@@ -44,6 +44,9 @@ class UserBase implements \JsonSerializable {
 	public const TYPE_USER = User::TYPE;
 	public const TYPE_ADMIN = Admin::TYPE;
 
+	/** @var string */
+	protected $richObjectType = 'user';
+
 	/** @var IL10N */
 	private $l10n;
 
@@ -199,6 +202,14 @@ class UserBase implements \JsonSerializable {
 	public function setOrganisation(string $organisation): string {
 		$this->organisation = $organisation;
 		return $this->organisation;
+	}
+
+	public function getRichObjectString() : array {
+		return [
+			'type' => $this->richObjectType,
+			'id' => $this->getId(),
+			'name' => $this->getDisplayName(),
+		];
 	}
 
 	/**

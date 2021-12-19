@@ -44,6 +44,7 @@ class Circle extends UserBase {
 			$this->circle = Circles::detailsCircle($id);
 			$this->displayName = $this->circle->getName();
 			$this->description = \OC::$server->getL10N('polls')->t('Circle');
+			$this->richObjectType = 'circle';
 		} else {
 			throw new CirclesNotEnabledException();
 		}
@@ -51,6 +52,19 @@ class Circle extends UserBase {
 
 	public static function isEnabled() : bool {
 		return Container::isAppEnabled('circles');
+	}
+
+	public function getRichObjectString() : array {
+		return [
+			'type' => $this->richObjectType,
+			'id' => $this->getId(),
+			'name' => $this->getDisplayName(),
+			'link' => $this->circle->getUrl(),
+		];
+	}
+
+	public function getCircleUrl(): string {
+		return 'lala';
 	}
 
 	/**

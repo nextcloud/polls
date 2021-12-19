@@ -37,6 +37,7 @@ use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\OptionConfirmedEvent;
 use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
+use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollArchivedEvent;
@@ -83,6 +84,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(OptionConfirmedEvent::class, OptionListener::class);
 		$context->registerEventListener(OptionCreatedEvent::class, OptionListener::class);
 		$context->registerEventListener(OptionDeletedEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionUnconfirmedEvent::class, OptionListener::class);
 		$context->registerEventListener(PollOptionReorderedEvent::class, OptionListener::class);
 		$context->registerEventListener(OptionUpdatedEvent::class, OptionListener::class);
 		$context->registerEventListener(PollArchivedEvent::class, PollListener::class);

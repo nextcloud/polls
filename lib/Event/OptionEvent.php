@@ -28,7 +28,8 @@ use OCA\Polls\Db\Option;
 abstract class OptionEvent extends BaseEvent {
 	public const ADD = 'option_add';
 	public const UPDATE = 'option_update';
-	public const CONFIRM = 'option_confirme';
+	public const CONFIRM = 'option_confirm';
+	public const UNCONFIRM = 'option_unconfirm';
 	public const DELETE = 'option_delete';
 
 	/** @var Option */
@@ -40,6 +41,11 @@ abstract class OptionEvent extends BaseEvent {
 		parent::__construct($option);
 		$this->activityObject = 'poll';
 		$this->option = $option;
+		$this->activitySubjectParams['optionTitle'] = [
+			'type' => 'highlight',
+			'id' => $this->option->getId(),
+			'name' => $this->option->getPollOptionText(),
+		];
 	}
 
 	public function getOption(): Option {

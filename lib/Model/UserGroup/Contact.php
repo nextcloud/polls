@@ -42,6 +42,7 @@ class Contact extends UserBase {
 		if (self::isEnabled()) {
 			$this->icon = self::ICON;
 			$this->getContact();
+			$this->richObjectType = 'addressbook-contact';
 		} else {
 			throw new ContactsNotEnabledExceptions();
 		}

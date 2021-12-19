@@ -43,6 +43,7 @@ use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\OptionConfirmedEvent;
 use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
+use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Model\Acl;
 
@@ -249,7 +250,11 @@ class OptionService {
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
 		$this->option = $this->optionMapper->update($this->option);
 
-		$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($this->option));
+		if ($this->option->getConfirmed()) {
+			$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($this->option));
+		} else {
+			$this->eventDispatcher->dispatchTyped(new OptionUnconfirmedEvent($this->option));
+		}
 
 		return $this->option;
 	}

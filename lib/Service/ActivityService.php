@@ -28,6 +28,7 @@ use OCP\Activity\IEvent as ActivityEvent;
 use OCP\EventDispatcher\Event;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\OptionEvent;
@@ -69,6 +70,8 @@ class ActivityService {
 	public function getActivityMessage(ActivityEvent $event, string $language) : string {
 		$this->trans = $this->transFactory->get($event->getApp(), $language);
 		$userIsActor = $event->getAuthor() === \OC::$server->getUserSession()->getUser()->getUID();
+		$parameters = $event->getSubjectParameters();
+		$shareType = $parameters['shareType']['name'] ?? '';
 
 		switch ($event->getType()) {
 			case CommentEvent::ADD:
@@ -92,6 +95,10 @@ class ActivityService {
 				return $userIsActor
 					? $this->trans->t('You confirmed option {optionTitle} in poll {pollTitle}')
 					: $this->trans->t('{actor} confirmed option {optionTitle} in poll {pollTitle}');
+			case OptionEvent::UNCONFIRM:
+				return $userIsActor
+					? $this->trans->t('You unconfirmed option {optionTitle} in poll {pollTitle}')
+					: $this->trans->t('{actor} unconfirmed option {optionTitle} in poll {pollTitle}');
 			case OptionEvent::DELETE:
 				return $userIsActor
 					? $this->trans->t('You removed option {optionTitle} from poll {pollTitle}')
@@ -127,9 +134,43 @@ class ActivityService {
 					: $this->trans->t('{actor} reordered the options of poll {pollTitle}');
 
 			case ShareEvent::ADD:
+				if ($shareType === Share::TYPE_PUBLIC) {
+					return $userIsActor
+						? $this->trans->t('You added a public share in poll {pollTitle}')
+						: $this->trans->t('{actor} added a public share in poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_GROUP) {
+					return $userIsActor
+						? $this->trans->t('You added a share for group {sharee} in poll {pollTitle}')
+						: $this->trans->t('{actor} added a share for group {sharee} in poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_USER) {
+					return $userIsActor
+						? $this->trans->t('You added a share for {sharee} in poll {pollTitle}')
+						: $this->trans->t('{actor} added a share for {sharee} in poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_EMAIL) {
+					return $userIsActor
+						? $this->trans->t('You added a share for {sharee} in poll {pollTitle}')
+						: $this->trans->t('{actor} added a share for {sharee} in poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_CONTACT) {
+					return $userIsActor
+						? $this->trans->t('You added a share for {sharee} in poll {pollTitle}')
+						: $this->trans->t('{actor} added a share for {sharee} in poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_EXTERNAL) {
+					return $userIsActor
+						? $this->trans->t('You added a share for {sharee} in poll {pollTitle}')
+						: $this->trans->t('{actor} added a share for {sharee} in poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_CIRCLE) {
+					return $userIsActor
+						? $this->trans->t('You added a share for circle {sharee} in poll {pollTitle}')
+						: $this->trans->t('{actor} added a share for circle {sharee} in poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_CONTACTGROUP) {
+					return $userIsActor
+						? $this->trans->t('You added a share for contact group {sharee} in poll {pollTitle}')
+						: $this->trans->t('{actor} added a share for contact group {sharee} in poll {pollTitle}');
+				}
+
 				return $userIsActor
-					? $this->trans->t('You added a share')
-					: $this->trans->t('{actor} added a share');
+					? $this->trans->t('You added a share in poll {pollTitle}')
+					: $this->trans->t('{actor} added a share in poll {pollTitle}');
 			case ShareEvent::CHANGE_EMAIL:
 				return $userIsActor
 					? $this->trans->t('You changed your email address')
@@ -145,15 +186,49 @@ class ActivityService {
 			case ShareEvent::REGISTRATION:
 				return $userIsActor
 					? $this->trans->t('You registered to poll {pollTitle}')
-					: $this->trans->t('{actor} registered to poll {pollTitle}');
+					: $this->trans->t('{sharee} registered to poll {pollTitle}');
 			case ShareEvent::DELETE:
+				if ($shareType === Share::TYPE_PUBLIC) {
+					return $userIsActor
+						? $this->trans->t('You deleted a public share from poll {pollTitle}')
+						: $this->trans->t('{actor} deleted a public share from poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_GROUP) {
+					return $userIsActor
+						? $this->trans->t('You deleted the share for group {sharee} from poll {pollTitle}')
+						: $this->trans->t('{actor} deleted the share for group {sharee} from poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_USER) {
+					return $userIsActor
+						? $this->trans->t('You deleted the share for {sharee} from poll {pollTitle}')
+						: $this->trans->t('{actor} deleted the share for {sharee} from poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_EMAIL) {
+					return $userIsActor
+						? $this->trans->t('You deleted the share for {sharee} from poll {pollTitle}')
+						: $this->trans->t('{actor} deleted the share for {sharee} from poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_CONTACT) {
+					return $userIsActor
+						? $this->trans->t('You deleted the share for {sharee} from poll {pollTitle}')
+						: $this->trans->t('{actor} deleted the share for {sharee} from poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_EXTERNAL) {
+					return $userIsActor
+						? $this->trans->t('You deleted the share for {sharee} from poll {pollTitle}')
+						: $this->trans->t('{actor} deleted the share for {sharee} from poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_CIRCLE) {
+					return $userIsActor
+						? $this->trans->t('You deleted the share for circle {sharee} from poll {pollTitle}')
+						: $this->trans->t('{actor} deleted the share for circle {sharee} from poll {pollTitle}');
+				} elseif ($shareType === Share::TYPE_CONTACTGROUP) {
+					return $userIsActor
+						? $this->trans->t('You deleted the share for contact group {sharee} from poll {pollTitle}')
+						: $this->trans->t('{actor} deleted the share for contact group {sharee} from poll {pollTitle}');
+				}
+
 				return $userIsActor
-					? $this->trans->t('You deleted a share')
-					: $this->trans->t('{actor} deleted a share');
+					? $this->trans->t('You deleted a share from poll {pollTitle}')
+					: $this->trans->t('{actor} deleted a share from poll {pollTitle}');
 
 			case VoteEvent::SET:
 				return $userIsActor
-					? $this->trans->t('You voted in poll {pollTitle}')
+					? $this->trans->t('You {actor} voted in poll {pollTitle}')
 					: $this->trans->t('{actor} voted in poll {pollTitle}');
 		}
 
