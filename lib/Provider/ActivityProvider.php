@@ -111,7 +111,14 @@ class ActivityProvider implements IProvider {
 				'name' => $actor->getDisplayName(),
 			];
 		}
-		$event->setParsedSubject(str_replace('{actor}', $actor->getUID(), $subject))
+
+		$placeholders = $replacements = [];
+		foreach ($parameters as $placeholder => $parameter) {
+			$placeholders[] = '{' . $placeholder . '}';
+			$replacements[] = $parameter['name'];
+		}
+
+		$event->setParsedSubject(str_replace($placeholders, $replacements, $subject))
 			->setRichSubject($subject, $parameters);
 	}
 }

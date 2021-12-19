@@ -42,6 +42,7 @@ class Group extends UserBase {
 		$this->group = Container::queryClass(IGroupManager::class)->get($this->id);
 		$this->description = \OC::$server->getL10N('polls')->t('Group');
 		$this->displayName = $this->group->getDisplayName();
+		$this->richObjectType = 'user-group';
 	}
 
 	/**

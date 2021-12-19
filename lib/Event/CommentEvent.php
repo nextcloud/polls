@@ -40,7 +40,6 @@ abstract class CommentEvent extends BaseEvent {
 			'type' => 'highlight',
 			'id' => $comment->getId(),
 			'name' => $comment->getComment(),
-			'link' => $this->poll->getVoteUrl(),
 		];
 	}
 

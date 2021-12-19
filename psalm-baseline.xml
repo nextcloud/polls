@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="v4.15.0@a1b5e489e6fcebe40cb804793d964e99fc347820">
   <file src="lib/AppInfo/Application.php">
-    <InvalidArgument occurrences="23">
+    <InvalidArgument occurrences="24">
+      <code>registerEventListener</code>
       <code>registerEventListener</code>
       <code>registerEventListener</code>
       <code>registerEventListener</code>
@@ -27,21 +28,18 @@
       <code>registerEventListener</code>
     </InvalidArgument>
   </file>
-  <file src="lib/Event/BaseEvent.php">
-    <UndefinedMagicMethod occurrences="3">
-      <code>getPollId</code>
-      <code>getPollId</code>
-      <code>getPollId</code>
-    </UndefinedMagicMethod>
-  </file>
   <file src="lib/Listener/BaseListener.php">
-    <UndefinedMethod occurrences="6">
+    <UndefinedMethod occurrences="10">
       <code>getActivityId</code>
+      <code>getActor</code>
+      <code>getActor</code>
       <code>getActor</code>
       <code>getLogId</code>
       <code>getLogId</code>
       <code>getPollId</code>
       <code>getPollId</code>
+      <code>getPollOwner</code>
+      <code>getPollOwner</code>
     </UndefinedMethod>
   </file>
   <file src="lib/Listener/GroupDeletedListener.php">

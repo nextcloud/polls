@@ -23,29 +23,13 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Option;
 
-abstract class ShareEvent extends BaseEvent {
-	public const ADD = 'share_add';
-	public const ADD_PUBLIC = 'share_add_public';
-	public const CHANGE_EMAIL = 'share_change_email';
-	public const CHANGE_TYPE = 'share_change_type';
-	public const CHANGE_REG_CONSTR = 'share_change_reg_const';
-	public const REGISTRATION = 'share_registration';
-	public const DELETE = 'share_delete';
-
-	/** @var Share */
-	private $share;
-
-	public function __construct(Share $share) {
-		parent::__construct($share);
-		$this->activityObject = 'poll';
-		$this->share = $share;
-		$this->activitySubjectParams['shareType'] = $this->share->getRichObjectString();
-		$this->activitySubjectParams['sharee'] = $this->share->getUserObject()->getRichObjectString();
-	}
-
-	public function getShare(): Share {
-		return $this->share;
+class OptionUnconfirmedEvent extends OptionEvent {
+	public function __construct(
+		Option $option
+	) {
+		parent::__construct($option);
+		$this->activitySubject = self::UNCONFIRM;
 	}
 }

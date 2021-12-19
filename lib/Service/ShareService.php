@@ -403,6 +403,7 @@ class ShareService {
 				UserBase::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
 				!$emailAddress
 			);
+			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
 				|| $this->share->getType() === Share::TYPE_CONTACT) {
 
@@ -417,8 +418,6 @@ class ShareService {
 			}
 			$this->share->setEmailAddress($emailAddress);
 			$this->shareMapper->update($this->share);
-
-			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
 		} else {
 			throw new NotAuthorizedException;
 		}

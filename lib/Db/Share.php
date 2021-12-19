@@ -190,6 +190,14 @@ class Share extends Entity implements JsonSerializable {
 		);
 	}
 
+	public function getRichObjectString(): array {
+		return [
+			'type' => 'highlight',
+			'id' => $this->getId(),
+			'name' => $this->getType(),
+		];
+	}
+
 	private function setMiscSettingsArray(array $value) : void {
 		$this->setMiscSettings(json_encode($value));
 	}

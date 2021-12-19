@@ -80,12 +80,14 @@ abstract class BaseListener implements IEventListener {
 		} catch (InvalidClassException $e) {
 			return;
 		} catch (UniqueConstraintViolationException $e) {
-			// skip adding new activity, if adding log throws exception
+			// TODO: skip adding new activity in some situations, if adding log throws exception
 			// deprecated NC22
+			$this->addActivity();
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-				// skip adding new activity, if adding log throws exception
+				// TODO: skip adding new activity in some situations, if adding log throws exception
 				// since NC22
+				$this->addActivity();
 			} else {
 				throw $e;
 			}
@@ -146,6 +148,9 @@ abstract class BaseListener implements IEventListener {
 		if ($this->event->getActivityId()) {
 			$activityEvent = $this->activityService->createActivityEvent($this->event);
 			$this->activityService->publishActivityEvent($activityEvent, $this->event->getActor());
+			if ($this->event->getActor() !== $this->event->getPollOwner()) {
+				$this->activityService->publishActivityEvent($activityEvent, $this->event->getPollOwner());
+			}
 		}
 	}
 
