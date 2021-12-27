@@ -64,7 +64,6 @@ class PollChanges implements IFilter {
 	}
 
 	public function filterTypes(array $types) : array {
-		\OC::$server->getLogger()->error(json_encode($types));
 		return ['poll_add', 'vote_set'];
 	}
 }
