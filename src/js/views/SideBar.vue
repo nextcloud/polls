@@ -56,6 +56,14 @@
 			icon="icon-comment">
 			<SideBarTabComments />
 		</AppSidebarTab>
+
+		<AppSidebarTab v-if="acl.allowEdit"
+			:id="'activity'"
+			:order="4"
+			:name="t('polls', 'Activity')"
+			icon="icon-comment">
+			<SideBarTabActivity />
+		</AppSidebarTab>
 	</AppSidebar>
 </template>
 
@@ -72,6 +80,7 @@ export default {
 		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments'),
 		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions'),
 		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare'),
+		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity'),
 		// SideBarTabUserOptions: () => import('../components/SideBar/SideBarTabUserOptions'),
 		AppSidebar,
 		AppSidebarTab,

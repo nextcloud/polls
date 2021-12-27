@@ -76,18 +76,21 @@ abstract class BaseListener implements IEventListener {
 		try {
 			$this->checkClass();
 			$this->addLog();
+			// If addLog throws UniqueConstraintViolationException, avoid spamming in activities
 			$this->addActivity();
 		} catch (InvalidClassException $e) {
 			return;
 		} catch (UniqueConstraintViolationException $e) {
-			// TODO: skip adding new activity in some situations, if adding log throws exception
+			// Avoid spamming
+			// TODO: report some important events anyways
 			// deprecated NC22
-			$this->addActivity();
+			// $this->addActivity();
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-				// TODO: skip adding new activity in some situations, if adding log throws exception
+				// Avoid spamming
+				// TODO: report some important events anyways
 				// since NC22
-				$this->addActivity();
+				// $this->addActivity();
 			} else {
 				throw $e;
 			}
