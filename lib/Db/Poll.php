@@ -255,9 +255,11 @@ class Poll extends Entity implements JsonSerializable {
 		return $this->getMiscSettingsArray()['autoReminder'] ?? false;
 	}
 
+	// alias of getId()
 	public function getPollId(): int {
 		return $this->getId();
 	}
+
 	public function getProposalsExpired(): bool {
 		return (
 			   $this->getProposalsExpire() > 0
@@ -287,7 +289,10 @@ class Poll extends Entity implements JsonSerializable {
 		return json_decode($this->getMiscSettings(), true);
 	}
 
-	private function setMiscSettingsByKey(string $key, bool $value): void {
+	/**
+	 * @param bool|string|int|array $value
+	 */
+	private function setMiscSettingsByKey(string $key, $value): void {
 		$miscSettings = $this->getMiscSettingsArray();
 		$miscSettings[$key] = $value;
 		$this->setMiscSettingsArray($miscSettings);
