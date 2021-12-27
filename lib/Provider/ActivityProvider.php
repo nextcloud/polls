@@ -95,14 +95,6 @@ class ActivityProvider implements IProvider {
 		$this->trans = $this->transFactory->get($event->getApp(), $language);
 		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'polls-black.svg')));
 		$this->setSubjects($event, $this->activityService->getActivityMessage($event, $language, $this->activityManager->isFormattingFilteredObject()));
-
-		try {
-			$event = $this->eventMerger->mergeEvents($event->getApp(), $event, $previousEvent);
-			\OC::$server->getLogger()->error('merged ' . $event->getType());
-		} catch (\Exception $e) {
-			\OC::$server->getLogger()->error('Not merged ' . $event->getType());
-		}
-
 		return $event;
 	}
 
