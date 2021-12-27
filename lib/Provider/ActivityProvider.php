@@ -33,6 +33,7 @@ use OCP\Activity\IManager as ActivityManager;
 use OCP\Activity\IEventMerger;
 use OCP\Activity\IEvent;
 use OCA\Polls\Service\ActivityService;
+use OCA\Polls\Db\ShareMapper;
 
 class ActivityProvider implements IProvider {
 	/** @var IFactory */
@@ -56,20 +57,26 @@ class ActivityProvider implements IProvider {
 	/** @var IURLGenerator */
 	protected $urlGenerator;
 
+	/** @var ShareMapper */
+	protected $shareMapper;
+
 	/**
-	 * @param IFactory $transFactory
-	 * @param IURLGenerator $urlGenerator
 	 * @param ActivityManager $activityManager
 	 * @param ActivityService $activityService
 	 * @param IEventMerger $eventMerger
+	 * @param IFactory $transFactory
+	 * @param IUserManager $userManager
+	 * @param IURLGenerator $urlGenerator
+	 * @param ShareMapper $shareMapper
 	 */
 	public function __construct(
 		ActivityManager $activityManager,
+		ActivityService $activityService,
 		IEventMerger $eventMerger,
 		IFactory $transFactory,
 		IURLGenerator $urlGenerator,
 		IUserManager $userManager,
-		ActivityService $activityService
+		ShareMapper $shareMapper
 	) {
 		$this->activityManager = $activityManager;
 		$this->activityService = $activityService;
@@ -77,6 +84,7 @@ class ActivityProvider implements IProvider {
 		$this->transFactory = $transFactory;
 		$this->urlGenerator = $urlGenerator;
 		$this->userManager = $userManager;
+		$this->shareMapper = $shareMapper;
 	}
 
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {
@@ -85,18 +93,16 @@ class ActivityProvider implements IProvider {
 		}
 
 		$this->trans = $this->transFactory->get($event->getApp(), $language);
-		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'app.svg')));
+		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'polls-black.svg')));
+		$this->setSubjects($event, $this->activityService->getActivityMessage($event, $language, $this->activityManager->isFormattingFilteredObject()));
 
-		// TODO: Extend for filtered views
-		if ($this->activityManager->isFormattingFilteredObject()) {
-			try {
-				return $event->setParsedSubject($this->trans->t('Some activity triggered'));
-			} catch (\InvalidArgumentException $e) {
-			}
+		try {
+			$event = $this->eventMerger->mergeEvents($event->getApp(), $event, $previousEvent);
+			\OC::$server->getLogger()->error('merged ' . $event->getType());
+		} catch (\Exception $e) {
+			\OC::$server->getLogger()->error('Not merged ' . $event->getType());
 		}
 
-		$this->setSubjects($event, $this->activityService->getActivityMessage($event, $language));
-		// $this - $this->eventMerger->mergeEvents($event->getApp(), $event, $previousEvent);
 		return $event;
 	}
 
@@ -104,13 +110,29 @@ class ActivityProvider implements IProvider {
 		$parameters = $event->getSubjectParameters();
 		$actor = $this->userManager->get($event->getAuthor());
 
-		if ($actor instanceof IUser) {
+		try {
+			if ($actor instanceof IUser) {
+				$parameters['actor'] = [
+					'type' => 'user',
+					'id' => $actor->getUID(),
+					'name' => $actor->getDisplayName(),
+				];
+			} else {
+				$share = $this->shareMapper->findByPollAndUser($event->getObjectId(), $event->getAuthor());
+				$parameters['actor'] = [
+					'type' => 'guest',
+					'id' => $share->getUserId(),
+					'name' => $share->getDisplayName(),
+				];
+			}
+		} catch (\Exception $e) {
 			$parameters['actor'] = [
-				'type' => 'user',
-				'id' => $actor->getUID(),
-				'name' => $actor->getDisplayName(),
+				'type' => 'guest',
+				'id' => $event->getAuthor(),
+				'name' => 'An unknown user',
 			];
 		}
+
 
 		$placeholders = $replacements = [];
 		foreach ($parameters as $placeholder => $parameter) {

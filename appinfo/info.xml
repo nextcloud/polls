@@ -26,10 +26,6 @@
         <nextcloud min-version="21" max-version="23" />
     </dependencies>
     <activity>
-        <settings>
-            <setting>OCA\Polls\Settings\ActivitySettings</setting>
-            <setting>OCA\Polls\Settings\ActivityVote</setting>
-        </settings>
 		<providers>
 			<provider>OCA\Polls\Provider\ActivityProvider</provider>
 		</providers>
