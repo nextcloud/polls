@@ -57,7 +57,7 @@
 			<SideBarTabComments />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit"
+		<AppSidebarTab v-if="acl.allowEdit && useActicity"
 			:id="'activity'"
 			:order="4"
 			:name="t('polls', 'Activity')"
@@ -97,6 +97,7 @@ export default {
 		...mapState({
 			poll: (state) => state.poll,
 			acl: (state) => state.poll.acl,
+			useActivity: (state) => state.appSettings.useActivity,
 		}),
 	},
 	methods: {

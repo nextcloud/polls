@@ -68,5 +68,6 @@ class SettingsService {
 		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
 		$this->appSettings->setUpdateType($settingsArray['updateType']);
+		$this->appSettings->setUseActivity($settingsArray['useActivity']);
 	}
 }
