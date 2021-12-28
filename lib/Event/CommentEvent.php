@@ -23,35 +23,27 @@
 
 namespace OCA\Polls\Event;
 
-use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Comment;
 
-class CommentEvent extends Event {
+abstract class CommentEvent extends BaseEvent {
+	public const ADD = 'comment_add';
+	public const DELETE = 'comment_delete';
 
 	/** @var Comment */
 	private $comment;
 
 	public function __construct(Comment $comment) {
-		parent::__construct();
+		parent::__construct($comment);
+		$this->activityObject = 'poll';
 		$this->comment = $comment;
+		$this->activitySubjectParams['comment'] = [
+			'type' => 'highlight',
+			'id' => $comment->getId(),
+			'name' => $comment->getComment(),
+		];
 	}
 
 	public function getComment(): Comment {
 		return $this->comment;
-	}
-
-	public function getPollId(): int {
-		return $this->comment->getPollId();
-	}
-
-	public function getLogMsg(): string {
-		return '';
-	}
-
-	public function getActor(): string {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return \OC::$server->getUserSession()->getUser()->getUID();
-		}
-		return $this->comment->getUserId();
 	}
 }

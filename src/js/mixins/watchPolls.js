@@ -137,7 +137,7 @@ export const watchPolls = {
 		},
 
 		async loadTables(tables) {
-			let dispatches = []
+			let dispatches = ['activity/list']
 
 			tables.forEach((item) => {
 				this.lastUpdated = Math.max(item.updated, this.lastUpdated)

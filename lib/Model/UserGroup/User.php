@@ -24,6 +24,7 @@
 namespace OCA\Polls\Model\UserGroup;
 
 use DateTimeZone;
+use OCA\Polls\Helper\Container;
 use OCP\IUserManager;
 use OCP\IUser;
 
@@ -43,7 +44,7 @@ class User extends UserBase {
 		$this->isNoUser = false;
 		$this->description = \OC::$server->getL10N('polls')->t('User');
 
-		$this->user = self::getContainer()->query(IUserManager::class)->get($this->id);
+		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
 		$this->displayName = $this->user->getDisplayName();
 		$this->emailAddress = $this->user->getEmailAddress();
 		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
@@ -71,7 +72,7 @@ class User extends UserBase {
 	public static function search(string $query = '', array $skip = []): array {
 		$users = [];
 
-		foreach (self::getContainer()->query(IUserManager::class)->search($query) as $user) {
+		foreach (Container::queryClass(IUserManager::class)->search($query) as $user) {
 			if (!in_array($user->getUID(), $skip)) {
 				$users[] = new self($user->getUID());
 			}

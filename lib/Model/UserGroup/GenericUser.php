@@ -38,6 +38,7 @@ class GenericUser extends UserBase {
 		parent::__construct($id, $type);
 		$this->displayName = $displayName;
 		$this->emailAddress = $emailAddress;
+		$this->richObjectType = 'guest';
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->icon = self::ICON_PUBLIC;

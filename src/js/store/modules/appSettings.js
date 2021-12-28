@@ -36,6 +36,7 @@ const defaultAppSettings = () => ({
 		autoArchive: false,
 		autoArchiveOffset: 30,
 		updateType: 'longPolling',
+		useActivity: false,
 	},
 })
 

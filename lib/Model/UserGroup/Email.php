@@ -37,6 +37,7 @@ class Email extends UserBase {
 		$this->icon = self::ICON;
 		$this->emailAddress = $id;
 		$this->displayName = $displayName ? $displayName : $this->displayName;
+		$this->richObjectType = 'email';
 	}
 
 	public function getDisplayName(): string {

@@ -23,10 +23,13 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Db\Log;
+use OCA\Polls\Db\Poll;
 
 class PollRestoredEvent extends PollEvent {
-	public function getLogMsg(): string {
-		return Log::MSG_ID_RESTOREPOLL;
+	public function __construct(
+		Poll $poll
+	) {
+		parent::__construct($poll);
+		$this->activitySubject = self::RESTORE;
 	}
 }

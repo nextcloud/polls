@@ -23,54 +23,25 @@
 
 namespace OCA\Polls\Listener;
 
-use OCP\EventDispatcher\Event;
-use OCP\EventDispatcher\IEventListener;
 use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Db\Watch;
-use OCA\Polls\Service\LogService;
-use OCA\Polls\Service\WatchService;
-use OCA\Polls\Service\NotificationService;
+use OCA\Polls\Exceptions\InvalidClassException;
 
-class PollListener implements IEventListener {
+class PollListener extends BaseListener {
 
-	/** @var LogService */
-	private $logService;
+	// Simulate vote and option change due to possible configuration changes
+	/** @var array */
+	protected $watchTables = [Watch::OBJECT_POLLS, Watch::OBJECT_VOTES, Watch::OBJECT_OPTIONS];
 
-	/** @var NotificationService */
-	private $notificationService;
-
-	/** @var WatchService */
-	private $watchService;
-
-	/** @var string */
-	private $table = Watch::OBJECT_POLLS;
-
-	public function __construct(
-		LogService $logService,
-		NotificationService $notificationService,
-		WatchService $watchService
-	) {
-		$this->logService = $logService;
-		$this->notificationService = $notificationService;
-		$this->watchService = $watchService;
+	protected function checkClass() : void {
+		if (!($this->event instanceof PollEvent)) {
+			throw new InvalidClassException;
+		}
 	}
 
-	public function handle(Event $event): void {
-		if (!($event instanceof PollEvent)) {
-			return;
-		}
-
-		$this->watchService->writeUpdate($event->getPollId(), $this->table);
-		// If the poll configuration is changed, simulate vote change
-		$this->watchService->writeUpdate($event->getPollId(), Watch::OBJECT_VOTES);
-		// If the poll configuration is changed, simulate option change
-		$this->watchService->writeUpdate($event->getPollId(), Watch::OBJECT_OPTIONS);
-
-		if ($event->getLogMsg()) {
-			$this->logService->setLog($event->getPollId(), $event->getLogMsg(), $event->getActor());
-		}
-		if (!empty($event->getNotification())) {
-			$this->notificationService->createNotification($event->getNotification());
+	protected function createNotification() : void {
+		if (!empty($this->event->getNotification())) {
+			$this->notificationService->createNotification($this->event->getNotification());
 		}
 	}
 }

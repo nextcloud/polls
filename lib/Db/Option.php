@@ -179,7 +179,7 @@ class Option extends Entity implements JsonSerializable {
 		return $this->owner;
 	}
 
-	public function getDisplayName(): string {
+	public function getDisplayName(): ?string {
 		if (!strncmp($this->getOwner(), 'deleted_', 8)) {
 			return 'Deleted User';
 		}
