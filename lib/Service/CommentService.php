@@ -26,7 +26,8 @@ namespace OCA\Polls\Service;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Event\CommentEvent;
+use OCA\Polls\Event\CommentAddEvent;
+use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Model\Acl;
 
 class CommentService {
@@ -95,7 +96,7 @@ class CommentService {
 		$this->comment->setTimestamp(time());
 		$this->comment = $this->commentMapper->insert($this->comment);
 
-		$this->eventDispatcher->dispatchTyped(new CommentEvent($this->comment));
+		$this->eventDispatcher->dispatchTyped(new CommentAddEvent($this->comment));
 
 		return $this->comment;
 	}
@@ -118,7 +119,7 @@ class CommentService {
 
 		$this->commentMapper->delete($this->comment);
 
-		$this->eventDispatcher->dispatchTyped(new CommentEvent($this->comment));
+		$this->eventDispatcher->dispatchTyped(new CommentDeleteEvent($this->comment));
 
 		return $this->comment;
 	}

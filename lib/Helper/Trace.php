@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Polls\Model;
+namespace OCA\Polls\Helper;
 
 class Trace implements \JsonSerializable {
 

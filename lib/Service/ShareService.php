@@ -38,7 +38,12 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Event\ShareEvent;
+use OCA\Polls\Event\ShareCreateEvent;
+use OCA\Polls\Event\ShareTypeChangedEvent;
+use OCA\Polls\Event\ShareChangedEmailEvent;
+use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
+use OCA\Polls\Event\ShareDeletedEvent;
+use OCA\Polls\Event\ShareRegistrationEvent;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserGroup\UserBase;
 
@@ -256,7 +261,6 @@ class ShareService {
 
 		$this->share = $this->shareMapper->insert($this->share);
 
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
 
 		return $this->share;
 	}
@@ -284,6 +288,8 @@ class ShareService {
 
 		$this->create($pollId, UserBase::getUserGroupChild($type, $userId));
 
+		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($this->share));
+
 		return $this->share;
 	}
 
@@ -300,7 +306,7 @@ class ShareService {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareTypeChangedEvent($this->share));
 
 		return $this->share;
 	}
@@ -317,8 +323,7 @@ class ShareService {
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
-
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareChangedRegistrationConstraintEvent($this->share));
 
 		return $this->share;
 	}
@@ -345,7 +350,7 @@ class ShareService {
 			throw new InvalidShareTypeException('Email address can only be set in external shares.');
 		}
 
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareChangedEmailEvent($this->share));
 
 		return $this->share;
 	}
@@ -385,10 +390,7 @@ class ShareService {
 		}
 
 		$this->systemService->validatePublicUsername($userName, $token);
-
-		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
-			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
-		}
+		$this->systemService->validateEmailAddress($emailAddress, $poll->getPublicPollEmail() !== 'mandatory');
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Create new external share for user, who entered the poll via public link,
@@ -398,6 +400,7 @@ class ShareService {
 				UserBase::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
 				!$emailAddress
 			);
+			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
 				|| $this->share->getType() === Share::TYPE_CONTACT) {
 
@@ -412,8 +415,6 @@ class ShareService {
 			}
 			$this->share->setEmailAddress($emailAddress);
 			$this->shareMapper->update($this->share);
-
-			$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
 		} else {
 			throw new NotAuthorizedException;
 		}
@@ -442,7 +443,7 @@ class ShareService {
 			// silently catch
 		}
 
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($this->share));
 
 		return $token;
 	}

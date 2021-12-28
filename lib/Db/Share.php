@@ -28,8 +28,7 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCP\AppFramework\IAppContainer;
-use OCA\Polls\AppInfo\Application;
+use OCA\Polls\Helper\Container;
 
 /**
  * @method int getId()
@@ -191,6 +190,14 @@ class Share extends Entity implements JsonSerializable {
 		);
 	}
 
+	public function getRichObjectString(): array {
+		return [
+			'type' => 'highlight',
+			'id' => $this->getId(),
+			'name' => $this->getType(),
+		];
+	}
+
 	private function setMiscSettingsArray(array $value) : void {
 		$this->setMiscSettings(json_encode($value));
 	}
@@ -199,7 +206,10 @@ class Share extends Entity implements JsonSerializable {
 		return json_decode($this->getMiscSettings(), true);
 	}
 
-	private function setMiscSettingsByKey(string $key, $value) {
+	/**
+	 * @param bool|string|int|array $value
+	 */
+	private function setMiscSettingsByKey(string $key, $value): void {
 		$miscSettings = $this->getMiscSettingsArray();
 		$miscSettings[$key] = $value;
 		$this->setMiscSettingsArray($miscSettings);
@@ -213,20 +223,9 @@ class Share extends Entity implements JsonSerializable {
 	 */
 	private function getDefaultPublicPollEmail() : string {
 		try {
-			return $this->getContainer()
-				->query(PollMapper::class)
-				->find($this->getPollId())->getPublicPollEmail();
+			return Container::queryPoll($this->getPollId())->getPublicPollEmail();
 		} catch (\Exception $e) {
 			return 'optional';
 		}
-	}
-
-	/**
-	 * remove also
-	 * @deprecated
-	 */
-	protected static function getContainer() : IAppContainer {
-		$app = \OC::$server->query(Application::class);
-		return $app->getContainer();
 	}
 }

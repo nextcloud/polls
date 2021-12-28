@@ -23,34 +23,32 @@
 
 namespace OCA\Polls\Event;
 
-use OCP\EventDispatcher\Event;
 use OCA\Polls\Db\Option;
 
-class OptionEvent extends Event {
+abstract class OptionEvent extends BaseEvent {
+	public const ADD = 'option_add';
+	public const UPDATE = 'option_update';
+	public const CONFIRM = 'option_confirm';
+	public const UNCONFIRM = 'option_unconfirm';
+	public const DELETE = 'option_delete';
+
 	/** @var Option */
 	private $option;
 
-	public function __construct(Option $option) {
-		parent::__construct();
+	public function __construct(
+		Option $option
+	) {
+		parent::__construct($option);
+		$this->activityObject = 'poll';
 		$this->option = $option;
+		$this->activitySubjectParams['optionTitle'] = [
+			'type' => 'highlight',
+			'id' => $this->option->getId(),
+			'name' => $this->option->getPollOptionText(),
+		];
 	}
 
 	public function getOption(): Option {
 		return $this->option;
-	}
-
-	public function getPollId(): int {
-		return $this->option->getPollId();
-	}
-
-	public function getLogMsg(): string {
-		return '';
-	}
-
-	public function getActor(): string {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return \OC::$server->getUserSession()->getUser()->getUID();
-		}
-		return $this->option->getOwner();
 	}
 }

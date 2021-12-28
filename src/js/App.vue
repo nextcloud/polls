@@ -190,7 +190,6 @@ export default {
 		},
 
 		async loadPoll(silent) {
-			const dispatches = []
 			if (!silent) {
 				this.loading = true
 				this.transitionsOff()
@@ -201,19 +200,20 @@ export default {
 					throw new Error('No pollId for vote page')
 				}
 
-				if (this.$route.name === 'publicVote') {
-					dispatches.push('share/get')
-				} else if (this.$route.name === 'vote') {
-					dispatches.push('shares/list')
-				}
-
-				dispatches.push(
+				const dispatches = [
 					'poll/get',
 					'comments/list',
 					'options/list',
 					'votes/list',
 					'subscription/get',
-				)
+				]
+
+				if (this.$route.name === 'publicVote') {
+					dispatches.push('share/get')
+				} else if (this.$route.name === 'vote') {
+					dispatches.push('shares/list')
+					dispatches.push('activity/list')
+				}
 
 				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
 				await Promise.all(requests)

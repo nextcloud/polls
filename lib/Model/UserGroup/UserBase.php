@@ -27,10 +27,9 @@ use OCA\Polls\Exceptions\InvalidShareTypeException;
 
 use DateTimeZone;
 use OCP\IL10N;
-use OCP\AppFramework\IAppContainer;
+use OCA\Polls\Helper\Container;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
-use OCA\Polls\AppInfo\Application;
 use OCP\IDateTimeZone;
 
 class UserBase implements \JsonSerializable {
@@ -44,6 +43,9 @@ class UserBase implements \JsonSerializable {
 	public const TYPE_GROUP = Group::TYPE;
 	public const TYPE_USER = User::TYPE;
 	public const TYPE_ADMIN = Admin::TYPE;
+
+	/** @var string */
+	protected $richObjectType = 'user';
 
 	/** @var IL10N */
 	private $l10n;
@@ -100,7 +102,7 @@ class UserBase implements \JsonSerializable {
 		$this->locale = $locale;
 		$this->icon = 'icon-share';
 		$this->l10n = \OC::$server->getL10N('polls');
-		$this->timezone = $this->getContainer()->query(IDateTimeZone::class);
+		$this->timezone = Container::queryClass(IDateTimeZone::class);
 	}
 
 	public function getId(): string {
@@ -202,6 +204,14 @@ class UserBase implements \JsonSerializable {
 		return $this->organisation;
 	}
 
+	public function getRichObjectString() : array {
+		return [
+			'type' => $this->richObjectType,
+			'id' => $this->getId(),
+			'name' => $this->getDisplayName(),
+		];
+	}
+
 	/**
 	 * search all possible sharees - use ISearch to respect autocomplete restrictions
 	 */
@@ -215,7 +225,7 @@ class UserBase implements \JsonSerializable {
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
-		[$result, $more] = self::getContainer()->query(ISearch::class)->search($query, $types, false, 200, 0);
+		[$result, $more] = Container::queryClass(ISearch::class)->search($query, $types, false, 200, 0);
 
 		foreach (($result['users'] ?? []) as $item) {
 			$items[] = new User($item['value']['shareWith']);
@@ -255,12 +265,6 @@ class UserBase implements \JsonSerializable {
 	 */
 	public function getMembers(): array {
 		return [$this];
-	}
-
-	protected static function getContainer() : IAppContainer {
-		$app = \OC::$server->query(Application::class);
-
-		return $app->getContainer();
 	}
 
 	/**
