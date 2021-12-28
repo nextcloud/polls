@@ -1,7 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.9.3@4c262932602b9bbab5020863d1eb22d49de0dbf4">
+<files psalm-version="v4.15.0@a1b5e489e6fcebe40cb804793d964e99fc347820">
   <file src="lib/AppInfo/Application.php">
-    <InvalidArgument occurrences="16">
+    <InvalidArgument occurrences="24">
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
+      <code>registerEventListener</code>
       <code>registerEventListener</code>
       <code>registerEventListener</code>
       <code>registerEventListener</code>
@@ -19,5 +27,45 @@
       <code>registerEventListener</code>
       <code>registerEventListener</code>
     </InvalidArgument>
+  </file>
+  <file src="lib/Listener/BaseListener.php">
+    <UndefinedMethod occurrences="10">
+      <code>getActivityId</code>
+      <code>getActor</code>
+      <code>getActor</code>
+      <code>getActor</code>
+      <code>getLogId</code>
+      <code>getLogId</code>
+      <code>getPollId</code>
+      <code>getPollId</code>
+      <code>getPollOwner</code>
+      <code>getPollOwner</code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Listener/GroupDeletedListener.php">
+    <UndefinedMethod occurrences="1">
+      <code>getGroup</code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Listener/PollListener.php">
+    <UndefinedMethod occurrences="2">
+      <code>getNotification</code>
+      <code>getNotification</code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Listener/UserDeletedListener.php">
+    <UndefinedMethod occurrences="1">
+      <code>getUser</code>
+    </UndefinedMethod>
+  </file>
+  <file src="lib/Service/ActivityService.php">
+    <UndefinedMethod occurrences="6">
+      <code>getActivityId</code>
+      <code>getActivityObject</code>
+      <code>getActivityObjectId</code>
+      <code>getActivitySubject</code>
+      <code>getActivitySubjectParams</code>
+      <code>getActor</code>
+    </UndefinedMethod>
   </file>
 </files>
