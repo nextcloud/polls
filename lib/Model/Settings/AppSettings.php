@@ -95,6 +95,10 @@ class AppSettings implements JsonSerializable {
 		return $this->config->getAppValue(self::APP_NAME, 'updateType') ?: 'longPolling';
 	}
 
+	public function getUseActivity(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'useActivity'), false);
+	}
+
 	// Checks
 	public function getCreationAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
@@ -158,6 +162,10 @@ class AppSettings implements JsonSerializable {
 		$this->config->setAppValue(self::APP_NAME, 'updateType', $value);
 	}
 
+	public function setUseActivity(bool $value): void {
+		$this->config->setAppValue(self::APP_NAME, 'useActivity', $this->boolToString($value));
+	}
+
 	public function jsonSerialize() {
 		// convert group ids to group objects
 		$publicSharesGroups = [];
@@ -187,6 +195,7 @@ class AppSettings implements JsonSerializable {
 			'autoArchive' => $this->getAutoArchive(),
 			'autoArchiveOffset' => $this->getAutoArchiveOffset(),
 			'updateType' => $this->getUpdateType(),
+			'useActivity' => $this->getUseActivity(),
 		];
 	}
 

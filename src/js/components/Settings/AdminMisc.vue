@@ -23,6 +23,9 @@
 <template>
 	<div>
 		<div class="user_settings">
+			<CheckboxRadioSwitch :checked.sync="useActivity" type="switch">
+				{{ t('polls', 'Track activities') }}
+			</CheckboxRadioSwitch>
 			<CheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
 				{{ t('polls', 'Hide login option in public polls') }}
 			</CheckboxRadioSwitch>
@@ -95,6 +98,14 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ showLogin: !value })
+			},
+		},
+		useActivity: {
+			get() {
+				return this.appSettings.useActivity
+			},
+			set(value) {
+				this.writeValue({ useActivity: value })
 			},
 		},
 		autoArchive: {

@@ -33,11 +33,15 @@ use OCA\Polls\Service\ActivityService;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\NotificationService;
 use OCA\Polls\Service\WatchService;
+use OCA\Polls\Model\Settings\AppSettings;
 
 abstract class BaseListener implements IEventListener {
 
 	/** @var ActivityService */
 	protected $activityService;
+
+	/** @var AppSettings */
+	protected $appSettings;
 
 	/** @var IJobList */
 	protected $jobList;
@@ -59,11 +63,13 @@ abstract class BaseListener implements IEventListener {
 
 	public function __construct(
 		ActivityService $activityService,
+		AppSettings $appSettings,
 		IJobList $jobList,
 		LogService $logService,
 		NotificationService $notificationService,
 		WatchService $watchService
 	) {
+		$this->appSettings = $appSettings;
 		$this->activityService = $activityService;
 		$this->jobList = $jobList;
 		$this->logService = $logService;
@@ -77,20 +83,26 @@ abstract class BaseListener implements IEventListener {
 			$this->checkClass();
 			$this->addLog();
 			// If addLog throws UniqueConstraintViolationException, avoid spamming in activities
-			$this->addActivity();
+			if ($this->appSettings->getActivity()) {
+				$this->addActivity();
+			}
 		} catch (InvalidClassException $e) {
 			return;
 		} catch (UniqueConstraintViolationException $e) {
 			// Avoid spamming
 			// TODO: report some important events anyways
 			// deprecated NC22
-			// $this->addActivity();
+			// if ($this->appSettings->getActivity()) {
+			// 	$this->addActivity();
+			// }
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				// Avoid spamming
 				// TODO: report some important events anyways
 				// since NC22
-				// $this->addActivity();
+				// if ($this->appSettings->getActivity()) {
+				// 	$this->addActivity();
+				// }
 			} else {
 				throw $e;
 			}
