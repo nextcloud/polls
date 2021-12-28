@@ -82,8 +82,9 @@ abstract class BaseListener implements IEventListener {
 		try {
 			$this->checkClass();
 			$this->addLog();
+
 			// If addLog throws UniqueConstraintViolationException, avoid spamming in activities
-			if ($this->appSettings->getActivity()) {
+			if ($this->appSettings->getUseActivity()) {
 				$this->addActivity();
 			}
 		} catch (InvalidClassException $e) {
@@ -92,7 +93,7 @@ abstract class BaseListener implements IEventListener {
 			// Avoid spamming
 			// TODO: report some important events anyways
 			// deprecated NC22
-			// if ($this->appSettings->getActivity()) {
+			// if ($this->appSettings->getUseActivity()) {
 			// 	$this->addActivity();
 			// }
 		} catch (Exception $e) {
@@ -100,7 +101,7 @@ abstract class BaseListener implements IEventListener {
 				// Avoid spamming
 				// TODO: report some important events anyways
 				// since NC22
-				// if ($this->appSettings->getActivity()) {
+				// if ($this->appSettings->getUseActivity()) {
 				// 	$this->addActivity();
 				// }
 			} else {
