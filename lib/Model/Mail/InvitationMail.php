@@ -47,6 +47,7 @@ class InvitationMail extends MailBase {
 		$this->emailTemplate->addHeader();
 		$this->emailTemplate->addHeading($this->trans->t('Poll invitation "%s"', $this->poll->getTitle()), false);
 		$this->emailTemplate->addBodyText($this->getMainBody());
+		// TODO: Check second paramater
 		$this->emailTemplate->addBodyText($this->getRichDescription(), 'Hey');
 
 		$this->emailTemplate->addBodyButton(
