@@ -29,6 +29,6 @@ class ActivityVote extends ActivitySettings {
 	}
 
 	public function getName() : string {
-		return $this->l->t('Someone votes inside a <strong>poll</strong>');
+		return $this->l->t('Someone voted inside a <strong>poll</strong>');
 	}
 }
