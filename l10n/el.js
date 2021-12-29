@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\"" : "Ο {owner} σας προσκάλεσε να συμμετέχετε στην δημοσκόπηση \"{title}\"",
     "Poll invitation \"%s\"" : "Πρόσκληση στη δημοσκόπηση «%s»",
     "Go to poll" : "Μετάβαση στην δημοσκόπηση",
     "Do not share this link with other people, because it is connected to your votes." : "Μην μοιράζεστε αυτόν τον σύνδεσμο με άλλα άτομα, επειδή συνδέεται με τις ψήφους σας.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Σας στάλθηκε αυτό το email, επειδή προσκληθήκατε να ψηφίσετε στην δημοσκόπηση. Το όνομα ή το email σας θα καταγραφή. Αν δεν επιθυμείτε επικοινωνήστε με τον διαχειριστή της δημοσκόπησης που σας την έστειλε.",
+    "{owner} invited you to take part in the poll \"{title}\"" : "Ο {owner} σας προσκάλεσε να συμμετέχετε στην δημοσκόπηση \"{title}\"",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Αυτό το e-mail σας αποστέλλεται, επειδή έχετε εγγραφεί στις ειδοποιήσεις της δημοσκόπησης. Για να εξαιρεθείτε, επισκεφθείτε τη δημοσκόπηση και καταργήστε τη συνδρομή σας.",
     "Polls App - New Activity" : "Εφαρμογή ψηφοφοριών - Νέα δραστηριότητα",
     "A user" : "Ένας χρήστης",

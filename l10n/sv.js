@@ -1,9 +1,9 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} bjöd in dej att delta i omröstningen \"{title}\"",
     "Poll invitation \"%s\"" : "Omröstningsinbjudan \"%s\"",
     "Go to poll" : "Gå till omröstningen",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} bjöd in dej att delta i omröstningen \"{title}\"",
     "Polls App - New Activity" : "Omröstningsapp - Ny aktivitet",
     "Contact" : "Kontakt",
     "Public link" : "Publik länk",

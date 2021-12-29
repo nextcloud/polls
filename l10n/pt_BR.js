@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} convidou você para participar da enquete \"{title}\" como um membro do grupo {group_name}",
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} convidou você para participar da enquete \"{title}\"",
     "Poll invitation \"%s\"" : "Convite da enquete \"%s\"",
     "Go to poll" : "Ir para enquete",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Este link fornece acesso pessoal à enquete mencionada acima. Pressione o botão acima ou copie o link a seguir e adicione-o na barra de localização do seu navegador:",
     "Do not share this link with other people, because it is connected to your votes." : "Não compartilhe este link com outras pessoas, porque ele está vinculado aos seus votos.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Este e-mail foi enviado porque você foi convidado a votar nesta enquete pelo proprietário dela. Pelo menos seu nome ou e-mail estão registrados nesta enquete. Se desejar sair dela, entre em contato com o administrador do site ou o criador da enquete.",
+    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} convidou você para participar da enquete \"{title}\" como um membro do grupo {group_name}",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} convidou você para participar da enquete \"{title}\"",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Este e-mail foi enviado porque você se inscreveu nas notificações desta enquete. Para desativar, visite a enquete e remova sua inscrição.",
     "Polls App - New Activity" : "Aplicativo Enquete - Atividade Nova",
     "\"{title}\" has recent activity:" : "\"{title}\" tem atividade recente:",

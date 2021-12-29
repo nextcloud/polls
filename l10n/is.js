@@ -1,9 +1,9 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} bauð þér að taka þátt í könnuninni \"{title}\"",
     "Poll invitation \"%s\"" : "Boð um þátttöku í könnuninni \"%s\"",
     "Go to poll" : "Fara á könnun",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} bauð þér að taka þátt í könnuninni \"{title}\"",
     "Polls App - New Activity" : "Kannanaforrit - Ný virkni",
     "A user" : "Notandi",
     "Contact" : "Tengiliður",
