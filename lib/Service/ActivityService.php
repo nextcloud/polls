@@ -94,12 +94,12 @@ class ActivityService {
 		switch ($this->eventType) {
 			case CommentEvent::ADD:
 				return $this->userIsActor
-					? $this->trans->t('You commented poll {pollTitle}')
-					: $this->trans->t('{actor} commented poll {pollTitle}');
+					? $this->trans->t('You commented on poll {pollTitle}')
+					: $this->trans->t('{actor} commented on poll {pollTitle}');
 			case CommentEvent::DELETE:
 				return $this->userIsActor
-					? $this->trans->t('You deleted a commented from poll {pollTitle}')
-					: $this->trans->t('{actor} deleted a commented from poll {pollTitle}');
+					? $this->trans->t('You deleted a comment from poll {pollTitle}')
+					: $this->trans->t('{actor} deleted a comment from poll {pollTitle}');
 
 			case OptionEvent::ADD:
 				return $this->userIsActor
@@ -159,7 +159,7 @@ class ActivityService {
 				} elseif ($this->shareType === Share::TYPE_GROUP) {
 					return $this->userIsActor
 						? $this->trans->t('You shared poll {pollTitle} with group {sharee}')
-						: $this->trans->t('{actor} You shared poll {pollTitle} with group {sharee}');
+						: $this->trans->t('{actor} shared poll {pollTitle} with group {sharee}');
 				} elseif ($this->shareType === Share::TYPE_CIRCLE) {
 					return $this->userIsActor
 						? $this->trans->t('You shared poll {pollTitle} with circle {sharee}')
@@ -187,7 +187,7 @@ class ActivityService {
 			case ShareEvent::REGISTRATION:
 				return $this->userIsActor
 					? $this->trans->t('You registered to poll {pollTitle}')
-					: $this->trans->t('{sharee} registered to poll {pollTitle}');
+					: $this->trans->t('{actor} registered to poll {pollTitle}');
 			case ShareEvent::DELETE:
 				if ($this->shareType === Share::TYPE_PUBLIC) {
 					return $this->userIsActor
@@ -246,8 +246,8 @@ class ActivityService {
 					: $this->trans->t('{actor} commented');
 			case CommentEvent::DELETE:
 				return $this->userIsActor
-					? $this->trans->t('You deleted a commented')
-					: $this->trans->t('{actor} deleted a commented');
+					? $this->trans->t('You deleted a comment')
+					: $this->trans->t('{actor} deleted a comment');
 
 			case OptionEvent::ADD:
 				return $this->userIsActor
@@ -305,7 +305,7 @@ class ActivityService {
 				} elseif ($this->shareType === Share::TYPE_GROUP) {
 					return $this->userIsActor
 						? $this->trans->t('You shared this poll with group {sharee}')
-						: $this->trans->t('{actor} You shared this poll with group {sharee}');
+						: $this->trans->t('{actor} shared this poll with group {sharee}');
 				} elseif ($this->shareType === Share::TYPE_CIRCLE) {
 					return $this->userIsActor
 						? $this->trans->t('You shared this poll with circle {sharee}')
@@ -355,7 +355,7 @@ class ActivityService {
 
 				return $this->userIsActor
 					? $this->trans->t('You deleted {sharee}\'s share')
-					: $this->trans->t('{actor} deleted a share');
+					: $this->trans->t('{actor} deleted {sharee}\'s share');
 
 			case VoteEvent::SET:
 				return $this->userIsActor
