@@ -1,7 +1,7 @@
 { "translations": {
-    "{owner} invited you to take part in the poll \"{title}\"" : "{صاحب} شما را دعوت به شرکت در نظرسنجی \"{عنوان}\"",
     "Poll invitation \"%s\"" : "دعوت نظرسنجی \"%s\"",
     "Go to poll" : "برو به نظرسنجی",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{صاحب} شما را دعوت به شرکت در نظرسنجی \"{عنوان}\"",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "این ایمیل برای شما ارسال شده است ، زیرا در اعلان های این نظرسنجی مشترک هستید. برای امتناع ، از نظرسنجی بازدید کرده و اشتراک خود را حذف کنید.",
     "Polls App - New Activity" : "برنامه نظرسنجی - فعالیت جدید",
     "Contact" : "مخاطب",

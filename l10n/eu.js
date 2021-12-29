@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} jabeak \"{title}\" bozketan parte hartzera gonbidatu zaitu",
     "Poll invitation \"%s\"" : "Bozketara gonbidapena \"%s\"",
     "Go to poll" : "Joan bozketara",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Esteka honek goian izendatutako galdeketarako sarbide pertsonala ematen dizu. Sakatu goiko botoia edo kopiatu esteka hau eta gehitu zure nabigatzailearen kokapen barran:",
     "Do not share this link with other people, because it is connected to your votes." : "Ez zabaldu esteka hau, zure bozketara lotua baitago.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Inkestaren honen jabeak bozkatzera gonbidatu zaituelako jaso duzu posta elektroniko hau. Gutxienez zure izena edo helbide elektronikoa gordetzen da bozketa honetan. Bozketa honetatik atera nahi baduzu, jarri gunearen administratzailearekin edo bozketa hasi duenarekin (mezu hau bidali dizuna).",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} jabeak \"{title}\" bozketan parte hartzera gonbidatu zaitu",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Bozketa honen jakinarazpenetara harpidetuta zaudelako jaso duzu posta elektroniko hau. Ez badituzu horrelako mezuak jaso nahi, joan bozketara eta kendu zure harpidetza.",
     "Polls App - New Activity" : "Bozketak aplikazioa - Jarduera berria",
     "\"{title}\" has recent activity:" : "\"{title}\" jarduerak ditu azkenaldian:",

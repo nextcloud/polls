@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} sizi {group_name} grubunun bir üyesi olarak \"{title}\" anketine katılmaya çağırdı",
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} kullanıcısı sizi \"{title}\" anketine katılmaya çağırdı",
     "Poll invitation \"%s\"" : "\"%s\" anketine çağrı",
     "Go to poll" : "Ankete git",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Bu bağlantı yukarıdaki ankete yalnız size özel olan bir erişim sağlar. Yukarıdaki düğmeye tıklayın ya da aşağıdaki bağlantıyı kopyalayıp web tarayıcınızın adres çubuğuna yapıştırın:",
     "Do not share this link with other people, because it is connected to your votes." : "Bu bağlantı size özel olduğundan ve vereceğini oy ile ilgili olduğundan başka kişilerle paylaşmayın.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Bu e-posta, anket sahibi tarafından bu ankete oy vermeye çağrıldığınızı bildirmek için gönderilmiştir. En azından adınız ya da e-posta adresiniz bu ankete kaydedilmiş. Bilgilerinizin bu anketten silinmesini istiyorsanız, site yöneticisi ya da e-postayı gönderen anket hazırlayıcısı ile görüşün.",
+    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} sizi {group_name} grubunun bir üyesi olarak \"{title}\" anketine katılmaya çağırdı",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} kullanıcısı sizi \"{title}\" anketine katılmaya çağırdı",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Bu e-posta, bu anketin bildirimlerine abone olduğunuz için gönderildi. Bildirimlerin gönderilmemesi için ankete giderek abonelikten ayrılabilirsiniz.",
     "Polls App - New Activity" : "Anketler uygulaması - Yeni işlem",
     "\"{title}\" has recent activity:" : "Son \"{title}\" işlemleri: ",

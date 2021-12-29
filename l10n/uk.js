@@ -1,9 +1,9 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} запросив вас взяти участь у опитування \"{title}\"",
     "Poll invitation \"%s\"" : "Запрошення до опитування %s",
     "Go to poll" : "Перейти до опитування",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} запросив вас взяти участь у опитування \"{title}\"",
     "Contact" : "Контакт",
     "Public link" : "Публічне посилання",
     "Group" : "Група",

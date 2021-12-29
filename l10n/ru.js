@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} приглашает вас принять участие в опросе «{title}»",
     "Poll invitation \"%s\"" : "Приглашение на участие о опросе «%s»",
     "Go to poll" : "Перейти к опросу",
     "Do not share this link with other people, because it is connected to your votes." : "Не передавайте эту ссылку другим, т.к. она связана с вашими ответами на вопросы.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Это электронное письмо является приглашением на участие в опросе. В настоящее время в опросе уже содержатся сведения о вашем имени и адресе электронной почты. Если вы желаете, чтобы сведения о вас были удалены, свяжитесь с организатором опроса или администратором сайта, откуда было отправлено это письмо.",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} приглашает вас принять участие в опросе «{title}»",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Это письмо было отправлено потому что вы подписались на получение информации о произошедших в опросе событиях. Чтобы отписаться перейдите на страницу опроса и удалите  подписку.",
     "Polls App - New Activity" : "Приложение для проведения опросов — новые события",
     "A user" : "Пользователь",

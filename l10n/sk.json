@@ -1,11 +1,11 @@
 { "translations": {
-    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} vás pozval zúčastniť sa na ankete „{title}“ ako člen skupiny {group_name}",
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} vás pozval na účasť v ankete „{title}“",
     "Poll invitation \"%s\"" : "Pozvánka do ankety „%s“",
     "Go to poll" : "Prejsť na anketu",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Tento odkaz vám poskytuje osobný prístup k vyššie uvedenej ankete. Stlačte tlačidlo hore alebo skopírujte nasledujúci odkaz a pridajte ho do adresového riadka prehliadača:",
     "Do not share this link with other people, because it is connected to your votes." : "Tento odkaz nezdieľajte s inými ľuďmi, pretože súvisí s vašimi hlasmi.",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Tento e-mail ste dostali, pretože ste vlastníkom ankety pozvaní sa jej zúčastniť. V rámci ankety sa zaznamená aspoň vaše meno alebo e-mailová adresa. Ak chcete byť odstránení z tohto tejto ankety, kontaktujte správcu webu alebo iniciátora tejto ankety, z ktorého sa správa odosiela.",
+    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} vás pozval zúčastniť sa na ankete „{title}“ ako člen skupiny {group_name}",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} vás pozval na účasť v ankete „{title}“",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Tento e-mail ste dostali, pretože ste sa prihlásili na odber upozornení na túto anketu. Ak sa chcete odhlásiť, navštívte anketu a odstráňte svoj odber.",
     "Polls App - New Activity" : "Aplikácia Ankety - nová aktivita",
     "\"{title}\" has recent activity:" : "\"{title}\" má nedávnu aktivitu:",

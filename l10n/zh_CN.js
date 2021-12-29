@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
-    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} 邀请你作为 {group_name} 群组的一名成员加入 \"{title}\" 投票",
-    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} 邀请您参加名为 “{title}” 的投票",
     "Poll invitation \"%s\"" : "邀请 “%s” 投票",
     "Go to poll" : "前往投票",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "这个链接可以让你访问上面提到的民意调查。按上面的按钮或复制以下链接，并添加到你的浏览器的地址栏:",
     "Do not share this link with other people, because it is connected to your votes." : "不要与他人分享这个链接，因为它与你的投票相关连。",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "这封电子邮件发送给您，是因为投票拥有者邀请您在此投票。此投票至少记录了您的名称和电子邮件地址。如果您希望从此投票中被去除，请联系网站管理员或者投票拥有者，也就是发送此电子邮件的人。",
+    "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} 邀请你作为 {group_name} 群组的一名成员加入 \"{title}\" 投票",
+    "{owner} invited you to take part in the poll \"{title}\"" : "{owner} 邀请您参加名为 “{title}” 的投票",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "该电子邮件已发送给您，因为您已订阅此投票的通知。 要选择退出，请访问投票并移除您的订阅。",
     "Polls App - New Activity" : "投票应用 - 新的活动",
     "\"{title}\" has recent activity:" : "“{title}” 最近有活动：",
