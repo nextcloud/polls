@@ -57,7 +57,7 @@
 			<SideBarTabComments />
 		</AppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit && useActicity"
+		<AppSidebarTab v-if="acl.allowEdit && useActivity"
 			:id="'activity'"
 			:order="4"
 			:name="t('polls', 'Activity')"
