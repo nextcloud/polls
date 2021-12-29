@@ -25,7 +25,10 @@
 namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Db\Share;
-use League\CommonMark\CommonMarkConverter;
+use League\CommonMark\MarkdownConverter;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\Table\TableExtension;
 
 class InvitationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Invitation';
@@ -47,8 +50,7 @@ class InvitationMail extends MailBase {
 		$this->emailTemplate->addHeader();
 		$this->emailTemplate->addHeading($this->trans->t('Poll invitation "%s"', $this->poll->getTitle()), false);
 		$this->emailTemplate->addBodyText($this->getMainBody());
-		// TODO: Check second paramater
-		$this->emailTemplate->addBodyText($this->getRichDescription(), 'Hey');
+		$this->emailTemplate->addBodyText($this->getRichDescription());
 
 		$this->emailTemplate->addBodyButton(
 				$this->trans->t('Go to poll'),
@@ -82,7 +84,10 @@ class InvitationMail extends MailBase {
 			'allow_unsafe_links' => false,
 		];
 
-		$converter = new CommonMarkConverter($config);
-		return $converter->convertToHtml($this->poll->getDescription());
+		$environment = new Environment($config);
+		$environment->addExtension(new CommonMarkCoreExtension());
+		$environment->addExtension(new TableExtension());
+		$converter = new MarkdownConverter($environment);
+		return $converter->convertToHtml($this->poll->getDescription())->getContent();
 	}
 }
