@@ -105,7 +105,6 @@ module.exports = {
 		}),
 		new StyleLintPlugin({
 			files: 'src/**/*.{css,scss,vue}',
-			failOnError: !isDev,
 		}),
 		new webpack.DefinePlugin({ appName: JSON.stringify(appName) }),
 		new webpack.DefinePlugin({ appVersion: JSON.stringify(appVersion) }),
