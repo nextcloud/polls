@@ -1,5 +1,9 @@
 module.exports = {
-	extends: 'stylelint-config-recommended-scss',
+	extends: [
+		'stylelint-config-recommended-scss',
+		'stylelint-config-recommended-vue',
+	],
+	ignoreFiles: ['**/*.js', '**/*.gif', '**/*.svg'],
 	rules: {
 		indentation: 'tab',
 		'selector-type-no-unknown': null,
@@ -21,6 +25,7 @@ module.exports = {
 		'selector-list-comma-newline-after': null,
 		'no-descending-specificity': null,
 		'string-quotes': 'single',
+		'no-invalid-double-slash-comments': null,
 	},
 	plugins: ['stylelint-scss'],
 }
