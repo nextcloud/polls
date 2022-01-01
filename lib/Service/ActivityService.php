@@ -355,7 +355,7 @@ class ActivityService {
 
 				return $this->userIsActor
 					? $this->trans->t('You deleted {sharee}\'s share')
-					: $this->trans->t('{actor} deleted {sharee}\'s share');
+					: $this->trans->t('{actor} deleted a share');
 
 			case VoteEvent::SET:
 				return $this->userIsActor
