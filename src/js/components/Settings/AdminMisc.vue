@@ -80,7 +80,7 @@ export default {
 
 	computed: {
 		...mapState({
-			appSettings: (state) => state.appSettings.appSettings,
+			appSettings: (state) => state.appSettings,
 		}),
 
 		// Add bindings
