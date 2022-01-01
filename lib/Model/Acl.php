@@ -216,7 +216,8 @@ class Acl implements JsonSerializable {
 			case self::PERMISSION_OPTIONS_ADD:
 				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT)
 					|| ($this->poll->getAllowProposals() === Poll::PROPOSAL_ALLOW
-					&& !$this->poll->getProposalsExpired());
+					&& !$this->poll->getProposalsExpired()
+					&& $this->share->getType() !== Share::TYPE_PUBLIC);
 
 			case self::PERMISSION_COMMENT_ADD:
 				return $this->share->getType() !== Share::TYPE_PUBLIC && $this->poll->getallowComment();
