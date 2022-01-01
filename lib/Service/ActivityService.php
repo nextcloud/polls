@@ -319,7 +319,7 @@ class ActivityService {
 			case ShareEvent::CHANGE_EMAIL:
 				return $this->userIsActor
 					? $this->trans->t('You have changed your email address')
-					: $this->trans->t('{actor}\'s email address has been changed');
+					: $this->trans->t('{sharee}\'s email address has been changed');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
 					? $this->trans->t('You have changed the share type')
