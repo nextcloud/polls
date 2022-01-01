@@ -25,19 +25,17 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
 const defaultAppSettings = () => ({
-	appSettings: {
-		allowPublicShares: true,
-		allowAllAccess: true,
-		allowPollCreation: true,
-		showLogin: true,
-		allAccessGroups: [],
-		publicSharesGroups: [],
-		pollCreationGroups: [],
-		autoArchive: false,
-		autoArchiveOffset: 30,
-		updateType: 'longPolling',
-		useActivity: false,
-	},
+	allowPublicShares: true,
+	allowAllAccess: true,
+	allowPollCreation: true,
+	showLogin: true,
+	allAccessGroups: [],
+	publicSharesGroups: [],
+	pollCreationGroups: [],
+	autoArchive: false,
+	autoArchiveOffset: 30,
+	updateType: 'longPolling',
+	useActivity: false,
 })
 
 const state = defaultAppSettings()
@@ -49,8 +47,8 @@ const mutations = {
 	},
 
 	set(state, payload) {
-		Object.keys(payload).filter((key) => key in state.appSettings).forEach((key) => {
-			state.appSettings[key] = payload[key]
+		Object.keys(payload).filter((key) => key in state).forEach((key) => {
+			state[key] = payload[key]
 		})
 	},
 }
@@ -69,10 +67,10 @@ const actions = {
 	async write(context) {
 		const endPoint = 'apps/polls/settings/app'
 		try {
-			const response = await axios.post(generateUrl(endPoint), { appSettings: context.state.appSettings })
+			const response = await axios.post(generateUrl(endPoint), { appSettings: context.state })
 			context.commit('set', response.data.appSettings)
 		} catch (e) {
-			console.error('Error writing appSettings', { error: e.response }, { appSettings: state.appSettings })
+			console.error('Error writing appSettings', { error: e.response }, { appSettings: state })
 			throw e
 		}
 	},

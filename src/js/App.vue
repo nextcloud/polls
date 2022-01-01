@@ -69,7 +69,7 @@ export default {
 	computed: {
 		...mapState({
 			settings: (state) => state.settings.user,
-			appSettings: (state) => state.appSettings.appSettings,
+			appSettings: (state) => state.appSettings,
 			poll: (state) => state.poll,
 			allowEdit: (state) => state.poll.acl.allowEdit,
 			dashboard: (state) => state.settings.dashboard,
