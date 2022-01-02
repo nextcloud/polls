@@ -41,7 +41,6 @@ OC.L10N.register(
     "%s deleted your poll" : "1 %s töröle a szavazásod",
     "{actor} deleted your poll \"%s\"." : "{actor} törölte a \"1%s\" szavazásod.",
     "%s archived your poll" : "1 %s archivált szavazásod",
-    "You changed your email address" : "Email cím megváltoztatva",
     "Switch to list view" : "Váltás listanézetre",
     "Switch to table view" : "Váltás táblázat nézetre",
     "Link copied to clipboard" : "Hivatkozás bemásolva a vágólapra",
