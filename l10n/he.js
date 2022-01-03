@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Poll changes" : "שינויים בסקר",
     "Poll invitation \"%s\"" : "הזמנה לסקר „%s”",
     "Go to poll" : "מעבר לסקר",
     "{owner} invited you to take part in the poll \"{title}\"" : "הוזמנת על ידי {owner} להשתתף בסקר „{title}”",
