@@ -326,6 +326,7 @@ OC.L10N.register(
     "Options" : "Aukerak",
     "Sharing" : "Partekatzea",
     "Comments" : "Iruzkinak",
+    "Activity" : "Jarduera",
     "Polls user settings" : "Galdeketak erabiltzaile-ezarpenak",
     "Experimental styles" : "Estilo esperimentalak",
     "No vote options available" : "Ez dago bozka aukerarik eskuragarri.",
