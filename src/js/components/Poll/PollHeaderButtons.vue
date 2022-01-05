@@ -35,6 +35,7 @@
 		</Popover>
 		<ActionSortOptions />
 		<ActionChangeView />
+		<ExportPoll />
 		<ActionToggleSidebar v-if="allowEdit || allowComment" />
 	</div>
 </template>
@@ -46,6 +47,7 @@ import { emit } from '@nextcloud/event-bus'
 import ActionSortOptions from '../Actions/ActionSortOptions'
 import ActionChangeView from '../Actions/ActionChangeView'
 import ActionToggleSidebar from '../Actions/ActionToggleSidebar'
+import ExportPoll from '../Export/ExportPoll'
 import UserMenu from '../User/UserMenu'
 
 export default {
@@ -57,6 +59,7 @@ export default {
 		ActionChangeView,
 		ActionSortOptions,
 		ActionToggleSidebar,
+		ExportPoll,
 		PollInformation: () => import('../Poll/PollInformation'),
 		UserMenu,
 	},
