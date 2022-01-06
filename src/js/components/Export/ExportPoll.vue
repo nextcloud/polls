@@ -26,7 +26,14 @@
 			<template #icon>
 				<ExcelIcon />
 			</template>
-			{{ t('polls', 'Download Excel file') }}
+			{{ t('polls', 'Download Excel spreadsheet') }}
+		</ActionButton>
+
+		<ActionButton close-after-click @click="getOdsFile()">
+			<template #icon>
+				<FileTableIcon />
+			</template>
+			{{ t('polls', 'Download Open Document spreadsheet') }}
 		</ActionButton>
 
 		<ActionButton close-after-click @click="getCsvFile()">
@@ -35,14 +42,14 @@
 			</template>
 			{{ t('polls', 'Download CSV file') }}
 		</ActionButton>
-	</Actions>
 
-	<!-- <div class="action change-view">
-		<ButtonDiv :title="caption"
-			simple
-			:icon="icon"
-			@click="getExcel()" />
-		<Modal v-if="showModal" /> -->
+		<ActionButton close-after-click @click="getHTMLFile()">
+			<template #icon>
+				<XmlIcon />
+			</template>
+			{{ t('polls', 'Download HTML file') }}
+		</ActionButton>
+	</Actions>
 </template>
 
 <script>
@@ -51,7 +58,9 @@ import { saveAs } from 'file-saver'
 import XLSX from 'xlsx'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
+import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
+import XmlIcon from 'vue-material-design-icons/Xml.vue'
 
 export default {
 	name: 'ExportPoll',
@@ -60,6 +69,8 @@ export default {
 		ActionButton,
 		CsvIcon,
 		ExcelIcon,
+		FileTableIcon,
+		XmlIcon,
 	},
 
 	data() {
@@ -88,6 +99,20 @@ export default {
 			this.addSheet()
 			this.addRowsFromArray()
 			this.downloadCsvFile()
+		},
+
+		getHTMLFile() {
+			this.createWorkbook()
+			this.addSheet()
+			this.addRowsFromArray()
+			this.downloadHTMLFile()
+		},
+
+		getOdsFile() {
+			this.createWorkbook()
+			this.addSheet()
+			this.addRowsFromArray()
+			this.downloadOdsFile()
 		},
 
 		getExcelFile() {
@@ -139,9 +164,19 @@ export default {
 			saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), 'poll.xlsx')
 		},
 
+		downloadOdsFile() {
+			const wbout = XLSX.write(this.workBook, { bookType: 'ods', type: 'binary' })
+			saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), 'poll.ods')
+		},
+
 		downloadCsvFile() {
 			const wbout = XLSX.write(this.workBook, { bookType: 'csv', type: 'binary' })
 			saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), 'poll.csv')
+		},
+
+		downloadHTMLFile() {
+			const wbout = XLSX.write(this.workBook, { bookType: 'html', type: 'binary' })
+			saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), 'poll.html')
 		},
 
 		s2ab(s) {
