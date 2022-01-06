@@ -71,7 +71,7 @@ class PollService {
 	private $acl;
 
 	/** @var AppSettings */
-	private $appsettings;
+	private $appSettings;
 
 	public function __construct(
 		Acl $acl,
