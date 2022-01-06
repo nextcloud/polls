@@ -167,7 +167,7 @@ class PollService {
 	 * Add poll
 	 */
 	public function add(string $type, string $title): Poll {
-		if (!$this->appSettings->getCreationAllowed()) {
+		if (!$this->appSettings->getPollCreationAllowed()) {
 			throw new NotAuthorizedException;
 		}
 
