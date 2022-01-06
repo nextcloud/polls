@@ -42,6 +42,7 @@ use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\Settings\AppSettings;
 
 class PollService {
 
@@ -69,8 +70,12 @@ class PollService {
 	/** @var Acl */
 	private $acl;
 
+	/** @var AppSettings */
+	private $appsettings;
+
 	public function __construct(
 		Acl $acl,
+		AppSettings $appSettings,
 		IEventDispatcher $eventDispatcher,
 		MailService $mailService,
 		Poll $poll,
@@ -80,6 +85,7 @@ class PollService {
 		Vote $vote
 	) {
 		$this->acl = $acl;
+		$this->appSettings = $appSettings;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->mailService = $mailService;
 		$this->poll = $poll;
@@ -161,7 +167,7 @@ class PollService {
 	 * Add poll
 	 */
 	public function add(string $type, string $title): Poll {
-		if (!\OC::$server->getUserSession()->isLoggedIn()) {
+		if (!$this->appSettings->getCreationAllowed()) {
 			throw new NotAuthorizedException;
 		}
 
