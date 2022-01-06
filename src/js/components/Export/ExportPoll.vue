@@ -22,28 +22,28 @@
 
 <template lang="html">
 	<Actions default-icon="icon-download">
-		<ActionButton close-after-click @click="getExcelFile()">
+		<ActionButton close-after-click @click="exportFile('xlsx')">
 			<template #icon>
 				<ExcelIcon />
 			</template>
 			{{ t('polls', 'Download Excel spreadsheet') }}
 		</ActionButton>
 
-		<ActionButton close-after-click @click="getOdsFile()">
+		<ActionButton close-after-click @click="exportFile('ods')">
 			<template #icon>
 				<FileTableIcon />
 			</template>
 			{{ t('polls', 'Download Open Document spreadsheet') }}
 		</ActionButton>
 
-		<ActionButton close-after-click @click="getCsvFile()">
+		<ActionButton close-after-click @click="exportFile('csv')">
 			<template #icon>
 				<CsvIcon />
 			</template>
 			{{ t('polls', 'Download CSV file') }}
 		</ActionButton>
 
-		<ActionButton close-after-click @click="getHTMLFile()">
+		<ActionButton close-after-click @click="exportFile('html')">
 			<template #icon>
 				<XmlIcon />
 			</template>
@@ -76,6 +76,7 @@ export default {
 	data() {
 		return {
 			workBook: [],
+			sheetData: [],
 		}
 	},
 
@@ -94,89 +95,63 @@ export default {
 	},
 
 	methods: {
-		getCsvFile() {
-			this.createWorkbook()
-			this.addSheet()
-			this.addRowsFromArray()
-			this.downloadCsvFile()
-		},
-
-		getHTMLFile() {
-			this.createWorkbook()
-			this.addSheet()
-			this.addRowsFromArray()
-			this.downloadHTMLFile()
-		},
-
-		getOdsFile() {
-			this.createWorkbook()
-			this.addSheet()
-			this.addRowsFromArray()
-			this.downloadOdsFile()
-		},
-
-		getExcelFile() {
-			this.createWorkbook()
-			this.addSheet()
-			this.addRowsFromArray()
-			this.downloadExcelFile()
-		},
-
-		createWorkbook() {
+		exportFile(type) {
 			this.workBook = XLSX.utils.book_new()
-		},
-		addSheet() {
 			this.workBook.SheetNames.push(this.poll.title)
-		},
-		addRowsFromArray() {
-			const sheetData = [
-				[this.poll.title],
-				[this.poll.description],
-			]
+			this.sheetData = []
 
-			if (this.poll.type === 'datePoll') {
-				// const optionsLine = [...[''], ...this.options.list.map((item) => item.pollOptionText)]
-				// sheetData.push(optionsLine)
-
-				sheetData.push([...[t('polls', 'from')], ...this.options.list.map((option) => this.explodeDates(option).from.dateTime)])
-				sheetData.push([...[t('polls', 'to')], ...this.options.list.map((option) => this.explodeDates(option).to.dateTime)])
-				// sheetData.push(['to'].push(...this.options.list.map((option) => this.explodeDates(option).to.dateTime)))
-			} else {
-				sheetData.push([...[''], ...this.options.list.map((item) => item.pollOptionText)])
+			if (['html', 'xlsx', 'ods'].includes(type)) {
+				this.sheetData.push(
+					[this.poll.title],
+					[this.poll.description],
+				)
 			}
 
+			if (this.poll.type === 'textPoll') {
+				this.sheetData.push(['', ...this.options.list.map((item) => item.pollOptionText)])
+
+			} else if (['csv'].includes(type)) {
+				this.sheetData.push([t('polls', 'Participants'), ...this.options.list.map((option) => this.explodeDates(option).iso)])
+
+			} else if (['html'].includes(type)) {
+				this.sheetData.push([t('polls', 'Participants'), ...this.options.list.map((option) => this.explodeDates(option).raw)])
+
+			} else {
+				this.sheetData.push([t('polls', 'from'), ...this.options.list.map((option) => this.explodeDates(option).from.dateTime)])
+				this.sheetData.push([t('polls', 'to'), ...this.options.list.map((option) => this.explodeDates(option).to.dateTime)])
+			}
+
+			if (['html', 'ods', 'xlsx'].includes(type)) {
+				this.addVotesArray('symbols')
+			} else if (['csv'].includes(type)) {
+				this.addVotesArray('raw')
+			} else {
+				this.addVotesArray()
+			}
+
+			const workBookOutput = XLSX.write(this.workBook, { bookType: type, type: 'binary' })
+			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${type}`)
+		},
+
+		addVotesArray(style) {
 			this.participants.forEach((participant) => {
 				const votesLine = [participant.displayName]
 
 				this.options.list.forEach((option, i) => {
-					votesLine.push(t('polls', this.getVote({ userId: participant.userId, option }).voteAnswerSymbol))
+					if (style === 'symbols') {
+						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswerSymbol ?? '❌')
+					} else if (style === 'raw') {
+						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswer)
+					} else {
+						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswerTranslated ?? t('polls', 'no'))
+					}
 				})
 
-				sheetData.push(votesLine)
+				this.sheetData.push(votesLine)
 			})
 
-			const ws = XLSX.utils.aoa_to_sheet(sheetData)
-			this.workBook.Sheets[this.poll.title] = ws
-
-		},
-		downloadExcelFile() {
-			const wbout = XLSX.write(this.workBook, { bookType: 'xlsx', type: 'binary' })
-			saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), 'poll.xlsx')
-		},
-
-		downloadOdsFile() {
-			const wbout = XLSX.write(this.workBook, { bookType: 'ods', type: 'binary' })
-			saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), 'poll.ods')
-		},
-
-		downloadCsvFile() {
-			const wbout = XLSX.write(this.workBook, { bookType: 'csv', type: 'binary' })
-			saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), 'poll.csv')
-		},
-
-		downloadHTMLFile() {
-			const wbout = XLSX.write(this.workBook, { bookType: 'html', type: 'binary' })
-			saveAs(new Blob([this.s2ab(wbout)], { type: 'application/octet-stream' }), 'poll.html')
+			const workSheet = XLSX.utils.aoa_to_sheet(this.sheetData)
+			this.workBook.Sheets[this.poll.title] = workSheet
 		},
 
 		s2ab(s) {

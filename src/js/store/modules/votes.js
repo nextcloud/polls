@@ -104,6 +104,9 @@ const actions = {
 				} else if (vote.voteAnswer === 'maybe') {
 					vote.voteAnswerTranslated = t('polls', 'maybe')
 					vote.voteAnswerSymbol = '❔'
+				} else {
+					vote.voteAnswerTranslated = t('polls', 'no')
+					vote.voteAnswerSymbol = '❌'
 				}
 				votes.push(vote)
 			})

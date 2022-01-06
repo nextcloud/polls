@@ -111,6 +111,7 @@ const getters = {
 				time: from.format('LT'),
 				date: from.format('ll'),
 				dateTime: from.format('llll'),
+				iso: moment(from).toISOString(),
 				utc: moment(from).utc().format('llll'),
 			},
 			to: {
@@ -120,10 +121,13 @@ const getters = {
 				time: to.format('LT'),
 				date: toModified.format('ll'),
 				dateTime: to.format('llll'),
+				iso: moment(to).toISOString(),
 				utc: moment(to).utc().format('llll'),
 				sameDay: from.format('L') === toModified.format('L'),
 			},
 			dayLong: dayLongEvent,
+			raw: `${from.format('llll')} - ${toModified.format('llll')}`,
+			iso: `${moment(from).toISOString()} - ${moment(to).toISOString()}`,
 		}
 
 	},
