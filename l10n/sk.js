@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Poll changes" : "Zmeny v anketách",
     "Poll invitation \"%s\"" : "Pozvánka do ankety „%s“",
     "Go to poll" : "Prejsť na anketu",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Tento odkaz vám poskytuje osobný prístup k vyššie uvedenej ankete. Stlačte tlačidlo hore alebo skopírujte nasledujúci odkaz a pridajte ho do adresového riadka prehliadača:",
@@ -23,6 +24,7 @@ OC.L10N.register(
     "A voting option has been removed." : "Možnosť v hlasovaní bola odobraná.",
     "The poll owner has been changed." : "Vlastník ankety bol zmenený.",
     "%s created the poll." : "%s vytvoril anketu.",
+    "A voting option has been unconfirmed." : "Možnosť v hlasovaní nebola potvrdená.",
     "Reminder for poll \"%s\"" : "Pripomienka pre anketu „%s“",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} vám posiela toto pripomenutie, pre potvrdenie, že vaše možnosti v hlasovaní sú nastavené.",
     "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "Prvá možnosť ankety je vždy nižšia ako {leftPeriod} hodín ({dateTime}, {timezone}).",
@@ -327,6 +329,7 @@ OC.L10N.register(
     "Options" : "Možnosti",
     "Sharing" : "Zdieľanie",
     "Comments" : "Komentáre",
+    "Activity" : "Aktivita",
     "Polls user settings" : "Užívateľské nastavenia ankiet",
     "Experimental styles" : "Experimentálne štýly",
     "No vote options available" : "Žiadne možnosti hlasovania neboli nájdené",
