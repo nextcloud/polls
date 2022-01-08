@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Poll changes" : "Peilingswijzigingen",
     "Poll invitation \"%s\"" : "Peilingsuitnodiging \"%s\"",
     "Go to poll" : "Ga naar peiling",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Deze link geeft je persoonlijke toegang tot de bovenstaande peiling. Druk op de knop hierboven of kopieer de volgende link en voeg die toe aan de lokatiebalk van je browser:",
