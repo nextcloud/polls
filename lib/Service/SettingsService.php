@@ -61,12 +61,14 @@ class SettingsService {
 		$this->appSettings->setAllowPublicShares($settingsArray['allowPublicShares']);
 		$this->appSettings->setAllowAllAccess($settingsArray['allowAllAccess']);
 		$this->appSettings->setAllowPollCreation($settingsArray['allowPollCreation']);
+		$this->appSettings->setAllowPollDownload($settingsArray['allowPollDownload']);
 		$this->appSettings->setShowLogin($settingsArray['showLogin']);
 		$this->appSettings->setAutoArchive($settingsArray['autoArchive']);
 		$this->appSettings->setAutoArchiveOffset($settingsArray['autoArchiveOffset']);
 		$this->appSettings->setAllAccessGroups(array_column($settingsArray['allAccessGroups'], 'id'));
 		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
+		$this->appSettings->setPollDownloadGroups(array_column($settingsArray['pollDownloadGroups'], 'id'));
 		$this->appSettings->setUpdateType($settingsArray['updateType']);
 		$this->appSettings->setUseActivity($settingsArray['useActivity']);
 	}

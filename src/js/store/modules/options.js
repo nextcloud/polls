@@ -24,6 +24,7 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import orderBy from 'lodash/orderBy'
+import moment from '@nextcloud/moment'
 
 const defaultOptions = () => ({
 	list: [],
@@ -84,6 +85,53 @@ const getters = {
 	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc'),
 	proposalsExist: (state) => !!state.list.filter((option) => option.owner).length,
 	confirmed: (state) => state.list.filter((option) => option.confirmed > 0),
+
+	explodeDates: (state, getters, rootState) => (option) => {
+		const from = moment.unix(option.timestamp)
+		const to = moment.unix(option.timestamp + Math.max(0, option.duration))
+		// does the event start at 00:00 local time and
+		// is the duration divisable through 24 hours without rest
+		// then we have a day long event (one or multiple days)
+		// In this case we want to suppress the display of any time information
+		const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
+
+		const dayModifier = dayLongEvent ? 1 : 0
+		// modified to date, in case of day long events, a second gets substracted
+		// to set the begin of the to day to the end of the previous date
+		const toModified = moment(to).subtract(dayModifier, 'days')
+
+		if (rootState.poll.type !== 'datePoll') {
+			return {}
+		}
+		return {
+			from: {
+				month: from.format(moment().year() === from.year() ? 'MMM' : 'MMM [ \']YY'),
+				day: from.format('D'),
+				dow: from.format('ddd'),
+				time: from.format('LT'),
+				date: from.format('ll'),
+				dateTime: from.format('llll'),
+				iso: moment(from).toISOString(),
+				utc: moment(from).utc().format('llll'),
+			},
+			to: {
+				month: toModified.format(moment().year() === toModified.year() ? 'MMM' : 'MMM [ \']YY'),
+				day: toModified.format('D'),
+				dow: toModified.format('ddd'),
+				time: to.format('LT'),
+				date: toModified.format('ll'),
+				dateTime: to.format('llll'),
+				iso: moment(to).toISOString(),
+				utc: moment(to).utc().format('llll'),
+				sameDay: from.format('L') === toModified.format('L'),
+			},
+			dayLong: dayLongEvent,
+			raw: `${from.format('llll')} - ${toModified.format('llll')}`,
+			iso: `${moment(from).toISOString()} - ${moment(to).toISOString()}`,
+		}
+
+	},
+
 }
 
 const actions = {

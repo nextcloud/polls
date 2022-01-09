@@ -31,9 +31,11 @@
 			<h2>{{ t('polls', 'Poll creation restrictions') }}</h2>
 			<AdminPollCreation />
 		</div>
+
 		<div class="sub-section">
 			<h2>{{ t('polls', 'Other settings') }}</h2>
 			<AdminMisc />
+			<AdminPollDownload />
 		</div>
 	</div>
 </template>
@@ -41,6 +43,7 @@
 <script>
 import AdminMisc from '../components/Settings/AdminMisc'
 import AdminPollCreation from '../components/Settings/AdminPollCreation'
+import AdminPollDownload from '../components/Settings/AdminPollDownload'
 import AdminShareSettings from '../components/Settings/AdminShareSettings'
 
 export default {
@@ -49,6 +52,7 @@ export default {
 	components: {
 		AdminMisc,
 		AdminPollCreation,
+		AdminPollDownload,
 		AdminShareSettings,
 	},
 

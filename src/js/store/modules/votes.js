@@ -34,7 +34,7 @@ const namespaced = true
 
 const mutations = {
 	set(state, payload) {
-		state.list = payload.votes
+		state.list = payload
 	},
 
 	reset(state) {
@@ -93,7 +93,24 @@ const actions = {
 		}
 		try {
 			const response = await axios.get(generateUrl(`${endPoint}/votes`), { params: { time: +new Date() } })
-			context.commit('set', response.data)
+			const votes = []
+			response.data.votes.forEach((vote) => {
+				if (vote.voteAnswer === 'yes') {
+					vote.voteAnswerTranslated = t('polls', 'yes')
+					vote.voteAnswerSymbol = '✔'
+				} else if (vote.voteAnswer === 'no') {
+					vote.voteAnswerTranslated = t('polls', 'no')
+					vote.voteAnswerSymbol = '❌'
+				} else if (vote.voteAnswer === 'maybe') {
+					vote.voteAnswerTranslated = t('polls', 'maybe')
+					vote.voteAnswerSymbol = '❔'
+				} else {
+					vote.voteAnswerTranslated = t('polls', 'no')
+					vote.voteAnswerSymbol = '❌'
+				}
+				votes.push(vote)
+			})
+			context.commit('set', votes)
 		} catch {
 			context.commit('reset')
 		}
