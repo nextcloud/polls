@@ -21,55 +21,57 @@
   -->
 
 <template>
-	<div class="vote-table-header-item"
-		:class=" { winner: isWinner }">
-		<OptionItem :option="option" :poll-type="poll.type" :display="optionStyle" />
+	<div class="side-bar-tab-polls">
+		<div v-for="(poll) in polls"
+			:key="poll.id"
+			:class="['poll-item', { listed: listed(poll.id) }]"
+			@click="toggle(poll.id)">
+			<UserItem condensed :user-id="poll.owner" />
+			<div class="poll-title-box">
+				{{ poll.title }}
+			</div>
+		</div>
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import OptionItem from '../Options/OptionItem'
-
+import { mapActions, mapGetters } from 'vuex'
+import UserItem from '../User/UserItem'
 export default {
-	name: 'VoteTableHeaderItem',
+	name: 'SideBarTabDatePolls',
 
 	components: {
-		OptionItem,
-	},
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined,
-		},
+		UserItem,
 	},
 
 	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
-		}),
-
 		...mapGetters({
-			closed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
+			polls: 'polls/datePolls',
+			listed: 'combo/pollIsListed',
+		}),
+	},
+	methods: {
+		...mapActions({
+			toggle: 'combo/togglePollItem',
 		}),
 
-		optionStyle() {
-			if (this.poll.type === 'datePoll') {
-				return 'dateBox'
-			}
-			return 'textBox'
-
-		},
-
-		isWinner() {
-			// highlight best option until poll is closed and
-			// at least one option is confirmed
-			return this.option.rank === 1 && this.option.yes && !(this.closed && this.confirmedOptions.length)
-		},
 	},
 }
-
 </script>
+
+<style lang="scss">
+.poll-item {
+	display: flex;
+	align-items: center;
+	&.listed {
+		background-color: var(--color-polls-background-yes);
+		margin: 8px 0;
+		border-bottom: 1px solid var(--color-border);
+		border-radius: var(--border-radius-large);
+		box-shadow: 2px 2px 6px var(--color-box-shadow);
+	}
+	.poll-title-box {
+		transition: background-color 1s ease-out;
+	}
+}
+</style>

@@ -20,56 +20,67 @@
   -
   -->
 
-<template>
-	<div class="vote-table-header-item"
-		:class=" { winner: isWinner }">
-		<OptionItem :option="option" :poll-type="poll.type" :display="optionStyle" />
+<template lang="html">
+	<div class="combo-title">
+		<div class="combo-title__title">
+			{{ title }}
+		</div>
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import OptionItem from '../Options/OptionItem'
+import { mapState } from 'vuex'
 
 export default {
-	name: 'VoteTableHeaderItem',
-
-	components: {
-		OptionItem,
-	},
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined,
-		},
-	},
+	name: 'ComboTitle',
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
+			title: (state) => state.combo.title,
 		}),
-
-		...mapGetters({
-			closed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
-		}),
-
-		optionStyle() {
-			if (this.poll.type === 'datePoll') {
-				return 'dateBox'
-			}
-			return 'textBox'
-
-		},
-
-		isWinner() {
-			// highlight best option until poll is closed and
-			// at least one option is confirmed
-			return this.option.rank === 1 && this.option.yes && !(this.closed && this.confirmedOptions.length)
-		},
 	},
 }
 
 </script>
+
+<style lang="scss">
+	.combo-title {
+		.combo-title__sub {
+			opacity: 0.7;
+			line-height: 1.2em;
+			font-size: 1em;
+			button {
+				margin-left: 8px;
+			}
+
+			[class^='icon-'], [class*=' icon-'] {
+				padding-left: 21px;
+				background-position: left center;
+			}
+			.closed {
+				color: var(--color-error);
+				font-weight: 700;
+			}
+			.closing {
+				color: var(--color-warning);
+				font-weight: 700;
+			}
+			.open {
+				font-weight: 700;
+			}
+			.archived {
+				color: var(--color-error);
+				font-weight: 700;
+			}
+			.created {
+				color: var(--color-text-light);
+			}
+		}
+
+		.combo-title__title {
+			font-weight: bold;
+			font-size: 1.3em;
+			line-height: 1.5em;
+		}
+	}
+</style>

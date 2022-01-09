@@ -127,6 +127,7 @@ const getters = {
 
 	activePolls: (state) => state.list.filter((poll) => (!poll.deleted)),
 	archivedPolls: (state, getters) => state.list.filter((poll) => (poll.deleted)),
+	datePolls: (state) => state.list.filter((poll) => (poll.type === 'datePoll' && !poll.deleted)),
 	myPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.isOwner)),
 	publicPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'public')),
 	hiddenPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'hidden')),

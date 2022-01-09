@@ -32,7 +32,9 @@ const Administration = () => import('./views/Administration')
 const Vote = () => import('./views/Vote')
 const NotFound = () => import('./views/NotFound')
 const SideBar = () => import('./views/SideBar')
+const SideBarCombo = () => import('./views/SideBarCombo')
 const Navigation = () => import('./views/Navigation')
+const Combo = () => import('./views/Combo')
 
 Vue.use(Router)
 
@@ -95,6 +97,15 @@ export default new Router({
 				navigation: Navigation,
 			},
 			name: 'administration',
+		},
+		{
+			path: '/combo',
+			components: {
+				default: Combo,
+				navigation: Navigation,
+				sidebar: SideBarCombo,
+			},
+			name: 'combo',
 		},
 		{
 			path: '/not-found',

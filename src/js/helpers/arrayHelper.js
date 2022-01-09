@@ -25,4 +25,17 @@ const uniqueArrayOfObjects = function(array) {
 	return [...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) => JSON.parse(string))
 }
 
-export { uniqueArrayOfObjects }
+const uniqueOptions = function(options) {
+	return options.filter((option, index, array) => array.findIndex((compare) => (compare.pollOptionText === option.pollOptionText)) === index)
+}
+
+const uniqueParticipants = function(votes) {
+	const participants = votes.map((vote) => ({
+		userId: vote.userId,
+		displayName: vote.displayName,
+		isNoUser: vote.isNoUser,
+		pollId: vote.pollId,
+	}))
+	return uniqueArrayOfObjects(participants)
+}
+export { uniqueArrayOfObjects, uniqueOptions, uniqueParticipants }

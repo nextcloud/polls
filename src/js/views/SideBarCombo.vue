@@ -21,55 +21,52 @@
   -->
 
 <template>
-	<div class="vote-table-header-item"
-		:class=" { winner: isWinner }">
-		<OptionItem :option="option" :poll-type="poll.type" :display="optionStyle" />
-	</div>
+	<AppSidebar ref="sideBar"
+		:active="active"
+		:title="t('polls', 'Select polls to combine')"
+		@close="closeSideBar()">
+		<AppSidebarTab
+			:id="'polls'"
+			:order="1"
+			:name="t('polls', 'Polls')"
+			icon="icon-polls">
+			<SideBarTabDatePolls />
+		</AppSidebarTab>
+	</AppSidebar>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
-import OptionItem from '../Options/OptionItem'
+import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
+import { mapGetters } from 'vuex'
+import { emit } from '@nextcloud/event-bus'
 
 export default {
-	name: 'VoteTableHeaderItem',
+	name: 'SideBarCombo',
 
 	components: {
-		OptionItem,
+		SideBarTabDatePolls: () => import('../components/SideBar/SideBarTabDatePolls'),
+		AppSidebar,
+		AppSidebarTab,
 	},
 
 	props: {
-		option: {
-			type: Object,
-			default: undefined,
+		active: {
+			type: String,
+			default: t('polls', 'Polls').toLowerCase(),
 		},
 	},
 
 	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
-		}),
-
 		...mapGetters({
-			closed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
+			polls: 'polls/datePolls',
 		}),
-
-		optionStyle() {
-			if (this.poll.type === 'datePoll') {
-				return 'dateBox'
-			}
-			return 'textBox'
-
-		},
-
-		isWinner() {
-			// highlight best option until poll is closed and
-			// at least one option is confirmed
-			return this.option.rank === 1 && this.option.yes && !(this.closed && this.confirmedOptions.length)
+	},
+	methods: {
+		closeSideBar() {
+			emit('polls:sidebar:toggle', { open: false })
 		},
 	},
+
 }
 
 </script>

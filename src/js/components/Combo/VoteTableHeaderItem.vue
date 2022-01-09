@@ -21,14 +21,12 @@
   -->
 
 <template>
-	<div class="vote-table-header-item"
-		:class=" { winner: isWinner }">
-		<OptionItem :option="option" :poll-type="poll.type" :display="optionStyle" />
+	<div class="vote-table-header-item">
+		<OptionItem :option="option" poll-type="datePoll" display="dateBox" />
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import OptionItem from '../Options/OptionItem'
 
 export default {
@@ -42,32 +40,6 @@ export default {
 		option: {
 			type: Object,
 			default: undefined,
-		},
-	},
-
-	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
-		}),
-
-		...mapGetters({
-			closed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
-		}),
-
-		optionStyle() {
-			if (this.poll.type === 'datePoll') {
-				return 'dateBox'
-			}
-			return 'textBox'
-
-		},
-
-		isWinner() {
-			// highlight best option until poll is closed and
-			// at least one option is confirmed
-			return this.option.rank === 1 && this.option.yes && !(this.closed && this.confirmedOptions.length)
 		},
 	},
 }

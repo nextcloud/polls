@@ -47,6 +47,10 @@
 			</AppNavigationItem>
 		</template>
 		<template #footer>
+			<AppNavigationItem
+				:title="t('core', 'Combos')"
+				icon="icon-settings"
+				:to="{ name: 'combo' }" />
 			<AppNavigationItem v-if="showAdminSection"
 				:title="t('core', 'Administration')"
 				icon="icon-settings"
