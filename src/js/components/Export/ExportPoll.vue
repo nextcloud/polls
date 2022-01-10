@@ -117,8 +117,8 @@ export default {
 				this.sheetData.push([t('polls', 'Participants'), ...this.options.list.map((option) => this.explodeDates(option).raw)])
 
 			} else {
-				this.sheetData.push([t('polls', 'from'), ...this.options.list.map((option) => this.explodeDates(option).from.dateTime)])
-				this.sheetData.push([t('polls', 'to'), ...this.options.list.map((option) => this.explodeDates(option).to.dateTime)])
+				this.sheetData.push([t('polls', 'From'), ...this.options.list.map((option) => this.explodeDates(option).from.dateTime)])
+				this.sheetData.push([t('polls', 'To'), ...this.options.list.map((option) => this.explodeDates(option).to.dateTime)])
 			}
 
 			if (['html', 'ods', 'xlsx'].includes(type)) {
@@ -143,7 +143,7 @@ export default {
 					} else if (style === 'raw') {
 						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswer)
 					} else {
-						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswerTranslated ?? t('polls', 'no'))
+						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswerTranslated ?? t('polls', 'No'))
 					}
 				})
 
