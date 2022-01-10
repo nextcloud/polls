@@ -21,14 +21,14 @@
   -->
 
 <template>
-	<AppContent class="combo-table">
+	<AppContent class="combo">
 		<ComboTitle />
 		<div v-if="combo.description" class="area__header">
 			{{ combo.description }}
 		</div>
 
 		<div class="area__main" :class="viewMode">
-			<div class="vote-table" :class="viewMode">
+			<div class="combo-table" :class="viewMode">
 				<div class="vote-table__users">
 					<div class="spacer" />
 					<div v-for="(poll) in polls"

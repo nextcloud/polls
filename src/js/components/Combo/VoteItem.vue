@@ -21,13 +21,14 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer]">
+	<div class="vote-item" :class="[answer, {empty: foreignOption}]">
 		<div class="icon" />
 		<slot name="indicator" />
 	</div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 
 export default {
 	name: 'VoteItem',
@@ -41,14 +42,29 @@ export default {
 			type: Object,
 			default: null,
 		},
+		pollId: {
+			type: Number,
+			default: 0,
+		},
 	},
 
 	computed: {
+		...mapGetters({
+			optionBelongsToPoll: 'combo/optionBelongsToPoll',
+		}),
+
 		answer() {
 			return this.$store.getters['combo/getVote']({
 				option: this.option,
 				user: this.user,
 			}).voteAnswer
+		},
+
+		foreignOption() {
+			return !this.optionBelongsToPoll({
+				pollOptionText: this.option.pollOptionText,
+				pollId: this.pollId,
+			})
 		},
 	},
 }

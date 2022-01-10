@@ -25,11 +25,11 @@
 		<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
 		<div v-for="(poll) in polls"
 			:key="poll.id"
-			class="poll-group"
-			v-tooltip.auto="poll.title">
+			v-tooltip.auto="poll.title"
+			class="poll-group">
 			<VoteItem v-for="(participant) in participantsByPoll(poll.id)"
-				:class="{empty: poll.id !== option.pollId}"
 				:key="`${participant.userId}_${participant.pollId}`"
+				:poll-id="poll.id"
 				:user="participant"
 				:option="option" />
 		</div>
@@ -62,6 +62,7 @@ export default {
 	computed: {
 		...mapGetters({
 			participantsByPoll: 'combo/participantsInPoll',
+			optionBelongsToPoll: 'combo/optionBelongsToPoll',
 		}),
 		...mapState({
 			polls: (state) => state.combo.polls,

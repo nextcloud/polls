@@ -83,6 +83,7 @@ const getters = {
 	votesInPoll: (state) => (pollId) => state.votes.filter((vote) => vote.pollId === pollId),
 	participantsInPoll: (state) => (pollId) => state.participants.filter((participant) => participant.pollId === pollId),
 	pollIsListed: (state) => (pollId) => !!state.polls.find((poll) => poll.id === pollId),
+	optionBelongsToPoll: (state) => (payload) => !!state.options.find((option) => option.pollOptionText === payload.pollOptionText && option.pollId === payload.pollId),
 	uniqueOptions: (state) => sortBy(uniqueOptions(state.options), 'timestamp'),
 
 	getVote: (state) => (payload) => {
