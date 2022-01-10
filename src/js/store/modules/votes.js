@@ -96,16 +96,13 @@ const actions = {
 			const votes = []
 			response.data.votes.forEach((vote) => {
 				if (vote.voteAnswer === 'yes') {
-					vote.voteAnswerTranslated = t('polls', 'yes')
+					vote.voteAnswerTranslated = t('polls', 'Yes')
 					vote.voteAnswerSymbol = '✔'
-				} else if (vote.voteAnswer === 'no') {
-					vote.voteAnswerTranslated = t('polls', 'no')
-					vote.voteAnswerSymbol = '❌'
 				} else if (vote.voteAnswer === 'maybe') {
-					vote.voteAnswerTranslated = t('polls', 'maybe')
+					vote.voteAnswerTranslated = t('polls', 'Maybe')
 					vote.voteAnswerSymbol = '❔'
 				} else {
-					vote.voteAnswerTranslated = t('polls', 'no')
+					vote.voteAnswerTranslated = t('polls', 'No')
 					vote.voteAnswerSymbol = '❌'
 				}
 				votes.push(vote)
