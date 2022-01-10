@@ -95,10 +95,10 @@ const actions = {
 			const response = await axios.get(generateUrl(`${endPoint}/votes`), { params: { time: +new Date() } })
 			const votes = []
 			response.data.votes.forEach((vote) => {
-				if (vote.voteAnswer === 'Yes') {
+				if (vote.voteAnswer === 'yes') {
 					vote.voteAnswerTranslated = t('polls', 'Yes')
 					vote.voteAnswerSymbol = '✔'
-				} else if (vote.voteAnswer === 'Maybe') {
+				} else if (vote.voteAnswer === 'maybe') {
 					vote.voteAnswerTranslated = t('polls', 'Maybe')
 					vote.voteAnswerSymbol = '❔'
 				} else {
