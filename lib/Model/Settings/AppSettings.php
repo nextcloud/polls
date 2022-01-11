@@ -67,6 +67,10 @@ class AppSettings implements JsonSerializable {
 		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPublicShares'), true);
 	}
 
+	public function getAllowCombo(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowCombo'), true);
+	}
+
 	public function getAllowAllAccess(): bool {
 		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowAllAccess'), true);
 	}
@@ -77,6 +81,10 @@ class AppSettings implements JsonSerializable {
 
 	public function getPublicSharesGroups(): array {
 		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'publicSharesGroups'));
+	}
+
+	public function getComboGroups(): array {
+		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'comboGroups'));
 	}
 
 	public function getAllAccessGroups(): array {
@@ -121,9 +129,20 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
+	public function getComboAllowed(): bool {
+		if ($this->session->isLoggedIn()) {
+			return $this->getAllowCombo() || $this->isMember($this->getComboGroups());
+		}
+		return false;
+	}
+
 	// Setters
 	public function setAllowPublicShares(bool $value): void {
 		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', $this->boolToString($value));
+	}
+
+	public function setAllowCombo(bool $value): void {
+		$this->config->setAppValue(self::APP_NAME, 'allowCombo', $this->boolToString($value));
 	}
 
 	public function setShowLogin(bool $value): void {
@@ -140,6 +159,10 @@ class AppSettings implements JsonSerializable {
 
 	public function setPublicSharesGroups(array $value): void {
 		$this->config->setAppValue(self::APP_NAME, 'publicSharesGroups', json_encode($value));
+	}
+
+	public function setComboGroups(array $value): void {
+		$this->config->setAppValue(self::APP_NAME, 'comboGroups', json_encode($value));
 	}
 
 	public function setAllAccessGroups(array $value): void {
@@ -169,11 +192,16 @@ class AppSettings implements JsonSerializable {
 	public function jsonSerialize() {
 		// convert group ids to group objects
 		$publicSharesGroups = [];
+		$comboGroups = [];
 		$allAccessGroups = [];
 		$pollCreationGroups = [];
 
 		foreach ($this->getPublicSharesGroups() as $group) {
 			$publicSharesGroups[] = new Group($group);
+		}
+
+		foreach ($this->getComboGroups() as $group) {
+			$comboGroups[] = new Group($group);
 		}
 
 		foreach ($this->getAllAccessGroups() as $group) {
@@ -186,11 +214,13 @@ class AppSettings implements JsonSerializable {
 
 		return [
 			'allowPublicShares' => $this->getAllowPublicShares(),
+			'allowCombo' => $this->getAllowCombo(),
 			'allowAllAccess' => $this->getAllowAllAccess(),
 			'allowPollCreation' => $this->getAllowPollCreation(),
 			'allAccessGroups' => $allAccessGroups,
 			'pollCreationGroups' => $pollCreationGroups,
 			'publicSharesGroups' => $publicSharesGroups,
+			'comboGroups' => $comboGroups,
 			'showLogin' => $this->getShowLogin(),
 			'autoArchive' => $this->getAutoArchive(),
 			'autoArchiveOffset' => $this->getAutoArchiveOffset(),

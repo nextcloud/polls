@@ -31,7 +31,6 @@ const defaultCombo = () => ({
 	title: 'Combined polls',
 	description: 'Combine multiple date polls in a single view',
 	options: [],
-	pollIds: [],
 	polls: [],
 	participants: [],
 	votes: [],
@@ -105,10 +104,7 @@ const getters = {
 const actions = {
 
 	reset(context) {
-		context.commit('reset')
-	},
-	async get(context) {
-		await context.commit('reset')
+		// context.commit('reset')
 	},
 
 	async add(context, pollId) {
@@ -121,6 +117,14 @@ const actions = {
 		context.commit('removePoll', { pollId })
 		context.commit('removeVotes', { pollId })
 		context.commit('removeOptions', { pollId })
+	},
+
+	async cleanUp(context) {
+		context.state.polls.forEach((comboPoll) => {
+			if (context.rootState.polls.list.findIndex((poll) => poll.id === comboPoll.id && !poll.deleted) < 0) {
+				context.commit('removePoll', { pollId: comboPoll.id })
+			}
+		})
 	},
 
 	async togglePollItem(context, pollId) {

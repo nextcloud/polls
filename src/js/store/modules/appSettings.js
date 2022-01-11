@@ -25,6 +25,7 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
 const defaultAppSettings = () => ({
+	allowCombo: true,
 	allowPublicShares: true,
 	allowAllAccess: true,
 	allowPollCreation: true,
@@ -32,6 +33,7 @@ const defaultAppSettings = () => ({
 	allAccessGroups: [],
 	publicSharesGroups: [],
 	pollCreationGroups: [],
+	comboGroups: [],
 	autoArchive: false,
 	autoArchiveOffset: 30,
 	updateType: 'longPolling',

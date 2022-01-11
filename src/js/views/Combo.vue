@@ -28,7 +28,7 @@
 		</div>
 
 		<div class="area__main" :class="viewMode">
-			<div class="combo-table" :class="viewMode">
+			<div v-show="combo.polls.length" class="combo-table" :class="viewMode">
 				<div class="vote-table__users">
 					<div class="spacer" />
 					<div v-for="(poll) in polls"
@@ -50,6 +50,12 @@
 						:view-mode="viewMode" />
 				</transition-group>
 			</div>
+			<EmptyContent v-if="!combo.polls.length" icon="icon-polls">
+				{{ t('polls', 'No polls selected') }}
+				<template #desc>
+					{{ t('polls', 'Select polls by clicking on them in the right sidebar!') }}
+				</template>
+			</EmptyContent>
 		</div>
 
 		<LoadingOverlay v-if="isLoading" />
@@ -58,7 +64,8 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { AppContent } from '@nextcloud/vue'
+import { AppContent, EmptyContent } from '@nextcloud/vue'
+import { emit } from '@nextcloud/event-bus'
 import ComboTitle from '../components/Combo/ComboTitle'
 import VoteColumn from '../components/Combo/VoteColumn'
 
@@ -66,6 +73,7 @@ export default {
 	name: 'Combo',
 	components: {
 		AppContent,
+		EmptyContent,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
 		ComboTitle,
 		VoteColumn,
@@ -102,11 +110,11 @@ export default {
 		if (!window.matchMedia) {
 			return true
 		}
-
+		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 	},
 
 	beforeDestroy() {
-		this.$store.dispatch({ type: 'combo/reset' })
+		// this.$store.dispatch({ type: 'combo/reset' })
 	},
 
 }

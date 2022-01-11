@@ -47,7 +47,7 @@
 			</AppNavigationItem>
 		</template>
 		<template #footer>
-			<AppNavigationItem
+			<AppNavigationItem v-if="isComboActivated"
 				:title="t('core', 'Combos')"
 				icon="icon-settings"
 				:to="{ name: 'combo' }" />
@@ -89,6 +89,7 @@ export default {
 	computed: {
 		...mapState({
 			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
+			isComboActivated: (state) => state.polls.isComboAllowed,
 		}),
 
 		...mapGetters({

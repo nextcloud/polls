@@ -208,7 +208,6 @@ export default {
 					'options/list',
 					'votes/list',
 					'subscription/get',
-					'combo/get',
 				]
 
 				if (this.$route.name === 'publicVote') {
