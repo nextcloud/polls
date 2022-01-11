@@ -75,8 +75,12 @@ export default {
 
 .vote-item {
 	display: flex;
+	justify-content: center;
+	align-items: center;
 	background-color: var(--color-polls-background-no);
 	transition: background-color 1s ease-out;
+	background-clip: content-box;
+
 	> .icon {
 		color: var(--color-polls-foreground-no);
 		background-position: center;
@@ -124,12 +128,4 @@ export default {
 		}
 	}
 }
-
-.vote-item.confirmed {
-	background-color: transparent;
-	&:not(.yes):not(.maybe) .icon {
-		background-image: var(--icon-polls-no);
-	}
-}
-
 </style>

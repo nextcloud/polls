@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div class="vote-column">
-		<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
+		<OptionItem :option="option" poll-type="datePoll" display="dateBox" />
 		<div v-for="(poll) in polls"
 			:key="poll.id"
 			v-tooltip.auto="poll.title"
@@ -39,20 +39,16 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import VoteItem from './VoteItem'
-import VoteTableHeaderItem from './VoteTableHeaderItem'
+import OptionItem from '../Options/OptionItem'
 
 export default {
 	name: 'VoteColumn',
 	components: {
-		VoteTableHeaderItem,
 		VoteItem,
+		OptionItem,
 	},
 
 	props: {
-		viewMode: {
-			type: String,
-			default: 'table-view',
-		},
 		option: {
 			type: Object,
 			default: undefined,
@@ -71,3 +67,15 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss">
+.vote-column {
+	display: flex;
+	flex: 1 0 85px;
+	flex-direction: column;
+	align-items: stretch;
+	max-width: 280px;
+	border-left: 1px solid var(--color-border-dark);
+	margin-bottom: 4px;
+}
+</style>
