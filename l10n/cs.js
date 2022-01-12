@@ -233,6 +233,8 @@ OC.L10N.register(
     "Download CSV file" : "Stáhnout si CSV soubor",
     "Download HTML file" : "Stáhnout si HTML soubor",
     "Participants" : "Účastníci",
+    "From" : "Od",
+    "To" : "Do",
     "No" : "Ne",
     "Clone poll" : "Klonovat anketu",
     "Archive poll" : "Archivovat anketu",

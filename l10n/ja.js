@@ -13,6 +13,7 @@ OC.L10N.register(
     "The poll has been restored." : "投票が復元されました。",
     "The poll has been closed." : "投票は終了しました。",
     "Check your votes" : "投票内容を確認する",
+    "Circle" : "サークル",
     "Contact" : "連絡先",
     "Public link" : "公開リンク",
     "External user" : "外部ユーザー",
@@ -32,7 +33,9 @@ OC.L10N.register(
     "Error while saving comment" : "コメントの保存中にエラーが発生しました",
     "Delete comment" : "コメントを削除",
     "Error while deleting the comment" : "コメントの削除中にエラーが発生しました",
+    "All users" : "すべてのユーザー",
     "Allow admins to edit this poll" : "管理者がこの投票を編集することを許可",
+    "Allow Comments" : "コメントを許可",
     "Anonymous poll" : "匿名投票",
     "Always show results" : "常に結果を表示",
     "Never show results" : "結果を表示しない",
@@ -80,6 +83,7 @@ OC.L10N.register(
     "Copy link to clipboard" : "リンクをクリップボードにコピーする",
     "Remove share" : "共有を削除",
     "Unsent invitations" : "未送信の招待",
+    "No comments" : "コメントなし",
     "As an admin you may edit this poll" : "管理者として、この投票を編集することができます",
     "Description" : "説明",
     "Poll configurations" : "投票設定",
@@ -100,6 +104,7 @@ OC.L10N.register(
     "Share restrictions" : "共有の制限",
     "Other settings" : "他の設定",
     "Yes" : "はい",
+    "Administration" : "管理",
     "Add new Poll" : "新規投票追加",
     "Error loading poll list" : "投票リストの読み込み中にエラーが発生しました",
     "Error cloning poll." : "投票のクローン中にエラーが発生しました",
@@ -126,6 +131,7 @@ OC.L10N.register(
     "Public polls" : "公開中の投票",
     "A complete list with all public polls on this site, regardless who is the owner." : "所有者権を無視したこのサイト上にある公開投票の全リスト。",
     "All polls" : "全ての投票",
-    "All polls, where you have access to." : "あなたがアクセスできる全投票"
+    "All polls, where you have access to." : "あなたがアクセスできる全投票",
+    "Archive" : "アーカイブ"
 },
 "nplurals=1; plural=0;");

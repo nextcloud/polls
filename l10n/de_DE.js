@@ -233,6 +233,8 @@ OC.L10N.register(
     "Download CSV file" : "CSV-Datei herunteladen",
     "Download HTML file" : "HTML-Datei herunterladen",
     "Participants" : "Teilnehmer",
+    "From" : "Von",
+    "To" : "Bis",
     "No" : "Nein",
     "Clone poll" : "Umfrage duplizieren",
     "Archive poll" : "Umfrage archivieren",
