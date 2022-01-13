@@ -233,6 +233,8 @@ OC.L10N.register(
     "Download CSV file" : "CSV olarak indir",
     "Download HTML file" : "HTML olarak indir",
     "Participants" : "Katılımcılar",
+    "From" : "Başlangıç",
+    "To" : "Bitiş",
     "No" : "Hayır",
     "Clone poll" : "Anketi kopyala",
     "Archive poll" : "Anketi arşivle",
