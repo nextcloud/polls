@@ -51,6 +51,8 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_POLL_USERNAMES_VIEW = 'seeUserNames';
 	public const PERMISSION_POLL_TAKEOVER = 'takeOver';
 	public const PERMISSION_POLL_SUBSCRIBE = 'subscribe';
+	public const PERMISSION_POLL_CREATE = 'pollCreate';
+	public const PERMISSION_POLL_DOWNLOAD = 'pollDownload';
 	public const PERMISSION_COMMENT_ADD = 'comment';
 	public const PERMISSION_OPTIONS_ADD = 'add_options';
 	public const PERMISSION_VOTE_EDIT = 'vote';
@@ -192,8 +194,14 @@ class Acl implements JsonSerializable {
 			case self::PERMISSION_POLL_EDIT:
 				return $this->getIsOwner() || $this->getHasAdminAccess();
 
+			case self::PERMISSION_POLL_CREATE:
+				return $this->appSettings->getPollCreationAllowed();
+
 			case self::PERMISSION_POLL_DELETE:
 				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT) || $this->getIsAdmin();
+
+			case self::PERMISSION_POLL_DOWNLOAD:
+				return $this->appSettings->getPollDownloadAllowed();
 
 			case self::PERMISSION_POLL_ARCHIVE:
 				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT) || $this->getIsAdmin();
@@ -249,6 +257,8 @@ class Acl implements JsonSerializable {
 			'allowComment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
 			'allowDelete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
 			'allowEdit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+			'allowPollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
+			'allowPollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
 			'allowPublicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
 			'allowSeeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
 			'allowSeeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),

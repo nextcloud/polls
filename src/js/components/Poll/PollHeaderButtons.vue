@@ -35,6 +35,7 @@
 		</Popover>
 		<ActionSortOptions />
 		<ActionChangeView />
+		<ExportPoll v-if="allowPollDownload" />
 		<ActionToggleSidebar v-if="allowEdit || allowComment" />
 	</div>
 </template>
@@ -57,6 +58,7 @@ export default {
 		ActionChangeView,
 		ActionSortOptions,
 		ActionToggleSidebar,
+		ExportPoll: () => import('../Export/ExportPoll'),
 		PollInformation: () => import('../Poll/PollInformation'),
 		UserMenu,
 	},
@@ -65,6 +67,7 @@ export default {
 		...mapState({
 			allowComment: (state) => state.poll.allowComment,
 			allowEdit: (state) => state.poll.acl.allowEdit,
+			allowPollDownload: (state) => state.poll.acl.allowPollDownload,
 		}),
 	},
 
