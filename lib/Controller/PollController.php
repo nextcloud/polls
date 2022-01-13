@@ -75,7 +75,7 @@ class PollController extends Controller {
 			$appSettings = new AppSettings;
 			return [
 				'list' => $this->pollService->list(),
-				'pollCreationAllowed' => $appSettings->getCreationAllowed(),
+				'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),
 				'comboAllowed' => $appSettings->getComboAllowed(),
 			];
 		});
