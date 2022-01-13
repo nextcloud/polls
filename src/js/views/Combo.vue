@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions, mapGetters, mapState } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ComboTable from '../components/Combo/ComboTable'
@@ -72,15 +72,28 @@ export default {
 	},
 
 	computed: {
+		...mapGetters({
+			pollCombo: 'combo/pollCombo',
+		}),
 		...mapState({
 			description: (state) => state.combo.description,
 			title: (state) => state.combo.title,
 			polls: (state) => state.combo.polls,
+			savePollCombo: (state) => state.settings.user.pollCombo,
 		}),
 
 		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
 			return `${t('polls', 'Polls')} - ${this.title}`
+		},
+	},
+
+	watch: {
+		pollCombo() {
+			this.setPollCombo({ pollCombo: this.pollCombo })
+		},
+		savePollCombo() {
+			this.verifyPolls()
 		},
 	},
 
@@ -92,10 +105,18 @@ export default {
 			return true
 		}
 		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
+		this.verifyPolls()
 	},
 
 	beforeDestroy() {
 		// this.$store.dispatch({ type: 'combo/reset' })
+	},
+
+	methods: {
+		...mapActions({
+			setPollCombo: 'settings/setPollCombo',
+			verifyPolls: 'combo/verifyPollsFromSettings',
+		}),
 	},
 
 }

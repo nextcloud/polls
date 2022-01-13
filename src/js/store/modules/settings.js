@@ -38,6 +38,7 @@ const defaultSettings = () => ({
 		defaultViewTextPoll: 'list-view',
 		defaultViewDatePoll: 'table-view',
 		performanceThreshold: 1000,
+		pollCombo: [],
 	},
 	session: {
 		manualViewDatePoll: '',
@@ -96,6 +97,10 @@ const mutations = {
 
 	addCheckCalendar(state, payload) {
 		state.user.checkCalendars.push(payload.calendar.key)
+	},
+
+	setPollCombo(state, payload) {
+		state.user.pollCombo = payload.pollCombo
 	},
 
 	setViewDatePoll(state, payload) {
@@ -204,6 +209,11 @@ const actions = {
 		} catch {
 			context.commit('reset')
 		}
+	},
+
+	async setPollCombo(context, payload) {
+		await context.commit('setPollCombo', { pollCombo: payload.pollCombo })
+		context.dispatch('write')
 	},
 
 	async write(context) {

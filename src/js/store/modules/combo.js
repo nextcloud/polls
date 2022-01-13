@@ -82,6 +82,7 @@ const getters = {
 	votesInPoll: (state) => (pollId) => state.votes.filter((vote) => vote.pollId === pollId),
 	participantsInPoll: (state) => (pollId) => state.participants.filter((participant) => participant.pollId === pollId),
 	pollIsListed: (state) => (pollId) => !!state.polls.find((poll) => poll.id === pollId),
+	pollCombo: (state) => state.polls.map((poll) => poll.id),
 	optionBelongsToPoll: (state) => (payload) => !!state.options.find((option) => option.pollOptionText === payload.pollOptionText && option.pollId === payload.pollId),
 	uniqueOptions: (state) => sortBy(uniqueOptions(state.options), 'timestamp'),
 
@@ -108,15 +109,27 @@ const actions = {
 	},
 
 	async add(context, pollId) {
-		context.dispatch('addPoll', { pollId })
-		context.dispatch('addVotes', { pollId })
-		context.dispatch('addOptions', { pollId })
+		return Promise.all([
+			'addPoll',
+			'addVotes',
+			'addOptions',
+		].map((dispatch) => context.dispatch(dispatch, { pollId })))
 	},
 
 	async remove(context, pollId) {
-		context.commit('removePoll', { pollId })
-		context.commit('removeVotes', { pollId })
-		context.commit('removeOptions', { pollId })
+		return Promise.all([
+			'removePoll',
+			'removeVotes',
+			'removeOptions',
+		].map((commit) => context.commit(commit, { pollId })))
+	},
+
+	async verifyPollsFromSettings(context) {
+		context.rootState.settings.user.pollCombo.forEach((pollId) => {
+			if (!context.getters.pollCombo.includes(pollId)) {
+				context.dispatch('add', pollId)
+			}
+		})
 	},
 
 	async cleanUp(context) {
