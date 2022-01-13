@@ -233,7 +233,7 @@ class ActivityService {
 
 		return $this->userIsActor
 			? $this->trans->t('You have done something indescribable with poll {pollTitle}')
-			: $this->trans->t('{actor} has did something indescribable with poll {pollTitle}');
+			: $this->trans->t('{actor} has done something indescribable with poll {pollTitle}');
 	}
 
 	private function getMessageFiltered() {
@@ -319,7 +319,7 @@ class ActivityService {
 			case ShareEvent::CHANGE_EMAIL:
 				return $this->userIsActor
 					? $this->trans->t('You have changed your email address')
-					: $this->trans->t('{sharee}\'s email address has been changed');
+					: $this->trans->t('Email address of {sharee} has been changed');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
 					? $this->trans->t('You have changed the share type')
@@ -352,7 +352,7 @@ class ActivityService {
 				}
 
 				return $this->userIsActor
-					? $this->trans->t('You have deleted {sharee}\'s share')
+					? $this->trans->t('You have deleted share of {sharee}')
 					: $this->trans->t('{actor} has deleted a share');
 
 			case VoteEvent::SET:

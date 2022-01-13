@@ -1,6 +1,24 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.5.0] - tbd
+## New
+- Added poll exports (.xlsx, odt, .csv, .html)
+- Added activities
+- Added a combo function, to view different date polls in one view
+- Added feature switches for admins to en-/disable exports, activities and the new combo view
+
+## Fixed
+- It was possible to add option proposals, when not registered in public polls
+- A deleted poll could cause repeating error logs on notifications
+
+## [3.5.0 RC1] - tbd
+- [new] #366 - Export poll (#1942, #2169)
+- [new] #804 - Use activities (#2154)
+- [new] #1986 - Combined view for date polls (#2175)
+- [fix] #2147 - Adding proposals is possible without registering (#2163)
+- [fix] #2133 - Notifications error with deleted polls(#2178)
+
 ## [3.4.2] - 2021-12-13
 ## New
 - Added an indicator for shares, which indicates, if a share already voted or not

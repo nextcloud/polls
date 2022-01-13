@@ -28,6 +28,8 @@ const defaultAcl = () => ({
 	allowComment: false,
 	allowDelete: false,
 	allowEdit: false,
+	allowPollDownload: false,
+	allowPollCreation: false,
 	allowPublicShares: false,
 	allowSeeResults: false,
 	allowSeeUsernames: false,
