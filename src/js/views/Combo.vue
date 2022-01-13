@@ -22,6 +22,9 @@
 
 <template>
 	<AppContent>
+		<div class="poll-header-buttons">
+			<ActionToggleSidebar />
+		</div>
 		<div class="combo-title">
 			{{ title }}
 		</div>
@@ -50,6 +53,7 @@ import { mapState } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ComboTable from '../components/Combo/ComboTable'
+import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
 
 export default {
 	name: 'Combo',
@@ -57,6 +61,7 @@ export default {
 		AppContent,
 		ComboTable,
 		EmptyContent,
+		ActionToggleSidebar,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
 	},
 
@@ -102,5 +107,14 @@ export default {
 		font-weight: bold;
 		font-size: 1.3em;
 		line-height: 1.5em;
+	}
+
+	.poll-header-buttons {
+		display: flex;
+		flex-wrap: wrap-reverse;
+		flex: 0 1 auto;
+		justify-content: flex-end;
+		align-self: flex-end;
+		border-radius: var(--border-radius-pill);
 	}
 </style>
