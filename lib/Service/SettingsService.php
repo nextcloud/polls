@@ -67,6 +67,7 @@ class SettingsService {
 		$this->appSettings->setAutoArchive($settingsArray['autoArchive']);
 		$this->appSettings->setAutoArchiveOffset($settingsArray['autoArchiveOffset']);
 		$this->appSettings->setAllAccessGroups(array_column($settingsArray['allAccessGroups'], 'id'));
+		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
 		$this->appSettings->setComboGroups(array_column($settingsArray['comboGroups'], 'id'));
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
 		$this->appSettings->setPollDownloadGroups(array_column($settingsArray['pollDownloadGroups'], 'id'));
