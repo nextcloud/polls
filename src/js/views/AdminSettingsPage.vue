@@ -35,6 +35,7 @@
 		<div class="sub-section">
 			<h2>{{ t('polls', 'Other settings') }}</h2>
 			<AdminMisc />
+			<AdminCombo />
 			<AdminPollDownload />
 		</div>
 	</div>
@@ -45,11 +46,13 @@ import AdminMisc from '../components/Settings/AdminMisc'
 import AdminPollCreation from '../components/Settings/AdminPollCreation'
 import AdminPollDownload from '../components/Settings/AdminPollDownload'
 import AdminShareSettings from '../components/Settings/AdminShareSettings'
+import AdminCombo from '../components/Settings/AdminCombo'
 
 export default {
 	name: 'AdminSettingsPage',
 
 	components: {
+		AdminCombo,
 		AdminMisc,
 		AdminPollCreation,
 		AdminPollDownload,

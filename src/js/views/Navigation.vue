@@ -47,6 +47,10 @@
 			</AppNavigationItem>
 		</template>
 		<template #footer>
+			<AppNavigationItem v-if="isComboActivated"
+				:title="t('polls', 'Combine polls')"
+				icon="icon-projects"
+				:to="{ name: 'combo' }" />
 			<AppNavigationItem v-if="showAdminSection"
 				:title="t('core', 'Administration')"
 				icon="icon-settings"
@@ -85,6 +89,7 @@ export default {
 	computed: {
 		...mapState({
 			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
+			isComboActivated: (state) => state.polls.isComboAllowed,
 		}),
 
 		...mapGetters({

@@ -59,6 +59,7 @@ class SettingsService {
 	 */
 	public function writeAppSettings(array $settingsArray): void {
 		$this->appSettings->setAllowPublicShares($settingsArray['allowPublicShares']);
+		$this->appSettings->setAllowCombo($settingsArray['allowCombo']);
 		$this->appSettings->setAllowAllAccess($settingsArray['allowAllAccess']);
 		$this->appSettings->setAllowPollCreation($settingsArray['allowPollCreation']);
 		$this->appSettings->setAllowPollDownload($settingsArray['allowPollDownload']);
@@ -67,6 +68,7 @@ class SettingsService {
 		$this->appSettings->setAutoArchiveOffset($settingsArray['autoArchiveOffset']);
 		$this->appSettings->setAllAccessGroups(array_column($settingsArray['allAccessGroups'], 'id'));
 		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
+		$this->appSettings->setComboGroups(array_column($settingsArray['comboGroups'], 'id'));
 		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
 		$this->appSettings->setPollDownloadGroups(array_column($settingsArray['pollDownloadGroups'], 'id'));
 		$this->appSettings->setUpdateType($settingsArray['updateType']);

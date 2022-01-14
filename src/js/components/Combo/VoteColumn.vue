@@ -20,21 +20,31 @@
   -
   -->
 
-<template>
-	<div class="vote-table-header-item"
-		:class=" { winner: isWinner }">
-		<OptionItem :option="option" :poll-type="poll.type" :display="optionStyle" />
+<template lang="html">
+	<div class="vote-column">
+		<OptionItem :option="option" poll-type="datePoll" display="dateBox" />
+		<div v-for="(poll) in polls"
+			:key="poll.id"
+			v-tooltip.auto="poll.title"
+			class="poll-group">
+			<VoteItem v-for="(participant) in participantsByPoll(poll.id)"
+				:key="`${participant.userId}_${participant.pollId}`"
+				:poll-id="poll.id"
+				:user="participant"
+				:option="option" />
+		</div>
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
+import VoteItem from './VoteItem'
 import OptionItem from '../Options/OptionItem'
 
 export default {
-	name: 'VoteTableHeaderItem',
-
+	name: 'VoteColumn',
 	components: {
+		VoteItem,
 		OptionItem,
 	},
 
@@ -46,30 +56,26 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
-		}),
-
 		...mapGetters({
-			closed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
+			participantsByPoll: 'combo/participantsInPoll',
+			optionBelongsToPoll: 'combo/optionBelongsToPoll',
 		}),
-
-		optionStyle() {
-			if (this.poll.type === 'datePoll') {
-				return 'dateBox'
-			}
-			return 'textBox'
-
-		},
-
-		isWinner() {
-			// highlight best option until poll is closed and
-			// at least one option is confirmed
-			return this.option.rank === 1 && this.option.yes && !(this.closed && this.confirmedOptions.length)
-		},
+		...mapState({
+			polls: (state) => state.combo.polls,
+			participants: (state) => state.combo.participants,
+		}),
 	},
 }
-
 </script>
+
+<style lang="scss">
+.vote-column {
+	display: flex;
+	flex: 1 0 85px;
+	flex-direction: column;
+	align-items: stretch;
+	max-width: 280px;
+	border-left: 1px solid var(--color-border-dark);
+	margin-bottom: 4px;
+}
+</style>

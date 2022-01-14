@@ -28,6 +28,7 @@
 				:key="option.id"
 				:option="option"
 				:show-confirmed="true"
+				:poll-type="pollType"
 				display="textBox"
 				tag="li">
 				<template #icon>
@@ -101,6 +102,7 @@ export default {
 		return {
 			cloneModal: false,
 			optionToClone: {},
+			pollType: 'datePoll',
 		}
 	},
 

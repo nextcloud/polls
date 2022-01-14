@@ -70,7 +70,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
 export default {
 	name: 'OptionItem',
@@ -92,12 +91,12 @@ export default {
 			type: String,
 			default: 'textBox',
 		},
+		pollType: {
+			type: String,
+			default: 'textPoll',
+		},
 	},
 	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-		}),
-
 		isDraggable() {
 			return this.draggable
 		},
@@ -116,7 +115,7 @@ export default {
 			// to set the begin of the to day to the end of the previous date
 			const toModified = moment(to).subtract(dayModifier, 'days')
 
-			if (this.poll.type !== 'datePoll') {
+			if (this.pollType !== 'datePoll') {
 				return {}
 			}
 			return {
@@ -145,7 +144,7 @@ export default {
 		},
 
 		dateLocalFormat() {
-			if (this.poll.type !== 'datePoll') {
+			if (this.pollType !== 'datePoll') {
 				return {}
 			}
 
@@ -177,7 +176,7 @@ export default {
 		},
 
 		optionTooltip() {
-			if (this.poll.type === 'datePoll') {
+			if (this.pollType === 'datePoll') {
 				return this.dateLocalFormatUTC
 			}
 
@@ -185,7 +184,7 @@ export default {
 		},
 
 		optionText() {
-			if (this.poll.type === 'datePoll') {
+			if (this.pollType === 'datePoll') {
 				return this.dateLocalFormat
 			}
 
@@ -193,7 +192,7 @@ export default {
 		},
 
 		show() {
-			if (this.poll.type === 'datePoll' && this.display === 'dateBox') {
+			if (this.pollType === 'datePoll' && this.display === 'dateBox') {
 				return 'dateBox'
 			}
 

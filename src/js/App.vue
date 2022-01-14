@@ -93,6 +93,9 @@ export default {
 		},
 
 		showSidebar() {
+			if (this.$route.name === 'combo') {
+				return this.sideBarOpen
+			}
 			return this.sideBarOpen && this.poll.id && (this.allowEdit || this.poll.allowComment)
 		},
 	},
@@ -199,7 +202,6 @@ export default {
 				if (this.$route.name === 'vote' && !this.$route.params.id) {
 					throw new Error('No pollId for vote page')
 				}
-
 				const dispatches = [
 					'poll/get',
 					'comments/list',

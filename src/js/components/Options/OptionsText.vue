@@ -28,6 +28,7 @@
 				<OptionItem v-for="(option) in reOrderedOptions"
 					:key="option.id"
 					:option="option"
+					:poll-type="pollType"
 					:draggable="true">
 					<template #icon>
 						<OptionItemOwner v-if="acl.allowAddOptions"
@@ -87,6 +88,12 @@ export default {
 		confirmOption,
 		removeOption,
 	],
+
+	data() {
+		return {
+			pollType: 'textPoll',
+		}
+	},
 
 	computed: {
 		...mapState({

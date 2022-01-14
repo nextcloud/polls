@@ -167,6 +167,7 @@ export const watchPolls = {
 			})
 			dispatches = [...new Set(dispatches)] // remove duplicates
 			await Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
+			await this.$store.dispatch('combo/cleanUp')
 		},
 
 	},

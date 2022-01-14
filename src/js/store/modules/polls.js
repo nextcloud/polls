@@ -30,6 +30,7 @@ import { generateUrl } from '@nextcloud/router'
 const state = {
 	list: [],
 	isPollCreationAllowed: false,
+	isComboAllowed: false,
 	categories: [
 		{
 			id: 'relevant',
@@ -115,6 +116,9 @@ const mutations = {
 	setPollCreationAllowed(state, payload) {
 		state.isPollCreationAllowed = payload.pollCreationAllowed
 	},
+	setComboAllowed(state, payload) {
+		state.isComboAllowed = payload.comboAllowed
+	},
 }
 
 const getters = {
@@ -127,6 +131,7 @@ const getters = {
 
 	activePolls: (state) => state.list.filter((poll) => (!poll.deleted)),
 	archivedPolls: (state, getters) => state.list.filter((poll) => (poll.deleted)),
+	datePolls: (state) => state.list.filter((poll) => (poll.type === 'datePoll' && !poll.deleted)),
 	myPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.isOwner)),
 	publicPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'public')),
 	hiddenPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'hidden')),
@@ -180,6 +185,7 @@ const actions = {
 			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', { list: response.data.list })
 			context.commit('setPollCreationAllowed', { pollCreationAllowed: response.data.pollCreationAllowed })
+			context.commit('setComboAllowed', { comboAllowed: response.data.comboAllowed })
 		} catch (e) {
 			console.error('Error loading polls', { error: e.response })
 		}

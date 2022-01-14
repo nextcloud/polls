@@ -54,6 +54,7 @@ return [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],
 		['name' => 'page#index', 'url' => '/list/{id}', 'verb' => 'GET', 'postfix' => 'list'],
+		['name' => 'page#index', 'url' => '/combo', 'verb' => 'GET', 'postfix' => 'combo'],
 		['name' => 'page#vote', 'url' => '/vote/{id}', 'verb' => 'GET'],
 
 		['name' => 'poll#list', 'url' => '/polls', 'verb' => 'GET'],
