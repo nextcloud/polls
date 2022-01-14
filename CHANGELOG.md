@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 - Added activities
 - Added a combo function, to view different date polls in one view
 - Added feature switches for admins to en-/disable exports, activities and the new combo view
+- Linkify URLs and email addresses in text options
 
 ## Fixed
 - It was possible to add option proposals, when not registered in public polls
@@ -16,6 +17,7 @@ All notable changes to this project will be documented in this file.
 - [new] #366 - Export poll (#1942, #2169)
 - [new] #804 - Use activities (#2154)
 - [new] #1986 - Combined view for date polls (#2175)
+- [new] #2102 - Linkify options (#1709, #2190)
 - [fix] #2147 - Adding proposals is possible without registering (#2163)
 - [fix] #2133 - Notifications error with deleted polls(#2178)
 

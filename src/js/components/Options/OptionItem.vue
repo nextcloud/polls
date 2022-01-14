@@ -26,7 +26,10 @@
 
 		<slot name="icon" />
 
-		<div v-if="show === 'textBox'" v-tooltip.auto="optionTooltip" class="option-item__option--text">
+		<div v-html="optionText"
+			v-if="show === 'textBox'"
+			v-tooltip.auto="optionTooltip"
+			class="option-item__option--text">
 			{{ optionText }}
 		</div>
 
@@ -71,6 +74,8 @@
 
 <script>
 import moment from '@nextcloud/moment'
+import linkifyStr from 'linkify-string'
+
 export default {
 	name: 'OptionItem',
 
@@ -188,7 +193,7 @@ export default {
 				return this.dateLocalFormat
 			}
 
-			return this.option.pollOptionText
+			return linkifyStr(this.option.pollOptionText)
 		},
 
 		show() {
@@ -281,6 +286,11 @@ export default {
 	.option-item__option--text {
 		overflow: hidden;
 		text-overflow: ellipsis;
+
+		a {
+			font-weight: bold;
+			text-decoration: underline;
+		}
 	}
 
 	.draggable, .draggable [class*='option-item__option']  {
