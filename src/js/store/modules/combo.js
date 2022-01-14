@@ -28,8 +28,6 @@ import sortBy from 'lodash/sortBy'
 
 const defaultCombo = () => ({
 	id: 1,
-	title: 'Combined polls',
-	description: 'Combine multiple date polls in a single view',
 	options: [],
 	polls: [],
 	participants: [],

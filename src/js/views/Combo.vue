@@ -68,6 +68,8 @@ export default {
 	data() {
 		return {
 			isLoading: false,
+			title: t('polls', 'Combined polls'),
+			description: t('polls', 'Combine multiple date polls in a single view'),
 		}
 	},
 
@@ -76,8 +78,6 @@ export default {
 			pollCombo: 'combo/pollCombo',
 		}),
 		...mapState({
-			description: (state) => state.combo.description,
-			title: (state) => state.combo.title,
 			polls: (state) => state.combo.polls,
 			savePollCombo: (state) => state.settings.user.pollCombo,
 		}),

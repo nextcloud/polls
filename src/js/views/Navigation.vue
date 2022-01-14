@@ -48,8 +48,8 @@
 		</template>
 		<template #footer>
 			<AppNavigationItem v-if="isComboActivated"
-				:title="t('core', 'Combos')"
-				icon="icon-settings"
+				:title="t('polls', 'Combine polls')"
+				icon="icon-projects"
 				:to="{ name: 'combo' }" />
 			<AppNavigationItem v-if="showAdminSection"
 				:title="t('core', 'Administration')"
