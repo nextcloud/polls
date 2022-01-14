@@ -83,7 +83,6 @@ export default {
 	computed: {
 		...mapGetters({
 			participants: 'poll/participants',
-			options: 'options/participants',
 			getVote: 'votes/getVote',
 			explodeDates: 'options/explodeDates',
 		}),
