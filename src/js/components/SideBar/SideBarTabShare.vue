@@ -22,14 +22,20 @@
 
 <template>
 	<div class="sidebar-share">
+		<CollectionList v-if="pollId"
+			:id="`${pollId}`"
+			:name="pollTitle"
+			type="poll" />
 		<SharesListUnsent class="shares unsent" />
 		<SharesList class="shares effective" />
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import SharesList from '../Shares/SharesList'
 import SharesListUnsent from '../Shares/SharesListUnsent'
+import { CollectionList } from 'nextcloud-vue-collections'
 
 export default {
 	name: 'SideBarTabShare',
@@ -37,8 +43,16 @@ export default {
 	components: {
 		SharesList,
 		SharesListUnsent,
+		CollectionList,
 	},
 
+	computed: {
+		...mapState({
+			pollId: (state) => state.poll.id,
+			pollTitle: (state) => state.poll.title,
+		}),
+
+	},
 }
 </script>
 

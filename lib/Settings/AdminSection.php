@@ -29,7 +29,7 @@ use OCP\Settings\IIconSection;
 
 class AdminSection implements IIconSection {
 
-		/** @var IL10N */
+	/** @var IL10N */
 	private $trans;
 
 	/** @var IURLGenerator */
