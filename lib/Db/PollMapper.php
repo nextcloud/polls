@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\Search\ISearchQuery;
 
 /**
  * @template-extends QBMapper<Poll>
@@ -90,6 +91,34 @@ class PollMapper extends QBMapper {
 			->from($this->getTableName())
 			->where($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->orWhere($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Poll[]
+	 */
+	public function search(string $userId, ISearchQuery $query): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->orX(
+				...array_map(function (string $token) use ($qb) {
+					return $qb->expr()->orX(
+						$qb->expr()->iLike(
+							'title',
+							$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($token) . '%', IQueryBuilder::PARAM_STR),
+							IQueryBuilder::PARAM_STR
+						),
+						$qb->expr()->iLike(
+							'description',
+							$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($token) . '%', IQueryBuilder::PARAM_STR),
+							IQueryBuilder::PARAM_STR
+						)
+					);
+				}, explode(' ', $query->getTerm()))
+			));
 		return $this->findEntities($qb);
 	}
 

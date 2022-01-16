@@ -65,6 +65,7 @@ use OCA\Polls\Listener\PollListener;
 use OCA\Polls\Listener\ShareListener;
 use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Provider\ResourceProvider;
+use OCA\Polls\Provider\SearchProvider;
 
 class Application extends App implements IBootstrap {
 
@@ -107,6 +108,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(VoteSetEvent::class, VoteListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
+		$context->registerSearchProvider(SearchProvider::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {
