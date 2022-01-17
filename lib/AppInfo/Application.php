@@ -34,6 +34,7 @@ use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
+use OCP\Util;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\OptionConfirmedEvent;
@@ -116,5 +117,8 @@ class Application extends App implements IBootstrap {
 	}
 	protected function registerCollaborationResources(IProviderManager $resourceManager, SymfonyAdapter $symfonyAdapter): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
+		$symfonyAdapter->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+			Util::addScript('polls', 'polls-collections');
+		});
 	}
 }

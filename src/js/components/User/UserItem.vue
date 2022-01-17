@@ -25,7 +25,7 @@
 		<Avatar :disable-menu="disableMenu"
 			:disable-tooltip="disableTooltip"
 			class="user-item__avatar"
-			:is-guest="$route.name === 'publicVote'"
+			:is-guest="isGuestComputed"
 			:menu-position="menuPosition"
 			:size="iconSize"
 			:icon-class="avatarIcon"
@@ -116,6 +116,10 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		isGuest: {
+			type: Boolean,
+			default: false,
+		},
 		icon: {
 			type: Boolean,
 			default: false,
@@ -131,6 +135,9 @@ export default {
 	},
 
 	computed: {
+		isGuestComputed() {
+			return this.$route?.name === 'publicVote' ? true : this.isGuest
+		},
 		name() {
 			if (this.type === 'public') {
 				return t('polls', 'Public link')
