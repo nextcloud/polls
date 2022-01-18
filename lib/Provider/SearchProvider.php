@@ -91,7 +91,7 @@ class SearchProvider implements IProvider {
 	}
 
 	public function getOrder(string $route, array $routeParameters): int {
-		if ($route === 'polls.page.index') {
+		if (in_array(strtolower($route), ['polls.page.index', 'polls.page.vote'])) {
 			return -5;
 		}
 		return 51;
