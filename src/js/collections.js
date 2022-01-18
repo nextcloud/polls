@@ -24,6 +24,7 @@
 
 import Vue from 'vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
+import './assets/scss/polls-icon.scss'
 
 (function(OCP, OC) {
 
