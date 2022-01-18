@@ -25,6 +25,7 @@
 import Vue from 'vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import './assets/scss/polls-icon.scss'
+import store from './store/store-polls'
 
 (function(OCP, OC) {
 
@@ -48,6 +49,7 @@ import './assets/scss/polls-icon.scss'
 			body.appendChild(container)
 			const PollSelector = () => import('./views/PollSelector')
 			const ComponentVM = new Vue({
+				store,
 				render: (h) => h(PollSelector, {
 					props: {
 						// Even if it is used from Talk the Collections menu is

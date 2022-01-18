@@ -28,14 +28,14 @@
 		<div id="modal-inner" class="polls-picker-modal" :class="{ 'icon-loading': loading }">
 			<div id="modal-content">
 				<h2>
-					{{ dialogTitle }} toll
+					{{ dialogTitle }}
 				</h2>
 				<p v-if="dialogSubtitle" class="subtitle">
 					{{ dialogSubtitle }}
 				</p>
 				<div id="polls-list">
-					<ul v-if="!loading && availablePolls.length > 0">
-						<li v-for="(poll) in availablePolls"
+					<ul v-if="!loading && activePolls.length > 0">
+						<li v-for="(poll) in activePolls"
 							:key="poll.id"
 							:class="['poll-item', {selected: selectedPollId === poll.id }]"
 							@click="selectedPollId = poll.id">
@@ -51,7 +51,7 @@
 				</div>
 				<div id="modal-buttons">
 					<button
-						v-if="!loading && availablePolls.length > 0"
+						v-if="!loading && activePolls.length > 0"
 						class="primary"
 						:disabled="!selectedPollId"
 						@click="select">
@@ -64,15 +64,13 @@
 </template>
 
 <script>
-import axios from '@nextcloud/axios'
+import { mapActions, mapGetters } from 'vuex'
 import { Modal } from '@nextcloud/vue'
-import { generateUrl } from '@nextcloud/router'
 import UserItem from '../components/User/UserItem'
 
 export default {
 	name: 'PollSelector',
 	components: {
-		// ConversationIcon,
 		Modal,
 		UserItem,
 	},
@@ -95,35 +93,33 @@ export default {
 	data() {
 		return {
 			selectedPollId: null,
-			loading: false,
-			polls: [],
+			loading: true,
 		}
 	},
 	computed: {
-		availablePolls() {
-			return this.polls
-		},
+		...mapGetters({
+			activePolls: 'polls/activePolls',
+		}),
 	},
 	beforeMount() {
-		this.loadPolls()
+		this.fetchPolls()
 	},
 
 	methods: {
-		async loadPolls() {
-			try {
-				const response = await axios.get(generateUrl('apps/polls/polls'), { params: { time: +new Date() } })
-				this.polls = response.data.list
-			} catch (e) {
-				console.error('Error loading polls', { error: e.response })
-				this.polls = []
-			} finally {
-				this.loading = false
-			}
+		...mapActions({
+			loadPolls: 'polls/list',
+		}),
+
+		async fetchPolls() {
+			await this.loadPolls()
+			this.loading = false
 		},
+
 		close() {
 			this.$root.$emit('close')
 			this.$emit('close')
 		},
+
 		select() {
 			this.$root.$emit('select', this.selectedPollId)
 		},
