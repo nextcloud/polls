@@ -86,8 +86,7 @@ class SearchProvider implements IProvider {
 
 		return SearchResult::complete(
 			$this->l10n->t('polls', 'Polls'),
-			$resultEntries,
-			''
+			$resultEntries
 		);
 	}
 

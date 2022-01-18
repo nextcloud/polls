@@ -98,7 +98,6 @@ class PollService {
 
 	/**
 	 * Get list of polls
-	 * @return Poll[]
 	 */
 	public function list(): array {
 		$pollList = [];
@@ -125,7 +124,6 @@ class PollService {
 
 	/**
 	 * Get list of polls
-	 * @return Poll[]
 	 */
 	public function search(ISearchQuery $query): array {
 		$pollList = [];

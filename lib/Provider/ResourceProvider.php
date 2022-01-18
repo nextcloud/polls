@@ -25,6 +25,7 @@ namespace OCA\Polls\Provider;
 
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\QueryException;
 use OCP\Collaboration\Resources\IManager;
@@ -60,7 +61,7 @@ class ResourceProvider implements IProvider {
 	}
 
 	public function getResourceRichObject(IResource $resource): array {
-		$poll = $this->pollMapper->find($resource->getId());
+		$poll = $this->pollMapper->find(intval($resource->getId()));
 
 		return [
 			'type' => self::RESOURCE_TYPE,
@@ -77,7 +78,7 @@ class ResourceProvider implements IProvider {
 		}
 
 		try {
-			$this->acl->setPollId($resource->getID());
+			$this->acl->setPollId(intval($resource->getId()));
 			$poll = $this->acl->getPoll();
 		} catch (NotAuthorizedException $e) {
 			return false;

@@ -25,7 +25,7 @@
 namespace OCA\Polls\AppInfo;
 
 use Closure;
-use OC\EventDispatcher\SymfonyAdapter;
+// use OC\EventDispatcher\SymfonyAdapter;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -115,10 +115,11 @@ class Application extends App implements IBootstrap {
 	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
-	protected function registerCollaborationResources(IProviderManager $resourceManager, SymfonyAdapter $symfonyAdapter): void {
+	protected function registerCollaborationResources(IProviderManager $resourceManager): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
-		$symfonyAdapter->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
-			Util::addScript('polls', 'polls-collections');
+
+		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+			Util::addScript(self::APP_ID, 'polls-collections');
 		});
 	}
 }
