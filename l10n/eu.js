@@ -121,6 +121,8 @@ OC.L10N.register(
     "Download CSV file" : "Deskargatu CSV fitxategia",
     "Download HTML file" : "Deskargatu HTML fitxategia",
     "Participants" : "Parte-hartzaileak",
+    "From" : "Nork",
+    "To" : "Nori",
     "No" : "Ez",
     "Clone poll" : "Klonatu bozketa",
     "Archive poll" : "Artxibatu inkesta",
