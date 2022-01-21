@@ -27,51 +27,49 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import './assets/scss/polls-icon.scss'
 import store from './store/store-polls'
 
-(function(OCP, OC) {
+// eslint-disable-next-line
+__webpack_nonce__ = btoa(OC.requestToken)
+// eslint-disable-next-line
+__webpack_public_path__ = OC.linkTo('polls', 'js/')
 
-	// eslint-disable-next-line
-	__webpack_nonce__ = btoa(OC.requestToken)
-	// eslint-disable-next-line
-	__webpack_public_path__ = OC.linkTo('polls', 'js/')
+Vue.config.debug = process.env.NODE_ENV !== 'production'
+Vue.config.devTools = process.env.NODE_ENV !== 'production'
 
-	Vue.config.debug = process.env.NODE_ENV !== 'production'
-	Vue.config.devTools = process.env.NODE_ENV !== 'production'
+Vue.prototype.t = translate
+Vue.prototype.n = translatePlural
+Vue.prototype.OC = OC
 
-	Vue.prototype.t = translate
-	Vue.prototype.n = translatePlural
-	Vue.prototype.OC = OC
+const PollSelector = () => import('./views/PollSelector')
 
-	OCP.Collaboration.registerType('poll', {
-		action: () => new Promise((resolve, reject) => {
-			const container = document.createElement('div')
-			container.id = 'polls-poll-select'
-			const body = document.getElementById('body-user')
-			body.appendChild(container)
-			const PollSelector = () => import('./views/PollSelector')
-			const ComponentVM = new Vue({
-				store,
-				render: (h) => h(PollSelector, {
-					props: {
-						// Even if it is used from Talk the Collections menu is
-						// independently loaded, so the properties that depend
-						// on the store need to be explicitly injected.
-						container: window.store ? window.store.getters.getMainContainerSelector() : undefined,
-					},
-				}),
-			})
-			ComponentVM.$mount(container)
-			ComponentVM.$root.$on('close', () => {
-				ComponentVM.$el.remove()
-				ComponentVM.$destroy()
-				reject(new Error('User cancelled poll selection'))
-			})
-			ComponentVM.$root.$on('select', (id) => {
-				resolve(id)
-				ComponentVM.$el.remove()
-				ComponentVM.$destroy()
-			})
-		}),
+const selector = (selector) => new Promise((resolve, reject) => {
+	const container = document.createElement('div')
+
+	document.getElementById('body-user').append(container)
+
+	const ComponentVM = new Vue({
+		store,
+		render: (h) => h(selector),
+	}).$mount(container)
+
+	ComponentVM.$root.$on('close', () => {
+		ComponentVM.$el.remove()
+		ComponentVM.$destroy()
+		reject(new Error('Selection canceled'))
+	})
+
+	ComponentVM.$root.$on('select', (id) => {
+		ComponentVM.$el.remove()
+		ComponentVM.$destroy()
+		resolve(id)
+	})
+})
+
+window.addEventListener('DOMContentLoaded', () => {
+	window.OCP.Collaboration.registerType('poll', {
+		action: () => {
+			selector(PollSelector)
+		},
 		typeString: t('poll', 'Link to a poll'),
 		typeIconClass: 'icon-polls',
 	})
-})(window.OCP, window.OC)
+})
