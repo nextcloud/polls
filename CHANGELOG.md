@@ -7,11 +7,15 @@ All notable changes to this project will be documented in this file.
 - Added activities
 - Added a combo function, to view different date polls in one view
 - Added feature switches for admins to en-/disable exports, activities and the new combo view
+- Add polls to collections
 - Linkify URLs and email addresses in text options
 
 ## Fixed
 - It was possible to add option proposals, when not registered in public polls
 - A deleted poll could cause repeating error logs on notifications
+
+## [3.5.0-beta2] - 2022-01-22
+- [new] #950 - Allow join project / collection (#2194)
 
 ## [3.5.0-beta1] - 2022-01-18
 - [new] #366 - Export poll (#1942, #2169)

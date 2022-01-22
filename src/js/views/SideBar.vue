@@ -49,9 +49,17 @@
 			<SideBarTabShare />
 		</AppSidebarTab>
 
+		<AppSidebarTab v-if="acl.loggedIn && useCollaboration"
+			:id="'collaboration'"
+			:order="4"
+			:name="t('polls', 'Collaboration')"
+			icon="icon-projects">
+			<SideBarTabCollaboration />
+		</AppSidebarTab>
+
 		<AppSidebarTab v-if="acl.allowComment"
 			:id="'comments'"
-			:order="4"
+			:order="5"
 			:name="t('polls', 'Comments')"
 			icon="icon-comment">
 			<SideBarTabComments />
@@ -59,7 +67,7 @@
 
 		<AppSidebarTab v-if="acl.allowEdit && useActivity"
 			:id="'activity'"
-			:order="4"
+			:order="6"
 			:name="t('polls', 'Activity')"
 			icon="icon-comment">
 			<SideBarTabActivity />
@@ -80,6 +88,7 @@ export default {
 		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments'),
 		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions'),
 		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare'),
+		SideBarTabCollaboration: () => import('../components/SideBar/SideBarTabCollaboration'),
 		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity'),
 		// SideBarTabUserOptions: () => import('../components/SideBar/SideBarTabUserOptions'),
 		AppSidebar,
@@ -98,6 +107,7 @@ export default {
 			poll: (state) => state.poll,
 			acl: (state) => state.poll.acl,
 			useActivity: (state) => state.appSettings.useActivity,
+			useCollaboration: (state) => state.appSettings.useCollaboration,
 		}),
 	},
 	methods: {

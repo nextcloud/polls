@@ -21,23 +21,23 @@
   -->
 
 <template>
-	<div class="sidebar-share">
-		<SharesListUnsent class="shares unsent" />
-		<SharesList class="shares effective" />
+	<div class="sidebar-collaboration">
+		<CollectionList v-if="pollId"
+			:id="`${pollId}`"
+			:name="pollTitle"
+			type="poll" />
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import SharesList from '../Shares/SharesList'
-import SharesListUnsent from '../Shares/SharesListUnsent'
+import { CollectionList } from 'nextcloud-vue-collections'
 
 export default {
-	name: 'SideBarTabShare',
+	name: 'SideBarTabCollaboration',
 
 	components: {
-		SharesList,
-		SharesListUnsent,
+		CollectionList,
 	},
 
 	computed: {
@@ -51,38 +51,8 @@ export default {
 </script>
 
 <style lang="scss">
-	.sidebar-share {
+	.sidebar-collaboration {
 		display: flex;
 		flex-direction: column;
-	}
-
-	.shares-list {
-		display: flex;
-		flex-flow: column;
-		justify-content: flex-start;
-		padding-top: 8px;
-
-		> li {
-			display: flex;
-			align-items: stretch;
-			margin: 4px 0;
-		}
-	}
-
-	.share-item {
-		display: flex;
-		flex: 1;
-		align-items: center;
-		max-width: 100%;
-	}
-
-	.share-item__description {
-		flex: 1;
-		min-width: 50px;
-		color: var(--color-text-maxcontrast);
-		padding-left: 8px;
-		white-space: nowrap;
-		overflow: hidden;
-		text-overflow: ellipsis;
 	}
 </style>

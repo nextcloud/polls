@@ -25,6 +25,7 @@ namespace OCA\Polls\Service;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Search\ISearchQuery;
 
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\InvalidAccessException;
@@ -111,6 +112,29 @@ class PollService {
 						(array) json_decode(json_encode($poll)),
 						(array) json_decode(json_encode($this->acl))
 						);
+				} catch (NotAuthorizedException $e) {
+					continue;
+				}
+			}
+		} catch (DoesNotExistException $e) {
+			// silent catch
+		}
+		return $pollList;
+	}
+
+	/**
+	 * Get list of polls
+	 */
+	public function search(ISearchQuery $query): array {
+		$pollList = [];
+		try {
+			$polls = $this->pollMapper->search(\OC::$server->getUserSession()->getUser()->getUID(), $query);
+
+			foreach ($polls as $poll) {
+				try {
+					$this->acl->setPollId($poll->getId());
+					// TODO: Not the elegant way. Improvement neccessary
+					$pollList[] = $poll;
 				} catch (NotAuthorizedException $e) {
 					continue;
 				}

@@ -40,6 +40,7 @@ const defaultAppSettings = () => ({
 	autoArchiveOffset: 30,
 	updateType: 'longPolling',
 	useActivity: false,
+	useCollaboration: true,
 })
 
 const state = defaultAppSettings()

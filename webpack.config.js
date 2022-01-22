@@ -14,6 +14,7 @@ module.exports = {
 	mode: buildMode,
 	devtool: isDev ? 'eval' : false,
 	entry: {
+		'polls-collections': path.join(__dirname, 'src/js/', 'collections.js'),
 		polls: path.join(__dirname, 'src/js/', 'main.js'),
 		userSettings: path.join(__dirname, 'src/js/', 'userSettings.js'),
 		adminSettings: path.join(__dirname, 'src/js/', 'adminSettings.js'),
