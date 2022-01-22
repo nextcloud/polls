@@ -58,15 +58,6 @@ abstract class TableSchema {
 		Vote::TABLE,
 	];
 
-	public const UNIQUE_TABLES = [
-		Log::TABLE,
-		Subscription::TABLE,
-		Option::TABLE,
-		Preferences::TABLE,
-		Share::TABLE,
-		Vote::TABLE,
-	];
-
 	public const UNIQUE_INDICES = [
 		Option::TABLE => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_text', 'timestamp']],
 		Log::TABLE => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
@@ -232,7 +223,7 @@ abstract class TableSchema {
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
-			'comment' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
+			'comment' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
 			'timestamp' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 
 		],
