@@ -117,7 +117,7 @@ class Rebuild extends Command {
 			if ($schema->hasTable($tableName)) {
 				$table = $schema->getTable($tableName);
 				if (!$table->hasIndex($values['name'])) {
-					if ($values['unique']) {
+					if ($values['unique'] === true) {
 						$table->addUniqueIndex($values['columns'], $values['name']);
 						$output->writeln('<info> - Added unique index ' . $values['name'] . ' to ' . $tableName . '</info>');
 					} else {
