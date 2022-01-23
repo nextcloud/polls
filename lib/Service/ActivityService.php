@@ -90,7 +90,7 @@ class ActivityService {
 			: $this->getMessageFull();
 	}
 
-	private function getMessageFull() {
+	private function getMessageFull(): string {
 		switch ($this->eventType) {
 			case CommentEvent::ADD:
 				return $this->userIsActor
@@ -236,7 +236,7 @@ class ActivityService {
 			: $this->trans->t('{actor} has done something indescribable with poll {pollTitle}');
 	}
 
-	private function getMessageFiltered() {
+	private function getMessageFiltered(): string {
 		switch ($this->eventType) {
 			case CommentEvent::ADD:
 				return $this->userIsActor

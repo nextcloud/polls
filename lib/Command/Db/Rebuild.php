@@ -72,7 +72,7 @@ class Rebuild extends Command {
 		return 0;
 	}
 
-	private function requestConfirmation(InputInterface $input, OutputInterface $output) {
+	private function requestConfirmation(InputInterface $input, OutputInterface $output): int {
 		if ($input->isInteractive()) {
 			$helper = $this->getHelper('question');
 			$output->writeln('<comment>All polls tables will get checked against the current schema.</comment>');
@@ -117,13 +117,19 @@ class Rebuild extends Command {
 			if ($schema->hasTable($tableName)) {
 				$table = $schema->getTable($tableName);
 				if (!$table->hasIndex($values['name'])) {
-					if ($values['unique'] === true) {
-						$table->addUniqueIndex($values['columns'], $values['name']);
-						$output->writeln('<info> - Added unique index ' . $values['name'] . ' to ' . $tableName . '</info>');
-					} else {
-						$table->addIndex($values['columns'], $values['name']);
-						$output->writeln('<info> - Added index ' . $values['name'] . ' to ' . $tableName . '</info>');
-					}
+					$table->addUniqueIndex($values['columns'], $values['name']);
+					$output->writeln('<info> - Added unique index ' . $values['name'] . ' to ' . $tableName . '</info>');
+
+					// TODO: Commented out atm to get psalm quiet, because we just have unique indices. 
+					//
+
+					// if ($values['unique']) {
+					// 	$table->addUniqueIndex($values['columns'], $values['name']);
+					// 	$output->writeln('<info> - Added unique index ' . $values['name'] . ' to ' . $tableName . '</info>');
+					// } else {
+					// 	$table->addIndex($values['columns'], $values['name']);
+					// 	$output->writeln('<info> - Added index ' . $values['name'] . ' to ' . $tableName . '</info>');
+					// }
 				}
 			}
 		}
@@ -142,7 +148,7 @@ class Rebuild extends Command {
 			$tableCreated = false;
 
 			if ($schema->hasTable($tableName)) {
-				$output->writeln('<info> - Validating table ' . $tableName . '</info>');
+				$output->writeln(' - Validating table ' . $tableName);
 				$table = $schema->getTable($tableName);
 			} else {
 				$output->writeln('<info> - Creating table ' . $tableName . '</info>');
@@ -155,7 +161,7 @@ class Rebuild extends Command {
 					$column = $table->getColumn($columnName);
 					$column->setOptions($columnDefinition['options']);
 					if ($column->getType()->getName() !== $columnDefinition['type']) {
-						$output->writeln('<comment>   Migrated type of ' . $tableName . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'] . '</comment>');
+						$output->writeln('<info>   Migrated type of ' . $tableName . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'] . '</info>');
 						$column->setType(Type::getType($columnDefinition['type']));
 					}
 
@@ -163,7 +169,7 @@ class Rebuild extends Command {
 					$table->changeColumn($columnName, $columnDefinition['options']);
 				} else {
 					$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
-					$output->writeln('<comment>  Added ' . $tableName . ', ' . $columnName . ' (' . $columnDefinition['type'] . ')</comment>');
+					$output->writeln('<info>  Added ' . $tableName . ', ' . $columnName . ' (' . $columnDefinition['type'] . ')</info>');
 				}
 			}
 
@@ -196,7 +202,7 @@ class Rebuild extends Command {
 		$this->connection->migrateToSchema($schema->getWrappedSchema());
 
 		if (!$dropped) {
-			$output->writeln('<info> - No orphaned columns found</info>');
+			$output->writeln(' - No orphaned columns found');
 		}
 	}
 
@@ -217,7 +223,7 @@ class Rebuild extends Command {
 		}
 		$this->connection->migrateToSchema($schema->getWrappedSchema());
 		if (!$dropped) {
-			$output->writeln('<info> - No orphaned tables found</info>');
+			$output->writeln(' - No orphaned tables found');
 		}
 	}
 

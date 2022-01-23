@@ -26,12 +26,14 @@
 
 		<slot name="icon" />
 
-		<div v-html="optionText"
-			v-if="show === 'textBox'"
+		<!-- eslint-disable vue/no-v-html -->
+		<div v-if="show === 'textBox'"
 			v-tooltip.auto="optionTooltip"
-			class="option-item__option--text">
+			class="option-item__option--text"
+			v-html="optionText">
 			{{ optionText }}
 		</div>
+		<!-- eslint-enable vue/no-v-html -->
 
 		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormatUTC" class="option-item__option--datebox">
 			<div class="event-date">
