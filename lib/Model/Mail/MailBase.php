@@ -30,16 +30,21 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Helper\Container;
 use OCP\IL10N;
 use OCP\IUser;
+use OCP\IUserManager;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
 use OCP\Mail\IMailer;
+use Psr\Log\LoggerInterface;
 
 class MailBase {
 	private const TEMPLATE_CLASS = 'polls.Mail';
 
 	/** @var UserBase */
 	protected $recipient;
+
+	/** @var LoggerInterface */
+	protected $logger;
 
 	/** @var Poll */
 	protected $poll;
@@ -62,6 +67,9 @@ class MailBase {
 	/** @var IEMailTemplate */
 	protected $emailTemplate;
 
+	/** @var IUserManager */
+	private $userManager;
+
 	/** @var User */
 	protected $owner;
 
@@ -73,7 +81,10 @@ class MailBase {
 		$this->poll = $this->getPoll($pollId);
 		$this->recipient = $this->getUser($recipientId);
 		$this->url = $url ?? $this->poll->getVoteUrl();
-
+		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->logger = Container::queryClass(LoggerInterface::class);
+		$this->mailer = Container::queryClass(IMailer::class);
+		$this->transFactory = Container::queryClass(IFactory::class);
 		$this->initializeClass();
 	}
 
@@ -84,8 +95,6 @@ class MailBase {
 			$this->url = $this->getShareURL();
 		}
 
-		$this->mailer = Container::queryClass(IMailer::class);
-		$this->transFactory = Container::queryClass(IFactory::class);
 		$this->trans = $this->transFactory->get(
 			'polls',
 			$this->recipient->getLanguage()
@@ -116,14 +125,14 @@ class MailBase {
 			$message->useTemplate($this->emailTemplate);
 			$this->mailer->send($message);
 		} catch (\Exception $e) {
-			\OC::$server->getLogger()->error('Error sending Mail to ' . json_encode($this->recipient));
-			\OC::$server->getLogger()->alert($e->getMessage());
+			$this->logger->error('Error sending Mail to ' . json_encode($this->recipient));
+			$this->logger->alert($e->getMessage());
 			throw $e;
 		}
 	}
 
 	protected function getUser(string $userId) : UserBase {
-		if (\OC::$server->getUserManager()->get($userId) instanceof IUser) {
+		if ($this->userManager->get($userId) instanceof IUser) {
 			// return User object
 			return new User($userId);
 		}

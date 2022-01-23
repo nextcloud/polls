@@ -27,8 +27,10 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCA\Polls\Helper\Container;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
+use OCP\IUserManager;
 
 /**
  * @method int getId()
@@ -99,6 +101,9 @@ class Option extends Entity implements JsonSerializable {
 	/** @var bool $isBookedUp */
 	public $isBookedUp = false;
 
+	/** @var IUserManager */
+	private $userManager;
+
 	public function __construct() {
 		$this->addType('released', 'int');
 		$this->addType('pollId', 'int');
@@ -106,6 +111,7 @@ class Option extends Entity implements JsonSerializable {
 		$this->addType('order', 'int');
 		$this->addType('confirmed', 'int');
 		$this->addType('duration', 'int');
+		$this->userManager = Container::queryClass(IUserManager::class);
 	}
 
 	public function jsonSerialize() {
@@ -185,10 +191,10 @@ class Option extends Entity implements JsonSerializable {
 		}
 		return $this->getOwnerIsNoUser()
 			? $this->getOwner()
-			: \OC::$server->getUserManager()->get($this->getOwner())->getDisplayName();
+			: $this->userManager->get($this->getOwner())->getDisplayName();
 	}
 
 	private function getOwnerIsNoUser(): bool {
-		return !\OC::$server->getUserManager()->get($this->getOwner()) instanceof IUser;
+		return !$this->userManager->get($this->getOwner()) instanceof IUser;
 	}
 }

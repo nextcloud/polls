@@ -101,7 +101,7 @@ class UserBase implements \JsonSerializable {
 		$this->language = $language;
 		$this->locale = $locale;
 		$this->icon = 'icon-share';
-		$this->l10n = \OC::$server->getL10N('polls');
+		$this->l10n = Container::getL10N();
 		$this->timezone = Container::queryClass(IDateTimeZone::class);
 	}
 

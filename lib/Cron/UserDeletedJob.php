@@ -44,6 +44,9 @@ class UserDeletedJob extends QueuedJob {
 	/** @var CommentMapper **/
 	private $commentMapper;
 
+	/** @var ISecureRandom */
+	private $secureRandom;
+
 	/** @var LogMapper **/
 	private $logMapper;
 
@@ -70,6 +73,7 @@ class UserDeletedJob extends QueuedJob {
 
 	public function __construct(
 		CommentMapper $commentMapper,
+		ISecureRandom $secureRandom,
 		LogMapper $logMapper,
 		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
@@ -86,6 +90,7 @@ class UserDeletedJob extends QueuedJob {
 		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->preferencesMapper = $preferencesMapper;
+		$this->secureRandom = $secureRandom;
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->voteMapper = $voteMapper;
@@ -102,7 +107,7 @@ class UserDeletedJob extends QueuedJob {
 			'user' => $owner
 		]);
 
-		$replacementName = 'deleted_' . \OC::$server->getSecureRandom()->generate(
+		$replacementName = 'deleted_' . $this->secureRandom->generate(
 			8,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .

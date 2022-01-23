@@ -24,6 +24,7 @@
 namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
+use OCP\IUserSession;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -39,17 +40,22 @@ class PreferencesController extends Controller {
 	/** @var CalendarService */
 	private $calendarService;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		PreferencesService $preferencesService,
-		CalendarService $calendarService
+		CalendarService $calendarService,
+		IUserSession $userSession
 	) {
 		parent::__construct($appName, $request);
-		$this->preferencesService = $preferencesService;
 		$this->calendarService = $calendarService;
+		$this->preferencesService = $preferencesService;
+		$this->userSession = $userSession;
 	}
 
 	/**
@@ -68,7 +74,7 @@ class PreferencesController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function write(array $settings): DataResponse {
-		if (!\OC::$server->getUserSession()->isLoggedIn()) {
+		if ($this->userSession->isLoggedIn()) {
 			return new DataResponse([], Http::STATUS_OK);
 		}
 		return $this->response(function () use ($settings) {

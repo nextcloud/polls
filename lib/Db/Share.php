@@ -26,6 +26,7 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
+use OCP\IURLGenerator;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Helper\Container;
@@ -115,6 +116,9 @@ class Share extends Entity implements JsonSerializable {
 	/** @var string $miscSettings*/
 	protected $miscSettings;
 
+	/** @var IURLGenerator */
+	private $urlGenerator;
+
 	/** @var PollMapper */
 	protected $pollMapper;
 
@@ -125,6 +129,7 @@ class Share extends Entity implements JsonSerializable {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
 		$this->addType('reminderSent', 'int');
+		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->appSettings = new AppSettings;
 	}
 
@@ -156,12 +161,12 @@ class Share extends Entity implements JsonSerializable {
 
 	public function getURL(): string {
 		if (in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN, self::TYPE_GROUP], true)) {
-			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
+			return $this->urlGenerator->linkToRouteAbsolute(
 				'polls.page.vote',
 				['id' => $this->pollId]
 			);
 		} elseif ($this->token) {
-			return \OC::$server->getUrlGenerator()->linkToRouteAbsolute(
+			return $this->urlGenerator->linkToRouteAbsolute(
 				'polls.public.vote_page',
 				['token' => $this->token]
 			);

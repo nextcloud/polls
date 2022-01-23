@@ -43,7 +43,7 @@ class Circle extends UserBase {
 			$this->icon = self::ICON;
 			$this->circle = Circles::detailsCircle($id);
 			$this->displayName = $this->circle->getName();
-			$this->description = \OC::$server->getL10N('polls')->t('Circle');
+			$this->description = Container::getL10N()->t('Circle');
 			$this->richObjectType = 'circle';
 		} else {
 			throw new CirclesNotEnabledException();

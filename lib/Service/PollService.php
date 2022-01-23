@@ -23,6 +23,8 @@
 
 namespace OCA\Polls\Service;
 
+use OCP\IUserSession;
+use OCP\IGroupManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Search\ISearchQuery;
@@ -53,6 +55,12 @@ class PollService {
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
+	/** @var IUserSession */
+	private $userSession;
+
+	/** @var IGroupManager */
+	private $groupManager;
+
 	/** @var PollMapper */
 	private $pollMapper;
 
@@ -78,6 +86,8 @@ class PollService {
 		Acl $acl,
 		AppSettings $appSettings,
 		IEventDispatcher $eventDispatcher,
+		IGroupManager $groupManager,
+		IUserSession $userSession,
 		MailService $mailService,
 		Poll $poll,
 		PollMapper $pollMapper,
@@ -88,10 +98,12 @@ class PollService {
 		$this->acl = $acl;
 		$this->appSettings = $appSettings;
 		$this->eventDispatcher = $eventDispatcher;
+		$this->groupManager = $groupManager;
 		$this->mailService = $mailService;
 		$this->poll = $poll;
 		$this->pollMapper = $pollMapper;
 		$this->userId = $UserId;
+		$this->userSession = $userSession;
 		$this->voteMapper = $voteMapper;
 		$this->vote = $vote;
 	}
@@ -102,7 +114,7 @@ class PollService {
 	public function list(): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->findForMe(\OC::$server->getUserSession()->getUser()->getUID());
+			$polls = $this->pollMapper->findForMe($this->userSession->getUser()->getUID());
 
 			foreach ($polls as $poll) {
 				try {
@@ -128,7 +140,7 @@ class PollService {
 	public function search(ISearchQuery $query): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->search(\OC::$server->getUserSession()->getUser()->getUID(), $query);
+			$polls = $this->pollMapper->search($this->userSession->getUser()->getUID(), $query);
 
 			foreach ($polls as $poll) {
 				try {
@@ -152,8 +164,8 @@ class PollService {
 	 */
 	public function listForAdmin(): array {
 		$pollList = [];
-		$userId = \OC::$server->getUserSession()->getUser()->getUID();
-		if (\OC::$server->getGroupManager()->isAdmin($userId)) {
+		$userId = $this->userSession->getUser()->getUID();
+		if ($this->groupManager->isAdmin($userId)) {
 			try {
 				$pollList = $this->pollMapper->findForAdmin($userId);
 			} catch (DoesNotExistException $e) {
@@ -173,7 +185,7 @@ class PollService {
 
 		$this->eventDispatcher->dispatchTyped(new PollTakeOverEvent($this->poll));
 
-		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
+		$this->poll->setOwner($this->userSession->getUser()->getUID());
 		$this->pollMapper->update($this->poll);
 
 		return $this->poll;
@@ -207,7 +219,7 @@ class PollService {
 		$this->poll = new Poll();
 		$this->poll->setType($type);
 		$this->poll->setCreated(time());
-		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
+		$this->poll->setOwner($this->userSession->getUser()->getUID());
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
 		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
@@ -313,7 +325,7 @@ class PollService {
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
-		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
+		$this->poll->setOwner($this->userSession->getUser()->getUID());
 		$this->poll->setTitle('Clone of ' . $origin->getTitle());
 		$this->poll->setDeleted(0);
 		$this->poll->setAccess(Poll::ACCESS_HIDDEN);

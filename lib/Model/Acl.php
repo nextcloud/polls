@@ -33,6 +33,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\IGroupManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 
@@ -62,6 +63,9 @@ class Acl implements JsonSerializable {
 	/** @var IUserManager */
 	private $userManager;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	/** @var AppSettings */
 	private $appSettings;
 
@@ -85,12 +89,14 @@ class Acl implements JsonSerializable {
 
 	public function __construct(
 		IUserManager $userManager,
+		IUserSession $userSession,
 		IGroupManager $groupManager,
 		PollMapper $pollMapper,
 		VoteMapper $voteMapper,
 		ShareMapper $shareMapper
 	) {
 		$this->userManager = $userManager;
+		$this->userSession = $userSession;
 		$this->groupManager = $groupManager;
 		$this->pollMapper = $pollMapper;
 		$this->voteMapper = $voteMapper;
@@ -99,7 +105,6 @@ class Acl implements JsonSerializable {
 		$this->share = new Share;
 		$this->appSettings = new AppSettings;
 	}
-
 
 	/**
 	 * load share via token and than call setShare
@@ -146,7 +151,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getUserId(): string {
-		return $this->getIsLoggedIn() ? \OC::$server->getUserSession()->getUser()->getUID() : $this->share->getUserId();
+		return $this->getIsLoggedIn() ? $this->userSession->getUser()->getUID() : $this->share->getUserId();
 	}
 
 	public function validateUserId(string $userId): void {
@@ -282,7 +287,7 @@ class Acl implements JsonSerializable {
 	 * getIsLogged - Is user logged in to nextcloud?
 	 */
 	private function getIsLoggedIn(): bool {
-		return \OC::$server->getUserSession()->isLoggedIn();
+		return $this->userSession->isLoggedIn();
 	}
 
 	/**
