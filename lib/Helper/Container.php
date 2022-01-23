@@ -28,10 +28,11 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
-use OCP\AppFramework\IAppContainer;
+use OCP\App\IAppManager;
+use Psr\Container\ContainerInterface;
 
 abstract class Container {
-	public static function getContainer() : IAppContainer {
+	public static function getContainer() : ContainerInterface {
 		$app = \OC::$server->query(Application::class);
 		return $app->getContainer();
 	}
@@ -50,6 +51,6 @@ abstract class Container {
 	}
 
 	public static function isAppEnabled(string $app) : bool {
-		return \OC::$server->getAppManager()->isEnabledForUser($app);
+		return self::queryClass(IAppManager::class)->isEnabledForUser($app);
 	}
 }
