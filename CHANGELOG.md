@@ -3,10 +3,11 @@ All notable changes to this project will be documented in this file.
 
 ## [3.5.0] - tbd
 ## New
-- Added poll exports (.xlsx, odt, .csv, .html)
-- Added activities
-- Added a combo function, to view different date polls in one view
+- Export polls (.xlsx, odt, .csv, .html)
+- Track activities
+- Combine multiple polls in one view (read only)
 - Added feature switches for admins to en-/disable exports, activities and the new combo view
+- New command `occ polls:db:recreate` for validating and fixing db structure
 - Add polls to collections
 - Linkify URLs and email addresses in text options
 
@@ -16,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 ## [3.5.0-beta2] - 2022-01-22
 - [new] #950 - Allow join project / collection (#2194)
+- [new] #2204 - Add `occ polls:db:recreate` for validating and fixing db structure
 
 ## [3.5.0-beta1] - 2022-01-18
 - [new] #366 - Export poll (#1942, #2169)

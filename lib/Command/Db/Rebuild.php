@@ -120,9 +120,8 @@ class Rebuild extends Command {
 					$table->addUniqueIndex($values['columns'], $values['name']);
 					$output->writeln('<info> - Added unique index ' . $values['name'] . ' to ' . $tableName . '</info>');
 
-					// TODO: Commented out atm to get psalm quiet, because we just have unique indices. 
+					// TODO: Commented out atm to get psalm quiet, because we just have unique indices.
 					//
-
 					// if ($values['unique']) {
 					// 	$table->addUniqueIndex($values['columns'], $values['name']);
 					// 	$output->writeln('<info> - Added unique index ' . $values['name'] . ' to ' . $tableName . '</info>');
