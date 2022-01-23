@@ -58,15 +58,6 @@ abstract class TableSchema {
 		Vote::TABLE,
 	];
 
-	public const UNIQUE_TABLES = [
-		Log::TABLE,
-		Subscription::TABLE,
-		Option::TABLE,
-		Preferences::TABLE,
-		Share::TABLE,
-		Vote::TABLE,
-	];
-
 	public const UNIQUE_INDICES = [
 		Option::TABLE => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_text', 'timestamp']],
 		Log::TABLE => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
