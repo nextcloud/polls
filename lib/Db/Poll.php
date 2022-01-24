@@ -271,6 +271,16 @@ class Poll extends Entity implements JsonSerializable {
 		return $this->getId();
 	}
 
+	// alias of getOwner()
+	public function getUserId() : string {
+		return $this->getOwner();
+	}
+
+	// alias of setOwner($value)
+	public function setUserId(string $userId) : void {
+		$this->setOwner($userId);
+	}
+
 	public function getProposalsExpired(): bool {
 		return (
 			   $this->getProposalsExpire() > 0

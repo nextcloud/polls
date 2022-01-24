@@ -177,7 +177,7 @@ class Option extends Entity implements JsonSerializable {
 		$this->setOwner($userId);
 	}
 
-	// used for 1.9.0-beta1 installtions
+	// used for 1.9.0-beta1 installations
 	public function getOwner() : string {
 		if ($this->owner === 'disallow' || $this->owner === null) {
 			return '';

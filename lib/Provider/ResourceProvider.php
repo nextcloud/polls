@@ -93,7 +93,7 @@ class ResourceProvider implements IProvider {
 		return true;
 	}
 
-	public function invalidateAccessCache($pollId = null) {
+	public function invalidateAccessCache($pollId = null): void {
 		if ($pollId !== null) {
 			$resource = $this->resourceManager->getResourceForUser(self::RESOURCE_TYPE, (string)$pollId, null);
 			$this->resourceManager->invalidateAccessCacheForResource($resource);

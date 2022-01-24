@@ -28,6 +28,12 @@
       <code>registerEventListener</code>
     </InvalidArgument>
   </file>
+  <file src="lib/Db/Preferences.php">
+    <UndefinedClass occurrences="2">
+      <code>BackgroundService</code>
+      <code>BackgroundService</code>
+    </UndefinedClass>
+  </file>
   <file src="lib/Listener/BaseListener.php">
     <UndefinedMethod occurrences="10">
       <code>getActivityId</code>

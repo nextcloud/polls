@@ -39,7 +39,7 @@ abstract class Container {
 	}
 
 	public static function queryClass(string $class) {
-		return self::getContainer()->query($class);
+		return self::getContainer()->get($class);
 	}
 
 	public static function queryPoll(int $pollId) : Poll {
