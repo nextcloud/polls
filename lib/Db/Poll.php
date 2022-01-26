@@ -27,7 +27,10 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCA\Polls\Helper\Container;
 use OCP\IUser;
+use OCP\IUserManager;
+use OCP\IURLGenerator;
 use OCP\AppFramework\Db\Entity;
 use OCA\Polls\Model\UserGroup\User;
 
@@ -152,6 +155,12 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var string $miscSettings*/
 	protected $miscSettings;
 
+	/** @var IURLGenerator */
+	private $urlGenerator;
+
+	/** @var IUserManager */
+	private $userManager;
+
 	public function __construct() {
 		$this->addType('created', 'int');
 		$this->addType('expire', 'int');
@@ -166,6 +175,8 @@ class Poll extends Entity implements JsonSerializable {
 		$this->addType('important', 'int');
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
+		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
+		$this->userManager = Container::queryClass(IUserManager::class);
 	}
 
 	public function jsonSerialize() {
@@ -230,7 +241,7 @@ class Poll extends Entity implements JsonSerializable {
 	}
 
 	public function getVoteUrl() : string {
-		return \OC::$server->getURLGenerator()->linkToRouteAbsolute(
+		return $this->urlGenerator->linkToRouteAbsolute(
 			'polls.page.vote',
 			['id' => $this->getId()]
 		);
@@ -260,6 +271,16 @@ class Poll extends Entity implements JsonSerializable {
 		return $this->getId();
 	}
 
+	// alias of getOwner()
+	public function getUserId() : string {
+		return $this->getOwner();
+	}
+
+	// alias of setOwner($value)
+	public function setUserId(string $userId) : void {
+		$this->setOwner($userId);
+	}
+
 	public function getProposalsExpired(): bool {
 		return (
 			   $this->getProposalsExpire() > 0
@@ -272,8 +293,8 @@ class Poll extends Entity implements JsonSerializable {
 	}
 
 	public function getDisplayName(): string {
-		return \OC::$server->getUserManager()->get($this->owner) instanceof IUser
-			? \OC::$server->getUserManager()->get($this->owner)->getDisplayName()
+		return $this->userManager->get($this->owner) instanceof IUser
+			? $this->userManager->get($this->owner)->getDisplayName()
 			: $this->owner;
 	}
 

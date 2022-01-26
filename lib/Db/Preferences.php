@@ -27,6 +27,7 @@ use JsonSerializable;
 use OCA\Dashboard\Service\BackgroundService;
 use OCA\Polls\Helper\Container;
 use OCP\AppFramework\Db\Entity;
+use OCP\IConfig;
 
 /**
  * @method integer getId()
@@ -50,8 +51,12 @@ class Preferences extends Entity implements JsonSerializable {
 	/** @var string $preferences */
 	protected $preferences;
 
+	/** @var IConfig */
+	private $config;
+
 	public function __construct() {
 		$this->addType('timestamp', 'int');
+		$this->config = Container::queryClass(IConfig::class);
 	}
 
 	public function jsonSerialize() {
@@ -69,13 +74,13 @@ class Preferences extends Entity implements JsonSerializable {
 	 */
 	public function getDashboardBackground(): array {
 		if (Container::isAppEnabled('dashboard')) {
-			$background = \OC::$server->getConfig()->getUserValue($this->userId, 'dashboard', 'background');
+			$background = $this->config->getUserValue($this->userId, 'dashboard', 'background');
 			return [
 				'isInstalled' => true,
-				'background' => \OC::$server->getConfig()->getUserValue($this->userId, 'dashboard', 'background'),
+				'background' => $this->config->getUserValue($this->userId, 'dashboard', 'background'),
 				'themingDefaultBackground' => $background,
 				'shippedBackgrounds' => BackgroundService::SHIPPED_BACKGROUNDS,
-				'backgroundVersion' => \OC::$server->getConfig()->getUserValue($this->userId, 'dashboard', 'backgroundVersion'),
+				'backgroundVersion' => $this->config->getUserValue($this->userId, 'dashboard', 'backgroundVersion'),
 				'theming' => BackgroundService::SHIPPED_BACKGROUNDS[$background]['theming'] ?? 'light',
 			];
 		}

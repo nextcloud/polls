@@ -40,7 +40,7 @@ class Group extends UserBase {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
 		$this->group = Container::queryClass(IGroupManager::class)->get($this->id);
-		$this->description = \OC::$server->getL10N('polls')->t('Group');
+		$this->description = Container::getL10N()->t('Group');
 		$this->displayName = $this->group->getDisplayName();
 		$this->richObjectType = 'user-group';
 	}

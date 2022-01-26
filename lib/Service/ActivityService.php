@@ -27,6 +27,7 @@ use OCP\Activity\IManager as ActivityManager;
 use OCP\Activity\IEvent as ActivityEvent;
 use OCP\EventDispatcher\Event;
 use OCP\IL10N;
+use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Event\CommentEvent;
@@ -45,10 +46,13 @@ class ActivityService {
 	/** @var IL10N */
 	protected $trans;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	/** @var string */
 	protected $shareType;
 
-	/** @var string */
+	/** @var bool */
 	protected $userIsActor;
 
 	/** @var string */
@@ -56,10 +60,12 @@ class ActivityService {
 
 	public function __construct(
 		IFactory $transFactory,
+		IUserSession $userSession,
 		ActivityManager $activityManager
 	) {
-		$this->transFactory = $transFactory;
 		$this->activityManager = $activityManager;
+		$this->transFactory = $transFactory;
+		$this->userSession = $userSession;
 	}
 
 	public function createActivityEvent(Event $event): ActivityEvent {
@@ -80,7 +86,7 @@ class ActivityService {
 
 	public function getActivityMessage(ActivityEvent $event, string $language, bool $filtered = false) : string {
 		$this->trans = $this->transFactory->get($event->getApp(), $language);
-		$this->userIsActor = $event->getAuthor() === \OC::$server->getUserSession()->getUser()->getUID();
+		$this->userIsActor = $event->getAuthor() === $this->userSession->getUser()->getUID();
 		$this->eventType = $event->getType();
 		$parameters = $event->getSubjectParameters();
 		$this->shareType = $parameters['shareType']['name'] ?? '';

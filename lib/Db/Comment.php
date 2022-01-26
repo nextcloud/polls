@@ -27,7 +27,9 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCA\Polls\Helper\Container;
 use OCP\IUser;
+use OCP\IUserManager;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -57,9 +59,13 @@ class Comment extends Entity implements JsonSerializable {
 	/** @var string $comment */
 	protected $comment = '';
 
+	/** @var IUserManager */
+	private $userManager;
+
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('timestamp', 'int');
+		$this->userManager = Container::queryClass(IUserManager::class);
 	}
 
 	public function jsonSerialize() {
@@ -80,10 +86,10 @@ class Comment extends Entity implements JsonSerializable {
 		}
 		return $this->getIsNoUser()
 			? $this->userId
-			: \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+			: $this->userManager->get($this->userId)->getDisplayName();
 	}
 
 	public function getIsNoUser(): bool {
-		return !(\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+		return !($this->userManager->get($this->userId) instanceof IUser);
 	}
 }

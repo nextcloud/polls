@@ -31,6 +31,7 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Helper\Container;
+use OCP\IUserSession;
 
 abstract class BaseEvent extends Event {
 	/** @var string */
@@ -51,12 +52,16 @@ abstract class BaseEvent extends Event {
 	/** @var bool */
 	protected $log = true;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	public function __construct(
 		$eventObject
 	) {
 		parent::__construct();
 		$this->eventObject = $eventObject;
 		$this->poll = Container::queryPoll($this->getPollId());
+		$this->userSession = Container::queryClass(IUserSession::class);
 
 		$this->activitySubjectParams['pollTitle'] = [
 			'type' => 'highlight',
@@ -91,8 +96,8 @@ abstract class BaseEvent extends Event {
 	}
 
 	public function getActor(): string {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
-			return \OC::$server->getUserSession()->getUser()->getUID();
+		if ($this->userSession->isLoggedIn()) {
+			return $this->userSession->getUser()->getUID();
 		}
 		return $this->eventObject->getUserId();
 	}

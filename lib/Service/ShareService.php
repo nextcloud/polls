@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IGroupManager;
+use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Exceptions\NotAuthorizedException;
@@ -64,6 +65,9 @@ class ShareService {
 	/** @var IGroupManager */
 	private $groupManager;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	/** @var SystemService */
 	private $systemService;
 
@@ -72,6 +76,9 @@ class ShareService {
 
 	/** @var PollMapper */
 	private $pollMapper;
+
+	/** @var ISecureRandom */
+	private $secureRandom;
 
 	/** @var Share */
 	private $share;
@@ -94,8 +101,10 @@ class ShareService {
 		?string $UserId,
 		IEventDispatcher $eventDispatcher,
 		IGroupManager $groupManager,
-		SystemService $systemService,
+		ISecureRandom $secureRandom,
+		IUserSession $userSession,
 		ShareMapper $shareMapper,
+		SystemService $systemService,
 		PollMapper $pollMapper,
 		Share $share,
 		MailService $mailService,
@@ -107,13 +116,15 @@ class ShareService {
 		$this->userId = $UserId;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->groupManager = $groupManager;
-		$this->systemService = $systemService;
+		$this->secureRandom = $secureRandom;
 		$this->shareMapper = $shareMapper;
+		$this->systemService = $systemService;
 		$this->pollMapper = $pollMapper;
 		$this->share = $share;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
 		$this->notificationService = $notificationService;
+		$this->userSession = $userSession;
 	}
 
 	/**
@@ -168,7 +179,7 @@ class ShareService {
 				}
 				break;
 			case Share::TYPE_GROUP:
-				if (!\OC::$server->getUserSession()->isLoggedIn()) {
+				if (!$this->userSession->isLoggedIn()) {
 					throw new NotAuthorizedException;
 				}
 
@@ -200,7 +211,7 @@ class ShareService {
 		}
 		// Allow users entering the poll with a public share access
 
-		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
+		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->isLoggedIn()) {
 			try {
 				// Test if the user has already access.
 				$this->acl->setPollId($this->share->getPollId());
@@ -209,7 +220,7 @@ class ShareService {
 				// Return the created share
 				return $this->create(
 					$this->share->getPollId(),
-					UserBase::getUserGroupChild(Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
+					UserBase::getUserGroupChild(Share::TYPE_USER, $this->userSession->getUser()->getUID()),
 					true
 				);
 			}
@@ -235,7 +246,7 @@ class ShareService {
 	 */
 	private function create(int $pollId, UserBase $userGroup, bool $preventInvitation = false): Share {
 		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
-		$token = \OC::$server->getSecureRandom()->generate(
+		$token = $this->secureRandom->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .

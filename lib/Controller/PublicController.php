@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\IUserSession;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
@@ -51,6 +52,9 @@ class PublicController extends Controller {
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
+
+	/** @var IUserSession */
+	private $userSession;
 
 	/** @var Acl */
 	private $acl;
@@ -94,6 +98,7 @@ class PublicController extends Controller {
 		string $appName,
 		IRequest $request,
 		IURLGenerator $urlGenerator,
+		IUserSession $userSession,
 		Acl $acl,
 		CommentService $commentService,
 		MailService $mailService,
@@ -109,6 +114,7 @@ class PublicController extends Controller {
 	) {
 		parent::__construct($appName, $request);
 		$this->urlGenerator = $urlGenerator;
+		$this->userSession = $userSession;
 		$this->acl = $acl;
 		$this->commentService = $commentService;
 		$this->mailService = $mailService;
@@ -130,7 +136,7 @@ class PublicController extends Controller {
 	 * @return TemplateResponse|PublicTemplateResponse
 	 */
 	public function votePage() {
-		if (\OC::$server->getUserSession()->isLoggedIn()) {
+		if ($this->userSession->isLoggedIn()) {
 			return new TemplateResponse('polls', 'polls.tmpl', [
 				'urlGenerator' => $this->urlGenerator]);
 		} else {

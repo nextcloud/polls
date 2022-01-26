@@ -27,7 +27,6 @@ use OCA\Polls\Model\Acl;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\QueryException;
 use OCP\Collaboration\Resources\IManager;
 use OCP\Collaboration\Resources\IProvider;
 use OCP\Collaboration\Resources\IResource;
@@ -46,13 +45,18 @@ class ResourceProvider implements IProvider {
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
+	/** @var IManager */
+	private $resourceManager;
+
 	public function __construct(
 		PollMapper $pollMapper,
 		Acl $acl,
+		IManager $resourceManager,
 		IURLGenerator $urlGenerator
 	) {
 		$this->pollMapper = $pollMapper;
 		$this->urlGenerator = $urlGenerator;
+		$this->resourceManager = $resourceManager;
 		$this->acl = $acl;
 	}
 
@@ -89,17 +93,12 @@ class ResourceProvider implements IProvider {
 		return true;
 	}
 
-	public function invalidateAccessCache($pollId = null) {
-		try {
-			/** @var IManager $resourceManager */
-			$resourceManager = \OC::$server->query(IManager::class);
-		} catch (QueryException $e) {
-		}
+	public function invalidateAccessCache($pollId = null): void {
 		if ($pollId !== null) {
-			$resource = $resourceManager->getResourceForUser(self::RESOURCE_TYPE, (string)$pollId, null);
-			$resourceManager->invalidateAccessCacheForResource($resource);
+			$resource = $this->resourceManager->getResourceForUser(self::RESOURCE_TYPE, (string)$pollId, null);
+			$this->resourceManager->invalidateAccessCacheForResource($resource);
 		} else {
-			$resourceManager->invalidateAccessCacheForProvider($this);
+			$this->resourceManager->invalidateAccessCacheForProvider($this);
 		}
 	}
 }

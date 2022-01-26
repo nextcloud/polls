@@ -25,12 +25,16 @@ namespace OCA\Polls\Model\UserGroup;
 
 use DateTimeZone;
 use OCA\Polls\Helper\Container;
+use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\IUser;
 
 class User extends UserBase {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
+
+	/** @var IConfig */
+	private $config;
 
 	/** @var IUser */
 	private $user;
@@ -42,13 +46,14 @@ class User extends UserBase {
 		parent::__construct($id, $type);
 		$this->icon = self::ICON;
 		$this->isNoUser = false;
-		$this->description = \OC::$server->getL10N('polls')->t('User');
+		$this->description = Container::getL10N()->t('User');
 
+		$this->config = Container::queryClass(IConfig::class);
 		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
 		$this->displayName = $this->user->getDisplayName();
 		$this->emailAddress = $this->user->getEmailAddress();
-		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
-		$this->locale = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'locale');
+		$this->language = $this->config->getUserValue($this->id, 'core', 'lang');
+		$this->locale = $this->config->getUserValue($this->id, 'core', 'locale');
 	}
 
 	public function isEnabled(): bool {
@@ -56,7 +61,7 @@ class User extends UserBase {
 	}
 
 	public function getTimeZone(): DateTimeZone {
-		$tz = \OC::$server->getConfig()->getUserValue($this->getId(), 'core', 'timezone');
+		$tz = $this->config->getUserValue($this->getId(), 'core', 'timezone');
 		if ($tz) {
 			return new DateTimeZone($tz);
 		}

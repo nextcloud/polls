@@ -27,10 +27,14 @@ use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
 use OCA\Polls\Helper\Container;
 use OCP\Contacts\IManager as IContactsManager;
+use Psr\Log\LoggerInterface;
 
 class Contact extends UserBase {
 	public const TYPE = 'contact';
 	public const ICON = 'icon-mail';
+
+	/** @var LoggerInterface */
+	protected $logger;
 
 	/** @var array */
 	private $contact = [];
@@ -46,6 +50,7 @@ class Contact extends UserBase {
 		} else {
 			throw new ContactsNotEnabledExceptions();
 		}
+		$this->logger = Container::queryClass(LoggerInterface::class);
 	}
 
 
@@ -84,7 +89,7 @@ class Contact extends UserBase {
 		// Don't throw an error, log the error and take the first entry
 		if (count($contacts) > 1) {
 			// throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
-			\OC::$server->getLogger()->error('Multiple contacts found for id ' . $this->id);
+			$this->logger->error('Multiple contacts found for id ' . $this->id);
 		}
 
 		$this->contact = $contacts[0];
@@ -104,7 +109,7 @@ class Contact extends UserBase {
 		if (isset($this->contact['ORG'])) {
 			array_unshift($description, $this->organisation);
 		}
-		$this->description = count($description) ? implode(", ", $description) : \OC::$server->getL10N('polls')->t('Contact');
+		$this->description = count($description) ? implode(", ", $description) : Container::getL10N()->t('Contact');
 	}
 
 	public static function isEnabled(): bool {

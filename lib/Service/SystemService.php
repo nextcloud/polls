@@ -26,6 +26,7 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
+use OCA\Polls\Helper\Container;
 
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
@@ -36,6 +37,7 @@ use OCA\Polls\Model\UserGroup\Email;
 use OCA\Polls\Model\UserGroup\Group;
 use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Model\UserGroup\UserBase;
+use OCP\IUserManager;
 
 class SystemService {
 
@@ -46,11 +48,11 @@ class SystemService {
 	private $shareMapper;
 
 	public function __construct(
-		VoteMapper $voteMapper,
-		ShareMapper $shareMapper
+		ShareMapper $shareMapper,
+		VoteMapper $voteMapper
 	) {
-		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
+		$this->voteMapper = $voteMapper;
 	}
 
 	/**
@@ -84,7 +86,7 @@ class SystemService {
 	 */
 	public static function getSiteUsers(string $query = '', array $skip = []): array {
 		$users = [];
-		foreach (\OC::$server->getUserManager()->searchDisplayName($query) as $user) {
+		foreach (Container::queryClass(IUserManager::class)->searchDisplayName($query) as $user) {
 			if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {
 				$users[] = new User($user->getUID());
 			}

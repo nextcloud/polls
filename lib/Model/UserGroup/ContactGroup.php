@@ -37,7 +37,7 @@ class ContactGroup extends UserBase {
 		parent::__construct($id, self::TYPE);
 		if (self::isEnabled()) {
 			$this->icon = self::ICON;
-			$this->description = \OC::$server->getL10N('polls')->t('Contact group');
+			$this->description = Container::getL10N()->t('Contact group');
 			$this->richObjectType = 'addressbook-contact';
 		} else {
 			throw new ContactsNotEnabledExceptions();
