@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Poll changes" : "Inkestaren aldaketak",
     "Poll invitation \"%s\"" : "Bozketara gonbidapena \"%s\"",
     "Go to poll" : "Joan bozketara",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Esteka honek goian izendatutako galdeketarako sarbide pertsonala ematen dizu. Sakatu goiko botoia edo kopiatu esteka hau eta gehitu zure nabigatzailearen kokapen barran:",
@@ -46,6 +47,7 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor}-(e)k zure \"%s\" inkesta ezabatu du.",
     "%s archived your poll" : "%s-(e)k zure inkesta artxibatu du",
     "{actor} archived your poll \"%s\"." : "{actor}-ek zure \"%s\" inkesta artxibatu du.",
+    "polls" : "inkestak",
     "You have added an option" : "Aukera bat gehitu duzu",
     "This poll has been closed" : "Inkesta hau itxi da.",
     "You have added a public share" : "Partekatze publiko bat gehitu duzu",
@@ -337,6 +339,9 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Sartu bozketa bat edo hasi berri bat.",
     "Goto Nextcloud" : "Joan Nextcloudera",
     "Error loading poll" : "Errorea bozketa kargatzean",
+    "No polls found" : "Ez da inkestarik aurkitu",
+    "Select poll" : "Hautatu inkesta",
+    "Link to a poll" : "Lotu inkesta batera",
     "Details" : "Xehetasunak",
     "Configuration" : "Konfigurazioa",
     "Options" : "Aukerak",
