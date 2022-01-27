@@ -44,7 +44,7 @@ class ActivityService {
 	protected $transFactory;
 
 	/** @var IL10N */
-	protected $trans;
+	protected $l10n;
 
 	/** @var IUserSession */
 	private $userSession;
@@ -85,7 +85,7 @@ class ActivityService {
 	}
 
 	public function getActivityMessage(ActivityEvent $event, string $language, bool $filtered = false) : string {
-		$this->trans = $this->transFactory->get($event->getApp(), $language);
+		$this->l10n = $this->transFactory->get($event->getApp(), $language);
 		$this->userIsActor = $event->getAuthor() === $this->userSession->getUser()->getUID();
 		$this->eventType = $event->getType();
 		$parameters = $event->getSubjectParameters();
@@ -100,275 +100,275 @@ class ActivityService {
 		switch ($this->eventType) {
 			case CommentEvent::ADD:
 				return $this->userIsActor
-					? $this->trans->t('You have commented on poll {pollTitle}')
-					: $this->trans->t('{actor} has commented on poll {pollTitle}');
+					? $this->l10n->t('You have commented on poll {pollTitle}')
+					: $this->l10n->t('{actor} has commented on poll {pollTitle}');
 			case CommentEvent::DELETE:
 				return $this->userIsActor
-					? $this->trans->t('You have deleted a comment from poll {pollTitle}')
-					: $this->trans->t('{actor} has deleted a comment from poll {pollTitle}');
+					? $this->l10n->t('You have deleted a comment from poll {pollTitle}')
+					: $this->l10n->t('{actor} has deleted a comment from poll {pollTitle}');
 
 			case OptionEvent::ADD:
 				return $this->userIsActor
-					? $this->trans->t('You have added an option to poll {pollTitle}')
-					: $this->trans->t('{actor} has added an option to poll {pollTitle}');
+					? $this->l10n->t('You have added an option to poll {pollTitle}')
+					: $this->l10n->t('{actor} has added an option to poll {pollTitle}');
 			case OptionEvent::UPDATE:
 				return $this->userIsActor
-					? $this->trans->t('You have changed an option of poll {pollTitle}')
-					: $this->trans->t('{actor} has changed an option of poll {pollTitle}');
+					? $this->l10n->t('You have changed an option of poll {pollTitle}')
+					: $this->l10n->t('{actor} has changed an option of poll {pollTitle}');
 			case OptionEvent::CONFIRM:
 				return $this->userIsActor
-					? $this->trans->t('You have confirmed option {optionTitle} of poll {pollTitle}')
-					: $this->trans->t('{actor} has confirmed option {optionTitle} of poll {pollTitle}');
+					? $this->l10n->t('You have confirmed option {optionTitle} of poll {pollTitle}')
+					: $this->l10n->t('{actor} has confirmed option {optionTitle} of poll {pollTitle}');
 			case OptionEvent::UNCONFIRM:
 				return $this->userIsActor
-					? $this->trans->t('You have unconfirmed option {optionTitle} of poll {pollTitle}')
-					: $this->trans->t('{actor} has unconfirmed option {optionTitle} of poll {pollTitle}');
+					? $this->l10n->t('You have unconfirmed option {optionTitle} of poll {pollTitle}')
+					: $this->l10n->t('{actor} has unconfirmed option {optionTitle} of poll {pollTitle}');
 			case OptionEvent::DELETE:
 				return $this->userIsActor
-					? $this->trans->t('You have removed option {optionTitle} from poll {pollTitle}')
-					: $this->trans->t('{actor} has removed option {optionTitle} from poll {pollTitle}');
+					? $this->l10n->t('You have removed option {optionTitle} from poll {pollTitle}')
+					: $this->l10n->t('{actor} has removed option {optionTitle} from poll {pollTitle}');
 
 			case PollEvent::ADD:
 				return $this->userIsActor
-					? $this->trans->t('You have added poll {pollTitle}')
-					: $this->trans->t('{actor} has added poll {pollTitle}');
+					? $this->l10n->t('You have added poll {pollTitle}')
+					: $this->l10n->t('{actor} has added poll {pollTitle}');
 			case PollEvent::UPDATE:
 				return $this->userIsActor
-					? $this->trans->t('You have changed the configuration of poll {pollTitle}')
-					: $this->trans->t('{actor} has changed the configuration of poll {pollTitle}');
+					? $this->l10n->t('You have changed the configuration of poll {pollTitle}')
+					: $this->l10n->t('{actor} has changed the configuration of poll {pollTitle}');
 			case PollEvent::DELETE:
 				return $this->userIsActor
-					? $this->trans->t('You have archived poll {pollTitle}')
-					: $this->trans->t('{actor} has archived poll {pollTitle}');
+					? $this->l10n->t('You have archived poll {pollTitle}')
+					: $this->l10n->t('{actor} has archived poll {pollTitle}');
 			case PollEvent::RESTORE:
 				return $this->userIsActor
-					? $this->trans->t('You have restored poll {pollTitle}')
-					: $this->trans->t('{actor} has restored poll {pollTitle}');
+					? $this->l10n->t('You have restored poll {pollTitle}')
+					: $this->l10n->t('{actor} has restored poll {pollTitle}');
 			case PollEvent::EXPIRE:
-				return $this->trans->t('Poll {pollTitle} has been closed');
+				return $this->l10n->t('Poll {pollTitle} has been closed');
 			case PollEvent::OWNER_CHANGE:
 				return $this->userIsActor
-					? $this->trans->t('You have changed the owner of poll {pollTitle}')
-					: $this->trans->t('{actor} has changed the owner of poll {pollTitle}');
+					? $this->l10n->t('You have changed the owner of poll {pollTitle}')
+					: $this->l10n->t('{actor} has changed the owner of poll {pollTitle}');
 			case PollEvent::OPTION_REORDER:
 				return $this->userIsActor
-					? $this->trans->t('You have reordered the options of poll {pollTitle}')
-					: $this->trans->t('{actor} has reordered the options of poll {pollTitle}');
+					? $this->l10n->t('You have reordered the options of poll {pollTitle}')
+					: $this->l10n->t('{actor} has reordered the options of poll {pollTitle}');
 
 			case ShareEvent::ADD:
 				if ($this->shareType === Share::TYPE_PUBLIC) {
 					return $this->userIsActor
-						? $this->trans->t('You have added a public share to poll {pollTitle}')
-						: $this->trans->t('{actor} has added a public share to poll {pollTitle}');
+						? $this->l10n->t('You have added a public share to poll {pollTitle}')
+						: $this->l10n->t('{actor} has added a public share to poll {pollTitle}');
 				} elseif ($this->shareType === Share::TYPE_GROUP) {
 					return $this->userIsActor
-						? $this->trans->t('You have shared poll {pollTitle} with group {sharee}')
-						: $this->trans->t('{actor} has shared poll {pollTitle} with group {sharee}');
+						? $this->l10n->t('You have shared poll {pollTitle} with group {sharee}')
+						: $this->l10n->t('{actor} has shared poll {pollTitle} with group {sharee}');
 				} elseif ($this->shareType === Share::TYPE_CIRCLE) {
 					return $this->userIsActor
-						? $this->trans->t('You have shared poll {pollTitle} with circle {sharee}')
-						: $this->trans->t('{actor} has shared poll {pollTitle} with circle {sharee}');
+						? $this->l10n->t('You have shared poll {pollTitle} with circle {sharee}')
+						: $this->l10n->t('{actor} has shared poll {pollTitle} with circle {sharee}');
 				} elseif ($this->shareType === Share::TYPE_CONTACTGROUP) {
 					return $this->userIsActor
-						? $this->trans->t('You have shared poll {pollTitle} with contact group {sharee}')
-						: $this->trans->t('{actor} has shared poll {pollTitle} with contact group {sharee}');
+						? $this->l10n->t('You have shared poll {pollTitle} with contact group {sharee}')
+						: $this->l10n->t('{actor} has shared poll {pollTitle} with contact group {sharee}');
 				}
 				return $this->userIsActor
-					? $this->trans->t('You have shared poll {pollTitle} with {sharee}')
-					: $this->trans->t('{actor} has shared poll {pollTitle} with {sharee}');
+					? $this->l10n->t('You have shared poll {pollTitle} with {sharee}')
+					: $this->l10n->t('{actor} has shared poll {pollTitle} with {sharee}');
 			case ShareEvent::CHANGE_EMAIL:
 				return $this->userIsActor
-					? $this->trans->t('You have changed your email address')
-					: $this->trans->t('{sharee} has changed his email address');
+					? $this->l10n->t('You have changed your email address')
+					: $this->l10n->t('{sharee} has changed his email address');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
-					? $this->trans->t('You have changed the share type')
-					: $this->trans->t('{actor} has changed the share type');
+					? $this->l10n->t('You have changed the share type')
+					: $this->l10n->t('{actor} has changed the share type');
 			case ShareEvent::CHANGE_REG_CONSTR:
 				return $this->userIsActor
-					? $this->trans->t('You have changed the registration constraints for share {sharee}')
-					: $this->trans->t('{actor} has changed the registration constraints for share {sharee}');
+					? $this->l10n->t('You have changed the registration constraints for share {sharee}')
+					: $this->l10n->t('{actor} has changed the registration constraints for share {sharee}');
 			case ShareEvent::REGISTRATION:
 				return $this->userIsActor
-					? $this->trans->t('You have registered to poll {pollTitle}')
-					: $this->trans->t('{sharee} registered to poll {pollTitle}');
+					? $this->l10n->t('You have registered to poll {pollTitle}')
+					: $this->l10n->t('{sharee} registered to poll {pollTitle}');
 			case ShareEvent::DELETE:
 				if ($this->shareType === Share::TYPE_PUBLIC) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted a public share from poll {pollTitle}')
-						: $this->trans->t('{actor} has deleted a public share from poll {pollTitle}');
+						? $this->l10n->t('You have deleted a public share from poll {pollTitle}')
+						: $this->l10n->t('{actor} has deleted a public share from poll {pollTitle}');
 				} elseif ($this->shareType === Share::TYPE_GROUP) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for group {sharee} from poll {pollTitle}')
-						: $this->trans->t('{actor} has deleted the share for group {sharee} from poll {pollTitle}');
+						? $this->l10n->t('You have deleted the share for group {sharee} from poll {pollTitle}')
+						: $this->l10n->t('{actor} has deleted the share for group {sharee} from poll {pollTitle}');
 				} elseif ($this->shareType === Share::TYPE_USER) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for {sharee} from poll {pollTitle}')
-						: $this->trans->t('{actor} has deleted the share for {sharee} from poll {pollTitle}');
+						? $this->l10n->t('You have deleted the share for {sharee} from poll {pollTitle}')
+						: $this->l10n->t('{actor} has deleted the share for {sharee} from poll {pollTitle}');
 				} elseif ($this->shareType === Share::TYPE_EMAIL) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for {sharee} from poll {pollTitle}')
-						: $this->trans->t('{actor} has deleted the share for {sharee} from poll {pollTitle}');
+						? $this->l10n->t('You have deleted the share for {sharee} from poll {pollTitle}')
+						: $this->l10n->t('{actor} has deleted the share for {sharee} from poll {pollTitle}');
 				} elseif ($this->shareType === Share::TYPE_CONTACT) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for {sharee} from poll {pollTitle}')
-						: $this->trans->t('{actor} has deleted the share for {sharee} from poll {pollTitle}');
+						? $this->l10n->t('You have deleted the share for {sharee} from poll {pollTitle}')
+						: $this->l10n->t('{actor} has deleted the share for {sharee} from poll {pollTitle}');
 				} elseif ($this->shareType === Share::TYPE_EXTERNAL) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for {sharee} from poll {pollTitle}')
-						: $this->trans->t('{actor} has deleted the share for {sharee} from poll {pollTitle}');
+						? $this->l10n->t('You have deleted the share for {sharee} from poll {pollTitle}')
+						: $this->l10n->t('{actor} has deleted the share for {sharee} from poll {pollTitle}');
 				} elseif ($this->shareType === Share::TYPE_CIRCLE) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for circle {sharee} from poll {pollTitle}')
-						: $this->trans->t('{actor} has deleted the share for circle {sharee} from poll {pollTitle}');
+						? $this->l10n->t('You have deleted the share for circle {sharee} from poll {pollTitle}')
+						: $this->l10n->t('{actor} has deleted the share for circle {sharee} from poll {pollTitle}');
 				} elseif ($this->shareType === Share::TYPE_CONTACTGROUP) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for contact group {sharee} from poll {pollTitle}')
-						: $this->trans->t('{actor} has deleted the share for contact group {sharee} from poll {pollTitle}');
+						? $this->l10n->t('You have deleted the share for contact group {sharee} from poll {pollTitle}')
+						: $this->l10n->t('{actor} has deleted the share for contact group {sharee} from poll {pollTitle}');
 				}
 
 				return $this->userIsActor
-					? $this->trans->t('You have deleted a share from poll {pollTitle}')
-					: $this->trans->t('{actor} has deleted a share from poll {pollTitle}');
+					? $this->l10n->t('You have deleted a share from poll {pollTitle}')
+					: $this->l10n->t('{actor} has deleted a share from poll {pollTitle}');
 
 			case VoteEvent::SET:
 				return $this->userIsActor
-					? $this->trans->t('You have voted in poll {pollTitle}')
-					: $this->trans->t('{actor} has voted in poll {pollTitle}');
+					? $this->l10n->t('You have voted in poll {pollTitle}')
+					: $this->l10n->t('{actor} has voted in poll {pollTitle}');
 		}
 
 		return $this->userIsActor
-			? $this->trans->t('You have done something indescribable with poll {pollTitle}')
-			: $this->trans->t('{actor} has done something indescribable with poll {pollTitle}');
+			? $this->l10n->t('You have done something indescribable with poll {pollTitle}')
+			: $this->l10n->t('{actor} has done something indescribable with poll {pollTitle}');
 	}
 
 	private function getMessageFiltered(): string {
 		switch ($this->eventType) {
 			case CommentEvent::ADD:
 				return $this->userIsActor
-					? $this->trans->t('You have commented')
-					: $this->trans->t('{actor} has commented');
+					? $this->l10n->t('You have commented')
+					: $this->l10n->t('{actor} has commented');
 			case CommentEvent::DELETE:
 				return $this->userIsActor
-					? $this->trans->t('You have deleted a comment')
-					: $this->trans->t('{actor} has deleted a comment');
+					? $this->l10n->t('You have deleted a comment')
+					: $this->l10n->t('{actor} has deleted a comment');
 
 			case OptionEvent::ADD:
 				return $this->userIsActor
-					? $this->trans->t('You have added an option')
-					: $this->trans->t('{actor} has added an option');
+					? $this->l10n->t('You have added an option')
+					: $this->l10n->t('{actor} has added an option');
 			case OptionEvent::UPDATE:
 				return $this->userIsActor
-					? $this->trans->t('You have changed an option')
-					: $this->trans->t('{actor} has changed an option');
+					? $this->l10n->t('You have changed an option')
+					: $this->l10n->t('{actor} has changed an option');
 			case OptionEvent::CONFIRM:
 				return $this->userIsActor
-					? $this->trans->t('You have confirmed option {optionTitle}')
-					: $this->trans->t('{actor} has confirmed option {optionTitle}');
+					? $this->l10n->t('You have confirmed option {optionTitle}')
+					: $this->l10n->t('{actor} has confirmed option {optionTitle}');
 			case OptionEvent::UNCONFIRM:
 				return $this->userIsActor
-					? $this->trans->t('You have unconfirmed option {optionTitle}')
-					: $this->trans->t('{actor} has unconfirmed option {optionTitle}');
+					? $this->l10n->t('You have unconfirmed option {optionTitle}')
+					: $this->l10n->t('{actor} has unconfirmed option {optionTitle}');
 			case OptionEvent::DELETE:
 				return $this->userIsActor
-					? $this->trans->t('You have removed option {optionTitle}')
-					: $this->trans->t('{actor} has removed option {optionTitle}');
+					? $this->l10n->t('You have removed option {optionTitle}')
+					: $this->l10n->t('{actor} has removed option {optionTitle}');
 
 			case PollEvent::ADD:
 				return $this->userIsActor
-					? $this->trans->t('You have created this poll')
-					: $this->trans->t('{actor} has created this poll');
+					? $this->l10n->t('You have created this poll')
+					: $this->l10n->t('{actor} has created this poll');
 			case PollEvent::UPDATE:
 				return $this->userIsActor
-					? $this->trans->t('You have changed the configuration')
-					: $this->trans->t('{actor} has changed the configuration');
+					? $this->l10n->t('You have changed the configuration')
+					: $this->l10n->t('{actor} has changed the configuration');
 			case PollEvent::DELETE:
 				return $this->userIsActor
-					? $this->trans->t('You have archived this poll')
-					: $this->trans->t('{actor} has archived this poll');
+					? $this->l10n->t('You have archived this poll')
+					: $this->l10n->t('{actor} has archived this poll');
 			case PollEvent::RESTORE:
 				return $this->userIsActor
-					? $this->trans->t('You have restored this poll')
-					: $this->trans->t('{actor} has restored this poll');
+					? $this->l10n->t('You have restored this poll')
+					: $this->l10n->t('{actor} has restored this poll');
 			case PollEvent::EXPIRE:
-				return $this->trans->t('This poll has been closed');
+				return $this->l10n->t('This poll has been closed');
 			case PollEvent::OWNER_CHANGE:
 				return $this->userIsActor
-					? $this->trans->t('You have changed the poll owner')
-					: $this->trans->t('{actor} has changed the poll owner');
+					? $this->l10n->t('You have changed the poll owner')
+					: $this->l10n->t('{actor} has changed the poll owner');
 			case PollEvent::OPTION_REORDER:
 				return $this->userIsActor
-					? $this->trans->t('You have reordered the options')
-					: $this->trans->t('{actor} has reordered the options');
+					? $this->l10n->t('You have reordered the options')
+					: $this->l10n->t('{actor} has reordered the options');
 
 			case ShareEvent::ADD:
 				if ($this->shareType === Share::TYPE_PUBLIC) {
 					return $this->userIsActor
-						? $this->trans->t('You have added a public share')
-						: $this->trans->t('{actor} has added a public share');
+						? $this->l10n->t('You have added a public share')
+						: $this->l10n->t('{actor} has added a public share');
 				} elseif ($this->shareType === Share::TYPE_GROUP) {
 					return $this->userIsActor
-						? $this->trans->t('You have shared this poll with group {sharee}')
-						: $this->trans->t('{actor} has shared this poll with group {sharee}');
+						? $this->l10n->t('You have shared this poll with group {sharee}')
+						: $this->l10n->t('{actor} has shared this poll with group {sharee}');
 				} elseif ($this->shareType === Share::TYPE_CIRCLE) {
 					return $this->userIsActor
-						? $this->trans->t('You have shared this poll with circle {sharee}')
-						: $this->trans->t('{actor} has shared this poll with circle {sharee}');
+						? $this->l10n->t('You have shared this poll with circle {sharee}')
+						: $this->l10n->t('{actor} has shared this poll with circle {sharee}');
 				} elseif ($this->shareType === Share::TYPE_CONTACTGROUP) {
 					return $this->userIsActor
-						? $this->trans->t('You have shared this poll with contact group {sharee}')
-						: $this->trans->t('{actor} has shared this poll with contact group {sharee}');
+						? $this->l10n->t('You have shared this poll with contact group {sharee}')
+						: $this->l10n->t('{actor} has shared this poll with contact group {sharee}');
 				}
 				return $this->userIsActor
-					? $this->trans->t('You have shared this poll with {sharee}')
-					: $this->trans->t('{actor} has shared this poll with {sharee}');
+					? $this->l10n->t('You have shared this poll with {sharee}')
+					: $this->l10n->t('{actor} has shared this poll with {sharee}');
 			case ShareEvent::CHANGE_EMAIL:
 				return $this->userIsActor
-					? $this->trans->t('You have changed your email address')
-					: $this->trans->t('Email address of {sharee} has been changed');
+					? $this->l10n->t('You have changed your email address')
+					: $this->l10n->t('Email address of {sharee} has been changed');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
-					? $this->trans->t('You have changed the share type')
-					: $this->trans->t('{actor} has changed the share type');
+					? $this->l10n->t('You have changed the share type')
+					: $this->l10n->t('{actor} has changed the share type');
 			case ShareEvent::CHANGE_REG_CONSTR:
 				return $this->userIsActor
-					? $this->trans->t('You have changed the registration constraints for share {sharee}')
-					: $this->trans->t('{actor} has changed the registration constraints for share {sharee}');
+					? $this->l10n->t('You have changed the registration constraints for share {sharee}')
+					: $this->l10n->t('{actor} has changed the registration constraints for share {sharee}');
 			case ShareEvent::REGISTRATION:
 				return $this->userIsActor
-					? $this->trans->t('You have registered')
-					: $this->trans->t('{sharee} has registered');
+					? $this->l10n->t('You have registered')
+					: $this->l10n->t('{sharee} has registered');
 			case ShareEvent::DELETE:
 				if ($this->shareType === Share::TYPE_PUBLIC) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted a public share')
-						: $this->trans->t('{actor} has deleted a public share');
+						? $this->l10n->t('You have deleted a public share')
+						: $this->l10n->t('{actor} has deleted a public share');
 				} elseif ($this->shareType === Share::TYPE_GROUP) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for group {sharee}')
-						: $this->trans->t('{actor} has deleted the share for group {sharee}');
+						? $this->l10n->t('You have deleted the share for group {sharee}')
+						: $this->l10n->t('{actor} has deleted the share for group {sharee}');
 				} elseif ($this->shareType === Share::TYPE_CIRCLE) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for circle {sharee}')
-						: $this->trans->t('{actor} has deleted the share for circle {sharee}');
+						? $this->l10n->t('You have deleted the share for circle {sharee}')
+						: $this->l10n->t('{actor} has deleted the share for circle {sharee}');
 				} elseif ($this->shareType === Share::TYPE_CONTACTGROUP) {
 					return $this->userIsActor
-						? $this->trans->t('You have deleted the share for contact group {sharee}')
-						: $this->trans->t('{actor} has deleted the share for contact group {sharee}');
+						? $this->l10n->t('You have deleted the share for contact group {sharee}')
+						: $this->l10n->t('{actor} has deleted the share for contact group {sharee}');
 				}
 
 				return $this->userIsActor
-					? $this->trans->t('You have deleted share of {sharee}')
-					: $this->trans->t('{actor} has deleted a share');
+					? $this->l10n->t('You have deleted share of {sharee}')
+					: $this->l10n->t('{actor} has deleted a share');
 
 			case VoteEvent::SET:
 				return $this->userIsActor
-					? $this->trans->t('You have voted')
-					: $this->trans->t('{actor} has voted');
+					? $this->l10n->t('You have voted')
+					: $this->l10n->t('{actor} has voted');
 		}
 
 		return $this->userIsActor
-			? $this->trans->t('You have done something indescribable with this poll')
-			: $this->trans->t('{actor} has done something indescribable with this poll');
+			? $this->l10n->t('You have done something indescribable with this poll')
+			: $this->l10n->t('{actor} has done something indescribable with this poll');
 	}
 }

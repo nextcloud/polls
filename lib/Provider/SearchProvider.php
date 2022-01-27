@@ -66,7 +66,7 @@ class SearchProvider implements IProvider {
 	}
 
 	public function getName(): string {
-		return $this->l10n->t('polls', 'Polls');
+		return $this->l10n->t('Polls');
 	}
 
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
@@ -85,7 +85,7 @@ class SearchProvider implements IProvider {
 		}, $results);
 
 		return SearchResult::complete(
-			$this->l10n->t('polls', 'Polls'),
+			$this->l10n->t('Polls'),
 			$resultEntries
 		);
 	}

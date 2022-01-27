@@ -29,17 +29,20 @@ use OCP\IURLGenerator;
 class PollChanges implements IFilter {
 
 	/** @var IL10N */
-	protected $trans;
+	protected $l10n;
 
 	/** @var IURLGenerator */
 	protected $urlGenerator;
 
 	/**
-	 * @param IL10N $trans
+	 * @param IL10N $l10n
 	 * @param IURLGenerator $urlGenerator
 	 */
-	public function __construct(IL10N $trans, IURLGenerator $urlGenerator) {
-		$this->trans = $trans;
+	public function __construct(
+		IL10N $l10n,
+		IURLGenerator $urlGenerator
+	) {
+		$this->l10n = $l10n;
 		$this->urlGenerator = $urlGenerator;
 	}
 
@@ -48,7 +51,7 @@ class PollChanges implements IFilter {
 	}
 
 	public function getName() : string {
-		return $this->trans->t('Poll changes');
+		return $this->l10n->t('Poll changes');
 	}
 
 	public function getIcon() : string {
