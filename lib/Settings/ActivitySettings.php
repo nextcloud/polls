@@ -29,13 +29,13 @@ use OCP\Activity\ISetting;
 class ActivitySettings implements ISetting {
 
 	/** @var IL10N */
-	protected $l;
+	protected $l10n;
 
 	/**
-	 * @param IL10N $l
+	 * @param IL10N $l10n
 	 */
-	public function __construct(IL10N $l) {
-		$this->l = $l;
+	public function __construct(IL10N $l10n) {
+		$this->l10n = $l10n;
 	}
 
 	public function getIdentifier() : string {
@@ -43,7 +43,7 @@ class ActivitySettings implements ISetting {
 	}
 
 	public function getName() : string {
-		return $this->l->t('Events happening inside of a <strong>poll</strong>');
+		return $this->l10n->t('Events happening inside of a <strong>poll</strong>');
 	}
 
 	public function getPriority() : int {

@@ -59,7 +59,7 @@ class MailBase {
 	protected $mailer;
 
 	/** @var IL10N */
-	protected $trans;
+	protected $l10n;
 
 	/** @var IFactory */
 	protected $transFactory;
@@ -95,14 +95,14 @@ class MailBase {
 			$this->url = $this->getShareURL();
 		}
 
-		$this->trans = $this->transFactory->get(
+		$this->l10n = $this->transFactory->get(
 			'polls',
 			$this->recipient->getLanguage()
 				? $this->recipient->getLanguage()
 				: $this->owner->getLanguage()
 		);
 
-		$this->footer = $this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
+		$this->footer = $this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
 		$this->emailTemplate = $this->mailer->createEMailTemplate(
 			self::TEMPLATE_CLASS, [
 				'owner' => $this->owner->getDisplayName(),
