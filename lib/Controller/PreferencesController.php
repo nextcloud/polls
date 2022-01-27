@@ -74,7 +74,7 @@ class PreferencesController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function write(array $settings): DataResponse {
-		if ($this->userSession->isLoggedIn()) {
+		if (!$this->userSession->isLoggedIn()) {
 			return new DataResponse([], Http::STATUS_OK);
 		}
 		return $this->response(function () use ($settings) {
