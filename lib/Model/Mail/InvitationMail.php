@@ -41,11 +41,11 @@ class InvitationMail extends MailBase {
 	}
 
 	protected function getSubject(): string {
-		return $this->trans->t('Poll invitation "%s"', $this->poll->getTitle());
+		return $this->l10n->t('Poll invitation "%s"', $this->poll->getTitle());
 	}
 
 	protected function getFooter(): string {
-		return $this->trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.');
+		return $this->l10n->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.');
 	}
 
 	protected function buildBody(): void {
@@ -53,13 +53,13 @@ class InvitationMail extends MailBase {
 			$this->emailTemplate->addBodyText(str_replace(
 				['{owner}', '{title}', '{group_name}'],
 				[$this->owner->getDisplayName(), $this->poll->getTitle(), $this->share->getDisplayName()],
-				$this->trans->t('{owner} invited you to take part in the poll "{title}" as a member of the group {group_name}')
+				$this->l10n->t('{owner} invited you to take part in the poll "{title}" as a member of the group {group_name}')
 			));
 		} else {
 			$this->emailTemplate->addBodyText(str_replace(
 				['{owner}', '{title}'],
 				[$this->owner->getDisplayName(), $this->poll->getTitle()],
-				$this->trans->t('{owner} invited you to take part in the poll "{title}"')
+				$this->l10n->t('{owner} invited you to take part in the poll "{title}"')
 			));
 		}
 
@@ -69,8 +69,8 @@ class InvitationMail extends MailBase {
 			$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
 		}
 
-		$this->emailTemplate->addBodyText($this->trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
+		$this->emailTemplate->addBodyText($this->l10n->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
 		$this->emailTemplate->addBodyText($this->url);
-		$this->emailTemplate->addBodyText($this->trans->t('Do not share this link with other people, because it is connected to your votes.'));
+		$this->emailTemplate->addBodyText($this->l10n->t('Do not share this link with other people, because it is connected to your votes.'));
 	}
 }

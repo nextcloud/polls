@@ -63,7 +63,7 @@ abstract class MailBase {
 	protected $mailer;
 
 	/** @var IL10N */
-	protected $trans;
+	protected $l10n;
 
 	/** @var IFactory */
 	protected $transFactory;
@@ -116,7 +116,7 @@ abstract class MailBase {
 			$this->url = $this->getShareURL();
 		}
 
-		$this->trans = $this->transFactory->get(
+		$this->l10n = $this->transFactory->get(
 			'polls',
 			$this->recipient->getLanguage()
 				? $this->recipient->getLanguage()
@@ -148,7 +148,7 @@ abstract class MailBase {
 	}
 
 	protected function getSubject(): string {
-		return $this->trans->t('Notification for poll "%s"', $this->poll->getTitle());
+		return $this->l10n->t('Notification for poll "%s"', $this->poll->getTitle());
 	}
 
 	protected function getHeading(): string {
@@ -156,11 +156,11 @@ abstract class MailBase {
 	}
 
 	protected function getButtonText(): string {
-		return $this->trans->t('Go to poll');
+		return $this->l10n->t('Go to poll');
 	}
 
 	protected function getFooter(): string {
-		return $this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
+		return $this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
 	}
 
 	protected function buildBody(): void {
