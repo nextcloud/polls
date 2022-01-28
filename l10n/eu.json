@@ -45,7 +45,6 @@
     "{actor} deleted your poll \"%s\"." : "{actor}-(e)k zure \"%s\" inkesta ezabatu du.",
     "%s archived your poll" : "%s-(e)k zure inkesta artxibatu du",
     "{actor} archived your poll \"%s\"." : "{actor}-ek zure \"%s\" inkesta artxibatu du.",
-    "polls" : "inkestak",
     "You have added an option" : "Aukera bat gehitu duzu",
     "This poll has been closed" : "Inkesta hau itxi da.",
     "You have added a public share" : "Partekatze publiko bat gehitu duzu",

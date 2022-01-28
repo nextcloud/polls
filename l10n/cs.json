@@ -45,7 +45,6 @@
     "{actor} deleted your poll \"%s\"." : "{actor} smazal(a) vaši anketu „%s“.",
     "%s archived your poll" : "%s zaarchivoval(a) vaši anketu",
     "{actor} archived your poll \"%s\"." : "{actor} zaarchivovala vaši anketu „%s“.",
-    "polls" : "ankety",
     "You have commented on poll {pollTitle}" : "Okomentovali jste anketu {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} okomentoval(a) anketu {pollTitle}",
     "You have deleted a comment from poll {pollTitle}" : "Smazali jste komentář v anketě {pollTitle}",

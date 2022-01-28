@@ -47,7 +47,6 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} 已刪除了您的投票「%s」。",
     "%s archived your poll" : "%s 已封存您的投票",
     "{actor} archived your poll \"%s\"." : "{actor} 已存檔您的投票 「%s」。",
-    "polls" : "民意調查",
     "You have commented on poll {pollTitle}" : "您對民意調查 {pollTitle} 發表了評論",
     "{actor} has commented on poll {pollTitle}" : "(actor) 對民意調查 {pollTitle} 發表了評論",
     "You have deleted a comment from poll {pollTitle}" : "您從民意調查 {pollTitle} 中刪除了一條評論",

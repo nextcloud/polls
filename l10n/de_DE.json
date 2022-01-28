@@ -45,7 +45,6 @@
     "{actor} deleted your poll \"%s\"." : "{actor} hat Ihre Umfrage \"%s\" gelöscht.",
     "%s archived your poll" : "%s hat Ihre Umfrage archiviert",
     "{actor} archived your poll \"%s\"." : "{actor} hat Ihre Umfrage \"%s\" archiviert.",
-    "polls" : "Umfragen",
     "You have commented on poll {pollTitle}" : "Sie haben die Umfrage {pollTitle} kommentiert",
     "{actor} has commented on poll {pollTitle}" : "{actor} hat die Umfrage {pollTitle} kommentiert",
     "You have deleted a comment from poll {pollTitle}" : "Sie haben einen Kommentar zur Umfrage {pollTitle} gelöscht",

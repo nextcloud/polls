@@ -47,7 +47,6 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor}, \"%s\" anketinizi sildi.",
     "%s archived your poll" : "%s anketinizi arşivledi",
     "{actor} archived your poll \"%s\"." : "{actor}, \"%s\" anketinizi arşivledi.",
-    "polls" : "anketler",
     "You have commented on poll {pollTitle}" : "{pollTitle} anketi hakkında yorum yaptınız",
     "{actor} has commented on poll {pollTitle}" : "{actor}, {pollTitle} anketi hakkında yorum yaptı",
     "You have deleted a comment from poll {pollTitle}" : "{pollTitle} anketi hakkındaki bir yorumu sildiniz",

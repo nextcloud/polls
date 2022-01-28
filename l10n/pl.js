@@ -47,7 +47,6 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} usunął Twoją sondę \"%s\".",
     "%s archived your poll" : "%s zarchiwizował Twoją sondę",
     "{actor} archived your poll \"%s\"." : "{actor} zarchiwizował Twoją sondę \"%s\".",
-    "polls" : "sondy",
     "You have commented on poll {pollTitle}" : "Skomentowałeś w sondzie {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} skomentował w sondzie {pollTitle}",
     "You have deleted a comment from poll {pollTitle}" : "Usunąłeś komentarz z sondy {pollTitle}",
