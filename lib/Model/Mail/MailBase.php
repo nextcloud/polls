@@ -35,9 +35,13 @@ use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
 use OCP\Mail\IMailer;
+use League\CommonMark\MarkdownConverter;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\Table\TableExtension;
 use Psr\Log\LoggerInterface;
 
-class MailBase {
+abstract class MailBase {
 	private const TEMPLATE_CLASS = 'polls.Mail';
 
 	/** @var UserBase */
@@ -64,11 +68,11 @@ class MailBase {
 	/** @var IFactory */
 	protected $transFactory;
 
-	/** @var IEMailTemplate */
-	protected $emailTemplate;
-
 	/** @var IUserManager */
 	private $userManager;
+
+	/** @var IEmailTemplate */
+	protected $emailTemplate;
 
 	/** @var User */
 	protected $owner;
@@ -78,14 +82,31 @@ class MailBase {
 		int $pollId,
 		string $url = null
 	) {
-		$this->poll = $this->getPoll($pollId);
-		$this->recipient = $this->getUser($recipientId);
-		$this->url = $url ?? $this->poll->getVoteUrl();
 		$this->userManager = Container::queryClass(IUserManager::class);
 		$this->logger = Container::queryClass(LoggerInterface::class);
 		$this->mailer = Container::queryClass(IMailer::class);
 		$this->transFactory = Container::queryClass(IFactory::class);
+
+		$this->poll = $this->getPoll($pollId);
+		$this->recipient = $this->getUser($recipientId);
+		$this->url = $url ?? $this->poll->getVoteUrl();
+
 		$this->initializeClass();
+	}
+
+	public function send(): void {
+		$this->validateEmailAddress();
+
+		try {
+			$message = $this->mailer->createMessage();
+			$message->setTo([$this->recipient->getEmailAddress() => $this->recipient->getDisplayName()]);
+			$message->useTemplate($this->getEmailTemplate());
+			$this->mailer->send($message);
+		} catch (\Exception $e) {
+			$this->logger->error('Error sending Mail to ' . json_encode($this->recipient));
+			$this->logger->alert($e->getMessage());
+			throw $e;
+		}
 	}
 
 	protected function initializeClass(): void {
@@ -101,8 +122,9 @@ class MailBase {
 				? $this->recipient->getLanguage()
 				: $this->owner->getLanguage()
 		);
+	}
 
-		$this->footer = $this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
+	private function getEmailTemplate() : IEMailTemplate {
 		$this->emailTemplate = $this->mailer->createEMailTemplate(
 			self::TEMPLATE_CLASS, [
 				'owner' => $this->owner->getDisplayName(),
@@ -110,25 +132,39 @@ class MailBase {
 				'link' => $this->url
 			]
 		);
-	}
 
-	public function getEmailTemplate() : IEMailTemplate {
+		$this->emailTemplate->setSubject($this->getSubject());
+
+		// add heading
+		$this->emailTemplate->addHeader();
+		$this->emailTemplate->addHeading($this->getHeading(), false);
+
+		$this->buildBody();
+
+		// add footer
+		$this->emailTemplate->addFooter($this->getFooter());
+
 		return $this->emailTemplate;
 	}
 
-	public function send(): void {
-		$this->validateEmailAddress();
+	protected function getSubject(): string {
+		return $this->l10n->t('Notification for poll "%s"', $this->poll->getTitle());
+	}
 
-		try {
-			$message = $this->mailer->createMessage();
-			$message->setTo([$this->recipient->getEmailAddress() => $this->recipient->getDisplayName()]);
-			$message->useTemplate($this->emailTemplate);
-			$this->mailer->send($message);
-		} catch (\Exception $e) {
-			$this->logger->error('Error sending Mail to ' . json_encode($this->recipient));
-			$this->logger->alert($e->getMessage());
-			throw $e;
-		}
+	protected function getHeading(): string {
+		return $this->getSubject();
+	}
+
+	protected function getButtonText(): string {
+		return $this->l10n->t('Go to poll');
+	}
+
+	protected function getFooter(): string {
+		return $this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
+	}
+
+	protected function buildBody(): void {
+		$this->emailTemplate->addBodyText('Sorry. This eMail has no text and this should not happen.');
 	}
 
 	protected function getUser(string $userId) : UserBase {
@@ -140,15 +176,28 @@ class MailBase {
 		return Container::findShare($this->poll->getId(), $userId)->getUserObject();
 	}
 
-	protected function getShareURL() : string {
+	protected function getRichDescription() : string {
+		$config = [
+			'html_input' => 'strip',
+			'allow_unsafe_links' => false,
+		];
+
+		$environment = new Environment($config);
+		$environment->addExtension(new CommonMarkCoreExtension());
+		$environment->addExtension(new TableExtension());
+		$converter = new MarkdownConverter($environment);
+		return $converter->convertToHtml($this->poll->getDescription())->getContent();
+	}
+
+	private function getShareURL() : string {
 		return Container::findShare($this->poll->getId(), $this->recipient->getId())->getURL();
 	}
 
-	protected function getPoll(int $pollId) : Poll {
+	private function getPoll(int $pollId) : Poll {
 		return Container::queryPoll($pollId);
 	}
 
-	protected function validateEmailAddress(): void {
+	private function validateEmailAddress(): void {
 		if (!$this->recipient->getEmailAddress()
 			|| !filter_var($this->recipient->getEmailAddress(), FILTER_VALIDATE_EMAIL)) {
 			throw new InvalidEmailAddress('Invalid email address (' . $this->recipient->getEmailAddress() . ')');

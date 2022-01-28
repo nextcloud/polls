@@ -44,13 +44,17 @@ class NotificationMail extends MailBase {
 	) {
 		parent::__construct($subscription->getUserId(), $subscription->getPollId());
 		$this->subscription = $subscription;
-		$this->buildEmailTemplate();
 	}
 
-	public function buildEmailTemplate() : void {
-		$this->emailTemplate->setSubject($this->l10n->t('Polls App - New Activity'));
-		$this->emailTemplate->addHeader();
-		$this->emailTemplate->addHeading($this->l10n->t('Polls App - New Activity'), false);
+	protected function getSubject(): string {
+		return $this->l10n->t('Polls App - New Activity');
+	}
+
+	protected function getFooter(): string {
+		return $this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
+	}
+
+	protected function buildBody(): void {
 		$this->emailTemplate->addBodyText(str_replace(
 			['{title}'],
 			[$this->poll->getTitle()],
@@ -68,11 +72,10 @@ class NotificationMail extends MailBase {
 			$this->emailTemplate->addBodyListItem($this->getComposedLogString($logItem, $displayName));
 		}
 
-		$this->emailTemplate->addBodyButton(htmlspecialchars($this->l10n->t('Go to poll')), $this->url, '');
-		$this->emailTemplate->addFooter($this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
+		$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
 	}
 
-	protected function getComposedLogString(Log $logItem, string $displayName): string {
+	private function getComposedLogString(Log $logItem, string $displayName): string {
 		$logStrings = [
 			Log::MSG_ID_SETVOTE => $this->l10n->t('%s has voted.', [$displayName]),
 			Log::MSG_ID_UPDATEPOLL => $this->l10n->t('Updated poll configuration. Please check your votes.'),

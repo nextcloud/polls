@@ -191,6 +191,10 @@ class MailService {
 
 			$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
 			foreach ($shares as $share) {
+				if (in_array($share->getType(), [Share::TYPE_CIRCLE, Share::TYPE_CONTACTGROUP])) {
+					continue;
+				}
+
 				foreach ($share->getUserObject()->getMembers() as $recipient) {
 					$reminder = new ReminderMail(
 						$recipient->getId(),
