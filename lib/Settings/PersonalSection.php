@@ -30,13 +30,13 @@ use OCP\Settings\IIconSection;
 class PersonalSection implements IIconSection {
 
 		/** @var IL10N */
-	private $trans;
+	private $l10n;
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
-	public function __construct(IL10N $trans, IURLGenerator $urlGenerator) {
-		$this->trans = $trans;
+	public function __construct(IL10N $l10n, IURLGenerator $urlGenerator) {
+		$this->l10n = $l10n;
 		$this->urlGenerator = $urlGenerator;
 	}
 
@@ -45,7 +45,7 @@ class PersonalSection implements IIconSection {
 	}
 
 	public function getName(): string {
-		return $this->trans->t('Polls');
+		return $this->l10n->t('Polls');
 	}
 
 	public function getPriority(): int {
