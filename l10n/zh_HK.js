@@ -8,6 +8,7 @@ OC.L10N.register(
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} 邀請您參加「{title}」的投票",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "此連結給您個人存取上面提到的投票。按上方的按鈕或複製以下的連結，然後將其貼到您瀏覽器的網址列：",
     "Do not share this link with other people, because it is connected to your votes." : "不要與其他人分享此連結，因為其與您的投票息息相關。",
+    "Notification for poll \"%s\"" : "民意調查 \"%s\" 之通告",
     "Go to poll" : "去投票",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "該電子郵件已發送給您，因為您已訂閱此投票的通知。要選擇退出，請造訪投票並移除您的訂閱。",
     "Polls App - New Activity" : "投票應用程式 - 新活動",
