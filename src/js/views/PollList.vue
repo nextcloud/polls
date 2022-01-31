@@ -45,11 +45,9 @@
 				class="poll-list__list">
 				<PollItem key="0"
 					:header="true"
-					:sort="sort"
-					:reverse="reverse"
-					@sort-list="setSort($event)" />
+					@sort-list="setSortColumn($event)" />
 
-				<PollItem v-for="(poll) in sortedList"
+				<PollItem v-for="(poll) in pollList"
 					:key="poll.id"
 					:poll="poll"
 					@goto-poll="gotoPoll(poll.id)"
@@ -94,8 +92,8 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import sortBy from 'lodash/sortBy'
+import { mapGetters, mapState, mapActions } from 'vuex'
+// import sortBy from 'lodash/sortBy'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
@@ -115,8 +113,6 @@ export default {
 	data() {
 		return {
 			isLoading: false,
-			sort: 'created',
-			reverse: true,
 		}
 	},
 
@@ -143,15 +139,12 @@ export default {
 			return `${t('polls', 'Polls')} - ${this.title}`
 		},
 
-		sortedList() {
-			if (this.reverse) {
-				return sortBy(this.filteredPolls(this.$route.params.type), this.sort).reverse()
-			}
-			return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
+		pollList() {
+			return this.filteredPolls(this.$route.params.type)
 		},
 
 		noPolls() {
-			return this.sortedList.length < 1
+			return this.pollList.length < 1
 		},
 
 	},
@@ -167,6 +160,10 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			setSortColumn: 'polls/setSort',
+		}),
+
 		gotoPoll(pollId) {
 			this.$router
 				.push({ name: 'vote', params: { id: pollId } })
@@ -187,15 +184,6 @@ export default {
 				emit('polls:sidebar:toggle', { open: false })
 			}
 
-		},
-
-		setSort(payload) {
-			if (this.sort === payload.sort) {
-				this.reverse = !this.reverse
-			} else {
-				this.sort = payload.sort
-				this.reverse = true
-			}
 		},
 
 		async toggleArchive(pollId) {

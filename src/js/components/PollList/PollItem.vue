@@ -22,32 +22,32 @@
 
 <template>
 	<div v-if="header" class="poll-item__header">
-		<div class="item__title sortable" @click="$emit('sort-list', {sort: 'title'})">
+		<div class="item__title sortable" @click="$emit('sort-list', { sortBy: 'title'})">
 			{{ t('polls', 'Title') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<span :class="['sort-indicator', { 'hidden': sortBy !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
 		<div class="item__icon-spacer" />
 
-		<div class="item__access sortable" @click="$emit('sort-list', {sort: 'access'})">
+		<div class="item__access sortable" @click="$emit('sort-list', { sortBy: 'access'})">
 			{{ t('polls', 'Access') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<span :class="['sort-indicator', { 'hidden': sortBy !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="item__owner sortable" @click="$emit('sort-list', {sort: 'owner'})">
+		<div class="item__owner sortable" @click="$emit('sort-list', { sortBy: 'owner.displayName'})">
 			{{ t('polls', 'Owner') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'owner'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<span :class="['sort-indicator', { 'hidden': sortBy !== 'owner.displayName'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
 		<div class="wrapper">
-			<div class="item__created sortable" @click="$emit('sort-list', {sort: 'created'})">
+			<div class="item__created sortable" @click="$emit('sort-list', { sortBy: 'created'})">
 				{{ t('polls', 'Created') }}
-				<span :class="['sort-indicator', { 'hidden': sort !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+				<span :class="['sort-indicator', { 'hidden': sortBy !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 
-			<div class="item__expiry sortable" @click="$emit('sort-list', {sort: 'expire'})">
+			<div class="item__expiry sortable" @click="$emit('sort-list', { sortBy: 'expire'})">
 				{{ t('polls', 'Closing date') }}
-				<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+				<span :class="['sort-indicator', { 'hidden': sortBy !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 		</div>
 	</div>
@@ -72,7 +72,7 @@
 		<div v-tooltip.auto="accessType" :class="['item__access', accessIcon]" />
 
 		<div class="item__owner">
-			<UserItem :user-id="poll.owner" :display-name="poll.ownerDisplayName" condensed />
+			<UserItem v-bind="poll.owner" condensed />
 		</div>
 
 		<div class="wrapper">
@@ -92,6 +92,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
 import Badge from '../Base/Badge'
 
@@ -110,17 +111,14 @@ export default {
 			type: Object,
 			default: undefined,
 		},
-		sort: {
-			type: String,
-			default: 'created',
-		},
-		reverse: {
-			type: Boolean,
-			default: true,
-		},
 	},
 
 	computed: {
+		...mapState({
+			sortBy: (state) => state.polls.sort.sortby,
+			reverse: (state) => state.polls.sort.reverse,
+		}),
+
 		closeToClosing() {
 			return (!this.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)
 		},

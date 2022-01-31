@@ -24,13 +24,13 @@
 	<div class="counter">
 		<div class="counter--icon">
 			<div class="yes">
-				<span>{{ option.yes }}</span>
+				<span>{{ option.computed.yes }}</span>
 			</div>
 			<div v-if="showMaybe" class="maybe">
-				<span>{{ option.maybe }}</span>
+				<span>{{ option.computed.maybe }}</span>
 			</div>
 			<div v-if="showNo" class="no">
-				<span>{{ option.no }}</span>
+				<span>{{ option.computed.no }}</span>
 			</div>
 		</div>
 	</div>

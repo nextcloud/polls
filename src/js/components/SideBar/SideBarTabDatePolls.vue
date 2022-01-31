@@ -26,7 +26,7 @@
 			:key="poll.id"
 			:class="['poll-item', { listed: listed(poll.id) }]"
 			@click="toggle(poll.id)">
-			<UserItem condensed :user-id="poll.owner" />
+			<UserItem v-bind="poll.owner" condensed />
 			<div class="poll-title-box">
 				{{ poll.title }}
 			</div>

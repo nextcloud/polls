@@ -26,14 +26,15 @@ const uniqueArrayOfObjects = function(array) {
 }
 
 const uniqueOptions = function(options) {
-	return options.filter((option, index, array) => array.findIndex((compare) => (compare.pollOptionText === option.pollOptionText)) === index)
+	return options.filter((option, index, array) => array.findIndex((compare) => (compare.text === option.text)) === index)
 }
 
 const uniqueParticipants = function(votes) {
 	const participants = votes.map((vote) => ({
-		userId: vote.userId,
-		displayName: vote.displayName,
-		isNoUser: vote.isNoUser,
+		userId: vote.user.userId,
+		displayName: vote.user.displayName,
+		isNoUser: vote.user.isNoUser,
+		user: vote.user,
 		pollId: vote.pollId,
 	}))
 	return uniqueArrayOfObjects(participants)

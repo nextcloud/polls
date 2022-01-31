@@ -23,7 +23,7 @@
 <template lang="html">
 	<div class="poll-information">
 		<div class="icon-user">
-			{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner" :user="poll.owner" :display-name="poll.ownerDisplayName" />
+			{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner.userId" :user="poll.owner.userId" :display-name="poll.owner.displayName" />
 		</div>
 		<div :class="accessClass">
 			{{ accessCaption }}

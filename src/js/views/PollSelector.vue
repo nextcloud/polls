@@ -39,7 +39,7 @@
 							:key="poll.id"
 							:class="['poll-item', {selected: selectedPollId === poll.id }]"
 							@click="selectedPollId = poll.id">
-							<UserItem condensed :user-id="poll.owner" />
+							<UserItem v-bind="poll.owner" condensed />
 							<div class="poll-title-box">
 								{{ poll.title }}
 							</div>

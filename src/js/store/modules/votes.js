@@ -42,14 +42,14 @@ const mutations = {
 	},
 
 	deleteVotes(state, payload) {
-		state.list = state.list.filter((vote) => vote.userId !== payload.userId)
+		state.list = state.list.filter((vote) => vote.user.userId !== payload.userId)
 	},
 
 	setItem(state, payload) {
 		const index = state.list.findIndex((vote) =>
 			parseInt(vote.pollId) === payload.pollId
-			&& vote.userId === payload.vote.userId
-			&& vote.voteOptionText === payload.option.pollOptionText)
+			&& vote.user.userId === payload.vote.user.userId
+			&& vote.optionText === payload.option.text)
 		if (index > -1) {
 			state.list[index] = Object.assign(state.list[index], payload.vote)
 			return
@@ -59,19 +59,19 @@ const mutations = {
 }
 
 const getters = {
-	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText)),
-	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length,
-	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.voteAnswer === answer).length,
-	hasVoted: (state) => (userId) => state.list.findIndex((vote) => vote.userId === userId) > -1,
+	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.text === vote.voteOptionText)),
+	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.user.userId === rootState.poll.acl.userId && vote.answer === answer).length,
+	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.answer === answer).length,
+	hasVoted: (state) => (userId) => state.list.findIndex((vote) => vote.user.userId === userId) > -1,
 	hasVotes: (state) => state.list.length > 0,
 
 	getVote: (state) => (payload) => {
-		const found = state.list.find((vote) => (vote.userId === payload.userId
-				&& vote.voteOptionText === payload.option.pollOptionText))
+		const found = state.list.find((vote) => (vote.user.userId === payload.userId
+				&& vote.optionText === payload.option.text))
 		if (found === undefined) {
 			return {
-				voteAnswer: '',
-				voteOptionText: payload.option.pollOptionText,
+				answer: '',
+				optionText: payload.option.text,
 				userId: payload.userId,
 			}
 		}
@@ -95,15 +95,15 @@ const actions = {
 			const response = await axios.get(generateUrl(`${endPoint}/votes`), { params: { time: +new Date() } })
 			const votes = []
 			response.data.votes.forEach((vote) => {
-				if (vote.voteAnswer === 'yes') {
-					vote.voteAnswerTranslated = t('polls', 'Yes')
-					vote.voteAnswerSymbol = '✔'
-				} else if (vote.voteAnswer === 'maybe') {
-					vote.voteAnswerTranslated = t('polls', 'Maybe')
-					vote.voteAnswerSymbol = '❔'
+				if (vote.answer === 'yes') {
+					vote.answerTranslated = t('polls', 'Yes')
+					vote.answerSymbol = '✔'
+				} else if (vote.answer === 'maybe') {
+					vote.answerTranslated = t('polls', 'Maybe')
+					vote.answerSymbol = '❔'
 				} else {
-					vote.voteAnswerTranslated = t('polls', 'No')
-					vote.voteAnswerSymbol = '❌'
+					vote.answerTranslated = t('polls', 'No')
+					vote.answerSymbol = '❌'
 				}
 				votes.push(vote)
 			})

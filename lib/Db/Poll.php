@@ -186,7 +186,6 @@ class Poll extends Entity implements JsonSerializable {
 			'title' => $this->getTitle(),
 			'description' => $this->getDescription(),
 			'descriptionSafe' => $this->getDescriptionSafe(),
-			'owner' => $this->getOwner(),
 			'created' => $this->getCreated(),
 			'expire' => $this->getExpire(),
 			'deleted' => $this->getDeleted(),
@@ -200,11 +199,14 @@ class Poll extends Entity implements JsonSerializable {
 			'optionLimit' => $this->getOptionLimit(),
 			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
 			'adminAccess' => $this->getAdminAccess(),
-			'ownerDisplayName' => $this->getDisplayName(),
 			'important' => $this->getImportant(),
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'useNo' => $this->getUseNo(),
 			'autoReminder' => $this->getAutoReminder(),
+			'owner' => [
+				'userId' => $this->getOwner(),
+				'displayName' => $this->getDisplayName(),
+			],
 		];
 	}
 

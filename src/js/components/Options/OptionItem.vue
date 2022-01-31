@@ -187,7 +187,7 @@ export default {
 				return this.dateLocalFormatUTC
 			}
 
-			return this.option.pollOptionText
+			return this.option.text
 		},
 
 		optionText() {
@@ -195,7 +195,7 @@ export default {
 				return this.dateLocalFormat
 			}
 
-			return linkifyStr(this.option.pollOptionText)
+			return linkifyStr(this.option.text)
 		},
 
 		show() {

@@ -72,11 +72,13 @@ class Comment extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
-			'userId' => $this->getUserId(),
 			'timestamp' => $this->getTimestamp(),
 			'comment' => $this->getComment(),
-			'isNoUser' => $this->getIsNoUser(),
-			'displayName' => $this->getDisplayName(),
+			'user' => [
+				'userId' => $this->getUserId(),
+				'displayName' => $this->getDisplayName(),
+				'isNoUser' => $this->getIsNoUser(),
+			],
 		];
 	}
 

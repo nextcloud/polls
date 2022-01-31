@@ -65,7 +65,7 @@ export default {
 				&& this.isValidUser
 				&& !this.closed
 				&& !this.isVoteLimitExceded
-				&& !(this.option.isBookedUp && !['yes', 'maybe'].includes(this.answer))
+				&& !(this.option.computed.isBookedUp && !['yes', 'maybe'].includes(this.answer))
 		},
 
 		isActive() {
@@ -80,7 +80,7 @@ export default {
 			return this.$store.getters['votes/getVote']({
 				option: this.option,
 				userId: this.userId,
-			}).voteAnswer
+			}).answer
 		},
 
 		isVoteLimitExceded() {

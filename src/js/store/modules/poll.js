@@ -33,8 +33,6 @@ const defaultPoll = () => ({
 	title: '',
 	description: '',
 	descriptionSafe: '',
-	owner: '',
-	ownerDisplayName: '',
 	created: 0,
 	expire: 0,
 	deleted: 0,
@@ -52,6 +50,11 @@ const defaultPoll = () => ({
 	hideBookedUp: 0,
 	useNo: 1,
 	autoReminder: false,
+	owner: {
+		userId: '',
+		displayName: '',
+		isNoUser: false,
+	},
 })
 
 const state = defaultPoll()

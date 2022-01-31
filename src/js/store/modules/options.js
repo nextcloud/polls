@@ -82,8 +82,8 @@ const mutations = {
 
 const getters = {
 	count: (state) => state.list.length,
-	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc'),
-	proposalsExist: (state) => !!state.list.filter((option) => option.owner).length,
+	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'computed.rank' : 'order', 'asc'),
+	proposalsExist: (state) => !!state.list.filter((option) => option.owner.userId).length,
 	confirmed: (state) => state.list.filter((option) => option.confirmed > 0),
 
 	explodeDates: (state, getters, rootState) => (option) => {
@@ -170,7 +170,7 @@ const actions = {
 			const response = await axios.post(generateUrl(endPoint), {
 				pollId: context.rootState.route.params.id,
 				timestamp: payload.timestamp,
-				pollOptionText: payload.pollOptionText,
+				text: payload.text,
 				duration: payload.duration,
 			})
 			context.commit('setItem', { option: response.data.option })
@@ -187,7 +187,7 @@ const actions = {
 		try {
 			const response = await axios.put(generateUrl(endPoint), {
 				timestamp: payload.option.timestamp,
-				pollOptionText: payload.option.timeStamp,
+				text: payload.option.timeStamp,
 				duration: payload.option.duration,
 			})
 			context.commit('setItem', { option: response.data.option })

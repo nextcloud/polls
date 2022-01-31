@@ -34,9 +34,9 @@
 			<span :class="['sort-indicator', { 'hidden': sort !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="item__owner sortable" @click="$emit('sort-list', {sort: 'owner'})">
+		<div class="item__owner sortable" @click="$emit('sort-list', {sort: 'owner.displayName'})">
 			{{ t('polls', 'Owner') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'owner'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<span :class="['sort-indicator', { 'hidden': sort !== 'owner.displayName'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
 		<div class="wrapper">
@@ -65,7 +65,7 @@
 		<slot name="actions" />
 		<div v-tooltip.auto="accessType" :class="'item__access--' + poll.access" />
 		<div class="item__owner">
-			<UserItem :user-id="poll.owner" :display-name="poll.ownerDisplayName" />
+			<UserItem v-bind="poll.owner" />
 		</div>
 		<div class="wrapper">
 			<div class="item__created">
