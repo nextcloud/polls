@@ -37,7 +37,7 @@ import SettingsDlg from './components/Settings/SettingsDlg'
 import { getCurrentUser } from '@nextcloud/auth'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
@@ -111,6 +111,9 @@ export default {
 		},
 
 		$route(to, from) {
+			if (this.$route.name === 'list') {
+				this.setFilter(this.$route.params.type)
+			}
 			this.loadPoll()
 			this.watchPolls()
 		},
@@ -171,6 +174,9 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			setFilter: 'polls/setFilter',
+		}),
 		handleScroll() {
 			if (window.scrollY > 70) {
 				document.body.classList.add('page--scrolled')

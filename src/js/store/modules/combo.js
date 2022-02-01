@@ -81,18 +81,18 @@ const getters = {
 	participantsInPoll: (state) => (pollId) => state.participants.filter((participant) => participant.pollId === pollId),
 	pollIsListed: (state) => (pollId) => !!state.polls.find((poll) => poll.id === pollId),
 	pollCombo: (state) => state.polls.map((poll) => poll.id),
-	optionBelongsToPoll: (state) => (payload) => !!state.options.find((option) => option.pollOptionText === payload.pollOptionText && option.pollId === payload.pollId),
+	optionBelongsToPoll: (state) => (payload) => !!state.options.find((option) => option.text === payload.text && option.pollId === payload.pollId),
 	uniqueOptions: (state) => sortBy(uniqueOptions(state.options), 'timestamp'),
 
 	getVote: (state) => (payload) => {
 		const found = state.votes.find((vote) => (
-			vote.userId === payload.user.userId
-            && vote.voteOptionText === payload.option.pollOptionText
+			vote.user.userId === payload.user.userId
+            && vote.optionText === payload.option.text
             && vote.pollId === payload.user.pollId))
 		if (found === undefined) {
 			return {
-				voteAnswer: '',
-				voteOptionText: payload.option.pollOptionText,
+				answer: '',
+				optionText: payload.option.text,
 				userId: payload.userId,
 			}
 		}

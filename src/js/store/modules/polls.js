@@ -26,11 +26,17 @@
 import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
+import orderBy from 'lodash/orderBy'
 
 const state = {
 	list: [],
 	isPollCreationAllowed: false,
 	isComboAllowed: false,
+	currentCategoryId: 'all',
+	sort: {
+		by: 'created',
+		reverse: true,
+	},
 	categories: [
 		{
 			id: 'relevant',
@@ -40,6 +46,15 @@ const state = {
 			icon: 'icon-details',
 			pinned: false,
 			createDependent: false,
+			filterCondition(poll) {
+				return !poll.deleted
+                && !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4)
+                && (poll.important
+                    || poll.userHasVoted
+                    || poll.isOwner
+                    || (poll.allowView && poll.access !== 'public')
+                )
+			},
 		},
 		{
 			id: 'my',
@@ -49,6 +64,9 @@ const state = {
 			icon: 'icon-user',
 			pinned: false,
 			createDependent: true,
+			filterCondition(poll) {
+				return !poll.deleted && poll.isOwner
+			},
 		},
 		{
 			id: 'hidden',
@@ -58,6 +76,9 @@ const state = {
 			icon: 'icon-polls-hidden-poll',
 			pinned: false,
 			createDependent: true,
+			filterCondition(poll) {
+				return !poll.deleted && poll.access === 'hidden'
+			},
 		},
 		{
 			id: 'participated',
@@ -67,6 +88,9 @@ const state = {
 			icon: 'icon-polls-confirmed',
 			pinned: false,
 			createDependent: false,
+			filterCondition(poll) {
+				return !poll.deleted && poll.userHasVoted
+			},
 		},
 		{
 			id: 'public',
@@ -76,6 +100,9 @@ const state = {
 			icon: 'icon-link',
 			pinned: false,
 			createDependent: true,
+			filterCondition(poll) {
+				return !poll.deleted && poll.access === 'public'
+			},
 		},
 		{
 			id: 'all',
@@ -85,6 +112,9 @@ const state = {
 			icon: 'icon-polls',
 			pinned: false,
 			createDependent: false,
+			filterCondition(poll) {
+				return !poll.deleted
+			},
 		},
 		{
 			id: 'closed',
@@ -94,6 +124,11 @@ const state = {
 			icon: 'icon-polls-closed',
 			pinned: false,
 			createDependent: false,
+			filterCondition(poll) {
+				return !poll.deleted
+                    && poll.expire > 0
+                    && moment.unix(poll.expire).diff() < 0
+			},
 		},
 		{
 			id: 'archived',
@@ -103,6 +138,9 @@ const state = {
 			icon: 'icon-category-app-bundles',
 			pinned: true,
 			createDependent: true,
+			filterCondition(poll) {
+				return poll.deleted
+			},
 		},
 	],
 }
@@ -113,6 +151,20 @@ const mutations = {
 	set(state, payload) {
 		Object.assign(state, payload)
 	},
+
+	setFilter(state, payload) {
+		state.currentCategoryId = payload.currentCategoryId
+	},
+
+	setSort(state, payload) {
+		if (state.sort.by === payload.sortBy) {
+			state.sort.reverse = !state.sort.reverse
+		} else {
+			state.sort.reverse = true
+		}
+		state.sort.by = payload.sortBy
+	},
+
 	setPollCreationAllowed(state, payload) {
 		state.isPollCreationAllowed = payload.pollCreationAllowed
 	},
@@ -129,55 +181,28 @@ const getters = {
 		return state.categories.filter((category) => (!category.createDependent))
 	},
 
-	activePolls: (state) => state.list.filter((poll) => (!poll.deleted)),
-	archivedPolls: (state, getters) => state.list.filter((poll) => (poll.deleted)),
+	activePolls: (state, getters) => getters.filtered('all'),
 	datePolls: (state) => state.list.filter((poll) => (poll.type === 'datePoll' && !poll.deleted)),
-	myPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.isOwner)),
-	publicPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'public')),
-	hiddenPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.access === 'hidden')),
-	participatedPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.userHasVoted)),
-	closedPolls: (state, getters) => getters.activePolls.filter((poll) => (poll.expire > 0 && moment.unix(poll.expire).diff() < 0)),
-
-	relevantPolls: (state, getters) => getters.activePolls.filter((poll) => ((
-		poll.important || poll.userHasVoted || poll.isOwner || (poll.allowView && poll.access !== 'public')
-	) && !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4))),
 
 	filtered: (state, getters) => (filterId) => {
-		if (filterId === 'all') {
-			return getters.activePolls
-		}
-
-		if (filterId === 'relevant') {
-			return getters.relevantPolls
-		}
-
-		if (filterId === 'my') {
-			return getters.myPolls
-		}
-
-		if (filterId === 'public') {
-			return getters.publicPolls
-		}
-
-		if (filterId === 'hidden') {
-			return getters.hiddenPolls
-		}
-
-		if (filterId === 'participated') {
-			return getters.participatedPolls
-		}
-
-		if (filterId === 'closed') {
-			return getters.closedPolls
-		}
-
-		if (filterId === 'archived') {
-			return getters.archivedPolls
-		}
+		const currentCategory = state.categories.find((category) => category.id === filterId)
+		return orderBy(
+			state.list.filter((poll) => currentCategory.filterCondition(poll)),
+			[state.sort.by],
+			[state.sort.reverse ? 'desc' : 'asc']
+		)
 	},
 }
 
 const actions = {
+	async setSort(context, payload) {
+		context.commit('setSort', { sortBy: payload.sortBy })
+	},
+
+	async setFilter(context, payload) {
+		context.commit('setFilter', { currentCategoryId: payload })
+	},
+
 	async list(context) {
 		const endPoint = 'apps/polls/polls'
 

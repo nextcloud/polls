@@ -118,22 +118,25 @@ class Option extends Entity implements JsonSerializable {
 		return [
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
-			'owner' => $this->getOwner(),
-			'ownerDisplayName' => $this->getDisplayName(),
-			'ownerIsNoUser' => $this->getOwnerIsNoUser(),
-			'released' => $this->getReleased(),
-			'pollOptionText' => $this->getPollOptionText(),
+			'text' => $this->getPollOptionText(),
 			'timestamp' => $this->getTimestamp(),
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
 			'duration' => $this->getDuration(),
-			'rank' => $this->rank,
-			'no' => $this->no,
-			'yes' => $this->yes,
-			'maybe' => $this->maybe,
-			'realNo' => $this->realNo,
-			'votes' => $this->votes,
-			'isBookedUp' => $this->isBookedUp,
+			'computed' => [
+				'rank' => $this->rank,
+				'no' => $this->no,
+				'yes' => $this->yes,
+				'maybe' => $this->maybe,
+				'realNo' => $this->realNo,
+				'votes' => $this->votes,
+				'isBookedUp' => $this->isBookedUp,
+			],
+			'owner' => [
+				'userId' => $this->getOwner(),
+				'displayName' => $this->getDisplayName(),
+				'isNoUser' => $this->getOwnerIsNoUser(),
+			],
 		];
 	}
 

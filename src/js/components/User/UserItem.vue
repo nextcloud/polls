@@ -136,8 +136,9 @@ export default {
 
 	computed: {
 		isGuestComputed() {
-			return this.$route?.name === 'publicVote' ? true : this.isGuest
+			return this.$route?.name === 'publicVote' || this.isGuest || this.isNoUser
 		},
+
 		name() {
 			if (this.type === 'public') {
 				return t('polls', 'Public link')

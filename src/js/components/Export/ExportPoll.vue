@@ -107,7 +107,7 @@ export default {
 			}
 
 			if (this.poll.type === 'textPoll') {
-				this.sheetData.push(['', ...this.options.list.map((item) => item.pollOptionText)])
+				this.sheetData.push(['', ...this.options.list.map((item) => item.text)])
 
 			} else if (['csv'].includes(type)) {
 				this.sheetData.push([t('polls', 'Participants'), ...this.options.list.map((option) => this.explodeDates(option).iso)])
@@ -138,11 +138,11 @@ export default {
 
 				this.options.list.forEach((option, i) => {
 					if (style === 'symbols') {
-						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswerSymbol ?? '❌')
+						votesLine.push(this.getVote({ userId: participant.userId, option }).answerSymbol ?? '❌')
 					} else if (style === 'raw') {
-						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswer)
+						votesLine.push(this.getVote({ userId: participant.userId, option }).answer)
 					} else {
-						votesLine.push(this.getVote({ userId: participant.userId, option }).voteAnswerTranslated ?? t('polls', 'No'))
+						votesLine.push(this.getVote({ userId: participant.userId, option }).answerTranslated ?? t('polls', 'No'))
 					}
 				})
 

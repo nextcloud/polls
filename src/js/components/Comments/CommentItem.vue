@@ -22,15 +22,15 @@
 
 <template>
 	<div class="comment-item">
-		<UserItem v-bind="comment" hide-names />
+		<UserItem v-bind="comment.user" hide-names />
 		<div class="comment-item__content">
-			<span class="comment-item__user">{{ comment.displayName }}</span>
+			<span class="comment-item__user">{{ comment.user.displayName }}</span>
 			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
 			<div class="comment-item__comment">
 				{{ comment.comment }}
 			</div>
 		</div>
-		<ActionDelete v-if="comment.userId === acl.userId || acl.isOwner"
+		<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
 			:title="t('polls', 'Delete comment')"
 			@delete="deleteComment()" />
 	</div>

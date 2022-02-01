@@ -67,7 +67,7 @@ export default {
 		isWinner() {
 			// highlight best option until poll is closed and
 			// at least one option is confirmed
-			return this.option.rank === 1 && this.option.yes && !(this.closed && this.confirmedOptions.length)
+			return this.option.computed.rank === 1 && this.option.computed.yes && !(this.closed && this.confirmedOptions.length)
 		},
 	},
 }

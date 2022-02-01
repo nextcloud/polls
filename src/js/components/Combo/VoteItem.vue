@@ -57,12 +57,12 @@ export default {
 			return this.$store.getters['combo/getVote']({
 				option: this.option,
 				user: this.user,
-			}).voteAnswer
+			}).answer
 		},
 
 		foreignOption() {
 			return !this.optionBelongsToPoll({
-				pollOptionText: this.option.pollOptionText,
+				text: this.option.text,
 				pollId: this.pollId,
 			})
 		},

@@ -42,7 +42,7 @@ const mutations = {
 	},
 
 	deleteActivities(state, payload) {
-		state.list = state.list.filter((vote) => vote.userId !== payload.userId)
+		state.list = state.list.filter((vote) => vote.user.userId !== payload.userId)
 	},
 
 }

@@ -84,14 +84,14 @@
 		<LoadingOverlay v-if="isLoading" />
 		<Modal v-if="takeOverModal" @close="takeOverModal = false">
 			<div class="modal__content">
-				<h2>{{ t('polls', 'Do you want to take over this poll from {username} and change the ownership?', {username: takeOverOwner}) }}</h2>
+				<h2>{{ t('polls', 'Do you want to take over this poll from {username} and change the ownership?', {username: takeOver.owner.displayName}) }}</h2>
 				<div>{{ t('polls', 'The original owner will be notified.') }}</div>
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="takeOverModal = false" />
 					<ButtonDiv :primary="true"
 						:title="t('polls', 'Yes')"
-						@click="takeOver()" />
+						@click="takeOverPoll()" />
 				</div>
 			</div>
 		</Modal>
@@ -138,8 +138,10 @@ export default {
 			sort: 'created',
 			reverse: true,
 			takeOverModal: false,
-			takeOverOwner: '',
-			takeOverPollId: 0,
+			takeOver: {
+				owner: '',
+				pollId: 0,
+			},
 			deleteModal: false,
 			deletePollId: 0,
 		}
@@ -183,9 +185,9 @@ export default {
 	},
 
 	methods: {
-		confirmTakeOver(pollId, owner) {
-			this.takeOverPollId = pollId
-			this.takeOverOwner = owner
+		confirmTakeOver(pollId, currentOwner) {
+			this.takeOver.pollId = pollId
+			this.takeOver.owner = currentOwner
 			this.takeOverModal = true
 		},
 
@@ -212,9 +214,9 @@ export default {
 			}
 		},
 
-		async takeOver() {
+		async takeOverPoll() {
 			try {
-				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.takeOverPollId })
+				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.takeOver.pollId })
 				this.takeOverModal = false
 			} catch {
 				showError(t('polls', 'Error overtaking poll.'))

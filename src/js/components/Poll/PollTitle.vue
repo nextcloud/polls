@@ -60,7 +60,7 @@ export default {
 			title: (state) => state.poll.title,
 			expire: (state) => state.poll.expire,
 			isDeleted: (state) => state.poll.deleted,
-			ownerDisplayName: (state) => state.poll.ownerDisplayName,
+			ownerDisplayName: (state) => state.poll.owner.displayName,
 			pollCreated: (state) => state.poll.created,
 			mayEdit: (state) => state.poll.acl.allowEdit,
 		}),

@@ -22,17 +22,17 @@
 
 <template>
 	<div class="option-item-owner">
-		<ActionDelete v-if="!acl.allowEdit && acl.userId === option.owner"
+		<ActionDelete v-if="!acl.allowEdit && acl.userId === option.owner.userId"
 			:title="t('polls', 'Delete option')"
 			@delete="removeOption(option)" />
 
-		<Avatar v-else-if="option.owner && option.owner !== pollOwner"
-			:user="option.owner"
-			:display-name="option.ownerDisplayName"
-			:is-no-user="option.ownerIsNoUser"
+		<Avatar v-else-if="option.owner.userId && option.owner.userId !== pollOwner"
+			:user="option.owner.userId"
+			:display-name="option.owner.displayName"
+			:is-no-user="option.owner.isNoUser"
 			disable-menu
 			:size="avatarSize"
-			:tooltip-message="t('polls', '{displayName}\'s proposal', { displayName: option.ownerDisplayName })" />
+			:tooltip-message="t('polls', '{displayName}\'s proposal', { displayName: option.owner.displayName })" />
 	</div>
 </template>
 
@@ -67,7 +67,7 @@ export default {
 
 	computed: {
 		...mapState({
-			pollOwner: (state) => state.poll.owner,
+			pollOwner: (state) => state.poll.owner.userId,
 			acl: (state) => state.poll.acl,
 		}),
 
