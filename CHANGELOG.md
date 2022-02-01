@@ -15,11 +15,15 @@ All notable changes to this project will be documented in this file.
 - It was possible to add option proposals, when not registered in public polls
 - A deleted poll could cause repeating error logs on notifications
 
-## [3.5.0-beta2] - 2022-02-23
+## [3.5.0-beta3] - 2022-02-01
+- Code optimization and refactoring
+- #2201 - Migration error (#2199, #2222)
+
+## [3.5.0-beta2] - 2022-01-23
 - [new] #950 - Allow join project / collection (#2194)
 - [new] #2204 - Add `occ polls:db:recreate` for validating and fixing db structure
 
-## [3.5.0-beta1] - 2022-02-18
+## [3.5.0-beta1] - 2022-01-18
 - [new] #366 - Export poll (#1942, #2169)
 - [new] #804 - Use activities (#2154)
 - [new] #1986 - Combined view for date polls (#2175)
