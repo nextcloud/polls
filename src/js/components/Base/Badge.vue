@@ -53,10 +53,6 @@ export default {
 </script>
 
 <style lang="scss">
-	h2 .badge {
-		font-size: 0.6em;
-	}
-
 	.badge {
 		border-radius: var(--border-radius);
 		padding: 5px;
@@ -66,6 +62,10 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 		font-size: 0.9em;
+
+		h2 & {
+			font-size: 0.6em;
+		}
 
 		&.withIcon {
 			padding-left: 25px !important;

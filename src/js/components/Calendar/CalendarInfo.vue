@@ -27,7 +27,7 @@
 		<div v-if="!event.allDay" class="calendar-info__time">
 			{{ formatDate(event.start) }} - {{ formatDate(event.end) }}
 		</div>
-		<div class="calendar-info__summay" :class="statusClass">
+		<div class="summay" :class="statusClass">
 			{{ event.summary }}
 		</div>
 	</div>
@@ -119,9 +119,13 @@ export default {
 	margin: 4px 0;
 	padding: 0 4px;
 
+	.summay {
+		margin-left: 4px;
+	}
+
 	&.conflict-ignore {
 		border-left: 4px solid transparent;
-		.calendar-info__summay {
+		.summay {
 			font-weight: bold;
 		}
 	}
@@ -148,9 +152,5 @@ export default {
 	width: 65px;
 	font-size: 0.8em;
 	flex: 0 auto;
-}
-
-.calendar-info__summay {
-	margin-left: 4px;
 }
 </style>

@@ -218,9 +218,27 @@ export default {
 	&.list-view {
 		flex-direction: column;
 
+		.vote-column {
+			flex-direction: row-reverse;
+			align-items: center;
+			max-width: initial;
+			position: relative;
+			border-top: solid 1px var(--color-border);
+			border-left: none;
+			padding: 0;
+		}
+
+		.participant {
+			border-top: none;
+		}
+
+		.participant:not(.currentuser), .vote-item:not(.currentuser) {
+			display: none;
+		}
+
 		&.closed {
 			.vote-item:not(.confirmed) {
-				background-color: var(--color-main-background);
+				background-color: transparent;
 				&.no > .icon {
 					background-image: var(--icon-polls-no)
 				}
@@ -234,34 +252,25 @@ export default {
 			}
 		}
 
-		.vote-table__users .confirm {
+		.confirm {
 			display: none;
 		}
 
-		.vote-column {
-			flex-direction: row-reverse;
-			align-items: center;
-			max-width: initial;
-			position: relative;
-			border-top: solid 1px var(--color-border);
-			border-left: none;
-			padding: 0;
+		.owner {
+			order: 0;
+		}
+
+		.counter {
+			order: 0;
+			padding-left: 12px;
 		}
 
 		.vote-table__users {
 			margin: 0;
 
-			.owner {
+			.confirm, .owner {
 				display: none;
 			}
-		}
-
-		.participant:not(.currentuser), .vote-item:not(.currentuser) {
-			display: none;
-		}
-
-		.participant.currentuser {
-			border-top: none;
 		}
 
 		.vote-table__votes {
@@ -276,17 +285,8 @@ export default {
 			}
 		}
 
-		.counter {
-			order: 0;
-			padding-left: 12px;
-		}
-
 		.vote-item.currentuser {
 			border: none;
-		}
-
-		.owner {
-			order: 0;
 		}
 
 		@media only screen and (max-width: 370px) {
@@ -312,10 +312,6 @@ export default {
 		}
 
 		.calendar-peek__caption {
-			display: none;
-		}
-
-		.confirm {
 			display: none;
 		}
 

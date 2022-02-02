@@ -25,15 +25,16 @@
 		}
 	}
 
+	#body-user.dashboard--dark & {
+		--color-header: rgba(255, 255, 255, 1);
+	}
+
 	#body-user[class*='dashboard--'].page--scrolled & {
 		&:before {
 			margin-top: 0;
 		}
 	}
 
-	#body-user.dashboard--dark & {
-		--color-header: rgba(255, 255, 255, 1);
-	}
 }
 
 #body-user.dashboard--dark:not(.dashboard--inverted) {
@@ -49,8 +50,8 @@
 
 
 		li:hover a::before,
-		li:hover a.active::before,
 		li a.active::before,
+		li:hover a.active::before,
 		li a:focus::before {
 			display: none !important;
 		}

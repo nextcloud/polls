@@ -95,16 +95,6 @@ export default {
 		position: relative;
 		display: flex;
 
-		&.numeric {
-			min-width: 100px;
-			width: 110px;
-			display: block;
-
-			input {
-				text-align: center;
-			}
-		}
-
 		input {
 			width: 100%;
 			background-repeat: no-repeat;
@@ -131,6 +121,16 @@ export default {
 				background-image: var(--icon-polls-yes);
 				background-color: var(--color-background-success) !important;
 				color: var(--color-foreground-success);
+			}
+		}
+
+		&.numeric {
+			min-width: 100px;
+			width: 110px;
+			display: block;
+
+			input {
+				text-align: center;
 			}
 		}
 
