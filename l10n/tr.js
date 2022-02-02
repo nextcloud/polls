@@ -8,6 +8,7 @@ OC.L10N.register(
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} kullanıcısı sizi \"{title}\" anketine katılmaya çağırdı",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Bu bağlantı yukarıdaki ankete yalnız size özel olan bir erişim sağlar. Yukarıdaki düğmeye tıklayın ya da aşağıdaki bağlantıyı kopyalayıp web tarayıcınızın adres çubuğuna yapıştırın:",
     "Do not share this link with other people, because it is connected to your votes." : "Bu bağlantı size özel olduğundan ve vereceğini oy ile ilgili olduğundan başka kişilerle paylaşmayın.",
+    "Notification for poll \"%s\"" : "\"%s\" anketi için bildirim",
     "Go to poll" : "Ankete git",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Bu e-posta, bu anketin bildirimlerine abone olduğunuz için gönderildi. Bildirimlerin gönderilmemesi için ankete giderek abonelikten ayrılabilirsiniz.",
     "Polls App - New Activity" : "Anketler uygulaması - Yeni işlem",
