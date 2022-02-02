@@ -12,6 +12,7 @@ jobs:
         node-version: [14.x, 16.x]
         npm-version: [7]
 
+    name: node${{ matrix.node-versions }} npm${{ matrix.npm-versions }}
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-version }}

@@ -22,7 +22,7 @@ jobs:
         databases: ['sqlite']
         server-versions: ['master', 'stable21']
 
-    name: php${{ matrix.php-versions }}-${{ matrix.databases }}-${{ matrix.server-versions }}
+    name: php${{ matrix.php-versions }} ${{ matrix.databases }} ${{ matrix.server-versions }}
 
     steps:
       - name: Checkout server

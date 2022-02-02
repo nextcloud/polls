@@ -15,7 +15,7 @@ jobs:
               ocp-version: [ 'dev-master', 'dev-stable21' ]
               php-versions: ['7.4', '8.0']
 
-      name: Nextcloud ${{ matrix.ocp-version }} PHP ${{ matrix.php-versions}}
+      name: php${{ matrix.php-versions}} ${{ matrix.ocp-version }}
       steps:
           - name: Checkout
             uses: actions/checkout@master

@@ -15,7 +15,7 @@ jobs:
       matrix:
         php-versions: ['7.4', '8.0']
 
-    name: php-cs
+    name: php-cs php${{ matrix.php-versions }}
 
     steps:
     - name: Checkout
@@ -36,17 +36,17 @@ jobs:
     strategy:
       matrix:
         node-versions: [14.x]
-        npm-version: [7]
+        npm-versions: [7]
 
-    name: eslint node ${{ matrix.node-versions }}
+    name: eslint node${{ matrix.node-versions }} npm${{ matrix.npm-versions }}
     steps:
       - uses: actions/checkout@v2
       - name: Use node ${{ matrix.node-versions }}
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-versions }}
-      - name: Set up npm ${{ matrix.npm-version }}
-        run: npm i -g npm@"${{ matrix.npm-version }}"
+      - name: Set up npm ${{ matrix.npm-versions }}
+        run: npm i -g npm@"${{ matrix.npm-versions }}"
       - name: Install dependencies
         run: npm ci
       - name: Run Lint
@@ -58,9 +58,9 @@ jobs:
     strategy:
       matrix:
         node-versions: [14.x]
-        npm-version: [7]
+        npm-versions: [7]
 
-    name: stylelint node ${{ matrix.node-versions }}
+    name: stylelint node${{ matrix.node-versions }} npm${{ matrix.npm-versions }}
     steps:
       - uses: actions/checkout@v2
 
