@@ -208,6 +208,23 @@ export default {
 		text-overflow: ellipsis;
 	}
 
+	.item__title {
+		display: flex;
+		flex-direction: column;
+		flex: 1 0 155px;
+		align-items: stretch;
+		justify-content: center;
+
+		.item__title__title {
+			display: block;
+		}
+
+		.item__title__description {
+			opacity: 0.5;
+			display: block;
+		}
+	}
+
 	.poll-item__header {
 		opacity: 0.7;
 		flex: auto;
@@ -253,23 +270,6 @@ export default {
 		display: flex;
 		flex: 0 1 auto;
 		flex-wrap: wrap;
-	}
-
-	.item__title {
-		display: flex;
-		flex-direction: column;
-		flex: 1 0 155px;
-		align-items: stretch;
-		justify-content: center;
-
-		.item__title__title {
-			display: block;
-		}
-
-		.item__title__description {
-			opacity: 0.5;
-			display: block;
-		}
 	}
 
 	.item__access,

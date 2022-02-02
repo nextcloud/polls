@@ -94,6 +94,14 @@ export default {
 		flex-direction: column;
 	}
 
+	.participant, .vote-item {
+		flex: 0 0 auto;
+		height: 4.5em;
+		line-height: 1.5em;
+		padding: 4px;
+		border-top: solid 1px var(--color-border-dark);
+	}
+
 	.user-column {
 		display: flex;
 		flex-direction: column;
@@ -109,14 +117,6 @@ export default {
 		display: flex;
 		flex: 1;
 		overflow-x: scroll;
-	}
-
-	.participant, .vote-item {
-		flex: 0 0 auto;
-		height: 4.5em;
-		line-height: 1.5em;
-		padding: 4px;
-		border-top: solid 1px var(--color-border-dark);
 	}
 
 	.user-column::after, .vote-column::after {

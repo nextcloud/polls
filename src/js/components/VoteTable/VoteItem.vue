@@ -148,14 +148,6 @@ export default {
 		}
 	}
 
-	&.no {
-		background-color: var(--color-polls-background-no);
-		&.active > .icon {
-			color: var(--color-polls-foreground-no);
-			background-image: var(--icon-polls-no)
-		}
-	}
-
 	&.maybe {
 		background-color: var(--color-polls-background-maybe);
 		> .icon {
@@ -172,6 +164,15 @@ export default {
 			border-radius: var(--border-radius);
 		}
 	}
+
+	&.no {
+		background-color: var(--color-polls-background-no);
+		&.active > .icon {
+			color: var(--color-polls-foreground-no);
+			background-image: var(--icon-polls-no)
+		}
+	}
+
 }
 
 .vote-item.confirmed {

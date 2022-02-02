@@ -295,6 +295,10 @@ export default {
 		}
 	}
 
+	.option-item__handle {
+		margin-right: 8px;
+	}
+
 	.draggable, .draggable [class*='option-item__option']  {
 		cursor: grab;
 		&:active {
@@ -316,9 +320,4 @@ export default {
 		justify-content: flex-end;
 		padding-right: 8px;
 	}
-
-	.option-item__handle {
-		margin-right: 8px;
-	}
-
 </style>
