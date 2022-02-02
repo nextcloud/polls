@@ -18,7 +18,7 @@ jobs:
     - name: Use Node.js ${{ matrix.node-versions }}
       uses: actions/setup-node@v2
       with:
-        node-versions: ${{ matrix.node-versions }}
+        node-version: ${{ matrix.node-versions }}
     - name: Set up npm ${{ matrix.npm-versions }}
       run: npm i -g npm@"${{ matrix.npm-versions }}"
     - name: install dependencies
