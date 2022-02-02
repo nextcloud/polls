@@ -36,6 +36,7 @@ jobs:
     strategy:
       matrix:
         node-versions: [14.x]
+        npm-version: [7]
 
     name: eslint node ${{ matrix.node-versions }}
     steps:
@@ -44,8 +45,8 @@ jobs:
         uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-versions }}
-      - name: Set up npm7
-        run: npm i -g npm@7
+      - name: Set up npm ${{ matrix.npm-version }}
+        run: npm i -g npm@"${{ matrix.npm-version }}"
       - name: Install dependencies
         run: npm ci
       - name: Run Lint
@@ -57,18 +58,19 @@ jobs:
     strategy:
       matrix:
         node-versions: [14.x]
+        npm-version: [7]
 
     name: stylelint node ${{ matrix.node-versions }}
     steps:
       - uses: actions/checkout@v2
 
       - name: Set up node ${{ matrix.node-versions }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v2
         with:
           node-version: ${{ matrix.node-versions }}
-
+      - name: Set up npm ${{ matrix.npm-version }}
+        run: npm i -g npm@"${{ matrix.npm-version }}"
       - name: Install dependencies
         run: npm ci
-
       - name: Run stylelint
         run: npm run stylelint
