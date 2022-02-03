@@ -70,8 +70,7 @@
 		"npm": "^7.0.0"
 	},
 	"devDependencies": {
-		"@babel/preset-env": "^7.16.11",
-		"@babel/types": "^7.16.7",
+		"@nextcloud/babel-config": "^1.0.0",
 		"@nextcloud/browserslist-config": "^2.2.0",
 		"@nextcloud/eslint-config": "^7.0.2",
 		"@nextcloud/stylelint-config": "^2.1.2",
