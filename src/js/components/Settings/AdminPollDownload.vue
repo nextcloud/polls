@@ -27,8 +27,7 @@
 		</CheckboxRadioSwitch>
 		<div v-if="pollDownloadLimited" class="settings_details">
 			<div>{{ t('polls','Allow poll download for the following groups') }}</div>
-			<Multiselect
-				v-model="pollDownloadGroups"
+			<Multiselect v-model="pollDownloadGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"

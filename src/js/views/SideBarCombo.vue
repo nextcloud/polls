@@ -25,8 +25,7 @@
 		:active="active"
 		:title="t('polls', 'Select polls to combine')"
 		@close="closeSideBar()">
-		<AppSidebarTab
-			:id="'polls'"
+		<AppSidebarTab :id="'polls'"
 			:order="1"
 			:name="t('polls', 'Polls')"
 			icon="icon-polls">

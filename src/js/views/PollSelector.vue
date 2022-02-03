@@ -22,8 +22,7 @@
   -->
 
 <template>
-	<Modal
-		:container="container"
+	<Modal :container="container"
 		@close="close">
 		<div id="modal-inner" class="polls-picker-modal" :class="{ 'icon-loading': loading }">
 			<div id="modal-content">
@@ -50,8 +49,7 @@
 					</div>
 				</div>
 				<div id="modal-buttons">
-					<button
-						v-if="!loading && activePolls.length > 0"
+					<button v-if="!loading && activePolls.length > 0"
 						class="primary"
 						:disabled="!selectedPollId"
 						@click="select">

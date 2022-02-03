@@ -45,14 +45,12 @@
 					</template>
 
 					<Actions>
-						<ActionButton
-							v-if="share.emailAddress || share.type === 'group'"
+						<ActionButton v-if="share.emailAddress || share.type === 'group'"
 							icon="icon-confirm"
 							@click="sendInvitation(share)">
 							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
 						</ActionButton>
-						<ActionButton
-							v-if="share.type === 'user' || share.type === 'admin'"
+						<ActionButton v-if="share.type === 'user' || share.type === 'admin'"
 							:icon="share.type === 'user' ? 'icon-user-admin' : 'icon-user'"
 							@click="switchAdmin({ share })">
 							{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
@@ -84,8 +82,7 @@
 						</ActionRadio>
 					</Actions>
 
-					<ActionDelete
-						:title="t('polls', 'Remove share')"
+					<ActionDelete :title="t('polls', 'Remove share')"
 						@delete="removeShare({ share })" />
 				</UserItem>
 			</TransitionGroup>

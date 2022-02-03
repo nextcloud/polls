@@ -48,8 +48,7 @@
 						<h3 v-else>
 							{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}
 						</h3>
-						<InputDiv
-							v-model="emailAddress"
+						<InputDiv v-model="emailAddress"
 							v-tooltip="emailCheck.result"
 							:signaling-class="emailCheck.status"
 							:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"

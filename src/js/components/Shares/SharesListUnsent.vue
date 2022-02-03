@@ -30,21 +30,18 @@
 				resolve-info
 				:icon="true">
 				<Actions>
-					<ActionButton
-						v-if="share.emailAddress || share.type === 'group'"
+					<ActionButton v-if="share.emailAddress || share.type === 'group'"
 						icon="icon-confirm"
 						@click="sendInvitation(share)">
 						{{ t('polls', 'Send invitation mail') }}
 					</ActionButton>
-					<ActionButton
-						v-if="['contactGroup', 'circle'].includes(share.type)"
+					<ActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
 						icon="icon-toggle-filelist"
 						@click="resolveGroup(share)">
 						{{ t('polls', 'Resolve into individual invitations') }}
 					</ActionButton>
 				</Actions>
-				<ActionDelete
-					:title="t('polls', 'Remove invitation')"
+				<ActionDelete :title="t('polls', 'Remove invitation')"
 					@delete="removeShare({ share })" />
 			</UserItem>
 		</TransitionGroup>
