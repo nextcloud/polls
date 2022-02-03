@@ -27,8 +27,7 @@
 		</CheckboxRadioSwitch>
 		<div v-if="comboLimited" class="settings_details">
 			<div>{{ t('polls','Allow combo view for the following groups') }}</div>
-			<Multiselect
-				v-model="comboGroups"
+			<Multiselect v-model="comboGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"

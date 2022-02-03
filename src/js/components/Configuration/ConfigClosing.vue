@@ -22,8 +22,7 @@
 
 <template>
 	<div>
-		<ButtonDiv
-			:icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
+		<ButtonDiv :icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
 			:title="closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
 			@click="toggleClosed()" />
 		<CheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">

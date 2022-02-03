@@ -27,8 +27,7 @@
 		</CheckboxRadioSwitch>
 		<div v-if="createPollLimited" class="settings_details">
 			<div>{{ t('polls','Allow poll creation for the following groups') }}</div>
-			<Multiselect
-				v-model="createPollGroups"
+			<Multiselect v-model="createPollGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"

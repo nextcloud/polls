@@ -27,8 +27,7 @@
 		</CheckboxRadioSwitch>
 		<div v-if="publicSharesLimited" class="settings_details">
 			<div>{{ t('polls','Allow public shares for the following groups') }}</div>
-			<Multiselect
-				v-model="publicSharesGroups"
+			<Multiselect v-model="publicSharesGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"
@@ -47,8 +46,7 @@
 		</CheckboxRadioSwitch>
 		<div v-if="allAccessLimited" class="settings_details">
 			<div>{{ t('polls','Allow poll sharing to all users for the following groups') }}</div>
-			<Multiselect
-				v-model="allAccessGroups"
+			<Multiselect v-model="allAccessGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"

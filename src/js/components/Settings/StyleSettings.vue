@@ -46,8 +46,7 @@
 				</CheckboxRadioSwitch>
 
 				<div v-if="individualImage" class="settings_details">
-					<input
-						v-model="individualImageUrl"
+					<input v-model="individualImageUrl"
 						type="text"
 						:placeholder="t('polls', 'Enter the URL of your favorite background image.')">
 					<CheckboxRadioSwitch :checked.sync="individualImageStyle" type="switch">

@@ -77,13 +77,11 @@
 
 		<div class="wrapper">
 			<div class="item__created">
-				<Badge
-					:title="timeCreatedRelative"
+				<Badge :title="timeCreatedRelative"
 					icon="icon-clock" />
 			</div>
 			<div class="item__expiry">
-				<Badge
-					:title="timeExpirationRelative"
+				<Badge :title="timeExpirationRelative"
 					icon="icon-calendar-000"
 					:class="expiryClass" />
 			</div>
