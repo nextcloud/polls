@@ -71,7 +71,7 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.16.12",
-		"@babel/eslint-parser": "^7.16.5",
+		"@babel/eslint-parser": "^7.17.0",
 		"@babel/preset-env": "^7.16.11",
 		"@babel/types": "^7.16.7",
 		"@nextcloud/browserslist-config": "^2.2.0",
