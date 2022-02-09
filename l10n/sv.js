@@ -77,6 +77,7 @@ OC.L10N.register(
     "Confirmed" : "Bekräftad",
     "OK" : "OK",
     "Week" : "Vecka",
+    "Time zone: {timezoneString}" : "Tidszon: {timezoneString}",
     "never" : "aldrig",
     "Enter your name" : "Ange ditt namn",
     "Access" : "Åtkomst",
