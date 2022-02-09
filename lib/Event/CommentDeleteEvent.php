@@ -28,6 +28,7 @@ use OCA\Polls\Db\Comment;
 class CommentDeleteEvent extends CommentEvent {
 	public function __construct(Comment $comment) {
 		parent::__construct($comment);
+		$this->log = false;
 		$this->activitySubject = self::DELETE;
 	}
 }
