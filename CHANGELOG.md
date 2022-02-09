@@ -1,19 +1,20 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.5.0] - tbd
+## [3.5.0] - 2022-02-09
 ## New
-- Export polls (.xlsx, odt, .csv, .html)
-- Track activities
-- Combine multiple polls in one view (read only)
-- Added feature switches for admins to en-/disable exports, activities and the new combo view
-- New command `occ polls:db:recreate` for validating and fixing db structure
+- following new features are disabled by default per admin switch
+    - Export polls (.xlsx, odt, .csv, .html)
+    - Track activities
+    - Combine multiple polls in one view (read only)
 - Add polls to collections
 - Linkify URLs and email addresses in text options
+- New command `occ polls:db:recreate` for validating and fixing db structure
 
 ## Fixed
 - It was possible to add option proposals, when not registered in public polls
 - A deleted poll could cause repeating error logs on notifications
+- fixed a migration error, when updating from rather old version
 
 ## [3.5.0-beta3] - 2022-02-01
 - Code optimization and refactoring
