@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.5.1] - 2022-02-11
+## Fixed
+- updated php minimum version in info.xml
+
 ## [3.5.0] - 2022-02-09
 ## New
 - following new features are disabled by default per admin switch
