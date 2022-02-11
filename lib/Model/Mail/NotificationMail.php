@@ -99,6 +99,7 @@ class NotificationMail extends MailBase {
 			OptionEvent::CONFIRM => $this->l10n->t('A voting option has been confirmed.'),
 			OptionEvent::UNCONFIRM => $this->l10n->t('A voting option has been unconfirmed.'),
 			OptionEvent::DELETE => $this->l10n->t('A voting option has been removed.'),
+			CommentEvent::ADD => $this->l10n->t('%s has left a comment.', [$displayName]),
 			VoteEvent::SET => $this->l10n->t('%s has voted.', [$displayName]),
 		];
 
