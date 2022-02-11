@@ -1,9 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.5.2] - 2022-02-11
+## Fixed
+- #2248 - Adding options in text poll is not possible
+
 ## [3.5.1] - 2022-02-11
 ## Fixed
-- updated php minimum version in info.xml
+- #2246 - updated php minimum version in info.xml
 
 ## [3.5.0] - 2022-02-09
 ## New
