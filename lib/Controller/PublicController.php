@@ -244,9 +244,9 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function addOption(string $token, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
-		return $this->responseCreate(function () use ($token, $timestamp, $pollOptionText, $duration) {
-			return ['option' => $this->optionService->add(0, $timestamp, $pollOptionText, $duration, $token)];
+	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): DataResponse {
+		return $this->responseCreate(function () use ($token, $timestamp, $text, $duration) {
+			return ['option' => $this->optionService->add(0, $timestamp, $text, $duration, $token)];
 		});
 	}
 
