@@ -26,6 +26,7 @@ namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Subscription;
+use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\OptionEvent;
 use OCA\Polls\Event\VoteEvent;
