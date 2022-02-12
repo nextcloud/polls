@@ -43,14 +43,6 @@
 					@subtract="autoArchiveOffset -= 1" />
 			</div>
 		</div>
-
-		<div class="user_settings">
-			<h2>{{ t('polls', 'Performance settings') }}</h2>
-			<div>
-				{{ t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.') }}
-			</div>
-			<RadioGroupDiv v-model="updateType" :options="updateTypeOptions" />
-		</div>
 	</div>
 </template>
 
@@ -58,8 +50,7 @@
 
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import InputDiv from '../../Base/InputDiv'
-import RadioGroupDiv from '../../Base/RadioGroupDiv'
+import InputDiv from '../Base/InputDiv'
 
 export default {
 	name: 'AdminMisc',
@@ -67,17 +58,6 @@ export default {
 	components: {
 		CheckboxRadioSwitch,
 		InputDiv,
-		RadioGroupDiv,
-	},
-
-	data() {
-		return {
-			updateTypeOptions: [
-				{ value: 'longPolling', label: t('polls', 'Activate long polling for instant updates') },
-				{ value: 'periodicPolling', label: t('polls', 'Activate periodic polling of updates from the client') },
-				{ value: 'noPolling', label: t('polls', 'Disable automatic updates (reload app for updates)') },
-			],
-		}
 	},
 
 	computed: {
@@ -86,14 +66,6 @@ export default {
 		}),
 
 		// Add bindings
-		updateType: {
-			get() {
-				return this.appSettings.updateType
-			},
-			set(value) {
-				this.writeValue({ updateType: value })
-			},
-		},
 		hideLogin: {
 			get() {
 				return !this.appSettings.showLogin

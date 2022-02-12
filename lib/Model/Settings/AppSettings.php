@@ -151,6 +151,37 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
+	public function getLegalTermsInEmail(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'legalTermsInEmail'), true);
+	}
+
+	public function getPrivacyUrl(): string {
+		return $this->config->getAppValue(self::APP_NAME, 'privacyUrl');
+	}
+
+	public function getUsePrivacyUrl(): string {
+		if ($this->config->getAppValue(self::APP_NAME, 'privacyUrl')) {
+			return $this->config->getAppValue(self::APP_NAME, 'privacyUrl');
+		}
+		return $this->config->getAppValue('theming', 'privacyUrl');
+	}
+
+	public function getImprintUrl(): string {
+		return $this->config->getAppValue(self::APP_NAME, 'imprintUrl');
+	}
+
+
+	public function getUseImprintUrl(): string {
+		if ($this->config->getAppValue(self::APP_NAME, 'imprintUrl')) {
+			return $this->config->getAppValue(self::APP_NAME, 'imprintUrl');
+		}
+		return $this->config->getAppValue('theming', 'imprintUrl');
+	}
+
+	public function getDisclaimer(): string {
+		return $this->config->getAppValue(self::APP_NAME, 'disclaimer');
+	}
+
 	// Setters
 	public function setAllowPublicShares(bool $value): void {
 		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', $this->boolToString($value));
@@ -212,6 +243,22 @@ class AppSettings implements JsonSerializable {
 		$this->config->setAppValue(self::APP_NAME, 'useActivity', $this->boolToString($value));
 	}
 
+	public function setLegalTermsInEmail(bool $value): void {
+		$this->config->setAppValue(self::APP_NAME, 'legalTermsInEmail', $this->boolToString($value));
+	}
+
+	public function setPrivacyUrl(string $value): void {
+		$this->config->setAppValue(self::APP_NAME, 'privacyUrl', $value);
+	}
+
+	public function setImprintUrl(string $value): void {
+		$this->config->setAppValue(self::APP_NAME, 'imprintUrl', $value);
+	}
+
+	public function setDisclaimer(string $value): void {
+		$this->config->setAppValue(self::APP_NAME, 'disclaimer', $value);
+	}
+
 	public function jsonSerialize() {
 		// convert group ids to group objects
 		$publicSharesGroups = [];
@@ -256,6 +303,14 @@ class AppSettings implements JsonSerializable {
 			'autoArchiveOffset' => $this->getAutoArchiveOffset(),
 			'updateType' => $this->getUpdateType(),
 			'useActivity' => $this->getUseActivity(),
+			'privacyUrl' => $this->getPrivacyUrl(),
+			'legalTermsInEmail' => $this->getLegalTermsInEmail(),
+			'imprintUrl' => $this->getImprintUrl(),
+			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
+			'useImprintUrl' => $this->getUseImprintUrl(),
+			'defaultPrivacyUrl' => $this->config->getAppValue('theming', 'privacyUrl'),
+			'defaultImprintUrl' => $this->config->getAppValue('theming', 'imprintUrl'),
+			'disclaimer' => $this->getDisclaimer(),
 		];
 	}
 
