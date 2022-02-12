@@ -52,6 +52,8 @@ export default {
 
 <style lang="scss">
 	textarea.edit-description {
+		width: 99%;
+		resize: vertical;
 		height: 210px;
 	}
 </style>

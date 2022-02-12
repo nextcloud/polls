@@ -77,6 +77,10 @@
 					</div>
 				</div>
 			</div>
+			<div class="legal_links">
+				<a :href="imprintUrl" target="_blank">{{ t('polls', 'Legal Notice') }}</a>
+				<a :href="privacyUrl" target="_blank">{{ t('polls', 'Privacy policy') }}</a>
+			</div>
 		</div>
 	</Modal>
 </template>
@@ -117,6 +121,8 @@ export default {
 		...mapState({
 			poll: (state) => state.poll,
 			share: (state) => state.share,
+			privacyUrl: (state) => state.appSettings.usePrivacyUrl,
+			imprintUrl: (state) => state.appSettings.useImprintUrl,
 		}),
 
 		registrationIsValid() {
@@ -323,6 +329,34 @@ export default {
 	.description {
 		hyphens: auto;
 		border-top: 1px solid var(--color-border);
+	}
+
+	.legal_links {
+		padding: 4px 24px;
+
+		a {
+			color: var(--color-text-lighter);
+			font-weight: bold;
+			white-space: nowrap;
+			padding: 10px;
+			margin: -10px;
+
+			&:hover, &:active {
+				color: var(--color-text-light);
+				&::after {
+					color: var(--color-text-lighter);
+				}
+			}
+
+			&:after {
+			    content:"|";
+				padding: 0 4px;
+			}
+
+			&:last-child:after {
+			    content:"";
+			}
+		}
 	}
 
 	.status-message {

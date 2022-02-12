@@ -41,6 +41,14 @@ const defaultAppSettings = () => ({
 	updateType: 'longPolling',
 	useActivity: false,
 	useCollaboration: true,
+	privacyUrl: '',
+	imprintUrl: '',
+	usePrivacyUrl: '',
+	useImprintUrl: '',
+	legalTermsInEmail: false,
+	defaultPrivacyUrl: '',
+	defaultImprintUrl: '',
+	disclaimer: '',
 })
 
 const state = defaultAppSettings()
