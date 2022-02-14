@@ -45,8 +45,8 @@ class User extends UserBase {
 	) {
 		parent::__construct($id, $type);
 		$this->icon = self::ICON;
-		$this->isNoUser = false;
 		$this->description = Container::getL10N()->t('User');
+		$this->isNoUser = false;
 
 		$this->config = Container::queryClass(IConfig::class);
 		$this->user = Container::queryClass(IUserManager::class)->get($this->id);

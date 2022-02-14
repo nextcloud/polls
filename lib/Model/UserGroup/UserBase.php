@@ -94,24 +94,23 @@ class UserBase implements \JsonSerializable {
 		string $language = '',
 		string $locale = ''
 	) {
+		$this->icon = 'icon-share';
+
+		$this->l10n = Container::getL10N();
+		$this->timezone = Container::queryClass(IDateTimeZone::class);
+
 		$this->id = $id;
 		$this->type = $type;
 		$this->displayName = $displayName;
 		$this->emailAddress = $emailAddress;
 		$this->language = $language;
 		$this->locale = $locale;
-		$this->icon = 'icon-share';
-		$this->l10n = Container::getL10N();
-		$this->timezone = Container::queryClass(IDateTimeZone::class);
 	}
 
 	public function getId(): string {
 		return $this->id;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getPublicId(): string {
 		return $this->id;
 	}

@@ -39,12 +39,13 @@ class Circle extends UserBase {
 		string $id
 	) {
 		parent::__construct($id, self::TYPE);
+		$this->icon = self::ICON;
+		$this->description = Container::getL10N()->t('Circle');
+		$this->richObjectType = 'circle';
+
 		if (self::isEnabled()) {
-			$this->icon = self::ICON;
 			$this->circle = Circles::detailsCircle($id);
 			$this->displayName = $this->circle->getName();
-			$this->description = Container::getL10N()->t('Circle');
-			$this->richObjectType = 'circle';
 		} else {
 			throw new CirclesNotEnabledException();
 		}

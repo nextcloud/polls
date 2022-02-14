@@ -35,11 +35,11 @@ class ContactGroup extends UserBase {
 		string $id
 	) {
 		parent::__construct($id, self::TYPE);
-		if (self::isEnabled()) {
-			$this->icon = self::ICON;
-			$this->description = Container::getL10N()->t('Contact group');
-			$this->richObjectType = 'addressbook-contact';
-		} else {
+		$this->icon = self::ICON;
+		$this->description = Container::getL10N()->t('Contact group');
+		$this->richObjectType = 'addressbook-contact';
+
+		if (!self::isEnabled()) {
 			throw new ContactsNotEnabledExceptions();
 		}
 	}
