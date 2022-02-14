@@ -45,8 +45,8 @@ class User extends UserBase {
 	) {
 		parent::__construct($id, $type);
 		$this->icon = self::ICON;
-		$this->description = Container::getL10N()->t('User');
 		$this->isNoUser = false;
+		$this->description = Container::getL10N()->t('User');
 
 		$this->config = Container::queryClass(IConfig::class);
 		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
@@ -68,6 +68,12 @@ class User extends UserBase {
 		return new DateTimeZone($this->timezone->getTimeZone()->getName());
 	}
 
+	public function getDescription(): string {
+		if ($this->getEmailAddress()) {
+			return $this->getEmailAddress();
+		}
+		return $this->description;
+	}
 
 	/**
 	 * @return User[]

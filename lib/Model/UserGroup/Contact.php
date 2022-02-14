@@ -107,13 +107,23 @@ class Contact extends UserBase {
 		$this->emailAddress = $this->contact['EMAIL'][0] ?? $this->emailAddress;
 		$this->organisation = $this->contact['ORG'] ?? '';
 		$this->categories = isset($this->contact['CATEGORIES']) ? explode(',', $this->contact['CATEGORIES']) : [];
-		$description = $this->categories;
+	}
+
+	public function getDescription(): string {
+		$description = $this->getCategories();
 
 		if (isset($this->contact['ORG'])) {
-			array_unshift($description, $this->organisation);
+			array_unshift($description, $this->getOrganisation());
 		}
-		$this->description = count($description) ? implode(", ", $description) : Container::getL10N()->t('Contact');
+
+		if ($this->getEmailAddress()) {
+			array_unshift($description, $this->getEmailAddress());
+		}
+
+		return count($description) ? implode(", ", $description) : Container::getL10N()->t('Contact');
 	}
+
+
 
 	public static function isEnabled(): bool {
 		return Container::isAppEnabled('contacts');
