@@ -49,6 +49,5 @@ class GenericUser extends UserBase {
 
 		$this->displayName = $displayName;
 		$this->emailAddress = $emailAddress;
-
 	}
 }
