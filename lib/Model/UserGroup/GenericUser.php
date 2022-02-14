@@ -38,16 +38,16 @@ class GenericUser extends UserBase {
 		string $emailAddress = ''
 	) {
 		parent::__construct($id, $type);
-		$this->displayName = $displayName;
-		$this->emailAddress = $emailAddress;
+		$this->icon = self::ICON_DEFAULT;
+		$this->description = Container::getL10N()->t('External user');
 		$this->richObjectType = 'guest';
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->icon = self::ICON_PUBLIC;
 			$this->description = Container::getL10N()->t('Public link');
-		} else {
-			$this->icon = self::ICON_DEFAULT;
-			$this->description = Container::getL10N()->t('External user');
 		}
+
+		$this->displayName = $displayName;
+		$this->emailAddress = $emailAddress;
 	}
 }

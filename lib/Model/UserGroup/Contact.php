@@ -43,14 +43,17 @@ class Contact extends UserBase {
 		string $id
 	) {
 		parent::__construct($id, self::TYPE);
+		$this->icon = self::ICON;
+		$this->description = Container::getL10N()->t('Contact');
+		$this->richObjectType = 'addressbook-contact';
+
+		$this->logger = Container::queryClass(LoggerInterface::class);
+
 		if (self::isEnabled()) {
-			$this->icon = self::ICON;
 			$this->getContact();
-			$this->richObjectType = 'addressbook-contact';
 		} else {
 			throw new ContactsNotEnabledExceptions();
 		}
-		$this->logger = Container::queryClass(LoggerInterface::class);
 	}
 
 
@@ -89,7 +92,7 @@ class Contact extends UserBase {
 		// Don't throw an error, log the error and take the first entry
 		if (count($contacts) > 1) {
 			// throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
-			$this->logger->error('Multiple contacts found for id ' . $this->id);
+			$this->logger->warning('Multiple contacts found for id ' . $this->id);
 		}
 
 		$this->contact = $contacts[0];
