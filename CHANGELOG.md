@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
 
 ## Fixed
 - #2263 - Fixed user search (#2267)
+- #2272 - Fixed poll export due to changed module export of xlsx
 
 ## Misc
 - late translations delivery
