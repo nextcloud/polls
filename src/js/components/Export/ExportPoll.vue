@@ -55,7 +55,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { saveAs } from 'file-saver'
-import XLSX from 'xlsx'
+import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
@@ -95,7 +95,7 @@ export default {
 
 	methods: {
 		exportFile(type) {
-			this.workBook = XLSX.utils.book_new()
+			this.workBook = xlsxUtils.book_new()
 			this.workBook.SheetNames.push(this.poll.title)
 			this.sheetData = []
 
@@ -128,7 +128,7 @@ export default {
 				this.addVotesArray()
 			}
 
-			const workBookOutput = XLSX.write(this.workBook, { bookType: type, type: 'binary' })
+			const workBookOutput = xlsxWrite(this.workBook, { bookType: type, type: 'binary' })
 			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${type}`)
 		},
 
@@ -149,7 +149,7 @@ export default {
 				this.sheetData.push(votesLine)
 			})
 
-			const workSheet = XLSX.utils.aoa_to_sheet(this.sheetData)
+			const workSheet = xlsxUtils.aoa_to_sheet(this.sheetData)
 			this.workBook.Sheets[this.poll.title] = workSheet
 		},
 
