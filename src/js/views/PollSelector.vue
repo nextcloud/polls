@@ -53,7 +53,7 @@
 						class="primary"
 						:disabled="!selectedPollId"
 						@click="select">
-						{{ t('poll', 'Select poll') }}
+						{{ t('polls', 'Select poll') }}
 					</button>
 				</div>
 			</div>
