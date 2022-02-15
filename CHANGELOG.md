@@ -1,6 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.5.3] - 2022-02-15
+## Changed
+- #2264 - add email address if valid search parameter (#2268)
+
+## Fixed
+- #2263 - Fixed user search (#2267)
+
+## Misc
+- late translations delivery
+
 ## [3.5.2] - 2022-02-11
 ## Fixed
 - #2248 - Adding options in text poll is not possible
