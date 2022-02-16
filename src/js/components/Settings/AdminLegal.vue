@@ -159,6 +159,7 @@ export default {
 			width: 100%;
 		}
 	}
+
 	.markup-disclaimer {
 		p {
 			white-space: pre-wrap;
