@@ -55,7 +55,9 @@
 							no-submit
 							@submit="submitRegistration" />
 					</div>
-
+					<div v-if="imprintUrl" class="section__optin">
+						<span> {{ t('polls', 'By clicking on "OK" you accept our privacy policy (link below).') }} </span>
+					</div>
 					<div class="modal__buttons">
 						<div class="modal__buttons__spacer" />
 						<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
@@ -289,6 +291,9 @@ export default {
 </script>
 
 <style lang="scss">
+	.section__optin {
+		font-weight: 400;
+	}
 	.modal__registration {
 		display: flex;
 		flex-wrap: wrap;
