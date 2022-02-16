@@ -67,7 +67,7 @@ const selector = (selector) => new Promise((resolve, reject) => {
 window.addEventListener('DOMContentLoaded', () => {
 	window.OCP.Collaboration.registerType('poll', {
 		action: () => selector(PollSelector),
-		typeString: t('poll', 'Link to a poll'),
+		typeString: t('polls', 'Link to a poll'),
 		typeIconClass: 'icon-polls',
 	})
 })
