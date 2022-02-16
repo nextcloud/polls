@@ -26,6 +26,7 @@ OC.L10N.register(
     "The poll owner has been changed." : "Der Besitzer der Umfrage wurde geändert.",
     "%s created the poll." : "%s hat die Umfrage erstellt.",
     "A voting option has been unconfirmed." : "Die Bestätigung für eine Abstimmungsmöglichkeit wurde zurückgenommen",
+    "%s has left a comment." : "%s hat einen Kommentar hinterlassen",
     "Reminder for poll \"%s\"" : "Erinnerung für die Umfrage \"%s\"",
     "Check your votes" : "Überprüfe Deine Stimmabgabe",
     "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "Die erste Abfrageoption ist weniger als {leftPeriod} Stunden entfernt ({dateTime}, {timezone}).",
