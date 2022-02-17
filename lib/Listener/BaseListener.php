@@ -29,6 +29,7 @@ use OCP\DB\Exception;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
 use OCA\Polls\Exceptions\InvalidClassException;
+use OCA\Polls\Exceptions\OCPEventException;
 use OCA\Polls\Service\ActivityService;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\NotificationService;
@@ -89,6 +90,8 @@ abstract class BaseListener implements IEventListener {
 			}
 		} catch (InvalidClassException $e) {
 			return;
+		} catch (OCPEventException $e) {
+			// Event is no polls internal event, continue with general jobs
 		} catch (UniqueConstraintViolationException $e) {
 			// Avoid spamming
 			// TODO: report some important events anyways
