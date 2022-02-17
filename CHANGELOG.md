@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.5.4] - 2022-02-17
+## Fixed
+- #2276 - Deletion of NC users was broken through polls (#2279)
+- #2270 - Translation error
+
 ## [3.5.3] - 2022-02-15
 ## Changed
 - #2264 - add email address if valid search parameter (#2268)
