@@ -23,6 +23,8 @@
 <template lang="html">
 	<div class="vote-table" :class="[viewMode, { closed: closed }]">
 		<div class="vote-table__users">
+			<VoteMenu />
+
 			<div class="spacer" />
 
 			<div v-for="(participant) in participants"
@@ -54,6 +56,7 @@ import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
 import ActionDelete from '../Actions/ActionDelete'
 import VoteColumn from './VoteColumn'
+import VoteMenu from './VoteMenu'
 import { confirmOption } from '../../mixins/optionMixins'
 
 export default {
@@ -61,6 +64,7 @@ export default {
 	components: {
 		ActionDelete,
 		VoteColumn,
+		VoteMenu,
 	},
 
 	mixins: [confirmOption],
@@ -120,8 +124,9 @@ export default {
 	.vote-table__users {
 		display: flex;
 		flex-direction: column;
-		overflow-x: scroll;
+		// overflow-x: scroll;
 		margin-bottom: 4px;
+		align-items: flex-start;
 	}
 
 	.vote-table__votes {
@@ -267,6 +272,7 @@ export default {
 
 		.vote-table__users {
 			margin: 0;
+			flex-direction: revert;
 
 			.confirm, .owner {
 				display: none;
