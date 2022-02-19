@@ -22,42 +22,55 @@
 
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
-		<PollHeaderButtons />
-		<PollTitle show-sub-text />
-		<div v-if="poll.description" class="area__header">
-			<MarkUpDescription />
-		</div>
+		<HeaderBar>
+			<template #left>
+				<div id="header_poll_title">
+					{{ poll.title }}
+				</div>
+			</template>
+			<template #right>
+				<PollHeaderButtons />
+			</template>
+			<template #bottom>
+				<PollTitle hide-title show-sub-text />
+			</template>
+		</HeaderBar>
+		<div class="vote_main">
+			<div v-if="poll.description" class="area__header">
+				<MarkUpDescription />
+			</div>
 
-		<div v-if="acl.allowAddOptions && proposalsOpen && !closed" class="area__proposal">
-			<OptionProposals />
-		</div>
+			<div v-if="acl.allowAddOptions && proposalsOpen && !closed" class="area__proposal">
+				<OptionProposals />
+			</div>
 
-		<div class="area__main" :class="viewMode">
-			<VoteTable v-show="options.length" :view-mode="viewMode" />
+			<div class="area__main" :class="viewMode">
+				<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-			<EmptyContent v-if="!options.length" :icon="pollTypeIcon">
-				{{ t('polls', 'No vote options available') }}
-				<template #desc>
-					<button v-if="acl.allowEdit" @click="openOptions">
-						{{ t('polls', 'Add some!') }}
-					</button>
-					<div v-if="!acl.allowEdit">
-						{{ t('polls', 'Maybe the owner did not provide some until now.') }}
-					</div>
-				</template>
-			</EmptyContent>
-		</div>
+				<EmptyContent v-if="!options.length" :icon="pollTypeIcon">
+					{{ t('polls', 'No vote options available') }}
+					<template #desc>
+						<button v-if="acl.allowEdit" @click="openOptions">
+							{{ t('polls', 'Add some!') }}
+						</button>
+						<div v-if="!acl.allowEdit">
+							{{ t('polls', 'Maybe the owner did not provide some until now.') }}
+						</div>
+					</template>
+				</EmptyContent>
+			</div>
 
-		<div v-if="countHiddenParticipants" class="area__footer">
-			<h2>
-				{{ t('polls', 'Due to performance concerns {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
-			</h2>
-		</div>
+			<div v-if="countHiddenParticipants" class="area__footer">
+				<h2>
+					{{ t('polls', 'Due to performance concerns {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
+				</h2>
+			</div>
 
-		<div v-if="poll.anonymous" class="area__footer">
-			<div>
-				{{ t('polls', 'Although participant\'s names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
-				{{ t('polls', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
+			<div v-if="poll.anonymous" class="area__footer">
+				<div>
+					{{ t('polls', 'Although participant\'s names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
+					{{ t('polls', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
+				</div>
 			</div>
 		</div>
 
@@ -73,19 +86,21 @@ import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription'
 import PollTitle from '../components/Poll/PollTitle'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons'
+import HeaderBar from '../components/Base/HeaderBar'
 
 export default {
 	name: 'Vote',
 	components: {
 		AppContent,
-		MarkUpDescription,
 		EmptyContent,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
+		HeaderBar,
+		MarkUpDescription,
 		PollHeaderButtons,
 		PollTitle,
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
+		OptionProposals: () => import('../components/Options/OptionProposals'),
 		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal'),
 		VoteTable: () => import('../components/VoteTable/VoteTable'),
-		OptionProposals: () => import('../components/Options/OptionProposals'),
 	},
 
 	data() {
@@ -157,14 +172,24 @@ export default {
 </script>
 
 <style lang="scss">
-.poll-title {
-	margin-bottom: 16px;
+
+.vote_head {
+	display: flex;
+	flex-wrap: wrap-reverse;
+	// margin-bottom: 16px;
+	justify-content: flex-end;
+	.poll-title {
+		flex: 1 270px;
+	}
+}
+
+.area__main {
+	display: flex;
+	flex-direction: column;
 }
 
 .area__proposal .mx-input-wrapper > button {
 	width: initial;
-}
-
 }
 
 .icon.icon-settings.active {

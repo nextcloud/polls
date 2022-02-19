@@ -22,19 +22,17 @@
 
 <template lang="html">
 	<div class="poll-title">
-		<div class="poll-title__title">
+		<div v-if="!hideTitle" class="poll-title__title">
 			{{ title }}
 		</div>
 		<div v-if="showSubText" class="poll-title__sub">
 			<span>{{ subTextLeft }}</span>
-			<span v-for="(subText) in subTexts"
-				:key="subText.text">
-				<span> | </span>
+			<span v-for="(subText) in subTexts" :key="subText.text">
 				<span :class="[subText.class, subText.icon]">{{ subText.text }}</span>
+				<button v-if="isNoAccessSet" @click="openSharing">
+					{{ t('polls', 'Grant access') }}
+				</button>
 			</span>
-			<button v-if="isNoAccessSet" @click="openSharing">
-				{{ t('polls', 'Grant access') }}
-			</button>
 		</div>
 	</div>
 </template>
@@ -49,6 +47,10 @@ export default {
 
 	props: {
 		showSubText: {
+			type: Boolean,
+			default: false,
+		},
+		hideTitle: {
 			type: Boolean,
 			default: false,
 		},
@@ -74,7 +76,10 @@ export default {
 		}),
 
 		subTextLeft() {
-			return t('polls', 'A poll from {name}', { name: this.ownerDisplayName })
+			if (this.access === 'hidden') {
+				return t('polls', 'A hidden poll from {name}', { name: this.ownerDisplayName })
+			}
+			return t('polls', 'A public poll from {name}', { name: this.ownerDisplayName })
 		},
 
 		isNoAccessSet() {
@@ -173,8 +178,14 @@ export default {
 			opacity: 0.7;
 			line-height: 1.2em;
 			font-size: 1em;
+
 			button {
 				margin-left: 8px;
+			}
+
+			& > span:not(:last-child)::after {
+				content: "|";
+				padding: 0 4px;
 			}
 
 			[class^='icon-'], [class*=' icon-'] {
