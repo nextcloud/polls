@@ -124,8 +124,7 @@ export default {
 	.vote-table__users {
 		display: flex;
 		flex-direction: column;
-		// overflow-x: scroll;
-		margin-bottom: 4px;
+		padding-bottom: 4px;
 		align-items: flex-start;
 	}
 
@@ -209,6 +208,9 @@ export default {
 			content: '';
 			height: 8px;
 			order: 99;
+		}
+		.vote-table__users {
+			overflow-x: scroll;
 		}
 
 		.participant {
