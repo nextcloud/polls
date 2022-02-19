@@ -41,6 +41,9 @@ export default {
 		}),
 
 		markedDescription() {
+			marked.setOptions({
+				headerPrefix: 'desc-',
+			})
 			return DOMPurify.sanitize(marked.parse(this.description))
 		},
 	},
@@ -49,31 +52,22 @@ export default {
 </script>
 
 <style lang="scss">
+
+.markup-description * {
+	margin: revert;
+	padding: revert;
+	font-size: revert;
+	text-decoration: revert;
+	list-style: revert;
+	opacity: revert;
+	min-height: revert;
+}
+
 .markup-description {
-	p {
-		white-space: pre-wrap;
-		margin: 16px 0;
-	}
-	a {
-		font-weight: bold;
-		text-decoration: underline;
-	}
-	h1 {
-		font-size: revert;
-	}
-	ul, ol {
-		list-style: revert;
-		margin-left: 16px;
-	}
-	input[type='checkbox'] {
-		min-height: revert;
-		&:disabled {
-			opacity: 1;
-		}
-	}
 	table {
 		border-spacing: 2px;
 	}
+
 	thead {
 		background-color: var(--color-background-darker);
 		color: var(--color-text-light);

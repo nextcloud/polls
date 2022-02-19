@@ -165,8 +165,6 @@ export default {
 	width: initial;
 }
 
-.markup-description {
-	font-size: 1.1em;
 }
 
 .icon.icon-settings.active {
