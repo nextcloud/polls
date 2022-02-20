@@ -58,8 +58,8 @@
 
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import InputDiv from '../Base/InputDiv'
-import RadioGroupDiv from '../Base/RadioGroupDiv'
+import InputDiv from '../../Base/InputDiv'
+import RadioGroupDiv from '../../Base/RadioGroupDiv'
 
 export default {
 	name: 'AdminMisc',
