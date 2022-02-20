@@ -28,6 +28,8 @@
 		<InputDiv v-if="optionLimit"
 			v-model="optionLimit"
 			class="selectUnit indented"
+			type="number"
+			inputmode="numeric"
 			use-num-modifiers
 			@add="optionLimit += 1"
 			@subtract="optionLimit -= 1" />

@@ -50,6 +50,8 @@
 						</h3>
 						<InputDiv v-model="emailAddress"
 							v-tooltip="emailCheck.result"
+							type="email"
+							inputmode="email"
 							:signaling-class="emailCheck.status"
 							:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
 							no-submit
