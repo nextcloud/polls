@@ -42,14 +42,14 @@ import { AppSettingsDialog, AppSettingsSection } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
-	name: 'SettingsDlg',
+	name: 'UserSettingsDlg',
 
 	components: {
 		AppSettingsDialog,
 		AppSettingsSection,
-		FeatureSettings: () => import('./FeatureSettings'),
-		StyleSettings: () => import('./StyleSettings'),
-		PerformanceSettings: () => import('./PerformanceSettings'),
+		FeatureSettings: () => import('./UserSettings/FeatureSettings'),
+		StyleSettings: () => import('./UserSettings/StyleSettings'),
+		PerformanceSettings: () => import('./UserSettings/PerformanceSettings'),
 	},
 
 	data() {

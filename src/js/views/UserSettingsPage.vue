@@ -47,9 +47,9 @@ export default {
 	name: 'UserSettingsPage',
 
 	components: {
-		FeatureSettings: () => import('../components/Settings/FeatureSettings'),
-		StyleSettings: () => import('../components/Settings/StyleSettings'),
-		PerformanceSettings: () => import('../components/Settings/PerformanceSettings'),
+		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings'),
+		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings'),
+		PerformanceSettings: () => import('../components/Settings/UserSettings/PerformanceSettings'),
 	},
 
 	created() {

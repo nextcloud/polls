@@ -42,11 +42,11 @@
 </template>
 
 <script>
-import AdminMisc from '../components/Settings/AdminMisc'
-import AdminPollCreation from '../components/Settings/AdminPollCreation'
-import AdminPollDownload from '../components/Settings/AdminPollDownload'
-import AdminShareSettings from '../components/Settings/AdminShareSettings'
-import AdminCombo from '../components/Settings/AdminCombo'
+import AdminMisc from '../components/Settings/AdminSettings/AdminMisc'
+import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation'
+import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload'
+import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings'
+import AdminCombo from '../components/Settings/AdminSettings/AdminCombo'
 
 export default {
 	name: 'AdminSettingsPage',

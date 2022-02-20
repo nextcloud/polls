@@ -28,12 +28,12 @@
 		<router-view />
 		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
 		<LoadingOverlay v-if="loading" />
-		<SettingsDlg />
+		<UserSettingsDlg />
 	</Content>
 </template>
 
 <script>
-import SettingsDlg from './components/Settings/SettingsDlg'
+import UserSettingsDlg from './components/Settings/UserSettingsDlg'
 import { getCurrentUser } from '@nextcloud/auth'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -52,7 +52,7 @@ export default {
 	components: {
 		Content,
 		LoadingOverlay: () => import('./components/Base/LoadingOverlay'),
-		SettingsDlg,
+		UserSettingsDlg,
 	},
 
 	mixins: [watchPolls],
