@@ -22,14 +22,16 @@
 
 <template lang="html">
 	<div :class="['input-div', { numeric: useNumModifiers }]">
-		<div v-if="useNumModifiers" class="modifier subtract icon-polls-minus" @click="$emit('subtract')" />
+		<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="$emit('subtract')" />
 		<input ref="input"
+			:type="type"
 			:value="value"
+			:inputmode="inputmode"
 			:placeholder="placeholder"
-			:class="['input', signalingClass]"
+			:class="[{ 'has-modifier': useNumModifiers }, 'input', signalingClass]"
 			@input="$emit('input', $event.target.value)"
 			@keyup.enter="$emit('submit', $event.target.value)">
-		<div v-if="useNumModifiers" class="modifier add icon-add" @click="$emit('add')" />
+		<PlusIcon v-if="useNumModifiers" class="modifier add" @click="$emit('add')" />
 		<ButtonDiv v-if="!useNumModifiers && !noSubmit" submit @click="$emit('submit', $refs.input.value)" />
 	</div>
 </template>
@@ -37,12 +39,15 @@
 <script>
 
 import ButtonDiv from '../Base/ButtonDiv'
-
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import MinusIcon from 'vue-material-design-icons/Minus.vue'
 export default {
 	name: 'InputDiv',
 
 	components: {
 		ButtonDiv,
+		PlusIcon,
+		MinusIcon,
 	},
 
 	props: {
@@ -57,6 +62,20 @@ export default {
 		placeholder: {
 			type: String,
 			default: '',
+		},
+		type: {
+			type: String,
+			default: 'text',
+			validator(value) {
+				return ['text', 'email', 'number'].includes(value)
+			},
+		},
+		inputmode: {
+			type: String,
+			default: 'text',
+			validator(value) {
+				return ['text', 'none', 'numeric', 'email'].includes(value)
+			},
 		},
 		useNumModifiers: {
 			type: Boolean,
@@ -104,6 +123,10 @@ export default {
 				color: grey;
 			}
 
+			&.has-modifier {
+				padding: 0 40px;
+			}
+
 			&.error {
 				border-color: var(--color-error);
 				background-color: var(--color-background-error);
@@ -140,7 +163,7 @@ export default {
 			top: 0;
 			height: 32px;
 			margin: 4px 1px;
-			padding: 0 14px;
+			padding: 0 4px;
 			border-color: var(--color-border-dark);
 			cursor: pointer;
 

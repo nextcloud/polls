@@ -36,6 +36,8 @@
 				<span>{{ t('polls', 'After how many days are the closed polls to be archived:') }}</span>
 				<InputDiv v-model="autoArchiveOffset"
 					class="selectUnit"
+					type="number"
+					inputmode="numeric"
 					use-num-modifiers
 					@add="autoArchiveOffset += 1"
 					@subtract="autoArchiveOffset -= 1" />
