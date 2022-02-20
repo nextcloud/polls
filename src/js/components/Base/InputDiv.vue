@@ -124,7 +124,7 @@ export default {
 			}
 
 			&.has-modifier {
-				padding: 0 40px;
+				padding: 0 34px;
 			}
 
 			&.error {
