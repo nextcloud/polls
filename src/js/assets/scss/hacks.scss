@@ -31,3 +31,7 @@
 .modal-wrapper .modal-container {
 	overflow: scroll !important;
 }
+
+#body-public .modal-wrapper--large .modal-container {
+	height: unset;
+}

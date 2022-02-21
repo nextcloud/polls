@@ -43,6 +43,7 @@
 			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
 			<AdminPerformance />
 		</SettingsSection>
+
 		<SettingsSection :title="t('polls', 'Legal terms for public poll registation')"
 			:description="t('polls', 'Override the default links of your site to your leagal terms here. Leave empty to use the links, which are cofigured in the theming app.')">
 			<AdminLegal />
@@ -51,13 +52,13 @@
 </template>
 
 <script>
-import AdminCombo from '../components/Settings/AdminCombo'
-import AdminLegal from '../components/Settings/AdminLegal'
-import AdminMisc from '../components/Settings/AdminMisc'
-import AdminPerformance from '../components/Settings/AdminPerformance'
-import AdminPollCreation from '../components/Settings/AdminPollCreation'
-import AdminPollDownload from '../components/Settings/AdminPollDownload'
-import AdminShareSettings from '../components/Settings/AdminShareSettings'
+import AdminCombo from '../components/Settings/AdminSettings/AdminCombo'
+import AdminLegal from '../components/Settings/AdminSettings/AdminLegal'
+import AdminMisc from '../components/Settings/AdminSettings/AdminMisc'
+import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance'
+import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation'
+import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload'
+import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings'
 import { SettingsSection } from '@nextcloud/vue'
 
 export default {
@@ -85,9 +86,11 @@ export default {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: stretch;
+
 		.section-wrapper {
 			flex: 1 640px;
 		}
+
 		.sub-section {
 			margin-bottom: 48px;
 			flex: 1 640px;
