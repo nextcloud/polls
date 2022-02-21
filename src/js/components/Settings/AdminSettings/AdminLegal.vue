@@ -54,7 +54,7 @@
 
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import InputDiv from '../Base/InputDiv'
+import InputDiv from '../../Base/InputDiv'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 

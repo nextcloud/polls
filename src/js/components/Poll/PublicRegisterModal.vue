@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<Modal v-show="modal" :can-close="false">
+	<Modal v-show="modal" :size="modalSize" :can-close="false">
 		<div class="modal__content">
 			<div class="modal__registration">
 				<div class="registration__registration">
@@ -118,6 +118,7 @@ export default {
 			isValidName: false,
 			isValidEmailAddress: false,
 			modal: true,
+			modalSize: 'large',
 		}
 	},
 
@@ -296,6 +297,7 @@ export default {
 	.section__optin {
 		font-weight: 400;
 	}
+
 	.modal__registration {
 		display: flex;
 		flex-wrap: wrap;
@@ -316,10 +318,13 @@ export default {
 		}
 
 		.registration__login {
-			width: 180px;
+			flex: 1 180px;
+			// width: 180px;
 		}
 		.registration__registration {
-			width: 400px;
+			// width: 400px;
+			flex: 1 480px;
+
 		}
 	}
 

@@ -29,7 +29,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import RadioGroupDiv from '../Base/RadioGroupDiv'
+import RadioGroupDiv from '../../Base/RadioGroupDiv'
 
 export default {
 	name: 'AdminPerformance',
