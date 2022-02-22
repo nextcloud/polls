@@ -67,14 +67,14 @@ export default {
 			type: String,
 			default: 'text',
 			validator(value) {
-				return ['text', 'email', 'number'].includes(value)
+				return ['text', 'email', 'number', 'url'].includes(value)
 			},
 		},
 		inputmode: {
 			type: String,
 			default: 'text',
 			validator(value) {
-				return ['text', 'none', 'numeric', 'email'].includes(value)
+				return ['text', 'none', 'numeric', 'email', 'url'].includes(value)
 			},
 		},
 		useNumModifiers: {

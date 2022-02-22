@@ -22,29 +22,39 @@
 
 <template>
 	<div class="user_settings">
-		<CheckboxRadioSwitch :checked.sync="legalTermsInEmail" type="switch">
-			{{ t('polls', 'Add links to legal terms to email footer') }}
-		</CheckboxRadioSwitch>
+		<p class="settings-description">
+			{{ t('polls', 'The privacy link and the leagal notice link are automatically added to the registration dialog of public polls.')}}
+			{{ t('polls', 'As a default the links configured in the theaming app are used. For public polls these can be overriden by individual terms.')}}
+		</p>
 		<span>{{ t('polls', 'Privacy policy link:') }}</span>
 		<InputDiv v-model="privacyUrl"
-			no-submit
+			type="url"
+			inputmode="url"
 			:placeholder="appSettings.defaultPrivacyUrl"
+			no-submit
 			@change="saveSettings()" />
+
 		<span>{{ t('polls', 'Legal notice link:') }}</span>
 		<InputDiv v-model="imprintUrl"
+			type="url"
+			inputmode="url"
 			no-submit
 			:placeholder="appSettings.defaultImprintUrl"
 			@change="saveSettings()" />
 
+		<CheckboxRadioSwitch :checked.sync="legalTermsInEmail" type="switch">
+			{{ t('polls', 'Add terms links also to the email footer') }}
+		</CheckboxRadioSwitch>
+
 		<div class="disclaimer_group">
-			<span class="grow_title">{{ t('polls', 'Email disclaimer') }}</span>
+			<span class="grow_title">{{ t('polls', 'Additional email disclaimer') }}</span>
 			<CheckboxRadioSwitch :checked.sync="preview" type="switch">
 				{{ t('polls', 'Preview') }}
 			</CheckboxRadioSwitch>
 		</div>
 		<textarea v-show="!preview" v-model="disclaimer" @change="saveSettings()" />
 		<!-- eslint-disable-next-line vue/no-v-html -->
-		<div v-show="preview" class="markup-disclaimer" v-html="markedDisclaimer">
+		<div v-show="preview" class="polls-markdown" v-html="markedDisclaimer">
 			{{ markedDisclaimer }}
 		</div>
 	</div>
@@ -78,6 +88,9 @@ export default {
 		}),
 
 		markedDisclaimer() {
+			marked.setOptions({
+				headerPrefix: 'disclaimer-',
+			})
 			return DOMPurify.sanitize(marked.parse(this.appSettings.disclaimer))
 		},
 
@@ -157,41 +170,6 @@ export default {
 		margin-left: 36px;
 		input, .stretch {
 			width: 100%;
-		}
-	}
-
-	.markup-disclaimer {
-		p {
-			white-space: pre-wrap;
-			margin: 16px 0;
-		}
-		a {
-			font-weight: bold;
-			text-decoration: underline;
-		}
-		h1 {
-			font-size: revert;
-		}
-		ul, ol {
-			list-style: revert;
-			margin-left: 16px;
-		}
-		input[type='checkbox'] {
-			min-height: revert;
-			&:disabled {
-				opacity: 1;
-			}
-		}
-		table {
-			border-spacing: 2px;
-		}
-		thead {
-			background-color: var(--color-background-darker);
-			color: var(--color-text-light);
-		}
-
-		td, th {
-			padding: 1px 4px;
 		}
 	}
 </style>

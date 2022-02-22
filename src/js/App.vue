@@ -45,6 +45,7 @@ import './assets/scss/icons.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/dashboard.scss'
+import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls'
 
 export default {

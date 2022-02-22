@@ -32,6 +32,16 @@
 			<AdminPollCreation />
 		</SettingsSection>
 
+		<SettingsSection :title="t('polls', 'Performance settings')"
+			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
+			<AdminPerformance />
+		</SettingsSection>
+
+		<SettingsSection :title="t('polls', 'Legal terms for public poll registation')"
+			:description="t('polls', 'Override the default links of your site to your leagal terms. Leave empty to use the links, which are configured in the theming app.')">
+			<AdminLegal />
+		</SettingsSection>
+
 		<SettingsSection :title="t('polls', 'Other settings')"
 			:description="t('polls', 'Activate or disable individual features.')">
 			<AdminMisc />
@@ -39,15 +49,6 @@
 			<AdminPollDownload />
 		</SettingsSection>
 
-		<SettingsSection :title="t('polls', 'Performance settings')"
-			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
-			<AdminPerformance />
-		</SettingsSection>
-
-		<SettingsSection :title="t('polls', 'Legal terms for public poll registation')"
-			:description="t('polls', 'Override the default links of your site to your leagal terms here. Leave empty to use the links, which are cofigured in the theming app.')">
-			<AdminLegal />
-		</SettingsSection>
 	</div>
 </template>
 
@@ -60,6 +61,7 @@ import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCre
 import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload'
 import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings'
 import { SettingsSection } from '@nextcloud/vue'
+import '../assets/scss/markdown.scss'
 
 export default {
 	name: 'AdminSettingsPage',
@@ -82,28 +84,21 @@ export default {
 </script>
 
 <style lang="scss">
-	.polls_admin_settings {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: stretch;
+.polls_admin_settings {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
 
-		.section-wrapper {
-			flex: 1 640px;
-		}
-
-		.sub-section {
-			margin-bottom: 48px;
-			flex: 1 640px;
-		}
-
-		h2 {
-			margin-bottom: 0;
-		}
-
-		.settings-section {
-			flex: 1 0 480px;
-			margin-bottom: 0;
-			border-bottom: 1px solid var(--color-border);
-		}
+	.settings-section {
+		flex: 1 0 480px;
+		margin-bottom: 0;
+		border-bottom: 1px solid var(--color-border);
 	}
+}
+
+.settings-description {
+	margin-top: -.2em;
+	margin-bottom: 1em;
+	opacity: .7;
+}
 </style>

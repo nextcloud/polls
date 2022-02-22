@@ -21,22 +21,35 @@
   -->
 
 <template>
-	<div>
-		<div class="user_settings">
-			{{ t('polls', 'Limit the amount of vote cells. If the threshold is reached, all other participants get hidden to avoid performance break downs. The default value is 1000.') }}
-			<input v-model="threshold"
-				type="text"
-				:placeholder="t('polls', 'Enter amount of maximum allowed vote boxes.')">
-		</div>
+	<div class="user_settings">
+		<span>
+			{{ t('polls', 'A poll with many options and voters can have a heavy inpact on client performance.') }}
+			{{ t('polls', 'Set the amount of vote cells (options x participants) up to which all vote cells should be displayed.') }}
+			{{ t('polls', 'If this threshold gets tresspasses only the current user will be displayed, to avoid a performance breakdown.') }}
+			{{ t('polls', 'The default threshold of 1.000 should be a good and safe value.') }}
+		</span>
+		<InputDiv v-model="threshold"
+			type="number"
+			inputmode="numeric"
+			use-num-modifiers
+			@add="threshold += 100"
+			@subtract="threshold -= 100"
+			no-submit
+			:placeholder="'1000'" />
 	</div>
 </template>
 
 <script>
 
 import { mapState } from 'vuex'
+import InputDiv from '../../Base/InputDiv'
 
 export default {
 	name: 'PerformanceSettings',
+
+	components: {
+		InputDiv,
+	},
 
 	computed: {
 		...mapState({
@@ -48,6 +61,9 @@ export default {
 				return this.settings.performanceThreshold
 			},
 			set(value) {
+				if (value < 1) {
+					value = 1000
+				}
 				this.writeValue({ performanceThreshold: +value })
 			},
 		},
