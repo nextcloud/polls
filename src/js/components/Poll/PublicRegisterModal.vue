@@ -112,9 +112,13 @@ const ExternalLink = {
 			type: String,
 			default: '',
 		},
+		target: {
+			type: String,
+			default: null,
+		},
 	},
 	render(createElement, context) {
-		return createElement('a', { attrs: { href: context.props.href }, style: { 'font-weight': 600 } }, context.props.name)
+		return createElement('a', { attrs: { href: context.props.href, target: context.props.target }, style: { 'font-weight': 600 } }, context.props.name)
 	},
 }
 
@@ -166,6 +170,7 @@ export default {
 					props: {
 						href: this.privacyUrl,
 						name: t('polls', 'privacy policy'),
+						target: '_blank'
 					}
 				},
 			}
