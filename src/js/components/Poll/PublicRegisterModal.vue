@@ -57,8 +57,8 @@
 							no-submit
 							@submit="submitRegistration" />
 					</div>
-					<div v-if="imprintUrl" class="section__optin">
-						<span> {{ t('polls', 'By clicking on "OK" you accept our privacy policy (link below).') }} </span>
+					<div v-if="privacyUrl" class="section__optin">
+						<RichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 					</div>
 					<div class="modal__buttons">
 						<div class="modal__buttons__spacer" />
@@ -98,14 +98,34 @@ import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
 import { mapState } from 'vuex'
+import RichText from '@juliushaertl/vue-richtext'
+
+const ExternalLink = {
+	name: 'ExternalLink',
+	functional: true,
+	props: {
+		href: {
+			type: String,
+			default: '',
+		},
+		name: {
+			type: String,
+			default: '',
+		},
+	},
+	render(createElement, context) {
+		return createElement('a', { attrs: { href: context.props.href }, style: { 'font-weight': 600 } }, context.props.name)
+	},
+}
 
 export default {
 	name: 'PublicRegisterModal',
 
 	components: {
-		Modal,
 		ButtonDiv,
 		InputDiv,
+		Modal,
+		RichText,
 	},
 
 	data() {
@@ -136,6 +156,20 @@ export default {
 
 		disableSubmit() {
 			return !this.registrationIsValid || this.checkingUserName
+		},
+
+		privacyRich() {
+			const subject = t('polls', 'By clicking the "OK"-Button you accept our {privacyPolicy}.')
+			const parameters = {
+				privacyPolicy: {
+					component: ExternalLink,
+					props: {
+						href: this.privacyUrl,
+						name: t('polls', 'privacy policy'),
+					}
+				},
+			}
+			return { subject, parameters }
 		},
 
 		loginLink() {
@@ -295,7 +329,9 @@ export default {
 
 <style lang="scss">
 	.section__optin {
-		font-weight: 400;
+		a {
+			text-decoration: underline;
+		}
 	}
 
 	.modal__registration {
