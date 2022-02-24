@@ -32,14 +32,14 @@
 			<AdminPollCreation />
 		</SettingsSection>
 
-		<SettingsSection :title="t('polls', 'Performance settings')"
-			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
-			<AdminPerformance />
-		</SettingsSection>
-
 		<SettingsSection :title="t('polls', 'Legal terms for public poll registation')"
 			:description="t('polls', 'Override the default links of your site to your leagal terms. Leave empty to use the links, which are configured in the theming app.')">
 			<AdminLegal />
+		</SettingsSection>
+
+		<SettingsSection :title="t('polls', 'Email options')"
+			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to mails.')">
+			<AdminEmail />
 		</SettingsSection>
 
 		<SettingsSection :title="t('polls', 'Other settings')"
@@ -49,11 +49,16 @@
 			<AdminPollDownload />
 		</SettingsSection>
 
+		<SettingsSection :title="t('polls', 'Performance settings')"
+			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
+			<AdminPerformance />
+		</SettingsSection>
 	</div>
 </template>
 
 <script>
 import AdminCombo from '../components/Settings/AdminSettings/AdminCombo'
+import AdminEmail from '../components/Settings/AdminSettings/AdminEmail'
 import AdminLegal from '../components/Settings/AdminSettings/AdminLegal'
 import AdminMisc from '../components/Settings/AdminSettings/AdminMisc'
 import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance'
@@ -68,6 +73,7 @@ export default {
 
 	components: {
 		AdminCombo,
+		AdminEmail,
 		AdminLegal,
 		AdminMisc,
 		AdminPerformance,

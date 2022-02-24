@@ -33,24 +33,7 @@
 import moment from '@nextcloud/moment'
 import RichText from '@juliushaertl/vue-richtext'
 import { UserBubble } from '@nextcloud/vue'
-
-const InternalLink = {
-	name: 'InternalLink',
-	functional: true,
-	props: {
-		href: {
-			type: String,
-			default: '',
-		},
-		name: {
-			type: String,
-			default: '',
-		},
-	},
-	render(createElement, context) {
-		return createElement('a', { attrs: { href: context.props.href }, style: { 'font-weight': 600 } }, context.props.name)
-	},
-}
+import SimpleLink from '../../helpers/SimpleLink'
 
 export default {
 	name: 'ActivityItem',
@@ -84,7 +67,7 @@ export default {
 				switch (type) {
 				case 'highlight':
 					parameters[key] = {
-						component: InternalLink,
+						component: SimpleLink,
 						props: {
 							href: parameters[key].link,
 							name: parameters[key].name,

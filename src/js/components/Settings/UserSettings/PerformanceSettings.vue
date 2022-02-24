@@ -32,10 +32,10 @@
 			type="number"
 			inputmode="numeric"
 			use-num-modifiers
-			@add="threshold += 100"
-			@subtract="threshold -= 100"
 			no-submit
-			:placeholder="'1000'" />
+			:placeholder="'1000'"
+			@add="threshold += 100"
+			@subtract="threshold -= 100" />
 	</div>
 </template>
 

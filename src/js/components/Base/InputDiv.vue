@@ -30,6 +30,7 @@
 			:placeholder="placeholder"
 			:class="[{ 'has-modifier': useNumModifiers }, 'input', signalingClass]"
 			@input="$emit('input', $event.target.value)"
+			@change="$emit('change', $event.target.value)"
 			@keyup.enter="$emit('submit', $event.target.value)">
 		<PlusIcon v-if="useNumModifiers" class="modifier add" @click="$emit('add')" />
 		<ButtonDiv v-if="!useNumModifiers && !noSubmit" submit @click="$emit('submit', $refs.input.value)" />
@@ -72,7 +73,7 @@ export default {
 		},
 		inputmode: {
 			type: String,
-			default: 'text',
+			default: null,
 			validator(value) {
 				return ['text', 'none', 'numeric', 'email', 'url'].includes(value)
 			},

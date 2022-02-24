@@ -82,8 +82,10 @@
 				</div>
 			</div>
 			<div class="legal_links">
-				<a :href="imprintUrl" target="_blank">{{ t('polls', 'Legal Notice') }}</a>
-				<a :href="privacyUrl" target="_blank">{{ t('polls', 'Privacy policy') }}</a>
+				<SimpleLink v-if="imprintUrl"
+					:href="imprintUrl"
+					target="_blank"
+					:name="t('polls', 'Legal Notice')" />
 			</div>
 		</div>
 	</Modal>
@@ -99,34 +101,14 @@ import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import RichText from '@juliushaertl/vue-richtext'
-
-const ExternalLink = {
-	name: 'ExternalLink',
-	functional: true,
-	props: {
-		href: {
-			type: String,
-			default: '',
-		},
-		name: {
-			type: String,
-			default: '',
-		},
-		target: {
-			type: String,
-			default: null,
-		},
-	},
-	render(createElement, context) {
-		return createElement('a', { attrs: { href: context.props.href, target: context.props.target }, style: { 'font-weight': 600 } }, context.props.name)
-	},
-}
+import SimpleLink from '../../helpers/SimpleLink'
 
 export default {
 	name: 'PublicRegisterModal',
 
 	components: {
 		ButtonDiv,
+		SimpleLink,
 		InputDiv,
 		Modal,
 		RichText,
@@ -166,12 +148,12 @@ export default {
 			const subject = t('polls', 'By clicking the "OK"-Button you accept our {privacyPolicy}.')
 			const parameters = {
 				privacyPolicy: {
-					component: ExternalLink,
+					component: SimpleLink,
 					props: {
 						href: this.privacyUrl,
 						name: t('polls', 'privacy policy'),
-						target: '_blank'
-					}
+						target: '_blank',
+					},
 				},
 			}
 			return { subject, parameters }

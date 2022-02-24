@@ -22,37 +22,42 @@
 
 <template>
 	<div class="user_settings">
-		<p class="settings-description">
-			{{ t('polls', 'The privacy link and the leagal notice link are automatically added to the registration dialog of public polls.') }}
-			{{ t('polls', 'As a default the links configured in the theaming app are used. For public polls these can be overriden by individual terms.') }}
-		</p>
-		<span>{{ t('polls', 'Privacy policy link:') }}</span>
-		<InputDiv v-model="privacyUrl"
-			type="url"
-			:placeholder="placeholder.privacy"
-			no-submit
-			@change="saveSettings()" />
+		<CheckboxRadioSwitch :checked.sync="legalTermsInEmail" type="switch">
+			{{ t('polls', 'Add terms links also to the email footer') }}
+		</CheckboxRadioSwitch>
 
-		<span>{{ t('polls', 'Legal notice link:') }}</span>
-		<InputDiv v-model="imprintUrl"
-			type="url"
-			inputmode="url"
-			no-submit
-			:placeholder="placeholder.imprint"
-			@change="saveSettings()" />
+		<div class="disclaimer_group">
+			<span class="grow_title">{{ t('polls', 'Additional email disclaimer') }}</span>
+			<CheckboxRadioSwitch :checked.sync="preview" type="switch">
+				{{ t('polls', 'Preview') }}
+			</CheckboxRadioSwitch>
+		</div>
+		<textarea v-show="!preview" v-model="disclaimer" @change="saveSettings()" />
+		<!-- eslint-disable-next-line vue/no-v-html -->
+		<div v-show="preview" class="polls-markdown" v-html="markedDisclaimer">
+			{{ markedDisclaimer }}
+		</div>
 	</div>
 </template>
 
 <script>
 
 import { mapState } from 'vuex'
-import InputDiv from '../../Base/InputDiv'
+import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 
 export default {
-	name: 'AdminLegal',
+	name: 'AdminEmail',
 
 	components: {
-		InputDiv,
+		CheckboxRadioSwitch,
+	},
+
+	data() {
+		return {
+			preview: false,
+		}
 	},
 
 	computed: {
@@ -60,34 +65,28 @@ export default {
 			appSettings: (state) => state.appSettings,
 		}),
 
-		placeholder() {
-			let privacy = t('polls', 'Enter the URL of your privacy terms')
-			let imprint = t('polls', 'Enter the URL of your legal notice')
-			if (this.appSettings.defaultPrivacyUrl) {
-				privacy = this.appSettings.defaultPrivacyUrl
-			}
-			if (this.appSettings.defaultImprintUrl) {
-				imprint = this.appSettings.defaultImprintUrl
-			}
-			return { privacy, imprint }
+		markedDisclaimer() {
+			marked.setOptions({
+				headerPrefix: 'disclaimer-',
+			})
+			return DOMPurify.sanitize(marked.parse(this.appSettings.disclaimer))
 		},
 
 		// Add bindings
-		privacyUrl: {
+		legalTermsInEmail: {
 			get() {
-				return this.appSettings.privacyUrl
+				return !!this.appSettings.legalTermsInEmail
 			},
 			set(value) {
-				this.$store.commit('appSettings/set', { privacyUrl: value })
+				this.writeValue({ legalTermsInEmail: !!value })
 			},
 		},
-
-		imprintUrl: {
+		disclaimer: {
 			get() {
-				return this.appSettings.imprintUrl
+				return this.appSettings.disclaimer
 			},
 			set(value) {
-				this.$store.commit('appSettings/set', { imprintUrl: value })
+				this.$store.commit('appSettings/set', { disclaimer: value })
 			},
 		},
 	},
@@ -96,11 +95,29 @@ export default {
 		saveSettings() {
 			this.$store.dispatch('appSettings/write')
 		},
+
+		async writeValue(value) {
+			await this.$store.commit('appSettings/set', value)
+			this.$store.dispatch('appSettings/write')
+		},
 	},
 }
 </script>
 
 <style lang="scss">
+	.disclaimer_group {
+		display: flex;
+		align-items: center;
+
+		span {
+			margin-right: 12px;
+		}
+
+		.grow_title {
+			flex-grow: 1;
+		}
+	}
+
 	.user_settings {
 		padding-top: 16px;
 		textarea {

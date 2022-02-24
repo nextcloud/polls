@@ -1,3 +1,5 @@
+// some hacks, do alter the display of third parity components
+
 // fill full input with background color
 .mx-input {
 	background-clip: initial !important;
@@ -32,6 +34,9 @@
 	overflow: scroll !important;
 }
 
-#body-public .modal-wrapper--large .modal-container {
-	height: unset;
+// fix height of modal wrapper after introduction of @nextcloud/vue 5.0
+@media only screen and (min-width: 513px) {
+	#body-public .modal-wrapper--large .modal-container {
+		height: unset;
+	}
 }

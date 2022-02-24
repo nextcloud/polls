@@ -48,6 +48,7 @@ export default {
 		ActionButton,
 		ButtonDiv,
 	},
+
 	props: {
 		buttonMode: {
 			type: Boolean,
