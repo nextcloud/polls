@@ -148,22 +148,22 @@ export default {
 			if (this.important) {
 				return t('polls', 'Relevant and accessible for all users')
 			}
-			return t('polls', 'Access for all users')
+			return t('polls', 'Open poll')
 		},
 
 		accessClass() {
 			if (this.access === 'hidden') {
-				return 'icon-polls-hidden-poll'
+				return 'icon-polls-private-poll'
 			}
 			if (this.important) {
-				return 'icon-polls-public-poll'
+				return 'icon-polls-open-poll'
 			}
-			return 'icon-polls-public-poll'
+			return 'icon-polls-open-poll'
 		},
 
 		resultsClass() {
 			if (this.showResults === 'never' || (this.showResults === 'closed' && !this.closed)) {
-				return 'icon-polls-hidden'
+				return 'icon-polls-private'
 			}
 			return 'icon-polls-visible'
 

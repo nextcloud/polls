@@ -244,11 +244,11 @@ export default {
 }
 
 .item__access--public {
-	background-image: var(--icon-polls-public-poll);
+	background-image: var(--icon-polls-open-poll);
 }
 
 .item__access--hidden {
-	background-image: var(--icon-polls-hidden-poll);
+	background-image: var(--icon-polls-private-poll);
 }
 
 .poll-item__item {

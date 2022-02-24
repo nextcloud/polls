@@ -145,7 +145,7 @@ export default {
 			}
 
 			if (this.type === 'all') {
-				return t('polls', 'All users')
+				return t('polls', 'Open poll')
 			}
 
 			if (this.displayName) {
