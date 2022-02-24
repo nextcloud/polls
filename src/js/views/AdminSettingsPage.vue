@@ -21,42 +21,66 @@
   -->
 
 <template>
-	<div class="section">
-		<div class="sub-section">
-			<h2>{{ t('polls', 'Share restrictions') }}</h2>
+	<div class="polls_admin_settings">
+		<SettingsSection :title="t('polls', 'Share restrictions')"
+			:description="t('polls', 'Restrict the share actions globally or on a group base')">
 			<AdminShareSettings />
-		</div>
+		</SettingsSection>
 
-		<div class="sub-section">
-			<h2>{{ t('polls', 'Poll creation restrictions') }}</h2>
+		<SettingsSection :title="t('polls', 'Poll creation restrictions')"
+			:description="t('polls', 'Restrict the creation of new polls globally or on a group base')">
 			<AdminPollCreation />
-		</div>
+		</SettingsSection>
 
-		<div class="sub-section">
-			<h2>{{ t('polls', 'Other settings') }}</h2>
+		<SettingsSection :title="t('polls', 'Legal terms for public poll registation')"
+			:description="t('polls', 'Override the default links of your site to your leagal terms. Leave empty to use the links, which are configured in the theming app.')">
+			<AdminLegal />
+		</SettingsSection>
+
+		<SettingsSection :title="t('polls', 'Email options')"
+			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to mails.')">
+			<AdminEmail />
+		</SettingsSection>
+
+		<SettingsSection :title="t('polls', 'Other settings')"
+			:description="t('polls', 'Activate or disable individual features.')">
 			<AdminMisc />
 			<AdminCombo />
 			<AdminPollDownload />
-		</div>
+		</SettingsSection>
+
+		<SettingsSection :title="t('polls', 'Performance settings')"
+			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
+			<AdminPerformance />
+		</SettingsSection>
 	</div>
 </template>
 
 <script>
+import AdminCombo from '../components/Settings/AdminSettings/AdminCombo'
+import AdminEmail from '../components/Settings/AdminSettings/AdminEmail'
+import AdminLegal from '../components/Settings/AdminSettings/AdminLegal'
 import AdminMisc from '../components/Settings/AdminSettings/AdminMisc'
+import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance'
 import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation'
 import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload'
 import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings'
-import AdminCombo from '../components/Settings/AdminSettings/AdminCombo'
+import { SettingsSection } from '@nextcloud/vue'
+import '../assets/scss/markdown.scss'
 
 export default {
 	name: 'AdminSettingsPage',
 
 	components: {
 		AdminCombo,
+		AdminEmail,
+		AdminLegal,
 		AdminMisc,
+		AdminPerformance,
 		AdminPollCreation,
 		AdminPollDownload,
 		AdminShareSettings,
+		SettingsSection,
 	},
 
 	created() {
@@ -66,19 +90,21 @@ export default {
 </script>
 
 <style lang="scss">
-	.section {
-		display: flex;
-		flex-wrap: wrap;
-		.section-wrapper {
-			flex: 1 640px;
-		}
-		.sub-section {
-			margin-bottom: 48px;
-			flex: 1 640px;
-		}
+.polls_admin_settings {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
 
-		h2 {
-			margin-bottom: 0;
-		}
+	.settings-section {
+		flex: 1 0 480px;
+		margin-bottom: 0;
+		border-bottom: 1px solid var(--color-border);
 	}
+}
+
+.settings-description {
+	margin-top: -.2em;
+	margin-bottom: 1em;
+	opacity: .7;
+}
 </style>

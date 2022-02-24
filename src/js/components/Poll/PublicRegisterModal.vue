@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<Modal v-show="modal" :can-close="false">
+	<Modal v-show="modal" :size="modalSize" :can-close="false">
 		<div class="modal__content">
 			<div class="modal__registration">
 				<div class="registration__registration">
@@ -57,7 +57,9 @@
 							no-submit
 							@submit="submitRegistration" />
 					</div>
-
+					<div v-if="privacyUrl" class="section__optin">
+						<RichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
+					</div>
 					<div class="modal__buttons">
 						<div class="modal__buttons__spacer" />
 						<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
@@ -79,6 +81,12 @@
 					</div>
 				</div>
 			</div>
+			<div class="legal_links">
+				<SimpleLink v-if="imprintUrl"
+					:href="imprintUrl"
+					target="_blank"
+					:name="t('polls', 'Legal Notice')" />
+			</div>
 		</div>
 	</Modal>
 </template>
@@ -92,14 +100,18 @@ import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { Modal } from '@nextcloud/vue'
 import { mapState } from 'vuex'
+import RichText from '@juliushaertl/vue-richtext'
+import SimpleLink from '../../helpers/SimpleLink'
 
 export default {
 	name: 'PublicRegisterModal',
 
 	components: {
-		Modal,
 		ButtonDiv,
+		SimpleLink,
 		InputDiv,
+		Modal,
+		RichText,
 	},
 
 	data() {
@@ -112,6 +124,7 @@ export default {
 			isValidName: false,
 			isValidEmailAddress: false,
 			modal: true,
+			modalSize: 'large',
 		}
 	},
 
@@ -119,6 +132,8 @@ export default {
 		...mapState({
 			poll: (state) => state.poll,
 			share: (state) => state.share,
+			privacyUrl: (state) => state.appSettings.usePrivacyUrl,
+			imprintUrl: (state) => state.appSettings.useImprintUrl,
 		}),
 
 		registrationIsValid() {
@@ -127,6 +142,21 @@ export default {
 
 		disableSubmit() {
 			return !this.registrationIsValid || this.checkingUserName
+		},
+
+		privacyRich() {
+			const subject = t('polls', 'By clicking the "OK"-Button you accept our {privacyPolicy}.')
+			const parameters = {
+				privacyPolicy: {
+					component: SimpleLink,
+					props: {
+						href: this.privacyUrl,
+						name: t('polls', 'privacy policy'),
+						target: '_blank',
+					},
+				},
+			}
+			return { subject, parameters }
 		},
 
 		loginLink() {
@@ -285,6 +315,12 @@ export default {
 </script>
 
 <style lang="scss">
+	.section__optin {
+		a {
+			text-decoration: underline;
+		}
+	}
+
 	.modal__registration {
 		display: flex;
 		flex-wrap: wrap;
@@ -305,10 +341,13 @@ export default {
 		}
 
 		.registration__login {
-			width: 180px;
+			flex: 1 180px;
+			// width: 180px;
 		}
 		.registration__registration {
-			width: 400px;
+			// width: 400px;
+			flex: 1 480px;
+
 		}
 	}
 
@@ -325,6 +364,34 @@ export default {
 	.description {
 		hyphens: auto;
 		border-top: 1px solid var(--color-border);
+	}
+
+	.legal_links {
+		padding: 4px 24px;
+
+		a {
+			color: var(--color-text-lighter);
+			font-weight: bold;
+			white-space: nowrap;
+			padding: 10px;
+			margin: -10px;
+
+			&:hover, &:active {
+				color: var(--color-text-light);
+				&::after {
+					color: var(--color-text-lighter);
+				}
+			}
+
+			&:after {
+			    content:"|";
+				padding: 0 4px;
+			}
+
+			&:last-child:after {
+			    content:"";
+			}
+		}
 	}
 
 	.status-message {

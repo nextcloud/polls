@@ -21,27 +21,21 @@
   -->
 
 <template>
-	<div>
-		<div class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="useActivity" type="switch">
-				{{ t('polls', 'Track activities') }}
+	<div class="user_settings">
+		<CheckboxRadioSwitch :checked.sync="legalTermsInEmail" type="switch">
+			{{ t('polls', 'Add terms links also to the email footer') }}
+		</CheckboxRadioSwitch>
+
+		<div class="disclaimer_group">
+			<span class="grow_title">{{ t('polls', 'Additional email disclaimer') }}</span>
+			<CheckboxRadioSwitch :checked.sync="preview" type="switch">
+				{{ t('polls', 'Preview') }}
 			</CheckboxRadioSwitch>
-			<CheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
-				{{ t('polls', 'Hide login option in public polls') }}
-			</CheckboxRadioSwitch>
-			<CheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
-				{{ t('polls', 'Archive closed polls automatically') }}
-			</CheckboxRadioSwitch>
-			<div v-if="autoArchive" class="settings_details">
-				<span>{{ t('polls', 'After how many days are the closed polls to be archived:') }}</span>
-				<InputDiv v-model="autoArchiveOffset"
-					class="selectUnit"
-					type="number"
-					inputmode="numeric"
-					use-num-modifiers
-					@add="autoArchiveOffset += 1"
-					@subtract="autoArchiveOffset -= 1" />
-			</div>
+		</div>
+		<textarea v-show="!preview" v-model="disclaimer" @change="saveSettings()" />
+		<!-- eslint-disable-next-line vue/no-v-html -->
+		<div v-show="preview" class="polls-markdown" v-html="markedDisclaimer">
+			{{ markedDisclaimer }}
 		</div>
 	</div>
 </template>
@@ -50,14 +44,20 @@
 
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import InputDiv from '../../Base/InputDiv'
+import { marked } from 'marked'
+import DOMPurify from 'dompurify'
 
 export default {
-	name: 'AdminMisc',
+	name: 'AdminEmail',
 
 	components: {
 		CheckboxRadioSwitch,
-		InputDiv,
+	},
+
+	data() {
+		return {
+			preview: false,
+		}
 	},
 
 	computed: {
@@ -65,43 +65,37 @@ export default {
 			appSettings: (state) => state.appSettings,
 		}),
 
+		markedDisclaimer() {
+			marked.setOptions({
+				headerPrefix: 'disclaimer-',
+			})
+			return DOMPurify.sanitize(marked.parse(this.appSettings.disclaimer))
+		},
+
 		// Add bindings
-		hideLogin: {
+		legalTermsInEmail: {
 			get() {
-				return !this.appSettings.showLogin
+				return !!this.appSettings.legalTermsInEmail
 			},
 			set(value) {
-				this.writeValue({ showLogin: !value })
+				this.writeValue({ legalTermsInEmail: !!value })
 			},
 		},
-		useActivity: {
+		disclaimer: {
 			get() {
-				return this.appSettings.useActivity
+				return this.appSettings.disclaimer
 			},
 			set(value) {
-				this.writeValue({ useActivity: value })
-			},
-		},
-		autoArchive: {
-			get() {
-				return this.appSettings.autoArchive
-			},
-			set(value) {
-				this.writeValue({ autoArchive: value })
-			},
-		},
-		autoArchiveOffset: {
-			get() {
-				return this.appSettings.autoArchiveOffset
-			},
-			set(value) {
-				value = value < 1 ? 1 : value
-				this.writeValue({ autoArchiveOffset: value })
+				this.$store.commit('appSettings/set', { disclaimer: value })
 			},
 		},
 	},
 
 	methods: {
+		saveSettings() {
+			this.$store.dispatch('appSettings/write')
+		},
+
 		async writeValue(value) {
 			await this.$store.commit('appSettings/set', value)
 			this.$store.dispatch('appSettings/write')
@@ -111,8 +105,26 @@ export default {
 </script>
 
 <style lang="scss">
+	.disclaimer_group {
+		display: flex;
+		align-items: center;
+
+		span {
+			margin-right: 12px;
+		}
+
+		.grow_title {
+			flex-grow: 1;
+		}
+	}
+
 	.user_settings {
 		padding-top: 16px;
+		textarea {
+			width: 99%;
+			resize: vertical;
+			height: 230px;
+		}
 	}
 
 	.settings_details {

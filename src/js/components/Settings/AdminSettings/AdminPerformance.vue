@@ -22,70 +22,67 @@
 
 <template>
 	<div class="user_settings">
-		<span>
-			{{ t('polls', 'A poll with many options and voters can have a heavy inpact on client performance.') }}
-			{{ t('polls', 'Set the amount of vote cells (options x participants) up to which all vote cells should be displayed.') }}
-			{{ t('polls', 'If this threshold gets tresspasses only the current user will be displayed, to avoid a performance breakdown.') }}
-			{{ t('polls', 'The default threshold of 1.000 should be a good and safe value.') }}
-		</span>
-		<InputDiv v-model="threshold"
-			type="number"
-			inputmode="numeric"
-			use-num-modifiers
-			no-submit
-			:placeholder="'1000'"
-			@add="threshold += 100"
-			@subtract="threshold -= 100" />
+		<RadioGroupDiv v-model="updateType" :options="updateTypeOptions" />
 	</div>
 </template>
 
 <script>
 
 import { mapState } from 'vuex'
-import InputDiv from '../../Base/InputDiv'
+import RadioGroupDiv from '../../Base/RadioGroupDiv'
 
 export default {
-	name: 'PerformanceSettings',
+	name: 'AdminPerformance',
 
 	components: {
-		InputDiv,
+		RadioGroupDiv,
+	},
+
+	data() {
+		return {
+			updateTypeOptions: [
+				{ value: 'longPolling', label: t('polls', 'Activate long polling for instant updates') },
+				{ value: 'periodicPolling', label: t('polls', 'Activate periodic polling of updates from the client') },
+				{ value: 'noPolling', label: t('polls', 'Disable automatic updates (reload app for updates)') },
+			],
+		}
 	},
 
 	computed: {
 		...mapState({
-			settings: (state) => state.settings.user,
+			appSettings: (state) => state.appSettings,
 		}),
 
-		threshold: {
+		// Add bindings
+		updateType: {
 			get() {
-				return this.settings.performanceThreshold
+				return this.appSettings.updateType
 			},
 			set(value) {
-				if (value < 1) {
-					value = 1000
-				}
-				this.writeValue({ performanceThreshold: +value })
+				this.writeValue({ updateType: value })
 			},
 		},
 	},
 
 	methods: {
 		async writeValue(value) {
-			await this.$store.commit('settings/setPreference', value)
-			this.$store.dispatch('settings/write')
+			await this.$store.commit('appSettings/set', value)
+			this.$store.dispatch('appSettings/write')
 		},
 	},
 }
 </script>
 
-<style>
+<style lang="scss">
 	.user_settings {
 		padding-top: 16px;
 	}
 
 	.settings_details {
-		padding-top: 8px;
+		padding-bottom: 16px;
 		margin-left: 36px;
+		input, .stretch {
+			width: 100%;
+		}
 	}
-
 </style>

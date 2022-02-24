@@ -57,6 +57,7 @@ import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
 
 export default {
 	name: 'Combo',
+
 	components: {
 		AppContent,
 		ComboTable,

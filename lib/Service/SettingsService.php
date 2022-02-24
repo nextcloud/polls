@@ -73,5 +73,9 @@ class SettingsService {
 		$this->appSettings->setPollDownloadGroups(array_column($settingsArray['pollDownloadGroups'], 'id'));
 		$this->appSettings->setUpdateType($settingsArray['updateType']);
 		$this->appSettings->setUseActivity($settingsArray['useActivity']);
+		$this->appSettings->setPrivacyUrl($settingsArray['privacyUrl']);
+		$this->appSettings->setImprintUrl($settingsArray['imprintUrl']);
+		$this->appSettings->setLegalTermsInEmail($settingsArray['legalTermsInEmail']);
+		$this->appSettings->setDisclaimer($settingsArray['disclaimer']);
 	}
 }

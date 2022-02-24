@@ -26,6 +26,7 @@ namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Helper\Container;
 use OCP\IL10N;
@@ -74,6 +75,9 @@ abstract class MailBase {
 	/** @var IEmailTemplate */
 	protected $emailTemplate;
 
+	/** @var AppSettings */
+	protected $appSettings;
+
 	/** @var User */
 	protected $owner;
 
@@ -86,6 +90,7 @@ abstract class MailBase {
 		$this->logger = Container::queryClass(LoggerInterface::class);
 		$this->mailer = Container::queryClass(IMailer::class);
 		$this->transFactory = Container::queryClass(IFactory::class);
+		$this->appSettings = Container::queryClass(AppSettings::class);
 
 		$this->poll = $this->getPoll($pollId);
 		$this->recipient = $this->getUser($recipientId);
@@ -142,10 +147,20 @@ abstract class MailBase {
 		$this->buildBody();
 
 		// add footer
-		$this->emailTemplate->addFooter($this->getFooter());
+		$footerText = $this->getFooter();
+		if ($this->appSettings->getLegalTermsInEmail()) {
+			$footerText = $footerText . '<br>' . $this->getLegalLinks();
+		}
 
+		if ($this->appSettings->getDisclaimer()) {
+			$footerText = $footerText . '<br>' . $this->getParsedMarkDown($this->appSettings->getDisclaimer());
+		}
+
+		$this->emailTemplate->addFooter($footerText);
 		return $this->emailTemplate;
 	}
+
+
 
 	protected function getSubject(): string {
 		return $this->l10n->t('Notification for poll "%s"', $this->poll->getTitle());
@@ -167,6 +182,22 @@ abstract class MailBase {
 		$this->emailTemplate->addBodyText('Sorry. This eMail has no text and this should not happen.');
 	}
 
+	protected function getLegalLinks() {
+		$legal = '';
+
+		if ($this->appSettings->getUseImprintUrl()) {
+			$legal = '<a href="' . $this->appSettings->getUseImprintUrl() . '">' .  $this->l10n->t('Legal Notice') . '</a>';
+		}
+		if ($this->appSettings->getUsePrivacyUrl()) {
+			if ($this->appSettings->getUseImprintUrl()) {
+				$legal = $legal . ' | ';
+			}
+
+			$legal = $legal . '<a href="' . $this->appSettings->getUsePrivacyUrl() . '">' .  $this->l10n->t('Privacy Policy') . '</a>';
+		}
+		return $legal;
+	}
+
 	protected function getUser(string $userId) : UserBase {
 		if ($this->userManager->get($userId) instanceof IUser) {
 			// return User object
@@ -177,7 +208,14 @@ abstract class MailBase {
 	}
 
 	protected function getRichDescription() : string {
+		return $this->getParsedMarkDown($this->poll->getDescription());
+	}
+
+	protected function getParsedMarkDown($source) : string {
 		$config = [
+			'renderer' => [
+				'soft_break' => "<br />",
+			],
 			'html_input' => 'strip',
 			'allow_unsafe_links' => false,
 		];
@@ -186,7 +224,7 @@ abstract class MailBase {
 		$environment->addExtension(new CommonMarkCoreExtension());
 		$environment->addExtension(new TableExtension());
 		$converter = new MarkdownConverter($environment);
-		return $converter->convertToHtml($this->poll->getDescription())->getContent();
+		return $converter->convertToHtml($source)->getContent();
 	}
 
 	private function getShareURL() : string {
