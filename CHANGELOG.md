@@ -160,7 +160,7 @@ All changes: https://github.com/nextcloud/polls/issues?q=is%3Aclosed+milestone%3
 - Change checkboxes to a switch style
 - added some infos to the information button
 - Added a configurable threshold to hide other users' votes:
-  If too many vote cells are generated, the js performance can break down and lead to a long js runtime. The per user threshold defaults to 1000 cells to display. This needs further optimization for a good UX.
+  If too many voting cells are generated, the js performance can break down and lead to a long js runtime. The per user threshold defaults to 1000 cells to display. This needs further optimization for a good UX.
 
 ### A lot of optimizations under the hood
 - Using more server side events

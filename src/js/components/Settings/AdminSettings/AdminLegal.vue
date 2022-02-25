@@ -23,7 +23,7 @@
 <template>
 	<div class="user_settings">
 		<p class="settings-description">
-			{{ t('polls', 'The privacy link and the leagal notice link are automatically added to the registration dialog of public polls.') }}
+			{{ t('polls', 'The privacy link and the legal notice link are automatically added to the registration dialog of public polls.') }}
 			{{ t('polls', 'As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms.') }}
 		</p>
 		<span>{{ t('polls', 'Privacy policy link:') }}</span>
@@ -61,7 +61,7 @@ export default {
 		}),
 
 		placeholder() {
-			let privacy = t('polls', 'Enter the URL of your privacy terms')
+			let privacy = t('polls', 'Enter the URL of your privacy policy')
 			let imprint = t('polls', 'Enter the URL of your legal notice')
 			if (this.appSettings.defaultPrivacyUrl) {
 				privacy = this.appSettings.defaultPrivacyUrl
