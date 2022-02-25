@@ -96,7 +96,7 @@ export default {
 	methods: {
 		exportFile(type) {
 			this.workBook = xlsxUtils.book_new()
-			this.workBook.SheetNames.push(this.poll.title)
+			this.workBook.SheetNames.push(this.poll.title.slice(0, 31))
 			this.sheetData = []
 
 			if (['html', 'xlsx', 'ods'].includes(type)) {
