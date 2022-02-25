@@ -145,7 +145,7 @@ export default {
 		},
 
 		privacyRich() {
-			const subject = t('polls', 'By clicking the "OK"-Button you accept our {privacyPolicy}.')
+			const subject = t('polls', 'By clicking the "OK" button you accept our {privacyPolicy}.')
 			const parameters = {
 				privacyPolicy: {
 					component: SimpleLink,
