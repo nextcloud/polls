@@ -33,7 +33,7 @@
 		</SettingsSection>
 
 		<SettingsSection :title="t('polls', 'Legal terms for public poll registation')"
-			:description="t('polls', 'Override the default links of your site to your leagal terms. Leave empty to use the links, which are configured in the theming app.')">
+			:description="t('polls', 'Override the default links of your site to your legal terms. Leave empty to use the links, which are configured in the theming app.')">
 			<AdminLegal />
 		</SettingsSection>
 
