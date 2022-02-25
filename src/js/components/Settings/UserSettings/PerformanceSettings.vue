@@ -26,7 +26,7 @@
 			{{ t('polls', 'A poll with many options and voters can have a heavy impact on client performance.') }}
 			{{ t('polls', 'Set the amount of voting cells (options x participants) up to which all voting cells should be displayed.') }}
 			{{ t('polls', 'If this threshold gets tresspasses only the current user will be displayed, to avoid a performance breakdown.') }}
-			{{ t('polls', 'The default threshold of 1.000 should be a good and safe value.') }}
+			{{ t('polls', 'The default threshold of 1000 should be a good and safe value.') }}
 		</span>
 		<InputDiv v-model="threshold"
 			type="number"
