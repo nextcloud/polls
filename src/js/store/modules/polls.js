@@ -70,10 +70,10 @@ const state = {
 		},
 		{
 			id: 'hidden',
-			title: t('polls', 'Hidden polls'),
-			titleExt: t('polls', 'Hidden polls'),
-			description: t('polls', 'All hidden polls, to which you have access.'),
-			icon: 'icon-polls-hidden-poll',
+			title: t('polls', 'Private polls'),
+			titleExt: t('polls', 'Private polls'),
+			description: t('polls', 'All private polls, to which you have access.'),
+			icon: 'icon-polls-private-poll',
 			pinned: false,
 			createDependent: true,
 			filterCondition(poll) {
@@ -94,9 +94,9 @@ const state = {
 		},
 		{
 			id: 'public',
-			title: t('polls', 'Public polls'),
-			titleExt: t('polls', 'Public polls'),
-			description: t('polls', 'A complete list with all public polls on this site, regardless who is the owner.'),
+			title: t('polls', 'Open polls'),
+			titleExt: t('polls', 'Open polls'),
+			description: t('polls', 'A complete list with all open polls on this site, regardless who is the owner.'),
 			icon: 'icon-link',
 			pinned: false,
 			createDependent: true,

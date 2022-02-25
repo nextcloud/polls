@@ -42,10 +42,10 @@
 		</div>
 
 		<CheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
-			{{ t('polls', 'Disallow publishing poll to all users') }}
+			{{ t('polls', 'Disallow open polls') }}
 		</CheckboxRadioSwitch>
 		<div v-if="allAccessLimited" class="settings_details">
-			<div>{{ t('polls','Allow poll sharing to all users for the following groups') }}</div>
+			<div>{{ t('polls','Allow creating open polls for the following groups') }}</div>
 			<Multiselect v-model="allAccessGroups"
 				class="stretch"
 				label="displayName"

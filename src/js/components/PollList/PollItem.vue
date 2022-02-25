@@ -143,10 +143,10 @@ export default {
 			}
 
 			if (this.poll.access === 'public') {
-				return 'icon-polls-public-poll'
+				return 'icon-polls-open-poll'
 			}
 
-			return 'icon-polls-hidden-poll'
+			return 'icon-polls-private-poll'
 		},
 
 		pollType() {
@@ -310,11 +310,11 @@ export default {
 	}
 
 	.item__access--public {
-		background-image: var(--icon-polls-public-poll);
+		background-image: var(--icon-polls-open-poll);
 	}
 
 	.item__access--hidden {
-		background-image: var(--icon-polls-hidden-poll);
+		background-image: var(--icon-polls-private-poll);
 	}
 
 	.item__access--deleted {

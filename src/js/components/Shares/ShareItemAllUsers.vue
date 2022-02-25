@@ -22,8 +22,8 @@
 
 <template>
 	<UserItem type="all"
-		:user-id="t('polls', 'All users')"
-		:display-name="t('polls', 'All users')"
+		:user-id="t('polls', 'Open poll')"
+		:display-name="t('polls', 'Open poll')"
 		:disabled="access==='hidden'"
 		show-email
 		is-no-user>
