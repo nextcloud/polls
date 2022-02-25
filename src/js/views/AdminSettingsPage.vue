@@ -32,7 +32,7 @@
 			<AdminPollCreation />
 		</SettingsSection>
 
-		<SettingsSection :title="t('polls', 'Legal terms for public poll registation')"
+		<SettingsSection :title="t('polls', 'Legal terms for public poll registration')"
 			:description="t('polls', 'Override the default links of your site to your legal terms. Leave empty to use the links, which are configured in the theming app.')">
 			<AdminLegal />
 		</SettingsSection>
