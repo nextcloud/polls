@@ -38,7 +38,7 @@
 		</SettingsSection>
 
 		<SettingsSection :title="t('polls', 'Email options')"
-			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to mails.')">
+			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to emails.')">
 			<AdminEmail />
 		</SettingsSection>
 
