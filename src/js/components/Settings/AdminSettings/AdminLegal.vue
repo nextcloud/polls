@@ -61,7 +61,7 @@ export default {
 		}),
 
 		placeholder() {
-			let privacy = t('polls', 'Enter the URL of your privacy terms')
+			let privacy = t('polls', 'Enter the URL of your privacy policy')
 			let imprint = t('polls', 'Enter the URL of your legal notice')
 			if (this.appSettings.defaultPrivacyUrl) {
 				privacy = this.appSettings.defaultPrivacyUrl
