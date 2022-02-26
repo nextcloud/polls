@@ -64,8 +64,6 @@ OC.L10N.register(
     "Year" : "سال",
     "Title must not be empty!" : "عنوان نباید خالی باشد!",
     "My polls" : "نظرسنجی های من",
-    "Hidden polls" : "نظرسنجی پنهان",
-    "Public polls" : "نظرسنجی های عمومی",
     "All polls" : "همه نظرسنجی ها"
 },
 "nplurals=2; plural=(n > 1);");

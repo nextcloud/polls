@@ -96,11 +96,7 @@
     "Relevant" : "Релевантно",
     "Relevant polls" : "Релевантна гласања",
     "My polls" : "Моја гласања",
-    "Hidden polls" : "Сакривена гласања",
-    "All hidden polls, to which you have access." : "Сва скривена гласања, којима имате приступ.",
     "All polls, where you placed a vote." : "Сва гласања, где сте дали глас.",
-    "Public polls" : "Јавна гласања",
-    "A complete list with all public polls on this site, regardless who is the owner." : "Цео списак свих јавних гласања на сајту, без обзира на власника.",
     "All polls" : "Сва гласања",
     "All polls, where you have access to." : "Сва гласање, којима имате приступ."
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);"

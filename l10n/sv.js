@@ -102,7 +102,6 @@ OC.L10N.register(
     "Month" : "Månad",
     "Title must not be empty!" : "Titeln får inte vara tom",
     "My polls" : "Mina omröstningar",
-    "Public polls" : "Publika omröstningar",
     "All polls" : "Alla omröstningar"
 },
 "nplurals=2; plural=(n != 1);");

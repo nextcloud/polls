@@ -98,11 +98,7 @@ OC.L10N.register(
     "Relevant" : "Релевантно",
     "Relevant polls" : "Релевантна гласања",
     "My polls" : "Моја гласања",
-    "Hidden polls" : "Сакривена гласања",
-    "All hidden polls, to which you have access." : "Сва скривена гласања, којима имате приступ.",
     "All polls, where you placed a vote." : "Сва гласања, где сте дали глас.",
-    "Public polls" : "Јавна гласања",
-    "A complete list with all public polls on this site, regardless who is the owner." : "Цео списак свих јавних гласања на сајту, без обзира на власника.",
     "All polls" : "Сва гласања",
     "All polls, where you have access to." : "Сва гласање, којима имате приступ."
 },

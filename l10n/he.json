@@ -88,9 +88,7 @@
     "Title must not be empty!" : "הכותרת לא יכולה להישאר ריקה!",
     "Relevant polls" : "סקרים אפשריים",
     "My polls" : "הסקרים שלי",
-    "Hidden polls" : "סקרים מוסתרים",
     "All polls, where you placed a vote." : "כל הסקרים בהם הצבעת.",
-    "Public polls" : "סקרים ציבוריים",
     "All polls" : "כל הסקרים",
     "All polls, where you have access to." : "כל הסקרים אליהם יש לך גישה."
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;"

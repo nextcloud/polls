@@ -45,8 +45,6 @@ OC.L10N.register(
     "Day" : "Día",
     "Month" : "Mes",
     "My polls" : "Mis encuestas",
-    "Hidden polls" : "Encuestas ocultas",
-    "Public polls" : "Encuestas públicas",
     "All polls" : "Todas las encuestas"
 },
 "nplurals=2; plural=(n != 1);");

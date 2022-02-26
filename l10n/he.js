@@ -90,9 +90,7 @@ OC.L10N.register(
     "Title must not be empty!" : "הכותרת לא יכולה להישאר ריקה!",
     "Relevant polls" : "סקרים אפשריים",
     "My polls" : "הסקרים שלי",
-    "Hidden polls" : "סקרים מוסתרים",
     "All polls, where you placed a vote." : "כל הסקרים בהם הצבעת.",
-    "Public polls" : "סקרים ציבוריים",
     "All polls" : "כל הסקרים",
     "All polls, where you have access to." : "כל הסקרים אליהם יש לך גישה."
 },

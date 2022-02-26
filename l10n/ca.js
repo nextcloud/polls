@@ -112,11 +112,7 @@ OC.L10N.register(
     "Relevant" : "Important",
     "Relevant polls" : "Enquestes rellevants",
     "My polls" : "Les meves enquestes",
-    "Hidden polls" : "Enquestes ocultes",
-    "All hidden polls, to which you have access." : "Totes les enquestes ocultes, a les quals teniu accés.",
     "All polls, where you placed a vote." : "Totes les enquestes, on vostè va posar un vot.",
-    "Public polls" : "Enquestes públiques",
-    "A complete list with all public polls on this site, regardless who is the owner." : "Una llista completa amb totes les enquestes públiques d'aquest lloc, independentment de qui sigui el propietari.",
     "All polls" : "Totes les enquestes",
     "All polls, where you have access to." : "Totes les enquestes, on teniu accés.",
     "Closed polls" : "Enquestes tancades"
