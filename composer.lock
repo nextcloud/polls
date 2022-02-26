@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "a405a2daa0d4524d2ed415e798e006ad",
+    "content-hash": "446637bd32e4be9092d9decd2adbcde9",
     "packages": [
         {
             "name": "dflydev/dot-access-data",
@@ -784,16 +784,16 @@
         },
         {
             "name": "christophwurst/nextcloud",
-            "version": "v22.1.1",
+            "version": "v23.0.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/ChristophWurst/nextcloud_composer.git",
-                "reference": "8bb086cd016128b5ef8353662fd1852db3248d1e"
+                "reference": "7f7b957934d22205aab66c568ac3029bd8f2110d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/8bb086cd016128b5ef8353662fd1852db3248d1e",
-                "reference": "8bb086cd016128b5ef8353662fd1852db3248d1e",
+                "url": "https://api.github.com/repos/ChristophWurst/nextcloud_composer/zipball/7f7b957934d22205aab66c568ac3029bd8f2110d",
+                "reference": "7f7b957934d22205aab66c568ac3029bd8f2110d",
                 "shasum": ""
             },
             "require": {
@@ -821,9 +821,9 @@
             "description": "Composer package containing Nextcloud's public API (classes, interfaces)",
             "support": {
                 "issues": "https://github.com/ChristophWurst/nextcloud_composer/issues",
-                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/v22.1.1"
+                "source": "https://github.com/ChristophWurst/nextcloud_composer/tree/v23.0.2"
             },
-            "time": "2021-11-11T14:01:42+00:00"
+            "time": "2022-02-22T09:41:29+00:00"
         },
         {
             "name": "composer/package-versions-deprecated",
