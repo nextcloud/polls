@@ -45,12 +45,10 @@ export default {
 .vote_menu {
 	display: flex;
 	justify-content: flex-end;
-	// align-self: flex-end;
 	flex: 0;
-	// background-color: var(--color-background-darker);
+	background-color: var(--color-background-darker);
 	border-radius: var(--border-radius-pill);
-	margin-bottom: 8px;
-	margin-top: 16px;
+	margin: 8px;
 }
 
 </style>
