@@ -107,6 +107,8 @@ export default {
 
 	.participant {
 		display: flex;
+		align-self: stretch;
+		justify-content: center;
 	}
 
 	.participant, .vote-item {
