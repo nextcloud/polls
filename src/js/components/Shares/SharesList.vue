@@ -25,7 +25,7 @@
 		<UserSearch class="add-share" />
 		<ShareItemAllUsers v-if="allowAllAccess" />
 		<SharePublicAdd v-if="allowPublicShares" />
-		<div class="shares-list">
+		<div v-if="invitationShares.length" class="shares-list shared">
 			<TransitionGroup :css="false" tag="div">
 				<UserItem v-for="(share) in invitationShares"
 					:key="share.id"
@@ -166,6 +166,12 @@ export default {
 </script>
 
 <style lang="scss">
+.shares-list.shared {
+	border-top: 1px solid var(--color-border);
+	padding-top: 24px;
+	margin-top: 16px;
+}
+
 .vote-status {
 	margin-left: 8px;
 	width: 32px;
