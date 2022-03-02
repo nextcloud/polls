@@ -156,7 +156,7 @@ export default {
 		}
 	}
 
-	&.active {
+	&.active, &.active.no {
 		background-color: transparent;
 		> .icon {
 			cursor: pointer;
