@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div :class="['user-item', type, { disabled, 'condensed' : condensed }]">
+	<div :class="['user-item', type, { disabled, condensed: condensed }]">
 		<Avatar :disable-menu="disableMenu"
 			:disable-tooltip="disableTooltip"
 			class="user-item__avatar"
@@ -43,7 +43,7 @@
 				{{ name }}
 			</div>
 			<div v-if="type === 'admin'" class="description">
-				{{ t('polls', 'Is granted admin rights for this poll') }}
+				{{ t("polls", "Is granted admin rights for this poll") }}
 			</div>
 			<div v-else-if="displayEmailAddress" class="description">
 				{{ displayEmailAddress }}
@@ -140,7 +140,7 @@ export default {
 		},
 
 		name() {
-			if (this.type === 'public') {
+			if (this.type === 'public' && this.userId !== 'addPublic') {
 				return t('polls', 'Public link')
 			}
 
@@ -157,10 +157,7 @@ export default {
 		},
 
 		displayEmailAddress() {
-			if (this.type === 'public') {
-				if (this.userId === 'addPublic') {
-					return t('polls', 'Add a new public link')
-				}
+			if (this.type === 'public' && this.userId !== 'addPublic') {
 				return t('polls', 'Token: {token}', { token: this.userId })
 			}
 
@@ -236,7 +233,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .avatar-class-icon {
 	border-radius: 50%;
 	background-color: var(--color-primary-element) !important;
@@ -291,5 +287,4 @@ export default {
 	left: 0;
 	top: 3px;
 }
-
 </style>

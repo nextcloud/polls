@@ -24,14 +24,14 @@
 	<UserItem type="public"
 		class="add-public"
 		user-id="addPublic"
-		:display-name="t('polls', 'Add public link')"
+		:display-name="t('polls', 'Add a new public link')"
 		is-no-user>
 		<template #status>
 			<div class="vote-status" />
 		</template>
 		<Actions>
 			<ActionButton icon="icon-add" @click="addPublicShare()">
-				{{ t('polls', 'Add public link') }}
+				{{ t('polls', 'Add a new public link') }}
 			</ActionButton>
 		</Actions>
 	</UserItem>
