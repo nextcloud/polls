@@ -62,7 +62,7 @@
 			</template>
 		</EmptyContent>
 
-		<Modal v-if="cloneModal" :can-close="false">
+		<Modal v-if="cloneModal" size="small" :can-close="false">
 			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
 		</Modal>
 	</div>
