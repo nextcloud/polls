@@ -24,5 +24,5 @@
  */
  declare(strict_types=1);
 
- script('polls', 'polls');
+ script('polls', 'polls-main');
  \OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');
