@@ -73,7 +73,7 @@
 							<ActionButton icon="icon-delete"
 								class="danger"
 								:close-after-click="true"
-								@click="confirmDelete(poll.id)">
+								@click="confirmDelete(poll.id, poll.owner)">
 								{{ t('polls', 'Delete poll') }}
 							</ActionButton>
 						</Actions>
@@ -81,11 +81,13 @@
 				</PollItem>
 			</transition-group>
 		</div>
+
 		<LoadingOverlay v-if="isLoading" />
-		<Modal v-if="takeOverModal" @close="takeOverModal = false">
+
+		<Modal v-if="takeOverModal" size="small" @close="takeOverModal = false">
 			<div class="modal__content">
-				<h2>{{ t('polls', 'Do you want to take over this poll from {username} and change the ownership?', {username: takeOver.owner.displayName}) }}</h2>
-				<div>{{ t('polls', 'The original owner will be notified.') }}</div>
+				<h2>{{ t('polls', 'Do you want to take over this poll?') }}</h2>
+				<div>{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}</div>
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="takeOverModal = false" />
@@ -95,11 +97,14 @@
 				</div>
 			</div>
 		</Modal>
-		<Modal v-if="deleteModal" @close="deleteModal = false">
+
+		<Modal v-if="deleteModal" size="small" @close="deleteModal = false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Do you want to delete this poll?') }}</h2>
-				<div>{{ t('polls', 'This action cannot be reverted.') }}</div>
-				<div>{{ t('polls', 'The original owner will be notified.') }}</div>
+				<div>
+					{{ t('polls', 'This action cannot be reverted.') }}
+					{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}
+				</div>
 				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'No')"
 						@click="deleteModal = false" />
@@ -138,12 +143,11 @@ export default {
 			sort: 'created',
 			reverse: true,
 			takeOverModal: false,
-			takeOver: {
+			currentPoll: {
 				owner: '',
 				pollId: 0,
 			},
 			deleteModal: false,
-			deletePollId: 0,
 		}
 	},
 
@@ -186,13 +190,14 @@ export default {
 
 	methods: {
 		confirmTakeOver(pollId, currentOwner) {
-			this.takeOver.pollId = pollId
-			this.takeOver.owner = currentOwner
+			this.currentPoll.pollId = pollId
+			this.currentPoll.owner = currentOwner
 			this.takeOverModal = true
 		},
 
-		confirmDelete(pollId) {
-			this.deletePollId = pollId
+		confirmDelete(pollId, currentOwner) {
+			this.currentPoll.pollId = pollId
+			this.currentPoll.owner = currentOwner
 			this.deleteModal = true
 		},
 
@@ -206,7 +211,7 @@ export default {
 
 		async deletePoll() {
 			try {
-				await this.$store.dispatch('poll/delete', { pollId: this.deletePollId })
+				await this.$store.dispatch('poll/delete', { pollId: this.currentPoll.pollId })
 				this.deleteModal = false
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
@@ -216,7 +221,7 @@ export default {
 
 		async takeOverPoll() {
 			try {
-				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.takeOver.pollId })
+				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.currentPoll.pollId })
 				this.takeOverModal = false
 			} catch {
 				showError(t('polls', 'Error overtaking poll.'))
@@ -246,11 +251,11 @@ export default {
 </script>
 
 <style lang="scss">
-	.poll-list__list {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		overflow: scroll;
-		padding-bottom: 14px;
-	}
+.poll-list__list {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: scroll;
+	padding-bottom: 14px;
+}
 </style>
