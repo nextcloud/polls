@@ -22,6 +22,6 @@
 	 */
 	 declare(strict_types=1);
 
-	 script('polls', 'userSettings');
+	 script('polls', 'polls-userSettings');
 ?>
 <div id="user_settings" />
