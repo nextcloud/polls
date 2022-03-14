@@ -284,8 +284,6 @@ OC.L10N.register(
     "No polls found for this category" : "Nije pronađena nijedna anketa za ovu kategoriju",
     "Add one or change category!" : "Dodajte anketu ili promijenite kategoriju!",
     "Take over" : "Preuzmi",
-    "Do you want to take over this poll from {username} and change the ownership?" : "Želite li preuzeti ovu anketu od {username} i promijeniti vlasništvo?",
-    "The original owner will be notified." : "Izvorni vlasnik će biti obaviješten o tome.",
     "Yes" : "Da",
     "Do you want to delete this poll?" : "Želite li izbrisati ovu anketu?",
     "This action cannot be reverted." : "Ova se radnja ne može poništiti.",
