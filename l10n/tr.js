@@ -461,6 +461,8 @@ OC.L10N.register(
     "No polls found for this category" : "Bu kategoride bir anket bulunamadı",
     "Add one or change category!" : "Bir anket ekleyin ya da kategoriyi değiştirin!",
     "Take over" : "Devral",
+    "Do you want to take over this poll?" : "Bu anketi devralmak istiyor musunuz?",
+    "{username} will get notified." : "{username} bilgilendirilecek.",
     "Yes" : "Evet",
     "Do you want to delete this poll?" : "Bu anketi silmek istiyor musunuz?",
     "This action cannot be reverted." : "Bu işlem geri alınamaz.",

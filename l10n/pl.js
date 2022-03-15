@@ -461,6 +461,8 @@ OC.L10N.register(
     "No polls found for this category" : "Nie znaleziono sond dla tej kategorii",
     "Add one or change category!" : "Dodaj jedną lub zmień kategorię!",
     "Take over" : "Przejąć",
+    "Do you want to take over this poll?" : "Czy chcesz przejąć tę sondę?",
+    "{username} will get notified." : "{username} otrzyma powiadomienie.",
     "Yes" : "Tak",
     "Do you want to delete this poll?" : "Czy chcesz usunąć tę sondę?",
     "This action cannot be reverted." : "Tej czynności nie można cofnąć.",

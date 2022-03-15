@@ -461,6 +461,8 @@ OC.L10N.register(
     "No polls found for this category" : "Pro tuto kategorii nenalezeny žádné ankety",
     "Add one or change category!" : "Přidejte nebo změňte kategorii!",
     "Take over" : "Převzít",
+    "Do you want to take over this poll?" : "Chcete tuto anketu převzít?",
+    "{username} will get notified." : "{username} bude upozorněn(a).",
     "Yes" : "Ano",
     "Do you want to delete this poll?" : "Chcete tuto anketu smazat?",
     "This action cannot be reverted." : "Tuto akci není možné vzít zpět.",
