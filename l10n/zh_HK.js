@@ -461,6 +461,8 @@ OC.L10N.register(
     "No polls found for this category" : "找不到此分類的投票",
     "Add one or change category!" : "新增或更改分類！",
     "Take over" : "接管",
+    "Do you want to take over this poll?" : "您想要接管此投票嗎？",
+    "{username} will get notified." : "將會通知 {username}。",
     "Yes" : "是",
     "Do you want to delete this poll?" : "您想要刪除此投票嗎？",
     "This action cannot be reverted." : "此操作無法還原。",
