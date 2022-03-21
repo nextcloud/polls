@@ -227,8 +227,6 @@ class UserBase implements \JsonSerializable {
 
 		[$result, $more] = Container::queryClass(ISearch::class)->search($query, $types, false, 200, 0);
 
-
-		\OC::$server->getLogger()->error(json_encode());
 		foreach (($result['users'] ?? []) as $item) {
 			$items[] = new User($item['value']['shareWith']);
 		}
