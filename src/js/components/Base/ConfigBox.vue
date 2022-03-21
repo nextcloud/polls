@@ -65,7 +65,7 @@ export default {
 		iconClassComputed() {
 			// presence of an icon slot overrides the icon class
 			return this.hasIconSlot ? null : this.iconClass
-		}
+		},
 	},
 }
 

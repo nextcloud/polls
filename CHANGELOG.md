@@ -1,6 +1,32 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.6.0] - tbd
+- Compatibility to Nextcloud 24
+- Hidden polls are now private polls and public polls are called open polls to distinguish them from public polls via public links
+- Added configuration options for admins to add legal terms to the public registration dialog and emails
+- Added the possibility for admins to add a disclaimer test to generated emails
+- Poll export to spreadsheeds was fixed if Poll title is longer than 31 characters
+- Style optimizations for settings pages
+- Supports keyboards on mobiles based on input type
+
+
+## [3.6.0-beta1] - tbd
+## Changes
+- #2255 - Rename "hidden" polls to "private" polls, "public" to "open" (#2289)
+
+## New
+- #2261 - Added the option to add links to terms and private policy to public registration dialog
+- #2260 - Added an option to add legal terms and a disclaimer to emails
+
+## Fixed
+- #2285 - Fixed poll export (#2286, #2287)
+- #2312 - Fixed heights of modals after update to @nextcloud/vue
+
+## Misc
+- #2283 - Added support for inputmode
+- #2311 - Added support for material design icons to some components
+
 ## [3.5.4] - 2022-02-17
 ## Fixed
 - #2276 - Deletion of NC users was broken through polls (#2279)
