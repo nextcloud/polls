@@ -218,7 +218,8 @@ class UserBase implements \JsonSerializable {
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
-			IShare::TYPE_GROUP
+			IShare::TYPE_GROUP,
+			IShare::TYPE_EMAIL
 		];
 		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
 			$types[] = IShare::TYPE_CIRCLE;
