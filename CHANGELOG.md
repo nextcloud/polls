@@ -2,14 +2,17 @@
 All notable changes to this project will be documented in this file.
 
 ## [3.6.0] - tbd
+### New
 - Compatibility to Nextcloud 24
 - Hidden polls are now private polls and public polls are called open polls to distinguish them from public polls via public links
 - Added configuration options for admins to add legal terms to the public registration dialog and emails
 - Added the possibility for admins to add a disclaimer test to generated emails
-- Poll export to spreadsheeds was fixed if Poll title is longer than 31 characters
 - Style optimizations for settings pages
 - Supports keyboards on mobiles based on input type
 
+### Fixed
+- Poll export to spreadsheeds was fixed if Poll title is longer than 31 characters
+- Fix LDAP user search
 
 ## [3.6.0-beta1] - tbd
 ## Changes
@@ -20,8 +23,9 @@ All notable changes to this project will be documented in this file.
 - #2260 - Added an option to add legal terms and a disclaimer to emails
 
 ## Fixed
+- #1310 - Fix LDAP search (#2323)
 - #2285 - Fixed poll export (#2286, #2287)
-- #2312 - Fixed heights of modals after update to @nextcloud/vue
+- #2312 - Fixed heights of modals after update of @nextcloud/vue@5
 
 ## Misc
 - #2283 - Added support for inputmode
