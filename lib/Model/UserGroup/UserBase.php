@@ -218,7 +218,8 @@ class UserBase implements \JsonSerializable {
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
-			IShare::TYPE_GROUP
+			IShare::TYPE_GROUP,
+			IShare::TYPE_EMAIL
 		];
 		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
 			$types[] = IShare::TYPE_CIRCLE;
@@ -226,6 +227,8 @@ class UserBase implements \JsonSerializable {
 
 		[$result, $more] = Container::queryClass(ISearch::class)->search($query, $types, false, 200, 0);
 
+
+		\OC::$server->getLogger()->error(json_encode());
 		foreach (($result['users'] ?? []) as $item) {
 			$items[] = new User($item['value']['shareWith']);
 		}
