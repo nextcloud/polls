@@ -112,10 +112,6 @@ export default {
 		this.verifyPolls()
 	},
 
-	beforeDestroy() {
-		// this.$store.dispatch({ type: 'combo/reset' })
-	},
-
 	methods: {
 		...mapActions({
 			setPollCombo: 'settings/setPollCombo',

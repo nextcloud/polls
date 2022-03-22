@@ -25,9 +25,6 @@
 		<span>{{ subTextLeft }}</span>
 		<span v-for="(subText) in subTexts" :key="subText.text">
 			<span :class="[subText.class, subText.icon]">{{ subText.text }}</span>
-			<!-- <button v-if="isNoAccessSet" @click="openSharing">
-				{{ t('polls', 'Grant access') }}
-			</button> -->
 		</span>
 	</div>
 </template>

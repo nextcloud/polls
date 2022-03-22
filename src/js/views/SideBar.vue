@@ -90,7 +90,6 @@ export default {
 		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare'),
 		SideBarTabCollaboration: () => import('../components/SideBar/SideBarTabCollaboration'),
 		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity'),
-		// SideBarTabUserOptions: () => import('../components/SideBar/SideBarTabUserOptions'),
 		AppSidebar,
 		AppSidebarTab,
 	},

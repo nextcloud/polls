@@ -102,10 +102,6 @@ const getters = {
 
 const actions = {
 
-	reset(context) {
-		// context.commit('reset')
-	},
-
 	async add(context, pollId) {
 		return Promise.all([
 			'addPoll',

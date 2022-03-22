@@ -154,7 +154,6 @@ export default {
 		.vote-table-header-item {
 			align-items: stretch;
 			flex: 1;
-			// padding: 0 8px;
 			order: 1;
 		}
 	}

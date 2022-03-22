@@ -260,7 +260,7 @@ export default {
 // special settings for header area
 .area__header {
 	position: sticky;
-	top: 50px; // was 54px
+	top: 50px;
 	background-color: var(--color-main-background);
 	border-bottom: 1px solid var(--color-border);
 	z-index: 9;

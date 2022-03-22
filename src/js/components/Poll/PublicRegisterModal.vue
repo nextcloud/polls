@@ -342,10 +342,8 @@ export default {
 
 		.registration__login {
 			flex: 1 180px;
-			// width: 180px;
 		}
 		.registration__registration {
-			// width: 400px;
 			flex: 1 480px;
 
 		}

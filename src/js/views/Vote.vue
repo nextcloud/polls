@@ -178,7 +178,6 @@ export default {
 .vote_head {
 	display: flex;
 	flex-wrap: wrap-reverse;
-	// margin-bottom: 16px;
 	justify-content: flex-end;
 	.poll-title {
 		flex: 1 270px;

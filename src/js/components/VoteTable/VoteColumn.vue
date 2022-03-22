@@ -67,7 +67,6 @@ export default {
 		ActionButton,
 		CalendarPeek: () => import('../Calendar/CalendarPeek'),
 		Counter,
-		// Confirmation: () => import('../Options/Confirmation'),
 		VoteTableHeaderItem,
 		VoteItem,
 		OptionItemOwner: () => import('../Options/OptionItemOwner'),
