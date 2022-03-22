@@ -26,6 +26,7 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Helper\Container;
 
 use OCA\Polls\Db\ShareMapper;
@@ -135,7 +136,12 @@ class SystemService {
 	 * @return true
 	 */
 	public function validatePublicUsername(string $userName, string $token): bool {
-		$share = $this->shareMapper->findByToken($token);
+		try {
+			$share = $this->shareMapper->findByToken($token);
+		} catch (\Exception $e) {
+			throw new NotAuthorizedException('Token invalid');
+		}
+
 
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');
