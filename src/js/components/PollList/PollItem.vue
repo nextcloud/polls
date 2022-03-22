@@ -264,7 +264,6 @@ export default {
 	}
 
 	.wrapper {
-		// width: 325px;
 		display: flex;
 		flex: 0 1 auto;
 		flex-wrap: wrap;

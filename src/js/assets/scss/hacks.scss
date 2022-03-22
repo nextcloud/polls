@@ -5,6 +5,15 @@
 	background-clip: initial !important;
 }
 
+.action-item.action-item--single.app-navigation-toggle.undefined.has-tooltip {
+	top: 4px;
+	margin-right: -50px;
+	[class*='dashboard--'] & {
+		top: 12px;
+		margin-right: -58px;
+	}
+}
+
 .mx-datepicker-main .checkbox-radio-switch--checked svg {
 	fill: var(--color-primary-element);
 }

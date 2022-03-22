@@ -22,14 +22,12 @@
 
 <template>
 	<AppContent class="poll-list">
-		<div class="poll-list-title">
-			<h2 class="title">
+		<HeaderBar class="area__header">
+			<template #title>
 				{{ title }}
-			</h2>
-			<h3 class="description">
-				{{ description }}
-			</h3>
-		</div>
+			</template>
+			{{ description }}
+		</HeaderBar>
 
 		<div class="area__main">
 			<EmptyContent v-if="noPolls" icon="icon-polls">
@@ -93,10 +91,10 @@
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
-// import sortBy from 'lodash/sortBy'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
+import HeaderBar from '../components/Base/HeaderBar'
 
 export default {
 	name: 'PollList',
@@ -105,9 +103,10 @@ export default {
 		AppContent,
 		Actions,
 		ActionButton,
+		EmptyContent,
+		HeaderBar,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
 		PollItem: () => import('../components/PollList/PollItem'),
-		EmptyContent,
 	},
 
 	data() {
@@ -214,10 +213,6 @@ export default {
 </script>
 
 <style lang="scss">
-	.poll-list {
-		padding-top: 5px;
-	}
-
 	.poll-list__list {
 		width: 100%;
 		display: flex;

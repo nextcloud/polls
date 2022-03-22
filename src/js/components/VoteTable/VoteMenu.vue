@@ -20,61 +20,35 @@
   -
   -->
 
-<template lang="html">
-	<!-- eslint-disable-next-line vue/no-v-html -->
-	<div class="markup-description" v-html="markedDescription">
-		{{ markedDescription }}
+<template>
+	<div class="vote_menu">
+		<ActionSortOptions />
+		<ActionChangeView />
 	</div>
 </template>
 
 <script>
-import { marked } from 'marked'
-import DOMPurify from 'dompurify'
-import { mapState } from 'vuex'
+import ActionSortOptions from '../Actions/ActionSortOptions'
+import ActionChangeView from '../Actions/ActionChangeView'
 
 export default {
-	name: 'MarkUpDescription',
+	name: 'VoteMenu',
 
-	computed: {
-		...mapState({
-			description: (state) => state.poll.descriptionSafe,
-		}),
-
-		markedDescription() {
-			marked.setOptions({
-				headerPrefix: 'desc-',
-			})
-			return DOMPurify.sanitize(marked.parse(this.description))
-		},
+	components: {
+		ActionChangeView,
+		ActionSortOptions,
 	},
 }
-
 </script>
 
 <style lang="scss">
-
-.markup-description * {
-	margin: revert;
-	padding: revert;
-	font-size: revert;
-	text-decoration: revert;
-	list-style: revert;
-	opacity: revert;
-	min-height: revert;
+.vote_menu {
+	display: flex;
+	justify-content: flex-end;
+	flex: 0;
+	background-color: var(--color-background-darker);
+	border-radius: var(--border-radius-pill);
+	margin: 8px;
 }
 
-.markup-description {
-	table {
-		border-spacing: 2px;
-	}
-
-	thead {
-		background-color: var(--color-background-darker);
-		color: var(--color-text-light);
-	}
-
-	td, th {
-		padding: 1px 4px;
-	}
-}
 </style>

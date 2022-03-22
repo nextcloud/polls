@@ -22,42 +22,52 @@
 
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
-		<PollHeaderButtons />
-		<PollTitle show-sub-text />
-		<div v-if="poll.description" class="area__header">
-			<MarkUpDescription />
-		</div>
+		<HeaderBar class="area__header">
+			<template #title>
+				{{ poll.title }}
+			</template>
+			<template #right>
+				<PollHeaderButtons />
+			</template>
+			<PollInfoLine />
+		</HeaderBar>
 
-		<div v-if="acl.allowAddOptions && proposalsOpen && !closed" class="area__proposal">
-			<OptionProposals />
-		</div>
+		<div class="vote_main">
+			<div v-if="poll.description" class="area__description">
+				<MarkUpDescription />
+			</div>
 
-		<div class="area__main" :class="viewMode">
-			<VoteTable v-show="options.length" :view-mode="viewMode" />
+			<div v-if="acl.allowAddOptions && proposalsOpen && !closed" class="area__proposal">
+				<OptionProposals />
+			</div>
 
-			<EmptyContent v-if="!options.length" :icon="pollTypeIcon">
-				{{ t('polls', 'No vote options available') }}
-				<template #desc>
-					<button v-if="acl.allowEdit" @click="openOptions">
-						{{ t('polls', 'Add some!') }}
-					</button>
-					<div v-if="!acl.allowEdit">
-						{{ t('polls', 'Maybe the owner did not provide some until now.') }}
-					</div>
-				</template>
-			</EmptyContent>
-		</div>
+			<div class="area__main" :class="viewMode">
+				<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-		<div v-if="countHiddenParticipants" class="area__footer">
-			<h2>
-				{{ t('polls', 'Due to performance concerns {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
-			</h2>
-		</div>
+				<EmptyContent v-if="!options.length" :icon="pollTypeIcon">
+					{{ t('polls', 'No vote options available') }}
+					<template #desc>
+						<button v-if="acl.allowEdit" @click="openOptions">
+							{{ t('polls', 'Add some!') }}
+						</button>
+						<div v-if="!acl.allowEdit">
+							{{ t('polls', 'Maybe the owner did not provide some until now.') }}
+						</div>
+					</template>
+				</EmptyContent>
+			</div>
 
-		<div v-if="poll.anonymous" class="area__footer">
-			<div>
-				{{ t('polls', 'Although participant\'s names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
-				{{ t('polls', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
+			<div v-if="countHiddenParticipants" class="area__footer">
+				<h2>
+					{{ t('polls', 'Due to performance concerns {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
+				</h2>
+			</div>
+
+			<div v-if="poll.anonymous" class="area__footer">
+				<div>
+					{{ t('polls', 'Although participant\'s names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
+					{{ t('polls', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
+				</div>
 			</div>
 		</div>
 
@@ -71,21 +81,23 @@ import { mapState, mapGetters } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription'
-import PollTitle from '../components/Poll/PollTitle'
+import PollInfoLine from '../components/Poll/PollInfoLine'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons'
+import HeaderBar from '../components/Base/HeaderBar'
 
 export default {
 	name: 'Vote',
 	components: {
 		AppContent,
-		MarkUpDescription,
 		EmptyContent,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
+		HeaderBar,
+		MarkUpDescription,
 		PollHeaderButtons,
-		PollTitle,
+		PollInfoLine,
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
+		OptionProposals: () => import('../components/Options/OptionProposals'),
 		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal'),
 		VoteTable: () => import('../components/VoteTable/VoteTable'),
-		OptionProposals: () => import('../components/Options/OptionProposals'),
 	},
 
 	data() {
@@ -157,16 +169,28 @@ export default {
 </script>
 
 <style lang="scss">
-.poll-title {
-	margin-bottom: 16px;
+.vote_main {
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
+}
+
+.vote_head {
+	display: flex;
+	flex-wrap: wrap-reverse;
+	justify-content: flex-end;
+	.poll-title {
+		flex: 1 270px;
+	}
+}
+
+.area__main {
+	display: flex;
+	flex-direction: column;
 }
 
 .area__proposal .mx-input-wrapper > button {
 	width: initial;
-}
-
-.markup-description {
-	font-size: 1.1em;
 }
 
 .icon.icon-settings.active {
@@ -174,5 +198,4 @@ export default {
 	width: 44px;
 	height: 44px;
 }
-
 </style>

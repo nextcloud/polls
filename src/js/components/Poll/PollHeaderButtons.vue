@@ -33,8 +33,6 @@
 			</template>
 			<PollInformation />
 		</Popover>
-		<ActionSortOptions />
-		<ActionChangeView />
 		<ExportPoll v-if="allowPollDownload" />
 		<ActionToggleSidebar v-if="allowEdit || allowComment" />
 	</div>
@@ -44,8 +42,6 @@
 import { mapState } from 'vuex'
 import { Actions, ActionButton, Popover } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
-import ActionSortOptions from '../Actions/ActionSortOptions'
-import ActionChangeView from '../Actions/ActionChangeView'
 import ActionToggleSidebar from '../Actions/ActionToggleSidebar'
 import UserMenu from '../User/UserMenu'
 
@@ -55,8 +51,6 @@ export default {
 		Actions,
 		ActionButton,
 		Popover,
-		ActionChangeView,
-		ActionSortOptions,
 		ActionToggleSidebar,
 		ExportPoll: () => import('../Export/ExportPoll'),
 		PollInformation: () => import('../Poll/PollInformation'),
@@ -85,8 +79,7 @@ export default {
 <style lang="scss">
 .poll-header-buttons {
 	display: flex;
-	flex-wrap: wrap-reverse;
-	flex: 0 1 auto;
+	flex: 0;
 	justify-content: flex-end;
 	align-self: flex-end;
 	border-radius: var(--border-radius-pill);
