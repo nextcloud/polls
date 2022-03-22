@@ -21,19 +21,14 @@
   -->
 
 <template lang="html">
-	<div class="poll-title">
-		<div v-if="!hideTitle" class="poll-title__title">
-			{{ title }}
-		</div>
-		<div v-if="showSubText" class="poll-title__sub">
-			<span>{{ subTextLeft }}</span>
-			<span v-for="(subText) in subTexts" :key="subText.text">
-				<span :class="[subText.class, subText.icon]">{{ subText.text }}</span>
-				<button v-if="isNoAccessSet" @click="openSharing">
-					{{ t('polls', 'Grant access') }}
-				</button>
-			</span>
-		</div>
+	<div class="poll-info-line">
+		<span>{{ subTextLeft }}</span>
+		<span v-for="(subText) in subTexts" :key="subText.text">
+			<span :class="[subText.class, subText.icon]">{{ subText.text }}</span>
+			<!-- <button v-if="isNoAccessSet" @click="openSharing">
+				{{ t('polls', 'Grant access') }}
+			</button> -->
+		</span>
 	</div>
 </template>
 
@@ -43,18 +38,7 @@ import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 
 export default {
-	name: 'PollTitle',
-
-	props: {
-		showSubText: {
-			type: Boolean,
-			default: false,
-		},
-		hideTitle: {
-			type: Boolean,
-			default: false,
-		},
-	},
+	name: 'PollInfoLine',
 
 	computed: {
 		...mapState({
@@ -91,7 +75,7 @@ export default {
 
 			if (this.isNoAccessSet) {
 				return [{
-					text: t('polls', 'Currently no users have access to this poll'),
+					text: t('polls', 'Invite users via the share tab in the sidebar'),
 					icon: 'icon-error',
 					class: 'closed',
 				}]
@@ -173,49 +157,48 @@ export default {
 </script>
 
 <style lang="scss">
-	.poll-title {
-		.poll-title__sub {
-			opacity: 0.7;
-			line-height: 1.2em;
-			font-size: 1em;
+.poll-info-line {
+	display: flex;
+	flex-wrap: wrap;
+	opacity: 0.7;
+	font-size: 1em;
 
-			button {
-				margin-left: 8px;
-			}
-
-			& > span:not(:last-child)::after {
-				content: "|";
-				padding: 0 4px;
-			}
-
-			[class^='icon-'], [class*=' icon-'] {
-				padding-left: 21px;
-				background-position: left center;
-			}
-			.closed {
-				color: var(--color-error);
-				font-weight: 700;
-			}
-			.closing {
-				color: var(--color-warning);
-				font-weight: 700;
-			}
-			.open {
-				font-weight: 700;
-			}
-			.archived {
-				color: var(--color-error);
-				font-weight: 700;
-			}
-			.created {
-				color: var(--color-text-light);
-			}
-		}
-
-		.poll-title__title {
-			font-weight: bold;
-			font-size: 1.3em;
-			line-height: 1.5em;
-		}
+	button {
+		margin-left: 8px;
 	}
+
+	& > span:not(:last-child)::after {
+		content: "|";
+		padding: 0 4px;
+	}
+
+	[class^="icon-"],
+	[class*=" icon-"] {
+		padding-left: 21px;
+		background-position: left center;
+	}
+
+	.closed {
+		color: var(--color-error);
+		font-weight: 700;
+	}
+
+	.closing {
+		color: var(--color-warning);
+		font-weight: 700;
+	}
+
+	.open {
+		font-weight: 700;
+	}
+
+	.archived {
+		color: var(--color-error);
+		font-weight: 700;
+	}
+
+	.created {
+		color: var(--color-text-light);
+	}
+}
 </style>

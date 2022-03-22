@@ -22,22 +22,14 @@
 
 <template>
 	<AppContent class="poll-list">
-		<div class="area__header">
-			<h2 class="title">
-				{{ title }}
-			</h2>
-		</div>
+		<HeaderBar class="area__header">
+			<template #title>
+				{{ t('polls', 'Adminitrative poll management') }}
+			</template>
+			{{ t('polls', 'Manage polls of other users. You can take over the ownership or delete polls.') }}
+		</HeaderBar>
 
 		<div class="area__main">
-			<div>
-				<h2 class="title">
-					{{ t('polls', 'Manage polls') }}
-				</h2>
-				<h3 class="description">
-					{{ t('polls', 'Manage polls of other users. You can take over the ownership or delete polls.') }}
-				</h3>
-			</div>
-
 			<EmptyContent v-if="noPolls" icon="icon-polls">
 				{{ t('polls', 'No polls found for this category') }}
 				<template #desc>
@@ -118,6 +110,7 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, EmptyContent, Modal } from '@nextcloud/vue'
 import sortBy from 'lodash/sortBy'
+import HeaderBar from '../components/Base/HeaderBar'
 
 export default {
 	name: 'Administration',
@@ -126,10 +119,11 @@ export default {
 		AppContent,
 		Actions,
 		ActionButton,
+		EmptyContent,
+		HeaderBar,
+		Modal,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
 		PollItem: () => import('../components/PollList/PollItem'),
-		EmptyContent,
-		Modal,
 	},
 
 	data() {

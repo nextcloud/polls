@@ -22,21 +22,18 @@
 
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
-		<HeaderBar>
-			<template #left>
-				<div id="header_poll_title">
-					{{ poll.title }}
-				</div>
+		<HeaderBar class="area__header">
+			<template #title>
+				{{ poll.title }}
 			</template>
 			<template #right>
 				<PollHeaderButtons />
 			</template>
-			<template #bottom>
-				<PollTitle hide-title show-sub-text />
-			</template>
+			<PollInfoLine />
 		</HeaderBar>
+
 		<div class="vote_main">
-			<div v-if="poll.description" class="area__header">
+			<div v-if="poll.description" class="area__description">
 				<MarkUpDescription />
 			</div>
 
@@ -84,7 +81,7 @@ import { mapState, mapGetters } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription'
-import PollTitle from '../components/Poll/PollTitle'
+import PollInfoLine from '../components/Poll/PollInfoLine'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons'
 import HeaderBar from '../components/Base/HeaderBar'
 
@@ -96,7 +93,7 @@ export default {
 		HeaderBar,
 		MarkUpDescription,
 		PollHeaderButtons,
-		PollTitle,
+		PollInfoLine,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
 		OptionProposals: () => import('../components/Options/OptionProposals'),
 		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal'),
@@ -172,6 +169,11 @@ export default {
 </script>
 
 <style lang="scss">
+.vote_main {
+	display: flex;
+	flex-direction: column;
+	row-gap: 8px;
+}
 
 .vote_head {
 	display: flex;
@@ -197,5 +199,4 @@ export default {
 	width: 44px;
 	height: 44px;
 }
-
 </style>

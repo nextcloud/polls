@@ -22,16 +22,17 @@
 
 <template>
 	<AppContent>
-		<div class="poll-header-buttons">
-			<ActionToggleSidebar />
-		</div>
-		<div class="combo-title">
-			{{ title }}
-		</div>
-
-		<div v-if="description" class="area__header">
+		<HeaderBar class="area__header">
+			<template #title>
+				{{ title }}
+			</template>
+			<template #right>
+				<div class="poll-header-buttons">
+					<ActionToggleSidebar />
+				</div>
+			</template>
 			{{ description }}
-		</div>
+		</HeaderBar>
 
 		<div class="area__main">
 			<ComboTable v-show="polls.length" />
@@ -54,15 +55,17 @@ import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ComboTable from '../components/Combo/ComboTable'
 import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
+import HeaderBar from '../components/Base/HeaderBar'
 
 export default {
 	name: 'Combo',
 
 	components: {
+		ActionToggleSidebar,
 		AppContent,
 		ComboTable,
 		EmptyContent,
-		ActionToggleSidebar,
+		HeaderBar,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
 	},
 
@@ -123,20 +126,3 @@ export default {
 }
 
 </script>
-
-<style lang="scss">
-	.combo-title {
-		font-weight: bold;
-		font-size: 1.3em;
-		line-height: 1.5em;
-	}
-
-	.poll-header-buttons {
-		display: flex;
-		flex-wrap: wrap-reverse;
-		flex: 0 1 auto;
-		justify-content: flex-end;
-		align-self: flex-end;
-		border-radius: var(--border-radius-pill);
-	}
-</style>

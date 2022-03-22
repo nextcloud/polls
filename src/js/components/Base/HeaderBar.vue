@@ -21,70 +21,87 @@
   -->
 
 <template lang="html">
-	<Component :is="tag" class="header_bar">
+	<div class="header_bar">
 		<div class="header_bar_top">
-			<div id="bar_top_left" class="bar_top_left">
-				<slot name="left" />
+			<div class="bar_top_left">
+				<div :class="['header_title', { 'clamped': clamped }]" @click="toggleClamp()">
+					<slot name="title" />
+				</div>
+				<div class="bar_top_left_sub">
+					<slot name="sub" />
+				</div>
 			</div>
 			<div class="bar_top_right">
 				<slot name="right" />
-
 			</div>
 		</div>
 		<div class="header_bar_bottom">
-			<slot name="bottom" />
+			<slot name="default" />
 		</div>
-	</Component>
+	</div>
 </template>
 
 <script>
-import Spacer from './Spacer'
-
 export default {
 	name: 'HeaderBar',
-	components: {
-		Spacer,
+	data() {
+		return {
+			clamped: true,
+		}
 	},
-
-	props: {
-		tag: {
-			type: String,
-			default: 'div',
+	methods: {
+		toggleClamp() {
+			this.clamped = !this.clamped
 		},
 	},
 }
-
 </script>
 
 <style lang="scss">
+.page--scrolled .header_bar_bottom {
+	display: none;
+}
+
 .header_bar {
 	.header_bar_top {
 		display: flex;
 		flex-wrap: wrap-reverse;
 		justify-content: flex-end;
+		gap:8px;
+		min-height: 3em;
+
 		.bar_top_left {
-			font-weight: bold;
-			font-size: 1.3em;
-			line-height: 1.5em;
+			display: flex;
+			flex-direction: column;
 			flex: 1 180px;
+			justify-content: center;
+		}
+
+		.header_title {
+			font-weight: bold;
+			font-size: 1em;
+			line-height: 1.5em;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			display: -webkit-box;
-			-webkit-line-clamp: 2;
-			line-clamp: 2;
-			-webkit-box-orient: vertical;
-			padding-right: 8px;
+			&.clamped {
+				-webkit-line-clamp: 2;
+				line-clamp: 2;
+				-webkit-box-orient: vertical;
+			}
+		}
+		.sub {
+			display: flex;
+			flex-wrap: wrap;
+		}
+		.header_bar_bottom {
+			display: flex;
+			margin-bottom: 16px;
 		}
 	}
 
-	.header_bar_bottom {
-		display: flex;
-		margin-bottom: 16px;
-	}
-
-	[class*='bar_'] {
+	[class*="bar_"] {
 		flex: 0;
 	}
 }
-
 </style>

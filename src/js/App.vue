@@ -44,7 +44,7 @@ import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
-import './assets/scss/dashboard.scss'
+import './assets/scss/theming.scss'
 import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls'
 
@@ -179,7 +179,7 @@ export default {
 			setFilter: 'polls/setFilter',
 		}),
 		handleScroll() {
-			if (window.scrollY > 70) {
+			if (window.scrollY > 20) {
 				document.body.classList.add('page--scrolled')
 			} else {
 				document.body.classList.remove('page--scrolled')
@@ -241,13 +241,36 @@ export default {
 </script>
 
 <style lang="scss">
-[class^='area__'] {
-	padding: 0 8px 16px 0;
+.app-content {
+	display: flex;
+	flex-direction: column;
+	padding: 0px 8px;
+	row-gap: 8px;
+	background-color: transparent !important;
+}
+
+// global areas settings
+[class*='area__'] {
+	padding: 4px 0px;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
 	min-width: 270px;
 }
 
+// special settings for header area
+.area__header {
+	position: sticky;
+	top: 50px; // was 54px
+	background-color: var(--color-main-background);
+	border-bottom: 1px solid var(--color-border);
+	z-index: 9;
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-right: 8px;
+	padding-left: 56px;
+}
+
+// global modal settings
 .modal__content {
 	padding: 14px;
 	display: flex;
@@ -276,80 +299,4 @@ export default {
 	text-decoration: underline;
 }
 
-.app-content {
-	display: flex;
-	flex-direction: column;
-	padding: 4px 8px 0 40px;
-	min-width: 320px;
-	background-color: transparent !important;
-}
-
-// Theming styles
-
-.app-polls {
-	body.dashboard--light &,
-	body.dashboard--dark & {
-		.app-navigation {
-			border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
-		}
-		.app-sidebar {
-			border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
-		}
-
-	}
-
-	body.dashboard--light &,
-	body.dashboard--dark &,
-	body.polls--light &,
-	body.polls--dark & {
-		// background: var(--polls-background-image);
-		.app-navigation {
-			border-right: 0px;
-			box-shadow: 2px 0 6px var(--color-box-shadow);
-		}
-
-		.poll-header-buttons {
-			align-self: flex-end;
-			border-radius: var(--border-radius-pill);
-			background-color: var(--color-main-background);
-		}
-
-		[class*='area__'] {
-			padding: 8px;
-			margin: 0 6px 24px 0;
-			border-radius: var(--border-radius-large);
-			box-shadow: 2px 2px 6px var(--color-box-shadow);
-		}
-
-		&.translucent {
-			.app-navigation, .app-sidebar, .poll-header-buttons, [class*='area__'] {
-				backdrop-filter: blur(10px);
-				background-color: var(--color-background-translucent);
-			}
-		}
-	}
-
-	body.theme--light.polls--light & {
-		#app-navigation-vue .app-navigation-toggle svg {
-			filter: invert(1) hue-rotate(180deg) !important;
-			opacity: 1;
-		}
-
-		.poll-title, .poll-list-title {
-			filter: invert(1) hue-rotate(180deg) !important;
-		}
-	}
-
-	body.theme--dark.dashboard--dark &,
-	body.theme--dark.polls--dark & {
-		#app-navigation-vue .app-navigation-toggle svg {
-			filter: invert(1) hue-rotate(180deg) !important;
-			opacity: 1;
-		}
-
-		.poll-title, .poll-list-title {
-			filter: invert(1) hue-rotate(180deg) !important;
-		}
-	}
-}
 </style>
