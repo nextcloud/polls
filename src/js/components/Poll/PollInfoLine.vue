@@ -34,7 +34,6 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { emit } from '@nextcloud/event-bus'
 import moment from '@nextcloud/moment'
 
 export default {
@@ -144,12 +143,6 @@ export default {
 			}
 			return t('polls', 'never')
 
-		},
-	},
-
-	methods: {
-		openSharing() {
-			emit('polls:sidebar:toggle', { open: true, activeTab: 'sharing' })
 		},
 	},
 }
