@@ -185,6 +185,7 @@ export default {
 	}
 }
 
+
 .area__main {
 	display: flex;
 	flex-direction: column;
