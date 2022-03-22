@@ -27,7 +27,6 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
@@ -335,11 +334,9 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 */
 	public function validatePublicUsername(string $userName, string $token): DataResponse {
-		try {
-			return new DataResponse(['result' => $this->systemService->validatePublicUsername($userName, $token), 'name' => $userName], Http::STATUS_OK);
-		} catch (\Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
-		}
+		return $this->response(function () use ($userName, $token) {
+			return ['result' => $this->systemService->validatePublicUsername($userName, $token), 'name' => $userName];
+		});
 	}
 
 	/**
@@ -348,11 +345,9 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 */
 	public function validateEmailAddress(string $emailAddress): DataResponse {
-		try {
-			return new DataResponse(['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress], Http::STATUS_OK);
-		} catch (\Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_CONFLICT);
-		}
+		return $this->response(function () use ($emailAddress) {
+			return ['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress];
+		});
 	}
 
 	/**
