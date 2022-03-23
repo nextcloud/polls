@@ -55,7 +55,18 @@
 	<div v-else class="poll-item__item">
 		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
 
-		<router-link class="item__title"
+		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
+			<div class="item__title__title">
+				{{ poll.title }}
+			</div>
+
+			<div class="item__title__description">
+				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+			</div>
+		</div>
+
+		<router-link v-else
+			class="item__title"
 			:to="{ name: 'vote', params: { id: poll.id }}"
 			:class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
 			<div class="item__title__title">
@@ -108,6 +119,10 @@ export default {
 		poll: {
 			type: Object,
 			default: undefined,
+		},
+		noLink: {
+			type: Boolean,
+			default: false,
 		},
 	},
 
