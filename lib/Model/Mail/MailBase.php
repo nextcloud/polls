@@ -211,7 +211,7 @@ abstract class MailBase {
 		return $this->getParsedMarkDown($this->poll->getDescription());
 	}
 
-	protected function getParsedMarkDown($source) : string {
+	protected function getParsedMarkDown(string $source) : string {
 		$config = [
 			'renderer' => [
 				'soft_break' => "<br />",

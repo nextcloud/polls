@@ -77,6 +77,7 @@ export default {
 		return {
 			workBook: [],
 			sheetData: [],
+			emailAddresses: [],
 		}
 	},
 
@@ -90,11 +91,15 @@ export default {
 			poll: (state) => state.poll,
 			options: (state) => state.options,
 			votes: (state) => state.votes,
+			isOwner: (state) => state.poll.acl.allowEdit,
 		}),
 	},
 
 	methods: {
-		exportFile(type) {
+		async exportFile(type) {
+			const participantsHeader = [t('polls', 'Participants')]
+			const fromHeader = [t('polls', 'From')]
+			const toHeader = [t('polls', 'To')]
 			this.workBook = xlsxUtils.book_new()
 			this.workBook.SheetNames.push(this.poll.title.slice(0, 31))
 			this.sheetData = []
@@ -106,18 +111,41 @@ export default {
 				)
 			}
 
+			if (this.isOwner) {
+				participantsHeader.push(t('polls', 'Email address'))
+				fromHeader.push('')
+				toHeader.push('')
+				const response = await this.$store.dispatch('poll/getParticipantsEmailAddresses')
+				this.emailAddresses = response.data
+			}
+
 			if (this.poll.type === 'textPoll') {
-				this.sheetData.push(['', ...this.options.list.map((item) => item.text)])
+				this.sheetData.push([
+					...participantsHeader,
+					...this.options.list.map((item) => item.text),
+				])
 
 			} else if (['csv'].includes(type)) {
-				this.sheetData.push([t('polls', 'Participants'), ...this.options.list.map((option) => this.explodeDates(option).iso)])
+				this.sheetData.push([
+					...participantsHeader,
+					...this.options.list.map((option) => this.explodeDates(option).iso),
+				])
 
 			} else if (['html'].includes(type)) {
-				this.sheetData.push([t('polls', 'Participants'), ...this.options.list.map((option) => this.explodeDates(option).raw)])
+				this.sheetData.push([
+					...participantsHeader,
+					...this.options.list.map((option) => this.explodeDates(option).raw),
+				])
 
 			} else {
-				this.sheetData.push([t('polls', 'From'), ...this.options.list.map((option) => this.explodeDates(option).from.dateTime)])
-				this.sheetData.push([t('polls', 'To'), ...this.options.list.map((option) => this.explodeDates(option).to.dateTime)])
+				this.sheetData.push([
+					...fromHeader,
+					...this.options.list.map((option) => this.explodeDates(option).from.dateTime),
+				])
+				this.sheetData.push([
+					...toHeader,
+					...this.options.list.map((option) => this.explodeDates(option).to.dateTime),
+				])
 			}
 
 			if (['html', 'ods', 'xlsx'].includes(type)) {
@@ -127,7 +155,6 @@ export default {
 			} else {
 				this.addVotesArray()
 			}
-
 			const workBookOutput = xlsxWrite(this.workBook, { bookType: type, type: 'binary' })
 			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${type}`)
 		},
@@ -135,6 +162,9 @@ export default {
 		addVotesArray(style) {
 			this.participants.forEach((participant) => {
 				const votesLine = [participant.displayName]
+				if (this.isOwner) {
+					votesLine.push(this.emailAddresses.find((item) => item.displayName === participant.displayName).emailAddress)
+				}
 
 				this.options.list.forEach((option, i) => {
 					if (style === 'symbols') {
@@ -150,7 +180,7 @@ export default {
 			})
 
 			const workSheet = xlsxUtils.aoa_to_sheet(this.sheetData)
-			this.workBook.Sheets[this.poll.title] = workSheet
+			this.workBook.Sheets[this.poll.title.slice(0, 31)] = workSheet
 		},
 
 		s2ab(s) {

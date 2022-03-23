@@ -348,9 +348,9 @@ class PollService {
 	/**
 	 * Collect email addresses from particitipants
 	 *
-	 * @return string[]
+	 * @return string[][]
 	 *
-	 * @psalm-return array<int, string>
+	 * @psalm-return list<array{displayName: string, emailAddress: string, combined: string}>
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
@@ -359,9 +359,12 @@ class PollService {
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
 		$list = [];
 		foreach ($votes as $vote) {
-			$list[] = $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>';
+			$list[] = [
+				'displayName' => $vote->getDisplayName(),
+				'emailAddress' => $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()),
+				'combined' => $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>'];
 		}
-		return array_unique($list);
+		return $list;
 	}
 
 	/**
