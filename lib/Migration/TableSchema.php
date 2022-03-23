@@ -150,7 +150,7 @@ abstract class TableSchema {
 			'created' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'expire' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'deleted' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'access' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'hidden', 'length' => 1024]],
+			'access' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'private', 'length' => 1024]],
 			'anonymous' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'allow_maybe' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 1]],
 			'vote_limit' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],

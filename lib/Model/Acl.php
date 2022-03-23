@@ -182,7 +182,7 @@ class Acl implements JsonSerializable {
 					return false; // always deny access, if poll is archived
 				}
 
-				if ($this->poll->getAccess() === Poll::ACCESS_PUBLIC) {
+				if ($this->poll->getAccess() === Poll::ACCESS_OPEN) {
 					return true; // grant access if poll poll is public
 				}
 

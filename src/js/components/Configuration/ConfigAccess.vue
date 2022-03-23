@@ -25,7 +25,7 @@
 		<RadioGroupDiv v-model="pollAccess" :options="accessOptions" />
 		<CheckboxRadioSwitch class="indented"
 			:checked.sync="pollImportant"
-			:disabled="pollAccess !== 'public'"
+			:disabled="pollAccess !== 'open'"
 			type="switch">
 			{{ t('polls', 'Relevant for all users') }}
 		</CheckboxRadioSwitch>
@@ -48,8 +48,8 @@ export default {
 	data() {
 		return {
 			accessOptions: [
-				{ value: 'hidden', label: t('polls', 'Only invited users') },
-				{ value: 'public', label: t('polls', 'All users') },
+				{ value: 'private', label: t('polls', 'Only invited users') },
+				{ value: 'open', label: t('polls', 'All users') },
 			],
 		}
 	},

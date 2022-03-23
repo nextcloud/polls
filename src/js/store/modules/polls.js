@@ -52,7 +52,7 @@ const state = {
                 && (poll.important
                     || poll.userHasVoted
                     || poll.isOwner
-                    || (poll.allowView && poll.access !== 'public')
+                    || (poll.allowView && poll.access !== 'open')
                 )
 			},
 		},
@@ -69,7 +69,7 @@ const state = {
 			},
 		},
 		{
-			id: 'hidden',
+			id: 'private',
 			title: t('polls', 'Private polls'),
 			titleExt: t('polls', 'Private polls'),
 			description: t('polls', 'All private polls, to which you have access.'),
@@ -77,7 +77,7 @@ const state = {
 			pinned: false,
 			createDependent: true,
 			filterCondition(poll) {
-				return !poll.deleted && poll.access === 'hidden'
+				return !poll.deleted && poll.access === 'private'
 			},
 		},
 		{
@@ -93,7 +93,7 @@ const state = {
 			},
 		},
 		{
-			id: 'public',
+			id: 'open',
 			title: t('polls', 'Open polls'),
 			titleExt: t('polls', 'Open polls'),
 			description: t('polls', 'A complete list with all open polls on this site, regardless who is the owner.'),
@@ -101,7 +101,7 @@ const state = {
 			pinned: false,
 			createDependent: true,
 			filterCondition(poll) {
-				return !poll.deleted && poll.access === 'public'
+				return !poll.deleted && poll.access === 'open'
 			},
 		},
 		{

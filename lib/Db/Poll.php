@@ -85,6 +85,8 @@ class Poll extends Entity implements JsonSerializable {
 	public const TYPE_TEXT = 'textPoll';
 	public const ACCESS_HIDDEN = 'hidden';
 	public const ACCESS_PUBLIC = 'public';
+	public const ACCESS_PRIVATE = 'private';
+	public const ACCESS_OPEN = 'open';
 	public const SHOW_RESULTS_ALWAYS = 'always';
 	public const SHOW_RESULTS_CLOSED = 'closed';
 	public const SHOW_RESULTS_NEVER = 'never';
@@ -281,6 +283,16 @@ class Poll extends Entity implements JsonSerializable {
 	// alias of setOwner($value)
 	public function setUserId(string $userId) : void {
 		$this->setOwner($userId);
+	}
+
+	public function getAccess() {
+		if ($this->access === self::ACCESS_PUBLIC) {
+			return self::ACCESS_OPEN;
+		}
+		if ($this->access === self::ACCESS_HIDDEN) {
+			return self::ACCESS_PRIVATE;
+		}
+		return $this->access;
 	}
 
 	public function getProposalsExpired(): bool {

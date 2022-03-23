@@ -144,8 +144,8 @@ export default {
 				return t('polls', 'Public link')
 			}
 
-			if (this.type === 'all') {
-				return t('polls', 'Open poll')
+			if (this.type === 'internalAccess') {
+				return t('polls', 'Internal access')
 			}
 
 			if (this.displayName) {
@@ -161,11 +161,11 @@ export default {
 				return t('polls', 'Token: {token}', { token: this.userId })
 			}
 
-			if (this.type === 'all') {
+			if (this.type === 'internalAccess') {
 				if (this.disabled) {
-					return t('polls', 'Access for all users of this site is disabled')
+					return t('polls', 'This poll is private')
 				}
-				return t('polls', 'Access for all users of this site is enabled')
+				return t('polls', 'This is an open poll')
 			}
 
 			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.type)) {
@@ -187,7 +187,7 @@ export default {
 				return 'icon-public'
 			}
 
-			if (this.type === 'all') {
+			if (this.type === 'internalAccess') {
 				return 'icon-public'
 			}
 

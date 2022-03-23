@@ -36,7 +36,7 @@ const defaultPoll = () => ({
 	created: 0,
 	expire: 0,
 	deleted: 0,
-	access: 'hidden',
+	access: 'private',
 	anonymous: 0,
 	allowComment: 0,
 	allowMaybe: 0,

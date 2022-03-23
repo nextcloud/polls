@@ -222,7 +222,7 @@ class PollService {
 		$this->poll->setOwner($this->userSession->getUser()->getUID());
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
-		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
+		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
 		$this->poll->setExpire(0);
 		$this->poll->setAnonymous(0);
 		$this->poll->setAllowMaybe(0);
@@ -259,7 +259,7 @@ class PollService {
 			throw new EmptyTitleException('Title must not be empty');
 		}
 
-		if (isset($poll['access']) && $poll['access'] === (Poll::ACCESS_PUBLIC)) {
+		if (isset($poll['access']) && $poll['access'] === (Poll::ACCESS_OPEN)) {
 			$this->acl->request(Acl::PERMISSION_ALL_ACCESS);
 		}
 
@@ -328,7 +328,7 @@ class PollService {
 		$this->poll->setOwner($this->userSession->getUser()->getUID());
 		$this->poll->setTitle('Clone of ' . $origin->getTitle());
 		$this->poll->setDeleted(0);
-		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
+		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
 
 		$this->poll->setType($origin->getType());
 		$this->poll->setDescription($origin->getDescription());
@@ -401,7 +401,7 @@ class PollService {
 	 * @psalm-return array{0: string, 1: string}
 	 */
 	private function getValidAccess(): array {
-		return [Poll::ACCESS_HIDDEN, Poll::ACCESS_PUBLIC];
+		return [Poll::ACCESS_PRIVATE, Poll::ACCESS_OPEN];
 	}
 
 	/**

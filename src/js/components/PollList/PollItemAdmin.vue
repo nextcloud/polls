@@ -110,7 +110,7 @@ export default {
 		}),
 
 		accessType() {
-			if (this.poll.access === 'public') {
+			if (this.poll.access === 'open') {
 				return t('polls', 'All users')
 			}
 			return t('polls', 'Only invited users')

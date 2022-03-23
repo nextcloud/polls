@@ -142,7 +142,7 @@ export default {
 		},
 
 		accessCaption() {
-			if (this.access === 'hidden') {
+			if (this.access === 'private') {
 				return t('polls', 'Access only for invited persons')
 			}
 			if (this.important) {
@@ -152,7 +152,7 @@ export default {
 		},
 
 		accessClass() {
-			if (this.access === 'hidden') {
+			if (this.access === 'private') {
 				return 'icon-polls-private-poll'
 			}
 			if (this.important) {
