@@ -47,7 +47,10 @@
 					:reverse="reverse"
 					@sort-list="setSort($event)" />
 
-				<PollItem v-for="(poll) in sortedList" :key="poll.id" :poll="poll">
+				<PollItem v-for="(poll) in sortedList"
+					:key="poll.id"
+					:poll="poll"
+					no-link>
 					<template #actions>
 						<Actions :force-menu="true">
 							<ActionButton icon="icon-add"
