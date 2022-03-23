@@ -125,7 +125,7 @@ class MailService {
 		} catch (\Exception $e) {
 			// catch silently
 		}
-		return $userId;
+		return '';
 	}
 
 	public function resendInvitation(string $token): Share {

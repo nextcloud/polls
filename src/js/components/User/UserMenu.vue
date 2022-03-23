@@ -198,10 +198,11 @@ export default {
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
 		},
+
 		async getAddresses() {
 			try {
 				const response = await this.$store.dispatch('poll/getParticipantsEmailAddresses')
-				await this.$copyText(response.data)
+				await this.$copyText(response.data.map((item) => item.combined))
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))

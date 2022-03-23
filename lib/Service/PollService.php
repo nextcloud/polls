@@ -359,9 +359,12 @@ class PollService {
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
 		$list = [];
 		foreach ($votes as $vote) {
-			$list[] = $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>';
+			$list[] = [
+				'displayName' => $vote->getDisplayName(),
+				'emailAddress' => $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()),
+				'combined' => $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>'];
 		}
-		return array_unique($list);
+		return $list;
 	}
 
 	/**
