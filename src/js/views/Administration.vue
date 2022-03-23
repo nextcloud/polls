@@ -24,7 +24,7 @@
 	<AppContent class="poll-list">
 		<HeaderBar class="area__header">
 			<template #title>
-				{{ t('polls', 'Adminitrative poll management') }}
+				{{ t('polls', 'Administrative poll management') }}
 			</template>
 			{{ t('polls', 'Manage polls of other users. You can take over the ownership or delete polls.') }}
 		</HeaderBar>
