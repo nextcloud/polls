@@ -146,10 +146,10 @@ export default {
 			}
 
 			if (this.poll.access === 'open') {
-				return t('polls', 'All users')
+				return t('polls', 'Open poll')
 			}
 
-			return t('polls', 'Only invited users')
+			return t('polls', 'Private poll')
 		},
 
 		accessIcon() {
