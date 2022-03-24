@@ -22,31 +22,31 @@
 
 <template lang="html">
 	<div :class="['input-div', { numeric: useNumModifiers }]">
-		<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="$emit('subtract')" />
 		<input ref="input"
 			:type="type"
 			:value="value"
 			:inputmode="inputmode"
 			:placeholder="placeholder"
-			:class="[{ 'has-modifier': useNumModifiers }, 'input', signalingClass]"
+			:class="[{ 'has-modifier': useNumModifiers, 'has-submit': !noSubmit }, 'input', signalingClass]"
 			@input="$emit('input', $event.target.value)"
 			@change="$emit('change', $event.target.value)"
 			@keyup.enter="$emit('submit', $event.target.value)">
+		<ArrowRight v-if="!useNumModifiers && !noSubmit" class="submit" @click="$emit('submit', $refs.input.value)" />
+		<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="$emit('subtract')" />
 		<PlusIcon v-if="useNumModifiers" class="modifier add" @click="$emit('add')" />
-		<ButtonDiv v-if="!useNumModifiers && !noSubmit" submit @click="$emit('submit', $refs.input.value)" />
 	</div>
 </template>
 
 <script>
-
-import ButtonDiv from '../Base/ButtonDiv'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
+import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
+
 export default {
 	name: 'InputDiv',
 
 	components: {
-		ButtonDiv,
+		ArrowRight,
 		PlusIcon,
 		MinusIcon,
 	},
@@ -113,7 +113,6 @@ export default {
 
 	.input-div {
 		position: relative;
-		display: flex;
 
 		input {
 			width: 100%;
@@ -122,6 +121,10 @@ export default {
 
 			&:empty:before {
 				color: grey;
+			}
+
+			&.has-submit {
+				padding-right: 34px;
 			}
 
 			&.has-modifier {
@@ -155,6 +158,17 @@ export default {
 
 			input {
 				text-align: center;
+			}
+		}
+
+		.submit {
+			position: absolute;
+			right: 6px;
+			top: 8px;
+			cursor: pointer;
+
+			&:hover {
+				background-color: var(--color-background-hover)
 			}
 		}
 
