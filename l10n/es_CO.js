@@ -27,7 +27,6 @@ OC.L10N.register(
     "Confirmed" : "Confirmado",
     "OK" : "OK",
     "Week" : "Semana",
-    "No Participants until now" : "No hay participantes por ahora",
     "never" : "nunca",
     "Access" : "Acceso",
     "Owner" : "Dueño",
