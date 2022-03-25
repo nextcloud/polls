@@ -56,14 +56,14 @@ export default {
 		}),
 
 		subTextLeft() {
-			if (this.access === 'hidden') {
+			if (this.access === 'private') {
 				return t('polls', 'A hidden poll from {name}', { name: this.ownerDisplayName })
 			}
 			return t('polls', 'A public poll from {name}', { name: this.ownerDisplayName })
 		},
 
 		isNoAccessSet() {
-			return this.access === 'hidden' && !this.hasShares && this.mayEdit
+			return this.access === 'private' && !this.hasShares && this.mayEdit
 		},
 
 		subTexts() {

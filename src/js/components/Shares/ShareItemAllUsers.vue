@@ -21,10 +21,10 @@
   -->
 
 <template>
-	<UserItem type="all"
+	<UserItem type="internalAccess"
 		:user-id="t('polls', 'Open poll')"
 		:display-name="t('polls', 'Open poll')"
-		:disabled="access==='hidden'"
+		:disabled="access==='private'"
 		show-email
 		is-no-user>
 		<template #status>
@@ -55,11 +55,11 @@ export default {
 
 		pollAccess: {
 			get() {
-				return this.access === 'public'
+				return this.access === 'open'
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { important: +value })
-				this.$store.commit('poll/setProperty', { access: value ? 'public' : 'hidden' })
+				this.$store.commit('poll/setProperty', { access: value ? 'open' : 'private' })
 				this.writePoll()
 			},
 		},

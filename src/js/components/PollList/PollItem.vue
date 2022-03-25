@@ -145,11 +145,11 @@ export default {
 				return t('polls', 'Archived')
 			}
 
-			if (this.poll.access === 'public') {
-				return t('polls', 'All users')
+			if (this.poll.access === 'open') {
+				return t('polls', 'Open poll')
 			}
 
-			return t('polls', 'Only invited users')
+			return t('polls', 'Private poll')
 		},
 
 		accessIcon() {
@@ -157,7 +157,7 @@ export default {
 				return 'icon-category-app-bundles'
 			}
 
-			if (this.poll.access === 'public') {
+			if (this.poll.access === 'open') {
 				return 'icon-polls-open-poll'
 			}
 
