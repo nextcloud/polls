@@ -47,6 +47,9 @@ use OCP\AppFramework\Db\Entity;
 class Comment extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_comments';
 
+	/** @var array $subComments */
+	protected $subComments = [];
+
 	/** @var int $pollId */
 	protected $pollId = 0;
 
@@ -74,12 +77,21 @@ class Comment extends Entity implements JsonSerializable {
 			'pollId' => $this->getPollId(),
 			'timestamp' => $this->getTimestamp(),
 			'comment' => $this->getComment(),
-			'user' => [
-				'userId' => $this->getUserId(),
-				'displayName' => $this->getDisplayName(),
-				'isNoUser' => $this->getIsNoUser(),
-			],
+			'user' => $this->getUser(),
+			'subComments' => $this->getSubComments(),
 		];
+	}
+
+	public function addSubComment(Comment $comment) {
+		$this->subComments[] = [
+			'id' => $comment->getId(),
+			'comment' => $comment->getComment(),
+			'timestamp' => $this->getTimestamp(),
+		];
+	}
+
+	public function getSubComments(): array {
+		return $this->subComments;
 	}
 
 	public function getDisplayName(): string {
@@ -91,6 +103,13 @@ class Comment extends Entity implements JsonSerializable {
 			: $this->userManager->get($this->userId)->getDisplayName();
 	}
 
+	public function getUser(): array {
+		return [
+			'userId' => $this->getUserId(),
+			'displayName' => $this->getDisplayName(),
+			'isNoUser' => $this->getIsNoUser(),
+		];
+	}
 	public function getIsNoUser(): bool {
 		return !($this->userManager->get($this->userId) instanceof IUser);
 	}

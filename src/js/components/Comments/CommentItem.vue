@@ -26,11 +26,14 @@
 		<div class="comment-item__content">
 			<span class="comment-item__user">{{ comment.user.displayName }}</span>
 			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
-			<div class="comment-item__comment">
-				{{ comment.comment }}
-			</div>
+			<p v-for="(subComment) in comment.subComments"
+				:key="subComment.id"
+				class="comment-item__comment">
+				{{ subComment.comment }}
+			</p>
 		</div>
 		<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
+			icon-mode
 			:title="t('polls', 'Delete comment')"
 			@delete="deleteComment()" />
 	</div>
@@ -95,6 +98,10 @@ export default {
 		&::before {
 			content: ' ~ '
 		}
+	}
+
+	.comment-item__comment {
+		hyphens: auto;
 	}
 
 	.comment-item__content {
