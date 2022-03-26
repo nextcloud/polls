@@ -22,12 +22,13 @@
 
 <template lang="html">
 	<div class="config-box">
-		<div :class="['config-box__header']">
+		<div class="config-box__header">
 			<slot name="icon" />
 			<div v-tooltip.auto="info" :class="['config-box__title', iconClassComputed, {indented: indented}]">
 				{{ title }}
 				<div v-if="info" class="icon-info" />
 			</div>
+			<slot name="actions" />
 		</div>
 		<div class="config-box__container">
 			<slot />
@@ -75,6 +76,8 @@ export default {
 .config-box__header {
 	display: flex;
 	align-content: center;
+	align-items: center;
+	justify-content: space-between;
 	gap: 5px;
 	margin: 8px 0 8px 0;
 }

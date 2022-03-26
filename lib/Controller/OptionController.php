@@ -72,6 +72,12 @@ class OptionController extends Controller {
 		});
 	}
 
+	public function addBulk(int $pollId, string $text = ''): DataResponse {
+		return $this->responseCreate(function () use ($pollId, $text) {
+			return ['options' => $this->optionService->addBulk($pollId, $text)];
+		});
+	}
+
 	/**
 	 * Update option
 	 * @NoAdminRequired

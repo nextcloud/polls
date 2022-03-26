@@ -181,6 +181,22 @@ const actions = {
 		}
 	},
 
+	async addBulk(context, payload) {
+		const endPoint = 'apps/polls/option/bulk'
+
+		try {
+			const response = await axios.post(generateUrl(endPoint), {
+				pollId: context.rootState.route.params.id,
+				text: payload.text,
+			})
+			context.commit('set', { options: response.data.options })
+		} catch (e) {
+			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
+		}
+	},
+
 	async update(context, payload) {
 		const endPoint = `apps/polls/option/${payload.option.id}`
 

@@ -69,6 +69,7 @@ return [
 
 		['name' => 'option#list', 'url' => '/poll/{pollId}/options', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/option', 'verb' => 'POST'],
+		['name' => 'option#addBulk', 'url' => '/option/bulk', 'verb' => 'POST'],
 		['name' => 'option#update', 'url' => '/option/{optionId}', 'verb' => 'PUT'],
 		['name' => 'option#delete', 'url' => '/option/{optionId}', 'verb' => 'DELETE'],
 

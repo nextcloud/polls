@@ -196,6 +196,26 @@ class OptionService {
 
 		return $this->option;
 	}
+	/**
+	 * Add a new option
+	 *
+	 * @return Option[]
+	 */
+	public function addBulk(int $pollId, string $pollOptionText = ''): array {
+		$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
+
+		$newOptions = array_unique(explode(PHP_EOL, $pollOptionText));
+		foreach ($newOptions as $option) {
+			if ($option) {
+				try {
+					$this->add($pollId, 0, $option);
+				} catch (DuplicateEntryException $e) {
+					continue;
+				}
+			}
+		}
+		return $this->list($pollId);
+	}
 
 	/**
 	 * Update option
