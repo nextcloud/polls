@@ -77,7 +77,6 @@ OC.L10N.register(
     "Error while saving comment" : "Error en desar el comentari",
     "Delete comment" : "Esborrar comentari",
     "Error while deleting the comment" : "Error en suprimir el comentari",
-    "Relevant for all users" : "Rellevant per a tots els usuaris",
     "Allow admins to edit this poll" : "Permet als administradors editar aquesta enquesta",
     "Anonymous poll" : "Enquesta anònima",
     "Always show results" : "Mostra sempre els resultats",

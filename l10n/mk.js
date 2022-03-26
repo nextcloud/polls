@@ -11,7 +11,6 @@ OC.L10N.register(
     "Conflict" : "Конфликт",
     "New comment …" : "Нов коментар ...",
     "Delete comment" : "Избриши коментар",
-    "All users" : "Сите корисници",
     "Title" : "Наслов",
     "Cancel" : "Откажи",
     "Apply" : "Примени",

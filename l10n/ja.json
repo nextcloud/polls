@@ -28,7 +28,6 @@
     "Error while saving comment" : "コメントの保存中にエラーが発生しました",
     "Delete comment" : "コメントを削除",
     "Error while deleting the comment" : "コメントの削除中にエラーが発生しました",
-    "All users" : "すべてのユーザー",
     "Allow admins to edit this poll" : "管理者がこの投票を編集することを許可",
     "Allow Comments" : "コメントを許可",
     "Anonymous poll" : "匿名投票",

@@ -15,7 +15,6 @@ OC.L10N.register(
     "%s invited you to a poll" : "%s vos condivèt a un sondatge",
     "New comment …" : "Nòu comentari…",
     "Delete comment" : "Suprimir comentari",
-    "All users" : "Totes los utilizaires",
     "Title" : "Títol",
     "Cancel" : "Anullar",
     "Apply" : "Aplicar",
