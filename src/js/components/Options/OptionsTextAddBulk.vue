@@ -30,12 +30,18 @@
 				{{ caption }}
 			</ActionButton>
 		</Actions>
+
 		<Modal v-if="showModal" size="small" :can-close="false">
 			<div class="option-clone-date modal__content">
+				<h2>{{ t('polls', 'Create multiple options at once') }}</h2>
+
+				<p>{{ t('polls', 'Each line creates a new option. Duplicates will get skipped without warning.') }}</p>
+
 				<textarea v-model="newPollTexts"
 					class="add-options-list"
 					:placeholder="placeholder" />
-				<div class="buttons">
+
+				<div class="modal__buttons">
 					<ButtonDiv :title="t('polls', 'Close')" @click="showModal = false" />
 					<ButtonDiv :primary="true" :title="t('polls', 'Add options')" @click="addOptionsList()" />
 				</div>
@@ -82,14 +88,10 @@ export default {
 			if (this.newPollTexts) {
 				try {
 					await this.$store.dispatch('options/addBulk', { text: this.newPollTexts })
-					showSuccess(t('polls', 'Options added (possible duplicates got skipped)'))
+					showSuccess(t('polls', 'Options added'))
 					this.newPollTexts = ''
 				} catch (e) {
-					if (e.response.status === 409) {
-						showError(t('polls', '{optionTexts} already exists', { optionText: this.newPollText }))
-					} else {
-						showError(t('polls', 'Error adding options', { optionText: this.newPollText }))
-					}
+					showError(t('polls', 'Error adding options', { optionText: this.newPollText }))
 				}
 			}
 		},
@@ -98,6 +100,10 @@ export default {
 </script>
 
 <style lang="scss">
+	.option-clone-date.modal__content {
+		padding-left: 28px;
+		padding-right: 28px;
+	}
 	.add-options-list {
 		width: 99%;
 		resize: vertical;
