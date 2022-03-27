@@ -32,8 +32,9 @@
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Available Options')" :icon-class="pollTypeIcon">
-			<template v-if="pollType === 'textPoll'" #actions>
-				<OptionsTextAddBulk />
+			<template #actions>
+				<OptionsTextAddBulk v-if="pollType === 'textPoll' && !closed" />
+				<OptionsDateAdd v-if="pollType === 'datePoll' && !closed" />
 			</template>
 			<OptionsDate v-if="pollType === 'datePoll'" />
 			<OptionsText v-if="pollType === 'textPoll'" />
@@ -58,6 +59,7 @@ export default {
 		OptionsDate,
 		OptionsDateShift,
 		OptionsText,
+		OptionsDateAdd: () => import('../Options/OptionsDateAdd'),
 		OptionsTextAddBulk: () => import('../Options/OptionsTextAddBulk'),
 	},
 
