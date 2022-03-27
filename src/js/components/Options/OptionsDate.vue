@@ -22,7 +22,6 @@
 
 <template>
 	<div>
-		<OptionsDateAdd v-if="!closed" />
 		<transition-group is="ul" v-if="countOptions">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
@@ -42,7 +41,10 @@
 						:title="t('polls', 'Delete option')"
 						@delete="removeOption(option)" />
 					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton v-if="!closed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
+						<ActionButton v-if="!closed" @click="cloneOptionModal(option)">
+							<template #icon>
+								<CloneDateIcon />
+							</template>
 							{{ t('polls', 'Clone option') }}
 						</ActionButton>
 						<ActionButton v-if="closed"
@@ -76,18 +78,19 @@ import OptionCloneDate from './OptionCloneDate'
 import OptionItem from './OptionItem'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 import { dateUnits } from '../../mixins/dateMixins'
+import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 
 export default {
 	name: 'OptionsDate',
 
 	components: {
+		CloneDateIcon,
 		Actions,
 		ActionButton,
 		ActionDelete,
 		EmptyContent,
 		Modal,
 		OptionCloneDate,
-		OptionsDateAdd: () => import('./OptionsDateAdd'),
 		OptionItem,
 		OptionItemOwner: () => import('./OptionItemOwner'),
 	},

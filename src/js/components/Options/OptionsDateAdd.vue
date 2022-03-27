@@ -28,7 +28,12 @@
 		@change="changedDate"
 		@pick="pickedDate">
 		<template #input>
-			<ButtonDiv :title="caption" :primary="primary" />
+			<VueButton type="primary" :aria-label="buttonAriaLabel">
+				<template #icon>
+					<AddDateIcon />
+				</template>
+				<span v-if="caption"> {{ caption }} </span>
+			</VueButton>
 		</template>
 
 		<template #header>
@@ -70,16 +75,17 @@
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
-import { CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
-import ButtonDiv from '../Base/ButtonDiv'
+import { Button as VueButton, CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
 import Spacer from '../Base/Spacer'
+import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 
 export default {
 	name: 'OptionsDateAdd',
 
 	components: {
+		AddDateIcon,
+		VueButton,
 		CheckboxRadioSwitch,
-		ButtonDiv,
 		DatetimePicker,
 		Spacer,
 	},
@@ -87,11 +93,7 @@ export default {
 	props: {
 		caption: {
 			type: String,
-			default: t('polls', 'Add date'),
-		},
-		primary: {
-			type: Boolean,
-			default: false,
+			default: undefined,
 		},
 	},
 
@@ -109,6 +111,10 @@ export default {
 	},
 
 	computed: {
+		buttonAriaLabel() {
+			return this.caption ?? t('polls', 'Add date')
+		},
+
 		dateOption() {
 			let from = moment()
 			let to = moment()
@@ -297,14 +303,13 @@ export default {
 </script>
 
 <style lang="scss">
-.mx-datepicker {
-	width: 100% !important;
+
+.mx-input-wrapper .material-design-icon__svg {
+	width: initial;
+	height: initial;
 }
 
 .mx-input-wrapper {
-	&> button {
-		width: 100%;
-	}
 	.mx-icon-calendar {
 		display: none;
 	}
