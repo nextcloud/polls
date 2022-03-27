@@ -104,10 +104,10 @@ export default {
 		padding-left: 28px;
 		padding-right: 28px;
 	}
+
 	.add-options-list {
 		width: 99%;
 		resize: vertical;
 		height: 210px;
 	}
-
 </style>
