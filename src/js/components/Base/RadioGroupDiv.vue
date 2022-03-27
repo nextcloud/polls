@@ -36,7 +36,7 @@
 <script>
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
-const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10)
+const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
 
 export default {
 	name: 'RadioGroupDiv',
