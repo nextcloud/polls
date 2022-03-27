@@ -289,6 +289,7 @@ export default {
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
+	margin-top: 14px;
 	.button {
 		margin-left: 10px;
 		margin-right: 0;

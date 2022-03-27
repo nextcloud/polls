@@ -37,7 +37,7 @@
 			<input v-model="sequence.amount">
 		</div>
 
-		<div class="buttons">
+		<div class="modal__buttons">
 			<ButtonDiv :title="t('polls', 'Cancel')" @click="$emit('close')" />
 			<ButtonDiv :primary="true" :title="t('polls', 'OK')" @click="createSequence" />
 		</div>
