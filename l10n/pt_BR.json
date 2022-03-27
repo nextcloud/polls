@@ -6,6 +6,7 @@
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} convidou você para participar da enquete \"{title}\"",
     "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Este link fornece acesso pessoal à enquete mencionada acima. Pressione o botão acima ou copie o link a seguir e adicione-o na barra de localização do seu navegador:",
     "Do not share this link with other people, because it is connected to your votes." : "Não compartilhe este link com outras pessoas, porque ele está vinculado aos seus votos.",
+    "Notification for poll \"%s\"" : "Notificação para enquete \"%s\"",
     "Go to poll" : "Ir para enquete",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Este e-mail foi enviado porque você se inscreveu nas notificações desta enquete. Para desativar, visite a enquete e remova sua inscrição.",
     "Polls App - New Activity" : "Aplicativo Enquete - Atividade Nova",
