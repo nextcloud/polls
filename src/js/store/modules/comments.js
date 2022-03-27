@@ -93,8 +93,9 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.post(generateUrl(`${endPoint}/comment`), { message: payload.message })
-			context.commit('add', { comment: response.data.comment })
+			await axios.post(generateUrl(`${endPoint}/comment`), { message: payload.message })
+			context.dispatch('list')
+			// context.commit('add', { comment: response.data.comment })
 		} catch (e) {
 			console.error('Error writing comment', { error: e.response }, { payload })
 			throw e

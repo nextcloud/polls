@@ -65,7 +65,7 @@ class CommentService {
 	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
 	 */
-	public function list(?int $pollId = 0, string $token = ''): array {
+	public function listFlat(?int $pollId = 0, string $token = ''): array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -78,6 +78,31 @@ class CommentService {
 			$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
 			return $this->anonymizer->getComments();
 		}
+	}
+
+	/**
+	 * Get comments
+	 * Read all comments of a poll based on the poll id and return list as array
+	 */
+	public function list(?int $pollId = 0, string $token = ''): array {
+		$comments = $this->listFlat($pollId, $token);
+		$timeTolerance = 5 * 60; // treat comments within 5 minutes as one comment
+		$groupedComments = [];
+
+		foreach ($comments as $comment) {
+			// Create a new comment if comment is from another user than the last in the list
+			// or the timespan beteen comments is less than the tolerance (i.e. 5 minutes)
+			if (!count($groupedComments)
+				|| !($comment->getDisplayName() === end($groupedComments)->getDisplayName()
+					&& $comment->getTimestamp() - end($groupedComments)->getTimestamp() < $timeTolerance)
+			) {
+				$groupedComments[] = $comment;
+			}
+
+			// Add current comment as subComment element
+			$groupedComments[array_key_last($groupedComments)]->addSubComment($comment);
+		}
+		return $groupedComments;
 	}
 
 	/**

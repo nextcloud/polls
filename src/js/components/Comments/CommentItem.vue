@@ -26,13 +26,18 @@
 		<div class="comment-item__content">
 			<span class="comment-item__user">{{ comment.user.displayName }}</span>
 			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
-			<div class="comment-item__comment">
-				{{ comment.comment }}
+			<div v-for="(subComment) in comment.subComments"
+				:key="subComment.id"
+				class="comment-item__subcomment">
+				<span class="comment-item__comment">
+					{{ subComment.comment }}
+				</span>
+				<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
+					icon-mode
+					:title="t('polls', 'Delete comment')"
+					@delete="deleteComment(subComment)" />
 			</div>
 		</div>
-		<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
-			:title="t('polls', 'Delete comment')"
-			@delete="deleteComment()" />
 	</div>
 </template>
 
@@ -65,9 +70,9 @@ export default {
 	},
 
 	methods: {
-		async deleteComment() {
+		async deleteComment(comment) {
 			try {
-				await this.$store.dispatch({ type: 'comments/delete', comment: this.comment })
+				await this.$store.dispatch({ type: 'comments/delete', comment })
 			} catch {
 				showError(t('polls', 'Error while deleting the comment'))
 			}
@@ -101,5 +106,26 @@ export default {
 		margin-left: 8px;
 		flex: 1 1;
 		padding-top: 2px;
+
+		.material-design-icon.delete-icon {
+			// display: none;
+			visibility: hidden;
+		}
+
+		.comment-item__subcomment {
+			display: flex;
+			&:hover {
+				.material-design-icon.delete-icon {
+					visibility: visible;
+					// display: flex;
+				}
+			}
+		}
+
+		.comment-item__comment {
+			hyphens: auto;
+			flex: 1;
+		}
 	}
+
 </style>
