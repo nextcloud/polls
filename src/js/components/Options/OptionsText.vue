@@ -23,8 +23,12 @@
 <template>
 	<div>
 		<OptionsTextAdd v-if="!closed" />
-		<draggable v-if="countOptions" v-model="reOrderedOptions">
-			<transition-group>
+		<draggable v-if="countOptions"
+			v-model="reOrderedOptions"
+			v-bind="dragOptions"
+			@start="drag = true"
+			@end="drag = false">
+			<transition-group type="transition" :name="!drag ? 'flip-list' : null">
 				<OptionItem v-for="(option) in reOrderedOptions"
 					:key="option.id"
 					:option="option"
@@ -92,6 +96,7 @@ export default {
 	data() {
 		return {
 			pollType: 'textPoll',
+			drag: false,
 		}
 	},
 
@@ -107,6 +112,15 @@ export default {
 			countOptions: 'options/count',
 			pollTypeIcon: 'poll/typeIcon',
 		}),
+
+		dragOptions() {
+			return {
+				animation: 200,
+				group: 'description',
+				disabled: false,
+				ghostClass: 'ghost',
+			}
+		},
 
 		reOrderedOptions: {
 			get() {
@@ -132,6 +146,14 @@ export default {
 		&:empty:before {
 			color: grey;
 		}
+	}
+
+	.flip-list-move {
+		transition: transform 0.5s;
+	}
+
+	.no-move {
+		transition: transform 0s;
 	}
 
 	.submit-option {
