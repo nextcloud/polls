@@ -322,6 +322,7 @@ OC.L10N.register(
     "Created" : "Vytvořeno",
     "Closing date" : "Datum uzavření",
     "No description provided" : "Nezadán žádný popis",
+    "Private poll" : "Soukromá anketa",
     "Deactivate combo view for all users" : "Deaktivovat kombo pohled pro všechny uživatele",
     "Allow combo view for the following groups" : "Umožnit kombo pohled pro následující skupiny",
     "Leave empty to disallow for all." : "Pokud chcete neumožnit pro všechny, ponechte nevyplněné.",
