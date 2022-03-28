@@ -33,7 +33,6 @@
 					{{ subComment.comment }}
 				</span>
 				<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
-					icon-mode
 					:title="t('polls', 'Delete comment')"
 					@delete="deleteComment(subComment)" />
 			</div>
@@ -107,15 +106,18 @@ export default {
 		flex: 1 1;
 		padding-top: 2px;
 
-		.material-design-icon.delete-icon {
+		.material-design-icon {
 			// display: none;
 			visibility: hidden;
 		}
 
 		.comment-item__subcomment {
 			display: flex;
+			align-items: center;
+
 			&:hover {
-				.material-design-icon.delete-icon {
+				background: var(--color-background-hover);
+				.material-design-icon {
 					visibility: visible;
 					// display: flex;
 				}

@@ -22,7 +22,7 @@
 
 <template>
 	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, 'date-box': show === 'dateBox' }">
-		<div v-if="isDraggable" class="option-item__handle icon icon-handle" />
+		<DragIcon v-if="isDraggable" :class="{ draggable: isDraggable }" />
 
 		<slot name="icon" />
 
@@ -77,9 +77,14 @@
 <script>
 import moment from '@nextcloud/moment'
 import linkifyStr from 'linkify-string'
+import DragIcon from 'vue-material-design-icons/DragHorizontalVariant.vue'
 
 export default {
 	name: 'OptionItem',
+
+	components: {
+		DragIcon,
+	},
 
 	props: {
 		draggable: {
@@ -103,6 +108,7 @@ export default {
 			default: 'textPoll',
 		},
 	},
+
 	computed: {
 		isDraggable() {
 			return this.draggable
@@ -210,7 +216,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 	.option-item {
 		display: flex;
 		align-items: center;
@@ -219,6 +224,16 @@ export default {
 		&.date-box {
 			align-items: stretch;
 			flex-direction: column;
+		}
+
+		.material-design-icon {
+			visibility: hidden;
+		}
+
+		&:hover {
+			.material-design-icon {
+				visibility: visible;
+			}
 		}
 	}
 
@@ -306,13 +321,6 @@ export default {
 			cursor: -moz-grabbing;
 			cursor: -webkit-grabbing;
 		}
-		.option-item__handle {
-			visibility: hidden;
-		}
-		&:hover > .option-item__handle {
-			visibility: visible;
-		}
-
 	}
 
 	.option-item__rank {
