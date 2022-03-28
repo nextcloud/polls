@@ -69,7 +69,7 @@
 			:id="'activity'"
 			:order="6"
 			:name="t('polls', 'Activity')"
-			icon="icon-comment">
+			icon="icon-activity">
 			<SideBarTabActivity />
 		</AppSidebarTab>
 	</AppSidebar>
