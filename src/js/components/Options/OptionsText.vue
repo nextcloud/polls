@@ -156,6 +156,11 @@ export default {
 		transition: transform 0s;
 	}
 
+	.ghost {
+		opacity: 0.5;
+		background: var(--color-primary-hover);
+	}
+
 	.submit-option {
 		width: 30px;
 		background-color: transparent;
