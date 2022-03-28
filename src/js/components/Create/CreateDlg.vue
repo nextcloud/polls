@@ -22,7 +22,10 @@
 
 <template lang="html">
 	<div class="create-dialog">
-		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
+		<ConfigBox :title="t('polls', 'Title')">
+			<template #icon>
+				<SpeakerIcon />
+			</template>
 			<input id="pollTitle"
 				ref="pollTitle"
 				v-model="title"
@@ -31,7 +34,10 @@
 				@keyup.enter="confirm">
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll type')" icon-class="icon-checkmark">
+		<ConfigBox :title="t('polls', 'Poll type')">
+			<template #icon>
+				<CheckIcon />
+			</template>
 			<RadioGroupDiv v-model="pollType" :options="pollTypeOptions" />
 		</ConfigBox>
 
@@ -51,11 +57,15 @@ import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import ConfigBox from '../Base/ConfigBox'
 import RadioGroupDiv from '../Base/RadioGroupDiv'
+import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 export default {
 	name: 'CreateDlg',
 
 	components: {
+		SpeakerIcon,
+		CheckIcon,
 		ConfigBox,
 		RadioGroupDiv,
 	},

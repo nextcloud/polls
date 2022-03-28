@@ -28,15 +28,24 @@
 
 		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
+		<ConfigBox :title="t('polls', 'Title')">
+			<template #icon>
+				<SpeakerIcon />
+			</template>
 			<ConfigTitle @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Description')" icon-class="icon-edit">
+		<ConfigBox :title="t('polls', 'Description')">
+			<template #icon>
+				<DescriptionIcon />
+			</template>
 			<ConfigDescription @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
+		<ConfigBox :title="t('polls', 'Poll configurations')">
+			<template #icon>
+				<PollConfigIcon />
+			</template>
 			<ConfigAllowComment @change="writePoll" />
 			<ConfigAllowMayBe @change="writePoll" />
 			<ConfigUseNo @change="writePoll" />
@@ -46,13 +55,22 @@
 			<ConfigOptionLimit @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
+		<ConfigBox :title="t('polls', 'Poll closing status')">
+			<template #icon>
+				<LockedIcon v-if="closed" />
+				<UnlockedIcon v-else />
+			</template>
 			<ConfigClosing @change="writePoll" />
 			<ConfigAutoReminder v-if="pollType === 'datePoll' || hasEpiration"
 				@change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
+		<ConfigBox :title="t('polls', 'Result display')">
+			<template #icon>
+				<ShowResultsIcon v-if="showResults === 'always'" />
+				<HieResultsUntilClosedIcon v-if="showResults === 'closed'" />
+				<ShowResultsNeverIcon v-if="showResults === 'never'" />
+			</template>
 			<ConfigShowResults @change="writePoll" />
 		</ConfigBox>
 
@@ -85,11 +103,27 @@ import ConfigTitle from '../Configuration/ConfigTitle'
 import ConfigUseNo from '../Configuration/ConfigUseNo'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit'
 import { writePoll } from '../../mixins/writePoll'
+import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
+import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
+import LockedIcon from 'vue-material-design-icons/Lock.vue'
+import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
+import HieResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
+import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
 
 export default {
 	name: 'SideBarTabConfiguration',
 
 	components: {
+		DescriptionIcon,
+		ShowResultsIcon,
+		HieResultsUntilClosedIcon,
+		ShowResultsNeverIcon,
+		LockedIcon,
+		UnlockedIcon,
+		PollConfigIcon,
+		SpeakerIcon,
 		ConfigBox,
 		ConfigAllowComment,
 		ConfigAllowMayBe,
@@ -113,6 +147,7 @@ export default {
 			pollId: (state) => state.poll.id,
 			hasEpiration: (state) => state.poll.expire,
 			isOwner: (state) => state.poll.acl.isOwner,
+			showResults: (state) => state.poll.showResults,
 		}),
 
 		...mapGetters({

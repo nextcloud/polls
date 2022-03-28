@@ -21,7 +21,11 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Shares')" icon-class="icon-share">
+	<ConfigBox :title="t('polls', 'Shares')">
+		<template #icon>
+			<ShareIcon />
+		</template>
+
 		<UserSearch class="add-share" />
 		<ShareItemAllUsers v-if="allowAllAccess" />
 		<SharePublicAdd v-if="allowPublicShares" />
@@ -101,11 +105,13 @@ import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 import UserSearch from '../User/UserSearch'
 import SharePublicAdd from './SharePublicAdd'
 import ShareItemAllUsers from './ShareItemAllUsers'
+import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 
 export default {
 	name: 'SharesList',
 
 	components: {
+		ShareIcon,
 		Actions,
 		ActionButton,
 		ActionCaption,
