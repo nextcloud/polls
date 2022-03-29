@@ -188,7 +188,6 @@ OC.L10N.register(
     "Allow proposals from users" : "Salli ehdotukset käyttäjiltä",
     "Shift all date options" : "Siirrä kaikkia vaihtoehtoja",
     "Available Options" : "Saatavilla olevat valinnat",
-    "User Menu" : "Käyttäjävalikko",
     "Receive notification email on activity to {emailAddress}" : "Lähetä ilmoitussähköpostia tapahtumista osoitteeseen {emailAddress}",
     "Receive notification email on activity" : "Vastaanota sähköposti-ilmoituksia toimista",
     "Token: {token}" : "Poletti: {token}",

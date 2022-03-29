@@ -245,7 +245,6 @@ OC.L10N.register(
     "Allow proposals from users" : "Dovoli podajanje predlogov uporabnikov",
     "Shift all date options" : "Premakni vse časovne možnosti",
     "Available Options" : "Razpoložljive možnosti",
-    "User Menu" : "Uporabniški meni",
     "Receive notification email on activity to {emailAddress}" : "Pošlji obvestilo o dejavnosti ankete na elektronski naslov {emailAddress}",
     "Receive notification email on activity" : "Pošlji obvestilo o dejavnosti ankete na elektronske naslove",
     "Internal access" : "Notranji dostop",

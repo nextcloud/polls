@@ -386,7 +386,6 @@ OC.L10N.register(
     "Allow proposals from users" : "Permitir propostas de usuários",
     "Shift all date options" : "Mudar todas as opções de data",
     "Available Options" : "Opções disponíveis",
-    "User Menu" : "Menu do usuário",
     "Receive notification email on activity to {emailAddress}" : "Receber e-mail notificando atividade de {emailAddress}",
     "Receive notification email on activity" : "Receber e-mail notificando atividade",
     "Token: {token}" : "Token: {token}",

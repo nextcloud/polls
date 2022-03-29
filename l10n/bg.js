@@ -250,7 +250,6 @@ OC.L10N.register(
     "Allow proposals from users" : "Разрешаване на предложения от потребители",
     "Shift all date options" : "Преместване на всички опции за дата",
     "Available Options" : "Налични опции",
-    "User Menu" : "Меню за потребители",
     "Receive notification email on activity to {emailAddress}" : "Получавайте имейл с известие за дейността до {emailAddress}",
     "Receive notification email on activity" : "Получавайте имейл с известие за активност",
     "Token: {token}" : "Токен: {token}",

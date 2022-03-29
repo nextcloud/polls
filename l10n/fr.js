@@ -404,7 +404,6 @@ OC.L10N.register(
     "Allow proposals from users" : "Accepter les propositions des utilisateurs",
     "Shift all date options" : "Options pour décaler toutes les dates",
     "Available Options" : "Options disponibles",
-    "User Menu" : "Menu utilisateur",
     "Receive notification email on activity to {emailAddress}" : "Recevoir un mail de notification d'activité à {emailAddress}",
     "Receive notification email on activity" : "Recevoir une notification par courriel en cas d'activité",
     "Token: {token}" : "Jeton : {token}",

@@ -209,7 +209,6 @@ OC.L10N.register(
     "Allow proposals from users" : "Permite propostas dae is utentes",
     "Shift all date options" : "Càmbia totu is sèberos de data",
     "Available Options" : "Sèberos a disponimentu",
-    "User Menu" : "Menu utente",
     "Receive notification email on activity to {emailAddress}" : "Retzi notìficas tràmite posta eletrònica subra s'atividade a {emailAddress} ",
     "Receive notification email on activity" : "Retzi notìficas tràmite posta eletrònica subra s'atividade ",
     "Copy your personal link to clipboard" : "Còpia su ligòngiu personale tuo in punta de billete",

@@ -408,7 +408,6 @@ OC.L10N.register(
     "Allow proposals from users" : "Επιτρέπονται προτάσεις από χρήστες",
     "Shift all date options" : "Μετακινήστε όλες τις επιλογές ημερομηνίας",
     "Available Options" : "Διαθέσιμες Επιλογές",
-    "User Menu" : "Μενού χρήστη",
     "Receive notification email on activity to {emailAddress}" : "Λάβετε email ειδοποίησης σχετικά με τη δραστηριότητα στο {emailAddress}",
     "Receive notification email on activity" : "Ενημέρωση με email σε δραστηριότητα",
     "Token: {token}" : "Token: {token}",

@@ -382,7 +382,6 @@ OC.L10N.register(
     "Allow proposals from users" : "允许用户提出建议",
     "Shift all date options" : "更改所有日期选项",
     "Available Options" : "可用选项",
-    "User Menu" : "用户菜单",
     "Receive notification email on activity to {emailAddress}" : "接收 {emailAddress} 活动的通知邮件",
     "Receive notification email on activity" : "有活动时接收邮件提醒",
     "Token: {token}" : "令牌：{token}",
