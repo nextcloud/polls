@@ -22,45 +22,34 @@
 
 <template lang="html">
 	<div class="poll-information">
-		<div class="icon-user">
+		<Badge icon="icon-md-owner">
 			{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner.userId" :user="poll.owner.userId" :display-name="poll.owner.displayName" />
-		</div>
-		<div :class="accessClass">
-			{{ accessCaption }}
-		</div>
-		<div class="icon-star">
-			{{ t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative }) }}
-		</div>
-		<div v-if="poll.expire" class="icon-polls-closed">
-			{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
-		</div>
-		<div v-if="poll.anonymous" class="icon-polls-anonymous">
-			{{ t('polls', 'Anonymous poll') }}
-		</div>
-		<div :class="resultsClass">
-			{{ resultsCaption }}
-		</div>
-		<div v-if="countParticipantsVoted && acl.allowSeeResults" class="icon-user">
-			{{ n('polls', '%n Participant', '%n Participants', countParticipantsVoted) }}
-		</div>
-		<div class="icon-polls-unconfirmed">
-			{{ n('polls', '%n option', '%n options', countOptions) }}
-		</div>
-		<div v-if="countAllYesVotes" class="icon-polls-yes">
+		</Badge>
+		<Badge :icon="accessClass" :title="accessCaption" />
+		<Badge icon="icon-md-creation"
+			:title="t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative })" />
+		<Badge v-if="poll.expire"
+			icon="icon-md-closed-poll"
+			:title="t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative})" />
+		<Badge v-if="poll.anonymous"
+			icon="icon-md-anonymous-poll"
+			:title="t('polls', 'Anonymous poll')" />
+		<Badge :icon="resultsClass" :title="resultsCaption" />
+		<Badge v-if="countParticipantsVoted && acl.allowSeeResults"
+			icon="icon-md-participants"
+			:title="n('polls', '%n Participant', '%n Participants', countParticipantsVoted)" />
+		<Badge icon="icon-md-options" :title="n('polls', '%n option', '%n options', countOptions)" />
+		<Badge v-if="countAllYesVotes" icon="icon-md-yes-votes">
 			{{ n('polls', '%n "Yes" vote', '%n "Yes" votes', countAllYesVotes) }}
-		</div>
-		<div v-if="countAllNoVotes" class="icon-polls-no">
-			{{ n('polls', '%n "No" vote', '%n "No" votes', countAllNoVotes) }}
-		</div>
-		<div v-if="countAllMaybeVotes" class="icon-polls-maybe">
+		</Badge>
+		<Badge v-if="countAllNoVotes" icon="icon-md-no-votes">
+			{{ n('polls', '%n No vote', '%n "No" votes', countAllNoVotes) }}
+		</Badge>
+		<Badge v-if="countAllMaybeVotes" icon="icon-md-maybe-votes">
 			{{ n('polls', '%n "Maybe" vote', '%n "Maybe" votes', countAllMaybeVotes) }}
-		</div>
-		<div class="icon-timezone">
-			{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
-		</div>
-		<div v-if="proposalsAllowed" class="icon-add">
-			{{ proposalsStatus }}
-		</div>
+		</Badge>
+		<Badge icon="icon-md-timezone" :title="t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone})" />
+		<Badge v-if="proposalsAllowed" icon="icon-md-proposals-allowed" :title="proposalsStatus" />
 		<div v-if="poll.voteLimit" class="icon-checkmark">
 			{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
 		</div>
@@ -70,9 +59,9 @@
 		<div v-if="$route.name === 'publicVote' && share.emailAddress" class="icon-mail">
 			{{ share.emailAddress }}
 		</div>
-		<div v-if="subscribed" class="icon-sound">
-			{{ t('polls', 'You subscribed to this poll') }}
-		</div>
+		<Badge v-if="subscribed"
+			icon="icon-md-subscribed"
+			:title="t('polls', 'You subscribed to this poll')" />
 	</div>
 </template>
 
@@ -80,11 +69,13 @@
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { UserBubble } from '@nextcloud/vue'
+import Badge from '../Base/Badge'
 
 export default {
 	name: 'PollInformation',
 
 	components: {
+		Badge,
 		UserBubble,
 	},
 
@@ -138,35 +129,37 @@ export default {
 				return t('polls', 'Results are always hidden')
 			}
 			return t('polls', 'Results are visible')
+		},
+
+		resultsClass() {
+			if (this.showResults === 'never') {
+				return 'icon-md-show-results-never'
+			}
+			if (this.showResults === 'closed' && !this.closed) {
+				return 'icon-md-hide-results-until-closed'
+			}
+			return 'icon-md-show-results'
 
 		},
 
 		accessCaption() {
 			if (this.access === 'private') {
-				return t('polls', 'Access only for invited persons')
+				return t('polls', 'Private poll')
 			}
 			if (this.important) {
-				return t('polls', 'Relevant and accessible for all users')
+				return t('polls', 'Open and relevant poll')
 			}
 			return t('polls', 'Open poll')
 		},
 
 		accessClass() {
 			if (this.access === 'private') {
-				return 'icon-polls-private-poll'
+				return 'icon-md-private-poll'
 			}
 			if (this.important) {
-				return 'icon-polls-open-poll'
+				return 'icon-md-open-poll'
 			}
-			return 'icon-polls-open-poll'
-		},
-
-		resultsClass() {
-			if (this.showResults === 'never' || (this.showResults === 'closed' && !this.closed)) {
-				return 'icon-polls-private'
-			}
-			return 'icon-polls-visible'
-
+			return 'icon-md-open-poll'
 		},
 
 		dateCreatedRelative() {

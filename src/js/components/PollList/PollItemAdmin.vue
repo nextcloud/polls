@@ -53,7 +53,8 @@
 	</div>
 
 	<div v-else class="poll-item__item" :class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
-		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
+		<div v-tooltip.auto="pollTypeName" :class="pollTypeIcon" />
+
 		<div class="item__title">
 			<div class="item__title__title">
 				{{ poll.title }}
@@ -62,11 +63,15 @@
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</div>
+
 		<slot name="actions" />
+
 		<div v-tooltip.auto="accessType" :class="'item__access--' + poll.access" />
+
 		<div class="item__owner">
 			<UserItem v-bind="poll.owner" />
 		</div>
+
 		<div class="wrapper">
 			<div class="item__created">
 				{{ timeCreatedRelative }}
@@ -117,12 +122,20 @@ export default {
 
 		},
 
-		pollType() {
+		pollTypeName() {
 			if (this.poll.type === 'textPoll') {
 				return t('polls', 'Text poll')
 			}
-			return t('polls', 'Date poll')
 
+			return t('polls', 'Date poll')
+		},
+
+		pollTypeIcon() {
+			if (this.poll.type === 'textPoll') {
+				return 'icon-md-text-poll'
+			}
+
+			return 'icon-md-date-poll'
 		},
 
 		timeExpirationRelative() {

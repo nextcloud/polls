@@ -102,12 +102,18 @@ const getters = {
 
 	},
 
+	typeName: (state) => {
+		if (state.type === 'textPoll') {
+			return t('polls', 'Text poll')
+		}
+		return t('polls', 'Date poll')
+	},
+
 	typeIcon: (state) => {
 		if (state.type === 'textPoll') {
-			return 'icon-toggle-filelist'
+			return 'icon-md-text-poll'
 		}
-		return 'icon-calendar-000'
-
+		return 'icon-md-date-poll'
 	},
 
 	answerSequence: (state, getters, rootState) => {

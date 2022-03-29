@@ -68,7 +68,7 @@
 		<ConfigBox :title="t('polls', 'Result display')">
 			<template #icon>
 				<ShowResultsIcon v-if="showResults === 'always'" />
-				<HieResultsUntilClosedIcon v-if="showResults === 'closed'" />
+				<HideResultsUntilClosedIcon v-if="showResults === 'closed'" />
 				<ShowResultsNeverIcon v-if="showResults === 'never'" />
 			</template>
 			<ConfigShowResults @change="writePoll" />
@@ -109,7 +109,7 @@ import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
 import LockedIcon from 'vue-material-design-icons/Lock.vue'
 import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
-import HieResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
+import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
 import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
 
 export default {
@@ -118,7 +118,7 @@ export default {
 	components: {
 		DescriptionIcon,
 		ShowResultsIcon,
-		HieResultsUntilClosedIcon,
+		HideResultsUntilClosedIcon,
 		ShowResultsNeverIcon,
 		LockedIcon,
 		UnlockedIcon,

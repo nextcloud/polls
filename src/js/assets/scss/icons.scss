@@ -46,11 +46,6 @@
 	--icon-polls-unconfirmed: url('../icons/unconfirmed.svg');
 	--icon-polls-unconfirmed--fff: url('../icons/unconfirmed-fff.svg');
 	--icon-polls-yes: url('../icons/yes-vote.svg');
-// material design icons
-	--icon-md-wrench: url('../icons/wrench.svg');
-	--icon-md-format-list-checks: url('../icons/format-list-checks.svg');
-	--icon-md-share-variant: url('../icons/share-variant.svg');
-	--icon-md-comment-processing: url('../icons/comment-processing.svg');
 
 	// filters to colorize background svg from black
 	// generated with https://codepen.io/jsm91/embed/ZEEawyZ?height=600&default-tab=result&embed-version=2
@@ -85,37 +80,6 @@
 .icon-table-view { background-image: var(--icon-polls-table-view); }
 .icon-polls-visible { background-image: var(--icon-polls-open-poll); }
 .icon-polls-yes { background-image: var(--icon-polls-yes); }
-
-// material design icons
-.icon-md-sidebar-options {
-    -webkit-mask-image: var(--icon-md-format-list-checks);
-    mask-image: var(--icon-md-format-list-checks);
-}
-
-.icon-md-sidebar-configuration {
-    -webkit-mask-image: var(--icon-md-wrench);
-    mask-image: var(--icon-md-wrench);
-}
-
-.icon-md-sidebar-comments {
-    -webkit-mask-image: var(--icon-md-comment-processing);
-    mask-image: var(--icon-md-comment-processing);
-}
-
-.icon-md-sidebar-share {
-    -webkit-mask-image: var(--icon-md-share-variant);
-    mask-image: var(--icon-md-share-variant);
-}
-
-[class^='icon-md'] {
-	background-color: #000;
-	mask-repeat: no-repeat;
-	mask-position: center;
-	mask-size: 16px;
-	&.light {
-		background-color: #fff;
-	}
-}
 
 .theme--dark {
 	.icon-clock { background-image: var(--icon-clock--fff); }

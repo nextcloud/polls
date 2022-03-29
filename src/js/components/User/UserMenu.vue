@@ -27,7 +27,7 @@
 		</ActionButton>
 		<ActionSeparator />
 		<ActionInput v-if="$route.name === 'publicVote'"
-			icon="icon-edit"
+			icon="icon-md-edit-email-address"
 			:class="check.status"
 			:value="emailAddressTemp"
 			@click="deleteEmailAddress"
@@ -38,7 +38,7 @@
 		<ActionButton v-if="$route.name === 'publicVote'"
 			:disabled="!emailAddress"
 			:value="emailAddress"
-			icon="icon-share"
+			icon="icon-md-send-link-per-email"
 			@click="resendInvitation()">
 			{{ t('polls', 'Get your personal link per mail') }}
 		</ActionButton>
@@ -50,14 +50,14 @@
 		</ActionCheckbox>
 		<ActionButton v-if="$route.name === 'publicVote' && emailAddress"
 			:disabled="!emailAddress"
-			icon="icon-delete"
+			icon="icon-md-delete"
 			@click="deleteEmailAddress">
 			{{ t('polls', 'Remove Email Address') }}
 		</ActionButton>
-		<ActionButton v-if="acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
+		<ActionButton v-if="acl.allowEdit" icon="icon-md-clippy" @click="getAddresses()">
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</ActionButton>
-		<ActionButton icon="icon-history" @click="resetVotes()">
+		<ActionButton icon="icon-md-reset-votes" @click="resetVotes()">
 			{{ t('polls', 'Reset your votes') }}
 		</ActionButton>
 	</Actions>

@@ -53,7 +53,7 @@
 	</div>
 
 	<div v-else class="poll-item__item">
-		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
+		<div v-tooltip.auto="pollTypeName" :class="['item__icon-spacer', pollTypeIcon]" />
 
 		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
 			<div class="item__title__title">
@@ -89,11 +89,11 @@
 		<div class="wrapper">
 			<div class="item__created">
 				<Badge :title="timeCreatedRelative"
-					icon="icon-clock" />
+					icon="icon-md-creation" />
 			</div>
 			<div class="item__expiry">
 				<Badge :title="timeExpirationRelative"
-					icon="icon-calendar-000"
+					icon="icon-md-expiration"
 					:class="expiryClass" />
 			</div>
 		</div>
@@ -152,24 +152,32 @@ export default {
 			return t('polls', 'Private poll')
 		},
 
-		accessIcon() {
-			if (this.poll.deleted) {
-				return 'icon-category-app-bundles'
-			}
-
-			if (this.poll.access === 'open') {
-				return 'icon-polls-open-poll'
-			}
-
-			return 'icon-polls-private-poll'
-		},
-
-		pollType() {
+		pollTypeName() {
 			if (this.poll.type === 'textPoll') {
 				return t('polls', 'Text poll')
 			}
 
 			return t('polls', 'Date poll')
+		},
+
+		pollTypeIcon() {
+			if (this.poll.type === 'textPoll') {
+				return 'icon-md-text-poll'
+			}
+
+			return 'icon-md-date-poll'
+		},
+
+		accessIcon() {
+			if (this.poll.deleted) {
+				return 'icon-md-archived-poll'
+			}
+
+			if (this.poll.access === 'open') {
+				return 'icon-md-open-poll'
+			}
+
+			return 'icon-md-private-poll'
 		},
 
 		timeExpirationRelative() {
@@ -306,14 +314,6 @@ export default {
 		min-height: 16px;
 	}
 
-	.item__type--textPoll {
-		background-image: var(--icon-toggle-filelist-000);
-	}
-
-	.item__type--datePoll {
-		background-image: var(--icon-calendar-000);
-	}
-
 	[class^='item__access'] {
 		width: 70px;
 		background-repeat: no-repeat;
@@ -321,17 +321,5 @@ export default {
 		min-width: 16px;
 		min-height: 16px;
 		justify-content: center;
-	}
-
-	.item__access--public {
-		background-image: var(--icon-polls-open-poll);
-	}
-
-	.item__access--hidden {
-		background-image: var(--icon-polls-private-poll);
-	}
-
-	.item__access--deleted {
-		background-image: var(--icon-category-app-bundles-000);
 	}
 </style>
