@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<Actions default-icon="icon-md-export">
+	<Actions default-icon="icon-mask-md-export">
 		<template #icon>
 			<ExportIcon />
 		</template>

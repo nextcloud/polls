@@ -82,7 +82,7 @@ export default {
 				subTexts.push({
 					id: 'no-access',
 					text: t('polls', 'Invite users via the share tab in the sidebar'),
-					icon: 'icon-md-sidebar-share',
+					icon: 'icon-mask-md-sidebar-share',
 					class: 'closed',
 				})
 				return subTexts
@@ -91,7 +91,7 @@ export default {
 				subTexts.push({
 					id: 'deleted',
 					text: t('polls', 'Archived'),
-					icon: 'icon-md-archived-poll',
+					icon: 'icon-mask-md-archived-poll',
 					class: 'archived',
 				})
 				return subTexts
@@ -111,7 +111,7 @@ export default {
 				subTexts.push({
 					id: 'expiring',
 					text: t('polls', 'Closing {relativeExpirationTime}', { relativeExpirationTime: this.timeExpirationRelative }),
-					icon: 'icon-md-expiration',
+					icon: 'icon-mask-md-expiration',
 					class: this.closeToClosing ? 'closing' : 'open',
 				})
 				return subTexts
@@ -121,7 +121,7 @@ export default {
 				subTexts.push({
 					id: 'expired',
 					text: t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
-					icon: 'icon-md-proposals',
+					icon: 'icon-mask-md-proposals',
 					class: 'proposal',
 				})
 				return subTexts
@@ -131,7 +131,7 @@ export default {
 				subTexts.push({
 					id: 'proposal-open',
 					text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
-					icon: 'icon-md-proposals',
+					icon: 'icon-mask-md-proposals',
 					class: 'proposal',
 				})
 				return subTexts
@@ -141,7 +141,7 @@ export default {
 				subTexts.push({
 					id: 'created',
 					text: this.dateCreatedRelative,
-					icon: 'icon-md-creation',
+					icon: 'icon-mask-md-creation',
 					class: 'created',
 				})
 			}

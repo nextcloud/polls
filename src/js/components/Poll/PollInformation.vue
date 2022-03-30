@@ -22,34 +22,34 @@
 
 <template lang="html">
 	<div class="poll-information">
-		<Badge icon="icon-md-owner">
+		<Badge icon="icon-mask-md-owner">
 			{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner.userId" :user="poll.owner.userId" :display-name="poll.owner.displayName" />
 		</Badge>
 		<Badge :icon="accessClass" :title="accessCaption" />
-		<Badge icon="icon-md-creation"
+		<Badge icon="icon-mask-md-creation"
 			:title="t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative })" />
 		<Badge v-if="poll.expire"
-			icon="icon-md-closed-poll"
+			icon="icon-mask-md-closed-poll"
 			:title="t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative})" />
 		<Badge v-if="poll.anonymous"
-			icon="icon-md-anonymous-poll"
+			icon="icon-mask-md-anonymous-poll"
 			:title="t('polls', 'Anonymous poll')" />
 		<Badge :icon="resultsClass" :title="resultsCaption" />
 		<Badge v-if="countParticipantsVoted && acl.allowSeeResults"
-			icon="icon-md-participants"
+			icon="icon-mask-md-participants"
 			:title="n('polls', '%n Participant', '%n Participants', countParticipantsVoted)" />
-		<Badge icon="icon-md-options" :title="n('polls', '%n option', '%n options', countOptions)" />
-		<Badge v-if="countAllYesVotes" icon="icon-md-yes-votes">
+		<Badge icon="icon-mask-md-options" :title="n('polls', '%n option', '%n options', countOptions)" />
+		<Badge v-if="countAllYesVotes" icon="icon-mask-md-yes-votes">
 			{{ n('polls', '%n "Yes" vote', '%n "Yes" votes', countAllYesVotes) }}
 		</Badge>
-		<Badge v-if="countAllNoVotes" icon="icon-md-no-votes">
+		<Badge v-if="countAllNoVotes" icon="icon-mask-md-no-votes">
 			{{ n('polls', '%n No vote', '%n "No" votes', countAllNoVotes) }}
 		</Badge>
-		<Badge v-if="countAllMaybeVotes" icon="icon-md-maybe-votes">
+		<Badge v-if="countAllMaybeVotes" icon="icon-mask-md-maybe-votes">
 			{{ n('polls', '%n "Maybe" vote', '%n "Maybe" votes', countAllMaybeVotes) }}
 		</Badge>
-		<Badge icon="icon-md-timezone" :title="t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone})" />
-		<Badge v-if="proposalsAllowed" icon="icon-md-proposals-allowed" :title="proposalsStatus" />
+		<Badge icon="icon-mask-md-timezone" :title="t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone})" />
+		<Badge v-if="proposalsAllowed" icon="icon-mask-md-proposals-allowed" :title="proposalsStatus" />
 		<div v-if="poll.voteLimit" class="icon-checkmark">
 			{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
 		</div>
@@ -60,7 +60,7 @@
 			{{ share.emailAddress }}
 		</div>
 		<Badge v-if="subscribed"
-			icon="icon-md-subscribed"
+			icon="icon-mask-md-subscribed"
 			:title="t('polls', 'You subscribed to this poll')" />
 	</div>
 </template>
@@ -133,12 +133,12 @@ export default {
 
 		resultsClass() {
 			if (this.showResults === 'never') {
-				return 'icon-md-show-results-never'
+				return 'icon-mask-md-show-results-never'
 			}
 			if (this.showResults === 'closed' && !this.closed) {
-				return 'icon-md-hide-results-until-closed'
+				return 'icon-mask-md-hide-results-until-closed'
 			}
-			return 'icon-md-show-results'
+			return 'icon-mask-md-show-results'
 
 		},
 
@@ -154,12 +154,12 @@ export default {
 
 		accessClass() {
 			if (this.access === 'private') {
-				return 'icon-md-private-poll'
+				return 'icon-mask-md-private-poll'
 			}
 			if (this.important) {
-				return 'icon-md-open-poll'
+				return 'icon-mask-md-open-poll'
 			}
-			return 'icon-md-open-poll'
+			return 'icon-mask-md-open-poll'
 		},
 
 		dateCreatedRelative() {

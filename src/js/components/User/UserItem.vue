@@ -221,7 +221,7 @@ export default {
 		iconClass() {
 			if (this.icon) {
 				if (this.type === 'admin') {
-					return 'icon-user-admin'
+					return 'icon-mask-md-admin'
 				}
 			}
 			return ''

@@ -111,9 +111,9 @@ const getters = {
 
 	typeIcon: (state) => {
 		if (state.type === 'textPoll') {
-			return 'icon-md-text-poll'
+			return 'icon-mask-md-text-poll'
 		}
-		return 'icon-md-date-poll'
+		return 'icon-mask-md-date-poll'
 	},
 
 	answerSequence: (state, getters, rootState) => {

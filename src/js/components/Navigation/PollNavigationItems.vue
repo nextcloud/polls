@@ -27,25 +27,25 @@
 		:class="{ closed: closed }">
 		<template #actions>
 			<ActionButton v-if="isPollCreationAllowed"
-				icon="icon-md-clone-poll"
+				icon="icon-mask-md-clone-poll"
 				@click="$emit('clone-poll')">
 				{{ t('polls', 'Clone poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && !poll.deleted"
-				icon="icon-md-archive-poll"
+				icon="icon-mask-md-archive-poll"
 				@click="$emit('toggle-archive')">
 				{{ t('polls', 'Archive poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted"
-				icon="icon-md-restore-poll"
+				icon="icon-mask-md-restore-poll"
 				@click="$emit('toggle-archive')">
 				{{ t('polls', 'Restore poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted"
-				icon="icon-md-delete-poll"
+				icon="icon-mask-md-delete-poll"
 				class="danger"
 				@click="$emit('delete-poll')">
 				{{ t('polls', 'Delete poll') }}
@@ -85,10 +85,10 @@ export default {
 
 		pollTypeIcon() {
 			if (this.poll.type === 'textPoll') {
-				return 'icon-md-text-poll'
+				return 'icon-mask-md-text-poll'
 			}
 
-			return 'icon-md-date-poll'
+			return 'icon-mask-md-date-poll'
 		},
 	},
 }

@@ -29,7 +29,7 @@
 			:id="'configuration'"
 			:order="1"
 			:name="t('polls', 'Configuration')"
-			icon="icon-md-sidebar-configuration">
+			icon="icon-mask-md-sidebar-configuration">
 			<SideBarTabConfiguration />
 		</AppSidebarTab>
 
@@ -37,7 +37,7 @@
 			:id="'options'"
 			:order="2"
 			:name="t('polls', 'Options')"
-			icon="icon-md-sidebar-options">
+			icon="icon-mask-md-sidebar-options">
 			<SideBarTabOptions />
 		</AppSidebarTab>
 
@@ -45,7 +45,7 @@
 			:id="'sharing'"
 			:order="3"
 			:name="t('polls', 'Sharing')"
-			icon="icon-md-sidebar-share">
+			icon="icon-mask-md-sidebar-share">
 			<SideBarTabShare />
 		</AppSidebarTab>
 
@@ -61,7 +61,7 @@
 			:id="'comments'"
 			:order="5"
 			:name="t('polls', 'Comments')"
-			icon="icon-md-sidebar-comments">
+			icon="icon-mask-md-sidebar-comments">
 			<SideBarTabComments />
 		</AppSidebarTab>
 

@@ -53,28 +53,28 @@
 					<template #actions>
 						<Actions force-menu>
 							<ActionButton v-if="isPollCreationAllowed"
-								icon="icon-md-clone-poll"
+								icon="icon-mask-md-clone-poll"
 								:close-after-click="true"
 								@click="clonePoll(poll.id)">
 								{{ t('polls', 'Clone poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && !poll.deleted"
-								icon="icon-md-archive-poll"
+								icon="icon-mask-md-archive-poll"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
 								{{ t('polls', 'Archive poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && poll.deleted"
-								icon="icon-md-restore-poll"
+								icon="icon-mask-md-restore-poll"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
 								{{ t('polls', 'Restore poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && poll.deleted"
-								icon="icon-md-delete-poll"
+								icon="icon-mask-md-delete-poll"
 								class="danger"
 								:close-after-click="true"
 								@click="deletePoll(poll.id)">

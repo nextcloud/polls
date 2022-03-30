@@ -26,7 +26,7 @@
 		<Popover>
 			<template #trigger>
 				<Actions>
-					<ActionButton icon="icon-md-poll-information">
+					<ActionButton icon="icon-mask-md-poll-information">
 						<template #icon>
 							<PollInformationIcon />
 						</template>

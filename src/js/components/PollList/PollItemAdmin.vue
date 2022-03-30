@@ -132,10 +132,10 @@ export default {
 
 		pollTypeIcon() {
 			if (this.poll.type === 'textPoll') {
-				return 'icon-md-text-poll'
+				return 'icon-mask-md-text-poll'
 			}
 
-			return 'icon-md-date-poll'
+			return 'icon-mask-md-date-poll'
 		},
 
 		timeExpirationRelative() {

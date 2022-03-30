@@ -18,6 +18,8 @@
 	--icon-md-email-edit-outline: url('../icons/material-design/email-edit-outline.svg');
 	--icon-md-archive: url('../icons/material-design/archive.svg');
 	--icon-md-crown: url('../icons/material-design/crown.svg');
+	--icon-md-shield-crown-outline: url('../icons/material-design/shield-crown-outline.svg');
+	--icon-md-email: url('../icons/material-design/email.svg');
 	--icon-md-check: url('../icons/material-design/check.svg');
 	--icon-md-close: url('../icons/material-design/close.svg');
 	--icon-md-polls-maybe: url('../icons/material-design/polls-maybe.svg');
@@ -44,7 +46,7 @@
 	--icon-md-checkbox-marked-outline: url('../icons/material-design/checkbox-marked-outline.svg');
 }
 
-[class*='icon-md-'] {
+[class*='icon-mask-md-'] {
 	background-color: #000;
 	mask-repeat: no-repeat;
 	mask-position: center;
@@ -55,222 +57,236 @@
 }
 
 .theme--dark {
-	&[class*='icon-md-'] {
+	&[class*='icon-mask-md-'] {
 		background-color: #000 !important;
 	}
-	[class*='icon-md'] {
+	[class*='icon-mask-md-'] {
 		background-color: #fff;
 	}
 }
 
 // material design icons
-.icon-md-navigation-relevant {
+.icon-mask-md-navigation-relevant {
     -webkit-mask-image: var(--icon-md-exclamation-thick);
     mask-image: var(--icon-md-exclamation-thick);
 }
 
-.icon-md-navigation-my,
-.icon-md-owner {
+.icon-mask-md-navigation-my,
+.icon-mask-md-owner {
 	-webkit-mask-image: var(--icon-md-crown);
 	mask-image: var(--icon-md-crown);
 }
 
-.icon-md-navigation-private,
-.icon-md-private-poll {
+.icon-mask-md-navigation-private,
+.icon-mask-md-private-poll {
     -webkit-mask-image: var(--icon-md-key);
     mask-image: var(--icon-md-key);
 }
 
-.icon-md-navigation-open,
-.icon-md-open-poll {
+.icon-mask-md-navigation-open,
+.icon-mask-md-open-poll {
     -webkit-mask-image: var(--icon-md-earth);
     mask-image: var(--icon-md-earth);
 }
 
-.icon-md-navigation-participated {
+.icon-mask-md-navigation-participated {
     -webkit-mask-image: var(--icon-md-account-check);
     mask-image: var(--icon-md-account-check);
 }
 
-.icon-md-navigation-all {
+.icon-mask-md-navigation-all {
     -webkit-mask-image: var(--icon-md-poll);
     mask-image: var(--icon-md-poll);
 }
 
-.icon-md-navigation-closed, .icon-md-closed-poll {
+.icon-mask-md-navigation-closed, .icon-mask-md-closed-poll {
     -webkit-mask-image: var(--icon-md-lock);
     mask-image: var(--icon-md-lock);
 }
 
-.icon-md-navigation-archived,
-.icon-md-archived-poll,
-.icon-md-archive-poll {
+.icon-mask-md-navigation-archived,
+.icon-mask-md-archived-poll,
+.icon-mask-md-archive-poll {
     -webkit-mask-image: var(--icon-md-archive);
     mask-image: var(--icon-md-archive);
 }
 
-.icon-md-navigation-combo {
+.icon-mask-md-navigation-combo {
     -webkit-mask-image: var(--icon-md-vector-combine);
     mask-image: var(--icon-md-vector-combine);
 }
 
-.icon-md-navigation-administration {
+.icon-mask-md-navigation-administration {
     -webkit-mask-image: var(--icon-md-cog);
     mask-image: var(--icon-md-cog);
 }
 
-.icon-md-navigation-personal-settings {
+.icon-mask-md-navigation-personal-settings {
     -webkit-mask-image: var(--icon-md-account-cog);
     mask-image: var(--icon-md-account-cog);
 }
 
-.icon-md-sidebar-options {
+.icon-mask-md-sidebar-options {
     -webkit-mask-image: var(--icon-md-format-list-checks);
     mask-image: var(--icon-md-format-list-checks);
 }
 
-.icon-md-sidebar-configuration {
+.icon-mask-md-email {
+    -webkit-mask-image: var(--icon-md-email);
+    mask-image: var(--icon-md-email);
+}
+
+.icon-svg-md-email {
+	background-image: var(--icon-md-email);
+}
+
+.icon-mask-md-admin {
+    -webkit-mask-image: var(--icon-md-shield-crown-outline);
+    mask-image: var(--icon-md-shield-crown-outline);
+}
+
+.icon-mask-md-sidebar-configuration {
     -webkit-mask-image: var(--icon-md-wrench);
     mask-image: var(--icon-md-wrench);
 }
 
-.icon-md-sidebar-comments {
+.icon-mask-md-sidebar-comments {
     -webkit-mask-image: var(--icon-md-comment-processing);
     mask-image: var(--icon-md-comment-processing);
 }
 
-.icon-md-sidebar-share {
+.icon-mask-md-sidebar-share {
     -webkit-mask-image: var(--icon-md-share-variant);
     mask-image: var(--icon-md-share-variant);
 }
 
-.icon-md-date-options {
+.icon-mask-md-date-options {
 	-webkit-mask-image: var(--icon-md-calendar-month);
     mask-image: var(--icon-md-calendar-month);
 }
 
-.icon-md-date-poll {
+.icon-mask-md-date-poll {
 	-webkit-mask-image: var(--icon-md-calendar-blank);
     mask-image: var(--icon-md-calendar-blank);
 }
 
-.icon-md-anonymous-poll {
+.icon-mask-md-anonymous-poll {
 	-webkit-mask-image: var(--icon-md-incognito);
     mask-image: var(--icon-md-incognito);
 }
 
-.icon-md-text-poll {
+.icon-mask-md-text-poll {
 	-webkit-mask-image: var(--icon-md-format-list-bulleted-square);
     mask-image: var(--icon-md-format-list-bulleted-square);
 }
 
-.icon-md-clone-poll {
+.icon-mask-md-clone-poll {
 	-webkit-mask-image: var(--icon-md-content-copy);
     mask-image: var(--icon-md-content-copy);
 }
 
-.icon-md-restore-poll {
+.icon-mask-md-restore-poll {
 	-webkit-mask-image: var(--icon-md-recycle);
     mask-image: var(--icon-md-recycle);
 }
 
-.icon-md-delete-poll {
+.icon-mask-md-delete-poll {
 	-webkit-mask-image: var(--icon-md-delete);
     mask-image: var(--icon-md-delete);
 }
 
-.icon-md-expiration {
+.icon-mask-md-expiration {
 	-webkit-mask-image: var(--icon-md-calendar-end);
     mask-image: var(--icon-md-calendar-end);
 }
 
-.icon-md-creation {
+.icon-mask-md-creation {
 	-webkit-mask-image: var(--icon-md-clock-outline);
     mask-image: var(--icon-md-clock-outline);
 }
 
-.icon-md-clippy {
+.icon-mask-md-clippy {
 	-webkit-mask-image: var(--icon-md-clipboard-arrow-left-outline);
     mask-image: var(--icon-md-clipboard-arrow-left-outline);
 }
 
-.icon-md-reset-votes {
+.icon-mask-md-reset-votes {
 	-webkit-mask-image: var(--icon-md-undo);
     mask-image: var(--icon-md-undo);
 }
 
-.icon-md-subscribed {
+.icon-mask-md-subscribed {
 	-webkit-mask-image: var(--icon-md-bell);
     mask-image: var(--icon-md-bell);
 }
 
-.icon-md-unsubscribed {
+.icon-mask-md-unsubscribed {
 	-webkit-mask-image: var(--icon-md-bell-off);
     mask-image: var(--icon-md-bell-off);
 }
 
-.icon-md-participants {
+.icon-mask-md-participants {
 	-webkit-mask-image: var(--icon-md-account-group);
     mask-image: var(--icon-md-account-group);
 }
 
-.icon-md-show-results {
+.icon-mask-md-show-results {
 	-webkit-mask-image: var(--icon-md-monitor);
     mask-image: var(--icon-md-monitor);
 }
 
-.icon-md-hide-results-until-closed {
+.icon-mask-md-hide-results-until-closed {
 	-webkit-mask-image: var(--icon-md-monitor-lock);
     mask-image: var(--icon-md-monitor-lock);
 }
 
-.icon-md-show-results-never {
+.icon-mask-md-show-results-never {
 	-webkit-mask-image: var(--icon-md-monitor-off);
     mask-image: var(--icon-md-monitor-off);
 }
 
-.icon-md-options {
+.icon-mask-md-options {
 	-webkit-mask-image: var(--icon-md-format-list-checkbox);
     mask-image: var(--icon-md-format-list-checkbox);
 }
 
-.icon-md-timezone {
+.icon-mask-md-timezone {
 	-webkit-mask-image: var(--icon-md-map-clock-outline);
     mask-image: var(--icon-md-map-clock-outline);
 }
 
-.icon-md-proposals-allowed,
-.icon-md-proposals {
+.icon-mask-md-proposals-allowed,
+.icon-mask-md-proposals {
 	-webkit-mask-image: var(--icon-md-offer);
     mask-image: var(--icon-md-offer);
 }
 
-.icon-md-edit-email-address {
+.icon-mask-md-edit-email-address {
 	-webkit-mask-image: var(--icon-md-email-edit);
     mask-image: var(--icon-md-email-edit);
 }
 
-.icon-md-send-link-per-email {
+.icon-mask-md-send-link-per-email {
 	-webkit-mask-image: var(--icon-md-link-variant);
     mask-image: var(--icon-md-link-variant);
 }
 
-.icon-md-yes-vote,
-.icon-md-yes-votes {
+.icon-mask-md-yes-vote,
+.icon-mask-md-yes-votes {
 	background-color: var(--color-polls-foreground-yes) !important;
 	-webkit-mask-image: var(--icon-md-check);
     mask-image: var(--icon-md-check);
 }
 
-.icon-md-no-vote,
-.icon-md-no-votes {
+.icon-mask-md-no-vote,
+.icon-mask-md-no-votes {
 	background-color: var(--color-polls-foreground-no) !important;
 	-webkit-mask-image: var(--icon-md-close);
     mask-image: var(--icon-md-close);
 }
 
-.icon-md-maybe-vote,
-.icon-md-maybe-votes {
+.icon-mask-md-maybe-vote,
+.icon-mask-md-maybe-votes {
 	background-color: var(--color-polls-foreground-maybe) !important;
 	-webkit-mask-image: var(--icon-md-polls-maybe);
     mask-image: var(--icon-md-polls-maybe);

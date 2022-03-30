@@ -89,11 +89,11 @@
 		<div class="wrapper">
 			<div class="item__created">
 				<Badge :title="timeCreatedRelative"
-					icon="icon-md-creation" />
+					icon="icon-mask-md-creation" />
 			</div>
 			<div class="item__expiry">
 				<Badge :title="timeExpirationRelative"
-					icon="icon-md-expiration"
+					icon="icon-mask-md-expiration"
 					:class="expiryClass" />
 			</div>
 		</div>
@@ -162,22 +162,22 @@ export default {
 
 		pollTypeIcon() {
 			if (this.poll.type === 'textPoll') {
-				return 'icon-md-text-poll'
+				return 'icon-mask-md-text-poll'
 			}
 
-			return 'icon-md-date-poll'
+			return 'icon-mask-md-date-poll'
 		},
 
 		accessIcon() {
 			if (this.poll.deleted) {
-				return 'icon-md-archived-poll'
+				return 'icon-mask-md-archived-poll'
 			}
 
 			if (this.poll.access === 'open') {
-				return 'icon-md-open-poll'
+				return 'icon-mask-md-open-poll'
 			}
 
-			return 'icon-md-private-poll'
+			return 'icon-mask-md-private-poll'
 		},
 
 		timeExpirationRelative() {

@@ -24,7 +24,7 @@
 	<div class="comments">
 		<CommentAdd v-if="acl.allowComment" />
 		<Comments v-if="!showEmptyContent" />
-		<EmptyContent v-else icon="icon-md-sidebar-comments">
+		<EmptyContent v-else icon="icon-mask-md-sidebar-comments">
 			{{ t('polls', 'No comments') }}
 			<template #desc>
 				{{ t('polls', 'Be the first.') }}

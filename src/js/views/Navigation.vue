@@ -49,13 +49,13 @@
 		<template #footer>
 			<AppNavigationItem v-if="isComboActivated"
 				:title="t('polls', 'Combine polls')"
-				icon="icon-md-navigation-combo"
+				icon="icon-mask-md-navigation-combo"
 				:to="{ name: 'combo' }" />
 			<AppNavigationItem v-if="showAdminSection"
 				:title="t('core', 'Administration')"
-				icon="icon-md-navigation-administration"
+				icon="icon-mask-md-navigation-administration"
 				:to="{ name: 'administration' }" />
-			<AppNavigationItem :title="t('core', 'Personal settings')" icon="icon-md-navigation-personal-settings" @click="showSettings()" />
+			<AppNavigationItem :title="t('core', 'Personal settings')" icon="icon-mask-md-navigation-personal-settings" @click="showSettings()" />
 		</template>
 	</AppNavigation>
 </template>

@@ -73,7 +73,7 @@ export default {
 			border-color: var(--color-error);
 			background-color: var(--color-error);
 			color: var(--color-primary-text) !important;
-			[class*='icon-md-'] {
+			[class*='icon-mask-md-'] {
 				background-color: #fff;
 			}
 		}
@@ -82,7 +82,7 @@ export default {
 			border-color: var(--color-success);
 			background-color: var(--color-success);
 			color: var(--color-primary-text) !important;
-			[class*='icon-md-'] {
+			[class*='icon-mask-md-'] {
 				background-color: #fff;
 			}
 		}
