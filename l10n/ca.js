@@ -68,6 +68,8 @@ OC.L10N.register(
     "You have added poll {pollTitle}" : "Heu afegit l'enquesta {pollTitle}",
     "{actor} has added poll {pollTitle}" : "{actor} ha afegit l'enquesta {pollTitle}",
     "You have changed the configuration of poll {pollTitle}" : "Heu canviat la configuració de l'enquesta {pollTitle}",
+    "{actor} has changed the configuration of poll {pollTitle}" : "{actor} ha canviat la configuració de l'enquesta  {pollTitle}",
+    "You have archived poll {pollTitle}" : "Heu arxivat l'enquesta {pollTitle}",
     "Date order" : "Ordre de data",
     "Original order" : "Ordre original",
     "Ranked order" : "Ordre classificat",
