@@ -22,7 +22,7 @@
 
 <template>
 	<div class="vote_menu">
-		<ActionSortOptions />
+		<ActionSortOptions button-mode />
 		<ActionChangeView />
 	</div>
 </template>

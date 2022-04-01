@@ -49,17 +49,47 @@
 					</template>
 
 					<Actions>
-						<ActionButton v-if="share.emailAddress || share.type === 'group'"
-							icon="icon-confirm"
-							@click="sendInvitation(share)">
+						<ActionButton v-if="share.emailAddress || share.type === 'group'" @click="sendInvitation(share)">
+							<template #icon>
+								<SendEmailIcon />
+							</template>
 							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
 						</ActionButton>
-						<ActionButton v-if="share.type === 'user' || share.type === 'admin'"
-							:icon="share.type === 'user' ? 'icon-user-admin' : 'icon-user'"
-							@click="switchAdmin({ share })">
+
+						<ActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin({ share })">
+							<template #icon>
+								<span v-if="share.type === 'user'"
+									aria-hidden="true"
+									role="img"
+									class="material-design-icon shield-crown-outline">
+									<svg fill="currentColor"
+										class="material-design-icon__svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24">
+										<path d="M12 1L21 5V11C21 16.55 17.16 21.74 12 23C6.84 21.74 3 16.55 3 11V5L12 1M12 3.18L5 6.3V11.22C5 15.54 8.25 20 12 21C15.75 20 19 15.54 19 11.22V6.3L12 3.18M16 14V15.5L16 15.59C15.96 15.81 15.78 15.96 15.53 16L15.43 16H8.57L8.47 16C8.22 15.96 8.04 15.81 8 15.59L8 15.5V14H16M17 8L16 13H8L7 8L7 8L9.67 10.67L12 8.34L14.33 10.67L17 8L17 8Z" />
+									</svg>
+								</span>
+								<span v-else
+									aria-hidden="true"
+									role="img"
+									class="material-design-icon shield-crown-outline-strike-thru">
+									<svg fill="currentColor"
+										class="material-design-icon__svg"
+										width="24"
+										height="24"
+										viewBox="0 0 24 24">
+										<path d="M 12 1 L 6.2246094 3.5664062 L 7.7382812 5.0800781 L 12 3.1796875 L 19 6.3007812 L 19 11.220703 C 19 12.637983 18.643799 14.066906 18.041016 15.386719 L 19.527344 16.875 C 20.464898 15.090266 21 13.070015 21 11 L 21 5 L 12 1 z M 1.4101562 1.5800781 L 0 3 L 3 6 L 3 11 C 3 16.55 6.84 21.74 12 23 C 13.934538 22.527613 15.682612 21.502326 17.113281 20.113281 L 17.115234 20.113281 L 20.75 23.75 L 22.160156 22.339844 L 18.433594 18.611328 C 18.434683 18.609871 18.436412 18.60888 18.4375 18.607422 L 17.021484 17.191406 C 17.020461 17.192881 17.018602 17.193838 17.017578 17.195312 L 15.746094 15.923828 C 15.747717 15.922943 15.748389 15.920819 15.75 15.919922 L 13.830078 14 L 13.824219 14 L 12.824219 13 L 12.830078 13 L 10.085938 10.253906 L 10.082031 10.257812 L 5.7832031 5.953125 L 4.2675781 4.4375 L 1.4101562 1.5800781 z M 5 8 L 7.5 10.5 L 8 13 L 10 13 L 11 14 L 8 14 L 8 15.5 L 8 15.589844 C 8.04 15.809844 8.2207031 15.96 8.4707031 16 L 8.5703125 16 L 13 16 L 15.734375 18.734375 C 14.640664 19.827028 13.353093 20.639175 12 21 C 8.25 20 5 15.540703 5 11.220703 L 5 8 z M 17 8 L 14.330078 10.669922 L 12 8.3398438 L 11.498047 8.8417969 L 15.654297 13 L 16 13 L 17 8 z " />
+									</svg>
+								</span>
+							</template>
 							{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 						</ActionButton>
-						<ActionButton icon="icon-clippy" @click="copyLink( { url: share.URL })">
+
+						<ActionButton @click="copyLink( { url: share.URL })">
+							<template #icon>
+								<ClippyIcon />
+							</template>
 							{{ t('polls', 'Copy link to clipboard') }}
 						</ActionButton>
 						<ActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
@@ -106,12 +136,19 @@ import UserSearch from '../User/UserSearch'
 import SharePublicAdd from './SharePublicAdd'
 import ShareItemAllUsers from './ShareItemAllUsers'
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+import SendEmailIcon from 'vue-material-design-icons/EmailSend.vue'
+import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 
 export default {
 	name: 'SharesList',
 
 	components: {
+		ClippyIcon,
 		ShareIcon,
+		SendEmailIcon,
+		UnvotedIcon,
+		UserSearch,
+		VotedIcon,
 		Actions,
 		ActionButton,
 		ActionCaption,
@@ -120,9 +157,6 @@ export default {
 		ConfigBox,
 		SharePublicAdd,
 		ShareItemAllUsers,
-		UnvotedIcon,
-		UserSearch,
-		VotedIcon,
 	},
 
 	computed: {
