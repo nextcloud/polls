@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 - Compatibility to Nextcloud 24
 - Hidden polls are now private polls and public polls are called open polls to distinguish them from public polls via public links
 - Added configuration options for admins to add legal terms to the public registration dialog and emails
-- Added the possibility for admins to add a disclaimer test to generated emails
+- Added the possibility for admins to add a disclaimer text to generated emails
 - Input fields now support matching keyboards on mobiles
 - Added email addresses for owner's poll export
 - Grouping comments for less noise
