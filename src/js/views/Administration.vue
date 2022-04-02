@@ -84,11 +84,13 @@
 				<h2>{{ t('polls', 'Do you want to take over this poll?') }}</h2>
 				<div>{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}</div>
 				<div class="modal__buttons">
-					<ButtonDiv :title="t('polls', 'No')"
-						@click="takeOverModal = false" />
-					<ButtonDiv :primary="true"
-						:title="t('polls', 'Yes')"
-						@click="takeOverPoll()" />
+					<VueButton @click="takeOverModal = false">
+						{{ t('polls', 'No') }}
+					</VueButton>
+
+					<VueButton type="primary" @click="takeOverPoll()">
+						{{ t('polls', 'Yes') }}
+					</VueButton>
 				</div>
 			</div>
 		</Modal>
@@ -101,11 +103,13 @@
 					{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}
 				</div>
 				<div class="modal__buttons">
-					<ButtonDiv :title="t('polls', 'No')"
-						@click="deleteModal = false" />
-					<ButtonDiv :primary="true"
-						:title="t('polls', 'Yes')"
-						@click="deletePoll()" />
+					<VueButton @click="deleteModal = false">
+						{{ t('polls', 'No') }}
+					</VueButton>
+
+					<VueButton type="primary" @click="deletePoll()">
+						{{ t('polls', 'Yes') }}
+					</VueButton>
 				</div>
 			</div>
 		</Modal>
@@ -116,7 +120,7 @@
 import { mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
-import { Actions, ActionButton, AppContent, EmptyContent, Modal } from '@nextcloud/vue'
+import { Actions, ActionButton, AppContent, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
 import sortBy from 'lodash/sortBy'
 import HeaderBar from '../components/Base/HeaderBar'
 
@@ -130,6 +134,7 @@ export default {
 		EmptyContent,
 		HeaderBar,
 		Modal,
+		VueButton,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
 		PollItem: () => import('../components/PollList/PollItem'),
 	},

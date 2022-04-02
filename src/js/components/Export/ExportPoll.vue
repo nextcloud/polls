@@ -21,7 +21,10 @@
   -->
 
 <template lang="html">
-	<Actions default-icon="icon-download">
+	<Actions default-icon="icon-mask-md-export">
+		<template #icon>
+			<ExportIcon />
+		</template>
 		<ActionButton close-after-click @click="exportFile('xlsx')">
 			<template #icon>
 				<ExcelIcon />
@@ -61,6 +64,7 @@ import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
+import ExportIcon from 'vue-material-design-icons/FileDownloadOutline'
 
 export default {
 	name: 'ExportPoll',
@@ -70,6 +74,7 @@ export default {
 		CsvIcon,
 		ExcelIcon,
 		FileTableIcon,
+		ExportIcon,
 		XmlIcon,
 	},
 

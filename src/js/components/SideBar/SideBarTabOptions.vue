@@ -22,22 +22,43 @@
 
 <template>
 	<div class="side-bar-tab-options">
-		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
-		<ConfigBox :title="t('polls', 'Allow proposals from users')" icon-class="icon-category-customization">
+		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" />
+		<ConfigBox :title="t('polls', 'Allow proposals from users')">
+			<template #icon>
+				<AddDateIcon />
+			</template>
 			<ConfigProposals />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !closed" :title="t('polls', 'Shift all date options')" icon-class="icon-polls-move">
+		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !closed" :title="t('polls', 'Shift all date options')">
+			<template #icon>
+				<ShiftDateIcon />
+			</template>
 			<OptionsDateShift />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Available Options')" :icon-class="pollTypeIcon">
-			<template #actions>
-				<OptionsTextAddBulk v-if="pollType === 'textPoll' && !closed" />
-				<OptionsDateAdd v-if="pollType === 'datePoll' && !closed" />
+		<ConfigBox v-if="pollType === 'datePoll'" :title="t('polls', 'Available Options')">
+			<template #icon>
+				<DateOptionsIcon />
 			</template>
-			<OptionsDate v-if="pollType === 'datePoll'" />
-			<OptionsText v-if="pollType === 'textPoll'" />
+
+			<OptionsDate />
+
+			<template #actions>
+				<OptionsDateAdd v-if="!closed" />
+			</template>
+		</ConfigBox>
+
+		<ConfigBox v-if="pollType === 'textPoll'" :title="t('polls', 'Available Options')">
+			<template #icon>
+				<TextOptionsIcon />
+			</template>
+
+			<OptionsText />
+
+			<template #actions>
+				<OptionsTextAddBulk v-if="!closed" />
+			</template>
 		</ConfigBox>
 	</div>
 </template>
@@ -49,11 +70,19 @@ import OptionsDate from '../Options/OptionsDate'
 import OptionsDateShift from '../Options/OptionsDateShift'
 import OptionsText from '../Options/OptionsText'
 import ConfigProposals from '../Configuration/ConfigProposals'
+import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
+import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
+import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
+import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
 export default {
 	name: 'SideBarTabOptions',
 
 	components: {
+		AddDateIcon,
+		DateOptionsIcon,
+		ShiftDateIcon,
+		TextOptionsIcon,
 		ConfigBox,
 		ConfigProposals,
 		OptionsDate,

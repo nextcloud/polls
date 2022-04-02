@@ -22,9 +22,13 @@
 
 <template>
 	<div>
-		<ButtonDiv :icon="closed ? 'icon-polls-open' : 'icon-polls-closed'"
-			:title="closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll')"
-			@click="toggleClosed()" />
+		<VueButton @click="toggleClosed()">
+			<template #icon>
+				<OpenPollIcon v-if="closed" />
+				<ClosePollIcon v-else />
+			</template>
+			{{ closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll') }}
+		</VueButton>
 		<CheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">
 			{{ t('polls', 'Poll closing date') }}
 		</CheckboxRadioSwitch>
@@ -35,14 +39,19 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { DatetimePicker, CheckboxRadioSwitch } from '@nextcloud/vue'
+import { Button as VueButton, DatetimePicker, CheckboxRadioSwitch } from '@nextcloud/vue'
+import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
 
 export default {
 	name: 'ConfigClosing',
 
 	components: {
+		OpenPollIcon,
+		ClosePollIcon,
 		CheckboxRadioSwitch,
 		DatetimePicker,
+		VueButton,
 	},
 
 	data() {

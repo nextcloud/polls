@@ -26,7 +26,10 @@
 		<Popover>
 			<template #trigger>
 				<Actions>
-					<ActionButton icon="icon-info">
+					<ActionButton icon="icon-mask-md-poll-information">
+						<template #icon>
+							<PollInformationIcon />
+						</template>
 						{{ t('polls', 'Poll informations') }}
 					</ActionButton>
 				</Actions>
@@ -44,10 +47,12 @@ import { Actions, ActionButton, Popover } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ActionToggleSidebar from '../Actions/ActionToggleSidebar'
 import UserMenu from '../User/UserMenu'
+import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
 export default {
 	name: 'PollHeaderButtons',
 	components: {
+		PollInformationIcon,
 		Actions,
 		ActionButton,
 		Popover,

@@ -34,7 +34,6 @@ import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
 import UserItem from './components/User/UserItem'
-import ButtonDiv from './components/Base/ButtonDiv'
 
 /* eslint-disable-next-line camelcase, no-undef */
 __webpack_nonce__ = btoa(getRequestToken())
@@ -53,7 +52,6 @@ Vue.prototype.getCurrentUser = getCurrentUser
 // eslint-disable-next-line vue/match-component-file-name
 Vue.component('UserItem', UserItem)
 // eslint-disable-next-line vue/match-component-file-name
-Vue.component('ButtonDiv', ButtonDiv)
 Vue.directive('tooltip', Tooltip)
 
 Vue.use(ClickOutside)

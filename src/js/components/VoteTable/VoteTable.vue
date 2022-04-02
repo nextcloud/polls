@@ -105,12 +105,6 @@ export default {
 	display: flex;
 	flex: 1;
 
-	.participant {
-		display: flex;
-		align-self: stretch;
-		justify-content: center;
-	}
-
 	.participant, .vote-item {
 		flex: 0 0 auto;
 		height: 4.5em;
@@ -120,6 +114,24 @@ export default {
 		border-top: solid 1px var(--color-border-dark);
 		&.currentuser {
 			order:5;
+		}
+	}
+
+	.participant {
+		display: flex;
+		align-self: stretch;
+		justify-content: center;
+
+		.material-design-icon {
+			// display: none;
+			visibility: hidden;
+		}
+
+		&:hover {
+			background: var(--color-background-hover);
+			.material-design-icon {
+				visibility: visible;
+			}
 		}
 	}
 

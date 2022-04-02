@@ -22,28 +22,30 @@
 
 <template lang="html">
 	<AppNavigationItem :title="poll.title"
-		:icon="pollIcon"
+		:icon="pollTypeIcon"
 		:to="{name: 'vote', params: {id: poll.id}}"
 		:class="{ closed: closed }">
 		<template #actions>
-			<ActionButton v-if="isPollCreationAllowed" icon="icon-polls-clone" @click="$emit('clone-poll')">
+			<ActionButton v-if="isPollCreationAllowed"
+				icon="icon-mask-md-clone-poll"
+				@click="$emit('clone-poll')">
 				{{ t('polls', 'Clone poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && !poll.deleted"
-				icon="icon-category-app-bundles"
+				icon="icon-mask-md-archive-poll"
 				@click="$emit('toggle-archive')">
 				{{ t('polls', 'Archive poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted"
-				icon="icon-history"
+				icon="icon-mask-md-restore-poll"
 				@click="$emit('toggle-archive')">
 				{{ t('polls', 'Restore poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted"
-				icon="icon-delete"
+				icon="icon-mask-md-delete-poll"
 				class="danger"
 				@click="$emit('delete-poll')">
 				{{ t('polls', 'Delete poll') }}
@@ -81,19 +83,13 @@ export default {
 			closed: 'poll/isClosed',
 		}),
 
-		pollIcon() {
-			if (this.poll.type === 'datePoll') {
-				return 'icon-calendar-000'
+		pollTypeIcon() {
+			if (this.poll.type === 'textPoll') {
+				return 'icon-mask-md-text-poll'
 			}
-			return 'icon-toggle-filelist'
 
+			return 'icon-mask-md-date-poll'
 		},
 	},
 }
 </script>
-
-<style lang="scss">
-.icon-calendar-000 {
-	background-image: var(--icon-calendar-000);
-}
-</style>

@@ -184,23 +184,23 @@ export default {
 
 		avatarIcon() {
 			if (this.type === 'public') {
-				return 'icon-public'
+				return 'icon-svg-md-link'
 			}
 
 			if (this.type === 'internalAccess') {
-				return 'icon-public'
+				return 'icon-svg-md-link'
 			}
 
 			if (this.type === 'contact') {
-				return 'icon-mail'
+				return 'icon-svg-md-email'
 			}
 
 			if (this.type === 'email') {
-				return 'icon-mail'
+				return 'icon-svg-md-email'
 			}
 
 			if (this.type === 'external') {
-				return 'icon-share'
+				return 'icon-svg-md-share'
 			}
 
 			if (this.type === 'contactGroup') {
@@ -221,7 +221,7 @@ export default {
 		iconClass() {
 			if (this.icon) {
 				if (this.type === 'admin') {
-					return 'icon-user-admin'
+					return 'icon-mask-md-admin'
 				}
 			}
 			return ''

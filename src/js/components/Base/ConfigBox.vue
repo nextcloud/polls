@@ -77,7 +77,6 @@ export default {
 	display: flex;
 	align-content: center;
 	align-items: center;
-	justify-content: space-between;
 	gap: 5px;
 	margin: 8px 0 8px 0;
 }
@@ -92,6 +91,7 @@ export default {
 
 	.config-box__title {
 		display: flex;
+		flex: 1;
 		background-position: 0 4px;
 		opacity: 0.7;
 		font-weight: bold;

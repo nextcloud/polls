@@ -21,8 +21,14 @@
   -->
 
 <template lang="html">
-	<Component :is="tag" :class="badgeClass">
-		{{ title }}
+	<Component :is="tag" class="badge">
+		<div :class="icon" />
+		<span>
+			{{ title }}
+		</span>
+		<span>
+			<slot />
+		</span>
 	</Component>
 </template>
 
@@ -43,17 +49,13 @@ export default {
 			default: 'span',
 		},
 	},
-
-	computed: {
-		badgeClass() {
-			return ['badge', this.icon, { withIcon: Boolean(this.icon) }]
-		},
-	},
 }
 </script>
 
 <style lang="scss">
 	.badge {
+		display: flex;
+		gap: 5px;
 		border-radius: var(--border-radius);
 		padding: 5px;
 		margin: 8px 4px;
@@ -67,22 +69,22 @@ export default {
 			font-size: 0.6em;
 		}
 
-		&.withIcon {
-			padding-left: 25px !important;
-			text-align: left;
-			background-position: 4px center;
-		}
-
 		&.error {
 			border-color: var(--color-error);
 			background-color: var(--color-error);
-			color: var(--color-primary-text);
+			color: var(--color-primary-text) !important;
+			[class*='icon-mask-md-'] {
+				background-color: #fff;
+			}
 		}
 
 		&.success {
 			border-color: var(--color-success);
 			background-color: var(--color-success);
-			color: var(--color-primary-text);
+			color: var(--color-primary-text) !important;
+			[class*='icon-mask-md-'] {
+				background-color: #fff;
+			}
 		}
 	}
 

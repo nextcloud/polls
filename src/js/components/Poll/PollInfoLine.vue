@@ -22,9 +22,9 @@
 
 <template lang="html">
 	<div class="poll-info-line">
-		<span>{{ subTextLeft }}</span>
-		<span v-for="(subText) in subTexts" :key="subText.text">
-			<span :class="[subText.class, subText.icon]">{{ subText.text }}</span>
+		<span v-for="(subText) in subTexts" :key="subText.id" :class="subText.class">
+			<span :class="subText.icon" />
+			<span class="sub-text">{{ subText.text }}</span>
 		</span>
 	</div>
 </template>
@@ -55,13 +55,6 @@ export default {
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
 
-		subTextLeft() {
-			if (this.access === 'private') {
-				return t('polls', 'A hidden poll from {name}', { name: this.ownerDisplayName })
-			}
-			return t('polls', 'A public poll from {name}', { name: this.ownerDisplayName })
-		},
-
 		isNoAccessSet() {
 			return this.access === 'private' && !this.hasShares && this.mayEdit
 		},
@@ -69,59 +62,88 @@ export default {
 		subTexts() {
 			const subTexts = []
 
+			if (this.access === 'private') {
+				subTexts.push({
+					id: this.access,
+					text: t('polls', 'A hidden poll from {name}', { name: this.ownerDisplayName }),
+					icon: '',
+					class: '',
+				})
+			} else {
+				subTexts.push({
+					id: this.access,
+					text: t('polls', 'A public poll from {name}', { name: this.ownerDisplayName }),
+					icon: '',
+					class: '',
+				})
+			}
+
 			if (this.isNoAccessSet) {
-				return [{
+				subTexts.push({
+					id: 'no-access',
 					text: t('polls', 'Invite users via the share tab in the sidebar'),
-					icon: 'icon-error',
+					icon: 'icon-mask-md-sidebar-share',
 					class: 'closed',
-				}]
+				})
+				return subTexts
 			}
 			if (this.isDeleted) {
-				return [{
+				subTexts.push({
+					id: 'deleted',
 					text: t('polls', 'Archived'),
-					icon: 'icon-category-app-bundles',
+					icon: 'icon-mask-md-archived-poll',
 					class: 'archived',
-				}]
+				})
+				return subTexts
 			}
 
 			if (this.isClosed) {
-				return [{
+				subTexts.push({
+					id: 'closed',
 					text: this.timeExpirationRelative,
-					icon: 'icon-polls-closed',
+					icon: 'icon-mask-md-closed-poll',
 					class: 'closed',
-				}]
+				})
+				return subTexts
 			}
 
 			if (!this.isClosed && this.expire) {
 				subTexts.push({
+					id: 'expiring',
 					text: t('polls', 'Closing {relativeExpirationTime}', { relativeExpirationTime: this.timeExpirationRelative }),
-					icon: 'icon-calendar-000',
+					icon: 'icon-mask-md-expiration',
 					class: this.closeToClosing ? 'closing' : 'open',
 				})
+				return subTexts
 			}
 
 			if (this.proposalsExpirySet && this.proposalsExpired) {
 				subTexts.push({
+					id: 'expired',
 					text: t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
-					icon: 'icon-add',
+					icon: 'icon-mask-md-proposals',
 					class: 'proposal',
 				})
+				return subTexts
 			}
 
 			if (this.proposalsExpirySet && !this.proposalsExpired) {
 				subTexts.push({
+					id: 'proposal-open',
 					text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
-					icon: 'icon-add',
+					icon: 'icon-mask-md-proposals',
 					class: 'proposal',
 				})
+				return subTexts
 			}
 
-			if (subTexts.length < 1) {
-				return [{
+			if (subTexts.length < 2) {
+				subTexts.push({
+					id: 'created',
 					text: this.dateCreatedRelative,
-					icon: 'icon-clock',
+					icon: 'icon-mask-md-creation',
 					class: 'created',
-				}]
+				})
 			}
 			return subTexts
 		},
@@ -153,42 +175,52 @@ export default {
 	opacity: 0.7;
 	font-size: 1em;
 
-	button {
-		margin-left: 8px;
-	}
-
 	& > span:not(:last-child)::after {
 		content: "|";
-		padding: 0 4px;
+		padding: 0 2px;
 	}
 
 	[class^="icon-"],
 	[class*=" icon-"] {
-		padding-left: 21px;
-		background-position: left center;
+		padding-right: 21px;
+	}
+
+	[class^="icon-md"],
+	[class*=" icon-md"] {
+		mask-size: 1em;
 	}
 
 	.closed {
-		color: var(--color-error);
-		font-weight: 700;
+		.sub-text{
+			color: var(--color-error);
+			font-weight: 700;
+		}
 	}
 
 	.closing {
-		color: var(--color-warning);
-		font-weight: 700;
+		.sub-text{
+			color: var(--color-warning);
+			font-weight: 700;
+		}
 	}
 
 	.open {
-		font-weight: 700;
+		.sub-text{
+			font-weight: 700;
+		}
 	}
 
 	.archived {
-		color: var(--color-error);
-		font-weight: 700;
+		.sub-text{
+			color: var(--color-error);
+			font-weight: 700;
+		}
 	}
 
 	.created {
-		color: var(--color-text-light);
+		.sub-text{
+			color: var(--color-text-light);
+		}
 	}
 }
 </style>

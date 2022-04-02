@@ -27,7 +27,6 @@ import appSettings from './store/modules/appSettings'
 import { translate, translatePlural } from '@nextcloud/l10n'
 
 import AdminSettingsPage from './views/AdminSettingsPage'
-import ButtonDiv from './components/Base/ButtonDiv'
 
 // /* eslint-disable-next-line camelcase, no-undef */
 // __webpack_nonce__ = btoa(getRequestToken())
@@ -40,7 +39,6 @@ Vue.prototype.n = translatePlural
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
 // eslint-disable-next-line vue/match-component-file-name
-Vue.component('ButtonDiv', ButtonDiv)
 
 Vue.use(Vuex)
 

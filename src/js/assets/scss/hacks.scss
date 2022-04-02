@@ -14,6 +14,10 @@
 	}
 }
 
+.mx-input-wrapper .button-vue--vue-primary .material-design-icon__svg {
+	fill: var(--color-primary-text);
+}
+
 .mx-datepicker-main .checkbox-radio-switch--checked svg {
 	fill: var(--color-primary-element);
 }

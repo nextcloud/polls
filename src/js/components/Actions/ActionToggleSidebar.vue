@@ -21,50 +21,35 @@
   -->
 
 <template>
-	<div class="action change-view">
-		<ButtonDiv v-if="buttonMode"
-			:title="caption"
-			simple
-			:icon="icon"
-			@click="clickAction()" />
-		<Actions v-else>
-			<ActionButton :icon="icon" @click="clickAction()">
-				{{ caption }}
-			</ActionButton>
-		</Actions>
+	<div class="action toggle-sidebar">
+		<VueButton v-tooltip="caption"
+			type="tertiary"
+			@click="clickAction()">
+			<SidebarIcon />
+		</VueButton>
 	</div>
 </template>
 
 <script>
-import { Actions, ActionButton } from '@nextcloud/vue'
-import ButtonDiv from '../Base/ButtonDiv'
+import { Button as VueButton } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
+import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 
 export default {
 	name: 'ActionToggleSidebar',
 
 	components: {
-		Actions,
-		ActionButton,
-		ButtonDiv,
-	},
-
-	props: {
-		buttonMode: {
-			type: Boolean,
-			default: false,
-		},
+		SidebarIcon,
+		VueButton,
 	},
 
 	data() {
 		return {
 			caption: t('polls', 'Toggle Sidebar'),
-			icon: 'icon-menu-sidebar',
 		}
 	},
 
 	methods: {
-
 		clickAction() {
 			emit('polls:sidebar:toggle')
 		},

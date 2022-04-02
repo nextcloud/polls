@@ -42,6 +42,7 @@ import '@nextcloud/dialogs/styles/toast.scss'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
+import './assets/scss/icons-md.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/theming.scss'
@@ -287,6 +288,7 @@ export default {
 
 .modal__buttons {
 	display: flex;
+	gap: 8px;
 	justify-content: flex-end;
 	align-items: center;
 	margin-top: 14px;

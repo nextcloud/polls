@@ -22,32 +22,30 @@
 
 <template>
 	<div class="">
-		<DeleteIcon v-if="iconMode && !deleteTimeout" :size="iconSize" @click="deleteItem()" />
-		<UndoIcon v-if="iconMode && deleteTimeout" :size="iconSize" @click="cancelDelete()" />
-
-		<Actions v-if="!iconMode">
-			<ActionButton v-if="deleteTimeout" icon="icon-history" @click="cancelDelete()">
-				{{ n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', countdown, { countdown }) }}
-			</ActionButton>
-			<ActionButton v-else icon="icon-delete" @click="deleteItem()">
-				{{ title }}
-			</ActionButton>
-		</Actions>
+		<VueButton type="tertiary">
+			<UndoIcon v-if="deleteTimeout"
+				v-tooltip="countdownTitle"
+				:size="iconSize"
+				@click="cancelDelete()" />
+			<DeleteIcon v-else
+				v-tooltip="title"
+				:size="iconSize"
+				@click="deleteItem()" />
+		</VueButton>
 	</div>
 </template>
 
 <script>
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Button as VueButton } from '@nextcloud/vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
 
 export default {
 	name: 'ActionDelete',
 	components: {
-		Actions,
-		ActionButton,
 		DeleteIcon,
 		UndoIcon,
+		VueButton,
 	},
 
 	props: {
@@ -59,10 +57,6 @@ export default {
 		title: {
 			type: String,
 			default: t('polls', 'Delete'),
-		},
-		iconMode: {
-			type: Boolean,
-			default: false,
 		},
 		iconSize: {
 			type: Number,
@@ -76,6 +70,12 @@ export default {
 			deleteTimeout: null,
 			countdown: 4, // seconds
 		}
+	},
+
+	computed: {
+		countdownTitle() {
+			return n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', this.countdown, { countdown: this.countdown })
+		},
 	},
 
 	methods: {
@@ -116,6 +116,10 @@ export default {
 
 	&.delete-icon:hover {
 		color: var(--color-error-hover);
+	}
+	&.arrow-u-left-top-icon {
+		/* force the undo icon always to be visible */
+		visibility: visible !important;
 	}
 }
 </style>

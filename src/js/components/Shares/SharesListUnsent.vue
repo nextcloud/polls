@@ -21,7 +21,10 @@
   -->
 
 <template>
-	<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')" icon-class="icon-polls-mail">
+	<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')">
+		<template #icon>
+			<EmailAlertIcon />
+		</template>
 		<TransitionGroup :css="false" tag="div" class="shares-list">
 			<UserItem v-for="(share) in unsentInvitations"
 				:key="share.id"
@@ -54,11 +57,13 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import ConfigBox from '../Base/ConfigBox'
+import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 
 export default {
 	name: 'SharesListUnsent',
 
 	components: {
+		EmailAlertIcon,
 		Actions,
 		ActionButton,
 		ActionDelete,
