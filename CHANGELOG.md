@@ -20,7 +20,7 @@ All notable changes to this project will be documented in this file.
 - Dont't add tags to description in plain text invitation mail
 - poll list in admin page should not link to a poll
 
-## [3.6.0-beta1] - tbd
+## [3.6.0-beta1] - 2022-04-02
 ## Changes
 - #2255 - Rename "hidden" polls to "private" polls, "public" to "open" (#2289)
 - #2328 - Migrate access strings to 'private' and 'open' (instead of 'hidden' and 'public')
