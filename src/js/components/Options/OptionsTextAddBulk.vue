@@ -42,8 +42,13 @@
 					:placeholder="placeholder" />
 
 				<div class="modal__buttons">
-					<ButtonDiv :title="t('polls', 'Close')" @click="showModal = false" />
-					<ButtonDiv :primary="true" :title="t('polls', 'Add options')" @click="addOptionsList()" />
+					<VueButton @click="showModal = false">
+						{{ t('polls', 'Close') }}
+					</VueButton>
+
+					<VueButton type="primary" @click="addOptionsList()">
+						{{ t('polls', 'OK') }}
+					</VueButton>
 				</div>
 			</div>
 		</Modal>
@@ -52,7 +57,7 @@
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { Actions, ActionButton, Modal } from '@nextcloud/vue'
+import { Actions, ActionButton, Button as VueButton, Modal } from '@nextcloud/vue'
 import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 
 export default {
@@ -63,6 +68,7 @@ export default {
 		Actions,
 		ActionButton,
 		Modal,
+		VueButton,
 	},
 
 	props: {

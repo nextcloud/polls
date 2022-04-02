@@ -288,6 +288,7 @@ export default {
 
 .modal__buttons {
 	display: flex;
+	gap: 8px;
 	justify-content: flex-end;
 	align-items: center;
 	margin-top: 14px;

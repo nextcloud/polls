@@ -25,7 +25,7 @@
 		<div v-if="proposalsExist">
 			{{ t('polls', 'Shifting dates is disabled to prevent shifting of other user\'s proposals.') }}
 		</div>
-		<div v-else class="selectUnit">
+		<div v-else class="select-unit">
 			<InputDiv v-model="shift.step"
 				use-num-modifiers
 				@add="shift.step += 1"
@@ -34,8 +34,11 @@
 				:options="dateUnits"
 				label="name"
 				track-by="value" />
-			<ButtonDiv submit
-				@click="shiftDates(shift)" />
+			<VueButton class="submit"
+				type="tertiary"
+				@click="shiftDates(shift)">
+				<SubmitIcon />
+			</VueButton>
 		</div>
 	</div>
 </template>
@@ -44,15 +47,18 @@
 
 import { mapState, mapGetters } from 'vuex'
 import InputDiv from '../Base/InputDiv'
-import { Multiselect } from '@nextcloud/vue'
+import { Button as VueButton, Multiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins'
+import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 export default {
 	name: 'OptionsDateShift',
 
 	components: {
+		SubmitIcon,
 		InputDiv,
 		Multiselect,
+		VueButton,
 	},
 
 	mixins: [dateUnits],
@@ -86,7 +92,7 @@ export default {
 </script>
 
 <style lang="scss">
-.selectUnit {
+.select-unit {
 	display: flex;
 	flex-wrap: wrap;
 	align-items: center;
@@ -96,6 +102,15 @@ export default {
 		min-width: 75px;
 		flex: 1;
 	}
-}
 
+	.button-vue.button-vue--vue-tertiary {
+		padding: 0;
+		min-width: 0;
+	}
+
+	.button-vue__text,
+	.button-vue--text-only .button-vue__text {
+		margin: 0;
+	}
+}
 </style>

@@ -36,17 +36,19 @@
 							:option="option"
 							class="owner" />
 					</template>
-					<template #actions>
-						<ActionDelete v-if="acl.allowEdit"
+					<template v-if="acl.allowEdit" #actions>
+						<ActionDelete v-if="!closed"
 							:title="t('polls', 'Delete option')"
 							@delete="removeOption(option)" />
-						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="closed"
-								:icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
-								@click="confirmOption(option)">
-								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-							</ActionButton>
-						</Actions>
+						<VueButton v-if="closed"
+							v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+							type="tertiary"
+							@click="confirmOption(option)">
+							<template #icon>
+								<UnconfirmIcon v-if="option.confirmed" />
+								<ConfirmIcon v-else />
+							</template>
+						</VueButton>
 					</template>
 				</OptionItem>
 			</transition-group>
@@ -63,24 +65,27 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
+import { Button as VueButton, EmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
 import ActionDelete from '../Actions/ActionDelete'
 import OptionItem from './OptionItem'
 import OptionItemOwner from '../Options/OptionItemOwner'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 
 export default {
 	name: 'OptionsText',
 
 	components: {
-		Actions,
-		ActionButton,
+		ConfirmIcon,
+		UnconfirmIcon,
 		ActionDelete,
 		EmptyContent,
 		draggable,
 		OptionItem,
 		OptionItemOwner,
+		VueButton,
 		OptionsTextAdd: () => import('./OptionsTextAdd'),
 	},
 

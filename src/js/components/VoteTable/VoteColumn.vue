@@ -24,8 +24,6 @@
 	<div :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
 		<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
 
-		<!-- <Confirmation v-if="option.confirmed && closed" :option="option" /> -->
-
 		<Counter v-if="acl.allowSeeResults"
 			:show-maybe="!!poll.allowMaybe"
 			:option="option" />
@@ -42,33 +40,39 @@
 			:avatar-size="24"
 			class="owner" />
 
-		<Actions v-if="acl.allowEdit && closed" class="action confirm">
-			<ActionButton v-if="closed"
-				:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+		<div v-if="acl.allowEdit && closed" class="action confirm">
+			<VueButton v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+				type="tertiary"
 				@click="confirmOption(option)">
-				{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-			</ActionButton>
-		</Actions>
+				<template #icon>
+					<UnconfirmIcon v-if="option.confirmed" :size="20" />
+					<ConfirmIcon v-else :size="20" />
+				</template>
+			</VueButton>
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { Button as VueButton } from '@nextcloud/vue'
 import Counter from '../Options/Counter'
 import VoteItem from './VoteItem'
 import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { confirmOption } from '../../mixins/optionMixins'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 
 export default {
 	name: 'VoteColumn',
 	components: {
-		Actions,
-		ActionButton,
-		CalendarPeek: () => import('../Calendar/CalendarPeek'),
+		ConfirmIcon,
+		UnconfirmIcon,
 		Counter,
 		VoteTableHeaderItem,
 		VoteItem,
+		VueButton,
+		CalendarPeek: () => import('../Calendar/CalendarPeek'),
 		OptionItemOwner: () => import('../Options/OptionItemOwner'),
 	},
 

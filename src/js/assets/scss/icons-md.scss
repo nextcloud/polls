@@ -1,4 +1,18 @@
 // material design icons
+@mixin svg-icon($url) {
+    background-image: $url;
+}
+
+// masked svg background icon
+@mixin masked-icon($url, $color: var(--icon-md-color-default)) {
+    -webkit-mask-image: $url;
+    mask-image: $url;
+	mask-repeat: no-repeat;
+	mask-position: center;
+	mask-size: var(--icon-size);
+	background-color: $color;
+}
+
 :root {
 	--icon-md-account-check: url('../icons/material-design/account-check.svg');
 	--icon-md-account-group: url('../icons/material-design/account-group.svg');
@@ -59,13 +73,6 @@
 	background-color: #000;
 }
 
-// .material-design-icon {
-// 	display: flex;
-// 	align-self: center;
-// 	align-items: center;
-// 	justify-content: center;
-// }
-
 .theme--dark {
 	&[class*='icon-mask-md-'] {
 		background-color: #000 !important;
@@ -75,76 +82,63 @@
 	}
 }
 
-@mixin svg-icon($url) {
-    background-image: $url;
-}
-
-// masked svg background icon
-@mixin masked-icon($url, $color: var(--icon-md-color-default)) {
-    -webkit-mask-image: $url;
-    mask-image: $url;
-	mask-repeat: no-repeat;
-	mask-position: center;
-	mask-size: var(--icon-size);
-	background-color: $color;
-}
-
-
 // material design icons
 // just svg background icon
 .icon-svg-md-email { @include svg-icon(var(--icon-md-email)); }
 .icon-svg-md-share { @include svg-icon(var(--icon-md-share-variant)); }
 .icon-svg-md-link { @include svg-icon(var(--icon-md-link-variant)); }
 
-.icon-mask-md-navigation-relevant { @include masked-icon(var(--icon-md-exclamation-thick)); }
-.icon-mask-md-navigation-my { @include masked-icon(var(--icon-md-crown)); }
-.icon-mask-md-owner { @include masked-icon(var(--icon-md-crown)); }
-.icon-mask-md-navigation-private { @include masked-icon(var(--icon-md-key)); }
-.icon-mask-md-private-poll { @include masked-icon(var(--icon-md-key)); }
-.icon-mask-md-navigation-open { @include masked-icon(var(--icon-md-earth)); }
-.icon-mask-md-open-poll { @include masked-icon(var(--icon-md-earth)); }
-.icon-mask-md-navigation-participated { @include masked-icon(var(--icon-md-account-check)); }
-.icon-mask-md-navigation-all { @include masked-icon(var(--icon-md-poll)); }
-.icon-mask-md-navigation-closed, .icon-mask-md-closed-poll { @include masked-icon(var(--icon-md-lock)); }
-.icon-mask-md-navigation-archived { @include masked-icon(var(--icon-md-archive)); }
-.icon-mask-md-archived-poll { @include masked-icon(var(--icon-md-archive)); }
-.icon-mask-md-archive-poll { @include masked-icon(var(--icon-md-archive)); }
-.icon-mask-md-navigation-combo { @include masked-icon(var(--icon-md-vector-combine)); }
-.icon-mask-md-navigation-administration { @include masked-icon(var(--icon-md-cog)); }
-.icon-mask-md-navigation-personal-settings { @include masked-icon(var(--icon-md-account-cog)); }
-.icon-mask-md-sidebar-options { @include masked-icon(var(--icon-md-format-list-checks)); }
-.icon-mask-md-email { @include masked-icon(var(--icon-md-email)); }
+// mask icons
 .icon-mask-md-admin { @include masked-icon(var(--icon-md-shield-crown-outline)); }
 .icon-mask-md-admin-remove { @include masked-icon(var(--icon-md-shield-crown-outline-strike-thru)); }
-.icon-mask-md-sidebar-configuration { @include masked-icon(var(--icon-md-wrench)); }
-.icon-mask-md-sidebar-comments { @include masked-icon(var(--icon-md-comment-processing)); }
-.icon-mask-md-sidebar-share { @include masked-icon(var(--icon-md-share-variant)); }
+.icon-mask-md-anonymous-poll { @include masked-icon(var(--icon-md-incognito)); }
+.icon-mask-md-archive-poll { @include masked-icon(var(--icon-md-archive)); }
+.icon-mask-md-archived-poll { @include masked-icon(var(--icon-md-archive)); }
+.icon-mask-md-clippy { @include masked-icon(var(--icon-md-clipboard-arrow-left-outline)); }
+.icon-mask-md-clone-poll { @include masked-icon(var(--icon-md-content-copy)); }
+.icon-mask-md-closed-poll { @include masked-icon(var(--icon-md-lock)); }
+.icon-mask-md-creation { @include masked-icon(var(--icon-md-clock-outline)); }
 .icon-mask-md-date-options { @include masked-icon(var(--icon-md-calendar-month)); }
 .icon-mask-md-date-poll { @include masked-icon(var(--icon-md-calendar-blank)); }
-.icon-mask-md-anonymous-poll { @include masked-icon(var(--icon-md-incognito)); }
-.icon-mask-md-text-poll { @include masked-icon(var(--icon-md-format-list-bulleted-square)); }
-.icon-mask-md-clone-poll { @include masked-icon(var(--icon-md-content-copy)); }
-.icon-mask-md-restore-poll { @include masked-icon(var(--icon-md-recycle)); }
 .icon-mask-md-delete-poll { @include masked-icon(var(--icon-md-delete)); }
+.icon-mask-md-edit-email-address { @include masked-icon(var(--icon-md-email-edit)); }
+.icon-mask-md-email { @include masked-icon(var(--icon-md-email)); }
 .icon-mask-md-expiration { @include masked-icon(var(--icon-md-calendar-end)); }
-.icon-mask-md-creation { @include masked-icon(var(--icon-md-clock-outline)); }
-.icon-mask-md-clippy { @include masked-icon(var(--icon-md-clipboard-arrow-left-outline)); }
-.icon-mask-md-reset-votes { @include masked-icon(var(--icon-md-undo)); }
-.icon-mask-md-subscribed { @include masked-icon(var(--icon-md-bell)); }
-.icon-mask-md-unsubscribed { @include masked-icon(var(--icon-md-bell-off)); }
-.icon-mask-md-participants { @include masked-icon(var(--icon-md-account-group)); }
-.icon-mask-md-show-results { @include masked-icon(var(--icon-md-monitor)); }
 .icon-mask-md-hide-results-until-closed { @include masked-icon(var(--icon-md-monitor-lock)); }
-.icon-mask-md-show-results-never { @include masked-icon(var(--icon-md-monitor-off)); }
+.icon-mask-md-navigation-administration { @include masked-icon(var(--icon-md-cog)); }
+.icon-mask-md-navigation-all { @include masked-icon(var(--icon-md-poll)); }
+.icon-mask-md-navigation-archived { @include masked-icon(var(--icon-md-archive)); }
+.icon-mask-md-navigation-closed { @include masked-icon(var(--icon-md-lock)); }
+.icon-mask-md-navigation-combo { @include masked-icon(var(--icon-md-vector-combine)); }
+.icon-mask-md-navigation-my { @include masked-icon(var(--icon-md-crown)); }
+.icon-mask-md-navigation-open { @include masked-icon(var(--icon-md-earth)); }
+.icon-mask-md-navigation-participated { @include masked-icon(var(--icon-md-account-check)); }
+.icon-mask-md-navigation-personal-settings { @include masked-icon(var(--icon-md-account-cog)); }
+.icon-mask-md-navigation-private { @include masked-icon(var(--icon-md-key)); }
+.icon-mask-md-navigation-relevant { @include masked-icon(var(--icon-md-exclamation-thick)); }
+.icon-mask-md-open-poll { @include masked-icon(var(--icon-md-earth)); }
 .icon-mask-md-options { @include masked-icon(var(--icon-md-format-list-checkbox)); }
-.icon-mask-md-timezone { @include masked-icon(var(--icon-md-map-clock-outline)); }
+.icon-mask-md-options-order-date { @include masked-icon(var(--icon-md-sort-clock-ascending-outline)); }
+.icon-mask-md-options-order-original { @include masked-icon(var(--icon-md-format-list-bulleted-square)); }
+.icon-mask-md-options-order-ranked { @include masked-icon(var(--icon-md-format-list-numbered)); }
+.icon-mask-md-owner { @include masked-icon(var(--icon-md-crown)); }
+.icon-mask-md-participants { @include masked-icon(var(--icon-md-account-group)); }
+.icon-mask-md-private-poll { @include masked-icon(var(--icon-md-key)); }
 .icon-mask-md-proposals-allowed { @include masked-icon(var(--icon-md-offer)); }
 .icon-mask-md-proposals { @include masked-icon(var(--icon-md-offer)); }
-.icon-mask-md-edit-email-address { @include masked-icon(var(--icon-md-email-edit)); }
 .icon-mask-md-send-link-per-email { @include masked-icon(var(--icon-md-link-variant)); }
-.icon-mask-md-options-order-ranked { @include masked-icon(var(--icon-md-format-list-numbered)); }
-.icon-mask-md-options-order-original { @include masked-icon(var(--icon-md-format-list-bulleted-square)); }
-.icon-mask-md-options-order-date { @include masked-icon(var(--icon-md-sort-clock-ascending-outline)); }
+.icon-mask-md-show-results { @include masked-icon(var(--icon-md-monitor)); }
+.icon-mask-md-show-results-never { @include masked-icon(var(--icon-md-monitor-off)); }
+.icon-mask-md-sidebar-comments { @include masked-icon(var(--icon-md-comment-processing)); }
+.icon-mask-md-sidebar-configuration { @include masked-icon(var(--icon-md-wrench)); }
+.icon-mask-md-sidebar-options { @include masked-icon(var(--icon-md-format-list-checks)); }
+.icon-mask-md-sidebar-share { @include masked-icon(var(--icon-md-share-variant)); }
+.icon-mask-md-subscribed { @include masked-icon(var(--icon-md-bell)); }
+.icon-mask-md-reset-votes { @include masked-icon(var(--icon-md-undo)); }
+.icon-mask-md-restore-poll { @include masked-icon(var(--icon-md-recycle)); }
+.icon-mask-md-text-poll { @include masked-icon(var(--icon-md-format-list-bulleted-square)); }
+.icon-mask-md-timezone { @include masked-icon(var(--icon-md-map-clock-outline)); }
+.icon-mask-md-unsubscribed { @include masked-icon(var(--icon-md-bell-off)); }
 
 .icon-mask-md-yes-vote,
 .icon-mask-md-yes-votes {

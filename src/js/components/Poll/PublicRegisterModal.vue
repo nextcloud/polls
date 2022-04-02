@@ -61,18 +61,21 @@
 						<RichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 					</div>
 					<div class="modal__buttons">
-						<div class="modal__buttons__spacer" />
-						<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
-						<ButtonDiv :primary="true"
-							:disabled="disableSubmit"
-							:title="t('polls', 'OK')"
-							@click="submitRegistration" />
+						<VueButton @click="closeModal">
+							{{ t('polls', 'Cancel') }}
+						</VueButton>
+
+						<VueButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
+							{{ t('polls', 'OK') }}
+						</VueButton>
 					</div>
 				</div>
 
 				<div v-if="share.showLogin" class="registration__login">
 					<h2> {{ t('polls', 'You are a registered user of this site?') }} </h2>
-					<ButtonDiv :title="t('polls', 'Login')" @click="login()" />
+					<VueButton wide @click="login()">
+						{{ t('polls', 'Login') }}
+					</VueButton>
 					<div>
 						{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}
 					</div>
@@ -94,24 +97,23 @@
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
-import ButtonDiv from '../Base/ButtonDiv'
-import InputDiv from '../Base/InputDiv'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { Modal } from '@nextcloud/vue'
+import { Button as VueButton, Modal } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import RichText from '@juliushaertl/vue-richtext'
+import InputDiv from '../Base/InputDiv'
 import SimpleLink from '../../helpers/SimpleLink'
 
 export default {
 	name: 'PublicRegisterModal',
 
 	components: {
-		ButtonDiv,
 		SimpleLink,
 		InputDiv,
 		Modal,
 		RichText,
+		VueButton,
 	},
 
 	data() {

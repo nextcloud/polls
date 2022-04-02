@@ -36,23 +36,28 @@
 						:option="option"
 						class="owner" />
 				</template>
-				<template #actions>
-					<ActionDelete v-if="acl.allowEdit"
+				<template v-if="acl.allowEdit" #actions>
+					<ActionDelete v-if="!closed"
 						:title="t('polls', 'Delete option')"
 						@delete="removeOption(option)" />
-					<Actions v-if="acl.allowEdit" class="action">
+
+					<Actions v-if="!closed" class="action">
 						<ActionButton v-if="!closed" @click="cloneOptionModal(option)">
 							<template #icon>
 								<CloneDateIcon />
 							</template>
 							{{ t('polls', 'Clone option') }}
 						</ActionButton>
-						<ActionButton v-if="closed"
-							:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
-							@click="confirmOption(option)">
-							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-						</ActionButton>
 					</Actions>
+					<VueButton v-if="closed"
+						v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+						type="tertiary"
+						@click="confirmOption(option)">
+						<template #icon>
+							<UnconfirmIcon v-if="option.confirmed" />
+							<ConfirmIcon v-else />
+						</template>
+					</VueButton>
 				</template>
 			</OptionItem>
 		</transition-group>
@@ -72,19 +77,23 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Actions, ActionButton, EmptyContent, Modal } from '@nextcloud/vue'
+import { Actions, ActionButton, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete'
 import OptionCloneDate from './OptionCloneDate'
 import OptionItem from './OptionItem'
 import { confirmOption, removeOption } from '../../mixins/optionMixins'
 import { dateUnits } from '../../mixins/dateMixins'
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 
 export default {
 	name: 'OptionsDate',
 
 	components: {
 		CloneDateIcon,
+		ConfirmIcon,
+		UnconfirmIcon,
 		Actions,
 		ActionButton,
 		ActionDelete,
@@ -92,6 +101,7 @@ export default {
 		Modal,
 		OptionCloneDate,
 		OptionItem,
+		VueButton,
 		OptionItemOwner: () => import('./OptionItemOwner'),
 	},
 

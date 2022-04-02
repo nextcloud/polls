@@ -38,8 +38,13 @@
 		</div>
 
 		<div class="modal__buttons">
-			<ButtonDiv :title="t('polls', 'Cancel')" @click="$emit('close')" />
-			<ButtonDiv :primary="true" :title="t('polls', 'OK')" @click="createSequence" />
+			<VueButton @click="$emit('close')">
+				{{ t('polls', 'Cancel') }}
+			</VueButton>
+
+			<VueButton type="primary" @click="createSequence()">
+				{{ t('polls', 'OK') }}
+			</VueButton>
 		</div>
 	</div>
 </template>
@@ -47,7 +52,7 @@
 <script>
 
 import moment from '@nextcloud/moment'
-import { Multiselect } from '@nextcloud/vue'
+import { Button as VueButton, Multiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins'
 
 export default {
@@ -55,6 +60,7 @@ export default {
 
 	components: {
 		Multiselect,
+		VueButton,
 	},
 
 	mixins: [dateUnits],

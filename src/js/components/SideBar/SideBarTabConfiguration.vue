@@ -74,21 +74,29 @@
 			<ConfigShowResults @change="writePoll" />
 		</ConfigBox>
 
-		<ButtonDiv :icon="isPollArchived ? 'icon-history' : 'icon-category-app-bundles'"
-			:title="isPollArchived ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
-			@click="toggleArchive()" />
+		<div class="delete-area">
+			<VueButton @click="toggleArchive()">
+				<template #icon>
+					<RestorePollIcon v-if="isPollArchived" />
+					<ArchivePollIcon v-else />
+				</template>
+				{{ isPollArchived ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
+			</VueButton>
 
-		<ButtonDiv v-if="isPollArchived"
-			icon="icon-delete"
-			class="error"
-			:title="t('polls', 'Delete poll')"
-			@click="deletePoll()" />
+			<VueButton v-if="isPollArchived" type="error" @click="deletePoll()">
+				<template #icon>
+					<DeletePollIcon />
+				</template>
+				{{ t('polls', 'Delete poll') }}
+			</VueButton>
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
+import { Button as VueButton } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import ConfigBox from '../Base/ConfigBox'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment'
@@ -102,8 +110,11 @@ import ConfigShowResults from '../Configuration/ConfigShowResults'
 import ConfigTitle from '../Configuration/ConfigTitle'
 import ConfigUseNo from '../Configuration/ConfigUseNo'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit'
+
 import { writePoll } from '../../mixins/writePoll'
+
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
 import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
 import LockedIcon from 'vue-material-design-icons/Lock.vue'
@@ -111,19 +122,24 @@ import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
 import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
 import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
+import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 
 export default {
 	name: 'SideBarTabConfiguration',
 
 	components: {
+		ArchivePollIcon,
+		DeletePollIcon,
 		DescriptionIcon,
-		ShowResultsIcon,
-		HideResultsUntilClosedIcon,
-		ShowResultsNeverIcon,
 		LockedIcon,
-		UnlockedIcon,
+		HideResultsUntilClosedIcon,
 		PollConfigIcon,
+		RestorePollIcon,
+		ShowResultsIcon,
+		ShowResultsNeverIcon,
 		SpeakerIcon,
+		UnlockedIcon,
 		ConfigBox,
 		ConfigAllowComment,
 		ConfigAllowMayBe,
@@ -136,6 +152,7 @@ export default {
 		ConfigTitle,
 		ConfigUseNo,
 		ConfigVoteLimit,
+		VueButton,
 	},
 
 	mixins: [writePoll],
@@ -178,3 +195,11 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss">
+.delete-area {
+	display: flex;
+	gap: 8px;
+	justify-content: space-between;
+}
+</style>

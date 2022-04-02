@@ -101,7 +101,7 @@ export default {
 				subTexts.push({
 					id: 'closed',
 					text: this.timeExpirationRelative,
-					icon: 'icon-polls-closed',
+					icon: 'icon-mask-md-closed-poll',
 					class: 'closed',
 				})
 				return subTexts
