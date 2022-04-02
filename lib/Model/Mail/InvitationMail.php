@@ -63,7 +63,7 @@ class InvitationMail extends MailBase {
 			));
 		}
 
-		$this->emailTemplate->addBodyText($this->getRichDescription(), $this->getRichDescription());
+		$this->emailTemplate->addBodyText($this->getRichDescription(), $this->poll->getDescription());
 
 		if ($this->getButtonText() && $this->url) {
 			$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
