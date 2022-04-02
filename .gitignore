@@ -8,7 +8,6 @@
 build/
 css/*.map
 js/*
-jsconfig.json
 nbproject/
 node_modules/
 tests/.phpunit.result.cache
