@@ -7,29 +7,41 @@ All notable changes to this project will be documented in this file.
 - Hidden polls are now private polls and public polls are called open polls to distinguish them from public polls via public links
 - Added configuration options for admins to add legal terms to the public registration dialog and emails
 - Added the possibility for admins to add a disclaimer test to generated emails
-- Style optimizations for settings pages
-- Supports keyboards on mobiles based on input type
+- Input fields now support matching keyboards on mobiles
+- Added email addresses for owner's poll export
+- Grouping comments for less noise
+- Bulk import for text polls
+- Changed icon set
+- some more design changes
 
 ### Fixed
 - Poll export to spreadsheeds was fixed if Poll title is longer than 31 characters
 - Fix LDAP user search
+- Dont't add tags to description in plain text invitation mail
+- poll list in admin page should not link to a poll
 
 ## [3.6.0-beta1] - tbd
 ## Changes
 - #2255 - Rename "hidden" polls to "private" polls, "public" to "open" (#2289)
+- #2328 - Migrate access strings to 'private' and 'open' (instead of 'hidden' and 'public')
 
 ## New
 - #2261 - Added the option to add links to terms and private policy to public registration dialog
 - #2260 - Added an option to add legal terms and a disclaimer to emails
+- #2177 - Add email addresses to poll export (#2327)
 
 ## Fixed
 - #1310 - Fix LDAP search (#2323)
 - #2285 - Fixed poll export (#2286, #2287)
 - #2312 - Fixed heights of modals after update of @nextcloud/vue@5
+- #2306 - HTML Tags in plain Poll invitation (#2346)
+- #2254 - Links in admin page could lead to non accessible poll (#2326)
 
 ## Misc
 - #2283 - Added support for inputmode
-- #2311 - Added support for material design icons to some components
+- #2311 - Added support for material design icons to some components (#2329)
+- #2332 - Replace deprecated String.prototype.substr()
+- #2329 - Styling inpuDiv
 
 ## [3.5.4] - 2022-02-17
 ## Fixed
