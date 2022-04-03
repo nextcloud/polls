@@ -73,7 +73,6 @@ OC.L10N.register(
     "No" : "Nej",
     "Clone poll" : "Kopiera omröstningen",
     "Delete poll" : "Ta bort omröstningen",
-    "Confirmed" : "Bekräftad",
     "OK" : "OK",
     "Week" : "Vecka",
     "never" : "aldrig",

@@ -21,7 +21,6 @@ OC.L10N.register(
     "No" : "No",
     "Clone poll" : "Duobligi la enketon",
     "Delete poll" : "Forigi enketon",
-    "Confirmed" : "Konfirmita",
     "OK" : "Bone",
     "Week" : "Semajno",
     "never" : "neniam",

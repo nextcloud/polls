@@ -44,7 +44,6 @@
     "Clone poll" : "投票を複製",
     "Restore poll" : "投票を再開",
     "Delete poll" : "投票を削除",
-    "Confirmed" : "確認済み",
     "Clone to option sequence" : "選択シーケンスのクローン",
     "Create a sequence of date options starting with {dateOption}." : "{dateOption}で始まる日付オプションのシーケンスを作成します。",
     "OK" : "OK",

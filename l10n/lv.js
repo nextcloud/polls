@@ -13,7 +13,6 @@ OC.L10N.register(
     "Cancel" : "Atcelt",
     "Apply" : "Apstiprināt",
     "No" : "Nē",
-    "Confirmed" : "Apstiprināts",
     "OK" : "Labi",
     "Week" : "Nedēļa",
     "never" : "nekad",

@@ -102,7 +102,6 @@ OC.L10N.register(
     "Clone poll" : "Clona enquesta",
     "Restore poll" : "Restaura l'enquesta",
     "Delete poll" : "Suprimeix enquesta",
-    "Confirmed" : "Confirmat",
     "Clone to option sequence" : "Clonar a seqüència d'opcions",
     "Create a sequence of date options starting with {dateOption}." : "Crear una seqüència d'opcions de data a partir de {dateOption}.",
     "OK" : "D'acord",

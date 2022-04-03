@@ -15,7 +15,6 @@ OC.L10N.register(
     "Apply" : "적용",
     "No" : "아니요",
     "Delete poll" : "투표 삭제",
-    "Confirmed" : "확인됨",
     "OK" : "확인",
     "Week" : "주",
     "never" : "하지 않음",

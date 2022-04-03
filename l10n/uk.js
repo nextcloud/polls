@@ -29,7 +29,6 @@ OC.L10N.register(
     "Clone poll" : "Копіювати опитування",
     "Restore poll" : "Відновити опитування",
     "Delete poll" : "Вилучити опитування",
-    "Confirmed" : "Підтверджено",
     "OK" : "OK",
     "Week" : "Тиждень",
     "never" : "ніколи",

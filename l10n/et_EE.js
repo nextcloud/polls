@@ -15,7 +15,6 @@ OC.L10N.register(
     "Apply" : "Rakenda",
     "No" : "Ei",
     "Delete poll" : "Kustuta küsitlus",
-    "Confirmed" : "Kinnitatud",
     "OK" : "OK",
     "Week" : "Nädal",
     "never" : "mitte kunagi",

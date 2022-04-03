@@ -13,7 +13,6 @@ OC.L10N.register(
     "Cancel" : "Encaboxar",
     "Apply" : "Aplicar",
     "No" : "Non",
-    "Confirmed" : "Confirmáu",
     "OK" : "Aceutar",
     "Week" : "Selmana",
     "never" : "never",

@@ -15,7 +15,6 @@ OC.L10N.register(
     "Apply" : "Aplicar",
     "No" : "No",
     "Delete poll" : "Borrar encuesta",
-    "Confirmed" : "Confirmado",
     "OK" : "OK",
     "Week" : "Semana",
     "never" : "nunca",

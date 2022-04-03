@@ -37,7 +37,6 @@ OC.L10N.register(
     "Clone poll" : "Клонирај гласање",
     "Restore poll" : "Поврати гласање",
     "Delete poll" : "Обриши гласање",
-    "Confirmed" : "Потврђен",
     "Clone to option sequence" : "Секвенца клонирања опција",
     "Create a sequence of date options starting with {dateOption}." : "Направи секвенцу датума почевши од {dateOption}.",
     "OK" : "У реду",

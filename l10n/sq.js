@@ -13,7 +13,6 @@ OC.L10N.register(
     "Apply" : "Apliko",
     "No" : "Jo",
     "Delete poll" : "Fshij sondazhin",
-    "Confirmed" : "E konfirmuar",
     "OK" : "OK",
     "Week" : "Javë",
     "never" : "asnjëherë",

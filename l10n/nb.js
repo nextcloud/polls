@@ -15,7 +15,6 @@ OC.L10N.register(
     "Apply" : "Bruk",
     "No" : "Nei",
     "Delete poll" : "Slett avstemning",
-    "Confirmed" : "Bekreftet",
     "OK" : "OK",
     "Week" : "Uke",
     "never" : "aldri",

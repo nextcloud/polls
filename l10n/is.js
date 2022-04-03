@@ -42,7 +42,6 @@ OC.L10N.register(
     "Clone poll" : "Klóna könnun",
     "Restore poll" : "Endurheimta könnun",
     "Delete poll" : "Eyða könnun",
-    "Confirmed" : "Staðfest",
     "OK" : "Í lagi",
     "Week" : "Vika",
     "Delete option" : "Eyða valkosti",

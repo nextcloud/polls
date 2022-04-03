@@ -24,7 +24,6 @@ OC.L10N.register(
     "Date poll" : "Encuesta de fechas",
     "No" : "No",
     "Delete poll" : "Borrar encuesta",
-    "Confirmed" : "Confirmado",
     "OK" : "OK",
     "Week" : "Semana",
     "never" : "nunca",

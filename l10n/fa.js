@@ -28,7 +28,6 @@ OC.L10N.register(
     "Clone poll" : "نظرسنجی کلون",
     "Restore poll" : "بازیابی نظرسنجی",
     "Delete poll" : "نظرسنجی را حذف کنید",
-    "Confirmed" : "تایید شده",
     "OK" : "تایید",
     "Week" : "هفته",
     "Delete option" : "گزینه حذف",

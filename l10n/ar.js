@@ -14,7 +14,6 @@ OC.L10N.register(
     "Cancel" : "الغاء",
     "No" : "لا",
     "Delete poll" : "احذف استطلاع الرأي",
-    "Confirmed" : "مؤكَّد",
     "OK" : "موافق",
     "Week" : "أسبوع",
     "Add" : "إضافة",

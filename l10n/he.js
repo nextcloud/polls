@@ -40,7 +40,6 @@ OC.L10N.register(
     "Clone poll" : "שכפול סקר",
     "Restore poll" : "שחזור סקר",
     "Delete poll" : "מחיקת סקר",
-    "Confirmed" : "מאושר",
     "Clone to option sequence" : "שכפול לרצף אפשרויות",
     "Create a sequence of date options starting with {dateOption}." : "יצירת רצף של אפשרויות תאריכים החל מ־{dateOption}.",
     "OK" : "אישור",

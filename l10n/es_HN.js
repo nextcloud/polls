@@ -13,7 +13,6 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
     "No" : "No",
-    "Confirmed" : "Confirmado",
     "OK" : "OK",
     "Week" : "Semana",
     "never" : "nunca",

@@ -18,7 +18,6 @@ OC.L10N.register(
     "No" : "Nej",
     "Clone poll" : "Klon afstemning",
     "Delete poll" : "Slet afstemning",
-    "Confirmed" : "Bekræftet",
     "OK" : "OK",
     "Week" : "Uge",
     "never" : "aldrig",
