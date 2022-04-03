@@ -35,6 +35,9 @@
 							no-submit
 							focus
 							@submit="submitRegistration" />
+						<CheckboxRadioSwitch :checked.sync="saveCookie">
+							{{ t('polls', 'Save username in cookie for 30 days.') }}
+						</CheckboxRadioSwitch>
 					</div>
 
 					<div :class="['status-message', userNameCheck.status]">
@@ -99,7 +102,7 @@ import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { Button as VueButton, Modal } from '@nextcloud/vue'
+import { Button as VueButton, Modal, CheckboxRadioSwitch } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import RichText from '@juliushaertl/vue-richtext'
 import InputDiv from '../Base/InputDiv'
@@ -109,10 +112,11 @@ export default {
 	name: 'PublicRegisterModal',
 
 	components: {
-		SimpleLink,
+		CheckboxRadioSwitch,
 		InputDiv,
 		Modal,
 		RichText,
+		SimpleLink,
 		VueButton,
 	},
 
@@ -127,6 +131,7 @@ export default {
 			isValidEmailAddress: false,
 			modal: true,
 			modalSize: 'large',
+			saveCookie: true,
 		}
 	},
 
@@ -294,7 +299,7 @@ export default {
 		async submitRegistration() {
 			if (this.registrationIsValid) {
 				try {
-					const response = await this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress })
+					const response = await this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress, saveCookie: this.saveCookie })
 					if (this.$route.params.token === response.token) {
 						this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
 						this.closeModal()

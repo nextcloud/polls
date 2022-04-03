@@ -73,6 +73,13 @@ const actions = {
 		}
 	},
 
+	setCookie(context, payload) {
+		const currentTime = new Date()
+		currentTime.setTime(currentTime.getTime() + (30 * 24 * 60 * 1000)) // cookie life time 30 days
+		const cookieExpiry = `expires=${currentTime.toUTCString()}`
+		document.cookie = `${context.rootState.route.params.token}=${payload.privateToken};${cookieExpiry};path=/`
+	},
+
 	async register(context, payload) {
 		if (context.rootState.route.name !== 'publicVote') {
 			return
@@ -85,6 +92,11 @@ const actions = {
 				userName: payload.userName,
 				emailAddress: payload.emailAddress,
 			})
+
+			if (payload.saveCookie) {
+				await context.dispatch('setCookie', { privateToken: response.data.share.token })
+			}
+
 			return { token: response.data.share.token }
 		} catch (e) {
 			console.error('Error writing personal share', { error: e.response }, { payload })

@@ -55,7 +55,12 @@ async function validateToken(to, from, next) {
 			// reroute to the internal vote page, if the user is logged in
 			next({ name: 'vote', params: { id: response.data.share.pollId } })
 		} else {
-			next()
+			const privateToken = getCookie(to.params.token)
+			if (privateToken) {
+				next({ name: 'publicVote', params: { token: privateToken } })
+			} else {
+				next()
+			}
 		}
 	} catch (e) {
 		if (getCurrentUser()) {
@@ -65,6 +70,25 @@ async function validateToken(to, from, next) {
 		}
 
 	}
+}
+
+/**
+ * @param {string} token public token as cookie name
+ */
+function getCookie(token) {
+	const name = `${token}=`
+	const decodedCookie = decodeURIComponent(document.cookie)
+	const ca = decodedCookie.split(';')
+	for (let i = 0; i < ca.length; i++) {
+		let c = ca[i]
+		while (c.charAt(0) === ' ') {
+			c = c.substring(1)
+		}
+		if (c.indexOf(name) === 0) {
+			return c.substring(name.length, c.length)
+		}
+	}
+	return ''
 }
 
 export default new Router({
