@@ -62,7 +62,7 @@ git clone https://github.com/nextcloud/polls.git
 
 * Install dev environment with ```make dev-setup```
 * Compile javascript with ```npm run build```
-* Run a complete build with ```make all``` (installs dev env, runs linters and builds the polls.js)
+* Run a complete build with ```make appstore``` (Find the output in the build directory)
 
 ## Contribution Guidelines
 Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together we can strengthen and support each other.
