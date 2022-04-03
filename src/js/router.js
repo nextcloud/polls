@@ -25,6 +25,7 @@ import Router from 'vue-router'
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
+import { getCookie, setCookie } from './helpers/cookieHelper'
 
 // Dynamic loading
 const List = () => import('./views/PollList')
@@ -57,6 +58,9 @@ async function validateToken(to, from, next) {
 		} else {
 			const privateToken = getCookie(to.params.token)
 			if (privateToken) {
+				// extend expiry time for 30 days after successful access
+				const cookieExpiration = (30 * 24 * 60 * 1000)
+				setCookie(to.params.token, privateToken, cookieExpiration)
 				next({ name: 'publicVote', params: { token: privateToken } })
 			} else {
 				next()
@@ -70,25 +74,6 @@ async function validateToken(to, from, next) {
 		}
 
 	}
-}
-
-/**
- * @param {string} token public token as cookie name
- */
-function getCookie(token) {
-	const name = `${token}=`
-	const decodedCookie = decodeURIComponent(document.cookie)
-	const ca = decodedCookie.split(';')
-	for (let i = 0; i < ca.length; i++) {
-		let c = ca[i]
-		while (c.charAt(0) === ' ') {
-			c = c.substring(1)
-		}
-		if (c.indexOf(name) === 0) {
-			return c.substring(name.length, c.length)
-		}
-	}
-	return ''
 }
 
 export default new Router({

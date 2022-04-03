@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import { setCookie } from '../../helpers/cookieHelper'
 
 const defaultShares = () => ({
 	displayName: '',
@@ -73,13 +74,6 @@ const actions = {
 		}
 	},
 
-	setCookie(context, payload) {
-		const currentTime = new Date()
-		currentTime.setTime(currentTime.getTime() + (30 * 24 * 60 * 1000)) // cookie life time 30 days
-		const cookieExpiry = `expires=${currentTime.toUTCString()}`
-		document.cookie = `${context.rootState.route.params.token}=${payload.privateToken};${cookieExpiry};path=/`
-	},
-
 	async register(context, payload) {
 		if (context.rootState.route.name !== 'publicVote') {
 			return
@@ -94,10 +88,12 @@ const actions = {
 			})
 
 			if (payload.saveCookie) {
-				await context.dispatch('setCookie', { privateToken: response.data.share.token })
+				const cookieExpiration = (30 * 24 * 60 * 1000)
+				setCookie(context.rootState.route.params.token, response.data.share.token, cookieExpiration)
 			}
 
 			return { token: response.data.share.token }
+
 		} catch (e) {
 			console.error('Error writing personal share', { error: e.response }, { payload })
 			throw e
