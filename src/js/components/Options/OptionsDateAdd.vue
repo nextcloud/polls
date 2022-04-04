@@ -42,7 +42,10 @@
 			</CheckboxRadioSwitch>
 			<div class="picker-buttons">
 				<button v-if="useTime" @click="toggleTimePanel">
-					{{ t('polls', showTimePanel ? 'Change date': 'Change time') }}
+					{{ showTimePanel
+						? t('polls', 'Change date')
+						: t('polls', 'Change time')
+					}}
 				</button>
 				<button v-if="useTime" @click="removeTime">
 					{{ t('polls', 'Remove time') }}
