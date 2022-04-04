@@ -36,7 +36,7 @@
 							focus
 							@submit="submitRegistration" />
 						<CheckboxRadioSwitch :checked.sync="saveCookie">
-							{{ t('polls', 'Save username in cookie for 30 days.') }}
+							{{ t('polls', 'Save username in cookie for 30 days') }}
 						</CheckboxRadioSwitch>
 					</div>
 
