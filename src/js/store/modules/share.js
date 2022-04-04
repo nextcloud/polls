@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import { setCookie } from '../../helpers/cookieHelper'
 
 const defaultShares = () => ({
 	displayName: '',
@@ -85,7 +86,14 @@ const actions = {
 				userName: payload.userName,
 				emailAddress: payload.emailAddress,
 			})
+
+			if (payload.saveCookie) {
+				const cookieExpiration = (30 * 24 * 60 * 1000)
+				setCookie(context.rootState.route.params.token, response.data.share.token, cookieExpiration)
+			}
+
 			return { token: response.data.share.token }
+
 		} catch (e) {
 			console.error('Error writing personal share', { error: e.response }, { payload })
 			throw e

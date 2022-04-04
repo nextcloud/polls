@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
 - Added email addresses for owner's poll export
 - Grouping comments for less noise
 - Bulk import for text polls
+- Save username of a public poll (using cookie)
 - Changed icon set
 - some more design changes
 
@@ -19,6 +20,11 @@ All notable changes to this project will be documented in this file.
 - Fix LDAP user search
 - Dont't add tags to description in plain text invitation mail
 - poll list in admin page should not link to a poll
+
+## [3.6.0-beta2] - tbd
+## New
+- #2261 - Added the option to add links to terms and private policy to public registration dialog
+- #2313 - Translation missing (#2349)
 
 ## [3.6.0-beta1] - 2022-04-02
 ## Changes

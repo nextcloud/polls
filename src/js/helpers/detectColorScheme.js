@@ -21,7 +21,7 @@
  *
  */
 
-const detectColorScheme = function() {
+const detectColorScheme = () => {
 	if (!window.matchMedia) {
 		return true
 	}
