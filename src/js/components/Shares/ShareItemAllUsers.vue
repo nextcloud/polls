@@ -22,8 +22,8 @@
 
 <template>
 	<UserItem type="internalAccess"
-		:user-id="t('polls', 'Open poll')"
-		:display-name="t('polls', 'Open poll')"
+		:user-id="t('polls', 'Open accessible poll')"
+		:display-name="t('polls', 'Open accessible poll')"
 		:disabled="access==='private'"
 		show-email
 		is-no-user>
