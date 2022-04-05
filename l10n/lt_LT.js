@@ -8,6 +8,7 @@ OC.L10N.register(
     "Do not share this link with other people, because it is connected to your votes." : "Nebendrinkite šios nuorodos su kitais žmonėmis, nes ji yra susieta su jūsų balsais.",
     "Go to poll" : "Pereiti į apklausą",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Šis el. laiškas yra išsiųstas jums, nes esate užsiprenumeravę šios apklausos pranešimus. Norėdami atsisakyti prenumeratos, apsilankykite apklausoje ir pašalinkite prenumeratą.",
+    "Privacy Policy" : "Privatumo politika",
     "Polls App - New Activity" : "Apklausų programėlė - Nauja veikla",
     "A user" : "Naudotojas",
     "Updated poll configuration. Please check your votes." : "Atnaujinta apklausos konfigūracija. Pasitikrinkite balsus.",
