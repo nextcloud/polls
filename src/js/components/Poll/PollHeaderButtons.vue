@@ -25,14 +25,10 @@
 		<UserMenu />
 		<Popover>
 			<template #trigger>
-				<Actions>
-					<ActionButton icon="icon-mask-md-poll-information">
-						<template #icon>
-							<PollInformationIcon />
-						</template>
-						{{ t('polls', 'Poll informations') }}
-					</ActionButton>
-				</Actions>
+				<VueButton v-tooltip="t('polls', 'Poll informations')"
+					type="tertiary">
+					<PollInformationIcon />
+				</VueButton>
 			</template>
 			<PollInformation />
 		</Popover>
@@ -43,7 +39,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Actions, ActionButton, Popover } from '@nextcloud/vue'
+import { Button as VueButton, Popover } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ActionToggleSidebar from '../Actions/ActionToggleSidebar'
 import UserMenu from '../User/UserMenu'
@@ -52,14 +48,13 @@ import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vu
 export default {
 	name: 'PollHeaderButtons',
 	components: {
-		PollInformationIcon,
-		Actions,
-		ActionButton,
-		Popover,
 		ActionToggleSidebar,
+		PollInformationIcon,
+		Popover,
+		VueButton,
+		UserMenu,
 		ExportPoll: () => import('../Export/ExportPoll'),
 		PollInformation: () => import('../Poll/PollInformation'),
-		UserMenu,
 	},
 
 	computed: {

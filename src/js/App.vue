@@ -79,6 +79,7 @@ export default {
 
 		...mapGetters({
 			themeClass: 'settings/themeClass',
+			backgroundClass: 'settings/backgroundClass',
 			useDashboardStyling: 'settings/useDashboardStyling',
 			useIndividualStyling: 'settings/useIndividualStyling',
 			useTranslucentPanels: 'settings/useTranslucentPanels',
@@ -104,6 +105,15 @@ export default {
 
 	watch: {
 		themeClass(newValue, oldValue) {
+			if (oldValue) {
+				document.body.classList.remove(oldValue)
+			}
+			if (newValue) {
+				document.body.classList.add(newValue)
+			}
+		},
+
+		backgroundClass(newValue, oldValue) {
 			if (oldValue) {
 				document.body.classList.remove(oldValue)
 			}
@@ -251,7 +261,8 @@ export default {
 }
 
 // global areas settings
-[class*='area__'] {
+[class*=' area__'],
+[class^='area__'] {
 	padding: 4px 0px;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
@@ -259,7 +270,8 @@ export default {
 }
 
 // special settings for header area
-.area__header {
+[class*=' area__header'],
+[class^='area__header'] {
 	position: sticky;
 	top: 50px;
 	background-color: var(--color-main-background);
@@ -270,6 +282,13 @@ export default {
 	padding-right: 8px;
 	padding-left: 56px;
 }
+
+// [class*=' area__header_vote'],
+// [class^='area__header_vote'] {
+//   background-color: transparent;
+//   border: none;
+//   box-shadow: none !important;
+// }
 
 // global modal settings
 .modal__content {
