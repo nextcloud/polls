@@ -65,14 +65,14 @@ export default {
 			if (this.access === 'private') {
 				subTexts.push({
 					id: this.access,
-					text: t('polls', 'A hidden poll from {name}', { name: this.ownerDisplayName }),
+					text: t('polls', 'A private poll from {name}', { name: this.ownerDisplayName }),
 					icon: '',
 					class: '',
 				})
 			} else {
 				subTexts.push({
 					id: this.access,
-					text: t('polls', 'A public poll from {name}', { name: this.ownerDisplayName }),
+					text: t('polls', 'An open poll from {name}', { name: this.ownerDisplayName }),
 					icon: '',
 					class: '',
 				})

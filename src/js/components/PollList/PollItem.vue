@@ -146,6 +146,7 @@ export default {
 			}
 
 			if (this.poll.access === 'open') {
+				// TRANSLATORS Open poll means a poll which is open in the meaning of accessible for everyone
 				return t('polls', 'Open poll')
 			}
 

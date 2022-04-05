@@ -42,7 +42,7 @@
 		</div>
 
 		<CheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
-			{{ t('polls', 'Disallow open polls') }}
+			{{ disallowCaption }}
 		</CheckboxRadioSwitch>
 		<div v-if="allAccessLimited" class="settings_details">
 			<div>{{ t('polls','Allow creating open polls for the following groups') }}</div>
@@ -83,6 +83,8 @@ export default {
 			searchToken: null,
 			groups: [],
 			isLoading: false,
+			// TRANSLATORS This means to disallow the creation of open (accessible) polls
+			disallowCaption: t('polls', 'Disallow open polls'),
 		}
 	},
 
