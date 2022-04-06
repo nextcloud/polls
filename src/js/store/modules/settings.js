@@ -122,6 +122,21 @@ const getters = {
 		return ''
 	},
 
+	backgroundClass(state) {
+		if (state.user.useDashboardStyling) {
+			return ''
+		}
+
+		if (state.user.useIndividualStyling && state.user.individualImage) {
+			return 'polls--bg-image'
+		}
+
+		if (state.user.useIndividualStyling && state.user.individualBgColor) {
+			return 'polls--bg-color'
+		}
+
+		return ''
+	},
 	useDashboardStyling(state) {
 		return state.dashboard.isInstalled && state.user.useDashboardStyling
 	},
