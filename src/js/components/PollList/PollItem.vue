@@ -146,7 +146,7 @@ export default {
 			}
 
 			if (this.poll.access === 'open') {
-				return t('polls', 'Open poll')
+				return t('polls', 'Open accessible poll')
 			}
 
 			return t('polls', 'Private poll')
