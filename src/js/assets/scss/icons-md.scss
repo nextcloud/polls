@@ -101,7 +101,7 @@
 .icon-mask-md-date-options { @include masked-icon(var(--icon-md-calendar-month)); }
 .icon-mask-md-date-poll { @include masked-icon(var(--icon-md-calendar-blank)); }
 .icon-mask-md-delete-poll { @include masked-icon(var(--icon-md-delete)); }
-.icon-mask-md-edit-email-address { @include masked-icon(var(--icon-md-email-edit)); }
+.icon-mask-md-edit-email-address { @include masked-icon(var(--icon-md-email-edit-outline)); }
 .icon-mask-md-email { @include masked-icon(var(--icon-md-email)); }
 .icon-mask-md-expiration { @include masked-icon(var(--icon-md-calendar-end)); }
 .icon-mask-md-hide-results-until-closed { @include masked-icon(var(--icon-md-monitor-lock)); }
