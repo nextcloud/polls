@@ -22,7 +22,7 @@
 
 <template>
 	<div class="poll-header-buttons">
-		<UserMenu />
+		<UserMenu v-if="showUserMenu" />
 		<Popover>
 			<template #trigger>
 				<VueButton v-tooltip="t('polls', 'Poll informations')"
@@ -42,7 +42,6 @@ import { mapState } from 'vuex'
 import { Button as VueButton, Popover } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ActionToggleSidebar from '../Actions/ActionToggleSidebar'
-import UserMenu from '../User/UserMenu'
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
 export default {
@@ -52,7 +51,7 @@ export default {
 		PollInformationIcon,
 		Popover,
 		VueButton,
-		UserMenu,
+		UserMenu: () => import('../User/UserMenu'),
 		ExportPoll: () => import('../Export/ExportPoll'),
 		PollInformation: () => import('../Poll/PollInformation'),
 	},
@@ -61,8 +60,13 @@ export default {
 		...mapState({
 			allowComment: (state) => state.poll.allowComment,
 			allowEdit: (state) => state.poll.acl.allowEdit,
+			allowVote: (state) => state.poll.acl.allowVote,
 			allowPollDownload: (state) => state.poll.acl.allowPollDownload,
 		}),
+
+		showUserMenu() {
+			return this.$route.name !== 'publicVote' || this.allowVote
+		},
 	},
 
 	created() {
