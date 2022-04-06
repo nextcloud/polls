@@ -509,4 +509,4 @@ OC.L10N.register(
     "My archived polls" : "Mes sondages archivés",
     "Your archived polls are only accessible to you." : "Vos sondages archivés sont consultables par vous uniquement."
 },
-"nplurals=3; plural=(n==0 || n==1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
+"nplurals=2; plural=(n > 1);");
