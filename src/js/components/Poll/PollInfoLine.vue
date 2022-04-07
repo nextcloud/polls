@@ -72,7 +72,7 @@ export default {
 			} else {
 				subTexts.push({
 					id: this.access,
-					text: t('polls', 'An open accessible poll from {name}', { name: this.ownerDisplayName }),
+					text: t('polls', 'An openly accessible poll from {name}', { name: this.ownerDisplayName }),
 					icon: '',
 					class: '',
 				})
