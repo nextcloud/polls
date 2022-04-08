@@ -165,7 +165,7 @@ export default {
 				if (this.disabled) {
 					return t('polls', 'This poll is private')
 				}
-				return t('polls', 'This is an open accessible poll')
+				return t('polls', 'This is an openly accessible poll')
 			}
 
 			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.type)) {

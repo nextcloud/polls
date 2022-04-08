@@ -94,9 +94,9 @@ const state = {
 		},
 		{
 			id: 'open',
-			title: t('polls', 'Open accessible polls'),
-			titleExt: t('polls', 'Open accessible polls'),
-			description: t('polls', 'A complete list with all open accessible polls on this site, regardless who is the owner.'),
+			title: t('polls', 'Openly accessible polls'),
+			titleExt: t('polls', 'Openly accessible polls'),
+			description: t('polls', 'A complete list with all openly accessible polls on this site, regardless who is the owner.'),
 			icon: 'icon-mask-md-navigation-open',
 			pinned: false,
 			createDependent: true,

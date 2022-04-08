@@ -147,9 +147,9 @@ export default {
 				return t('polls', 'Private poll')
 			}
 			if (this.important) {
-				return t('polls', 'Open accessible and relevant poll')
+				return t('polls', 'Openly accessible and relevant poll')
 			}
-			return t('polls', 'Open accessible poll')
+			return t('polls', 'Openly accessible poll')
 		},
 
 		accessClass() {
