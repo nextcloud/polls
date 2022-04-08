@@ -440,6 +440,8 @@ OC.L10N.register(
     "No polls found for this category" : "Nenhuma enquete encontrada para esta categoria",
     "Add one or change category!" : "Adicione uma ou mude a categoria!",
     "Take over" : "Assumir",
+    "Do you want to take over this poll?" : "Você quer assumir esta enquete?",
+    "{username} will get notified." : "{username} será notificado.",
     "Yes" : "Sim",
     "Do you want to delete this poll?" : "Deseja excluir esta enquete?",
     "This action cannot be reverted." : "Esta ação não pode ser desfeita.",
