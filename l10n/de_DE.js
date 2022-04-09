@@ -276,6 +276,7 @@ OC.L10N.register(
     "Options added" : "Optionen hinzugefügt",
     "Error adding options" : "Fehler beim Hinzufügen von Optionen",
     "Poll informations" : "Umfrageinformationen",
+    "A private poll from {name}" : "Eine private Umfrage von  {name}",
     "Invite users via the share tab in the sidebar" : "Laden Sie Benutzer über die Registerkarte „Teilen“ in der Seitenleiste ein",
     "Archived" : "Archiviert",
     "Closing {relativeExpirationTime}" : "Schließt {relativeExpirationTime}",
