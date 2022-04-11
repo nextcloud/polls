@@ -25,7 +25,9 @@
 		<VueButton v-tooltip="caption"
 			type="tertiary"
 			@click="clickAction()">
-			<SidebarIcon />
+			<template #icon>
+				<SidebarIcon />
+			</template>
 		</VueButton>
 	</div>
 </template>
