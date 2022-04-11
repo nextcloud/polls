@@ -46,10 +46,3 @@
 .modal-wrapper .modal-container {
 	overflow: scroll !important;
 }
-
-// fix height of modal wrapper after introduction of @nextcloud/vue 5.0
-// @media only screen and (min-width: 513px) {
-// 	#body-public .modal-wrapper--large .modal-container {
-// 		height: unset;
-// 	}
-// }
