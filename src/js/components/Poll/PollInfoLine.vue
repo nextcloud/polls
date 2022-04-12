@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div class="poll-info-line">
-		<span v-for="(subText) in subTexts" :key="subText.id" :class="subText.class">
+		<span v-for="(subText) in subTexts" :key="subText.id" :class="['sub-text', subText.class]">
 			<span :class="subText.icon" />
 			<span class="sub-text">{{ subText.text }}</span>
 		</span>
@@ -62,6 +62,16 @@ export default {
 		subTexts() {
 			const subTexts = []
 
+			if (this.isNoAccessSet) {
+				subTexts.push({
+					id: 'no-access',
+					text: t('polls', 'Poll is unpublished. Invite users via the share tab in the sidebar'),
+					icon: 'icon-mask-md-unpublished-poll',
+					class: 'unpublished',
+				})
+				return subTexts
+			}
+
 			if (this.access === 'private') {
 				subTexts.push({
 					id: this.access,
@@ -78,15 +88,6 @@ export default {
 				})
 			}
 
-			if (this.isNoAccessSet) {
-				subTexts.push({
-					id: 'no-access',
-					text: t('polls', 'Invite users via the share tab in the sidebar'),
-					icon: 'icon-mask-md-sidebar-share',
-					class: 'closed',
-				})
-				return subTexts
-			}
 			if (this.isDeleted) {
 				subTexts.push({
 					id: 'deleted',
@@ -167,13 +168,21 @@ export default {
 }
 
 </script>
-
+.poll-info-line [class^="icon-"], .poll-info-line [class*=" icon-"] {
+	/* padding-right: 21px; */
+	width: var(--icon-size);
+	margin: 0px 6px 0 2px;
+}
 <style lang="scss">
 .poll-info-line {
 	display: flex;
 	flex-wrap: wrap;
 	opacity: 0.7;
 	font-size: 1em;
+
+	.sub-text {
+		display: flex;
+	}
 
 	& > span:not(:last-child)::after {
 		content: "|";
@@ -182,17 +191,24 @@ export default {
 
 	[class^="icon-"],
 	[class*=" icon-"] {
-		padding-right: 21px;
+		width: var(--icon-size);
+		margin: 0px 6px 0 2px;
 	}
 
 	[class^="icon-md"],
 	[class*=" icon-md"] {
-		mask-size: 1em;
+		mask-size: var(--icon-size);
 	}
 
 	.closed {
 		.sub-text{
 			color: var(--color-error);
+			font-weight: 700;
+		}
+	}
+
+	.unpublished {
+		.sub-text{
 			font-weight: 700;
 		}
 	}
