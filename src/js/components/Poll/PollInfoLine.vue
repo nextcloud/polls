@@ -65,7 +65,10 @@ export default {
 			if (this.isNoAccessSet) {
 				subTexts.push({
 					id: 'no-access',
-					text: t('polls', 'Poll is unpublished. Invite users via the share tab in the sidebar'),
+					text: [
+						t('polls', 'This poll is unpublished'),
+						t('polls', 'Invite users via the share tab in the sidebar'),
+					].join('. '),
 					icon: 'icon-mask-md-unpublished-poll',
 					class: 'unpublished',
 				})
