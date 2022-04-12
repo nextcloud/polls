@@ -22,7 +22,7 @@
 
 <template>
 	<AppContent :class="[{ closed: closed }, poll.type]">
-		<HeaderBar class="area__header_vote">
+		<HeaderBar class="area__header">
 			<template #title>
 				{{ poll.title }}
 			</template>

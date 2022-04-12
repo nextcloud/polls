@@ -246,6 +246,10 @@ export default {
 			border-top: solid 1px var(--color-border);
 			border-left: none;
 			padding: 0;
+
+			&.locked {
+				background-color: var(--color-polls-background-no);
+			}
 		}
 
 		.participant {
