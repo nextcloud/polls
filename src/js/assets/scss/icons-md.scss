@@ -11,6 +11,10 @@
 	mask-position: center;
 	mask-size: var(--icon-size);
 	background-color: $color;
+
+	&.empty-content__icon {
+		mask-size: 64px;
+	}
 }
 
 :root {
