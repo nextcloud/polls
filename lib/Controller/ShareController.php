@@ -79,9 +79,9 @@ class ShareController extends Controller {
 	 * Add share
 	 * @NoAdminRequired
 	 */
-	public function add(int $pollId, string $type, string $userId = ''): DataResponse {
-		return $this->responseCreate(function () use ($pollId, $type, $userId) {
-			return ['share' => $this->shareService->add($pollId, $type, $userId)];
+	public function add(int $pollId, string $type, string $userId = '', string $displayName = ''): DataResponse {
+		return $this->responseCreate(function () use ($pollId, $type, $userId, $displayName) {
+			return ['share' => $this->shareService->add($pollId, $type, $userId, $displayName)];
 		});
 	}
 

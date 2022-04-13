@@ -104,6 +104,7 @@ export default {
 					type: payload.type,
 					id: payload.id,
 					emailAddress: payload.emailAddress,
+					displayName: payload.displayName,
 				})
 			} catch {
 				showError(t('polls', 'Error while adding share'))

@@ -281,7 +281,7 @@ class ShareService {
 	 *
 	 * @return Share
 	 */
-	public function add(int $pollId, string $type, string $userId = ''): Share {
+	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): Share {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 
 		if ($type === UserBase::TYPE_PUBLIC) {
@@ -297,7 +297,7 @@ class ShareService {
 			}
 		}
 
-		$this->create($pollId, UserBase::getUserGroupChild($type, $userId));
+		$this->create($pollId, UserBase::getUserGroupChild($type, $userId, $displayName, $emailAddress));
 
 		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($this->share));
 
