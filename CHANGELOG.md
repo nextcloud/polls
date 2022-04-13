@@ -23,8 +23,14 @@ All notable changes to this project will be documented in this file.
 
 ## [3.6.0-beta2] - tbd
 ## New
-- #2261 - Added the option to add links to terms and private policy to public registration dialog
-- #2313 - Translation missing (#2349)
+- #2373 - Add icon symbol for locked vote options 
+- #2351 - Store username in a public poll to cookie
+
+## Fixed
+- #2374 - Avoid unnecessary error logs in activities
+- #2369 - Fix missing icons after dep update
+- #2357 - Fix styling bugs
+- Fixed different translation errors
 
 ## [3.6.0-beta1] - 2022-04-02
 ## Changes
