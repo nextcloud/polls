@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<div :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
+	<div :class="componentClass">
 		<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
 
 		<Counter v-if="acl.allowSeeResults"
@@ -94,13 +94,35 @@ export default {
 			acl: (state) => state.poll.acl,
 			poll: (state) => state.poll,
 			settings: (state) => state.settings.user,
+			currentUser: (state) => state.poll.acl.userId,
 		}),
 
 		...mapGetters({
 			closed: 'poll/isClosed',
 			participants: 'poll/safeParticipants',
 			proposalsExist: 'options/proposalsExist',
+			getVote: 'votes/getVote',
 		}),
+
+		componentClass() {
+			const classList = ['vote-column']
+			const ownAnswer = this.getVote({
+				userId: this.currentUser,
+				option: this.option,
+			})
+
+			if (this.option.computed.isBookedUp && !this.closed) {
+				classList.push('locked')
+			}
+
+			if (this.option.confirmed && this.closed) {
+				classList.push('confirmed')
+			}
+
+			classList.push(ownAnswer)
+
+			return classList.join(' ')
+		},
 
 		showCalendarPeek() {
 			return this.poll.type === 'datePoll' && this.getCurrentUser() && this.settings.calendarPeek

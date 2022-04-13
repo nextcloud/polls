@@ -25,8 +25,10 @@
 		<VueButton v-tooltip="caption"
 			type="tertiary"
 			@click="clickAction()">
-			<ListViewIcon v-if="viewMode === 'table-view'" />
-			<TableViewIcon v-else />
+			<template #icon>
+				<ListViewIcon v-if="viewMode === 'table-view'" />
+				<TableViewIcon v-else />
+			</template>
 		</VueButton>
 	</div>
 </template>

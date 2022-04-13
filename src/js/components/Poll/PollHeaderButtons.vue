@@ -27,7 +27,9 @@
 			<template #trigger>
 				<VueButton v-tooltip="t('polls', 'Poll informations')"
 					type="tertiary">
-					<PollInformationIcon />
+					<template #icon>
+						<PollInformationIcon />
+					</template>
 				</VueButton>
 			</template>
 			<PollInformation />

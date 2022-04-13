@@ -23,14 +23,16 @@
 <template>
 	<div class="">
 		<VueButton type="tertiary">
-			<UndoIcon v-if="deleteTimeout"
-				v-tooltip="countdownTitle"
-				:size="iconSize"
-				@click="cancelDelete()" />
-			<DeleteIcon v-else
-				v-tooltip="title"
-				:size="iconSize"
-				@click="deleteItem()" />
+			<template #icon>
+				<UndoIcon v-if="deleteTimeout"
+					v-tooltip="countdownTitle"
+					:size="iconSize"
+					@click="cancelDelete()" />
+				<DeleteIcon v-else
+					v-tooltip="title"
+					:size="iconSize"
+					@click="deleteItem()" />
+			</template>
 		</VueButton>
 	</div>
 </template>

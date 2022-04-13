@@ -37,7 +37,9 @@
 			<VueButton class="submit"
 				type="tertiary"
 				@click="shiftDates(shift)">
-				<SubmitIcon />
+				<template #icon>
+					<SubmitIcon />
+				</template>
 			</VueButton>
 		</div>
 	</div>

@@ -11,6 +11,10 @@
 	mask-position: center;
 	mask-size: var(--icon-size);
 	background-color: $color;
+
+	&.empty-content__icon {
+		mask-size: 64px;
+	}
 }
 
 :root {
@@ -53,6 +57,7 @@
 	--icon-md-offer: url('../icons/material-design/offer.svg');
 	--icon-md-poll: url('../icons/material-design/poll.svg');
 	--icon-md-polls-maybe: url('../icons/material-design/polls-maybe.svg');
+	--icon-md-publish-off: url('../icons/material-design/publish-off.svg');
 	--icon-md-recycle: url('../icons/material-design/recycle.svg');
 	--icon-md-share-variant: url('../icons/material-design/share-variant.svg');
 	--icon-md-shield-crown-outline: url('../icons/material-design/shield-crown-outline.svg');
@@ -139,6 +144,7 @@
 .icon-mask-md-text-poll { @include masked-icon(var(--icon-md-format-list-bulleted-square)); }
 .icon-mask-md-timezone { @include masked-icon(var(--icon-md-map-clock-outline)); }
 .icon-mask-md-unsubscribed { @include masked-icon(var(--icon-md-bell-off)); }
+.icon-mask-md-unpublished-poll { @include masked-icon(var(--icon-md-publish-off)); }
 
 .icon-mask-md-yes-vote,
 .icon-mask-md-yes-votes {

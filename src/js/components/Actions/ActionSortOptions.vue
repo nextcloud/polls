@@ -25,9 +25,11 @@
 		<VueButton v-tooltip="caption"
 			type="tertiary"
 			@click="clickAction()">
-			<SortByDateOptionIcon v-if="isRanked && pollType === 'datePoll'" />
-			<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textPoll'" />
-			<SortByRankIcon v-else />
+			<template #icon>
+				<SortByDateOptionIcon v-if="isRanked && pollType === 'datePoll'" />
+				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textPoll'" />
+				<SortByRankIcon v-else />
+			</template>
 		</VueButton>
 	</div>
 </template>

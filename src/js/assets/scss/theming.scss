@@ -54,7 +54,8 @@
 }
 
 @mixin flatAppHeader {
-	.area__header_vote {
+	.area__header {
+		padding-left: 40px;
 		box-shadow: none;
 		backdrop-filter: none !important;
 		border: none;
@@ -67,6 +68,7 @@
 	// fixes the app header, when page is scrolled horizontally
 	[class*=" area__header"],
 	[class^="area__header"] {
+		padding-left: 40px;
 		background-color: var(--color-main-background);
 		backdrop-filter: initial;
 		box-shadow: 6px 6px 6px var(--color-box-shadow);
