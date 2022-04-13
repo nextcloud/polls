@@ -34,6 +34,7 @@ import moment from '@nextcloud/moment'
 import RichText from '@juliushaertl/vue-richtext'
 import { UserBubble } from '@nextcloud/vue'
 import SimpleLink from '../../helpers/SimpleLink'
+import GuestBubble from '../../helpers/GuestBubble'
 
 export default {
 	name: 'ActivityItem',
@@ -85,7 +86,7 @@ export default {
 					break
 				case 'guest':
 					parameters[key] = {
-						component: UserBubble,
+						component: GuestBubble,
 						props: {
 							user: parameters[key].id,
 							displayName: parameters[key].name,
