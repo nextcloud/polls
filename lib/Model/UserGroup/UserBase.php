@@ -285,7 +285,7 @@ class UserBase implements \JsonSerializable {
 			case Admin::TYPE:
 				return new Admin($id);
 			case Email::TYPE:
-				return new Email($id);
+				return new Email($id, $displayName, $emailAddress);
 			case self::TYPE_PUBLIC:
 				return new GenericUser($id, self::TYPE_PUBLIC);
 			case self::TYPE_EXTERNAL:

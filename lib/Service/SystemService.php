@@ -41,7 +41,9 @@ use OCA\Polls\Model\UserGroup\UserBase;
 use OCP\IUserManager;
 
 class SystemService {
-
+	private const REGEX_VALID_MAIL = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+	private const REGEX_PARSE_MAIL = '/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/';
+	
 	/** @var VoteMapper */
 	private $voteMapper;
 
@@ -62,7 +64,7 @@ class SystemService {
 	 * @return bool
 	 */
 	private static function isValidEmail(string $emailAddress): bool {
-		return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $emailAddress)) ? false : true;
+		return (!preg_match(self::REGEX_VALID_MAIL, $emailAddress)) ? false : true;
 	}
 
 	/**
@@ -118,8 +120,11 @@ class SystemService {
 	public function getSiteUsersAndGroups(string $query = ''): array {
 		$list = [];
 		if ($query !== '') {
-			if (self::isValidEmail($query)) {
-				$list[] = new Email($query);
+			preg_match_all(self::REGEX_PARSE_MAIL, $query, $parsedQuery);
+			$emailAddress = $parsedQuery[2][0];
+			$displayName = $parsedQuery[1][0];
+			if ($emailAddress && self::isValidEmail($emailAddress)) {
+				$list[] = new Email($emailAddress, $displayName, $emailAddress);
 			}
 
 			$list = array_merge($list, UserBase::search($query));

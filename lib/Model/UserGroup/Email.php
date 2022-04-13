@@ -32,14 +32,15 @@ class Email extends UserBase {
 
 	public function __construct(
 		string $id,
-		string $displayName = ''
+		string $displayName = '',
+		string $emailAddress = ''
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
-		$this->description = Container::getL10N()->t('External Email');
+		$this->description = $emailAddress ? $emailAddress : Container::getL10N()->t('External Email');
 		$this->richObjectType = 'email';
-
-		$this->emailAddress = $id;
+		
+		$this->emailAddress = $emailAddress ? $emailAddress : $id;
 		$this->displayName = $displayName ? $displayName : $this->displayName;
 	}
 
