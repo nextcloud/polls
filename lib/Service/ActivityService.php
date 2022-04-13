@@ -86,7 +86,11 @@ class ActivityService {
 
 	public function getActivityMessage(ActivityEvent $event, string $language, bool $filtered = false) : string {
 		$this->l10n = $this->transFactory->get($event->getApp(), $language);
-		$this->userIsActor = $event->getAuthor() === $this->userSession->getUser()->getUID();
+		try {
+			$this->userIsActor = $event->getAuthor() === $this->userSession->getUser()->getUID();
+		} catch (\Exception $e) {
+			$this->userIsActor = false;
+		}
 		$this->eventType = $event->getType();
 		$parameters = $event->getSubjectParameters();
 		$this->shareType = $parameters['shareType']['name'] ?? '';
