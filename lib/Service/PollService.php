@@ -260,12 +260,12 @@ class PollService {
 		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
 			if (!in_array($poll['access'], $this->getValidAccess())) {
 				throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
-			}	
+			}
 
 			if ($poll['access'] === (Poll::ACCESS_OPEN)) {
 				$this->acl->setPollId($pollId, Acl::PERMISSION_ALL_ACCESS);
 			}
-		}	
+		}
 
 		// Set the expiry time to the actual servertime to avoid an
 		// expiry misinterpration when using acl
