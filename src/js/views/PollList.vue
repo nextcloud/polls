@@ -126,11 +126,11 @@ export default {
 		}),
 
 		title() {
-			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).titleExt
+			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.titleExt
 		},
 
 		description() {
-			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).description
+			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.description
 		},
 
 		/* eslint-disable-next-line vue/no-unused-properties */

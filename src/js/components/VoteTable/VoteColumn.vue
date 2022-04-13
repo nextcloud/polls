@@ -33,7 +33,9 @@
 		<VoteItem v-for="(participant) in participants"
 			:key="participant.userId"
 			:user-id="participant.userId"
-			:option="option" />
+			:option="option"
+			:locked="isLocked"
+			:confirmed="isConfirmed" />
 
 		<OptionItemOwner v-if="proposalsExist"
 			:option="option"
@@ -95,23 +97,20 @@ export default {
 			poll: (state) => state.poll,
 			settings: (state) => state.settings.user,
 			currentUser: (state) => state.poll.acl.userId,
+			isVoteLimitExceeded: (state) => state.poll.acl.isVoteLimitExceeded,
+			voteLimit: (state) => state.poll.voteLimit,
 		}),
 
 		...mapGetters({
 			closed: 'poll/isClosed',
+			getVote: 'votes/getVote',
 			participants: 'poll/safeParticipants',
 			proposalsExist: 'options/proposalsExist',
-			getVote: 'votes/getVote',
 		}),
 
 		componentClass() {
 			const classList = ['vote-column']
-			const ownAnswer = this.getVote({
-				userId: this.currentUser,
-				option: this.option,
-			})
-
-			if (this.option.computed.isBookedUp && !this.closed) {
+			if (this.isLocked) {
 				classList.push('locked')
 			}
 
@@ -119,9 +118,27 @@ export default {
 				classList.push('confirmed')
 			}
 
-			classList.push(ownAnswer)
+			classList.push(this.ownAnswer)
 
-			return classList.join(' ')
+			return classList.join(' ').trim()
+		},
+
+		isConfirmed() {
+			return !!(this.option.confirmed && this.closed)
+		},
+
+		ownAnswer() {
+			return this.getVote({
+				userId: this.currentUser,
+				option: this.option,
+			}).answer
+		},
+
+		isLocked() {
+			return (this.option.computed.isBookedUp || this.isVoteLimitExceeded)
+				&& !this.closed
+				&& this.ownAnswer !== 'yes'
+				&& this.ownAnswer !== 'maybe'
 		},
 
 		showCalendarPeek() {

@@ -28,8 +28,8 @@ const defaultAcl = () => ({
 	allowComment: false,
 	allowDelete: false,
 	allowEdit: false,
-	allowPollDownload: false,
 	allowPollCreation: false,
+	allowPollDownload: false,
 	allowPublicShares: false,
 	allowSeeResults: false,
 	allowSeeUsernames: false,
@@ -38,12 +38,15 @@ const defaultAcl = () => ({
 	allowVote: false,
 	displayName: '',
 	isOwner: false,
+	isVoteLimitExceeded: false,
 	loggedIn: false,
 	pollId: null,
 	token: '',
 	userHasVoted: false,
 	userId: '',
 	userIsInvolved: '',
+	pollExpired: false,
+	pollExpire: 0,
 })
 
 const state = defaultAcl()

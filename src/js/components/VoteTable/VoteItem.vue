@@ -21,8 +21,8 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, {confirmed: isConfirmed }, { active: isVotable }, {currentuser: isCurrentUser}]">
-		<div v-if="isActive && !isVoteLimitExceded" class="icon" @click="setVote()" />
+	<div class="vote-item" :class="[answer, { confirmed: confirmed }, { active: isVotable }, {currentuser: isCurrentUser}]">
+		<div v-if="isActive" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 		<slot name="indicator" />
 	</div>
@@ -44,18 +44,23 @@ export default {
 			type: String,
 			default: '',
 		},
+		locked: {
+			type: Boolean,
+			default: false,
+		},
+		confirmed: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
 		...mapState({
-			voteLimit: (state) => state.poll.voteLimit,
-			optionLimit: (state) => state.poll.optionLimit,
 			currentUser: (state) => state.poll.acl.userId,
 			allowVote: (state) => state.poll.acl.allowVote,
 		}),
 
 		...mapGetters({
-			countVotes: 'votes/countVotes',
 			closed: 'poll/isClosed',
 			answerSequence: 'poll/answerSequence',
 		}),
@@ -64,8 +69,7 @@ export default {
 			return this.isActive
 				&& this.isValidUser
 				&& !this.closed
-				&& !this.isVoteLimitExceded
-				&& !(this.option.computed.isBookedUp && !['yes', 'maybe'].includes(this.answer))
+				&& !this.locked
 		},
 
 		isActive() {
@@ -81,14 +85,6 @@ export default {
 				option: this.option,
 				userId: this.userId,
 			}).answer
-		},
-
-		isVoteLimitExceded() {
-			return (this.countVotes('yes') >= this.voteLimit && this.voteLimit && this.answer !== 'yes')
-		},
-
-		isConfirmed() {
-			return this.option.confirmed && this.closed
 		},
 
 		nextAnswer() {

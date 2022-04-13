@@ -244,23 +244,27 @@ class PollService {
 	 * @return Poll
 	 */
 	public function update(int $pollId, array $poll): Poll {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		$this->poll = $this->acl->getPoll();
+		// $this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+		// $this->poll = $this->acl->getPoll();
+		$this->poll = $this->pollMapper->find($pollId);
 
 		// Validate valuess
 		if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
 			throw new InvalidShowResultsException('Invalid value for prop showResults');
-		}
-		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
-			throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
 		}
 
 		if (isset($poll['title']) && !$poll['title']) {
 			throw new EmptyTitleException('Title must not be empty');
 		}
 
-		if (isset($poll['access']) && $poll['access'] === (Poll::ACCESS_OPEN)) {
-			$this->acl->request(Acl::PERMISSION_ALL_ACCESS);
+		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
+			if (!in_array($poll['access'], $this->getValidAccess())) {
+				throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
+			}
+
+			if ($poll['access'] === (Poll::ACCESS_OPEN)) {
+				$this->acl->setPollId($pollId, Acl::PERMISSION_ALL_ACCESS);
+			}
 		}
 
 		// Set the expiry time to the actual servertime to avoid an
