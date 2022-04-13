@@ -29,6 +29,7 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\ShareMapper;
@@ -72,6 +73,9 @@ class Acl implements JsonSerializable {
 	/** @var IGroupManager */
 	private $groupManager;
 
+	/** @var OptionMapper */
+	private $optionMapper;
+	
 	/** @var PollMapper */
 	private $pollMapper;
 
@@ -91,6 +95,7 @@ class Acl implements JsonSerializable {
 		IUserManager $userManager,
 		IUserSession $userSession,
 		IGroupManager $groupManager,
+		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
 		VoteMapper $voteMapper,
 		ShareMapper $shareMapper
@@ -98,6 +103,7 @@ class Acl implements JsonSerializable {
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->groupManager = $groupManager;
+		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
@@ -254,6 +260,32 @@ class Acl implements JsonSerializable {
 		}
 	}
 
+	public function getIsVoteLimitExceeded(): bool {
+		// return true, if no vote limit is set
+		if ($this->getPoll()->getVoteLimit() < 1) {
+			return false;
+		}
+
+		// Only count votes, which match to an actual existing option.
+		// Explanation: If an option is deleted, the corresponding votes are not deleted.
+		$pollOptionTexts = array_map(function ($option) {
+			return $option->getPollOptionText();
+		}, $this->optionMapper->findByPoll($this->getPollId()));
+
+		$voteCount = 0;
+		$votes = $this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->getUserId());
+		foreach ($votes as $vote) {
+			if (in_array($vote->getVoteOptionText(), $pollOptionTexts)) {
+				$voteCount++;
+			}
+		}
+		
+		if ($this->getPoll()->getVoteLimit() <= $voteCount) {
+			return true;
+		}
+		return false;
+	}
+
 	public function jsonSerialize(): array {
 		return	[
 			'allowAddOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
@@ -272,6 +304,7 @@ class Acl implements JsonSerializable {
 			'allowVote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
 			'displayName' => $this->getDisplayName(),
 			'isOwner' => $this->getIsOwner(),
+			'isVoteLimitExceeded' => $this->getIsVoteLimitExceeded(),
 			'loggedIn' => $this->getIsLoggedIn(),
 			'pollId' => $this->getPollId(),
 			'token' => $this->getToken(),

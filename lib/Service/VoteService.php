@@ -97,7 +97,7 @@ class VoteService {
 		}
 	}
 
-	private function checkLimits(Option $option, string $userId):void {
+	private function checkLimits(Option $option, string $userId): void {
 
 		// check, if the optionlimit is reached or exceeded, if one is set
 		if ($this->acl->getPoll()->getOptionLimit() > 0) {
@@ -105,29 +105,10 @@ class VoteService {
 				throw new VoteLimitExceededException;
 			}
 		}
-
-		// exit, if no vote limit is set
-		if ($this->acl->getPoll()->getVoteLimit() < 1) {
-			return;
-		}
-
-		// Only count votes, which match to an actual existing option.
-		// Explanation: If an option is deleted, the corresponding votes are not deleted.
-		$pollOptionTexts = array_map(function ($option) {
-			return $option->getPollOptionText();
-		}, $this->optionMapper->findByPoll($option->getPollId()));
-
-		$votecount = 0;
-		$votes = $this->voteMapper->getYesVotesByParticipant($option->getPollId(), $userId);
-		foreach ($votes as $vote) {
-			if (in_array($vote->getVoteOptionText(), $pollOptionTexts)) {
-				$votecount++;
-			}
-		}
-
-		if ($this->acl->getPoll()->getVoteLimit() <= $votecount) {
+		if ($this->acl->getIsVoteLimitExceeded()) {
 			throw new VoteLimitExceededException;
 		}
+		return;
 	}
 
 	/**

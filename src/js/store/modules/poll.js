@@ -228,7 +228,9 @@ const actions = {
 		const endPoint = `apps/polls/poll/${context.state.id}`
 		try {
 			const response = await axios.put(generateUrl(endPoint), { poll: context.state })
-			context.commit('set', { poll: response.data })
+			context.commit('set', response.data)
+			context.commit('acl/set', response.data)
+			context.dispatch('options/list', null, { root: true })
 		} catch (e) {
 			console.error('Error updating poll:', { error: e.response }, { poll: context.state })
 			throw e

@@ -21,29 +21,35 @@
  *
  */
 
- namespace OCA\Polls\Controller;
+namespace OCA\Polls\Controller;
 
- use OCP\AppFramework\Db\DoesNotExistException;
- use OCA\Polls\Exceptions\Exception;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Exceptions\Exception;
 
- use OCP\IRequest;
- use OCP\AppFramework\ApiController;
- use OCP\AppFramework\Http;
- use OCP\AppFramework\Http\DataResponse;
+use OCP\IRequest;
+use OCP\AppFramework\ApiController;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\DataResponse;
 
- use OCA\Polls\Service\PollService;
+use OCA\Polls\Model\Acl;
+use OCA\Polls\Service\PollService;
 
- class PollApiController extends ApiController {
+class PollApiController extends ApiController {
 
-	 /** @var PollService */
+	/** @var Acl */
+	private $acl;
+
+	/** @var PollService */
  	private $pollService;
 
  	public function __construct(
 		string $appName,
+		Acl $acl,
 		IRequest $request,
 		PollService $pollService
 	) {
  		parent::__construct($appName, $request);
+		$this->acl = $acl;
  		$this->pollService = $pollService;
  	}
 
@@ -101,8 +107,14 @@
  	 */
  	public function update(int $pollId, array $poll): DataResponse {
  		try {
- 			return new DataResponse(['poll' => $this->pollService->update($pollId, $poll)], Http::STATUS_OK);
- 		} catch (DoesNotExistException $e) {
+			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+ 			
+			return new DataResponse([
+				 'poll' => $this->pollService->update($pollId, $poll),
+				 'acl' => $this->acl,
+			], Http::STATUS_OK);
+
+		} catch (DoesNotExistException $e) {
  			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
  		} catch (Exception $e) {
  			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
@@ -182,4 +194,4 @@
  	public function enum(): DataResponse {
  		return new DataResponse($this->pollService->getValidEnum(), Http::STATUS_OK);
  	}
- }
+}

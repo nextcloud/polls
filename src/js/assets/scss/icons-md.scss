@@ -24,6 +24,7 @@
 	--icon-md-archive: url('../icons/material-design/archive.svg');
 	--icon-md-bell: url('../icons/material-design/bell.svg');
 	--icon-md-bell-off: url('../icons/material-design/bell-off.svg');
+	--icon-md-cancel: url('../icons/material-design/cancel.svg');
 	--icon-md-calendar-month: url('../icons/material-design/calendar-month.svg');
 	--icon-md-calendar-blank: url('../icons/material-design/calendar-blank.svg');
 	--icon-md-calendar-end: url('../icons/material-design/calendar-end.svg');
@@ -156,6 +157,13 @@
 .icon-mask-md-no-votes {
 	background-color: var(--color-polls-foreground-no) !important;
 	@include masked-icon(var(--icon-md-close));
+}
+
+.locked .vote-item.currentuser .icon,
+.icon-mask-md-locked-vote {
+	background-color: var(--color-polls-foreground-no) !important;
+	@include masked-icon(var(--icon-md-cancel));
+	mask-size: 100%;
 }
 
 .icon-mask-md-maybe-vote,

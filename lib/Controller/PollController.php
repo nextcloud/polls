@@ -113,7 +113,12 @@ class PollController extends Controller {
 
 	public function update(int $pollId, array $poll): DataResponse {
 		return $this->response(function () use ($pollId, $poll) {
-			return $this->pollService->update($pollId, $poll);
+			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+			
+			return [
+				'poll' => $this->pollService->update($pollId, $poll),
+				'acl' => $this->acl,
+			];
 		});
 	}
 
