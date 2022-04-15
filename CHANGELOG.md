@@ -7,8 +7,9 @@ All notable changes to this project will be documented in this file.
 - Hidden polls are now private polls and public polls are called open polls to distinguish them from public polls via public links
 - Added configuration options for admins to add legal terms to the public registration dialog and emails
 - Added the possibility for admins to add a disclaimer text to generated emails
-- Input fields now support matching keyboards on mobiles
 - Added email addresses for owner's poll export
+- Allow email share adding using common email formats with name
+- Input fields now support matching keyboards on mobiles
 - Grouping comments for less noise
 - Bulk import for text polls
 - Save username of a public poll (using cookie)
@@ -23,7 +24,8 @@ All notable changes to this project will be documented in this file.
 
 ## [dev] - tbd
 ## Changes
-- #2377 - Changed transitions on vote vlicks and add hover state 
+- #2377 - Changed transitions on vote vlicks and add hover state
+- #2367 - Allow email share adding using common email formats with name (#2375)
 
 ## Fixed
 
