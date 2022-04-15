@@ -125,7 +125,7 @@ export default {
 .vote-item {
 	display: flex;
 	background-color: var(--color-polls-background-no);
-	transition: background-color 1s ease-out;
+	transition: all 0.4s ease-in-out;
 	> .icon {
 		color: var(--color-polls-foreground-no);
 		background-position: center;
@@ -134,6 +134,7 @@ export default {
 		width: 30px;
 		height: 30px;
 		flex: 0 0 auto;
+		transition: all 0.4s ease-in-out;
 	}
 
 	&.yes {
@@ -167,6 +168,12 @@ export default {
 			color: var(--color-polls-foreground-no);
 			background-image: var(--icon-polls-no)
 		}
+	}
+
+	&.active > .icon:hover {
+		background-size: 100%;
+		width: 35px;
+		height: 35px;
 	}
 
 }

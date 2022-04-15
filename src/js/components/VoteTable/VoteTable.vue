@@ -163,7 +163,7 @@ export default {
 			justify-content: center;
 			align-items: center;
 		}
-		.vote-table-header-item {
+		.option-item {
 			align-items: stretch;
 			flex: 1;
 			order: 1;
@@ -213,7 +213,7 @@ export default {
 
 	.spacer {
 		flex: 1;
-		order: 1;
+		order: 0;
 	}
 
 	&.table-view {
@@ -282,6 +282,8 @@ export default {
 
 		.owner {
 			order: 0;
+			flex: 1;
+			justify-content: flex-end;
 		}
 
 		.counter {
@@ -303,10 +305,12 @@ export default {
 			flex-direction: column;
 		}
 
-		.vote-table-header-item {
+		.option-item {
 			flex-direction: row;
-			.option-item {
-				padding: 8px 4px;
+			padding: 8px 4px;
+			&.date-box {
+				flex: 0;
+				align-items: baseline;
 			}
 		}
 
@@ -338,10 +342,6 @@ export default {
 
 		.calendar-peek__caption {
 			display: none;
-		}
-
-		.option-item.date-box {
-			align-items: baseline;
 		}
 
 		.option-item__option--datebox {
