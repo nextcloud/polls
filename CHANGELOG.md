@@ -21,6 +21,12 @@ All notable changes to this project will be documented in this file.
 - Dont't add tags to description in plain text invitation mail
 - poll list in admin page should not link to a poll
 
+## [3.6.0-beta3] - tbd
+## Changes
+- #2377 - Changed transitions on vote vlicks and add hover state 
+
+## Fixed
+
 ## [3.6.0-beta2] - 2022-04-13
 ## New
 - #2373 - Add icon symbol for locked vote options 
