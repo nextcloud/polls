@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div :class="componentClass">
-		<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
+		<OptionItem :option="option" :poll-type="poll.type" :display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
 
 		<Counter v-if="acl.allowSeeResults"
 			:show-maybe="!!poll.allowMaybe"
@@ -42,6 +42,8 @@
 			:avatar-size="24"
 			class="owner" />
 
+		<Spacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
+
 		<div v-if="acl.allowEdit && closed" class="action confirm">
 			<VueButton v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 				type="tertiary"
@@ -59,8 +61,9 @@
 import { mapState, mapGetters } from 'vuex'
 import { Button as VueButton } from '@nextcloud/vue'
 import Counter from '../Options/Counter'
+import OptionItem from '../Options/OptionItem'
+import Spacer from '../Base/Spacer'
 import VoteItem from './VoteItem'
-import VoteTableHeaderItem from './VoteTableHeaderItem'
 import { confirmOption } from '../../mixins/optionMixins'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
@@ -71,7 +74,8 @@ export default {
 		ConfirmIcon,
 		UnconfirmIcon,
 		Counter,
-		VoteTableHeaderItem,
+		OptionItem,
+		Spacer,
 		VoteItem,
 		VueButton,
 		CalendarPeek: () => import('../Calendar/CalendarPeek'),
@@ -81,13 +85,16 @@ export default {
 	mixins: [confirmOption],
 
 	props: {
-		viewMode: {
-			type: String,
-			default: 'table-view',
-		},
 		option: {
 			type: Object,
 			default: undefined,
+		},
+		viewMode: {
+			type: String,
+			default: 'table-view',
+			validator(value) {
+				return ['table-view', 'list-view'].includes(value)
+			},
 		},
 	},
 
@@ -120,7 +127,7 @@ export default {
 
 			classList.push(this.ownAnswer)
 
-			return classList.join(' ').trim()
+			return classList
 		},
 
 		isConfirmed() {

@@ -117,7 +117,7 @@ class PollController extends Controller {
 			
 			return [
 				'poll' => $this->pollService->update($pollId, $poll),
-				'acl' => $this->acl,
+				'acl' => $this->acl->setPollId($pollId),
 			];
 		});
 	}
