@@ -14,7 +14,6 @@ All notable changes to this project will be documented in this file.
 - Bulk import for text polls
 - Save username of a public poll (using cookie)
 - Changed icon set
-- 
 - some more design changes
 
 ### Fixed
