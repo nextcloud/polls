@@ -276,6 +276,7 @@ OC.L10N.register(
     "Options added" : "Seçenekler eklendi",
     "Error adding options" : "Seçenekler eklenirken sorun çıktı",
     "Poll informations" : "Anket bilgileri",
+    "This poll is unpublished" : "Bu anket yayından kaldırıldı",
     "Invite users via the share tab in the sidebar" : "Kullanıcıları çağırmak için yan çubuktaki paylaş sekmesini kullanıın",
     "A private poll from {name}" : "{name} tarafından kapalı bir anket",
     "An openly accessible poll from {name}" : "{name} tarafından herkese açık bir anket",

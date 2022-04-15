@@ -276,6 +276,7 @@ OC.L10N.register(
     "Options added" : "已新增選項",
     "Error adding options" : "新增選項錯誤",
     "Poll informations" : "投票資訊",
+    "This poll is unpublished" : "此投票未發佈",
     "Invite users via the share tab in the sidebar" : "透過側邊欄中的分享分頁邀請使用者",
     "A private poll from {name}" : "來自 {name} 的私人投票",
     "An openly accessible poll from {name}" : "來自 {name} 的開放可存取投票",

@@ -276,6 +276,7 @@ OC.L10N.register(
     "Options added" : "Volby přidány",
     "Error adding options" : "Chyba při přidávání voleb",
     "Poll informations" : "Informace o anketě",
+    "This poll is unpublished" : "Zveřejnění této ankety bylo zrušeno",
     "Invite users via the share tab in the sidebar" : "Pozvat uživatele prostřednictvím karty sdílení v postranním panelu",
     "A private poll from {name}" : "Soukromá anketa od {name}",
     "An openly accessible poll from {name}" : "Otevřeně přístupná anketa od {name}",
