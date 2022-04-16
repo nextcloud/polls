@@ -67,7 +67,7 @@ export default {
 		display: flex;
 		flex-wrap: wrap-reverse;
 		justify-content: flex-end;
-		gap:8px;
+		gap: 8px;
 		min-height: 3em;
 
 		.bar_top_left {

@@ -22,73 +22,71 @@ All notable changes to this project will be documented in this file.
 - Dont't add tags to description in plain text invitation mail
 - poll list in admin page should not link to a poll
 
-## [dev] - tbd
-## Changes
-- #2377 - Changed transitions on vote vlicks and add hover state
+## [3.6.0-rc1] - 2022-04-16
+### New
 - #2367 - Allow email share adding using common email formats with name (#2375)
-
-## Fixed
-
+### Changes
+- #2377 - Changed transitions on vote vlicks and add hover state
 ## [3.6.0-beta2] - 2022-04-13
-## New
+### New
 - #2373 - Add icon symbol for locked vote options 
 - #2351 - Store username in a public poll to cookie
 
-## Fixed
+### Fixed
 - #2374 - Avoid unnecessary error logs in activities
 - #2369 - Fix missing icons after dep update
 - #2357 - Fix styling bugs
 - Fixed different translation errors
 
 ## [3.6.0-beta1] - 2022-04-02
-## Changes
+### Changes
 - #2255 - Rename "hidden" polls to "private" polls, "public" to "open" (#2289)
 - #2328 - Migrate access strings to 'private' and 'open' (instead of 'hidden' and 'public')
 
-## New
+### New
 - #2261 - Added the option to add links to terms and private policy to public registration dialog
 - #2260 - Added an option to add legal terms and a disclaimer to emails
 - #2177 - Add email addresses to poll export (#2327)
 
-## Fixed
+### Fixed
 - #1310 - Fix LDAP search (#2323)
 - #2285 - Fixed poll export (#2286, #2287)
 - #2312 - Fixed heights of modals after update of @nextcloud/vue@5
 - #2306 - HTML Tags in plain Poll invitation (#2346)
 - #2254 - Links in admin page could lead to non accessible poll (#2326)
 
-## Misc
+### Misc
 - #2283 - Added support for inputmode
 - #2311 - Added support for material design icons to some components (#2329)
 - #2332 - Replace deprecated String.prototype.substr()
 - #2329 - Styling inpuDiv
 
 ## [3.5.4] - 2022-02-17
-## Fixed
+### Fixed
 - #2276 - Deletion of NC users was broken through polls (#2279)
 - #2270 - Translation error
 
 ## [3.5.3] - 2022-02-15
-## Changed
+### Changed
 - #2264 - add email address if valid search parameter (#2268)
 
-## Fixed
+### Fixed
 - #2263 - Fixed user search (#2267)
 - #2272 - Fixed poll export due to changed module export of xlsx
 
-## Misc
+### Misc
 - late translations delivery
 
 ## [3.5.2] - 2022-02-11
-## Fixed
+### Fixed
 - #2248 - Adding options in text poll is not possible
 
 ## [3.5.1] - 2022-02-11
-## Fixed
+### Fixed
 - #2246 - updated php minimum version in info.xml
 
 ## [3.5.0] - 2022-02-09
-## New
+### New
 - following new features are disabled by default per admin switch
     - Export polls (.xlsx, odt, .csv, .html)
     - Track activities
@@ -97,7 +95,7 @@ All notable changes to this project will be documented in this file.
 - Linkify URLs and email addresses in text options
 - New command `occ polls:db:recreate` for validating and fixing db structure
 
-## Fixed
+### Fixed
 - It was possible to add option proposals, when not registered in public polls
 - A deleted poll could cause repeating error logs on notifications
 - fixed a migration error, when updating from rather old version
@@ -106,11 +104,11 @@ All notable changes to this project will be documented in this file.
 - Code optimization and refactoring
 - #2201 - Migration error (#2199, #2222)
 
-## [3.5.0-beta2] - 2022-01-23
+### [3.5.0-beta2] - 2022-01-23
 - [new] #950 - Allow join project / collection (#2194)
 - [new] #2204 - Add `occ polls:db:recreate` for validating and fixing db structure
 
-## [3.5.0-beta1] - 2022-01-18
+### [3.5.0-beta1] - 2022-01-18
 - [new] #366 - Export poll (#1942, #2169)
 - [new] #804 - Use activities (#2154)
 - [new] #1986 - Combined view for date polls (#2175)
@@ -119,13 +117,13 @@ All notable changes to this project will be documented in this file.
 - [fix] #2133 - Notifications error with deleted polls(#2178)
 
 ## [3.4.2] - 2021-12-13
-## New
+### New
 - Added an indicator for shares, which indicates, if a share already voted or not
 - Added an autoreminder
 - Added a hint, if no one except the poll owner can access the poll
 - Added an admin setting to change the updates polling behavior (Disabled, periodically or instant via long-polling)
 
-## Changed
+### Changed
 - Compatible with Nextcloud 21 - 23
 - Share tab redesign
   - Moved the 'all users' access setting as switch to the shares list
@@ -136,7 +134,7 @@ All notable changes to this project will be documented in this file.
   - Registration options for public polls are now configurable per public share.
     An existing setting from the poll configuration will be used as default
 
-## Fixed
+### Fixed
 - Fixed auto archiver, to prevent to archive polls without an expiration date
 - fix error when adding option #2126 (v3.4.1)
 - fix missing anonymization of proposal owners in anonymous polls #2136 (v3.4.2)
