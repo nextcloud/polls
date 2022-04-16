@@ -4,7 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [3.6.0] - tbd
 ### New
 - Compatibility to Nextcloud 24
-- Hidden polls are now private polls and public polls are called open polls to distinguish them from public polls via public links
+- Renaming: **hidden polls** are now **private polls** and **public polls** are called **open polls** to distinguish them from **real public polls** via public links
 - Added configuration options for admins to add legal terms to the public registration dialog and emails
 - Added the possibility for admins to add a disclaimer text to generated emails
 - Added email addresses for owner's poll export
@@ -19,8 +19,8 @@ All notable changes to this project will be documented in this file.
 ### Fixed
 - Poll export to spreadsheeds was fixed if Poll title is longer than 31 characters
 - Fix LDAP user search
-- Dont't add tags to description in plain text invitation mail
-- poll list in admin page should not link to a poll
+- Poll list in admin page should not link to a poll
+- Remove markup in text only emails
 
 ## [3.6.0-rc1] - 2022-04-16
 ### New
@@ -36,7 +36,7 @@ All notable changes to this project will be documented in this file.
 - #2374 - Avoid unnecessary error logs in activities
 - #2369 - Fix missing icons after dep update
 - #2357 - Fix styling bugs
-- Fixed different translation errors
+- #misc - Fixed different translation errors
 
 ## [3.6.0-beta1] - 2022-04-02
 ### Changes
