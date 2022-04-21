@@ -6,6 +6,10 @@
 // masked svg background icon
 @mixin masked-icon($url, $color: var(--icon-md-color-default)) {
     -webkit-mask-image: $url;
+    -webkit-mask-image: $url;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	-webkit-mask-size: var(--icon-size);
     mask-image: $url;
 	mask-repeat: no-repeat;
 	mask-position: center;
