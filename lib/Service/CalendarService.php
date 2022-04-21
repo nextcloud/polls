@@ -29,8 +29,11 @@ use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCA\Polls\Model\CalendarEvent;
 use OCA\Polls\Db\Preferences;
+use OCA\Polls\Model\UserGroup\CurrentUser;
 
 class CalendarService {
+	/** @var CurrentUser */
+	private $currentUser ;
 
 	/** @var CalendarManager */
 	private $calendarManager;
@@ -46,14 +49,41 @@ class CalendarService {
 
 	public function __construct(
 		CalendarManager $calendarManager,
-		PreferencesService $preferencesService
+		PreferencesService $preferencesService,
+		CurrentUser $currentUser
 	) {
+		$this->currentUser = $currentUser;
 		$this->calendarManager = $calendarManager;
 		$this->preferencesService = $preferencesService;
 		$this->preferences = $this->preferencesService->get();
-		$this->calendars = $this->calendarManager->getCalendars();
+		$this->getCalendarsForPrincipal();
 	}
+	
+	/**
+	 * getCalendars - 
+	 *
+	 * @return ICalendar[]
+	 *
+	 * @psalm-return list<ICalendar>
+	 */
+	public function getCalendarsForPrincipal(string $userId = ''): array {
+		if (\OC_Util::getVersion()[0] < 24) {
+			// deprecated since NC23
+			$this->calendars = $this->calendarManager->getCalendars();
+			return $this->calendars;
+		}
 
+		// use from NC24 on
+		if ($userId) {
+			$principalUri = 'principals/users/' . $userId;
+		} else {
+			$principalUri = $this->currentUser->getPrincipalUri();
+		}
+
+		$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
+		return $this->calendars;
+	}
+	
 	/**
 	 * getEvents - get events from the user's calendars inside given timespan
 	 *
@@ -62,28 +92,80 @@ class CalendarService {
 	 * @psalm-return list<CalendarEvent>
 	 */
 	public function getEvents(DateTime $from, DateTime $to): array {
+		if (\OC_Util::getVersion()[0] < 24) {
+			// deprecated since NC24
+			\OC::$server->getLogger()->error('calling legacy version');
+			return $this->getEventsLegcy($from, $to);
+		}
+
+		// use from NC24 on
+		$events = [];
+		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
+		$query->setTimerangeStart(\DateTimeImmutable::createFromMutable($from));
+		$query->setTimerangeEnd(\DateTimeImmutable::createFromMutable($to));
+
+		foreach ($this->calendars as $calendar) {
+			if (in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
+				$query->addSearchCalendar($calendar->getUri());
+			}
+		}
+
+		$foundEvents = $this->calendarManager->searchForPrincipal($query);
+
+		foreach ($foundEvents as $event) {
+			$calendarEvent = new CalendarEvent($event, $this->getCalendarFromEvent($event));
+			// since we get back recurring events of other days, just make sure this event
+			// matches the search pattern
+			// TODO: identify possible time zone issues, when handling all day events
+			if (($from->getTimestamp() < $calendarEvent->getEnd())
+				&& ($to->getTimestamp() > $calendarEvent->getStart())) {
+				}
+				array_push($events, $calendarEvent);
+		}
+		return $events;
+	}
+
+	private function getCalendarFromEvent(array $event): ICalendar {
+		foreach ($this->calendars as $calendar) {
+			if ($calendar->getKey() === $event['calendar-key']) {
+				return $calendar;
+			}
+		}
+
+	}
+	/**
+	 * getEvents - get events from the user's calendars inside given timespan
+	 *
+	 * @return CalendarEvent[]
+	 * 
+	 * @deprecated since NC23
+	 * 
+	 * @psalm-return list<CalendarEvent>
+	 */
+	private function getEventsLegcy(DateTime $from, DateTime $to): array {
 		$events = [];
 		foreach ($this->calendars as $calendar) {
-
+			
 			// Skip not configured calendars
 			if (!in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
 				continue;
 			}
-
+			
 			// search for all events which
 			// - start before the end of the requested timespan ($to) and
 			// - end after the start of the requested timespan ($from)
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
+			// \OC::$server->getLogger()->error('foundEvents: ' . json_encode($foundEvents));
 			foreach ($foundEvents as $event) {
 				$calendarEvent = new CalendarEvent($event, $calendar);
-
 				// since we get back recurring events of other days, just make sure this event
 				// matches the search pattern
 				// TODO: identify possible time zone issues, when handling all day events
 				if (($from->getTimestamp() < $calendarEvent->getEnd())
 					&& ($to->getTimestamp() > $calendarEvent->getStart())) {
+					}
 					array_push($events, $calendarEvent);
-				}
+				// array_push($events, $calendarEvent);
 			}
 		}
 		return $events;

@@ -32,6 +32,7 @@ use OCP\IUser;
 class User extends UserBase {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
+	public const PRINCIPAL_PREFIX = 'principals/users/';
 
 	/** @var IConfig */
 	private $config;
@@ -75,6 +76,9 @@ class User extends UserBase {
 		return $this->description;
 	}
 
+	public function getPrincipalUri() {
+		return self::PRINCIPAL_PREFIX . $this->getId();
+	}
 	/**
 	 * @return User[]
 	 *
