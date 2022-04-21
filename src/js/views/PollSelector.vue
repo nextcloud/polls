@@ -64,7 +64,7 @@
 <script>
 import { mapActions, mapGetters } from 'vuex'
 import { Modal } from '@nextcloud/vue'
-import UserItem from '../components/User/UserItem'
+import UserItem from '../components/User/UserItem.vue'
 
 export default {
 	name: 'PollSelector',

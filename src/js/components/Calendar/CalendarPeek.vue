@@ -42,7 +42,7 @@
 import { mapState } from 'vuex'
 import orderBy from 'lodash/orderBy'
 import { Popover } from '@nextcloud/vue'
-import CalendarInfo from '../Calendar/CalendarInfo'
+import CalendarInfo from '../Calendar/CalendarInfo.vue'
 import { showError } from '@nextcloud/dialogs'
 
 export default {

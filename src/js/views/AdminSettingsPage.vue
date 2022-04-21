@@ -57,14 +57,14 @@
 </template>
 
 <script>
-import AdminCombo from '../components/Settings/AdminSettings/AdminCombo'
-import AdminEmail from '../components/Settings/AdminSettings/AdminEmail'
-import AdminLegal from '../components/Settings/AdminSettings/AdminLegal'
-import AdminMisc from '../components/Settings/AdminSettings/AdminMisc'
-import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance'
-import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation'
-import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload'
-import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings'
+import AdminCombo from '../components/Settings/AdminSettings/AdminCombo.vue'
+import AdminEmail from '../components/Settings/AdminSettings/AdminEmail.vue'
+import AdminLegal from '../components/Settings/AdminSettings/AdminLegal.vue'
+import AdminMisc from '../components/Settings/AdminSettings/AdminMisc.vue'
+import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance.vue'
+import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation.vue'
+import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
+import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings.vue'
 import { SettingsSection } from '@nextcloud/vue'
 import '../assets/scss/markdown.scss'
 

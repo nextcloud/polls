@@ -43,7 +43,7 @@
 import { mapState } from 'vuex'
 import { Button as VueButton, Popover } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
-import ActionToggleSidebar from '../Actions/ActionToggleSidebar'
+import ActionToggleSidebar from '../Actions/ActionToggleSidebar.vue'
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
 export default {
@@ -53,9 +53,9 @@ export default {
 		PollInformationIcon,
 		Popover,
 		VueButton,
-		UserMenu: () => import('../User/UserMenu'),
-		ExportPoll: () => import('../Export/ExportPoll'),
-		PollInformation: () => import('../Poll/PollInformation'),
+		UserMenu: () => import('../User/UserMenu.vue'),
+		ExportPoll: () => import('../Export/ExportPoll.vue'),
+		PollInformation: () => import('../Poll/PollInformation.vue'),
 	},
 
 	computed: {

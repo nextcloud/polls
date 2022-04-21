@@ -71,10 +71,10 @@
 import { mapGetters, mapState } from 'vuex'
 import { Button as VueButton, EmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
-import ActionDelete from '../Actions/ActionDelete'
-import OptionItem from './OptionItem'
-import OptionItemOwner from '../Options/OptionItemOwner'
-import { confirmOption, removeOption } from '../../mixins/optionMixins'
+import ActionDelete from '../Actions/ActionDelete.vue'
+import OptionItem from './OptionItem.vue'
+import OptionItemOwner from '../Options/OptionItemOwner.vue'
+import { confirmOption, removeOption } from '../../mixins/optionMixins.js'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 
@@ -90,7 +90,7 @@ export default {
 		OptionItem,
 		OptionItemOwner,
 		VueButton,
-		OptionsTextAdd: () => import('./OptionsTextAdd'),
+		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
 	},
 
 	mixins: [

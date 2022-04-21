@@ -48,9 +48,9 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex'
-import InputDiv from '../Base/InputDiv'
+import InputDiv from '../Base/InputDiv.vue'
 import { Button as VueButton, Multiselect } from '@nextcloud/vue'
-import { dateUnits } from '../../mixins/dateMixins'
+import { dateUnits } from '../../mixins/dateMixins.js'
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 export default {

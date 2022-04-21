@@ -41,8 +41,8 @@ export default {
 	name: 'OptionProposals',
 
 	components: {
-		OptionsDateAdd: () => import('./OptionsDateAdd'),
-		OptionsTextAdd: () => import('./OptionsTextAdd'),
+		OptionsDateAdd: () => import('./OptionsDateAdd.vue'),
+		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
 	},
 
 	computed: {

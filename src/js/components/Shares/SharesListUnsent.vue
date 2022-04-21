@@ -55,8 +55,8 @@
 import { mapGetters, mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { Actions, ActionButton } from '@nextcloud/vue'
-import ActionDelete from '../Actions/ActionDelete'
-import ConfigBox from '../Base/ConfigBox'
+import ActionDelete from '../Actions/ActionDelete.vue'
+import ConfigBox from '../Base/ConfigBox.vue'
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 
 export default {

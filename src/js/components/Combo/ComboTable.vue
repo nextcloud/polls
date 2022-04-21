@@ -46,7 +46,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import VoteColumn from './VoteColumn'
+import VoteColumn from './VoteColumn.vue'
 
 export default {
 	name: 'ComboTable',

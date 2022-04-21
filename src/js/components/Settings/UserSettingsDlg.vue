@@ -47,9 +47,9 @@ export default {
 	components: {
 		AppSettingsDialog,
 		AppSettingsSection,
-		FeatureSettings: () => import('./UserSettings/FeatureSettings'),
-		StyleSettings: () => import('./UserSettings/StyleSettings'),
-		PerformanceSettings: () => import('./UserSettings/PerformanceSettings'),
+		FeatureSettings: () => import('./UserSettings/FeatureSettings.vue'),
+		StyleSettings: () => import('./UserSettings/StyleSettings.vue'),
+		PerformanceSettings: () => import('./UserSettings/PerformanceSettings.vue'),
 	},
 
 	data() {

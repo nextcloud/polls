@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import Activities from '../Activity/Activities'
+import Activities from '../Activity/Activities.vue'
 import { EmptyContent } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 

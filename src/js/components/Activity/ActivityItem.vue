@@ -33,8 +33,8 @@
 import moment from '@nextcloud/moment'
 import RichText from '@juliushaertl/vue-richtext'
 import { UserBubble } from '@nextcloud/vue'
-import SimpleLink from '../../helpers/SimpleLink'
-import GuestBubble from '../../helpers/GuestBubble'
+import SimpleLink from '../../helpers/SimpleLink.js'
+import GuestBubble from '../../helpers/GuestBubble.js'
 
 export default {
 	name: 'ActivityItem',

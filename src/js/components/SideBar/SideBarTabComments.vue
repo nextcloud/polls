@@ -34,8 +34,8 @@
 </template>
 
 <script>
-import CommentAdd from '../Comments/CommentAdd'
-import Comments from '../Comments/Comments'
+import CommentAdd from '../Comments/CommentAdd.vue'
+import Comments from '../Comments/Comments.vue'
 import { EmptyContent } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 

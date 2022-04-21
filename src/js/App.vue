@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import UserSettingsDlg from './components/Settings/UserSettingsDlg'
+import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -47,13 +47,13 @@ import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/theming.scss'
 import './assets/scss/markdown.scss'
-import { watchPolls } from './mixins/watchPolls'
+import { watchPolls } from './mixins/watchPolls.js'
 
 export default {
 	name: 'App',
 	components: {
 		Content,
-		LoadingOverlay: () => import('./components/Base/LoadingOverlay'),
+		LoadingOverlay: () => import('./components/Base/LoadingOverlay.vue'),
 		UserSettingsDlg,
 	},
 

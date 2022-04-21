@@ -44,7 +44,7 @@
 import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 import { mapState } from 'vuex'
-import ActionDelete from '../Actions/ActionDelete'
+import ActionDelete from '../Actions/ActionDelete.vue'
 
 export default {
 	name: 'CommentItem',

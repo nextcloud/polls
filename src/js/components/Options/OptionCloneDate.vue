@@ -53,7 +53,7 @@
 
 import moment from '@nextcloud/moment'
 import { Button as VueButton, Multiselect } from '@nextcloud/vue'
-import { dateUnits } from '../../mixins/dateMixins'
+import { dateUnits } from '../../mixins/dateMixins.js'
 
 export default {
 	name: 'OptionCloneDate',

@@ -23,7 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import { setCookie } from '../../helpers/cookieHelper'
+import { setCookie } from '../../helpers/cookieHelper.js'
 
 const defaultShares = () => ({
 	displayName: '',

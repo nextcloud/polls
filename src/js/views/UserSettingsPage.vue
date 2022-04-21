@@ -47,9 +47,9 @@ export default {
 
 	components: {
 		SettingsSection,
-		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings'),
-		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings'),
-		PerformanceSettings: () => import('../components/Settings/UserSettings/PerformanceSettings'),
+		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings.vue'),
+		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings.vue'),
+		PerformanceSettings: () => import('../components/Settings/UserSettings/PerformanceSettings.vue'),
 	},
 
 	created() {

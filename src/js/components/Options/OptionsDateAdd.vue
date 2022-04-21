@@ -79,7 +79,7 @@
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import { Button as VueButton, CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
-import Spacer from '../Base/Spacer'
+import Spacer from '../Base/Spacer.vue'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 
 export default {

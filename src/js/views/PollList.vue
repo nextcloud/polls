@@ -94,7 +94,7 @@ import { mapGetters, mapState, mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
-import HeaderBar from '../components/Base/HeaderBar'
+import HeaderBar from '../components/Base/HeaderBar.vue'
 
 export default {
 	name: 'PollList',
@@ -105,8 +105,8 @@ export default {
 		ActionButton,
 		EmptyContent,
 		HeaderBar,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
-		PollItem: () => import('../components/PollList/PollItem'),
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},
 
 	data() {

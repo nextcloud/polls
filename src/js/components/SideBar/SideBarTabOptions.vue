@@ -65,11 +65,11 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import ConfigBox from '../Base/ConfigBox'
-import OptionsDate from '../Options/OptionsDate'
-import OptionsDateShift from '../Options/OptionsDateShift'
-import OptionsText from '../Options/OptionsText'
-import ConfigProposals from '../Configuration/ConfigProposals'
+import ConfigBox from '../Base/ConfigBox.vue'
+import OptionsDate from '../Options/OptionsDate.vue'
+import OptionsDateShift from '../Options/OptionsDateShift.vue'
+import OptionsText from '../Options/OptionsText.vue'
+import ConfigProposals from '../Configuration/ConfigProposals.vue'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
 import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
@@ -88,8 +88,8 @@ export default {
 		OptionsDate,
 		OptionsDateShift,
 		OptionsText,
-		OptionsDateAdd: () => import('../Options/OptionsDateAdd'),
-		OptionsTextAddBulk: () => import('../Options/OptionsTextAddBulk'),
+		OptionsDateAdd: () => import('../Options/OptionsDateAdd.vue'),
+		OptionsTextAddBulk: () => import('../Options/OptionsTextAddBulk.vue'),
 	},
 
 	computed: {

@@ -69,7 +69,7 @@
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { UserBubble } from '@nextcloud/vue'
-import Badge from '../Base/Badge'
+import Badge from '../Base/Badge.vue'
 
 export default {
 	name: 'PollInformation',

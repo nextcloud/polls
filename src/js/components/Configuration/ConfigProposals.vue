@@ -38,7 +38,7 @@
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
-import { writePoll } from '../../mixins/writePoll'
+import { writePoll } from '../../mixins/writePoll.js'
 
 export default {
 	name: 'ConfigProposals',

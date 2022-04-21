@@ -23,12 +23,12 @@
 
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
-import settings from './store/modules/settings'
+import settings from './store/modules/settings.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { getRequestToken } from '@nextcloud/auth'
 import { generateFilePath } from '@nextcloud/router'
 
-import UserSettingsPage from './views/UserSettingsPage'
+import UserSettingsPage from './views/UserSettingsPage.vue'
 
 /* eslint-disable-next-line camelcase, no-undef */
 __webpack_nonce__ = btoa(getRequestToken())

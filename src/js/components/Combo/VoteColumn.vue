@@ -38,8 +38,8 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import VoteItem from './VoteItem'
-import OptionItem from '../Options/OptionItem'
+import VoteItem from './VoteItem.vue'
+import OptionItem from '../Options/OptionItem.vue'
 
 export default {
 	name: 'VoteColumn',

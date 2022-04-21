@@ -84,12 +84,12 @@ export default {
 	name: 'SideBar',
 
 	components: {
-		SideBarTabConfiguration: () => import('../components/SideBar/SideBarTabConfiguration'),
-		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments'),
-		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions'),
-		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare'),
-		SideBarTabCollaboration: () => import('../components/SideBar/SideBarTabCollaboration'),
-		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity'),
+		SideBarTabConfiguration: () => import('../components/SideBar/SideBarTabConfiguration.vue'),
+		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments.vue'),
+		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions.vue'),
+		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare.vue'),
+		SideBarTabCollaboration: () => import('../components/SideBar/SideBarTabCollaboration.vue'),
+		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity.vue'),
 		AppSidebar,
 		AppSidebarTab,
 	},

@@ -23,7 +23,7 @@
 
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
-import modules from './modules'
+import modules from './modules/index.js'
 
 Vue.use(Vuex)
 
