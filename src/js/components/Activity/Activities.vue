@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import ActivityItem from './ActivityItem'
+import ActivityItem from './ActivityItem.vue'
 import { mapState } from 'vuex'
 
 export default {

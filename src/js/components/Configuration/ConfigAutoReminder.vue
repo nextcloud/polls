@@ -50,7 +50,7 @@ export default {
 		Actions,
 		ActionButton,
 		Popover,
-		AutoReminderInformation: () => import('./AutoReminderInformation'),
+		AutoReminderInformation: () => import('./AutoReminderInformation.vue'),
 	},
 
 	computed: {

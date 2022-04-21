@@ -29,8 +29,8 @@
 
 <script>
 import { mapState } from 'vuex'
-import SharesList from '../Shares/SharesList'
-import SharesListUnsent from '../Shares/SharesListUnsent'
+import SharesList from '../Shares/SharesList.vue'
+import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 
 export default {
 	name: 'SideBarTabShare',

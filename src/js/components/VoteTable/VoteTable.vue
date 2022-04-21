@@ -54,10 +54,10 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
-import ActionDelete from '../Actions/ActionDelete'
-import VoteColumn from './VoteColumn'
-import VoteMenu from './VoteMenu'
-import { confirmOption } from '../../mixins/optionMixins'
+import ActionDelete from '../Actions/ActionDelete.vue'
+import VoteColumn from './VoteColumn.vue'
+import VoteMenu from './VoteMenu.vue'
+import { confirmOption } from '../../mixins/optionMixins.js'
 
 export default {
 	name: 'VoteTable',

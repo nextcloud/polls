@@ -36,7 +36,7 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import UserItem from '../User/UserItem'
+import UserItem from '../User/UserItem.vue'
 export default {
 	name: 'SideBarTabDatePolls',
 

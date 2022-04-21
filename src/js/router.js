@@ -25,17 +25,17 @@ import Router from 'vue-router'
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
-import { getCookie, setCookie } from './helpers/cookieHelper'
+import { getCookie, setCookie } from './helpers/cookieHelper.js'
 
 // Dynamic loading
-const List = () => import('./views/PollList')
-const Administration = () => import('./views/Administration')
-const Vote = () => import('./views/Vote')
-const NotFound = () => import('./views/NotFound')
-const SideBar = () => import('./views/SideBar')
-const SideBarCombo = () => import('./views/SideBarCombo')
-const Navigation = () => import('./views/Navigation')
-const Combo = () => import('./views/Combo')
+const List = () => import('./views/PollList.vue')
+const Administration = () => import('./views/Administration.vue')
+const Vote = () => import('./views/Vote.vue')
+const NotFound = () => import('./views/NotFound.vue')
+const SideBar = () => import('./views/SideBar.vue')
+const SideBarCombo = () => import('./views/SideBarCombo.vue')
+const Navigation = () => import('./views/Navigation.vue')
+const Combo = () => import('./views/Combo.vue')
 
 Vue.use(Router)
 

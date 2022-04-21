@@ -39,8 +39,8 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Avatar } from '@nextcloud/vue'
-import { removeOption } from '../../mixins/optionMixins'
-import ActionDelete from '../Actions/ActionDelete'
+import { removeOption } from '../../mixins/optionMixins.js'
+import ActionDelete from '../Actions/ActionDelete.vue'
 
 export default {
 	name: 'OptionItemOwner',

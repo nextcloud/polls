@@ -43,7 +43,7 @@ export default {
 	name: 'SideBarCombo',
 
 	components: {
-		SideBarTabDatePolls: () => import('../components/SideBar/SideBarTabDatePolls'),
+		SideBarTabDatePolls: () => import('../components/SideBar/SideBarTabDatePolls.vue'),
 		AppSidebar,
 		AppSidebarTab,
 	},

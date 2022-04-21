@@ -122,7 +122,7 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
 import sortBy from 'lodash/sortBy'
-import HeaderBar from '../components/Base/HeaderBar'
+import HeaderBar from '../components/Base/HeaderBar.vue'
 
 export default {
 	name: 'Administration',
@@ -135,8 +135,8 @@ export default {
 		HeaderBar,
 		Modal,
 		VueButton,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
-		PollItem: () => import('../components/PollList/PollItem'),
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},
 
 	data() {

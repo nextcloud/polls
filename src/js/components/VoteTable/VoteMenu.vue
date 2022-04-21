@@ -28,8 +28,8 @@
 </template>
 
 <script>
-import ActionSortOptions from '../Actions/ActionSortOptions'
-import ActionChangeView from '../Actions/ActionChangeView'
+import ActionSortOptions from '../Actions/ActionSortOptions.vue'
+import ActionChangeView from '../Actions/ActionChangeView.vue'
 
 export default {
 	name: 'VoteMenu',

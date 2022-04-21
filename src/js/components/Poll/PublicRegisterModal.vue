@@ -105,8 +105,8 @@ import { generateUrl } from '@nextcloud/router'
 import { Button as VueButton, Modal, CheckboxRadioSwitch } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import RichText from '@juliushaertl/vue-richtext'
-import InputDiv from '../Base/InputDiv'
-import SimpleLink from '../../helpers/SimpleLink'
+import InputDiv from '../Base/InputDiv.vue'
+import SimpleLink from '../../helpers/SimpleLink.js'
 
 export default {
 	name: 'PublicRegisterModal',

@@ -55,8 +55,8 @@
 <script>
 import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import ConfigBox from '../Base/ConfigBox'
-import RadioGroupDiv from '../Base/RadioGroupDiv'
+import ConfigBox from '../Base/ConfigBox.vue'
+import RadioGroupDiv from '../Base/RadioGroupDiv.vue'
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 

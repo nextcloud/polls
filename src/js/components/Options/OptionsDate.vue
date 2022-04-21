@@ -78,11 +78,11 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { Actions, ActionButton, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
-import ActionDelete from '../Actions/ActionDelete'
-import OptionCloneDate from './OptionCloneDate'
-import OptionItem from './OptionItem'
-import { confirmOption, removeOption } from '../../mixins/optionMixins'
-import { dateUnits } from '../../mixins/dateMixins'
+import ActionDelete from '../Actions/ActionDelete.vue'
+import OptionCloneDate from './OptionCloneDate.vue'
+import OptionItem from './OptionItem.vue'
+import { confirmOption, removeOption } from '../../mixins/optionMixins.js'
+import { dateUnits } from '../../mixins/dateMixins.js'
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
@@ -102,7 +102,7 @@ export default {
 		OptionCloneDate,
 		OptionItem,
 		VueButton,
-		OptionItemOwner: () => import('./OptionItemOwner'),
+		OptionItemOwner: () => import('./OptionItemOwner.vue'),
 	},
 
 	mixins: [

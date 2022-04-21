@@ -103,7 +103,7 @@
 <script>
 import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
-import Badge from '../Base/Badge'
+import Badge from '../Base/Badge.vue'
 
 export default {
 	name: 'PollItem',

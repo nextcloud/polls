@@ -42,7 +42,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import InputDiv from '../../Base/InputDiv'
+import InputDiv from '../../Base/InputDiv.vue'
 
 export default {
 	name: 'PerformanceSettings',

@@ -60,11 +60,11 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { Button as VueButton } from '@nextcloud/vue'
-import Counter from '../Options/Counter'
-import OptionItem from '../Options/OptionItem'
-import Spacer from '../Base/Spacer'
-import VoteItem from './VoteItem'
-import { confirmOption } from '../../mixins/optionMixins'
+import Counter from '../Options/Counter.vue'
+import OptionItem from '../Options/OptionItem.vue'
+import Spacer from '../Base/Spacer.vue'
+import VoteItem from './VoteItem.vue'
+import { confirmOption } from '../../mixins/optionMixins.js'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 
@@ -78,8 +78,8 @@ export default {
 		Spacer,
 		VoteItem,
 		VueButton,
-		CalendarPeek: () => import('../Calendar/CalendarPeek'),
-		OptionItemOwner: () => import('../Options/OptionItemOwner'),
+		CalendarPeek: () => import('../Calendar/CalendarPeek.vue'),
+		OptionItemOwner: () => import('../Options/OptionItemOwner.vue'),
 	},
 
 	mixins: [confirmOption],

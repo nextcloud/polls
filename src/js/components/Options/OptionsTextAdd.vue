@@ -28,7 +28,7 @@
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import InputDiv from '../Base/InputDiv'
+import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'OptionsTextAdd',

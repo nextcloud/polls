@@ -25,7 +25,7 @@
 import Vue from 'vue'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import './assets/scss/polls-icon.scss'
-import store from './store/store-polls'
+import store from './store/store-polls.js'
 
 // eslint-disable-next-line
 __webpack_nonce__ = btoa(OC.requestToken)
@@ -39,7 +39,7 @@ Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 Vue.prototype.OC = OC
 
-const PollSelector = () => import('./views/PollSelector')
+const PollSelector = () => import('./views/PollSelector.vue')
 
 const selector = (selector) => new Promise((resolve, reject) => {
 	const container = document.createElement('div')

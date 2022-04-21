@@ -37,7 +37,7 @@
 <script>
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import { writePoll } from '../../mixins/writePoll'
+import { writePoll } from '../../mixins/writePoll.js'
 
 export default {
 	name: 'ShareItemAllUsers',

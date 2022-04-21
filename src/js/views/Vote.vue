@@ -80,10 +80,10 @@
 import { mapState, mapGetters } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
-import MarkUpDescription from '../components/Poll/MarkUpDescription'
-import PollInfoLine from '../components/Poll/PollInfoLine'
-import PollHeaderButtons from '../components/Poll/PollHeaderButtons'
-import HeaderBar from '../components/Base/HeaderBar'
+import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
+import PollInfoLine from '../components/Poll/PollInfoLine.vue'
+import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
+import HeaderBar from '../components/Base/HeaderBar.vue'
 
 export default {
 	name: 'Vote',
@@ -94,10 +94,10 @@ export default {
 		MarkUpDescription,
 		PollHeaderButtons,
 		PollInfoLine,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
-		OptionProposals: () => import('../components/Options/OptionProposals'),
-		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal'),
-		VoteTable: () => import('../components/VoteTable/VoteTable'),
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		OptionProposals: () => import('../components/Options/OptionProposals.vue'),
+		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal.vue'),
+		VoteTable: () => import('../components/VoteTable/VoteTable.vue'),
 	},
 
 	data() {

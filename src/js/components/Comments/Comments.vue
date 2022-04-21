@@ -31,7 +31,7 @@
 
 <script>
 import sortBy from 'lodash/sortBy'
-import CommentItem from './CommentItem'
+import CommentItem from './CommentItem.vue'
 import { mapState } from 'vuex'
 
 export default {

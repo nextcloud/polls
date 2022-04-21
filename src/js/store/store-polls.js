@@ -23,7 +23,7 @@
 
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
-import polls from './modules/polls'
+import polls from './modules/polls.js'
 
 Vue.use(Vuex)
 

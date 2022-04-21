@@ -45,7 +45,7 @@
 <script>
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import InputDiv from '../Base/InputDiv'
+import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'ConfigOptionLimit',

@@ -53,9 +53,9 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { AppContent, EmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
-import ComboTable from '../components/Combo/ComboTable'
-import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar'
-import HeaderBar from '../components/Base/HeaderBar'
+import ComboTable from '../components/Combo/ComboTable.vue'
+import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar.vue'
+import HeaderBar from '../components/Base/HeaderBar.vue'
 
 export default {
 	name: 'Combo',
@@ -66,7 +66,7 @@ export default {
 		ComboTable,
 		EmptyContent,
 		HeaderBar,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 	},
 
 	data() {
