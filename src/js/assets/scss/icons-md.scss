@@ -6,6 +6,9 @@
 // masked svg background icon
 @mixin masked-icon($url, $color: var(--icon-md-color-default)) {
     -webkit-mask-image: $url;
+	-webkit-mask-repeat: no-repeat;
+	-webkit-mask-position: center;
+	-webkit-mask-size: var(--icon-size);
     mask-image: $url;
 	mask-repeat: no-repeat;
 	mask-position: center;
@@ -14,6 +17,7 @@
 
 	&.empty-content__icon {
 		mask-size: 64px;
+		-webkit-mask-size: 64px;
 	}
 }
 
@@ -164,6 +168,7 @@
 	background-color: var(--color-polls-foreground-no) !important;
 	@include masked-icon(var(--icon-md-cancel));
 	mask-size: 100%;
+	-webkit-mask-size: 100%;
 }
 
 .icon-mask-md-maybe-vote,
