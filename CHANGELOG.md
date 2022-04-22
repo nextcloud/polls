@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.6.0] - tbd
+## [3.6.0] - 2022-04-21
 ### New
 - Compatibility to Nextcloud 24
 - Renaming: **hidden polls** are now **private polls** and **public polls** are called **open polls** to distinguish them from **real public polls** via public links
