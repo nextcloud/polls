@@ -102,10 +102,16 @@ export default {
 		display: {
 			type: String,
 			default: 'textBox',
+			validator(value) {
+				return ['textBox', 'dateBox'].includes(value)
+			},
 		},
 		pollType: {
 			type: String,
 			default: 'textPoll',
+			validator(value) {
+				return ['textPoll', 'datePoll'].includes(value)
+			},
 		},
 	},
 

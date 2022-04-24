@@ -58,6 +58,9 @@ export default {
 		viewMode: {
 			type: String,
 			default: 'table-view',
+			validator(value) {
+				return ['table-view', 'list-view'].includes(value)
+			},
 		},
 	},
 
