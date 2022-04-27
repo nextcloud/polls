@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -26,7 +26,7 @@
 			{{ t('polls', 'Hide email addresses of internal users') }}
 		</CheckboxRadioSwitch>
 		<div v-if="hideMailAddresses" class="settings_details">
-			<div>{{ t('polls','Show email Addresses for for the following groups') }}</div>
+			<div>{{ t('polls','Show email addresses of internal users to members of the following groups') }}</div>
 			<Multiselect v-model="showMailAddressesGroups"
 				class="stretch"
 				label="displayName"
