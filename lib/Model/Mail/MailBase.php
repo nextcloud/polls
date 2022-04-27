@@ -148,12 +148,12 @@ abstract class MailBase {
 
 		// add footer
 		$footerText = $this->getFooter();
-		if ($this->appSettings->getLegalTermsInEmail()) {
+		if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL)) {
 			$footerText = $footerText . '<br>' . $this->getLegalLinks();
 		}
 
-		if ($this->appSettings->getDisclaimer()) {
-			$footerText = $footerText . '<br>' . $this->getParsedMarkDown($this->appSettings->getDisclaimer());
+		if ($this->appSettings->getStringSetting(AppSettings::SETTING_DISCLAIMER)) {
+			$footerText = $footerText . '<br>' . $this->getParsedMarkDown($this->appSettings->getStringSetting(AppSettings::SETTING_DISCLAIMER));
 		}
 
 		$this->emailTemplate->addFooter($footerText);
@@ -182,7 +182,7 @@ abstract class MailBase {
 		$this->emailTemplate->addBodyText('Sorry. This eMail has no text and this should not happen.');
 	}
 
-	protected function getLegalLinks() {
+	protected function getLegalLinks(): string {
 		$legal = '';
 
 		if ($this->appSettings->getUseImprintUrl()) {

@@ -32,6 +32,32 @@ use OCP\IUserSession;
 
 class AppSettings implements JsonSerializable {
 	private const APP_NAME = 'polls';
+	public const SETTING_ALLOW_PUBLIC_SHARES = 'allowPublicShares';
+	public const SETTING_ALLOW_COMBO = 'allowCombo';
+	public const SETTING_ALLOW_ALL_ACCESS = 'allowAllAccess';
+	public const SETTING_ALLOW_POLL_CREATION = 'allowPollCreation';
+	public const SETTING_ALLOW_POLL_DOWNLOAD = 'allowPollDownload';
+	public const SETTING_AUTO_ARCHIVE = 'autoArchive';
+	public const SETTING_LEGAL_TERMS_IN_EMAIL = 'legalTermsInEmail';
+	public const SETTING_SHOW_LOGIN = 'showLogin';
+	public const SETTING_USE_ACTIVITY = 'useActivity';
+	// new
+	public const SETTING_ALL_ACCESS_GROUPS = 'allAccessGroups';
+	public const SETTING_POLL_CREATION_GROUPS = 'pollCreationGroups';
+	public const SETTING_POLL_DOWNLOAD_GROUPS = 'pollDownloadGroups';
+	public const SETTING_PUBLIC_SHARES_GROUPS = 'publicSharesGroups';
+	public const SETTING_SHOW_MAIL_ADDRESSES_GROUPS = 'showMailAddressesGroups';
+	public const SETTING_COMBO_GROUPS = 'comboGroups';
+
+	public const SETTING_SHOW_MAIL_ADDRESSES = 'showMailAddresses';
+	public const SETTING_AUTO_ARCHIVE_OFFSET = 'autoArchiveOffset';
+	public const SETTING_UPDATE_TYPE = 'updateType';
+	public const SETTING_PRIVACY_URL = 'privacyUrl';
+	public const SETTING_IMPRINT_URL = 'imprintUrl';
+	public const SETTING_USE_PRIVACY_URL = 'usePrivacyUrl';
+	public const SETTING_USE_IMPRINT_URL = 'useImprintUrl';
+	public const SETTING_DISCLAIMER = 'disclaimer';
+
 
 	/** @var IConfig */
 	private $config;
@@ -55,208 +81,93 @@ class AppSettings implements JsonSerializable {
 	}
 
 	// Getters
-	public function getShowLogin(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'showLogin'), true);
+	// generic Setters
+	public function getBooleanSetting(string $key, bool $default = true): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, $key), $default);
 	}
 
-	public function getAutoArchive(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'autoArchive'), false);
+	public function getGroupSetting(string $key): array {
+		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, $key));
 	}
 
-	public function getAllowPublicShares(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPublicShares'), true);
+	public function getStringSetting(string $key, string $default = ''): string {
+		return $this->config->getAppValue(self::APP_NAME, $key) ?: $default;
 	}
 
-	public function getAllowCombo(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowCombo'), true);
-	}
-
-	public function getAllowAllAccess(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowAllAccess'), true);
-	}
-
-	public function getAllowPollCreation(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPollCreation'), true);
-	}
-
-	public function getAllowPollDownload(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPollDownload'), true);
-	}
-
-	public function getPublicSharesGroups(): array {
-		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'publicSharesGroups'));
-	}
-
-	public function getComboGroups(): array {
-		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'comboGroups'));
-	}
-
-	public function getAllAccessGroups(): array {
-		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'allAccessGroups'));
-	}
-
-	public function getPollCreationGroups(): array {
-		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'pollCreationGroups'));
-	}
-
-	public function getPollDownloadGroups(): array {
-		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'pollDownloadGroups'));
-	}
-
-	public function getAutoArchiveOffset(): int {
-		return $this->stringToInteger($this->config->getAppValue(self::APP_NAME, 'autoArchiveOffset'), 30);
-	}
-
-	public function getUpdateType(): string {
-		return $this->config->getAppValue(self::APP_NAME, 'updateType') ?: 'longPolling';
-	}
-
-	public function getUseActivity(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'useActivity'), false);
+	public function getIntegerSetting(string $key, int $default = 0): int {
+		return $this->stringToInteger($this->config->getAppValue(self::APP_NAME, $key), $default);
 	}
 
 	// Checks
 	public function getPollCreationAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
-			return $this->getAllowPollCreation() || $this->isMember($this->getPollCreationGroups());
+			return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_CREATION) || $this->isMember($this->$this->getGroupSetting(self::SETTING_POLL_CREATION_GROUPS));
+		}
+		return false;
+	}
+
+	public function getAllowSeeMailAddresses(): bool {
+		if ($this->session->isLoggedIn()) {
+			return $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES) || $this->isMember($this->getGroupSetting(self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS));
 		}
 		return false;
 	}
 
 	public function getPollDownloadAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
-			return $this->getAllowPollDownload() || $this->isMember($this->getPollDownloadGroups());
+			return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD) || $this->isMember($this->getGroupSetting(self::SETTING_POLL_DOWNLOAD_GROUPS));
 		}
 		return false;
 	}
 
 	public function getAllAccessAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
-			return $this->getAllowAllAccess() || $this->isMember($this->getAllAccessGroups());
+			return $this->getBooleanSetting(self::SETTING_ALLOW_ALL_ACCESS) || $this->isMember($this->getGroupSetting(self::SETTING_ALL_ACCESS_GROUPS));
 		}
 		return false;
 	}
 
 	public function getPublicSharesAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
-			return $this->getAllowPublicShares() || $this->isMember($this->getPublicSharesGroups());
+			return $this->getBooleanSetting(self::SETTING_ALLOW_PUBLIC_SHARES) || $this->isMember($this->getGroupSetting(self::SETTING_PUBLIC_SHARES_GROUPS));
 		}
 		return false;
 	}
 
 	public function getComboAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
-			return $this->getAllowCombo() || $this->isMember($this->getComboGroups());
+			return $this->getBooleanSetting(self::SETTING_ALLOW_COMBO)
+			  || $this->isMember($this->getGroupSetting(self::SETTING_COMBO_GROUPS));
 		}
 		return false;
 	}
 
-	public function getLegalTermsInEmail(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'legalTermsInEmail'), true);
-	}
-
-	public function getPrivacyUrl(): string {
-		return $this->config->getAppValue(self::APP_NAME, 'privacyUrl');
-	}
-
 	public function getUsePrivacyUrl(): string {
-		if ($this->config->getAppValue(self::APP_NAME, 'privacyUrl')) {
-			return $this->config->getAppValue(self::APP_NAME, 'privacyUrl');
+		if ($this->config->getAppValue(self::APP_NAME, self::SETTING_PRIVACY_URL)) {
+			return $this->config->getAppValue(self::APP_NAME, self::SETTING_PRIVACY_URL);
 		}
 		return $this->config->getAppValue('theming', 'privacyUrl');
 	}
 
-	public function getImprintUrl(): string {
-		return $this->config->getAppValue(self::APP_NAME, 'imprintUrl');
-	}
-
-
 	public function getUseImprintUrl(): string {
-		if ($this->config->getAppValue(self::APP_NAME, 'imprintUrl')) {
-			return $this->config->getAppValue(self::APP_NAME, 'imprintUrl');
+		if ($this->config->getAppValue(self::APP_NAME, self::SETTING_IMPRINT_URL)) {
+			return $this->config->getAppValue(self::APP_NAME, self::SETTING_IMPRINT_URL);
 		}
 		return $this->config->getAppValue('theming', 'imprintUrl');
 	}
-
-	public function getDisclaimer(): string {
-		return $this->config->getAppValue(self::APP_NAME, 'disclaimer');
-	}
-
+	
 	// Setters
-	public function setAllowPublicShares(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', $this->boolToString($value));
+	// generic setters
+	public function setBooleanSetting(string $key, bool $value): void {
+		$this->config->setAppValue(self::APP_NAME, $key, $this->boolToString($value));
 	}
 
-	public function setAllowCombo(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allowCombo', $this->boolToString($value));
+	public function setGroupSetting(string $key, array $value): void {
+		$this->config->setAppValue(self::APP_NAME, $key, json_encode($value));
 	}
 
-	public function setShowLogin(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'showLogin', $this->boolToString($value));
-	}
-
-	public function setAllowAllAccess(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allowAllAccess', $this->boolToString($value));
-	}
-
-	public function setAllowPollCreation(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allowPollCreation', $this->boolToString($value));
-	}
-
-	public function setAllowPollDownload(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allowPollDownload', $this->boolToString($value));
-	}
-
-	public function setPublicSharesGroups(array $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'publicSharesGroups', json_encode($value));
-	}
-
-	public function setComboGroups(array $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'comboGroups', json_encode($value));
-	}
-
-	public function setAllAccessGroups(array $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'allAccessGroups', json_encode($value));
-	}
-
-	public function setPollCreationGroups(array $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'pollCreationGroups', json_encode($value));
-	}
-
-	public function setPollDownloadGroups(array $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'pollDownloadGroups', json_encode($value));
-	}
-
-	public function setAutoArchive(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'autoArchive', $this->boolToString($value));
-	}
-
-	public function setAutoArchiveOffset(int $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'autoArchiveOffset', strval($value));
-	}
-
-	public function setUpdateType(string $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'updateType', $value);
-	}
-
-	public function setUseActivity(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'useActivity', $this->boolToString($value));
-	}
-
-	public function setLegalTermsInEmail(bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'legalTermsInEmail', $this->boolToString($value));
-	}
-
-	public function setPrivacyUrl(string $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'privacyUrl', $value);
-	}
-
-	public function setImprintUrl(string $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'imprintUrl', $value);
-	}
-
-	public function setDisclaimer(string $value): void {
-		$this->config->setAppValue(self::APP_NAME, 'disclaimer', $value);
+	public function setStringSetting(string $key, string $value): void {
+		$this->config->setAppValue(self::APP_NAME, $key, $value);
 	}
 
 	public function jsonSerialize() {
@@ -266,51 +177,58 @@ class AppSettings implements JsonSerializable {
 		$allAccessGroups = [];
 		$pollCreationGroups = [];
 		$pollDownloadGroups = [];
+		$showMailAddressesGroups = [];
 
-		foreach ($this->getPublicSharesGroups() as $group) {
+		foreach ($this->getGroupSetting(self::SETTING_PUBLIC_SHARES_GROUPS) as $group) {
 			$publicSharesGroups[] = new Group($group);
 		}
 
-		foreach ($this->getComboGroups() as $group) {
+		foreach ($this->getGroupSetting(self::SETTING_COMBO_GROUPS) as $group) {
 			$comboGroups[] = new Group($group);
 		}
 
-		foreach ($this->getAllAccessGroups() as $group) {
+		foreach ($this->getGroupSetting(self::SETTING_ALL_ACCESS_GROUPS) as $group) {
 			$allAccessGroups[] = new Group($group);
 		}
 
-		foreach ($this->getPollCreationGroups() as $group) {
+		foreach ($this->getGroupSetting(self::SETTING_POLL_CREATION_GROUPS) as $group) {
 			$pollCreationGroups[] = new Group($group);
 		}
 
-		foreach ($this->getPollDownloadGroups() as $group) {
+		foreach ($this->getGroupSetting(self::SETTING_POLL_DOWNLOAD_GROUPS) as $group) {
 			$pollDownloadGroups[] = new Group($group);
 		}
 
+		foreach ($this->getGroupSetting(self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS) as $group) {
+			$showMailAddressesGroups[] = new Group($group);
+		}
+
 		return [
-			'allowPublicShares' => $this->getAllowPublicShares(),
-			'allowCombo' => $this->getAllowCombo(),
-			'allowAllAccess' => $this->getAllowAllAccess(),
-			'allowPollCreation' => $this->getAllowPollCreation(),
-			'allowPollDownload' => $this->getAllowPollDownload(),
-			'allAccessGroups' => $allAccessGroups,
-			'pollCreationGroups' => $pollCreationGroups,
-			'pollDownloadGroups' => $pollDownloadGroups,
-			'publicSharesGroups' => $publicSharesGroups,
-			'comboGroups' => $comboGroups,
-			'showLogin' => $this->getShowLogin(),
-			'autoArchive' => $this->getAutoArchive(),
-			'autoArchiveOffset' => $this->getAutoArchiveOffset(),
-			'updateType' => $this->getUpdateType(),
-			'useActivity' => $this->getUseActivity(),
-			'privacyUrl' => $this->getPrivacyUrl(),
-			'legalTermsInEmail' => $this->getLegalTermsInEmail(),
-			'imprintUrl' => $this->getImprintUrl(),
-			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
-			'useImprintUrl' => $this->getUseImprintUrl(),
+			self::SETTING_ALLOW_PUBLIC_SHARES => $this->getBooleanSetting(self::SETTING_ALLOW_PUBLIC_SHARES),
+			self::SETTING_ALLOW_COMBO => $this->getBooleanSetting(self::SETTING_ALLOW_COMBO),
+			self::SETTING_ALLOW_ALL_ACCESS => $this->getBooleanSetting(self::SETTING_ALLOW_ALL_ACCESS),
+			self::SETTING_ALLOW_POLL_CREATION => $this->getBooleanSetting(self::SETTING_ALLOW_POLL_CREATION),
+			self::SETTING_ALLOW_POLL_DOWNLOAD => $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD),
+			self::SETTING_AUTO_ARCHIVE => $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE),
+			self::SETTING_LEGAL_TERMS_IN_EMAIL => $this->getBooleanSetting(self::SETTING_LEGAL_TERMS_IN_EMAIL),
+			self::SETTING_SHOW_LOGIN => $this->getBooleanSetting(self::SETTING_SHOW_LOGIN),
+			self::SETTING_SHOW_MAIL_ADDRESSES => $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES),
+			self::SETTING_USE_ACTIVITY => $this->getBooleanSetting(self::SETTING_USE_ACTIVITY),
+			self::SETTING_USE_PRIVACY_URL => $this->getBooleanSetting(self::SETTING_USE_PRIVACY_URL),
+			self::SETTING_USE_IMPRINT_URL => $this->getBooleanSetting(self::SETTING_USE_IMPRINT_URL),
+			self::SETTING_ALL_ACCESS_GROUPS => $allAccessGroups,
+			self::SETTING_POLL_CREATION_GROUPS => $pollCreationGroups,
+			self::SETTING_POLL_DOWNLOAD_GROUPS => $pollDownloadGroups,
+			self::SETTING_PUBLIC_SHARES_GROUPS => $publicSharesGroups,
+			self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS => $showMailAddressesGroups,
+			self::SETTING_COMBO_GROUPS => $comboGroups,
+			self::SETTING_AUTO_ARCHIVE_OFFSET => $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET, 30),
+			self::SETTING_DISCLAIMER => $this->getStringSetting(self::SETTING_DISCLAIMER),
+			self::SETTING_IMPRINT_URL => $this->getStringSetting(self::SETTING_IMPRINT_URL),
+			self::SETTING_PRIVACY_URL => $this->getStringSetting(self::SETTING_PRIVACY_URL),
+			self::SETTING_UPDATE_TYPE => $this->getStringSetting(self::SETTING_UPDATE_TYPE, 'longPolling'),
 			'defaultPrivacyUrl' => $this->config->getAppValue('theming', 'privacyUrl'),
 			'defaultImprintUrl' => $this->config->getAppValue('theming', 'imprintUrl'),
-			'disclaimer' => $this->getDisclaimer(),
 		];
 	}
 

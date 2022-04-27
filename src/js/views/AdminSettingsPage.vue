@@ -47,6 +47,7 @@
 			<AdminMisc />
 			<AdminCombo />
 			<AdminPollDownload />
+			<AdminHideMailAddresses />
 		</SettingsSection>
 
 		<SettingsSection :title="t('polls', 'Performance settings')"
@@ -65,6 +66,7 @@ import AdminPerformance from '../components/Settings/AdminSettings/AdminPerforma
 import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation.vue'
 import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
 import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings.vue'
+import AdminHideMailAddresses from '../components/Settings/AdminSettings/AdminHideMailAddresses.vue'
 import { SettingsSection } from '@nextcloud/vue'
 import '../assets/scss/markdown.scss'
 
@@ -80,6 +82,7 @@ export default {
 		AdminPollCreation,
 		AdminPollDownload,
 		AdminShareSettings,
+		AdminHideMailAddresses,
 		SettingsSection,
 	},
 

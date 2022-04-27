@@ -58,24 +58,28 @@ class SettingsService {
 	 * Write app settings
 	 */
 	public function writeAppSettings(array $settingsArray): void {
-		$this->appSettings->setAllowPublicShares($settingsArray['allowPublicShares']);
-		$this->appSettings->setAllowCombo($settingsArray['allowCombo']);
-		$this->appSettings->setAllowAllAccess($settingsArray['allowAllAccess']);
-		$this->appSettings->setAllowPollCreation($settingsArray['allowPollCreation']);
-		$this->appSettings->setAllowPollDownload($settingsArray['allowPollDownload']);
-		$this->appSettings->setShowLogin($settingsArray['showLogin']);
-		$this->appSettings->setAutoArchive($settingsArray['autoArchive']);
-		$this->appSettings->setAutoArchiveOffset($settingsArray['autoArchiveOffset']);
-		$this->appSettings->setAllAccessGroups(array_column($settingsArray['allAccessGroups'], 'id'));
-		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
-		$this->appSettings->setComboGroups(array_column($settingsArray['comboGroups'], 'id'));
-		$this->appSettings->setPollCreationGroups(array_column($settingsArray['pollCreationGroups'], 'id'));
-		$this->appSettings->setPollDownloadGroups(array_column($settingsArray['pollDownloadGroups'], 'id'));
-		$this->appSettings->setUpdateType($settingsArray['updateType']);
-		$this->appSettings->setUseActivity($settingsArray['useActivity']);
-		$this->appSettings->setPrivacyUrl($settingsArray['privacyUrl']);
-		$this->appSettings->setImprintUrl($settingsArray['imprintUrl']);
-		$this->appSettings->setLegalTermsInEmail($settingsArray['legalTermsInEmail']);
-		$this->appSettings->setDisclaimer($settingsArray['disclaimer']);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_SHOW_MAIL_ADDRESSES, $settingsArray[AppSettings::SETTING_SHOW_MAIL_ADDRESSES]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_PUBLIC_SHARES, $settingsArray[AppSettings::SETTING_ALLOW_PUBLIC_SHARES]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_COMBO, $settingsArray[AppSettings::SETTING_ALLOW_COMBO]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_ALL_ACCESS, $settingsArray[AppSettings::SETTING_ALLOW_ALL_ACCESS]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_POLL_CREATION, $settingsArray[AppSettings::SETTING_ALLOW_POLL_CREATION]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_POLL_DOWNLOAD, $settingsArray[AppSettings::SETTING_ALLOW_POLL_DOWNLOAD]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_AUTO_ARCHIVE, $settingsArray[AppSettings::SETTING_AUTO_ARCHIVE]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_SHOW_LOGIN, $settingsArray[AppSettings::SETTING_SHOW_LOGIN]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_USE_ACTIVITY, $settingsArray[AppSettings::SETTING_USE_ACTIVITY]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL, $settingsArray[AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL]);
+		
+		$this->appSettings->setGroupSetting(AppSettings::SETTING_SHOW_MAIL_ADDRESSES_GROUPS, array_column($settingsArray[AppSettings::SETTING_SHOW_MAIL_ADDRESSES_GROUPS], 'id'));
+		$this->appSettings->setGroupSetting(AppSettings::SETTING_ALL_ACCESS_GROUPS, array_column($settingsArray[AppSettings::SETTING_ALL_ACCESS_GROUPS], 'id'));
+		$this->appSettings->setGroupSetting(AppSettings::SETTING_PUBLIC_SHARES_GROUPS, array_column($settingsArray[AppSettings::SETTING_PUBLIC_SHARES_GROUPS], 'id'));
+		$this->appSettings->setGroupSetting(AppSettings::SETTING_COMBO_GROUPS, array_column($settingsArray[AppSettings::SETTING_COMBO_GROUPS], 'id'));
+		$this->appSettings->setGroupSetting(AppSettings::SETTING_POLL_CREATION_GROUPS, array_column($settingsArray[AppSettings::SETTING_POLL_CREATION_GROUPS], 'id'));
+		$this->appSettings->setGroupSetting(AppSettings::SETTING_POLL_DOWNLOAD_GROUPS, array_column($settingsArray[AppSettings::SETTING_POLL_DOWNLOAD_GROUPS], 'id'));
+		
+		$this->appSettings->setStringSetting(AppSettings::SETTING_AUTO_ARCHIVE_OFFSET, strval($settingsArray[AppSettings::SETTING_AUTO_ARCHIVE_OFFSET]));
+		$this->appSettings->setStringSetting(AppSettings::SETTING_UPDATE_TYPE, $settingsArray[AppSettings::SETTING_UPDATE_TYPE]);
+		$this->appSettings->setStringSetting(AppSettings::SETTING_PRIVACY_URL, $settingsArray[AppSettings::SETTING_PRIVACY_URL]);
+		$this->appSettings->setStringSetting(AppSettings::SETTING_IMPRINT_URL, $settingsArray[AppSettings::SETTING_IMPRINT_URL]);
+		$this->appSettings->setStringSetting(AppSettings::SETTING_DISCLAIMER, $settingsArray[AppSettings::SETTING_DISCLAIMER]);
 	}
 }

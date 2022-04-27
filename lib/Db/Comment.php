@@ -82,7 +82,7 @@ class Comment extends Entity implements JsonSerializable {
 		];
 	}
 
-	public function addSubComment(Comment $comment) {
+	public function addSubComment(Comment $comment): void {
 		$this->subComments[] = [
 			'id' => $comment->getId(),
 			'comment' => $comment->getComment(),

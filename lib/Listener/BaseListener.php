@@ -85,7 +85,7 @@ abstract class BaseListener implements IEventListener {
 			$this->addLog();
 
 			// If addLog throws UniqueConstraintViolationException, avoid spamming activities
-			if ($this->appSettings->getUseActivity()) {
+			if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_USE_ACTIVITY)) {
 				$this->addActivity();
 			}
 		} catch (InvalidClassException $e) {

@@ -33,6 +33,7 @@ const defaultAcl = () => ({
 	allowPublicShares: false,
 	allowSeeResults: false,
 	allowSeeUsernames: false,
+	allowSeeMailAddresses: false,
 	allowSubscribe: false,
 	allowView: false,
 	allowVote: false,
