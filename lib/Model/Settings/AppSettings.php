@@ -101,7 +101,7 @@ class AppSettings implements JsonSerializable {
 	// Checks
 	public function getPollCreationAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
-			return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_CREATION) || $this->isMember($this->$this->getGroupSetting(self::SETTING_POLL_CREATION_GROUPS));
+			return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_CREATION) || $this->isMember($this->getGroupSetting(self::SETTING_POLL_CREATION_GROUPS));
 		}
 		return false;
 	}
