@@ -61,7 +61,7 @@ class WatchController extends Controller {
 			$timeout = 30;
 
 			$offset = $offset ?? $start;
-			if ($this->appSettings->getUpdateType() === 'longPolling') {
+			if ($this->appSettings->getStringSetting(AppSettings::SETTING_UPDATE_TYPE) === 'longPolling') {
 				while (empty($updates) && time() <= $start + $timeout) {
 					sleep(1);
 					$updates = $this->watchService->getUpdates($pollId, $offset);

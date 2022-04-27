@@ -146,7 +146,7 @@ class Share extends Entity implements JsonSerializable {
 			'displayName' => $this->getDisplayName(),
 			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
 			'URL' => $this->getURL(),
-			'showLogin' => $this->appSettings->getShowLogin(),
+			'showLogin' => $this->appSettings->getBooleanSetting(AppSettings::SETTING_SHOW_LOGIN),
 			'publicPollEmail' => $this->getPublicPollEmail(),
 		];
 	}

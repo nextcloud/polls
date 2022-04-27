@@ -113,7 +113,8 @@ class MailService {
 
 	public function resolveEmailAddress(int $pollId, string $userId): string {
 		if ($this->userManager->get($userId) instanceof IUser) {
-			return $this->config->getUserValue($userId, 'settings', 'email');
+			$user = new User($userId);
+			return $user->getEmailAddressMasked();
 		}
 
 		// if $userId is no site user, eval via shares
