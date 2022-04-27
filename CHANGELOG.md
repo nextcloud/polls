@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.7.0-beta2] - 2022-04-27
+## Fix
+- Fixed syntax error in class AppSettings
 ## [3.7.0-beta1] - 2022-04-27
 ## New
 - #2392 - Add admin option to prevent email address exposing of internal users
