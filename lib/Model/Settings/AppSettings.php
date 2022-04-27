@@ -55,22 +55,32 @@ class AppSettings implements JsonSerializable {
 	}
 
 	// Getters
-	public function getShowLogin(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'showLogin'), true);
+	// generic Setters
+	public function getBooleanSetting(string $key, bool $default = true): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, $key), $default);
 	}
 
-	public function getAutoArchive(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'autoArchive'), false);
+	public function getGroupSetting(string $key): array {
+		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, $key));
+	}	
+
+	public function getStringSetting(string $key): string {
+		return $this->config->getAppValue(self::APP_NAME, $key);
 	}
 
-	public function getAllowPublicShares(): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPublicShares'), true);
-	}
-
+	// explicit setters
 	public function getAllowCombo(): bool {
 		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowCombo'), true);
 	}
 
+	public function getShowMailAddresses(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'showMailAddresses'), true);
+	}
+
+	public function getAllowPublicShares(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPublicShares'), true);
+	}	
+	
 	public function getAllowAllAccess(): bool {
 		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowAllAccess'), true);
 	}
@@ -78,34 +88,41 @@ class AppSettings implements JsonSerializable {
 	public function getAllowPollCreation(): bool {
 		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPollCreation'), true);
 	}
-
+	
 	public function getAllowPollDownload(): bool {
 		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'allowPollDownload'), true);
-	}
-
+	}	
+	
 	public function getPublicSharesGroups(): array {
 		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'publicSharesGroups'));
-	}
-
+	}	
 	public function getComboGroups(): array {
 		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'comboGroups'));
-	}
+	}	
 
 	public function getAllAccessGroups(): array {
 		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'allAccessGroups'));
+	}	
+	
+	public function getAutoArchive(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'autoArchive'), false);
+	}		
+	
+	public function getAutoArchiveOffset(): int {
+		return $this->stringToInteger($this->config->getAppValue(self::APP_NAME, 'autoArchiveOffset'), 30);
 	}
 
 	public function getPollCreationGroups(): array {
 		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'pollCreationGroups'));
-	}
-
+	}		
+	
 	public function getPollDownloadGroups(): array {
 		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, 'pollDownloadGroups'));
-	}
-
-	public function getAutoArchiveOffset(): int {
-		return $this->stringToInteger($this->config->getAppValue(self::APP_NAME, 'autoArchiveOffset'), 30);
-	}
+	}	
+	
+	public function getShowLogin(): bool {
+		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, 'showLogin'), true);
+	}			
 
 	public function getUpdateType(): string {
 		return $this->config->getAppValue(self::APP_NAME, 'updateType') ?: 'longPolling';
@@ -119,6 +136,13 @@ class AppSettings implements JsonSerializable {
 	public function getPollCreationAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
 			return $this->getAllowPollCreation() || $this->isMember($this->getPollCreationGroups());
+		}
+		return false;
+	}
+
+	public function getAllowSeeMailAddresses(): bool {
+		if ($this->session->isLoggedIn()) {
+			return $this->getShowMailAddresses() || $this->isMember($this->getGroupSetting('showMailAddressesGroups'));
 		}
 		return false;
 	}
@@ -183,6 +207,20 @@ class AppSettings implements JsonSerializable {
 	}
 
 	// Setters
+	// generic setters
+	public function setBooleanSetting(string $key, bool $value): void {
+		$this->config->setAppValue(self::APP_NAME, $key, $this->boolToString($value));
+	}
+
+	public function setGroupSetting(string $key, array $value): void {
+		$this->config->setAppValue(self::APP_NAME, $key, json_encode($value));
+	}
+
+	public function setStringSettings(string $key, string $value): void {
+		$this->config->setAppValue(self::APP_NAME, $key, $value);
+	}
+
+	// explicit setters
 	public function setAllowPublicShares(bool $value): void {
 		$this->config->setAppValue(self::APP_NAME, 'allowPublicShares', $this->boolToString($value));
 	}
@@ -209,6 +247,10 @@ class AppSettings implements JsonSerializable {
 
 	public function setPublicSharesGroups(array $value): void {
 		$this->config->setAppValue(self::APP_NAME, 'publicSharesGroups', json_encode($value));
+	}
+
+	public function setShowMailAddressesGroups(array $value): void {
+		$this->config->setAppValue(self::APP_NAME, 'showMailAddressesGroups', json_encode($value));
 	}
 
 	public function setComboGroups(array $value): void {
@@ -266,6 +308,7 @@ class AppSettings implements JsonSerializable {
 		$allAccessGroups = [];
 		$pollCreationGroups = [];
 		$pollDownloadGroups = [];
+		$showMailAddressesGroups = [];
 
 		foreach ($this->getPublicSharesGroups() as $group) {
 			$publicSharesGroups[] = new Group($group);
@@ -287,6 +330,10 @@ class AppSettings implements JsonSerializable {
 			$pollDownloadGroups[] = new Group($group);
 		}
 
+		foreach ($this->getGroupSetting('showMailAddressesGroups') as $group) {
+			$showMailAddressesGroups[] = new Group($group);
+		}
+
 		return [
 			'allowPublicShares' => $this->getAllowPublicShares(),
 			'allowCombo' => $this->getAllowCombo(),
@@ -297,8 +344,10 @@ class AppSettings implements JsonSerializable {
 			'pollCreationGroups' => $pollCreationGroups,
 			'pollDownloadGroups' => $pollDownloadGroups,
 			'publicSharesGroups' => $publicSharesGroups,
+			'showMailAddressesGroups' => $showMailAddressesGroups,
 			'comboGroups' => $comboGroups,
 			'showLogin' => $this->getShowLogin(),
+			'showMailAddresses' => $this->getShowMailAddresses(),
 			'autoArchive' => $this->getAutoArchive(),
 			'autoArchiveOffset' => $this->getAutoArchiveOffset(),
 			'updateType' => $this->getUpdateType(),

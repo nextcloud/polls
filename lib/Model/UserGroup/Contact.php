@@ -130,7 +130,7 @@ class Contact extends UserBase {
 	}
 
 	/**
-	 * List all contacts with email adresses
+	 * List all contacts with email addresses
 	 * excluding contacts from localSystemBook
 	 *
 	 * @param string[] $queryRange

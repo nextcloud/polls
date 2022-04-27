@@ -25,6 +25,7 @@ namespace OCA\Polls\Model\UserGroup;
 
 use DateTimeZone;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\IUser;
@@ -35,6 +36,9 @@ class User extends UserBase {
 
 	/** @var IConfig */
 	private $config;
+
+	/** @var AppSettings */
+	protected $appSettings;
 
 	/** @var IUser */
 	private $user;
@@ -54,10 +58,18 @@ class User extends UserBase {
 		$this->emailAddress = $this->user->getEmailAddress();
 		$this->language = $this->config->getUserValue($this->id, 'core', 'lang');
 		$this->locale = $this->config->getUserValue($this->id, 'core', 'locale');
+		$this->appSettings = new AppSettings;
 	}
 
 	public function isEnabled(): bool {
 		return $this->user->isEnabled();
+	}
+
+	public function getEmailAddressMasked(): string {
+		if ($this->appSettings->getAllowSeeMailAddresses() && $this->emailAddress) {
+			return $this->emailAddress;
+		}
+		return '';
 	}
 
 	public function getTimeZone(): DateTimeZone {

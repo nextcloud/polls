@@ -50,6 +50,7 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_POLL_DELETE = 'delete';
 	public const PERMISSION_POLL_ARCHIVE = 'archive';
 	public const PERMISSION_POLL_RESULTS_VIEW = 'seeResults';
+	public const PERMISSION_POLL_MAILADDRESSES_VIEW = 'seeMailAddresses';
 	public const PERMISSION_POLL_USERNAMES_VIEW = 'seeUserNames';
 	public const PERMISSION_POLL_TAKEOVER = 'takeOver';
 	public const PERMISSION_POLL_SUBSCRIBE = 'subscribe';
@@ -208,6 +209,9 @@ class Acl implements JsonSerializable {
 			case self::PERMISSION_POLL_CREATE:
 				return $this->appSettings->getPollCreationAllowed();
 
+			case self::PERMISSION_POLL_MAILADDRESSES_VIEW:
+				return $this->appSettings->getAllowSeeMailAddresses();
+
 			case self::PERMISSION_POLL_DELETE:
 				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT) || $this->getIsAdmin();
 
@@ -299,6 +303,7 @@ class Acl implements JsonSerializable {
 			'allowPublicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
 			'allowSeeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
 			'allowSeeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+			'allowSeeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
 			'allowSubscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
 			'allowView' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
 			'allowVote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
@@ -328,6 +333,10 @@ class Acl implements JsonSerializable {
 	 * Returns true, if user is in admin group
 	 */
 	private function getIsAdmin(): bool {
+		return ($this->getIsLoggedIn() && $this->groupManager->isAdmin($this->getUserId()));
+	}
+
+	private function getAllowSeeUserNames(): bool {
 		return ($this->getIsLoggedIn() && $this->groupManager->isAdmin($this->getUserId()));
 	}
 

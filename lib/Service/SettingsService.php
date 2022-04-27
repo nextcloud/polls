@@ -58,13 +58,16 @@ class SettingsService {
 	 * Write app settings
 	 */
 	public function writeAppSettings(array $settingsArray): void {
+		$this->appSettings->setBooleanSetting('showMailAddresses', $settingsArray['showMailAddresses']);
+		$this->appSettings->setGroupSetting('showMailAddressesGroups', array_column($settingsArray['showMailAddressesGroups'], 'id'));
+
 		$this->appSettings->setAllowPublicShares($settingsArray['allowPublicShares']);
 		$this->appSettings->setAllowCombo($settingsArray['allowCombo']);
 		$this->appSettings->setAllowAllAccess($settingsArray['allowAllAccess']);
 		$this->appSettings->setAllowPollCreation($settingsArray['allowPollCreation']);
 		$this->appSettings->setAllowPollDownload($settingsArray['allowPollDownload']);
-		$this->appSettings->setShowLogin($settingsArray['showLogin']);
 		$this->appSettings->setAutoArchive($settingsArray['autoArchive']);
+		$this->appSettings->setShowLogin($settingsArray['showLogin']);
 		$this->appSettings->setAutoArchiveOffset($settingsArray['autoArchiveOffset']);
 		$this->appSettings->setAllAccessGroups(array_column($settingsArray['allAccessGroups'], 'id'));
 		$this->appSettings->setPublicSharesGroups(array_column($settingsArray['publicSharesGroups'], 'id'));
