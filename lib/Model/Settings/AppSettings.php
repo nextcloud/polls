@@ -88,7 +88,7 @@ class AppSettings implements JsonSerializable {
 
 	public function getGroupSetting(string $key): array {
 		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, $key));
-	}	
+	}
 
 	public function getStringSetting(string $key, string $default = ''): string {
 		return $this->config->getAppValue(self::APP_NAME, $key) ?: $default;
@@ -136,7 +136,7 @@ class AppSettings implements JsonSerializable {
 
 	public function getComboAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
-			return $this->getBooleanSetting(self::SETTING_ALLOW_COMBO) 
+			return $this->getBooleanSetting(self::SETTING_ALLOW_COMBO)
 			  || $this->isMember($this->getGroupSetting(self::SETTING_COMBO_GROUPS));
 		}
 		return false;
@@ -222,7 +222,7 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_PUBLIC_SHARES_GROUPS => $publicSharesGroups,
 			self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS => $showMailAddressesGroups,
 			self::SETTING_COMBO_GROUPS => $comboGroups,
-			self::SETTING_AUTO_ARCHIVE_OFFSET => $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET,30),
+			self::SETTING_AUTO_ARCHIVE_OFFSET => $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET, 30),
 			self::SETTING_DISCLAIMER => $this->getStringSetting(self::SETTING_DISCLAIMER),
 			self::SETTING_IMPRINT_URL => $this->getStringSetting(self::SETTING_IMPRINT_URL),
 			self::SETTING_PRIVACY_URL => $this->getStringSetting(self::SETTING_PRIVACY_URL),

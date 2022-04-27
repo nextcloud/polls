@@ -58,7 +58,6 @@ class SettingsService {
 	 * Write app settings
 	 */
 	public function writeAppSettings(array $settingsArray): void {
-		
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_SHOW_MAIL_ADDRESSES, $settingsArray[AppSettings::SETTING_SHOW_MAIL_ADDRESSES]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_PUBLIC_SHARES, $settingsArray[AppSettings::SETTING_ALLOW_PUBLIC_SHARES]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_COMBO, $settingsArray[AppSettings::SETTING_ALLOW_COMBO]);

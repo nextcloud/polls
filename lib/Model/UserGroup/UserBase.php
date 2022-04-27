@@ -151,7 +151,7 @@ class UserBase implements \JsonSerializable {
 		return $this->emailAddress ?? '';
 	}
 
-	// 
+	// Function for obfuscating mail adresses; Default return the email address
 	public function getEmailAddressMasked(): string {
 		return $this->emailAddress ?? '';
 	}
