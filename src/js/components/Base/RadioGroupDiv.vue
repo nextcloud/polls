@@ -24,8 +24,9 @@
 	<div class="radio-group-div">
 		<CheckboxRadioSwitch v-for="(option, index) in options"
 			:key="option.value"
+			:checked.sync="selectedValue"
+			:value="option.value"
 			:name="id + '_' + index"
-			:checked="option.value === value"
 			type="radio"
 			@update:checked="$emit('input', option.value)">
 			{{ option.label }}
@@ -57,6 +58,17 @@ export default {
 		value: {
 			type: String,
 			default: null,
+		},
+	},
+
+	computed: {
+		selectedValue: {
+			get() {
+				return this.value
+			},
+			set(value) {
+				this.$emit('input', value)
+			},
 		},
 	},
 }

@@ -111,6 +111,21 @@ export default {
 		type: {
 			type: String,
 			default: 'user',
+			validator(value) {
+				return [
+					'public',
+					'internalAccess',
+					'user',
+					'admin',
+					'group',
+					'contact',
+					'contactGroup',
+					'circle',
+					'external',
+					'email',
+				].includes(value)
+			},
+
 		},
 		isNoUser: {
 			type: Boolean,
