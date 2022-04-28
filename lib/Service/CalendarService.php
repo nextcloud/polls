@@ -134,7 +134,7 @@ class CalendarService {
 		}
 	}
 	/**
-	 * getEvents - get events from the user's calendars inside given timespan
+	 * getEventsLegacy - get events from the user's calendars inside given timespan
 	 *
 	 * @return CalendarEvent[]
 	 *

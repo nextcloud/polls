@@ -24,6 +24,7 @@
 namespace OCA\Polls\Model;
 
 use \OCP\Calendar\ICalendar;
+use RRule\RRule;
 
 class CalendarEvent implements \JsonSerializable {
 
@@ -93,8 +94,21 @@ class CalendarEvent implements \JsonSerializable {
 		return isset($this->event['RRULE']);
 	}
 
-	public function getRecurrencies(): string {
-		return 'not implementend yet';
+	public function getOccurencies(): array {
+		$occurencies = [];
+
+		if ($this->getHasRRule()) {
+			$rrule = new RRule($this->getRRule());
+
+			foreach ($rrule as $occurence) {
+				$occurencies[] = $occurence->format('r');
+				if (count($occurencies) > 99) {
+					return $occurencies;
+				}
+			}
+		}
+
+		return $occurencies;
 	}
 
 	/**
@@ -104,13 +118,16 @@ class CalendarEvent implements \JsonSerializable {
 	 */
 	public function getRRule() {
 		$rRule = [];
+		$baseRRule = ['DTSTART' => $this->event['DTSTART'][0]];
+
 		if ($this->getHasRRule()) {
 			preg_match_all("/([^;= ]+)=([^;= ]+)/", $this->event['RRULE'][0], $r);
 			$rRule = array_combine($r[1], $r[2]);
 		}
-		return $rRule;
+		return array_merge($baseRRule, $rRule);
 	}
 
+	
 	public function getStatus(): string {
 		return $this->event['STATUS'][0] ?? '';
 	}
@@ -136,7 +153,7 @@ class CalendarEvent implements \JsonSerializable {
 			'calDav' => $this->getCalDav(),
 			'hasRRule' => $this->getHasRRule(),
 			'rRule' => $this->getRRule(),
-			'recurrencies' => $this->getRecurrencies(),
+			'occurencies' => $this->getOccurencies(),
 		];
 	}
 }
