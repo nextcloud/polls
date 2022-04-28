@@ -27,7 +27,6 @@ use OCP\IUserSession;
 use OCA\Polls\Helper\Container;
 
 class CurrentUser extends User {
-
 	public function __construct(
 	) {
 		parent::__construct(Container::queryClass(IUserSession::class)->getUser()->getUId());

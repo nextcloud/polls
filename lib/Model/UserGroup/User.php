@@ -88,7 +88,7 @@ class User extends UserBase {
 		return $this->description;
 	}
 
-	public function getPrincipalUri() {
+	public function getPrincipalUri(): string {
 		return self::PRINCIPAL_PREFIX . $this->getId();
 	}
 	/**
