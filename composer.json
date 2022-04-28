@@ -43,6 +43,7 @@
 		"psalm:baseline:update": "php vendor/vimeo/psalm/psalm --update-baseline"
 	},
 	"require": {
-		"league/commonmark": "^2.1"
+		"league/commonmark": "^2.1",
+		"rlanvin/php-rrule": "^2.3"
 	}
 }
