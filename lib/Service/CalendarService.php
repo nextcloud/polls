@@ -114,7 +114,12 @@ class CalendarService {
 		$foundEvents = $this->calendarManager->searchForPrincipal($query);
 
 		foreach ($foundEvents as $event) {
-			$calendarEvent = new CalendarEvent($event, $this->getCalendarFromEvent($event));
+			$calendar = $this->getCalendarFromEvent($event);
+			if ($calendar === null) {
+				continue;
+			}
+
+			$calendarEvent = new CalendarEvent($event, $calendar);
 			// since we get back recurring events of other days, just make sure this event
 			// matches the search pattern
 			// TODO: identify possible time zone issues, when handling all day events
@@ -126,12 +131,13 @@ class CalendarService {
 		return $events;
 	}
 
-	private function getCalendarFromEvent(array $event): ICalendar {
+	 private function getCalendarFromEvent(array $event): ?ICalendar {
 		foreach ($this->calendars as $calendar) {
 			if ($calendar->getKey() === $event['calendar-key']) {
 				return $calendar;
 			}
 		}
+		return null;
 	}
 	/**
 	 * getEventsLegacy - get events from the user's calendars inside given timespan
