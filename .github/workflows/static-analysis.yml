@@ -35,7 +35,7 @@ jobs:
       runs-on: ubuntu-latest
       strategy:
           matrix:
-              ocp-version: [ , 'dev-stable23', 'dev-stable22', 'dev-stable21' ]
+              ocp-version: [ 'dev-stable23', 'dev-stable22', 'dev-stable21' ]
               php-versions: ['7.4', '8.0']
 
       name: psalm php ${{ matrix.php-versions}} ${{ matrix.ocp-version }}
