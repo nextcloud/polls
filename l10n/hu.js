@@ -338,6 +338,8 @@ OC.L10N.register(
     "Add terms links also to the email footer" : "Feltételek hivatkozásainak hozzáadása az e-mail láblécéhez",
     "Additional email disclaimer" : "További nyilatkozatok az e-mailben",
     "Preview" : "Előnézet",
+    "Hide email addresses of internal users" : "Az e-mail-címek elrejtése a belső felhasználók elől",
+    "Show email addresses of internal users to members of the following groups" : "Az e-mail-címek megjelenítése a következő csoportokba tartozó belső felhasználók számára",
     "The privacy link and the legal notice link are automatically added to the registration dialog of public polls." : "Az adatvédelmi és a jogi nyilatkozat hivatkozásai automatikusan hozzáadásra kerülnek a nyilvános szavazások regisztrációs párbeszédjéhez.",
     "As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms." : "Alapértelmezés szerint a hivatkozások beállítása a Témázás alkalmazásban történik. A nyilvános szavazásoknál ez egyedi feltételekkel felülbírálható.",
     "Privacy policy link:" : "Adatvédelmi irányelvek hivatkozása:",

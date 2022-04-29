@@ -336,6 +336,8 @@
     "Add terms links also to the email footer" : "Dodaj linki do warunków również w stopce e-maila",
     "Additional email disclaimer" : "Dodatkowe zastrzeżenie w e-mailu",
     "Preview" : "Podgląd",
+    "Hide email addresses of internal users" : "Ukryj adresy e-mail użytkowników wewnętrznych",
+    "Show email addresses of internal users to members of the following groups" : "Pokaż adresy e-mail użytkowników wewnętrznych członkom następujących grup",
     "The privacy link and the legal notice link are automatically added to the registration dialog of public polls." : "Link do prywatności i link do informacji prawnej są automatycznie dodawane do okna rejestracji w sondach publicznych.",
     "As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms." : "Domyślnie używane są linki skonfigurowane w aplikacji motywu. W przypadku sond publicznych mogą one zostać zastąpione indywidualnymi warunkami.",
     "Privacy policy link:" : "Link do polityki prywatności:",

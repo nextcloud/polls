@@ -338,6 +338,8 @@ OC.L10N.register(
     "Add terms links also to the email footer" : "Přidat odkazy na podmínky používání do zápatí e-mailu",
     "Additional email disclaimer" : "Další e-mailové zřeknutí se odpovědnosti",
     "Preview" : "Náhled",
+    "Hide email addresses of internal users" : "Skrýt e-mailové adresy interních uživatelů",
+    "Show email addresses of internal users to members of the following groups" : "Zobrazovat e-mailové adresy interních uživatelů členům následujících skupin",
     "The privacy link and the legal notice link are automatically added to the registration dialog of public polls." : "Odkaz na zásady ochrany soukromí a právní upozornění jsou automaticky přidány do dialogu registrace veřejných anket.",
     "As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms." : "Jako výchozí odkaz nastavený v aplikaci pro opatření vzhledem jsou použity. Pro veřejné ankety budou tyto přebity jednotlivými podmínkami.",
     "Privacy policy link:" : "Odkaz na zásady ochrany osobních údajů:",

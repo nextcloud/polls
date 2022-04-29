@@ -336,6 +336,8 @@
     "Add terms links also to the email footer" : "將條款連結也新增至電子郵件頁尾",
     "Additional email disclaimer" : "額外的電子郵件免責聲明",
     "Preview" : "預覽",
+    "Hide email addresses of internal users" : "隱藏內部用戶的電郵地址",
+    "Show email addresses of internal users to members of the following groups" : "向以下群組的成員顯示內部用戶的電郵地址",
     "The privacy link and the legal notice link are automatically added to the registration dialog of public polls." : "隱私連結與法律聲明連結自動新增至公開投票的註冊對話方塊。",
     "As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms." : "預設情況下，使用佈景主題應用程式設定的連結。對於公開投票，這可以被獨立的條款覆寫。",
     "Privacy policy link:" : "私隱政策連結：",
