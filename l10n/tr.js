@@ -338,6 +338,8 @@ OC.L10N.register(
     "Add terms links also to the email footer" : "E-posta alt bilgisine kullanım koşulları bağlantısı eklensin",
     "Additional email disclaimer" : "Ek e-posta sorumluluk reddi",
     "Preview" : "Ön izleme",
+    "Hide email addresses of internal users" : "İç kullanıcıların e-posta adresleri gizlensin",
+    "Show email addresses of internal users to members of the following groups" : "İç kullanıcıların e-posta adresleri şu grupların üyelerine görüntülensin",
     "The privacy link and the legal notice link are automatically added to the registration dialog of public polls." : "Herkese açık anketlerde, kayıt penceresine gizlilik ilkesi ve yasal bildirim bağlantıları otomatik olarak eklenir. ",
     "As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms." : "Varsayılan olarak, tema uygulamasında yapılandırılmış bağlantılar kullanılır. Kamuoyu yoklamaları için bunlar özel metinler ile değiştirilebilir.",
     "Privacy policy link:" : "Gizlilik ilkesi bağlantısı:",
