@@ -49,6 +49,6 @@
   <file src="lib/Service/CalendarService.php">
     <UndefinedInterfaceMethod occurrences="1">
       <code>getCalendarsForPrincipal</code>
-    </UndefinedMethod>
+    </UndefinedInterfaceMethod>
   </file>
 </files>
