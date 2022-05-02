@@ -81,6 +81,7 @@ export default {
 			return {
 				id: this.option.id,
 				UID: this.option.id,
+				calendarUri: this.state.poll.uri,
 				calendarKey: 0,
 				calendarName: 'Polls',
 				displayColor: 'transparent',

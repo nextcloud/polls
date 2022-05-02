@@ -31,6 +31,7 @@ use RRule\RRule;
 class CalendarEvent implements \JsonSerializable {
 	public const TYPE_DATE = 'date';
 	public const TYPE_DATE_TIME = 'dateTime';
+	public const CALENDAR_PREFIX_URI = 'calendar/';
 	private const MAX_OCURRENCIES = 100;
 
 	/** @var array */
@@ -91,11 +92,19 @@ class CalendarEvent implements \JsonSerializable {
 		return $this->calendar->getKey();
 	}
 
+	public function getCalendarUri(): string {
+		try {
+			return self::CALENDAR_PREFIX_URI . $this->calendar->getUri();
+		} catch (\Exception $e) {
+			return '';
+		}
+	}
+
 	public function getDisplayColor(): ?string {
 		return $this->calendar->getDisplayColor();
 	}
 
-	// Getters for commont eventdescription
+	// Getters for common event description
 	public function getId(): string {
 		return $this->iCal['id'];
 	}
@@ -244,6 +253,7 @@ class CalendarEvent implements \JsonSerializable {
 			'id' => $this->getId(),
 			'UID' => $this->getUID(),
 			'calendarKey' => $this->getCalendarKey(),
+			'calendarUri' => $this->getCalendarUri(),
 			'calendarName' => $this->getCalendarName(),
 			'displayColor' => $this->getDisplayColor(),
 			'allDay' => $this->getAllDay(),

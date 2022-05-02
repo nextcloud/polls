@@ -93,6 +93,7 @@ class Poll extends Entity implements JsonSerializable {
 	public const PROPOSAL_DISALLOW = 'disallow';
 	public const PROPOSAL_ALLOW = 'allow';
 	public const PROPOSAL_REVIEW = 'review';
+	public const URI_PREFIX = 'poll/';
 
 	/** @var string $type */
 	protected $type;
@@ -242,6 +243,10 @@ class Poll extends Entity implements JsonSerializable {
 			   $this->getExpire() > 0
 			&& $this->getExpire() < time()
 		);
+	}
+
+	public function getUri(): string {
+		return self::URI_PREFIX . $this->getId();
 	}
 
 	public function getVoteUrl() : string {
