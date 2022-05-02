@@ -25,6 +25,7 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
+use DateTimeImmutable;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\Util;
@@ -41,6 +42,9 @@ class CalendarService {
 
 	/** @var ICalendar[] */
 	private $calendars;
+
+	/** @var array */
+	private $calendarMapKeys;
 
 	/** @var PreferencesService */
 	private $preferencesService;
@@ -82,6 +86,7 @@ class CalendarService {
 		}
 
 		$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
+		// $this->calendars[] = 'ncyagstde-2';
 		return $this->calendars;
 	}
 
@@ -95,15 +100,17 @@ class CalendarService {
 	public function getEvents(DateTime $from, DateTime $to): array {
 		if (Util::getVersion()[0] < 24) {
 			// deprecated since NC24
-			\OC::$server->getLogger()->error('calling legacy version');
+			\OC::$server->getLogger()->debug('calling legacy version');
 			return $this->getEventsLegcy($from, $to);
 		}
 
+		$from = DateTimeImmutable::createFromMutable($from);
+		$to = DateTimeImmutable::createFromMutable($to);
 		// use from NC24 on
 		$events = [];
 		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
-		$query->setTimerangeStart(\DateTimeImmutable::createFromMutable($from));
-		$query->setTimerangeEnd(\DateTimeImmutable::createFromMutable($to));
+		$query->setTimerangeStart($from);
+		$query->setTimerangeEnd($to);
 
 		foreach ($this->calendars as $calendar) {
 			if (in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
@@ -119,14 +126,15 @@ class CalendarService {
 				continue;
 			}
 
-			$calendarEvent = new CalendarEvent($event, $calendar);
-			// since we get back recurring events of other days, just make sure this event
-			// matches the search pattern
-			// TODO: identify possible time zone issues, when handling all day events
-			if (($from->getTimestamp() < $calendarEvent->getEnd())
-				&& ($to->getTimestamp() > $calendarEvent->getStart())) {
+			$calendarEvent = new CalendarEvent($event, $calendar, $from, $to);
+			if ($calendarEvent->getOccurrences()) {
+				for ($index = 0; $index < count($calendarEvent->getOccurrences()); $index++) {
+					$calendarEvent->setOccurrence($index);
+					array_push($events, $calendarEvent);
+				}
+			} else {
+				array_push($events, $calendarEvent);
 			}
-			array_push($events, $calendarEvent);
 		}
 		return $events;
 	}
@@ -163,7 +171,7 @@ class CalendarService {
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
 			// \OC::$server->getLogger()->error('foundEvents: ' . json_encode($foundEvents));
 			foreach ($foundEvents as $event) {
-				$calendarEvent = new CalendarEvent($event, $calendar);
+				$calendarEvent = new CalendarEvent($event, $calendar, $from, $to);
 				// since we get back recurring events of other days, just make sure this event
 				// matches the search pattern
 				// TODO: identify possible time zone issues, when handling all day events
@@ -187,12 +195,24 @@ class CalendarService {
 	public function getCalendars(): array {
 		$calendars = [];
 		foreach ($this->calendars as $calendar) {
-			$calendars[] = [
-				'name' => $calendar->getDisplayName(),
-				'key' => $calendar->getKey(),
-				'displayColor' => $calendar->getDisplayColor(),
-				'permissions' => $calendar->getPermissions(),
-			];
+			if (Util::getVersion()[0] < 24) {
+				$calendars[] = [
+					'key' => $calendar->getKey(),
+					'calendarUri' => '', // since NC23
+					'name' => $calendar->getDisplayName(),
+					'displayColor' => $calendar->getDisplayColor(),
+					'permissions' => $calendar->getPermissions(),
+				];
+			} else {
+				$calendars[] = [
+					'key' => $calendar->getKey(),
+					'calendarUri' => $calendar->getUri(), // since NC23
+					'name' => $calendar->getDisplayName(),
+					'displayColor' => $calendar->getDisplayColor(),
+					'permissions' => $calendar->getPermissions(),
+					'calendar' => $calendar,
+				];
+			}
 		}
 		return $calendars;
 	}
