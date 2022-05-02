@@ -81,7 +81,7 @@ export default {
 			return {
 				id: this.option.id,
 				UID: this.option.id,
-				calendarUri: this.state.poll.uri,
+				calendarUri: this.poll.uri,
 				calendarKey: 0,
 				calendarName: 'Polls',
 				displayColor: 'transparent',
@@ -89,9 +89,10 @@ export default {
 				description: this.poll.description,
 				start: this.option.timestamp,
 				location: '',
-				end: this.option.timestamp + 3600,
+				end: this.option.timestamp + this.option.duration,
 				status: 'self',
 				summary: this.poll.title,
+				type: '',
 			}
 		},
 	},
