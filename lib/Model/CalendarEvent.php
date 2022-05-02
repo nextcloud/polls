@@ -43,7 +43,7 @@ class CalendarEvent implements \JsonSerializable {
 	/** @var bool */
 	protected $hasRRule;
 
-	/** @var RRule */
+	/** @var array */
 	protected $rRule = null;
 
 	/** @var int */
@@ -85,7 +85,7 @@ class CalendarEvent implements \JsonSerializable {
 	public function setOccurrence(int $index) {
 		if ($this->occurrences) {
 			$this->matchOccurrence = $index;
-		}		
+		}
 	}
 
 	public function getCalendarKey(): string {
@@ -125,7 +125,7 @@ class CalendarEvent implements \JsonSerializable {
 		return $this->event['LOCATION'][0] ?? '';
 	}
 
-	// Getters for the event's scheduling information 
+	// Getters for the event's scheduling information
 	public function getAllDay(): string {
 		return $this->getType() === self::TYPE_DATE ? $this->event['DTSTART'][0]->format('Y-m-d') : '';
 	}
@@ -154,7 +154,7 @@ class CalendarEvent implements \JsonSerializable {
 		return null;
 	}
 
-	public function getStart() : DateTimeImmutable {
+	public function getStart() : ?DateTimeImmutable {
 		if ($this->occurrences != null && $this->matchOccurrence !== null) {
 			return DateTimeImmutable::createFromMutable($this->occurrences[$this->matchOccurrence]);
 		}
@@ -225,7 +225,7 @@ class CalendarEvent implements \JsonSerializable {
 		$rRule = new RRule($this->rRule);
 
 		foreach ($rRule as $occurrence) {
-			if ($this->filterFrom 
+			if ($this->filterFrom
 			  && (($occurrence->getTimestamp() + $this->getDuration()) < $this->filterFrom->getTimestamp())) {
 				// skip occurrences before filter span
 				continue;

@@ -98,14 +98,15 @@ class CalendarService {
 	 * @psalm-return list<CalendarEvent>
 	 */
 	public function getEvents(DateTime $from, DateTime $to): array {
+		$from = DateTimeImmutable::createFromMutable($from);
+		$to = DateTimeImmutable::createFromMutable($to);
+
 		if (Util::getVersion()[0] < 24) {
 			// deprecated since NC24
 			\OC::$server->getLogger()->debug('calling legacy version');
 			return $this->getEventsLegcy($from, $to);
 		}
 
-		$from = DateTimeImmutable::createFromMutable($from);
-		$to = DateTimeImmutable::createFromMutable($to);
 		// use from NC24 on
 		$events = [];
 		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
@@ -156,7 +157,7 @@ class CalendarService {
 	 *
 	 * @psalm-return list<CalendarEvent>
 	 */
-	private function getEventsLegcy(DateTime $from, DateTime $to): array {
+	private function getEventsLegcy(DateTimeImmutable $from, DateTimeImmutable $to): array {
 		$events = [];
 		foreach ($this->calendars as $calendar) {
 
