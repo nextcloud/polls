@@ -263,11 +263,11 @@ class CalendarEvent implements \JsonSerializable {
 			'end' => $this->getEnd()->getTimestamp(),
 			'status' => $this->getStatus(),
 			'summary' => $this->getSummary(),
+			'type' => $this->getType(),
 			// 'duration' => $this->getDuration(),
 			// 'iCal' => $this->getICal(),
 			// 'hasRRule' => $this->getHasRRule(),
 			// 'rRule' => $this->getRRule(),
-			// 'type' => $this->getType(),
 			// 'timezone' => $this->getBaseStart()->getTimeZone(),
 			// 'occurrences' => $this->getOccurrences(),
 			// 'times' => [
