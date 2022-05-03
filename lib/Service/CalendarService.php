@@ -59,7 +59,7 @@ class CalendarService {
 		$this->preferences = $this->preferencesService->get();
 		$this->getCalendarsForPrincipal();
 	}
-	
+
 	/**
 	 * getCalendars -
 	 *
@@ -84,7 +84,7 @@ class CalendarService {
 		$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
 		return $this->calendars;
 	}
-	
+
 	/**
 	 * getEvents - get events from the user's calendars inside given timespan
 	 *
@@ -145,12 +145,12 @@ class CalendarService {
 	private function getEventsLegcy(DateTime $from, DateTime $to): array {
 		$events = [];
 		foreach ($this->calendars as $calendar) {
-			
+
 			// Skip not configured calendars
 			if (!in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
 				continue;
 			}
-			
+
 			// search for all events which
 			// - start before the end of the requested timespan ($to) and
 			// - end after the start of the requested timespan ($from)
