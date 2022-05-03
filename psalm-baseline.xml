@@ -79,4 +79,9 @@
       <code>getUri</code>
     </UndefinedInterfaceMethod>
   </file>
+  <file src="lib/Service/CalendarEvent.php">
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>getUri</code>
+    </UndefinedInterfaceMethod>
+  </file>
 </files>
