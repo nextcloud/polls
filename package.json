@@ -49,7 +49,7 @@
 		"file-saver": "^2.0.5",
 		"linkify-string": "^3.0.4",
 		"lodash": "^4.17.21",
-		"marked": "^4.0.14",
+		"marked": "^4.0.15",
 		"nextcloud-vue-collections": "^0.9.0",
 		"v-click-outside": "^3.1.2",
 		"vue": "^2.6.14",
