@@ -91,32 +91,6 @@ class CalendarService {
 	}
 
 	/**
-	 * getCalendars -
-	 *
-	 * @return ICalendar[]
-	 *
-	 * @psalm-return list<ICalendar>
-	 */
-	public function getCalendarsForPrincipal(string $userId = ''): array {
-		if (Util::getVersion()[0] < 24) {
-			// deprecated since NC23
-			$this->calendars = $this->calendarManager->getCalendars();
-			return $this->calendars;
-		}
-
-		// use from NC24 on
-		if ($userId) {
-			$principalUri = 'principals/users/' . $userId;
-		} else {
-			$principalUri = $this->currentUser->getPrincipalUri();
-		}
-
-		$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
-		// $this->calendars[] = 'ncyagstde-2';
-		return $this->calendars;
-	}
-
-	/**
 	 * getEvents - get events from the user's calendars inside given timespan
 	 *
 	 * @return CalendarEvent[]
@@ -134,56 +108,6 @@ class CalendarService {
 		}
 
 		// use from NC24 on
-		$events = [];
-		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
-		$query->setTimerangeStart($from);
-		$query->setTimerangeEnd($to);
-
-		foreach ($this->calendars as $calendar) {
-			if (in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
-				$query->addSearchCalendar($calendar->getUri());
-			}
-		}
-
-		$foundEvents = $this->calendarManager->searchForPrincipal($query);
-
-		foreach ($foundEvents as $event) {
-			$calendar = $this->getCalendarFromEvent($event);
-			if ($calendar === null) {
-				continue;
-			}
-
-			$calendarEvent = new CalendarEvent($event, $calendar, $from, $to);
-			if ($calendarEvent->getOccurrences()) {
-				for ($index = 0; $index < count($calendarEvent->getOccurrences()); $index++) {
-					$calendarEvent->setOccurrence($index);
-					array_push($events, $calendarEvent);
-				}
-			} else {
-				array_push($events, $calendarEvent);
-			}
-		}
-		return $events;
-	}
-
-	private function getCalendarFromEvent(array $event): ?ICalendar {
-		foreach ($this->calendars as $calendar) {
-			if ($calendar->getKey() === $event['calendar-key']) {
-				return $calendar;
-			}
-		}
-		return null;
-	}
-	/**
-	 * getEventsLegacy - get events from the user's calendars inside given timespan
-	 *
-	 * @return CalendarEvent[]
-	 *
-	 * @deprecated since NC23
-	 *
-	 * @psalm-return list<CalendarEvent>
-	 */
-	private function getEventsLegcy(DateTimeImmutable $from, DateTimeImmutable $to): array {
 		$events = [];
 		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
 		$query->setTimerangeStart($from);
