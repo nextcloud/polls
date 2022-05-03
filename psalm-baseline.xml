@@ -74,8 +74,9 @@
     </UndefinedMethod>
   </file>
   <file src="lib/Service/CalendarService.php">
-    <UndefinedInterfaceMethod occurrences="1">
+    <UndefinedInterfaceMethod occurrences="2">
       <code>getCalendarsForPrincipal</code>
+      <code>getUri</code>
     </UndefinedInterfaceMethod>
   </file>
 </files>
