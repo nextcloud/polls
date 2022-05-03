@@ -73,14 +73,14 @@
       <code>getActor</code>
     </UndefinedMethod>
   </file>
-  <file src="lib/Service/CalendarService.php">
-    <UndefinedInterfaceMethod occurrences="2">
-      <code>getCalendarsForPrincipal</code>
+  <file src="lib/Model/CalendarEvent.php">
+    <UndefinedInterfaceMethod occurrences="1">
       <code>getUri</code>
     </UndefinedInterfaceMethod>
   </file>
-  <file src="lib/Service/CalendarEvent.php">
-    <UndefinedInterfaceMethod occurrences="1">
+  <file src="lib/Service/CalendarService.php">
+    <UndefinedInterfaceMethod occurrences="2">
+      <code>getCalendarsForPrincipal</code>
       <code>getUri</code>
     </UndefinedInterfaceMethod>
   </file>
