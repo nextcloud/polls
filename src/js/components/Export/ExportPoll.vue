@@ -88,7 +88,7 @@ export default {
 
 	computed: {
 		...mapGetters({
-			participants: 'poll/participants',
+			participants: 'poll/participantsVoted',
 			getVote: 'votes/getVote',
 			explodeDates: 'options/explodeDates',
 		}),

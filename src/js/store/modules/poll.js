@@ -25,7 +25,7 @@ import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
-import { uniqueArrayOfObjects, uniqueParticipants } from '../../helpers/arrayHelper.js'
+import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
 
 const defaultPoll = () => ({
 	id: 0,
@@ -126,7 +126,7 @@ const getters = {
 	},
 
 	participants: (state, getters, rootState) => {
-		const participants = uniqueParticipants(rootState.votes.list)
+		const participants = getters.participantsVoted
 
 		// add current user, if not among participants and voting is allowed
 		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
@@ -151,11 +151,9 @@ const getters = {
 		return getters.participants
 	},
 
-	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((item) => ({
-		userId: item.userId,
-		displayName: item.displayName,
-		isNoUser: item.isNoUser,
-	}))),
+	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((item) => (
+		item.user
+	))),
 
 	proposalsOptions: () => [
 		{ value: 'disallow', label: t('polls', 'Disallow proposals') },
