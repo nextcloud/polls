@@ -6,7 +6,7 @@ OC.L10N.register(
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Bu e-posta, anket sahibi tarafından bu ankete oy vermeye çağrıldığınızı bildirmek için gönderilmiştir. En azından adınız ya da e-posta adresiniz bu ankete kaydedilmiş. Bilgilerinizin bu anketten silinmesini istiyorsanız, site yöneticisi ya da e-postayı gönderen anket hazırlayıcısı ile görüşün.",
     "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} sizi {group_name} grubunun bir üyesi olarak \"{title}\" anketine katılmaya çağırdı",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} kullanıcısı sizi \"{title}\" anketine katılmaya çağırdı",
-    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Bu bağlantı yukarıdaki ankete yalnız size özel olan bir erişim sağlar. Yukarıdaki düğmeye tıklayın ya da aşağıdaki bağlantıyı kopyalayıp web tarayıcınızın adres çubuğuna yapıştırın:",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Bu bağlantı yukarıdaki anket için yalnızca size özel olan bir erişim sağlar. Yukarıdaki düğmeye tıklayın ya da aşağıdaki bağlantıyı kopyalayıp web tarayıcınızın adres çubuğuna yapıştırın:",
     "Do not share this link with other people, because it is connected to your votes." : "Bu bağlantı size özel olduğundan ve vereceğini oy ile ilgili olduğundan başka kişilerle paylaşmayın.",
     "Notification for poll \"%s\"" : "\"%s\" anketi için bildirim",
     "Go to poll" : "Ankete git",
@@ -304,7 +304,7 @@ OC.L10N.register(
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n \"Evet\" oyu","%n \"Evet\" oyu"],
     "_%n No vote_::_%n \"No\" votes_" : ["%n Hayır oyu","%n \"Hayır\" oyu"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Belki\" oyu","%n \"Belki\" oyu"],
-    "_Only %n vote per option._::_Only %n votes per option._" : ["Her seçenek için yalnız %n oy.","Her seçenek için yalnız %n oy."],
+    "_Only %n vote per option._::_Only %n votes per option._" : ["Her seçenek için yalnızca %n oy.","Her seçenek için yalnızca %n oy."],
     "Optional email address" : "İsteğe bağlı e-posta adresi",
     "Checking email address …" : "E-posta adresiniz denetleniyor…",
     "valid email address." : "E-posta adresi geçerli.",
@@ -537,6 +537,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Oy vermenin devre dışı bırakıldığı tüm bitmemiş anketler. ",
     "Archive" : "Arşiv",
     "My archived polls" : "Arşivlenmiş anketlerim",
-    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnız siz erişebilirsiniz."
+    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz."
 },
 "nplurals=2; plural=(n > 1);");
