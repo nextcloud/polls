@@ -24,11 +24,10 @@
 	<div>
 		<div class="user_settings">
 			<CheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
-				{{ t('polls', 'Use calendar lookup') }}
+				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
 			</CheckboxRadioSwitch>
 			<div v-show="calendarPeek" class="settings_details">
-				{{ t('polls', 'Check, if an option in a date poll is conflicting with or near an entry in your calendar.') }}
-				{{ t('polls', 'Opt in to the calendars, which should be checked.') }}
+				{{ t('polls', 'Activate all calendars to consult for the search of conflicting events.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
 					<CheckboxRadioSwitch :checked="calendar.selected"
@@ -43,7 +42,7 @@
 
 		<div class="user_settings">
 			<p class="settings-description">
-				{{ t('polls', 'Add a tolerance in hours to search before an option.') }}
+				{{ t('polls', 'Set the time interval in hours, a calendar event must be finished before a date option, to get accounted to the conflict check.') }}
 			</p>
 			<InputDiv v-model="checkCalendarsBefore"
 				type="number"
@@ -52,8 +51,11 @@
 				no-submit
 				@add="checkCalendarsBefore += 1"
 				@subtract="checkCalendarsBefore -= 1" />
+		</div>
+
+		<div class="user_settings">
 			<p class="settings-description">
-				{{ t('polls', 'Add a tolerance in hours to search after an option.') }}
+				{{ t('polls', 'Set the time interval in hours, a calendar event must start after a date option, to get accounted to the conflict check.') }}
 			</p>
 			<InputDiv v-model="checkCalendarsAfter"
 				type="number"
