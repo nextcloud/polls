@@ -79,9 +79,11 @@
     </UndefinedInterfaceMethod>
   </file>
   <file src="lib/Service/CalendarService.php">
-    <UndefinedInterfaceMethod occurrences="2">
+    <UndefinedInterfaceMethod occurrences="4">
       <code>getCalendarsForPrincipal</code>
       <code>getUri</code>
+      <code>newQuery</code>
+      <code>searchForPrincipal</code>
     </UndefinedInterfaceMethod>
   </file>
 </files>
