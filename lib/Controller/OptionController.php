@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use DateTime;
 use DateInterval;
+use DateTimeZone;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -142,16 +143,19 @@ class OptionController extends Controller {
 	 * findCalendarEvents
 	 * @NoAdminRequired
 	 */
-	public function findCalendarEvents(int $optionId): DataResponse {
-		return $this->response(function () use ($optionId) {
+	public function findCalendarEvents(int $optionId, string $tz): DataResponse {
+		return $this->response(function () use ($optionId, $tz) {
 			$option = $this->optionService->get($optionId);
-			$searchFrom = new DateTime();
-			$searchTo = new DateTime();
-			// Search calendar entries which end inside one hour before option start time
-			$searchFrom = $searchFrom->setTimestamp($option->getTimestamp())->sub(new DateInterval('PT1H'));
-			// Search calendar entries which start inside one hour after option end time
-			$searchTo = $searchTo->setTimestamp($option->getTimestamp() + $option->getDuration())->add(new DateInterval('PT1H'));
-			$events = $this->calendarService->getEvents($searchFrom, $searchTo);
+			$timezone = new DateTimeZone($tz);
+			$searchFrom = (new DateTime())->setTimeZone($timezone);
+			$searchTo = (new DateTime())->setTimeZone($timezone);
+
+			// Search calendar entries which end inside one hour before option start time and one hour after option end time
+			$searchFrom->setTimestamp($option->getTimestamp())->sub(new DateInterval('PT1H'));
+			$searchTo->setTimestamp($option->getTimestamp() + $option->getDuration())->add(new DateInterval('PT1H'));
+
+			$events = $this->calendarService->getEvents($searchFrom, $searchTo, $timezone);
+
 			return ['events' => $events];
 		});
 	}

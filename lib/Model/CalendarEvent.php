@@ -25,6 +25,7 @@ namespace OCA\Polls\Model;
 
 use DateTimeImmutable;
 use DateInterval;
+use DateTimeZone;
 use \OCP\Calendar\ICalendar;
 use RRule\RRule;
 
@@ -52,27 +53,33 @@ class CalendarEvent implements \JsonSerializable {
 	/** @var array */
 	protected $event;
 
-	/** @var DateTimeImmutable */
-	protected $filterFrom;
-
-	/** @var DateTimeImmutable */
-	protected $filterTo;
-
 	/** @var ICalendar */
 	protected $calendar;
+
+	/** @var DateTimeImmutable */
+	protected $filterFrom;
+	
+	/** @var DateTimeImmutable */
+	protected $filterTo;
+	
+	/** @var DateTimeZone */
+	protected $timezone;
 
 	public function __construct(
 		array $iCal,
 		ICalendar $calendar,
 		DateTimeImmutable $filterFrom = null,
-		DateTimeImmutable $filterTo = null
+		DateTimeImmutable $filterTo = null,
+		DateTimeZone $timezone = null
 	) {
 		$this->iCal = $iCal;
 		$this->calendar = $calendar;
-		$this->event = $this->iCal['objects'][0];
 		$this->filterFrom = $filterFrom;
 		$this->filterTo = $filterTo;
+		$this->timezone = $timezone;
+		$this->event = $this->iCal['objects'][0];
 		$this->hasRRule = isset($this->event['RRULE']);
+		$this->fixAllDay();
 		$this->buildRRule();
 		$this->calculateOccurrences();
 	}
@@ -200,6 +207,16 @@ class CalendarEvent implements \JsonSerializable {
 
 	public function getOccurrences() : ?array {
 		return $this->occurrences;
+	}
+
+	private function fixAllDay(): void {
+		// force all day events to 00:00 in the user's timezone
+		if ($this->getType() === self::TYPE_DATE) {
+			$this->event['DTSTART'][0] = $this->event['DTSTART'][0]->setTimezone($this->timezone);
+			$this->event['DTEND'][0] = $this->event['DTEND'][0]->setTimezone($this->timezone);
+			$this->event['DTSTART'][0] = $this->event['DTSTART'][0]->setTime(0, 0);
+			$this->event['DTEND'][0] = $this->event['DTEND'][0]->setTime(0, 0);
+		}
 	}
 
 	private function buildRRule() : void {

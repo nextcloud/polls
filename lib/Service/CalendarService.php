@@ -26,6 +26,7 @@ namespace OCA\Polls\Service;
 
 use DateTime;
 use DateTimeImmutable;
+use DateTimeZone;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\Util;
@@ -97,7 +98,7 @@ class CalendarService {
 	 *
 	 * @psalm-return list<CalendarEvent>
 	 */
-	public function getEvents(DateTime $from, DateTime $to): array {
+	public function getEvents(DateTime $from, DateTime $to, DateTimeZone $timezone): array {
 		$from = DateTimeImmutable::createFromMutable($from);
 		$to = DateTimeImmutable::createFromMutable($to);
 
@@ -127,7 +128,7 @@ class CalendarService {
 				continue;
 			}
 
-			$calendarEvent = new CalendarEvent($event, $calendar, $from, $to);
+			$calendarEvent = new CalendarEvent($event, $calendar, $from, $to, $timezone);
 			if ($calendarEvent->getOccurrences()) {
 				for ($index = 0; $index < count($calendarEvent->getOccurrences()); $index++) {
 					$calendarEvent->setOccurrence($index);

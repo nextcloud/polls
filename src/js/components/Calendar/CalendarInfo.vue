@@ -24,11 +24,14 @@
 	<div class="calendar-info"
 		:class="[conflictLevel, statusClass]"
 		:style="calendarStyle">
-		<div v-if="!event.allDay" class="calendar-info__time">
-			{{ formatDate(event.start) }} - {{ formatDate(event.end) }}
+		<div v-if="calendarEvent.allDay" class="calendar-info__time">
+			{{ dayStart }} {{ dayEnd }}
+		</div>
+		<div v-else class="calendar-info__time">
+			{{ formatDate(calendarEvent.start) }} - {{ formatDate(calendarEvent.end) }}
 		</div>
 		<div class="summay" :class="statusClass">
-			{{ event.summary }}
+			{{ calendarEvent.summary }}
 		</div>
 	</div>
 </template>
@@ -40,7 +43,7 @@ export default {
 	name: 'CalendarInfo',
 
 	props: {
-		event: {
+		calendarEvent: {
 			type: Object,
 			default: undefined,
 		},
@@ -55,21 +58,35 @@ export default {
 	computed: {
 		calendarStyle() {
 			return {
-				backgroundColor: this.event.displayColor,
+				backgroundColor: this.calendarEvent.displayColor,
 				color: this.fontColor,
 			}
 		},
 
+		dayStart() {
+			return moment.unix(this.calendarEvent.start).format('ddd')
+		},
+
+		dayEnd() {
+			const dayEnd = moment.unix(this.calendarEvent.end - 1).format('ddd')
+
+			if (dayEnd === this.dayStart) {
+				return ''
+			}
+
+			return `- ${dayEnd}`
+		},
+
 		statusClass() {
-			return this.event.status.toLowerCase()
+			return this.calendarEvent.status.toLowerCase()
 		},
 
 		fontColor() {
-			if (this.event.displayColor === 'transparent') {
+			if (this.calendarEvent.displayColor === 'transparent') {
 				return 'var(--color-main-text)'
 			}
 
-			const hex = this.event.displayColor.replace(/#/, '')
+			const hex = this.calendarEvent.displayColor.replace(/#/, '')
 			const r = parseInt(hex.slice(0, 2), 16)
 			const g = parseInt(hex.slice(2, 4), 16)
 			const b = parseInt(hex.slice(4, 6), 16)
@@ -84,15 +101,17 @@ export default {
 		},
 
 		conflictLevel() {
-			if (this.event.calendarKey === 0) {
+			if (this.calendarEvent.calendarKey === 0) {
 				return 'conflict-ignore'
 			}
 
-			if (this.event.start > this.option.timestamp + 3599) {
+			// No conflict, if calendarEvent starts after end of option
+			if (this.calendarEvent.start >= this.option.timestamp + this.option.duration) {
 				return 'conflict-no'
 			}
 
-			if (this.event.end - 1 < this.option.timestamp) {
+			// No conflict, if calendarEvent ends before option
+			if (this.calendarEvent.end <= this.option.timestamp) {
 				return 'conflict-no'
 			}
 
