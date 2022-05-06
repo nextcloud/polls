@@ -89,7 +89,7 @@ class CalendarEvent implements \JsonSerializable {
 		return $this->calendar->getDisplayName();
 	}
 
-	public function setOccurrence(int $index) {
+	public function setOccurrence(int $index): void {
 		if ($this->occurrences) {
 			$this->matchOccurrence = $index;
 		}

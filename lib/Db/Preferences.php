@@ -60,14 +60,14 @@ class Preferences extends Entity implements JsonSerializable {
 	}
 
 	
-	public function getCheckCalendarsBefore() {
+	public function getCheckCalendarsBefore(): int {
 		if (isset(json_decode($this->getPreferences())->checkCalendarsBefore)) {
 			return intval(json_decode($this->getPreferences())->checkCalendarsBefore);
 		}
 		return 0;
 	}
 	
-	public function getCheckCalendarsAfter() {
+	public function getCheckCalendarsAfter(): int {
 		if (isset(json_decode($this->getPreferences())->checkCalendarsAfter)) {
 			return intval(json_decode($this->getPreferences())->checkCalendarsAfter);
 		}

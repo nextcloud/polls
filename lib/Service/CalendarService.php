@@ -104,12 +104,12 @@ class CalendarService {
 	 *
 	 * @return DateTimeImmutable[]
 	 *
-	 * @psalm-return list<DateTimeImmutable>
+	 * @psalm-return array{from: DateTimeImmutable, to: DateTimeImmutable}
 	 */
 	private function getTimerange(int $optionId, DateTimeZone $timezone) : array {
 		$option = $this->optionMapper->find($optionId);
 		$searchIntervalBefore = new DateInterval('PT' . $this->preferences->getCheckCalendarsBefore() . 'H');
-		$searchIntervalAfter = new DateInterval('PT' . $this->preferences->getCheckCalendarsAfter() . 'H');;
+		$searchIntervalAfter = new DateInterval('PT' . $this->preferences->getCheckCalendarsAfter() . 'H');
 
 		$from = (new DateTime())
 			->setTimeZone($timezone)
@@ -124,7 +124,6 @@ class CalendarService {
 			'from' => DateTimeImmutable::createFromMutable($from),
 			'to' => DateTimeImmutable::createFromMutable($to),
 		];
-
 	}
 
 	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to) : ?array {
