@@ -22,6 +22,10 @@
 
 <template>
 	<AppSettingsDialog :open.sync="show" :show-navigation="true">
+		<AppSettingsSection :title="t('polls', 'Calendar check')">
+			<CalendarSettings />
+		</AppSettingsSection>
+
 		<AppSettingsSection :title="t('polls', 'User settings')">
 			<FeatureSettings />
 		</AppSettingsSection>
@@ -47,6 +51,7 @@ export default {
 	components: {
 		AppSettingsDialog,
 		AppSettingsSection,
+		CalendarSettings: () => import('./UserSettings/CalendarSettings.vue'),
 		FeatureSettings: () => import('./UserSettings/FeatureSettings.vue'),
 		StyleSettings: () => import('./UserSettings/StyleSettings.vue'),
 		PerformanceSettings: () => import('./UserSettings/PerformanceSettings.vue'),

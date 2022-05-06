@@ -290,6 +290,8 @@ class CalendarEvent implements \JsonSerializable {
 			// 'times' => [
 			// 	'start' => $this->getStart(),
 			// 	'end' => $this->getEnd(),
+			// 	'filterFrom' => $this->filterFrom,
+			// 	'filterTo' => $this->filterTo,
 			// ],
 		];
 	}

@@ -32,7 +32,7 @@ class AdminSettings implements ISettings {
 	}
 
 	public function getSection(): string {
-		return 'polls-admin';
+		return 'polls';
 	}
 
 	public function getPriority():int {

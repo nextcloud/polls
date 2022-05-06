@@ -145,18 +145,27 @@ class OptionController extends Controller {
 	 */
 	public function findCalendarEvents(int $optionId, string $tz): DataResponse {
 		return $this->response(function () use ($optionId, $tz) {
-			$option = $this->optionService->get($optionId);
-			$timezone = new DateTimeZone($tz);
-			$searchFrom = (new DateTime())->setTimeZone($timezone);
-			$searchTo = (new DateTime())->setTimeZone($timezone);
-
-			// Search calendar entries which end inside one hour before option start time and one hour after option end time
-			$searchFrom->setTimestamp($option->getTimestamp())->sub(new DateInterval('PT1H'));
-			$searchTo->setTimestamp($option->getTimestamp() + $option->getDuration())->add(new DateInterval('PT1H'));
-
-			$events = $this->calendarService->getEvents($searchFrom, $searchTo, $timezone);
-
-			return ['events' => $events];
+			return ['events' => $this->calendarService->getEvents($optionId, $tz)];
 		});
 	}
+	// /**
+	//  * findCalendarEvents
+	//  * @NoAdminRequired
+	//  */
+	// public function findCalendarEvents_old(int $optionId, string $tz): DataResponse {
+	// 	return $this->response(function () use ($optionId, $tz) {
+	// 		$option = $this->optionService->get($optionId);
+	// 		$timezone = new DateTimeZone($tz);
+	// 		$searchFrom = (new DateTime())->setTimeZone($timezone);
+	// 		$searchTo = (new DateTime())->setTimeZone($timezone);
+
+	// 		// Search calendar entries which end inside one hour before option start time and one hour after option end time
+	// 		$searchFrom->setTimestamp($option->getTimestamp())->sub(new DateInterval('PT1H'));
+	// 		$searchTo->setTimestamp($option->getTimestamp() + $option->getDuration())->add(new DateInterval('PT1H'));
+
+	// 		$events = $this->calendarService->getEvents($searchFrom, $searchTo, $timezone);
+
+	// 		return ['events' => $events];
+	// 	});
+	// }
 }

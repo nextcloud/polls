@@ -25,12 +25,14 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
+use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\Util;
 use OCA\Polls\Model\CalendarEvent;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Model\UserGroup\CurrentUser;
 
@@ -53,14 +55,19 @@ class CalendarService {
 	/** @var Preferences */
 	private $preferences;
 
+	/** @var OptionMapper */
+	private $optionMapper;
+
 	public function __construct(
 		CalendarManager $calendarManager,
 		PreferencesService $preferencesService,
+		OptionMapper $optionMapper,
 		CurrentUser $currentUser
 	) {
 		$this->currentUser = $currentUser;
 		$this->calendarManager = $calendarManager;
 		$this->preferencesService = $preferencesService;
+		$this->optionMapper = $optionMapper;
 		$this->preferences = $this->preferencesService->get();
 		$this->getCalendarsForPrincipal();
 	}
@@ -91,25 +98,36 @@ class CalendarService {
 		return $this->calendars;
 	}
 
+
 	/**
-	 * getEvents - get events from the user's calendars inside given timespan
+	 * getTimerange - set timeranges to search within based on the option's time information
 	 *
-	 * @return CalendarEvent[]
+	 * @return DateTimeImmutable[]
 	 *
-	 * @psalm-return list<CalendarEvent>
+	 * @psalm-return list<DateTimeImmutable>
 	 */
-	public function getEvents(DateTime $from, DateTime $to, DateTimeZone $timezone): array {
-		$from = DateTimeImmutable::createFromMutable($from);
-		$to = DateTimeImmutable::createFromMutable($to);
+	private function getTimerange(int $optionId, DateTimeZone $timezone) : array {
+		$option = $this->optionMapper->find($optionId);
+		$searchIntervalBefore = new DateInterval('PT' . $this->preferences->getCheckCalendarsBefore() . 'H');
+		$searchIntervalAfter = new DateInterval('PT' . $this->preferences->getCheckCalendarsAfter() . 'H');;
 
-		if (Util::getVersion()[0] < 24) {
-			// deprecated since NC24
-			\OC::$server->getLogger()->debug('calling legacy version');
-			return $this->getEventsLegcy($from, $to);
-		}
+		$from = (new DateTime())
+			->setTimeZone($timezone)
+			->setTimestamp($option->getTimestamp())
+			->sub($searchIntervalBefore);
+		$to = (new DateTime())
+			->setTimeZone($timezone)
+			->setTimestamp($option->getTimestamp() + $option->getDuration())
+			->add($searchIntervalAfter);
 
-		// use from NC24 on
-		$events = [];
+		return [
+			'from' => DateTimeImmutable::createFromMutable($from),
+			'to' => DateTimeImmutable::createFromMutable($to),
+		];
+
+	}
+
+	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to) : ?array {
 		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
@@ -119,8 +137,28 @@ class CalendarService {
 				$query->addSearchCalendar($calendar->getUri());
 			}
 		}
+		return $this->calendarManager->searchForPrincipal($query);
+	}
 
-		$foundEvents = $this->calendarManager->searchForPrincipal($query);
+	/**
+	 * getEvents - get events from the user's calendars inside given timespan
+	 *
+	 * @return CalendarEvent[]
+	 *
+	 * @psalm-return list<CalendarEvent>
+	 */
+	public function getEvents(int $optionId, string $tz): array {
+		$timezone = new DateTimeZone($tz);
+		$timerange = $this->getTimerange($optionId, $timezone);
+
+		if (Util::getVersion()[0] < 24) {
+			// deprecated since NC24
+			return $this->getEventsLegcy($timerange['from'], $timerange['to']);
+		}
+		
+		// use from NC24 on
+		$events = [];
+		$foundEvents = $this->searchEventsByTimeRange($timerange['from'], $timerange['to']);
 
 		foreach ($foundEvents as $event) {
 			$calendar = $this->getCalendarFromEvent($event);
@@ -128,7 +166,7 @@ class CalendarService {
 				continue;
 			}
 
-			$calendarEvent = new CalendarEvent($event, $calendar, $from, $to, $timezone);
+			$calendarEvent = new CalendarEvent($event, $calendar, $timerange['from'], $timerange['to'], $timezone);
 			if ($calendarEvent->getOccurrences()) {
 				for ($index = 0; $index < count($calendarEvent->getOccurrences()); $index++) {
 					$calendarEvent->setOccurrence($index);

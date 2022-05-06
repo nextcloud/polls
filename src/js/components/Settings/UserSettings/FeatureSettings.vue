@@ -23,25 +23,6 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
-				{{ t('polls', 'Use calendar lookup') }}
-			</CheckboxRadioSwitch>
-			<div v-show="calendarPeek" class="settings_details">
-				{{ t('polls', 'Check, if an option in a date poll is conflicting with or near an entry in your calendar.') }}
-				{{ t('polls', 'Opt in to the calendars, which should be checked.') }}
-
-				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
-					<CheckboxRadioSwitch :checked="calendar.selected"
-						type="switch"
-						@update:checked="clickedCalendar(calendar)">
-						<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
-						{{ calendar.name }}
-					</CheckboxRadioSwitch>
-				</div>
-			</div>
-		</div>
-
-		<div class="user_settings">
 			<CheckboxRadioSwitch :checked.sync="defaultViewTextPoll" type="switch">
 				{{ t('polls', 'Text polls default to list view') }}
 			</CheckboxRadioSwitch>
@@ -76,26 +57,7 @@ export default {
 	computed: {
 		...mapState({
 			settings: (state) => state.settings.user,
-			calendars: (state) => state.settings.availableCalendars,
 		}),
-		// Add bindings
-		calendarPeek: {
-			get() {
-				return !!this.settings.calendarPeek
-			},
-			set(value) {
-				this.writeValue({ calendarPeek: value })
-			},
-		},
-
-		calendarChoices() {
-			return this.calendars.map((calendar) => ({
-				key: calendar.key.toString(),
-				name: calendar.name,
-				displayColor: calendar.displayColor,
-				selected: this.settings.checkCalendars.includes(calendar.key.toString()),
-			}), this)
-		},
 
 		defaultViewTextPoll: {
 			get() {
@@ -126,15 +88,6 @@ export default {
 	methods: {
 		async writeValue(value) {
 			await this.$store.commit('settings/setPreference', value)
-			this.$store.dispatch('settings/write')
-		},
-
-		async clickedCalendar(calendar) {
-			if (this.settings.checkCalendars.includes(calendar.key)) {
-				await this.writeValue({ checkCalendars: this.settings.checkCalendars.filter((item) => item !== calendar.key.toString()) })
-			} else {
-				await this.$store.commit('settings/addCheckCalendar', { calendar })
-			}
 			this.$store.dispatch('settings/write')
 		},
 	},

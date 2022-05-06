@@ -41,7 +41,7 @@ class AdminSection implements IIconSection {
 	}
 
 	public function getID(): string {
-		return 'polls-admin';
+		return 'polls';
 	}
 
 	public function getName(): string {
