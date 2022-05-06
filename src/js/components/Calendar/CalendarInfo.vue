@@ -24,11 +24,8 @@
 	<div class="calendar-info"
 		:class="[conflictLevel, statusClass]"
 		:style="calendarStyle">
-		<div v-if="calendarEvent.allDay" class="calendar-info__time">
-			{{ dayStart }} {{ dayEnd }}
-		</div>
-		<div v-else class="calendar-info__time">
-			{{ formatDate(calendarEvent.start) }} - {{ formatDate(calendarEvent.end) }}
+		<div class="calendar-info__time">
+			{{ showJustDays ? dayDisplay : timeDisplay }}
 		</div>
 		<div class="summay" :class="statusClass">
 			{{ calendarEvent.summary }}
@@ -68,13 +65,34 @@ export default {
 		},
 
 		dayEnd() {
-			const dayEnd = moment.unix(this.calendarEvent.end - 1).format('ddd')
+			return moment.unix(this.calendarEvent.end - 1).format('ddd')
+		},
 
-			if (dayEnd === this.dayStart) {
-				return ''
+		dayDisplay() {
+			if (this.dayEnd === this.dayStart) {
+				return this.dayStart
 			}
 
-			return `- ${dayEnd}`
+			return `${this.dayStart} - ${this.dayEnd}`
+		},
+
+		timeStart() {
+			return moment.unix(this.calendarEvent.start).format('LT')
+		},
+
+		timeEnd() {
+			return moment.unix(this.calendarEvent.end).format('LT')
+		},
+
+		timeDisplay() {
+			if (this.timeEnd === this.timeStart) {
+				return this.timeStart
+			}
+			return `${this.timeStart} - ${this.timeEnd}`
+		},
+
+		showJustDays() {
+			return this.dayStart !== this.dayEnd || this.calendarEvent.allDay
 		},
 
 		statusClass() {
@@ -117,13 +135,6 @@ export default {
 
 			return 'conflict-yes'
 		},
-	},
-
-	methods: {
-		formatDate(timeStamp) {
-			return moment.unix(timeStamp).format('LT')
-		},
-
 	},
 }
 
