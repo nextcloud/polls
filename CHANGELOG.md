@@ -1,12 +1,35 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.7.0] - tbd
+### New
+- User setting for conflict check (hours before and after an option to search for conflicts)
+- Add admin option to prevent email address exposing of internal users
+### Fix
+- Poll export, if the owner did not vote
+- Calendar conflict check (NC24)
+- Handling of recurring calendar events (NC24)
+
+### Misc
+- Switch to new calendar API (NC24)
+
+## [3.7.0-beta3] - 2022-05-06
+### New
+- User setting for conflict check (set hours before and after an option to search for conflicts)
+### Fix
+- Poll export, if the owner did not vote
+- Calendar conflict check (NC24)
+- Handling of recurring calendar events (NC24)
+
+### Misc
+- Switch to new calendar API (NC24)
+
 ## [3.7.0-beta2] - 2022-04-27
-## Fix
+### Fix
 - Fixed syntax error in class AppSettings
 
 ## [3.7.0-beta1] - 2022-04-27
-## New
+### New
 - #2392 - Add admin option to prevent email address exposing of internal users
 
 ## [3.6.1] - 2022-04-23
