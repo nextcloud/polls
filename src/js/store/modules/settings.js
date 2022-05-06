@@ -35,6 +35,8 @@ const defaultSettings = () => ({
 		translucentPanels: false,
 		calendarPeek: false,
 		checkCalendars: [],
+		checkCalendarsBefore: 0,
+		checkCalendarsAfter: 0,
 		defaultViewTextPoll: 'list-view',
 		defaultViewDatePoll: 'table-view',
 		performanceThreshold: 1000,

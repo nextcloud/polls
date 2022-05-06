@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,21 +21,14 @@
  *
  */
 
-namespace OCA\Polls\Settings;
+namespace OCA\Polls\Model\UserGroup;
 
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\Settings\ISettings;
+use OCP\IUserSession;
+use OCA\Polls\Helper\Container;
 
-class AdminSettings implements ISettings {
-	public function getForm(): TemplateResponse {
-		return new TemplateResponse('polls', 'admin', []);
-	}
-
-	public function getSection(): string {
-		return 'polls';
-	}
-
-	public function getPriority():int {
-		return 50;
+class CurrentUser extends User {
+	public function __construct(
+	) {
+		parent::__construct(Container::queryClass(IUserSession::class)->getUser()->getUId());
 	}
 }

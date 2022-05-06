@@ -22,6 +22,10 @@
 
 <template>
 	<div class="polls_user_settings">
+		<SettingsSection :title="t('polls', 'Calendar check')"
+			:description="t('polls', 'Search for conflicting calendar entries')">
+			<CalendarSettings />
+		</SettingsSection>
 		<SettingsSection :title="t('polls', 'Polls user settings')"
 			:description="t('polls', 'Set your personal preferences for the polls app')">
 			<FeatureSettings />
@@ -47,6 +51,7 @@ export default {
 
 	components: {
 		SettingsSection,
+		CalendarSettings: () => import('../components/Settings/UserSettings/CalendarSettings.vue'),
 		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings.vue'),
 		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings.vue'),
 		PerformanceSettings: () => import('../components/Settings/UserSettings/PerformanceSettings.vue'),

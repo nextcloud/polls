@@ -302,7 +302,11 @@ const actions = {
 		const endPoint = `apps/polls/option/${payload.option.id}/events`
 
 		try {
-			return await axios.get(generateUrl(endPoint))
+			return await axios.get(generateUrl(endPoint), {
+				params: {
+					tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
+				},
+			})
 		} catch (e) {
 			return { events: [] }
 		}
