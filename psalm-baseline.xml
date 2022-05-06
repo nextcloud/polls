@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.22.0@fc2c6ab4d5fa5d644d8617089f012f3bb84b8703">
+<files psalm-version="4.23.0@f1fe6ff483bf325c803df9f510d09a03fd796f88">
   <file src="lib/AppInfo/Application.php">
     <InvalidArgument occurrences="24">
       <code>registerEventListener</code>
@@ -27,7 +27,8 @@
       <code>registerEventListener</code>
       <code>registerEventListener</code>
     </InvalidArgument>
-  </file>  <file src="lib/Db/Preferences.php">
+  </file>
+  <file src="lib/Db/Preferences.php">
     <UndefinedClass occurrences="2">
       <code>BackgroundService</code>
       <code>BackgroundService</code>
@@ -63,6 +64,11 @@
       <code>getUser</code>
     </UndefinedMethod>
   </file>
+  <file src="lib/Model/CalendarEvent.php">
+    <UndefinedInterfaceMethod occurrences="1">
+      <code>getUri</code>
+    </UndefinedInterfaceMethod>
+  </file>
   <file src="lib/Service/ActivityService.php">
     <UndefinedMethod occurrences="6">
       <code>getActivityId</code>
@@ -73,14 +79,10 @@
       <code>getActor</code>
     </UndefinedMethod>
   </file>
-  <file src="lib/Model/CalendarEvent.php">
-    <UndefinedInterfaceMethod occurrences="1">
-      <code>getUri</code>
-    </UndefinedInterfaceMethod>
-  </file>
   <file src="lib/Service/CalendarService.php">
-    <UndefinedInterfaceMethod occurrences="4">
+    <UndefinedInterfaceMethod occurrences="5">
       <code>getCalendarsForPrincipal</code>
+      <code>getUri</code>
       <code>getUri</code>
       <code>newQuery</code>
       <code>searchForPrincipal</code>
