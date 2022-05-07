@@ -71,7 +71,6 @@ OC.L10N.register(
     "Closing date" : "Lokadagsetning",
     "No description provided" : "Engin lýsing var gefin",
     "Preview" : "Forskoðun",
-    "Use calendar lookup" : "Nota uppflettingu í dagatali",
     "Use background image" : "Nota bakgrunnsmynd",
     "Shares" : "Sameignir",
     "Resend invitation mail" : "Senda boðspóst aftur",
