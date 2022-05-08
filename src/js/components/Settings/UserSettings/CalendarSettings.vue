@@ -42,7 +42,7 @@
 
 		<div class="user_settings">
 			<p class="settings-description">
-				{{ t('polls', 'Set the time interval in hours, a calendar event must be finished before a date option, to get accounted to the conflict check.') }}
+				{{ t('polls', 'Set the time interval in hours. A calendar event must be finished before a date option, to get accounted to the conflict check.') }}
 			</p>
 			<InputDiv v-model="checkCalendarsBefore"
 				type="number"
@@ -55,7 +55,7 @@
 
 		<div class="user_settings">
 			<p class="settings-description">
-				{{ t('polls', 'Set the time interval in hours, a calendar event must start after a date option, to get accounted to the conflict check.') }}
+				{{ t('polls', 'Set the time interval in hours. A calendar event must start after a date option, to get accounted to the conflict check.') }}
 			</p>
 			<InputDiv v-model="checkCalendarsAfter"
 				type="number"
