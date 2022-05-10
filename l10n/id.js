@@ -10,6 +10,7 @@ OC.L10N.register(
     "Title" : "Judul",
     "Cancel" : "Membatalkan",
     "Apply" : "Terapkan",
+    "Email address" : "Alamat email",
     "No" : "Tidak",
     "OK" : "OK",
     "Week" : "Minggu",
