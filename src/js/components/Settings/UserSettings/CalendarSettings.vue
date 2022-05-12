@@ -27,7 +27,7 @@
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
 			</CheckboxRadioSwitch>
 			<div v-show="calendarPeek" class="settings_details">
-				{{ t('polls', 'Activate all calendars and search for conflicting events.') }}
+				{{ t('polls', 'Activate all calendars to search for conflicting events.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
 					<CheckboxRadioSwitch :checked="calendar.selected"
