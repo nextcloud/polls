@@ -52,10 +52,10 @@
 				icon="icon-mask-md-navigation-combo"
 				:to="{ name: 'combo' }" />
 			<AppNavigationItem v-if="showAdminSection"
-				:title="t('core', 'Administration')"
+				:title="t('polls', 'Administration')"
 				icon="icon-mask-md-navigation-administration"
 				:to="{ name: 'administration' }" />
-			<AppNavigationItem :title="t('core', 'Personal settings')" icon="icon-mask-md-navigation-personal-settings" @click="showSettings()" />
+			<AppNavigationItem :title="t('polls', 'Personal settings')" icon="icon-mask-md-navigation-personal-settings" @click="showSettings()" />
 		</template>
 	</AppNavigation>
 </template>
