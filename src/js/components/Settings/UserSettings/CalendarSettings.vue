@@ -55,7 +55,7 @@
 
 		<div class="user_settings">
 			<p class="settings-description">
-				{{ t('polls', 'Specify in which period (in hours) before the option existing appointments should be included in the search results.') }}
+				{{ t('polls', 'Specify in which period (in hours) after the option existing appointments should be included in the search results.') }}
 			</p>
 			<InputDiv v-model="checkCalendarsAfter"
 				type="number"
