@@ -129,6 +129,12 @@ class OptionService {
 
 			$this->votes = $this->voteMapper->findByPoll($this->acl->getPollId());
 
+			
+			if (!$this->acl->getIsLoggedIn()) {
+				// if participant is not logged in avoid leaking user ids
+				$this->options = $this->anonymizer->replaceUserId($this->options, $token);
+			}
+
 
 			$this->calculateVotes();
 

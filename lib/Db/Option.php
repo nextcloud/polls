@@ -31,6 +31,7 @@ use OCA\Polls\Helper\Container;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * @method int getId()
@@ -104,6 +105,9 @@ class Option extends Entity implements JsonSerializable {
 	/** @var IUserManager */
 	private $userManager;
 
+	/** @var ShareMapper */
+	private $shareMapper;
+
 	public function __construct() {
 		$this->addType('released', 'int');
 		$this->addType('pollId', 'int');
@@ -112,6 +116,7 @@ class Option extends Entity implements JsonSerializable {
 		$this->addType('confirmed', 'int');
 		$this->addType('duration', 'int');
 		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	public function jsonSerialize() {
@@ -192,9 +197,23 @@ class Option extends Entity implements JsonSerializable {
 		if (!strncmp($this->getOwner(), 'deleted_', 8)) {
 			return 'Deleted User';
 		}
-		return $this->getOwnerIsNoUser()
-			? $this->getOwner()
-			: $this->userManager->get($this->getOwner())->getDisplayName();
+		// if ($this->getOwner() === '') {
+		// 	return '';
+		// }
+		// return $this->getOwnerIsNoUser()
+		// 	? $this->getOwner()
+		// 	: $this->userManager->get($this->getOwner())->getDisplayName();
+		
+		if ($this->getOwnerIsNoUser()) {
+			try {
+				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getOwner());
+				return $share->getDisplayName();
+			} catch (DoesNotExistException $e) {
+				return $this->getOwner();
+			}
+		}
+		return $this->userManager->get($this->getOwner())->getDisplayName();
+
 	}
 
 	private function getOwnerIsNoUser(): bool {

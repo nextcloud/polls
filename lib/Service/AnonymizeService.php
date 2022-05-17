@@ -31,6 +31,7 @@ use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Model\UserGroup\UserBase;
 
 class AnonymizeService {
 
@@ -148,9 +149,17 @@ class AnonymizeService {
 	 *
 	 * @psalm-return Comment|Option|Poll|Vote|array<Comment|Option|Poll|Vote>
 	 */
-	public static function replaceUserId($arrayOrObject) {
+	public static function replaceUserId($arrayOrObject, ?string $token = null) {
+		$shareUser = null;
+		if ($token) {
+			$shareUser = UserBase::getUserGroupChildFromShare($token);
+		}
+
 		if (is_array($arrayOrObject)) {
 			foreach ($arrayOrObject as $item) {
+				if ($shareUser && $shareUser->getId() === $item->getUserId()) {
+					continue;
+				}
 				if ($item instanceof Comment || $item instanceof Vote) {
 					$item->setUserId($item->getDisplayName());
 				}
@@ -158,6 +167,11 @@ class AnonymizeService {
 					$item->setOwner($item->getDisplayName());
 				}
 			}
+			return $arrayOrObject;
+		}
+
+		if ($shareUser && $shareUser->getId() === $arrayOrObject->getUserId()) {
+			return $arrayOrObject;
 		}
 
 		if ($arrayOrObject instanceof Option || $arrayOrObject instanceof Poll) {

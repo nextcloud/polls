@@ -82,19 +82,27 @@ class VoteService {
 		}
 
 		try {
-			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
-				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
-			}
 
-			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
+			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
+				// Just return the participants votes, no further anoymizing or obfuscatin is nessecary
+				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
+			} elseif (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
 				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
+				// Return anoymized votes
 				return $this->anonymizer->getVotes();
 			}
 
-			return $this->voteMapper->findByPoll($this->acl->getpollId());
+			$votes = $this->voteMapper->findByPoll($this->acl->getpollId());
+
+			if (!$this->acl->getIsLoggedIn()) {
+				// if participant is not logged in avoid leaking user ids 
+				$votes = $this->anonymizer->replaceUserId($votes, $token);
+			}
+
 		} catch (DoesNotExistException $e) {
-			return [];
+			$votes = [];
 		}
+		return $votes;
 	}
 
 	private function checkLimits(Option $option, string $userId): void {

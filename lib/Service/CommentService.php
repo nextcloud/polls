@@ -73,7 +73,15 @@ class CommentService {
 		}
 
 		if ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
-			return $this->commentMapper->findByPoll($this->acl->getPollId());
+			$comments = $this->commentMapper->findByPoll($this->acl->getPollId());
+
+			if (!$this->acl->getIsLoggedIn()) {
+				// if participant is not logged in avoid leaking user ids
+				$comments = $this->anonymizer->replaceUserId($comments, $token);
+			}
+
+			return $comments;
+
 		} else {
 			$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
 			return $this->anonymizer->getComments();
