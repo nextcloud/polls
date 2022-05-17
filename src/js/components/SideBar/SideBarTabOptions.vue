@@ -45,7 +45,10 @@
 			<OptionsDate />
 
 			<template #actions>
-				<OptionsDateAdd v-if="!closed" />
+				<OptionsDateAdd v-if="!closed"
+					:caption="t('polls', 'Add a date')"
+					show-caption
+					primary />
 			</template>
 		</ConfigBox>
 
