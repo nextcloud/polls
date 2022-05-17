@@ -242,7 +242,7 @@ class ShareService {
 	}
 
 	/**
-	 * crate a new share 
+	 * crate a new share
 	 *
 	 * @return Share
 	 */
@@ -388,7 +388,7 @@ class ShareService {
 		}
 	}
 
-	private function generatePublicUserId(string $token, string $prefix = 'ex_') {
+	private function generatePublicUserId(string $token, string $prefix = 'ex_'): string {
 		$publicUserId = '';
 
 		while ($publicUserId === '') {

@@ -73,8 +73,12 @@ class VoteService {
 
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
+	 *
+	 * @return (Option|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Poll|mixed)[]|Option|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Poll
+	 *
+	 * @psalm-return Option|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Poll|array<Option|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Poll|mixed>
 	 */
-	public function list(int $pollId = 0, string $token = ''): array {
+	public function list(int $pollId = 0, string $token = '') {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -82,7 +86,6 @@ class VoteService {
 		}
 
 		try {
-
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				// Just return the participants votes, no further anoymizing or obfuscatin is nessecary
 				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
@@ -95,10 +98,9 @@ class VoteService {
 			$votes = $this->voteMapper->findByPoll($this->acl->getpollId());
 
 			if (!$this->acl->getIsLoggedIn()) {
-				// if participant is not logged in avoid leaking user ids 
+				// if participant is not logged in avoid leaking user ids
 				$votes = $this->anonymizer->replaceUserId($votes, $token);
 			}
-
 		} catch (DoesNotExistException $e) {
 			$votes = [];
 		}

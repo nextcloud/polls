@@ -213,7 +213,6 @@ class Option extends Entity implements JsonSerializable {
 			}
 		}
 		return $this->userManager->get($this->getOwner())->getDisplayName();
-
 	}
 
 	private function getOwnerIsNoUser(): bool {

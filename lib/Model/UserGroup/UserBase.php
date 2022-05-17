@@ -273,7 +273,10 @@ class UserBase implements \JsonSerializable {
 		return [$this];
 	}
 
-	public static function getUserGroupChildFromShare($token) {
+	/**
+	 * @return Admin|Circle|Contact|ContactGroup|Email|GenericUser|Group|User
+	 */
+	public static function getUserGroupChildFromShare(string $token) {
 		$shareMapper = Container::queryClass(ShareMapper::class);
 		$share = $shareMapper->findByToken($token);
 		return self::getUserGroupChild(

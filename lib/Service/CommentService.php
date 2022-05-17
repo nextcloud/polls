@@ -64,8 +64,12 @@ class CommentService {
 	/**
 	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
+	 *
+	 * @return (Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Poll|\OCA\Polls\Db\Vote|mixed)[]|Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Poll|\OCA\Polls\Db\Vote
+	 *
+	 * @psalm-return Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Poll|\OCA\Polls\Db\Vote|array<Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Poll|\OCA\Polls\Db\Vote|mixed>
 	 */
-	public function listFlat(?int $pollId = 0, string $token = ''): array {
+	public function listFlat(?int $pollId = 0, string $token = '') {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -81,7 +85,6 @@ class CommentService {
 			}
 
 			return $comments;
-
 		} else {
 			$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
 			return $this->anonymizer->getComments();
