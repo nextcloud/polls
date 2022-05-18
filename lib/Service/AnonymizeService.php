@@ -31,7 +31,6 @@ use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Model\UserGroup\UserBase;
 
 class AnonymizeService {
 
@@ -142,22 +141,11 @@ class AnonymizeService {
 
 	/**
 	 * Replaces userIds with displayName to avoid exposing usernames in public polls
-	 *
-	 * @param (Comment|Option|Poll|Vote)[]|Comment|Option|Poll|Vote $arrayOrObject
-	 *
-	 * @return (Comment|Option|Poll|Vote)[]|Comment|Option|Poll|Vote
-	 *
-	 * @psalm-return Comment|Option|Poll|Vote|array<Comment|Option|Poll|Vote>
 	 */
-	public static function replaceUserId($arrayOrObject, ?string $token = null) {
-		$shareUser = null;
-		if ($token) {
-			$shareUser = UserBase::getUserGroupChildFromShare($token);
-		}
-
+	public static function replaceUserId(&$arrayOrObject, string $userId) : void {
 		if (is_array($arrayOrObject)) {
 			foreach ($arrayOrObject as $item) {
-				if ($shareUser && $shareUser->getId() === $item->getUserId()) {
+				if ($item->getUserId() === $userId) {
 					continue;
 				}
 				if ($item instanceof Comment || $item instanceof Vote) {
@@ -167,11 +155,11 @@ class AnonymizeService {
 					$item->setOwner($item->getDisplayName());
 				}
 			}
-			return $arrayOrObject;
+			return;
 		}
 
-		if ($shareUser && $shareUser->getId() === $arrayOrObject->getUserId()) {
-			return $arrayOrObject;
+		if ($arrayOrObject->getUserId() === $userId) {
+			return;
 		}
 
 		if ($arrayOrObject instanceof Option || $arrayOrObject instanceof Poll) {
@@ -182,6 +170,6 @@ class AnonymizeService {
 			$arrayOrObject->setUserId($arrayOrObject->getDisplayName());
 		}
 
-		return $arrayOrObject;
+		return;
 	}
 }

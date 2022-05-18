@@ -132,7 +132,7 @@ class OptionService {
 			
 			if (!$this->acl->getIsLoggedIn()) {
 				// if participant is not logged in avoid leaking user ids
-				$this->options = $this->anonymizer->replaceUserId($this->options, $token);
+				AnonymizeService::replaceUserId($this->options, $this->acl->getUserId());
 			}
 
 

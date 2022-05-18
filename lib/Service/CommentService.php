@@ -65,11 +65,10 @@ class CommentService {
 	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
 	 *
-	 * @return (Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Poll|\OCA\Polls\Db\Vote|mixed)[]|Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Poll|\OCA\Polls\Db\Vote
+	 * @return Comment[]
 	 *
-	 * @psalm-return Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Poll|\OCA\Polls\Db\Vote|array<Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Poll|\OCA\Polls\Db\Vote|mixed>
 	 */
-	public function listFlat(?int $pollId = 0, string $token = '') {
+	public function listFlat(?int $pollId = 0, string $token = '') : array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -81,7 +80,7 @@ class CommentService {
 
 			if (!$this->acl->getIsLoggedIn()) {
 				// if participant is not logged in avoid leaking user ids
-				$comments = $this->anonymizer->replaceUserId($comments, $token);
+				AnonymizeService::replaceUserId($comments, $this->acl->getUserId());
 			}
 
 			return $comments;

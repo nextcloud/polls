@@ -74,11 +74,9 @@ class VoteService {
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
 	 *
-	 * @return (Option|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Poll|mixed)[]|Option|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Poll
-	 *
-	 * @psalm-return Option|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Poll|array<Option|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Poll|mixed>
+	 * @return Vote[]
 	 */
-	public function list(int $pollId = 0, string $token = '') {
+	public function list(int $pollId = 0, string $token = '') : array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -99,7 +97,7 @@ class VoteService {
 
 			if (!$this->acl->getIsLoggedIn()) {
 				// if participant is not logged in avoid leaking user ids
-				$votes = $this->anonymizer->replaceUserId($votes, $token);
+				AnonymizeService::replaceUserId($votes, $this->acl->getUserId());
 			}
 		} catch (DoesNotExistException $e) {
 			$votes = [];

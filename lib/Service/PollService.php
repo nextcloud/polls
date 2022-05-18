@@ -193,18 +193,14 @@ class PollService {
 
 	/**
 	 * get poll configuration
-	 *
-	 * @return (Poll|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Option)[]|Poll|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Option
-	 *
-	 * @psalm-return Poll|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Option|array<Poll|Vote|\OCA\Polls\Db\Comment|\OCA\Polls\Db\Option>
 	 */
-	public function get(int $pollId) {
+	public function get(int $pollId) : Poll {
 		$this->acl->setPollId($pollId);
 		$this->poll = $this->pollMapper->find($pollId);
 
 		if (!$this->acl->getIsLoggedIn()) {
 			// if participant is not logged in avoid leaking user ids
-			return AnonymizeService::replaceUserId($this->poll);
+			AnonymizeService::replaceUserId($this->poll, $this->acl->getUserId());
 		}
 		return $this->poll;
 	}
