@@ -70,9 +70,7 @@ class ShareController extends Controller {
 	 * @return DataResponse
 	 */
 	public function list(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId): array {
-			return ['shares' => $this->shareService->list($pollId)];
-		});
+		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
 	}
 
 	/**
@@ -80,9 +78,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = ''): DataResponse {
-		return $this->responseCreate(function () use ($pollId, $type, $userId, $displayName) {
-			return ['share' => $this->shareService->add($pollId, $type, $userId, $displayName)];
-		});
+		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName)]);
 	}
 
 	/**
@@ -90,9 +86,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function userToAdmin(string $token): DataResponse {
-		return $this->responseCreate(function () use ($token) {
-			return ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)];
-		});
+		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)]);
 	}
 
 	/**
@@ -100,9 +94,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function setPublicPollEmail(string $token, string $value): DataResponse {
-		return $this->response(function () use ($token, $value) {
-			return ['share' => $this->shareService->setPublicPollEmail($token, $value)];
-		});
+		return $this->response(fn () => ['share' => $this->shareService->setPublicPollEmail($token, $value)]);
 	}
 
 	/**
@@ -110,9 +102,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function adminToUser(string $token): DataResponse {
-		return $this->responseCreate(function () use ($token) {
-			return ['share' => $this->shareService->setType($token, Share::TYPE_USER)];
-		});
+		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_USER)]);
 	}
 
 	/**
@@ -120,9 +110,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function setEmailAddress(string $token, string $emailAddress = ''): DataResponse {
-		return $this->response(function () use ($token, $emailAddress) {
-			return ['share' => $this->shareService->setEmailAddress($token, $emailAddress)];
-		});
+		return $this->response(fn () => ['share' => $this->shareService->setEmailAddress($token, $emailAddress)]);
 	}
 
 	/**
@@ -131,9 +119,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function register(string $token, string $userName, string $emailAddress = ''): DataResponse {
-		return $this->responseCreate(function () use ($token, $userName, $emailAddress) {
-			return ['share' => $this->shareService->register($token, $userName, $emailAddress)];
-		});
+		return $this->responseCreate(fn () => ['share' => $this->shareService->register($token, $userName, $emailAddress)]);
 	}
 
 	/**
@@ -142,9 +128,7 @@ class ShareController extends Controller {
 	 */
 
 	public function delete(string $token): DataResponse {
-		return $this->responseDeleteTolerant(function () use ($token) {
-			return ['share' => $this->shareService->delete($token)];
-		});
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete($token)]);
 	}
 
 	/**
@@ -153,12 +137,10 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function sendInvitation(string $token): DataResponse {
-		return $this->response(function () use ($token) {
-			return [
-				'share' => $this->shareService->get($token),
-				'sentResult' => $this->shareService->sendInvitation($token),
-			];
-		});
+		return $this->response(fn () => [
+			'share' => $this->shareService->get($token),
+			'sentResult' => $this->shareService->sendInvitation($token),
+		]);
 	}
 
 	/**

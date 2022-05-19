@@ -112,7 +112,7 @@ class OptionService {
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function list(int $pollId = 0, string $token = ''): array {
+	public function list(?int $pollId, ?string $token = null): array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -120,21 +120,17 @@ class OptionService {
 		}
 
 		try {
+			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
+
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
 				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
-				$this->options = $this->anonymizer->getOptions();
-			} else {
-				$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
-			}
-
-			$this->votes = $this->voteMapper->findByPoll($this->acl->getPollId());
-
-			
-			if (!$this->acl->getIsLoggedIn()) {
+				$this->anonymizer->anonymize($this->options);
+			} elseif (!$this->acl->getIsLoggedIn()) {
 				// if participant is not logged in avoid leaking user ids
 				AnonymizeService::replaceUserId($this->options, $this->acl->getUserId());
 			}
 
+			$this->votes = $this->voteMapper->findByPoll($this->acl->getPollId());
 
 			$this->calculateVotes();
 
@@ -146,11 +142,11 @@ class OptionService {
 			if ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				$this->calculateRanks();
 			}
-
-			return array_values($this->options);
 		} catch (DoesNotExistException $e) {
-			return [];
+			$this->options = [];
 		}
+
+		return array_values($this->options);
 	}
 
 	/**

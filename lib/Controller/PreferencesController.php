@@ -64,9 +64,7 @@ class PreferencesController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function get(): DataResponse {
-		return $this->response(function (): Preferences {
-			return $this->preferencesService->get();
-		});
+		return $this->response(fn () => $this->preferencesService->get());
 	}
 
 	/**
@@ -77,9 +75,7 @@ class PreferencesController extends Controller {
 		if (!$this->userSession->isLoggedIn()) {
 			return new DataResponse([], Http::STATUS_OK);
 		}
-		return $this->response(function () use ($settings) {
-			return $this->preferencesService->write($settings);
-		});
+		return $this->response(fn () => $this->preferencesService->write($settings));
 	}
 
 	/**

@@ -51,9 +51,7 @@ class VoteController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function list(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['votes' => $this->voteService->list($pollId)];
-		});
+		return $this->response(fn () => ['votes' => $this->voteService->list($pollId)]);
 	}
 
 	/**
@@ -62,9 +60,7 @@ class VoteController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function set(int $optionId, string $setTo): DataResponse {
-		return $this->response(function () use ($optionId, $setTo) {
-			return ['vote' => $this->voteService->set($optionId, $setTo)];
-		});
+		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $setTo)]);
 	}
 
 	/**
@@ -72,8 +68,6 @@ class VoteController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function delete(int $pollId, string $userId = ''): DataResponse {
-		return $this->response(function () use ($pollId, $userId) {
-			return ['deleted' => $this->voteService->delete($pollId, $userId)];
-		});
+		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId)]);
 	}
 }

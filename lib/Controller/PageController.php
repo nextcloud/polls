@@ -54,8 +54,7 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function index(): TemplateResponse {
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
+		return new TemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
@@ -64,7 +63,6 @@ class PageController extends Controller {
 	 */
 	public function vote(int $id): TemplateResponse {
 		$this->notificationService->removeNotification($id);
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
+		return new TemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 	}
 }

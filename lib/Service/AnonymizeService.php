@@ -70,7 +70,7 @@ class AnonymizeService {
 	 * $array Input list which should be anonymized must be a collection of Vote or Comment
 	 * Returns the original array with anonymized user names
 	 */
-	private function anonymize(array $array): array {
+	public function anonymize(array &$array): void {
 		// get mapping for the complete poll
 		foreach ($array as &$element) {
 			if (!$element->getUserId() || $element->getUserId() === $this->userId) {
@@ -79,8 +79,6 @@ class AnonymizeService {
 			}
 			$element->setUserId($this->anonList[$element->getUserId()] ?? 'Unknown user');
 		}
-
-		return $array;
 	}
 
 	/**
@@ -113,30 +111,6 @@ class AnonymizeService {
 			}
 		}
 		return;
-	}
-
-	/**
-	 * Anonymizes the comments of a poll
-	 * Returns anonymized comments
-	 */
-	public function getComments(): array {
-		return $this->anonymize($this->commentMapper->findByPoll($this->pollId));
-	}
-
-	/**
-	 * Anonymizes the participants of a poll
-	 * Returns anonymized votes
-	 */
-	public function getVotes(): array {
-		return $this->anonymize($this->voteMapper->findByPoll($this->pollId));
-	}
-
-	/**
-	 * Anonymizes the proposal users
-	 * Returns options with anonymized owners
-	 */
-	public function getOptions(): array {
-		return $this->anonymize($this->optionMapper->findByPoll($this->pollId));
 	}
 
 	/**

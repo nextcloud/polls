@@ -76,7 +76,7 @@ class VoteService {
 	 *
 	 * @return Vote[]
 	 */
-	public function list(int $pollId = 0, string $token = '') : array {
+	public function list(?int $pollId, string $token = '') : array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -87,15 +87,14 @@ class VoteService {
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				// Just return the participants votes, no further anoymizing or obfuscatin is nessecary
 				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
-			} elseif (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
-				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
-				// Return anoymized votes
-				return $this->anonymizer->getVotes();
 			}
 
 			$votes = $this->voteMapper->findByPoll($this->acl->getpollId());
 
-			if (!$this->acl->getIsLoggedIn()) {
+			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
+				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
+				$this->anonymizer->anonymize($votes);
+			} elseif (!$this->acl->getIsLoggedIn()) {
 				// if participant is not logged in avoid leaking user ids
 				AnonymizeService::replaceUserId($votes, $this->acl->getUserId());
 			}
@@ -164,19 +163,19 @@ class VoteService {
 	/**
 	 * Remove user from poll
 	 */
-	public function delete(int $pollId = 0, string $userId = '', string $token = ''): string {
+	public function delete(?int $pollId, ?string $userId, string $token = ''): string {
 		if ($token) {
 			$this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT);
 			$userId = $this->acl->getUserId();
 			$pollId = $this->acl->getPollId();
 		} else {
-			if ($userId) {
-				$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-			} else {
-				$this->acl->setPollId($pollId, Acl::PERMISSION_VOTE_EDIT);
-				$userId = $this->acl->getUserId();
-			}
+			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		}
+
+		if (!$userId) {
+			$userId = $this->acl->getUserId();
+		}
+
 		// fake a vote so that the event can be triggered
 		// surpress logging of this action
 		$this->vote = new Vote();

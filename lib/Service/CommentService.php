@@ -68,33 +68,31 @@ class CommentService {
 	 * @return Comment[]
 	 *
 	 */
-	public function listFlat(?int $pollId = 0, string $token = '') : array {
+	public function listFlat(?int $pollId, string $token = '') : array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
 			$this->acl->setPollId($pollId);
 		}
 
-		if ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
-			$comments = $this->commentMapper->findByPoll($this->acl->getPollId());
+		$comments = $this->commentMapper->findByPoll($this->acl->getPollId());
 
-			if (!$this->acl->getIsLoggedIn()) {
-				// if participant is not logged in avoid leaking user ids
-				AnonymizeService::replaceUserId($comments, $this->acl->getUserId());
-			}
-
-			return $comments;
-		} else {
+		if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
 			$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
-			return $this->anonymizer->getComments();
+			$this->anonymizer->anonymize($comments);
+		} elseif (!$this->acl->getIsLoggedIn()) {
+			// if participant is not logged in avoid leaking user ids
+			AnonymizeService::replaceUserId($comments, $this->acl->getUserId());
 		}
+
+		return $comments;
 	}
 
 	/**
 	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
 	 */
-	public function list(?int $pollId = 0, string $token = ''): array {
+	public function list(?int $pollId, string $token = ''): array {
 		$comments = $this->listFlat($pollId, $token);
 		$timeTolerance = 5 * 60; // treat comments within 5 minutes as one comment
 		$groupedComments = [];
