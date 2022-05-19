@@ -27,7 +27,7 @@
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
 			</CheckboxRadioSwitch>
 			<div v-show="calendarPeek" class="settings_details">
-				{{ t('polls', 'Activate all calendars to consult for the search of conflicting events.') }}
+				{{ t('polls', 'Select the calendars to use for lookup.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
 					<CheckboxRadioSwitch :checked="calendar.selected"
@@ -42,7 +42,7 @@
 
 		<div class="user_settings">
 			<p class="settings-description">
-				{{ t('polls', 'Set the time interval in hours, a calendar event must be finished before a date option, to get accounted to the conflict check.') }}
+				{{ t('polls', 'Specify in which period (in hours) before the option existing appointments should be included in the search results.') }}
 			</p>
 			<InputDiv v-model="checkCalendarsBefore"
 				type="number"
@@ -55,7 +55,7 @@
 
 		<div class="user_settings">
 			<p class="settings-description">
-				{{ t('polls', 'Set the time interval in hours, a calendar event must start after a date option, to get accounted to the conflict check.') }}
+				{{ t('polls', 'Specify in which period (in hours) after the option existing appointments should be included in the search results.') }}
 			</p>
 			<InputDiv v-model="checkCalendarsAfter"
 				type="number"
