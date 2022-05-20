@@ -116,7 +116,7 @@ class CommentService {
 	/**
 	 * Add comment
 	 */
-	public function add(int $pollId = 0, ?string $token = '', string $message = ''): Comment {
+	public function add(string $message, ?int $pollId = null, ?string $token = null): Comment {
 		if ($token) {
 			$this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD);
 		} else {

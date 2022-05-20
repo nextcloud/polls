@@ -57,7 +57,7 @@ class CommentController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function add(int $pollId, string $message): DataResponse {
-		return $this->response(fn () => ['comment' => $this->commentService->add($pollId, null, $message)]);
+		return $this->response(fn () => ['comment' => $this->commentService->add($message, $pollId)]);
 	}
 
 	/**

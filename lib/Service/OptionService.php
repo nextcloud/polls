@@ -166,7 +166,7 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, string $token = ''): Option {
+	public function add(?int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, string $token = ''): Option {
 		if ($token) {
 			$this->acl->setToken($token, Acl::PERMISSION_OPTIONS_ADD);
 		} else {

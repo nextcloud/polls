@@ -27,8 +27,13 @@ use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Db\WatchMapper;
+use OCA\Polls\Exceptions\NoUpdatesException;
+use OCA\Polls\Model\Settings\AppSettings;
 
 class WatchService {
+
+	/** @var AppSettings */
+	private $appSettings;
 
 	/** @var WatchMapper */
 	private $watchMapper;
@@ -40,7 +45,32 @@ class WatchService {
 		WatchMapper $watchMapper
 	) {
 		$this->watchMapper = $watchMapper;
+		$this->appSettings = new AppSettings;
 		$this->watch = new Watch;
+	}
+
+	/**
+	 * Watch poll for updates
+	 */
+	public function watchUpdates(int $pollId, ?int $offset): array {
+		$start = time();
+		$timeout = 30;
+		$offset = $offset ?? $start;
+
+		if ($this->appSettings->getStringSetting(AppSettings::SETTING_UPDATE_TYPE) === 'longPolling') {
+			while (empty($updates) && time() <= $start + $timeout) {
+				sleep(1);
+				$updates = $this->getUpdates($pollId, $offset);
+			}
+		} else {
+			$updates = $this->getUpdates($pollId, $offset);
+		}
+
+		if (empty($updates)) {
+			throw new NoUpdatesException;
+		}
+
+		return $updates;
 	}
 
 	/**

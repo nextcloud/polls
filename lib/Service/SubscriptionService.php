@@ -47,7 +47,7 @@ class SubscriptionService {
 		$this->acl = $acl;
 	}
 
-	public function get(int $pollId = 0, string $token = ''): bool {
+	public function get(?int $pollId = null, ?string $token = null): bool {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -70,7 +70,7 @@ class SubscriptionService {
 		$this->subscriptionMapper->insert($subscription);
 	}
 
-	public function set(bool $subscribed, int $pollId = 0, string $token = ''): bool {
+	public function set(bool $subscribed, ?int $pollId = null, ?string $token = null): bool {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {

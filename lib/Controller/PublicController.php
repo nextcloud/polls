@@ -31,7 +31,6 @@ use OCP\AppFramework\Http\DataResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 
-use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Comment;
@@ -161,21 +160,7 @@ class PublicController extends Controller {
 	 */
 	public function watchPoll(string $token, ?int $offset): DataResponse {
 		$pollId = $this->acl->setToken($token)->getPollId();
-
-		return $this->responseLong(function () use ($pollId, $offset) {
-			$start = time();
-			$timeout = 30;
-			$offset = $offset ?? $start;
-
-			while (empty($updates) && time() <= $start + $timeout) {
-				sleep(1);
-				$updates = $this->watchService->getUpdates($pollId, $offset);
-			}
-			if (empty($updates)) {
-				throw new NoUpdatesException;
-			}
-			return ['updates' => $updates];
-		});
+		return $this->responseLong(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
 	}
 
 	/**
@@ -230,7 +215,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 */
 	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): DataResponse {
-		return $this->responseCreate(fn () => ['option' => $this->optionService->add(0, $timestamp, $text, $duration, $token)]);
+		return $this->responseCreate(fn () => ['option' => $this->optionService->add(null, $timestamp, $text, $duration, $token)]);
 	}
 
 	/**
@@ -248,7 +233,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function getSubscription(string $token): DataResponse {
-		return $this->response(fn () => ['subscribed' => $this->subscriptionService->get(0, $token)]);
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->get(null, $token)]);
 	}
 
 	/**
@@ -266,7 +251,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 */
 	public function addComment(string $token, string $message): DataResponse {
-		return $this->response(fn () => ['comment' => $this->commentService->add(0, $token, $message)]);
+		return $this->response(fn () => ['comment' => $this->commentService->add($message, null, $token)]);
 	}
 
 	/**
@@ -284,7 +269,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function subscribe(string $token): DataResponse {
-		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, 0, $token)]);
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, null, $token)]);
 	}
 
 	/**
@@ -293,7 +278,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function unsubscribe(string $token): DataResponse {
-		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, 0, $token)]);
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, null, $token)]);
 	}
 
 	/**

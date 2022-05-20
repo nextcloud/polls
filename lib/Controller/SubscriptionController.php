@@ -49,7 +49,7 @@ class SubscriptionController extends Controller {
 	 * Get subscription status
 	 * @NoAdminRequired
 	 */
-	public function get(int $pollId = 0): DataResponse {
+	public function get(int $pollId): DataResponse {
 		return $this->response(fn () => ['subscribed' => $this->subscriptionService->get($pollId)]);
 	}
 
