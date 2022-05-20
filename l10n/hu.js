@@ -362,7 +362,6 @@ OC.L10N.register(
     "Disallow openly accessible polls" : "Nyilvánosan elérhető szavazások letiltása",
     "Allow creating openly accessible polls for the following groups" : "Nyilvánosan elérhető szavazások engedélyezése a következő csoportok számára",
     "Use calendar lookup for conflicting calendar events" : "Naptár átvizsgálása az ütköző naptáresemények megkereséséhez",
-    "Activate all calendars to consult for the search of conflicting events." : "Összes naptár aktiválása az ütköző események keresésekor.",
     "Text polls default to list view" : "A szöveges szavazások alapértelmezése a listanézet",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Jelölje be ezt, ha a szöveges szavazásokat függőlegesen igazított listában szeretné megjeleníteni rácsnézet helyett. A kezdeti alapértelmezés a listanézet.",
     "Date polls default to list view" : "A dátumszavazások alapértelmezése a listanézet",
