@@ -49,10 +49,8 @@ class SubscriptionController extends Controller {
 	 * Get subscription status
 	 * @NoAdminRequired
 	 */
-	public function get(int $pollId = 0): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['subscribed' => $this->subscriptionService->get($pollId)];
-		});
+	public function get(int $pollId): DataResponse {
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->get($pollId)]);
 	}
 
 	/**
@@ -60,9 +58,7 @@ class SubscriptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function subscribe(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['subscribed' => $this->subscriptionService->set(true, $pollId, '')];
-		});
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, $pollId, '')]);
 	}
 
 	/**
@@ -70,8 +66,6 @@ class SubscriptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function unsubscribe(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['subscribed' => $this->subscriptionService->set(false, $pollId, '')];
-		});
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(false, $pollId, '')]);
 	}
 }

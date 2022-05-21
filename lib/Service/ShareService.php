@@ -35,6 +35,7 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\NotFoundException;
+use OCA\Polls\Exceptions\InvalidUsernameException;
 
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
@@ -159,9 +160,10 @@ class ShareService {
 	}
 
 	/**
-	 * Validate share
+	 * Validate if share type is allowed to be used in a public poll
+	 * or is accessibale for use by the current user
 	 */
-	private function validate() : void {
+	private function validateShareType() : void {
 		switch ($this->share->getType()) {
 			case Share::TYPE_PUBLIC:
 				// public shares are always valid
@@ -200,11 +202,11 @@ class ShareService {
 	/**
 	 * Get share by token
 	 */
-	public function get(string $token, bool $validate = false): Share {
+	public function get(string $token, bool $validateShareType = false): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			if ($validate) {
-				$this->validate();
+			if ($validateShareType) {
+				$this->validateShareType();
 			}
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
@@ -216,9 +218,9 @@ class ShareService {
 				// Test if the user has already access.
 				$this->acl->setPollId($this->share->getPollId());
 			} catch (NotAuthorizedException $e) {
-				// If he is not authorized until now, create a new personal share for this user.
+				// If he is not authorized until now, createNewShare a new personal share for this user.
 				// Return the created share
-				return $this->create(
+				return $this->createNewShare(
 					$this->share->getPollId(),
 					UserBase::getUserGroupChild(Share::TYPE_USER, $this->userSession->getUser()->getUID()),
 					true
@@ -240,11 +242,11 @@ class ShareService {
 	}
 
 	/**
-	 * crate share - MUST BE PRIVATE!
+	 * crate a new share
 	 *
 	 * @return Share
 	 */
-	private function create(int $pollId, UserBase $userGroup, bool $preventInvitation = false): Share {
+	private function createNewShare(int $pollId, UserBase $userGroup, bool $preventInvitation = false): Share {
 		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
 		$token = $this->secureRandom->generate(
 			16,
@@ -297,7 +299,7 @@ class ShareService {
 			}
 		}
 
-		$this->create($pollId, UserBase::getUserGroupChild($type, $userId, $displayName, $emailAddress));
+		$this->createNewShare($pollId, UserBase::getUserGroupChild($type, $userId, $displayName, $emailAddress));
 
 		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($this->share));
 
@@ -386,6 +388,28 @@ class ShareService {
 		}
 	}
 
+	private function generatePublicUserId(string $token, string $prefix = 'ex_'): string {
+		$publicUserId = '';
+
+		while ($publicUserId === '') {
+			$publicUserId = $prefix . $this->secureRandom->generate(
+				8,
+				ISecureRandom::CHAR_DIGITS .
+				ISecureRandom::CHAR_LOWER .
+				ISecureRandom::CHAR_UPPER
+			);
+
+			try {
+				// make sure, the user id is unique
+				$this->systemService->validatePublicUsername($publicUserId, $token);
+			} catch (InvalidUsernameException $th) {
+				$publicUserId = '';
+			}
+		}
+
+		return $publicUserId;
+	}
+
 	/**
 	 * Create a personal share from a public share
 	 * or update an email share with the username
@@ -401,17 +425,19 @@ class ShareService {
 		}
 
 		$this->systemService->validatePublicUsername($userName, $token);
-
+		
 		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
 			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
 		}
 
+		$userId = $this->generatePublicUserId($token);
+		
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Create new external share for user, who entered the poll via public link,
 			// prevent invtation sending, when no email address is given
-			$this->create(
+			$this->createNewShare(
 				$this->share->getPollId(),
-				UserBase::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
+				UserBase::getUserGroupChild(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress),
 				!$emailAddress
 			);
 			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
@@ -420,7 +446,7 @@ class ShareService {
 
 			// Convert email and contact shares to external share, if user registers
 			$this->share->setType(Share::TYPE_EXTERNAL);
-			$this->share->setUserId($userName);
+			$this->share->setUserId($userId);
 			$this->share->setDisplayName($userName);
 
 			// prepare for resending invitation to new email address

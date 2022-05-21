@@ -50,9 +50,7 @@ class SettingsController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function getAppSettings(): DataResponse {
-		return $this->response(function (): array {
-			return ['appSettings' => $this->settingsService->getAppSettings()];
-		});
+		return $this->response(fn () => ['appSettings' => $this->settingsService->getAppSettings()]);
 	}
 
 	/**
@@ -60,8 +58,6 @@ class SettingsController extends Controller {
 	 */
 	public function writeAppSettings(array $appSettings): DataResponse {
 		$this->settingsService->writeAppSettings($appSettings);
-		return $this->response(function (): array {
-			return ['appSettings' => $this->settingsService->getAppSettings()];
-		});
+		return $this->response(fn () => ['appSettings' => $this->settingsService->getAppSettings()]);
 	}
 }

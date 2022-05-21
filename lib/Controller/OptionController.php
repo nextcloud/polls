@@ -23,9 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use DateTime;
-use DateInterval;
-use DateTimeZone;
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\DataResponse;
@@ -68,15 +65,11 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): DataResponse {
-		return $this->responseCreate(function () use ($pollId, $timestamp, $text, $duration) {
-			return ['option' => $this->optionService->add($pollId, $timestamp, $text, $duration)];
-		});
+		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $text, $duration)]);
 	}
 
 	public function addBulk(int $pollId, string $text = ''): DataResponse {
-		return $this->responseCreate(function () use ($pollId, $text) {
-			return ['options' => $this->optionService->addBulk($pollId, $text)];
-		});
+		return $this->responseCreate(fn () => ['options' => $this->optionService->addBulk($pollId, $text)]);
 	}
 
 	/**
@@ -84,9 +77,7 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function update(int $optionId, int $timestamp, string $text, int $duration): DataResponse {
-		return $this->response(function () use ($optionId, $timestamp, $text, $duration) {
-			return ['option' => $this->optionService->update($optionId, $timestamp, $text, $duration)];
-		});
+		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $text, $duration)]);
 	}
 
 	/**
@@ -94,9 +85,7 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function delete(int $optionId): DataResponse {
-		return $this->responseDeleteTolerant(function () use ($optionId) {
-			return ['option' => $this->optionService->delete($optionId)];
-		});
+		return $this->responseDeleteTolerant(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
 
 	/**
@@ -104,9 +93,7 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function confirm(int $optionId): DataResponse {
-		return $this->response(function () use ($optionId) {
-			return ['option' => $this->optionService->confirm($optionId)];
-		});
+		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
 
 	/**
@@ -114,9 +101,7 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function reorder(int $pollId, array $options): DataResponse {
-		return $this->response(function () use ($pollId, $options) {
-			return ['options' => $this->optionService->reorder($pollId, $options)];
-		});
+		return $this->response(fn () => ['options' => $this->optionService->reorder($pollId, $options)]);
 	}
 
 	/**
@@ -124,9 +109,7 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function sequence(int $optionId, int $step, string $unit, int $amount): DataResponse {
-		return $this->response(function () use ($optionId, $step, $unit, $amount) {
-			return ['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)];
-		});
+		return $this->response(fn () => ['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)]);
 	}
 
 	/**
@@ -134,9 +117,7 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function shift(int $pollId, int $step, string $unit): DataResponse {
-		return $this->response(function () use ($pollId, $step, $unit) {
-			return ['options' => $this->optionService->shift($pollId, $step, $unit)];
-		});
+		return $this->response(fn () => ['options' => $this->optionService->shift($pollId, $step, $unit)]);
 	}
 
 	/**
@@ -144,28 +125,6 @@ class OptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function findCalendarEvents(int $optionId, string $tz): DataResponse {
-		return $this->response(function () use ($optionId, $tz) {
-			return ['events' => $this->calendarService->getEvents($optionId, $tz)];
-		});
+		return $this->response(fn () => ['events' => $this->calendarService->getEvents($optionId, $tz)]);
 	}
-	// /**
-	//  * findCalendarEvents
-	//  * @NoAdminRequired
-	//  */
-	// public function findCalendarEvents_old(int $optionId, string $tz): DataResponse {
-	// 	return $this->response(function () use ($optionId, $tz) {
-	// 		$option = $this->optionService->get($optionId);
-	// 		$timezone = new DateTimeZone($tz);
-	// 		$searchFrom = (new DateTime())->setTimeZone($timezone);
-	// 		$searchTo = (new DateTime())->setTimeZone($timezone);
-
-	// 		// Search calendar entries which end inside one hour before option start time and one hour after option end time
-	// 		$searchFrom->setTimestamp($option->getTimestamp())->sub(new DateInterval('PT1H'));
-	// 		$searchTo->setTimestamp($option->getTimestamp() + $option->getDuration())->add(new DateInterval('PT1H'));
-
-	// 		$events = $this->calendarService->getEvents($searchFrom, $searchTo, $timezone);
-
-	// 		return ['events' => $events];
-	// 	});
-	// }
 }

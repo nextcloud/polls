@@ -31,6 +31,7 @@ use OCA\Polls\Helper\Container;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * @method int getId()
@@ -65,10 +66,14 @@ class Comment extends Entity implements JsonSerializable {
 	/** @var IUserManager */
 	private $userManager;
 
+	/** @var ShareMapper */
+	private $shareMapper;
+
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('timestamp', 'int');
 		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	public function jsonSerialize() {
@@ -98,9 +103,17 @@ class Comment extends Entity implements JsonSerializable {
 		if (!strncmp($this->userId, 'deleted_', 8)) {
 			return 'Deleted User';
 		}
-		return $this->getIsNoUser()
-			? $this->userId
-			: $this->userManager->get($this->userId)->getDisplayName();
+
+		if ($this->getIsNoUser()) {
+			// get displayName from share
+			try {
+				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->userId);
+				return $share->getDisplayName();
+			} catch (DoesNotExistException $e) {
+				return $this->userId;
+			}
+		}
+		return $this->userManager->get($this->userId)->getDisplayName();
 	}
 
 	public function getUser(): array {

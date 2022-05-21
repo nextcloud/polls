@@ -27,6 +27,7 @@ use OCA\Polls\Exceptions\InvalidShareTypeException;
 
 use DateTimeZone;
 use OCP\IL10N;
+use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Helper\Container;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
@@ -270,6 +271,20 @@ class UserBase implements \JsonSerializable {
 	 */
 	public function getMembers(): array {
 		return [$this];
+	}
+
+	/**
+	 * @return Admin|Circle|Contact|ContactGroup|Email|GenericUser|Group|User
+	 */
+	public static function getUserGroupChildFromShare(string $token) {
+		$shareMapper = Container::queryClass(ShareMapper::class);
+		$share = $shareMapper->findByToken($token);
+		return self::getUserGroupChild(
+			$share->getType(),
+			$share->getUserId(),
+			$share->getDisplayName(),
+			$share->getEmailAddress()
+		);
 	}
 
 	/**

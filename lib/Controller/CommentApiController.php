@@ -56,9 +56,7 @@ class CommentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function list(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['comments' => $this->commentService->list($pollId)];
-		});
+		return $this->response(fn () => ['comments' => $this->commentService->list($pollId)]);
 	}
 
 	/**
@@ -68,9 +66,7 @@ class CommentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function add(int $pollId, string $message): DataResponse {
-		return $this->response(function () use ($pollId, $message) {
-			return ['comment' => $this->commentService->add($pollId, null, $message)];
-		});
+		return $this->response(fn () => ['comment' => $this->commentService->add($message, $pollId)]);
 	}
 
 	/**
@@ -80,8 +76,6 @@ class CommentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function delete(int $commentId): DataResponse {
-		return $this->responseDeleteTolerant(function () use ($commentId) {
-			return ['comment' => $this->commentService->delete($commentId)];
-		});
+		return $this->responseDeleteTolerant(fn () => ['comment' => $this->commentService->delete($commentId)]);
 	}
 }

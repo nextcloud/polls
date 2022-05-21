@@ -194,9 +194,15 @@ class PollService {
 	/**
 	 * get poll configuration
 	 */
-	public function get(int $pollId): Poll {
+	public function get(int $pollId) : Poll {
 		$this->acl->setPollId($pollId);
-		return $this->acl->getPoll();
+		$this->poll = $this->pollMapper->find($pollId);
+
+		if (!$this->acl->getIsLoggedIn()) {
+			// if participant is not logged in avoid leaking user ids
+			AnonymizeService::replaceUserId($this->poll, $this->acl->getUserId());
+		}
+		return $this->poll;
 	}
 
 	/**

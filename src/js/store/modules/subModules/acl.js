@@ -39,6 +39,8 @@ const defaultAcl = () => ({
 	allowVote: false,
 	displayName: '',
 	isOwner: false,
+	isNoUser: true,
+	isGuest: true,
 	isVoteLimitExceeded: false,
 	loggedIn: false,
 	pollId: null,

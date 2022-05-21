@@ -311,6 +311,8 @@ class Acl implements JsonSerializable {
 			'isOwner' => $this->getIsOwner(),
 			'isVoteLimitExceeded' => $this->getIsVoteLimitExceeded(),
 			'loggedIn' => $this->getIsLoggedIn(),
+			'isNoUser' => !$this->getIsLoggedIn(),
+			'isGuest' => !$this->getIsLoggedIn(),
 			'pollId' => $this->getPollId(),
 			'token' => $this->getToken(),
 			'userHasVoted' => $this->getIsParticipant(),
@@ -324,7 +326,7 @@ class Acl implements JsonSerializable {
 	/**
 	 * getIsLogged - Is user logged in to nextcloud?
 	 */
-	private function getIsLoggedIn(): bool {
+	public function getIsLoggedIn(): bool {
 		return $this->userSession->isLoggedIn();
 	}
 

@@ -56,9 +56,7 @@ class OptionApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function list(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['options' => $this->optionService->list($pollId)];
-		});
+		return $this->response(fn () => ['options' => $this->optionService->list($pollId)]);
 	}
 
 	/**
@@ -68,9 +66,7 @@ class OptionApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
-		return $this->responseCreate(function () use ($pollId, $timestamp, $pollOptionText, $duration) {
-			return ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)];
-		});
+		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)]);
 	}
 
 
@@ -81,9 +77,7 @@ class OptionApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
-		return $this->response(function () use ($optionId, $timestamp, $pollOptionText, $duration) {
-			return ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText, $duration)];
-		});
+		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText, $duration)]);
 	}
 
 	/**
@@ -93,9 +87,7 @@ class OptionApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function delete(int $optionId): DataResponse {
-		return $this->responseDeleteTolerant(function () use ($optionId) {
-			return ['option' => $this->optionService->delete($optionId)];
-		});
+		return $this->responseDeleteTolerant(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
 
 	/**
@@ -105,9 +97,7 @@ class OptionApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function confirm(int $optionId): DataResponse {
-		return $this->response(function () use ($optionId) {
-			return ['option' => $this->optionService->confirm($optionId)];
-		});
+		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
 
 	/**
@@ -117,8 +107,6 @@ class OptionApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function setOrder(int $optionId, int $order): DataResponse {
-		return $this->response(function () use ($optionId, $order) {
-			return ['option' => $this->optionService->setOrder($optionId, $order)];
-		});
+		return $this->response(fn () => ['option' => $this->optionService->setOrder($optionId, $order)]);
 	}
 }
