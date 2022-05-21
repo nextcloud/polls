@@ -108,6 +108,7 @@ OC.L10N.register(
     "You have registered" : "Erregistratu zara",
     "{sharee} has registered" : "[sharee] erregistratu da",
     "You have deleted a public share" : "Partekatze publiko bat ezabatu duzu",
+    "{actor} has deleted a share" : "{actor}-(e)k partekatze bat ezabatu du",
     "You have voted" : "Bozkatu duzu",
     "{actor} has voted" : "{actor}(e)k bozkatu du",
     "A polls app, similar to Doodle/Dudle with the possibility to restrict access." : "Bozketak egiteko aplikazioa, Doodle/Dudle-ren modukoa, sarbidea mugatzeko aukerarekin.",

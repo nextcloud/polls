@@ -28,6 +28,8 @@
     "Owner" : "Owner",
     "Created" : "Created",
     "Preview" : "Preview",
+    "Specify in which period (in hours) before the option existing appointments should be included in the search results." : "Specify in which period (in hours) before the option should existing appointments be included in the search results.",
+    "Specify in which period (in hours) after the option existing appointments should be included in the search results." : "Specify in which period (in hours) after the option should existing appointments be included in the search results.",
     "Shares" : "Shares",
     "Description" : "Description",
     "Receive notification email on activity" : "Receive notification email on activity",
