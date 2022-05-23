@@ -361,6 +361,8 @@
     "Allow creating openly accessible polls for the following groups" : "Şu gruplara herkese açık anket oluşturma izni verilsin",
     "Use calendar lookup for conflicting calendar events" : "Çakışan takvim etkinlikleri için takvim taraması kullanılsın",
     "Select the calendars to use for lookup." : "Aranacak takvimleri seçin.",
+    "Specify in which period (in hours) before the option existing appointments should be included in the search results." : "Seçenekten önce hangi aralıkta (saat olarak) var olan randevuların arama sonuçlarına katılması gerektiğini belirtin.",
+    "Specify in which period (in hours) after the option existing appointments should be included in the search results." : "Seçenekten sonra hangi aralıkta (saat olarak) var olan randevuların arama sonuçlarına katılması gerektiğini belirtin.",
     "Text polls default to list view" : "Metin anketleri varsayılan olarak liste görünümünde",
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Metin anketinin tablo görünümü yerine dikey olarak hizalanmış liste görünümünde olmasını istiyorsanız, bu seçeneği işaretleyin. İlk varsayılan liste görünümüdür.",
     "Date polls default to list view" : "Tarih anketleri varsayılan olarak liste görünümünde",
