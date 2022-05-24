@@ -171,7 +171,7 @@
     "Switch to list view" : "Basculer en mode liste",
     "Switch to table view" : "Basculer en mode tableau",
     "Delete" : "Supprimer",
-    "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Suppression dans {countdown} seconde","Suppression dans {countdown} secondes"],
+    "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Suppression dans {countdown} seconde","Suppression dans {countdown} secondes","Suppression dans {countdown} secondes"],
     "Date order" : "Ordre de date",
     "Original order" : "Ordre original",
     "Ranked order" : "Ordre classé",
@@ -288,11 +288,11 @@
     "Results are always hidden" : "Les résultats sont toujours masqués",
     "Results are visible" : "Les résultats sont visibles",
     "Private poll" : "Sondage privé",
-    "_%n Participant_::_%n Participants_" : ["%n participant","%n participants"],
-    "_%n option_::_%n options_" : ["%n choix","%n choix"],
-    "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n vote \"Oui\"","%n votes \"Oui\""],
-    "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n vote \"Peut-être\"","%n votes \"Peut-être\""],
-    "_Only %n vote per option._::_Only %n votes per option._" : ["Limiter à %n vote par choix","Limiter à %n votes par choix"],
+    "_%n Participant_::_%n Participants_" : ["%n participant","%n participants","%n participants"],
+    "_%n option_::_%n options_" : ["%n choix","%n choix","%n choix"],
+    "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n vote \"Oui\"","%n votes \"Oui\"","%n votes \"Oui\""],
+    "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n vote \"Peut-être\"","%n votes \"Peut-être\"","%n votes \"Peut-être\""],
+    "_Only %n vote per option._::_Only %n votes per option._" : ["Limiter à %n vote par choix","Limiter à %n votes par choix","Limiter à %n votes par choix"],
     "Optional email address" : "Adresse e-mail (optionnel)",
     "Checking email address …" : "Vérification de l'adresse e-mail …",
     "valid email address." : "adresse e-mail valide",
@@ -480,7 +480,7 @@
     "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Pour des raisons de performance, {countHiddenParticipants} participants sont cachés.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Bien que les noms des participants soient masqués, ce sondage n'est pas réellement anonyme car le propriétaire peut voir les noms.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "De plus, le propriétaire peut retirer l'anonymat à n'importe quel moment, ce qui révélerait les noms des participants.",
-    "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n vote sur {maximalVotes} restant.","%n votes sur {maximalVotes} restant."],
+    "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n vote sur {maximalVotes} restant.","%n votes sur {maximalVotes} restant.","%n votes sur {maximalVotes} restant."],
     "Minute" : "Minute",
     "Hour" : "Heure",
     "Day" : "Jour",
@@ -507,5 +507,5 @@
     "Archive" : "Archive",
     "My archived polls" : "Mes sondages archivés",
     "Your archived polls are only accessible to you." : "Vos sondages archivés sont consultables par vous uniquement."
-},"pluralForm" :"nplurals=2; plural=(n > 1);"
+},"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }
