@@ -54,52 +54,13 @@
 	--color-polls-foreground-filter-maybe: invert(81%) sepia(22%) saturate(3383%) hue-rotate(353deg) brightness(101%) contrast(101%);
 }
 
-.icon-activity { background-image: var(--icon-activity-activity-dark-000); }
 .icon-circles { background-image: var(--icon-circles); }
 .icon-polls { background-image: var(--icon-polls); }
 .icon-polls-maybe { background-image: var(--icon-polls-maybe); }
 .icon-polls-no { background-image: var(--icon-polls-no); }
 .icon-polls-yes { background-image: var(--icon-polls-yes); }
-// .icon-clock { background-image: var(--icon-clock); }
-// .icon-clock-fff { background-image: var(--icon-clock--fff); }
-// .icon-handle { background-image: var(--icon-polls-handle); }
-// .icon-list-view { background-image: var(--icon-polls-list-view); }
-// .icon-polls-anonymous { background-image: var(--icon-polls-anonymous); }
-// .icon-polls-back { background-image: var(--icon-polls-back); }
-// .icon-polls-clone { background-image: var(--icon-polls-clone); }
-// .icon-polls-closed { background-image: var(--icon-polls-closed); }
-// .icon-polls-closed-fff { background-image: var(--icon-polls-closed--fff); }
-// .icon-polls-confirmed { background-image: var(--icon-polls-confirmed); }
-// .icon-polls-private-poll { background-image: var(--icon-polls-private-poll); }
-// .icon-polls-private { background-image: var(--icon-polls-private-poll); }
-// .icon-polls-mail { background-image: var(--icon-polls-mail); }
-// .icon-polls-minus { background-image: var(--icon-polls-minus); }
-// .icon-polls-move { background-image: var(--icon-polls-move); }
-// .icon-polls-open { background-image: var(--icon-polls-open); }
-// .icon-polls-open-poll { background-image: var(--icon-polls-open-poll); }
-// .icon-polls-sidebar-toggle { background-image: var(--icon-polls-sidebar-toggle); }
-// .icon-polls-unconfirmed { background-image: var(--icon-polls-unconfirmed); }
-// .icon-table-view { background-image: var(--icon-polls-table-view); }
-// .icon-polls-visible { background-image: var(--icon-polls-open-poll); }
 
 .theme--dark {
 	.icon-circles { background-image: var(--icon-circles--fff); }
 	.icon-polls { background-image: var(--icon-polls--fff); }
-	// .icon-clock { background-image: var(--icon-clock--fff); }
-	// .icon-handle { background-image: var(--icon-polls-handle--fff); }
-	// .icon-list-view { background-image: var(--icon-polls-list-view-fff); }
-	// .icon-polls-anonymous { background-image: var(--icon-polls-anonymous--fff); }
-	// .icon-polls-back { background-image: var(--icon-polls-back--fff); }
-	// .icon-polls-clone { background-image: var(--icon-polls-clone--fff); }
-	// .icon-polls-closed { background-image: var(--icon-polls-closed--fff); }
-	// .icon-polls-confirmed { background-image: var(--icon-polls-confirmed--fff); }
-	// .icon-polls-private { background-image: var(--icon-polls-private-poll--fff); }
-	// .icon-polls-private-poll { background-image: var(--icon-polls-private-poll--fff); }
-	// .icon-polls-mail { background-image: var(--icon-polls-mail--fff); }
-	// .icon-polls-move { background-image: var(--icon-polls-move--fff); }
-	// .icon-polls-open { background-image: var(--icon-polls-open--fff); }
-	// .icon-polls-open-poll { background-image: var(--icon-polls-open-poll--fff); }
-	// .icon-polls-sidebar-toggle { background-image: var(--icon-polls-sidebar-toggle--fff); }
-	// .icon-polls-unconfirmed { background-image: var(--icon-polls-unconfirmed--fff); }
-	// .icon-table-view { background-image: var(--icon-polls-table-view-fff); }
 }

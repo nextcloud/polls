@@ -22,7 +22,6 @@
 }
 
 :root {
-	--icon-md-shield-crown-outline: url('../icons/material-design/shield-crown-outline.svg');
 	--icon-md-email: url('../icons/material-design/email.svg');
 	--icon-md-share-variant: url('../icons/material-design/share-variant.svg');
 	--icon-md-link-variant: url('../icons/material-design/link-variant.svg');
@@ -53,6 +52,4 @@
 .icon-svg-md-link { @include svg-icon(var(--icon-md-link-variant)); }
 
 // mask icons
-// UserItem.vue
-.icon-mask-md-admin { @include masked-icon(var(--icon-md-shield-crown-outline)); }
 

@@ -22,7 +22,7 @@
 <template>
 	<span :aria-hidden="!title"
 		:aria-label="title"
-		class="material-design-icon publish-off-icon"
+		class="material-design-icon activity-app-icon"
 		role="img"
 		v-bind="$attrs"
 		@click="$emit('click', $event)">
@@ -30,8 +30,8 @@
 			class="material-design-icon__svg"
 			:width="size"
 			:height="size"
-			viewBox="0 0 24 24">
-			<path d="M20.8 22.7L15 16.9V20H9V14H5L8.6 10.4L1.1 3L2.4 1.7L22.1 21.4L20.8 22.7M19 6V4H7.2L9.2 6H19M17.2 14H19L12 7L11.1 7.9L17.2 14Z">
+			viewBox="0 0 32 32">
+			<path d="m16 1-10 18h11l-1 12 10-18h-11z" :fill="fillColor">
 				<title v-if="title">{{ title }}</title>
 			</path>
 		</svg>
@@ -40,11 +40,11 @@
 
 <script>
 export default {
-	name: 'PublishOff',
+	name: 'ActivityAppIcon',
 	props: {
 		title: {
 			type: String,
-			default: 'Unpublished',
+			default: 'Activity',
 		},
 		fillColor: {
 			type: String,

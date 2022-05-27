@@ -58,8 +58,10 @@
 		<AppSidebarTab v-if="acl.loggedIn && useCollaboration"
 			:id="'collaboration'"
 			:order="4"
-			:name="t('polls', 'Collaboration')"
-			icon="icon-projects">
+			:name="t('polls', 'Collaboration')">
+			<template #icon>
+				<SidebarProjectsIcon />
+			</template>
 			<SideBarTabCollaboration />
 		</AppSidebarTab>
 
@@ -76,8 +78,10 @@
 		<AppSidebarTab v-if="acl.allowEdit && useActivity"
 			:id="'activity'"
 			:order="6"
-			:name="t('polls', 'Activity')"
-			icon="icon-activity">
+			:name="t('polls', 'Activity')">
+			<template #icon>
+				<SidebarActivityIcon />
+			</template>
 			<SideBarTabActivity />
 		</AppSidebarTab>
 	</AppSidebar>
@@ -91,6 +95,8 @@ import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+import SidebarActivityIcon from '../components/AppIcons/ActivityAppIcon.vue'
+import SidebarProjectsIcon from '../components/AppIcons/ProjectsAppIcon.vue'
 
 export default {
 	name: 'SideBar',
@@ -104,8 +110,10 @@ export default {
 		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity.vue'),
 		AppSidebar,
 		AppSidebarTab,
+		SidebarActivityIcon,
 		SidebarConfigurationIcon,
 		SidebarOptionsIcon,
+		SidebarProjectsIcon,
 		SidebarShareIcon,
 		SidebarCommentsIcon,
 	},
