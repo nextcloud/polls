@@ -58,11 +58,16 @@
 			</transition-group>
 		</draggable>
 
-		<EmptyContent v-else :icon="pollTypeIcon">
-			{{ t('polls', 'No vote options') }}
+		<EmptyContent v-else>
+			<template #icon>
+				<TextPollIcon />
+			</template>
+
 			<template #desc>
 				{{ t('polls', 'Add some!') }}
 			</template>
+
+			{{ t('polls', 'No vote options') }}
 		</EmptyContent>
 	</div>
 </template>
@@ -77,6 +82,7 @@ import OptionItemOwner from '../Options/OptionItemOwner.vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins.js'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
 export default {
 	name: 'OptionsText',
@@ -90,6 +96,7 @@ export default {
 		OptionItem,
 		OptionItemOwner,
 		VueButton,
+		TextPollIcon,
 		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
 	},
 
@@ -115,7 +122,6 @@ export default {
 		...mapGetters({
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
-			pollTypeIcon: 'poll/typeIcon',
 		}),
 
 		dragOptions() {

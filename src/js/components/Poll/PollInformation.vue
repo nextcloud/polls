@@ -22,46 +22,111 @@
 
 <template lang="html">
 	<div class="poll-information">
-		<Badge icon="icon-mask-md-owner">
+		<Badge>
+			<template #icon>
+				<OwnerIcon />
+			</template>
 			{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner.userId" :user="poll.owner.userId" :display-name="poll.owner.displayName" />
 		</Badge>
-		<Badge :icon="accessClass" :title="accessCaption" />
-		<Badge icon="icon-mask-md-creation"
-			:title="t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative })" />
-		<Badge v-if="poll.expire"
-			icon="icon-mask-md-closed-poll"
-			:title="t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative})" />
-		<Badge v-if="poll.anonymous"
-			icon="icon-mask-md-anonymous-poll"
-			:title="t('polls', 'Anonymous poll')" />
-		<Badge :icon="resultsClass" :title="resultsCaption" />
-		<Badge v-if="countParticipantsVoted && acl.allowSeeResults"
-			icon="icon-mask-md-participants"
-			:title="n('polls', '%n Participant', '%n Participants', countParticipantsVoted)" />
-		<Badge icon="icon-mask-md-options" :title="n('polls', '%n option', '%n options', countOptions)" />
-		<Badge v-if="countAllYesVotes" icon="icon-mask-md-yes-votes">
+		<Badge>
+			<template #icon>
+				<PrivatePollIcon v-if="access === 'private'" />
+				<OpenPollIcon v-else />
+			</template>
+			{{ accessCaption }}
+		</Badge>
+		<Badge>
+			<template #icon>
+				<CreationIcon />
+			</template>
+			{{ t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative }) }}
+		</Badge>
+		<Badge v-if="poll.expire">
+			<template #icon>
+				<ClosedIcon />
+			</template>
+			{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
+		</Badge>
+		<Badge v-if="poll.anonymous">
+			<template #icon>
+				<AnoymousIcon />
+			</template>
+			{{ t('polls', 'Anonymous poll') }}
+		</Badge>
+		<Badge>
+			<template #icon>
+				<HideResultsIcon v-if="showResults === 'never'" />
+				<ShowResultsOnClosedIcon v-else-if="showResults === 'closed' && closed" />
+				<ShowResultsIcon v-else />
+			</template>
+			{{ resultsCaption }}
+		</Badge>
+		<Badge v-if="countParticipantsVoted && acl.allowSeeResults">
+			<template #icon>
+				<ParticipantsIcon />
+			</template>
+			{{ n('polls', '%n Participant', '%n Participants', countParticipantsVoted) }}
+		</Badge>
+		<Badge>
+			<template #icon>
+				<OptionsIcon />
+			</template>
+			{{ n('polls', '%n option', '%n options', countOptions) }}
+		</Badge>
+		<Badge v-if="countAllYesVotes">
+			<template #icon>
+				<CheckIcon fill-color="#49bc49" />
+			</template>
 			{{ n('polls', '%n "Yes" vote', '%n "Yes" votes', countAllYesVotes) }}
 		</Badge>
-		<Badge v-if="countAllNoVotes" icon="icon-mask-md-no-votes">
+		<Badge v-if="countAllNoVotes">
+			<template #icon>
+				<CloseIcon fill-color="#f45573" />
+			</template>
 			{{ n('polls', '%n No vote', '%n "No" votes', countAllNoVotes) }}
 		</Badge>
-		<Badge v-if="countAllMaybeVotes" icon="icon-mask-md-maybe-votes">
+		<Badge v-if="countAllMaybeVotes">
+			<template #icon>
+				<MaybeIcon />
+			</template>
 			{{ n('polls', '%n "Maybe" vote', '%n "Maybe" votes', countAllMaybeVotes) }}
 		</Badge>
-		<Badge icon="icon-mask-md-timezone" :title="t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone})" />
-		<Badge v-if="proposalsAllowed" icon="icon-mask-md-proposals-allowed" :title="proposalsStatus" />
-		<div v-if="poll.voteLimit" class="icon-checkmark">
+		<Badge>
+			<template #icon>
+				<TimezoneIcon />
+			</template>
+			{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
+		</Badge>
+		<Badge v-if="proposalsAllowed">
+			<template #icon>
+				<ProposalsAllowedIcon />
+			</template>
+			{{ proposalsStatus }}
+		</Badge>
+		<Badge v-if="poll.voteLimit">
+			<template #icon>
+				<CheckIcon />
+			</template>
 			{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
-		</div>
-		<div v-if="poll.optionLimit" class="icon-close">
+		</Badge>
+		<Badge v-if="poll.optionLimit">
+			<template #icon>
+				<CloseIcon />
+			</template>
 			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
-		</div>
-		<div v-if="$route.name === 'publicVote' && share.emailAddress" class="icon-mail">
+		</Badge>
+		<Badge v-if="$route.name === 'publicVote' && share.emailAddress">
+			<template #icon>
+				<EmailIcon />
+			</template>
 			{{ share.emailAddress }}
-		</div>
-		<Badge v-if="subscribed"
-			icon="icon-mask-md-subscribed"
-			:title="t('polls', 'You subscribed to this poll')" />
+		</Badge>
+		<Badge v-if="subscribed">
+			<template #icon>
+				<SubscribedIcon />
+			</template>
+			{{ t('polls', 'You subscribed to this poll') }}
+		</Badge>
 	</div>
 </template>
 
@@ -70,6 +135,24 @@ import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { UserBubble } from '@nextcloud/vue'
 import Badge from '../Base/Badge.vue'
+import OwnerIcon from 'vue-material-design-icons/Crown.vue'
+import SubscribedIcon from 'vue-material-design-icons/Bell.vue'
+import ProposalsAllowedIcon from 'vue-material-design-icons/Offer.vue'
+import TimezoneIcon from 'vue-material-design-icons/MapClockOutline.vue'
+import OptionsIcon from 'vue-material-design-icons/FormatListCheckbox.vue'
+import ParticipantsIcon from 'vue-material-design-icons/AccountGroup.vue'
+import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
+import ShowResultsOnClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
+import HideResultsIcon from 'vue-material-design-icons/MonitorOff.vue'
+import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
+import ClosedIcon from 'vue-material-design-icons/Lock.vue'
+import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
+import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
+import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import EmailIcon from 'vue-material-design-icons/Email.vue'
+import MaybeIcon from '../AppIcons/MaybeIcon.vue'
 
 export default {
 	name: 'PollInformation',
@@ -77,6 +160,24 @@ export default {
 	components: {
 		Badge,
 		UserBubble,
+		OwnerIcon,
+		SubscribedIcon,
+		ProposalsAllowedIcon,
+		TimezoneIcon,
+		OptionsIcon,
+		ParticipantsIcon,
+		ShowResultsIcon,
+		ShowResultsOnClosedIcon,
+		HideResultsIcon,
+		AnoymousIcon,
+		ClosedIcon,
+		CreationIcon,
+		PrivatePollIcon,
+		OpenPollIcon,
+		CheckIcon,
+		CloseIcon,
+		MaybeIcon,
+		EmailIcon,
 	},
 
 	computed: {
@@ -131,17 +232,6 @@ export default {
 			return t('polls', 'Results are visible')
 		},
 
-		resultsClass() {
-			if (this.showResults === 'never') {
-				return 'icon-mask-md-show-results-never'
-			}
-			if (this.showResults === 'closed' && !this.closed) {
-				return 'icon-mask-md-hide-results-until-closed'
-			}
-			return 'icon-mask-md-show-results'
-
-		},
-
 		accessCaption() {
 			if (this.access === 'private') {
 				return t('polls', 'Private poll')
@@ -150,16 +240,6 @@ export default {
 				return t('polls', 'Openly accessible and relevant poll')
 			}
 			return t('polls', 'Openly accessible poll')
-		},
-
-		accessClass() {
-			if (this.access === 'private') {
-				return 'icon-mask-md-private-poll'
-			}
-			if (this.important) {
-				return 'icon-mask-md-open-poll'
-			}
-			return 'icon-mask-md-open-poll'
 		},
 
 		dateCreatedRelative() {

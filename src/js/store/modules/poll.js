@@ -109,13 +109,6 @@ const getters = {
 		return t('polls', 'Date poll')
 	},
 
-	typeIcon: (state) => {
-		if (state.type === 'textPoll') {
-			return 'icon-mask-md-text-poll'
-		}
-		return 'icon-mask-md-date-poll'
-	},
-
 	answerSequence: (state, getters, rootState) => {
 		const noString = rootState.poll.useNo ? 'no' : ''
 		if (state.allowMaybe) {

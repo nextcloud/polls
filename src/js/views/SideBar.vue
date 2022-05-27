@@ -28,24 +28,30 @@
 		<AppSidebarTab v-if="acl.allowEdit"
 			:id="'configuration'"
 			:order="1"
-			:name="t('polls', 'Configuration')"
-			icon="icon-mask-md-sidebar-configuration">
+			:name="t('polls', 'Configuration')">
+			<template #icon>
+				<SidebarConfigurationIcon />
+			</template>
 			<SideBarTabConfiguration />
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="acl.allowEdit"
 			:id="'options'"
 			:order="2"
-			:name="t('polls', 'Options')"
-			icon="icon-mask-md-sidebar-options">
+			:name="t('polls', 'Options')">
+			<template #icon>
+				<SidebarOptionsIcon />
+			</template>
 			<SideBarTabOptions />
 		</AppSidebarTab>
 
 		<AppSidebarTab v-if="acl.allowEdit"
 			:id="'sharing'"
 			:order="3"
-			:name="t('polls', 'Sharing')"
-			icon="icon-mask-md-sidebar-share">
+			:name="t('polls', 'Sharing')">
+			<template #icon>
+				<SidebarShareIcon />
+			</template>
 			<SideBarTabShare />
 		</AppSidebarTab>
 
@@ -60,8 +66,10 @@
 		<AppSidebarTab v-if="acl.allowComment"
 			:id="'comments'"
 			:order="5"
-			:name="t('polls', 'Comments')"
-			icon="icon-mask-md-sidebar-comments">
+			:name="t('polls', 'Comments')">
+			<template #icon>
+				<SidebarCommentsIcon />
+			</template>
 			<SideBarTabComments />
 		</AppSidebarTab>
 
@@ -79,6 +87,10 @@
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
+import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
+import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
+import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 
 export default {
 	name: 'SideBar',
@@ -92,6 +104,10 @@ export default {
 		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity.vue'),
 		AppSidebar,
 		AppSidebarTab,
+		SidebarConfigurationIcon,
+		SidebarOptionsIcon,
+		SidebarShareIcon,
+		SidebarCommentsIcon,
 	},
 
 	props: {

@@ -53,31 +53,39 @@
 					<template #actions>
 						<Actions force-menu>
 							<ActionButton v-if="isPollCreationAllowed"
-								icon="icon-mask-md-clone-poll"
 								:close-after-click="true"
 								@click="clonePoll(poll.id)">
+								<template #icon>
+									<ClonePollIcon />
+								</template>
 								{{ t('polls', 'Clone poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && !poll.deleted"
-								icon="icon-mask-md-archive-poll"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
+								<template #icon>
+									<ArchivePollIcon />
+								</template>
 								{{ t('polls', 'Archive poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && poll.deleted"
-								icon="icon-mask-md-restore-poll"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
+								<template #icon>
+									<RestorePollIcon />
+								</template>
 								{{ t('polls', 'Restore poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && poll.deleted"
-								icon="icon-mask-md-delete-poll"
 								class="danger"
 								:close-after-click="true"
 								@click="deletePoll(poll.id)">
+								<template #icon>
+									<DeletePollIcon />
+								</template>
 								{{ t('polls', 'Delete poll') }}
 							</ActionButton>
 						</Actions>
@@ -95,6 +103,10 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
 import HeaderBar from '../components/Base/HeaderBar.vue'
+import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
+import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 
 export default {
 	name: 'PollList',
@@ -105,6 +117,10 @@ export default {
 		ActionButton,
 		EmptyContent,
 		HeaderBar,
+		DeletePollIcon,
+		ClonePollIcon,
+		ArchivePollIcon,
+		RestorePollIcon,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},

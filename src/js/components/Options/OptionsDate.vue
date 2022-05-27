@@ -62,11 +62,16 @@
 			</OptionItem>
 		</transition-group>
 
-		<EmptyContent v-else :icon="pollTypeIcon">
-			{{ t('polls', 'No vote options') }}
+		<EmptyContent v-else>
+			<template #icon>
+				<DatePollIcon />
+			</template>
+
 			<template #desc>
 				{{ t('polls', 'Add some!') }}
 			</template>
+
+			{{ t('polls', 'No vote options') }}
 		</EmptyContent>
 
 		<Modal v-if="cloneModal" size="small" :can-close="false">
@@ -86,6 +91,7 @@ import { dateUnits } from '../../mixins/dateMixins.js'
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
 export default {
 	name: 'OptionsDate',
@@ -102,6 +108,7 @@ export default {
 		OptionCloneDate,
 		OptionItem,
 		VueButton,
+		DatePollIcon,
 		OptionItemOwner: () => import('./OptionItemOwner.vue'),
 	},
 
@@ -129,7 +136,6 @@ export default {
 		...mapGetters({
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
-			pollTypeIcon: 'poll/typeIcon',
 		}),
 	},
 

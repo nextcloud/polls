@@ -53,7 +53,11 @@
 	</div>
 
 	<div v-else class="poll-item__item">
-		<div v-tooltip.auto="pollTypeName" :class="['item__icon-spacer', pollTypeIcon]" />
+		<div v-tooltip.auto="pollTypeName" class="item__icon-spacer">
+			<TextPollIcon v-if="pollType === 'textPoll'" />
+			<DatePollIcon v-else />
+		</div>
+		<!-- <div v-tooltip.auto="pollTypeName" :class="['item__icon-spacer', pollTypeIcon]" /> -->
 
 		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
 			<div class="item__title__title">
@@ -79,8 +83,11 @@
 		</router-link>
 
 		<slot name="actions" />
-
-		<div v-tooltip.auto="accessType" :class="['item__access', accessIcon]" />
+		<div v-tooltip.auto="accessType" class="item__access">
+			<ArchivedPollIcon v-if="poll.deleted" />
+			<OpenPollIcon v-else-if="poll.access === 'open'" />
+			<PrivatePollIcon v-else />
+		</div>
 
 		<div class="item__owner">
 			<UserItem v-bind="poll.owner" condensed />
@@ -88,13 +95,20 @@
 
 		<div class="wrapper">
 			<div class="item__created">
-				<Badge :title="timeCreatedRelative"
-					icon="icon-mask-md-creation" />
+				<Badge>
+					<template #icon>
+						<CreationIcon />
+					</template>
+					{{ timeCreatedRelative }}
+				</Badge>
 			</div>
 			<div class="item__expiry">
-				<Badge :title="timeExpirationRelative"
-					icon="icon-mask-md-expiration"
-					:class="expiryClass" />
+				<Badge :class="expiryClass">
+					<template #icon>
+						<ExpirationIcon />
+					</template>
+					{{ timeExpirationRelative }}
+				</Badge>
 			</div>
 		</div>
 	</div>
@@ -104,11 +118,25 @@
 import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
 import Badge from '../Base/Badge.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
+import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
+import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
+import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
 
 export default {
 	name: 'PollItem',
 	components: {
 		Badge,
+		TextPollIcon,
+		DatePollIcon,
+		CreationIcon,
+		ExpirationIcon,
+		PrivatePollIcon,
+		OpenPollIcon,
+		ArchivedPollIcon,
 	},
 
 	props: {
@@ -152,32 +180,15 @@ export default {
 			return t('polls', 'Private poll')
 		},
 
+		pollType() {
+			return this.poll.type
+		},
+
 		pollTypeName() {
-			if (this.poll.type === 'textPoll') {
+			if (this.pollType === 'textPoll') {
 				return t('polls', 'Text poll')
 			}
-
 			return t('polls', 'Date poll')
-		},
-
-		pollTypeIcon() {
-			if (this.poll.type === 'textPoll') {
-				return 'icon-mask-md-text-poll'
-			}
-
-			return 'icon-mask-md-date-poll'
-		},
-
-		accessIcon() {
-			if (this.poll.deleted) {
-				return 'icon-mask-md-archived-poll'
-			}
-
-			if (this.poll.access === 'open') {
-				return 'icon-mask-md-open-poll'
-			}
-
-			return 'icon-mask-md-private-poll'
 		},
 
 		timeExpirationRelative() {

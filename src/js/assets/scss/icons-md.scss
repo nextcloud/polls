@@ -22,56 +22,10 @@
 }
 
 :root {
-	--icon-md-account-check: url('../icons/material-design/account-check.svg');
-	--icon-md-account-group: url('../icons/material-design/account-group.svg');
-	--icon-md-account-cog: url('../icons/material-design/account-cog.svg');
-	--icon-md-archive: url('../icons/material-design/archive.svg');
-	--icon-md-bell: url('../icons/material-design/bell.svg');
-	--icon-md-bell-off: url('../icons/material-design/bell-off.svg');
-	--icon-md-cancel: url('../icons/material-design/cancel.svg');
-	--icon-md-calendar-month: url('../icons/material-design/calendar-month.svg');
-	--icon-md-calendar-blank: url('../icons/material-design/calendar-blank.svg');
-	--icon-md-calendar-end: url('../icons/material-design/calendar-end.svg');
-	--icon-md-check: url('../icons/material-design/check.svg');
-	--icon-md-clipboard-arrow-left-outline: url('../icons/material-design/clipboard-arrow-left-outline.svg');
-	--icon-md-close: url('../icons/material-design/close.svg');
-	--icon-md-clock-outline: url('../icons/material-design/clock-outline.svg');
-	--icon-md-checkbox-marked-outline: url('../icons/material-design/checkbox-marked-outline.svg');
-	--icon-md-cog: url('../icons/material-design/cog.svg');
-	--icon-md-comment-processing: url('../icons/material-design/comment-processing.svg');
-	--icon-md-content-copy: url('../icons/material-design/content-copy.svg');
-	--icon-md-crown: url('../icons/material-design/crown.svg');
-	--icon-md-delete: url('../icons/material-design/delete.svg');
-	--icon-md-earth: url('../icons/material-design/earth.svg');
-	--icon-md-email: url('../icons/material-design/email.svg');
-	--icon-md-email-edit-outline: url('../icons/material-design/email-edit-outline.svg');
-	--icon-md-exclamation-thick: url('../icons/material-design/exclamation-thick.svg');
-	--icon-md-format-list-bulleted-square: url('../icons/material-design/format-list-bulleted-square.svg');
-	--icon-md-format-list-checkbox: url('../icons/material-design/format-list-checkbox.svg');
-	--icon-md-format-list-numbered: url('../icons/material-design/format-list-numbered.svg');
-	--icon-md-format-list-checks: url('../icons/material-design/format-list-checks.svg');
-	--icon-md-incognito: url('../icons/material-design/incognito.svg');
-	--icon-md-link-variant: url('../icons/material-design/link-variant.svg');
-	--icon-md-lock: url('../icons/material-design/lock.svg');
-	--icon-md-lock-open-variant: url('../icons/material-design/lock-open-variant.svg');
-	--icon-md-key: url('../icons/material-design/key.svg');
-	--icon-md-map-clock-outline: url('../icons/material-design/map-clock-outline.svg');
-	--icon-md-monitor: url('../icons/material-design/monitor.svg');
-	--icon-md-monitor-lock: url('../icons/material-design/monitor-lock.svg');
-	--icon-md-monitor-off: url('../icons/material-design/monitor-off.svg');
-	--icon-md-offer: url('../icons/material-design/offer.svg');
-	--icon-md-poll: url('../icons/material-design/poll.svg');
-	--icon-md-polls-maybe: url('../icons/material-design/polls-maybe.svg');
-	--icon-md-publish-off: url('../icons/material-design/publish-off.svg');
-	--icon-md-recycle: url('../icons/material-design/recycle.svg');
-	--icon-md-share-variant: url('../icons/material-design/share-variant.svg');
 	--icon-md-shield-crown-outline: url('../icons/material-design/shield-crown-outline.svg');
-	--icon-md-polls-shield-crown-outline-strike-thru: url('../icons/material-design/polls-shield-crown-outline-strike-thru.svg');
-	--icon-md-sort-clock-ascending-outline: url('../icons/material-design/sort-clock-ascending-outline.svg');
-	--icon-md-undo: url('../icons/material-design/undo.svg');
-	--icon-md-vector-combine: url('../icons/material-design/vector-combine.svg');
-	--icon-md-wrench: url('../icons/material-design/wrench.svg');
-
+	--icon-md-email: url('../icons/material-design/email.svg');
+	--icon-md-share-variant: url('../icons/material-design/share-variant.svg');
+	--icon-md-link-variant: url('../icons/material-design/link-variant.svg');
 
 	--icon-size: 18px;
 	--icon-md-color-default: #000;
@@ -99,80 +53,6 @@
 .icon-svg-md-link { @include svg-icon(var(--icon-md-link-variant)); }
 
 // mask icons
+// UserItem.vue
 .icon-mask-md-admin { @include masked-icon(var(--icon-md-shield-crown-outline)); }
-.icon-mask-md-admin-remove { @include masked-icon(var(--icon-md-shield-crown-outline-strike-thru)); }
-.icon-mask-md-anonymous-poll { @include masked-icon(var(--icon-md-incognito)); }
-.icon-mask-md-archive-poll { @include masked-icon(var(--icon-md-archive)); }
-.icon-mask-md-archived-poll { @include masked-icon(var(--icon-md-archive)); }
-.icon-mask-md-clippy { @include masked-icon(var(--icon-md-clipboard-arrow-left-outline)); }
-.icon-mask-md-clone-poll { @include masked-icon(var(--icon-md-content-copy)); }
-.icon-mask-md-closed-poll { @include masked-icon(var(--icon-md-lock)); }
-.icon-mask-md-creation { @include masked-icon(var(--icon-md-clock-outline)); }
-.icon-mask-md-date-options { @include masked-icon(var(--icon-md-calendar-month)); }
-.icon-mask-md-date-poll { @include masked-icon(var(--icon-md-calendar-blank)); }
-.icon-mask-md-delete-poll { @include masked-icon(var(--icon-md-delete)); }
-.icon-mask-md-edit-email-address { @include masked-icon(var(--icon-md-email-edit-outline)); }
-.icon-mask-md-email { @include masked-icon(var(--icon-md-email)); }
-.icon-mask-md-expiration { @include masked-icon(var(--icon-md-calendar-end)); }
-.icon-mask-md-hide-results-until-closed { @include masked-icon(var(--icon-md-monitor-lock)); }
-.icon-mask-md-navigation-administration { @include masked-icon(var(--icon-md-cog)); }
-.icon-mask-md-navigation-all { @include masked-icon(var(--icon-md-poll)); }
-.icon-mask-md-navigation-archived { @include masked-icon(var(--icon-md-archive)); }
-.icon-mask-md-navigation-closed { @include masked-icon(var(--icon-md-lock)); }
-.icon-mask-md-navigation-combo { @include masked-icon(var(--icon-md-vector-combine)); }
-.icon-mask-md-navigation-my { @include masked-icon(var(--icon-md-crown)); }
-.icon-mask-md-navigation-open { @include masked-icon(var(--icon-md-earth)); }
-.icon-mask-md-navigation-participated { @include masked-icon(var(--icon-md-account-check)); }
-.icon-mask-md-navigation-personal-settings { @include masked-icon(var(--icon-md-account-cog)); }
-.icon-mask-md-navigation-private { @include masked-icon(var(--icon-md-key)); }
-.icon-mask-md-navigation-relevant { @include masked-icon(var(--icon-md-exclamation-thick)); }
-.icon-mask-md-open-poll { @include masked-icon(var(--icon-md-earth)); }
-.icon-mask-md-options { @include masked-icon(var(--icon-md-format-list-checkbox)); }
-.icon-mask-md-options-order-date { @include masked-icon(var(--icon-md-sort-clock-ascending-outline)); }
-.icon-mask-md-options-order-original { @include masked-icon(var(--icon-md-format-list-bulleted-square)); }
-.icon-mask-md-options-order-ranked { @include masked-icon(var(--icon-md-format-list-numbered)); }
-.icon-mask-md-owner { @include masked-icon(var(--icon-md-crown)); }
-.icon-mask-md-participants { @include masked-icon(var(--icon-md-account-group)); }
-.icon-mask-md-private-poll { @include masked-icon(var(--icon-md-key)); }
-.icon-mask-md-proposals-allowed { @include masked-icon(var(--icon-md-offer)); }
-.icon-mask-md-proposals { @include masked-icon(var(--icon-md-offer)); }
-.icon-mask-md-send-link-per-email { @include masked-icon(var(--icon-md-link-variant)); }
-.icon-mask-md-show-results { @include masked-icon(var(--icon-md-monitor)); }
-.icon-mask-md-show-results-never { @include masked-icon(var(--icon-md-monitor-off)); }
-.icon-mask-md-sidebar-comments { @include masked-icon(var(--icon-md-comment-processing)); }
-.icon-mask-md-sidebar-configuration { @include masked-icon(var(--icon-md-wrench)); }
-.icon-mask-md-sidebar-options { @include masked-icon(var(--icon-md-format-list-checks)); }
-.icon-mask-md-sidebar-share { @include masked-icon(var(--icon-md-share-variant)); }
-.icon-mask-md-subscribed { @include masked-icon(var(--icon-md-bell)); }
-.icon-mask-md-reset-votes { @include masked-icon(var(--icon-md-undo)); }
-.icon-mask-md-restore-poll { @include masked-icon(var(--icon-md-recycle)); }
-.icon-mask-md-text-poll { @include masked-icon(var(--icon-md-format-list-bulleted-square)); }
-.icon-mask-md-timezone { @include masked-icon(var(--icon-md-map-clock-outline)); }
-.icon-mask-md-unsubscribed { @include masked-icon(var(--icon-md-bell-off)); }
-.icon-mask-md-unpublished-poll { @include masked-icon(var(--icon-md-publish-off)); }
 
-.icon-mask-md-yes-vote,
-.icon-mask-md-yes-votes {
-	background-color: var(--color-polls-foreground-yes) !important;
-	@include masked-icon(var(--icon-md-check));
-}
-
-.icon-mask-md-no-vote,
-.icon-mask-md-no-votes {
-	background-color: var(--color-polls-foreground-no) !important;
-	@include masked-icon(var(--icon-md-close));
-}
-
-.locked .vote-item.currentuser .icon,
-.icon-mask-md-locked-vote {
-	background-color: var(--color-polls-foreground-no) !important;
-	@include masked-icon(var(--icon-md-cancel));
-	mask-size: 100%;
-	-webkit-mask-size: 100%;
-}
-
-.icon-mask-md-maybe-vote,
-.icon-mask-md-maybe-votes {
-	background-color: var(--color-polls-foreground-maybe) !important;
-	@include masked-icon(var(--icon-md-polls-maybe));
-}

@@ -22,10 +22,9 @@
 
 <template lang="html">
 	<Component :is="tag" class="badge">
-		<div :class="icon" />
-		<span>
-			{{ title }}
-		</span>
+		<div>
+			<slot name="icon" />
+		</div>
 		<span>
 			<slot />
 		</span>
@@ -36,14 +35,6 @@
 export default {
 	name: 'Badge',
 	props: {
-		title: {
-			type: String,
-			default: '',
-		},
-		icon: {
-			type: String,
-			default: '',
-		},
 		tag: {
 			type: String,
 			default: 'span',
@@ -55,6 +46,7 @@ export default {
 <style lang="scss">
 	.badge {
 		display: flex;
+		align-items: center;
 		gap: 5px;
 		border-radius: var(--border-radius);
 		padding: 5px;
@@ -73,18 +65,12 @@ export default {
 			border-color: var(--color-error);
 			background-color: var(--color-error);
 			color: var(--color-primary-text) !important;
-			[class*='icon-mask-md-'] {
-				background-color: #fff;
-			}
 		}
 
 		&.success {
 			border-color: var(--color-success);
 			background-color: var(--color-success);
 			color: var(--color-primary-text) !important;
-			[class*='icon-mask-md-'] {
-				background-color: #fff;
-			}
 		}
 	}
 

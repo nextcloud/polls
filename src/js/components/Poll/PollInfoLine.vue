@@ -23,7 +23,7 @@
 <template lang="html">
 	<div class="poll-info-line">
 		<span v-for="(subText) in subTexts" :key="subText.id" :class="['sub-text', subText.class]">
-			<span :class="subText.icon" />
+			<Component :is="subText.iconComponent" :size="16" />
 			<span class="sub-text">{{ subText.text }}</span>
 		</span>
 	</div>
@@ -32,6 +32,12 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
+import unpublishedIcon from '../AppIcons/PublishOff.vue'
+import archivedPollIcon from 'vue-material-design-icons/Archive.vue'
+import closedPollIcon from 'vue-material-design-icons/Lock.vue'
+import creationIcon from 'vue-material-design-icons/ClockOutline.vue'
+import ProposalsIcon from 'vue-material-design-icons/Offer.vue'
+import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
 
 export default {
 	name: 'PollInfoLine',
@@ -62,6 +68,16 @@ export default {
 		subTexts() {
 			const subTexts = []
 
+			if (this.isDeleted) {
+				subTexts.push({
+					id: 'deleted',
+					text: t('polls', 'Archived'),
+					class: 'archived',
+					iconComponent: archivedPollIcon,
+				})
+				return subTexts
+			}
+
 			if (this.isNoAccessSet) {
 				subTexts.push({
 					id: 'no-access',
@@ -69,8 +85,8 @@ export default {
 						t('polls', 'This poll is unpublished'),
 						t('polls', 'Invite users via the share tab in the sidebar'),
 					].join('. '),
-					icon: 'icon-mask-md-unpublished-poll',
 					class: 'unpublished',
+					iconComponent: unpublishedIcon,
 				})
 				return subTexts
 			}
@@ -79,34 +95,24 @@ export default {
 				subTexts.push({
 					id: this.access,
 					text: t('polls', 'A private poll from {name}', { name: this.ownerDisplayName }),
-					icon: '',
 					class: '',
+					iconComponent: null,
 				})
 			} else {
 				subTexts.push({
 					id: this.access,
 					text: t('polls', 'An openly accessible poll from {name}', { name: this.ownerDisplayName }),
-					icon: '',
 					class: '',
+					iconComponent: null,
 				})
-			}
-
-			if (this.isDeleted) {
-				subTexts.push({
-					id: 'deleted',
-					text: t('polls', 'Archived'),
-					icon: 'icon-mask-md-archived-poll',
-					class: 'archived',
-				})
-				return subTexts
 			}
 
 			if (this.isClosed) {
 				subTexts.push({
 					id: 'closed',
 					text: this.timeExpirationRelative,
-					icon: 'icon-mask-md-closed-poll',
 					class: 'closed',
+					iconComponent: closedPollIcon,
 				})
 				return subTexts
 			}
@@ -115,8 +121,8 @@ export default {
 				subTexts.push({
 					id: 'expiring',
 					text: t('polls', 'Closing {relativeExpirationTime}', { relativeExpirationTime: this.timeExpirationRelative }),
-					icon: 'icon-mask-md-expiration',
 					class: this.closeToClosing ? 'closing' : 'open',
+					iconComponent: ExpirationIcon,
 				})
 				return subTexts
 			}
@@ -125,8 +131,8 @@ export default {
 				subTexts.push({
 					id: 'expired',
 					text: t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
-					icon: 'icon-mask-md-proposals',
 					class: 'proposal',
+					iconComponent: ProposalsIcon,
 				})
 				return subTexts
 			}
@@ -135,8 +141,8 @@ export default {
 				subTexts.push({
 					id: 'proposal-open',
 					text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
-					icon: 'icon-mask-md-proposals',
 					class: 'proposal',
+					iconComponent: ProposalsIcon,
 				})
 				return subTexts
 			}
@@ -145,8 +151,8 @@ export default {
 				subTexts.push({
 					id: 'created',
 					text: this.dateCreatedRelative,
-					icon: 'icon-mask-md-creation',
 					class: 'created',
+					iconComponent: creationIcon,
 				})
 			}
 			return subTexts
@@ -171,17 +177,16 @@ export default {
 }
 
 </script>
-.poll-info-line [class^="icon-"], .poll-info-line [class*=" icon-"] {
-	/* padding-right: 21px; */
-	width: var(--icon-size);
-	margin: 0px 6px 0 2px;
-}
 <style lang="scss">
 .poll-info-line {
 	display: flex;
 	flex-wrap: wrap;
 	opacity: 0.7;
 	font-size: 1em;
+
+	.material-design-icon {
+		padding: 0 2px;
+	}
 
 	.sub-text {
 		display: flex;
@@ -192,25 +197,14 @@ export default {
 		padding: 0 2px;
 	}
 
-	[class^="icon-"],
-	[class*=" icon-"] {
-		width: var(--icon-size);
-		margin: 0px 6px 0 2px;
-	}
-
-	[class^="icon-md"],
-	[class*=" icon-md"] {
-		mask-size: var(--icon-size);
-	}
-
-	.closed {
+	.closed, .archived {
 		.sub-text{
 			color: var(--color-error);
 			font-weight: 700;
 		}
 	}
 
-	.unpublished {
+	.unpublished, .open {
 		.sub-text{
 			font-weight: 700;
 		}
@@ -219,19 +213,6 @@ export default {
 	.closing {
 		.sub-text{
 			color: var(--color-warning);
-			font-weight: 700;
-		}
-	}
-
-	.open {
-		.sub-text{
-			font-weight: 700;
-		}
-	}
-
-	.archived {
-		.sub-text{
-			color: var(--color-error);
 			font-weight: 700;
 		}
 	}

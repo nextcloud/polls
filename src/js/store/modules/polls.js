@@ -43,7 +43,6 @@ const state = {
 			title: t('polls', 'Relevant'),
 			titleExt: t('polls', 'Relevant polls'),
 			description: t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago.'),
-			icon: 'icon-mask-md-navigation-relevant',
 			pinned: false,
 			createDependent: false,
 			filterCondition(poll) {
@@ -61,7 +60,6 @@ const state = {
 			title: t('polls', 'My polls'),
 			titleExt: t('polls', 'My polls'),
 			description: t('polls', 'Your polls (in which you are the owner).'),
-			icon: 'icon-mask-md-navigation-my',
 			pinned: false,
 			createDependent: true,
 			filterCondition(poll) {
@@ -73,7 +71,6 @@ const state = {
 			title: t('polls', 'Private polls'),
 			titleExt: t('polls', 'Private polls'),
 			description: t('polls', 'All private polls, to which you have access.'),
-			icon: 'icon-mask-md-navigation-private',
 			pinned: false,
 			createDependent: true,
 			filterCondition(poll) {
@@ -85,7 +82,6 @@ const state = {
 			title: t('polls', 'Participated'),
 			titleExt: t('polls', 'Participated'),
 			description: t('polls', 'All polls, where you placed a vote.'),
-			icon: 'icon-mask-md-navigation-participated',
 			pinned: false,
 			createDependent: false,
 			filterCondition(poll) {
@@ -97,7 +93,6 @@ const state = {
 			title: t('polls', 'Openly accessible polls'),
 			titleExt: t('polls', 'Openly accessible polls'),
 			description: t('polls', 'A complete list with all openly accessible polls on this site, regardless who is the owner.'),
-			icon: 'icon-mask-md-navigation-open',
 			pinned: false,
 			createDependent: true,
 			filterCondition(poll) {
@@ -109,7 +104,6 @@ const state = {
 			title: t('polls', 'All polls'),
 			titleExt: t('polls', 'All polls'),
 			description: t('polls', 'All polls, where you have access to.'),
-			icon: 'icon-mask-md-navigation-all',
 			pinned: false,
 			createDependent: false,
 			filterCondition(poll) {
@@ -121,7 +115,6 @@ const state = {
 			title: t('polls', 'Closed polls'),
 			titleExt: t('polls', 'Closed polls'),
 			description: t('polls', 'All closed polls, where voting is disabled.'),
-			icon: 'icon-mask-md-navigation-closed',
 			pinned: false,
 			createDependent: false,
 			filterCondition(poll) {
@@ -135,7 +128,6 @@ const state = {
 			title: t('polls', 'Archive'),
 			titleExt: t('polls', 'My archived polls'),
 			description: t('polls', 'Your archived polls are only accessible to you.'),
-			icon: 'icon-mask-md-navigation-archived',
 			pinned: true,
 			createDependent: true,
 			filterCondition(poll) {

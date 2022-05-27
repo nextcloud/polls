@@ -59,7 +59,7 @@ const mutations = {
 }
 
 const getters = {
-	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.text === vote.voteOptionText)),
+	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.text === vote.optionText)),
 	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.user.userId === rootState.poll.acl.userId && vote.answer === answer).length,
 	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.answer === answer).length,
 	hasVoted: (state) => (userId) => state.list.findIndex((vote) => vote.user.userId === userId) > -1,
