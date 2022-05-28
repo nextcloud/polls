@@ -27,15 +27,18 @@
 			:text="t('polls', 'Add new Poll')"
 			@click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @close-create="closeCreate()" />
+
 		<template #list>
 			<AppNavigationItem v-for="(pollCategory) in pollCategories"
 				:key="pollCategory.id"
 				:title="pollCategory.title"
 				:allow-collapse="true"
 				:pinned="pollCategory.pinned"
-				:icon="pollCategory.icon"
 				:to="{ name: 'list', params: {type: pollCategory.id}}"
 				:open="false">
+				<template #icon>
+					<Component :is="getIconComponent(pollCategory.id)" :size="iconSize" />
+				</template>
 				<ul>
 					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
 						:key="poll.id"
@@ -46,16 +49,28 @@
 				</ul>
 			</AppNavigationItem>
 		</template>
+
 		<template #footer>
 			<AppNavigationItem v-if="isComboActivated"
 				:title="t('polls', 'Combine polls')"
-				icon="icon-mask-md-navigation-combo"
-				:to="{ name: 'combo' }" />
+				:to="{ name: 'combo' }">
+				<template #icon>
+					<ComboIcon :size="iconSize" />
+				</template>
+			</AppNavigationItem>
 			<AppNavigationItem v-if="showAdminSection"
 				:title="t('polls', 'Administration')"
-				icon="icon-mask-md-navigation-administration"
-				:to="{ name: 'administration' }" />
-			<AppNavigationItem :title="t('polls', 'Personal settings')" icon="icon-mask-md-navigation-personal-settings" @click="showSettings()" />
+				:to="{ name: 'administration' }">
+				<template #icon>
+					<AdministrationIcon :size="iconSize" />
+				</template>
+			</AppNavigationItem>
+			<AppNavigationItem :title="t('polls', 'Personal settings')"
+				@click="showSettings()">
+				<template #icon>
+					<SettingsIcon :size="iconSize" />
+				</template>
+			</AppNavigationItem>
 		</template>
 	</AppNavigation>
 </template>
@@ -69,6 +84,17 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import CreateDlg from '../components/Create/CreateDlg.vue'
 import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
+import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
+import AdministrationIcon from 'vue-material-design-icons/Cog.vue'
+import SettingsIcon from 'vue-material-design-icons/AccountCog.vue'
+import RelevantIcon from 'vue-material-design-icons/ExclamationThick.vue'
+import MyPollsIcon from 'vue-material-design-icons/Crown.vue'
+import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
+import ParticipatedIcon from 'vue-material-design-icons/AccountCheck.vue'
+import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
+import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
+import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 
 export default {
 	name: 'Navigation',
@@ -78,11 +104,25 @@ export default {
 		AppNavigationItem,
 		CreateDlg,
 		PollNavigationItems,
+		ComboIcon,
+		SettingsIcon,
+		AdministrationIcon,
 	},
 
 	data() {
 		return {
+			iconSize: 20,
 			createDlg: false,
+			icons: [
+				{ id: 'relevant', iconComponent: RelevantIcon },
+				{ id: 'my', iconComponent: MyPollsIcon },
+				{ id: 'private', iconComponent: PrivatePollsIcon },
+				{ id: 'participated', iconComponent: ParticipatedIcon },
+				{ id: 'open', iconComponent: OpenPollIcon },
+				{ id: 'all', iconComponent: AllPollsIcon },
+				{ id: 'closed', iconComponent: ClosedPollsIcon },
+				{ id: 'archived', iconComponent: ArchivedPollsIcon },
+			],
 		}
 	},
 
@@ -113,6 +153,10 @@ export default {
 	methods: {
 		closeCreate() {
 			this.createDlg = false
+		},
+
+		getIconComponent(iconId) {
+			return this.icons.find((icon) => icon.id === iconId).iconComponent
 		},
 
 		toggleCreateDlg() {

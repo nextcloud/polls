@@ -34,7 +34,7 @@
 			:display-name="name"
 			:is-no-user="isNoUser" />
 
-		<div v-if="icon" :class="['type-icon', iconClass]" />
+		<AdminIcon v-if="icon && type === 'admin'" :size="16" class="type-icon" />
 
 		<slot name="status" />
 
@@ -63,6 +63,7 @@ export default {
 
 	components: {
 		Avatar,
+		AdminIcon: () => import('../AppIcons/ShieldCrownOutline.vue'),
 	},
 
 	inheritAttrs: false,
@@ -232,16 +233,6 @@ export default {
 
 			return ''
 		},
-
-		iconClass() {
-			if (this.icon) {
-				if (this.type === 'admin') {
-					return 'icon-mask-md-admin'
-				}
-			}
-			return ''
-		},
-
 	},
 }
 
@@ -253,6 +244,13 @@ export default {
 	background-color: var(--color-primary-element) !important;
 	height: 100%;
 	background-size: 16px;
+}
+
+.type-icon {
+	position: absolute;
+	background-size: 16px;
+	top: 3px;
+	left: 0;
 }
 
 .user-item {
@@ -296,10 +294,4 @@ export default {
 	}
 }
 
-.type-icon {
-	background-size: 16px;
-	position: absolute;
-	left: 0;
-	top: 3px;
-}
 </style>

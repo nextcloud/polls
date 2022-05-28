@@ -92,7 +92,6 @@ export default {
 	.config-box__title {
 		display: flex;
 		flex: 1;
-		background-position: 0 4px;
 		opacity: 0.7;
 		font-weight: bold;
 		margin: 0;

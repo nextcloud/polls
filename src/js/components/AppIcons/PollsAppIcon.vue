@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -19,59 +19,53 @@
   - along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -
   -->
-
-<template lang="html">
-	<Component :is="tag" class="badge">
-		<div>
-			<slot name="icon" />
-		</div>
-		<span>
-			<slot />
-		</span>
-	</Component>
+<template>
+	<span :aria-hidden="!title"
+		:aria-label="title"
+		class="material-design-icon polls-app-icon"
+		role="img"
+		v-bind="$attrs"
+		@click="$emit('click', $event)">
+		<svg :fill="fillColor"
+			class="material-design-icon__svg"
+			:width="size"
+			:height="size"
+			viewBox="0 0 32 32">
+			<g :fill="fillColor">
+				<rect y="2"
+					x="3"
+					height="26"
+					width="7" />
+				<rect y="12"
+					x="12"
+					height="16"
+					width="7" />
+				<rect y="8"
+					x="21"
+					height="20"
+					width="7" />
+				<title v-if="title">{{ title }}</title>
+			</g>
+		</svg>
+	</span>
 </template>
 
 <script>
 export default {
-	name: 'Badge',
+	name: 'PollsAppIcon',
 	props: {
-		tag: {
+		title: {
 			type: String,
-			default: 'span',
+			default: 'Polls',
+		},
+		fillColor: {
+			type: String,
+			default: 'currentColor',
+		},
+		size: {
+			type: Number,
+			default: 24,
 		},
 	},
 }
 </script>
-
-<style lang="scss">
-	.badge {
-		display: flex;
-		align-items: center;
-		gap: 5px;
-		border-radius: var(--border-radius);
-		padding: 5px;
-		margin: 8px 4px;
-		text-align: center;
-		line-height: 1.1em;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		font-size: 0.9em;
-
-		h2 & {
-			font-size: 0.6em;
-		}
-
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-text) !important;
-		}
-
-		&.success {
-			border-color: var(--color-success);
-			background-color: var(--color-success);
-			color: var(--color-primary-text) !important;
-		}
-	}
-
-</style>

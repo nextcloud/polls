@@ -99,7 +99,6 @@ export default {
 		...mapGetters({
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
-			pollTypeIcon: 'poll/typeIcon',
 		}),
 		...mapState({
 			pollType: (state) => state.poll.type,

@@ -30,11 +30,14 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<EmptyContent v-if="noPolls" icon="icon-polls">
-				{{ t('polls', 'No polls found for this category') }}
+			<EmptyContent v-if="noPolls">
+				<template #icon>
+					<PollsAppIcon />
+				</template>
 				<template #desc>
 					{{ t('polls', 'Add one or change category!') }}
 				</template>
+				{{ t('polls', 'No polls found for this category') }}
 			</EmptyContent>
 
 			<transition-group v-else
@@ -123,6 +126,7 @@ import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
 import sortBy from 'lodash/sortBy'
 import HeaderBar from '../components/Base/HeaderBar.vue'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 
 export default {
 	name: 'Administration',
@@ -135,6 +139,7 @@ export default {
 		HeaderBar,
 		Modal,
 		VueButton,
+		PollsAppIcon,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},

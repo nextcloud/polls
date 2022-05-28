@@ -31,9 +31,12 @@
 			@input="$emit('input', $event.target.value)"
 			@change="$emit('change', $event.target.value)"
 			@keyup.enter="$emit('submit', $event.target.value)">
-		<ArrowRight v-if="!useNumModifiers && !noSubmit" class="submit" @click="$emit('submit', $refs.input.value)" />
-		<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="$emit('subtract')" />
-		<PlusIcon v-if="useNumModifiers" class="modifier add" @click="$emit('add')" />
+		<Spinner v-if="checking" class="spinner" />
+		<ArrowRight v-if="showSubmit" class="submit" @click="$emit('submit', $refs.input.value)" />
+		<CloseIcon v-if="error" class="error" fill-color="#f45573" />
+		<CheckIcon v-if="success" class="success" fill-color="#49bc49" />
+		<MinusIcon v-if="showModifiers" class="modifier subtract" @click="$emit('subtract')" />
+		<PlusIcon v-if="showModifiers" class="modifier add" @click="$emit('add')" />
 	</div>
 </template>
 
@@ -41,6 +44,9 @@
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import Spinner from '../AppIcons/Spinner.vue'
 
 export default {
 	name: 'InputDiv',
@@ -49,6 +55,9 @@ export default {
 		ArrowRight,
 		PlusIcon,
 		MinusIcon,
+		CloseIcon,
+		CheckIcon,
+		Spinner,
 	},
 
 	props: {
@@ -59,6 +68,9 @@ export default {
 		signalingClass: {
 			type: String,
 			default: '',
+			validator(value) {
+				return ['', 'empty', 'error', 'success', 'checking'].includes(value)
+			},
 		},
 		placeholder: {
 			type: String,
@@ -92,6 +104,24 @@ export default {
 		},
 	},
 
+	computed: {
+		error() {
+			return !this.checking && !this.useNumModifiers && this.signalingClass === 'error'
+		},
+		success() {
+			return !this.checking && !this.useNumModifiers && this.signalingClass === 'success' && this.noSubmit
+		},
+		showSubmit() {
+			return !this.checking && !this.useNumModifiers && !this.noSubmit && this.signalingClass !== 'error'
+		},
+		showModifiers() {
+			return this.useNumModifiers
+		},
+		checking() {
+			return !this.useNumModifiers && this.signalingClass === 'checking'
+		},
+	},
+
 	mounted() {
 		if (this.focus) {
 			this.setFocus()
@@ -109,15 +139,13 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 	.input-div {
 		position: relative;
 
 		input {
 			width: 100%;
-			background-repeat: no-repeat;
-			background-position: right 12px center;
 
 			&:empty:before {
 				color: grey;
@@ -134,18 +162,15 @@ export default {
 			&.error {
 				border-color: var(--color-error);
 				background-color: var(--color-background-error);
-				background-image: var(--icon-polls-no);
 				color: var(--color-foreground-error);
 			}
 
 			&.checking {
 				border-color: var(--color-warning);
-				background-image: var(--icon-polls-loading);
 			}
 
 			&.success, &.icon-confirm.success {
 				border-color: var(--color-success);
-				background-image: var(--icon-polls-yes);
 				background-color: var(--color-background-success) !important;
 				color: var(--color-foreground-success);
 			}
@@ -161,15 +186,19 @@ export default {
 			}
 		}
 
+		.error, .success, .spinner {
+			&.material-design-icon {
+				position: absolute;
+				right: 6px;
+				top: 8px;
+			}
+		}
+
 		.submit {
 			position: absolute;
 			right: 6px;
 			top: 8px;
 			cursor: pointer;
-
-			&:hover {
-				background-color: var(--color-background-hover)
-			}
 		}
 
 		.modifier {

@@ -24,8 +24,11 @@
 	<div class="comments">
 		<CommentAdd v-if="acl.allowComment" />
 		<Comments v-if="!showEmptyContent" />
-		<EmptyContent v-else icon="icon-mask-md-sidebar-comments">
+		<EmptyContent v-else>
 			{{ t('polls', 'No comments') }}
+			<template #icon>
+				<CommentsIcon />
+			</template>
 			<template #desc>
 				{{ t('polls', 'Be the first.') }}
 			</template>
@@ -38,6 +41,7 @@ import CommentAdd from '../Comments/CommentAdd.vue'
 import Comments from '../Comments/Comments.vue'
 import { EmptyContent } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
+import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 
 export default {
 	name: 'SideBarTabComments',
@@ -45,6 +49,7 @@ export default {
 		CommentAdd,
 		Comments,
 		EmptyContent,
+		CommentsIcon,
 	},
 
 	computed: {

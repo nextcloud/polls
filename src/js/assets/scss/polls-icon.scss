@@ -7,6 +7,11 @@
 	background-image: var(--icon-polls);
 	background-size: 16px 16px;
 }
+@media (prefers-color-scheme: dark) {
+	.icon-polls {
+		background-image: var(--icon-polls--fff);
+	}
+}
 
 .theme--dark {
 	.icon-polls {

@@ -44,7 +44,11 @@
 			<div class="area__main" :class="viewMode">
 				<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-				<EmptyContent v-if="!options.length" :icon="pollTypeIcon">
+				<EmptyContent v-if="!options.length">
+					<template #icon>
+						<TextPollIcon v-if="poll.type === 'textPoll'" />
+						<DatePollIcon v-else />
+					</template>
 					{{ t('polls', 'No vote options available') }}
 					<template #desc>
 						<button v-if="acl.allowEdit" @click="openOptions">
@@ -84,6 +88,8 @@ import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
 import HeaderBar from '../components/Base/HeaderBar.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
 export default {
 	name: 'Vote',
@@ -94,6 +100,8 @@ export default {
 		MarkUpDescription,
 		PollHeaderButtons,
 		PollInfoLine,
+		DatePollIcon,
+		TextPollIcon,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 		OptionProposals: () => import('../components/Options/OptionProposals.vue'),
 		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal.vue'),
@@ -117,7 +125,6 @@ export default {
 		...mapGetters({
 			closed: 'poll/isClosed',
 			options: 'options/rankedOptions',
-			pollTypeIcon: 'poll/typeIcon',
 			viewMode: 'poll/viewMode',
 			proposalsAllowed: 'poll/proposalsAllowed',
 			proposalsOpen: 'poll/proposalsOpen',

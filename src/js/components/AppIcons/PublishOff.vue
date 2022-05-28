@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -19,59 +19,41 @@
   - along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -
   -->
-
-<template lang="html">
-	<Component :is="tag" class="badge">
-		<div>
-			<slot name="icon" />
-		</div>
-		<span>
-			<slot />
-		</span>
-	</Component>
+<template>
+	<span :aria-hidden="!title"
+		:aria-label="title"
+		class="material-design-icon publish-off-icon"
+		role="img"
+		v-bind="$attrs"
+		@click="$emit('click', $event)">
+		<svg :fill="fillColor"
+			class="material-design-icon__svg"
+			:width="size"
+			:height="size"
+			viewBox="0 0 24 24">
+			<path d="M20.8 22.7L15 16.9V20H9V14H5L8.6 10.4L1.1 3L2.4 1.7L22.1 21.4L20.8 22.7M19 6V4H7.2L9.2 6H19M17.2 14H19L12 7L11.1 7.9L17.2 14Z">
+				<title v-if="title">{{ title }}</title>
+			</path>
+		</svg>
+	</span>
 </template>
 
 <script>
 export default {
-	name: 'Badge',
+	name: 'PublishOff',
 	props: {
-		tag: {
+		title: {
 			type: String,
-			default: 'span',
+			default: 'Unpublished',
+		},
+		fillColor: {
+			type: String,
+			default: 'currentColor',
+		},
+		size: {
+			type: Number,
+			default: 24,
 		},
 	},
 }
 </script>
-
-<style lang="scss">
-	.badge {
-		display: flex;
-		align-items: center;
-		gap: 5px;
-		border-radius: var(--border-radius);
-		padding: 5px;
-		margin: 8px 4px;
-		text-align: center;
-		line-height: 1.1em;
-		overflow: hidden;
-		text-overflow: ellipsis;
-		font-size: 0.9em;
-
-		h2 & {
-			font-size: 0.6em;
-		}
-
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-text) !important;
-		}
-
-		&.success {
-			border-color: var(--color-success);
-			background-color: var(--color-success);
-			color: var(--color-primary-text) !important;
-		}
-	}
-
-</style>
