@@ -92,7 +92,7 @@ class VoteMapper extends QBMapper {
 	public function findParticipantsByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->selectDistinct('user_id')
+		$qb->selectDistinct(['user_id', 'poll_id'])
 		   ->from($this->getTableName())
 		   ->where(
 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))

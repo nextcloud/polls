@@ -98,6 +98,14 @@ export default {
 			votes: (state) => state.votes,
 			isOwner: (state) => state.poll.acl.allowEdit,
 		}),
+
+		sheetName() {
+			// Not allowed characters for the sheet name: : \ / ? * [ ]
+			// Strip them out
+			// Stonger regex i.e. for file names: /[&/\\#,+()$~%.'":*?<>{}]/g
+			const regex = /[\\/?*[\]]/g
+			return this.poll.title.replaceAll(regex, '').slice(0, 31)
+		},
 	},
 
 	methods: {
@@ -106,7 +114,7 @@ export default {
 			const fromHeader = [t('polls', 'From')]
 			const toHeader = [t('polls', 'To')]
 			this.workBook = xlsxUtils.book_new()
-			this.workBook.SheetNames.push(this.poll.title.slice(0, 31))
+			this.workBook.SheetNames.push(this.sheetName)
 			this.sheetData = []
 
 			if (['html', 'xlsx', 'ods'].includes(type)) {
@@ -160,6 +168,7 @@ export default {
 			} else {
 				this.addVotesArray()
 			}
+
 			const workBookOutput = xlsxWrite(this.workBook, { bookType: type, type: 'binary' })
 			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${type}`)
 		},
@@ -185,7 +194,7 @@ export default {
 			})
 
 			const workSheet = xlsxUtils.aoa_to_sheet(this.sheetData)
-			this.workBook.Sheets[this.poll.title.slice(0, 31)] = workSheet
+			this.workBook.Sheets[this.sheetName] = workSheet
 		},
 
 		s2ab(s) {
