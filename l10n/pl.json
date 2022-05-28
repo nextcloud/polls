@@ -232,7 +232,7 @@
     "Email address" : "Adres e-mail",
     "No" : "Nie",
     "Clone poll" : "Klonuj sondę",
-    "Archive poll" : "Archiwum sondy",
+    "Archive poll" : "Zarchiwizuj sondę",
     "Restore poll" : "Przywróć sondę",
     "Delete poll" : "Usuń sondę",
     "Clone to option sequence" : "Klonuj do sekwencji opcji",
@@ -537,7 +537,7 @@
     "All polls, where you have access to." : "Wszystkie sondy, do których masz dostęp.",
     "Closed polls" : "Sondy zamknięte",
     "All closed polls, where voting is disabled." : "Wszystkie sondy zamknięte, w których głosowanie jest wyłączone.",
-    "Archive" : "Archiwizuj",
+    "Archive" : "Archiwum",
     "My archived polls" : "Moje zarchiwizowane sondy",
     "Your archived polls are only accessible to you." : "Twoje zarchiwizowane sondy są dostępne tylko dla Ciebie."
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"

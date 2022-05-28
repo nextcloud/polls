@@ -234,7 +234,7 @@ OC.L10N.register(
     "Email address" : "Adres e-mail",
     "No" : "Nie",
     "Clone poll" : "Klonuj sondę",
-    "Archive poll" : "Archiwum sondy",
+    "Archive poll" : "Zarchiwizuj sondę",
     "Restore poll" : "Przywróć sondę",
     "Delete poll" : "Usuń sondę",
     "Clone to option sequence" : "Klonuj do sekwencji opcji",
@@ -539,7 +539,7 @@ OC.L10N.register(
     "All polls, where you have access to." : "Wszystkie sondy, do których masz dostęp.",
     "Closed polls" : "Sondy zamknięte",
     "All closed polls, where voting is disabled." : "Wszystkie sondy zamknięte, w których głosowanie jest wyłączone.",
-    "Archive" : "Archiwizuj",
+    "Archive" : "Archiwum",
     "My archived polls" : "Moje zarchiwizowane sondy",
     "Your archived polls are only accessible to you." : "Twoje zarchiwizowane sondy są dostępne tylko dla Ciebie."
 },
