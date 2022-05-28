@@ -248,6 +248,7 @@ export default {
 
 .type-icon {
 	position: absolute;
+	background-size: 16px;
 	top: 3px;
 	left: 0;
 }
@@ -293,10 +294,4 @@ export default {
 	}
 }
 
-.type-icon {
-	background-size: 16px;
-	position: absolute;
-	left: 0;
-	top: 3px;
-}
 </style>
