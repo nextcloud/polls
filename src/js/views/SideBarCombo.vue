@@ -27,8 +27,10 @@
 		@close="closeSideBar()">
 		<AppSidebarTab :id="'polls'"
 			:order="1"
-			:name="t('polls', 'Polls')"
-			icon="icon-polls">
+			:name="t('polls', 'Polls')">
+			<template #icon>
+				<PollsAppIcon />
+			</template>
 			<SideBarTabDatePolls />
 		</AppSidebarTab>
 	</AppSidebar>
@@ -38,6 +40,7 @@
 import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 
 export default {
 	name: 'SideBarCombo',
@@ -46,6 +49,7 @@ export default {
 		SideBarTabDatePolls: () => import('../components/SideBar/SideBarTabDatePolls.vue'),
 		AppSidebar,
 		AppSidebarTab,
+		PollsAppIcon,
 	},
 
 	props: {

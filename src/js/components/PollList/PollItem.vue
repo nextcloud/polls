@@ -319,16 +319,12 @@ export default {
 
 	[class^='item__type'] {
 		width: 44px;
-		background-repeat: no-repeat;
-		background-position: center;
 		min-width: 16px;
 		min-height: 16px;
 	}
 
 	[class^='item__access'] {
 		width: 70px;
-		background-repeat: no-repeat;
-		background-position: center;
 		min-width: 16px;
 		min-height: 16px;
 		justify-content: center;

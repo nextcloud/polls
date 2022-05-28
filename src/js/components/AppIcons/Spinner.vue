@@ -22,36 +22,28 @@
 <template>
 	<span :aria-hidden="!title"
 		:aria-label="title"
-		class="material-design-icon activity-app-icon"
+		class="material-design-icon spinner"
 		role="img"
 		v-bind="$attrs"
 		@click="$emit('click', $event)">
-		<svg :fill="fillColor"
-			class="material-design-icon__svg"
+		<svg viewBox="0 0 100 100"
 			:width="size"
-			:height="size"
-			viewBox="0 0 4.2333 4.2333">
-			<g transform="translate(0 -292.77)">
-				<g transform="translate(0 -.52917)">
-					<path transform="matrix(.26458 0 0 .26458 0 293.3)"
-						d="m5.1602 1.9746v2.205h-4.5937v7.6836h2.8047v2.3262h10.291v-4.5371h1.7891v-7.6777h-9.9043zm0.75195 0.74609h8.7871v6.1855h-1.0371v-2.3945h-2.8047v-2.332h-4.9453zm-4.5938 2.2109h8.793v1.5801h-6.7402v4.6054h-2.0527v-6.1855zm2.8066 2.3262h8.793v6.1855h-8.793z"
-						stroke="fillColor"
-						stroke-width=".4">
-						<title v-if="title">{{ title }}</title>
-					</path>
-				</g>
-			</g>
+			:height="size">
+			<circle cx="50"
+				cy="50"
+				r="45"
+				:stroke="fillColor" />
 		</svg>
 	</span>
 </template>
 
 <script>
 export default {
-	name: 'ProjectsAppIcon',
+	name: 'Spinner',
 	props: {
 		title: {
 			type: String,
-			default: 'Activity',
+			default: 'Admin Access',
 		},
 		fillColor: {
 			type: String,
@@ -64,3 +56,51 @@ export default {
 	},
 }
 </script>
+
+<style land="css" scoped>
+svg {
+  animation: 2s linear infinite svg-animation;
+  max-width: 100px;
+}
+
+@keyframes svg-animation {
+	0% {
+		transform: rotateZ(0deg);
+	}
+
+	100% {
+		transform: rotateZ(360deg)
+	}
+}
+
+circle {
+	animation: 1.4s ease-in-out infinite both circle-animation;
+	display: block;
+	fill: transparent;
+	/* stroke: #2f3d4c; */
+	stroke-linecap: round;
+	stroke-dasharray: 283;
+	stroke-dashoffset: 280;
+	stroke-width: 10px;
+	transform-origin: 50% 50%;
+}
+
+@keyframes circle-animation {
+	0%,
+	25% {
+		stroke-dashoffset: 280;
+		transform: rotate(0);
+	}
+
+	50%,
+	75% {
+		stroke-dashoffset: 75;
+		transform: rotate(45deg);
+	}
+
+	100% {
+		stroke-dashoffset: 280;
+		transform: rotate(360deg);
+	}
+}
+</style>

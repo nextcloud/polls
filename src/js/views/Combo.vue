@@ -37,11 +37,14 @@
 		<div class="area__main">
 			<ComboTable v-show="polls.length" />
 
-			<EmptyContent v-if="!polls.length" icon="icon-polls">
-				{{ t('polls', 'No polls selected') }}
+			<EmptyContent v-if="!polls.length">
+				<template #icon>
+					<PollsAppIcon />
+				</template>
 				<template #desc>
 					{{ t('polls', 'Select polls by clicking on them in the right sidebar!') }}
 				</template>
+				{{ t('polls', 'No polls selected') }}
 			</EmptyContent>
 		</div>
 
@@ -56,6 +59,7 @@ import { emit } from '@nextcloud/event-bus'
 import ComboTable from '../components/Combo/ComboTable.vue'
 import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar.vue'
 import HeaderBar from '../components/Base/HeaderBar.vue'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 
 export default {
 	name: 'Combo',
@@ -66,6 +70,7 @@ export default {
 		ComboTable,
 		EmptyContent,
 		HeaderBar,
+		PollsAppIcon,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 	},
 

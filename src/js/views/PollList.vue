@@ -30,11 +30,14 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<EmptyContent v-if="noPolls" icon="icon-polls">
-				{{ t('polls', 'No polls found for this category') }}
+			<EmptyContent v-if="noPolls">
+				<template #icon>
+					<PollsAppIcon />
+				</template>
 				<template #desc>
 					{{ t('polls', 'Add one or change category!') }}
 				</template>
+				{{ t('polls', 'No polls found for this category') }}
 			</EmptyContent>
 
 			<transition-group v-else
@@ -107,6 +110,7 @@ import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 
 export default {
 	name: 'PollList',
@@ -121,6 +125,7 @@ export default {
 		ClonePollIcon,
 		ArchivePollIcon,
 		RestorePollIcon,
+		PollsAppIcon,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},

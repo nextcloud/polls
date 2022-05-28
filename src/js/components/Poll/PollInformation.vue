@@ -273,8 +273,6 @@ export default {
 	.poll-information {
 		padding: 8px;
 		> div {
-			background-position: 0 4px;
-			background-repeat: no-repeat;
 			opacity: 0.7;
 			margin: 8px 0 4px 0;
 			padding-left: 24px;
