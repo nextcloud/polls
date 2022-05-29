@@ -190,13 +190,13 @@ export default {
 
 			if (!this.isValidName) {
 				return {
-					result: t('polls', '{username} is invalid or reserved.', { username: this.userName }),
+					result: t('polls', 'Name {username} is invalid or reserved.', { username: this.userName }),
 					status: 'error',
 				}
 			}
 
 			return {
-				result: t('polls', '{username} is valid.', { username: this.userName }),
+				result: t('polls', 'Name {username} is valid.', { username: this.userName }),
 				status: 'success',
 			}
 		},
