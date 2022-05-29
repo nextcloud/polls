@@ -7,11 +7,24 @@ All notable changes to this project will be documented in this file.
 - Add admin option to prevent email address exposing of internal users
 ### Fix
 - Poll export, if the owner did not vote
-- Calendar conflict check (NC24)
+- Poll export was broken, when certain characters were present in the poll title
 - Handling of recurring calendar events (NC24)
+- Removed error message in log triggered from user search when adding share
+- Fixed calendar conflict search for recurring events (NC24)
 
 ### Misc
 - Switch to new calendar API (NC24)
+- repaces icons with material design icons
+- generate a unique user id for public users
+
+## [3.7.0-beta4] - 2022-05-29
+### Fix
+- Poll export was broken, when certain characters were present in the poll title
+- Removed error message in log triggered from user search when adding share
+
+### Misc
+- Replaced icons with material design icons
+- Generate a unique user id for public users
 
 ## [3.7.0-beta3] - 2022-05-06
 ### New
