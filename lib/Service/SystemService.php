@@ -122,12 +122,10 @@ class SystemService {
 		if ($query !== '') {
 			preg_match_all(self::REGEX_PARSE_MAIL, $query, $parsedQuery);
 
-			if (!empty($parsedQuery[1]) && !empty($parsedQuery[2])) {
-				$emailAddress = $parsedQuery[2][0];
-				$displayName = $parsedQuery[1][0];
-				if ($emailAddress && self::isValidEmail($emailAddress)) {
-					$list[] = new Email($emailAddress, $displayName, $emailAddress);
-				}
+			$emailAddress = isset($parsedQuery[2][0]) ? $parsedQuery[2][0] : '';
+			$displayName = isset($parsedQuery[1][0]) ? $parsedQuery[1][0] : '';
+			if ($emailAddress && self::isValidEmail($emailAddress)) {
+				$list[] = new Email($emailAddress, $displayName, $emailAddress);
 			}
 
 			$list = array_merge($list, UserBase::search($query));
