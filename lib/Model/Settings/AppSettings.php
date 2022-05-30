@@ -54,8 +54,6 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_UPDATE_TYPE = 'updateType';
 	public const SETTING_PRIVACY_URL = 'privacyUrl';
 	public const SETTING_IMPRINT_URL = 'imprintUrl';
-	public const SETTING_USE_PRIVACY_URL = 'usePrivacyUrl';
-	public const SETTING_USE_IMPRINT_URL = 'useImprintUrl';
 	public const SETTING_DISCLAIMER = 'disclaimer';
 
 
@@ -214,8 +212,6 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_SHOW_LOGIN => $this->getBooleanSetting(self::SETTING_SHOW_LOGIN),
 			self::SETTING_SHOW_MAIL_ADDRESSES => $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES),
 			self::SETTING_USE_ACTIVITY => $this->getBooleanSetting(self::SETTING_USE_ACTIVITY),
-			self::SETTING_USE_PRIVACY_URL => $this->getBooleanSetting(self::SETTING_USE_PRIVACY_URL),
-			self::SETTING_USE_IMPRINT_URL => $this->getBooleanSetting(self::SETTING_USE_IMPRINT_URL),
 			self::SETTING_ALL_ACCESS_GROUPS => $allAccessGroups,
 			self::SETTING_POLL_CREATION_GROUPS => $pollCreationGroups,
 			self::SETTING_POLL_DOWNLOAD_GROUPS => $pollDownloadGroups,
@@ -227,6 +223,8 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_IMPRINT_URL => $this->getStringSetting(self::SETTING_IMPRINT_URL),
 			self::SETTING_PRIVACY_URL => $this->getStringSetting(self::SETTING_PRIVACY_URL),
 			self::SETTING_UPDATE_TYPE => $this->getStringSetting(self::SETTING_UPDATE_TYPE, 'longPolling'),
+			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
+			'useImprintUrl' => $this->getUseImprintUrl(),
 			'defaultPrivacyUrl' => $this->config->getAppValue('theming', 'privacyUrl'),
 			'defaultImprintUrl' => $this->config->getAppValue('theming', 'imprintUrl'),
 		];
