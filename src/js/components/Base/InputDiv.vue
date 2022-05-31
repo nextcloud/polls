@@ -22,21 +22,29 @@
 
 <template lang="html">
 	<div :class="['input-div', { numeric: useNumModifiers }]">
-		<input ref="input"
-			:type="type"
-			:value="value"
-			:inputmode="inputmode"
-			:placeholder="placeholder"
-			:class="[{ 'has-modifier': useNumModifiers, 'has-submit': !noSubmit }, 'input', signalingClass]"
-			@input="$emit('input', $event.target.value)"
-			@change="$emit('change', $event.target.value)"
-			@keyup.enter="$emit('submit', $event.target.value)">
-		<Spinner v-if="checking" class="spinner" />
-		<ArrowRight v-if="showSubmit" class="submit" @click="$emit('submit', $refs.input.value)" />
-		<CloseIcon v-if="error" class="error" fill-color="#f45573" />
-		<CheckIcon v-if="success" class="success" fill-color="#49bc49" />
-		<MinusIcon v-if="showModifiers" class="modifier subtract" @click="$emit('subtract')" />
-		<PlusIcon v-if="showModifiers" class="modifier add" @click="$emit('add')" />
+		<h3 v-if="label">
+			{{ label }}
+		</h3>
+		<div class="input-wrapper">
+			<input ref="input"
+				:type="type"
+				:value="value"
+				:inputmode="inputmode"
+				:placeholder="placeholder"
+				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': !noSubmit }, 'input', signalingClass]"
+				@input="$emit('input', $event.target.value)"
+				@change="$emit('change', $event.target.value)"
+				@keyup.enter="$emit('submit', $event.target.value)">
+			<Spinner v-if="checking" class="signaling-icon spinner" />
+			<ArrowRight v-if="showSubmit" class="signaling-icon submit" @click="$emit('submit', $refs.input.value)" />
+			<AlertIcon v-if="error" class="signaling-icon error" fill-color="#f45573" />
+			<CheckIcon v-if="success" class="signaling-icon success" fill-color="#49bc49" />
+			<MinusIcon v-if="showModifiers" class="modifier subtract" @click="$emit('subtract')" />
+			<PlusIcon v-if="showModifiers" class="modifier add" @click="$emit('add')" />
+		</div>
+		<div v-if="helperText!==null" :class="['helper', signalingClass]">
+			{{ helperText }}
+		</div>
 	</div>
 </template>
 
@@ -44,8 +52,8 @@
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
+import AlertIcon from 'vue-material-design-icons/AlertCircle.vue'
 import Spinner from '../AppIcons/Spinner.vue'
 
 export default {
@@ -55,7 +63,7 @@ export default {
 		ArrowRight,
 		PlusIcon,
 		MinusIcon,
-		CloseIcon,
+		AlertIcon,
 		CheckIcon,
 		Spinner,
 	},
@@ -102,6 +110,14 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		helperText: {
+			type: String,
+			default: null,
+		},
+		label: {
+			type: String,
+			default: null,
+		},
 	},
 
 	computed: {
@@ -144,12 +160,22 @@ export default {
 	.input-div {
 		position: relative;
 
+		.input-wrapper {
+			position: relative;
+		}
+
+		.helper {
+			min-height: 1.5rem;
+			font-size: 0.8em;
+			opacity: 0.8;
+			&.error {
+				opacity: 1;
+				color: var(--color-error)
+			}
+		}
+
 		input {
 			width: 100%;
-
-			&:empty:before {
-				color: grey;
-			}
 
 			&.has-submit {
 				padding-right: 34px;
@@ -164,16 +190,6 @@ export default {
 				background-color: var(--color-background-error);
 				color: var(--color-foreground-error);
 			}
-
-			&.checking {
-				border-color: var(--color-warning);
-			}
-
-			&.success, &.icon-confirm.success {
-				border-color: var(--color-success);
-				background-color: var(--color-background-success) !important;
-				color: var(--color-foreground-success);
-			}
 		}
 
 		&.numeric {
@@ -186,7 +202,7 @@ export default {
 			}
 		}
 
-		.error, .success, .spinner {
+		.signaling-icon {
 			&.material-design-icon {
 				position: absolute;
 				right: 6px;
