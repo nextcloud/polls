@@ -320,8 +320,6 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "點擊「確定」按鈕即表示您同意我們的 {privacyPolicy}。",
     "privacy policy" : "隱私權政策",
     "Checking name …" : "正在檢查名稱……",
-    "{username} is invalid or reserved." : "{username} 無效或已保留。",
-    "{username} is valid." : "{username} 有效。",
     "Valid email address." : "有效的電子郵件地址。",
     "Email could not be sent to {emailAddress}" : "電子郵件無法傳送至 {emailAddress}",
     "Error saving name" : "儲存名稱時發生錯誤",

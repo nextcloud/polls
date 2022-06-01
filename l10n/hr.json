@@ -170,7 +170,6 @@
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Kao redoviti korisnik ove stranice, nakon prijave možete sudjelovati sa svojim osobnim identifikacijskim značajkama.",
     "Otherwise participate publicly." : "U suprotnom sudjelujte javno.",
     "Checking name …" : "Provjera imena...",
-    "{username} is valid." : "Korisničko ime {username} nije važeće.",
     "Valid email address." : "Važeća adresa e-pošte.",
     "Email could not be sent to {emailAddress}" : "Poruka e-pošte nije poslana na {emailAddress}",
     "Error saving name" : "Pogreška pri spremanju imena",

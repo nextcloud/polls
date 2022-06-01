@@ -318,8 +318,6 @@
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "С натискането на бутон „OK“ приемате нашата {privacyPolicy}.",
     "privacy policy" : "политика за поверителност",
     "Checking name …" : "Името се проверява …",
-    "{username} is invalid or reserved." : "{username} е невалидно или запазено.",
-    "{username} is valid." : "{username} е валиден.",
     "Valid email address." : "Валиден имейл адрес.",
     "Email could not be sent to {emailAddress}" : "Имейлът не можа да бъде изпратен до {emailAddress}",
     "Error saving name" : "Грешка при запазване на името",

@@ -318,8 +318,6 @@
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "\"Tamam\" üzerinde tıklayarak {privacyPolicy} metnini kabul etmiş olursunuz.",
     "privacy policy" : "gizlilik ilkesi",
     "Checking name …" : "Ad denetleniyor …",
-    "{username} is invalid or reserved." : "{username} kullanıcı adı geçersiz ya da ayrılmış.",
-    "{username} is valid." : "{username} geçerli.",
     "Valid email address." : "E-posta adresi geçerli.",
     "Email could not be sent to {emailAddress}" : "E-posta {emailAdress} adresine gönderilemedi",
     "Error saving name" : "Ad kaydedilirken sorun çıktı",

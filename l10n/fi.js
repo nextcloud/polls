@@ -132,7 +132,6 @@ OC.L10N.register(
     "You are a registered user of this site?" : "Oletko rekisteröitynyt tälle sivustolle?",
     "Login" : "Kirjaudu",
     "Checking name …" : "Tarkistetaan nimeä…",
-    "{username} is valid." : "{username} on kelvollinen.",
     "Valid email address." : "Kelvollinen sähköpostiosoite.",
     "Email could not be sent to {emailAddress}" : "Sähköpostia ei voitu lähettää osoitteeseen {emailAddress}",
     "Error saving name" : "Virhe tallentaessa nimeä",

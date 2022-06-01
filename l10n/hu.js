@@ -320,8 +320,6 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "A „Rendben” gombra kattintással elfogadja az {privacyPolicy}.",
     "privacy policy" : "adatvédelmi irányelveket",
     "Checking name …" : "Név ellenőrzése…",
-    "{username} is invalid or reserved." : "A(z) {username} érvénytelen vagy fenntartott.",
-    "{username} is valid." : "A(z) {username} érvényes.",
     "Valid email address." : "Érvényes e-mail-cím.",
     "Email could not be sent to {emailAddress}" : "Az e-mail nem küldhető el a következő címre: {emailAddress}",
     "Error saving name" : "Hiba a név mentése során",

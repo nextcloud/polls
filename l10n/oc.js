@@ -30,7 +30,6 @@ OC.L10N.register(
     "never" : "pas jamai",
     "_%n Participant_::_%n Participants_" : ["%n participant","%n participants"],
     "Login" : "Login",
-    "{username} is valid." : "{username} es valid.",
     "Owner" : "Owner",
     "Preview" : "Apercebut",
     "User settings" : "Paramètres utilizaire",

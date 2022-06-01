@@ -160,7 +160,6 @@
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Po prijavi v okolje lahko sodelujete s privzeto istovetnostjo.",
     "Otherwise participate publicly." : "Sicer sodelujete javno.",
     "Checking name …" : "Poteka preverjanje imena ...",
-    "{username} is valid." : "Uporabniško ime {username} je veljavno.",
     "Valid email address." : "Veljaven elektronski naslov.",
     "Email could not be sent to {emailAddress}" : "Sporočila na naslov {emailAddress} ni mogoče poslati.",
     "Error saving name" : "Napaka shranjevanja imena",

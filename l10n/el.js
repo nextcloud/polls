@@ -315,8 +315,6 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Κάνοντας κλικ στο κουμπί \"OK\" αποδέχεστε την {privacyPolicy} μας.",
     "privacy policy" : "πολιτική απορρήτου",
     "Checking name …" : "Έλεγχος χρήστη …",
-    "{username} is invalid or reserved." : "{username} δεν είναι έγκυρο ή έχει δεσμευτεί.",
-    "{username} is valid." : "{username} είναι έγκυρο.",
     "Valid email address." : "Έγκυρη ηλεκτρονική διεύθυνση",
     "Email could not be sent to {emailAddress}" : "Δεν ήταν δυνατή η αποστολή email στη διεύθυνση {emailAddress}",
     "Error saving name" : "Σφάλμα αποθήκευσης ονόματος",

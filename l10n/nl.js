@@ -217,8 +217,6 @@ OC.L10N.register(
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Als regelmatige gebruiker van deze site kun ja na het inloggen deelnemen met je interne account.",
     "Otherwise participate publicly." : "Doe anders openbaar mee.",
     "Checking name …" : "Naam controleren ...",
-    "{username} is invalid or reserved." : "{username} is ongeldig of gereserveerd.",
-    "{username} is valid." : "{username} is geldig.",
     "Valid email address." : "geldig e-mailadres.",
     "Email could not be sent to {emailAddress}" : "E-mail kon niet verstuurd worden naar {emailAddress}",
     "Error saving name" : "Fout bij opslaan naam",

@@ -163,7 +163,6 @@ OC.L10N.register(
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Jei esate pastovus šios internetinės svetainės naudotojas, prisijungę, galėsite dalyvauti naudodami savo vidinę tapatybę.",
     "Otherwise participate publicly." : "Priešingu atveju, dalyvaukite viešai.",
     "Checking name …" : "Tikrinamas vardas…",
-    "{username} is valid." : "{username} yra tinkamas vardas.",
     "Valid email address." : "Tinkamas el. pašto adresas.",
     "Email could not be sent to {emailAddress}" : "Nepavyko išsiųsti el. laiško, adresu {emailAddress}",
     "Error saving name" : "Klaida įrašant vardą",

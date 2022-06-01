@@ -297,8 +297,6 @@ OC.L10N.register(
     "As a regular user of this site, you can participate with your internal identity after logging in." : "作为这个站点的经常用户，你可以在登录后使用您的内部身份参与。",
     "Otherwise participate publicly." : "否则公开参与",
     "Checking name …" : "正在检查名称 …",
-    "{username} is invalid or reserved." : "{username} 是无效或保留的用户名。",
-    "{username} is valid." : "{username} 是无效的",
     "Valid email address." : "有效的电邮地址",
     "Email could not be sent to {emailAddress}" : "无法发送电邮到 {emailAddress}",
     "Error saving name" : "保存名字出错",

@@ -320,8 +320,6 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Kliknutím na „OK“ přijmete naše {privacyPolicy}.",
     "privacy policy" : "zásady ochrany soukromí",
     "Checking name …" : "Kontrola jména…",
-    "{username} is invalid or reserved." : "{username} je neplatné nebo rezervované.",
-    "{username} is valid." : "{username} je platné.",
     "Valid email address." : "Platná e-mailová adresa.",
     "Email could not be sent to {emailAddress}" : "E-mail se nepodařilo odeslat na {emailAddress}",
     "Error saving name" : "Chyba při ukládání jména",

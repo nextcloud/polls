@@ -320,8 +320,6 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Durch Klicken auf den \"OK\"-Button akzeptierst Du unsere {privacyPolicy}. ",
     "privacy policy" : "Datenschutzerklärung",
     "Checking name …" : "Überprüfe Benutzernamen …",
-    "{username} is invalid or reserved." : "{username} is ungültig oder reserviert",
-    "{username} is valid." : "{username} is gültig.",
     "Valid email address." : "Gültige E-Mail-Adresse",
     "Email could not be sent to {emailAddress}" : "E-Mail konnt nicht an {emailAddress} gesendet werden",
     "Error saving name" : "Fehler beim Speichern des Benutzernamen",
