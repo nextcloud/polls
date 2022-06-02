@@ -320,6 +320,8 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "\"Tamam\" üzerinde tıklayarak {privacyPolicy} metnini kabul etmiş olursunuz.",
     "privacy policy" : "gizlilik ilkesi",
     "Checking name …" : "Ad denetleniyor …",
+    "The name {username} is invalid or reserved." : "{username} kullanıcı adı geçersiz ya da ayrılmış.",
+    "The name {username} is valid." : "{username} kullanıcı adı geçerli.",
     "Valid email address." : "E-posta adresi geçerli.",
     "Email could not be sent to {emailAddress}" : "E-posta {emailAdress} adresine gönderilemedi",
     "Error saving name" : "Ad kaydedilirken sorun çıktı",

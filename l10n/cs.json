@@ -318,6 +318,8 @@
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Kliknutím na „OK“ přijmete naše {privacyPolicy}.",
     "privacy policy" : "zásady ochrany soukromí",
     "Checking name …" : "Kontrola jména…",
+    "The name {username} is invalid or reserved." : "Jméno {username} je neplatné nebo rezervované.",
+    "The name {username} is valid." : "Jméno {username} je platné.",
     "Valid email address." : "Platná e-mailová adresa.",
     "Email could not be sent to {emailAddress}" : "E-mail se nepodařilo odeslat na {emailAddress}",
     "Error saving name" : "Chyba při ukládání jména",
