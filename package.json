@@ -1,7 +1,7 @@
 {
 	"name": "polls",
 	"description": "Polls app for nextcloud",
-	"version": "3.7.0-beta10",
+	"version": "3.7.0-beta11",
 	"authors": [
 		{
 			"name": "Vinzenz Rosenkranz",
