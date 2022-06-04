@@ -25,14 +25,13 @@
 		<CheckboxRadioSwitch :checked.sync="useVoteLimit" type="switch">
 			{{ t('polls', 'Limit "Yes" votes per user') }}
 		</CheckboxRadioSwitch>
+
 		<InputDiv v-if="voteLimit"
 			v-model="voteLimit"
-			class="selectUnit indented"
+			class="indented"
 			type="number"
 			inputmode="numeric"
-			use-num-modifiers
-			@add="voteLimit += 1"
-			@subtract="voteLimit -= 1" />
+			use-num-modifiers />
 	</div>
 </template>
 

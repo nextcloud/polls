@@ -21,23 +21,31 @@
   -->
 
 <template>
-	<input v-model="title"
-		:class="{ error: !poll.title }"
+	<InputDiv v-model="title"
+		:signaling-class="checkTitle"
 		type="text"
-		@change="$emit('change')"
-		@keyup.enter="$emit('change')">
+		@change="$emit('change')" />
 </template>
 
 <script>
 import { mapState } from 'vuex'
+import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'ConfigTitle',
+
+	components: {
+		InputDiv,
+	},
 
 	computed: {
 		...mapState({
 			poll: (state) => state.poll,
 		}),
+
+		checkTitle() {
+			return this.poll.title ? '' : 'error'
+		},
 
 		title: {
 			get() {

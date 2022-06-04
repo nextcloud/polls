@@ -26,43 +26,36 @@
 			<div class="modal__registration">
 				<div class="registration__registration">
 					<h2>{{ t('polls', 'Public participation') }}</h2>
-					<div class="section__username">
-						<h3>{{ t('polls', 'To participate, tell us how we can call you!') }}</h3>
-						<InputDiv v-model="userName"
-							v-tooltip="userNameCheck.result"
-							:signaling-class="userNameCheck.status"
-							:placeholder="t('polls', 'Enter your name')"
-							no-submit
-							focus
-							@submit="submitRegistration" />
-						<CheckboxRadioSwitch :checked.sync="saveCookie">
-							{{ t('polls', 'Save username in cookie for 30 days') }}
-						</CheckboxRadioSwitch>
-					</div>
+					<InputDiv v-model="userName"
+						v-tooltip="userNameCheck.result"
+						class="section__username"
+						:label="t('polls', 'To participate, tell us how we can call you!')"
+						:signaling-class="userNameCheck.status"
+						:placeholder="t('polls', 'Enter your name')"
+						:helper-text="userNameCheck.result"
+						focus
+						@submit="submitRegistration" />
 
-					<div :class="['status-message', userNameCheck.status]">
-						{{ userNameCheck.result }}
-					</div>
+					<CheckboxRadioSwitch :checked.sync="saveCookie">
+						{{ t('polls', 'Save username in cookie for 30 days') }}
+					</CheckboxRadioSwitch>
 
-					<div v-if="share.publicPollEmail !== 'disabled'" class="section__email">
-						<h3 v-if="share.publicPollEmail === 'mandatory'">
-							{{ t("polls", "Your email address is required. After the registration your personal link to the poll will be sent to this address.") }}
-						</h3>
-						<h3 v-else>
-							{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}
-						</h3>
-						<InputDiv v-model="emailAddress"
-							v-tooltip="emailCheck.result"
-							type="email"
-							inputmode="email"
-							:signaling-class="emailCheck.status"
-							:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
-							no-submit
-							@submit="submitRegistration" />
-					</div>
+					<InputDiv v-if="share.publicPollEmail !== 'disabled'"
+						v-model="emailAddress"
+						v-tooltip="emailCheck.result"
+						class="section__email"
+						:label="emailLabel"
+						:signaling-class="emailCheck.status"
+						:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
+						:helper-text="emailCheck.result"
+						type="email"
+						inputmode="email"
+						@submit="submitRegistration" />
+
 					<div v-if="privacyUrl" class="section__optin">
 						<RichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 					</div>
+
 					<div class="modal__buttons">
 						<VueButton @click="closeModal">
 							{{ t('polls', 'Cancel') }}
@@ -143,6 +136,13 @@ export default {
 			imprintUrl: (state) => state.appSettings.useImprintUrl,
 		}),
 
+		emailLabel() {
+			if (this.share.publicPollEmail === 'mandatory') {
+				return t('polls', 'Your email address is required. After the registration your personal link to the poll will be sent to this address.')
+			}
+			return t('polls', 'With your email address you can subscribe to notifications and you will receive your personal link to this poll.')
+		},
+
 		registrationIsValid() {
 			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
 		},
@@ -181,9 +181,10 @@ export default {
 					status: 'checking',
 				}
 			}
-			if (this.userName.length === 0) {
+
+			if (this.userName.length < 1) {
 				return {
-					result: ' ',
+					result: t('polls', 'A name is required'),
 					status: 'empty',
 				}
 			}
@@ -196,7 +197,7 @@ export default {
 			}
 
 			return {
-				result: t('polls', 'The name {username} is valid.', { username: this.userName }),
+				result: '',
 				status: 'success',
 			}
 		},
@@ -208,10 +209,17 @@ export default {
 					status: 'checking',
 				}
 			}
+
 			if (this.emailAddress.length < 1) {
+				if (this.share.publicPollEmail === 'mandatory') {
+					return {
+						result: t('polls', 'An email address is required.'),
+						status: 'empty',
+					}
+				}
 				return {
 					result: '',
-					status: '',
+					status: 'empty',
 				}
 			}
 
@@ -223,7 +231,7 @@ export default {
 			}
 
 			return {
-				result: t('polls', 'Valid email address.'),
+				result: '',
 				status: 'success',
 			}
 		},
@@ -323,6 +331,8 @@ export default {
 
 <style lang="scss">
 	.section__optin {
+		align-self: end;
+
 		a {
 			text-decoration: underline;
 		}
@@ -397,12 +407,6 @@ export default {
 			    content:"";
 			}
 		}
-	}
-
-	.status-message {
-		hyphens: auto;
-		font-size: 0.9em;
-		min-height: 1.8em;
 	}
 
 	@media only screen and (max-width: 688px) {

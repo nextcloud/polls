@@ -34,9 +34,7 @@
 		</div>
 		<textarea v-show="!preview" v-model="disclaimer" @change="saveSettings()" />
 		<!-- eslint-disable-next-line vue/no-v-html -->
-		<div v-show="preview" class="polls-markdown" v-html="markedDisclaimer">
-			{{ markedDisclaimer }}
-		</div>
+		<div v-show="preview" class="polls-markdown" v-html="markedDisclaimer" />
 	</div>
 </template>
 
@@ -115,23 +113,6 @@ export default {
 
 		.grow_title {
 			flex-grow: 1;
-		}
-	}
-
-	.user_settings {
-		padding-top: 16px;
-		textarea {
-			width: 99%;
-			resize: vertical;
-			height: 230px;
-		}
-	}
-
-	.settings_details {
-		padding-bottom: 16px;
-		margin-left: 36px;
-		input, .stretch {
-			width: 100%;
 		}
 	}
 </style>

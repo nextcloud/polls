@@ -22,20 +22,19 @@
 
 <template>
 	<div class="user_settings">
-		<span>
+		<h3>
 			{{ t('polls', 'A poll with many options and voters can have a heavy impact on client performance.') }}
 			{{ t('polls', 'Set the amount of voting cells (options x participants) up to which all voting cells should be displayed.') }}
 			{{ t('polls', 'If this threshold gets tresspasses only the current user will be displayed, to avoid a performance breakdown.') }}
 			{{ t('polls', 'The default threshold of 1000 should be a good and safe value.') }}
-		</span>
+		</h3>
 		<InputDiv v-model="threshold"
 			type="number"
 			inputmode="numeric"
 			use-num-modifiers
-			no-submit
 			:placeholder="'1000'"
-			@add="threshold += 100"
-			@subtract="threshold -= 100" />
+			:modifier-step-value="100"
+			:modifier-min="200" />
 	</div>
 </template>
 
@@ -77,15 +76,3 @@ export default {
 	},
 }
 </script>
-
-<style>
-	.user_settings {
-		padding-top: 16px;
-	}
-
-	.settings_details {
-		padding-top: 8px;
-		margin-left: 36px;
-	}
-
-</style>

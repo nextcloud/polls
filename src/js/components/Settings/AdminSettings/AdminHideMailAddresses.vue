@@ -26,7 +26,7 @@
 			{{ t('polls', 'Hide email addresses of internal users') }}
 		</CheckboxRadioSwitch>
 		<div v-if="hideMailAddresses" class="settings_details">
-			<div>{{ t('polls','Show email addresses of internal users to members of the following groups') }}</div>
+			<h3>{{ t('polls','Show email addresses of internal users to members of the following groups') }}</h3>
 			<Multiselect v-model="showMailAddressesGroups"
 				class="stretch"
 				label="displayName"
@@ -129,17 +129,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.user_settings {
-		padding-top: 16px;
-	}
-
-	.settings_details {
-		padding-bottom: 16px;
-		margin-left: 36px;
-		input, .stretch {
-			width: 100%;
-		}
-	}
-</style>

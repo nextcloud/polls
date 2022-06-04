@@ -26,6 +26,7 @@
 			v-tooltip="check.result"
 			:signaling-class="check.status"
 			:placeholder="t('polls', 'Optional email address')"
+			submit
 			@submit="submitEmailAddress" />
 	</div>
 </template>

@@ -26,18 +26,17 @@
 			{{ t('polls', 'The privacy link and the legal notice link are automatically added to the registration dialog of public polls.') }}
 			{{ t('polls', 'As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms.') }}
 		</p>
-		<span>{{ t('polls', 'Privacy policy link:') }}</span>
+
 		<InputDiv v-model="privacyUrl"
 			type="url"
 			:placeholder="placeholder.privacy"
-			no-submit
+			:label="t('polls', 'Privacy policy link:')"
 			@change="saveSettings()" />
 
-		<span>{{ t('polls', 'Legal notice link:') }}</span>
 		<InputDiv v-model="imprintUrl"
 			type="url"
 			inputmode="url"
-			no-submit
+			:label="t('polls', 'Legal notice link:')"
 			:placeholder="placeholder.imprint"
 			@change="saveSettings()" />
 	</div>
@@ -99,22 +98,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.user_settings {
-		padding-top: 16px;
-		textarea {
-			width: 99%;
-			resize: vertical;
-			height: 230px;
-		}
-	}
-
-	.settings_details {
-		padding-bottom: 16px;
-		margin-left: 36px;
-		input, .stretch {
-			width: 100%;
-		}
-	}
-</style>
