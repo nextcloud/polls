@@ -8,12 +8,6 @@ on:
     #   v*-beta*
 
 jobs:
-  # extract_versions:
-  #   runs-on: ubuntu-latest
-  #   name: Version check
-  #   - uses: actions/checkout@v2
-
-
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -23,6 +17,7 @@ jobs:
 
     name: build release
     steps:
+    - uses: actions/checkout@v2
     - name: Get app version
       id: getxml
       uses: mavrosxristoforos/get-xml-info@1.0
