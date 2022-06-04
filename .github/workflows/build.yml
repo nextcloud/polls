@@ -2,14 +2,12 @@ name: Build
 
 on: 
   push:
-    tags:
-      v*-beta*
+    branches:
+      master
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-versions: [14.x]
@@ -22,7 +20,3 @@ jobs:
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-versions }}
-    - name: Set up npm ${{ matrix.npm-versions }}
-      run: npm i -g npm@"${{ matrix.npm-versions }}"
-    - name: create release package
-      run: make appstore
