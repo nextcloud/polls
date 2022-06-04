@@ -8,8 +8,35 @@ on:
     #   v*-beta*
 
 jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    name: Checkout repository
+    steps:
+    - uses: actions/checkout@v2
+
+  version_check:
+    runs-on: ubuntu-latest
+    needs: checkout
+    name: Checkout repository
+    steps:
+    - name: Get app version from appinfo/info.xml
+      id: appinfo
+      uses: mavrosxristoforos/get-xml-info@1.0
+      with:
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//version'
+    - name: Get tag name
+      id: gettag
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+    - name: Check correct app version
+      if: ${{ format('v{0}', steps.getxml.outputs.info) != steps.gettag.outputs.VERSION }}
+      run: echo App version ${{ format('v{0}', steps.getxml.outputs.info) }} is not equal to tag name ${{ steps.gettag.outputs.VERSION }} |
+        exit 1
+
+
   build:
     runs-on: ubuntu-latest
+    needs: version_check
     strategy:
       matrix:
         node-versions: [14.x]
@@ -30,8 +57,6 @@ jobs:
     - name: Check correct app version
       if: ${{ format('v{0}', steps.getxml.outputs.info) != steps.gettag.outputs.VERSION }}
       run: echo App version ${{ format('v{0}', steps.getxml.outputs.info) }} is not equal to tag name ${{ steps.gettag.outputs.VERSION }}
-      #  |
-      #   exit 1
     - name: Print version
       if: ${{ format('v{0}', steps.getxml.outputs.info) ==  steps.gettag.outputs.VERSION }}
       run: echo App version ${{ format('v{0}', steps.getxml.outputs.info) }}, Tag name ${{ steps.gettag.outputs.VERSION }}
