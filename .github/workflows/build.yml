@@ -7,9 +7,7 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
     strategy:
       matrix:
         node-versions: [14.x]
@@ -18,11 +16,14 @@ jobs:
     name: build release
     steps:
     - uses: actions/checkout@v2
-    - name: Setup Node.js ${{ matrix.node-versions }}
-      uses: actions/setup-node@v2
+    - name: Get app version
+      id: getxml
+      uses: mavrosxristoforos/get-xml-info@1.0
       with:
-        node-version: ${{ matrix.node-versions }}
-    - name: Set up npm ${{ matrix.npm-versions }}
-      run: npm i -g npm@"${{ matrix.npm-versions }}"
-    - name: create release package
-      run: make appstore
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//version'
+    - name: Get tag name
+      id: gettag
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+    - name: Print version
+      run: echo App version ${{ steps.getxml.outputs.info }}, Tag name ${{ steps.gettag.outputs.VERSION }}
