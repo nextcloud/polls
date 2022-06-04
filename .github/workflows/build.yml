@@ -26,8 +26,4 @@ jobs:
       id: gettag
       run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
     - name: Print version
-<<<<<<< HEAD
       run: echo App version ${{ steps.getxml.outputs.info }}, Tag name ${{ steps.gettag.outputs.VERSION }}
-=======
-      run: echo App version ${{ steps.getxml.outputs.info }}, Tag name ${{ steps.gettag.outputs.VERSION }}
->>>>>>> b485dbc35bf51a325e09bd402ca9c8771d5dfb61
