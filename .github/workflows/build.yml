@@ -1,6 +1,6 @@
-name: Node CI
+name: Build
 
-on: [push]
+on: [tag]
 
 jobs:
   build:
@@ -9,10 +9,10 @@ jobs:
 
     strategy:
       matrix:
-        node-versions: [14.x, 16.x]
+        node-versions: [14.x]
         npm-versions: [7]
 
-    name: build node${{ matrix.node-versions }} npm${{ matrix.npm-versions }}
+    name: build release
     steps:
     - uses: actions/checkout@v2
     - name: Use Node.js ${{ matrix.node-versions }}
@@ -22,6 +22,4 @@ jobs:
     - name: Set up npm ${{ matrix.npm-versions }}
       run: npm i -g npm@"${{ matrix.npm-versions }}"
     - name: install dependencies
-      run: npm ci
-    - name: build
-      run: npm run build --if-present
+      run: make appstore
