@@ -16,7 +16,9 @@ jobs:
     name: build release
     steps:
     - uses: actions/checkout@v2
-    - name: Setup Node.js ${{ matrix.node-versions }}
-      uses: actions/setup-node@v2
+    - name: Get XML
+      id: getxml
+      uses: mavrosxristoforos/get-xml-info@1.0
       with:
-        node-version: ${{ matrix.node-versions }}
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//version'
