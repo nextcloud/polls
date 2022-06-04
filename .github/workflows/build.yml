@@ -2,8 +2,8 @@ name: Build
 
 on: 
   push:
-    tags:
-      v*-beta*
+    branches:
+      master
 
 jobs:
   build:
@@ -17,8 +17,7 @@ jobs:
 
     name: build release
     steps:
-    - name: Step 1 - Checkout
-      - uses: actions/checkout@v2
+    - uses: actions/checkout@v2
     - name: Step 2 - read apps version
       - uses: mavrosxristoforos/get-xml-info@1
         with: 
