@@ -8,6 +8,12 @@ on:
     #   v*-beta*
 
 jobs:
+  extract_versions:
+    runs-on: ubuntu-latest
+    name: Version check
+    - uses: actions/checkout@v2
+
+
   build:
     runs-on: ubuntu-latest
     strategy:
@@ -17,7 +23,6 @@ jobs:
 
     name: build release
     steps:
-    - uses: actions/checkout@v2
     - name: Get app version
       id: getxml
       uses: mavrosxristoforos/get-xml-info@1.0
@@ -28,10 +33,10 @@ jobs:
       id: gettag
       run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
     - name: Check correct app version
-      if: ${{ format('v{0}', steps.getxml.outputs.info) }} != ${{ steps.gettag.outputs.VERSION }}
+      if: ${{ format('v{0}', steps.getxml.outputs.info) != steps.gettag.outputs.VERSION }}
       run: echo App version ${{ format('v{0}', steps.getxml.outputs.info) }} is not equal to tag name ${{ steps.gettag.outputs.VERSION }}
       #  |
       #   exit 1
     - name: Print version
-      if: ${{ format('v{0}', steps.getxml.outputs.info) }} == ${{ steps.gettag.outputs.VERSION }}
+      if: ${{ format('v{0}', steps.getxml.outputs.info) ==  steps.gettag.outputs.VERSION }}
       run: echo App version ${{ format('v{0}', steps.getxml.outputs.info) }}, Tag name ${{ steps.gettag.outputs.VERSION }}
