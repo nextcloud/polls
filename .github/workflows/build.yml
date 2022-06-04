@@ -26,15 +26,14 @@ jobs:
   check_versions:
     runs-on: ubuntu-latest
     needs: extract_versions
-    if: ${{ format('v{0}', needs.check_version.steps.getxml.outputs.info) }} == ${{ needs.check_version.steps.gettag.outputs.VERSION }}
+    if: ${{ format('v{0}', needs.check_versions.steps.getxml.outputs.info) }} != ${{ needs.check_versions.steps.gettag.outputs.VERSION }}
     steps:
     - name: Confirm versions
-      run: echo App version ${{ format('v{0}', needs.check_version.steps.getxml.outputs.info) }}, Tag name ${{ needs.check_version.steps.gettag.outputs.VERSION }}      
+      run: echo App version ${{ format('v{0}', needs.check_versions.steps.getxml.outputs.info) }}, Tag name ${{ needs.check_version.steps.gettag.outputs.VERSION }}      
 
   run_build:
     runs-on: ubuntu-latest
     needs: check_versions
-    if: ${{ format('v{0}', needs.check_version.steps.getxml.outputs.info) }} == ${{ needs.check_version.steps.gettag.outputs.VERSION }}
     strategy:
       matrix:
         node-versions: [14.x]
