@@ -22,3 +22,5 @@ jobs:
       with:
         xml-file: 'appinfo/info.xml'
         xpath: '//info//version'
+    - name: Check version
+      run: echo ${{ steps.getxml.outputs.info }}
