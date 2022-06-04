@@ -1,6 +1,9 @@
 name: Build
 
-on: [tag]
+on: 
+  push:
+    tags:
+      v*-beta*
 
 jobs:
   build:
