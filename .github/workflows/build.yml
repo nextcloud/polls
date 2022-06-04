@@ -17,12 +17,10 @@ jobs:
 
     name: build release
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-versions }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-versions }}
-    - name: Set up npm ${{ matrix.npm-versions }}
-      run: npm i -g npm@"${{ matrix.npm-versions }}"
-    - name: install dependencies
-      run: make appstore
+    - name: Step 1 - Checkout
+      - uses: actions/checkout@v2
+    - name: Step 2 - read apps version
+      - uses: mavrosxristoforos/get-xml-info@1
+        with: 
+          xml-file: 'appinfo/info.xml'
+          xpath: "//info//version"
