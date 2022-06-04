@@ -193,6 +193,7 @@ export default {
 
 <style lang="scss" scoped>
 	$input-height: 34px;
+
 	.input-div {
 		position: relative;
 		flex: 1;
