@@ -16,11 +16,19 @@ jobs:
     name: build release
     steps:
     - uses: actions/checkout@v2
-    - name: Get XML
+    - name: Get app version
       id: getxml
       uses: mavrosxristoforos/get-xml-info@1.0
       with:
         xml-file: 'appinfo/info.xml'
         xpath: '//info//version'
-    - name: Check version
-      run: echo ${{ steps.getxml.outputs.info }}
+    -name: Get tag name
+      id: tag
+      uses: actions/github-script@0.2.0
+      with:
+        github-token: ${{ secrets.GITHUB_TOKEN }}
+        script: |
+          return context.payload.ref.replace(/\/refs\/tags\//, '');
+    - name: Print version
+      run: echo App version ${{ steps.getxml.outputs.info }}
+      run: echo Tag name ${{ steps.tag.outputs.result }}
