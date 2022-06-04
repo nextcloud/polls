@@ -24,10 +24,6 @@ jobs:
         xpath: '//info//version'
     - name: Get tag name
       id: gettag
-      uses: actions/github-script@5
-      with:
-        github-token: ${{ secrets.GITHUB_TOKEN }}
-        script: |
-          return context.payload.ref.replace(/\/refs\/tags\//, '');
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
     - name: Print version
-      run: echo App version ${{ steps.getxml.outputs.info }}, Tag name ${{ steps.gettag.outputs.result }}
+      run: echo App version ${{ steps.getxml.outputs.info }}, Tag name ${{ steps.gettag.outputs.VERSION }}
