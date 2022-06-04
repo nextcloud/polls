@@ -20,7 +20,8 @@ jobs:
         xpath: '//info//version'
     - name: Get tag name
       id: gettag
-      run: echo ::set-output name=VERSION::$('v3.7.0-beta18')
+      run: echo ::set-output name=VERSION::$('v3.7.0-beta18') |
+        echo "${{steps.gettag.outputs.VERSION}}"
       # run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
 
   check_versions:
