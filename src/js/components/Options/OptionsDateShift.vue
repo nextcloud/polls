@@ -26,10 +26,7 @@
 			{{ t('polls', 'Shifting dates is disabled to prevent shifting of other user\'s proposals.') }}
 		</div>
 		<div v-else class="select-unit">
-			<InputDiv v-model="shift.step"
-				use-num-modifiers
-				@add="shift.step += 1"
-				@subtract="shift.step -= 1" />
+			<InputDiv v-model="shift.step" use-num-modifiers />
 			<Multiselect v-model="shift.unit"
 				:options="dateUnits"
 				label="name"

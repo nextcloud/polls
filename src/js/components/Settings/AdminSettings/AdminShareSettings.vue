@@ -26,7 +26,7 @@
 			{{ t('polls', 'Disallow public shares') }}
 		</CheckboxRadioSwitch>
 		<div v-if="publicSharesLimited" class="settings_details">
-			<div>{{ t('polls','Allow public shares for the following groups') }}</div>
+			<h3>{{ t('polls','Allow public shares for the following groups') }}</h3>
 			<Multiselect v-model="publicSharesGroups"
 				class="stretch"
 				label="displayName"
@@ -45,7 +45,7 @@
 			{{ t('polls', 'Disallow openly accessible polls') }}
 		</CheckboxRadioSwitch>
 		<div v-if="allAccessLimited" class="settings_details">
-			<div>{{ t('polls','Allow creating openly accessible polls for the following groups') }}</div>
+			<h3>{{ t('polls','Allow creating openly accessible polls for the following groups') }}</h3>
 			<Multiselect v-model="allAccessGroups"
 				class="stretch"
 				label="displayName"
@@ -163,17 +163,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.user_settings {
-		padding-top: 16px;
-	}
-
-	.settings_details {
-		padding-bottom: 16px;
-		margin-left: 36px;
-		input, .stretch {
-			width: 100%;
-		}
-	}
-</style>

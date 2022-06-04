@@ -26,7 +26,7 @@
 			{{ t('polls', 'Disallow poll creation for all users') }}
 		</CheckboxRadioSwitch>
 		<div v-if="createPollLimited" class="settings_details">
-			<div>{{ t('polls','Allow poll creation for the following groups') }}</div>
+			<h3>{{ t('polls','Allow poll creation for the following groups') }}</h3>
 			<Multiselect v-model="createPollGroups"
 				class="stretch"
 				label="displayName"
@@ -128,17 +128,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.user_settings {
-		padding-top: 16px;
-	}
-
-	.settings_details {
-		padding-bottom: 16px;
-		margin-left: 36px;
-		input, .stretch {
-			width: 100%;
-		}
-	}
-</style>

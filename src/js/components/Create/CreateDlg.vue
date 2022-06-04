@@ -26,12 +26,11 @@
 			<template #icon>
 				<SpeakerIcon />
 			</template>
-			<input id="pollTitle"
-				ref="pollTitle"
+			<InputDiv ref="pollTitle"
 				v-model="title"
 				type="text"
 				:placeholder="t('polls', 'Enter Title')"
-				@keyup.enter="confirm">
+				@submit="confirm" />
 		</ConfigBox>
 
 		<ConfigBox :title="t('polls', 'Poll type')">
@@ -59,6 +58,7 @@ import ConfigBox from '../Base/ConfigBox.vue'
 import RadioGroupDiv from '../Base/RadioGroupDiv.vue'
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
+import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'CreateDlg',
@@ -68,6 +68,7 @@ export default {
 		CheckIcon,
 		ConfigBox,
 		RadioGroupDiv,
+		InputDiv,
 	},
 
 	data() {
@@ -92,6 +93,11 @@ export default {
 	},
 
 	methods: {
+		/** @public */
+		setFocus() {
+			this.$refs.pollTitle.setFocus()
+		},
+
 		cancel() {
 			this.title = ''
 			this.pollType = 'datePoll'
@@ -107,13 +113,6 @@ export default {
 			} catch {
 				showError(t('polls', 'Error while creating Poll "{pollTitle}"', { pollTitle: this.title }))
 			}
-		},
-
-		/** @public */
-		setFocus() {
-			this.$nextTick(() => {
-				this.$refs.pollTitle.focus()
-			})
 		},
 	},
 }

@@ -76,4 +76,20 @@ export default {
 		border-bottom: 1px solid var(--color-border);
 	}
 }
+
+.user_settings {
+	padding-top: 16px;
+
+	textarea {
+		width: 99%;
+		resize: vertical;
+		height: 230px;
+	}
+}
+
+.settings_details {
+	padding-bottom: 16px;
+	margin-left: 36px;
+}
+
 </style>

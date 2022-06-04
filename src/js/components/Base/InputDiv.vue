@@ -22,40 +22,51 @@
 
 <template lang="html">
 	<div :class="['input-div', { numeric: useNumModifiers }]">
-		<input ref="input"
-			:type="type"
-			:value="value"
-			:inputmode="inputmode"
-			:placeholder="placeholder"
-			:class="[{ 'has-modifier': useNumModifiers, 'has-submit': !noSubmit }, 'input', signalingClass]"
-			@input="$emit('input', $event.target.value)"
-			@change="$emit('change', $event.target.value)"
-			@keyup.enter="$emit('submit', $event.target.value)">
-		<Spinner v-if="checking" class="spinner" />
-		<ArrowRight v-if="showSubmit" class="submit" @click="$emit('submit', $refs.input.value)" />
-		<CloseIcon v-if="error" class="error" fill-color="#f45573" />
-		<CheckIcon v-if="success" class="success" fill-color="#49bc49" />
-		<MinusIcon v-if="showModifiers" class="modifier subtract" @click="$emit('subtract')" />
-		<PlusIcon v-if="showModifiers" class="modifier add" @click="$emit('add')" />
+		<h3 v-if="label">
+			{{ label }}
+		</h3>
+
+		<div class="input-wrapper">
+			<input ref="input"
+				:type="type"
+				:value="value"
+				:inputmode="inputmode"
+				:placeholder="placeholder"
+				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, signalingClass]"
+				@input="$emit('input', $event.target.value)"
+				@change="$emit('change', $event.target.value)"
+				@keyup.enter="$emit('submit', $event.target.value)">
+
+			<Spinner v-if="checking" class="signaling-icon spinner" />
+			<ArrowRightIcon v-if="showSubmit" class="signaling-icon submit" @click="$emit('submit', $refs.input.value)" />
+			<AlertIcon v-if="error" class="signaling-icon error" fill-color="#f45573" />
+			<CheckIcon v-if="success" class="signaling-icon success" fill-color="#49bc49" />
+			<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="subtract()" />
+			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
+		</div>
+
+		<div v-if="helperText!==null" :class="['helper', signalingClass]">
+			{{ helperText }}
+		</div>
 	</div>
 </template>
 
 <script>
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
-import ArrowRight from 'vue-material-design-icons/ArrowRight.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
+import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
+import AlertIcon from 'vue-material-design-icons/AlertCircle.vue'
 import Spinner from '../AppIcons/Spinner.vue'
 
 export default {
 	name: 'InputDiv',
 
 	components: {
-		ArrowRight,
+		ArrowRightIcon,
 		PlusIcon,
 		MinusIcon,
-		CloseIcon,
+		AlertIcon,
 		CheckIcon,
 		Spinner,
 	},
@@ -94,13 +105,33 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		modifierStepValue: {
+			type: Number,
+			default: 1,
+		},
+		modifierMax: {
+			type: Number,
+			default: null,
+		},
+		modifierMin: {
+			type: Number,
+			default: null,
+		},
 		focus: {
 			type: Boolean,
 			default: false,
 		},
-		noSubmit: {
+		submit: {
 			type: Boolean,
 			default: false,
+		},
+		helperText: {
+			type: String,
+			default: null,
+		},
+		label: {
+			type: String,
+			default: null,
 		},
 	},
 
@@ -109,13 +140,10 @@ export default {
 			return !this.checking && !this.useNumModifiers && this.signalingClass === 'error'
 		},
 		success() {
-			return !this.checking && !this.useNumModifiers && this.signalingClass === 'success' && this.noSubmit
+			return !this.checking && !this.useNumModifiers && this.signalingClass === 'success' && !this.submit
 		},
 		showSubmit() {
-			return !this.checking && !this.useNumModifiers && !this.noSubmit && this.signalingClass !== 'error'
-		},
-		showModifiers() {
-			return this.useNumModifiers
+			return !this.checking && !this.useNumModifiers && this.submit && this.signalingClass !== 'error'
 		},
 		checking() {
 			return !this.useNumModifiers && this.signalingClass === 'checking'
@@ -134,29 +162,70 @@ export default {
 				this.$refs.input.focus()
 			})
 		},
+
+		add() {
+			let newValue = this.value
+			if (this.modifierMax && (newValue + this.modifierStepValue) > this.modifierMax) {
+				if (this.modifierMin) {
+					newValue = this.modifierMin
+				}
+			} else {
+				newValue += this.modifierStepValue
+			}
+			this.$emit('input', newValue)
+		},
+
+		subtract() {
+			let newValue = this.value
+			if (this.modifierMin && (newValue - this.modifierStepValue) < this.modifierMin) {
+				if (this.modifierMax) {
+					newValue = this.modifierMax
+				}
+			} else {
+				newValue -= this.modifierStepValue
+			}
+			this.$emit('input', newValue)
+		},
 	},
 }
 
 </script>
 
 <style lang="scss" scoped>
+	$input-height: 34px;
 
 	.input-div {
 		position: relative;
+		flex: 1;
+
+		.input-wrapper {
+			position: relative;
+			display: flex;
+		}
+
+		.helper {
+			min-height: 1.5rem;
+			font-size: 0.8em;
+			opacity: 0.8;
+			&.error {
+				opacity: 1;
+				color: var(--color-error)
+			}
+		}
 
 		input {
 			width: 100%;
+			margin: 0;
 
-			&:empty:before {
-				color: grey;
-			}
-
-			&.has-submit {
-				padding-right: 34px;
+			&.has-submit,
+			&.error,
+			&.success,
+			&.checking {
+				padding-right: $input-height;
 			}
 
 			&.has-modifier {
-				padding: 0 34px;
+				padding: 0 $input-height;
 			}
 
 			&.error {
@@ -164,50 +233,28 @@ export default {
 				background-color: var(--color-background-error);
 				color: var(--color-foreground-error);
 			}
-
-			&.checking {
-				border-color: var(--color-warning);
-			}
-
-			&.success, &.icon-confirm.success {
-				border-color: var(--color-success);
-				background-color: var(--color-background-success) !important;
-				color: var(--color-foreground-success);
-			}
 		}
 
 		&.numeric {
-			min-width: 100px;
-			width: 110px;
+			min-width: 110px;
+			max-width: 150px;
 			display: block;
-
-			input {
+			.input-wrapper input {
 				text-align: center;
 			}
 		}
 
-		.error, .success, .spinner {
-			&.material-design-icon {
-				position: absolute;
-				right: 6px;
-				top: 8px;
-			}
-		}
-
-		.submit {
+		.signaling-icon {
 			position: absolute;
-			right: 6px;
-			top: 8px;
-			cursor: pointer;
+			right: 0;
+			width: $input-height;
+			height: $input-height;
 		}
 
 		.modifier {
-			flex: 0;
 			position: absolute;
-			top: 0;
-			height: 32px;
-			margin: 4px 1px;
-			padding: 0 4px;
+			height: $input-height;
+			width: $input-height;
 			border-color: var(--color-border-dark);
 			cursor: pointer;
 
@@ -222,7 +269,6 @@ export default {
 			}
 
 			&.subtract {
-				left: 0;
 				border-right: solid 1px var(--color-border-dark);
 				border-radius: var(--border-radius) 0 0 var(--border-radius);
 			}

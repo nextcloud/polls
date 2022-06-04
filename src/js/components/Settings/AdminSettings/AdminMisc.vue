@@ -26,22 +26,21 @@
 			<CheckboxRadioSwitch :checked.sync="useActivity" type="switch">
 				{{ t('polls', 'Track activities') }}
 			</CheckboxRadioSwitch>
+
 			<CheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
 				{{ t('polls', 'Hide login option in public polls') }}
 			</CheckboxRadioSwitch>
+
 			<CheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
 				{{ t('polls', 'Archive closed polls automatically') }}
 			</CheckboxRadioSwitch>
-			<div v-if="autoArchive" class="settings_details">
-				<span>{{ t('polls', 'After how many days are the closed polls to be archived:') }}</span>
-				<InputDiv v-model="autoArchiveOffset"
-					class="selectUnit"
-					type="number"
-					inputmode="numeric"
-					use-num-modifiers
-					@add="autoArchiveOffset += 1"
-					@subtract="autoArchiveOffset -= 1" />
-			</div>
+			<InputDiv v-if="autoArchive"
+				v-model="autoArchiveOffset"
+				class="settings_details"
+				type="number"
+				inputmode="numeric"
+				use-num-modifiers
+				:label="t('polls', 'After how many days are closed polls to be archived:')" />
 		</div>
 	</div>
 </template>
@@ -109,17 +108,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.user_settings {
-		padding-top: 16px;
-	}
-
-	.settings_details {
-		padding-bottom: 16px;
-		margin-left: 36px;
-		input, .stretch {
-			width: 100%;
-		}
-	}
-</style>

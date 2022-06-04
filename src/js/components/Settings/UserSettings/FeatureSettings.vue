@@ -93,22 +93,3 @@ export default {
 	},
 }
 </script>
-
-<style>
-	.user_settings {
-		padding-top: 16px;
-	}
-
-	.settings_details {
-		padding-top: 8px;
-		margin-left: 36px;
-	}
-
-	.bully {
-		display: inline-block;
-		width: 11px;
-		height: 11px;
-		border-radius: 50%;
-		margin: 0 4px 0 0;
-	}
-</style>

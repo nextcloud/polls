@@ -46,9 +46,9 @@
 				</CheckboxRadioSwitch>
 
 				<div v-if="individualImage" class="settings_details">
-					<input v-model="individualImageUrl"
+					<InputDiv v-model="individualImageUrl"
 						type="text"
-						:placeholder="t('polls', 'Enter the URL of your favorite background image.')">
+						:placeholder="t('polls', 'Enter the URL of your favorite background image.')" />
 					<CheckboxRadioSwitch :checked.sync="individualImageStyle" type="switch">
 						{{ t('polls', 'Dark picture') }}
 					</CheckboxRadioSwitch>
@@ -72,12 +72,14 @@
 
 import { mapState } from 'vuex'
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import InputDiv from '../../Base/InputDiv.vue'
 
 export default {
 	name: 'StyleSettings',
 
 	components: {
 		CheckboxRadioSwitch,
+		InputDiv,
 	},
 
 	computed: {
@@ -159,17 +161,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.user_settings {
-		padding-top: 16px;
-	}
-
-	.settings_details {
-		padding-top: 8px;
-		margin-left: 36px;
-		input {
-			width: 100%;
-		}
-	}
-</style>

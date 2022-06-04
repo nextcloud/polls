@@ -23,6 +23,7 @@
 <template>
 	<InputDiv v-model="newPollText"
 		:placeholder="placeholder"
+		submit
 		@submit="addOption()" />
 </template>
 

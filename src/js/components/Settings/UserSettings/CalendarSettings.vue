@@ -26,6 +26,7 @@
 			<CheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
 			</CheckboxRadioSwitch>
+
 			<div v-show="calendarPeek" class="settings_details">
 				{{ t('polls', 'Select the calendars to use for lookup.') }}
 
@@ -41,29 +42,19 @@
 		</div>
 
 		<div class="user_settings">
-			<p class="settings-description">
-				{{ t('polls', 'Specify in which period (in hours) before the option existing appointments should be included in the search results.') }}
-			</p>
 			<InputDiv v-model="checkCalendarsBefore"
+				:label="t('polls', 'Specify in which period (in hours) before the option existing appointments should be included in the search results.')"
 				type="number"
 				inputmode="numeric"
-				use-num-modifiers
-				no-submit
-				@add="checkCalendarsBefore += 1"
-				@subtract="checkCalendarsBefore -= 1" />
+				use-num-modifiers />
 		</div>
 
 		<div class="user_settings">
-			<p class="settings-description">
-				{{ t('polls', 'Specify in which period (in hours) after the option existing appointments should be included in the search results.') }}
-			</p>
 			<InputDiv v-model="checkCalendarsAfter"
+				:label="t('polls', 'Specify in which period (in hours) after the option existing appointments should be included in the search results.')"
 				type="number"
 				inputmode="numeric"
-				use-num-modifiers
-				no-submit
-				@add="checkCalendarsAfter += 1"
-				@subtract="checkCalendarsAfter -= 1" />
+				use-num-modifiers />
 		</div>
 	</div>
 </template>
@@ -157,15 +148,6 @@ export default {
 </script>
 
 <style>
-	.user_settings {
-		padding-top: 16px;
-	}
-
-	.settings_details {
-		padding-top: 8px;
-		margin-left: 36px;
-	}
-
 	.bully {
 		display: inline-block;
 		width: 11px;
