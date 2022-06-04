@@ -24,7 +24,7 @@ jobs:
         xpath: '//info//version'
     - name: Get tag name
       id: gettag
-      uses: actions/github-script@6
+      uses: actions/github-script@5
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
