@@ -22,13 +22,12 @@ jobs:
       with:
         xml-file: 'appinfo/info.xml'
         xpath: '//info//version'
-    -name: Get tag name
-      id: tag
-      uses: actions/github-script@0.2.0
+    - name: Get tag name
+      id: gettag
+      uses: actions/github-script@6
       with:
         github-token: ${{ secrets.GITHUB_TOKEN }}
         script: |
           return context.payload.ref.replace(/\/refs\/tags\//, '');
     - name: Print version
-      run: echo App version ${{ steps.getxml.outputs.info }}
-      run: echo Tag name ${{ steps.tag.outputs.result }}
+      run: echo App version ${{ steps.getxml.outputs.info }}, Tag name ${{ steps.gettag.outputs.result }}
