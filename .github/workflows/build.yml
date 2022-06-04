@@ -25,5 +25,9 @@ jobs:
     - name: Get tag name
       id: gettag
       run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+    - name: Check correct app version
+      if: ${{ steps.getxml.outputs.info }} != ${{ steps.gettag.outputs.VERSION }}
+      run: echo App version ${{ steps.getxml.outputs.info }} is not equal to tag name ${{ steps.gettag.outputs.VERSION }} |
+        exit 1
     - name: Print version
       run: echo App version ${{ steps.getxml.outputs.info }}, Tag name ${{ steps.gettag.outputs.VERSION }}
