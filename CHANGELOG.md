@@ -16,6 +16,17 @@ All notable changes to this project will be documented in this file.
 - Switch to new calendar API (NC24)
 - repaces icons with material design icons
 - generate a unique user id for public users
+- Less noise in the registration dialog
+
+## [3.7.0-beta5] - 2022-06-05
+
+### Fix
+- Translations
+- legal links
+
+### Changes
+- Changed apperance of registration modal
+- Improvement of InputDiv component
 
 ## [3.7.0-beta4] - 2022-05-29
 ### Fix
