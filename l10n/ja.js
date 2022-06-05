@@ -73,7 +73,6 @@ OC.L10N.register(
     "To participate, tell us how we can call you!" : "参加するのに必要な連絡方法を教えてください ",
     "Enter your name" : "あなたの名前を入力",
     "Login" : "ログイン",
-    "Valid email address." : "有効なメールアドレス。",
     "Access" : "アクセス",
     "Owner" : "オーナー",
     "Created" : "作成されました",
