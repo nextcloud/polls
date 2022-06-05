@@ -1,0 +1,62 @@
+name: Pubish beta release
+
+on: 
+  push:
+    tags:
+      v*-beta*
+
+jobs:
+  checkout:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        node-versions: [14.x]
+        npm-versions: [7]
+    name: Beta release
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Get app version from appinfo/info.xml
+      id: appinfo
+      uses: mavrosxristoforos/get-xml-info@1.0
+      with:
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//version'
+    - name: Get tag name
+      id: gettag
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+    - name: Check correct app version
+      if: ${{ format('v{0}', steps.appinfo.outputs.info) != steps.gettag.outputs.VERSION }}
+      run: echo App version ${{ format('v{0}', steps.appinfo.outputs.info) }} is not equal to tag name ${{ steps.gettag.outputs.VERSION }} |
+        echo Cancelling workflow
+        exit 1
+
+    - name: Use node ${{ matrix.node-versions }}
+      uses: actions/setup-node@v2
+      with:
+        node-version: ${{ matrix.node-versions }}
+    - name: Set up npm ${{ matrix.npm-versions }}
+      run: npm i -g npm@"${{ matrix.npm-versions }}"
+
+    - name: Make appstore package
+      run: make appstore
+
+    - name: rename package
+      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
+
+    - name: create zip archive from sources
+      run: |
+        pushd build/source
+        zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip *
+        popd
+
+    - name: Publish beta release
+      uses: softprops/action-gh-release@v1
+      with: 
+        body_path: CHANGELOG.md
+        prerelease: true
+        draft: true
+        generate_release_notes: true
+        files: |
+          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
+          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip
