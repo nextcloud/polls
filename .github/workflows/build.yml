@@ -48,7 +48,7 @@ jobs:
         mkdir -p build/artifacts/appstore
         touch build/source/file.txt
         touch build/source/folder/file-in-folder.txt
-        touch build/artifacts/appstore/polls.tar.gz
+        echo "test" > build/artifacts/appstore/polls.tar.gz
 
     # - name: Make appstore package
       # run: make appstore
