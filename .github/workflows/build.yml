@@ -42,24 +42,25 @@ jobs:
     # - name: Set up npm ${{ matrix.npm-versions }}
     #   run: npm i -g npm@"${{ matrix.npm-versions }}"
 
-    - name: Make appstore package
-      # run: make appstore
-      run: mkdir -p build/artifacts/appstore
+    - name: simulate make appstore
+      run: |
+        mkdir -p build/source/folder
+        mkdir -p build/artifacts/appstore
+        touch build/source/file.txt
+        touch build/source/folder/file-in-folder.txt
         touch build/artifacts/appstore/polls.tar.gz
+
+    # - name: Make appstore package
+      # run: make appstore
 
     - name: rename package
       run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
 
     - name: create zip archive from sources
-      # run: |
-      #   pushd build/source
-      #   zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip *
-      #   popd
       run: |
-        mkdir -p build/source/folder
-        touch build/source/file.txt
-        touch build/source/folder/file-in-folder.txt
+        pushd build/source
         zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip *
+        popd
 
     - name: create release
       uses: softprops/action-gh-release@v1
