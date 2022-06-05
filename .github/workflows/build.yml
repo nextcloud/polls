@@ -43,9 +43,11 @@ jobs:
       run: npm i -g npm@"${{ matrix.npm-versions }}"
 
     - name: Make appstore package
-      run: make appstore
+      # run: make appstore
+      run: mkdir -p build/artifacts/appstore
+        touch build/artifacts/appstore/polls.tar.gz
     - name: rename package
-      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${steps.appinfo.outputs.info}.tar.gz
+      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
 
     - name: create release
       uses: softprops/action-gh-release@v1
@@ -53,4 +55,5 @@ jobs:
         draft: true
         prerelease: true
         generate_release_notes: true
-        files: build/artifacts/appstore/polls.tar.gz
+        # files: build/artifacts/appstore/polls.tar.gz
+        files: appinfo/info.xml
