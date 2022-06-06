@@ -184,7 +184,7 @@ export default {
 
 			if (this.userName.length < 1) {
 				return {
-					result: t('polls', 'A name is required'),
+					result: t('polls', 'A name is required.'),
 					status: 'empty',
 				}
 			}
