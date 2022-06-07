@@ -322,7 +322,6 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "點擊「確定」按鈕即表示您同意我們的 {privacyPolicy}。",
     "privacy policy" : "私隱政策",
     "Checking name …" : "正在檢查名稱……",
-    "A name is required" : "姓名為必填",
     "The name {username} is invalid or reserved." : "名稱 {username} 無效或已被保留。",
     "An email address is required." : "電郵地址為必填。",
     "Email could not be sent to {emailAddress}" : "郵件無法傳送到 {emailAddress}",
