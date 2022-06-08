@@ -187,6 +187,7 @@
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Napsauttamalla \"OK\" hyväksyt {privacyPolicy}.",
     "privacy policy" : "tietosuojakäytännön",
     "Checking name …" : "Tarkistetaan nimeä…",
+    "A name is required." : "Nimi vaaditaan.",
     "The name {username} is invalid or reserved." : "Nimi {username} on virheellinen tai varattu.",
     "An email address is required." : "Sähköpostiosoite vaaditaan.",
     "Email could not be sent to {emailAddress}" : "Sähköpostia ei voitu lähettää osoitteeseen {emailAddress}",

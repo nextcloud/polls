@@ -322,6 +322,7 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Kliknutím na „OK“ přijmete naše {privacyPolicy}.",
     "privacy policy" : "zásady ochrany soukromí",
     "Checking name …" : "Kontrola jména…",
+    "A name is required." : "Je vyžadováno jméno.",
     "The name {username} is invalid or reserved." : "Jméno {username} je neplatné nebo rezervované.",
     "An email address is required." : "Je vyžadována e-mailová adresa.",
     "Email could not be sent to {emailAddress}" : "E-mail se nepodařilo odeslat na {emailAddress}",

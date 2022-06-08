@@ -322,6 +322,7 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Klikając przycisk \"OK\", akceptujesz naszą {privacyPolicy}.",
     "privacy policy" : "politykę prywatności",
     "Checking name …" : "Sprawdzanie nazwy…",
+    "A name is required." : "Nazwa jest wymagana.",
     "The name {username} is invalid or reserved." : "Nazwa {username} jest nieprawidłowa lub zarezerwowana.",
     "An email address is required." : "Adres e-mail jest wymagany.",
     "Email could not be sent to {emailAddress}" : "Nie można wysłać e-maila na {emailAddress}",

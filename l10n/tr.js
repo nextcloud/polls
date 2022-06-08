@@ -322,6 +322,7 @@ OC.L10N.register(
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "\"Tamam\" üzerinde tıklayarak {privacyPolicy} metnini kabul etmiş olursunuz.",
     "privacy policy" : "gizlilik ilkesi",
     "Checking name …" : "Ad denetleniyor …",
+    "A name is required." : "Bir ad yazılmalıdır.",
     "The name {username} is invalid or reserved." : "{username} kullanıcı adı geçersiz ya da ayrılmış.",
     "An email address is required." : "Bir e-posta adresi yazılması zorunludur.",
     "Email could not be sent to {emailAddress}" : "E-posta {emailAdress} adresine gönderilemedi",
