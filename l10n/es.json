@@ -320,6 +320,7 @@
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Al pulsar el botón «Ok», aceptas nuestra {privacyPolicy}",
     "privacy policy" : "política de privacidad",
     "Checking name …" : "Comprobando nombre …",
+    "A name is required." : "Es obligatorio un nombre.",
     "The name {username} is invalid or reserved." : "El nombre {username} es inválido o está reservado.",
     "An email address is required." : "Es obligatoria una dirección de correo.",
     "Email could not be sent to {emailAddress}" : "No se ha podido enviar el email a {emailAddress}",
