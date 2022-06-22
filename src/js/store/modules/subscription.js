@@ -59,7 +59,10 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', response.data)
 		} catch {
 			context.commit('set', false)
@@ -79,7 +82,9 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.put(generateUrl(endPoint))
+			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error(e.response)

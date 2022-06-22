@@ -45,10 +45,7 @@
 
 <script>
 
-import debounce from 'lodash/debounce'
-import { mapState } from 'vuex'
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
+import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 import { CheckboxRadioSwitch, Multiselect } from '@nextcloud/vue'
 
 export default {
@@ -59,19 +56,9 @@ export default {
 		Multiselect,
 	},
 
-	data() {
-		return {
-			searchToken: null,
-			groups: [],
-			isLoading: false,
-		}
-	},
+	mixins: [loadGroups, writeValue],
 
 	computed: {
-		...mapState({
-			appSettings: (state) => state.appSettings,
-		}),
-
 		// Add bindings
 		createPollLimited: {
 			get() {
@@ -89,42 +76,6 @@ export default {
 				this.writeValue({ pollCreationGroups: value })
 			},
 		},
-	},
-
-	created() {
-		this.loadGroups('')
-	},
-
-	methods: {
-		async writeValue(value) {
-			await this.$store.commit('appSettings/set', value)
-			this.$store.dispatch('appSettings/write')
-		},
-		loadGroups: debounce(async function(query) {
-			let endPoint = generateUrl(`apps/polls/groups/${query}`)
-
-			if (!query.trim()) {
-				endPoint = generateUrl('apps/polls/groups')
-			}
-			this.isLoading = true
-
-			if (this.searchToken) {
-				this.searchToken.cancel()
-			}
-			this.searchToken = axios.CancelToken.source()
-			try {
-				const response = await axios.get(endPoint, { cancelToken: this.searchToken.token })
-				this.groups = response.data.groups
-				this.isLoading = false
-			} catch (e) {
-				if (axios.isCancel(e)) {
-					// request was cancelled
-				} else {
-					console.error(e.response)
-					this.isLoading = false
-				}
-			}
-		}, 250),
 	},
 }
 </script>

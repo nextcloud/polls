@@ -51,7 +51,10 @@ const actions = {
 
 		const endPoint = 'apps/polls/administration/polls'
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', { list: response.data })
 		} catch (e) {
 			console.error('Error loading polls', { error: e.response })
@@ -64,7 +67,9 @@ const actions = {
 		}
 
 		const endPoint = `apps/polls/administration/poll/${payload.pollId}/takeover`
-		axios.put(generateUrl(endPoint))
+		axios.put(generateUrl(endPoint), {
+			headers: { Accept: 'application/json' },
+		})
 	},
 }
 

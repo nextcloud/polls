@@ -185,10 +185,14 @@ export default {
 		},
 
 		validateEmailAddress: debounce(async function(value) {
+			const endPoint = `apps/polls/check/emailaddress/${this.emailAddressTemp}`
+
 			this.emailAddressTemp = value
 			try {
 				this.checking = true
-				await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddressTemp}`)
+				await axios.get(generateUrl(endPoint), {
+					headers: { Accept: 'application/json' },
+				})
 				this.checkResult = t('polls', 'valid email address.')
 				this.checkStatus = 'success'
 			} catch {

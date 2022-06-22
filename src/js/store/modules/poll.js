@@ -187,7 +187,10 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
 		} catch (e) {
@@ -199,7 +202,11 @@ const actions = {
 	async add(context, payload) {
 		const endPoint = 'apps/polls/poll/add'
 		try {
-			return await axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
+			return await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				title: payload.title,
+				type: payload.type,
+			})
 		} catch (e) {
 			console.error('Error adding poll:', { error: e.response }, { state: context.state })
 			throw e
@@ -218,7 +225,10 @@ const actions = {
 	async update(context) {
 		const endPoint = `apps/polls/poll/${context.state.id}`
 		try {
-			const response = await axios.put(generateUrl(endPoint), { poll: context.state })
+			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				poll: context.state,
+			})
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
 			context.dispatch('options/list', null, { root: true })
@@ -240,7 +250,9 @@ const actions = {
 	async delete(context, payload) {
 		const endPoint = `apps/polls/poll/${payload.pollId}`
 		try {
-			await axios.delete(generateUrl(endPoint))
+			await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error deleting poll', { error: e.response }, { payload })
 		}
@@ -249,7 +261,9 @@ const actions = {
 	async getParticipantsEmailAddresses(context) {
 		const endPoint = `apps/polls/poll/${context.state.id}/addresses`
 		try {
-			return await axios.get(generateUrl(endPoint))
+			return await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error retrieving email addresses', { error: e.response })
 		}

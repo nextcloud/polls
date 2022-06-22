@@ -128,6 +128,7 @@ export const watchPolls = {
 			return await axios.get(generateUrl(this.endPoint), {
 				params: { offset: this.lastUpdated },
 				cancelToken: this.cancelToken.token,
+				headers: { Accept: 'application/json' },
 			})
 		},
 

@@ -199,7 +199,10 @@ const actions = {
 		const endPoint = 'apps/polls/polls'
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', { list: response.data.list })
 			context.commit('setPollCreationAllowed', { pollCreationAllowed: response.data.pollCreationAllowed })
 			context.commit('setComboAllowed', { comboAllowed: response.data.comboAllowed })

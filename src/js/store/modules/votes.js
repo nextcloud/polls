@@ -92,7 +92,10 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(`${endPoint}/votes`), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(`${endPoint}/votes`), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			const votes = []
 			response.data.votes.forEach((vote) => {
 				if (vote.answer === 'yes') {
@@ -122,6 +125,7 @@ const actions = {
 
 		try {
 			const response = await axios.put(generateUrl(`${endPoint}/vote`), {
+				headers: { Accept: 'application/json' },
 				optionId: payload.option.id,
 				setTo: payload.setTo,
 			})
@@ -150,7 +154,9 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.delete(generateUrl(endPoint))
+			const response = await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('deleteVotes', { userId: response.data.deleted })
 		} catch (e) {
 			console.error('Error deleting votes', { error: e.response })
@@ -161,7 +167,9 @@ const actions = {
 	async deleteUser(context, payload) {
 		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/user/${payload.userId}`
 		try {
-			await axios.delete(generateUrl(endPoint))
+			await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('deleteVotes', payload)
 		} catch (e) {
 			console.error('Error deleting votes', { error: e.response }, { payload })
