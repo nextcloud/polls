@@ -27,7 +27,7 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 
@@ -145,7 +145,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function getPoll(string $token): DataResponse {
+	public function getPoll(string $token): JSONResponse {
 		$this->acl->setToken($token);
 		return $this->response(fn () => [
 			'acl' => $this->acl,
@@ -158,7 +158,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function watchPoll(string $token, ?int $offset): DataResponse {
+	public function watchPoll(string $token, ?int $offset): JSONResponse {
 		$pollId = $this->acl->setToken($token)->getPollId();
 		return $this->responseLong(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
 	}
@@ -168,7 +168,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function getShare(string $token): DataResponse {
+	public function getShare(string $token): JSONResponse {
 		$validateShareType = true;
 		return $this->response(fn () => ['share' => $this->shareService->get($token, $validateShareType)]);
 	}
@@ -178,7 +178,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function getComments(string $token): DataResponse {
+	public function getComments(string $token): JSONResponse {
 		return $this->response(fn () => ['comments' => $this->commentService->list(null, $token)]);
 	}
 
@@ -187,7 +187,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function getVotes(string $token): DataResponse {
+	public function getVotes(string $token): JSONResponse {
 		return $this->response(fn () => ['votes' => $this->voteService->list(null, $token)]);
 	}
 
@@ -196,7 +196,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function deleteUser(string $token): DataResponse {
+	public function deleteUser(string $token): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->delete(null, null, $token)]);
 	}
 
@@ -205,7 +205,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function getOptions(string $token): DataResponse {
+	public function getOptions(string $token): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->list(null, $token)]);
 	}
 
@@ -214,7 +214,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): DataResponse {
+	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add(null, $timestamp, $text, $duration, $token)]);
 	}
 
@@ -223,7 +223,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function deleteOption(string $token, int $optionId): DataResponse {
+	public function deleteOption(string $token, int $optionId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['option' => $this->optionService->delete($optionId, $token)]);
 	}
 
@@ -232,7 +232,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function getSubscription(string $token): DataResponse {
+	public function getSubscription(string $token): JSONResponse {
 		return $this->response(fn () => ['subscribed' => $this->subscriptionService->get(null, $token)]);
 	}
 
@@ -241,7 +241,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function setVote(int $optionId, string $setTo, string $token): DataResponse {
+	public function setVote(int $optionId, string $setTo, string $token): JSONResponse {
 		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $setTo, $token)]);
 	}
 
@@ -250,7 +250,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function addComment(string $token, string $message): DataResponse {
+	public function addComment(string $token, string $message): JSONResponse {
 		return $this->response(fn () => ['comment' => $this->commentService->add($message, null, $token)]);
 	}
 
@@ -259,7 +259,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function deleteComment(int $commentId, string $token): DataResponse {
+	public function deleteComment(int $commentId, string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['comment' => $this->commentService->delete($commentId, $token)]);
 	}
 
@@ -268,7 +268,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function subscribe(string $token): DataResponse {
+	public function subscribe(string $token): JSONResponse {
 		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, null, $token)]);
 	}
 
@@ -277,7 +277,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function unsubscribe(string $token): DataResponse {
+	public function unsubscribe(string $token): JSONResponse {
 		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, null, $token)]);
 	}
 
@@ -288,7 +288,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function validatePublicUsername(string $userName, string $token): DataResponse {
+	public function validatePublicUsername(string $userName, string $token): JSONResponse {
 		return $this->response(fn () => ['result' => $this->systemService->validatePublicUsername($userName, $token), 'name' => $userName]);
 	}
 
@@ -297,7 +297,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function validateEmailAddress(string $emailAddress): DataResponse {
+	public function validateEmailAddress(string $emailAddress): JSONResponse {
 		return $this->response(fn () => ['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress]);
 	}
 
@@ -306,7 +306,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function setEmailAddress(string $token, string $emailAddress = ''): DataResponse {
+	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->setEmailAddress($token, $emailAddress, true)]);
 	}
 
@@ -315,7 +315,7 @@ class PublicController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function deleteEmailAddress(string $token): DataResponse {
+	public function deleteEmailAddress(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->deleteEmailAddress($token)]);
 	}
 
@@ -325,7 +325,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function register(string $token, string $userName, string $emailAddress = ''): DataResponse {
+	public function register(string $token, string $userName, string $emailAddress = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->register($token, $userName, $emailAddress)]);
 	}
 
@@ -335,7 +335,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function resendInvitation(string $token): DataResponse {
+	public function resendInvitation(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->mailService->resendInvitation($token)]);
 	}
 }

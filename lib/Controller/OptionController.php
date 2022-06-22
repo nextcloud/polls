@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\CalendarService;
 
@@ -54,7 +54,7 @@ class OptionController extends Controller {
 	 * Get all options of given poll
 	 * @NoAdminRequired
 	 */
-	public function list(int $pollId): DataResponse {
+	public function list(int $pollId): JSONResponse {
 		return $this->response(function () use ($pollId) {
 			return ['options' => $this->optionService->list($pollId)];
 		});
@@ -64,11 +64,11 @@ class OptionController extends Controller {
 	 * Add a new option
 	 * @NoAdminRequired
 	 */
-	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): DataResponse {
+	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $text, $duration)]);
 	}
 
-	public function addBulk(int $pollId, string $text = ''): DataResponse {
+	public function addBulk(int $pollId, string $text = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['options' => $this->optionService->addBulk($pollId, $text)]);
 	}
 
@@ -76,7 +76,7 @@ class OptionController extends Controller {
 	 * Update option
 	 * @NoAdminRequired
 	 */
-	public function update(int $optionId, int $timestamp, string $text, int $duration): DataResponse {
+	public function update(int $optionId, int $timestamp, string $text, int $duration): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $text, $duration)]);
 	}
 
@@ -84,7 +84,7 @@ class OptionController extends Controller {
 	 * Delete option
 	 * @NoAdminRequired
 	 */
-	public function delete(int $optionId): DataResponse {
+	public function delete(int $optionId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
 
@@ -92,7 +92,7 @@ class OptionController extends Controller {
 	 * Switch option confirmation
 	 * @NoAdminRequired
 	 */
-	public function confirm(int $optionId): DataResponse {
+	public function confirm(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
 
@@ -100,7 +100,7 @@ class OptionController extends Controller {
 	 * Reorder options
 	 * @NoAdminRequired
 	 */
-	public function reorder(int $pollId, array $options): DataResponse {
+	public function reorder(int $pollId, array $options): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->reorder($pollId, $options)]);
 	}
 
@@ -108,7 +108,7 @@ class OptionController extends Controller {
 	 * Reorder options
 	 * @NoAdminRequired
 	 */
-	public function sequence(int $optionId, int $step, string $unit, int $amount): DataResponse {
+	public function sequence(int $optionId, int $step, string $unit, int $amount): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)]);
 	}
 
@@ -116,7 +116,7 @@ class OptionController extends Controller {
 	 * Reorder options
 	 * @NoAdminRequired
 	 */
-	public function shift(int $pollId, int $step, string $unit): DataResponse {
+	public function shift(int $pollId, int $step, string $unit): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->shift($pollId, $step, $unit)]);
 	}
 
@@ -124,7 +124,7 @@ class OptionController extends Controller {
 	 * findCalendarEvents
 	 * @NoAdminRequired
 	 */
-	public function findCalendarEvents(int $optionId, string $tz): DataResponse {
+	public function findCalendarEvents(int $optionId, string $tz): JSONResponse {
 		return $this->response(fn () => ['events' => $this->calendarService->getEvents($optionId, $tz)]);
 	}
 }

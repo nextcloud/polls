@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Service\SubscriptionService;
 
@@ -49,7 +49,7 @@ class SubscriptionController extends Controller {
 	 * Get subscription status
 	 * @NoAdminRequired
 	 */
-	public function get(int $pollId): DataResponse {
+	public function get(int $pollId): JSONResponse {
 		return $this->response(fn () => ['subscribed' => $this->subscriptionService->get($pollId)]);
 	}
 
@@ -57,7 +57,7 @@ class SubscriptionController extends Controller {
 	 * subscribe
 	 * @NoAdminRequired
 	 */
-	public function subscribe(int $pollId): DataResponse {
+	public function subscribe(int $pollId): JSONResponse {
 		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, $pollId, '')]);
 	}
 
@@ -65,7 +65,7 @@ class SubscriptionController extends Controller {
 	 * Unsubscribe
 	 * @NoAdminRequired
 	 */
-	public function unsubscribe(int $pollId): DataResponse {
+	public function unsubscribe(int $pollId): JSONResponse {
 		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(false, $pollId, '')]);
 	}
 }

@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\PollService;
@@ -68,7 +68,7 @@ class PollController extends Controller {
 	 * Get list of polls
 	 * @NoAdminRequired
 	 */
-	public function list(): DataResponse {
+	public function list(): JSONResponse {
 		return $this->response(function () {
 			$appSettings = new AppSettings;
 			return [
@@ -83,7 +83,7 @@ class PollController extends Controller {
 	 * get complete poll
 	 * @NoAdminRequired
 	 */
-	public function get(int $pollId): DataResponse {
+	public function get(int $pollId): JSONResponse {
 		$this->acl->setPollId($pollId);
 		return $this->response(fn () => [
 			'acl' => $this->acl,
@@ -95,7 +95,7 @@ class PollController extends Controller {
 	 * Add poll
 	 * @NoAdminRequired
 	 */
-	public function add(string $type, string $title): DataResponse {
+	public function add(string $type, string $title): JSONResponse {
 		return $this->responseCreate(fn () => $this->pollService->add($type, $title));
 	}
 
@@ -103,7 +103,7 @@ class PollController extends Controller {
 	 * Update poll configuration
 	 * @NoAdminRequired
 	 */
-	public function update(int $pollId, array $poll): DataResponse {
+	public function update(int $pollId, array $poll): JSONResponse {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		return $this->response(fn () => [
 			'poll' => $this->pollService->update($pollId, $poll),
@@ -115,7 +115,7 @@ class PollController extends Controller {
 	 * Switch deleted status (move to deleted polls)
 	 * @NoAdminRequired
 	 */
-	public function toggleArchive(int $pollId): DataResponse {
+	public function toggleArchive(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
 	}
 
@@ -124,7 +124,7 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function delete(int $pollId): DataResponse {
+	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
 	}
 
@@ -132,7 +132,7 @@ class PollController extends Controller {
 	 * Clone poll
 	 * @NoAdminRequired
 	 */
-	public function clone(int $pollId): DataResponse {
+	public function clone(int $pollId): JSONResponse {
 		$poll = $this->pollService->clone($pollId);
 		$this->optionService->clone($pollId, $poll->getId());
 		return $this->get($pollId);
@@ -142,7 +142,7 @@ class PollController extends Controller {
 	 * Collect email addresses from particitipants
 	 * @NoAdminRequired
 	 */
-	public function getParticipantsEmailAddresses(int $pollId): DataResponse {
+	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->getParticipantsEmailAddresses($pollId));
 	}
 }

@@ -27,8 +27,7 @@ use OCP\IRequest;
 use OCP\IUserSession;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
-use OCA\Polls\Db\Preferences;
+use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\PreferencesService;
 use OCA\Polls\Service\CalendarService;
 
@@ -63,7 +62,7 @@ class PreferencesController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function get(): DataResponse {
+	public function get(): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->get());
 	}
 
@@ -71,9 +70,9 @@ class PreferencesController extends Controller {
 	 * Write preferences
 	 * @NoAdminRequired
 	 */
-	public function write(array $settings): DataResponse {
+	public function write(array $settings): JSONResponse {
 		if (!$this->userSession->isLoggedIn()) {
-			return new DataResponse([], Http::STATUS_OK);
+			return new JSONResponse([], Http::STATUS_OK);
 		}
 		return $this->response(fn () => $this->preferencesService->write($settings));
 	}
@@ -83,7 +82,7 @@ class PreferencesController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function getCalendars(): DataResponse {
-		return new DataResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
+	public function getCalendars(): JSONResponse {
+		return new JSONResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
 	}
 }

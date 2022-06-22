@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Service\CommentService;
 
@@ -55,7 +55,7 @@ class CommentApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function list(int $pollId): DataResponse {
+	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['comments' => $this->commentService->list($pollId)]);
 	}
 
@@ -65,7 +65,7 @@ class CommentApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function add(int $pollId, string $message): DataResponse {
+	public function add(int $pollId, string $message): JSONResponse {
 		return $this->response(fn () => ['comment' => $this->commentService->add($message, $pollId)]);
 	}
 
@@ -75,7 +75,7 @@ class CommentApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function delete(int $commentId): DataResponse {
+	public function delete(int $commentId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['comment' => $this->commentService->delete($commentId)]);
 	}
 }

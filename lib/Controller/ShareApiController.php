@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\MailService;
@@ -60,7 +60,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function list(int $pollId): DataResponse {
+	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
 	}
 
@@ -70,7 +70,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function get(string $token): DataResponse {
+	public function get(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->get($token)]);
 	}
 
@@ -80,7 +80,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function add(int $pollId, string $type, string $userId = ''): DataResponse {
+	public function add(int $pollId, string $type, string $userId = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId)]);
 	}
 
@@ -90,7 +90,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function delete(string $token): DataResponse {
+	public function delete(string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete($token)]);
 	}
 
@@ -100,7 +100,7 @@ class ShareApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function sendInvitation(string $token): DataResponse {
+	public function sendInvitation(string $token): JSONResponse {
 		$sentResult = $this->mailService->sendInvitation($token);
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [

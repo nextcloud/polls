@@ -26,7 +26,7 @@ namespace OCA\Polls\Controller;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 
 use OCA\Polls\Db\Poll;
@@ -68,28 +68,28 @@ class AdminController extends Controller {
 	/**
 	 * Get list of polls for administrative purposes
 	 */
-	public function list(): DataResponse {
+	public function list(): JSONResponse {
 		return $this->response(fn () => $this->pollService->listForAdmin());
 	}
 
 	/**
 	 * Get list of polls for administrative purposes
 	 */
-	public function takeover(int $pollId): DataResponse {
+	public function takeover(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->takeover($pollId));
 	}
 
 	/**
 	 * Switch deleted status (move to deleted polls)
 	 */
-	public function toggleArchive(int $pollId): DataResponse {
+	public function toggleArchive(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
 	}
 
 	/**
 	 * Delete poll
 	 */
-	public function delete(int $pollId): DataResponse {
+	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
 	}
 }

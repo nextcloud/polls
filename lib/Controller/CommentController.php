@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\CommentService;
 
 class CommentController extends Controller {
@@ -48,7 +48,7 @@ class CommentController extends Controller {
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
 	 */
-	public function list(int $pollId): DataResponse {
+	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['comments' => $this->commentService->list($pollId)]);
 	}
 
@@ -56,7 +56,7 @@ class CommentController extends Controller {
 	 * Write a new comment to the db and returns the new comment as array
 	 * @NoAdminRequired
 	 */
-	public function add(int $pollId, string $message): DataResponse {
+	public function add(int $pollId, string $message): JSONResponse {
 		return $this->response(fn () => ['comment' => $this->commentService->add($message, $pollId)]);
 	}
 
@@ -64,7 +64,7 @@ class CommentController extends Controller {
 	 * Delete Comment
 	 * @NoAdminRequired
 	 */
-	public function delete(int $commentId): DataResponse {
+	public function delete(int $commentId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['comment' => $this->commentService->delete($commentId)]);
 	}
 }
