@@ -37,7 +37,7 @@
 						@submit="submitRegistration" />
 
 					<CheckboxRadioSwitch :checked.sync="saveCookie">
-						{{ t('polls', 'Save username in cookie for 30 days') }}
+						{{ t('polls', 'Remember me for 30 days') }}
 					</CheckboxRadioSwitch>
 
 					<InputDiv v-if="share.publicPollEmail !== 'disabled'"
