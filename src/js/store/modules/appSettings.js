@@ -75,7 +75,7 @@ const actions = {
 			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
 			context.commit('set', response.data.appSettings)
 		} catch {
-			context.commit('reset')
+			// context.commit('reset')
 		}
 	},
 

@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\WatchService;
 
 class WatchController extends Controller {
@@ -49,7 +49,7 @@ class WatchController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function watchPoll(int $pollId, ?int $offset): DataResponse {
+	public function watchPoll(int $pollId, ?int $offset): JSONResponse {
 		return $this->responseLong(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
 	}
 }

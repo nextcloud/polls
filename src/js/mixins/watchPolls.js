@@ -26,6 +26,8 @@ import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapState } from 'vuex'
 
+const defaultSleepTimeout = 30
+
 export const watchPolls = {
 	data() {
 		return {
@@ -38,7 +40,8 @@ export const watchPolls = {
 			endPoint: '',
 			isLoggedin: !!getCurrentUser(),
 			isAdmin: !!getCurrentUser()?.isAdmin,
-			sleepTimeout: 30, // seconds
+			sleepTimeout: defaultSleepTimeout, // seconds
+			gotValidResponse: true,
 		}
 	},
 
@@ -56,34 +59,46 @@ export const watchPolls = {
 				return
 			}
 
+			if (this.updateType === 'noPolling') {
+				console.debug('[polls]', 'Polling for updates is disabled')
+				return
+			}
+
 			console.debug('[polls]', 'Watch for updates')
 			this.cancelToken = axios.CancelToken.source()
 
 			while (this.retryCounter < this.maxTries) {
+				// reset sleep timer to default
+				this.sleepTimeout = defaultSleepTimeout
 				await this.$store.dispatch('appSettings/get')
-
-				if (this.updateType === 'noPolling') {
-					console.debug('[polls]', 'Polling for updates is disabled')
-					break
-				}
 
 				try {
 					const response = await this.fetchUpdates()
-					console.debug('[polls]', `Update detected (${this.updateType})`, response.data.updates)
-					this.loadTables(response.data.updates)
-					this.retryCounter = 0 // reset retryCounter after we got a valid response
+
+					// check, if we got a valid json response
+					if (response.headers['content-type'].includes('application/json')) {
+						this.gotValidResponse = true
+						console.debug('[polls]', `Update detected (${this.updateType})`, response.data.updates)
+						this.loadTables(response.data.updates)
+						this.retryCounter = 0 // reset retryCounter after we got a valid response
+					} else {
+						console.debug('[polls]', `No JSON response recieved, got "${response.headers['content-type']}"`)
+						this.gotValidResponse = false
+					}
+
 				} catch (e) {
 					if (axios.isCancel(e)) {
 						this.handleCanceledRequest()
 					} else if (e.response?.status === 304) {
 						this.handleNotModifiedResponse()
 					} else {
+						this.gotValidResponse = false
 						await this.handleConnectionError(e)
 					}
 				}
 
-				if (this.updateType === 'periodicPolling') {
-					console.debug('[polls]', `Sleep ${this.sleepTimeout} seconds`)
+				if (this.updateType === 'periodicPolling' || !this.gotValidResponse) {
+					console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds`)
 					await this.sleep(this.sleepTimeout)
 				}
 			}
@@ -128,17 +143,20 @@ export const watchPolls = {
 
 		async handleConnectionError(e) {
 			this.retryCounter += 1
-			console.debug('[polls]', e.message ?? `No response - request aborted - failed request ${this.retryCounter}/${this.maxTries}`)
 
-			if (e.response) {
-				console.error('[polls]', 'Unhandled error watching polls', e)
+			if (e?.response?.status === 503) {
+				// Server possibly in maintenance mode
+				this.sleepTimeout = e.response.headers['retry-after'] ?? this.sleepTimeout
+				console.debug('[polls]', `Service not avaiable - retry after ${this.sleepTimeout} seconds`)
+			} else if (e.response) {
+				console.error('[polls]', 'Unhandled error while watching polls updates', e)
+			} else {
+				console.debug('[polls]', e.message ?? `No response - request aborted - failed request ${this.retryCounter}/${this.maxTries}`)
 			}
-			await this.sleep(this.sleepTimeout)
 		},
 
 		async loadTables(tables) {
 			let dispatches = ['activity/list']
-
 			tables.forEach((item) => {
 				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
 

@@ -26,6 +26,7 @@ use Closure;
 
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NoUpdatesException;
@@ -49,11 +50,11 @@ trait ResponseHandle {
 	 * response
 	 * @NoAdminRequired
 	 */
-	protected function responseLong(Closure $callback): DataResponse {
+	protected function responseLong(Closure $callback): JSONResponse {
 		try {
-			return new DataResponse($callback(), Http::STATUS_OK);
+			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (NoUpdatesException $e) {
-			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
+			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
 		}
 	}
 
