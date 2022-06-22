@@ -235,11 +235,10 @@ export default {
 			}
 		}
 
-		&.numeric {
+		&.numeric .input-wrapper {
 			min-width: 110px;
 			max-width: 150px;
-			display: block;
-			.input-wrapper input {
+			input {
 				text-align: center;
 			}
 		}
