@@ -285,8 +285,14 @@ export default {
 		},
 
 		validatePublicUsername: debounce(async function() {
+			const endpoint = 'apps/polls/check/username'
+
 			try {
-				await axios.post(generateUrl('apps/polls/check/username'), { userName: this.userName, token: this.$route.params.token })
+				await axios.post(generateUrl(endpoint), {
+					headers: { Accept: 'application/json' },
+					userName: this.userName,
+					token: this.$route.params.token,
+				})
 				this.isValidName = true
 			} catch {
 				this.isValidName = false
@@ -295,8 +301,12 @@ export default {
 		}, 500),
 
 		validateEmailAddress: debounce(async function() {
+			const endpoint = `apps/polls/check/emailaddress/${this.emailAddress}`
+
 			try {
-				await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`)
+				await axios.get(generateUrl(endpoint), {
+					headers: { Accept: 'application/json' },
+				})
 				this.isValidEmailAddress = true
 			} catch {
 				this.isValidEmailAddress = false

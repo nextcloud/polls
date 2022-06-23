@@ -29,7 +29,7 @@ use OCA\Polls\Exceptions\InvalidShareTypeException;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Service\MailService;
@@ -67,9 +67,9 @@ class ShareController extends Controller {
 	 *
 	 * @NoAdminRequired
 	 *
-	 * @return DataResponse
+	 * @return JSONResponse
 	 */
-	public function list(int $pollId): DataResponse {
+	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
 	}
 
@@ -77,7 +77,7 @@ class ShareController extends Controller {
 	 * Add share
 	 * @NoAdminRequired
 	 */
-	public function add(int $pollId, string $type, string $userId = '', string $displayName = ''): DataResponse {
+	public function add(int $pollId, string $type, string $userId = '', string $displayName = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName)]);
 	}
 
@@ -85,7 +85,7 @@ class ShareController extends Controller {
 	 * Convert user to poll admin
 	 * @NoAdminRequired
 	 */
-	public function userToAdmin(string $token): DataResponse {
+	public function userToAdmin(string $token): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)]);
 	}
 
@@ -93,7 +93,7 @@ class ShareController extends Controller {
 	 * Convert user to poll admin
 	 * @NoAdminRequired
 	 */
-	public function setPublicPollEmail(string $token, string $value): DataResponse {
+	public function setPublicPollEmail(string $token, string $value): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->setPublicPollEmail($token, $value)]);
 	}
 
@@ -101,7 +101,7 @@ class ShareController extends Controller {
 	 * Convert poll admin to user
 	 * @NoAdminRequired
 	 */
-	public function adminToUser(string $token): DataResponse {
+	public function adminToUser(string $token): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_USER)]);
 	}
 
@@ -109,7 +109,7 @@ class ShareController extends Controller {
 	 * Set email address
 	 * @NoAdminRequired
 	 */
-	public function setEmailAddress(string $token, string $emailAddress = ''): DataResponse {
+	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->setEmailAddress($token, $emailAddress)]);
 	}
 
@@ -118,7 +118,7 @@ class ShareController extends Controller {
 	 * or update an email share with the username
 	 * @NoAdminRequired
 	 */
-	public function register(string $token, string $userName, string $emailAddress = ''): DataResponse {
+	public function register(string $token, string $userName, string $emailAddress = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->register($token, $userName, $emailAddress)]);
 	}
 
@@ -127,7 +127,7 @@ class ShareController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function delete(string $token): DataResponse {
+	public function delete(string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete($token)]);
 	}
 
@@ -136,7 +136,7 @@ class ShareController extends Controller {
 	 * Additionally send notification via notifications
 	 * @NoAdminRequired
 	 */
-	public function sendInvitation(string $token): DataResponse {
+	public function sendInvitation(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->get($token),
 			'sentResult' => $this->shareService->sendInvitation($token),
@@ -147,7 +147,7 @@ class ShareController extends Controller {
 	 * resolve contact group to individual shares
 	 * @NoAdminRequired
 	 */
-	public function resolveGroup(string $token): DataResponse {
+	public function resolveGroup(string $token): JSONResponse {
 		return $this->response(function () use ($token) {
 			$shares = [];
 			$share = $this->shareService->get($token);

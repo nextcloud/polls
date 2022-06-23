@@ -51,7 +51,10 @@ Vue.use(Router)
  */
 async function validateToken(to, from, next) {
 	try {
-		const response = await axios.get(generateUrl(`apps/polls/s/${to.params.token}/share`), { params: { time: +new Date() } })
+		const response = await axios.get(generateUrl(`apps/polls/s/${to.params.token}/share`), {
+			headers: { Accept: 'application/json' },
+			params: { time: +new Date() },
+		})
 		if (getCurrentUser()) {
 			// reroute to the internal vote page, if the user is logged in
 			next({ name: 'vote', params: { id: response.data.share.pollId } })

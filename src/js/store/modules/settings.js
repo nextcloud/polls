@@ -229,14 +229,20 @@ const actions = {
 	},
 
 	async setPollCombo(context, payload) {
-		await context.commit('setPollCombo', { pollCombo: payload.pollCombo })
+		await context.commit('setPollCombo', {
+			headers: { Accept: 'application/json' },
+			pollCombo: payload.pollCombo,
+		})
 		context.dispatch('write')
 	},
 
 	async write(context) {
 		const endPoint = 'apps/polls/preferences'
 		try {
-			const response = await axios.post(generateUrl(endPoint), { settings: context.state.user })
+			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				settings: context.state.user,
+			})
 			context.commit('setPreference', response.data.preferences)
 		} catch (e) {
 			console.error('Error writing preferences', { error: e.response }, { preferences: state.user })
@@ -246,7 +252,9 @@ const actions = {
 
 	async getCalendars(context) {
 		const endPoint = 'apps/polls/calendars'
-		const response = await axios.get(generateUrl(endPoint))
+		const response = await axios.get(generateUrl(endPoint), {
+			headers: { Accept: 'application/json' },
+		})
 		context.commit('setCalendars', { calendars: response.data.calendars })
 		return response
 	},

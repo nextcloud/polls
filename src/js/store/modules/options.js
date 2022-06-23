@@ -150,7 +150,10 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			console.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })
@@ -168,6 +171,7 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				pollId: context.rootState.route.params.id,
 				timestamp: payload.timestamp,
 				text: payload.text,
@@ -186,6 +190,7 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				pollId: context.rootState.route.params.id,
 				text: payload.text,
 			})
@@ -202,6 +207,7 @@ const actions = {
 
 		try {
 			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				timestamp: payload.option.timestamp,
 				text: payload.option.timeStamp,
 				duration: payload.option.duration,
@@ -224,7 +230,9 @@ const actions = {
 		}
 
 		try {
-			await axios.delete(generateUrl(endPoint))
+			await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('delete', { option: payload.option })
 		} catch (e) {
 			console.error('Error deleting option', { error: e.response }, { payload })
@@ -239,7 +247,9 @@ const actions = {
 		context.commit('confirm', { option: payload.option })
 
 		try {
-			const response = await axios.put(generateUrl(endPoint))
+			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
 			console.error('Error confirming option', { error: e.response }, { payload })
@@ -255,6 +265,7 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				options: payload,
 			})
 			context.commit('set', { options: response.data.options })
@@ -270,6 +281,7 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				step: payload.sequence.step,
 				unit: payload.sequence.unit.value,
 				amount: payload.sequence.amount,
@@ -287,6 +299,7 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				step: payload.shift.step,
 				unit: payload.shift.unit.value,
 			})
@@ -303,9 +316,8 @@ const actions = {
 
 		try {
 			return await axios.get(generateUrl(endPoint), {
-				params: {
-					tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
-				},
+				headers: { Accept: 'application/json' },
+				params: { tz: Intl.DateTimeFormat().resolvedOptions().timeZone },
 			})
 		} catch (e) {
 			return { events: [] }

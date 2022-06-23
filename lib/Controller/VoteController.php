@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Service\VoteService;
 
@@ -50,7 +50,7 @@ class VoteController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function list(int $pollId): DataResponse {
+	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['votes' => $this->voteService->list($pollId)]);
 	}
 
@@ -59,7 +59,7 @@ class VoteController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function set(int $optionId, string $setTo): DataResponse {
+	public function set(int $optionId, string $setTo): JSONResponse {
 		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $setTo)]);
 	}
 
@@ -67,7 +67,7 @@ class VoteController extends Controller {
 	 * Remove user from poll
 	 * @NoAdminRequired
 	 */
-	public function delete(int $pollId, string $userId = ''): DataResponse {
+	public function delete(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId)]);
 	}
 }

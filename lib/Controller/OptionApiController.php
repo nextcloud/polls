@@ -26,7 +26,7 @@ namespace OCA\Polls\Controller;
 use OCP\IRequest;
 
 use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\OptionService;
 
 class OptionApiController extends ApiController {
@@ -55,7 +55,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function list(int $pollId): DataResponse {
+	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->list($pollId)]);
 	}
 
@@ -65,7 +65,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
+	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)]);
 	}
 
@@ -76,7 +76,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
+	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText, $duration)]);
 	}
 
@@ -86,7 +86,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function delete(int $optionId): DataResponse {
+	public function delete(int $optionId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
 
@@ -96,7 +96,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function confirm(int $optionId): DataResponse {
+	public function confirm(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
 
@@ -106,7 +106,7 @@ class OptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function setOrder(int $optionId, int $order): DataResponse {
+	public function setOrder(int $optionId, int $order): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->setOrder($optionId, $order)]);
 	}
 }

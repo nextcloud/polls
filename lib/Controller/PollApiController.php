@@ -29,7 +29,7 @@ use OCA\Polls\Exceptions\Exception;
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\PollService;
@@ -59,13 +59,13 @@ class PollApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function list(): DataResponse {
+	public function list(): JSONResponse {
 		try {
-			return new DataResponse(['polls' => $this->pollService->list()], Http::STATUS_OK);
+			return new JSONResponse(['polls' => $this->pollService->list()], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse([], Http::STATUS_NOT_FOUND);
+			return new JSONResponse([], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -75,13 +75,13 @@ class PollApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function get(int $pollId): DataResponse {
+	public function get(int $pollId): JSONResponse {
 		try {
-			return new DataResponse(['poll' => $this->pollService->get($pollId)], Http::STATUS_OK);
+			return new JSONResponse(['poll' => $this->pollService->get($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
+			return new JSONResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -91,11 +91,11 @@ class PollApiController extends ApiController {
 	 * @NoCSRFRequired
 	 * @CORS
 	 */
-	public function add(string $type, string $title): DataResponse {
+	public function add(string $type, string $title): JSONResponse {
 		try {
-			return new DataResponse(['poll' => $this->pollService->add($type, $title)], Http::STATUS_CREATED);
+			return new JSONResponse(['poll' => $this->pollService->add($type, $title)], Http::STATUS_CREATED);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -105,18 +105,18 @@ class PollApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function update(int $pollId, array $poll): DataResponse {
+	public function update(int $pollId, array $poll): JSONResponse {
 		try {
 			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 			
-			return new DataResponse([
+			return new JSONResponse([
 				'poll' => $this->pollService->update($pollId, $poll),
 				'acl' => $this->acl,
 			], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -126,13 +126,13 @@ class PollApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function toggleArchive(int $pollId): DataResponse {
+	public function toggleArchive(int $pollId): JSONResponse {
 		try {
-			return new DataResponse(['poll' => $this->pollService->toggleArchive($pollId)], Http::STATUS_OK);
+			return new JSONResponse(['poll' => $this->pollService->toggleArchive($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -142,13 +142,13 @@ class PollApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function delete(int $pollId): DataResponse {
+	public function delete(int $pollId): JSONResponse {
 		try {
-			return new DataResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
+			return new JSONResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['message' => $e->getMessage()], Http::STATUS_OK);
+			return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -158,13 +158,13 @@ class PollApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function clone(int $pollId): DataResponse {
+	public function clone(int $pollId): JSONResponse {
 		try {
-			return new DataResponse(['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
+			return new JSONResponse(['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -174,13 +174,13 @@ class PollApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function getParticipantsEmailAddresses(int $pollId): DataResponse {
+	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
 		try {
-			return new DataResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
+			return new JSONResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -190,7 +190,7 @@ class PollApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function enum(): DataResponse {
-		return new DataResponse($this->pollService->getValidEnum(), Http::STATUS_OK);
+	public function enum(): JSONResponse {
+		return new JSONResponse($this->pollService->getValidEnum(), Http::STATUS_OK);
 	}
 }

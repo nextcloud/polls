@@ -145,7 +145,10 @@ const actions = {
 	async addPoll(context, payload) {
 		const endPoint = `apps/polls/poll/${payload.pollId}/poll`
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('addPoll', response.data)
 		} catch (e) {
 			console.debug('Error loading poll for combo', { error: e.response })
@@ -156,7 +159,10 @@ const actions = {
 		const endPoint = `apps/polls/poll/${payload.pollId}/options`
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('addOptions', response.data)
 		} catch (e) {
 			console.debug('Error loading options for combo', { error: e.response })
@@ -167,7 +173,10 @@ const actions = {
 		const endPoint = `apps/polls/poll/${payload.pollId}/votes`
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('addVotes', response.data)
 		} catch (e) {
 			console.debug('Error loading options for combo', { error: e.response })

@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 use Closure;
 
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\NoUpdatesException;
@@ -37,11 +37,11 @@ trait ResponseHandle {
 	 * response
 	 * @NoAdminRequired
 	 */
-	protected function response(Closure $callback): DataResponse {
+	protected function response(Closure $callback): JSONResponse {
 		try {
-			return new DataResponse($callback(), Http::STATUS_OK);
+			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -49,11 +49,11 @@ trait ResponseHandle {
 	 * response
 	 * @NoAdminRequired
 	 */
-	protected function responseLong(Closure $callback): DataResponse {
+	protected function responseLong(Closure $callback): JSONResponse {
 		try {
-			return new DataResponse($callback(), Http::STATUS_OK);
+			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (NoUpdatesException $e) {
-			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
+			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
 		}
 	}
 
@@ -61,11 +61,11 @@ trait ResponseHandle {
 	 * responseCreate
 	 * @NoAdminRequired
 	 */
-	protected function responseCreate(Closure $callback): DataResponse {
+	protected function responseCreate(Closure $callback): JSONResponse {
 		try {
-			return new DataResponse($callback(), Http::STATUS_CREATED);
+			return new JSONResponse($callback(), Http::STATUS_CREATED);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -73,13 +73,13 @@ trait ResponseHandle {
 	 * responseDeleteTolerant
 	 * @NoAdminRequired
 	 */
-	protected function responseDeleteTolerant(Closure $callback): DataResponse {
+	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
 		try {
-			return new DataResponse($callback(), Http::STATUS_OK);
+			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['message' => 'Not found, assume already deleted'], Http::STATUS_OK);
+			return new JSONResponse(['message' => 'Not found, assume already deleted'], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

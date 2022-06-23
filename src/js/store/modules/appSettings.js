@@ -72,17 +72,23 @@ const actions = {
 	async get(context) {
 		const endPoint = 'apps/polls/settings/app'
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', response.data.appSettings)
 		} catch {
-			context.commit('reset')
+			// context.commit('reset')
 		}
 	},
 
 	async write(context) {
 		const endPoint = 'apps/polls/settings/app'
 		try {
-			const response = await axios.post(generateUrl(endPoint), { appSettings: context.state })
+			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				appSettings: context.state,
+			})
 			context.commit('set', response.data.appSettings)
 		} catch (e) {
 			console.error('Error writing appSettings', { error: e.response }, { appSettings: state })

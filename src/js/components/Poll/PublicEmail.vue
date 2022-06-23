@@ -101,7 +101,9 @@ export default {
 			} else {
 				try {
 					this.checking = true
-					await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`)
+					await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`, {
+						headers: { Accept: 'application/json' },
+					})
 					this.checkResult = t('polls', 'valid email address.')
 					this.checkStatus = 'success'
 				} catch {
