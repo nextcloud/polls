@@ -312,7 +312,6 @@ OC.L10N.register(
     "Public participation" : "公開參與",
     "To participate, tell us how we can call you!" : "要參與，請告訴我們如何稱呼您！",
     "Enter your name" : "輸入您的名稱",
-    "Save username in cookie for 30 days" : "將使用者名稱儲存在 cookie 中 30 天",
     "You are a registered user of this site?" : "您是此網站的註冊使用者？",
     "Login" : "登入",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "作為此網站的一般使用者，您可以在登入後以您的內部身份參與。",

@@ -312,7 +312,6 @@ OC.L10N.register(
     "Public participation" : "Herkese açık katılım",
     "To participate, tell us how we can call you!" : "Katılmak için size nasıl hitap edeceğimizi söyleyin!",
     "Enter your name" : "Adınızı yazın",
-    "Save username in cookie for 30 days" : "Kullanıcı adı 30 gün süreyle çerez içinde tutulsun",
     "You are a registered user of this site?" : "Bu sitenin kayıtlı bir kullanıcısı mısınız?",
     "Login" : "Oturum aç",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Sitenin normal bir kullanıcısı olarak, oturum açtıktan sonra site kimliğinizle katılabilirsiniz.",

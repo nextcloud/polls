@@ -312,7 +312,6 @@ OC.L10N.register(
     "Public participation" : "Participação pública",
     "To participate, tell us how we can call you!" : "Para participar, diga-nos como podemos chamá-lo(a)!",
     "Enter your name" : "Digite seu nome",
-    "Save username in cookie for 30 days" : "Salvar nome de usuário no cookie por 30 dias",
     "You are a registered user of this site?" : "Você é um usuário registrado neste site?",
     "Login" : "Conectar",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Como usuário regular deste site, você pode participar com sua identidade interna após o login.",

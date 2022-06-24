@@ -224,7 +224,6 @@ OC.L10N.register(
     "Public participation" : "Javna udeležba",
     "To participate, tell us how we can call you!" : "Za sodelovanje je treba vpisati vsaj ime!",
     "Enter your name" : "Vpišite ime",
-    "Save username in cookie for 30 days" : "Shrani uporabniško ime in piškotek za 30 dni",
     "You are a registered user of this site?" : "Ali imate omogočen uporabniški račun na tej strani?",
     "Login" : "Prijava",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Po prijavi v okolje lahko sodelujete s privzeto istovetnostjo.",

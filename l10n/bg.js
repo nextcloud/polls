@@ -309,7 +309,6 @@ OC.L10N.register(
     "Public participation" : "Публично участие",
     "To participate, tell us how we can call you!" : "За да участвате, кажете ни как да ви наричаме!",
     "Enter your name" : "Въведете вашето име",
-    "Save username in cookie for 30 days" : "Запиши  името на потребител в бисквитка за 30 дни",
     "You are a registered user of this site?" : "Вие сте регистриран потребител на този сайт?",
     "Login" : "Вписване",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Като редовен потребител на този сайт, можете да участвате с вътрешната си самоличност след като влезете.",

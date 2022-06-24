@@ -312,7 +312,6 @@ OC.L10N.register(
     "Public participation" : "Parte-hartze publikoa",
     "To participate, tell us how we can call you!" : "Parte hartzeko, esaiguzu nola deitu ahal zaitugun!",
     "Enter your name" : "Sartu zure izena",
-    "Save username in cookie for 30 days" : "Gorde erabiltzaile-izena cookiean 30 egunez",
     "You are a registered user of this site?" : "Gune honen erabiltzaile erregistratu bat zara?",
     "Login" : "Hasi saioa",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Gune honetako ohiko erabiltzaile gisa, saioa hasi ondoren zure barne identitatearekin parte har dezakezu.",
