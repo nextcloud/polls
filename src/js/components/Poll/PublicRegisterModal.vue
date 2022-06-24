@@ -36,7 +36,7 @@
 						focus
 						@submit="submitRegistration" />
 
-					<CheckboxRadioSwitch :checked.sync="saveCookie">
+					<CheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
 						{{ t('polls', 'Remember me for 30 days') }}
 					</CheckboxRadioSwitch>
 
@@ -318,6 +318,7 @@ export default {
 			if (this.registrationIsValid) {
 				try {
 					const response = await this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress, saveCookie: this.saveCookie })
+
 					if (this.$route.params.token === response.token) {
 						this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
 						this.closeModal()

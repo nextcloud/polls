@@ -91,7 +91,7 @@ const actions = {
 				emailAddress: payload.emailAddress,
 			})
 
-			if (payload.saveCookie) {
+			if (payload.saveCookie && context.state.type === 'public') {
 				const cookieExpiration = (30 * 24 * 60 * 1000)
 				setCookie(context.rootState.route.params.token, response.data.share.token, cookieExpiration)
 			}
