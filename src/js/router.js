@@ -58,9 +58,12 @@ async function validateToken(to, from, next) {
 		if (getCurrentUser()) {
 			// reroute to the internal vote page, if the user is logged in
 			next({ name: 'vote', params: { id: response.data.share.pollId } })
+
 		} else {
+
 			const privateToken = getCookie(to.params.token)
-			if (privateToken) {
+
+			if (privateToken && to.params.token !== privateToken) {
 				// extend expiry time for 30 days after successful access
 				const cookieExpiration = (30 * 24 * 60 * 1000)
 				setCookie(to.params.token, privateToken, cookieExpiration)
