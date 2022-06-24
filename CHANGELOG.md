@@ -5,12 +5,14 @@ All notable changes to this project will be documented in this file.
 ### New
 - User setting for conflict check (hours before and after an option to search for conflicts)
 - Add admin option to prevent email address exposing of internal users
+
 ### Fix
 - Poll export, if the owner did not vote
 - Poll export was broken, when certain characters were present in the poll title
 - Handling of recurring calendar events (NC24)
 - Removed error message in log triggered from user search when adding share
 - Fixed calendar conflict search for recurring events (NC24)
+- Personal public shares gor intinite redirected
 
 ### Misc
 - Switch to new calendar API (NC24)
