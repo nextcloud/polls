@@ -147,7 +147,7 @@ class PollMapper extends QBMapper {
 			->set('deleted', $query->createNamedParameter($archiveDate))
 			->where($query->expr()->lt('expire', $query->createNamedParameter($offset)))
 			->andWhere($query->expr()->gt('expire', $query->createNamedParameter(0)));
-		$query->execute();
+		$query->executeStatement();
 	}
 
 	/**
@@ -158,6 +158,6 @@ class PollMapper extends QBMapper {
 		$query->delete($this->getTableName())
 			->where('owner = :userId')
 			->setParameter('userId', $userId);
-		$query->execute();
+		$query->executeStatement();
 	}
 }
