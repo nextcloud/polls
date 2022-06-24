@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.7.0] - tbd
+## [3.7.0] - 2022-06-24
 ### New
 - User setting for conflict check (hours before and after an option to search for conflicts)
 - Add admin option to prevent email address exposing of internal users
@@ -12,7 +12,7 @@ All notable changes to this project will be documented in this file.
 - Handling of recurring calendar events (NC24)
 - Removed error message in log triggered from user search when adding share
 - Fixed calendar conflict search for recurring events (NC24)
-- Personal public shares gor intinite redirected
+- Personal public shares got intinite redirected
 
 ### Misc
 - Switch to new calendar API (NC24)
