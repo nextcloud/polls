@@ -113,7 +113,8 @@ class MailService {
 
 	public function resolveEmailAddress(int $pollId, string $userId): string {
 		if ($this->userManager->get($userId) instanceof IUser) {
-			return \OC::$server->getConfig()->getUserValue($userId, 'settings', 'email');
+			$user = new User($userId);
+			return $user->getEmailAddressMasked();
 		}
 
 		// if $userId is no site user, eval via shares
@@ -125,7 +126,7 @@ class MailService {
 		} catch (\Exception $e) {
 			// catch silently
 		}
-		return $userId;
+		return '';
 	}
 
 	public function resendInvitation(string $token): Share {
@@ -191,6 +192,10 @@ class MailService {
 
 			$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
 			foreach ($shares as $share) {
+				if (in_array($share->getType(), [Share::TYPE_CIRCLE, Share::TYPE_CONTACTGROUP])) {
+					continue;
+				}
+
 				foreach ($share->getUserObject()->getMembers() as $recipient) {
 					$reminder = new ReminderMail(
 						$recipient->getId(),

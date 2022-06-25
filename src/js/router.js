@@ -25,14 +25,17 @@ import Router from 'vue-router'
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
+import { getCookie, setCookie } from './helpers/cookieHelper.js'
 
 // Dynamic loading
-const List = () => import('./views/PollList')
-const Administration = () => import('./views/Administration')
-const Vote = () => import('./views/Vote')
-const NotFound = () => import('./views/NotFound')
-const SideBar = () => import('./views/SideBar')
-const Navigation = () => import('./views/Navigation')
+const List = () => import('./views/PollList.vue')
+const Administration = () => import('./views/Administration.vue')
+const Vote = () => import('./views/Vote.vue')
+const NotFound = () => import('./views/NotFound.vue')
+const SideBar = () => import('./views/SideBar.vue')
+const SideBarCombo = () => import('./views/SideBarCombo.vue')
+const Navigation = () => import('./views/Navigation.vue')
+const Combo = () => import('./views/Combo.vue')
 
 Vue.use(Router)
 
@@ -48,12 +51,26 @@ Vue.use(Router)
  */
 async function validateToken(to, from, next) {
 	try {
-		const response = await axios.get(generateUrl(`apps/polls/s/${to.params.token}/share`), { params: { time: +new Date() } })
+		const response = await axios.get(generateUrl(`apps/polls/s/${to.params.token}/share`), {
+			headers: { Accept: 'application/json' },
+			params: { time: +new Date() },
+		})
 		if (getCurrentUser()) {
 			// reroute to the internal vote page, if the user is logged in
 			next({ name: 'vote', params: { id: response.data.share.pollId } })
+
 		} else {
-			next()
+
+			const privateToken = getCookie(to.params.token)
+
+			if (privateToken && to.params.token !== privateToken) {
+				// extend expiry time for 30 days after successful access
+				const cookieExpiration = (30 * 24 * 60 * 1000)
+				setCookie(to.params.token, privateToken, cookieExpiration)
+				next({ name: 'publicVote', params: { token: privateToken } })
+			} else {
+				next()
+			}
 		}
 	} catch (e) {
 		if (getCurrentUser()) {
@@ -95,6 +112,15 @@ export default new Router({
 				navigation: Navigation,
 			},
 			name: 'administration',
+		},
+		{
+			path: '/combo',
+			components: {
+				default: Combo,
+				navigation: Navigation,
+				sidebar: SideBarCombo,
+			},
+			name: 'combo',
 		},
 		{
 			path: '/not-found',

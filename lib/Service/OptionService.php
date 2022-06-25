@@ -39,10 +39,12 @@ use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\OptionConfirmedEvent;
 use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
+use OCA\Polls\Event\OptionUnconfirmedEvent;
+use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Model\Acl;
 
 class OptionService {
@@ -58,6 +60,9 @@ class OptionService {
 
 	/** @var Acl */
 	private $acl;
+
+	/** @var AnonymizeService */
+	private $anonymizer;
 
 	/** @var Option */
 	private $option;
@@ -80,6 +85,7 @@ class OptionService {
 	public function __construct(
 		string $AppName,
 		Acl $acl,
+		AnonymizeService $anonymizer,
 		IEventDispatcher $eventDispatcher,
 		LoggerInterface $logger,
 		Option $option,
@@ -88,6 +94,7 @@ class OptionService {
 	) {
 		$this->appName = $AppName;
 		$this->acl = $acl;
+		$this->anonymizer = $anonymizer;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->logger = $logger;
 		$this->option = $option;
@@ -105,7 +112,7 @@ class OptionService {
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function list(int $pollId = 0, string $token = ''): array {
+	public function list(?int $pollId, ?string $token = null): array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -114,6 +121,15 @@ class OptionService {
 
 		try {
 			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
+
+			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
+				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
+				$this->anonymizer->anonymize($this->options);
+			} elseif (!$this->acl->getIsLoggedIn()) {
+				// if participant is not logged in avoid leaking user ids
+				AnonymizeService::replaceUserId($this->options, $this->acl->getUserId());
+			}
+
 			$this->votes = $this->voteMapper->findByPoll($this->acl->getPollId());
 
 			$this->calculateVotes();
@@ -126,11 +142,11 @@ class OptionService {
 			if ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				$this->calculateRanks();
 			}
-
-			return array_values($this->options);
 		} catch (DoesNotExistException $e) {
-			return [];
+			$this->options = [];
 		}
+
+		return array_values($this->options);
 	}
 
 	/**
@@ -150,7 +166,7 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, string $token = ''): Option {
+	public function add(?int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, string $token = ''): Option {
 		if ($token) {
 			$this->acl->setToken($token, Acl::PERMISSION_OPTIONS_ADD);
 		} else {
@@ -182,6 +198,26 @@ class OptionService {
 
 		return $this->option;
 	}
+	/**
+	 * Add a new option
+	 *
+	 * @return Option[]
+	 */
+	public function addBulk(int $pollId, string $pollOptionText = ''): array {
+		$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
+
+		$newOptions = array_unique(explode(PHP_EOL, $pollOptionText));
+		foreach ($newOptions as $option) {
+			if ($option) {
+				try {
+					$this->add($pollId, 0, $option);
+				} catch (DuplicateEntryException $e) {
+					continue;
+				}
+			}
+		}
+		return $this->list($pollId);
+	}
 
 	/**
 	 * Update option
@@ -195,7 +231,7 @@ class OptionService {
 		$this->setOption($timestamp, $pollOptionText, $duration);
 
 		$this->option = $this->optionMapper->update($this->option);
-		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
+		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
 
 		return $this->option;
 	}
@@ -236,7 +272,11 @@ class OptionService {
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
 		$this->option = $this->optionMapper->update($this->option);
 
-		$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($this->option));
+		if ($this->option->getConfirmed()) {
+			$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($this->option));
+		} else {
+			$this->eventDispatcher->dispatchTyped(new OptionUnconfirmedEvent($this->option));
+		}
 
 		return $this->option;
 	}
@@ -341,6 +381,7 @@ class OptionService {
 			$option->setDuration($origin->getDuration());
 			$option->setOrder($origin->getOrder());
 			$this->optionMapper->insert($option);
+			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}
 
 		return $this->optionMapper->findByPoll($toPollId);
@@ -369,7 +410,7 @@ class OptionService {
 			}
 		}
 
-		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
+		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
 
 		return $this->optionMapper->findByPoll($this->acl->getPollId());
 	}
@@ -400,7 +441,7 @@ class OptionService {
 			$this->optionMapper->update($option);
 		}
 
-		$this->eventDispatcher->dispatchTyped(new OptionEvent($this->option));
+		$this->eventDispatcher->dispatchTyped(new PollOptionReorderedEvent($this->acl->getPoll()));
 
 		return $this->optionMapper->findByPoll($this->acl->getPollId());
 	}

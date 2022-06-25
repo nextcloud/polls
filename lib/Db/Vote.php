@@ -26,8 +26,11 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
+use OCA\Polls\Helper\Container;
 use OCP\IUser;
+use OCP\IUserManager;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * @method int getPollId()
@@ -59,22 +62,31 @@ class Vote extends Entity implements JsonSerializable {
 	/** @var string $voteAnswer */
 	protected $voteAnswer;
 
+	/** @var IUserManager */
+	private $userManager;
+
+	/** @var ShareMapper */
+	private $shareMapper;
+
 	public function __construct() {
 		$this->addType('id', 'int');
 		$this->addType('pollId', 'int');
 		$this->addType('voteOptionId', 'int');
+		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
-			'userId' => $this->getUserId(),
-			'voteOptionId' => $this->getVoteOptionId(),
-			'voteOptionText' => $this->getVoteOptionText(),
-			'voteAnswer' => $this->getVoteAnswer(),
-			'isNoUser' => $this->getIsNoUser(),
-			'displayName' => $this->getDisplayName(),
+			'optionText' => $this->getVoteOptionText(),
+			'answer' => $this->getVoteAnswer(),
+			'user' => [
+				'userId' => $this->getUserId(),
+				'displayName' => $this->getDisplayName(),
+				'isNoUser' => $this->getIsNoUser(),
+			],
 		];
 	}
 
@@ -82,12 +94,19 @@ class Vote extends Entity implements JsonSerializable {
 		if (!strncmp($this->userId, 'deleted_', 8)) {
 			return 'Deleted User';
 		}
-		return $this->getIsNoUser()
-			? $this->userId
-			: \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+
+		if ($this->getIsNoUser()) {
+			try {
+				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->userId);
+				return $share->getDisplayName();
+			} catch (DoesNotExistException $e) {
+				return $this->userId;
+			}
+		}
+		return $this->userManager->get($this->userId)->getDisplayName();
 	}
 
 	public function getIsNoUser(): bool {
-		return !(\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+		return !($this->userManager->get($this->userId) instanceof IUser);
 	}
 }

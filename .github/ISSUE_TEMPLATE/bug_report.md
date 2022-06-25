@@ -3,6 +3,9 @@ name: Bug report
 about: Create a report to help us improve
 
 ---
+<!--
+Please use this form to help understanding your issue! Bug reports without this issue may be closed without further notice. 
+-->
 
 ## What is going wrong? What did you observe?
 **Describe the bug**

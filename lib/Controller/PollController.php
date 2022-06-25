@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\PollService;
@@ -68,14 +68,13 @@ class PollController extends Controller {
 	 * Get list of polls
 	 * @NoAdminRequired
 	 */
-
-	public function list(): DataResponse {
+	public function list(): JSONResponse {
 		return $this->response(function () {
-			// return $this->pollService->list();
 			$appSettings = new AppSettings;
 			return [
 				'list' => $this->pollService->list(),
-				'pollCreationAllowed' => $appSettings->getCreationAllowed(),
+				'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),
+				'comboAllowed' => $appSettings->getComboAllowed(),
 			];
 		});
 	}
@@ -84,47 +83,40 @@ class PollController extends Controller {
 	 * get complete poll
 	 * @NoAdminRequired
 	 */
-	public function get(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			$this->acl->setPollId($pollId);
-			return [
-				'acl' => $this->acl,
-				'poll' => $this->acl->getPoll(),
-			];
-		});
+	public function get(int $pollId): JSONResponse {
+		$this->acl->setPollId($pollId);
+		return $this->response(fn () => [
+			'acl' => $this->acl,
+			'poll' => $this->acl->getPoll(),
+		]);
 	}
 
 	/**
 	 * Add poll
 	 * @NoAdminRequired
 	 */
-
-	public function add(string $type, string $title): DataResponse {
-		return $this->responseCreate(function () use ($type, $title) {
-			return $this->pollService->add($type, $title);
-		});
+	public function add(string $type, string $title): JSONResponse {
+		return $this->responseCreate(fn () => $this->pollService->add($type, $title));
 	}
 
 	/**
 	 * Update poll configuration
 	 * @NoAdminRequired
 	 */
-
-	public function update(int $pollId, array $poll): DataResponse {
-		return $this->response(function () use ($pollId, $poll) {
-			return $this->pollService->update($pollId, $poll);
-		});
+	public function update(int $pollId, array $poll): JSONResponse {
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+		return $this->response(fn () => [
+			'poll' => $this->pollService->update($pollId, $poll),
+			'acl' => $this->acl->setPollId($pollId),
+		]);
 	}
 
 	/**
 	 * Switch deleted status (move to deleted polls)
 	 * @NoAdminRequired
 	 */
-
-	public function toggleArchive(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return $this->pollService->toggleArchive($pollId);
-		});
+	public function toggleArchive(int $pollId): JSONResponse {
+		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
 	}
 
 	/**
@@ -132,33 +124,25 @@ class PollController extends Controller {
 	 * @NoAdminRequired
 	 */
 
-	public function delete(int $pollId): DataResponse {
-		return $this->responseDeleteTolerant(function () use ($pollId) {
-			return $this->pollService->delete($pollId);
-		});
+	public function delete(int $pollId): JSONResponse {
+		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
 	}
 
 	/**
 	 * Clone poll
 	 * @NoAdminRequired
 	 */
-	public function clone(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			$poll = $this->pollService->clone($pollId);
-			$this->optionService->clone($pollId, $poll->getId());
-
-			return $poll;
-		});
+	public function clone(int $pollId): JSONResponse {
+		$poll = $this->pollService->clone($pollId);
+		$this->optionService->clone($pollId, $poll->getId());
+		return $this->get($pollId);
 	}
 
 	/**
 	 * Collect email addresses from particitipants
 	 * @NoAdminRequired
 	 */
-
-	public function getParticipantsEmailAddresses(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return $this->pollService->getParticipantsEmailAddresses($pollId);
-		});
+	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
+		return $this->response(fn () => $this->pollService->getParticipantsEmailAddresses($pollId));
 	}
 }

@@ -23,10 +23,10 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
-use OCP\App\IAppManager;
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Model\Circle as CirclesCircle;
 use OCA\Polls\Exceptions\CirclesNotEnabledException;
+use OCA\Polls\Helper\Container;
 
 class Circle extends UserBase {
 	public const TYPE = 'circle';
@@ -39,24 +39,39 @@ class Circle extends UserBase {
 		string $id
 	) {
 		parent::__construct($id, self::TYPE);
+		$this->icon = self::ICON;
+		$this->description = Container::getL10N()->t('Circle');
+		$this->richObjectType = 'circle';
+
 		if (self::isEnabled()) {
-			$this->icon = self::ICON;
 			$this->circle = Circles::detailsCircle($id);
 			$this->displayName = $this->circle->getName();
-			$this->description = \OC::$server->getL10N('polls')->t('Circle');
 		} else {
 			throw new CirclesNotEnabledException();
 		}
 	}
 
-	public static function isEnabled(): bool {
-		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('circles');
+	public static function isEnabled() : bool {
+		return Container::isAppEnabled('circles');
+	}
+
+	public function getRichObjectString() : array {
+		return [
+			'type' => $this->richObjectType,
+			'id' => $this->getId(),
+			'name' => $this->getDisplayName(),
+			'link' => $this->circle->getUrl(),
+		];
+	}
+
+	public function getCircleUrl(): string {
+		return 'lala';
 	}
 
 	/**
 	 * @return Circle[]
 	 */
-	public static function search(string $query = '', array $skip = []): array {
+	public static function search(string $query = '', array $skip = []) : array {
 		$circles = [];
 		if (self::isEnabled()) {
 			foreach (Circles::listCircles(CirclesCircle::CIRCLES_ALL, $query) as $circle) {

@@ -22,40 +22,55 @@
 
 <template>
 	<div v-if="header" class="poll-item__header">
-		<div class="item__title sortable" @click="$emit('sort-list', {sort: 'title'})">
+		<div class="item__title sortable" @click="$emit('sort-list', { sortBy: 'title'})">
 			{{ t('polls', 'Title') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<span :class="['sort-indicator', { 'hidden': sortBy !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
 		<div class="item__icon-spacer" />
 
-		<div class="item__access sortable" @click="$emit('sort-list', {sort: 'access'})">
+		<div class="item__access sortable" @click="$emit('sort-list', { sortBy: 'access'})">
 			{{ t('polls', 'Access') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<span :class="['sort-indicator', { 'hidden': sortBy !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
-		<div class="item__owner sortable" @click="$emit('sort-list', {sort: 'owner'})">
+		<div class="item__owner sortable" @click="$emit('sort-list', { sortBy: 'owner.displayName'})">
 			{{ t('polls', 'Owner') }}
-			<span :class="['sort-indicator', { 'hidden': sort !== 'owner'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<span :class="['sort-indicator', { 'hidden': sortBy !== 'owner.displayName'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 		</div>
 
 		<div class="wrapper">
-			<div class="item__created sortable" @click="$emit('sort-list', {sort: 'created'})">
+			<div class="item__created sortable" @click="$emit('sort-list', { sortBy: 'created'})">
 				{{ t('polls', 'Created') }}
-				<span :class="['sort-indicator', { 'hidden': sort !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+				<span :class="['sort-indicator', { 'hidden': sortBy !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 
-			<div class="item__expiry sortable" @click="$emit('sort-list', {sort: 'expire'})">
+			<div class="item__expiry sortable" @click="$emit('sort-list', { sortBy: 'expire'})">
 				{{ t('polls', 'Closing date') }}
-				<span :class="['sort-indicator', { 'hidden': sort !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+				<span :class="['sort-indicator', { 'hidden': sortBy !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
 			</div>
 		</div>
 	</div>
 
 	<div v-else class="poll-item__item">
-		<div v-tooltip.auto="pollType" :class="'item__type--' + poll.type" />
+		<div v-tooltip.auto="pollTypeName" class="item__icon-spacer">
+			<TextPollIcon v-if="pollType === 'textPoll'" />
+			<DatePollIcon v-else />
+		</div>
+		<!-- <div v-tooltip.auto="pollTypeName" :class="['item__icon-spacer', pollTypeIcon]" /> -->
 
-		<router-link class="item__title"
+		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
+			<div class="item__title__title">
+				{{ poll.title }}
+			</div>
+
+			<div class="item__title__description">
+				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+			</div>
+		</div>
+
+		<router-link v-else
+			class="item__title"
 			:to="{ name: 'vote', params: { id: poll.id }}"
 			:class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
 			<div class="item__title__title">
@@ -68,37 +83,60 @@
 		</router-link>
 
 		<slot name="actions" />
-
-		<div v-tooltip.auto="accessType" :class="['item__access', accessIcon]" />
+		<div v-tooltip.auto="accessType" class="item__access">
+			<ArchivedPollIcon v-if="poll.deleted" />
+			<OpenPollIcon v-else-if="poll.access === 'open'" />
+			<PrivatePollIcon v-else />
+		</div>
 
 		<div class="item__owner">
-			<UserItem :user-id="poll.owner" :display-name="poll.ownerDisplayName" condensed />
+			<UserItem v-bind="poll.owner" condensed />
 		</div>
 
 		<div class="wrapper">
 			<div class="item__created">
-				<Badge
-					:title="timeCreatedRelative"
-					icon="icon-clock" />
+				<Badge>
+					<template #icon>
+						<CreationIcon />
+					</template>
+					{{ timeCreatedRelative }}
+				</Badge>
 			</div>
 			<div class="item__expiry">
-				<Badge
-					:title="timeExpirationRelative"
-					icon="icon-calendar-000"
-					:class="expiryClass" />
+				<Badge :class="expiryClass">
+					<template #icon>
+						<ExpirationIcon />
+					</template>
+					{{ timeExpirationRelative }}
+				</Badge>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
-import Badge from '../Base/Badge'
+import Badge from '../Base/Badge.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
+import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
+import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
+import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
 
 export default {
 	name: 'PollItem',
 	components: {
 		Badge,
+		TextPollIcon,
+		DatePollIcon,
+		CreationIcon,
+		ExpirationIcon,
+		PrivatePollIcon,
+		OpenPollIcon,
+		ArchivedPollIcon,
 	},
 
 	props: {
@@ -110,17 +148,18 @@ export default {
 			type: Object,
 			default: undefined,
 		},
-		sort: {
-			type: String,
-			default: 'created',
-		},
-		reverse: {
+		noLink: {
 			type: Boolean,
-			default: true,
+			default: false,
 		},
 	},
 
 	computed: {
+		...mapState({
+			sortBy: (state) => state.polls.sort.sortby,
+			reverse: (state) => state.polls.sort.reverse,
+		}),
+
 		closeToClosing() {
 			return (!this.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)
 		},
@@ -134,30 +173,21 @@ export default {
 				return t('polls', 'Archived')
 			}
 
-			if (this.poll.access === 'public') {
-				return t('polls', 'All users')
+			if (this.poll.access === 'open') {
+				return t('polls', 'Openly accessible poll')
 			}
 
-			return t('polls', 'Only invited users')
-		},
-
-		accessIcon() {
-			if (this.poll.deleted) {
-				return 'icon-category-app-bundles'
-			}
-
-			if (this.poll.access === 'public') {
-				return 'icon-polls-public-poll'
-			}
-
-			return 'icon-polls-hidden-poll'
+			return t('polls', 'Private poll')
 		},
 
 		pollType() {
-			if (this.poll.type === 'textPoll') {
+			return this.poll.type
+		},
+
+		pollTypeName() {
+			if (this.pollType === 'textPoll') {
 				return t('polls', 'Text poll')
 			}
-
 			return t('polls', 'Date poll')
 		},
 
@@ -210,6 +240,23 @@ export default {
 		text-overflow: ellipsis;
 	}
 
+	.item__title {
+		display: flex;
+		flex-direction: column;
+		flex: 1 0 155px;
+		align-items: stretch;
+		justify-content: center;
+
+		.item__title__title {
+			display: block;
+		}
+
+		.item__title__description {
+			opacity: 0.5;
+			display: block;
+		}
+	}
+
 	.poll-item__header {
 		opacity: 0.7;
 		flex: auto;
@@ -251,27 +298,9 @@ export default {
 	}
 
 	.wrapper {
-		// width: 325px;
 		display: flex;
 		flex: 0 1 auto;
 		flex-wrap: wrap;
-	}
-
-	.item__title {
-		display: flex;
-		flex-direction: column;
-		flex: 1 0 155px;
-		align-items: stretch;
-		justify-content: center;
-
-		.item__title__title {
-			display: block;
-		}
-
-		.item__title__description {
-			opacity: 0.5;
-			display: block;
-		}
 	}
 
 	.item__access,
@@ -290,38 +319,14 @@ export default {
 
 	[class^='item__type'] {
 		width: 44px;
-		background-repeat: no-repeat;
-		background-position: center;
 		min-width: 16px;
 		min-height: 16px;
-	}
-
-	.item__type--textPoll {
-		background-image: var(--icon-toggle-filelist-000);
-	}
-
-	.item__type--datePoll {
-		background-image: var(--icon-calendar-000);
 	}
 
 	[class^='item__access'] {
 		width: 70px;
-		background-repeat: no-repeat;
-		background-position: center;
 		min-width: 16px;
 		min-height: 16px;
 		justify-content: center;
-	}
-
-	.item__access--public {
-		background-image: var(--icon-polls-public-poll);
-	}
-
-	.item__access--hidden {
-		background-image: var(--icon-polls-hidden-poll);
-	}
-
-	.item__access--deleted {
-		background-image: var(--icon-category-app-bundles-000);
 	}
 </style>

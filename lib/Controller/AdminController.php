@@ -26,7 +26,7 @@ namespace OCA\Polls\Controller;
 use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 
 use OCA\Polls\Db\Poll;
@@ -62,43 +62,34 @@ class AdminController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function index(): TemplateResponse {
-		return new TemplateResponse('polls', 'polls.tmpl',
-		['urlGenerator' => $this->urlGenerator]);
+		return new TemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
 	 * Get list of polls for administrative purposes
 	 */
-	public function list(): DataResponse {
-		return $this->response(function () {
-			return $this->pollService->listForAdmin();
-		});
+	public function list(): JSONResponse {
+		return $this->response(fn () => $this->pollService->listForAdmin());
 	}
 
 	/**
 	 * Get list of polls for administrative purposes
 	 */
-	public function takeover(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return $this->pollService->takeover($pollId);
-		});
+	public function takeover(int $pollId): JSONResponse {
+		return $this->response(fn () => $this->pollService->takeover($pollId));
 	}
 
 	/**
 	 * Switch deleted status (move to deleted polls)
 	 */
-	public function toggleArchive(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return $this->pollService->toggleArchive($pollId);
-		});
+	public function toggleArchive(int $pollId): JSONResponse {
+		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
 	}
 
 	/**
 	 * Delete poll
 	 */
-	public function delete(int $pollId): DataResponse {
-		return $this->responseDeleteTolerant(function () use ($pollId) {
-			return $this->pollService->delete($pollId);
-		});
+	public function delete(int $pollId): JSONResponse {
+		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
 	}
 }

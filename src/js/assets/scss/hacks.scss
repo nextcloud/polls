@@ -1,6 +1,21 @@
+// some hacks, do alter the display of third parity components
+
 // fill full input with background color
 .mx-input {
 	background-clip: initial !important;
+}
+
+.action-item.action-item--single.app-navigation-toggle.undefined.has-tooltip {
+	top: 4px;
+	margin-right: -50px;
+	[class*='dashboard--'] & {
+		top: 12px;
+		margin-right: -58px;
+	}
+}
+
+.mx-input-wrapper .button-vue--vue-primary .material-design-icon__svg {
+	fill: var(--color-primary-text);
 }
 
 .mx-datepicker-main .checkbox-radio-switch--checked svg {
@@ -12,6 +27,10 @@
 	overflow-y: hidden;
 }
 
+.user-item > .checkbox-radio-switch-switch,
+.user-item.add-public > .icon-add {
+	margin-right: 20px !important;
+}
 // fix avatardiv size to match the image
 .avatardiv img {
 	display: block;

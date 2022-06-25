@@ -22,17 +22,21 @@
 
 <template>
 	<div class="comment-item">
-		<UserItem v-bind="comment" hide-names />
+		<UserItem v-bind="comment.user" hide-names />
 		<div class="comment-item__content">
-			<span class="comment-item__user">{{ comment.displayName }}</span>
+			<span class="comment-item__user">{{ comment.user.displayName }}</span>
 			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
-			<div class="comment-item__comment">
-				{{ comment.comment }}
+			<div v-for="(subComment) in comment.subComments"
+				:key="subComment.id"
+				class="comment-item__subcomment">
+				<span class="comment-item__comment">
+					{{ subComment.comment }}
+				</span>
+				<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
+					:title="t('polls', 'Delete comment')"
+					@delete="deleteComment(subComment)" />
 			</div>
 		</div>
-		<ActionDelete v-if="comment.userId === acl.userId || acl.isOwner"
-			:title="t('polls', 'Delete comment')"
-			@delete="deleteComment()" />
 	</div>
 </template>
 
@@ -40,7 +44,7 @@
 import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 import { mapState } from 'vuex'
-import ActionDelete from '../Actions/ActionDelete'
+import ActionDelete from '../Actions/ActionDelete.vue'
 
 export default {
 	name: 'CommentItem',
@@ -65,9 +69,9 @@ export default {
 	},
 
 	methods: {
-		async deleteComment() {
+		async deleteComment(comment) {
 			try {
-				await this.$store.dispatch({ type: 'comments/delete', comment: this.comment })
+				await this.$store.dispatch({ type: 'comments/delete', comment })
 			} catch {
 				showError(t('polls', 'Error while deleting the comment'))
 			}
@@ -101,5 +105,29 @@ export default {
 		margin-left: 8px;
 		flex: 1 1;
 		padding-top: 2px;
+
+		.material-design-icon {
+			// display: none;
+			visibility: hidden;
+		}
+
+		.comment-item__subcomment {
+			display: flex;
+			align-items: center;
+
+			&:hover {
+				background: var(--color-background-hover);
+				.material-design-icon {
+					visibility: visible;
+					// display: flex;
+				}
+			}
+		}
+
+		.comment-item__comment {
+			hyphens: auto;
+			flex: 1;
+		}
 	}
+
 </style>

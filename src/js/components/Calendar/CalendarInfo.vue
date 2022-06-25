@@ -24,11 +24,11 @@
 	<div class="calendar-info"
 		:class="[conflictLevel, statusClass]"
 		:style="calendarStyle">
-		<div v-if="!event.allDay" class="calendar-info__time">
-			{{ formatDate(event.start) }} - {{ formatDate(event.end) }}
+		<div class="calendar-info__time">
+			{{ showJustDays ? dayDisplay : timeDisplay }}
 		</div>
-		<div class="calendar-info__summay" :class="statusClass">
-			{{ event.summary }}
+		<div class="summay" :class="statusClass">
+			{{ calendarEvent.summary }}
 		</div>
 	</div>
 </template>
@@ -40,7 +40,7 @@ export default {
 	name: 'CalendarInfo',
 
 	props: {
-		event: {
+		calendarEvent: {
 			type: Object,
 			default: undefined,
 		},
@@ -55,24 +55,59 @@ export default {
 	computed: {
 		calendarStyle() {
 			return {
-				backgroundColor: this.event.displayColor,
+				backgroundColor: this.calendarEvent.displayColor,
 				color: this.fontColor,
 			}
 		},
 
+		dayStart() {
+			return moment.unix(this.calendarEvent.start).format('ddd')
+		},
+
+		dayEnd() {
+			return moment.unix(this.calendarEvent.end - 1).format('ddd')
+		},
+
+		dayDisplay() {
+			if (this.dayEnd === this.dayStart) {
+				return this.dayStart
+			}
+
+			return `${this.dayStart} - ${this.dayEnd}`
+		},
+
+		timeStart() {
+			return moment.unix(this.calendarEvent.start).format('LT')
+		},
+
+		timeEnd() {
+			return moment.unix(this.calendarEvent.end).format('LT')
+		},
+
+		timeDisplay() {
+			if (this.timeEnd === this.timeStart) {
+				return this.timeStart
+			}
+			return `${this.timeStart} - ${this.timeEnd}`
+		},
+
+		showJustDays() {
+			return this.dayStart !== this.dayEnd || this.calendarEvent.allDay
+		},
+
 		statusClass() {
-			return this.event.status.toLowerCase()
+			return this.calendarEvent.status.toLowerCase()
 		},
 
 		fontColor() {
-			if (this.event.displayColor === 'transparent') {
+			if (this.calendarEvent.displayColor === 'transparent') {
 				return 'var(--color-main-text)'
 			}
 
-			const hex = this.event.displayColor.replace(/#/, '')
-			const r = parseInt(hex.substr(0, 2), 16)
-			const g = parseInt(hex.substr(2, 2), 16)
-			const b = parseInt(hex.substr(4, 2), 16)
+			const hex = this.calendarEvent.displayColor.replace(/#/, '')
+			const r = parseInt(hex.slice(0, 2), 16)
+			const g = parseInt(hex.slice(2, 4), 16)
+			const b = parseInt(hex.slice(4, 6), 16)
 
 			const l = [
 				0.299 * r,
@@ -84,27 +119,22 @@ export default {
 		},
 
 		conflictLevel() {
-			if (this.event.calendarKey === 0) {
+			if (this.calendarEvent.calendarKey === 0) {
 				return 'conflict-ignore'
 			}
 
-			if (this.event.start > this.option.timestamp + 3599) {
+			// No conflict, if calendarEvent starts after end of option
+			if (this.calendarEvent.start >= this.option.timestamp + this.option.duration) {
 				return 'conflict-no'
 			}
 
-			if (this.event.end - 1 < this.option.timestamp) {
+			// No conflict, if calendarEvent ends before option
+			if (this.calendarEvent.end <= this.option.timestamp) {
 				return 'conflict-no'
 			}
 
 			return 'conflict-yes'
 		},
-	},
-
-	methods: {
-		formatDate(timeStamp) {
-			return moment.unix(timeStamp).format('LT')
-		},
-
 	},
 }
 
@@ -119,9 +149,13 @@ export default {
 	margin: 4px 0;
 	padding: 0 4px;
 
+	.summay {
+		margin-left: 4px;
+	}
+
 	&.conflict-ignore {
 		border-left: 4px solid transparent;
-		.calendar-info__summay {
+		.summay {
 			font-weight: bold;
 		}
 	}
@@ -148,9 +182,5 @@ export default {
 	width: 65px;
 	font-size: 0.8em;
 	flex: 0 auto;
-}
-
-.calendar-info__summay {
-	margin-left: 4px;
 }
 </style>

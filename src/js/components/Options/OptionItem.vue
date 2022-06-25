@@ -22,44 +22,47 @@
 
 <template>
 	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, 'date-box': show === 'dateBox' }">
-		<div v-if="isDraggable" class="option-item__handle icon icon-handle" />
+		<DragIcon v-if="isDraggable" :class="{ draggable: isDraggable }" />
 
 		<slot name="icon" />
 
-		<div v-if="show === 'textBox'" v-tooltip.auto="optionTooltip" class="option-item__option--text">
-			{{ optionText }}
-		</div>
+		<!-- eslint-disable vue/no-v-html -->
+		<div v-if="show === 'textBox'"
+			v-tooltip.auto="optionTooltip"
+			class="option-item__option--text"
+			v-html="optionText" />
+		<!-- eslint-enable vue/no-v-html -->
 
 		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormatUTC" class="option-item__option--datebox">
 			<div class="event-date">
 				<div class="event-from">
 					<div class="month">
-						{{ event.from.month }}
+						{{ eventOption.from.month }}
 					</div>
 					<div class="day">
-						{{ event.from.dow }} {{ event.from.day }}
+						{{ eventOption.from.dow }} {{ eventOption.from.day }}
 					</div>
-					<div v-if="!event.dayLong" class="time">
-						{{ event.from.time }}
-						<span v-if="!event.dayLong && option.duration && event.to.sameDay">
-							- {{ event.to.time }}
+					<div v-if="!eventOption.dayLong" class="time">
+						{{ eventOption.from.time }}
+						<span v-if="!eventOption.dayLong && option.duration && eventOption.to.sameDay">
+							- {{ eventOption.to.time }}
 						</span>
 					</div>
 				</div>
 
-				<div v-if="option.duration && !event.to.sameDay" class="devider">
+				<div v-if="option.duration && !eventOption.to.sameDay" class="devider">
 					-
 				</div>
 
-				<div v-if="option.duration && !event.to.sameDay" class="event-to">
+				<div v-if="option.duration && !eventOption.to.sameDay" class="event-to">
 					<div class="month">
-						{{ event.to.month }}
+						{{ eventOption.to.month }}
 					</div>
 					<div class="day">
-						{{ event.to.dow }} {{ event.to.day }}
+						{{ eventOption.to.dow }} {{ eventOption.to.day }}
 					</div>
-					<div v-if="!event.dayLong" class="time">
-						{{ event.to.time }}
+					<div v-if="!eventOption.dayLong" class="time">
+						{{ eventOption.to.time }}
 					</div>
 				</div>
 			</div>
@@ -70,10 +73,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
+import linkifyStr from 'linkify-string'
+import DragIcon from 'vue-material-design-icons/DragHorizontalVariant.vue'
+
 export default {
 	name: 'OptionItem',
+
+	components: {
+		DragIcon,
+	},
 
 	props: {
 		draggable: {
@@ -91,18 +100,25 @@ export default {
 		display: {
 			type: String,
 			default: 'textBox',
+			validator(value) {
+				return ['textBox', 'dateBox'].includes(value)
+			},
+		},
+		pollType: {
+			type: String,
+			default: 'textPoll',
+			validator(value) {
+				return ['textPoll', 'datePoll'].includes(value)
+			},
 		},
 	},
-	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-		}),
 
+	computed: {
 		isDraggable() {
 			return this.draggable
 		},
 
-		event() {
+		eventOption() {
 			const from = moment.unix(this.option.timestamp)
 			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
 			// does the event start at 00:00 local time and
@@ -116,7 +132,7 @@ export default {
 			// to set the begin of the to day to the end of the previous date
 			const toModified = moment(to).subtract(dayModifier, 'days')
 
-			if (this.poll.type !== 'datePoll') {
+			if (this.pollType !== 'datePoll') {
 				return {}
 			}
 			return {
@@ -145,55 +161,55 @@ export default {
 		},
 
 		dateLocalFormat() {
-			if (this.poll.type !== 'datePoll') {
+			if (this.pollType !== 'datePoll') {
 				return {}
 			}
 
 			if (this.option.duration === 0) {
-				return this.event.from.dateTime
+				return this.eventOption.from.dateTime
 			}
 
-			if (this.event.dayLong && this.event.to.sameDay) {
-				return this.event.from.date
+			if (this.eventOption.dayLong && this.eventOption.to.sameDay) {
+				return this.eventOption.from.date
 			}
 
-			if (this.event.dayLong && !this.event.to.sameDay) {
-				return `${this.event.from.date} - ${this.event.to.date}`
+			if (this.eventOption.dayLong && !this.eventOption.to.sameDay) {
+				return `${this.eventOption.from.date} - ${this.eventOption.to.date}`
 			}
 
-			if (this.event.to.sameDay) {
-				return `${this.event.from.dateTime} - ${this.event.to.time}`
+			if (this.eventOption.to.sameDay) {
+				return `${this.eventOption.from.dateTime} - ${this.eventOption.to.time}`
 			}
 
-			return `${this.event.from.dateTime} - ${this.event.to.dateTime}`
+			return `${this.eventOption.from.dateTime} - ${this.eventOption.to.dateTime}`
 		},
 
 		dateLocalFormatUTC() {
 			if (this.option.duration) {
-				return `${this.event.from.utc} - ${this.event.to.utc} UTC`
+				return `${this.eventOption.from.utc} - ${this.eventOption.to.utc} UTC`
 			}
 
-			return `${this.event.from.utc} UTC`
+			return `${this.eventOption.from.utc} UTC`
 		},
 
 		optionTooltip() {
-			if (this.poll.type === 'datePoll') {
+			if (this.pollType === 'datePoll') {
 				return this.dateLocalFormatUTC
 			}
 
-			return this.option.pollOptionText
+			return this.option.text
 		},
 
 		optionText() {
-			if (this.poll.type === 'datePoll') {
+			if (this.pollType === 'datePoll') {
 				return this.dateLocalFormat
 			}
 
-			return this.option.pollOptionText
+			return linkifyStr(this.option.text)
 		},
 
 		show() {
-			if (this.poll.type === 'datePoll' && this.display === 'dateBox') {
+			if (this.pollType === 'datePoll' && this.display === 'dateBox') {
 				return 'dateBox'
 			}
 
@@ -204,7 +220,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 	.option-item {
 		display: flex;
 		align-items: center;
@@ -213,6 +228,16 @@ export default {
 		&.date-box {
 			align-items: stretch;
 			flex-direction: column;
+		}
+
+		.material-design-icon {
+			visibility: hidden;
+		}
+
+		&:hover {
+			.material-design-icon {
+				visibility: visible;
+			}
 		}
 	}
 
@@ -282,6 +307,15 @@ export default {
 	.option-item__option--text {
 		overflow: hidden;
 		text-overflow: ellipsis;
+
+		a {
+			font-weight: bold;
+			text-decoration: underline;
+		}
+	}
+
+	.option-item__handle {
+		margin-right: 8px;
 	}
 
 	.draggable, .draggable [class*='option-item__option']  {
@@ -291,13 +325,6 @@ export default {
 			cursor: -moz-grabbing;
 			cursor: -webkit-grabbing;
 		}
-		.option-item__handle {
-			visibility: hidden;
-		}
-		&:hover > .option-item__handle {
-			visibility: visible;
-		}
-
 	}
 
 	.option-item__rank {
@@ -305,9 +332,4 @@ export default {
 		justify-content: flex-end;
 		padding-right: 8px;
 	}
-
-	.option-item__handle {
-		margin-right: 8px;
-	}
-
 </style>

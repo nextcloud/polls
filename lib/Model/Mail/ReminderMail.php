@@ -45,60 +45,61 @@ class ReminderMail extends MailBase {
 	protected $timeToDeadline;
 
 	public function __construct(
-		string $userId,
+		string $recipientId,
 		int $pollId,
 		int $deadline,
 		int $timeToDeadline
 	) {
-		parent::__construct($userId, $pollId);
+		parent::__construct($recipientId, $pollId);
 		$this->deadline = $deadline;
 		$this->timeToDeadline = $timeToDeadline;
-		$this->buildEmailTemplate();
 	}
 
-	public function buildEmailTemplate() : void {
+	protected function getSubject(): string {
+		return $this->l10n->t('Reminder for poll "%s"', $this->poll->getTitle());
+	}
+
+	protected function getButtonText(): string {
+		return $this->l10n->t('Check your votes');
+	}
+
+	protected function getFooter(): string {
+		return $this->l10n->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.');
+	}
+
+	protected function buildBody(): void {
 		$dtDeadline = new DateTime('now', $this->recipient->getTimeZone());
 		$dtDeadline->setTimestamp($this->deadline);
-		$deadlineText = (string) $this->trans->l('datetime', $dtDeadline, ['width' => 'long']);
-
-		$this->emailTemplate->setSubject($this->trans->t('Reminder for poll "%s"', $this->poll->getTitle()));
-		$this->emailTemplate->addHeader();
-		$this->emailTemplate->addHeading($this->trans->t('Reminder for poll "%s"', $this->poll->getTitle()), false);
-
-		$reminderText = str_replace(
-			['{owner}'],
-			[$this->owner->getDisplayName()],
-			$this->trans->t('{owner} sends you this reminder to make sure, your votes are set.')
-		);
+		$deadlineText = (string) $this->l10n->l('datetime', $dtDeadline, ['width' => 'long']);
 
 		if ($this->getReminderReason() === self::REASON_OPTION) {
-			$reminderText = str_replace(
+			$this->emailTemplate->addBodyText(str_replace(
 				['{leftPeriod}', '{dateTime}', '{timezone}'],
 				[($this->timeToDeadline / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
-				$this->trans->t('The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone}).')
-			);
+				$this->l10n->t('The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone}).')
+			));
+		} elseif ($this->getReminderReason() === self::REASON_EXPIRATION) {
+			$this->emailTemplate->addBodyText(str_replace(
+					['{leftPeriod}', '{dateTime}', '{timezone}'],
+					[($this->timeToDeadline / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
+					$this->l10n->t('The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone}).')
+				));
+		} else {
+			$this->emailTemplate->addBodyText(str_replace(
+				['{owner}'],
+				[$this->owner->getDisplayName()],
+				$this->l10n->t('{owner} sends you this reminder to make sure, your votes are set.')
+			));
 		}
 
-		if ($this->getReminderReason() === self::REASON_EXPIRATION) {
-			$reminderText = str_replace(
-				['{leftPeriod}', '{dateTime}', '{timezone}'],
-				[($this->timeToDeadline / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
-				$this->trans->t('The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone}).')
-			);
-		}
+		$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
 
-		$this->emailTemplate->addBodyText($reminderText);
-		$this->emailTemplate->addBodyButton(
-				$this->trans->t('Check your votes'),
-				$this->url
-			);
-		$this->emailTemplate->addBodyText($this->trans->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
+		$this->emailTemplate->addBodyText($this->l10n->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
 		$this->emailTemplate->addBodyText($this->url);
-		$this->emailTemplate->addBodyText($this->trans->t('Do not share this link with other people, because it is connected to your votes.'));
-		$this->emailTemplate->addFooter($this->trans->t('This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.'));
+		$this->emailTemplate->addBodyText($this->l10n->t('Do not share this link with other people, because it is connected to your votes.'));
 	}
 
-	public function getReminderReason() : ?string {
+	private function getReminderReason() : ?string {
 		if ($this->poll->getExpire()) {
 			return self::REASON_EXPIRATION;
 		} elseif ($this->poll->getType() === Poll::TYPE_DATE) {

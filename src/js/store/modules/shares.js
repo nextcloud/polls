@@ -61,12 +61,13 @@ const getters = {
 		// share types, which will be active, after the user gets his invitation
 		const invitationTypes = ['email', 'external', 'contact']
 		// sharetype which are active without sending an invitation
-		const directShareTypes = ['user', 'group', 'admin']
+		const directShareTypes = ['user', 'group', 'admin', 'public']
 		return state.list.filter((share) => (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent)) || directShareTypes.includes(share.type))
 	},
 
 	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent),
 	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
+	hasShares: (state) => state.list.length > 0,
 }
 
 const actions = {
@@ -74,7 +75,10 @@ const actions = {
 		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/shares`
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })
@@ -86,7 +90,10 @@ const actions = {
 		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/share`
 
 		try {
-			await axios.post(generateUrl(endPoint), payload.share)
+			await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				...payload.share,
+			})
 		} catch (e) {
 			console.error('Error writing share', { error: e.response }, { payload })
 			throw e
@@ -101,7 +108,9 @@ const actions = {
 		context.commit('delete', { share: payload.share })
 
 		try {
-			await axios.delete(generateUrl(endPoint))
+			await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error removing share', { error: e.response }, { payload })
 			throw e
@@ -120,9 +129,26 @@ const actions = {
 		}
 
 		try {
-			await axios.put(generateUrl(endPoint))
+			await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error switching type', { error: e.response }, { payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
+	},
+
+	async setPublicPollEmail(context, payload) {
+		const endPoint = `apps/polls/share/${payload.share.token}/publicpollemail/${payload.value}`
+
+		try {
+			await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
+		} catch (e) {
+			console.error('Error changing email register setting', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')
@@ -133,7 +159,9 @@ const actions = {
 		const endPoint = `apps/polls/share/${payload.share.token}/invite`
 
 		try {
-			return await axios.post(generateUrl(endPoint))
+			return await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e
@@ -146,7 +174,9 @@ const actions = {
 		const endPoint = `apps/polls/share/${payload.share.token}/resolve`
 
 		try {
-			await axios.get(generateUrl(endPoint))
+			await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
 			throw e

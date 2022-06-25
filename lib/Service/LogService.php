@@ -23,12 +23,14 @@
 
 namespace OCA\Polls\Service;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use OCP\DB\Exception;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
+use OCP\IUserSession;
 
 class LogService {
+
+	/** @var IUserSession */
+	private $userSession;
 
 	/** @var LogMapper */
 	private $logMapper;
@@ -37,11 +39,13 @@ class LogService {
 	private $log;
 
 	public function __construct(
+		IUserSession $userSession,
 		LogMapper $logMapper,
 		Log $log
 	) {
 		$this->logMapper = $logMapper;
 		$this->log = $log;
+		$this->userSession = $userSession;
 	}
 
 	/**
@@ -52,18 +56,8 @@ class LogService {
 		$this->log->setPollId($pollId);
 		$this->log->setCreated(time());
 		$this->log->setMessageId($messageId);
-		$this->log->setUserId($userId ? $userId : \OC::$server->getUserSession()->getUser()->getUID());
+		$this->log->setUserId($userId ? $userId : $this->userSession->getUser()->getUID());
 
-		try {
-			return $this->logMapper->insert($this->log);
-		} catch (UniqueConstraintViolationException $e) {
-			// deprecated NC22
-			return null;
-		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-				return null;
-			}
-			throw $e;
-		}
+		return $this->logMapper->insert($this->log);
 	}
 }

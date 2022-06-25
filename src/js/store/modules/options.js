@@ -24,6 +24,7 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import orderBy from 'lodash/orderBy'
+import moment from '@nextcloud/moment'
 
 const defaultOptions = () => ({
 	list: [],
@@ -81,9 +82,56 @@ const mutations = {
 
 const getters = {
 	count: (state) => state.list.length,
-	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'rank' : 'order', 'asc'),
-	proposalsExist: (state) => !!state.list.filter((option) => option.owner).length,
+	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'computed.rank' : 'order', 'asc'),
+	proposalsExist: (state) => !!state.list.filter((option) => option.owner.userId).length,
 	confirmed: (state) => state.list.filter((option) => option.confirmed > 0),
+
+	explodeDates: (state, getters, rootState) => (option) => {
+		const from = moment.unix(option.timestamp)
+		const to = moment.unix(option.timestamp + Math.max(0, option.duration))
+		// does the event start at 00:00 local time and
+		// is the duration divisable through 24 hours without rest
+		// then we have a day long event (one or multiple days)
+		// In this case we want to suppress the display of any time information
+		const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
+
+		const dayModifier = dayLongEvent ? 1 : 0
+		// modified to date, in case of day long events, a second gets substracted
+		// to set the begin of the to day to the end of the previous date
+		const toModified = moment(to).subtract(dayModifier, 'days')
+
+		if (rootState.poll.type !== 'datePoll') {
+			return {}
+		}
+		return {
+			from: {
+				month: from.format(moment().year() === from.year() ? 'MMM' : 'MMM [ \']YY'),
+				day: from.format('D'),
+				dow: from.format('ddd'),
+				time: from.format('LT'),
+				date: from.format('ll'),
+				dateTime: from.format('llll'),
+				iso: moment(from).toISOString(),
+				utc: moment(from).utc().format('llll'),
+			},
+			to: {
+				month: toModified.format(moment().year() === toModified.year() ? 'MMM' : 'MMM [ \']YY'),
+				day: toModified.format('D'),
+				dow: toModified.format('ddd'),
+				time: to.format('LT'),
+				date: toModified.format('ll'),
+				dateTime: to.format('llll'),
+				iso: moment(to).toISOString(),
+				utc: moment(to).utc().format('llll'),
+				sameDay: from.format('L') === toModified.format('L'),
+			},
+			dayLong: dayLongEvent,
+			raw: `${from.format('llll')} - ${toModified.format('llll')}`,
+			iso: `${moment(from).toISOString()} - ${moment(to).toISOString()}`,
+		}
+
+	},
+
 }
 
 const actions = {
@@ -102,7 +150,10 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			console.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })
@@ -120,12 +171,30 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				pollId: context.rootState.route.params.id,
 				timestamp: payload.timestamp,
-				pollOptionText: payload.pollOptionText,
+				text: payload.text,
 				duration: payload.duration,
 			})
 			context.commit('setItem', { option: response.data.option })
+		} catch (e) {
+			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
+		}
+	},
+
+	async addBulk(context, payload) {
+		const endPoint = 'apps/polls/option/bulk'
+
+		try {
+			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				pollId: context.rootState.route.params.id,
+				text: payload.text,
+			})
+			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
@@ -138,8 +207,9 @@ const actions = {
 
 		try {
 			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				timestamp: payload.option.timestamp,
-				pollOptionText: payload.option.timeStamp,
+				text: payload.option.timeStamp,
 				duration: payload.option.duration,
 			})
 			context.commit('setItem', { option: response.data.option })
@@ -160,7 +230,9 @@ const actions = {
 		}
 
 		try {
-			await axios.delete(generateUrl(endPoint))
+			await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('delete', { option: payload.option })
 		} catch (e) {
 			console.error('Error deleting option', { error: e.response }, { payload })
@@ -175,7 +247,9 @@ const actions = {
 		context.commit('confirm', { option: payload.option })
 
 		try {
-			const response = await axios.put(generateUrl(endPoint))
+			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
 			console.error('Error confirming option', { error: e.response }, { payload })
@@ -191,6 +265,7 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				options: payload,
 			})
 			context.commit('set', { options: response.data.options })
@@ -206,6 +281,7 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				step: payload.sequence.step,
 				unit: payload.sequence.unit.value,
 				amount: payload.sequence.amount,
@@ -223,6 +299,7 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				step: payload.shift.step,
 				unit: payload.shift.unit.value,
 			})
@@ -238,7 +315,10 @@ const actions = {
 		const endPoint = `apps/polls/option/${payload.option.id}/events`
 
 		try {
-			return await axios.get(generateUrl(endPoint))
+			return await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { tz: Intl.DateTimeFormat().resolvedOptions().timeZone },
+			})
 		} catch (e) {
 			return { events: [] }
 		}

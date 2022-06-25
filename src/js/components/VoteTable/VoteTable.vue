@@ -23,6 +23,8 @@
 <template lang="html">
 	<div class="vote-table" :class="[viewMode, { closed: closed }]">
 		<div class="vote-table__users">
+			<VoteMenu />
+
 			<div class="spacer" />
 
 			<div v-for="(participant) in participants"
@@ -52,15 +54,17 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
-import ActionDelete from '../Actions/ActionDelete'
-import VoteColumn from './VoteColumn'
-import { confirmOption } from '../../mixins/optionMixins'
+import ActionDelete from '../Actions/ActionDelete.vue'
+import VoteColumn from './VoteColumn.vue'
+import VoteMenu from './VoteMenu.vue'
+import { confirmOption } from '../../mixins/optionMixins.js'
 
 export default {
 	name: 'VoteTable',
 	components: {
 		ActionDelete,
 		VoteColumn,
+		VoteMenu,
 	},
 
 	mixins: [confirmOption],
@@ -69,6 +73,9 @@ export default {
 		viewMode: {
 			type: String,
 			default: 'table-view',
+			validator(value) {
+				return ['table-view', 'list-view'].includes(value)
+			},
 		},
 	},
 
@@ -101,10 +108,6 @@ export default {
 	display: flex;
 	flex: 1;
 
-	.participant {
-		display: flex;
-	}
-
 	.participant, .vote-item {
 		flex: 0 0 auto;
 		height: 4.5em;
@@ -117,11 +120,29 @@ export default {
 		}
 	}
 
+	.participant {
+		display: flex;
+		align-self: stretch;
+		justify-content: center;
+
+		.material-design-icon {
+			// display: none;
+			visibility: hidden;
+		}
+
+		&:hover {
+			background: var(--color-background-hover);
+			.material-design-icon {
+				visibility: visible;
+			}
+		}
+	}
+
 	.vote-table__users {
 		display: flex;
 		flex-direction: column;
-		overflow-x: scroll;
-		margin-bottom: 4px;
+		padding-bottom: 4px;
+		align-items: flex-start;
 	}
 
 	.vote-table__votes {
@@ -145,10 +166,9 @@ export default {
 			justify-content: center;
 			align-items: center;
 		}
-		.vote-table-header-item {
+		.option-item {
 			align-items: stretch;
 			flex: 1;
-			// padding: 0 8px;
 			order: 1;
 		}
 	}
@@ -196,7 +216,7 @@ export default {
 
 	.spacer {
 		flex: 1;
-		order: 1;
+		order: 0;
 	}
 
 	&.table-view {
@@ -204,6 +224,9 @@ export default {
 			content: '';
 			height: 8px;
 			order: 99;
+		}
+		.vote-table__users {
+			overflow-x: scroll;
 		}
 
 		.participant {
@@ -218,9 +241,31 @@ export default {
 	&.list-view {
 		flex-direction: column;
 
+		.vote-column {
+			flex-direction: row-reverse;
+			align-items: center;
+			max-width: initial;
+			position: relative;
+			border-top: solid 1px var(--color-border);
+			border-left: none;
+			padding: 0;
+
+			&.locked {
+				background-color: var(--color-polls-background-no);
+			}
+		}
+
+		.participant {
+			border-top: none;
+		}
+
+		.participant:not(.currentuser), .vote-item:not(.currentuser) {
+			display: none;
+		}
+
 		&.closed {
 			.vote-item:not(.confirmed) {
-				background-color: var(--color-main-background);
+				background-color: transparent;
 				&.no > .icon {
 					background-image: var(--icon-polls-no)
 				}
@@ -234,46 +279,14 @@ export default {
 			}
 		}
 
-		.vote-table__users .confirm {
+		.confirm {
 			display: none;
 		}
 
-		.vote-column {
-			flex-direction: row-reverse;
-			align-items: center;
-			max-width: initial;
-			position: relative;
-			border-top: solid 1px var(--color-border);
-			border-left: none;
-			padding: 0;
-		}
-
-		.vote-table__users {
-			margin: 0;
-
-			.owner {
-				display: none;
-			}
-		}
-
-		.participant:not(.currentuser), .vote-item:not(.currentuser) {
-			display: none;
-		}
-
-		.participant.currentuser {
-			border-top: none;
-		}
-
-		.vote-table__votes {
-			align-items: stretch;
-			flex-direction: column;
-		}
-
-		.vote-table-header-item {
-			flex-direction: row;
-			.option-item {
-				padding: 8px 4px;
-			}
+		.owner {
+			order: 0;
+			flex: 1;
+			justify-content: flex-end;
 		}
 
 		.counter {
@@ -281,12 +294,31 @@ export default {
 			padding-left: 12px;
 		}
 
-		.vote-item.currentuser {
-			border: none;
+		.vote-table__users {
+			margin: 0;
+			flex-direction: revert;
+
+			.confirm, .owner {
+				display: none;
+			}
 		}
 
-		.owner {
-			order: 0;
+		.vote-table__votes {
+			align-items: stretch;
+			flex-direction: column;
+		}
+
+		.option-item {
+			flex-direction: row;
+			padding: 8px 4px;
+			&.date-box {
+				flex: 0;
+				align-items: baseline;
+			}
+		}
+
+		.vote-item.currentuser {
+			border: none;
 		}
 
 		@media only screen and (max-width: 370px) {
@@ -313,14 +345,6 @@ export default {
 
 		.calendar-peek__caption {
 			display: none;
-		}
-
-		.confirm {
-			display: none;
-		}
-
-		.option-item.date-box {
-			align-items: baseline;
 		}
 
 		.option-item__option--datebox {

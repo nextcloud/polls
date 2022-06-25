@@ -28,17 +28,17 @@ version=$(shell node -p -e "require('./package.json').version")
 appstore: setup-build build-js-production package
 
 # install deps for release package
-setup-build: install-composer-build-deps npm-init
+setup-build: setup-build-composer npm-init
 
 # install deps for ci (tests and analysis)
-setup-dev: composer install-composer-dev-deps npm-init
+setup-dev: setup-dev-composer npm-init
 
 # install composer deps for ci (tests and analysis)
-install-composer-build-deps: composer
+setup-build-composer: composer
 	composer install --no-dev -o
 
 # install composer deps for release package
-install-composer-dev-deps: composer
+setup-dev-composer: composer
 	composer install -o
 
 # install node deps
@@ -64,6 +64,12 @@ lint:
 lint-fix:
 	npm run lint:fix
 	npm run stylelint:fix
+	composer run cs:fix
+
+cs:
+	composer run cs:check
+
+cs-fix:
 	composer run cs:fix
 
 # build vue app
@@ -109,6 +115,6 @@ package: clean
 
 
 .PHONY: test
-test: composer install-composer-dev-deps
+test: composer setup-dev-composer
 	$(CURDIR)/vendor/phpunit/phpunit/phpunit --coverage-clover clover.xml -c tests/phpunit.xml
 	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.integration.xml

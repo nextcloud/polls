@@ -40,9 +40,7 @@ use OCA\Polls\Db\Watch;
 
 /**
  * Database definition for installing and migrations
- *
  * These definitions contain the base database layout
- *
  * used for initial migration to version 3.x from all prior versoins
  */
 
@@ -54,15 +52,6 @@ abstract class TableSchema {
 		Log::TABLE,
 		Subscription::TABLE,
 		Option::TABLE,
-		Share::TABLE,
-		Vote::TABLE,
-	];
-
-	public const UNIQUE_TABLES = [
-		Log::TABLE,
-		Subscription::TABLE,
-		Option::TABLE,
-		Preferences::TABLE,
 		Share::TABLE,
 		Vote::TABLE,
 	];
@@ -116,74 +105,41 @@ abstract class TableSchema {
 	];
 
 	/**
-	 * define obsolete tables, which do get migrated as an array of table names
+	 * define obsolete tables to drop
 	 */
 	public const GONE_TABLES = [
-		'polls_events',
-		'polls_dts',
-		'polls_txts',
-		'polls_particip',
-		'polls_particip_text',
-		'polls_test',
+		'polls_events', // dropped in 1.0
+		'polls_dts', // dropped in 0.9
+		'polls_txts', // dropped in 0.9
+		'polls_particip', // dropped in 0.9
+		'polls_particip_text', // dropped in 0.9
+		'polls_test', // invalid table, accidentially introduced in an old beta version
 	];
 
-	/** define obsolete columns, which do get migrated
-	 * Format:
-	 * public const GONE_COLUMNS = [
-	 *   'tableName1' => [
-	 *     'columnName1',
-	 *     'columnName2',
-	 *     ...,
-	 *   ],
-	 *   'tableName2' => [
-	 *     'columnName1',
-	 *     'columnName2',
-	 *     ...,
-	 *   ],
-	 *   ...,
-	 * ];
+	/**
+	 * define obsolete columns to drop
 	 */
 	public const GONE_COLUMNS = [
 		Poll::TABLE => [
-			'full_anonymous',
-			'options',
-			'settings',
+			'full_anonymous', // dropped in 3.0, orphaned
+			'options', // dropped in 3.0, orphaned
+			'settings', // dropped in 3.0, orphaned
 		],
 		Comment::TABLE => [
-			'dt',
+			'dt', // dropped in 3.0, orphaned
+		],
+		Share::TABLE => [
+			'user', // dropped in 1.01
+			'user_email', // dropped in 1.06 and migrated to email_address
+		],
+		Log::TABLE => [
+			'message', // dropped in 1.07, orphaned
 		],
 	];
 
 	/**
-	 * define primary keys (only set on table creation)
-	 * Format:
-	 * public const PRIMARYKEY = [
-	 *   Poll::TABLE => [
-	 *     'id' => [
-	 *       'type' => Types::INTEGER,
-	 *       'options' => ['autoincrement' => true, 'notnull' => true]
-	 *     ],
-	 *     'type' => [
-	 *       'type' => Types::STRING,
-	 *       'options' => ['notnull' => true, 'default' => 'datePoll', 'length' => 64]],
-	 *     ],
-	 *     ...,
-	 *   ],
-	 *   Option::TABLE => [
-	 *     'id' => [
-	 *       'type' => Types::INTEGER,
-	 *       'options' => ['autoincrement' => true, 'notnull' => true]
-	 *     ],
-	 *     'poll_id' => [
-	 *       'type' => Types::INTEGER,
-	 *       'options' => ['notnull' => true, 'default' => 0]
-	 *     ],
-	 *     ...,
-	 *   ],
-	 *   ...,
-	 * ];
+	 * define table structure
 	 */
-
 	public const TABLES = [
 		Poll::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
@@ -194,7 +150,7 @@ abstract class TableSchema {
 			'created' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'expire' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'deleted' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'access' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'hidden', 'length' => 1024]],
+			'access' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'private', 'length' => 1024]],
 			'anonymous' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'allow_maybe' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 1]],
 			'vote_limit' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
@@ -246,6 +202,7 @@ abstract class TableSchema {
 			'email_address' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'invitation_sent' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'reminder_sent' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'misc_settings' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
 		],
 		Subscription::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
@@ -276,8 +233,8 @@ abstract class TableSchema {
 	];
 
 	/**
-	 * Iterate over tables and make sure, the are created or updated
-	 * according to the schema
+	 * Iterate over tables and make sure, they are created or updated
+	 * according to the currently valid schema
 	 */
 	public static function createOrUpdateSchema(ISchemaWrapper &$schema, IOutput &$output): void {
 		foreach (self::TABLES as $tableName => $columns) {

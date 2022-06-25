@@ -28,17 +28,24 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\MultipleObjectsReturnedException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IGroupManager;
+use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
 
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\NotFoundException;
+use OCA\Polls\Exceptions\InvalidUsernameException;
 
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
-use OCA\Polls\Event\ShareEvent;
+use OCA\Polls\Event\ShareCreateEvent;
+use OCA\Polls\Event\ShareTypeChangedEvent;
+use OCA\Polls\Event\ShareChangedEmailEvent;
+use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
+use OCA\Polls\Event\ShareDeletedEvent;
+use OCA\Polls\Event\ShareRegistrationEvent;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserGroup\UserBase;
 
@@ -59,6 +66,9 @@ class ShareService {
 	/** @var IGroupManager */
 	private $groupManager;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	/** @var SystemService */
 	private $systemService;
 
@@ -68,8 +78,14 @@ class ShareService {
 	/** @var PollMapper */
 	private $pollMapper;
 
+	/** @var ISecureRandom */
+	private $secureRandom;
+
 	/** @var Share */
 	private $share;
+
+	/** @var array */
+	private $shares = [];
 
 	/** @var MailService */
 	private $mailService;
@@ -86,8 +102,10 @@ class ShareService {
 		?string $UserId,
 		IEventDispatcher $eventDispatcher,
 		IGroupManager $groupManager,
-		SystemService $systemService,
+		ISecureRandom $secureRandom,
+		IUserSession $userSession,
 		ShareMapper $shareMapper,
+		SystemService $systemService,
 		PollMapper $pollMapper,
 		Share $share,
 		MailService $mailService,
@@ -99,13 +117,15 @@ class ShareService {
 		$this->userId = $UserId;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->groupManager = $groupManager;
-		$this->systemService = $systemService;
+		$this->secureRandom = $secureRandom;
 		$this->shareMapper = $shareMapper;
+		$this->systemService = $systemService;
 		$this->pollMapper = $pollMapper;
 		$this->share = $share;
 		$this->mailService = $mailService;
 		$this->acl = $acl;
 		$this->notificationService = $notificationService;
+		$this->userSession = $userSession;
 	}
 
 	/**
@@ -118,23 +138,35 @@ class ShareService {
 	public function list(int $pollId): array {
 		try {
 			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-			$shares = $this->shareMapper->findByPoll($pollId);
+			$this->shares = $this->shareMapper->findByPoll($pollId);
 		} catch (NotAuthorizedException $e) {
 			return [];
 		} catch (DoesNotExistException $e) {
 			return [];
 		}
+		$this->sortByCategory();
+		return $this->shares;
+	}
 
-		return $shares;
+	private function sortByCategory() : void {
+		$sortedShares = [];
+		foreach (Share::TYPE_SORT_ARRAY as $shareType) {
+			$filteredShares = array_filter($this->shares, function ($share) use ($shareType) {
+				return $share->getType() === $shareType;
+			});
+			$sortedShares = array_merge($sortedShares, $filteredShares);
+		}
+		$this->shares = $sortedShares;
 	}
 
 	/**
-	 * Validate share
+	 * Validate if share type is allowed to be used in a public poll
+	 * or is accessibale for use by the current user
 	 */
-	private function validate():void {
+	private function validateShareType() : void {
 		switch ($this->share->getType()) {
 			case Share::TYPE_PUBLIC:
-				// public shares are alway valid
+				// public shares are always valid
 				break;
 			case Share::TYPE_USER:
 				if ($this->share->getUserId() !== $this->userId) {
@@ -149,14 +181,13 @@ class ShareService {
 				}
 				break;
 			case Share::TYPE_GROUP:
-				if (!\OC::$server->getUserSession()->isLoggedIn()) {
+				if (!$this->userSession->isLoggedIn()) {
 					throw new NotAuthorizedException;
 				}
 
 				if (!$this->groupManager->isInGroup($this->share->getUserId(), $this->userId)) {
 					throw new NotAuthorizedException;
 				}
-
 				break;
 			case Share::TYPE_EMAIL:
 				break;
@@ -171,27 +202,27 @@ class ShareService {
 	/**
 	 * Get share by token
 	 */
-	public function get(string $token, bool $validate = false): Share {
+	public function get(string $token, bool $validateShareType = false): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			if ($validate) {
-				$this->validate();
+			if ($validateShareType) {
+				$this->validateShareType();
 			}
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 		// Allow users entering the poll with a public share access
 
-		if ($this->share->getType() === Share::TYPE_PUBLIC && \OC::$server->getUserSession()->isLoggedIn()) {
+		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->isLoggedIn()) {
 			try {
 				// Test if the user has already access.
 				$this->acl->setPollId($this->share->getPollId());
 			} catch (NotAuthorizedException $e) {
-				// If he is not authorized until now, create a new personal share for this user.
+				// If he is not authorized until now, createNewShare a new personal share for this user.
 				// Return the created share
-				return $this->create(
+				return $this->createNewShare(
 					$this->share->getPollId(),
-					UserBase::getUserGroupChild(Share::TYPE_USER, \OC::$server->getUserSession()->getUser()->getUID()),
+					UserBase::getUserGroupChild(Share::TYPE_USER, $this->userSession->getUser()->getUID()),
 					true
 				);
 			}
@@ -211,13 +242,13 @@ class ShareService {
 	}
 
 	/**
-	 * crate share - MUST BE PRIVATE!
+	 * crate a new share
 	 *
 	 * @return Share
 	 */
-	private function create(int $pollId, UserBase $userGroup, bool $preventInvitation = false): Share {
+	private function createNewShare(int $pollId, UserBase $userGroup, bool $preventInvitation = false): Share {
 		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
-		$token = \OC::$server->getSecureRandom()->generate(
+		$token = $this->secureRandom->generate(
 			16,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .
@@ -243,7 +274,6 @@ class ShareService {
 
 		$this->share = $this->shareMapper->insert($this->share);
 
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
 
 		return $this->share;
 	}
@@ -253,7 +283,7 @@ class ShareService {
 	 *
 	 * @return Share
 	 */
-	public function add(int $pollId, string $type, string $userId = ''): Share {
+	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): Share {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 
 		if ($type === UserBase::TYPE_PUBLIC) {
@@ -269,7 +299,9 @@ class ShareService {
 			}
 		}
 
-		$this->create($pollId, UserBase::getUserGroupChild($type, $userId));
+		$this->createNewShare($pollId, UserBase::getUserGroupChild($type, $userId, $displayName, $emailAddress));
+
+		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($this->share));
 
 		return $this->share;
 	}
@@ -287,7 +319,24 @@ class ShareService {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareTypeChangedEvent($this->share));
+
+		return $this->share;
+	}
+
+	/**
+	 * Change share type
+	 */
+	public function setPublicPollEmail(string $token, string $value): Share {
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+			$this->share->setPublicPollEmail($value);
+			$this->share = $this->shareMapper->update($this->share);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+		$this->eventDispatcher->dispatchTyped(new ShareChangedRegistrationConstraintEvent($this->share));
 
 		return $this->share;
 	}
@@ -314,7 +363,7 @@ class ShareService {
 			throw new InvalidShareTypeException('Email address can only be set in external shares.');
 		}
 
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareChangedEmailEvent($this->share));
 
 		return $this->share;
 	}
@@ -339,6 +388,28 @@ class ShareService {
 		}
 	}
 
+	private function generatePublicUserId(string $token, string $prefix = 'ex_'): string {
+		$publicUserId = '';
+
+		while ($publicUserId === '') {
+			$publicUserId = $prefix . $this->secureRandom->generate(
+				8,
+				ISecureRandom::CHAR_DIGITS .
+				ISecureRandom::CHAR_LOWER .
+				ISecureRandom::CHAR_UPPER
+			);
+
+			try {
+				// make sure, the user id is unique
+				$this->systemService->validatePublicUsername($publicUserId, $token);
+			} catch (InvalidUsernameException $th) {
+				$publicUserId = '';
+			}
+		}
+
+		return $publicUserId;
+	}
+
 	/**
 	 * Create a personal share from a public share
 	 * or update an email share with the username
@@ -354,22 +425,28 @@ class ShareService {
 		}
 
 		$this->systemService->validatePublicUsername($userName, $token);
-		$this->systemService->validateEmailAddress($emailAddress, $poll->getPublicPollEmail() !== 'mandatory');
+		
+		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
+			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
+		}
 
+		$userId = $this->generatePublicUserId($token);
+		
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Create new external share for user, who entered the poll via public link,
 			// prevent invtation sending, when no email address is given
-			$this->create(
+			$this->createNewShare(
 				$this->share->getPollId(),
-				UserBase::getUserGroupChild(Share::TYPE_EXTERNAL, $userName, $userName, $emailAddress),
+				UserBase::getUserGroupChild(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress),
 				!$emailAddress
 			);
+			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
 				|| $this->share->getType() === Share::TYPE_CONTACT) {
 
 			// Convert email and contact shares to external share, if user registers
 			$this->share->setType(Share::TYPE_EXTERNAL);
-			$this->share->setUserId($userName);
+			$this->share->setUserId($userId);
 			$this->share->setDisplayName($userName);
 
 			// prepare for resending invitation to new email address
@@ -378,8 +455,6 @@ class ShareService {
 			}
 			$this->share->setEmailAddress($emailAddress);
 			$this->shareMapper->update($this->share);
-
-			$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
 		} else {
 			throw new NotAuthorizedException;
 		}
@@ -408,7 +483,7 @@ class ShareService {
 			// silently catch
 		}
 
-		$this->eventDispatcher->dispatchTyped(new ShareEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($this->share));
 
 		return $token;
 	}

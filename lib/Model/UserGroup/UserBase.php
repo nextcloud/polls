@@ -27,10 +27,10 @@ use OCA\Polls\Exceptions\InvalidShareTypeException;
 
 use DateTimeZone;
 use OCP\IL10N;
-use OCP\AppFramework\IAppContainer;
+use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Helper\Container;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
-use OCA\Polls\AppInfo\Application;
 use OCP\IDateTimeZone;
 
 class UserBase implements \JsonSerializable {
@@ -44,6 +44,9 @@ class UserBase implements \JsonSerializable {
 	public const TYPE_GROUP = Group::TYPE;
 	public const TYPE_USER = User::TYPE;
 	public const TYPE_ADMIN = Admin::TYPE;
+
+	/** @var string */
+	protected $richObjectType = 'user';
 
 	/** @var IL10N */
 	private $l10n;
@@ -92,24 +95,23 @@ class UserBase implements \JsonSerializable {
 		string $language = '',
 		string $locale = ''
 	) {
+		$this->icon = 'icon-share';
+
+		$this->l10n = Container::getL10N();
+		$this->timezone = Container::queryClass(IDateTimeZone::class);
+
 		$this->id = $id;
 		$this->type = $type;
 		$this->displayName = $displayName;
 		$this->emailAddress = $emailAddress;
 		$this->language = $language;
 		$this->locale = $locale;
-		$this->icon = 'icon-share';
-		$this->l10n = \OC::$server->getL10N('polls');
-		$this->timezone = $this->getContainer()->query(IDateTimeZone::class);
 	}
 
 	public function getId(): string {
 		return $this->id;
 	}
 
-	/**
-	 * @return string
-	 */
 	public function getPublicId(): string {
 		return $this->id;
 	}
@@ -147,6 +149,11 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getEmailAddress(): string {
+		return $this->emailAddress ?? '';
+	}
+
+	// Function for obfuscating mail adresses; Default return the email address
+	public function getEmailAddressMasked(): string {
 		return $this->emailAddress ?? '';
 	}
 
@@ -202,6 +209,14 @@ class UserBase implements \JsonSerializable {
 		return $this->organisation;
 	}
 
+	public function getRichObjectString() : array {
+		return [
+			'type' => $this->richObjectType,
+			'id' => $this->getId(),
+			'name' => $this->getDisplayName(),
+		];
+	}
+
 	/**
 	 * search all possible sharees - use ISearch to respect autocomplete restrictions
 	 */
@@ -209,13 +224,14 @@ class UserBase implements \JsonSerializable {
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
-			IShare::TYPE_GROUP
+			IShare::TYPE_GROUP,
+			IShare::TYPE_EMAIL
 		];
 		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
-		[$result, $more] = self::getContainer()->query(ISearch::class)->search($query, $types, false, 200, 0);
+		[$result, $more] = Container::queryClass(ISearch::class)->search($query, $types, false, 200, 0);
 
 		foreach (($result['users'] ?? []) as $item) {
 			$items[] = new User($item['value']['shareWith']);
@@ -257,10 +273,18 @@ class UserBase implements \JsonSerializable {
 		return [$this];
 	}
 
-	protected static function getContainer() : IAppContainer {
-		$app = \OC::$server->query(Application::class);
-
-		return $app->getContainer();
+	/**
+	 * @return Admin|Circle|Contact|ContactGroup|Email|GenericUser|Group|User
+	 */
+	public static function getUserGroupChildFromShare(string $token) {
+		$shareMapper = Container::queryClass(ShareMapper::class);
+		$share = $shareMapper->findByToken($token);
+		return self::getUserGroupChild(
+			$share->getType(),
+			$share->getUserId(),
+			$share->getDisplayName(),
+			$share->getEmailAddress()
+		);
 	}
 
 	/**
@@ -281,7 +305,7 @@ class UserBase implements \JsonSerializable {
 			case Admin::TYPE:
 				return new Admin($id);
 			case Email::TYPE:
-				return new Email($id);
+				return new Email($id, $displayName, $emailAddress);
 			case self::TYPE_PUBLIC:
 				return new GenericUser($id, self::TYPE_PUBLIC);
 			case self::TYPE_EXTERNAL:
@@ -299,7 +323,7 @@ class UserBase implements \JsonSerializable {
 			'type' => $this->getType(),
 			'displayName' => $this->getDisplayName(),
 			'organisation' => $this->getOrganisation(),
-			'emailAddress' => $this->getEmailAddress(),
+			'emailAddress' => $this->getEmailAddressMasked(),
 			'language' => $this->getLanguage(),
 			'desc' => $this->getDescription(),
 			'subtitle' => $this->getDescription(),

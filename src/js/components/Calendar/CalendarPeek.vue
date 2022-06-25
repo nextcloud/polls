@@ -31,7 +31,7 @@
 		<div class="calendar-peek__grid">
 			<CalendarInfo v-for="eventItem in sortedEvents"
 				:key="eventItem.UID"
-				:event="eventItem"
+				:calendar-event="eventItem"
 				:option="option" />
 		</div>
 	</Popover>
@@ -42,7 +42,8 @@
 import { mapState } from 'vuex'
 import orderBy from 'lodash/orderBy'
 import { Popover } from '@nextcloud/vue'
-import CalendarInfo from '../Calendar/CalendarInfo'
+import moment from '@nextcloud/moment'
+import CalendarInfo from '../Calendar/CalendarInfo.vue'
 import { showError } from '@nextcloud/dialogs'
 
 export default {
@@ -71,6 +72,16 @@ export default {
 			poll: (state) => state.poll,
 		}),
 
+		detectAllDay() {
+			const from = moment.unix(this.option.timestamp)
+			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
+			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
+			return {
+				allDay: dayLongEvent,
+				type: dayLongEvent ? 'date' : 'dateTime',
+			}
+		},
+
 		sortedEvents() {
 			const sortedEvents = [...this.events]
 			sortedEvents.push(this.thisOption)
@@ -81,16 +92,18 @@ export default {
 			return {
 				id: this.option.id,
 				UID: this.option.id,
+				calendarUri: this.poll.uri,
 				calendarKey: 0,
 				calendarName: 'Polls',
 				displayColor: 'transparent',
-				allDay: '',
+				allDay: this.detectAllDay.allDay,
 				description: this.poll.description,
 				start: this.option.timestamp,
 				location: '',
-				end: this.option.timestamp + 3600,
+				end: this.option.timestamp + this.option.duration,
 				status: 'self',
 				summary: this.poll.title,
+				type: this.detectAllDay.type,
 			}
 		},
 	},

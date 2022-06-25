@@ -22,37 +22,33 @@
 
 <template>
 	<div class="action sort-options">
-		<ButtonDiv v-if="buttonMode"
-			:title="caption"
-			simple
-			:icon="icon"
-			@click="clickAction()" />
-		<Actions v-else>
-			<ActionButton :icon="icon" @click="clickAction()">
-				{{ caption }}
-			</ActionButton>
-		</Actions>
+		<VueButton v-tooltip="caption"
+			type="tertiary"
+			@click="clickAction()">
+			<template #icon>
+				<SortByDateOptionIcon v-if="isRanked && pollType === 'datePoll'" />
+				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textPoll'" />
+				<SortByRankIcon v-else />
+			</template>
+		</VueButton>
 	</div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
-import ButtonDiv from '../Base/ButtonDiv'
+import { Button as VueButton } from '@nextcloud/vue'
+import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
+import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
 export default {
 	name: 'ActionSortOptions',
 
 	components: {
-		Actions,
-		ActionButton,
-		ButtonDiv,
-	},
-	props: {
-		buttonMode: {
-			type: Boolean,
-			default: false,
-		},
+		SortByRankIcon,
+		SortByOriginalOrderIcon,
+		SortByDateOptionIcon,
+		VueButton,
 	},
 
 	computed: {
@@ -62,27 +58,15 @@ export default {
 		}),
 
 		caption() {
-			if (this.isRanked) {
-				if (this.pollType === 'datePoll') {
-					return t('polls', 'Date order')
-				}
+			if (this.isRanked && this.pollType === 'datePoll') {
+				return t('polls', 'Date order')
+			}
+
+			if (this.isRanked && this.pollType === 'textPoll') {
 				return t('polls', 'Original order')
-
 			}
+
 			return t('polls', 'Ranked order')
-
-		},
-
-		icon() {
-			if (this.isRanked) {
-				if (this.pollType === 'datePoll') {
-					return 'icon-calendar-000'
-				}
-				return 'icon-toggle-filelist'
-
-			}
-			return 'icon-quota'
-
 		},
 	},
 

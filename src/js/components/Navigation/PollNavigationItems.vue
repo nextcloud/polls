@@ -22,30 +22,43 @@
 
 <template lang="html">
 	<AppNavigationItem :title="poll.title"
-		:icon="pollIcon"
 		:to="{name: 'vote', params: {id: poll.id}}"
 		:class="{ closed: closed }">
+		<template #icon>
+			<TextPollIcon v-if="poll.type === 'textPoll'" />
+			<DatePollIcon v-else />
+		</template>
 		<template #actions>
-			<ActionButton v-if="isPollCreationAllowed" icon="icon-polls-clone" @click="$emit('clone-poll')">
+			<ActionButton v-if="isPollCreationAllowed"
+				@click="$emit('clone-poll')">
+				<template #icon>
+					<ClonePollIcon />
+				</template>
 				{{ t('polls', 'Clone poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && !poll.deleted"
-				icon="icon-category-app-bundles"
 				@click="$emit('toggle-archive')">
+				<template #icon>
+					<ArchivePollIcon />
+				</template>
 				{{ t('polls', 'Archive poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted"
-				icon="icon-history"
 				@click="$emit('toggle-archive')">
+				<template #icon>
+					<RestorePollIcon />
+				</template>
 				{{ t('polls', 'Restore poll') }}
 			</ActionButton>
 
 			<ActionButton v-if="poll.allowEdit && poll.deleted"
-				icon="icon-delete"
 				class="danger"
 				@click="$emit('delete-poll')">
+				<template #icon>
+					<DeletePollIcon />
+				</template>
 				{{ t('polls', 'Delete poll') }}
 			</ActionButton>
 		</template>
@@ -56,6 +69,12 @@
 
 import { mapState, mapGetters } from 'vuex'
 import { ActionButton, AppNavigationItem } from '@nextcloud/vue'
+import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
+import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
 export default {
 	name: 'PollNavigationItems',
@@ -63,6 +82,12 @@ export default {
 	components: {
 		ActionButton,
 		AppNavigationItem,
+		DeletePollIcon,
+		ClonePollIcon,
+		ArchivePollIcon,
+		RestorePollIcon,
+		TextPollIcon,
+		DatePollIcon,
 	},
 
 	props: {
@@ -80,20 +105,6 @@ export default {
 		...mapGetters({
 			closed: 'poll/isClosed',
 		}),
-
-		pollIcon() {
-			if (this.poll.type === 'datePoll') {
-				return 'icon-calendar-000'
-			}
-			return 'icon-toggle-filelist'
-
-		},
 	},
 }
 </script>
-
-<style lang="scss">
-.icon-calendar-000 {
-	background-image: var(--icon-calendar-000);
-}
-</style>

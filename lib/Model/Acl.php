@@ -29,10 +29,12 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\IGroupManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 
@@ -48,9 +50,12 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_POLL_DELETE = 'delete';
 	public const PERMISSION_POLL_ARCHIVE = 'archive';
 	public const PERMISSION_POLL_RESULTS_VIEW = 'seeResults';
+	public const PERMISSION_POLL_MAILADDRESSES_VIEW = 'seeMailAddresses';
 	public const PERMISSION_POLL_USERNAMES_VIEW = 'seeUserNames';
 	public const PERMISSION_POLL_TAKEOVER = 'takeOver';
 	public const PERMISSION_POLL_SUBSCRIBE = 'subscribe';
+	public const PERMISSION_POLL_CREATE = 'pollCreate';
+	public const PERMISSION_POLL_DOWNLOAD = 'pollDownload';
 	public const PERMISSION_COMMENT_ADD = 'comment';
 	public const PERMISSION_OPTIONS_ADD = 'add_options';
 	public const PERMISSION_VOTE_EDIT = 'vote';
@@ -60,12 +65,18 @@ class Acl implements JsonSerializable {
 	/** @var IUserManager */
 	private $userManager;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	/** @var AppSettings */
 	private $appSettings;
 
 	/** @var IGroupManager */
 	private $groupManager;
 
+	/** @var OptionMapper */
+	private $optionMapper;
+	
 	/** @var PollMapper */
 	private $pollMapper;
 
@@ -83,13 +94,17 @@ class Acl implements JsonSerializable {
 
 	public function __construct(
 		IUserManager $userManager,
+		IUserSession $userSession,
 		IGroupManager $groupManager,
+		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
 		VoteMapper $voteMapper,
 		ShareMapper $shareMapper
 	) {
 		$this->userManager = $userManager;
+		$this->userSession = $userSession;
 		$this->groupManager = $groupManager;
+		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
@@ -97,7 +112,6 @@ class Acl implements JsonSerializable {
 		$this->share = new Share;
 		$this->appSettings = new AppSettings;
 	}
-
 
 	/**
 	 * load share via token and than call setShare
@@ -144,7 +158,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getUserId(): string {
-		return $this->getIsLoggedIn() ? \OC::$server->getUserSession()->getUser()->getUID() : $this->share->getUserId();
+		return $this->getIsLoggedIn() ? $this->userSession->getUser()->getUID() : $this->share->getUserId();
 	}
 
 	public function validateUserId(string $userId): void {
@@ -175,7 +189,7 @@ class Acl implements JsonSerializable {
 					return false; // always deny access, if poll is archived
 				}
 
-				if ($this->poll->getAccess() === Poll::ACCESS_PUBLIC) {
+				if ($this->poll->getAccess() === Poll::ACCESS_OPEN) {
 					return true; // grant access if poll poll is public
 				}
 
@@ -192,8 +206,17 @@ class Acl implements JsonSerializable {
 			case self::PERMISSION_POLL_EDIT:
 				return $this->getIsOwner() || $this->getHasAdminAccess();
 
+			case self::PERMISSION_POLL_CREATE:
+				return $this->appSettings->getPollCreationAllowed();
+
+			case self::PERMISSION_POLL_MAILADDRESSES_VIEW:
+				return $this->appSettings->getAllowSeeMailAddresses();
+
 			case self::PERMISSION_POLL_DELETE:
 				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT) || $this->getIsAdmin();
+
+			case self::PERMISSION_POLL_DOWNLOAD:
+				return $this->appSettings->getPollDownloadAllowed();
 
 			case self::PERMISSION_POLL_ARCHIVE:
 				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT) || $this->getIsAdmin();
@@ -216,7 +239,8 @@ class Acl implements JsonSerializable {
 			case self::PERMISSION_OPTIONS_ADD:
 				return $this->getIsAllowed(self::PERMISSION_POLL_EDIT)
 					|| ($this->poll->getAllowProposals() === Poll::PROPOSAL_ALLOW
-					&& !$this->poll->getProposalsExpired());
+					&& !$this->poll->getProposalsExpired()
+					&& $this->share->getType() !== Share::TYPE_PUBLIC);
 
 			case self::PERMISSION_COMMENT_ADD:
 				return $this->share->getType() !== Share::TYPE_PUBLIC && $this->poll->getallowComment();
@@ -240,6 +264,32 @@ class Acl implements JsonSerializable {
 		}
 	}
 
+	public function getIsVoteLimitExceeded(): bool {
+		// return true, if no vote limit is set
+		if ($this->getPoll()->getVoteLimit() < 1) {
+			return false;
+		}
+
+		// Only count votes, which match to an actual existing option.
+		// Explanation: If an option is deleted, the corresponding votes are not deleted.
+		$pollOptionTexts = array_map(function ($option) {
+			return $option->getPollOptionText();
+		}, $this->optionMapper->findByPoll($this->getPollId()));
+
+		$voteCount = 0;
+		$votes = $this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->getUserId());
+		foreach ($votes as $vote) {
+			if (in_array($vote->getVoteOptionText(), $pollOptionTexts)) {
+				$voteCount++;
+			}
+		}
+		
+		if ($this->getPoll()->getVoteLimit() <= $voteCount) {
+			return true;
+		}
+		return false;
+	}
+
 	public function jsonSerialize(): array {
 		return	[
 			'allowAddOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
@@ -248,15 +298,21 @@ class Acl implements JsonSerializable {
 			'allowComment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
 			'allowDelete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
 			'allowEdit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+			'allowPollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
+			'allowPollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
 			'allowPublicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
 			'allowSeeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
 			'allowSeeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+			'allowSeeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
 			'allowSubscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
 			'allowView' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
 			'allowVote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
 			'displayName' => $this->getDisplayName(),
 			'isOwner' => $this->getIsOwner(),
+			'isVoteLimitExceeded' => $this->getIsVoteLimitExceeded(),
 			'loggedIn' => $this->getIsLoggedIn(),
+			'isNoUser' => !$this->getIsLoggedIn(),
+			'isGuest' => !$this->getIsLoggedIn(),
 			'pollId' => $this->getPollId(),
 			'token' => $this->getToken(),
 			'userHasVoted' => $this->getIsParticipant(),
@@ -270,8 +326,8 @@ class Acl implements JsonSerializable {
 	/**
 	 * getIsLogged - Is user logged in to nextcloud?
 	 */
-	private function getIsLoggedIn(): bool {
-		return \OC::$server->getUserSession()->isLoggedIn();
+	public function getIsLoggedIn(): bool {
+		return $this->userSession->isLoggedIn();
 	}
 
 	/**
@@ -279,6 +335,10 @@ class Acl implements JsonSerializable {
 	 * Returns true, if user is in admin group
 	 */
 	private function getIsAdmin(): bool {
+		return ($this->getIsLoggedIn() && $this->groupManager->isAdmin($this->getUserId()));
+	}
+
+	private function getAllowSeeUserNames(): bool {
 		return ($this->getIsLoggedIn() && $this->groupManager->isAdmin($this->getUserId()));
 	}
 

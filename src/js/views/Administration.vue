@@ -22,27 +22,22 @@
 
 <template>
 	<AppContent class="poll-list">
-		<div class="area__header">
-			<h2 class="title">
-				{{ title }}
-			</h2>
-		</div>
+		<HeaderBar class="area__header">
+			<template #title>
+				{{ t('polls', 'Administrative poll management') }}
+			</template>
+			{{ t('polls', 'Manage polls of other users. You can take over the ownership or delete polls.') }}
+		</HeaderBar>
 
 		<div class="area__main">
-			<div>
-				<h2 class="title">
-					{{ t('polls', 'Manage polls') }}
-				</h2>
-				<h3 class="description">
-					{{ t('polls', 'Manage polls of other users. You can take over the ownership or delete polls.') }}
-				</h3>
-			</div>
-
-			<EmptyContent v-if="noPolls" icon="icon-polls">
-				{{ t('polls', 'No polls found for this category') }}
+			<EmptyContent v-if="noPolls">
+				<template #icon>
+					<PollsAppIcon />
+				</template>
 				<template #desc>
 					{{ t('polls', 'Add one or change category!') }}
 				</template>
+				{{ t('polls', 'No polls found for this category') }}
 			</EmptyContent>
 
 			<transition-group v-else
@@ -55,7 +50,10 @@
 					:reverse="reverse"
 					@sort-list="setSort($event)" />
 
-				<PollItem v-for="(poll) in sortedList" :key="poll.id" :poll="poll">
+				<PollItem v-for="(poll) in sortedList"
+					:key="poll.id"
+					:poll="poll"
+					no-link>
 					<template #actions>
 						<Actions :force-menu="true">
 							<ActionButton icon="icon-add"
@@ -73,7 +71,7 @@
 							<ActionButton icon="icon-delete"
 								class="danger"
 								:close-after-click="true"
-								@click="confirmDelete(poll.id)">
+								@click="confirmDelete(poll.id, poll.owner)">
 								{{ t('polls', 'Delete poll') }}
 							</ActionButton>
 						</Actions>
@@ -81,31 +79,40 @@
 				</PollItem>
 			</transition-group>
 		</div>
+
 		<LoadingOverlay v-if="isLoading" />
-		<Modal v-if="takeOverModal" @close="takeOverModal = false">
+
+		<Modal v-if="takeOverModal" size="small" @close="takeOverModal = false">
 			<div class="modal__content">
-				<h2>{{ t('polls', 'Do you want to take over this poll from {username} and change the ownership?', {username: takeOverOwner}) }}</h2>
-				<div>{{ t('polls', 'The original owner will be notified.') }}</div>
+				<h2>{{ t('polls', 'Do you want to take over this poll?') }}</h2>
+				<div>{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}</div>
 				<div class="modal__buttons">
-					<ButtonDiv :title="t('polls', 'No')"
-						@click="takeOverModal = false" />
-					<ButtonDiv :primary="true"
-						:title="t('polls', 'Yes')"
-						@click="takeOver()" />
+					<VueButton @click="takeOverModal = false">
+						{{ t('polls', 'No') }}
+					</VueButton>
+
+					<VueButton type="primary" @click="takeOverPoll()">
+						{{ t('polls', 'Yes') }}
+					</VueButton>
 				</div>
 			</div>
 		</Modal>
-		<Modal v-if="deleteModal" @close="deleteModal = false">
+
+		<Modal v-if="deleteModal" size="small" @close="deleteModal = false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Do you want to delete this poll?') }}</h2>
-				<div>{{ t('polls', 'This action cannot be reverted.') }}</div>
-				<div>{{ t('polls', 'The original owner will be notified.') }}</div>
+				<div>
+					{{ t('polls', 'This action cannot be reverted.') }}
+					{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}
+				</div>
 				<div class="modal__buttons">
-					<ButtonDiv :title="t('polls', 'No')"
-						@click="deleteModal = false" />
-					<ButtonDiv :primary="true"
-						:title="t('polls', 'Yes')"
-						@click="deletePoll()" />
+					<VueButton @click="deleteModal = false">
+						{{ t('polls', 'No') }}
+					</VueButton>
+
+					<VueButton type="primary" @click="deletePoll()">
+						{{ t('polls', 'Yes') }}
+					</VueButton>
 				</div>
 			</div>
 		</Modal>
@@ -116,8 +123,10 @@
 import { mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
-import { Actions, ActionButton, AppContent, EmptyContent, Modal } from '@nextcloud/vue'
+import { Actions, ActionButton, AppContent, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
 import sortBy from 'lodash/sortBy'
+import HeaderBar from '../components/Base/HeaderBar.vue'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 
 export default {
 	name: 'Administration',
@@ -126,10 +135,13 @@ export default {
 		AppContent,
 		Actions,
 		ActionButton,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
-		PollItem: () => import('../components/PollList/PollItem'),
 		EmptyContent,
+		HeaderBar,
 		Modal,
+		VueButton,
+		PollsAppIcon,
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},
 
 	data() {
@@ -138,10 +150,11 @@ export default {
 			sort: 'created',
 			reverse: true,
 			takeOverModal: false,
-			takeOverOwner: '',
-			takeOverPollId: 0,
+			currentPoll: {
+				owner: '',
+				pollId: 0,
+			},
 			deleteModal: false,
-			deletePollId: 0,
 		}
 	},
 
@@ -183,14 +196,15 @@ export default {
 	},
 
 	methods: {
-		confirmTakeOver(pollId, owner) {
-			this.takeOverPollId = pollId
-			this.takeOverOwner = owner
+		confirmTakeOver(pollId, currentOwner) {
+			this.currentPoll.pollId = pollId
+			this.currentPoll.owner = currentOwner
 			this.takeOverModal = true
 		},
 
-		confirmDelete(pollId) {
-			this.deletePollId = pollId
+		confirmDelete(pollId, currentOwner) {
+			this.currentPoll.pollId = pollId
+			this.currentPoll.owner = currentOwner
 			this.deleteModal = true
 		},
 
@@ -204,7 +218,7 @@ export default {
 
 		async deletePoll() {
 			try {
-				await this.$store.dispatch('poll/delete', { pollId: this.deletePollId })
+				await this.$store.dispatch('poll/delete', { pollId: this.currentPoll.pollId })
 				this.deleteModal = false
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
@@ -212,9 +226,9 @@ export default {
 			}
 		},
 
-		async takeOver() {
+		async takeOverPoll() {
 			try {
-				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.takeOverPollId })
+				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.currentPoll.pollId })
 				this.takeOverModal = false
 			} catch {
 				showError(t('polls', 'Error overtaking poll.'))
@@ -244,11 +258,11 @@ export default {
 </script>
 
 <style lang="scss">
-	.poll-list__list {
-		width: 100%;
-		display: flex;
-		flex-direction: column;
-		overflow: scroll;
-		padding-bottom: 14px;
-	}
+.poll-list__list {
+	width: 100%;
+	display: flex;
+	flex-direction: column;
+	overflow: scroll;
+	padding-bottom: 14px;
+}
 </style>

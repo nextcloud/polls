@@ -65,7 +65,7 @@ export default {
 			searchToken: null,
 			users: [],
 			isLoading: false,
-			placeholder: t('polls', 'Enter a name to start the search'),
+			placeholder: t('polls', 'Type to add an individual share'),
 		}
 	},
 
@@ -74,6 +74,8 @@ export default {
 
 	methods: {
 		loadUsersAsync: debounce(async function(query) {
+			const endPoint = `apps/polls/search/users/${query}`
+
 			if (!query) {
 				this.users = []
 				return
@@ -84,7 +86,10 @@ export default {
 			}
 			this.searchToken = axios.CancelToken.source()
 			try {
-				const response = await axios.get(generateUrl(`apps/polls/search/users/${query}`), { cancelToken: this.searchToken.token })
+				const response = await axios.get(generateUrl(endPoint), {
+					headers: { Accept: 'application/json' },
+					cancelToken: this.searchToken.token,
+				})
 				this.users = response.data.siteusers
 				this.isLoading = false
 			} catch (e) {
@@ -104,6 +109,7 @@ export default {
 					type: payload.type,
 					id: payload.id,
 					emailAddress: payload.emailAddress,
+					displayName: payload.displayName,
 				})
 			} catch {
 				showError(t('polls', 'Error while adding share'))
@@ -117,5 +123,7 @@ export default {
 	.multiselect {
 		width: 100% !important;
 		max-width: 100% !important;
+		margin-top: 4px !important;
+		margin-bottom: 4px !important;
 	}
 </style>

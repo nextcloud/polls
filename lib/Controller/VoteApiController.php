@@ -29,7 +29,7 @@ use OCA\Polls\Exceptions\Exception;
 use OCP\IRequest;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Service\VoteService;
 
@@ -57,13 +57,13 @@ class VoteApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function list(int $pollId): DataResponse {
+	public function list(int $pollId): JSONResponse {
 		try {
-			return new DataResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
+			return new JSONResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
+			return new JSONResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -73,13 +73,13 @@ class VoteApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function set(int $optionId, string $setTo): DataResponse {
+	public function set(int $optionId, string $setTo): JSONResponse {
 		try {
-			return new DataResponse(['vote' => $this->voteService->set($optionId, $setTo)], Http::STATUS_OK);
+			return new JSONResponse(['vote' => $this->voteService->set($optionId, $setTo)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
+			return new JSONResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

@@ -26,6 +26,8 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
+use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Helper\Container;
 
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
@@ -36,9 +38,12 @@ use OCA\Polls\Model\UserGroup\Email;
 use OCA\Polls\Model\UserGroup\Group;
 use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Model\UserGroup\UserBase;
+use OCP\IUserManager;
 
 class SystemService {
-
+	private const REGEX_VALID_MAIL = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+	private const REGEX_PARSE_MAIL = '/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/';
+	
 	/** @var VoteMapper */
 	private $voteMapper;
 
@@ -46,11 +51,11 @@ class SystemService {
 	private $shareMapper;
 
 	public function __construct(
-		VoteMapper $voteMapper,
-		ShareMapper $shareMapper
+		ShareMapper $shareMapper,
+		VoteMapper $voteMapper
 	) {
-		$this->voteMapper = $voteMapper;
 		$this->shareMapper = $shareMapper;
+		$this->voteMapper = $voteMapper;
 	}
 
 	/**
@@ -59,7 +64,7 @@ class SystemService {
 	 * @return bool
 	 */
 	private static function isValidEmail(string $emailAddress): bool {
-		return (!preg_match('/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/', $emailAddress)) ? false : true;
+		return (!preg_match(self::REGEX_VALID_MAIL, $emailAddress)) ? false : true;
 	}
 
 	/**
@@ -84,7 +89,7 @@ class SystemService {
 	 */
 	public static function getSiteUsers(string $query = '', array $skip = []): array {
 		$users = [];
-		foreach (\OC::$server->getUserManager()->searchDisplayName($query) as $user) {
+		foreach (Container::queryClass(IUserManager::class)->searchDisplayName($query) as $user) {
 			if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {
 				$users[] = new User($user->getUID());
 			}
@@ -115,8 +120,12 @@ class SystemService {
 	public function getSiteUsersAndGroups(string $query = ''): array {
 		$list = [];
 		if ($query !== '') {
-			if (self::isValidEmail($query)) {
-				$list[] = new Email($query);
+			preg_match_all(self::REGEX_PARSE_MAIL, $query, $parsedQuery);
+
+			$emailAddress = isset($parsedQuery[2][0]) ? $parsedQuery[2][0] : '';
+			$displayName = isset($parsedQuery[1][0]) ? $parsedQuery[1][0] : '';
+			if ($emailAddress && self::isValidEmail($emailAddress)) {
+				$list[] = new Email($emailAddress, $displayName, $emailAddress);
 			}
 
 			$list = array_merge($list, UserBase::search($query));
@@ -133,7 +142,12 @@ class SystemService {
 	 * @return true
 	 */
 	public function validatePublicUsername(string $userName, string $token): bool {
-		$share = $this->shareMapper->findByToken($token);
+		try {
+			$share = $this->shareMapper->findByToken($token);
+		} catch (\Exception $e) {
+			throw new NotAuthorizedException('Token invalid');
+		}
+
 
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');

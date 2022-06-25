@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\SettingsService;
 
 class SettingsController extends Controller {
@@ -49,19 +49,15 @@ class SettingsController extends Controller {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function getAppSettings(): DataResponse {
-		return $this->response(function (): array {
-			return ['appSettings' => $this->settingsService->getAppSettings()];
-		});
+	public function getAppSettings(): JSONResponse {
+		return $this->response(fn () => ['appSettings' => $this->settingsService->getAppSettings()]);
 	}
 
 	/**
 	 * Write app settings
 	 */
-	public function writeAppSettings(array $appSettings): DataResponse {
+	public function writeAppSettings(array $appSettings): JSONResponse {
 		$this->settingsService->writeAppSettings($appSettings);
-		return $this->response(function (): array {
-			return ['appSettings' => $this->settingsService->getAppSettings()];
-		});
+		return $this->response(fn () => ['appSettings' => $this->settingsService->getAppSettings()]);
 	}
 }

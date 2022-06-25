@@ -23,8 +23,11 @@
 
 namespace OCA\Polls\Service;
 
+use OCP\IUserSession;
+use OCP\IGroupManager;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\Search\ISearchQuery;
 
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\InvalidAccessException;
@@ -42,6 +45,7 @@ use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\Settings\AppSettings;
 
 class PollService {
 
@@ -50,6 +54,12 @@ class PollService {
 
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
+
+	/** @var IUserSession */
+	private $userSession;
+
+	/** @var IGroupManager */
+	private $groupManager;
 
 	/** @var PollMapper */
 	private $pollMapper;
@@ -69,9 +79,15 @@ class PollService {
 	/** @var Acl */
 	private $acl;
 
+	/** @var AppSettings */
+	private $appSettings;
+
 	public function __construct(
 		Acl $acl,
+		AppSettings $appSettings,
 		IEventDispatcher $eventDispatcher,
+		IGroupManager $groupManager,
+		IUserSession $userSession,
 		MailService $mailService,
 		Poll $poll,
 		PollMapper $pollMapper,
@@ -80,11 +96,14 @@ class PollService {
 		Vote $vote
 	) {
 		$this->acl = $acl;
+		$this->appSettings = $appSettings;
 		$this->eventDispatcher = $eventDispatcher;
+		$this->groupManager = $groupManager;
 		$this->mailService = $mailService;
 		$this->poll = $poll;
 		$this->pollMapper = $pollMapper;
 		$this->userId = $UserId;
+		$this->userSession = $userSession;
 		$this->voteMapper = $voteMapper;
 		$this->vote = $vote;
 	}
@@ -95,7 +114,7 @@ class PollService {
 	public function list(): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->findForMe(\OC::$server->getUserSession()->getUser()->getUID());
+			$polls = $this->pollMapper->findForMe($this->userSession->getUser()->getUID());
 
 			foreach ($polls as $poll) {
 				try {
@@ -116,14 +135,37 @@ class PollService {
 	}
 
 	/**
+	 * Get list of polls
+	 */
+	public function search(ISearchQuery $query): array {
+		$pollList = [];
+		try {
+			$polls = $this->pollMapper->search($this->userSession->getUser()->getUID(), $query);
+
+			foreach ($polls as $poll) {
+				try {
+					$this->acl->setPollId($poll->getId());
+					// TODO: Not the elegant way. Improvement neccessary
+					$pollList[] = $poll;
+				} catch (NotAuthorizedException $e) {
+					continue;
+				}
+			}
+		} catch (DoesNotExistException $e) {
+			// silent catch
+		}
+		return $pollList;
+	}
+
+	/**
 	 *   * Get list of polls
 	 *
 	 * @return Poll[]
 	 */
 	public function listForAdmin(): array {
 		$pollList = [];
-		$userId = \OC::$server->getUserSession()->getUser()->getUID();
-		if (\OC::$server->getGroupManager()->isAdmin($userId)) {
+		$userId = $this->userSession->getUser()->getUID();
+		if ($this->groupManager->isAdmin($userId)) {
 			try {
 				$pollList = $this->pollMapper->findForAdmin($userId);
 			} catch (DoesNotExistException $e) {
@@ -143,7 +185,7 @@ class PollService {
 
 		$this->eventDispatcher->dispatchTyped(new PollTakeOverEvent($this->poll));
 
-		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
+		$this->poll->setOwner($this->userSession->getUser()->getUID());
 		$this->pollMapper->update($this->poll);
 
 		return $this->poll;
@@ -152,16 +194,22 @@ class PollService {
 	/**
 	 * get poll configuration
 	 */
-	public function get(int $pollId): Poll {
+	public function get(int $pollId) : Poll {
 		$this->acl->setPollId($pollId);
-		return $this->acl->getPoll();
+		$this->poll = $this->pollMapper->find($pollId);
+
+		if (!$this->acl->getIsLoggedIn()) {
+			// if participant is not logged in avoid leaking user ids
+			AnonymizeService::replaceUserId($this->poll, $this->acl->getUserId());
+		}
+		return $this->poll;
 	}
 
 	/**
 	 * Add poll
 	 */
 	public function add(string $type, string $title): Poll {
-		if (!\OC::$server->getUserSession()->isLoggedIn()) {
+		if (!$this->appSettings->getPollCreationAllowed()) {
 			throw new NotAuthorizedException;
 		}
 
@@ -177,10 +225,10 @@ class PollService {
 		$this->poll = new Poll();
 		$this->poll->setType($type);
 		$this->poll->setCreated(time());
-		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
+		$this->poll->setOwner($this->userSession->getUser()->getUID());
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
-		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
+		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
 		$this->poll->setExpire(0);
 		$this->poll->setAnonymous(0);
 		$this->poll->setAllowMaybe(0);
@@ -202,23 +250,27 @@ class PollService {
 	 * @return Poll
 	 */
 	public function update(int $pollId, array $poll): Poll {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		$this->poll = $this->acl->getPoll();
+		// $this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+		// $this->poll = $this->acl->getPoll();
+		$this->poll = $this->pollMapper->find($pollId);
 
 		// Validate valuess
 		if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
 			throw new InvalidShowResultsException('Invalid value for prop showResults');
-		}
-		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
-			throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
 		}
 
 		if (isset($poll['title']) && !$poll['title']) {
 			throw new EmptyTitleException('Title must not be empty');
 		}
 
-		if (isset($poll['access']) && $poll['access'] === (Poll::ACCESS_PUBLIC)) {
-			$this->acl->request(Acl::PERMISSION_ALL_ACCESS);
+		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
+			if (!in_array($poll['access'], $this->getValidAccess())) {
+				throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
+			}
+
+			if ($poll['access'] === (Poll::ACCESS_OPEN)) {
+				$this->acl->setPollId($pollId, Acl::PERMISSION_ALL_ACCESS);
+			}
 		}
 
 		// Set the expiry time to the actual servertime to avoid an
@@ -283,10 +335,10 @@ class PollService {
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
-		$this->poll->setOwner(\OC::$server->getUserSession()->getUser()->getUID());
+		$this->poll->setOwner($this->userSession->getUser()->getUID());
 		$this->poll->setTitle('Clone of ' . $origin->getTitle());
 		$this->poll->setDeleted(0);
-		$this->poll->setAccess(Poll::ACCESS_HIDDEN);
+		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
 
 		$this->poll->setType($origin->getType());
 		$this->poll->setDescription($origin->getDescription());
@@ -306,9 +358,9 @@ class PollService {
 	/**
 	 * Collect email addresses from particitipants
 	 *
-	 * @return string[]
+	 * @return string[][]
 	 *
-	 * @psalm-return array<int, string>
+	 * @psalm-return list<array{displayName: string, emailAddress: string, combined: string}>
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
@@ -317,9 +369,12 @@ class PollService {
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
 		$list = [];
 		foreach ($votes as $vote) {
-			$list[] = $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>';
+			$list[] = [
+				'displayName' => $vote->getDisplayName(),
+				'emailAddress' => $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()),
+				'combined' => $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>'];
 		}
-		return array_unique($list);
+		return $list;
 	}
 
 	/**
@@ -356,7 +411,7 @@ class PollService {
 	 * @psalm-return array{0: string, 1: string}
 	 */
 	private function getValidAccess(): array {
-		return [Poll::ACCESS_HIDDEN, Poll::ACCESS_PUBLIC];
+		return [Poll::ACCESS_PRIVATE, Poll::ACCESS_OPEN];
 	}
 
 	/**

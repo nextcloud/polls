@@ -34,6 +34,9 @@ use OCA\Polls\Db\ShareMapper;
 
 class GroupDeletedJob extends QueuedJob {
 
+	/** @var ISecureRandom */
+	private $secureRandom;
+
 	/** @var ShareMapper **/
 	private $shareMapper;
 
@@ -42,10 +45,12 @@ class GroupDeletedJob extends QueuedJob {
 
 	public function __construct(
 		ShareMapper $shareMapper,
+		ISecureRandom $secureRandom,
 		ITimeFactory $time,
 		LoggerInterface $logger
 	) {
 		parent::__construct($time);
+		$this->secureRandom = $secureRandom;
 		$this->shareMapper = $shareMapper;
 		$this->logger = $logger;
 	}
@@ -60,7 +65,7 @@ class GroupDeletedJob extends QueuedJob {
 			'group' => $group
 		]);
 
-		$replacementName = 'deleted_' . \OC::$server->getSecureRandom()->generate(
+		$replacementName = 'deleted_' . $this->secureRandom->generate(
 			8,
 			ISecureRandom::CHAR_DIGITS .
 			ISecureRandom::CHAR_LOWER .

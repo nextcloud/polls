@@ -21,8 +21,31 @@
  *
  */
 
-const uniqueArrayOfObjects = function(array) {
-	return [...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) => JSON.parse(string))
-}
+/**
+ * @param {Array} array Array of objects to unify
+ */
+const uniqueArrayOfObjects = (array) =>
+	[...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) => JSON.parse(string))
 
-export { uniqueArrayOfObjects }
+/**
+ * @param {Array} options Array of poll options to unify
+ */
+const uniqueOptions = (options) =>
+	options.filter((option, index, array) =>
+		array.findIndex((compare) =>
+			(compare.text === option.text)) === index)
+
+/**
+ * @param {Array} votes Array of votes to gerneate a unique array of participants from
+ */
+const uniqueParticipants = (votes) => {
+	const participants = votes.map((vote) => ({
+		userId: vote.user.userId,
+		displayName: vote.user.displayName,
+		isNoUser: vote.user.isNoUser,
+		user: vote.user,
+		pollId: vote.pollId,
+	}))
+	return uniqueArrayOfObjects(participants)
+}
+export { uniqueArrayOfObjects, uniqueOptions, uniqueParticipants }

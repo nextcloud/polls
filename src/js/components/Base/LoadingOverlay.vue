@@ -22,13 +22,18 @@
 
 <template>
 	<div class="loading-overlay">
-		<span class="icon-loading" />
+		<Spinner :size="70" />
 	</div>
 </template>
 
 <script>
+import Spinner from '../AppIcons/Spinner.vue'
+
 export default {
 	name: 'LoadingOverlay',
+	components: {
+		Spinner,
+	},
 }
 </script>
 
@@ -43,19 +48,10 @@ export default {
 	opacity: 0.9;
 	z-index: 9999;
 
-	.icon-loading {
+	.spinner {
 		position: fixed;
 		left: 50%;
 		top: 50%;
-		margin-left: -35px;
-		margin-top: -10px;
-
-		&::after {
-			border: 10px solid var(--color-loading-light);
-			border-top-color: var(--color-primary-element);
-			height: 70px;
-			width: 70px;
-		}
 	}
 }
 </style>

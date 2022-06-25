@@ -25,18 +25,32 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 
 const defaultAppSettings = () => ({
-	appSettings: {
-		allowPublicShares: true,
-		allowAllAccess: true,
-		allowPollCreation: true,
-		showLogin: true,
-		allAccessGroups: [],
-		publicSharesGroups: [],
-		pollCreationGroups: [],
-		autoArchive: false,
-		autoArchiveOffset: 30,
-		updateType: 'longPolling',
-	},
+	allAccessGroups: [],
+	allowCombo: true,
+	allowPublicShares: true,
+	allowAllAccess: true,
+	allowPollCreation: true,
+	allowPollDownload: true,
+	autoArchive: false,
+	autoArchiveOffset: 30,
+	defaultPrivacyUrl: '',
+	defaultImprintUrl: '',
+	disclaimer: '',
+	imprintUrl: '',
+	legalTermsInEmail: false,
+	privacyUrl: '',
+	showMailAddresses: 'false',
+	showLogin: true,
+	updateType: 'longPolling',
+	useActivity: false,
+	useCollaboration: true,
+	usePrivacyUrl: '',
+	useImprintUrl: '',
+	comboGroups: [],
+	publicSharesGroups: [],
+	pollCreationGroups: [],
+	pollDownloadGroups: [],
+	showMailAddressesGroups: [],
 })
 
 const state = defaultAppSettings()
@@ -48,8 +62,8 @@ const mutations = {
 	},
 
 	set(state, payload) {
-		Object.keys(payload).filter((key) => key in state.appSettings).forEach((key) => {
-			state.appSettings[key] = payload[key]
+		Object.keys(payload).filter((key) => key in state).forEach((key) => {
+			state[key] = payload[key]
 		})
 	},
 }
@@ -58,20 +72,26 @@ const actions = {
 	async get(context) {
 		const endPoint = 'apps/polls/settings/app'
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', response.data.appSettings)
 		} catch {
-			context.commit('reset')
+			// context.commit('reset')
 		}
 	},
 
 	async write(context) {
 		const endPoint = 'apps/polls/settings/app'
 		try {
-			const response = await axios.post(generateUrl(endPoint), { appSettings: context.state.appSettings })
+			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				appSettings: context.state,
+			})
 			context.commit('set', response.data.appSettings)
 		} catch (e) {
-			console.error('Error writing appSettings', { error: e.response }, { appSettings: state.appSettings })
+			console.error('Error writing appSettings', { error: e.response }, { appSettings: state })
 			throw e
 		}
 	},

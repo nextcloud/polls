@@ -24,12 +24,22 @@
 namespace OCA\Polls\Model\UserGroup;
 
 use DateTimeZone;
+use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Settings\AppSettings;
+use OCP\IConfig;
 use OCP\IUserManager;
 use OCP\IUser;
 
 class User extends UserBase {
 	public const TYPE = 'user';
 	public const ICON = 'icon-user';
+	public const PRINCIPAL_PREFIX = 'principals/users/';
+
+	/** @var IConfig */
+	private $config;
+
+	/** @var AppSettings */
+	protected $appSettings;
 
 	/** @var IUser */
 	private $user;
@@ -41,28 +51,46 @@ class User extends UserBase {
 		parent::__construct($id, $type);
 		$this->icon = self::ICON;
 		$this->isNoUser = false;
-		$this->description = \OC::$server->getL10N('polls')->t('User');
+		$this->description = Container::getL10N()->t('User');
 
-		$this->user = self::getContainer()->query(IUserManager::class)->get($this->id);
+		$this->config = Container::queryClass(IConfig::class);
+		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
 		$this->displayName = $this->user->getDisplayName();
 		$this->emailAddress = $this->user->getEmailAddress();
-		$this->language = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'lang');
-		$this->locale = \OC::$server->getConfig()->getUserValue($this->id, 'core', 'locale');
+		$this->language = $this->config->getUserValue($this->id, 'core', 'lang');
+		$this->locale = $this->config->getUserValue($this->id, 'core', 'locale');
+		$this->appSettings = new AppSettings;
 	}
 
 	public function isEnabled(): bool {
 		return $this->user->isEnabled();
 	}
 
+	public function getEmailAddressMasked(): string {
+		if ($this->appSettings->getAllowSeeMailAddresses() && $this->emailAddress) {
+			return $this->emailAddress;
+		}
+		return '';
+	}
+
 	public function getTimeZone(): DateTimeZone {
-		$tz = \OC::$server->getConfig()->getUserValue($this->getId(), 'core', 'timezone');
+		$tz = $this->config->getUserValue($this->getId(), 'core', 'timezone');
 		if ($tz) {
 			return new DateTimeZone($tz);
 		}
 		return new DateTimeZone($this->timezone->getTimeZone()->getName());
 	}
 
+	public function getDescription(): string {
+		if ($this->getEmailAddress()) {
+			return $this->getEmailAddress();
+		}
+		return $this->description;
+	}
 
+	public function getPrincipalUri(): string {
+		return self::PRINCIPAL_PREFIX . $this->getId();
+	}
 	/**
 	 * @return User[]
 	 *
@@ -71,7 +99,7 @@ class User extends UserBase {
 	public static function search(string $query = '', array $skip = []): array {
 		$users = [];
 
-		foreach (self::getContainer()->query(IUserManager::class)->search($query) as $user) {
+		foreach (Container::queryClass(IUserManager::class)->search($query) as $user) {
 			if (!in_array($user->getUID(), $skip)) {
 				$users[] = new self($user->getUID());
 			}

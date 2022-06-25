@@ -33,12 +33,10 @@ const defaultPoll = () => ({
 	title: '',
 	description: '',
 	descriptionSafe: '',
-	owner: '',
-	ownerDisplayName: '',
 	created: 0,
 	expire: 0,
 	deleted: 0,
-	access: 'hidden',
+	access: 'private',
 	anonymous: 0,
 	allowComment: 0,
 	allowMaybe: 0,
@@ -51,8 +49,12 @@ const defaultPoll = () => ({
 	important: 0,
 	hideBookedUp: 0,
 	useNo: 1,
-	publicPollEmail: 'optional',
 	autoReminder: false,
+	owner: {
+		userId: '',
+		displayName: '',
+		isNoUser: false,
+	},
 })
 
 const state = defaultPoll()
@@ -100,12 +102,11 @@ const getters = {
 
 	},
 
-	typeIcon: (state) => {
+	typeName: (state) => {
 		if (state.type === 'textPoll') {
-			return 'icon-toggle-filelist'
+			return t('polls', 'Text poll')
 		}
-		return 'icon-calendar-000'
-
+		return t('polls', 'Date poll')
 	},
 
 	answerSequence: (state, getters, rootState) => {
@@ -118,11 +119,7 @@ const getters = {
 	},
 
 	participants: (state, getters, rootState) => {
-		const participants = rootState.votes.list.map((item) => ({
-			userId: item.userId,
-			displayName: item.displayName,
-			isNoUser: item.isNoUser,
-		}))
+		const participants = getters.participantsVoted
 
 		// add current user, if not among participants and voting is allowed
 		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
@@ -133,7 +130,7 @@ const getters = {
 			})
 		}
 
-		return uniqueArrayOfObjects(participants)
+		return participants
 	},
 
 	safeParticipants: (state, getters) => {
@@ -147,11 +144,9 @@ const getters = {
 		return getters.participants
 	},
 
-	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((item) => ({
-		userId: item.userId,
-		displayName: item.displayName,
-		isNoUser: item.isNoUser,
-	}))),
+	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((item) => (
+		item.user
+	))),
 
 	proposalsOptions: () => [
 		{ value: 'disallow', label: t('polls', 'Disallow proposals') },
@@ -192,7 +187,10 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
 		} catch (e) {
@@ -204,7 +202,11 @@ const actions = {
 	async add(context, payload) {
 		const endPoint = 'apps/polls/poll/add'
 		try {
-			return await axios.post(generateUrl(endPoint), { title: payload.title, type: payload.type })
+			return await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				title: payload.title,
+				type: payload.type,
+			})
 		} catch (e) {
 			console.error('Error adding poll:', { error: e.response }, { state: context.state })
 			throw e
@@ -223,8 +225,13 @@ const actions = {
 	async update(context) {
 		const endPoint = `apps/polls/poll/${context.state.id}`
 		try {
-			const response = await axios.put(generateUrl(endPoint), { poll: context.state })
-			context.commit('set', { poll: response.data })
+			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				poll: context.state,
+			})
+			context.commit('set', response.data)
+			context.commit('acl/set', response.data)
+			context.dispatch('options/list', null, { root: true })
 		} catch (e) {
 			console.error('Error updating poll:', { error: e.response }, { poll: context.state })
 			throw e
@@ -243,7 +250,9 @@ const actions = {
 	async delete(context, payload) {
 		const endPoint = `apps/polls/poll/${payload.pollId}`
 		try {
-			await axios.delete(generateUrl(endPoint))
+			await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error deleting poll', { error: e.response }, { payload })
 		}
@@ -252,7 +261,9 @@ const actions = {
 	async getParticipantsEmailAddresses(context) {
 		const endPoint = `apps/polls/poll/${context.state.id}/addresses`
 		try {
-			return await axios.get(generateUrl(endPoint))
+			return await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error retrieving email addresses', { error: e.response })
 		}

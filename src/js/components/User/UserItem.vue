@@ -21,19 +21,20 @@
   -->
 
 <template>
-	<div class="user-item" :class="{ type, 'condensed' : condensed }">
+	<div :class="['user-item', type, { disabled, condensed: condensed }]">
 		<Avatar :disable-menu="disableMenu"
 			:disable-tooltip="disableTooltip"
 			class="user-item__avatar"
-			:is-guest="$route.name === 'publicVote'"
+			:is-guest="isGuestComputed"
 			:menu-position="menuPosition"
 			:size="iconSize"
+			:icon-class="avatarIcon"
 			:show-user-status="showUserStatus"
 			:user="userId"
 			:display-name="name"
 			:is-no-user="isNoUser" />
 
-		<div v-if="icon" :class="['type-icon', iconClass]" />
+		<AdminIcon v-if="icon && type === 'admin'" :size="16" class="type-icon" />
 
 		<slot name="status" />
 
@@ -41,7 +42,10 @@
 			<div class="name">
 				{{ name }}
 			</div>
-			<div v-if="displayEmailAddress" class="subname">
+			<div v-if="type === 'admin'" class="description">
+				{{ t("polls", "Is granted admin rights for this poll") }}
+			</div>
+			<div v-else-if="displayEmailAddress" class="description">
 				{{ displayEmailAddress }}
 			</div>
 		</div>
@@ -59,11 +63,16 @@ export default {
 
 	components: {
 		Avatar,
+		AdminIcon: () => import('../AppIcons/ShieldCrownOutline.vue'),
 	},
 
 	inheritAttrs: false,
 
 	props: {
+		disabled: {
+			type: Boolean,
+			default: false,
+		},
 		hideNames: {
 			type: Boolean,
 			default: false,
@@ -77,6 +86,10 @@ export default {
 			default: true,
 		},
 		disableTooltip: {
+			type: Boolean,
+			default: false,
+		},
+		resolveInfo: {
 			type: Boolean,
 			default: false,
 		},
@@ -99,8 +112,27 @@ export default {
 		type: {
 			type: String,
 			default: 'user',
+			validator(value) {
+				return [
+					'public',
+					'internalAccess',
+					'user',
+					'admin',
+					'group',
+					'contact',
+					'contactGroup',
+					'circle',
+					'external',
+					'email',
+				].includes(value)
+			},
+
 		},
 		isNoUser: {
+			type: Boolean,
+			default: false,
+		},
+		isGuest: {
 			type: Boolean,
 			default: false,
 		},
@@ -119,15 +151,43 @@ export default {
 	},
 
 	computed: {
+		isGuestComputed() {
+			return this.$route?.name === 'publicVote' || this.isGuest || this.isNoUser
+		},
+
 		name() {
+			if (this.type === 'public' && this.userId !== 'addPublic') {
+				return t('polls', 'Public link')
+			}
+
+			if (this.type === 'internalAccess') {
+				return t('polls', 'Internal access')
+			}
+
 			if (this.displayName) {
 				return this.displayName
 			}
+
 			return this.userId
 
 		},
 
 		displayEmailAddress() {
+			if (this.type === 'public' && this.userId !== 'addPublic') {
+				return t('polls', 'Token: {token}', { token: this.userId })
+			}
+
+			if (this.type === 'internalAccess') {
+				if (this.disabled) {
+					return t('polls', 'This poll is private')
+				}
+				return t('polls', 'This is an openly accessible poll')
+			}
+
+			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.type)) {
+				return t('polls', 'Resolve this group first!')
+			}
+
 			if (this.showEmail && ['external', 'email'].includes(this.type) && this.emailAddress !== this.name) {
 				return this.emailAddress
 			}
@@ -138,49 +198,70 @@ export default {
 			return Boolean(getCurrentUser())
 		},
 
-		iconClass() {
-			if (this.icon) {
-				if (this.type === 'contact') {
-					return 'icon-mail'
-				}
+		avatarIcon() {
+			if (this.type === 'public') {
+				return 'icon-svg-md-link'
+			}
 
-				if (this.type === 'email') {
-					return 'icon-mail'
-				}
+			if (this.type === 'internalAccess') {
+				return 'icon-svg-md-link'
+			}
 
-				if (this.type === 'external') {
-					return 'icon-share'
-				}
+			if (this.type === 'contact') {
+				return 'icon-svg-md-email'
+			}
 
-				if (this.type === 'contactGroup') {
-					return 'icon-group'
-				}
+			if (this.type === 'email') {
+				return 'icon-svg-md-email'
+			}
 
-				if (this.type === 'circle') {
-					return 'icon-circles'
-				}
+			if (this.type === 'external') {
+				return 'icon-svg-md-share'
+			}
 
-				if (this.type === 'admin') {
-					return 'icon-user-admin'
-				}
+			if (this.type === 'contactGroup') {
+				return 'icon-group'
+			}
 
-				return `icon-${this.type}`
+			if (this.type === 'group') {
+				return 'icon-group'
+			}
+
+			if (this.type === 'circle') {
+				return 'icon-circles'
 			}
 
 			return ''
 		},
-
 	},
 }
 
 </script>
 
 <style lang="scss">
+.avatar-class-icon {
+	border-radius: 50%;
+	background-color: var(--color-primary-element) !important;
+	height: 100%;
+	background-size: 16px;
+}
+
+.type-icon {
+	position: absolute;
+	background-size: 16px;
+	top: 3px;
+	left: 0;
+}
+
 .user-item {
+	position: relative;
 	display: flex;
 	align-items: center;
 	padding: 4px;
 	max-width: 100%;
+	&.disabled {
+		opacity: 0.6;
+	}
 }
 
 .user-item__name {
@@ -192,7 +273,7 @@ export default {
 		overflow: hidden;
 		text-overflow: ellipsis;
 	}
-	.subname {
+	.description {
 		color: var(--color-text-maxcontrast);
 		font-size: 0.7em;
 	}
@@ -211,11 +292,6 @@ export default {
 		max-width: 70px;
 		padding: 0 4px;
 	}
-}
-
-.type-icon {
-	margin-left: 8px;
-	background-size: 16px;
 }
 
 </style>

@@ -22,21 +22,22 @@
 
 <template>
 	<AppContent class="poll-list">
-		<div class="poll-list-title">
-			<h2 class="title">
+		<HeaderBar class="area__header">
+			<template #title>
 				{{ title }}
-			</h2>
-			<h3 class="description">
-				{{ description }}
-			</h3>
-		</div>
+			</template>
+			{{ description }}
+		</HeaderBar>
 
 		<div class="area__main">
-			<EmptyContent v-if="noPolls" icon="icon-polls">
-				{{ t('polls', 'No polls found for this category') }}
+			<EmptyContent v-if="noPolls">
+				<template #icon>
+					<PollsAppIcon />
+				</template>
 				<template #desc>
 					{{ t('polls', 'Add one or change category!') }}
 				</template>
+				{{ t('polls', 'No polls found for this category') }}
 			</EmptyContent>
 
 			<transition-group v-else
@@ -45,11 +46,9 @@
 				class="poll-list__list">
 				<PollItem key="0"
 					:header="true"
-					:sort="sort"
-					:reverse="reverse"
-					@sort-list="setSort($event)" />
+					@sort-list="setSortColumn($event)" />
 
-				<PollItem v-for="(poll) in sortedList"
+				<PollItem v-for="(poll) in pollList"
 					:key="poll.id"
 					:poll="poll"
 					@goto-poll="gotoPoll(poll.id)"
@@ -57,31 +56,39 @@
 					<template #actions>
 						<Actions force-menu>
 							<ActionButton v-if="isPollCreationAllowed"
-								icon="icon-add"
 								:close-after-click="true"
 								@click="clonePoll(poll.id)">
+								<template #icon>
+									<ClonePollIcon />
+								</template>
 								{{ t('polls', 'Clone poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && !poll.deleted"
-								icon="icon-category-app-bundles"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
+								<template #icon>
+									<ArchivePollIcon />
+								</template>
 								{{ t('polls', 'Archive poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && poll.deleted"
-								icon="icon-history"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
+								<template #icon>
+									<RestorePollIcon />
+								</template>
 								{{ t('polls', 'Restore poll') }}
 							</ActionButton>
 
 							<ActionButton v-if="poll.allowEdit && poll.deleted"
-								icon="icon-delete"
 								class="danger"
 								:close-after-click="true"
 								@click="deletePoll(poll.id)">
+								<template #icon>
+									<DeletePollIcon />
+								</template>
 								{{ t('polls', 'Delete poll') }}
 							</ActionButton>
 						</Actions>
@@ -94,11 +101,16 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import sortBy from 'lodash/sortBy'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
+import HeaderBar from '../components/Base/HeaderBar.vue'
+import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
+import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 
 export default {
 	name: 'PollList',
@@ -107,16 +119,20 @@ export default {
 		AppContent,
 		Actions,
 		ActionButton,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay'),
-		PollItem: () => import('../components/PollList/PollItem'),
 		EmptyContent,
+		HeaderBar,
+		DeletePollIcon,
+		ClonePollIcon,
+		ArchivePollIcon,
+		RestorePollIcon,
+		PollsAppIcon,
+		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},
 
 	data() {
 		return {
 			isLoading: false,
-			sort: 'created',
-			reverse: true,
 		}
 	},
 
@@ -131,11 +147,11 @@ export default {
 		}),
 
 		title() {
-			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).titleExt
+			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.titleExt
 		},
 
 		description() {
-			return this.pollCategories.find((category) => (category.id === this.$route.params.type)).description
+			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.description
 		},
 
 		/* eslint-disable-next-line vue/no-unused-properties */
@@ -143,15 +159,12 @@ export default {
 			return `${t('polls', 'Polls')} - ${this.title}`
 		},
 
-		sortedList() {
-			if (this.reverse) {
-				return sortBy(this.filteredPolls(this.$route.params.type), this.sort).reverse()
-			}
-			return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
+		pollList() {
+			return this.filteredPolls(this.$route.params.type)
 		},
 
 		noPolls() {
-			return this.sortedList.length < 1
+			return this.pollList.length < 1
 		},
 
 	},
@@ -167,6 +180,10 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			setSortColumn: 'polls/setSort',
+		}),
+
 		gotoPoll(pollId) {
 			this.$router
 				.push({ name: 'vote', params: { id: pollId } })
@@ -187,15 +204,6 @@ export default {
 				emit('polls:sidebar:toggle', { open: false })
 			}
 
-		},
-
-		setSort(payload) {
-			if (this.sort === payload.sort) {
-				this.reverse = !this.reverse
-			} else {
-				this.sort = payload.sort
-				this.reverse = true
-			}
 		},
 
 		async toggleArchive(pollId) {
@@ -226,10 +234,6 @@ export default {
 </script>
 
 <style lang="scss">
-	.poll-list {
-		padding-top: 5px;
-	}
-
 	.poll-list__list {
 		width: 100%;
 		display: flex;

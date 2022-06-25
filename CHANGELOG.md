@@ -1,6 +1,206 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.7.0] - 2022-06-24
+### New
+- User setting for conflict check (hours before and after an option to search for conflicts)
+- Add admin option to prevent email address exposing of internal users
+
+### Fix
+- Poll export, if the owner did not vote
+- Poll export was broken, when certain characters were present in the poll title
+- Handling of recurring calendar events (NC24)
+- Removed error message in log triggered from user search when adding share
+- Fixed calendar conflict search for recurring events (NC24)
+- Personal public shares got intinite redirected
+
+### Misc
+- Switch to new calendar API (NC24)
+- repaces icons with material design icons
+- generate a unique user id for public users
+- Less noise in the registration dialog
+
+## [3.7.0-beta5] - 2022-06-05
+
+### Fix
+- Translations
+- legal links
+
+### Changes
+- Changed apperance of registration modal
+- Improvement of InputDiv component
+
+## [3.7.0-beta4] - 2022-05-29
+### Fix
+- Poll export was broken, when certain characters were present in the poll title
+- Removed error message in log triggered from user search when adding share
+
+### Misc
+- Replaced icons with material design icons
+- Generate a unique user id for public users
+
+## [3.7.0-beta3] - 2022-05-06
+### New
+- User setting for conflict check (set hours before and after an option to search for conflicts)
+### Fix
+- Poll export, if the owner did not vote
+- Calendar conflict check (NC24)
+- Handling of recurring calendar events (NC24)
+
+### Misc
+- Switch to new calendar API (NC24)
+
+## [3.7.0-beta2] - 2022-04-27
+### Fix
+- Fixed syntax error in class AppSettings
+
+## [3.7.0-beta1] - 2022-04-27
+### New
+- #2392 - Add admin option to prevent email address exposing of internal users
+
+## [3.6.1] - 2022-04-23
+### New
+- Compatibility to Nextcloud 24
+- Renaming: **hidden polls** are now **private polls** and **public polls** are called **open polls** to distinguish them from **real public polls** via public links
+- Added configuration options for admins to add legal terms to the public registration dialog and emails
+- Added the possibility for admins to add a disclaimer text to generated emails
+- Added email addresses for owner's poll export
+- Allow email share adding using common email formats with name
+- Input fields now support matching keyboards on mobiles
+- Grouping comments for less noise
+- Bulk import for text polls
+- Save username of a public poll (using cookie)
+- Changed icon set
+- some more design changes
+
+### Fixed
+- Poll export to spreadsheeds was fixed if Poll title is longer than 31 characters
+- Fix LDAP user search
+- Poll list in admin page should not link to a poll
+- Remove markup in text only emails
+
+## [3.6.0-rc1] - 2022-04-16
+### New
+- #2367 - Allow email share adding using common email formats with name (#2375)
+### Changes
+- #2377 - Changed transitions on vote vlicks and add hover state
+## [3.6.0-beta2] - 2022-04-13
+### New
+- #2373 - Add icon symbol for locked vote options 
+- #2351 - Store username in a public poll to cookie
+
+### Fixed
+- #2374 - Avoid unnecessary error logs in activities
+- #2369 - Fix missing icons after dep update
+- #2357 - Fix styling bugs
+- #misc - Fixed different translation errors
+
+## [3.6.0-beta1] - 2022-04-02
+### Changes
+- #2255 - Rename "hidden" polls to "private" polls, "public" to "open" (#2289)
+- #2328 - Migrate access strings to 'private' and 'open' (instead of 'hidden' and 'public')
+
+### New
+- #2261 - Added the option to add links to terms and private policy to public registration dialog
+- #2260 - Added an option to add legal terms and a disclaimer to emails
+- #2177 - Add email addresses to poll export (#2327)
+
+### Fixed
+- #1310 - Fix LDAP search (#2323)
+- #2285 - Fixed poll export (#2286, #2287)
+- #2312 - Fixed heights of modals after update of @nextcloud/vue@5
+- #2306 - HTML Tags in plain Poll invitation (#2346)
+- #2254 - Links in admin page could lead to non accessible poll (#2326)
+
+### Misc
+- #2283 - Added support for inputmode
+- #2311 - Added support for material design icons to some components (#2329)
+- #2332 - Replace deprecated String.prototype.substr()
+- #2329 - Styling inpuDiv
+
+## [3.5.4] - 2022-02-17
+### Fixed
+- #2276 - Deletion of NC users was broken through polls (#2279)
+- #2270 - Translation error
+
+## [3.5.3] - 2022-02-15
+### Changed
+- #2264 - add email address if valid search parameter (#2268)
+
+### Fixed
+- #2263 - Fixed user search (#2267)
+- #2272 - Fixed poll export due to changed module export of xlsx
+
+### Misc
+- late translations delivery
+
+## [3.5.2] - 2022-02-11
+### Fixed
+- #2248 - Adding options in text poll is not possible
+
+## [3.5.1] - 2022-02-11
+### Fixed
+- #2246 - updated php minimum version in info.xml
+
+## [3.5.0] - 2022-02-09
+### New
+- following new features are disabled by default per admin switch
+    - Export polls (.xlsx, odt, .csv, .html)
+    - Track activities
+    - Combine multiple polls in one view (read only)
+- Add polls to collections
+- Linkify URLs and email addresses in text options
+- New command `occ polls:db:recreate` for validating and fixing db structure
+
+### Fixed
+- It was possible to add option proposals, when not registered in public polls
+- A deleted poll could cause repeating error logs on notifications
+- fixed a migration error, when updating from rather old version
+
+## [3.5.0-beta3] - 2022-02-01
+- Code optimization and refactoring
+- #2201 - Migration error (#2199, #2222)
+
+### [3.5.0-beta2] - 2022-01-23
+- [new] #950 - Allow join project / collection (#2194)
+- [new] #2204 - Add `occ polls:db:recreate` for validating and fixing db structure
+
+### [3.5.0-beta1] - 2022-01-18
+- [new] #366 - Export poll (#1942, #2169)
+- [new] #804 - Use activities (#2154)
+- [new] #1986 - Combined view for date polls (#2175)
+- [new] #2102 - Linkify options (#1709, #2190)
+- [fix] #2147 - Adding proposals is possible without registering (#2163)
+- [fix] #2133 - Notifications error with deleted polls(#2178)
+
+## [3.4.2] - 2021-12-13
+### New
+- Added an indicator for shares, which indicates, if a share already voted or not
+- Added an autoreminder
+- Added a hint, if no one except the poll owner can access the poll
+- Added an admin setting to change the updates polling behavior (Disabled, periodically or instant via long-polling)
+
+### Changed
+- Compatible with Nextcloud 21 - 23
+- Share tab redesign
+  - Moved the 'all users' access setting as switch to the shares list
+  - Polls with access for all users are now automatically relevant for all users
+  - Removed the settings to 'access all admins' edit rights (in favor for granting individual edit rights, introduced in Polls 3.2).
+    An existing setting will still be valid and can be removed
+  - Combine all shares into one list
+  - Registration options for public polls are now configurable per public share.
+    An existing setting from the poll configuration will be used as default
+
+### Fixed
+- Fixed auto archiver, to prevent to archive polls without an expiration date
+- fix error when adding option #2126 (v3.4.1)
+- fix missing anonymization of proposal owners in anonymous polls #2136 (v3.4.2)
+- fix testing of email address constraints for public poll registration #2137 (v3.4.2)
+
+## [3.4.0-beta1] - 2021-11-26
+- [compatibility] - Compatible with Nextcloud 23
+- [change] #2076 - Share tab redesign
+
 ## [3.4.0-alpha1] - 2021-11-02
 - [new] #1305 - Added participation indicator in effective shares list (#2037)
 - [new] #656 - Add autoreminder job (#2039)
@@ -77,7 +277,7 @@ All changes: https://github.com/nextcloud/polls/issues?q=is%3Aclosed+milestone%3
 - Change checkboxes to a switch style
 - added some infos to the information button
 - Added a configurable threshold to hide other users' votes:
-  If too many vote cells are generated, the js performance can break down and lead to a long js runtime. The per user threshold defaults to 1000 cells to display. This needs further optimization for a good UX.
+  If too many voting cells are generated, the js performance can break down and lead to a long js runtime. The per user threshold defaults to 1000 cells to display. This needs further optimization for a good UX.
 
 ### A lot of optimizations under the hood
 - Using more server side events

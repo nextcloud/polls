@@ -54,6 +54,7 @@ return [
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],
 		['name' => 'page#index', 'url' => '/list/{id}', 'verb' => 'GET', 'postfix' => 'list'],
+		['name' => 'page#index', 'url' => '/combo', 'verb' => 'GET', 'postfix' => 'combo'],
 		['name' => 'page#vote', 'url' => '/vote/{id}', 'verb' => 'GET'],
 
 		['name' => 'poll#list', 'url' => '/polls', 'verb' => 'GET'],
@@ -68,6 +69,7 @@ return [
 
 		['name' => 'option#list', 'url' => '/poll/{pollId}/options', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/option', 'verb' => 'POST'],
+		['name' => 'option#addBulk', 'url' => '/option/bulk', 'verb' => 'POST'],
 		['name' => 'option#update', 'url' => '/option/{optionId}', 'verb' => 'PUT'],
 		['name' => 'option#delete', 'url' => '/option/{optionId}', 'verb' => 'DELETE'],
 
@@ -90,6 +92,7 @@ return [
 		['name' => 'share#resolveGroup', 'url' => '/share/{token}/resolve', 'verb' => 'GET'],
 		['name' => 'share#user_to_admin', 'url' => '/share/{token}/admin', 'verb' => 'PUT'],
 		['name' => 'share#admin_to_user', 'url' => '/share/{token}/user', 'verb' => 'PUT'],
+		['name' => 'share#set_public_poll_email', 'url' => '/share/{token}/publicpollemail/{value}', 'verb' => 'PUT'],
 
 		['name' => 'settings#getAppSettings', 'url' => '/settings/app', 'verb' => 'GET'],
 		['name' => 'settings#writeAppSettings', 'url' => '/settings/app', 'verb' => 'POST'],

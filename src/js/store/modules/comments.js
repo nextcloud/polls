@@ -71,7 +71,10 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.get(generateUrl(`${endPoint}/comments`), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(`${endPoint}/comments`), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', response.data)
 		} catch {
 			context.commit('reset')
@@ -93,8 +96,12 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.post(generateUrl(`${endPoint}/comment`), { message: payload.message })
-			context.commit('add', { comment: response.data.comment })
+			await axios.post(generateUrl(`${endPoint}/comment`), {
+				headers: { Accept: 'application/json' },
+				message: payload.message,
+			})
+			context.dispatch('list')
+			// context.commit('add', { comment: response.data.comment })
 		} catch (e) {
 			console.error('Error writing comment', { error: e.response }, { payload })
 			throw e
@@ -109,7 +116,9 @@ const actions = {
 		}
 
 		try {
-			await axios.delete(generateUrl(`${endPoint}/comment/${payload.comment.id}`))
+			await axios.delete(generateUrl(`${endPoint}/comment/${payload.comment.id}`), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('delete', { comment: payload.comment })
 		} catch (e) {
 			console.error('Error deleting comment', { error: e.response }, { payload })

@@ -34,7 +34,7 @@ const namespaced = true
 
 const mutations = {
 	set(state, payload) {
-		state.list = payload.votes
+		state.list = payload
 	},
 
 	reset(state) {
@@ -42,14 +42,14 @@ const mutations = {
 	},
 
 	deleteVotes(state, payload) {
-		state.list = state.list.filter((vote) => vote.userId !== payload.userId)
+		state.list = state.list.filter((vote) => vote.user.userId !== payload.userId)
 	},
 
 	setItem(state, payload) {
 		const index = state.list.findIndex((vote) =>
 			parseInt(vote.pollId) === payload.pollId
-			&& vote.userId === payload.vote.userId
-			&& vote.voteOptionText === payload.option.pollOptionText)
+			&& vote.user.userId === payload.vote.user.userId
+			&& vote.optionText === payload.option.text)
 		if (index > -1) {
 			state.list[index] = Object.assign(state.list[index], payload.vote)
 			return
@@ -59,18 +59,19 @@ const mutations = {
 }
 
 const getters = {
-	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.pollOptionText === vote.voteOptionText)),
-	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.userId === rootState.poll.acl.userId && vote.voteAnswer === answer).length,
-	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.voteAnswer === answer).length,
-	hasVoted: (state) => (userId) => state.list.findIndex((vote) => vote.userId === userId) > -1,
+	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.text === vote.optionText)),
+	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.user.userId === rootState.poll.acl.userId && vote.answer === answer).length,
+	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.answer === answer).length,
+	hasVoted: (state) => (userId) => state.list.findIndex((vote) => vote.user.userId === userId) > -1,
+	hasVotes: (state) => state.list.length > 0,
 
 	getVote: (state) => (payload) => {
-		const found = state.list.find((vote) => (vote.userId === payload.userId
-				&& vote.voteOptionText === payload.option.pollOptionText))
+		const found = state.list.find((vote) => (vote.user.userId === payload.userId
+				&& vote.optionText === payload.option.text))
 		if (found === undefined) {
 			return {
-				voteAnswer: '',
-				voteOptionText: payload.option.pollOptionText,
+				answer: '',
+				optionText: payload.option.text,
 				userId: payload.userId,
 			}
 		}
@@ -91,8 +92,25 @@ const actions = {
 			return
 		}
 		try {
-			const response = await axios.get(generateUrl(`${endPoint}/votes`), { params: { time: +new Date() } })
-			context.commit('set', response.data)
+			const response = await axios.get(generateUrl(`${endPoint}/votes`), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
+			const votes = []
+			response.data.votes.forEach((vote) => {
+				if (vote.answer === 'yes') {
+					vote.answerTranslated = t('polls', 'Yes')
+					vote.answerSymbol = '✔'
+				} else if (vote.answer === 'maybe') {
+					vote.answerTranslated = t('polls', 'Maybe')
+					vote.answerSymbol = '❔'
+				} else {
+					vote.answerTranslated = t('polls', 'No')
+					vote.answerSymbol = '❌'
+				}
+				votes.push(vote)
+			})
+			context.commit('set', votes)
 		} catch {
 			context.commit('reset')
 		}
@@ -107,11 +125,13 @@ const actions = {
 
 		try {
 			const response = await axios.put(generateUrl(`${endPoint}/vote`), {
+				headers: { Accept: 'application/json' },
 				optionId: payload.option.id,
 				setTo: payload.setTo,
 			})
 			context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
 			context.dispatch('options/list', null, { root: true })
+			context.dispatch('poll/get', null, { root: true })
 			return response
 		} catch (e) {
 			if (e.response.status === 409) {
@@ -134,7 +154,9 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.delete(generateUrl(endPoint))
+			const response = await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('deleteVotes', { userId: response.data.deleted })
 		} catch (e) {
 			console.error('Error deleting votes', { error: e.response })
@@ -145,7 +167,9 @@ const actions = {
 	async deleteUser(context, payload) {
 		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/user/${payload.userId}`
 		try {
-			await axios.delete(generateUrl(endPoint))
+			await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('deleteVotes', payload)
 		} catch (e) {
 			console.error('Error deleting votes', { error: e.response }, { payload })

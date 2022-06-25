@@ -26,6 +26,7 @@
 			v-tooltip="check.result"
 			:signaling-class="check.status"
 			:placeholder="t('polls', 'Optional email address')"
+			submit
 			@submit="submitEmailAddress" />
 	</div>
 </template>
@@ -33,7 +34,7 @@
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
-import InputDiv from '../Base/InputDiv'
+import InputDiv from '../Base/InputDiv.vue'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
@@ -100,7 +101,9 @@ export default {
 			} else {
 				try {
 					this.checking = true
-					await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`)
+					await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`, {
+						headers: { Accept: 'application/json' },
+					})
 					this.checkResult = t('polls', 'valid email address.')
 					this.checkStatus = 'success'
 				} catch {

@@ -26,6 +26,10 @@ namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Subscription;
+use OCA\Polls\Event\CommentEvent;
+use OCA\Polls\Event\PollEvent;
+use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\VoteEvent;
 
 class NotificationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Notification';
@@ -39,28 +43,29 @@ class NotificationMail extends MailBase {
 	public function __construct(
 		Subscription $subscription
 	) {
-		parent::__construct(
-			$subscription->getUserId(),
-			$subscription->getPollId(),
-		);
+		parent::__construct($subscription->getUserId(), $subscription->getPollId());
 		$this->subscription = $subscription;
-		$this->buildEmailTemplate();
 	}
 
-	public function buildEmailTemplate() : void {
-		$this->emailTemplate->setSubject($this->trans->t('Polls App - New Activity'));
-		$this->emailTemplate->addHeader();
-		$this->emailTemplate->addHeading($this->trans->t('Polls App - New Activity'), false);
+	protected function getSubject(): string {
+		return $this->l10n->t('Polls App - New Activity');
+	}
+
+	protected function getFooter(): string {
+		return $this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
+	}
+
+	protected function buildBody(): void {
 		$this->emailTemplate->addBodyText(str_replace(
 			['{title}'],
 			[$this->poll->getTitle()],
-			$this->trans->t('"{title}" has recent activity:')
+			$this->l10n->t('"{title}" has recent activity:')
 		));
 
 		foreach ($this->subscription->getNotifyLogs() as $logItem) {
 			if ($this->poll->getAnonymous() || $this->poll->getShowResults() !== "always") {
 				// hide actor's name if poll is anonymous or results are hidden
-				$displayName = $this->trans->t('A user');
+				$displayName = $this->l10n->t('A user');
 			} else {
 				$displayName = $this->getUser($logItem->getUserId())->getDisplayName();
 			}
@@ -68,23 +73,35 @@ class NotificationMail extends MailBase {
 			$this->emailTemplate->addBodyListItem($this->getComposedLogString($logItem, $displayName));
 		}
 
-		$this->emailTemplate->addBodyButton(htmlspecialchars($this->trans->t('Go to poll')), $this->url, '');
-		$this->emailTemplate->addFooter($this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.'));
+		$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
 	}
 
 	private function getComposedLogString(Log $logItem, string $displayName): string {
 		$logStrings = [
-			Log::MSG_ID_SETVOTE => $this->trans->t('%s has voted.', [$displayName]),
-			Log::MSG_ID_UPDATEPOLL => $this->trans->t('Updated poll configuration. Please check your votes.'),
-			Log::MSG_ID_DELETEPOLL => $this->trans->t('The poll has been deleted.'),
-			Log::MSG_ID_RESTOREPOLL => $this->trans->t('The poll has been restored.'),
-			Log::MSG_ID_EXPIREPOLL => $this->trans->t('The poll has been closed.'),
-			Log::MSG_ID_ADDOPTION => $this->trans->t('A voting option has been added.'),
-			Log::MSG_ID_UPDATEOPTION => $this->trans->t('A voting option has been changed.'),
-			Log::MSG_ID_CONFIRMOPTION => $this->trans->t('A voting option has been confirmed.'),
-			Log::MSG_ID_DELETEOPTION => $this->trans->t('A voting option has been removed.'),
-			Log::MSG_ID_OWNERCHANGE => $this->trans->t('The poll owner has been changed.'),
-			Log::MSG_ID_ADDPOLL => $this->trans->t('%s created the poll.', [$displayName]),
+			Log::MSG_ID_SETVOTE => $this->l10n->t('%s has voted.', [$displayName]),
+			Log::MSG_ID_UPDATEPOLL => $this->l10n->t('Updated poll configuration. Please check your votes.'),
+			Log::MSG_ID_DELETEPOLL => $this->l10n->t('The poll has been deleted.'),
+			Log::MSG_ID_RESTOREPOLL => $this->l10n->t('The poll has been restored.'),
+			Log::MSG_ID_EXPIREPOLL => $this->l10n->t('The poll has been closed.'),
+			Log::MSG_ID_ADDOPTION => $this->l10n->t('A voting option has been added.'),
+			Log::MSG_ID_UPDATEOPTION => $this->l10n->t('A voting option has been changed.'),
+			Log::MSG_ID_CONFIRMOPTION => $this->l10n->t('A voting option has been confirmed.'),
+			Log::MSG_ID_DELETEOPTION => $this->l10n->t('A voting option has been removed.'),
+			Log::MSG_ID_OWNERCHANGE => $this->l10n->t('The poll owner has been changed.'),
+			Log::MSG_ID_ADDPOLL => $this->l10n->t('%s created the poll.', [$displayName]),
+			PollEvent::ADD => $this->l10n->t('%s created the poll.', [$displayName]),
+			PollEvent::UPDATE => $this->l10n->t('Updated poll configuration. Please check your votes.'),
+			PollEvent::DELETE => $this->l10n->t('The poll has been deleted.'),
+			PollEvent::RESTORE => $this->l10n->t('The poll has been restored.'),
+			PollEvent::EXPIRE => $this->l10n->t('The poll has been closed.'),
+			PollEvent::OWNER_CHANGE => $this->l10n->t('The poll owner has been changed.'),
+			OptionEvent::ADD => $this->l10n->t('A voting option has been added.'),
+			OptionEvent::UPDATE => $this->l10n->t('A voting option has been changed.'),
+			OptionEvent::CONFIRM => $this->l10n->t('A voting option has been confirmed.'),
+			OptionEvent::UNCONFIRM => $this->l10n->t('A voting option has been unconfirmed.'),
+			OptionEvent::DELETE => $this->l10n->t('A voting option has been removed.'),
+			CommentEvent::ADD => $this->l10n->t('%s has left a comment.', [$displayName]),
+			VoteEvent::SET => $this->l10n->t('%s has voted.', [$displayName]),
 		];
 
 		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";

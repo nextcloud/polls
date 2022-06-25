@@ -29,6 +29,7 @@ use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 
 class AnonymizeService {
@@ -38,6 +39,9 @@ class AnonymizeService {
 
 	/** @var CommentMapper */
 	private $commentMapper;
+
+	/** @var OptionMapper */
+	private $optionMapper;
 
 	/** @var array */
 	private $anonList;
@@ -50,10 +54,12 @@ class AnonymizeService {
 
 	public function __construct(
 		VoteMapper $voteMapper,
-		CommentMapper $commentMapper
+		CommentMapper $commentMapper,
+		OptionMapper $optionMapper
 	) {
 		$this->voteMapper = $voteMapper;
 		$this->commentMapper = $commentMapper;
+		$this->optionMapper = $optionMapper;
 		$this->anonList = [];
 		$this->userId = null;
 		$this->pollId = 0;
@@ -64,17 +70,15 @@ class AnonymizeService {
 	 * $array Input list which should be anonymized must be a collection of Vote or Comment
 	 * Returns the original array with anonymized user names
 	 */
-	private function anonymize(array $array): array {
+	public function anonymize(array &$array): void {
 		// get mapping for the complete poll
 		foreach ($array as &$element) {
-			if ($element->getUserId() === $this->userId) {
+			if (!$element->getUserId() || $element->getUserId() === $this->userId) {
 				// skip current user
 				continue;
 			}
 			$element->setUserId($this->anonList[$element->getUserId()] ?? 'Unknown user');
 		}
-
-		return $array;
 	}
 
 	/**
@@ -87,6 +91,7 @@ class AnonymizeService {
 		$this->userId = $userId;
 		$votes = $this->voteMapper->findByPoll($pollId);
 		$comments = $this->commentMapper->findByPoll($pollId);
+		$options = $this->optionMapper->findByPoll($pollId);
 		$i = 0;
 
 		foreach ($votes as $element) {
@@ -100,37 +105,23 @@ class AnonymizeService {
 				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
 			}
 		}
+		foreach ($options as $element) {
+			if (!array_key_exists($element->getUserId(), $this->anonList) && $element->getUserId() !== $userId) {
+				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
+			}
+		}
 		return;
 	}
 
 	/**
-	 * Anonymizes the comments of a poll
-	 * Returns anonymized comments
-	 */
-	public function getComments(): array {
-		return $this->anonymize($this->commentMapper->findByPoll($this->pollId));
-	}
-
-	/**
-	 * Anonymizes the participants of a poll
-	 * Returns anonymized votes
-	 */
-	public function getVotes(): array {
-		return $this->anonymize($this->voteMapper->findByPoll($this->pollId));
-	}
-
-	/**
 	 * Replaces userIds with displayName to avoid exposing usernames in public polls
-	 *
-	 * @param (Comment|Option|Poll|Vote)[]|Comment|Option|Poll|Vote $arrayOrObject
-	 *
-	 * @return (Comment|Option|Poll|Vote)[]|Comment|Option|Poll|Vote
-	 *
-	 * @psalm-return Comment|Option|Poll|Vote|array<Comment|Option|Poll|Vote>
 	 */
-	public static function replaceUserId($arrayOrObject) {
+	public static function replaceUserId(&$arrayOrObject, string $userId) : void {
 		if (is_array($arrayOrObject)) {
 			foreach ($arrayOrObject as $item) {
+				if ($item->getUserId() === $userId) {
+					continue;
+				}
 				if ($item instanceof Comment || $item instanceof Vote) {
 					$item->setUserId($item->getDisplayName());
 				}
@@ -138,6 +129,11 @@ class AnonymizeService {
 					$item->setOwner($item->getDisplayName());
 				}
 			}
+			return;
+		}
+
+		if ($arrayOrObject->getUserId() === $userId) {
+			return;
 		}
 
 		if ($arrayOrObject instanceof Option || $arrayOrObject instanceof Poll) {
@@ -148,6 +144,6 @@ class AnonymizeService {
 			$arrayOrObject->setUserId($arrayOrObject->getDisplayName());
 		}
 
-		return $arrayOrObject;
+		return;
 	}
 }

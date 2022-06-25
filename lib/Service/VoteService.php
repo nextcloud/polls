@@ -32,7 +32,7 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
-use OCA\Polls\Event\VoteEvent;
+use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Model\Acl;
 
 class VoteService {
@@ -73,8 +73,10 @@ class VoteService {
 
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
+	 *
+	 * @return Vote[]
 	 */
-	public function list(int $pollId = 0, string $token = ''): array {
+	public function list(?int $pollId, string $token = '') : array {
 		if ($token) {
 			$this->acl->setToken($token);
 		} else {
@@ -83,21 +85,26 @@ class VoteService {
 
 		try {
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
+				// Just return the participants votes, no further anoymizing or obfuscatin is nessecary
 				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
 			}
 
+			$votes = $this->voteMapper->findByPoll($this->acl->getpollId());
+
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
 				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
-				return $this->anonymizer->getVotes();
+				$this->anonymizer->anonymize($votes);
+			} elseif (!$this->acl->getIsLoggedIn()) {
+				// if participant is not logged in avoid leaking user ids
+				AnonymizeService::replaceUserId($votes, $this->acl->getUserId());
 			}
-
-			return $this->voteMapper->findByPoll($this->acl->getpollId());
 		} catch (DoesNotExistException $e) {
-			return [];
+			$votes = [];
 		}
+		return $votes;
 	}
 
-	private function checkLimits(Option $option, string $userId):void {
+	private function checkLimits(Option $option, string $userId): void {
 
 		// check, if the optionlimit is reached or exceeded, if one is set
 		if ($this->acl->getPoll()->getOptionLimit() > 0) {
@@ -105,29 +112,10 @@ class VoteService {
 				throw new VoteLimitExceededException;
 			}
 		}
-
-		// exit, if no vote limit is set
-		if ($this->acl->getPoll()->getVoteLimit() < 1) {
-			return;
-		}
-
-		// Only count votes, which match to an actual existing option.
-		// Explanation: If an option is deleted, the corresponding votes are not deleted.
-		$pollOptionTexts = array_map(function ($option) {
-			return $option->getPollOptionText();
-		}, $this->optionMapper->findByPoll($option->getPollId()));
-
-		$votecount = 0;
-		$votes = $this->voteMapper->getYesVotesByParticipant($option->getPollId(), $userId);
-		foreach ($votes as $vote) {
-			if (in_array($vote->getVoteOptionText(), $pollOptionTexts)) {
-				$votecount++;
-			}
-		}
-
-		if ($this->acl->getPoll()->getVoteLimit() <= $votecount) {
+		if ($this->acl->getIsVoteLimitExceeded()) {
 			throw new VoteLimitExceededException;
 		}
+		return;
 	}
 
 	/**
@@ -168,33 +156,33 @@ class VoteService {
 			$this->voteMapper->insert($this->vote);
 		}
 
-		$this->eventDispatcher->dispatchTyped(new VoteEvent($this->vote));
+		$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote));
 		return $this->vote;
 	}
 
 	/**
 	 * Remove user from poll
 	 */
-	public function delete(int $pollId = 0, string $userId = '', string $token = ''): string {
+	public function delete(?int $pollId, ?string $userId, string $token = ''): string {
 		if ($token) {
 			$this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT);
 			$userId = $this->acl->getUserId();
 			$pollId = $this->acl->getPollId();
 		} else {
-			if ($userId) {
-				$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-			} else {
-				$this->acl->setPollId($pollId, Acl::PERMISSION_VOTE_EDIT);
-				$userId = $this->acl->getUserId();
-			}
+			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		}
+
+		if (!$userId) {
+			$userId = $this->acl->getUserId();
+		}
+
 		// fake a vote so that the event can be triggered
 		// surpress logging of this action
 		$this->vote = new Vote();
 		$this->vote->setPollId($pollId);
 		$this->vote->setUserId($userId);
 		$this->voteMapper->deleteByPollAndUserId($pollId, $userId);
-		$this->eventDispatcher->dispatchTyped(new VoteEvent($this->vote, false));
+		$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote, false));
 		return $userId;
 	}
 }

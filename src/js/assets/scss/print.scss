@@ -6,9 +6,6 @@
 
 	.vote-item {
 		background: none !important;
-		&.active > .icon{
-			border: none !important;
-		}
 
 		> .icon {
 			background: none !important;
@@ -18,6 +15,11 @@
 				content: '❌';
 			}
 		}
+
+		&.active > .icon{
+			border: none !important;
+		}
+
 
 		&.yes > .icon::after {
 			content: '✔';

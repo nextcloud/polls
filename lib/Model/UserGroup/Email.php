@@ -24,18 +24,23 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
+use OCA\Polls\Helper\Container;
+
 class Email extends UserBase {
 	public const TYPE = 'email';
 	public const ICON = 'icon-mail';
 
 	public function __construct(
 		string $id,
-		string $displayName = ''
+		string $displayName = '',
+		string $emailAddress = ''
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->description = \OC::$server->getL10N('polls')->t('External Email');
 		$this->icon = self::ICON;
-		$this->emailAddress = $id;
+		$this->description = $emailAddress ? $emailAddress : Container::getL10N()->t('External Email');
+		$this->richObjectType = 'email';
+		
+		$this->emailAddress = $emailAddress ? $emailAddress : $id;
 		$this->displayName = $displayName ? $displayName : $this->displayName;
 	}
 

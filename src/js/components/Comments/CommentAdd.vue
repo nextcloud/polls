@@ -23,9 +23,11 @@
 <template lang="html">
 	<div class="comment-add">
 		<UserItem v-bind="acl" hide-names />
+
 		<InputDiv v-model="comment"
 			class="comment-add__input"
 			:placeholder="t('polls', 'New comment …')"
+			submit
 			@submit="writeComment()" />
 	</div>
 </template>
@@ -33,7 +35,7 @@
 <script>
 import { mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import InputDiv from '../Base/InputDiv'
+import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'CommentAdd',

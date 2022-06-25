@@ -22,6 +22,6 @@
 	 */
 	 declare(strict_types=1);
 
-	 script('polls', 'adminSettings');
+	 script('polls', 'polls-adminSettings');
 ?>
 <div id="admin_settings" />

@@ -24,10 +24,10 @@
 namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
+use OCP\IUserSession;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
-use OCA\Polls\Db\Preferences;
+use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\PreferencesService;
 use OCA\Polls\Service\CalendarService;
 
@@ -39,17 +39,22 @@ class PreferencesController extends Controller {
 	/** @var CalendarService */
 	private $calendarService;
 
+	/** @var IUserSession */
+	private $userSession;
+
 	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		PreferencesService $preferencesService,
-		CalendarService $calendarService
+		CalendarService $calendarService,
+		IUserSession $userSession
 	) {
 		parent::__construct($appName, $request);
-		$this->preferencesService = $preferencesService;
 		$this->calendarService = $calendarService;
+		$this->preferencesService = $preferencesService;
+		$this->userSession = $userSession;
 	}
 
 	/**
@@ -57,23 +62,19 @@ class PreferencesController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function get(): DataResponse {
-		return $this->response(function (): Preferences {
-			return $this->preferencesService->get();
-		});
+	public function get(): JSONResponse {
+		return $this->response(fn () => $this->preferencesService->get());
 	}
 
 	/**
 	 * Write preferences
 	 * @NoAdminRequired
 	 */
-	public function write(array $settings): DataResponse {
-		if (!\OC::$server->getUserSession()->isLoggedIn()) {
-			return new DataResponse([], Http::STATUS_OK);
+	public function write(array $settings): JSONResponse {
+		if (!$this->userSession->isLoggedIn()) {
+			return new JSONResponse([], Http::STATUS_OK);
 		}
-		return $this->response(function () use ($settings) {
-			return $this->preferencesService->write($settings);
-		});
+		return $this->response(fn () => $this->preferencesService->write($settings));
 	}
 
 	/**
@@ -81,7 +82,7 @@ class PreferencesController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function getCalendars(): DataResponse {
-		return new DataResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
+	public function getCalendars(): JSONResponse {
+		return new JSONResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
 	}
 }

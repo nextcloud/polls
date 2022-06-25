@@ -22,50 +22,53 @@
 
 <template>
 	<div class="poll-header-buttons">
-		<UserMenu />
+		<UserMenu v-if="showUserMenu" />
 		<Popover>
 			<template #trigger>
-				<Actions>
-					<ActionButton icon="icon-info">
-						{{ t('polls', 'Poll informations') }}
-					</ActionButton>
-				</Actions>
+				<VueButton v-tooltip="t('polls', 'Poll informations')"
+					type="tertiary">
+					<template #icon>
+						<PollInformationIcon />
+					</template>
+				</VueButton>
 			</template>
 			<PollInformation />
 		</Popover>
-		<ActionSortOptions />
-		<ActionChangeView />
+		<ExportPoll v-if="allowPollDownload" />
 		<ActionToggleSidebar v-if="allowEdit || allowComment" />
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { Actions, ActionButton, Popover } from '@nextcloud/vue'
+import { Button as VueButton, Popover } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
-import ActionSortOptions from '../Actions/ActionSortOptions'
-import ActionChangeView from '../Actions/ActionChangeView'
-import ActionToggleSidebar from '../Actions/ActionToggleSidebar'
-import UserMenu from '../User/UserMenu'
+import ActionToggleSidebar from '../Actions/ActionToggleSidebar.vue'
+import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
 export default {
 	name: 'PollHeaderButtons',
 	components: {
-		Actions,
-		ActionButton,
-		Popover,
-		ActionChangeView,
-		ActionSortOptions,
 		ActionToggleSidebar,
-		PollInformation: () => import('../Poll/PollInformation'),
-		UserMenu,
+		PollInformationIcon,
+		Popover,
+		VueButton,
+		UserMenu: () => import('../User/UserMenu.vue'),
+		ExportPoll: () => import('../Export/ExportPoll.vue'),
+		PollInformation: () => import('../Poll/PollInformation.vue'),
 	},
 
 	computed: {
 		...mapState({
 			allowComment: (state) => state.poll.allowComment,
 			allowEdit: (state) => state.poll.acl.allowEdit,
+			allowVote: (state) => state.poll.acl.allowVote,
+			allowPollDownload: (state) => state.poll.acl.allowPollDownload,
 		}),
+
+		showUserMenu() {
+			return this.$route.name !== 'publicVote' || this.allowVote
+		},
 	},
 
 	created() {
@@ -82,8 +85,7 @@ export default {
 <style lang="scss">
 .poll-header-buttons {
 	display: flex;
-	flex-wrap: wrap-reverse;
-	flex: 0 1 auto;
+	flex: 0;
 	justify-content: flex-end;
 	align-self: flex-end;
 	border-radius: var(--border-radius-pill);

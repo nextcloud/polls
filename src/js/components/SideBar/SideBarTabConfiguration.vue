@@ -22,21 +22,30 @@
 
 <template>
 	<div>
-		<div v-if="participantsVoted" class="warning">
+		<div v-if="hasVotes" class="warning">
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
 		</div>
 
-		<ConfigBox v-if="!acl.isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
+		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
+		<ConfigBox :title="t('polls', 'Title')">
+			<template #icon>
+				<SpeakerIcon />
+			</template>
 			<ConfigTitle @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Description')" icon-class="icon-edit">
+		<ConfigBox :title="t('polls', 'Description')">
+			<template #icon>
+				<DescriptionIcon />
+			</template>
 			<ConfigDescription @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll configurations')" icon-class="icon-category-customization">
+		<ConfigBox :title="t('polls', 'Poll configurations')">
+			<template #icon>
+				<PollConfigIcon />
+			</template>
 			<ConfigAllowComment @change="writePoll" />
 			<ConfigAllowMayBe @change="writePoll" />
 			<ConfigUseNo @change="writePoll" />
@@ -46,60 +55,92 @@
 			<ConfigOptionLimit @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll closing status')" :icon-class="closed ? 'icon-polls-closed' : 'icon-polls-open'">
+		<ConfigBox :title="t('polls', 'Poll closing status')">
+			<template #icon>
+				<LockedIcon v-if="closed" />
+				<UnlockedIcon v-else />
+			</template>
 			<ConfigClosing @change="writePoll" />
-			<ConfigAutoReminder v-if="poll.type === 'datePoll' || poll.expire"
+			<ConfigAutoReminder v-if="pollType === 'datePoll' || hasEpiration"
 				@change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox v-if="acl.isOwner || acl.allowAllAccess" :title="t('polls', 'Access')" icon-class="icon-category-auth">
-			<ConfigAdminAccess v-if="acl.isOwner" @change="writePoll" />
-			<ConfigAccess v-if="acl.allowAllAccess" @change="writePoll" />
-		</ConfigBox>
-
-		<ConfigBox :title="t('polls', 'Result display')" icon-class="icon-screen">
+		<ConfigBox :title="t('polls', 'Result display')">
+			<template #icon>
+				<ShowResultsIcon v-if="showResults === 'always'" />
+				<HideResultsUntilClosedIcon v-if="showResults === 'closed'" />
+				<ShowResultsNeverIcon v-if="showResults === 'never'" />
+			</template>
 			<ConfigShowResults @change="writePoll" />
 		</ConfigBox>
 
-		<ButtonDiv :icon="poll.deleted ? 'icon-history' : 'icon-category-app-bundles'"
-			:title="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
-			@click="toggleArchive()" />
+		<div class="delete-area">
+			<VueButton @click="toggleArchive()">
+				<template #icon>
+					<RestorePollIcon v-if="isPollArchived" />
+					<ArchivePollIcon v-else />
+				</template>
+				{{ isPollArchived ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
+			</VueButton>
 
-		<ButtonDiv v-if="poll.deleted"
-			icon="icon-delete"
-			class="error"
-			:title="t('polls', 'Delete poll')"
-			@click="deletePoll()" />
+			<VueButton v-if="isPollArchived" type="error" @click="deletePoll()">
+				<template #icon>
+					<DeletePollIcon />
+				</template>
+				{{ t('polls', 'Delete poll') }}
+			</VueButton>
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
+import { Button as VueButton } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
-import ConfigBox from '../Base/ConfigBox'
-import ConfigAccess from '../Configuration/ConfigAccess'
-import ConfigAdminAccess from '../Configuration/ConfigAdminAccess'
-import ConfigAllowComment from '../Configuration/ConfigAllowComment'
-import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe'
-import ConfigAnonymous from '../Configuration/ConfigAnonymous'
-import ConfigAutoReminder from '../Configuration/ConfigAutoReminder'
-import ConfigClosing from '../Configuration/ConfigClosing'
-import ConfigDescription from '../Configuration/ConfigDescription'
-import ConfigOptionLimit from '../Configuration/ConfigOptionLimit'
-import ConfigShowResults from '../Configuration/ConfigShowResults'
-import ConfigTitle from '../Configuration/ConfigTitle'
-import ConfigUseNo from '../Configuration/ConfigUseNo'
-import ConfigVoteLimit from '../Configuration/ConfigVoteLimit'
-import { writePoll } from '../../mixins/writePoll'
+import ConfigBox from '../Base/ConfigBox.vue'
+import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
+import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
+import ConfigAnonymous from '../Configuration/ConfigAnonymous.vue'
+import ConfigAutoReminder from '../Configuration/ConfigAutoReminder.vue'
+import ConfigClosing from '../Configuration/ConfigClosing.vue'
+import ConfigDescription from '../Configuration/ConfigDescription.vue'
+import ConfigOptionLimit from '../Configuration/ConfigOptionLimit.vue'
+import ConfigShowResults from '../Configuration/ConfigShowResults.vue'
+import ConfigTitle from '../Configuration/ConfigTitle.vue'
+import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
+import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
+
+import { writePoll } from '../../mixins/writePoll.js'
+
+import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
+import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
+import LockedIcon from 'vue-material-design-icons/Lock.vue'
+import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
+import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
+import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
+import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 
 export default {
 	name: 'SideBarTabConfiguration',
 
 	components: {
+		ArchivePollIcon,
+		DeletePollIcon,
+		DescriptionIcon,
+		LockedIcon,
+		HideResultsUntilClosedIcon,
+		PollConfigIcon,
+		RestorePollIcon,
+		ShowResultsIcon,
+		ShowResultsNeverIcon,
+		SpeakerIcon,
+		UnlockedIcon,
 		ConfigBox,
-		ConfigAccess,
-		ConfigAdminAccess,
 		ConfigAllowComment,
 		ConfigAllowMayBe,
 		ConfigAnonymous,
@@ -111,25 +152,30 @@ export default {
 		ConfigTitle,
 		ConfigUseNo,
 		ConfigVoteLimit,
+		VueButton,
 	},
 
 	mixins: [writePoll],
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
+			isPollArchived: (state) => state.poll.deleted,
+			pollType: (state) => state.poll.type,
+			pollId: (state) => state.poll.id,
+			hasEpiration: (state) => state.poll.expire,
+			isOwner: (state) => state.poll.acl.isOwner,
+			showResults: (state) => state.poll.showResults,
 		}),
 
 		...mapGetters({
 			closed: 'poll/isClosed',
-			participantsVoted: 'poll/participantsVoted',
+			hasVotes: 'votes/hasVotes',
 		}),
 	},
 
 	methods: {
 		toggleArchive() {
-			if (this.poll.deleted) {
+			if (this.isPollArchived) {
 				this.$store.commit('poll/setProperty', { deleted: 0 })
 			} else {
 				this.$store.commit('poll/setProperty', { deleted: moment.utc().unix() })
@@ -138,9 +184,9 @@ export default {
 		},
 
 		async deletePoll() {
-			if (!this.poll.deleted) return
+			if (!this.isPollArchived) return
 			try {
-				await this.$store.dispatch('poll/delete', { pollId: this.poll.id })
+				await this.$store.dispatch('poll/delete', { pollId: this.pollId })
 				this.$router.push({ name: 'list', params: { type: 'relevant' } })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
@@ -149,3 +195,11 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss">
+.delete-area {
+	display: flex;
+	gap: 8px;
+	justify-content: space-between;
+}
+</style>

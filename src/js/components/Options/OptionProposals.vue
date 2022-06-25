@@ -27,6 +27,7 @@
 			<OptionsDateAdd v-if="pollType === 'datePoll'"
 				:caption="t('polls', 'Propose a date')"
 				class="add-date-proposal"
+				show-caption
 				primary />
 			<OptionsTextAdd v-if="pollType === 'textPoll'" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
 		</div>
@@ -40,8 +41,8 @@ export default {
 	name: 'OptionProposals',
 
 	components: {
-		OptionsDateAdd: () => import('./OptionsDateAdd'),
-		OptionsTextAdd: () => import('./OptionsTextAdd'),
+		OptionsDateAdd: () => import('./OptionsDateAdd.vue'),
+		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
 	},
 
 	computed: {

@@ -22,16 +22,21 @@
 
 <template lang="html">
 	<div class="create-dialog">
-		<ConfigBox :title="t('polls', 'Title')" icon-class="icon-sound">
-			<input id="pollTitle"
-				ref="pollTitle"
+		<ConfigBox :title="t('polls', 'Title')">
+			<template #icon>
+				<SpeakerIcon />
+			</template>
+			<InputDiv ref="pollTitle"
 				v-model="title"
 				type="text"
 				:placeholder="t('polls', 'Enter Title')"
-				@keyup.enter="confirm">
+				@submit="confirm" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll type')" icon-class="icon-checkmark">
+		<ConfigBox :title="t('polls', 'Poll type')">
+			<template #icon>
+				<CheckIcon />
+			</template>
 			<RadioGroupDiv v-model="pollType" :options="pollTypeOptions" />
 		</ConfigBox>
 
@@ -49,15 +54,21 @@
 <script>
 import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import ConfigBox from '../Base/ConfigBox'
-import RadioGroupDiv from '../Base/RadioGroupDiv'
+import ConfigBox from '../Base/ConfigBox.vue'
+import RadioGroupDiv from '../Base/RadioGroupDiv.vue'
+import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'CreateDlg',
 
 	components: {
+		SpeakerIcon,
+		CheckIcon,
 		ConfigBox,
 		RadioGroupDiv,
+		InputDiv,
 	},
 
 	data() {
@@ -82,6 +93,11 @@ export default {
 	},
 
 	methods: {
+		/** @public */
+		setFocus() {
+			this.$refs.pollTitle.setFocus()
+		},
+
 		cancel() {
 			this.title = ''
 			this.pollType = 'datePoll'
@@ -97,13 +113,6 @@ export default {
 			} catch {
 				showError(t('polls', 'Error while creating Poll "{pollTitle}"', { pollTitle: this.title }))
 			}
-		},
-
-		/** @public */
-		setFocus() {
-			this.$nextTick(() => {
-				this.$refs.pollTitle.focus()
-			})
 		},
 	},
 }

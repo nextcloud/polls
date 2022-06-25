@@ -28,31 +28,33 @@
 		<router-view />
 		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
 		<LoadingOverlay v-if="loading" />
-		<SettingsDlg />
+		<UserSettingsDlg />
 	</Content>
 </template>
 
 <script>
-import SettingsDlg from './components/Settings/SettingsDlg'
+import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { Content } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/icons.scss'
+import './assets/scss/icons-md.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
-import './assets/scss/dashboard.scss'
-import { watchPolls } from './mixins/watchPolls'
+import './assets/scss/theming.scss'
+import './assets/scss/markdown.scss'
+import { watchPolls } from './mixins/watchPolls.js'
 
 export default {
 	name: 'App',
 	components: {
 		Content,
-		LoadingOverlay: () => import('./components/Base/LoadingOverlay'),
-		SettingsDlg,
+		LoadingOverlay: () => import('./components/Base/LoadingOverlay.vue'),
+		UserSettingsDlg,
 	},
 
 	mixins: [watchPolls],
@@ -69,7 +71,7 @@ export default {
 	computed: {
 		...mapState({
 			settings: (state) => state.settings.user,
-			appSettings: (state) => state.appSettings.appSettings,
+			appSettings: (state) => state.appSettings,
 			poll: (state) => state.poll,
 			allowEdit: (state) => state.poll.acl.allowEdit,
 			dashboard: (state) => state.settings.dashboard,
@@ -77,6 +79,7 @@ export default {
 
 		...mapGetters({
 			themeClass: 'settings/themeClass',
+			backgroundClass: 'settings/backgroundClass',
 			useDashboardStyling: 'settings/useDashboardStyling',
 			useIndividualStyling: 'settings/useIndividualStyling',
 			useTranslucentPanels: 'settings/useTranslucentPanels',
@@ -93,6 +96,9 @@ export default {
 		},
 
 		showSidebar() {
+			if (this.$route.name === 'combo') {
+				return this.sideBarOpen
+			}
 			return this.sideBarOpen && this.poll.id && (this.allowEdit || this.poll.allowComment)
 		},
 	},
@@ -107,7 +113,19 @@ export default {
 			}
 		},
 
+		backgroundClass(newValue, oldValue) {
+			if (oldValue) {
+				document.body.classList.remove(oldValue)
+			}
+			if (newValue) {
+				document.body.classList.add(newValue)
+			}
+		},
+
 		$route(to, from) {
+			if (this.$route.name === 'list') {
+				this.setFilter(this.$route.params.type)
+			}
 			this.loadPoll()
 			this.watchPolls()
 		},
@@ -168,8 +186,11 @@ export default {
 	},
 
 	methods: {
+		...mapActions({
+			setFilter: 'polls/setFilter',
+		}),
 		handleScroll() {
-			if (window.scrollY > 70) {
+			if (window.scrollY > 20) {
 				document.body.classList.add('page--scrolled')
 			} else {
 				document.body.classList.remove('page--scrolled')
@@ -190,7 +211,6 @@ export default {
 		},
 
 		async loadPoll(silent) {
-			const dispatches = []
 			if (!silent) {
 				this.loading = true
 				this.transitionsOff()
@@ -200,20 +220,20 @@ export default {
 				if (this.$route.name === 'vote' && !this.$route.params.id) {
 					throw new Error('No pollId for vote page')
 				}
-
-				if (this.$route.name === 'publicVote') {
-					dispatches.push('share/get')
-				} else if (this.$route.name === 'vote') {
-					dispatches.push('shares/list')
-				}
-
-				dispatches.push(
+				const dispatches = [
 					'poll/get',
 					'comments/list',
 					'options/list',
 					'votes/list',
 					'subscription/get',
-				)
+				]
+
+				if (this.$route.name === 'publicVote') {
+					dispatches.push('share/get')
+				} else if (this.$route.name === 'vote') {
+					dispatches.push('shares/list')
+					dispatches.push('activity/list')
+				}
 
 				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
 				await Promise.all(requests)
@@ -232,13 +252,45 @@ export default {
 </script>
 
 <style lang="scss">
+.app-content {
+	display: flex;
+	flex-direction: column;
+	padding: 0px 8px;
+	row-gap: 8px;
+	background-color: transparent !important;
+}
+
+// global areas settings
+[class*=' area__'],
 [class^='area__'] {
-	padding: 0 8px 16px 0;
+	padding: 4px 0px;
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
 	min-width: 270px;
 }
 
+// special settings for header area
+[class*=' area__header'],
+[class^='area__header'] {
+	position: sticky;
+	top: 50px;
+	background-color: var(--color-main-background);
+	border-bottom: 1px solid var(--color-border);
+	z-index: 9;
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-right: 8px;
+	padding-left: 56px;
+}
+
+// [class*=' area__header_vote'],
+// [class^='area__header_vote'] {
+//   background-color: transparent;
+//   border: none;
+//   box-shadow: none !important;
+// }
+
+// global modal settings
 .modal__content {
 	padding: 14px;
 	display: flex;
@@ -255,8 +307,10 @@ export default {
 
 .modal__buttons {
 	display: flex;
+	gap: 8px;
 	justify-content: flex-end;
 	align-items: center;
+	margin-top: 36px;
 	.button {
 		margin-left: 10px;
 		margin-right: 0;
@@ -267,80 +321,4 @@ export default {
 	text-decoration: underline;
 }
 
-.app-content {
-	display: flex;
-	flex-direction: column;
-	padding: 4px 8px 0 40px;
-	min-width: 320px;
-	background-color: transparent !important;
-}
-
-// Theming styles
-
-.app-polls {
-	body.dashboard--light &,
-	body.dashboard--dark & {
-		.app-navigation {
-			border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
-		}
-		.app-sidebar {
-			border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
-		}
-
-	}
-
-	body.dashboard--light &,
-	body.dashboard--dark &,
-	body.polls--light &,
-	body.polls--dark & {
-		// background: var(--polls-background-image);
-		.app-navigation {
-			border-right: 0px;
-			box-shadow: 2px 0 6px var(--color-box-shadow);
-		}
-
-		.poll-header-buttons {
-			align-self: flex-end;
-			border-radius: var(--border-radius-pill);
-			background-color: var(--color-main-background);
-		}
-
-		[class*='area__'] {
-			padding: 8px;
-			margin: 0 6px 24px 0;
-			border-radius: var(--border-radius-large);
-			box-shadow: 2px 2px 6px var(--color-box-shadow);
-		}
-
-		&.translucent {
-			.app-navigation, .app-sidebar, .poll-header-buttons, [class*='area__'] {
-				backdrop-filter: blur(10px);
-				background-color: var(--color-background-translucent);
-			}
-		}
-	}
-
-	body.theme--light.polls--light & {
-		#app-navigation-vue .app-navigation-toggle svg {
-			filter: invert(1) hue-rotate(180deg) !important;
-			opacity: 1;
-		}
-
-		.poll-title, .poll-list-title {
-			filter: invert(1) hue-rotate(180deg) !important;
-		}
-	}
-
-	body.theme--dark.dashboard--dark &,
-	body.theme--dark.polls--dark & {
-		#app-navigation-vue .app-navigation-toggle svg {
-			filter: invert(1) hue-rotate(180deg) !important;
-			opacity: 1;
-		}
-
-		.poll-title, .poll-list-title {
-			filter: invert(1) hue-rotate(180deg) !important;
-		}
-	}
-}
 </style>

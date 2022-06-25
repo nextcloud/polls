@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\SystemService;
 
 use OCP\IRequest;
@@ -48,22 +48,22 @@ class SystemController extends Controller {
 	 * Get a combined list of NC users, groups and contacts
 	 * @NoAdminRequired
 	 */
-	public function userSearch(string $query = ''): DataResponse {
-		return new DataResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
+	public function userSearch(string $query = ''): JSONResponse {
+		return new JSONResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
 			$query)], Http::STATUS_OK);
 	}
 	/**
 	 * Get a combined list of NC groups
 	 */
-	public function groupAll(): DataResponse {
-		return new DataResponse(['groups' => $this->systemService->getGroups()], Http::STATUS_OK);
+	public function groupAll(): JSONResponse {
+		return new JSONResponse(['groups' => $this->systemService->getGroups()], Http::STATUS_OK);
 	}
 
 	/**
 	 * Get a combined list of NC groups
 	 */
-	public function groupSearch(string $query = ''): DataResponse {
-		return new DataResponse(['groups' => $this->systemService->getGroups(
+	public function groupSearch(string $query = ''): JSONResponse {
+		return new JSONResponse(['groups' => $this->systemService->getGroups(
 			$query)], Http::STATUS_OK);
 	}
 }

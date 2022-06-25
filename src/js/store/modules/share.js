@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import { setCookie } from '../../helpers/cookieHelper.js'
 
 const defaultShares = () => ({
 	displayName: '',
@@ -33,6 +34,7 @@ const defaultShares = () => ({
 	type: '',
 	emailAddress: '',
 	userId: '',
+	publicPollEmail: 'optional',
 })
 
 const state = defaultShares()
@@ -63,7 +65,10 @@ const actions = {
 		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/share`
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				params: { time: +new Date() },
+			})
 			context.commit('set', { share: response.data.share })
 			return response.data
 		} catch (e) {
@@ -81,10 +86,18 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				userName: payload.userName,
 				emailAddress: payload.emailAddress,
 			})
+
+			if (payload.saveCookie && context.state.type === 'public') {
+				const cookieExpiration = (30 * 24 * 60 * 1000)
+				setCookie(context.rootState.route.params.token, response.data.share.token, cookieExpiration)
+			}
+
 			return { token: response.data.share.token }
+
 		} catch (e) {
 			console.error('Error writing personal share', { error: e.response }, { payload })
 			throw e
@@ -100,6 +113,7 @@ const actions = {
 
 		try {
 			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
 				emailAddress: payload.emailAddress,
 			})
 			context.commit('set', { share: response.data.share })
@@ -118,7 +132,9 @@ const actions = {
 		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/email`
 
 		try {
-			const response = await axios.delete(generateUrl(endPoint))
+			const response = await axios.delete(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 			context.commit('set', { share: response.data.share })
 			context.dispatch('subscription/update', false, { root: true })
 			context.dispatch('poll/get', null, { root: true })
@@ -136,7 +152,9 @@ const actions = {
 		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/resend`
 
 		try {
-			return await axios.put(generateUrl(endPoint))
+			return await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
 		} catch (e) {
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e

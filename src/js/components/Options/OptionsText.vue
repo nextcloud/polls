@@ -23,11 +23,16 @@
 <template>
 	<div>
 		<OptionsTextAdd v-if="!closed" />
-		<draggable v-if="countOptions" v-model="reOrderedOptions">
-			<transition-group>
+		<draggable v-if="countOptions"
+			v-model="reOrderedOptions"
+			v-bind="dragOptions"
+			@start="drag = true"
+			@end="drag = false">
+			<transition-group type="transition" :name="!drag ? 'flip-list' : null">
 				<OptionItem v-for="(option) in reOrderedOptions"
 					:key="option.id"
 					:option="option"
+					:poll-type="pollType"
 					:draggable="true">
 					<template #icon>
 						<OptionItemOwner v-if="acl.allowAddOptions"
@@ -35,58 +40,77 @@
 							:option="option"
 							class="owner" />
 					</template>
-					<template #actions>
-						<ActionDelete v-if="acl.allowEdit"
+					<template v-if="acl.allowEdit" #actions>
+						<ActionDelete v-if="!closed"
 							:title="t('polls', 'Delete option')"
 							@delete="removeOption(option)" />
-						<Actions v-if="acl.allowEdit" class="action">
-							<ActionButton v-if="closed"
-								:icon="option.confirmed ? 'icon-polls-yes' : 'icon-checkmark'"
-								@click="confirmOption(option)">
-								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-							</ActionButton>
-						</Actions>
+						<VueButton v-if="closed"
+							v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+							type="tertiary"
+							@click="confirmOption(option)">
+							<template #icon>
+								<UnconfirmIcon v-if="option.confirmed" />
+								<ConfirmIcon v-else />
+							</template>
+						</VueButton>
 					</template>
 				</OptionItem>
 			</transition-group>
 		</draggable>
 
-		<EmptyContent v-else :icon="pollTypeIcon">
-			{{ t('polls', 'No vote options') }}
+		<EmptyContent v-else>
+			<template #icon>
+				<TextPollIcon />
+			</template>
+
 			<template #desc>
 				{{ t('polls', 'Add some!') }}
 			</template>
+
+			{{ t('polls', 'No vote options') }}
 		</EmptyContent>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Actions, ActionButton, EmptyContent } from '@nextcloud/vue'
+import { Button as VueButton, EmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
-import ActionDelete from '../Actions/ActionDelete'
-import OptionItem from './OptionItem'
-import OptionItemOwner from '../Options/OptionItemOwner'
-import { confirmOption, removeOption } from '../../mixins/optionMixins'
+import ActionDelete from '../Actions/ActionDelete.vue'
+import OptionItem from './OptionItem.vue'
+import OptionItemOwner from '../Options/OptionItemOwner.vue'
+import { confirmOption, removeOption } from '../../mixins/optionMixins.js'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
 export default {
 	name: 'OptionsText',
 
 	components: {
-		Actions,
-		ActionButton,
+		ConfirmIcon,
+		UnconfirmIcon,
 		ActionDelete,
 		EmptyContent,
 		draggable,
 		OptionItem,
 		OptionItemOwner,
-		OptionsTextAdd: () => import('./OptionsTextAdd'),
+		VueButton,
+		TextPollIcon,
+		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
 	},
 
 	mixins: [
 		confirmOption,
 		removeOption,
 	],
+
+	data() {
+		return {
+			pollType: 'textPoll',
+			drag: false,
+		}
+	},
 
 	computed: {
 		...mapState({
@@ -98,8 +122,16 @@ export default {
 		...mapGetters({
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
-			pollTypeIcon: 'poll/typeIcon',
 		}),
+
+		dragOptions() {
+			return {
+				animation: 200,
+				group: 'description',
+				disabled: false,
+				ghostClass: 'ghost',
+			}
+		},
 
 		reOrderedOptions: {
 			get() {
@@ -125,6 +157,19 @@ export default {
 		&:empty:before {
 			color: grey;
 		}
+	}
+
+	.flip-list-move {
+		transition: transform 0.5s;
+	}
+
+	.no-move {
+		transition: transform 0s;
+	}
+
+	.ghost {
+		opacity: 0.5;
+		background: var(--color-primary-hover);
 	}
 
 	.submit-option {

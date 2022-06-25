@@ -21,35 +21,40 @@
   -->
 
 <template>
-	<div class="section">
-		<div class="sub-section">
-			<h2>{{ t('polls', 'Polls user settings') }}</h2>
+	<div class="polls_user_settings">
+		<SettingsSection :title="t('polls', 'Calendar check')"
+			:description="t('polls', 'Search for conflicting calendar entries')">
+			<CalendarSettings />
+		</SettingsSection>
+		<SettingsSection :title="t('polls', 'Polls user settings')"
+			:description="t('polls', 'Set your personal preferences for the polls app')">
 			<FeatureSettings />
-		</div>
+		</SettingsSection>
 
-		<div class="section-wrapper">
-			<div class="sub-section">
-				<h2>{{ t('polls', 'Performance settings') }}</h2>
-				<PerformanceSettings />
-			</div>
+		<SettingsSection :title="t('polls', 'Performance settings')"
+			:description="t('polls', 'Try to change these parameters to handle big polls')">
+			<PerformanceSettings />
+		</SettingsSection>
 
-			<div class="sub-section">
-				<h2>{{ t('polls', 'Experimental styles') }}</h2>
-				<StyleSettings />
-			</div>
-		</div>
+		<SettingsSection :title="t('polls', 'Experimental styles')"
+			:description="t('polls', 'Some visual styling options.')">
+			<StyleSettings />
+		</SettingsSection>
 	</div>
 </template>
 
 <script>
 
+import { SettingsSection } from '@nextcloud/vue'
 export default {
 	name: 'UserSettingsPage',
 
 	components: {
-		FeatureSettings: () => import('../components/Settings/FeatureSettings'),
-		StyleSettings: () => import('../components/Settings/StyleSettings'),
-		PerformanceSettings: () => import('../components/Settings/PerformanceSettings'),
+		SettingsSection,
+		CalendarSettings: () => import('../components/Settings/UserSettings/CalendarSettings.vue'),
+		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings.vue'),
+		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings.vue'),
+		PerformanceSettings: () => import('../components/Settings/UserSettings/PerformanceSettings.vue'),
 	},
 
 	created() {
@@ -60,19 +65,31 @@ export default {
 </script>
 
 <style lang="scss">
-	.section {
-		display: flex;
-		flex-wrap: wrap;
-		.section-wrapper {
-			flex: 1 640px;
-		}
-		.sub-section {
-			margin-bottom: 48px;
-			flex: 1 640px;
-		}
+.polls_user_settings {
+	display: flex;
+	flex-wrap: wrap;
+	align-items: stretch;
 
-		h2 {
-			margin-bottom: 0;
-		}
+	.settings-section {
+		flex: 1 0 480px;
+		margin-bottom: 0;
+		border-bottom: 1px solid var(--color-border);
 	}
+}
+
+.user_settings {
+	padding-top: 16px;
+
+	textarea {
+		width: 99%;
+		resize: vertical;
+		height: 230px;
+	}
+}
+
+.settings_details {
+	padding-bottom: 16px;
+	margin-left: 36px;
+}
+
 </style>

@@ -23,14 +23,18 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
-use OCP\App\IAppManager;
-use OCP\Contacts\IManager as IContactsManager;
 use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
+use OCA\Polls\Helper\Container;
+use OCP\Contacts\IManager as IContactsManager;
+use Psr\Log\LoggerInterface;
 
 class Contact extends UserBase {
 	public const TYPE = 'contact';
 	public const ICON = 'icon-mail';
+
+	/** @var LoggerInterface */
+	protected $logger;
 
 	/** @var array */
 	private $contact = [];
@@ -39,8 +43,13 @@ class Contact extends UserBase {
 		string $id
 	) {
 		parent::__construct($id, self::TYPE);
+		$this->icon = self::ICON;
+		$this->description = Container::getL10N()->t('Contact');
+		$this->richObjectType = 'addressbook-contact';
+
+		$this->logger = Container::queryClass(LoggerInterface::class);
+
 		if (self::isEnabled()) {
-			$this->icon = self::ICON;
 			$this->getContact();
 		} else {
 			throw new ContactsNotEnabledExceptions();
@@ -83,7 +92,7 @@ class Contact extends UserBase {
 		// Don't throw an error, log the error and take the first entry
 		if (count($contacts) > 1) {
 			// throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
-			\OC::$server->getLogger()->error('Multiple contacts found for id ' . $this->id);
+			$this->logger->warning('Multiple contacts found for id ' . $this->id);
 		}
 
 		$this->contact = $contacts[0];
@@ -98,20 +107,30 @@ class Contact extends UserBase {
 		$this->emailAddress = $this->contact['EMAIL'][0] ?? $this->emailAddress;
 		$this->organisation = $this->contact['ORG'] ?? '';
 		$this->categories = isset($this->contact['CATEGORIES']) ? explode(',', $this->contact['CATEGORIES']) : [];
-		$description = $this->categories;
-
-		if (isset($this->contact['ORG'])) {
-			array_unshift($description, $this->organisation);
-		}
-		$this->description = count($description) ? implode(", ", $description) : \OC::$server->getL10N('polls')->t('Contact');
 	}
 
+	public function getDescription(): string {
+		$description = $this->getCategories();
+
+		if (isset($this->contact['ORG'])) {
+			array_unshift($description, $this->getOrganisation());
+		}
+
+		if ($this->getEmailAddress()) {
+			array_unshift($description, $this->getEmailAddress());
+		}
+
+		return count($description) ? implode(", ", $description) : Container::getL10N()->t('Contact');
+	}
+
+
+
 	public static function isEnabled(): bool {
-		return self::getContainer()->query(IAppManager::class)->isEnabledForUser('contacts');
+		return Container::isAppEnabled('contacts');
 	}
 
 	/**
-	 * List all contacts with email adresses
+	 * List all contacts with email addresses
 	 * excluding contacts from localSystemBook
 	 *
 	 * @param string[] $queryRange
@@ -120,7 +139,7 @@ class Contact extends UserBase {
 		$contacts = [];
 
 		if (self::isEnabled()) {
-			foreach (self::getContainer()->query(IContactsManager::class)->search($query, $queryRange) as $contact) {
+			foreach (Container::queryClass(IContactsManager::class)->search($query, $queryRange) as $contact) {
 				if (!array_key_exists('isLocalSystemBook', $contact) && array_key_exists('EMAIL', $contact)) {
 					$contacts[] = $contact;
 				}

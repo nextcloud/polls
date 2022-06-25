@@ -23,23 +23,36 @@
 <template>
 	<div class="option-clone-date">
 		<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
-
 		<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: dateBaseOptionString }) }}</p>
-		<div>
-			<h3> {{ t('polls', 'Step unit:') }} </h3>
-			<Multiselect v-model="sequence.unit"
-				:options="dateUnits"
-				label="name"
-				track-by="value" />
-			<h3> {{ t('polls', 'Step width:') }} </h3>
-			<input v-model="sequence.step">
-			<h3>{{ t('polls', 'Number of items to create:') }}</h3>
-			<input v-model="sequence.amount">
+
+		<h3> {{ t('polls', 'Step unit') }} </h3>
+		<Multiselect v-model="sequence.unit"
+			:options="dateUnits"
+			label="name"
+			track-by="value" />
+
+		<div class="sideways">
+			<InputDiv v-model="sequence.step"
+				:label="t('polls', 'Step width')"
+				type="number"
+				inputmode="numeric"
+				use-num-modifiers />
+
+			<InputDiv v-model="sequence.amount"
+				:label="t('polls', 'Amount')"
+				type="number"
+				inputmode="numeric"
+				use-num-modifiers />
 		</div>
 
-		<div class="buttons">
-			<ButtonDiv :title="t('polls', 'Cancel')" @click="$emit('close')" />
-			<ButtonDiv :primary="true" :title="t('polls', 'OK')" @click="createSequence" />
+		<div class="modal__buttons">
+			<VueButton @click="$emit('close')">
+				{{ t('polls', 'Cancel') }}
+			</VueButton>
+
+			<VueButton type="primary" @click="createSequence()">
+				{{ t('polls', 'OK') }}
+			</VueButton>
 		</div>
 	</div>
 </template>
@@ -47,14 +60,17 @@
 <script>
 
 import moment from '@nextcloud/moment'
-import { Multiselect } from '@nextcloud/vue'
-import { dateUnits } from '../../mixins/dateMixins'
+import { Button as VueButton, Multiselect } from '@nextcloud/vue'
+import { dateUnits } from '../../mixins/dateMixins.js'
+import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'OptionCloneDate',
 
 	components: {
+		InputDiv,
 		Multiselect,
+		VueButton,
 	},
 
 	mixins: [dateUnits],
@@ -97,14 +113,11 @@ export default {
 </script>
 
 <style lang="scss">
-.buttons {
+
+.sideways {
 	display: flex;
-	justify-content: flex-end;
-	align-items: center;
-	.button {
-		margin-left: 10px;
-		margin-right: 0;
-	}
+	column-gap: 48px;
+	flex-wrap: wrap;
 }
 
 </style>

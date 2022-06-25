@@ -21,25 +21,32 @@
   -->
 
 <template>
-	<Actions default-icon="icon-settings" primary>
-		<ActionButton v-if="$route.name === 'publicVote'" icon="icon-clippy" @click="copyLink()">
+	<Actions primary>
+		<template #icon>
+			<SettingsIcon :size="20" decorative />
+		</template>
+		<ActionButton v-if="$route.name === 'publicVote'" icon="icon-md-link" @click="copyLink()">
 			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</ActionButton>
 		<ActionSeparator />
 		<ActionInput v-if="$route.name === 'publicVote'"
-			icon="icon-edit"
 			:class="check.status"
 			:value="emailAddressTemp"
 			@click="deleteEmailAddress"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
+			<template #icon>
+				<EditEmailIcon />
+			</template>
 			{{ t('polls', 'Edit Email Address') }}
 		</ActionInput>
 		<ActionButton v-if="$route.name === 'publicVote'"
 			:disabled="!emailAddress"
 			:value="emailAddress"
-			icon="icon-share"
 			@click="resendInvitation()">
+			<template #icon>
+				<SendLinkPerEmailIcon />
+			</template>
 			{{ t('polls', 'Get your personal link per mail') }}
 		</ActionButton>
 		<ActionCheckbox :checked="subscribed"
@@ -50,14 +57,22 @@
 		</ActionCheckbox>
 		<ActionButton v-if="$route.name === 'publicVote' && emailAddress"
 			:disabled="!emailAddress"
-			icon="icon-delete"
 			@click="deleteEmailAddress">
+			<template #icon>
+				<DeleteIcon />
+			</template>
 			{{ t('polls', 'Remove Email Address') }}
 		</ActionButton>
-		<ActionButton v-if="acl.allowEdit" icon="icon-clippy" @click="getAddresses()">
+		<ActionButton v-if="acl.allowEdit" @click="getAddresses()">
+			<template #icon>
+				<ClippyIcon />
+			</template>
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</ActionButton>
-		<ActionButton icon="icon-history" @click="resetVotes()">
+		<ActionButton @click="resetVotes()">
+			<template #icon>
+				<ResetVotesIcon />
+			</template>
 			{{ t('polls', 'Reset your votes') }}
 		</ActionButton>
 	</Actions>
@@ -70,6 +85,12 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { Actions, ActionButton, ActionCheckbox, ActionInput, ActionSeparator } from '@nextcloud/vue'
 import { mapState } from 'vuex'
+import SettingsIcon from 'vue-material-design-icons/Cog.vue'
+import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
+import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
+import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 
 export default {
 	name: 'UserMenu',
@@ -80,6 +101,12 @@ export default {
 		ActionCheckbox,
 		ActionInput,
 		ActionSeparator,
+		SettingsIcon,
+		EditEmailIcon,
+		SendLinkPerEmailIcon,
+		DeleteIcon,
+		ClippyIcon,
+		ResetVotesIcon,
 	},
 
 	data() {
@@ -158,10 +185,14 @@ export default {
 		},
 
 		validateEmailAddress: debounce(async function(value) {
+			const endPoint = `apps/polls/check/emailaddress/${this.emailAddressTemp}`
+
 			this.emailAddressTemp = value
 			try {
 				this.checking = true
-				await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddressTemp}`)
+				await axios.get(generateUrl(endPoint), {
+					headers: { Accept: 'application/json' },
+				})
 				this.checkResult = t('polls', 'valid email address.')
 				this.checkStatus = 'success'
 			} catch {
@@ -198,10 +229,11 @@ export default {
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
 		},
+
 		async getAddresses() {
 			try {
 				const response = await this.$store.dispatch('poll/getParticipantsEmailAddresses')
-				await this.$copyText(response.data)
+				await this.$copyText(response.data.map((item) => item.combined))
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))

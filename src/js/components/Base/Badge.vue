@@ -21,8 +21,13 @@
   -->
 
 <template lang="html">
-	<Component :is="tag" :class="badgeClass">
-		{{ title }}
+	<Component :is="tag" class="badge">
+		<div>
+			<slot name="icon" />
+		</div>
+		<span>
+			<slot />
+		</span>
 	</Component>
 </template>
 
@@ -30,34 +35,19 @@
 export default {
 	name: 'Badge',
 	props: {
-		title: {
-			type: String,
-			default: '',
-		},
-		icon: {
-			type: String,
-			default: '',
-		},
 		tag: {
 			type: String,
 			default: 'span',
-		},
-	},
-
-	computed: {
-		badgeClass() {
-			return ['badge', this.icon, { withIcon: Boolean(this.icon) }]
 		},
 	},
 }
 </script>
 
 <style lang="scss">
-	h2 .badge {
-		font-size: 0.6em;
-	}
-
 	.badge {
+		display: flex;
+		align-items: center;
+		gap: 5px;
 		border-radius: var(--border-radius);
 		padding: 5px;
 		margin: 8px 4px;
@@ -67,22 +57,20 @@ export default {
 		text-overflow: ellipsis;
 		font-size: 0.9em;
 
-		&.withIcon {
-			padding-left: 25px !important;
-			text-align: left;
-			background-position: 4px center;
+		h2 & {
+			font-size: 0.6em;
 		}
 
 		&.error {
 			border-color: var(--color-error);
 			background-color: var(--color-error);
-			color: var(--color-primary-text);
+			color: var(--color-primary-text) !important;
 		}
 
 		&.success {
 			border-color: var(--color-success);
 			background-color: var(--color-success);
-			color: var(--color-primary-text);
+			color: var(--color-primary-text) !important;
 		}
 	}
 

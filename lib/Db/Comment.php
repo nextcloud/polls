@@ -27,8 +27,11 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCA\Polls\Helper\Container;
 use OCP\IUser;
+use OCP\IUserManager;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * @method int getId()
@@ -45,6 +48,9 @@ use OCP\AppFramework\Db\Entity;
 class Comment extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_comments';
 
+	/** @var array $subComments */
+	protected $subComments = [];
+
 	/** @var int $pollId */
 	protected $pollId = 0;
 
@@ -57,33 +63,67 @@ class Comment extends Entity implements JsonSerializable {
 	/** @var string $comment */
 	protected $comment = '';
 
+	/** @var IUserManager */
+	private $userManager;
+
+	/** @var ShareMapper */
+	private $shareMapper;
+
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('timestamp', 'int');
+		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
-			'userId' => $this->getUserId(),
 			'timestamp' => $this->getTimestamp(),
 			'comment' => $this->getComment(),
-			'isNoUser' => $this->getIsNoUser(),
-			'displayName' => $this->getDisplayName(),
+			'user' => $this->getUser(),
+			'subComments' => $this->getSubComments(),
 		];
+	}
+
+	public function addSubComment(Comment $comment): void {
+		$this->subComments[] = [
+			'id' => $comment->getId(),
+			'comment' => $comment->getComment(),
+			'timestamp' => $this->getTimestamp(),
+		];
+	}
+
+	public function getSubComments(): array {
+		return $this->subComments;
 	}
 
 	public function getDisplayName(): string {
 		if (!strncmp($this->userId, 'deleted_', 8)) {
 			return 'Deleted User';
 		}
-		return $this->getIsNoUser()
-			? $this->userId
-			: \OC::$server->getUserManager()->get($this->userId)->getDisplayName();
+
+		if ($this->getIsNoUser()) {
+			// get displayName from share
+			try {
+				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->userId);
+				return $share->getDisplayName();
+			} catch (DoesNotExistException $e) {
+				return $this->userId;
+			}
+		}
+		return $this->userManager->get($this->userId)->getDisplayName();
 	}
 
+	public function getUser(): array {
+		return [
+			'userId' => $this->getUserId(),
+			'displayName' => $this->getDisplayName(),
+			'isNoUser' => $this->getIsNoUser(),
+		];
+	}
 	public function getIsNoUser(): bool {
-		return !(\OC::$server->getUserManager()->get($this->userId) instanceof IUser);
+		return !($this->userManager->get($this->userId) instanceof IUser);
 	}
 }

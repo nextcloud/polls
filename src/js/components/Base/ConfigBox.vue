@@ -22,9 +22,13 @@
 
 <template lang="html">
 	<div class="config-box">
-		<div v-tooltip.auto="info" class="config-box__title" :class="iconClass">
-			{{ title }}
-			<div v-if="info" class="icon-info" />
+		<div class="config-box__header">
+			<slot name="icon" />
+			<div v-tooltip.auto="info" :class="['config-box__title', iconClassComputed, {indented: indented}]">
+				{{ title }}
+				<div v-if="info" class="icon-info" />
+			</div>
+			<slot name="actions" />
 		</div>
 		<div class="config-box__container">
 			<slot />
@@ -42,51 +46,82 @@ export default {
 		},
 		iconClass: {
 			type: String,
-			default: '',
+			default: null,
 		},
 		info: {
 			type: String,
 			default: '',
 		},
+		indented: {
+			type: Boolean,
+			default: false,
+		},
+	},
+
+	computed: {
+		hasIconSlot() {
+			return !!this.$slots.icon
+		},
+
+		iconClassComputed() {
+			// presence of an icon slot overrides the icon class
+			return this.hasIconSlot ? null : this.iconClass
+		},
 	},
 }
+
 </script>
 
 <style lang="scss">
-.config-box {
-	padding: 8px 0;
-}
-
-.config-box__title {
+.config-box__header {
 	display: flex;
-	background-position: 0 4px;
-	opacity: 0.7;
-	font-weight: bold;
-	margin: 8px 0 4px 0;
-	padding-left: 24px;
-
-	.icon-info {
-		opacity: 0.7;
-		width: 32px;
-	}
+	align-content: center;
+	align-items: center;
+	gap: 5px;
+	margin: 8px 0 8px 0;
 }
 
-.config-box__container{
+.config-box {
 	display: flex;
 	flex-direction: column;
-	padding-left: 24px;
-
-	label {
-		margin: 4px 0;
+	padding: 8px 0;
+	.icon-container {
+		width: 20px;
 	}
 
-	input, textarea {
-		width: auto;
+	.config-box__title {
+		display: flex;
+		flex: 1;
+		opacity: 0.7;
+		font-weight: bold;
+		margin: 0;
+
+		&[class*='icon-'] {
+			padding-left: 24px;
+		}
+
+		.icon-info {
+			opacity: 0.7;
+			width: 32px;
+		}
+	}
+
+	.config-box__container{
+		display: flex;
+		flex-direction: column;
+		padding-left: 24px;
+
+		label {
+			margin: 4px 0;
+		}
+
+		input, textarea {
+			width: 100%;
+		}
 	}
 }
 
 .indented {
 	margin-left: 24px !important;
 }
-
 </style>

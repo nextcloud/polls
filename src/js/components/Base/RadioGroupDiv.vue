@@ -24,8 +24,9 @@
 	<div class="radio-group-div">
 		<CheckboxRadioSwitch v-for="(option, index) in options"
 			:key="option.value"
+			:checked.sync="selectedValue"
+			:value="option.value"
 			:name="id + '_' + index"
-			:checked="option.value === value"
 			type="radio"
 			@update:checked="$emit('input', option.value)">
 			{{ option.label }}
@@ -36,7 +37,7 @@
 <script>
 import { CheckboxRadioSwitch } from '@nextcloud/vue'
 
-const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').substr(2, 10)
+const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
 
 export default {
 	name: 'RadioGroupDiv',
@@ -57,6 +58,17 @@ export default {
 		value: {
 			type: String,
 			default: null,
+		},
+	},
+
+	computed: {
+		selectedValue: {
+			get() {
+				return this.value
+			},
+			set(value) {
+				this.$emit('input', value)
+			},
 		},
 	},
 }

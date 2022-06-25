@@ -23,29 +23,20 @@
 
 namespace OCA\Polls\Listener;
 
-use OCP\BackgroundJob\IJobList;
-use OCP\EventDispatcher\Event;
-use OCP\EventDispatcher\IEventListener;
 use OCP\User\Events\UserDeletedEvent;
 use OCA\Polls\Cron\UserDeletedJob;
+use OCA\Polls\Exceptions\InvalidClassException;
+use OCA\Polls\Exceptions\OCPEventException;
 
-class UserDeletedListener implements IEventListener {
-
-	/** @var IJobList */
-	private $jobList;
-
-	public function __construct(
-		IJobList $jobList
-	) {
-		$this->jobList = $jobList;
+class UserDeletedListener extends BaseListener {
+	protected function checkClass() : void {
+		if (!($this->event instanceof UserDeletedEvent)) {
+			throw new InvalidClassException;
+		}
+		throw new OCPEventException;
 	}
 
-	public function handle(Event $event): void {
-		if (!($event instanceof UserDeletedEvent)) {
-			return;
-		}
-
-		// Set a Cron-Job to delete the Users Polls.
-		$this->jobList->add(UserDeletedJob::class, ['owner' => $event->getUser()->getUID()]);
+	protected function addCronJob() : void {
+		$this->jobList->add(UserDeletedJob::class, ['owner' => $this->event->getUser()->getUID()]);
 	}
 }

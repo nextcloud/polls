@@ -22,46 +22,83 @@
 
 <template>
 	<div class="side-bar-tab-options">
-		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
-		<ConfigBox :title="t('polls', 'Allow proposals from users')" icon-class="icon-category-customization">
+		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" />
+		<ConfigBox :title="t('polls', 'Allow proposals from users')">
+			<template #icon>
+				<AddDateIcon />
+			</template>
 			<ConfigProposals />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !closed" :title="t('polls', 'Shift all date options')" icon-class="icon-polls-move">
+		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !closed" :title="t('polls', 'Shift all date options')">
+			<template #icon>
+				<ShiftDateIcon />
+			</template>
 			<OptionsDateShift />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Available Options')" :icon-class="pollTypeIcon">
-			<OptionsDate v-if="pollType === 'datePoll'" />
-			<OptionsText v-else-if="pollType === 'textPoll'" />
+		<ConfigBox v-if="pollType === 'datePoll'" :title="t('polls', 'Available Options')">
+			<template #icon>
+				<DateOptionsIcon />
+			</template>
+
+			<OptionsDate />
+
+			<template #actions>
+				<OptionsDateAdd v-if="!closed"
+					:caption="t('polls', 'Add a date')"
+					show-caption
+					primary />
+			</template>
+		</ConfigBox>
+
+		<ConfigBox v-if="pollType === 'textPoll'" :title="t('polls', 'Available Options')">
+			<template #icon>
+				<TextOptionsIcon />
+			</template>
+
+			<OptionsText />
+
+			<template #actions>
+				<OptionsTextAddBulk v-if="!closed" />
+			</template>
 		</ConfigBox>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import ConfigBox from '../Base/ConfigBox'
-import OptionsDate from '../Options/OptionsDate'
-import OptionsDateShift from '../Options/OptionsDateShift'
-import OptionsText from '../Options/OptionsText'
-import ConfigProposals from '../Configuration/ConfigProposals'
+import ConfigBox from '../Base/ConfigBox.vue'
+import OptionsDate from '../Options/OptionsDate.vue'
+import OptionsDateShift from '../Options/OptionsDateShift.vue'
+import OptionsText from '../Options/OptionsText.vue'
+import ConfigProposals from '../Configuration/ConfigProposals.vue'
+import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
+import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
+import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
+import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
 export default {
 	name: 'SideBarTabOptions',
 
 	components: {
+		AddDateIcon,
+		DateOptionsIcon,
+		ShiftDateIcon,
+		TextOptionsIcon,
 		ConfigBox,
 		ConfigProposals,
 		OptionsDate,
 		OptionsDateShift,
 		OptionsText,
+		OptionsDateAdd: () => import('../Options/OptionsDateAdd.vue'),
+		OptionsTextAddBulk: () => import('../Options/OptionsTextAddBulk.vue'),
 	},
 
 	computed: {
 		...mapGetters({
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
-			pollTypeIcon: 'poll/typeIcon',
 		}),
 		...mapState({
 			pollType: (state) => state.poll.type,

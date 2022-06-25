@@ -21,8 +21,8 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, {confirmed: isConfirmed }, { active: isVotable }, {currentuser: isCurrentUser}]">
-		<div v-if="isActive && !isVoteLimitExceded" class="icon" @click="setVote()" />
+	<div class="vote-item" :class="[answer, { confirmed: confirmed }, { active: isVotable }, {currentuser: isCurrentUser}]">
+		<div v-if="isActive" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 		<slot name="indicator" />
 	</div>
@@ -44,18 +44,23 @@ export default {
 			type: String,
 			default: '',
 		},
+		locked: {
+			type: Boolean,
+			default: false,
+		},
+		confirmed: {
+			type: Boolean,
+			default: false,
+		},
 	},
 
 	computed: {
 		...mapState({
-			voteLimit: (state) => state.poll.voteLimit,
-			optionLimit: (state) => state.poll.optionLimit,
 			currentUser: (state) => state.poll.acl.userId,
 			allowVote: (state) => state.poll.acl.allowVote,
 		}),
 
 		...mapGetters({
-			countVotes: 'votes/countVotes',
 			closed: 'poll/isClosed',
 			answerSequence: 'poll/answerSequence',
 		}),
@@ -64,8 +69,7 @@ export default {
 			return this.isActive
 				&& this.isValidUser
 				&& !this.closed
-				&& !this.isVoteLimitExceded
-				&& !(this.option.isBookedUp && !['yes', 'maybe'].includes(this.answer))
+				&& !this.locked
 		},
 
 		isActive() {
@@ -80,15 +84,7 @@ export default {
 			return this.$store.getters['votes/getVote']({
 				option: this.option,
 				userId: this.userId,
-			}).voteAnswer
-		},
-
-		isVoteLimitExceded() {
-			return (this.countVotes('yes') >= this.voteLimit && this.voteLimit && this.answer !== 'yes')
-		},
-
-		isConfirmed() {
-			return this.option.confirmed && this.closed
+			}).answer
 		},
 
 		nextAnswer() {
@@ -129,7 +125,7 @@ export default {
 .vote-item {
 	display: flex;
 	background-color: var(--color-polls-background-no);
-	transition: background-color 1s ease-out;
+	transition: all 0.4s ease-in-out;
 	> .icon {
 		color: var(--color-polls-foreground-no);
 		background-position: center;
@@ -138,6 +134,7 @@ export default {
 		width: 30px;
 		height: 30px;
 		flex: 0 0 auto;
+		transition: all 0.4s ease-in-out;
 	}
 
 	&.yes {
@@ -145,14 +142,6 @@ export default {
 		> .icon {
 			color: var(--color-polls-foreground-yes);
 			background-image: var(--icon-polls-yes)
-		}
-	}
-
-	&.no {
-		background-color: var(--color-polls-background-no);
-		&.active > .icon {
-			color: var(--color-polls-foreground-no);
-			background-image: var(--icon-polls-no)
 		}
 	}
 
@@ -164,7 +153,7 @@ export default {
 		}
 	}
 
-	&.active {
+	&.active, &.active.no {
 		background-color: transparent;
 		> .icon {
 			cursor: pointer;
@@ -172,6 +161,21 @@ export default {
 			border-radius: var(--border-radius);
 		}
 	}
+
+	&.no {
+		background-color: var(--color-polls-background-no);
+		&.active > .icon {
+			color: var(--color-polls-foreground-no);
+			background-image: var(--icon-polls-no)
+		}
+	}
+
+	&.active > .icon:hover {
+		background-size: 100%;
+		width: 35px;
+		height: 35px;
+	}
+
 }
 
 .vote-item.confirmed {

@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Service\SubscriptionService;
 
@@ -49,29 +49,23 @@ class SubscriptionController extends Controller {
 	 * Get subscription status
 	 * @NoAdminRequired
 	 */
-	public function get(int $pollId = 0): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['subscribed' => $this->subscriptionService->get($pollId)];
-		});
+	public function get(int $pollId): JSONResponse {
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->get($pollId)]);
 	}
 
 	/**
 	 * subscribe
 	 * @NoAdminRequired
 	 */
-	public function subscribe(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['subscribed' => $this->subscriptionService->set(true, $pollId, '')];
-		});
+	public function subscribe(int $pollId): JSONResponse {
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, $pollId, '')]);
 	}
 
 	/**
 	 * Unsubscribe
 	 * @NoAdminRequired
 	 */
-	public function unsubscribe(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['subscribed' => $this->subscriptionService->set(false, $pollId, '')];
-		});
+	public function unsubscribe(int $pollId): JSONResponse {
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(false, $pollId, '')]);
 	}
 }

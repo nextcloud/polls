@@ -24,25 +24,32 @@
 
 namespace OCA\Polls\Model\Mail;
 
-use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\ShareMapper;
-use OCP\AppFramework\IAppContainer;
+use OCA\Polls\Helper\Container;
 use OCP\IL10N;
 use OCP\IUser;
+use OCP\IUserManager;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
 use OCP\Mail\IMailer;
+use League\CommonMark\MarkdownConverter;
+use League\CommonMark\Environment\Environment;
+use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
+use League\CommonMark\Extension\Table\TableExtension;
+use Psr\Log\LoggerInterface;
 
-class MailBase {
+abstract class MailBase {
 	private const TEMPLATE_CLASS = 'polls.Mail';
 
 	/** @var UserBase */
 	protected $recipient;
+
+	/** @var LoggerInterface */
+	protected $logger;
 
 	/** @var Poll */
 	protected $poll;
@@ -57,43 +64,72 @@ class MailBase {
 	protected $mailer;
 
 	/** @var IL10N */
-	protected $trans;
+	protected $l10n;
 
 	/** @var IFactory */
 	protected $transFactory;
 
-	/** @var IEMailTemplate */
+	/** @var IUserManager */
+	private $userManager;
+
+	/** @var IEmailTemplate */
 	protected $emailTemplate;
+
+	/** @var AppSettings */
+	protected $appSettings;
 
 	/** @var User */
 	protected $owner;
 
 	public function __construct(
-		string $userId,
+		string $recipientId,
 		int $pollId,
 		string $url = null
 	) {
-		$this->poll = $this->getPoll($pollId);
-		$this->recipient = $this->getUser($userId);
+		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->logger = Container::queryClass(LoggerInterface::class);
+		$this->mailer = Container::queryClass(IMailer::class);
+		$this->transFactory = Container::queryClass(IFactory::class);
+		$this->appSettings = Container::queryClass(AppSettings::class);
 
+		$this->poll = $this->getPoll($pollId);
+		$this->recipient = $this->getUser($recipientId);
 		$this->url = $url ?? $this->poll->getVoteUrl();
 
+		$this->initializeClass();
+	}
+
+	public function send(): void {
+		$this->validateEmailAddress();
+
+		try {
+			$message = $this->mailer->createMessage();
+			$message->setTo([$this->recipient->getEmailAddress() => $this->recipient->getDisplayName()]);
+			$message->useTemplate($this->getEmailTemplate());
+			$this->mailer->send($message);
+		} catch (\Exception $e) {
+			$this->logger->error('Error sending Mail to ' . json_encode($this->recipient));
+			$this->logger->alert($e->getMessage());
+			throw $e;
+		}
+	}
+
+	protected function initializeClass(): void {
 		$this->owner = $this->poll->getOwnerUserObject();
 
 		if ($this->recipient->getIsNoUser()) {
 			$this->url = $this->getShareURL();
 		}
 
-		$this->mailer = self::getContainer()->query(IMailer::class);
-		$this->transFactory = self::getContainer()->query(IFactory::class);
-		$this->trans = $this->transFactory->get(
+		$this->l10n = $this->transFactory->get(
 			'polls',
 			$this->recipient->getLanguage()
 				? $this->recipient->getLanguage()
 				: $this->owner->getLanguage()
 		);
+	}
 
-		$this->footer = $this->trans->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
+	private function getEmailTemplate() : IEMailTemplate {
 		$this->emailTemplate = $this->mailer->createEMailTemplate(
 			self::TEMPLATE_CLASS, [
 				'owner' => $this->owner->getDisplayName(),
@@ -101,57 +137,108 @@ class MailBase {
 				'link' => $this->url
 			]
 		);
-	}
 
-	public function getEmailTemplate() : IEMailTemplate {
+		$this->emailTemplate->setSubject($this->getSubject());
+
+		// add heading
+		$this->emailTemplate->addHeader();
+		$this->emailTemplate->addHeading($this->getHeading(), false);
+
+		$this->buildBody();
+
+		// add footer
+		$footerText = $this->getFooter();
+		if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL)) {
+			$footerText = $footerText . '<br>' . $this->getLegalLinks();
+		}
+
+		if ($this->appSettings->getStringSetting(AppSettings::SETTING_DISCLAIMER)) {
+			$footerText = $footerText . '<br>' . $this->getParsedMarkDown($this->appSettings->getStringSetting(AppSettings::SETTING_DISCLAIMER));
+		}
+
+		$this->emailTemplate->addFooter($footerText);
 		return $this->emailTemplate;
 	}
 
-	public function send(): void {
-		if (!$this->recipient->getEmailAddress()
-			|| !filter_var($this->recipient->getEmailAddress(), FILTER_VALIDATE_EMAIL)) {
-			throw new InvalidEmailAddress('Invalid email address (' . $this->recipient->getEmailAddress() . ')');
-		}
 
-		try {
-			$message = $this->mailer->createMessage();
-			$message->setTo([$this->recipient->getEmailAddress() => $this->recipient->getDisplayName()]);
-			$message->useTemplate($this->emailTemplate);
-			$this->mailer->send($message);
-		} catch (\Exception $e) {
-			\OC::$server->getLogger()->error('Error sending Mail to ' . json_encode($this->recipient));
-			\OC::$server->getLogger()->alert($e->getMessage());
-			throw $e;
+
+	protected function getSubject(): string {
+		return $this->l10n->t('Notification for poll "%s"', $this->poll->getTitle());
+	}
+
+	protected function getHeading(): string {
+		return $this->getSubject();
+	}
+
+	protected function getButtonText(): string {
+		return $this->l10n->t('Go to poll');
+	}
+
+	protected function getFooter(): string {
+		return $this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
+	}
+
+	protected function buildBody(): void {
+		$this->emailTemplate->addBodyText('Sorry. This eMail has no text and this should not happen.');
+	}
+
+	protected function getLegalLinks(): string {
+		$legal = '';
+
+		if ($this->appSettings->getUseImprintUrl()) {
+			$legal = '<a href="' . $this->appSettings->getUseImprintUrl() . '">' .  $this->l10n->t('Legal Notice') . '</a>';
 		}
+		if ($this->appSettings->getUsePrivacyUrl()) {
+			if ($this->appSettings->getUseImprintUrl()) {
+				$legal = $legal . ' | ';
+			}
+
+			$legal = $legal . '<a href="' . $this->appSettings->getUsePrivacyUrl() . '">' .  $this->l10n->t('Privacy Policy') . '</a>';
+		}
+		return $legal;
 	}
 
 	protected function getUser(string $userId) : UserBase {
-		if (\OC::$server->getUserManager()->get($userId) instanceof IUser) {
+		if ($this->userManager->get($userId) instanceof IUser) {
 			// return User object
 			return new User($userId);
 		}
 		// return UserBaseChild from share
-		return $this->getContainer()
-			->query(ShareMapper::class)
-			->findByPollAndUser($this->poll->getId(), $userId)
-			->getUserObject();
+		return Container::findShare($this->poll->getId(), $userId)->getUserObject();
+	}
+
+	protected function getRichDescription() : string {
+		return $this->getParsedMarkDown($this->poll->getDescription());
+	}
+
+	protected function getParsedMarkDown(string $source) : string {
+		$config = [
+			'renderer' => [
+				'soft_break' => "<br />",
+			],
+			'html_input' => 'strip',
+			'allow_unsafe_links' => false,
+		];
+
+		$environment = new Environment($config);
+		$environment->addExtension(new CommonMarkCoreExtension());
+		$environment->addExtension(new TableExtension());
+		$converter = new MarkdownConverter($environment);
+		return $converter->convertToHtml($source)->getContent();
 	}
 
 	private function getShareURL() : string {
-		return $this->getContainer()
-			->query(ShareMapper::class)
-			->findByPollAndUser($this->poll->getId(), $this->recipient->getId())
-			->getURL();
+		return Container::findShare($this->poll->getId(), $this->recipient->getId())->getURL();
 	}
 
-	protected function getPoll(int $pollId) : Poll {
-		return $this->getContainer()
-			->query(PollMapper::class)
-			->find($pollId);
+	private function getPoll(int $pollId) : Poll {
+		return Container::queryPoll($pollId);
 	}
 
-	protected static function getContainer() : IAppContainer {
-		$app = \OC::$server->query(Application::class);
-		return $app->getContainer();
+	private function validateEmailAddress(): void {
+		if (!$this->recipient->getEmailAddress()
+			|| !filter_var($this->recipient->getEmailAddress(), FILTER_VALIDATE_EMAIL)) {
+			throw new InvalidEmailAddress('Invalid email address (' . $this->recipient->getEmailAddress() . ')');
+		}
 	}
 }

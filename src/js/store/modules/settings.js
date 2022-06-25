@@ -35,9 +35,12 @@ const defaultSettings = () => ({
 		translucentPanels: false,
 		calendarPeek: false,
 		checkCalendars: [],
+		checkCalendarsBefore: 0,
+		checkCalendarsAfter: 0,
 		defaultViewTextPoll: 'list-view',
 		defaultViewDatePoll: 'table-view',
 		performanceThreshold: 1000,
+		pollCombo: [],
 	},
 	session: {
 		manualViewDatePoll: '',
@@ -98,6 +101,10 @@ const mutations = {
 		state.user.checkCalendars.push(payload.calendar.key)
 	},
 
+	setPollCombo(state, payload) {
+		state.user.pollCombo = payload.pollCombo
+	},
+
 	setViewDatePoll(state, payload) {
 		state.session.manualViewDatePoll = payload
 	},
@@ -117,6 +124,21 @@ const getters = {
 		return ''
 	},
 
+	backgroundClass(state) {
+		if (state.user.useDashboardStyling) {
+			return ''
+		}
+
+		if (state.user.useIndividualStyling && state.user.individualImage) {
+			return 'polls--bg-image'
+		}
+
+		if (state.user.useIndividualStyling && state.user.individualBgColor) {
+			return 'polls--bg-color'
+		}
+
+		return ''
+	},
 	useDashboardStyling(state) {
 		return state.dashboard.isInstalled && state.user.useDashboardStyling
 	},
@@ -206,10 +228,21 @@ const actions = {
 		}
 	},
 
+	async setPollCombo(context, payload) {
+		await context.commit('setPollCombo', {
+			headers: { Accept: 'application/json' },
+			pollCombo: payload.pollCombo,
+		})
+		context.dispatch('write')
+	},
+
 	async write(context) {
 		const endPoint = 'apps/polls/preferences'
 		try {
-			const response = await axios.post(generateUrl(endPoint), { settings: context.state.user })
+			const response = await axios.post(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+				settings: context.state.user,
+			})
 			context.commit('setPreference', response.data.preferences)
 		} catch (e) {
 			console.error('Error writing preferences', { error: e.response }, { preferences: state.user })
@@ -219,7 +252,9 @@ const actions = {
 
 	async getCalendars(context) {
 		const endPoint = 'apps/polls/calendars'
-		const response = await axios.get(generateUrl(endPoint))
+		const response = await axios.get(generateUrl(endPoint), {
+			headers: { Accept: 'application/json' },
+		})
 		context.commit('setCalendars', { calendars: response.data.calendars })
 		return response
 	},

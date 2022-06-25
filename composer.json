@@ -24,7 +24,7 @@
 		}
 	},
 	"require-dev": {
-		"christophwurst/nextcloud": "^22.1",
+		"christophwurst/nextcloud": "^24.0",
 		"phpunit/phpunit": "^9.5",
 		"friendsofphp/php-cs-fixer": "^3.2",
 		"league/factory-muffin": "^3.0",
@@ -36,13 +36,14 @@
 	"scripts": {
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
-		"psalm": "php vendor/vimeo/psalm/psalm",
-		"psalm:fix": "php vendor/vimeo/psalm/psalm --alter --issues=InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
-		"psalm:info": "php vendor/vimeo/psalm/psalm --show-info=true",
+		"psalm": "php vendor/vimeo/psalm/psalm --no-diff",
+		"psalm:fix": "php vendor/vimeo/psalm/psalm --alter --issues=MissingReturnType,InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
+		"psalm:info": "php vendor/vimeo/psalm/psalm --no-diff --show-info=true",
 		"psalm:baseline": "php vendor/vimeo/psalm/psalm --set-baseline=psalm-baseline.xml",
 		"psalm:baseline:update": "php vendor/vimeo/psalm/psalm --update-baseline"
 	},
 	"require": {
-		"league/commonmark": "^1.6"
+		"league/commonmark": "^2.1",
+		"rlanvin/php-rrule": "^2.3"
 	}
 }

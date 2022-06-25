@@ -30,7 +30,7 @@ use OCP\IRequest;
 
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Service\SubscriptionService;
 
@@ -59,14 +59,14 @@ class SubscriptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function get(int $pollId): DataResponse {
+	public function get(int $pollId): JSONResponse {
 		try {
 			$this->subscriptionService->get($pollId, '');
-			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
+			return new JSONResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new DataResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
+			return new JSONResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -76,12 +76,12 @@ class SubscriptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function subscribe(int $pollId): DataResponse {
+	public function subscribe(int $pollId): JSONResponse {
 		try {
 			$this->subscriptionService->set(true, $pollId, '');
-			return new DataResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
+			return new JSONResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
@@ -91,12 +91,12 @@ class SubscriptionApiController extends ApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function unsubscribe(int $pollId): DataResponse {
+	public function unsubscribe(int $pollId): JSONResponse {
 		try {
 			$this->subscriptionService->set(false, $pollId, '');
-			return new DataResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
+			return new JSONResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
 		} catch (Exception $e) {
-			return new DataResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 }

@@ -21,10 +21,8 @@
   -->
 
 <template lang="html">
-	<div :class="['vote-column', { 'confirmed' : option.confirmed && closed }]">
-		<VoteTableHeaderItem :option="option" :view-mode="viewMode" />
-
-		<!-- <Confirmation v-if="option.confirmed && closed" :option="option" /> -->
+	<div :class="componentClass">
+		<OptionItem :option="option" :poll-type="poll.type" :display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
 
 		<Counter v-if="acl.allowSeeResults"
 			:show-maybe="!!poll.allowMaybe"
@@ -35,54 +33,68 @@
 		<VoteItem v-for="(participant) in participants"
 			:key="participant.userId"
 			:user-id="participant.userId"
-			:option="option" />
+			:option="option"
+			:locked="isLocked"
+			:confirmed="isConfirmed" />
 
 		<OptionItemOwner v-if="proposalsExist"
 			:option="option"
 			:avatar-size="24"
 			class="owner" />
 
-		<Actions v-if="acl.allowEdit && closed" class="action confirm">
-			<ActionButton v-if="closed"
-				:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
+		<Spacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
+
+		<div v-if="acl.allowEdit && closed" class="action confirm">
+			<VueButton v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+				type="tertiary"
 				@click="confirmOption(option)">
-				{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-			</ActionButton>
-		</Actions>
+				<template #icon>
+					<UnconfirmIcon v-if="option.confirmed" :size="20" />
+					<ConfirmIcon v-else :size="20" />
+				</template>
+			</VueButton>
+		</div>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
-import Counter from '../Options/Counter'
-import VoteItem from './VoteItem'
-import VoteTableHeaderItem from './VoteTableHeaderItem'
-import { confirmOption } from '../../mixins/optionMixins'
+import { Button as VueButton } from '@nextcloud/vue'
+import Counter from '../Options/Counter.vue'
+import OptionItem from '../Options/OptionItem.vue'
+import Spacer from '../Base/Spacer.vue'
+import VoteItem from './VoteItem.vue'
+import { confirmOption } from '../../mixins/optionMixins.js'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 
 export default {
 	name: 'VoteColumn',
 	components: {
-		Actions,
-		ActionButton,
-		CalendarPeek: () => import('../Calendar/CalendarPeek'),
+		ConfirmIcon,
+		UnconfirmIcon,
 		Counter,
-		// Confirmation: () => import('../Options/Confirmation'),
-		VoteTableHeaderItem,
+		OptionItem,
+		Spacer,
 		VoteItem,
-		OptionItemOwner: () => import('../Options/OptionItemOwner'),
+		VueButton,
+		CalendarPeek: () => import('../Calendar/CalendarPeek.vue'),
+		OptionItemOwner: () => import('../Options/OptionItemOwner.vue'),
 	},
 
 	mixins: [confirmOption],
 
 	props: {
-		viewMode: {
-			type: String,
-			default: 'table-view',
-		},
 		option: {
 			type: Object,
 			default: undefined,
+		},
+		viewMode: {
+			type: String,
+			default: 'table-view',
+			validator(value) {
+				return ['table-view', 'list-view'].includes(value)
+			},
 		},
 	},
 
@@ -91,13 +103,50 @@ export default {
 			acl: (state) => state.poll.acl,
 			poll: (state) => state.poll,
 			settings: (state) => state.settings.user,
+			currentUser: (state) => state.poll.acl.userId,
+			isVoteLimitExceeded: (state) => state.poll.acl.isVoteLimitExceeded,
+			voteLimit: (state) => state.poll.voteLimit,
 		}),
 
 		...mapGetters({
 			closed: 'poll/isClosed',
+			getVote: 'votes/getVote',
 			participants: 'poll/safeParticipants',
 			proposalsExist: 'options/proposalsExist',
 		}),
+
+		componentClass() {
+			const classList = ['vote-column']
+			if (this.isLocked) {
+				classList.push('locked')
+			}
+
+			if (this.option.confirmed && this.closed) {
+				classList.push('confirmed')
+			}
+
+			classList.push(this.ownAnswer)
+
+			return classList
+		},
+
+		isConfirmed() {
+			return !!(this.option.confirmed && this.closed)
+		},
+
+		ownAnswer() {
+			return this.getVote({
+				userId: this.currentUser,
+				option: this.option,
+			}).answer
+		},
+
+		isLocked() {
+			return (this.option.computed.isBookedUp || this.isVoteLimitExceeded)
+				&& !this.closed
+				&& this.ownAnswer !== 'yes'
+				&& this.ownAnswer !== 'maybe'
+		},
 
 		showCalendarPeek() {
 			return this.poll.type === 'datePoll' && this.getCurrentUser() && this.settings.calendarPeek

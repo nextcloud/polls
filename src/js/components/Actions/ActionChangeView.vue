@@ -22,39 +22,31 @@
 
 <template>
 	<div class="action change-view">
-		<ButtonDiv v-if="buttonMode"
-			:title="caption"
-			simple
-			:icon="icon"
-			@click="clickAction()" />
-		<Actions v-else>
-			<ActionButton :icon="icon" @click="clickAction()">
-				{{ caption }}
-			</ActionButton>
-		</Actions>
+		<VueButton v-tooltip="caption"
+			type="tertiary"
+			@click="clickAction()">
+			<template #icon>
+				<ListViewIcon v-if="viewMode === 'table-view'" />
+				<TableViewIcon v-else />
+			</template>
+		</VueButton>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Actions, ActionButton } from '@nextcloud/vue'
-import ButtonDiv from '../Base/ButtonDiv'
+import { Button as VueButton } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
+import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
+import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
 
 export default {
 	name: 'ActionChangeView',
 
 	components: {
-		Actions,
-		ActionButton,
-		ButtonDiv,
-	},
-
-	props: {
-		buttonMode: {
-			type: Boolean,
-			default: false,
-		},
+		ListViewIcon,
+		TableViewIcon,
+		VueButton,
 	},
 
 	computed: {
@@ -74,16 +66,8 @@ export default {
 				return t('polls', 'Switch to list view')
 			}
 			return t('polls', 'Switch to table view')
-
 		},
 
-		icon() {
-			if (this.viewMode === 'table-view') {
-				return 'icon-list-view'
-			}
-			return 'icon-table-view'
-
-		},
 	},
 
 	methods: {

@@ -22,12 +22,12 @@
 
 <template>
 	<div>
-		<OptionsDateAdd v-if="!closed" />
 		<transition-group is="ul" v-if="countOptions">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
 				:option="option"
 				:show-confirmed="true"
+				:poll-type="pollType"
 				display="textBox"
 				tag="li">
 				<template #icon>
@@ -36,32 +36,45 @@
 						:option="option"
 						class="owner" />
 				</template>
-				<template #actions>
-					<ActionDelete v-if="acl.allowEdit"
+				<template v-if="acl.allowEdit" #actions>
+					<ActionDelete v-if="!closed"
 						:title="t('polls', 'Delete option')"
 						@delete="removeOption(option)" />
-					<Actions v-if="acl.allowEdit" class="action">
-						<ActionButton v-if="!closed" icon="icon-polls-clone" @click="cloneOptionModal(option)">
+
+					<Actions v-if="!closed" class="action">
+						<ActionButton v-if="!closed" @click="cloneOptionModal(option)">
+							<template #icon>
+								<CloneDateIcon />
+							</template>
 							{{ t('polls', 'Clone option') }}
 						</ActionButton>
-						<ActionButton v-if="closed"
-							:icon="option.confirmed ? 'icon-polls-confirmed' : 'icon-polls-unconfirmed'"
-							@click="confirmOption(option)">
-							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
-						</ActionButton>
 					</Actions>
+					<VueButton v-if="closed"
+						v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+						type="tertiary"
+						@click="confirmOption(option)">
+						<template #icon>
+							<UnconfirmIcon v-if="option.confirmed" />
+							<ConfirmIcon v-else />
+						</template>
+					</VueButton>
 				</template>
 			</OptionItem>
 		</transition-group>
 
-		<EmptyContent v-else :icon="pollTypeIcon">
-			{{ t('polls', 'No vote options') }}
+		<EmptyContent v-else>
+			<template #icon>
+				<DatePollIcon />
+			</template>
+
 			<template #desc>
 				{{ t('polls', 'Add some!') }}
 			</template>
+
+			{{ t('polls', 'No vote options') }}
 		</EmptyContent>
 
-		<Modal v-if="cloneModal" :can-close="false">
+		<Modal v-if="cloneModal" size="small" :can-close="false">
 			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
 		</Modal>
 	</div>
@@ -69,26 +82,34 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Actions, ActionButton, EmptyContent, Modal } from '@nextcloud/vue'
-import ActionDelete from '../Actions/ActionDelete'
-import OptionCloneDate from './OptionCloneDate'
-import OptionItem from './OptionItem'
-import { confirmOption, removeOption } from '../../mixins/optionMixins'
-import { dateUnits } from '../../mixins/dateMixins'
+import { Actions, ActionButton, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
+import ActionDelete from '../Actions/ActionDelete.vue'
+import OptionCloneDate from './OptionCloneDate.vue'
+import OptionItem from './OptionItem.vue'
+import { confirmOption, removeOption } from '../../mixins/optionMixins.js'
+import { dateUnits } from '../../mixins/dateMixins.js'
+import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
 export default {
 	name: 'OptionsDate',
 
 	components: {
+		CloneDateIcon,
+		ConfirmIcon,
+		UnconfirmIcon,
 		Actions,
 		ActionButton,
 		ActionDelete,
 		EmptyContent,
 		Modal,
 		OptionCloneDate,
-		OptionsDateAdd: () => import('./OptionsDateAdd'),
 		OptionItem,
-		OptionItemOwner: () => import('./OptionItemOwner'),
+		VueButton,
+		DatePollIcon,
+		OptionItemOwner: () => import('./OptionItemOwner.vue'),
 	},
 
 	mixins: [
@@ -101,6 +122,7 @@ export default {
 		return {
 			cloneModal: false,
 			optionToClone: {},
+			pollType: 'datePoll',
 		}
 	},
 
@@ -114,7 +136,6 @@ export default {
 		...mapGetters({
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
-			pollTypeIcon: 'poll/typeIcon',
 		}),
 	},
 

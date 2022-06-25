@@ -23,12 +23,13 @@
 <template>
 	<InputDiv v-model="newPollText"
 		:placeholder="placeholder"
+		submit
 		@submit="addOption()" />
 </template>
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import InputDiv from '../Base/InputDiv'
+import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'OptionsTextAdd',
@@ -54,7 +55,7 @@ export default {
 		async addOption() {
 			if (this.newPollText) {
 				try {
-					await this.$store.dispatch('options/add', { pollOptionText: this.newPollText })
+					await this.$store.dispatch('options/add', { text: this.newPollText })
 					showSuccess(t('polls', '{optionText} added', { optionText: this.newPollText }))
 					this.newPollText = ''
 				} catch (e) {

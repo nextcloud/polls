@@ -25,7 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\Http\JSONResponse;
 
 use OCA\Polls\Service\VoteService;
 
@@ -50,10 +50,8 @@ class VoteController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function list(int $pollId): DataResponse {
-		return $this->response(function () use ($pollId) {
-			return ['votes' => $this->voteService->list($pollId)];
-		});
+	public function list(int $pollId): JSONResponse {
+		return $this->response(fn () => ['votes' => $this->voteService->list($pollId)]);
 	}
 
 	/**
@@ -61,19 +59,15 @@ class VoteController extends Controller {
 	 * @NoAdminRequired
 	 * @NoCSRFRequired
 	 */
-	public function set(int $optionId, string $setTo): DataResponse {
-		return $this->response(function () use ($optionId, $setTo) {
-			return ['vote' => $this->voteService->set($optionId, $setTo)];
-		});
+	public function set(int $optionId, string $setTo): JSONResponse {
+		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $setTo)]);
 	}
 
 	/**
 	 * Remove user from poll
 	 * @NoAdminRequired
 	 */
-	public function delete(int $pollId, string $userId = ''): DataResponse {
-		return $this->response(function () use ($pollId, $userId) {
-			return ['deleted' => $this->voteService->delete($pollId, $userId)];
-		});
+	public function delete(int $pollId, string $userId = ''): JSONResponse {
+		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId)]);
 	}
 }

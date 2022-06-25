@@ -22,10 +22,10 @@
  */
 
 import Vue from 'vue'
-import App from './App'
+import App from './App.vue'
 import { sync } from 'vuex-router-sync'
-import store from './store'
-import router from './router'
+import store from './store/index.js'
+import router from './router.js'
 import ClickOutside from 'v-click-outside'
 import VueClipboard from 'vue-clipboard2'
 import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
@@ -33,8 +33,7 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
-import UserItem from './components/User/UserItem'
-import ButtonDiv from './components/Base/ButtonDiv'
+import UserItem from './components/User/UserItem.vue'
 
 /* eslint-disable-next-line camelcase, no-undef */
 __webpack_nonce__ = btoa(getRequestToken())
@@ -53,7 +52,6 @@ Vue.prototype.getCurrentUser = getCurrentUser
 // eslint-disable-next-line vue/match-component-file-name
 Vue.component('UserItem', UserItem)
 // eslint-disable-next-line vue/match-component-file-name
-Vue.component('ButtonDiv', ButtonDiv)
 Vue.directive('tooltip', Tooltip)
 
 Vue.use(ClickOutside)

@@ -21,55 +21,57 @@
   -->
 
 <template lang="html">
-	<Modal v-show="modal" :can-close="false">
+	<Modal v-show="modal" :size="modalSize" :can-close="false">
 		<div class="modal__content">
 			<div class="modal__registration">
 				<div class="registration__registration">
 					<h2>{{ t('polls', 'Public participation') }}</h2>
-					<div class="section__username">
-						<h3>{{ t('polls', 'To participate, tell us how we can call you!') }}</h3>
-						<InputDiv v-model="userName"
-							v-tooltip="userNameCheck.result"
-							:signaling-class="userNameCheck.status"
-							:placeholder="t('polls', 'Enter your name')"
-							no-submit
-							focus
-							@submit="submitRegistration" />
-					</div>
+					<InputDiv v-model="userName"
+						v-tooltip="userNameCheck.result"
+						class="section__username"
+						:label="t('polls', 'To participate, tell us how we can call you!')"
+						:signaling-class="userNameCheck.status"
+						:placeholder="t('polls', 'Enter your name')"
+						:helper-text="userNameCheck.result"
+						focus
+						@submit="submitRegistration" />
 
-					<div :class="['status-message', userNameCheck.status]">
-						{{ userNameCheck.result }}
-					</div>
+					<CheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
+						{{ t('polls', 'Remember me for 30 days') }}
+					</CheckboxRadioSwitch>
 
-					<div v-if="poll.publicPollEmail !== 'disabled'" class="section__email">
-						<h3 v-if="poll.publicPollEmail === 'mandatory'">
-							{{ t("polls", "Your email address is required. After the registration your personal link to the poll will be sent to this address.") }}
-						</h3>
-						<h3 v-else>
-							{{ t("polls", "With your email address you can subscribe to notifications and you will receive your personal link to this poll.") }}
-						</h3>
-						<InputDiv
-							v-model="emailAddress"
-							v-tooltip="emailCheck.result"
-							:signaling-class="emailCheck.status"
-							:placeholder="t('polls', poll.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
-							no-submit
-							@submit="submitRegistration" />
+					<InputDiv v-if="share.publicPollEmail !== 'disabled'"
+						v-model="emailAddress"
+						v-tooltip="emailCheck.result"
+						class="section__email"
+						:label="emailLabel"
+						:signaling-class="emailCheck.status"
+						:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
+						:helper-text="emailCheck.result"
+						type="email"
+						inputmode="email"
+						@submit="submitRegistration" />
+
+					<div v-if="privacyUrl" class="section__optin">
+						<RichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 					</div>
 
 					<div class="modal__buttons">
-						<div class="modal__buttons__spacer" />
-						<ButtonDiv :title="t('polls', 'Cancel')" @click="closeModal" />
-						<ButtonDiv :primary="true"
-							:disabled="disableSubmit"
-							:title="t('polls', 'OK')"
-							@click="submitRegistration" />
+						<VueButton @click="closeModal">
+							{{ t('polls', 'Cancel') }}
+						</VueButton>
+
+						<VueButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
+							{{ t('polls', 'OK') }}
+						</VueButton>
 					</div>
 				</div>
 
 				<div v-if="share.showLogin" class="registration__login">
 					<h2> {{ t('polls', 'You are a registered user of this site?') }} </h2>
-					<ButtonDiv :title="t('polls', 'Login')" @click="login()" />
+					<VueButton wide @click="login()">
+						{{ t('polls', 'Login') }}
+					</VueButton>
 					<div>
 						{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}
 					</div>
@@ -78,6 +80,12 @@
 					</div>
 				</div>
 			</div>
+			<div class="legal_links">
+				<SimpleLink v-if="imprintUrl"
+					:href="imprintUrl"
+					target="_blank"
+					:name="t('polls', 'Legal Notice')" />
+			</div>
 		</div>
 	</Modal>
 </template>
@@ -85,20 +93,24 @@
 <script>
 import debounce from 'lodash/debounce'
 import axios from '@nextcloud/axios'
-import ButtonDiv from '../Base/ButtonDiv'
-import InputDiv from '../Base/InputDiv'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { Modal } from '@nextcloud/vue'
+import { Button as VueButton, Modal, CheckboxRadioSwitch } from '@nextcloud/vue'
 import { mapState } from 'vuex'
+import RichText from '@juliushaertl/vue-richtext'
+import InputDiv from '../Base/InputDiv.vue'
+import SimpleLink from '../../helpers/SimpleLink.js'
 
 export default {
 	name: 'PublicRegisterModal',
 
 	components: {
-		Modal,
-		ButtonDiv,
+		CheckboxRadioSwitch,
 		InputDiv,
+		Modal,
+		RichText,
+		SimpleLink,
+		VueButton,
 	},
 
 	data() {
@@ -111,6 +123,8 @@ export default {
 			isValidName: false,
 			isValidEmailAddress: false,
 			modal: true,
+			modalSize: 'large',
+			saveCookie: true,
 		}
 	},
 
@@ -118,14 +132,38 @@ export default {
 		...mapState({
 			poll: (state) => state.poll,
 			share: (state) => state.share,
+			privacyUrl: (state) => state.appSettings.usePrivacyUrl,
+			imprintUrl: (state) => state.appSettings.useImprintUrl,
 		}),
 
+		emailLabel() {
+			if (this.share.publicPollEmail === 'mandatory') {
+				return t('polls', 'Your email address is required. After the registration your personal link to the poll will be sent to this address.')
+			}
+			return t('polls', 'With your email address you can subscribe to notifications and you will receive your personal link to this poll.')
+		},
+
 		registrationIsValid() {
-			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.poll.publicPollEmail !== 'mandatory'))
+			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
 		},
 
 		disableSubmit() {
 			return !this.registrationIsValid || this.checkingUserName
+		},
+
+		privacyRich() {
+			const subject = t('polls', 'By clicking the "OK" button you accept our {privacyPolicy}.')
+			const parameters = {
+				privacyPolicy: {
+					component: SimpleLink,
+					props: {
+						href: this.privacyUrl,
+						name: t('polls', 'privacy policy'),
+						target: '_blank',
+					},
+				},
+			}
+			return { subject, parameters }
 		},
 
 		loginLink() {
@@ -143,22 +181,23 @@ export default {
 					status: 'checking',
 				}
 			}
-			if (this.userName.length === 0) {
+
+			if (this.userName.length < 1) {
 				return {
-					result: ' ',
+					result: t('polls', 'A name is required.'),
 					status: 'empty',
 				}
 			}
 
 			if (!this.isValidName) {
 				return {
-					result: t('polls', '{username} is invalid or reserved.', { username: this.userName }),
+					result: t('polls', 'The name {username} is invalid or reserved.', { username: this.userName }),
 					status: 'error',
 				}
 			}
 
 			return {
-				result: t('polls', '{username} is valid.', { username: this.userName }),
+				result: '',
 				status: 'success',
 			}
 		},
@@ -170,10 +209,17 @@ export default {
 					status: 'checking',
 				}
 			}
+
 			if (this.emailAddress.length < 1) {
+				if (this.share.publicPollEmail === 'mandatory') {
+					return {
+						result: t('polls', 'An email address is required.'),
+						status: 'empty',
+					}
+				}
 				return {
 					result: '',
-					status: '',
+					status: 'empty',
 				}
 			}
 
@@ -185,7 +231,7 @@ export default {
 			}
 
 			return {
-				result: t('polls', 'Valid email address.'),
+				result: '',
 				status: 'success',
 			}
 		},
@@ -239,8 +285,14 @@ export default {
 		},
 
 		validatePublicUsername: debounce(async function() {
+			const endpoint = 'apps/polls/check/username'
+
 			try {
-				await axios.post(generateUrl('apps/polls/check/username'), { userName: this.userName, token: this.$route.params.token })
+				await axios.post(generateUrl(endpoint), {
+					headers: { Accept: 'application/json' },
+					userName: this.userName,
+					token: this.$route.params.token,
+				})
 				this.isValidName = true
 			} catch {
 				this.isValidName = false
@@ -249,8 +301,12 @@ export default {
 		}, 500),
 
 		validateEmailAddress: debounce(async function() {
+			const endpoint = `apps/polls/check/emailaddress/${this.emailAddress}`
+
 			try {
-				await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`)
+				await axios.get(generateUrl(endpoint), {
+					headers: { Accept: 'application/json' },
+				})
 				this.isValidEmailAddress = true
 			} catch {
 				this.isValidEmailAddress = false
@@ -261,7 +317,8 @@ export default {
 		async submitRegistration() {
 			if (this.registrationIsValid) {
 				try {
-					const response = await this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress })
+					const response = await this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress, saveCookie: this.saveCookie })
+
 					if (this.$route.params.token === response.token) {
 						this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
 						this.closeModal()
@@ -284,6 +341,14 @@ export default {
 </script>
 
 <style lang="scss">
+	.section__optin {
+		align-self: end;
+
+		a {
+			text-decoration: underline;
+		}
+	}
+
 	.modal__registration {
 		display: flex;
 		flex-wrap: wrap;
@@ -304,10 +369,11 @@ export default {
 		}
 
 		.registration__login {
-			width: 180px;
+			flex: 1 180px;
 		}
 		.registration__registration {
-			width: 400px;
+			flex: 1 480px;
+
 		}
 	}
 
@@ -326,10 +392,32 @@ export default {
 		border-top: 1px solid var(--color-border);
 	}
 
-	.status-message {
-		hyphens: auto;
-		font-size: 0.9em;
-		min-height: 1.8em;
+	.legal_links {
+		padding: 4px 24px;
+
+		a {
+			color: var(--color-text-lighter);
+			font-weight: bold;
+			white-space: nowrap;
+			padding: 10px;
+			margin: -10px;
+
+			&:hover, &:active {
+				color: var(--color-text-light);
+				&::after {
+					color: var(--color-text-lighter);
+				}
+			}
+
+			&:after {
+			    content:"|";
+				padding: 0 4px;
+			}
+
+			&:last-child:after {
+			    content:"";
+			}
+		}
 	}
 
 	@media only screen and (max-width: 688px) {

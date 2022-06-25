@@ -27,7 +27,10 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCA\Polls\Helper\Container;
 use OCP\IUser;
+use OCP\IUserManager;
+use OCP\IURLGenerator;
 use OCP\AppFramework\Db\Entity;
 use OCA\Polls\Model\UserGroup\User;
 
@@ -82,12 +85,15 @@ class Poll extends Entity implements JsonSerializable {
 	public const TYPE_TEXT = 'textPoll';
 	public const ACCESS_HIDDEN = 'hidden';
 	public const ACCESS_PUBLIC = 'public';
+	public const ACCESS_PRIVATE = 'private';
+	public const ACCESS_OPEN = 'open';
 	public const SHOW_RESULTS_ALWAYS = 'always';
 	public const SHOW_RESULTS_CLOSED = 'closed';
 	public const SHOW_RESULTS_NEVER = 'never';
 	public const PROPOSAL_DISALLOW = 'disallow';
 	public const PROPOSAL_ALLOW = 'allow';
 	public const PROPOSAL_REVIEW = 'review';
+	public const URI_PREFIX = 'poll/';
 
 	/** @var string $type */
 	protected $type;
@@ -152,6 +158,11 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var string $miscSettings*/
 	protected $miscSettings;
 
+	/** @var IURLGenerator */
+	private $urlGenerator;
+
+	/** @var IUserManager */
+	private $userManager;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -167,6 +178,8 @@ class Poll extends Entity implements JsonSerializable {
 		$this->addType('important', 'int');
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
+		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
+		$this->userManager = Container::queryClass(IUserManager::class);
 	}
 
 	public function jsonSerialize() {
@@ -176,7 +189,6 @@ class Poll extends Entity implements JsonSerializable {
 			'title' => $this->getTitle(),
 			'description' => $this->getDescription(),
 			'descriptionSafe' => $this->getDescriptionSafe(),
-			'owner' => $this->getOwner(),
 			'created' => $this->getCreated(),
 			'expire' => $this->getExpire(),
 			'deleted' => $this->getDeleted(),
@@ -190,12 +202,14 @@ class Poll extends Entity implements JsonSerializable {
 			'optionLimit' => $this->getOptionLimit(),
 			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
 			'adminAccess' => $this->getAdminAccess(),
-			'ownerDisplayName' => $this->getDisplayName(),
 			'important' => $this->getImportant(),
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'useNo' => $this->getUseNo(),
-			'publicPollEmail' => $this->getPublicPollEmail(),
 			'autoReminder' => $this->getAutoReminder(),
+			'owner' => [
+				'userId' => $this->getOwner(),
+				'displayName' => $this->getDisplayName(),
+			],
 		];
 	}
 
@@ -220,10 +234,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setImportant($array['important'] ?? $this->getImportant());
 		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
 		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
-		$this->setMiscSettings(json_encode([
-			'publicPollEmail' => $array['publicPollEmail'],
-			'autoReminder' => $array['autoReminder'],
-		]));
+		$this->setAutoReminder($array['autoReminder'] ?? $this->getAutoReminder());
 		return $this;
 	}
 
@@ -234,18 +245,59 @@ class Poll extends Entity implements JsonSerializable {
 		);
 	}
 
+	public function getUri(): string {
+		return self::URI_PREFIX . $this->getId();
+	}
+
 	public function getVoteUrl() : string {
-		return \OC::$server->getURLGenerator()->linkToRouteAbsolute(
+		return $this->urlGenerator->linkToRouteAbsolute(
 			'polls.page.vote',
 			['id' => $this->getId()]
 		);
 	}
+
+	/**
+	 * Keep for compatibilty reasons
+	 * TODO: remove this later
+	 * OCA\Polls\Db\Share::getDefaultPublicPollEmail() depends on this
+	 * @deprecated
+	 */
+
 	public function getPublicPollEmail(): string {
-		return json_decode($this->getMiscSettings())->publicPollEmail ?? 'optional';
+		return $this->getMiscSettingsArray()['publicPollEmail'] ?? 'optional';
+	}
+
+	public function setAutoReminder(bool $value) : void {
+		$this->setMiscSettingsByKey('autoReminder', $value);
 	}
 
 	public function getAutoReminder(): bool {
-		return json_decode($this->getMiscSettings())->autoReminder ?? false;
+		return $this->getMiscSettingsArray()['autoReminder'] ?? false;
+	}
+
+	// alias of getId()
+	public function getPollId(): int {
+		return $this->getId();
+	}
+
+	// alias of getOwner()
+	public function getUserId() : string {
+		return $this->getOwner();
+	}
+
+	// alias of setOwner($value)
+	public function setUserId(string $userId) : void {
+		$this->setOwner($userId);
+	}
+
+	public function getAccess() {
+		if ($this->access === self::ACCESS_PUBLIC) {
+			return self::ACCESS_OPEN;
+		}
+		if ($this->access === self::ACCESS_HIDDEN) {
+			return self::ACCESS_PRIVATE;
+		}
+		return $this->access;
 	}
 
 	public function getProposalsExpired(): bool {
@@ -260,12 +312,29 @@ class Poll extends Entity implements JsonSerializable {
 	}
 
 	public function getDisplayName(): string {
-		return \OC::$server->getUserManager()->get($this->owner) instanceof IUser
-			? \OC::$server->getUserManager()->get($this->owner)->getDisplayName()
+		return $this->userManager->get($this->owner) instanceof IUser
+			? $this->userManager->get($this->owner)->getDisplayName()
 			: $this->owner;
 	}
 
 	public function getOwnerUserObject(): User {
 		return new User($this->owner);
+	}
+
+	private function setMiscSettingsArray(array $value) : void {
+		$this->setMiscSettings(json_encode($value));
+	}
+
+	private function getMiscSettingsArray() : ?array {
+		return json_decode($this->getMiscSettings(), true);
+	}
+
+	/**
+	 * @param bool|string|int|array $value
+	 */
+	private function setMiscSettingsByKey(string $key, $value): void {
+		$miscSettings = $this->getMiscSettingsArray();
+		$miscSettings[$key] = $value;
+		$this->setMiscSettingsArray($miscSettings);
 	}
 }

@@ -27,8 +27,11 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCA\Polls\Helper\Container;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
+use OCP\IUserManager;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * @method int getId()
@@ -99,6 +102,12 @@ class Option extends Entity implements JsonSerializable {
 	/** @var bool $isBookedUp */
 	public $isBookedUp = false;
 
+	/** @var IUserManager */
+	private $userManager;
+
+	/** @var ShareMapper */
+	private $shareMapper;
+
 	public function __construct() {
 		$this->addType('released', 'int');
 		$this->addType('pollId', 'int');
@@ -106,28 +115,33 @@ class Option extends Entity implements JsonSerializable {
 		$this->addType('order', 'int');
 		$this->addType('confirmed', 'int');
 		$this->addType('duration', 'int');
+		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
-			'owner' => $this->getOwner(),
-			'ownerDisplayName' => $this->getDisplayName(),
-			'ownerIsNoUser' => $this->getOwnerIsNoUser(),
-			'released' => $this->getReleased(),
-			'pollOptionText' => $this->getPollOptionText(),
+			'text' => $this->getPollOptionText(),
 			'timestamp' => $this->getTimestamp(),
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
 			'duration' => $this->getDuration(),
-			'rank' => $this->rank,
-			'no' => $this->no,
-			'yes' => $this->yes,
-			'maybe' => $this->maybe,
-			'realNo' => $this->realNo,
-			'votes' => $this->votes,
-			'isBookedUp' => $this->isBookedUp,
+			'computed' => [
+				'rank' => $this->rank,
+				'no' => $this->no,
+				'yes' => $this->yes,
+				'maybe' => $this->maybe,
+				'realNo' => $this->realNo,
+				'votes' => $this->votes,
+				'isBookedUp' => $this->isBookedUp,
+			],
+			'owner' => [
+				'userId' => $this->getOwner(),
+				'displayName' => $this->getDisplayName(),
+				'isNoUser' => $this->getOwnerIsNoUser(),
+			],
 		];
 	}
 
@@ -161,24 +175,47 @@ class Option extends Entity implements JsonSerializable {
 		return $this->order;
 	}
 
-	// used for 1.9.0-beta1 installtions
-	public function getOwner() {
-		if ($this->owner === 'disallow') {
+	// alias of getOwner()
+	public function getUserId() : string {
+		return $this->getOwner();
+	}
+
+	// alias of setOwner($value)
+	public function setUserId(string $userId) : void {
+		$this->setOwner($userId);
+	}
+
+	// used for 1.9.0-beta1 installations
+	public function getOwner() : string {
+		if ($this->owner === 'disallow' || $this->owner === null) {
 			return '';
 		}
 		return $this->owner;
 	}
 
-	public function getDisplayName(): string {
+	public function getDisplayName(): ?string {
 		if (!strncmp($this->getOwner(), 'deleted_', 8)) {
 			return 'Deleted User';
 		}
-		return $this->getOwnerIsNoUser()
-			? $this->owner
-			: \OC::$server->getUserManager()->get($this->getOwner())->getDisplayName();
+		// if ($this->getOwner() === '') {
+		// 	return '';
+		// }
+		// return $this->getOwnerIsNoUser()
+		// 	? $this->getOwner()
+		// 	: $this->userManager->get($this->getOwner())->getDisplayName();
+		
+		if ($this->getOwnerIsNoUser()) {
+			try {
+				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getOwner());
+				return $share->getDisplayName();
+			} catch (DoesNotExistException $e) {
+				return $this->getOwner();
+			}
+		}
+		return $this->userManager->get($this->getOwner())->getDisplayName();
 	}
 
 	private function getOwnerIsNoUser(): bool {
-		return !\OC::$server->getUserManager()->get($this->getOwner()) instanceof IUser;
+		return !$this->userManager->get($this->getOwner()) instanceof IUser;
 	}
 }
