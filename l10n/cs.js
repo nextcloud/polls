@@ -312,6 +312,7 @@ OC.L10N.register(
     "Public participation" : "Veřejní účastníci",
     "To participate, tell us how we can call you!" : "Abyste se mohli zúčastnit, sdělte nám, jak Vás máme oslovovat!",
     "Enter your name" : "Zadejte své jméno",
+    "Remember me for 30 days" : "Zapamatovat si mne na 30 dnů",
     "You are a registered user of this site?" : "Jste registrovaný uživatel této stránky?",
     "Login" : "Přihlásit",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Jako uživatel této stránky, můžete po přihlášení, přispět pod svým profilem.",
@@ -540,6 +541,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Všechny uzavřené ankety, ve kterých není možné hlasovat.",
     "Archive" : "Archivovat",
     "My archived polls" : "Moje archivované ankety",
-    "Your archived polls are only accessible to you." : "Vaše archivované ankety jsou přístupné pouze vám."
+    "Your archived polls are only accessible to you." : "Vaše archivované ankety jsou přístupné pouze vám.",
+    "Maybe" : "Možná"
 },
 "nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;");

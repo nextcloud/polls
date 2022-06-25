@@ -535,6 +535,7 @@
     "All closed polls, where voting is disabled." : "Alle geschlossenen Umfragen, bei denen die Abstimmung deaktiviert ist.",
     "Archive" : "Archiv",
     "My archived polls" : "Meine archivierten Umfragen",
-    "Your archived polls are only accessible to you." : "Deine archivierten Umfragen sind nur für Dich zugänglich"
+    "Your archived polls are only accessible to you." : "Deine archivierten Umfragen sind nur für Dich zugänglich",
+    "Maybe" : "Vielleicht"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

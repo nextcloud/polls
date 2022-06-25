@@ -312,6 +312,7 @@ OC.L10N.register(
     "Public participation" : "Öffentliche Teilnahme",
     "To participate, tell us how we can call you!" : "Um teilzunehmen, sagen Sie uns wie wir Sie nennen dürfen!",
     "Enter your name" : "Geben Sie Ihren Namen ein",
+    "Remember me for 30 days" : "Für 30 Tage an mich erinnern",
     "You are a registered user of this site?" : "Sind Sie ein registrierter Benutzer dieser Webseite?",
     "Login" : "Anmeldung",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Als regelmäßiger Benutzer dieser Website können Sie nach dem Anmelden mit Ihrer internen Identität teilnehmen. ",
@@ -540,6 +541,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Alle geschlossenen Umfragen, bei denen die Abstimmung deaktiviert ist.",
     "Archive" : "Archiv",
     "My archived polls" : "Meine archivierten Umfragen",
-    "Your archived polls are only accessible to you." : "Ihre archivierten Umfragen sind nur für Sie zugänglich. "
+    "Your archived polls are only accessible to you." : "Ihre archivierten Umfragen sind nur für Sie zugänglich. ",
+    "Maybe" : "Vielleicht"
 },
 "nplurals=2; plural=(n != 1);");

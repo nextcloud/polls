@@ -39,6 +39,7 @@
     "Hour" : "საათი",
     "Day" : "დღე",
     "Month" : "თვე",
-    "Archive" : "არქივი"
+    "Archive" : "არქივი",
+    "Maybe" : "შესაძლოა"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }

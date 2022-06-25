@@ -540,6 +540,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Az összes lezárt szavazás, ahol a szavazás le van tiltva.",
     "Archive" : "Archívum",
     "My archived polls" : "Archivált saját szavazások",
-    "Your archived polls are only accessible to you." : "Az archivált szavazásaihoz csak Ön fér hozzá."
+    "Your archived polls are only accessible to you." : "Az archivált szavazásaihoz csak Ön fér hozzá.",
+    "Maybe" : "Talán"
 },
 "nplurals=2; plural=(n != 1);");

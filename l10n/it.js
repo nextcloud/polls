@@ -499,6 +499,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Tutti i sondaggi chiusi, dove il voto è disabilitato.",
     "Archive" : "Archivio",
     "My archived polls" : "I miei sondaggi archiviati",
-    "Your archived polls are only accessible to you." : "I tuoi sondaggi archiviati sono accessibili solo a te."
+    "Your archived polls are only accessible to you." : "I tuoi sondaggi archiviati sono accessibili solo a te.",
+    "Maybe" : "Forse"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

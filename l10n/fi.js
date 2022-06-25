@@ -328,6 +328,7 @@ OC.L10N.register(
     "Closed polls" : "Suljetut äänestykset",
     "All closed polls, where voting is disabled." : "Kaikki suljetut äänestykset, joissa äänestäminen on poissä käytöstä",
     "Archive" : "Arkisto",
-    "My archived polls" : "Omat arkistoidut kyselyt"
+    "My archived polls" : "Omat arkistoidut kyselyt",
+    "Maybe" : "Ehkä"
 },
 "nplurals=2; plural=(n != 1);");
