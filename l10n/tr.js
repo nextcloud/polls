@@ -312,6 +312,7 @@ OC.L10N.register(
     "Public participation" : "Herkese açık katılım",
     "To participate, tell us how we can call you!" : "Katılmak için size nasıl hitap edeceğimizi söyleyin!",
     "Enter your name" : "Adınızı yazın",
+    "Remember me for 30 days" : "Beni 30 gün boyunca hatırla",
     "You are a registered user of this site?" : "Bu sitenin kayıtlı bir kullanıcısı mısınız?",
     "Login" : "Oturum aç",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Sitenin normal bir kullanıcısı olarak, oturum açtıktan sonra site kimliğinizle katılabilirsiniz.",
@@ -540,6 +541,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Oy vermenin devre dışı bırakıldığı tüm bitmemiş anketler. ",
     "Archive" : "Arşiv",
     "My archived polls" : "Arşivlenmiş anketlerim",
-    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz."
+    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz.",
+    "Maybe" : "Belki"
 },
 "nplurals=2; plural=(n > 1);");
