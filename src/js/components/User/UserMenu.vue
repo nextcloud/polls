@@ -28,7 +28,7 @@
 		<ActionButton v-if="$route.name === 'publicVote'" icon="icon-md-link" @click="copyLink()">
 			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</ActionButton>
-		<ActionSeparator />
+		<ActionSeparator v-if="$route.name === 'publicVote'" />
 		<ActionInput v-if="$route.name === 'publicVote'"
 			:class="check.status"
 			:value="emailAddressTemp"
@@ -75,6 +75,12 @@
 			</template>
 			{{ t('polls', 'Reset your votes') }}
 		</ActionButton>
+		<ActionButton v-if="$route.name === 'publicVote' && hasCookie" @click="logout()">
+			<template #icon>
+				<LogoutIcon />
+			</template>
+			{{ t('polls', 'Logout as {name} (delete cookie)', { name: acl.displayName }) }}
+		</ActionButton>
 	</Actions>
 </template>
 
@@ -91,6 +97,8 @@ import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
+import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import { deleteCookieByValue, findCookieByValue } from '../../helpers/cookieHelper.js'
 
 export default {
 	name: 'UserMenu',
@@ -103,6 +111,7 @@ export default {
 		ActionSeparator,
 		SettingsIcon,
 		EditEmailIcon,
+		LogoutIcon,
 		SendLinkPerEmailIcon,
 		DeleteIcon,
 		ClippyIcon,
@@ -125,6 +134,10 @@ export default {
 			subscribed: (state) => state.subscription.subscribed,
 			emailAddress: (state) => state.share.emailAddress,
 		}),
+
+		hasCookie() {
+			return !!findCookieByValue(this.$route.params.token)
+		},
 
 		emailAddressUnchanged() {
 			return this.emailAddress === this.emailAddressTemp
@@ -171,6 +184,13 @@ export default {
 	},
 
 	methods: {
+		logout() {
+			const reRouteTo = deleteCookieByValue(this.$route.params.token)
+			if (reRouteTo) {
+				this.$router.push({ name: 'publicVote', params: { token: reRouteTo } })
+			}
+		},
+
 		async toggleSubscription() {
 			await this.$store.dispatch('subscription/update', !this.subscribed)
 		},
