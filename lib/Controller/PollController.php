@@ -139,6 +139,13 @@ class PollController extends Controller {
 	}
 
 	/**
+	 * Transfer polls between users
+	 */
+	public function transferPolls(string $sourceUser, string $targetUser): JSONResponse {
+		return $this->response(fn () => $this->pollService->transferPolls($sourceUser, $targetUser));
+	}
+
+	/**
 	 * Collect email addresses from particitipants
 	 * @NoAdminRequired
 	 */

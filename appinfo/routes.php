@@ -67,6 +67,8 @@ return [
 		['name' => 'poll#clone', 'url' => '/poll/{pollId}/clone', 'verb' => 'GET'],
 		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/poll/{pollId}/addresses', 'verb' => 'GET'],
 
+		['name' => 'poll#transfer_polls', 'url' => '/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
+
 		['name' => 'option#list', 'url' => '/poll/{pollId}/options', 'verb' => 'GET'],
 		['name' => 'option#add', 'url' => '/option', 'verb' => 'POST'],
 		['name' => 'option#addBulk', 'url' => '/option/bulk', 'verb' => 'POST'],
@@ -118,6 +120,7 @@ return [
 
 		// REST-API calls
 		['name' => 'poll_api#list', 'url' => '/api/v1.0/polls', 'verb' => 'GET'],
+		['name' => 'poll_api#transfer_polls', 'url' => '/api/v1.0/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#add', 'url' => '/api/v1.0/poll', 'verb' => 'POST'],
 		['name' => 'poll_api#get', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll_api#update', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'PUT'],

@@ -39,6 +39,7 @@
         <command>OCA\Polls\Command\Share\Add</command>
         <command>OCA\Polls\Command\Share\Remove</command>
         <command>OCA\Polls\Command\Db\Rebuild</command>
+        <command>OCA\Polls\Command\Poll\TransferOwnership</command>
     </commands>
     <settings>
         <admin-section>OCA\Polls\Settings\AdminSection</admin-section>

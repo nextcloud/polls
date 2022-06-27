@@ -41,11 +41,15 @@ use OCA\Polls\Db\Vote;
 use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCreatedEvent;
 use OCA\Polls\Event\PollDeletedEvent;
+use OCA\Polls\Event\PollOwnerChangeEvent;
 use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
+use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCP\IUser;
+use OCP\IUserManager;
 
 class PollService {
 
@@ -54,6 +58,9 @@ class PollService {
 
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
+	
+	/** @var IUserManager */
+	private $userManager;
 
 	/** @var IUserSession */
 	private $userSession;
@@ -87,6 +94,7 @@ class PollService {
 		AppSettings $appSettings,
 		IEventDispatcher $eventDispatcher,
 		IGroupManager $groupManager,
+		IUserManager $userManager,
 		IUserSession $userSession,
 		MailService $mailService,
 		Poll $poll,
@@ -103,6 +111,7 @@ class PollService {
 		$this->poll = $poll;
 		$this->pollMapper = $pollMapper;
 		$this->userId = $UserId;
+		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->voteMapper = $voteMapper;
 		$this->vote = $vote;
@@ -190,6 +199,20 @@ class PollService {
 
 		return $this->poll;
 	}
+
+	public function transferPolls(string $sourceUser, string $targetUser) {
+		if ($this->userManager->get($targetUser) instanceof IUser) {
+			$pollsToTransfer = $this->pollMapper->findOwner($sourceUser);
+			foreach ($pollsToTransfer as $poll) {
+				$poll->setOwner($targetUser);
+				$this->pollMapper->update($poll);
+				$this->eventDispatcher->dispatchTyped(new PollOwnerChangeEvent($poll));
+			}
+			return $pollsToTransfer;
+		}
+		throw new InvalidUsernameException('The user id "' . $targetUser . '" is not valid.');
+	}
+
 
 	/**
 	 * get poll configuration

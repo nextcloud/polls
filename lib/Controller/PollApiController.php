@@ -169,6 +169,19 @@ class PollApiController extends ApiController {
 	}
 
 	/**
+	 * Clone poll
+	 * @CORS
+	 * @NoCSRFRequired
+	 */
+	public function transferPolls(string $sourceUser, string $targetUser): JSONResponse {
+		try {
+			return new JSONResponse(['transferred' => $this->pollService->transferPolls($sourceUser, $targetUser)], Http::STATUS_CREATED);
+		} catch (Exception $e) {
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
 	 * Collect email addresses from particitipants
 	 * @NoAdminRequired
 	 * @CORS

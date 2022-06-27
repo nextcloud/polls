@@ -80,6 +80,7 @@ abstract class BaseListener implements IEventListener {
 
 	public function handle(Event $event) : void {
 		$this->event = $event;
+
 		try {
 			$this->checkClass();
 			$this->addLog();
@@ -111,7 +112,6 @@ abstract class BaseListener implements IEventListener {
 				throw $e;
 			}
 		}
-
 		// add a cron job, if necessary (i.e. for removed users and groups)
 		$this->addCronJob();
 
