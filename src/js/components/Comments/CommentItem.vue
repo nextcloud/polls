@@ -29,7 +29,8 @@
 			<div v-for="(subComment) in comment.subComments"
 				:key="subComment.id"
 				class="comment-item__subcomment">
-				<span class="comment-item__comment">
+				<span class="comment-item__comment"
+					v-html="linkify(subComment.comment)">
 					{{ subComment.comment }}
 				</span>
 				<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
@@ -42,6 +43,7 @@
 
 <script>
 import moment from '@nextcloud/moment'
+import linkifyStr from 'linkify-string'
 import { showError } from '@nextcloud/dialogs'
 import { mapState } from 'vuex'
 import ActionDelete from '../Actions/ActionDelete.vue'
@@ -69,6 +71,10 @@ export default {
 	},
 
 	methods: {
+		linkify(comment) {
+			return linkifyStr(comment)
+		},
+
 		async deleteComment(comment) {
 			try {
 				await this.$store.dispatch({ type: 'comments/delete', comment })
@@ -123,10 +129,12 @@ export default {
 				}
 			}
 		}
-
 		.comment-item__comment {
 			hyphens: auto;
 			flex: 1;
+			a {
+				text-decoration-line: underline;
+			}
 		}
 	}
 
