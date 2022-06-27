@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.8.0] - tbd
+### New
+- Minimum Nextcloud version 22
+- Convert links in comments to clickable links
+- Add an option for public users to logout from a poll, when logged in via cookie
+- Allow bulk poll ownership transfer for admins
+
 ## [3.7.0] - 2022-06-24
 ### New
 - User setting for conflict check (hours before and after an option to search for conflicts)
