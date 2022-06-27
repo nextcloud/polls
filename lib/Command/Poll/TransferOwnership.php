@@ -33,7 +33,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class TransferOwnership extends Command {
-    /** @var PollService */
+	/** @var PollService */
 	private $pollService;
 
 	/** @var IUserManager */
@@ -44,8 +44,8 @@ class TransferOwnership extends Command {
 		PollService $pollService
 	) {
 		parent::__construct();
-        $this->pollService = $pollService;
-        $this->userManager = $userManager;
+		$this->pollService = $pollService;
+		$this->userManager = $userManager;
 	}
 
 	protected function configure(): void {
@@ -78,11 +78,9 @@ class TransferOwnership extends Command {
 
 		if (sizeof($transferredPolls) < 1) {
 			$output->writeln('<info>No polls were transferred from ' . $input->getArgument('source-user') . '</info>');
-
-		} else if (sizeof($transferredPolls) === 1) {
+		} elseif (sizeof($transferredPolls) === 1) {
 			$output->writeln('<info>One poll was transferred from ' . $input->getArgument('source-user') . ' to ' . $input->getArgument('target-user') . '</info>');
 			$output->writeln('<info> * ' . $transferredPolls[0]->getId() . ' - ' . $transferredPolls[0]->getTitle() . '</info>');
-
 		} else {
 			$output->writeln('<info>' . sizeof($transferredPolls) . ' polls were transferred from ' . $input->getArgument('source-user') . ' to ' . $input->getArgument('target-user') . '</info>');
 			foreach ($transferredPolls as $poll) {

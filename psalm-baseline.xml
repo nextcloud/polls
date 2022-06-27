@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="4.23.0@f1fe6ff483bf325c803df9f510d09a03fd796f88">
   <file src="lib/AppInfo/Application.php">
-    <InvalidArgument occurrences="24">
+    <InvalidArgument occurrences="25">
+      <code>registerEventListener</code>
       <code>registerEventListener</code>
       <code>registerEventListener</code>
       <code>registerEventListener</code>
