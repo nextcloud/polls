@@ -31,11 +31,9 @@
 				class="comment-item__subcomment">
 				<!-- eslint-disable vue/no-v-html -->
 				<span class="comment-item__comment"
-					v-html="linkify(subComment.comment)">
-					{{ subComment.comment }}
+					v-html="linkify(subComment.comment)" />
 				<!-- eslint-enable vue/no-v-html -->
 
-				</span>
 				<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
 					:title="t('polls', 'Delete comment')"
 					@delete="deleteComment(subComment)" />
