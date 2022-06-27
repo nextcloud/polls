@@ -23,24 +23,13 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Db\Poll;
 
-class PollTakeoverEvent extends PollOwnerChangeEvent {
+class PollOwnerChangeEvent extends PollEvent {
 	public function __construct(
 		Poll $poll
 	) {
 		parent::__construct($poll);
-	}
-
-	public function getNotification(): array {
-		return [
-			'msgId' => Notifier::NOTIFY_POLL_TAKEOVER,
-			'objectType' => 'poll',
-			'objectValue' => $this->getPollId(),
-			'recipient' => $this->getPollOwner(),
-			'actor' => $this->getActor(),
-			'pollTitle' => $this->getPollTitle(),
-		];
+		$this->activitySubject = self::OWNER_CHANGE;
 	}
 }

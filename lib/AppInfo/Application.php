@@ -47,6 +47,7 @@ use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCreatedEvent;
 use OCA\Polls\Event\PollDeletedEvent;
 use OCA\Polls\Event\PollExpiredEvent;
+use OCA\Polls\Event\PollOwnerChangeEvent;
 use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
@@ -98,6 +99,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(PollDeletedEvent::class, PollListener::class);
 		$context->registerEventListener(PollExpiredEvent::class, PollListener::class);
 		$context->registerEventListener(PollRestoredEvent::class, PollListener::class);
+		$context->registerEventListener(PollOwnerChangeEvent::class, PollListener::class);
 		$context->registerEventListener(PollTakeoverEvent::class, PollListener::class);
 		$context->registerEventListener(PollUpdatedEvent::class, PollListener::class);
 		$context->registerEventListener(ShareChangedEmailEvent::class, ShareListener::class);
