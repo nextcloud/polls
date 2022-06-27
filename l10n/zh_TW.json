@@ -310,6 +310,7 @@
     "Public participation" : "公開參與",
     "To participate, tell us how we can call you!" : "要參與，請告訴我們如何稱呼您！",
     "Enter your name" : "輸入您的名稱",
+    "Remember me for 30 days" : "記住我30天",
     "You are a registered user of this site?" : "您是此網站的註冊使用者？",
     "Login" : "登入",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "作為此網站的一般使用者，您可以在登入後以您的內部身份參與。",
@@ -538,6 +539,7 @@
     "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。",
     "Archive" : "封存",
     "My archived polls" : "我的已封存投票",
-    "Your archived polls are only accessible to you." : "您封存的投票僅有您能存取。"
+    "Your archived polls are only accessible to you." : "您封存的投票僅有您能存取。",
+    "Maybe" : "也許"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

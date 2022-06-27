@@ -312,6 +312,7 @@ OC.L10N.register(
     "Public participation" : "Nyilvános részvétel",
     "To participate, tell us how we can call you!" : "A részvételhez mondja el hogyan szólíthatjuk.",
     "Enter your name" : "Adja meg a nevét",
+    "Remember me for 30 days" : "Megjegyzés 30 napig",
     "You are a registered user of this site?" : "A regisztrált felhasználója ennek a webhelynek?",
     "Login" : "Bejelentkezés",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "A webhely rendszeres felhasználójaként, bejelentkezés után részt vehet a szavazásban.",
