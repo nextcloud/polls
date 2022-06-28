@@ -312,6 +312,7 @@ OC.L10N.register(
     "Public participation" : "Parte-hartze publikoa",
     "To participate, tell us how we can call you!" : "Parte hartzeko, esaiguzu nola deitu ahal zaitugun!",
     "Enter your name" : "Sartu zure izena",
+    "Remember me for 30 days" : "Gogorarazi 30 egunetan",
     "You are a registered user of this site?" : "Gune honen erabiltzaile erregistratu bat zara?",
     "Login" : "Hasi saioa",
     "As a regular user of this site, you can participate with your internal identity after logging in." : "Gune honetako ohiko erabiltzaile gisa, saioa hasi ondoren zure barne identitatearekin parte har dezakezu.",
@@ -540,6 +541,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Itxitako bozketa guztiak, bozkatu ezin direnak.",
     "Archive" : "Artxibatu",
     "My archived polls" : "Nire artxibatutako galdeketak",
-    "Your archived polls are only accessible to you." : "Artxibatutako galdeketak zuretzat bakarrik dira eskuragarriak."
+    "Your archived polls are only accessible to you." : "Artxibatutako galdeketak zuretzat bakarrik dira eskuragarriak.",
+    "Maybe" : "Agian"
 },
 "nplurals=2; plural=(n != 1);");
