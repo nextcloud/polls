@@ -440,6 +440,7 @@ OC.L10N.register(
     "Remove Email Address" : "E-posta adresini sil",
     "Copy list of email addresses to clipboard" : "E-posta adreslerinin listesini panoya kopyala",
     "Reset your votes" : "Oylarınızı sıfırlayın",
+    "Logout as {name} (delete cookie)" : "{name} oturumunu kapat (çerezi sil)",
     "Email address deleted." : "E-posta adresi silindi",
     "Error deleting email address {emailAddress}" : "{emailAddress} e-posta adresi silinirken sorun çıktı",
     "Email address {emailAddress} saved." : "{emailAddress} adresi kaydedildi.",

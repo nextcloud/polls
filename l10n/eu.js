@@ -440,6 +440,7 @@ OC.L10N.register(
     "Remove Email Address" : "Kendu e-posta helbidea",
     "Copy list of email addresses to clipboard" : "Kopiatu e-posta helbide zerrenda bat arbelera",
     "Reset your votes" : "Berezarri zure botoak",
+    "Logout as {name} (delete cookie)" : "{name} saioa itxi (cookie-a ezabatu)",
     "Email address deleted." : "E-posta helbidea ezabatuta.",
     "Error deleting email address {emailAddress}" : "Errorea {emailAddress} helbide elektronikoa ezabatzean",
     "Email address {emailAddress} saved." : "{emailAddress} e-posta helbidea gordeta.",

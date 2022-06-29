@@ -438,6 +438,7 @@
     "Remove Email Address" : "移除電郵地址",
     "Copy list of email addresses to clipboard" : "將電郵地址清單複製到剪貼板",
     "Reset your votes" : "重置您的投票",
+    "Logout as {name} (delete cookie)" : "以 {name} 身份登出（刪除 cookie）",
     "Email address deleted." : "電郵地址已刪除。",
     "Error deleting email address {emailAddress}" : "刪除電郵地址 {emailAddress} 時出錯",
     "Email address {emailAddress} saved." : "電郵地址 {emailAddress} 已保存。",

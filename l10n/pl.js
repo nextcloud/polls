@@ -440,6 +440,7 @@ OC.L10N.register(
     "Remove Email Address" : "Usuń adres e-mail",
     "Copy list of email addresses to clipboard" : "Kopiuj listę adresów e-mail do schowka",
     "Reset your votes" : "Zresetuj swoje głosy",
+    "Logout as {name} (delete cookie)" : "Wyloguj się jako {name} (usuń plik cookie)",
     "Email address deleted." : "Adres e-mail został usunięty.",
     "Error deleting email address {emailAddress}" : "Błąd podczas usuwania adresu e-mail {emailAddress}",
     "Email address {emailAddress} saved." : "Adres e-mail {emailAddress} został zapisany.",

@@ -440,6 +440,7 @@ OC.L10N.register(
     "Remove Email Address" : "Odebrat e-mailovou adresu",
     "Copy list of email addresses to clipboard" : "Zkopírovat seznam e-mailových adres do schránky",
     "Reset your votes" : "Resetovat své hlasy",
+    "Logout as {name} (delete cookie)" : "Odhlásit se jako {name} (smazat cookie)",
     "Email address deleted." : "E-mailová adresa smazána.",
     "Error deleting email address {emailAddress}" : "Chyba při mazání e-mailové adresy {emailAddress}",
     "Email address {emailAddress} saved." : "E-mailová adresa {emailAddress} uložena.",
