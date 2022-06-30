@@ -27,6 +27,7 @@ OC.L10N.register(
     "Added" : "Додадено",
     "Close" : "Затвори",
     "never" : "никогаш",
+    "_%n Participant_::_%n Participants_" : ["%n Учесник","%n Учесници"],
     "Login" : "Најава",
     "Access" : "Пристап",
     "Owner" : "Сопственик",
