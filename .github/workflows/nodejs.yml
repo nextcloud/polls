@@ -15,13 +15,28 @@ jobs:
     name: build node${{ matrix.node-versions }} npm${{ matrix.npm-versions }}
     steps:
     - uses: actions/checkout@v2
+    - name: Cache node modules
+      id: cache-modules
+      uses: actions/cache@v2
+      env:
+        cache-name: cache-node-modules
+      with:
+        # caching node_modules
+        path: node_modules # 👈 path for node_modules folder
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/package-lock.json') }}
+        # 👆 name of the chache key includes package-lock.json
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
     - name: Use Node.js ${{ matrix.node-versions }}
       uses: actions/setup-node@v2
       with:
         node-version: ${{ matrix.node-versions }}
-    - name: Set up npm ${{ matrix.npm-versions }}
-      run: npm i -g npm@"${{ matrix.npm-versions }}"
+    # - name: Set up npm ${{ matrix.npm-versions }}
+    #   run: npm i -g npm@"${{ matrix.npm-versions }}"
     - name: install dependencies
+      if: steps.cache-modules.outputs.cache-hit != 'true'
       run: npm ci
     - name: build
       run: npm run build --if-present
