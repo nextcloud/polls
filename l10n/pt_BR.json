@@ -438,6 +438,7 @@
     "Remove Email Address" : "Remover Endereço de e-mail ",
     "Copy list of email addresses to clipboard" : "Copiar a lista de emails para a área de transferência",
     "Reset your votes" : "Redefina seus votos",
+    "Logout as {name} (delete cookie)" : "Sair como {name} (excluir cookie)",
     "Email address deleted." : "Endereço de e-mail excluído.",
     "Error deleting email address {emailAddress}" : "Erro ao excluir endereço de e-mail {emailAddress}",
     "Email address {emailAddress} saved." : "Endereço de e-mail {emailAddress} salvo.",
