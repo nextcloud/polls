@@ -1,0 +1,37 @@
+name: Read polls version from info.xml
+inputs: 
+  skip-check:
+    description: Do not check tag against version
+    required: false
+    type:  boolean
+    default: false
+
+outputs:
+  app-version: 
+    description: 'Version string from app'
+    value: ${{ steps.appinfo.outputs.info }}
+  tag-version: 
+    description: 'Version string from tag'
+    value: ${{ steps.gettag.outputs.VERSION }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Get app version from appinfo/info.xml
+      id: appinfo
+      uses: mavrosxristoforos/get-xml-info@1.0
+      with:
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//version'
+
+    - name: Get tag name
+      id: gettag
+      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
+      shell: bash
+
+    - name: Compare versions
+      if: ${{ !inputs.skip-version && format('v{0}', steps.appinfo.outputs.info) != steps.gettag.outputs.VERSION }}
+      uses: actions/github-script@v3
+      with:
+        script: |
+          core.setFailed('App version ${{ format('v{0}', steps.appinfo.outputs.info) }} is not equal to tag name ${{ steps.gettag.outputs.VERSION }}!')

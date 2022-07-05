@@ -1,0 +1,65 @@
+name: Setup composer and PHP
+inputs:
+  php-version:
+    description: 'PHP version (default: 7.4)'
+    required: false
+    default: '7.4'
+  php-tools:
+    description: 'Additional php tools'
+    required: false
+    type: string
+  php-extensions:
+    description: 'extensions to add to php'
+    required: false
+    type: string
+  mode:
+    description: 'Composer install mode (dev, production, default: dev)'
+    required: false
+    type: string
+    default: 'dev'
+  working-directory:
+    description: 'deployment directory'
+    required: false
+    type: string
+    default: ''
+
+outputs:
+  cache-hit: 
+    description: 'Return cache hit'
+    value: ${{ steps.cache-composer.outputs.cache-hit }}
+
+runs:
+  using: "composite"
+  steps:
+    - name: Use or setup caching composer packages (${{ inputs.mode }})
+      uses: actions/cache@v3
+      id: cache-composer
+      env:
+        cache-name: cache-composer-${{ inputs.mode }}
+      with:
+        path: vendor
+        key: ${{ runner.os }}-build-${{ env.cache-name }}-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-build-${{ env.cache-name }}-
+          ${{ runner.os }}-build-
+          ${{ runner.os }}-
+
+    - name: Set up php ${{ inputs.php-version }}
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: ${{ inputs.php-version }}
+        tools: ${{ inputs.php-tools }}
+        extensions: ${{ inputs.php-extensions }}
+        coverage: none
+
+    - name: Install dev packages
+      if: steps.cache-composer.outputs.cache-hit != 'true' && inputs.mode == 'dev'
+      working-directory: ${{ inputs.working-directory }}
+      run: composer i
+      shell: bash
+
+    - name: Install production packages
+      if: steps.cache-composer.outputs.cache-hit != 'true' && inputs.mode == 'production'
+      working-directory: ${{ inputs.working-directory }}
+      run: composer i -o
+      shell: bash

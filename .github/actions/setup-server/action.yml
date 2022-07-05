@@ -1,0 +1,96 @@
+name: Checkout and setup server
+inputs:
+  server-version:
+    required: false
+    default: 'master'
+    description: 'Define Nextcloud branch (default: master)'
+  app-name:
+    required: false
+    default: 'polls'
+    description: 'App to checkout (default: polls)'
+  php-version:
+    required: false
+    default: '7.4'
+    description: 'PHP version (default: 7.4)'
+  server-path:
+    required: false
+    default: server
+    desrcription: 'Server path (default: server)'
+  db-host:
+    required: false
+    default: 127.0.0.1
+    desrcription: 'Server path (Default: 127.0.0.1)'
+  db-engine:
+    required: false
+    default: 'sqlite'
+    description: 'Database system to use (sqlite, mysql, pgsql, Default: sqlite)'
+  db-port:
+    required: false
+    type: number
+    default: 4444
+    description: 'Database port to use (default: 4444)'
+  db-name:
+    required: false
+    default: nextcloud
+    desrcription: 'Database name (Default: nextcloud)'
+  db-username:
+    required: false
+    default: root
+    desrcription: 'Database root user (Default: root)'
+  db-password:
+    required: false
+    default: rootpassword
+    desrcription: 'Database root password (Default: rootpassword)'
+  admin-user:
+    required: false
+    default: admin
+    desrcription: 'User id of the admin user (Default: admin)'
+  admin-password:
+    required: false
+    default: password
+    desrcription: 'Password of the admin user (Default: password)'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Checkout server ${{ inputs.server-version }}
+      uses: actions/checkout@v2
+      with:
+        path: ${{ inputs.server-path }}
+        repository: nextcloud/server
+        ref: ${{ inputs.server-version }}
+
+    - name: Checkout submodules
+      working-directory: ${{ inputs.server-path }}
+      shell: bash
+      run: |
+        auth_header="$(git config --local --get http.https://github.com/.extraheader)"
+        git submodule sync --recursive
+        git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
+
+    - name: Checkout ${{ inputs.app-name }}
+      uses: actions/checkout@v2
+      with:
+        path: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
+
+    - name: Set up php ${{ inputs.php-version }}
+      uses: shivammathur/setup-php@v2
+      with:
+        php-version: ${{ inputs.php-version }}
+        tools: phpunit
+        extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, zip, gd
+        coverage: none
+
+    - name: Set up components
+      working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
+      shell: bash
+      run: composer i
+
+    - name: Set up Nextcloud
+      working-directory: ${{ inputs.server-path }}
+      shell: bash
+      run: |
+        mkdir data
+        ./occ maintenance:install --verbose --database=${{ inputs.db-engine }} --database-name=${{ inputs.db-name }} --database-host=${{ inputs.db-host }} --database-port=${{ inputs.db-port }} --database-user=${{ inputs.db-username }} --database-pass=${{ inputs.db-password }} --admin-user ${{ inputs.admin-user }} --admin-pass ${{ inputs.admin-password }}
+        ./occ app:enable --force ${{ inputs.app-name }}
+        php -S localhost:8080 &

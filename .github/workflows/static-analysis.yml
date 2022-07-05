@@ -8,25 +8,26 @@ on:
       - stable*
 
 jobs:
-  static-psalm-analysis:
-      runs-on: ubuntu-latest
-      strategy:
-          matrix:
-              ocp-version: [ 'dev-master', 'dev-stable21' ]
-              php-versions: ['7.4', '8.0']
+  psalm:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ocp-version: [ 'dev-master', 'dev-stable21' ]
+        php-versions: ['7.4', '8.0']
 
-      name: psalm php${{ matrix.php-versions}} ${{ matrix.ocp-version }}
-      steps:
-          - name: Checkout
-            uses: actions/checkout@master
-          - name: Set up php
-            uses: shivammathur/setup-php@master
-            with:
-                php-version: ${{ matrix.php-versions }}
-                coverage: none
-          - name: Install dependencies
-            run: composer i
-          - name: Install dependencies
-            run: composer require --dev christophwurst/nextcloud:${{ matrix.ocp-version }}
-          - name: Run coding standards check
-            run: composer run psalm
+    name: psalm php${{ matrix.php-versions}} ${{ matrix.ocp-version }}
+
+    steps:
+      - uses: actions/checkout@master
+
+      - name: Setup composer and PHP
+        uses: ./.github/actions/setup-composer
+        with:
+          php-version: ${{ matrix.php-versions }}
+          php-tools: composer, psalm
+
+      - name: Install Nextcloud API
+        run: composer require --dev christophwurst/nextcloud:${{ matrix.ocp-version }}
+
+      - name: Run coding standards check
+        run: composer run psalm

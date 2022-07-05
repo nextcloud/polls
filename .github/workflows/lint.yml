@@ -8,69 +8,57 @@ on:
       - stable*
 
 jobs:
-  php-cs-fixer:
+  php-cs:
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
-        php-versions: ['7.4', '8.0']
+        php-versions: ['7.4', '8.0', '8.1']
 
-    name: php-cs php${{ matrix.php-versions }}
+    name: PHP CS php${{ matrix.php-versions }}
 
     steps:
-    - name: Checkout
+    - name: Checkout repository
       uses: actions/checkout@v2
-    - name: Set up php
-      uses: shivammathur/setup-php@master
+
+    - name: Setup composer and PHP
+      uses: ./.github/actions/setup-composer
       with:
         php-version: ${{ matrix.php-versions }}
-        coverage: none
-    - name: Install dependencies
-      run: composer i
+        php-tools: composer, phpunit
+
     - name: Run coding standards check
       run: composer run cs:check
 
-  lint:
+  eslint:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-versions: [14.x]
-        npm-versions: [7]
-
-    name: eslint node${{ matrix.node-versions }} npm${{ matrix.npm-versions }}
+    name: ${{ inputs.lint }} node${{ inputs.node-version }}
     steps:
-      - uses: actions/checkout@v2
-      - name: Use node ${{ matrix.node-versions }}
-        uses: actions/setup-node@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: ./.github/actions/setup-node
         with:
-          node-version: ${{ matrix.node-versions }}
-      - name: Set up npm ${{ matrix.npm-versions }}
-        run: npm i -g npm@"${{ matrix.npm-versions }}"
-      - name: Install dependencies
-        run: npm ci
-      - name: Run Lint
+          node-version: '16'
+
+      - name: Run eslint
         run: npm run lint
 
   stylelint:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        node-versions: [14.x]
-        npm-versions: [7]
-
-    name: stylelint node${{ matrix.node-versions }} npm${{ matrix.npm-versions }}
+    name: ${{ inputs.lint }} node${{ inputs.node-version }}
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-      - name: Set up node ${{ matrix.node-versions }}
-        uses: actions/setup-node@v2
+      - name: Setup node
+        uses: ./.github/actions/setup-node
         with:
-          node-version: ${{ matrix.node-versions }}
-      - name: Set up npm ${{ matrix.npm-version }}
-        run: npm i -g npm@"${{ matrix.npm-version }}"
-      - name: Install dependencies
-        run: npm ci
+          node-version: '16'
+
       - name: Run stylelint
         run: npm run stylelint
+
