@@ -438,6 +438,7 @@
     "Remove Email Address" : "E-mail-cím eltávolítása",
     "Copy list of email addresses to clipboard" : "E-mail-címek listájának másolása a vágólapra",
     "Reset your votes" : "Saját szavazatok visszaállítása",
+    "Logout as {name} (delete cookie)" : "Kijelentkezés mint {name} (süti törlése)",
     "Email address deleted." : "E-mail cím törölve.",
     "Error deleting email address {emailAddress}" : "Hiba történt a(z) {emailAddress} e-mail-cím törlése során",
     "Email address {emailAddress} saved." : "A(z) {emailAddress} e-mail-cím mentve.",
