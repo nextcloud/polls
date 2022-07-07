@@ -15,7 +15,7 @@ jobs:
       matrix:
         php-versions: ['7.4', '8.0', '8.1']
 
-    name: PHP ${{ matrix.php-versions }}
+    name: PHP-CS
 
     steps:
     - name: Checkout repository
