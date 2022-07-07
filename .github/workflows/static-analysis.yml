@@ -1,4 +1,4 @@
-name: psalm
+name: Psalm
 
 on:
   pull_request:
@@ -15,7 +15,7 @@ jobs:
         ocp-version: [ 'dev-master', 'dev-stable22' ]
         php-versions: ['7.4', '8.0']
 
-    name: psalm php${{ matrix.php-versions}} ${{ matrix.ocp-version }}
+    name: PHP ${{ matrix.php-versions}} ${{ matrix.ocp-version }}
 
     steps:
       - uses: actions/checkout@master
