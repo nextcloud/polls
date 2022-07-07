@@ -15,7 +15,7 @@ jobs:
       matrix:
         php-versions: ['7.4', '8.0', '8.1']
 
-    name: PHP CS php${{ matrix.php-versions }}
+    name: PHP ${{ matrix.php-versions }}
 
     steps:
     - name: Checkout repository
@@ -33,7 +33,8 @@ jobs:
   eslint:
     runs-on: ubuntu-latest
 
-    name: ${{ inputs.lint }} node${{ inputs.node-version }}
+    name: ESLint
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -49,7 +50,8 @@ jobs:
   stylelint:
     runs-on: ubuntu-latest
 
-    name: ${{ inputs.lint }} node${{ inputs.node-version }}
+    name: Stylelint
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2

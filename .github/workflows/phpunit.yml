@@ -26,7 +26,7 @@ jobs:
         php-versions: ['7.4', '8.0', '8.1']
         server-versions: ['master']
 
-    name: PHPUnit php${{ matrix.php-versions }}-sqlite-${{ matrix.server-versions }}
+    name: SQLite
 
     steps:
       - uses: actions/checkout@v2
@@ -61,7 +61,7 @@ jobs:
         php-versions: ['8.0']
         server-versions: ['stable24', 'stable23']
 
-    name: PHPUnit php${{ matrix.php-versions }}-mysql-${{ matrix.server-versions }}
+    name: MySQL
 
     services:
       mysql:
@@ -103,9 +103,9 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: ['7.4']
-        server-versions: ['stable22', 'stable21']
+        server-versions: ['stable23', 'stable22']
 
-    name: PHPUnit php${{ matrix.php-versions }}-pgsql-${{ matrix.server-versions }}
+    name: PostgreSQL
 
     services:
       postgres:
