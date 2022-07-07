@@ -1,27 +1,24 @@
 name: Node CI
 
-on: [push]
+on:
+  pull_request:
+  push:
+    branches:
+      - master
+      - stable*
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
-    strategy:
-      matrix:
-        node-versions: [14.x, 16.x]
-        npm-versions: [7]
-
-    name: build node${{ matrix.node-versions }} npm${{ matrix.npm-versions }}
+    name: Build app
     steps:
-    - uses: actions/checkout@v2
-    - name: Use Node.js ${{ matrix.node-versions }}
-      uses: actions/setup-node@v2
-      with:
-        node-version: ${{ matrix.node-versions }}
-    - name: Set up npm ${{ matrix.npm-versions }}
-      run: npm i -g npm@"${{ matrix.npm-versions }}"
-    - name: install dependencies
-      run: npm ci
-    - name: build
-      run: npm run build --if-present
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup node
+        uses: ./.github/actions/setup-node
+        with:
+          node-version: '16'
+
+      - name: build
+        run: npm run build --if-present

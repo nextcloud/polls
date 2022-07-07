@@ -1,4 +1,4 @@
-name: Pubish beta release
+name: Publish beta release
 
 on: 
   push:
@@ -8,54 +8,56 @@ on:
 jobs:
   checkout:
     runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        node-versions: [14.x]
-        npm-versions: [7]
     name: Beta release
     steps:
     - uses: actions/checkout@v2
-
-    - name: Get app version from appinfo/info.xml
-      id: appinfo
-      uses: mavrosxristoforos/get-xml-info@1.0
-      with:
-        xml-file: 'appinfo/info.xml'
-        xpath: '//info//version'
-    - name: Get tag name
-      id: gettag
-      run: echo ::set-output name=VERSION::$(echo $GITHUB_REF | cut -d / -f 3)
     - name: Check correct app version
-      if: ${{ format('v{0}', steps.appinfo.outputs.info) != steps.gettag.outputs.VERSION }}
-      run: echo App version ${{ format('v{0}', steps.appinfo.outputs.info) }} is not equal to tag name ${{ steps.gettag.outputs.VERSION }} |
-        echo Cancelling workflow
-        exit 1
+      id: appinfo
+      uses: ./.github/actions/get-polls-version
 
-    - name: Use node ${{ matrix.node-versions }}
-      uses: actions/setup-node@v2
+    - name: Setup node
+      if: success()
+      uses: ./.github/actions/setup-node
+
+    - name: Setup composer and PHP
+      if: success()
+      uses: ./.github/actions/setup-composer
       with:
-        node-version: ${{ matrix.node-versions }}
-    - name: Set up npm ${{ matrix.npm-versions }}
-      run: npm i -g npm@"${{ matrix.npm-versions }}"
+        mode: production
+        php-tools: composer
+
+    - name: build
+      run: npm run build --if-present
 
     - name: Make appstore package
-      run: make appstore
+      if: success()
+      run: make package
 
     - name: rename package
+      if: success()
       run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
 
     - name: create zip archive from sources
+      if: success()
       run: |
         pushd build/source
         zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip *
         popd
 
-    - name: Publish beta release
-      uses: softprops/action-gh-release@v1
-      with: 
-        prerelease: true
-        draft: true
-        generate_release_notes: true
-        files: |
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip
+    - uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      id: create-issue
+      run: 'echo Created issue number ${{ steps.create-issue.outputs.number }}'
+      run: 'echo Created ${{ steps.create-issue.outputs.url }}'
+
+    # - name: Publish beta release
+    #   if: success()
+    #   uses: softprops/action-gh-release@v1
+    #   with: 
+    #     prerelease: true
+    #     draft: true
+    #     generate_release_notes: true
+    #     files: |
+    #       build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
+    #       build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip
