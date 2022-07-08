@@ -7,7 +7,11 @@ All notable changes to this project will be documented in this file.
 - Convert links in comments to clickable links
 - Add an option for public users to logout from a poll, when logged in via cookie
 - Allow bulk poll ownership transfer for admins
+- Allow users to change their name after registration to a public poll
 
+### Fix
+ - Unsubscribing from a public was not possible
+ - Use display name for avatar of the current public user instead of user id
 ## [3.7.0] - 2022-06-24
 ### New
 - User setting for conflict check (hours before and after an option to search for conflicts)
