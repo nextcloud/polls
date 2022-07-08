@@ -31,10 +31,10 @@ class ShareListener extends BaseListener {
 
 	/** @var array */
 	protected $watchTables = [
-		Watch::OBJECT_SHARES, 
-		Watch::OBJECT_POLLS, 
-		Watch::OBJECT_VOTES, 
-		Watch::OBJECT_OPTIONS, 
+		Watch::OBJECT_SHARES,
+		Watch::OBJECT_POLLS,
+		Watch::OBJECT_VOTES,
+		Watch::OBJECT_OPTIONS,
 		Watch::OBJECT_COMMENTS
 	];
 
