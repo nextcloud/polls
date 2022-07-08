@@ -35,13 +35,13 @@ jobs:
 
     - name: rename package
       if: success()
-      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
+      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
 
     - name: create zip archive from sources
       if: success()
       run: |
         pushd build/source
-        zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip *
+        zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip *
         popd
 
     - name: Publish beta release
@@ -49,8 +49,8 @@ jobs:
       uses: softprops/action-gh-release@v1
       with: 
         prerelease: true
-        draft: true
+        draft: false
         generate_release_notes: true
         files: |
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip
+          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
+          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip
