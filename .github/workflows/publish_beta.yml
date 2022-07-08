@@ -44,20 +44,13 @@ jobs:
         zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip *
         popd
 
-    - uses: JasonEtco/create-an-issue@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      id: create-issue
-      run: 'echo Created issue number ${{ steps.create-issue.outputs.number }}'
-      run: 'echo Created ${{ steps.create-issue.outputs.url }}'
-
-    # - name: Publish beta release
-    #   if: success()
-    #   uses: softprops/action-gh-release@v1
-    #   with: 
-    #     prerelease: true
-    #     draft: true
-    #     generate_release_notes: true
-    #     files: |
-    #       build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
-    #       build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip
+    - name: Publish beta release
+      if: success()
+      uses: softprops/action-gh-release@v1
+      with: 
+        prerelease: true
+        draft: true
+        generate_release_notes: true
+        files: |
+          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.tar.gz
+          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.info }}.zip
