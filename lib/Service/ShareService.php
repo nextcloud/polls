@@ -40,6 +40,7 @@ use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Event\ShareChangedDisplayNameEvent;
 use OCA\Polls\Event\ShareCreateEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
@@ -342,8 +343,7 @@ class ShareService {
 	}
 
 	/**
-	 * Set emailAddress to personal share
-	 * or update an email share with the username
+	 * Set emailAddress of personal share
 	 *
 	 * @return Share
 	 */
@@ -364,6 +364,32 @@ class ShareService {
 		}
 
 		$this->eventDispatcher->dispatchTyped(new ShareChangedEmailEvent($this->share));
+
+		return $this->share;
+	}
+
+	/**
+	 * Set displayName of personal share
+	 *
+	 * @return Share
+	 */
+	public function setDisplayName(string $token, string $displayName): Share {
+		try {
+			$this->share = $this->shareMapper->findByToken($token);
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Token ' . $token . ' does not exist');
+		}
+
+		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
+			$this->systemService->validatePublicUsername($displayName, $token);
+			$this->share->setDisplayName($displayName);
+			// TODO: Send confirmation
+			$this->share = $this->shareMapper->update($this->share);
+		} else {
+			throw new InvalidShareTypeException('Displayname can only be changed in external shares.');
+		}
+
+		$this->eventDispatcher->dispatchTyped(new ShareChangedDisplayNameEvent($this->share));
 
 		return $this->share;
 	}

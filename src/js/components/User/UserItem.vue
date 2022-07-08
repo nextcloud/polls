@@ -30,7 +30,7 @@
 			:size="iconSize"
 			:icon-class="avatarIcon"
 			:show-user-status="showUserStatus"
-			:user="userId"
+			:user="avatarUserId"
 			:display-name="name"
 			:is-no-user="isNoUser" />
 
@@ -170,6 +170,13 @@ export default {
 
 			return this.userId
 
+		},
+
+		avatarUserId() {
+			if (this.isGuestComputed) {
+				return this.name
+			}
+			return this.userId
 		},
 
 		displayEmailAddress() {

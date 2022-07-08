@@ -32,13 +32,22 @@
 		<ActionInput v-if="$route.name === 'publicVote'"
 			:class="check.status"
 			:value="emailAddressTemp"
-			@click="deleteEmailAddress"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			<template #icon>
 				<EditEmailIcon />
 			</template>
 			{{ t('polls', 'Edit Email Address') }}
+		</ActionInput>
+		<ActionInput v-if="$route.name === 'publicVote'"
+			:class="checkDisplayName.status"
+			:value="displayNameTemp"
+			@update:value="validateDisplayName"
+			@submit="submitDisplayName">
+			<template #icon>
+				<EditAccountIcon />
+			</template>
+			{{ t('polls', 'Change name') }}
 		</ActionInput>
 		<ActionButton v-if="$route.name === 'publicVote'"
 			:disabled="!emailAddress"
@@ -92,6 +101,7 @@ import { generateUrl } from '@nextcloud/router'
 import { Actions, ActionButton, ActionCheckbox, ActionInput, ActionSeparator } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import SettingsIcon from 'vue-material-design-icons/Cog.vue'
+import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
@@ -110,6 +120,7 @@ export default {
 		ActionInput,
 		ActionSeparator,
 		SettingsIcon,
+		EditAccountIcon,
 		EditEmailIcon,
 		LogoutIcon,
 		SendLinkPerEmailIcon,
@@ -120,10 +131,14 @@ export default {
 
 	data() {
 		return {
+			displayNameTemp: '',
 			emailAddressTemp: '',
 			checkResult: '',
 			checkStatus: '',
 			checking: false,
+			displayNameCheckResult: '',
+			displayNameCheckStatus: '',
+			displayNameChecking: false,
 		}
 	},
 
@@ -133,6 +148,7 @@ export default {
 			share: (state) => state.share,
 			subscribed: (state) => state.subscription.subscribed,
 			emailAddress: (state) => state.share.emailAddress,
+			displayName: (state) => state.poll.acl.displayName,
 		}),
 
 		hasCookie() {
@@ -141,6 +157,10 @@ export default {
 
 		emailAddressUnchanged() {
 			return this.emailAddress === this.emailAddressTemp
+		},
+
+		displayNameUnchanged() {
+			return this.displayName === this.displayNameTemp
 		},
 
 		check() {
@@ -164,6 +184,27 @@ export default {
 			}
 		},
 
+		checkDisplayName() {
+			if (this.displayNameChecking) {
+				return {
+					result: t('polls', 'Checking name …'),
+					status: 'checking',
+				}
+			}
+
+			if (this.displayNameUnchanged) {
+				return {
+					result: '',
+					status: '',
+				}
+			}
+
+			return {
+				result: this.displayNameCheckResult,
+				status: this.displayNameCheckStatus,
+			}
+		},
+
 		personalLink() {
 			return window.location.origin
 				+ this.$router.resolve({
@@ -177,10 +218,14 @@ export default {
 		emailAddress() {
 			this.emailAddressTemp = this.emailAddress
 		},
+		displayName() {
+			this.displayNameTemp = this.displayName
+		},
 	},
 
 	created() {
 		this.emailAddressTemp = this.emailAddress
+		this.displayNameTemp = this.displayName
 	},
 
 	methods: {
@@ -223,12 +268,42 @@ export default {
 			}
 		}, 500),
 
+		validateDisplayName: debounce(async function(value) {
+			const endpoint = 'apps/polls/check/username'
+
+			this.displayNameTemp = value
+			try {
+				this.displayNameChecking = true
+				await axios.post(generateUrl(endpoint), {
+					headers: { Accept: 'application/json' },
+					userName: this.displayNameTemp,
+					token: this.$route.params.token,
+				})
+				this.displayNameCheckResult = t('polls', 'valid name.')
+				this.displayNameCheckStatus = 'success'
+			} catch {
+				this.displayNameCheckResult = t('polls', 'Invalid email address.')
+				this.displayNameCheckStatus = 'error'
+			} finally {
+				this.displayNameChecking = false
+			}
+		}, 500),
+
 		async submitEmailAddress() {
 			try {
 				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.emailAddressTemp })
 				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.emailAddressTemp }))
 			} catch {
 				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.emailAddressTemp }))
+			}
+		},
+
+		async submitDisplayName() {
+			try {
+				await this.$store.dispatch('share/updateDisplayName', { displayName: this.displayNameTemp })
+				showSuccess(t('polls', 'Name changed.'))
+			} catch {
+				showError(t('polls', 'Error changing name.'))
 			}
 		},
 

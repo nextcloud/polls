@@ -278,7 +278,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function unsubscribe(string $token): JSONResponse {
-		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, null, $token)]);
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(false, null, $token)]);
 	}
 
 	/**
@@ -300,6 +300,16 @@ class PublicController extends Controller {
 	public function validateEmailAddress(string $emailAddress): JSONResponse {
 		return $this->response(fn () => ['result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress]);
 	}
+
+	/**
+	 * Change displayName
+	 * @PublicPage
+	 * @NoAdminRequired
+	 */
+	public function setDisplayName(string $token, string $displayName): JSONResponse {
+		return $this->response(fn () => ['share' => $this->shareService->setDisplayname($token, $displayName)]);
+	}
+
 
 	/**
 	 * Set EmailAddress

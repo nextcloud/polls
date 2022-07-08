@@ -51,6 +51,7 @@ use OCA\Polls\Event\PollOwnerChangeEvent;
 use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
+use OCA\Polls\Event\ShareChangedDisplayNameEvent;
 use OCA\Polls\Event\ShareCreateEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
@@ -103,6 +104,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(PollTakeoverEvent::class, PollListener::class);
 		$context->registerEventListener(PollUpdatedEvent::class, PollListener::class);
 		$context->registerEventListener(ShareChangedEmailEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedDisplayNameEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareChangedRegistrationConstraintEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareCreateEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareListener::class);
