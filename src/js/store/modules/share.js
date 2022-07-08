@@ -124,6 +124,28 @@ const actions = {
 		}
 	},
 
+	async updateDisplayName(context, payload) {
+		if (context.rootState.route.name !== 'publicVote') {
+			return
+		}
+
+		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/name/${payload.displayName}`
+
+		try {
+			const response = await axios.put(generateUrl(endPoint), {
+				headers: { Accept: 'application/json' },
+			})
+			context.commit('set', { share: response.data.share })
+			context.dispatch('poll/get', null, { root: true })
+			context.dispatch('comments/list', null, { root: true })
+			context.dispatch('votes/list', null, { root: true })
+			context.dispatch('options/list', null, { root: true })
+		} catch (e) {
+			console.error('Error changing name', { error: e.response }, { payload })
+			throw e
+		}
+	},
+
 	async deleteEmailAddress(context, payload) {
 		if (context.rootState.route.name !== 'publicVote') {
 			return
