@@ -52,7 +52,7 @@
 		"marked": "^4.0.17",
 		"nextcloud-vue-collections": "^0.10.0",
 		"v-click-outside": "^3.2.0",
-		"vue": "^2.7.3",
+		"vue": "^3.2.37",
 		"vue-clipboard2": "^0.3.3",
 		"vue-material-design-icons": "^5.1.1",
 		"vue-router": "^3.5.4",
