@@ -278,7 +278,7 @@ class PublicController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function unsubscribe(string $token): JSONResponse {
-		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, null, $token)]);
+		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(false, null, $token)]);
 	}
 
 	/**
