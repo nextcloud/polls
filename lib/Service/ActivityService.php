@@ -184,6 +184,10 @@ class ActivityService {
 				return $this->userIsActor
 					? $this->l10n->t('You have changed your email address')
 					: $this->l10n->t('{sharee} has changed his email address');
+			case ShareEvent::CHANGE_DISPLAY_NAME:
+				return $this->userIsActor
+					? $this->l10n->t('You have changed your name')
+					: $this->l10n->t('{sharee} has changed his name');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
 					? $this->l10n->t('You have changed the share type')
@@ -330,6 +334,10 @@ class ActivityService {
 				return $this->userIsActor
 					? $this->l10n->t('You have changed your email address')
 					: $this->l10n->t('Email address of {sharee} has been changed');
+			case ShareEvent::CHANGE_DISPLAY_NAME:
+				return $this->userIsActor
+					? $this->l10n->t('You have changed your name')
+					: $this->l10n->t('Displaynname of {sharee} has been changed');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
 					? $this->l10n->t('You have changed the share type')

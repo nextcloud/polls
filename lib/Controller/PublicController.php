@@ -302,6 +302,16 @@ class PublicController extends Controller {
 	}
 
 	/**
+	 * Change displayName
+	 * @PublicPage
+	 * @NoAdminRequired
+	 */
+	public function setDisplayName(string $token, string $displayName): JSONResponse {
+		return $this->response(fn () => ['share' => $this->shareService->setDisplayname($token, $displayName)]);
+	}
+
+
+	/**
 	 * Set EmailAddress
 	 * @PublicPage
 	 * @NoAdminRequired
