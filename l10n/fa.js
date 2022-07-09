@@ -58,6 +58,7 @@ OC.L10N.register(
     "Shift all date options" : "همه گزینه های تاریخ را تغییر دهید",
     "Available Options" : "گزینه های موجود",
     "Receive notification email on activity" : "ایمیل فعالیت را دریافت کنید",
+    "Change name" : "تغییر نام",
     "Error while adding share" : "خطا در هنگام افزودن اشتراک",
     "Yes" : "بله",
     "Administration" : "مدیریت",

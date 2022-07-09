@@ -36,6 +36,7 @@ OC.L10N.register(
     "Shares" : "Споделувања",
     "Remove share" : "Отстрани споделување",
     "Description" : "Опис",
+    "Change name" : "Промени име",
     "Email options" : "Е-пошта параметри",
     "Yes" : "Да",
     "Administration" : "Администрација",

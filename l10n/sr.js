@@ -83,6 +83,7 @@ OC.L10N.register(
     "Shift all date options" : "Помери све ставке са датумима",
     "Available Options" : "Доступне опције",
     "Receive notification email on activity" : "Примај обавештења о активностима преко е-поште",
+    "Change name" : "Промени име",
     "Copy list of email addresses to clipboard" : "Копирај списак е-мејл адреса у оставу",
     "Error while adding share" : "Грешка приликом додавања дељења",
     "Delete votes" : "Обриши гласове",

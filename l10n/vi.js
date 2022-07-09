@@ -29,6 +29,7 @@ OC.L10N.register(
     "Preview" : "Xem trước",
     "Shares" : "Chia sẻ",
     "Description" : "Mô tả",
+    "Change name" : "Đổi tên",
     "Yes" : "Đồng ý",
     "Details" : "Thông tin",
     "Configuration" : "Cấu hình",

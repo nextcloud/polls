@@ -208,6 +208,7 @@ OC.L10N.register(
     "Token: {token}" : "Prieigos raktas: {token}",
     "Copy your personal link to clipboard" : "Kopijuoti jūsų asmeninę nuorodą į iškarpinę",
     "Edit Email Address" : "Taisyti el. pašto adresą",
+    "Change name" : "Keisti vardą",
     "Get your personal link per mail" : "Gauti asmeninę nuorodą el. paštu",
     "Subscribe to notifications" : "Prenumeruoti pranešimus",
     "Remove Email Address" : "Šalinti el. pašto adresą",

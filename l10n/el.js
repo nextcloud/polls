@@ -427,6 +427,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Παραχωρούνται δικαιώματα διαχειριστή για αυτήν τη δημοσκόπηση",
     "Copy your personal link to clipboard" : "Αντιγράψτε τον προσωπικό σας σύνδεσμο στο πρόχειρο",
     "Edit Email Address" : "Επεξεργασία Διεύθυνσης Email",
+    "Change name" : "Αλλαγή ονόματος",
     "Get your personal link per mail" : "Λάβετε τον προσωπικό σας σύνδεσμο με email",
     "Subscribe to notifications" : "Εγγραφείτε στις ειδοποιήσεις",
     "Remove Email Address" : "Κατάργηση Διεύθυνσης Email",

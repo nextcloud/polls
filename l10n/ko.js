@@ -36,6 +36,7 @@ OC.L10N.register(
     "Shares" : "공유",
     "Description" : "설명",
     "Receive notification email on activity" : "활동 이메일 알림 받기",
+    "Change name" : "이름 변경",
     "Yes" : "예",
     "Administration" : "관리",
     "Details" : "세부사항",

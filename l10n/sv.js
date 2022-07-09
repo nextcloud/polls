@@ -104,6 +104,7 @@ OC.L10N.register(
     "Poll configurations" : "Omröstningsinställningar",
     "Shift all date options" : "Skjut på alla datumalternativ",
     "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
+    "Change name" : "Byt namn",
     "Email options" : "E-postinställningar",
     "Yes" : "Ja",
     "Administration" : "Administration",

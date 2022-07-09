@@ -44,6 +44,7 @@ OC.L10N.register(
     "Poll configurations" : "Enketa agordo",
     "Shift all date options" : "Movi ĉiujn datajn opciojn",
     "Receive notification email on activity" : "Ricevi sciigojn retpoŝte okaze de aktivaĵo",
+    "Change name" : "Ŝanĝi nomon",
     "Yes" : "Yes",
     "Administration" : "Administrado",
     "Details" : "Detaloj",

@@ -242,6 +242,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Primaj obavijesti o aktivnostima e-poštom",
     "Copy your personal link to clipboard" : "Kopirajte svoju osobnu poveznicu u međuspremnik",
     "Edit Email Address" : "Uredi adresu e-pošte",
+    "Change name" : "Promijeni ime",
     "Get your personal link per mail" : "Primite svoju osobnu poveznicu e-poštom",
     "Subscribe to notifications" : "Pretplati se na obavijesti",
     "Remove Email Address" : "Ukloni adresu e-pošte",

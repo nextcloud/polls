@@ -52,6 +52,7 @@ OC.L10N.register(
     "Description" : "Опис",
     "Poll configurations" : "Налаштування опитування",
     "Result display" : "Показ результатів",
+    "Change name" : "Змінити ім'я",
     "Yes" : "Так",
     "Administration" : "Адміністрування",
     "Add new Poll" : "Додати нове опитування",

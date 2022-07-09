@@ -35,6 +35,7 @@ OC.L10N.register(
     "Shares" : "Shares",
     "Description" : "Description",
     "Receive notification email on activity" : "Receive notification email on activity",
+    "Change name" : "Change name",
     "Yes" : "Yes",
     "Administration" : "Administration",
     "Details" : "Details",

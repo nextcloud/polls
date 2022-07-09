@@ -330,6 +330,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Dodeljena dovoljenja za skrbniško urejanje ankete",
     "Copy your personal link to clipboard" : "Kopiraj zasebno povezavo v odložišče",
     "Edit Email Address" : "Uredi elektronski naslov",
+    "Change name" : "Spremeni ime",
     "Get your personal link per mail" : "Pridobi osebno povezavo po elektronski pošti",
     "Subscribe to notifications" : "Naroči na obvestila",
     "Remove Email Address" : "Odstrani elektronski naslov",

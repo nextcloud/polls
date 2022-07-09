@@ -435,6 +435,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Pro tuto anketu jsou udělena oprávnění pro správu",
     "Copy your personal link to clipboard" : "Zkopírovat váš soukromý odkaz do schránky",
     "Edit Email Address" : "Upravit e-mailovou adresu",
+    "Change name" : "Změnit název",
     "Get your personal link per mail" : "Získat váš soukromý odkaz pro každý e-mail",
     "Subscribe to notifications" : "Přihlásit se k odběru upozornění",
     "Remove Email Address" : "Odebrat e-mailovou adresu",

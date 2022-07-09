@@ -40,6 +40,7 @@ OC.L10N.register(
     "Link copied to clipboard" : "Link kopieret til udklipsholder",
     "Description" : "Beskrivelse",
     "Receive notification email on activity" : "Modtag notifikationsemail om aktivitet",
+    "Change name" : "Ændre navn",
     "Email options" : "E-mail muligheder",
     "Yes" : "Ja",
     "Administration" : "Administration",

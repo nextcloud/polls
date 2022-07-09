@@ -101,6 +101,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "アクティビティに関して通知メールを受け取る",
     "Copy your personal link to clipboard" : "個人リンクをクリップボードにコピー",
     "Edit Email Address" : "メールアドレスを編集",
+    "Change name" : "名称変更",
     "Remove Email Address" : "メールアドレスを削除",
     "Email address deleted." : "メールアドレスが削除しました。",
     "Email address {emailAddress} saved." : "メールアドレス{emailAddress}が保存しました。",

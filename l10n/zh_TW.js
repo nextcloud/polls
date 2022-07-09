@@ -435,6 +435,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "被授予此投票的管理員權限",
     "Copy your personal link to clipboard" : "將您的個人連結複製到剪貼簿",
     "Edit Email Address" : "編輯電子郵件位址",
+    "Change name" : "更改名稱",
     "Get your personal link per mail" : "透過郵件取得您的個人連結",
     "Subscribe to notifications" : "訂閱通知",
     "Remove Email Address" : "移除電子郵件位址",

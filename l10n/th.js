@@ -23,6 +23,7 @@ OC.L10N.register(
     "Preview" : "ตัวอย่าง",
     "Shares" : "แชร์",
     "Description" : "รายละเอียด",
+    "Change name" : "เปลี่ยนชื่อ",
     "Email options" : "ตัวเลือกอีเมล",
     "Yes" : "ใช่",
     "Details" : "รายละเอียด",

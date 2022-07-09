@@ -26,6 +26,7 @@ OC.L10N.register(
     "Preview" : "Vista previa",
     "Shares" : "Shares",
     "Description" : "Descripción",
+    "Change name" : "Cambiar nombre",
     "Yes" : "Si",
     "Details" : "Detalles",
     "Configuration" : "Configuración",

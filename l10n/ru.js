@@ -289,6 +289,7 @@ OC.L10N.register(
     "Shift all date options" : "Сдвиг дат",
     "Available Options" : "Доступные варианты",
     "Receive notification email on activity" : "Получать уведомления при изменении",
+    "Change name" : "Изменить имя",
     "Subscribe to notifications" : "Подписаться на уведомления",
     "Copy list of email addresses to clipboard" : "Копировать список адресов эл. почты в буфер обмена",
     "Error while adding share" : "Не удалось опубликовать опрос",

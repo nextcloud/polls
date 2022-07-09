@@ -165,6 +165,7 @@ OC.L10N.register(
     "Available Options" : "Opcions disponibles",
     "Receive notification email on activity to {emailAddress}" : "Rebre un correu electrònic de notificació sobre l'activitat a {emailAddress}",
     "Receive notification email on activity" : "Rep correu electrònic de notificació quan hi hagi activitat",
+    "Change name" : "Canvia el nom",
     "Copy list of email addresses to clipboard" : "Copy list of email addresses to clipboard",
     "Error while adding share" : "Error en afegir compartició",
     "Delete votes" : "Suprimir vots",

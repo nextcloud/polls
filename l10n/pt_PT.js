@@ -32,6 +32,7 @@ OC.L10N.register(
     "Shares" : "Partilhas",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Description" : "Descrição",
+    "Change name" : "Alterar nome",
     "Yes" : "Sim",
     "Administration" : "Administração",
     "Details" : "Detalhes",

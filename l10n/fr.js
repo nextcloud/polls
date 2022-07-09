@@ -434,6 +434,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "a obtenu le droits d'administration pour ce sondage",
     "Copy your personal link to clipboard" : "Copier le lien personnel dans le presse-papier",
     "Edit Email Address" : "Modifier l'adresse e-mail",
+    "Change name" : "Modifier le nom",
     "Get your personal link per mail" : "Recevez votre lien personnel par e-mail",
     "Subscribe to notifications" : "S'abonner aux notifications",
     "Remove Email Address" : "Supprimer l'adresse e-mail",

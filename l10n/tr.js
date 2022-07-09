@@ -435,6 +435,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Bu anket için yönetici izinleri verildi",
     "Copy your personal link to clipboard" : "Size özel bağlantıyı panoya kopyalayın",
     "Edit Email Address" : "E-posta adresini düzenle",
+    "Change name" : "Adı değiştir",
     "Get your personal link per mail" : "Size özel bağlantıyı e-posta ile alın",
     "Subscribe to notifications" : "Bildirimlere abone ol",
     "Remove Email Address" : "E-posta adresini sil",

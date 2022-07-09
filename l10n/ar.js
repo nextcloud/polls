@@ -33,6 +33,7 @@ OC.L10N.register(
     "Preview" : "معاينة",
     "Shares" : "التي قمتَ بمشاركتها",
     "Description" : "الوصف",
+    "Change name" : "تغيير الإسم",
     "Yes" : "نعم",
     "Administration" : "الإدارة",
     "Details" : "التفاصيل",

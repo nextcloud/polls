@@ -35,6 +35,7 @@ OC.L10N.register(
     "Shares" : "Elementos compartidos",
     "Description" : "Descripción",
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
+    "Change name" : "Cambiar nombre",
     "Yes" : "Sí",
     "Administration" : "Administración",
     "Details" : "Detalles",

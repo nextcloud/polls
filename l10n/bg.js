@@ -435,6 +435,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Предоставени са администраторски права за тази анкета",
     "Copy your personal link to clipboard" : "Копирайте личната си връзка в клипборда",
     "Edit Email Address" : "Редактиране на имейл адрес",
+    "Change name" : "Промяна на име",
     "Get your personal link per mail" : "Вземете личната си връзка по имейл",
     "Subscribe to notifications" : "Абонирайте се за известия",
     "Remove Email Address" : "Премахване на имейл адрес",

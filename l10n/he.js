@@ -78,6 +78,7 @@ OC.L10N.register(
     "Shift all date options" : "הזזת כל אפשרויות התאריך",
     "Available Options" : "אפשרויות זמינות",
     "Receive notification email on activity" : "קבלת הודעות בדוא״ל כשיש פעילות",
+    "Change name" : "החלפת שם",
     "Error while adding share" : "שגיאה בהוספת שיתוף",
     "Delete votes" : "מחיקת סקרים",
     "User {userId} removed" : "המשתמש {userId} הוסר",

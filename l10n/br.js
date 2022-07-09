@@ -22,6 +22,7 @@ OC.L10N.register(
     "Preview" : "Ragwell",
     "Shares" : "Rannañ",
     "Description" : "Diskrivadur",
+    "Change name" : "Cheñch env",
     "Yes" : "Ya",
     "Administration" : "Merouriez",
     "Details" : "Munudoù",

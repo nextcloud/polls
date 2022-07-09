@@ -27,6 +27,7 @@ OC.L10N.register(
     "Preview" : "Previzualizare",
     "Shares" : "Partajări",
     "Description" : "Descriere",
+    "Change name" : "Schimbă numele",
     "Yes" : "a",
     "Administration" : "Administrare",
     "Details" : "Detalii",

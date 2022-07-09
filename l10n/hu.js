@@ -435,6 +435,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Adminisztrátori jogokat kapott ehhez a szavazáshoz",
     "Copy your personal link to clipboard" : "Személyes hivatkozás másolása a vágólapra",
     "Edit Email Address" : "E-mail-cím szerkesztése",
+    "Change name" : "Név módosítása",
     "Get your personal link per mail" : "Személyes megosztási hivatkozás kérése e-mailben",
     "Subscribe to notifications" : "Feliratkozás az értesítésekre",
     "Remove Email Address" : "E-mail-cím eltávolítása",

@@ -322,6 +322,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Heeft beheerdersmachtigingen gekregen voor deze poll",
     "Copy your personal link to clipboard" : "Kopieer je privé-link naar het klembord",
     "Edit Email Address" : "Wijzig E-mailadres",
+    "Change name" : "Naam veranderen",
     "Get your personal link per mail" : "Krijg je persoonlijke link per email",
     "Subscribe to notifications" : "Abonneren op meldingen",
     "Remove Email Address" : "Verwijder e-mailadres",
