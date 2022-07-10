@@ -33,6 +33,7 @@ OC.L10N.register(
     "No activity" : "Sin actividad",
     "Description" : "Descripción",
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
+    "Change name" : "Cambiar nombre",
     "Yes" : "Sí",
     "Administration" : "Administración",
     "Details" : "Detalles",

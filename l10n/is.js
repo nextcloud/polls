@@ -92,6 +92,7 @@ OC.L10N.register(
     "Shift all date options" : "Hliðra öllum valkostum dagsetninga",
     "Available Options" : "Tiltækir valkostir",
     "Receive notification email on activity" : "Fá tilkynningu í tölvupósti við virkni",
+    "Change name" : "Breyta nafni",
     "Error while adding share" : "Villa við að bæta við sameign",
     "Delete votes" : "Eyða atkvæðum",
     "User {userId} removed" : "Notandinn {userId} fjarlægður",
