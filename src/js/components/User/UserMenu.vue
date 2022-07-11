@@ -279,7 +279,7 @@ export default {
 					userName: this.displayNameTemp,
 					token: this.$route.params.token,
 				})
-				this.displayNameCheckResult = t('polls', 'valid name.')
+				this.displayNameCheckResult = t('polls', 'Valid name.')
 				this.displayNameCheckStatus = 'success'
 			} catch {
 				this.displayNameCheckResult = t('polls', 'Invalid email address.')
