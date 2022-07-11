@@ -337,7 +337,7 @@ class ActivityService {
 			case ShareEvent::CHANGE_DISPLAY_NAME:
 				return $this->userIsActor
 					? $this->l10n->t('You have changed your name')
-					: $this->l10n->t('Displaynname of {sharee} has been changed');
+					: $this->l10n->t('Display name of {sharee} has been changed');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
 					? $this->l10n->t('You have changed the share type')
