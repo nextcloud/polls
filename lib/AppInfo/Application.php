@@ -71,25 +71,21 @@ use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Provider\ResourceProvider;
 use OCA\Polls\Provider\SearchProvider;
 
-class Application extends App implements IBootstrap
-{
+class Application extends App implements IBootstrap {
 
 	/** @var string */
 	public const APP_ID = 'polls';
 
-	public function __construct(array $urlParams = [])
-	{
+	public function __construct(array $urlParams = []) {
 		parent::__construct(self::APP_ID, $urlParams);
 	}
 
-	public function boot(IBootContext $context): void
-	{
+	public function boot(IBootContext $context): void {
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 	}
 
-	public function register(IRegistrationContext $context): void
-	{
+	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 
 		$context->registerEventListener(CommentAddEvent::class, CommentListener::class);
@@ -121,12 +117,10 @@ class Application extends App implements IBootstrap
 		$context->registerSearchProvider(SearchProvider::class);
 	}
 
-	public function registerNotifications(NotificationManager $notificationManager): void
-	{
+	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
-	protected function registerCollaborationResources(IProviderManager $resourceManager, IEventDispatcher $eventDispatcher): void
-	{
+	protected function registerCollaborationResources(IProviderManager $resourceManager, IEventDispatcher $eventDispatcher): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
 		$eventDispatcher->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
 			Util::addScript(self::APP_ID, 'polls-collections');
