@@ -208,7 +208,7 @@ class CalendarService {
 			// - start before the end of the requested timespan ($to) and
 			// - end after the start of the requested timespan ($from)
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
-			// \OC::$server->getLogger()->error('foundEvents: ' . json_encode($foundEvents));
+
 			foreach ($foundEvents as $event) {
 				$calendarEvent = new CalendarEvent($event, $calendar, $from, $to);
 				// since we get back recurring events of other days, just make sure this event

@@ -24,6 +24,7 @@
 namespace OCA\Polls\Helper;
 
 use OCA\Polls\AppInfo\Application;
+use OCP\AppFramework\App;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
@@ -34,7 +35,7 @@ use Psr\Container\ContainerInterface;
 
 abstract class Container {
 	public static function getContainer() : ContainerInterface {
-		$app = \OC::$server->query(Application::class);
+		$app = new App('polls');
 		return $app->getContainer();
 	}
 

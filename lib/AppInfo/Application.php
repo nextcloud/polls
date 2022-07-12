@@ -25,7 +25,6 @@
 namespace OCA\Polls\AppInfo;
 
 use Closure;
-// use OC\EventDispatcher\SymfonyAdapter;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -34,6 +33,7 @@ use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Util;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
@@ -119,10 +119,10 @@ class Application extends App implements IBootstrap {
 	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
-	protected function registerCollaborationResources(IProviderManager $resourceManager): void {
+	protected function registerCollaborationResources(IProviderManager $resourceManager, IEventDispatcher $eventDispatcher): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
 
-		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+		$eventDispatcher->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
 			Util::addScript(self::APP_ID, 'polls-collections');
 		});
 	}
