@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ocp-version: [ 'dev-master', 'dev-stable22' ]
+        ocp-version: [ 'dev-master', 'dev-stable23' ]
         php-versions: ['7.4', '8.0']
 
     name: Psalm
