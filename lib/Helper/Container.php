@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Helper;
 
-use OCA\Polls\AppInfo\Application;
 use OCP\AppFramework\App;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
