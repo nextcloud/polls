@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -36,9 +37,10 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Model\UserGroup\CurrentUser;
 
-class CalendarService {
+class CalendarService
+{
 	/** @var CurrentUser */
-	private $currentUser ;
+	private $currentUser;
 
 	/** @var CalendarManager */
 	private $calendarManager;
@@ -79,7 +81,8 @@ class CalendarService {
 	 *
 	 * @psalm-return list<ICalendar>
 	 */
-	public function getCalendarsForPrincipal(string $userId = ''): array {
+	public function getCalendarsForPrincipal(string $userId = ''): array
+	{
 		if (Util::getVersion()[0] < 24) {
 			// deprecated since NC23
 			$this->calendars = $this->calendarManager->getCalendars();
@@ -106,7 +109,8 @@ class CalendarService {
 	 *
 	 * @psalm-return array{from: DateTimeImmutable, to: DateTimeImmutable}
 	 */
-	private function getTimerange(int $optionId, DateTimeZone $timezone) : array {
+	private function getTimerange(int $optionId, DateTimeZone $timezone): array
+	{
 		$option = $this->optionMapper->find($optionId);
 		$searchIntervalBefore = new DateInterval('PT' . $this->preferences->getCheckCalendarsBefore() . 'H');
 		$searchIntervalAfter = new DateInterval('PT' . $this->preferences->getCheckCalendarsAfter() . 'H');
@@ -126,7 +130,8 @@ class CalendarService {
 		];
 	}
 
-	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to) : ?array {
+	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): ?array
+	{
 		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
@@ -146,7 +151,8 @@ class CalendarService {
 	 *
 	 * @psalm-return list<CalendarEvent>
 	 */
-	public function getEvents(int $optionId, string $tz): array {
+	public function getEvents(int $optionId, string $tz): array
+	{
 		$timezone = new DateTimeZone($tz);
 		$timerange = $this->getTimerange($optionId, $timezone);
 
@@ -154,7 +160,7 @@ class CalendarService {
 			// deprecated since NC24
 			return $this->getEventsLegcy($timerange['from'], $timerange['to']);
 		}
-		
+
 		// use from NC24 on
 		$events = [];
 		$foundEvents = $this->searchEventsByTimeRange($timerange['from'], $timerange['to']);
@@ -178,7 +184,8 @@ class CalendarService {
 		return $events;
 	}
 
-	private function getCalendarFromEvent(array $event): ?ICalendar {
+	private function getCalendarFromEvent(array $event): ?ICalendar
+	{
 		foreach ($this->calendars as $calendar) {
 			if ($calendar->getKey() === $event['calendar-key']) {
 				return $calendar;
@@ -195,7 +202,8 @@ class CalendarService {
 	 *
 	 * @psalm-return list<CalendarEvent>
 	 */
-	private function getEventsLegcy(DateTimeImmutable $from, DateTimeImmutable $to): array {
+	private function getEventsLegcy(DateTimeImmutable $from, DateTimeImmutable $to): array
+	{
 		$events = [];
 		foreach ($this->calendars as $calendar) {
 
@@ -208,14 +216,15 @@ class CalendarService {
 			// - start before the end of the requested timespan ($to) and
 			// - end after the start of the requested timespan ($from)
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
-			// \OC::$server->getLogger()->error('foundEvents: ' . json_encode($foundEvents));
+
 			foreach ($foundEvents as $event) {
 				$calendarEvent = new CalendarEvent($event, $calendar, $from, $to);
 				// since we get back recurring events of other days, just make sure this event
 				// matches the search pattern
 				// TODO: identify possible time zone issues, when handling all day events
 				if (($from->getTimestamp() < $calendarEvent->getEnd())
-					&& ($to->getTimestamp() > $calendarEvent->getStart())) {
+					&& ($to->getTimestamp() > $calendarEvent->getStart())
+				) {
 				}
 				array_push($events, $calendarEvent);
 				// array_push($events, $calendarEvent);
@@ -231,7 +240,8 @@ class CalendarService {
 	 *
 	 * @psalm-return list<array{name: mixed, key: mixed, displayColor: mixed, permissions: mixed}>
 	 */
-	public function getCalendars(): array {
+	public function getCalendars(): array
+	{
 		$calendars = [];
 		foreach ($this->calendars as $calendar) {
 			if (Util::getVersion()[0] < 24) {

@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
@@ -23,7 +24,7 @@
 
 namespace OCA\Polls\Helper;
 
-use OCA\Polls\AppInfo\Application;
+use OCP\AppFramework\App;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
@@ -32,29 +33,36 @@ use OCP\App\IAppManager;
 use OCP\L10N\IFactory;
 use Psr\Container\ContainerInterface;
 
-abstract class Container {
-	public static function getContainer() : ContainerInterface {
-		$app = \OC::$server->query(Application::class);
+abstract class Container
+{
+	public static function getContainer(): ContainerInterface
+	{
+		$app = new App('polls');
 		return $app->getContainer();
 	}
 
-	public static function queryClass(string $class) {
+	public static function queryClass(string $class)
+	{
 		return self::getContainer()->get($class);
 	}
 
-	public static function queryPoll(int $pollId) : Poll {
+	public static function queryPoll(int $pollId): Poll
+	{
 		return self::queryClass(PollMapper::class)->find($pollId);
 	}
 
-	public static function findShare(int $pollId, string $userId) : Share {
+	public static function findShare(int $pollId, string $userId): Share
+	{
 		return self::queryClass(ShareMapper::class)
 			->findByPollAndUser($pollId, $userId);
 	}
 
-	public static function getL10N(string $lang = null) {
+	public static function getL10N(string $lang = null)
+	{
 		return self::queryClass(IFactory::class)->get('polls', $lang);
 	}
-	public static function isAppEnabled(string $app) : bool {
+	public static function isAppEnabled(string $app): bool
+	{
 		return self::queryClass(IAppManager::class)->isEnabledForUser($app);
 	}
 }

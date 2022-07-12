@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -25,7 +26,6 @@
 namespace OCA\Polls\AppInfo;
 
 use Closure;
-// use OC\EventDispatcher\SymfonyAdapter;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -34,6 +34,7 @@ use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Util;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
@@ -70,21 +71,25 @@ use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Provider\ResourceProvider;
 use OCA\Polls\Provider\SearchProvider;
 
-class Application extends App implements IBootstrap {
+class Application extends App implements IBootstrap
+{
 
 	/** @var string */
 	public const APP_ID = 'polls';
 
-	public function __construct(array $urlParams = []) {
+	public function __construct(array $urlParams = [])
+	{
 		parent::__construct(self::APP_ID, $urlParams);
 	}
 
-	public function boot(IBootContext $context): void {
+	public function boot(IBootContext $context): void
+	{
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
 		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 	}
 
-	public function register(IRegistrationContext $context): void {
+	public function register(IRegistrationContext $context): void
+	{
 		include_once __DIR__ . '/../../vendor/autoload.php';
 
 		$context->registerEventListener(CommentAddEvent::class, CommentListener::class);
@@ -116,13 +121,14 @@ class Application extends App implements IBootstrap {
 		$context->registerSearchProvider(SearchProvider::class);
 	}
 
-	public function registerNotifications(NotificationManager $notificationManager): void {
+	public function registerNotifications(NotificationManager $notificationManager): void
+	{
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
-	protected function registerCollaborationResources(IProviderManager $resourceManager): void {
+	protected function registerCollaborationResources(IProviderManager $resourceManager, IEventDispatcher $eventDispatcher): void
+	{
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
-
-		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+		$eventDispatcher->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
 			Util::addScript(self::APP_ID, 'polls-collections');
 		});
 	}
