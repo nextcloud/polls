@@ -29,6 +29,7 @@ use OCA\Polls\Exceptions\InvalidClassException;
 use OCA\Polls\Exceptions\OCPEventException;
 
 class GroupDeletedListener extends BaseListener {
+
 	protected function checkClass() : void {
 		if (!($this->event instanceof GroupDeletedEvent)) {
 			throw new InvalidClassException;
