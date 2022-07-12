@@ -24,10 +24,13 @@
 namespace OCA\Polls\Listener;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
+use OCA\Polls\Event\BaseEvent;
 use OCP\BackgroundJob\IJobList;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\Event;
 use OCP\EventDispatcher\IEventListener;
+use OCP\Group\Events\GroupDeletedEvent;
+use OCP\User\Events\UserDeletedEvent;
 use OCA\Polls\Exceptions\InvalidClassException;
 use OCA\Polls\Exceptions\OCPEventException;
 use OCA\Polls\Service\ActivityService;
@@ -56,7 +59,7 @@ abstract class BaseListener implements IEventListener {
 	/** @var WatchService */
 	protected $watchService;
 
-	/** @var Event */
+	/** @var Event|BaseEvent|GroupDeletedEvent|UserDeletedEvent */
 	protected $event;
 
 	/** @var array */
