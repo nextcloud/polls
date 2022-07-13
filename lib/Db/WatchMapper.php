@@ -83,6 +83,6 @@ class WatchMapper extends QBMapper {
 			->where(
 				$query->expr()->lt('updated', $query->createNamedParameter($offset))
 			);
-		$query->execute();
+		$query->executeStatement();
 	}
 }
