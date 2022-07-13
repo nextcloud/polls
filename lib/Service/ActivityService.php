@@ -30,6 +30,7 @@ use OCP\IL10N;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Event\BaseEvent;
 use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\OptionEvent;
@@ -68,7 +69,7 @@ class ActivityService {
 		$this->userSession = $userSession;
 	}
 
-	public function createActivityEvent(Event $event): ActivityEvent {
+	public function createActivityEvent(BaseEvent $event): ActivityEvent {
 		$activityEvent = $this->activityManager->generateEvent();
 		$activityEvent->setApp('polls')
 			->setType($event->getActivityId())
