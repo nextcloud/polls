@@ -32,6 +32,7 @@ OC.L10N.register(
     "Administration" : "Administrare",
     "Details" : "Detalii",
     "Configuration" : "Configurație",
+    "Options" : "Opțiuni",
     "Sharing" : "Partajare",
     "Comments" : "Comentarii",
     "Activity" : "Activitate",
