@@ -23,18 +23,15 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\Exception;
-
-use OCP\IRequest;
-use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\PollService;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
 
-class PollApiController extends ApiController {
+class PollApiController extends BaseApiController {
 
 	/** @var Acl */
 	private $acl;

@@ -23,43 +23,28 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Db\Share;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
-
-
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
-
-use OCA\Polls\Db\Share;
-use OCA\Polls\Service\MailService;
-use OCA\Polls\Service\ShareService;
-use OCA\Polls\Service\SystemService;
 use OCA\Polls\Model\UserGroup\UserBase;
+use OCA\Polls\Service\ShareService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\ISession;
+use OCP\IRequest;
 
-class ShareController extends Controller {
-	use ResponseHandle;
-
-	/** @var MailService */
-	private $mailService;
+class ShareController extends BaseController {
 
 	/** @var ShareService */
 	private $shareService;
 
-	/** @var SystemService */
-	private $systemService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		MailService $mailService,
-		ShareService $shareService,
-		SystemService $systemService
+		ISession $session,
+		ShareService $shareService
 	) {
-		parent::__construct($appName, $request);
-		$this->mailService = $mailService;
+		parent::__construct($appName, $request, $session);
 		$this->shareService = $shareService;
-		$this->systemService = $systemService;
 	}
 
 	/**

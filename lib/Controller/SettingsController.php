@@ -23,24 +23,23 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\SettingsService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
+use OCP\ISession;
 
-class SettingsController extends Controller {
+class SettingsController extends BaseController {
 
 	/** @var SettingsService */
 	private $settingsService;
 
-	use ResponseHandle;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ISession $session,
 		SettingsService $settingsService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->settingsService = $settingsService;
 	}
 

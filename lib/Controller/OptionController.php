@@ -23,13 +23,13 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
-use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\CalendarService;
+use OCA\Polls\Service\OptionService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
+use OCP\ISession;
 
-class OptionController extends Controller {
+class OptionController extends BaseController {
 
 	/** @var OptionService */
 	private $optionService;
@@ -37,15 +37,14 @@ class OptionController extends Controller {
 	/** @var CalendarService */
 	private $calendarService;
 
-	use ResponseHandle;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ISession $session,
 		OptionService $optionService,
 		CalendarService $calendarService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->optionService = $optionService;
 		$this->calendarService = $calendarService;
 	}

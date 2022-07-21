@@ -23,25 +23,23 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
-
 use OCA\Polls\Service\SubscriptionService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
+use OCP\ISession;
 
-class SubscriptionController extends Controller {
+class SubscriptionController extends BaseController {
 
 	/** @var SubscriptionService */
 	private $subscriptionService;
 
-	use ResponseHandle;
-
 	public function __construct(
 		string $appName,
-		SubscriptionService $subscriptionService,
-		IRequest $request
+		ISession $session,
+		IRequest $request,
+		SubscriptionService $subscriptionService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->subscriptionService = $subscriptionService;
 	}
 

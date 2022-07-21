@@ -23,18 +23,14 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Service\OptionService;
+use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
-use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http\JSONResponse;
-use OCA\Polls\Service\OptionService;
-
-class OptionApiController extends ApiController {
+class OptionApiController extends BaseApiController {
 
 	/** @var OptionService */
 	private $optionService;
-
-	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
