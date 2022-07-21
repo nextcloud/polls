@@ -23,12 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use Psr\Log\LoggerInterface;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\IGroupManager;
-use OCP\IConfig;
-use OCP\IURLGenerator;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
@@ -42,71 +36,51 @@ use OCA\Polls\Model\UserGroup\User;
 use OCA\Polls\Model\Mail\InvitationMail;
 use OCA\Polls\Model\Mail\ReminderMail;
 use OCA\Polls\Model\Mail\NotificationMail;
+use OCP\IUser;
+use OCP\IUserManager;
+use Psr\Log\LoggerInterface;
 
 class MailService {
 	/** @var LoggerInterface */
 	private $logger;
-
-	/** @var string */
-	private $appName;
-
+	
+	/** @var LogMapper */
+	private $logMapper;
+	
+	/** @var Log[] **/
+	private $logs;
+	
 	/** @var IUserManager */
 	private $userManager;
 
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var IConfig */
-	private $config;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
+	/** @var OptionMapper */
+	private $optionMapper;
+	
+	/** @var PollMapper */
+	private $pollMapper;
+	
 	/** @var SubscriptionMapper */
 	private $subscriptionMapper;
 
 	/** @var ShareMapper */
 	private $shareMapper;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var OptionMapper */
-	private $optionMapper;
-
-	/** @var LogMapper */
-	private $logMapper;
-
-	/** @var Log[] **/
-	private $logs;
-
-	/** @var Poll **/
-	private $poll;
-
+	
 	public function __construct(
-		string $AppName,
-		LoggerInterface $logger,
 		IUserManager $userManager,
-		IGroupManager $groupManager,
-		IConfig $config,
-		IURLGenerator $urlGenerator,
-		ShareMapper $shareMapper,
-		SubscriptionMapper $subscriptionMapper,
+		LoggerInterface $logger,
+		LogMapper $logMapper,
 		OptionMapper $optionMapper,
 		PollMapper $pollMapper,
-		LogMapper $logMapper
+		ShareMapper $shareMapper,
+		SubscriptionMapper $subscriptionMapper
 	) {
-		$this->appName = $AppName;
 		$this->logger = $logger;
-		$this->config = $config;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-		$this->urlGenerator = $urlGenerator;
 		$this->logMapper = $logMapper;
 		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
+		$this->userManager = $userManager;
 		$this->poll = new Poll;
 		$this->logs = [];
 	}

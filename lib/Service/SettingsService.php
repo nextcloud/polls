@@ -23,27 +23,14 @@
 
 namespace OCA\Polls\Service;
 
-use OCP\IConfig;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCA\Polls\Model\UserGroup\Group;
 
 class SettingsService {
-
-	/** @var IConfig */
-	private $config;
 
 	/** @var AppSettings */
 	private $appSettings;
 
-	/** @var string|null */
-	private $userId;
-
-	public function __construct(
-		?string $UserId,
-		IConfig $config
-	) {
-		$this->userId = $UserId;
-		$this->config = $config;
+	public function __construct() {
 		$this->appSettings = new AppSettings;
 	}
 

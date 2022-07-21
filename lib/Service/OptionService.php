@@ -25,15 +25,6 @@ namespace OCA\Polls\Service;
 
 use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Psr\Log\LoggerInterface;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\DB\Exception;
-use OCP\EventDispatcher\IEventDispatcher;
-
-use OCA\Polls\Exceptions\DuplicateEntryException;
-use OCA\Polls\Exceptions\InvalidPollTypeException;
-use OCA\Polls\Exceptions\InvalidOptionPropertyException;
-
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
@@ -45,7 +36,14 @@ use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
+use OCA\Polls\Exceptions\DuplicateEntryException;
+use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Exceptions\InvalidOptionPropertyException;
 use OCA\Polls\Model\Acl;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\DB\Exception;
+use OCP\EventDispatcher\IEventDispatcher;
+use Psr\Log\LoggerInterface;
 
 class OptionService {
 
@@ -54,9 +52,6 @@ class OptionService {
 
 	/** @var LoggerInterface */
 	private $logger;
-
-	/** @var string */
-	private $appName;
 
 	/** @var Acl */
 	private $acl;
@@ -83,7 +78,6 @@ class OptionService {
 	private $voteMapper;
 
 	public function __construct(
-		string $AppName,
 		Acl $acl,
 		AnonymizeService $anonymizer,
 		IEventDispatcher $eventDispatcher,
@@ -92,7 +86,6 @@ class OptionService {
 		OptionMapper $optionMapper,
 		VoteMapper $voteMapper
 	) {
-		$this->appName = $AppName;
 		$this->acl = $acl;
 		$this->anonymizer = $anonymizer;
 		$this->eventDispatcher = $eventDispatcher;

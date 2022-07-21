@@ -23,20 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use Psr\Log\LoggerInterface;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
-use OCP\EventDispatcher\IEventDispatcher;
-use OCP\IGroupManager;
-use OCP\IUserSession;
-use OCP\Security\ISecureRandom;
-
-use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCA\Polls\Exceptions\InvalidShareTypeException;
-use OCA\Polls\Exceptions\ShareAlreadyExistsException;
-use OCA\Polls\Exceptions\NotFoundException;
-use OCA\Polls\Exceptions\InvalidUsernameException;
-
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
@@ -47,16 +33,25 @@ use OCA\Polls\Event\ShareChangedEmailEvent;
 use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
 use OCA\Polls\Event\ShareDeletedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
+use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\InvalidShareTypeException;
+use OCA\Polls\Exceptions\ShareAlreadyExistsException;
+use OCA\Polls\Exceptions\NotFoundException;
+use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserGroup\UserBase;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IGroupManager;
+use OCP\IUserSession;
+use OCP\Security\ISecureRandom;
+use Psr\Log\LoggerInterface;
 
 class ShareService {
 
 	/** @var LoggerInterface */
 	private $logger;
-
-	/** @var string */
-	private $appName;
 
 	/** @var string|null */
 	private $userId;
@@ -98,7 +93,6 @@ class ShareService {
 	private $notificationService;
 
 	public function __construct(
-		string $AppName,
 		LoggerInterface $logger,
 		?string $UserId,
 		IEventDispatcher $eventDispatcher,
@@ -113,7 +107,6 @@ class ShareService {
 		Acl $acl,
 		NotificationService $notificationService
 	) {
-		$this->appName = $AppName;
 		$this->logger = $logger;
 		$this->userId = $UserId;
 		$this->eventDispatcher = $eventDispatcher;

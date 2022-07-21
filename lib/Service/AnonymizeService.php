@@ -49,9 +49,6 @@ class AnonymizeService {
 	/** @var string|null */
 	private $userId;
 
-	/** @var int */
-	private $pollId;
-
 	public function __construct(
 		VoteMapper $voteMapper,
 		CommentMapper $commentMapper,
@@ -62,7 +59,6 @@ class AnonymizeService {
 		$this->optionMapper = $optionMapper;
 		$this->anonList = [];
 		$this->userId = null;
-		$this->pollId = 0;
 	}
 
 	/**
