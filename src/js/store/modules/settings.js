@@ -28,6 +28,7 @@ const defaultSettings = () => ({
 	user: {
 		useDashboardStyling: false,
 		useIndividualStyling: false,
+		useCommentsAlternativeStyling: false,
 		individualBgColor: false,
 		individualImage: false,
 		individualImageUrl: '',
