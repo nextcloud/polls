@@ -26,7 +26,9 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class TooShortException extends Exception {
-	public function __construct(string $e = 'String too short') {
+	public function __construct(
+		string $e = 'String too short'
+	) {
 		parent::__construct($e, Http::STATUS_FORBIDDEN);
 	}
 }

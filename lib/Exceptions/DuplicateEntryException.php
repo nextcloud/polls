@@ -26,7 +26,9 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class DuplicateEntryException extends Exception {
-	public function __construct(string $e = 'Duplicate Entry') {
+	public function __construct(
+		string $e = 'Duplicate Entry'
+	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

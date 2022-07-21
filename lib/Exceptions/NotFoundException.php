@@ -28,7 +28,8 @@ use OCP\AppFramework\Http;
 class NotFoundException extends Exception {
 	public function __construct(
 		string $e = 'Not found',
-		int $status = Http::STATUS_NOT_FOUND) {
+		int $status = Http::STATUS_NOT_FOUND
+	) {
 		parent::__construct($e, $status);
 	}
 }
