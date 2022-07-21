@@ -26,19 +26,21 @@ namespace OCA\Polls\Controller;
 use Closure;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
-use OCP\AppFramework\Controller;
+use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
-class BaseApiController extends Controller {
-
+class BaseApiController extends ApiController {
 	public function __construct(
 		string $appName,
-		IRequest $request
+		IRequest $request,
+		string $corsMethods = 'PUT, POST, GET, DELETE',
+		string $corsAllowedHeaders = 'Authorization, Content-Type, Accept',
+		int $corsMaxAge = 1728000
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $corsMethods, $corsAllowedHeaders, $corsMaxAge);
 	}
 
 	/**

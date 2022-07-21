@@ -41,11 +41,7 @@ class SubscriptionApiController extends BaseApiController {
 		IRequest $request
 
 	) {
-		parent::__construct($appName,
-			$request,
-			'PUT, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
 		$this->subscriptionService = $subscriptionService;
 	}
 

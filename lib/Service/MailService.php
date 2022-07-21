@@ -81,7 +81,6 @@ class MailService {
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->userManager = $userManager;
-		$this->poll = new Poll;
 		$this->logs = [];
 	}
 

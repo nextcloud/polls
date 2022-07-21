@@ -37,11 +37,7 @@ class CommentApiController extends BaseApiController {
 		IRequest $request,
 		CommentService $commentService
 	) {
-		parent::__construct($appName,
-			$request,
-			'POST, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
 		$this->commentService = $commentService;
 	}
 

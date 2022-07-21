@@ -41,11 +41,7 @@ class ShareApiController extends BaseApiController {
 		MailService $mailService,
 		ShareService $shareService
 	) {
-		parent::__construct($appName,
-			$request,
-			'POST, PUT, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
 		$this->shareService = $shareService;
 		$this->mailService = $mailService;
 	}

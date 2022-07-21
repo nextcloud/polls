@@ -40,11 +40,7 @@ class VoteApiController extends BaseApiController {
 		IRequest $request,
 		VoteService $voteService
 	) {
-		parent::__construct($appName,
-			$request,
-			'PUT, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
 		$this->voteService = $voteService;
 	}
 

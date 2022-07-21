@@ -23,8 +23,6 @@
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Db\Share;
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
@@ -45,39 +43,36 @@ use OCP\IUserSession;
 
 class PublicController extends BaseController {
 
+	/** @var Acl */
+	private $acl;
+	
+	/** @var CommentService */
+	private $commentService;
+
+	/** @var MailService */
+	private $mailService;
+
+	/** @var OptionService */
+	private $optionService;
+	
+	/** @var PollService */
+	private $pollService;
+	
+	/** @var ShareService */
+	private $shareService;
+	
+	/** @var SubscriptionService */
+	private $subscriptionService;
+	
+	/** @var SystemService */
+	private $systemService;
+
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
 	/** @var IUserSession */
 	private $userSession;
-
-	/** @var Acl */
-	private $acl;
-
-	/** @var CommentService */
-	private $commentService;
-
-	/** @var OptionService */
-	private $optionService;
-
-	/** @var MailService */
-	private $mailService;
-
-	/** @var PollService */
-	private $pollService;
-
-	/** @var ShareService */
-	private $shareService;
-
-	/** @var Share */
-	private $share;
-
-	/** @var SubscriptionService */
-	private $subscriptionService;
-
-	/** @var SystemService */
-	private $systemService;
-
+	
 	/** @var VoteService */
 	private $voteService;
 
@@ -95,9 +90,7 @@ class PublicController extends BaseController {
 		MailService $mailService,
 		OptionService $optionService,
 		PollService $pollService,
-		Poll $poll,
 		ShareService $shareService,
-		Share $share,
 		SubscriptionService $subscriptionService,
 		SystemService $systemService,
 		VoteService $voteService,
@@ -111,9 +104,7 @@ class PublicController extends BaseController {
 		$this->mailService = $mailService;
 		$this->optionService = $optionService;
 		$this->pollService = $pollService;
-		$this->poll = $poll;
 		$this->shareService = $shareService;
-		$this->share = $share;
 		$this->subscriptionService = $subscriptionService;
 		$this->systemService = $systemService;
 		$this->voteService = $voteService;

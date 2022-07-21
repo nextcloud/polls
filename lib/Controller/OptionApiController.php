@@ -37,11 +37,7 @@ class OptionApiController extends BaseApiController {
 		IRequest $request,
 		OptionService $optionService
 	) {
-		parent::__construct($appName,
-			$request,
-			'POST, PUT, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
 		$this->optionService = $optionService;
 	}
 
