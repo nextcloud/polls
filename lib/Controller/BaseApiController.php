@@ -23,74 +23,69 @@
 
 namespace OCA\Polls\Controller;
 
+use Closure;
 use OCA\Polls\Exceptions\Exception;
-use OCA\Polls\Service\SubscriptionService;
+use OCA\Polls\Exceptions\NoUpdatesException;
+use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\AppFramework\Http;
 
-class SubscriptionApiController extends BaseApiController {
-
-	/** @var SubscriptionService */
-	private $subscriptionService;
+class BaseApiController extends Controller {
 
 	public function __construct(
 		string $appName,
-		SubscriptionService $subscriptionService,
 		IRequest $request
-
 	) {
-		parent::__construct($appName,
-			$request,
-			'PUT, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
-		$this->subscriptionService = $subscriptionService;
+		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * Get subscription status
+	 * response
 	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
 	 */
-	public function get(int $pollId): JSONResponse {
+	protected function response(Closure $callback): JSONResponse {
 		try {
-			$this->subscriptionService->get($pollId, '');
-			return new JSONResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
+			return new JSONResponse($callback(), Http::STATUS_OK);
+		} catch (Exception $e) {
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * response
+	 * @NoAdminRequired
+	 */
+	protected function responseLong(Closure $callback): JSONResponse {
+		try {
+			return new JSONResponse($callback(), Http::STATUS_OK);
+		} catch (NoUpdatesException $e) {
+			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
+		}
+	}
+
+	/**
+	 * responseCreate
+	 * @NoAdminRequired
+	 */
+	protected function responseCreate(Closure $callback): JSONResponse {
+		try {
+			return new JSONResponse($callback(), Http::STATUS_CREATED);
+		} catch (Exception $e) {
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * responseDeleteTolerant
+	 * @NoAdminRequired
+	 */
+	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
+		try {
+			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * Subscribe to poll
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 */
-	public function subscribe(int $pollId): JSONResponse {
-		try {
-			$this->subscriptionService->set(true, $pollId, '');
-			return new JSONResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * Unsubscribe from poll
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
-	 */
-	public function unsubscribe(int $pollId): JSONResponse {
-		try {
-			$this->subscriptionService->set(false, $pollId, '');
-			return new JSONResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
+			return new JSONResponse(['message' => 'Not found, assume already deleted'], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}

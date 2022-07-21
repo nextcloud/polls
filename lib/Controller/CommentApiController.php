@@ -23,18 +23,14 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Service\CommentService;
 use OCP\IRequest;
-use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http\JSONResponse;
 
-use OCA\Polls\Service\CommentService;
-
-class CommentApiController extends ApiController {
+class CommentApiController extends BaseApiController {
 
 	/** @var CommentService */
 	private $commentService;
-
-	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
