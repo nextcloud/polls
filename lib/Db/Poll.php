@@ -26,13 +26,13 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-
+use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\UserGroup\User;
+use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IURLGenerator;
-use OCP\AppFramework\Db\Entity;
-use OCA\Polls\Model\UserGroup\User;
 
 /**
  * @method string getType()
@@ -94,6 +94,11 @@ class Poll extends Entity implements JsonSerializable {
 	public const PROPOSAL_ALLOW = 'allow';
 	public const PROPOSAL_REVIEW = 'review';
 	public const URI_PREFIX = 'poll/';
+	public const FIVE_DAYS = 432000;
+	public const FOUR_DAYS = 345600;
+	public const THREE_DAYS = 259200;
+	public const TWO_DAYS = 172800;
+	public const ONE_AND_HALF_DAY = 129600;
 
 	/** @var string $type */
 	protected $type;
@@ -164,6 +169,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var IUserManager */
 	private $userManager;
 
+	/** @var OptionMapper */
+	private $optionMapper;
+
 	public function __construct() {
 		$this->addType('created', 'int');
 		$this->addType('expire', 'int');
@@ -180,6 +188,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->addType('useNo', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->optionMapper = Container::queryClass(OptionMapper::class);
 	}
 
 	public function jsonSerialize() {
@@ -328,6 +337,43 @@ class Poll extends Entity implements JsonSerializable {
 	private function getMiscSettingsArray() : ?array {
 		return json_decode($this->getMiscSettings(), true);
 	}
+
+	public function getTimeToDeadline(int $time = 0): ?int {
+		if ($time === 0) {
+			$time = time();
+		}
+		$deadline = $this->getDeadline();
+		if (
+			$deadline - $this->getCreated() > self::FIVE_DAYS
+			&& $deadline - $time < self::TWO_DAYS
+			&& $deadline > $time
+		) {
+			return self::TWO_DAYS;
+		}
+
+		if (
+			$deadline - $this->getCreated() > self::TWO_DAYS
+			&& $deadline - $time < self::ONE_AND_HALF_DAY
+			&& $deadline > $time
+		) {
+			return self::ONE_AND_HALF_DAY;
+		}
+		throw new NoDeadLineException();
+	}
+
+	public function getDeadline(): ?int {
+		if ($this->getExpire()) {
+			return $this->getExpire();
+		}
+
+		if ($this->getType() === Poll::TYPE_DATE) {
+			// use first date option as reminder deadline
+			$options = $this->optionMapper->findByPoll($this->getId());
+			return $options[0]->getTimestamp();
+		}
+		throw new NoDeadLineException();
+	}
+
 
 	/**
 	 * @param bool|string|int|array $value

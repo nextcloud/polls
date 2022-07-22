@@ -24,15 +24,15 @@
 
 namespace OCA\Polls\Model\Mail;
 
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Exceptions\InvalidEmailAddress;
+use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
-use OCA\Polls\Model\Settings\AppSettings;
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Helper\Container;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\IUserManager;
-use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
 use OCP\Mail\IMailer;
@@ -159,8 +159,6 @@ abstract class MailBase {
 		$this->emailTemplate->addFooter($footerText);
 		return $this->emailTemplate;
 	}
-
-
 
 	protected function getSubject(): string {
 		return $this->l10n->t('Notification for poll "%s"', $this->poll->getTitle());
