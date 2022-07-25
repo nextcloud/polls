@@ -383,6 +383,7 @@
     "Dark picture" : "深色圖片",
     "Translucent foreground elements" : "半透明前景元素",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "在側邊蘭嶼投票表格等前景元素新增半透明特效（不是所有瀏覽器都能正常運作）。",
+    "Use alternative styling for the comments sidebar" : "為評論側邊欄使用替代樣式",
     "Calendar check" : "行事曆檢查",
     "User settings" : "使用者設定",
     "Performance settings" : "效能設定",
