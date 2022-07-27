@@ -383,6 +383,7 @@
     "Dark picture" : "Argazki iluna",
     "Translucent foreground elements" : "Aurreko elementu transluzidoak",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Gehitu efektu transluzido bat aurreko elementuentzat, alboko barra eta galdeketa-taula bezalakoentzat (ez du nabigatzaile guztiekin funtzionatzen).",
+    "Use alternative styling for the comments sidebar" : "Erabili estilo alternatiboa iruzkinen albo-barrarentzat",
     "Calendar check" : "Egutegiaren egiaztapena",
     "User settings" : "Erabiltzaile ezarpenak",
     "Performance settings" : "Errendimendu ezarpenak",
