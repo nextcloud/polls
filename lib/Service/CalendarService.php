@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -38,7 +39,7 @@ use OCA\Polls\Model\UserGroup\CurrentUser;
 
 class CalendarService {
 	/** @var CurrentUser */
-	private $currentUser ;
+	private $currentUser;
 
 	/** @var CalendarManager */
 	private $calendarManager;
@@ -106,7 +107,7 @@ class CalendarService {
 	 *
 	 * @psalm-return array{from: DateTimeImmutable, to: DateTimeImmutable}
 	 */
-	private function getTimerange(int $optionId, DateTimeZone $timezone) : array {
+	private function getTimerange(int $optionId, DateTimeZone $timezone): array {
 		$option = $this->optionMapper->find($optionId);
 		$searchIntervalBefore = new DateInterval('PT' . $this->preferences->getCheckCalendarsBefore() . 'H');
 		$searchIntervalAfter = new DateInterval('PT' . $this->preferences->getCheckCalendarsAfter() . 'H');
@@ -126,7 +127,7 @@ class CalendarService {
 		];
 	}
 
-	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to) : ?array {
+	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): ?array {
 		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
@@ -154,7 +155,7 @@ class CalendarService {
 			// deprecated since NC24
 			return $this->getEventsLegcy($timerange['from'], $timerange['to']);
 		}
-		
+
 		// use from NC24 on
 		$events = [];
 		$foundEvents = $this->searchEventsByTimeRange($timerange['from'], $timerange['to']);
@@ -208,14 +209,15 @@ class CalendarService {
 			// - start before the end of the requested timespan ($to) and
 			// - end after the start of the requested timespan ($from)
 			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
-			// \OC::$server->getLogger()->error('foundEvents: ' . json_encode($foundEvents));
+
 			foreach ($foundEvents as $event) {
 				$calendarEvent = new CalendarEvent($event, $calendar, $from, $to);
 				// since we get back recurring events of other days, just make sure this event
 				// matches the search pattern
 				// TODO: identify possible time zone issues, when handling all day events
 				if (($from->getTimestamp() < $calendarEvent->getEnd())
-					&& ($to->getTimestamp() > $calendarEvent->getStart())) {
+					&& ($to->getTimestamp() > $calendarEvent->getStart())
+				) {
 				}
 				array_push($events, $calendarEvent);
 				// array_push($events, $calendarEvent);

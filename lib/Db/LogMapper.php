@@ -115,7 +115,7 @@ class LogMapper extends QBMapper {
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'processed', 'poll_id', 'user_id', 'message_id')
 				->from($this->getTableName());
-			$foundEntries = $query->execute();
+			$foundEntries = $query->executeQuery();
 
 			$delete = $this->db->getQueryBuilder();
 			$delete->delete($this->getTableName())
@@ -132,7 +132,7 @@ class LogMapper extends QBMapper {
 				];
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);
-					$delete->execute();
+					$delete->executeStatement();
 					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
@@ -160,7 +160,7 @@ class LogMapper extends QBMapper {
 		$query->delete($this->getTableName())
 			->where('user_id = :userId')
 			->setParameter('userId', $userId);
-		$query->execute();
+		$query->executeStatement();
 	}
 
 	/**
@@ -172,7 +172,7 @@ class LogMapper extends QBMapper {
 			->where(
 				$query->expr()->lt('created', $query->createNamedParameter($offset))
 			);
-		$query->execute();
+		$query->executeStatement();
 	}
 
 	/**
@@ -184,6 +184,6 @@ class LogMapper extends QBMapper {
 			->where(
 				$query->expr()->gt('processed', $query->createNamedParameter(0))
 			);
-		$query->execute();
+		$query->executeStatement();
 	}
 }

@@ -1,84 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.23.0@f1fe6ff483bf325c803df9f510d09a03fd796f88">
-  <file src="lib/AppInfo/Application.php">
-    <InvalidArgument occurrences="25">
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-      <code>registerEventListener</code>
-    </InvalidArgument>
-  </file>
+<files psalm-version="4.24.0@06dd975cb55d36af80f242561738f16c5f58264f">
   <file src="lib/Db/Preferences.php">
     <UndefinedClass occurrences="2">
       <code>BackgroundService</code>
       <code>BackgroundService</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Listener/BaseListener.php">
-    <UndefinedMethod occurrences="10">
-      <code>getActivityId</code>
-      <code>getActor</code>
-      <code>getActor</code>
-      <code>getActor</code>
-      <code>getLogId</code>
-      <code>getLogId</code>
-      <code>getPollId</code>
-      <code>getPollId</code>
-      <code>getPollOwner</code>
-      <code>getPollOwner</code>
-    </UndefinedMethod>
-  </file>
-  <file src="lib/Listener/GroupDeletedListener.php">
-    <UndefinedMethod occurrences="1">
-      <code>getGroup</code>
-    </UndefinedMethod>
-  </file>
-  <file src="lib/Listener/PollListener.php">
-    <UndefinedMethod occurrences="2">
-      <code>getNotification</code>
-      <code>getNotification</code>
-    </UndefinedMethod>
-  </file>
-  <file src="lib/Listener/UserDeletedListener.php">
-    <UndefinedMethod occurrences="1">
-      <code>getUser</code>
-    </UndefinedMethod>
-  </file>
   <file src="lib/Model/CalendarEvent.php">
     <UndefinedInterfaceMethod occurrences="1">
       <code>getUri</code>
     </UndefinedInterfaceMethod>
-  </file>
-  <file src="lib/Service/ActivityService.php">
-    <UndefinedMethod occurrences="6">
-      <code>getActivityId</code>
-      <code>getActivityObject</code>
-      <code>getActivityObjectId</code>
-      <code>getActivitySubject</code>
-      <code>getActivitySubjectParams</code>
-      <code>getActor</code>
-    </UndefinedMethod>
   </file>
   <file src="lib/Service/CalendarService.php">
     <UndefinedInterfaceMethod occurrences="5">
