@@ -385,6 +385,7 @@ OC.L10N.register(
     "Dark picture" : "Sötét kép",
     "Translucent foreground elements" : "Áttetsző előtérbeli elemek",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Áttetsző hatás hozzáadása az előtérbeli elemekhez, mint az oldalsáv és a szavazattáblázat (Nem működik minden böngészővel).",
+    "Use alternative styling for the comments sidebar" : "Alternatív stílus használata a névjegyek oldalsávhoz",
     "Calendar check" : "Naptárellenőrzés",
     "User settings" : "Felhasználói beállítások",
     "Performance settings" : "Teljesítménybeállítások",

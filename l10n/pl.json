@@ -383,6 +383,7 @@
     "Dark picture" : "Ciemny obraz",
     "Translucent foreground elements" : "Przezroczyste elementy pierwszego planu",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Dodaj efekt półprzezroczystości do elementów pierwszego planu, takich jak pasek boczny i tabela sond (nie działa we wszystkich przeglądarkach).",
+    "Use alternative styling for the comments sidebar" : "Użyj alternatywnego stylu dla paska bocznego komentarzy",
     "Calendar check" : "Sprawdzenie kalendarza",
     "User settings" : "Ustawienia użytkownika",
     "Performance settings" : "Ustawienia wydajności",

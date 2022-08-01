@@ -383,6 +383,7 @@
     "Dark picture" : "Tmavý obrázek",
     "Translucent foreground elements" : "Průhledné prvky popředí",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Přidat efekt průhlednosti na prvky popředí, jako je postranní pruh a tabulka ankety (nefunguje ve všech prohlížečích).",
+    "Use alternative styling for the comments sidebar" : "Pro postranní panel s komentáři použít alternativní styl",
     "Calendar check" : "Kontrola kalendáře",
     "User settings" : "Nastavení pro uživatele",
     "Performance settings" : "Nastavení ohledně výkonnosti",
