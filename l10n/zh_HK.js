@@ -385,6 +385,7 @@ OC.L10N.register(
     "Dark picture" : "黑暗畫面",
     "Translucent foreground elements" : "半透明前景元素",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "在側邊欄和投票表等前景元素上添加半透明效果（不適用於所有瀏覽器）。",
+    "Use alternative styling for the comments sidebar" : "為評論側欄使用代用樣式",
     "Calendar check" : "日曆檢查",
     "User settings" : "用戶設定",
     "Performance settings" : "效能設定",

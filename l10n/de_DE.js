@@ -385,6 +385,7 @@ OC.L10N.register(
     "Dark picture" : "Dunkles Bild",
     "Translucent foreground elements" : "Durchscheinende Vordergrundelemente",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Fügen Sie einen durchscheinenden Effekt zu Vordergrundelementen wie der Seitenleiste und der Umfragetabelle hinzu (funktioniert nicht mit allen Browsern).",
+    "Use alternative styling for the comments sidebar" : "Alternative Stile für die Seitenleiste der Kommentare verwenden",
     "Calendar check" : "Kalender-Prüfung",
     "User settings" : "Benutzer-Einstellungen",
     "Performance settings" : "Leistungseinstellungen",

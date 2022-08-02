@@ -139,7 +139,7 @@ class DeleteInvalidRecords implements IRepairStep {
                     WHERE polls.id = {$child}.poll_id
                 )";
 			$stmt = $this->connection->prepare($query);
-			$stmt->execute();
+			$stmt->executeStatement();
 		}
 	}
 }

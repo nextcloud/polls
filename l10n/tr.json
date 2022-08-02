@@ -383,6 +383,7 @@
     "Dark picture" : "Koyu görsel",
     "Translucent foreground elements" : "Yarı saydam ön plan ögeleri",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Yan çubuk ve anket tablosu gibi ön plan ögelerine yarı saydam etkisi ekler (tüm tarayıcılarda çalışmaz).",
+    "Use alternative styling for the comments sidebar" : "Yorumlar yan çubuğu için alternatif biçemlendirme kullanılsın",
     "Calendar check" : "Takvim denetimi",
     "User settings" : "Kullanıcı ayarları",
     "Performance settings" : "Başarım ayarları",

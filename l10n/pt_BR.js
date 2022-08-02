@@ -385,6 +385,7 @@ OC.L10N.register(
     "Dark picture" : "Imagem escura",
     "Translucent foreground elements" : "Elementos translúcidos de primeiro plano",
     "Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers)." : "Adicione um efeito translúcido em elementos de primeiro plano, como barra lateral e tabela de votação (não funciona com todos os navegadores).",
+    "Use alternative styling for the comments sidebar" : "Use um estilo alternativo para a barra lateral de comentários",
     "Calendar check" : "Verificação do calendário",
     "User settings" : "Configurações de usuário",
     "Performance settings" : "Configurações de desempenho ",

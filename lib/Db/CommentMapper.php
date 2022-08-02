@@ -82,7 +82,7 @@ class CommentMapper extends QBMapper {
 			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
 	/**
@@ -96,7 +96,7 @@ class CommentMapper extends QBMapper {
 			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
 
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
 	/**
@@ -107,6 +107,6 @@ class CommentMapper extends QBMapper {
 		$query->update($this->getTableName())
 			->set('user_id', $query->createNamedParameter($replacementName))
 			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
-			->execute();
+			->executeStatement();
 	}
 }

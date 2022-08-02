@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="comment-item">
+	<div :class="['comment-item' , {currentuser: isCurrentUser}]">
 		<UserItem v-bind="comment.user" hide-names />
 		<div class="comment-item__content">
 			<span class="comment-item__user">{{ comment.user.displayName }}</span>
@@ -65,9 +65,15 @@ export default {
 	computed: {
 		...mapState({
 			acl: (state) => state.poll.acl,
+			currentUser: (state) => state.poll.acl.userId,
 		}),
+
 		dateCommentedRelative() {
 			return moment.unix(this.comment.timestamp).fromNow()
+		},
+
+		isCurrentUser() {
+			return this.currentUser === this.comment.user.userId
 		},
 	},
 
@@ -114,7 +120,6 @@ export default {
 		padding-top: 2px;
 
 		.material-design-icon {
-			// display: none;
 			visibility: hidden;
 		}
 
@@ -126,15 +131,46 @@ export default {
 				background: var(--color-background-hover);
 				.material-design-icon {
 					visibility: visible;
-					// display: flex;
 				}
 			}
 		}
+
 		.comment-item__comment {
 			hyphens: auto;
 			flex: 1;
 			a {
 				text-decoration-line: underline;
+			}
+		}
+	}
+
+	// experimental
+	.alternativestyle {
+		.comment-item {
+		flex-direction: row-reverse;
+			&.currentuser {
+				flex-direction: row;
+			}
+		}
+
+		.comment-item__content {
+			border: solid 1px var(--color-primary-element-light);
+			border-radius: var(--border-radius-large);
+			background-color: var(--color-primary-light);
+			box-shadow: 2px 2px 6px var(--color-box-shadow);
+			padding-left: 8px;
+			padding-bottom: 10px;
+
+			.comment-item__subcomment {
+				margin-right: 4px;
+
+				&:hover {
+					background: var(--color-primary-hover);
+					color: var(--color-primary-light-hover);
+					margin-left: -4px;
+					padding-left: 4px;
+					border-radius: var(--border-radius-large);
+				}
 			}
 		}
 	}

@@ -65,6 +65,11 @@
 				</div>
 			</div>
 		</div>
+		<div class="user_settings">
+			<CheckboxRadioSwitch :checked.sync="useCommentsAlternativeStyling" type="switch">
+				{{ t('polls', 'Use alternative styling for the comments sidebar') }}
+			</CheckboxRadioSwitch>
+		</div>
 	</div>
 </template>
 
@@ -148,6 +153,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ translucentPanels: +value })
+			},
+		},
+
+		useCommentsAlternativeStyling: {
+			get() {
+				return !!this.settings.useCommentsAlternativeStyling
+			},
+			set(value) {
+				this.writeValue({ useCommentsAlternativeStyling: +value })
 			},
 		},
 
