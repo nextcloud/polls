@@ -26,8 +26,8 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
-use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Service\ShareService;
+use OCA\Polls\Service\UserService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\ISession;
 use OCP\IRequest;
@@ -37,14 +37,19 @@ class ShareController extends BaseController {
 	/** @var ShareService */
 	private $shareService;
 
+	/** @var UserService */
+	private $userService;
+
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		ShareService $shareService
+		ShareService $shareService,
+		UserService $userService
 	) {
 		parent::__construct($appName, $request, $session);
 		$this->shareService = $shareService;
+		$this->userService = $userService;
 	}
 
 	/**
@@ -145,7 +150,7 @@ class ShareController extends BaseController {
 				throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
 			}
 
-			foreach (UserBase::getUserGroupChild($share->getType(), $share->getUserId())->getMembers() as $member) {
+			foreach ($this->userService->getUser($share->getType(), $share->getUserId())->getMembers() as $member) {
 				try {
 					$newShare = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
 					$shares[] = $newShare;

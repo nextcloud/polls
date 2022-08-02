@@ -36,24 +36,28 @@ use OCA\Polls\Model\UserGroup\ContactGroup;
 use OCA\Polls\Model\UserGroup\Email;
 use OCA\Polls\Model\UserGroup\Group;
 use OCA\Polls\Model\UserGroup\User;
-use OCA\Polls\Model\UserGroup\UserBase;
 use OCP\IUserManager;
 
 class SystemService {
 	private const REGEX_VALID_MAIL = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
 	private const REGEX_PARSE_MAIL = '/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/';
 	
+	/** @var ShareMapper */
+	private $shareMapper;
+	
+	/** @var UserService */
+	private $userService;
+	
 	/** @var VoteMapper */
 	private $voteMapper;
 
-	/** @var ShareMapper */
-	private $shareMapper;
-
 	public function __construct(
 		ShareMapper $shareMapper,
+		UserService $userService,
 		VoteMapper $voteMapper
 	) {
 		$this->shareMapper = $shareMapper;
+		$this->userService = $userService;
 		$this->voteMapper = $voteMapper;
 	}
 
@@ -127,7 +131,7 @@ class SystemService {
 				$list[] = new Email($emailAddress, $displayName, $emailAddress);
 			}
 
-			$list = array_merge($list, UserBase::search($query));
+			$list = array_merge($list, $this->userService->search($query));
 		}
 
 		return $list;

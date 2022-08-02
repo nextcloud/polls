@@ -50,11 +50,8 @@ use Psr\Log\LoggerInterface;
 
 class ShareService {
 
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var string|null */
-	private $userId;
+	/** @var Acl */
+	private $acl;
 
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
@@ -62,35 +59,41 @@ class ShareService {
 	/** @var IGroupManager */
 	private $groupManager;
 
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var SystemService */
-	private $systemService;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var ISecureRandom */
-	private $secureRandom;
-
-	/** @var Share */
-	private $share;
-
-	/** @var array */
-	private $shares = [];
+	/** @var LoggerInterface */
+	private $logger;
 
 	/** @var MailService */
 	private $mailService;
 
-	/** @var Acl */
-	private $acl;
-
 	/** @var NotificationService */
 	private $notificationService;
+
+	/** @var PollMapper */
+	private $pollMapper;
+	
+	/** @var ShareMapper */
+	private $shareMapper;
+	
+	/** @var ISecureRandom */
+	private $secureRandom;
+	
+	/** @var Share */
+	private $share;
+	
+	/** @var array */
+	private $shares = [];
+	
+	/** @var SystemService */
+	private $systemService;
+
+	/** @var string|null */
+	private $userId;
+
+	/** @var UserService */
+	private $userService;
+	
+	/** @var IUserSession */
+	private $userSession;
 
 	public function __construct(
 		LoggerInterface $logger,
@@ -105,7 +108,8 @@ class ShareService {
 		Share $share,
 		MailService $mailService,
 		Acl $acl,
-		NotificationService $notificationService
+		NotificationService $notificationService,
+		UserService $userService
 	) {
 		$this->logger = $logger;
 		$this->userId = $UserId;
@@ -120,6 +124,7 @@ class ShareService {
 		$this->acl = $acl;
 		$this->notificationService = $notificationService;
 		$this->userSession = $userSession;
+		$this->userService = $userService;
 	}
 
 	/**
@@ -158,24 +163,26 @@ class ShareService {
 	 * or is accessibale for use by the current user
 	 */
 	private function validateShareType() : void {
+		$currentUser = $this->userService->getCurrentUser();
+
 		switch ($this->share->getType()) {
 			case Share::TYPE_PUBLIC:
 				// public shares are always valid
 				break;
 			case Share::TYPE_USER:
-				if ($this->share->getUserId() !== $this->userId) {
+				if ($this->share->getUserId() !== $currentUser->getId()) {
 					// share is not valid for user
 					throw new NotAuthorizedException;
 				}
 				break;
 			case Share::TYPE_ADMIN:
-				if ($this->share->getUserId() !== $this->userId) {
+				if ($this->share->getUserId() !== $currentUser->getId()) {
 					// share is not valid for user
 					throw new NotAuthorizedException;
 				}
 				break;
 			case Share::TYPE_GROUP:
-				if (!$this->userSession->isLoggedIn()) {
+				if (!$currentUser->getIsLoggedIn()) {
 					throw new NotAuthorizedException;
 				}
 
@@ -216,7 +223,7 @@ class ShareService {
 				// Return the created share
 				return $this->createNewShare(
 					$this->share->getPollId(),
-					UserBase::getUserGroupChild(Share::TYPE_USER, $this->userSession->getUser()->getUID()),
+					$this->userService->getUser(Share::TYPE_USER, $this->userSession->getUser()->getUID()),
 					true
 				);
 			}
@@ -293,7 +300,7 @@ class ShareService {
 			}
 		}
 
-		$this->createNewShare($pollId, UserBase::getUserGroupChild($type, $userId, $displayName, $emailAddress));
+		$this->createNewShare($pollId, $this->userService->getUser($type, $userId, $displayName, $emailAddress));
 
 		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($this->share));
 
@@ -456,7 +463,7 @@ class ShareService {
 			// prevent invtation sending, when no email address is given
 			$this->createNewShare(
 				$this->share->getPollId(),
-				UserBase::getUserGroupChild(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress),
+				$this->userService->getUser(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress),
 				!$emailAddress
 			);
 			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));

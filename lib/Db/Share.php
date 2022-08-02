@@ -30,6 +30,7 @@ use OCP\IURLGenerator;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Service\UserService;
 
 /**
  * @method int getId()
@@ -125,11 +126,15 @@ class Share extends Entity implements JsonSerializable {
 	/** @var AppSettings */
 	protected $appSettings;
 
+	/** @var UserService */
+	protected $userService;
+
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
 		$this->addType('reminderSent', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
+		$this->userService = Container::queryClass(UserService::class);
 		$this->appSettings = new AppSettings;
 	}
 
@@ -187,7 +192,7 @@ class Share extends Entity implements JsonSerializable {
 	}
 
 	public function getUserObject(): UserBase {
-		return UserBase::getUserGroupChild(
+		return $this->userService->getUser(
 			$this->type,
 			$this->userId,
 			$this->displayName,
