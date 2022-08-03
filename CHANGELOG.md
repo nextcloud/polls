@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
 ### Fix
  - Unsubscribing from a public was not possible
  - Use display name for avatar of the current public user instead of user id
+ - Fix export, if owner did not vote in the poll
+ 
 ## [3.7.0] - 2022-06-24
 ### New
 - User setting for conflict check (hours before and after an option to search for conflicts)
