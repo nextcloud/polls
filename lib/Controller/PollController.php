@@ -24,16 +24,15 @@
 namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
-use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\JSONResponse;
 
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCP\ISession;
 
-class PollController extends Controller {
+class PollController extends BaseController {
 
 	/** @var Acl */
 	private $acl;
@@ -44,24 +43,18 @@ class PollController extends Controller {
 	/** @var PollService */
 	private $pollService;
 
-	/** @var Poll */
-	private $poll;
-
-	use ResponseHandle;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ISession $session,
 		Acl $acl,
 		OptionService $optionService,
-		PollService $pollService,
-		Poll $poll
+		PollService $pollService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->acl = $acl;
 		$this->optionService = $optionService;
 		$this->pollService = $pollService;
-		$this->poll = $poll;
 	}
 
 	/**

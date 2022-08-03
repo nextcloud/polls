@@ -23,17 +23,15 @@
 
 namespace OCA\Polls\Service;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\EventDispatcher\IEventDispatcher;
-
-use OCA\Polls\Exceptions\VoteLimitExceededException;
-
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Event\VoteSetEvent;
+use OCA\Polls\Exceptions\VoteLimitExceededException;
 use OCA\Polls\Model\Acl;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\EventDispatcher\IEventDispatcher;
 
 class VoteService {
 

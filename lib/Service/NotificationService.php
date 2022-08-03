@@ -24,8 +24,8 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
-use OCP\Notification\IManager;
 use OCA\Polls\Notification\Notifier;
+use OCP\Notification\IManager;
 
 class NotificationService {
 	public const APP_ID = 'polls';

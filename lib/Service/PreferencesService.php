@@ -23,17 +23,12 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\IConfig;
-
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
+use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 class PreferencesService {
-
-	/** @var IConfig */
-	private $config;
 
 	/** @var PreferencesMapper */
 	private $preferencesMapper;
@@ -46,11 +41,9 @@ class PreferencesService {
 
 	public function __construct(
 		?string $UserId,
-		IConfig $config,
 		PreferencesMapper $preferencesMapper
 	) {
 		$this->userId = $UserId;
-		$this->config = $config;
 		$this->preferencesMapper = $preferencesMapper;
 		$this->preferences = new Preferences;
 		$this->load();

@@ -34,35 +34,35 @@ use OCA\Polls\Db\Poll;
 
 class AnonymizeService {
 
-	/** @var VoteMapper */
-	private $voteMapper;
-
-	/** @var CommentMapper */
-	private $commentMapper;
-
-	/** @var OptionMapper */
-	private $optionMapper;
-
 	/** @var array */
 	private $anonList;
-
-	/** @var string|null */
-	private $userId;
-
+	
+	/** @var CommentMapper */
+	private $commentMapper;
+	
 	/** @var int */
 	private $pollId;
 
+	/** @var OptionMapper */
+	private $optionMapper;
+	
+	/** @var string|null */
+	private $userId;
+	
+	/** @var VoteMapper */
+	private $voteMapper;
+
 	public function __construct(
-		VoteMapper $voteMapper,
 		CommentMapper $commentMapper,
-		OptionMapper $optionMapper
+		OptionMapper $optionMapper,
+		VoteMapper $voteMapper
 	) {
-		$this->voteMapper = $voteMapper;
+		$this->anonList = [];
 		$this->commentMapper = $commentMapper;
 		$this->optionMapper = $optionMapper;
-		$this->anonList = [];
-		$this->userId = null;
 		$this->pollId = 0;
+		$this->userId = null;
+		$this->voteMapper = $voteMapper;
 	}
 
 	/**

@@ -23,21 +23,9 @@
 
 namespace OCA\Polls\Service;
 
-use OCP\IUserSession;
-use OCP\IGroupManager;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\EventDispatcher\IEventDispatcher;
-use OCP\Search\ISearchQuery;
-
-use OCA\Polls\Exceptions\EmptyTitleException;
-use OCA\Polls\Exceptions\InvalidAccessException;
-use OCA\Polls\Exceptions\InvalidShowResultsException;
-use OCA\Polls\Exceptions\InvalidPollTypeException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Db\Vote;
 use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCreatedEvent;
 use OCA\Polls\Event\PollDeletedEvent;
@@ -45,16 +33,23 @@ use OCA\Polls\Event\PollOwnerChangeEvent;
 use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
+use OCA\Polls\Exceptions\EmptyTitleException;
+use OCA\Polls\Exceptions\InvalidAccessException;
+use OCA\Polls\Exceptions\InvalidShowResultsException;
+use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\EventDispatcher\IEventDispatcher;
+use OCP\IGroupManager;
 use OCP\IUser;
 use OCP\IUserManager;
+use OCP\IUserSession;
+use OCP\Search\ISearchQuery;
 
 class PollService {
-
-	/** @var string|null */
-	private $userId;
 
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
@@ -77,9 +72,6 @@ class PollService {
 	/** @var VoteMapper */
 	private $voteMapper;
 
-	/** @var Vote */
-	private $vote;
-
 	/** @var MailService */
 	private $mailService;
 
@@ -99,9 +91,7 @@ class PollService {
 		MailService $mailService,
 		Poll $poll,
 		PollMapper $pollMapper,
-		?string $UserId,
-		VoteMapper $voteMapper,
-		Vote $vote
+		VoteMapper $voteMapper
 	) {
 		$this->acl = $acl;
 		$this->appSettings = $appSettings;
@@ -110,11 +100,9 @@ class PollService {
 		$this->mailService = $mailService;
 		$this->poll = $poll;
 		$this->pollMapper = $pollMapper;
-		$this->userId = $UserId;
 		$this->userManager = $userManager;
 		$this->userSession = $userSession;
 		$this->voteMapper = $voteMapper;
-		$this->vote = $vote;
 	}
 
 	/**

@@ -24,12 +24,11 @@
 namespace OCA\Polls\Service;
 
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\DB\Exception;
-
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Model\Acl;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\DB\Exception;
 
 class SubscriptionService {
 

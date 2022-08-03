@@ -26,7 +26,9 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class InvalidOptionPropertyException extends Exception {
-	public function __construct(string $e = 'Invalid option attributes') {
+	public function __construct(
+		string $e = 'Invalid option attributes'
+	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}
 }

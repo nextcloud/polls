@@ -23,17 +23,14 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\Exception;
-
-use OCP\IRequest;
-use OCP\AppFramework\ApiController;
+use OCA\Polls\Service\VoteService;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
 
-use OCA\Polls\Service\VoteService;
-
-class VoteApiController extends ApiController {
+class VoteApiController extends BaseApiController {
 
 	/** @var VoteService */
 	private $voteService;
@@ -43,11 +40,7 @@ class VoteApiController extends ApiController {
 		IRequest $request,
 		VoteService $voteService
 	) {
-		parent::__construct($appName,
-			$request,
-			'PUT, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
 		$this->voteService = $voteService;
 	}
 

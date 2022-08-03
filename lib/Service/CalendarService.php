@@ -29,13 +29,13 @@ use DateTime;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
+use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Preferences;
+use OCA\Polls\Model\CalendarEvent;
+use OCA\Polls\Model\UserGroup\CurrentUser;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\Util;
-use OCA\Polls\Model\CalendarEvent;
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Db\Preferences;
-use OCA\Polls\Model\UserGroup\CurrentUser;
 
 class CalendarService {
 	/** @var CurrentUser */
@@ -46,9 +46,6 @@ class CalendarService {
 
 	/** @var ICalendar[] */
 	private $calendars;
-
-	/** @var array */
-	private $calendarMapKeys;
 
 	/** @var PreferencesService */
 	private $preferencesService;

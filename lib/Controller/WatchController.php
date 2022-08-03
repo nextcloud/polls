@@ -23,24 +23,23 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\WatchService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
+use OCP\ISession;
 
-class WatchController extends Controller {
+class WatchController extends BaseController {
 
 	/** @var WatchService */
 	private $watchService;
 
-	use ResponseHandle;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ISession $session,
 		WatchService $watchService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->watchService = $watchService;
 	}
 

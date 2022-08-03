@@ -23,43 +23,33 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Db\Share;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
-
-
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
-
-use OCA\Polls\Db\Share;
-use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
-use OCA\Polls\Service\SystemService;
-use OCA\Polls\Model\UserGroup\UserBase;
+use OCA\Polls\Service\UserService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\ISession;
+use OCP\IRequest;
 
-class ShareController extends Controller {
-	use ResponseHandle;
-
-	/** @var MailService */
-	private $mailService;
+class ShareController extends BaseController {
 
 	/** @var ShareService */
 	private $shareService;
 
-	/** @var SystemService */
-	private $systemService;
+	/** @var UserService */
+	private $userService;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		MailService $mailService,
+		ISession $session,
 		ShareService $shareService,
-		SystemService $systemService
+		UserService $userService
 	) {
-		parent::__construct($appName, $request);
-		$this->mailService = $mailService;
+		parent::__construct($appName, $request, $session);
 		$this->shareService = $shareService;
-		$this->systemService = $systemService;
+		$this->userService = $userService;
 	}
 
 	/**
@@ -160,7 +150,7 @@ class ShareController extends Controller {
 				throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
 			}
 
-			foreach (UserBase::getUserGroupChild($share->getType(), $share->getUserId())->getMembers() as $member) {
+			foreach ($this->userService->getUser($share->getType(), $share->getUserId())->getMembers() as $member) {
 				try {
 					$newShare = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
 					$shares[] = $newShare;

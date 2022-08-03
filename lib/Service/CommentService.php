@@ -23,12 +23,12 @@
 
 namespace OCA\Polls\Service;
 
-use OCP\EventDispatcher\IEventDispatcher;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Model\Acl;
+use OCP\EventDispatcher\IEventDispatcher;
 
 class CommentService {
 

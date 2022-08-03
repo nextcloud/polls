@@ -25,10 +25,10 @@ namespace OCA\Polls\Exceptions;
 
 use OCP\AppFramework\Http;
 
-class InvalidEmailAddress extends Exception {
+class NoDeadLineException extends Exception {
 	public function __construct(
-		string $e = 'Invalid email address'
+		string $e = 'No deadline calculated'
 	) {
-		parent::__construct($e, Http::STATUS_FORBIDDEN);
+		parent::__construct($e, Http::STATUS_OK);
 	}
 }

@@ -23,11 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use OCP\Activity\IManager as ActivityManager;
-use OCP\Activity\IEvent as ActivityEvent;
-use OCP\IL10N;
-use OCP\IUserSession;
-use OCP\L10N\IFactory;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Event\BaseEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -35,6 +30,11 @@ use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\OptionEvent;
 use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Event\VoteEvent;
+use OCP\Activity\IManager as ActivityManager;
+use OCP\Activity\IEvent as ActivityEvent;
+use OCP\IL10N;
+use OCP\IUserSession;
+use OCP\L10N\IFactory;
 
 class ActivityService {
 	/** @var ActivityManager */

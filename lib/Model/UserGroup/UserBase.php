@@ -23,15 +23,13 @@
 
 namespace OCA\Polls\Model\UserGroup;
 
-use OCA\Polls\Exceptions\InvalidShareTypeException;
-
 use DateTimeZone;
 use OCP\IL10N;
-use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Helper\Container;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
 use OCP\IDateTimeZone;
+use OCP\IUserSession;
 
 class UserBase implements \JsonSerializable {
 	public const TYPE = 'generic';
@@ -87,6 +85,9 @@ class UserBase implements \JsonSerializable {
 	/** @var IDateTimeZone */
 	protected $timezone;
 
+	/** @var IUserSession */
+	protected $userSession;
+
 	public function __construct(
 		string $id,
 		string $type,
@@ -99,6 +100,7 @@ class UserBase implements \JsonSerializable {
 
 		$this->l10n = Container::getL10N();
 		$this->timezone = Container::queryClass(IDateTimeZone::class);
+		$this->userSession = Container::queryClass(IUserSession::class);
 
 		$this->id = $id;
 		$this->type = $type;
@@ -113,10 +115,6 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getPublicId(): string {
-		return $this->id;
-	}
-
-	public function getUser(): string {
 		return $this->id;
 	}
 
@@ -159,6 +157,10 @@ class UserBase implements \JsonSerializable {
 
 	public function getOrganisation(): string {
 		return $this->organisation;
+	}
+
+	public function getIsLoggedIn(): bool {
+		return $this->userSession->isLoggedIn();
 	}
 
 	/**
@@ -261,7 +263,6 @@ class UserBase implements \JsonSerializable {
 			}
 		}
 
-
 		return $items;
 	}
 
@@ -271,48 +272,6 @@ class UserBase implements \JsonSerializable {
 	 */
 	public function getMembers(): array {
 		return [$this];
-	}
-
-	/**
-	 * @return Admin|Circle|Contact|ContactGroup|Email|GenericUser|Group|User
-	 */
-	public static function getUserGroupChildFromShare(string $token) {
-		$shareMapper = Container::queryClass(ShareMapper::class);
-		$share = $shareMapper->findByToken($token);
-		return self::getUserGroupChild(
-			$share->getType(),
-			$share->getUserId(),
-			$share->getDisplayName(),
-			$share->getEmailAddress()
-		);
-	}
-
-	/**
-	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Group|User|Admin
-	 */
-	public static function getUserGroupChild(string $type, string $id, string $displayName = '', string $emailAddress = '') {
-		switch ($type) {
-			case Group::TYPE:
-				return new Group($id);
-			case Circle::TYPE:
-				return new Circle($id);
-			case Contact::TYPE:
-				return new Contact($id);
-			case ContactGroup::TYPE:
-				return new ContactGroup($id);
-			case User::TYPE:
-				return new User($id);
-			case Admin::TYPE:
-				return new Admin($id);
-			case Email::TYPE:
-				return new Email($id, $displayName, $emailAddress);
-			case self::TYPE_PUBLIC:
-				return new GenericUser($id, self::TYPE_PUBLIC);
-			case self::TYPE_EXTERNAL:
-				return new GenericUser($id, self::TYPE_EXTERNAL, $displayName, $emailAddress);
-			default:
-				throw new InvalidShareTypeException('Invalid share type (' . $type . ')');
-			}
 	}
 
 	public function jsonSerialize(): array {
