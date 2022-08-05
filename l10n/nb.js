@@ -17,6 +17,8 @@ OC.L10N.register(
     "Cancel" : "Avbryt",
     "Apply" : "Bruk",
     "Participants" : "Deltakere",
+    "From" : "Fra",
+    "To" : "Til",
     "Email address" : "E-post adresse",
     "No" : "Nei",
     "Delete poll" : "Slett avstemning",
