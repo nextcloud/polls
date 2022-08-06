@@ -30,9 +30,8 @@ use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\UserGroup\User;
+use OCA\Polls\Service\UserService;
 use OCP\IL10N;
-use OCP\IUser;
-use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
 use OCP\Mail\IMailer;
@@ -45,52 +44,52 @@ use Psr\Log\LoggerInterface;
 abstract class MailBase {
 	private const TEMPLATE_CLASS = 'polls.Mail';
 
-	/** @var UserBase */
-	protected $recipient;
-
-	/** @var LoggerInterface */
-	protected $logger;
-
-	/** @var Poll */
-	protected $poll;
-
-	/** @var string|null */
-	protected $url = null;
+	/** @var AppSettings */
+	protected $appSettings;
+	
+	/** @var IEmailTemplate */
+	protected $emailTemplate;
 
 	/** @var string */
 	protected $footer;
-
-	/** @var IMailer */
-	protected $mailer;
-
+	
 	/** @var IL10N */
 	protected $l10n;
+
+	/** @var LoggerInterface */
+	protected $logger;
+	
+	/** @var IMailer */
+	protected $mailer;
+	
+	/** @var User */
+	protected $owner;
+	
+	/** @var Poll */
+	protected $poll;
+	
+	/** @var UserBase */
+	protected $recipient;
 
 	/** @var IFactory */
 	protected $transFactory;
 
-	/** @var IUserManager */
-	private $userManager;
+	/** @var UserService */
+	protected $userService;
 
-	/** @var IEmailTemplate */
-	protected $emailTemplate;
-
-	/** @var AppSettings */
-	protected $appSettings;
-
-	/** @var User */
-	protected $owner;
+	/** @var string|null */
+	protected $url = null;
 
 	public function __construct(
 		string $recipientId,
 		int $pollId,
 		string $url = null
 	) {
-		$this->userManager = Container::queryClass(IUserManager::class);
+		$this->appSettings = Container::queryClass(AppSettings::class);
 		$this->logger = Container::queryClass(LoggerInterface::class);
 		$this->mailer = Container::queryClass(IMailer::class);
 		$this->transFactory = Container::queryClass(IFactory::class);
-		$this->appSettings = Container::queryClass(AppSettings::class);
+		$this->userService = Container::queryClass(UserService::class);
 
 		$this->poll = $this->getPoll($pollId);
 		$this->recipient = $this->getUser($recipientId);
@@ -172,6 +171,12 @@ abstract class MailBase {
 		return $this->l10n->t('Go to poll');
 	}
 
+	protected function addButtonToPoll(): void {
+		if ($this->getButtonText() && $this->url) {
+			$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
+		}
+	}
+
 	protected function getFooter(): string {
 		return $this->l10n->t('This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription.');
 	}
@@ -197,12 +202,7 @@ abstract class MailBase {
 	}
 
 	protected function getUser(string $userId) : UserBase {
-		if ($this->userManager->get($userId) instanceof IUser) {
-			// return User object
-			return new User($userId);
-		}
-		// return UserBaseChild from share
-		return Container::findShare($this->poll->getId(), $userId)->getUserObject();
+		return $this->userService->evaluateUser($userId, $this->poll->getId());
 	}
 
 	protected function getRichDescription() : string {

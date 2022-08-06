@@ -247,6 +247,17 @@ const actions = {
 		}
 	},
 
+	async sendConfirmation(context, payload) {
+		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/confirmation`
+		try {
+			const response = await axios.post(generateUrl(endPoint))
+			console.log(response.data)
+			return response.data.confirmations
+		} catch (e) {
+			console.error('Error sending confirmation', { error: e.response }, { payload })
+		}
+	},
+
 	async delete(context, payload) {
 		const endPoint = `apps/polls/poll/${payload.pollId}`
 		try {

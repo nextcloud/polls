@@ -29,6 +29,12 @@
 			</template>
 			{{ closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll') }}
 		</VueButton>
+		<VueButton @click="sendConfirmation()">
+			<template #icon>
+				<OpenPollIcon v-if="closed" />
+			</template>
+			{{ t('polls', 'Send Confirmation') }}
+		</VueButton>
 		<CheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">
 			{{ t('polls', 'Poll closing date') }}
 		</CheckboxRadioSwitch>
@@ -38,6 +44,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import { Button as VueButton, DatetimePicker, CheckboxRadioSwitch } from '@nextcloud/vue'
 import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
@@ -119,6 +126,16 @@ export default {
 			}
 			this.$emit('change')
 
+		},
+
+		async sendConfirmation() {
+			const confirmations = await this.$store.dispatch('poll/sendConfirmation')
+			confirmations.sent.forEach((confirmation) => {
+				showSuccess(t('polls', `Confirmation sent to ${confirmation}`))
+			})
+			confirmations.error.forEach((confirmation) => {
+				showError(t('polls', `Confirmation could not be sent to ${confirmation}`))
+			})
 		},
 	},
 }

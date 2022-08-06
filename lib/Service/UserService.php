@@ -24,6 +24,7 @@
 namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Model\UserGroup\Admin;
@@ -58,18 +59,23 @@ class UserService {
 	/** @var ISearch */
 	private $userSearch;
 	
+	/** @var VoteMapper */
+	private $voteMapper;
+	
 	public function __construct(
 		ISearch $userSearch,
 		ISession $session,
 		IUserSession $userSession,
 		IUserManager $userManager,
-		ShareMapper $shareMapper
+		ShareMapper $shareMapper,
+		VoteMapper $voteMapper
 	) {
 		$this->userSearch = $userSearch;
 		$this->session = $session;
 		$this->shareMapper = $shareMapper;
 		$this->userSession = $userSession;
 		$this->userManager = $userManager;
+		$this->voteMapper = $voteMapper;
 	}
 
 	/**
@@ -110,6 +116,23 @@ class UserService {
 		} catch (Exception $e) {
 			return null;
 		}
+	}
+
+	/**
+	 * Get participans of a poll as array of users
+	 * @return Admin|Circle|Contact|ContactGroup|Email|GenericUser|Group|User
+	 */
+	public function getParticipants($pollId) : array {
+		$users = [];
+		$participants = $this->voteMapper->findParticipantsByPoll($pollId);
+
+		foreach ($participants as &$participant) {
+			$user = $this->evaluateUser($participant->getUserId(), $pollId);
+			if ($user) {
+				$users[] = $this->evaluateUser($participant->getUserId(), $pollId);
+			}
+		}
+		return $users;
 	}
 
 	/**

@@ -68,7 +68,7 @@ class NotificationMail extends MailBase {
 			$this->emailTemplate->addBodyListItem($this->getComposedLogString($logItem, $displayName));
 		}
 
-		$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
+		$this->addButtonToPoll();
 	}
 
 	private function evaluateDisplayName(Log $logItem) {
