@@ -30,12 +30,16 @@ use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\Service\MailService;
 use OCP\ISession;
 
 class PollController extends BaseController {
 
 	/** @var Acl */
 	private $acl;
+
+	/** @var MailService */
+	private $mailService;
 
 	/** @var OptionService */
 	private $optionService;
@@ -45,14 +49,16 @@ class PollController extends BaseController {
 
 	public function __construct(
 		string $appName,
+		Acl $acl,
 		IRequest $request,
 		ISession $session,
-		Acl $acl,
+		MailService $mailService,
 		OptionService $optionService,
 		PollService $pollService
 	) {
 		parent::__construct($appName, $request, $session);
 		$this->acl = $acl;
+		$this->mailService = $mailService;
 		$this->optionService = $optionService;
 		$this->pollService = $pollService;
 	}
@@ -101,6 +107,17 @@ class PollController extends BaseController {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->update($pollId, $poll),
 			'acl' => $this->acl->setPollId($pollId),
+		]);
+	}
+
+	/**
+	 * Send confirmation mails
+	 * @NoAdminRequired
+	 */
+	public function sendConfirmation(int $pollId): JSONResponse {
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+		return $this->response(fn () => [
+			'confirmations' => $this->mailService->sendConfirmation($pollId),
 		]);
 	}
 

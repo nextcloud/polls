@@ -67,7 +67,7 @@ return [
 		['name' => 'poll#toggleArchive', 'url' => '/poll/{pollId}/toggleArchive', 'verb' => 'PUT'],
 		['name' => 'poll#clone', 'url' => '/poll/{pollId}/clone', 'verb' => 'GET'],
 		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/poll/{pollId}/addresses', 'verb' => 'GET'],
-
+		['name' => 'poll#sendConfirmation', 'url' => '/poll/{pollId}/confirmation', 'verb' => 'POST'],
 		['name' => 'poll#transfer_polls', 'url' => '/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
 
 		['name' => 'option#list', 'url' => '/poll/{pollId}/options', 'verb' => 'GET'],
