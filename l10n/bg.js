@@ -247,7 +247,7 @@ OC.L10N.register(
     "Amount" : "Количество /брой/",
     "OK" : "ОК",
     "Week" : "Седмица",
-    "Delete option" : "Опция за изтриване",
+    "Delete option" : "Изтриване на опция",
     "{displayName}'s proposal" : "Предложение на {displayName}",
     "Propose a date" : "Предложете дата",
     "Propose an option" : "Предложете опция",
