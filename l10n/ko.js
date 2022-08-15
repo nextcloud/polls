@@ -37,6 +37,7 @@ OC.L10N.register(
     "Description" : "설명",
     "Receive notification email on activity" : "활동 이메일 알림 받기",
     "Change name" : "이름 변경",
+    "Email options" : "이메일 옵션",
     "Yes" : "예",
     "Administration" : "관리",
     "Details" : "세부사항",
