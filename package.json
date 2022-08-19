@@ -1,82 +1,82 @@
 {
-  "name": "polls",
-  "description": "Polls app for nextcloud",
-  "version": "3.8.0-beta5",
-  "authors": [
-    {
-      "name": "Vinzenz Rosenkranz",
-      "email": "vinzenz.rosenkranz@gmail.com",
-      "role": "Developer"
-    },
-    {
-      "name": "Rene Gieling",
-      "email": "github@dartcafe.de",
-      "role": "Developer"
-    }
-  ],
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/nextcloud/polls.git"
-  },
-  "bugs": {
-    "url": "https://github.com/nextcloud/polls/issues"
-  },
-  "homepage": "https://github.com/nextcloud/polls#readme",
-  "license": "AGPL-3.0",
-  "private": true,
-  "main": "src/js/main.js",
-  "scripts": {
-    "dev": "webpack --node-env development",
-    "watch": "webpack --node-env development --progress --watch",
-    "build": "webpack --node-env production --progress",
-    "lint": "eslint --ext .js,.vue src",
-    "lint:fix": "eslint --ext .js,.vue src --fix",
-    "stylelint": "stylelint src/**/*{.scss,.vue,.css}",
-    "stylelint:fix": "stylelint src --fix"
-  },
-  "dependencies": {
-    "@juliushaertl/vue-richtext": "^1.0.1",
-    "@nextcloud/auth": "^1.3.0",
-    "@nextcloud/axios": "^1.10.0",
-    "@nextcloud/dialogs": "^3.1.4",
-    "@nextcloud/event-bus": "^2.1.1",
-    "@nextcloud/l10n": "^1.6.0",
-    "@nextcloud/moment": "^1.2.1",
-    "@nextcloud/router": "^2.0.0",
-    "@nextcloud/vue": "^5.4.0",
-    "core-js": "^3.24.1",
-    "dompurify": "^2.3.10",
-    "file-saver": "^2.0.5",
-    "linkify-string": "^3.0.4",
-    "lodash": "^4.17.21",
-    "marked": "^4.0.18",
-    "nextcloud-vue-collections": "^0.10.0",
-    "v-click-outside": "^3.2.0",
-    "vue": "^2.7.3",
-    "vue-clipboard2": "^0.3.3",
-    "vue-material-design-icons": "^5.1.2",
-    "vue-router": "^3.5.4",
-    "vuedraggable": "^2.24.3",
-    "vuex": "^3.6.2",
-    "vuex-router-sync": "^5.0.0",
-    "xlsx": "^0.18.5"
-  },
-  "browserslist": [
-    "extends @nextcloud/browserslist-config"
-  ],
-  "engines": {
-    "node": "^16.0.0",
-    "npm": "^7.0.0 || ^8.0.0"
-  },
-  "devDependencies": {
-    "@nextcloud/babel-config": "^1.0.0",
-    "@nextcloud/browserslist-config": "^2.2.0",
-    "@nextcloud/eslint-config": "^8.0.0",
-    "@nextcloud/stylelint-config": "^2.1.2",
-    "@nextcloud/webpack-vue-config": "^5.2.1",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-prettier": "^4.2.1",
-    "prettier": "^2.7.1",
-    "vue-template-compiler": "^2.7.3"
-  }
+	"name": "polls",
+	"description": "Polls app for nextcloud",
+	"version": "3.8.0-beta5",
+	"authors": [
+		{
+			"name": "Vinzenz Rosenkranz",
+			"email": "vinzenz.rosenkranz@gmail.com",
+			"role": "Developer"
+		},
+		{
+			"name": "Rene Gieling",
+			"email": "github@dartcafe.de",
+			"role": "Developer"
+		}
+	],
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/nextcloud/polls.git"
+	},
+	"bugs": {
+		"url": "https://github.com/nextcloud/polls/issues"
+	},
+	"homepage": "https://github.com/nextcloud/polls#readme",
+	"license": "AGPL-3.0",
+	"private": true,
+	"main": "src/js/main.js",
+	"scripts": {
+		"dev": "webpack --node-env development",
+		"watch": "webpack --node-env development --progress --watch",
+		"build": "webpack --node-env production --progress",
+		"lint": "eslint --ext .js,.vue src",
+		"lint:fix": "eslint --ext .js,.vue src --fix",
+		"stylelint": "stylelint src/**/*{.scss,.vue,.css}",
+		"stylelint:fix": "stylelint src --fix"
+	},
+	"dependencies": {
+		"@juliushaertl/vue-richtext": "^1.0.1",
+		"@nextcloud/auth": "^1.3.0",
+		"@nextcloud/axios": "^1.11.0",
+		"@nextcloud/dialogs": "^3.2.0",
+		"@nextcloud/event-bus": "^2.1.1",
+		"@nextcloud/l10n": "^1.6.0",
+		"@nextcloud/moment": "^1.2.1",
+		"@nextcloud/router": "^2.0.0",
+		"@nextcloud/vue": "^5.4.0",
+		"core-js": "^3.24.1",
+		"dompurify": "^2.3.10",
+		"file-saver": "^2.0.5",
+		"linkify-string": "^3.0.4",
+		"lodash": "^4.17.21",
+		"marked": "^4.0.18",
+		"nextcloud-vue-collections": "^0.10.0",
+		"v-click-outside": "^3.2.0",
+		"vue": "^2.7.3",
+		"vue-clipboard2": "^0.3.3",
+		"vue-material-design-icons": "^5.1.2",
+		"vue-router": "^3.5.4",
+		"vuedraggable": "^2.24.3",
+		"vuex": "^3.6.2",
+		"vuex-router-sync": "^5.0.0",
+		"xlsx": "^0.18.5"
+	},
+	"browserslist": [
+		"extends @nextcloud/browserslist-config"
+	],
+	"engines": {
+		"node": "^16.0.0",
+		"npm": "^7.0.0 || ^8.0.0"
+	},
+	"devDependencies": {
+		"@nextcloud/babel-config": "^1.0.0",
+		"@nextcloud/browserslist-config": "^2.3.0",
+		"@nextcloud/eslint-config": "^8.0.0",
+		"@nextcloud/stylelint-config": "^2.2.0",
+		"@nextcloud/webpack-vue-config": "^5.3.0",
+		"eslint-config-prettier": "^8.5.0",
+		"eslint-plugin-prettier": "^4.2.1",
+		"prettier": "^2.7.1",
+		"vue-template-compiler": "^2.7.3"
+	}
 }
