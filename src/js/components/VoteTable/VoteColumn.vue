@@ -42,7 +42,7 @@
 			:avatar-size="24"
 			class="owner" />
 
-		<Spacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
+		<FlexSpacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
 
 		<div v-if="acl.allowEdit && closed" class="action confirm">
 			<VueButton v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
@@ -62,7 +62,7 @@ import { mapState, mapGetters } from 'vuex'
 import { Button as VueButton } from '@nextcloud/vue'
 import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
-import Spacer from '../Base/Spacer.vue'
+import FlexSpacer from '../Base/FlexSpacer.vue'
 import VoteItem from './VoteItem.vue'
 import { confirmOption } from '../../mixins/optionMixins.js'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
@@ -75,7 +75,7 @@ export default {
 		UnconfirmIcon,
 		Counter,
 		OptionItem,
-		Spacer,
+		FlexSpacer,
 		VoteItem,
 		VueButton,
 		CalendarPeek: () => import('../Calendar/CalendarPeek.vue'),

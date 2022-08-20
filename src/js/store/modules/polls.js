@@ -26,7 +26,7 @@
 import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
-import orderBy from 'lodash/orderBy'
+import { orderBy } from 'lodash'
 
 const state = {
 	list: [],

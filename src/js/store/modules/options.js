@@ -23,7 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
-import orderBy from 'lodash/orderBy'
+import { orderBy } from 'lodash'
 import moment from '@nextcloud/moment'
 
 const defaultOptions = () => ({

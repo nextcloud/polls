@@ -21,7 +21,7 @@
  *
  */
 
-import debounce from 'lodash/debounce'
+import { debounce } from 'lodash'
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { mapState } from 'vuex'

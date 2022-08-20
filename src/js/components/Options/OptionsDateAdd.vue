@@ -61,7 +61,7 @@
 				<div>
 					{{ dateOption.text }}
 				</div>
-				<Spacer />
+				<FlexSpacer />
 				<button v-if="dateOption.option.duration >= 0 && !added" class="primary" @click="addOption">
 					{{ t('polls', 'Add') }}
 				</button>
@@ -79,7 +79,7 @@
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import { Button as VueButton, CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
-import Spacer from '../Base/Spacer.vue'
+import FlexSpacer from '../Base/FlexSpacer.vue'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 
 export default {
@@ -90,7 +90,7 @@ export default {
 		VueButton,
 		CheckboxRadioSwitch,
 		DatetimePicker,
-		Spacer,
+		FlexSpacer,
 	},
 
 	props: {

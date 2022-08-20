@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'lodash'
 import CommentItem from './CommentItem.vue'
 import { mapState } from 'vuex'
 

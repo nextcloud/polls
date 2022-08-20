@@ -124,7 +124,7 @@ import { mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { Actions, ActionButton, AppContent, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'lodash'
 import HeaderBar from '../components/Base/HeaderBar.vue'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 
