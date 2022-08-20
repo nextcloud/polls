@@ -109,6 +109,7 @@ export default {
 .sent-confirmations {
 	flex: auto;
 }
+
 .error-confirmations {
 	flex: auto;
 }

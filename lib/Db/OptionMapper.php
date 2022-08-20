@@ -66,10 +66,10 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-			)->andWhere(
-				$qb->expr()->gt('confirmed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT))
-			);
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   )->andWhere(
+		   	$qb->expr()->gt('confirmed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+		   );
 
 		return $this->findEntities($qb);
 	}

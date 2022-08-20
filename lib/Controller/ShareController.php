@@ -100,7 +100,7 @@ class ShareController extends BaseController {
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->setEmailAddress($this->shareService->get($token),
-			$emailAddress)
+				$emailAddress)
 		]);
 	}
 
