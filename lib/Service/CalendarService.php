@@ -32,7 +32,7 @@ use DateTimeZone;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Model\CalendarEvent;
-use OCA\Polls\Model\UserGroup\CurrentUser;
+use OCA\Polls\Model\User\CurrentUser;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\Util;

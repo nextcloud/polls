@@ -46,15 +46,9 @@ class SubscriptionService {
 		$this->acl = $acl;
 	}
 
-	public function get(?int $pollId = null, ?string $token = null): bool {
-		if ($token) {
-			$this->acl->setToken($token);
-		} else {
-			$this->acl->setPollId($pollId);
-		}
-
+	public function get(Acl $acl): bool {
 		try {
-			$this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
+			$this->subscriptionMapper->findByPollAndUser($acl->getPollId(), $acl->getUserId());
 			// Subscription exists
 			return true;
 		} catch (DoesNotExistException $e) {
@@ -62,30 +56,17 @@ class SubscriptionService {
 		}
 	}
 
-	public function add(int $pollId, string $userId): void {
-		$subscription = new Subscription();
-		$subscription->setPollId($pollId);
-		$subscription->setUserId($userId);
-		$this->subscriptionMapper->insert($subscription);
-	}
-
-	public function set(bool $subscribed, ?int $pollId = null, ?string $token = null): bool {
-		if ($token) {
-			$this->acl->setToken($token);
-		} else {
-			$this->acl->setPollId($pollId);
-		}
-
+	public function set(bool $subscribed, Acl $acl): bool {
 		if (!$subscribed) {
 			try {
-				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
+				$subscription = $this->subscriptionMapper->findByPollAndUser($acl->getPollId(), $acl->getUserId());
 				$this->subscriptionMapper->delete($subscription);
 			} catch (DoesNotExistException $e) {
 				// catch silently (assume already unsubscribed)
 			}
 		} else {
 			try {
-				$this->add($this->acl->getPollId(), $this->acl->getUserId());
+				$this->add($acl->getPollId(), $acl->getUserId());
 			} catch (UniqueConstraintViolationException $e) {
 				// deprecated NC22
 				// catch silently (assume already subscribed)
@@ -97,5 +78,12 @@ class SubscriptionService {
 			}
 		}
 		return $subscribed;
+	}
+
+	private function add(int $pollId, string $userId): void {
+		$subscription = new Subscription();
+		$subscription->setPollId($pollId);
+		$subscription->setUserId($userId);
+		$this->subscriptionMapper->insert($subscription);
 	}
 }

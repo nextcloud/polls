@@ -28,7 +28,6 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
-use OCA\Polls\Model\UserGroup\User;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -324,10 +323,6 @@ class Poll extends Entity implements JsonSerializable {
 		return $this->userManager->get($this->owner) instanceof IUser
 			? $this->userManager->get($this->owner)->getDisplayName()
 			: $this->owner;
-	}
-
-	public function getOwnerUserObject(): User {
-		return new User($this->owner);
 	}
 
 	private function setMiscSettingsArray(array $value) : void {

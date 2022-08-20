@@ -21,10 +21,12 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Model\Group;
 
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\UserBase;
 use OCP\Contacts\IManager as IContactsManager;
 
 class ContactGroup extends UserBase {
@@ -36,7 +38,7 @@ class ContactGroup extends UserBase {
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
-		$this->description = Container::getL10N()->t('Contact group');
+		$this->description = $this->l10n->t('Contact group');
 		$this->richObjectType = 'addressbook-contact';
 
 		if (!self::isEnabled()) {

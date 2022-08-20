@@ -21,33 +21,15 @@
  *
  */
 
+namespace OCA\Polls\Model\User;
 
-namespace OCA\Polls\Model\UserGroup;
-
-use OCA\Polls\Helper\Container;
-
-class GenericUser extends UserBase {
-	public const TYPE = 'external';
-	public const ICON_DEFAULT = 'icon-share';
-	public const ICON_PUBLIC = 'icon-public';
+class Admin extends User {
+	public const TYPE = 'admin';
+	public const ICON = 'icon-settings';
 
 	public function __construct(
-		string $id,
-		string $type = self::TYPE,
-		string $displayName = '',
-		string $emailAddress = ''
+		string $id
 	) {
-		parent::__construct($id, $type);
-		$this->icon = self::ICON_DEFAULT;
-		$this->description = Container::getL10N()->t('External user');
-		$this->richObjectType = 'guest';
-
-		if ($type === UserBase::TYPE_PUBLIC) {
-			$this->icon = self::ICON_PUBLIC;
-			$this->description = Container::getL10N()->t('Public link');
-		}
-
-		$this->displayName = $displayName;
-		$this->emailAddress = $emailAddress;
+		parent::__construct($id, self::TYPE);
 	}
 }

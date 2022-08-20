@@ -68,21 +68,15 @@ class CommentService {
 	 * @return Comment[]
 	 *
 	 */
-	public function listFlat(?int $pollId, string $token = '') : array {
-		if ($token) {
-			$this->acl->setToken($token);
-		} else {
-			$this->acl->setPollId($pollId);
-		}
+	private function listFlat(Acl $acl) : array {
+		$comments = $this->commentMapper->findByPoll($acl->getPollId());
 
-		$comments = $this->commentMapper->findByPoll($this->acl->getPollId());
-
-		if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
-			$this->anonymizer->set($this->acl->getPollId(), $this->acl->getUserId());
+		if (!$acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
+			$this->anonymizer->set($acl->getPollId(), $acl->getUserId());
 			$this->anonymizer->anonymize($comments);
-		} elseif (!$this->acl->getIsLoggedIn()) {
+		} elseif (!$acl->getIsLoggedIn()) {
 			// if participant is not logged in avoid leaking user ids
-			AnonymizeService::replaceUserId($comments, $this->acl->getUserId());
+			AnonymizeService::replaceUserId($comments, $acl->getUserId());
 		}
 
 		return $comments;
@@ -92,8 +86,8 @@ class CommentService {
 	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
 	 */
-	public function list(?int $pollId, string $token = ''): array {
-		$comments = $this->listFlat($pollId, $token);
+	public function list(Acl $acl): array {
+		$comments = $this->listFlat($acl);
 		$timeTolerance = 5 * 60; // treat comments within 5 minutes as one comment
 		$groupedComments = [];
 
@@ -116,15 +110,16 @@ class CommentService {
 	/**
 	 * Add comment
 	 */
-	public function add(string $message, ?int $pollId = null, ?string $token = null): Comment {
-		if ($token) {
-			$this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD);
-		} else {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD);
-		}
+	public function get(int $commentId): Comment {
+		return $this->commentMapper->find($commentId);
+	}
+	/**
+	 * Add comment
+	 */
+	public function add(string $message, Acl $acl): Comment {
 		$this->comment = new Comment();
-		$this->comment->setPollId($this->acl->getPollId());
-		$this->comment->setUserId($this->acl->getUserId());
+		$this->comment->setPollId($acl->getPollId());
+		$this->comment->setUserId($acl->getUserId());
 		$this->comment->setComment($message);
 		$this->comment->setTimestamp(time());
 		$this->comment = $this->commentMapper->insert($this->comment);
@@ -137,23 +132,16 @@ class CommentService {
 	/**
 	 * Delete comment
 	 */
-	public function delete(int $commentId, string $token = ''): Comment {
-		$this->comment = $this->commentMapper->find($commentId);
+	public function delete(Comment $comment, Acl $acl): Comment {
+		$acl->validatePollId($comment->getPollId());
 
-		if ($token) {
-			$this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD, $this->comment->getPollId());
-		} else {
-			$this->acl->setPollId($this->comment->getPollId());
+		if (!$acl->getIsOwner()) {
+			$acl->validateUserId($comment->getUserId());
 		}
 
-		if (!$this->acl->getIsOwner()) {
-			$this->acl->validateUserId($this->comment->getUserId());
-		}
+		$this->commentMapper->delete($comment);
+		$this->eventDispatcher->dispatchTyped(new CommentDeleteEvent($comment));
 
-		$this->commentMapper->delete($this->comment);
-
-		$this->eventDispatcher->dispatchTyped(new CommentDeleteEvent($this->comment));
-
-		return $this->comment;
+		return $comment;
 	}
 }

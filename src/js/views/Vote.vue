@@ -40,7 +40,7 @@
 			<div v-if="acl.allowAddOptions && proposalsOpen && !closed" class="area__proposal">
 				<OptionProposals />
 			</div>
-			<div class="area__confirmation">
+			<div v-if="showConfirmationMail" class="area__confirmation">
 				<ActionSendConfirmedOptions />
 			</div>
 
@@ -135,7 +135,12 @@ export default {
 			proposalsOpen: 'poll/proposalsOpen',
 			countHiddenParticipants: 'poll/countHiddenParticipants',
 			safeTable: 'poll/safeTable',
+			confirmedOptions: 'options/confirmed',
 		}),
+
+		showConfirmationMail() {
+			return this.acl.isOwner && this.closed && this.confirmedOptions.length > 0
+		},
 
 		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {

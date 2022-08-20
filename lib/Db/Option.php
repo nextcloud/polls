@@ -25,6 +25,10 @@
 
 namespace OCA\Polls\Db;
 
+use DateInterval;
+use DateTime;
+use DateTimeImmutable;
+use DateTimeZone;
 use JsonSerializable;
 
 use OCA\Polls\Helper\Container;
@@ -32,6 +36,7 @@ use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IL10N;
 
 /**
  * @method int getId()
@@ -145,6 +150,7 @@ class Option extends Entity implements JsonSerializable {
 		];
 	}
 
+
 	public function getPollOptionText(): string {
 		if ($this->getTimestamp() && $this->getDuration()) {
 			return date('c', $this->getTimestamp()) . ' - ' . date('c', $this->getTimestamp() + $this->getDuration());
@@ -197,13 +203,7 @@ class Option extends Entity implements JsonSerializable {
 		if (!strncmp($this->getOwner(), 'deleted_', 8)) {
 			return 'Deleted User';
 		}
-		// if ($this->getOwner() === '') {
-		// 	return '';
-		// }
-		// return $this->getOwnerIsNoUser()
-		// 	? $this->getOwner()
-		// 	: $this->userManager->get($this->getOwner())->getDisplayName();
-		
+	
 		if ($this->getOwnerIsNoUser()) {
 			try {
 				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getOwner());
@@ -215,7 +215,68 @@ class Option extends Entity implements JsonSerializable {
 		return $this->userManager->get($this->getOwner())->getDisplayName();
 	}
 
+	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n) {
+		$mutableFrom = DateTime::createFromImmutable($this->getDateObjectFrom($timeZone));
+		$mutableTo = DateTime::createFromImmutable($this->getDateObjectTo($timeZone));
+		$dayLongSecond = new DateInterval('PT1S');
+		$sameDay = $this->getDateObjectFrom($timeZone)->format('Y-m-d') === $this->getDateObjectTo($timeZone)->format('Y-m-d');
+
+		// If duration is zero, the option represents a moment with day and time
+		if ($this->getDuration() === 0) {
+			return $l10n->l('datetime', $mutableFrom);
+		}
+
+		$dateTimeFrom = $l10n->l('datetime', $mutableFrom);
+		$dateTimeTo = $l10n->l('datetime', $mutableTo);
+
+		// If the option spans over on or more whole days, the option represents only the days without time
+		// adjust the end by substracting a second, to represent the last moment at the day and not the first moment of the following day
+		// which is calculated by adding the duration
+		if ($this->getDaylong($timeZone)) {
+			$dateTimeFrom = $l10n->l('date', $mutableFrom);
+			$dateTimeTo = $l10n->l('date', $mutableTo->sub($dayLongSecond));
+			// if start and end day are identiacal, just return the start day
+			if ($dateTimeFrom === $dateTimeTo) {
+				return $dateTimeFrom;
+			}
+		}
+
+		if ($sameDay) {
+			$dateTimeTo = $dateTimeTo = $l10n->l('time', $mutableTo);
+		}
+
+		return $dateTimeFrom . ' - ' . $dateTimeTo;
+	}
+
 	private function getOwnerIsNoUser(): bool {
 		return !$this->userManager->get($this->getOwner()) instanceof IUser;
+	}
+
+	/**
+	 * Check, if the date option spans one or more whole days (from 00:00 to 24:00)
+	 */
+	private function getDaylong(DateTimeZone $timeZone = null): bool {
+		$from = $this->getDateObjectFrom($timeZone);
+		$to = $this->getDateObjectTo($timeZone);
+		$dateInterval = $from->diff($to);
+
+		if (
+			$this->getDuration() > 0
+			&& $from->format('H') === '00'
+			&& $dateInterval->h + $dateInterval->i + $dateInterval->h === 0
+		) {
+			return true;
+		}
+		return false;
+	}
+
+	private function getDateObjectFrom(DateTimeZone $timeZone): DateTimeImmutable {
+		$dateTime = (new DateTimeImmutable())->setTimestamp($this->getTimestamp());
+		return $dateTime->setTimezone($timeZone);
+	}
+
+	private function getDateObjectTo(DateTimeZone $timeZone): DateTimeImmutable {
+		$dateTime = (new DateTimeImmutable())->setTimestamp($this->getTimestamp() + $this->getDuration());
+		return $dateTime->setTimezone($timeZone);
 	}
 }

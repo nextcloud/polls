@@ -21,7 +21,7 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Model\User;
 
 use OCP\IUserSession;
 use OCA\Polls\Helper\Container;

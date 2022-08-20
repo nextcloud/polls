@@ -23,19 +23,19 @@
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Helper\Container;
-use OCA\Polls\Model\UserGroup\Circle;
-use OCA\Polls\Model\UserGroup\Contact;
-use OCA\Polls\Model\UserGroup\ContactGroup;
-use OCA\Polls\Model\UserGroup\Email;
-use OCA\Polls\Model\UserGroup\Group;
-use OCA\Polls\Model\UserGroup\User;
+use OCA\Polls\Model\Group\Circle;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\Group\ContactGroup;
+use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\Group\Group;
+use OCA\Polls\Model\User\User;
 use OCP\IUserManager;
 
 class SystemService {
@@ -144,14 +144,7 @@ class SystemService {
 	 *
 	 * @return true
 	 */
-	public function validatePublicUsername(string $userName, string $token): bool {
-		try {
-			$share = $this->shareMapper->findByToken($token);
-		} catch (\Exception $e) {
-			throw new NotAuthorizedException('Token invalid');
-		}
-
-
+	public function validatePublicUsername(string $userName, Share $share): bool {
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');
 		}

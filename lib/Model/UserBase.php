@@ -21,11 +21,18 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Model;
 
 use DateTimeZone;
 use OCP\IL10N;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Group\Circle;
+use OCA\Polls\Model\Group\ContactGroup;
+use OCA\Polls\Model\User\Admin;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\Group\Group;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\Share\IShare;
 use OCP\IDateTimeZone;
@@ -47,7 +54,7 @@ class UserBase implements \JsonSerializable {
 	protected $richObjectType = 'user';
 
 	/** @var IL10N */
-	private $l10n;
+	protected $l10n;
 
 	/** @var string */
 	protected $id;
@@ -65,10 +72,10 @@ class UserBase implements \JsonSerializable {
 	protected $emailAddress = null;
 
 	/** @var string */
-	protected $language = '';
+	protected $languageCode = '';
 
 	/** @var string */
-	protected $locale = '';
+	protected $localeCode = '';
 
 	/** @var string */
 	protected $organisation = '';
@@ -83,7 +90,10 @@ class UserBase implements \JsonSerializable {
 	protected $categories = [];
 
 	/** @var IDateTimeZone */
-	protected $timezone;
+	protected $timeZone;
+	
+	/** @var string */
+	protected $timeZoneName;
 
 	/** @var IUserSession */
 	protected $userSession;
@@ -93,21 +103,23 @@ class UserBase implements \JsonSerializable {
 		string $type,
 		string $displayName = '',
 		string $emailAddress = '',
-		string $language = '',
-		string $locale = ''
+		string $languageCode = '',
+		string $localeCode = '',
+		string $timeZoneName = ''
 	) {
 		$this->icon = 'icon-share';
 
 		$this->l10n = Container::getL10N();
-		$this->timezone = Container::queryClass(IDateTimeZone::class);
+		$this->timeZone = Container::queryClass(IDateTimeZone::class);
 		$this->userSession = Container::queryClass(IUserSession::class);
 
 		$this->id = $id;
 		$this->type = $type;
 		$this->displayName = $displayName;
 		$this->emailAddress = $emailAddress;
-		$this->language = $language;
-		$this->locale = $locale;
+		$this->timeZoneName = $timeZoneName;
+		$this->localeCode = $localeCode;
+		$this->languageCode = $languageCode;
 	}
 
 	public function getId(): string {
@@ -122,16 +134,27 @@ class UserBase implements \JsonSerializable {
 		return $this->type;
 	}
 
-	public function getLanguage(): string {
-		return $this->language;
+	public function getLanguageCode(): string {
+		return $this->languageCode;
 	}
 
+	public function getLocaleCode(): string {
+		if (!$this->localeCode) {
+			return $this->languageCode;
+		}
+
+		return $this->localeCode;
+	}
+	
 	public function getTimeZone(): DateTimeZone {
-		return new DateTimeZone($this->timezone->getTimeZone()->getName());
+		if ($this->timeZoneName) {
+			return new DateTimeZone($this->timeZoneName);
+		}
+		return new DateTimeZone($this->timeZone->getTimeZone()->getName());
 	}
 
-	public function getLocale(): string {
-		return $this->locale;
+	public function getTimeZoneName(): string {
+		return $this->timeZoneName;
 	}
 
 	public function getDisplayName(): string {
@@ -196,14 +219,14 @@ class UserBase implements \JsonSerializable {
 		return $this->emailAddress;
 	}
 
-	public function setLanguage(string $language): string {
-		$this->language = $language;
-		return $this->language;
+	public function setLanguageCode(string $languageCode): string {
+		$this->languageCode = $languageCode;
+		return $this->languageCode;
 	}
 
-	public function setLocale(string $locale): string {
-		$this->locale = $locale;
-		return $this->locale;
+	public function setLocaleCode(string $localeCode): string {
+		$this->localeCode = $localeCode;
+		return $this->localeCode;
 	}
 
 	public function setOrganisation(string $organisation): string {
@@ -283,7 +306,9 @@ class UserBase implements \JsonSerializable {
 			'displayName' => $this->getDisplayName(),
 			'organisation' => $this->getOrganisation(),
 			'emailAddress' => $this->getEmailAddressMasked(),
-			'language' => $this->getLanguage(),
+			'languageCode' => $this->getLanguageCode(),
+			'localeCode' => $this->getLocaleCode(),
+			'timeZone' => $this->getTimeZoneName(),
 			'desc' => $this->getDescription(),
 			'subtitle' => $this->getDescription(),
 			'icon' => $this->getIcon(),
