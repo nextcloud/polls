@@ -89,6 +89,7 @@ const actions = {
 				headers: { Accept: 'application/json' },
 				userName: payload.userName,
 				emailAddress: payload.emailAddress,
+				timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
 			})
 
 			if (payload.saveCookie && context.state.type === 'public') {

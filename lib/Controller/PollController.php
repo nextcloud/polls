@@ -82,10 +82,11 @@ class PollController extends BaseController {
 	 * @NoAdminRequired
 	 */
 	public function get(int $pollId): JSONResponse {
-		$this->acl->setPollId($pollId);
+		$poll = $this->pollService->get($pollId);
+		$this->acl->setPoll($poll);
 		return $this->response(fn () => [
 			'acl' => $this->acl,
-			'poll' => $this->acl->getPoll(),
+			'poll' => $poll,
 		]);
 	}
 
@@ -116,7 +117,7 @@ class PollController extends BaseController {
 	public function sendConfirmation(int $pollId): JSONResponse {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		return $this->response(fn () => [
-			'confirmations' => $this->mailService->sendConfirmation($pollId),
+			'confirmations' => $this->mailService->sendConfirmations($pollId),
 		]);
 	}
 

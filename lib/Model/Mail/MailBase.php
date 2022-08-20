@@ -24,12 +24,13 @@
 
 namespace OCA\Polls\Model\Mail;
 
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCA\Polls\Model\UserGroup\UserBase;
-use OCA\Polls\Model\UserGroup\User;
+use OCA\Polls\Model\UserBase;
+use OCA\Polls\Model\User\User;
 use OCA\Polls\Service\UserService;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
@@ -61,7 +62,10 @@ abstract class MailBase {
 	
 	/** @var IMailer */
 	protected $mailer;
-	
+
+	/** @var OptionMapper */
+	protected $optionMapper;
+
 	/** @var User */
 	protected $owner;
 	
@@ -88,9 +92,9 @@ abstract class MailBase {
 		$this->appSettings = Container::queryClass(AppSettings::class);
 		$this->logger = Container::queryClass(LoggerInterface::class);
 		$this->mailer = Container::queryClass(IMailer::class);
+		$this->optionMapper = Container::queryClass(OptionMapper::class);
 		$this->transFactory = Container::queryClass(IFactory::class);
 		$this->userService = Container::queryClass(UserService::class);
-
 		$this->poll = $this->getPoll($pollId);
 		$this->recipient = $this->getUser($recipientId);
 		$this->url = $url ?? $this->poll->getVoteUrl();
@@ -114,7 +118,7 @@ abstract class MailBase {
 	}
 
 	protected function initializeClass(): void {
-		$this->owner = $this->poll->getOwnerUserObject();
+		$this->owner = $this->getUser($this->poll->getOwner());
 
 		if ($this->recipient->getIsNoUser()) {
 			$this->url = $this->getShareURL();
@@ -122,9 +126,8 @@ abstract class MailBase {
 
 		$this->l10n = $this->transFactory->get(
 			'polls',
-			$this->recipient->getLanguage()
-				? $this->recipient->getLanguage()
-				: $this->owner->getLanguage()
+			$this->recipient->getLanguageCode() ? $this->recipient->getLanguageCode() : $this->owner->getLanguageCode(),
+			$this->recipient->getLocaleCode()
 		);
 	}
 
@@ -201,7 +204,7 @@ abstract class MailBase {
 		return $legal;
 	}
 
-	protected function getUser(string $userId) : UserBase {
+	protected function getUser(string $userId) : ?UserBase {
 		return $this->userService->evaluateUser($userId, $this->poll->getId());
 	}
 

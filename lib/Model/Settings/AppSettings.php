@@ -24,7 +24,7 @@
 namespace OCA\Polls\Model\Settings;
 
 use JsonSerializable;
-use OCA\Polls\Model\UserGroup\Group;
+use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Helper\Container;
 use OCP\IConfig;
 use OCP\IGroupManager;

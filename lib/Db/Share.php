@@ -27,10 +27,8 @@ use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\IURLGenerator;
-use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Helper\Container;
-use OCA\Polls\Service\UserService;
 
 /**
  * @method int getId()
@@ -126,15 +124,11 @@ class Share extends Entity implements JsonSerializable {
 	/** @var AppSettings */
 	protected $appSettings;
 
-	/** @var UserService */
-	protected $userService;
-
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
 		$this->addType('reminderSent', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
-		$this->userService = Container::queryClass(UserService::class);
 		$this->appSettings = new AppSettings;
 	}
 
@@ -164,6 +158,27 @@ class Share extends Entity implements JsonSerializable {
 		$this->setMiscSettingsByKey('publicPollEmail', $value);
 	}
 
+	public function getTimeZoneName() : ?string {
+		return $this->getMiscSettingsArray()['timeZone'] ?? '';
+	}
+
+	public function setTimeZoneName(string $value) : void {
+		$this->setMiscSettingsByKey('timeZone', $value);
+	}
+
+	public function getLanguage(): ?string {
+		return $this->getMiscSettingsArray()['language'] ?? '';
+	}
+
+	// Fallback for now; use language as locale
+	public function getLocale(): ?string {
+		return $this->getLanguage();
+	}
+
+	public function setLanguage(string $value) : void {
+		$this->setMiscSettingsByKey('language', $value);
+	}
+
 	public function getURL(): string {
 		if (in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN, self::TYPE_GROUP], true)) {
 			return $this->urlGenerator->linkToRouteAbsolute(
@@ -189,15 +204,6 @@ class Share extends Entity implements JsonSerializable {
 			return $userId;
 		}
 		return $this->userId;
-	}
-
-	public function getUserObject(): UserBase {
-		return $this->userService->getUser(
-			$this->type,
-			$this->userId,
-			$this->displayName,
-			$this->emailAddress
-		);
 	}
 
 	public function getRichObjectString(): array {

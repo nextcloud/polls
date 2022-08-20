@@ -36,7 +36,7 @@ use OCA\Polls\Model\Mail\ConfirmationMail;
 use OCA\Polls\Model\Mail\InvitationMail;
 use OCA\Polls\Model\Mail\NotificationMail;
 use OCA\Polls\Model\Mail\ReminderMail;
-use OCA\Polls\Model\UserGroup\UserBase;
+use OCA\Polls\Model\UserBase;
 use Psr\Log\LoggerInterface;
 
 class MailService {
@@ -130,7 +130,7 @@ class MailService {
 		$sentMails = [];
 		$abortedMails = [];
 
-		foreach ($share->getUserObject()->getMembers() as $recipient) {
+		foreach ($this->userService->getUserFromShare($share)->getMembers() as $recipient) {
 			$invitation = new InvitationMail($recipient->getId(), $share);
 
 			try {
@@ -162,18 +162,20 @@ class MailService {
 		}
 	}
 
-	public function sendConfirmation($pollId): array {
+	/**
+	 * Send a confirmation mail for the poll to all participants
+	 */
+	public function sendConfirmations($pollId): array {
 		$sentMails = [];
 		$abortedMails = [];
 
 		$participants = $this->userService->getParticipants($pollId);
 		foreach ($participants as $participant) {
-			if ($this->sendConfirmationToParticipant($participant, $pollId)) {
+			if ($this->sendConfirmationMail($participant, $pollId)) {
 				$sentMails[] = $participant->getDisplayName();
 			} else {
 				$abortedMails[] = $participant->getDisplayName();
 			}
-			
 		}
 
 		return [
@@ -195,11 +197,8 @@ class MailService {
 		}
 	}
 
-	private function sendConfirmationToParticipant(UserBase $participant, int $pollId) : bool {
-		$confirmation = new ConfirmationMail(
-			$participant->getId(),
-			$pollId
-		);
+	private function sendConfirmationMail(UserBase $participant, int $pollId) : bool {
+		$confirmation = new ConfirmationMail($participant->getId(), $pollId);
 
 		try {
 			$confirmation->send();
@@ -209,11 +208,12 @@ class MailService {
 		} catch (\Exception $e) {
 			$this->logger->error('Error sending confirmation to ' . json_encode($participant));
 		}
+
 		return false;
 	}
 
 	private function sendAutoReminderToRecipients(Share $share, Poll $poll) {
-		foreach ($share->getUserObject()->getMembers() as $recipient) {
+		foreach ($this->userService->getUserFromShare($share)->getMembers() as $recipient) {
 			$reminder = new ReminderMail(
 				$recipient->getId(),
 				$poll->getId()

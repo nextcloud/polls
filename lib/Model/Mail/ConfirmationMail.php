@@ -24,25 +24,25 @@
 
 namespace OCA\Polls\Model\Mail;
 
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Helper\Container;
+use OCA\Polls\Db\Option;
+use OCA\Polls\Db\Poll;
 
 class ConfirmationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Confirmation';
 
-	/** @var OptionMapper */
-	protected $optionMapper;
+	/** @var Option[] */
+	protected $confirmedOptions;
 
 	public function __construct(
 		string $recipientId,
 		int $pollId
 	) {
 		parent::__construct($recipientId, $pollId);
-		$this->optionMapper = Container::queryClass(OptionMapper::class);
+		$this->confirmedOptions = $this->optionMapper->findConfirmed($pollId);
 	}
 
 	protected function getSubject(): string {
-		return $this->l10n->t('Poll "%s" has been closed', $this->poll->getTitle());
+		return $this->l10n->t('Poll "%s" - Confirmation', $this->poll->getTitle());
 	}
 
 	protected function getFooter(): string {
@@ -56,20 +56,32 @@ class ConfirmationMail extends MailBase {
 			$this->l10n->t('{owner} wants to inform you about the final result of the poll "{title}"')
 		));
 
-		$confirmedOptions = $this->optionMapper->findConfirmed($this->poll->getId());
-		$countConfirmed = count($confirmedOptions);
-
 		$this->emailTemplate->addBodyText(
-			$this->l10n->n('Confirmed option:', 'Confirmed options:', $countConfirmed)
+			$this->l10n->n('Confirmed option:', 'Confirmed options:', count($this->confirmedOptions))
 		);
 
-		foreach ($confirmedOptions as $option) {
-			$this->emailTemplate->addBodyListItem(
-				$option->getPollOptionText()
+		foreach ($this->confirmedOptions as $option) {
+			if ($this->poll->getType() === Poll::TYPE_DATE) {
+				$this->emailTemplate->addBodyListItem($option->getDateStringLocalized($this->recipient->getTimeZone(), $this->l10n));
+			} else {
+				$this->emailTemplate->addBodyListItem($option->getPollOptionText());
+			}
+		}
+
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
+			$this->emailTemplate->addBodyText(
+				$this->l10n->t('The used time zone is "%s", based on the detected time zone at your registration time. To view the times in your current time zone, enter the poll by clicking the button below.', $this->recipient->getTimeZoneName())
 			);
 		}
 
-		$this->emailTemplate->addBodyText($this->getRichDescription(), $this->poll->getDescription());
+		// $this->emailTemplate->addBodyText(
+		// 	$this->l10n->t('Used languageCode is %1$s, %2$s, %3$s', [$this->l10n->getLanguageCode(), $this->l10n->getLocaleCode(), $this->transFactory->localeExists($this->l10n->getLanguageCode())])
+		// );
+
+		if ($this->poll->getDescription()) {
+			$this->emailTemplate->addBodyText($this->getRichDescription(), $this->poll->getDescription());
+		}
+
 		$this->addButtonToPoll();
 
 		$this->emailTemplate->addBodyText($this->l10n->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));

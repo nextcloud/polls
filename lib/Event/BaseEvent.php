@@ -31,6 +31,7 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Service\UserService;
 use OCP\IUserSession;
 
 abstract class BaseEvent extends Event {
@@ -55,12 +56,16 @@ abstract class BaseEvent extends Event {
 	/** @var IUserSession */
 	private $userSession;
 
+	/** @var UserService */
+	protected $userService;
+
 	public function __construct(
 		$eventObject
 	) {
 		parent::__construct();
 		$this->eventObject = $eventObject;
 		$this->poll = Container::queryPoll($this->getPollId());
+		$this->userService = Container::queryClass(UserService::class);
 		$this->userSession = Container::queryClass(IUserSession::class);
 
 		$this->activitySubjectParams['pollTitle'] = [
