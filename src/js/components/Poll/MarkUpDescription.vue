@@ -22,9 +22,7 @@
 
 <template lang="html">
 	<!-- eslint-disable-next-line vue/no-v-html -->
-	<div class="markup-description" v-html="markedDescription">
-		{{ markedDescription }}
-	</div>
+	<div class="markup-description" v-html="markedDescription" />
 </template>
 
 <script>

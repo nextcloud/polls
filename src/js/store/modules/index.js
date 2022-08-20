@@ -21,7 +21,7 @@
  *
  */
 
-import camelCase from 'lodash/camelCase'
+import { camelCase } from 'lodash'
 const requireModule = require.context('.', false, /\.js$/)
 const modules = {}
 

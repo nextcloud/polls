@@ -28,7 +28,7 @@
 
 <script>
 export default {
-	name: 'Spacer',
+	name: 'FlexSpacer',
 	props: {
 		tag: {
 			type: String,

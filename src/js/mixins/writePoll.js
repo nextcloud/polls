@@ -21,7 +21,7 @@
  *
  */
 
-import debounce from 'lodash/debounce'
+import { debounce } from 'lodash'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { mapState } from 'vuex'
 

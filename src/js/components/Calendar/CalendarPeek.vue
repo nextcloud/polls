@@ -36,11 +36,11 @@
 		</div>
 	</Popover>
 </template>
-
+n
 <script>
 
 import { mapState } from 'vuex'
-import orderBy from 'lodash/orderBy'
+import { orderBy } from 'lodash'
 import { Popover } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import CalendarInfo from '../Calendar/CalendarInfo.vue'

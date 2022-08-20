@@ -79,7 +79,7 @@ export default {
 
 </script>
 
-<style lang="scss" >
+<style lang="scss">
 .combo-title {
 	margin-bottom: 16px;
 }

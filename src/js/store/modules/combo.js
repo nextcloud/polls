@@ -24,7 +24,7 @@
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { uniqueOptions, uniqueParticipants } from '../../helpers/arrayHelper.js'
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'lodash'
 
 const defaultCombo = () => ({
 	id: 1,
