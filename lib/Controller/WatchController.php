@@ -29,7 +29,6 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class WatchController extends BaseController {
-
 	/** @var WatchService */
 	private $watchService;
 

@@ -40,7 +40,6 @@ use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
 
 class UserDeletedJob extends QueuedJob {
-
 	/** @var CommentMapper **/
 	private $commentMapper;
 

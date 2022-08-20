@@ -28,7 +28,6 @@ use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Exceptions\InvalidClassException;
 
 class ShareListener extends BaseListener {
-
 	/** @var array */
 	protected $watchTables = [
 		Watch::OBJECT_SHARES,

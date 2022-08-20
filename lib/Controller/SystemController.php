@@ -30,7 +30,6 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class SystemController extends BaseController {
-
 	/** @var SystemService */
 	private $systemService;
 

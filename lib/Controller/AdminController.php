@@ -31,7 +31,6 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 
 class AdminController extends BaseController {
-
 	/** @var IURLGenerator */
 	private $urlGenerator;
 

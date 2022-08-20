@@ -196,7 +196,6 @@ class CalendarService {
 	private function getEventsLegcy(DateTimeImmutable $from, DateTimeImmutable $to): array {
 		$events = [];
 		foreach ($this->calendars as $calendar) {
-
 			// Skip not configured calendars
 			if (!in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
 				continue;

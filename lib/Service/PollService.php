@@ -50,7 +50,6 @@ use OCP\IUserSession;
 use OCP\Search\ISearchQuery;
 
 class PollService {
-
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 	
@@ -120,7 +119,7 @@ class PollService {
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
 						(array) json_decode(json_encode($this->acl))
-						);
+					);
 				} catch (NotAuthorizedException $e) {
 					continue;
 				}

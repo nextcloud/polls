@@ -28,7 +28,6 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class OptionApiController extends BaseApiController {
-
 	/** @var OptionService */
 	private $optionService;
 

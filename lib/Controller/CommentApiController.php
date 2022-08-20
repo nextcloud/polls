@@ -28,7 +28,6 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\JSONResponse;
 
 class CommentApiController extends BaseApiController {
-
 	/** @var CommentService */
 	private $commentService;
 

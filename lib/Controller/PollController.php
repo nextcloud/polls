@@ -33,7 +33,6 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCP\ISession;
 
 class PollController extends BaseController {
-
 	/** @var Acl */
 	private $acl;
 

@@ -42,7 +42,6 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 
 class PublicController extends BaseController {
-
 	/** @var Acl */
 	private $acl;
 	

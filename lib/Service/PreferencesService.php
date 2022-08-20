@@ -29,7 +29,6 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 class PreferencesService {
-
 	/** @var PreferencesMapper */
 	private $preferencesMapper;
 

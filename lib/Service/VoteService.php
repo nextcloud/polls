@@ -34,7 +34,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class VoteService {
-
 	/** @var Acl */
 	private $acl;
 
@@ -103,7 +102,6 @@ class VoteService {
 	}
 
 	private function checkLimits(Option $option, string $userId): void {
-
 		// check, if the optionlimit is reached or exceeded, if one is set
 		if ($this->acl->getPoll()->getOptionLimit() > 0) {
 			if ($this->acl->getPoll()->getOptionLimit() <= count($this->voteMapper->getYesVotesByOption($option->getPollId(), $option->getPollOptionText()))) {

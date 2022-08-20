@@ -72,7 +72,6 @@ use OCA\Polls\Provider\ResourceProvider;
 use OCA\Polls\Provider\SearchProvider;
 
 class Application extends App implements IBootstrap {
-
 	/** @var string */
 	public const APP_ID = 'polls';
 

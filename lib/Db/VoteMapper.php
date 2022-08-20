@@ -95,7 +95,7 @@ class VoteMapper extends QBMapper {
 		$qb->selectDistinct(['user_id', 'poll_id'])
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
 		return $this->findEntities($qb);

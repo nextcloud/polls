@@ -37,7 +37,6 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 
 class SearchProvider implements IProvider {
-
 	/** @var IL10N */
 	private $l10n;
 

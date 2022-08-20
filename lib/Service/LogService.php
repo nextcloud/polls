@@ -28,7 +28,6 @@ use OCA\Polls\Db\LogMapper;
 use OCP\IUserSession;
 
 class LogService {
-
 	/** @var IUserSession */
 	private $userSession;
 

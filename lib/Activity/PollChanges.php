@@ -27,7 +27,6 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 
 class PollChanges implements IFilter {
-
 	/** @var IL10N */
 	protected $l10n;
 

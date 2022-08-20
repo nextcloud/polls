@@ -49,7 +49,7 @@ class PollMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
 		return $this->findEntity($qb);
 	}
@@ -75,8 +75,8 @@ class PollMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where($qb->expr()->like(
-			   'misc_settings',
-			   $qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
+		   	'misc_settings',
+		   	$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
 		   ));
 		return $this->findEntities($qb);
 	}
@@ -143,7 +143,7 @@ class PollMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->neq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->neq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntities($qb);

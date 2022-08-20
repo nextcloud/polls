@@ -32,7 +32,6 @@ use OCA\Polls\Service\CalendarService;
 use OCP\ISession;
 
 class PreferencesController extends BaseController {
-
 	/** @var PreferencesService */
 	private $preferencesService;
 

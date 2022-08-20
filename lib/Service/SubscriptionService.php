@@ -31,7 +31,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 
 class SubscriptionService {
-
 	/** @var Acl */
 	private $acl;
 

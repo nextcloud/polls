@@ -30,7 +30,6 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 class WatchService {
-
 	/** @var AppSettings */
 	private $appSettings;
 

@@ -33,7 +33,6 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 
 class AnonymizeService {
-
 	/** @var array */
 	private $anonList;
 	

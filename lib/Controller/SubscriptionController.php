@@ -29,7 +29,6 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class SubscriptionController extends BaseController {
-
 	/** @var SubscriptionService */
 	private $subscriptionService;
 

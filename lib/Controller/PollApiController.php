@@ -32,7 +32,6 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class PollApiController extends BaseApiController {
-
 	/** @var Acl */
 	private $acl;
 
