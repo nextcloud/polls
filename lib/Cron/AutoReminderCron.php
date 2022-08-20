@@ -28,7 +28,6 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Polls\Service\MailService;
 
 class AutoReminderCron extends TimedJob {
-
 	/** @var MailService */
 	private $mailService;
 

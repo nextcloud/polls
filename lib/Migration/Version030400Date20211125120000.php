@@ -39,7 +39,6 @@ use OCA\Polls\Db\Poll;
  * Version: jj = major version, mm = minor, pp = patch
  */
 class Version030400Date20211125120000 extends SimpleMigrationStep {
-
 	/** @var IDBConnection */
 	protected $connection;
 

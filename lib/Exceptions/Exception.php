@@ -26,7 +26,6 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class Exception extends \Exception {
-
 	/** @var integer */
 	protected $status;
 

@@ -31,7 +31,6 @@ use OCP\IRequest;
 use OCP\AppFramework\Http;
 
 class SubscriptionApiController extends BaseApiController {
-
 	/** @var SubscriptionService */
 	private $subscriptionService;
 

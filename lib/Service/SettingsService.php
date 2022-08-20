@@ -26,7 +26,6 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Model\Settings\AppSettings;
 
 class SettingsService {
-
 	/** @var AppSettings */
 	private $appSettings;
 

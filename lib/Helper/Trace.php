@@ -24,7 +24,6 @@
 namespace OCA\Polls\Helper;
 
 class Trace implements \JsonSerializable {
-
 	/** @var Array */
 	protected $result = [];
 

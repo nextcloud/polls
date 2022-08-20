@@ -249,7 +249,7 @@ class Poll extends Entity implements JsonSerializable {
 
 	public function getExpired(): bool {
 		return (
-			   $this->getExpire() > 0
+			$this->getExpire() > 0
 			&& $this->getExpire() < time()
 		);
 	}
@@ -311,7 +311,7 @@ class Poll extends Entity implements JsonSerializable {
 
 	public function getProposalsExpired(): bool {
 		return (
-			   $this->getProposalsExpire() > 0
+			$this->getProposalsExpire() > 0
 			&& $this->getProposalsExpire() < time()
 		);
 	}

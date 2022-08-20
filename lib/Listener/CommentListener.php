@@ -28,7 +28,6 @@ use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Exceptions\InvalidClassException;
 
 class CommentListener extends BaseListener {
-
 	/** @var array */
 	protected $watchTables = [Watch::OBJECT_COMMENTS];
 

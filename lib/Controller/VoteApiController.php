@@ -31,7 +31,6 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class VoteApiController extends BaseApiController {
-
 	/** @var VoteService */
 	private $voteService;
 

@@ -30,7 +30,6 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class OptionController extends BaseController {
-
 	/** @var OptionService */
 	private $optionService;
 

@@ -49,7 +49,6 @@ use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
 class ShareService {
-
 	/** @var Acl */
 	private $acl;
 
@@ -469,7 +468,6 @@ class ShareService {
 			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
 		} elseif ($this->share->getType() === Share::TYPE_EMAIL
 				|| $this->share->getType() === Share::TYPE_CONTACT) {
-
 			// Convert email and contact shares to external share, if user registers
 			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userId);
@@ -524,8 +522,8 @@ class ShareService {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
 
 		// TODO: skip this atm, to send invitations as mail too, if user is a site user
-			// $sentResult = ['sentMails' => [new User($share->getuserId())]];
-			// $this->shareService->setInvitationSent($token);
+		// $sentResult = ['sentMails' => [new User($share->getuserId())]];
+		// $this->shareService->setInvitationSent($token);
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
 			foreach ($share->getUserObject()->getMembers() as $member) {
 				$this->notificationService->sendInvitation($share->getPollId(), $member->getId());

@@ -22,7 +22,7 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
- declare(strict_types=1);
+declare(strict_types=1);
 
- script('polls', 'polls-main');
- \OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');
+script('polls', 'polls-main');
+\OC::$server->getEventDispatcher()->dispatch('\OCP\Collaboration\Resources::loadAdditionalScripts');

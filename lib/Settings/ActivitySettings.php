@@ -27,7 +27,6 @@ use OCP\IL10N;
 use OCP\Activity\ISetting;
 
 class ActivitySettings implements ISetting {
-
 	/** @var IL10N */
 	protected $l10n;
 

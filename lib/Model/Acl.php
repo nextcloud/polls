@@ -361,7 +361,7 @@ class Acl implements JsonSerializable {
 	 */
 	private function getIsInvolved(): bool {
 		return (
-			   $this->getIsOwner()
+			$this->getIsOwner()
 			|| $this->getIsParticipant()
 			|| $this->getIsInvitedViaGroupShare()
 			|| $this->getIsPersonallyInvited());

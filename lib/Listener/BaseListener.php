@@ -40,7 +40,6 @@ use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
 
 abstract class BaseListener implements IEventListener {
-
 	/** @var ActivityService */
 	protected $activityService;
 

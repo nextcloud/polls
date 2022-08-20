@@ -50,7 +50,7 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
 
 		return $this->findEntity($qb);
@@ -67,7 +67,7 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   )
 		   ->orderBy('order', 'ASC');
 
@@ -83,10 +83,10 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   )
 		   ->andWhere(
-			   $qb->expr()->eq('poll_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->eq('poll_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR))
 		   )
 		   ->orderBy('order', 'ASC');
 
@@ -98,7 +98,7 @@ class OptionMapper extends QBMapper {
 
 		$qb->delete($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($optionId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($optionId, IQueryBuilder::PARAM_INT))
 		   );
 
 		$qb->executeStatement();
@@ -109,7 +109,7 @@ class OptionMapper extends QBMapper {
 
 		$qb->delete($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
 		$qb->executeStatement();
@@ -171,7 +171,7 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('duration', $qb->createNamedParameter(86400, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('duration', $qb->createNamedParameter(86400, IQueryBuilder::PARAM_INT))
 		   )
 		   ->orderBy('order', 'ASC');
 

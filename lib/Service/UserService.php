@@ -43,7 +43,6 @@ use OCP\IUserSession;
 use OCP\Share\IShare;
 
 class UserService {
-
 	/** @var ShareMapper */
 	private $shareMapper;
 

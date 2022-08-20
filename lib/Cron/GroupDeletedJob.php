@@ -33,7 +33,6 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 
 class GroupDeletedJob extends QueuedJob {
-
 	/** @var ISecureRandom */
 	private $secureRandom;
 

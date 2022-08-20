@@ -68,7 +68,7 @@ class SubscriptionMapper extends QBMapper {
 		$qb->select('*')
 			 ->from($this->getTableName())
 			 ->where(
-				 $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+			 	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			 );
 
 		return $this->findEntities($qb);

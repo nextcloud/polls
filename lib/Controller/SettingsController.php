@@ -29,7 +29,6 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class SettingsController extends BaseController {
-
 	/** @var SettingsService */
 	private $settingsService;
 

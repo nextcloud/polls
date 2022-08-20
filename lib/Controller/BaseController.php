@@ -34,7 +34,6 @@ use OCP\ISession;
 use OCP\IRequest;
 
 class BaseController extends Controller {
-
 	/** @var ISession */
 	protected $session;
 

@@ -29,7 +29,6 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class VoteController extends BaseController {
-
 	/** @var VoteService */
 	private $voteService;
 

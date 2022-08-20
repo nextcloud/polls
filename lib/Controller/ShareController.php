@@ -33,7 +33,6 @@ use OCP\ISession;
 use OCP\IRequest;
 
 class ShareController extends BaseController {
-
 	/** @var ShareService */
 	private $shareService;
 

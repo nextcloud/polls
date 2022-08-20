@@ -31,7 +31,6 @@ use OCA\Polls\Model\Acl;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class CommentService {
-
 	/** @var Acl */
 	private $acl;
 

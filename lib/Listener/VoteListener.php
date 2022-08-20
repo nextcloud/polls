@@ -28,7 +28,6 @@ use OCA\Polls\Db\Watch;
 use OCA\Polls\Exceptions\InvalidClassException;
 
 class VoteListener extends BaseListener {
-
 	/** @var array */
 	protected $watchTables = [Watch::OBJECT_VOTES, Watch::OBJECT_OPTIONS];
 

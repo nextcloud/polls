@@ -67,7 +67,7 @@ class ShareMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
 		return $this->findEntities($qb);
@@ -97,10 +97,10 @@ class ShareMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   )
 		   ->andWhere(
-			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntity($qb);
@@ -115,7 +115,7 @@ class ShareMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntity($qb);
@@ -126,7 +126,7 @@ class ShareMapper extends QBMapper {
 
 		$qb->delete($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
 		$qb->executeStatement();
@@ -161,7 +161,7 @@ class ShareMapper extends QBMapper {
 
 		$qb->delete($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($shareId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($shareId, IQueryBuilder::PARAM_INT))
 		   );
 
 		$qb->executeStatement();

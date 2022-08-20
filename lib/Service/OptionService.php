@@ -46,7 +46,6 @@ use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
 
 class OptionService {
-
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
