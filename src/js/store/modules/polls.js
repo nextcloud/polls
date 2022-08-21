@@ -138,6 +138,7 @@ const state = {
 }
 
 const namespaced = true
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -200,7 +201,7 @@ const actions = {
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('set', { list: response.data.list })

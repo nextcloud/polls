@@ -28,9 +28,9 @@ const defaultActivities = () => ({
 	list: [],
 })
 
-const state = defaultActivities()
-
 const namespaced = true
+const state = defaultActivities()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -55,9 +55,10 @@ const actions = {
 		params.append('limit', 50)
 		params.append('object_type', 'poll')
 		params.append('object_id', context.rootState.route.params.id)
+		const endPoint = generateOcsUrl('apps/activity/api/v2/activity/filter?') + params
 
 		try {
-			const response = await axios.get(generateOcsUrl('apps/activity/api/v2/activity/filter?') + params)
+			const response = await axios.get(endPoint, axiosDefaultConfig)
 			context.commit('set', response.data.ocs.data)
 		} catch {
 			context.commit('reset')

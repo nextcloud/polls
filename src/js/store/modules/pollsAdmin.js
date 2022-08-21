@@ -27,11 +27,11 @@ import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 
+const namespaced = true
 const state = {
 	list: [],
 }
-
-const namespaced = true
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -52,7 +52,7 @@ const actions = {
 		const endPoint = 'apps/polls/administration/polls'
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('set', { list: response.data })
@@ -67,9 +67,7 @@ const actions = {
 		}
 
 		const endPoint = `apps/polls/administration/poll/${payload.pollId}/takeover`
-		axios.put(generateUrl(endPoint), {
-			headers: { Accept: 'application/json' },
-		})
+		axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 	},
 }
 

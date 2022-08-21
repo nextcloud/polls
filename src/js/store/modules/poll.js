@@ -57,12 +57,10 @@ const defaultPoll = () => ({
 	},
 })
 
-const state = defaultPoll()
-
 const namespaced = true
-const modules = {
-	acl,
-}
+const modules = { acl }
+const state = defaultPoll()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -188,7 +186,7 @@ const actions = {
 		}
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('set', response.data)
@@ -203,10 +201,9 @@ const actions = {
 		const endPoint = 'apps/polls/poll/add'
 		try {
 			return await axios.post(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
 				title: payload.title,
 				type: payload.type,
-			})
+			}, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error adding poll:', { error: e.response }, { state: context.state })
 			throw e
@@ -216,7 +213,7 @@ const actions = {
 	async clone(context, payload) {
 		const endPoint = `apps/polls/poll/${payload.pollId}/clone`
 		try {
-			return await axios.get(generateUrl(endPoint))
+			return await axios.post(generateUrl(endPoint), null, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error cloning poll', { error: e.response }, { payload })
 		}
@@ -226,9 +223,9 @@ const actions = {
 		const endPoint = `apps/polls/poll/${context.state.id}`
 		try {
 			const response = await axios.put(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
 				poll: context.state,
-			})
+			}, axiosDefaultConfig)
+
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
 			context.dispatch('options/list', null, { root: true })
@@ -241,7 +238,7 @@ const actions = {
 	async toggleArchive(context, payload) {
 		const endPoint = `apps/polls/poll/${payload.pollId}/toggleArchive`
 		try {
-			await axios.put(generateUrl(endPoint))
+			await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error archiving/restoring', { error: e.response }, { payload })
 		}
@@ -250,7 +247,7 @@ const actions = {
 	async sendConfirmation(context, payload) {
 		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/confirmation`
 		try {
-			const response = await axios.post(generateUrl(endPoint))
+			const response = await axios.post(generateUrl(endPoint), null, axiosDefaultConfig)
 			return response.data.confirmations
 		} catch (e) {
 			console.error('Error sending confirmation', { error: e.response }, { payload })
@@ -260,9 +257,7 @@ const actions = {
 	async delete(context, payload) {
 		const endPoint = `apps/polls/poll/${payload.pollId}`
 		try {
-			await axios.delete(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error deleting poll', { error: e.response }, { payload })
 		}
@@ -271,9 +266,7 @@ const actions = {
 	async getParticipantsEmailAddresses(context) {
 		const endPoint = `apps/polls/poll/${context.state.id}/addresses`
 		try {
-			return await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			return await axios.get(generateUrl(endPoint), axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error retrieving email addresses', { error: e.response })
 		}
