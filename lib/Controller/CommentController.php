@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -32,13 +33,18 @@ class CommentController extends BaseController {
 	/** @var CommentService */
 	private $commentService;
 
+	/** @var Acl */
+	private $acl;
+
 	public function __construct(
 		string $appName,
+		Acl $acl,
 		ISession $session,
 		IRequest $request,
 		CommentService $commentService
 	) {
 		parent::__construct($appName, $request, $session);
+		$this->acl = $acl;
 		$this->commentService = $commentService;
 	}
 
@@ -47,7 +53,9 @@ class CommentController extends BaseController {
 	 * @NoAdminRequired
 	 */
 	public function list(int $pollId): JSONResponse {
-		return $this->response(fn () => ['comments' => $this->commentService->list($pollId)]);
+		return $this->response(fn () => [
+			'comments' => $this->commentService->list($this->acl->setPollId($pollId))
+		]);
 	}
 
 	/**
@@ -55,7 +63,9 @@ class CommentController extends BaseController {
 	 * @NoAdminRequired
 	 */
 	public function add(int $pollId, string $message): JSONResponse {
-		return $this->response(fn () => ['comment' => $this->commentService->add($message, $pollId)]);
+		return $this->response(fn () => [
+			'comment' => $this->commentService->add($message, $this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD))
+		]);
 	}
 
 	/**
@@ -63,6 +73,10 @@ class CommentController extends BaseController {
 	 * @NoAdminRequired
 	 */
 	public function delete(int $commentId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['comment' => $this->commentService->delete($commentId)]);
+		$comment = $this->commentService->get($commentId);
+
+		return $this->responseDeleteTolerant(fn () => [
+			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()))
+		]);
 	}
 }

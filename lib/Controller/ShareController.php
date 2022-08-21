@@ -53,7 +53,6 @@ class ShareController extends BaseController {
 
 	/**
 	 * List shares
-	 *
 	 * @NoAdminRequired
 	 *
 	 * @return JSONResponse
@@ -99,17 +98,34 @@ class ShareController extends BaseController {
 	 * @NoAdminRequired
 	 */
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->setEmailAddress($token, $emailAddress)]);
+		return $this->response(fn () => [
+			'share' => $this->shareService->setEmailAddress($this->shareService->get($token),
+				$emailAddress)
+		]);
 	}
 
-	/**
-	 * Create a personal share from a public share
-	 * or update an email share with the username
-	 * @NoAdminRequired
-	 */
-	public function register(string $token, string $userName, string $emailAddress = ''): JSONResponse {
-		return $this->responseCreate(fn () => ['share' => $this->shareService->register($token, $userName, $emailAddress)]);
-	}
+	// /**
+	//  * Create a personal share from a public share
+	//  * or update an email share with the username
+	//  * @deprecated not used?
+	//  * @NoAdminRequired
+	//  */
+	// public function register(
+	// 	string $token,
+	// 	string $userName,
+	// 	string $emailAddress = '',
+	// 	string $timeZone = ''
+	// 	): JSONResponse {
+
+	// 	return $this->responseCreate(fn () =>
+	// 		['share' => $this->shareService->register(
+	// 			$this->shareService->get($token),
+	// 			$userName,
+	// 			$emailAddress,
+	// 			$timeZone
+	// 		)]
+	// 	);
+	// }
 
 	/**
 	 * Delete share

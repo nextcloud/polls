@@ -21,11 +21,12 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Model\User;
 
 use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\UserBase;
 use OCP\Contacts\IManager as IContactsManager;
 use Psr\Log\LoggerInterface;
 
@@ -44,7 +45,7 @@ class Contact extends UserBase {
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
-		$this->description = Container::getL10N()->t('Contact');
+		$this->description = $this->l10n->t('Contact');
 		$this->richObjectType = 'addressbook-contact';
 
 		$this->logger = Container::queryClass(LoggerInterface::class);
@@ -120,7 +121,7 @@ class Contact extends UserBase {
 			array_unshift($description, $this->getEmailAddress());
 		}
 
-		return count($description) ? implode(", ", $description) : Container::getL10N()->t('Contact');
+		return count($description) ? implode(", ", $description) : $this->l10n->t('Contact');
 	}
 
 

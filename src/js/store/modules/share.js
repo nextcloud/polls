@@ -37,9 +37,9 @@ const defaultShares = () => ({
 	publicPollEmail: 'optional',
 })
 
-const state = defaultShares()
-
 const namespaced = true
+const state = defaultShares()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -66,7 +66,7 @@ const actions = {
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('set', { share: response.data.share })
@@ -86,10 +86,10 @@ const actions = {
 
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
 				userName: payload.userName,
 				emailAddress: payload.emailAddress,
-			})
+				timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+			}, axiosDefaultConfig)
 
 			if (payload.saveCookie && context.state.type === 'public') {
 				const cookieExpiration = (30 * 24 * 60 * 1000)
@@ -109,13 +109,10 @@ const actions = {
 			return
 		}
 
-		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/email`
+		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/email/${payload.emailAddress}`
 
 		try {
-			const response = await axios.put(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-				emailAddress: payload.emailAddress,
-			})
+			const response = await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
@@ -132,9 +129,7 @@ const actions = {
 		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/name/${payload.displayName}`
 
 		try {
-			const response = await axios.put(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			const response = await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('poll/get', null, { root: true })
 			context.dispatch('comments/list', null, { root: true })
@@ -154,9 +149,7 @@ const actions = {
 		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/email`
 
 		try {
-			const response = await axios.delete(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			const response = await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('subscription/update', false, { root: true })
 			context.dispatch('poll/get', null, { root: true })
@@ -174,9 +167,7 @@ const actions = {
 		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/resend`
 
 		try {
-			return await axios.put(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			return await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e

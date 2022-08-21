@@ -21,15 +21,34 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
 
-class Admin extends User {
-	public const TYPE = 'admin';
-	public const ICON = 'icon-settings';
+namespace OCA\Polls\Model\User;
+
+use OCA\Polls\Model\UserBase;
+
+class GenericUser extends UserBase {
+	public const TYPE = 'external';
+	public const ICON_DEFAULT = 'icon-share';
+	public const ICON_PUBLIC = 'icon-public';
 
 	public function __construct(
-		string $id
+		string $id,
+		string $type = self::TYPE,
+		string $displayName = '',
+		string $emailAddress = '',
+		string $languageCode = '',
+		string $localeCode = '',
+		string $timeZoneName = ''
 	) {
-		parent::__construct($id, self::TYPE);
+		parent::__construct($id, $type, $displayName, $emailAddress, $languageCode, $localeCode, $timeZoneName);
+
+		$this->icon = self::ICON_DEFAULT;
+		$this->description = $this->l10n->t('External user');
+		$this->richObjectType = 'guest';
+
+		if ($type === UserBase::TYPE_PUBLIC) {
+			$this->icon = self::ICON_PUBLIC;
+			$this->description = $this->l10n->t('Public link');
+		}
 	}
 }

@@ -34,9 +34,9 @@ const defaultCombo = () => ({
 	votes: [],
 })
 
-const state = defaultCombo()
-
 const namespaced = true
+const state = defaultCombo()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -146,7 +146,7 @@ const actions = {
 		const endPoint = `apps/polls/poll/${payload.pollId}/poll`
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('addPoll', response.data)
@@ -160,7 +160,7 @@ const actions = {
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('addOptions', response.data)
@@ -174,7 +174,7 @@ const actions = {
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('addVotes', response.data)

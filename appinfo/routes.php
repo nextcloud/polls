@@ -30,7 +30,7 @@ return [
 		['name' => 'public#get_options', 'url' => '/s/{token}/options', 'verb' => 'GET'],
 		['name' => 'public#get_votes', 'url' => '/s/{token}/votes', 'verb' => 'GET'],
 		['name' => 'public#get_subscription', 'url' => '/s/{token}/subscription', 'verb' => 'GET'],
-		['name' => 'public#set_email_address', 'url' => '/s/{token}/email', 'verb' => 'PUT'],
+		['name' => 'public#set_email_address', 'url' => '/s/{token}/email/{emailAddress}', 'verb' => 'PUT'],
 		['name' => 'public#set_display_name', 'url' => '/s/{token}/name/{displayName}', 'verb' => 'PUT'],
 		['name' => 'public#delete_email_address', 'url' => '/s/{token}/email', 'verb' => 'DELETE'],
 
@@ -65,9 +65,9 @@ return [
 		['name' => 'poll#delete', 'url' => '/poll/{pollId}', 'verb' => 'DELETE'],
 
 		['name' => 'poll#toggleArchive', 'url' => '/poll/{pollId}/toggleArchive', 'verb' => 'PUT'],
-		['name' => 'poll#clone', 'url' => '/poll/{pollId}/clone', 'verb' => 'GET'],
+		['name' => 'poll#clone', 'url' => '/poll/{pollId}/clone', 'verb' => 'POST'],
 		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/poll/{pollId}/addresses', 'verb' => 'GET'],
-
+		['name' => 'poll#sendConfirmation', 'url' => '/poll/{pollId}/confirmation', 'verb' => 'POST'],
 		['name' => 'poll#transfer_polls', 'url' => '/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
 
 		['name' => 'option#list', 'url' => '/poll/{pollId}/options', 'verb' => 'GET'],

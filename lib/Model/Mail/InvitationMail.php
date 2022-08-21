@@ -65,9 +65,7 @@ class InvitationMail extends MailBase {
 
 		$this->emailTemplate->addBodyText($this->getRichDescription(), $this->poll->getDescription());
 
-		if ($this->getButtonText() && $this->url) {
-			$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
-		}
+		$this->addButtonToPoll();
 
 		$this->emailTemplate->addBodyText($this->l10n->t('This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser\'s location bar:'));
 		$this->emailTemplate->addBodyText($this->url);

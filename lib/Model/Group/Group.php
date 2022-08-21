@@ -21,9 +21,11 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Model\Group;
 
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 use OCP\IGroupManager;
 use OCP\IGroup;
 
@@ -39,7 +41,7 @@ class Group extends UserBase {
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
-		$this->description = Container::getL10N()->t('Group');
+		$this->description = $this->l10n->t('Group');
 		$this->richObjectType = 'user-group';
 
 		$this->group = Container::queryClass(IGroupManager::class)->get($this->id);

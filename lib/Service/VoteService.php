@@ -73,9 +73,9 @@ class VoteService {
 	 *
 	 * @return Vote[]
 	 */
-	public function list(?int $pollId, string $token = '') : array {
-		if ($token) {
-			$this->acl->setToken($token);
+	public function list(?int $pollId, ?Acl $acl = null) : array {
+		if ($acl) {
+			$this->acl = $acl;
 		} else {
 			$this->acl->setPollId($pollId);
 		}
@@ -117,11 +117,12 @@ class VoteService {
 	/**
 	 * Set vote
 	 */
-	public function set(int $optionId, string $setTo, string $token = ''): ?Vote {
+	public function set(int $optionId, string $setTo, ?Acl $acl = null): ?Vote {
 		$option = $this->optionMapper->find($optionId);
 
-		if ($token) {
-			$this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
+		if ($acl) {
+			$this->acl = $acl; // ->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
+		// $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
 		} else {
 			$this->acl->setPollId($option->getPollId(), Acl::PERMISSION_VOTE_EDIT);
 		}
@@ -159,9 +160,9 @@ class VoteService {
 	/**
 	 * Remove user from poll
 	 */
-	public function delete(?int $pollId, ?string $userId, string $token = ''): string {
-		if ($token) {
-			$this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT);
+	public function delete(?int $pollId, ?string $userId, ?Acl $acl = null): string {
+		if ($acl) {
+			$this->acl = $acl;
 			$userId = $this->acl->getUserId();
 			$pollId = $this->acl->getPollId();
 		} else {

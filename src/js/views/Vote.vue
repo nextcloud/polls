@@ -40,6 +40,9 @@
 			<div v-if="acl.allowAddOptions && proposalsOpen && !closed" class="area__proposal">
 				<OptionProposals />
 			</div>
+			<div v-if="showConfirmationMail" class="area__confirmation">
+				<ActionSendConfirmedOptions />
+			</div>
 
 			<div class="area__main" :class="viewMode">
 				<VoteTable v-show="options.length" :view-mode="viewMode" />
@@ -90,10 +93,12 @@ import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
 import HeaderBar from '../components/Base/HeaderBar.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import ActionSendConfirmedOptions from '../components/Actions/ActionSendConfirmedOptions.vue'
 
 export default {
 	name: 'Vote',
 	components: {
+		ActionSendConfirmedOptions,
 		AppContent,
 		EmptyContent,
 		HeaderBar,
@@ -130,7 +135,12 @@ export default {
 			proposalsOpen: 'poll/proposalsOpen',
 			countHiddenParticipants: 'poll/countHiddenParticipants',
 			safeTable: 'poll/safeTable',
+			confirmedOptions: 'options/confirmed',
 		}),
+
+		showConfirmationMail() {
+			return this.acl.isOwner && this.closed && this.confirmedOptions.length > 0
+		},
 
 		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {

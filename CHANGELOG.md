@@ -8,6 +8,7 @@ All notable changes to this project will be documented in this file.
 - Add an option for public users to logout from a poll, when logged in via cookie
 - Allow bulk poll ownership transfer for admins
 - Allow users to change their name after registration to a public poll
+- Added option to send mails about confirmed options
 
 ### Fix
  - Unsubscribing from a public was not possible
