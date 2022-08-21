@@ -111,10 +111,9 @@ class UserService {
 	/**
 	 * find appropriate language
 	 */
-
 	public function getGenericLanguage($compatibilityLanguageForNc22) {
 		// TODO: Remove compatibily code after NC23 is minimum prerequisite
-		if(Util::getVersion()[0] <= 22) {
+		if (Util::getVersion()[0] < 23) {
 			return $compatibilityLanguageForNc22;
 		}
 		return $this->transFactory->findGenericLanguage('polls');
