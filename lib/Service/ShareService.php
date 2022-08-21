@@ -277,8 +277,6 @@ class ShareService {
 		Share $share,
 		string $userName,
 		string $emailAddress = '',
-		string $language = '',
-		string $locale = '',
 		string $timeZone = ''
 	): Share {
 		$this->share = $share;
@@ -288,6 +286,7 @@ class ShareService {
 			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
 		}
 
+		$language = $this->userService->getGenericLanguage();
 		$userId = $this->generatePublicUserId();
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
@@ -295,7 +294,7 @@ class ShareService {
 			// prevent invtation sending, when no email address is given
 			$this->createNewShare(
 				$this->share->getPollId(),
-				$this->userService->getUser(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress, $language, $locale, $timeZone),
+				$this->userService->getUser(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress, $language, $language, $timeZone),
 				!$emailAddress,
 				$timeZone
 			);

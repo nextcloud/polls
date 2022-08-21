@@ -104,31 +104,28 @@ class ShareController extends BaseController {
 		]);
 	}
 
-	/**
-	 * Create a personal share from a public share
-	 * or update an email share with the username
-	 * @deprecated not used?
-	 * @NoAdminRequired
-	 */
-	public function register(
-		string $token,
-		string $userName,
-		string $emailAddress = '',
-		string $timeZone = ''
-		): JSONResponse {
-		$language = explode(',', $this->request->getHeader('Accept-Language'))[0];
+	// /**
+	//  * Create a personal share from a public share
+	//  * or update an email share with the username
+	//  * @deprecated not used?
+	//  * @NoAdminRequired
+	//  */
+	// public function register(
+	// 	string $token,
+	// 	string $userName,
+	// 	string $emailAddress = '',
+	// 	string $timeZone = ''
+	// 	): JSONResponse {
 
-		return $this->responseCreate(fn () =>
-			['share' => $this->shareService->register(
-				$this->shareService->get($token),
-				$userName,
-				$emailAddress,
-				$language,
-				$language,
-				$timeZone
-			)]
-		);
-	}
+	// 	return $this->responseCreate(fn () =>
+	// 		['share' => $this->shareService->register(
+	// 			$this->shareService->get($token),
+	// 			$userName,
+	// 			$emailAddress,
+	// 			$timeZone
+	// 		)]
+	// 	);
+	// }
 
 	/**
 	 * Delete share

@@ -42,14 +42,18 @@ use OCP\Collaboration\Collaborators\ISearch;
 use OCP\ISession;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCP\L10N\IFactory;
 use OCP\Share\IShare;
 
 class UserService {
 	/** @var ShareMapper */
 	private $shareMapper;
-
+	
 	/** @var ISession */
 	private $session;
+
+	/** @var IFactory */
+	private $transFactory;
 
 	/** @var IUserManager */
 	private $userManager;
@@ -64,6 +68,7 @@ class UserService {
 	private $voteMapper;
 	
 	public function __construct(
+		IFactory $transFactory,
 		ISearch $userSearch,
 		ISession $session,
 		IUserSession $userSession,
@@ -71,6 +76,7 @@ class UserService {
 		ShareMapper $shareMapper,
 		VoteMapper $voteMapper
 	) {
+		$this->transFactory = $transFactory;
 		$this->userSearch = $userSearch;
 		$this->session = $session;
 		$this->shareMapper = $shareMapper;
@@ -99,6 +105,14 @@ class UserService {
 		}
 
 		throw new DoesNotExistException('User not found');
+	}
+
+	/**
+	 * find appropriate language
+	 */
+
+	public function getGenericLanguage() {
+		return $this->transFactory->findGenericLanguage('polls');
 	}
 
 	/**

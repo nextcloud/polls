@@ -367,10 +367,9 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 */
 	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
-		$language = explode(',', $this->request->getHeader('Accept-Language'))[0];
-
+		// $language = explode(',', $this->request->getHeader('Accept-Language'))[0];
 		return $this->responseCreate(fn () => [
-			'share' => $this->shareService->register($this->shareService->get($token), $userName, $emailAddress, $language, $language, $timeZone)
+			'share' => $this->shareService->register($this->shareService->get($token), $userName, $emailAddress, $timeZone)
 		], $token);
 	}
 
