@@ -44,6 +44,7 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use OCP\Share\IShare;
+use OCP\Util;
 
 class UserService {
 	/** @var ShareMapper */
@@ -111,7 +112,11 @@ class UserService {
 	 * find appropriate language
 	 */
 
-	public function getGenericLanguage() {
+	public function getGenericLanguage($compatibilityLanguageForNc22) {
+		// TODO: Remove compatibily code after NC23 is minimum prerequisite
+		if(Util::getVersion()[0] <= 22) {
+			return $compatibilityLanguageForNc22;
+		}
 		return $this->transFactory->findGenericLanguage('polls');
 	}
 

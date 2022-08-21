@@ -277,7 +277,8 @@ class ShareService {
 		Share $share,
 		string $userName,
 		string $emailAddress = '',
-		string $timeZone = ''
+		string $timeZone = '',
+		string $acceptedLanguage = '' // TODO: remove after NC22
 	): Share {
 		$this->share = $share;
 		$this->systemService->validatePublicUsername($userName, $this->share);
@@ -286,7 +287,7 @@ class ShareService {
 			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
 		}
 
-		$language = $this->userService->getGenericLanguage();
+		$language = $this->userService->getGenericLanguage($acceptedLanguage);
 		$userId = $this->generatePublicUserId();
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
