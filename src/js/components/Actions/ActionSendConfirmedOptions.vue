@@ -28,12 +28,12 @@
 				<template #icon>
 					<EmailCheckIcon />
 				</template>
-				{{ t('polls', 'Send Confirmation mails') }}
+				{{ t('polls', 'Send confirmation emails') }}
 			</VueButton>
 		</div>
 		<div v-if="confirmations" class="confirmation-info">
 			<div v-if="confirmations.sent" class="sent-confirmations">
-				<h2>{{ t('polls', 'Sent mails to:') }}</h2>
+				<h2>{{ t('polls', 'Sent emails to:') }}</h2>
 				<ul>
 					<li v-for="(item) in confirmations.sent" :key="item">
 						{{ item }}
@@ -41,7 +41,7 @@
 				</ul>
 			</div>
 			<div v-if="confirmations.error" class="error-confirmations">
-				<h2>{{ t('polls', 'Mails could not be sent:') }}</h2>
+				<h2>{{ t('polls', 'Emails could not be sent:') }}</h2>
 				<ul>
 					<li v-for="(item) in confirmations.error" :key="item">
 						{{ item }}
@@ -67,7 +67,7 @@ export default {
 
 	data() {
 		return {
-			caption: t('polls', 'Send information about confirmed options per mail'),
+			caption: t('polls', 'Send information about confirmed options by email'),
 			confirmations: null,
 			headerCaption: t('polls', 'Inform your participants about the confirmed options'),
 		}
