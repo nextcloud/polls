@@ -1,10 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Piiri",
+    "Contact group" : "Yhteystietoryhmä",
+    "Group" : "Ryhmä",
+    "Do not share this link with other people, because it is connected to your votes." : "älä jaa tätä linkkiä muille, sillä se on yhdistetty ääniisi.",
     "Poll invitation \"%s\"" : "Kyselykutsu \"%s\"",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Tämä sähköposti on lähetetty sinulle, koska sinut on kutsuttu äänestämään tässä äänestyksess sen tekijän toimesta. Ainakin nimesi ja sähköpostisi tallennetaan äänestykseen. Jos haluat poistua tästä äänestyksestä, ota yhteyttä sen tekijään tai sen sivun ylläpitäjään, jolta tämä viesti on lähetetty.",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} kutsui sinut vastaamaan kyselyyn \"{title}\"",
-    "Do not share this link with other people, because it is connected to your votes." : "älä jaa tätä linkkiä muille, sillä se on yhdistetty ääniisi.",
     "Notification for poll \"%s\"" : "Ilmoitus kyselyyn \"%s\" liittyen",
     "Go to poll" : "Siirry kyselyyn",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Tämä sähköposti on lähetetty sinulle, koska tilasit ilmoituksia tästä äänestyksestä. Mikäli et enää halua ilmoituksia tästä äänestyksetä, vieraile sen sivulla ja poista tilauksesi.",
@@ -26,13 +29,10 @@ OC.L10N.register(
     "%s has left a comment." : "%s jätti kommentin.",
     "Reminder for poll \"%s\"" : "Muistutus kyselyyn \"%s\"",
     "Check your votes" : "Tarkista äänesi",
-    "Circle" : "Piiri",
     "Contact" : "Yhteystieto",
-    "Contact group" : "Yhteystietoryhmä",
     "External Email" : "Ulkoinen sähköposti",
     "External user" : "Ulkoinen käyttäjä",
     "Public link" : "Julkinen linkki",
-    "Group" : "Ryhmä",
     "User" : "Käyttäjä",
     "Polls" : "Kyselyt",
     "%s invited you to a poll" : "%s kutsui sinut kyselyyn",
@@ -334,7 +334,6 @@ OC.L10N.register(
     "Closed polls" : "Suljetut äänestykset",
     "All closed polls, where voting is disabled." : "Kaikki suljetut äänestykset, joissa äänestäminen on poissä käytöstä",
     "Archive" : "Arkisto",
-    "My archived polls" : "Omat arkistoidut kyselyt",
-    "Maybe" : "Ehkä"
+    "My archived polls" : "Omat arkistoidut kyselyt"
 },
 "nplurals=2; plural=(n != 1);");

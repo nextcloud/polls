@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Public link" : "Liamm publik",
     "Group" : "Stollad",
+    "Public link" : "Liamm publik",
     "User" : "Implijer",
     "Delete" : "Lemel",
     "Conflict" : "Stourm",

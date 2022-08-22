@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Sirkel",
+    "Group" : "Gruppe",
     "Legal Notice" : "Juridiske merknader",
     "Polls App - New Activity" : "Avstemningsapp - Ny aktivitet",
-    "Circle" : "Sirkel",
     "Contact" : "Kontakt",
     "Public link" : "Offentlig lenke",
-    "Group" : "Gruppe",
     "User" : "Bruker",
     "Polls" : "Avstemninger",
     "Delete" : "Slett",
@@ -52,7 +52,6 @@ OC.L10N.register(
     "Day" : "Dag",
     "Month" : "Måned",
     "Year" : "År",
-    "Archive" : "Arkiv",
-    "Maybe" : "Kanskje"
+    "Archive" : "Arkiv"
 },
 "nplurals=2; plural=(n != 1);");

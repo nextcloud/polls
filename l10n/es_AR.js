@@ -1,10 +1,10 @@
 OC.L10N.register(
     "polls",
     {
-    "Legal Notice" : "Aviso legal",
     "Circle" : "Círculo",
-    "Contact" : "Contacto",
     "Group" : "Grupo",
+    "Legal Notice" : "Aviso legal",
+    "Contact" : "Contacto",
     "User" : "Usuario",
     "Delete" : "Eliminar",
     "Conflict" : "Conflicto",

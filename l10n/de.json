@@ -1,11 +1,14 @@
 { "translations": {
     "Poll changes" : "Änderungen der Umfrage",
+    "Circle" : "Kreis",
+    "Contact group" : "Kontaktgruppe",
+    "Group" : "Gruppe",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Über diesen Link erhältst du persönlichen Zugriff auf die oben genannte Umfrage. Klicke auf die Schaltfläche oben oder kopiere den folgenden Link und füge ihn in die Adressleiste deines Browsers ein:",
+    "Do not share this link with other people, because it is connected to your votes." : "Teile diesen Link nicht mit anderen Personen, da er mit deinen Stimmabgaben verbunden ist.",
     "Poll invitation \"%s\"" : "Umfrage-Einladung \"%s\"",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Du erhältst diese E-Mail, da du vom Ersteller der Umfrage zur Abstimmung eingeladen wurdest. In dieser Umfrage wird mindestens dein Name oder deine E-Mail-Adresse erfasst. Wenn du aus dieser Umfrage entfernt werden möchtest, wende dich an den Seiten-Administrator oder den Initiator dieser Umfrage, auf dessen Veranlassung hin diese E-Mail versandt wurde.",
     "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} hat dich eingeladen, an der Umfrage \"{title}\" als Mitglied der Gruppe {group_name} teilzunehmen",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} hat dich eingeladen an der Umfrage \"{title}\" teilzunehmen",
-    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Über diesen Link erhältst du persönlichen Zugriff auf die oben genannte Umfrage. Klicke auf die Schaltfläche oben oder kopiere den folgenden Link und füge ihn in die Adressleiste deines Browsers ein:",
-    "Do not share this link with other people, because it is connected to your votes." : "Teile diesen Link nicht mit anderen Personen, da er mit deinen Stimmabgaben verbunden ist.",
     "Notification for poll \"%s\"" : "Benachrichtigung für Umfrage \"%s\"",
     "Go to poll" : "Zur Umfrage gehen",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Du erhältst diese E-Mail, da du Benachrichtigungen zu dieser Umfrage abonniert hast. Um dich abzumelden, besuche die Umfrage und beende dein Abonnement.",
@@ -32,13 +35,10 @@
     "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "Die erste Abfrageoption ist weniger als {leftPeriod} Stunden entfernt ({dateTime}, {timezone}).",
     "The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone})." : "Die Umfrage läuft in weniger als {leftPeriod} Stunden ab ({dateTime}, {timezone}).",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} schickt dir diese Erinnerung, um sicherzustellen, dass deine Stimmen abgegeben wurden.",
-    "Circle" : "Kreis",
     "Contact" : "Kontakt",
-    "Contact group" : "Kontaktgruppe",
     "External Email" : "Externe E-Mail",
     "External user" : "Externer Benutzer",
     "Public link" : "Öffentlicher Link",
-    "Group" : "Gruppe",
     "User" : "Benutzer",
     "Polls" : "Umfragen",
     "%s invited you to a poll" : "%s hat dich zu einer Umfrage eingeladen",
@@ -548,7 +548,6 @@
     "All closed polls, where voting is disabled." : "Alle geschlossenen Umfragen, bei denen die Abstimmung deaktiviert ist.",
     "Archive" : "Archiv",
     "My archived polls" : "Meine archivierten Umfragen",
-    "Your archived polls are only accessible to you." : "Deine archivierten Umfragen sind nur für dich zugänglich",
-    "Maybe" : "Vielleicht"
+    "Your archived polls are only accessible to you." : "Deine archivierten Umfragen sind nur für dich zugänglich"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

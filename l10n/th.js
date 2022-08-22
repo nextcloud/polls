@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Public link" : "ลิงค์สาธารณะ",
     "Group" : "กลุ่ม",
+    "Public link" : "ลิงค์สาธารณะ",
     "User" : "User",
     "Delete" : "ลบ",
     "Conflict" : "ความขัดแย้ง",

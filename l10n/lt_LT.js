@@ -1,11 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Ratas",
+    "Group" : "Grupė",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Ši nuoroda suteikia jums asmeninę prieigą prie aukščiau paminėtos apklausos. Spustelėkite aukščiau esantį mygtuką arba nukopijuokite sekančią nuorodą ir įdėkite ją į savo naršyklės adresų juostą:",
+    "Do not share this link with other people, because it is connected to your votes." : "Nebendrinkite šios nuorodos su kitais žmonėmis, nes ji yra susieta su jūsų balsais.",
     "Poll invitation \"%s\"" : "Kvietimas dalyvauti apklausoje \"%s\"",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Šis el. laiškas yra siunčiamas jums, nes apklausos savininkas kviečia jus balsuoti šioje apklausoje. Joje yra įrašytas bent jūsų vardas arba el. pašto adresas. Jei norite būti pašalinti iš šios apklausos, susisiekite su internetinės svetainės, iš kurios yra siunčiamas šis el. laiškas, administratoriumi arba šios apklausos iniciatoriumi.",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} pakvietė jus dalyvauti apklausoje, pavadinimu \"{title}\"",
-    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Ši nuoroda suteikia jums asmeninę prieigą prie aukščiau paminėtos apklausos. Spustelėkite aukščiau esantį mygtuką arba nukopijuokite sekančią nuorodą ir įdėkite ją į savo naršyklės adresų juostą:",
-    "Do not share this link with other people, because it is connected to your votes." : "Nebendrinkite šios nuorodos su kitais žmonėmis, nes ji yra susieta su jūsų balsais.",
     "Go to poll" : "Pereiti į apklausą",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Šis el. laiškas yra išsiųstas jums, nes esate užsiprenumeravę šios apklausos pranešimus. Norėdami atsisakyti prenumeratos, apsilankykite apklausoje ir pašalinkite prenumeratą.",
     "Legal Notice" : "Teisinis pranešimas",
@@ -21,12 +23,10 @@ OC.L10N.register(
     "A voting option has been removed." : "Pašalintas balsavimo variantas.",
     "The poll owner has been changed." : "Pasikeitė apklausos savininkas.",
     "%s created the poll." : "%s sukūrė apklausą.",
-    "Circle" : "Ratas",
     "Contact" : "Adresatas",
     "External Email" : "Išorinis el. paštas",
     "External user" : "Išorinis naudotojas",
     "Public link" : "Viešoji nuoroda",
-    "Group" : "Grupė",
     "User" : "Naudotojas",
     "Polls" : "Apklausos",
     "%s invited you to a poll" : "%s pakvietė jus dalyvauti apklausoje",
@@ -279,7 +279,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Visos baigtos apklausos, kuriose balsavimas yra išjungtas.",
     "Archive" : "Archyvas",
     "My archived polls" : "Mano archyvuotos apklausos",
-    "Your archived polls are only accessible to you." : "Jūsų archyvuotos apklausos yra pasiekiamos tik jums.",
-    "Maybe" : "Galbūt"
+    "Your archived polls are only accessible to you." : "Jūsų archyvuotos apklausos yra pasiekiamos tik jums."
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

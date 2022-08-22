@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Ring",
+    "Group" : "Grupp",
     "Legal Notice" : "Juriidiline teave",
     "Polls App - New Activity" : "Küsitluste rakendus - uus tegevus",
-    "Circle" : "Ring",
     "Contact" : "Kontakt",
     "Public link" : "Avalik link",
-    "Group" : "Grupp",
     "User" : "Kasutaja",
     "Polls" : "Küsitlused",
     "Delete" : "Kustuta",

@@ -2,9 +2,9 @@ OC.L10N.register(
     "polls",
     {
     "Circle" : "Cerc",
+    "Group" : "Grup",
     "Contact" : "Contact",
     "Public link" : "Link public",
-    "Group" : "Grup",
     "User" : "Utilizator",
     "Delete" : "Șterge",
     "Conflict" : "Conflict",

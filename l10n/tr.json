@@ -1,11 +1,14 @@
 { "translations": {
     "Poll changes" : "Anket değişiklikleri",
+    "Circle" : "Çevre",
+    "Contact group" : "Kişi grubu",
+    "Group" : "Grup",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Bu bağlantı yukarıdaki anket için yalnızca size özel olan bir erişim sağlar. Yukarıdaki düğmeye tıklayın ya da aşağıdaki bağlantıyı kopyalayıp web tarayıcınızın adres çubuğuna yapıştırın:",
+    "Do not share this link with other people, because it is connected to your votes." : "Bu bağlantı size özel olduğundan ve vereceğini oy ile ilgili olduğundan başka kişilerle paylaşmayın.",
     "Poll invitation \"%s\"" : "\"%s\" anketine çağrı",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Bu e-posta, anket sahibi tarafından bu ankete oy vermeye çağrıldığınızı bildirmek için gönderilmiştir. En azından adınız ya da e-posta adresiniz bu ankete kaydedilmiş. Bilgilerinizin bu anketten silinmesini istiyorsanız, site yöneticisi ya da e-postayı gönderen anket hazırlayıcısı ile görüşün.",
     "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} sizi {group_name} grubunun bir üyesi olarak \"{title}\" anketine katılmaya çağırdı",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} kullanıcısı sizi \"{title}\" anketine katılmaya çağırdı",
-    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Bu bağlantı yukarıdaki anket için yalnızca size özel olan bir erişim sağlar. Yukarıdaki düğmeye tıklayın ya da aşağıdaki bağlantıyı kopyalayıp web tarayıcınızın adres çubuğuna yapıştırın:",
-    "Do not share this link with other people, because it is connected to your votes." : "Bu bağlantı size özel olduğundan ve vereceğini oy ile ilgili olduğundan başka kişilerle paylaşmayın.",
     "Notification for poll \"%s\"" : "\"%s\" anketi için bildirim",
     "Go to poll" : "Ankete git",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Bu e-posta, bu anketin bildirimlerine abone olduğunuz için gönderildi. Bildirimlerin gönderilmemesi için ankete giderek abonelikten ayrılabilirsiniz.",
@@ -32,13 +35,10 @@
     "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "İlk anket seçeneğine {leftPeriod} saatten ({dateTime}, {timezone}) daha az kaldı.",
     "The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone})." : "Anketin bitmesine {leftPeriod} saatten ({dateTime}, {timezone}) daha az kaldı.",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} oy verdiğinizden emin olmak için bu anımsatıcıyı gönderdi.",
-    "Circle" : "Çevre",
     "Contact" : "Kişi",
-    "Contact group" : "Kişi grubu",
     "External Email" : "Dış e-posta adresi",
     "External user" : "Dış kullanıcı",
     "Public link" : "Herkese açık bağlantı",
-    "Group" : "Grup",
     "User" : "Kullanıcı adı",
     "Polls" : "Anketler",
     "%s invited you to a poll" : "%s sizi bir ankete çağırdı",
@@ -548,7 +548,6 @@
     "All closed polls, where voting is disabled." : "Oy vermenin devre dışı bırakıldığı tüm bitmemiş anketler. ",
     "Archive" : "Arşiv",
     "My archived polls" : "Arşivlenmiş anketlerim",
-    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz.",
-    "Maybe" : "Belki"
+    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "წრე",
+    "Group" : "ჯგუფი",
     "Legal Notice" : "იურიდიული ცნობა",
     "Polls App - New Activity" : "Polls აპლიკაცია - ახალი აქტივობა",
-    "Circle" : "წრე",
     "Contact" : "კონტაქტი",
-    "Group" : "ჯგუფი",
     "User" : "მომხმარებელი",
     "Polls" : "გამოკითხვები",
     "Delete" : "წაშლა",
@@ -41,7 +41,6 @@ OC.L10N.register(
     "Hour" : "საათი",
     "Day" : "დღე",
     "Month" : "თვე",
-    "Archive" : "არქივი",
-    "Maybe" : "შესაძლოა"
+    "Archive" : "არქივი"
 },
 "nplurals=2; plural=(n!=1);");

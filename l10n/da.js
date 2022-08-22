@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Cirkel",
+    "Group" : "Gruppe",
     "Go to poll" : "Gå til afstemninger",
     "Legal Notice" : "Juridisk notits",
-    "Circle" : "Cirkel",
     "Contact" : "takt",
     "Public link" : "Offentligt link",
-    "Group" : "Gruppe",
     "User" : "Bruger",
     "Polls" : "Afstemning",
     "Delete" : "Slet",

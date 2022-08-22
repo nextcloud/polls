@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
-    "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
     "Circle" : "Круг",
+    "Group" : "Група",
+    "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
     "Contact" : "Контакт",
     "Public link" : "Јавен линк",
-    "Group" : "Група",
     "User" : "Корисник",
     "Polls" : "Анкети",
     "Delete" : "Избриши",

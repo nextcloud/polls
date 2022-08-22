@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Círculu",
+    "Group" : "Group",
     "Legal Notice" : "Avisu llegal",
     "Polls App - New Activity" : "Aplicación d'encuestes - Actividá nueva",
-    "Circle" : "Círculu",
     "Contact" : "Contautu",
-    "Group" : "Group",
     "User" : "Usuariu",
     "Polls" : "Enquestes",
     "Delete" : "Desaniciar",

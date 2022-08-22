@@ -1,11 +1,14 @@
 { "translations": {
     "Poll changes" : "投票變更",
+    "Circle" : "小圈圈",
+    "Contact group" : "聯絡人群組",
+    "Group" : "群組",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "此連結給您個人存取上面提到的投票。按上方的按鈕或複製以下的連結，然後將其貼到您瀏覽器的網址列：",
+    "Do not share this link with other people, because it is connected to your votes." : "不要與其他人分享此連結，因為其與您的投票息息相關。",
     "Poll invitation \"%s\"" : "投票邀請「%s」",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "此電子郵件已傳送給您，因為投票擁有者邀請您在此投票。此投票至少會記錄您的名字與您的電子郵件地址。如果您想要從此投票中移除，請聯絡站台管理員或此投票的發起者（即傳送郵件給您的人）。",
     "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} 邀請您作為 {group_name} 群組的成員參與「{title}」投票",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} 邀請您參加「{title}」的投票",
-    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "此連結給您個人存取上面提到的投票。按上方的按鈕或複製以下的連結，然後將其貼到您瀏覽器的網址列：",
-    "Do not share this link with other people, because it is connected to your votes." : "不要與其他人分享此連結，因為其與您的投票息息相關。",
     "Notification for poll \"%s\"" : "投票「%s」的通知",
     "Go to poll" : "去投票",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "該電子郵件已發送給您，因為您已訂閱此投票的通知。 要選擇退出，請造訪投票並移除您的訂閱。",
@@ -32,13 +35,10 @@
     "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "第一個投票選項剩下不到 {leftPeriod} 個小時 ({dateTime}, {timezone})。",
     "The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone})." : "第一個投票選項將於 {leftPeriod} 個小時內過期 ({dateTime}, {timezone})。",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} 向您傳送此提醒以確保您已投票。",
-    "Circle" : "小圈圈",
     "Contact" : "聯絡人",
-    "Contact group" : "聯絡人群組",
     "External Email" : "外部電子郵件",
     "External user" : "外部使用者",
     "Public link" : "公開連結",
-    "Group" : "群組",
     "User" : "使用者",
     "Polls" : "調查",
     "%s invited you to a poll" : "%s 邀請您參加投票",
@@ -548,7 +548,6 @@
     "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。",
     "Archive" : "封存",
     "My archived polls" : "我的已封存投票",
-    "Your archived polls are only accessible to you." : "您封存的投票僅有您能存取。",
-    "Maybe" : "也許"
+    "Your archived polls are only accessible to you." : "您封存的投票僅有您能存取。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

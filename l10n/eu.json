@@ -1,11 +1,14 @@
 { "translations": {
     "Poll changes" : "Galdeketaren aldaketak",
+    "Circle" : "Zirkulua",
+    "Contact group" : "Kontaktu taldea",
+    "Group" : "Taldea",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Esteka honek goian izendatutako galdeketarako sarbide pertsonala ematen dizu. Sakatu goiko botoia edo kopiatu esteka hau eta gehitu zure nabigatzailearen kokapen barran:",
+    "Do not share this link with other people, because it is connected to your votes." : "Ez zabaldu esteka hau, zure bozketara lotua baitago.",
     "Poll invitation \"%s\"" : "Bozketara gonbidapena \"%s\"",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Galdeketa honen jabeak bozkatzera gonbidatu zaituelako jaso duzu posta elektroniko hau. Gutxienez zure izena edo helbide elektronikoa gordetzen da bozketa honetan. Bozketa honetatik atera nahi baduzu, jarri gunearen administratzailearekin edo bozketa hasi duenarekin (mezu hau bidali dizuna).",
     "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} jabeak \"{title}\" bozketan parte hartzera gonbidatu zaitu {group_name} taldeko kide gisa",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} jabeak \"{title}\" bozketan parte hartzera gonbidatu zaitu",
-    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Esteka honek goian izendatutako galdeketarako sarbide pertsonala ematen dizu. Sakatu goiko botoia edo kopiatu esteka hau eta gehitu zure nabigatzailearen kokapen barran:",
-    "Do not share this link with other people, because it is connected to your votes." : "Ez zabaldu esteka hau, zure bozketara lotua baitago.",
     "Notification for poll \"%s\"" : "\"%s\" galdeketaren jakinarazpena",
     "Go to poll" : "Joan bozketara",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Bozketa honen jakinarazpenetara harpidetuta zaudelako jaso duzu posta elektroniko hau. Ez badituzu horrelako mezuak jaso nahi, joan bozketara eta kendu zure harpidetza.",
@@ -32,13 +35,10 @@
     "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "Lehengo galdeketa {leftPeriod} ordu baino lehen engongo da eskuragarri ({dateTime}, {timezone}).",
     "The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone})." : "Galdeketa {leftPeriod} ordu baino lehen iraungiko da ({dateTime}, {timezone}).",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} zure botoak ezarrita daudela ziurtatzeko abisu hau bidali dizu.",
-    "Circle" : "Zirkulua",
     "Contact" : "Kontaktua",
-    "Contact group" : "Kontaktu taldea",
     "External Email" : "Kanpoko posta",
     "External user" : "Kanpoko erabiltzailea",
     "Public link" : "Esteka publikoa",
-    "Group" : "Taldea",
     "User" : "Erabiltzailea",
     "Polls" : "Bozketak",
     "%s invited you to a poll" : "%s galdeketa batera gonbidatu zaitu",
@@ -548,7 +548,6 @@
     "All closed polls, where voting is disabled." : "Itxitako bozketa guztiak, bozkatu ezin direnak.",
     "Archive" : "Artxibatu",
     "My archived polls" : "Nire artxibatutako galdeketak",
-    "Your archived polls are only accessible to you." : "Artxibatutako galdeketak zuretzat bakarrik dira eskuragarriak.",
-    "Maybe" : "Agian"
+    "Your archived polls are only accessible to you." : "Artxibatutako galdeketak zuretzat bakarrik dira eskuragarriak."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
