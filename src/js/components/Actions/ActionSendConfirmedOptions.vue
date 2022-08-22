@@ -28,7 +28,7 @@
 				<template #icon>
 					<EmailCheckIcon />
 				</template>
-				{{ t('polls', 'Send Confirmation emails') }}
+				{{ t('polls', 'Send confirmation emails') }}
 			</VueButton>
 		</div>
 		<div v-if="confirmations" class="confirmation-info">
