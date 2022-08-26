@@ -46,7 +46,7 @@ class ConfirmationMail extends MailBase {
 	}
 
 	protected function getFooter(): string {
-		return $this->l10n->t('This email is sent to you, to inform you about the result of a poll, you participated in. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from.');
+		return $this->l10n->t('This email is sent to you to inform you about the result of a poll you participated in. At least your name or your email address was recorded in this poll. If you want to be removed from this poll, contact the site administrator or the poll initiator, where the mail is sent from.');
 	}
 
 	protected function buildBody(): void {
