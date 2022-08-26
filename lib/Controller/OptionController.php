@@ -65,7 +65,11 @@ class OptionController extends BaseController {
 	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $text, $duration)]);
 	}
-
+	
+	/**
+	 * Add mulitple new option
+	 * @NoAdminRequired
+	 */
 	public function addBulk(int $pollId, string $text = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['options' => $this->optionService->addBulk($pollId, $text)]);
 	}
