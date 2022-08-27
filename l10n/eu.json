@@ -4,7 +4,6 @@
     "Contact group" : "Kontaktu taldea",
     "Group" : "Taldea",
     "Poll \"%s\" - Confirmation" : "Inkesta \"%s\" - Berrespena",
-    "This email is sent to you, to inform you about the result of a poll, you participated in. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Mezu elektroniko hau bidali dizugu, parte hartu zenuen inkestaren emaitzaren berri emateko. Gutxienez zure izena edo zure helbide elektronikoa inkesta honetan jasota dago. Inkesta honetatik kendu nahi baduzu, jarri harremanetan guneko administratzailearekin edo mezua bidali dizun inkesta honen sortzailearekin.",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner}-ek \"{title}\" inkestaren azken emaitzaren berri eman nahi dizu",
     "_Confirmed option:_::_Confirmed options:_" : ["Berretsitako aukera:","Berretsitako aukerak:"],
     "The used time zone is \"%s\", based on the detected time zone at your registration time. To view the times in your current time zone, enter the poll by clicking the button below." : "Erabilitako ordu-eremua \"%s\" da, erregistratzeko zinen orduan hautemandako ordu-eremuan oinarrituta. Zure uneko ordu-eremuko orduak ikusteko, sartu inkesta beheko botoian klik eginez.",

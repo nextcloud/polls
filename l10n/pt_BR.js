@@ -6,7 +6,6 @@ OC.L10N.register(
     "Contact group" : "Grupo de contato",
     "Group" : "Grupo",
     "Poll \"%s\" - Confirmation" : "Enquete \"%s\" - Confirmação",
-    "This email is sent to you, to inform you about the result of a poll, you participated in. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Você está recependo este email para saber o resultado de uma enquete que você participou. Seu nome ou endereço de email foram gravados na enquete. Se você quiser ser removido da enquete, contacte o administrador do site ou a pessoa que iniciou esta enquete, de onde este email partiu.",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} quer informar-lhe do resultado final da enquete \"{title}\"",
     "_Confirmed option:_::_Confirmed options:_" : ["Opções confirmadas:","Opções confirmadas:","Opções confirmadas:"],
     "The used time zone is \"%s\", based on the detected time zone at your registration time. To view the times in your current time zone, enter the poll by clicking the button below." : "O fuso horário usado é \"%s\", baseado na detecção de seu fuso horário na hora de registro. Para ver os horários em seu fuso horário atual, entre na enquete clicando no botão abaixo.",

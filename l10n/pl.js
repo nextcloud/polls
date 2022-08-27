@@ -6,7 +6,6 @@ OC.L10N.register(
     "Contact group" : "Kontakt grupy",
     "Group" : "Grupa",
     "Poll \"%s\" - Confirmation" : "Sonda \"%s\" - Potwierdzenie",
-    "This email is sent to you, to inform you about the result of a poll, you participated in. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Ten e-mail jest wysyłany do Ciebie, aby poinformować o wyniku sondy, w której uczestniczyłeś. W sondzie zapisana jest przynajmniej Twoja nazwa lub adres e-mail. Jeśli chcesz zostać usunięty z tej sondy, skontaktuj się z administratorem strony lub inicjatorem tej sondy, z której wysyłana jest poczta.",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} chce poinformować o ostatecznym wyniku sondy \"{title}\"",
     "_Confirmed option:_::_Confirmed options:_" : ["Potwierdzona opcja:","Potwierdzone opcje:","Potwierdzone opcje:","Potwierdzone opcje:"],
     "The used time zone is \"%s\", based on the detected time zone at your registration time. To view the times in your current time zone, enter the poll by clicking the button below." : "Użyta strefa czasowa to \"%s\", oparta na wykrytej strefie czasowej w czasie rejestracji. Aby wyświetlić czasy w swojej aktualnej strefie czasowej, wejdź do sondy, klikając przycisk poniżej.",

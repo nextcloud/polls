@@ -4,7 +4,6 @@
     "Contact group" : "聯絡人群組",
     "Group" : "群組",
     "Poll \"%s\" - Confirmation" : "民意調查 “%s” - 確認",
-    "This email is sent to you, to inform you about the result of a poll, you participated in. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "此電郵通知您您參與了民意調查的結果。您的姓名或電郵地址已記錄在此民意調查中。如果您希望從此投票中刪除您的詳細信息，請聯繫站點管理員或投票發起人。",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} 想通知您民意調查 “{title}” 的最終結果",
     "_Confirmed option:_::_Confirmed options:_" : ["確認選項："],
     "The used time zone is \"%s\", based on the detected time zone at your registration time. To view the times in your current time zone, enter the poll by clicking the button below." : "使用的時區為 “%s”，基於您註冊時檢測到的時區。要查看您目前時區的時間，請單擊下面的按鈕進入民意調查。",
