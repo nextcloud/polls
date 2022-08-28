@@ -6,6 +6,7 @@ OC.L10N.register(
     "Contact group" : "Névjegycsoport",
     "Group" : "Csoport",
     "Poll \"%s\" - Confirmation" : "„%s” szavazás – megerősítés",
+    "This email is sent to you to inform you about the result of a poll you participated in. At least your name or your email address was recorded in this poll. If you want to be removed from this poll, contact the site administrator or the poll initiator, where the mail is sent from." : "Ezt az e-mailt azért kapta, hogy értesítsük egy szavazás eredményéről, amelyben részt vett. Legalább az Ön nevét vagy e-mail-címét rögzítette a szavazás. Ha el akarja távolítani magát ebből a szavazásból, vegye fel a kapcsolatot a webhely rendszergazdájával vagy a szavazás kezdeményezőjével, ahonnan a levelet kapta.",
     "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} szeretné tájékoztatni a(z) „{title}” szavazás eredményéről",
     "_Confirmed option:_::_Confirmed options:_" : ["Megerősített lehetőség:","Megerősített lehetőségek:"],
     "The used time zone is \"%s\", based on the detected time zone at your registration time. To view the times in your current time zone, enter the poll by clicking the button below." : "A regisztrációnál észlelt időzóna ez volt: „%s”. Hogy a jelenlegi időzónában tekintse meg az időket, lépjen be a lenti gombra kattintva lépjen be a szavazásba.",
