@@ -37,6 +37,7 @@ OC.L10N.register(
     "Created" : "Oprettet",
     "Preview" : "Forhåndsvisning",
     "Shares" : "Delinger",
+    "Remove share" : "Fjern deling",
     "Link copied to clipboard" : "Link kopieret til udklipsholder",
     "Description" : "Beskrivelse",
     "Receive notification email on activity" : "Modtag notifikationsemail om aktivitet",
