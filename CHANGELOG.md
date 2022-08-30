@@ -12,9 +12,10 @@ All notable changes to this project will be documented in this file.
 - Added option to send mails about confirmed options
 
 ### Fix
- - Unsubscribing from a public was not possible
+ - Unsubscribing from a public poll was not possible
  - Use display name for avatar of the current public user instead of user id
  - Fix export, if owner did not vote in the poll
+ - Fix adding option, when not admin (bulk operation)
  
 ## [3.7.0] - 2022-06-24
 ### New
