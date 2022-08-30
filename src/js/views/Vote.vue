@@ -158,16 +158,6 @@ export default {
 	},
 
 	created() {
-		// simulate @media:prefers-color-scheme until it is supported for logged in users
-		// This simulates the theme--dark
-		// TODO: remove, when completely supported by core
-		if (!window.matchMedia) {
-			return true
-		}
-
-		if (this.$route.name === 'publicVote' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-			document.body.classList.add('theme--dark')
-		}
 
 		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 	},

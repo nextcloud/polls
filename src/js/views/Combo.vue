@@ -107,12 +107,6 @@ export default {
 	},
 
 	created() {
-		// simulate @media:prefers-color-scheme until it is supported for logged in users
-		// This simulates the theme--dark
-		// TODO: remove, when completely supported by core
-		if (!window.matchMedia) {
-			return true
-		}
 		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 		this.verifyPolls()
 	},
