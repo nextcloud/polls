@@ -190,7 +190,7 @@ class Poll extends Entity implements JsonSerializable {
 		$this->optionMapper = Container::queryClass(OptionMapper::class);
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): mixed {
 		return [
 			'id' => $this->getId(),
 			'type' => $this->getType(),

@@ -81,7 +81,7 @@ class Log extends Entity implements JsonSerializable {
 		$this->addType('processed', 'int');
 	}
 
-	public function jsonSerialize() {
+	public function jsonSerialize(): mixed {
 		return [
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),
