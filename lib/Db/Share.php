@@ -132,6 +132,9 @@ class Share extends Entity implements JsonSerializable {
 		$this->appSettings = new AppSettings;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),

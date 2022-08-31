@@ -74,6 +74,9 @@ class Preferences extends Entity implements JsonSerializable {
 		return 0;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
