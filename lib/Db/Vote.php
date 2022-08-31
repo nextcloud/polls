@@ -76,7 +76,10 @@ class Vote extends Entity implements JsonSerializable {
 		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
-	public function jsonSerialize(): mixed {
+	/**
+	 * @return mixed
+	 */
+	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),

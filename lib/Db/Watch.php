@@ -59,7 +59,10 @@ class Watch extends Entity implements JsonSerializable {
 		$this->addType('updated', 'int');
 	}
 
-	public function jsonSerialize(): mixed {
+	/**
+	 * @return mixed
+	 */
+	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
 			'pollId' => $this->getPollId(),

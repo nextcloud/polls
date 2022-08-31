@@ -168,7 +168,10 @@ class AppSettings implements JsonSerializable {
 		$this->config->setAppValue(self::APP_NAME, $key, $value);
 	}
 
-	public function jsonSerialize(): mixed {
+	/**
+	 * @return mixed
+	 */
+	public function jsonSerialize() {
 		// convert group ids to group objects
 		$publicSharesGroups = [];
 		$comboGroups = [];
