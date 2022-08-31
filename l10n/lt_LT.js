@@ -146,6 +146,7 @@ OC.L10N.register(
     "Results are hidden until closing poll" : "Rezultatai yra paslėpti tol, kol apklausa bus baigta",
     "Results are always hidden" : "Rezultatai yra visą laiką paslėpti",
     "Results are visible" : "Rezultatai yra matomi",
+    "Private poll" : "Privati apklausa",
     "_%n Participant_::_%n Participants_" : ["%n dalyvis","%n dalyviai","%n dalyvių","%n dalyvis"],
     "_%n option_::_%n options_" : ["%n variantas","%n variantai","%n variantų","%n variantas"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["„Taip“: %n balsas","„Taip“: %n balsai","„Taip“: %n balsų","„Taip“: %n balsas"],
