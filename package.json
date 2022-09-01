@@ -35,7 +35,6 @@
 		"stylelint:fix": "stylelint src --fix"
 	},
 	"dependencies": {
-		"@juliushaertl/vue-richtext": "^1.0.1",
 		"@nextcloud/auth": "^2.0.0",
 		"@nextcloud/axios": "^2.0.0",
 		"@nextcloud/dialogs": "^3.2.0",
@@ -44,6 +43,7 @@
 		"@nextcloud/moment": "^1.2.1",
 		"@nextcloud/router": "^2.0.0",
 		"@nextcloud/vue": "^5.4.0",
+		"@nextcloud/vue-richtext": "^2.0.0",
 		"core-js": "^3.25.0",
 		"dompurify": "^2.4.0",
 		"file-saver": "^2.0.5",
