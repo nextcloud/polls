@@ -71,8 +71,7 @@
 				{{ t('polls', 'Pick a day.') }}
 			</div>
 		</template>
-		</DateTimePicker>
-	</ncdatetimepicker>
+	</NcDateTimePicker>
 </template>
 
 <script>
