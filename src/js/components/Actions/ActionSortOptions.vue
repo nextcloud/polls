@@ -22,7 +22,7 @@
 
 <template>
 	<div class="action sort-options">
-		<VueButton v-tooltip="caption"
+		<NcButton v-tooltip="caption"
 			type="tertiary"
 			@click="clickAction()">
 			<template #icon>
@@ -30,13 +30,13 @@
 				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textPoll'" />
 				<SortByRankIcon v-else />
 			</template>
-		</VueButton>
+		</NcButton>
 	</div>
 </template>
 
 <script>
 import { mapState, mapMutations } from 'vuex'
-import { Button as VueButton } from '@nextcloud/vue'
+import { NcButton } from '@nextcloud/vue'
 import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
@@ -48,7 +48,7 @@ export default {
 		SortByRankIcon,
 		SortByOriginalOrderIcon,
 		SortByDateOptionIcon,
-		VueButton,
+		NcButton,
 	},
 
 	computed: {

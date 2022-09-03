@@ -32,7 +32,7 @@
 <script>
 import moment from '@nextcloud/moment'
 import { RichText } from '@nextcloud/vue-richtext'
-import { UserBubble } from '@nextcloud/vue'
+import { NcUserBubble } from '@nextcloud/vue'
 import SimpleLink from '../../helpers/SimpleLink.js'
 import GuestBubble from '../../helpers/GuestBubble.js'
 
@@ -77,7 +77,7 @@ export default {
 					break
 				case 'user':
 					parameters[key] = {
-						component: UserBubble,
+						component: NcUserBubble,
 						props: {
 							user: parameters[key].id,
 							displayName: parameters[key].name,

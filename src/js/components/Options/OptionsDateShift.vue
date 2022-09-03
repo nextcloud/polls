@@ -27,17 +27,17 @@
 		</div>
 		<div v-else class="select-unit">
 			<InputDiv v-model="shift.step" use-num-modifiers />
-			<Multiselect v-model="shift.unit"
+			<NcMultiselect v-model="shift.unit"
 				:options="dateUnits"
 				label="name"
 				track-by="value" />
-			<VueButton class="submit"
+			<NcButton class="submit"
 				type="tertiary"
 				@click="shiftDates(shift)">
 				<template #icon>
 					<SubmitIcon />
 				</template>
-			</VueButton>
+			</NcButton>
 		</div>
 	</div>
 </template>
@@ -46,7 +46,7 @@
 
 import { mapState, mapGetters } from 'vuex'
 import InputDiv from '../Base/InputDiv.vue'
-import { Button as VueButton, Multiselect } from '@nextcloud/vue'
+import { NcButton, NcMultiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
@@ -56,8 +56,8 @@ export default {
 	components: {
 		SubmitIcon,
 		InputDiv,
-		Multiselect,
-		VueButton,
+		NcMultiselect,
+		NcButton,
 	},
 
 	mixins: [dateUnits],

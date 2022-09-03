@@ -22,119 +22,119 @@
 
 <template lang="html">
 	<div class="poll-information">
-		<Badge>
+		<BadgeDiv>
 			<template #icon>
 				<OwnerIcon />
 			</template>
-			{{ t('polls', 'Poll owner:') }} <UserBubble v-if="poll.owner.userId" :user="poll.owner.userId" :display-name="poll.owner.displayName" />
-		</Badge>
-		<Badge>
+			{{ t('polls', 'Poll owner:') }} <NcUserBubble v-if="poll.owner.userId" :user="poll.owner.userId" :display-name="poll.owner.displayName" />
+		</BadgeDiv>
+		<BadgeDiv>
 			<template #icon>
 				<PrivatePollIcon v-if="access === 'private'" />
 				<OpenPollIcon v-else />
 			</template>
 			{{ accessCaption }}
-		</Badge>
-		<Badge>
+		</BadgeDiv>
+		<BadgeDiv>
 			<template #icon>
 				<CreationIcon />
 			</template>
 			{{ t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative }) }}
-		</Badge>
-		<Badge v-if="poll.expire">
+		</BadgeDiv>
+		<BadgeDiv v-if="poll.expire">
 			<template #icon>
 				<ClosedIcon />
 			</template>
 			{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
-		</Badge>
-		<Badge v-if="poll.anonymous">
+		</BadgeDiv>
+		<BadgeDiv v-if="poll.anonymous">
 			<template #icon>
 				<AnoymousIcon />
 			</template>
 			{{ t('polls', 'Anonymous poll') }}
-		</Badge>
-		<Badge>
+		</BadgeDiv>
+		<BadgeDiv>
 			<template #icon>
 				<HideResultsIcon v-if="showResults === 'never'" />
 				<ShowResultsOnClosedIcon v-else-if="showResults === 'closed' && closed" />
 				<ShowResultsIcon v-else />
 			</template>
 			{{ resultsCaption }}
-		</Badge>
-		<Badge v-if="countParticipantsVoted && acl.allowSeeResults">
+		</BadgeDiv>
+		<BadgeDiv v-if="countParticipantsVoted && acl.allowSeeResults">
 			<template #icon>
 				<ParticipantsIcon />
 			</template>
 			{{ n('polls', '%n Participant', '%n Participants', countParticipantsVoted) }}
-		</Badge>
-		<Badge>
+		</BadgeDiv>
+		<BadgeDiv>
 			<template #icon>
 				<OptionsIcon />
 			</template>
 			{{ n('polls', '%n option', '%n options', countOptions) }}
-		</Badge>
-		<Badge v-if="countAllYesVotes">
+		</BadgeDiv>
+		<BadgeDiv v-if="countAllYesVotes">
 			<template #icon>
 				<CheckIcon fill-color="#49bc49" />
 			</template>
 			{{ n('polls', '%n "Yes" vote', '%n "Yes" votes', countAllYesVotes) }}
-		</Badge>
-		<Badge v-if="countAllNoVotes">
+		</BadgeDiv>
+		<BadgeDiv v-if="countAllNoVotes">
 			<template #icon>
 				<CloseIcon fill-color="#f45573" />
 			</template>
 			{{ n('polls', '%n No vote', '%n "No" votes', countAllNoVotes) }}
-		</Badge>
-		<Badge v-if="countAllMaybeVotes">
+		</BadgeDiv>
+		<BadgeDiv v-if="countAllMaybeVotes">
 			<template #icon>
 				<MaybeIcon />
 			</template>
 			{{ n('polls', '%n "Maybe" vote', '%n "Maybe" votes', countAllMaybeVotes) }}
-		</Badge>
-		<Badge>
+		</BadgeDiv>
+		<BadgeDiv>
 			<template #icon>
 				<TimezoneIcon />
 			</template>
 			{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
-		</Badge>
-		<Badge v-if="proposalsAllowed">
+		</BadgeDiv>
+		<BadgeDiv v-if="proposalsAllowed">
 			<template #icon>
 				<ProposalsAllowedIcon />
 			</template>
 			{{ proposalsStatus }}
-		</Badge>
-		<Badge v-if="poll.voteLimit">
+		</BadgeDiv>
+		<BadgeDiv v-if="poll.voteLimit">
 			<template #icon>
 				<CheckIcon />
 			</template>
 			{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
-		</Badge>
-		<Badge v-if="poll.optionLimit">
+		</BadgeDiv>
+		<BadgeDiv v-if="poll.optionLimit">
 			<template #icon>
 				<CloseIcon />
 			</template>
 			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
-		</Badge>
-		<Badge v-if="$route.name === 'publicVote' && share.emailAddress">
+		</BadgeDiv>
+		<BadgeDiv v-if="$route.name === 'publicVote' && share.emailAddress">
 			<template #icon>
 				<EmailIcon />
 			</template>
 			{{ share.emailAddress }}
-		</Badge>
-		<Badge v-if="subscribed">
+		</BadgeDiv>
+		<BadgeDiv v-if="subscribed">
 			<template #icon>
 				<SubscribedIcon />
 			</template>
 			{{ t('polls', 'You subscribed to this poll') }}
-		</Badge>
+		</BadgeDiv>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { UserBubble } from '@nextcloud/vue'
-import Badge from '../Base/Badge.vue'
+import { NcUserBubble } from '@nextcloud/vue'
+import BadgeDiv from '../Base/BadgeDiv.vue'
 import OwnerIcon from 'vue-material-design-icons/Crown.vue'
 import SubscribedIcon from 'vue-material-design-icons/Bell.vue'
 import ProposalsAllowedIcon from 'vue-material-design-icons/Offer.vue'
@@ -158,8 +158,8 @@ export default {
 	name: 'PollInformation',
 
 	components: {
-		Badge,
-		UserBubble,
+		BadgeDiv,
+		NcUserBubble,
 		OwnerIcon,
 		SubscribedIcon,
 		ProposalsAllowedIcon,

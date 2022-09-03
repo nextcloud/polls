@@ -41,15 +41,15 @@
 						:title="t('polls', 'Delete option')"
 						@delete="removeOption(option)" />
 
-					<Actions v-if="!closed" class="action">
-						<ActionButton v-if="!closed" @click="cloneOptionModal(option)">
+					<NcActions v-if="!closed" class="action">
+						<NcActionButton v-if="!closed" @click="cloneOptionModal(option)">
 							<template #icon>
 								<CloneDateIcon />
 							</template>
 							{{ t('polls', 'Clone option') }}
-						</ActionButton>
-					</Actions>
-					<VueButton v-if="closed"
+						</NcActionButton>
+					</NcActions>
+					<NcVueButton v-if="closed"
 						v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 						type="tertiary"
 						@click="confirmOption(option)">
@@ -57,12 +57,12 @@
 							<UnconfirmIcon v-if="option.confirmed" />
 							<ConfirmIcon v-else />
 						</template>
-					</VueButton>
+					</NcVueButton>
 				</template>
 			</OptionItem>
 		</transition-group>
 
-		<EmptyContent v-else>
+		<NcEmptyContent v-else>
 			<template #icon>
 				<DatePollIcon />
 			</template>
@@ -72,17 +72,17 @@
 			</template>
 
 			{{ t('polls', 'No vote options') }}
-		</EmptyContent>
+		</NcEmptyContent>
 
-		<Modal v-if="cloneModal" size="small" :can-close="false">
+		<NcModal v-if="cloneModal" size="small" :can-close="false">
 			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Actions, ActionButton, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcVueButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import OptionCloneDate from './OptionCloneDate.vue'
 import OptionItem from './OptionItem.vue'
@@ -100,14 +100,14 @@ export default {
 		CloneDateIcon,
 		ConfirmIcon,
 		UnconfirmIcon,
-		Actions,
-		ActionButton,
+		NcActions,
+		NcActionButton,
 		ActionDelete,
-		EmptyContent,
-		Modal,
+		NcEmptyContent,
+		NcModal,
 		OptionCloneDate,
 		OptionItem,
-		VueButton,
+		NcVueButton,
 		DatePollIcon,
 		OptionItemOwner: () => import('./OptionItemOwner.vue'),
 	},

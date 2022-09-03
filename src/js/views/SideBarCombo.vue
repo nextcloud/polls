@@ -21,23 +21,23 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar"
+	<NcAppSidebar ref="sideBar"
 		:active="active"
 		:title="t('polls', 'Select polls to combine')"
 		@close="closeSideBar()">
-		<AppSidebarTab :id="'polls'"
+		<NcAppSidebarTab :id="'polls'"
 			:order="1"
 			:name="t('polls', 'Polls')">
 			<template #icon>
 				<PollsAppIcon />
 			</template>
 			<SideBarTabDatePolls />
-		</AppSidebarTab>
-	</AppSidebar>
+		</NcAppSidebarTab>
+	</NcAppSidebar>
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
+import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
@@ -47,8 +47,8 @@ export default {
 
 	components: {
 		SideBarTabDatePolls: () => import('../components/SideBar/SideBarTabDatePolls.vue'),
-		AppSidebar,
-		AppSidebarTab,
+		NcAppSidebar,
+		NcAppSidebarTab,
 		PollsAppIcon,
 	},
 

@@ -24,12 +24,12 @@
 	<div class="action send-confirmations">
 		<div class="confirmation-button">
 			<h2>{{ headerCaption }}</h2>
-			<VueButton v-tooltip="caption" @click="clickAction()">
+			<NcButton v-tooltip="caption" @click="clickAction()">
 				<template #icon>
 					<EmailCheckIcon />
 				</template>
 				{{ t('polls', 'Send confirmation emails') }}
-			</VueButton>
+			</NcButton>
 		</div>
 		<div v-if="confirmations" class="confirmation-info">
 			<div v-if="confirmations.sent" class="sent-confirmations">
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-import { Button as VueButton } from '@nextcloud/vue'
+import { NcButton } from '@nextcloud/vue'
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 import { showError, showSuccess } from '@nextcloud/dialogs'
 
@@ -62,7 +62,7 @@ export default {
 
 	components: {
 		EmailCheckIcon,
-		VueButton,
+		NcButton,
 	},
 
 	data() {

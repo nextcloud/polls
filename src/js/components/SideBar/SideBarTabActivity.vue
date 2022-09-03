@@ -23,22 +23,22 @@
 <template>
 	<div class="comments">
 		<Activities v-if="!showEmptyContent" />
-		<EmptyContent v-else icon="icon-comment">
+		<NcEmptyContent v-else icon="icon-comment">
 			{{ t('polls', 'No activity') }}
-		</EmptyContent>
+		</NcEmptyContent>
 	</div>
 </template>
 
 <script>
 import Activities from '../Activity/Activities.vue'
-import { EmptyContent } from '@nextcloud/vue'
+import { NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 
 export default {
 	name: 'SideBarTabActivity',
 	components: {
 		Activities,
-		EmptyContent,
+		NcEmptyContent,
 	},
 
 	computed: {

@@ -22,7 +22,7 @@
   -->
 
 <template>
-	<Modal :container="container"
+	<NcModal :container="container"
 		@close="close">
 		<div id="modal-inner" class="polls-picker-modal" :class="{ 'icon-loading': loading }">
 			<div id="modal-content">
@@ -58,18 +58,18 @@
 				</div>
 			</div>
 		</div>
-	</Modal>
+	</NcModal>
 </template>
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import { Modal } from '@nextcloud/vue'
+import { NcModal } from '@nextcloud/vue'
 import UserItem from '../components/User/UserItem.vue'
 
 export default {
 	name: 'PollSelector',
 	components: {
-		Modal,
+		NcModal,
 		UserItem,
 	},
 	props: {

@@ -24,7 +24,7 @@
 	<div class="comments">
 		<CommentAdd v-if="acl.allowComment" />
 		<Comments v-if="!showEmptyContent" />
-		<EmptyContent v-else>
+		<NcEmptyContent v-else>
 			{{ t('polls', 'No comments') }}
 			<template #icon>
 				<CommentsIcon />
@@ -32,14 +32,14 @@
 			<template #desc>
 				{{ t('polls', 'Be the first.') }}
 			</template>
-		</EmptyContent>
+		</NcEmptyContent>
 	</div>
 </template>
 
 <script>
 import CommentAdd from '../Comments/CommentAdd.vue'
 import Comments from '../Comments/Comments.vue'
-import { EmptyContent } from '@nextcloud/vue'
+import { NcEmptyContent } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 
@@ -48,7 +48,7 @@ export default {
 	components: {
 		CommentAdd,
 		Comments,
-		EmptyContent,
+		NcEmptyContent,
 		CommentsIcon,
 	},
 

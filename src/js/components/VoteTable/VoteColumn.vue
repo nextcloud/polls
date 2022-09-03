@@ -45,21 +45,21 @@
 		<FlexSpacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
 
 		<div v-if="acl.allowEdit && closed" class="action confirm">
-			<VueButton v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+			<NcButton v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 				type="tertiary"
 				@click="confirmOption(option)">
 				<template #icon>
 					<UnconfirmIcon v-if="option.confirmed" :size="20" />
 					<ConfirmIcon v-else :size="20" />
 				</template>
-			</VueButton>
+			</NcButton>
 		</div>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Button as VueButton } from '@nextcloud/vue'
+import { NcButton } from '@nextcloud/vue'
 import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import FlexSpacer from '../Base/FlexSpacer.vue'
@@ -77,7 +77,7 @@ export default {
 		OptionItem,
 		FlexSpacer,
 		VoteItem,
-		VueButton,
+		NcButton,
 		CalendarPeek: () => import('../Calendar/CalendarPeek.vue'),
 		OptionItemOwner: () => import('../Options/OptionItemOwner.vue'),
 	},

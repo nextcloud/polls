@@ -21,20 +21,20 @@
   -->
 
 <template>
-	<CheckboxRadioSwitch :checked.sync="adminAccess" type="switch">
+	<NcCheckboxRadioSwitch :checked.sync="adminAccess" type="switch">
 		{{ label }}
-	</CheckboxRadioSwitch>
+	</NcCheckboxRadioSwitch>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAdminAccess',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 	},
 
 	data() {

@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Popover class="calendar-peek">
+	<NcPopover class="calendar-peek">
 		<template v-if="events.length" #trigger>
 			<div class="calendar-peek__conflict icon icon-calendar" />
 			<p class="calendar-peek__caption">
@@ -34,14 +34,14 @@
 				:calendar-event="eventItem"
 				:option="option" />
 		</div>
-	</Popover>
+	</NcPopover>
 </template>
 n
 <script>
 
 import { mapState } from 'vuex'
 import { orderBy } from 'lodash'
-import { Popover } from '@nextcloud/vue'
+import { NcPopover } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import CalendarInfo from '../Calendar/CalendarInfo.vue'
 import { showError } from '@nextcloud/dialogs'
@@ -51,7 +51,7 @@ export default {
 
 	components: {
 		CalendarInfo,
-		Popover,
+		NcPopover,
 	},
 
 	props: {

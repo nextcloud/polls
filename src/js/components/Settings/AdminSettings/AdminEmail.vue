@@ -22,15 +22,15 @@
 
 <template>
 	<div class="user_settings">
-		<CheckboxRadioSwitch :checked.sync="legalTermsInEmail" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="legalTermsInEmail" type="switch">
 			{{ t('polls', 'Add terms links also to the email footer') }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 
 		<div class="disclaimer_group">
 			<span class="grow_title">{{ t('polls', 'Additional email disclaimer') }}</span>
-			<CheckboxRadioSwitch :checked.sync="preview" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="preview" type="switch">
 				{{ t('polls', 'Preview') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 		</div>
 		<textarea v-show="!preview" v-model="disclaimer" @change="saveSettings()" />
 		<!-- eslint-disable-next-line vue/no-v-html -->
@@ -41,7 +41,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { marked } from 'marked'
 import DOMPurify from 'dompurify'
 
@@ -49,7 +49,7 @@ export default {
 	name: 'AdminEmail',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 	},
 
 	data() {

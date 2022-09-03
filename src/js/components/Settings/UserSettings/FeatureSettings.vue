@@ -23,18 +23,18 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="defaultViewTextPoll" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="defaultViewTextPoll" type="switch">
 				{{ t('polls', 'Text polls default to list view') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
 				{{ t('polls', 'Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view.') }}
 			</div>
 		</div>
 
 		<div class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="defaultViewDatePoll" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="defaultViewDatePoll" type="switch">
 				{{ t('polls', 'Date polls default to list view') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
 				{{ t('polls', 'Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view.') }}
 			</div>
@@ -45,13 +45,13 @@
 <script>
 
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'FeatureSettings',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 	},
 
 	computed: {

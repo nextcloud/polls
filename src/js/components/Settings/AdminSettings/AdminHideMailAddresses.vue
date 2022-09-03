@@ -22,12 +22,12 @@
 
 <template>
 	<div class="user_settings">
-		<CheckboxRadioSwitch :checked.sync="hideMailAddresses" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="hideMailAddresses" type="switch">
 			{{ t('polls', 'Hide email addresses of internal users') }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 		<div v-if="hideMailAddresses" class="settings_details">
 			<h3>{{ t('polls','Show email addresses of internal users to members of the following groups') }}</h3>
-			<Multiselect v-model="showMailAddressesGroups"
+			<NcMultiselect v-model="showMailAddressesGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"
@@ -45,15 +45,15 @@
 
 <script>
 
-import { CheckboxRadioSwitch, Multiselect } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch, NcMultiselect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
 	name: 'AdminHideMailAddresses',
 
 	components: {
-		CheckboxRadioSwitch,
-		Multiselect,
+		NcCheckboxRadioSwitch,
+		NcMultiselect,
 	},
 
 	mixins: [loadGroups, writeValue],

@@ -22,12 +22,12 @@
 
 <template>
 	<div class="user_settings">
-		<CheckboxRadioSwitch :checked.sync="comboLimited" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="comboLimited" type="switch">
 			{{ t('polls', 'Deactivate combo view for all users') }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 		<div v-if="comboLimited" class="settings_details">
 			<h3>{{ t('polls','Allow combo view for the following groups') }}</h3>
-			<Multiselect v-model="comboGroups"
+			<NcMultiselect v-model="comboGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"
@@ -45,15 +45,15 @@
 
 <script>
 
-import { CheckboxRadioSwitch, Multiselect } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch, NcMultiselect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
 	name: 'AdminCombo',
 
 	components: {
-		CheckboxRadioSwitch,
-		Multiselect,
+		NcCheckboxRadioSwitch,
+		NcMultiselect,
 	},
 
 	mixins: [loadGroups, writeValue],

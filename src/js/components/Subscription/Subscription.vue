@@ -22,20 +22,20 @@
 
 <template lang="html">
 	<div class="subscription">
-		<CheckboxRadioSwitch :checked.sync="subscribe" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="subscribe" type="switch">
 			{{ label }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 export default {
 	name: 'Subscription',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 	},
 
 	computed: {

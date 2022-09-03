@@ -75,20 +75,20 @@
 		</ConfigBox>
 
 		<div class="delete-area">
-			<VueButton @click="toggleArchive()">
+			<NcButton @click="toggleArchive()">
 				<template #icon>
 					<RestorePollIcon v-if="isPollArchived" />
 					<ArchivePollIcon v-else />
 				</template>
 				{{ isPollArchived ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
-			</VueButton>
+			</NcButton>
 
-			<VueButton v-if="isPollArchived" type="error" @click="deletePoll()">
+			<NcButton v-if="isPollArchived" type="error" @click="deletePoll()">
 				<template #icon>
 					<DeletePollIcon />
 				</template>
 				{{ t('polls', 'Delete poll') }}
-			</VueButton>
+			</NcButton>
 		</div>
 	</div>
 </template>
@@ -96,7 +96,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import { Button as VueButton } from '@nextcloud/vue'
+import { NcButton } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import ConfigBox from '../Base/ConfigBox.vue'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
@@ -152,7 +152,7 @@ export default {
 		ConfigTitle,
 		ConfigUseNo,
 		ConfigVoteLimit,
-		VueButton,
+		NcButton,
 	},
 
 	mixins: [writePoll],

@@ -21,15 +21,15 @@
   -->
 
 <template>
-	<Actions primary>
+	<NcActions primary>
 		<template #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
-		<ActionButton v-if="$route.name === 'publicVote'" icon="icon-md-link" @click="copyLink()">
+		<NcActionButton v-if="$route.name === 'publicVote'" icon="icon-md-link" @click="copyLink()">
 			{{ t('polls', 'Copy your personal link to clipboard') }}
-		</ActionButton>
-		<ActionSeparator v-if="$route.name === 'publicVote'" />
-		<ActionInput v-if="$route.name === 'publicVote'"
+		</NcActionButton>
+		<NcActionSeparator v-if="$route.name === 'publicVote'" />
+		<NcActionInput v-if="$route.name === 'publicVote'"
 			:class="check.status"
 			:value="emailAddressTemp"
 			@update:value="validateEmailAddress"
@@ -38,8 +38,8 @@
 				<EditEmailIcon />
 			</template>
 			{{ t('polls', 'Edit Email Address') }}
-		</ActionInput>
-		<ActionInput v-if="$route.name === 'publicVote'"
+		</NcActionInput>
+		<NcActionInput v-if="$route.name === 'publicVote'"
 			:class="checkDisplayName.status"
 			:value="displayNameTemp"
 			@update:value="validateDisplayName"
@@ -48,8 +48,8 @@
 				<EditAccountIcon />
 			</template>
 			{{ t('polls', 'Change name') }}
-		</ActionInput>
-		<ActionButton v-if="$route.name === 'publicVote'"
+		</NcActionInput>
+		<NcActionButton v-if="$route.name === 'publicVote'"
 			:disabled="!emailAddress"
 			:value="emailAddress"
 			@click="resendInvitation()">
@@ -57,40 +57,40 @@
 				<SendLinkPerEmailIcon />
 			</template>
 			{{ t('polls', 'Get your personal link per mail') }}
-		</ActionButton>
-		<ActionCheckbox :checked="subscribed"
+		</NcActionButton>
+		<NcActionCheckbox :checked="subscribed"
 			:disabled="!acl.allowSubscribe"
 			title="check"
 			@change="toggleSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
-		</ActionCheckbox>
-		<ActionButton v-if="$route.name === 'publicVote' && emailAddress"
+		</NcActionCheckbox>
+		<NcActionButton v-if="$route.name === 'publicVote' && emailAddress"
 			:disabled="!emailAddress"
 			@click="deleteEmailAddress">
 			<template #icon>
 				<DeleteIcon />
 			</template>
 			{{ t('polls', 'Remove Email Address') }}
-		</ActionButton>
-		<ActionButton v-if="acl.allowEdit" @click="getAddresses()">
+		</NcActionButton>
+		<NcActionButton v-if="acl.allowEdit" @click="getAddresses()">
 			<template #icon>
 				<ClippyIcon />
 			</template>
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
-		</ActionButton>
-		<ActionButton @click="resetVotes()">
+		</NcActionButton>
+		<NcActionButton @click="resetVotes()">
 			<template #icon>
 				<ResetVotesIcon />
 			</template>
 			{{ t('polls', 'Reset your votes') }}
-		</ActionButton>
-		<ActionButton v-if="$route.name === 'publicVote' && hasCookie" @click="logout()">
+		</NcActionButton>
+		<NcActionButton v-if="$route.name === 'publicVote' && hasCookie" @click="logout()">
 			<template #icon>
 				<LogoutIcon />
 			</template>
 			{{ t('polls', 'Logout as {name} (delete cookie)', { name: acl.displayName }) }}
-		</ActionButton>
-	</Actions>
+		</NcActionButton>
+	</NcActions>
 </template>
 
 <script>
@@ -98,7 +98,7 @@ import { debounce } from 'lodash'
 import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { Actions, ActionButton, ActionCheckbox, ActionInput, ActionSeparator } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionCheckbox, NcActionInput, NcActionSeparator } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import SettingsIcon from 'vue-material-design-icons/Cog.vue'
 import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
@@ -114,11 +114,11 @@ export default {
 	name: 'UserMenu',
 
 	components: {
-		Actions,
-		ActionButton,
-		ActionCheckbox,
-		ActionInput,
-		ActionSeparator,
+		NcActions,
+		NcActionButton,
+		NcActionCheckbox,
+		NcActionInput,
+		NcActionSeparator,
 		SettingsIcon,
 		EditAccountIcon,
 		EditEmailIcon,
