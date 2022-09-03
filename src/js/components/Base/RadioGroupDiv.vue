@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div class="radio-group-div">
-		<CheckboxRadioSwitch v-for="(option, index) in options"
+		<NcCheckboxRadioSwitch v-for="(option, index) in options"
 			:key="option.value"
 			:checked.sync="selectedValue"
 			:value="option.value"
@@ -30,12 +30,12 @@
 			type="radio"
 			@update:checked="$emit('input', option.value)">
 			{{ option.label }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
 
@@ -43,7 +43,7 @@ export default {
 	name: 'RadioGroupDiv',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 	},
 
 	props: {

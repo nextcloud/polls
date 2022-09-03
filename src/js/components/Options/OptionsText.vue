@@ -44,7 +44,7 @@
 						<ActionDelete v-if="!closed"
 							:title="t('polls', 'Delete option')"
 							@delete="removeOption(option)" />
-						<VueButton v-if="closed"
+						<NcButton v-if="closed"
 							v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 							type="tertiary"
 							@click="confirmOption(option)">
@@ -52,13 +52,13 @@
 								<UnconfirmIcon v-if="option.confirmed" />
 								<ConfirmIcon v-else />
 							</template>
-						</VueButton>
+						</NcButton>
 					</template>
 				</OptionItem>
 			</transition-group>
 		</draggable>
 
-		<EmptyContent v-else>
+		<NcEmptyContent v-else>
 			<template #icon>
 				<TextPollIcon />
 			</template>
@@ -68,13 +68,13 @@
 			</template>
 
 			{{ t('polls', 'No vote options') }}
-		</EmptyContent>
+		</NcEmptyContent>
 	</div>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { Button as VueButton, EmptyContent } from '@nextcloud/vue'
+import { NcButton, NcEmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import OptionItem from './OptionItem.vue'
@@ -91,11 +91,11 @@ export default {
 		ConfirmIcon,
 		UnconfirmIcon,
 		ActionDelete,
-		EmptyContent,
+		NcEmptyContent,
 		draggable,
 		OptionItem,
 		OptionItemOwner,
-		VueButton,
+		NcButton,
 		TextPollIcon,
 		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
 	},

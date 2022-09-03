@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent class="poll-list">
+	<NcAppContent class="poll-list">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ title }}
@@ -30,7 +30,7 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<EmptyContent v-if="noPolls">
+			<NcEmptyContent v-if="noPolls">
 				<template #icon>
 					<PollsAppIcon />
 				</template>
@@ -38,7 +38,7 @@
 					{{ t('polls', 'Add one or change category!') }}
 				</template>
 				{{ t('polls', 'No polls found for this category') }}
-			</EmptyContent>
+			</NcEmptyContent>
 
 			<transition-group v-else
 				name="list"
@@ -54,35 +54,35 @@
 					@goto-poll="gotoPoll(poll.id)"
 					@load-poll="loadPoll(poll.id)">
 					<template #actions>
-						<Actions force-menu>
-							<ActionButton v-if="isPollCreationAllowed"
+						<NcActions force-menu>
+							<NcActionButton v-if="isPollCreationAllowed"
 								:close-after-click="true"
 								@click="clonePoll(poll.id)">
 								<template #icon>
 									<ClonePollIcon />
 								</template>
 								{{ t('polls', 'Clone poll') }}
-							</ActionButton>
+							</NcActionButton>
 
-							<ActionButton v-if="poll.allowEdit && !poll.deleted"
+							<NcActionButton v-if="poll.allowEdit && !poll.deleted"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
 								<template #icon>
 									<ArchivePollIcon />
 								</template>
 								{{ t('polls', 'Archive poll') }}
-							</ActionButton>
+							</NcActionButton>
 
-							<ActionButton v-if="poll.allowEdit && poll.deleted"
+							<NcActionButton v-if="poll.allowEdit && poll.deleted"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
 								<template #icon>
 									<RestorePollIcon />
 								</template>
 								{{ t('polls', 'Restore poll') }}
-							</ActionButton>
+							</NcActionButton>
 
-							<ActionButton v-if="poll.allowEdit && poll.deleted"
+							<NcActionButton v-if="poll.allowEdit && poll.deleted"
 								class="danger"
 								:close-after-click="true"
 								@click="deletePoll(poll.id)">
@@ -90,21 +90,21 @@
 									<DeletePollIcon />
 								</template>
 								{{ t('polls', 'Delete poll') }}
-							</ActionButton>
-						</Actions>
+							</NcActionButton>
+						</NcActions>
 					</template>
 				</PollItem>
 			</transition-group>
 		</div>
 		<LoadingOverlay v-if="isLoading" />
-	</AppContent>
+	</NcAppContent>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
-import { Actions, ActionButton, AppContent, EmptyContent } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import HeaderBar from '../components/Base/HeaderBar.vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
@@ -116,10 +116,10 @@ export default {
 	name: 'PollList',
 
 	components: {
-		AppContent,
-		Actions,
-		ActionButton,
-		EmptyContent,
+		NcAppContent,
+		NcActions,
+		NcActionButton,
+		NcEmptyContent,
 		HeaderBar,
 		DeletePollIcon,
 		ClonePollIcon,

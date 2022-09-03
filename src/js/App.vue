@@ -35,7 +35,7 @@
 <script>
 import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { Content as NcContent } from '@nextcloud/vue'
+import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'

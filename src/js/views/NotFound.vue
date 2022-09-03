@@ -21,8 +21,8 @@
   -->
 
 <template>
-	<AppContent>
-		<EmptyContent icon="icon-search">
+	<NcAppContent>
+		<NcEmptyContent icon="icon-search">
 			{{ t('polls', '404 - poll not found') }}
 			<template #desc>
 				<p v-if="getCurrentUser()">
@@ -32,19 +32,19 @@
 					{{ t('polls', 'Goto Nextcloud') }}
 				</button>
 			</template>
-		</EmptyContent>
-	</AppContent>
+		</NcEmptyContent>
+	</NcAppContent>
 </template>
 
 <script>
-import { AppContent, EmptyContent } from '@nextcloud/vue'
+import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
 	name: 'NotFound',
 	components: {
-		AppContent,
-		EmptyContent,
+		NcAppContent,
+		NcEmptyContent,
 	},
 
 	methods: {

@@ -21,20 +21,20 @@
   -->
 
 <template>
-	<CheckboxRadioSwitch :checked.sync="allowComment" type="switch">
+	<NcCheckboxRadioSwitch :checked.sync="allowComment" type="switch">
 		{{ t('polls', 'Allow Comments') }}
-	</CheckboxRadioSwitch>
+	</NcCheckboxRadioSwitch>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAllowComment',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 	},
 
 	computed: {

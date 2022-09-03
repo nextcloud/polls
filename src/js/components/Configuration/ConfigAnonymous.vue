@@ -21,20 +21,20 @@
   -->
 
 <template>
-	<CheckboxRadioSwitch :checked.sync="anonymous" type="switch">
+	<NcCheckboxRadioSwitch :checked.sync="anonymous" type="switch">
 		{{ t('polls', 'Anonymous poll') }}
-	</CheckboxRadioSwitch>
+	</NcCheckboxRadioSwitch>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAnonymous',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 	},
 
 	computed: {

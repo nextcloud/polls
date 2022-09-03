@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<Modal v-show="modal" :size="modalSize" :can-close="false">
+	<NcModal v-show="modal" :size="modalSize" :can-close="false">
 		<div class="modal__content">
 			<div class="modal__registration">
 				<div class="registration__registration">
@@ -36,9 +36,9 @@
 						focus
 						@submit="submitRegistration" />
 
-					<CheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
+					<NcCheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
 						{{ t('polls', 'Remember me for 30 days') }}
-					</CheckboxRadioSwitch>
+					</NcCheckboxRadioSwitch>
 
 					<InputDiv v-if="share.publicPollEmail !== 'disabled'"
 						v-model="emailAddress"
@@ -57,21 +57,21 @@
 					</div>
 
 					<div class="modal__buttons">
-						<VueButton @click="closeModal">
+						<NcButton @click="closeModal">
 							{{ t('polls', 'Cancel') }}
-						</VueButton>
+						</NcButton>
 
-						<VueButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
+						<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
 							{{ t('polls', 'OK') }}
-						</VueButton>
+						</NcButton>
 					</div>
 				</div>
 
 				<div v-if="share.showLogin" class="registration__login">
 					<h2> {{ t('polls', 'You are a registered user of this site?') }} </h2>
-					<VueButton wide @click="login()">
+					<NcButton wide @click="login()">
 						{{ t('polls', 'Login') }}
-					</VueButton>
+					</NcButton>
 					<div>
 						{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}
 					</div>
@@ -87,7 +87,7 @@
 					:name="t('polls', 'Legal Notice')" />
 			</div>
 		</div>
-	</Modal>
+	</NcModal>
 </template>
 
 <script>
@@ -95,7 +95,7 @@ import { debounce } from 'lodash'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { Button as VueButton, Modal, CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcButton, NcModal, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import { RichText } from '@nextcloud/vue-richtext'
 import InputDiv from '../Base/InputDiv.vue'
@@ -105,12 +105,12 @@ export default {
 	name: 'PublicRegisterModal',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 		InputDiv,
-		Modal,
+		NcModal,
 		RichText,
 		SimpleLink,
-		VueButton,
+		NcButton,
 	},
 
 	data() {

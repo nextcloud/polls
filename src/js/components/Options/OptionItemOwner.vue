@@ -26,7 +26,7 @@
 			:title="t('polls', 'Delete option')"
 			@delete="removeOption(option)" />
 
-		<Avatar v-else-if="option.owner.userId && option.owner.userId !== pollOwner"
+		<NcAvatar v-else-if="option.owner.userId && option.owner.userId !== pollOwner"
 			:user="option.owner.userId"
 			:display-name="option.owner.displayName"
 			:is-no-user="option.owner.isNoUser"
@@ -38,7 +38,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Avatar } from '@nextcloud/vue'
+import { NcAvatar } from '@nextcloud/vue'
 import { removeOption } from '../../mixins/optionMixins.js'
 import ActionDelete from '../Actions/ActionDelete.vue'
 
@@ -46,7 +46,7 @@ export default {
 	name: 'OptionItemOwner',
 
 	components: {
-		Avatar,
+		NcAvatar,
 		ActionDelete,
 	},
 

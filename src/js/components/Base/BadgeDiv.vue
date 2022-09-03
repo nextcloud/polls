@@ -33,7 +33,7 @@
 
 <script>
 export default {
-	name: 'Badge',
+	name: 'BadgeDiv',
 	props: {
 		tag: {
 			type: String,

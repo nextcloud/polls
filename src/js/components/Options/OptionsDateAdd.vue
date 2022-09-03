@@ -21,25 +21,25 @@
   -->
 
 <template>
-	<DatetimePicker v-model="pickerSelection"
+	<NcDatetimePicker v-model="pickerSelection"
 		v-bind="pickerOptions"
 		:open.sync="pickerOpen"
 		style="width: inherit;"
 		@change="changedDate"
 		@pick="pickedDate">
 		<template #input>
-			<VueButton type="primary" :aria-label="buttonAriaLabel">
+			<NcButton type="primary" :aria-label="buttonAriaLabel">
 				<template #icon>
 					<AddDateIcon />
 				</template>
 				<span v-if="caption"> {{ caption }} </span>
-			</VueButton>
+			</NcButton>
 		</template>
 
 		<template #header>
-			<CheckboxRadioSwitch :checked.sync="useRange" class="range" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="useRange" class="range" type="switch">
 				{{ t('polls', 'Select range') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 			<div class="picker-buttons">
 				<button v-if="useTime" @click="toggleTimePanel">
 					{{ showTimePanel
@@ -71,14 +71,15 @@
 				{{ t('polls', 'Pick a day.') }}
 			</div>
 		</template>
-	</DateTimePicker>
+		</DateTimePicker>
+	</ncdatetimepicker>
 </template>
 
 <script>
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
-import { Button as VueButton, CheckboxRadioSwitch, DatetimePicker } from '@nextcloud/vue'
+import { NcButton, NcCheckboxRadioSwitch, NcDatetimePicker } from '@nextcloud/vue'
 import FlexSpacer from '../Base/FlexSpacer.vue'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 
@@ -87,9 +88,9 @@ export default {
 
 	components: {
 		AddDateIcon,
-		VueButton,
-		CheckboxRadioSwitch,
-		DatetimePicker,
+		NcButton,
+		NcCheckboxRadioSwitch,
+		NcDatetimePicker,
 		FlexSpacer,
 	},
 

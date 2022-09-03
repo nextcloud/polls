@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Multiselect id="ajax"
+	<NcMultiselect id="ajax"
 		:options="users"
 		:multiple="false"
 		:user-select="true"
@@ -43,7 +43,7 @@
 				{{ values.length }} users selected
 			</span>
 		</template>
-	</Multiselect>
+	</NcMultiselect>
 </template>
 
 <script>
@@ -51,13 +51,13 @@ import { debounce } from 'lodash'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { Multiselect } from '@nextcloud/vue'
+import { NcMultiselect } from '@nextcloud/vue'
 
 export default {
 	name: 'UserSearch',
 
 	components: {
-		Multiselect,
+		NcMultiselect,
 	},
 
 	data() {

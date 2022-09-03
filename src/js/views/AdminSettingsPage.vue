@@ -22,38 +22,38 @@
 
 <template>
 	<div class="polls_admin_settings">
-		<SettingsSection :title="t('polls', 'Share restrictions')"
+		<NcSettingsSection :title="t('polls', 'Share restrictions')"
 			:description="t('polls', 'Restrict the share actions globally or on a group base')">
 			<AdminShareSettings />
-		</SettingsSection>
+		</NcSettingsSection>
 
-		<SettingsSection :title="t('polls', 'Poll creation restrictions')"
+		<NcSettingsSection :title="t('polls', 'Poll creation restrictions')"
 			:description="t('polls', 'Restrict the creation of new polls globally or on a group base')">
 			<AdminPollCreation />
-		</SettingsSection>
+		</NcSettingsSection>
 
-		<SettingsSection :title="t('polls', 'Legal terms for public poll registration')"
+		<NcSettingsSection :title="t('polls', 'Legal terms for public poll registration')"
 			:description="t('polls', 'Override the default links of your site to your legal terms. Leave empty to use the links, which are configured in the theming app.')">
 			<AdminLegal />
-		</SettingsSection>
+		</NcSettingsSection>
 
-		<SettingsSection :title="t('polls', 'Email options')"
+		<NcSettingsSection :title="t('polls', 'Email options')"
 			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to emails.')">
 			<AdminEmail />
-		</SettingsSection>
+		</NcSettingsSection>
 
-		<SettingsSection :title="t('polls', 'Other settings')"
+		<NcSettingsSection :title="t('polls', 'Other settings')"
 			:description="t('polls', 'Activate or disable individual features.')">
 			<AdminMisc />
 			<AdminCombo />
 			<AdminPollDownload />
 			<AdminHideMailAddresses />
-		</SettingsSection>
+		</NcSettingsSection>
 
-		<SettingsSection :title="t('polls', 'Performance settings')"
+		<NcSettingsSection :title="t('polls', 'Performance settings')"
 			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
 			<AdminPerformance />
-		</SettingsSection>
+		</NcSettingsSection>
 	</div>
 </template>
 
@@ -67,7 +67,7 @@ import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCre
 import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
 import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings.vue'
 import AdminHideMailAddresses from '../components/Settings/AdminSettings/AdminHideMailAddresses.vue'
-import { SettingsSection } from '@nextcloud/vue'
+import { NcSettingsSection } from '@nextcloud/vue'
 import '../assets/scss/markdown.scss'
 
 export default {
@@ -83,7 +83,7 @@ export default {
 		AdminPollDownload,
 		AdminShareSettings,
 		AdminHideMailAddresses,
-		SettingsSection,
+		NcSettingsSection,
 	},
 
 	created() {

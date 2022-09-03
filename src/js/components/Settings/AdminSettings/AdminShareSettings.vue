@@ -22,12 +22,12 @@
 
 <template>
 	<div class="user_settings">
-		<CheckboxRadioSwitch :checked.sync="publicSharesLimited" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="publicSharesLimited" type="switch">
 			{{ t('polls', 'Disallow public shares') }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 		<div v-if="publicSharesLimited" class="settings_details">
 			<h3>{{ t('polls','Allow public shares for the following groups') }}</h3>
-			<Multiselect v-model="publicSharesGroups"
+			<NcMultiselect v-model="publicSharesGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"
@@ -41,12 +41,12 @@
 				@search-change="loadGroups" />
 		</div>
 
-		<CheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
 			{{ t('polls', 'Disallow openly accessible polls') }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 		<div v-if="allAccessLimited" class="settings_details">
 			<h3>{{ t('polls','Allow creating openly accessible polls for the following groups') }}</h3>
-			<Multiselect v-model="allAccessGroups"
+			<NcMultiselect v-model="allAccessGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"
@@ -64,15 +64,15 @@
 
 <script>
 
-import { CheckboxRadioSwitch, Multiselect } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch, NcMultiselect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
 	name: 'AdminShareSettings',
 
 	components: {
-		CheckboxRadioSwitch,
-		Multiselect,
+		NcCheckboxRadioSwitch,
+		NcMultiselect,
 	},
 
 	mixins: [loadGroups, writeValue],

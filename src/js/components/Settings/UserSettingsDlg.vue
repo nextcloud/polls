@@ -21,36 +21,36 @@
   -->
 
 <template>
-	<AppSettingsDialog :open.sync="show" :show-navigation="true">
-		<AppSettingsSection :title="t('polls', 'Calendar check')">
+	<NcAppSettingsDialog :open.sync="show" :show-navigation="true">
+		<NcAppSettingsSection :title="t('polls', 'Calendar check')">
 			<CalendarSettings />
-		</AppSettingsSection>
+		</NcAppSettingsSection>
 
-		<AppSettingsSection :title="t('polls', 'User settings')">
+		<NcAppSettingsSection :title="t('polls', 'User settings')">
 			<FeatureSettings />
-		</AppSettingsSection>
+		</NcAppSettingsSection>
 
-		<AppSettingsSection :title="t('polls', 'Performance settings')">
+		<NcAppSettingsSection :title="t('polls', 'Performance settings')">
 			<PerformanceSettings />
-		</AppSettingsSection>
+		</NcAppSettingsSection>
 
-		<AppSettingsSection :title="t('polls', 'Styles')">
+		<NcAppSettingsSection :title="t('polls', 'Styles')">
 			<StyleSettings />
-		</AppSettingsSection>
-	</AppSettingsDialog>
+		</NcAppSettingsSection>
+	</NcAppSettingsDialog>
 </template>
 
 <script>
 
-import { AppSettingsDialog, AppSettingsSection } from '@nextcloud/vue'
+import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'UserSettingsDlg',
 
 	components: {
-		AppSettingsDialog,
-		AppSettingsSection,
+		NcAppSettingsDialog,
+		NcAppSettingsSection,
 		CalendarSettings: () => import('./UserSettings/CalendarSettings.vue'),
 		FeatureSettings: () => import('./UserSettings/FeatureSettings.vue'),
 		StyleSettings: () => import('./UserSettings/StyleSettings.vue'),

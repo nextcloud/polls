@@ -21,7 +21,7 @@
   -->
 
 <template lang="html">
-	<AppNavigationItem :title="poll.title"
+	<NcAppNavigationItem :title="poll.title"
 		:to="{name: 'vote', params: {id: poll.id}}"
 		:class="{ closed: closed }">
 		<template #icon>
@@ -29,46 +29,46 @@
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>
-			<ActionButton v-if="isPollCreationAllowed"
+			<NcActionButton v-if="isPollCreationAllowed"
 				@click="$emit('clone-poll')">
 				<template #icon>
 					<ClonePollIcon />
 				</template>
 				{{ t('polls', 'Clone poll') }}
-			</ActionButton>
+			</NcActionButton>
 
-			<ActionButton v-if="poll.allowEdit && !poll.deleted"
+			<NcActionButton v-if="poll.allowEdit && !poll.deleted"
 				@click="$emit('toggle-archive')">
 				<template #icon>
 					<ArchivePollIcon />
 				</template>
 				{{ t('polls', 'Archive poll') }}
-			</ActionButton>
+			</NcActionButton>
 
-			<ActionButton v-if="poll.allowEdit && poll.deleted"
+			<NcActionButton v-if="poll.allowEdit && poll.deleted"
 				@click="$emit('toggle-archive')">
 				<template #icon>
 					<RestorePollIcon />
 				</template>
 				{{ t('polls', 'Restore poll') }}
-			</ActionButton>
+			</NcActionButton>
 
-			<ActionButton v-if="poll.allowEdit && poll.deleted"
+			<NcActionButton v-if="poll.allowEdit && poll.deleted"
 				class="danger"
 				@click="$emit('delete-poll')">
 				<template #icon>
 					<DeletePollIcon />
 				</template>
 				{{ t('polls', 'Delete poll') }}
-			</ActionButton>
+			</NcActionButton>
 		</template>
-	</AppNavigationItem>
+	</NcAppNavigationItem>
 </template>
 
 <script>
 
 import { mapState, mapGetters } from 'vuex'
-import { ActionButton, AppNavigationItem } from '@nextcloud/vue'
+import { NcActionButton, NcAppNavigationItem } from '@nextcloud/vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
@@ -80,8 +80,8 @@ export default {
 	name: 'PollNavigationItems',
 
 	components: {
-		ActionButton,
-		AppNavigationItem,
+		NcActionButton,
+		NcAppNavigationItem,
 		DeletePollIcon,
 		ClonePollIcon,
 		ArchivePollIcon,

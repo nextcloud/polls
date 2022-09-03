@@ -29,24 +29,24 @@
 		<template #status>
 			<div class="vote-status" />
 		</template>
-		<Actions>
-			<ActionButton icon="icon-add" @click="addPublicShare()">
+		<NcActions>
+			<NcActionButton icon="icon-add" @click="addPublicShare()">
 				{{ t('polls', 'Add a new public link') }}
-			</ActionButton>
-		</Actions>
+			</NcActionButton>
+		</NcActions>
 	</UserItem>
 </template>
 
 <script>
 import { showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { NcActions, NcActionButton } from '@nextcloud/vue'
 
 export default {
 	name: 'SharePublicAdd',
 
 	components: {
-		Actions,
-		ActionButton,
+		NcActions,
+		NcActionButton,
 	},
 
 	methods: {

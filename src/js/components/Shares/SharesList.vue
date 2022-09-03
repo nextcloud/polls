@@ -48,15 +48,15 @@
 						</div>
 					</template>
 
-					<Actions>
-						<ActionButton v-if="share.emailAddress || share.type === 'group'" @click="sendInvitation(share)">
+					<NcActions>
+						<NcActionButton v-if="share.emailAddress || share.type === 'group'" @click="sendInvitation(share)">
 							<template #icon>
 								<SendEmailIcon />
 							</template>
 							{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
-						</ActionButton>
+						</NcActionButton>
 
-						<ActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin({ share })">
+						<NcActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin({ share })">
 							<template #icon>
 								<span v-if="share.type === 'user'"
 									aria-hidden="true"
@@ -84,37 +84,37 @@
 								</span>
 							</template>
 							{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
-						</ActionButton>
+						</NcActionButton>
 
-						<ActionButton @click="copyLink( { url: share.URL })">
+						<NcActionButton @click="copyLink( { url: share.URL })">
 							<template #icon>
 								<ClippyIcon />
 							</template>
 							{{ t('polls', 'Copy link to clipboard') }}
-						</ActionButton>
-						<ActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
-						<ActionRadio v-if="share.type === 'public'"
+						</NcActionButton>
+						<NcActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
+						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="optional"
 							:checked="share.publicPollEmail === 'optional'"
 							@change="setPublicPollEmail({ share, value: 'optional' })">
 							{{ t('polls', 'Email address is optional') }}
-						</ActionRadio>
-						<ActionRadio v-if="share.type === 'public'"
+						</NcActionRadio>
+						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="mandatory"
 							:checked="share.publicPollEmail === 'mandatory'"
 							@change="setPublicPollEmail({ share, value: 'mandatory' })">
 							{{ t('polls', 'Email address is mandatory') }}
-						</ActionRadio>
-						<ActionRadio v-if="share.type === 'public'"
+						</NcActionRadio>
+						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="disabled"
 							:checked="share.publicPollEmail === 'disabled'"
 							@change="setPublicPollEmail({ share, value: 'disabled' })">
 							{{ t('polls', 'Do not ask for email address') }}
-						</ActionRadio>
-					</Actions>
+						</NcActionRadio>
+					</NcActions>
 
 					<ActionDelete :title="t('polls', 'Remove share')"
 						@delete="removeShare({ share })" />
@@ -127,7 +127,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton, ActionCaption, ActionRadio } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionCaption, NcActionRadio } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
@@ -149,11 +149,11 @@ export default {
 		UnvotedIcon,
 		UserSearch,
 		VotedIcon,
-		Actions,
-		ActionButton,
-		ActionCaption,
+		NcActions,
+		NcActionButton,
+		NcActionCaption,
 		ActionDelete,
-		ActionRadio,
+		NcActionRadio,
 		ConfigBox,
 		SharePublicAdd,
 		ShareItemAllUsers,

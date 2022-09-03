@@ -22,12 +22,12 @@
 
 <template>
 	<div class="user_settings">
-		<CheckboxRadioSwitch :checked.sync="pollDownloadLimited" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="pollDownloadLimited" type="switch">
 			{{ t('polls', 'Disallow poll download') }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 		<div v-if="pollDownloadLimited" class="settings_details">
 			<h3>{{ t('polls','Allow poll download for the following groups') }}</h3>
-			<Multiselect v-model="pollDownloadGroups"
+			<NcMultiselect v-model="pollDownloadGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"
@@ -45,15 +45,15 @@
 
 <script>
 
-import { CheckboxRadioSwitch, Multiselect } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch, NcMultiselect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
 	name: 'AdminPollDownload',
 
 	components: {
-		CheckboxRadioSwitch,
-		Multiselect,
+		NcCheckboxRadioSwitch,
+		NcMultiselect,
 	},
 
 	mixins: [loadGroups, writeValue],

@@ -22,20 +22,20 @@
 
 <template>
 	<div class="action change-view">
-		<VueButton v-tooltip="caption"
+		<NcButton v-tooltip="caption"
 			type="tertiary"
 			@click="clickAction()">
 			<template #icon>
 				<ListViewIcon v-if="viewMode === 'table-view'" />
 				<TableViewIcon v-else />
 			</template>
-		</VueButton>
+		</NcButton>
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { Button as VueButton } from '@nextcloud/vue'
+import { NcButton } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
 import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
@@ -46,7 +46,7 @@ export default {
 	components: {
 		ListViewIcon,
 		TableViewIcon,
-		VueButton,
+		NcButton,
 	},
 
 	computed: {

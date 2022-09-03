@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent :class="[{ closed: closed }, poll.type]">
+	<NcAppContent :class="[{ closed: closed }, poll.type]">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ poll.title }}
@@ -47,7 +47,7 @@
 			<div class="area__main" :class="viewMode">
 				<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-				<EmptyContent v-if="!options.length">
+				<NcEmptyContent v-if="!options.length">
 					<template #icon>
 						<TextPollIcon v-if="poll.type === 'textPoll'" />
 						<DatePollIcon v-else />
@@ -61,7 +61,7 @@
 							{{ t('polls', 'Maybe the owner did not provide some until now.') }}
 						</div>
 					</template>
-				</EmptyContent>
+				</NcEmptyContent>
 			</div>
 
 			<div v-if="countHiddenParticipants" class="area__footer">
@@ -80,12 +80,12 @@
 
 		<PublicRegisterModal v-if="showRegisterModal" />
 		<LoadingOverlay v-if="isLoading" />
-	</AppContent>
+	</NcAppContent>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { AppContent, EmptyContent } from '@nextcloud/vue'
+import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -99,8 +99,8 @@ export default {
 	name: 'Vote',
 	components: {
 		ActionSendConfirmedOptions,
-		AppContent,
-		EmptyContent,
+		NcAppContent,
+		NcEmptyContent,
 		HeaderBar,
 		MarkUpDescription,
 		PollHeaderButtons,

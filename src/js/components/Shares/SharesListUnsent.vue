@@ -32,18 +32,18 @@
 				show-email
 				resolve-info
 				:icon="true">
-				<Actions>
-					<ActionButton v-if="share.emailAddress || share.type === 'group'"
+				<NcActions>
+					<NcActionButton v-if="share.emailAddress || share.type === 'group'"
 						icon="icon-confirm"
 						@click="sendInvitation(share)">
 						{{ t('polls', 'Send invitation mail') }}
-					</ActionButton>
-					<ActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
+					</NcActionButton>
+					<NcActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
 						icon="icon-toggle-filelist"
 						@click="resolveGroup(share)">
 						{{ t('polls', 'Resolve into individual invitations') }}
-					</ActionButton>
-				</Actions>
+					</NcActionButton>
+				</NcActions>
 				<ActionDelete :title="t('polls', 'Remove invitation')"
 					@delete="removeShare({ share })" />
 			</UserItem>
@@ -54,7 +54,7 @@
 <script>
 import { mapGetters, mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { NcActions, NcActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
@@ -64,8 +64,8 @@ export default {
 
 	components: {
 		EmailAlertIcon,
-		Actions,
-		ActionButton,
+		NcActions,
+		NcActionButton,
 		ActionDelete,
 		ConfigBox,
 	},

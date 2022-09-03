@@ -23,17 +23,17 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="useActivity" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="useActivity" type="switch">
 				{{ t('polls', 'Track activities') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 
-			<CheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
 				{{ t('polls', 'Hide login option in public polls') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 
-			<CheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
 				{{ t('polls', 'Archive closed polls automatically') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 			<InputDiv v-if="autoArchive"
 				v-model="autoArchiveOffset"
 				class="settings_details"
@@ -48,14 +48,14 @@
 <script>
 
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import InputDiv from '../../Base/InputDiv.vue'
 
 export default {
 	name: 'AdminMisc',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 		InputDiv,
 	},
 

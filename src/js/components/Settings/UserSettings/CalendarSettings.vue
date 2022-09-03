@@ -23,20 +23,20 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 
 			<div v-show="calendarPeek" class="settings_details">
 				{{ t('polls', 'Select the calendars to use for lookup.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
-					<CheckboxRadioSwitch :checked="calendar.selected"
+					<NcCheckboxRadioSwitch :checked="calendar.selected"
 						type="switch"
 						@update:checked="clickedCalendar(calendar)">
 						<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
 						{{ calendar.name }}
-					</CheckboxRadioSwitch>
+					</NcCheckboxRadioSwitch>
 				</div>
 			</div>
 		</div>
@@ -62,14 +62,14 @@
 <script>
 
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import InputDiv from '../../Base/InputDiv.vue'
 
 export default {
 	name: 'CalendarSettings',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 		InputDiv,
 	},
 

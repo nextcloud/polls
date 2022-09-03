@@ -23,17 +23,17 @@
 <template>
 	<div class="poll-header-buttons">
 		<UserMenu v-if="showUserMenu" />
-		<Popover>
+		<NcPopover>
 			<template #trigger>
-				<VueButton v-tooltip="t('polls', 'Poll informations')"
+				<NcButton v-tooltip="t('polls', 'Poll informations')"
 					type="tertiary">
 					<template #icon>
 						<PollInformationIcon />
 					</template>
-				</VueButton>
+				</NcButton>
 			</template>
 			<PollInformation />
-		</Popover>
+		</NcPopover>
 		<ExportPoll v-if="allowPollDownload" />
 		<ActionToggleSidebar v-if="allowEdit || allowComment" />
 	</div>
@@ -41,7 +41,7 @@
 
 <script>
 import { mapState } from 'vuex'
-import { Button as VueButton, Popover } from '@nextcloud/vue'
+import { NcButton, NcPopover } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ActionToggleSidebar from '../Actions/ActionToggleSidebar.vue'
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
@@ -51,8 +51,8 @@ export default {
 	components: {
 		ActionToggleSidebar,
 		PollInformationIcon,
-		Popover,
-		VueButton,
+		NcPopover,
+		NcButton,
 		UserMenu: () => import('../User/UserMenu.vue'),
 		ExportPoll: () => import('../Export/ExportPoll.vue'),
 		PollInformation: () => import('../Poll/PollInformation.vue'),

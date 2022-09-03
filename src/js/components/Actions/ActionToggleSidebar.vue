@@ -22,18 +22,18 @@
 
 <template>
 	<div class="action toggle-sidebar">
-		<VueButton v-tooltip="caption"
+		<NcButton v-tooltip="caption"
 			type="tertiary"
 			@click="clickAction()">
 			<template #icon>
 				<SidebarIcon />
 			</template>
-		</VueButton>
+		</NcButton>
 	</div>
 </template>
 
 <script>
-import { Button as VueButton } from '@nextcloud/vue'
+import { NcButton } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 
@@ -42,7 +42,7 @@ export default {
 
 	components: {
 		SidebarIcon,
-		VueButton,
+		NcButton,
 	},
 
 	data() {

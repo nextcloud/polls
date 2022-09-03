@@ -21,45 +21,45 @@
   -->
 
 <template lang="html">
-	<Actions>
+	<NcActions>
 		<template #icon>
 			<ExportIcon />
 		</template>
-		<ActionButton close-after-click @click="exportFile('xlsx')">
+		<NcActionButton close-after-click @click="exportFile('xlsx')">
 			<template #icon>
 				<ExcelIcon />
 			</template>
 			{{ t('polls', 'Download Excel spreadsheet') }}
-		</ActionButton>
+		</NcActionButton>
 
-		<ActionButton close-after-click @click="exportFile('ods')">
+		<NcActionButton close-after-click @click="exportFile('ods')">
 			<template #icon>
 				<FileTableIcon />
 			</template>
 			{{ t('polls', 'Download Open Document spreadsheet') }}
-		</ActionButton>
+		</NcActionButton>
 
-		<ActionButton close-after-click @click="exportFile('csv')">
+		<NcActionButton close-after-click @click="exportFile('csv')">
 			<template #icon>
 				<CsvIcon />
 			</template>
 			{{ t('polls', 'Download CSV file') }}
-		</ActionButton>
+		</NcActionButton>
 
-		<ActionButton close-after-click @click="exportFile('html')">
+		<NcActionButton close-after-click @click="exportFile('html')">
 			<template #icon>
 				<XmlIcon />
 			</template>
 			{{ t('polls', 'Download HTML file') }}
-		</ActionButton>
-	</Actions>
+		</NcActionButton>
+	</NcActions>
 </template>
 
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { saveAs } from 'file-saver'
 import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
-import { Actions, ActionButton } from '@nextcloud/vue'
+import { NcActions, NcActionButton } from '@nextcloud/vue'
 import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
@@ -69,8 +69,8 @@ import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 export default {
 	name: 'ExportPoll',
 	components: {
-		Actions,
-		ActionButton,
+		NcActions,
+		NcActionButton,
 		CsvIcon,
 		ExcelIcon,
 		FileTableIcon,
