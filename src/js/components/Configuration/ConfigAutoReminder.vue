@@ -25,7 +25,7 @@
 		<NcCheckboxRadioSwitch :checked.sync="autoReminder" type="switch">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
-		<Popover>
+		<NcPopover>
 			<template #trigger>
 				<NcActions>
 					<NcActionButton icon="icon-info">
@@ -34,13 +34,13 @@
 				</NcActions>
 			</template>
 			<AutoReminderInformation />
-		</Popover>
+		</NcPopover>
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { NcActions, NcActionButton, Popover, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcPopover, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'ConfigAutoReminder',
@@ -49,7 +49,7 @@ export default {
 		NcCheckboxRadioSwitch,
 		NcActions,
 		NcActionButton,
-		Popover,
+		NcPopover,
 		AutoReminderInformation: () => import('./AutoReminderInformation.vue'),
 	},
 
