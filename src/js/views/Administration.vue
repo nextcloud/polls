@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent class="poll-list">
+	<NcAppContent class="poll-list">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ t('polls', 'Administrative poll management') }}
@@ -116,14 +116,14 @@
 				</div>
 			</div>
 		</NcModal>
-	</AppContent>
+	</NcAppContent>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
-import { NcActions, NcActionButton, AppContent, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import { sortBy } from 'lodash'
 import HeaderBar from '../components/Base/HeaderBar.vue'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
@@ -132,7 +132,7 @@ export default {
 	name: 'Administration',
 
 	components: {
-		AppContent,
+		NcAppContent,
 		NcActions,
 		NcActionButton,
 		NcEmptyContent,
