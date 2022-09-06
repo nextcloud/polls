@@ -67,6 +67,7 @@ OC.L10N.register(
     "Hour" : "Годин",
     "Day" : "День",
     "Month" : "Місяць",
+    "Year" : "рік",
     "Title must not be empty!" : "Потрібно зазначити заголовок!",
     "Relevant" : "Відповідне",
     "My polls" : "Мої опитування",
