@@ -183,7 +183,7 @@ OC.L10N.register(
     "Delete" : "Löschen",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Lösche in {countdown} Sekunde","Lösche in {countdown} Sekunden"],
     "Send confirmation emails" : "Sende Bestätigungs-E-Mails",
-    "Sent emails to:" : "Sende E-Mails an:",
+    "Sent emails to:" : "E-Mails gesendet an:",
     "Emails could not be sent:" : "E-Mails konnten nicht versandt werden:",
     "Send information about confirmed options by email" : "Informationen über bestätigte Optionen per E-Mail senden",
     "Inform your participants about the confirmed options" : "Informieren Sie Ihre Teilnehmer über die bestätigten Optionen",
