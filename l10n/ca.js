@@ -170,6 +170,7 @@ OC.L10N.register(
     "Error while adding share" : "Error en afegir compartició",
     "Delete votes" : "Suprimir vots",
     "User {userId} removed" : "Usuari {userId} eliminat",
+    "Email options" : "Opcions de correu electrònic",
     "Yes" : "Sí",
     "Administration" : "Administració",
     "Add new Poll" : "Afegeix una enquesta nova",

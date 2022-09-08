@@ -56,6 +56,7 @@ OC.L10N.register(
     "Yes" : "Так",
     "Administration" : "Адміністрування",
     "Add new Poll" : "Додати нове опитування",
+    "Personal settings" : "Персональні налаштування",
     "Error loading poll list" : "Помилка завантаження списку опитування",
     "Error loading poll" : "Помилка під час завантаження опитування",
     "Details" : "Деталі",
