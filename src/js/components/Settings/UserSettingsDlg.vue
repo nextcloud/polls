@@ -22,19 +22,19 @@
 
 <template>
 	<NcAppSettingsDialog :open.sync="show" :show-navigation="true">
-		<NcAppSettingsSection :title="t('polls', 'Calendar check')">
+		<NcAppSettingsSection id="calendar" :title="t('polls', 'Calendar check')">
 			<CalendarSettings />
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection :title="t('polls', 'User settings')">
+		<NcAppSettingsSection id="div-settings" :title="t('polls', 'User settings')">
 			<FeatureSettings />
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection :title="t('polls', 'Performance settings')">
+		<NcAppSettingsSection id="performance" :title="t('polls', 'Performance settings')">
 			<PerformanceSettings />
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection :title="t('polls', 'Styles')">
+		<NcAppSettingsSection id="styles" :title="t('polls', 'Styles')">
 			<StyleSettings />
 		</NcAppSettingsSection>
 	</NcAppSettingsDialog>
