@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcAppContent :class="[{ closed: closed }, poll.type]">
+	<NcAppContent :class="[{ closed: closed, 'page--scrolled': scrolled }, poll.type]">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ poll.title }}
@@ -116,6 +116,8 @@ export default {
 	data() {
 		return {
 			isLoading: false,
+			scrolled: false,
+			scrollElement: null,
 		}
 	},
 
@@ -157,16 +159,25 @@ export default {
 
 	},
 
-	created() {
-
-		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
+	mounted() {
+		this.scrollElement = document.getElementById('app-content-vue')
+		this.scrollElement.addEventListener('scroll', this.handleScroll)
 	},
 
 	beforeDestroy() {
+		this.scrollElement.removeEventListener('scroll', this.handleScroll)
 		this.$store.dispatch({ type: 'poll/reset' })
 	},
 
 	methods: {
+		handleScroll() {
+			if (this.scrollElement.scrollTop > 20) {
+				this.scrolled = true
+			} else {
+				this.scrolled = false
+			}
+		},
+
 		openOptions() {
 			emit('polls:sidebar:toggle', { open: true, activeTab: 'options' })
 		},

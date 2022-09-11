@@ -55,7 +55,6 @@
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
 import ComboTable from '../components/Combo/ComboTable.vue'
 import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar.vue'
 import HeaderBar from '../components/Base/HeaderBar.vue'
@@ -107,7 +106,6 @@ export default {
 	},
 
 	created() {
-		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 		this.verifyPolls()
 	},
 

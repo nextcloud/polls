@@ -133,12 +133,12 @@ export default {
 			useCollaboration: (state) => state.appSettings.useCollaboration,
 		}),
 	},
+
 	methods: {
 		closeSideBar() {
 			emit('polls:sidebar:toggle', { open: false })
 		},
 	},
-
 }
 
 </script>

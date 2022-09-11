@@ -103,7 +103,6 @@
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import { NcActions, NcActionButton, NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import HeaderBar from '../components/Base/HeaderBar.vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
@@ -192,7 +191,6 @@ export default {
 		async loadPoll(pollId) {
 			try {
 				await this.$store.dispatch({ type: 'poll/get', pollId })
-				emit('polls:sidebar:toggle', { open: true })
 			} catch {
 				showError(t('polls', 'Error loading poll'))
 			}
@@ -200,10 +198,6 @@ export default {
 
 		refreshView() {
 			window.document.title = `${t('polls', 'Polls')} - ${this.title}`
-			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
-				emit('polls:sidebar:toggle', { open: false })
-			}
-
 		},
 
 		async toggleArchive(pollId) {

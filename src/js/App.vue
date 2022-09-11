@@ -26,7 +26,7 @@
 		:class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
-		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
+		<router-view v-show="sideBar.open" name="sidebar" :active="sidebar.activeTab" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
@@ -61,8 +61,10 @@ export default {
 
 	data() {
 		return {
-			sideBarOpen: (window.innerWidth > 920),
-			activeTab: 'comments',
+			sideBar: {
+				open: (window.innerWidth > 920),
+				activeTab: 'comments',
+			},
 			transitionClass: 'transitions-active',
 			loading: false,
 		}
@@ -93,13 +95,6 @@ export default {
 					translucent: this.useTranslucentPanels,
 				},
 			]
-		},
-
-		showSidebar() {
-			if (this.$route.name === 'combo') {
-				return this.sideBarOpen
-			}
-			return this.sideBarOpen && this.poll.id && (this.allowEdit || this.poll.allowComment)
 		},
 	},
 
@@ -153,28 +148,9 @@ export default {
 		})
 
 		subscribe('polls:sidebar:toggle', (payload) => {
-			if (payload === undefined) {
-				this.sideBarOpen = !this.sideBarOpen
-			} else {
-				if (payload.activeTab !== undefined) {
-					this.activeTab = payload.activeTab
-				}
-				if (payload.open === undefined) {
-					this.sideBarOpen = !this.sideBarOpen
-				} else {
-					this.sideBarOpen = payload.open
-				}
-			}
-
+			this.sideBar.activeTab = payload?.activeTab ?? this.sideBar.activeTab
+			this.sideBar.open = payload?.open ?? !this.sideBar.open
 		})
-	},
-
-	mounted() {
-		window.addEventListener('scroll', this.handleScroll)
-	},
-
-	destroyed() {
-		window.removeEventListener('scroll', this.handleScroll)
 	},
 
 	beforeDestroy() {
@@ -189,13 +165,6 @@ export default {
 		...mapActions({
 			setFilter: 'polls/setFilter',
 		}),
-		handleScroll() {
-			if (window.scrollY > 20) {
-				document.body.classList.add('page--scrolled')
-			} else {
-				document.body.classList.remove('page--scrolled')
-			}
-		},
 
 		transitionsOn() {
 			this.transitionClass = 'transitions-active'

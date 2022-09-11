@@ -22,7 +22,6 @@
 
 <template>
 	<NcAppSidebar ref="sideBar"
-		:active="active"
 		:title="t('polls', 'Select polls to combine')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab :id="'polls'"
@@ -52,18 +51,12 @@ export default {
 		PollsAppIcon,
 	},
 
-	props: {
-		active: {
-			type: String,
-			default: t('polls', 'Polls').toLowerCase(),
-		},
-	},
-
 	computed: {
 		...mapGetters({
 			polls: 'polls/datePolls',
 		}),
 	},
+
 	methods: {
 		closeSideBar() {
 			emit('polls:sidebar:toggle', { open: false })

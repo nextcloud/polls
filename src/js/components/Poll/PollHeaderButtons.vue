@@ -42,7 +42,6 @@
 <script>
 import { mapState } from 'vuex'
 import { NcButton, NcPopover } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
 import ActionToggleSidebar from '../Actions/ActionToggleSidebar.vue'
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
@@ -69,10 +68,6 @@ export default {
 		showUserMenu() {
 			return this.$route.name !== 'publicVote' || this.allowVote
 		},
-	},
-
-	created() {
-		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 	},
 
 	beforeDestroy() {

@@ -122,7 +122,6 @@
 <script>
 import { mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import { sortBy } from 'lodash'
 import HeaderBar from '../components/Base/HeaderBar.vue'
@@ -238,10 +237,6 @@ export default {
 
 		refreshView() {
 			window.document.title = `${t('polls', 'Polls')} - ${this.title}`
-			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
-				emit('polls:sidebar:toggle', { open: false })
-			}
-
 		},
 
 		setSort(payload) {
