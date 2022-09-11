@@ -3,8 +3,8 @@ name: Publish pre-release
 on: 
   push:
     tags:
-      v*-beta*
-      v*-RC*
+      - v*-beta*
+      - v*-rc*
 
 jobs:
   checkout:
