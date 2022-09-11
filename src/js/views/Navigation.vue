@@ -65,7 +65,7 @@
 					<AdministrationIcon :size="iconSize" />
 				</template>
 			</NcAppNavigationItem>
-			<NcAppNavigationItem :title="t('polls', 'Personal settings')"
+			<NcAppNavigationItem :title="t('polls', 'Polls settings')"
 				@click="showSettings()">
 				<template #icon>
 					<SettingsIcon :size="iconSize" />
