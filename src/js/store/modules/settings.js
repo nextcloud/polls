@@ -180,7 +180,8 @@ const getters = {
 				return 'var(--color-primary-light)'
 			}
 		}
-		return 'var(--color-main-background)'
+		// return 'var(--color-main-background)'
+		return ''
 	},
 
 	viewTextPoll(state) {

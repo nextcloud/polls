@@ -257,7 +257,6 @@ export default {
 	flex-direction: column;
 	padding: 0px 8px;
 	row-gap: 8px;
-	background-color: transparent !important;
 }
 
 // global areas settings
@@ -273,7 +272,7 @@ export default {
 [class*=' area__header'],
 [class^='area__header'] {
 	position: sticky;
-	top: 50px;
+	top: 0;
 	background-color: var(--color-main-background);
 	border-bottom: 1px solid var(--color-border);
 	z-index: 9;
