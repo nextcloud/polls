@@ -1,9 +1,10 @@
-name: Publish beta release
+name: Publish pre-release
 
 on: 
   push:
     tags:
       v*-beta*
+      v*-RC*
 
 jobs:
   checkout:
@@ -44,7 +45,7 @@ jobs:
         zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip *
         popd
 
-    - name: Publish beta release
+    - name: Publish pre-release
       if: success()
       uses: softprops/action-gh-release@v1
       with: 
