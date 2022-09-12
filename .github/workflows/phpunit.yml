@@ -38,7 +38,6 @@ jobs:
         with:
           server-version: ${{ matrix.server-versions }}
           php-version: ${{ matrix.php-versions }}
-          php-tools: phpunit
           server-path: ${{ env.SERVER_PATH }}
           db-engine: sqlite
           db-port: ${{ env.DB_PORT}}
@@ -48,11 +47,11 @@ jobs:
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.xml
+        run: ./vendor/phpunit/phpunit/phpunit -c tests/phpunit.xml
 
       - name: PHPUnit integration
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.integration.xml
+        run: ./vendor/phpunit/phpunit/phpunit -c tests/phpunit.integration.xml
 
   mysql:
     runs-on: ubuntu-latest
@@ -91,11 +90,11 @@ jobs:
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.xml
+        run: ./vendor/phpunit/phpunit/phpunit -c tests/phpunit.xml
 
       - name: PHPUnit integration
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.integration.xml
+        run: ./vendor/phpunit/phpunit/phpunit -c tests/phpunit.integration.xml
 
   pgsql:
     runs-on: ubuntu-latest
@@ -137,8 +136,8 @@ jobs:
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.xml
+        run: ./vendor/phpunit/phpunit/phpunit -c tests/phpunit.xml
 
       - name: PHPUnit integration
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.integration.xml
+        run: ./vendor/phpunit/phpunit/phpunit -c tests/phpunit.integration.xml
