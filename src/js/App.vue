@@ -26,7 +26,7 @@
 		:class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
-		<router-view v-show="sideBar.open" name="sidebar" :active="sidebar.activeTab" />
+		<router-view v-show="sideBar.open" name="sidebar" :active="sideBar.activeTab" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
