@@ -25,12 +25,10 @@
 	},
 	"require-dev": {
 		"christophwurst/nextcloud": "^24.0",
-		"phpunit/phpunit": "^9.5",
 		"friendsofphp/php-cs-fixer": "^3.2",
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
 		"nextcloud/coding-standard": "^1.0",
-		"vimeo/psalm": "^4.3",
 		"doctrine/dbal": "^3.1"
 	},
 	"scripts": {
