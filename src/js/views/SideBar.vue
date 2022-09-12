@@ -21,8 +21,7 @@
   -->
 
 <template>
-	<NcAppSidebar ref="sideBar"
-		:active="active"
+	<NcAppSidebar :active="active"
 		:title="t('polls', 'Details')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab v-if="acl.allowEdit"

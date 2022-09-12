@@ -21,8 +21,7 @@
   -->
 
 <template>
-	<NcAppSidebar ref="sideBar"
-		:title="t('polls', 'Select polls to combine')"
+	<NcAppSidebar :title="t('polls', 'Select polls to combine')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab :id="'polls'"
 			:order="1"
