@@ -25,8 +25,6 @@ namespace OCA\Polls\Command\Db;
 
 use OC\DB\Connection;
 use OC\DB\SchemaWrapper;
-use OCP\IDBConnection;
-use Doctrine\DBAL\Types\Type;
 use OCA\Polls\Migration\TableSchema;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -161,7 +159,7 @@ class Rebuild extends Command {
 					$column->setOptions($columnDefinition['options']);
 					if ($column->getType()->getName() !== $columnDefinition['type']) {
 						$output->writeln('<info>   Migrated type of ' . $tableName . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'] . '</info>');
-						$column->setType(Type::getType($columnDefinition['type']));
+						$column->setType($columnDefinition['type']);
 					}
 
 					// force change to current options definition
