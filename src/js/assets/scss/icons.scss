@@ -1,6 +1,4 @@
 :root {
-	--polls-vote-rows: 1;
-	--polls-vote-columns: 1;
 	--icon-circles: url('../icons/circles.svg');
 	--icon-circles--fff: url('../icons/circles-fff.svg');
 	--icon-polls-maybe: url('../icons/maybe-vote.svg');
@@ -19,7 +17,3 @@
 .icon-polls-maybe { background-image: var(--icon-polls-maybe); }
 .icon-polls-no { background-image: var(--icon-polls-no); }
 .icon-polls-yes { background-image: var(--icon-polls-yes); }
-
-.theme--dark {
-	.icon-circles { background-image: var(--icon-circles--fff); }
-}

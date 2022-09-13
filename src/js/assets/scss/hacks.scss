@@ -13,10 +13,6 @@
 .action-item.action-item--single.app-navigation-toggle.undefined.has-tooltip {
 	top: 4px;
 	margin-right: -50px;
-	[class*='dashboard--'] & {
-		top: 12px;
-		margin-right: -58px;
-	}
 }
 
 .mx-input-wrapper .button-vue--vue-primary .material-design-icon__svg {

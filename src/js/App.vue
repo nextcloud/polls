@@ -21,9 +21,7 @@
   -->
 
 <template>
-	<NcContent app-name="polls"
-		:style="{background: appBackground}"
-		:class="appClass">
+	<NcContent app-name="polls" :class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
 		<router-view v-show="sideBar.open" name="sidebar" :active="sideBar.activeTab" />
@@ -37,7 +35,7 @@ import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
@@ -45,7 +43,6 @@ import './assets/scss/icons.scss'
 import './assets/scss/icons-md.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
-import './assets/scss/theming.scss'
 import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls.js'
 
@@ -76,47 +73,18 @@ export default {
 			appSettings: (state) => state.appSettings,
 			poll: (state) => state.poll,
 			allowEdit: (state) => state.poll.acl.allowEdit,
-			dashboard: (state) => state.settings.dashboard,
-		}),
-
-		...mapGetters({
-			themeClass: 'settings/themeClass',
-			backgroundClass: 'settings/backgroundClass',
-			useDashboardStyling: 'settings/useDashboardStyling',
-			useIndividualStyling: 'settings/useIndividualStyling',
-			useTranslucentPanels: 'settings/useTranslucentPanels',
-			appBackground: 'settings/appBackground',
 		}),
 
 		appClass() {
 			return [
 				this.transitionClass, {
 					edit: this.allowEdit,
-					translucent: this.useTranslucentPanels,
 				},
 			]
 		},
 	},
 
 	watch: {
-		themeClass(newValue, oldValue) {
-			if (oldValue) {
-				document.body.classList.remove(oldValue)
-			}
-			if (newValue) {
-				document.body.classList.add(newValue)
-			}
-		},
-
-		backgroundClass(newValue, oldValue) {
-			if (oldValue) {
-				document.body.classList.remove(oldValue)
-			}
-			if (newValue) {
-				document.body.classList.add(newValue)
-			}
-		},
-
 		$route(to, from) {
 			if (this.$route.name === 'list') {
 				this.setFilter(this.$route.params.type)
@@ -250,13 +218,6 @@ export default {
 	padding-right: 8px;
 	padding-left: 56px;
 }
-
-// [class*=' area__header_vote'],
-// [class^='area__header_vote'] {
-//   background-color: transparent;
-//   border: none;
-//   box-shadow: none !important;
-// }
 
 // global modal settings
 .modal__content {

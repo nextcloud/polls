@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcAppContent :class="[{ closed: closed, 'page--scrolled': scrolled }, poll.type]">
+	<NcAppContent :class="[{ closed: closed, scrolled: scrolled }, poll.type]">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ poll.title }}
@@ -205,6 +205,14 @@ export default {
 .area__main {
 	display: flex;
 	flex-direction: column;
+}
+
+.app-content .area__header {
+	transition: all var(--animation-slow) linear;
+}
+
+.app-content.scrolled .area__header {
+	box-shadow: 6px 6px 6px var(--color-box-shadow);
 }
 
 .area__proposal .mx-input-wrapper > button {
