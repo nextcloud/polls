@@ -242,7 +242,6 @@ OC.L10N.register(
     "Error archiving/restoring poll." : "Klaida archyvuojant/atkuriant apklausą.",
     "Error overtaking poll." : "Klaida perimant apklausą.",
     "Add new Poll" : "Pridėti naują apklausą",
-    "Personal settings" : "Asmeniniai nustatymai",
     "Error loading poll list" : "Klaida įkeliant apklausų sąrašą",
     "Error cloning poll." : "Klaida dubliuojant apklausą.",
     "404 - poll not found" : "404 - apklausa nerasta",

@@ -476,7 +476,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Συνδυάστε πολλαπλές δημοσκοπήσεις ημερομηνίας σε μια ενιαία προβολή",
     "Add new Poll" : "Προσθήκη νέας δημοσκόπησης",
     "Combine polls" : "Συνδυάστε δημοσκοπήσεις",
-    "Personal settings" : "Προσωπικές ρυθμίσεις",
     "Error loading poll list" : "Σφάλμα φόρτωσης λίστας δημοσκοπήσεων",
     "Error cloning poll." : "Σφάλμα κλωνοποίησης δημοσκόπησης.",
     "404 - poll not found" : "404 - η δημοσκόπηση δεν βρέθηκε",

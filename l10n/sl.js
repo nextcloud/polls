@@ -372,7 +372,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Združi več datumskih anket v en pogled",
     "Add new Poll" : "Dodaj anketo",
     "Combine polls" : "Združi ankete",
-    "Personal settings" : "Osebne nastavitve",
     "Error loading poll list" : "Prišlo je do napake nalaganja seznama anket",
     "Error cloning poll." : "Napaka kloniranja ankete.",
     "404 - poll not found" : "napaka 404 – ankete ni mogoče najti",

@@ -501,7 +501,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combine várias pesquisas de data em uma única visualização",
     "Add new Poll" : "Adicionar nova Enquete",
     "Combine polls" : "Reunir enquetes",
-    "Personal settings" : "Configurações pessoais",
     "Error loading poll list" : "Erro ao carregar a lista de enquetes",
     "Error cloning poll." : "Erro ao clonar enquete.",
     "404 - poll not found" : "404 - enquete não encontrada",

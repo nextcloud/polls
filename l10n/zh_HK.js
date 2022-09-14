@@ -506,7 +506,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "在一個檢視中組合多個日期投票",
     "Add new Poll" : "新增投票",
     "Combine polls" : "聯合民意調查",
-    "Personal settings" : "個人設定",
     "Error loading poll list" : "載入投票列表時發生錯誤",
     "Error cloning poll." : "複製投票時發生錯誤。",
     "404 - poll not found" : "404 - 找不到投票",

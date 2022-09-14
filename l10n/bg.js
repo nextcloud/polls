@@ -506,7 +506,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Комбинирайте няколко анкети за дати в един изглед",
     "Add new Poll" : "Добавяне на нова анкета",
     "Combine polls" : "Комбиниране на анкети",
-    "Personal settings" : "Лични настройки",
     "Error loading poll list" : "Грешка при зареждането на списъка с анкети",
     "Error cloning poll." : "Грешка при клониране на анкета.",
     "404 - poll not found" : "404 - анкетата не е намерена",

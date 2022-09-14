@@ -484,7 +484,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combiner plusieurs sondages de date en une vue unique",
     "Add new Poll" : "Ajouter un nouveau sondage",
     "Combine polls" : "Combiner les sondages",
-    "Personal settings" : "Paramètres personnels",
     "Error loading poll list" : "Erreur lors du chargement de la liste des sondages",
     "Error cloning poll." : "Erreur de duplication du sondage.",
     "404 - poll not found" : "404 - sondage introuvable",

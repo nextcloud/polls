@@ -501,7 +501,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Batu data-galdeketa anitz ikuspegi bakarrean",
     "Add new Poll" : "Gehitu bozketa berria",
     "Combine polls" : "Batu galdeketak",
-    "Personal settings" : "Ezarpen pertsonalak",
     "Error loading poll list" : "Errorea bozketa zerrenda kargatzean",
     "Error cloning poll." : "Errorea bozketa klonatzean.",
     "404 - poll not found" : "404 - ez da bozketa aurkitu",
