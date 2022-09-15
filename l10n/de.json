@@ -182,7 +182,7 @@
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Lösche in {countdown} Sekunde","Lösche in {countdown} Sekunden"],
     "Send confirmation emails" : "Sende Bestätigungs-E-Mails",
     "Sent emails to:" : "Sende E-Mails an:",
-    "Emails could not be sent:" : "E-Mails konnten nicht versandt werden:",
+    "Emails could not be sent:" : "E-Mails konnten nicht gesendet werden:",
     "Send information about confirmed options by email" : "Informationen über bestätigte Optionen per E-Mail senden",
     "Inform your participants about the confirmed options" : "Informiere deine Teilnehmer über die bestätigten Optionen",
     "Confirmations processed" : "Bestätigungen verarbeitet",

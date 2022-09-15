@@ -506,6 +506,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Połącz wiele sond dat w jednym widoku",
     "Add new Poll" : "Dodaj nową sondę",
     "Combine polls" : "Połącz sondy",
+    "Polls settings" : "Ustawienia Sondy",
     "Error loading poll list" : "Błąd ładowania listy sondy",
     "Error cloning poll." : "Błąd podczas klonowania sondy.",
     "404 - poll not found" : "404 - nie znaleziono sondy",
