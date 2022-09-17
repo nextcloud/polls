@@ -25,6 +25,7 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapState } from 'vuex'
+import { InvalidJSON } from '../Exceptions/Exceptions.js'
 
 const defaultSleepTimeout = 30
 
@@ -53,53 +54,47 @@ export const watchPolls = {
 
 	methods: {
 		async watchPolls() {
+			// quit if polling for updates is disabled
+			if (this.updateType === 'noPolling') {
+				return
+			}
+
 			if (this.cancelToken) {
 				// there is already a cancelToken, so just cancel the previous session and exit
 				this.cancelWatch()
 				return
 			}
 
-			if (this.updateType === 'noPolling') {
-				console.debug('[polls]', 'Polling for updates is disabled')
-				return
-			}
-
-			console.debug('[polls]', 'Watch for updates')
 			this.cancelToken = axios.CancelToken.source()
 
 			while (this.retryCounter < this.maxTries) {
 				// reset sleep timer to default
 				this.sleepTimeout = defaultSleepTimeout
+				this.gotValidResponse = false
 				await this.$store.dispatch('appSettings/get')
 
+				if (this.updateType === 'noPolling') {
+					console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
+					this.cancelWatch()
+					return
+				}
+
 				try {
-					const response = await this.fetchUpdates()
-
-					// check, if we got a valid json response
-					if (response.headers['content-type'].includes('application/json')) {
-						this.gotValidResponse = true
-						console.debug('[polls]', `Update detected (${this.updateType})`, response.data.updates)
-						this.loadTables(response.data.updates)
-						this.retryCounter = 0 // reset retryCounter after we got a valid response
-					} else {
-						console.debug('[polls]', `No JSON response recieved, got "${response.headers['content-type']}"`)
-						this.gotValidResponse = false
+					// Avoid requests, if the tab/window is not visible
+					if (!document.hidden) {
+						console.debug('[polls]', 'Watch for updates')
+						await this.handleResponse(await this.fetchUpdates())
 					}
-
 				} catch (e) {
 					if (axios.isCancel(e)) {
 						this.handleCanceledRequest()
-					} else if (e.response?.status === 304) {
-						this.handleNotModifiedResponse()
 					} else {
-						this.gotValidResponse = false
-						await this.handleConnectionError(e)
+						this.handleConnectionError(e)
 					}
 				}
 
-				if (this.updateType === 'periodicPolling' || !this.gotValidResponse) {
-					console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds`)
-					await this.sleep(this.sleepTimeout)
+				if (this.updateType !== 'longPolling' || !this.gotValidResponse || document.hidden) {
+					await this.sleep()
 				}
 			}
 
@@ -115,8 +110,17 @@ export const watchPolls = {
 			this.cancelToken.cancel()
 		},
 
-		sleep(timeout) {
-			return new Promise((resolve) => setTimeout(resolve, timeout * 1000))
+		sleep() {
+			let reason = `Connection error, Attempt: ${this.retryCounter}/${this.maxTries})`
+
+			if (this.gotValidResponse) {
+				reason = this.updateType
+			} else if (document.hidden) {
+				reason = 'app is in background'
+			}
+
+			console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds (reason: ${reason})`)
+			return new Promise((resolve) => setTimeout(resolve, this.sleepTimeout * 1000))
 		},
 
 		async fetchUpdates() {
@@ -125,6 +129,7 @@ export const watchPolls = {
 			} else {
 				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
 			}
+
 			return await axios.get(generateUrl(this.endPoint), {
 				params: { offset: this.lastUpdated },
 				cancelToken: this.cancelToken.token,
@@ -132,28 +137,47 @@ export const watchPolls = {
 			})
 		},
 
+		handleResponse(response) {
+			if (response.headers['content-type'].includes('application/json')) {
+				this.gotValidResponse = true
+				console.debug('[polls]', `Update detected (${this.updateType})`, response.data.updates)
+				this.loadTables(response.data.updates)
+				this.retryCounter = 0 // reset retryCounter after we got a valid response
+				return
+			}
+
+			// console.debug('[polls]', `No JSON response recieved, got "${response.headers['content-type']}"`)
+			this.gotValidResponse = false
+			throw new InvalidJSON(`No JSON response recieved, got "${response.headers['content-type']}"`)
+		},
+
 		handleCanceledRequest() {
 			console.debug('[polls]', 'Fetch canceled')
 			this.cancelToken = axios.CancelToken.source()
 		},
 
-		handleNotModifiedResponse() {
-			console.debug('[polls]', `No updates (using ${this.updateType})`)
-			this.retryCounter = 0 // reset retryCounter, after we get a 304
-		},
-
 		async handleConnectionError(e) {
+			if (e.response?.status === 304) {
+				console.debug('[polls]', `No updates (using ${this.updateType})`)
+				this.gotValidResponse = true
+				this.retryCounter = 0 // reset retryCounter, after we get a 304
+				return
+			}
+
 			this.retryCounter += 1
 
 			if (e?.response?.status === 503) {
 				// Server possibly in maintenance mode
 				this.sleepTimeout = e.response.headers['retry-after'] ?? this.sleepTimeout
 				console.debug('[polls]', `Service not avaiable - retry after ${this.sleepTimeout} seconds`)
-			} else if (e.response) {
-				console.error('[polls]', 'Unhandled error while watching polls updates', e)
-			} else {
-				console.debug('[polls]', e.message ?? `No response - request aborted - failed request ${this.retryCounter}/${this.maxTries}`)
+				return
 			}
+			if (e.response) {
+				console.error('[polls]', e)
+				return
+			}
+
+			console.debug('[polls]', e.message ?? `No response - request aborted - failed request ${this.retryCounter}/${this.maxTries}`)
 		},
 
 		async loadTables(tables) {
