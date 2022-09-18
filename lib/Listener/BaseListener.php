@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Listener;
 
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use OCA\Polls\Event\BaseEvent;
 use OCA\Polls\Exceptions\InvalidClassException;
 use OCA\Polls\Exceptions\OCPEventException;
@@ -95,13 +94,6 @@ abstract class BaseListener implements IEventListener {
 			return;
 		} catch (OCPEventException $e) {
 			// Event is no polls internal event, continue with general jobs
-		} catch (UniqueConstraintViolationException $e) {
-			// Avoid spamming
-			// TODO: report some important events anyways
-			// deprecated NC22
-			// if ($this->appSettings->getUseActivity()) {
-			// 	$this->addActivity();
-			// }
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				// Avoid spamming
@@ -135,7 +127,6 @@ abstract class BaseListener implements IEventListener {
 
 	/**
 	 * Default logging for email notifications.
-	 * @throws UniqueConstraintViolationException
 	 * @throws Exception
 	 */
 	protected function addLog() : void {

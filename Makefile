@@ -88,6 +88,10 @@ ifeq (,$(composer))
 	php $(build_tools_dir)/composer.phar update --prefer-dist
 endif
 
+#install additional dev tools
+tools: composer
+	composer global require phpunit/phpunit vimeo/psalm friendsofphp/php-cs-fixer
+
 # Builds the source package for the appstore
 # signs, if certificate is present
 package: clean
@@ -116,5 +120,5 @@ package: clean
 
 .PHONY: test
 test: composer setup-dev-composer
-	$(CURDIR)/vendor/phpunit/phpunit/phpunit --coverage-clover clover.xml -c tests/phpunit.xml
-	$(CURDIR)/vendor/phpunit/phpunit/phpunit -c phpunit.integration.xml
+	phpunit --coverage-clover clover.xml -c tests/phpunit.xml
+	phpunit -c phpunit.integration.xml
