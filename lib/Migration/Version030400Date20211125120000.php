@@ -30,8 +30,6 @@ use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
 use OCA\Polls\Db\Poll;
 
-// use Doctrine\DBAL\Types\Type;
-
 /**
  * Installation class for the polls app.
  * Initial db creation

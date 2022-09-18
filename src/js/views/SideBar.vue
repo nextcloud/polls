@@ -54,7 +54,7 @@
 			<SideBarTabShare />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="acl.loggedIn && useCollaboration"
+		<AppSidebarTab v-if="projectsEnabled && acl.loggedIn && useCollaboration"
 			:id="'collaboration'"
 			:order="4"
 			:name="t('polls', 'Collaboration')">
@@ -90,6 +90,7 @@
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
+import { loadState } from '@nextcloud/initial-state'
 import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
@@ -122,6 +123,12 @@ export default {
 			type: String,
 			default: t('polls', 'Comments').toLowerCase(),
 		},
+	},
+
+	data() {
+		return {
+			projectsEnabled: loadState('core', 'projects_enabled', false),
+		}
 	},
 
 	computed: {

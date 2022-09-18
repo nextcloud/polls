@@ -24,7 +24,6 @@
 
 namespace OCA\Polls\Db;
 
-use Doctrine\DBAL\Exception\DatabaseObjectNotFoundException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -89,9 +88,6 @@ class PreferencesMapper extends QBMapper {
 					$userskeep[] = $row['user_id'];
 				}
 			}
-		} catch (DatabaseObjectNotFoundException $e) {
-			// deprecated NC22
-			// ignore silently
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_DATABASE_OBJECT_NOT_FOUND) {
 				// ignore silently

@@ -27,7 +27,6 @@ use OCP\IDBConnection;
 use OCP\DB\Types;
 use OCP\DB\ISchemaWrapper;
 use OCP\Migration\IOutput;
-use Doctrine\DBAL\Types\Type;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Option;
@@ -255,7 +254,7 @@ abstract class TableSchema {
 					$column->setOptions($columnDefinition['options']);
 					if ($column->getType()->getName() !== $columnDefinition['type']) {
 						$output->info('Migrating type of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['type']);
-						$column->setType(Type::getType($columnDefinition['type']));
+						$column->setType($columnDefinition['type']);
 					}
 
 					// force change to current options definition
