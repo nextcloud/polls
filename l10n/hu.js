@@ -506,7 +506,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Több dátumszavazás összevonása egyetlen nézetbe",
     "Add new Poll" : "Új szavazás hozzáadása",
     "Combine polls" : "Szavazások összevonása",
-    "Personal settings" : "Személyes beállítások",
     "Error loading poll list" : "Hiba a szavazások betöltése során",
     "Error cloning poll." : "Hiba a szavazás klónozása során.",
     "404 - poll not found" : "404 – a szavazás nem található",

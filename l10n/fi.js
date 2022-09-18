@@ -293,7 +293,6 @@ OC.L10N.register(
     "Administration" : "Ylläpito",
     "No polls selected" : "Kyselyitä ei ole valittu",
     "Add new Poll" : "Lisää uusi kysely",
-    "Personal settings" : "Henkilökohtaiset asetukset",
     "Error loading poll list" : "Virhe ladatessa kyselylistaa",
     "Error cloning poll." : "Virhe kyselyä kloonatessa.",
     "404 - poll not found" : "404 - äänestystä ei löytynyt",

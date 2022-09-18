@@ -506,7 +506,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Kombinieren Sie mehrere Datumsumfragen in einer einzigen Ansicht",
     "Add new Poll" : "Neue Umfrage hinzufügen",
     "Combine polls" : "Umfragen kombinieren",
-    "Personal settings" : "Persönliche Einstellungen",
+    "Polls settings" : "Umfragen-Einstellungen",
     "Error loading poll list" : "Fehler beim Laden der Umfrageliste",
     "Error cloning poll." : "Fehler beim Klonen der Umfrage.",
     "404 - poll not found" : "404 - Umfrage nicht gefunden",

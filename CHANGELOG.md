@@ -1,14 +1,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.8.0] - tbd
+## [4.0.0] - tbd
 ### New
 - Support Nextcloud version 25
-- Minimum Nextcloud version 22
+### Misc
+- Experimental designs have been removed
+
+## [3.8.0] - 2022-09-18
+### New
+- Support Nextcloud version 22 - 24
 - Convert links in comments to clickable links
-- Add an option for public users to logout from a poll, when logged in via cookie
+- Allow public users to logout from a poll, when logged in via cookie
+- Allow public users to change their name after registration to a public poll
 - Allow bulk poll ownership transfer for admins
-- Allow users to change their name after registration to a public poll
 - Added option to send mails about confirmed options
 
 ### Fix

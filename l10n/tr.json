@@ -504,7 +504,7 @@
     "Combine multiple date polls in a single view" : "Farklı tarihlerdeki anketleri tek görünümde birleştirin",
     "Add new Poll" : "Anket ekle",
     "Combine polls" : "Anketleri birleştir",
-    "Personal settings" : "Kişisel ayarlar",
+    "Polls settings" : "Anketler ayarları",
     "Error loading poll list" : "Anket listesi yüklenirken sorun çıktı",
     "Error cloning poll." : "Anket kopyalanırken sorun çıktı.",
     "404 - poll not found" : "404 - anket bulunamadı",

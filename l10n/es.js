@@ -492,7 +492,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combinar varias votaciones de fecha en una misma vista",
     "Add new Poll" : "Añadir nueva Votación",
     "Combine polls" : "Combinar votaciones",
-    "Personal settings" : "Ajustes personales",
     "Error loading poll list" : "Error al cargar la lista de votaciones",
     "Error cloning poll." : "Error al clonar votación.",
     "404 - poll not found" : "404 - votación no encontrada",
