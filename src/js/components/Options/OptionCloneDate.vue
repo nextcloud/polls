@@ -26,7 +26,7 @@
 		<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: dateBaseOptionString }) }}</p>
 
 		<h3> {{ t('polls', 'Step unit') }} </h3>
-		<Multiselect v-model="sequence.unit"
+		<NcMultiselect v-model="sequence.unit"
 			:options="dateUnits"
 			label="name"
 			track-by="value" />
@@ -46,13 +46,13 @@
 		</div>
 
 		<div class="modal__buttons">
-			<VueButton @click="$emit('close')">
+			<NcButton @click="$emit('close')">
 				{{ t('polls', 'Cancel') }}
-			</VueButton>
+			</NcButton>
 
-			<VueButton type="primary" @click="createSequence()">
+			<NcButton type="primary" @click="createSequence()">
 				{{ t('polls', 'OK') }}
-			</VueButton>
+			</NcButton>
 		</div>
 	</div>
 </template>
@@ -60,7 +60,7 @@
 <script>
 
 import moment from '@nextcloud/moment'
-import { Button as VueButton, Multiselect } from '@nextcloud/vue'
+import { NcButton, NcMultiselect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import InputDiv from '../Base/InputDiv.vue'
 
@@ -69,8 +69,8 @@ export default {
 
 	components: {
 		InputDiv,
-		Multiselect,
-		VueButton,
+		NcMultiselect,
+		NcButton,
 	},
 
 	mixins: [dateUnits],

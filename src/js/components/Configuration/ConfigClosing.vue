@@ -22,24 +22,24 @@
 
 <template>
 	<div>
-		<VueButton @click="toggleClosed()">
+		<NcButton @click="toggleClosed()">
 			<template #icon>
 				<OpenPollIcon v-if="closed" />
 				<ClosePollIcon v-else />
 			</template>
 			{{ closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll') }}
-		</VueButton>
-		<CheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">
+		</NcButton>
+		<NcCheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">
 			{{ t('polls', 'Poll closing date') }}
-		</CheckboxRadioSwitch>
-		<DatetimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
+		</NcCheckboxRadioSwitch>
+		<NcDatetimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { Button as VueButton, DatetimePicker, CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcButton, NcDatetimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
 
@@ -49,9 +49,9 @@ export default {
 	components: {
 		OpenPollIcon,
 		ClosePollIcon,
-		CheckboxRadioSwitch,
-		DatetimePicker,
-		VueButton,
+		NcCheckboxRadioSwitch,
+		NcDatetimePicker,
+		NcButton,
 	},
 
 	data() {

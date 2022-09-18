@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent :class="[{ closed: closed }, poll.type]">
+	<NcAppContent :class="[{ closed: closed, scrolled: scrolled }, poll.type]">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ poll.title }}
@@ -47,7 +47,7 @@
 			<div class="area__main" :class="viewMode">
 				<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-				<EmptyContent v-if="!options.length">
+				<NcEmptyContent v-if="!options.length">
 					<template #icon>
 						<TextPollIcon v-if="poll.type === 'textPoll'" />
 						<DatePollIcon v-else />
@@ -61,7 +61,7 @@
 							{{ t('polls', 'Maybe the owner did not provide some until now.') }}
 						</div>
 					</template>
-				</EmptyContent>
+				</NcEmptyContent>
 			</div>
 
 			<div v-if="countHiddenParticipants" class="area__footer">
@@ -80,12 +80,12 @@
 
 		<PublicRegisterModal v-if="showRegisterModal" />
 		<LoadingOverlay v-if="isLoading" />
-	</AppContent>
+	</NcAppContent>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { AppContent, EmptyContent } from '@nextcloud/vue'
+import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -99,8 +99,8 @@ export default {
 	name: 'Vote',
 	components: {
 		ActionSendConfirmedOptions,
-		AppContent,
-		EmptyContent,
+		NcAppContent,
+		NcEmptyContent,
 		HeaderBar,
 		MarkUpDescription,
 		PollHeaderButtons,
@@ -116,6 +116,8 @@ export default {
 	data() {
 		return {
 			isLoading: false,
+			scrolled: false,
+			scrollElement: null,
 		}
 	},
 
@@ -157,16 +159,25 @@ export default {
 
 	},
 
-	created() {
-
-		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
+	mounted() {
+		this.scrollElement = document.getElementById('app-content-vue')
+		this.scrollElement.addEventListener('scroll', this.handleScroll)
 	},
 
 	beforeDestroy() {
+		this.scrollElement.removeEventListener('scroll', this.handleScroll)
 		this.$store.dispatch({ type: 'poll/reset' })
 	},
 
 	methods: {
+		handleScroll() {
+			if (this.scrollElement.scrollTop > 20) {
+				this.scrolled = true
+			} else {
+				this.scrolled = false
+			}
+		},
+
 		openOptions() {
 			emit('polls:sidebar:toggle', { open: true, activeTab: 'options' })
 		},
@@ -194,6 +205,14 @@ export default {
 .area__main {
 	display: flex;
 	flex-direction: column;
+}
+
+.app-content .area__header {
+	transition: all var(--animation-slow) linear;
+}
+
+.app-content.scrolled .area__header {
+	box-shadow: 6px 6px 6px var(--color-box-shadow);
 }
 
 .area__proposal .mx-input-wrapper > button {

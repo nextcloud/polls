@@ -21,15 +21,15 @@
   -->
 
 <template lang="html">
-	<AppNavigation>
-		<AppNavigationNew v-if="isPollCreationAllowed"
+	<NcAppNavigation>
+		<NcAppNavigationNew v-if="isPollCreationAllowed"
 			button-class="icon-add"
 			:text="t('polls', 'Add new Poll')"
 			@click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @close-create="closeCreate()" />
 
 		<template #list>
-			<AppNavigationItem v-for="(pollCategory) in pollCategories"
+			<NcAppNavigationItem v-for="(pollCategory) in pollCategories"
 				:key="pollCategory.id"
 				:title="pollCategory.title"
 				:allow-collapse="true"
@@ -47,37 +47,37 @@
 						@clone-poll="clonePoll(poll.id)"
 						@delete-poll="deletePoll(poll.id)" />
 				</ul>
-			</AppNavigationItem>
+			</NcAppNavigationItem>
 		</template>
 
 		<template #footer>
-			<AppNavigationItem v-if="isComboActivated"
+			<NcAppNavigationItem v-if="isComboActivated"
 				:title="t('polls', 'Combine polls')"
 				:to="{ name: 'combo' }">
 				<template #icon>
 					<ComboIcon :size="iconSize" />
 				</template>
-			</AppNavigationItem>
-			<AppNavigationItem v-if="showAdminSection"
+			</NcAppNavigationItem>
+			<NcAppNavigationItem v-if="showAdminSection"
 				:title="t('polls', 'Administration')"
 				:to="{ name: 'administration' }">
 				<template #icon>
 					<AdministrationIcon :size="iconSize" />
 				</template>
-			</AppNavigationItem>
-			<AppNavigationItem :title="t('polls', 'Polls settings')"
+			</NcAppNavigationItem>
+			<NcAppNavigationItem :title="t('polls', 'Polls settings')"
 				@click="showSettings()">
 				<template #icon>
 					<SettingsIcon :size="iconSize" />
 				</template>
-			</AppNavigationItem>
+			</NcAppNavigationItem>
 		</template>
-	</AppNavigation>
+	</NcAppNavigation>
 </template>
 
 <script>
 
-import { AppNavigation, AppNavigationNew, AppNavigationItem } from '@nextcloud/vue'
+import { NcAppNavigation, NcAppNavigationNew, NcAppNavigationItem } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
@@ -99,9 +99,9 @@ import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 export default {
 	name: 'Navigation',
 	components: {
-		AppNavigation,
-		AppNavigationNew,
-		AppNavigationItem,
+		NcAppNavigation,
+		NcAppNavigationNew,
+		NcAppNavigationItem,
 		CreateDlg,
 		PollNavigationItems,
 		ComboIcon,

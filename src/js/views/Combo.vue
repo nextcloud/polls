@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent>
+	<NcAppContent>
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ title }}
@@ -37,7 +37,7 @@
 		<div class="area__main">
 			<ComboTable v-show="polls.length" />
 
-			<EmptyContent v-if="!polls.length">
+			<NcEmptyContent v-if="!polls.length">
 				<template #icon>
 					<PollsAppIcon />
 				</template>
@@ -45,17 +45,16 @@
 					{{ t('polls', 'Select polls by clicking on them in the right sidebar!') }}
 				</template>
 				{{ t('polls', 'No polls selected') }}
-			</EmptyContent>
+			</NcEmptyContent>
 		</div>
 
 		<LoadingOverlay v-if="isLoading" />
-	</AppContent>
+	</NcAppContent>
 </template>
 
 <script>
 import { mapActions, mapGetters, mapState } from 'vuex'
-import { AppContent, EmptyContent } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
+import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import ComboTable from '../components/Combo/ComboTable.vue'
 import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar.vue'
 import HeaderBar from '../components/Base/HeaderBar.vue'
@@ -66,9 +65,9 @@ export default {
 
 	components: {
 		ActionToggleSidebar,
-		AppContent,
+		NcAppContent,
 		ComboTable,
-		EmptyContent,
+		NcEmptyContent,
 		HeaderBar,
 		PollsAppIcon,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
@@ -107,7 +106,6 @@ export default {
 	},
 
 	created() {
-		emit('polls:sidebar:toggle', { open: (window.innerWidth > 920) })
 		this.verifyPolls()
 	},
 

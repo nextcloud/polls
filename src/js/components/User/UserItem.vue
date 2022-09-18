@@ -22,7 +22,7 @@
 
 <template>
 	<div :class="['user-item', type, { disabled, condensed: condensed }]">
-		<Avatar :disable-menu="disableMenu"
+		<NcAvatar :disable-menu="disableMenu"
 			:disable-tooltip="disableTooltip"
 			class="user-item__avatar"
 			:is-guest="isGuestComputed"
@@ -56,13 +56,13 @@
 
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
-import { Avatar } from '@nextcloud/vue'
+import { NcAvatar } from '@nextcloud/vue'
 
 export default {
 	name: 'UserItem',
 
 	components: {
-		Avatar,
+		NcAvatar,
 		AdminIcon: () => import('../AppIcons/ShieldCrownOutline.vue'),
 	},
 

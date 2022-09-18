@@ -22,35 +22,35 @@
 
 <template>
 	<div class="polls_user_settings">
-		<SettingsSection :title="t('polls', 'Calendar check')"
+		<NcSettingsSection :title="t('polls', 'Calendar check')"
 			:description="t('polls', 'Search for conflicting calendar entries')">
 			<CalendarSettings />
-		</SettingsSection>
-		<SettingsSection :title="t('polls', 'Polls user settings')"
+		</NcSettingsSection>
+		<NcSettingsSection :title="t('polls', 'Polls user settings')"
 			:description="t('polls', 'Set your personal preferences for the polls app')">
 			<FeatureSettings />
-		</SettingsSection>
+		</NcSettingsSection>
 
-		<SettingsSection :title="t('polls', 'Performance settings')"
+		<NcSettingsSection :title="t('polls', 'Performance settings')"
 			:description="t('polls', 'Try to change these parameters to handle big polls')">
 			<PerformanceSettings />
-		</SettingsSection>
+		</NcSettingsSection>
 
-		<SettingsSection :title="t('polls', 'Experimental styles')"
+		<NcSettingsSection :title="t('polls', 'Experimental styles')"
 			:description="t('polls', 'Some visual styling options.')">
 			<StyleSettings />
-		</SettingsSection>
+		</NcSettingsSection>
 	</div>
 </template>
 
 <script>
 
-import { SettingsSection } from '@nextcloud/vue'
+import { NcSettingsSection } from '@nextcloud/vue'
 export default {
 	name: 'UserSettingsPage',
 
 	components: {
-		SettingsSection,
+		NcSettingsSection,
 		CalendarSettings: () => import('../components/Settings/UserSettings/CalendarSettings.vue'),
 		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings.vue'),
 		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings.vue'),

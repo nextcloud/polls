@@ -24,51 +24,9 @@
 	<div>
 		<b> {{ t('polls', 'The style settings are still experimental!') }}</b>
 		<div class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="useDashboardStyling" type="switch">
-				{{ t('polls', 'Adopt dashboard style') }}
-			</CheckboxRadioSwitch>
-		</div>
-
-		<div v-if="!useDashboardStyling" class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="useIndividualStyling" type="switch">
-				{{ t('polls', 'Set individual styles') }}
-			</CheckboxRadioSwitch>
-		</div>
-
-		<div v-if="useIndividualStyling && !useDashboardStyling">
-			<div class="user_settings">
-				<CheckboxRadioSwitch :checked.sync="individualBgColor" type="switch">
-					{{ t('polls', 'Use background color') }}
-				</CheckboxRadioSwitch>
-
-				<CheckboxRadioSwitch :checked.sync="individualImage" type="switch">
-					{{ t('polls', 'Use background image') }}
-				</CheckboxRadioSwitch>
-
-				<div v-if="individualImage" class="settings_details">
-					<InputDiv v-model="individualImageUrl"
-						type="text"
-						:placeholder="t('polls', 'Enter the URL of your favorite background image.')" />
-					<CheckboxRadioSwitch :checked.sync="individualImageStyle" type="switch">
-						{{ t('polls', 'Dark picture') }}
-					</CheckboxRadioSwitch>
-				</div>
-			</div>
-
-			<div class="user_settings">
-				<CheckboxRadioSwitch :checked.sync="translucentPanels" type="switch">
-					{{ t('polls', 'Translucent foreground elements') }}
-				</CheckboxRadioSwitch>
-
-				<div class="settings_details">
-					{{ t('polls', 'Add a translucent effect on foreground elements like sidebar and poll table (Does not work with all browsers).') }}
-				</div>
-			</div>
-		</div>
-		<div class="user_settings">
-			<CheckboxRadioSwitch :checked.sync="useCommentsAlternativeStyling" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="useCommentsAlternativeStyling" type="switch">
 				{{ t('polls', 'Use alternative styling for the comments sidebar') }}
-			</CheckboxRadioSwitch>
+			</NcCheckboxRadioSwitch>
 		</div>
 	</div>
 </template>
@@ -76,85 +34,19 @@
 <script>
 
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
-import InputDiv from '../../Base/InputDiv.vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
 	name: 'StyleSettings',
 
 	components: {
-		CheckboxRadioSwitch,
-		InputDiv,
+		NcCheckboxRadioSwitch,
 	},
 
 	computed: {
 		...mapState({
 			settings: (state) => state.settings.user,
 		}),
-
-		// Add bindings
-		useDashboardStyling: {
-			get() {
-				return !!this.settings.useDashboardStyling
-			},
-			set(value) {
-				this.writeValue({ useDashboardStyling: +value })
-			},
-		},
-
-		useIndividualStyling: {
-			get() {
-				return !!this.settings.useIndividualStyling
-			},
-			set(value) {
-				this.writeValue({ useIndividualStyling: +value })
-			},
-		},
-
-		individualImage: {
-			get() {
-				return !!this.settings.individualImage
-			},
-			set(value) {
-				this.writeValue({ individualImage: +value })
-			},
-		},
-
-		individualImageStyle: {
-			get() {
-				return this.settings.individualImageStyle === 'light'
-			},
-			set(value) {
-				this.writeValue({ individualImageStyle: value ? 'light' : 'dark' })
-			},
-		},
-
-		individualBgColor: {
-			get() {
-				return !!this.settings.individualBgColor
-			},
-			set(value) {
-				this.writeValue({ individualBgColor: +value })
-			},
-		},
-
-		individualImageUrl: {
-			get() {
-				return this.settings.individualImageUrl
-			},
-			set(value) {
-				this.writeValue({ individualImageUrl: value })
-			},
-		},
-
-		translucentPanels: {
-			get() {
-				return !!this.settings.translucentPanels
-			},
-			set(value) {
-				this.writeValue({ translucentPanels: +value })
-			},
-		},
 
 		useCommentsAlternativeStyling: {
 			get() {

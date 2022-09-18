@@ -1,7 +1,7 @@
 {
 	"name": "polls",
 	"description": "Polls app for nextcloud",
-	"version": "3.8.0",
+	"version": "4.0.0-beta1",
 	"authors": [
 		{
 			"name": "Vinzenz Rosenkranz",
@@ -43,7 +43,7 @@
 		"@nextcloud/l10n": "^1.6.0",
 		"@nextcloud/moment": "^1.2.1",
 		"@nextcloud/router": "^2.0.0",
-		"@nextcloud/vue": "^5.4.0",
+		"@nextcloud/vue": "^7.0.0-beta.3",
 		"@nextcloud/vue-richtext": "^2.0.1",
 		"core-js": "^3.25.1",
 		"dompurify": "^2.4.0",

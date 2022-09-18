@@ -22,7 +22,7 @@
 
 <template>
 	<div class="">
-		<VueButton type="tertiary">
+		<NcButton type="tertiary">
 			<template #icon>
 				<UndoIcon v-if="deleteTimeout"
 					v-tooltip="countdownTitle"
@@ -33,12 +33,12 @@
 					:size="iconSize"
 					@click="deleteItem()" />
 			</template>
-		</VueButton>
+		</NcButton>
 	</div>
 </template>
 
 <script>
-import { Button as VueButton } from '@nextcloud/vue'
+import { NcButton } from '@nextcloud/vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
 
@@ -47,7 +47,7 @@ export default {
 	components: {
 		DeleteIcon,
 		UndoIcon,
-		VueButton,
+		NcButton,
 	},
 
 	props: {

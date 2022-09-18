@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<AppContent class="poll-list">
+	<NcAppContent class="poll-list">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ t('polls', 'Administrative poll management') }}
@@ -30,7 +30,7 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<EmptyContent v-if="noPolls">
+			<NcEmptyContent v-if="noPolls">
 				<template #icon>
 					<PollsAppIcon />
 				</template>
@@ -38,7 +38,7 @@
 					{{ t('polls', 'Add one or change category!') }}
 				</template>
 				{{ t('polls', 'No polls found for this category') }}
-			</EmptyContent>
+			</NcEmptyContent>
 
 			<transition-group v-else
 				name="list"
@@ -55,26 +55,26 @@
 					:poll="poll"
 					no-link>
 					<template #actions>
-						<Actions :force-menu="true">
-							<ActionButton icon="icon-add"
+						<NcActions :force-menu="true">
+							<NcActionButton icon="icon-add"
 								:close-after-click="true"
 								@click="confirmTakeOver(poll.id, poll.owner)">
 								{{ t('polls', 'Take over') }}
-							</ActionButton>
+							</NcActionButton>
 
-							<ActionButton :icon="poll.deleted ? 'icon-history' : 'icon-category-app-bundles'"
+							<NcActionButton :icon="poll.deleted ? 'icon-history' : 'icon-category-app-bundles'"
 								:close-after-click="true"
 								@click="toggleArchive(poll.id)">
 								{{ poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
-							</ActionButton>
+							</NcActionButton>
 
-							<ActionButton icon="icon-delete"
+							<NcActionButton icon="icon-delete"
 								class="danger"
 								:close-after-click="true"
 								@click="confirmDelete(poll.id, poll.owner)">
 								{{ t('polls', 'Delete poll') }}
-							</ActionButton>
-						</Actions>
+							</NcActionButton>
+						</NcActions>
 					</template>
 				</PollItem>
 			</transition-group>
@@ -82,23 +82,23 @@
 
 		<LoadingOverlay v-if="isLoading" />
 
-		<Modal v-if="takeOverModal" size="small" @close="takeOverModal = false">
+		<NcModal v-if="takeOverModal" size="small" @close="takeOverModal = false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Do you want to take over this poll?') }}</h2>
 				<div>{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}</div>
 				<div class="modal__buttons">
-					<VueButton @click="takeOverModal = false">
+					<NcButton @click="takeOverModal = false">
 						{{ t('polls', 'No') }}
-					</VueButton>
+					</NcButton>
 
-					<VueButton type="primary" @click="takeOverPoll()">
+					<NcButton type="primary" @click="takeOverPoll()">
 						{{ t('polls', 'Yes') }}
-					</VueButton>
+					</NcButton>
 				</div>
 			</div>
-		</Modal>
+		</NcModal>
 
-		<Modal v-if="deleteModal" size="small" @close="deleteModal = false">
+		<NcModal v-if="deleteModal" size="small" @close="deleteModal = false">
 			<div class="modal__content">
 				<h2>{{ t('polls', 'Do you want to delete this poll?') }}</h2>
 				<div>
@@ -106,24 +106,23 @@
 					{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}
 				</div>
 				<div class="modal__buttons">
-					<VueButton @click="deleteModal = false">
+					<NcButton @click="deleteModal = false">
 						{{ t('polls', 'No') }}
-					</VueButton>
+					</NcButton>
 
-					<VueButton type="primary" @click="deletePoll()">
+					<NcButton type="primary" @click="deletePoll()">
 						{{ t('polls', 'Yes') }}
-					</VueButton>
+					</NcButton>
 				</div>
 			</div>
-		</Modal>
-	</AppContent>
+		</NcModal>
+	</NcAppContent>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
-import { Actions, ActionButton, AppContent, Button as VueButton, EmptyContent, Modal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import { sortBy } from 'lodash'
 import HeaderBar from '../components/Base/HeaderBar.vue'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
@@ -132,13 +131,13 @@ export default {
 	name: 'Administration',
 
 	components: {
-		AppContent,
-		Actions,
-		ActionButton,
-		EmptyContent,
+		NcAppContent,
+		NcActions,
+		NcActionButton,
+		NcEmptyContent,
 		HeaderBar,
-		Modal,
-		VueButton,
+		NcModal,
+		NcButton,
 		PollsAppIcon,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 		PollItem: () => import('../components/PollList/PollItem.vue'),
@@ -238,10 +237,6 @@ export default {
 
 		refreshView() {
 			window.document.title = `${t('polls', 'Polls')} - ${this.title}`
-			if (!this.filteredPolls(this.$route.params.type).find((poll) => poll.id === this.$store.state.poll.id)) {
-				emit('polls:sidebar:toggle', { open: false })
-			}
-
 		},
 
 		setSort(payload) {

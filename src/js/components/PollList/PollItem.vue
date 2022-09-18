@@ -95,20 +95,20 @@
 
 		<div class="wrapper">
 			<div class="item__created">
-				<Badge>
+				<BadgeDiv>
 					<template #icon>
 						<CreationIcon />
 					</template>
 					{{ timeCreatedRelative }}
-				</Badge>
+				</BadgeDiv>
 			</div>
 			<div class="item__expiry">
-				<Badge :class="expiryClass">
+				<BadgeDiv :class="expiryClass">
 					<template #icon>
 						<ExpirationIcon />
 					</template>
 					{{ timeExpirationRelative }}
-				</Badge>
+				</BadgeDiv>
 			</div>
 		</div>
 	</div>
@@ -117,7 +117,7 @@
 <script>
 import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
-import Badge from '../Base/Badge.vue'
+import BadgeDiv from '../Base/BadgeDiv.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
@@ -129,7 +129,7 @@ import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
 export default {
 	name: 'PollItem',
 	components: {
-		Badge,
+		BadgeDiv,
 		TextPollIcon,
 		DatePollIcon,
 		CreationIcon,

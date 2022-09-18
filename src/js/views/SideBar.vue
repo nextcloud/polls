@@ -21,11 +21,10 @@
   -->
 
 <template>
-	<AppSidebar ref="sideBar"
-		:active="active"
+	<NcAppSidebar :active="active"
 		:title="t('polls', 'Details')"
 		@close="closeSideBar()">
-		<AppSidebarTab v-if="acl.allowEdit"
+		<NcAppSidebarTab v-if="acl.allowEdit"
 			:id="'configuration'"
 			:order="1"
 			:name="t('polls', 'Configuration')">
@@ -33,9 +32,9 @@
 				<SidebarConfigurationIcon />
 			</template>
 			<SideBarTabConfiguration />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit"
+		<NcAppSidebarTab v-if="acl.allowEdit"
 			:id="'options'"
 			:order="2"
 			:name="t('polls', 'Options')">
@@ -43,9 +42,9 @@
 				<SidebarOptionsIcon />
 			</template>
 			<SideBarTabOptions />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit"
+		<NcAppSidebarTab v-if="acl.allowEdit"
 			:id="'sharing'"
 			:order="3"
 			:name="t('polls', 'Sharing')">
@@ -53,9 +52,9 @@
 				<SidebarShareIcon />
 			</template>
 			<SideBarTabShare />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="projectsEnabled && acl.loggedIn && useCollaboration"
+		<NCAppSidebarTab v-if="projectsEnabled && acl.loggedIn && useCollaboration"
 			:id="'collaboration'"
 			:order="4"
 			:name="t('polls', 'Collaboration')">
@@ -63,9 +62,9 @@
 				<SidebarProjectsIcon />
 			</template>
 			<SideBarTabCollaboration />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowComment"
+		<NcAppSidebarTab v-if="acl.allowComment"
 			:id="'comments'"
 			:order="5"
 			:name="t('polls', 'Comments')">
@@ -73,9 +72,9 @@
 				<SidebarCommentsIcon />
 			</template>
 			<SideBarTabComments />
-		</AppSidebarTab>
+		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="acl.allowEdit && useActivity"
+		<NcAppSidebarTab v-if="acl.allowEdit && useActivity"
 			:id="'activity'"
 			:order="6"
 			:name="t('polls', 'Activity')">
@@ -83,12 +82,12 @@
 				<SidebarActivityIcon />
 			</template>
 			<SideBarTabActivity />
-		</AppSidebarTab>
-	</AppSidebar>
+		</NcAppSidebarTab>
+	</NcAppSidebar>
 </template>
 
 <script>
-import { AppSidebar, AppSidebarTab } from '@nextcloud/vue'
+import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 import { loadState } from '@nextcloud/initial-state'
@@ -109,8 +108,8 @@ export default {
 		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare.vue'),
 		SideBarTabCollaboration: () => import('../components/SideBar/SideBarTabCollaboration.vue'),
 		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity.vue'),
-		AppSidebar,
-		AppSidebarTab,
+		NcAppSidebar,
+		NcAppSidebarTab,
 		SidebarActivityIcon,
 		SidebarConfigurationIcon,
 		SidebarOptionsIcon,
@@ -140,12 +139,12 @@ export default {
 			useCollaboration: (state) => state.appSettings.useCollaboration,
 		}),
 	},
+
 	methods: {
 		closeSideBar() {
 			emit('polls:sidebar:toggle', { open: false })
 		},
 	},
-
 }
 
 </script>

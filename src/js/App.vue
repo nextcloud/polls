@@ -21,12 +21,10 @@
   -->
 
 <template>
-	<NcContent app-name="polls"
-		:style="{background: appBackground}"
-		:class="appClass">
+	<NcContent app-name="polls" :class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
-		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
+		<router-view v-show="sideBar.open" name="sidebar" :active="sideBar.activeTab" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
@@ -35,9 +33,9 @@
 <script>
 import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { Content as NcContent } from '@nextcloud/vue'
+import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState, mapActions } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
@@ -45,7 +43,6 @@ import './assets/scss/icons.scss'
 import './assets/scss/icons-md.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
-import './assets/scss/theming.scss'
 import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls.js'
 
@@ -61,8 +58,10 @@ export default {
 
 	data() {
 		return {
-			sideBarOpen: (window.innerWidth > 920),
-			activeTab: 'comments',
+			sideBar: {
+				open: (window.innerWidth > 920),
+				activeTab: 'comments',
+			},
 			transitionClass: 'transitions-active',
 			loading: false,
 		}
@@ -74,54 +73,18 @@ export default {
 			appSettings: (state) => state.appSettings,
 			poll: (state) => state.poll,
 			allowEdit: (state) => state.poll.acl.allowEdit,
-			dashboard: (state) => state.settings.dashboard,
-		}),
-
-		...mapGetters({
-			themeClass: 'settings/themeClass',
-			backgroundClass: 'settings/backgroundClass',
-			useDashboardStyling: 'settings/useDashboardStyling',
-			useIndividualStyling: 'settings/useIndividualStyling',
-			useTranslucentPanels: 'settings/useTranslucentPanels',
-			appBackground: 'settings/appBackground',
 		}),
 
 		appClass() {
 			return [
 				this.transitionClass, {
 					edit: this.allowEdit,
-					translucent: this.useTranslucentPanels,
 				},
 			]
-		},
-
-		showSidebar() {
-			if (this.$route.name === 'combo') {
-				return this.sideBarOpen
-			}
-			return this.sideBarOpen && this.poll.id && (this.allowEdit || this.poll.allowComment)
 		},
 	},
 
 	watch: {
-		themeClass(newValue, oldValue) {
-			if (oldValue) {
-				document.body.classList.remove(oldValue)
-			}
-			if (newValue) {
-				document.body.classList.add(newValue)
-			}
-		},
-
-		backgroundClass(newValue, oldValue) {
-			if (oldValue) {
-				document.body.classList.remove(oldValue)
-			}
-			if (newValue) {
-				document.body.classList.add(newValue)
-			}
-		},
-
 		$route(to, from) {
 			if (this.$route.name === 'list') {
 				this.setFilter(this.$route.params.type)
@@ -153,28 +116,9 @@ export default {
 		})
 
 		subscribe('polls:sidebar:toggle', (payload) => {
-			if (payload === undefined) {
-				this.sideBarOpen = !this.sideBarOpen
-			} else {
-				if (payload.activeTab !== undefined) {
-					this.activeTab = payload.activeTab
-				}
-				if (payload.open === undefined) {
-					this.sideBarOpen = !this.sideBarOpen
-				} else {
-					this.sideBarOpen = payload.open
-				}
-			}
-
+			this.sideBar.activeTab = payload?.activeTab ?? this.sideBar.activeTab
+			this.sideBar.open = payload?.open ?? !this.sideBar.open
 		})
-	},
-
-	mounted() {
-		window.addEventListener('scroll', this.handleScroll)
-	},
-
-	destroyed() {
-		window.removeEventListener('scroll', this.handleScroll)
 	},
 
 	beforeDestroy() {
@@ -189,13 +133,6 @@ export default {
 		...mapActions({
 			setFilter: 'polls/setFilter',
 		}),
-		handleScroll() {
-			if (window.scrollY > 20) {
-				document.body.classList.add('page--scrolled')
-			} else {
-				document.body.classList.remove('page--scrolled')
-			}
-		},
 
 		transitionsOn() {
 			this.transitionClass = 'transitions-active'
@@ -257,7 +194,6 @@ export default {
 	flex-direction: column;
 	padding: 0px 8px;
 	row-gap: 8px;
-	background-color: transparent !important;
 }
 
 // global areas settings
@@ -273,7 +209,7 @@ export default {
 [class*=' area__header'],
 [class^='area__header'] {
 	position: sticky;
-	top: 50px;
+	top: 0;
 	background-color: var(--color-main-background);
 	border-bottom: 1px solid var(--color-border);
 	z-index: 9;
@@ -282,13 +218,6 @@ export default {
 	padding-right: 8px;
 	padding-left: 56px;
 }
-
-// [class*=' area__header_vote'],
-// [class^='area__header_vote'] {
-//   background-color: transparent;
-//   border: none;
-//   box-shadow: none !important;
-// }
 
 // global modal settings
 .modal__content {

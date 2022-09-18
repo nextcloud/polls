@@ -21,19 +21,19 @@
   -->
 
 <template lang="html">
-	<Actions>
-		<ActionCheckbox v-model="subscribe" :label="label" />
-	</Actions>
+	<NcActions>
+		<NcActionCheckbox v-model="subscribe" :label="label" />
+	</NcActions>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { Actions, ActionCheckbox } from '@nextcloud/vue'
+import { NcActions, NcActionCheckbox } from '@nextcloud/vue'
 export default {
 	name: 'ActionSubscription',
 
 	components: {
-		Actions, ActionCheckbox,
+		NcActions, NcActionCheckbox,
 	},
 
 	computed: {

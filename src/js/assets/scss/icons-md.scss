@@ -36,15 +36,6 @@
 	background-color: #000;
 }
 
-.theme--dark {
-	&[class*='icon-mask-md-'] {
-		background-color: #000 !important;
-	}
-	[class*='icon-mask-md-'] {
-		background-color: #fff;
-	}
-}
-
 // material design icons
 // just svg background icon
 .icon-svg-md-email { @include svg-icon(var(--icon-md-email)); }

@@ -30,20 +30,20 @@
 		<template #status>
 			<div class="vote-status" />
 		</template>
-		<CheckboxRadioSwitch :checked.sync="pollAccess" type="switch" />
+		<NcCheckboxRadioSwitch :checked.sync="pollAccess" type="switch" />
 	</UserItem>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { CheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { writePoll } from '../../mixins/writePoll.js'
 
 export default {
 	name: 'ShareItemAllUsers',
 
 	components: {
-		CheckboxRadioSwitch,
+		NcCheckboxRadioSwitch,
 	},
 
 	mixins: [writePoll],

@@ -22,12 +22,12 @@
 
 <template>
 	<div class="user_settings">
-		<CheckboxRadioSwitch :checked.sync="createPollLimited" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="createPollLimited" type="switch">
 			{{ t('polls', 'Disallow poll creation for all users') }}
-		</CheckboxRadioSwitch>
+		</NcCheckboxRadioSwitch>
 		<div v-if="createPollLimited" class="settings_details">
 			<h3>{{ t('polls','Allow poll creation for the following groups') }}</h3>
-			<Multiselect v-model="createPollGroups"
+			<NcMultiselect v-model="createPollGroups"
 				class="stretch"
 				label="displayName"
 				track-by="id"
@@ -46,14 +46,14 @@
 <script>
 
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
-import { CheckboxRadioSwitch, Multiselect } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch, NcMultiselect } from '@nextcloud/vue'
 
 export default {
 	name: 'AdminPollCreation',
 
 	components: {
-		CheckboxRadioSwitch,
-		Multiselect,
+		NcCheckboxRadioSwitch,
+		NcMultiselect,
 	},
 
 	mixins: [loadGroups, writeValue],

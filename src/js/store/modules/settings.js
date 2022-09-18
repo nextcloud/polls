@@ -26,14 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 
 const defaultSettings = () => ({
 	user: {
-		useDashboardStyling: false,
-		useIndividualStyling: false,
 		useCommentsAlternativeStyling: false,
-		individualBgColor: false,
-		individualImage: false,
-		individualImageUrl: '',
-		individualImageStyle: 'light',
-		translucentPanels: false,
 		calendarPeek: false,
 		checkCalendars: [],
 		checkCalendarsBefore: 0,
@@ -46,14 +39,6 @@ const defaultSettings = () => ({
 	session: {
 		manualViewDatePoll: '',
 		manualViewTextPoll: '',
-	},
-	dashboard: {
-		background: '',
-		themingDefaultBackground: '',
-		backgroundVersion: 0,
-		shippedBackgrounds: '',
-		isInstalled: false,
-		theming: 'light',
 	},
 	availableCalendars: [],
 	viewModes: [
@@ -72,7 +57,6 @@ const mutations = {
 	},
 
 	setPreference(state, payload) {
-
 		if (payload.defaultViewTextPoll === 'desktop') {
 			payload.defaultViewTextPoll = 'table-view'
 		}
@@ -89,10 +73,6 @@ const mutations = {
 		Object.keys(payload).filter((key) => key in state.user).forEach((key) => {
 			state.user[key] = payload[key]
 		})
-	},
-
-	setDashboard(state, payload) {
-		state.dashboard = payload
 	},
 
 	setCalendars(state, payload) {
@@ -116,73 +96,6 @@ const mutations = {
 }
 
 const getters = {
-	themeClass(state) {
-		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
-			return `dashboard--${state.dashboard.theming}`
-		}
-		if (state.user.useIndividualStyling && state.user.individualImage) {
-			return `polls--${state.user.individualImageStyle}`
-		}
-		return ''
-	},
-
-	backgroundClass(state) {
-		if (state.user.useDashboardStyling) {
-			return ''
-		}
-
-		if (state.user.useIndividualStyling && state.user.individualImage) {
-			return 'polls--bg-image'
-		}
-
-		if (state.user.useIndividualStyling && state.user.individualBgColor) {
-			return 'polls--bg-color'
-		}
-
-		return ''
-	},
-	useDashboardStyling(state) {
-		return state.dashboard.isInstalled && state.user.useDashboardStyling
-	},
-
-	useIndividualStyling(state) {
-		return !state.user.useDashboardStyling && state.user.useIndividualStyling
-	},
-
-	useTranslucentPanels(state) {
-		return (state.dashboard.isInstalled && state.user.useDashboardStyling)
-			|| (state.user.useIndividualStyling && state.user.translucentPanels)
-	},
-
-	appBackground(state) {
-		const imageProps = 'no-repeat fixed center center / cover'
-		if (state.dashboard.isInstalled && state.user.useDashboardStyling) {
-			if (state.dashboard.background === 'custom') {
-				return `url("${generateUrl('/apps/dashboard/background')}?v=${window.OCA.Theming.cacheBuster}") ${imageProps}`
-			}
-
-			if (!state.dashboard.background) {
-				return `url("${generateUrl('/apps/theming/image/background')}?v=${window.OCA.Theming.cacheBuster}") ${imageProps}`
-			}
-
-			if (state.dashboard.background.charAt(0) === '#') {
-				return state.dashboard.background
-			}
-
-			return `url("${generateUrl('/apps/dashboard/img/')}${state.dashboard.background}") ${imageProps}`
-		}
-
-		if (state.user.useIndividualStyling) {
-			if (state.user.individualImage) {
-				return `url("${state.user.individualImageUrl}") ${imageProps}`
-			}
-			if (state.user.individualBgColor) {
-				return 'var(--color-primary-light)'
-			}
-		}
-		return 'var(--color-main-background)'
-	},
-
 	viewTextPoll(state) {
 		if (state.session.manualViewTextPoll) {
 			return state.session.manualViewTextPoll
@@ -227,7 +140,6 @@ const actions = {
 				response.data.preferences.defaultViewDatePoll = 'list-view'
 			}
 			context.commit('setPreference', response.data.preferences)
-			context.commit('setDashboard', response.data.dashboard)
 		} catch {
 			context.commit('reset')
 		}

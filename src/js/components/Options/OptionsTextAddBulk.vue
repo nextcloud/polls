@@ -22,16 +22,16 @@
 
 <template>
 	<div>
-		<Actions>
-			<ActionButton @click="showModal = true">
+		<NcActions>
+			<NcActionButton @click="showModal = true">
 				<template #icon>
 					<PasteIcon />
 				</template>
 				{{ caption }}
-			</ActionButton>
-		</Actions>
+			</NcActionButton>
+		</NcActions>
 
-		<Modal v-if="showModal" size="small" :can-close="false">
+		<NcModal v-if="showModal" size="small" :can-close="false">
 			<div class="option-clone-date modal__content">
 				<h2>{{ t('polls', 'Create multiple options at once') }}</h2>
 
@@ -42,22 +42,22 @@
 					:placeholder="placeholder" />
 
 				<div class="modal__buttons">
-					<VueButton @click="showModal = false">
+					<NcButton @click="showModal = false">
 						{{ t('polls', 'Close') }}
-					</VueButton>
+					</NcButton>
 
-					<VueButton type="primary" @click="addOptionsList()">
+					<NcButton type="primary" @click="addOptionsList()">
 						{{ t('polls', 'OK') }}
-					</VueButton>
+					</NcButton>
 				</div>
 			</div>
-		</Modal>
+		</NcModal>
 	</div>
 </template>
 
 <script>
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { Actions, ActionButton, Button as VueButton, Modal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
 import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 
 export default {
@@ -65,10 +65,10 @@ export default {
 
 	components: {
 		PasteIcon,
-		Actions,
-		ActionButton,
-		Modal,
-		VueButton,
+		NcActions,
+		NcActionButton,
+		NcModal,
+		NcButton,
 	},
 
 	props: {
