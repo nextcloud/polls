@@ -54,7 +54,7 @@
 			<SideBarTabShare />
 		</NcAppSidebarTab>
 
-		<AppSidebarTab v-if="projectsEnabled && acl.loggedIn && useCollaboration"
+		<NCAppSidebarTab v-if="projectsEnabled && acl.loggedIn && useCollaboration"
 			:id="'collaboration'"
 			:order="4"
 			:name="t('polls', 'Collaboration')">
