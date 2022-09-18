@@ -21,12 +21,16 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Model\Group;
 
 use OCA\Circles\Api\v1\Circles;
 use OCA\Circles\Model\Circle as CirclesCircle;
 use OCA\Polls\Exceptions\CirclesNotEnabledException;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 
 class Circle extends UserBase {
 	public const TYPE = 'circle';
@@ -40,7 +44,7 @@ class Circle extends UserBase {
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
-		$this->description = Container::getL10N()->t('Circle');
+		$this->description = $this->l10n->t('Circle');
 		$this->richObjectType = 'circle';
 
 		if (self::isEnabled()) {

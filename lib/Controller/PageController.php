@@ -32,7 +32,6 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCA\Polls\Service\NotificationService;
 
 class PageController extends Controller {
-
 	/** @var IURLGenerator */
 	private $urlGenerator;
 	/** @var NotificationService */

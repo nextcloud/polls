@@ -111,7 +111,7 @@
 	[class*=" area__"],
 	[class^="area__"] {
 		backdrop-filter: blur(10px);
-		background-color: var(--color-background-translucent);
+		background-color: var(--color-main-background-blur);
 	}
 }
 

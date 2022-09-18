@@ -1,10 +1,10 @@
 OC.L10N.register(
     "polls",
     {
+    "Group" : "Groep",
     "Legal Notice" : "Regskennisgewing",
     "Contact" : "Kontak",
     "Public link" : "Openbare skakel",
-    "Group" : "Groep",
     "User" : "Gebruiker",
     "Delete" : "Skrap",
     "New comment …" : "Nuwe kommentaar…",

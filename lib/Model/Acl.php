@@ -116,7 +116,10 @@ class Acl implements JsonSerializable {
 	/**
 	 * load share via token and than call setShare
 	 */
-	public function setToken(string $token = '', string $permission = self::PERMISSION_POLL_VIEW, ?int $pollIdToValidate = null): Acl {
+	public function setToken(string $token = '',
+		string $permission = self::PERMISSION_POLL_VIEW,
+		?int $pollIdToValidate = null
+	): Acl {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
 
@@ -134,6 +137,10 @@ class Acl implements JsonSerializable {
 		return $this;
 	}
 
+	public function getShare() : Share {
+		return $this->share;
+	}
+
 	public function setPollId(?int $pollId = 0, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
 			$this->poll = $this->pollMapper->find($pollId);
@@ -143,6 +150,10 @@ class Acl implements JsonSerializable {
 		}
 
 		return $this;
+	}
+
+	public function setPoll(Poll $poll) {
+		$this->poll = $poll;
 	}
 
 	public function getToken(): string {
@@ -161,10 +172,18 @@ class Acl implements JsonSerializable {
 		return $this->getIsLoggedIn() ? $this->userSession->getUser()->getUID() : $this->share->getUserId();
 	}
 
-	public function validateUserId(string $userId): void {
+	public function validateUserId(string $userId): bool {
 		if ($this->getUserId() !== $userId) {
 			throw new NotAuthorizedException;
 		}
+		return true;
+	}
+
+	public function validatePollId(int $pollId): bool {
+		if ($this->getPollId() !== $pollId) {
+			throw new NotAuthorizedException;
+		}
+		return true;
 	}
 
 	public function getIsOwner(): bool {
@@ -361,7 +380,7 @@ class Acl implements JsonSerializable {
 	 */
 	private function getIsInvolved(): bool {
 		return (
-			   $this->getIsOwner()
+			$this->getIsOwner()
 			|| $this->getIsParticipant()
 			|| $this->getIsInvitedViaGroupShare()
 			|| $this->getIsPersonallyInvited());
@@ -441,10 +460,10 @@ class Acl implements JsonSerializable {
 
 	private function validateShareAccess(): void {
 		if ($this->getIsLoggedIn() && !$this->getIsShareValidForUsers()) {
-			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for guests');
+			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '" is only valid for guests');
 		}
 		if (!$this->getIsShareValidForGuests()) {
-			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '"only valid for registered users');
+			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '" is only valid for registered users');
 		};
 	}
 

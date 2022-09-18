@@ -1,8 +1,8 @@
 OC.L10N.register(
     "polls",
     {
-    "Public link" : "Liamm publik",
     "Group" : "Stollad",
+    "Public link" : "Liamm publik",
     "User" : "Implijer",
     "Delete" : "Lemel",
     "Conflict" : "Stourm",
@@ -22,6 +22,7 @@ OC.L10N.register(
     "Preview" : "Ragwell",
     "Shares" : "Rannañ",
     "Description" : "Diskrivadur",
+    "Change name" : "Cheñch env",
     "Yes" : "Ya",
     "Administration" : "Merouriez",
     "Details" : "Munudoù",

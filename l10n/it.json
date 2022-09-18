@@ -1,11 +1,14 @@
 { "translations": {
     "Poll changes" : "Cambiamenti dei sondaggi",
+    "Circle" : "Cerchia",
+    "Contact group" : "Gruppo di contatti",
+    "Group" : "Gruppo",
+    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Questo collegamento ti fornisce accesso personale al suddetto sondaggio. Premi il pulsante sopra o copia il collegamento seguente e aggiungilo nella barra degli indirizzi del tuo browser:",
+    "Do not share this link with other people, because it is connected to your votes." : "Non condividere questo collegamento con altre persone, perché è connesso ai tuoi voti.",
     "Poll invitation \"%s\"" : "Invito al sondaggio \"%s\"",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "Questa email ti è stata inviata poiché sei stato invitato a votare in questo sondaggio dal suo proprietario. Almeno il tuo nome o il tuo indirizzo di posta è registrato in questo sondaggio. Se vuoi essere rimosso dal sondaggio, contatta l'amministratore del sito o l'autore del sondaggio, dal quale arriva il messaggio.",
     "{owner} invited you to take part in the poll \"{title}\" as a member of the group {group_name}" : "{owner} ti ha invitato a partecipare al sondaggio \"{title}\" come membro del gruppo {group_name}",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} ti ha invitato a partecipare al sondaggio \"{title}\"",
-    "This link gives you personal access to the poll named above. Press the button above or copy the following link and add it in your browser's location bar:" : "Questo collegamento ti fornisce accesso personale al suddetto sondaggio. Premi il pulsante sopra o copia il collegamento seguente e aggiungilo nella barra degli indirizzi del tuo browser:",
-    "Do not share this link with other people, because it is connected to your votes." : "Non condividere questo collegamento con altre persone, perché è connesso ai tuoi voti.",
     "Notification for poll \"%s\"" : "Notifica per sondaggio \"%s\"",
     "Go to poll" : "Vai al sondaggio",
     "This email is sent to you, because you subscribed to notifications of this poll. To opt out, visit the poll and remove your subscription." : "Questa email è inviata a te, poiché hai sottoscritto le notifiche a questo sondaggio. Per rinunciare, visita il sondaggio e rimuovi la tua sottoscrizione.",
@@ -32,13 +35,10 @@
     "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "La prima opzione di sondaggio è assente per meno di ore {leftPeriod} ({dateTime}, {timezone}). ",
     "The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone})." : "Il sondaggio sta per scadere tra meno di ore {leftPeriod} ({dateTime}, {timezone}).",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} ti invia questo promemoria per assicurarti che i tuoi voti sono stati impostati.",
-    "Circle" : "Cerchia",
     "Contact" : "Contatto",
-    "Contact group" : "Gruppo di contatti",
     "External Email" : "Email esterna",
     "External user" : "Utente esterno",
     "Public link" : "Collegamento pubblico",
-    "Group" : "Gruppo",
     "User" : "Utente",
     "Polls" : "Sondaggi",
     "%s invited you to a poll" : "%s ti ha invitato a un sondaggio",
@@ -398,6 +398,7 @@
     "Is granted admin rights for this poll" : "Sono concessi i diritti di amministratore per questo sondaggio",
     "Copy your personal link to clipboard" : "Copia il collegamento personale negli appunti",
     "Edit Email Address" : "Modifica l'indirizzo email",
+    "Change name" : "Cambia il nome",
     "Get your personal link per mail" : "Ottieni il collegamento personale per email",
     "Subscribe to notifications" : "Iscriviti alle notifiche",
     "Remove Email Address" : "Rimuovi l'indirizzo email",
@@ -497,7 +498,6 @@
     "All closed polls, where voting is disabled." : "Tutti i sondaggi chiusi, dove il voto è disabilitato.",
     "Archive" : "Archivio",
     "My archived polls" : "I miei sondaggi archiviati",
-    "Your archived polls are only accessible to you." : "I tuoi sondaggi archiviati sono accessibili solo a te.",
-    "Maybe" : "Forse"
+    "Your archived polls are only accessible to you." : "I tuoi sondaggi archiviati sono accessibili solo a te."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

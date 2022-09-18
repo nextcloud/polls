@@ -23,19 +23,15 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\Exception;
-
-use OCP\IRequest;
-use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\PollService;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
 
-class PollApiController extends ApiController {
-
+class PollApiController extends BaseApiController {
 	/** @var Acl */
 	private $acl;
 
@@ -163,6 +159,19 @@ class PollApiController extends ApiController {
 			return new JSONResponse(['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
 		} catch (DoesNotExistException $e) {
 			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
+		} catch (Exception $e) {
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * Clone poll
+	 * @CORS
+	 * @NoCSRFRequired
+	 */
+	public function transferPolls(string $sourceUser, string $targetUser): JSONResponse {
+		try {
+			return new JSONResponse(['transferred' => $this->pollService->transferPolls($sourceUser, $targetUser)], Http::STATUS_CREATED);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}

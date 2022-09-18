@@ -23,15 +23,13 @@
 
 namespace OCA\Polls\Service;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCP\AppFramework\Db\DoesNotExistException;
 
 class WatchService {
-
 	/** @var AppSettings */
 	private $appSettings;
 

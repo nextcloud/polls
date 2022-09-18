@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,15 +21,14 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Model\User;
 
-class Admin extends User {
-	public const TYPE = 'admin';
-	public const ICON = 'icon-settings';
+use OCP\IUserSession;
+use OCA\Polls\Helper\Container;
 
+class CurrentUser extends User {
 	public function __construct(
-		string $id
 	) {
-		parent::__construct($id, self::TYPE);
+		parent::__construct(Container::queryClass(IUserSession::class)->getUser()->getUId());
 	}
 }

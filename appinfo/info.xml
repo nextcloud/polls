@@ -4,7 +4,7 @@
     <name>Polls</name>
     <summary>A polls app, similar to Doodle/Dudle with the possibility to restrict access.</summary>
     <description>A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
-    <version>3.7.0</version>
+    <version>3.8.0</version>
     <licence>agpl</licence>
     <author>Vinzenz Rosenkranz</author>
     <author>René Gieling</author>
@@ -23,7 +23,7 @@
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
     <dependencies>
         <php min-version="7.4"/>
-        <nextcloud min-version="21" max-version="24" />
+        <nextcloud min-version="22" max-version="24" />
     </dependencies>
     <activity>
 		<providers>
@@ -39,6 +39,7 @@
         <command>OCA\Polls\Command\Share\Add</command>
         <command>OCA\Polls\Command\Share\Remove</command>
         <command>OCA\Polls\Command\Db\Rebuild</command>
+        <command>OCA\Polls\Command\Poll\TransferOwnership</command>
     </commands>
     <settings>
         <admin-section>OCA\Polls\Settings\AdminSection</admin-section>

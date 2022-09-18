@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Rondo",
+    "Group" : "Grupo",
     "Go to poll" : "Iri al enketo",
     "Legal Notice" : "Atentigo pri kopirajto",
     "Polls App - New Activity" : "Enketilo-aplikaĵo — Nova aktivaĵo",
-    "Circle" : "Rondo",
     "Contact" : "Kontakto",
     "Public link" : "Publika ligilo",
-    "Group" : "Grupo",
     "User" : "Uzanto",
     "Polls" : "Enketilo",
     "Delete" : "Forigi",
@@ -44,6 +44,7 @@ OC.L10N.register(
     "Poll configurations" : "Enketa agordo",
     "Shift all date options" : "Movi ĉiujn datajn opciojn",
     "Receive notification email on activity" : "Ricevi sciigojn retpoŝte okaze de aktivaĵo",
+    "Change name" : "Ŝanĝi nomon",
     "Yes" : "Yes",
     "Administration" : "Administrado",
     "Details" : "Detaloj",

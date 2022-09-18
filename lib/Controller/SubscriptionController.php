@@ -23,25 +23,28 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
-
+use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\SubscriptionService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
+use OCP\ISession;
 
-class SubscriptionController extends Controller {
-
+class SubscriptionController extends BaseController {
 	/** @var SubscriptionService */
 	private $subscriptionService;
 
-	use ResponseHandle;
-
+	/** @var Acl */
+	private $acl;
+	
 	public function __construct(
 		string $appName,
-		SubscriptionService $subscriptionService,
-		IRequest $request
+		Acl $acl,
+		ISession $session,
+		IRequest $request,
+		SubscriptionService $subscriptionService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
+		$this->acl = $acl;
 		$this->subscriptionService = $subscriptionService;
 	}
 
@@ -50,7 +53,9 @@ class SubscriptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function get(int $pollId): JSONResponse {
-		return $this->response(fn () => ['subscribed' => $this->subscriptionService->get($pollId)]);
+		return $this->response(fn () => [
+			'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId))
+		]);
 	}
 
 	/**
@@ -58,7 +63,9 @@ class SubscriptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function subscribe(int $pollId): JSONResponse {
-		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(true, $pollId, '')]);
+		return $this->response(fn () => [
+			'subscribed' => $this->subscriptionService->set(true, $this->acl->setPollId($pollId))
+		]);
 	}
 
 	/**
@@ -66,6 +73,8 @@ class SubscriptionController extends Controller {
 	 * @NoAdminRequired
 	 */
 	public function unsubscribe(int $pollId): JSONResponse {
-		return $this->response(fn () => ['subscribed' => $this->subscriptionService->set(false, $pollId, '')]);
+		return $this->response(fn () => [
+			'subscribed' => $this->subscriptionService->set(false, $this->acl->setPollId($pollId))
+		]);
 	}
 }

@@ -52,9 +52,8 @@ const defaultAcl = () => ({
 	pollExpire: 0,
 })
 
-const state = defaultAcl()
-
 const namespaced = true
+const state = defaultAcl()
 
 const mutations = {
 

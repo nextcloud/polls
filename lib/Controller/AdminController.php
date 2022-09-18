@@ -23,39 +23,30 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\IURLGenerator;
-use OCP\AppFramework\Controller;
+use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\ISession;
+use OCP\IRequest;
+use OCP\IURLGenerator;
 
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Service\PollService;
-
-class AdminController extends Controller {
-
+class AdminController extends BaseController {
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
 	/** @var PollService */
 	private $pollService;
 
-	/** @var Poll */
-	private $poll;
-
-	use ResponseHandle;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ISession $session,
 		IURLGenerator $urlGenerator,
-		PollService $pollService,
-		Poll $poll
+		PollService $pollService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->urlGenerator = $urlGenerator;
 		$this->pollService = $pollService;
-		$this->poll = $poll;
 	}
 
 	/**

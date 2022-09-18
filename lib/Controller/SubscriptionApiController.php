@@ -23,33 +23,29 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCA\Polls\Exceptions\Exception;
-
-use OCP\IRequest;
-
-use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\JSONResponse;
-
+use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\SubscriptionService;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
+use OCP\AppFramework\Http;
 
-class SubscriptionApiController extends ApiController {
-
+class SubscriptionApiController extends BaseApiController {
 	/** @var SubscriptionService */
 	private $subscriptionService;
 
+	/** @var Acl */
+	private $acl;
+
 	public function __construct(
 		string $appName,
+		Acl $acl,
 		SubscriptionService $subscriptionService,
 		IRequest $request
-
 	) {
-		parent::__construct($appName,
-			$request,
-			'PUT, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
+		$this->acl = $acl;
 		$this->subscriptionService = $subscriptionService;
 	}
 
@@ -61,7 +57,7 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function get(int $pollId): JSONResponse {
 		try {
-			$this->subscriptionService->get($pollId, '');
+			$this->subscriptionService->get($this->acl->setPollId($pollId));
 			return new JSONResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new JSONResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
@@ -78,7 +74,7 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function subscribe(int $pollId): JSONResponse {
 		try {
-			$this->subscriptionService->set(true, $pollId, '');
+			$this->subscriptionService->set(true, $this->acl->setPollId($pollId));
 			return new JSONResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
@@ -93,7 +89,7 @@ class SubscriptionApiController extends ApiController {
 	 */
 	public function unsubscribe(int $pollId): JSONResponse {
 		try {
-			$this->subscriptionService->set(false, $pollId, '');
+			$this->subscriptionService->set(false, $this->acl->setPollId($pollId));
 			return new JSONResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());

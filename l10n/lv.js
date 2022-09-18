@@ -2,8 +2,8 @@ OC.L10N.register(
     "polls",
     {
     "Circle" : "Loks",
-    "Contact" : "Kontakts",
     "Group" : "Grupa",
+    "Contact" : "Kontakts",
     "User" : "Lietotājs",
     "Delete" : "Dzēst",
     "Conflict" : "Konflikts",

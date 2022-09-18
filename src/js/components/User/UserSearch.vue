@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
+import { debounce } from 'lodash'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'

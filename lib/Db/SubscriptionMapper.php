@@ -68,7 +68,7 @@ class SubscriptionMapper extends QBMapper {
 		$qb->select('*')
 			 ->from($this->getTableName())
 			 ->where(
-				 $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+			 	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			 );
 
 		return $this->findEntities($qb);
@@ -104,7 +104,7 @@ class SubscriptionMapper extends QBMapper {
 			$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		);
 
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
 	public function removeDuplicates(?IOutput $output = null): int {
@@ -115,7 +115,7 @@ class SubscriptionMapper extends QBMapper {
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'poll_id', 'user_id')
 				->from($this->getTableName());
-			$foundEntries = $query->execute();
+			$foundEntries = $query->executeQuery();
 
 			$delete = $this->db->getQueryBuilder();
 			$delete->delete($this->getTableName())->where('id = :id');
@@ -130,7 +130,7 @@ class SubscriptionMapper extends QBMapper {
 
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);
-					$delete->execute();
+					$delete->executeStatement();
 					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
@@ -158,6 +158,6 @@ class SubscriptionMapper extends QBMapper {
 		$query->delete($this->getTableName())
 			->where('user_id = :userId')
 			->setParameter('userId', $userId);
-		$query->execute();
+		$query->executeStatement();
 	}
 }

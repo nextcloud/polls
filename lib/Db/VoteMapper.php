@@ -95,7 +95,7 @@ class VoteMapper extends QBMapper {
 		$qb->selectDistinct(['user_id', 'poll_id'])
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
 		return $this->findEntities($qb);
@@ -119,7 +119,7 @@ class VoteMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->getTableName())
 		   ->where($qb->expr()->eq('id', $qb->createNamedParameter($voteId, IQueryBuilder::PARAM_INT)))
-		   ->execute();
+		   ->executeStatement();
 	}
 
 	public function deleteByPollAndUserId(int $pollId, string $userId): void {
@@ -127,14 +127,14 @@ class VoteMapper extends QBMapper {
 		$qb->delete($this->getTableName())
 		   ->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 		   ->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
-		   ->execute();
+		   ->executeStatement();
 	}
 
 	public function deleteByPoll(int $pollId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->getTableName())
 		   ->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-		   ->execute();
+		   ->executeStatement();
 	}
 
 	/**
@@ -175,7 +175,7 @@ class VoteMapper extends QBMapper {
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'poll_id', 'user_id', 'vote_option_text')
 				->from($this->getTableName());
-			$foundEntries = $query->execute();
+			$foundEntries = $query->executeQuery();
 
 			$delete = $this->db->getQueryBuilder();
 			$delete->delete($this->getTableName())
@@ -191,7 +191,7 @@ class VoteMapper extends QBMapper {
 				];
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);
-					$delete->execute();
+					$delete->executeStatement();
 					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
@@ -219,7 +219,7 @@ class VoteMapper extends QBMapper {
 		$query->update($this->getTableName())
 			->set('user_id', $query->createNamedParameter($replacementName))
 			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
-			->execute();
+			->executeStatement();
 	}
 
 	public function fixVoteOptionText(int $pollId, int $optionId, string $searchOptionText, string $replaceOptionText): void {
@@ -229,6 +229,6 @@ class VoteMapper extends QBMapper {
 			->where($query->expr()->eq('vote_option_text', $query->createNamedParameter($searchOptionText)))
 			->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId)))
 			->andWhere($query->expr()->eq('vote_option_id', $query->createNamedParameter($optionId)))
-			->execute();
+			->executeStatement();
 	}
 }

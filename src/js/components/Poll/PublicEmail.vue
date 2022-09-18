@@ -32,7 +32,7 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
+import { debounce } from 'lodash'
 import axios from '@nextcloud/axios'
 import InputDiv from '../Base/InputDiv.vue'
 import { generateUrl } from '@nextcloud/router'

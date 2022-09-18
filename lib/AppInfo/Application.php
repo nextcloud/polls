@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -25,7 +26,6 @@
 namespace OCA\Polls\AppInfo;
 
 use Closure;
-// use OC\EventDispatcher\SymfonyAdapter;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -34,6 +34,7 @@ use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Util;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
@@ -47,9 +48,11 @@ use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCreatedEvent;
 use OCA\Polls\Event\PollDeletedEvent;
 use OCA\Polls\Event\PollExpiredEvent;
+use OCA\Polls\Event\PollOwnerChangeEvent;
 use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
+use OCA\Polls\Event\ShareChangedDisplayNameEvent;
 use OCA\Polls\Event\ShareCreateEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
@@ -69,7 +72,6 @@ use OCA\Polls\Provider\ResourceProvider;
 use OCA\Polls\Provider\SearchProvider;
 
 class Application extends App implements IBootstrap {
-
 	/** @var string */
 	public const APP_ID = 'polls';
 
@@ -98,9 +100,11 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(PollDeletedEvent::class, PollListener::class);
 		$context->registerEventListener(PollExpiredEvent::class, PollListener::class);
 		$context->registerEventListener(PollRestoredEvent::class, PollListener::class);
+		$context->registerEventListener(PollOwnerChangeEvent::class, PollListener::class);
 		$context->registerEventListener(PollTakeoverEvent::class, PollListener::class);
 		$context->registerEventListener(PollUpdatedEvent::class, PollListener::class);
 		$context->registerEventListener(ShareChangedEmailEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedDisplayNameEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareChangedRegistrationConstraintEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareCreateEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareDeletedEvent::class, ShareListener::class);
@@ -115,10 +119,9 @@ class Application extends App implements IBootstrap {
 	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
-	protected function registerCollaborationResources(IProviderManager $resourceManager): void {
+	protected function registerCollaborationResources(IProviderManager $resourceManager, IEventDispatcher $eventDispatcher): void {
 		$resourceManager->registerResourceProvider(ResourceProvider::class);
-
-		\OC::$server->getEventDispatcher()->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+		$eventDispatcher->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
 			Util::addScript(self::APP_ID, 'polls-collections');
 		});
 	}

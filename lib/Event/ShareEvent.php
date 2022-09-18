@@ -24,11 +24,13 @@
 namespace OCA\Polls\Event;
 
 use OCA\Polls\Db\Share;
+use OCA\Polls\Model\UserBase;
 
 abstract class ShareEvent extends BaseEvent {
 	public const ADD = 'share_add';
 	public const ADD_PUBLIC = 'share_add_public';
 	public const CHANGE_EMAIL = 'share_change_email';
+	public const CHANGE_DISPLAY_NAME = 'share_change_display_name';
 	public const CHANGE_TYPE = 'share_change_type';
 	public const CHANGE_REG_CONSTR = 'share_change_reg_const';
 	public const REGISTRATION = 'share_registration';
@@ -37,16 +39,23 @@ abstract class ShareEvent extends BaseEvent {
 	/** @var Share */
 	private $share;
 
+	/** @var UserBase */
+	protected $sharee;
+
 	public function __construct(Share $share) {
 		parent::__construct($share);
 		$this->activityObject = 'poll';
 		$this->log = false;
 		$this->share = $share;
 		$this->activitySubjectParams['shareType'] = $this->share->getRichObjectString();
-		$this->activitySubjectParams['sharee'] = $this->share->getUserObject()->getRichObjectString();
+		$this->activitySubjectParams['sharee'] = $this->getSharee()->getRichObjectString();
 	}
 
 	public function getShare(): Share {
 		return $this->share;
+	}
+
+	protected function getSharee() : UserBase {
+		return $this->userService->getUserFromShare($this->share);
 	}
 }

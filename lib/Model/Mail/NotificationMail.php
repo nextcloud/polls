@@ -25,6 +25,7 @@
 namespace OCA\Polls\Model\Mail;
 
 use OCA\Polls\Db\Log;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\PollEvent;
@@ -63,17 +64,20 @@ class NotificationMail extends MailBase {
 		));
 
 		foreach ($this->subscription->getNotifyLogs() as $logItem) {
-			if ($this->poll->getAnonymous() || $this->poll->getShowResults() !== "always") {
-				// hide actor's name if poll is anonymous or results are hidden
-				$displayName = $this->l10n->t('A user');
-			} else {
-				$displayName = $this->getUser($logItem->getUserId())->getDisplayName();
-			}
-
+			$displayName = $this->evaluateDisplayName($logItem);
 			$this->emailTemplate->addBodyListItem($this->getComposedLogString($logItem, $displayName));
 		}
 
-		$this->emailTemplate->addBodyButton($this->getButtonText(), $this->url);
+		$this->addButtonToPoll();
+	}
+
+	private function evaluateDisplayName(Log $logItem) {
+		if ($this->poll->getAnonymous() || $this->poll->getShowResults() !== Poll::SHOW_RESULTS_ALWAYS) {
+			// hide actor's name if poll is anonymous or results are hidden
+			return $this->l10n->t('A user');
+		}
+
+		return $this->getUser($logItem->getUserId())->getDisplayName();
 	}
 
 	private function getComposedLogString(Log $logItem, string $displayName): string {

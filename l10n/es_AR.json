@@ -1,8 +1,8 @@
 { "translations": {
-    "Legal Notice" : "Aviso legal",
     "Circle" : "Círculo",
-    "Contact" : "Contacto",
     "Group" : "Grupo",
+    "Legal Notice" : "Aviso legal",
+    "Contact" : "Contacto",
     "User" : "Usuario",
     "Delete" : "Eliminar",
     "Conflict" : "Conflicto",
@@ -24,6 +24,7 @@
     "Preview" : "Vista previa",
     "Shares" : "Shares",
     "Description" : "Descripción",
+    "Change name" : "Cambiar nombre",
     "Yes" : "Si",
     "Details" : "Detalles",
     "Configuration" : "Configuración",

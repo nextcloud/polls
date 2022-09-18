@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Círculo",
+    "Group" : "Grupo",
     "Legal Notice" : "Aviso legal",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
-    "Circle" : "Círculo",
     "Contact" : "Contacto",
     "Public link" : "Liga pública",
-    "Group" : "Grupo",
     "User" : "Usuario",
     "Polls" : "Encuestas",
     "Delete" : "Borrar",
@@ -44,4 +44,4 @@ OC.L10N.register(
     "Month" : "Mes",
     "Archive" : "Archivar"
 },
-"nplurals=2; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
+"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

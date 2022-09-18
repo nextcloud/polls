@@ -34,7 +34,6 @@ use OCP\Migration\IOutput;
  * while changing the schema
  */
 class RemoveIndices implements IRepairStep {
-
 	/** @var Connection */
 	private $connection;
 

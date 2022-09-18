@@ -28,9 +28,9 @@ const defaultSubscription = () => ({
 	subscribed: false,
 })
 
-const state = defaultSubscription()
-
 const namespaced = true
+const state = defaultSubscription()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 
@@ -60,7 +60,7 @@ const actions = {
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('set', response.data)
@@ -82,9 +82,7 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.put(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			const response = await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error(e.response)

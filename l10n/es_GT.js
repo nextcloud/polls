@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Círculo",
+    "Group" : "Grupo",
     "Legal Notice" : "Aviso legal",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
-    "Circle" : "Círculo",
     "Contact" : "Contacto",
     "Public link" : "Liga pública",
-    "Group" : "Grupo",
     "User" : "Ususario",
     "Polls" : "Encuestas",
     "Delete" : "Borrar",
@@ -35,6 +35,7 @@ OC.L10N.register(
     "Shares" : "Elementos compartidos",
     "Description" : "Descripción",
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
+    "Change name" : "Cambiar nombre",
     "Yes" : "Sí",
     "Administration" : "Administración",
     "Details" : "Detalles",

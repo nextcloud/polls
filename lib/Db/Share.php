@@ -27,7 +27,6 @@ use JsonSerializable;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\IURLGenerator;
-use OCA\Polls\Model\UserGroup\UserBase;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Helper\Container;
 
@@ -133,6 +132,9 @@ class Share extends Entity implements JsonSerializable {
 		$this->appSettings = new AppSettings;
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),
@@ -157,6 +159,27 @@ class Share extends Entity implements JsonSerializable {
 
 	public function setPublicPollEmail(string $value) : void {
 		$this->setMiscSettingsByKey('publicPollEmail', $value);
+	}
+
+	public function getTimeZoneName() : ?string {
+		return $this->getMiscSettingsArray()['timeZone'] ?? '';
+	}
+
+	public function setTimeZoneName(string $value) : void {
+		$this->setMiscSettingsByKey('timeZone', $value);
+	}
+
+	public function getLanguage(): ?string {
+		return $this->getMiscSettingsArray()['language'] ?? '';
+	}
+
+	// Fallback for now; use language as locale
+	public function getLocale(): ?string {
+		return $this->getLanguage();
+	}
+
+	public function setLanguage(string $value) : void {
+		$this->setMiscSettingsByKey('language', $value);
 	}
 
 	public function getURL(): string {
@@ -184,15 +207,6 @@ class Share extends Entity implements JsonSerializable {
 			return $userId;
 		}
 		return $this->userId;
-	}
-
-	public function getUserObject(): UserBase {
-		return UserBase::getUserGroupChild(
-			$this->type,
-			$this->userId,
-			$this->displayName,
-			$this->emailAddress
-		);
 	}
 
 	public function getRichObjectString(): array {

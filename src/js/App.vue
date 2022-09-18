@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Content app-name="polls"
+	<NcContent app-name="polls"
 		:style="{background: appBackground}"
 		:class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
@@ -29,13 +29,13 @@
 		<router-view v-if="showSidebar" name="sidebar" :active="activeTab" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
-	</Content>
+	</NcContent>
 </template>
 
 <script>
 import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
-import { Content } from '@nextcloud/vue'
+import { Content as NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState, mapGetters, mapActions } from 'vuex'
 import '@nextcloud/dialogs/styles/toast.scss'
@@ -52,7 +52,7 @@ import { watchPolls } from './mixins/watchPolls.js'
 export default {
 	name: 'App',
 	components: {
-		Content,
+		NcContent,
 		LoadingOverlay: () => import('./components/Base/LoadingOverlay.vue'),
 		UserSettingsDlg,
 	},

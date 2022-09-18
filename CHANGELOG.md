@@ -1,6 +1,27 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.0.0] - tbd
+### New
+- Support Nextcloud version 25
+### Misc
+- Experimental designs have been removed
+
+## [3.8.0] - 2022-09-18
+### New
+- Support Nextcloud version 22 - 24
+- Convert links in comments to clickable links
+- Allow public users to logout from a poll, when logged in via cookie
+- Allow public users to change their name after registration to a public poll
+- Allow bulk poll ownership transfer for admins
+- Added option to send mails about confirmed options
+
+### Fix
+ - Unsubscribing from a public poll was not possible
+ - Use display name for avatar of the current public user instead of user id
+ - Fix export, if owner did not vote in the poll
+ - Fix adding option, when not admin (bulk operation)
+ 
 ## [3.7.0] - 2022-06-24
 ### New
 - User setting for conflict check (hours before and after an option to search for conflicts)

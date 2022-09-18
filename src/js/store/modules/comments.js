@@ -28,9 +28,9 @@ const defaultComments = () => ({
 	list: [],
 })
 
-const state = defaultComments()
-
 const namespaced = true
+const state = defaultComments()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 
@@ -72,7 +72,7 @@ const actions = {
 
 		try {
 			const response = await axios.get(generateUrl(`${endPoint}/comments`), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('set', response.data)
@@ -97,9 +97,8 @@ const actions = {
 
 		try {
 			await axios.post(generateUrl(`${endPoint}/comment`), {
-				headers: { Accept: 'application/json' },
 				message: payload.message,
-			})
+			}, axiosDefaultConfig)
 			context.dispatch('list')
 			// context.commit('add', { comment: response.data.comment })
 		} catch (e) {
@@ -114,11 +113,10 @@ const actions = {
 		if (context.rootState.route.name === 'publicVote') {
 			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
 		}
+		endPoint = `${endPoint}/comment/${payload.comment.id}`
 
 		try {
-			await axios.delete(generateUrl(`${endPoint}/comment/${payload.comment.id}`), {
-				headers: { Accept: 'application/json' },
-			})
+			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
 			context.commit('delete', { comment: payload.comment })
 		} catch (e) {
 			console.error('Error deleting comment', { error: e.response }, { payload })

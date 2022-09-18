@@ -23,16 +23,12 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Http\JSONResponse;
-
-use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\MailService;
+use OCA\Polls\Service\ShareService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
 
-class ShareApiController extends ApiController {
-	use ResponseHandle;
-
+class ShareApiController extends BaseApiController {
 	/** @var ShareService */
 	private $shareService;
 
@@ -45,11 +41,7 @@ class ShareApiController extends ApiController {
 		MailService $mailService,
 		ShareService $shareService
 	) {
-		parent::__construct($appName,
-			$request,
-			'POST, PUT, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
 		$this->shareService = $shareService;
 		$this->mailService = $mailService;
 	}

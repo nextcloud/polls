@@ -23,18 +23,18 @@
 
 namespace OCA\Polls\Service;
 
-use OCP\Activity\IManager as ActivityManager;
-use OCP\Activity\IEvent as ActivityEvent;
-use OCP\EventDispatcher\Event;
-use OCP\IL10N;
-use OCP\IUserSession;
-use OCP\L10N\IFactory;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Event\BaseEvent;
 use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\OptionEvent;
 use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Event\VoteEvent;
+use OCP\Activity\IManager as ActivityManager;
+use OCP\Activity\IEvent as ActivityEvent;
+use OCP\IL10N;
+use OCP\IUserSession;
+use OCP\L10N\IFactory;
 
 class ActivityService {
 	/** @var ActivityManager */
@@ -68,7 +68,7 @@ class ActivityService {
 		$this->userSession = $userSession;
 	}
 
-	public function createActivityEvent(Event $event): ActivityEvent {
+	public function createActivityEvent(BaseEvent $event): ActivityEvent {
 		$activityEvent = $this->activityManager->generateEvent();
 		$activityEvent->setApp('polls')
 			->setType($event->getActivityId())
@@ -184,6 +184,10 @@ class ActivityService {
 				return $this->userIsActor
 					? $this->l10n->t('You have changed your email address')
 					: $this->l10n->t('{sharee} has changed his email address');
+			case ShareEvent::CHANGE_DISPLAY_NAME:
+				return $this->userIsActor
+					? $this->l10n->t('You have changed your name')
+					: $this->l10n->t('{sharee} has changed his name');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
 					? $this->l10n->t('You have changed the share type')
@@ -330,6 +334,10 @@ class ActivityService {
 				return $this->userIsActor
 					? $this->l10n->t('You have changed your email address')
 					: $this->l10n->t('Email address of {sharee} has been changed');
+			case ShareEvent::CHANGE_DISPLAY_NAME:
+				return $this->userIsActor
+					? $this->l10n->t('You have changed your name')
+					: $this->l10n->t('Display name of {sharee} has been changed');
 			case ShareEvent::CHANGE_TYPE:
 				return $this->userIsActor
 					? $this->l10n->t('You have changed the share type')

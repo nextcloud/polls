@@ -28,17 +28,26 @@
 		<ActionButton v-if="$route.name === 'publicVote'" icon="icon-md-link" @click="copyLink()">
 			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</ActionButton>
-		<ActionSeparator />
+		<ActionSeparator v-if="$route.name === 'publicVote'" />
 		<ActionInput v-if="$route.name === 'publicVote'"
 			:class="check.status"
 			:value="emailAddressTemp"
-			@click="deleteEmailAddress"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			<template #icon>
 				<EditEmailIcon />
 			</template>
 			{{ t('polls', 'Edit Email Address') }}
+		</ActionInput>
+		<ActionInput v-if="$route.name === 'publicVote'"
+			:class="checkDisplayName.status"
+			:value="displayNameTemp"
+			@update:value="validateDisplayName"
+			@submit="submitDisplayName">
+			<template #icon>
+				<EditAccountIcon />
+			</template>
+			{{ t('polls', 'Change name') }}
 		</ActionInput>
 		<ActionButton v-if="$route.name === 'publicVote'"
 			:disabled="!emailAddress"
@@ -75,22 +84,31 @@
 			</template>
 			{{ t('polls', 'Reset your votes') }}
 		</ActionButton>
+		<ActionButton v-if="$route.name === 'publicVote' && hasCookie" @click="logout()">
+			<template #icon>
+				<LogoutIcon />
+			</template>
+			{{ t('polls', 'Logout as {name} (delete cookie)', { name: acl.displayName }) }}
+		</ActionButton>
 	</Actions>
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
+import { debounce } from 'lodash'
 import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { Actions, ActionButton, ActionCheckbox, ActionInput, ActionSeparator } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import SettingsIcon from 'vue-material-design-icons/Cog.vue'
+import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
+import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+import { deleteCookieByValue, findCookieByValue } from '../../helpers/cookieHelper.js'
 
 export default {
 	name: 'UserMenu',
@@ -102,7 +120,9 @@ export default {
 		ActionInput,
 		ActionSeparator,
 		SettingsIcon,
+		EditAccountIcon,
 		EditEmailIcon,
+		LogoutIcon,
 		SendLinkPerEmailIcon,
 		DeleteIcon,
 		ClippyIcon,
@@ -111,10 +131,14 @@ export default {
 
 	data() {
 		return {
+			displayNameTemp: '',
 			emailAddressTemp: '',
 			checkResult: '',
 			checkStatus: '',
 			checking: false,
+			displayNameCheckResult: '',
+			displayNameCheckStatus: '',
+			displayNameChecking: false,
 		}
 	},
 
@@ -124,10 +148,19 @@ export default {
 			share: (state) => state.share,
 			subscribed: (state) => state.subscription.subscribed,
 			emailAddress: (state) => state.share.emailAddress,
+			displayName: (state) => state.poll.acl.displayName,
 		}),
+
+		hasCookie() {
+			return !!findCookieByValue(this.$route.params.token)
+		},
 
 		emailAddressUnchanged() {
 			return this.emailAddress === this.emailAddressTemp
+		},
+
+		displayNameUnchanged() {
+			return this.displayName === this.displayNameTemp
 		},
 
 		check() {
@@ -151,6 +184,27 @@ export default {
 			}
 		},
 
+		checkDisplayName() {
+			if (this.displayNameChecking) {
+				return {
+					result: t('polls', 'Checking name …'),
+					status: 'checking',
+				}
+			}
+
+			if (this.displayNameUnchanged) {
+				return {
+					result: '',
+					status: '',
+				}
+			}
+
+			return {
+				result: this.displayNameCheckResult,
+				status: this.displayNameCheckStatus,
+			}
+		},
+
 		personalLink() {
 			return window.location.origin
 				+ this.$router.resolve({
@@ -164,13 +218,24 @@ export default {
 		emailAddress() {
 			this.emailAddressTemp = this.emailAddress
 		},
+		displayName() {
+			this.displayNameTemp = this.displayName
+		},
 	},
 
 	created() {
 		this.emailAddressTemp = this.emailAddress
+		this.displayNameTemp = this.displayName
 	},
 
 	methods: {
+		logout() {
+			const reRouteTo = deleteCookieByValue(this.$route.params.token)
+			if (reRouteTo) {
+				this.$router.push({ name: 'publicVote', params: { token: reRouteTo } })
+			}
+		},
+
 		async toggleSubscription() {
 			await this.$store.dispatch('subscription/update', !this.subscribed)
 		},
@@ -203,12 +268,42 @@ export default {
 			}
 		}, 500),
 
+		validateDisplayName: debounce(async function(value) {
+			const endpoint = 'apps/polls/check/username'
+
+			this.displayNameTemp = value
+			try {
+				this.displayNameChecking = true
+				await axios.post(generateUrl(endpoint), {
+					headers: { Accept: 'application/json' },
+					userName: this.displayNameTemp,
+					token: this.$route.params.token,
+				})
+				this.displayNameCheckResult = t('polls', 'Valid name.')
+				this.displayNameCheckStatus = 'success'
+			} catch {
+				this.displayNameCheckResult = t('polls', 'Invalid email address.')
+				this.displayNameCheckStatus = 'error'
+			} finally {
+				this.displayNameChecking = false
+			}
+		}, 500),
+
 		async submitEmailAddress() {
 			try {
 				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.emailAddressTemp })
 				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.emailAddressTemp }))
 			} catch {
 				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.emailAddressTemp }))
+			}
+		},
+
+		async submitDisplayName() {
+			try {
+				await this.$store.dispatch('share/updateDisplayName', { displayName: this.displayNameTemp })
+				showSuccess(t('polls', 'Name changed.'))
+			} catch {
+				showError(t('polls', 'Error changing name.'))
 			}
 		},
 

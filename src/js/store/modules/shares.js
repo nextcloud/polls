@@ -28,9 +28,9 @@ const defaultShares = () => ({
 	list: [],
 })
 
-const state = defaultShares()
-
 const namespaced = true
+const state = defaultShares()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -76,7 +76,7 @@ const actions = {
 
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('set', response.data)
@@ -90,10 +90,7 @@ const actions = {
 		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/share`
 
 		try {
-			await axios.post(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-				...payload.share,
-			})
+			await axios.post(generateUrl(endPoint), payload.share, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error writing share', { error: e.response }, { payload })
 			throw e
@@ -108,9 +105,7 @@ const actions = {
 		context.commit('delete', { share: payload.share })
 
 		try {
-			await axios.delete(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error removing share', { error: e.response }, { payload })
 			throw e
@@ -129,9 +124,7 @@ const actions = {
 		}
 
 		try {
-			await axios.put(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error switching type', { error: e.response }, { payload })
 			throw e
@@ -144,9 +137,7 @@ const actions = {
 		const endPoint = `apps/polls/share/${payload.share.token}/publicpollemail/${payload.value}`
 
 		try {
-			await axios.put(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error changing email register setting', { error: e.response }, { payload })
 			throw e
@@ -159,9 +150,7 @@ const actions = {
 		const endPoint = `apps/polls/share/${payload.share.token}/invite`
 
 		try {
-			return await axios.post(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			return await axios.post(generateUrl(endPoint), null, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e
@@ -174,9 +163,7 @@ const actions = {
 		const endPoint = `apps/polls/share/${payload.share.token}/resolve`
 
 		try {
-			await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			await axios.get(generateUrl(endPoint), axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
 			throw e

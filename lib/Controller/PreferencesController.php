@@ -25,14 +25,13 @@ namespace OCA\Polls\Controller;
 
 use OCP\IRequest;
 use OCP\IUserSession;
-use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCA\Polls\Service\PreferencesService;
 use OCA\Polls\Service\CalendarService;
+use OCP\ISession;
 
-class PreferencesController extends Controller {
-
+class PreferencesController extends BaseController {
 	/** @var PreferencesService */
 	private $preferencesService;
 
@@ -42,16 +41,15 @@ class PreferencesController extends Controller {
 	/** @var IUserSession */
 	private $userSession;
 
-	use ResponseHandle;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ISession $session,
 		PreferencesService $preferencesService,
 		CalendarService $calendarService,
 		IUserSession $userSession
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->calendarService = $calendarService;
 		$this->preferencesService = $preferencesService;
 		$this->userSession = $userSession;

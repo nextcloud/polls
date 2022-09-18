@@ -1,6 +1,6 @@
 <?php
 /**
- * @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,14 +21,14 @@
  *
  */
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Exceptions;
 
-use OCP\IUserSession;
-use OCA\Polls\Helper\Container;
+use OCP\AppFramework\Http;
 
-class CurrentUser extends User {
+class NoDeadLineException extends Exception {
 	public function __construct(
+		string $e = 'No deadline calculated'
 	) {
-		parent::__construct(Container::queryClass(IUserSession::class)->getUser()->getUId());
+		parent::__construct($e, Http::STATUS_OK);
 	}
 }

@@ -51,6 +51,9 @@ class Subscription extends Entity implements JsonSerializable {
 		$this->addType('pollId', 'int');
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function jsonSerialize() {
 		return [
 			'id' => $this->getId(),

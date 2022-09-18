@@ -49,7 +49,7 @@ class PollMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
 		return $this->findEntity($qb);
 	}
@@ -75,8 +75,8 @@ class PollMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where($qb->expr()->like(
-			   'misc_settings',
-			   $qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
+		   	'misc_settings',
+		   	$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
 		   ));
 		return $this->findEntities($qb);
 	}
@@ -91,6 +91,18 @@ class PollMapper extends QBMapper {
 			->from($this->getTableName())
 			->where($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->orWhere($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Poll[]
+	 */
+	public function findOwner(string $userId): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
 
@@ -131,7 +143,7 @@ class PollMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->neq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->neq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntities($qb);
@@ -147,7 +159,7 @@ class PollMapper extends QBMapper {
 			->set('deleted', $query->createNamedParameter($archiveDate))
 			->where($query->expr()->lt('expire', $query->createNamedParameter($offset)))
 			->andWhere($query->expr()->gt('expire', $query->createNamedParameter(0)));
-		$query->execute();
+		$query->executeStatement();
 	}
 
 	/**
@@ -158,6 +170,6 @@ class PollMapper extends QBMapper {
 		$query->delete($this->getTableName())
 			->where('owner = :userId')
 			->setParameter('userId', $userId);
-		$query->execute();
+		$query->executeStatement();
 	}
 }

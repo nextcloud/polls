@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "Circle",
+    "Group" : "Group",
     "Legal Notice" : "Legal Notice",
     "Polls App - New Activity" : "Polls App - New Activity",
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} sends you this reminder to make sure your votes are set.",
-    "Circle" : "Circle",
     "Contact" : "Contact",
     "Public link" : "Public link",
-    "Group" : "Group",
     "User" : "User",
     "Polls" : "Polls",
     "Delete" : "Delete",
@@ -35,6 +35,7 @@ OC.L10N.register(
     "Shares" : "Shares",
     "Description" : "Description",
     "Receive notification email on activity" : "Receive notification email on activity",
+    "Change name" : "Change name",
     "Yes" : "Yes",
     "Administration" : "Administration",
     "Details" : "Details",

@@ -23,38 +23,41 @@
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Helper\Container;
-
-use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Model\UserGroup\Circle;
-use OCA\Polls\Model\UserGroup\Contact;
-use OCA\Polls\Model\UserGroup\ContactGroup;
-use OCA\Polls\Model\UserGroup\Email;
-use OCA\Polls\Model\UserGroup\Group;
-use OCA\Polls\Model\UserGroup\User;
-use OCA\Polls\Model\UserGroup\UserBase;
+use OCA\Polls\Model\Group\Circle;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\Group\ContactGroup;
+use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\Group\Group;
+use OCA\Polls\Model\User\User;
 use OCP\IUserManager;
 
 class SystemService {
 	private const REGEX_VALID_MAIL = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
 	private const REGEX_PARSE_MAIL = '/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/';
 	
+	/** @var ShareMapper */
+	private $shareMapper;
+	
+	/** @var UserService */
+	private $userService;
+	
 	/** @var VoteMapper */
 	private $voteMapper;
 
-	/** @var ShareMapper */
-	private $shareMapper;
-
 	public function __construct(
 		ShareMapper $shareMapper,
+		UserService $userService,
 		VoteMapper $voteMapper
 	) {
 		$this->shareMapper = $shareMapper;
+		$this->userService = $userService;
 		$this->voteMapper = $voteMapper;
 	}
 
@@ -128,7 +131,7 @@ class SystemService {
 				$list[] = new Email($emailAddress, $displayName, $emailAddress);
 			}
 
-			$list = array_merge($list, UserBase::search($query));
+			$list = array_merge($list, $this->userService->search($query));
 		}
 
 		return $list;
@@ -141,14 +144,7 @@ class SystemService {
 	 *
 	 * @return true
 	 */
-	public function validatePublicUsername(string $userName, string $token): bool {
-		try {
-			$share = $this->shareMapper->findByToken($token);
-		} catch (\Exception $e) {
-			throw new NotAuthorizedException('Token invalid');
-		}
-
-
+	public function validatePublicUsername(string $userName, Share $share): bool {
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');
 		}

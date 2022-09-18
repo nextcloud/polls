@@ -22,9 +22,9 @@
  */
 
 
-namespace OCA\Polls\Model\UserGroup;
+namespace OCA\Polls\Model\User;
 
-use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\UserBase;
 
 class GenericUser extends UserBase {
 	public const TYPE = 'external';
@@ -35,19 +35,20 @@ class GenericUser extends UserBase {
 		string $id,
 		string $type = self::TYPE,
 		string $displayName = '',
-		string $emailAddress = ''
+		string $emailAddress = '',
+		string $languageCode = '',
+		string $localeCode = '',
+		string $timeZoneName = ''
 	) {
-		parent::__construct($id, $type);
+		parent::__construct($id, $type, $displayName, $emailAddress, $languageCode, $localeCode, $timeZoneName);
+
 		$this->icon = self::ICON_DEFAULT;
-		$this->description = Container::getL10N()->t('External user');
+		$this->description = $this->l10n->t('External user');
 		$this->richObjectType = 'guest';
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->icon = self::ICON_PUBLIC;
-			$this->description = Container::getL10N()->t('Public link');
+			$this->description = $this->l10n->t('Public link');
 		}
-
-		$this->displayName = $displayName;
-		$this->emailAddress = $emailAddress;
 	}
 }

@@ -23,24 +23,23 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\AppFramework\Controller;
+use OCA\Polls\Service\SystemService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
-use OCA\Polls\Service\SystemService;
-
 use OCP\IRequest;
+use OCP\ISession;
 
-class SystemController extends Controller {
-
+class SystemController extends BaseController {
 	/** @var SystemService */
 	private $systemService;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ISession $session,
 		SystemService $systemService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->systemService = $systemService;
 	}
 

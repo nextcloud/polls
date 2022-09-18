@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "دائرة ",
+    "Group" : "الفريق",
     "Do not share this link with other people, because it is connected to your votes." : "لا تشارك هذا الرابط مع اشخاص اخريين، لانه مرتبط مع تصويتك.",
     "Go to poll" : "الانتقال إلى استطلاع الرأي",
-    "Circle" : "دائرة ",
     "Contact" : "التواصل",
-    "Group" : "الفريق",
     "User" : "المستخدم",
     "Polls" : "استطلاعات الرأي",
     "Delete" : "إزالة",
@@ -33,6 +33,7 @@ OC.L10N.register(
     "Preview" : "معاينة",
     "Shares" : "التي قمتَ بمشاركتها",
     "Description" : "الوصف",
+    "Change name" : "تغيير الإسم",
     "Yes" : "نعم",
     "Administration" : "الإدارة",
     "Details" : "التفاصيل",

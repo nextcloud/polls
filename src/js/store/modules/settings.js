@@ -28,6 +28,7 @@ const defaultSettings = () => ({
 	user: {
 		useDashboardStyling: false,
 		useIndividualStyling: false,
+		useCommentsAlternativeStyling: false,
 		individualBgColor: false,
 		individualImage: false,
 		individualImageUrl: '',
@@ -61,8 +62,9 @@ const defaultSettings = () => ({
 	],
 })
 
-const state = defaultSettings()
 const namespaced = true
+const state = defaultSettings()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	reset(state) {
@@ -208,7 +210,10 @@ const actions = {
 	async get(context) {
 		const endPoint = 'apps/polls/preferences'
 		try {
-			const response = await axios.get(generateUrl(endPoint), { params: { time: +new Date() } })
+			const response = await axios.get(generateUrl(endPoint), {
+				...axiosDefaultConfig,
+				params: { time: +new Date() },
+			})
 			if (response.data.preferences.defaultViewTextPoll === 'desktop') {
 				response.data.preferences.defaultViewTextPoll = 'table-view'
 			}
@@ -240,9 +245,8 @@ const actions = {
 		const endPoint = 'apps/polls/preferences'
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
 				settings: context.state.user,
-			})
+			}, axiosDefaultConfig)
 			context.commit('setPreference', response.data.preferences)
 		} catch (e) {
 			console.error('Error writing preferences', { error: e.response }, { preferences: state.user })
@@ -252,9 +256,7 @@ const actions = {
 
 	async getCalendars(context) {
 		const endPoint = 'apps/polls/calendars'
-		const response = await axios.get(generateUrl(endPoint), {
-			headers: { Accept: 'application/json' },
-		})
+		const response = await axios.get(generateUrl(endPoint), axiosDefaultConfig)
 		context.commit('setCalendars', { calendars: response.data.calendars })
 		return response
 	},

@@ -30,7 +30,6 @@ use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
 class CreateIndices implements IRepairStep {
-
 	/** @var Connection */
 	private $connection;
 

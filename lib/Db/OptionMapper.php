@@ -50,14 +50,31 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
 
 		return $this->findEntity($qb);
 	}
 
 	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Option[]
+	 * @psalm-return array<array-key, Option>
+	 */
+	public function findConfirmed(int $pollId): array {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   )->andWhere(
+		   	$qb->expr()->gt('confirmed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT))
+		   );
+
+		return $this->findEntities($qb);
+	}
+
+	/**
 	 * @return Option[]
 	 * @psalm-return array<array-key, Option>
 	 */
@@ -67,7 +84,7 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   )
 		   ->orderBy('order', 'ASC');
 
@@ -83,10 +100,10 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   )
 		   ->andWhere(
-			   $qb->expr()->eq('poll_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->eq('poll_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR))
 		   )
 		   ->orderBy('order', 'ASC');
 
@@ -98,10 +115,10 @@ class OptionMapper extends QBMapper {
 
 		$qb->delete($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($optionId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($optionId, IQueryBuilder::PARAM_INT))
 		   );
 
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
 	public function deleteByPoll(int $pollId): void {
@@ -109,10 +126,10 @@ class OptionMapper extends QBMapper {
 
 		$qb->delete($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
 	public function removeDuplicates(?IOutput $output = null): int {
@@ -123,7 +140,7 @@ class OptionMapper extends QBMapper {
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'poll_id', 'poll_option_text', 'timestamp')
 				->from($this->getTableName());
-			$foundEntries = $query->execute();
+			$foundEntries = $query->executeQuery();
 
 			$delete = $this->db->getQueryBuilder();
 			$delete->delete($this->getTableName())
@@ -139,7 +156,7 @@ class OptionMapper extends QBMapper {
 				];
 				if (in_array($currentRecord, $entries2Keep)) {
 					$delete->setParameter('id', $row['id']);
-					$delete->execute();
+					$delete->executeStatement();
 					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;
@@ -171,7 +188,7 @@ class OptionMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('duration', $qb->createNamedParameter(86400, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('duration', $qb->createNamedParameter(86400, IQueryBuilder::PARAM_INT))
 		   )
 		   ->orderBy('order', 'ASC');
 
@@ -183,6 +200,6 @@ class OptionMapper extends QBMapper {
 		$query->update($this->getTableName())
 			->set('owner', $query->createNamedParameter($replacementName))
 			->where($query->expr()->eq('owner', $query->createNamedParameter($userId)))
-			->execute();
+			->executeStatement();
 	}
 }

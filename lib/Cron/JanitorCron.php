@@ -31,7 +31,6 @@ use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Model\Settings\AppSettings;
 
 class JanitorCron extends TimedJob {
-
 	/** @var LogMapper */
 	private $logMapper;
 

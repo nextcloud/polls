@@ -1,11 +1,11 @@
 OC.L10N.register(
     "polls",
     {
-    "Legal Notice" : "Notícia de legalidade",
     "Circle" : "Círculo",
+    "Group" : "Grupo",
+    "Legal Notice" : "Notícia de legalidade",
     "Contact" : "Contacto",
     "Public link" : "Hiperligação Pública",
-    "Group" : "Grupo",
     "User" : "Utilizador",
     "Delete" : "Apagar",
     "Conflict" : "Conflito",
@@ -32,6 +32,7 @@ OC.L10N.register(
     "Shares" : "Partilhas",
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Description" : "Descrição",
+    "Change name" : "Alterar nome",
     "Yes" : "Sim",
     "Administration" : "Administração",
     "Details" : "Detalhes",

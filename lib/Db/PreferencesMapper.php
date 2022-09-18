@@ -52,7 +52,7 @@ class PreferencesMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntity($qb);
@@ -65,14 +65,14 @@ class PreferencesMapper extends QBMapper {
 			$query->delete($this->getTableName())
 				->where('user_id = :userId')
 				->setParameter('userId', '');
-			$query->execute();
+			$query->executeStatement();
 
 			// remove duplicate preferences from polls_preferences
 			// preserve the last user setting in the db
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'user_id')
 				->from($this->getTableName());
-			$users = $query->execute();
+			$users = $query->executeQuery();
 
 			$delete = $this->db->getQueryBuilder();
 			$delete->delete($this->getTableName())
@@ -83,7 +83,7 @@ class PreferencesMapper extends QBMapper {
 			while ($row = $users->fetch()) {
 				if (in_array($row['user_id'], $userskeep)) {
 					$delete->setParameter('id', $row['id']);
-					$delete->execute();
+					$delete->executeStatement();
 					$count++;
 				} else {
 					$userskeep[] = $row['user_id'];
@@ -114,6 +114,6 @@ class PreferencesMapper extends QBMapper {
 		$query->delete($this->getTableName())
 			->where('user_id = :userId')
 			->setParameter('userId', $userId);
-		$query->execute();
+		$query->executeStatement();
 	}
 }

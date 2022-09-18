@@ -53,8 +53,9 @@ const defaultAppSettings = () => ({
 	showMailAddressesGroups: [],
 })
 
-const state = defaultAppSettings()
 const namespaced = true
+const state = defaultAppSettings()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	reset(state) {
@@ -73,7 +74,7 @@ const actions = {
 		const endPoint = 'apps/polls/settings/app'
 		try {
 			const response = await axios.get(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			context.commit('set', response.data.appSettings)
@@ -86,9 +87,8 @@ const actions = {
 		const endPoint = 'apps/polls/settings/app'
 		try {
 			const response = await axios.post(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
 				appSettings: context.state,
-			})
+			}, axiosDefaultConfig)
 			context.commit('set', response.data.appSettings)
 		} catch (e) {
 			console.error('Error writing appSettings', { error: e.response }, { appSettings: state })

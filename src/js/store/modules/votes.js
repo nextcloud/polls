@@ -28,9 +28,9 @@ const defaultVotes = () => ({
 	list: [],
 })
 
-const state = defaultVotes()
-
 const namespaced = true
+const state = defaultVotes()
+const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -93,7 +93,7 @@ const actions = {
 		}
 		try {
 			const response = await axios.get(generateUrl(`${endPoint}/votes`), {
-				headers: { Accept: 'application/json' },
+				...axiosDefaultConfig,
 				params: { time: +new Date() },
 			})
 			const votes = []
@@ -125,10 +125,9 @@ const actions = {
 
 		try {
 			const response = await axios.put(generateUrl(`${endPoint}/vote`), {
-				headers: { Accept: 'application/json' },
 				optionId: payload.option.id,
 				setTo: payload.setTo,
-			})
+			}, axiosDefaultConfig)
 			context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
 			context.dispatch('options/list', null, { root: true })
 			context.dispatch('poll/get', null, { root: true })
@@ -154,9 +153,7 @@ const actions = {
 		}
 
 		try {
-			const response = await axios.delete(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			const response = await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
 			context.commit('deleteVotes', { userId: response.data.deleted })
 		} catch (e) {
 			console.error('Error deleting votes', { error: e.response })
@@ -167,9 +164,7 @@ const actions = {
 	async deleteUser(context, payload) {
 		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/user/${payload.userId}`
 		try {
-			await axios.delete(generateUrl(endPoint), {
-				headers: { Accept: 'application/json' },
-			})
+			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
 			context.commit('deleteVotes', payload)
 		} catch (e) {
 			console.error('Error deleting votes', { error: e.response }, { payload })

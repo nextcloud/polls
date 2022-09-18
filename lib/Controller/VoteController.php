@@ -23,25 +23,22 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\JSONResponse;
-
 use OCA\Polls\Service\VoteService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
+use OCP\ISession;
 
-class VoteController extends Controller {
-
+class VoteController extends BaseController {
 	/** @var VoteService */
 	private $voteService;
-
-	use ResponseHandle;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		ISession $session,
 		VoteService $voteService
 	) {
-		parent::__construct($appName, $request);
+		parent::__construct($appName, $request, $session);
 		$this->voteService = $voteService;
 	}
 

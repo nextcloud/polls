@@ -313,7 +313,7 @@ abstract class TableSchema {
 				->andWhere('version = :version')
 				->setParameter('appName', 'polls')
 				->setParameter('version', $version)
-				->execute();
+				->executeStatement();
 		}
 	}
 }

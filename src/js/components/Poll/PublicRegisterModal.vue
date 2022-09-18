@@ -91,13 +91,13 @@
 </template>
 
 <script>
-import debounce from 'lodash/debounce'
+import { debounce } from 'lodash'
 import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { Button as VueButton, Modal, CheckboxRadioSwitch } from '@nextcloud/vue'
 import { mapState } from 'vuex'
-import RichText from '@juliushaertl/vue-richtext'
+import { RichText } from '@nextcloud/vue-richtext'
 import InputDiv from '../Base/InputDiv.vue'
 import SimpleLink from '../../helpers/SimpleLink.js'
 

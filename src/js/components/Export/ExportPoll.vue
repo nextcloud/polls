@@ -64,7 +64,7 @@ import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
-import ExportIcon from 'vue-material-design-icons/FileDownloadOutline'
+import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 
 export default {
 	name: 'ExportPoll',
@@ -176,21 +176,25 @@ export default {
 		addVotesArray(style) {
 			this.participants.forEach((participant) => {
 				const votesLine = [participant.displayName]
-				if (this.isOwner) {
-					votesLine.push(this.emailAddresses.find((item) => item.displayName === participant.displayName).emailAddress)
-				}
-
-				this.options.list.forEach((option, i) => {
-					if (style === 'symbols') {
-						votesLine.push(this.getVote({ userId: participant.userId, option }).answerSymbol ?? '❌')
-					} else if (style === 'raw') {
-						votesLine.push(this.getVote({ userId: participant.userId, option }).answer)
-					} else {
-						votesLine.push(this.getVote({ userId: participant.userId, option }).answerTranslated ?? t('polls', 'No'))
+				try {
+					if (this.isOwner) {
+						votesLine.push(this.emailAddresses.find((item) => item.displayName === participant.displayName).emailAddress)
 					}
-				})
 
-				this.sheetData.push(votesLine)
+					this.options.list.forEach((option, i) => {
+						if (style === 'symbols') {
+							votesLine.push(this.getVote({ userId: participant.userId, option }).answerSymbol ?? '❌')
+						} else if (style === 'raw') {
+							votesLine.push(this.getVote({ userId: participant.userId, option }).answer)
+						} else {
+							votesLine.push(this.getVote({ userId: participant.userId, option }).answerTranslated ?? t('polls', 'No'))
+						}
+					})
+
+					this.sheetData.push(votesLine)
+				} catch (e) {
+					// just skip this participant
+				}
 			})
 
 			const workSheet = xlsxUtils.aoa_to_sheet(this.sheetData)

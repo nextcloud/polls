@@ -38,4 +38,13 @@ class NotReady extends Error {
 
 }
 
-export { Exception, NotReady }
+class InvalidJSON extends Error {
+
+	constructor(message) {
+		super(message)
+		this.name = 'InvalidJSON'
+	}
+
+}
+
+export { Exception, InvalidJSON, NotReady }

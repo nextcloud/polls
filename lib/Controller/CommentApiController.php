@@ -23,29 +23,26 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Model\Acl;
+use OCA\Polls\Service\CommentService;
 use OCP\IRequest;
-use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Http\JSONResponse;
 
-use OCA\Polls\Service\CommentService;
-
-class CommentApiController extends ApiController {
-
+class CommentApiController extends BaseApiController {
 	/** @var CommentService */
 	private $commentService;
 
-	use ResponseHandle;
+	/** @var Acl */
+	private $acl;
 
 	public function __construct(
 		string $appName,
+		Acl $acl,
 		IRequest $request,
 		CommentService $commentService
 	) {
-		parent::__construct($appName,
-			$request,
-			'POST, GET, DELETE',
-			'Authorization, Content-Type, Accept',
-			1728000);
+		parent::__construct($appName, $request);
+		$this->acl = $acl;
 		$this->commentService = $commentService;
 	}
 
@@ -56,7 +53,9 @@ class CommentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function list(int $pollId): JSONResponse {
-		return $this->response(fn () => ['comments' => $this->commentService->list($pollId)]);
+		return $this->response(fn () => [
+			'comments' => $this->commentService->list($$this->acl->setPollId($pollId))
+		]);
 	}
 
 	/**
@@ -66,7 +65,9 @@ class CommentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function add(int $pollId, string $message): JSONResponse {
-		return $this->response(fn () => ['comment' => $this->commentService->add($message, $pollId)]);
+		return $this->response(fn () => [
+			'comment' => $this->commentService->add($message, $this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD))
+		]);
 	}
 
 	/**
@@ -76,6 +77,10 @@ class CommentApiController extends ApiController {
 	 * @NoCSRFRequired
 	 */
 	public function delete(int $commentId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['comment' => $this->commentService->delete($commentId)]);
+		$comment = $this->commentService->get($commentId);
+
+		return $this->responseDeleteTolerant(fn () => [
+			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()))
+		]);
 	}
 }

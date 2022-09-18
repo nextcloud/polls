@@ -1,10 +1,10 @@
 OC.L10N.register(
     "polls",
     {
-    "Legal Notice" : "Thông cáo pháp lý",
     "Circle" : "Vòng kết nối",
-    "Contact" : "Liên hệ",
     "Group" : "N",
+    "Legal Notice" : "Thông cáo pháp lý",
+    "Contact" : "Liên hệ",
     "User" : "Người dùng",
     "Delete" : "Xóa",
     "Conflict" : "Xung đột",
@@ -29,6 +29,7 @@ OC.L10N.register(
     "Preview" : "Xem trước",
     "Shares" : "Chia sẻ",
     "Description" : "Mô tả",
+    "Change name" : "Đổi tên",
     "Yes" : "Đồng ý",
     "Details" : "Thông tin",
     "Configuration" : "Cấu hình",

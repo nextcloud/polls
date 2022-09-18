@@ -23,200 +23,68 @@
 
 namespace OCA\Polls\Service;
 
-use Psr\Log\LoggerInterface;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\IGroupManager;
-use OCP\IConfig;
-use OCP\IURLGenerator;
-use OCA\Polls\Db\SubscriptionMapper;
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\Share;
-use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Log;
+use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Share;
+use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
-use OCA\Polls\Model\UserGroup\User;
+use OCA\Polls\Exceptions\NoDeadLineException;
+use OCA\Polls\Model\Mail\ConfirmationMail;
 use OCA\Polls\Model\Mail\InvitationMail;
-use OCA\Polls\Model\Mail\ReminderMail;
 use OCA\Polls\Model\Mail\NotificationMail;
+use OCA\Polls\Model\Mail\ReminderMail;
+use OCA\Polls\Model\UserBase;
+use Psr\Log\LoggerInterface;
 
 class MailService {
 	/** @var LoggerInterface */
 	private $logger;
-
-	/** @var string */
-	private $appName;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var IConfig */
-	private $config;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var SubscriptionMapper */
-	private $subscriptionMapper;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
+	
+	/** @var LogMapper */
+	private $logMapper;
+	
+	/** @var Log[] **/
+	private $logs;
+	
 	/** @var PollMapper */
 	private $pollMapper;
 
-	/** @var OptionMapper */
-	private $optionMapper;
+	/** @var ShareMapper */
+	private $shareMapper;
+	
+	/** @var SubscriptionMapper */
+	private $subscriptionMapper;
 
-	/** @var LogMapper */
-	private $logMapper;
-
-	/** @var Log[] **/
-	private $logs;
-
-	/** @var Poll **/
-	private $poll;
+	/** @var UserService */
+	private $userService;
 
 	public function __construct(
-		string $AppName,
 		LoggerInterface $logger,
-		IUserManager $userManager,
-		IGroupManager $groupManager,
-		IConfig $config,
-		IURLGenerator $urlGenerator,
+		LogMapper $logMapper,
+		PollMapper $pollMapper,
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
-		OptionMapper $optionMapper,
-		PollMapper $pollMapper,
-		LogMapper $logMapper
+		UserService $userService
 	) {
-		$this->appName = $AppName;
 		$this->logger = $logger;
-		$this->config = $config;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
-		$this->urlGenerator = $urlGenerator;
 		$this->logMapper = $logMapper;
-		$this->optionMapper = $optionMapper;
 		$this->pollMapper = $pollMapper;
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
-		$this->poll = new Poll;
+		$this->userService = $userService;
 		$this->logs = [];
 	}
 
 	public function resolveEmailAddress(int $pollId, string $userId): string {
-		if ($this->userManager->get($userId) instanceof IUser) {
-			$user = new User($userId);
-			return $user->getEmailAddressMasked();
+		$user = $this->userService->evaluateUser($userId, $pollId);
+		if ($user->getEmailAddress()) {
+			return $user->getEmailAddress();
 		}
 
-		// if $userId is no site user, eval via shares
-		try {
-			$share = $this->shareMapper->findByPollAndUser($pollId, $userId);
-			if ($share->getEmailAddress()) {
-				return $share->getEmailAddress();
-			}
-		} catch (\Exception $e) {
-			// catch silently
-		}
 		return '';
-	}
-
-	public function resendInvitation(string $token): Share {
-		$this->sendInvitation($token);
-		return $this->shareMapper->findByToken($token);
-	}
-
-	public function sendInvitation(string $token): array {
-		$share = $this->shareMapper->findByToken($token);
-		$sentMails = [];
-		$abortedMails = [];
-
-		foreach ($share->getUserObject()->getMembers() as $recipient) {
-			$invitation = new InvitationMail($recipient->getId(), $share);
-
-			try {
-				$invitation->send();
-				$sentMails[] = $recipient;
-			} catch (InvalidEmailAddress $e) {
-				$abortedMails[] = $recipient;
-				$this->logger->warning('Invalid or no email address for invitation: ' . json_encode($recipient));
-			} catch (\Exception $e) {
-				$abortedMails[] = $recipient;
-				$this->logger->error('Error sending Invitation to ' . json_encode($recipient));
-			}
-		}
-
-		$share->setInvitationSent(time());
-		$this->shareMapper->update($share);
-		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
-	}
-
-	public function sendAutoReminder(): void {
-		$polls = $this->pollMapper->findAutoReminderPolls();
-		$time = time();
-		$remindPolls = [];
-
-		foreach ($polls as $poll) {
-			if ($poll->getExpire()) {
-				$deadline = $poll->getExpire();
-				$reminderReason = ReminderMail::REASON_EXPIRATION;
-			} elseif ($poll->getType() === Poll::TYPE_DATE) {
-				// use first date option as reminder deadline
-				$options = $this->optionMapper->findByPoll($poll->getId());
-				$deadline = $options[0]->getTimestamp();
-				$reminderReason = ReminderMail::REASON_OPTION;
-			} else {
-				// Textpolls without expirations are not processed
-				continue;
-			}
-
-			if ($deadline - $poll->getCreated() > ReminderMail::FIVE_DAYS
-				&& $deadline - $time < ReminderMail::TWO_DAYS
-				&& $deadline > $time) {
-				$timeToDeadline = ReminderMail::TWO_DAYS;
-			} elseif ($deadline - $poll->getCreated() > ReminderMail::TWO_DAYS
-				&& $deadline - $time < ReminderMail::ONE_AND_HALF_DAY
-				&& $deadline > $time) {
-				$timeToDeadline = ReminderMail::ONE_AND_HALF_DAY;
-			} else {
-				continue;
-			}
-
-			$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
-			foreach ($shares as $share) {
-				if (in_array($share->getType(), [Share::TYPE_CIRCLE, Share::TYPE_CONTACTGROUP])) {
-					continue;
-				}
-
-				foreach ($share->getUserObject()->getMembers() as $recipient) {
-					$reminder = new ReminderMail(
-						$recipient->getId(),
-						$poll->getId(),
-						$deadline,
-						$timeToDeadline
-					);
-
-					try {
-						$reminder->send();
-					} catch (InvalidEmailAddress $e) {
-						$this->logger->warning('Invalid or no email address for reminder: ' . json_encode($share));
-					} catch (\Exception $e) {
-						$this->logger->error('Error sending Reminder to ' . json_encode($share));
-					}
-				}
-
-				$share->setReminderSent(time());
-				$this->shareMapper->update($share);
-			}
-		}
 	}
 
 	public function sendNotifications(): void {
@@ -249,6 +117,115 @@ class MailService {
 		foreach ($this->logs as $logItem) {
 			$logItem->setProcessed(time());
 			$this->logMapper->update($logItem);
+		}
+	}
+
+	public function resendInvitation(string $token): Share {
+		$this->sendInvitation($token);
+		return $this->shareMapper->findByToken($token);
+	}
+
+	public function sendInvitation(string $token): array {
+		$share = $this->shareMapper->findByToken($token);
+		$sentMails = [];
+		$abortedMails = [];
+
+		foreach ($this->userService->getUserFromShare($share)->getMembers() as $recipient) {
+			$invitation = new InvitationMail($recipient->getId(), $share);
+
+			try {
+				$invitation->send();
+				$sentMails[] = $recipient;
+			} catch (InvalidEmailAddress $e) {
+				$abortedMails[] = $recipient;
+				$this->logger->warning('Invalid or no email address for invitation: ' . json_encode($recipient));
+			} catch (\Exception $e) {
+				$abortedMails[] = $recipient;
+				$this->logger->error('Error sending Invitation to ' . json_encode($recipient));
+			}
+		}
+
+		$share->setInvitationSent(time());
+		$this->shareMapper->update($share);
+		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
+	}
+
+	public function sendAutoReminder(): void {
+		$polls = $this->pollMapper->findAutoReminderPolls();
+		
+		foreach ($polls as $poll) {
+			try {
+				$this->processSharesForAutoReminder($poll);
+			} catch (NoDeadLineException $e) {
+				continue;
+			}
+		}
+	}
+
+	/**
+	 * Send a confirmation mail for the poll to all participants
+	 */
+	public function sendConfirmations($pollId): array {
+		$sentMails = [];
+		$abortedMails = [];
+
+		$participants = $this->userService->getParticipants($pollId);
+		foreach ($participants as $participant) {
+			if ($this->sendConfirmationMail($participant, $pollId)) {
+				$sentMails[] = $participant->getDisplayName();
+			} else {
+				$abortedMails[] = $participant->getDisplayName();
+			}
+		}
+
+		return [
+			'sent' => $sentMails,
+			'error' => $abortedMails
+		];
+	}
+
+	private function processSharesForAutoReminder(Poll $poll) {
+		$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
+		foreach ($shares as $share) {
+			if (in_array($share->getType(), [Share::TYPE_CIRCLE, Share::TYPE_CONTACTGROUP])) {
+				continue;
+			}
+
+			$this->sendAutoReminderToRecipients($share, $poll);
+			$share->setReminderSent(time());
+			$this->shareMapper->update($share);
+		}
+	}
+
+	private function sendConfirmationMail(UserBase $participant, int $pollId) : bool {
+		$confirmation = new ConfirmationMail($participant->getId(), $pollId);
+
+		try {
+			$confirmation->send();
+			return true;
+		} catch (InvalidEmailAddress $e) {
+			$this->logger->warning('Invalid or no email address for confirmation: ' . json_encode($participant));
+		} catch (\Exception $e) {
+			$this->logger->error('Error sending confirmation to ' . json_encode($participant));
+		}
+
+		return false;
+	}
+
+	private function sendAutoReminderToRecipients(Share $share, Poll $poll) {
+		foreach ($this->userService->getUserFromShare($share)->getMembers() as $recipient) {
+			$reminder = new ReminderMail(
+				$recipient->getId(),
+				$poll->getId()
+			);
+
+			try {
+				$reminder->send();
+			} catch (InvalidEmailAddress $e) {
+				$this->logger->warning('Invalid or no email address for reminder: ' . json_encode($share));
+			} catch (\Exception $e) {
+				$this->logger->error('Error sending reminder to ' . json_encode($share));
+			}
 		}
 	}
 }

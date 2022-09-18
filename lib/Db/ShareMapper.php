@@ -67,7 +67,7 @@ class ShareMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
 		return $this->findEntities($qb);
@@ -97,10 +97,10 @@ class ShareMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   )
 		   ->andWhere(
-			   $qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntity($qb);
@@ -115,7 +115,7 @@ class ShareMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR))
+		   	$qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR))
 		   );
 
 		return $this->findEntity($qb);
@@ -126,10 +126,10 @@ class ShareMapper extends QBMapper {
 
 		$qb->delete($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   );
 
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
 	public function deleteByUserId(string $userId): void {
@@ -137,7 +137,7 @@ class ShareMapper extends QBMapper {
 		$query->delete($this->getTableName())
 			->where('user_id = :userId')
 			->setParameter('userId', $userId);
-		$query->execute();
+		$query->executeStatement();
 	}
 
 	/**
@@ -150,7 +150,7 @@ class ShareMapper extends QBMapper {
 			->andWhere('type = :type')
 			->setParameter('id', $id)
 			->setParameter('type', $type);
-		$query->execute();
+		$query->executeStatement();
 	}
 
 	/**
@@ -161,10 +161,10 @@ class ShareMapper extends QBMapper {
 
 		$qb->delete($this->getTableName())
 		   ->where(
-			   $qb->expr()->eq('id', $qb->createNamedParameter($shareId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($shareId, IQueryBuilder::PARAM_INT))
 		   );
 
-		$qb->execute();
+		$qb->executeStatement();
 	}
 
 	public function removeDuplicates(?IOutput $output = null): int {
@@ -177,14 +177,14 @@ class ShareMapper extends QBMapper {
 				->set('user_id', 'token')
 				->where('type = :type')
 				->setParameter('type', 'public')
-				->execute();
+				->executeStatement();
 
 			// remove duplicates from polls_share
 			// preserve the first entry
 			$query = $this->db->getQueryBuilder();
 			$query->select('id', 'type', 'poll_id', 'user_id')
 				->from($this->getTableName());
-			$foundEntries = $query->execute();
+			$foundEntries = $query->executeQuery();
 
 			$delete = $this->db->getQueryBuilder();
 			$delete->delete($this->getTableName())->where('id = :id');
@@ -200,7 +200,7 @@ class ShareMapper extends QBMapper {
 
 				if (in_array($currentRecord, $entries2Keep) || $row['user_id'] === null || $row['type'] === '') {
 					$delete->setParameter('id', $row['id']);
-					$delete->execute();
+					$delete->executeStatement();
 					$count++;
 				} else {
 					$entries2Keep[] = $currentRecord;

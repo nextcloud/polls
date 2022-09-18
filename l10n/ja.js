@@ -1,6 +1,8 @@
 OC.L10N.register(
     "polls",
     {
+    "Circle" : "サークル",
+    "Group" : "グループ",
     "Poll invitation \"%s\"" : "投票への招待 \"%s\"",
     "This email is sent to you, because you are invited to vote in this poll by the poll owner. At least your name or your email address is recorded in this poll. If you want to get removed from this poll, contact the site administrator or the initiator of this poll, where the mail is sent from." : "このメールはあなたに送られています。少なくともあなたの名前やメールアドレスはこの投票に記録されています。この投票から自身を削除したい場合は、サイト管理者またはメールが送信されているこの投票の開始者に連絡してください。",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} があなたを投票 \"{title}\" に参加するよう招待しました",
@@ -15,11 +17,9 @@ OC.L10N.register(
     "The poll has been restored." : "投票が復元されました。",
     "The poll has been closed." : "投票は終了しました。",
     "Check your votes" : "投票内容を確認する",
-    "Circle" : "サークル",
     "Contact" : "連絡先",
     "External user" : "外部ユーザー",
     "Public link" : "公開リンク",
-    "Group" : "グループ",
     "User" : "ユーザー",
     "Polls" : "投票",
     "Delete" : "削除",
@@ -101,6 +101,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "アクティビティに関して通知メールを受け取る",
     "Copy your personal link to clipboard" : "個人リンクをクリップボードにコピー",
     "Edit Email Address" : "メールアドレスを編集",
+    "Change name" : "名称変更",
     "Remove Email Address" : "メールアドレスを削除",
     "Email address deleted." : "メールアドレスが削除しました。",
     "Email address {emailAddress} saved." : "メールアドレス{emailAddress}が保存しました。",

@@ -24,7 +24,7 @@
 namespace OCA\Polls\Model\Settings;
 
 use JsonSerializable;
-use OCA\Polls\Model\UserGroup\Group;
+use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Helper\Container;
 use OCP\IConfig;
 use OCP\IGroupManager;
@@ -168,6 +168,9 @@ class AppSettings implements JsonSerializable {
 		$this->config->setAppValue(self::APP_NAME, $key, $value);
 	}
 
+	/**
+	 * @return mixed
+	 */
 	public function jsonSerialize() {
 		// convert group ids to group objects
 		$publicSharesGroups = [];

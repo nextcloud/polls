@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<transition-group name="fade" class="comments" tag="ul">
+	<transition-group name="fade" :class="['comments' , {'alternativestyle': commentStyling}]" tag="ul">
 		<CommentItem v-for="(comment) in sortedList"
 			:key="comment.id"
 			:comment="comment"
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import sortBy from 'lodash/sortBy'
+import { sortBy } from 'lodash'
 import CommentItem from './CommentItem.vue'
 import { mapState } from 'vuex'
 
@@ -49,6 +49,7 @@ export default {
 	computed: {
 		...mapState({
 			comments: (state) => state.comments.list,
+			commentStyling: (state) => state.settings.user.useCommentsAlternativeStyling,
 		}),
 
 		sortedList() {

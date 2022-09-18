@@ -20,24 +20,41 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
+
 namespace OCA\Polls\Controller;
 
 use Closure;
-
+use OCA\Polls\Exceptions\Exception;
+use OCA\Polls\Exceptions\NoUpdatesException;
+use OCP\AppFramework\Controller;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\ISession;
+use OCP\IRequest;
 
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCA\Polls\Exceptions\NoUpdatesException;
-use OCA\Polls\Exceptions\Exception;
+class BaseController extends Controller {
+	/** @var ISession */
+	protected $session;
 
-trait ResponseHandle {
+	public function __construct(
+		string $appName,
+		IRequest $request,
+		ISession $session
+	) {
+		parent::__construct($appName, $request);
+		$this->session = $session;
+	}
 
 	/**
 	 * response
 	 * @NoAdminRequired
 	 */
-	protected function response(Closure $callback): JSONResponse {
+	protected function response(Closure $callback, string $token = ''): JSONResponse {
+		if ($token) {
+			$this->session->set('publicPollToken', $token);
+		}
+
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (Exception $e) {
@@ -49,7 +66,11 @@ trait ResponseHandle {
 	 * response
 	 * @NoAdminRequired
 	 */
-	protected function responseLong(Closure $callback): JSONResponse {
+	protected function responseLong(Closure $callback, string $token = ''): JSONResponse {
+		if ($token) {
+			$this->session->set('publicPollToken', $token);
+		}
+
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (NoUpdatesException $e) {
@@ -61,7 +82,11 @@ trait ResponseHandle {
 	 * responseCreate
 	 * @NoAdminRequired
 	 */
-	protected function responseCreate(Closure $callback): JSONResponse {
+	protected function responseCreate(Closure $callback, string $token = ''): JSONResponse {
+		if ($token) {
+			$this->session->set('publicPollToken', $token);
+		}
+
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
 		} catch (Exception $e) {
@@ -73,7 +98,11 @@ trait ResponseHandle {
 	 * responseDeleteTolerant
 	 * @NoAdminRequired
 	 */
-	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
+	protected function responseDeleteTolerant(Closure $callback, string $token = ''): JSONResponse {
+		if ($token) {
+			$this->session->set('publicPollToken', $token);
+		}
+
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

@@ -25,15 +25,6 @@ namespace OCA\Polls\Service;
 
 use DateTime;
 use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-use Psr\Log\LoggerInterface;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\DB\Exception;
-use OCP\EventDispatcher\IEventDispatcher;
-
-use OCA\Polls\Exceptions\DuplicateEntryException;
-use OCA\Polls\Exceptions\InvalidPollTypeException;
-use OCA\Polls\Exceptions\InvalidOptionPropertyException;
-
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
@@ -45,18 +36,22 @@ use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
+use OCA\Polls\Exceptions\DuplicateEntryException;
+use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Exceptions\InvalidOptionPropertyException;
+use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Model\Acl;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\DB\Exception;
+use OCP\EventDispatcher\IEventDispatcher;
+use Psr\Log\LoggerInterface;
 
 class OptionService {
-
 	/** @var IEventDispatcher */
 	private $eventDispatcher;
 
 	/** @var LoggerInterface */
 	private $logger;
-
-	/** @var string */
-	private $appName;
 
 	/** @var Acl */
 	private $acl;
@@ -83,7 +78,6 @@ class OptionService {
 	private $voteMapper;
 
 	public function __construct(
-		string $AppName,
 		Acl $acl,
 		AnonymizeService $anonymizer,
 		IEventDispatcher $eventDispatcher,
@@ -92,7 +86,6 @@ class OptionService {
 		OptionMapper $optionMapper,
 		VoteMapper $voteMapper
 	) {
-		$this->appName = $AppName;
 		$this->acl = $acl;
 		$this->anonymizer = $anonymizer;
 		$this->eventDispatcher = $eventDispatcher;
@@ -112,9 +105,9 @@ class OptionService {
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function list(?int $pollId, ?string $token = null): array {
-		if ($token) {
-			$this->acl->setToken($token);
+	public function list(?int $pollId, ?Acl $acl = null): array {
+		if ($acl) {
+			$this->acl = $acl;
 		} else {
 			$this->acl->setPollId($pollId);
 		}
@@ -166,9 +159,9 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function add(?int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, string $token = ''): Option {
-		if ($token) {
-			$this->acl->setToken($token, Acl::PERMISSION_OPTIONS_ADD);
+	public function add(?int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, ?Acl $acl = null): Option {
+		if ($acl) {
+			$this->acl = $acl;
 		} else {
 			$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
 		}
@@ -241,13 +234,17 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function delete(int $optionId, string $token = ''): Option {
+	public function delete(int $optionId, ?Acl $acl = null): Option {
 		$this->option = $this->optionMapper->find($optionId);
 
-		if ($token) {
-			$this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW, $this->option->getPollId());
+		if ($acl) {
+			$this->acl = $acl;
 		} else {
 			$this->acl->setPollId($this->option->getPollId());
+		}
+
+		if ($this->option->getPollId() !== $this->acl->getPollid()) {
+			throw new NotAuthorizedException();
 		}
 
 		if ($this->option->getOwner() !== $this->acl->getUserId()) {
