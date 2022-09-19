@@ -113,10 +113,10 @@ export const watchPolls = {
 		sleep() {
 			let reason = `Connection error, Attempt: ${this.retryCounter}/${this.maxTries})`
 
-			if (this.gotValidResponse) {
-				reason = this.updateType
-			} else if (document.hidden) {
+			if (document.hidden) {
 				reason = 'app is in background'
+			} else if (this.gotValidResponse) {
+				reason = this.updateType
 			}
 
 			console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds (reason: ${reason})`)
