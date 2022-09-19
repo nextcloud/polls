@@ -79,7 +79,6 @@ OC.L10N.register(
     "Created" : "作成されました",
     "No description provided" : "説明がありません",
     "Preview" : "プレビュー",
-    "Use background image" : "背景画像を使う",
     "User settings" : "ユーザー設定",
     "Shares" : "共有",
     "Resend invitation mail" : "招待メールを再送",

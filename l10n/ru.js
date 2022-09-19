@@ -271,8 +271,6 @@ OC.L10N.register(
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Установите этот флажок, если вы предпочитаете отображать текстовый опрос в виде вертикально выровненного списка, а не в виде сетки. Изначально по умолчанию используется вид списка.",
     "Date polls default to list view" : "Опросы по дате по умолчанию в режиме просмотра списка",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Установите этот флажок, если вы предпочитаете отображать опрос дат в вертикальном виде, а не в виде сетки. Изначально по умолчанию используется вид сетки.",
-    "Use background image" : "Использовать фоновое изображение",
-    "Enter the URL of your favorite background image." : "Введите адрес фонового изображения.",
     "User settings" : "Параметры пользователя",
     "Shares" : "Приглашения",
     "Resend invitation mail" : "Повторно отправить приглашение по эл. почте",

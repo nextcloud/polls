@@ -145,7 +145,6 @@ OC.L10N.register(
     "Created" : "Creat",
     "No description provided" : "No s'ha proveït cap descripció",
     "Preview" : "Previsualitza",
-    "Use background image" : "Utilitza la imatge de fons",
     "User settings" : "Paràmetres de l'usuari",
     "Shares" : "Compartits",
     "Resend invitation mail" : "Torna a enviar el correu d'invitació",

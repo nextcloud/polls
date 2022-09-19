@@ -188,8 +188,6 @@ OC.L10N.register(
     "Hide email addresses of internal users" : "Slėpti vidinių naudotojų el. pašto adresus",
     "Hide login option in public polls" : "Slėpti prisijungimo parinktį viešose apklausose",
     "Archive closed polls automatically" : "Automatiškai archyvuoti baigtas apklausas",
-    "Use background image" : "Naudoti foninį paveikslą",
-    "Enter the URL of your favorite background image." : "Įveskite savo mėgstamo foninio paveikslo URL.",
     "User settings" : "Naudotojo nustatymai",
     "Performance settings" : "Našumo nustatymai",
     "Styles" : "Stiliai",

@@ -93,8 +93,6 @@ OC.L10N.register(
     "Owner" : "Ägare",
     "Created" : "Skapad",
     "Preview" : "Förhandsvisning",
-    "Use background image" : "Använd bakgrundsbild",
-    "Enter the URL of your favorite background image." : "Ange webbadressen till din favoritbakgrundsbild.",
     "User settings" : "Användarinställningar",
     "Shares" : "Delat",
     "Remove share" : "Ta bort delning",
