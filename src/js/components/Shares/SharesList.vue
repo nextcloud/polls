@@ -86,12 +86,12 @@
 							{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 						</NcActionButton>
 
-						<NcActionButton @click="copyLink( { url: share.URL })">
+						<!-- <NcActionButton @click="copyLink({ url: share.URL })">
 							<template #icon>
 								<ClippyIcon />
 							</template>
 							{{ t('polls', 'Copy link to clipboard') }}
-						</NcActionButton>
+						</NcActionButton> -->
 						<NcActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
 						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
@@ -116,6 +116,11 @@
 						</NcActionRadio>
 					</NcActions>
 
+					<NcButton v-tooltip="t('polls', 'Copy link to clipboard')" type="tertiary" @click="copyLink({ url: share.URL })">
+						<template #icon>
+							<ClippyIcon />
+						</template>
+					</NcButton>
 					<ActionDelete :title="t('polls', 'Remove share')"
 						@delete="removeShare({ share })" />
 				</UserItem>
@@ -127,7 +132,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton, NcActionCaption, NcActionRadio } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcActionCaption, NcActionRadio } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
@@ -152,8 +157,9 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcActionCaption,
-		ActionDelete,
 		NcActionRadio,
+		NcButton,
+		ActionDelete,
 		ConfigBox,
 		SharePublicAdd,
 		ShareItemAllUsers,
@@ -193,9 +199,9 @@ export default {
 			}
 		},
 
-		async copyLink(payload) {
+		copyLink(payload) {
 			try {
-				await this.$copyText(payload.url)
+				this.$copyText(payload.url)
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
