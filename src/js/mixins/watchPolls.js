@@ -68,28 +68,29 @@ export const watchPolls = {
 			this.cancelToken = axios.CancelToken.source()
 
 			while (this.retryCounter < this.maxTries) {
-				// reset sleep timer to default
-				this.sleepTimeout = defaultSleepTimeout
-				this.gotValidResponse = false
-				await this.$store.dispatch('appSettings/get')
+				// Avoid requests, if the tab/window is not visible
+				if (!document.hidden) {
+					// reset sleep timer to default
+					this.sleepTimeout = defaultSleepTimeout
+					this.gotValidResponse = false
+					await this.$store.dispatch('appSettings/get')
 
-				if (this.updateType === 'noPolling') {
-					console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
-					this.cancelWatch()
-					return
-				}
+					if (this.updateType === 'noPolling') {
+						console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
+						this.cancelWatch()
+						return
+					}
 
-				try {
-					// Avoid requests, if the tab/window is not visible
-					if (!document.hidden) {
+					try {
 						console.debug('[polls]', 'Watch for updates')
 						await this.handleResponse(await this.fetchUpdates())
-					}
-				} catch (e) {
-					if (axios.isCancel(e)) {
-						this.handleCanceledRequest()
-					} else {
-						this.handleConnectionError(e)
+
+					} catch (e) {
+						if (axios.isCancel(e)) {
+							this.handleCanceledRequest()
+						} else {
+							this.handleConnectionError(e)
+						}
 					}
 				}
 
@@ -104,6 +105,20 @@ export const watchPolls = {
 			if (this.retryCounter) {
 				console.debug('[polls]', `Cancel watch after ${this.retryCounter} failed requests`)
 			}
+		},
+
+		async fetchUpdates() {
+			if (this.$route.name === 'publicVote') {
+				this.endPoint = `apps/polls/s/${this.$route.params.token}/watch`
+			} else {
+				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
+			}
+
+			return await axios.get(generateUrl(this.endPoint), {
+				params: { offset: this.lastUpdated },
+				cancelToken: this.cancelToken.token,
+				headers: { Accept: 'application/json' },
+			})
 		},
 
 		cancelWatch() {
@@ -121,20 +136,6 @@ export const watchPolls = {
 
 			console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds (reason: ${reason})`)
 			return new Promise((resolve) => setTimeout(resolve, this.sleepTimeout * 1000))
-		},
-
-		async fetchUpdates() {
-			if (this.$route.name === 'publicVote') {
-				this.endPoint = `apps/polls/s/${this.$route.params.token}/watch`
-			} else {
-				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
-			}
-
-			return await axios.get(generateUrl(this.endPoint), {
-				params: { offset: this.lastUpdated },
-				cancelToken: this.cancelToken.token,
-				headers: { Accept: 'application/json' },
-			})
 		},
 
 		handleResponse(response) {
