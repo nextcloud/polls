@@ -30,12 +30,12 @@ use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
-use OCP\Collaboration\Resources\IProviderManager;
+// use OCP\Collaboration\Resources\IProviderManager;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
-use OCP\EventDispatcher\IEventDispatcher;
-use OCP\Util;
+// use OCP\EventDispatcher\IEventDispatcher;
+// use OCP\Util;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\OptionConfirmedEvent;
@@ -81,7 +81,7 @@ class Application extends App implements IBootstrap {
 
 	public function boot(IBootContext $context): void {
 		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
-		$context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
+		// $context->injectFn(Closure::fromCallable([$this, 'registerCollaborationResources']));
 	}
 
 	public function register(IRegistrationContext $context): void {
@@ -119,10 +119,10 @@ class Application extends App implements IBootstrap {
 	public function registerNotifications(NotificationManager $notificationManager): void {
 		$notificationManager->registerNotifierService(Notifier::class);
 	}
-	protected function registerCollaborationResources(IProviderManager $resourceManager, IEventDispatcher $eventDispatcher): void {
-		$resourceManager->registerResourceProvider(ResourceProvider::class);
-		$eventDispatcher->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
-			Util::addScript(self::APP_ID, 'polls-collections');
-		});
-	}
+	// protected function registerCollaborationResources(IProviderManager $resourceManager, IEventDispatcher $eventDispatcher): void {
+	// 	$resourceManager->registerResourceProvider(ResourceProvider::class);
+	// 	$eventDispatcher->addListener('\OCP\Collaboration\Resources::loadAdditionalScripts', static function () {
+	// 		Util::addScript(self::APP_ID, 'polls-collections');
+	// 	});
+	// }
 }
