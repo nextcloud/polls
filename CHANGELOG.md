@@ -7,6 +7,11 @@ All notable changes to this project will be documented in this file.
 ### Misc
 - Experimental designs have been removed
 
+## [3.8.1] - 2022-09-20
+### Fix
+ - upload error in the files app seems to be couased by projects feature
+  Deprecated projects have been removed from polls
+
 ## [3.8.0] - 2022-09-18
 ### New
 - Support Nextcloud version 22 - 24
