@@ -41,7 +41,7 @@
 		</ConfigBox>
 
 		<div class="create-buttons">
-			<NcButton class="button" @click="cancel">
+			<NcButton @click="cancel">
 				{{ t('polls', 'Cancel') }}
 			</NcButton>
 			<NcButton :disabled="titleEmpty" type="primary" @click="confirm">
