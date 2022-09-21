@@ -23,11 +23,10 @@
 <template>
 	<div class="comments">
 		<Activities v-if="!showEmptyContent" />
-		<NcEmptyContent v-else>
+		<NcEmptyContent v-else :title="t('polls', 'No activity')">
 			<template #icon>
 				<ActivityIcon />
 			</template>
-			{{ t('polls', 'No activity') }}
 		</NcEmptyContent>
 	</div>
 </template>

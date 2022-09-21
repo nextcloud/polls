@@ -62,16 +62,14 @@
 			</OptionItem>
 		</transition-group>
 
-		<NcEmptyContent v-else>
+		<NcEmptyContent v-else :title="t('polls', 'No vote options')">
 			<template #icon>
 				<DatePollIcon />
 			</template>
 
-			<template #desc>
+			<template #action>
 				{{ t('polls', 'Add some!') }}
 			</template>
-
-			{{ t('polls', 'No vote options') }}
 		</NcEmptyContent>
 
 		<NcModal v-if="cloneModal" size="small" :can-close="false">

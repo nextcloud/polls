@@ -47,13 +47,12 @@
 			<div class="area__main" :class="viewMode">
 				<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-				<NcEmptyContent v-if="!options.length">
+				<NcEmptyContent v-if="!options.length" :title="t('polls', 'No vote options available')">
 					<template #icon>
 						<TextPollIcon v-if="poll.type === 'textPoll'" />
 						<DatePollIcon v-else />
 					</template>
-					{{ t('polls', 'No vote options available') }}
-					<template #desc>
+					<template #action>
 						<button v-if="acl.allowEdit" @click="openOptions">
 							{{ t('polls', 'Add some!') }}
 						</button>
