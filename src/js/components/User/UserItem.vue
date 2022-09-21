@@ -63,7 +63,7 @@ export default {
 
 	components: {
 		NcAvatar,
-		AdminIcon: () => import('../AppIcons/ShieldCrownOutline.vue'),
+		AdminIcon: () => import('vue-material-design-icons/ShieldCrownOutline.vue'),
 	},
 
 	inheritAttrs: false,

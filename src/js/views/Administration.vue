@@ -56,22 +56,25 @@
 					no-link>
 					<template #actions>
 						<NcActions :force-menu="true">
-							<NcActionButton icon="icon-add"
-								:close-after-click="true"
-								@click="confirmTakeOver(poll.id, poll.owner)">
+							<NcActionButton close-after-click @click="confirmTakeOver(poll.id, poll.owner)">
+								<template #icon>
+									<PlusIcon />
+								</template>
 								{{ t('polls', 'Take over') }}
 							</NcActionButton>
 
-							<NcActionButton :icon="poll.deleted ? 'icon-history' : 'icon-category-app-bundles'"
-								:close-after-click="true"
-								@click="toggleArchive(poll.id)">
+							<NcActionButton close-after-click @click="toggleArchive(poll.id)">
+								<template #icon>
+									<RestorePollIcon v-if="poll.deleted" />
+									<ArchivePollIcon v-else />
+								</template>
 								{{ poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
 							</NcActionButton>
 
-							<NcActionButton icon="icon-delete"
-								class="danger"
-								:close-after-click="true"
-								@click="confirmDelete(poll.id, poll.owner)">
+							<NcActionButton class="danger" close-after-click @click="confirmDelete(poll.id, poll.owner)">
+								<template #icon>
+									<DeleteIcon />
+								</template>
 								{{ t('polls', 'Delete poll') }}
 							</NcActionButton>
 						</NcActions>
@@ -126,11 +129,20 @@ import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcMo
 import { sortBy } from 'lodash'
 import HeaderBar from '../components/Base/HeaderBar.vue'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 
 export default {
 	name: 'Administration',
 
 	components: {
+		ArchivePollIcon,
+		RestorePollIcon,
+		PlusIcon,
+		DeleteIcon,
+		PollsAppIcon,
 		NcAppContent,
 		NcActions,
 		NcActionButton,
@@ -138,7 +150,6 @@ export default {
 		HeaderBar,
 		NcModal,
 		NcButton,
-		PollsAppIcon,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},

@@ -30,7 +30,10 @@
 			<div class="vote-status" />
 		</template>
 		<NcActions>
-			<NcActionButton icon="icon-add" @click="addPublicShare()">
+			<NcActionButton @click="addPublicShare()">
+				<template #icon>
+					<PlusIcon />
+				</template>
 				{{ t('polls', 'Add a new public link') }}
 			</NcActionButton>
 		</NcActions>
@@ -40,6 +43,7 @@
 <script>
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton } from '@nextcloud/vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
 
 export default {
 	name: 'SharePublicAdd',
@@ -47,6 +51,7 @@ export default {
 	components: {
 		NcActions,
 		NcActionButton,
+		PlusIcon,
 	},
 
 	methods: {

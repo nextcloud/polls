@@ -23,7 +23,10 @@
 <template>
 	<div class="comments">
 		<Activities v-if="!showEmptyContent" />
-		<NcEmptyContent v-else icon="icon-comment">
+		<NcEmptyContent v-else>
+			<template #icon>
+				<ActivityIcon />
+			</template>
 			{{ t('polls', 'No activity') }}
 		</NcEmptyContent>
 	</div>
@@ -33,10 +36,12 @@
 import Activities from '../Activity/Activities.vue'
 import { NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'vuex'
+import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 export default {
 	name: 'SideBarTabActivity',
 	components: {
+		ActivityIcon,
 		Activities,
 		NcEmptyContent,
 	},
@@ -44,10 +49,11 @@ export default {
 	computed: {
 		...mapState({
 			acl: (state) => state.poll.acl,
+			activities: (state) => state.activity.list,
 		}),
 
 		showEmptyContent() {
-			return false
+			return this.activities.length === 0
 		},
 
 	},

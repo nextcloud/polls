@@ -22,15 +22,12 @@
 
 <template>
 	<NcAppContent>
-		<NcEmptyContent icon="icon-search">
-			{{ t('polls', '404 - poll not found') }}
-			<template #desc>
-				<p v-if="getCurrentUser()">
-					{{ t('polls', 'Enter a poll or start a new one.') }}
-				</p>
-				<button v-else @click="gotoLogin()">
-					{{ t('polls', 'Goto Nextcloud') }}
-				</button>
+		<NcEmptyContent :title="t('polls', '404 - poll not found')">
+			<template #icon>
+				<SearchIcon />
+			</template>
+			<template #action>
+				{{ t('polls', 'Enter a poll or start a new one.') }}
 			</template>
 		</NcEmptyContent>
 	</NcAppContent>
@@ -38,19 +35,14 @@
 
 <script>
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
-import { generateUrl } from '@nextcloud/router'
+import SearchIcon from 'vue-material-design-icons/Magnify.vue'
 
 export default {
 	name: 'NotFound',
 	components: {
+		SearchIcon,
 		NcAppContent,
 		NcEmptyContent,
-	},
-
-	methods: {
-		gotoLogin() {
-			window.location.replace(generateUrl('/'))
-		},
 	},
 }
 </script>

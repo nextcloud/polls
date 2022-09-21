@@ -32,7 +32,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import unpublishedIcon from '../AppIcons/PublishOff.vue'
+import unpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
 import archivedPollIcon from 'vue-material-design-icons/Archive.vue'
 import closedPollIcon from 'vue-material-design-icons/Lock.vue'
 import creationIcon from 'vue-material-design-icons/ClockOutline.vue'

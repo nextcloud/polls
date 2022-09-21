@@ -95,7 +95,7 @@ import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
-import SidebarActivityIcon from '../components/AppIcons/ActivityAppIcon.vue'
+import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import SidebarProjectsIcon from '../components/AppIcons/ProjectsAppIcon.vue'
 
 export default {

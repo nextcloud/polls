@@ -34,13 +34,17 @@
 				:icon="true">
 				<NcActions>
 					<NcActionButton v-if="share.emailAddress || share.type === 'group'"
-						icon="icon-confirm"
 						@click="sendInvitation(share)">
+						<template #icon>
+							<SendEmailIcon />
+						</template>
 						{{ t('polls', 'Send invitation mail') }}
 					</NcActionButton>
 					<NcActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
-						icon="icon-toggle-filelist"
 						@click="resolveGroup(share)">
+						<template #icon>
+							<ResolveGroupIcon />
+						</template>
 						{{ t('polls', 'Resolve into individual invitations') }}
 					</NcActionButton>
 				</NcActions>
@@ -58,12 +62,16 @@ import { NcActions, NcActionButton } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
+import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
+import SendEmailIcon from 'vue-material-design-icons/EmailSend.vue'
 
 export default {
 	name: 'SharesListUnsent',
 
 	components: {
 		EmailAlertIcon,
+		ResolveGroupIcon,
+		SendEmailIcon,
 		NcActions,
 		NcActionButton,
 		ActionDelete,
