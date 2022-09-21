@@ -53,9 +53,9 @@
 						<DatePollIcon v-else />
 					</template>
 					<template #action>
-						<button v-if="acl.allowEdit" @click="openOptions">
+						<NcButton v-if="acl.allowEdit" type="primary" @click="openOptions">
 							{{ t('polls', 'Add some!') }}
-						</button>
+						</NcButton>
 						<div v-if="!acl.allowEdit">
 							{{ t('polls', 'Maybe the owner did not provide some until now.') }}
 						</div>
@@ -84,7 +84,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -99,6 +99,7 @@ export default {
 	components: {
 		ActionSendConfirmedOptions,
 		NcAppContent,
+		NcButton,
 		NcEmptyContent,
 		HeaderBar,
 		MarkUpDescription,
