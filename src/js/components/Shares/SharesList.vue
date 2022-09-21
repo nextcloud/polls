@@ -29,6 +29,7 @@
 		<UserSearch class="add-share" />
 		<ShareItemAllUsers v-if="allowAllAccess" />
 		<SharePublicAdd v-if="allowPublicShares" />
+
 		<div v-if="invitationShares.length" class="shares-list shared">
 			<TransitionGroup :css="false" tag="div">
 				<UserItem v-for="(share) in invitationShares"
@@ -86,13 +87,15 @@
 							{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 						</NcActionButton>
 
-						<!-- <NcActionButton @click="copyLink({ url: share.URL })">
+						<NcActionButton @click="copyLink({ url: share.URL })">
 							<template #icon>
 								<ClippyIcon />
 							</template>
 							{{ t('polls', 'Copy link to clipboard') }}
-						</NcActionButton> -->
+						</NcActionButton>
+
 						<NcActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
+
 						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="optional"
@@ -100,6 +103,7 @@
 							@change="setPublicPollEmail({ share, value: 'optional' })">
 							{{ t('polls', 'Email address is optional') }}
 						</NcActionRadio>
+
 						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="mandatory"
@@ -107,6 +111,7 @@
 							@change="setPublicPollEmail({ share, value: 'mandatory' })">
 							{{ t('polls', 'Email address is mandatory') }}
 						</NcActionRadio>
+
 						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="disabled"
@@ -116,11 +121,6 @@
 						</NcActionRadio>
 					</NcActions>
 
-					<NcButton v-tooltip="t('polls', 'Copy link to clipboard')" type="tertiary" @click="copyLink({ url: share.URL })">
-						<template #icon>
-							<ClippyIcon />
-						</template>
-					</NcButton>
 					<ActionDelete :title="t('polls', 'Remove share')"
 						@delete="removeShare({ share })" />
 				</UserItem>
@@ -132,7 +132,7 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton, NcButton, NcActionCaption, NcActionRadio } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionCaption, NcActionRadio } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
@@ -158,7 +158,6 @@ export default {
 		NcActionButton,
 		NcActionCaption,
 		NcActionRadio,
-		NcButton,
 		ActionDelete,
 		ConfigBox,
 		SharePublicAdd,
@@ -201,7 +200,7 @@ export default {
 
 		copyLink(payload) {
 			try {
-				this.$copyText(payload.url)
+				navigator.clipboard.writeText(payload.url)
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))

@@ -27,7 +27,6 @@ import { sync } from 'vuex-router-sync'
 import store from './store/index.js'
 import router from './router.js'
 import ClickOutside from 'v-click-outside'
-import VueClipboard from 'vue-clipboard2'
 import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
@@ -55,7 +54,6 @@ Vue.component('UserItem', UserItem)
 Vue.directive('tooltip', Tooltip)
 
 Vue.use(ClickOutside)
-Vue.use(VueClipboard)
 
 /* eslint-disable-next-line no-new */
 new Vue({
