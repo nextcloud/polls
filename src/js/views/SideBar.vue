@@ -54,16 +54,6 @@
 			<SideBarTabShare />
 		</NcAppSidebarTab>
 
-		<NCAppSidebarTab v-if="projectsEnabled && acl.loggedIn && useCollaboration"
-			:id="'collaboration'"
-			:order="4"
-			:name="t('polls', 'Collaboration')">
-			<template #icon>
-				<SidebarProjectsIcon />
-			</template>
-			<SideBarTabCollaboration />
-		</NcAppSidebarTab>
-
 		<NcAppSidebarTab v-if="acl.allowComment"
 			:id="'comments'"
 			:order="5"
@@ -90,13 +80,11 @@
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
-import { loadState } from '@nextcloud/initial-state'
 import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
-import SidebarProjectsIcon from '../components/AppIcons/ProjectsAppIcon.vue'
 
 export default {
 	name: 'SideBar',
@@ -106,14 +94,12 @@ export default {
 		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments.vue'),
 		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions.vue'),
 		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare.vue'),
-		SideBarTabCollaboration: () => import('../components/SideBar/SideBarTabCollaboration.vue'),
 		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity.vue'),
 		NcAppSidebar,
 		NcAppSidebarTab,
 		SidebarActivityIcon,
 		SidebarConfigurationIcon,
 		SidebarOptionsIcon,
-		SidebarProjectsIcon,
 		SidebarShareIcon,
 		SidebarCommentsIcon,
 	},
@@ -123,12 +109,6 @@ export default {
 			type: String,
 			default: t('polls', 'Comments').toLowerCase(),
 		},
-	},
-
-	data() {
-		return {
-			projectsEnabled: loadState('core', 'projects_enabled', false),
-		}
 	},
 
 	computed: {
