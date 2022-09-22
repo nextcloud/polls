@@ -252,6 +252,7 @@ OC.L10N.register(
     "Closing: {dateRelative}" : "Завершается {dateRelative}",
     "Time zone: {timezoneString}" : "Часовой пояс: {timezoneString}",
     "You subscribed to this poll" : "Вы подписаны на этот опрос",
+    "Private poll" : "Закрытый опрос",
     "_%n Participant_::_%n Participants_" : ["%n участник","%n участников","%n участников","%n участников"],
     "Optional email address" : "Дополнительный адрес эл. почты",
     "Checking email address …" : "Проверяется адрес эл. почты…",
