@@ -47,16 +47,15 @@
 			<div class="area__main" :class="viewMode">
 				<VoteTable v-show="options.length" :view-mode="viewMode" />
 
-				<NcEmptyContent v-if="!options.length">
+				<NcEmptyContent v-if="!options.length" :title="t('polls', 'No vote options available')">
 					<template #icon>
 						<TextPollIcon v-if="poll.type === 'textPoll'" />
 						<DatePollIcon v-else />
 					</template>
-					{{ t('polls', 'No vote options available') }}
-					<template #desc>
-						<button v-if="acl.allowEdit" @click="openOptions">
+					<template #action>
+						<NcButton v-if="acl.allowEdit" type="primary" @click="openOptions">
 							{{ t('polls', 'Add some!') }}
-						</button>
+						</NcButton>
 						<div v-if="!acl.allowEdit">
 							{{ t('polls', 'Maybe the owner did not provide some until now.') }}
 						</div>
@@ -85,7 +84,7 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
-import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -100,6 +99,7 @@ export default {
 	components: {
 		ActionSendConfirmedOptions,
 		NcAppContent,
+		NcButton,
 		NcEmptyContent,
 		HeaderBar,
 		MarkUpDescription,

@@ -41,18 +41,18 @@
 				{{ t('polls', 'Select range') }}
 			</NcCheckboxRadioSwitch>
 			<div class="picker-buttons">
-				<button v-if="useTime" @click="toggleTimePanel">
+				<NcButton v-if="useTime" @click="toggleTimePanel">
 					{{ showTimePanel
 						? t('polls', 'Change date')
 						: t('polls', 'Change time')
 					}}
-				</button>
-				<button v-if="useTime" @click="removeTime">
+				</NcButton>
+				<NcButton v-if="useTime" @click="removeTime">
 					{{ t('polls', 'Remove time') }}
-				</button>
-				<button v-else :disabled="!dateOption.isValid" @click="addTime">
+				</NcButton>
+				<NcButton v-else :disabled="!dateOption.isValid" @click="addTime">
 					{{ t('polls', 'Add time') }}
-				</button>
+				</NcButton>
 			</div>
 		</template>
 
@@ -62,9 +62,9 @@
 					{{ dateOption.text }}
 				</div>
 				<FlexSpacer />
-				<button v-if="dateOption.option.duration >= 0 && !added" class="primary" @click="addOption">
+				<NcButton v-if="dateOption.option.duration >= 0 && !added" type="primary" @click="addOption">
 					{{ t('polls', 'Add') }}
-				</button>
+				</NcButton>
 				<div v-if="added" v-tooltip.auto="t('polls', 'Added')" class="icon-polls-yes" />
 			</div>
 			<div v-else>

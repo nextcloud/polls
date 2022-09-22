@@ -28,7 +28,10 @@
 		<NcPopover>
 			<template #trigger>
 				<NcActions>
-					<NcActionButton icon="icon-info">
+					<NcActionButton>
+						<template #icon>
+							<InformationIcon />
+						</template>
 						{{ t('polls', 'Autoreminder informations') }}
 					</NcActionButton>
 				</NcActions>
@@ -41,6 +44,7 @@
 <script>
 import { mapState } from 'vuex'
 import { NcActions, NcActionButton, NcPopover, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 
 export default {
 	name: 'ConfigAutoReminder',
@@ -50,6 +54,7 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcPopover,
+		InformationIcon,
 		AutoReminderInformation: () => import('./AutoReminderInformation.vue'),
 	},
 

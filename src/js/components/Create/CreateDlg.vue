@@ -41,12 +41,12 @@
 		</ConfigBox>
 
 		<div class="create-buttons">
-			<button class="button" @click="cancel">
+			<NcButton @click="cancel">
 				{{ t('polls', 'Cancel') }}
-			</button>
-			<button :disabled="titleEmpty" class="button primary" @click="confirm">
+			</NcButton>
+			<NcButton :disabled="titleEmpty" type="primary" @click="confirm">
 				{{ t('polls', 'Apply') }}
-			</button>
+			</NcButton>
 		</div>
 	</div>
 </template>
@@ -54,6 +54,7 @@
 <script>
 import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import { NcButton } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import RadioGroupDiv from '../Base/RadioGroupDiv.vue'
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
@@ -64,6 +65,7 @@ export default {
 	name: 'CreateDlg',
 
 	components: {
+		NcButton,
 		SpeakerIcon,
 		CheckIcon,
 		ConfigBox,

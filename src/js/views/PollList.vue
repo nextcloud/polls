@@ -30,14 +30,13 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<NcEmptyContent v-if="noPolls">
+			<NcEmptyContent v-if="noPolls" :title="t('polls', 'No polls found for this category')">
 				<template #icon>
 					<PollsAppIcon />
 				</template>
-				<template #desc>
+				<template #action>
 					{{ t('polls', 'Add one or change category!') }}
 				</template>
-				{{ t('polls', 'No polls found for this category') }}
 			</NcEmptyContent>
 
 			<transition-group v-else

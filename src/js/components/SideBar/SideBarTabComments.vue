@@ -24,12 +24,11 @@
 	<div class="comments">
 		<CommentAdd v-if="acl.allowComment" />
 		<Comments v-if="!showEmptyContent" />
-		<NcEmptyContent v-else>
-			{{ t('polls', 'No comments') }}
+		<NcEmptyContent :title="t('polls', 'No comments')">
 			<template #icon>
 				<CommentsIcon />
 			</template>
-			<template #desc>
+			<template #action>
 				{{ t('polls', 'Be the first.') }}
 			</template>
 		</NcEmptyContent>

@@ -68,28 +68,29 @@ export const watchPolls = {
 			this.cancelToken = axios.CancelToken.source()
 
 			while (this.retryCounter < this.maxTries) {
-				// reset sleep timer to default
-				this.sleepTimeout = defaultSleepTimeout
-				this.gotValidResponse = false
-				await this.$store.dispatch('appSettings/get')
+				// Avoid requests, if the tab/window is not visible
+				if (!document.hidden) {
+					// reset sleep timer to default
+					this.sleepTimeout = defaultSleepTimeout
+					this.gotValidResponse = false
+					await this.$store.dispatch('appSettings/get')
 
-				if (this.updateType === 'noPolling') {
-					console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
-					this.cancelWatch()
-					return
-				}
+					if (this.updateType === 'noPolling') {
+						console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
+						this.cancelWatch()
+						return
+					}
 
-				try {
-					// Avoid requests, if the tab/window is not visible
-					if (!document.hidden) {
+					try {
 						console.debug('[polls]', 'Watch for updates')
 						await this.handleResponse(await this.fetchUpdates())
-					}
-				} catch (e) {
-					if (axios.isCancel(e)) {
-						this.handleCanceledRequest()
-					} else {
-						this.handleConnectionError(e)
+
+					} catch (e) {
+						if (axios.isCancel(e)) {
+							this.handleCanceledRequest()
+						} else {
+							this.handleConnectionError(e)
+						}
 					}
 				}
 
@@ -106,23 +107,6 @@ export const watchPolls = {
 			}
 		},
 
-		cancelWatch() {
-			this.cancelToken.cancel()
-		},
-
-		sleep() {
-			let reason = `Connection error, Attempt: ${this.retryCounter}/${this.maxTries})`
-
-			if (this.gotValidResponse) {
-				reason = this.updateType
-			} else if (document.hidden) {
-				reason = 'app is in background'
-			}
-
-			console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds (reason: ${reason})`)
-			return new Promise((resolve) => setTimeout(resolve, this.sleepTimeout * 1000))
-		},
-
 		async fetchUpdates() {
 			if (this.$route.name === 'publicVote') {
 				this.endPoint = `apps/polls/s/${this.$route.params.token}/watch`
@@ -135,6 +119,23 @@ export const watchPolls = {
 				cancelToken: this.cancelToken.token,
 				headers: { Accept: 'application/json' },
 			})
+		},
+
+		cancelWatch() {
+			this.cancelToken.cancel()
+		},
+
+		sleep() {
+			let reason = `Connection error, Attempt: ${this.retryCounter}/${this.maxTries})`
+
+			if (document.hidden) {
+				reason = 'app is in background'
+			} else if (this.gotValidResponse) {
+				reason = this.updateType
+			}
+
+			console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds (reason: ${reason})`)
+			return new Promise((resolve) => setTimeout(resolve, this.sleepTimeout * 1000))
 		},
 
 		handleResponse(response) {

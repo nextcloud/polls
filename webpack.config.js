@@ -4,7 +4,6 @@ const webpackRules = require('@nextcloud/webpack-vue-config/rules')
 
 webpackConfig.entry = {
 	main: path.join(__dirname, 'src/js/', 'main.js'),
-	collections: path.join(__dirname, 'src/js/', 'collections.js'),
 	userSettings: path.join(__dirname, 'src/js/', 'userSettings.js'),
 	adminSettings: path.join(__dirname, 'src/js/', 'adminSettings.js'),
 }

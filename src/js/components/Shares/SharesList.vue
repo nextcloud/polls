@@ -29,6 +29,7 @@
 		<UserSearch class="add-share" />
 		<ShareItemAllUsers v-if="allowAllAccess" />
 		<SharePublicAdd v-if="allowPublicShares" />
+
 		<div v-if="invitationShares.length" class="shares-list shared">
 			<TransitionGroup :css="false" tag="div">
 				<UserItem v-for="(share) in invitationShares"
@@ -86,13 +87,15 @@
 							{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 						</NcActionButton>
 
-						<NcActionButton @click="copyLink( { url: share.URL })">
+						<NcActionButton @click="copyLink({ url: share.URL })">
 							<template #icon>
 								<ClippyIcon />
 							</template>
 							{{ t('polls', 'Copy link to clipboard') }}
 						</NcActionButton>
+
 						<NcActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
+
 						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="optional"
@@ -100,6 +103,7 @@
 							@change="setPublicPollEmail({ share, value: 'optional' })">
 							{{ t('polls', 'Email address is optional') }}
 						</NcActionRadio>
+
 						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="mandatory"
@@ -107,6 +111,7 @@
 							@change="setPublicPollEmail({ share, value: 'mandatory' })">
 							{{ t('polls', 'Email address is mandatory') }}
 						</NcActionRadio>
+
 						<NcActionRadio v-if="share.type === 'public'"
 							name="publicPollEmail"
 							value="disabled"
@@ -152,8 +157,8 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcActionCaption,
-		ActionDelete,
 		NcActionRadio,
+		ActionDelete,
 		ConfigBox,
 		SharePublicAdd,
 		ShareItemAllUsers,
@@ -193,9 +198,9 @@ export default {
 			}
 		},
 
-		async copyLink(payload) {
+		copyLink(payload) {
 			try {
-				await this.$copyText(payload.url)
+				navigator.clipboard.writeText(payload.url)
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))

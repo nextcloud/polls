@@ -25,7 +25,10 @@
 		<template #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
-		<NcActionButton v-if="$route.name === 'publicVote'" icon="icon-md-link" @click="copyLink()">
+		<NcActionButton v-if="$route.name === 'publicVote'" @click="copyLink()">
+			<template #icon>
+				<ClippyIcon />
+			</template>
 			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</NcActionButton>
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
@@ -318,7 +321,7 @@ export default {
 
 		async copyLink() {
 			try {
-				await this.$copyText(this.personalLink)
+				await navigator.clipboard.writeText(this.personalLink)
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
@@ -328,7 +331,7 @@ export default {
 		async getAddresses() {
 			try {
 				const response = await this.$store.dispatch('poll/getParticipantsEmailAddresses')
-				await this.$copyText(response.data.map((item) => item.combined))
+				await navigator.clipboard.writeText(response.data.map((item) => item.combined))
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
