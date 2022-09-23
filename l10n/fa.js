@@ -65,7 +65,6 @@ OC.L10N.register(
     "Add new Poll" : "نظرسنجی جدید افزودن",
     "Error cloning poll." : "خطای کلون نظرسنجی",
     "Enter a poll or start a new one." : "یک نظرسنجی وارد کنید یا یک مورد جدید را شروع کنید.",
-    "Goto Nextcloud" : "برو نکست کلود",
     "Details" : "جزئیات",
     "Configuration" : "پیکربندی",
     "Options" : "گزینه ها",

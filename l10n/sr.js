@@ -97,7 +97,6 @@ OC.L10N.register(
     "Error loading poll list" : "Грешка приликом учитавања списка гласања",
     "Error cloning poll." : "Грешка приликом клонирања гласања.",
     "Enter a poll or start a new one." : "Одаберите гласање или започните ново.",
-    "Goto Nextcloud" : "Иди на Некстклауд",
     "Error loading poll" : "Грешка при учитавању гласања",
     "Details" : "Детаљи",
     "Configuration" : "Конфигурација",

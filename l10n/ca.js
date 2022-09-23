@@ -176,7 +176,6 @@ OC.L10N.register(
     "Error loading poll list" : "S'ha produït un error en carregar la llista de enquestes",
     "Error cloning poll." : "Error clonant l’enquesta.",
     "Enter a poll or start a new one." : "Introduïu una enquesta o inicieu-ne una de nova.",
-    "Goto Nextcloud" : "Anar a Nextcloud",
     "Error loading poll" : "Error carregant l’enquesta",
     "Details" : "Detalls",
     "Configuration" : "Configuració",

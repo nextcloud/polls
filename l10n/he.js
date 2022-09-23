@@ -88,7 +88,6 @@ OC.L10N.register(
     "Error loading poll list" : "שגיאה בטעינת רשימת הסקרים",
     "Error cloning poll." : "שגיאה בשכפול סקר.",
     "Enter a poll or start a new one." : "כניסה לסקר או הקמת אחד חדש.",
-    "Goto Nextcloud" : "מעבר ל־Nextcloud",
     "Error loading poll" : "שגיאה בטעינת הסקר",
     "Details" : "פרטים",
     "Configuration" : "הגדרות",
