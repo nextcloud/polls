@@ -187,7 +187,12 @@ class PollService {
 		return $this->poll;
 	}
 
-	public function transferPolls(string $sourceUser, string $targetUser) {
+	/**
+	 * @return Poll[]
+	 *
+	 * @psalm-return array<Poll>
+	 */
+	public function transferPolls(string $sourceUser, string $targetUser): array {
 		if ($this->userManager->get($targetUser) instanceof IUser) {
 			$pollsToTransfer = $this->pollMapper->findOwner($sourceUser);
 			foreach ($pollsToTransfer as $poll) {

@@ -111,11 +111,7 @@ class UserService {
 	/**
 	 * find appropriate language
 	 */
-	public function getGenericLanguage($compatibilityLanguageForNc22) {
-		// TODO: Remove compatibily code after NC23 is minimum prerequisite
-		if (Util::getVersion()[0] < 23) {
-			return $compatibilityLanguageForNc22;
-		}
+	public function getGenericLanguage(): string {
 		return $this->transFactory->findGenericLanguage('polls');
 	}
 
@@ -142,7 +138,7 @@ class UserService {
 	 * Get participans of a poll as array of user objects
 	 * @return array<array-key, mixed>
 	 */
-	public function getParticipants($pollId) : array {
+	public function getParticipants(int $pollId) : array {
 		$users = [];
 		// get the distict list of usernames from the votes
 		$participants = $this->voteMapper->findParticipantsByPoll($pollId);
