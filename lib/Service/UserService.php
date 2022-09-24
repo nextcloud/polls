@@ -44,7 +44,6 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use OCP\Share\IShare;
-use OCP\Util;
 
 class UserService {
 	/** @var ShareMapper */
