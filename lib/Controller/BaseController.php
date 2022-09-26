@@ -50,10 +50,7 @@ class BaseController extends Controller {
 	 * response
 	 * @NoAdminRequired
 	 */
-	protected function response(Closure $callback, string $token = ''): JSONResponse {
-		if ($token) {
-			$this->session->set('publicPollToken', $token);
-		}
+	protected function response(Closure $callback): JSONResponse {
 
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -66,11 +63,7 @@ class BaseController extends Controller {
 	 * response
 	 * @NoAdminRequired
 	 */
-	protected function responseLong(Closure $callback, string $token = ''): JSONResponse {
-		if ($token) {
-			$this->session->set('publicPollToken', $token);
-		}
-
+	protected function responseLong(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (NoUpdatesException $e) {
@@ -82,11 +75,7 @@ class BaseController extends Controller {
 	 * responseCreate
 	 * @NoAdminRequired
 	 */
-	protected function responseCreate(Closure $callback, string $token = ''): JSONResponse {
-		if ($token) {
-			$this->session->set('publicPollToken', $token);
-		}
-
+	protected function responseCreate(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
 		} catch (Exception $e) {
@@ -98,11 +87,7 @@ class BaseController extends Controller {
 	 * responseDeleteTolerant
 	 * @NoAdminRequired
 	 */
-	protected function responseDeleteTolerant(Closure $callback, string $token = ''): JSONResponse {
-		if ($token) {
-			$this->session->set('publicPollToken', $token);
-		}
-
+	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

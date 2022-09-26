@@ -66,6 +66,9 @@ class PublicController extends BaseController {
 	/** @var SystemService */
 	private $systemService;
 
+	/** @var string */
+	private $token;
+
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
@@ -108,6 +111,8 @@ class PublicController extends BaseController {
 		$this->systemService = $systemService;
 		$this->voteService = $voteService;
 		$this->watchService = $watchService;
+		$this->token = $this->session->get('publicPollToken');
+		$this->acl->setToken($this->token);
 	}
 
 	/**
@@ -129,13 +134,11 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function getPoll(string $token): JSONResponse {
-		$this->acl->setToken($token);
-
+	public function getPoll(): JSONResponse {
 		return $this->response(fn () => [
 			'acl' => $this->acl,
 			'poll' => $this->pollService->get($this->acl->getPollId()),
-		], $token);
+		]);
 	}
 
 	/**
@@ -143,10 +146,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function watchPoll(string $token, ?int $offset): JSONResponse {
+	public function watchPoll(?int $offset): JSONResponse {
 		return $this->responseLong(fn () => [
-			'updates' => $this->watchService->watchUpdates($this->acl->setToken($token)->getPollId(), $offset)
-		], $token);
+			'updates' => $this->watchService->watchUpdates($this->acl->getPollId(), $offset)
+		]);
 	}
 
 	/**
@@ -154,11 +157,11 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function getShare(string $token): JSONResponse {
+	public function getShare(): JSONResponse {
 		$validateShareType = true;
 		return $this->response(fn () => [
-			'share' => $this->shareService->get($token, $validateShareType)
-		], $token);
+			'share' => $this->shareService->get($this->token, $validateShareType)
+		]);
 	}
 
 	/**
@@ -166,12 +169,13 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function getVotes(string $token): JSONResponse {
-		$this->acl->setToken($token);
+	public function getVotes(): JSONResponse {
+		// $token = $this->session->get('publicPollToken');
+		// $this->acl->setToken($token);
 		
 		return $this->response(fn () => [
 			'votes' => $this->voteService->list(null, $this->acl)
-		], $token);
+		]);
 	}
 
 	/**
@@ -179,10 +183,11 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function deleteUser(string $token): JSONResponse {
+	public function deleteUser(): JSONResponse {
+		$token = $this->session->get('publicPollToken');
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->delete(null, null, $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
-		], $token);
+			'deleted' => $this->voteService->delete(null, null, $this->acl->setToken($this->token, Acl::PERMISSION_VOTE_EDIT))
+		]);
 	}
 
 	/**
@@ -190,10 +195,10 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function getOptions(string $token): JSONResponse {
+	public function getOptions(): JSONResponse {
 		return $this->response(fn () => [
-			'options' => $this->optionService->list(null, $this->acl->setToken($token))
-		], $token);
+			'options' => $this->optionService->list(null, $this->acl)
+		]);
 	}
 
 	/**
@@ -201,16 +206,16 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
+	public function addOption(int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => [
 			'option' => $this->optionService->add(
 				null,
 				$timestamp,
 				$text,
 				$duration,
-				$this->acl->setToken($token, Acl::PERMISSION_OPTIONS_ADD)
+				$this->acl->setToken($this->token, Acl::PERMISSION_OPTIONS_ADD)
 			)
-		], $token);
+		]);
 	}
 
 	/**
@@ -218,10 +223,10 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function deleteOption(string $token, int $optionId): JSONResponse {
+	public function deleteOption(int $optionId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => [
-			'option' => $this->optionService->delete($optionId, $this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW))
-		], $token);
+			'option' => $this->optionService->delete($optionId, $this->acl->setToken($this->token, Acl::PERMISSION_POLL_VIEW))
+		]);
 	}
 
 	/**
@@ -229,10 +234,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function setVote(int $optionId, string $setTo, string $token): JSONResponse {
+	public function setVote(int $optionId, string $setTo): JSONResponse {
 		return $this->response(fn () => [
-			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
-		], $token);
+			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->setToken($this->token, Acl::PERMISSION_COMMENT_ADD))
+		]);
 	}
 
 	/**
@@ -240,10 +245,10 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function getComments(string $token): JSONResponse {
+	public function getComments(): JSONResponse {
 		return $this->response(fn () => [
-			'comments' => $this->commentService->list($this->acl->setToken($token))
-		], $token);
+			'comments' => $this->commentService->list($this->acl)
+		]);
 	}
 
 	/**
@@ -251,10 +256,10 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function addComment(string $token, string $message): JSONResponse {
+	public function addComment(string $message): JSONResponse {
 		return $this->response(fn () => [
-			'comment' => $this->commentService->add($message, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD))
-		], $token);
+			'comment' => $this->commentService->add($message, $this->acl->setToken($this->token, Acl::PERMISSION_COMMENT_ADD))
+		]);
 	}
 
 	/**
@@ -262,11 +267,11 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function deleteComment(int $commentId, string $token): JSONResponse {
+	public function deleteComment(int $commentId): JSONResponse {
 		$comment = $this->commentService->get($commentId);
 		return $this->responseDeleteTolerant(fn () => [
-			'comment' => $this->commentService->delete($comment, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD))
-		], $token);
+			'comment' => $this->commentService->delete($comment, $this->acl->setToken($this->token, Acl::PERMISSION_COMMENT_ADD))
+		]);
 	}
 
 	/**
@@ -274,10 +279,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function getSubscription(string $token): JSONResponse {
+	public function getSubscription(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->get($this->acl->setToken($token))
-		], $token);
+			'subscribed' => $this->subscriptionService->get($this->acl)
+		]);
 	}
 
 	/**
@@ -285,10 +290,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function subscribe(string $token): JSONResponse {
+	public function subscribe(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->set(true, $this->acl->setToken($token))
-		], $token);
+			'subscribed' => $this->subscriptionService->set(true, $this->acl)
+		]);
 	}
 
 	/**
@@ -296,10 +301,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function unsubscribe(string $token): JSONResponse {
+	public function unsubscribe(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->set(false, $this->acl->setToken($token))
-		], $token);
+			'subscribed' => $this->subscriptionService->set(false, $this->acl)
+		]);
 	}
 
 	/**
@@ -309,10 +314,10 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function validatePublicUsername(string $userName, string $token): JSONResponse {
+	public function validatePublicUsername(string $userName): JSONResponse {
 		return $this->response(fn () => [
-			'result' => $this->systemService->validatePublicUsername($userName, $this->shareService->get($token)), 'name' => $userName
-		], $token);
+			'result' => $this->systemService->validatePublicUsername($userName, $this->shareService->get($this->token)), 'name' => $userName
+		]);
 	}
 
 	/**
@@ -331,10 +336,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function setDisplayName(string $token, string $displayName): JSONResponse {
+	public function setDisplayName(string $displayName): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setDisplayname($this->shareService->get($token), $displayName)
-		], $token);
+			'share' => $this->shareService->setDisplayname($this->shareService->get($this->token), $displayName)
+		]);
 	}
 
 
@@ -343,10 +348,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
+	public function setEmailAddress(string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setEmailAddress($this->shareService->get($token), $emailAddress, true)
-		], $token);
+			'share' => $this->shareService->setEmailAddress($this->shareService->get($this->token), $emailAddress, true)
+		]);
 	}
 
 	/**
@@ -354,10 +359,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 * @NoAdminRequired
 	 */
-	public function deleteEmailAddress(string $token): JSONResponse {
+	public function deleteEmailAddress(): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->deleteEmailAddress($this->shareService->get($token))
-		], $token);
+			'share' => $this->shareService->deleteEmailAddress($this->shareService->get($this->token))
+		]);
 	}
 
 	/**
@@ -366,10 +371,10 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
+	public function register(string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
 		return $this->responseCreate(fn () => [
-			'share' => $this->shareService->register($this->shareService->get($token), $userName, $emailAddress, $timeZone)
-		], $token);
+			'share' => $this->shareService->register($this->shareService->get($this->token), $userName, $emailAddress, $timeZone)
+		]);
 	}
 
 	/**
@@ -378,9 +383,9 @@ class PublicController extends BaseController {
 	 * @NoAdminRequired
 	 * @PublicPage
 	 */
-	public function resendInvitation(string $token): JSONResponse {
+	public function resendInvitation(): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->mailService->resendInvitation($token)
-		], $token);
+			'share' => $this->mailService->resendInvitation($this->token)
+		]);
 	}
 }
