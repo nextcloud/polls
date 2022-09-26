@@ -65,6 +65,7 @@ use OCA\Polls\Listener\OptionListener;
 use OCA\Polls\Listener\PollListener;
 use OCA\Polls\Listener\ShareListener;
 use OCA\Polls\Listener\VoteListener;
+use OCA\Polls\Middleware\TokenAccessMiddleware;
 use OCA\Polls\Provider\SearchProvider;
 
 class Application extends App implements IBootstrap {
@@ -81,6 +82,8 @@ class Application extends App implements IBootstrap {
 
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
+
+		$context->registerMiddleWare(TokenAccessMiddleware::class);
 
 		$context->registerEventListener(CommentAddEvent::class, CommentListener::class);
 		$context->registerEventListener(CommentDeleteEvent::class, CommentListener::class);
