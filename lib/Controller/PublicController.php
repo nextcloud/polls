@@ -231,7 +231,7 @@ class PublicController extends BaseController {
 	 */
 	public function setVote(int $optionId, string $setTo, string $token): JSONResponse {
 		return $this->response(fn () => [
-			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD))
+			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
 		], $token);
 	}
 
