@@ -112,7 +112,6 @@ class PublicController extends BaseController {
 		$this->voteService = $voteService;
 		$this->watchService = $watchService;
 		$this->token = $this->session->get('publicPollToken');
-		$this->acl->setToken($this->token);
 	}
 
 	/**
@@ -170,9 +169,6 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 */
 	public function getVotes(): JSONResponse {
-		// $token = $this->session->get('publicPollToken');
-		// $this->acl->setToken($token);
-		
 		return $this->response(fn () => [
 			'votes' => $this->voteService->list(null, $this->acl)
 		]);
@@ -184,9 +180,8 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 */
 	public function deleteUser(): JSONResponse {
-		$token = $this->session->get('publicPollToken');
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->delete(null, null, $this->acl->setToken($this->token, Acl::PERMISSION_VOTE_EDIT))
+			'deleted' => $this->voteService->delete(null, null, $this->acl->request(Acl::PERMISSION_VOTE_EDIT))
 		]);
 	}
 
@@ -213,7 +208,7 @@ class PublicController extends BaseController {
 				$timestamp,
 				$text,
 				$duration,
-				$this->acl->setToken($this->token, Acl::PERMISSION_OPTIONS_ADD)
+				$this->acl->request(Acl::PERMISSION_OPTIONS_ADD)
 			)
 		]);
 	}
@@ -225,7 +220,7 @@ class PublicController extends BaseController {
 	 */
 	public function deleteOption(int $optionId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => [
-			'option' => $this->optionService->delete($optionId, $this->acl->setToken($this->token, Acl::PERMISSION_POLL_VIEW))
+			'option' => $this->optionService->delete($optionId, $this->acl->request(Acl::PERMISSION_POLL_VIEW))
 		]);
 	}
 
@@ -236,7 +231,7 @@ class PublicController extends BaseController {
 	 */
 	public function setVote(int $optionId, string $setTo): JSONResponse {
 		return $this->response(fn () => [
-			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->setToken($this->token, Acl::PERMISSION_COMMENT_ADD))
+			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->request(Acl::PERMISSION_COMMENT_ADD))
 		]);
 	}
 
@@ -258,7 +253,7 @@ class PublicController extends BaseController {
 	 */
 	public function addComment(string $message): JSONResponse {
 		return $this->response(fn () => [
-			'comment' => $this->commentService->add($message, $this->acl->setToken($this->token, Acl::PERMISSION_COMMENT_ADD))
+			'comment' => $this->commentService->add($message, $this->acl->request(Acl::PERMISSION_COMMENT_ADD))
 		]);
 	}
 
@@ -270,7 +265,7 @@ class PublicController extends BaseController {
 	public function deleteComment(int $commentId): JSONResponse {
 		$comment = $this->commentService->get($commentId);
 		return $this->responseDeleteTolerant(fn () => [
-			'comment' => $this->commentService->delete($comment, $this->acl->setToken($this->token, Acl::PERMISSION_COMMENT_ADD))
+			'comment' => $this->commentService->delete($comment, $this->acl->request(Acl::PERMISSION_COMMENT_ADD))
 		]);
 	}
 

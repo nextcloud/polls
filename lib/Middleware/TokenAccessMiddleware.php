@@ -25,10 +25,6 @@ class TokenAccessMiddleware extends Middleware {
 			return;
 		}
 
-		if ($methodName === 'validateEmailAddress') {
-			return;
-		}
-
 		$token = $this->request->getParam('token');
 		$this->session->set('publicPollToken', $token);
 	}
