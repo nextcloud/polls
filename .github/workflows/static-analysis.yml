@@ -27,7 +27,7 @@ jobs:
           php-tools: composer, psalm
 
       - name: Install Nextcloud API
-        run: composer require --dev nextcloud/ocp:dev-:${{ matrix.ocp-version }}
+        run: composer require --dev nextcloud/ocp:dev-${{ matrix.ocp-version }}
 
       - name: Run coding standards check
         run: composer run psalm
