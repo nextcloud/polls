@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 ## [3.8.2] - 2022-09-27
 ### Fix
  - fix a bug, which prevents voting in a public vote, when comments are disabled.
- - supress annoying error log entries with PHP 8.1
+ - suppress annoying error log entries with PHP 8.1
 
 ## [3.8.1] - 2022-09-20
 ### Fix
