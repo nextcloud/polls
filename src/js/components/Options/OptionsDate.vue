@@ -49,7 +49,7 @@
 							{{ t('polls', 'Clone option') }}
 						</NcActionButton>
 					</NcActions>
-					<NcVueButton v-if="closed"
+					<NcButton v-if="closed"
 						v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 						type="tertiary"
 						@click="confirmOption(option)">
@@ -57,7 +57,7 @@
 							<UnconfirmIcon v-if="option.confirmed" />
 							<ConfirmIcon v-else />
 						</template>
-					</NcVueButton>
+					</NcButton>
 				</template>
 			</OptionItem>
 		</transition-group>
@@ -80,7 +80,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { NcActions, NcActionButton, NcVueButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import OptionCloneDate from './OptionCloneDate.vue'
 import OptionItem from './OptionItem.vue'
@@ -105,7 +105,7 @@ export default {
 		NcModal,
 		OptionCloneDate,
 		OptionItem,
-		NcVueButton,
+		NcButton,
 		DatePollIcon,
 		OptionItemOwner: () => import('./OptionItemOwner.vue'),
 	},
