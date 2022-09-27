@@ -152,7 +152,7 @@ class Acl implements JsonSerializable {
 		return $this;
 	}
 
-	public function setPoll(Poll $poll) {
+	public function setPoll(Poll $poll): void {
 		$this->poll = $poll;
 	}
 

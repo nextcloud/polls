@@ -71,7 +71,7 @@ class NotificationMail extends MailBase {
 		$this->addButtonToPoll();
 	}
 
-	private function evaluateDisplayName(Log $logItem) {
+	private function evaluateDisplayName(Log $logItem): string {
 		if ($this->poll->getAnonymous() || $this->poll->getShowResults() !== Poll::SHOW_RESULTS_ALWAYS) {
 			// hide actor's name if poll is anonymous or results are hidden
 			return $this->l10n->t('A user');

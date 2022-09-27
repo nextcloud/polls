@@ -169,9 +169,9 @@ class AppSettings implements JsonSerializable {
 	}
 
 	/**
-	 * @return mixed
+	 * @return array
 	 */
-	public function jsonSerialize() {
+	public function jsonSerialize(): array {
 		// convert group ids to group objects
 		$publicSharesGroups = [];
 		$comboGroups = [];

@@ -165,7 +165,7 @@ class MailService {
 	/**
 	 * Send a confirmation mail for the poll to all participants
 	 */
-	public function sendConfirmations($pollId): array {
+	public function sendConfirmations(int $pollId): array {
 		$sentMails = [];
 		$abortedMails = [];
 
@@ -184,7 +184,7 @@ class MailService {
 		];
 	}
 
-	private function processSharesForAutoReminder(Poll $poll) {
+	private function processSharesForAutoReminder(Poll $poll): void {
 		$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
 		foreach ($shares as $share) {
 			if (in_array($share->getType(), [Share::TYPE_CIRCLE, Share::TYPE_CONTACTGROUP])) {
@@ -212,7 +212,7 @@ class MailService {
 		return false;
 	}
 
-	private function sendAutoReminderToRecipients(Share $share, Poll $poll) {
+	private function sendAutoReminderToRecipients(Share $share, Poll $poll): void {
 		foreach ($this->userService->getUserFromShare($share)->getMembers() as $recipient) {
 			$reminder = new ReminderMail(
 				$recipient->getId(),

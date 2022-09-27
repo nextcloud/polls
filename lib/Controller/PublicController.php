@@ -231,7 +231,7 @@ class PublicController extends BaseController {
 	 */
 	public function setVote(int $optionId, string $setTo, string $token): JSONResponse {
 		return $this->response(fn () => [
-			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD))
+			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
 		], $token);
 	}
 
@@ -367,11 +367,8 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 */
 	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
-		// TODO: Until NC22, remove after NC22
-		$acceptedLanguage = explode(',', $this->request->getHeader('Accept-Language'))[0];
-
 		return $this->responseCreate(fn () => [
-			'share' => $this->shareService->register($this->shareService->get($token), $userName, $emailAddress, $timeZone, $acceptedLanguage)
+			'share' => $this->shareService->register($this->shareService->get($token), $userName, $emailAddress, $timeZone)
 		], $token);
 	}
 
