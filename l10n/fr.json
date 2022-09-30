@@ -34,7 +34,7 @@
     "The poll owner has been changed." : "Le propriétaire du sondage a changé.",
     "%s created the poll." : "%s a créé le sondage.",
     "A voting option has been unconfirmed." : "Une option de vote n'a pas été confirmée.",
-    "%s has left a comment." : "%s a laissé un commentaire",
+    "%s has left a comment." : "%s a laissé un commentaire.",
     "Reminder for poll \"%s\"" : "Rappel pour le sondage \"%s\"",
     "Check your votes" : "Vérifiez vos votes",
     "The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone})." : "La première option du sondage est absente depuis {leftPeriod} heures ({dateTime}, {timezone}).",
