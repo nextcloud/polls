@@ -281,6 +281,7 @@ OC.L10N.register(
     "Results are visible since closing poll" : "Výsledky sú viditeľné až do ukončenia hlasovania",
     "Results are always hidden" : "Výsledky sú vždy skryté",
     "Results are visible" : "Výsledky sú viditeľné",
+    "Private poll" : "Súkromná anketa",
     "_%n Participant_::_%n Participants_" : ["%n účastník","%n účastníci","%n účastníci","%n účastníkov"],
     "_%n option_::_%n options_" : ["%n možnosť","%n možností","%n možností","%n možností"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n hlasovanie \"Áno\"","%n hlasovaní \"Áno\"","%n hlasovaní \"Áno\"","%n hlasovaní \"Áno\""],
