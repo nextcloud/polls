@@ -54,6 +54,7 @@ export const watchPolls = {
 
 	methods: {
 		async watchPolls() {
+			// loop while tab is hidden and avoid further requests
 			// quit if polling for updates is disabled
 			if (this.updateType === 'noPolling') {
 				return
@@ -68,34 +69,38 @@ export const watchPolls = {
 			this.cancelToken = axios.CancelToken.source()
 
 			while (this.retryCounter < this.maxTries) {
-				// Avoid requests, if the tab/window is not visible
-				if (!document.hidden) {
-					// reset sleep timer to default
-					this.sleepTimeout = defaultSleepTimeout
-					this.gotValidResponse = false
-					await this.$store.dispatch('appSettings/get')
+				// reset sleep timer to default
+				this.sleepTimeout = defaultSleepTimeout
+				this.gotValidResponse = false
 
-					if (this.updateType === 'noPolling') {
-						console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
-						this.cancelWatch()
-						return
-					}
+				while (document.hidden) {
+					console.debug('[polls]', 'app is in background')
+					await new Promise((resolve) => setTimeout(resolve, 2000))
+				}
 
-					try {
-						console.debug('[polls]', 'Watch for updates')
-						await this.handleResponse(await this.fetchUpdates())
+				await this.$store.dispatch('appSettings/get')
 
-					} catch (e) {
-						if (axios.isCancel(e)) {
-							this.handleCanceledRequest()
-						} else {
-							this.handleConnectionError(e)
-						}
+				if (this.updateType === 'noPolling') {
+					console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
+					this.cancelWatch()
+					return
+				}
+
+				try {
+					console.debug('[polls]', 'Watch for updates')
+					await this.handleResponse(await this.fetchUpdates())
+
+				} catch (e) {
+					if (axios.isCancel(e)) {
+						this.handleCanceledRequest()
+					} else {
+						this.handleConnectionError(e)
 					}
 				}
 
-				if (this.updateType !== 'longPolling' || !this.gotValidResponse || document.hidden) {
+				if (this.updateType !== 'longPolling' || !this.gotValidResponse) {
 					await this.sleep()
+					console.debug('[polls', 'continue after sleep')
 				}
 			}
 
@@ -128,9 +133,7 @@ export const watchPolls = {
 		sleep() {
 			let reason = `Connection error, Attempt: ${this.retryCounter}/${this.maxTries})`
 
-			if (document.hidden) {
-				reason = 'app is in background'
-			} else if (this.gotValidResponse) {
+			if (this.gotValidResponse) {
 				reason = this.updateType
 			}
 
@@ -183,22 +186,25 @@ export const watchPolls = {
 
 		async loadTables(tables) {
 			let dispatches = ['activity/list']
+			console.debug('[polls]', 'fetching updates', tables)
 			tables.forEach((item) => {
 				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
-
 				if (item.table === 'polls') {
 					if (this.isAdmin) {
+						console.debug('[polls]', 'update admin view', item.table)
 						// If user is an admin, also load admin list
 						dispatches = [...dispatches, 'pollsAdmin/list']
 					}
 
 					if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
 						// if current poll is affected, load current poll configuration
+						console.debug('[polls]', 'current poll', item.table)
 						dispatches = [...dispatches, 'poll/get']
 					}
 
 					if (this.isLoggedin) {
 						// if user is an authorized user load polls list
+						console.debug('[polls]', 'update list', item.table)
 						dispatches = [...dispatches, `${item.table}/list`]
 					}
 				} else if (!this.isLoggedin && (item.table === 'shares')) {
