@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.0.0] - tbd
+## [4.0.0] - 2022-10-13
 ### New
 - Support Nextcloud version 25
 ### Misc
