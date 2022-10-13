@@ -103,6 +103,7 @@ OC.L10N.register(
     "Shift all date options" : "Skjut på alla datumalternativ",
     "Receive notification email on activity" : "Mottag notifieringsepost vid aktivitet",
     "Change name" : "Byt namn",
+    "Delete votes" : "Radera röster",
     "Email options" : "E-postinställningar",
     "Yes" : "Ja",
     "Administration" : "Administration",
