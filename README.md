@@ -42,16 +42,16 @@ You can download and install the latest release from the [Nextcloud app store](h
 
 ## Screenshots
 #### Manage your polls and create new ones
-![Manage Polls](screenshots/manage.png)
+![Manage Polls](screenshots/overview.png)
 
 #### Many configuration options
-![Vote](screenshots/configuration.png)
+![Vote](screenshots/edit-poll.png)
 
 #### Share your poll with other people
 ![Edit poll](screenshots/share.png)
 
 #### Vote on mobile
-![Share poll](screenshots/mobile.png)
+![Share poll](screenshots/vote.png)
 
 ### Install from git
 If you want to run the latest development version from git source, you need to clone the repo to your apps folder:
