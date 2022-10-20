@@ -396,16 +396,16 @@ export default {
 		padding: 4px 24px;
 
 		a {
-			color: var(--color-text-lighter);
+			color: var(--color-text-maxcontrast);
 			font-weight: bold;
 			white-space: nowrap;
 			padding: 10px;
 			margin: -10px;
 
 			&:hover, &:active {
-				color: var(--color-text-light);
+				color: var(--color-main-text);
 				&::after {
-					color: var(--color-text-lighter);
+					color: var(--color-text-maxcontrast);
 				}
 			}
 
