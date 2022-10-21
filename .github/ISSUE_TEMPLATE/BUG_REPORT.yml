@@ -287,7 +287,7 @@ body:
         php occ app:list
         ./occ app:list
         ```
-      placeholder: > NOTE: This will be automatically formatted into code for better readability.
+      placeholder: This will be automatically formatted into code for better readability.
       render: shell
 
   - type: textarea
