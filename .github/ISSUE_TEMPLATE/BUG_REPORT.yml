@@ -68,7 +68,7 @@ body:
     attributes:
       value: |
         ---
-        # Add some information how you installed your current Polls version
+        # Add some information about your Polls installation
   - type: dropdown
     id: install-method
     attributes:
@@ -108,7 +108,6 @@ body:
       label: Which browser did you use, when experiencing the bug?
       description: |
         Select **all** browsers you used, where the bug appeared.
-        _Describe in the "Additional info" section if you chose "Other"._
       options:
       - label: "Firefox"
       - label: "Chrome"
@@ -120,13 +119,13 @@ body:
     attributes:
       label: Other browser
       placeholder: i.e. Opera mobile
+
   - type: checkboxes
     id: client-os
     attributes:
       label: Which System did you use, when experiencing the bug?
       description: |
         Select **all** operating systems, where you observed the bug.
-        _Describe in the "Additional info" section if you chose "Other"._
       options:
       - label: "Windows"
       - label: "Linux"
@@ -139,6 +138,7 @@ body:
     attributes:
       label: Other OS
       placeholder: i.e. DOS 2.1
+
   - type: textarea
     id: client-logs
     attributes:
@@ -147,13 +147,13 @@ body:
         Provide the content of your browser console or network tab in case of errors (see developer tools of your browser).
         > NOTE: This will be automatically formatted into code for better readability.
       render: shell
+
   - type: textarea
     id: client-additional-info
     attributes:
       label: Additional client environment information
       description: |
         Add additional information about your client environment (i.e. browser plug-ins).
-      render: markdown
 
   - type: markdown
     attributes:
@@ -179,6 +179,7 @@ body:
     attributes:
       label: Other Nextcloud version
       placeholder: i.e. Nextcloud 21.1.1
+
   - type: dropdown
     id: server-php
     attributes:
@@ -198,7 +199,8 @@ body:
     attributes:
       label: Other PHP version
       description: Add your _other_ PHP versoin
-      placeholder: ex. PHP 5.4
+      placeholder: i.e. PHP 5.4
+
   - type: dropdown
     id: server-database
     attributes:
@@ -219,7 +221,8 @@ body:
     attributes:
       label: Database Engine version or other Database
       description: Add your database engine version or _other_ PHP versoin
-      placeholder: ex. PostgreSQL 14.5, MariaDB 10.5, dBase IV
+      placeholder: i.e. PostgreSQL 14.5
+
   - type: checkboxes
     id: server-user-backend
     attributes:
@@ -232,15 +235,17 @@ body:
       - label: "LDAP/ Active Directory"
       - label: "SSO - SAML"
       - label: "Other/Don't know"
+
   - type: textarea
     id: server-nextcloud-log
     attributes:
-      label: Did you observe error entries in your Nexcloud log?
+      label: Add your nextcloud server log here
       description: |
         Provide Nextcloud logs lines, which can give information about the bug.
         Copy all relevant contents from `data/nextcloud.log` or copy the a RAW entries from `/settings/admin/logging` section:
         > NOTE: This will be automatically formatted into code for better readability.
       render: shell
+
   - type: textarea
     id: additional-environment-info
     attributes:
@@ -254,6 +259,7 @@ body:
         ---
         # Collect some information about your Nextcloud installation
         This helps us to identify possible effects caused by other apps or your environment.
+
   - type: textarea
     id: nextcloud-configs
     attributes:
@@ -268,6 +274,7 @@ body:
         ```
         > NOTE: This will be automatically formatted into code for better readability.
       render: shell
+
   - type: textarea
     id: nextcloud-apps
     attributes:
@@ -280,8 +287,9 @@ body:
         php occ app:list
         ./occ app:list
         ```
-        > NOTE: This will be automatically formatted into code for better readability.
+      placeholder: > NOTE: This will be automatically formatted into code for better readability.
       render: shell
+
   - type: textarea
     id: nextcloud-signing-status
     attributes:
