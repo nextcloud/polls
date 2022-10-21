@@ -219,7 +219,7 @@ export default {
 
 	.created {
 		.sub-text{
-			color: var(--color-text-light);
+			color: var(--color-main-text);
 		}
 	}
 }

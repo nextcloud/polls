@@ -243,7 +243,7 @@ export default {
 
 	.devider {
 		align-self: center;
-		color: var(--color-text-lighter);
+		color: var(--color-text-maxcontrast);
 	}
 
 	.option-item__option--datebox {
@@ -271,7 +271,7 @@ export default {
 				white-space: pre;
 				font-size: 1.1em;
 				padding: 0 4px;
-				color: var(--color-text-lighter);
+				color: var(--color-text-maxcontrast);
 			}
 			.day {
 				font-size: 1.2em;

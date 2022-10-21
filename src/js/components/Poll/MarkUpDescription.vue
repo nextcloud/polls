@@ -68,7 +68,7 @@ export default {
 
 	thead {
 		background-color: var(--color-background-darker);
-		color: var(--color-text-light);
+		color: var(--color-main-text);
 	}
 
 	td, th {
