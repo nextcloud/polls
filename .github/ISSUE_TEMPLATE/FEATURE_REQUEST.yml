@@ -23,7 +23,7 @@ body:
       description: |
         Describe what (goal) you want to achieve and why (value). Please explain your goal and why this is valuable and 
         **do not** describe the solution you suggest. Try to use the [user story](https://en.wikipedia.org/wiki/User_story) pattern
-    value: As a **[poll participant/poll owner/...]**, I want to **[be able to .../ don't want to ...]**, because **[it helps to ... /avoids ...]**.
+      value: As a **[poll participant/poll owner/...]**, I want to **[be able to .../ don't want to ...]**, because **[it helps to ... /avoids ...]**.
     validations:
       required: true
   - type: textarea
