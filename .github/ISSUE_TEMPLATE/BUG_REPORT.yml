@@ -33,7 +33,7 @@ body:
   - type: textarea
     id: bug-description
     attributes:
-      label: What went wrong, what did you obseve?
+      label: What went wrong, what did you observe?
       description: |
         Provide a description of the bug you're experiencing. Describe, if you are a poll user or a poll owner.
         Don't just expect someone will guess what your specific problem is and provide full details.
@@ -44,8 +44,8 @@ body:
     attributes:
       label: What did you expect, how polls should behave instead?
       description: |
-        Describe, what did you expect to happen, instead of the observed behavior
-        Help us to understand how this bug could be solved
+        Describe, what did you expect to happen, instead of the observed behavior.
+        Help us to understand how this bug could be solved.
     validations:
       required: true
   - type: textarea
@@ -53,9 +53,9 @@ body:
     attributes:
       label: What steps does it need to replay this bug? 
       description: |
-        Try to describe all informations, which led to this bug, so that we are able to reproduce it.
+        Try to describe as precisely as you can, what led to this bug, so that we are able to reproduce it.
         Describe the poll configuration and other relevant circumstances. 
-        The better your description is _(go 'here', click 'there'...)_ the fastest you'll get an _(accurate)_ answer.
+        The better your description is _(go 'here', click 'there'...)_ the faster you'll get an _(accurate)_ answer.
         A picture describes more than 1000 words: Add screenshots which illustrate the bug.
       value: |
         1.
@@ -68,7 +68,7 @@ body:
     attributes:
       value: |
         ---
-        # Add some information about your way you istalled polls
+        # Add some information how you installed your current Polls version
   - type: dropdown
     id: install-method
     attributes:
@@ -101,7 +101,7 @@ body:
         ---
         # Client environment
         This helps us to identify possible effects caused by the client environment.
-        ⚠️ Please make sure the browser extensions/plug-ins can be excluded as the bug source (especially script and ad blockers).
+        ⚠️ Please make sure browser extensions/plug-ins can be excluded as the bug source (especially script and ad blockers).
   - type: checkboxes
     id: client-browser
     attributes:
@@ -112,9 +112,14 @@ body:
       options:
       - label: "Firefox"
       - label: "Chrome"
-      - label: "Chromium/Chromium based"
+      - label: "Chromium/Chromium based (i.e. Edge)"
       - label: "Safari"
       - label: "Other/Don't know"
+  - type: input
+    id: client-browser-other
+    attributes:
+      label: Other browser
+      placeholder: i.e. Opera mobile
   - type: checkboxes
     id: client-os
     attributes:
@@ -129,20 +134,26 @@ body:
       - label: "iOS"
       - label: "Android"
       - label: "Other/Don't know"
-  - type: textarea
-    id: client-additional-info
+  - type: input
+    id: client-os-other
     attributes:
-      label: Additional client environment informations
-      description: |
-        Add additional information about your client environment (i.e. browser plug-ins).
+      label: Other OS
+      placeholder: i.e. DOS 2.1
   - type: textarea
     id: client-logs
     attributes:
-      label: Did you observe error entries in your browser's console or network tab?
+      label: Add your browser log here
       description: |
         Provide the content of your browser console or network tab in case of errors (see developer tools of your browser).
         > NOTE: This will be automatically formatted into code for better readability.
       render: shell
+  - type: textarea
+    id: client-additional-info
+    attributes:
+      label: Additional client environment information
+      description: |
+        Add additional information about your client environment (i.e. browser plug-ins).
+      render: markdown
 
   - type: markdown
     attributes:
@@ -156,7 +167,6 @@ body:
       label: NC version
       description: |
         Which Nextcloud Server version are you running.
-        _Describe in the "Additional info" section if you chose "Other"._
       options:
         - "Nextcloud 23 (Nextcloud Hub 1)"
         - "Nextcloud 24 (Nextcloud Hub 2)"
@@ -164,13 +174,17 @@ body:
         - "Other/Don't know"
     validations:
       required: true
+  - type: input
+    id: server-nc-version-other
+    attributes:
+      label: Other Nextcloud version
+      placeholder: i.e. Nextcloud 21.1.1
   - type: dropdown
     id: server-php
     attributes:
       label: PHP engine version
       description: |
         Select PHP engine version serving Nextcloud Server.
-        _Describe in the "Additional info" section if you chose "Other"._
       options:
         - "PHP 7.3"
         - "PHP 7.4"
@@ -180,9 +194,9 @@ body:
     validations:
       required: true
   - type: input
-    id: server-other-php-version
+    id: server-php-other
     attributes:
-      label: Other version
+      label: Other PHP version
       description: Add your _other_ PHP versoin
       placeholder: ex. PHP 5.4
   - type: dropdown
@@ -191,7 +205,6 @@ body:
       label: Database engine
       description: |
         Select Database engine serving Nextcloud Server.
-        _Describe in the "Additional info" section if you chose "Other"._
       options:
         - "MySQL"
         - "MariaDB"
@@ -204,7 +217,7 @@ body:
   - type: input
     id: server-other-db-version
     attributes:
-      label: Version information
+      label: Database Engine version or other Database
       description: Add your database engine version or _other_ PHP versoin
       placeholder: ex. PostgreSQL 14.5, MariaDB 10.5, dBase IV
   - type: checkboxes
