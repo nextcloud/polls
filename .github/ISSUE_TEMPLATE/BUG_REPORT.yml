@@ -1,8 +1,6 @@
 name: "Bug report: Nextcloud Polls"
 description: "Submit a report and help us improve Polls"
 labels: ["bug"]
-assignees:
-  - dartcafe
 
 body:
   - type: markdown
@@ -58,8 +56,6 @@ body:
         A picture describes more than 1000 words: Add screenshots which illustrate the bug.
       value: |
         1.
-        2.
-        3.
     validations:
       required: true
 
