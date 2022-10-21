@@ -1,6 +1,5 @@
 name: "Bug report: Nextcloud Polls"
 description: "Submit a report and help us improve Polls"
-title: "[Bug]: "
 labels: ["bug"]
 assignees:
   - dartcafe
@@ -145,7 +144,7 @@ body:
       label: Add your browser log here
       description: |
         Provide the content of your browser console or network tab in case of errors (see developer tools of your browser).
-        > NOTE: This will be automatically formatted into code for better readability.
+      placeholder: This will be automatically formatted into code for better readability.
       render: shell
 
   - type: textarea
@@ -243,7 +242,7 @@ body:
       description: |
         Provide Nextcloud logs lines, which can give information about the bug.
         Copy all relevant contents from `data/nextcloud.log` or copy the a RAW entries from `/settings/admin/logging` section:
-        > NOTE: This will be automatically formatted into code for better readability.
+      placeholder: This will be automatically formatted into code for better readability.
       render: shell
 
   - type: textarea
@@ -272,7 +271,7 @@ body:
         php occ config:list system
         ./occ config:list system
         ```
-        > NOTE: This will be automatically formatted into code for better readability.
+      placeholder: This will be automatically formatted into code for better readability.
       render: shell
 
   - type: textarea
@@ -300,7 +299,7 @@ body:
         ```shell
         https://yournextcloud.tld/index.php/settings/integrity/failed 
         ```
-        > NOTE: This will be automatically formatted into code for better readability.
+      placeholder: This will be automatically formatted into code for better readability.
       render: shell
 
   - type: markdown
