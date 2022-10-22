@@ -54,36 +54,26 @@ export const watchPolls = {
 
 	methods: {
 		async watchPolls() {
-			// loop while tab is hidden and avoid further requests
-			// quit if polling for updates is disabled
-			if (this.updateType === 'noPolling') {
-				return
-			}
-
 			if (this.cancelToken) {
-				// there is already a cancelToken, so just cancel the previous session and exit
-				this.cancelWatch()
-				return
+				this.cancelWatch() // there is already a cancelToken, cancel the previous session
 			}
 
-			this.cancelToken = axios.CancelToken.source()
+			this.cancelToken = axios.CancelToken.source() // get a new cancel token
 
 			while (this.retryCounter < this.maxTries) {
-				// reset sleep timer to default
-				this.sleepTimeout = defaultSleepTimeout
+				this.sleepTimeout = defaultSleepTimeout // reset sleep timer to default
 				this.gotValidResponse = false
 
-				while (document.hidden) {
-					console.debug('[polls]', 'app is in background')
-					await new Promise((resolve) => setTimeout(resolve, 2000))
-				}
-
-				await this.$store.dispatch('appSettings/get')
-
 				if (this.updateType === 'noPolling') {
+					// leave if polling is disabled
 					console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
 					this.cancelWatch()
 					return
+				}
+
+				while (document.hidden) { // loop while tab is hidden and avoid further requests
+					console.debug('[polls]', 'app is in background')
+					await new Promise((resolve) => setTimeout(resolve, 2000))
 				}
 
 				try {
@@ -98,9 +88,10 @@ export const watchPolls = {
 					}
 				}
 
+				// sleep if request was invalid or polling is set to something else than "longPolling"
 				if (this.updateType !== 'longPolling' || !this.gotValidResponse) {
 					await this.sleep()
-					console.debug('[polls', 'continue after sleep')
+					console.debug('[polls]', 'continue after sleep')
 				}
 			}
 
@@ -119,11 +110,16 @@ export const watchPolls = {
 				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
 			}
 
-			return await axios.get(generateUrl(this.endPoint), {
+			await this.$store.dispatch('appSettings/get')
+
+			const response = await axios.get(generateUrl(this.endPoint), {
 				params: { offset: this.lastUpdated },
 				cancelToken: this.cancelToken.token,
 				headers: { Accept: 'application/json' },
 			})
+
+			return response
+
 		},
 
 		cancelWatch() {
@@ -150,7 +146,6 @@ export const watchPolls = {
 				return
 			}
 
-			// console.debug('[polls]', `No JSON response recieved, got "${response.headers['content-type']}"`)
 			this.gotValidResponse = false
 			throw new InvalidJSON(`No JSON response recieved, got "${response.headers['content-type']}"`)
 		},
