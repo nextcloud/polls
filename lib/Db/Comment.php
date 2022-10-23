@@ -44,7 +44,7 @@ use OCP\AppFramework\Db\Entity;
  * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
  */
-class Comment extends Entity implements JsonSerializable {
+class Comment extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_comments';
 
 	/** @var array $subComments */
@@ -65,17 +65,9 @@ class Comment extends Entity implements JsonSerializable {
 	/** @var string $comment */
 	protected $comment = '';
 
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('timestamp', 'int');
-		$this->userManager = Container::queryClass(IUserManager::class);
-		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	/**
@@ -102,47 +94,5 @@ class Comment extends Entity implements JsonSerializable {
 
 	public function getSubComments(): array {
 		return $this->subComments;
-	}
-
-	public function getDisplayName(): string {
-		if ($this->getIsNoUser()) {
-			// get displayName from share
-			try {
-				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
-			} catch (ShareNotFoundException $e) {
-				// use fake share
-				$share = $e->getReplacement();
-			}
-			return $share->getDisplayName();
-		}
-
-		return $this->userManager->get($this->getUserId())->getDisplayName();
-	}
-
-	private function getPublicUserId() {
-		if (!$this->getUserId()) {
-			return '';
-		}
-
-		if ($this->publicUserId) {
-			return $this->publicUserId;
-		}
-
-		return $this->getUserId();
-	}
-	
-	public function generateHashedUserId() {
-		$this->publicUserId = hash('md5', $this->getUserId());
-	}
-
-	public function getUser(): array {
-		return [
-			'userId' => $this->getPublicUserId(),
-			'displayName' => $this->getDisplayName(),
-			'isNoUser' => $this->getIsNoUser(),
-		];
-	}
-	public function getIsNoUser(): bool {
-		return !($this->userManager->get($this->getUserId()) instanceof IUser);
 	}
 }
