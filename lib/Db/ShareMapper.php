@@ -24,6 +24,8 @@
 
 namespace OCA\Polls\Db;
 
+use OCA\Polls\Exceptions\ShareNotFoundException;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -102,22 +104,38 @@ class ShareMapper extends QBMapper {
 		   	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
-		return $this->findEntity($qb);
+	   try {
+			return $this->findEntity($qb);
+		} catch (DoesNotExistException $e) {
+			// \OC::$server->getLogger()->error('foundByPollAndUser: ' . $userId);
+			throw new ShareNotFoundException("Share not found by userId and pollId", $userId, $pollId);
+		}
 	}
 
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 */
 	public function findByToken(string $token): Share {
+		$userId = '';
+		$pollId = 0;
+
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR))
-		   );
+		->from($this->getTableName())
+		->where(
+			$qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR))
+		);
+		
+		try {
+			return $this->findEntity($qb);
+		} catch (DoesNotExistException $e) {
+			$exploded = explode('_', $token);
+			// Check, if token is a fake token
+			if ($exploded[1] === 'deleted' && $exploded[1] === 'share') {
+				$userId = $exploded[2];
+				$pollId = $exploded[3];
+			}
+			throw new ShareNotFoundException('Token ' . $token . ' does not exist', $userId, $pollId, $token);
+		}
 
-		return $this->findEntity($qb);
 	}
 
 	public function deleteByPoll(int $pollId): void {
