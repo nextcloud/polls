@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Db;
 
+use Doctrine\DBAL\Exception\DatabaseObjectNotFoundException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
