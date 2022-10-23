@@ -35,7 +35,6 @@ use OCP\IUserManager;
  */
 
 abstract class EntityWithUser extends Entity {
-
 	/** @var string $publicUserId */
 	protected $publicUserId = '';
 
