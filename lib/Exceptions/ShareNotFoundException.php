@@ -25,7 +25,6 @@ namespace OCA\Polls\Exceptions;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\UserBase;
-use OCP\AppFramework\Http;
 
 class ShareNotFoundException extends NotFoundException {
 	/** @var int $pollId */
@@ -65,5 +64,4 @@ class ShareNotFoundException extends NotFoundException {
 		$share->setDisplayName('Deleted User');
 		return $share;
 	}
-
 }

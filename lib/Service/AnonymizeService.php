@@ -28,7 +28,6 @@ use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 
@@ -114,6 +113,10 @@ class AnonymizeService {
 
 	/**
 	 * Replaces userIds with displayName to avoid exposing usernames in public polls
+	 *
+	 * @param (Comment|Vote|\OCA\Polls\Db\Option)[]|Poll $arrayOrObject
+	 *
+	 * @psalm-param Poll|array<Comment|Vote|\OCA\Polls\Db\Option> $arrayOrObject
 	 */
 	public static function replaceUserId(&$arrayOrObject, string $userId) : void {
 		if (is_array($arrayOrObject)) {
