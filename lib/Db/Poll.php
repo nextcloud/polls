@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 use OCA\Polls\Exceptions\NoDeadLineException;
+use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Helper\Container;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
@@ -78,7 +79,7 @@ use OCP\IURLGenerator;
  * @method void setMiscSettings(string $value)
  */
 
-class Poll extends Entity implements JsonSerializable {
+class Poll extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_polls';
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
@@ -168,8 +169,11 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
-	/** @var IUserManager */
-	private $userManager;
+	// /** @var IUserManager */
+	// private $userManager;
+
+	// /** @var ShareMapper */
+	// private $shareMapper;
 
 	/** @var OptionMapper */
 	private $optionMapper;
@@ -188,9 +192,10 @@ class Poll extends Entity implements JsonSerializable {
 		$this->addType('important', 'int');
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
-		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
-		$this->userManager = Container::queryClass(IUserManager::class);
+		// $this->shareMapper = Container::queryClass(ShareMapper::class);
 		$this->optionMapper = Container::queryClass(OptionMapper::class);
+		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
+		// $this->userManager = Container::queryClass(IUserManager::class);
 	}
 
 	/**
@@ -220,11 +225,7 @@ class Poll extends Entity implements JsonSerializable {
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'useNo' => $this->getUseNo(),
 			'autoReminder' => $this->getAutoReminder(),
-			'owner' => [
-				'userId' => $this->getPublicUserId(),
-				'displayName' => $this->getDisplayName(),
-				'isNoUser' => $this->getIsNoUser(),
-			],
+			'owner' => $this->getUser(),
 		];
 	}
 
@@ -305,26 +306,6 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setOwner($userId);
 	}
 
-	public function getIsNoUser(): bool {
-		return !($this->userManager->get($this->getUserId()) instanceof IUser);
-	}
-
-	private function getPublicUserId() {
-		if (!$this->getUserId()) {
-			return '';
-		}
-
-		if ($this->publicUserId) {
-			return $this->publicUserId;
-		}
-
-		return $this->getUserId();
-	}
-
-	public function generateHashedUserId() {
-		$this->publicUserId = hash('md5', $this->getUserId());
-	}
-
 	public function getAccess() {
 		if ($this->access === self::ACCESS_PUBLIC) {
 			return self::ACCESS_OPEN;
@@ -344,12 +325,6 @@ class Poll extends Entity implements JsonSerializable {
 
 	public function getDescriptionSafe(): string {
 		return htmlspecialchars($this->description);
-	}
-
-	public function getDisplayName(): string {
-		return $this->userManager->get($this->owner) instanceof IUser
-			? $this->userManager->get($this->owner)->getDisplayName()
-			: $this->owner;
 	}
 
 	private function setMiscSettingsArray(array $value) : void {
@@ -400,7 +375,6 @@ class Poll extends Entity implements JsonSerializable {
 		throw new NoDeadLineException();
 	}
 
-
 	/**
 	 * @param bool|string|int|array $value
 	 */
@@ -409,4 +383,47 @@ class Poll extends Entity implements JsonSerializable {
 		$miscSettings[$key] = $value;
 		$this->setMiscSettingsArray($miscSettings);
 	}
+
+	// public function getIsNoUser(): bool {
+	// 	return !($this->userManager->get($this->getUserId()) instanceof IUser);
+	// }
+
+	// public function getDisplayName(): string {
+	// 	if ($this->getIsNoUser()) {
+	// 		// get displayName from share
+	// 		try {
+	// 			$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
+	// 		} catch (ShareNotFoundException $e) {
+	// 			// use fake share
+	// 			$share = $e->getReplacement();
+	// 		}
+	// 		return $share->getDisplayName();
+	// 	}
+
+	// 	return $this->userManager->get($this->getUserId())->getDisplayName();
+	// }
+
+	// private function getPublicUserId() {
+	// 	if (!$this->getUserId()) {
+	// 		return '';
+	// 	}
+
+	// 	if ($this->publicUserId) {
+	// 		return $this->publicUserId;
+	// 	}
+
+	// 	return $this->getUserId();
+	// }
+
+	// public function generateHashedUserId() {
+	// 	$this->publicUserId = hash('md5', $this->getUserId());
+	// }
+
+	// public function getUser(): array {
+	// 	return [
+	// 		'userId' => $this->getPublicUserId(),
+	// 		'displayName' => $this->getDisplayName(),
+	// 		'isNoUser' => $this->getIsNoUser(),
+	// 	];
+	// }
 }
