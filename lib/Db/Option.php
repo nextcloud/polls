@@ -175,9 +175,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->setOwner($userId);
 	}
 
-	/**
-	 * @return false|int|string
-	 */
 	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n) {
 		$mutableFrom = DateTime::createFromImmutable($this->getDateObjectFrom($timeZone));
 		$mutableTo = DateTime::createFromImmutable($this->getDateObjectTo($timeZone));
