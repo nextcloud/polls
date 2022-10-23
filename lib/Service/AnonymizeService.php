@@ -121,12 +121,7 @@ class AnonymizeService {
 				if ($item->getUserId() === $userId) {
 					continue;
 				}
-				if ($item instanceof Comment || $item instanceof Vote) {
-					$item->setUserId($item->getDisplayName());
-				}
-				if ($item instanceof Option || $item instanceof Poll) {
-					$item->setOwner($item->getDisplayName());
-				}
+				$item->generateHashedUserId();
 			}
 			return;
 		}
@@ -135,13 +130,7 @@ class AnonymizeService {
 			return;
 		}
 
-		if ($arrayOrObject instanceof Option || $arrayOrObject instanceof Poll) {
-			$arrayOrObject->setOwner($arrayOrObject->getDisplayName());
-		}
-
-		if ($arrayOrObject instanceof Comment || $arrayOrObject instanceof Vote) {
-			$arrayOrObject->setUserId($arrayOrObject->getDisplayName());
-		}
+		$arrayOrObject->generateHashedUserId();
 
 		return;
 	}

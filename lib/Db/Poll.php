@@ -111,6 +111,9 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var string $owner */
 	protected $owner;
 
+	/** @var string $publicUserId */
+	protected $publicUserId = '';
+
 	/** @var int $created */
 	protected $created;
 
@@ -218,8 +221,9 @@ class Poll extends Entity implements JsonSerializable {
 			'useNo' => $this->getUseNo(),
 			'autoReminder' => $this->getAutoReminder(),
 			'owner' => [
-				'userId' => $this->getOwner(),
+				'userId' => $this->getPublicUserId(),
 				'displayName' => $this->getDisplayName(),
+				'isNoUser' => $this->getIsNoUser(),
 			],
 		];
 	}
@@ -301,6 +305,26 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setOwner($userId);
 	}
 
+	public function getIsNoUser(): bool {
+		return !($this->userManager->get($this->getUserId()) instanceof IUser);
+	}
+
+	private function getPublicUserId() {
+		if (!$this->getUserId()) {
+			return '';
+		}
+
+		if ($this->publicUserId) {
+			return $this->publicUserId;
+		}
+
+		return $this->getUserId();
+	}
+
+	public function generateHashedUserId() {
+		$this->publicUserId = hash('md5', $this->getUserId());
+	}
+
 	public function getAccess() {
 		if ($this->access === self::ACCESS_PUBLIC) {
 			return self::ACCESS_OPEN;
@@ -332,8 +356,12 @@ class Poll extends Entity implements JsonSerializable {
 		$this->setMiscSettings(json_encode($value));
 	}
 
-	private function getMiscSettingsArray() : ?array {
-		return json_decode($this->getMiscSettings(), true);
+	private function getMiscSettingsArray() : array {
+		if ($this->getMiscSettings()) {
+			return json_decode($this->getMiscSettings(), true);
+		}
+		
+		return [];
 	}
 
 	public function getTimeToDeadline(int $time = 0): ?int {

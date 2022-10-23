@@ -30,12 +30,11 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use JsonSerializable;
-
+use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Helper\Container;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IL10N;
 
 /**
@@ -66,6 +65,9 @@ class Option extends Entity implements JsonSerializable {
 
 	/** @var string $owner */
 	protected $owner;
+
+	/** @var string $publicUserId */
+	protected $publicUserId = '';
 
 	/** @var int $released */
 	protected $released;
@@ -146,13 +148,12 @@ class Option extends Entity implements JsonSerializable {
 				'isBookedUp' => $this->isBookedUp,
 			],
 			'owner' => [
-				'userId' => $this->getOwner(),
+				'userId' => $this->getPublicUserId(),
 				'displayName' => $this->getDisplayName(),
 				'isNoUser' => $this->getOwnerIsNoUser(),
 			],
 		];
 	}
-
 
 	public function getPollOptionText(): string {
 		if ($this->getTimestamp() && $this->getDuration()) {
@@ -193,29 +194,43 @@ class Option extends Entity implements JsonSerializable {
 	public function setUserId(string $userId) : void {
 		$this->setOwner($userId);
 	}
-
-	// used for 1.9.0-beta1 installations
-	public function getOwner() : string {
-		if ($this->owner === 'disallow' || $this->owner === null) {
-			return '';
-		}
-		return $this->owner;
+	
+	// alias of getOwnerIsNoUser()
+	private function getIsNoUser(): bool {
+		return $this->getOwnerIsNoUser();
 	}
 
-	public function getDisplayName(): ?string {
-		if (!strncmp($this->getOwner(), 'deleted_', 8)) {
-			return 'Deleted User';
+
+	private function getPublicUserId() {
+		if (!$this->getUserId()) {
+			return '';
 		}
-	
-		if ($this->getOwnerIsNoUser()) {
+
+		if ($this->publicUserId) {
+			return $this->publicUserId;
+		}
+		return $this->getUserId();
+	}
+
+	public function generateHashedUserId() {
+		$this->publicUserId = hash('md5', $this->getUserId());
+	}
+
+	public function getDisplayName(): string {
+		if (!$this->getUserId()) {
+			return '';
+		}
+
+		if ($this->getIsNoUser()) {
 			try {
-				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getOwner());
-				return $share->getDisplayName();
-			} catch (DoesNotExistException $e) {
-				return $this->getOwner();
+				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
+			} catch (ShareNotFoundException $e) {
+				$share = $e->getReplacement();
 			}
+			return $share->getDisplayName();
 		}
-		return $this->userManager->get($this->getOwner())->getDisplayName();
+
+		return $this->userManager->get($this->getUserId())->getDisplayName();
 	}
 
 	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n) {

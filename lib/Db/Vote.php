@@ -26,11 +26,11 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
+use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Helper\Container;
 use OCP\IUser;
 use OCP\IUserManager;
 use OCP\AppFramework\Db\Entity;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * @method int getPollId()
@@ -52,6 +52,9 @@ class Vote extends Entity implements JsonSerializable {
 
 	/** @var string $userId */
 	protected $userId;
+
+	/** @var string $publicUserId */
+	protected $publicUserId = '';
 
 	/** @var int $voteOptionId */
 	protected $voteOptionId;
@@ -86,30 +89,47 @@ class Vote extends Entity implements JsonSerializable {
 			'optionText' => $this->getVoteOptionText(),
 			'answer' => $this->getVoteAnswer(),
 			'user' => [
-				'userId' => $this->getUserId(),
+				'userId' => $this->getPublicUserId(),
 				'displayName' => $this->getDisplayName(),
-				'isNoUser' => $this->getIsNoUser(),
+				'isNoUser' => $this->getIsNoUser()
 			],
 		];
 	}
 
 	public function getDisplayName(): string {
-		if (!strncmp($this->userId, 'deleted_', 8)) {
-			return 'Deleted User';
-		}
-
 		if ($this->getIsNoUser()) {
+			// get displayName from share
 			try {
 				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->userId);
-				return $share->getDisplayName();
-			} catch (DoesNotExistException $e) {
-				return $this->userId;
+			} catch (ShareNotFoundException $e) {
+				// use fake share
+				$share = $e->getReplacement();
 			}
+			return $share->getDisplayName();
 		}
+
 		return $this->userManager->get($this->userId)->getDisplayName();
 	}
 
 	public function getIsNoUser(): bool {
 		return !($this->userManager->get($this->userId) instanceof IUser);
 	}
+
+	private function getPublicUserId() {
+		if (!$this->getUserId()) {
+			return '';
+		}
+
+		if ($this->publicUserId) {
+			return $this->publicUserId;
+		}
+
+		return $this->getUserId();
+	}
+
+	public function generateHashedUserId() {
+		$this->publicUserId = hash('md5', $this->getUserId());
+	}
+
 }
+
