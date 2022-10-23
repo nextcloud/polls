@@ -26,11 +26,6 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-use OCA\Polls\Exceptions\ShareNotFoundException;
-use OCA\Polls\Helper\Container;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\AppFramework\Db\Entity;
 
 /**
  * @method int getPollId()
@@ -53,9 +48,6 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	/** @var string $userId */
 	protected $userId;
 
-	/** @var string $publicUserId */
-	protected $publicUserId = '';
-
 	/** @var int $voteOptionId */
 	protected $voteOptionId;
 
@@ -65,18 +57,10 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	/** @var string $voteAnswer */
 	protected $voteAnswer;
 
-	// /** @var IUserManager */
-	// private $userManager;
-
-	// /** @var ShareMapper */
-	// private $shareMapper;
-
 	public function __construct() {
 		$this->addType('id', 'int');
 		$this->addType('pollId', 'int');
 		$this->addType('voteOptionId', 'int');
-		// $this->userManager = Container::queryClass(IUserManager::class);
-		// $this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	/**
@@ -91,48 +75,4 @@ class Vote extends EntityWithUser implements JsonSerializable {
 			'user' => $this->getUser(),
 		];
 	}
-
-	// public function getIsNoUser(): bool {
-	// 	return !($this->userManager->get($this->userId) instanceof IUser);
-	// }
-
-	// public function getDisplayName(): string {
-	// 	if ($this->getIsNoUser()) {
-	// 		// get displayName from share
-	// 		try {
-	// 			$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->userId);
-	// 		} catch (ShareNotFoundException $e) {
-	// 			// use fake share
-	// 			$share = $e->getReplacement();
-	// 		}
-	// 		return $share->getDisplayName();
-	// 	}
-
-	// 	return $this->userManager->get($this->userId)->getDisplayName();
-	// }
-
-	// private function getPublicUserId() {
-	// 	if (!$this->getUserId()) {
-	// 		return '';
-	// 	}
-
-	// 	if ($this->publicUserId) {
-	// 		return $this->publicUserId;
-	// 	}
-
-	// 	return $this->getUserId();
-	// }
-
-	// public function generateHashedUserId() {
-	// 	$this->publicUserId = hash('md5', $this->getUserId());
-	// }
-
-	// public function getUser(): array {
-	// 	return [
-	// 		'userId' => $this->getPublicUserId(),
-	// 		'displayName' => $this->getDisplayName(),
-	// 		'isNoUser' => $this->getIsNoUser(),
-	// 	];
-	// }
 }
-

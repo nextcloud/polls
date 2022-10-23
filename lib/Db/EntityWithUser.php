@@ -31,10 +31,13 @@ use OCP\IUserManager;
 
 /**
  * @method string getUserId()
- * @method void setUserId(string $value)
+ * @method int getPollId()
  */
 
 abstract class EntityWithUser extends Entity {
+
+	/** @var string $publicUserId */
+	protected $publicUserId = '';
 
 	public function getIsNoUser(): bool {
 		return !(Container::queryClass(IUserManager::class)->get($this->getUserId()) instanceof IUser);
@@ -58,7 +61,7 @@ abstract class EntityWithUser extends Entity {
 		return Container::queryClass(IUserManager::class)->get($this->getUserId())->getDisplayName();
 	}
 
-	private function getPublicUserId() {
+	private function getPublicUserId(): string {
 		if (!$this->getUserId()) {
 			return '';
 		}
@@ -70,7 +73,7 @@ abstract class EntityWithUser extends Entity {
 		return $this->getUserId();
 	}
 
-	public function generateHashedUserId() {
+	public function generateHashedUserId(): void {
 		$this->publicUserId = hash('md5', $this->getUserId());
 	}
 

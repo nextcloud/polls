@@ -23,8 +23,7 @@
 
 namespace OCA\Polls\Db;
 
-Interface IEntityWithUser {
-
+interface IEntityWithUser {
 	/**
 	 * Is this object'suser or owner an internal user or external
 	 */

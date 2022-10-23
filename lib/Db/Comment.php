@@ -26,11 +26,6 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-use OCA\Polls\Exceptions\ShareNotFoundException;
-use OCA\Polls\Helper\Container;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\AppFramework\Db\Entity;
 
 /**
  * @method int getId()
@@ -55,9 +50,6 @@ class Comment extends EntityWithUser implements JsonSerializable {
 
 	/** @var string $userId */
 	protected $userId = '';
-
-	/** @var string $publicUserId */
-	protected $publicUserId = '';
 
 	/** @var int $timestamp */
 	protected $timestamp = 0;

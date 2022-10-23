@@ -104,10 +104,9 @@ class ShareMapper extends QBMapper {
 		   	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
 		   );
 
-	   try {
+		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
-			// \OC::$server->getLogger()->error('foundByPollAndUser: ' . $userId);
 			throw new ShareNotFoundException("Share not found by userId and pollId", $userId, $pollId);
 		}
 	}
@@ -131,11 +130,10 @@ class ShareMapper extends QBMapper {
 			// Check, if token is a fake token
 			if ($exploded[1] === 'deleted' && $exploded[1] === 'share') {
 				$userId = $exploded[2];
-				$pollId = $exploded[3];
+				$pollId = intval($exploded[3]);
 			}
 			throw new ShareNotFoundException('Token ' . $token . ' does not exist', $userId, $pollId, $token);
 		}
-
 	}
 
 	public function deleteByPoll(int $pollId): void {
