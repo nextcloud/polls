@@ -208,7 +208,7 @@ class PollService {
 	 *
 	 * @psalm-return Poll|array<\OCA\Polls\Db\Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Vote>
 	 */
-	public function get(int $pollId)  {
+	public function get(int $pollId) {
 		$this->acl->setPollId($pollId);
 		$this->poll = $this->pollMapper->find($pollId);
 
