@@ -25,6 +25,7 @@
 namespace OCA\Polls\Db;
 
 use OCA\Polls\Exceptions\ShareNotFoundException;
+use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
@@ -107,14 +108,28 @@ class ShareMapper extends QBMapper {
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
-			throw new ShareNotFoundException("Share not found by userId and pollId", $userId, $pollId);
+			throw new ShareNotFoundException("Share not found by userId and pollId");
 		}
 	}
 
-	public function findByToken(string $token): Share {
-		$userId = '';
-		$pollId = 0;
+	/**
+	 * Returns a fake share in case of deleted shares
+	 */
+	public function getReplacement($pollId, $userId): ?Share {
+		if (!$userId) {
+			return null;
+		}
 
+		$share = new Share;
+		$share->setUserId($userId);
+		$share->setPollId($pollId);
+		$share->setType(UserBase::TYPE_EXTERNAL);
+		$share->setToken('deleted_share_' . $userId . '_' . $pollId);
+		$share->setDisplayName('Deleted User');
+		return $share;
+	}
+
+	public function findByToken(string $token): Share {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -126,13 +141,7 @@ class ShareMapper extends QBMapper {
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
-			$exploded = explode('_', $token);
-			// Check, if token is a fake token
-			if ($exploded[1] === 'deleted' && $exploded[1] === 'share') {
-				$userId = $exploded[2];
-				$pollId = intval($exploded[3]);
-			}
-			throw new ShareNotFoundException('Token ' . $token . ' does not exist', $userId, $pollId, $token);
+			throw new ShareNotFoundException('Token ' . $token . ' does not exist');
 		}
 	}
 
