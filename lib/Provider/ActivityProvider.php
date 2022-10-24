@@ -34,6 +34,7 @@ use OCP\Activity\IEventMerger;
 use OCP\Activity\IEvent;
 use OCA\Polls\Service\ActivityService;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Exceptions\ShareNotFoundException;
 
 class ActivityProvider implements IProvider {
 	/** @var IFactory */
@@ -110,7 +111,12 @@ class ActivityProvider implements IProvider {
 					'name' => $actor->getDisplayName(),
 				];
 			} else {
-				$share = $this->shareMapper->findByPollAndUser($event->getObjectId(), $event->getAuthor());
+				try {
+					$share = $this->shareMapper->findByPollAndUser($event->getObjectId(), $event->getAuthor());
+				} catch (ShareNotFoundException $e) {
+					// User seems to be probaly deleted, use fake share
+					$share = $this->shareMapper->getReplacement($event->getObjectId(), $event->getAuthor());
+				}
 				$parameters['actor'] = [
 					'type' => 'guest',
 					'id' => $share->getUserId(),

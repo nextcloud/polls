@@ -30,12 +30,6 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use JsonSerializable;
-
-use OCA\Polls\Helper\Container;
-use OCP\AppFramework\Db\Entity;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IL10N;
 
 /**
@@ -58,7 +52,7 @@ use OCP\IL10N;
  * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
  */
-class Option extends Entity implements JsonSerializable {
+class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
 
 	/** @var int $pollId */
@@ -107,12 +101,6 @@ class Option extends Entity implements JsonSerializable {
 	/** @var bool $isBookedUp */
 	public $isBookedUp = false;
 
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
 	public function __construct() {
 		$this->addType('released', 'int');
 		$this->addType('pollId', 'int');
@@ -120,8 +108,6 @@ class Option extends Entity implements JsonSerializable {
 		$this->addType('order', 'int');
 		$this->addType('confirmed', 'int');
 		$this->addType('duration', 'int');
-		$this->userManager = Container::queryClass(IUserManager::class);
-		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	/**
@@ -145,14 +131,9 @@ class Option extends Entity implements JsonSerializable {
 				'votes' => $this->votes,
 				'isBookedUp' => $this->isBookedUp,
 			],
-			'owner' => [
-				'userId' => $this->getOwner(),
-				'displayName' => $this->getDisplayName(),
-				'isNoUser' => $this->getOwnerIsNoUser(),
-			],
+			'owner' => $this->getUser(),
 		];
 	}
-
 
 	public function getPollOptionText(): string {
 		if ($this->getTimestamp() && $this->getDuration()) {
@@ -194,30 +175,6 @@ class Option extends Entity implements JsonSerializable {
 		$this->setOwner($userId);
 	}
 
-	// used for 1.9.0-beta1 installations
-	public function getOwner() : string {
-		if ($this->owner === 'disallow' || $this->owner === null) {
-			return '';
-		}
-		return $this->owner;
-	}
-
-	public function getDisplayName(): ?string {
-		if (!strncmp($this->getOwner(), 'deleted_', 8)) {
-			return 'Deleted User';
-		}
-	
-		if ($this->getOwnerIsNoUser()) {
-			try {
-				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getOwner());
-				return $share->getDisplayName();
-			} catch (DoesNotExistException $e) {
-				return $this->getOwner();
-			}
-		}
-		return $this->userManager->get($this->getOwner())->getDisplayName();
-	}
-
 	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n) {
 		$mutableFrom = DateTime::createFromImmutable($this->getDateObjectFrom($timeZone));
 		$mutableTo = DateTime::createFromImmutable($this->getDateObjectTo($timeZone));
@@ -251,9 +208,9 @@ class Option extends Entity implements JsonSerializable {
 		return $dateTimeFrom . ' - ' . $dateTimeTo;
 	}
 
-	private function getOwnerIsNoUser(): bool {
-		return !$this->userManager->get($this->getOwner()) instanceof IUser;
-	}
+	// private function getOwnerIsNoUser(): bool {
+	// 	return !$this->userManager->get($this->getOwner()) instanceof IUser;
+	// }
 
 	/**
 	 * Check, if the date option spans one or more whole days (from 00:00 to 24:00)

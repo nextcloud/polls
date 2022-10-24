@@ -108,6 +108,6 @@ class NotificationMail extends MailBase {
 			VoteEvent::SET => $this->l10n->t('%s has voted.', [$displayName]),
 		];
 
-		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . " (" . $displayName . ")";
+		return $logStrings[$logItem->getMessageId()] ?? $logItem->getMessageId() . ' (' . $displayName . ')';
 	}
 }
