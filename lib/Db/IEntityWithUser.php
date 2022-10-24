@@ -1,8 +1,8 @@
 <?php
 /**
- * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
- * @author René Gieling <github@dartcafe.de>
+ * @author Kai Schröer <git@schroeer.co>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -21,14 +21,26 @@
  *
  */
 
-namespace OCA\Polls\Exceptions;
+namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Http;
+interface IEntityWithUser {
+	/**
+	 * Is this object'suser or owner an internal user or external
+	 */
+	public function getUserId(): string;
 
-class NotFoundException extends Exception {
-	public function __construct(
-		string $e = 'Not found'
-	) {
-		parent::__construct($e, Http::STATUS_NOT_FOUND);
-	}
+	/**
+	 * Returns the displayname of this object's user or owner
+	 */
+	public function getDisplayName(): string;
+
+	/**
+	 * Creates a hashed version of the userId
+	 */
+	public function generateHashedUserId(): void;
+
+	/**
+	 * Returns an array with user attributes for jsonSerialize()
+	 */
+	public function getUser(): array;
 }
