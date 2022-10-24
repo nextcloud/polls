@@ -28,9 +28,6 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
-use OCP\AppFramework\Db\Entity;
-use OCP\IUser;
-use OCP\IUserManager;
 use OCP\IURLGenerator;
 
 /**
@@ -78,7 +75,7 @@ use OCP\IURLGenerator;
  * @method void setMiscSettings(string $value)
  */
 
-class Poll extends Entity implements JsonSerializable {
+class Poll extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_polls';
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
@@ -165,9 +162,6 @@ class Poll extends Entity implements JsonSerializable {
 	/** @var IURLGenerator */
 	private $urlGenerator;
 
-	/** @var IUserManager */
-	private $userManager;
-
 	/** @var OptionMapper */
 	private $optionMapper;
 
@@ -185,9 +179,8 @@ class Poll extends Entity implements JsonSerializable {
 		$this->addType('important', 'int');
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
-		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
-		$this->userManager = Container::queryClass(IUserManager::class);
 		$this->optionMapper = Container::queryClass(OptionMapper::class);
+		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 	}
 
 	/**
@@ -217,10 +210,7 @@ class Poll extends Entity implements JsonSerializable {
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'useNo' => $this->getUseNo(),
 			'autoReminder' => $this->getAutoReminder(),
-			'owner' => [
-				'userId' => $this->getOwner(),
-				'displayName' => $this->getDisplayName(),
-			],
+			'owner' => $this->getUser(),
 		];
 	}
 
@@ -322,18 +312,16 @@ class Poll extends Entity implements JsonSerializable {
 		return htmlspecialchars($this->description);
 	}
 
-	public function getDisplayName(): string {
-		return $this->userManager->get($this->owner) instanceof IUser
-			? $this->userManager->get($this->owner)->getDisplayName()
-			: $this->owner;
-	}
-
 	private function setMiscSettingsArray(array $value) : void {
 		$this->setMiscSettings(json_encode($value));
 	}
 
-	private function getMiscSettingsArray() : ?array {
-		return json_decode($this->getMiscSettings(), true);
+	private function getMiscSettingsArray() : array {
+		if ($this->getMiscSettings()) {
+			return json_decode($this->getMiscSettings(), true);
+		}
+		
+		return [];
 	}
 
 	public function getTimeToDeadline(int $time = 0): ?int {
@@ -371,7 +359,6 @@ class Poll extends Entity implements JsonSerializable {
 		}
 		throw new NoDeadLineException();
 	}
-
 
 	/**
 	 * @param bool|string|int|array $value

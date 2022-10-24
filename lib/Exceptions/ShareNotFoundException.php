@@ -23,12 +23,10 @@
 
 namespace OCA\Polls\Exceptions;
 
-use OCP\AppFramework\Http;
-
-class NotFoundException extends Exception {
+class ShareNotFoundException extends NotFoundException {
 	public function __construct(
-		string $e = 'Not found'
+		string $e = 'Share not found'
 	) {
-		parent::__construct($e, Http::STATUS_NOT_FOUND);
+		parent::__construct($e);
 	}
 }

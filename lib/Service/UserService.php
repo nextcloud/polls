@@ -26,8 +26,8 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
+use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\User\Admin;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
@@ -132,10 +132,12 @@ class UserService {
 		// Otherwise get it from a share that belongs to the poll and return the share user
 		try {
 			$share = $this->shareMapper->findByPollAndUser($pollId, $userId);
-			return $this->getUserFromShare($share);
-		} catch (Exception $e) {
-			return null;
+		} catch (ShareNotFoundException $e) {
+			// User seems to be probaly deleted, use fake share
+			$share = $this->shareMapper->getReplacement($pollId, $userId);
 		}
+
+		return $this->getUserFromShare($share);
 	}
 
 	/**

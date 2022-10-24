@@ -109,7 +109,7 @@ jobs:
 
     services:
       postgres:
-        image: postgres
+        image: postgres:14.5-bullseye
         ports:
           - 4444:5432/tcp
         env:

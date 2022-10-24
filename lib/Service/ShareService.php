@@ -37,6 +37,7 @@ use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
+use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -144,13 +145,9 @@ class ShareService {
 	 * Get share by token for accessing the poll
 	 */
 	public function get(string $token, bool $validateShareType = false): Share {
-		try {
-			$this->share = $this->shareMapper->findByToken($token);
-			if ($validateShareType) {
-				$this->validateShareType();
-			}
-		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Token ' . $token . ' does not exist');
+		$this->share = $this->shareMapper->findByToken($token);
+		if ($validateShareType) {
+			$this->validateShareType();
 		}
 
 		// Exception: logged in user accesses the poll via public share link
@@ -184,15 +181,10 @@ class ShareService {
 	 * Change share type
 	 */
 	public function setType(string $token, string $type): Share {
-		try {
-			$this->share = $this->shareMapper->findByToken($token);
-			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
-			$this->share->setType($type);
-			$this->share = $this->shareMapper->update($this->share);
-		} catch (DoesNotExistException $e) {
-			throw new NotFoundException('Token ' . $token . ' does not exist');
-		}
-
+		$this->share = $this->shareMapper->findByToken($token);
+		$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+		$this->share->setType($type);
+		$this->share = $this->shareMapper->update($this->share);
 		$this->eventDispatcher->dispatchTyped(new ShareTypeChangedEvent($this->share));
 
 		return $this->share;
@@ -207,7 +199,7 @@ class ShareService {
 			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 			$this->share->setPublicPollEmail($value);
 			$this->share = $this->shareMapper->update($this->share);
-		} catch (DoesNotExistException $e) {
+		} catch (ShareNotFoundException $e) {
 			throw new NotFoundException('Token ' . $token . ' does not exist');
 		}
 		$this->eventDispatcher->dispatchTyped(new ShareChangedRegistrationConstraintEvent($this->share));
@@ -339,7 +331,7 @@ class ShareService {
 			$this->share = $this->shareMapper->findByToken($token);
 			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 			$this->shareMapper->delete($this->share);
-		} catch (DoesNotExistException $e) {
+		} catch (ShareNotFoundException $e) {
 			// silently catch
 		}
 
@@ -432,7 +424,7 @@ class ShareService {
 				throw new ShareAlreadyExistsException;
 			} catch (MultipleObjectsReturnedException $e) {
 				throw new ShareAlreadyExistsException;
-			} catch (DoesNotExistException $e) {
+			} catch (ShareNotFoundException $e) {
 				// continue
 			}
 		}
