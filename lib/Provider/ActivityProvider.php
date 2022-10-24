@@ -114,7 +114,8 @@ class ActivityProvider implements IProvider {
 				try {
 					$share = $this->shareMapper->findByPollAndUser($event->getObjectId(), $event->getAuthor());
 				} catch (ShareNotFoundException $e) {
-					$share = $e->getReplacement();
+					// User seems to be probaly deleted, use fake share
+					$share = $this->shareMapper->getReplacement($event->getObjectId(), $event->getAuthor());
 				}
 				$parameters['actor'] = [
 					'type' => 'guest',

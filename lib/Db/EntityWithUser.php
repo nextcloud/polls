@@ -51,8 +51,8 @@ abstract class EntityWithUser extends Entity {
 			try {
 				$share = Container::queryClass(ShareMapper::class)->findByPollAndUser($this->getPollId(), $this->getUserId());
 			} catch (ShareNotFoundException $e) {
-				// use fake share
-				$share = $e->getReplacement();
+				// User seems to be probaly deleted, use fake share
+				$share = Container::queryClass(ShareMapper::class)->getReplacement($this->getPollId(), $this->getUserId());
 			}
 			return $share->getDisplayName();
 		}

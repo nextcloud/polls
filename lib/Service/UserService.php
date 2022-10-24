@@ -133,7 +133,8 @@ class UserService {
 		try {
 			$share = $this->shareMapper->findByPollAndUser($pollId, $userId);
 		} catch (ShareNotFoundException $e) {
-			$share = $e->getReplacement();
+			// User seems to be probaly deleted, use fake share
+			$share = $this->shareMapper->getReplacement($pollId, $userId);
 		}
 
 		return $this->getUserFromShare($share);

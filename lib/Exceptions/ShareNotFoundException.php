@@ -27,41 +27,9 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Model\UserBase;
 
 class ShareNotFoundException extends NotFoundException {
-	/** @var int $pollId */
-	protected $pollId = 0;
-
-	/** @var string $userId */
-	protected $userId = '';
-
-	/** @var string $token */
-	protected $token = '';
-
 	public function __construct(
-		string $e = 'Share not found',
-		string $userId = '',
-		int $pollId = 0,
-		string $token = ''
+		string $e = 'Share not found'
 	) {
 		parent::__construct($e);
-		$this->userId = $userId;
-		$this->pollId = $pollId;
-		$this->token = $token;
-	}
-
-	/**
-	 * Returns a fake share in case of deleted shares
-	 */
-	public function getReplacement(): ?Share {
-		if (!$this->userId) {
-			return null;
-		}
-
-		$share = new Share;
-		$share->setUserId($this->userId);
-		$share->setPollId($this->pollId);
-		$share->setType(UserBase::TYPE_EXTERNAL);
-		$share->setToken('deleted_share_' . $this->userId . '_' . $this->pollId);
-		$share->setDisplayName('Deleted User');
-		return $share;
 	}
 }
