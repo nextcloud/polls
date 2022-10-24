@@ -23,9 +23,6 @@
 
 namespace OCA\Polls\Exceptions;
 
-use OCA\Polls\Db\Share;
-use OCA\Polls\Model\UserBase;
-
 class ShareNotFoundException extends NotFoundException {
 	public function __construct(
 		string $e = 'Share not found'
