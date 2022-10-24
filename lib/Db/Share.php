@@ -221,8 +221,12 @@ class Share extends Entity implements JsonSerializable {
 		$this->setMiscSettings(json_encode($value));
 	}
 
-	private function getMiscSettingsArray() : ?array {
-		return json_decode($this->getMiscSettings(), true);
+	private function getMiscSettingsArray() : array {
+		if ($this->getMiscSettings()) {
+			return json_decode($this->getMiscSettings(), true);
+		}
+		
+		return [];
 	}
 
 	/**

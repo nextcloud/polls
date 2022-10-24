@@ -27,12 +27,6 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
-use OCA\Polls\Helper\Container;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\AppFramework\Db\Entity;
-use OCP\AppFramework\Db\DoesNotExistException;
-
 /**
  * @method int getId()
  * @method void setId(integer $value)
@@ -45,7 +39,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
  * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
  */
-class Comment extends Entity implements JsonSerializable {
+class Comment extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_comments';
 
 	/** @var array $subComments */
@@ -63,17 +57,9 @@ class Comment extends Entity implements JsonSerializable {
 	/** @var string $comment */
 	protected $comment = '';
 
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('timestamp', 'int');
-		$this->userManager = Container::queryClass(IUserManager::class);
-		$this->shareMapper = Container::queryClass(ShareMapper::class);
 	}
 
 	/**
@@ -100,33 +86,5 @@ class Comment extends Entity implements JsonSerializable {
 
 	public function getSubComments(): array {
 		return $this->subComments;
-	}
-
-	public function getDisplayName(): string {
-		if (!strncmp($this->userId, 'deleted_', 8)) {
-			return 'Deleted User';
-		}
-
-		if ($this->getIsNoUser()) {
-			// get displayName from share
-			try {
-				$share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->userId);
-				return $share->getDisplayName();
-			} catch (DoesNotExistException $e) {
-				return $this->userId;
-			}
-		}
-		return $this->userManager->get($this->userId)->getDisplayName();
-	}
-
-	public function getUser(): array {
-		return [
-			'userId' => $this->getUserId(),
-			'displayName' => $this->getDisplayName(),
-			'isNoUser' => $this->getIsNoUser(),
-		];
-	}
-	public function getIsNoUser(): bool {
-		return !($this->userManager->get($this->userId) instanceof IUser);
 	}
 }

@@ -33,6 +33,7 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\IGroupManager;
@@ -130,7 +131,7 @@ class Acl implements JsonSerializable {
 			$this->poll = $this->pollMapper->find($this->share->getPollId());
 			$this->validateShareAccess();
 			$this->request($permission);
-		} catch (DoesNotExistException $e) {
+		} catch (ShareNotFoundException $e) {
 			throw new NotAuthorizedException('Error loading share ' . $token);
 		}
 
