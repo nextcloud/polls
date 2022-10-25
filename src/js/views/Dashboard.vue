@@ -24,8 +24,8 @@
 	<div>
 		<NcDashboardWidget :items="relevantPolls"
 			empty-content-icon="icon-polls"
-			:empty-content-message="t('polls', 'No polls')"
-			:show-more-text="t('polls', 'relevant polls')"
+			:empty-content-message="t('polls', 'No polls found for this category')"
+			:show-more-text="t('polls', 'Relevant polls')"
 			:loading="loading"
 			@hide="() => {}"
 			@markDone="() => {}">
