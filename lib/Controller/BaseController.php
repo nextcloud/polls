@@ -51,7 +51,6 @@ class BaseController extends Controller {
 	 * @NoAdminRequired
 	 */
 	protected function response(Closure $callback): JSONResponse {
-
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (Exception $e) {

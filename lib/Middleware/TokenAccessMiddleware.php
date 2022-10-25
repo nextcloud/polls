@@ -7,8 +7,10 @@ use OCP\AppFramework\Middleware;
 use OCP\ISession;
 use OCP\IRequest;
 
-
 class TokenAccessMiddleware extends Middleware {
+	/** @var IRequest */
+	protected $request;
+
 	/** @var ISession */
 	protected $session;
 
