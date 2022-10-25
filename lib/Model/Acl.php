@@ -28,6 +28,7 @@ use JsonSerializable;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
+use OCA\Polls\Model\UserBase;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\OptionMapper;
