@@ -33,6 +33,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Notification\IManager as NotificationManager;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
+use OCA\Polls\Dashboard\PollWidget;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\OptionConfirmedEvent;
@@ -109,6 +110,7 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 		$context->registerSearchProvider(SearchProvider::class);
+		$context->registerDashboardWidget(PollWidget::class);
 	}
 
 	public function registerNotifications(NotificationManager $notificationManager): void {

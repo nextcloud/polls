@@ -6,6 +6,7 @@ webpackConfig.entry = {
 	main: path.join(__dirname, 'src/js/', 'main.js'),
 	userSettings: path.join(__dirname, 'src/js/', 'userSettings.js'),
 	adminSettings: path.join(__dirname, 'src/js/', 'adminSettings.js'),
+	dashboard: path.join(__dirname, 'src/js/', 'init-dashboard.js'),
 }
 
 webpackConfig.output = {
