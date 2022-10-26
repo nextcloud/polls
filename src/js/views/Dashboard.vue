@@ -1,6 +1,6 @@
 <!--
   - @copyright Copyright (c) 2022 Michael Longo <contact@tiller.fr>
-  - 
+  -
   - @author Michael Longo <contact@tiller.fr>
   -
   - @license GNU AGPL version 3 or any later version
@@ -20,7 +20,7 @@
   -
   -->
 
-  <template>
+<template>
 	<div>
 		<NcDashboardWidget :items="relevantPolls"
 			empty-content-icon="icon-polls"
@@ -54,8 +54,8 @@
 </template>
 
 <script>
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { NcButton, NcDashboardWidget } from '@nextcloud/vue'
+import { NcDashboardWidget } from '@nextcloud/vue'
+import { showError } from '@nextcloud/dialogs'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { mapGetters } from 'vuex'
@@ -67,9 +67,6 @@ export default {
 		NcDashboardWidget,
 		TextPollIcon,
 		DatePollIcon,
-		NcButton,
-		PlusIcon,
-		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},
 	data() {
 		return {
@@ -78,8 +75,8 @@ export default {
 	},
 	computed: {
 		...mapGetters({
-            filteredPolls: 'polls/filtered',
-        }),
+			filteredPolls: 'polls/filtered',
+		}),
 		relevantPolls() {
 			const list = [
 				...this.filteredPolls('relevant'),
@@ -87,15 +84,16 @@ export default {
 			return list.slice(0, 6)
 		},
 		pollLink() {
-			return (card) => {
-				return generateUrl(`/apps/polls/vote/${card.id}`)
-			}
+			return (card) => generateUrl(`/apps/polls/vote/${card.id}`)
 		},
 	},
 	beforeMount() {
 		this.loading = true
 		this.$store.dispatch('polls/list').then(() => {
 			this.loading = false
+			return null
+		}).catch(() => {
+			showError(t('polls', 'Error loading poll list'))
 		})
 	},
 }
