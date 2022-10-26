@@ -97,7 +97,7 @@ export default {
 		this.$store.dispatch('polls/list').then(() => {
 			this.loading = false
 		})
-	}
+	},
 }
 </script>
 <style lang="scss">

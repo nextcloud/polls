@@ -26,41 +26,40 @@ namespace OCA\Polls\Dashboard;
 use OCP\Dashboard\IWidget;
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use OCP\IUserSession;
 
 class PollWidget implements IWidget {
-    private IL10N $l10n;
-    private IURLGenerator $urlGenerator;
+	private IL10N $l10n;
+	private IURLGenerator $urlGenerator;
 
-    public function __construct(
-        IL10N $l10n,
-        IURLGenerator $urlGenerator
-    ) {
-        $this->l10n = $l10n;
-        $this->urlGenerator = $urlGenerator;
-    }
+	public function __construct(
+		IL10N $l10n,
+		IURLGenerator $urlGenerator
+	) {
+		$this->l10n = $l10n;
+		$this->urlGenerator = $urlGenerator;
+	}
 
-    public function getId(): string {
-        return 'polls';
-    }
+	public function getId(): string {
+		return 'polls';
+	}
 
-    public function getTitle(): string {
-        return $this->l10n->t('Polls');
-    }
+	public function getTitle(): string {
+		return $this->l10n->t('Polls');
+	}
 
-    public function getOrder(): int {
-        return 50;
-    }
+	public function getOrder(): int {
+		return 50;
+	}
 
-    public function getIconClass(): string {
-        return 'icon-polls';
-    }
+	public function getIconClass(): string {
+		return 'icon-polls';
+	}
 
-    public function getUrl(): ?string {
-        return $this->urlGenerator->linkToRouteAbsolute('polls.page.index');
-    }
+	public function getUrl(): ?string {
+		return $this->urlGenerator->linkToRouteAbsolute('polls.page.index');
+	}
 
-    public function load(): void {
-        \OCP\Util::addScript('polls', 'polls-dashboard');
-    }
+	public function load(): void {
+		\OCP\Util::addScript('polls', 'polls-dashboard');
+	}
 }

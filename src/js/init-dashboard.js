@@ -41,13 +41,13 @@ __webpack_public_path__ = generateFilePath('polls', '', 'js/')
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 Vue.prototype.getCurrentUser = getCurrentUser
- 
+
 document.addEventListener('DOMContentLoaded', () => {
-    OCA.Dashboard.register('polls', (el) => {
-        const View = Vue.extend(Dashboard)
-        const vm = new View({
-            propsData: {},
-            store,
-        }).$mount(el)
-    })
+	OCA.Dashboard.register('polls', (el) => {
+		const View = Vue.extend(Dashboard)
+		new View({
+			propsData: {},
+			store,
+		}).$mount(el)
+	})
 })
