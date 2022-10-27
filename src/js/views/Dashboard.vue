@@ -23,12 +23,15 @@
 <template>
 	<div>
 		<NcDashboardWidget :items="relevantPolls"
-			empty-content-icon="icon-polls"
 			:empty-content-message="t('polls', 'No polls found for this category')"
 			:show-more-text="t('polls', 'Relevant polls')"
 			:loading="loading"
 			@hide="() => {}"
 			@markDone="() => {}">
+			<template #emptyContentIcon>
+				<PollsAppIcon />
+			</template>
+
 			<template #default="{ item }">
 				<a :href="pollLink(item)">
 					<div class="poll-item__item">
@@ -58,6 +61,7 @@ import { NcDashboardWidget } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
 import { mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 
@@ -65,28 +69,34 @@ export default {
 	name: 'Dashboard',
 	components: {
 		NcDashboardWidget,
-		TextPollIcon,
 		DatePollIcon,
+		PollsAppIcon,
+		TextPollIcon,
 	},
+
 	data() {
 		return {
 			loading: false,
 		}
 	},
+
 	computed: {
 		...mapGetters({
 			filteredPolls: 'polls/filtered',
 		}),
+
 		relevantPolls() {
 			const list = [
 				...this.filteredPolls('relevant'),
 			]
 			return list.slice(0, 6)
 		},
+
 		pollLink() {
 			return (card) => generateUrl(`/apps/polls/vote/${card.id}`)
 		},
 	},
+
 	beforeMount() {
 		this.loading = true
 		this.$store.dispatch('polls/list').then(() => {
@@ -97,7 +107,9 @@ export default {
 		})
 	},
 }
+
 </script>
+
 <style lang="scss">
 	[class^='poll-item__'] {
 		display: flex;

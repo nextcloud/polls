@@ -28,7 +28,7 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
 
 import Dashboard from './views/Dashboard.vue'
-import './assets/scss/dashboard.scss'
+import './assets/scss/polls-icon.scss'
 
 Vue.config.debug = process.env.NODE_ENV !== 'production'
 Vue.config.devTools = process.env.NODE_ENV !== 'production'
