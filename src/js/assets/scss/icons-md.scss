@@ -3,24 +3,6 @@
     background-image: $url;
 }
 
-// masked svg background icon
-@mixin masked-icon($url, $color: var(--icon-md-color-default)) {
-    -webkit-mask-image: $url;
-	-webkit-mask-repeat: no-repeat;
-	-webkit-mask-position: center;
-	-webkit-mask-size: var(--icon-size);
-    mask-image: $url;
-	mask-repeat: no-repeat;
-	mask-position: center;
-	mask-size: var(--icon-size);
-	background-color: $color;
-
-	&.empty-content__icon {
-		mask-size: 64px;
-		-webkit-mask-size: 64px;
-	}
-}
-
 :root {
 	--icon-md-email: url('../icons/material-design/email.svg');
 	--icon-md-share-variant: url('../icons/material-design/share-variant.svg');
@@ -41,6 +23,3 @@
 .icon-svg-md-email { @include svg-icon(var(--icon-md-email)); }
 .icon-svg-md-share { @include svg-icon(var(--icon-md-share-variant)); }
 .icon-svg-md-link { @include svg-icon(var(--icon-md-link-variant)); }
-
-// mask icons
-
