@@ -1,6 +1,13 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.0] - tbd
+### New
+- Added a dashboard widget for relevant polls
+
+## [3.8.3] - 2022-10-24
+### Fix
+ - Fix poll export containing participants with deleted shares
 ## [4.0.0] - 2022-10-13
 ### New
 - Support Nextcloud version 25
