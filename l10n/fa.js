@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "نظرسنجی ها",
     "Circle" : "حلقه",
     "Group" : "گروه",
     "Poll invitation \"%s\"" : "دعوت نظرسنجی \"%s\"",
@@ -12,7 +13,6 @@ OC.L10N.register(
     "Contact" : "مخاطب",
     "Public link" : "پیوند عمومی",
     "User" : "کاربر",
-    "Polls" : "نظرسنجی ها",
     "Delete" : "حذف",
     "Conflict" : "تضاد",
     "New comment …" : "توضیح جدید ...",

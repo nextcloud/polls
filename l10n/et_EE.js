@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Küsitlused",
     "Circle" : "Ring",
     "Group" : "Grupp",
     "Legal Notice" : "Juriidiline teave",
@@ -8,7 +9,6 @@ OC.L10N.register(
     "Contact" : "Kontakt",
     "Public link" : "Avalik link",
     "User" : "Kasutaja",
-    "Polls" : "Küsitlused",
     "Delete" : "Kustuta",
     "Conflict" : "Konflikt",
     "New comment …" : "Uus kommentaar ...",

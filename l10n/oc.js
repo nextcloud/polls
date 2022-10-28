@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Sondatges",
     "Contact group" : "Grop de contactes",
     "Group" : "Grop",
     "Poll invitation \"%s\"" : "Invitacion al sondatge « %s »",
@@ -11,7 +12,6 @@ OC.L10N.register(
     "External user" : "Utilizaire extèrn",
     "Public link" : "Ligam public",
     "User" : "User",
-    "Polls" : "Sondatges",
     "%s invited you to a poll" : "%s vos condivèt a un sondatge",
     "Delete" : "Suprimir",
     "New comment …" : "Nòu comentari…",

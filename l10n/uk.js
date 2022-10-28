@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Опитування",
     "Circle" : "Коло",
     "Group" : "Група",
     "Poll invitation \"%s\"" : "Запрошення до опитування %s",
@@ -10,7 +11,6 @@ OC.L10N.register(
     "Contact" : "Контакт",
     "Public link" : "Публічне посилання",
     "User" : "Користувач",
-    "Polls" : "Опитування",
     "Delete" : "Вилучити",
     "Conflict" : "Конфлікт",
     "New comment …" : "Новий коментар...",
@@ -57,8 +57,8 @@ OC.L10N.register(
     "Email options" : "Параметри електронної пошти",
     "Yes" : "Так",
     "Administration" : "Адміністрування",
-    "Add new Poll" : "Додати нове опитування",
     "Error loading poll list" : "Помилка завантаження списку опитування",
+    "Add new Poll" : "Додати нове опитування",
     "Error loading poll" : "Помилка під час завантаження опитування",
     "Details" : "Деталі",
     "Configuration" : "Налаштування",

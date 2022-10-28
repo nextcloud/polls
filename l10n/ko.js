@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "투표",
     "Circle" : "서클",
     "Group" : "그룹",
     "Legal Notice" : "법적 고지",
@@ -8,7 +9,6 @@ OC.L10N.register(
     "Contact" : "연락처",
     "Public link" : "공개 링크",
     "User" : "사용자",
-    "Polls" : "투표",
     "Delete" : "삭제",
     "Conflict" : "충돌",
     "New comment …" : "새 댓글…",

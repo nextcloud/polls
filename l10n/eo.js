@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Enketilo",
     "Circle" : "Rondo",
     "Group" : "Grupo",
     "Go to poll" : "Iri al enketo",
@@ -9,7 +10,6 @@ OC.L10N.register(
     "Contact" : "Kontakto",
     "Public link" : "Publika ligilo",
     "User" : "Uzanto",
-    "Polls" : "Enketilo",
     "Delete" : "Forigi",
     "Conflict" : "Konflikto",
     "New comment …" : "Nova komento...",

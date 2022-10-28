@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Avstemninger",
     "Circle" : "Sirkel",
     "Group" : "Gruppe",
     "Legal Notice" : "Juridiske merknader",
@@ -8,7 +9,6 @@ OC.L10N.register(
     "Contact" : "Kontakt",
     "Public link" : "Offentlig lenke",
     "User" : "Bruker",
-    "Polls" : "Avstemninger",
     "Delete" : "Slett",
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar…",

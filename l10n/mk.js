@@ -1,13 +1,13 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Анкети",
     "Circle" : "Круг",
     "Group" : "Група",
     "Poll invitation \"%s\"" : "Покана за анкета \"%s\"",
     "Contact" : "Контакт",
     "Public link" : "Јавен линк",
     "User" : "Корисник",
-    "Polls" : "Анкети",
     "Delete" : "Избриши",
     "Toggle Sidebar" : "Отвори странична лента",
     "Conflict" : "Конфликт",

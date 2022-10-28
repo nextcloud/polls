@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Afstemning",
     "Circle" : "Cirkel",
     "Group" : "Gruppe",
     "Go to poll" : "Gå til afstemninger",
@@ -8,7 +9,6 @@ OC.L10N.register(
     "Contact" : "takt",
     "Public link" : "Offentligt link",
     "User" : "Bruger",
-    "Polls" : "Afstemning",
     "Delete" : "Slet",
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar…",

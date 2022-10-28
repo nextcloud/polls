@@ -1,12 +1,12 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Sondazhe",
     "Circle" : "Rreth",
     "Group" : "Grup",
     "Legal Notice" : "Shënim i ligjshëm",
     "Contact" : "Kontakt",
     "User" : "Përdorues",
-    "Polls" : "Sondazhe",
     "Delete" : "Fshij",
     "Conflict" : "Përplasje",
     "New comment …" : "Koment i ri ...",
