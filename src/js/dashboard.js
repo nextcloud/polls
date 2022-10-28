@@ -3,6 +3,7 @@
  * @copyright Copyright (c) 2022 Michael Longo <contact@tiller.fr>
  *
  * @author Michael Longo <contact@tiller.fr>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license  AGPL-3.0-or-later
  *

@@ -2,6 +2,7 @@
   - @copyright Copyright (c) 2022 Michael Longo <contact@tiller.fr>
   -
   - @author Michael Longo <contact@tiller.fr>
+  - @author René Gieling <github@dartcafe.de>
   -
   - @license GNU AGPL version 3 or any later version
   -
@@ -93,7 +94,7 @@ export default {
 		},
 
 		pollLink() {
-			return (card) => generateUrl(`/apps/polls/vote/${card.id}`)
+			return (poll) => generateUrl(`/apps/polls/vote/${poll.id}`)
 		},
 	},
 
