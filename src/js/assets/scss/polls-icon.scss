@@ -1,14 +1,4 @@
-:root {
-	--icon-polls: url('../icons/polls.svg');
-	--icon-polls--fff: url('../icons/polls-fff.svg');
-}
-
 .icon-polls {
-	background-image: var(--icon-polls);
-	background-size: 16px 16px;
-}
-@media (prefers-color-scheme: dark) {
-	.icon-polls {
-		background-image: var(--icon-polls--fff);
-	}
+	background-image: url(../../../../img/polls.svg);
+	filter: var(--background-invert-if-dark);
 }

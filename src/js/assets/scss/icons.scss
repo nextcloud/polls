@@ -1,6 +1,4 @@
 :root {
-	--icon-circles: url('../icons/circles.svg');
-	--icon-circles--fff: url('../icons/circles-fff.svg');
 	--icon-polls-maybe: url('../icons/maybe-vote.svg');
 	--icon-polls-no: url('../icons/no-vote.svg');
 	--icon-polls-yes: url('../icons/yes-vote.svg');
@@ -13,7 +11,4 @@
 	--color-polls-foreground-filter-maybe: invert(81%) sepia(22%) saturate(3383%) hue-rotate(353deg) brightness(101%) contrast(101%);
 }
 
-.icon-circles { background-image: var(--icon-circles); }
-.icon-polls-maybe { background-image: var(--icon-polls-maybe); }
-.icon-polls-no { background-image: var(--icon-polls-no); }
 .icon-polls-yes { background-image: var(--icon-polls-yes); }
