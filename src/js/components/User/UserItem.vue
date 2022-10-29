@@ -28,11 +28,21 @@
 			:is-guest="isGuestComputed"
 			:menu-position="menuPosition"
 			:size="iconSize"
-			:icon-class="avatarIcon"
 			:show-user-status="showUserStatus"
 			:user="avatarUserId"
 			:display-name="name"
-			:is-no-user="isNoUser" />
+			:is-no-user="isNoUser">
+			<template v-if="useIconSlot" #icon>
+				<LinkIcon v-if="type==='public'" :size="mdIconSize" />
+				<InternalLinkIcon v-if="type==='internalAccess'" :size="mdIconSize" />
+				<ContactIcon v-if="type==='contact'" :size="mdIconSize" />
+				<EmailIcon v-if="type==='email'" :size="mdIconSize" />
+				<ShareIcon v-if="type==='external'" :size="mdIconSize" />
+				<ContactGroupIcon v-if="type==='contactGroup'" :size="mdIconSize" />
+				<GroupIcon v-if="type==='group'" :size="mdIconSize" />
+				<CircleIcon v-if="type==='circle'" :size="mdIconSize" />
+			</template>
+		</NcAvatar>
 
 		<AdminIcon v-if="icon && type === 'admin'" :size="16" class="type-icon" />
 
@@ -42,11 +52,8 @@
 			<div class="name">
 				{{ name }}
 			</div>
-			<div v-if="type === 'admin'" class="description">
-				{{ t("polls", "Is granted admin rights for this poll") }}
-			</div>
-			<div v-else-if="displayEmailAddress" class="description">
-				{{ displayEmailAddress }}
+			<div class="description">
+				{{ description }}
 			</div>
 		</div>
 
@@ -64,6 +71,14 @@ export default {
 	components: {
 		NcAvatar,
 		AdminIcon: () => import('vue-material-design-icons/ShieldCrownOutline.vue'),
+		LinkIcon: () => import('vue-material-design-icons/LinkVariant.vue'),
+		InternalLinkIcon: () => import('vue-material-design-icons/LinkVariant.vue'),
+		ContactIcon: () => import('vue-material-design-icons/CardAccountDetails.vue'),
+		EmailIcon: () => import('vue-material-design-icons/Email.vue'),
+		ShareIcon: () => import('vue-material-design-icons/ShareVariant.vue'),
+		ContactGroupIcon: () => import('vue-material-design-icons/AccountGroupOutline.vue'),
+		GroupIcon: () => import('vue-material-design-icons/AccountMultiple.vue'),
+		CircleIcon: () => import('vue-material-design-icons/GoogleCirclesExtended.vue'),
 	},
 
 	inheritAttrs: false,
@@ -144,6 +159,10 @@ export default {
 			type: Number,
 			default: 32,
 		},
+		mdIconSize: {
+			type: Number,
+			default: 20,
+		},
 		condensed: {
 			type: Boolean,
 			default: false,
@@ -155,27 +174,24 @@ export default {
 			return this.$route?.name === 'publicVote' || this.isGuest || this.isNoUser
 		},
 
+		useIconSlot() {
+			return !['user', 'admin'].includes(this.type)
+		},
+		description() {
+			if (this.type === 'admin') return t('polls', 'Is granted admin rights for this poll')
+			if (this.displayEmailAddress) return this.displayEmailAddress
+			return ''
+		},
+
 		name() {
-			if (this.type === 'public' && this.userId !== 'addPublic') {
-				return t('polls', 'Public link')
-			}
-
-			if (this.type === 'internalAccess') {
-				return t('polls', 'Internal access')
-			}
-
-			if (this.displayName) {
-				return this.displayName
-			}
-
+			if (this.type === 'public' && this.userId !== 'addPublic') return t('polls', 'Public link')
+			if (this.type === 'internalAccess') return t('polls', 'Internal access')
+			if (this.displayName) return this.displayName
 			return this.userId
-
 		},
 
 		avatarUserId() {
-			if (this.isGuestComputed) {
-				return this.name
-			}
+			if (this.isGuestComputed) return this.name
 			return this.userId
 		},
 
@@ -198,47 +214,12 @@ export default {
 			if (this.showEmail && ['external', 'email'].includes(this.type) && this.emailAddress !== this.name) {
 				return this.emailAddress
 			}
+
 			return ''
 		},
 
 		showUserStatus() {
 			return Boolean(getCurrentUser())
-		},
-
-		avatarIcon() {
-			if (this.type === 'public') {
-				return 'icon-svg-md-link'
-			}
-
-			if (this.type === 'internalAccess') {
-				return 'icon-svg-md-link'
-			}
-
-			if (this.type === 'contact') {
-				return 'icon-svg-md-email'
-			}
-
-			if (this.type === 'email') {
-				return 'icon-svg-md-email'
-			}
-
-			if (this.type === 'external') {
-				return 'icon-svg-md-share'
-			}
-
-			if (this.type === 'contactGroup') {
-				return 'icon-group'
-			}
-
-			if (this.type === 'group') {
-				return 'icon-group'
-			}
-
-			if (this.type === 'circle') {
-				return 'icon-circles'
-			}
-
-			return ''
 		},
 	},
 }
@@ -246,13 +227,6 @@ export default {
 </script>
 
 <style lang="scss">
-.avatar-class-icon {
-	border-radius: 50%;
-	background-color: var(--color-primary-element) !important;
-	height: 100%;
-	background-size: 16px;
-}
-
 .type-icon {
 	position: absolute;
 	background-size: 16px;
@@ -269,6 +243,11 @@ export default {
 	&.disabled {
 		opacity: 0.6;
 	}
+}
+
+.user-item__avatar .material-design-icon {
+	background-color: var(--color-primary-element);
+	border-radius: 50%;
 }
 
 .user-item__name {

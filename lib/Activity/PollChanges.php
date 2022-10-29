@@ -54,7 +54,7 @@ class PollChanges implements IFilter {
 	}
 
 	public function getIcon() : string {
-		return $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('polls', 'polls-black.svg'));
+		return $this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('polls', 'polls.svg'));
 	}
 
 	public function getPriority() : int {
