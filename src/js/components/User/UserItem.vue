@@ -52,11 +52,8 @@
 			<div class="name">
 				{{ name }}
 			</div>
-			<div v-if="type === 'admin'" class="description">
-				{{ t("polls", "Is granted admin rights for this poll") }}
-			</div>
-			<div v-else-if="displayEmailAddress" class="description">
-				{{ displayEmailAddress }}
+			<div class="description">
+				{{ description }}
 			</div>
 		</div>
 
@@ -66,7 +63,6 @@
 
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
-
 import { NcAvatar } from '@nextcloud/vue'
 
 export default {
@@ -181,28 +177,21 @@ export default {
 		useIconSlot() {
 			return !['user', 'admin'].includes(this.type)
 		},
+		description() {
+			if (this.type === 'admin') return t('polls', 'Is granted admin rights for this poll')
+			if (this.displayEmailAddress) return this.displayEmailAddress
+			return ''
+		},
 
 		name() {
-			if (this.type === 'public' && this.userId !== 'addPublic') {
-				return t('polls', 'Public link')
-			}
-
-			if (this.type === 'internalAccess') {
-				return t('polls', 'Internal access')
-			}
-
-			if (this.displayName) {
-				return this.displayName
-			}
-
+			if (this.type === 'public' && this.userId !== 'addPublic') return t('polls', 'Public link')
+			if (this.type === 'internalAccess') return t('polls', 'Internal access')
+			if (this.displayName) return this.displayName
 			return this.userId
-
 		},
 
 		avatarUserId() {
-			if (this.isGuestComputed) {
-				return this.name
-			}
+			if (this.isGuestComputed) return this.name
 			return this.userId
 		},
 
@@ -225,6 +214,7 @@ export default {
 			if (this.showEmail && ['external', 'email'].includes(this.type) && this.emailAddress !== this.name) {
 				return this.emailAddress
 			}
+
 			return ''
 		},
 

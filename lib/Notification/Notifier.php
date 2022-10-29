@@ -108,7 +108,7 @@ class Notifier implements INotifier {
 
 		$notification->setIcon(
 			$this->urlGenerator->getAbsoluteURL(
-				$this->urlGenerator->imagePath('polls', 'polls-black.svg')
+				$this->urlGenerator->imagePath('polls', 'polls.svg')
 			)
 		);
 
