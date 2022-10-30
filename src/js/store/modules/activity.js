@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateOcsUrl } from '@nextcloud/router'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const defaultActivities = () => ({
 	list: [],
@@ -30,7 +31,6 @@ const defaultActivities = () => ({
 
 const namespaced = true
 const state = defaultActivities()
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {

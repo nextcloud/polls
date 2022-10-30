@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const defaultComments = () => ({
 	list: [],
@@ -30,7 +31,6 @@ const defaultComments = () => ({
 
 const namespaced = true
 const state = defaultComments()
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 

@@ -26,6 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapState } from 'vuex'
 import { InvalidJSON } from '../Exceptions/Exceptions.js'
+import axiosDefaultConfig from '../helpers/AxiosDefault.js'
 
 const defaultSleepTimeout = 30
 
@@ -113,9 +114,9 @@ export const watchPolls = {
 			await this.$store.dispatch('appSettings/get')
 
 			const response = await axios.get(generateUrl(this.endPoint), {
+				...axiosDefaultConfig,
 				params: { offset: this.lastUpdated },
 				cancelToken: this.cancelToken.token,
-				headers: { Accept: 'application/json' },
 			})
 
 			return response

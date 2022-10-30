@@ -26,6 +26,7 @@ import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
 import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const defaultPoll = () => ({
 	id: 0,
@@ -60,7 +61,6 @@ const defaultPoll = () => ({
 const namespaced = true
 const modules = { acl }
 const state = defaultPoll()
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
