@@ -4,8 +4,6 @@
  *
  * @author Rene Gieling <github@dartcafe.de>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
- *
  * @license  AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify

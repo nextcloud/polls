@@ -99,21 +99,6 @@ const actions = {
 		}
 	},
 
-	async delete(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}`
-
-		context.commit('delete', { share: payload.share })
-
-		try {
-			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
-		} catch (e) {
-			console.error('Error removing share', { error: e.response }, { payload })
-			throw e
-		} finally {
-			context.dispatch('list')
-		}
-	},
-
 	async switchAdmin(context, payload) {
 		let endPoint = `apps/polls/share/${payload.share.token}`
 
@@ -166,6 +151,21 @@ const actions = {
 			await axios.get(generateUrl(endPoint), axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
+			throw e
+		} finally {
+			context.dispatch('list')
+		}
+	},
+
+	async delete(context, payload) {
+		const endPoint = `apps/polls/share/${payload.share.token}`
+
+		context.commit('delete', { share: payload.share })
+
+		try {
+			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
+		} catch (e) {
+			console.error('Error removing share', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')

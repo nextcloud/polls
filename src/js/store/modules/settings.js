@@ -57,6 +57,7 @@ const mutations = {
 	},
 
 	setPreference(state, payload) {
+		// change values in case of old settings
 		if (payload.defaultViewTextPoll === 'desktop') {
 			payload.defaultViewTextPoll = 'table-view'
 		}

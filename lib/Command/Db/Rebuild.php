@@ -215,7 +215,7 @@ class Rebuild extends Command {
 			if ($schema->hasTable($tableName)) {
 				$dropped = true;
 				$schema->dropTable($tableName);
-				$output->writeln('<info> - Dropped' . $tableName .'</info>');
+				$output->writeln('<info> - Dropped ' . $tableName .'</info>');
 			}
 		}
 		$this->connection->migrateToSchema($schema->getWrappedSchema());

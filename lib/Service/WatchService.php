@@ -28,6 +28,7 @@ use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\DB\Exception;
 
 class WatchService {
 	/** @var AppSettings */
@@ -86,16 +87,22 @@ class WatchService {
 	 * @return Watch
 	 */
 	public function writeUpdate(int $pollId, string $table): Watch {
+		$sessionId = session_id();
+		$this->watch = new Watch();
+		$this->watch->setPollId($pollId);
+		$this->watch->setTable($table);
+		$this->watch->setSessionId($sessionId);
+
 		try {
-			$this->watch = $this->watchMapper->findForPollIdAndTable($pollId, $table);
-		} catch (DoesNotExistException $e) {
-			$this->watch = new Watch();
-			$this->watch->setPollId($pollId);
-			$this->watch->setTable($table);
 			$this->watch = $this->watchMapper->insert($this->watch);
+		} catch (Exception $e) {
+			if ($e->getReason() !== Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw $e;
+			}
 		}
 
 		$this->watch->setUpdated(time());
 		return $this->watchMapper->update($this->watch);
+
 	}
 }

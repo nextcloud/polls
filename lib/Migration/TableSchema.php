@@ -62,7 +62,7 @@ abstract class TableSchema {
 		Share::TABLE => ['name' => 'UNIQ_shares', 'unique' => true, 'columns' => ['poll_id', 'user_id']],
 		Vote::TABLE => ['name' => 'UNIQ_votes', 'unique' => true, 'columns' => ['poll_id', 'user_id', 'vote_option_text']],
 		Preferences::TABLE => ['name' => 'UNIQ_preferences', 'unique' => true, 'columns' => ['user_id']],
-		Watch::TABLE => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table']],
+		Watch::TABLE => ['name' => 'UNIQ_watch', 'unique' => true, 'columns' => ['poll_id', 'table', 'session_id']],
 	];
 
 	/**
@@ -101,12 +101,15 @@ abstract class TableSchema {
 		'0109Date20210323120002',
 		'030000Date20210611120000',
 		'030000Date20210704120000',
+		'030200Date20210912120000',
+		'030400Date20211125120000',
 	];
 
 	/**
 	 * define obsolete tables to drop
 	 */
 	public const GONE_TABLES = [
+		'polls_watch', // always drop the watch table for a clean truncation and rely on recreation
 		'polls_events', // dropped in 1.0
 		'polls_dts', // dropped in 0.9
 		'polls_txts', // dropped in 0.9
@@ -222,6 +225,7 @@ abstract class TableSchema {
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'table' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'updated' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'session_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null]],
 		],
 		Preferences::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
@@ -277,7 +281,7 @@ abstract class TableSchema {
 		foreach (self::GONE_TABLES as $tableName) {
 			if ($schema->hasTable($tableName)) {
 				$schema->dropTable($tableName);
-				$output->info('Dropped orphaned table ' . $tableName);
+				$output->info('Dropped table ' . $tableName);
 			}
 		}
 	}

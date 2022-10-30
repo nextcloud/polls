@@ -23,12 +23,13 @@
 
 namespace OCA\Polls\Migration;
 
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\Watch;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
-use OCA\Polls\Db\Poll;
 
 /**
  * Installation class for the polls app.
@@ -36,7 +37,7 @@ use OCA\Polls\Db\Poll;
  * Changed class naming: Version[jjmmpp]Date[YYYYMMDDHHMMSS]
  * Version: jj = major version, mm = minor, pp = patch
  */
-class Version030400Date20211125120000 extends SimpleMigrationStep {
+class Version040100Date20221030070000 extends SimpleMigrationStep {
 	/** @var IDBConnection */
 	protected $connection;
 
