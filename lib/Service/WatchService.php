@@ -98,12 +98,11 @@ class WatchService {
 		} catch (Exception $e) {
 			if ($e->getReason() !== Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw $e;
-			}	
+			}
 			$this->watch = $this->watchMapper->findForPollIdAndTable($pollId, $table);
-		}	
+		}
 
 		$this->watch->setUpdated(time());
 		return $this->watchMapper->update($this->watch);
-
 	}
 }

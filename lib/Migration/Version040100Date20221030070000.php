@@ -24,7 +24,6 @@
 namespace OCA\Polls\Migration;
 
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\Watch;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
