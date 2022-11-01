@@ -12,6 +12,9 @@ class RequestAttributesMiddleware extends Middleware {
 	/** @var ISession */
 	protected $session;
 
+	/** @var IRequest */
+	protected $request;
+
 	public function __construct(
 		IRequest $request,
 		ISession $session
@@ -21,13 +24,9 @@ class RequestAttributesMiddleware extends Middleware {
 	}
 
 	public function beforeController($controller, $methodName) {
-		$headers = getallheaders();
-		if (array_key_exists(self::CLIENT_ID_KEY, $headers)) {
-			$clientId = $headers[self::CLIENT_ID_KEY];
+		$clientId = $this->request->getHeader(self::CLIENT_ID_KEY) ?? $this->session->getId();
+		if ($clientId) {
 			$this->session->set('ncPollsClientId', $clientId);
-		} else {
-			// use session_id as fallback, if no clientId is given
-			$this->session->set('ncPollsClientId', session_id());
 		}
 	}
 }
