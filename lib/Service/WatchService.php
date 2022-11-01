@@ -29,10 +29,14 @@ use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
+use OCP\ISession;
 
 class WatchService {
 	/** @var AppSettings */
 	private $appSettings;
+
+	/** @var ISession */
+	protected $session;
 
 	/** @var WatchMapper */
 	private $watchMapper;
@@ -41,11 +45,13 @@ class WatchService {
 	private $watch;
 
 	public function __construct(
+		ISession $session,
 		WatchMapper $watchMapper
 	) {
-		$this->watchMapper = $watchMapper;
 		$this->appSettings = new AppSettings;
+		$this->session = $session;
 		$this->watch = new Watch;
+		$this->watchMapper = $watchMapper;
 	}
 
 	/**
@@ -87,7 +93,7 @@ class WatchService {
 	 * @return Watch
 	 */
 	public function writeUpdate(int $pollId, string $table): Watch {
-		$sessionId = hash('md5', session_id());
+		$sessionId = hash('md5', $this->session->get('ncPollsClientId'));
 		$this->watch = new Watch();
 		$this->watch->setPollId($pollId);
 		$this->watch->setTable($table);

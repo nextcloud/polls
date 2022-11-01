@@ -24,7 +24,7 @@ const clientSessionId = Math.random().toString(36).substring(2)
 const axiosDefaultConfig = {
 	headers: {
 		Accept: 'application/json',
-		'Nc-Polls-ClientId': clientSessionId,
+		'Nc-Polls-Client-Id': clientSessionId,
 	},
 }
 
