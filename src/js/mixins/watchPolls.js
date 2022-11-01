@@ -72,7 +72,8 @@ export const watchPolls = {
 					return
 				}
 
-				while (document.hidden) { // loop while tab is hidden and avoid further requests
+				// loop while tab is hidden and avoid further requests
+				while (document.hidden) {
 					console.debug('[polls]', 'app is in background')
 					await new Promise((resolve) => setTimeout(resolve, 2000))
 				}

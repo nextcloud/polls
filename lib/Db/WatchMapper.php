@@ -33,6 +33,9 @@ use OCP\ISession;
 class WatchMapper extends QBMapper {
 	public const TABLE = Watch::TABLE;
 
+	/** @var ISession */
+	protected $session = null;
+
 	public function __construct(
 		IDBConnection $db,
 		ISession $session

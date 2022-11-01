@@ -7,7 +7,6 @@ use OCP\ISession;
 use OCP\IRequest;
 
 class RequestAttributesMiddleware extends Middleware {
-
 	private const CLIENT_ID_KEY = 'Nc-Polls-Client-Id';
 
 	/** @var ISession */
