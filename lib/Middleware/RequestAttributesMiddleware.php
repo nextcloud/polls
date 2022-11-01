@@ -24,7 +24,12 @@ class RequestAttributesMiddleware extends Middleware {
 	}
 
 	public function beforeController($controller, $methodName) {
-		$clientId = $this->request->getHeader(self::CLIENT_ID_KEY) ?? $this->session->getId();
+		$clientId = $this->request->getHeader(self::CLIENT_ID_KEY);
+
+		if (!$clientId) {
+			$clientId = $this->session->getId();
+		}
+
 		if ($clientId) {
 			$this->session->set('ncPollsClientId', $clientId);
 		}
