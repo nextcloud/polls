@@ -26,6 +26,9 @@ class RequestAttributesMiddleware extends Middleware {
 		if (array_key_exists(self::CLIENT_ID_KEY, $headers)) {
 			$clientId = $headers[self::CLIENT_ID_KEY];
 			$this->session->set('ncPollsClientId', $clientId);
+		} else {
+			// use session_id as fallback, if no clientId is given
+			$this->session->set('ncPollsClientId', session_id());
 		}
 	}
 }
