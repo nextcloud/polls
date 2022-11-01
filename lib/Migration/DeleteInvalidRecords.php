@@ -38,6 +38,7 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\WatchMapper;
 
 /**
  * Preparation before migration
@@ -68,6 +69,9 @@ class DeleteInvalidRecords implements IRepairStep {
 	/** @var VoteMapper */
 	private $voteMapper;
 
+	/** @var WatchMapper */
+	private $watchMapper;
+
 	/** @var array */
 	protected $childTables = [
 		CommentMapper::TABLE,
@@ -86,7 +90,8 @@ class DeleteInvalidRecords implements IRepairStep {
 		PreferencesMapper $preferencesMapper,
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
-		VoteMapper $voteMapper
+		VoteMapper $voteMapper,
+		WatchMapper $watchMapper
 	) {
 		$this->config = $config;
 		$this->connection = $connection;
@@ -96,6 +101,7 @@ class DeleteInvalidRecords implements IRepairStep {
 		$this->shareMapper = $shareMapper;
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->voteMapper = $voteMapper;
+		$this->watchMapper = $watchMapper;
 	}
 
 	public function getName():string {
@@ -112,6 +118,7 @@ class DeleteInvalidRecords implements IRepairStep {
 			$this->shareMapper->removeDuplicates($output);
 			$this->subscriptionMapper->removeDuplicates($output);
 			$this->voteMapper->removeDuplicates($output);
+			$this->watchMapper->deleteOldEntries(time());
 		}
 	}
 

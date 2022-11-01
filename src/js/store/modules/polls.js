@@ -27,6 +27,7 @@ import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import { orderBy } from 'lodash'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const state = {
 	list: [],
@@ -138,7 +139,6 @@ const state = {
 }
 
 const namespaced = true
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {

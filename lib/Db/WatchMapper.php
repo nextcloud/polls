@@ -25,6 +25,7 @@ namespace OCA\Polls\Db;
 
 use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\ISession;
 
 /**
  * @template-extends QBMapper<Watch>
@@ -32,8 +33,15 @@ use OCP\AppFramework\Db\QBMapper;
 class WatchMapper extends QBMapper {
 	public const TABLE = Watch::TABLE;
 
-	public function __construct(IDBConnection $db) {
+	/** @var ISession */
+	protected $session = null;
+
+	public function __construct(
+		IDBConnection $db,
+		ISession $session
+	) {
 		parent::__construct($db, self::TABLE, Watch::class);
+		$this->session = $session;
 	}
 
 	/**
@@ -46,6 +54,9 @@ class WatchMapper extends QBMapper {
 		$qb->select('*')
 		   ->from($this->getTableName())
 		   ->where($qb->expr()->gt('updated', $qb->createNamedParameter($offset)))
+		   ->andWhere(
+		   	$qb->expr()->neq('session_id', $qb->createNamedParameter(hash('md5', $this->session->get('ncPollsClientId'))))
+		   )
 		   ->andWhere($qb->expr()->orX(
 		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId)),
 		   	$qb->expr()->eq('table', $qb->createNamedParameter('polls'))
@@ -68,6 +79,9 @@ class WatchMapper extends QBMapper {
 		   )
 		   ->andWhere(
 		   	$qb->expr()->eq('table', $qb->createNamedParameter($table))
+		   )
+		   ->andWhere(
+		   	$qb->expr()->eq('session_id', $qb->createNamedParameter(hash('md5', $this->session->get('ncPollsClientId'))))
 		   );
 
 		return $this->findEntity($qb);

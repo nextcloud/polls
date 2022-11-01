@@ -26,6 +26,7 @@ import moment from '@nextcloud/moment'
 import { generateUrl } from '@nextcloud/router'
 import acl from './subModules/acl.js'
 import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const defaultPoll = () => ({
 	id: 0,
@@ -60,7 +61,6 @@ const defaultPoll = () => ({
 const namespaced = true
 const modules = { acl }
 const state = defaultPoll()
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -200,22 +200,16 @@ const actions = {
 	async add(context, payload) {
 		const endPoint = 'apps/polls/poll/add'
 		try {
-			return await axios.post(generateUrl(endPoint), {
+			const response = await axios.post(generateUrl(endPoint), {
 				title: payload.title,
 				type: payload.type,
 			}, axiosDefaultConfig)
+
+			context.dispatch('polls/list', null, { root: true })
+			return response
 		} catch (e) {
 			console.error('Error adding poll:', { error: e.response }, { state: context.state })
 			throw e
-		}
-	},
-
-	async clone(context, payload) {
-		const endPoint = `apps/polls/poll/${payload.pollId}/clone`
-		try {
-			return await axios.post(generateUrl(endPoint), null, axiosDefaultConfig)
-		} catch (e) {
-			console.error('Error cloning poll', { error: e.response }, { payload })
 		}
 	},
 
@@ -225,13 +219,25 @@ const actions = {
 			const response = await axios.put(generateUrl(endPoint), {
 				poll: context.state,
 			}, axiosDefaultConfig)
-
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
-			context.dispatch('options/list', null, { root: true })
 		} catch (e) {
 			console.error('Error updating poll:', { error: e.response }, { poll: context.state })
+			context.dispatch('get')
 			throw e
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
+		}
+	},
+
+	async delete(context, payload) {
+		const endPoint = `apps/polls/poll/${payload.pollId}`
+		try {
+			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
+		} catch (e) {
+			console.error('Error deleting poll', { error: e.response }, { payload })
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
 		}
 	},
 
@@ -241,6 +247,19 @@ const actions = {
 			await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
 		} catch (e) {
 			console.error('Error archiving/restoring', { error: e.response }, { payload })
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
+		}
+	},
+
+	async clone(context, payload) {
+		const endPoint = `apps/polls/poll/${payload.pollId}/clone`
+		try {
+			const response = await axios.post(generateUrl(endPoint), null, axiosDefaultConfig)
+			context.dispatch('polls/list', null, { root: true })
+			return response
+		} catch (e) {
+			console.error('Error cloning poll', { error: e.response }, { payload })
 		}
 	},
 
@@ -254,15 +273,6 @@ const actions = {
 		}
 	},
 
-	async delete(context, payload) {
-		const endPoint = `apps/polls/poll/${payload.pollId}`
-		try {
-			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
-		} catch (e) {
-			console.error('Error deleting poll', { error: e.response }, { payload })
-		}
-	},
-
 	async getParticipantsEmailAddresses(context) {
 		const endPoint = `apps/polls/poll/${context.state.id}/addresses`
 		try {
@@ -271,7 +281,6 @@ const actions = {
 			console.error('Error retrieving email addresses', { error: e.response })
 		}
 	},
-
 }
 
 export default { namespaced, state, mutations, getters, actions, modules }

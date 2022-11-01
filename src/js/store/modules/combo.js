@@ -25,6 +25,7 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { uniqueOptions, uniqueParticipants } from '../../helpers/arrayHelper.js'
 import { sortBy } from 'lodash'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const defaultCombo = () => ({
 	id: 1,
@@ -36,7 +37,6 @@ const defaultCombo = () => ({
 
 const namespaced = true
 const state = defaultCombo()
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {

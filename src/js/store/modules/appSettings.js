@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const defaultAppSettings = () => ({
 	allAccessGroups: [],
@@ -55,7 +56,6 @@ const defaultAppSettings = () => ({
 
 const namespaced = true
 const state = defaultAppSettings()
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	reset(state) {

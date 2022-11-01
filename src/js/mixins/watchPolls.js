@@ -26,6 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapState } from 'vuex'
 import { InvalidJSON } from '../Exceptions/Exceptions.js'
+import axiosDefaultConfig from '../helpers/AxiosDefault.js'
 
 const defaultSleepTimeout = 30
 
@@ -54,48 +55,45 @@ export const watchPolls = {
 
 	methods: {
 		async watchPolls() {
-			// quit if polling for updates is disabled
-			if (this.updateType === 'noPolling') {
-				return
-			}
-
 			if (this.cancelToken) {
-				// there is already a cancelToken, so just cancel the previous session and exit
-				this.cancelWatch()
-				return
+				this.cancelWatch() // there is already a cancelToken, cancel the previous session
 			}
 
-			this.cancelToken = axios.CancelToken.source()
+			this.cancelToken = axios.CancelToken.source() // get a new cancel token
 
 			while (this.retryCounter < this.maxTries) {
-				// Avoid requests, if the tab/window is not visible
-				if (!document.hidden) {
-					// reset sleep timer to default
-					this.sleepTimeout = defaultSleepTimeout
-					this.gotValidResponse = false
-					await this.$store.dispatch('appSettings/get')
+				this.sleepTimeout = defaultSleepTimeout // reset sleep timer to default
+				this.gotValidResponse = false
 
-					if (this.updateType === 'noPolling') {
-						console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
-						this.cancelWatch()
-						return
-					}
+				if (this.updateType === 'noPolling') {
+					// leave if polling is disabled
+					console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
+					this.cancelWatch()
+					return
+				}
 
-					try {
-						console.debug('[polls]', 'Watch for updates')
-						await this.handleResponse(await this.fetchUpdates())
+				// loop while tab is hidden and avoid further requests
+				while (document.hidden) {
+					console.debug('[polls]', 'app is in background')
+					await new Promise((resolve) => setTimeout(resolve, 2000))
+				}
 
-					} catch (e) {
-						if (axios.isCancel(e)) {
-							this.handleCanceledRequest()
-						} else {
-							this.handleConnectionError(e)
-						}
+				try {
+					console.debug('[polls]', 'Watch for updates')
+					await this.handleResponse(await this.fetchUpdates())
+
+				} catch (e) {
+					if (axios.isCancel(e)) {
+						this.handleCanceledRequest()
+					} else {
+						this.handleConnectionError(e)
 					}
 				}
 
-				if (this.updateType !== 'longPolling' || !this.gotValidResponse || document.hidden) {
+				// sleep if request was invalid or polling is set to something else than "longPolling"
+				if (this.updateType !== 'longPolling' || !this.gotValidResponse) {
 					await this.sleep()
+					console.debug('[polls]', 'continue after sleep')
 				}
 			}
 
@@ -114,11 +112,16 @@ export const watchPolls = {
 				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
 			}
 
-			return await axios.get(generateUrl(this.endPoint), {
+			await this.$store.dispatch('appSettings/get')
+
+			const response = await axios.get(generateUrl(this.endPoint), {
+				...axiosDefaultConfig,
 				params: { offset: this.lastUpdated },
 				cancelToken: this.cancelToken.token,
-				headers: { Accept: 'application/json' },
 			})
+
+			return response
+
 		},
 
 		cancelWatch() {
@@ -128,9 +131,7 @@ export const watchPolls = {
 		sleep() {
 			let reason = `Connection error, Attempt: ${this.retryCounter}/${this.maxTries})`
 
-			if (document.hidden) {
-				reason = 'app is in background'
-			} else if (this.gotValidResponse) {
+			if (this.gotValidResponse) {
 				reason = this.updateType
 			}
 
@@ -147,7 +148,6 @@ export const watchPolls = {
 				return
 			}
 
-			// console.debug('[polls]', `No JSON response recieved, got "${response.headers['content-type']}"`)
 			this.gotValidResponse = false
 			throw new InvalidJSON(`No JSON response recieved, got "${response.headers['content-type']}"`)
 		},
@@ -183,22 +183,25 @@ export const watchPolls = {
 
 		async loadTables(tables) {
 			let dispatches = ['activity/list']
+			console.debug('[polls]', 'fetching updates', tables)
 			tables.forEach((item) => {
 				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
-
 				if (item.table === 'polls') {
 					if (this.isAdmin) {
+						console.debug('[polls]', 'update admin view', item.table)
 						// If user is an admin, also load admin list
 						dispatches = [...dispatches, 'pollsAdmin/list']
 					}
 
 					if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
 						// if current poll is affected, load current poll configuration
+						console.debug('[polls]', 'current poll', item.table)
 						dispatches = [...dispatches, 'poll/get']
 					}
 
 					if (this.isLoggedin) {
 						// if user is an authorized user load polls list
+						console.debug('[polls]', 'update list', item.table)
 						dispatches = [...dispatches, `${item.table}/list`]
 					}
 				} else if (!this.isLoggedin && (item.table === 'shares')) {

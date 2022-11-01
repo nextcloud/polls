@@ -25,6 +25,7 @@ import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
 import { orderBy } from 'lodash'
 import moment from '@nextcloud/moment'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const defaultOptions = () => ({
 	list: [],
@@ -33,7 +34,6 @@ const defaultOptions = () => ({
 
 const namespaced = true
 const state = defaultOptions()
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {
@@ -184,22 +184,6 @@ const actions = {
 		}
 	},
 
-	async addBulk(context, payload) {
-		const endPoint = 'apps/polls/option/bulk'
-
-		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				pollId: context.rootState.route.params.id,
-				text: payload.text,
-			}, axiosDefaultConfig)
-			context.commit('set', { options: response.data.options })
-		} catch (e) {
-			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
-			context.dispatch('list')
-			throw e
-		}
-	},
-
 	async update(context, payload) {
 		const endPoint = `apps/polls/option/${payload.option.id}`
 
@@ -231,6 +215,22 @@ const actions = {
 			context.commit('delete', { option: payload.option })
 		} catch (e) {
 			console.error('Error deleting option', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
+		}
+	},
+
+	async addBulk(context, payload) {
+		const endPoint = 'apps/polls/option/bulk'
+
+		try {
+			const response = await axios.post(generateUrl(endPoint), {
+				pollId: context.rootState.route.params.id,
+				text: payload.text,
+			}, axiosDefaultConfig)
+			context.commit('set', { options: response.data.options })
+		} catch (e) {
+			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}

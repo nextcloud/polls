@@ -4,8 +4,6 @@
  *
  * @author Rene Gieling <github@dartcafe.de>
  *
- * @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
- *
  * @license  AGPL-3.0-or-later
  *
  * This program is free software: you can redistribute it and/or modify
@@ -26,12 +24,12 @@
 import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const namespaced = true
 const state = {
 	list: [],
 }
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	set(state, payload) {

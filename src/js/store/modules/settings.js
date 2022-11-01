@@ -23,6 +23,7 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl } from '@nextcloud/router'
+import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
 
 const defaultSettings = () => ({
 	user: {
@@ -49,7 +50,6 @@ const defaultSettings = () => ({
 
 const namespaced = true
 const state = defaultSettings()
-const axiosDefaultConfig = { headers: { Accept: 'application/json' } }
 
 const mutations = {
 	reset(state) {
@@ -57,6 +57,7 @@ const mutations = {
 	},
 
 	setPreference(state, payload) {
+		// change values in case of old settings
 		if (payload.defaultViewTextPoll === 'desktop') {
 			payload.defaultViewTextPoll = 'table-view'
 		}
