@@ -24,7 +24,7 @@
 	<div class="comments">
 		<CommentAdd v-if="acl.allowComment" />
 		<Comments v-if="!showEmptyContent" />
-		<NcEmptyContent :title="t('polls', 'No comments')">
+		<NcEmptyContent v-else :title="t('polls', 'No comments')">
 			<template #icon>
 				<CommentsIcon />
 			</template>
