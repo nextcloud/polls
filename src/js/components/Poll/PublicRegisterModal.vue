@@ -92,7 +92,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import axios from '@nextcloud/axios'
+// import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { NcButton, NcModal, NcCheckboxRadioSwitch } from '@nextcloud/vue'
@@ -100,6 +100,9 @@ import { mapState } from 'vuex'
 import { RichText } from '@nextcloud/vue-richtext'
 import InputDiv from '../Base/InputDiv.vue'
 import SimpleLink from '../../helpers/SimpleLink.js'
+import { ValidatorAPI } from '../../Api/validators.js'
+import { PublicAPI } from '../../Api/public.js'
+import { setCookie } from '../../helpers/cookieHelper.js'
 
 export default {
 	name: 'PublicRegisterModal',
@@ -115,13 +118,13 @@ export default {
 
 	data() {
 		return {
+			status: {
+				email: 'invalid',
+				userName: 'invalid',
+			},
 			userName: '',
 			emailAddress: '',
-			checkingUserName: false,
-			checkingEmailAddress: false,
 			redirecting: false,
-			isValidName: false,
-			isValidEmailAddress: false,
 			modal: true,
 			modalSize: 'large',
 			saveCookie: true,
@@ -144,11 +147,11 @@ export default {
 		},
 
 		registrationIsValid() {
-			return this.isValidName && (this.isValidEmailAddress || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
+			return this.status.userName === 'valid' && (this.status.email === 'valid' || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
 		},
 
 		disableSubmit() {
-			return !this.registrationIsValid || this.checkingUserName
+			return !this.registrationIsValid || this.status.userName === 'checking'
 		},
 
 		privacyRich() {
@@ -175,7 +178,7 @@ export default {
 		},
 
 		userNameCheck() {
-			if (this.checkingUserName) {
+			if (this.status.userName === 'checking') {
 				return {
 					result: t('polls', 'Checking name …'),
 					status: 'checking',
@@ -189,7 +192,7 @@ export default {
 				}
 			}
 
-			if (!this.isValidName) {
+			if (this.status.userName === 'invalid') {
 				return {
 					result: t('polls', 'The name {username} is invalid or reserved.', { username: this.userName }),
 					status: 'error',
@@ -203,7 +206,7 @@ export default {
 		},
 
 		emailCheck() {
-			if (this.checkingEmailAddress) {
+			if (this.status.email === 'checking') {
 				return {
 					result: t('polls', 'Checking email address …'),
 					status: 'checking',
@@ -223,7 +226,7 @@ export default {
 				}
 			}
 
-			if (!this.isValidEmailAddress) {
+			if (this.status.email === 'invalid') {
 				return {
 					result: t('polls', 'Invalid email address.'),
 					status: 'error',
@@ -241,23 +244,19 @@ export default {
 	watch: {
 		userName() {
 			if (this.userName) {
-				this.checkingUserName = true
 				if (this.userName !== this.share.userid) {
 					this.validatePublicUsername()
 				}
 			} else {
-				this.checkingUserName = false
-				this.isValidName = false
+				this.status.userName = 'invalid'
 			}
 		},
 
 		emailAddress() {
 			if (this.emailAddress) {
-				this.checkingEmailAddress = true
 				this.validateEmailAddress()
 			} else {
-				this.checkingEmailAddress = false
-				this.isValidEmailAddress = false
+				this.status.email = 'invalid'
 			}
 		},
 	},
@@ -285,53 +284,58 @@ export default {
 		},
 
 		validatePublicUsername: debounce(async function() {
-			const endpoint = 'apps/polls/check/username'
-
+			this.status.userName = 'checking'
 			try {
-				await axios.post(generateUrl(endpoint), {
-					headers: { Accept: 'application/json' },
-					userName: this.userName,
-					token: this.$route.params.token,
-				})
-				this.isValidName = true
+				await ValidatorAPI.validateName(this.$route.params.token, this.userName)
+				this.status.userName = 'valid'
 			} catch {
-				this.isValidName = false
+				this.status.userName = 'invalid'
 			}
-			this.checkingUserName = false
 		}, 500),
 
 		validateEmailAddress: debounce(async function() {
-			const endpoint = `apps/polls/check/emailaddress/${this.emailAddress}`
-
+			this.status.email = 'checking'
 			try {
-				await axios.get(generateUrl(endpoint), {
-					headers: { Accept: 'application/json' },
-				})
-				this.isValidEmailAddress = true
+				await ValidatorAPI.validateEmailAddress(this.emailAddress)
+				this.status.email = 'valid'
 			} catch {
-				this.isValidEmailAddress = false
+				this.status.email = 'valid'
 			}
-			this.checkingEmailAddress = false
 		}, 500),
 
 		async submitRegistration() {
 			if (this.registrationIsValid) {
 				try {
-					const response = await this.$store.dispatch('share/register', { userName: this.userName, emailAddress: this.emailAddress, saveCookie: this.saveCookie })
+					const response = await PublicAPI.register(
+						this.$route.params.token,
+						this.userName,
+						this.emailAddress,
+					)
 
-					if (this.$route.params.token === response.token) {
-						this.$store.dispatch({ type: 'poll/get', pollId: this.$route.params.id, token: this.$route.params.token })
+					if (this.saveCookie && this.$route.params.type === 'public') {
+						const cookieExpiration = (30 * 24 * 60 * 1000)
+						setCookie(this.$route.params.token, response.data.share.token, cookieExpiration)
+					}
+
+					if (this.$route.params.token === response.data.share.token) {
+						// if share was not a public share, but a personal share
+						// (i.e. email shares allow to change personal data by fist entering of the poll),
+						// just load the poll
+						this.$store.dispatch({ type: 'poll/get' })
 						this.closeModal()
 					} else {
+						// in case of a public share, redirect to the generated share
 						this.redirecting = true
-						this.$router.replace({ name: 'publicVote', params: { token: response.token } })
+						this.$router.replace({ name: 'publicVote', params: { token: response.data.share.token } })
 						this.closeModal()
 					}
+
+					// TODO: Is that correct, is this possible in any way?
 					if (this.share.emailAddress && !this.share.invitationSent) {
 						showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.emailAddress }))
 					}
-				} catch {
-					showError(t('polls', 'Error saving name'))
+				} catch (e) {
+					showError(t('polls', 'Error registering to poll', { error: e.response }))
 				}
 
 			}

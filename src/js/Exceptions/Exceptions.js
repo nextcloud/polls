@@ -47,4 +47,13 @@ class InvalidJSON extends Error {
 
 }
 
-export { Exception, InvalidJSON, NotReady }
+class CancelledRequest extends Error {
+
+	constructor(message) {
+		super(message)
+		this.name = 'cancelledRequest'
+	}
+
+}
+
+export { Exception, InvalidJSON, NotReady, CancelledRequest }

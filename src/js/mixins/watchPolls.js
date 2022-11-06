@@ -26,7 +26,7 @@ import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapState } from 'vuex'
 import { InvalidJSON } from '../Exceptions/Exceptions.js'
-import axiosDefaultConfig from '../helpers/AxiosDefault.js'
+import { axiosDefaultConfig } from '../helpers/AxiosHelper.js'
 
 const defaultSleepTimeout = 30
 

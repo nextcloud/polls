@@ -21,9 +21,7 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { SharesAPI } from '../../Api/shares.js'
 
 const defaultShares = () => ({
 	list: [],
@@ -72,13 +70,8 @@ const getters = {
 
 const actions = {
 	async list(context) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/shares`
-
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await SharesAPI.getShares(context.rootState.route.params.id)
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })
@@ -87,10 +80,8 @@ const actions = {
 	},
 
 	async add(context, payload) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/share`
-
 		try {
-			await axios.post(generateUrl(endPoint), payload.share, axiosDefaultConfig)
+			await SharesAPI.addShare(context.rootState.route.params.id, payload.share)
 		} catch (e) {
 			console.error('Error writing share', { error: e.response }, { payload })
 			throw e
@@ -100,18 +91,12 @@ const actions = {
 	},
 
 	async switchAdmin(context, payload) {
-		let endPoint = `apps/polls/share/${payload.share.token}`
-
-		if (payload.share.type === 'admin') {
-			endPoint = `${endPoint}/user`
-		} else if (payload.share.type === 'user') {
-			endPoint = `${endPoint}/admin`
-		}
+		const setTo = payload.share.type === 'user' ? 'admin' : 'user'
 
 		try {
-			await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
+			await SharesAPI.switchAdmin(payload.share.token, setTo)
 		} catch (e) {
-			console.error('Error switching type', { error: e.response }, { payload })
+			console.error(`Error switching type to ${setTo}`, { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('list')
@@ -119,10 +104,8 @@ const actions = {
 	},
 
 	async setPublicPollEmail(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}/publicpollemail/${payload.value}`
-
 		try {
-			await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
+			await SharesAPI.setEmailAddressConstraint(payload.share.token, payload.value)
 		} catch (e) {
 			console.error('Error changing email register setting', { error: e.response }, { payload })
 			throw e
@@ -132,10 +115,8 @@ const actions = {
 	},
 
 	async sendInvitation(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}/invite`
-
 		try {
-			return await axios.post(generateUrl(endPoint), null, axiosDefaultConfig)
+			return await SharesAPI.sendInvitation(payload.share.token)
 		} catch (e) {
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e
@@ -145,10 +126,9 @@ const actions = {
 	},
 
 	async resolveGroup(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}/resolve`
 
 		try {
-			await axios.get(generateUrl(endPoint), axiosDefaultConfig)
+			await SharesAPI.resolveShare(payload.share.token)
 		} catch (e) {
 			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
 			throw e
@@ -158,12 +138,9 @@ const actions = {
 	},
 
 	async delete(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}`
-
 		context.commit('delete', { share: payload.share })
-
 		try {
-			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
+			await SharesAPI.deleteShare(payload.share.token)
 		} catch (e) {
 			console.error('Error removing share', { error: e.response }, { payload })
 			throw e

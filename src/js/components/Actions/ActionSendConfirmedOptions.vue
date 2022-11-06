@@ -56,6 +56,7 @@
 import { NcButton } from '@nextcloud/vue'
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 import { showError, showSuccess } from '@nextcloud/dialogs'
+import { PollsAPI } from '../../Api/polls.js'
 
 export default {
 	name: 'ActionSendConfirmedOptions',
@@ -75,7 +76,7 @@ export default {
 
 	methods: {
 		async clickAction() {
-			this.confirmations = await this.$store.dispatch('poll/sendConfirmation')
+			this.confirmations = await PollsAPI.sendConfirmation(this.$route.params.id)
 			this.headerCaption = t('polls', 'Confirmations processed')
 			this.confirmations.sent.forEach((confirmation) => {
 				showSuccess(t('polls', `Confirmation sent to ${confirmation}`))

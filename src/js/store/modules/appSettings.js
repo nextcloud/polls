@@ -21,9 +21,7 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { AppSettingsAPI } from '../../Api/appSettings.js'
 
 const defaultAppSettings = () => ({
 	allAccessGroups: [],
@@ -71,12 +69,8 @@ const mutations = {
 
 const actions = {
 	async get(context) {
-		const endPoint = 'apps/polls/settings/app'
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await AppSettingsAPI.getAppSettings()
 			context.commit('set', response.data.appSettings)
 		} catch {
 			// context.commit('reset')
@@ -84,15 +78,14 @@ const actions = {
 	},
 
 	async write(context) {
-		const endPoint = 'apps/polls/settings/app'
 		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				appSettings: context.state,
-			}, axiosDefaultConfig)
+			const response = await AppSettingsAPI.writeAppSettings(context.state)
 			context.commit('set', response.data.appSettings)
 		} catch (e) {
-			console.error('Error writing appSettings', { error: e.response }, { appSettings: state })
-			throw e
+			if (e.name !== 'CancelledRequest') {
+				console.error('Error writing appSettings', { error: e.response }, { appSettings: state })
+				throw e
+			}
 		}
 	},
 }

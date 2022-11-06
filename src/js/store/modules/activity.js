@@ -21,9 +21,7 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateOcsUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { ActivityAPI } from '../../Api/activity.js'
 
 const defaultActivities = () => ({
 	list: [],
@@ -49,18 +47,11 @@ const mutations = {
 
 const actions = {
 	async list(context) {
-		const params = new URLSearchParams()
-		params.append('format', 'json')
-		params.append('since', 0)
-		params.append('limit', 50)
-		params.append('object_type', 'poll')
-		params.append('object_id', context.rootState.route.params.id)
-		const endPoint = generateOcsUrl('apps/activity/api/v2/activity/filter?') + params
 
 		try {
-			const response = await axios.get(endPoint, axiosDefaultConfig)
+			const response = await ActivityAPI.getActivities(context.rootState.route.params.id)
 			context.commit('set', response.data.ocs.data)
-		} catch {
+		} catch (error) {
 			context.commit('reset')
 		}
 	},

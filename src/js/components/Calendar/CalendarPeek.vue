@@ -43,8 +43,9 @@ import { mapState } from 'vuex'
 import { orderBy } from 'lodash'
 import { NcPopover } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
-import CalendarInfo from '../Calendar/CalendarInfo.vue'
+import CalendarInfo from './CalendarInfo.vue'
 import { showError } from '@nextcloud/dialogs'
+import { CalendarAPI } from '../../Api/calendar.js'
 
 export default {
 	name: 'CalendarPeek',
@@ -115,7 +116,7 @@ export default {
 	methods: {
 		async getEvents() {
 			try {
-				const response = await this.$store.dispatch('options/getEvents', { option: this.option })
+				const response = CalendarAPI.getEvents(this.option.pollId)
 				this.events = response.data.events
 			} catch (e) {
 				if (e.message === 'Network Error') {

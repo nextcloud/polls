@@ -21,9 +21,8 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { PollsAPI } from '../../Api/polls.js'
+import { PublicAPI } from '../../Api/public.js'
 
 const defaultSubscription = () => ({
 	subscribed: false,
@@ -47,22 +46,16 @@ const mutations = {
 const actions = {
 
 	async get(context) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/subscription`
-		} else if (context.rootState.route.name === 'vote') {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/subscription`
-		} else {
-			context.commit('reset')
-			return
-		}
-
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.getSubscription(context.rootState.route.token)
+			} else if (context.rootState.route.name === 'vote') {
+				response = await PollsAPI.getSubscription(context.rootState.route.params.id)
+			} else {
+				context.commit('reset')
+				return
+			}
 			context.commit('set', response.data)
 		} catch {
 			context.commit('set', false)
@@ -70,19 +63,16 @@ const actions = {
 	},
 
 	async update(context, payload) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}${payload ? '/subscribe' : '/unsubscribe'}`
-		} else if (context.rootState.route.name === 'vote') {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}${payload ? '/subscribe' : '/unsubscribe'}`
-		} else {
-			context.commit('reset')
-			return
-		}
-
 		try {
-			const response = await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = PublicAPI.setSubscription(context.rootState.route.params.token)
+			} else if (context.rootState.route.name === 'vote') {
+				response = PollsAPI.setSubscription(context.rootState.route.params.id)
+			} else {
+				context.commit('reset')
+				return
+			}
 			context.commit('set', response.data)
 		} catch (e) {
 			console.error(e.response)

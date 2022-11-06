@@ -112,6 +112,7 @@ import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/cookieHelper.js'
+import { PollsAPI } from '../../Api/polls.js'
 
 export default {
 	name: 'UserMenu',
@@ -330,7 +331,7 @@ export default {
 
 		async getAddresses() {
 			try {
-				const response = await this.$store.dispatch('poll/getParticipantsEmailAddresses')
+				const response = await PollsAPI.getParticipantsEmailAddresses(this.$route.params.id)
 				await navigator.clipboard.writeText(response.data.map((item) => item.combined))
 				showSuccess(t('polls', 'Link copied to clipboard'))
 			} catch {

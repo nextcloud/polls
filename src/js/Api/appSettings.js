@@ -20,12 +20,28 @@
  *
  */
 
-const clientSessionId = Math.random().toString(36).substring(2)
-const axiosDefaultConfig = {
-	headers: {
-		Accept: 'application/json',
-		'Nc-Polls-Client-Id': clientSessionId,
+import { axiosRequest, createCancelTokenHandler } from './AxiosHelper.js'
+
+const appSettings = {
+	getAppSettings() {
+		return axiosRequest({
+			method: 'GET',
+			url: 'settings/app',
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getAppSettings.name].handleRequestCancellation().token,
+		})
+	},
+
+	writeAppSettings(appSettings) {
+		return axiosRequest({
+			method: 'POST',
+			url: 'settings/app',
+			data: appSettings,
+			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
+		})
 	},
 }
 
-export default axiosDefaultConfig
+const cancelTokenHandlerObject = createCancelTokenHandler(appSettings)
+
+export { appSettings as AppSettingsAPI }
