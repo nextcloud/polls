@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Circle" : "Loks",
     "Group" : "Grupa",
+    "Privacy Policy" : "Privātuma politika",
     "Contact" : "Kontakts",
     "User" : "Lietotājs",
     "Delete" : "Dzēst",
@@ -25,6 +26,7 @@ OC.L10N.register(
     "Owner" : "Īpašnieks",
     "Created" : "Izveidots",
     "Preview" : "Priekšskatīt",
+    "Privacy policy link:" : "Privātuma politikas saite:",
     "Shares" : "Koplietots",
     "No activity" : "Nav nekādas aktivitātes",
     "Description" : "Apraksts",
