@@ -76,7 +76,12 @@ export default {
 
 	methods: {
 		async clickAction() {
-			this.confirmations = await PollsAPI.sendConfirmation(this.$route.params.id)
+			try {
+				this.confirmations = await PollsAPI.sendConfirmation(this.$route.params.id)
+			} catch (e) {
+				if (e?.code === 'ERR_CANCELED') return
+			}
+
 			this.headerCaption = t('polls', 'Confirmations processed')
 			this.confirmations.sent.forEach((confirmation) => {
 				showSuccess(t('polls', `Confirmation sent to ${confirmation}`))

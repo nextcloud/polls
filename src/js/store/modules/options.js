@@ -150,6 +150,7 @@ const actions = {
 
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })
 			throw e
 		}
@@ -180,6 +181,7 @@ const actions = {
 			}
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -206,6 +208,7 @@ const actions = {
 			}
 			context.commit('delete', { option: payload.option })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -217,6 +220,7 @@ const actions = {
 			const response = OptionsAPI.addOptions(context.rootState.route.params.id, payload.text)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -229,6 +233,7 @@ const actions = {
 			const response = OptionsAPI.confirmOption(payload.optionId)
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error confirming option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -258,6 +263,7 @@ const actions = {
 			)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error creating sequence', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -273,6 +279,7 @@ const actions = {
 			)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error shifting dates', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e

@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosRequest, createCancelTokenHandler } from './AxiosHelper.js'
+import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
 
 const polls = {
 	getPolls() {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: 'polls',
 			params: { time: +new Date() },
@@ -33,7 +33,7 @@ const polls = {
 	},
 
 	getPollsForAdmin() {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: 'administration/polls',
 			params: { time: +new Date() },
@@ -42,7 +42,7 @@ const polls = {
 	},
 
 	getPoll(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/poll`,
 			params: { time: +new Date() },
@@ -51,7 +51,7 @@ const polls = {
 	},
 
 	takeOver(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'PUT',
 			url: `apps/polls/administration/poll/${pollId}/takeover`,
 			cancelToken: cancelTokenHandlerObject[this.takeOver.name].handleRequestCancellation().token,
@@ -59,7 +59,7 @@ const polls = {
 	},
 
 	addPoll(type, title) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: 'poll/add',
 			data: {
@@ -71,7 +71,7 @@ const polls = {
 	},
 
 	updatePoll(poll) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'PUT',
 			url: `poll/${poll.id}`,
 			data: { poll },
@@ -80,7 +80,7 @@ const polls = {
 	},
 
 	deletePoll(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'DELETE',
 			url: `poll/${pollId}`,
 			cancelToken: cancelTokenHandlerObject[this.deletePoll.name].handleRequestCancellation().token,
@@ -88,7 +88,7 @@ const polls = {
 	},
 
 	toggleArchive(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/toggleArchive`,
 			cancelToken: cancelTokenHandlerObject[this.toggleArchive.name].handleRequestCancellation().token,
@@ -96,7 +96,7 @@ const polls = {
 	},
 
 	clonePoll(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/clone`,
 			cancelToken: cancelTokenHandlerObject[this.clonePoll.name].handleRequestCancellation().token,
@@ -104,7 +104,7 @@ const polls = {
 	},
 
 	sendConfirmation(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/confirmation`,
 			cancelToken: cancelTokenHandlerObject[this.sendConfirmation.name].handleRequestCancellation().token,
@@ -112,7 +112,7 @@ const polls = {
 	},
 
 	getParticipantsEmailAddresses(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/addresses`,
 			cancelToken: cancelTokenHandlerObject[this.getParticipantsEmailAddresses.name].handleRequestCancellation().token,
@@ -120,7 +120,7 @@ const polls = {
 	},
 
 	getSubscription(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/subscription`,
 			cancelToken: cancelTokenHandlerObject[this.getSubscription.name].handleRequestCancellation().token,
@@ -128,7 +128,7 @@ const polls = {
 	},
 
 	setSubscription(pollId, subscription) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}${subscription ? '/subscribe' : '/unsubscribe'}`,
 			cancelToken: cancelTokenHandlerObject[this.setSubscription.name].handleRequestCancellation().token,

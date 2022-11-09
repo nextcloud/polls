@@ -334,7 +334,8 @@ export default {
 				const response = await PollsAPI.getParticipantsEmailAddresses(this.$route.params.id)
 				await navigator.clipboard.writeText(response.data.map((item) => item.combined))
 				showSuccess(t('polls', 'Link copied to clipboard'))
-			} catch {
+			} catch (e) {
+				if (e?.code === 'ERR_CANCELED') return
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
 		},

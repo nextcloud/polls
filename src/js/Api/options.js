@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosRequest, createCancelTokenHandler } from './AxiosHelper.js'
+import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
 
 const options = {
 	getOptions(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/options`,
 			params: { time: +new Date() },
@@ -33,7 +33,7 @@ const options = {
 	},
 
 	addOption(option) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: 'option',
 			data: { ...option },
@@ -42,7 +42,7 @@ const options = {
 	},
 
 	updateOption(option) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'PUT',
 			url: `option/${option.id}`,
 			// TODO: replace text with timestamp
@@ -52,7 +52,7 @@ const options = {
 	},
 
 	deleteOption(optionId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'DELETE',
 			url: `option/${optionId}`,
 			params: { time: +new Date() },
@@ -61,7 +61,7 @@ const options = {
 	},
 
 	addOptions(pollId, optionsBatch) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: 'option/bulk',
 			data: {
@@ -73,7 +73,7 @@ const options = {
 	},
 
 	confirmOption(optionId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'PUT',
 			url: `option/${optionId}/confirm`,
 			cancelToken: cancelTokenHandlerObject[this.confirmOption.name].handleRequestCancellation().token,
@@ -81,7 +81,7 @@ const options = {
 	},
 
 	reorderOptions(pollId, options) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/options/reorder`,
 			data: { options },
@@ -90,7 +90,7 @@ const options = {
 	},
 
 	addOptionsSequence(optionId, step, unit, amount) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: `option/${optionId}/sequence`,
 			data: {
@@ -103,7 +103,7 @@ const options = {
 	},
 
 	shiftOptions(pollId, step, unit) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/shift`,
 			data: {

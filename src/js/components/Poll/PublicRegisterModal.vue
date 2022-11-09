@@ -104,6 +104,8 @@ import { ValidatorAPI } from '../../Api/validators.js'
 import { PublicAPI } from '../../Api/public.js'
 import { setCookie } from '../../helpers/cookieHelper.js'
 
+const COOKIE_LIFETIME = 30
+
 export default {
 	name: 'PublicRegisterModal',
 
@@ -288,8 +290,13 @@ export default {
 			try {
 				await ValidatorAPI.validateName(this.$route.params.token, this.userName)
 				this.status.userName = 'valid'
-			} catch {
-				this.status.userName = 'invalid'
+			} catch (e) {
+				if (e?.code === 'ERR_CANCELED') return
+				if (e?.code === 'ERR_BAD_REQUEST') {
+					this.status.userName = 'invalid'
+					return
+				}
+				throw e
 			}
 		}, 500),
 
@@ -298,46 +305,63 @@ export default {
 			try {
 				await ValidatorAPI.validateEmailAddress(this.emailAddress)
 				this.status.email = 'valid'
-			} catch {
-				this.status.email = 'valid'
+			} catch (e) {
+				if (e?.code === 'ERR_CANCELED') return
+				if (e?.code === 'ERR_BAD_REQUEST') {
+					this.status.email = 'invalid'
+					return
+				}
+				throw e
 			}
 		}, 500),
 
+		updateCookie(value) {
+			const cookieExpiration = (COOKIE_LIFETIME * 24 * 60 * 1000)
+			setCookie(this.$route.params.token, value, cookieExpiration)
+		},
+
+		routeToPersonalShare(token) {
+			if (this.$route.params.token === token) {
+				// if share was not a public share, but a personal share
+				// (i.e. email shares allow to change personal data by fist entering of the poll),
+				// just load the poll
+				this.$store.dispatch({ type: 'poll/get' })
+				this.closeModal()
+			} else {
+				// in case of a public share, redirect to the generated share
+				this.redirecting = true
+				this.$router.replace({ name: 'publicVote', params: { token } })
+				this.closeModal()
+			}
+
+		},
+
 		async submitRegistration() {
-			if (this.registrationIsValid) {
-				try {
-					const response = await PublicAPI.register(
-						this.$route.params.token,
-						this.userName,
-						this.emailAddress,
-					)
+			if (!this.registrationIsValid) {
+				return
+			}
 
-					if (this.saveCookie && this.$route.params.type === 'public') {
-						const cookieExpiration = (30 * 24 * 60 * 1000)
-						setCookie(this.$route.params.token, response.data.share.token, cookieExpiration)
-					}
+			try {
+				const response = await PublicAPI.register(
+					this.$route.params.token,
+					this.userName,
+					this.emailAddress,
+				)
 
-					if (this.$route.params.token === response.data.share.token) {
-						// if share was not a public share, but a personal share
-						// (i.e. email shares allow to change personal data by fist entering of the poll),
-						// just load the poll
-						this.$store.dispatch({ type: 'poll/get' })
-						this.closeModal()
-					} else {
-						// in case of a public share, redirect to the generated share
-						this.redirecting = true
-						this.$router.replace({ name: 'publicVote', params: { token: response.data.share.token } })
-						this.closeModal()
-					}
-
-					// TODO: Is that correct, is this possible in any way?
-					if (this.share.emailAddress && !this.share.invitationSent) {
-						showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.emailAddress }))
-					}
-				} catch (e) {
-					showError(t('polls', 'Error registering to poll', { error: e.response }))
+				if (this.saveCookie && this.$route.params.type === 'public') {
+					this.updateCookie(response.data.share.token)
 				}
 
+				this.routeToPersonalShare(response.data.share.token)
+
+				// TODO: Is that correct, is this possible in any way?
+				if (this.share.emailAddress && !this.share.invitationSent) {
+					showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.emailAddress }))
+				}
+			} catch (e) {
+				if (e?.code === 'ERR_CANCELED') return
+				showError(t('polls', 'Error registering to poll', { error: e.response }))
+				throw e
 			}
 		},
 	},

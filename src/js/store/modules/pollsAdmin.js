@@ -49,7 +49,9 @@ const actions = {
 			const response = await PollsAPI.getPollsForAdmin()
 			context.commit('set', { list: response.data })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loading polls', { error: e.response })
+			throw e
 		}
 	},
 
@@ -58,7 +60,12 @@ const actions = {
 			return
 		}
 
-		PollsAPI.takeOver(payload.pollId)
+		try {
+			PollsAPI.takeOver(payload.pollId)
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			throw e
+		}
 	},
 }
 

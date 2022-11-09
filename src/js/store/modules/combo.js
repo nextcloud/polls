@@ -147,6 +147,7 @@ const actions = {
 			const response = await PollsAPI.getPoll(payload.pollId)
 			context.commit('addPoll', response.data)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error loading poll for combo', { error: e.response })
 		}
 	},
@@ -156,6 +157,7 @@ const actions = {
 			const response = await OptionsAPI.getOptions(payload.pollId)
 			context.commit('addOptions', response.data)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error loading options for combo', { error: e.response })
 		}
 	},
@@ -165,6 +167,7 @@ const actions = {
 			const response = await VotesAPI.getVotes(payload.pollId)
 			context.commit('addVotes', response.data)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error loading options for combo', { error: e.response })
 		}
 	},

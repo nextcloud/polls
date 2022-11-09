@@ -68,7 +68,8 @@ const actions = {
 			}
 
 			context.commit('set', response.data)
-		} catch {
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			context.commit('reset')
 		}
 	},
@@ -87,6 +88,7 @@ const actions = {
 			context.dispatch('list')
 			// context.commit('add', { comment: response.data.comment })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing comment', { error: e.response }, { payload })
 			throw e
 		}
@@ -102,6 +104,7 @@ const actions = {
 
 			context.commit('delete', { comment: payload.comment })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting comment', { error: e.response }, { payload })
 			throw e
 		}

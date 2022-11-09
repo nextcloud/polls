@@ -22,7 +22,6 @@
 
 import axios from '@nextcloud/axios'
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
-import { CancelledRequest } from '../Exceptions/Exceptions.js'
 
 const clientSessionId = Math.random().toString(36).substring(2)
 
@@ -44,30 +43,6 @@ const axiosOcsConfig = {
 const CancelToken = axios.CancelToken
 const axiosInstance = axios.create(axiosConfig)
 const axiosOcsInstance = axios.create(axiosOcsConfig)
-
-const axiosRequest = (payload) => {
-	try {
-		const response = axiosInstance.request(payload)
-		return response
-	} catch (e) {
-		if (axios.canceled()) {
-			throw new CancelledRequest('Request cancelled')
-		}
-		throw e
-	}
-}
-
-const axiosOcsRequest = (payload) => {
-	try {
-		const response = axiosOcsInstance.request(payload)
-		return response
-	} catch (e) {
-		if (axios.canceled()) {
-			throw new CancelledRequest('Request cancelled')
-		}
-		throw e
-	}
-}
 
 /**
  * Description
@@ -107,4 +82,4 @@ const createCancelTokenHandler = (apiObject) => {
 	return cancelTokenHandler
 }
 
-export { axiosConfig, axiosOcsInstance, axiosOcsRequest, axiosRequest, axiosInstance, createCancelTokenHandler }
+export { axiosConfig, axiosOcsInstance, axiosInstance, createCancelTokenHandler }

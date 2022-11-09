@@ -57,12 +57,14 @@ const actions = {
 				return
 			}
 			context.commit('set', response.data)
-		} catch {
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			context.commit('set', false)
+			throw e
 		}
 	},
 
-	async update(context, payload) {
+	async update(context) {
 		try {
 			let response = null
 			if (context.rootState.route.name === 'publicVote') {
@@ -75,7 +77,9 @@ const actions = {
 			}
 			context.commit('set', response.data)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error(e.response)
+			throw e
 		}
 	},
 }

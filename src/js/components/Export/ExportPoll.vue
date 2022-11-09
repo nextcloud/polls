@@ -126,11 +126,15 @@ export default {
 			}
 
 			if (this.isOwner) {
-				participantsHeader.push(t('polls', 'Email address'))
-				fromHeader.push('')
-				toHeader.push('')
-				const response = await PollsAPI.getParticipantsEmailAddresses(this.$route.params.id)
-				this.emailAddresses = response.data
+				try {
+					participantsHeader.push(t('polls', 'Email address'))
+					fromHeader.push('')
+					toHeader.push('')
+					const response = await PollsAPI.getParticipantsEmailAddresses(this.$route.params.id)
+					this.emailAddresses = response.data
+				} catch (error) {
+					if (error.name === 'CanceledError') return
+				}
 			}
 
 			if (this.poll.type === 'textPoll') {

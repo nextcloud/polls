@@ -90,6 +90,7 @@ const actions = {
 				context.commit('reset')
 				return
 			}
+
 			const votes = []
 			response.data.votes.forEach((vote) => {
 				if (vote.answer === 'yes') {
@@ -105,8 +106,10 @@ const actions = {
 				votes.push(vote)
 			})
 			context.commit('set', votes)
-		} catch {
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			context.commit('reset')
+			throw e
 		}
 	},
 
@@ -123,6 +126,7 @@ const actions = {
 			context.dispatch('poll/get', null, { root: true })
 			return response
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			if (e.response.status === 409) {
 				context.dispatch('list')
 				context.dispatch('options/list', null, { root: true })
@@ -143,6 +147,7 @@ const actions = {
 			}
 			context.commit('deleteVotes', { userId: response.data.deleted })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting votes', { error: e.response })
 			throw e
 		}
@@ -153,6 +158,7 @@ const actions = {
 			await VotesAPI.removeUser(context.rootState.route.params.id, payload.userId)
 			context.commit('deleteVotes', payload)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting votes', { error: e.response }, { payload })
 			throw e
 		}

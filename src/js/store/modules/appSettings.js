@@ -72,7 +72,7 @@ const actions = {
 		try {
 			const response = await AppSettingsAPI.getAppSettings()
 			context.commit('set', response.data.appSettings)
-		} catch {
+		} catch (e) {
 			// context.commit('reset')
 		}
 	},
@@ -82,10 +82,9 @@ const actions = {
 			const response = await AppSettingsAPI.writeAppSettings(context.state)
 			context.commit('set', response.data.appSettings)
 		} catch (e) {
-			if (e.name !== 'CancelledRequest') {
-				console.error('Error writing appSettings', { error: e.response }, { appSettings: state })
-				throw e
-			}
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error writing appSettings', { error: e.response }, { appSettings: state })
+			throw e
 		}
 	},
 }

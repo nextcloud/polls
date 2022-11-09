@@ -136,8 +136,10 @@ const actions = {
 				response.data.preferences.defaultViewDatePoll = 'list-view'
 			}
 			context.commit('setPreference', response.data.preferences)
-		} catch {
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			context.commit('reset')
+			throw e
 		}
 	},
 
@@ -153,15 +155,21 @@ const actions = {
 			const response = await UserSettingsAPI.writeUserSettings(context.state.user)
 			context.commit('setPreference', response.data.preferences)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing preferences', { error: e.response }, { preferences: state.user })
 			throw e
 		}
 	},
 
 	async getCalendars(context) {
-		const response = await CalendarAPI.getCalendars()
-		context.commit('setCalendars', { calendars: response.data.calendars })
-		return response
+		try {
+			const response = await CalendarAPI.getCalendars()
+			context.commit('setCalendars', { calendars: response.data.calendars })
+			return response
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			throw e
+		}
 	},
 }
 

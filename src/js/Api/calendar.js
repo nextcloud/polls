@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosRequest, createCancelTokenHandler } from './AxiosHelper.js'
+import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
 
 const calendar = {
 	getCalendars() {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: 'calendars',
 			params: { time: +new Date() },
@@ -32,7 +32,7 @@ const calendar = {
 		})
 	},
 	getEvents(pollId) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: `option/${pollId}/events`,
 			params: { time: +new Date() },

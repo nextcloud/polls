@@ -202,7 +202,9 @@ const actions = {
 			context.commit('setPollCreationAllowed', { pollCreationAllowed: response.data.pollCreationAllowed })
 			context.commit('setComboAllowed', { comboAllowed: response.data.comboAllowed })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loading polls', { error: e.response })
+			throw e
 		}
 	},
 }

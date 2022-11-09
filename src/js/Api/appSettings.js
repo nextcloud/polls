@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosRequest, createCancelTokenHandler } from './AxiosHelper.js'
+import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
 
 const appSettings = {
 	getAppSettings() {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'GET',
 			url: 'settings/app',
 			params: { time: +new Date() },
@@ -33,7 +33,7 @@ const appSettings = {
 	},
 
 	writeAppSettings(appSettings) {
-		return axiosRequest({
+		return axiosInstance.request({
 			method: 'POST',
 			url: 'settings/app',
 			data: appSettings,

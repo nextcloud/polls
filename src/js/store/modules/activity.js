@@ -51,7 +51,8 @@ const actions = {
 		try {
 			const response = await ActivityAPI.getActivities(context.rootState.route.params.id)
 			context.commit('set', response.data.ocs.data)
-		} catch (error) {
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			context.commit('reset')
 		}
 	},

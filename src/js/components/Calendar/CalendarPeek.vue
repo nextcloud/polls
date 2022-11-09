@@ -119,6 +119,7 @@ export default {
 				const response = CalendarAPI.getEvents(this.option.pollId)
 				this.events = response.data.events
 			} catch (e) {
+				if (e?.code === 'ERR_CANCELED') return
 				if (e.message === 'Network Error') {
 					showError(t('polls', 'Got a network error while checking calendar events.'))
 				}
