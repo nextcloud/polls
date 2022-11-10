@@ -5,6 +5,7 @@ OC.L10N.register(
     "Group" : "Grupa",
     "Privacy Policy" : "Privātuma politika",
     "Contact" : "Kontakts",
+    "Public link" : "Publiskā saite",
     "User" : "Lietotājs",
     "Delete" : "Dzēst",
     "Conflict" : "Konflikts",
