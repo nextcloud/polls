@@ -68,9 +68,9 @@ const actions = {
 		try {
 			let response = null
 			if (context.rootState.route.name === 'publicVote') {
-				response = PublicAPI.setSubscription(context.rootState.route.params.token)
+				response = await PublicAPI.setSubscription(context.rootState.route.params.token)
 			} else if (context.rootState.route.name === 'vote') {
-				response = PollsAPI.setSubscription(context.rootState.route.params.id)
+				response = await PollsAPI.setSubscription(context.rootState.route.params.id)
 			} else {
 				context.commit('reset')
 				return

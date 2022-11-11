@@ -130,7 +130,7 @@ const polls = {
 	setSubscription(pollId, subscription) {
 		return axiosInstance.request({
 			method: 'PUT',
-			url: `poll/${pollId}${subscription ? '/subscribe' : '/unsubscribe'}`,
+			url: `poll/${pollId}${subscription ? '/unsubscribe' : '/subscribe'}`,
 			cancelToken: cancelTokenHandlerObject[this.setSubscription.name].handleRequestCancellation().token,
 		})
 	},
