@@ -50,6 +50,15 @@ const polls = {
 		})
 	},
 
+	watchPoll(pollId = 0, lastUpdated) {
+		return axiosInstance.request({
+			method: 'GET',
+			url: `poll/${pollId}/watch`,
+			params: { offset: lastUpdated },
+			cancelToken: cancelTokenHandlerObject[this.watchPoll.name].handleRequestCancellation().token,
+		})
+	},
+
 	takeOver(pollId) {
 		return axiosInstance.request({
 			method: 'PUT',

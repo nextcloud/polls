@@ -21,29 +21,25 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { mapState } from 'vuex'
 import { InvalidJSON } from '../Exceptions/Exceptions.js'
-import { axiosDefaultConfig } from '../helpers/AxiosHelper.js'
+import { PollsAPI } from '../Api/polls.js'
+import { PublicAPI } from '../Api/public.js'
 
-const defaultSleepTimeout = 30
+const SLEEP_TIMEOUT_DEFAULT = 30
+const MAX_TRIES = 5
 
 export const watchPolls = {
 	data() {
 		return {
-			cancelToken: null,
 			restart: false,
 			watching: true,
 			lastUpdated: Math.round(Date.now() / 1000),
-			retryCounter: 0,
-			maxTries: 5,
 			endPoint: '',
 			isLoggedin: !!getCurrentUser(),
 			isAdmin: !!getCurrentUser()?.isAdmin,
-			sleepTimeout: defaultSleepTimeout, // seconds
-			gotValidResponse: true,
+			sleepTimeout: SLEEP_TIMEOUT_DEFAULT, // seconds
 		}
 	},
 
@@ -51,170 +47,132 @@ export const watchPolls = {
 		...mapState({
 			updateType: (state) => state.appSettings.updateType,
 		}),
+
+		pollingDisabled() {
+			if (this.updateType !== 'noPolling') {
+				return false
+			}
+
+			console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
+			return true
+		},
 	},
 
 	methods: {
 		async watchPolls() {
-			if (this.cancelToken) {
-				this.cancelWatch() // there is already a cancelToken, cancel the previous session
-			}
+			let retryCounter = 0
+			const sleepTimeout = SLEEP_TIMEOUT_DEFAULT
 
-			this.cancelToken = axios.CancelToken.source() // get a new cancel token
+			while (retryCounter < MAX_TRIES) {
+				if (this.pollingDisabled) return
 
-			while (this.retryCounter < this.maxTries) {
-				this.sleepTimeout = defaultSleepTimeout // reset sleep timer to default
-				this.gotValidResponse = false
-
-				if (this.updateType === 'noPolling') {
-					// leave if polling is disabled
-					console.debug('[polls]', 'Polling for updates is disabled. Cancel watch.')
-					this.cancelWatch()
-					return
-				}
-
-				// loop while tab is hidden and avoid further requests
+				// avoid requests when app is in background and pause
 				while (document.hidden) {
-					console.debug('[polls]', 'app is in background')
-					await new Promise((resolve) => setTimeout(resolve, 2000))
+					console.debug('[polls]', 'App in background, pause watching')
+					await new Promise((resolve) => setTimeout(resolve, 5000))
 				}
 
 				try {
-					console.debug('[polls]', 'Watch for updates')
-					await this.handleResponse(await this.fetchUpdates())
+					const response = await this.fetchUpdates()
+
+					if (response.headers['content-type'].includes('application/json')) {
+						retryCounter = 0
+						this.loadStores(response.data.updates)
+					} else {
+						throw new InvalidJSON(`No JSON response recieved, got "${response.headers['content-type']}"`)
+					}
 
 				} catch (e) {
-					if (axios.isCancel(e)) {
-						this.handleCanceledRequest()
-					} else {
-						this.handleConnectionError(e)
-					}
+					this.sleepTimeout = e?.response.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
+					retryCounter = await this.handleConnectionException(e, retryCounter, sleepTimeout)
 				}
 
-				// sleep if request was invalid or polling is set to something else than "longPolling"
-				if (this.updateType !== 'longPolling' || !this.gotValidResponse) {
-					await this.sleep()
-					console.debug('[polls]', 'continue after sleep')
+				// sleep if request was invalid or polling is set to "peeriodicPolling"
+				if (this.updateType === 'periodicPolling' || retryCounter) {
+					await this.sleep(sleepTimeout)
+					console.debug('[polls]', 'Continue after sleep')
 				}
 			}
 
-			// invalidate the cancel token before leaving
-			this.cancelToken = null
-
-			if (this.retryCounter) {
-				console.debug('[polls]', `Cancel watch after ${this.retryCounter} failed requests`)
+			if (retryCounter) {
+				console.debug('[polls]', `Cancel watch after ${retryCounter} failed requests`)
 			}
 		},
 
 		async fetchUpdates() {
-			if (this.$route.name === 'publicVote') {
-				this.endPoint = `apps/polls/s/${this.$route.params.token}/watch`
-			} else {
-				this.endPoint = `apps/polls/poll/${this.$route.params.id ?? 0}/watch`
-			}
-
+			console.debug('[polls]', `Watching for updates (${this.updateType})`)
 			await this.$store.dispatch('appSettings/get')
 
-			const response = await axios.get(generateUrl(this.endPoint), {
-				...axiosDefaultConfig,
-				params: { offset: this.lastUpdated },
-				cancelToken: this.cancelToken.token,
-			})
-
-			return response
-
-		},
-
-		cancelWatch() {
-			this.cancelToken.cancel()
-		},
-
-		sleep() {
-			let reason = `Connection error, Attempt: ${this.retryCounter}/${this.maxTries})`
-
-			if (this.gotValidResponse) {
-				reason = this.updateType
+			if (this.$route.name === 'publicVote') {
+				return await PublicAPI.watchPoll(this.$route.params.token, this.lastUpdated)
 			}
 
-			console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds (reason: ${reason})`)
-			return new Promise((resolve) => setTimeout(resolve, this.sleepTimeout * 1000))
+			return await PollsAPI.watchPoll(this.$route.params.id, this.lastUpdated)
 		},
 
-		handleResponse(response) {
-			if (response.headers['content-type'].includes('application/json')) {
-				this.gotValidResponse = true
-				console.debug('[polls]', `Update detected (${this.updateType})`, response.data.updates)
-				this.loadTables(response.data.updates)
-				this.retryCounter = 0 // reset retryCounter after we got a valid response
-				return
+		sleep(retryCounter, sleepTimeout) {
+			const reason = retryCounter ? `Connection error, Attempt: ${retryCounter}/${MAX_TRIES})` : this.updateType
+			console.debug('[polls]', `Sleep for ${sleepTimeout} seconds (reason: ${reason})`)
+			return new Promise((resolve) => setTimeout(resolve, sleepTimeout * 1000))
+		},
+
+		async handleConnectionException(e, retryCounter, sleepTimeout) {
+			retryCounter += 1
+
+			if (e?.code === 'ERR_CANCELED') {
+				return 0
 			}
 
-			this.gotValidResponse = false
-			throw new InvalidJSON(`No JSON response recieved, got "${response.headers['content-type']}"`)
-		},
-
-		handleCanceledRequest() {
-			console.debug('[polls]', 'Fetch canceled')
-			this.cancelToken = axios.CancelToken.source()
-		},
-
-		async handleConnectionError(e) {
 			if (e.response?.status === 304) {
-				console.debug('[polls]', `No updates (using ${this.updateType})`)
-				this.gotValidResponse = true
-				this.retryCounter = 0 // reset retryCounter, after we get a 304
-				return
+				console.debug('[polls]', 'No updates')
+				return 0
 			}
-
-			this.retryCounter += 1
 
 			if (e?.response?.status === 503) {
 				// Server possibly in maintenance mode
-				this.sleepTimeout = e.response.headers['retry-after'] ?? this.sleepTimeout
-				console.debug('[polls]', `Service not avaiable - retry after ${this.sleepTimeout} seconds`)
-				return
+				console.debug('[polls]', `Service not avaiable - retry after ${sleepTimeout} seconds`)
+				return retryCounter
 			}
+
 			if (e.response) {
 				console.error('[polls]', e)
-				return
+				return retryCounter
 			}
 
-			console.debug('[polls]', e.message ?? `No response - request aborted - failed request ${this.retryCounter}/${this.maxTries}`)
+			console.debug('[polls]', e.message ?? `No response - request aborted - failed request ${retryCounter}/${MAX_TRIES}`)
 		},
 
-		async loadTables(tables) {
-			let dispatches = ['activity/list']
-			console.debug('[polls]', 'fetching updates', tables)
-			tables.forEach((item) => {
-				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
-				if (item.table === 'polls') {
-					if (this.isAdmin) {
-						console.debug('[polls]', 'update admin view', item.table)
-						// If user is an admin, also load admin list
-						dispatches = [...dispatches, 'pollsAdmin/list']
-					}
+		async loadStores(stores) {
+			console.debug('[polls]', 'Updates detected', stores)
 
-					if (item.pollId === parseInt(this.$route.params.id ?? this.$store.state.share.pollId)) {
-						// if current poll is affected, load current poll configuration
-						console.debug('[polls]', 'current poll', item.table)
+			let dispatches = ['activity/list']
+
+			stores.forEach((item) => {
+				this.lastUpdated = Math.max(item.updated, this.lastUpdated)
+
+				if (item.table === 'polls') {
+
+					// If user is an admin, also load admin list
+					if (this.isAdmin) dispatches = [...dispatches, 'pollsAdmin/list']
+
+					// if user is an authorized user load polls list and combo
+					if (this.isLoggedin) dispatches = [...dispatches, `${item.table}/list`, 'combo/cleanUp']
+
+					// if current poll is affected, load current poll configuration
+					if (item.pollId === this.$store.state.poll.id) {
 						dispatches = [...dispatches, 'poll/get']
 					}
 
-					if (this.isLoggedin) {
-						// if user is an authorized user load polls list
-						console.debug('[polls]', 'update list', item.table)
-						dispatches = [...dispatches, `${item.table}/list`]
-					}
 				} else if (!this.isLoggedin && (item.table === 'shares')) {
 					// if current user is guest and table is shares only reload current share
 					dispatches = [...dispatches, 'share/get']
 				} else {
-					// otherwise load table
+					// otherwise just load particulair store
 					dispatches = [...dispatches, `${item.table}/list`]
 				}
 			})
-			dispatches = [...new Set(dispatches)] // remove duplicates
-			await Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
-			await this.$store.dispatch('combo/cleanUp')
+			dispatches = [...new Set(dispatches)] // remove duplicates and add combo
+			return Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
 		},
 
 	},

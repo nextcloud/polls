@@ -32,10 +32,11 @@ const publicPoll = {
 		})
 	},
 
-	watch(shareToken) {
+	watchPoll(shareToken, lastUpdated) {
 		return axiosInstance.request({
 			method: 'GET',
 			url: `s/${shareToken}/watch`,
+			params: { offset: lastUpdated },
 			cancelToken: cancelTokenHandlerObject[this.watch.name].handleRequestCancellation().token,
 		})
 	},

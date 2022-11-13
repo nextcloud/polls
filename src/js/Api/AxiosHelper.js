@@ -47,7 +47,7 @@ const axiosOcsInstance = axios.create(axiosOcsConfig)
 /**
  * Description
  *
- * @param {any} apiObject
+ * @param {any} apiObject apiObject
  * @return {any}
  */
 const createCancelTokenHandler = (apiObject) => {
