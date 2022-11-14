@@ -297,7 +297,7 @@ OC.L10N.register(
     "Invite users via the share tab in the sidebar" : "Inviter les utilisateurs via l'onglet de partage dans le panneau latéral",
     "A private poll from {name}" : "Un sondage privé de {name}",
     "An openly accessible poll from {name}" : "Un sondage accessible au public de {name}",
-    "Closing {relativeExpirationTime}" : "Fermeture dans {relativeExpirationTime}",
+    "Closing {relativeExpirationTime}" : "Fermeture {relativeExpirationTime}",
     "Proposal period ended {timeRelative}" : "Les propositions sont closes {timeRelative}",
     "Proposal period ends {timeRelative}" : "Les propositions sont closes {timeRelative}",
     "never" : "jamais",
