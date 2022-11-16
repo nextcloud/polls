@@ -3,6 +3,6 @@ description: "Used for announcements"
 labels: ["announcement"]
 
 body:
-  - type: markdown
+  - type: textarea
     attributes:
       value: Your Message to the world
