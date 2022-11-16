@@ -1,0 +1,8 @@
+name: "Announcement"
+description: "Used for announcements"
+labels: ["announcement"]
+
+body:
+  - type: markdown
+    attributes:
+      value: Your Message to the world
