@@ -48,10 +48,9 @@
 
 <script>
 import { debounce } from 'lodash'
-import axios from '@nextcloud/axios'
 import { showError } from '@nextcloud/dialogs'
-import { generateUrl } from '@nextcloud/router'
 import { NcMultiselect } from '@nextcloud/vue'
+import { AppSettingsAPI } from '../../Api/appSettings.js'
 
 export default {
 	name: 'UserSearch',
@@ -62,7 +61,6 @@ export default {
 
 	data() {
 		return {
-			searchToken: null,
 			users: [],
 			isLoading: false,
 			placeholder: t('polls', 'Type to add an individual share'),
@@ -74,31 +72,21 @@ export default {
 
 	methods: {
 		loadUsersAsync: debounce(async function(query) {
-			const endPoint = `apps/polls/search/users/${query}`
-
 			if (!query) {
 				this.users = []
 				return
 			}
+
 			this.isLoading = true
-			if (this.searchToken) {
-				this.searchToken.cancel()
-			}
-			this.searchToken = axios.CancelToken.source()
+
 			try {
-				const response = await axios.get(generateUrl(endPoint), {
-					headers: { Accept: 'application/json' },
-					cancelToken: this.searchToken.token,
-				})
+				const response = await AppSettingsAPI.getUsers(query)
 				this.users = response.data.siteusers
 				this.isLoading = false
 			} catch (e) {
-				if (axios.isCancel(e)) {
-					// request was cancelled
-				} else {
-					console.error(e.response)
-					this.isLoading = false
-				}
+				if (e?.code === 'ERR_CANCELED') return
+				console.error(e.response)
+				this.isLoading = false
 			}
 		}, 250),
 

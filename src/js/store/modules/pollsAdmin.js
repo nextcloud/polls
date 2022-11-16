@@ -21,10 +21,8 @@
  *
  */
 
-import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
-import { generateUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { PollsAPI } from '../../Api/polls.js'
 
 const namespaced = true
 const state = {
@@ -47,15 +45,13 @@ const actions = {
 			return
 		}
 
-		const endPoint = 'apps/polls/administration/polls'
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await PollsAPI.getPollsForAdmin()
 			context.commit('set', { list: response.data })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loading polls', { error: e.response })
+			throw e
 		}
 	},
 
@@ -64,8 +60,12 @@ const actions = {
 			return
 		}
 
-		const endPoint = `apps/polls/administration/poll/${payload.pollId}/takeover`
-		axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
+		try {
+			PollsAPI.takeOver(payload.pollId)
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			throw e
+		}
 	},
 }
 

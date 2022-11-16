@@ -20,12 +20,27 @@
  *
  */
 
-const clientSessionId = Math.random().toString(36).substring(2)
-const axiosDefaultConfig = {
-	headers: {
-		Accept: 'application/json',
-		'Nc-Polls-Client-Id': clientSessionId,
+import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+
+const calendar = {
+	getCalendars() {
+		return httpInstance.request({
+			method: 'GET',
+			url: 'calendars',
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getCalendars.name].handleRequestCancellation().token,
+		})
+	},
+	getEvents(pollId) {
+		return httpInstance.request({
+			method: 'GET',
+			url: `option/${pollId}/events`,
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getEvents.name].handleRequestCancellation().token,
+		})
 	},
 }
 
-export default axiosDefaultConfig
+const cancelTokenHandlerObject = createCancelTokenHandler(calendar)
+
+export { calendar as CalendarAPI }

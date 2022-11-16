@@ -21,9 +21,8 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { CommentsAPI } from '../../Api/comments.js'
+import { PublicAPI } from '../../Api/public.js'
 
 const defaultComments = () => ({
 	list: [],
@@ -57,68 +56,55 @@ const getters = {
 
 const actions = {
 	async list(context) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
-		} else if (context.rootState.route.name === 'vote') {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
-		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
-		} else {
-			context.commit('reset')
-			return
-		}
-
 		try {
-			const response = await axios.get(generateUrl(`${endPoint}/comments`), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.getComments(context.rootState.route.params.token)
+			} else if (context.rootState.route.name === 'vote') {
+				response = await CommentsAPI.getComments(context.rootState.route.params.id)
+			} else {
+				context.commit('reset')
+				return
+			}
+
 			context.commit('set', response.data)
-		} catch {
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			context.commit('reset')
 		}
 	},
 
 	async add(context, payload) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
-		} else if (context.rootState.route.name === 'vote') {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
-		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
-		} else {
-			context.commit('reset')
-			return
-		}
-
 		try {
-			await axios.post(generateUrl(`${endPoint}/comment`), {
-				message: payload.message,
-			}, axiosDefaultConfig)
+			if (context.rootState.route.name === 'publicVote') {
+				await PublicAPI.addComment(context.rootState.route.params.token, payload.message)
+			} else if (context.rootState.route.name === 'vote') {
+				await CommentsAPI.addComment(context.rootState.route.params.id, payload.message)
+			} else {
+				context.commit('reset')
+				return
+			}
+
 			context.dispatch('list')
 			// context.commit('add', { comment: response.data.comment })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing comment', { error: e.response }, { payload })
 			throw e
 		}
 	},
 
 	async delete(context, payload) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
-		}
-		endPoint = `${endPoint}/comment/${payload.comment.id}`
-
 		try {
-			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
+			if (context.rootState.route.name === 'publicVote') {
+				await PublicAPI.deleteComment(context.rootState.route.params.token, payload.comment.id)
+			} else {
+				await CommentsAPI.deleteComment(payload.comment.id)
+			}
+
 			context.commit('delete', { comment: payload.comment })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting comment', { error: e.response }, { payload })
 			throw e
 		}

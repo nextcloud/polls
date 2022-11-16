@@ -21,10 +21,7 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import { setCookie } from '../../helpers/cookieHelper.js'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { PublicAPI } from '../../Api/public.js'
 
 const defaultShares = () => ({
 	displayName: '',
@@ -62,44 +59,13 @@ const actions = {
 			return
 		}
 
-		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/share`
-
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await PublicAPI.getShare(context.rootState.route.params.token)
 			context.commit('set', { share: response.data.share })
 			return response.data
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error retrieving share', { error: e.response })
-			throw e.response
-		}
-	},
-
-	async register(context, payload) {
-		if (context.rootState.route.name !== 'publicVote') {
-			return
-		}
-
-		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/register`
-
-		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				userName: payload.userName,
-				emailAddress: payload.emailAddress,
-				timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
-			}, axiosDefaultConfig)
-
-			if (payload.saveCookie && context.state.type === 'public') {
-				const cookieExpiration = (30 * 24 * 60 * 1000)
-				setCookie(context.rootState.route.params.token, response.data.share.token, cookieExpiration)
-			}
-
-			return { token: response.data.share.token }
-
-		} catch (e) {
-			console.error('Error writing personal share', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -109,13 +75,12 @@ const actions = {
 			return
 		}
 
-		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/email/${payload.emailAddress}`
-
 		try {
-			const response = await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
+			const response = await PublicAPI.setEmail(context.rootState.route.params.token, payload.emailAddress)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing email address', { error: e.response }, { payload })
 			throw e
 		}
@@ -126,16 +91,15 @@ const actions = {
 			return
 		}
 
-		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/name/${payload.displayName}`
-
 		try {
-			const response = await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
+			const response = await PublicAPI.setDisplayName(context.rootState.route.params.token, payload.displayName)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('poll/get', null, { root: true })
 			context.dispatch('comments/list', null, { root: true })
 			context.dispatch('votes/list', null, { root: true })
 			context.dispatch('options/list', null, { root: true })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error changing name', { error: e.response }, { payload })
 			throw e
 		}
@@ -146,14 +110,13 @@ const actions = {
 			return
 		}
 
-		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/email`
-
 		try {
-			const response = await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
+			const response = PublicAPI.deleteEmailAddress(context.rootState.route.params.token)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('subscription/update', false, { root: true })
 			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing email address', { error: e.response }, { payload })
 			throw e
 		}
@@ -164,11 +127,10 @@ const actions = {
 			return
 		}
 
-		const endPoint = `apps/polls/s/${context.rootState.route.params.token}/resend`
-
 		try {
-			return await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
+			return await PublicAPI.resendInvitation(context.rootState.route.params.token)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error sending invitation', { error: e.response }, { payload })
 			throw e
 		}

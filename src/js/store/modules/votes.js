@@ -21,9 +21,8 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { VotesAPI } from '../../Api/votes.js'
+import { PublicAPI } from '../../Api/public.js'
 
 const defaultVotes = () => ({
 	list: [],
@@ -81,21 +80,17 @@ const getters = {
 
 const actions = {
 	async list(context) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}`
-		} else if (context.rootState.route.name === 'vote') {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}`
-		} else {
-			context.commit('reset')
-			return
-		}
 		try {
-			const response = await axios.get(generateUrl(`${endPoint}/votes`), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.getVotes(context.rootState.route.params.token)
+			} else if (context.rootState.route.name === 'vote') {
+				response = await VotesAPI.getVotes(context.rootState.route.params.id)
+			} else {
+				context.commit('reset')
+				return
+			}
+
 			const votes = []
 			response.data.votes.forEach((vote) => {
 				if (vote.answer === 'yes') {
@@ -111,28 +106,27 @@ const actions = {
 				votes.push(vote)
 			})
 			context.commit('set', votes)
-		} catch {
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			context.commit('reset')
+			throw e
 		}
 	},
 
 	async set(context, payload) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.poll.acl.token}`
-		}
-
 		try {
-			const response = await axios.put(generateUrl(`${endPoint}/vote`), {
-				optionId: payload.option.id,
-				setTo: payload.setTo,
-			}, axiosDefaultConfig)
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.setVote(context.rootState.route.params.token, payload.option.id, payload.setTo)
+			} else {
+				response = await VotesAPI.setVote(payload.option.id, payload.setTo)
+			}
 			context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
 			context.dispatch('options/list', null, { root: true })
 			context.dispatch('poll/get', null, { root: true })
 			return response
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			if (e.response.status === 409) {
 				context.dispatch('list')
 				context.dispatch('options/list', null, { root: true })
@@ -144,29 +138,27 @@ const actions = {
 	},
 
 	async resetVotes(context) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.poll.acl.token}/user`
-		} else {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/user`
-		}
-
 		try {
-			const response = await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.removeVotes(context.rootState.route.params.token)
+			} else {
+				response = await VotesAPI.removeUser(context.rootState.route.params.id)
+			}
 			context.commit('deleteVotes', { userId: response.data.deleted })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting votes', { error: e.response })
 			throw e
 		}
 	},
 
 	async deleteUser(context, payload) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/user/${payload.userId}`
 		try {
-			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
+			await VotesAPI.removeUser(context.rootState.route.params.id, payload.userId)
 			context.commit('deleteVotes', payload)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting votes', { error: e.response }, { payload })
 			throw e
 		}

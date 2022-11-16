@@ -21,9 +21,8 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { CalendarAPI } from '../../Api/calendar.js'
+import { UserSettingsAPI } from '../../Api/userSettings.js'
 
 const defaultSettings = () => ({
 	user: {
@@ -122,12 +121,8 @@ const getters = {
 
 const actions = {
 	async get(context) {
-		const endPoint = 'apps/polls/preferences'
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await UserSettingsAPI.getUserSettings()
 			if (response.data.preferences.defaultViewTextPoll === 'desktop') {
 				response.data.preferences.defaultViewTextPoll = 'table-view'
 			}
@@ -141,37 +136,40 @@ const actions = {
 				response.data.preferences.defaultViewDatePoll = 'list-view'
 			}
 			context.commit('setPreference', response.data.preferences)
-		} catch {
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			context.commit('reset')
+			throw e
 		}
 	},
 
 	async setPollCombo(context, payload) {
 		await context.commit('setPollCombo', {
-			headers: { Accept: 'application/json' },
 			pollCombo: payload.pollCombo,
 		})
 		context.dispatch('write')
 	},
 
 	async write(context) {
-		const endPoint = 'apps/polls/preferences'
 		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				settings: context.state.user,
-			}, axiosDefaultConfig)
+			const response = await UserSettingsAPI.writeUserSettings(context.state.user)
 			context.commit('setPreference', response.data.preferences)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing preferences', { error: e.response }, { preferences: state.user })
 			throw e
 		}
 	},
 
 	async getCalendars(context) {
-		const endPoint = 'apps/polls/calendars'
-		const response = await axios.get(generateUrl(endPoint), axiosDefaultConfig)
-		context.commit('setCalendars', { calendars: response.data.calendars })
-		return response
+		try {
+			const response = await CalendarAPI.getCalendars()
+			context.commit('setCalendars', { calendars: response.data.calendars })
+			return response
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			throw e
+		}
 	},
 }
 

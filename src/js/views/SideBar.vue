@@ -25,7 +25,8 @@
 		:title="t('polls', 'Details')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab v-if="acl.allowEdit"
-			:id="'configuration'"
+			id="configuration"
+			icon="icon-settings"
 			:order="1"
 			:name="t('polls', 'Configuration')">
 			<template #icon>
@@ -35,7 +36,8 @@
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab v-if="acl.allowEdit"
-			:id="'options'"
+			id="options"
+			icon="icon-toggle-filelist"
 			:order="2"
 			:name="t('polls', 'Options')">
 			<template #icon>
@@ -45,7 +47,8 @@
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab v-if="acl.allowEdit"
-			:id="'sharing'"
+			id="sharing"
+			icon="icon-share"
 			:order="3"
 			:name="t('polls', 'Sharing')">
 			<template #icon>
@@ -55,7 +58,8 @@
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab v-if="acl.allowComment"
-			:id="'comments'"
+			id="comments"
+			icon="icon-comment"
 			:order="5"
 			:name="t('polls', 'Comments')">
 			<template #icon>
@@ -65,7 +69,8 @@
 		</NcAppSidebarTab>
 
 		<NcAppSidebarTab v-if="acl.allowEdit && useActivity"
-			:id="'activity'"
+			id="activity"
+			icon="icon-add"
 			:order="6"
 			:name="t('polls', 'Activity')">
 			<template #icon>
@@ -85,11 +90,23 @@ import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+// test static loading
+// import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration.vue'
+// import SideBarTabComments from '../components/SideBar/SideBarTabComments.vue'
+// import SideBarTabOptions from '../components/SideBar/SideBarTabOptions.vue'
+// import SideBarTabShare from '../components/SideBar/SideBarTabShare.vue'
+// import SideBarTabActivity from '../components/SideBar/SideBarTabActivity.vue'
 
 export default {
 	name: 'SideBar',
 
 	components: {
+		// test static loading
+		// SideBarTabConfiguration,
+		// SideBarTabComments,
+		// SideBarTabOptions,
+		// SideBarTabShare,
+		// SideBarTabActivity,
 		SideBarTabConfiguration: () => import('../components/SideBar/SideBarTabConfiguration.vue'),
 		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments.vue'),
 		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions.vue'),

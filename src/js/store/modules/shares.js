@@ -21,9 +21,7 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { SharesAPI } from '../../Api/shares.js'
 
 const defaultShares = () => ({
 	list: [],
@@ -72,103 +70,89 @@ const getters = {
 
 const actions = {
 	async list(context) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/shares`
-
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await SharesAPI.getShares(context.rootState.route.params.id)
 			context.commit('set', response.data)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })
 			throw e
 		}
 	},
 
 	async add(context, payload) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/share`
-
 		try {
-			await axios.post(generateUrl(endPoint), payload.share, axiosDefaultConfig)
-		} catch (e) {
-			console.error('Error writing share', { error: e.response }, { payload })
-			throw e
-		} finally {
+			await SharesAPI.addShare(context.rootState.route.params.id, payload.share)
 			context.dispatch('list')
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error writing share', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
 		}
 	},
 
 	async switchAdmin(context, payload) {
-		let endPoint = `apps/polls/share/${payload.share.token}`
-
-		if (payload.share.type === 'admin') {
-			endPoint = `${endPoint}/user`
-		} else if (payload.share.type === 'user') {
-			endPoint = `${endPoint}/admin`
-		}
+		const setTo = payload.share.type === 'user' ? 'admin' : 'user'
 
 		try {
-			await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
-		} catch (e) {
-			console.error('Error switching type', { error: e.response }, { payload })
-			throw e
-		} finally {
+			await SharesAPI.switchAdmin(payload.share.token, setTo)
 			context.dispatch('list')
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error(`Error switching type to ${setTo}`, { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
 		}
 	},
 
 	async setPublicPollEmail(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}/publicpollemail/${payload.value}`
-
 		try {
-			await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
-		} catch (e) {
-			console.error('Error changing email register setting', { error: e.response }, { payload })
-			throw e
-		} finally {
+			await SharesAPI.setEmailAddressConstraint(payload.share.token, payload.value)
 			context.dispatch('list')
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error changing email register setting', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
 		}
 	},
 
 	async sendInvitation(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}/invite`
-
 		try {
-			return await axios.post(generateUrl(endPoint), null, axiosDefaultConfig)
-		} catch (e) {
-			console.error('Error sending invitation', { error: e.response }, { payload })
-			throw e
-		} finally {
+			const response = await SharesAPI.sendInvitation(payload.share.token)
 			context.dispatch('list')
+			return response
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error sending invitation', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
 		}
 	},
 
 	async resolveGroup(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}/resolve`
 
 		try {
-			await axios.get(generateUrl(endPoint), axiosDefaultConfig)
+			await SharesAPI.resolveShare(payload.share.token)
+			context.dispatch('list')
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
 			throw e
-		} finally {
-			context.dispatch('list')
 		}
 	},
 
 	async delete(context, payload) {
-		const endPoint = `apps/polls/share/${payload.share.token}`
-
 		context.commit('delete', { share: payload.share })
-
 		try {
-			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
-		} catch (e) {
-			console.error('Error removing share', { error: e.response }, { payload })
-			throw e
-		} finally {
+			await SharesAPI.deleteShare(payload.share.token)
 			context.dispatch('list')
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error removing share', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
 		}
 	},
 }

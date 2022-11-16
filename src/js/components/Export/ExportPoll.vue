@@ -65,6 +65,7 @@ import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
+import { PollsAPI } from '../../Api/polls.js'
 
 export default {
 	name: 'ExportPoll',
@@ -125,11 +126,15 @@ export default {
 			}
 
 			if (this.isOwner) {
-				participantsHeader.push(t('polls', 'Email address'))
-				fromHeader.push('')
-				toHeader.push('')
-				const response = await this.$store.dispatch('poll/getParticipantsEmailAddresses')
-				this.emailAddresses = response.data
+				try {
+					participantsHeader.push(t('polls', 'Email address'))
+					fromHeader.push('')
+					toHeader.push('')
+					const response = await PollsAPI.getParticipantsEmailAddresses(this.$route.params.id)
+					this.emailAddresses = response.data
+				} catch (error) {
+					if (error.name === 'CanceledError') return
+				}
 			}
 
 			if (this.poll.type === 'textPoll') {

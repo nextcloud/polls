@@ -21,11 +21,10 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
 import { orderBy } from 'lodash'
 import moment from '@nextcloud/moment'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { OptionsAPI } from '../../Api/options.js'
+import { PublicAPI } from '../../Api/public.js'
 
 const defaultOptions = () => ({
 	list: [],
@@ -137,47 +136,52 @@ const getters = {
 const actions = {
 
 	async list(context) {
-		let endPoint = 'apps/polls'
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/options`
-		} else if (context.rootState.route.name === 'vote') {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/options`
-		} else if (context.rootState.route.name === 'list' && context.rootState.route.params.id) {
-			endPoint = `${endPoint}/poll/${context.rootState.route.params.id}/options`
-		} else {
-			context.commit('reset')
-			return
-		}
-
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			let response = null
+
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.getOptions(context.rootState.route.params.token)
+			} else if (context.rootState.route.params.id) {
+				response = await OptionsAPI.getOptions(context.rootState.route.params.id)
+			} else {
+				context.commit('reset')
+				return
+			}
+
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })
 			throw e
 		}
 	},
 
 	async add(context, payload) {
-		let endPoint = 'apps/polls'
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/option`
-		} else {
-			endPoint = `${endPoint}/option`
-		}
-
 		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				pollId: context.rootState.route.params.id,
-				timestamp: payload.timestamp,
-				text: payload.text,
-				duration: payload.duration,
-			}, axiosDefaultConfig)
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.addOption(
+					context.rootState.route.params.token,
+					{
+						pollId: context.rootState.route.params.id,
+						timestamp: payload.timestamp,
+						text: payload.text,
+						duration: payload.duration,
+					}
+				)
+			} else {
+				response = await OptionsAPI.addOption(
+					{
+						pollId: context.rootState.route.params.id,
+						timestamp: payload.timestamp,
+						text: payload.text,
+						duration: payload.duration,
+					}
+				)
+			}
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -185,14 +189,8 @@ const actions = {
 	},
 
 	async update(context, payload) {
-		const endPoint = `apps/polls/option/${payload.option.id}`
-
 		try {
-			const response = await axios.put(generateUrl(endPoint), {
-				timestamp: payload.option.timestamp,
-				text: payload.option.timeStamp,
-				duration: payload.option.duration,
-			}, axiosDefaultConfig)
+			const response = await OptionsAPI.updateOption(payload.option)
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
 			console.error('Error updating option', { error: e.response }, { payload })
@@ -202,18 +200,15 @@ const actions = {
 	},
 
 	async delete(context, payload) {
-		let endPoint = 'apps/polls'
-
-		if (context.rootState.route.name === 'publicVote') {
-			endPoint = `${endPoint}/s/${context.rootState.route.params.token}/option/${payload.option.id}`
-		} else {
-			endPoint = `${endPoint}/option/${payload.option.id}`
-		}
-
 		try {
-			await axios.delete(generateUrl(endPoint), axiosDefaultConfig)
+			if (context.rootState.route.name === 'publicVote') {
+				await PublicAPI.deleteOption(context.rootState.route.params.token, payload.option.id)
+			} else {
+				await OptionsAPI.deleteOption(payload.option.id)
+			}
 			context.commit('delete', { option: payload.option })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -221,15 +216,11 @@ const actions = {
 	},
 
 	async addBulk(context, payload) {
-		const endPoint = 'apps/polls/option/bulk'
-
 		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				pollId: context.rootState.route.params.id,
-				text: payload.text,
-			}, axiosDefaultConfig)
+			const response = OptionsAPI.addOptions(context.rootState.route.params.id, payload.text)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -237,14 +228,12 @@ const actions = {
 	},
 
 	async confirm(context, payload) {
-		const endPoint = `apps/polls/option/${payload.option.id}/confirm`
-
 		context.commit('confirm', { option: payload.option })
-
 		try {
-			const response = await axios.put(generateUrl(endPoint), null, axiosDefaultConfig)
+			const response = OptionsAPI.confirmOption(payload.optionId)
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error confirming option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -252,14 +241,10 @@ const actions = {
 	},
 
 	async reorder(context, payload) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/options/reorder`
-
 		context.commit('reorder', { options: payload })
 
 		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				options: payload,
-			}, axiosDefaultConfig)
+			const response = await OptionsAPI.reorderOptions(context.rootState.route.params.id, payload)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			console.error('Error reordering option', { error: e.response }, { payload })
@@ -269,16 +254,16 @@ const actions = {
 	},
 
 	async sequence(context, payload) {
-		const endPoint = `apps/polls/option/${payload.option.id}/sequence`
-
 		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				step: payload.sequence.step,
-				unit: payload.sequence.unit.value,
-				amount: payload.sequence.amount,
-			}, axiosDefaultConfig)
+			const response = await OptionsAPI.addOptionsSequence(
+				payload.option.id,
+				payload.sequence.step,
+				payload.sequence.unit.value,
+				payload.sequence.amount,
+			)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error creating sequence', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
@@ -286,34 +271,20 @@ const actions = {
 	},
 
 	async shift(context, payload) {
-		const endPoint = `apps/polls/poll/${context.rootState.route.params.id}/shift`
-
 		try {
-			const response = await axios.post(generateUrl(endPoint), {
-				step: payload.shift.step,
-				unit: payload.shift.unit.value,
-			}, axiosDefaultConfig)
+			const response = await OptionsAPI.shiftOptions(
+				context.rootState.route.params.id,
+				payload.shift.step,
+				payload.shift.unit.value,
+			)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error shifting dates', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
 	},
-
-	async getEvents(context, payload) {
-		const endPoint = `apps/polls/option/${payload.option.id}/events`
-
-		try {
-			return await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { tz: Intl.DateTimeFormat().resolvedOptions().timeZone },
-			})
-		} catch (e) {
-			return { events: [] }
-		}
-	},
-
 }
 
 export default { state, mutations, getters, actions, namespaced }

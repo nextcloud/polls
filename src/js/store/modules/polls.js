@@ -23,11 +23,9 @@
  *
  */
 
-import axios from '@nextcloud/axios'
 import moment from '@nextcloud/moment'
-import { generateUrl } from '@nextcloud/router'
 import { orderBy } from 'lodash'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { PollsAPI } from '../../Api/polls.js'
 
 const state = {
 	list: [],
@@ -197,18 +195,16 @@ const actions = {
 	},
 
 	async list(context) {
-		const endPoint = 'apps/polls/polls'
 
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await PollsAPI.getPolls()
 			context.commit('set', { list: response.data.list })
 			context.commit('setPollCreationAllowed', { pollCreationAllowed: response.data.pollCreationAllowed })
 			context.commit('setComboAllowed', { comboAllowed: response.data.comboAllowed })
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loading polls', { error: e.response })
+			throw e
 		}
 	},
 }

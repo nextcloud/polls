@@ -21,11 +21,11 @@
  *
  */
 
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
 import { uniqueOptions, uniqueParticipants } from '../../helpers/arrayHelper.js'
 import { sortBy } from 'lodash'
-import axiosDefaultConfig from '../../helpers/AxiosDefault.js'
+import { PollsAPI } from '../../Api/polls.js'
+import { OptionsAPI } from '../../Api/options.js'
+import { VotesAPI } from '../../Api/votes.js'
 
 const defaultCombo = () => ({
 	id: 1,
@@ -143,42 +143,31 @@ const actions = {
 	},
 
 	async addPoll(context, payload) {
-		const endPoint = `apps/polls/poll/${payload.pollId}/poll`
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await PollsAPI.getPoll(payload.pollId)
 			context.commit('addPoll', response.data)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error loading poll for combo', { error: e.response })
 		}
 	},
 
 	async addOptions(context, payload) {
-		const endPoint = `apps/polls/poll/${payload.pollId}/options`
-
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await OptionsAPI.getOptions(payload.pollId)
 			context.commit('addOptions', response.data)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error loading options for combo', { error: e.response })
 		}
 	},
 
 	async addVotes(context, payload) {
-		const endPoint = `apps/polls/poll/${payload.pollId}/votes`
-
 		try {
-			const response = await axios.get(generateUrl(endPoint), {
-				...axiosDefaultConfig,
-				params: { time: +new Date() },
-			})
+			const response = await VotesAPI.getVotes(payload.pollId)
 			context.commit('addVotes', response.data)
 		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error loading options for combo', { error: e.response })
 		}
 	},

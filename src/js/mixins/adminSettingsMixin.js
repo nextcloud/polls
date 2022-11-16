@@ -22,9 +22,8 @@
  */
 
 import { debounce } from 'lodash'
-import axios from '@nextcloud/axios'
-import { generateUrl } from '@nextcloud/router'
 import { mapState } from 'vuex'
+import appSettings from '../store/modules/appSettings.js'
 
 export const loadGroups = {
 	data() {
@@ -46,34 +45,16 @@ export const loadGroups = {
 
 	methods: {
 		loadGroups: debounce(async function(query) {
-			let endPoint = 'apps/polls/groups'
-
-			if (query.trim()) {
-				endPoint = `${endPoint}/${query}`
-			}
-
 			this.isLoading = true
 
-			if (this.searchToken) {
-				this.searchToken.cancel()
-			}
-
-			this.searchToken = axios.CancelToken.source()
-
 			try {
-				const response = await axios.get(generateUrl(endPoint), {
-					headers: { Accept: 'application/json' },
-					cancelToken: this.searchToken.token,
-				})
+				const response = await appSettings.getGroups(query)
 				this.groups = response.data.groups
 				this.isLoading = false
 			} catch (e) {
-				if (axios.isCancel(e)) {
-					// request was cancelled
-				} else {
-					console.error(e.response)
-					this.isLoading = false
-				}
+				if (e?.code === 'ERR_CANCELED') return
+				console.error(e.response)
+				this.isLoading = false
 			}
 		}, 250),
 	},
