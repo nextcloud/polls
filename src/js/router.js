@@ -22,10 +22,10 @@
  */
 import Vue from 'vue'
 import Router from 'vue-router'
-import axios from '@nextcloud/axios'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, setCookie } from './helpers/cookieHelper.js'
+import { PublicAPI } from './Api/public.js'
 
 // Dynamic loading
 const List = () => import('./views/PollList.vue')
@@ -51,10 +51,7 @@ Vue.use(Router)
  */
 async function validateToken(to, from, next) {
 	try {
-		const response = await axios.get(generateUrl(`apps/polls/s/${to.params.token}/share`), {
-			headers: { Accept: 'application/json' },
-			params: { time: +new Date() },
-		})
+		const response = await PublicAPI.getShare(to.params.token)
 		if (getCurrentUser()) {
 			// reroute to the internal vote page, if the user is logged in
 			next({ name: 'vote', params: { id: response.data.share.pollId } })

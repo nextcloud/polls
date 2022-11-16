@@ -33,9 +33,8 @@
 
 <script>
 import { debounce } from 'lodash'
-import axios from '@nextcloud/axios'
 import InputDiv from '../Base/InputDiv.vue'
-import { generateUrl } from '@nextcloud/router'
+import { ValidatorAPI } from '../../Api/validators.js'
 
 export default {
 	name: 'PublicEmail',
@@ -101,12 +100,11 @@ export default {
 			} else {
 				try {
 					this.checking = true
-					await axios.get(`${generateUrl('apps/polls/check/emailaddress')}/${this.emailAddress}`, {
-						headers: { Accept: 'application/json' },
-					})
+					await ValidatorAPI.validateEmailAddress(this.emailAddress)
 					this.checkResult = t('polls', 'valid email address.')
 					this.checkStatus = 'success'
-				} catch {
+				} catch (e) {
+					if (e?.code === 'ERR_CANCELED') return
 					this.checkResult = t('polls', 'Invalid email address.')
 					this.checkStatus = 'error'
 				} finally {

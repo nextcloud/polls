@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const shares = {
 	getShares(pollId) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/shares`,
 			params: { time: +new Date() },
@@ -33,7 +33,7 @@ const shares = {
 	},
 
 	addShare(pollId, share) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/share`,
 			data: {
@@ -44,7 +44,7 @@ const shares = {
 	},
 
 	switchAdmin(shareToken, setTo) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/${setTo}`,
 			params: { time: +new Date() },
@@ -53,7 +53,7 @@ const shares = {
 	},
 
 	setEmailAddressConstraint(shareToken, setTo) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/publicpollemail/${setTo}`,
 			params: { time: +new Date() },
@@ -62,7 +62,7 @@ const shares = {
 	},
 
 	sendInvitation(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: `share/${shareToken}/invite`,
 			params: { time: +new Date() },
@@ -71,7 +71,7 @@ const shares = {
 	},
 
 	resolveShare(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `share/${shareToken}/resolve`,
 			params: { time: +new Date() },
@@ -80,7 +80,7 @@ const shares = {
 	},
 
 	deleteShare(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'DELETE',
 			url: `share/${shareToken}`,
 			params: { time: +new Date() },

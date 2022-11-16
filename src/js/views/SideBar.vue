@@ -26,6 +26,7 @@
 		@close="closeSideBar()">
 		<NcAppSidebarTab v-if="acl.allowEdit"
 			id="configuration"
+			icon="icon-settings"
 			:order="1"
 			:name="t('polls', 'Configuration')">
 			<template #icon>
@@ -36,6 +37,7 @@
 
 		<NcAppSidebarTab v-if="acl.allowEdit"
 			id="options"
+			icon="icon-toggle-filelist"
 			:order="2"
 			:name="t('polls', 'Options')">
 			<template #icon>
@@ -46,6 +48,7 @@
 
 		<NcAppSidebarTab v-if="acl.allowEdit"
 			id="sharing"
+			icon="icon-share"
 			:order="3"
 			:name="t('polls', 'Sharing')">
 			<template #icon>
@@ -56,6 +59,7 @@
 
 		<NcAppSidebarTab v-if="acl.allowComment"
 			id="comments"
+			icon="icon-comment"
 			:order="5"
 			:name="t('polls', 'Comments')">
 			<template #icon>
@@ -66,6 +70,7 @@
 
 		<NcAppSidebarTab v-if="acl.allowEdit && useActivity"
 			id="activity"
+			icon="icon-add"
 			:order="6"
 			:name="t('polls', 'Activity')">
 			<template #icon>

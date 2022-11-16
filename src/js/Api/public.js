@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const publicPoll = {
 	getPoll(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/poll`,
 			params: { time: +new Date() },
@@ -33,7 +33,7 @@ const publicPoll = {
 	},
 
 	watchPoll(shareToken, lastUpdated) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `s/${shareToken}/watch`,
 			params: { offset: lastUpdated },
@@ -42,7 +42,7 @@ const publicPoll = {
 	},
 
 	getOptions(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/options`,
 			params: { time: +new Date() },
@@ -51,7 +51,7 @@ const publicPoll = {
 	},
 
 	addOption(shareToken, option) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: `/s/${shareToken}/option`,
 			data: { ...option },
@@ -60,7 +60,7 @@ const publicPoll = {
 	},
 
 	deleteOption(shareToken, optionId) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/option/${optionId}`,
 			params: { time: +new Date() },
@@ -69,7 +69,7 @@ const publicPoll = {
 	},
 
 	getVotes(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/votes`,
 			params: { time: +new Date() },
@@ -78,7 +78,7 @@ const publicPoll = {
 	},
 
 	setVote(shareToken, optionId, setTo) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/vote`,
 			data: { optionId, setTo },
@@ -87,7 +87,7 @@ const publicPoll = {
 	},
 
 	removeVotes(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/user`,
 			cancelToken: cancelTokenHandlerObject[this.removeVotes.name].handleRequestCancellation().token,
@@ -95,7 +95,7 @@ const publicPoll = {
 	},
 
 	getComments(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/comments`,
 			params: { time: +new Date() },
@@ -104,7 +104,7 @@ const publicPoll = {
 	},
 
 	addComment(shareToken, message) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: `s/${shareToken}/comment`,
 			data: { message },
@@ -114,7 +114,7 @@ const publicPoll = {
 	},
 
 	deleteComment(shareToken, commentId) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/${commentId}`,
 			params: { time: +new Date() },
@@ -124,7 +124,7 @@ const publicPoll = {
 	},
 
 	getShare(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `s/${shareToken}/share`,
 			params: { time: +new Date() },
@@ -133,7 +133,7 @@ const publicPoll = {
 	},
 
 	setEmail(shareToken, emailAddress) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/email/${emailAddress}`,
 			params: { time: +new Date() },
@@ -142,7 +142,7 @@ const publicPoll = {
 	},
 
 	deleteEmailAddress(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/email`,
 			params: { time: +new Date() },
@@ -151,7 +151,7 @@ const publicPoll = {
 	},
 
 	setDisplayName(shareToken, displayName) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/name/${displayName}`,
 			params: { time: +new Date() },
@@ -160,7 +160,7 @@ const publicPoll = {
 	},
 
 	resendInvitation(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: `s/${shareToken}/resend`,
 			params: { time: +new Date() },
@@ -169,7 +169,7 @@ const publicPoll = {
 	},
 
 	getSubscription(shareToken) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `s/${shareToken}/subscription`,
 			cancelToken: cancelTokenHandlerObject[this.getSubscription.name].handleRequestCancellation().token,
@@ -177,7 +177,7 @@ const publicPoll = {
 	},
 
 	setSubscription(shareToken, subscription) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}${subscription ? '/subscribe' : '/unsubscribe'}`,
 			cancelToken: cancelTokenHandlerObject[this.setSubscription.name].handleRequestCancellation().token,
@@ -185,7 +185,7 @@ const publicPoll = {
 	},
 
 	register(shareToken, userName, emailAddress, timeZone) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: `s/${shareToken}/register`,
 			data: {

@@ -83,7 +83,7 @@ export const watchPolls = {
 					}
 
 				} catch (e) {
-					this.sleepTimeout = e?.response.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
+					this.sleepTimeout = e?.response?.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
 					retryCounter = await this.handleConnectionException(e, retryCounter, sleepTimeout)
 				}
 

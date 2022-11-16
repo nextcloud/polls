@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const validators = {
 	validateEmailAddress(emailAddress) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `check/emailaddress/${emailAddress}`,
 			cancelToken: cancelTokenHandlerObject[this.validateEmailAddress.name].handleRequestCancellation().token,
@@ -32,7 +32,7 @@ const validators = {
 	},
 
 	validateName(pollToken, name) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: 'check/username',
 			cancelToken: cancelTokenHandlerObject[this.validateName.name].handleRequestCancellation().token,

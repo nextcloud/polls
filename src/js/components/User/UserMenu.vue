@@ -98,9 +98,7 @@
 
 <script>
 import { debounce } from 'lodash'
-import axios from '@nextcloud/axios'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { generateUrl } from '@nextcloud/router'
 import { NcActions, NcActionButton, NcActionCheckbox, NcActionInput, NcActionSeparator } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import SettingsIcon from 'vue-material-design-icons/Cog.vue'
@@ -113,6 +111,7 @@ import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/cookieHelper.js'
 import { PollsAPI } from '../../Api/polls.js'
+import { ValidatorAPI } from '../../Api/validators.js'
 
 export default {
 	name: 'UserMenu',
@@ -254,14 +253,10 @@ export default {
 		},
 
 		validateEmailAddress: debounce(async function(value) {
-			const endPoint = `apps/polls/check/emailaddress/${this.emailAddressTemp}`
-
 			this.emailAddressTemp = value
 			try {
 				this.checking = true
-				await axios.get(generateUrl(endPoint), {
-					headers: { Accept: 'application/json' },
-				})
+				await ValidatorAPI.validateEmailAddress(this.emailAddressTemp)
 				this.checkResult = t('polls', 'valid email address.')
 				this.checkStatus = 'success'
 			} catch {
@@ -273,16 +268,10 @@ export default {
 		}, 500),
 
 		validateDisplayName: debounce(async function(value) {
-			const endpoint = 'apps/polls/check/username'
-
 			this.displayNameTemp = value
 			try {
 				this.displayNameChecking = true
-				await axios.post(generateUrl(endpoint), {
-					headers: { Accept: 'application/json' },
-					userName: this.displayNameTemp,
-					token: this.$route.params.token,
-				})
+				await ValidatorAPI.validateName(this.$route.params.token, this.displayNameTemp)
 				this.displayNameCheckResult = t('polls', 'Valid name.')
 				this.displayNameCheckStatus = 'success'
 			} catch {

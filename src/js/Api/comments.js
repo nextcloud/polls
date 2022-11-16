@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const comments = {
 	getComments(pollId) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/comments`,
 			params: { time: +new Date() },
@@ -32,7 +32,7 @@ const comments = {
 		})
 	},
 	addComment(pollId, message) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/comment`,
 			data: { message },
@@ -42,7 +42,7 @@ const comments = {
 	},
 
 	deleteComment(commentId) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'DELETE',
 			url: `comment/${commentId}`,
 			params: { time: +new Date() },

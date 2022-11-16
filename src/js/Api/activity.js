@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosOcsInstance, createCancelTokenHandler } from './AxiosHelper.js'
+import { ocsInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const activity = {
 	getActivities(pollId) {
-		const response = axiosOcsInstance.request({
+		const response = ocsInstance.request({
 			method: 'GET',
 			url: 'activity/api/v2/activity/filter',
 			params: {

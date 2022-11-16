@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const votes = {
 	getVotes(pollId) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/votes`,
 			params: { time: +new Date() },
@@ -33,7 +33,7 @@ const votes = {
 	},
 
 	setVote(optionId, setTo) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'PUT',
 			url: 'vote',
 			data: { optionId, setTo },
@@ -42,7 +42,7 @@ const votes = {
 	},
 
 	removeUser(pollId, userId = null) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'DELETE',
 			url: userId ? `poll/${pollId}/user/${userId}` : `poll/${pollId}/user`,
 			cancelToken: cancelTokenHandlerObject[this.removeUser.name].handleRequestCancellation().token,

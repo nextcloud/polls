@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const appSettings = {
 	getAppSettings() {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: 'settings/app',
 			params: { time: +new Date() },
@@ -33,9 +33,27 @@ const appSettings = {
 	},
 
 	writeAppSettings(appSettings) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: 'settings/app',
+			data: appSettings,
+			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
+		})
+	},
+
+	getGroups(query) {
+		return httpInstance.request({
+			method: 'GET',
+			url: `groups${query.trim() ? `/${query.trim()}` : ''}`,
+			data: appSettings,
+			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
+		})
+	},
+
+	getUsers(query) {
+		return httpInstance.request({
+			method: 'GET',
+			url: `search/users${query.trim() ? `/${query.trim()}` : ''}`,
 			data: appSettings,
 			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
 		})

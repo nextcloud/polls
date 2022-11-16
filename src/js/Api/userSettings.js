@@ -20,11 +20,11 @@
  *
  */
 
-import { axiosInstance, createCancelTokenHandler } from './AxiosHelper.js'
+import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const userSettings = {
 	getUserSettings() {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'GET',
 			url: 'preferences',
 			params: { time: +new Date() },
@@ -33,7 +33,7 @@ const userSettings = {
 	},
 
 	writeUserSettings(settings) {
-		return axiosInstance.request({
+		return httpInstance.request({
 			method: 'POST',
 			url: 'settings/app',
 			data: settings,

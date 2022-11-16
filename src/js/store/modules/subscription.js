@@ -49,7 +49,7 @@ const actions = {
 		try {
 			let response = null
 			if (context.rootState.route.name === 'publicVote') {
-				response = await PublicAPI.getSubscription(context.rootState.route.token)
+				response = await PublicAPI.getSubscription(context.rootState.route.params.token)
 			} else if (context.rootState.route.name === 'vote') {
 				response = await PollsAPI.getSubscription(context.rootState.route.params.id)
 			} else {
