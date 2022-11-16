@@ -4,6 +4,8 @@ All notable changes to this project will be documented in this file.
 ## [4.1.0] - tbd
 ### New
 - Added a dashboard widget for relevant polls
+### Misc
+- Refactoring of API requests to a central http API
 
 ## [3.8.3] - 2022-10-24
 ### Fix
