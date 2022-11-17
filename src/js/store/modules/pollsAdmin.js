@@ -62,6 +62,7 @@ const actions = {
 
 		try {
 			PollsAPI.takeOver(payload.pollId)
+			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			throw e

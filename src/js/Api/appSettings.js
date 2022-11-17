@@ -36,7 +36,7 @@ const appSettings = {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'settings/app',
-			data: appSettings,
+			data: { appSettings },
 			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
 		})
 	},
@@ -45,7 +45,6 @@ const appSettings = {
 		return httpInstance.request({
 			method: 'GET',
 			url: `groups${query.trim() ? `/${query.trim()}` : ''}`,
-			data: appSettings,
 			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
 		})
 	},
@@ -54,7 +53,6 @@ const appSettings = {
 		return httpInstance.request({
 			method: 'GET',
 			url: `search/users${query.trim() ? `/${query.trim()}` : ''}`,
-			data: appSettings,
 			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
 		})
 	},

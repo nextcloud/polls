@@ -62,7 +62,7 @@ const polls = {
 	takeOver(pollId) {
 		return httpInstance.request({
 			method: 'PUT',
-			url: `apps/polls/administration/poll/${pollId}/takeover`,
+			url: `administration/poll/${pollId}/takeover`,
 			cancelToken: cancelTokenHandlerObject[this.takeOver.name].handleRequestCancellation().token,
 		})
 	},
