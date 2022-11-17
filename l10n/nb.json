@@ -50,6 +50,7 @@
     "Day" : "Dag",
     "Month" : "Måned",
     "Year" : "År",
-    "Archive" : "Arkiv"
+    "Archive" : "Arkiv",
+    "Maybe" : "Kanskje"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

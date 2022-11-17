@@ -237,7 +237,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Ime {username} ni veljavno oziroma je že zasedeno.",
     "An email address is required." : "Naslov elektronske pošte mora biti vpisan.",
     "Email could not be sent to {emailAddress}" : "Sporočila na naslov {emailAddress} ni mogoče poslati.",
-    "Error saving name" : "Napaka shranjevanja imena",
     "Access" : "Dostop",
     "Owner" : "Lastnik",
     "Created" : "Ustvarjeno",

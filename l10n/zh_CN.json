@@ -295,7 +295,6 @@
     "With your email address you can subscribe to notifications and you will receive your personal link to this poll." : "通过你的电子邮件地址，你可以订阅通知，你将收到这个投票的个人链接。",
     "Checking name …" : "正在检查名称 …",
     "Email could not be sent to {emailAddress}" : "无法发送电邮到 {emailAddress}",
-    "Error saving name" : "保存名字出错",
     "Access" : "投票范围",
     "Owner" : "拥有者",
     "Created" : "已创建",

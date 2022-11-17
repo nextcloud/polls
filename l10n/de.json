@@ -340,7 +340,6 @@
     "The name {username} is invalid or reserved." : "Der Name {username} is ungültig oder reserviert",
     "An email address is required." : "Eine E-Mail Adresse ist erforderlich",
     "Email could not be sent to {emailAddress}" : "E-Mail konnt nicht an {emailAddress} gesendet werden",
-    "Error saving name" : "Fehler beim Speichern des Benutzernamen",
     "Access" : "Zugriff",
     "Owner" : "Inhaber",
     "Created" : "Erstellt",
@@ -548,6 +547,7 @@
     "All closed polls, where voting is disabled." : "Alle geschlossenen Umfragen, bei denen die Abstimmung deaktiviert ist.",
     "Archive" : "Archiv",
     "My archived polls" : "Meine archivierten Umfragen",
-    "Your archived polls are only accessible to you." : "Deine archivierten Umfragen sind nur für dich zugänglich"
+    "Your archived polls are only accessible to you." : "Deine archivierten Umfragen sind nur für dich zugänglich",
+    "Maybe" : "Vielleicht"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

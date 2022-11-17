@@ -323,7 +323,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Το όνομα χρήστη {username} δεν είναι έγκυρο ή είναι δεσμευμένο.",
     "An email address is required." : "Απαιτείται μια διεύθυνση email.",
     "Email could not be sent to {emailAddress}" : "Δεν ήταν δυνατή η αποστολή email στη διεύθυνση {emailAddress}",
-    "Error saving name" : "Σφάλμα αποθήκευσης ονόματος",
     "Access" : "Πρόσβαση",
     "Owner" : "Ιδιοκτήτης",
     "Created" : "Δημιουργήθηκε",

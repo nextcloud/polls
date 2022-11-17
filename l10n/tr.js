@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "{username} kullanıcı adı geçersiz ya da ayrılmış.",
     "An email address is required." : "Bir e-posta adresi yazılması zorunludur.",
     "Email could not be sent to {emailAddress}" : "E-posta {emailAdress} adresine gönderilemedi",
-    "Error saving name" : "Ad kaydedilirken sorun çıktı",
     "Access" : "Erişim",
     "Owner" : "Sahip",
     "Created" : "Oluşturulma",
@@ -550,6 +549,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Oy vermenin devre dışı bırakıldığı tüm sona ermemiş anketler. ",
     "Archive" : "Arşiv",
     "My archived polls" : "Arşivlenmiş anketlerim",
-    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz."
+    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz.",
+    "Maybe" : "Belki"
 },
 "nplurals=2; plural=(n > 1);");

@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "名稱 {username} 無效或已被保留。",
     "An email address is required." : "電郵地址為必填。",
     "Email could not be sent to {emailAddress}" : "郵件無法傳送到 {emailAddress}",
-    "Error saving name" : "儲存名稱時發生錯誤",
     "Access" : "存取",
     "Owner" : "所有者",
     "Created" : "已建立",
@@ -550,6 +549,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。",
     "Archive" : "封存",
     "My archived polls" : "我已封存的民意調查",
-    "Your archived polls are only accessible to you." : "您封存的民意調查僅供您存取。"
+    "Your archived polls are only accessible to you." : "您封存的民意調查僅供您存取。",
+    "Maybe" : "也許"
 },
 "nplurals=1; plural=0;");

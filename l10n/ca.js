@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "El nom {username} no és vàlid o reservat.",
     "An email address is required." : "Cal una adreça electrònica.",
     "Email could not be sent to {emailAddress}" : "No s'ha pogut enviar el correu electrònic a {emailAddress}",
-    "Error saving name" : "S'ha produït un error en desar el nom",
     "Access" : "Accés",
     "Owner" : "Propietari",
     "Created" : "Creat",

@@ -340,7 +340,6 @@
     "The name {username} is invalid or reserved." : "Nazwa {username} jest nieprawidłowa lub zarezerwowana.",
     "An email address is required." : "Adres e-mail jest wymagany.",
     "Email could not be sent to {emailAddress}" : "Nie można wysłać e-maila na {emailAddress}",
-    "Error saving name" : "Błąd podczas zapisywania nazwy",
     "Access" : "Dostęp",
     "Owner" : "Właściciel",
     "Created" : "Utworzona",
@@ -548,6 +547,7 @@
     "All closed polls, where voting is disabled." : "Wszystkie sondy zamknięte, w których głosowanie jest wyłączone.",
     "Archive" : "Archiwum",
     "My archived polls" : "Moje zarchiwizowane sondy",
-    "Your archived polls are only accessible to you." : "Twoje zarchiwizowane sondy są dostępne tylko dla Ciebie."
+    "Your archived polls are only accessible to you." : "Twoje zarchiwizowane sondy są dostępne tylko dla Ciebie.",
+    "Maybe" : "Może"
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

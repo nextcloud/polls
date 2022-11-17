@@ -41,6 +41,7 @@ OC.L10N.register(
     "Hour" : "საათი",
     "Day" : "დღე",
     "Month" : "თვე",
-    "Archive" : "არქივი"
+    "Archive" : "არქივი",
+    "Maybe" : "შესაძლოა"
 },
 "nplurals=2; plural=(n!=1);");

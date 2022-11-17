@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Namnet {username} är ogiltigt eller reserverat.",
     "An email address is required." : "En e-postadress krävs.",
     "Email could not be sent to {emailAddress}" : "E-post kunde inte skickas till {emailAddress}",
-    "Error saving name" : "Det gick inte att spara namn",
     "Access" : "Åtkomst",
     "Owner" : "Ägare",
     "Created" : "Skapad",

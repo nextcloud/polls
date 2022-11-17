@@ -52,6 +52,7 @@ OC.L10N.register(
     "Day" : "Dag",
     "Month" : "Måned",
     "Year" : "År",
-    "Archive" : "Arkiv"
+    "Archive" : "Arkiv",
+    "Maybe" : "Kanskje"
 },
 "nplurals=2; plural=(n != 1);");

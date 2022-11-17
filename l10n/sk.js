@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Meno {username} je neplatné alebo rezervované",
     "An email address is required." : "E-mailová adresa je povinná.",
     "Email could not be sent to {emailAddress}" : "Pošta nemôže byť znova odoslaná na {emailAddress}",
-    "Error saving name" : "Chyba pri ukladaní mena",
     "Access" : "Prístup",
     "Owner" : "Vlastník",
     "Created" : "Vytvorené",

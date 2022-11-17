@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Името {username} е невалидно или е запазено.",
     "An email address is required." : "Нужен е имейл адрес.",
     "Email could not be sent to {emailAddress}" : "Имейлът не можа да бъде изпратен до {emailAddress}",
-    "Error saving name" : "Грешка при запазване на името",
     "Access" : "Достъп",
     "Owner" : "Създател",
     "Created" : "Създаден",
@@ -550,6 +549,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Всички затворени анкети, където гласуването е забранено.",
     "Archive" : "Архив",
     "My archived polls" : "Моите архивирани анкети",
-    "Your archived polls are only accessible to you." : "Вашите архивирани анкети са достъпни само за вас."
+    "Your archived polls are only accessible to you." : "Вашите архивирани анкети са достъпни само за вас.",
+    "Maybe" : "Може би"
 },
 "nplurals=2; plural=(n != 1);");

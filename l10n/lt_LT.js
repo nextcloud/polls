@@ -178,7 +178,6 @@ OC.L10N.register(
     "privacy policy" : "privatumo politika",
     "Checking name …" : "Tikrinamas vardas…",
     "Email could not be sent to {emailAddress}" : "Nepavyko išsiųsti el. laiško, adresu {emailAddress}",
-    "Error saving name" : "Klaida įrašant vardą",
     "Access" : "Prieiga",
     "Owner" : "Savininkas",
     "Created" : "Sukurta",
@@ -299,6 +298,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Visos baigtos apklausos, kuriose balsavimas yra išjungtas.",
     "Archive" : "Archyvas",
     "My archived polls" : "Mano archyvuotos apklausos",
-    "Your archived polls are only accessible to you." : "Jūsų archyvuotos apklausos yra pasiekiamos tik jums."
+    "Your archived polls are only accessible to you." : "Jūsų archyvuotos apklausos yra pasiekiamos tik jums.",
+    "Maybe" : "Galbūt"
 },
 "nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);");

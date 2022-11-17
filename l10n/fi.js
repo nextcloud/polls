@@ -197,7 +197,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Nimi {username} on virheellinen tai varattu.",
     "An email address is required." : "Sähköpostiosoite vaaditaan.",
     "Email could not be sent to {emailAddress}" : "Sähköpostia ei voitu lähettää osoitteeseen {emailAddress}",
-    "Error saving name" : "Virhe tallentaessa nimeä",
     "Access" : "Käyttöoikeus",
     "Owner" : "Omistaja",
     "Created" : "Luonut",
@@ -325,6 +324,7 @@ OC.L10N.register(
     "Closed polls" : "Suljetut äänestykset",
     "All closed polls, where voting is disabled." : "Kaikki suljetut äänestykset, joissa äänestäminen on poissä käytöstä",
     "Archive" : "Arkisto",
-    "My archived polls" : "Omat arkistoidut kyselyt"
+    "My archived polls" : "Omat arkistoidut kyselyt",
+    "Maybe" : "Ehkä"
 },
 "nplurals=2; plural=(n != 1);");

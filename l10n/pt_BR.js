@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "O nome {username} é inválido ou reservado.",
     "An email address is required." : "É necessário um endereço de e-mail.",
     "Email could not be sent to {emailAddress}" : "Não foi possível enviar o e-mail para {emailAddress} ",
-    "Error saving name" : "Erro ao salvar o nome ",
     "Access" : "Acesso",
     "Owner" : "Proprietário",
     "Created" : "Criada",
@@ -550,6 +549,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Todas as enquetes encerradas, onde a votação está desativada.",
     "Archive" : "Arquivo ",
     "My archived polls" : "Minhas enquetes arquivadas",
-    "Your archived polls are only accessible to you." : "Suas enquetes arquivadas estão acessíveis apenas para você."
+    "Your archived polls are only accessible to you." : "Suas enquetes arquivadas estão acessíveis apenas para você.",
+    "Maybe" : "Talvez"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

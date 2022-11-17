@@ -141,7 +141,6 @@ OC.L10N.register(
     "With your email address you can subscribe to notifications and you will receive your personal link to this poll." : "Cun s'indiritzu de posta eletrònica podes fàghere sa sutaiscritzione a is notìficas e as a retzire su ligòngiu personale a custu sondàgiu.",
     "Checking name …" : "Controllende su nùmene ...",
     "Email could not be sent to {emailAddress}" : "No at fatu a imbiare su messàgiu de posta eletrònica a  {emailAddress}",
-    "Error saving name" : "Errore sarvende su nùmene",
     "Access" : "Atzessu",
     "Owner" : "Mere",
     "Created" : "Creadu",

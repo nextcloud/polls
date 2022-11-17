@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "{username} izena baliogabea edo erreserbatua da.",
     "An email address is required." : "Helbide elektronikoa behar da.",
     "Email could not be sent to {emailAddress}" : "Ezin izan da mezu elektronikoa bidali {helbide elektroniko} helbidera",
-    "Error saving name" : "Errorea izena gordetzerakoan",
     "Access" : "Sarbidea",
     "Owner" : "Jabea",
     "Created" : "Sorrera",
@@ -550,6 +549,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Itxitako bozketa guztiak, bozkatu ezin direnak.",
     "Archive" : "Artxibatu",
     "My archived polls" : "Nire artxibatutako galdeketak",
-    "Your archived polls are only accessible to you." : "Artxibatutako galdeketak zuretzat bakarrik dira eskuragarriak."
+    "Your archived polls are only accessible to you." : "Artxibatutako galdeketak zuretzat bakarrik dira eskuragarriak.",
+    "Maybe" : "Agian"
 },
 "nplurals=2; plural=(n != 1);");

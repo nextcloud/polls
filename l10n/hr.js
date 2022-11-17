@@ -172,7 +172,6 @@ OC.L10N.register(
     "With your email address you can subscribe to notifications and you will receive your personal link to this poll." : "Svoju adresu e-pošte možete iskoristiti za pretplatu na obavijesti i primit ćete osobnu poveznicu za ovu anketu.",
     "Checking name …" : "Provjera imena...",
     "Email could not be sent to {emailAddress}" : "Poruka e-pošte nije poslana na {emailAddress}",
-    "Error saving name" : "Pogreška pri spremanju imena",
     "Access" : "Pristup",
     "Owner" : "Vlasnik",
     "Created" : "Stvoreno",

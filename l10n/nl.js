@@ -311,7 +311,6 @@ OC.L10N.register(
     "A name is required." : "Een naam is verplicht.",
     "The name {username} is invalid or reserved." : "De naam {username} is ongeldig of gereserveerd.",
     "Email could not be sent to {emailAddress}" : "E-mail kon niet verstuurd worden naar {emailAddress}",
-    "Error saving name" : "Fout bij opslaan naam",
     "Access" : "Toegang",
     "Owner" : "Eigenaar",
     "Created" : "Gemaakt",

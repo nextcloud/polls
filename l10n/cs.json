@@ -340,7 +340,6 @@
     "The name {username} is invalid or reserved." : "Jméno {username} je neplatné nebo rezervované.",
     "An email address is required." : "Je vyžadována e-mailová adresa.",
     "Email could not be sent to {emailAddress}" : "E-mail se nepodařilo odeslat na {emailAddress}",
-    "Error saving name" : "Chyba při ukládání jména",
     "Access" : "Přístup",
     "Owner" : "Vlastník",
     "Created" : "Vytvořeno",
@@ -548,6 +547,7 @@
     "All closed polls, where voting is disabled." : "Všechny uzavřené ankety, ve kterých není možné hlasovat.",
     "Archive" : "Archivovat",
     "My archived polls" : "Moje archivované ankety",
-    "Your archived polls are only accessible to you." : "Vaše archivované ankety jsou přístupné pouze vám."
+    "Your archived polls are only accessible to you." : "Vaše archivované ankety jsou přístupné pouze vám.",
+    "Maybe" : "Možná"
 },"pluralForm" :"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n >= 2 && n <= 4 && n % 1 == 0) ? 1: (n % 1 != 0 ) ? 2 : 3;"
 }

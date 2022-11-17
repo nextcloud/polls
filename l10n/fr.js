@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Le nom {username} est invalide ou réservé.",
     "An email address is required." : "Une adresse e-mail est requise.",
     "Email could not be sent to {emailAddress}" : "L'e-mail n'a pas pu être envoyé à {emailAddress}",
-    "Error saving name" : "Erreur à l’enregistrement du nom d'utilisateur",
     "Access" : "Accès",
     "Owner" : "Propriétaire",
     "Created" : "Créé",
@@ -550,6 +549,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Tous les sondages terminés (où il n'est plus possible de voter).",
     "Archive" : "Archive",
     "My archived polls" : "Mes sondages archivés",
-    "Your archived polls are only accessible to you." : "Vos sondages archivés sont consultables par vous uniquement."
+    "Your archived polls are only accessible to you." : "Vos sondages archivés sont consultables par vous uniquement.",
+    "Maybe" : "Peut-être"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

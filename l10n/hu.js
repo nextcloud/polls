@@ -342,7 +342,6 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "A(z) {username} név érvénytelen vagy rendszer számára fenntartott.",
     "An email address is required." : "Az e-mail-cím kötelez.",
     "Email could not be sent to {emailAddress}" : "Az e-mail nem küldhető el a következő címre: {emailAddress}",
-    "Error saving name" : "Hiba a név mentése során",
     "Access" : "Hozzáférés",
     "Owner" : "Tulajdonos",
     "Created" : "Létrehozva",
@@ -550,6 +549,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Az összes lezárt szavazás, ahol a szavazás le van tiltva.",
     "Archive" : "Archívum",
     "My archived polls" : "Archivált saját szavazások",
-    "Your archived polls are only accessible to you." : "Az archivált szavazásaihoz csak Ön fér hozzá."
+    "Your archived polls are only accessible to you." : "Az archivált szavazásaihoz csak Ön fér hozzá.",
+    "Maybe" : "Talán"
 },
 "nplurals=2; plural=(n != 1);");
