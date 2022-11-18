@@ -342,6 +342,7 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "{username} kullanıcı adı geçersiz ya da ayrılmış.",
     "An email address is required." : "Bir e-posta adresi yazılması zorunludur.",
     "Email could not be sent to {emailAddress}" : "E-posta {emailAdress} adresine gönderilemedi",
+    "Error registering to poll" : "Anket kaydedilirken sorun çıktı",
     "Access" : "Erişim",
     "Owner" : "Sahip",
     "Created" : "Oluşturulma",

@@ -342,6 +342,7 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "名稱 {username} 無效或已被保留。",
     "An email address is required." : "電子郵件地址為必填。",
     "Email could not be sent to {emailAddress}" : "電子郵件無法傳送至 {emailAddress}",
+    "Error registering to poll" : "註冊投票時發生錯誤",
     "Access" : "存取",
     "Owner" : "擁有者",
     "Created" : "已建立",
