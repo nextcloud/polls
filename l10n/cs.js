@@ -342,6 +342,7 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Jméno {username} je neplatné nebo rezervované.",
     "An email address is required." : "Je vyžadována e-mailová adresa.",
     "Email could not be sent to {emailAddress}" : "E-mail se nepodařilo odeslat na {emailAddress}",
+    "Error registering to poll" : "Chyba při registraci ankety",
     "Access" : "Přístup",
     "Owner" : "Vlastník",
     "Created" : "Vytvořeno",
