@@ -60,15 +60,17 @@ export const watchPolls = {
 
 	methods: {
 		async watchPolls() {
-			let retryCounter = 0
 			const sleepTimeout = SLEEP_TIMEOUT_DEFAULT
 
-			while (retryCounter < MAX_TRIES) {
-				if (this.pollingDisabled) return
+			let retryCounter = 0
+
+			console.debug('[polls]', this.pollingDisabled ? 'Watch is disabled' : `Start ${this.updateType} for updates`)
+
+			while (retryCounter < MAX_TRIES && !this.pollingDisabled) {
 
 				// avoid requests when app is in background and pause
 				while (document.hidden) {
-					console.debug('[polls]', 'App in background, pause watching')
+					console.debug('[polls]', `App in background, pause ${this.updateType}`)
 					await new Promise((resolve) => setTimeout(resolve, 5000))
 				}
 
@@ -90,7 +92,9 @@ export const watchPolls = {
 				// sleep if request was invalid or polling is set to "peeriodicPolling"
 				if (this.updateType === 'periodicPolling' || retryCounter) {
 					await this.sleep(sleepTimeout)
-					console.debug('[polls]', 'Continue after sleep')
+					console.debug('[polls]', `Continue ${this.updateType} after sleep`)
+				} else if (this.updateType === 'noPolling') {
+					console.debug('[polls]', 'Watch got disabled')
 				}
 			}
 
@@ -100,7 +104,6 @@ export const watchPolls = {
 		},
 
 		async fetchUpdates() {
-			console.debug('[polls]', `Watching for updates (${this.updateType})`)
 			await this.$store.dispatch('appSettings/get')
 
 			if (this.$route.name === 'publicVote') {
@@ -124,13 +127,13 @@ export const watchPolls = {
 			}
 
 			if (e.response?.status === 304) {
-				console.debug('[polls]', 'No updates')
+				console.debug('[polls]', `No updates - continue ${this.updateType}`)
 				return 0
 			}
 
 			if (e?.response?.status === 503) {
 				// Server possibly in maintenance mode
-				console.debug('[polls]', `Service not avaiable - retry after ${sleepTimeout} seconds`)
+				console.debug('[polls]', `Service not avaiable - retry ${this.updateType} after ${sleepTimeout} seconds`)
 				return retryCounter
 			}
 
@@ -139,7 +142,7 @@ export const watchPolls = {
 				return retryCounter
 			}
 
-			console.debug('[polls]', e.message ?? `No response - request aborted - failed request ${retryCounter}/${MAX_TRIES}`)
+			console.debug('[polls]', e.message ?? `No response - ${this.updateType} aborted - failed request ${retryCounter}/${MAX_TRIES}`)
 		},
 
 		async loadStores(stores) {
