@@ -277,6 +277,7 @@ OC.L10N.register(
     "Results are visible since closing poll" : "结果自关闭投票起可见",
     "Results are always hidden" : "结果始终是隐藏的",
     "Results are visible" : "结果是可见的",
+    "Private poll" : "私密投票",
     "_%n Participant_::_%n Participants_" : ["%n 参与者"],
     "_%n option_::_%n options_" : ["%n 个选项"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n“赞成”票"],
