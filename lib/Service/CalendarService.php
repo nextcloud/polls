@@ -78,13 +78,6 @@ class CalendarService {
 	 * @psalm-return list<ICalendar>
 	 */
 	public function getCalendarsForPrincipal(string $userId = ''): array {
-		if (Util::getVersion()[0] < 24) {
-			// deprecated since NC23
-			$this->calendars = $this->calendarManager->getCalendars();
-			return $this->calendars;
-		}
-
-		// use from NC24 on
 		if ($userId) {
 			$principalUri = 'principals/users/' . $userId;
 		} else {
@@ -92,7 +85,6 @@ class CalendarService {
 		}
 
 		$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
-		// $this->calendars[] = 'ncyagstde-2';
 		return $this->calendars;
 	}
 
@@ -148,12 +140,6 @@ class CalendarService {
 		$timezone = new DateTimeZone($tz);
 		$timerange = $this->getTimerange($optionId, $timezone);
 
-		if (Util::getVersion()[0] < 24) {
-			// deprecated since NC24
-			return $this->getEventsLegcy($timerange['from'], $timerange['to']);
-		}
-
-		// use from NC24 on
 		$events = [];
 		$foundEvents = $this->searchEventsByTimeRange($timerange['from'], $timerange['to']);
 
@@ -184,43 +170,6 @@ class CalendarService {
 		}
 		return null;
 	}
-	/**
-	 * getEventsLegacy - get events from the user's calendars inside given timespan
-	 *
-	 * @return CalendarEvent[]
-	 *
-	 * @deprecated since NC23
-	 *
-	 * @psalm-return list<CalendarEvent>
-	 */
-	private function getEventsLegcy(DateTimeImmutable $from, DateTimeImmutable $to): array {
-		$events = [];
-		foreach ($this->calendars as $calendar) {
-			// Skip not configured calendars
-			if (!in_array($calendar->getKey(), json_decode($this->preferences->getPreferences())->checkCalendars)) {
-				continue;
-			}
-
-			// search for all events which
-			// - start before the end of the requested timespan ($to) and
-			// - end after the start of the requested timespan ($from)
-			$foundEvents = $calendar->search('', ['SUMMARY'], ['timerange' => ['start' => $from, 'end' => $to]]);
-
-			foreach ($foundEvents as $event) {
-				$calendarEvent = new CalendarEvent($event, $calendar, $from, $to);
-				// since we get back recurring events of other days, just make sure this event
-				// matches the search pattern
-				// TODO: identify possible time zone issues, when handling all day events
-				if (($from->getTimestamp() < $calendarEvent->getEnd())
-					&& ($to->getTimestamp() > $calendarEvent->getStart())
-				) {
-				}
-				array_push($events, $calendarEvent);
-				// array_push($events, $calendarEvent);
-			}
-		}
-		return $events;
-	}
 
 	/**
 	 * Get user's calendars
@@ -232,24 +181,14 @@ class CalendarService {
 	public function getCalendars(): array {
 		$calendars = [];
 		foreach ($this->calendars as $calendar) {
-			if (Util::getVersion()[0] < 24) {
-				$calendars[] = [
-					'key' => $calendar->getKey(),
-					'calendarUri' => '', // since NC23
-					'name' => $calendar->getDisplayName(),
-					'displayColor' => $calendar->getDisplayColor(),
-					'permissions' => $calendar->getPermissions(),
-				];
-			} else {
-				$calendars[] = [
-					'key' => $calendar->getKey(),
-					'calendarUri' => $calendar->getUri(), // since NC23
-					'name' => $calendar->getDisplayName(),
-					'displayColor' => $calendar->getDisplayColor(),
-					'permissions' => $calendar->getPermissions(),
-					'calendar' => $calendar,
-				];
-			}
+			$calendars[] = [
+				'key' => $calendar->getKey(),
+				'calendarUri' => $calendar->getUri(), // since NC23
+				'name' => $calendar->getDisplayName(),
+				'displayColor' => $calendar->getDisplayColor(),
+				'permissions' => $calendar->getPermissions(),
+				'calendar' => $calendar,
+			];
 		}
 		return $calendars;
 	}
