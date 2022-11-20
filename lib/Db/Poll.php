@@ -257,17 +257,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	/**
-	 * Keep for compatibilty reasons
-	 * TODO: remove this later
-	 * OCA\Polls\Db\Share::getDefaultPublicPollEmail() depends on this
-	 * @deprecated
-	 */
-
-	public function getPublicPollEmail(): string {
-		return $this->getMiscSettingsArray()['publicPollEmail'] ?? 'optional';
-	}
-
 	public function setAutoReminder(bool $value) : void {
 		$this->setMiscSettingsByKey('autoReminder', $value);
 	}
