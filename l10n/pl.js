@@ -342,6 +342,7 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Nazwa {username} jest nieprawidłowa lub zarezerwowana.",
     "An email address is required." : "Adres e-mail jest wymagany.",
     "Email could not be sent to {emailAddress}" : "Nie można wysłać e-maila na {emailAddress}",
+    "Error registering to poll" : "Błąd rejestracji do sondy",
     "Access" : "Dostęp",
     "Owner" : "Właściciel",
     "Created" : "Utworzona",
