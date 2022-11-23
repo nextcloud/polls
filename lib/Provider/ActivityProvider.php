@@ -41,7 +41,7 @@ class ActivityProvider implements IProvider {
 	protected $transFactory;
 
 	/** @var IL10N */
-	protected $l10n;
+	protected $l10n = null;
 
 	/** @var ActivityManager */
 	protected $activityManager;

@@ -68,8 +68,8 @@ class UserBase implements \JsonSerializable {
 	/** @var string */
 	protected $description = '';
 
-	/** @var string|null */
-	protected $emailAddress = null;
+	/** @var string */
+	protected $emailAddress = '';
 
 	/** @var string */
 	protected $languageCode = '';

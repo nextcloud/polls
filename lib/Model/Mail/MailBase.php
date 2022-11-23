@@ -49,10 +49,10 @@ abstract class MailBase {
 	protected $appSettings;
 	
 	/** @var IEmailTemplate */
-	protected $emailTemplate;
+	protected $emailTemplate = null;
 
 	/** @var string */
-	protected $footer;
+	protected $footer = '';
 	
 	/** @var IL10N */
 	protected $l10n;

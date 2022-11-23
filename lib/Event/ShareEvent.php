@@ -40,7 +40,7 @@ abstract class ShareEvent extends BaseEvent {
 	private $share;
 
 	/** @var UserBase */
-	protected $sharee;
+	protected $sharee = null;
 
 	public function __construct(Share $share) {
 		parent::__construct($share);

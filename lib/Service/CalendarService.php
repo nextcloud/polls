@@ -35,7 +35,6 @@ use OCA\Polls\Model\CalendarEvent;
 use OCA\Polls\Model\User\CurrentUser;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
-use OCP\Util;
 
 class CalendarService {
 	/** @var CurrentUser */
@@ -72,12 +71,8 @@ class CalendarService {
 
 	/**
 	 * getCalendars -
-	 *
-	 * @return ICalendar[]
-	 *
-	 * @psalm-return list<ICalendar>
 	 */
-	public function getCalendarsForPrincipal(string $userId = ''): array {
+	private function getCalendarsForPrincipal(string $userId = ''): void {
 		if ($userId) {
 			$principalUri = 'principals/users/' . $userId;
 		} else {
@@ -85,7 +80,6 @@ class CalendarService {
 		}
 
 		$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
-		return $this->calendars;
 	}
 
 

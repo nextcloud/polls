@@ -113,13 +113,10 @@ class Share extends Entity implements JsonSerializable {
 	protected $displayName = '';
 
 	/** @var string $miscSettings*/
-	protected $miscSettings;
+	protected $miscSettings = '';
 
 	/** @var IURLGenerator */
 	private $urlGenerator;
-
-	/** @var PollMapper */
-	protected $pollMapper;
 
 	/** @var AppSettings */
 	protected $appSettings;

@@ -97,67 +97,67 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const ONE_AND_HALF_DAY = 129600;
 
 	/** @var string $type */
-	protected $type;
+	protected $type = '';
 
 	/** @var string $title */
-	protected $title;
+	protected $title = '';
 
 	/** @var string $description */
-	protected $description;
+	protected $description = '';
 
 	/** @var string $owner */
-	protected $owner;
+	protected $owner = '';
 
 	/** @var int $created */
-	protected $created;
+	protected $created = 0;
 
 	/** @var int $expire */
-	protected $expire;
+	protected $expire = 0;
 
 	/** @var int $deleted */
-	protected $deleted;
+	protected $deleted = 0;
 
 	/** @var string $access */
-	protected $access;
+	protected $access = '';
 
 	/** @var int $anonymous */
-	protected $anonymous;
+	protected $anonymous = 0;
 
 	/** @var int $allowMaybe */
-	protected $allowMaybe;
+	protected $allowMaybe = 0;
 
 	/** @var string $allowProposals */
-	protected $allowProposals;
+	protected $allowProposals = '';
 
 	/** @var string $proposalsExpire */
-	protected $proposalsExpire;
+	protected $proposalsExpire = '';
 
 	/** @var int $voteLimit*/
-	protected $voteLimit;
+	protected $voteLimit = 0;
 
 	/** @var int $optionLimit*/
-	protected $optionLimit;
+	protected $optionLimit = 0;
 
 	/** @var string $showResults */
-	protected $showResults;
+	protected $showResults = '';
 
 	/** @var int $adminAccess*/
-	protected $adminAccess;
+	protected $adminAccess = 0;
 
 	/** @var int $important*/
-	protected $important;
+	protected $important = 0;
 
 	/** @var int $allowComment*/
-	protected $allowComment;
+	protected $allowComment = 0;
 
 	/** @var int $hideBookedUp*/
-	protected $hideBookedUp;
+	protected $hideBookedUp = 0;
 
 	/** @var int $useNo*/
-	protected $useNo;
+	protected $useNo = 0;
 
 	/** @var string $miscSettings*/
-	protected $miscSettings;
+	protected $miscSettings = '';
 
 	/** @var IURLGenerator */
 	private $urlGenerator;

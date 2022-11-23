@@ -58,7 +58,7 @@ abstract class BaseListener implements IEventListener {
 	protected $watchService;
 
 	/** @var Event|BaseEvent|GroupDeletedEvent|UserDeletedEvent */
-	protected $event;
+	protected $event = null;
 
 	/** @var array */
 	protected $watchTables = [];

@@ -23,7 +23,7 @@ class RequestAttributesMiddleware extends Middleware {
 		$this->session = $session;
 	}
 
-	public function beforeController($controller, $methodName) {
+	public function beforeController($controller, $methodName): void {
 		$clientId = $this->request->getHeader(self::CLIENT_ID_KEY);
 
 		if (!$clientId) {
