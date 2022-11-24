@@ -38,10 +38,10 @@ class NotificationService {
 
 	public function __construct(
 		IManager $notificationManager,
-		?string $UserId
+		?string $userId
 	) {
 		$this->notificationManager = $notificationManager;
-		$this->userId = $UserId;
+		$this->userId = $userId;
 	}
 
 	public function removeNotification(int $pollId): void {

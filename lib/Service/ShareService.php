@@ -93,7 +93,7 @@ class ShareService {
 
 	public function __construct(
 		LoggerInterface $logger,
-		?string $UserId,
+		?string $userId,
 		IEventDispatcher $eventDispatcher,
 		IGroupManager $groupManager,
 		ISecureRandom $secureRandom,
@@ -107,7 +107,7 @@ class ShareService {
 		UserService $userService
 	) {
 		$this->logger = $logger;
-		$this->userId = $UserId;
+		$this->userId = $userId;
 		$this->eventDispatcher = $eventDispatcher;
 		$this->groupManager = $groupManager;
 		$this->secureRandom = $secureRandom;
