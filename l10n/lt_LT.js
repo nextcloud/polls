@@ -103,6 +103,8 @@ OC.L10N.register(
     "Text poll" : "Tekstinė apklausa",
     "Poll \"{pollTitle}\" added" : "Apklausa „{pollTitle}“ pridėta",
     "Error while creating Poll \"{pollTitle}\"" : "Klaida kuriant apklausą „{pollTitle}“",
+    "Download CSV file" : "Atsisiųsti CSV failą",
+    "Download HTML file" : "Atsisiųsti HTML failą",
     "Participants" : "Dalyviai",
     "From" : "Nuo",
     "To" : "Kam",
