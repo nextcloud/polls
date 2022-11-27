@@ -48,16 +48,16 @@ class Watch extends Entity implements JsonSerializable {
 	public const OBJECT_SHARES = "shares";
 
 	/** @var int $pollId */
-	protected $pollId;
+	protected $pollId = 0;
 
 	/** @var string $tableId */
-	protected $table;
+	protected $table = '';
 
 	/** @var int $updated */
-	protected $updated;
+	protected $updated = 0;
 
 	/** @var string $sessionId */
-	protected $sessionId;
+	protected $sessionId = '';
 
 	public function __construct() {
 		$this->addType('pollId', 'int');

@@ -58,22 +58,22 @@ class Log extends Entity implements JsonSerializable {
 	public const MSG_ID_OWNERCHANGE = 'updateOwner';
 
 	/** @var int $pollId */
-	protected $pollId;
+	protected $pollId = 0;
 
 	/** @var int $created */
-	protected $created;
+	protected $created = 0;
 
 	/** @var int $processed */
-	protected $processed;
+	protected $processed = 0;
 
 	/** @var string $userId */
-	protected $userId;
+	protected $userId = '';
 
 	/** @var string $displayName */
-	protected $displayName;
+	protected $displayName = '';
 
 	/** @var string $messageId */
-	protected $messageId;
+	protected $messageId = '';
 
 	public function __construct() {
 		$this->addType('pollId', 'int');

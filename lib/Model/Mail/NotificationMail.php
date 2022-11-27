@@ -36,7 +36,7 @@ class NotificationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Notification';
 
 	/** @var Log[] */
-	protected $log;
+	protected $log = [];
 
 	/** @var Subscription **/
 	protected $subscription;

@@ -39,10 +39,10 @@ class Subscription extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_notif';
 
 	/** @var int $pollId */
-	protected $pollId;
+	protected $pollId = 0;
 
 	/** @var string $userId */
-	protected $userId;
+	protected $userId = '';
 
 	/** @var Log[] $logEntries */
 	protected $logEntries = [];

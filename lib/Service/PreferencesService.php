@@ -39,10 +39,10 @@ class PreferencesService {
 	private $userId;
 
 	public function __construct(
-		?string $UserId,
+		?string $userId,
 		PreferencesMapper $preferencesMapper
 	) {
-		$this->userId = $UserId;
+		$this->userId = $userId;
 		$this->preferencesMapper = $preferencesMapper;
 		$this->preferences = new Preferences;
 		$this->load();

@@ -44,19 +44,19 @@ class ActivityService {
 	protected $transFactory;
 
 	/** @var IL10N */
-	protected $l10n;
+	protected $l10n = null;
 
 	/** @var IUserSession */
 	private $userSession;
 
 	/** @var string */
-	protected $shareType;
+	protected $shareType = '';
 
 	/** @var bool */
-	protected $userIsActor;
+	protected $userIsActor = true;
 
 	/** @var string */
-	protected $eventType;
+	protected $eventType = '';
 
 	public function __construct(
 		IFactory $transFactory,

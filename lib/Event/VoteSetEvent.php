@@ -28,7 +28,7 @@ use OCA\Polls\Db\Vote;
 class VoteSetEvent extends VoteEvent {
 	public function __construct(
 		Vote $vote,
-		$log = true
+		bool $log = true
 	) {
 		parent::__construct($vote);
 		$this->log = $log;

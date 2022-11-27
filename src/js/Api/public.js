@@ -37,7 +37,7 @@ const publicPoll = {
 			method: 'GET',
 			url: `s/${shareToken}/watch`,
 			params: { offset: lastUpdated },
-			cancelToken: cancelTokenHandlerObject[this.watch.name].handleRequestCancellation().token,
+			cancelToken: cancelTokenHandlerObject[this.watchPoll.name].handleRequestCancellation().token,
 		})
 	},
 

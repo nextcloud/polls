@@ -56,28 +56,28 @@ class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
 
 	/** @var int $pollId */
-	protected $pollId;
+	protected $pollId = 0;
 
 	/** @var string $owner */
-	protected $owner;
+	protected $owner = '';
 
 	/** @var int $released */
-	protected $released;
+	protected $released = 0;
 
 	/** @var string $pollOptionText */
-	protected $pollOptionText;
+	protected $pollOptionText = '';
 
 	/** @var int $timestamp */
-	protected $timestamp;
+	protected $timestamp = 0;
 
 	/** @var int $order */
-	protected $order;
+	protected $order = 0;
 
 	/** @var int $confirmed */
-	protected $confirmed;
+	protected $confirmed = 0;
 
 	/** @var int $duration */
-	protected $duration;
+	protected $duration = 0;
 
 	// public variables, not in the db
 	/** @var int $rank */

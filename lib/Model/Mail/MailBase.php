@@ -49,10 +49,10 @@ abstract class MailBase {
 	protected $appSettings;
 	
 	/** @var IEmailTemplate */
-	protected $emailTemplate;
+	protected $emailTemplate = null;
 
 	/** @var string */
-	protected $footer;
+	protected $footer = '';
 	
 	/** @var IL10N */
 	protected $l10n;
@@ -225,7 +225,7 @@ abstract class MailBase {
 		$environment->addExtension(new CommonMarkCoreExtension());
 		$environment->addExtension(new TableExtension());
 		$converter = new MarkdownConverter($environment);
-		return $converter->convertToHtml($source)->getContent();
+		return $converter->convert($source)->getContent();
 	}
 
 	private function getShareURL() : string {
