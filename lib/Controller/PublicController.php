@@ -116,11 +116,13 @@ class PublicController extends BaseController {
 	 * @NoCSRFRequired
 	 * @return TemplateResponse|PublicTemplateResponse
 	 */
-	public function votePage() {
+	public function votePage(string $token) {
 		if ($this->userSession->isLoggedIn()) {
 			return new TemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 		} else {
-			return new PublicTemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+			$template = new PublicTemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+			$template->setFooterVisible(false);
+			return $template;
 		}
 	}
 
