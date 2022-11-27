@@ -120,7 +120,7 @@ class PublicController extends BaseController {
 		if ($this->userSession->isLoggedIn()) {
 			return new TemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 		} else {
-			$template =	new PublicTemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+			$template = new PublicTemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 			$template->setFooterVisible(false);
 			return $template;
 		}
