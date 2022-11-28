@@ -342,6 +342,7 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "A(z) {username} név érvénytelen vagy rendszer számára fenntartott.",
     "An email address is required." : "Az e-mail-cím kötelez.",
     "Email could not be sent to {emailAddress}" : "Az e-mail nem küldhető el a következő címre: {emailAddress}",
+    "Error registering to poll" : "Hiba a szavazás regisztrációja során",
     "Access" : "Hozzáférés",
     "Owner" : "Tulajdonos",
     "Created" : "Létrehozva",
