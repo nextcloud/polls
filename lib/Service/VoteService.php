@@ -166,11 +166,13 @@ class VoteService {
 			$userId = $this->acl->getUserId();
 			$pollId = $this->acl->getPollId();
 		} else {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+			$this->acl->setPollId($pollId);
 		}
 
 		if (!$userId) {
 			$userId = $this->acl->getUserId();
+		} else {
+			$this->acl->request(Acl::PERMISSION_POLL_EDIT);
 		}
 
 		// fake a vote so that the event can be triggered
