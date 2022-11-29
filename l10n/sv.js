@@ -342,6 +342,7 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Namnet {username} är ogiltigt eller reserverat.",
     "An email address is required." : "En e-postadress krävs.",
     "Email could not be sent to {emailAddress}" : "E-post kunde inte skickas till {emailAddress}",
+    "Error registering to poll" : "Felregistrering röstningar",
     "Access" : "Åtkomst",
     "Owner" : "Ägare",
     "Created" : "Skapad",
@@ -549,6 +550,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Alla stängda omröstningar, där röstning är inaktiverad.",
     "Archive" : "Arkivera",
     "My archived polls" : "Mina arkiverade omröstningar",
-    "Your archived polls are only accessible to you." : "Dina arkiverade omröstningar är endast tillgängliga för dig."
+    "Your archived polls are only accessible to you." : "Dina arkiverade omröstningar är endast tillgängliga för dig.",
+    "Maybe" : "Kanske"
 },
 "nplurals=2; plural=(n != 1);");
