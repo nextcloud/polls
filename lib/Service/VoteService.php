@@ -28,7 +28,6 @@ use OCA\Polls\Db\Option;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Event\VoteSetEvent;
-use OCA\Polls\Exceptions\InvalidPollIdException;
 use OCA\Polls\Exceptions\VoteLimitExceededException;
 use OCA\Polls\Model\Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -83,7 +82,7 @@ class VoteService {
 
 		try {
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
-				// Just return the participants votes, no further anoymizing or obfuscating is nessecary
+				// Just return the participants votes, no further anoymizing or obfuscatin is nessecary
 				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), $this->acl->getUserId());
 			}
 
@@ -167,15 +166,15 @@ class VoteService {
 			$userId = $this->acl->getUserId();
 			$pollId = $this->acl->getPollId();
 		} else {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+			$this->acl->setPollId($pollId);
 		}
 
 		if (!$userId) {
 			$userId = $this->acl->getUserId();
+		} else {
+			$this->acl->request(Acl::PERMISSION_POLL_EDIT);
 		}
-		if (!$pollId) {
-			throw new InvalidPollIdException('Poll id is missing');
-		}
+
 		// fake a vote so that the event can be triggered
 		// surpress logging of this action
 		$this->vote = new Vote();
