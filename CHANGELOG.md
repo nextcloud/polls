@@ -7,6 +7,10 @@ All notable changes to this project will be documented in this file.
 ### Misc
 - Refactoring of API requests to a central http API
 
+## [3.8.4] - tbd
+### Fix
+ - Reset own votes as a logged in user without admin rights
+ - Error was thrown, when a owner of an option was null
 ## [3.8.3] - 2022-10-24
 ### Fix
  - Fix poll export containing participants with deleted shares
