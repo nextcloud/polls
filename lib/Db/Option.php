@@ -166,7 +166,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	// alias of getOwner()
-	public function getUserId() : string {
+	public function getUserId() : ?string {
 		return $this->getOwner();
 	}
 
