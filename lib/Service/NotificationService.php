@@ -46,6 +46,9 @@ class NotificationService {
 
 	public function removeNotification(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
+		if (!$this->userId) {
+			return;
+		}
 		$notification->setApp(self::APP_ID)
 			->setObject('poll', strval($pollId))
 			->setUser($this->userId);
