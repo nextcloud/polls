@@ -14,6 +14,8 @@ OC.L10N.register(
     "New comment …" : "Ny kommentar…",
     "Delete comment" : "Slet kommentar",
     "Anonymous poll" : "Anonym afstemning",
+    "Always show results" : "Vis altid resultater",
+    "Never show results" : "Vis aldrig resultater",
     "Title" : "Titel",
     "Poll type" : "Afstemningstype",
     "Cancel" : "Annullér",
