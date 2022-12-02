@@ -170,7 +170,7 @@ class CalendarService {
 	 *
 	 * @return array[]
 	 *
-	 * @psalm-return list<array{name: mixed, key: mixed, displayColor: mixed, permissions: mixed}>
+	 * @psalm-return list<array{calendar: ICalendar, calendarUri: string, displayColor: null|string, key: string, name: null|string, permissions: int}>
 	 */
 	public function getCalendars(): array {
 		$calendars = [];
