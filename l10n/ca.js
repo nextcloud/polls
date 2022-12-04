@@ -342,6 +342,7 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "El nom {username} no és vàlid o reservat.",
     "An email address is required." : "Cal una adreça electrònica.",
     "Email could not be sent to {emailAddress}" : "No s'ha pogut enviar el correu electrònic a {emailAddress}",
+    "Error registering to poll" : "Error en registrant a enquesta",
     "Access" : "Accés",
     "Owner" : "Propietari",
     "Created" : "Creat",
@@ -549,6 +550,7 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Totes les enquestes tancades, on la votació està desactivada.",
     "Archive" : "Arxiu",
     "My archived polls" : "Les meves enquestes arxivades",
-    "Your archived polls are only accessible to you." : "Només podeu accedir a les vostres enquestes arxivades."
+    "Your archived polls are only accessible to you." : "Només podeu accedir a les vostres enquestes arxivades.",
+    "Maybe" : "Potser"
 },
 "nplurals=2; plural=(n != 1);");
