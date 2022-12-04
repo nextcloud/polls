@@ -111,63 +111,39 @@ export default {
 
 </script>
 
-<style lang="scss">
-	[class^='poll-item__'] {
+<style lang="scss" scoped>
+	.poll-item__item {
 		display: flex;
-		flex: 1;
-		padding: 4px 8px;
-		border-bottom: 1px solid var(--color-border-dark);
-	}
+		padding: 4px 0;
 
-	[class^='item__'],
-	.poll-item__item .action-item {
-		display: flex;
-		align-items: center;
-		flex: 0 0 auto;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
+		&.active {
+			background-color: var(--color-primary-light);
+		}
+
+		&:hover {
+			background-color: var(--color-background-hover);
+		}
 	}
 
 	.item__title {
 		display: flex;
 		flex-direction: column;
-		flex: 1 0 155px;
-		align-items: stretch;
-		justify-content: center;
+		overflow: hidden;
 
-		.item__title__title {
+		*  {
 			display: block;
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
 		}
 
 		.item__title__description {
 			opacity: 0.5;
-			display: block;
-		}
-	}
-
-	.poll-item__item {
-		border-radius: var(--border-radius-large);
-
-		&> .action-item {
-			display: flex;
-		}
-		&.active {
-			background-color: var(--color-primary-light);
-		}
-		&:hover {
-			background-color: var(--color-background-hover);
 		}
 	}
 
 	.item__icon-spacer {
 		width: 44px;
 		min-width: 44px;
-	}
-
-	[class^='item__type'] {
-		width: 44px;
-		min-width: 16px;
-		min-height: 16px;
 	}
 </style>
