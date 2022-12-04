@@ -32,7 +32,7 @@
 				:value="value"
 				:inputmode="inputmode"
 				:placeholder="placeholder"
-				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, signalingClass]"
+				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, computedSignalingClass]"
 				@input="$emit('input', $event.target.value)"
 				@change="$emit('change', $event.target.value)"
 				@keyup.enter="$emit('submit', $event.target.value)">
@@ -45,7 +45,7 @@
 			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
 		</div>
 
-		<div v-if="helperText!==null" :class="['helper', signalingClass]">
+		<div v-if="helperText!==null" :class="['helper', computedSignalingClass]">
 			{{ helperText }}
 		</div>
 	</div>
@@ -80,7 +80,7 @@ export default {
 			type: String,
 			default: '',
 			validator(value) {
-				return ['', 'empty', 'error', 'success', 'checking'].includes(value)
+				return ['', 'empty', 'error', 'valid', 'invalid', 'success', 'checking'].includes(value)
 			},
 		},
 		placeholder: {
@@ -136,17 +136,23 @@ export default {
 	},
 
 	computed: {
+		computedSignalingClass() {
+			if (this.signalingClass === 'valid') return 'success'
+			if (this.signalingClass === 'invalid') return 'error'
+			return this.signalingClass
+		},
+
 		error() {
-			return !this.checking && !this.useNumModifiers && this.signalingClass === 'error'
+			return !this.checking && !this.useNumModifiers && this.computedSignalingClass === 'error'
 		},
 		success() {
-			return !this.checking && !this.useNumModifiers && this.signalingClass === 'success' && !this.submit
+			return !this.checking && !this.useNumModifiers && this.computedSignalingClass === 'success' && !this.submit
 		},
 		showSubmit() {
-			return !this.checking && !this.useNumModifiers && this.submit && this.signalingClass !== 'error'
+			return !this.checking && !this.useNumModifiers && this.submit && this.computedSignalingClass !== 'error'
 		},
 		checking() {
-			return !this.useNumModifiers && this.signalingClass === 'checking'
+			return !this.useNumModifiers && this.computedSignalingClass === 'checking'
 		},
 	},
 
