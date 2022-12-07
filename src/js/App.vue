@@ -237,8 +237,23 @@ export default {
 	display: flex;
 	gap: 8px;
 	justify-content: flex-end;
+	flex-wrap: wrap-reverse;
 	align-items: center;
 	margin-top: 36px;
+
+	.left {
+		display: flex;
+		flex: 1;
+		gap: 8px;
+	}
+
+	.right {
+		display: flex;
+		flex: 0;
+		justify-content: flex-end;
+		gap: 8px;
+	}
+
 	.button {
 		margin-left: 10px;
 		margin-right: 0;

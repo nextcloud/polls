@@ -25,50 +25,56 @@
 		<div class="modal__content">
 			<div class="modal__registration">
 				<div class="registration__registration">
-					<h2>{{ t('polls', 'Public participation') }}</h2>
+					<h2>{{ t('polls', 'Guest users') }}</h2>
 					<InputDiv v-model="userName"
-						v-tooltip="userNameCheck.result"
 						class="section__username"
-						:label="t('polls', 'To participate, tell us how we can call you!')"
-						:signaling-class="userNameCheck.status"
-						:placeholder="t('polls', 'Enter your name')"
-						:helper-text="userNameCheck.result"
+						:signaling-class="checkStatus.userName"
+						:placeholder="t('polls', 'Enter your name or nickname')"
+						:helper-text="userNameHint"
 						focus
+						@submit="submitRegistration" />
+
+					<InputDiv v-if="share.publicPollEmail !== 'disabled'"
+						v-model="emailAddress"
+						class="section__email"
+						:signaling-class="checkStatus.email"
+						:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
+						:helper-text="emailAddressHint"
+						type="email"
+						inputmode="email"
 						@submit="submitRegistration" />
 
 					<NcCheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
 						{{ t('polls', 'Remember me for 30 days') }}
 					</NcCheckboxRadioSwitch>
 
-					<InputDiv v-if="share.publicPollEmail !== 'disabled'"
-						v-model="emailAddress"
-						v-tooltip="emailCheck.result"
-						class="section__email"
-						:label="emailLabel"
-						:signaling-class="emailCheck.status"
-						:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
-						:helper-text="emailCheck.result"
-						type="email"
-						inputmode="email"
-						@submit="submitRegistration" />
-
 					<div v-if="privacyUrl" class="section__optin">
 						<RichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 					</div>
 
 					<div class="modal__buttons">
-						<NcButton @click="closeModal">
-							{{ t('polls', 'Cancel') }}
-						</NcButton>
+						<div class="left">
+							<div class="legal_links">
+								<SimpleLink v-if="imprintUrl"
+									:href="imprintUrl"
+									target="_blank"
+									:name="t('polls', 'Legal Notice')" />
+							</div>
+						</div>
+						<div class="right">
+							<NcButton @click="closeModal">
+								{{ t('polls', 'Cancel') }}
+							</NcButton>
 
-						<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
-							{{ t('polls', 'OK') }}
-						</NcButton>
+							<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
+								{{ t('polls', 'OK') }}
+							</NcButton>
+						</div>
 					</div>
 				</div>
 
 				<div v-if="share.showLogin" class="registration__login">
-					<h2> {{ t('polls', 'You are a registered user of this site?') }} </h2>
+					<h2> {{ t('polls', 'Registered users') }} </h2>
 					<NcButton wide @click="login()">
 						{{ t('polls', 'Login') }}
 					</NcButton>
@@ -76,15 +82,9 @@
 						{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}
 					</div>
 					<div>
-						{{ t('polls', 'Otherwise participate publicly.') }}
+						{{ t('polls', 'Otherwise participate as a guest user.') }}
 					</div>
 				</div>
-			</div>
-			<div class="legal_links">
-				<SimpleLink v-if="imprintUrl"
-					:href="imprintUrl"
-					target="_blank"
-					:name="t('polls', 'Legal Notice')" />
 			</div>
 		</div>
 	</NcModal>
@@ -119,9 +119,9 @@ export default {
 
 	data() {
 		return {
-			status: {
-				email: 'invalid',
-				userName: 'invalid',
+			checkStatus: {
+				email: 'empty',
+				userName: 'empty',
 			},
 			userName: '',
 			emailAddress: '',
@@ -140,19 +140,12 @@ export default {
 			imprintUrl: (state) => state.appSettings.useImprintUrl,
 		}),
 
-		emailLabel() {
-			if (this.share.publicPollEmail === 'mandatory') {
-				return t('polls', 'Your email address is required. After the registration your personal link to the poll will be sent to this address.')
-			}
-			return t('polls', 'With your email address you can subscribe to notifications and you will receive your personal link to this poll.')
-		},
-
 		registrationIsValid() {
-			return this.status.userName === 'valid' && (this.status.email === 'valid' || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
+			return this.checkStatus.userName === 'valid' && (this.checkStatus.email === 'valid' || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
 		},
 
 		disableSubmit() {
-			return !this.registrationIsValid || this.status.userName === 'checking'
+			return !this.registrationIsValid || this.checkStatus.userName === 'checking'
 		},
 
 		privacyRich() {
@@ -175,90 +168,43 @@ export default {
 				name: 'publicVote',
 				params: { token: this.$route.params.token },
 			}).href
-			return generateUrl(`login?redirect_url=${redirectUrl}`)
+
+			return generateUrl(
+				'/login',
+				{ redirect_url: redirectUrl },
+			)
 		},
 
-		userNameCheck() {
-			if (this.status.userName === 'checking') {
-				return {
-					result: t('polls', 'Checking name …'),
-					status: 'checking',
-				}
-			}
-
-			if (this.userName.length < 1) {
-				return {
-					result: t('polls', 'A name is required.'),
-					status: 'empty',
-				}
-			}
-
-			if (this.status.userName === 'invalid') {
-				return {
-					result: t('polls', 'The name {username} is invalid or reserved.', { username: this.userName }),
-					status: 'error',
-				}
-			}
-
-			return {
-				result: '',
-				status: 'success',
-			}
+		userNameHint() {
+			if (this.checkStatus.userName === 'checking') return t('polls', 'Checking name …')
+			if (this.checkStatus.userName === 'empty') return t('polls', 'A name is required.')
+			if (this.checkStatus.userName === 'invalid') return t('polls', 'The name {username} is invalid or reserved.', { username: this.userName })
+			return ''
 		},
 
-		emailCheck() {
-			if (this.status.email === 'checking') {
-				return {
-					result: t('polls', 'Checking email address …'),
-					status: 'checking',
-				}
-			}
-
-			if (this.emailAddress.length < 1) {
-				if (this.share.publicPollEmail === 'mandatory') {
-					return {
-						result: t('polls', 'An email address is required.'),
-						status: 'empty',
-					}
-				}
-				return {
-					result: '',
-					status: 'empty',
-				}
-			}
-
-			if (this.status.email === 'invalid') {
-				return {
-					result: t('polls', 'Invalid email address.'),
-					status: 'error',
-				}
-			}
-
-			return {
-				result: '',
-				status: 'success',
-			}
+		emailGeneratedStatus() {
+			return this.checkStatus.email === 'empty' ? this.share.publicPollEmail : this.checkStatus.email
 		},
 
+		emailAddressHint() {
+			if (this.emailGeneratedStatus === 'checking') return t('polls', 'Checking email address …')
+			if (this.emailGeneratedStatus === 'mandatory') return t('polls', 'An email address is required.')
+			if (this.emailGeneratedStatus === 'invalid') return t('polls', 'Invalid email address.')
+			if (this.share.type === 'public') {
+				if (this.emailGeneratedStatus === 'valid') return t('polls', 'You will recieve your personal link after clicking "OK".')
+				return t('polls', 'Enter your email address to get your personal access link.')
+			}
+			return ''
+		},
 	},
 
 	watch: {
 		userName() {
-			if (this.userName) {
-				if (this.userName !== this.share.userid) {
-					this.validatePublicUsername()
-				}
-			} else {
-				this.status.userName = 'invalid'
-			}
+			this.validatePublicUsername()
 		},
 
 		emailAddress() {
-			if (this.emailAddress) {
-				this.validateEmailAddress()
-			} else {
-				this.status.email = 'invalid'
-			}
+			this.validateEmailAddress()
 		},
 	},
 
@@ -285,14 +231,20 @@ export default {
 		},
 
 		validatePublicUsername: debounce(async function() {
-			this.status.userName = 'checking'
+			if (this.userName.length < 1) {
+				this.checkStatus.userName = 'empty'
+				return
+			}
+
+			this.checkStatus.userName = 'checking'
+
 			try {
 				await ValidatorAPI.validateName(this.$route.params.token, this.userName)
-				this.status.userName = 'valid'
+				this.checkStatus.userName = 'valid'
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED') return
 				if (e?.code === 'ERR_BAD_REQUEST') {
-					this.status.userName = 'invalid'
+					this.checkStatus.userName = 'invalid'
 					return
 				}
 				throw e
@@ -300,14 +252,19 @@ export default {
 		}, 500),
 
 		validateEmailAddress: debounce(async function() {
-			this.status.email = 'checking'
+			if (this.emailAddress.length < 1) {
+				this.checkStatus.email = 'empty'
+				return
+			}
+
+			this.checkStatus.email = 'checking'
 			try {
 				await ValidatorAPI.validateEmailAddress(this.emailAddress)
-				this.status.email = 'valid'
+				this.checkStatus.email = 'valid'
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED') return
 				if (e?.code === 'ERR_BAD_REQUEST') {
-					this.status.email = 'invalid'
+					this.checkStatus.email = 'invalid'
 					return
 				}
 				throw e
@@ -369,8 +326,6 @@ export default {
 
 <style lang="scss">
 	.section__optin {
-		align-self: end;
-
 		a {
 			text-decoration: underline;
 		}
@@ -420,8 +375,6 @@ export default {
 	}
 
 	.legal_links {
-		padding: 4px 24px;
-
 		a {
 			color: var(--color-text-maxcontrast);
 			font-weight: bold;
