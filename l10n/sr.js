@@ -60,8 +60,6 @@ OC.L10N.register(
     "_%n Participant_::_%n Participants_" : ["%n учесник","%n учесника","%n учесника"],
     "Optional email address" : "Опциона адреса е-поште",
     "Checking email address …" : "Проверавам адресу е-поште…",
-    "To participate, tell us how we can call you!" : "Да би учествовао, реци нам како да те зовемо!",
-    "Enter your name" : "Унесите Ваше име",
     "Login" : "Пријава",
     "Access" : "Тип приступа",
     "Owner" : "Власник",

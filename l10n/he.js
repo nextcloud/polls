@@ -57,7 +57,6 @@ OC.L10N.register(
     "Close" : "סגירה",
     "never" : "מעולם לא",
     "_%n Participant_::_%n Participants_" : ["משתתף אחד","%n משתתפים","%n משתתפים","%n משתתפים"],
-    "Enter your name" : "נא למלא את שמך",
     "Login" : "כניסה",
     "Access" : "גישה",
     "Owner" : "בעלות",

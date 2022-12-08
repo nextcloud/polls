@@ -41,7 +41,6 @@ OC.L10N.register(
     "Add" : "افزودن",
     "Close" : "بسته",
     "never" : "never",
-    "Enter your name" : "اسمت را وارد کن",
     "Login" : "ورود",
     "Access" : "دسترسی",
     "Owner" : "Owner",
