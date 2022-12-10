@@ -48,6 +48,7 @@ OC.L10N.register(
     "Created" : "Створено",
     "No description provided" : "Відсутній опис",
     "Preview" : "Перегляд",
+    "User settings" : "Налаштування користувача",
     "Shares" : "Спільний доступ",
     "As an admin you may edit this poll" : "Адміністратор може редагувати це опитування",
     "Description" : "Опис",
