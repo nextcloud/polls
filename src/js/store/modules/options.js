@@ -230,7 +230,7 @@ const actions = {
 	async confirm(context, payload) {
 		context.commit('confirm', { option: payload.option })
 		try {
-			const response = OptionsAPI.confirmOption(payload.optionId)
+			const response = OptionsAPI.confirmOption(payload.option.id)
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
