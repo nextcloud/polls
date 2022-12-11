@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 ## [4.1.0] - tbd
 ### New
 - Added a dashboard widget for relevant polls
+- Improved registration dialog for public polls
+### Fix
+ - Reset own votes as a logged in user without admin rights
+ - Error was thrown, when a owner of an option was null
 ### Misc
 - Refactoring of API requests to a central http API
 
@@ -11,6 +15,7 @@ All notable changes to this project will be documented in this file.
 ### Fix
  - Reset own votes as a logged in user without admin rights
  - Error was thrown, when a owner of an option was null
+
 ## [3.8.3] - 2022-10-24
 ### Fix
  - Fix poll export containing participants with deleted shares
