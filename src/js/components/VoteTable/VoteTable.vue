@@ -113,8 +113,8 @@ export default {
 		height: 4.5em;
 		order: 10;
 		line-height: 1.5em;
-		padding: 4px;
-		border-top: solid 1px var(--color-border-dark);
+		padding: 6px;
+		border-radius: 12px;
 		&.currentuser {
 			order:5;
 		}
@@ -158,12 +158,11 @@ export default {
 		flex-direction: column;
 		align-items: stretch;
 		max-width: 280px;
-		border-left: 1px solid var(--color-border-dark);
 		margin-bottom: 4px;
 
 		&>div {
 			display: flex;
-			justify-content: center;
+			justify-content: space-around;
 			align-items: center;
 		}
 		.option-item {
@@ -291,6 +290,8 @@ export default {
 
 		.counter {
 			order: 0;
+			flex: 0;
+			flex-direction: column;
 			padding-left: 12px;
 		}
 
