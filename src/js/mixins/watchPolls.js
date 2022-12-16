@@ -67,7 +67,6 @@ export const watchPolls = {
 			console.debug('[polls]', this.pollingDisabled ? 'Watch is disabled' : `Start ${this.updateType} for updates`)
 
 			while (retryCounter < MAX_TRIES && !this.pollingDisabled) {
-
 				// avoid requests when app is in background and pause
 				while (document.hidden) {
 					console.debug('[polls]', `App in background, pause ${this.updateType}`)
@@ -85,8 +84,11 @@ export const watchPolls = {
 					}
 
 				} catch (e) {
-					this.sleepTimeout = e?.response?.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
 					retryCounter = await this.handleConnectionException(e, retryCounter, sleepTimeout)
+					if (retryCounter === null) {
+						console.debug('[polls]', 'Watch cancelled')
+						return
+					}
 				}
 
 				// sleep if request was invalid or polling is set to "peeriodicPolling"
@@ -123,7 +125,12 @@ export const watchPolls = {
 			retryCounter += 1
 
 			if (e?.code === 'ERR_CANCELED') {
-				return 0
+				return null
+			}
+
+			if (e?.code === 'ERR_NETWORK') {
+				console.debug('[polls]', `Possibly offline - continue ${this.updateType}`)
+				return retryCounter
 			}
 
 			if (e.response?.status === 304) {
@@ -133,6 +140,7 @@ export const watchPolls = {
 
 			if (e?.response?.status === 503) {
 				// Server possibly in maintenance mode
+				this.sleepTimeout = e?.response?.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
 				console.debug('[polls]', `Service not avaiable - retry ${this.updateType} after ${sleepTimeout} seconds`)
 				return retryCounter
 			}
