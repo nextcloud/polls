@@ -30,9 +30,6 @@
 			<MaybeCounterIcon fill-color="var(--color-polls-foreground-maybe)" :size="20" />
 			<span>{{ option.computed.maybe }}</span>
 		</div>
-		<div v-if="showNo" class="no">
-			<span>{{ option.computed.no }}</span>
-		</div>
 	</div>
 </template>
 
@@ -55,10 +52,6 @@ export default {
 			default: undefined,
 		},
 		showMaybe: {
-			type: Boolean,
-			default: false,
-		},
-		showNo: {
 			type: Boolean,
 			default: false,
 		},
