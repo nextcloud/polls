@@ -89,6 +89,11 @@ body:
         - "Updated from a much older version (more than one major version)"
     validations:
       required: true
+  - type: input
+    id: polls-version
+    attributes:
+      label: Affected polls version
+      placeholder: Your installed polls version
 
   - type: markdown
     attributes:
