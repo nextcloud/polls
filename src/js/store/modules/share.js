@@ -111,7 +111,7 @@ const actions = {
 		}
 
 		try {
-			const response = PublicAPI.deleteEmailAddress(context.rootState.route.params.token)
+			const response = await PublicAPI.deleteEmailAddress(context.rootState.route.params.token)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('subscription/update', false, { root: true })
 			context.dispatch('poll/get', null, { root: true })

@@ -217,7 +217,7 @@ const actions = {
 
 	async addBulk(context, payload) {
 		try {
-			const response = OptionsAPI.addOptions(context.rootState.route.params.id, payload.text)
+			const response = await OptionsAPI.addOptions(context.rootState.route.params.id, payload.text)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
@@ -230,7 +230,7 @@ const actions = {
 	async confirm(context, payload) {
 		context.commit('confirm', { option: payload.option })
 		try {
-			const response = OptionsAPI.confirmOption(payload.option.id)
+			const response = await OptionsAPI.confirmOption(payload.option.id)
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return

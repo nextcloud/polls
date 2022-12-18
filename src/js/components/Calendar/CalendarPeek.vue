@@ -44,7 +44,6 @@ import { orderBy } from 'lodash'
 import { NcPopover } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import CalendarInfo from './CalendarInfo.vue'
-import { showError } from '@nextcloud/dialogs'
 import { CalendarAPI } from '../../Api/calendar.js'
 
 export default {
@@ -116,13 +115,11 @@ export default {
 	methods: {
 		async getEvents() {
 			try {
-				const response = CalendarAPI.getEvents(this.option.pollId)
+				const response = await CalendarAPI.getEvents(this.option.id)
 				this.events = response.data.events
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED') return
-				if (e.message === 'Network Error') {
-					showError(t('polls', 'Got a network error while checking calendar events.'))
-				}
+				console.error('Error fetching events', { error: e.response })
 			}
 		},
 

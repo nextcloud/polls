@@ -55,13 +55,13 @@ const actions = {
 		}
 	},
 
-	takeOver(context, payload) {
+	async takeOver(context, payload) {
 		if (!getCurrentUser().isAdmin) {
 			return
 		}
 
 		try {
-			PollsAPI.takeOver(payload.pollId)
+			await PollsAPI.takeOver(payload.pollId)
 			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
