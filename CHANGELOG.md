@@ -5,11 +5,15 @@ All notable changes to this project will be documented in this file.
 ### New
 - Added a dashboard widget for relevant polls
 - Improved registration dialog for public polls
+- Small design change to vote page according to new nextcloud design
+- Improved registration dialog
 ### Fix
  - Reset own votes as a logged in user without admin rights
  - Error was thrown, when a owner of an option was null
+ - Deleted shares prevented poll export and
 ### Misc
 - Refactoring of API requests to a central http API
+- Refactoring and fixes to background watcher
 
 ## [3.8.4] - tbd
 ### Fix
