@@ -31,15 +31,14 @@ const calendar = {
 			cancelToken: cancelTokenHandlerObject[this.getCalendars.name].handleRequestCancellation().token,
 		})
 	},
-	getEvents(pollId) {
+	getEvents(optionId) {
 		return httpInstance.request({
 			method: 'GET',
-			url: `option/${pollId}/events`,
+			url: `option/${optionId}/events`,
 			params: {
 				tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
 				time: +new Date(),
 			},
-			// cancelToken: cancelTokenHandlerObject[this.getEvents.name].handleRequestCancellation().token,
 		})
 	},
 }
