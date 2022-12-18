@@ -63,6 +63,8 @@ export default {
 			},
 			transitionClass: 'transitions-active',
 			loading: false,
+			isLoggedin: !!getCurrentUser(),
+			isAdmin: !!getCurrentUser()?.isAdmin,
 		}
 	},
 
@@ -110,6 +112,10 @@ export default {
 			this.transitionsOn()
 		})
 
+		subscribe('polls:stores:load', (stores) => {
+			this.loadStores(stores)
+		})
+
 		subscribe('polls:poll:load', (silent) => {
 			this.loadPoll(silent)
 		})
@@ -144,6 +150,40 @@ export default {
 					this.transitionClass = 'transitions-active'
 				}, delay)
 			}
+		},
+
+		async loadStores(stores) {
+			console.debug('[polls]', 'Updates detected', stores)
+
+			let dispatches = [
+				'activity/list',
+				'appSettings/get',
+			]
+
+			stores.forEach((item) => {
+				if (item.table === 'polls') {
+
+					// If user is an admin, also load admin list
+					if (this.isAdmin) dispatches = [...dispatches, 'pollsAdmin/list']
+
+					// if user is an authorized user load polls list and combo
+					if (this.isLoggedin) dispatches = [...dispatches, `${item.table}/list`, 'combo/cleanUp']
+
+					// if current poll is affected, load current poll configuration
+					if (item.pollId === this.$store.state.poll.id) {
+						dispatches = [...dispatches, 'poll/get']
+					}
+
+				} else if (!this.isLoggedin && (item.table === 'shares')) {
+					// if current user is guest and table is shares only reload current share
+					dispatches = [...dispatches, 'share/get']
+				} else {
+					// otherwise just load particulair store
+					dispatches = [...dispatches, `${item.table}/list`]
+				}
+			})
+			dispatches = [...new Set(dispatches)] // remove duplicates and add combo
+			return Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
 		},
 
 		async loadPoll(silent) {
