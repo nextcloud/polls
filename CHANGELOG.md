@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [3.8.4] - tbd
+## [3.8.4] - 2022-12-18
 ### Fix
  - Reset own votes as a logged in user without admin rights
  - Error was thrown, when a owner of an option was null
