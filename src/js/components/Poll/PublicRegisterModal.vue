@@ -191,7 +191,7 @@ export default {
 			if (this.emailGeneratedStatus === 'mandatory') return t('polls', 'An email address is required.')
 			if (this.emailGeneratedStatus === 'invalid') return t('polls', 'Invalid email address.')
 			if (this.share.type === 'public') {
-				if (this.emailGeneratedStatus === 'valid') return t('polls', 'You will recieve your personal link after clicking "OK".')
+				if (this.emailGeneratedStatus === 'valid') return t('polls', 'You will receive your personal link after clicking "OK".')
 				return t('polls', 'Enter your email address to get your personal access link.')
 			}
 			return ''
