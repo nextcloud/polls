@@ -22,24 +22,29 @@
 
 <template>
 	<div class="counter">
-		<div class="counter--icon">
-			<div class="yes">
-				<span>{{ option.computed.yes }}</span>
-			</div>
-			<div v-if="showMaybe" class="maybe">
-				<span>{{ option.computed.maybe }}</span>
-			</div>
-			<div v-if="showNo" class="no">
-				<span>{{ option.computed.no }}</span>
-			</div>
+		<div class="yes">
+			<YesCounterIcon fill-color="var(--color-polls-foreground-yes)" :size="20" />
+			<span>{{ option.computed.yes }}</span>
+		</div>
+		<div v-if="showMaybe" class="maybe">
+			<MaybeCounterIcon fill-color="var(--color-polls-foreground-maybe)" :size="20" />
+			<span>{{ option.computed.maybe }}</span>
 		</div>
 	</div>
 </template>
 
 <script>
 
+import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
+import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
+
 export default {
 	name: 'Counter',
+
+	components: {
+		YesCounterIcon,
+		MaybeCounterIcon,
+	},
 
 	props: {
 		option: {
@@ -47,10 +52,6 @@ export default {
 			default: undefined,
 		},
 		showMaybe: {
-			type: Boolean,
-			default: false,
-		},
-		showNo: {
 			type: Boolean,
 			default: false,
 		},
@@ -62,40 +63,29 @@ export default {
 <style lang="scss">
 .counter {
 	display: flex;
+	align-items: center;
 	justify-content: space-around;
-}
-
-.counter--icon {
-	display: flex;
-	justify-content: center;
+	gap: 4px;
+	padding: 0 12px;
 	font-size: 1.1em;
 
-	&> * {
-		background-position: 0px 2px;
-		padding-left: 23px;
-		background-repeat: no-repeat;
-		background-size: contain;
-		margin: 4px;
+	div {
+		display: flex;
+		align-items: center;
+		justify-content: space-around;
 	}
 
 	.yes {
 		color: var(--color-polls-foreground-yes);
-		background-image: var(--icon-polls-yes);
 	}
+
 	.no {
 		color: var(--color-polls-foreground-no);
-		background-image: var(--icon-polls-no);
 	}
+
 	.maybe {
 		color: var(--color-polls-foreground-maybe);
-		background-image: var(--icon-polls-maybe);
 	}
 }
 
-.list-view .counter {
-	flex: 0;
-	.counter--icon {
-		flex-direction: column;
-	}
-}
 </style>
