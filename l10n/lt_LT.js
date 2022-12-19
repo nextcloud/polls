@@ -72,7 +72,6 @@ OC.L10N.register(
     "Ranked order" : "Išrikiuota tvarka",
     "Toggle Sidebar" : "Perjungti šoninę juostą",
     "Conflict" : "Failų konfliktas",
-    "Got a network error while checking calendar events." : "Tikrinant kalendoriaus įvykius gauta tinklo klaida",
     "New comment …" : "Naujas komentaras …",
     "Error while saving comment" : "Klaida įrašant komentarą",
     "Delete comment" : "Ištrinti komentarą",

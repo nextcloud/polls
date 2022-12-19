@@ -195,7 +195,6 @@ OC.L10N.register(
     "Ranked order" : "Rangordning",
     "Toggle Sidebar" : "Växla sidofält",
     "Conflict" : "Konflikt",
-    "Got a network error while checking calendar events." : "Ett nätverksfel uppstod när kalenderhändelser kontrollerades.",
     "New comment …" : "Ny kommentar ...",
     "Error while saving comment" : "Det gick inte att spara kommentaren",
     "Delete comment" : "Ta bort kommentar",

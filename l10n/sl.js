@@ -99,7 +99,6 @@ OC.L10N.register(
     "Ranked order" : "Rangirana razvrstitev",
     "Toggle Sidebar" : "Preklopi bočno okno",
     "Conflict" : "Spor",
-    "Got a network error while checking calendar events." : "Med preverjanjem dogodkov koledarja je prišlo do napake omrežja.",
     "New comment …" : "Nova opomba ...",
     "Error while saving comment" : "Napaka med shranjevanjem opombe",
     "Delete comment" : "Izbriši opombo",

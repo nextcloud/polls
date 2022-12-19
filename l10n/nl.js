@@ -180,7 +180,6 @@ OC.L10N.register(
     "Ranked order" : "Gerangschikte volgorde",
     "Toggle Sidebar" : "Omschakelen Zijbalk",
     "Conflict" : "Conflict",
-    "Got a network error while checking calendar events." : "Er is een netwerkfout opgetreden tijdens het controleren van agenda-afspraken.",
     "New comment …" : "Nieuwe reactie ...",
     "Error while saving comment" : "Fout bij opslaan reactie",
     "Delete comment" : "Verwijderen reactie",

@@ -195,7 +195,6 @@ OC.L10N.register(
     "Ranked order" : "Népszerűségi sorrend",
     "Toggle Sidebar" : "Oldalsáv be/ki",
     "Conflict" : "Ütközés",
-    "Got a network error while checking calendar events." : "Hálózati hiba történt a naptáresemények ellenőrzése során.",
     "New comment …" : "Új hozzászólás…",
     "Error while saving comment" : "Hiba a hozzászólás mentése során",
     "Delete comment" : "Hozzászólás törlése",

@@ -37,7 +37,6 @@ OC.L10N.register(
     "Ranked order" : "Òrdine classificadu",
     "Toggle Sidebar" : "Mustra/Cua s'istanca laterale",
     "Conflict" : "Cuntierra",
-    "Got a network error while checking calendar events." : "B'at àpidu un'errore de rete in su controllu de is eventos de su calndàriu.",
     "New comment …" : "Cummentu nou …",
     "Error while saving comment" : "Errore sarvende su cummentu",
     "Delete comment" : "Cantzella cummentu",

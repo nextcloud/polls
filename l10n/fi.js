@@ -96,7 +96,6 @@ OC.L10N.register(
     "Ranked order" : "Tulosjärjestys",
     "Toggle Sidebar" : "Avaa tai sulje sivupalkki",
     "Conflict" : "Ristiriita",
-    "Got a network error while checking calendar events." : "Kalenteritapahtumia tarkistaessa ilmeni verkkovirhe.",
     "New comment …" : "Uusi kommentti…",
     "Error while saving comment" : "Virhe kommenttia tallentaessa",
     "Delete comment" : "Poista kommentti",

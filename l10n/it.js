@@ -179,7 +179,6 @@ OC.L10N.register(
     "Ranked order" : "Ordine classificato",
     "Toggle Sidebar" : "Commuta barra laterale",
     "Conflict" : "Conflitto",
-    "Got a network error while checking calendar events." : "Si è verificato un errore di rete durante il controllo degli eventi del calendario.",
     "New comment …" : "Nuovo commento...",
     "Error while saving comment" : "Errore durante il salvataggio del commento",
     "Delete comment" : "Elimina commento",

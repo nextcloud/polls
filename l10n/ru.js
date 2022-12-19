@@ -181,7 +181,6 @@ OC.L10N.register(
     "Ranked order" : "Ранжирование по порядку",
     "Toggle Sidebar" : "Скрыть или показать боковую панель",
     "Conflict" : "Конфликт",
-    "Got a network error while checking calendar events." : "Не удалось проверить события календаря, ошибка сети.",
     "New comment …" : "Текст комментария…",
     "Error while saving comment" : "При сохранении комментария произошла ошибка",
     "Delete comment" : "Удалить комментарий",

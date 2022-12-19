@@ -195,7 +195,6 @@ OC.L10N.register(
     "Ranked order" : "Ordena sailkatua",
     "Toggle Sidebar" : "Txandakatu alboko barra",
     "Conflict" : "Gatazka",
-    "Got a network error while checking calendar events." : "Sare errore bat gertatu da egutegiaren gertaerak begiratzean.",
     "New comment …" : "Iruzkin berria …",
     "Error while saving comment" : "Errorea iruzkina gordetzean",
     "Delete comment" : "Ezabatu Iruzkina",
