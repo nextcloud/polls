@@ -337,6 +337,7 @@ OC.L10N.register(
     "A name is required." : "姓名為必填。",
     "The name {username} is invalid or reserved." : "名稱 {username} 無效或已被保留。",
     "An email address is required." : "電郵地址為必填。",
+    "You will receive your personal link after clicking \"OK\"." : "您將會在點擊「確定」後收到您的個人連結。",
     "Enter your email address to get your personal access link." : "輸入您的電郵地址以取得您的個人存取連結。",
     "Email could not be sent to {emailAddress}" : "郵件無法傳送到 {emailAddress}",
     "Error registering to poll" : "註冊投票時發生錯誤",

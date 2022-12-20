@@ -337,6 +337,7 @@ OC.L10N.register(
     "A name is required." : "Bir ad yazılmalıdır.",
     "The name {username} is invalid or reserved." : "{username} kullanıcı adı geçersiz ya da ayrılmış.",
     "An email address is required." : "Bir e-posta adresi yazılması zorunludur.",
+    "You will receive your personal link after clicking \"OK\"." : "\"Tamam\" üzerine tıkladıktan sonra kişisel bağlantınızı alacaksınız.",
     "Enter your email address to get your personal access link." : "Kişisel erişim bağlantınızı almak için e-posta adresinizi yazın.",
     "Email could not be sent to {emailAddress}" : "E-posta {emailAdress} adresine gönderilemedi",
     "Error registering to poll" : "Anket kaydedilirken sorun çıktı",
