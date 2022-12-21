@@ -11,6 +11,7 @@ All notable changes to this project will be documented in this file.
  - Reset own votes as a logged in user without admin rights
  - Error was thrown, when a owner of an option was null
  - Deleted shares prevented poll export and
+ - avoid timestamp overflow for dates greater than 01-19-2038
 ### Misc
 - Refactoring of API requests to a central http API
 - Refactoring and fixes to background watcher
