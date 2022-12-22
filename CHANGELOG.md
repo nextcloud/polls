@@ -12,6 +12,7 @@ All notable changes to this project will be documented in this file.
  - Error was thrown, when a owner of an option was null
  - Deleted shares prevented poll export and
  - avoid timestamp overflow for dates greater than 01-19-2038
+ - increase length of option texts from 256 to 1024 characters
 ### Misc
 - Refactoring of API requests to a central http API
 - Refactoring and fixes to background watcher
