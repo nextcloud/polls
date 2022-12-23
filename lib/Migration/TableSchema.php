@@ -103,6 +103,7 @@ abstract class TableSchema {
 		'030000Date20210704120000',
 		'030200Date20210912120000',
 		'030400Date20211125120000',
+		'040100Date20221030070000',
 	];
 
 	/**
@@ -170,7 +171,7 @@ abstract class TableSchema {
 		Option::TABLE => [
 			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
 			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
 			'duration' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'order' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
@@ -183,7 +184,7 @@ abstract class TableSchema {
 			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'vote_option_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'vote_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
+			'vote_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
 			'vote_answer' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 		],
 		Comment::TABLE => [
