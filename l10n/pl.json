@@ -335,6 +335,7 @@
     "A name is required." : "Nazwa jest wymagana.",
     "The name {username} is invalid or reserved." : "Nazwa {username} jest nieprawidłowa lub zarezerwowana.",
     "An email address is required." : "Adres e-mail jest wymagany.",
+    "You will receive your personal link after clicking \"OK\"." : "Po kliknięciu w \"OK\" otrzymasz swój osobisty link.",
     "Enter your email address to get your personal access link." : "Wpisz swój adres e-mail, aby otrzymać osobisty link dostępu.",
     "Email could not be sent to {emailAddress}" : "Nie można wysłać e-maila na {emailAddress}",
     "Error registering to poll" : "Błąd rejestracji do sondy",
