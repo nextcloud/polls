@@ -26,9 +26,9 @@
 	"private": true,
 	"main": "src/js/main.js",
 	"scripts": {
-		"dev": "webpack --node-env development",
-		"watch": "webpack --node-env development --progress --watch",
-		"build": "webpack --node-env production --progress",
+		"dev": "webpack --mode=development",
+		"watch": "webpack --mode=development --progress --watch",
+		"build": "webpack --mode=production --progress",
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src/**/*{.scss,.vue,.css}",
