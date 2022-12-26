@@ -45,7 +45,7 @@
 		"@nextcloud/router": "^2.0.0",
 		"@nextcloud/vue": "^7.2.0",
 		"@nextcloud/vue-richtext": "^2.0.4",
-		"core-js": "^3.26.1",
+		"core-js": "^3.27.0",
 		"dompurify": "^2.4.1",
 		"file-saver": "^2.0.5",
 		"linkify-string": "^4.0.2",
