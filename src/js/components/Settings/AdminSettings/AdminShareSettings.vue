@@ -44,6 +44,7 @@
 		<NcCheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
 			{{ t('polls', 'Disallow openly accessible polls') }}
 		</NcCheckboxRadioSwitch>
+
 		<div v-if="allAccessLimited" class="settings_details">
 			<h3>{{ t('polls','Allow creating openly accessible polls for the following groups') }}</h3>
 			<NcMultiselect v-model="allAccessGroups"

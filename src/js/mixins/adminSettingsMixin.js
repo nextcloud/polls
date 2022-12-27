@@ -23,7 +23,7 @@
 
 import { debounce } from 'lodash'
 import { mapState } from 'vuex'
-import appSettings from '../store/modules/appSettings.js'
+import { AppSettingsAPI } from '../Api/appSettings.js'
 
 export const loadGroups = {
 	data() {
@@ -48,7 +48,7 @@ export const loadGroups = {
 			this.isLoading = true
 
 			try {
-				const response = await appSettings.getGroups(query)
+				const response = await AppSettingsAPI.getGroups(query)
 				this.groups = response.data.groups
 				this.isLoading = false
 			} catch (e) {
