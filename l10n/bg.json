@@ -335,6 +335,7 @@
     "A name is required." : "Нужно е име.",
     "The name {username} is invalid or reserved." : "Името {username} е невалидно или е запазено.",
     "An email address is required." : "Нужен е имейл адрес.",
+    "You will receive your personal link after clicking \"OK\"." : "Ще получите ваша лична връзка, след като кликнете върху „ОК“.",
     "Enter your email address to get your personal access link." : "Въвеждане на имейл адрес, за получаване на лична връзка за достъп.",
     "Email could not be sent to {emailAddress}" : "Имейлът не можа да бъде изпратен до {emailAddress}",
     "Error registering to poll" : "Грешка при регистрация за анкетиране",
