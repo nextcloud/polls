@@ -48,7 +48,7 @@
 		"core-js": "^3.27.1",
 		"dompurify": "^2.4.1",
 		"file-saver": "^2.0.5",
-		"linkify-string": "^4.0.2",
+		"linkify-string": "^4.1.0",
 		"lodash": "^4.17.21",
 		"marked": "^4.2.5",
 		"nextcloud-vue-collections": "^0.10.0",
