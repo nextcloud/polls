@@ -155,6 +155,11 @@ class SystemService {
 
 		$userName = strtolower(trim($userName));
 
+		// reserved usernames
+		if (str_contains($userName, 'deleted user') || str_contains($userName, 'anonymous')) {
+			throw new InvalidUsernameException;
+		}
+
 		// get all groups
 		foreach (Group::search() as $group) {
 			if ($userName === strtolower(trim($group->getId()))
