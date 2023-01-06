@@ -127,11 +127,10 @@ class ShareMapper extends QBMapper {
 		$share->setToken('deleted_share_' . $userId . '_' . $pollId);
 
 		// TODO: Just a quick fix, differentiate anoymous and deleted users on userGroup base
-		if (substr($userId, 0,  9) === 'Anonymous') {
+		if (substr($userId, 0, 9) === 'Anonymous') {
 			$share->setDisplayName($userId);
 		} else {
 			$share->setDisplayName('Deleted User');
-
 		}
 		return $share;
 	}
