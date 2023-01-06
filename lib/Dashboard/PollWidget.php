@@ -52,7 +52,7 @@ class PollWidget implements IWidget {
 	}
 
 	public function getIconClass(): string {
-		return 'icon-polls';
+		return 'icon-polls-dark';
 	}
 
 	public function getUrl(): ?string {
