@@ -157,8 +157,8 @@ class SystemService {
 
 		// reserved usernames
 		if (strpos($userName, 'deleted user') !== false || strpos($userName, 'anonymous') !== false) {
-		// TODO: PHP 8 syntax
-		// if (str_contains($userName, 'deleted user') || str_contains($userName, 'anonymous')) {
+			// TODO: PHP 8 syntax
+			// if (str_contains($userName, 'deleted user') || str_contains($userName, 'anonymous')) {
 			throw new InvalidUsernameException;
 		}
 
