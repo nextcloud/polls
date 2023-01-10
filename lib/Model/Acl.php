@@ -332,22 +332,6 @@ class Acl implements JsonSerializable {
 		return ($this->getIsLoggedIn() && $this->groupManager->isAdmin($this->getUserId()));
 	}
 
-	private function getAllowSeeUserNames(): bool {
-		return ($this->getIsLoggedIn() && $this->groupManager->isAdmin($this->getUserId()));
-	}
-
-	/**
-	 * getHasAdminAccess - Has user administrative rights?
-	 * Returns true, if user is in admin group and poll has allowed admins to manage the poll,
-	 * or when running console commands.
-	 */
-	private function getHasAdminAccess(): bool {
-		return (($this->getIsAdmin() && $this->poll->getAdminAccess())
-			|| defined('OC_CONSOLE')
-			|| $this->getIsDelegatedAdmin()
-		);
-	}
-
 	/**
 	 * getIsInvolved - Is user involved?
 	 * Returns true, if the current user is involved in the poll via share,
