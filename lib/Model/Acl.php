@@ -163,11 +163,11 @@ class Acl implements JsonSerializable {
 
 	public function getPollId(): int {
 		return $this->poll->getId();
-	}	
+	}
 
 	public function getToken(): string {
 		return strval($this->share->getToken());
-	}		
+	}
 
 	public function getUserId(): string {
 		return $this->getIsLoggedIn() ? $this->userSession->getUser()->getUID() : $this->share->getUserId();
@@ -516,7 +516,7 @@ class Acl implements JsonSerializable {
 
 	/**
 	 * Checks, if user is allowed to delete the poll
-	 * includes the right to archive and take over 
+	 * includes the right to archive and take over
 	 **/
 	private function getAllowDeletePoll(): bool {
 		// users with edit rights are allowed to delete the poll
@@ -607,7 +607,7 @@ class Acl implements JsonSerializable {
 		return $this->getHasEmail();
 	}
 
-	private function getShowResults() {
+	private function getShowResults(): bool {
 		// edit rights include access to results
 		if ($this->getAllowEditPoll()) {
 			return true;
@@ -626,4 +626,3 @@ class Acl implements JsonSerializable {
 		return $this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS;
 	}
 }
-
