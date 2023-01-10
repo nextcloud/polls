@@ -561,7 +561,7 @@ class Acl implements JsonSerializable {
 			return false;
 		}
 
-		return $this->poll->getAllowComment();
+		return !!$this->poll->getAllowComment();
 	}
 
 	/**
