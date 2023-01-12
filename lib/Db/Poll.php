@@ -49,8 +49,8 @@ use OCP\IURLGenerator;
  * @method void setAccess(string $value)
  * @method int getAnonymous()
  * @method void setAnonymous(integer $value)
- * @method int getallowComment()
- * @method void setallowComment(integer $value)
+ * @method int getAllowComment()
+ * @method void setAllowComment(integer $value)
  * @method int getAllowMaybe()
  * @method void setAllowMaybe(integer $value)
  * @method string getAllowProposals()
@@ -223,7 +223,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setAccess($array['access'] ?? $this->getAccess());
 		$this->setExpire($array['expire'] ?? $this->getExpire());
 		$this->setAnonymous($array['anonymous'] ?? $this->getAnonymous());
-		$this->setallowComment($array['allowComment'] ?? $this->getallowComment());
+		$this->setallowComment($array['allowComment'] ?? $this->getAllowComment());
 		$this->setAllowMaybe($array['allowMaybe'] ?? $this->getAllowMaybe());
 		$this->setAllowProposals($array['allowProposals'] ?? $this->getAllowProposals());
 		$this->setProposalsExpire($array['proposalsExpire'] ?? $this->getProposalsExpire());
