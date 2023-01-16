@@ -46,7 +46,11 @@ class Version041000Date20221221070000 extends SimpleMigrationStep {
 	/** @var FixVotes */
 	protected $fixVotes;
 
-	public function __construct(IDBConnection $connection, IConfig $config, FixVotes $fixVotes) {
+	public function __construct(
+		IDBConnection $connection, 
+		IConfig $config, 
+		FixVotes $fixVotes
+	) {
 		$this->connection = $connection;
 		$this->config = $config;
 		$this->fixVotes = $fixVotes;
@@ -62,18 +66,27 @@ class Version041000Date20221221070000 extends SimpleMigrationStep {
 		if ($schema->hasTable(Poll::TABLE)) {
 			// Call initial migration from class TableSchema
 			// Drop old tables, which are migrated in prior versions
-			TableSchema::removeObsoleteTables($schema, $output);
+			foreach (TableSchema::removeObsoleteTables($schema) as $message) {
+				$output->info('Polls - ' . $message);
+			};
 
 			// Drop old columns, which are migrated in prior versions
-			TableSchema::removeObsoleteColumns($schema, $output);
+			foreach (TableSchema::removeObsoleteColumns($schema) as $message) {
+				$output->info('Polls - ' . $message);
+			};
 		}
 
 		// Create tables, as defined in TableSchema or fix column definitions
-		TableSchema::createOrUpdateSchema($schema, $output);
+		foreach (TableSchema::createOrUpdateSchema($schema) as $message) {
+			$output->info('Polls - ' . $message);
+		};
+
 		// remove old migration entries from versions prior to polls 3.x
 		// including migration versions from test releases
 		// theoretically, only this migration should be existent. If not, no matter
-		TableSchema::removeObsoleteMigrations($this->connection, $output);
+		foreach (TableSchema::removeObsoleteMigrations($this->connection) as $message) {
+			$output->info('Polls - ' . $message);
+		};
 
 		$this->fixVotes->run($output);
 

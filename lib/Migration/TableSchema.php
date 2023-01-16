@@ -26,7 +26,6 @@ namespace OCA\Polls\Migration;
 use OCP\IDBConnection;
 use OCP\DB\Types;
 use OCP\DB\ISchemaWrapper;
-use OCP\Migration\IOutput;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Option;
@@ -36,7 +35,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Watch;
-
+use Doctrine\DBAL\Types\Type;
 /**
  * Database definition for installing and migrations
  * These definitions contain the base database layout
@@ -145,93 +144,93 @@ abstract class TableSchema {
 	 */
 	public const TABLES = [
 		Poll::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'datePoll', 'length' => 64]],
 			'title' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 128]],
 			'description' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
 			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
-			'created' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
-			'expire' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
-			'deleted' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'created' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'expire' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'deleted' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'access' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'private', 'length' => 1024]],
-			'anonymous' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'allow_maybe' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 1]],
-			'vote_limit' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'option_limit' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'anonymous' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'allow_maybe' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 1, 'length' => 20]],
+			'vote_limit' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'option_limit' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'show_results' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'always', 'length' => 64]],
-			'admin_access' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'important' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'allow_comment' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 1]],
-			'hide_booked_up' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 1]],
+			'admin_access' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'important' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'allow_comment' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 1, 'length' => 20]],
+			'hide_booked_up' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 1, 'length' => 20]],
 			'allow_proposals' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'disallow', 'length' => 64]],
-			'use_no' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 1]],
-			'proposals_expire' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'use_no' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 1, 'length' => 20]],
+			'proposals_expire' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'misc_settings' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
 		],
 		Option::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
-			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'poll_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
-			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
-			'duration' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
-			'order' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
-			'confirmed' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'duration' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'order' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'confirmed' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
-			'released' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'released' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 		],
 		Vote::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
-			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
-			'vote_option_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'vote_option_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'vote_option_text' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
 			'vote_answer' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 		],
 		Comment::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
-			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'comment' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 1024]],
-			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 
 		],
 		Share::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
 			'token' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
-			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'email_address' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
-			'invitation_sent' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
-			'reminder_sent' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'invitation_sent' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'reminder_sent' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'misc_settings' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
 		],
 		Subscription::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
-			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 		],
 		Log::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
-			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'message_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
-			'created' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
-			'processed' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'created' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'processed' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 		],
 		Watch::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
-			'poll_id' => ['type' => Types::INTEGER, 'options' => ['notnull' => true, 'default' => 0]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'table' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 64]],
-			'updated' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'updated' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'session_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null]],
 		],
 		Preferences::TABLE => [
-			'id' => ['type' => Types::INTEGER, 'options' => ['autoincrement' => true, 'notnull' => true]],
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
 			'user_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
-			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0]],
+			'timestamp' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'preferences' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
 		],
 	];
@@ -240,15 +239,16 @@ abstract class TableSchema {
 	 * Iterate over tables and make sure, they are created or updated
 	 * according to the currently valid schema
 	 */
-	public static function createOrUpdateSchema(ISchemaWrapper &$schema, IOutput &$output): void {
+	public static function createOrUpdateSchema(ISchemaWrapper &$schema): array {
+		$messages = [];
 		foreach (self::TABLES as $tableName => $columns) {
 			$tableCreated = false;
 
 			if ($schema->hasTable($tableName)) {
-				$output->info('Validating table ' . $tableName);
+				$messages[] = 'Validating table ' . $tableName;
 				$table = $schema->getTable($tableName);
 			} else {
-				$output->info('Creating table ' . $tableName);
+				$messages[] = 'Creating table ' . $tableName;
 				$table = $schema->createTable($tableName);
 				$tableCreated = true;
 			}
@@ -258,8 +258,8 @@ abstract class TableSchema {
 					$column = $table->getColumn($columnName);
 					$column->setOptions($columnDefinition['options']);
 					if ($column->getType()->getName() !== $columnDefinition['type']) {
-						$output->info('Migrating type of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['type']);
-						$column->setType($columnDefinition['type']);
+						$messages[] = 'Migrating type of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['type'];
+						$column->setType(Type::getType($columnDefinition['type']));
 					}
 
 					// force change to current options definition
@@ -273,24 +273,28 @@ abstract class TableSchema {
 				$table->setPrimaryKey(['id']);
 			}
 		}
+		return $messages;
 	}
 
 	/**
 	 * Remove obsolete tables if they still exist
 	 */
-	public static function removeObsoleteTables(ISchemaWrapper &$schema, IOutput &$output): void {
+	public static function removeObsoleteTables(ISchemaWrapper &$schema): array {
+		$messages = [];
 		foreach (self::GONE_TABLES as $tableName) {
 			if ($schema->hasTable($tableName)) {
 				$schema->dropTable($tableName);
-				$output->info('Dropped table ' . $tableName);
+				$messages[] = 'Dropped table ' . $tableName;
 			}
 		}
+		return $messages;
 	}
 
 	/**
 	 * Remove obsolete columns, if they exist
 	 */
-	public static function removeObsoleteColumns(ISchemaWrapper &$schema, IOutput &$output): void {
+	public static function removeObsoleteColumns(ISchemaWrapper &$schema): array {
+		$messages = [];
 		foreach (self::GONE_COLUMNS as $tableName => $columns) {
 			if ($schema->hasTable($tableName)) {
 				$table = $schema->getTable($tableName);
@@ -298,20 +302,23 @@ abstract class TableSchema {
 				foreach ($columns as $columnName) {
 					if ($table->hasColumn($columnName)) {
 						$table->dropColumn($columnName);
-						$output->info('Dropped obsolete column ' . $columnName . ' from ' . $tableName);
+						$messages[] = 'Dropped obsolete column ' . $columnName . ' from ' . $tableName;
 					}
 				}
 			}
 		}
+		return $messages;
 	}
 
 	/**
 	 * Tidy migrations table and remove obsolete migration entries.
 	 */
-	public static function removeObsoleteMigrations(IDBConnection &$connection, IOutput &$output): void {
+	public static function removeObsoleteMigrations(IDBConnection &$connection): array {
+		$messages = [];
 		$query = $connection->getQueryBuilder();
-		$output->info('tidy migration entries');
+		$messages[] = 'tidy migration entries';
 		foreach (self::GONE_MIGRATIONS as $version) {
+			$messages[] = '- remove ' . $version;
 			$query->delete('migrations')
 				->where('app = :appName')
 				->andWhere('version = :version')
@@ -319,5 +326,6 @@ abstract class TableSchema {
 				->setParameter('version', $version)
 				->executeStatement();
 		}
+		return $messages;
 	}
 }
