@@ -18,6 +18,7 @@ All notable changes to this project will be documented in this file.
 ### Misc
 - Refactoring of API requests to a central http API
 - Refactoring and fixes to background watcher
+- Accelerated installation and updates
 
 ## [3.8.4] - tbd
 ### Fix
