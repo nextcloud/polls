@@ -33,8 +33,12 @@ class CreateIndices implements IRepairStep {
 	/** @var Connection */
 	private $connection;
 
+	/** @var SchemaWrapper */
+	private $schema;
+
 	public function __construct(Connection $connection) {
 		$this->connection = $connection;
+		$this->schema = new SchemaWrapper($this->connection);
 	}
 
 	public function getName() {
@@ -42,42 +46,75 @@ class CreateIndices implements IRepairStep {
 	}
 
 	public function run(IOutput $output): void {
+		$this->createForeignKeyConstraints();
+		$this->createIndices();
+		$this->migrate();
+
+		$output->info('Polls - Foreign key contraints created.');
+		$output->info('Polls - Indices created.');
+	}
+
+	/**
+	 * execute the migration
+	 */
+	public function migrate() {
+		$this->connection->migrateToSchema($this->schema->getWrappedSchema());
+	}
+
+	/**
+	 * add on delete fk contraints to all tables referencing the main polls table
+	 */
+	public function createForeignKeyConstraints(): array {
+		$messages = [];
+
+		foreach (TableSchema::FK_CHILD_TABLES as $childTable) {
+			$this->createForeignKeyConstraint(TableSchema::FK_PARENT_TABLE, $childTable);
+			$messages[] = 'Add ' . TableSchema::FK_PARENT_TABLE . '[\'poll_id\'] <- ' . $childTable . '[\'id\']';
+		}
+
+		return $messages;
+	}
+
+	/**
+	 * Create all indices
+	 */
+	public function createIndices(): array {
+		$messages = [];
+
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $values) {
 			$this->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
+			$messages[] = 'Added unique index ' . $values['name'] . ' to ' . $tableName;
 		}
-		$output->info('Polls - Indices created.');
 
-		$this->createForeignKeyConstraints();
-		$output->info('Polls - Foreign key contraints created.');
+		// $this->connection->migrateToSchema($this->schema->getWrappedSchema());
+
+		return $messages;
 	}
 
 	/**
-	 * add an on delete fk contraint to all tables referencing the main polls table
+	 * add an on delete fk contraint
 	 */
-	private function createForeignKeyConstraints(): void {
-		$schema = new SchemaWrapper($this->connection);
-		$eventTable = $schema->getTable(TableSchema::FK_PARENT_TABLE);
-		foreach (TableSchema::FK_CHILD_TABLES as $tbl) {
-			$table = $schema->getTable($tbl);
-			$table->addForeignKeyConstraint($eventTable, ['poll_id'], ['id'], ['onDelete' => 'CASCADE']);
-		}
-		$this->connection->migrateToSchema($schema->getWrappedSchema());
-	}
+	private function createForeignKeyConstraint(string $parentTableName, string $childTableName): void {
+		$parentTable = $this->schema->getTable($parentTableName);
+		$childTable = $this->schema->getTable($childTableName);
 
+		$childTable->addForeignKeyConstraint($parentTable, ['poll_id'], ['id'], ['onDelete' => 'CASCADE']);
+
+		// $this->connection->migrateToSchema($this->schema->getWrappedSchema());
+	}
+	
 	/**
-	 * Create index for $table
+	 * Create index
 	 */
 	private function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false): void {
-		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable($tableName)) {
-			$table = $schema->getTable($tableName);
+		if ($this->schema->hasTable($tableName)) {
+			$table = $this->schema->getTable($tableName);
 			if (!$table->hasIndex($indexName)) {
 				if ($unique) {
 					$table->addUniqueIndex($columns, $indexName);
 				} else {
 					$table->addIndex($columns, $indexName);
 				}
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
 			}
 		}
 	}

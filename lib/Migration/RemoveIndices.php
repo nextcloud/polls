@@ -37,91 +37,118 @@ class RemoveIndices implements IRepairStep {
 	/** @var Connection */
 	private $connection;
 
+	/** @var SchemaWrapper */
+	private $schema;
+
 	public function __construct(Connection $connection) {
 		$this->connection = $connection;
+		$this->schema = new SchemaWrapper($this->connection);
 	}
 
 	public function getName() {
-		return 'Polls - Remove indices and foreign key constraints';
+		return 'Polls - Remove foreign key constraints and generic indices';
 	}
 
 	public function run(IOutput $output): void {
-		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
-			$this->removeForeignKeys($tableName);
-			$this->removeGenericIndices($tableName);
-		}
-
-		foreach (TableSchema::UNIQUE_INDICES as $tableName => $value) {
-			$this->removeUniqueIndices($tableName);
-		}
+		$this->removeAllForeignKeyConstraints();
+		$this->removeAllGenericIndices();
+		$this->removeAllUniqueIndices();
+		$this->migrate();
 	}
 
 	/**
-	 * remove a foreign key with $foreignKeyName from $tableName
+	 * execute the migration
 	 */
-	private function removeForeignKey(string $tableName, string $foreignKeyName): void {
-		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable($tableName)) {
-			$table = $schema->getTable($tableName);
-			$table->removeForeignKey($foreignKeyName);
-			$this->connection->migrateToSchema($schema->getWrappedSchema());
-		}
-	}
-
-	/**
-	 * remove an index with $indexName from $tableName
-	 */
-	private function removeIndex(string $tableName, string $indexName): void {
-		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable($tableName)) {
-			$table = $schema->getTable($tableName);
-			if ($table->hasIndex($indexName)) {
-				$table->dropIndex($indexName);
-				$this->connection->migrateToSchema($schema->getWrappedSchema());
-			}
-		}
-	}
-
-	/**
-	 * remove all UNIQUE indices from $table
-	 */
-	private function removeUniqueIndices(string $tableName): void {
-		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable($tableName)) {
-			$table = $schema->getTable($tableName);
-			foreach ($table->getIndexes() as $index) {
-				if (strpos($index->getName(), 'UNIQ_') === 0) {
-					$this->removeIndex($tableName, $index->getName());
-				}
-			}
-		}
-	}
-
-	/**
-	 * remove all UNIQUE indices from $table
-	 */
-	private function removeGenericIndices(string $tableName): void {
-		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable($tableName)) {
-			$table = $schema->getTable($tableName);
-			foreach ($table->getIndexes() as $index) {
-				if (strpos($index->getName(), 'IDX_') === 0) {
-					$this->removeIndex($tableName, $index->getName());
-				}
-			}
-		}
+	public function migrate() {
+		$this->connection->migrateToSchema($this->schema->getWrappedSchema());
 	}
 
 	/**
 	 * 	remove all foreign keys from $tableName
 	 */
-	private function removeForeignKeys(string $tableName): void {
-		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable($tableName)) {
-			$table = $schema->getTable($tableName);
+	public function removeAllForeignKeyConstraints(): array {
+		$messages = [];
+
+		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
+			$messages = array_merge($messages, $this->removeForeignKeysFromTable($tableName));
+		}
+
+		return $messages;
+	}
+
+	/**
+	 * 	remove all foreign keys from $tableName
+	 */
+	public function removeAllGenericIndices(): array {
+		$messages = [];
+
+		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
+			$messages = array_merge($messages, $this->removeGenericIndicesFromTable($tableName));
+		}
+
+		return $messages;
+	}
+
+	/**
+	 * 	remove all foreign keys from $tableName
+	 */
+	public function removeAllUniqueIndices(): array {
+		$messages = [];
+
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $value) {
+			$messages = array_merge($messages, $this->removeUniqueIndicesFromTable($tableName));
+		}
+
+		return $messages;
+	}
+
+	/**
+	 * 	remove all foreign keys from $tableName
+	 */
+	private function removeForeignKeysFromTable(string $tableName): array {
+		$messages = [];
+		if ($this->schema->hasTable($tableName)) {
+			$table = $this->schema->getTable($tableName);
 			foreach ($table->getForeignKeys() as $foreignKey) {
-				$this->removeForeignKey($tableName, $foreignKey->getName());
+				$messages[] = 'Remove ' . $foreignKey->getName() . ' from ' . $tableName;
+				$table->removeForeignKey($foreignKey->getName());
 			}
 		}
+		
+		return $messages;
+	}
+	
+	/**
+	 * remove all UNIQUE indices from $table
+	 */
+	private function removeUniqueIndicesFromTable(string $tableName): array {
+		$messages = [];
+		if ($this->schema->hasTable($tableName)) {
+			$table = $this->schema->getTable($tableName);
+			foreach ($table->getIndexes() as $index) {
+				if (strpos($index->getName(), 'UNIQ_') === 0) {
+					$messages[] = 'Remove ' . $index->getName() . ' from ' . $tableName;
+					$table->dropIndex($index->getName());
+				}
+			}
+		}
+		return $messages;
+	}
+	
+	/**
+	 * remove all UNIQUE indices from $table
+	 */
+	private function removeGenericIndicesFromTable(string $tableName): array {
+		$messages = [];
+		if ($this->schema->hasTable($tableName)) {
+			$table = $this->schema->getTable($tableName);
+			foreach ($table->getIndexes() as $index) {
+				if (strpos($index->getName(), 'IDX_') === 0) {
+					$messages[] = 'Remove ' . $index->getName() . ' from ' . $tableName;
+					$table->dropIndex($index->getName());
+				}
+			}
+		}
+		return $messages;
 	}
 }

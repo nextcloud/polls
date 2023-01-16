@@ -1,28 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="4.26.0@6998fabb2bf528b65777bf9941920888d23c03ac">
-  <file src="lib/Db/Preferences.php">
-    <UndefinedClass occurrences="2">
-      <code>BackgroundService</code>
-      <code>BackgroundService</code>
-    </UndefinedClass>
+<files psalm-version="4.30.0@d0bc6e25d89f649e4f36a534f330f8bb4643dd69">
+  <file src="lib/Migration/CreateIndices.php">
+    <UndefinedDocblockClass occurrences="6">
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>SchemaWrapper</code>
+    </UndefinedDocblockClass>
   </file>
-  <file src="lib/Model/CalendarEvent.php">
-    <UndefinedInterfaceMethod occurrences="1">
-      <code>getUri</code>
-    </UndefinedInterfaceMethod>
-  </file>
-  <file src="lib/Service/CalendarService.php">
-    <UndefinedInterfaceMethod occurrences="5">
-      <code>getCalendarsForPrincipal</code>
-      <code>getUri</code>
-      <code>getUri</code>
-      <code>newQuery</code>
-      <code>searchForPrincipal</code>
-    </UndefinedInterfaceMethod>
-  </file>
-  <file src="lib/Service/UserService.php">
-    <UndefinedInterfaceMethod occurrences="1">
-      <code>findGenericLanguage</code>
-    </UndefinedInterfaceMethod>
+  <file src="lib/Migration/RemoveIndices.php">
+    <UndefinedDocblockClass occurrences="8">
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>$this-&gt;schema</code>
+      <code>SchemaWrapper</code>
+    </UndefinedDocblockClass>
   </file>
 </files>
