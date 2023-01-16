@@ -84,7 +84,6 @@ class RemoveIndices extends Command {
 		foreach ($messages as $message) {
 			$output->writeln('<info> ' . $message . ' </info>');
 		}
-
 	}
 
 	/**
@@ -97,7 +96,6 @@ class RemoveIndices extends Command {
 		foreach ($messages as $message) {
 			$output->writeln('<info> ' . $message . ' </info>');
 		}
-
 	}
 
 	/**

@@ -37,7 +37,7 @@ class AddIndices extends Command {
 		IndexManager $indexManager
 	) {
 		parent::__construct();
-        $this->indexManager = $indexManager;
+		$this->indexManager = $indexManager;
 	}
 
 	protected function configure(): void {

@@ -95,7 +95,7 @@ class RemoveIndices implements IRepairStep {
 	public function removeAllUniqueIndices(): array {
 		$messages = [];
 
-		foreach	(TableSchema::UNIQUE_INDICES as $tableName => $value) {
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $value) {
 			$messages = array_merge($messages, $this->removeUniqueIndicesFromTable($tableName));
 		}
 

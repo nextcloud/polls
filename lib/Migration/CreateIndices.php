@@ -52,7 +52,6 @@ class CreateIndices implements IRepairStep {
 
 		$output->info('Polls - Foreign key contraints created.');
 		$output->info('Polls - Indices created.');
-
 	}
 
 	/**

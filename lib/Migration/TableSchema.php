@@ -36,6 +36,7 @@ use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Watch;
 use Doctrine\DBAL\Types\Type;
+
 /**
  * Database definition for installing and migrations
  * These definitions contain the base database layout

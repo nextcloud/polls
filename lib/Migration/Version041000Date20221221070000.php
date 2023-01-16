@@ -47,8 +47,8 @@ class Version041000Date20221221070000 extends SimpleMigrationStep {
 	protected $fixVotes;
 
 	public function __construct(
-		IDBConnection $connection, 
-		IConfig $config, 
+		IDBConnection $connection,
+		IConfig $config,
 		FixVotes $fixVotes
 	) {
 		$this->connection = $connection;
