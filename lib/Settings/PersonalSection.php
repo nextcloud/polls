@@ -52,6 +52,6 @@ class PersonalSection implements IIconSection {
 	}
 
 	public function getIcon(): string {
-		return $this->urlGenerator->imagePath('polls', 'polls.svg');
+		return $this->urlGenerator->imagePath('polls', 'polls-dark.svg');
 	}
 }
