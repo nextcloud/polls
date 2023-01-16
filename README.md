@@ -36,6 +36,15 @@ This app is supposed to work on Nextcloud version 21+.
 ### Install latest release
 You can download and install the latest release from the [Nextcloud app store](https://apps.nextcloud.com/apps/polls).
 
+## Available occ commands
+| Command | Description |
+| - | - |
+| `polls:db:rebuild`                                                           | Rebuild Polls' database including indices                    |
+| `polls:index:add`                                                            | Create all necessary indices and foreign key constraints     |
+| `polls:index:remove`                                                         | Remove all indices                                           |
+| `polls:poll:transfer-ownership  <source-user> <target-user>`                 | Transfer poll ownership from  <source-user> to <target-user> |
+| `polls:share:add [--user USER] [--group GROUP] [--email EMAIL] [--] <id>`    | Add user/group/email with <id> to shares                     |
+| `polls:share:remove [--user USER] [--group GROUP] [--email EMAIL] [--] <id>` | Remove user/group/email with <id> from shares                |
 ## Support
 - Report a bug or request a feature:  https://github.com/nextcloud/polls/issues
 - Community support: https://help.nextcloud.com/c/apps/polls/
