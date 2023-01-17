@@ -1,12 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.1.0] - tbd
+## [4.1.0] - 2023-01-17
 ### New
 - Added a dashboard widget for relevant polls
 - Improved registration dialog for public polls
 - Small design change to vote page according to new nextcloud design
-- Improved registration dialog
 ### Fix
  - Reset own votes as a logged in user without admin rights
  - Error was thrown, when a owner of an option was null
