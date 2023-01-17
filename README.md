@@ -26,7 +26,6 @@
 - :toolbox: Usable via REST-API
 - Supports the following nextcloud apps
     - Circles
-    - Collections aka projects
     - Contacts
     - Activity
 
