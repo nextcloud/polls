@@ -50,7 +50,7 @@ class VoteService {
 	 *
 	 * @return Vote[]
 	 */
-	public function list(?int $pollId, ?Acl $acl = null) : array {
+	public function list(?int $pollId = null, ?Acl $acl = null) : array {
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
@@ -137,7 +137,7 @@ class VoteService {
 	/**
 	 * Remove user from poll
 	 */
-	public function delete(?int $pollId, ?string $userId, ?Acl $acl = null): string {
+	public function delete(?int $pollId = null, ?string $userId = null, ?Acl $acl = null): string {
 		if ($acl) {
 			$this->acl = $acl;
 			$userId = $this->acl->getUserId();

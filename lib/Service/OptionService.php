@@ -72,7 +72,7 @@ class OptionService {
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function list(?int $pollId, ?Acl $acl = null): array {
+	public function list(?int $pollId = null, ?Acl $acl = null): array {
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
