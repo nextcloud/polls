@@ -39,7 +39,7 @@ use OCP\AppFramework\Db\Entity;
 class Preferences extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_preferences';
 
-	protected string $userId= '';
+	protected string $userId = '';
 	protected int $timestamp = 0;
 	protected string $preferences = '';
 
