@@ -10,8 +10,8 @@ inputs:
     description: 'App to checkout (default: polls)'
   php-version:
     required: false
-    default: '7.4'
-    description: 'PHP version (default: 7.4)'
+    default: '8.0'
+    description: 'PHP version (default: 8.0)'
   server-path:
     required: false
     default: server
