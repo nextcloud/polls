@@ -28,8 +28,7 @@ use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Exceptions\InvalidClassException;
 
 class CommentListener extends BaseListener {
-	/** @var array */
-	protected $watchTables = [Watch::OBJECT_COMMENTS];
+	protected const WATCH_TABLES = [Watch::OBJECT_COMMENTS];
 
 	protected function checkClass() : void {
 		if (!($this->event instanceof CommentEvent)) {

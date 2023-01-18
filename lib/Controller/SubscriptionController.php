@@ -30,22 +30,14 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class SubscriptionController extends BaseController {
-	/** @var SubscriptionService */
-	private $subscriptionService;
-
-	/** @var Acl */
-	private $acl;
-	
 	public function __construct(
 		string $appName,
-		Acl $acl,
 		ISession $session,
 		IRequest $request,
-		SubscriptionService $subscriptionService
+		private Acl $acl,
+		private SubscriptionService $subscriptionService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->acl = $acl;
-		$this->subscriptionService = $subscriptionService;
 	}
 
 	/**

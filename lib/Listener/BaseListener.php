@@ -42,44 +42,17 @@ use OCP\User\Events\UserDeletedEvent;
  * @template-implements IEventListener<Event>
  */
 abstract class BaseListener implements IEventListener {
-	/** @var ActivityService */
-	protected $activityService;
-
-	/** @var AppSettings */
-	protected $appSettings;
-
-	/** @var IJobList */
-	protected $jobList;
-
-	/** @var LogService */
-	protected $logService;
-
-	/** @var NotificationService */
-	protected $notificationService;
-
-	/** @var WatchService */
-	protected $watchService;
-
-	/** @var Event|BaseEvent|GroupDeletedEvent|UserDeletedEvent */
-	protected $event = null;
-
-	/** @var array */
-	protected $watchTables = [];
+	protected Event|BaseEvent|GroupDeletedEvent|UserDeletedEvent|null $event = null;
+	protected const WATCH_TABLES = [];
 
 	public function __construct(
-		ActivityService $activityService,
-		AppSettings $appSettings,
-		IJobList $jobList,
-		LogService $logService,
-		NotificationService $notificationService,
-		WatchService $watchService
+		protected ActivityService $activityService,
+		protected AppSettings $appSettings,
+		protected IJobList $jobList,
+		protected LogService $logService,
+		protected NotificationService $notificationService,
+		protected WatchService $watchService
 	) {
-		$this->appSettings = $appSettings;
-		$this->activityService = $activityService;
-		$this->jobList = $jobList;
-		$this->logService = $logService;
-		$this->notificationService = $notificationService;
-		$this->watchService = $watchService;
 	}
 
 	public function handle(Event $event) : void {
@@ -171,10 +144,10 @@ abstract class BaseListener implements IEventListener {
 
 	/**
 	 * Default for watch
-	 * Tables to watch are defined in $this->watchTables
+	 * Tables to watch are defined in WATCH_TABLES
 	 */
 	protected function writeWatch() : void {
-		foreach ($this->watchTables as $table) {
+		foreach (self::WATCH_TABLES as $table) {
 			$this->watchService->writeUpdate($this->event->getPollId(), $table);
 		}
 	}

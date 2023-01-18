@@ -31,23 +31,13 @@ use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Model\Settings\AppSettings;
 
 class JanitorCron extends TimedJob {
-	/** @var LogMapper */
-	private $logMapper;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var WatchMapper */
-	private $watchMapper;
-
-	/** @var AppSettings */
-	private $appSettings;
+	private AppSettings $appSettings;
 
 	public function __construct(
-		ITimeFactory $time,
-		LogMapper $logMapper,
-		PollMapper $pollMapper,
-		WatchMapper $watchMapper
+		protected ITimeFactory $time,
+		private LogMapper $logMapper,
+		private PollMapper $pollMapper,
+		private WatchMapper $watchMapper
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day

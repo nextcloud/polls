@@ -26,9 +26,6 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class InvalidUsernameException extends Exception {
-	/**
-	 * InvalidUsernameException Constructor
-	 */
 	public function __construct(
 		string $e = 'Username not allowed'
 	) {

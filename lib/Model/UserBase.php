@@ -50,76 +50,30 @@ class UserBase implements \JsonSerializable {
 	public const TYPE_USER = User::TYPE;
 	public const TYPE_ADMIN = Admin::TYPE;
 
-	/** @var string */
-	protected $richObjectType = 'user';
-
-	/** @var IL10N */
-	protected $l10n;
-
-	/** @var string */
-	protected $id;
-
-	/** @var string */
-	protected $type;
-
-	/** @var string */
-	protected $displayName = '';
-
-	/** @var string */
-	protected $description = '';
-
-	/** @var string */
-	protected $emailAddress = '';
-
-	/** @var string */
-	protected $languageCode = '';
-
-	/** @var string */
-	protected $localeCode = '';
-
-	/** @var string */
-	protected $organisation = '';
-
-	/** @var string */
-	protected $icon = '';
-
-	/** @var bool */
-	protected $isNoUser = true;
-
 	/** @var string[] */
-	protected $categories = [];
-
-	/** @var IDateTimeZone */
-	protected $timeZone;
-	
-	/** @var string */
-	protected $timeZoneName;
-
-	/** @var IUserSession */
-	protected $userSession;
+	protected array $categories = [];
+	protected bool $isNoUser = true;
+	protected string $description = '';
+	protected string $richObjectType = 'user';
+	protected string $organisation = '';
+	protected string $icon = '';
+	protected IDateTimeZone $timeZone;
+	protected IL10N $l10n;
+	protected IUserSession $userSession;
 
 	public function __construct(
-		string $id,
-		string $type,
-		string $displayName = '',
-		string $emailAddress = '',
-		string $languageCode = '',
-		string $localeCode = '',
-		string $timeZoneName = ''
+		protected string $id,
+		protected string $type,
+		protected string $displayName = '',
+		protected string $emailAddress = '',
+		protected string $languageCode = '',
+		protected string $localeCode = '',
+		protected string $timeZoneName = '',
 	) {
 		$this->icon = 'icon-share';
-
 		$this->l10n = Container::getL10N();
 		$this->timeZone = Container::queryClass(IDateTimeZone::class);
 		$this->userSession = Container::queryClass(IUserSession::class);
-
-		$this->id = $id;
-		$this->type = $type;
-		$this->displayName = $displayName;
-		$this->emailAddress = $emailAddress;
-		$this->timeZoneName = $timeZoneName;
-		$this->localeCode = $localeCode;
-		$this->languageCode = $languageCode;
 	}
 
 	public function getId(): string {
@@ -170,12 +124,14 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getEmailAddress(): string {
-		return $this->emailAddress ?? '';
+		return $this->emailAddress;
+		// return $this->emailAddress ?? '';
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
 	public function getEmailAddressMasked(): string {
-		return $this->emailAddress ?? '';
+		return $this->emailAddress;
+		// return $this->emailAddress ?? '';
 	}
 
 	public function getOrganisation(): string {

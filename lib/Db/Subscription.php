@@ -38,14 +38,11 @@ use OCP\AppFramework\Db\Entity;
 class Subscription extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_notif';
 
-	/** @var int $pollId */
-	protected $pollId = 0;
-
-	/** @var string $userId */
-	protected $userId = '';
-
 	/** @var Log[] $logEntries */
-	protected $logEntries = [];
+	protected array $logEntries = [];
+	protected int $pollId = 0;
+	protected string $userId = '';
+
 
 	public function __construct() {
 		$this->addType('pollId', 'int');

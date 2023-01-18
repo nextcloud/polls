@@ -34,10 +34,8 @@ use OCP\Migration\IOutput;
  * @template-extends QBMapper<Option>
  */
 class OptionMapper extends QBMapper {
-	public const TABLE = Option::TABLE;
-
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, self::TABLE, Option::class);
+		parent::__construct($db, Option::TABLE, Option::class);
 	}
 
 	/**

@@ -30,17 +30,13 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class SystemController extends BaseController {
-	/** @var SystemService */
-	private $systemService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		SystemService $systemService
+		private SystemService $systemService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->systemService = $systemService;
 	}
 
 	/**

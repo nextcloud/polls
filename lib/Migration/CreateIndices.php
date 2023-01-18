@@ -30,14 +30,10 @@ use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
 class CreateIndices implements IRepairStep {
-	/** @var Connection */
-	private $connection;
-
 	/** @var SchemaWrapper */
 	private $schema;
 
-	public function __construct(Connection $connection) {
-		$this->connection = $connection;
+	public function __construct(private Connection $connection) {
 		$this->schema = new SchemaWrapper($this->connection);
 	}
 

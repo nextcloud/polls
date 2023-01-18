@@ -31,33 +31,13 @@ use OCA\Polls\Model\Acl;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class CommentService {
-	/** @var Acl */
-	private $acl;
-
-	/** @var AnonymizeService */
-	private $anonymizer;
-
-	/** @var CommentMapper */
-	private $commentMapper;
-
-	/** @var Comment */
-	private $comment;
-
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
-
 	public function __construct(
-		Acl $acl,
-		AnonymizeService $anonymizer,
-		CommentMapper $commentMapper,
-		Comment $comment,
-		IEventDispatcher $eventDispatcher
+		private Acl $acl,
+		private AnonymizeService $anonymizer,
+		private CommentMapper $commentMapper,
+		private Comment $comment,
+		private IEventDispatcher $eventDispatcher,
 	) {
-		$this->acl = $acl;
-		$this->anonymizer = $anonymizer;
-		$this->commentMapper = $commentMapper;
-		$this->comment = $comment;
-		$this->eventDispatcher = $eventDispatcher;
 	}
 
 	/**

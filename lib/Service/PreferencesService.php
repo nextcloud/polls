@@ -29,21 +29,12 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 class PreferencesService {
-	/** @var PreferencesMapper */
-	private $preferencesMapper;
-
-	/** @var Preferences */
-	private $preferences;
-
-	/** @var string|null */
-	private $userId;
+	private Preferences $preferences;
 
 	public function __construct(
-		?string $userId,
-		PreferencesMapper $preferencesMapper
+		private ?string $userId,
+		private PreferencesMapper $preferencesMapper,
 	) {
-		$this->userId = $userId;
-		$this->preferencesMapper = $preferencesMapper;
 		$this->preferences = new Preferences;
 		$this->load();
 	}

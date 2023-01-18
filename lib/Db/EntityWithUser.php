@@ -35,8 +35,7 @@ use OCP\IUserManager;
  */
 
 abstract class EntityWithUser extends Entity {
-	/** @var string $publicUserId */
-	protected $publicUserId = '';
+	protected string $publicUserId = '';
 
 	public function getIsNoUser(): bool {
 		return !(Container::queryClass(IUserManager::class)->get($this->getUserId()) instanceof IUser);

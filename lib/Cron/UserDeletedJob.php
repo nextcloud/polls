@@ -40,60 +40,20 @@ use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
 
 class UserDeletedJob extends QueuedJob {
-	/** @var CommentMapper **/
-	private $commentMapper;
-
-	/** @var ISecureRandom */
-	private $secureRandom;
-
-	/** @var LogMapper **/
-	private $logMapper;
-
-	/** @var OptionMapper **/
-	private $optionMapper;
-
-	/** @var PollMapper **/
-	private $pollMapper;
-
-	/** @var PreferencesMapper **/
-	private $preferencesMapper;
-
-	/** @var SubscriptionMapper **/
-	private $subscriptionMapper;
-
-	/** @var ShareMapper **/
-	private $shareMapper;
-
-	/** @var VoteMapper **/
-	private $voteMapper;
-
-	/** @var LoggerInterface */
-	private $logger;
-
 	public function __construct(
-		CommentMapper $commentMapper,
-		ISecureRandom $secureRandom,
-		LogMapper $logMapper,
-		OptionMapper $optionMapper,
-		PollMapper $pollMapper,
-		PreferencesMapper $preferencesMapper,
-		ShareMapper $shareMapper,
-		SubscriptionMapper $subscriptionMapper,
-		VoteMapper $voteMapper,
-		ITimeFactory $time,
-		LoggerInterface $logger
+		private CommentMapper $commentMapper,
+		private ISecureRandom $secureRandom,
+		protected ITimeFactory $time,
+		private LoggerInterface $logger,
+		private LogMapper $logMapper,
+		private OptionMapper $optionMapper,
+		private PollMapper $pollMapper,
+		private PreferencesMapper $preferencesMapper,
+		private ShareMapper $shareMapper,
+		private SubscriptionMapper $subscriptionMapper,
+		private VoteMapper $voteMapper,
 	) {
 		parent::__construct($time);
-		$this->commentMapper = $commentMapper;
-		$this->logMapper = $logMapper;
-		$this->optionMapper = $optionMapper;
-		$this->pollMapper = $pollMapper;
-		$this->preferencesMapper = $preferencesMapper;
-		$this->secureRandom = $secureRandom;
-		$this->shareMapper = $shareMapper;
-		$this->subscriptionMapper = $subscriptionMapper;
-		$this->voteMapper = $voteMapper;
-		$this->logger = $logger;
 	}
 
 	/**

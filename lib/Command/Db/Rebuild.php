@@ -35,25 +35,13 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 use Doctrine\DBAL\Types\Type;
 
 class Rebuild extends Command {
-    /** @var Connection */
-	private $connection;
-
-	/** @var IndexManagerCreate */
-	private $indexManagerCreate;
-
-	/** @var IndexManagerRemove */
-	private $indexManagerRemove;
-
 	public function __construct(
-		Connection $connection,
-		IndexManagerCreate $indexManagerCreate,
-		IndexManagerRemove $indexManagerRemove
+		private Connection $connection,
+		private IndexManagerCreate $indexManagerCreate,
+		private IndexManagerRemove $indexManagerRemove
 
 	) {
 		parent::__construct();
-        $this->connection = $connection;
-		$this->indexManagerCreate = $indexManagerCreate;
-		$this->indexManagerRemove = $indexManagerRemove;
 	}
 
 	protected function configure(): void {

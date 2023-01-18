@@ -31,17 +31,11 @@ use OCP\ISession;
  * @template-extends QBMapper<Watch>
  */
 class WatchMapper extends QBMapper {
-	public const TABLE = Watch::TABLE;
-
-	/** @var ISession */
-	protected $session = null;
-
 	public function __construct(
 		IDBConnection $db,
-		ISession $session
+		protected ISession $session
 	) {
-		parent::__construct($db, self::TABLE, Watch::class);
-		$this->session = $session;
+		parent::__construct($db, Watch::TABLE, Watch::class);
 	}
 
 	/**

@@ -42,72 +42,25 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 
 class PublicController extends BaseController {
-	/** @var Acl */
-	private $acl;
-	
-	/** @var CommentService */
-	private $commentService;
-
-	/** @var MailService */
-	private $mailService;
-
-	/** @var OptionService */
-	private $optionService;
-	
-	/** @var PollService */
-	private $pollService;
-	
-	/** @var ShareService */
-	private $shareService;
-	
-	/** @var SubscriptionService */
-	private $subscriptionService;
-	
-	/** @var SystemService */
-	private $systemService;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var IUserSession */
-	private $userSession;
-	
-	/** @var VoteService */
-	private $voteService;
-
-	/** @var WatchService */
-	private $watchService;
 
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		IURLGenerator $urlGenerator,
-		IUserSession $userSession,
-		Acl $acl,
-		CommentService $commentService,
-		MailService $mailService,
-		OptionService $optionService,
-		PollService $pollService,
-		ShareService $shareService,
-		SubscriptionService $subscriptionService,
-		SystemService $systemService,
-		VoteService $voteService,
-		WatchService $watchService
+		private IURLGenerator $urlGenerator,
+		private IUserSession $userSession,
+		private Acl $acl,
+		private CommentService $commentService,
+		private MailService $mailService,
+		private OptionService $optionService,
+		private PollService $pollService,
+		private ShareService $shareService,
+		private SubscriptionService $subscriptionService,
+		private SystemService $systemService,
+		private VoteService $voteService,
+		private WatchService $watchService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->urlGenerator = $urlGenerator;
-		$this->userSession = $userSession;
-		$this->acl = $acl;
-		$this->commentService = $commentService;
-		$this->mailService = $mailService;
-		$this->optionService = $optionService;
-		$this->pollService = $pollService;
-		$this->shareService = $shareService;
-		$this->subscriptionService = $subscriptionService;
-		$this->systemService = $systemService;
-		$this->voteService = $voteService;
-		$this->watchService = $watchService;
 	}
 
 	/**

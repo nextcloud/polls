@@ -30,22 +30,14 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class OptionController extends BaseController {
-	/** @var OptionService */
-	private $optionService;
-
-	/** @var CalendarService */
-	private $calendarService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
-		OptionService $optionService,
-		CalendarService $calendarService
+		protected ISession $session,
+		private OptionService $optionService,
+		private CalendarService $calendarService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->optionService = $optionService;
-		$this->calendarService = $calendarService;
 	}
 
 	/**

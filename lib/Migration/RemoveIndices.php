@@ -34,14 +34,10 @@ use OCP\Migration\IOutput;
  * while changing the schema
  */
 class RemoveIndices implements IRepairStep {
-	/** @var Connection */
-	private $connection;
-
 	/** @var SchemaWrapper */
 	private $schema;
 
-	public function __construct(Connection $connection) {
-		$this->connection = $connection;
+	public function __construct(private Connection $connection) {
 		$this->schema = new SchemaWrapper($this->connection);
 	}
 

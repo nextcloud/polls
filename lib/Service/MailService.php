@@ -40,41 +40,17 @@ use OCA\Polls\Model\UserBase;
 use Psr\Log\LoggerInterface;
 
 class MailService {
-	/** @var LoggerInterface */
-	private $logger;
-	
-	/** @var LogMapper */
-	private $logMapper;
-	
 	/** @var Log[] **/
-	private $logs;
-	
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-	
-	/** @var SubscriptionMapper */
-	private $subscriptionMapper;
-
-	/** @var UserService */
-	private $userService;
+	private array $logs;
 
 	public function __construct(
-		LoggerInterface $logger,
-		LogMapper $logMapper,
-		PollMapper $pollMapper,
-		ShareMapper $shareMapper,
-		SubscriptionMapper $subscriptionMapper,
-		UserService $userService
+		private LoggerInterface $logger,
+		private LogMapper $logMapper,
+		private PollMapper $pollMapper,
+		private ShareMapper $shareMapper,
+		private SubscriptionMapper $subscriptionMapper,
+		private UserService $userService,
 	) {
-		$this->logger = $logger;
-		$this->logMapper = $logMapper;
-		$this->pollMapper = $pollMapper;
-		$this->shareMapper = $shareMapper;
-		$this->subscriptionMapper = $subscriptionMapper;
-		$this->userService = $userService;
 		$this->logs = [];
 	}
 

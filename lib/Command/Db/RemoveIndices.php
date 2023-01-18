@@ -30,14 +30,8 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class RemoveIndices extends Command {
-	/** @var IndexManager */
-	private $indexManager;
-
-	public function __construct(
-		IndexManager $indexManager
-	) {
+	public function __construct(private IndexManager $indexManager) {
 		parent::__construct();
-		$this->indexManager = $indexManager;
 	}
 
 	protected function configure(): void {

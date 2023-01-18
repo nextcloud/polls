@@ -40,33 +40,13 @@ class Notifier implements INotifier {
 	public const NOTIFY_POLL_TAKEOVER = 'takeOverPoll';
 	public const NOTIFY_INVITATION = 'invitation';
 
-	/** @var IFactory */
-	protected $l10nFactory;
-
-	/** @var IURLGenerator */
-	protected $urlGenerator;
-
-	/** @var IUserManager */
-	protected $userManager;
-
-	/** @var PollMapper */
-	protected $pollMapper;
-
-	/** @var NotificationService */
-	private $notificationService;
-
 	public function __construct(
-		IFactory $l10nFactory,
-		IURLGenerator $urlGenerator,
-		IUserManager $userManager,
-		PollMapper $pollMapper,
-		NotificationService $notificationService
+		protected IFactory $l10nFactory,
+		protected IURLGenerator $urlGenerator,
+		protected IUserManager $userManager,
+		protected PollMapper $pollMapper,
+		private NotificationService $notificationService
 	) {
-		$this->l10nFactory = $l10nFactory;
-		$this->urlGenerator = $urlGenerator;
-		$this->userManager = $userManager;
-		$this->pollMapper = $pollMapper;
-		$this->notificationService = $notificationService;
 	}
 
 	/**

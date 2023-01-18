@@ -32,27 +32,15 @@ use OCA\Polls\Service\CalendarService;
 use OCP\ISession;
 
 class PreferencesController extends BaseController {
-	/** @var PreferencesService */
-	private $preferencesService;
-
-	/** @var CalendarService */
-	private $calendarService;
-
-	/** @var IUserSession */
-	private $userSession;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		PreferencesService $preferencesService,
-		CalendarService $calendarService,
-		IUserSession $userSession
+		private PreferencesService $preferencesService,
+		private CalendarService $calendarService,
+		private IUserSession $userSession
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->calendarService = $calendarService;
-		$this->preferencesService = $preferencesService;
-		$this->userSession = $userSession;
 	}
 
 	/**

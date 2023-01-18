@@ -33,22 +33,14 @@ use OCP\ISession;
 use OCP\IRequest;
 
 class ShareController extends BaseController {
-	/** @var ShareService */
-	private $shareService;
-
-	/** @var UserService */
-	private $userService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		ShareService $shareService,
-		UserService $userService
+		private ShareService $shareService,
+		private UserService $userService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->shareService = $shareService;
-		$this->userService = $userService;
 	}
 
 	/**

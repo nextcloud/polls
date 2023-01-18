@@ -28,15 +28,10 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 
 class PollWidget implements IWidget {
-	private IL10N $l10n;
-	private IURLGenerator $urlGenerator;
-
 	public function __construct(
-		IL10N $l10n,
-		IURLGenerator $urlGenerator
+		private IL10N $l10n,
+		private IURLGenerator $urlGenerator
 	) {
-		$this->l10n = $l10n;
-		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function getId(): string {

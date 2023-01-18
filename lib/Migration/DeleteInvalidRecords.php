@@ -31,7 +31,6 @@ use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
 use OCA\Polls\Db\LogMapper;
-use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\Poll;
@@ -45,63 +44,17 @@ use OCA\Polls\Db\WatchMapper;
  * Remove all invalid records to avoid erros while adding indices ans constraints
  */
 class DeleteInvalidRecords implements IRepairStep {
-	/** @var IConfig */
-	protected $config;
-
-	/** @var Connection */
-	protected $connection;
-
-	/** @var LogMapper */
-	private $logMapper;
-
-	/** @var OptionMapper */
-	private $optionMapper;
-
-	/** @var PreferencesMapper */
-	private $preferencesMapper;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
-	/** @var SubscriptionMapper */
-	private $subscriptionMapper;
-
-	/** @var VoteMapper */
-	private $voteMapper;
-
-	/** @var WatchMapper */
-	private $watchMapper;
-
-	/** @var array */
-	protected $childTables = [
-		CommentMapper::TABLE,
-		LogMapper::TABLE,
-		SubscriptionMapper::TABLE,
-		OptionMapper::TABLE,
-		ShareMapper::TABLE,
-		VoteMapper::TABLE,
-	];
-
 	public function __construct(
-		IConfig $config,
-		Connection $connection,
-		LogMapper $logMapper,
-		OptionMapper $optionMapper,
-		PreferencesMapper $preferencesMapper,
-		ShareMapper $shareMapper,
-		SubscriptionMapper $subscriptionMapper,
-		VoteMapper $voteMapper,
-		WatchMapper $watchMapper
+		protected IConfig $config,
+		protected Connection $connection,
+		private LogMapper $logMapper,
+		private OptionMapper $optionMapper,
+		private PreferencesMapper $preferencesMapper,
+		private ShareMapper $shareMapper,
+		private SubscriptionMapper $subscriptionMapper,
+		private VoteMapper $voteMapper,
+		private WatchMapper $watchMapper
 	) {
-		$this->config = $config;
-		$this->connection = $connection;
-		$this->logMapper = $logMapper;
-		$this->optionMapper = $optionMapper;
-		$this->preferencesMapper = $preferencesMapper;
-		$this->shareMapper = $shareMapper;
-		$this->subscriptionMapper = $subscriptionMapper;
-		$this->voteMapper = $voteMapper;
-		$this->watchMapper = $watchMapper;
 	}
 
 	public function getName():string {
@@ -136,7 +89,7 @@ class DeleteInvalidRecords implements IRepairStep {
 		$prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 		// check for orphaned entries in all tables referencing
 		// the main polls table
-		foreach ($this->childTables as $tableName) {
+		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
 			$child = "$prefix$tableName";
 			$query = "DELETE
                 FROM $child
