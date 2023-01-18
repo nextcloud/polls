@@ -37,55 +37,17 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 
 class ActivityProvider implements IProvider {
-	/** @var IFactory */
-	protected $transFactory;
+	protected IL10N $l10n;
 
-	/** @var IL10N */
-	protected $l10n = null;
-
-	/** @var ActivityManager */
-	protected $activityManager;
-
-	/** @var ActivityService */
-	protected $activityService;
-
-	/** @var IEventMerger */
-	protected $eventMerger;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IURLGenerator */
-	protected $urlGenerator;
-
-	/** @var ShareMapper */
-	protected $shareMapper;
-
-	/**
-	 * @param ActivityManager $activityManager
-	 * @param ActivityService $activityService
-	 * @param IEventMerger $eventMerger
-	 * @param IFactory $transFactory
-	 * @param IUserManager $userManager
-	 * @param IURLGenerator $urlGenerator
-	 * @param ShareMapper $shareMapper
-	 */
 	public function __construct(
-		ActivityManager $activityManager,
-		ActivityService $activityService,
-		IEventMerger $eventMerger,
-		IFactory $transFactory,
-		IURLGenerator $urlGenerator,
-		IUserManager $userManager,
-		ShareMapper $shareMapper
+		protected ActivityManager $activityManager,
+		protected ActivityService $activityService,
+		protected IEventMerger $eventMerger,
+		protected IFactory $transFactory,
+		protected IURLGenerator $urlGenerator,
+		protected IUserManager $userManager,
+		protected ShareMapper $shareMapper
 	) {
-		$this->activityManager = $activityManager;
-		$this->activityService = $activityService;
-		$this->eventMerger = $eventMerger;
-		$this->transFactory = $transFactory;
-		$this->urlGenerator = $urlGenerator;
-		$this->userManager = $userManager;
-		$this->shareMapper = $shareMapper;
 	}
 
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {

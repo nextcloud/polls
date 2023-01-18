@@ -33,19 +33,11 @@ use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class TransferOwnership extends Command {
-	/** @var PollService */
-	private $pollService;
-
-	/** @var IUserManager */
-	private $userManager;
-
 	public function __construct(
-		IUserManager $userManager,
-		PollService $pollService
+		private IUserManager $userManager,
+		private PollService $pollService
 	) {
 		parent::__construct();
-		$this->pollService = $pollService;
-		$this->userManager = $userManager;
 	}
 
 	protected function configure(): void {

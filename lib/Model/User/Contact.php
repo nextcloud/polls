@@ -34,20 +34,14 @@ class Contact extends UserBase {
 	public const TYPE = 'contact';
 	public const ICON = 'icon-mail';
 
-	/** @var LoggerInterface */
-	protected $logger;
+	protected LoggerInterface $logger;
+	private array $contact = [];
 
-	/** @var array */
-	private $contact = [];
-
-	public function __construct(
-		string $id
-	) {
+	public function __construct(string $id) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;
 		$this->description = $this->l10n->t('Contact');
 		$this->richObjectType = 'addressbook-contact';
-
 		$this->logger = Container::queryClass(LoggerInterface::class);
 
 		if (self::isEnabled()) {

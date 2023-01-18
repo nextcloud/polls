@@ -28,15 +28,11 @@ use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Polls\Service\MailService;
 
 class NotificationCron extends TimedJob {
-	/** @var MailService */
-	private $mailService;
-
 	public function __construct(
-		ITimeFactory $time,
-		MailService $mailService
+		protected ITimeFactory $time,
+		private MailService $mailService
 	) {
 		parent::__construct($time);
-		$this->mailService = $mailService;
 		parent::setInterval(5); // run every 5 minutes
 	}
 

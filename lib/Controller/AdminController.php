@@ -31,22 +31,14 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 
 class AdminController extends BaseController {
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var PollService */
-	private $pollService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		IURLGenerator $urlGenerator,
-		PollService $pollService
+		private IURLGenerator $urlGenerator,
+		private PollService $pollService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->urlGenerator = $urlGenerator;
-		$this->pollService = $pollService;
 	}
 
 	/**

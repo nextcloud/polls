@@ -44,9 +44,6 @@ abstract class BaseEvent extends Event {
 	/** @var array */
 	protected $activitySubjectParams = [];
 
-	/** @var Poll|Comment|Share|Option|Vote */
-	protected $eventObject;
-
 	/** @var Poll */
 	protected $poll;
 
@@ -60,10 +57,9 @@ abstract class BaseEvent extends Event {
 	protected $userService;
 
 	public function __construct(
-		$eventObject
+		protected Poll|Comment|Share|Option|Vote $eventObject
 	) {
 		parent::__construct();
-		$this->eventObject = $eventObject;
 		$this->poll = Container::queryPoll($this->getPollId());
 		$this->userService = Container::queryClass(UserService::class);
 		$this->userSession = Container::queryClass(IUserSession::class);

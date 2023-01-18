@@ -96,74 +96,30 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TWO_DAYS = 172800;
 	public const ONE_AND_HALF_DAY = 129600;
 
-	/** @var string $type */
-	protected $type = '';
+	private IURLGenerator $urlGenerator;
+	private OptionMapper $optionMapper;
 
-	/** @var string $title */
-	protected $title = '';
-
-	/** @var string $description */
-	protected $description = '';
-
-	/** @var string $owner */
-	protected $owner = '';
-
-	/** @var int $created */
-	protected $created = 0;
-
-	/** @var int $expire */
-	protected $expire = 0;
-
-	/** @var int $deleted */
-	protected $deleted = 0;
-
-	/** @var string $access */
-	protected $access = '';
-
-	/** @var int $anonymous */
-	protected $anonymous = 0;
-
-	/** @var int $allowMaybe */
-	protected $allowMaybe = 0;
-
-	/** @var string $allowProposals */
-	protected $allowProposals = '';
-
-	/** @var string $proposalsExpire */
-	protected $proposalsExpire = '';
-
-	/** @var int $voteLimit*/
-	protected $voteLimit = 0;
-
-	/** @var int $optionLimit*/
-	protected $optionLimit = 0;
-
-	/** @var string $showResults */
-	protected $showResults = '';
-
-	/** @var int $adminAccess*/
-	protected $adminAccess = 0;
-
-	/** @var int $important*/
-	protected $important = 0;
-
-	/** @var int $allowComment*/
-	protected $allowComment = 0;
-
-	/** @var int $hideBookedUp*/
-	protected $hideBookedUp = 0;
-
-	/** @var int $useNo*/
-	protected $useNo = 0;
-
-	/** @var string $miscSettings*/
-	protected $miscSettings = '';
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var OptionMapper */
-	private $optionMapper;
+	protected string $type = '';
+	protected string $title = '';
+	protected string $description = '';
+	protected ?string $owner = '';
+	protected int $created = 0;
+	protected int $expire = 0;
+	protected int $deleted = 0;
+	protected string $access = '';
+	protected int $anonymous = 0;
+	protected int $allowMaybe = 0;
+	protected string $allowProposals = '';
+	protected string $proposalsExpire = '';
+	protected int $voteLimit = 0;
+	protected int $optionLimit = 0;
+	protected string $showResults = '';
+	protected int $adminAccess = 0;
+	protected int $important = 0;
+	protected int $allowComment = 0;
+	protected int $hideBookedUp = 0;
+	protected int $useNo = 0;
+	protected ?string $miscSettings = '';
 
 	public function __construct() {
 		$this->addType('created', 'int');

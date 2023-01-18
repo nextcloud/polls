@@ -46,43 +46,15 @@ use OCP\L10N\IFactory;
 use OCP\Share\IShare;
 
 class UserService {
-	/** @var ShareMapper */
-	private $shareMapper;
-	
-	/** @var ISession */
-	private $session;
-
-	/** @var IFactory */
-	private $transFactory;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var ISearch */
-	private $userSearch;
-	
-	/** @var VoteMapper */
-	private $voteMapper;
-	
 	public function __construct(
-		IFactory $transFactory,
-		ISearch $userSearch,
-		ISession $session,
-		IUserSession $userSession,
-		IUserManager $userManager,
-		ShareMapper $shareMapper,
-		VoteMapper $voteMapper
+		private IFactory $transFactory,
+		private ISearch $userSearch,
+		private ISession $session,
+		private IUserSession $userSession,
+		private IUserManager $userManager,
+		private ShareMapper $shareMapper,
+		private VoteMapper $voteMapper,
 	) {
-		$this->transFactory = $transFactory;
-		$this->userSearch = $userSearch;
-		$this->session = $session;
-		$this->shareMapper = $shareMapper;
-		$this->userSession = $userSession;
-		$this->userManager = $userManager;
-		$this->voteMapper = $voteMapper;
 	}
 
 	/**

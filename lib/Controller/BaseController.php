@@ -34,16 +34,12 @@ use OCP\ISession;
 use OCP\IRequest;
 
 class BaseController extends Controller {
-	/** @var ISession */
-	protected $session;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session
+		private ISession $session,
 	) {
 		parent::__construct($appName, $request);
-		$this->session = $session;
 	}
 
 	/**

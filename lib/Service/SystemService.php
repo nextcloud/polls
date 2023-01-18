@@ -42,23 +42,11 @@ class SystemService {
 	private const REGEX_VALID_MAIL = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
 	private const REGEX_PARSE_MAIL = '/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/';
 	
-	/** @var ShareMapper */
-	private $shareMapper;
-	
-	/** @var UserService */
-	private $userService;
-	
-	/** @var VoteMapper */
-	private $voteMapper;
-
 	public function __construct(
-		ShareMapper $shareMapper,
-		UserService $userService,
-		VoteMapper $voteMapper
+		private ShareMapper $shareMapper,
+		private UserService $userService,
+		private VoteMapper $voteMapper,
 	) {
-		$this->shareMapper = $shareMapper;
-		$this->userService = $userService;
-		$this->voteMapper = $voteMapper;
 	}
 
 	/**

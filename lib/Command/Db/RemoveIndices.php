@@ -28,20 +28,11 @@ use OCA\Polls\Db\IndexManager;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class RemoveIndices extends Command {
-	/** @var IndexManager */
-	private $indexManager;
+	protected string $name = self::NAME_PREFIX . 'index:remove';
+	protected string $description = 'Remove all indices and foreign key constraints';
 
-	/** @var string */
-	protected $name = self::NAME_PREFIX . 'index:remove';
-
-	/** @var string */
-	protected $description = 'Remove all indices and foreign key constraints';
-
-	public function __construct(
-		IndexManager $indexManager
-	) {
+	public function __construct(private IndexManager $indexManager) {
 		parent::__construct();
-		$this->indexManager = $indexManager;
 		$this->question = new ConfirmationQuestion('Continue (y/n)? [y] ', true);
 	}
 

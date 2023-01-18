@@ -32,21 +32,13 @@ use OCP\IRequest;
 use OCP\AppFramework\Http;
 
 class SubscriptionApiController extends BaseApiController {
-	/** @var SubscriptionService */
-	private $subscriptionService;
-
-	/** @var Acl */
-	private $acl;
-
 	public function __construct(
 		string $appName,
-		Acl $acl,
-		SubscriptionService $subscriptionService,
-		IRequest $request
+		IRequest $request,
+		private Acl $acl,
+		private SubscriptionService $subscriptionService,
 	) {
 		parent::__construct($appName, $request);
-		$this->acl = $acl;
-		$this->subscriptionService = $subscriptionService;
 	}
 
 	/**

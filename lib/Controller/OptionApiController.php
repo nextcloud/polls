@@ -28,16 +28,12 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class OptionApiController extends BaseApiController {
-	/** @var OptionService */
-	private $optionService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		OptionService $optionService
+		private OptionService $optionService
 	) {
 		parent::__construct($appName, $request);
-		$this->optionService = $optionService;
 	}
 
 	/**

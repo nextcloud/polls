@@ -37,7 +37,7 @@ class SubscriptionMapper extends QBMapper {
 	public const TABLE = Subscription::TABLE;
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, self::TABLE, Subscription::class);
+		parent::__construct($db, Subscription::TABLE, Subscription::class);
 	}
 
 	/**

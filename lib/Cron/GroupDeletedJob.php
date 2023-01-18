@@ -33,25 +33,13 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 
 class GroupDeletedJob extends QueuedJob {
-	/** @var ISecureRandom */
-	private $secureRandom;
-
-	/** @var ShareMapper **/
-	private $shareMapper;
-
-	/** @var LoggerInterface */
-	private $logger;
-
 	public function __construct(
-		ShareMapper $shareMapper,
-		ISecureRandom $secureRandom,
-		ITimeFactory $time,
-		LoggerInterface $logger
+		private ShareMapper $shareMapper,
+		private ISecureRandom $secureRandom,
+		protected ITimeFactory $time,
+		private LoggerInterface $logger,
 	) {
 		parent::__construct($time);
-		$this->secureRandom = $secureRandom;
-		$this->shareMapper = $shareMapper;
-		$this->logger = $logger;
 	}
 
 	/**

@@ -35,14 +35,9 @@ class User extends UserBase {
 	public const ICON = 'icon-user';
 	public const PRINCIPAL_PREFIX = 'principals/users/';
 
-	/** @var IConfig */
-	private $config;
-
-	/** @var AppSettings */
-	protected $appSettings;
-
-	/** @var IUser */
-	private $user;
+	private IConfig $config;
+	protected AppSettings $appSettings;
+	private IUser $user;
 
 	public function __construct(
 		string $id,

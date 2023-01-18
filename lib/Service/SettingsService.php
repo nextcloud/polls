@@ -26,8 +26,7 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Model\Settings\AppSettings;
 
 class SettingsService {
-	/** @var AppSettings */
-	private $appSettings;
+	private AppSettings $appSettings;
 
 	public function __construct() {
 		$this->appSettings = new AppSettings;

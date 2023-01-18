@@ -32,21 +32,13 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class PollApiController extends BaseApiController {
-	/** @var Acl */
-	private $acl;
-
-	/** @var PollService */
-	private $pollService;
-
 	public function __construct(
 		string $appName,
-		Acl $acl,
 		IRequest $request,
-		PollService $pollService
+		private Acl $acl,
+		private PollService $pollService
 	) {
 		parent::__construct($appName, $request);
-		$this->acl = $acl;
-		$this->pollService = $pollService;
 	}
 
 	/**

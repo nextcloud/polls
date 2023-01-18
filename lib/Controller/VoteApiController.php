@@ -31,16 +31,12 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class VoteApiController extends BaseApiController {
-	/** @var VoteService */
-	private $voteService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		VoteService $voteService
+		private VoteService $voteService
 	) {
 		parent::__construct($appName, $request);
-		$this->voteService = $voteService;
 	}
 
 	/**

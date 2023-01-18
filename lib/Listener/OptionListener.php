@@ -29,8 +29,10 @@ use OCA\Polls\Exceptions\InvalidClassException;
 
 class OptionListener extends BaseListener {
 	// simulate vote change to force recalculating of votes
-	/** @var array */
-	protected $watchTables = [Watch::OBJECT_OPTIONS, Watch::OBJECT_VOTES];
+	protected const WATCH_TABLES = [
+		Watch::OBJECT_OPTIONS,
+		Watch::OBJECT_VOTES,
+	];
 
 	protected function checkClass() : void {
 		if (!($this->event instanceof OptionEvent)) {

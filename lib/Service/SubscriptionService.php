@@ -30,18 +30,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 
 class SubscriptionService {
-	/** @var Acl */
-	private $acl;
-
-	/** @var SubscriptionMapper */
-	private $subscriptionMapper;
-
-	public function __construct(
-		SubscriptionMapper $subscriptionMapper,
-		Acl $acl
-	) {
-		$this->subscriptionMapper = $subscriptionMapper;
-		$this->acl = $acl;
+	public function __construct(private SubscriptionMapper $subscriptionMapper) {
 	}
 
 	public function get(Acl $acl): bool {

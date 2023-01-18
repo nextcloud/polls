@@ -46,54 +46,22 @@ use OCP\EventDispatcher\IEventDispatcher;
 use Psr\Log\LoggerInterface;
 
 class OptionService {
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var Acl */
-	private $acl;
-
-	/** @var AnonymizeService */
-	private $anonymizer;
-
-	/** @var Option */
-	private $option;
-
-	/** @var Poll */
-	private $poll;
-
 	/** @var Option[] */
-	private $options;
+	private array $options;
 
 	/** @var Vote[] */
-	private $votes;
-
-	/** @var OptionMapper */
-	private $optionMapper;
-
-	/** @var VoteMapper */
-	private $voteMapper;
+	private array $votes;
 
 	public function __construct(
-		Acl $acl,
-		AnonymizeService $anonymizer,
-		IEventDispatcher $eventDispatcher,
-		LoggerInterface $logger,
-		Option $option,
-		OptionMapper $optionMapper,
-		VoteMapper $voteMapper
+		private Acl $acl,
+		private AnonymizeService $anonymizer,
+		private IEventDispatcher $eventDispatcher,
+		private LoggerInterface $logger,
+		private Option $option,
+		private OptionMapper $optionMapper,
+		private VoteMapper $voteMapper,
 	) {
-		$this->acl = $acl;
-		$this->anonymizer = $anonymizer;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->logger = $logger;
-		$this->option = $option;
-		$this->optionMapper = $optionMapper;
-		$this->voteMapper = $voteMapper;
 		$this->options = [];
-		$this->poll = new Poll;
 		$this->votes = [];
 	}
 

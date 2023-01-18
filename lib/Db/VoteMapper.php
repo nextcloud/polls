@@ -35,10 +35,8 @@ use OCP\Migration\IOutput;
  * @template-extends QBMapper<Vote>
  */
 class VoteMapper extends QBMapper {
-	public const TABLE = Vote::TABLE;
-
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, self::TABLE, Vote::class);
+		parent::__construct($db, Vote::TABLE, Vote::class);
 	}
 
 	public function update(Entity $entity): Entity {

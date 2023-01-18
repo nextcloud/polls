@@ -35,38 +35,14 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class VoteService {
-	/** @var Acl */
-	private $acl;
-
-	/** @var AnonymizeService */
-	private $anonymizer;
-
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
-
-	/** @var OptionMapper */
-	private $optionMapper;
-
-	/** @var Vote */
-	private $vote;
-
-	/** @var VoteMapper */
-	private $voteMapper;
-
 	public function __construct(
-		Acl $acl,
-		AnonymizeService $anonymizer,
-		IEventDispatcher $eventDispatcher,
-		OptionMapper $optionMapper,
-		Vote $vote,
-		VoteMapper $voteMapper
+		private Acl $acl,
+		private AnonymizeService $anonymizer,
+		private IEventDispatcher $eventDispatcher,
+		private OptionMapper $optionMapper,
+		private Vote $vote,
+		private VoteMapper $voteMapper,
 	) {
-		$this->acl = $acl;
-		$this->anonymizer = $anonymizer;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->optionMapper = $optionMapper;
-		$this->vote = $vote;
-		$this->voteMapper = $voteMapper;
 	}
 
 	/**

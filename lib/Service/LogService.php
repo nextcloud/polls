@@ -28,23 +28,11 @@ use OCA\Polls\Db\LogMapper;
 use OCP\IUserSession;
 
 class LogService {
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var LogMapper */
-	private $logMapper;
-
-	/** @var Log */
-	private $log;
-
 	public function __construct(
-		IUserSession $userSession,
-		LogMapper $logMapper,
-		Log $log
+		private IUserSession $userSession,
+		private LogMapper $logMapper,
+		private Log $log
 	) {
-		$this->logMapper = $logMapper;
-		$this->log = $log;
-		$this->userSession = $userSession;
 	}
 
 	/**

@@ -57,54 +57,24 @@ use OCP\IL10N;
 class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
 
-	/** @var int $pollId */
-	protected $pollId = 0;
-
-	/** @var string $owner */
-	protected $owner = '';
-
-	/** @var int $released */
-	protected $released = 0;
-
-	/** @var string $pollOptionText */
-	protected $pollOptionText = '';
-
-	/** @var string $pollOptionHash */
-	protected $pollOptionHash = '';
-
-	/** @var int $timestamp */
-	protected $timestamp = 0;
-
-	/** @var int $order */
-	protected $order = 0;
-
-	/** @var int $confirmed */
-	protected $confirmed = 0;
-
-	/** @var int $duration */
-	protected $duration = 0;
+	protected int $pollId = 0;
+	protected int $owner = '';
+	protected int $released = 0;
+	protected string $pollOptionText = '';
+	protected string $pollOptionHash = '';
+	protected int $timestamp = 0;
+	protected int $order = 0;
+	protected int $confirmed = 0;
+	protected int $duration = 0;
 
 	// public variables, not in the db
-	/** @var int $rank */
-	public $rank = 0;
-
-	/** @var int $yes */
-	public $yes = 0;
-
-	/** @var int $no */
-	public $no = 0;
-
-	/** @var int $maybe */
-	public $maybe = 0;
-
-	/** @var int $realNo */
-	public $realNo = 0;
-
-	/** @var int $votes */
-	public $votes = 0;
-
-	/** @var bool $isBookedUp */
-	public $isBookedUp = false;
+	public int $rank = 0;
+	public int $yes = 0;
+	public int $no = 0;
+	public int $maybe = 0;
+	public int $realNo = 0;
+	public int $votes = 0;
+	public bool $isBookedUp = false;
 
 	public function __construct() {
 		$this->addType('released', 'int');

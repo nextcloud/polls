@@ -32,20 +32,13 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCA\Polls\Service\NotificationService;
 
 class PageController extends Controller {
-	/** @var IURLGenerator */
-	private $urlGenerator;
-	/** @var NotificationService */
-	private $notificationService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		IURLGenerator $urlGenerator,
-		NotificationService $notificationService
+		private IURLGenerator $urlGenerator,
+		private NotificationService $notificationService
 	) {
 		parent::__construct($appName, $request);
-		$this->urlGenerator = $urlGenerator;
-		$this->notificationService = $notificationService;
 	}
 
 	/**

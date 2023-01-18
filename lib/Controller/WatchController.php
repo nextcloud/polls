@@ -29,17 +29,13 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class WatchController extends BaseController {
-	/** @var WatchService */
-	private $watchService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		WatchService $watchService
+		private WatchService $watchService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->watchService = $watchService;
 	}
 
 	/**

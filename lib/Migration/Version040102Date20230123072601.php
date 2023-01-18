@@ -38,33 +38,13 @@ use OCP\Migration\IOutput;
  * Version: jj = major version, mm = minor, pp = patch
  */
 class Version040102Date20230123072601 extends SimpleMigrationStep {
-	/** @var IDBConnection */
-	protected $connection;
-
-	/** @var IndexManager */
-	private $indexManager;
-
-	/** @var IConfig */
-	protected $config;
-
-	/** @var FixVotes */
-	protected $fixVotes;
-
-	/** @var TableManager  */
-	protected $tableManager;
-
 	public function __construct(
-		IDBConnection $connection,
-		IConfig $config,
-		FixVotes $fixVotes,
-		IndexManager $indexManager,
-		TableManager $tableManager
+		private IDBConnection $connection,
+		private IConfig $config,
+		private FixVotes $fixVotes,
+		private IndexManager $indexManager,
+		private TableManager $tableManager
 	) {
-		$this->connection = $connection;
-		$this->config = $config;
-		$this->fixVotes = $fixVotes;
-		$this->indexManager = $indexManager;
-		$this->tableManager = $tableManager;
 	}
 
 	/**

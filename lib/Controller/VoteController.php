@@ -29,17 +29,13 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class VoteController extends BaseController {
-	/** @var VoteService */
-	private $voteService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		VoteService $voteService
+		private VoteService $voteService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->voteService = $voteService;
 	}
 
 	/**

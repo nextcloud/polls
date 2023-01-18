@@ -29,17 +29,13 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class SettingsController extends BaseController {
-	/** @var SettingsService */
-	private $settingsService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		SettingsService $settingsService
+		private SettingsService $settingsService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->settingsService = $settingsService;
 	}
 
 	/**

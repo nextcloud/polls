@@ -30,18 +30,10 @@ use OCP\Notification\IManager;
 class NotificationService {
 	public const APP_ID = 'polls';
 
-	/** @var IManager */
-	protected $notificationManager;
-
-	/** @var string */
-	protected $userId;
-
 	public function __construct(
-		IManager $notificationManager,
-		?string $userId
+		protected IManager $notificationManager,
+		protected ?string $userId,
 	) {
-		$this->notificationManager = $notificationManager;
-		$this->userId = $userId;
 	}
 
 	public function removeNotification(int $pollId): void {

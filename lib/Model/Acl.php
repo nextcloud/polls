@@ -63,52 +63,19 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_PUBLIC_SHARES = 'publicShares';
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var AppSettings */
-	private $appSettings;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var OptionMapper */
-	private $optionMapper;
-	
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var VoteMapper */
-	private $voteMapper;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
-	/** @var Poll */
-	private $poll;
-
-	/** @var Share */
-	private $share;
+	private AppSettings $appSettings;
+	private Poll $poll;
+	private Share $share;
 
 	public function __construct(
-		IUserManager $userManager,
-		IUserSession $userSession,
-		IGroupManager $groupManager,
-		OptionMapper $optionMapper,
-		PollMapper $pollMapper,
-		VoteMapper $voteMapper,
-		ShareMapper $shareMapper
+		private IUserManager $userManager,
+		private IUserSession $userSession,
+		private IGroupManager $groupManager,
+		private OptionMapper $optionMapper,
+		private PollMapper $pollMapper,
+		private VoteMapper $voteMapper,
+		private ShareMapper $shareMapper
 	) {
-		$this->userManager = $userManager;
-		$this->userSession = $userSession;
-		$this->groupManager = $groupManager;
-		$this->optionMapper = $optionMapper;
-		$this->pollMapper = $pollMapper;
-		$this->voteMapper = $voteMapper;
-		$this->shareMapper = $shareMapper;
 		$this->poll = new Poll;
 		$this->share = new Share;
 		$this->appSettings = new AppSettings;

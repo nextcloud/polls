@@ -27,22 +27,10 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 
 class PollChanges implements IFilter {
-	/** @var IL10N */
-	protected $l10n;
-
-	/** @var IURLGenerator */
-	protected $urlGenerator;
-
-	/**
-	 * @param IL10N $l10n
-	 * @param IURLGenerator $urlGenerator
-	 */
 	public function __construct(
-		IL10N $l10n,
-		IURLGenerator $urlGenerator
+		protected IL10N $l10n,
+		protected IURLGenerator $urlGenerator
 	) {
-		$this->l10n = $l10n;
-		$this->urlGenerator = $urlGenerator;
 	}
 
 	public function getIdentifier() : string {
