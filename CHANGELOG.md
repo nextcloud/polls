@@ -1,19 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [3.8.5] - 2023-01-19
+ - Dependencies updates
 ## [3.8.4] - 2022-12-18
 ### Fix
  - Reset own votes as a logged in user without admin rights
  - Error was thrown, when a owner of an option was null
 ## [3.8.3] - 2022-10-24
 ### Fix
- - Fix poll export containeing participants with deleted shares
-
-## [4.0.0] - tbd
-### New
-- Support Nextcloud version 25
-### Misc
-- Experimental designs have been removed
+ - Fix poll export containing participants with deleted shares
 
 ## [3.8.2] - 2022-09-27
 ### Fix
