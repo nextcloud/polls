@@ -147,7 +147,7 @@ abstract class BaseListener implements IEventListener {
 	 * Tables to watch are defined in WATCH_TABLES
 	 */
 	protected function writeWatch() : void {
-		foreach (self::WATCH_TABLES as $table) {
+		foreach (static::WATCH_TABLES as $table) {
 			$this->watchService->writeUpdate($this->event->getPollId(), $table);
 		}
 	}
