@@ -126,7 +126,7 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function add(?int $pollId, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, ?Acl $acl = null): Option {
+	public function add(?int $pollId = null, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, ?Acl $acl = null): Option {
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
