@@ -104,6 +104,7 @@ abstract class TableSchema {
 		'030200Date20210912120000',
 		'030400Date20211125120000',
 		'040100Date20221030070000',
+		'041000Date20221221070000',
 	];
 
 	/**
@@ -147,8 +148,8 @@ abstract class TableSchema {
 		Poll::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'datePoll', 'length' => 64]],
-			'title' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 128]],
-			'description' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
+			'title' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 128]],
+			'description' => ['type' => Types::TEXT, 'options' => ['notnull' => true, 'default' => '', 'length' => 65535]],
 			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'created' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'expire' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],

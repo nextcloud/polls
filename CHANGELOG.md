@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [4.1.0] - 2023-01-17
+## [4.1.1] - 2023-01-19
+### Fix
+ - Invitations are not send out if poll has no description
+ # [4.1.0] - 2023-01-17
 ### New
 - Added a dashboard widget for relevant polls
 - Improved registration dialog for public polls
