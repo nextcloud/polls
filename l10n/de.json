@@ -319,7 +319,7 @@
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n Vielleicht-Stimme","%n Vielleicht-Stimmen"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["Nur %n Stimme pro Option.","Nur %n Stimmen pro Option."],
     "Optional email address" : "Optionale E-Mail-Adresse",
-    "Checking email address …" : "Prüfe E-Mail-Adresse…",
+    "Checking email address …" : "Prüfe E-Mail-Adresse …",
     "valid email address." : "Gültige E-Mail-Adresse.",
     "Invalid email address." : "Ungültige E-Mail-Adresse.",
     "Guest users" : "Gastbenutzer",
