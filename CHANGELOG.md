@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
+## [4.1.2] - 2023-01-23
+### Fix
+ - Invitations are not send out if poll has no description (fix 2)
 ## [4.1.1] - 2023-01-19
 ### Fix
  - Invitations are not send out if poll has no description
