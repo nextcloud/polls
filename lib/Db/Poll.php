@@ -297,8 +297,18 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
+	// TODO: Workaround for nullish column, fix migration
+	public function getDescription(): string {
+		return $this->description ?? '';
+	}
+
+	// TODO: Workaround for nullish column, fix migration
+	public function getTitle(): string {
+		return $this->title ?? '';
+	}
+
 	public function getDescriptionSafe(): string {
-		return htmlspecialchars($this->description);
+		return htmlspecialchars($this->getDescription());
 	}
 
 	private function setMiscSettingsArray(array $value) : void {
