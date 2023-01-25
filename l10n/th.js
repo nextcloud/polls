@@ -3,7 +3,7 @@ OC.L10N.register(
     {
     "Group" : "กลุ่ม",
     "Public link" : "ลิงก์สาธารณะ",
-    "User" : "User",
+    "User" : "ผู้ใช้",
     "Delete" : "ลบ",
     "Conflict" : "ความขัดแย้ง",
     "New comment …" : "ความคิดเห็นใหม่ ...",
@@ -18,7 +18,7 @@ OC.L10N.register(
     "Add" : "เพิ่ม",
     "Close" : "ปิด",
     "never" : "ไม่ต้องเลย",
-    "Login" : "Login",
+    "Login" : "เข้าสู่ระบบ",
     "Owner" : "เจ้าของ",
     "Preview" : "ตัวอย่าง",
     "Shares" : "การแชร์",
