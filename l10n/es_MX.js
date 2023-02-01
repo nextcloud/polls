@@ -38,6 +38,7 @@ OC.L10N.register(
     "Administration" : "Administración",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
+    "Options" : "Opciones",
     "Sharing" : "Compartiendo",
     "Comments" : "Comentarios",
     "Activity" : "Actividad",
