@@ -268,7 +268,7 @@ OC.L10N.register(
     "Confirm option" : "Lehetőség megerősítése",
     "No vote options" : "Nincsenek szavazási lehetőségek",
     "Add some!" : "Adjon hozzá párat!",
-    "Select range" : "Válasszon tartományt",
+    "Select range" : "Tartomány választása",
     "Change date" : "Dátum módosítása",
     "Change time" : "Idő módosítása",
     "Remove time" : "Idő eltávolítása",
