@@ -421,7 +421,7 @@ OC.L10N.register(
     "No activity" : "Žádná aktivita",
     "No comments" : "Žádné komentáře",
     "Be the first." : "Buďte první.",
-    "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Prosím, při změnách voleb buďte opatrní, protože mohou nechteným způsobem ovlivnit již existující hlasy.",
+    "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Při změnách voleb buďte opatrní, protože mohou nechtěným způsobem ovlivnit už existující hlasy.",
     "As an admin you may edit this poll" : "Coby správce můžete tuto anketu upravovat",
     "Description" : "Popis",
     "Poll configurations" : "Nastavení anket",
