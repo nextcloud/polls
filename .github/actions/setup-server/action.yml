@@ -77,7 +77,7 @@ runs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ inputs.php-version }}
-        tools: phpunit
+        tools: phpunit:9
         extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, zip, gd
         coverage: none
 
