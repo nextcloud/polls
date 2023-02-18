@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Migration;
 
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Db\TableManager;
 use OCP\DB\ISchemaWrapper;
