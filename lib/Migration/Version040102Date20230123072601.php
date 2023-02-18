@@ -24,6 +24,8 @@
 namespace OCA\Polls\Migration;
 
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\IndexManager;
+use OCA\Polls\Db\TableManager;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
@@ -40,20 +42,30 @@ class Version040102Date20230123072601 extends SimpleMigrationStep {
 	/** @var IDBConnection */
 	protected $connection;
 
+	/** @var IndexManager */
+	private $indexManager;
+
 	/** @var IConfig */
 	protected $config;
 
 	/** @var FixVotes */
 	protected $fixVotes;
 
+	/** @var TableManager  */
+	protected $tableManager;
+
 	public function __construct(
 		IDBConnection $connection,
 		IConfig $config,
-		FixVotes $fixVotes
+		FixVotes $fixVotes,
+		IndexManager $indexManager,
+		TableManager $tableManager,
 	) {
 		$this->connection = $connection;
 		$this->config = $config;
 		$this->fixVotes = $fixVotes;
+		$this->indexManager = $indexManager;
+		$this->tableManager = $tableManager;
 	}
 
 	/**
@@ -62,32 +74,7 @@ class Version040102Date20230123072601 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
-
-		if ($schema->hasTable(Poll::TABLE)) {
-			// Call initial migration from class TableSchema
-			// Drop old tables, which are migrated in prior versions
-			foreach (TableSchema::removeObsoleteTables($schema) as $message) {
-				$output->info('Polls - ' . $message);
-			};
-
-			// Drop old columns, which are migrated in prior versions
-			foreach (TableSchema::removeObsoleteColumns($schema) as $message) {
-				$output->info('Polls - ' . $message);
-			};
-		}
-
-		// Create tables, as defined in TableSchema or fix column definitions
-		foreach (TableSchema::createOrUpdateSchema($schema) as $message) {
-			$output->info('Polls - ' . $message);
-		};
-
-		// remove old migration entries from versions prior to polls 3.x
-		// including migration versions from test releases
-		// theoretically, only this migration should be existent. If not, no matter
-		foreach (TableSchema::removeObsoleteMigrations($this->connection) as $message) {
-			$output->info('Polls - ' . $message);
-		};
-
+	
 		$this->fixVotes->run($output);
 
 		return $schema;
