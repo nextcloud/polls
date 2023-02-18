@@ -38,7 +38,7 @@ jobs:
         with:
           server-version: ${{ matrix.server-versions }}
           php-version: ${{ matrix.php-versions }}
-          php-tools: phpunit
+          php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: sqlite
           db-port: ${{ env.DB_PORT}}
@@ -82,7 +82,7 @@ jobs:
         with:
           server-version: ${{ matrix.server-versions }}
           php-version: ${{ matrix.php-versions }}
-          php-tools: phpunit
+          php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: 'mysql'
           db-port: ${{ env.DB_PORT }}
@@ -129,7 +129,7 @@ jobs:
         with:
           server-version: ${{ matrix.server-versions }}
           php-version: ${{ matrix.php-versions }}
-          php-tools: phpunit
+          php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: 'pgsql'
           db-port: ${{ env.DB_PORT}}
