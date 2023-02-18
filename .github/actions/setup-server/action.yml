@@ -86,6 +86,11 @@ runs:
       shell: bash
       run: composer i
 
+    - name: Install Doctrine\DBAL as global dev-dep
+      working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
+      shell: bash
+      run: composer global require --dev doctrine/dbal
+
     - name: Set up Nextcloud
       working-directory: ${{ inputs.server-path }}
       shell: bash
