@@ -141,7 +141,7 @@ import UserSearch from '../User/UserSearch.vue'
 import SharePublicAdd from './SharePublicAdd.vue'
 import ShareItemAllUsers from './ShareItemAllUsers.vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-import SendEmailIcon from 'vue-material-design-icons/EmailSend.vue'
+import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 
 export default {

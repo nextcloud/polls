@@ -63,7 +63,7 @@ import ActionDelete from '../Actions/ActionDelete.vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
-import SendEmailIcon from 'vue-material-design-icons/EmailSend.vue'
+import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
 
 export default {
 	name: 'SharesListUnsent',
