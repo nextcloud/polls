@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Migration;
 
-use OCP\IDBConnection;
 use OCP\DB\Types;
 use OCP\DB\ISchemaWrapper;
 use OCA\Polls\Db\Comment;
@@ -112,7 +111,6 @@ abstract class TableSchema {
 	 * define obsolete tables to drop
 	 */
 	public const GONE_TABLES = [
-		'polls_watch', // always drop the watch table for a clean truncation and rely on recreation
 		'polls_events', // dropped in 1.0
 		'polls_dts', // dropped in 0.9
 		'polls_txts', // dropped in 0.9
@@ -149,8 +147,8 @@ abstract class TableSchema {
 		Poll::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'datePoll', 'length' => 64]],
-			'title' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 128]],
-			'description' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => '', 'length' => 65535]],
+			'title' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 128]],
+			'description' => ['type' => Types::TEXT, 'options' => ['notnull' => true, 'default' => '', 'length' => 65535]],
 			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],
 			'created' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'expire' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
@@ -279,56 +277,56 @@ abstract class TableSchema {
 		return $messages;
 	}
 
-	/**
-	 * Remove obsolete tables if they still exist
-	 */
-	public static function removeObsoleteTables(ISchemaWrapper &$schema): array {
-		$messages = [];
-		foreach (self::GONE_TABLES as $tableName) {
-			if ($schema->hasTable($tableName)) {
-				$schema->dropTable($tableName);
-				$messages[] = 'Dropped table ' . $tableName;
-			}
-		}
-		return $messages;
-	}
+	// /**
+	//  * Remove obsolete tables if they still exist
+	//  */
+	// public static function removeObsoleteTables(ISchemaWrapper &$schema): array {
+	// 	$messages = [];
+	// 	foreach (self::GONE_TABLES as $tableName) {
+	// 		if ($schema->hasTable($tableName)) {
+	// 			$schema->dropTable($tableName);
+	// 			$messages[] = 'Dropped table ' . $tableName;
+	// 		}
+	// 	}
+	// 	return $messages;
+	// }
 
-	/**
-	 * Remove obsolete columns, if they exist
-	 */
-	public static function removeObsoleteColumns(ISchemaWrapper &$schema): array {
-		$messages = [];
-		foreach (self::GONE_COLUMNS as $tableName => $columns) {
-			if ($schema->hasTable($tableName)) {
-				$table = $schema->getTable($tableName);
+	// /**
+	//  * Remove obsolete columns, if they exist
+	//  */
+	// public static function removeObsoleteColumns(ISchemaWrapper &$schema): array {
+	// 	$messages = [];
+	// 	foreach (self::GONE_COLUMNS as $tableName => $columns) {
+	// 		if ($schema->hasTable($tableName)) {
+	// 			$table = $schema->getTable($tableName);
 
-				foreach ($columns as $columnName) {
-					if ($table->hasColumn($columnName)) {
-						$table->dropColumn($columnName);
-						$messages[] = 'Dropped obsolete column ' . $columnName . ' from ' . $tableName;
-					}
-				}
-			}
-		}
-		return $messages;
-	}
+	// 			foreach ($columns as $columnName) {
+	// 				if ($table->hasColumn($columnName)) {
+	// 					$table->dropColumn($columnName);
+	// 					$messages[] = 'Dropped obsolete column ' . $columnName . ' from ' . $tableName;
+	// 				}
+	// 			}
+	// 		}
+	// 	}
+	// 	return $messages;
+	// }
 
-	/**
-	 * Tidy migrations table and remove obsolete migration entries.
-	 */
-	public static function removeObsoleteMigrations(IDBConnection &$connection): array {
-		$messages = [];
-		$query = $connection->getQueryBuilder();
-		$messages[] = 'tidy migration entries';
-		foreach (self::GONE_MIGRATIONS as $version) {
-			$messages[] = '- remove ' . $version;
-			$query->delete('migrations')
-				->where('app = :appName')
-				->andWhere('version = :version')
-				->setParameter('appName', 'polls')
-				->setParameter('version', $version)
-				->executeStatement();
-		}
-		return $messages;
-	}
+	// /**
+	//  * Tidy migrations table and remove obsolete migration entries.
+	//  */
+	// public static function removeObsoleteMigrations(IDBConnection &$connection): array {
+	// 	$messages = [];
+	// 	$query = $connection->getQueryBuilder();
+	// 	$messages[] = 'tidy migration entries';
+	// 	foreach (self::GONE_MIGRATIONS as $version) {
+	// 		$messages[] = '- remove ' . $version;
+	// 		$query->delete('migrations')
+	// 			->where('app = :appName')
+	// 			->andWhere('version = :version')
+	// 			->setParameter('appName', 'polls')
+	// 			->setParameter('version', $version)
+	// 			->executeStatement();
+	// 	}
+	// 	return $messages;
+	// }
 }

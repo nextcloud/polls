@@ -21,28 +21,32 @@
  *
  */
 
+namespace OCA\Polls\Migration\RepairSteps;
 
-namespace OCA\Polls\Migration;
-
-use OCA\Polls\Db\TableManager;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
+use OCA\Polls\Db\IndexManager;
 
-class FixVotes implements IRepairStep {
-	/** @var TableManager */
-	private $tableManager;
+/**
+ * Preparation before migration
+ * Remove all indices and foreign key constraints to avoid errors
+ * while changing the schema
+ */
+class RemoveIndices implements IRepairStep {
+	/** @var IndexManager */
+	private $indexManager;
 
 	public function __construct(
-		TableManager $tableManager,
+		IndexManager $indexManager,
 	) {
-		$this->tableManager = $tableManager;
+		$this->indexManager = $indexManager;
 	}
 
 	/*
 	 * @inheritdoc
 	 */
 	public function getName() {
-		return 'Polls repairstep - Fix votes with duration options';
+		return 'Polls - Remove foreign key constraints and generic indices';
 	}
 
 	/*
@@ -50,8 +54,23 @@ class FixVotes implements IRepairStep {
 	 */
 	public function run(IOutput $output): void {
 		// secure, that the schema is updated to the current status
-		$this->tableManager->refreshSchema();
-		$this->tableManager->fixVotes();
-		$this->tableManager->migrate();
+		$this->indexManager->refreshSchema();
+		$messages = $this->indexManager->removeAllForeignKeyConstraints();
+		foreach ($messages as $message) {
+			$output->info($message);
+		}
+
+		// $messages = $this->indexManager->removeAllGenericIndices();
+		// foreach ($messages as $message) {
+		// 	$output->info($message);
+		// }
+
+		$messages = $this->indexManager->removeAllUniqueIndices();
+		foreach ($messages as $message) {
+			$output->info($message);
+		}
+
+		$this->indexManager->migrate();
+		$this->indexManager->refreshSchema();
 	}
 }

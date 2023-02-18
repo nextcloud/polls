@@ -22,23 +22,21 @@
  */
 
 
-namespace OCA\Polls\Migration;
+namespace OCA\Polls\Migration\RepairSteps;
 
-use OC\DB\Connection;
-use OC\DB\SchemaWrapper;
-use OCP\IConfig;
-use OCP\Migration\IRepairStep;
-use OCP\Migration\IOutput;
-
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\LogMapper;
-use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PreferencesMapper;
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\WatchMapper;
+use OCP\IDBConnection;
+use OCP\IConfig;
+use OCP\Migration\IRepairStep;
+use OCP\Migration\IOutput;
 
 /**
  * Preparation before migration
@@ -48,18 +46,18 @@ class DeleteInvalidRecords implements IRepairStep {
 	/** @var IConfig */
 	protected $config;
 
-	/** @var Connection */
-	protected $connection;
+	/** @var IDBConnection */
+	private $connection;
 
 	/** @var LogMapper */
 	private $logMapper;
-
+	
 	/** @var OptionMapper */
 	private $optionMapper;
-
+	
 	/** @var PreferencesMapper */
 	private $preferencesMapper;
-
+	
 	/** @var ShareMapper */
 	private $shareMapper;
 
@@ -72,26 +70,23 @@ class DeleteInvalidRecords implements IRepairStep {
 	/** @var WatchMapper */
 	private $watchMapper;
 
-	/** @var array */
-	protected $childTables = [
-		CommentMapper::TABLE,
-		LogMapper::TABLE,
-		SubscriptionMapper::TABLE,
-		OptionMapper::TABLE,
-		ShareMapper::TABLE,
-		VoteMapper::TABLE,
-	];
+	/** @var TableManager */
+	private $tableManager;
 
+	/** @var string */
+	private $dbPrefix;
+	
 	public function __construct(
 		IConfig $config,
-		Connection $connection,
+		IDBConnection $connection,
 		LogMapper $logMapper,
 		OptionMapper $optionMapper,
 		PreferencesMapper $preferencesMapper,
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
 		VoteMapper $voteMapper,
-		WatchMapper $watchMapper
+		WatchMapper $watchMapper,
+		TableManager $tableManager
 	) {
 		$this->config = $config;
 		$this->connection = $connection;
@@ -102,6 +97,8 @@ class DeleteInvalidRecords implements IRepairStep {
 		$this->subscriptionMapper = $subscriptionMapper;
 		$this->voteMapper = $voteMapper;
 		$this->watchMapper = $watchMapper;
+		$this->tableManager = $tableManager;
+		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
 
 	public function getName():string {
@@ -109,44 +106,20 @@ class DeleteInvalidRecords implements IRepairStep {
 	}
 
 	public function run(IOutput $output):void {
-		$schema = new SchemaWrapper($this->connection);
-		if ($schema->hasTable(Poll::TABLE)) {
-			$this->removeOrphaned();
+		if ($this->connection->tableExists(Poll::TABLE)) {
+			// secure, that the schema is updated to the current status
+			$this->tableManager->refreshSchema();
+
+			$this->tableManager->removeOrphaned();
+
 			$this->logMapper->removeDuplicates($output);
 			$this->optionMapper->removeDuplicates($output);
 			$this->preferencesMapper->removeDuplicates($output);
 			$this->shareMapper->removeDuplicates($output);
 			$this->subscriptionMapper->removeDuplicates($output);
 			$this->voteMapper->removeDuplicates($output);
+			// TODO: Obsolete, since we reset the table on every app enabling
 			$this->watchMapper->deleteOldEntries(time());
-		}
-	}
-
-	/**
-	 * delete all orphaned entries by selecting all rows
-	 * those poll_ids are not present in the polls table
-	 *
-	 * we have to use a raw query, because NOT EXISTS is not
-	 * part of doctrine's expression builder
-	 */
-	private function removeOrphaned():void {
-		// polls 1.4 -> introduced contraints
-		// Version0104Date20200205104800
-		// get table prefix, as we are running a raw query
-		$prefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
-		// check for orphaned entries in all tables referencing
-		// the main polls table
-		foreach ($this->childTables as $tableName) {
-			$child = "$prefix$tableName";
-			$query = "DELETE
-                FROM $child
-                WHERE NOT EXISTS (
-                    SELECT NULL
-                    FROM {$prefix}polls_polls polls
-                    WHERE polls.id = {$child}.poll_id
-                )";
-			$stmt = $this->connection->prepare($query);
-			$stmt->executeStatement();
 		}
 	}
 }
