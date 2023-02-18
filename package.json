@@ -46,7 +46,7 @@
 		"@nextcloud/vue": "^7.6.0",
 		"@nextcloud/vue-richtext": "^2.0.4",
 		"core-js": "^3.28.0",
-		"dompurify": "^2.4.3",
+		"dompurify": "^3.0.0",
 		"file-saver": "^2.0.5",
 		"linkify-string": "^4.1.0",
 		"lodash": "^4.17.21",
