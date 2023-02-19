@@ -25,7 +25,7 @@ jobs:
       uses: ./.github/actions/setup-composer
       with:
         php-version: ${{ matrix.php-versions }}
-        php-tools: composer, phpunit
+        php-tools: composer, php-cs-fixer
 
     - name: Run coding standards check
       run: composer run cs:check
