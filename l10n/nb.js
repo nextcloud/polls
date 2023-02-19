@@ -40,6 +40,7 @@ OC.L10N.register(
     "Description" : "Beskrivelse",
     "Receive notification email on activity" : "Motta e-postvarsel ved aktivitet",
     "Change name" : "Bytt navn",
+    "Email options" : "Alternativer for e-post",
     "Yes" : "Ja",
     "Administration" : "Administrasjon",
     "Details" : "Detaljer",
