@@ -58,7 +58,7 @@ class Version040102Date20230123072601 extends SimpleMigrationStep {
 		IConfig $config,
 		FixVotes $fixVotes,
 		IndexManager $indexManager,
-		TableManager $tableManager,
+		TableManager $tableManager
 	) {
 		$this->connection = $connection;
 		$this->config = $config;
