@@ -90,10 +90,10 @@ runs:
       shell: bash
       run: composer i --no-dev -o 
 
-    - name: Set up components
+    - name: Set up faker
       working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
       shell: bash
-      run: composer i league/factory-muffin league/factory-muffin-faker -o 
+      run: composer require league/factory-muffin league/factory-muffin-faker -o 
 
     - name: Set up Nextcloud
       working-directory: ${{ inputs.server-path }}
