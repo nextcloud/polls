@@ -37,7 +37,7 @@ class RemoveIndices implements IRepairStep {
 	private $indexManager;
 
 	public function __construct(
-		IndexManager $indexManager,
+		IndexManager $indexManager
 	) {
 		$this->indexManager = $indexManager;
 	}

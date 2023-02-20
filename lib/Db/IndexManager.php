@@ -44,7 +44,7 @@ class IndexManager {
 	
 	public function __construct(
 		IConfig $config,
-		IDBConnection $connection,
+		IDBConnection $connection
 	) {
 		$this->config = $config;
 		$this->connection = $connection;

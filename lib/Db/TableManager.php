@@ -73,7 +73,7 @@ class TableManager {
 		ShareMapper $shareMapper,
 		SubscriptionMapper $subscriptionMapper,
 		VoteMapper $voteMapper,
-		WatchMapper $watchMapper,
+		WatchMapper $watchMapper
 	) {
 		$this->config = $config;
 		$this->connection = $connection;

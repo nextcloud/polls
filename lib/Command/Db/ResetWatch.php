@@ -44,7 +44,7 @@ class ResetWatch extends Command {
 
 	public function __construct(
 		IndexManager $indexManager,
-		TableManager $tableManager,
+		TableManager $tableManager
 	) {
 		parent::__construct();
 		$this->indexManager = $indexManager;

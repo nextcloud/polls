@@ -37,7 +37,7 @@ class CleanMigrations extends Command {
 	protected $description = 'Remove old migrations entries from Nextcloud\'s migration table';
 
 	public function __construct(
-		TableManager $tableManager,
+		TableManager $tableManager
 	) {
 		parent::__construct();
 		$this->tableManager = $tableManager;

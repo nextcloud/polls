@@ -33,7 +33,7 @@ class CreateTables implements IRepairStep {
 	private $tableManager;
 
 	public function __construct(
-		TableManager $tableManager,
+		TableManager $tableManager
 	) {
 		$this->tableManager = $tableManager;
 	}
