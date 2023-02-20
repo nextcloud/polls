@@ -90,7 +90,12 @@ runs:
       shell: bash
       run: composer i --no-dev -o 
 
-    - name: Set up faker
+    - name: Set up faker I.
+      working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
+      shell: bash
+      run: composer remove league/factory-muffin league/factory-muffin-faker
+
+    - name: Set up faker II.
       working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
       shell: bash
       run: composer require league/factory-muffin league/factory-muffin-faker -o 
