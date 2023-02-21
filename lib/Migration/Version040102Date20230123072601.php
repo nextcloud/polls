@@ -73,8 +73,17 @@ class Version040102Date20230123072601 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
-	
-		$this->fixVotes->run($output);
+
+		// Create tables, as defined in TableSchema or fix column definitions
+		foreach ($this->tableManager->createTables() as $message) {
+			$output->info('Polls - ' . $message);
+		};
+		$this->tableManager->migrate();
+
+		$this->indexManager->refreshSchema();
+		$this->indexManager->createForeignKeyConstraints();
+		$this->indexManager->createIndices();
+		$this->indexManager->migrate();
 
 		return $schema;
 	}
