@@ -90,6 +90,11 @@ runs:
       shell: bash
       run: composer i
 
+    - name: Remove Nextcloud API
+      working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
+      shell: bash
+      run: composer remove nextcloud/ocp
+
     - name: Set up Nextcloud
       working-directory: ${{ inputs.server-path }}
       shell: bash
