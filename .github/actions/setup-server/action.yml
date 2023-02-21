@@ -90,10 +90,10 @@ runs:
       shell: bash
       run: composer i
 
-    - name: Remove Nextcloud API
+    - name: Remove Doctine\DBAL
       working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
       shell: bash
-      run: composer remove nextcloud/ocp
+      run: composer remove doctrine/dbal
 
     - name: Set up Nextcloud
       working-directory: ${{ inputs.server-path }}

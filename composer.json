@@ -27,8 +27,8 @@
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
 		"nextcloud/coding-standard": "^1.0",
-		"nextcloud/ocp": "dev-master",
-		"doctrine/dbal": "^3.6"
+		"doctrine/dbal": "^3.6",
+		"nextcloud/ocp": "dev-master"
 	},
 	"scripts": {
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
