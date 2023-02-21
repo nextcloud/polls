@@ -88,17 +88,7 @@ runs:
     - name: Set up components
       working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
       shell: bash
-      run: composer i --no-dev -o 
-
-    - name: Set up faker I.
-      working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
-      shell: bash
-      run: composer remove league/factory-muffin-faker league/factory-muffin 
-
-    - name: Set up faker II.
-      working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
-      shell: bash
-      run: composer require league/factory-muffin league/factory-muffin-faker -o 
+      run: composer i
 
     - name: Set up Nextcloud
       working-directory: ${{ inputs.server-path }}

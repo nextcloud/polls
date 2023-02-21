@@ -23,8 +23,15 @@
 			"OCA\\Polls\\Tests\\": "tests/"
 		}
 	},
+	"require-dev": {
+		"league/factory-muffin": "^3.0",
+		"league/factory-muffin-faker": "^2.0",
+		"nextcloud/coding-standard": "^1.0",
+		"nextcloud/ocp": "dev-master",
+		"doctrine/dbal": "^3.6"
+	},
 	"scripts": {
-		"cs:check": "php-cs-fixer fix --dry-run",
+		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "psalm --no-diff",
 		"psalm:fix": "psalm --alter --issues=MissingReturnType,InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
