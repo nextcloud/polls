@@ -22,13 +22,13 @@
  */
 
 
-namespace OCA\Polls\Migration;
+namespace OCA\Polls\Migration\RepairSteps;
 
 use OCA\Polls\Db\TableManager;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
-class FixVotes implements IRepairStep {
+class DropOrphanedColumns implements IRepairStep {
 	/** @var TableManager */
 	private $tableManager;
 
@@ -38,20 +38,17 @@ class FixVotes implements IRepairStep {
 		$this->tableManager = $tableManager;
 	}
 
-	/*
-	 * @inheritdoc
-	 */
 	public function getName() {
-		return 'Polls repairstep - Fix votes with duration options';
+		return 'Polls - Drop orphaned columns';
 	}
 
-	/*
-	 * @inheritdoc
-	 */
 	public function run(IOutput $output): void {
 		// secure, that the schema is updated to the current status
 		$this->tableManager->refreshSchema();
-		$this->tableManager->fixVotes();
-		$this->tableManager->migrate();
+		$messages = $this->tableManager->removeObsoleteColumns();
+		
+		foreach ($messages as $message) {
+			$output->info($message);
+		}
 	}
 }

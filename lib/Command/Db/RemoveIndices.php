@@ -23,21 +23,26 @@
 
 namespace OCA\Polls\Command\Db;
 
-use OCA\Polls\Migration\RemoveIndices as IndexManager;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
+use OCA\Polls\Command\Command;
+use OCA\Polls\Db\IndexManager;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class RemoveIndices extends Command {
 	/** @var IndexManager */
 	private $indexManager;
 
+	/** @var string */
+	protected $name = self::NAME_PREFIX . 'index:remove';
+
+	/** @var string */
+	protected $description = 'Remove all indices and foreign key constraints';
+
 	public function __construct(
 		IndexManager $indexManager
 	) {
 		parent::__construct();
 		$this->indexManager = $indexManager;
+		$this->question = new ConfirmationQuestion('Continue (y/n)? [y] ', true);
 	}
 
 	protected function configure(): void {
@@ -46,28 +51,23 @@ class RemoveIndices extends Command {
 			->setDescription('Remove indices');
 	}
 
-	protected function execute(InputInterface $input, OutputInterface $output): int {
-		if ($this->requestConfirmation($input, $output)) {
-			return 1;
-		}
-
+	protected function runCommands(): int {
 		// remove constraints and indices
-		$this->deleteForeignKeyConstraints($output);
-		$this->deleteGenericIndices($output);
-		$this->deleteUniqueIndices($output);
+		$this->deleteForeignKeyConstraints();
+		$this->deleteGenericIndices();
+		$this->deleteUniqueIndices();
 		$this->indexManager->migrate();
 		return 0;
 	}
 
-	private function requestConfirmation(InputInterface $input, OutputInterface $output): int {
-		if ($input->isInteractive()) {
-			$helper = $this->getHelper('question');
-			$output->writeln('<comment>Removes all indices and foreign key constraints.</comment>');
-			$output->writeln('<comment>NO data migration will be executed, so make sure you have a backup of your database.</comment>');
-			$output->writeln('');
+	protected function requestConfirmation(): int {
+		if ($this->input->isInteractive()) {
+			$this->helper = $this->getHelper('question');
+			$this->printComment('Removes all indices and foreign key constraints.');
+			$this->printComment('NO data migration will be executed, so make sure you have a backup of your database.');
+			$this->printNewLine();
 
-			$question = new ConfirmationQuestion('Continue (y/n)? [y] ', true);
-			if (!$helper->ask($input, $output, $question)) {
+			if (!$this->helper->ask($this->input, $this->output, $this->question)) {
 				return 1;
 			}
 		}
@@ -77,36 +77,36 @@ class RemoveIndices extends Command {
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
-	private function deleteForeignKeyConstraints(OutputInterface $output): void {
-		$output->writeln('<comment>Remove foreign key constraints and generic indices</comment>');
+	private function deleteForeignKeyConstraints(): void {
+		$this->printComment('Remove foreign key constraints and generic indices');
 		$messages = $this->indexManager->removeAllForeignKeyConstraints();
 
 		foreach ($messages as $message) {
-			$output->writeln('<info> ' . $message . ' </info>');
+			$this->printInfo(' ' . $message);
 		}
 	}
 
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
-	private function deleteGenericIndices(OutputInterface $output): void {
-		$output->writeln('<comment>Remove generic indices</comment>');
+	private function deleteGenericIndices(): void {
+		$this->printComment('Remove generic indices');
 		$messages = $this->indexManager->removeAllGenericIndices();
 
 		foreach ($messages as $message) {
-			$output->writeln('<info> ' . $message . ' </info>');
+			$this->printInfo(' ' . $message);
 		}
 	}
 
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
-	private function deleteUniqueIndices(OutputInterface $output): void {
-		$output->writeln('<comment>Remove unique indices</comment>');
+	private function deleteUniqueIndices(): void {
+		$this->printComment('Remove unique indices');
 		$messages = $this->indexManager->removeAllUniqueIndices();
 
 		foreach ($messages as $message) {
-			$output->writeln('<info> ' . $message . ' </info>');
+			$this->printInfo(' ' . $message);
 		}
 	}
 }

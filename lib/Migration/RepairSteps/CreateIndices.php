@@ -22,36 +22,39 @@
  */
 
 
-namespace OCA\Polls\Migration;
+namespace OCA\Polls\Migration\RepairSteps;
 
-use OCA\Polls\Db\TableManager;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
+use OCA\Polls\Db\IndexManager;
 
-class FixVotes implements IRepairStep {
-	/** @var TableManager */
-	private $tableManager;
-
+class CreateIndices implements IRepairStep {
+	/** @var IndexManager */
+	private $indexManager;
+	
 	public function __construct(
-		TableManager $tableManager
+		IndexManager $indexManager
 	) {
-		$this->tableManager = $tableManager;
+		$this->indexManager = $indexManager;
 	}
 
-	/*
-	 * @inheritdoc
-	 */
 	public function getName() {
-		return 'Polls repairstep - Fix votes with duration options';
+		return 'Polls - Create indices and foreign key constraints';
 	}
 
-	/*
-	 * @inheritdoc
-	 */
 	public function run(IOutput $output): void {
+		$messages = [];
 		// secure, that the schema is updated to the current status
-		$this->tableManager->refreshSchema();
-		$this->tableManager->fixVotes();
-		$this->tableManager->migrate();
+		$this->indexManager->refreshSchema();
+
+		$messages = array_merge($messages, $this->indexManager->createForeignKeyConstraints());
+		$messages = array_merge($messages, $this->indexManager->createIndices());
+		$this->indexManager->migrate();
+		foreach ($messages as $message) {
+			$output->info($message);
+		}
+
+		$output->info('Polls - Foreign key contraints created.');
+		$output->info('Polls - Indices created.');
 	}
 }

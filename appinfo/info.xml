@@ -23,7 +23,7 @@
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
     <dependencies>
         <php min-version="7.4"/>
-        <nextcloud min-version="25" max-version="25" />
+        <nextcloud min-version="25" max-version="26" />
     </dependencies>
     <activity>
 		<providers>
@@ -40,7 +40,9 @@
         <command>OCA\Polls\Command\Share\Remove</command>
         <command>OCA\Polls\Command\Db\RemoveIndices</command>
         <command>OCA\Polls\Command\Db\Rebuild</command>
-        <command>OCA\Polls\Command\Db\AddIndices</command>
+        <command>OCA\Polls\Command\Db\CreateIndices</command>
+        <command>OCA\Polls\Command\Db\CleanMigrations</command>
+        <command>OCA\Polls\Command\Db\ResetWatch</command>
         <command>OCA\Polls\Command\Poll\TransferOwnership</command>
     </commands>
     <settings>
@@ -51,11 +53,15 @@
     </settings>
     <repair-steps>
         <pre-migration>
-            <step>OCA\Polls\Migration\RemoveIndices</step>
-            <step>OCA\Polls\Migration\DeleteInvalidRecords</step>
+            <step>OCA\Polls\Migration\RepairSteps\RemoveObsoleteMigrations</step>
+            <step>OCA\Polls\Migration\RepairSteps\RemoveIndices</step>
+            <step>OCA\Polls\Migration\RepairSteps\CreateTables</step>
+            <step>OCA\Polls\Migration\RepairSteps\DeleteInvalidRecords</step>
         </pre-migration>
         <post-migration>
-            <step>OCA\Polls\Migration\CreateIndices</step>
+            <step>OCA\Polls\Migration\RepairSteps\DropOrphanedTables</step>
+            <step>OCA\Polls\Migration\RepairSteps\DropOrphanedColumns</step>
+            <step>OCA\Polls\Migration\RepairSteps\CreateIndices</step>
         </post-migration>
     </repair-steps>
     <navigations>

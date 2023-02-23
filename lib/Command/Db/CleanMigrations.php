@@ -17,41 +17,54 @@
  *  GNU Affero General Public License for more details.
  *
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program. If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-
-namespace OCA\Polls\Migration;
+namespace OCA\Polls\Command\Db;
 
 use OCA\Polls\Db\TableManager;
-use OCP\Migration\IRepairStep;
-use OCP\Migration\IOutput;
+use OCA\Polls\Command\Command;
 
-class FixVotes implements IRepairStep {
+class CleanMigrations extends Command {
 	/** @var TableManager */
 	private $tableManager;
+
+	/** @var string */
+	protected $name = self::NAME_PREFIX . 'db:clean-migrations';
+
+	/** @var string */
+	protected $description = 'Remove old migrations entries from Nextcloud\'s migration table';
 
 	public function __construct(
 		TableManager $tableManager
 	) {
+		parent::__construct();
 		$this->tableManager = $tableManager;
 	}
 
-	/*
-	 * @inheritdoc
-	 */
-	public function getName() {
-		return 'Polls repairstep - Fix votes with duration options';
-	}
-
-	/*
-	 * @inheritdoc
-	 */
-	public function run(IOutput $output): void {
+	protected function runCommands(): int {
+		// remove constraints and indices
+		$this->printComment('Remove migration entries from migration table');
 		// secure, that the schema is updated to the current status
 		$this->tableManager->refreshSchema();
-		$this->tableManager->fixVotes();
+		$this->tableManager->removeObsoleteMigrations();
 		$this->tableManager->migrate();
+		
+		return 0;
+	}
+
+	protected function requestConfirmation(): int {
+		if ($this->input->isInteractive()) {
+			$helper = $this->getHelper('question');
+			$this->printComment('All polls tables will get checked against the current schema.');
+			$this->printComment('NO data migration will be executed, so make sure you have a backup of your database.');
+			$this->printNewLine();
+
+			if (!$helper->ask($this->input, $this->output, $this->question)) {
+				return 1;
+			}
+		}
+		return 0;
 	}
 }

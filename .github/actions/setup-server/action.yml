@@ -12,6 +12,10 @@ inputs:
     required: false
     default: '7.4'
     description: 'PHP version (default: 7.4)'
+  php-tools:
+    description: 'Additional php tools'
+    required: false
+    type: string
   server-path:
     required: false
     default: server
@@ -77,7 +81,7 @@ runs:
       uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ inputs.php-version }}
-        tools: phpunit:9
+        tools: ${{ inputs.php-tools }}
         extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, zip, gd
         coverage: none
 
@@ -85,6 +89,11 @@ runs:
       working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
       shell: bash
       run: composer i
+
+    - name: Remove Nextcloud API and Doctrine
+      working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
+      shell: bash
+      run: composer remove --dev nextcloud/ocp doctrine/dbal
 
     - name: Set up Nextcloud
       working-directory: ${{ inputs.server-path }}

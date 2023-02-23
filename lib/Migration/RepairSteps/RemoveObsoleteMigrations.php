@@ -21,14 +21,18 @@
  *
  */
 
+namespace OCA\Polls\Migration\RepairSteps;
 
-namespace OCA\Polls\Migration;
-
-use OCA\Polls\Db\TableManager;
 use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
+use OCA\Polls\Db\TableManager;
 
-class FixVotes implements IRepairStep {
+/**
+ * remove old migration entries from versions prior to polls 3.x
+ * including migration versions from test releases
+ * theoretically, only this migration should be existent. If not, no matter
+ */
+class RemoveObsoleteMigrations implements IRepairStep {
 	/** @var TableManager */
 	private $tableManager;
 
@@ -42,7 +46,7 @@ class FixVotes implements IRepairStep {
 	 * @inheritdoc
 	 */
 	public function getName() {
-		return 'Polls repairstep - Fix votes with duration options';
+		return 'Polls - Remove old migrations from migrations table';
 	}
 
 	/*
@@ -51,7 +55,11 @@ class FixVotes implements IRepairStep {
 	public function run(IOutput $output): void {
 		// secure, that the schema is updated to the current status
 		$this->tableManager->refreshSchema();
-		$this->tableManager->fixVotes();
+		$messages = $this->tableManager->removeObsoleteMigrations();
+		foreach ($messages as $message) {
+			$output->info($message);
+		}
+
 		$this->tableManager->migrate();
 	}
 }

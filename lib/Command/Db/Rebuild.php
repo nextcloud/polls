@@ -23,80 +23,74 @@
 
 namespace OCA\Polls\Command\Db;
 
-use OC\DB\Connection;
-use OC\DB\SchemaWrapper;
-use OCA\Polls\Migration\TableSchema;
-use OCA\Polls\Migration\CreateIndices as IndexManagerCreate;
-use OCA\Polls\Migration\RemoveIndices as IndexManagerRemove;
-use Symfony\Component\Console\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
-use Doctrine\DBAL\Types\Type;
+use OCA\Polls\Db\TableManager;
+use OCA\Polls\Db\IndexManager;
+use OCA\Polls\Command\Command;
 
 class Rebuild extends Command {
-    /** @var Connection */
-	private $connection;
+	/** @var IndexManager */
+	private $indexManager;
 
-	/** @var IndexManagerCreate */
-	private $indexManagerCreate;
+	/** @var TableManager */
+	private $tableManager;
 
-	/** @var IndexManagerRemove */
-	private $indexManagerRemove;
+	/** @var string */
+	protected $name = self::NAME_PREFIX . 'db:rebuild';
+
+	/** @var string */
+	protected $description = 'Rebuilds poll\'s table structure';
 
 	public function __construct(
-		Connection $connection,
-		IndexManagerCreate $indexManagerCreate,
-		IndexManagerRemove $indexManagerRemove
-
+		TableManager $tableManager,
+		IndexManager $indexManager,
 	) {
 		parent::__construct();
-        $this->connection = $connection;
-		$this->indexManagerCreate = $indexManagerCreate;
-		$this->indexManagerRemove = $indexManagerRemove;
+		$this->indexManager = $indexManager;
+		$this->tableManager = $tableManager;
 	}
 
-	protected function configure(): void {
-		$this
-			->setName('polls:db:rebuild')
-			->setDescription('Rebuilds poll\'s table structure');
-	}
-
-	protected function execute(InputInterface $input, OutputInterface $output): int {
-		if ($this->requestConfirmation($input, $output)) {
-			return 1;
-		}
-
+	protected function runCommands(): int {
 		// remove constraints and indices
-		$this->deleteForeignKeyConstraints($output);
-		$this->deleteGenericIndices($output);
-		$this->deleteUniqueIndices($output);
-		$this->indexManagerRemove->migrate();
-		
+		$this->printComment('Step 1. Remove all indices and foreign key constraints');
+		// secure, that the schema is updated to the current status
+		$this->indexManager->refreshSchema();
+		$this->deleteForeignKeyConstraints();
+		$this->deleteGenericIndices();
+		$this->deleteUniqueIndices();
+		$this->indexManager->migrate();
+
 		// remove old tables and columns
-		$this->removeObsoleteTables($output);
-		$this->removeObsoleteColumns($output);
-		
+		$this->printComment('Step 2. Remove all orphaned tables and columns');
+		// secure, that the schema is updated to the current status
+		$this->tableManager->refreshSchema();
+		$this->removeObsoleteTables();
+		$this->removeObsoleteColumns();
+		$this->tableManager->migrate();
+
 		// validate and fix/create current table layout
-		$this->createOrUpdateSchema($output);
+		$this->printComment('Step 3. Create or update tables to current shema');
+		$this->createOrUpdateSchema();
+		$this->tableManager->migrate();
 		
 		// recreate indices and constraints
-		$this->addForeignKeyConstraints($output);
-		$this->addIndices($output);
-		$this->indexManagerCreate->migrate();
+		$this->printComment('Step 4. Recreate indices and foreign key constraints');
+		// secure, that the schema is updated to the current status
+		$this->indexManager->refreshSchema();
+		$this->addForeignKeyConstraints();
+		$this->addIndices();
+		$this->indexManager->migrate();
 		
 		return 0;
 	}
 
-	private function requestConfirmation(InputInterface $input, OutputInterface $output): int {
-		if ($input->isInteractive()) {
+	protected function requestConfirmation(): int {
+		if ($this->input->isInteractive()) {
 			$helper = $this->getHelper('question');
-			$output->writeln('<comment>All polls tables will get checked against the current schema.</comment>');
-			$output->writeln('<comment>NO data migration will be executed, so make sure you have a backup of your database.</comment>');
-			$output->writeln('');
+			$this->printComment('All polls tables will get checked against the current schema.');
+			$this->printComment('NO data migration will be executed, so make sure you have a backup of your database.');
+			$this->printNewLine();
 
-			$question = new ConfirmationQuestion('Continue with the conversion (y/n)? [n] ', false);
-			if (!$helper->ask($input, $output, $question)) {
+			if (!$helper->ask($this->input, $this->output, $this->question)) {
 				return 1;
 			}
 		}
@@ -106,25 +100,23 @@ class Rebuild extends Command {
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
-	private function addForeignKeyConstraints(OutputInterface $output): void {
-		$output->writeln('<comment>Add foreign key constraints</comment>');
-		$messages = $this->indexManagerCreate->createForeignKeyConstraints();
+	private function addForeignKeyConstraints(): void {
+		$this->printComment('- Add foreign key constraints');
+		$messages = $this->indexManager->createForeignKeyConstraints();
 
 		foreach ($messages as $message) {
-			$output->writeln('<info> ' . $message . ' </info>');
+			$this->printInfo(' - ' . $message);
 		}
 	}
-
-
 
 	/**
 	 * Create index for $table
 	 */
-	private function addIndices(OutputInterface $output): void {
-		$output->writeln('<comment>Add indices</comment>');
-		$messages = $this->indexManagerCreate->createIndices();
+	private function addIndices(): void {
+		$this->printComment('- Add indices');
+		$messages = $this->indexManager->createIndices();
 		foreach ($messages as $message) {
-			$output->writeln('<info> ' . $message . ' </info>');
+			$this->printInfo(' - ' . $message);
 		}
 	}
 
@@ -132,126 +124,64 @@ class Rebuild extends Command {
 	 * Iterate over tables and make sure, the are created or updated
 	 * according to the schema
 	 */
-	private function createOrUpdateSchema(OutputInterface $output): void {
-		$output->writeln('<comment>Set db structure</comment>');
-		$schema = new SchemaWrapper($this->connection);
-
-		foreach (TableSchema::TABLES as $tableName => $columns) {
-			$tableCreated = false;
-
-			if ($schema->hasTable($tableName)) {
-				$output->writeln(' - Validating table ' . $tableName);
-				$table = $schema->getTable($tableName);
-			} else {
-				$output->writeln('<info> - Creating table ' . $tableName . '</info>');
-				$table = $schema->createTable($tableName);
-				$tableCreated = true;
-			}
-
-			foreach ($columns as $columnName => $columnDefinition) {
-				if ($table->hasColumn($columnName)) {
-					$column = $table->getColumn($columnName);
-					$column->setOptions($columnDefinition['options']);
-					if ($column->getType()->getName() !== $columnDefinition['type']) {
-						$output->writeln('<info>   Migrated type of ' . $tableName . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'] . '</info>');
-						$column->setType(Type::getType($columnDefinition['type']));
-					}
-
-					// force change to current options definition
-					$table->changeColumn($columnName, $columnDefinition['options']);
-				} else {
-					$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
-					$output->writeln('<info>  Added ' . $tableName . ', ' . $columnName . ' (' . $columnDefinition['type'] . ')</info>');
-				}
-			}
-
-			if ($tableCreated) {
-				$table->setPrimaryKey(['id']);
-			}
+	private function createOrUpdateSchema(): void {
+		$this->printComment('- Set db structure');
+		$messages = $this->tableManager->createTables();
+		foreach ($messages as $message) {
+			$this->printInfo(' - ' . $message);
 		}
-
-		$this->connection->migrateToSchema($schema->getWrappedSchema());
 	}
 
-	private function removeObsoleteColumns(OutputInterface $output): void {
-		$output->writeln('<comment>Drop orphaned columns</comment>');
-		$schema = new SchemaWrapper($this->connection);
-		$dropped = false;
-
-		foreach (TableSchema::GONE_COLUMNS as $tableName => $columns) {
-			if ($schema->hasTable($tableName)) {
-				$table = $schema->getTable($tableName);
-
-				foreach ($columns as $columnName) {
-					if ($table->hasColumn($columnName)) {
-						$dropped = true;
-						$table->dropColumn($columnName);
-						$output->writeln('<info> - Dropped ' . $columnName . ' from ' . $tableName .'</info>');
-					}
-				}
-			}
-		}
-
-		$this->connection->migrateToSchema($schema->getWrappedSchema());
-
-		if (!$dropped) {
-			$output->writeln(' - No orphaned columns found');
+	private function removeObsoleteColumns(): void {
+		$this->printComment('- Drop orphaned columns');
+		$messages = $this->tableManager->removeObsoleteColumns();
+		foreach ($messages as $message) {
+			$this->printInfo(' - ' . $message);
 		}
 	}
 
 	/**
 	 * Remove obsolete tables if they still exist
 	 */
-	private function removeObsoleteTables(OutputInterface $output): void {
-		$output->writeln('<comment>Drop orphaned tables</comment>');
-		$schema = new SchemaWrapper($this->connection);
-		$dropped = false;
+	private function removeObsoleteTables(): void {
+		$this->printComment('  Drop orphaned tables');
+		$messages = $this->tableManager->removeObsoleteTables();
 
-		foreach (TableSchema::GONE_TABLES as $tableName) {
-			if ($schema->hasTable($tableName)) {
-				$dropped = true;
-				$schema->dropTable($tableName);
-				$output->writeln('<info> - Dropped ' . $tableName .'</info>');
-			}
-		}
-
-		$this->connection->migrateToSchema($schema->getWrappedSchema());
-
-		if (!$dropped) {
-			$output->writeln(' - No orphaned tables found');
+		foreach ($messages as $message) {
+			$this->printInfo(' - ' . $message);
 		}
 	}
 
-	private function deleteForeignKeyConstraints(OutputInterface $output): void {
-		$output->writeln('<comment>Remove foreign key constraints and generic indices</comment>');
-		$messages = $this->indexManagerRemove->removeAllForeignKeyConstraints();
+	private function deleteForeignKeyConstraints(): void {
+		$this->printComment('- Remove foreign key constraints');
+		$messages = $this->indexManager->removeAllForeignKeyConstraints();
 
 		foreach ($messages as $message) {
-			$output->writeln('<info> ' . $message . ' </info>');
+			$this->printInfo(' - ' . $message);
 		}
 	}
 
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
-	private function deleteGenericIndices(OutputInterface $output): void {
-		$output->writeln('<comment>Remove generic indices</comment>');
-		$messages = $this->indexManagerRemove->removeAllGenericIndices();
+	private function deleteGenericIndices(): void {
+		$this->printComment('- Remove generic indices');
+		$messages = $this->indexManager->removeAllGenericIndices();
 
 		foreach ($messages as $message) {
-			$output->writeln('<info> ' . $message . ' </info>');
+			$this->printInfo(' - ' . $message);
 		}
 	}
 
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
-	private function deleteUniqueIndices(OutputInterface $output): void {
-		$output->writeln('<comment>Remove unique indices</comment>');
-		$messages = $this->indexManagerRemove->removeAllUniqueIndices();
+	private function deleteUniqueIndices(): void {
+		$this->printComment('- Remove unique indices');
+		$messages = $this->indexManager->removeAllUniqueIndices();
 
 		foreach ($messages as $message) {
-			$output->writeln('<info> ' . $message . ' </info>');
+			$this->printInfo(' - ' . $message);
 		}
 	}
 }
