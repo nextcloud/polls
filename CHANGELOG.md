@@ -7,7 +7,8 @@ All notable changes to this project will be documented in this file.
  - Fix MySQL error 1071 Specified key was too long;
  ### changes
  - Change default of life update mechanism to manual updates instead of long polling (v4.1.3)
- 
+ - Added Nextcloud 26
+
 ## [4.1.2] - 2023-01-23
 ### Fix
  - Invitations are not send out if poll has no description (fix 2)
