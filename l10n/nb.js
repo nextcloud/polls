@@ -49,6 +49,7 @@ OC.L10N.register(
     "Sharing" : "Deling",
     "Comments" : "Kommentarer",
     "Activity" : "Aktivitet",
+    "Minute" : "Minutt",
     "Hour" : "Time",
     "Day" : "Dag",
     "Month" : "Måned",
