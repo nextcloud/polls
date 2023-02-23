@@ -41,14 +41,14 @@ class VoteMapper extends QBMapper {
 		parent::__construct($db, self::TABLE, Vote::class);
 	}
 
-	public function update(Entity $vote): Entity {
-		$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
-		return parent::update($vote);
+	public function update(Entity $entity): Entity {
+		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
+		return parent::update($entity);
 	}
 
-	public function insert(Entity $vote): Entity {
-		$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
-		return parent::insert($vote);
+	public function insert(Entity $entity): Entity {
+		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
+		return parent::insert($entity);
 	}
 
 	/**

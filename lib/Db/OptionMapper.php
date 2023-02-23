@@ -41,20 +41,20 @@ class OptionMapper extends QBMapper {
 		parent::__construct($db, self::TABLE, Option::class);
 	}
 
-	public function update(Entity $option): Entity {
-		$option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
-		return parent::update($option);
+	public function update(Entity $entity): Entity {
+		$entity->setPollOptionHash(hash('md5', $entity->getPollId() . $entity->getPollOptionText() . $entity->getTimestamp()));
+		return parent::update($entity);
 	}
 
-	public function insert(Entity $option): Entity {
-		$option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
-		return parent::insert($option);
+	public function insert(Entity $entity): Entity {
+		$entity->setPollOptionHash(hash('md5', $entity->getPollId() . $entity->getPollOptionText() . $entity->getTimestamp()));
+		return parent::insert($entity);
 	}
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Vote[]
-	 * @psalm-return array<array-key, Vote>
+	 * @return Option[]
+	 * @psalm-return array<array-key, Option>
 	 */
 	public function getAll(): array {
 		$qb = $this->db->getQueryBuilder();
