@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
-
+## [4.1.3] - 2023-02-23
+### Fix
+ - Fix infinite updates call, if no polling type for watches were set (avoid server spamming)
+ - Fix migrations and repair steps
+ ### changes
+ - Change default of life update mechanism to manual updates instead of long polling
+ 
 ## [4.1.2] - 2023-01-23
 ### Fix
  - Invitations are not send out if poll has no description (fix 2)
