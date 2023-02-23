@@ -68,7 +68,7 @@ class JanitorCron extends TimedJob {
 
 		if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_AUTO_ARCHIVE) && $this->appSettings->getIntegerSetting(AppSettings::SETTING_AUTO_ARCHIVE_OFFSET) > 0) {
 			$this->pollMapper->archiveExpiredPolls(
-				time() - ($this->appSettings->getIntegerSetting(AppSettings::SETTING_AUTO_ARCHIVE_OFFSET) * 86400)
+				time() - ($this->appSettings->getAutoarchiveOffset() * 86400)
 			); // archive polls after defined days after closing date
 		}
 	}

@@ -51,11 +51,16 @@ class AppSettings implements JsonSerializable {
 
 	public const SETTING_SHOW_MAIL_ADDRESSES = 'showMailAddresses';
 	public const SETTING_AUTO_ARCHIVE_OFFSET = 'autoArchiveOffset';
+	public const SETTING_AUTO_ARCHIVE_OFFSET_DEFAULT = 30;
 	public const SETTING_UPDATE_TYPE = 'updateType';
 	public const SETTING_PRIVACY_URL = 'privacyUrl';
 	public const SETTING_IMPRINT_URL = 'imprintUrl';
 	public const SETTING_DISCLAIMER = 'disclaimer';
-
+	
+	public const SETTING_UPDATE_TYPE_LONG_POLLING = 'longPolling';
+	public const SETTING_UPDATE_TYPE_NO_POLLING = 'noPolling';
+	public const SETTING_UPDATE_TYPE_PERIODIC_POLLING = 'periodicPolling';
+	public const SETTING_UPDATE_TYPE_DEFAULT = self::SETTING_UPDATE_TYPE_NO_POLLING;
 
 	/** @var IConfig */
 	private $config;
@@ -154,6 +159,14 @@ class AppSettings implements JsonSerializable {
 		return $this->config->getAppValue('theming', 'imprintUrl');
 	}
 	
+	public function getAutoarchiveOffset() {
+		return $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET, self::SETTING_AUTO_ARCHIVE_OFFSET_DEFAULT);
+	}
+
+	public function getUpdateType() {
+		return $this->getStringSetting(self::SETTING_UPDATE_TYPE, self::SETTING_UPDATE_TYPE_DEFAULT);
+	}
+
 	// Setters
 	// generic setters
 	public function setBooleanSetting(string $key, bool $value): void {
@@ -210,7 +223,6 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_ALLOW_ALL_ACCESS => $this->getBooleanSetting(self::SETTING_ALLOW_ALL_ACCESS),
 			self::SETTING_ALLOW_POLL_CREATION => $this->getBooleanSetting(self::SETTING_ALLOW_POLL_CREATION),
 			self::SETTING_ALLOW_POLL_DOWNLOAD => $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD),
-			self::SETTING_AUTO_ARCHIVE => $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE),
 			self::SETTING_LEGAL_TERMS_IN_EMAIL => $this->getBooleanSetting(self::SETTING_LEGAL_TERMS_IN_EMAIL),
 			self::SETTING_SHOW_LOGIN => $this->getBooleanSetting(self::SETTING_SHOW_LOGIN),
 			self::SETTING_SHOW_MAIL_ADDRESSES => $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES),
@@ -221,11 +233,12 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_PUBLIC_SHARES_GROUPS => $publicSharesGroups,
 			self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS => $showMailAddressesGroups,
 			self::SETTING_COMBO_GROUPS => $comboGroups,
-			self::SETTING_AUTO_ARCHIVE_OFFSET => $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET, 30),
+			self::SETTING_AUTO_ARCHIVE => $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE),
+			self::SETTING_AUTO_ARCHIVE_OFFSET => $this->getAutoarchiveOffset(),
 			self::SETTING_DISCLAIMER => $this->getStringSetting(self::SETTING_DISCLAIMER),
 			self::SETTING_IMPRINT_URL => $this->getStringSetting(self::SETTING_IMPRINT_URL),
 			self::SETTING_PRIVACY_URL => $this->getStringSetting(self::SETTING_PRIVACY_URL),
-			self::SETTING_UPDATE_TYPE => $this->getStringSetting(self::SETTING_UPDATE_TYPE, 'longPolling'),
+			self::SETTING_UPDATE_TYPE => $this->getUpdateType(),
 			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
 			'useImprintUrl' => $this->getUseImprintUrl(),
 			'defaultPrivacyUrl' => $this->config->getAppValue('theming', 'privacyUrl'),
