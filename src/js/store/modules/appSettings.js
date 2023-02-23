@@ -40,7 +40,7 @@ const defaultAppSettings = () => ({
 	privacyUrl: '',
 	showMailAddresses: 'false',
 	showLogin: true,
-	updateType: 'longPolling',
+	updateType: 'noPolling',
 	useActivity: false,
 	useCollaboration: true,
 	usePrivacyUrl: '',
