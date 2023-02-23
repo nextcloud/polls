@@ -43,7 +43,7 @@
 		"@nextcloud/l10n": "^2.1.0",
 		"@nextcloud/moment": "^1.2.1",
 		"@nextcloud/router": "^2.0.1",
-		"@nextcloud/vue": "^7.6.1",
+		"@nextcloud/vue": "^7.7.0",
 		"@nextcloud/vue-richtext": "^2.0.4",
 		"core-js": "^3.28.0",
 		"dompurify": "^3.0.0",
