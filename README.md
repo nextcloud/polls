@@ -38,8 +38,9 @@ You can download and install the latest release from the [Nextcloud app store](h
 ## Available occ commands
 | Command | Description |
 | - | - |
+| `polls:db:clean-migrations`                                                  | Remove obsolete migrations, which are no more needed         |
 | `polls:db:rebuild`                                                           | Rebuild Polls' database including indices                    |
-| `polls:index:add`                                                            | Create all necessary indices and foreign key constraints     |
+| `polls:index:create`                                                         | Create all necessary indices and foreign key constraints     |
 | `polls:index:remove`                                                         | Remove all indices                                           |
 | `polls:poll:transfer-ownership  <source-user> <target-user>`                 | Transfer poll ownership from  <source-user> to <target-user> |
 | `polls:share:add [--user USER] [--group GROUP] [--email EMAIL] [--] <id>`    | Add user/group/email with <id> to shares                     |
