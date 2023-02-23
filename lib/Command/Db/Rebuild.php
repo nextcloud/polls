@@ -72,8 +72,12 @@ class Rebuild extends Command {
 		$this->createOrUpdateSchema();
 		$this->tableManager->migrate();
 		
+		// validate and fix/create current table layout
+		$this->printComment('Step 4. set hashes for votes and options');
+		$this->migrateOptionsToHash();
+		
 		// recreate indices and constraints
-		$this->printComment('Step 4. Recreate indices and foreign key constraints');
+		$this->printComment('Step 5. Recreate indices and foreign key constraints');
 		// secure, that the schema is updated to the current status
 		$this->indexManager->refreshSchema();
 		$this->addForeignKeyConstraints();
@@ -127,6 +131,17 @@ class Rebuild extends Command {
 	private function createOrUpdateSchema(): void {
 		$this->printComment('- Set db structure');
 		$messages = $this->tableManager->createTables();
+		foreach ($messages as $message) {
+			$this->printInfo(' - ' . $message);
+		}
+	}
+
+	/**
+	 * Add or update hash for votes and options
+	 */
+	private function migrateOptionsToHash(): void {
+		$this->printComment('- add or update hashes');
+		$messages = $this->tableManager->migrateOptionsToHash();
 		foreach ($messages as $message) {
 			$this->printInfo(' - ' . $message);
 		}
