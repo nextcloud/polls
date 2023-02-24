@@ -42,72 +42,24 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 
 class PublicController extends BaseController {
-	/** @var Acl */
-	private $acl;
-	
-	/** @var CommentService */
-	private $commentService;
-
-	/** @var MailService */
-	private $mailService;
-
-	/** @var OptionService */
-	private $optionService;
-	
-	/** @var PollService */
-	private $pollService;
-	
-	/** @var ShareService */
-	private $shareService;
-	
-	/** @var SubscriptionService */
-	private $subscriptionService;
-	
-	/** @var SystemService */
-	private $systemService;
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var IUserSession */
-	private $userSession;
-	
-	/** @var VoteService */
-	private $voteService;
-
-	/** @var WatchService */
-	private $watchService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
-		IURLGenerator $urlGenerator,
-		IUserSession $userSession,
-		Acl $acl,
-		CommentService $commentService,
-		MailService $mailService,
-		OptionService $optionService,
-		PollService $pollService,
-		ShareService $shareService,
-		SubscriptionService $subscriptionService,
-		SystemService $systemService,
-		VoteService $voteService,
-		WatchService $watchService
+		private IURLGenerator $urlGenerator,
+		private IUserSession $userSession,
+		private Acl $acl,
+		private CommentService $commentService,
+		private MailService $mailService,
+		private OptionService $optionService,
+		private PollService $pollService,
+		private ShareService $shareService,
+		private SubscriptionService $subscriptionService,
+		private SystemService $systemService,
+		private VoteService $voteService,
+		private WatchService $watchService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->urlGenerator = $urlGenerator;
-		$this->userSession = $userSession;
-		$this->acl = $acl;
-		$this->commentService = $commentService;
-		$this->mailService = $mailService;
-		$this->optionService = $optionService;
-		$this->pollService = $pollService;
-		$this->shareService = $shareService;
-		$this->subscriptionService = $subscriptionService;
-		$this->systemService = $systemService;
-		$this->voteService = $voteService;
-		$this->watchService = $watchService;
 	}
 
 	/**
@@ -172,7 +124,7 @@ class PublicController extends BaseController {
 		$this->acl->setToken($token);
 		
 		return $this->response(fn () => [
-			'votes' => $this->voteService->list(null, $this->acl)
+			'votes' => $this->voteService->list(acl: $this->acl)
 		], $token);
 	}
 
@@ -183,7 +135,7 @@ class PublicController extends BaseController {
 	 */
 	public function deleteUser(string $token): JSONResponse {
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->delete(null, null, $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
+			'deleted' => $this->voteService->delete(acl: $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
 		], $token);
 	}
 
@@ -194,7 +146,7 @@ class PublicController extends BaseController {
 	 */
 	public function getOptions(string $token): JSONResponse {
 		return $this->response(fn () => [
-			'options' => $this->optionService->list(null, $this->acl->setToken($token))
+			'options' => $this->optionService->list(acl: $this->acl->setToken($token))
 		], $token);
 	}
 
@@ -206,11 +158,10 @@ class PublicController extends BaseController {
 	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => [
 			'option' => $this->optionService->add(
-				null,
-				$timestamp,
-				$text,
-				$duration,
-				$this->acl->setToken($token, Acl::PERMISSION_OPTIONS_ADD)
+				timestamp: $timestamp,
+				pollOptionText: $text,
+				duration: $duration,
+				acl: $this->acl->setToken($token, Acl::PERMISSION_OPTIONS_ADD)
 			)
 		], $token);
 	}

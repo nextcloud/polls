@@ -32,23 +32,12 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Command extends \Symfony\Component\Console\Command\Command {
 	protected const NAME_PREFIX = 'polls:';
 
-	/** @var OutputInterface */
-	protected $output;
-
-	/** @var InputInterface */
-	protected $input;
-
-	/** @var string */
-	protected $name = '';
-
-	/** @var string */
-	protected $description = '';
-
-	/** @var mixed */
-	protected $helper;
-
-	/** @var ConfirmationQuestion */
-	protected $question;
+	protected OutputInterface $output;
+	protected InputInterface $input;
+	protected string $name = '';
+	protected string $description = '';
+	protected mixed $helper;
+	protected ConfirmationQuestion $question;
 
 	public function __construct() {
 		parent::__construct();

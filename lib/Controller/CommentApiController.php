@@ -29,21 +29,13 @@ use OCP\IRequest;
 use OCP\AppFramework\Http\JSONResponse;
 
 class CommentApiController extends BaseApiController {
-	/** @var CommentService */
-	private $commentService;
-
-	/** @var Acl */
-	private $acl;
-
 	public function __construct(
 		string $appName,
-		Acl $acl,
 		IRequest $request,
-		CommentService $commentService
+		private Acl $acl,
+		private CommentService $commentService
 	) {
 		parent::__construct($appName, $request);
-		$this->acl = $acl;
-		$this->commentService = $commentService;
 	}
 
 	/**

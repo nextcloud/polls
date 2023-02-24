@@ -4,7 +4,7 @@
     <name>Polls</name>
     <summary>A polls app, similar to Doodle/Dudle with the possibility to restrict access.</summary>
     <description>A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
-    <version>4.1.4</version>
+    <version>5.0.0-beta1</version>
     <licence>agpl</licence>
     <author>Vinzenz Rosenkranz</author>
     <author>René Gieling</author>
@@ -22,7 +22,7 @@
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
     <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
     <dependencies>
-        <php min-version="7.4"/>
+        <php min-version="8.0"/>
         <nextcloud min-version="25" max-version="26" />
     </dependencies>
     <activity>

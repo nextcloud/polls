@@ -40,8 +40,6 @@ class Email extends UserBase {
 		$this->icon = self::ICON;
 		$this->description = $emailAddress ? $emailAddress : $this->l10n->t('External Email');
 		$this->richObjectType = 'email';
-		
-		$this->languageCode = $languageCode;
 		$this->emailAddress = $emailAddress ? $emailAddress : $id;
 		$this->displayName = $displayName ? $displayName : $this->displayName;
 	}

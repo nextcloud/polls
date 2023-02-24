@@ -37,34 +37,16 @@ use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 
 class CalendarService {
-	/** @var CurrentUser */
-	private $currentUser;
-
-	/** @var CalendarManager */
-	private $calendarManager;
-
 	/** @var ICalendar[] */
-	private $calendars;
-
-	/** @var PreferencesService */
-	private $preferencesService;
-
-	/** @var Preferences */
-	private $preferences;
-
-	/** @var OptionMapper */
-	private $optionMapper;
+	private array $calendars;
+	private Preferences $preferences;
 
 	public function __construct(
-		CalendarManager $calendarManager,
-		PreferencesService $preferencesService,
-		OptionMapper $optionMapper,
-		CurrentUser $currentUser
+		private CalendarManager $calendarManager,
+		private PreferencesService $preferencesService,
+		private OptionMapper $optionMapper,
+		private CurrentUser $currentUser,
 	) {
-		$this->currentUser = $currentUser;
-		$this->calendarManager = $calendarManager;
-		$this->preferencesService = $preferencesService;
-		$this->optionMapper = $optionMapper;
 		$this->preferences = $this->preferencesService->get();
 		$this->getCalendarsForPrincipal();
 	}

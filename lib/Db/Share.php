@@ -88,38 +88,17 @@ class Share extends Entity implements JsonSerializable {
 		self::TYPE_CONTACTGROUP,
 	];
 
-	/** @var string $token */
-	protected $token = '';
-
-	/** @var string $type */
-	protected $type = '';
-
-	/** @var int $pollId */
-	protected $pollId = 0;
-
-	/** @var string $userId */
-	protected $userId = '';
-
-	/** @var string $emailAddress */
-	protected $emailAddress = '';
-
-	/** @var string $invitationSent */
-	protected $invitationSent = '';
-
-	/** @var string $reminderSent */
-	protected $reminderSent = '';
-
-	/** @var string $displayName */
-	protected $displayName = '';
-
-	/** @var string $miscSettings*/
-	protected $miscSettings = '';
-
-	/** @var IURLGenerator */
-	private $urlGenerator;
-
-	/** @var AppSettings */
-	protected $appSettings;
+	protected IURLGenerator $urlGenerator;
+	protected AppSettings $appSettings;
+	protected int $pollId = 0;
+	protected string $token = '';
+	protected string $type = '';
+	protected string $userId = '';
+	protected string $emailAddress = '';
+	protected string $invitationSent = '';
+	protected string $reminderSent = '';
+	protected string $displayName = '';
+	protected ?string $miscSettings = '';
 
 	public function __construct() {
 		$this->addType('pollId', 'int');

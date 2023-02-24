@@ -37,7 +37,7 @@ class LogMapper extends QBMapper {
 	public const TABLE = Log::TABLE;
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, self::TABLE, Log::class);
+		parent::__construct($db, Log::TABLE, Log::class);
 	}
 
 	public function find(int $id): Log {

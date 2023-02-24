@@ -37,35 +37,16 @@ use OCP\IUserSession;
 use OCP\L10N\IFactory;
 
 class ActivityService {
-	/** @var ActivityManager */
-	protected $activityManager;
-
-	/** @var IFactory */
-	protected $transFactory;
-
-	/** @var IL10N */
-	protected $l10n = null;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var string */
-	protected $shareType = '';
-
-	/** @var bool */
-	protected $userIsActor = true;
-
-	/** @var string */
-	protected $eventType = '';
+	protected ?IL10N $l10n = null;
+	protected string $shareType = '';
+	protected bool $userIsActor = true;
+	protected string $eventType = '';
 
 	public function __construct(
-		IFactory $transFactory,
-		IUserSession $userSession,
-		ActivityManager $activityManager
+		private IFactory $transFactory,
+		private IUserSession $userSession,
+		private ActivityManager $activityManager,
 	) {
-		$this->activityManager = $activityManager;
-		$this->transFactory = $transFactory;
-		$this->userSession = $userSession;
 	}
 
 	public function createActivityEvent(BaseEvent $event): ActivityEvent {

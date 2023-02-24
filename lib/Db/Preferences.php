@@ -39,14 +39,9 @@ use OCP\AppFramework\Db\Entity;
 class Preferences extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_preferences';
 
-	/** @var string $userId */
-	protected $userId;
-
-	/** @var integer $timestamp */
-	protected $timestamp;
-
-	/** @var string $preferences */
-	protected $preferences;
+	protected string $userId = '';
+	protected int $timestamp = 0;
+	protected string $preferences = '';
 
 	public function __construct() {
 		$this->addType('timestamp', 'int');

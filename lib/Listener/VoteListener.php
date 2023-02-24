@@ -28,8 +28,10 @@ use OCA\Polls\Db\Watch;
 use OCA\Polls\Exceptions\InvalidClassException;
 
 class VoteListener extends BaseListener {
-	/** @var array */
-	protected $watchTables = [Watch::OBJECT_VOTES, Watch::OBJECT_OPTIONS];
+	protected const WATCH_TABLES = [
+		Watch::OBJECT_VOTES,
+		Watch::OBJECT_OPTIONS,
+	];
 
 	protected function checkClass() : void {
 		if (!($this->event instanceof VoteEvent)) {

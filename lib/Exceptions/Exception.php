@@ -26,16 +26,13 @@ namespace OCA\Polls\Exceptions;
 use OCP\AppFramework\Http;
 
 class Exception extends \Exception {
-	/** @var integer */
-	protected $status;
-
 	public function __construct(
 		string $e = 'Unexpected error',
-		int $status = Http::STATUS_INTERNAL_SERVER_ERROR
+		protected int $status = Http::STATUS_INTERNAL_SERVER_ERROR
 	) {
 		parent::__construct($e);
-		$this->status = $status;
 	}
+
 	public function getStatus(): int {
 		return $this->status;
 	}

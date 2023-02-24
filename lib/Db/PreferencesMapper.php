@@ -37,7 +37,7 @@ class PreferencesMapper extends QBMapper {
 	public const TABLE = Preferences::TABLE;
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, self::TABLE, Preferences::class);
+		parent::__construct($db, Preferences::TABLE, Preferences::class);
 	}
 
 	/**

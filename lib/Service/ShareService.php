@@ -49,76 +49,25 @@ use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
 class ShareService {
-	/** @var Acl */
-	private $acl;
-
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var LoggerInterface */
-	private $logger;
-
-	/** @var MailService */
-	private $mailService;
-
-	/** @var NotificationService */
-	private $notificationService;
-
-	/** @var ShareMapper */
-	private $shareMapper;
+	/** @var Share[] **/
+	private array $shares;
 	
-	/** @var ISecureRandom */
-	private $secureRandom;
-	
-	/** @var Share */
-	private $share;
-	
-	/** @var array */
-	private $shares = [];
-	
-	/** @var SystemService */
-	private $systemService;
-
-	/** @var string|null */
-	private $userId;
-
-	/** @var UserService */
-	private $userService;
-	
-	/** @var IUserSession */
-	private $userSession;
-
 	public function __construct(
-		LoggerInterface $logger,
-		?string $userId,
-		IEventDispatcher $eventDispatcher,
-		IGroupManager $groupManager,
-		ISecureRandom $secureRandom,
-		IUserSession $userSession,
-		ShareMapper $shareMapper,
-		SystemService $systemService,
-		Share $share,
-		MailService $mailService,
-		Acl $acl,
-		NotificationService $notificationService,
-		UserService $userService
+		private LoggerInterface $logger,
+		private ?string $userId,
+		private IEventDispatcher $eventDispatcher,
+		private IGroupManager $groupManager,
+		private ISecureRandom $secureRandom,
+		private IUserSession $userSession,
+		private ShareMapper $shareMapper,
+		private SystemService $systemService,
+		private Share $share,
+		private MailService $mailService,
+		private Acl $acl,
+		private NotificationService $notificationService,
+		private UserService $userService,
 	) {
-		$this->logger = $logger;
-		$this->userId = $userId;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->groupManager = $groupManager;
-		$this->secureRandom = $secureRandom;
-		$this->shareMapper = $shareMapper;
-		$this->systemService = $systemService;
-		$this->share = $share;
-		$this->mailService = $mailService;
-		$this->acl = $acl;
-		$this->notificationService = $notificationService;
-		$this->userSession = $userSession;
-		$this->userService = $userService;
+		$this->shares = [];
 	}
 
 	/**

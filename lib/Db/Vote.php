@@ -44,23 +44,12 @@ use JsonSerializable;
 class Vote extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_votes';
 
-	/** @var int $pollId */
-	protected $pollId = 0;
-
-	/** @var string $userId */
-	protected $userId = '';
-
-	/** @var int $voteOptionId */
-	protected $voteOptionId = 0;
-
-	/** @var string $voteOptionText */
-	protected $voteOptionText = '';
-
-	/** @var string $voteOptionHash */
-	protected $voteOptionHash = '';
-
-	/** @var string $voteAnswer */
-	protected $voteAnswer = '';
+	protected int $pollId = 0;
+	protected string $userId = '';
+	protected int $voteOptionId = 0;
+	protected string $voteOptionText = '';
+	protected string $voteOptionHash = '';
+	protected string $voteAnswer = '';
 
 	public function __construct() {
 		$this->addType('id', 'int');

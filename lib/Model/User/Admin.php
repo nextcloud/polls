@@ -27,9 +27,7 @@ class Admin extends User {
 	public const TYPE = 'admin';
 	public const ICON = 'icon-settings';
 
-	public function __construct(
-		string $id
-	) {
+	public function __construct(string $id) {
 		parent::__construct($id, self::TYPE);
 	}
 }

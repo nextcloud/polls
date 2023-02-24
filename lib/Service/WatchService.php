@@ -32,26 +32,15 @@ use OCP\DB\Exception;
 use OCP\ISession;
 
 class WatchService {
-	/** @var AppSettings */
-	private $appSettings;
-
-	/** @var ISession */
-	protected $session;
-
-	/** @var WatchMapper */
-	private $watchMapper;
-
-	/** @var Watch */
-	private $watch;
+	private AppSettings $appSettings;
+	private Watch $watch;
 
 	public function __construct(
-		ISession $session,
-		WatchMapper $watchMapper
+		private ISession $session,
+		private WatchMapper $watchMapper,
 	) {
 		$this->appSettings = new AppSettings;
-		$this->session = $session;
 		$this->watch = new Watch;
-		$this->watchMapper = $watchMapper;
 	}
 
 	/**

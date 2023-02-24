@@ -40,7 +40,7 @@ class ShareMapper extends QBMapper {
 	public const TABLE = Share::TABLE;
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, self::TABLE, Share::class);
+		parent::__construct($db, Share::TABLE, Share::class);
 	}
 
 	/**

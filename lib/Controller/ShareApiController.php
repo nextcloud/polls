@@ -29,21 +29,13 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 class ShareApiController extends BaseApiController {
-	/** @var ShareService */
-	private $shareService;
-
-	/** @var MailService */
-	private $mailService;
-
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		MailService $mailService,
-		ShareService $shareService
+		private MailService $mailService,
+		private ShareService $shareService
 	) {
 		parent::__construct($appName, $request);
-		$this->shareService = $shareService;
-		$this->mailService = $mailService;
 	}
 
 	/**

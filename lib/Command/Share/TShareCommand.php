@@ -33,33 +33,14 @@ use OCP\IUserManager;
 use Stecman\Component\Symfony\Console\BashCompletion\CompletionContext;
 
 trait TShareCommand {
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var ShareService */
-	private $shareService;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	public function __construct(PollMapper $pollMapper,
-								ShareMapper $shareMapper,
-								ShareService $shareService,
-								IUserManager $userManager,
-								IGroupManager $groupManager) {
+	public function __construct(
+		private PollMapper $pollMapper,
+		private ShareMapper $shareMapper,
+		private ShareService $shareService,
+		private IUserManager $userManager,
+		private IGroupManager $groupManager
+	) {
 		parent::__construct();
-
-		$this->pollMapper = $pollMapper;
-		$this->shareMapper = $shareMapper;
-		$this->shareService = $shareService;
-		$this->userManager = $userManager;
-		$this->groupManager = $groupManager;
 	}
 
 	private function completeUserValues(CompletionContext $context): array {

@@ -35,7 +35,7 @@ class CommentMapper extends QBMapper {
 	public const TABLE = Comment::TABLE;
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, self::TABLE, Comment::class);
+		parent::__construct($db, Comment::TABLE, Comment::class);
 	}
 
 	/**

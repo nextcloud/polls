@@ -34,32 +34,16 @@ use OCA\Polls\Service\MailService;
 use OCP\ISession;
 
 class PollController extends BaseController {
-	/** @var Acl */
-	private $acl;
-
-	/** @var MailService */
-	private $mailService;
-
-	/** @var OptionService */
-	private $optionService;
-
-	/** @var PollService */
-	private $pollService;
-
 	public function __construct(
 		string $appName,
-		Acl $acl,
 		IRequest $request,
 		ISession $session,
-		MailService $mailService,
-		OptionService $optionService,
-		PollService $pollService
+		private Acl $acl,
+		private MailService $mailService,
+		private OptionService $optionService,
+		private PollService $pollService,
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->acl = $acl;
-		$this->mailService = $mailService;
-		$this->optionService = $optionService;
-		$this->pollService = $pollService;
 	}
 
 	/**

@@ -42,23 +42,11 @@ class SystemService {
 	private const REGEX_VALID_MAIL = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
 	private const REGEX_PARSE_MAIL = '/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/';
 	
-	/** @var ShareMapper */
-	private $shareMapper;
-	
-	/** @var UserService */
-	private $userService;
-	
-	/** @var VoteMapper */
-	private $voteMapper;
-
 	public function __construct(
-		ShareMapper $shareMapper,
-		UserService $userService,
-		VoteMapper $voteMapper
+		private ShareMapper $shareMapper,
+		private UserService $userService,
+		private VoteMapper $voteMapper,
 	) {
-		$this->shareMapper = $shareMapper;
-		$this->userService = $userService;
-		$this->voteMapper = $voteMapper;
 	}
 
 	/**
@@ -155,10 +143,11 @@ class SystemService {
 
 		$userName = strtolower(trim($userName));
 
+		// old php 7 syntax
 		// reserved usernames
-		if (strpos($userName, 'deleted user') !== false || strpos($userName, 'anonymous') !== false) {
-			// TODO: PHP 8 syntax
-			// if (str_contains($userName, 'deleted user') || str_contains($userName, 'anonymous')) {
+		// if (strpos($userName, 'deleted user') !== false || strpos($userName, 'anonymous') !== false) {
+		// reserved usernames
+		if (str_contains($userName, 'deleted user') || str_contains($userName, 'anonymous')) {
 			throw new InvalidUsernameException;
 		}
 

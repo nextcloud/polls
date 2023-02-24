@@ -43,62 +43,18 @@ use OCP\Migration\IOutput;
  * Remove all invalid records to avoid erros while adding indices ans constraints
  */
 class DeleteInvalidRecords implements IRepairStep {
-	/** @var IConfig */
-	protected $config;
-
-	/** @var IDBConnection */
-	private $connection;
-
-	/** @var LogMapper */
-	private $logMapper;
-	
-	/** @var OptionMapper */
-	private $optionMapper;
-	
-	/** @var PreferencesMapper */
-	private $preferencesMapper;
-	
-	/** @var ShareMapper */
-	private $shareMapper;
-
-	/** @var SubscriptionMapper */
-	private $subscriptionMapper;
-
-	/** @var VoteMapper */
-	private $voteMapper;
-
-	/** @var WatchMapper */
-	private $watchMapper;
-
-	/** @var TableManager */
-	private $tableManager;
-
-	/** @var string */
-	private $dbPrefix;
-	
 	public function __construct(
-		IConfig $config,
-		IDBConnection $connection,
-		LogMapper $logMapper,
-		OptionMapper $optionMapper,
-		PreferencesMapper $preferencesMapper,
-		ShareMapper $shareMapper,
-		SubscriptionMapper $subscriptionMapper,
-		VoteMapper $voteMapper,
-		WatchMapper $watchMapper,
-		TableManager $tableManager
+		private IConfig $config,
+		private IDBConnection $connection,
+		private LogMapper $logMapper,
+		private OptionMapper $optionMapper,
+		private PreferencesMapper $preferencesMapper,
+		private ShareMapper $shareMapper,
+		private SubscriptionMapper $subscriptionMapper,
+		private VoteMapper $voteMapper,
+		private WatchMapper $watchMapper,
+		private TableManager $tableManager
 	) {
-		$this->config = $config;
-		$this->connection = $connection;
-		$this->logMapper = $logMapper;
-		$this->optionMapper = $optionMapper;
-		$this->preferencesMapper = $preferencesMapper;
-		$this->shareMapper = $shareMapper;
-		$this->subscriptionMapper = $subscriptionMapper;
-		$this->voteMapper = $voteMapper;
-		$this->watchMapper = $watchMapper;
-		$this->tableManager = $tableManager;
-		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
 
 	public function getName():string {

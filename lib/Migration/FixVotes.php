@@ -29,13 +29,7 @@ use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
 
 class FixVotes implements IRepairStep {
-	/** @var TableManager */
-	private $tableManager;
-
-	public function __construct(
-		TableManager $tableManager
-	) {
-		$this->tableManager = $tableManager;
+	public function __construct(private TableManager $tableManager) {
 	}
 
 	/*

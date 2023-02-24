@@ -30,34 +30,17 @@ use OCA\Polls\Model\Search\PollsSearchResultEntry;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Db\Poll;
 use OCP\IL10N;
-use OCP\IURLGenerator;
 use OCP\IUser;
 use OCP\Search\IProvider;
 use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 
 class SearchProvider implements IProvider {
-	/** @var IL10N */
-	private $l10n;
-
-	/**
-	 * @var IURLGenerator
-	 */
-	private $urlGenerator;
-
-	/**
-	 * @var PollService
-	 */
-	private $pollService;
-
 	public function __construct(
-		IL10N $l10n,
-		IURLGenerator $urlGenerator,
-		PollService $pollService
+		private IL10N $l10n,
+		// private IURLGenerator $urlGenerator,
+		private PollService $pollService,
 	) {
-		$this->l10n = $l10n;
-		$this->urlGenerator = $urlGenerator;
-		$this->pollService = $pollService;
 	}
 
 	public function getId(): string {

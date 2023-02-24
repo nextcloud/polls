@@ -42,20 +42,11 @@ use JsonSerializable;
 class Comment extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_comments';
 
-	/** @var array $subComments */
-	protected $subComments = [];
-
-	/** @var int $pollId */
-	protected $pollId = 0;
-
-	/** @var string $userId */
-	protected $userId = '';
-
-	/** @var int $timestamp */
-	protected $timestamp = 0;
-
-	/** @var string $comment */
-	protected $comment = '';
+	protected array $subComments = [];
+	protected int $pollId = 0;
+	protected string $userId = '';
+	protected int $timestamp = 0;
+	protected string $comment = '';
 
 	public function __construct() {
 		$this->addType('pollId', 'int');

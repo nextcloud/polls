@@ -9,18 +9,10 @@ use OCP\IRequest;
 class RequestAttributesMiddleware extends Middleware {
 	private const CLIENT_ID_KEY = 'Nc-Polls-Client-Id';
 
-	/** @var ISession */
-	protected $session;
-
-	/** @var IRequest */
-	protected $request;
-
 	public function __construct(
-		IRequest $request,
-		ISession $session
+		protected IRequest $request,
+		protected ISession $session
 	) {
-		$this->request = $request;
-		$this->session = $session;
 	}
 
 	public function beforeController($controller, $methodName): void {

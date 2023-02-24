@@ -50,58 +50,18 @@ use OCP\IUserSession;
 use OCP\Search\ISearchQuery;
 
 class PollService {
-	/** @var IEventDispatcher */
-	private $eventDispatcher;
-	
-	/** @var IUserManager */
-	private $userManager;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var Poll */
-	private $poll;
-
-	/** @var VoteMapper */
-	private $voteMapper;
-
-	/** @var MailService */
-	private $mailService;
-
-	/** @var Acl */
-	private $acl;
-
-	/** @var AppSettings */
-	private $appSettings;
-
 	public function __construct(
-		Acl $acl,
-		AppSettings $appSettings,
-		IEventDispatcher $eventDispatcher,
-		IGroupManager $groupManager,
-		IUserManager $userManager,
-		IUserSession $userSession,
-		MailService $mailService,
-		Poll $poll,
-		PollMapper $pollMapper,
-		VoteMapper $voteMapper
+		private Acl $acl,
+		private AppSettings $appSettings,
+		private IEventDispatcher $eventDispatcher,
+		private IGroupManager $groupManager,
+		private IUserManager $userManager,
+		private IUserSession $userSession,
+		private MailService $mailService,
+		private Poll $poll,
+		private PollMapper $pollMapper,
+		private VoteMapper $voteMapper
 	) {
-		$this->acl = $acl;
-		$this->appSettings = $appSettings;
-		$this->eventDispatcher = $eventDispatcher;
-		$this->groupManager = $groupManager;
-		$this->mailService = $mailService;
-		$this->poll = $poll;
-		$this->pollMapper = $pollMapper;
-		$this->userManager = $userManager;
-		$this->userSession = $userSession;
-		$this->voteMapper = $voteMapper;
 	}
 
 	/**

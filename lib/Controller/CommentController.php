@@ -30,22 +30,14 @@ use OCP\IRequest;
 use OCP\ISession;
 
 class CommentController extends BaseController {
-	/** @var CommentService */
-	private $commentService;
-
-	/** @var Acl */
-	private $acl;
-
 	public function __construct(
 		string $appName,
-		Acl $acl,
 		ISession $session,
 		IRequest $request,
-		CommentService $commentService
+		private Acl $acl,
+		private CommentService $commentService
 	) {
 		parent::__construct($appName, $request, $session);
-		$this->acl = $acl;
-		$this->commentService = $commentService;
 	}
 
 	/**

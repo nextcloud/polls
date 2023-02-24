@@ -28,25 +28,14 @@ use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
 
 class Rebuild extends Command {
-	/** @var IndexManager */
-	private $indexManager;
-
-	/** @var TableManager */
-	private $tableManager;
-
-	/** @var string */
-	protected $name = self::NAME_PREFIX . 'db:rebuild';
-
-	/** @var string */
-	protected $description = 'Rebuilds poll\'s table structure';
+	protected string $name = self::NAME_PREFIX . 'db:rebuild';
+	protected string $description = 'Rebuilds poll\'s table structure';
 
 	public function __construct(
-		TableManager $tableManager,
-		IndexManager $indexManager,
+		private TableManager $tableManager,
+		private IndexManager $indexManager,
 	) {
 		parent::__construct();
-		$this->indexManager = $indexManager;
-		$this->tableManager = $tableManager;
 	}
 
 	protected function runCommands(): int {
