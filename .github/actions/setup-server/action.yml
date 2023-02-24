@@ -58,7 +58,7 @@ runs:
   using: "composite"
   steps:
     - name: Checkout server ${{ inputs.server-version }}
-      uses: actions/checkout@3
+      uses: actions/checkout@v3
       with:
         path: ${{ inputs.server-path }}
         repository: nextcloud/server
@@ -73,12 +73,12 @@ runs:
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
     - name: Checkout ${{ inputs.app-name }}
-      uses: actions/checkout@3
+      uses: actions/checkout@v3
       with:
         path: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
 
     - name: Set up php ${{ inputs.php-version }}
-      uses: shivammathur/setup-php@2
+      uses: shivammathur/setup-php@v2
       with:
         php-version: ${{ inputs.php-version }}
         tools: ${{ inputs.php-tools }}
