@@ -252,7 +252,7 @@ class TableManager {
 	public function deleteDuplicates(): array {
 		$messages = [];
 
-		if ($this->schema->hasTable(Poll::TABLE)) {
+		if ($this->schema->hasTable($this->dbPrefix . Poll::TABLE)) {
 			$this->removeOrphaned();
 
 			$count[LogMapper::TABLE] = $this->logMapper->removeDuplicates();
@@ -290,9 +290,9 @@ class TableManager {
 		}
 		return $messages;
 	}
-	public function fixVotes() {
-		if ($this->schema->hasTable(OptionMapper::TABLE)) {
-			$table = $this->schema->getTable(OptionMapper::TABLE);
+	public function fixVotes(): void {
+		if ($this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
+			$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
 			if ($table->hasColumn('duration')) {
 				$foundOptions = $this->optionMapper->findOptionsWithDuration();
 				foreach ($foundOptions as $option) {
@@ -305,5 +305,38 @@ class TableManager {
 				}
 			}
 		}
+	}
+
+	public function migrateOptionsToHash(): array {
+		$messages = [];
+
+		if ($this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
+			$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
+			$count = 0;
+			if ($table->hasColumn('poll_option_hash')) {
+				foreach ($this->optionMapper->getAll() as $option) {
+					$option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
+
+					$this->optionMapper->update($option);
+					$count++;
+				}
+			}
+			$messages[] = 'Updated ' . $count . ' option hashes';
+		}
+		
+		
+		if ($this->schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
+			$table = $this->schema->getTable($this->dbPrefix . VoteMapper::TABLE);
+			$count = 0;
+			if ($table->hasColumn('vote_option_hash')) {
+				foreach ($this->voteMapper->getAll() as $vote) {
+					$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
+					$this->voteMapper->update($vote);
+					$count++;
+				}
+			}
+			$messages[] = 'Updated ' . $count . ' vote hashes';
+		}
+		return $messages;
 	}
 }

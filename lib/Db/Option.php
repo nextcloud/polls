@@ -47,6 +47,8 @@ use OCP\IL10N;
  * @method void setPollId(integer $value)
  * @method string getPollOptionText()
  * @method void setPollOptionText(string $value)
+ * @method string getPollOptionHash()
+ * @method void setPollOptionHash(string $value)
  * @method int getReleased()
  * @method void setReleased(int $value)
  * @method int getTimestamp()
@@ -66,6 +68,9 @@ class Option extends EntityWithUser implements JsonSerializable {
 
 	/** @var string $pollOptionText */
 	protected $pollOptionText = '';
+
+	/** @var string $pollOptionHash */
+	protected $pollOptionHash = '';
 
 	/** @var int $timestamp */
 	protected $timestamp = 0;

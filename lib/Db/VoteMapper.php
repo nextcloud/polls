@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -39,6 +40,29 @@ class VoteMapper extends QBMapper {
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, self::TABLE, Vote::class);
 	}
+
+	public function update(Entity $entity): Entity {
+		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
+		return parent::update($entity);
+	}
+
+	public function insert(Entity $entity): Entity {
+		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
+		return parent::insert($entity);
+	}
+
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Vote[]
+	 * @psalm-return array<array-key, Vote>
+	 */
+	public function getAll(): array {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')->from($this->getTableName());
+		return $this->findEntities($qb);
+	}
+
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
