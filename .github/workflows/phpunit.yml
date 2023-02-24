@@ -23,7 +23,7 @@ jobs:
       # do not stop on another job's failure
       fail-fast: false
       matrix:
-        php-versions: ['8.0', '8.1']
+        php-versions: ['8.0']
         server-versions: ['master']
 
     name: SQLite
@@ -59,7 +59,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        php-versions: ['8.0']
+        php-versions: ['8.1']
         server-versions: ['master']
 
     name: MySQL
@@ -104,7 +104,7 @@ jobs:
       # do not stop on another job's failure
       fail-fast: false
       matrix:
-        php-versions: ['8.0']
+        php-versions: ['8.2']
         server-versions: ['master']
 
     name: PostgreSQL

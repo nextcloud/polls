@@ -14,7 +14,7 @@ runs:
   using: "composite"
   steps:
     - name: Use or setup caching npm modules
-      uses: actions/cache@v3
+      uses: actions/cache@3
       id: cache-modules
       env:
         cache-name: cache-node-modules
@@ -27,7 +27,7 @@ runs:
           ${{ runner.os }}-
 
     - name: Set up node ${{ inputs.node-version }}
-      uses: actions/setup-node@v3
+      uses: actions/setup-node@3
       with:
         node-version: ${{ matrix.node-versions }}
 

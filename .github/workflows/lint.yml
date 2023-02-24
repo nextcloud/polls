@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.0', '8.1']
+        php-versions: ['8.0', '8.1', '8.2']
 
     name: PHP-CS
 
@@ -41,8 +41,6 @@ jobs:
 
       - name: Setup node
         uses: ./.github/actions/setup-node
-        with:
-          node-version: '16'
 
       - name: Run eslint
         run: npm run lint
@@ -58,8 +56,6 @@ jobs:
 
       - name: Setup node
         uses: ./.github/actions/setup-node
-        with:
-          node-version: '16'
 
       - name: Run stylelint
         run: npm run stylelint

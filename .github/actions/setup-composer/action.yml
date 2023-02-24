@@ -45,7 +45,7 @@ runs:
           ${{ runner.os }}-
 
     - name: Set up php ${{ inputs.php-version }}
-      uses: shivammathur/setup-php@master
+      uses: shivammathur/setup-php@2
       with:
         php-version: ${{ inputs.php-version }}
         tools: ${{ inputs.php-tools }}
