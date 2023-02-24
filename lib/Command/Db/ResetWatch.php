@@ -30,25 +30,14 @@ use OCA\Polls\Db\Watch;
 use OCA\Polls\Migration\TableSchema;
 
 class ResetWatch extends Command {
-	/** @var IndexManager */
-	private $indexManager;
-
-	/** @var TableManager */
-	private $tableManager;
-
-	/** @var string */
-	protected $name = self::NAME_PREFIX . 'db:reset-watch';
-
-	/** @var string */
-	protected $description = 'Resets the Watch table';
+	protected string $name = self::NAME_PREFIX . 'db:reset-watch';
+	protected string $description = 'Resets the Watch table';
 
 	public function __construct(
-		IndexManager $indexManager,
-		TableManager $tableManager
+		private IndexManager $indexManager,
+		private TableManager $tableManager
 	) {
 		parent::__construct();
-		$this->indexManager = $indexManager;
-		$this->tableManager = $tableManager;
 	}
 
 	protected function runCommands(): int {

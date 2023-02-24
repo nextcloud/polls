@@ -255,12 +255,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	// TODO: Workaround for nullish column, fix migration
 	public function getDescription(): string {
-		return $this->description ?? '';
+		return $this->description;
 	}
 
 	// TODO: Workaround for nullish column, fix migration
 	public function getTitle(): string {
-		return $this->title ?? '';
+		return $this->title;
 	}
 
 	public function getDescriptionSafe(): string {

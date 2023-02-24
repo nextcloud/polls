@@ -27,20 +27,11 @@ use OCA\Polls\Db\TableManager;
 use OCA\Polls\Command\Command;
 
 class CleanMigrations extends Command {
-	/** @var TableManager */
-	private $tableManager;
+	protected string $name = self::NAME_PREFIX . 'db:clean-migrations';
+	protected string $description = 'Remove old migrations entries from Nextcloud\'s migration table';
 
-	/** @var string */
-	protected $name = self::NAME_PREFIX . 'db:clean-migrations';
-
-	/** @var string */
-	protected $description = 'Remove old migrations entries from Nextcloud\'s migration table';
-
-	public function __construct(
-		TableManager $tableManager
-	) {
+	public function __construct(private TableManager $tableManager) {
 		parent::__construct();
-		$this->tableManager = $tableManager;
 	}
 
 	protected function runCommands(): int {

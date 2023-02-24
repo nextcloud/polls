@@ -33,6 +33,8 @@ use OCP\Search\ISearchQuery;
  * @template-extends QBMapper<Poll>
  */
 class PollMapper extends QBMapper {
+	public const TABLE = Poll::TABLE;
+
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, Poll::TABLE, Poll::class);
 	}

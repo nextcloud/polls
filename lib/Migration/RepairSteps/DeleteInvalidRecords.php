@@ -43,7 +43,6 @@ use OCP\Migration\IOutput;
  * Remove all invalid records to avoid erros while adding indices ans constraints
  */
 class DeleteInvalidRecords implements IRepairStep {
-
 	public function __construct(
 		private IConfig $config,
 		private IDBConnection $connection,
