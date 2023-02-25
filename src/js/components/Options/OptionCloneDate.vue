@@ -47,11 +47,15 @@
 
 		<div class="modal__buttons">
 			<NcButton @click="$emit('close')">
-				{{ t('polls', 'Cancel') }}
+				<template #default>
+					{{ t('polls', 'Cancel') }}
+				</template>
 			</NcButton>
 
 			<NcButton type="primary" @click="createSequence()">
-				{{ t('polls', 'OK') }}
+				<template #default>
+					{{ t('polls', 'OK') }}
+				</template>
 			</NcButton>
 		</div>
 	</div>

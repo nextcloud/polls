@@ -28,7 +28,9 @@
 				<template #icon>
 					<EmailCheckIcon />
 				</template>
-				{{ t('polls', 'Send confirmation emails') }}
+				<template #default>
+					{{ t('polls', 'Send confirmation emails') }}
+				</template>
 			</NcButton>
 		</div>
 		<div v-if="confirmations" class="confirmation-info">

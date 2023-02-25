@@ -43,11 +43,15 @@
 
 				<div class="modal__buttons">
 					<NcButton @click="showModal = false">
-						{{ t('polls', 'Close') }}
+						<template #default>
+							{{ t('polls', 'Close') }}
+						</template>
 					</NcButton>
 
 					<NcButton type="primary" @click="addOptionsList()">
-						{{ t('polls', 'OK') }}
+						<template #default>
+							{{ t('polls', 'OK') }}
+						</template>
 					</NcButton>
 				</div>
 			</div>
