@@ -1,5 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+##
+## [5.0.0] - tbd
+ ### Changes
+ - PHP 8.0 as minimum requirement
+
+## [4.1.5] - 2023-02-25
+### Fix
+ - Fix disappeared option add button after change in the nextcloud-vue lib
+ ### Changes
+ - Changed option owner column to notnull
 ## [4.1.4] - 2023-02-23
 ### Fix
  - Fix infinite updates call, if no polling type for watches were set (avoid server spamming) (v4.1.3)

@@ -80,14 +80,18 @@
 					<RestorePollIcon v-if="isPollArchived" />
 					<ArchivePollIcon v-else />
 				</template>
-				{{ isPollArchived ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
+				<template #default>
+					{{ isPollArchived ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
+				</template>
 			</NcButton>
 
 			<NcButton v-if="isPollArchived" type="error" @click="deletePoll()">
 				<template #icon>
 					<DeletePollIcon />
 				</template>
-				{{ t('polls', 'Delete poll') }}
+				<template #default>
+					{{ t('polls', 'Delete poll') }}
+				</template>
 			</NcButton>
 		</div>
 	</div>

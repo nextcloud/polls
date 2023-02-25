@@ -54,7 +54,9 @@
 					</template>
 					<template #action>
 						<NcButton v-if="acl.allowEdit" type="primary" @click="openOptions">
-							{{ t('polls', 'Add some!') }}
+							<template #default>
+								{{ t('polls', 'Add some!') }}
+							</template>
 						</NcButton>
 						<div v-if="!acl.allowEdit">
 							{{ t('polls', 'Maybe the owner did not provide some until now.') }}

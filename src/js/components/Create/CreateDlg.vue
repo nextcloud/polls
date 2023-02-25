@@ -42,10 +42,14 @@
 
 		<div class="create-buttons">
 			<NcButton @click="cancel">
-				{{ t('polls', 'Cancel') }}
+				<template #default>
+					{{ t('polls', 'Cancel') }}
+				</template>
 			</NcButton>
 			<NcButton :disabled="titleEmpty" type="primary" @click="confirm">
-				{{ t('polls', 'Apply') }}
+				<template #default>
+					{{ t('polls', 'Apply') }}
+				</template>
 			</NcButton>
 		</div>
 	</div>

@@ -32,7 +32,9 @@
 				<template #icon>
 					<AddDateIcon />
 				</template>
-				<span v-if="caption"> {{ caption }} </span>
+				<template v-if="caption">
+					{{ caption }}
+				</template>
 			</NcButton>
 		</template>
 
@@ -42,16 +44,22 @@
 			</NcCheckboxRadioSwitch>
 			<div class="picker-buttons">
 				<NcButton v-if="useTime" @click="toggleTimePanel">
-					{{ showTimePanel
-						? t('polls', 'Change date')
-						: t('polls', 'Change time')
-					}}
+					<template #default>
+						{{ showTimePanel
+							? t('polls', 'Change date')
+							: t('polls', 'Change time')
+						}}
+					</template>
 				</NcButton>
 				<NcButton v-if="useTime" @click="removeTime">
-					{{ t('polls', 'Remove time') }}
+					<template #default>
+						{{ t('polls', 'Remove time') }}
+					</template>
 				</NcButton>
 				<NcButton v-else :disabled="!dateOption.isValid" @click="addTime">
-					{{ t('polls', 'Add time') }}
+					<template #default>
+						{{ t('polls', 'Add time') }}
+					</template>
 				</NcButton>
 			</div>
 		</template>

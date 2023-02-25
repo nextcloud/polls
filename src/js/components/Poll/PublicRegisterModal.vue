@@ -63,11 +63,15 @@
 						</div>
 						<div class="right">
 							<NcButton @click="closeModal">
-								{{ t('polls', 'Cancel') }}
+								<template #default>
+									{{ t('polls', 'Cancel') }}
+								</template>
 							</NcButton>
 
 							<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
-								{{ t('polls', 'OK') }}
+								<template #default>
+									{{ t('polls', 'OK') }}
+								</template>
 							</NcButton>
 						</div>
 					</div>
@@ -76,7 +80,9 @@
 				<div v-if="share.showLogin" class="registration__login">
 					<h2> {{ t('polls', 'Registered users') }} </h2>
 					<NcButton wide @click="login()">
-						{{ t('polls', 'Login') }}
+						<template #default>
+							{{ t('polls', 'Login') }}
+						</template>
 					</NcButton>
 					<div>
 						{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}

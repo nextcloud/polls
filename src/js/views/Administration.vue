@@ -90,11 +90,15 @@
 				<div>{{ t('polls', '{username} will get notified.', {username: currentPoll.owner.displayName}) }}</div>
 				<div class="modal__buttons">
 					<NcButton @click="takeOverModal = false">
-						{{ t('polls', 'No') }}
+						<template #default>
+							{{ t('polls', 'No') }}
+						</template>
 					</NcButton>
 
 					<NcButton type="primary" @click="takeOverPoll()">
-						{{ t('polls', 'Yes') }}
+						<template #default>
+							{{ t('polls', 'Yes') }}
+						</template>
 					</NcButton>
 				</div>
 			</div>
@@ -109,11 +113,15 @@
 				</div>
 				<div class="modal__buttons">
 					<NcButton @click="deleteModal = false">
-						{{ t('polls', 'No') }}
+						<template #default>
+							{{ t('polls', 'No') }}
+						</template>
 					</NcButton>
 
 					<NcButton type="primary" @click="deletePoll()">
-						{{ t('polls', 'Yes') }}
+						<template #default>
+							{{ t('polls', 'Yes') }}
+						</template>
 					</NcButton>
 				</div>
 			</div>
