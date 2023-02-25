@@ -78,7 +78,6 @@
 				</div>
 			</div>
 		</div>
-		<QrModalVue encode-text="https://www.nextcloud.com" />
 		<PublicRegisterModal v-if="showRegisterModal" />
 		<LoadingOverlay v-if="isLoading" />
 	</NcAppContent>
@@ -95,7 +94,6 @@ import HeaderBar from '../components/Base/HeaderBar.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import ActionSendConfirmedOptions from '../components/Actions/ActionSendConfirmedOptions.vue'
-import QrModalVue from '../components/Base/QrModal.vue'
 
 export default {
 	name: 'Vote',
@@ -110,7 +108,6 @@ export default {
 		PollInfoLine,
 		DatePollIcon,
 		TextPollIcon,
-		QrModalVue,
 		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
 		OptionProposals: () => import('../components/Options/OptionProposals.vue'),
 		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal.vue'),
