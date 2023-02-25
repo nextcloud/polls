@@ -94,6 +94,13 @@
 							{{ t('polls', 'Copy link to clipboard') }}
 						</NcActionButton>
 
+						<NcActionButton v-if="share.URL" @click="openQrModal({ url: share.URL })">
+							<template #icon>
+								<QrIcon />
+							</template>
+							{{ t('polls', 'Show QR code') }}
+						</NcActionButton>
+
 						<NcActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
 
 						<NcActionRadio v-if="share.type === 'public'"
@@ -126,13 +133,20 @@
 				</UserItem>
 			</TransitionGroup>
 		</div>
+		<NcModal v-if="qrModal" size="small" :can-close="false">
+			<QrModal :title="pollTitle"
+				:description="pollDescription"
+				:encode-text="qrText"
+				class="modal__content"
+				@close="closeQrModal()" />
+		</NcModal>
 	</ConfigBox>
 </template>
 
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton, NcActionCaption, NcActionRadio } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcActionCaption, NcActionRadio, NcModal } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
@@ -143,12 +157,15 @@ import ShareItemAllUsers from './ShareItemAllUsers.vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
+import QrIcon from 'vue-material-design-icons/Qrcode.vue'
+import QrModal from '../Base/QrModal.vue'
 
 export default {
 	name: 'SharesList',
 
 	components: {
 		ClippyIcon,
+		QrIcon,
 		ShareIcon,
 		SendEmailIcon,
 		UnvotedIcon,
@@ -162,6 +179,15 @@ export default {
 		ConfigBox,
 		SharePublicAdd,
 		ShareItemAllUsers,
+		QrModal,
+		NcModal,
+	},
+
+	data() {
+		return {
+			qrModal: false,
+			qrText: '',
+		}
 	},
 
 	computed: {
@@ -169,6 +195,8 @@ export default {
 			allowAllAccess: (state) => state.poll.acl.allowAllAccess,
 			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
 			pollAccess: (state) => state.poll.access,
+			pollTitle: (state) => state.poll.title,
+			pollDescription: (state) => state.poll.description,
 		}),
 		...mapGetters({
 			invitationShares: 'shares/invitation',
@@ -205,6 +233,16 @@ export default {
 			} catch {
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
+		},
+
+		openQrModal(payload) {
+			this.qrText = payload.url
+			this.qrModal = true
+		},
+
+		closeQrModal() {
+			this.qrText = ''
+			this.qrModal = false
 		},
 	},
 }
