@@ -32,7 +32,9 @@
 				<template #icon>
 					<AddDateIcon />
 				</template>
-				<span v-if="caption"> {{ caption }} </span>
+				<template #default>
+					{{ caption }}
+				</template>
 			</NcButton>
 		</template>
 

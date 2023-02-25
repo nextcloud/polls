@@ -1,11 +1,17 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+## [4.1.5] - 2023-02-25
+### Fix
+ - Fix disappeared option add button after change in the nextcloud-vue lib
+ ### Changes
+ - Changed option owner column to notnull
+
 ## [4.1.4] - 2023-02-23
 ### Fix
  - Fix infinite updates call, if no polling type for watches were set (avoid server spamming) (v4.1.3)
  - Fix migrations and repair steps (v4.1.3)
  - Fix MySQL error 1071 Specified key was too long;
- ### changes
+ ### Changes
  - Change default of life update mechanism to manual updates instead of long polling (v4.1.3)
  - Added Nextcloud 26
 
