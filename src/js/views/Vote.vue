@@ -78,7 +78,6 @@
 				</div>
 			</div>
 		</div>
-
 		<PublicRegisterModal v-if="showRegisterModal" />
 		<LoadingOverlay v-if="isLoading" />
 	</NcAppContent>
