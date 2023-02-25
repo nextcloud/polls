@@ -138,7 +138,11 @@
 				:description="pollDescription"
 				:encode-text="qrText"
 				class="modal__content"
-				@close="closeQrModal()" />
+				@close="closeQrModal()">
+				<template #description>
+					<MarkUpDescription />
+				</template>
+			</QrModal>
 		</NcModal>
 	</ConfigBox>
 </template>
@@ -159,6 +163,7 @@ import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import QrIcon from 'vue-material-design-icons/Qrcode.vue'
 import QrModal from '../Base/QrModal.vue'
+import MarkUpDescription from '../Poll/MarkUpDescription.vue'
 
 export default {
 	name: 'SharesList',
@@ -181,6 +186,7 @@ export default {
 		ShareItemAllUsers,
 		QrModal,
 		NcModal,
+		MarkUpDescription,
 	},
 
 	data() {

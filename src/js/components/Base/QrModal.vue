@@ -23,18 +23,22 @@
 <template>
 	<div class="qr-code">
 		<h2>{{ title }}</h2>
-		<h3>{{ subTitle }}</h3>
-		<div>
+		<slot name="description">
+			{{ description }}
+		</slot>
+		<div class="canvas">
 			<img :src="qrUri" :alt="encodeText">
 		</div>
-		<p>{{ encodeText }}</p>
+		<h3>{{ subTitle }}</h3>
 		<p />
-		<p>{{ description }}</p>
-		<div class="modal__buttons">
+		<div class="modal__buttons noprint">
 			<NcButton type="primary" @click="$emit('close')">
 				{{ t('polls', 'Close') }}
 			</NcButton>
 		</div>
+		<p class="qr-url">
+			{{ encodeText }}
+		</p>
 	</div>
 </template>
 
@@ -94,13 +98,19 @@ export default {
 </script>
 
 <style lang="scss">
-@media print {
-  body * {
-    display:none;
-  }
+.canvas {
+	margin: auto;
+	padding: 32px;
+}
 
-  body .qr-code {
-    display:block;
-  }
+.qr-url {
+  font-size: 0.6em;
+  margin-top: 16px;
+}
+
+@media print {
+	.noprint {
+		display: none;
+	}
 }
 </style>
