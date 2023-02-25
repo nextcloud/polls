@@ -2,9 +2,11 @@
 All notable changes to this project will be documented in this file.
 ##
 ## [5.0.0] - tbd
- ### Changes
+ ### New
+ - Added qr code to shares
+### Changes
  - PHP 8.0 as minimum requirement
-
+ 
 ## [4.1.5] - 2023-02-25
 ### Fix
  - Fix disappeared option add button after change in the nextcloud-vue lib
