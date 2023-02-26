@@ -196,27 +196,17 @@ class UserService {
 	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Group|User|Admin
 	 */
 	public function getUser(string $type, string $id, string $displayName = '', string $emailAddress = '', ?string $language = '', string $locale = '', string $timeZoneName = ''): UserBase {
-		switch ($type) {
-			case Group::TYPE:
-				return new Group($id);
-			case Circle::TYPE:
-				return new Circle($id);
-			case Contact::TYPE:
-				return new Contact($id);
-			case ContactGroup::TYPE:
-				return new ContactGroup($id);
-			case User::TYPE:
-				return new User($id);
-			case Admin::TYPE:
-				return new Admin($id);
-			case Email::TYPE:
-				return new Email($id, $displayName, $emailAddress, $language);
-			case UserBase::TYPE_PUBLIC:
-				return new GenericUser($id, UserBase::TYPE_PUBLIC);
-			case UserBase::TYPE_EXTERNAL:
-				return new GenericUser($id, UserBase::TYPE_EXTERNAL, $displayName, $emailAddress, $language, $locale, $timeZoneName);
-			default:
-				throw new InvalidShareTypeException('Invalid user type (' . $type . ')');
-		}
+		return match ($type) {
+			Group::TYPE => new Group($id),
+			Circle::TYPE => new Circle($id),
+			Contact::TYPE => new Contact($id),
+			ContactGroup::TYPE => new ContactGroup($id),
+			User::TYPE => new User($id),
+			Admin::TYPE => new Admin($id),
+			Email::TYPE => new Email($id, $displayName, $emailAddress, $language),
+			UserBase::TYPE_PUBLIC => new GenericUser($id, UserBase::TYPE_PUBLIC),
+			UserBase::TYPE_EXTERNAL => new GenericUser($id, UserBase::TYPE_EXTERNAL, $displayName, $emailAddress, $language, $locale, $timeZoneName),
+			default => throw new InvalidShareTypeException('Invalid user type (' . $type . ')'),
+		};
 	}
 }
