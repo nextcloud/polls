@@ -402,39 +402,13 @@ class ShareService {
 	private function validateShareType(): void {
 		$currentUser = $this->userService->getCurrentUser();
 
-		switch ($this->share->getType()) {
-			case Share::TYPE_PUBLIC:
-				// public shares are always valid
-				break;
-			case Share::TYPE_USER:
-				if ($this->share->getUserId() !== $currentUser->getId()) {
-					// share is not valid for user
-					throw new NotAuthorizedException;
-				}
-				break;
-			case Share::TYPE_ADMIN:
-				if ($this->share->getUserId() !== $currentUser->getId()) {
-					// share is not valid for user
-					throw new NotAuthorizedException;
-				}
-				break;
-			case Share::TYPE_GROUP:
-				if (!$currentUser->getIsLoggedIn()) {
-					throw new NotAuthorizedException;
-				}
-
-				if (!$this->groupManager->isInGroup($this->share->getUserId(), $this->userId)) {
-					throw new NotAuthorizedException;
-				}
-				break;
-			case Share::TYPE_EMAIL:
-				break;
-			case Share::TYPE_EXTERNAL:
-				break;
-			default:
-				$this->logger->alert(json_encode('invalid share type ' . $this->share->getType()));
-				throw new NotAuthorizedException;
-		}
+		match ($this->share->getType()) {
+			Share::TYPE_PUBLIC,	Share::TYPE_EMAIL, Share::TYPE_EXTERNAL => true,
+			Share::TYPE_USER => $this->share->getUserId() === $currentUser->getId() ? true : throw new NotAuthorizedException,
+			Share::TYPE_ADMIN => $this->share->getUserId() === $currentUser->getId() ? true : throw new NotAuthorizedException,
+			Share::TYPE_GROUP => $currentUser->getIsLoggedIn() || $this->groupManager->isInGroup($this->share->getUserId(), $this->userId) ? true : throw new NotAuthorizedException,
+			default => throw new NotAuthorizedException('Invalid share type ' . $this->share->getType()),
+		};
 	}
 
 	/**

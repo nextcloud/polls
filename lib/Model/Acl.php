@@ -163,60 +163,26 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getIsAllowed(string $permission): bool {
-		switch ($permission) {
-			case self::PERMISSION_OVERRIDE:
-				return true;
-
-			case self::PERMISSION_POLL_CREATE:
-				return $this->appSettings->getPollCreationAllowed();
-
-			case self::PERMISSION_POLL_MAILADDRESSES_VIEW:
-				return $this->appSettings->getAllowSeeMailAddresses();
-
-			case self::PERMISSION_POLL_DOWNLOAD:
-				return $this->appSettings->getPollDownloadAllowed();
-
-			case self::PERMISSION_ALL_ACCESS:
-				return $this->appSettings->getAllAccessAllowed();
-
-			case self::PERMISSION_PUBLIC_SHARES:
-				return $this->appSettings->getPublicSharesAllowed();
-
-			case self::PERMISSION_POLL_VIEW:
-				return $this->getAllowAccessPoll();
-
-			case self::PERMISSION_POLL_EDIT:
-				return $this->getAllowEditPoll();
-
-			case self::PERMISSION_POLL_DELETE:
-				return $this->getAllowDeletePoll();
-
-			case self::PERMISSION_POLL_ARCHIVE:
-				return $this->getAllowDeletePoll();
-
-			case self::PERMISSION_POLL_TAKEOVER:
-				return $this->getAllowDeletePoll();
-
-			case self::PERMISSION_POLL_SUBSCRIBE:
-				return $this->getAllowSubscribeToPoll();
-
-			case self::PERMISSION_POLL_RESULTS_VIEW:
-				return $this->getShowResults();
-
-			case self::PERMISSION_POLL_USERNAMES_VIEW:
-				return $this->getAllowEditPoll() || !$this->poll->getAnonymous();
-
-			case self::PERMISSION_OPTIONS_ADD:
-				return $this->getAllowAddOptions();
-
-			case self::PERMISSION_COMMENT_ADD:
-				return $this->getAllowComment();
-
-			case self::PERMISSION_VOTE_EDIT:
-				return $this->getAllowVote();
-		}
-
-		return false;
+		return match ($permission) {
+			self::PERMISSION_OVERRIDE => true,
+			self::PERMISSION_POLL_CREATE => $this->appSettings->getPollCreationAllowed(),
+			self::PERMISSION_POLL_MAILADDRESSES_VIEW => $this->appSettings->getAllowSeeMailAddresses(),
+			self::PERMISSION_POLL_DOWNLOAD => $this->appSettings->getPollDownloadAllowed(),
+			self::PERMISSION_ALL_ACCESS => $this->appSettings->getAllAccessAllowed(),
+			self::PERMISSION_PUBLIC_SHARES => $this->appSettings->getPublicSharesAllowed(),
+			self::PERMISSION_POLL_VIEW => $this->getAllowAccessPoll(),
+			self::PERMISSION_POLL_EDIT => $this->getAllowEditPoll(),
+			self::PERMISSION_POLL_DELETE => $this->getAllowDeletePoll(),
+			self::PERMISSION_POLL_ARCHIVE => $this->getAllowDeletePoll(),
+			self::PERMISSION_POLL_TAKEOVER => $this->getAllowDeletePoll(),
+			self::PERMISSION_POLL_SUBSCRIBE => $this->getAllowSubscribeToPoll(),
+			self::PERMISSION_POLL_RESULTS_VIEW => $this->getShowResults(),
+			self::PERMISSION_POLL_USERNAMES_VIEW => $this->getAllowEditPoll() || !$this->poll->getAnonymous(),
+			self::PERMISSION_OPTIONS_ADD => $this->getAllowAddOptions(),
+			self::PERMISSION_COMMENT_ADD => $this->getAllowComment(),
+			self::PERMISSION_VOTE_EDIT => $this->getAllowVote(),
+			default => false,
+		};
 	}
 
 	public function request(string $permission): void {

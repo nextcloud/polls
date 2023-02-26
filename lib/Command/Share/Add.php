@@ -132,14 +132,10 @@ class Add extends Base {
 	}
 
 	public function completeOptionValues($optionName, CompletionContext $context) {
-		switch ($optionName) {
-			case 'user':
-				return $this->completeUserValues($context);
-
-			case 'group':
-				return $this->completeGroupValues($context);
-		}
-
-		return parent::completeOptionValues($optionName, $context);
+		return match ($optionName) {
+			'user' => $this->completeUserValues($context),
+			'group' => $this->completeGroupValues($context),
+			default => parent::completeOptionValues($optionName, $context),
+		};
 	}
 }

@@ -270,14 +270,11 @@ class AppSettings implements JsonSerializable {
 	}
 
 	private function stringToBool(string $value, bool $default): bool {
-		switch ($value) {
-			case 'yes':
-				return true;
-			case 'no':
-				return false;
-			default:
-				return $default;
-		}
+		return match ($value) {
+			'yes' => true,
+			'no' => false,
+			default => $default,
+		};
 	}
 
 	private function boolToString(?bool $value): string {
