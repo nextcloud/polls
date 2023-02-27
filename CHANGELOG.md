@@ -1,5 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+## [4.1.6] - 2023-02-27
+### Fix
+ - Removed trailing comma in rebuild command
 ## [4.1.5] - 2023-02-25
 ### Fix
  - Fix disappeared option add button after change in the nextcloud-vue lib
