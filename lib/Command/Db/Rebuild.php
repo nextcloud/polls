@@ -42,7 +42,7 @@ class Rebuild extends Command {
 
 	public function __construct(
 		TableManager $tableManager,
-		IndexManager $indexManager,
+		IndexManager $indexManager
 	) {
 		parent::__construct();
 		$this->indexManager = $indexManager;
