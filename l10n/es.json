@@ -401,6 +401,7 @@
     "Grant poll admin access" : "Conceder acceso de administrador a la votación",
     "Withdraw poll admin access" : "Retirar acceso de administrador a la votación",
     "Copy link to clipboard" : "Copiar enlace al portapapeles",
+    "Show QR code" : "Mostrar código QR",
     "Options for the registration dialog" : "Opciones para el diálogo de registro",
     "Email address is optional" : "El correo electrónico es opcional",
     "Email address is mandatory" : "El correo electrónico es obligatorio",
