@@ -401,6 +401,7 @@
     "Grant poll admin access" : "Предоставяне на администраторски достъп до анкетата",
     "Withdraw poll admin access" : "Оттегляне на администраторски достъп до анкетата",
     "Copy link to clipboard" : "Копиране на връзката в клипборда",
+    "Show QR code" : "Показване на QR код",
     "Options for the registration dialog" : "Опции за диалоговия прозорец за регистрация",
     "Email address is optional" : "Имейл адресът е по избор",
     "Email address is mandatory" : "Имейл адресът е задължителен",
