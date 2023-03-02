@@ -1,5 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+## [4.1.7] - 2023-03-02
+### Fix
+ - Fix invitation mails for guest users
 ## [4.1.6] - 2023-02-27
 ### Fix
  - Removed trailing comma in rebuild command
