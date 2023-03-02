@@ -401,6 +401,7 @@
     "Grant poll admin access" : "授予投票管理員權限",
     "Withdraw poll admin access" : "撤回投票管理員權限",
     "Copy link to clipboard" : "複製連結到剪貼簿",
+    "Show QR code" : "顯示 QR code",
     "Options for the registration dialog" : "註冊對話方塊的選項",
     "Email address is optional" : "電子郵件地址為選填",
     "Email address is mandatory" : "電子郵件地址為必填",

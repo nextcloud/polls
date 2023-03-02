@@ -88,6 +88,7 @@ OC.L10N.register(
     "Error while adding share" : "Грешка приликом додавања дељења",
     "Delete votes" : "Обриши гласове",
     "User {userId} removed" : "Корисник {userId} уклоњен",
+    "Email options" : "Опције за и-мејл",
     "Yes" : "Да",
     "Administration" : "Администрација",
     "Select polls by clicking on them in the right sidebar!" : "Изаберите анкете кликом на њих на десној бочној траци!",
