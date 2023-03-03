@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Polls" : "Опитування",
     "Circle" : "Коло",
+    "Contact group" : "Групи",
     "Group" : "Група",
     "Poll invitation \"%s\"" : "Запрошення до опитування %s",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} запросив вас взяти участь у опитування \"{title}\"",

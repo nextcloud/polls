@@ -67,6 +67,7 @@ OC.L10N.register(
     "No description provided" : "Није дат опис",
     "Preview" : "Претпреглед",
     "Use alternative styling for the comments sidebar" : "Користите алтернативни стил за бочну траку за коментаре",
+    "User settings" : "Корисничка подешавања",
     "Shares" : "Дељења",
     "Resend invitation mail" : "Поново пошаљи позивницу",
     "Send invitation mail" : "Пошаљи позивницу",
