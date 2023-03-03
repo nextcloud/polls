@@ -1,5 +1,8 @@
 # Changelog
 All notable changes to this project will be documented in this file.
+## [4.1.8] - 2023-03-03
+### Fix
+ - Fix Error on poll creation `General error: 1364 The field 'description' has no default value.`
 ## [4.1.7] - 2023-03-02
 ### Fix
  - Fix invitation mails for guest users
