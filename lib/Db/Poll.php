@@ -102,7 +102,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	/** @var string $title */
 	protected $title = '';
 
-	/** @var string $description */
+	/** @var ?string $description */
 	protected $description = '';
 
 	/** @var string $owner */
