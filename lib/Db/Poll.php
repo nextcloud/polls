@@ -101,7 +101,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	protected string $type = '';
 	protected string $title = '';
-	protected string $description = '';
+	protected ?string $description = '';
 	protected ?string $owner = '';
 	protected int $created = 0;
 	protected int $expire = 0;
@@ -253,14 +253,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	// TODO: Workaround for nullish column, fix migration
 	public function getDescription(): string {
-		return $this->description;
+		return $this->description ?? '';
 	}
 
-	// TODO: Workaround for nullish column, fix migration
 	public function getTitle(): string {
-		return $this->title;
+		return $this-> title ?? '';
 	}
 
 	public function getDescriptionSafe(): string {
