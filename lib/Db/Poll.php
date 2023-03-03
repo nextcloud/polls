@@ -254,11 +254,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getDescription(): string {
-		return $this->description ?? '';
+		return $this->description === null ? '' : $this->description;
 	}
 
 	public function getTitle(): string {
-		return $this-> title ?? '';
+		return $this-> title;
 	}
 
 	public function getDescriptionSafe(): string {
