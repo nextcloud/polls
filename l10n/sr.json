@@ -55,6 +55,7 @@
     "Add option" : "Додај ставку",
     "Invite users via the share tab in the sidebar" : "Позовите кориснике преко картице за дељење на бочној траци",
     "never" : "никад",
+    "Private poll" : "Приватно гласање",
     "_%n Participant_::_%n Participants_" : ["%n учесник","%n учесника","%n учесника"],
     "Optional email address" : "Опциона адреса е-поште",
     "Checking email address …" : "Проверавам адресу е-поште…",
