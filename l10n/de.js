@@ -403,6 +403,7 @@ OC.L10N.register(
     "Grant poll admin access" : "Gewähre Umfrage-Administratorrecht",
     "Withdraw poll admin access" : "Entziehe das Umfrage-Administratorrecht",
     "Copy link to clipboard" : "Link in die Zwischenablage kopieren",
+    "Show QR code" : "QR-Code anzeigen",
     "Options for the registration dialog" : "Optionen für den Registrierungsdialog",
     "Email address is optional" : "Eine E-Mail-Adresse ist optional",
     "Email address is mandatory" : "Eine E-Mail-Adresse ist verpflichtend",
