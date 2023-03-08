@@ -352,7 +352,7 @@
     "Preview" : "Prévisualiser",
     "Hide email addresses of internal users" : "Cacher les adresses e-mail des utilisateurs internes",
     "Show email addresses of internal users to members of the following groups" : "Montrer les adresses e-mail des utilisateurs internes aux membres des groupes suivants",
-    "The privacy link and the legal notice link are automatically added to the registration dialog of public polls." : "Le lien vers la politique de confidentialité et le lien vers la notice légale sont automatiquement ajoutés à la boite de dialogue d'inscription pour les sondages publics.",
+    "The privacy link and the legal notice link are automatically added to the registration dialog of public polls." : "Les liens vers la politique de confidentialité et vers la notice légale sont automatiquement ajoutés à la boîte de dialogue d'inscription pour les sondages publics.",
     "As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms." : "Par défaut, les liens configurés dans l'application de personnalisation du thème sont utilisés. Pour les sondages publics, ils peuvent être remplacés par une configuration spécifique.",
     "Privacy policy link:" : "Lien vers la politique de confidentialité :",
     "Legal notice link:" : "Lien vers la notice légale : ",

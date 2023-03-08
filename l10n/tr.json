@@ -401,6 +401,7 @@
     "Grant poll admin access" : "Anket yönetici erişimi yetkisi ver",
     "Withdraw poll admin access" : "Anket yönetici erişimi yetkisini geri al",
     "Copy link to clipboard" : "Bağlantıyı panoya kopyala",
+    "Show QR code" : "QR kodunu görüntüle",
     "Options for the registration dialog" : "Kayıt penceresi seçenekleri",
     "Email address is optional" : "E-posta adresinin yazılması isteğe bağlıdır",
     "Email address is mandatory" : "E-posta adresinin yazılması zorunludur",
