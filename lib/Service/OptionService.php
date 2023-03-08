@@ -72,7 +72,7 @@ class OptionService {
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function list(?int $pollId = null, ?Acl $acl = null): array {
+	public function list(int $pollId = 0, ?Acl $acl = null): array {
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
@@ -87,7 +87,11 @@ class OptionService {
 				$this->anonymizer->anonymize($this->options);
 			} elseif (!$this->acl->getIsLoggedIn()) {
 				// if participant is not logged in avoid leaking user ids
-				AnonymizeService::replaceUserId($this->options, $this->acl->getUserId());
+				foreach ($this->options as $option) {
+					if ($option->getUserId() !== $this->acl->getUserId()) {
+						$option->generateHashedUserId();
+					}
+				}
 			}
 
 			$this->votes = $this->voteMapper->findByPoll($this->acl->getPollId());
@@ -126,7 +130,7 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function add(?int $pollId = null, int $timestamp = 0, string $pollOptionText = '', ?int $duration = 0, ?Acl $acl = null): Option {
+	public function add(int $pollId = 0, int $timestamp = 0, string $pollOptionText = '', int $duration = 0, ?Acl $acl = null): Option {
 		if ($acl) {
 			$this->acl = $acl;
 		} else {

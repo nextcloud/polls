@@ -92,7 +92,7 @@ class CalendarService {
 		];
 	}
 
-	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): ?array {
+	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): array {
 		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
@@ -110,7 +110,7 @@ class CalendarService {
 	 *
 	 * @return CalendarEvent[]
 	 *
-	 * @psalm-return list<CalendarEvent>
+	 * @psalm-return list<CalendarEvent|null>
 	 */
 	public function getEvents(int $optionId, string $tz): array {
 		$timezone = new DateTimeZone($tz);
@@ -119,6 +119,10 @@ class CalendarService {
 		$events = [];
 		$foundEvents = $this->searchEventsByTimeRange($timerange['from'], $timerange['to']);
 
+		if (!$foundEvents) {
+			return [];
+		}
+
 		foreach ($foundEvents as $event) {
 			$calendar = $this->getCalendarFromEvent($event);
 			if ($calendar === null) {
@@ -126,6 +130,7 @@ class CalendarService {
 			}
 
 			$calendarEvent = new CalendarEvent($event, $calendar, $timerange['from'], $timerange['to'], $timezone);
+
 			if ($calendarEvent->getOccurrences()) {
 				for ($index = 0; $index < count($calendarEvent->getOccurrences()); $index++) {
 					$calendarEvent->setOccurrence($index);

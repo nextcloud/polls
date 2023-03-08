@@ -36,11 +36,8 @@ abstract class ShareEvent extends BaseEvent {
 	public const REGISTRATION = 'share_registration';
 	public const DELETE = 'share_delete';
 
-	/** @var Share */
-	private $share;
-
-	/** @var UserBase */
-	protected $sharee = null;
+	private Share $share;
+	// protected UserBase $sharee = null;
 
 	public function __construct(Share $share) {
 		parent::__construct($share);

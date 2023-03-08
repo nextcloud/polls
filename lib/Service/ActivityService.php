@@ -37,7 +37,7 @@ use OCP\IUserSession;
 use OCP\L10N\IFactory;
 
 class ActivityService {
-	protected ?IL10N $l10n = null;
+	// protected IL10N $l10n;
 	protected string $shareType = '';
 	protected bool $userIsActor = true;
 	protected string $eventType = '';
@@ -50,6 +50,7 @@ class ActivityService {
 		private IFactory $transFactory,
 		private IUserSession $userSession,
 		private ActivityManager $activityManager,
+		protected IL10N $l10n,
 	) {
 	}
 
@@ -72,7 +73,7 @@ class ActivityService {
 	public function getActivityMessage(ActivityEvent $event, string $language, bool $filtered = false) : string {
 		$this->l10n = $this->transFactory->get($event->getApp(), $language);
 		try {
-			$this->userIsActor = $event->getAuthor() === $this->userSession->getUser()->getUID();
+			$this->userIsActor = $event->getAuthor() === $this->userSession->getUser()?->getUID();
 		} catch (\Exception $e) {
 			$this->userIsActor = false;
 		}

@@ -35,50 +35,22 @@ class CalendarEvent implements \JsonSerializable {
 	public const CALENDAR_PREFIX_URI = 'calendar/';
 	private const MAX_OCURRENCIES = 100;
 
-	/** @var array */
-	protected $iCal;
-
-	/** @var array */
-	protected $occurrences = null;
-	
-	/** @var bool */
-	protected $hasRRule;
-
-	/** @var array */
-	protected $rRule = null;
-
-	/** @var int */
-	protected $matchOccurrence = null;
-
-	/** @var array */
-	protected $event;
-
-	/** @var ICalendar */
-	protected $calendar;
-
-	/** @var DateTimeImmutable */
-	protected $filterFrom;
-	
-	/** @var DateTimeImmutable */
-	protected $filterTo;
-	
-	/** @var DateTimeZone */
-	protected $timezone;
+	protected array $occurrences = [];
+	protected bool $hasRRule;
+	protected array $rRule;
+	protected ?int $matchOccurrence = null;
+	protected array $event;
 
 	public function __construct(
-		array $iCal,
-		ICalendar $calendar,
-		DateTimeImmutable $filterFrom = null,
-		DateTimeImmutable $filterTo = null,
-		DateTimeZone $timezone = null
+		protected array $iCal,
+		protected ICalendar $calendar,
+		protected ?DateTimeImmutable $filterFrom = null,
+		protected ?DateTimeImmutable $filterTo = null,
+		protected ?DateTimeZone $timezone = null
 	) {
-		$this->iCal = $iCal;
-		$this->calendar = $calendar;
-		$this->filterFrom = $filterFrom;
-		$this->filterTo = $filterTo;
-		$this->timezone = $timezone;
 		$this->event = $this->iCal['objects'][0];
 		$this->hasRRule = isset($this->event['RRULE']);
+		$this->rRule = [];
 		$this->fixAllDay();
 		$this->buildRRule();
 		$this->calculateOccurrences();
@@ -146,48 +118,50 @@ class CalendarEvent implements \JsonSerializable {
 		return self::TYPE_DATE_TIME;
 	}
 
-	public function getBaseStart() : ?DateTimeImmutable {
-		if (isset($this->event['DTSTART'][0])) {
-			return $this->event['DTSTART'][0];
-			// return (new DateTimeImmutable())->setTimestamp($this->event['DTSTART'][0]->getTimestamp());
-		}
-		return null;
+	/**
+	 * Get the event start from the base event
+	 */
+	public function getBaseStart(): DateTimeImmutable {
+		return $this->event['DTSTART'][0];
 	}
-
-	public function getBaseEnd() : ?DateTimeImmutable {
-		if (isset($this->event['DTEND'][0])) {
-			return $this->event['DTEND'][0];
-		}
-		return null;
+	
+	/**
+	 * Get the event end from the base event
+	 * If not set return the start of the base event
+	 */
+	public function getBaseEnd(): DateTimeImmutable {
+		return $this->event['DTEND'][0] ?? $this->event['DTSTART'][0];
 	}
-
-	public function getStart() : ?DateTimeImmutable {
+	
+	/**
+	 * Get the event start for the matched occurence
+	 */
+	public function getStart(): DateTimeImmutable {
 		if ($this->occurrences != null && $this->matchOccurrence !== null) {
 			return DateTimeImmutable::createFromMutable($this->occurrences[$this->matchOccurrence]);
 		}
 		return $this->getBaseStart();
 	}
-
-	public function getEnd(): ?DateTimeImmutable {
-		if ($this->getBaseEnd() !== null) {
-			return $this->getStart()->add($this->getDiff());
-		}
-		return null;
+	
+	/**
+	 * Calculate the end of the matched occurence by adding the diff of the base start/end
+	 */
+	public function getEnd(): DateTimeImmutable {
+		return $this->getStart()->add($this->getDiff());
 	}
-
-	public function getDiff() : ?DateInterval {
-		if ($this->getBaseStart() && $this->getBaseEnd()) {
-			return $this->getBaseStart()->diff($this->getBaseEnd());
-			// return $this->getBaseEnd()->getTimestamp() - $this->getBaseStart()->getTimestamp();
-		}
-		return null;
+	
+	/**
+	 * Calculate the event duration as DateInterval
+	 */
+	public function getDiff(): DateInterval {
+		return $this->getBaseStart()->diff($this->getBaseEnd());
 	}
-
-	public function getDuration() : int {
-		if ($this->getBaseStart() && $this->getBaseEnd()) {
-			return $this->getBaseEnd()->getTimestamp() - $this->getBaseStart()->getTimestamp();
-		}
-		return 0;
+	
+	/**
+	 * Calculate the event duration in seconds
+	 */
+	public function getDuration(): int {
+		return $this->getBaseEnd()->getTimestamp() - $this->getBaseStart()->getTimestamp();
 	}
 
 	public function getStatus(): string {
@@ -205,7 +179,7 @@ class CalendarEvent implements \JsonSerializable {
 		return $this->rRule;
 	}
 
-	public function getOccurrences() : ?array {
+	public function getOccurrences() : array {
 		return $this->occurrences;
 	}
 
@@ -219,7 +193,7 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	private function buildRRule() : void {
+	private function buildRRule(): void {
 		if (!$this->getHasRRule()) {
 			return;
 		}
@@ -240,6 +214,8 @@ class CalendarEvent implements \JsonSerializable {
 			return;
 		}
 		$rRule = new RRule($this->rRule);
+
+		$this->occurrences = [];
 
 		foreach ($rRule as $occurrence) {
 			if ($this->filterFrom

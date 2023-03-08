@@ -62,24 +62,15 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_UPDATE_TYPE_PERIODIC_POLLING = 'periodicPolling';
 	public const SETTING_UPDATE_TYPE_DEFAULT = self::SETTING_UPDATE_TYPE_NO_POLLING;
 
-	/** @var IConfig */
-	private $config;
-
-	/** @var IGroupManager */
-	private $groupManager;
-
-	/** @var IUserSession */
-	private $session;
-
-	/** @var string */
-	private $userId = '';
+	private IConfig $config;
+	private IGroupManager $groupManager;
+	private IUserSession $session;
+	private string $userId = '';
 
 	public function __construct() {
 		$this->config = Container::queryClass(IConfig::class);
 		$this->session = Container::queryClass(IUserSession::class);
-		if ($this->session->isLoggedIn()) {
-			$this->userId = Container::queryClass(IUserSession::class)->getUser()->getUId();
-		}
+		$this->userId = Container::queryClass(IUserSession::class)->getUser()?->getUId() ?? '';
 		$this->groupManager = Container::queryClass(IGroupManager::class);
 	}
 
@@ -159,11 +150,11 @@ class AppSettings implements JsonSerializable {
 		return $this->config->getAppValue('theming', 'imprintUrl');
 	}
 	
-	public function getAutoarchiveOffset() {
+	public function getAutoarchiveOffset(): int {
 		return $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET, self::SETTING_AUTO_ARCHIVE_OFFSET_DEFAULT);
 	}
 
-	public function getUpdateType() {
+	public function getUpdateType(): string {
 		return $this->getStringSetting(self::SETTING_UPDATE_TYPE, self::SETTING_UPDATE_TYPE_DEFAULT);
 	}
 

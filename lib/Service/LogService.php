@@ -28,11 +28,13 @@ use OCA\Polls\Db\LogMapper;
 use OCP\IUserSession;
 
 class LogService {
+	private string $userId;
 	public function __construct(
 		private IUserSession $userSession,
 		private LogMapper $logMapper,
 		private Log $log
 	) {
+		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
 	}
 
 	/**
@@ -43,7 +45,7 @@ class LogService {
 		$this->log->setPollId($pollId);
 		$this->log->setCreated(time());
 		$this->log->setMessageId($messageId);
-		$this->log->setUserId($userId ? $userId : $this->userSession->getUser()->getUID());
+		$this->log->setUserId($userId ?? $this->userId);
 
 		return $this->logMapper->insert($this->log);
 	}

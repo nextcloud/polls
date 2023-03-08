@@ -32,15 +32,11 @@ abstract class OptionEvent extends BaseEvent {
 	public const UNCONFIRM = 'option_unconfirm';
 	public const DELETE = 'option_delete';
 
-	/** @var Option */
-	private $option;
-
 	public function __construct(
-		Option $option
+		private Option $option
 	) {
 		parent::__construct($option);
 		$this->activityObject = 'poll';
-		$this->option = $option;
 		$this->activitySubjectParams['optionTitle'] = [
 			'type' => 'highlight',
 			'id' => $this->option->getId(),

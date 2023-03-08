@@ -35,29 +35,16 @@ use OCA\Polls\Service\UserService;
 use OCP\IUserSession;
 
 abstract class BaseEvent extends Event {
-	/** @var string */
-	protected $activityObject = '';
-
-	/** @var string */
-	protected $activitySubject = '';
-
-	/** @var array */
-	protected $activitySubjectParams = [];
-
-	/** @var Poll */
-	protected $poll;
-
-	/** @var bool */
-	protected $log = true;
-
-	/** @var IUserSession */
-	private $userSession;
-
-	/** @var UserService */
-	protected $userService;
+	protected string $activityObject = '';
+	protected string $activitySubject = '';
+	protected array $activitySubjectParams = [];
+	protected Poll $poll;
+	protected bool $log = true;
+	private IUserSession $userSession;
+	protected UserService $userService;
 
 	public function __construct(
-		protected Poll|Comment|Share|Option|Vote $eventObject
+		protected Poll|Comment|Share|Option|Vote $eventObject,
 	) {
 		parent::__construct();
 		$this->poll = Container::queryPoll($this->getPollId());
@@ -97,13 +84,10 @@ abstract class BaseEvent extends Event {
 	}
 
 	public function getActor(): string {
-		if ($this->userSession->isLoggedIn()) {
-			return $this->userSession->getUser()->getUID();
-		}
-		return $this->eventObject->getUserId();
+		return $this->userSession->getUser()?->getUID() ?? $this->eventObject->getUserId();
 	}
 
-	public function getLogId(): ?string {
+	public function getLogId(): string {
 		if ($this->log && $this->activitySubject) {
 			return $this->activitySubject;
 		}

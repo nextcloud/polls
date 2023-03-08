@@ -28,7 +28,7 @@ use DateTime;
 use OCA\Polls\Db\Poll;
 
 class ReminderMail extends MailBase {
-	private const TEMPLATE_CLASS = 'polls.Reminder';
+	protected const TEMPLATE_CLASS = 'polls.Reminder';
 	public const REASON_EXPIRATION = 'expiry';
 	public const REASON_OPTION = 'option';
 	public const REASON_NONE = null;
@@ -38,15 +38,12 @@ class ReminderMail extends MailBase {
 	public const TWO_DAYS = 172800;
 	public const ONE_AND_HALF_DAY = 129600;
 
-	/** @var int */
-	protected $deadline;
-
-	/** @var int */
-	protected $timeToDeadline;
+	protected int $deadline;
+	protected int $timeToDeadline;
 
 	public function __construct(
-		string $recipientId,
-		int $pollId
+		protected string $recipientId,
+		protected int $pollId
 	) {
 		parent::__construct($recipientId, $pollId);
 		$this->deadline = $this->poll->getDeadline();

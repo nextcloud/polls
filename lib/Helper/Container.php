@@ -40,7 +40,7 @@ abstract class Container {
 		return $app->getContainer();
 	}
 
-	public static function queryClass(string $class) {
+	public static function queryClass(string $class): mixed  {
 		return self::getContainer()->get($class);
 	}
 

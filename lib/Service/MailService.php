@@ -56,11 +56,8 @@ class MailService {
 
 	public function resolveEmailAddress(int $pollId, string $userId): string {
 		$user = $this->userService->evaluateUser($userId, $pollId);
-		if ($user->getEmailAddress()) {
-			return $user->getEmailAddress();
-		}
 
-		return '';
+		return $user->getEmailAddress();
 	}
 
 	public function sendNotifications(): void {

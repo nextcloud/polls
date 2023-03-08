@@ -37,7 +37,7 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 
 class ActivityProvider implements IProvider {
-	protected IL10N $l10n;
+	// protected IL10N $l10n;
 
 	public function __construct(
 		protected ActivityManager $activityManager,
@@ -46,7 +46,8 @@ class ActivityProvider implements IProvider {
 		protected IFactory $transFactory,
 		protected IURLGenerator $urlGenerator,
 		protected IUserManager $userManager,
-		protected ShareMapper $shareMapper
+		protected ShareMapper $shareMapper,
+		protected IL10N $l10n,
 	) {
 	}
 

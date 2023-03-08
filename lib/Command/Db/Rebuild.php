@@ -26,16 +26,22 @@ namespace OCA\Polls\Command\Db;
 use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Rebuild extends Command {
 	protected string $name = self::NAME_PREFIX . 'db:rebuild';
 	protected string $description = 'Rebuilds poll\'s table structure';
 
 	public function __construct(
+		protected OutputInterface $output,
+		protected InputInterface $input,
+		protected ConfirmationQuestion $question,
 		private TableManager $tableManager,
 		private IndexManager $indexManager,
 	) {
-		parent::__construct();
+		parent::__construct($output, $input, $question);
 	}
 
 	protected function runCommands(): int {

@@ -29,15 +29,11 @@ use OCA\Polls\Db\Share;
 class InvitationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Invitation';
 
-	/** @var Share */
-	protected $share;
-
 	public function __construct(
-		string $recipientId,
-		Share $share
+		protected string $recipientId,
+		protected Share $share,
 	) {
 		parent::__construct($recipientId, $share->getPollId());
-		$this->share = $share;
 	}
 
 	protected function getSubject(): string {

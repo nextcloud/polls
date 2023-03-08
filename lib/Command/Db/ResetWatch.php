@@ -28,16 +28,22 @@ use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Migration\TableSchema;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ResetWatch extends Command {
 	protected string $name = self::NAME_PREFIX . 'db:reset-watch';
 	protected string $description = 'Resets the Watch table';
 
 	public function __construct(
+		protected OutputInterface $output,
+		protected InputInterface $input,
+		protected ConfirmationQuestion $question,
 		private IndexManager $indexManager,
 		private TableManager $tableManager
 	) {
-		parent::__construct();
+		parent::__construct($output, $input, $question);
 	}
 
 	protected function runCommands(): int {

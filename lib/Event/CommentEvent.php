@@ -29,13 +29,11 @@ abstract class CommentEvent extends BaseEvent {
 	public const ADD = 'comment_add';
 	public const DELETE = 'comment_delete';
 
-	/** @var Comment */
-	private $comment;
-
-	public function __construct(Comment $comment) {
+	public function __construct(
+		private Comment $comment,
+	) {
 		parent::__construct($comment);
 		$this->activityObject = 'poll';
-		$this->comment = $comment;
 		$this->activitySubjectParams['comment'] = [
 			'type' => 'highlight',
 			'id' => $comment->getId(),

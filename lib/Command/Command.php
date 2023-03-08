@@ -32,14 +32,15 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Command extends \Symfony\Component\Console\Command\Command {
 	protected const NAME_PREFIX = 'polls:';
 
-	protected OutputInterface $output;
-	protected InputInterface $input;
 	protected string $name = '';
 	protected string $description = '';
 	protected mixed $helper;
-	protected ConfirmationQuestion $question;
-
-	public function __construct() {
+	
+	public function __construct(
+		protected OutputInterface $output,
+		protected InputInterface $input,
+		protected ConfirmationQuestion $question,
+	) {
 		parent::__construct();
 		$this->question = new ConfirmationQuestion('Continue (y/n)? [n] ', false);
 	}
@@ -76,23 +77,23 @@ class Command extends \Symfony\Component\Console\Command\Command {
 		throw new LogicException('You must override the runCommands() method in the concrete command class.');
 	}
 
-	protected function setOutput(OutputInterface $output) {
+	protected function setOutput(OutputInterface $output): void {
 		$this->output = $output;
 	}
 
-	protected function setInput(InputInterface $input) {
+	protected function setInput(InputInterface $input): void {
 		$this->input = $input;
 	}
 
-	protected function printInfo(string $message) {
+	protected function printInfo(string $message): void {
 		$this->output->writeln('<info>' . $message . '</info>');
 	}
 
-	protected function printNewLine() {
+	protected function printNewLine(): void {
 		$this->output->writeln('');
 	}
 
-	protected function printComment(string $message) {
+	protected function printComment(string $message): void {
 		$this->output->writeln('<comment>' . $message. '</comment>');
 	}
 }

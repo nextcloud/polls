@@ -29,6 +29,8 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
+ * @method int getId()
+ * @method void setId(integer $value)
  * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method int getCreated()
@@ -57,6 +59,7 @@ class Log extends Entity implements JsonSerializable {
 	public const MSG_ID_SETVOTE = 'setVote';
 	public const MSG_ID_OWNERCHANGE = 'updateOwner';
 
+	public $id = 0;
 	protected int $pollId = 0;
 	protected int $created = 0;
 	protected int $processed = 0;

@@ -37,6 +37,9 @@ class UserDeletedListener extends BaseListener {
 	}
 
 	protected function addCronJob() : void {
+		if (!($this->event instanceof UserDeletedEvent)) {
+			return;
+		}
 		$this->jobList->add(UserDeletedJob::class, ['owner' => $this->event->getUser()->getUID()]);
 	}
 }

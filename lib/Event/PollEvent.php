@@ -34,12 +34,10 @@ abstract class PollEvent extends BaseEvent {
 	public const OWNER_CHANGE = 'poll_change_owner';
 	public const OPTION_REORDER = 'poll_option_reorder';
 
-	/** @var Poll */
-	protected $poll;
-
-	public function __construct(Poll $poll) {
+	public function __construct(
+		protected Poll $poll,
+	) {
 		parent::__construct($poll);
 		$this->activityObject = 'poll';
-		$this->poll = $poll;
 	}
 }
