@@ -30,7 +30,6 @@ use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
-use OCA\Polls\Model\User\User;
 use OCA\Polls\Service\UserService;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
@@ -40,7 +39,6 @@ use League\CommonMark\MarkdownConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Table\TableExtension;
-use OCP\GlobalScale\IConfig;
 use Psr\Log\LoggerInterface;
 
 abstract class MailBase {

@@ -29,7 +29,6 @@ use OCP\Migration\IOutput;
 use OCA\Polls\Db\IndexManager;
 
 class CreateIndices implements IRepairStep {
-	
 	public function __construct(
 		private IndexManager $indexManager,
 	) {

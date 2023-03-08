@@ -139,7 +139,7 @@ class TableManager {
 	 */
 	public function removeObsoleteTables(): array {
 		$dropped = false;
-		$messages= [];
+		$messages = [];
 
 		foreach (TableSchema::GONE_TABLES as $tableName) {
 			// $tableName = $this->dbPrefix . $tableName;
