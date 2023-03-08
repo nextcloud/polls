@@ -50,6 +50,8 @@ use OCP\IUserSession;
 use OCP\Search\ISearchQuery;
 
 class PollService {
+	private string $userId;
+
 	public function __construct(
 		private Acl $acl,
 		private AppSettings $appSettings,
@@ -62,6 +64,7 @@ class PollService {
 		private PollMapper $pollMapper,
 		private VoteMapper $voteMapper
 	) {
+		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
 	}
 
 	/**
@@ -70,7 +73,7 @@ class PollService {
 	public function list(): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->findForMe($this->userSession->getUser()->getUID());
+			$polls = $this->pollMapper->findForMe($this->userId);
 
 			foreach ($polls as $poll) {
 				try {
@@ -96,7 +99,7 @@ class PollService {
 	public function search(ISearchQuery $query): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->search($this->userSession->getUser()->getUID(), $query);
+			$polls = $this->pollMapper->search($this->userId, $query);
 
 			foreach ($polls as $poll) {
 				try {
@@ -120,7 +123,7 @@ class PollService {
 	 */
 	public function listForAdmin(): array {
 		$pollList = [];
-		$userId = $this->userSession->getUser()->getUID();
+		$userId = $this->userId;
 		if ($this->groupManager->isAdmin($userId)) {
 			try {
 				$pollList = $this->pollMapper->findForAdmin($userId);
@@ -141,7 +144,7 @@ class PollService {
 
 		$this->eventDispatcher->dispatchTyped(new PollTakeOverEvent($this->poll));
 
-		$this->poll->setOwner($this->userSession->getUser()->getUID());
+		$this->poll->setOwner($this->userId);
 		$this->pollMapper->update($this->poll);
 
 		return $this->poll;
@@ -169,18 +172,18 @@ class PollService {
 	/**
 	 * get poll configuration
 	 *
-	 * @return (\OCA\Polls\Db\Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Vote)[]|Poll
+	 * @return Poll
 	 *
-	 * @psalm-return Poll|array<\OCA\Polls\Db\Comment|\OCA\Polls\Db\Option|\OCA\Polls\Db\Vote>
+	 * @psalm-return Poll
 	 */
 	public function get(int $pollId) {
 		$this->acl->setPollId($pollId);
 		$this->poll = $this->pollMapper->find($pollId);
 
-		if (!$this->acl->getIsLoggedIn()) {
-			// if participant is not logged in avoid leaking user ids
-			AnonymizeService::replaceUserId($this->poll, $this->acl->getUserId());
+		if (!$this->acl->getIsLoggedIn() && $this->poll->getUserId() !== $this->acl->getUserId()) {
+			$this->poll->generateHashedUserId();
 		}
+
 		return $this->poll;
 	}
 
@@ -204,7 +207,7 @@ class PollService {
 		$this->poll = new Poll();
 		$this->poll->setType($type);
 		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userSession->getUser()->getUID());
+		$this->poll->setOwner($this->userId);
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
 		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
@@ -314,7 +317,7 @@ class PollService {
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userSession->getUser()->getUID());
+		$this->poll->setOwner($this->userId);
 		$this->poll->setTitle('Clone of ' . $origin->getTitle());
 		$this->poll->setDeleted(0);
 		$this->poll->setAccess(Poll::ACCESS_PRIVATE);

@@ -42,6 +42,9 @@ class PollListener extends BaseListener {
 	}
 
 	protected function createNotification() : void {
+		if (!($this->event instanceof PollEvent)) {
+			return;
+		}
 		if (!empty($this->event->getNotification())) {
 			$this->notificationService->createNotification($this->event->getNotification());
 		}

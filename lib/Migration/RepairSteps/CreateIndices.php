@@ -29,13 +29,10 @@ use OCP\Migration\IOutput;
 use OCA\Polls\Db\IndexManager;
 
 class CreateIndices implements IRepairStep {
-	/** @var IndexManager */
-	private $indexManager;
 	
 	public function __construct(
-		IndexManager $indexManager
+		private IndexManager $indexManager,
 	) {
-		$this->indexManager = $indexManager;
 	}
 
 	public function getName() {

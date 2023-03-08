@@ -55,7 +55,11 @@ class CommentService {
 			$this->anonymizer->anonymize($comments);
 		} elseif (!$acl->getIsLoggedIn()) {
 			// if participant is not logged in avoid leaking user ids
-			AnonymizeService::replaceUserId($comments, $acl->getUserId());
+			foreach ($comments as $comment) {
+				if ($comment->getUserId() !== $this->acl->getUserId()) {
+					$comment->generateHashedUserId();
+				}
+			}
 		}
 
 		return $comments;

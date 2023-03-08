@@ -36,16 +36,12 @@ class NotificationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Notification';
 
 	/** @var Log[] */
-	protected $log = [];
-
-	/** @var Subscription **/
-	protected $subscription;
+	protected array $log = [];
 
 	public function __construct(
-		Subscription $subscription
+		protected Subscription $subscription
 	) {
 		parent::__construct($subscription->getUserId(), $subscription->getPollId());
-		$this->subscription = $subscription;
 	}
 
 	protected function getSubject(): string {

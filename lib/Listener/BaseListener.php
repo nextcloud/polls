@@ -106,6 +106,9 @@ abstract class BaseListener implements IEventListener {
 	 * @throws Exception
 	 */
 	protected function addLog() : void {
+		if (!($this->event instanceof BaseEvent)) {
+			return;
+		}
 		if ($this->event->getLogId()) {
 			$this->logService->setLog(
 				$this->event->getPollId(),
@@ -133,6 +136,9 @@ abstract class BaseListener implements IEventListener {
 	 * Default for activity notification.
 	 */
 	protected function addActivity() : void {
+		if (!($this->event instanceof BaseEvent)) {
+			return;
+		}
 		if ($this->event->getActivityId()) {
 			$activityEvent = $this->activityService->createActivityEvent($this->event);
 			$this->activityService->publishActivityEvent($activityEvent, $this->event->getActor());
@@ -147,6 +153,9 @@ abstract class BaseListener implements IEventListener {
 	 * Tables to watch are defined in WATCH_TABLES
 	 */
 	protected function writeWatch() : void {
+		if (!($this->event instanceof BaseEvent)) {
+			return;
+		}
 		foreach (static::WATCH_TABLES as $table) {
 			$this->watchService->writeUpdate($this->event->getPollId(), $table);
 		}

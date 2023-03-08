@@ -47,6 +47,7 @@ class Watch extends Entity implements JsonSerializable {
 	public const OBJECT_COMMENTS = "comments";
 	public const OBJECT_SHARES = "shares";
 
+	public $id = 0;
 	protected int $pollId = 0;
 	protected string $table = '';
 	protected int $updated = 0;

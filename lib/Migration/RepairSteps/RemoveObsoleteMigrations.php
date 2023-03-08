@@ -33,13 +33,9 @@ use OCA\Polls\Db\TableManager;
  * theoretically, only this migration should be existent. If not, no matter
  */
 class RemoveObsoleteMigrations implements IRepairStep {
-	/** @var TableManager */
-	private $tableManager;
-
 	public function __construct(
-		TableManager $tableManager
+		private TableManager $tableManager
 	) {
-		$this->tableManager = $tableManager;
 	}
 
 	/*

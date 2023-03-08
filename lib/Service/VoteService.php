@@ -50,7 +50,7 @@ class VoteService {
 	 *
 	 * @return Vote[]
 	 */
-	public function list(?int $pollId = null, ?Acl $acl = null) : array {
+	public function list(int $pollId = 0, ?Acl $acl = null) : array {
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
@@ -70,7 +70,11 @@ class VoteService {
 				$this->anonymizer->anonymize($votes);
 			} elseif (!$this->acl->getIsLoggedIn()) {
 				// if participant is not logged in avoid leaking user ids
-				AnonymizeService::replaceUserId($votes, $this->acl->getUserId());
+				foreach ($votes as $vote) {
+					if ($vote->getUserId() !== $this->acl->getUserId()) {
+						$vote->generateHashedUserId();
+					}
+				}
 			}
 		} catch (DoesNotExistException $e) {
 			$votes = [];
@@ -137,7 +141,7 @@ class VoteService {
 	/**
 	 * Remove user from poll
 	 */
-	public function delete(?int $pollId = null, ?string $userId = null, ?Acl $acl = null): string {
+	public function delete(int $pollId = 0, string $userId = '', ?Acl $acl = null): string {
 		if ($acl) {
 			$this->acl = $acl;
 			$userId = $this->acl->getUserId();

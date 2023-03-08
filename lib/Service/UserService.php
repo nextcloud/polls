@@ -64,8 +64,10 @@ class UserService {
 
 	public function getCurrentUser() : UserBase {
 		// If there is a valid user session, get current user from session
-		if ($this->userSession->getUser()) {
-			return new User($this->userSession->getUser()->getUID());
+		$userId = $this->userSession->getUser()?->getUID();
+
+		if ($userId) {
+			return new User($userId);
 		}
 		
 		// Retrieve token and get current user from share
@@ -90,12 +92,13 @@ class UserService {
 	 * evaluateUser - Get user by name and poll in case of a share user of the particulair poll
 	 */
 
-	public function evaluateUser(string $userId, int $pollId = 0): ?UserBase {
+	public function evaluateUser(string $userId, int $pollId = 0): UserBase {
 		// if a user with this name exists, return from the user base
 		$user = $this->userManager->get($userId);
 		if ($user) {
 			return new User($userId);
 		}
+
 		// Otherwise get it from a share that belongs to the poll and return the share user
 		try {
 			$share = $this->shareMapper->findByPollAndUser($pollId, $userId);
@@ -117,11 +120,7 @@ class UserService {
 		$participants = $this->voteMapper->findParticipantsByPoll($pollId);
 
 		foreach ($participants as &$participant) {
-			$user = $this->evaluateUser($participant->getUserId(), $pollId);
-			if ($user) {
-				// replace every entry with a user object
-				$users[] = $this->evaluateUser($participant->getUserId(), $pollId);
-			}
+			$users[] = $this->evaluateUser($participant->getUserId(), $pollId);
 		}
 		return $users;
 	}
@@ -195,7 +194,7 @@ class UserService {
 	 * create a new user object based on $type
 	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Group|User|Admin
 	 */
-	public function getUser(string $type, string $id, string $displayName = '', string $emailAddress = '', ?string $language = '', string $locale = '', string $timeZoneName = ''): UserBase {
+	public function getUser(string $type, string $id, string $displayName = '', string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): UserBase {
 		return match ($type) {
 			Group::TYPE => new Group($id),
 			Circle::TYPE => new Circle($id),

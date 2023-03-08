@@ -25,13 +25,21 @@ namespace OCA\Polls\Command\Db;
 
 use OCA\Polls\Db\TableManager;
 use OCA\Polls\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class CleanMigrations extends Command {
 	protected string $name = self::NAME_PREFIX . 'db:clean-migrations';
 	protected string $description = 'Remove old migrations entries from Nextcloud\'s migration table';
 
-	public function __construct(private TableManager $tableManager) {
-		parent::__construct();
+	public function __construct(
+		protected OutputInterface $output,
+		protected InputInterface $input,
+		protected ConfirmationQuestion $question,
+		protected TableManager $tableManager
+	) {
+		parent::__construct($output, $input, $question);
 	}
 
 	protected function runCommands(): int {

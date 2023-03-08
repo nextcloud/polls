@@ -40,54 +40,29 @@ use League\CommonMark\MarkdownConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Table\TableExtension;
+use OCP\GlobalScale\IConfig;
 use Psr\Log\LoggerInterface;
 
 abstract class MailBase {
-	private const TEMPLATE_CLASS = 'polls.Mail';
+	protected const TEMPLATE_CLASS = 'polls.Mail';
 
-	/** @var AppSettings */
-	protected $appSettings;
-	
-	/** @var IEmailTemplate */
-	protected $emailTemplate = null;
-
-	/** @var string */
-	protected $footer = '';
-	
-	/** @var IL10N */
-	protected $l10n;
-
-	/** @var LoggerInterface */
-	protected $logger;
-	
-	/** @var IMailer */
-	protected $mailer;
-
-	/** @var OptionMapper */
-	protected $optionMapper;
-
-	/** @var User */
-	protected $owner;
-	
-	/** @var Poll */
-	protected $poll;
-	
-	/** @var UserBase */
-	protected $recipient;
-
-	/** @var IFactory */
-	protected $transFactory;
-
-	/** @var UserService */
-	protected $userService;
-
-	/** @var string|null */
-	protected $url = null;
+	protected AppSettings $appSettings;
+	protected IEmailTemplate $emailTemplate;
+	protected string $footer = '';
+	protected IL10N $l10n;
+	protected LoggerInterface $logger;
+	protected IMailer $mailer;
+	protected OptionMapper $optionMapper;
+	protected UserBase $owner;
+	protected Poll $poll;
+	protected UserBase $recipient;
+	protected IFactory $transFactory;
+	protected UserService $userService;
 
 	public function __construct(
-		string $recipientId,
-		int $pollId,
-		string $url = null
+		protected string $recipientId,
+		protected int $pollId,
+		protected string $url = ''
 	) {
 		$this->appSettings = Container::queryClass(AppSettings::class);
 		$this->logger = Container::queryClass(LoggerInterface::class);
@@ -97,8 +72,8 @@ abstract class MailBase {
 		$this->userService = Container::queryClass(UserService::class);
 		$this->poll = $this->getPoll($pollId);
 		$this->recipient = $this->getUser($recipientId);
-		$this->url = $url ?? $this->poll->getVoteUrl();
-
+		$this->url = $url === '' ? $this->poll->getVoteUrl() : '';
+		$this->emailTemplate = Container::queryClass(IEMailTemplate::class);
 		$this->initializeClass();
 	}
 
@@ -124,9 +99,11 @@ abstract class MailBase {
 			$this->url = $this->getShareURL();
 		}
 
+		$languageCode = $this->recipient->getLanguageCode() !== '' ? $this->recipient->getLanguageCode() : $this->transFactory->findGenericLanguage();
+
 		$this->l10n = $this->transFactory->get(
 			'polls',
-			$this->recipient->getLanguageCode() ? $this->recipient->getLanguageCode() : $this->owner->getLanguageCode(),
+			$languageCode,
 			$this->recipient->getLocaleCode()
 		);
 	}
@@ -204,7 +181,7 @@ abstract class MailBase {
 		return $legal;
 	}
 
-	protected function getUser(string $userId) : ?UserBase {
+	protected function getUser(string $userId) : UserBase {
 		return $this->userService->evaluateUser($userId, $this->poll->getId());
 	}
 

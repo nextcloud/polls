@@ -33,13 +33,9 @@ use OCA\Polls\Db\IndexManager;
  * while changing the schema
  */
 class RemoveIndices implements IRepairStep {
-	/** @var IndexManager */
-	private $indexManager;
-
 	public function __construct(
-		IndexManager $indexManager
+		private IndexManager $indexManager
 	) {
-		$this->indexManager = $indexManager;
 	}
 
 	/*

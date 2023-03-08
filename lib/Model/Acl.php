@@ -109,12 +109,12 @@ class Acl implements JsonSerializable {
 		return $this->share;
 	}
 
-	public function setPollId(?int $pollId = 0, string $permission = self::PERMISSION_POLL_VIEW): Acl {
+	public function setPollId(int $pollId = 0, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
 			$this->poll = $this->pollMapper->find($pollId);
 			$this->request($permission);
 		} catch (DoesNotExistException $e) {
-			throw new NotAuthorizedException('Error loading poll ' . $pollId);
+			throw new NotAuthorizedException('Error loading poll with id ' . $pollId);
 		}
 
 		return $this;
@@ -137,7 +137,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getUserId(): string {
-		return $this->getIsLoggedIn() ? $this->userSession->getUser()->getUID() : $this->share->getUserId();
+		return $this->userSession->getUser()?->getUID() ?? $this->share->getUserId();
 	}
 
 	public function validateUserId(string $userId): bool {
@@ -159,7 +159,7 @@ class Acl implements JsonSerializable {
 	}
 
 	private function getDisplayName(): string {
-		return $this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())->getDisplayName() : $this->share->getDisplayName();
+		return ($this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())?->getDisplayName() : $this->share->getDisplayName()) ?? '';
 	}
 
 	public function getIsAllowed(string $permission): bool {
