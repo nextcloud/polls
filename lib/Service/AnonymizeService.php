@@ -26,6 +26,7 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\EntityWithUser;
 use OCA\Polls\Db\OptionMapper;
 
 class AnonymizeService {
