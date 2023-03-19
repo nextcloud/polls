@@ -39,7 +39,6 @@ use League\CommonMark\MarkdownConverter;
 use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Table\TableExtension;
-use OCP\GlobalScale\IConfig;
 use Psr\Log\LoggerInterface;
 
 abstract class MailBase {
