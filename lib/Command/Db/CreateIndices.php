@@ -25,22 +25,17 @@ namespace OCA\Polls\Command\Db;
 
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\IndexManager;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class CreateIndices extends Command {
-	protected string $name = self::NAME_PREFIX . 'index:create';
+	protected string $name = parent::NAME_PREFIX . 'index:create';
 	protected string $description = 'Add all indices and foreign key constraints';
+	protected array $operationHints = [
+		'Adds indices and foreing key constraints.',
+		'NO data migration will be executed, so make sure you have a backup of your database.',
+	];
 
-	public function __construct(
-		protected OutputInterface $output,
-		protected InputInterface $input,
-		protected ConfirmationQuestion $question,
-		private IndexManager $indexManager,
-	) {
-		parent::__construct($output, $input, $question);
-		$this->question = new ConfirmationQuestion('Continue (y/n)? [y] ', true);
+	public function __construct(private IndexManager $indexManager) {
+		parent::__construct();
 	}
 
 	protected function runCommands(): int {
@@ -51,20 +46,6 @@ class CreateIndices extends Command {
 		$this->addIndices();
 		$this->indexManager->migrate();
 
-		return 0;
-	}
-
-	protected function requestConfirmation(): int {
-		if ($this->input->isInteractive()) {
-			$this->helper = $this->getHelper('question');
-			$this->printComment('Adds indices and foreing key constraints.');
-			$this->printComment('NO data migration will be executed, so make sure you have a backup of your database.');
-			$this->printNewLine();
-
-			if (!$this->helper->ask($this->input, $this->output, $this->question)) {
-				return 1;
-			}
-		}
 		return 0;
 	}
 

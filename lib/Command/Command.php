@@ -34,15 +34,17 @@ class Command extends \Symfony\Component\Console\Command\Command {
 
 	protected string $name = '';
 	protected string $description = '';
+	protected array $operationHints = [];
+	protected bool $defaultContinueAnswer = false;
 	protected mixed $helper;
+	protected InputInterface $input;
+	protected OutputInterface $output;
+	protected ConfirmationQuestion $question;
 	
 	public function __construct(
-		protected OutputInterface $output,
-		protected InputInterface $input,
-		protected ConfirmationQuestion $question,
 	) {
 		parent::__construct();
-		$this->question = new ConfirmationQuestion('Continue (y/n)? [n] ', false);
+		$this->question = new ConfirmationQuestion('Continue (y/n)? ['. ($this->defaultContinueAnswer ? 'y' : 'n') . '] ', $this->defaultContinueAnswer);
 	}
 
 	protected function configure(): void {
@@ -55,18 +57,22 @@ class Command extends \Symfony\Component\Console\Command\Command {
 		$this->setOutput($output);
 		$this->setInput($input);
 
-		if ($this->requestConfirmation()) {
+		if ($this->requestConfirmation($input, $output)) {
 			return 1;
 		}
 
 		return $this->runCommands();
 	}
 
-	protected function requestConfirmation(): int {
-		if ($this->input->isInteractive()) {
+	protected function requestConfirmation(InputInterface $input, OutputInterface $output): int {
+		if ($input->isInteractive()) {
 			$this->helper = $this->getHelper('question');
+			foreach ($this->operationHints as $hint) {
+				$this->printComment($hint);
+			}
+			$this->printNewLine();
 
-			if (!$this->helper->ask($this->input, $this->output, $this->question)) {
+			if (!$this->helper->ask($input, $output, $this->question)) {
 				return 1;
 			}
 		}

@@ -28,22 +28,20 @@ use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Migration\TableSchema;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class ResetWatch extends Command {
-	protected string $name = self::NAME_PREFIX . 'db:reset-watch';
+	protected string $name = parent::NAME_PREFIX . 'db:reset-watch';
 	protected string $description = 'Resets the Watch table';
+	protected array $operationHints = [
+		'All polls tables will get checked against the current schema.',
+		'NO data migration will be executed, so make sure you have a backup of your database.',
+	];
 
 	public function __construct(
-		protected OutputInterface $output,
-		protected InputInterface $input,
-		protected ConfirmationQuestion $question,
 		private IndexManager $indexManager,
 		private TableManager $tableManager
 	) {
-		parent::__construct($output, $input, $question);
+		parent::__construct();
 	}
 
 	protected function runCommands(): int {
@@ -54,21 +52,6 @@ class ResetWatch extends Command {
 		$this->createIndex();
 		$this->indexManager->migrate();
 
-
-		return 0;
-	}
-
-	protected function requestConfirmation(): int {
-		if ($this->input->isInteractive()) {
-			$helper = $this->getHelper('question');
-			$this->printComment('All polls tables will get checked against the current schema.');
-			$this->printComment('NO data migration will be executed, so make sure you have a backup of your database.');
-			$this->printNewLine();
-
-			if (!$helper->ask($this->input, $this->output, $this->question)) {
-				return 1;
-			}
-		}
 		return 0;
 	}
 

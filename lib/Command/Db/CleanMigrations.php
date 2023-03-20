@@ -25,21 +25,17 @@ namespace OCA\Polls\Command\Db;
 
 use OCA\Polls\Db\TableManager;
 use OCA\Polls\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class CleanMigrations extends Command {
-	protected string $name = self::NAME_PREFIX . 'db:clean-migrations';
+	protected string $name = parent::NAME_PREFIX . 'db:clean-migrations';
 	protected string $description = 'Remove old migrations entries from Nextcloud\'s migration table';
+	protected array $operationHints = [
+		'All polls tables will get checked against the current schema.',
+		'NO data migration will be executed, so make sure you have a backup of your database.',
+	];
 
-	public function __construct(
-		protected OutputInterface $output,
-		protected InputInterface $input,
-		protected ConfirmationQuestion $question,
-		protected TableManager $tableManager
-	) {
-		parent::__construct($output, $input, $question);
+	public function __construct(protected TableManager $tableManager) {
+		parent::__construct();
 	}
 
 	protected function runCommands(): int {
@@ -50,20 +46,6 @@ class CleanMigrations extends Command {
 		$this->tableManager->removeObsoleteMigrations();
 		$this->tableManager->migrate();
 		
-		return 0;
-	}
-
-	protected function requestConfirmation(): int {
-		if ($this->input->isInteractive()) {
-			$helper = $this->getHelper('question');
-			$this->printComment('All polls tables will get checked against the current schema.');
-			$this->printComment('NO data migration will be executed, so make sure you have a backup of your database.');
-			$this->printNewLine();
-
-			if (!$helper->ask($this->input, $this->output, $this->question)) {
-				return 1;
-			}
-		}
 		return 0;
 	}
 }
