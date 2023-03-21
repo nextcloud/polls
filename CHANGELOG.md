@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 ##
 ## [5.0.0] - tbd
  ### New
- - Added qr code to shares
+ - Added qr code for public shares
 ### Changes
  - PHP 8.0 as minimum requirement
  
