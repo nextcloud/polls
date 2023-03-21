@@ -32,16 +32,19 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class Command extends \Symfony\Component\Console\Command\Command {
 	protected const NAME_PREFIX = 'polls:';
 
-	protected OutputInterface $output;
-	protected InputInterface $input;
 	protected string $name = '';
 	protected string $description = '';
+	protected array $operationHints = [];
+	protected bool $defaultContinueAnswer = false;
 	protected mixed $helper;
+	protected InputInterface $input;
+	protected OutputInterface $output;
 	protected ConfirmationQuestion $question;
-
-	public function __construct() {
+	
+	public function __construct(
+	) {
 		parent::__construct();
-		$this->question = new ConfirmationQuestion('Continue (y/n)? [n] ', false);
+		$this->question = new ConfirmationQuestion('Continue (y/n)? ['. ($this->defaultContinueAnswer ? 'y' : 'n') . '] ', $this->defaultContinueAnswer);
 	}
 
 	protected function configure(): void {
@@ -54,18 +57,22 @@ class Command extends \Symfony\Component\Console\Command\Command {
 		$this->setOutput($output);
 		$this->setInput($input);
 
-		if ($this->requestConfirmation()) {
+		if ($this->requestConfirmation($input, $output)) {
 			return 1;
 		}
 
 		return $this->runCommands();
 	}
 
-	protected function requestConfirmation(): int {
-		if ($this->input->isInteractive()) {
+	protected function requestConfirmation(InputInterface $input, OutputInterface $output): int {
+		if ($input->isInteractive()) {
 			$this->helper = $this->getHelper('question');
+			foreach ($this->operationHints as $hint) {
+				$this->printComment($hint);
+			}
+			$this->printNewLine();
 
-			if (!$this->helper->ask($this->input, $this->output, $this->question)) {
+			if (!$this->helper->ask($input, $output, $this->question)) {
 				return 1;
 			}
 		}
@@ -76,23 +83,23 @@ class Command extends \Symfony\Component\Console\Command\Command {
 		throw new LogicException('You must override the runCommands() method in the concrete command class.');
 	}
 
-	protected function setOutput(OutputInterface $output) {
+	protected function setOutput(OutputInterface $output): void {
 		$this->output = $output;
 	}
 
-	protected function setInput(InputInterface $input) {
+	protected function setInput(InputInterface $input): void {
 		$this->input = $input;
 	}
 
-	protected function printInfo(string $message) {
+	protected function printInfo(string $message): void {
 		$this->output->writeln('<info>' . $message . '</info>');
 	}
 
-	protected function printNewLine() {
+	protected function printNewLine(): void {
 		$this->output->writeln('');
 	}
 
-	protected function printComment(string $message) {
+	protected function printComment(string $message): void {
 		$this->output->writeln('<comment>' . $message. '</comment>');
 	}
 }

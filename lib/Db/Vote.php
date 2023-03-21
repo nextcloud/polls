@@ -28,6 +28,8 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 /**
+ * @method int getId()
+ * @method void setId(integer $value)
  * @method int getPollId()
  * @method void setPollId(integer $value)
  * @method string getUserId()
@@ -44,6 +46,7 @@ use JsonSerializable;
 class Vote extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_votes';
 
+	public $id = null;
 	protected int $pollId = 0;
 	protected string $userId = '';
 	protected int $voteOptionId = 0;

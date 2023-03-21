@@ -57,6 +57,7 @@ use OCP\IL10N;
 class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
 
+	public $id = null;
 	protected int $pollId = 0;
 	protected string $owner = '';
 	protected int $released = 0;
@@ -150,7 +151,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->setOwner($userId);
 	}
 
-	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n) {
+	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n): string {
 		$mutableFrom = DateTime::createFromImmutable($this->getDateObjectFrom($timeZone));
 		$mutableTo = DateTime::createFromImmutable($this->getDateObjectTo($timeZone));
 		$dayLongSecond = new DateInterval('PT1S');
@@ -158,7 +159,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 
 		// If duration is zero, the option represents a moment with day and time
 		if ($this->getDuration() === 0) {
-			return $l10n->l('datetime', $mutableFrom);
+			return (string) $l10n->l('datetime', $mutableFrom);
 		}
 
 		$dateTimeFrom = $l10n->l('datetime', $mutableFrom);
@@ -172,15 +173,15 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$dateTimeTo = $l10n->l('date', $mutableTo->sub($dayLongSecond));
 			// if start and end day are identiacal, just return the start day
 			if ($dateTimeFrom === $dateTimeTo) {
-				return $dateTimeFrom;
+				return (string) $dateTimeFrom;
 			}
 		}
 
 		if ($sameDay) {
-			$dateTimeTo = $dateTimeTo = $l10n->l('time', $mutableTo);
+			$dateTimeTo = $l10n->l('time', $mutableTo);
 		}
 
-		return $dateTimeFrom . ' - ' . $dateTimeTo;
+		return (string) $dateTimeFrom . ' - ' . (string) $dateTimeTo;
 	}
 
 	// private function getOwnerIsNoUser(): bool {
@@ -190,7 +191,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	/**
 	 * Check, if the date option spans one or more whole days (from 00:00 to 24:00)
 	 */
-	private function getDaylong(DateTimeZone $timeZone = null): bool {
+	private function getDaylong(DateTimeZone $timeZone): bool {
 		$from = $this->getDateObjectFrom($timeZone);
 		$to = $this->getDateObjectTo($timeZone);
 		$dateInterval = $from->diff($to);

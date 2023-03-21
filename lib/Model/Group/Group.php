@@ -33,8 +33,7 @@ class Group extends UserBase {
 	public const TYPE = 'group';
 	public const ICON = 'icon-group';
 
-	/** @var IGroup */
-	private $group;
+	private IGroup $group;
 
 	public function __construct(
 		string $id

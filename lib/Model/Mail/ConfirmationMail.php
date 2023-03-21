@@ -31,7 +31,7 @@ class ConfirmationMail extends MailBase {
 	private const TEMPLATE_CLASS = 'polls.Confirmation';
 
 	/** @var Option[] */
-	protected $confirmedOptions;
+	protected array $confirmedOptions;
 
 	public function __construct(
 		string $recipientId,

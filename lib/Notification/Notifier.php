@@ -75,8 +75,8 @@ class Notifier implements INotifier {
 		return [
 			'actor' => [
 				'type' => 'user',
-				'id' => $actor->getUID(),
-				'name' => $actor->getDisplayName(),
+				'id' => $actor?->getUID() ?? '',
+				'name' => $actor?->getDisplayName() ?? '',
 			]
 		];
 	}

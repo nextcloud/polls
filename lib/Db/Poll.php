@@ -31,6 +31,8 @@ use OCA\Polls\Helper\Container;
 use OCP\IURLGenerator;
 
 /**
+ * @method int getId()
+ * @method void setId(integer $value)
  * @method string getType()
  * @method void setType(string $value)
  * @method string getTitle()
@@ -99,6 +101,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	private IURLGenerator $urlGenerator;
 	private OptionMapper $optionMapper;
 
+	public $id = null;
 	protected string $type = '';
 	protected string $title = '';
 	protected ?string $description = '';
@@ -145,28 +148,28 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
-			'type' => $this->getType(),
-			'title' => $this->getTitle(),
-			'description' => $this->getDescription(),
-			'descriptionSafe' => $this->getDescriptionSafe(),
-			'created' => $this->getCreated(),
-			'expire' => $this->getExpire(),
-			'deleted' => $this->getDeleted(),
 			'access' => $this->getAccess(),
-			'anonymous' => $this->getAnonymous(),
+			'adminAccess' => $this->getAdminAccess(),
 			'allowComment' => $this->getAllowComment(),
 			'allowMaybe' => $this->getAllowMaybe(),
 			'allowProposals' => $this->getAllowProposals(),
-			'proposalsExpire' => $this->getProposalsExpire(),
-			'voteLimit' => $this->getVoteLimit(),
-			'optionLimit' => $this->getOptionLimit(),
-			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
-			'adminAccess' => $this->getAdminAccess(),
-			'important' => $this->getImportant(),
-			'hideBookedUp' => $this->getHideBookedUp(),
-			'useNo' => $this->getUseNo(),
+			'anonymous' => $this->getAnonymous(),
 			'autoReminder' => $this->getAutoReminder(),
+			'created' => $this->getCreated(),
+			'deleted' => $this->getDeleted(),
+			'description' => $this->getDescription() ?? '',
+			'descriptionSafe' => $this->getDescriptionSafe(),
+			'expire' => $this->getExpire(),
+			'hideBookedUp' => $this->getHideBookedUp(),
+			'important' => $this->getImportant(),
+			'optionLimit' => $this->getOptionLimit(),
 			'owner' => $this->getUser(),
+			'proposalsExpire' => $this->getProposalsExpire(),
+			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
+			'title' => $this->getTitle(),
+			'type' => $this->getType(),
+			'useNo' => $this->getUseNo(),
+			'voteLimit' => $this->getVoteLimit(),
 		];
 	}
 
@@ -174,24 +177,24 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * @return static
 	 */
 	public function deserializeArray(array $array): self {
-		$this->setTitle($array['title'] ?? $this->getTitle());
-		$this->setDescription($array['description'] ?? $this->getDescription());
 		$this->setAccess($array['access'] ?? $this->getAccess());
-		$this->setExpire($array['expire'] ?? $this->getExpire());
-		$this->setAnonymous($array['anonymous'] ?? $this->getAnonymous());
-		$this->setallowComment($array['allowComment'] ?? $this->getAllowComment());
+		$this->setAllowComment($array['allowComment'] ?? $this->getAllowComment());
 		$this->setAllowMaybe($array['allowMaybe'] ?? $this->getAllowMaybe());
 		$this->setAllowProposals($array['allowProposals'] ?? $this->getAllowProposals());
-		$this->setProposalsExpire($array['proposalsExpire'] ?? $this->getProposalsExpire());
-		$this->setVoteLimit($array['voteLimit'] ?? $this->getVoteLimit());
-		$this->setOptionLimit($array['optionLimit'] ?? $this->getOptionLimit());
-		$this->setShowResults($array['showResults'] ?? $this->getShowResults());
-		$this->setDeleted($array['deleted'] ?? $this->getDeleted());
 		$this->setAdminAccess($array['adminAccess'] ?? $this->getAdminAccess());
-		$this->setImportant($array['important'] ?? $this->getImportant());
-		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
-		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
+		$this->setAnonymous($array['anonymous'] ?? $this->getAnonymous());
 		$this->setAutoReminder($array['autoReminder'] ?? $this->getAutoReminder());
+		$this->setDescription($array['description'] ?? $this->getDescription());
+		$this->setDeleted($array['deleted'] ?? $this->getDeleted());
+		$this->setExpire($array['expire'] ?? $this->getExpire());
+		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
+		$this->setImportant($array['important'] ?? $this->getImportant());
+		$this->setOptionLimit($array['optionLimit'] ?? $this->getOptionLimit());
+		$this->setProposalsExpire($array['proposalsExpire'] ?? $this->getProposalsExpire());
+		$this->setShowResults($array['showResults'] ?? $this->getShowResults());
+		$this->setTitle($array['title'] ?? $this->getTitle());
+		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
+		$this->setVoteLimit($array['voteLimit'] ?? $this->getVoteLimit());
 		return $this;
 	}
 
@@ -277,21 +280,21 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return [];
 	}
 
-	public function getTimeToDeadline(int $time = 0): ?int {
+	public function getTimeToDeadline(int $time = 0): int {
 		if ($time === 0) {
 			$time = time();
 		}
+
 		$deadline = $this->getDeadline();
-		if (
-			$deadline - $this->getCreated() > self::FIVE_DAYS
+		
+		if ($deadline - $this->getCreated() > self::FIVE_DAYS
 			&& $deadline - $time < self::TWO_DAYS
 			&& $deadline > $time
 		) {
 			return self::TWO_DAYS;
 		}
 
-		if (
-			$deadline - $this->getCreated() > self::TWO_DAYS
+		if ($deadline - $this->getCreated() > self::TWO_DAYS
 			&& $deadline - $time < self::ONE_AND_HALF_DAY
 			&& $deadline > $time
 		) {
@@ -300,7 +303,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		throw new NoDeadLineException();
 	}
 
-	public function getDeadline(): ?int {
+	public function getDeadline(): int {
 		if ($this->getExpire()) {
 			return $this->getExpire();
 		}

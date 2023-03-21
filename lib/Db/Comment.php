@@ -42,6 +42,7 @@ use JsonSerializable;
 class Comment extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_comments';
 
+	public $id = null;
 	protected array $subComments = [];
 	protected int $pollId = 0;
 	protected string $userId = '';

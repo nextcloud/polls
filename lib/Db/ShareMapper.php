@@ -115,11 +115,7 @@ class ShareMapper extends QBMapper {
 	/**
 	 * Returns a fake share in case of deleted shares
 	 */
-	public function getReplacement(int $pollId, string $userId): ?Share {
-		if (!$userId) {
-			return null;
-		}
-
+	public function getReplacement(int $pollId, string $userId): Share {
 		$share = new Share;
 		$share->setUserId($userId);
 		$share->setPollId($pollId);

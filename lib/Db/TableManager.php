@@ -31,59 +31,20 @@ use OCP\IDBConnection;
 use OCP\IConfig;
 
 class TableManager {
-	/** @var IConfig */
-	private $config;
-	
-	/** @var IDBConnection */
-	protected $connection;
-
-	/** @var Schema */
-	private $schema;
-	
-	/** @var string */
-	private $dbPrefix;
-
-	/** @var LogMapper */
-	private $logMapper;
-
-	/** @var OptionMapper */
-	private $optionMapper;
-
-	/** @var PreferencesMapper */
-	private $preferencesMapper;
-
-	/** @var ShareMapper */
-	private $shareMapper;
-
-	/** @var SubscriptionMapper */
-	private $subscriptionMapper;
-
-	/** @var VoteMapper */
-	private $voteMapper;
-
-	/** @var WatchMapper */
-	private $watchMapper;
+	private Schema $schema;
+	private string $dbPrefix;
 
 	public function __construct(
-		IConfig $config,
-		IDBConnection $connection,
-		LogMapper $logMapper,
-		OptionMapper $optionMapper,
-		PreferencesMapper $preferencesMapper,
-		ShareMapper $shareMapper,
-		SubscriptionMapper $subscriptionMapper,
-		VoteMapper $voteMapper,
-		WatchMapper $watchMapper
+		private IConfig $config,
+		private IDBConnection $connection,
+		private LogMapper $logMapper,
+		private OptionMapper $optionMapper,
+		private PreferencesMapper $preferencesMapper,
+		private ShareMapper $shareMapper,
+		private SubscriptionMapper $subscriptionMapper,
+		private VoteMapper $voteMapper,
+		private WatchMapper $watchMapper
 	) {
-		$this->config = $config;
-		$this->connection = $connection;
-		$this->logMapper = $logMapper;
-		$this->optionMapper = $optionMapper;
-		$this->preferencesMapper = $preferencesMapper;
-		$this->shareMapper = $shareMapper;
-		$this->subscriptionMapper = $subscriptionMapper;
-		$this->voteMapper = $voteMapper;
-		$this->watchMapper = $watchMapper;
 		$this->schema = $this->connection->createSchema();
 		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
@@ -95,11 +56,16 @@ class TableManager {
 		$this->connection->migrateToSchema($this->schema);
 	}
 
-	public function refreshSchema() {
+	public function refreshSchema(): void {
 		$this->schema = $this->connection->createSchema();
 	}
 
-	public function resetWatch() {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return non-empty-list<string>
+	 */
+	public function resetWatch(): array {
 		$messages = [];
 		$tableName = $this->dbPrefix . Watch::TABLE;
 		$columns = TableSchema::TABLES[Watch::TABLE];
@@ -123,7 +89,12 @@ class TableManager {
 		return $messages;
 	}
 
-	public function createTables() {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return non-empty-list<string>
+	 */
+	public function createTables(): array {
 		$messages = [];
 		
 		foreach (TableSchema::TABLES as $tableName => $columns) {
@@ -168,6 +139,7 @@ class TableManager {
 	 */
 	public function removeObsoleteTables(): array {
 		$dropped = false;
+		$messages = [];
 
 		foreach (TableSchema::GONE_TABLES as $tableName) {
 			// $tableName = $this->dbPrefix . $tableName;
@@ -251,6 +223,7 @@ class TableManager {
 
 	public function deleteDuplicates(): array {
 		$messages = [];
+		$count = [];
 
 		if ($this->schema->hasTable($this->dbPrefix . Poll::TABLE)) {
 			$this->removeOrphaned();

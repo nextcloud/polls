@@ -37,6 +37,9 @@ class GroupDeletedListener extends BaseListener {
 	}
 
 	protected function addCronJob() : void {
+		if (!($this->event instanceof GroupDeletedEvent)) {
+			return;
+		}
 		$this->jobList->add(GroupDeletedJob::class, ['group' => $this->event->getGroup()->getGID()]);
 	}
 }

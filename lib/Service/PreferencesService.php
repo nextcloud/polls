@@ -27,14 +27,17 @@ use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IUserSession;
 
 class PreferencesService {
 	private Preferences $preferences;
+	private string $userId;
 
 	public function __construct(
-		private ?string $userId,
 		private PreferencesMapper $preferencesMapper,
+		private IUserSession $userSession,
 	) {
+		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
 		$this->preferences = new Preferences;
 		$this->load();
 	}

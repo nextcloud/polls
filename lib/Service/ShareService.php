@@ -51,10 +51,10 @@ use Psr\Log\LoggerInterface;
 class ShareService {
 	/** @var Share[] **/
 	private array $shares;
-	
+	private string $userId;
+
 	public function __construct(
 		private LoggerInterface $logger,
-		private ?string $userId,
 		private IEventDispatcher $eventDispatcher,
 		private IGroupManager $groupManager,
 		private ISecureRandom $secureRandom,
@@ -68,6 +68,7 @@ class ShareService {
 		private UserService $userService,
 	) {
 		$this->shares = [];
+		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
 	}
 
 	/**
@@ -109,7 +110,7 @@ class ShareService {
 				// for this user and return the created share instead of the public share
 				return $this->createNewShare(
 					$this->share->getPollId(),
-					$this->userService->getUser(Share::TYPE_USER, $this->userSession->getUser()->getUID()),
+					$this->userService->getUser(Share::TYPE_USER, $this->userId),
 					true
 				);
 			}

@@ -24,12 +24,9 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Db\Poll;
 
 class AnonymizeService {
 	private array $anonList;
@@ -88,26 +85,6 @@ class AnonymizeService {
 				$this->anonList[$element->getUserId()] = 'Anonymous ' . ++$i;
 			}
 		}
-		return;
-	}
-
-	public static function replaceUserId(&$arrayOrObject, string $userId) : void {
-		if (is_array($arrayOrObject)) {
-			foreach ($arrayOrObject as $item) {
-				if ($item->getUserId() === $userId) {
-					continue;
-				}
-				$item->generateHashedUserId();
-			}
-			return;
-		}
-
-		if ($arrayOrObject->getUserId() === $userId) {
-			return;
-		}
-
-		$arrayOrObject->generateHashedUserId();
-
 		return;
 	}
 }

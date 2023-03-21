@@ -26,10 +26,17 @@ namespace OCA\Polls\Command\Db;
 use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
+use Symfony\Component\Console\Input\InputInterface;
+use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Rebuild extends Command {
-	protected string $name = self::NAME_PREFIX . 'db:rebuild';
+	protected string $name = parent::NAME_PREFIX . 'db:rebuild';
 	protected string $description = 'Rebuilds poll\'s table structure';
+	protected array $operationHints = [
+		'All polls tables will get checked against the current schema.',
+		'NO data migration will be executed, so make sure you have a backup of your database.',
+	];
 
 	public function __construct(
 		private TableManager $tableManager,
@@ -73,20 +80,6 @@ class Rebuild extends Command {
 		$this->addIndices();
 		$this->indexManager->migrate();
 		
-		return 0;
-	}
-
-	protected function requestConfirmation(): int {
-		if ($this->input->isInteractive()) {
-			$helper = $this->getHelper('question');
-			$this->printComment('All polls tables will get checked against the current schema.');
-			$this->printComment('NO data migration will be executed, so make sure you have a backup of your database.');
-			$this->printNewLine();
-
-			if (!$helper->ask($this->input, $this->output, $this->question)) {
-				return 1;
-			}
-		}
 		return 0;
 	}
 

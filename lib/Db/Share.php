@@ -88,6 +88,7 @@ class Share extends Entity implements JsonSerializable {
 		self::TYPE_CONTACTGROUP,
 	];
 
+	public $id = null;
 	protected IURLGenerator $urlGenerator;
 	protected AppSettings $appSettings;
 	protected int $pollId = 0;
@@ -137,7 +138,7 @@ class Share extends Entity implements JsonSerializable {
 		$this->setMiscSettingsByKey('publicPollEmail', $value);
 	}
 
-	public function getTimeZoneName() : ?string {
+	public function getTimeZoneName() : string {
 		return $this->getMiscSettingsArray()['timeZone'] ?? '';
 	}
 
@@ -145,12 +146,12 @@ class Share extends Entity implements JsonSerializable {
 		$this->setMiscSettingsByKey('timeZone', $value);
 	}
 
-	public function getLanguage(): ?string {
+	public function getLanguage(): string {
 		return $this->getMiscSettingsArray()['language'] ?? '';
 	}
 
 	// Fallback for now; use language as locale
-	public function getLocale(): ?string {
+	public function getLocale(): string {
 		return $this->getLanguage();
 	}
 
