@@ -219,10 +219,8 @@ class PollService {
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
 		$this->poll->setImportant(0);
-		\OC::$server->getLogger()->error(json_encode($this->poll));
 		$this->poll = $this->pollMapper->insert($this->poll);
 
-		\OC::$server->getLogger()->error(json_encode($this->poll));
 		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));
 
 		return $this->poll;
