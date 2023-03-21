@@ -57,7 +57,7 @@ use OCP\IL10N;
 class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
 
-	public $id = 0;
+	public $id = null;
 	protected int $pollId = 0;
 	protected string $owner = '';
 	protected int $released = 0;

@@ -59,7 +59,7 @@ class Log extends Entity implements JsonSerializable {
 	public const MSG_ID_SETVOTE = 'setVote';
 	public const MSG_ID_OWNERCHANGE = 'updateOwner';
 
-	public $id = 0;
+	public $id = null;
 	protected int $pollId = 0;
 	protected int $created = 0;
 	protected int $processed = 0;

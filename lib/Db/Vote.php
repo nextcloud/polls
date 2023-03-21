@@ -46,7 +46,7 @@ use JsonSerializable;
 class Vote extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_votes';
 
-	public $id = 0;
+	public $id = null;
 	protected int $pollId = 0;
 	protected string $userId = '';
 	protected int $voteOptionId = 0;

@@ -101,7 +101,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	private IURLGenerator $urlGenerator;
 	private OptionMapper $optionMapper;
 
-	public $id = 0;
+	public $id = null;
 	protected string $type = '';
 	protected string $title = '';
 	protected ?string $description = '';
@@ -157,7 +157,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'autoReminder' => $this->getAutoReminder(),
 			'created' => $this->getCreated(),
 			'deleted' => $this->getDeleted(),
-			'description' => $this->getDescription(),
+			'description' => $this->getDescription() ?? '',
 			'descriptionSafe' => $this->getDescriptionSafe(),
 			'expire' => $this->getExpire(),
 			'hideBookedUp' => $this->getHideBookedUp(),

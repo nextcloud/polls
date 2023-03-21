@@ -88,7 +88,7 @@ class Share extends Entity implements JsonSerializable {
 		self::TYPE_CONTACTGROUP,
 	];
 
-	public $id = 0;
+	public $id = null;
 	protected IURLGenerator $urlGenerator;
 	protected AppSettings $appSettings;
 	protected int $pollId = 0;
