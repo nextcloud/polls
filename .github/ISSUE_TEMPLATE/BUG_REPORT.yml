@@ -171,6 +171,8 @@ body:
         - "Nextcloud 23 (Nextcloud Hub 1)"
         - "Nextcloud 24 (Nextcloud Hub 2)"
         - "Nextcloud 25 (Nextcloud Hub 3)"
+        - "Nextcloud 26 (Nextcloud Hub 4)"
+        - "Nextcloud 27 (Nextcloud Hub 5)"
         - "Other/Don't know"
     validations:
       required: true
