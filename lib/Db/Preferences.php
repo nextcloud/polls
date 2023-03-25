@@ -39,10 +39,22 @@ use OCP\AppFramework\Db\Entity;
 class Preferences extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_preferences';
 
+	public const DEFAULT = [
+		'useCommentsAlternativeStyling' => false,
+		'calendarPeek' => true,
+		'checkCalendars' => [],
+		'checkCalendarsBefore' => 0,
+		'checkCalendarsAfter' => 0,
+		'defaultViewTextPoll' => 'table-view',
+		'defaultViewDatePoll' => 'table-view',
+		'performanceThreshold' => 1000,
+		'pollCombo' => []
+	];
+
 	public $id = 0;
 	protected string $userId = '';
 	protected int $timestamp = 0;
-	protected string $preferences = '';
+	protected ?string $preferences = '';
 
 	public function __construct() {
 		$this->addType('timestamp', 'int');
@@ -70,7 +82,7 @@ class Preferences extends Entity implements JsonSerializable {
 			'id' => $this->getId(),
 			'userId' => $this->getUserId(),
 			'timestamp' => $this->getTimestamp(),
-			'preferences' => json_decode($this->preferences),
+			'preferences' => json_decode($this->preferences) ?? '',
 		];
 	}
 }

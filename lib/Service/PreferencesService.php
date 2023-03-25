@@ -49,7 +49,8 @@ class PreferencesService {
 			if ($this->userId) {
 				$this->preferences = new Preferences();
 				$this->preferences->setUserId($this->userId);
-				$this->preferences->setPreferences('');
+				$this->preferences->setTimestamp(time());
+				$this->preferences->setPreferences(json_encode(Preferences::DEFAULT));
 				$this->preferences = $this->preferencesMapper->insert($this->preferences);
 			} else {
 				throw new NotAuthorizedException;
