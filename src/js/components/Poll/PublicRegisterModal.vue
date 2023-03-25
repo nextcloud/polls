@@ -175,10 +175,10 @@ export default {
 				params: { token: this.$route.params.token },
 			}).href
 
-			return generateUrl(
-				'/login',
-				{ redirect_url: redirectUrl },
-			)
+			return `${generateUrl('/login')}?redirect_url=${redirectUrl}`
+
+			// TODO: broken?
+			// return generateUrl('/login', { redirect_url: redirectUrl })
 		},
 
 		userNameHint() {
