@@ -178,10 +178,7 @@ export default {
 			return `${generateUrl('/login')}?redirect_url=${redirectUrl}`
 
 			// TODO: broken?
-			// return generateUrl(
-			// 	'/login',
-			// 	{ redirect_url: redirectUrl },
-			// )
+			// return generateUrl('/login', { redirect_url: redirectUrl })
 		},
 
 		userNameHint() {
