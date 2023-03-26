@@ -27,7 +27,7 @@ namespace OCA\Polls\Model\Mail;
 use OCA\Polls\Db\Share;
 
 class InvitationMail extends MailBase {
-	private const TEMPLATE_CLASS = 'polls.Invitation';
+	protected const TEMPLATE_CLASS = 'polls.Invitation';
 
 	public function __construct(
 		protected string $recipientId,

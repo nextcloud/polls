@@ -179,13 +179,13 @@ class ActivityService {
 
 			ShareEvent::CHANGE_EMAIL => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed your email address'),
-				self::THIRD_PERSON_FULL => $this->l10n->t('{sharee} has changed his email address'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{sharee} has changed the email address'),
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have changed your email address'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('Email address of {sharee} has been changed'),
 			],
 			ShareEvent::CHANGE_DISPLAY_NAME => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed your name'),
-				self::THIRD_PERSON_FULL => $this->l10n->t('{sharee} has changed his name'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{sharee} has changed the name'),
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have changed your name'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('Display name of {sharee} has been changed'),
 			],

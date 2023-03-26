@@ -33,7 +33,7 @@ use OCA\Polls\Event\OptionEvent;
 use OCA\Polls\Event\VoteEvent;
 
 class NotificationMail extends MailBase {
-	private const TEMPLATE_CLASS = 'polls.Notification';
+	protected const TEMPLATE_CLASS = 'polls.Notification';
 
 	/** @var Log[] */
 	protected array $log = [];
