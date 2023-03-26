@@ -28,7 +28,7 @@ use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
 
 class ConfirmationMail extends MailBase {
-	private const TEMPLATE_CLASS = 'polls.Confirmation';
+	protected const TEMPLATE_CLASS = 'polls.Confirmation';
 
 	/** @var Option[] */
 	protected array $confirmedOptions;
