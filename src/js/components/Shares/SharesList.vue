@@ -133,12 +133,11 @@
 				</UserItem>
 			</TransitionGroup>
 		</div>
-		<NcModal v-if="qrModal" size="small" :can-close="false">
+		<NcModal v-if="qrModal" size="small" @close="qrModal=false">
 			<QrModal :title="pollTitle"
 				:description="pollDescription"
 				:encode-text="qrText"
-				class="modal__content"
-				@close="closeQrModal()">
+				class="modal__content">
 				<template #description>
 					<MarkUpDescription />
 				</template>
@@ -244,11 +243,6 @@ export default {
 		openQrModal(payload) {
 			this.qrText = payload.url
 			this.qrModal = true
-		},
-
-		closeQrModal() {
-			this.qrText = ''
-			this.qrModal = false
 		},
 	},
 }

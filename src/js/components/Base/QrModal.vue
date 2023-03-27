@@ -31,11 +31,6 @@
 		</div>
 		<h3>{{ subTitle }}</h3>
 		<p />
-		<div class="modal__buttons noprint">
-			<NcButton type="primary" @click="$emit('close')">
-				{{ t('polls', 'Close') }}
-			</NcButton>
-		</div>
 		<p class="qr-url">
 			{{ encodeText }}
 		</p>
@@ -45,14 +40,9 @@
 <script>
 
 import QRCode from 'qrcode'
-import { NcButton } from '@nextcloud/vue'
 
 export default {
 	name: 'QrModal',
-
-	components: {
-		NcButton,
-	},
 
 	props: {
 		title: {
@@ -81,9 +71,11 @@ export default {
 			},
 		}
 	},
+
 	created() {
 		this.generateQr()
 	},
+
 	methods: {
 		async generateQr() {
 			try {
