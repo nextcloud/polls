@@ -144,22 +144,23 @@ class VoteService {
 	public function delete(int $pollId = 0, string $userId = '', ?Acl $acl = null): string {
 		if ($acl) {
 			$this->acl = $acl;
-			$userId = $this->acl->getUserId();
 			$pollId = $this->acl->getPollId();
 		} else {
 			$this->acl->setPollId($pollId);
 		}
-
+		
+		// if no user id is given, reset votes of current user
 		if (!$userId) {
 			$userId = $this->acl->getUserId();
 		} else {
+			// otherwise edit rights must exist
 			$this->acl->request(Acl::PERMISSION_POLL_EDIT);
 		}
-
+		
 		if (!$pollId) {
 			throw new InvalidPollIdException('Poll id is missing');
 		}
-
+		
 		// fake a vote so that the event can be triggered
 		// suppress logging of this action
 		$this->vote = new Vote();
