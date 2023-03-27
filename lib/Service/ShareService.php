@@ -32,7 +32,7 @@ use OCA\Polls\Event\ShareChangedEmailEvent;
 use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
 use OCA\Polls\Event\ShareDeletedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
-use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\NotFoundException;
@@ -82,7 +82,7 @@ class ShareService {
 		try {
 			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 			$this->shares = $this->shareMapper->findByPoll($pollId);
-		} catch (NotAuthorizedException $e) {
+		} catch (ForbiddenException $e) {
 			return [];
 		} catch (DoesNotExistException $e) {
 			return [];
@@ -105,7 +105,7 @@ class ShareService {
 			try {
 				// Check, if he is already authorized for this poll
 				$this->acl->setPollId($this->share->getPollId());
-			} catch (NotAuthorizedException $e) {
+			} catch (ForbiddenException $e) {
 				// If he is not authorized for this poll, create a personal share
 				// for this user and return the created share instead of the public share
 				return $this->createNewShare(
@@ -257,7 +257,7 @@ class ShareService {
 			$this->share->setEmailAddress($emailAddress);
 			$this->shareMapper->update($this->share);
 		} else {
-			throw new NotAuthorizedException;
+			throw new ForbiddenException('Share does not allow registering for poll');
 		}
 
 		// send invitation mail, if invitationSent has no timestamp
@@ -402,13 +402,14 @@ class ShareService {
 	 */
 	private function validateShareType(): void {
 		$currentUser = $this->userService->getCurrentUser();
+		$declineMessage = 'User is not allowed to use this share for poll access (' . $this->share->getType() . ')';
 
 		match ($this->share->getType()) {
 			Share::TYPE_PUBLIC,	Share::TYPE_EMAIL, Share::TYPE_EXTERNAL => true,
-			Share::TYPE_USER => $this->share->getUserId() === $currentUser->getId() ? true : throw new NotAuthorizedException,
-			Share::TYPE_ADMIN => $this->share->getUserId() === $currentUser->getId() ? true : throw new NotAuthorizedException,
-			Share::TYPE_GROUP => $currentUser->getIsLoggedIn() || $this->groupManager->isInGroup($this->share->getUserId(), $this->userId) ? true : throw new NotAuthorizedException,
-			default => throw new NotAuthorizedException('Invalid share type ' . $this->share->getType()),
+			Share::TYPE_USER => $this->share->getUserId() === $currentUser->getId() ? true : throw new ForbiddenException($declineMessage),
+			Share::TYPE_ADMIN => $this->share->getUserId() === $currentUser->getId() ? true : throw new ForbiddenException($declineMessage),
+			Share::TYPE_GROUP => $currentUser->getIsLoggedIn() || $this->groupManager->isInGroup($this->share->getUserId(), $this->userId) ? true : throw new ForbiddenException($declineMessage),
+			default => throw new ForbiddenException('Invalid share type ' . $this->share->getType()),
 		};
 	}
 
