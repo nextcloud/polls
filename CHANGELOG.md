@@ -6,6 +6,7 @@ All notable changes to this project will be documented in this file.
  - Added qr code for public shares
 ### Changes
  - PHP 8.0 as minimum requirement
+ - Shorten public tokens to 8 characters (lower and upper characters and digits)
  
 ## [4.1.5] - 2023-02-25
 ### Fix
