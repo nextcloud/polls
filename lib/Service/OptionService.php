@@ -36,9 +36,9 @@ use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\DuplicateEntryException;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidOptionPropertyException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Model\Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
@@ -212,7 +212,7 @@ class OptionService {
 		}
 
 		if ($this->option->getPollId() !== $this->acl->getPollid()) {
-			throw new NotAuthorizedException();
+			throw new ForbiddenException('Trying to delete an option with foreign poll id');
 		}
 
 		if ($this->option->getOwner() !== $this->acl->getUserId()) {

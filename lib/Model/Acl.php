@@ -25,7 +25,6 @@
 namespace OCA\Polls\Model;
 
 use JsonSerializable;
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
@@ -33,6 +32,8 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Exceptions\ForbiddenException;
+use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -92,14 +93,14 @@ class Acl implements JsonSerializable {
 			$this->share = $this->shareMapper->findByToken($token);
 
 			if ($pollIdToValidate && $this->share->getPollId() !== $pollIdToValidate) {
-				throw new NotAuthorizedException;
+				throw new ForbiddenException('Share is not allowed accessing this poll');
 			}
 
 			$this->poll = $this->pollMapper->find($this->share->getPollId());
 			$this->validateShareAccess();
 			$this->request($permission);
 		} catch (ShareNotFoundException $e) {
-			throw new NotAuthorizedException('Error loading share ' . $token);
+			throw new NotFoundException('Error loading share ' . $token);
 		}
 
 		return $this;
@@ -114,7 +115,7 @@ class Acl implements JsonSerializable {
 			$this->poll = $this->pollMapper->find($pollId);
 			$this->request($permission);
 		} catch (DoesNotExistException $e) {
-			throw new NotAuthorizedException('Error loading poll with id ' . $pollId);
+			throw new NotFoundException('Error loading poll with id ' . $pollId);
 		}
 
 		return $this;
@@ -142,14 +143,14 @@ class Acl implements JsonSerializable {
 
 	public function validateUserId(string $userId): bool {
 		if ($this->getUserId() !== $userId) {
-			throw new NotAuthorizedException;
+			throw new ForbiddenException('User id does not match.');
 		}
 		return true;
 	}
 
 	public function validatePollId(int $pollId): bool {
 		if ($this->getPollId() !== $pollId) {
-			throw new NotAuthorizedException;
+			throw new ForbiddenException('Poll id does not match.');
 		}
 		return true;
 	}
@@ -187,7 +188,7 @@ class Acl implements JsonSerializable {
 
 	public function request(string $permission): void {
 		if (!$this->getIsAllowed($permission)) {
-			throw new NotAuthorizedException('denied permission ' . $permission);
+			throw new ForbiddenException('denied permission ' . $permission);
 		}
 	}
 
@@ -348,10 +349,10 @@ class Acl implements JsonSerializable {
 
 	private function validateShareAccess(): void {
 		if ($this->getIsLoggedIn() && !$this->getIsShareValidForUsers()) {
-			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '" is only valid for guests');
+			throw new ForbiddenException('Share type "' . $this->share->getType() . '" is only valid for guests');
 		}
 		if (!$this->getIsShareValidForGuests()) {
-			throw new NotAuthorizedException('Share type "' . $this->share->getType() . '" is only valid for registered users');
+			throw new ForbiddenException('Share type "' . $this->share->getType() . '" is only valid for registered users');
 		};
 	}
 

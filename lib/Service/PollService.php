@@ -34,10 +34,10 @@ use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
 use OCA\Polls\Exceptions\EmptyTitleException;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
-use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -83,7 +83,7 @@ class PollService {
 						(array) json_decode(json_encode($poll)),
 						(array) json_decode(json_encode($this->acl))
 					);
-				} catch (NotAuthorizedException $e) {
+				} catch (ForbiddenException $e) {
 					continue;
 				}
 			}
@@ -106,7 +106,7 @@ class PollService {
 					$this->acl->setPollId($poll->getId());
 					// TODO: Not the elegant way. Improvement neccessary
 					$pollList[] = $poll;
-				} catch (NotAuthorizedException $e) {
+				} catch (ForbiddenException $e) {
 					continue;
 				}
 			}
@@ -192,7 +192,7 @@ class PollService {
 	 */
 	public function add(string $type, string $title): Poll {
 		if (!$this->appSettings->getPollCreationAllowed()) {
-			throw new NotAuthorizedException;
+			throw new ForbiddenException('Poll creation is disabled');
 		}
 
 		// Validate valuess
