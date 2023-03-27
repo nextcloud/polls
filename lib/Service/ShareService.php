@@ -422,12 +422,30 @@ class ShareService {
 		string $timeZone = ''
 	): Share {
 		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
-		$token = $this->secureRandom->generate(
-			16,
-			ISecureRandom::CHAR_DIGITS .
-				ISecureRandom::CHAR_LOWER .
-				ISecureRandom::CHAR_UPPER
-		);
+
+		$token = null;
+		$loopCounter = 0;
+		// Generate a unique id
+		while (!$token) {
+			$loopCounter++;
+			$token = $this->secureRandom->generate(
+				8,
+				ISecureRandom::CHAR_DIGITS .
+					ISecureRandom::CHAR_LOWER .
+					ISecureRandom::CHAR_UPPER
+			);
+			try {
+				$this->shareMapper->findByToken($token);
+				// reset token, if it already exists
+				$token = null;
+			} catch (ShareNotFoundException) {
+				$loopCounter = 0;
+			}
+			if ($loopCounter > 10) {
+				// In case of uninspected situations, avoid an endless loop
+				throw new \Exception('Unexpected loop count while trying to create a token for a new share');
+			}
+		}
 
 		$this->share = new Share();
 		$this->share->setToken($token);
