@@ -71,7 +71,6 @@ abstract class MailBase {
 		$this->poll = $this->getPoll($pollId);
 		$this->recipient = $this->getUser($recipientId);
 		$this->url = $url === '' ? $this->poll->getVoteUrl() : '';
-		$this->emailTemplate = Container::queryClass(IEMailTemplate::class);
 		$this->initializeClass();
 	}
 
