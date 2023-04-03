@@ -71,8 +71,10 @@ abstract class MailBase {
 		$this->poll = $this->getPoll($pollId);
 		$this->recipient = $this->getUser($recipientId);
 		$this->url = $url === '' ? $this->poll->getVoteUrl() : '';
-		$this->emailTemplate = Container::queryClass(IEMailTemplate::class);
+		// There is no service providing this interface class:
+		// $this->emailTemplate = Container::queryClass(IEMailTemplate::class);
 		$this->initializeClass();
+		$this->emailTemplate = $this->getEmailTemplate();
 	}
 
 	public function send(): void {
