@@ -336,7 +336,7 @@ OC.L10N.register(
     "The name {username} is invalid or reserved." : "Der Name {username} is ungültig oder reserviert",
     "An email address is required." : "Eine E-Mail Adresse ist erforderlich",
     "You will receive your personal link after clicking \"OK\"." : "Nach einem Klick auf „OK“ erhältst du deinen persönlichen Link.",
-    "Enter your email address to get your personal access link." : "Gebe deine E-Mail-Adresse ein, um swinwn persönlichen Zugangslink zu erhalten.",
+    "Enter your email address to get your personal access link." : "Gebe deine E-Mail-Adresse ein, um einen persönlichen Zugangslink zu erhalten.",
     "Email could not be sent to {emailAddress}" : "E-Mail konnt nicht an {emailAddress} gesendet werden",
     "Error registering to poll" : "Fehler bei der Registrierung für die Umfrage",
     "Access" : "Zugriff",
