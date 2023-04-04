@@ -33,6 +33,7 @@ OC.L10N.register(
     "Link copied to clipboard" : "Ligação copiada para a área de transferência",
     "Description" : "Descrição",
     "Change name" : "Alterar nome",
+    "Email options" : "Opções de e-mail",
     "Yes" : "Sim",
     "Administration" : "Administração",
     "Details" : "Detalhes",
