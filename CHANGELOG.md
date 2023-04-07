@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [5.0.0] - tbd
+## [5.0.0] - 2023-04-07
  ### New
  - Added qr code for public shares
 ### Changes
