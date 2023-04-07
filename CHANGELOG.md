@@ -6,13 +6,24 @@ All notable changes to this project will be documented in this file.
  - Added qr code for public shares
 ### Changes
  - PHP 8.0 as minimum requirement
- - Shorten public tokens to 8 characters (lower and upper characters and digits)
- 
-## [4.1.5] - 2023-02-25
+ - Shorten public tokens to 8 characters (lower and upper characters and digits) 
+
+## [4.1.8] - 2023-03-03
+### Fix
+ - Fix Error on poll creation `General error: 1364 The field 'description' has no default value.`
+
+## [4.1.7] - 2023-03-02
+### Fix
+ - Fix invitation mails for guest users
+
+## [4.1.6] - 2023-02-27
+### Fix
+ - Removed trailing comma in rebuild command## [4.1.5] - 2023-02-25
 ### Fix
  - Fix disappeared option add button after change in the nextcloud-vue lib
  ### Changes
  - Changed option owner column to notnull
+
 ## [4.1.4] - 2023-02-23
 ### Fix
  - Fix infinite updates call, if no polling type for watches were set (avoid server spamming) (v4.1.3)
