@@ -65,7 +65,7 @@ class UserBase implements \JsonSerializable {
 		protected string $id,
 		protected string $type,
 		protected string $displayName = '',
-		protected string $emailAddress = '',
+		protected ?string $emailAddress = '',
 		protected string $languageCode = '',
 		protected string $localeCode = '',
 		protected string $timeZoneName = '',
@@ -124,14 +124,14 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getEmailAddress(): string {
-		return $this->emailAddress;
-		// return $this->emailAddress ?? '';
+		// return $this->emailAddress;
+		return $this->emailAddress ?? '';
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
 	public function getEmailAddressMasked(): string {
-		return $this->emailAddress;
-		// return $this->emailAddress ?? '';
+		// return $this->emailAddress;
+		return $this->emailAddress ?? '';
 	}
 
 	public function getOrganisation(): string {

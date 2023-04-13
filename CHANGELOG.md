@@ -1,8 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.0.1] - 2023-04-07
+### Fix
+ - Polls cannot be edited when user has no mail address
+ 
 ## [5.0.0] - 2023-04-07
- ### New
+### New
  - Added qr code for public shares
 ### Changes
  - PHP 8.0 as minimum requirement
