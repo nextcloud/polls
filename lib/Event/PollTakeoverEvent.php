@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Notification\Notifier;
 
 class PollTakeoverEvent extends PollOwnerChangeEvent {
 	public function __construct(

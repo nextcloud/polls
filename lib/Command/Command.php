@@ -24,9 +24,9 @@
 
 namespace OCA\Polls\Command;
 
+use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Exception\LogicException;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Command extends \Symfony\Component\Console\Command\Command {

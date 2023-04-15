@@ -25,10 +25,10 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 
+use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\Entity;
 use OCP\IURLGenerator;
-use OCA\Polls\Model\Settings\AppSettings;
-use OCA\Polls\Helper\Container;
 
 /**
  * @method int getId()

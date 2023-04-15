@@ -3,8 +3,8 @@
 namespace OCA\Polls\Middleware;
 
 use OCP\AppFramework\Middleware;
-use OCP\ISession;
 use OCP\IRequest;
+use OCP\ISession;
 
 class RequestAttributesMiddleware extends Middleware {
 	private const CLIENT_ID_KEY = 'Nc-Polls-Client-Id';

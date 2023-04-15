@@ -25,8 +25,8 @@
 
 namespace OCA\Polls\Service;
 
-use DateTime;
 use DateInterval;
+use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use OCA\Polls\Db\OptionMapper;

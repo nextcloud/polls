@@ -23,13 +23,13 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\IUserSession;
+use OCA\Polls\Service\CalendarService;
+use OCA\Polls\Service\PreferencesService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
-use OCA\Polls\Service\PreferencesService;
-use OCA\Polls\Service\CalendarService;
+use OCP\IRequest;
 use OCP\ISession;
+use OCP\IUserSession;
 
 class PreferencesController extends BaseController {
 	public function __construct(

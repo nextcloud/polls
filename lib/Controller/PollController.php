@@ -23,14 +23,14 @@
 
 namespace OCA\Polls\Controller;
 
-use OCP\IRequest;
-use OCP\AppFramework\Http\JSONResponse;
-
-use OCA\Polls\Service\PollService;
-use OCA\Polls\Service\OptionService;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+
 use OCA\Polls\Service\MailService;
+use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\PollService;
+use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
 use OCP\ISession;
 
 class PollController extends BaseController {

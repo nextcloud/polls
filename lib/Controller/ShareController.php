@@ -24,13 +24,13 @@
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Share;
-use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
+use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\UserService;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\ISession;
 use OCP\IRequest;
+use OCP\ISession;
 
 class ShareController extends BaseController {
 	public function __construct(

@@ -24,19 +24,19 @@
 
 namespace OCA\Polls\Migration\RepairSteps;
 
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\WatchMapper;
-use OCP\IDBConnection;
 use OCP\IConfig;
-use OCP\Migration\IRepairStep;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
+use OCP\Migration\IRepairStep;
 
 /**
  * Preparation before migration

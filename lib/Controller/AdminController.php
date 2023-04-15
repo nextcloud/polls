@@ -26,8 +26,8 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
-use OCP\ISession;
 use OCP\IRequest;
+use OCP\ISession;
 use OCP\IURLGenerator;
 
 class AdminController extends BaseController {

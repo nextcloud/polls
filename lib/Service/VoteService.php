@@ -23,10 +23,10 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Option;
-use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Exceptions\InvalidPollIdException;
 use OCA\Polls\Exceptions\VoteLimitExceededException;

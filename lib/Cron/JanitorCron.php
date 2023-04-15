@@ -23,12 +23,12 @@
 
 namespace OCA\Polls\Cron;
 
-use OCP\BackgroundJob\TimedJob;
-use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 
 class JanitorCron extends TimedJob {
 	private AppSettings $appSettings;

@@ -30,14 +30,14 @@ use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
-use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\SystemService;
+use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\AppFramework\Http\TemplateResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
-use OCP\ISession;
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
+use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 

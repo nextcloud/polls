@@ -23,20 +23,20 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Event\ShareChangedDisplayNameEvent;
-use OCA\Polls\Event\ShareCreateEvent;
-use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
 use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
+use OCA\Polls\Event\ShareCreateEvent;
 use OCA\Polls\Event\ShareDeletedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
+use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
-use OCA\Polls\Exceptions\ShareAlreadyExistsException;
-use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
+use OCA\Polls\Exceptions\NotFoundException;
+use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\UserBase;

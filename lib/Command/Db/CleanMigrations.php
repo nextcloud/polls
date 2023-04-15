@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Command\Db;
 
-use OCA\Polls\Db\TableManager;
 use OCA\Polls\Command\Command;
+use OCA\Polls\Db\TableManager;
 
 class CleanMigrations extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:clean-migrations';

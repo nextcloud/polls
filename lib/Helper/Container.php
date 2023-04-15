@@ -24,12 +24,12 @@
 
 namespace OCA\Polls\Helper;
 
-use OCP\AppFramework\App;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCP\App\IAppManager;
+use OCP\AppFramework\App;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
 use Psr\Container\ContainerInterface;

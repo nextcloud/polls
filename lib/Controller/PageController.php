@@ -24,12 +24,12 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Service\NotificationService;
+use OCP\AppFramework\Controller;
+
+use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 use OCP\IURLGenerator;
-
-use OCP\AppFramework\Controller;
-use OCP\AppFramework\Http\TemplateResponse;
-use OCA\Polls\Service\NotificationService;
 
 class PageController extends Controller {
 	public function __construct(

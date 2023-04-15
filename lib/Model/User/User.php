@@ -27,8 +27,8 @@ use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
 use OCP\IConfig;
-use OCP\IUserManager;
 use OCP\IUser;
+use OCP\IUserManager;
 
 class User extends UserBase {
 	public const TYPE = 'user';

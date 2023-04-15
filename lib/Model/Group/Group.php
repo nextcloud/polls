@@ -26,8 +26,8 @@ namespace OCA\Polls\Model\Group;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\User;
 use OCA\Polls\Model\UserBase;
-use OCP\IGroupManager;
 use OCP\IGroup;
+use OCP\IGroupManager;
 
 class Group extends UserBase {
 	public const TYPE = 'group';

@@ -24,9 +24,9 @@
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\AppFramework\Db\QBMapper;
 use OCP\Search\ISearchQuery;
 
 /**

@@ -27,9 +27,9 @@ use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\SubscriptionService;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\AppFramework\Http;
 
 class SubscriptionApiController extends BaseApiController {
 	public function __construct(

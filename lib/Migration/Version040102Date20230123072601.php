@@ -28,8 +28,8 @@ use OCA\Polls\Db\TableManager;
 use OCP\DB\ISchemaWrapper;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\Migration\SimpleMigrationStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\SimpleMigrationStep;
 
 /**
  * Installation class for the polls app.
