@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Model\Group;
 
-use OCA\Polls\Helper\Container;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
+use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\UserBase;
 use OCP\Contacts\IManager as IContactsManager;

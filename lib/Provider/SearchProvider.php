@@ -26,9 +26,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Provider;
 
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Search\PollsSearchResultEntry;
 use OCA\Polls\Service\PollService;
-use OCA\Polls\Db\Poll;
 use OCP\IL10N;
 use OCP\IUser;
 use OCP\Search\IProvider;

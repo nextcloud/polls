@@ -26,8 +26,8 @@ namespace OCA\Polls\Db;
 
 use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Migration\TableSchema;
-use OCP\IDBConnection;
 use OCP\IConfig;
+use OCP\IDBConnection;
 
 class IndexManager {
 	private Schema $schema;

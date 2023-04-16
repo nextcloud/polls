@@ -24,13 +24,13 @@
 
 namespace OCA\Polls\Cron;
 
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\BackgroundJob\QueuedJob;
-use OCP\Security\ISecureRandom;
-use Psr\Log\LoggerInterface;
-
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\QueuedJob;
+
+use OCP\Security\ISecureRandom;
+use Psr\Log\LoggerInterface;
 
 class GroupDeletedJob extends QueuedJob {
 	public function __construct(

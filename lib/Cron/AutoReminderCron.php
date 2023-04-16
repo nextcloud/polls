@@ -23,9 +23,9 @@
 
 namespace OCA\Polls\Cron;
 
-use OCP\BackgroundJob\TimedJob;
-use OCP\AppFramework\Utility\ITimeFactory;
 use OCA\Polls\Service\MailService;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\TimedJob;
 
 class AutoReminderCron extends TimedJob {
 	public function __construct(

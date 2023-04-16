@@ -24,15 +24,15 @@
 
 namespace OCA\Polls\Notification;
 
-use OCP\AppFramework\Db\DoesNotExistException;
+use OCA\Polls\Db\PollMapper;
 
+use OCA\Polls\Service\NotificationService;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IURLGenerator;
 use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Service\NotificationService;
 
 class Notifier implements INotifier {
 	public const NOTIFY_POLL_DELETED_BY_OTHER = 'deletePollByOther';

@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Notification\Notifier;
 
 class PollArchivedEvent extends PollEvent {
 	public function __construct(

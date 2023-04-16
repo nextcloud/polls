@@ -25,8 +25,8 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
-use OCP\IRequest;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\IRequest;
 
 class CommentApiController extends BaseApiController {
 	public function __construct(

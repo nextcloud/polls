@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Db;
 
-use OCP\IDBConnection;
 use OCP\AppFramework\Db\QBMapper;
+use OCP\IDBConnection;
 use OCP\ISession;
 
 /**

@@ -23,10 +23,10 @@
 
 namespace OCA\Polls\Listener;
 
-use OCP\User\Events\UserDeletedEvent;
 use OCA\Polls\Cron\UserDeletedJob;
 use OCA\Polls\Exceptions\InvalidClassException;
 use OCA\Polls\Exceptions\OCPEventException;
+use OCP\User\Events\UserDeletedEvent;
 
 class UserDeletedListener extends BaseListener {
 	protected function checkClass() : void {

@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Model\User;
 
-use OCP\IUserSession;
 use OCA\Polls\Helper\Container;
+use OCP\IUserSession;
 
 class CurrentUser extends User {
 	public function __construct() {

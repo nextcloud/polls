@@ -23,9 +23,9 @@
 
 namespace OCA\Polls\Command\Db;
 
-use OCA\Polls\Db\TableManager;
-use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
+use OCA\Polls\Db\IndexManager;
+use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Migration\TableSchema;
 

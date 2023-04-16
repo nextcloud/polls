@@ -24,9 +24,9 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\VoteMapper;
 
 class AnonymizeService {
 	private array $anonList;

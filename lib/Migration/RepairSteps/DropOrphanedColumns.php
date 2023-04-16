@@ -25,8 +25,8 @@
 namespace OCA\Polls\Migration\RepairSteps;
 
 use OCA\Polls\Db\TableManager;
-use OCP\Migration\IRepairStep;
 use OCP\Migration\IOutput;
+use OCP\Migration\IRepairStep;
 
 class DropOrphanedColumns implements IRepairStep {
 	public function __construct(

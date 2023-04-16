@@ -25,20 +25,20 @@
 namespace OCA\Polls\Model;
 
 use JsonSerializable;
-use OCA\Polls\Model\Settings\AppSettings;
-use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\Share;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
+use OCA\Polls\Model\Settings\AppSettings;
+use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\IGroupManager;
 use OCP\IUserManager;
 use OCP\IUserSession;
-use OCP\IGroupManager;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 /**
  * Class Acl

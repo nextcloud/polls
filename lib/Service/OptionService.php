@@ -24,21 +24,21 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Option;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Event\OptionUpdatedEvent;
+use OCA\Polls\Db\Vote;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\OptionConfirmedEvent;
 use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionUnconfirmedEvent;
+use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\ForbiddenException;
-use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidOptionPropertyException;
+use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;

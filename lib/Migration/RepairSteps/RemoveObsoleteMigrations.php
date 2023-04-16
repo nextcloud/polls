@@ -23,9 +23,9 @@
 
 namespace OCA\Polls\Migration\RepairSteps;
 
-use OCP\Migration\IRepairStep;
-use OCP\Migration\IOutput;
 use OCA\Polls\Db\TableManager;
+use OCP\Migration\IOutput;
+use OCP\Migration\IRepairStep;
 
 /**
  * remove old migration entries from versions prior to polls 3.x

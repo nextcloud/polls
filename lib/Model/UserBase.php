@@ -24,19 +24,19 @@
 namespace OCA\Polls\Model;
 
 use DateTimeZone;
-use OCP\IL10N;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
+use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Model\User\Admin;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\User;
-use OCA\Polls\Model\Group\Group;
 use OCP\Collaboration\Collaborators\ISearch;
-use OCP\Share\IShare;
 use OCP\IDateTimeZone;
+use OCP\IL10N;
 use OCP\IUserSession;
+use OCP\Share\IShare;
 
 class UserBase implements \JsonSerializable {
 	public const TYPE = 'generic';

@@ -23,18 +23,18 @@
 
 namespace OCA\Polls\Migration;
 
-use OCP\DB\Types;
-use OCP\DB\ISchemaWrapper;
+use Doctrine\DBAL\Types\Type;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Option;
-use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\Watch;
-use Doctrine\DBAL\Types\Type;
+use OCP\DB\ISchemaWrapper;
+use OCP\DB\Types;
 
 /**
  * Database definition for installing and migrations

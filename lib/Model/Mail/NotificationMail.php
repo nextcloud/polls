@@ -28,8 +28,8 @@ use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Event\CommentEvent;
-use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\VoteEvent;
 
 class NotificationMail extends MailBase {

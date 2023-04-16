@@ -30,8 +30,8 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
-use OCP\ISession;
 use OCP\IRequest;
+use OCP\ISession;
 
 class BaseController extends Controller {
 	public function __construct(

@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCreatedEvent;
@@ -36,8 +36,8 @@ use OCA\Polls\Event\PollUpdatedEvent;
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidAccessException;
-use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;

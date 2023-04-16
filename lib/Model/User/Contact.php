@@ -23,8 +23,8 @@
 
 namespace OCA\Polls\Model\User;
 
-use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
+use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\UserBase;
 use OCP\Contacts\IManager as IContactsManager;

@@ -24,20 +24,20 @@
 
 namespace OCA\Polls\Cron;
 
-use OCP\AppFramework\Utility\ITimeFactory;
-use OCP\BackgroundJob\QueuedJob;
-use OCP\Security\ISecureRandom;
-use Psr\Log\LoggerInterface;
-
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
+
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\VoteMapper;
+use OCP\AppFramework\Utility\ITimeFactory;
+use OCP\BackgroundJob\QueuedJob;
+use OCP\Security\ISecureRandom;
+use Psr\Log\LoggerInterface;
 
 class UserDeletedJob extends QueuedJob {
 	public function __construct(

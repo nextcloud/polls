@@ -24,9 +24,9 @@
 namespace OCA\Polls\Listener;
 
 use OCA\Polls\Cron\GroupDeletedJob;
-use OCP\Group\Events\GroupDeletedEvent;
 use OCA\Polls\Exceptions\InvalidClassException;
 use OCA\Polls\Exceptions\OCPEventException;
+use OCP\Group\Events\GroupDeletedEvent;
 
 class GroupDeletedListener extends BaseListener {
 	protected function checkClass() : void {
