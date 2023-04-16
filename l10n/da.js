@@ -29,6 +29,7 @@ OC.L10N.register(
     "Delete poll" : "Slet afstemning",
     "OK" : "OK",
     "Week" : "Uge",
+    "Delete option" : "Slet valg",
     "Add" : "Tilføj",
     "Add option" : "Tilføj valg",
     "Close" : "Luk",
