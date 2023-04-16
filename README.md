@@ -69,7 +69,7 @@ If you want to run the latest development version from git source, you need to c
 git clone https://github.com/nextcloud/polls.git
 ```
 
-* Install dev environment with ```make dev-setup```
+* Install dev environment with ```make setup-dev```
 * Compile javascript with ```npm run build```
 * Run a complete build with ```make appstore``` (Find the output in the build directory)
 
