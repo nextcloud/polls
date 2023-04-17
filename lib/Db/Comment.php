@@ -47,7 +47,7 @@ class Comment extends EntityWithUser implements JsonSerializable {
 	protected int $pollId = 0;
 	protected string $userId = '';
 	protected int $timestamp = 0;
-	protected string $comment = '';
+	protected ?string $comment = null;
 
 	public function __construct() {
 		$this->addType('pollId', 'int');
