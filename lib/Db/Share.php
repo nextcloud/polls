@@ -95,10 +95,10 @@ class Share extends Entity implements JsonSerializable {
 	protected string $token = '';
 	protected string $type = '';
 	protected string $userId = '';
-	protected string $emailAddress = '';
+	protected ?string $emailAddress = null;
 	protected string $invitationSent = '';
 	protected string $reminderSent = '';
-	protected string $displayName = '';
+	protected ?string $displayName = null;
 	protected ?string $miscSettings = '';
 
 	public function __construct() {
@@ -134,15 +134,15 @@ class Share extends Entity implements JsonSerializable {
 		return $this->getMiscSettingsArray()['publicPollEmail'] ?? 'optional';
 	}
 
-	public function setPublicPollEmail(string $value) : void {
+	public function setPublicPollEmail(string $value): void {
 		$this->setMiscSettingsByKey('publicPollEmail', $value);
 	}
 
-	public function getTimeZoneName() : string {
+	public function getTimeZoneName(): string {
 		return $this->getMiscSettingsArray()['timeZone'] ?? '';
 	}
 
-	public function setTimeZoneName(string $value) : void {
+	public function setTimeZoneName(string $value): void {
 		$this->setMiscSettingsByKey('timeZone', $value);
 	}
 
@@ -155,7 +155,7 @@ class Share extends Entity implements JsonSerializable {
 		return $this->getLanguage();
 	}
 
-	public function setLanguage(string $value) : void {
+	public function setLanguage(string $value): void {
 		$this->setMiscSettingsByKey('language', $value);
 	}
 
@@ -194,15 +194,14 @@ class Share extends Entity implements JsonSerializable {
 		];
 	}
 
-	private function setMiscSettingsArray(array $value) : void {
+	private function setMiscSettingsArray(array $value): void {
 		$this->setMiscSettings(json_encode($value));
 	}
 
-	private function getMiscSettingsArray() : array {
+	private function getMiscSettingsArray(): array {
 		if ($this->getMiscSettings()) {
 			return json_decode($this->getMiscSettings(), true);
 		}
-		
 		return [];
 	}
 
