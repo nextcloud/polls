@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [5.0.1] - 2023-04-07
+## [5.0.2] - 2023-04-17
+### Fix
+ - Fix crash with shares which have nullish mail addresses
+## [5.0.1] - 2023-04-13
 ### Fix
  - Polls cannot be edited when user has no mail address
  
