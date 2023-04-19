@@ -249,7 +249,7 @@ OC.L10N.register(
     "Email address" : "E-mail-cím",
     "No" : "Nem",
     "Clone poll" : "Szavazás klónozása",
-    "Archive poll" : "Szavazás aktiválása",
+    "Archive poll" : "Szavazás archiválása",
     "Restore poll" : "Szavazás helyreállítása",
     "Delete poll" : "Szavazás törlése",
     "Clone to option sequence" : "Lehetőségsorba klónozás",
