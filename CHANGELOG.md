@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.0.3] - 2023-04-20
+### Fix
+ - Fix notification exception for nullish log entries
 ## [5.0.2] - 2023-04-17
 ### Fix
  - Fix crash with shares which have nullish mail addresses
