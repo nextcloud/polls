@@ -417,6 +417,8 @@ OC.L10N.register(
     "No polls found for this category" : "Nessun sondaggio trovato per questa categoria",
     "Add one or change category!" : "Aggiungi una o cambia categoria!",
     "Take over" : "Rileva",
+    "Do you want to take over this poll?" : "Vuoi partecipare a questo sondaggio?",
+    "{username} will get notified." : "{username} riceverà una notifica.",
     "Yes" : "Sì",
     "Do you want to delete this poll?" : "Vuoi eliminare questo sondaggio?",
     "This action cannot be reverted." : "Questa azione non può essere annullata.",
