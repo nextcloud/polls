@@ -157,7 +157,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'autoReminder' => $this->getAutoReminder(),
 			'created' => $this->getCreated(),
 			'deleted' => $this->getDeleted(),
-			'description' => $this->getDescription() ?? '',
+			'description' => $this->getDescription(),
 			'descriptionSafe' => $this->getDescriptionSafe(),
 			'expire' => $this->getExpire(),
 			'hideBookedUp' => $this->getHideBookedUp(),
@@ -257,7 +257,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getDescription(): string {
-		return $this->description === null ? '' : $this->description;
+		return $this->description ?? '';
 	}
 
 	public function getTitle(): string {
