@@ -72,8 +72,12 @@ class Rebuild extends Command {
 		$this->printComment('Step 4. set hashes for votes and options');
 		$this->migrateOptionsToHash();
 		
+		// Remove orphaned records and duplicates
+		$this->printComment('Step 5. Remove invalid records (orphaned and duplicates)');
+		$this->cleanTables();
+		
 		// recreate indices and constraints
-		$this->printComment('Step 5. Recreate indices and foreign key constraints');
+		$this->printComment('Step 6. Recreate indices and foreign key constraints');
 		// secure, that the schema is updated to the current status
 		$this->indexManager->refreshSchema();
 		$this->addForeignKeyConstraints();
@@ -143,6 +147,21 @@ class Rebuild extends Command {
 	private function removeObsoleteTables(): void {
 		$this->printComment('  Drop orphaned tables');
 		$messages = $this->tableManager->removeObsoleteTables();
+
+		foreach ($messages as $message) {
+			$this->printInfo(' - ' . $message);
+		}
+	}
+
+	/**
+	 * Remove obsolete tables if they still exist
+	 */
+	private function cleanTables(): void {
+		$this->printComment('  Remove orphaned records');
+		$this->tableManager->removeOrphaned();
+
+		$this->printComment('  Remove duplicates');
+		$messages = $this->tableManager->deleteDuplicates();
 
 		foreach ($messages as $message) {
 			$this->printInfo(' - ' . $message);
