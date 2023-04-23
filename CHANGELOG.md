@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.0.4] - tbd
+### Fix
+ - Ensure duplicate removal after migration and in repair command
 ## [5.0.3] - 2023-04-20
 ### Fix
  - Fix notification exception for nullish log entries
