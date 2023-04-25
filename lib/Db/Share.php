@@ -97,7 +97,7 @@ class Share extends Entity implements JsonSerializable {
 	protected string $userId = '';
 	protected ?string $emailAddress = null;
 	protected int $invitationSent = 0;
-	protected string $reminderSent = '';
+	protected int $reminderSent = 0;
 	protected ?string $displayName = null;
 	protected ?string $miscSettings = '';
 
