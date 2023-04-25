@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [5.0.5] - tbd
 ### Fix
  - show unprocessed share invitations
+ - fix bulk adding of options
 # [5.0.4] - 2023-04-25
 ### Fix
  - Ensure duplicate removal after migration and in repair command
