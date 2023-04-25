@@ -68,7 +68,7 @@ const options = {
 				pollId,
 				text: optionsBatch,
 			},
-			cancelToken: cancelTokenHandlerObject[this.takeOver.name].handleRequestCancellation().token,
+			cancelToken: cancelTokenHandlerObject[this.addOptions.name].handleRequestCancellation().token,
 		})
 	},
 
