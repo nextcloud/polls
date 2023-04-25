@@ -1,7 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [5.0.4] - tbd
+## [5.0.5] - tbd
+### Fix
+ - show unprocessed share invitations
+# [5.0.4] - 2023-04-25
 ### Fix
  - Ensure duplicate removal after migration and in repair command
  - Fix notification exception for nullish log entries (fix was not pushed to 5.0.3)
