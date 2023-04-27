@@ -51,7 +51,7 @@
 		"linkify-string": "^4.1.1",
 		"lodash": "^4.17.21",
 		"marked": "^4.3.0",
-		"nextcloud-vue-collections": "^0.11.0",
+		"nextcloud-vue-collections": "^0.11.1",
 		"qrcode": "^1.5.3",
 		"v-click-outside": "^3.2.0",
 		"vue": "^2.7.14",
