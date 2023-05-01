@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ### Fix
  - show unprocessed share invitations
  - fix bulk adding of options
+### Changes
+ - change warning design (use NcNoteCard)
 # [5.0.4] - 2023-04-25
 ### Fix
  - Ensure duplicate removal after migration and in repair command
