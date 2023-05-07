@@ -1,12 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [5.0.5] - tbd
+## [5.0.5] - 2023-05-07
 ### Fix
  - show unprocessed share invitations
  - fix bulk adding of options
+ - fixed update problems
 ### Changes
  - change warning design (use NcNoteCard)
+ - Support NC 27
 # [5.0.4] - 2023-04-25
 ### Fix
  - Ensure duplicate removal after migration and in repair command
