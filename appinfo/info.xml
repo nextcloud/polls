@@ -38,6 +38,7 @@
     <commands>
         <command>OCA\Polls\Command\Share\Add</command>
         <command>OCA\Polls\Command\Share\Remove</command>
+        <command>OCA\Polls\Command\Db\Purge</command>
         <command>OCA\Polls\Command\Db\RemoveIndices</command>
         <command>OCA\Polls\Command\Db\Rebuild</command>
         <command>OCA\Polls\Command\Db\CreateIndices</command>

@@ -70,6 +70,58 @@ class TableManager {
 	 *
 	 * @psalm-return non-empty-list<string>
 	 */
+	public function purgeTables(): array {
+		$messages = [];
+
+		// drop all child tables
+		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
+			if ($this->connection->tableExists($tableName)) {
+				$this->connection->dropTable($tableName);
+				$this->logger->info('Dropped ' . $this->dbPrefix . $tableName);
+				$messages[] = 'Dropped ' . $this->dbPrefix . $tableName;
+			}
+		}
+		
+		// drop parent table
+		if ($this->connection->tableExists(TableSchema::FK_PARENT_TABLE)) {
+			$this->connection->dropTable(TableSchema::FK_PARENT_TABLE);
+			$this->logger->info('Dropped ' . $this->dbPrefix . TableSchema::FK_PARENT_TABLE);
+			$messages[] = 'Dropped ' . $this->dbPrefix . TableSchema::FK_PARENT_TABLE;
+		}
+
+		// delete all migration records
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('migrations')
+			->where('app = :appName')
+			->setParameter('appName', 'polls')
+			->executeStatement();
+
+		$this->logger->info('Removed all migration records from ' . $this->dbPrefix . 'migrations');
+		$messages[] = 'Removed all migration records from ' . $this->dbPrefix . 'migrations';
+		
+		// delete all app configs
+		$query = $this->connection->getQueryBuilder();
+		$query->delete('appconfig')
+			->where('appid = :appid')
+			->setParameter('appid', 'polls')
+			->executeStatement();
+
+		$this->logger->info('Removed all app config records from '. $this->dbPrefix . 'appconfig');
+		$messages[] = 'Removed all app config records from ' . $this->dbPrefix . 'appconfig';
+		$messages[] = 'Done.';
+		$messages[] = '';
+		$messages[] = 'Please call \'occ app:remove polls\' now!';
+
+		$this->refreshSchema();
+		
+		return $messages;
+	}
+
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return non-empty-list<string>
+	 */
 	public function resetWatch(): array {
 		$messages = [];
 		$tableName = $this->dbPrefix . Watch::TABLE;

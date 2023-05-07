@@ -101,5 +101,5 @@ runs:
       run: |
         mkdir data
         ./occ maintenance:install --verbose --database=${{ inputs.db-engine }} --database-name=${{ inputs.db-name }} --database-host=${{ inputs.db-host }} --database-port=${{ inputs.db-port }} --database-user=${{ inputs.db-username }} --database-pass=${{ inputs.db-password }} --admin-user ${{ inputs.admin-user }} --admin-pass ${{ inputs.admin-password }}
-        ./occ app:enable --force ${{ inputs.app-name }}
+        ./occ app:enable ${{ inputs.app-name }}
         php -S localhost:8080 &
