@@ -67,14 +67,8 @@ class DeleteInvalidRecords implements IRepairStep {
 			$this->tableManager->refreshSchema();
 
 			$this->tableManager->removeOrphaned();
+			$this->tableManager->deleteAllDuplicates();
 
-			$this->logMapper->removeDuplicates($output);
-			$this->optionMapper->removeDuplicates($output);
-			$this->preferencesMapper->removeDuplicates($output);
-			$this->shareMapper->removeDuplicates($output);
-			$this->subscriptionMapper->removeDuplicates($output);
-			$this->voteMapper->removeDuplicates($output);
-			// TODO: Obsolete, since we reset the table on every app enabling
 			$this->watchMapper->deleteOldEntries(time());
 		}
 	}

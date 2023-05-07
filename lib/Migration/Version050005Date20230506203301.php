@@ -37,7 +37,7 @@ use OCP\Migration\SimpleMigrationStep;
  * Changed class naming: Version[jjmmpp]Date[YYYYMMDDHHMMSS]
  * Version: jj = major version, mm = minor, pp = patch
  */
-class Version040102Date20230123072601 extends SimpleMigrationStep {
+class Version050005Date20230506203301 extends SimpleMigrationStep {
 	public function __construct(
 		private IDBConnection $connection,
 		private IConfig $config,
@@ -58,12 +58,6 @@ class Version040102Date20230123072601 extends SimpleMigrationStep {
 		foreach ($this->tableManager->createTables() as $message) {
 			$output->info('Polls - ' . $message);
 		};
-		$this->tableManager->migrate();
-
-		$this->indexManager->refreshSchema();
-		$this->indexManager->createForeignKeyConstraints();
-		$this->indexManager->createIndices();
-		$this->indexManager->migrate();
 
 		return $schema;
 	}

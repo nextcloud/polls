@@ -27,8 +27,12 @@ namespace OCA\Polls\Db;
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
 use OCA\Polls\Migration\TableSchema;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\Migration\IOutput;
+use PDO;
+use Psr\Log\LoggerInterface;
 
 class TableManager {
 	private Schema $schema;
@@ -37,13 +41,14 @@ class TableManager {
 	public function __construct(
 		private IConfig $config,
 		private IDBConnection $connection,
+		private LoggerInterface $logger,
 		private LogMapper $logMapper,
 		private OptionMapper $optionMapper,
 		private PreferencesMapper $preferencesMapper,
 		private ShareMapper $shareMapper,
 		private SubscriptionMapper $subscriptionMapper,
 		private VoteMapper $voteMapper,
-		private WatchMapper $watchMapper
+		private WatchMapper $watchMapper,
 	) {
 		$this->schema = $this->connection->createSchema();
 		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
@@ -221,29 +226,50 @@ class TableManager {
 		}
 	}
 
-	public function deleteDuplicates(): array {
+	public function deleteAllDuplicates(?IOutput $output = null) {
 		$messages = [];
-		$count = [];
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $index) {
+			$count = $this->deleteDuplicates($tableName, $index['columns']);
 
-		if ($this->schema->hasTable($this->dbPrefix . Poll::TABLE)) {
-			$this->removeOrphaned();
+			if ($count) {
+				$messages[] = 'Removed '. $count. ' duplicate records from ' . $this->dbPrefix . $tableName;
+				$this->logger->info(end($messages));
+			}
 
-			$count[LogMapper::TABLE] = $this->logMapper->removeDuplicates();
-			$count[OptionMapper::TABLE] = $this->optionMapper->removeDuplicates();
-			$count[PreferencesMapper::TABLE] = $this->preferencesMapper->removeDuplicates();
-			$count[ShareMapper::TABLE] = $this->shareMapper->removeDuplicates();
-			$count[SubscriptionMapper::TABLE] = $this->subscriptionMapper->removeDuplicates();
-			$count[VoteMapper::TABLE] = $this->voteMapper->removeDuplicates();
-			$count[WatchMapper::TABLE] = $this->watchMapper->deleteOldEntries(time());
-
-			foreach (TableSchema::UNIQUE_INDICES as $tableName => $value) {
-				if ($count[$tableName]) {
-					$messages[] = ' Removed ' . $count[$tableName] . ' duplicate records from ' . $tableName;
-				}
+			if ($output && $count) {
+				$output->info(end($messages));
 			}
 		}
-
 		return $messages;
+
+	}
+
+	private function deleteDuplicates(string $table, array $columns):int {
+		$this->watchMapper->deleteOldEntries(time());
+
+		$qb = $this->connection->getQueryBuilder();
+
+		if ($this->schema->hasTable($this->dbPrefix . $table)) {
+			// identify duplicates
+			$selection = $qb->selectDistinct('t1.id')
+				->from($table, 't1')
+				->innerJoin('t1', $table, 't2')
+				->where($qb->expr()->lt('t1.id', 't2.id'));
+
+			foreach ($columns as $column) {
+				$selection->andWhere($qb->expr()->eq('t1.' . $column, 't2.' . $column));
+			}
+
+			$duplicates = $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
+
+			$this->connection->getQueryBuilder()
+				->delete($table)
+				->where('id in (:ids)')
+				->setParameter('ids', $duplicates, IQueryBuilder::PARAM_INT_ARRAY)
+				->executeStatement();
+			return count($duplicates);
+		}
+		return 0;
 	}
 
 	/**
@@ -263,6 +289,7 @@ class TableManager {
 		}
 		return $messages;
 	}
+
 	public function fixVotes(): void {
 		if ($this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
 			$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
@@ -282,20 +309,27 @@ class TableManager {
 
 	public function migrateOptionsToHash(): array {
 		$messages = [];
-
+	
 		if ($this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
 			$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
 			$count = 0;
 			if ($table->hasColumn('poll_option_hash')) {
 				foreach ($this->optionMapper->getAll() as $option) {
 					$option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
-
+					
 					$this->optionMapper->update($option);
 					$count++;
 				}
+			} else {
+				$this->logger->error('{db} is missing- aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
 			}
+			$this->logger->info('Updated {number} hashes in {db}', ['number' => $count,'db' => $this->dbPrefix . OptionMapper::TABLE]);
 			$messages[] = 'Updated ' . $count . ' option hashes';
+		} else {
+			$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
 		}
+
+
 		
 		
 		if ($this->schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
@@ -307,8 +341,13 @@ class TableManager {
 					$this->voteMapper->update($vote);
 					$count++;
 				}
+			} else {
+				$this->logger->error('{db} is missing- aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
 			}
+			$this->logger->info('Updated {number} hashes in {db}', ['number' => $count, 'db' => $this->dbPrefix . VoteMapper::TABLE]);
 			$messages[] = 'Updated ' . $count . ' vote hashes';
+		} else {
+			$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
 		}
 		return $messages;
 	}

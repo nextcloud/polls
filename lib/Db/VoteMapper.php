@@ -26,10 +26,8 @@ namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
-use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\Migration\IOutput;
 
 /**
  * @template-extends QBMapper<Vote>
@@ -189,49 +187,6 @@ class VoteMapper extends QBMapper {
 		   ->andWhere($qb->expr()->eq('vote_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR)))
 		   ->andWhere($qb->expr()->eq('vote_answer', $qb->createNamedParameter('yes', IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
-	}
-
-
-	public function removeDuplicates(?IOutput $output = null): int {
-		$count = 0;
-		try {
-			$query = $this->db->getQueryBuilder();
-			$query->select('id', 'poll_id', 'user_id', 'vote_option_text')
-				->from($this->getTableName());
-			$foundEntries = $query->executeQuery();
-
-			$delete = $this->db->getQueryBuilder();
-			$delete->delete($this->getTableName())
-				->where('id = :id');
-
-			$entries2Keep = [];
-
-			while ($row = $foundEntries->fetch()) {
-				$currentRecord = [
-					$row['poll_id'],
-					$row['user_id'],
-					$row['vote_option_text']
-				];
-				if (in_array($currentRecord, $entries2Keep)) {
-					$delete->setParameter('id', $row['id']);
-					$delete->executeStatement();
-					$count++;
-				} else {
-					$entries2Keep[] = $currentRecord;
-				}
-			}
-		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_DATABASE_OBJECT_NOT_FOUND) {
-				// ignore silently
-			}
-			throw $e;
-		}
-
-		if ($output && $count) {
-			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
-		}
-
-		return $count;
 	}
 
 	public function renameUserId(string $userId, string $replacementName): void {

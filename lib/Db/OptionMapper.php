@@ -26,10 +26,9 @@ namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
-use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\Migration\IOutput;
+use Psr\Log\LoggerInterface;
 
 /**
  * @template-extends QBMapper<Option>
@@ -37,7 +36,10 @@ use OCP\Migration\IOutput;
 class OptionMapper extends QBMapper {
 	public const TABLE = Option::TABLE;
 
-	public function __construct(IDBConnection $db) {
+	public function __construct(
+		IDBConnection $db,
+		private LoggerInterface $logger,
+	) {
 		parent::__construct($db, Option::TABLE, Option::class);
 	}
 
@@ -152,50 +154,6 @@ class OptionMapper extends QBMapper {
 		   );
 
 		$qb->executeStatement();
-	}
-
-	public function removeDuplicates(?IOutput $output = null): int {
-		$count = 0;
-		try {
-			// remove duplicates from oc_polls_options
-			// preserve the first entry
-			$query = $this->db->getQueryBuilder();
-			$query->select('id', 'poll_id', 'poll_option_text', 'timestamp')
-				->from($this->getTableName());
-			$foundEntries = $query->executeQuery();
-
-			$delete = $this->db->getQueryBuilder();
-			$delete->delete($this->getTableName())
-				->where('id = :id');
-
-			$entries2Keep = [];
-
-			while ($row = $foundEntries->fetch()) {
-				$currentRecord = [
-					$row['poll_id'],
-					$row['poll_option_text'],
-					$row['timestamp']
-				];
-				if (in_array($currentRecord, $entries2Keep)) {
-					$delete->setParameter('id', $row['id']);
-					$delete->executeStatement();
-					$count++;
-				} else {
-					$entries2Keep[] = $currentRecord;
-				}
-			}
-		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_DATABASE_OBJECT_NOT_FOUND) {
-				// ignore silently
-			}
-			throw $e;
-		}
-
-		if ($output && $count) {
-			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
-		}
-
-		return $count;
 	}
 
 	/**
