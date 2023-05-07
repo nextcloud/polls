@@ -56,15 +56,16 @@
         <pre-migration>
             <step>OCA\Polls\Migration\RepairSteps\RemoveObsoleteMigrations</step>
             <step>OCA\Polls\Migration\RepairSteps\RemoveIndices</step>
-            <step>OCA\Polls\Migration\RepairSteps\CreateTables</step>
-        </pre-migration>
-        <post-migration>
             <step>OCA\Polls\Migration\RepairSteps\UpdateHashes</step>
             <step>OCA\Polls\Migration\RepairSteps\DeleteInvalidRecords</step>
+        </pre-migration>
+        <post-migration>
             <step>OCA\Polls\Migration\RepairSteps\DropOrphanedTables</step>
             <step>OCA\Polls\Migration\RepairSteps\DropOrphanedColumns</step>
-            <step>OCA\Polls\Migration\RepairSteps\CreateIndices</step>
         </post-migration>
+        <install>
+            <step>OCA\Polls\Migration\RepairSteps\Install</step>
+        </install>
     </repair-steps>
     <navigations>
         <navigation>

@@ -82,6 +82,14 @@ class TableManager {
 			}
 		}
 		
+		foreach (TableSchema::FK_OTHER_TABLES as $tableName) {
+			if ($this->connection->tableExists($tableName)) {
+				$this->connection->dropTable($tableName);
+				$this->logger->info('Dropped ' . $this->dbPrefix . $tableName);
+				$messages[] = 'Dropped ' . $this->dbPrefix . $tableName;
+			}
+		}
+		
 		// drop parent table
 		if ($this->connection->tableExists(TableSchema::FK_PARENT_TABLE)) {
 			$this->connection->dropTable(TableSchema::FK_PARENT_TABLE);
@@ -100,7 +108,7 @@ class TableManager {
 		$messages[] = 'Removed all migration records from ' . $this->dbPrefix . 'migrations';
 		
 		// delete all app configs
-		$query = $this->connection->getQueryBuilder();
+		// $query = $this->connection->getQueryBuilder();
 		$query->delete('appconfig')
 			->where('appid = :appid')
 			->setParameter('appid', 'polls')

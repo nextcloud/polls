@@ -17,37 +17,41 @@
  *  GNU Affero General Public License for more details.
  *
  *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ *  along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
 
-namespace OCA\Polls\Command\Db;
 
-use OCA\Polls\Command\Command;
+namespace OCA\Polls\Migration\RepairSteps;
+
 use OCA\Polls\Db\IndexManager;
-use OCA\Polls\Db\TableManager;
+use OCP\Migration\IOutput;
+use OCP\Migration\IRepairStep;
 
-class Purge extends Command {
-	protected string $name = parent::NAME_PREFIX . 'db:purge';
-	protected string $description = 'Remove all polls related tables and records';
-	protected array $operationHints = [
-		'This command will remove Polls completely from your instance',
-		' - delete all oc_polls_* tables, ',
-		' - delete Polls\'s migration records from oc_migrations, ',
-		' - delete Polls\'s app config records from oc_appconfig.',
-		' ',
-		'after running this command call \'occ app:remove polls \'',
-	];
-
+class Install implements IRepairStep {
 	public function __construct(
 		private IndexManager $indexManager,
-		private TableManager $tableManager
 	) {
-		parent::__construct();
 	}
 
-	protected function runCommands(): int {
-		$this->tableManager->purgeTables();
-		return 0;
+	public function getName() {
+		return 'Polls - Install';
+	}
+
+	public function run(IOutput $output): void {
+		\OC::$server->getLogger()->error('Starting ' . get_class());
+		$messages = [];
+		// secure, that the schema is updated to the current status
+		$this->indexManager->refreshSchema();
+
+		$messages = array_merge($messages, $this->indexManager->createForeignKeyConstraints());
+		$messages = array_merge($messages, $this->indexManager->createIndices());
+		$this->indexManager->migrate();
+		foreach ($messages as $message) {
+			$output->info($message);
+		}
+
+		$output->info('Polls - Foreign key contraints created.');
+		$output->info('Polls - Indices created.');
 	}
 }

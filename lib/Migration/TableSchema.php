@@ -55,6 +55,11 @@ abstract class TableSchema {
 		Vote::TABLE,
 	];
 
+	public const FK_OTHER_TABLES = [
+		Watch::TABLE,
+		Preferences::TABLE,
+	];
+
 	public const UNIQUE_INDICES = [
 		Option::TABLE => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
 		Log::TABLE => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],

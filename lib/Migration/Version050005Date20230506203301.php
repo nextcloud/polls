@@ -53,11 +53,12 @@ class Version050005Date20230506203301 extends SimpleMigrationStep {
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		/** @var ISchemaWrapper $schema */
 		$schema = $schemaClosure();
-
+		
 		// Create tables, as defined in TableSchema or fix column definitions
 		foreach ($this->tableManager->createTables() as $message) {
 			$output->info('Polls - ' . $message);
 		};
+		$this->tableManager->migrate();
 
 		return $schema;
 	}
