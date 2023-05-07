@@ -39,6 +39,7 @@ You can download and install the latest release from the [Nextcloud app store](h
 | Command | Description |
 | - | - |
 | `polls:db:clean-migrations`                                                  | Remove obsolete migrations, which are no more needed         |
+| `polls:db:purge`                                                             | Drop Polls' tables and remove migration and settings records |
 | `polls:db:rebuild`                                                           | Rebuild Polls' database including indices                    |
 | `polls:index:create`                                                         | Create all necessary indices and foreign key constraints     |
 | `polls:index:remove`                                                         | Remove all indices                                           |
@@ -98,12 +99,12 @@ Nextcloud executes
 ❗ As a compromise at the moment we allow the index creation to be ran twice when enabling the app via app store or `occ`, to ensure all indexes are created properly for every install/update/enabling path.
 
 ## Removing Polls from instance
-A command `occ polls:db:purge` to remove Polls completely was added in this PR. 
-* remove all Polls' tables
-* remove all Polls' migration records
-* remove all Polls' app config records (this also disables Polls)
+Call `occ polls:db:purge` to remove Polls completely. 
+* removes all Polls related tables
+* removes all Polls related migration records
+* removes all Polls related app config records (this also disables Polls)
 
-This does not remove Polls' files (call `occ app:remove polls` to remove it complete afterwards) but it resets Polls into an 'uninstalled' state. Enabling the app is then equivalent to a first time install and calls the migration and the install repair step (see above ).
+This does not remove Polls' files (call `occ app:remove polls` to remove it complete afterwards) but it resets Polls into an 'uninstalled' state. Enabling the app is then equivalent to a first time install and calls the migration and the install repair step (see above).
 
 ## Contribution Guidelines
 Please read the [Code of Conduct](https://nextcloud.com/community/code-of-conduct/). This document offers some guidance to ensure Nextcloud participants can cooperate effectively in a positive and inspiring atmosphere, and to explain how together we can strengthen and support each other.

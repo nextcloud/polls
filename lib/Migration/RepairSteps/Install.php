@@ -39,7 +39,6 @@ class Install implements IRepairStep {
 	}
 
 	public function run(IOutput $output): void {
-		\OC::$server->getLogger()->error('Starting ' . get_class());
 		$messages = [];
 		// secure, that the schema is updated to the current status
 		$this->indexManager->refreshSchema();
