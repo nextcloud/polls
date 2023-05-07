@@ -62,6 +62,7 @@
         <post-migration>
             <step>OCA\Polls\Migration\RepairSteps\DropOrphanedTables</step>
             <step>OCA\Polls\Migration\RepairSteps\DropOrphanedColumns</step>
+            <step>OCA\Polls\Migration\RepairSteps\CreateIndices</step>
         </post-migration>
         <install>
             <step>OCA\Polls\Migration\RepairSteps\Install</step>
