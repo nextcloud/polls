@@ -28,7 +28,6 @@ use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use Psr\Log\LoggerInterface;
 
 /**
  * @template-extends QBMapper<Option>
@@ -38,7 +37,6 @@ class OptionMapper extends QBMapper {
 
 	public function __construct(
 		IDBConnection $db,
-		private LoggerInterface $logger,
 	) {
 		parent::__construct($db, Option::TABLE, Option::class);
 	}
