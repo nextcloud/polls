@@ -55,6 +55,11 @@ abstract class TableSchema {
 		Vote::TABLE,
 	];
 
+	public const FK_OTHER_TABLES = [
+		Watch::TABLE,
+		Preferences::TABLE,
+	];
+
 	public const UNIQUE_INDICES = [
 		Option::TABLE => ['name' => 'UNIQ_options', 'unique' => true, 'columns' => ['poll_id', 'poll_option_hash', 'timestamp']],
 		Log::TABLE => ['name' => 'UNIQ_unprocessed', 'unique' => true, 'columns' => ['processed', 'poll_id', 'user_id', 'message_id']],
@@ -86,6 +91,7 @@ abstract class TableSchema {
 		'0105Date20200903172733',
 		'0106Date20201031080745',
 		'0106Date20201031080946',
+		'0107Date20201210160301',
 		'0107Date20201210204702',
 		'0107Date20201210213303',
 		'0107Date20201217071304',
@@ -106,6 +112,7 @@ abstract class TableSchema {
 		'040100Date20221030070000',
 		'041000Date20221221070000',
 		'040101Date20230119080000',
+		'040102Date20230123072601',
 	];
 
 	/**

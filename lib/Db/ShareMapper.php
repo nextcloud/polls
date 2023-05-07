@@ -28,10 +28,8 @@ use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
-use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\Migration\IOutput;
 
 /**
  * @template-extends QBMapper<Share>
@@ -191,58 +189,5 @@ class ShareMapper extends QBMapper {
 		   );
 
 		$qb->executeStatement();
-	}
-
-	public function removeDuplicates(?IOutput $output = null): int {
-		$count = 0;
-		try {
-			$query = $this->db->getQueryBuilder();
-			// make sure, all public shares fit to the unique index added in schemaChange(),
-			// by copying token to user_id
-			$query->update($this->getTableName())
-				->set('user_id', 'token')
-				->where('type = :type')
-				->setParameter('type', 'public')
-				->executeStatement();
-
-			// remove duplicates from polls_share
-			// preserve the first entry
-			$query = $this->db->getQueryBuilder();
-			$query->select('id', 'type', 'poll_id', 'user_id')
-				->from($this->getTableName());
-			$foundEntries = $query->executeQuery();
-
-			$delete = $this->db->getQueryBuilder();
-			$delete->delete($this->getTableName())->where('id = :id');
-
-			$entries2Keep = [];
-
-			while ($row = $foundEntries->fetch()) {
-				$currentRecord = [
-					$row['poll_id'],
-					$row['type'],
-					$row['user_id']
-				];
-
-				if (in_array($currentRecord, $entries2Keep) || $row['user_id'] === null || $row['type'] === '') {
-					$delete->setParameter('id', $row['id']);
-					$delete->executeStatement();
-					$count++;
-				} else {
-					$entries2Keep[] = $currentRecord;
-				}
-			}
-		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_DATABASE_OBJECT_NOT_FOUND) {
-				// ignore silently
-			}
-			throw $e;
-		}
-
-		if ($output && $count) {
-			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
-		}
-
-		return $count;
 	}
 }

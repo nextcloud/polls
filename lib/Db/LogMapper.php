@@ -25,10 +25,8 @@
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\QBMapper;
-use OCP\DB\Exception;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\Migration\IOutput;
 
 /**
  * @template-extends QBMapper<Log>
@@ -104,51 +102,6 @@ class LogMapper extends QBMapper {
 			->orderBy('id', 'DESC');
 
 		return $this->findEntity($qb);
-	}
-
-	public function removeDuplicates(?IOutput $output = null): int {
-		$count = 0;
-		try {
-			// remove duplicates from oc_polls_log
-			// preserve the first entry
-			$query = $this->db->getQueryBuilder();
-			$query->select('id', 'processed', 'poll_id', 'user_id', 'message_id')
-				->from($this->getTableName());
-			$foundEntries = $query->executeQuery();
-
-			$delete = $this->db->getQueryBuilder();
-			$delete->delete($this->getTableName())
-				->where('id = :id');
-
-			$entries2Keep = [];
-
-			while ($row = $foundEntries->fetch()) {
-				$currentRecord = [
-					$row['processed'],
-					$row['poll_id'],
-					$row['user_id'],
-					$row['message_id']
-				];
-				if (in_array($currentRecord, $entries2Keep)) {
-					$delete->setParameter('id', $row['id']);
-					$delete->executeStatement();
-					$count++;
-				} else {
-					$entries2Keep[] = $currentRecord;
-				}
-			}
-		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_DATABASE_OBJECT_NOT_FOUND) {
-				// ignore silently
-			}
-			throw $e;
-		}
-
-		if ($output && $count) {
-			$output->info('Removed ' . $count . ' duplicate records from ' . $this->getTableName());
-		}
-
-		return $count;
 	}
 
 	public function deleteByUserId(string $userId): void {

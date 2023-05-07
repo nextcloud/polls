@@ -161,7 +161,7 @@ class Rebuild extends Command {
 		$this->tableManager->removeOrphaned();
 
 		$this->printComment('  Remove duplicates');
-		$messages = $this->tableManager->deleteDuplicates();
+		$messages = $this->tableManager->deleteAllDuplicates();
 
 		foreach ($messages as $message) {
 			$this->printInfo(' - ' . $message);
