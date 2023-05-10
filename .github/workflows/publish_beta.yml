@@ -7,13 +7,19 @@ on:
       - v*-rc*
       - v*-RC*
 
+permissions:
+  contents: read
+  issues: write 
+
 jobs:
   checkout:
     runs-on: ubuntu-latest
     name: Beta release
     steps:
-    - uses: actions/checkout@v2
-    - name: Check correct app version
+    - name: Checkout app
+      uses: actions/checkout@v2
+
+    - name: Get app info and validate app version against tag name
       id: appinfo
       uses: ./.github/actions/get-polls-version
 
@@ -37,13 +43,13 @@ jobs:
 
     - name: rename package
       if: success()
-      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
+      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/${{ steps.appinfo.outputs.app-id }}-${{ steps.appinfo.outputs.app-version }}.tar.gz
 
     - name: create zip archive from sources
       if: success()
       run: |
         pushd build/source
-        zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip *
+        zip -r ../artifacts/appstore/${{ steps.appinfo.outputs.app-id }}-${{ steps.appinfo.outputs.app-version }}.zip *
         popd
 
     - name: Publish pre-release
@@ -54,5 +60,20 @@ jobs:
         draft: false
         generate_release_notes: true
         files: |
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip
+          build/artifacts/appstore/${{ steps.appinfo.outputs.app-id }}-${{ steps.appinfo.outputs.app-version }}.tar.gz
+          build/artifacts/appstore/${{ steps.appinfo.outputs.app-id }}-${{ steps.appinfo.outputs.app-version }}.zip
+
+    - name: Create notification
+      if: success()
+      uses: JasonEtco/create-an-issue@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          APP_ID: ${{ steps.appinfo.outputs.app-id }}
+          APP_NAME: ${{ steps.appinfo.outputs.app-name }}
+          APP_VERSION: ${{ steps.appinfo.outputs.app-version }}
+          TAG_VERSION: ${{ steps.appinfo.outputs.tag-version }}
+          NC_MIN_VERSION: ${{ steps.appinfo.outputs.nc-min-version }}
+          NC_MAX_VERSION: ${{ steps.appinfo.outputs.nc-max-version }}
+          PHP_MIN_VERSION: ${{ steps.appinfo.outputs.php-min-version }}
+        with:
+          filename: .github/NEW_VERSION.md

@@ -1,4 +1,4 @@
-name: Read polls version from info.xml
+name: Read app's version, id and dependencies from info.xml
 inputs: 
   skip-check:
     description: Do not check tag against version
@@ -9,8 +9,23 @@ inputs:
 outputs:
   app-version: 
     description: 'Version string from app'
-    value: ${{ steps.appinfo.outputs.info }}
-  tag-version: 
+    value: ${{ steps.app-version.outputs.info }}
+  app-id:
+    description: 'Version string from app'
+    value: ${{ steps.app-id.outputs.info }}
+  app-name: 
+    description: 'Version string from app'
+    value: ${{ steps.app-name.outputs.info }}
+  nc-min-version: 
+    description: 'Lowest supported Nextcloud version'
+    value: ${{ steps.nc-min-version.outputs.info }}
+  nc-max-version: 
+    description: 'Highest supported Nextcloud version'
+    value: ${{ steps.nc-max-version.outputs.info }}
+  php-min-version: 
+    description: 'Minimum PHP version'
+    value: ${{ steps.php-min-version.outputs.info }}
+  tag-version:
     description: 'Version string from tag'
     value: ${{ steps.gettag.outputs.VERSION }}
 
@@ -18,11 +33,46 @@ runs:
   using: "composite"
   steps:
     - name: Get app version from appinfo/info.xml
-      id: appinfo
+      id: app-version
       uses: mavrosxristoforos/get-xml-info@1.1.1
       with:
         xml-file: 'appinfo/info.xml'
         xpath: '//info//version'
+
+    - name: Get app id from appinfo/info.xml
+      id: app-id
+      uses: mavrosxristoforos/get-xml-info@1.1.1
+      with:
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//version'
+
+    - name: Get app Name from appinfo/info.xml
+      id: app-name
+      uses: mavrosxristoforos/get-xml-info@1.1.1
+      with:
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//name'
+
+    - name: Get Nextcloud min version from appinfo/info.xml
+      id: nc-min-version
+      uses: mavrosxristoforos/get-xml-info@1.1.1
+      with:
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//dependencies//nextcloud@min-version'
+
+    - name: Get Nextcloud max version from appinfo/info.xml
+      id: nc-max-version
+      uses: mavrosxristoforos/get-xml-info@1.1.1
+      with:
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//dependencies//nextcloud@max-version'
+
+    - name: Get PHP min version from appinfo/info.xml
+      id: php-min-version
+      uses: mavrosxristoforos/get-xml-info@1.1.1
+      with:
+        xml-file: 'appinfo/info.xml'
+        xpath: '//info//dependencies//php@min-version'
 
     - name: Get tag name
       id: gettag
@@ -30,7 +80,7 @@ runs:
       shell: bash
 
     - name: Compare versions
-      if: ${{ !inputs.skip-version && format('v{0}', steps.appinfo.outputs.info) != steps.gettag.outputs.VERSION }}
+      if: ${{ !inputs.skip-version && format('v{0}', steps.app-version.outputs.info) != steps.gettag.outputs.VERSION }}
       uses: actions/github-script@v6
       with:
         script: |

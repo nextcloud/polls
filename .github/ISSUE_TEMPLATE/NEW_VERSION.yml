@@ -1,0 +1,24 @@
+name: "New version released"
+description: "Used for announcements"
+labels: ["announcement"]
+---
+title: {{ env.APP_NAME }} {{ env.APP_VERSION }} released (NC env.NV_MIN_VERSION - env.NC_MAX_VERSION)
+---
+
+body:
+  - type: textarea
+    attributes:
+      label: New {{ env.APP_NAME }} version
+      value: | 
+        Compatibility: 
+        - PHP min. {{ env.PHP_MIN_VERSION }} 
+        - Nextcloud {{ env.NC_MIN_VERSION }} - {{ env.NC_MAX_VERSION }}
+
+        See releasenotes: https://github.com/nextcloud/polls/releases/tag/{{ env.TAG_NAME }}
+        Download ZIP: https://github.com/nextcloud/polls/releases/download/{{ env.TAG_NAME }}/{{ env.APP_ID }}-{{ env.APP_VERSION }}.zip
+        Download TAR.GZ: https://github.com/nextcloud/polls/releases/download/{{ env.TAG_NAME }}/{{ env.APP_ID }}-{{ env.APP_VERSION }}.tar.gz
+
+        App store release will follow soon.     
+        
+
+

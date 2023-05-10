@@ -3,7 +3,7 @@ inputs:
   node-version:
     required: false
     default: 16
-    description: 'Node version to use'
+    description: 'Node version to use (currently ignored)'
 
 outputs:
   cache-hit: 
@@ -26,10 +26,20 @@ runs:
           ${{ runner.os }}-build-
           ${{ runner.os }}-
 
-    - name: Set up node ${{ inputs.node-version }}
+    - name: Read package.json node and npm engines version
+      uses: skjnldsv/read-package-engines-version-actions@v2
+      id: versions
+      with:
+        fallbackNode: '^16'
+        fallbackNpm: '^8'
+
+    - name: Set up node ${{ steps.versions.outputs.nodeVersion }}
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-versions }}
+        node-version: ${{ steps.versions.outputs.nodeVersion }}
+
+    - name: Set up npm ${{ steps.versions.outputs.npmVersion }}
+      run: npm i -g npm@"${{ steps.versions.outputs.npmVersion }}"
 
     - name: Install dependencies
       if: steps.cache-modules.outputs.cache-hit != 'true'
