@@ -25,6 +25,7 @@ OC.L10N.register(
     "Access" : "Acces",
     "Owner" : "Proprietar",
     "Preview" : "Previzualizare",
+    "User settings" : "Setările utilizatorului",
     "Shares" : "Partajări",
     "Description" : "Descriere",
     "Change name" : "Schimbă numele",
