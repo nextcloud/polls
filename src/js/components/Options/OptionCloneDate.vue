@@ -26,10 +26,11 @@
 		<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: dateBaseOptionString }) }}</p>
 
 		<h3> {{ t('polls', 'Step unit') }} </h3>
-		<NcMultiselect v-model="sequence.unit"
+		<NcSelect v-model="sequence.unit"
+			:clearable="false"
+			:filterable="false"
 			:options="dateUnits"
-			label="name"
-			track-by="value" />
+			label="name" />
 
 		<div class="sideways">
 			<InputDiv v-model="sequence.step"
@@ -64,7 +65,7 @@
 <script>
 
 import moment from '@nextcloud/moment'
-import { NcButton, NcMultiselect } from '@nextcloud/vue'
+import { NcButton, NcSelect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import InputDiv from '../Base/InputDiv.vue'
 
@@ -73,7 +74,7 @@ export default {
 
 	components: {
 		InputDiv,
-		NcMultiselect,
+		NcSelect,
 		NcButton,
 	},
 

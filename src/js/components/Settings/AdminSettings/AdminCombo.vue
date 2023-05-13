@@ -27,25 +27,21 @@
 		</NcCheckboxRadioSwitch>
 		<div v-if="comboLimited" class="settings_details">
 			<h3>{{ t('polls','Allow combo view for the following groups') }}</h3>
-			<NcMultiselect v-model="comboGroups"
-				class="stretch"
+			<NcSelect v-model="comboGroups"
 				label="displayName"
-				track-by="id"
 				:options="groups"
 				:user-select="true"
-				:clear-on-select="false"
-				:preserve-search="true"
 				:multiple="true"
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disallow for all.')"
-				@search-change="loadGroups" />
+				@search="loadGroups" />
 		</div>
 	</div>
 </template>
 
 <script>
 
-import { NcCheckboxRadioSwitch, NcMultiselect } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
@@ -53,7 +49,7 @@ export default {
 
 	components: {
 		NcCheckboxRadioSwitch,
-		NcMultiselect,
+		NcSelect,
 	},
 
 	mixins: [loadGroups, writeValue],

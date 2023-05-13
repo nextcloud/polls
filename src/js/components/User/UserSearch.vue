@@ -21,42 +21,37 @@
   -->
 
 <template>
-	<NcMultiselect id="ajax"
+	<NcSelect id="ajax"
 		:options="users"
 		:multiple="false"
 		:user-select="true"
 		:tag-width="80"
-		:clear-on-select="false"
-		:preserve-search="true"
-		:options-limit="30"
+		:limit="30"
 		:loading="isLoading"
-		:internal-search="false"
 		:searchable="true"
-		:preselect-first="true"
 		:placeholder="placeholder"
 		label="displayName"
-		track-by="userId"
-		@select="addShare"
-		@search-change="loadUsersAsync">
+		@option:selected="addShare"
+		@search="loadUsersAsync">
 		<template #selection="{ values, isOpen }">
 			<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
 				{{ values.length }} users selected
 			</span>
 		</template>
-	</NcMultiselect>
+	</NcSelect>
 </template>
 
 <script>
 import { debounce } from 'lodash'
 import { showError } from '@nextcloud/dialogs'
-import { NcMultiselect } from '@nextcloud/vue'
+import { NcSelect } from '@nextcloud/vue'
 import { AppSettingsAPI } from '../../Api/appSettings.js'
 
 export default {
 	name: 'UserSearch',
 
 	components: {
-		NcMultiselect,
+		NcSelect,
 	},
 
 	data() {
