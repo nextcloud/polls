@@ -204,25 +204,6 @@ export default {
 		position: relative;
 		flex: 1;
 
-		.input-wrapper {
-			position: relative;
-			display: flex;
-			& > input {
-				height: 48px !important;
-				flex: 1;
-			}
-		}
-
-		.helper {
-			min-height: 1.5rem;
-			font-size: 0.8em;
-			opacity: 0.8;
-			&.error {
-				opacity: 1;
-				color: var(--color-error)
-			}
-		}
-
 		input {
 			margin: 0;
 
@@ -241,6 +222,25 @@ export default {
 				border-color: var(--color-error);
 				background-color: var(--color-background-error);
 				color: var(--color-foreground-error);
+			}
+		}
+
+		.input-wrapper {
+			position: relative;
+			display: flex;
+			& > input {
+				height: 48px !important;
+				flex: 1;
+			}
+		}
+
+		.helper {
+			min-height: 1.5rem;
+			font-size: 0.8em;
+			opacity: 0.8;
+			&.error {
+				opacity: 1;
+				color: var(--color-error)
 			}
 		}
 
