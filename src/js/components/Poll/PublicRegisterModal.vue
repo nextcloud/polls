@@ -49,7 +49,7 @@
 					</NcCheckboxRadioSwitch>
 
 					<div v-if="privacyUrl" class="section__optin">
-						<RichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
+						<NcRichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 					</div>
 
 					<div class="modal__buttons">
@@ -100,9 +100,8 @@
 import { debounce } from 'lodash'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { NcButton, NcModal, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcButton, NcModal, NcCheckboxRadioSwitch, NcRichText } from '@nextcloud/vue'
 import { mapState } from 'vuex'
-import { RichText } from '@nextcloud/vue-richtext'
 import InputDiv from '../Base/InputDiv.vue'
 import SimpleLink from '../../helpers/SimpleLink.js'
 import { ValidatorAPI } from '../../Api/validators.js'
@@ -118,7 +117,7 @@ export default {
 		NcCheckboxRadioSwitch,
 		InputDiv,
 		NcModal,
-		RichText,
+		NcRichText,
 		SimpleLink,
 		NcButton,
 	},

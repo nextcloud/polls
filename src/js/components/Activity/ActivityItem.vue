@@ -24,15 +24,14 @@
 	<div class="activity-item">
 		<div class="activity-item__content">
 			<span class="activity-item__date">{{ dateActivityRelative }}</span>
-			<RichText :text="message.subject" :arguments="message.parameters" />
+			<NcRichText :text="message.subject" :arguments="message.parameters" />
 		</div>
 	</div>
 </template>
 
 <script>
 import moment from '@nextcloud/moment'
-import { RichText } from '@nextcloud/vue-richtext'
-import { NcUserBubble } from '@nextcloud/vue'
+import { NcUserBubble, NcRichText } from '@nextcloud/vue'
 import SimpleLink from '../../helpers/SimpleLink.js'
 import GuestBubble from '../../helpers/GuestBubble.js'
 
@@ -40,7 +39,7 @@ export default {
 	name: 'ActivityItem',
 
 	components: {
-		RichText,
+		NcRichText,
 	},
 
 	props: {
