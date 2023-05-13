@@ -285,7 +285,7 @@ export default {
 			display: flex;
 		}
 		&.active {
-			background-color: var(--color-primary-light);
+			background-color: var(--color-primary-element-light);
 		}
 		&:hover {
 			background-color: var(--color-background-hover);
