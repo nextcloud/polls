@@ -106,17 +106,13 @@ export default {
 		}
 	}
 
-	.config-box__container{
+	.config-box__container {
 		display: flex;
 		flex-direction: column;
 		padding-left: 24px;
 
 		label {
 			margin: 4px 0;
-		}
-
-		input, textarea {
-			width: 100%;
 		}
 	}
 }

@@ -198,7 +198,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	$input-height: 34px;
+	$input-height: 44px;
 
 	.input-div {
 		position: relative;
@@ -207,6 +207,10 @@ export default {
 		.input-wrapper {
 			position: relative;
 			display: flex;
+			& > input {
+				height: 48px !important;
+				flex: 1;
+			}
 		}
 
 		.helper {
@@ -220,7 +224,6 @@ export default {
 		}
 
 		input {
-			width: 100%;
 			margin: 0;
 
 			&.has-submit,
@@ -258,7 +261,7 @@ export default {
 
 		.modifier {
 			position: absolute;
-			height: $input-height;
+			height: 100%;
 			width: $input-height;
 			border-color: var(--color-border-dark);
 			cursor: pointer;
@@ -269,12 +272,12 @@ export default {
 
 			&.add {
 				right: 0;
-				border-left: solid 1px var(--color-border-dark);
+				border-left: solid 2px var(--color-border-maxcontrast);
 				border-radius: 0 var(--border-radius) var(--border-radius) 0;
 			}
 
 			&.subtract {
-				border-right: solid 1px var(--color-border-dark);
+				border-right: solid 2px var(--color-border-maxcontrast);
 				border-radius: var(--border-radius) 0 0 var(--border-radius);
 			}
 		}
