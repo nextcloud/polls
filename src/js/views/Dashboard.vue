@@ -117,7 +117,7 @@ export default {
 		padding: 4px 0;
 
 		&.active {
-			background-color: var(--color-primary-light);
+			background-color: var(--color-primary-element-light);
 		}
 
 		&:hover {

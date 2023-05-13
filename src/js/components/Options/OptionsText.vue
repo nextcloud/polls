@@ -167,7 +167,7 @@ export default {
 
 	.ghost {
 		opacity: 0.5;
-		background: var(--color-primary-hover);
+		background: var(--color-primary-element-hover);
 	}
 
 	.submit-option {

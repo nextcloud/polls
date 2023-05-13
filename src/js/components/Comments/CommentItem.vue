@@ -156,7 +156,7 @@ export default {
 		.comment-item__content {
 			border: solid 1px var(--color-primary-element-light);
 			border-radius: var(--border-radius-large);
-			background-color: var(--color-primary-light);
+			background-color: var(--color-primary-element-light);
 			box-shadow: 2px 2px 6px var(--color-box-shadow);
 			padding-left: 8px;
 			padding-bottom: 10px;
@@ -165,8 +165,8 @@ export default {
 				margin-right: 4px;
 
 				&:hover {
-					background: var(--color-primary-hover);
-					color: var(--color-primary-light-hover);
+					background: var(--color-primary-element-hover);
+					color: var(--color-primary-element-light-hover);
 					margin-left: -4px;
 					padding-left: 4px;
 					border-radius: var(--border-radius-large);

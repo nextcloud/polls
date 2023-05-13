@@ -64,13 +64,13 @@ export default {
 		&.error {
 			border-color: var(--color-error);
 			background-color: var(--color-error);
-			color: var(--color-primary-text) !important;
+			color: var(--color-primary-element-text) !important;
 		}
 
 		&.success {
 			border-color: var(--color-success);
 			background-color: var(--color-success);
-			color: var(--color-primary-text) !important;
+			color: var(--color-primary-element-text) !important;
 		}
 	}
 
