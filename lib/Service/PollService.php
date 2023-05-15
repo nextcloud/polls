@@ -91,7 +91,7 @@ class PollService {
 						$poll->getLastInteraction(),
 						$poll->getExpire(),
 						$this->optionMapper->findDateBoundaries($poll->getId())['max'],
-						) + ($this->preferences->getRelevantOffsetTimestamp());
+					) + ($this->preferences->getRelevantOffsetTimestamp());
 						
 					// mix poll settings, acl and relevantThreshold into one array
 					$pollList[] = (object) array_merge(

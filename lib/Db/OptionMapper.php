@@ -154,7 +154,12 @@ class OptionMapper extends QBMapper {
 		$qb->executeStatement();
 	}
 
-	public function findDateBoundaries(int $pollId) {
+	/**
+	 * @return (int|mixed)[]
+	 *
+	 * @psalm-return array{min: 0|mixed, max: 0|mixed}
+	 */
+	public function findDateBoundaries(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('timestamp')
@@ -166,7 +171,7 @@ class OptionMapper extends QBMapper {
 		try {
 			return [
 				'min' => min($results),
-				'max' => max($results), 
+				'max' => max($results),
 			];
 		} catch (\Throwable $th) {
 			return [

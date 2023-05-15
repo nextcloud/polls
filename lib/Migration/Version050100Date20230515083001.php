@@ -57,6 +57,9 @@ class Version050100Date20230515083001 extends SimpleMigrationStep {
 		return null;
 	}
 
+	/**
+	 * @return void
+	 */
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$now = time();
 		$query = $this->db->getQueryBuilder();

@@ -287,7 +287,12 @@ class TableManager {
 		}
 	}
 
-	public function deleteAllDuplicates(?IOutput $output = null) {
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return list<string>
+	 */
+	public function deleteAllDuplicates(?IOutput $output = null): array {
 		$messages = [];
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $index) {
 			$count = $this->deleteDuplicates($tableName, $index['columns']);

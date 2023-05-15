@@ -29,8 +29,6 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Search\ISearchQuery;
 
-use function OCP\Log\logger;
-
 /**
  * @template-extends QBMapper<Poll>
  */

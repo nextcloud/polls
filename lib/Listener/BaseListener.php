@@ -110,7 +110,7 @@ abstract class BaseListener implements IEventListener {
 		throw new InvalidClassException('child class must be checked in child class');
 	}
 
-	protected function updateLastInteraction() {
+	protected function updateLastInteraction(): void {
 		// Update last interaction, exept event is one of the of excluded events
 		if (
 			!($this->event instanceof PollTakeoverEvent)
@@ -160,6 +160,7 @@ abstract class BaseListener implements IEventListener {
 		if (($this->event instanceof BaseEvent)) {
 			return $this->event->getPollId();
 		}
+		return 0;
 	}
 
 	/**
