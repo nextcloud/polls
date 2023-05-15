@@ -41,17 +41,17 @@ const state = {
 			id: 'relevant',
 			title: t('polls', 'Relevant'),
 			titleExt: t('polls', 'Relevant polls'),
-			description: t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago.'),
+			description: t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to.'),
 			pinned: false,
 			createDependent: false,
 			filterCondition(poll) {
 				return !poll.deleted
-                && !(poll.expire > 0 && moment.unix(poll.expire).diff(moment(), 'days') < -4)
-                && (poll.important
-                    || poll.userHasVoted
-                    || poll.isOwner
-                    || (poll.allowView && poll.access !== 'open')
-                )
+					&& (poll.relevantThreshold > (moment().unix()))
+					&& (poll.important
+						|| poll.userHasVoted
+						|| poll.isOwner
+						|| (poll.allowView && poll.access !== 'open')
+					)
 			},
 		},
 		{

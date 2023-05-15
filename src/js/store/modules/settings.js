@@ -35,6 +35,7 @@ const defaultSettings = () => ({
 		defaultViewDatePoll: 'table-view',
 		performanceThreshold: 1000,
 		pollCombo: [],
+		relevantOffset: 30,
 	},
 	session: {
 		manualViewDatePoll: '',

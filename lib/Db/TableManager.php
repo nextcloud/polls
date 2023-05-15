@@ -61,8 +61,9 @@ class TableManager {
 		$this->connection->migrateToSchema($this->schema);
 	}
 
-	public function refreshSchema(): void {
+	public function refreshSchema(): Schema {
 		$this->schema = $this->connection->createSchema();
+		return $this->schema;
 	}
 
 	/**
@@ -301,6 +302,17 @@ class TableManager {
 			}
 		}
 		return $messages;
+
+	}
+
+	public function resetLastInteraction(?int $timestamp): void {
+		$timestamp = $timestamp ?? time();
+		$query = $this->connection->getQueryBuilder();
+
+		$query->update(Poll::TABLE)
+			->set('last_interaction', $query->createNamedParameter($timestamp))
+			->where($query->expr()->eq('last_interaction', $query->createNamedParameter(0)));
+		$query->executeStatement();
 
 	}
 

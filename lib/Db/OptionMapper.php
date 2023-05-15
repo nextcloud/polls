@@ -154,6 +154,28 @@ class OptionMapper extends QBMapper {
 		$qb->executeStatement();
 	}
 
+	public function findDateBoundaries(int $pollId) {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('timestamp')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+
+		$results = $qb->executeQuery()->fetchAll(\PDO::FETCH_COLUMN);
+		
+		try {
+			return [
+				'min' => min($results),
+				'max' => max($results), 
+			];
+		} catch (\Throwable $th) {
+			return [
+				'min' => 0,
+				'max' => 0,
+			];
+		}
+	}
+
 	/**
 	 * @return Option[]
 	 */

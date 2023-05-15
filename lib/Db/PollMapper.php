@@ -29,6 +29,8 @@ use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Search\ISearchQuery;
 
+use function OCP\Log\logger;
+
 /**
  * @template-extends QBMapper<Poll>
  */
@@ -154,22 +156,34 @@ class PollMapper extends QBMapper {
 	 */
 	public function archiveExpiredPolls(int $offset): void {
 		$archiveDate = time();
-		$query = $this->db->getQueryBuilder();
-		$query->update($this->getTableName())
-			->set('deleted', $query->createNamedParameter($archiveDate))
-			->where($query->expr()->lt('expire', $query->createNamedParameter($offset)))
-			->andWhere($query->expr()->gt('expire', $query->createNamedParameter(0)));
-		$query->executeStatement();
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->getTableName())
+			->set('deleted', $qb->createNamedParameter($archiveDate))
+			->where($qb->expr()->lt('expire', $qb->createNamedParameter($offset)))
+			->andWhere($qb->expr()->gt('expire', $qb->createNamedParameter(0)));
+		$qb->executeStatement();
+	}
+
+	/**
+	 * Archive polls per timestamp
+	 */
+	public function setLastInteraction(int $pollId): void {
+		$timestamp = time();
+		$qb = $this->db->getQueryBuilder();
+		$qb->update($this->getTableName())
+			->set('last_interaction', $qb->createNamedParameter($timestamp, IQueryBuilder::PARAM_INT))
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		$qb->executeStatement();
 	}
 
 	/**
 	 * Delete polls of named owner
 	 */
 	public function deleteByUserId(string $userId): void {
-		$query = $this->db->getQueryBuilder();
-		$query->delete($this->getTableName())
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete($this->getTableName())
 			->where('owner = :userId')
 			->setParameter('userId', $userId);
-		$query->executeStatement();
+		$qb->executeStatement();
 	}
 }

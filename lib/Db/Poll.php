@@ -73,6 +73,8 @@ use OCP\IURLGenerator;
  * @method void setHideBookedUp(integer $value)
  * @method int getUseNo()
  * @method void setUseNo(integer $value)
+ * @method int getLastInteraction()
+ * @method void setLastInteraction(integer $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
  */
@@ -122,6 +124,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $allowComment = 0;
 	protected int $hideBookedUp = 0;
 	protected int $useNo = 0;
+	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
 
 	public function __construct() {
@@ -138,6 +141,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('important', 'int');
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
+		$this->addType('lastInteraction', 'int');
 		$this->optionMapper = Container::queryClass(OptionMapper::class);
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 	}
@@ -170,6 +174,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'type' => $this->getType(),
 			'useNo' => $this->getUseNo(),
 			'voteLimit' => $this->getVoteLimit(),
+			'lastInteraction' => $this->getLastInteraction(),
 		];
 	}
 
@@ -218,7 +223,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function setAutoReminder(bool $value) : void {
 		$this->setMiscSettingsByKey('autoReminder', $value);
-	}
+	}	
 
 	public function getAutoReminder(): bool {
 		return $this->getMiscSettingsArray()['autoReminder'] ?? false;
@@ -260,13 +265,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return $this->description ?? '';
 	}
 
-	public function getTitle(): string {
-		return $this-> title;
-	}
-
 	public function getDescriptionSafe(): string {
 		return htmlspecialchars($this->getDescription());
 	}
+
 
 	private function setMiscSettingsArray(array $value) : void {
 		$this->setMiscSettings(json_encode($value));
@@ -310,8 +312,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 		if ($this->getType() === Poll::TYPE_DATE) {
 			// use first date option as reminder deadline
-			$options = $this->optionMapper->findByPoll($this->getId());
-			return $options[0]->getTimestamp();
+			return $this->optionMapper->findDateBoundaries($this->getId())['min'];
 		}
 		throw new NoDeadLineException();
 	}

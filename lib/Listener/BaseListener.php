@@ -24,12 +24,18 @@
 namespace OCA\Polls\Listener;
 
 use OCA\Polls\Event\BaseEvent;
+use OCA\Polls\Event\PollArchivedEvent;
+use OCA\Polls\Event\PollDeletedEvent;
+use OCA\Polls\Event\PollExpiredEvent;
+use OCA\Polls\Event\PollOwnerChangeEvent;
+use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Exceptions\InvalidClassException;
 use OCA\Polls\Exceptions\OCPEventException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\ActivityService;
 use OCA\Polls\Service\LogService;
 use OCA\Polls\Service\NotificationService;
+use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\WatchService;
 use OCP\BackgroundJob\IJobList;
 use OCP\DB\Exception;
@@ -51,7 +57,8 @@ abstract class BaseListener implements IEventListener {
 		protected IJobList $jobList,
 		protected LogService $logService,
 		protected NotificationService $notificationService,
-		protected WatchService $watchService
+		protected WatchService $watchService,
+		protected PollService $pollService,
 	) {
 	}
 
@@ -59,7 +66,9 @@ abstract class BaseListener implements IEventListener {
 		$this->event = $event;
 
 		try {
+			// check if event is child of \OCA\Polls\Event\BaseEvent
 			$this->checkClass();
+			$this->updateLastInteraction();
 			$this->addLog();
 
 			// If addLog throws UniqueConstraintViolationException, avoid spamming activities
@@ -101,6 +110,18 @@ abstract class BaseListener implements IEventListener {
 		throw new InvalidClassException('child class must be checked in child class');
 	}
 
+	protected function updateLastInteraction() {
+		// Update last interaction, exept event is one of the of excluded events
+		if (
+			!($this->event instanceof PollTakeoverEvent)
+			&& !($this->event instanceof PollOwnerChangeEvent)
+			&& !($this->event instanceof PollExpiredEvent)
+			&& !($this->event instanceof PollDeletedEvent)
+			&& !($this->event instanceof PollArchivedEvent)
+		) {
+			$this->pollService->setLastInteraction($this->getPollId());
+		}
+	}
 	/**
 	 * Default logging for email notifications.
 	 * @throws Exception
@@ -133,6 +154,15 @@ abstract class BaseListener implements IEventListener {
 	}
 
 	/**
+	 * Return the poll id
+	 */
+	protected function getPollId() : int {
+		if (($this->event instanceof BaseEvent)) {
+			return $this->event->getPollId();
+		}
+	}
+
+	/**
 	 * Default for activity notification.
 	 */
 	protected function addActivity() : void {
@@ -156,6 +186,7 @@ abstract class BaseListener implements IEventListener {
 		if (!($this->event instanceof BaseEvent)) {
 			return;
 		}
+
 		foreach (static::WATCH_TABLES as $table) {
 			$this->watchService->writeUpdate($this->event->getPollId(), $table);
 		}

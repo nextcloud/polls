@@ -39,12 +39,21 @@
 				{{ t('polls', 'Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view.') }}
 			</div>
 		</div>
+
+		<div class="user_settings">
+			<InputDiv v-model="relevantOffset"
+				type="number"
+				inputmode="numeric"
+				use-num-modifiers
+				:label="t('polls', 'Enter the amount of days, polls without activity stay in the relevant list:')" />
+		</div>
 	</div>
 </template>
 
 <script>
 
 import { mapState } from 'vuex'
+import InputDiv from '../../Base/InputDiv.vue'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {
@@ -52,12 +61,23 @@ export default {
 
 	components: {
 		NcCheckboxRadioSwitch,
+		InputDiv,
 	},
 
 	computed: {
 		...mapState({
 			settings: (state) => state.settings.user,
 		}),
+
+		relevantOffset: {
+			get() {
+				return this.settings.relevantOffset
+			},
+			set(value) {
+				value = value < 1 ? 1 : value
+				this.writeValue({ relevantOffset: value })
+			},
+		},
 
 		defaultViewTextPoll: {
 			get() {
