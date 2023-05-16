@@ -23,10 +23,8 @@
 
 namespace OCA\Polls\Migration;
 
-use OCA\Polls\Db\IndexManager;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\TableManager;
-use OCP\DB\ISchemaWrapper;
-use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -37,13 +35,10 @@ use OCP\Migration\SimpleMigrationStep;
  * Changed class naming: Version[jjmmpp]Date[YYYYMMDDHHMMSS]
  * Version: jj = major version, mm = minor, pp = patch
  */
-class Version050005Date20230506203301 extends SimpleMigrationStep {
+class Version050100Date20230515083001 extends SimpleMigrationStep {
 	public function __construct(
-		private IDBConnection $connection,
-		private IConfig $config,
-		private FixVotes $fixVotes,
-		private IndexManager $indexManager,
-		private TableManager $tableManager
+		private TableManager $tableManager,
+		private IDBConnection $db,
 	) {
 	}
 
@@ -51,15 +46,26 @@ class Version050005Date20230506203301 extends SimpleMigrationStep {
 	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		/** @var ISchemaWrapper $schema */
-		$schema = $schemaClosure();
-		
 		// Create tables, as defined in TableSchema or fix column definitions
-		foreach ($this->tableManager->createTables() as $message) {
-			$output->info('Polls - ' . $message);
-		};
+		$messages = $this->tableManager->createTables();
 		$this->tableManager->migrate();
 
-		return $schema;
+		foreach ($messages as $message) {
+			$output->info('Polls - ' . $message);
+		};
+
+		return null;
+	}
+
+	/**
+	 * @return void
+	 */
+	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
+		$now = time();
+		$query = $this->db->getQueryBuilder();
+		$query->update(Poll::TABLE)
+			->set('last_interaction', $query->createNamedParameter($now))
+			->where($query->expr()->eq('last_interaction', $query->createNamedParameter(0)));
+		$query->executeStatement();
 	}
 }

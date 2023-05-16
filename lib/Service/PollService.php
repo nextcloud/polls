@@ -23,8 +23,11 @@
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Preferences;
+use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCreatedEvent;
@@ -51,7 +54,7 @@ use OCP\Search\ISearchQuery;
 
 class PollService {
 	private string $userId;
-
+	
 	public function __construct(
 		private Acl $acl,
 		private AppSettings $appSettings,
@@ -60,28 +63,41 @@ class PollService {
 		private IUserManager $userManager,
 		private IUserSession $userSession,
 		private MailService $mailService,
+		private OptionMapper $optionMapper,
 		private Poll $poll,
 		private PollMapper $pollMapper,
-		private VoteMapper $voteMapper
+		private Preferences $preferences,
+		private PreferencesMapper $preferencesMapper,
+		private VoteMapper $voteMapper,
 	) {
 		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
+		$this->preferences = $this->preferencesMapper->find($this->userId);
 	}
 
 	/**
-	 * Get list of polls
+	 * Get list of polls including acl and Threshold for "relevant polls"
 	 */
 	public function list(): array {
 		$pollList = [];
 		try {
 			$polls = $this->pollMapper->findForMe($this->userId);
-
+			
 			foreach ($polls as $poll) {
 				try {
 					$this->acl->setPollId($poll->getId());
 					// TODO: Not the elegant way. Improvement neccessary
+					$relevantThreshold = max(
+						$poll->getCreated(),
+						$poll->getLastInteraction(),
+						$poll->getExpire(),
+						$this->optionMapper->findDateBoundaries($poll->getId())['max'],
+					) + ($this->preferences->getRelevantOffsetTimestamp());
+						
+					// mix poll settings, acl and relevantThreshold into one array
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
-						(array) json_decode(json_encode($this->acl))
+						(array) json_decode(json_encode($this->acl)),
+						['relevantThreshold' => $relevantThreshold],
 					);
 				} catch (ForbiddenException $e) {
 					continue;
@@ -219,6 +235,7 @@ class PollService {
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
 		$this->poll->setImportant(0);
+		$this->poll->setLastInteraction(time());
 		$this->poll = $this->pollMapper->insert($this->poll);
 
 		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));
@@ -266,6 +283,15 @@ class PollService {
 		$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($this->poll));
 
 		return $this->poll;
+	}
+
+	/**
+	 * Update timestamp for last interaction with polls
+	 */
+	public function setLastInteraction(int $pollId): void {
+		if ($pollId) {
+			$this->pollMapper->setLastInteraction($pollId);
+		}
 	}
 
 
