@@ -140,6 +140,7 @@
     "{actor} has shared this poll with {sharee}" : "{actor} heeft deze peiling gedeeld met {sharee}",
     "You have deleted the share for {sharee} from poll {pollTitle}" : "Je hebt de share voor {sharee} van peiling {pollTitle} verwijderd",
     "{actor} has deleted the share for {sharee} from poll {pollTitle}" : "{actor} heeft de share voor {sharee} van peiling {pollTitle} verwijderd",
+    "You have deleted share of {sharee}" : "Je hebt de deellink voor {sharee} verwijderd",
     "{actor} has deleted a share" : "{actor} heeft een deellink verwijderd",
     "You have deleted a public share from poll {pollTitle}" : "Je hebt een publieke share verwijderd van peiling {pollTitle}",
     "{actor} has deleted a public share from poll {pollTitle}" : "{actor} heeft een publieke share verwijderd van peiling {pollTitle}",
