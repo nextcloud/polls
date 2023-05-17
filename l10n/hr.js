@@ -291,7 +291,6 @@ OC.L10N.register(
     "Disallow proposals" : "Zabrani prijedloge",
     "Allow proposals" : "Dopusti prijedloge",
     "Relevant" : "Važno",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago." : "Sve ankete s odgovarajućim značenjem za vas jer ste njihov sudionik ili vlasnik ili ste pozvani da u njima sudjelujete. Bez zatvorenih anketa starih više od pet dana.",
     "My polls" : "Moje ankete",
     "Your polls (in which you are the owner)." : "Vaše ankete (kojima ste vlasnik).",
     "Participated" : "Sudjelovao",

@@ -534,7 +534,6 @@ OC.L10N.register(
     "Disallow proposals" : "Vorschläge nicht zulassen",
     "Allow proposals" : "Vorschläge zulassen",
     "Relevant" : "Relevant",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago." : "Alle Umfragen, die für Sie relevant oder wichtig sind, weil Sie Teilnehmer oder Eigentümer sind oder zu denen Sie eingeladen sind. Ohne Umfragen, die vor mehr als fünf Tagen geschlossen wurden. ",
     "My polls" : "Meine Umfragen",
     "Your polls (in which you are the owner)." : "Ihre Umfragen (deren Inhaber Sie sind).",
     "Private polls" : "Private Umfragen",

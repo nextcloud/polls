@@ -534,7 +534,6 @@ OC.L10N.register(
     "Disallow proposals" : "Javaslatok tiltása",
     "Allow proposals" : "Javaslatok engedélyezése",
     "Relevant" : "Releváns",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago." : "Az összes olyan szavazás, amely releváns és fontos Önnek, mert résztvevő, tulajdonos vagy meghívták. Nem tartalmazz az öt napnál régebben lezárt szavazásokat.",
     "My polls" : "Saját szavazások",
     "Your polls (in which you are the owner)." : "Saját szavazások (ahol Ön a tulajdonos).",
     "Private polls" : "Privát szavazások",

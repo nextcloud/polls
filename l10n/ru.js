@@ -453,7 +453,6 @@ OC.L10N.register(
     "Disallow proposals" : "Отклонённые предложения",
     "Allow proposals" : "Разрешённые предложения",
     "Relevant" : "Актуальные",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago." : "Все опросы, за исключением завершённых, которые вы организовывали, в которых участвовали или в которые были приглашены, за исключением завершённых более пяти дней назад.",
     "My polls" : "Мои опросы",
     "Your polls (in which you are the owner)." : "Ваши опросы (где вы владелец)",
     "Private polls" : "Частные опросы",

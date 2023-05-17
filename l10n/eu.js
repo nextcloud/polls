@@ -532,7 +532,6 @@ OC.L10N.register(
     "Disallow proposals" : "Ez onartu proposamenak",
     "Allow proposals" : "Onartu proposamenak",
     "Relevant" : "Beharrezkoa",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago." : "Zuretzako esanguratsuak edo garrantzitsuak diren galdeketa guztiak, partaide edo jabe zarelako edo gonbidatu zaituztelako. Duela bost egun baino lehenago itxitako galdeketak kanpo utzita.",
     "My polls" : "Nire bozketak",
     "Your polls (in which you are the owner)." : "Zure galdeketak (jabe zarenak).",
     "Private polls" : "Galdeketa pribatuak",

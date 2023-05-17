@@ -534,7 +534,6 @@ OC.L10N.register(
     "Disallow proposals" : "Disallow proposals",
     "Allow proposals" : "Allow proposals",
     "Relevant" : "Relevant",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago." : "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago.",
     "My polls" : "My polls",
     "Your polls (in which you are the owner)." : "Your polls (in which you are the owner).",
     "Private polls" : "Private polls",

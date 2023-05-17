@@ -534,7 +534,6 @@ OC.L10N.register(
     "Disallow proposals" : "Забрани давање предлога",
     "Allow proposals" : "Дозволи давање предлога",
     "Relevant" : "Релевантно",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago." : "Сва гласања која се тичу вас, или су вам важна јер сте учесник или власник или сте позвани на њих. Без гласања затворених пре више од пет дана.",
     "My polls" : "Моја гласања",
     "Your polls (in which you are the owner)." : "Ваша гласања (чији сте ви власник).",
     "Private polls" : "Приватна гласања",

@@ -484,7 +484,6 @@ OC.L10N.register(
     "Disallow proposals" : "Disattiva le proposte",
     "Allow proposals" : "Attiva le proposte",
     "Relevant" : "Importante",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to. Without polls closed more than five days ago." : "Tutti i sondaggi che sono rilevanti o importanti per te, perché sei un partecipante, il proprietario o sei stato invitato. Senza sondaggi chiusi più di cinque giorni fa.",
     "My polls" : "I miei sondaggi",
     "Your polls (in which you are the owner)." : "I tuoi sondaggi (di cui sei il proprietario).",
     "Private polls" : "Sondaggi privati",
