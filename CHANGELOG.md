@@ -1,6 +1,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.1.0] - tbd
+### Changes
+ - Allow to clean relevant list from inactive polls after configurable amount of days
+ - support for PHP 8.2
+ - replaced dropdown elements (NcSelect over NcMultiSelect)
+ - Added alternative vote page design as beta option
+### Refactoring
+- replace vue-richtext by NcRichText
 ## [5.0.5] - 2023-05-07
 ### Fix
  - show unprocessed share invitations
