@@ -28,6 +28,11 @@
 				{{ t('polls', 'Use alternative styling for the comments sidebar') }}
 			</NcCheckboxRadioSwitch>
 		</div>
+		<div class="user_settings">
+			<NcCheckboxRadioSwitch :checked.sync="useAlternativeStyling" type="switch">
+				{{ t('polls', 'Use alternative vote page styling') }}
+			</NcCheckboxRadioSwitch>
+		</div>
 	</div>
 </template>
 
@@ -54,6 +59,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ useCommentsAlternativeStyling: +value })
+			},
+		},
+
+		useAlternativeStyling: {
+			get() {
+				return !!this.settings.useAlternativeStyling
+			},
+			set(value) {
+				this.writeValue({ useAlternativeStyling: +value })
 			},
 		},
 

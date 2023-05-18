@@ -27,6 +27,7 @@ import { UserSettingsAPI } from '../../Api/userSettings.js'
 const defaultSettings = () => ({
 	user: {
 		useCommentsAlternativeStyling: false,
+		useAlternativeStyling: false,
 		calendarPeek: false,
 		checkCalendars: [],
 		checkCalendarsBefore: 0,

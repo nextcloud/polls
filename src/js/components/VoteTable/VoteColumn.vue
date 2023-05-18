@@ -154,3 +154,19 @@ export default {
 	},
 }
 </script>
+
+<style lang="scss">
+.vote-style-beta-510 .vote-column {
+	border-radius: var(--border-radius-large);
+
+	&:hover {
+		background-color: var(--color-background-dark);
+		// box-shadow: 3px 3px 9px var(--color-background-darker);
+	}
+
+	&.locked:hover {
+		background-color: var(--color-polls-background-no);
+	}
+}
+
+</style>
