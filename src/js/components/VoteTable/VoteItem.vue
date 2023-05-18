@@ -185,4 +185,32 @@ export default {
 	}
 }
 
+.vote-style-beta-510 {
+	.vote-item {
+		background-color: transparent;
+		&.no {
+			background-color: transparent;
+		}
+		&.yes {
+			background-color: var(--color-polls-background-yes);
+		}
+		&.maybe {
+			background-color: var(--color-polls-background-maybe);
+		}
+
+		&.currentuser {
+			background-color: transparent !important;
+			.locked & {
+				background-color: var(--color-polls-background-no) !important;
+			}
+		}
+	}
+
+	.locked {
+		.vote-item.currentuser {
+			background-color: var(--color-polls-background-no) !important;
+		}
+	}
+}
+
 </style>
