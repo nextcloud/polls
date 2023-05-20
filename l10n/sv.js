@@ -390,6 +390,7 @@ OC.L10N.register(
     "The default threshold of 1000 should be a good and safe value." : "Standardtröskeln på 1000 bör vara ett bra och säkert värde.",
     "The style settings are still experimental!" : "Stilinställningarna är fortfarande experimentella!",
     "Use alternative styling for the comments sidebar" : "Använd alternativ stil för kommentarsfältet",
+    "Use alternative vote page styling" : "Använd alternativ stil för röstsidan",
     "Calendar check" : "Kalenderkontroll",
     "User settings" : "Användarinställningar",
     "Performance settings" : "Prestandainställningar",

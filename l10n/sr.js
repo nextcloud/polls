@@ -390,6 +390,7 @@ OC.L10N.register(
     "The default threshold of 1000 should be a good and safe value." : "Подразумевани праг од 1000 би требало да буде добра и сигурна вредност.",
     "The style settings are still experimental!" : "Подешавања стила су још увек експериментална!",
     "Use alternative styling for the comments sidebar" : "Користите алтернативни стил за бочну траку за коментаре",
+    "Use alternative vote page styling" : "Користи другачије стилизовану страницу за гласање",
     "Calendar check" : "Провера календара",
     "User settings" : "Корисничка подешавања",
     "Performance settings" : "Подешавања перформанси",

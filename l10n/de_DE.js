@@ -390,6 +390,7 @@ OC.L10N.register(
     "The default threshold of 1000 should be a good and safe value." : "Der Standardschwellenwert von 1000 sollte ein guter und sicherer Wert sein.",
     "The style settings are still experimental!" : "Die Stil-Einstellungen sind noch experimentell",
     "Use alternative styling for the comments sidebar" : "Alternative Stile für die Seitenleiste der Kommentare verwenden",
+    "Use alternative vote page styling" : "Einen alternativen Stil für die Abstimmungsseite verwenden",
     "Calendar check" : "Kalender-Prüfung",
     "User settings" : "Benutzer-Einstellungen",
     "Performance settings" : "Leistungseinstellungen",

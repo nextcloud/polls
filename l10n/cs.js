@@ -390,6 +390,7 @@ OC.L10N.register(
     "The default threshold of 1000 should be a good and safe value." : "Výchozí práh 1000 by měl být dobrou a bezpečnou hodnotou.",
     "The style settings are still experimental!" : "Nastavení pro styl jsou stále ještě experimentální!",
     "Use alternative styling for the comments sidebar" : "Pro postranní panel s komentáři použít alternativní styl",
+    "Use alternative vote page styling" : "Použít alternativní styl hlasovací stránky",
     "Calendar check" : "Kontrola kalendáře",
     "User settings" : "Nastavení pro uživatele",
     "Performance settings" : "Nastavení ohledně výkonnosti",

@@ -390,6 +390,7 @@ OC.L10N.register(
     "The default threshold of 1000 should be a good and safe value." : "預設閾值 1000 應該是良好且安全的值。",
     "The style settings are still experimental!" : "樣式設定仍處於實驗性階段！",
     "Use alternative styling for the comments sidebar" : "為評論側邊欄使用替代樣式",
+    "Use alternative vote page styling" : "使用替代投票頁面樣式",
     "Calendar check" : "行事曆檢查",
     "User settings" : "使用者設定",
     "Performance settings" : "效能設定",
