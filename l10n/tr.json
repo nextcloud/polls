@@ -387,6 +387,7 @@
     "The default threshold of 1000 should be a good and safe value." : "Varsayılan olarak 1000 gibi bir eşik değeri iyi ve güvenli olmalıdır.",
     "The style settings are still experimental!" : "Biçem ayarları henüz deneme aşamasındadır!",
     "Use alternative styling for the comments sidebar" : "Yorumlar yan çubuğu için alternatif biçemlendirme kullanılsın",
+    "Use alternative vote page styling" : "Alternatif oylama sayfası stili kullan",
     "Calendar check" : "Takvim denetimi",
     "User settings" : "Kullanıcı ayarları",
     "Performance settings" : "Başarım ayarları",

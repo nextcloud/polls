@@ -167,6 +167,7 @@
     "Switch to table view" : "切换为表格视图",
     "Delete" : "删除",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["在 {countdown} 秒内删除"],
+    "Send confirmation emails" : "发送确认电子邮件",
     "Date order" : "日期顺序",
     "Original order" : "初始顺序",
     "Ranked order" : "排名顺序",
