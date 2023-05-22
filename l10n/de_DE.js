@@ -325,7 +325,7 @@ OC.L10N.register(
     "valid email address." : "Gültige E-Mail-Adresse.",
     "Invalid email address." : "Ungültige E-Mail-Adresse.",
     "Guest users" : "Gastbenutzer",
-    "Enter your name or nickname" : "Geben Sie Ihren Namen oder Ihren Spitznamen ein",
+    "Enter your name or nickname" : "Geben Sie Ihren Namen oder einen Spitznamen ein",
     "Remember me for 30 days" : "Für 30 Tage an mich erinnern",
     "Registered users" : "Registrierte Benutzer",
     "Login" : "Anmeldung",
