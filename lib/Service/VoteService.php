@@ -103,7 +103,7 @@ class VoteService {
 
 		if ($acl) {
 			$this->acl = $acl; // ->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
-		// $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
+			// $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
 		} else {
 			$this->acl->setPollId($option->getPollId(), Acl::PERMISSION_VOTE_EDIT);
 		}

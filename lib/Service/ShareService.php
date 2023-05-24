@@ -298,9 +298,9 @@ class ShareService {
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
 
-		// TODO: skip this atm, to send invitations as mail too, if user is a site user
-		// $sentResult = ['sentMails' => [new User($share->getuserId())]];
-		// $this->shareService->setInvitationSent($token);
+			// TODO: skip this atm, to send invitations as mail too, if user is a site user
+			// $sentResult = ['sentMails' => [new User($share->getuserId())]];
+			// $this->shareService->setInvitationSent($token);
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
 			foreach ($this->userService->getUserFromShare($share)->getMembers() as $member) {
 				$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
