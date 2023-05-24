@@ -40,6 +40,7 @@
 		"psalm:baseline:update": "psalm --update-baseline"
 	},
 	"require": {
+		"php": ">=8.0 <=8.2",
 		"league/commonmark": "^2.1",
 		"rlanvin/php-rrule": "^2.3"
 	}
