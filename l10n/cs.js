@@ -536,6 +536,7 @@ OC.L10N.register(
     "Disallow proposals" : "Zakázat návrhy",
     "Allow proposals" : "Povolit návrhy",
     "Relevant" : "Relevantní",
+    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to." : "Všechny ankety, které s vámi souvisí nebo jsou pro vás důležité, protože jste účastníky nebo vlastníky nebo jste do nich byli přizváni.",
     "My polls" : "Moje ankety",
     "Your polls (in which you are the owner)." : "Vaše ankety (u kterých jste vlastníky).",
     "Private polls" : "Soukromé ankety",
