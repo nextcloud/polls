@@ -23,7 +23,7 @@
  */
 
 import Vue from 'vue'
-import store from './store/index.js'
+import store from './store/store-polls.js'
 import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
 import { translate, translatePlural } from '@nextcloud/l10n'
 import { generateFilePath } from '@nextcloud/router'
