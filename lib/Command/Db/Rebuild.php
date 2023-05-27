@@ -26,9 +26,6 @@ namespace OCA\Polls\Command\Db;
 use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
-use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Output\OutputInterface;
-use Symfony\Component\Console\Question\ConfirmationQuestion;
 
 class Rebuild extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:rebuild';
@@ -147,6 +144,17 @@ class Rebuild extends Command {
 	private function removeObsoleteTables(): void {
 		$this->printComment('  Drop orphaned tables');
 		$messages = $this->tableManager->removeObsoleteTables();
+
+		foreach ($messages as $message) {
+			$this->printInfo(' - ' . $message);
+		}
+	}
+
+	/**
+	 * Initialize last poll interactions timestamps
+	 */
+	public function resetLastInteraction(): void {
+		$messages = $this->tableManager->resetLastInteraction();
 
 		foreach ($messages as $message) {
 			$this->printInfo(' - ' . $message);
