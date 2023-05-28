@@ -194,7 +194,7 @@ class UserService {
 	 * create a new user object based on $type
 	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Group|User|Admin
 	 */
-	public function getUser(string $type, string $id, string $displayName = '', string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): UserBase {
+	public function getUser(string $type, string $id, string $displayName = '', ?string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): UserBase {
 		return match ($type) {
 			Group::TYPE => new Group($id),
 			Circle::TYPE => new Circle($id),
