@@ -108,7 +108,7 @@ OC.L10N.register(
     "Poll closing date" : "투표 마감일",
     "Allow Proposals" : "제안을 허용하다",
     "Always show results" : "항상 결과를 나타내다",
-    "Hide results until poll is closed" : "투표가 끝날 때 까지 결과를 숨기다",
+    "Hide results until poll is closed" : "투표가 끝날 때까지 결과를 숨기다",
     "Never show results" : "결과를 나타내지 않다",
     "Limit \"Yes\" votes per user" : "사용자당 \"예\" 표를 제한하다",
     "Title" : "제목",
