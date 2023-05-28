@@ -310,17 +310,6 @@ class TableManager {
 
 	}
 
-	public function resetLastInteraction(?int $timestamp): void {
-		$timestamp = $timestamp ?? time();
-		$query = $this->connection->getQueryBuilder();
-
-		$query->update(Poll::TABLE)
-			->set('last_interaction', $query->createNamedParameter($timestamp))
-			->where($query->expr()->eq('last_interaction', $query->createNamedParameter(0)));
-		$query->executeStatement();
-
-	}
-
 	private function deleteDuplicates(string $table, array $columns):int {
 		$this->watchMapper->deleteOldEntries(time());
 
@@ -384,6 +373,27 @@ class TableManager {
 		}
 	}
 
+	public function resetLastInteraction(?int $timestamp = null): array {
+		$messages = [];
+		$timestamp = $timestamp ?? time();
+		$query = $this->connection->getQueryBuilder();
+
+		$query->update(Poll::TABLE)
+			->set('last_interaction', $query->createNamedParameter($timestamp))
+			->where($query->expr()->eq('last_interaction', $query->createNamedParameter(0)));
+		$count = $query->executeStatement();
+
+		if ($count > 0) {
+			$this->logger->info('Updated {number} polls in {db} and set last_interaction to current timestamp {timestamp}', ['number' => $count, 'db' => $this->dbPrefix . PollMapper::TABLE, 'timestamp' => $timestamp]);
+			$messages[] = 'Updated ' . $count . ' polls';
+		} else {
+			$this->logger->info('No polls needed to get updated with last interaction info');
+			$messages[] = 'No polls needed to get updated with last interaction info';
+		}
+
+		return $messages;
+	}
+
 	public function migrateOptionsToHash(): array {
 		$messages = [];
 	
@@ -397,18 +407,17 @@ class TableManager {
 					$this->optionMapper->update($option);
 					$count++;
 				}
+
+				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count,'db' => $this->dbPrefix . OptionMapper::TABLE]);
+				$messages[] = 'Updated ' . $count . ' option hashes';
+
 			} else {
-				$this->logger->error('{db} is missing- aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
+				$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
 			}
-			$this->logger->info('Updated {number} hashes in {db}', ['number' => $count,'db' => $this->dbPrefix . OptionMapper::TABLE]);
-			$messages[] = 'Updated ' . $count . ' option hashes';
 		} else {
-			$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
+			$this->logger->error('{db} is missing - aborted recalculating hashes', [ 'db' => $this->dbPrefix . OptionMapper::TABLE]);
 		}
 
-
-		
-		
 		if ($this->schema->hasTable($this->dbPrefix . VoteMapper::TABLE)) {
 			$table = $this->schema->getTable($this->dbPrefix . VoteMapper::TABLE);
 			$count = 0;
@@ -418,13 +427,15 @@ class TableManager {
 					$this->voteMapper->update($vote);
 					$count++;
 				}
+
+				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count, 'db' => $this->dbPrefix . VoteMapper::TABLE]);
+				$messages[] = 'Updated ' . $count . ' vote hashes';
+				
 			} else {
-				$this->logger->error('{db} is missing- aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
+				$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
 			}
-			$this->logger->info('Updated {number} hashes in {db}', ['number' => $count, 'db' => $this->dbPrefix . VoteMapper::TABLE]);
-			$messages[] = 'Updated ' . $count . ' vote hashes';
 		} else {
-			$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
+			$this->logger->error('{db} is missing- aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
 		}
 		return $messages;
 	}
