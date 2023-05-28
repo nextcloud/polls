@@ -35,7 +35,7 @@ class GenericUser extends UserBase {
 		string $id,
 		string $type = self::TYPE,
 		string $displayName = '',
-		string $emailAddress = '',
+		?string $emailAddress = '',
 		string $languageCode = '',
 		string $localeCode = '',
 		string $timeZoneName = ''
