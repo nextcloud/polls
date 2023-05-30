@@ -14,6 +14,11 @@ webpackConfig.output = {
 	clean: true,
 }
 
+webpackConfig.resolve = {
+	...webpackConfig.resolve,
+	extensions: ['.*', '.ts', '.js', '.vue'],
+}
+
 webpackRules.RULE_VUE = {
 	...webpackRules.RULE_VUE,
 	options: {
