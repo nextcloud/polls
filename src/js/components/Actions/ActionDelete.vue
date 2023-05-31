@@ -66,6 +66,10 @@ export default {
 		},
 	},
 
+	emits: {
+		delete: null,
+	},
+
 	data() {
 		return {
 			deleteInterval: null,

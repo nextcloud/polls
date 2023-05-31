@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="useOptionLimit" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="useOptionLimit" type="switch">
 			{{ t('polls', 'Limit "Yes" votes per option') }}
 		</NcCheckboxRadioSwitch>
 
@@ -34,8 +34,8 @@
 			use-num-modifiers />
 
 		<NcCheckboxRadioSwitch v-if="optionLimit"
+			v-model:checked="hideBookedUp"
 			class="indented"
-			:checked.sync="hideBookedUp"
 			type="switch">
 			{{ t('polls', 'Hide not available Options') }}
 		</NcCheckboxRadioSwitch>
@@ -53,6 +53,10 @@ export default {
 	components: {
 		NcCheckboxRadioSwitch,
 		InputDiv,
+	},
+
+	emits: {
+		change: null,
 	},
 
 	computed: {

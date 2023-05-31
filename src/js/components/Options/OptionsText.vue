@@ -71,6 +71,7 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { NcButton, NcEmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
@@ -95,7 +96,7 @@ export default {
 		OptionItemOwner,
 		NcButton,
 		TextPollIcon,
-		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
+		OptionsTextAdd: defineAsyncComponent(() => import('./OptionsTextAdd.vue')),
 	},
 
 	mixins: [

@@ -60,7 +60,7 @@ export default {
 
 	computed: {
 		hasIconSlot() {
-			return !!this.$slots.icon
+			return !!this.$slots.icon()
 		},
 
 		iconClassComputed() {

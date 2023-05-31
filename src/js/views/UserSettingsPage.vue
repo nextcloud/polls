@@ -45,16 +45,17 @@
 
 <script>
 
+import { defineAsyncComponent } from 'vue'
 import { NcSettingsSection } from '@nextcloud/vue'
 export default {
 	name: 'UserSettingsPage',
 
 	components: {
 		NcSettingsSection,
-		CalendarSettings: () => import('../components/Settings/UserSettings/CalendarSettings.vue'),
-		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings.vue'),
-		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings.vue'),
-		PerformanceSettings: () => import('../components/Settings/UserSettings/PerformanceSettings.vue'),
+		CalendarSettings: defineAsyncComponent(() => import('../components/Settings/UserSettings/CalendarSettings.vue')),
+		FeatureSettings: defineAsyncComponent(() => import('../components/Settings/UserSettings/FeatureSettings.vue')),
+		StyleSettings: defineAsyncComponent(() => import('../components/Settings/UserSettings/StyleSettings.vue')),
+		PerformanceSettings: defineAsyncComponent(() => import('../components/Settings/UserSettings/PerformanceSettings.vue')),
 	},
 
 	created() {

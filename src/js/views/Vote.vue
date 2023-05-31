@@ -84,6 +84,7 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
@@ -108,10 +109,10 @@ export default {
 		PollInfoLine,
 		DatePollIcon,
 		TextPollIcon,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
-		OptionProposals: () => import('../components/Options/OptionProposals.vue'),
-		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal.vue'),
-		VoteTable: () => import('../components/VoteTable/VoteTable.vue'),
+		LoadingOverlay: defineAsyncComponent(() => import('../components/Base/LoadingOverlay.vue')),
+		OptionProposals: defineAsyncComponent(() => import('../components/Options/OptionProposals.vue')),
+		PublicRegisterModal: defineAsyncComponent(() => import('../components/Poll/PublicRegisterModal.vue')),
+		VoteTable: defineAsyncComponent(() => import('../components/VoteTable/VoteTable.vue')),
 	},
 
 	data() {
@@ -165,7 +166,7 @@ export default {
 		this.scrollElement.addEventListener('scroll', this.handleScroll)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.scrollElement.removeEventListener('scroll', this.handleScroll)
 		this.$store.dispatch({ type: 'poll/reset' })
 	},

@@ -35,6 +35,7 @@ import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { defineAsyncComponent } from 'vue'
 import { mapState, mapActions } from 'vuex'
 import '@nextcloud/dialogs/dist/index.css'
 import './assets/scss/colors.scss'
@@ -49,7 +50,7 @@ export default {
 	name: 'App',
 	components: {
 		NcContent,
-		LoadingOverlay: () => import('./components/Base/LoadingOverlay.vue'),
+		LoadingOverlay: defineAsyncComponent(() => import('./components/Base/LoadingOverlay.vue')),
 		UserSettingsDlg,
 	},
 
@@ -126,7 +127,7 @@ export default {
 		})
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.cancelToken.cancel()
 		unsubscribe('polls:poll:load')
 		unsubscribe('polls:sidebar:toggle')

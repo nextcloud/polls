@@ -79,6 +79,7 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import ActionDelete from '../Actions/ActionDelete.vue'
@@ -107,7 +108,7 @@ export default {
 		OptionItem,
 		NcButton,
 		DatePollIcon,
-		OptionItemOwner: () => import('./OptionItemOwner.vue'),
+		OptionItemOwner: defineAsyncComponent(() => import('./OptionItemOwner.vue')),
 	},
 
 	mixins: [

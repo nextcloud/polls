@@ -34,8 +34,8 @@
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
 		<NcActionInput v-if="$route.name === 'publicVote'"
 			:class="check.status"
-			:value="emailAddressTemp"
-			@update:value="validateEmailAddress"
+			:model-value="emailAddressTemp"
+			@update:model-value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			<template #icon>
 				<EditEmailIcon />
@@ -44,8 +44,8 @@
 		</NcActionInput>
 		<NcActionInput v-if="$route.name === 'publicVote'"
 			:class="checkDisplayName.status"
-			:value="displayNameTemp"
-			@update:value="validateDisplayName"
+			:model-value="displayNameTemp"
+			@update:model-value="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
 				<EditAccountIcon />
@@ -54,7 +54,7 @@
 		</NcActionInput>
 		<NcActionButton v-if="$route.name === 'publicVote'"
 			:disabled="!emailAddress"
-			:value="emailAddress"
+			:model-value="emailAddress"
 			@click="resendInvitation()">
 			<template #icon>
 				<SendLinkPerEmailIcon />

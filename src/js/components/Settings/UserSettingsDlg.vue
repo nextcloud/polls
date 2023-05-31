@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcAppSettingsDialog :open.sync="show" :show-navigation="true">
+	<NcAppSettingsDialog v-model:open="show" :show-navigation="true">
 		<NcAppSettingsSection id="calendar" :title="t('polls', 'Calendar check')">
 			<CalendarSettings />
 		</NcAppSettingsSection>
@@ -42,6 +42,7 @@
 
 <script>
 
+import { defineAsyncComponent } from 'vue'
 import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
@@ -51,10 +52,10 @@ export default {
 	components: {
 		NcAppSettingsDialog,
 		NcAppSettingsSection,
-		CalendarSettings: () => import('./UserSettings/CalendarSettings.vue'),
-		FeatureSettings: () => import('./UserSettings/FeatureSettings.vue'),
-		StyleSettings: () => import('./UserSettings/StyleSettings.vue'),
-		PerformanceSettings: () => import('./UserSettings/PerformanceSettings.vue'),
+		CalendarSettings: defineAsyncComponent(() => import('./UserSettings/CalendarSettings.vue')),
+		FeatureSettings: defineAsyncComponent(() => import('./UserSettings/FeatureSettings.vue')),
+		StyleSettings: defineAsyncComponent(() => import('./UserSettings/StyleSettings.vue')),
+		PerformanceSettings: defineAsyncComponent(() => import('./UserSettings/PerformanceSettings.vue')),
 	},
 
 	data() {
@@ -79,7 +80,7 @@ export default {
 
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('polls:settings:show')
 	},
 }

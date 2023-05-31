@@ -36,6 +36,7 @@
 
 <script>
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+import { defineAsyncComponent } from 'vue'
 import { mapGetters } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
@@ -44,7 +45,7 @@ export default {
 	name: 'SideBarCombo',
 
 	components: {
-		SideBarTabDatePolls: () => import('../components/SideBar/SideBarTabDatePolls.vue'),
+		SideBarTabDatePolls: defineAsyncComponent(() => import('../components/SideBar/SideBarTabDatePolls.vue')),
 		NcAppSidebar,
 		NcAppSidebarTab,
 		PollsAppIcon,

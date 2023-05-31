@@ -52,6 +52,7 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import ComboTable from '../components/Combo/ComboTable.vue'
@@ -69,7 +70,7 @@ export default {
 		NcEmptyContent,
 		HeaderBar,
 		PollsAppIcon,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		LoadingOverlay: defineAsyncComponent(() => import('../components/Base/LoadingOverlay.vue')),
 	},
 
 	data() {

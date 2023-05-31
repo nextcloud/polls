@@ -37,6 +37,10 @@ export default {
 		RadioGroupDiv,
 	},
 
+	emits: {
+		change: null,
+	},
+
 	data() {
 		return {
 			pollShowResultsOptions: [

@@ -67,6 +67,7 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapGetters, mapState } from 'vuex'
 import ConfigBox from '../Base/ConfigBox.vue'
 import OptionsDate from '../Options/OptionsDate.vue'
@@ -91,8 +92,8 @@ export default {
 		OptionsDate,
 		OptionsDateShift,
 		OptionsText,
-		OptionsDateAdd: () => import('../Options/OptionsDateAdd.vue'),
-		OptionsTextAddBulk: () => import('../Options/OptionsTextAddBulk.vue'),
+		OptionsDateAdd: defineAsyncComponent(() => import('../Options/OptionsDateAdd.vue')),
+		OptionsTextAddBulk: defineAsyncComponent(() => import('../Options/OptionsTextAddBulk.vue')),
 	},
 
 	computed: {

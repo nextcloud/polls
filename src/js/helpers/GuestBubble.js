@@ -20,6 +20,8 @@
  *
  */
 
+import { h } from 'vue'
+
 const GuestBubble = {
 	name: 'GuestBubble',
 	functional: true,
@@ -35,8 +37,8 @@ const GuestBubble = {
 		},
 	},
 
-	render(createElement, context) {
-		return createElement('span', context.props.displayName)
+	render(context) {
+		return h('span', context.props.displayName)
 	},
 }
 

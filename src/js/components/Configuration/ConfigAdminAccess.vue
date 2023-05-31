@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked.sync="adminAccess" type="switch">
+	<NcCheckboxRadioSwitch v-model:checked="adminAccess" type="switch">
 		{{ label }}
 	</NcCheckboxRadioSwitch>
 </template>
@@ -35,6 +35,10 @@ export default {
 
 	components: {
 		NcCheckboxRadioSwitch,
+	},
+
+	emits: {
+		change: null,
 	},
 
 	data() {

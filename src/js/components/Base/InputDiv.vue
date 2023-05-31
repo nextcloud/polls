@@ -29,7 +29,7 @@
 		<div class="input-wrapper">
 			<input ref="input"
 				:type="type"
-				:value="value"
+				:model-value="value"
 				:inputmode="inputmode"
 				:placeholder="placeholder"
 				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, computedSignalingClass]"
@@ -133,6 +133,12 @@ export default {
 			type: String,
 			default: null,
 		},
+	},
+
+	emits: {
+		input: null,
+		change: null,
+		submit: null,
 	},
 
 	computed: {

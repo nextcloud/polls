@@ -24,8 +24,8 @@
 	<div class="radio-group-div">
 		<NcCheckboxRadioSwitch v-for="(option, index) in options"
 			:key="option.value"
-			:checked.sync="selectedValue"
-			:value="option.value"
+			:v-model:checked="selectedValue"
+			:model-value="option.value"
 			:name="id + '_' + index"
 			type="radio"
 			@update:checked="$emit('input', option.value)">
@@ -59,6 +59,10 @@ export default {
 			type: String,
 			default: null,
 		},
+	},
+
+	emits: {
+		input: null,
 	},
 
 	computed: {

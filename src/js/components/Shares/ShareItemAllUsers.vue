@@ -30,7 +30,7 @@
 		<template #status>
 			<div class="vote-status" />
 		</template>
-		<NcCheckboxRadioSwitch :checked.sync="pollAccess" type="switch" />
+		<NcCheckboxRadioSwitch v-model:checked="pollAccess" type="switch" />
 	</UserItem>
 </template>
 

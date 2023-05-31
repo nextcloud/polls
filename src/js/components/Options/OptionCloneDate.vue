@@ -87,6 +87,10 @@ export default {
 		},
 	},
 
+	emits: {
+		close: null,
+	},
+
 	data() {
 		return {
 			sequence: {

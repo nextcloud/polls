@@ -20,6 +20,8 @@
  *
  */
 
+import { h } from 'vue'
+
 const SimpleLink = {
 	name: 'SimpleLink',
 	functional: true,
@@ -39,8 +41,8 @@ const SimpleLink = {
 		},
 	},
 
-	render(createElement, context) {
-		return createElement('a', {
+	render(context) {
+		return h('a', {
 			attrs: {
 				href: context.props.href,
 				target: context.props.target,

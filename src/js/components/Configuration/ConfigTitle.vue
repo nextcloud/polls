@@ -38,6 +38,10 @@ export default {
 		InputDiv,
 	},
 
+	emits: {
+		change: null,
+	},
+
 	computed: {
 		...mapState({
 			poll: (state) => state.poll,

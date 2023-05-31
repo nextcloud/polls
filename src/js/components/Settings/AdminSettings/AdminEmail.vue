@@ -22,13 +22,13 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="legalTermsInEmail" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="legalTermsInEmail" type="switch">
 			{{ t('polls', 'Add terms links also to the email footer') }}
 		</NcCheckboxRadioSwitch>
 
 		<div class="disclaimer_group">
 			<span class="grow_title">{{ t('polls', 'Additional email disclaimer') }}</span>
-			<NcCheckboxRadioSwitch :checked.sync="preview" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="preview" type="switch">
 				{{ t('polls', 'Preview') }}
 			</NcCheckboxRadioSwitch>
 		</div>

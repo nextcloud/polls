@@ -55,5 +55,8 @@ export default {
 			default: 24,
 		},
 	},
+	emits: {
+		click: null,
+	},
 }
 </script>

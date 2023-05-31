@@ -154,6 +154,10 @@ export default {
 		},
 	},
 
+	emits: {
+		'sort-list': null,
+	},
+
 	computed: {
 		...mapState({
 			sortBy: (state) => state.polls.sort.sortby,

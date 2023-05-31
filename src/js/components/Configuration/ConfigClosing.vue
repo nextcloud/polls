@@ -31,7 +31,7 @@
 				{{ closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll') }}
 			</template>
 		</NcButton>
-		<NcCheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">
+		<NcCheckboxRadioSwitch v-show="!closed" v-model:checked="useExpire" type="switch">
 			{{ t('polls', 'Poll closing date') }}
 		</NcCheckboxRadioSwitch>
 		<NcDatetimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
@@ -54,6 +54,10 @@ export default {
 		NcCheckboxRadioSwitch,
 		NcDatetimePicker,
 		NcButton,
+	},
+
+	emits: {
+		change: null,
 	},
 
 	data() {

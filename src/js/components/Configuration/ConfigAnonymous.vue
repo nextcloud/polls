@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked.sync="anonymous" type="switch">
+	<NcCheckboxRadioSwitch v-model:checked="anonymous" type="switch">
 		{{ t('polls', 'Anonymous poll') }}
 	</NcCheckboxRadioSwitch>
 </template>
@@ -35,6 +35,10 @@ export default {
 
 	components: {
 		NcCheckboxRadioSwitch,
+	},
+
+	emits: {
+		change: null,
 	},
 
 	computed: {

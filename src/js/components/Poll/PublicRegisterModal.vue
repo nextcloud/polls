@@ -44,7 +44,7 @@
 						inputmode="email"
 						@submit="submitRegistration" />
 
-					<NcCheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
+					<NcCheckboxRadioSwitch v-if="share.type === 'public'" v-model:checked="saveCookie">
 						{{ t('polls', 'Remember me for 30 days') }}
 					</NcCheckboxRadioSwitch>
 

@@ -35,14 +35,15 @@
 </template>
 
 <script>
+import { defineAsyncComponent } from 'vue'
 import { mapState, mapGetters } from 'vuex'
 
 export default {
 	name: 'OptionProposals',
 
 	components: {
-		OptionsDateAdd: () => import('./OptionsDateAdd.vue'),
-		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
+		OptionsDateAdd: defineAsyncComponent(() => import('./OptionsDateAdd.vue')),
+		OptionsTextAdd: defineAsyncComponent(() => import('./OptionsTextAdd.vue')),
 	},
 
 	computed: {
