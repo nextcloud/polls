@@ -21,37 +21,29 @@
  *
  */
 
-import Vue from 'vue'
-import Vuex, { Store } from 'vuex'
+import { createApp } from 'vue'
+import { createStore } from 'vuex'
 import appSettings from './store/modules/appSettings.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
 
 import AdminSettingsPage from './views/AdminSettingsPage.vue'
 
-// /* eslint-disable-next-line camelcase, no-undef */
-// __webpack_nonce__ = btoa(getRequestToken())
-// /* eslint-disable-next-line camelcase, no-undef */
-// __webpack_public_path__ = generateFilePath('polls', '', 'js/')
+/* eslint-disable-next-line camelcase, no-undef */
+__webpack_nonce__ = btoa(getRequestToken())
+/* eslint-disable-next-line camelcase, no-undef */
+__webpack_public_path__ = generateFilePath('polls', '', 'js/')
 
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
-
-Vue.config.debug = process.env.NODE_ENV !== 'production'
-Vue.config.devTools = process.env.NODE_ENV !== 'production'
-// eslint-disable-next-line vue/match-component-file-name
-
-Vue.use(Vuex)
-
-const store = new Store({
+const store = createStore({
 	modules: {
 		appSettings,
 	},
 	strict: process.env.NODE_ENV !== 'production',
 })
 
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#admin_settings',
-	store,
-	render: (h) => h(AdminSettingsPage),
-})
+const PollsAdminSettings = createApp(AdminSettingsPage)
+	.use(store)
+
+PollsAdminSettings.config.globalProperties.t = translate
+PollsAdminSettings.config.globalProperties.n = translatePlural
+
+AdminSettingsPage.mount('#admin_settings')
