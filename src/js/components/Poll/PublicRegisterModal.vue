@@ -404,14 +404,4 @@ export default {
 			}
 		}
 	}
-
-	@media only screen and (max-width: 688px) {
-		.modal__content {
-			padding: 6px;
-		}
-
-		.modal__registration > div {
-			padding: 12px;
-		}
-	}
 </style>
