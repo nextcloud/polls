@@ -31,7 +31,7 @@
 		<template #list>
 			<NcAppNavigationItem v-for="(pollCategory) in pollCategories"
 				:key="pollCategory.id"
-				:title="pollCategory.title"
+				:name="pollCategory.title"
 				:allow-collapse="true"
 				:pinned="pollCategory.pinned"
 				:to="{ name: 'list', params: {type: pollCategory.id}}"
@@ -52,20 +52,20 @@
 
 		<template #footer>
 			<NcAppNavigationItem v-if="isComboActivated"
-				:title="t('polls', 'Combine polls')"
+				:name="t('polls', 'Combine polls')"
 				:to="{ name: 'combo' }">
 				<template #icon>
 					<ComboIcon :size="iconSize" />
 				</template>
 			</NcAppNavigationItem>
 			<NcAppNavigationItem v-if="showAdminSection"
-				:title="t('polls', 'Administration')"
+				:name="t('polls', 'Administration')"
 				:to="{ name: 'administration' }">
 				<template #icon>
 					<AdministrationIcon :size="iconSize" />
 				</template>
 			</NcAppNavigationItem>
-			<NcAppNavigationItem :title="t('polls', 'Polls settings')"
+			<NcAppNavigationItem :name="t('polls', 'Polls settings')"
 				@click="showSettings()">
 				<template #icon>
 					<SettingsIcon :size="iconSize" />
