@@ -46,7 +46,9 @@
 					{{ t('polls', 'Cancel') }}
 				</template>
 			</NcButton>
-			<NcButton :disabled="titleEmpty" type="primary" @click="confirm">
+			<NcButton :disabled="titleEmpty"
+				type="primary"
+				@click="confirm">
 				<template #default>
 					{{ t('polls', 'Apply') }}
 				</template>

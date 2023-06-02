@@ -34,7 +34,6 @@
 		<NcModal v-if="showModal" size="small" :can-close="false">
 			<div class="option-clone-date modal__content">
 				<h2>{{ t('polls', 'Create multiple options at once') }}</h2>
-
 				<p>{{ t('polls', 'Each line creates a new option. Duplicates will get skipped without warning.') }}</p>
 
 				<textarea v-model="newPollTexts"

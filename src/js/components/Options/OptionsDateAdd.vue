@@ -43,20 +43,21 @@
 				{{ t('polls', 'Select range') }}
 			</NcCheckboxRadioSwitch>
 			<div class="picker-buttons">
-				<NcButton v-if="useTime" @click="toggleTimePanel">
+				<NcButton v-if="useTime"
+					@click="toggleTimePanel">
 					<template #default>
-						{{ showTimePanel
-							? t('polls', 'Change date')
-							: t('polls', 'Change time')
-						}}
+						{{ showTimePanel ? t('polls', 'Change date') : t('polls', 'Change time') }}
 					</template>
 				</NcButton>
-				<NcButton v-if="useTime" @click="removeTime">
+				<NcButton v-if="useTime"
+					@click="removeTime">
 					<template #default>
 						{{ t('polls', 'Remove time') }}
 					</template>
 				</NcButton>
-				<NcButton v-else :disabled="!dateOption.isValid" @click="addTime">
+				<NcButton v-else
+					:disabled="!dateOption.isValid"
+					@click="addTime">
 					<template #default>
 						{{ t('polls', 'Add time') }}
 					</template>
@@ -125,7 +126,6 @@ export default {
 		buttonAriaLabel() {
 			return this.caption ?? t('polls', 'Add date')
 		},
-
 		dateOption() {
 			let from = moment()
 			let to = moment()

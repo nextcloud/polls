@@ -23,6 +23,7 @@
 <template>
 	<div class="action change-view">
 		<NcButton v-tooltip="caption"
+			:aria-label="caption"
 			type="tertiary"
 			@click="clickAction()">
 			<template #icon>

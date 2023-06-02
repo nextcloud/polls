@@ -45,7 +45,8 @@
 		<FlexSpacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
 
 		<div v-if="acl.allowEdit && closed" class="action confirm">
-			<NcButton v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+			<NcButton v-tooltip="confirmButtonCaption"
+				:aria-label="confirmButtonCaption"
 				type="tertiary"
 				@click="confirmOption(option)">
 				<template #icon>
@@ -132,6 +133,10 @@ export default {
 
 		isConfirmed() {
 			return !!(this.option.confirmed && this.closed)
+		},
+
+		confirmButtonCaption() {
+			return this.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')
 		},
 
 		ownAnswer() {

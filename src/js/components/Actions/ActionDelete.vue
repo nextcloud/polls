@@ -22,14 +22,14 @@
 
 <template>
 	<div class="">
-		<NcButton type="tertiary">
+		<NcButton v-tooltip="computedTitle"
+			type="tertiary"
+			:aria-label="computedTitle">
 			<template #icon>
 				<UndoIcon v-if="deleteTimeout"
-					v-tooltip="countdownTitle"
 					:size="iconSize"
 					@click="cancelDelete()" />
 				<DeleteIcon v-else
-					v-tooltip="title"
 					:size="iconSize"
 					@click="deleteItem()" />
 			</template>
@@ -77,6 +77,9 @@ export default {
 	computed: {
 		countdownTitle() {
 			return n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', this.countdown, { countdown: this.countdown })
+		},
+		computedTitle() {
+			return this.deleteTimeout ? this.countdownTitle : this.title
 		},
 	},
 
