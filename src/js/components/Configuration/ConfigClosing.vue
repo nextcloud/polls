@@ -28,7 +28,7 @@
 				<ClosePollIcon v-else />
 			</template>
 			<template #default>
-				{{ closed ? t('polls', 'Reopen poll'): t('polls', 'Close poll') }}
+				{{ closed ? t('polls', 'Reopen poll') : t('polls', 'Close poll') }}
 			</template>
 		</NcButton>
 		<NcCheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">

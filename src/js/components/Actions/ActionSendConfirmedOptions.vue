@@ -24,7 +24,9 @@
 	<div class="action send-confirmations">
 		<div class="confirmation-button">
 			<h2>{{ headerCaption }}</h2>
-			<NcButton v-tooltip="caption" @click="clickAction()">
+			<NcButton v-tooltip="sendButtonCaption"
+				:aria-label="sendButtonCaption"
+				@click="clickAction()">
 				<template #icon>
 					<EmailCheckIcon />
 				</template>
@@ -70,7 +72,7 @@ export default {
 
 	data() {
 		return {
-			caption: t('polls', 'Send information about confirmed options by email'),
+			sendButtonCaption: t('polls', 'Send information about confirmed options by email'),
 			confirmations: null,
 			headerCaption: t('polls', 'Inform your participants about the confirmed options'),
 		}

@@ -23,6 +23,7 @@
 <template>
 	<div class="action toggle-sidebar">
 		<NcButton v-tooltip="caption"
+			:aria-label="caption"
 			type="tertiary"
 			@click="clickAction()">
 			<template #icon>

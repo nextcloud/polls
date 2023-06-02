@@ -25,7 +25,8 @@
 		<UserMenu v-if="showUserMenu" />
 		<NcPopover>
 			<template #trigger>
-				<NcButton v-tooltip="t('polls', 'Poll informations')"
+				<NcButton v-tooltip="caption"
+					:aria-label="caption"
 					type="tertiary">
 					<template #icon>
 						<PollInformationIcon />
@@ -55,6 +56,12 @@ export default {
 		UserMenu: () => import('../User/UserMenu.vue'),
 		ExportPoll: () => import('../Export/ExportPoll.vue'),
 		PollInformation: () => import('../Poll/PollInformation.vue'),
+	},
+
+	data() {
+		return {
+			caption: t('polls', 'Poll informations'),
+		}
 	},
 
 	computed: {
