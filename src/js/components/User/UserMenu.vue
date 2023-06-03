@@ -354,8 +354,6 @@ export default {
 		&.error {
 			input.action-input__input, label.action-input__label {
 				border-color: var(--color-error);
-				background-color: var(--color-background-error);
-				color: var(--color-foreground-error);
 			}
 			input.action-input__input {
 				background-image: var(--icon-polls-no);
@@ -373,8 +371,6 @@ export default {
 		&.success {
 			input.action-input__input, label.action-input__label {
 				border-color: var(--color-success);
-				background-color: var(--color-background-success) !important;
-				color: var(--color-foreground-success);
 			}
 			input.action-input__input {
 				background-image: var(--icon-polls-yes);
@@ -384,8 +380,6 @@ export default {
 		&.success input.action-input__input , &.icon-confirm.success input.action-input__input  {
 			border-color: var(--color-success);
 			background-image: var(--icon-polls-yes);
-			background-color: var(--color-background-success) !important;
-			color: var(--color-foreground-success);
 		}
 
 	}

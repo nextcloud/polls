@@ -39,8 +39,8 @@
 
 			<Spinner v-if="checking" class="signaling-icon spinner" />
 			<ArrowRightIcon v-if="showSubmit" class="signaling-icon submit" @click="$emit('submit', $refs.input.value)" />
-			<AlertIcon v-if="error" class="signaling-icon error" fill-color="#f45573" />
-			<CheckIcon v-if="success" class="signaling-icon success" fill-color="#49bc49" />
+			<AlertIcon v-if="error" class="signaling-icon error" />
+			<CheckIcon v-if="success" class="signaling-icon success" />
 			<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="subtract()" />
 			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
 		</div>
@@ -56,7 +56,7 @@ import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-import AlertIcon from 'vue-material-design-icons/AlertCircle.vue'
+import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import Spinner from '../AppIcons/Spinner.vue'
 
 export default {
@@ -220,8 +220,10 @@ export default {
 
 			&.error {
 				border-color: var(--color-error);
-				background-color: var(--color-background-error);
-				color: var(--color-foreground-error);
+			}
+
+			&.success {
+				border-color: var(--color-success);
 			}
 		}
 
