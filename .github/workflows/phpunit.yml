@@ -29,7 +29,7 @@ jobs:
     name: SQLite
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: src
 
@@ -74,7 +74,7 @@ jobs:
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: src
       - name: Prepare server
@@ -121,7 +121,7 @@ jobs:
         options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         with:
           path: src
       - name: Prepare server
