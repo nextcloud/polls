@@ -54,6 +54,7 @@ OC.L10N.register(
     "Delete option" : "מחיקת אפשרות",
     "Clone option" : "שכפול אפשרות",
     "Add" : "הוספה",
+    "Submit" : "שליחה",
     "Close" : "סגירה",
     "never" : "מעולם לא",
     "_%n Participant_::_%n Participants_" : ["משתתף אחד","%n משתתפים","%n משתתפים","%n משתתפים"],

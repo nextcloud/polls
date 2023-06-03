@@ -30,6 +30,7 @@ OC.L10N.register(
     "OK" : "Bone",
     "Week" : "Semajno",
     "Add" : "Aldoni",
+    "Submit" : "Sendi",
     "Add option" : "Aldoni opcion",
     "Close" : "Malfermi",
     "never" : "neniam",

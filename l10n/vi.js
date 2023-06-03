@@ -21,6 +21,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Tuần",
     "Add" : "Thêm",
+    "Submit" : "Gửi đi",
     "Close" : "Đóng",
     "never" : "không thay đổi",
     "Login" : "Đăng nhập",

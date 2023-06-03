@@ -25,6 +25,7 @@ OC.L10N.register(
     "Week" : "Недела",
     "Add" : "Додади",
     "Added" : "Додадено",
+    "Submit" : "Испрати",
     "Close" : "Затвори",
     "never" : "никогаш",
     "_%n Participant_::_%n Participants_" : ["%n Учесник","%n Учесници"],

@@ -40,6 +40,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Тиждень",
     "Add" : "Додати",
+    "Submit" : "Гаразд",
     "Add option" : "Додати варіант",
     "Close" : "закрити",
     "never" : "ніколи",

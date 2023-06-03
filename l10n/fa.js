@@ -39,6 +39,7 @@ OC.L10N.register(
     "Week" : "هفته",
     "Delete option" : "گزینه حذف",
     "Add" : "افزودن",
+    "Submit" : "ارسال",
     "Close" : "بسته",
     "never" : "never",
     "Login" : "ورود",

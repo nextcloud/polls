@@ -26,6 +26,7 @@ OC.L10N.register(
     "OK" : "D'acòrdi",
     "Week" : "Aquesta setmana",
     "Add" : "Apondre",
+    "Submit" : "Transmetre",
     "Close" : "Tampar",
     "never" : "pas jamai",
     "_%n Participant_::_%n Participants_" : ["%n participant","%n participants"],

@@ -19,6 +19,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Javë",
     "Add" : "Shto",
+    "Submit" : "Dërgo",
     "Close" : "Mbylleni",
     "never" : "asnjëherë",
     "Login" : "Hyrje",

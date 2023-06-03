@@ -31,6 +31,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Semana",
     "Add" : "Agregar",
+    "Submit" : "Enviar",
     "Close" : "Cerrar",
     "never" : "nunca",
     "Login" : "Iniciar sesión",

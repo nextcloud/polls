@@ -21,6 +21,7 @@ OC.L10N.register(
     "OK" : "Labi",
     "Week" : "Nedēļa",
     "Add" : "Pievienot",
+    "Submit" : "Iesniegt",
     "Close" : "Aizvērt",
     "never" : "nekad",
     "Login" : "Autorizēties",

@@ -19,6 +19,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Săptămâna",
     "Add" : "Adaugă",
+    "Submit" : "Trimite",
     "Close" : "Închide",
     "never" : "niciodată",
     "Login" : "Autentificare",

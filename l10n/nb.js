@@ -26,6 +26,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Uke",
     "Add" : "Legg til",
+    "Submit" : "Send inn",
     "Close" : "Lukk",
     "never" : "aldri",
     "Login" : "Logg inn",
