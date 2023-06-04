@@ -1,9 +1,5 @@
 // TODO: Remove :root selector after NC24
 :root {
-	--color-foreground-error: #222222;
-	--color-foreground-success: #222222;
-	--color-background-error: #f9c5c5;
-	--color-background-success: #d6fdda;
 	--color-polls-foreground-yes: #49bc49;
 	--color-polls-foreground-no: #f45573;
 	--color-polls-foreground-maybe: #ffc107;
@@ -15,10 +11,6 @@
 @media (prefers-color-scheme: dark) {
 	body#body-public,
 	[data-theme-default] {
-		--color-foreground-error: #dddddd;
-		--color-foreground-success: #dddddd;
-		--color-background-error: #4d0d00;
-		--color-background-success: #2e4600;
 		--color-polls-background-yes: #2e4600;
 		--color-polls-background-no: #4d0d00;
 		--color-polls-background-maybe: #665600;
