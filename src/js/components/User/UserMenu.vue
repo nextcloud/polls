@@ -33,7 +33,8 @@
 		</NcActionButton>
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
 		<NcActionInput v-if="$route.name === 'publicVote'"
-			:class="check.status"
+			:success="check.status === 'success'"
+			:error="check.status === 'error'"
 			:value="emailAddressTemp"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
@@ -43,7 +44,8 @@
 			{{ t('polls', 'Edit Email Address') }}
 		</NcActionInput>
 		<NcActionInput v-if="$route.name === 'publicVote'"
-			:class="checkDisplayName.status"
+			:success="checkDisplayName.status === 'success'"
+			:error="checkDisplayName.status === 'error'"
 			:value="displayNameTemp"
 			@update:value="validateDisplayName"
 			@submit="submitDisplayName">
