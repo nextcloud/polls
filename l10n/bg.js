@@ -282,6 +282,7 @@ OC.L10N.register(
     "{optionText} already exists" : "{optionText} вече съществува",
     "Error adding {optionText}" : "Грешка при добавянето на {optionText}",
     "Shifting dates is disabled to prevent shifting of other user's proposals." : "Прмяната на датите е деактивирано, за да се предотврати изместването на предложенията на други потребители.",
+    "Submit" : "Изпращане",
     "Add option" : "Добавяне на опция",
     "Create multiple options at once" : "Създаване на няколко опции наведнъж",
     "Each line creates a new option. Duplicates will get skipped without warning." : "Всеки ред създава нова опция. Дубликатите ще бъдат пропускани без предупреждение.",

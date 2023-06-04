@@ -280,6 +280,7 @@
     "{optionText} already exists" : "{optionText} ja existeix",
     "Error adding {optionText}" : "S'ha produït un error en afegir {optionText}",
     "Shifting dates is disabled to prevent shifting of other user's proposals." : "El canvi de dates està inhabilitat per evitar el canvi de propostes d'altres usuaris.",
+    "Submit" : "Envia",
     "Add option" : "Afegeix una opció",
     "Create multiple options at once" : "Crear diverses opcions alhora",
     "Each line creates a new option. Duplicates will get skipped without warning." : "Cada línia crea una nova opció. Els duplicats es saltaran sense previ avís.",

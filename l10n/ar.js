@@ -26,6 +26,7 @@ OC.L10N.register(
     "OK" : "موافق",
     "Week" : "أسبوع",
     "Add" : "إضافة",
+    "Submit" : "إرسال ",
     "Add option" : "إضافة خيار",
     "Close" : "إغلاق",
     "never" : "بتاتاً",

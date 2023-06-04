@@ -15,6 +15,7 @@ OC.L10N.register(
     "OK" : "Goed",
     "Week" : "Week",
     "Add" : "Voeg by",
+    "Submit" : "Dien in",
     "Close" : "Sluit",
     "never" : "nooit",
     "Login" : "Teken aan",

@@ -15,6 +15,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Sizun",
     "Add" : "Ouzhpennañ",
+    "Submit" : "Kinnig",
     "Close" : "Seriñ",
     "never" : "james",
     "Login" : "Anv arveriad",
