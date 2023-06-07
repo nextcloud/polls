@@ -33,9 +33,8 @@
 		</NcActionButton>
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
 		<NcActionInput v-if="$route.name === 'publicVote'"
-			:success="check.status === 'success'"
-			:error="check.status === 'error'"
-			:value="emailAddressTemp"
+			v-bind="userEmail.inputProps"
+			:value="userEmail.tempValue"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			<template #icon>
@@ -44,9 +43,8 @@
 			{{ t('polls', 'Edit Email Address') }}
 		</NcActionInput>
 		<NcActionInput v-if="$route.name === 'publicVote'"
-			:success="checkDisplayName.status === 'success'"
-			:error="checkDisplayName.status === 'error'"
-			:value="displayNameTemp"
+			v-bind="userName.inputProps"
+			:value="userName.tempValue"
 			@update:value="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
@@ -136,14 +134,32 @@ export default {
 
 	data() {
 		return {
-			displayNameTemp: '',
-			emailAddressTemp: '',
-			checkResult: '',
-			checkStatus: '',
-			checking: false,
-			displayNameCheckResult: '',
-			displayNameCheckStatus: '',
-			displayNameChecking: false,
+			userEmail: {
+				tempValue: '',
+				check: {
+					checking: false,
+					result: t('polls', 'Unchanged email address.'),
+					status: 'unchanged',
+				},
+				inputProps: {
+					success: false,
+					error: false,
+					showTrailingButton: true,
+				},
+			},
+			userName: {
+				tempValue: '',
+				check: {
+					checking: false,
+					result: t('polls', 'Unchanged name.'),
+					status: 'unchanged',
+				},
+				inputProps: {
+					success: false,
+					error: false,
+					showTrailingButton: true,
+				},
+			},
 		}
 	},
 
@@ -160,56 +176,6 @@ export default {
 			return !!findCookieByValue(this.$route.params.token)
 		},
 
-		emailAddressUnchanged() {
-			return this.emailAddress === this.emailAddressTemp
-		},
-
-		displayNameUnchanged() {
-			return this.displayName === this.displayNameTemp
-		},
-
-		check() {
-			if (this.checking) {
-				return {
-					result: t('polls', 'Checking email address …'),
-					status: 'checking',
-				}
-			}
-
-			if (this.emailAddressUnchanged) {
-				return {
-					result: '',
-					status: '',
-				}
-			}
-
-			return {
-				result: this.checkResult,
-				status: this.checkStatus,
-			}
-		},
-
-		checkDisplayName() {
-			if (this.displayNameChecking) {
-				return {
-					result: t('polls', 'Checking name …'),
-					status: 'checking',
-				}
-			}
-
-			if (this.displayNameUnchanged) {
-				return {
-					result: '',
-					status: '',
-				}
-			}
-
-			return {
-				result: this.displayNameCheckResult,
-				status: this.displayNameCheckStatus,
-			}
-		},
-
 		personalLink() {
 			return window.location.origin
 				+ this.$router.resolve({
@@ -221,16 +187,16 @@ export default {
 
 	watch: {
 		emailAddress() {
-			this.emailAddressTemp = this.emailAddress
+			this.userEmail.tempValue = this.emailAddress
 		},
 		displayName() {
-			this.displayNameTemp = this.displayName
+			this.userName.tempValue = this.displayName
 		},
 	},
 
 	created() {
-		this.emailAddressTemp = this.emailAddress
-		this.displayNameTemp = this.displayName
+		this.userEmail.tempValue = this.emailAddress
+		this.userName.tempValue = this.displayName
 	},
 
 	methods: {
@@ -250,52 +216,101 @@ export default {
 				await this.$store.dispatch('share/deleteEmailAddress')
 				showSuccess(t('polls', 'Email address deleted.'))
 			} catch {
-				showError(t('polls', 'Error deleting email address {emailAddress}', { emailAddress: this.emailAddressTemp }))
+				showError(t('polls', 'Error deleting email address {emailAddress}', { emailAddress: this.userEmail.tempValue }))
 			}
 		},
 
 		validateEmailAddress: debounce(async function(value) {
-			this.emailAddressTemp = value
+			this.userEmail.tempValue = value
+			const inputProps = this.userEmail.inputProps
+			const check = this.userEmail.check
+
+			if (this.userEmail.tempValue === this.emailAddress) {
+				check.result = t('polls', 'Unchanged email address.')
+				check.status = 'unchanged'
+				inputProps.success = false
+				inputProps.error = false
+				inputProps.showTrailingButton = false
+				return
+			}
+
+			check.checking = true
+			check.result = t('polls', 'Checking email address …')
+
 			try {
-				this.checking = true
-				await ValidatorAPI.validateEmailAddress(this.emailAddressTemp)
-				this.checkResult = t('polls', 'valid email address.')
-				this.checkStatus = 'success'
+				await ValidatorAPI.validateEmailAddress(this.userEmail.tempValue)
+				check.result = t('polls', 'Valid email address.')
+				check.status = 'success'
+				inputProps.success = true
+				inputProps.error = false
+				inputProps.showTrailingButton = true
 			} catch {
-				this.checkResult = t('polls', 'Invalid email address.')
-				this.checkStatus = 'error'
+				check.result = t('polls', 'Invalid email address.')
+				check.status = 'error'
+				inputProps.success = false
+				inputProps.error = true
+				inputProps.showTrailingButton = false
 			} finally {
-				this.checking = false
+				this.userEmail.check.checking = false
 			}
 		}, 500),
 
 		validateDisplayName: debounce(async function(value) {
-			this.displayNameTemp = value
+			this.userName.tempValue = value
+			const inputProps = this.userName.inputProps
+			const check = this.userName.check
+			if (this.userName.tempValue.length < 1) {
+				this.checkStatus.userName = 'empty'
+				check.result = t('polls', 'Empty name.')
+				check.status = 'error'
+				inputProps.success = false
+				inputProps.error = true
+				inputProps.showTrailingButton = false
+				return
+			}
+
+			if (this.userName.tempValue === this.displayName) {
+				check.result = t('polls', 'Unchanged name.')
+				check.status = 'unchanged'
+				inputProps.success = false
+				inputProps.error = false
+				inputProps.showTrailingButton = false
+				return
+			}
+
+			check.checking = true
+			check.result = t('polls', 'Checking name …')
+
 			try {
-				this.displayNameChecking = true
-				await ValidatorAPI.validateName(this.$route.params.token, this.displayNameTemp)
-				this.displayNameCheckResult = t('polls', 'Valid name.')
-				this.displayNameCheckStatus = 'success'
+				await ValidatorAPI.validateName(this.$route.params.token, this.userName.tempValue)
+				check.result = t('polls', 'Valid name.')
+				check.status = 'success'
+				inputProps.success = true
+				inputProps.error = false
+				inputProps.showTrailingButton = true
 			} catch {
-				this.displayNameCheckResult = t('polls', 'Invalid email address.')
-				this.displayNameCheckStatus = 'error'
+				check.result = t('polls', 'Invalid name.')
+				check.status = 'error'
+				inputProps.success = false
+				inputProps.error = true
+				inputProps.showTrailingButton = false
 			} finally {
-				this.displayNameChecking = false
+				this.userName.check.checking = false
 			}
 		}, 500),
 
 		async submitEmailAddress() {
 			try {
-				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.emailAddressTemp })
-				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.emailAddressTemp }))
+				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.userEmail.tempValue })
+				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.userEmail.tempValue }))
 			} catch {
-				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.emailAddressTemp }))
+				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.userEmail.tempValue }))
 			}
 		},
 
 		async submitDisplayName() {
 			try {
-				await this.$store.dispatch('share/updateDisplayName', { displayName: this.displayNameTemp })
+				await this.$store.dispatch('share/updateDisplayName', { displayName: this.userName.tempValue })
 				showSuccess(t('polls', 'Name changed.'))
 			} catch {
 				showError(t('polls', 'Error changing name.'))
@@ -365,7 +380,7 @@ export default {
 			}
 		}
 
-		&.checking input.action-input__input {
+		&.userEmail.checking input.action-input__input {
 			border-color: var(--color-warning);
 			background-image: var(--icon-polls-loading);
 		}
