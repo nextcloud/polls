@@ -34,7 +34,7 @@
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
 		<NcActionInput v-if="$route.name === 'publicVote'"
 			v-bind="userEmail.inputProps"
-			:value="userEmail.tempValue"
+			:value.sync="userEmail.inputValue"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			<template #icon>
@@ -44,7 +44,7 @@
 		</NcActionInput>
 		<NcActionInput v-if="$route.name === 'publicVote'"
 			v-bind="userName.inputProps"
-			:value="userName.tempValue"
+			:value.sync="userName.inputValue"
 			@update:value="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
@@ -113,6 +113,23 @@ import { deleteCookieByValue, findCookieByValue } from '../../helpers/cookieHelp
 import { PollsAPI } from '../../Api/polls.js'
 import { ValidatorAPI } from '../../Api/validators.js'
 
+const setError = (inputProps) => {
+	inputProps.success = false
+	inputProps.error = true
+	inputProps.showTrailingButton = false
+}
+
+const setSuccess = (inputProps) => {
+	inputProps.success = true
+	inputProps.error = false
+	inputProps.showTrailingButton = true
+}
+const setNeutral = (inputProps) => {
+	inputProps.success = false
+	inputProps.error = false
+	inputProps.showTrailingButton = false
+}
+
 export default {
 	name: 'UserMenu',
 
@@ -135,12 +152,7 @@ export default {
 	data() {
 		return {
 			userEmail: {
-				tempValue: '',
-				check: {
-					checking: false,
-					result: t('polls', 'Unchanged email address.'),
-					status: 'unchanged',
-				},
+				inputValue: '',
 				inputProps: {
 					success: false,
 					error: false,
@@ -148,12 +160,7 @@ export default {
 				},
 			},
 			userName: {
-				tempValue: '',
-				check: {
-					checking: false,
-					result: t('polls', 'Unchanged name.'),
-					status: 'unchanged',
-				},
+				inputValue: '',
 				inputProps: {
 					success: false,
 					error: false,
@@ -187,16 +194,16 @@ export default {
 
 	watch: {
 		emailAddress() {
-			this.userEmail.tempValue = this.emailAddress
+			this.userEmail.inputValue = this.emailAddress
 		},
 		displayName() {
-			this.userName.tempValue = this.displayName
+			this.userName.inputValue = this.displayName
 		},
 	},
 
 	created() {
-		this.userEmail.tempValue = this.emailAddress
-		this.userName.tempValue = this.displayName
+		this.userEmail.inputValue = this.emailAddress
+		this.userName.inputValue = this.displayName
 	},
 
 	methods: {
@@ -216,104 +223,65 @@ export default {
 				await this.$store.dispatch('share/deleteEmailAddress')
 				showSuccess(t('polls', 'Email address deleted.'))
 			} catch {
-				showError(t('polls', 'Error deleting email address {emailAddress}', { emailAddress: this.userEmail.tempValue }))
+				showError(t('polls', 'Error deleting email address {emailAddress}', { emailAddress: this.userEmail.inputValue }))
 			}
 		},
 
-		validateEmailAddress: debounce(async function(value) {
-			this.userEmail.tempValue = value
+		validateEmailAddress: debounce(async function() {
 			const inputProps = this.userEmail.inputProps
-			const check = this.userEmail.check
 
-			if (this.userEmail.tempValue === this.emailAddress) {
-				check.result = t('polls', 'Unchanged email address.')
-				check.status = 'unchanged'
-				inputProps.success = false
-				inputProps.error = false
-				inputProps.showTrailingButton = false
+			if (this.userEmail.inputValue === this.emailAddress) {
+				setNeutral(inputProps)
 				return
 			}
 
-			check.checking = true
-			check.result = t('polls', 'Checking email address …')
-
 			try {
-				await ValidatorAPI.validateEmailAddress(this.userEmail.tempValue)
-				check.result = t('polls', 'Valid email address.')
-				check.status = 'success'
-				inputProps.success = true
-				inputProps.error = false
-				inputProps.showTrailingButton = true
+				await ValidatorAPI.validateEmailAddress(this.userEmail.inputValue)
+				setSuccess(inputProps)
 			} catch {
-				check.result = t('polls', 'Invalid email address.')
-				check.status = 'error'
-				inputProps.success = false
-				inputProps.error = true
-				inputProps.showTrailingButton = false
-			} finally {
-				this.userEmail.check.checking = false
+				setError(inputProps)
 			}
 		}, 500),
 
-		validateDisplayName: debounce(async function(value) {
-			this.userName.tempValue = value
+		validateDisplayName: debounce(async function() {
 			const inputProps = this.userName.inputProps
-			const check = this.userName.check
-			if (this.userName.tempValue.length < 1) {
-				this.checkStatus.userName = 'empty'
-				check.result = t('polls', 'Empty name.')
-				check.status = 'error'
-				inputProps.success = false
-				inputProps.error = true
-				inputProps.showTrailingButton = false
+			if (this.userName.inputValue.length < 1) {
+				setError(inputProps)
 				return
 			}
 
-			if (this.userName.tempValue === this.displayName) {
-				check.result = t('polls', 'Unchanged name.')
-				check.status = 'unchanged'
-				inputProps.success = false
-				inputProps.error = false
-				inputProps.showTrailingButton = false
+			if (this.userName.inputValue === this.displayName) {
+				setNeutral(inputProps)
 				return
 			}
-
-			check.checking = true
-			check.result = t('polls', 'Checking name …')
 
 			try {
-				await ValidatorAPI.validateName(this.$route.params.token, this.userName.tempValue)
-				check.result = t('polls', 'Valid name.')
-				check.status = 'success'
-				inputProps.success = true
-				inputProps.error = false
-				inputProps.showTrailingButton = true
+				await ValidatorAPI.validateName(this.$route.params.token, this.userName.inputValue)
+				setSuccess(inputProps)
 			} catch {
-				check.result = t('polls', 'Invalid name.')
-				check.status = 'error'
-				inputProps.success = false
-				inputProps.error = true
-				inputProps.showTrailingButton = false
-			} finally {
-				this.userName.check.checking = false
+				setError(inputProps)
 			}
 		}, 500),
 
 		async submitEmailAddress() {
 			try {
-				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.userEmail.tempValue })
-				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.userEmail.tempValue }))
+				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.userEmail.inputValue })
+				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.userEmail.inputValue }))
+				setNeutral(this.userEmail.inputProps)
 			} catch {
-				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.userEmail.tempValue }))
+				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.userEmail.inputValue }))
+				setError(this.userEmail.inputProps)
 			}
 		},
 
 		async submitDisplayName() {
 			try {
-				await this.$store.dispatch('share/updateDisplayName', { displayName: this.userName.tempValue })
+				await this.$store.dispatch('share/updateDisplayName', { displayName: this.userName.inputValue })
+				setNeutral(this.userName.inputProps)
 				showSuccess(t('polls', 'Name changed.'))
 			} catch {
 				showError(t('polls', 'Error changing name.'))
+				setError(this.userName.inputProps)
 			}
 		},
 
