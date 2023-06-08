@@ -33,8 +33,8 @@
 		</NcActionButton>
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
 		<NcActionInput v-if="$route.name === 'publicVote'"
-			:class="check.status"
-			:value="emailAddressTemp"
+			v-bind="userEmail.inputProps"
+			:value.sync="userEmail.inputValue"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			<template #icon>
@@ -43,8 +43,8 @@
 			{{ t('polls', 'Edit Email Address') }}
 		</NcActionInput>
 		<NcActionInput v-if="$route.name === 'publicVote'"
-			:class="checkDisplayName.status"
-			:value="displayNameTemp"
+			v-bind="userName.inputProps"
+			:value.sync="userName.inputValue"
 			@update:value="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
@@ -113,6 +113,23 @@ import { deleteCookieByValue, findCookieByValue } from '../../helpers/cookieHelp
 import { PollsAPI } from '../../Api/polls.js'
 import { ValidatorAPI } from '../../Api/validators.js'
 
+const setError = (inputProps) => {
+	inputProps.success = false
+	inputProps.error = true
+	inputProps.showTrailingButton = false
+}
+
+const setSuccess = (inputProps) => {
+	inputProps.success = true
+	inputProps.error = false
+	inputProps.showTrailingButton = true
+}
+const setNeutral = (inputProps) => {
+	inputProps.success = false
+	inputProps.error = false
+	inputProps.showTrailingButton = false
+}
+
 export default {
 	name: 'UserMenu',
 
@@ -134,14 +151,22 @@ export default {
 
 	data() {
 		return {
-			displayNameTemp: '',
-			emailAddressTemp: '',
-			checkResult: '',
-			checkStatus: '',
-			checking: false,
-			displayNameCheckResult: '',
-			displayNameCheckStatus: '',
-			displayNameChecking: false,
+			userEmail: {
+				inputValue: '',
+				inputProps: {
+					success: false,
+					error: false,
+					showTrailingButton: true,
+				},
+			},
+			userName: {
+				inputValue: '',
+				inputProps: {
+					success: false,
+					error: false,
+					showTrailingButton: true,
+				},
+			},
 		}
 	},
 
@@ -158,56 +183,6 @@ export default {
 			return !!findCookieByValue(this.$route.params.token)
 		},
 
-		emailAddressUnchanged() {
-			return this.emailAddress === this.emailAddressTemp
-		},
-
-		displayNameUnchanged() {
-			return this.displayName === this.displayNameTemp
-		},
-
-		check() {
-			if (this.checking) {
-				return {
-					result: t('polls', 'Checking email address …'),
-					status: 'checking',
-				}
-			}
-
-			if (this.emailAddressUnchanged) {
-				return {
-					result: '',
-					status: '',
-				}
-			}
-
-			return {
-				result: this.checkResult,
-				status: this.checkStatus,
-			}
-		},
-
-		checkDisplayName() {
-			if (this.displayNameChecking) {
-				return {
-					result: t('polls', 'Checking name …'),
-					status: 'checking',
-				}
-			}
-
-			if (this.displayNameUnchanged) {
-				return {
-					result: '',
-					status: '',
-				}
-			}
-
-			return {
-				result: this.displayNameCheckResult,
-				status: this.displayNameCheckStatus,
-			}
-		},
-
 		personalLink() {
 			return window.location.origin
 				+ this.$router.resolve({
@@ -219,16 +194,16 @@ export default {
 
 	watch: {
 		emailAddress() {
-			this.emailAddressTemp = this.emailAddress
+			this.userEmail.inputValue = this.emailAddress
 		},
 		displayName() {
-			this.displayNameTemp = this.displayName
+			this.userName.inputValue = this.displayName
 		},
 	},
 
 	created() {
-		this.emailAddressTemp = this.emailAddress
-		this.displayNameTemp = this.displayName
+		this.userEmail.inputValue = this.emailAddress
+		this.userName.inputValue = this.displayName
 	},
 
 	methods: {
@@ -248,55 +223,65 @@ export default {
 				await this.$store.dispatch('share/deleteEmailAddress')
 				showSuccess(t('polls', 'Email address deleted.'))
 			} catch {
-				showError(t('polls', 'Error deleting email address {emailAddress}', { emailAddress: this.emailAddressTemp }))
+				showError(t('polls', 'Error deleting email address {emailAddress}', { emailAddress: this.userEmail.inputValue }))
 			}
 		},
 
-		validateEmailAddress: debounce(async function(value) {
-			this.emailAddressTemp = value
+		validateEmailAddress: debounce(async function() {
+			const inputProps = this.userEmail.inputProps
+
+			if (this.userEmail.inputValue === this.emailAddress) {
+				setNeutral(inputProps)
+				return
+			}
+
 			try {
-				this.checking = true
-				await ValidatorAPI.validateEmailAddress(this.emailAddressTemp)
-				this.checkResult = t('polls', 'valid email address.')
-				this.checkStatus = 'success'
+				await ValidatorAPI.validateEmailAddress(this.userEmail.inputValue)
+				setSuccess(inputProps)
 			} catch {
-				this.checkResult = t('polls', 'Invalid email address.')
-				this.checkStatus = 'error'
-			} finally {
-				this.checking = false
+				setError(inputProps)
 			}
 		}, 500),
 
-		validateDisplayName: debounce(async function(value) {
-			this.displayNameTemp = value
+		validateDisplayName: debounce(async function() {
+			const inputProps = this.userName.inputProps
+			if (this.userName.inputValue.length < 1) {
+				setError(inputProps)
+				return
+			}
+
+			if (this.userName.inputValue === this.displayName) {
+				setNeutral(inputProps)
+				return
+			}
+
 			try {
-				this.displayNameChecking = true
-				await ValidatorAPI.validateName(this.$route.params.token, this.displayNameTemp)
-				this.displayNameCheckResult = t('polls', 'Valid name.')
-				this.displayNameCheckStatus = 'success'
+				await ValidatorAPI.validateName(this.$route.params.token, this.userName.inputValue)
+				setSuccess(inputProps)
 			} catch {
-				this.displayNameCheckResult = t('polls', 'Invalid email address.')
-				this.displayNameCheckStatus = 'error'
-			} finally {
-				this.displayNameChecking = false
+				setError(inputProps)
 			}
 		}, 500),
 
 		async submitEmailAddress() {
 			try {
-				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.emailAddressTemp })
-				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.emailAddressTemp }))
+				await this.$store.dispatch('share/updateEmailAddress', { emailAddress: this.userEmail.inputValue })
+				showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: this.userEmail.inputValue }))
+				setNeutral(this.userEmail.inputProps)
 			} catch {
-				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.emailAddressTemp }))
+				showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: this.userEmail.inputValue }))
+				setError(this.userEmail.inputProps)
 			}
 		},
 
 		async submitDisplayName() {
 			try {
-				await this.$store.dispatch('share/updateDisplayName', { displayName: this.displayNameTemp })
+				await this.$store.dispatch('share/updateDisplayName', { displayName: this.userName.inputValue })
+				setNeutral(this.userName.inputProps)
 				showSuccess(t('polls', 'Name changed.'))
 			} catch {
 				showError(t('polls', 'Error changing name.'))
+				setError(this.userName.inputProps)
 			}
 		},
 
@@ -340,48 +325,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-	.action {
-		input.action-input__input {
-			background-repeat: no-repeat;
-			background-position: right 12px center;
-			&:empty:before {
-				color: grey;
-			}
-		}
-
-		&.error {
-			input.action-input__input, label.action-input__label {
-				border-color: var(--color-error);
-			}
-			input.action-input__input {
-				background-image: var(--icon-polls-no);
-			}
-			label.action-input__label {
-				cursor: not-allowed;
-			}
-		}
-
-		&.checking input.action-input__input {
-			border-color: var(--color-warning);
-			background-image: var(--icon-polls-loading);
-		}
-
-		&.success {
-			input.action-input__input, label.action-input__label {
-				border-color: var(--color-success);
-			}
-			input.action-input__input {
-				background-image: var(--icon-polls-yes);
-			}
-		}
-
-		&.success input.action-input__input , &.icon-confirm.success input.action-input__input  {
-			border-color: var(--color-success);
-			background-image: var(--icon-polls-yes);
-		}
-
-	}
-
-</style>
