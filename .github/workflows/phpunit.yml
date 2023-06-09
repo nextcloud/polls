@@ -13,8 +13,6 @@ env:
   DB_USER: root
   DB_PASSWORD: rootpassword
   DB_NAME: nextcloud
-  MYSQL_PORT: 4444
-  PGSQL_PORT: 5432
 
 jobs:
   sqlite:
@@ -64,8 +62,9 @@ jobs:
     services:
       mysql:
         image: mysql:8.0
+        # map port fix to 4444 for mysql
         ports:
-          -  4444:3306/tcp
+          - 4444:3306/tcp
         env:
           MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
@@ -83,7 +82,6 @@ jobs:
           php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: 'mysql'
-          mysql-port: ${{ env.MYSQL_PORT }}
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
@@ -107,11 +105,13 @@ jobs:
     services:
       postgres:
         image: postgres:14.5-bullseye
+        # map port fix to 4445 for pgsql
+        ports:
+          - 4445:5432/tcp
         env:
           POSTGRES_USER: ${{ env.DB_USER }}
           POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
           POSTGRES_DB: ${{ env.DB_NAME }}
-          POSTGRES_PORT: ${{ env.PGSQL_PORT }}
         options: --health-cmd pg_isready --health-interval 5s --health-timeout 2s --health-retries 5
 
     steps:
@@ -126,7 +126,6 @@ jobs:
           php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: 'pgsql'
-          pgsql-port: ${{ env.PGSQL_PORT }}
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
