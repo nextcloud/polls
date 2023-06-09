@@ -65,7 +65,7 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          -  ${{ env.MYSQL_PORT }}:3306/tcp
+          -  4444:3306/tcp
         env:
           MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
