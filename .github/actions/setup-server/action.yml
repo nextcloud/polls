@@ -28,11 +28,16 @@ inputs:
     required: false
     default: 'sqlite'
     description: 'Database system to use (sqlite, mysql, pgsql, Default: sqlite)'
-  db-port:
+  mysql-port:
     required: false
     type: number
     default: 4444
-    description: 'Database port to use (default: 4444)'
+    description: 'Database port to use for mysql (default: 4444)'
+  pgsql-port:
+    required: false
+    type: number
+    default: 4445
+    description: 'Database port to use for PostgesQL (default: 4445)'
   db-name:
     required: false
     default: nextcloud
@@ -99,7 +104,12 @@ runs:
       working-directory: ${{ inputs.server-path }}
       shell: bash
       run: |
+        if [ "${{ inputs.db-engine }}" = "mysql" ]; then
+           export DB_PORT=${{ inputs.mysql-port }}
+        elif [ "${{ inputs.db-engine }}" = "pgsql" ]; then
+          export DB_PORT=${{ inputs.pgsql-port }}
+        fi
         mkdir data
-        ./occ maintenance:install --verbose --database=${{ inputs.db-engine }} --database-name=${{ inputs.db-name }} --database-host=${{ inputs.db-host }} --database-port=${{ inputs.db-port }} --database-user=${{ inputs.db-username }} --database-pass=${{ inputs.db-password }} --admin-user ${{ inputs.admin-user }} --admin-pass ${{ inputs.admin-password }}
+        ./occ maintenance:install --verbose --database=${{ inputs.db-engine }} --database-name=${{ inputs.db-name }} --database-host=${{ inputs.db-host }} --database-port=${{ $DB_PORT }} --database-user=${{ inputs.db-username }} --database-pass=${{ inputs.db-password }} --admin-user ${{ inputs.admin-user }} --admin-pass ${{ inputs.admin-password }}
         ./occ app:enable --force ${{ inputs.app-name }}
         php -S localhost:8080 &

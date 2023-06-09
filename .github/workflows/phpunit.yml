@@ -9,11 +9,12 @@ on:
 
 env:
   APP_NAME: polls
-  DB_PORT: 4444
   SERVER_PATH: server
   DB_USER: root
   DB_PASSWORD: rootpassword
   DB_NAME: nextcloud
+  MYSQL_PORT: 4444
+  PGSQL_PORT: 4445
 
 jobs:
   sqlite:
@@ -41,10 +42,6 @@ jobs:
           php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: sqlite
-          db-port: ${{ env.DB_PORT}}
-          db-password: ${{ env.DB_PASSWORD }}
-          db-username: ${{ env.DB_USER }}
-          db-name: ${{ env.DB_NAME }}
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
@@ -68,7 +65,7 @@ jobs:
       mysql:
         image: mysql:8.0
         ports:
-          - 4444:3306/tcp
+          -  ${{ env.MYSQL_PORT }}:3306/tcp
         env:
           MYSQL_ROOT_PASSWORD: ${{ env.DB_PASSWORD }}
         options: --health-cmd="mysqladmin ping" --health-interval 5s --health-timeout 2s --health-retries 5
@@ -86,10 +83,7 @@ jobs:
           php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: 'mysql'
-          db-port: ${{ env.DB_PORT }}
-          db-password: ${{ env.DB_PASSWORD }}
-          db-username: ${{ env.DB_USER }}
-          db-name: ${{ env.DB_NAME }}
+          mysql-port: ${{ env.MYSQL_PORT }}
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
@@ -114,7 +108,7 @@ jobs:
       postgres:
         image: postgres:14.5-bullseye
         ports:
-          - 4444:5432/tcp
+          - ${{ env.PGSQL_PORT }}:5432/tcp
         env:
           POSTGRES_USER: ${{ env.DB_USER }}
           POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
@@ -133,10 +127,7 @@ jobs:
           php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: 'pgsql'
-          db-port: ${{ env.DB_PORT}}
-          db-password: ${{ env.DB_PASSWORD }}
-          db-username: ${{ env.DB_USER }}
-          db-name: ${{ env.DB_NAME }}
+          pgsql-port: ${{ env.PGSQL_PORT }}
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
