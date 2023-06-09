@@ -36,10 +36,12 @@ setup-dev: setup-dev-composer npm-init
 # install composer deps for ci (tests and analysis)
 setup-build-composer: composer
 	composer install --no-dev -o
+	composer dump-autoload -o
 
 # install composer deps for release package
 setup-dev-composer: composer
 	composer install -o
+	composer dump-autoload -o
 
 # install node deps
 npm-init:

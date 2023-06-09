@@ -14,10 +14,18 @@
 		}
 	],
 	"config": {
-      "platform": {
+		"sort-packages": true,
+		"optimize-autoloader": true,
+		"autoloader-suffix": "Polls",
+		"platform": {
         "php": "7.4"
       }
     },
+	"autoload": {
+		"psr-4": {
+			"OCA\\Polls\\": "lib/"
+		}
+	},
 	"autoload-dev": {
 		"psr-4": {
 			"OCA\\Polls\\Tests\\": "tests/"
