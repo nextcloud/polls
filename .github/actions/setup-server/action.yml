@@ -82,7 +82,7 @@ runs:
       with:
         php-version: ${{ inputs.php-version }}
         tools: ${{ inputs.php-tools }}
-        extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, zip, gd
+        extensions: mbstring, iconv, fileinfo, intl, mysql, pdo_mysql, sqlite, pdo_sqlite, pgsql, pdo_pgsql, zip, gd
         coverage: none
 
     - name: Set up components
