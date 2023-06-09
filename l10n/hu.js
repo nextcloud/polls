@@ -453,7 +453,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "Kijelentkezés mint {name} (süti törlése)",
     "Email address deleted." : "E-mail cím törölve.",
     "Error deleting email address {emailAddress}" : "Hiba történt a(z) {emailAddress} e-mail-cím törlése során",
-    "Valid name." : "Érvényes név.",
     "Email address {emailAddress} saved." : "A(z) {emailAddress} e-mail-cím mentve.",
     "Error saving email address {emailAddress}" : "Hiba történt az {emailAddress} cím mentésekor",
     "Name changed." : "Név módosítva.",

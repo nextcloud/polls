@@ -31,6 +31,7 @@ OC.L10N.register(
     "Week" : "Uge",
     "Delete option" : "Slet valg",
     "Add" : "Tilføj",
+    "Submit" : "Tilføj",
     "Add option" : "Tilføj valg",
     "Close" : "Luk",
     "never" : "aldrig",

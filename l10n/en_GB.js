@@ -455,7 +455,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "Logout as {name} (delete cookie)",
     "Email address deleted." : "Email address deleted.",
     "Error deleting email address {emailAddress}" : "Error deleting email address {emailAddress}",
-    "Valid name." : "Valid name.",
     "Email address {emailAddress} saved." : "Email address {emailAddress} saved.",
     "Error saving email address {emailAddress}" : "Error saving email address {emailAddress}",
     "Name changed." : "Name changed.",

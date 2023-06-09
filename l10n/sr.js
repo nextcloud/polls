@@ -455,7 +455,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "Одјави се као {name} (обриши колачић)",
     "Email address deleted." : "И-мејл адреса је обрисана.",
     "Error deleting email address {emailAddress}" : "Грешка приликом брисања и-мејл адресе {emailAddress}",
-    "Valid name." : "Исправно име.",
     "Email address {emailAddress} saved." : "Сачувана је и-мејл адреса {emailAddress}.",
     "Error saving email address {emailAddress}" : "Грешка приликом чувања и-мејл адресе {emailAddress}",
     "Name changed." : "Име је промењено.",

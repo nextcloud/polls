@@ -264,6 +264,7 @@ OC.L10N.register(
     "{optionText} already exists" : "{optionText} υπάρχει ήδη",
     "Error adding {optionText}" : "Σφάλμα κατά την προσθήκη του {optionText}",
     "Shifting dates is disabled to prevent shifting of other user's proposals." : "Η αλλαγή ημερομηνιών είναι απενεργοποιημένη για να αποφευχθεί η μετακίνηση των προτάσεων άλλων χρηστών.",
+    "Submit" : "Υποβολή",
     "Add option" : "Προσθήκη επιλογής",
     "Create multiple options at once" : "Δημιουργήστε πολλές επιλογές ταυτόχρονα",
     "Each line creates a new option. Duplicates will get skipped without warning." : "Κάθε γραμμή δημιουργεί μια νέα επιλογή. Τα διπλότυπα θα παραβλεφθούν χωρίς προειδοποίηση.",

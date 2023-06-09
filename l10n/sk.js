@@ -443,7 +443,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "Odhlásiť ako {name} (zmazať cookie)",
     "Email address deleted." : "E-mail adresa odobraná.",
     "Error deleting email address {emailAddress}" : "Chyba pri odstraňovaní e-mail adresy {emailAddress}",
-    "Valid name." : "Platné meno.",
     "Email address {emailAddress} saved." : "E-mailová adresa {emailAddress} uložená.",
     "Error saving email address {emailAddress}" : "Chyba pri ukladaní e-mail adresy {emailAddress}",
     "Name changed." : "Meno bolo zmenené.",

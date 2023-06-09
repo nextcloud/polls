@@ -455,7 +455,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "以 {name} 身份登出（刪除 cookie）",
     "Email address deleted." : "電子郵件地址已刪除。",
     "Error deleting email address {emailAddress}" : "刪除電子郵件地址 {emailAddress} 時發生錯誤",
-    "Valid name." : "有效名稱。",
     "Email address {emailAddress} saved." : "電子郵件地址 {emailAddress} 已儲存。",
     "Error saving email address {emailAddress}" : "儲存電子郵件地址 {emailAddress} 時發生錯誤",
     "Name changed." : "名稱已變更。",

@@ -453,7 +453,6 @@
     "Logout as {name} (delete cookie)" : "Logga ut som {name} (ta bort cookie)",
     "Email address deleted." : "E-postadressen har tagits bort.",
     "Error deleting email address {emailAddress}" : "Det gick inte att ta bort e-postadressen {emailAddress}",
-    "Valid name." : "Giltigt namn.",
     "Email address {emailAddress} saved." : "E-postadressen {emailAddress} har sparats.",
     "Error saving email address {emailAddress}" : "Det gick inte att spara e-postadressen {emailAddress}",
     "Name changed." : "Namnet har ändrats.",

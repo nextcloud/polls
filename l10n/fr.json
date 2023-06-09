@@ -453,7 +453,6 @@
     "Logout as {name} (delete cookie)" : "Déconnexion de {name} (suppression du cookie)",
     "Email address deleted." : "Adresse e-mail supprimée.",
     "Error deleting email address {emailAddress}" : "Erreur lors de la suppression de l'adresse e-mail {emailAddress}",
-    "Valid name." : "Nom valide.",
     "Email address {emailAddress} saved." : "Adresse e-mail {emailAddress} enregistrée.",
     "Error saving email address {emailAddress}" : "Erreur lors de l'enregistrement de l'adresse e-mail {emailAddress}",
     "Name changed." : "Nom changé.",

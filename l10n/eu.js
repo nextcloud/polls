@@ -451,7 +451,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "{name} saioa itxi (cookie-a ezabatu)",
     "Email address deleted." : "E-posta helbidea ezabatuta.",
     "Error deleting email address {emailAddress}" : "Errorea {emailAddress} helbide elektronikoa ezabatzean",
-    "Valid name." : "Baliozko izena.",
     "Email address {emailAddress} saved." : "{emailAddress} e-posta helbidea gordeta.",
     "Error saving email address {emailAddress}" : "Errorea {emailAddress} helbide elektronikoa gordetzean",
     "Name changed." : "Izena aldatuta.",

@@ -453,7 +453,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "Suprimir la sessió com a {name} (suprimeix la galeta)",
     "Email address deleted." : "S'ha suprimit l'adreça de correu electrònic.",
     "Error deleting email address {emailAddress}" : "S'ha produït un error en suprimir l'adreça de correu electrònic {emailAddress}",
-    "Valid name." : "Nom vàlid.",
     "Email address {emailAddress} saved." : "S'ha desat l'adreça de correu electrònic {emailAddress}.",
     "Error saving email address {emailAddress}" : "S'ha produït un error en desar l'adreça de correu electrònic {emailAddress}",
     "Name changed." : "El nom ha canviat.",

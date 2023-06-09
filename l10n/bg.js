@@ -453,7 +453,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "Излизане като {name} (изтриване на бисквитката)",
     "Email address deleted." : "Имейл адресът е изтрит.",
     "Error deleting email address {emailAddress}" : "Грешка при изтриването на имейл адреса {emailAddress}",
-    "Valid name." : "Валидно име.",
     "Email address {emailAddress} saved." : "Имейл адресът {emailAddress} е запазен.",
     "Error saving email address {emailAddress}" : "Грешка при запазването на имейл адреса {emailAddress}",
     "Name changed." : "Името е променено.",

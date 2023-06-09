@@ -332,7 +332,6 @@ OC.L10N.register(
     "Reset your votes" : "Ponastavi glasove",
     "Email address deleted." : "Elektronski naslov je izbrisan.",
     "Error deleting email address {emailAddress}" : "Brisanje elektronskega naslova {emailAddress} je spodletelo.",
-    "Valid name." : "Veljavno ime",
     "Email address {emailAddress} saved." : "Elektronski naslov {emailAddress} je shranjen.",
     "Error saving email address {emailAddress}" : "Shranjevanje elektronskega naslova {emailAddress} je spodletelo.",
     "Name changed." : "Ime je spremenjeno.",

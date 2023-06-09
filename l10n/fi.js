@@ -267,7 +267,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "Kirjaudu ulos tililtä {name} (poista eväste)",
     "Email address deleted." : "Sähköpostiosoite poistettu.",
     "Error deleting email address {emailAddress}" : "Virhe poistaessa sähköpostiosoitetta {emailAddress}",
-    "Valid name." : "Kelvollinen nimi.",
     "Email address {emailAddress} saved." : "Sähköpostiosoite {emailAddress} tallennettu.",
     "Error saving email address {emailAddress}" : "Virhe tallentaessa sähköpostiosoitetta {emailAddress}",
     "Name changed." : "Nimi vaihdettu.",

@@ -226,7 +226,6 @@
     "Remove Email Address" : "이메일 주소 삭제",
     "Email address deleted." : "이메일 주소가 삭제되었습니다.",
     "Error deleting email address {emailAddress}" : "이메일 주소 {emailAddress} 삭제 에러 ",
-    "Valid name." : "유효한 이름.",
     "Email address {emailAddress} saved." : "이메일 주소 {emailAddress}가 저장됨.",
     "Error saving email address {emailAddress}" : "이메일 주소 {emailAddress} 저장 에러",
     "Name changed." : "이름이 변경됨.",

@@ -455,7 +455,6 @@ OC.L10N.register(
     "Logout as {name} (delete cookie)" : "{name} oturumunu kapat (çerezi sil)",
     "Email address deleted." : "E-posta adresi silindi",
     "Error deleting email address {emailAddress}" : "{emailAddress} e-posta adresi silinirken sorun çıktı",
-    "Valid name." : "Geçerli ad.",
     "Email address {emailAddress} saved." : "{emailAddress} adresi kaydedildi.",
     "Error saving email address {emailAddress}" : "{emailAddress} adresi kaydedilirken sorun çıktı",
     "Name changed." : "Ad değiştirildi.",
