@@ -58,6 +58,7 @@ OC.L10N.register(
     "Description" : "Опис",
     "Poll configurations" : "Налаштування опитування",
     "Result display" : "Показ результатів",
+    "Edit Email Address" : "Редагувати ел. адресу",
     "Change name" : "Змінити ім'я",
     "Email options" : "Параметри електронної пошти",
     "Yes" : "Так",
