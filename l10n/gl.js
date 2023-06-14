@@ -182,7 +182,7 @@ OC.L10N.register(
     "No vote options available" : "Opcións de non voto dispoñíbeis",
     "Maybe the owner did not provide some until now." : "Quizais o propietario non forneceu ningunha ata agora.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Aínda que os nomes dos participantes están agochados, esta non é unha enquisa anónima real, porque non están agochados para o propietario.",
-    "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Ademais, o propietario pode eliminar a marca de anónima en calquera momento, o que revelará os nomes dos participantes.",
+    "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Ademais, o propietario pode retirar a marca de anónima en calquera momento, o que revelará os nomes dos participantes.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Queda %n de {maximalVotes} votos.","Quedan %n de {maximalVotes} votos."],
     "Minute" : "Minuto",
     "Hour" : "Hora",

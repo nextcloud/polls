@@ -499,7 +499,7 @@ OC.L10N.register(
     "Error loading poll list" : "S'ha produït un error carregant la llista de enquestes",
     "Add new Poll" : "Afegeix una enquesta nova",
     "Combine polls" : "Combinar enquestes",
-    "Polls settings" : "Paràmetres de les enquestes",
+    "Polls settings" : "Paràmetres d'Enquestes",
     "Error cloning poll." : "Error clonant l’enquesta.",
     "404 - poll not found" : "404 - no s'ha trobat l'enquesta",
     "Enter a poll or start a new one." : "Introduïu una enquesta o inicieu-ne una de nova.",
