@@ -97,7 +97,7 @@ OC.L10N.register(
     "valid email address." : "enderezo válido de correo.",
     "Invalid email address." : "Enderezo de correo incorrecto",
     "Login" : "Acceso",
-    "As a regular user of this site, you can participate with your internal identity after logging in." : "Como usuario habitual deste sitio, pode participar coa súa identidade interna após iniciar sesión.",
+    "As a regular user of this site, you can participate with your internal identity after logging in." : "Como usuario habitual deste sitio, pode participar coa súa identidade interna após iacceder.",
     "Access" : "Acceso",
     "Owner" : "Propietario",
     "Created" : "Creado",
