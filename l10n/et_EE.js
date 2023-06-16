@@ -18,6 +18,7 @@ OC.L10N.register(
     "Apply" : "Rakenda",
     "From" : "Saatja",
     "To" : "Saaja",
+    "Email address" : "E-posti aadress",
     "No" : "Ei",
     "Delete poll" : "Kustuta küsitlus",
     "OK" : "OK",
