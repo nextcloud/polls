@@ -75,7 +75,7 @@ OC.L10N.register(
     "Remove time" : "Retirar tempo",
     "Add time" : "Engadir tempo",
     "Add" : "Engadir",
-    "Add date" : "Engadir data",
+    "Add date" : "Engadir a data",
     "Click to add an option" : "Prema para engadir unha opción",
     "Error adding {optionText}" : "Produciuse un erro ao engadir {optionText}",
     "Submit" : "Enviar",
@@ -108,7 +108,7 @@ OC.L10N.register(
     "Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view." : "Comprobar isto, se prefire presentar o texto da enquisa nunha lista de aliñamento vertical mellor ca en vista de grade. O predeterminado é a vista de lista.",
     "Date polls default to list view" : "A data das enquisas de texto predeterminan a vista de lista",
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Comprobar isto, se prefire presentar a data de enquisa nunha vista vertical mellor ca en vista de grade. A vista predeterminada é en grade.",
-    "User settings" : "Axustes de usuario",
+    "User settings" : "Axustes do usuario",
     "Performance settings" : "Axustes do rendemento",
     "Styles" : "Estilos",
     "Add a new public link" : "Engadir unha ligazón pública nova",
@@ -200,6 +200,6 @@ OC.L10N.register(
     "All polls, where you have access to." : "Todas as enquisas, ás que vostede ten acceso.",
     "Closed polls" : "Enquisas pechadas",
     "All closed polls, where voting is disabled." : "Todas as enquisas pechadas, nas que a votación está desactivada.",
-    "Archive" : "Aquivar"
+    "Archive" : "Arquivar"
 },
 "nplurals=2; plural=(n != 1);");

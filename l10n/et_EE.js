@@ -24,6 +24,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Week" : "Nädal",
     "Add" : "Lisa",
+    "Submit" : "Saada",
     "Close" : "Sulge",
     "never" : "mitte kunagi",
     "Login" : "Logi sisse",
