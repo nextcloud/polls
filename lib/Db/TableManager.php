@@ -319,11 +319,17 @@ class TableManager {
 			// identify duplicates
 			$selection = $qb->selectDistinct('t1.id')
 				->from($table, 't1')
-				->innerJoin('t1', $table, 't2')
-				->where($qb->expr()->lt('t1.id', 't2.id'));
+				->innerJoin('t1', $table, 't2', $qb->expr()->eq('t1.id', 't2.id'));
+
+			$i = 0;
 
 			foreach ($columns as $column) {
-				$selection->andWhere($qb->expr()->eq('t1.' . $column, 't2.' . $column));
+				if ($i > 0) {
+					$selection->andWhere($qb->expr()->eq('t1.' . $column, 't2.' . $column));
+				} else {
+					$selection->where($qb->expr()->eq('t1.' . $column, 't2.' . $column));
+				}
+				$i = $i++;
 			}
 
 			$duplicates = $qb->executeQuery()->fetchAll(PDO::FETCH_COLUMN);
