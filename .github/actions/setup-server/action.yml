@@ -102,4 +102,5 @@ runs:
         mkdir data
         ./occ maintenance:install --verbose --database=${{ inputs.db-engine }} --database-name=${{ inputs.db-name }} --database-host=${{ inputs.db-host }} --database-port=$DB_PORT --database-user=${{ inputs.db-username }} --database-pass=${{ inputs.db-password }} --admin-user ${{ inputs.admin-user }} --admin-pass ${{ inputs.admin-password }}
         ./occ app:enable --force ${{ inputs.app-name }}
+        ./occ polls:db:rebuild -n
         php -S localhost:8080 &
