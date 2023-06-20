@@ -20,6 +20,7 @@
     "User" : "Usuario",
     "%s invited you to a poll" : "%s convidouno a unha enquisa",
     "%s took over your poll" : "%s fíxose cargo da súa enquisa",
+    "A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Unha aplicación de enquisas, semellante a Doodle/Dudle, coa posibilidade de restrinxir o acceso (membros, determinados grupos/usuarios, agochados e públicos).",
     "Switch to list view" : "Cambiar á vista de lista",
     "Switch to table view" : "Cambiar á vista de táboa",
     "Delete" : "Eliminar",
