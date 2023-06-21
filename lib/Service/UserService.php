@@ -44,6 +44,7 @@ use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use OCP\Share\IShare;
+use Psr\Log\LoggerInterface;
 
 class UserService {
 	public function __construct(
@@ -54,6 +55,7 @@ class UserService {
 		private IUserManager $userManager,
 		private ShareMapper $shareMapper,
 		private VoteMapper $voteMapper,
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -160,28 +162,59 @@ class UserService {
 		[$result, $more] = $this->userSearch->search($query, $types, false, 200, 0);
 
 		foreach (($result['users'] ?? []) as $item) {
-			$items[] = new User($item['value']['shareWith']);
+			if (isset($item['value']['shareWith'])) {
+				$items[] = new User($item['value']['shareWith']);
+			} else {
+				$this->logger->debug('Unrecognized result for query: \"{query}\". Result: {result]', [
+					'query' => $query,
+					'result' => json_encode($item),
+				]);
+			}
 		}
 
 		foreach (($result['exact']['users'] ?? []) as $item) {
-			$items[] = new User($item['value']['shareWith']);
+			if (isset($item['value']['shareWith'])) {
+				$items[] = new User($item['value']['shareWith']);
+			} else {
+				$this->logger->debug('Unrecognized result for query: \"{query}\". Result: {result]', [
+					'query' => $query,
+					'result' => json_encode($item),
+				]);
+			}
 		}
 
 		foreach (($result['groups'] ?? []) as $item) {
-			$items[] = new Group($item['value']['shareWith']);
+			if (isset($item['value']['shareWith'])) {
+				$items[] = new Group($item['value']['shareWith']);
+			} else {
+				$this->logger->debug('Unrecognized result for query: \"{query}\". Result: {result]', [
+					'query' => $query,
+					'result' => json_encode($item),
+				]);
+			}
 		}
 
 		foreach (($result['exact']['groups'] ?? []) as $item) {
-			$items[] = new Group($item['value']['shareWith']);
+			if (isset($item['value']['shareWith'])) {
+				$items[] = new Group($item['value']['shareWith']);
+			} else {
+				$this->logger->debug('Unrecognized result for query: \"{query}\". Result: {result]', [
+					'query' => $query,
+					'result' => json_encode($item),
+				]);
+			}
 		}
 
-		$items = array_merge($items, Contact::search($query));
-		$items = array_merge($items, ContactGroup::search($query));
-
+		if (Contact::isEnabled()) {
+			$items = array_merge($items, Contact::search($query));
+			$items = array_merge($items, ContactGroup::search($query));
+		}
+		
 		if (Circle::isEnabled()) {
 			foreach (($result['circles'] ?? []) as $item) {
 				$items[] = new Circle($item['value']['shareWith']);
 			}
+
 			foreach (($result['exact']['circles'] ?? []) as $item) {
 				$items[] = new Circle($item['value']['shareWith']);
 			}
