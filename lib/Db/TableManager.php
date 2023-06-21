@@ -319,7 +319,7 @@ class TableManager {
 			// identify duplicates
 			$selection = $qb->selectDistinct('t1.id')
 			->from($table, 't1')
-			->innerJoin('t1', $table, 't2', $qb->expr()->eq('t1.id', 't2.id'));
+			->innerJoin('t1', $table, 't2', $qb->expr()->lt('t1.id', 't2.id'));
 
 			$i = 0;
 
