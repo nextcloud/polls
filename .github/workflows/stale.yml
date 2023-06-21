@@ -14,5 +14,9 @@ jobs:
         stale-issue-message: 'This issue is marked as stale, because it had no activity in the last 30 days. It will be closed in 5 days.'
         stale-issue-label: 'stale'
         exempt-issue-labels: 'enhancement,bug,investigate,UX'
+        exempt-pr-labels: 'enhancement,bug'
+        exempt-all-milestones: true
         days-before-stale: 30
         days-before-close: 5
+        days-before-pr-close: 180
+        exempt-draft-pr: true
