@@ -89,6 +89,7 @@
     "Closing: {dateRelative}" : "Pechada o {dateRelative}",
     "Time zone: {timezoneString}" : "Fuso horario: {timezoneString}",
     "You subscribed to this poll" : "Vostede está subscrito a esta enquisa",
+    "Private poll" : "Enquisa privada",
     "_%n Participant_::_%n Participants_" : ["%n participante","%n participantes"],
     "_Only %n vote per option._::_Only %n votes per option._" : ["Só %n voto por opción.","Só %n votos por opción."],
     "Optional email address" : "Enderezo de correo-e opcional",
