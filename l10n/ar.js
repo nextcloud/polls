@@ -6,6 +6,7 @@ OC.L10N.register(
     "Group" : "الفريق",
     "Do not share this link with other people, because it is connected to your votes." : "لا تشارك هذا الرابط مع اشخاص اخريين، لانه مرتبط مع تصويتك.",
     "Go to poll" : "الانتقال إلى استطلاع الرأي",
+    "Legal Notice" : "ملاحظة قانونية",
     "Contact" : "التواصل",
     "Public link" : "رابط عمومي",
     "User" : "المستخدم",
