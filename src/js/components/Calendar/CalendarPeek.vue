@@ -21,12 +21,14 @@
   -->
 
 <template>
-	<NcPopover class="calendar-peek">
-		<template v-if="events.length" #trigger>
-			<div class="calendar-peek__conflict icon icon-calendar" />
-			<p class="calendar-peek__caption">
-				{{ t('polls', 'Conflict') }}
-			</p>
+	<NcPopover v-if="events.length" class="calendar-peek">
+		<template #trigger>
+			<div>
+				<div class="calendar-peek__conflict icon icon-calendar" />
+				<p class="calendar-peek__caption">
+					{{ t('polls', 'Conflict') }}
+				</p>
+			</div>
 		</template>
 		<div class="calendar-peek__grid">
 			<CalendarInfo v-for="eventItem in sortedEvents"
@@ -36,7 +38,7 @@
 		</div>
 	</NcPopover>
 </template>
-n
+
 <script>
 
 import { mapState } from 'vuex'
@@ -129,6 +131,10 @@ export default {
 </script>
 
 <style lang="scss">
+
+.calendar-peek {
+	flex-direction: column;
+}
 
 .calendar-peek__conflict.icon {
 	width: 32px;

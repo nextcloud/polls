@@ -28,7 +28,9 @@
 			:show-maybe="!!poll.allowMaybe"
 			:option="option" />
 
-		<CalendarPeek v-if="showCalendarPeek" :option="option" />
+		<CalendarPeek v-if="showCalendarPeek"
+			:focus-trap="false"
+			:option="option" />
 
 		<VoteItem v-for="(participant) in participants"
 			:key="participant.userId"
