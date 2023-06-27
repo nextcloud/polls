@@ -39,6 +39,7 @@ OC.L10N.register(
     "Owner" : "المالك",
     "Created" : "أُنشئ",
     "Preview" : "معاينة",
+    "User settings" : "إعدادات المستخدم",
     "Shares" : "المشاركات",
     "Description" : "الوصف",
     "Change name" : "تغيير الإسم",
