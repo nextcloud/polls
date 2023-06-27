@@ -1,17 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [5.1.0] - tbd
+## [5.1.0] - 2023-06-27
 ### Changes
- - Allow to clean relevant list from inactive polls after configurable amount of days
- - support for PHP 8.2
- - replaced dropdown elements (NcSelect over NcMultiSelect)
+ - Added user option to remove outdated polls from th "Relevant" list
  - Added alternative vote page design as beta option
 ### Fixes
  - Poll export broken under some circumstances
  - Fixed repair steps
-### Refactoring
-- replace vue-richtext by NcRichText
+ - Added a workaround and debugging logs regarding LDAP
+ - Fixed conflict detection for poll options against user's calendar
+ - PostgeSQL Compatibility
+### Misc
+- support PHP 8.2
+- Replace dropdown elements (NcSelect over NcMultiSelect)
+- Replace vue-richtext by NcRichText
+- minor updates caused by depencies
 ## [5.0.5] - 2023-05-07
 ### Fix
  - show unprocessed share invitations
