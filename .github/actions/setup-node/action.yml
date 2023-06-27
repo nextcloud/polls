@@ -2,7 +2,7 @@ name: Setup node and dependencies
 inputs:
   node-version:
     required: false
-    default: 16
+    default: 20
     description: 'Node version to use'
 
 outputs:
@@ -29,7 +29,7 @@ runs:
     - name: Set up node ${{ inputs.node-version }}
       uses: actions/setup-node@v3
       with:
-        node-version: ${{ matrix.node-versions }}
+        node-version: ${{ inputs.node-version }}
 
     - name: Install dependencies
       if: steps.cache-modules.outputs.cache-hit != 'true'
