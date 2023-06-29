@@ -90,7 +90,7 @@ class Notifier implements INotifier {
 
 		$notification->setIcon(
 			$this->urlGenerator->getAbsoluteURL(
-				$this->urlGenerator->imagePath('polls', 'polls.svg')
+				$this->urlGenerator->imagePath('polls', 'polls-dark.svg')
 			)
 		);
 
@@ -104,25 +104,21 @@ class Notifier implements INotifier {
 			return $notification;
 		}
 
-		if (isset($actor['actor'])) {
-			$actor = $actor['actor'];
-		}
-
 		$subjects = match ($notification->getSubject()) {
 			self::NOTIFY_INVITATION => [
-				self::SUBJECT_PARSED => $l->t('%s invited you to a poll', $actor['name']),
+				self::SUBJECT_PARSED => $l->t('%s invited you to a poll', $actor['actor']['name']),
 				self::SUBJECT_RICH => $l->t('{actor} has invited you to the poll "%s".', $pollTitle),
 			],
 			self::NOTIFY_POLL_TAKEOVER => [
-				self::SUBJECT_PARSED => $l->t('%s took over your poll', $actor['name']),
+				self::SUBJECT_PARSED => $l->t('%s took over your poll', $actor['actor']['name']),
 				self::SUBJECT_RICH => $l->t('{actor} took over your poll "%s" and is the new owner.', $pollTitle),
 			],
 			self::NOTIFY_POLL_DELETED_BY_OTHER => [
-				self::SUBJECT_PARSED => $l->t('%s deleted your poll', $actor['name']),
+				self::SUBJECT_PARSED => $l->t('%s deleted your poll', $actor['actor']['name']),
 				self::SUBJECT_RICH => $l->t('{actor} deleted your poll "%s".', $pollTitle),
 			],
 			self::NOTIFY_POLL_ARCHIVED_BY_OTHER => [
-				self::SUBJECT_PARSED => $l->t('%s archived your poll', $actor['name']),
+				self::SUBJECT_PARSED => $l->t('%s archived your poll', $actor['actor']['name']),
 				self::SUBJECT_RICH => $l->t('{actor} archived your poll "%s".', $pollTitle),
 			],
 			// Unknown subject => Unknown notification => throw
