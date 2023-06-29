@@ -369,7 +369,7 @@ class ShareService {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
 		} else {
 			try {
-				$this->shareMapper->findByPollAndUser($pollId, $userId);
+				$this->shareMapper->findByPollUserAndType($pollId, $userId, $type);
 				throw new ShareAlreadyExistsException;
 			} catch (MultipleObjectsReturnedException $e) {
 				throw new ShareAlreadyExistsException;

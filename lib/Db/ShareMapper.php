@@ -111,6 +111,31 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 */
+	public function findByPollUserAndType(int $pollId, string $userId, string $type): Share {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')
+		   ->from($this->getTableName())
+		   ->where(
+		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   )
+		   ->andWhere(
+		   	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
+		   )
+		   ->andWhere(
+		   	$qb->expr()->eq('type', $qb->createNamedParameter($type, IQueryBuilder::PARAM_STR))
+		   );
+
+		try {
+			return $this->findEntity($qb);
+		} catch (DoesNotExistException $e) {
+			throw new ShareNotFoundException("Share not found by userId and pollId");
+		}
+	}
+
+	/**
 	 * Returns a fake share in case of deleted shares
 	 */
 	public function getReplacement(int $pollId, string $userId): Share {
