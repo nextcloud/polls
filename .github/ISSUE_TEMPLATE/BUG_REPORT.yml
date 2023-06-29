@@ -101,7 +101,9 @@ body:
         ---
         # Client environment
         This helps us to identify possible effects caused by the client environment.
+
         ⚠️ Please make sure browser extensions/plug-ins can be excluded as the bug source (especially script and ad blockers).
+
   - type: checkboxes
     id: client-browser
     attributes:
@@ -119,25 +121,6 @@ body:
     attributes:
       label: Other browser
       placeholder: i.e. Opera mobile
-
-  - type: checkboxes
-    id: client-os
-    attributes:
-      label: Which System did you use, when experiencing the bug?
-      description: |
-        Select **all** operating systems, where you observed the bug.
-      options:
-      - label: "Windows"
-      - label: "Linux"
-      - label: "MacOs"
-      - label: "iOS"
-      - label: "Android"
-      - label: "Other/Don't know"
-  - type: input
-    id: client-os-other
-    attributes:
-      label: Other OS
-      placeholder: i.e. DOS 2.1
 
   - type: textarea
     id: client-logs
@@ -168,8 +151,6 @@ body:
       description: |
         Which Nextcloud Server version are you running.
       options:
-        - "Nextcloud 23 (Nextcloud Hub 1)"
-        - "Nextcloud 24 (Nextcloud Hub 2)"
         - "Nextcloud 25 (Nextcloud Hub 3)"
         - "Nextcloud 26 (Nextcloud Hub 4)"
         - "Nextcloud 27 (Nextcloud Hub 5)"
