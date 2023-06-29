@@ -25,7 +25,6 @@
 
 namespace OCA\Polls\AppInfo;
 
-use Closure;
 use OCA\Polls\Dashboard\PollWidget;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
@@ -66,7 +65,6 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
-use OCP\Notification\IManager as NotificationManager;
 use OCP\User\Events\UserDeletedEvent;
 
 class Application extends App implements IBootstrap {
@@ -78,14 +76,15 @@ class Application extends App implements IBootstrap {
 	}
 
 	public function boot(IBootContext $context): void {
-		$context->injectFn(Closure::fromCallable([$this, 'registerNotifications']));
+		# empty method, but is mandatory as defined in the interface
 	}
 
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);
-		
+		$context->registerNotifierService(Notifier::class);
+
 		$context->registerEventListener(CommentAddEvent::class, CommentListener::class);
 		$context->registerEventListener(CommentDeleteEvent::class, CommentListener::class);
 		$context->registerEventListener(OptionConfirmedEvent::class, OptionListener::class);
@@ -114,9 +113,5 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 		$context->registerSearchProvider(SearchProvider::class);
 		$context->registerDashboardWidget(PollWidget::class);
-	}
-
-	public function registerNotifications(NotificationManager $notificationManager): void {
-		$notificationManager->registerNotifierService(Notifier::class);
 	}
 }
