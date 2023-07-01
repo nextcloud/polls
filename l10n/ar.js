@@ -22,6 +22,8 @@ OC.L10N.register(
     "Cancel" : "الغاء",
     "Apply" : "حفظ",
     "Participants" : "المشارِكون",
+    "From" : "من :",
+    "To" : "إلى :",
     "Email address" : "عنوان البريد الإلكتروني",
     "No" : "لا",
     "Delete poll" : "احذف استطلاع الرأي",
@@ -39,6 +41,7 @@ OC.L10N.register(
     "Owner" : "المالك",
     "Created" : "أُنشئ",
     "Preview" : "معاينة",
+    "Use alternative vote page styling" : "استخدام التصميم البديل لصفحة التصويت",
     "User settings" : "إعدادات المستخدم",
     "Shares" : "المشاركات",
     "Description" : "الوصف",
@@ -54,6 +57,7 @@ OC.L10N.register(
     "Hour" : "الساعة",
     "Day" : "يوم",
     "Month" : "شهر",
+    "Year" : "السنة",
     "Archive" : "الأرشيف"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
