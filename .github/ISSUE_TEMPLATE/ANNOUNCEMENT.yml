@@ -5,4 +5,4 @@ labels: ["announcement"]
 body:
   - type: textarea
     attributes:
-      label: Your Message to the world
+      label: Annoncement
