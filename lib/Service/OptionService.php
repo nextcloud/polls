@@ -24,6 +24,7 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
+use DateTimeZone;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
@@ -43,6 +44,7 @@ use OCA\Polls\Model\Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
+use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class OptionService {
@@ -60,6 +62,8 @@ class OptionService {
 		private Option $option,
 		private OptionMapper $optionMapper,
 		private VoteMapper $voteMapper,
+		private ISession $session,
+		private SystemService $systemService,
 	) {
 		$this->options = [];
 		$this->votes = [];
@@ -246,6 +250,26 @@ class OptionService {
 		return $this->option;
 	}
 
+	private function getModifiedDateOption(Option $option, DateTimeZone $timeZone, int $step, string $unit) {
+		$from = (new DateTime())
+			->setTimestamp($option->getTimestamp())
+			->setTimezone($timeZone)
+			->modify($step . ' ' . $unit);
+		$to = (new DateTime())
+			->setTimestamp($option->getTimestamp() + $option->getDuration())
+			->setTimezone($timeZone)
+			->modify($step . ' ' . $unit);
+		return [
+			'from' => $from,
+			'to' => $to,
+			'duration' => $to->getTimestamp() - $from->getTimestamp(),
+		];
+	}
+
+	private function cloneOption() {
+		return clone $this->option;
+	}
+
 	/**
 	 * Make a sequence of date poll options
 	 *
@@ -256,6 +280,7 @@ class OptionService {
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
+		$timezone = new DateTimeZone($this->session->get('ncPollsClientTimeZone'));
 
 		if ($this->acl->getPoll()->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Sequences are only available in date polls');
@@ -265,25 +290,19 @@ class OptionService {
 			return $this->optionMapper->findByPoll($this->acl->getPollId());
 		}
 
-		$baseDate = new DateTime;
-		$baseDate->setTimestamp($this->option->getTimestamp());
-
-		for ($i = 0; $i < $amount; $i++) {
+		for ($i = 1; $i < ($amount + 1) ; $i++) {
 			$clonedOption = new Option();
-			$clonedOption->setPollId($this->acl->getPollId());
-			$clonedOption->setDuration($this->option->getDuration());
+			$clonedOption->setPollId($this->option->getPollId());
 			$clonedOption->setConfirmed(0);
-			$clonedOption->setTimestamp($baseDate->modify($step . ' ' . $unit)->getTimestamp());
-			$clonedOption->setOrder($clonedOption->getTimestamp());
-			$clonedOption->setPollOptionText($baseDate->format('c'));
+
+			$newDates = $this->getModifiedDateOption($this->option, $timezone, ($step * $i), $unit);
+			$clonedOption->setTimestamp($newDates['from']->getTimestamp());
+			$clonedOption->setDuration($newDates['duration']);
 
 			try {
 				$this->optionMapper->insert($clonedOption);
 			} catch (Exception $e) {
-				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-					$this->logger->warning('skip adding ' . $baseDate->format('c') . 'for pollId' . $this->option->getPollId() . '. Option already exists.');
-				}
-				throw $e;
+				$this->logger->warning('skip adding ' . $newDates['from']->format('c') . 'for pollId ' . $this->option->getPollId() . '. Option already exists.');
 			}
 		}
 
@@ -301,6 +320,7 @@ class OptionService {
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+		$timezone = new DateTimeZone($this->session->get('ncPollsClientTimeZone'));
 
 		if ($this->acl->getPoll()->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');
@@ -309,15 +329,15 @@ class OptionService {
 		$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
 
 		if ($step > 0) {
+			// start from last item if moving option into the future
 			// avoid UniqueConstraintViolationException
-			// start from last item
 			$this->options = array_reverse($this->options);
 		}
 
-		$shiftedDate = new DateTime;
 		foreach ($this->options as $option) {
-			$shiftedDate->setTimestamp($option->getTimestamp());
-			$option->setTimestamp($shiftedDate->modify($step . ' ' . $unit)->getTimestamp());
+			$newDates = $this->getModifiedDateOption($option, $timezone, $step, $unit);
+			$option->setTimestamp($newDates['from']->getTimestamp());
+			$option->setDuration($newDates['duration']);
 			$this->optionMapper->update($option);
 		}
 

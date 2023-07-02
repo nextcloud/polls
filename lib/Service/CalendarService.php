@@ -35,6 +35,7 @@ use OCA\Polls\Model\CalendarEvent;
 use OCA\Polls\Model\User\CurrentUser;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
+use OCP\ISession;
 
 class CalendarService {
 	/** @var ICalendar[] */
@@ -43,6 +44,7 @@ class CalendarService {
 
 	public function __construct(
 		private CalendarManager $calendarManager,
+		private ISession $session,
 		private PreferencesService $preferencesService,
 		private OptionMapper $optionMapper,
 		private CurrentUser $currentUser,
@@ -112,8 +114,8 @@ class CalendarService {
 	 *
 	 * @psalm-return list<CalendarEvent|null>
 	 */
-	public function getEvents(int $optionId, string $tz): array {
-		$timezone = new DateTimeZone($tz);
+	public function getEvents(int $optionId): array {
+		$timezone = new DateTimeZone($this->session->get('ncPollsClientTimeZone'));
 		$timerange = $this->getTimerange($optionId, $timezone);
 
 		$events = [];
