@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.2.0] - tbd
+### Fixes
+ - Fix date shifting and sequence probpelms with daylight saving times
+ - Bring back notifications
 ## [5.1.0] - 2023-06-27
 ### Changes
  - Added user option to remove outdated polls from th "Relevant" list
