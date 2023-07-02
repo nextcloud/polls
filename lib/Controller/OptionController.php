@@ -119,6 +119,6 @@ class OptionController extends BaseController {
 	 * @NoAdminRequired
 	 */
 	public function findCalendarEvents(int $optionId, string $tz): JSONResponse {
-		return $this->response(fn () => ['events' => $this->calendarService->getEvents($optionId, $tz)]);
+		return $this->response(fn () => ['events' => $this->calendarService->getEvents($optionId)]);
 	}
 }

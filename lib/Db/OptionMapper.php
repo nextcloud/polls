@@ -42,11 +42,19 @@ class OptionMapper extends QBMapper {
 	}
 
 	public function update(Entity $entity): Entity {
+		$entity->updatePollOptionText();
+		if ($entity->getTimestamp() > 0) {
+			$entity->setOrder($entity->getTimestamp());
+		}
 		$entity->setPollOptionHash(hash('md5', $entity->getPollId() . $entity->getPollOptionText() . $entity->getTimestamp()));
 		return parent::update($entity);
 	}
-
+	
 	public function insert(Entity $entity): Entity {
+		$entity->updatePollOptionText();
+		if ($entity->getTimestamp() > 0) {
+			$entity->setOrder($entity->getTimestamp());
+		}
 		$entity->setPollOptionHash(hash('md5', $entity->getPollId() . $entity->getPollOptionText() . $entity->getTimestamp()));
 		return parent::insert($entity);
 	}

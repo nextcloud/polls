@@ -120,6 +120,10 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return htmlspecialchars_decode($this->pollOptionText);
 	}
 
+	public function updatePollOptionText(): void {
+		$this->setPollOptionText($this->getPollOptionText());
+	}
+
 	public function getPollOptionTextEnd(): string {
 		if ($this->getTimestamp()) {
 			return date('c', $this->getTimestamp() + $this->getDuration());

@@ -30,6 +30,7 @@ const axiosConfig = {
 	headers: {
 		Accept: 'application/json',
 		'Nc-Polls-Client-Id': clientSessionId,
+		'Nc-Polls-Client-Time-Zone': Intl.DateTimeFormat().resolvedOptions().timeZone,
 	},
 }
 
