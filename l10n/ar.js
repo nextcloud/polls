@@ -45,6 +45,7 @@ OC.L10N.register(
     "User settings" : "إعدادات المستخدم",
     "Shares" : "المشاركات",
     "Description" : "الوصف",
+    "Receive notification email on activity" : "تلقي إشعار البريد الإلكتروني عند النشاط",
     "Change name" : "تغيير الإسم",
     "Yes" : "نعم",
     "Administration" : "الإدارة",

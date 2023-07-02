@@ -11,6 +11,8 @@ OC.L10N.register(
     "Delete comment" : "Skrap kommentaar",
     "Title" : "Titel",
     "Cancel" : "Kanselleer",
+    "From" : "Van",
+    "To" : "Aan",
     "Email address" : "E-posadres",
     "No" : "Nee",
     "OK" : "Goed",
