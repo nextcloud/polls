@@ -44,6 +44,8 @@ OC.L10N.register(
     "Use alternative vote page styling" : "استخدام التصميم البديل لصفحة التصويت",
     "User settings" : "إعدادات المستخدم",
     "Shares" : "المشاركات",
+    "Remove share" : "إحذف المُشارَكة",
+    "Link copied to clipboard" : "تمّ نسخ الرابط إلى الحافظة",
     "Description" : "الوصف",
     "Receive notification email on activity" : "تلقي إشعار البريد الإلكتروني عند النشاط",
     "Change name" : "تغيير الإسم",
