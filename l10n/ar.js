@@ -27,6 +27,7 @@ OC.L10N.register(
     "To" : "إلى :",
     "Email address" : "عنوان البريد الإلكتروني",
     "No" : "لا",
+    "Clone poll" : "استطلاع نسخ",
     "Delete poll" : "احذف استطلاع الرأي",
     "OK" : "موافق",
     "Week" : "أسبوع",
@@ -37,6 +38,7 @@ OC.L10N.register(
     "never" : "بتاتاً",
     "Results are always hidden" : "النتائج دائماً مخفية",
     "Results are visible" : "النتائج مرئية",
+    "Private poll" : "إستبيان خاصٌّ",
     "Login" : "الدخول",
     "Access" : "النفاذ",
     "Owner" : "المالك",
@@ -49,6 +51,7 @@ OC.L10N.register(
     "Link copied to clipboard" : "تمّ نسخ الرابط إلى الحافظة",
     "Description" : "الوصف",
     "Poll configurations" : "تهيئة الاستطلاع",
+    "Shift all date options" : "تبديل جميع خيارات التاريخ",
     "Receive notification email on activity" : "تلقي إشعار البريد الإلكتروني عند النشاط",
     "Change name" : "تغيير الإسم",
     "Yes" : "نعم",
@@ -63,6 +66,7 @@ OC.L10N.register(
     "Day" : "يوم",
     "Month" : "شهر",
     "Year" : "السنة",
+    "Title must not be empty!" : "يجب ألا يكون العنوان فارغًا!",
     "Archive" : "الأرشيف"
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");
