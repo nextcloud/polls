@@ -61,9 +61,9 @@ class UserDeletedJob extends QueuedJob {
 	 * @return void
 	 */
 	protected function run($argument) {
-		$owner = $argument['owner'];
-		$this->logger->info('Deleting polls for deleted user {user}', [
-			'user' => $owner
+		$userId = $argument['userId'];
+		$this->logger->info('Deleting polls for deleted user id {user}', [
+			'user' => $userId
 		]);
 
 		$replacementName = 'deleted_' . $this->secureRandom->generate(
@@ -73,13 +73,13 @@ class UserDeletedJob extends QueuedJob {
 			ISecureRandom::CHAR_UPPER
 		);
 
-		$this->pollMapper->deleteByUserId($owner);
-		$this->logMapper->deleteByUserId($owner);
-		$this->shareMapper->deleteByIdAndType($owner, Share::TYPE_USER);
-		$this->preferencesMapper->deleteByUserId($owner);
-		$this->subscriptionMapper->deleteByUserId($owner);
-		$this->commentMapper->renameUserId($owner, $replacementName);
-		$this->optionMapper->renameUserId($owner, $replacementName);
-		$this->voteMapper->renameUserId($owner, $replacementName);
+		$this->pollMapper->deleteByUserId($userId);
+		$this->logMapper->deleteByUserId($userId);
+		$this->shareMapper->deleteByIdAndType($userId, Share::TYPE_USER);
+		$this->preferencesMapper->deleteByUserId($userId);
+		$this->subscriptionMapper->deleteByUserId($userId);
+		$this->commentMapper->renameUserId($userId, $replacementName);
+		$this->optionMapper->renameUserId($userId, $replacementName);
+		$this->voteMapper->renameUserId($userId, $replacementName);
 	}
 }

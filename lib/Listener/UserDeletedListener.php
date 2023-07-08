@@ -40,6 +40,6 @@ class UserDeletedListener extends BaseListener {
 		if (!($this->event instanceof UserDeletedEvent)) {
 			return;
 		}
-		$this->jobList->add(UserDeletedJob::class, ['owner' => $this->event->getUser()->getUID()]);
+		$this->jobList->add(UserDeletedJob::class, ['userId' => $this->event->getUser()->getUID()]);
 	}
 }
