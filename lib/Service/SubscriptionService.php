@@ -57,8 +57,9 @@ class SubscriptionService {
 			} catch (Exception $e) {
 				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 					// catch silently (assume already subscribed)
+				} else {
+					throw $e;
 				}
-				throw $e;
 			}
 		}
 		return $subscribed;

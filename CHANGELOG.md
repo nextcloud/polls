@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Fixes
  - Fix date shifting and sequence problems with daylight saving times
  - Bring back notifications
+ - fix notification subscription
 ## [5.1.0] - 2023-06-27
 ### Changes
  - Added user option to remove outdated polls from th "Relevant" list
