@@ -70,9 +70,7 @@ class PollService {
 		private VoteMapper $voteMapper,
 	) {
 		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
-		if ($this->userId) {
-			$this->preferences = $this->preferencesService->load($this->userId);
-		}
+		$this->preferences = $this->preferencesService->load();
 	}
 
 	/**
