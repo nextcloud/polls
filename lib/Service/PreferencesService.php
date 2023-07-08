@@ -42,20 +42,19 @@ class PreferencesService {
 		$this->load();
 	}
 
-	public function load(): void {
+	public function load(): Preferences {
 		try {
 			$this->preferences = $this->preferencesMapper->find($this->userId);
 		} catch (DoesNotExistException $e) {
+			$this->preferences = new Preferences();
+			$this->preferences->setTimestamp(time());
+			$this->preferences->setPreferences(json_encode(Preferences::DEFAULT));
 			if ($this->userId) {
-				$this->preferences = new Preferences();
 				$this->preferences->setUserId($this->userId);
-				$this->preferences->setTimestamp(time());
-				$this->preferences->setPreferences(json_encode(Preferences::DEFAULT));
 				$this->preferences = $this->preferencesMapper->insert($this->preferences);
-			} else {
-				throw new NotAuthorizedException;
 			}
 		}
+		return $this->preferences;
 	}
 
 	/**

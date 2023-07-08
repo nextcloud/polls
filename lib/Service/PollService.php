@@ -27,7 +27,6 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Preferences;
-use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCreatedEvent;
@@ -67,12 +66,12 @@ class PollService {
 		private Poll $poll,
 		private PollMapper $pollMapper,
 		private Preferences $preferences,
-		private PreferencesMapper $preferencesMapper,
+		private PreferencesService $preferencesService,
 		private VoteMapper $voteMapper,
 	) {
 		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
 		if ($this->userId) {
-			$this->preferences = $this->preferencesMapper->find($this->userId);
+			$this->preferences = $this->preferencesService->load($this->userId);
 		}
 	}
 
