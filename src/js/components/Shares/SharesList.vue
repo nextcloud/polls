@@ -124,7 +124,7 @@
 							value="disabled"
 							:checked="share.publicPollEmail === 'disabled'"
 							@change="setPublicPollEmail({ share, value: 'disabled' })">
-							{{ t('polls', 'Do not ask for email address') }}
+							{{ t('polls', 'Do not ask for an email address') }}
 						</NcActionRadio>
 					</NcActions>
 
