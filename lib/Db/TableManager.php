@@ -156,18 +156,22 @@ class TableManager {
 	 *
 	 * @psalm-return non-empty-list<string>
 	 */
-	public function createTables(): array {
+	public function createTables(?Schema $schema = null): array {
+		if ($schema === null) {
+			$schema = &$this->schema;
+		}
+
 		$messages = [];
 		
 		foreach (TableSchema::TABLES as $tableName => $columns) {
 			$tableName = $this->dbPrefix . $tableName;
 
-			if ($this->schema->hasTable($tableName)) {
-				$table = $this->schema->getTable($tableName);
+			if ($schema->hasTable($tableName)) {
+				$table = $schema->getTable($tableName);
 				$messages[] = 'Validating table ' . $table->getName();
 				$tableCreated = false;
 			} else {
-				$table = $this->schema->createTable($tableName);
+				$table = $schema->createTable($tableName);
 				$tableCreated = true;
 				$messages[] = 'Creating table ' . $table->getName();
 			}

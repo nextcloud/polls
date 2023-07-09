@@ -47,14 +47,14 @@ class Version050100Date20230515083001 extends SimpleMigrationStep {
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		// Create tables, as defined in TableSchema or fix column definitions
-		$messages = $this->tableManager->createTables();
-		$this->tableManager->migrate();
+		$schema = $schemaClosure();
+		$messages = $this->tableManager->createTables($schema->getWrappedSchema());
 
 		foreach ($messages as $message) {
 			$output->info('Polls - ' . $message);
 		};
 
-		return null;
+		return $schema;
 	}
 
 	/**
