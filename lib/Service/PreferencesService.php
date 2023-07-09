@@ -30,7 +30,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IUserSession;
 
 class PreferencesService {
-	private ?string $userId = null,
+	private ?string $userId = null;
 	
 	public function __construct(
 		private IUserSession $userSession,
@@ -41,7 +41,7 @@ class PreferencesService {
 		$this->load();
 	}
 
-	public function load(?string $userId): Preferences {
+	public function load(?string $userId = null): Preferences {
 		try {
 			$this->preferences = $this->preferencesMapper->find($userId ?? $this->userId);
 		} catch	(DoesNotExistException $e) {
