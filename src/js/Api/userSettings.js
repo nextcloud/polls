@@ -32,11 +32,11 @@ const userSettings = {
 		})
 	},
 
-	writeUserSettings(settings) {
+	writeUserSettings(preferences) {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'preferences',
-			data: { settings },
+			data: { preferences },
 			cancelToken: cancelTokenHandlerObject[this.writeUserSettings.name].handleRequestCancellation().token,
 		})
 	},

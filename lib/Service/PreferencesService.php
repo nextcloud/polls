@@ -30,50 +30,49 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IUserSession;
 
 class PreferencesService {
-	private Preferences $preferences;
-	private string $userId;
-
+	private ?string $userId = null,
+	
 	public function __construct(
-		private PreferencesMapper $preferencesMapper,
 		private IUserSession $userSession,
+		private PreferencesMapper $preferencesMapper,
+		private Preferences $preferences,
 	) {
-		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
-		$this->preferences = new Preferences;
+		$this->userId = $this->userSession->getUser()?->getUID();
 		$this->load();
 	}
 
-	public function load(): Preferences {
+	public function load(?string $userId): Preferences {
 		try {
-			$this->preferences = $this->preferencesMapper->find($this->userId);
-		} catch (DoesNotExistException $e) {
-			$this->preferences = new Preferences();
-			$this->preferences->setTimestamp(time());
-			$this->preferences->setPreferences(json_encode(Preferences::DEFAULT));
-			if ($this->userId) {
-				$this->preferences->setUserId($this->userId);
-				$this->preferences = $this->preferencesMapper->insert($this->preferences);
-			}
+			$this->preferences = $this->preferencesMapper->find($userId ?? $this->userId);
+		} catch	(DoesNotExistException $e) {
+			$this->preferences = new Preferences;
 		}
+
 		return $this->preferences;
 	}
 
-	/**
-	 * Read all preferences
-	 */
 	public function get(): Preferences {
 		return $this->preferences;
 	}
-
+	
 	/**
 	 * Write references
 	 */
-	public function write(array $settings): Preferences {
+	public function write(array $preferences): Preferences {
 		if (!$this->userId) {
-			throw new NotAuthorizedException;
+			throw new NotAuthorizedException();
 		}
 
-		$this->preferences->setPreferences(json_encode($settings));
+		$this->preferences->setPreferences(json_encode($preferences));
 		$this->preferences->setTimestamp(time());
-		return $this->preferencesMapper->update($this->preferences);
+		$this->preferences->setUserId($this->userId);
+		
+		if ($this->preferences->getId() > 0) {
+			return $this->preferencesMapper->update($this->preferences);
+		} else {
+			return $this->preferencesMapper->insert($this->preferences);
+			
+		}
+
 	}
 }

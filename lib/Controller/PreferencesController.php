@@ -38,7 +38,7 @@ class PreferencesController extends BaseController {
 		ISession $session,
 		private PreferencesService $preferencesService,
 		private CalendarService $calendarService,
-		private IUserSession $userSession
+		private IUserSession $userSession,
 	) {
 		parent::__construct($appName, $request, $session);
 	}
@@ -56,11 +56,11 @@ class PreferencesController extends BaseController {
 	 * Write preferences
 	 * @NoAdminRequired
 	 */
-	public function write(array $settings): JSONResponse {
+	public function write(array $preferences): JSONResponse {
 		if (!$this->userSession->isLoggedIn()) {
 			return new JSONResponse([], Http::STATUS_OK);
 		}
-		return $this->response(fn () => $this->preferencesService->write($settings));
+		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
 
 	/**

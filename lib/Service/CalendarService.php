@@ -40,14 +40,14 @@ use OCP\ISession;
 class CalendarService {
 	/** @var ICalendar[] */
 	private array $calendars;
-	private Preferences $preferences;
-
+	
 	public function __construct(
 		private CalendarManager $calendarManager,
-		private ISession $session,
-		private PreferencesService $preferencesService,
-		private OptionMapper $optionMapper,
 		private CurrentUser $currentUser,
+		private ISession $session,
+		private OptionMapper $optionMapper,
+		private Preferences $preferences,
+		private PreferencesService $preferencesService,
 	) {
 		$this->preferences = $this->preferencesService->get();
 		$this->getCalendarsForPrincipal();

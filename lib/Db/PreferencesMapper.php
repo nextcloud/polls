@@ -43,7 +43,7 @@ class PreferencesMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Preferences
 	 */
-	public function find(string $userId): Preferences {
+	public function find(?string $userId): Preferences {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
