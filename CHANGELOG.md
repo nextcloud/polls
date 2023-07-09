@@ -6,6 +6,9 @@ All notable changes to this project will be documented in this file.
  - Fix date shifting and sequence problems with daylight saving times
  - Bring back notifications
  - fix notification subscription
+ - Eliminate preferences error logging on first time usage
+### Changes
+ - Set default view to table layout even for text polls, list layout is still the default layout when in mobile mode
 ## [5.1.0] - 2023-06-27
 ### Changes
  - Added user option to remove outdated polls from th "Relevant" list

@@ -42,7 +42,7 @@ class Preferences extends Entity implements JsonSerializable {
 	public const DEFAULT = [
 		'useCommentsAlternativeStyling' => false,
 		'useAlternativeStyling' => false,
-		'calendarPeek' => true,
+		'calendarPeek' => false,
 		'checkCalendars' => [],
 		'checkCalendarsBefore' => 0,
 		'checkCalendarsAfter' => 0,
@@ -60,6 +60,9 @@ class Preferences extends Entity implements JsonSerializable {
 
 	public function __construct() {
 		$this->addType('timestamp', 'int');
+
+		// initialize with default values
+		$this->setPreferences(json_encode(self::DEFAULT));
 	}
 
 	public function getPreferences_decoded() {
@@ -102,9 +105,6 @@ class Preferences extends Entity implements JsonSerializable {
 	 */
 	public function jsonSerialize(): array {
 		return [
-			'id' => $this->getId(),
-			'userId' => $this->getUserId(),
-			'timestamp' => $this->getTimestamp(),
 			'preferences' => json_decode($this->preferences) ?? '',
 		];
 	}

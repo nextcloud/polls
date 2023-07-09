@@ -24,16 +24,9 @@
 
 namespace OCA\Polls\Migration\RepairSteps;
 
-use OCA\Polls\Db\LogMapper;
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\PreferencesMapper;
-use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\TableManager;
-use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\WatchMapper;
-use OCP\IConfig;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
@@ -44,14 +37,7 @@ use OCP\Migration\IRepairStep;
  */
 class DeleteInvalidRecords implements IRepairStep {
 	public function __construct(
-		private IConfig $config,
 		private IDBConnection $connection,
-		private LogMapper $logMapper,
-		private OptionMapper $optionMapper,
-		private PreferencesMapper $preferencesMapper,
-		private ShareMapper $shareMapper,
-		private SubscriptionMapper $subscriptionMapper,
-		private VoteMapper $voteMapper,
 		private WatchMapper $watchMapper,
 		private TableManager $tableManager
 	) {

@@ -42,11 +42,7 @@ class TableManager {
 		private IConfig $config,
 		private IDBConnection $connection,
 		private LoggerInterface $logger,
-		private LogMapper $logMapper,
 		private OptionMapper $optionMapper,
-		private PreferencesMapper $preferencesMapper,
-		private ShareMapper $shareMapper,
-		private SubscriptionMapper $subscriptionMapper,
 		private VoteMapper $voteMapper,
 		private WatchMapper $watchMapper,
 	) {

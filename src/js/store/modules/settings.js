@@ -32,7 +32,7 @@ const defaultSettings = () => ({
 		checkCalendars: [],
 		checkCalendarsBefore: 0,
 		checkCalendarsAfter: 0,
-		defaultViewTextPoll: 'list-view',
+		defaultViewTextPoll: 'table-view',
 		defaultViewDatePoll: 'table-view',
 		performanceThreshold: 1000,
 		pollCombo: [],
@@ -58,20 +58,6 @@ const mutations = {
 	},
 
 	setPreference(state, payload) {
-		// change values in case of old settings
-		if (payload.defaultViewTextPoll === 'desktop') {
-			payload.defaultViewTextPoll = 'table-view'
-		}
-		if (payload.defaultViewTextPoll === 'mobile') {
-			payload.defaultViewTextPoll = 'list-view'
-		}
-		if (payload.defaultViewDatePoll === 'desktop') {
-			payload.defaultViewDatePoll = 'table-view'
-		}
-		if (payload.defaultViewDatePoll === 'mobile') {
-			payload.defaultViewDatePoll = 'list-view'
-		}
-
 		Object.keys(payload).filter((key) => key in state.user).forEach((key) => {
 			state.user[key] = payload[key]
 		})
@@ -125,18 +111,6 @@ const actions = {
 	async get(context) {
 		try {
 			const response = await UserSettingsAPI.getUserSettings()
-			if (response.data.preferences.defaultViewTextPoll === 'desktop') {
-				response.data.preferences.defaultViewTextPoll = 'table-view'
-			}
-			if (response.data.preferences.defaultViewTextPoll === 'mobile') {
-				response.data.preferences.defaultViewTextPoll = 'list-view'
-			}
-			if (response.data.preferences.defaultViewDatePoll === 'desktop') {
-				response.data.preferences.defaultViewDatePoll = 'table-view'
-			}
-			if (response.data.preferences.defaultViewDatePoll === 'mobile') {
-				response.data.preferences.defaultViewDatePoll = 'list-view'
-			}
 			context.commit('setPreference', response.data.preferences)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
