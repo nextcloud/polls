@@ -29,7 +29,7 @@
 					<InputDiv v-model="userName"
 						class="section__username"
 						:signaling-class="checkStatus.userName"
-						:placeholder="t('polls', 'Enter your name or nickname')"
+						:placeholder="t('polls', 'Enter your name or a nickname')"
 						:helper-text="userNameHint"
 						focus
 						@submit="submitRegistration" />
@@ -38,7 +38,7 @@
 						v-model="emailAddress"
 						class="section__email"
 						:signaling-class="checkStatus.email"
-						:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Mandatory email address' : 'Optional email address')"
+						:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Email address (mandatory)' : 'Email address (optional)')"
 						:helper-text="emailAddressHint"
 						type="email"
 						inputmode="email"
