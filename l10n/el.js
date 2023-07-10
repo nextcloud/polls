@@ -374,7 +374,6 @@ OC.L10N.register(
     "Options for the registration dialog" : "Επιλογές για το παράθυρο διαλόγου εγγραφής",
     "Email address is optional" : "Η διεύθυνση email είναι προαιρετική",
     "Email address is mandatory" : "Η διεύθυνση email είναι υποχρεωτική",
-    "Do not ask for email address" : "Μη ζητάτε διεύθυνση email",
     "Remove share" : "Κατάργηση διαμοιρασμού",
     "Invitation sent to {displayName} ({emailAddress})" : "Πρόσκληση στάλθηκε σε {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Σφάλμα κατά την αποστολή πρόσκλησης σε {displayName} ({emailAddress})",

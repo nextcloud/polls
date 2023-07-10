@@ -350,7 +350,6 @@ OC.L10N.register(
     "Options for the registration dialog" : "Opties voor registratievenster",
     "Email address is optional" : "E-mailadres is optioneel",
     "Email address is mandatory" : "E-mailadres is verplicht",
-    "Do not ask for email address" : "Vraag niet naar e-mailadres",
     "Remove share" : "Verwijderen share",
     "Invitation sent to {displayName} ({emailAddress})" : "Uitnodiging verzonden naar {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Fout bij verzenden van uitnodiging naar {displayName} ({emailAddress})",

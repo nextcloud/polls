@@ -396,7 +396,6 @@
     "Options for the registration dialog" : "Možnosti pre dialógové okno registrácie",
     "Email address is optional" : "E-mail adresa je nepovinná",
     "Email address is mandatory" : "E-mail adresa je povinná",
-    "Do not ask for email address" : "Nepýtať si e-mail adresu",
     "Remove share" : "Odstrániť zdieľanie",
     "Invitation sent to {displayName} ({emailAddress})" : "Pozvánka odoslaná pre {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Chyba pri odosielaná pozvánky pre {displayName} ({emailAddress})",

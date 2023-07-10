@@ -366,7 +366,6 @@ OC.L10N.register(
     "Options for the registration dialog" : "Opzioni per il dialogo di registrazione",
     "Email address is optional" : "L'indirizzo email è facoltativa",
     "Email address is mandatory" : "L'indirizzo email è obbligatorio",
-    "Do not ask for email address" : "Non chiedere l'indirizzo email",
     "Remove share" : "Rimuovi condivisione",
     "Invitation sent to {displayName} ({emailAddress})" : "Invito inviato a {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Errore nell'invio dell'invito a {displayName} ({emailAddress})",

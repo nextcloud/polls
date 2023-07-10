@@ -331,7 +331,6 @@ OC.L10N.register(
     "Options for the registration dialog" : "注册对话框选项",
     "Email address is optional" : "电子邮件地址可不填",
     "Email address is mandatory" : "必须填写电子邮件地址",
-    "Do not ask for email address" : "不要询问电邮地址",
     "Remove share" : "移除共享",
     "Invitation sent to {displayName} ({emailAddress})" : "邀请已发送至 {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "发送邀请至 {displayName} ({emailAddress}) 发生错误",
