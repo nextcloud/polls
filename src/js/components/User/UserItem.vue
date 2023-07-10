@@ -70,7 +70,7 @@ export default {
 
 	components: {
 		NcAvatar,
-		AdminIcon: () => import('vue-material-design-icons/ShieldCrownOutline.vue'),
+		AdminIcon: () => import('vue-material-design-icons/ShieldCrown.vue'),
 		LinkIcon: () => import('vue-material-design-icons/LinkVariant.vue'),
 		InternalLinkIcon: () => import('vue-material-design-icons/LinkVariant.vue'),
 		ContactIcon: () => import('vue-material-design-icons/CardAccountDetails.vue'),
