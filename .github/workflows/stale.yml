@@ -17,6 +17,6 @@ jobs:
         exempt-all-milestones: true
         days-before-stale: 30
         days-before-close: 5
-        days-before-pr-stale: -1
-        days-before-pr-close: -1
+        days-before-pr-stale: 500
+        days-before-pr-close: 500
         exempt-draft-pr: true
