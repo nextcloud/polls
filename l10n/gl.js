@@ -157,7 +157,7 @@ OC.L10N.register(
     "Error saving email address {emailAddress}" : "Produciuse un erro ao gardar o enderezo de correo {emailAddress}",
     "Invitation resent to {emailAddress}" : "Convite reenviado a {emailAddress}",
     "Mail could not be resent to {emailAddress}" : "Non foi posíbel reenviar o correo a {emailAddress}",
-    "Error while adding share" : "Produciuse un erro ao engadir o recurso compartido",
+    "Error while adding share" : "Produciuse un erro ao engadir a compartición",
     "Delete votes" : "Eliminar os votos",
     "User {userId} removed" : "Eliminouse o usuario {userId}",
     "Email options" : "Opcións de correo-e",
