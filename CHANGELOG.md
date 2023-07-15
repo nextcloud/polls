@@ -3,7 +3,7 @@ All notable changes to this project will be documented in this file.
 ##
 ## [5.2.0] - 2023-07-15
 ### Fixes
- - Fix date shifting and sequence problems with daylight saving times
+ - Fix date shifting and sequences when crossing daylight saving change
  - Bring back notifications
  - fix notification subscription
  - Eliminate preferences error logging on first time usage
