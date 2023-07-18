@@ -37,12 +37,14 @@ OC.L10N.register(
     "Administration" : "Administración",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
+    "Options" : "Opciones",
     "Sharing" : "Compartiendo",
     "Comments" : "Comentarios",
     "Activity" : "Actividad",
     "Hour" : "Hora",
     "Day" : "Día",
     "Month" : "Mes",
+    "Year" : "Año",
     "Archive" : "Archivar"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");
