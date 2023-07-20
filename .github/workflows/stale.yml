@@ -15,8 +15,10 @@ jobs:
         stale-issue-label: 'stale'
         exempt-issue-labels: 'enhancement,bug,investigate,UX'
         exempt-all-milestones: true
-        days-before-stale: 30
-        days-before-close: 5
+        days-before-stale: 500
+        days-before-close: 500
+        days-before-issue-stale: 30
+        days-before-issue-close: 5
         days-before-pr-stale: 500
         days-before-pr-close: 500
         exempt-draft-pr: true
