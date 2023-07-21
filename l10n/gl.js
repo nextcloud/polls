@@ -386,7 +386,7 @@ OC.L10N.register(
     "Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view." : "Marque isto, se prefire presentar a data de enquisa nunha vista vertical mellor ca en vista de grade. O predeterminado inicial é a vista de grade.",
     "Enter the amount of days, polls without activity stay in the relevant list:" : "Introduza a cantidade de días que as enquisas sen actividade permanecen na lista de relevantes:",
     "A poll with many options and voters can have a heavy impact on client performance." : "Unha enquisa con moitas opcións e votantes pode ter un gran impacto no rendemento do cliente.",
-    "Set the amount of voting cells (options x participants) up to which all voting cells should be displayed." : "Establecer a cantidade de celas de votación (opcións x participantes) ata a que deben amosarse todas as celas de votación.",
+    "Set the amount of voting cells (options x participants) up to which all voting cells should be displayed." : "Estabelecer a cantidade de celas de votación (opcións x participantes) ata a que deben amosarse todas as celas de votación.",
     "If this threshold gets tresspasses only the current user will be displayed, to avoid a performance breakdown." : "Se se supera este limiar só se amosará o usuario actual, para evitar unha creba no rendemento.",
     "The default threshold of 1000 should be a good and safe value." : "O limiar predeterminado de 1000 debería ser un valor bo e seguro.",
     "The style settings are still experimental!" : "Os axustes de estilo aínda son experimentais!",
