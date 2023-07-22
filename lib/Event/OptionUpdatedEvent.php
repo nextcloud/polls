@@ -27,7 +27,7 @@ use OCA\Polls\Db\Option;
 
 class OptionUpdatedEvent extends OptionEvent {
 	public function __construct(
-		Option $option
+		protected Option $option
 	) {
 		parent::__construct($option);
 		$this->activitySubject = self::UPDATE;

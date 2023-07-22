@@ -33,7 +33,7 @@ abstract class OptionEvent extends BaseEvent {
 	public const DELETE = 'option_delete';
 
 	public function __construct(
-		private Option $option
+		protected Option $option,
 	) {
 		parent::__construct($option);
 		$this->activityObject = 'poll';

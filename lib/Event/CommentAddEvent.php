@@ -26,7 +26,9 @@ namespace OCA\Polls\Event;
 use OCA\Polls\Db\Comment;
 
 class CommentAddEvent extends CommentEvent {
-	public function __construct(Comment $comment) {
+	public function __construct(
+		protected Comment $comment
+	) {
 		parent::__construct($comment);
 		$this->activitySubject = self::ADD;
 	}

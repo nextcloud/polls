@@ -40,7 +40,7 @@ abstract class BaseEvent extends Event {
 	protected array $activitySubjectParams = [];
 	protected Poll $poll;
 	protected bool $log = true;
-	private IUserSession $userSession;
+	protected IUserSession $userSession;
 	protected UserService $userService;
 
 	public function __construct(
