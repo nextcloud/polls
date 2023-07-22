@@ -30,7 +30,7 @@ abstract class CommentEvent extends BaseEvent {
 	public const DELETE = 'comment_delete';
 
 	public function __construct(
-		private Comment $comment,
+		protected Comment $comment,
 	) {
 		parent::__construct($comment);
 		$this->activityObject = 'poll';
