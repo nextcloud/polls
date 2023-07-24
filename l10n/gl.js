@@ -299,7 +299,7 @@ OC.L10N.register(
     "An openly accessible poll from {name}" : "Unha enquisa de libre acceso de {name}",
     "Closing {relativeExpirationTime}" : "Pechando {relativeExpirationTime}",
     "Proposal period ended {timeRelative}" : "O período de propostas rematou o {timeRelative}",
-    "Proposal period ends {timeRelative}" : "O período de propostas remata o {timeRelative}",
+    "Proposal period ends {timeRelative}" : "O período de propostas finaliza o {timeRelative}",
     "never" : "nunca",
     "Poll owner:" : "Propietario da enquisa:",
     "Created {dateRelative}" : "Creada o {dateRelative}",
