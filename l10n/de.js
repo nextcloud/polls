@@ -336,7 +336,7 @@ OC.L10N.register(
     "privacy policy" : "Datenschutzerklärung",
     "Checking name …" : "Überprüfe Benutzernamen …",
     "A name is required." : "Ein Name ist erforderlich",
-    "The name {username} is invalid or reserved." : "Der Name {username} is ungültig oder reserviert",
+    "The name {username} is invalid or reserved." : "Der Name {username} ist ungültig oder reserviert.",
     "An email address is required." : "Eine E-Mail Adresse ist erforderlich",
     "You will receive your personal link after clicking \"OK\"." : "Nach einem Klick auf „OK“ erhältst du deinen persönlichen Link.",
     "Enter your email address to get your personal access link." : "Gib deine E-Mail-Adresse ein, um deinen persönlichen Zugangslink zu erhalten.",
