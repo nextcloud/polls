@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcAppContent :class="[{ closed: closed, scrolled: scrolled, 'vote-style-beta-510': settings.user.useAlternativeStyling }, poll.type]">
+	<NcAppContent :class="[{ closed: closed, scrolled: scrolled, 'vote-style-beta-510': settings.user.useAlternativeStyling, 'vote-style-beta-530': settings.user.useAlternativeHeaderStyling530 }, poll.type]">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ poll.title }}

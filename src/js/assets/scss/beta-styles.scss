@@ -1,0 +1,38 @@
+.vote-style-beta-510 {
+	.vote-column {
+		border-radius: var(--border-radius-large);
+
+		&:hover {
+			background-color: var(--color-background-dark);
+		}
+
+		&.locked:hover {
+			background-color: var(--color-polls-background-no);
+		}
+	}
+
+	.table-view .currentuser {
+		height: 120px;
+	}
+
+}
+
+.vote-style-beta-530 .table-view {
+	.vote-column {
+		border-radius: var(--border-radius-large);
+		margin-left: 2px;
+		margin-right: 2px;
+
+		&>div:first-child {
+			border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
+		}
+
+		&>div:last-child {
+			border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+		}
+
+		.header {
+			background-color: var(--color-background-dark);
+		}
+	}
+}

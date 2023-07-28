@@ -28,6 +28,7 @@ const defaultSettings = () => ({
 	user: {
 		useCommentsAlternativeStyling: false,
 		useAlternativeStyling: false,
+		useAlternativeHeaderStyling530: false,
 		calendarPeek: false,
 		checkCalendars: [],
 		checkCalendarsBefore: 0,

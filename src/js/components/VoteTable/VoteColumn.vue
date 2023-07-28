@@ -22,13 +22,18 @@
 
 <template lang="html">
 	<div :class="componentClass">
-		<OptionItem :option="option" :poll-type="poll.type" :display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
+		<OptionItem class="header"
+			:option="option"
+			:poll-type="poll.type"
+			:display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
 
 		<Counter v-if="acl.allowSeeResults"
+			class="header"
 			:show-maybe="!!poll.allowMaybe"
 			:option="option" />
 
 		<CalendarPeek v-if="showCalendarPeek"
+			class="header"
 			:focus-trap="false"
 			:option="option" />
 
@@ -161,19 +166,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-.vote-style-beta-510 .vote-column {
-	border-radius: var(--border-radius-large);
-
-	&:hover {
-		background-color: var(--color-background-dark);
-		// box-shadow: 3px 3px 9px var(--color-background-darker);
-	}
-
-	&.locked:hover {
-		background-color: var(--color-polls-background-no);
-	}
-}
-
-</style>

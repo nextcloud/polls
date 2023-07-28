@@ -33,6 +33,11 @@
 				{{ t('polls', 'Use alternative vote page styling') }}
 			</NcCheckboxRadioSwitch>
 		</div>
+		<div class="user_settings">
+			<NcCheckboxRadioSwitch :checked.sync="useAlternativeHeaderStyling530" type="switch">
+				{{ t('polls', 'Use alternative vote page header styling') }}
+			</NcCheckboxRadioSwitch>
+		</div>
 	</div>
 </template>
 
@@ -68,6 +73,15 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ useAlternativeStyling: +value })
+			},
+		},
+
+		useAlternativeHeaderStyling530: {
+			get() {
+				return !!this.settings.useAlternativeHeaderStyling530
+			},
+			set(value) {
+				this.writeValue({ useAlternativeHeaderStyling530: +value })
 			},
 		},
 

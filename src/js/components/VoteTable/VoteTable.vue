@@ -124,6 +124,7 @@ export default {
 		display: flex;
 		align-self: stretch;
 		justify-content: center;
+		align-items: center;
 
 		.material-design-icon {
 			// display: none;
