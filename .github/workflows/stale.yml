@@ -13,12 +13,12 @@ jobs:
         repo-token: ${{ secrets.GITHUB_TOKEN }}
         stale-issue-message: 'This issue is marked as stale, because it had no activity in the last 30 days. It will be closed in 5 days.'
         stale-issue-label: 'stale'
+        stale-pr-label: 'stale'
         exempt-issue-labels: 'enhancement,bug,investigate,UX'
+        exempt-pr-labels: 'enhancement,bug,investigate,UX'
         exempt-all-milestones: true
-        days-before-stale: 500
-        days-before-close: 500
         days-before-issue-stale: 30
         days-before-issue-close: 5
-        days-before-pr-stale: 500
-        days-before-pr-close: 500
+        days-before-pr-stale: -1
+        days-before-pr-close: -1
         exempt-draft-pr: true
