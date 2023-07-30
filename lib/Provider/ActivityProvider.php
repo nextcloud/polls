@@ -57,7 +57,7 @@ class ActivityProvider implements IProvider {
 		}
 
 		$this->l10n = $this->transFactory->get($event->getApp(), $language);
-		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'polls.svg')));
+		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'polls-dark.svg')));
 		$this->setSubjects($event, $this->activityService->getActivityMessage($event, $language, $this->activityManager->isFormattingFilteredObject()));
 		return $event;
 	}
