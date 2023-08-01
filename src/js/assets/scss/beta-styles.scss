@@ -27,8 +27,15 @@
 			border-radius: var(--border-radius-large) var(--border-radius-large) 0 0;
 		}
 
-		&>div:last-child {
+		// &>div:last-child {
+		// 	border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+		// }
+
+		.vote-item.active.currentuser {
 			border-radius: 0 0 var(--border-radius-large) var(--border-radius-large);
+			background-color: var(--color-background-dark);
+			padding: 0;
+			margin-bottom: 6px;
 		}
 
 		.header {
