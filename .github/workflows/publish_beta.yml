@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Beta release
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
     - name: Check correct app version
       id: appinfo
       uses: ./.github/actions/get-polls-version
@@ -31,11 +31,11 @@ jobs:
     - name: build
       run: npm run build --if-present
 
-    - name: Make appstore package
+    - name: Make appstore package ${{ steps.appinfo.outputs.app-version }}
       if: success()
       run: make package
 
-    - name: rename package
+    - name: rename packages to polls-${{ steps.appinfo.outputs.app-version }}
       if: success()
       run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
 
@@ -46,13 +46,30 @@ jobs:
         zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip *
         popd
 
-    - name: Publish pre-release
+    - name: Extract release notes
+      if: success()
+      id: extract-release-notes
+      uses: ffurrer2/extract-release-notes@v1
+
+    - name: Publish pre-release ${{ steps.appinfo.outputs.app-version }}
       if: success()
       uses: softprops/action-gh-release@v1
-      with: 
+      with:
+        body: "# Changelog for the upcomming release (preview)\n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: true
         draft: false
         generate_release_notes: true
         files: |
           build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
           build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip
+
+    - name: Create release notification issue
+      if: success()
+      uses: JasonEtco/create-an-issue@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        RELEASENOTES: ${{ steps.extract-release-notes.outputs.release_notes }}
+        VERSION: ${{ steps.appinfo.outputs.app-version }}
+        TAG: ${{ steps.appinfo.outputs.tag-version }}
+      with:
+        filename: .github/BETA_NOTIFICATION.md
