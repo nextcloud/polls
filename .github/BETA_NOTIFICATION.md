@@ -1,0 +1,11 @@
+---
+title: Polls {{ env.VERSION }} released ({{ date | date('DD-MM-YYYY') }})
+labels: Announcement
+---
+# Changelog for the upcomming release (preview)
+{{ env.RELEASENOTES }}
+
+# Downloads
+Overview and changelog: https://github.com/nextcloud/polls/releases/tag/{{ env.TAG }}
+Download ZIP: https://github.com/nextcloud/polls/releases/download/{{ env.TAG }}/polls-{{ env.VERSION }}.zip
+Download TAR.GZ: https://github.com/nextcloud/polls/releases/download/{{ env.TAG }}/polls-{{ env.VERSION }}.tar.gz
