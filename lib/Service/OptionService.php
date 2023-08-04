@@ -250,7 +250,7 @@ class OptionService {
 		return $this->option;
 	}
 
-	private function getModifiedDateOption(Option $option, DateTimeZone $timeZone, int $step, string $unit) {
+	private function getModifiedDateOption(Option $option, DateTimeZone $timeZone, int $step, string $unit): array {
 		$from = (new DateTime())
 			->setTimestamp($option->getTimestamp())
 			->setTimezone($timeZone)
@@ -264,10 +264,6 @@ class OptionService {
 			'to' => $to,
 			'duration' => $to->getTimestamp() - $from->getTimestamp(),
 		];
-	}
-
-	private function cloneOption() {
-		return clone $this->option;
 	}
 
 	/**

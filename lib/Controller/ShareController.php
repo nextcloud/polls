@@ -57,7 +57,7 @@ class ShareController extends BaseController {
 	 * Add share
 	 * @NoAdminRequired
 	 */
-	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = '' ): JSONResponse {
+	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)]);
 	}
 

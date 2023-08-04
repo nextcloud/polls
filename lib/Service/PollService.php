@@ -185,8 +185,6 @@ class PollService {
 
 	/**
 	 * @return Poll
-	 *
-	 * @psalm-return array<Poll>
 	 */
 	public function transferPoll(int $pollId, string $targetUser): Poll {
 		if ($this->userManager->get($targetUser) instanceof IUser) {

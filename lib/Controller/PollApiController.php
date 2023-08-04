@@ -178,7 +178,7 @@ class PollApiController extends BaseApiController {
 	 * @param int $pollId Poll to transfer
 	 * @param string $destinationUser User to transfer the poll to
 	 */
-	public function transferPoll(string $pollId, string $destinationUser): JSONResponse {
+	public function transferPoll(int $pollId, string $destinationUser): JSONResponse {
 		try {
 			return new JSONResponse(['transferred' => $this->pollService->transferPoll($pollId, $destinationUser)], Http::STATUS_CREATED);
 		} catch (Exception $e) {
