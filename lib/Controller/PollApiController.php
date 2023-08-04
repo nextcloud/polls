@@ -157,13 +157,30 @@ class PollApiController extends BaseApiController {
 	}
 
 	/**
-	 * Clone poll
+	 * Transfer all polls from one user to another (change owner of poll)
 	 * @CORS
 	 * @NoCSRFRequired
+	 * @param string $sourceUser User to transfer polls from
+	 * @param string $destinationUser User to transfer polls to
 	 */
-	public function transferPolls(string $sourceUser, string $targetUser): JSONResponse {
+	public function transferPolls(string $sourceUser, string $destinationUser): JSONResponse {
 		try {
-			return new JSONResponse(['transferred' => $this->pollService->transferPolls($sourceUser, $targetUser)], Http::STATUS_CREATED);
+			return new JSONResponse(['transferred' => $this->pollService->transferPolls($sourceUser, $destinationUser)], Http::STATUS_CREATED);
+		} catch (Exception $e) {
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
+	 * Transfer singe poll to another user (change owner of poll)
+	 * @CORS
+	 * @NoCSRFRequired
+	 * @param int $pollId Poll to transfer
+	 * @param string $destinationUser User to transfer the poll to
+	 */
+	public function transferPoll(int $pollId, string $destinationUser): JSONResponse {
+		try {
+			return new JSONResponse(['transferred' => $this->pollService->transferPoll($pollId, $destinationUser)], Http::STATUS_CREATED);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}

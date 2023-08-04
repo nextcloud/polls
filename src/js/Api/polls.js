@@ -139,7 +139,7 @@ const polls = {
 	setSubscription(pollId, subscription) {
 		return httpInstance.request({
 			method: 'PUT',
-			url: `poll/${pollId}${subscription ? '/unsubscribe' : '/subscribe'}`,
+			url: `poll/${pollId}${subscription ? '/subscribe' : '/unsubscribe'}`,
 			cancelToken: cancelTokenHandlerObject[this.setSubscription.name].handleRequestCancellation().token,
 		})
 	},
