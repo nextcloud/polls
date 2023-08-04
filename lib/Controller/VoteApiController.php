@@ -61,9 +61,9 @@ class VoteApiController extends BaseApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function set(int $optionId, string $setTo): JSONResponse {
+	public function set(int $optionId, string $answer): JSONResponse {
 		try {
-			return new JSONResponse(['vote' => $this->voteService->set($optionId, $setTo)], Http::STATUS_OK);
+			return new JSONResponse(['vote' => $this->voteService->set($optionId, $answer)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new JSONResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {

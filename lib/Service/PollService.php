@@ -183,6 +183,22 @@ class PollService {
 		throw new InvalidUsernameException('The user id "' . $targetUser . '" is not valid.');
 	}
 
+	/**
+	 * @return Poll
+	 *
+	 * @psalm-return array<Poll>
+	 */
+	public function transferPoll(int $pollId, string $targetUser): Poll {
+		if ($this->userManager->get($targetUser) instanceof IUser) {
+			$poll = $this->pollMapper->find($pollId);
+			$poll->setOwner($targetUser);
+			$this->pollMapper->update($poll);
+			$this->eventDispatcher->dispatchTyped(new PollOwnerChangeEvent($poll));
+			return $poll;
+		}
+		throw new InvalidUsernameException('The user id "' . $targetUser . '" is not valid.');
+	}
+
 
 	/**
 	 * get poll configuration

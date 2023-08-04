@@ -46,7 +46,7 @@ class CommentApiController extends BaseApiController {
 	 */
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => [
-			'comments' => $this->commentService->list($$this->acl->setPollId($pollId))
+			'comments' => $this->commentService->list($this->acl->setPollId($pollId))
 		]);
 	}
 
@@ -56,9 +56,9 @@ class CommentApiController extends BaseApiController {
 	 * @CORS
 	 * @NoCSRFRequired
 	 */
-	public function add(int $pollId, string $message): JSONResponse {
+	public function add(int $pollId, string $comment): JSONResponse {
 		return $this->response(fn () => [
-			'comment' => $this->commentService->add($message, $this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD))
+			'comment' => $this->commentService->add($comment, $this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD))
 		]);
 	}
 
@@ -69,10 +69,13 @@ class CommentApiController extends BaseApiController {
 	 * @NoCSRFRequired
 	 */
 	public function delete(int $commentId): JSONResponse {
-		$comment = $this->commentService->get($commentId);
-
 		return $this->responseDeleteTolerant(fn () => [
-			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()))
+			'comment' => $this->deleteComment($commentId)
 		]);
+	}
+
+	private function deleteComment($commentId) {
+		$comment = $this->commentService->get($commentId);
+		return $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()));
 	}
 }

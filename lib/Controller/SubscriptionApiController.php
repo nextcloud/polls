@@ -49,10 +49,10 @@ class SubscriptionApiController extends BaseApiController {
 	 */
 	public function get(int $pollId): JSONResponse {
 		try {
-			$this->subscriptionService->get($this->acl->setPollId($pollId));
-			return new JSONResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['status' => 'Not subscribed to poll ' . $pollId], Http::STATUS_NOT_FOUND);
+			return new JSONResponse([
+				'pollId' => $pollId,
+				'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId)),
+			], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
@@ -67,7 +67,10 @@ class SubscriptionApiController extends BaseApiController {
 	public function subscribe(int $pollId): JSONResponse {
 		try {
 			$this->subscriptionService->set(true, $this->acl->setPollId($pollId));
-			return new JSONResponse(['status' => 'Subscribed to poll ' . $pollId], Http::STATUS_OK);
+			return new JSONResponse([
+				'pollId' => $pollId,
+				'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId)),
+			], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
@@ -82,7 +85,10 @@ class SubscriptionApiController extends BaseApiController {
 	public function unsubscribe(int $pollId): JSONResponse {
 		try {
 			$this->subscriptionService->set(false, $this->acl->setPollId($pollId));
-			return new JSONResponse(['status' => 'Unsubscribed from poll ' . $pollId], Http::STATUS_OK);
+			return new JSONResponse([
+				'pollId' => $pollId,
+				'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId)),
+			], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}

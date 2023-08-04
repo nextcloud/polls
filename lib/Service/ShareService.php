@@ -361,7 +361,7 @@ class ShareService {
 		string $type,
 		string $userId = '',
 		string $displayName = '',
-		string $emailAddress = ''
+		string $emailAddress = '',
 	): Share {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 
