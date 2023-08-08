@@ -29,5 +29,8 @@ jobs:
       - name: Install Nextcloud API
         run: composer require --dev nextcloud/ocp:dev-${{ matrix.ocp-version }}
 
+      - name: Install symfony/console
+        run: composer require symfony/console
+
       - name: Run coding standards check
         run: composer run psalm
