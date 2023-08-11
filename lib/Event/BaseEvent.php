@@ -35,11 +35,11 @@ use OCP\EventDispatcher\Event;
 use OCP\IUserSession;
 
 abstract class BaseEvent extends Event {
-	protected string $activityObject = '';
-	protected string $activitySubject = '';
+	protected ?string $activityObject = null;
+	protected ?string $eventId = null;
 	protected array $activitySubjectParams = [];
-	protected Poll $poll;
 	protected bool $log = true;
+	protected Poll $poll;
 	protected IUserSession $userSession;
 	protected UserService $userService;
 
@@ -88,8 +88,8 @@ abstract class BaseEvent extends Event {
 	}
 
 	public function getLogId(): string {
-		if ($this->log && $this->activitySubject) {
-			return $this->activitySubject;
+		if ($this->log && $this->eventId) {
+			return $this->eventId;
 		}
 		return '';
 	}
@@ -98,11 +98,7 @@ abstract class BaseEvent extends Event {
 		return [];
 	}
 
-	public function getActivityId(): string {
-		return $this->activitySubject;
-	}
-
-	public function getActivityObject(): string {
+	public function getActivityObject(): ?string {
 		return $this->activityObject;
 	}
 
@@ -113,8 +109,8 @@ abstract class BaseEvent extends Event {
 		return $this->eventObject->getId();
 	}
 
-	public function getActivitySubject(): string {
-		return $this->activitySubject;
+	public function getActivitySubject(): ?string {
+		return $this->eventId;
 	}
 
 	public function getActivitySubjectParams(): array {

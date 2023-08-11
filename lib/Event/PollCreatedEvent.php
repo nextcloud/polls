@@ -30,6 +30,6 @@ class PollCreatedEvent extends PollEvent {
 		protected Poll $poll
 	) {
 		parent::__construct($poll);
-		$this->activitySubject = self::ADD;
+		$this->eventId = self::ADD;
 	}
 }

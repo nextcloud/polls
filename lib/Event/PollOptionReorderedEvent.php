@@ -31,6 +31,6 @@ class PollOptionReorderedEvent extends PollEvent {
 	) {
 		parent::__construct($poll);
 		$this->log = false;
-		$this->activitySubject = self::OPTION_REORDER;
+		$this->eventId = self::OPTION_REORDER;
 	}
 }

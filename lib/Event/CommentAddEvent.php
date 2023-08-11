@@ -30,6 +30,6 @@ class CommentAddEvent extends CommentEvent {
 		protected Comment $comment
 	) {
 		parent::__construct($comment);
-		$this->activitySubject = self::ADD;
+		$this->eventId = self::ADD;
 	}
 }

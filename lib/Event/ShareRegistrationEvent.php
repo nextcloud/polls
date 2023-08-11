@@ -28,6 +28,6 @@ use OCA\Polls\Db\Share;
 class ShareRegistrationEvent extends ShareEvent {
 	public function __construct(Share $share) {
 		parent::__construct($share);
-		$this->activitySubject = self::REGISTRATION;
+		$this->eventId = self::REGISTRATION;
 	}
 }

@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
+use \OCA\Polls\Db\Comment;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCP\AppFramework\Http\JSONResponse;
@@ -74,7 +75,7 @@ class CommentApiController extends BaseApiController {
 		]);
 	}
 
-	private function deleteComment($commentId) {
+	private function deleteComment(int $commentId): Comment {
 		$comment = $this->commentService->get($commentId);
 		return $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()));
 	}

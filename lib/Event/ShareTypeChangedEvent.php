@@ -28,6 +28,6 @@ use OCA\Polls\Db\Share;
 class ShareTypeChangedEvent extends ShareEvent {
 	public function __construct(Share $share) {
 		parent::__construct($share);
-		$this->activitySubject = self::CHANGE_TYPE;
+		$this->eventId = self::CHANGE_TYPE;
 	}
 }

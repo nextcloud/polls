@@ -28,6 +28,6 @@ use OCA\Polls\Db\Share;
 class ShareDeletedEvent extends ShareEvent {
 	public function __construct(Share $share) {
 		parent::__construct($share);
-		$this->activitySubject = self::DELETE;
+		$this->eventId = self::DELETE;
 	}
 }

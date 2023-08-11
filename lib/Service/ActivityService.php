@@ -57,7 +57,7 @@ class ActivityService {
 	public function createActivityEvent(BaseEvent $event): ActivityEvent {
 		$activityEvent = $this->activityManager->generateEvent();
 		$activityEvent->setApp('polls')
-			->setType($event->getActivityId())
+			->setType($event->getActivitySubject())
 			->setAuthor($event->getActor())
 			->setObject($event->getActivityObject(), $event->getActivityObjectId())
 			->setSubject($event->getActivitySubject(), $event->getActivitySubjectParams())

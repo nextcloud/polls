@@ -30,6 +30,6 @@ class PollExpiredEvent extends PollEvent {
 		Poll $poll
 	) {
 		parent::__construct($poll);
-		$this->activitySubject = self::EXPIRE;
+		$this->eventId = self::EXPIRE;
 	}
 }

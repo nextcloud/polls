@@ -30,6 +30,6 @@ class OptionUpdatedEvent extends OptionEvent {
 		protected Option $option
 	) {
 		parent::__construct($option);
-		$this->activitySubject = self::UPDATE;
+		$this->eventId = self::UPDATE;
 	}
 }

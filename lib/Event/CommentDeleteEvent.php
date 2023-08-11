@@ -31,6 +31,6 @@ class CommentDeleteEvent extends CommentEvent {
 	) {
 		parent::__construct($comment);
 		$this->log = false;
-		$this->activitySubject = self::DELETE;
+		$this->eventId = self::DELETE;
 	}
 }

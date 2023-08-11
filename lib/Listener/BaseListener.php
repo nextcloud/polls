@@ -112,15 +112,15 @@ abstract class BaseListener implements IEventListener {
 
 	protected function updateLastInteraction(): void {
 		// Update last interaction, exept event is one of the of excluded events
-		if (
-			!($this->event instanceof PollTakeoverEvent)
-			&& !($this->event instanceof PollOwnerChangeEvent)
-			&& !($this->event instanceof PollExpiredEvent)
-			&& !($this->event instanceof PollDeletedEvent)
-			&& !($this->event instanceof PollArchivedEvent)
+		if ($this->event instanceof PollTakeoverEvent
+			|| $this->event instanceof PollOwnerChangeEvent
+			|| $this->event instanceof PollExpiredEvent
+			|| $this->event instanceof PollDeletedEvent
+			|| $this->event instanceof PollArchivedEvent
 		) {
-			$this->pollService->setLastInteraction($this->getPollId());
+			return;
 		}
+		$this->pollService->setLastInteraction($this->getPollId());
 	}
 	/**
 	 * Default logging for email notifications.
@@ -170,7 +170,7 @@ abstract class BaseListener implements IEventListener {
 		if (!($this->event instanceof BaseEvent)) {
 			return;
 		}
-		if ($this->event->getActivityId()) {
+		if ($this->event->getActivitySubject() && $this->event->getActivityObject()) {
 			$activityEvent = $this->activityService->createActivityEvent($this->event);
 			$this->activityService->publishActivityEvent($activityEvent, $this->event->getActor());
 			if ($this->event->getActor() !== $this->event->getPollOwner()) {
