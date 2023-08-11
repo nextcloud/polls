@@ -43,7 +43,7 @@ class ActivityService {
 	protected string $eventType = '';
 	private const FIRST_PERSON_FULL = 'firstFull';
 	private const THIRD_PERSON_FULL = 'thirdFull';
-	private const FIRST_PERSON_FILTERED = 'fistFiltered';
+	private const FIRST_PERSON_FILTERED = 'firstFiltered';
 	private const THIRD_PERSON_FILTERED = 'thirdFiltered';
 
 	public function __construct(
