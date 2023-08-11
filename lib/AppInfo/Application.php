@@ -26,6 +26,11 @@
 namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\Dashboard\PollWidget;
+use OCA\Polls\Event\CommentEvent;
+use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\PollEvent;
+use OCA\Polls\Event\ShareEvent;
+use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Listener\CommentListener;
 use OCA\Polls\Listener\GroupDeletedListener;
 use OCA\Polls\Listener\OptionListener;
