@@ -35,7 +35,7 @@ use OCP\EventDispatcher\Event;
 use OCP\IUserSession;
 
 abstract class BaseEvent extends Event {
-	protected ?string $activityObject = null;
+	protected ?string $activityObjectType = null;
 	protected ?string $eventId = null;
 	protected array $activitySubjectParams = [];
 	protected bool $log = true;
@@ -98,18 +98,18 @@ abstract class BaseEvent extends Event {
 		return [];
 	}
 
-	public function getActivityObject(): ?string {
-		return $this->activityObject;
+	public function getActivityObjectType(): ?string {
+		return $this->activityObjectType;
 	}
 
 	public function getActivityObjectId(): int {
-		if ($this->activityObject === 'poll') {
+		if ($this->activityObjectType === 'poll') {
 			return $this->eventObject->getPollId();
 		}
 		return $this->eventObject->getId();
 	}
 
-	public function getActivitySubject(): ?string {
+	public function getActivityType(): ?string {
 		return $this->eventId;
 	}
 

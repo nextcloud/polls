@@ -170,7 +170,7 @@ abstract class BaseListener implements IEventListener {
 		if (!($this->event instanceof BaseEvent)) {
 			return;
 		}
-		if ($this->event->getActivitySubject() && $this->event->getActivityObject()) {
+		if ($this->event->getActivityType() && $this->event->getActivityObjectType()) {
 			$activityEvent = $this->activityService->createActivityEvent($this->event);
 			$this->activityService->publishActivityEvent($activityEvent, $this->event->getActor());
 			if ($this->event->getActor() !== $this->event->getPollOwner()) {

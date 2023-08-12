@@ -37,7 +37,6 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 
 class ActivityProvider implements IProvider {
-	// protected IL10N $l10n;
 
 	public function __construct(
 		protected ActivityManager $activityManager,

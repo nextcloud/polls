@@ -57,10 +57,10 @@ class ActivityService {
 	public function createActivityEvent(BaseEvent $event): ActivityEvent {
 		$activityEvent = $this->activityManager->generateEvent();
 		$activityEvent->setApp('polls')
-			->setType($event->getActivitySubject())
+			->setType($event->getActivityType())
 			->setAuthor($event->getActor())
-			->setObject($event->getActivityObject(), $event->getActivityObjectId())
-			->setSubject($event->getActivitySubject(), $event->getActivitySubjectParams())
+			->setObject($event->getActivityObjectType(), $event->getActivityObjectId())
+			->setSubject($event->getActivityType(), $event->getActivitySubjectParams())
 			->setTimestamp(time());
 		return $activityEvent;
 	}
@@ -176,7 +176,6 @@ class ActivityService {
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have reordered the options'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has reordered the options'),
 			],
-
 			ShareEvent::CHANGE_EMAIL => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed your email address'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{sharee} has changed the email address'),
