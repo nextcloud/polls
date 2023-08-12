@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Settings;
 
+use OCA\Polls\AppInfo\AppConstants;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\Settings\IIconSection;

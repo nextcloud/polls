@@ -36,7 +36,7 @@ abstract class OptionEvent extends BaseEvent {
 		protected Option $option,
 	) {
 		parent::__construct($option);
-		$this->activityObject = 'poll';
+		$this->activityObjectType = 'poll';
 		$this->activitySubjectParams['optionTitle'] = [
 			'type' => 'highlight',
 			'id' => $this->option->getId(),

@@ -28,12 +28,12 @@ use OCA\Polls\Db\Comment;
 abstract class CommentEvent extends BaseEvent {
 	public const ADD = 'comment_add';
 	public const DELETE = 'comment_delete';
-
+	
 	public function __construct(
 		protected Comment $comment,
 	) {
 		parent::__construct($comment);
-		$this->activityObject = 'poll';
+		$this->activityObjectType = 'poll';
 		$this->activitySubjectParams['comment'] = [
 			'type' => 'highlight',
 			'id' => $comment->getId(),
