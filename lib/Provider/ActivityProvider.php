@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Provider;
 
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Service\ActivityService;
@@ -37,7 +38,6 @@ use OCP\IUserManager;
 use OCP\L10N\IFactory;
 
 class ActivityProvider implements IProvider {
-
 	public function __construct(
 		protected ActivityManager $activityManager,
 		protected ActivityService $activityService,
@@ -51,7 +51,7 @@ class ActivityProvider implements IProvider {
 	}
 
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {
-		if ($event->getApp() !== 'polls') {
+		if ($event->getApp() !== AppConstants::APP_ID) {
 			throw new \InvalidArgumentException();
 		}
 

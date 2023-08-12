@@ -24,10 +24,11 @@
 
 namespace OCA\Polls\Model\Mail;
 
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Db\Share;
 
 class InvitationMail extends MailBase {
-	protected const TEMPLATE_CLASS = 'polls.Invitation';
+	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Invitation';
 
 	public function __construct(
 		protected string $recipientId,

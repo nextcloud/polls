@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Provider;
 
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Search\PollsSearchResultEntry;
 use OCA\Polls\Service\PollService;
@@ -73,7 +74,7 @@ class SearchProvider implements IProvider {
 	}
 
 	public function getOrder(string $route, array $routeParameters): int {
-		if (in_array(strtolower($route), ['polls.page.index', 'polls.page.vote'])) {
+		if (in_array(strtolower($route), [AppConstants::APP_ID . '.page.index', AppConstants::APP_ID . '.page.vote'])) {
 			return -5;
 		}
 		return 51;

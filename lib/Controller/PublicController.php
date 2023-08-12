@@ -70,9 +70,9 @@ class PublicController extends BaseController {
 	 */
 	public function votePage(string $token) {
 		if ($this->userSession->isLoggedIn()) {
-			return new TemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+			return new TemplateResponse(AppConstants::APP_ID, 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 		} else {
-			$template = new PublicTemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+			$template = new PublicTemplateResponse(AppConstants::APP_ID, 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 			$template->setFooterVisible(false);
 			return $template;
 		}

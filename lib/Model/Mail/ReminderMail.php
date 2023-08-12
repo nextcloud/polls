@@ -25,10 +25,11 @@
 namespace OCA\Polls\Model\Mail;
 
 use DateTime;
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Db\Poll;
 
 class ReminderMail extends MailBase {
-	protected const TEMPLATE_CLASS = 'polls.Reminder';
+	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Reminder';
 	public const REASON_EXPIRATION = 'expiry';
 	public const REASON_OPTION = 'option';
 	public const REASON_NONE = null;

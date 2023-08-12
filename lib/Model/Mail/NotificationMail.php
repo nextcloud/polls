@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Model\Mail;
 
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Subscription;
@@ -33,7 +34,7 @@ use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\VoteEvent;
 
 class NotificationMail extends MailBase {
-	protected const TEMPLATE_CLASS = 'polls.Notification';
+	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Notification';
 
 	/** @var Log[] */
 	protected array $log = [];

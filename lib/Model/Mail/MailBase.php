@@ -28,6 +28,7 @@ use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\MarkdownConverter;
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
@@ -42,7 +43,7 @@ use OCP\Mail\IMailer;
 use Psr\Log\LoggerInterface;
 
 abstract class MailBase {
-	protected const TEMPLATE_CLASS = 'polls.Mail';
+	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Mail';
 
 	protected AppSettings $appSettings;
 	protected IEmailTemplate $emailTemplate;
@@ -99,7 +100,7 @@ abstract class MailBase {
 		$languageCode = $this->recipient->getLanguageCode() !== '' ? $this->recipient->getLanguageCode() : $this->transFactory->findGenericLanguage();
 
 		$this->l10n = $this->transFactory->get(
-			'polls',
+			AppConstants::APP_ID,
 			$languageCode,
 			$this->recipient->getLocaleCode()
 		);

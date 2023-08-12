@@ -24,6 +24,7 @@
 namespace OCA\Polls\Command\Share;
 
 use OC\Core\Command\Base;
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Model\Group\Group;
@@ -41,7 +42,7 @@ class Add extends Base {
 
 	protected function configure(): void {
 		$this
-			->setName('polls:share:add')
+			->setName(AppConstants::APP_ID . ':share:add')
 			->setDescription('Invites users to a poll')
 			->addArgument(
 				'id',

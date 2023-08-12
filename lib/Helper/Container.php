@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Helper;
 
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
@@ -36,7 +37,7 @@ use Psr\Container\ContainerInterface;
 
 abstract class Container {
 	public static function getContainer(): ContainerInterface {
-		$app = new App('polls');
+		$app = new App(AppConstants::APP_ID);
 		return $app->getContainer();
 	}
 
@@ -54,7 +55,7 @@ abstract class Container {
 	}
 
 	public static function getL10N(string $lang = null): IL10N {
-		return self::queryClass(IFactory::class)->get('polls', $lang);
+		return self::queryClass(IFactory::class)->get(AppConstants::APP_ID, $lang);
 	}
 	public static function isAppEnabled(string $app): bool {
 		return self::queryClass(IAppManager::class)->isEnabledForUser($app);

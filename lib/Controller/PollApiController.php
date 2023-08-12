@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\PollService;
@@ -49,7 +50,7 @@ class PollApiController extends BaseApiController {
 	 */
 	public function list(): JSONResponse {
 		try {
-			return new JSONResponse(['polls' => $this->pollService->list()], Http::STATUS_OK);
+			return new JSONResponse([AppConstants::APP_ID => $this->pollService->list()], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new JSONResponse([], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {

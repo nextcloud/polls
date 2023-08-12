@@ -24,6 +24,7 @@
 namespace OCA\Polls\Model\Settings;
 
 use JsonSerializable;
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Group;
 use OCP\IConfig;
@@ -31,7 +32,6 @@ use OCP\IGroupManager;
 use OCP\IUserSession;
 
 class AppSettings implements JsonSerializable {
-	private const APP_NAME = 'polls';
 	public const SETTING_ALLOW_PUBLIC_SHARES = 'allowPublicShares';
 	public const SETTING_ALLOW_COMBO = 'allowCombo';
 	public const SETTING_ALLOW_ALL_ACCESS = 'allowAllAccess';
@@ -77,19 +77,19 @@ class AppSettings implements JsonSerializable {
 	// Getters
 	// generic Setters
 	public function getBooleanSetting(string $key, bool $default = true): bool {
-		return $this->stringToBool($this->config->getAppValue(self::APP_NAME, $key), $default);
+		return $this->stringToBool($this->config->getAppValue(AppConstants::APP_ID, $key), $default);
 	}
 
 	public function getGroupSetting(string $key): array {
-		return $this->stringToArray($this->config->getAppValue(self::APP_NAME, $key));
+		return $this->stringToArray($this->config->getAppValue(AppConstants::APP_ID, $key));
 	}
 
 	public function getStringSetting(string $key, string $default = ''): string {
-		return $this->config->getAppValue(self::APP_NAME, $key) ?: $default;
+		return $this->config->getAppValue(AppConstants::APP_ID, $key) ?: $default;
 	}
 
 	public function getIntegerSetting(string $key, int $default = 0): int {
-		return $this->stringToInteger($this->config->getAppValue(self::APP_NAME, $key), $default);
+		return $this->stringToInteger($this->config->getAppValue(AppConstants::APP_ID, $key), $default);
 	}
 
 	// Checks
@@ -137,15 +137,15 @@ class AppSettings implements JsonSerializable {
 	}
 
 	public function getUsePrivacyUrl(): string {
-		if ($this->config->getAppValue(self::APP_NAME, self::SETTING_PRIVACY_URL)) {
-			return $this->config->getAppValue(self::APP_NAME, self::SETTING_PRIVACY_URL);
+		if ($this->config->getAppValue(AppConstants::APP_ID, self::SETTING_PRIVACY_URL)) {
+			return $this->config->getAppValue(AppConstants::APP_ID, self::SETTING_PRIVACY_URL);
 		}
 		return $this->config->getAppValue('theming', 'privacyUrl');
 	}
 
 	public function getUseImprintUrl(): string {
-		if ($this->config->getAppValue(self::APP_NAME, self::SETTING_IMPRINT_URL)) {
-			return $this->config->getAppValue(self::APP_NAME, self::SETTING_IMPRINT_URL);
+		if ($this->config->getAppValue(AppConstants::APP_ID, self::SETTING_IMPRINT_URL)) {
+			return $this->config->getAppValue(AppConstants::APP_ID, self::SETTING_IMPRINT_URL);
 		}
 		return $this->config->getAppValue('theming', 'imprintUrl');
 	}
@@ -161,15 +161,15 @@ class AppSettings implements JsonSerializable {
 	// Setters
 	// generic setters
 	public function setBooleanSetting(string $key, bool $value): void {
-		$this->config->setAppValue(self::APP_NAME, $key, $this->boolToString($value));
+		$this->config->setAppValue(AppConstants::APP_ID, $key, $this->boolToString($value));
 	}
 
 	public function setGroupSetting(string $key, array $value): void {
-		$this->config->setAppValue(self::APP_NAME, $key, json_encode($value));
+		$this->config->setAppValue(AppConstants::APP_ID, $key, json_encode($value));
 	}
 
 	public function setStringSetting(string $key, string $value): void {
-		$this->config->setAppValue(self::APP_NAME, $key, $value);
+		$this->config->setAppValue(AppConstants::APP_ID, $key, $value);
 	}
 
 	/**

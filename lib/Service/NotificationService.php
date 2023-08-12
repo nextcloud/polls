@@ -24,12 +24,11 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
+use OCA\Polls\AppInfo\AppConstants;
 use OCA\Polls\Notification\Notifier;
 use OCP\Notification\IManager;
 
 class NotificationService {
-	public const APP_ID = 'polls';
-
 	public function __construct(
 		protected IManager $notificationManager,
 		protected ?string $userId,
@@ -41,7 +40,7 @@ class NotificationService {
 		if (!$this->userId) {
 			return;
 		}
-		$notification->setApp(self::APP_ID)
+		$notification->setApp(AppConstants::APP_ID)
 			->setObject('poll', strval($pollId))
 			->setUser($this->userId);
 		$this->notificationManager->markProcessed($notification);
@@ -49,7 +48,7 @@ class NotificationService {
 
 	public function sendInvitation(int $pollId, string $recipient): bool {
 		$notification = $this->notificationManager->createNotification();
-		$notification->setApp(self::APP_ID)
+		$notification->setApp(AppConstants::APP_ID)
 			->setUser($recipient)
 			->setDateTime(new DateTime())
 			->setObject('poll', strval($pollId))
@@ -60,7 +59,7 @@ class NotificationService {
 
 	public function createNotification(array $params = []): bool {
 		$notification = $this->notificationManager->createNotification();
-		$notification->setApp(self::APP_ID)
+		$notification->setApp(AppConstants::APP_ID)
 			->setUser($params['recipient'])
 			->setDateTime(new DateTime())
 			->setObject($params['objectType'], strval($params['objectValue']))

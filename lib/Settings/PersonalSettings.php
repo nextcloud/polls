@@ -23,16 +23,17 @@
 
 namespace OCA\Polls\Settings;
 
+use OCA\Polls\AppInfo\AppConstants;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 
 class PersonalSettings implements ISettings {
 	public function getForm(): TemplateResponse {
-		return new TemplateResponse('polls', 'settings', []);
+		return new TemplateResponse(AppConstants::APP_ID, 'settings', []);
 	}
 
 	public function getSection(): string {
-		return 'polls';
+		return AppConstants::APP_ID;
 	}
 
 	public function getPriority(): int {
