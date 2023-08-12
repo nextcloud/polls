@@ -387,7 +387,7 @@ OC.L10N.register(
     "Enter the amount of days, polls without activity stay in the relevant list:" : "輸入無活動的投票要留在相關清單中的天數：",
     "A poll with many options and voters can have a heavy impact on client performance." : "具有許多選項與投票者的投票可能會對客戶端效能產生重大影響。",
     "Set the amount of voting cells (options x participants) up to which all voting cells should be displayed." : "設定應顯示所有投票儲存格的投票儲存格數量（選項 x 參與者）。",
-    "If this threshold gets tresspasses only the current user will be displayed, to avoid a performance breakdown." : "若超過此閾點，則只會顯示目前的使用者，以避免效能下降。",
+    "If this threshold gets tresspasses only the current user will be displayed, to avoid a performance breakdown." : "若超過此閾點，則只會顯示目前的用戶，以避免效能下降。",
     "The default threshold of 1000 should be a good and safe value." : "預設閾點閾點 1000 應該是良好且安全的值。",
     "The style settings are still experimental!" : "風格設定仍處於實驗性階段！",
     "Use alternative styling for the comments sidebar" : "為評論側欄使用代用樣式",
