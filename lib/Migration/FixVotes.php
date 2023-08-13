@@ -24,12 +24,18 @@
 
 namespace OCA\Polls\Migration;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\TableManager;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
 class FixVotes implements IRepairStep {
-	public function __construct(private TableManager $tableManager) {
+	public function __construct(
+		private TableManager $tableManager,
+		private IDBConnection $connection,
+		private Schema $schema,
+	) {
 	}
 
 	/*
@@ -44,8 +50,9 @@ class FixVotes implements IRepairStep {
 	 */
 	public function run(IOutput $output): void {
 		// secure, that the schema is updated to the current status
-		$this->tableManager->refreshSchema();
+		$this->schema = $this->connection->createSchema();
+		$this->tableManager->setSchema($this->schema);
 		$this->tableManager->fixVotes();
-		$this->tableManager->migrate();
+		$this->connection->migrateToSchema($this->schema);
 	}
 }

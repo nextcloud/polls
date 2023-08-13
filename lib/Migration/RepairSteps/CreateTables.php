@@ -24,13 +24,17 @@
 
 namespace OCA\Polls\Migration\RepairSteps;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\TableManager;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
 class CreateTables implements IRepairStep {
 	public function __construct(
-		private TableManager $tableManager
+		private TableManager $tableManager,
+		private IDBConnection $connection,
+		private Schema $schema,
 	) {
 	}
 
@@ -45,9 +49,12 @@ class CreateTables implements IRepairStep {
 			$output->info($message);
 		}
 		// secure, that the schema is updated to the current status
-		$this->tableManager->refreshSchema();
+		$this->schema = $this->connection->createSchema();
+		$this->tableManager->setSchema($this->schema);
+
 		$messages = $this->tableManager->createTables();
-		$this->tableManager->migrate();
+
+		$this->connection->migrateToSchema($this->schema);
 		
 		foreach ($messages as $message) {
 			$output->info($message);

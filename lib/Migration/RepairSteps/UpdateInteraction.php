@@ -25,12 +25,14 @@
 namespace OCA\Polls\Migration\RepairSteps;
 
 use OCA\Polls\Db\TableManager;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
 class UpdateInteraction implements IRepairStep {
 	public function __construct(
-		private TableManager $tableManager
+		private TableManager $tableManager,
+		private IDBConnection $connection,
 	) {
 	}
 
@@ -39,6 +41,8 @@ class UpdateInteraction implements IRepairStep {
 	}
 
 	public function run(IOutput $output): void {
+		$this->tableManager->setConnection($this->connection);
+
 		$messages = $this->tableManager->resetLastInteraction();
 		foreach ($messages as $message) {
 			$output->info($message);

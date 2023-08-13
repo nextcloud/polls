@@ -25,24 +25,28 @@
 namespace OCA\Polls\Migration\RepairSteps;
 
 use OCA\Polls\Db\TableManager;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
 class UpdateHashes implements IRepairStep {
 	public function __construct(
-		private TableManager $tableManager
+		private TableManager $tableManager,
+		private IDBConnection $connection,
 	) {
 	}
 
 	public function getName() {
-		return 'Polls - Create hashes vor votes and options';
+		return 'Polls - Create hashes for votes and options';
 	}
 
 	public function run(IOutput $output): void {
-		// Add hashes to votes and options
+		$this->tableManager->setConnection($this->connection);
+
 		$messages = $this->tableManager->migrateOptionsToHash();
 		foreach ($messages as $message) {
 			$output->info($message);
 		}
+
 	}
 }
