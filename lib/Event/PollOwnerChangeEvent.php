@@ -30,6 +30,6 @@ class PollOwnerChangeEvent extends PollEvent {
 		Poll $poll
 	) {
 		parent::__construct($poll);
-		$this->activitySubject = self::OWNER_CHANGE;
+		$this->eventId = self::OWNER_CHANGE;
 	}
 }

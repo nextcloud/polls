@@ -24,6 +24,7 @@
 namespace OCA\Polls\Command\Share;
 
 use OC\Core\Command\Base;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\Group\Group;
@@ -42,7 +43,7 @@ class Remove extends Base {
 
 	protected function configure(): void {
 		$this
-			->setName('polls:share:remove')
+			->setName(AppConstants::APP_ID . ':share:remove')
 			->setDescription('Remove user invitations from a poll')
 			->addArgument(
 				'id',

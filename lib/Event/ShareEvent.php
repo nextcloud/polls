@@ -41,7 +41,7 @@ abstract class ShareEvent extends BaseEvent {
 
 	public function __construct(Share $share) {
 		parent::__construct($share);
-		$this->activityObject = 'poll';
+		$this->activityObjectType = 'poll';
 		$this->log = false;
 		$this->share = $share;
 		$this->activitySubjectParams['shareType'] = $this->share->getRichObjectString();

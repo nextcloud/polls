@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Command\Poll;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Service\PollService;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -42,7 +43,7 @@ class TransferOwnership extends Command {
 
 	protected function configure(): void {
 		$this
-			->setName('polls:poll:transfer-ownership')
+			->setName(AppConstants::APP_ID . ':poll:transfer-ownership')
 			->setDescription('Transfer the ownership of one user\'s polls to another user.')
 			->addArgument(
 				'source-user',

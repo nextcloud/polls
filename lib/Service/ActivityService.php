@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Event\BaseEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -37,48 +38,38 @@ use OCP\IUserSession;
 use OCP\L10N\IFactory;
 
 class ActivityService {
+	protected const APP_ID = AppConstants::APP_ID;
+
 	// protected IL10N $l10n;
 	protected string $shareType = '';
 	protected bool $userIsActor = true;
 	protected string $eventType = '';
 	private const FIRST_PERSON_FULL = 'firstFull';
 	private const THIRD_PERSON_FULL = 'thirdFull';
-	private const FIRST_PERSON_FILTERED = 'fistFiltered';
+	private const FIRST_PERSON_FILTERED = 'firstFiltered';
 	private const THIRD_PERSON_FILTERED = 'thirdFiltered';
 
 	public function __construct(
+		private ActivityEvent $activityEvent,
+		private ActivityManager $activityManager,
+		private BaseEvent $baseEvent,
+		private IL10N $l10n,
 		private IFactory $transFactory,
 		private IUserSession $userSession,
-		private ActivityManager $activityManager,
-		protected IL10N $l10n,
 	) {
 	}
 
-	public function createActivityEvent(BaseEvent $event): ActivityEvent {
-		$activityEvent = $this->activityManager->generateEvent();
-		$activityEvent->setApp('polls')
-			->setType($event->getActivityId())
-			->setAuthor($event->getActor())
-			->setObject($event->getActivityObject(), $event->getActivityObjectId())
-			->setSubject($event->getActivitySubject(), $event->getActivitySubjectParams())
-			->setTimestamp(time());
-		return $activityEvent;
-	}
+	public function getActivityMessage(ActivityEvent $activityEvent, string $language, bool $filtered = false): string {
+		$this->activityEvent = $activityEvent;
+		$this->l10n = $this->transFactory->get($this->activityEvent->getApp(), $language);
 
-	public function publishActivityEvent(ActivityEvent $activityEvent, string $userId): void {
-		$activityEvent->setAffectedUser($userId);
-		$this->activityManager->publish($activityEvent);
-	}
-
-	public function getActivityMessage(ActivityEvent $event, string $language, bool $filtered = false) : string {
-		$this->l10n = $this->transFactory->get($event->getApp(), $language);
 		try {
-			$this->userIsActor = $event->getAuthor() === $this->userSession->getUser()?->getUID();
+			$this->userIsActor = $this->activityEvent->getAuthor() === $this->userSession->getUser()?->getUID();
 		} catch (\Exception $e) {
 			$this->userIsActor = false;
 		}
-		$this->eventType = $event->getType();
-		$parameters = $event->getSubjectParameters();
+
+		$parameters = $this->activityEvent->getSubjectParameters();
 		$this->shareType = $parameters['shareType']['name'] ?? '';
 
 		$messages = $this->getMatchedMessages();
@@ -90,8 +81,35 @@ class ActivityService {
 		return $this->userIsActor ? $messages[self::FIRST_PERSON_FULL] : $messages[self::THIRD_PERSON_FULL];
 	}
 
+	public function addActivity(BaseEvent $baseEvent): void {
+		$this->baseEvent = $baseEvent;
+		$this->createActivityEvent();
+		$this->publishActivityEvent();
+	}
+
+	private function createActivityEvent(): void {
+		$this->activityEvent = $this->activityManager->generateEvent();
+		$this->activityEvent->setApp(AppConstants::APP_ID)
+			->setType($this->baseEvent->getActivityType() ?? '')
+			->setAuthor($this->baseEvent->getActor())
+			->setObject($this->baseEvent->getActivityObjectType() ?? '', $this->baseEvent->getActivityObjectId())
+			->setSubject($this->baseEvent->getActivityType() ?? '', $this->baseEvent->getActivitySubjectParams())
+			->setTimestamp(time());
+	}
+
+	private function publishActivityEvent(): void {
+		$this->activityEvent->setAffectedUser($this->baseEvent->getActor());
+		$this->activityManager->publish($this->activityEvent);
+
+		// add additional event for poll owner if not actor
+		if ($this->baseEvent->getActor() !== $this->baseEvent->getPollOwner()) {
+			$this->activityEvent->setAffectedUser($this->baseEvent->getPollOwner());
+			$this->activityManager->publish($this->activityEvent);
+		}
+	}
+
 	private function getMatchedMessages(): array {
-		return match ($this->eventType) {
+		return match ($this->activityEvent->getType()) {
 			CommentEvent::ADD => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have commented on poll {pollTitle}'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has commented on poll {pollTitle}'),
@@ -176,7 +194,6 @@ class ActivityService {
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have reordered the options'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has reordered the options'),
 			],
-
 			ShareEvent::CHANGE_EMAIL => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed your email address'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{sharee} has changed the email address'),

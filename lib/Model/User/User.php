@@ -31,8 +31,11 @@ use OCP\IUser;
 use OCP\IUserManager;
 
 class User extends UserBase {
+	/** @var string */
 	public const TYPE = 'user';
+	/** @var string */
 	public const ICON = 'icon-user';
+	/** @var string */
 	public const PRINCIPAL_PREFIX = 'principals/users/';
 
 	private IConfig $config;

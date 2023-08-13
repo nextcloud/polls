@@ -26,6 +26,7 @@ namespace OCA\Polls\Db;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Migration\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;
@@ -98,7 +99,7 @@ class TableManager {
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('migrations')
 			->where('app = :appName')
-			->setParameter('appName', 'polls')
+			->setParameter('appName', AppConstants::APP_ID)
 			->executeStatement();
 
 		$this->logger->info('Removed all migration records from ' . $this->dbPrefix . 'migrations');
@@ -108,7 +109,7 @@ class TableManager {
 		// $query = $this->connection->getQueryBuilder();
 		$query->delete('appconfig')
 			->where('appid = :appid')
-			->setParameter('appid', 'polls')
+			->setParameter('appid', AppConstants::APP_ID)
 			->executeStatement();
 
 		$this->logger->info('Removed all app config records from '. $this->dbPrefix . 'appconfig');
@@ -351,7 +352,7 @@ class TableManager {
 			$query->delete('migrations')
 				->where('app = :appName')
 				->andWhere('version = :version')
-				->setParameter('appName', 'polls')
+				->setParameter('appName', AppConstants::APP_ID)
 				->setParameter('version', $version)
 				->executeStatement();
 		}

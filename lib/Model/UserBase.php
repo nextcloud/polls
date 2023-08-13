@@ -39,8 +39,11 @@ use OCP\IUserSession;
 use OCP\Share\IShare;
 
 class UserBase implements \JsonSerializable {
+	/** @var string */
 	public const TYPE = 'generic';
+	/** @var string */
 	public const TYPE_PUBLIC = 'public';
+	/** @var string */
 	public const TYPE_EXTERNAL = 'external';
 	public const TYPE_CIRCLE = Circle::TYPE;
 	public const TYPE_CONTACT = Contact::TYPE;

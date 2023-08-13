@@ -26,6 +26,7 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
 use OCP\IURLGenerator;
@@ -216,7 +217,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function getVoteUrl() : string {
 		return $this->urlGenerator->linkToRouteAbsolute(
-			'polls.page.vote',
+			AppConstants::APP_ID . '.page.vote',
 			['id' => $this->getId()]
 		);
 	}

@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Dashboard;
 
+use OCA\Polls\AppConstants;
 use OCP\Dashboard\IWidget;
 use OCP\IL10N;
 use OCP\IURLGenerator;
@@ -35,7 +36,7 @@ class PollWidget implements IWidget {
 	}
 
 	public function getId(): string {
-		return 'polls';
+		return AppConstants::APP_ID;
 	}
 
 	public function getTitle(): string {
@@ -51,10 +52,10 @@ class PollWidget implements IWidget {
 	}
 
 	public function getUrl(): ?string {
-		return $this->urlGenerator->linkToRouteAbsolute('polls.page.index');
+		return $this->urlGenerator->linkToRouteAbsolute(AppConstants::APP_ID . '.page.index');
 	}
 
 	public function load(): void {
-		\OCP\Util::addScript('polls', 'polls-dashboard');
+		\OCP\Util::addScript(AppConstants::APP_ID, 'polls-dashboard');
 	}
 }

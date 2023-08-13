@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Notification;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\PollMapper;
 
 use OCA\Polls\Service\NotificationService;
@@ -55,14 +56,14 @@ class Notifier implements INotifier {
 	 * Identifier of the notifier, only use [a-z0-9_]
 	 */
 	public function getID(): string {
-		return 'polls';
+		return AppConstants::APP_ID;
 	}
 
 	/**
 	 * Human readable name describing the notifier
 	 */
 	public function getName(): string {
-		return $this->l10nFactory->get('polls')->t('Polls');
+		return $this->l10nFactory->get(AppConstants::APP_ID)->t('Polls');
 	}
 
 	/**
@@ -82,15 +83,15 @@ class Notifier implements INotifier {
 	}
 
 	public function prepare(INotification $notification, string $languageCode): INotification {
-		$l = $this->l10nFactory->get('polls', $languageCode);
-		if ($notification->getApp() !== 'polls') {
+		$l = $this->l10nFactory->get(AppConstants::APP_ID, $languageCode);
+		if ($notification->getApp() !== AppConstants::APP_ID) {
 			throw new \InvalidArgumentException();
 		}
 		$parameters = $notification->getSubjectParameters();
 
 		$notification->setIcon(
 			$this->urlGenerator->getAbsoluteURL(
-				$this->urlGenerator->imagePath('polls', 'polls-dark.svg')
+				$this->urlGenerator->imagePath(AppConstants::APP_ID, 'polls-dark.svg')
 			)
 		);
 

@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
@@ -87,7 +88,7 @@ class UserService {
 	 * find appropriate language
 	 */
 	public function getGenericLanguage(): string {
-		return $this->transFactory->findGenericLanguage('polls');
+		return $this->transFactory->findGenericLanguage(AppConstants::APP_ID);
 	}
 
 	/**

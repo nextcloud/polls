@@ -28,6 +28,6 @@ use OCA\Polls\Db\Share;
 class ShareChangedRegistrationConstraintEvent extends ShareEvent {
 	public function __construct(Share $share) {
 		parent::__construct($share);
-		$this->activitySubject = self::CHANGE_REG_CONSTR;
+		$this->eventId = self::CHANGE_REG_CONSTR;
 	}
 }

@@ -38,6 +38,6 @@ abstract class PollEvent extends BaseEvent {
 		protected Poll $poll,
 	) {
 		parent::__construct($poll);
-		$this->activityObject = 'poll';
+		$this->activityObjectType = 'poll';
 	}
 }

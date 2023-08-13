@@ -176,17 +176,17 @@ class OptionMapper extends QBMapper {
 
 		$results = $qb->executeQuery()->fetchAll(\PDO::FETCH_COLUMN);
 		
-		try {
-			return [
-				'min' => min($results),
-				'max' => max($results),
-			];
-		} catch (\Throwable $th) {
+		if (empty($results)) {
 			return [
 				'min' => 0,
 				'max' => 0,
 			];
 		}
+
+		return [
+			'min' => min($results),
+			'max' => max($results),
+		];
 	}
 
 	/**

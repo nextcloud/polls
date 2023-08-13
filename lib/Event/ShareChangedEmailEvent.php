@@ -28,6 +28,6 @@ use OCA\Polls\Db\Share;
 class ShareChangedEmailEvent extends ShareEvent {
 	public function __construct(Share $share) {
 		parent::__construct($share);
-		$this->activitySubject = self::CHANGE_EMAIL;
+		$this->eventId = self::CHANGE_EMAIL;
 	}
 }

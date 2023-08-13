@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -45,7 +46,7 @@ class AdminController extends BaseController {
 	 * @NoCSRFRequired
 	 */
 	public function index(): TemplateResponse {
-		return new TemplateResponse('polls', 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+		return new TemplateResponse(AppConstants::APP_ID, 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**

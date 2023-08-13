@@ -32,6 +32,6 @@ class VoteSetEvent extends VoteEvent {
 	) {
 		parent::__construct($vote);
 		$this->log = $log;
-		$this->activitySubject = self::SET;
+		$this->eventId = self::SET;
 	}
 }

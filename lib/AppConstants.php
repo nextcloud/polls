@@ -1,6 +1,7 @@
 <?php
+
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2023 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -21,22 +22,9 @@
  *
  */
 
-namespace OCA\Polls\Settings;
+namespace OCA\Polls;
 
-use OCA\Polls\AppConstants;
-use OCP\AppFramework\Http\TemplateResponse;
-use OCP\Settings\ISettings;
-
-class PersonalSettings implements ISettings {
-	public function getForm(): TemplateResponse {
-		return new TemplateResponse(AppConstants::APP_ID, 'settings', []);
-	}
-
-	public function getSection(): string {
-		return AppConstants::APP_ID;
-	}
-
-	public function getPriority(): int {
-		return 50;
-	}
+abstract class AppConstants {
+	/** @var string */
+	public const APP_ID = 'polls';
 }

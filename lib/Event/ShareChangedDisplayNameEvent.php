@@ -28,6 +28,6 @@ use OCA\Polls\Db\Share;
 class ShareChangedDisplayNameEvent extends ShareEvent {
 	public function __construct(Share $share) {
 		parent::__construct($share);
-		$this->activitySubject = self::CHANGE_DISPLAY_NAME;
+		$this->eventId = self::CHANGE_DISPLAY_NAME;
 	}
 }

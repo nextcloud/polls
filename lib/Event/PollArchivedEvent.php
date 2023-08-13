@@ -31,7 +31,7 @@ class PollArchivedEvent extends PollEvent {
 		protected Poll $poll
 	) {
 		parent::__construct($poll);
-		$this->activitySubject = self::DELETE;
+		$this->eventId = self::DELETE;
 	}
 
 	public function getNotification(): array {

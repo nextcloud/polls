@@ -35,7 +35,7 @@ abstract class VoteEvent extends BaseEvent {
 		Vote $vote
 	) {
 		parent::__construct($vote);
-		$this->activityObject = 'poll';
+		$this->activityObjectType = 'poll';
 		$this->vote = $vote;
 	}
 

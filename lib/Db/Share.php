@@ -24,7 +24,7 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-
+use OCA\Polls\AppConstants;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\Entity;
@@ -162,12 +162,12 @@ class Share extends Entity implements JsonSerializable {
 	public function getURL(): string {
 		if (in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN, self::TYPE_GROUP], true)) {
 			return $this->urlGenerator->linkToRouteAbsolute(
-				'polls.page.vote',
+				AppConstants::APP_ID . '.page.vote',
 				['id' => $this->pollId]
 			);
 		} elseif ($this->token) {
 			return $this->urlGenerator->linkToRouteAbsolute(
-				'polls.public.vote_page',
+				AppConstants::APP_ID . '.public.vote_page',
 				['token' => $this->token]
 			);
 		} else {

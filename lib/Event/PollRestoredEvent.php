@@ -30,6 +30,6 @@ class PollRestoredEvent extends PollEvent {
 		Poll $poll
 	) {
 		parent::__construct($poll);
-		$this->activitySubject = self::RESTORE;
+		$this->eventId = self::RESTORE;
 	}
 }

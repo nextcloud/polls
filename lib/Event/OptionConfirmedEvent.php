@@ -30,6 +30,6 @@ class OptionConfirmedEvent extends OptionEvent {
 		protected Option $option
 	) {
 		parent::__construct($option);
-		$this->activitySubject = self::CONFIRM;
+		$this->eventId = self::CONFIRM;
 	}
 }

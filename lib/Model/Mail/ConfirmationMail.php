@@ -24,11 +24,12 @@
 
 namespace OCA\Polls\Model\Mail;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
 
 class ConfirmationMail extends MailBase {
-	protected const TEMPLATE_CLASS = 'polls.Confirmation';
+	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Confirmation';
 
 	/** @var Option[] */
 	protected array $confirmedOptions;

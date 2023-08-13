@@ -23,16 +23,17 @@
 
 namespace OCA\Polls\Settings;
 
+use OCA\Polls\AppConstants;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 
 class AdminSettings implements ISettings {
 	public function getForm(): TemplateResponse {
-		return new TemplateResponse('polls', 'admin', []);
+		return new TemplateResponse(AppConstants::APP_ID, 'admin', []);
 	}
 
 	public function getSection(): string {
-		return 'polls';
+		return AppConstants::APP_ID;
 	}
 
 	public function getPriority():int {

@@ -30,6 +30,6 @@ class OptionUnconfirmedEvent extends OptionEvent {
 		protected Option $option
 	) {
 		parent::__construct($option);
-		$this->activitySubject = self::UNCONFIRM;
+		$this->eventId = self::UNCONFIRM;
 	}
 }
