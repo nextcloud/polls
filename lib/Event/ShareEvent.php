@@ -48,10 +48,6 @@ abstract class ShareEvent extends BaseEvent {
 		$this->activitySubjectParams['sharee'] = $this->getSharee()->getRichObjectString();
 	}
 
-	public function getShare(): Share {
-		return $this->share;
-	}
-
 	protected function getSharee() : UserBase {
 		return $this->userService->getUserFromShare($this->share);
 	}

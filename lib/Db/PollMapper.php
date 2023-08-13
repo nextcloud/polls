@@ -58,17 +58,6 @@ class PollMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Poll[]
 	 */
-	public function findAll(): array {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-		   ->from($this->getTableName());
-		return $this->findEntities($qb);
-	}
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Poll[]
-	 */
 	public function findAutoReminderPolls(): array {
 		$autoReminderSearchString = '%"autoReminder":true%';
 		$qb = $this->db->getQueryBuilder();
@@ -110,7 +99,7 @@ class PollMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Poll[]
 	 */
-	public function search(string $userId, ISearchQuery $query): array {
+	public function search(ISearchQuery $query): array {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())

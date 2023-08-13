@@ -68,10 +68,6 @@ class Circle extends UserBase {
 		];
 	}
 
-	public function getCircleUrl(): string {
-		return 'lala';
-	}
-
 	/**
 	 * @return Circle[]
 	 */

@@ -106,10 +106,6 @@ class Acl implements JsonSerializable {
 		return $this;
 	}
 
-	public function getShare() : Share {
-		return $this->share;
-	}
-
 	public function setPollId(int $pollId = 0, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
 			$this->poll = $this->pollMapper->find($pollId);
@@ -141,18 +137,16 @@ class Acl implements JsonSerializable {
 		return $this->userSession->getUser()?->getUID() ?? $this->share->getUserId();
 	}
 
-	public function validateUserId(string $userId): bool {
+	public function validateUserId(string $userId): void {
 		if ($this->getUserId() !== $userId) {
 			throw new ForbiddenException('User id does not match.');
 		}
-		return true;
 	}
 
-	public function validatePollId(int $pollId): bool {
+	public function validatePollId(int $pollId): void {
 		if ($this->getPollId() !== $pollId) {
 			throw new ForbiddenException('Poll id does not match.');
 		}
-		return true;
 	}
 
 	public function getIsOwner(): bool {

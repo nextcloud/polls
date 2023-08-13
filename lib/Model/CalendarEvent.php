@@ -175,10 +175,6 @@ class CalendarEvent implements \JsonSerializable {
 		return $this->hasRRule;
 	}
 
-	public function getRRule(): ?array {
-		return $this->rRule;
-	}
-
 	public function getOccurrences() : array {
 		return $this->occurrences;
 	}
@@ -237,10 +233,6 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	public function getICal(): array {
-		return $this->iCal;
-	}
-
 	public function jsonSerialize(): array {
 		return	[
 			'id' => $this->getId(),
@@ -257,18 +249,6 @@ class CalendarEvent implements \JsonSerializable {
 			'status' => $this->getStatus(),
 			'summary' => $this->getSummary(),
 			'type' => $this->getType(),
-			// 'duration' => $this->getDuration(),
-			// 'iCal' => $this->getICal(),
-			// 'hasRRule' => $this->getHasRRule(),
-			// 'rRule' => $this->getRRule(),
-			// 'timezone' => $this->getBaseStart()->getTimeZone(),
-			// 'occurrences' => $this->getOccurrences(),
-			// 'times' => [
-			// 	'start' => $this->getStart(),
-			// 	'end' => $this->getEnd(),
-			// 	'filterFrom' => $this->filterFrom,
-			// 	'filterTo' => $this->filterTo,
-			// ],
 		];
 	}
 }

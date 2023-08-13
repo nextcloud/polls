@@ -35,8 +35,4 @@ class CommentListener extends BaseListener {
 			throw new InvalidClassException;
 		}
 	}
-
-	protected function writeActivity() : void {
-		return;
-	}
 }

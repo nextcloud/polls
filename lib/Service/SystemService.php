@@ -96,9 +96,6 @@ class SystemService {
 	public function getGroups(string $query = ''): array {
 		$groups = Group::search($query);
 		return $groups;
-		if ($query === '') {
-			return [];
-		}
 	}
 
 	/**

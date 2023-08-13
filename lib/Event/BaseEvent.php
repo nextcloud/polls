@@ -59,16 +59,8 @@ abstract class BaseEvent extends Event {
 		];
 	}
 
-	public function getEventObject(): Entity {
-		return $this->eventObject;
-	}
-
 	public function getPollId(): int {
 		return $this->eventObject->getPollId();
-	}
-
-	public function getPollUrl(): string {
-		return $this->poll->getVoteUrl();
 	}
 
 	public function getPollTitle(): string {
@@ -77,10 +69,6 @@ abstract class BaseEvent extends Event {
 
 	public function getPollOwner(): string {
 		return $this->poll->getOwner();
-	}
-
-	public function getPoll(): Poll {
-		return $this->poll;
 	}
 
 	public function getActor(): string {

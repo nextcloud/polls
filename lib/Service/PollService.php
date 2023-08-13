@@ -114,7 +114,7 @@ class PollService {
 	public function search(ISearchQuery $query): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->search($this->userId, $query);
+			$polls = $this->pollMapper->search($query);
 
 			foreach ($polls as $poll) {
 				try {

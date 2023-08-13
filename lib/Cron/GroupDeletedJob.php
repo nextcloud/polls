@@ -52,13 +52,6 @@ class GroupDeletedJob extends QueuedJob {
 			'group' => $group
 		]);
 
-		$replacementName = 'deleted_' . $this->secureRandom->generate(
-			8,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
-		);
-
 		$this->shareMapper->deleteByIdAndType($group, Share::TYPE_GROUP);
 	}
 }
