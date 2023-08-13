@@ -20,6 +20,10 @@
         <directory name="vendor" />
     </extraFiles>
 	<issueHandlers>
+        <LessSpecificReturnStatement errorLevel="error"/>
+        <LessSpecificReturnType errorLevel="error"/>
+        <LessSpecificImplementedReturnType errorLevel="error"/>
+        <MoreSpecificReturnType errorLevel="error"/>
         <PropertyNotSetInConstructor errorLevel="suppress"/>
 		<UndefinedClass>
 			<errorLevel type="suppress">
