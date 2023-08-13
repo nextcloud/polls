@@ -36,7 +36,7 @@ use PDO;
 use Psr\Log\LoggerInterface;
 
 class TableManager {
-	private Schema $schema;
+	
 	private string $dbPrefix;
 
 	public function __construct(
@@ -45,22 +45,18 @@ class TableManager {
 		private LoggerInterface $logger,
 		private OptionMapper $optionMapper,
 		private VoteMapper $voteMapper,
+		private Schema $schema,
 		private WatchMapper $watchMapper,
 	) {
-		$this->schema = $this->connection->createSchema();
 		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
 
-	/**
-	 * execute the migration
-	 */
-	public function migrate(): void {
-		$this->connection->migrateToSchema($this->schema);
+	public function setSchema(Schema &$schema): void {
+		$this->schema = $schema;
 	}
 
-	public function refreshSchema(): Schema {
-		$this->schema = $this->connection->createSchema();
-		return $this->schema;
+	public function setConnection(IDBConnection &$connection): void {
+		$this->connection = $connection;
 	}
 
 	/**
@@ -70,7 +66,6 @@ class TableManager {
 	 */
 	public function purgeTables(): array {
 		$messages = [];
-
 		// drop all child tables
 		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
 			if ($this->connection->tableExists($tableName)) {
@@ -118,7 +113,7 @@ class TableManager {
 		$messages[] = '';
 		$messages[] = 'Please call \'occ app:remove polls\' now!';
 
-		$this->refreshSchema();
+		// $this->refreshSchema();
 		
 		return $messages;
 	}
@@ -133,13 +128,6 @@ class TableManager {
 		$tableName = $this->dbPrefix . Watch::TABLE;
 		$columns = TableSchema::TABLES[Watch::TABLE];
 
-		if ($this->connection->tableExists(Watch::TABLE)) {
-			$this->connection->dropTable(Watch::TABLE);
-			$messages[] = 'Dropped ' . $tableName;
-		}
-
-		$this->refreshSchema();
-		
 		$table = $this->schema->createTable($tableName);
 		$messages[] = 'Creating table ' . $tableName;
 
@@ -157,42 +145,70 @@ class TableManager {
 	 *
 	 * @psalm-return non-empty-list<string>
 	 */
+	public function removeWatch(): array {
+		$messages = [];
+		$tableName = $this->dbPrefix . Watch::TABLE;
+
+		if ($this->connection->tableExists(Watch::TABLE)) {
+			$this->connection->dropTable(Watch::TABLE);
+			$messages[] = 'Dropped ' . $tableName;
+		}
+		return $messages;
+	}
+
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return non-empty-list<string>
+	 */
+	public function createTable(string $tableName, array $columns): array {
+		$messages = [];
+		
+		$tableName = $this->dbPrefix . $tableName;
+
+		if ($this->schema->hasTable($tableName)) {
+			$table = $this->schema->getTable($tableName);
+			$messages[] = 'Validating table ' . $table->getName();
+			$tableCreated = false;
+		} else {
+			$table = $this->schema->createTable($tableName);
+			$tableCreated = true;
+			$messages[] = 'Creating table ' . $table->getName();
+		}
+
+		foreach ($columns as $columnName => $columnDefinition) {
+			if ($table->hasColumn($columnName)) {
+				$column = $table->getColumn($columnName);
+				if ($column->getType()->getName() !== $columnDefinition['type']) {
+					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
+					$column->setType(Type::getType($columnDefinition['type']));
+				}
+				$column->setOptions($columnDefinition['options']);
+
+				// force change to current options definition
+				$table->changeColumn($columnName, $columnDefinition['options']);
+			} else {
+				$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
+				$messages[] = 'Added ' . $table->getName() . ', ' . $columnName . ' (' . $columnDefinition['type'] . ')';
+			}
+		}
+
+		if ($tableCreated) {
+			$table->setPrimaryKey(['id']);
+		}
+		return $messages;
+	}
+
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return non-empty-list<string>
+	 */
 	public function createTables(): array {
 		$messages = [];
 		
 		foreach (TableSchema::TABLES as $tableName => $columns) {
-			$tableName = $this->dbPrefix . $tableName;
-
-			if ($this->schema->hasTable($tableName)) {
-				$table = $this->schema->getTable($tableName);
-				$messages[] = 'Validating table ' . $table->getName();
-				$tableCreated = false;
-			} else {
-				$table = $this->schema->createTable($tableName);
-				$tableCreated = true;
-				$messages[] = 'Creating table ' . $table->getName();
-			}
-
-			foreach ($columns as $columnName => $columnDefinition) {
-				if ($table->hasColumn($columnName)) {
-					$column = $table->getColumn($columnName);
-					if ($column->getType()->getName() !== $columnDefinition['type']) {
-						$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
-						$column->setType(Type::getType($columnDefinition['type']));
-					}
-					$column->setOptions($columnDefinition['options']);
-
-					// force change to current options definition
-					$table->changeColumn($columnName, $columnDefinition['options']);
-				} else {
-					$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
-					$messages[] = 'Added ' . $table->getName() . ', ' . $columnName . ' (' . $columnDefinition['type'] . ')';
-				}
-			}
-
-			if ($tableCreated) {
-				$table->setPrimaryKey(['id']);
-			}
+			$messages = array_merge($messages, $this->createTable($tableName, $columns));
 		}
 		return $messages;
 	}
@@ -215,19 +231,6 @@ class TableManager {
 
 		if (!$dropped) {
 			$messages[] = 'No orphaned tables found';
-		}
-		return $messages;
-	}
-
-	/**
-	 * Remove obsolete tables if they still exist
-	 */
-	public function removeWatch(): array {
-		$tableName = Watch::TABLE;
-		$messages = [];
-		if ($this->connection->tableExists($tableName)) {
-			$this->connection->dropTable($tableName);
-			$messages[] = 'Dropped ' . $this->dbPrefix . $tableName;
 		}
 		return $messages;
 	}

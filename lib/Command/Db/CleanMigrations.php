@@ -23,8 +23,10 @@
 
 namespace OCA\Polls\Command\Db;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\TableManager;
+use OCP\IDBConnection;
 
 class CleanMigrations extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:clean-migrations';
@@ -34,17 +36,21 @@ class CleanMigrations extends Command {
 		'NO data migration will be executed, so make sure you have a backup of your database.',
 	];
 
-	public function __construct(protected TableManager $tableManager) {
+	public function __construct(
+		private TableManager $tableManager,
+		private IDBConnection $connection,
+		private Schema $schema,
+	) {
 		parent::__construct();
 	}
 
 	protected function runCommands(): int {
-		// remove constraints and indices
-		$this->printComment('Remove migration entries from migration table');
-		// secure, that the schema is updated to the current status
-		$this->tableManager->refreshSchema();
+		$this->schema = $this->connection->createSchema();
+		$this->tableManager->setSchema($this->schema);
 		$this->tableManager->removeObsoleteMigrations();
-		$this->tableManager->migrate();
+
+		$this->printComment('Remove migration entries from migration table');
+		$this->connection->migrateToSchema($this->schema);
 		
 		return 0;
 	}

@@ -26,6 +26,7 @@ namespace OCA\Polls\Command\Db;
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Db\TableManager;
+use OCP\IDBConnection;
 
 class Purge extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:purge';
@@ -40,14 +41,16 @@ class Purge extends Command {
 	];
 
 	public function __construct(
-		private IndexManager $indexManager,
+		private IDBConnection $connection,
 		private TableManager $tableManager
 	) {
 		parent::__construct();
 	}
 
 	protected function runCommands(): int {
-		$this->tableManager->purgeTables();
+		$this->tableManager->setConnection($this->connection);
+		$messages = $this->tableManager->purgeTables();
+		$this->printInfo($messages, ' - ');
 		return 0;
 	}
 }

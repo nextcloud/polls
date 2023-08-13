@@ -23,8 +23,10 @@
 
 namespace OCA\Polls\Command\Db;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\IndexManager;
+use OCP\IDBConnection;
 
 class RemoveIndices extends Command {
 	protected string $name = parent::NAME_PREFIX . 'index:remove';
@@ -34,16 +36,22 @@ class RemoveIndices extends Command {
 		'NO data migration will be executed, so make sure you have a backup of your database.',
 	];
 
-	public function __construct(private IndexManager $indexManager) {
+	public function __construct(
+		private IndexManager $indexManager,
+		private IDBConnection $connection,
+		private Schema $schema,
+	) {
 		parent::__construct();
 	}
 
 	protected function runCommands(): int {
 		// remove constraints and indices
+		$this->schema = $this->connection->createSchema();
+		$this->indexManager->setSchema($this->schema);
 		$this->deleteForeignKeyConstraints();
 		$this->deleteGenericIndices();
 		$this->deleteUniqueIndices();
-		$this->indexManager->migrate();
+		$this->connection->migrateToSchema($this->schema);
 		return 0;
 	}
 
@@ -53,10 +61,7 @@ class RemoveIndices extends Command {
 	private function deleteForeignKeyConstraints(): void {
 		$this->printComment('Remove foreign key constraints and generic indices');
 		$messages = $this->indexManager->removeAllForeignKeyConstraints();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' ' . $message);
-		}
+		$this->printInfo($messages, ' - ');
 	}
 
 	/**
@@ -65,10 +70,7 @@ class RemoveIndices extends Command {
 	private function deleteGenericIndices(): void {
 		$this->printComment('Remove generic indices');
 		$messages = $this->indexManager->removeAllGenericIndices();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' ' . $message);
-		}
+		$this->printInfo($messages, ' - ');
 	}
 
 	/**
@@ -77,9 +79,5 @@ class RemoveIndices extends Command {
 	private function deleteUniqueIndices(): void {
 		$this->printComment('Remove unique indices');
 		$messages = $this->indexManager->removeAllUniqueIndices();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' ' . $message);
-		}
-	}
+		$this->printInfo($messages, ' - ');	}
 }

@@ -23,11 +23,13 @@
 
 namespace OCA\Polls\Command\Db;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Migration\TableSchema;
+use OCP\IDBConnection;
 
 class ResetWatch extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:reset-watch';
@@ -39,55 +41,32 @@ class ResetWatch extends Command {
 
 	public function __construct(
 		private IndexManager $indexManager,
-		private TableManager $tableManager
+		private TableManager $tableManager,
+		private IDBConnection $connection,
+		private Schema $schema,
 	) {
 		parent::__construct();
 	}
 
 	protected function runCommands(): int {
-		$this->resetWatch();
-		$this->tableManager->migrate();
-		
-		$this->indexManager->refreshSchema();
-		$this->createIndex();
-		$this->indexManager->migrate();
+		$tableName = Watch::TABLE;
+		$indexValues = TableSchema::UNIQUE_INDICES[$tableName];
+		$columns = TableSchema::TABLES[$tableName];
 
+		$messages = $this->tableManager->removeWatch();
+		$this->printInfo($messages, ' - ');
+
+		$this->schema = $this->connection->createSchema();
+		$this->indexManager->setSchema($this->schema);
+		$this->tableManager->setSchema($this->schema);
+
+		$messages = $this->tableManager->createTable($tableName, $columns);
+		$messages[] = $this->indexManager->createIndex($tableName, $indexValues['name'], $indexValues['columns'], $indexValues['unique']);
+
+		$this->connection->migrateToSchema($this->schema);
+
+		$this->printInfo($messages, ' - ');
 		return 0;
 	}
 
-	/**
-	 * Iterate over tables and make sure, the are created or updated
-	 * according to the schema
-	 */
-	private function resetWatch(): void {
-		$messages = [];
-
-		$this->printComment('- Reset Watch table');
-		// Remove all indices
-		// drop and add watch with current schema
-		$messages = array_merge($messages, $this->tableManager->resetWatch());
-
-		// add indices again
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
-	}
-	/**
-	 * Iterate over tables and make sure, the are created or updated
-	 * according to the schema
-	 */
-	private function createIndex(): void {
-		$tableName = Watch::TABLE;
-		$values = TableSchema::UNIQUE_INDICES[$tableName];
-		$messages = [];
-
-		$this->printComment('- Create watch index');
-		// Remove all indices
-		$messages[] = $this->indexManager->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
-		
-		// add indices again
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
-	}
 }

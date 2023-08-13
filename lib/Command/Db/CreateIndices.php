@@ -23,8 +23,10 @@
 
 namespace OCA\Polls\Command\Db;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Command\Command;
 use OCA\Polls\Db\IndexManager;
+use OCP\IDBConnection;
 
 class CreateIndices extends Command {
 	protected string $name = parent::NAME_PREFIX . 'index:create';
@@ -34,17 +36,22 @@ class CreateIndices extends Command {
 		'NO data migration will be executed, so make sure you have a backup of your database.',
 	];
 
-	public function __construct(private IndexManager $indexManager) {
+	public function __construct(
+		private IndexManager $indexManager,
+		private IDBConnection $connection,
+		private Schema $schema,
+	) {
 		parent::__construct();
 	}
 
 	protected function runCommands(): int {
 		// create indices and constraints
 		// secure, that the schema is updated to the current status
-		$this->indexManager->refreshSchema();
+		$this->schema = $this->connection->createSchema();
+		$this->indexManager->setSchema($this->schema);
 		$this->addForeignKeyConstraints();
 		$this->addIndices();
-		$this->indexManager->migrate();
+		$this->connection->migrateToSchema($this->schema);
 
 		return 0;
 	}
@@ -55,10 +62,7 @@ class CreateIndices extends Command {
 	private function addForeignKeyConstraints(): void {
 		$this->printComment('Add foreign key constraints');
 		$messages = $this->indexManager->createForeignKeyConstraints();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' ' . $message);
-		}
+		$this->printInfo($messages, ' - ');
 	}
 
 	/**
@@ -67,8 +71,6 @@ class CreateIndices extends Command {
 	private function addIndices(): void {
 		$this->printComment('Add indices');
 		$messages = $this->indexManager->createIndices();
-		foreach ($messages as $message) {
-			$this->printInfo(' ' . $message);
-		}
+		$this->printInfo($messages, ' - ');
 	}
 }
