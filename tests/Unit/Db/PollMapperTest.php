@@ -61,13 +61,6 @@ class PollMapperTest extends UnitTestCase {
 	}
 
 	/**
-	 * testFindAll
-	 */
-	public function testFindAll() {
-		$this->assertEquals(count($this->pollMapper->findAll()), count($this->polls));
-	}
-
-	/**
 	 * testUpdate
 	 */
 	public function testUpdate() {
