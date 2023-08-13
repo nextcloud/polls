@@ -30,7 +30,6 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Service\UserService;
-use OCP\AppFramework\Db\Entity;
 use OCP\EventDispatcher\Event;
 use OCP\IUserSession;
 
