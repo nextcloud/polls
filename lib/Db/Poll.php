@@ -26,7 +26,7 @@
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
 use OCP\IURLGenerator;

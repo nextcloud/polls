@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;

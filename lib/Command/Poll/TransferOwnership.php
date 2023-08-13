@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Command\Poll;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Service\PollService;
 use OCP\IUser;
 use OCP\IUserManager;

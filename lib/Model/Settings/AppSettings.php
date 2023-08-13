@@ -24,7 +24,7 @@
 namespace OCA\Polls\Model\Settings;
 
 use JsonSerializable;
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Group;
 use OCP\IConfig;

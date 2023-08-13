@@ -25,6 +25,7 @@
 
 namespace OCA\Polls\AppInfo;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Dashboard\PollWidget;
 use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\OptionEvent;

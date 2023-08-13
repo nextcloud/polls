@@ -28,7 +28,7 @@ use League\CommonMark\Environment\Environment;
 use League\CommonMark\Extension\CommonMark\CommonMarkCoreExtension;
 use League\CommonMark\Extension\Table\TableExtension;
 use League\CommonMark\MarkdownConverter;
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
@@ -43,6 +43,7 @@ use OCP\Mail\IMailer;
 use Psr\Log\LoggerInterface;
 
 abstract class MailBase {
+	/** @var string */
 	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Mail';
 
 	protected AppSettings $appSettings;

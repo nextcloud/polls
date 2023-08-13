@@ -24,7 +24,7 @@
 
 namespace OCA\Polls\Model\Mail;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Subscription;

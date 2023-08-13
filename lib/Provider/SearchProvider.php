@@ -26,7 +26,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Provider;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Search\PollsSearchResultEntry;
 use OCA\Polls\Service\PollService;

@@ -24,7 +24,7 @@
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Service\NotificationService;
 use OCP\AppFramework\Controller;
 

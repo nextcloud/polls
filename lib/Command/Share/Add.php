@@ -24,7 +24,7 @@
 namespace OCA\Polls\Command\Share;
 
 use OC\Core\Command\Base;
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Model\Group\Group;

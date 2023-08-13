@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;

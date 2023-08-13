@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Event\BaseEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -90,10 +90,10 @@ class ActivityService {
 	private function createActivityEvent(): void {
 		$this->activityEvent = $this->activityManager->generateEvent();
 		$this->activityEvent->setApp(AppConstants::APP_ID)
-			->setType($this->baseEvent->getActivityType())
+			->setType($this->baseEvent->getActivityType() ?? '')
 			->setAuthor($this->baseEvent->getActor())
-			->setObject($this->baseEvent->getActivityObjectType(), $this->baseEvent->getActivityObjectId())
-			->setSubject($this->baseEvent->getActivityType(), $this->baseEvent->getActivitySubjectParams())
+			->setObject($this->baseEvent->getActivityObjectType() ?? '', $this->baseEvent->getActivityObjectId())
+			->setSubject($this->baseEvent->getActivityType() ?? '', $this->baseEvent->getActivitySubjectParams())
 			->setTimestamp(time());
 	}
 

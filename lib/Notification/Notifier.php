@@ -24,7 +24,7 @@
 
 namespace OCA\Polls\Notification;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\PollMapper;
 
 use OCA\Polls\Service\NotificationService;

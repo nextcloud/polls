@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Db;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\IDBConnection;
 use OCP\ISession;

@@ -26,7 +26,7 @@ namespace OCA\Polls\Db;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Migration\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IConfig;

@@ -22,7 +22,7 @@
  *
  */
 
-namespace OCA\Polls\AppInfo;
+namespace OCA\Polls;
 
 abstract class AppConstants {
 	/** @var string */

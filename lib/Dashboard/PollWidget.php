@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Dashboard;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCP\Dashboard\IWidget;
 use OCP\IL10N;
 use OCP\IURLGenerator;

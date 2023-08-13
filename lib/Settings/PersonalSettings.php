@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Settings;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 

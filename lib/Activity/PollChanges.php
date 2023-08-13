@@ -22,7 +22,7 @@
  */
 namespace OCA\Polls\Activity;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCP\Activity\IFilter;
 use OCP\IL10N;
 use OCP\IURLGenerator;

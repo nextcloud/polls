@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Provider;
 
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Service\ActivityService;

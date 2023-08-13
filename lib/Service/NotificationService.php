@@ -24,7 +24,7 @@
 namespace OCA\Polls\Service;
 
 use DateTime;
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Notification\Notifier;
 use OCP\Notification\IManager;
 

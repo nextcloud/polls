@@ -25,7 +25,7 @@
 namespace OCA\Polls\Model\Mail;
 
 use DateTime;
-use OCA\Polls\AppInfo\AppConstants;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Poll;
 
 class ReminderMail extends MailBase {
