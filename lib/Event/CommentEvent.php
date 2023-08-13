@@ -40,8 +40,4 @@ abstract class CommentEvent extends BaseEvent {
 			'name' => $comment->getComment(),
 		];
 	}
-
-	public function getComment(): Comment {
-		return $this->comment;
-	}
 }

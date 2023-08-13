@@ -30,7 +30,6 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Service\UserService;
-use OCP\AppFramework\Db\Entity;
 use OCP\EventDispatcher\Event;
 use OCP\IUserSession;
 
@@ -59,16 +58,8 @@ abstract class BaseEvent extends Event {
 		];
 	}
 
-	public function getEventObject(): Entity {
-		return $this->eventObject;
-	}
-
 	public function getPollId(): int {
 		return $this->eventObject->getPollId();
-	}
-
-	public function getPollUrl(): string {
-		return $this->poll->getVoteUrl();
 	}
 
 	public function getPollTitle(): string {
@@ -77,10 +68,6 @@ abstract class BaseEvent extends Event {
 
 	public function getPollOwner(): string {
 		return $this->poll->getOwner();
-	}
-
-	public function getPoll(): Poll {
-		return $this->poll;
 	}
 
 	public function getActor(): string {

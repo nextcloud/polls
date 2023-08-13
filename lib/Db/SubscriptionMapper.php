@@ -44,21 +44,6 @@ class SubscriptionMapper extends QBMapper {
 	 * @return Subscription[]
 	 * @psalm-return array<array-key, Subscription>
 	 */
-	public function findAll(): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-			 ->from($this->getTableName());
-
-		return $this->findEntities($qb);
-	}
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
-	 * @return Subscription[]
-	 * @psalm-return array<array-key, Subscription>
-	 */
 	public function findAllByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 

@@ -7,6 +7,8 @@
     xsi:schemaLocation="https://getpsalm.org/schema/config"
     errorBaseline="psalm-baseline.xml"
     cacheDirectory=".psalm.cache"
+    findUnusedBaselineEntry="true"
+    findUnusedCode="false"
 >
     <projectFiles>
         <directory name="lib" />
@@ -18,6 +20,11 @@
         <directory name="vendor" />
     </extraFiles>
 	<issueHandlers>
+        <LessSpecificReturnStatement errorLevel="error"/>
+        <LessSpecificReturnType errorLevel="error"/>
+        <LessSpecificImplementedReturnType errorLevel="error"/>
+        <MoreSpecificReturnType errorLevel="error"/>
+        <PropertyNotSetInConstructor errorLevel="suppress"/>
 		<UndefinedClass>
 			<errorLevel type="suppress">
 				<referencedClass name="OC" />

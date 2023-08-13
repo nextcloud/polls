@@ -43,8 +43,4 @@ abstract class OptionEvent extends BaseEvent {
 			'name' => $this->option->getPollOptionText(),
 		];
 	}
-
-	public function getOption(): Option {
-		return $this->option;
-	}
 }

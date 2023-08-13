@@ -46,21 +46,6 @@ class ShareMapper extends QBMapper {
 	 * @return Share[]
 	 * @psalm-return array<array-key, Share>
 	 */
-	public function findAll(): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-		   ->from($this->getTableName());
-
-		return $this->findEntities($qb);
-	}
-
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Share[]
-	 * @psalm-return array<array-key, Share>
-	 */
 	public function findByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
@@ -145,25 +130,6 @@ class ShareMapper extends QBMapper {
 		}
 	}
 
-	public function deleteByPoll(int $pollId): void {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->delete($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-		   );
-
-		$qb->executeStatement();
-	}
-
-	public function deleteByUserId(string $userId): void {
-		$query = $this->db->getQueryBuilder();
-		$query->delete($this->getTableName())
-			->where('user_id = :userId')
-			->setParameter('userId', $userId);
-		$query->executeStatement();
-	}
-
 	/**
 	 * @return void
 	 */
@@ -175,19 +141,5 @@ class ShareMapper extends QBMapper {
 			->setParameter('id', $id)
 			->setParameter('type', $type);
 		$query->executeStatement();
-	}
-
-	/**
-	 * @return void
-	 */
-	public function remove(int $shareId): void {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->delete($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('id', $qb->createNamedParameter($shareId, IQueryBuilder::PARAM_INT))
-		   );
-
-		$qb->executeStatement();
 	}
 }

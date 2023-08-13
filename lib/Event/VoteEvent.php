@@ -38,8 +38,4 @@ abstract class VoteEvent extends BaseEvent {
 		$this->activityObjectType = 'poll';
 		$this->vote = $vote;
 	}
-
-	public function getVote(): Vote {
-		return $this->vote;
-	}
 }

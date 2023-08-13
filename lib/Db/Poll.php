@@ -211,10 +211,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	public function getUri(): string {
-		return self::URI_PREFIX . $this->getId();
-	}
-
 	public function getVoteUrl() : string {
 		return $this->urlGenerator->linkToRouteAbsolute(
 			AppConstants::APP_ID . '.page.vote',
