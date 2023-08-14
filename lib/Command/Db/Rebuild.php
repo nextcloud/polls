@@ -61,10 +61,12 @@ class Rebuild extends Command {
 		$this->removeObsoleteColumns();
 
 		$this->connection->migrateToSchema($this->schema);
-
+		
 		$this->printComment('Step 3. Create or update tables to current shema');
 		$this->createOrUpdateSchema();
 		
+		$this->connection->migrateToSchema($this->schema);
+
 		$this->printComment('Step 4. set hashes for votes and options');
 		$this->migrateOptionsToHash();
 		
