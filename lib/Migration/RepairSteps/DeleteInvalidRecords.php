@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Migration\RepairSteps;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\WatchMapper;
@@ -39,7 +40,8 @@ class DeleteInvalidRecords implements IRepairStep {
 	public function __construct(
 		private IDBConnection $connection,
 		private WatchMapper $watchMapper,
-		private TableManager $tableManager
+		private TableManager $tableManager,
+		private Schema $schema,
 	) {
 	}
 
@@ -49,11 +51,13 @@ class DeleteInvalidRecords implements IRepairStep {
 
 	public function run(IOutput $output):void {
 		if ($this->connection->tableExists(Poll::TABLE)) {
-			// secure, that the schema is updated to the current status
-			$this->tableManager->refreshSchema();
+			$this->schema = $this->connection->createSchema();
+			$this->tableManager->setSchema($this->schema);
 
 			$this->tableManager->removeOrphaned();
 			$this->tableManager->deleteAllDuplicates();
+
+			$this->connection->migrateToSchema($this->schema);
 
 			$this->watchMapper->deleteOldEntries(time());
 		}

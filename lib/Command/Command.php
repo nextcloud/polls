@@ -91,15 +91,27 @@ class Command extends \Symfony\Component\Console\Command\Command {
 		$this->input = $input;
 	}
 
-	protected function printInfo(string $message): void {
-		$this->output->writeln('<info>' . $message . '</info>');
-	}
-
 	protected function printNewLine(): void {
 		$this->output->writeln('');
 	}
 
-	protected function printComment(string $message): void {
-		$this->output->writeln('<comment>' . $message. '</comment>');
+	protected function printInfo(string|array $messages, string $prefix = ''): void {
+		if (is_array($messages)) {
+			foreach ($messages as $message) {
+				$this->output->writeln('<info>' . $prefix . $message . '</info>');
+			}
+			return;
+		}
+		$this->output->writeln('<info>' . $prefix . $messages . '</info>');
+	}
+
+	protected function printComment(string|array $messages, string $prefix = ''): void {
+		if (is_array($messages)) {
+			foreach ($messages as $message) {
+				$this->output->writeln('<comment>' . $prefix . $message . '</comment>');
+			}
+			return;
+		}
+		$this->output->writeln('<comment>' . $prefix . $messages . '</comment>');
 	}
 }

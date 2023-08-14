@@ -23,8 +23,10 @@
 
 namespace OCA\Polls\Migration;
 
+use Doctrine\DBAL\Types\Type;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\TableManager;
+use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\SimpleMigrationStep;
@@ -36,9 +38,11 @@ use OCP\Migration\SimpleMigrationStep;
  * Version: jj = major version, mm = minor, pp = patch
  */
 class Version050100Date20230515083001 extends SimpleMigrationStep {
+	private ISchemaWrapper $schema;
+	
 	public function __construct(
 		private TableManager $tableManager,
-		private IDBConnection $db,
+		private IDBConnection $connection,
 	) {
 	}
 
@@ -46,15 +50,14 @@ class Version050100Date20230515083001 extends SimpleMigrationStep {
 	 * $schemaClosure The `\Closure` returns a `ISchemaWrapper`
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
-		// Create tables, as defined in TableSchema or fix column definitions
-		$messages = $this->tableManager->createTables();
-		$this->tableManager->migrate();
+		$this->schema = $schemaClosure();
+		$messages = $this->createTables();
 
 		foreach ($messages as $message) {
 			$output->info('Polls - ' . $message);
 		};
 
-		return null;
+		return $this->schema;
 	}
 
 	/**
@@ -62,10 +65,69 @@ class Version050100Date20230515083001 extends SimpleMigrationStep {
 	 */
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$now = time();
-		$query = $this->db->getQueryBuilder();
+		$query = $this->connection->getQueryBuilder();
 		$query->update(Poll::TABLE)
 			->set('last_interaction', $query->createNamedParameter($now))
 			->where($query->expr()->eq('last_interaction', $query->createNamedParameter(0)));
 		$query->executeStatement();
 	}
+
+
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return non-empty-list<string>
+	 */
+	public function createTable(string $tableName, array $columns): array {
+		$messages = [];
+
+		if ($this->schema->hasTable($tableName)) {
+			$table = $this->schema->getTable($tableName);
+			$messages[] = 'Validating table ' . $table->getName();
+			$tableCreated = false;
+		} else {
+			$table = $this->schema->createTable($tableName);
+			$tableCreated = true;
+			$messages[] = 'Creating table ' . $table->getName();
+		}
+
+		foreach ($columns as $columnName => $columnDefinition) {
+			if ($table->hasColumn($columnName)) {
+				$column = $table->getColumn($columnName);
+				if ($column->getType()->getName() !== $columnDefinition['type']) {
+					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
+					$column->setType(Type::getType($columnDefinition['type']));
+				}
+				$column->setOptions($columnDefinition['options']);
+
+				// force change to current options definition
+				$table->changeColumn($columnName, $columnDefinition['options']);
+			} else {
+				$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
+				$messages[] = 'Added ' . $table->getName() . ', ' . $columnName . ' (' . $columnDefinition['type'] . ')';
+			}
+		}
+
+		if ($tableCreated) {
+			$table->setPrimaryKey(['id']);
+		}
+		return $messages;
+	}
+
+	/**
+	 * @return string[]
+	 *
+	 * @psalm-return non-empty-list<string>
+	 */
+	public function createTables(): array {
+		$messages = [];
+
+		foreach (TableSchema::TABLES as $tableName => $columns) {
+			$messages = array_merge($messages, $this->createTable($tableName, $columns));
+		}
+		return $messages;
+	}
+
+
+
 }

@@ -23,7 +23,9 @@
 
 namespace OCA\Polls\Migration\RepairSteps;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\TableManager;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
@@ -34,7 +36,9 @@ use OCP\Migration\IRepairStep;
  */
 class RemoveObsoleteMigrations implements IRepairStep {
 	public function __construct(
-		private TableManager $tableManager
+		private TableManager $tableManager,
+		private IDBConnection $connection,
+		private Schema $schema,
 	) {
 	}
 
@@ -49,13 +53,12 @@ class RemoveObsoleteMigrations implements IRepairStep {
 	 * @inheritdoc
 	 */
 	public function run(IOutput $output): void {
-		// secure, that the schema is updated to the current status
-		$this->tableManager->refreshSchema();
+		$this->tableManager->setConnection($this->connection);
+
 		$messages = $this->tableManager->removeObsoleteMigrations();
 		foreach ($messages as $message) {
 			$output->info($message);
 		}
 
-		$this->tableManager->migrate();
 	}
 }

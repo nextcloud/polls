@@ -24,13 +24,17 @@
 
 namespace OCA\Polls\Migration\RepairSteps;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\IndexManager;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
 class CreateIndices implements IRepairStep {
 	public function __construct(
 		private IndexManager $indexManager,
+		private IDBConnection $connection,
+		private Schema $schema,
 	) {
 	}
 
@@ -41,11 +45,13 @@ class CreateIndices implements IRepairStep {
 	public function run(IOutput $output): void {
 		$messages = [];
 		// secure, that the schema is updated to the current status
-		$this->indexManager->refreshSchema();
+		$this->schema = $this->connection->createSchema();
+		$this->indexManager->setSchema($this->schema);
 
 		$messages = array_merge($messages, $this->indexManager->createForeignKeyConstraints());
 		$messages = array_merge($messages, $this->indexManager->createIndices());
-		$this->indexManager->migrate();
+		$this->connection->migrateToSchema($this->schema);
+
 		foreach ($messages as $message) {
 			$output->info($message);
 		}

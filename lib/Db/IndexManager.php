@@ -30,26 +30,19 @@ use OCP\IConfig;
 use OCP\IDBConnection;
 
 class IndexManager {
-	private Schema $schema;
+	
 	private string $dbPrefix;
 	
 	public function __construct(
 		private IConfig $config,
-		protected IDBConnection $connection
+		private IDBConnection $connection,
+		private Schema $schema,
 	) {
-		$this->schema = $this->connection->createSchema();
 		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
 
-	/**
-	 * execute the migration
-	 */
-	public function migrate(): void {
-		$this->connection->migrateToSchema($this->schema);
-	}
-
-	public function refreshSchema(): void {
-		$this->schema = $this->connection->createSchema();
+	public function setSchema(Schema &$schema): void {
+		$this->schema = $schema;
 	}
 
 	/**

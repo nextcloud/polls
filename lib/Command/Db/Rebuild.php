@@ -23,9 +23,11 @@
 
 namespace OCA\Polls\Command\Db;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
+use OCP\IDBConnection;
 
 class Rebuild extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:rebuild';
@@ -38,48 +40,44 @@ class Rebuild extends Command {
 	public function __construct(
 		private TableManager $tableManager,
 		private IndexManager $indexManager,
+		private IDBConnection $connection,
+		private Schema $schema,
 	) {
 		parent::__construct();
 	}
 
 	protected function runCommands(): int {
-		// remove constraints and indices
+		$this->schema = $this->connection->createSchema();
+		$this->indexManager->setSchema($this->schema);
+		$this->tableManager->setSchema($this->schema);
+
 		$this->printComment('Step 1. Remove all indices and foreign key constraints');
-		// secure, that the schema is updated to the current status
-		$this->indexManager->refreshSchema();
 		$this->deleteForeignKeyConstraints();
 		$this->deleteGenericIndices();
 		$this->deleteUniqueIndices();
-		$this->indexManager->migrate();
 
-		// remove old tables and columns
 		$this->printComment('Step 2. Remove all orphaned tables and columns');
-		// secure, that the schema is updated to the current status
-		$this->tableManager->refreshSchema();
 		$this->removeObsoleteTables();
 		$this->removeObsoleteColumns();
-		$this->tableManager->migrate();
 
-		// validate and fix/create current table layout
+		$this->connection->migrateToSchema($this->schema);
+		
 		$this->printComment('Step 3. Create or update tables to current shema');
 		$this->createOrUpdateSchema();
-		$this->tableManager->migrate();
 		
-		// validate and fix/create current table layout
+		$this->connection->migrateToSchema($this->schema);
+
 		$this->printComment('Step 4. set hashes for votes and options');
 		$this->migrateOptionsToHash();
 		
-		// Remove orphaned records and duplicates
 		$this->printComment('Step 5. Remove invalid records (orphaned and duplicates)');
 		$this->cleanTables();
 		
-		// recreate indices and constraints
 		$this->printComment('Step 6. Recreate indices and foreign key constraints');
-		// secure, that the schema is updated to the current status
-		$this->indexManager->refreshSchema();
 		$this->addForeignKeyConstraints();
 		$this->addIndices();
-		$this->indexManager->migrate();
+
+		$this->connection->migrateToSchema($this->schema);
 		
 		return 0;
 	}
@@ -88,23 +86,18 @@ class Rebuild extends Command {
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
 	private function addForeignKeyConstraints(): void {
-		$this->printComment('- Add foreign key constraints');
+		$this->printComment(' - Add foreign key constraints');
 		$messages = $this->indexManager->createForeignKeyConstraints();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	/**
 	 * Create index for $table
 	 */
 	private function addIndices(): void {
-		$this->printComment('- Add indices');
+		$this->printComment(' - Add indices');
 		$messages = $this->indexManager->createIndices();
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	/**
@@ -112,42 +105,33 @@ class Rebuild extends Command {
 	 * according to the schema
 	 */
 	private function createOrUpdateSchema(): void {
-		$this->printComment('- Set db structure');
+		$this->printComment(' - Set db structure');
 		$messages = $this->tableManager->createTables();
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	/**
 	 * Add or update hash for votes and options
 	 */
 	private function migrateOptionsToHash(): void {
-		$this->printComment('- add or update hashes');
+		$this->printComment(' - Add or update hashes');
 		$messages = $this->tableManager->migrateOptionsToHash();
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	private function removeObsoleteColumns(): void {
-		$this->printComment('- Drop orphaned columns');
+		$this->printComment(' - Drop orphaned columns');
 		$messages = $this->tableManager->removeObsoleteColumns();
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	/**
 	 * Remove obsolete tables if they still exist
 	 */
 	private function removeObsoleteTables(): void {
-		$this->printComment('  Drop orphaned tables');
+		$this->printComment(' - Drop orphaned tables');
 		$messages = $this->tableManager->removeObsoleteTables();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	/**
@@ -155,57 +139,42 @@ class Rebuild extends Command {
 	 */
 	public function resetLastInteraction(): void {
 		$messages = $this->tableManager->resetLastInteraction();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	/**
 	 * Remove obsolete tables if they still exist
 	 */
 	private function cleanTables(): void {
-		$this->printComment('  Remove orphaned records');
+		$this->printComment(' - Remove orphaned records');
 		$this->tableManager->removeOrphaned();
 
-		$this->printComment('  Remove duplicates');
+		$this->printComment(' - Remove duplicates');
 		$messages = $this->tableManager->deleteAllDuplicates();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	private function deleteForeignKeyConstraints(): void {
-		$this->printComment('- Remove foreign key constraints');
+		$this->printComment(' - Remove foreign key constraints');
 		$messages = $this->indexManager->removeAllForeignKeyConstraints();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
 	private function deleteGenericIndices(): void {
-		$this->printComment('- Remove generic indices');
+		$this->printComment(' - Remove generic indices');
 		$messages = $this->indexManager->removeAllGenericIndices();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 
 	/**
 	 * add an on delete fk contraint to all tables referencing the main polls table
 	 */
 	private function deleteUniqueIndices(): void {
-		$this->printComment('- Remove unique indices');
+		$this->printComment(' - Remove unique indices');
 		$messages = $this->indexManager->removeAllUniqueIndices();
-
-		foreach ($messages as $message) {
-			$this->printInfo(' - ' . $message);
-		}
+		$this->printInfo($messages, '   ');
 	}
 }

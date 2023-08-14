@@ -23,7 +23,9 @@
 
 namespace OCA\Polls\Migration\RepairSteps;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\IndexManager;
+use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
@@ -34,7 +36,9 @@ use OCP\Migration\IRepairStep;
  */
 class RemoveIndices implements IRepairStep {
 	public function __construct(
-		private IndexManager $indexManager
+		private IndexManager $indexManager,
+		private IDBConnection $connection,
+		private Schema $schema,
 	) {
 	}
 
@@ -49,24 +53,19 @@ class RemoveIndices implements IRepairStep {
 	 * @inheritdoc
 	 */
 	public function run(IOutput $output): void {
-		// secure, that the schema is updated to the current status
-		$this->indexManager->refreshSchema();
+		$this->schema = $this->connection->createSchema();
+		$this->indexManager->setSchema($this->schema);
+
 		$messages = $this->indexManager->removeAllForeignKeyConstraints();
 		foreach ($messages as $message) {
 			$output->info($message);
 		}
-
-		// $messages = $this->indexManager->removeAllGenericIndices();
-		// foreach ($messages as $message) {
-		// 	$output->info($message);
-		// }
 
 		$messages = $this->indexManager->removeAllUniqueIndices();
 		foreach ($messages as $message) {
 			$output->info($message);
 		}
 
-		$this->indexManager->migrate();
-		$this->indexManager->refreshSchema();
+		$this->connection->migrateToSchema($this->schema);
 	}
 }
