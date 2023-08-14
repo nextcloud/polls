@@ -1,6 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.3.0] - tbd
+### Fixes
+ - Fix API calls
+### Changes
+ - Refactorings and code maintenance
+ - dependency updates
 ## [5.2.0] - 2023-07-15
 ### Fixes
  - Fix date shifting and sequences when crossing daylight saving change
