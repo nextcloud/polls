@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Migration;
 
+use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\TableManager;
 use OCP\IDBConnection;
@@ -38,7 +39,8 @@ use OCP\Migration\SimpleMigrationStep;
 class Version050100Date20230515083001 extends SimpleMigrationStep {
 	public function __construct(
 		private TableManager $tableManager,
-		private IDBConnection $db,
+		private IDBConnection $connection,
+		private Schema $schema,
 	) {
 	}
 
@@ -47,8 +49,12 @@ class Version050100Date20230515083001 extends SimpleMigrationStep {
 	 */
 	public function changeSchema(IOutput $output, \Closure $schemaClosure, array $options) {
 		// Create tables, as defined in TableSchema or fix column definitions
+		$this->schema = $this->connection->createSchema();
+		$this->tableManager->setSchema($this->schema);
+
 		$messages = $this->tableManager->createTables();
-		$this->tableManager->migrate();
+
+		$this->connection->migrateToSchema($this->schema);
 
 		foreach ($messages as $message) {
 			$output->info('Polls - ' . $message);
@@ -62,7 +68,7 @@ class Version050100Date20230515083001 extends SimpleMigrationStep {
 	 */
 	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
 		$now = time();
-		$query = $this->db->getQueryBuilder();
+		$query = $this->connection->getQueryBuilder();
 		$query->update(Poll::TABLE)
 			->set('last_interaction', $query->createNamedParameter($now))
 			->where($query->expr()->eq('last_interaction', $query->createNamedParameter(0)));
