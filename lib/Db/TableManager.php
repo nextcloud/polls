@@ -142,8 +142,6 @@ class TableManager {
 
 	/**
 	 * @return string[]
-	 *
-	 * @psalm-return non-empty-list<string>
 	 */
 	public function removeWatch(): array {
 		$messages = [];

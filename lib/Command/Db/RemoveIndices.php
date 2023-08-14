@@ -79,5 +79,6 @@ class RemoveIndices extends Command {
 	private function deleteUniqueIndices(): void {
 		$this->printComment('Remove unique indices');
 		$messages = $this->indexManager->removeAllUniqueIndices();
-		$this->printInfo($messages, ' - ');	}
+		$this->printInfo($messages, ' - ');
+	}
 }

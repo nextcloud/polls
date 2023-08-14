@@ -24,7 +24,6 @@
 namespace OCA\Polls\Command\Db;
 
 use OCA\Polls\Command\Command;
-use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Db\TableManager;
 use OCP\IDBConnection;
 
