@@ -43,7 +43,7 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 
 class PublicController extends BaseController {
-	public function __construct(
+		public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
@@ -64,9 +64,8 @@ class PublicController extends BaseController {
 	}
 
 	/**
-	 * @PublicPage
-	 * @NoAdminRequired
 	 * @NoCSRFRequired
+	 * @PublicPage
 	 * @return TemplateResponse|PublicTemplateResponse
 	 */
 	public function votePage(string $token) {
@@ -82,7 +81,6 @@ class PublicController extends BaseController {
 	/**
 	 * get complete poll via token
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function getPoll(string $token): JSONResponse {
 		$this->acl->setToken($token);
@@ -96,7 +94,6 @@ class PublicController extends BaseController {
 	/**
 	 * Watch poll for updates
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function watchPoll(string $token, ?int $offset): JSONResponse {
 		return $this->responseLong(fn () => [
@@ -107,7 +104,6 @@ class PublicController extends BaseController {
 	/**
 	 * Get share
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function getShare(string $token): JSONResponse {
 		$validateShareType = true;
@@ -118,7 +114,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Get votes
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function getVotes(string $token): JSONResponse {
@@ -131,7 +126,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Delete user's votes
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function deleteUser(string $token): JSONResponse {
@@ -142,7 +136,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Get options
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function getOptions(string $token): JSONResponse {
@@ -153,7 +146,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Add options
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
@@ -169,7 +161,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Delete option
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function deleteOption(string $token, int $optionId): JSONResponse {
@@ -181,7 +172,6 @@ class PublicController extends BaseController {
 	/**
 	 * Set Vote
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function setVote(int $optionId, string $setTo, string $token): JSONResponse {
 		return $this->response(fn () => [
@@ -191,7 +181,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Get Comments
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function getComments(string $token): JSONResponse {
@@ -202,7 +191,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function addComment(string $token, string $message): JSONResponse {
@@ -213,7 +201,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Delete Comment
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function deleteComment(int $commentId, string $token): JSONResponse {
@@ -226,7 +213,6 @@ class PublicController extends BaseController {
 	/**
 	 * Get subscription status
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function getSubscription(string $token): JSONResponse {
 		return $this->response(fn () => [
@@ -237,7 +223,6 @@ class PublicController extends BaseController {
 	/**
 	 * subscribe
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function subscribe(string $token): JSONResponse {
 		return $this->response(fn () => [
@@ -248,7 +233,6 @@ class PublicController extends BaseController {
 	/**
 	 * Unsubscribe
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function unsubscribe(string $token): JSONResponse {
 		return $this->response(fn () => [
@@ -260,7 +244,6 @@ class PublicController extends BaseController {
 	 * Validate it the user name is reservrd
 	 * return false, if this username already exists as a user or as
 	 * a participant of the poll
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function validatePublicUsername(string $userName, string $token): JSONResponse {
@@ -271,7 +254,6 @@ class PublicController extends BaseController {
 
 	/**
 	 * Validate email address (simple validation)
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function validateEmailAddress(string $emailAddress): JSONResponse {
@@ -283,7 +265,6 @@ class PublicController extends BaseController {
 	/**
 	 * Change displayName
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function setDisplayName(string $token, string $displayName): JSONResponse {
 		return $this->response(fn () => [
@@ -295,7 +276,6 @@ class PublicController extends BaseController {
 	/**
 	 * Set EmailAddress
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
@@ -306,7 +286,6 @@ class PublicController extends BaseController {
 	/**
 	 * Set EmailAddress
 	 * @PublicPage
-	 * @NoAdminRequired
 	 */
 	public function deleteEmailAddress(string $token): JSONResponse {
 		return $this->response(fn () => [
@@ -317,7 +296,6 @@ class PublicController extends BaseController {
 	/**
 	 * Create a personal share from a public share
 	 * or update an email share with the username
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
@@ -329,7 +307,6 @@ class PublicController extends BaseController {
 	/**
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
-	 * @NoAdminRequired
 	 * @PublicPage
 	 */
 	public function resendInvitation(string $token): JSONResponse {
