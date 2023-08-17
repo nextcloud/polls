@@ -43,7 +43,7 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 
 class PublicController extends BaseController {
-		public function __construct(
+	public function __construct(
 		string $appName,
 		IRequest $request,
 		ISession $session,
