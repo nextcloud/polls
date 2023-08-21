@@ -47,9 +47,14 @@ const mutations = {
 		state.list.push(payload)
 	},
 
-	update(state, payload) {
+	updateShare(state, payload) {
 		const foundIndex = state.list.findIndex((share) => share.id === payload.share.id)
 		Object.assign(state.list[foundIndex], payload.share)
+	},
+
+	setShareProperty(state, payload) {
+		const foundIndex = state.list.findIndex((share) => share.id === payload.id)
+		Object.assign(state.list[foundIndex], payload)
 	},
 
 }
@@ -113,6 +118,18 @@ const actions = {
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error changing email register setting', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
+		}
+	},
+
+	async writeLabel(context, payload) {
+		try {
+			await SharesAPI.writeLabel(payload.token, payload.displayName)
+			// context.dispatch('list')
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error writing share label', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}

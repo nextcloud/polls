@@ -70,11 +70,21 @@ class ShareController extends BaseController {
 	}
 
 	/**
-	 * Convert user to poll admin
+	 * Change the contraints for email addresses in public polls
 	 * @NoAdminRequired
 	 */
 	public function setPublicPollEmail(string $token, string $value): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->setPublicPollEmail($token, $value)]);
+	}
+
+	/**
+	 * Change the contraints for email addresses in public polls
+	 * @NoAdminRequired
+	 */
+	public function setLabel(string $token, string $label = ''): JSONResponse {
+		return $this->response(fn () => [
+			'share' => $this->shareService->setDisplayName($this->shareService->get($token), $label)
+		]);
 	}
 
 	/**

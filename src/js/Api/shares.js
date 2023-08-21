@@ -43,11 +43,21 @@ const shares = {
 		})
 	},
 
+	writeLabel(shareToken, displayName) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `share/${shareToken}/setlabel`,
+			data: {
+				label: displayName,
+			},
+			cancelToken: cancelTokenHandlerObject[this.writeLabel.name].handleRequestCancellation().token,
+		})
+	},
+
 	switchAdmin(shareToken, setTo) {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/${setTo}`,
-			params: { time: +new Date() },
 			cancelToken: cancelTokenHandlerObject[this.switchAdmin.name].handleRequestCancellation().token,
 		})
 	},
@@ -56,7 +66,6 @@ const shares = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/publicpollemail/${setTo}`,
-			params: { time: +new Date() },
 			cancelToken: cancelTokenHandlerObject[this.setEmailAddressConstraint.name].handleRequestCancellation().token,
 		})
 	},
@@ -65,7 +74,6 @@ const shares = {
 		return httpInstance.request({
 			method: 'POST',
 			url: `share/${shareToken}/invite`,
-			params: { time: +new Date() },
 			cancelToken: cancelTokenHandlerObject[this.sendInvitation.name].handleRequestCancellation().token,
 		})
 	},
@@ -83,7 +91,6 @@ const shares = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `share/${shareToken}`,
-			params: { time: +new Date() },
 			cancelToken: cancelTokenHandlerObject[this.deleteShare.name].handleRequestCancellation().token,
 		})
 	},
