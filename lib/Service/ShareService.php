@@ -187,7 +187,7 @@ class ShareService {
 
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->systemService->validatePublicUsername($displayName, $this->share);
-		} else if ($this->share->getType() === Share::TYPE_PUBLIC) {
+		} elseif ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$this->acl->setPollId($share->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
 		} else {
 			throw new InvalidShareTypeException('Displayname can only be changed in external or public shares.');
