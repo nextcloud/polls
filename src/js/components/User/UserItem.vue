@@ -184,9 +184,9 @@ export default {
 		},
 
 		name() {
-			if (this.type === 'public' && this.userId !== 'addPublic') return t('polls', 'Public link')
 			if (this.type === 'internalAccess') return t('polls', 'Internal access')
 			if (this.displayName) return this.displayName
+			if (this.type === 'public' && this.userId !== 'addPublic') return t('polls', 'Public link')
 			return this.userId
 		},
 
@@ -197,7 +197,10 @@ export default {
 
 		displayEmailAddress() {
 			if (this.type === 'public' && this.userId !== 'addPublic') {
-				return t('polls', 'Token: {token}', { token: this.userId })
+				if (!this.displayName) {
+					return t('polls', 'Token: {token}', { token: this.userId })
+				}
+				return t('polls', 'Public link: {token}', { token: this.userId })
 			}
 
 			if (this.type === 'internalAccess') {
