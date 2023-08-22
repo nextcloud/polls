@@ -194,7 +194,6 @@ class ShareService {
 		}
 		
 		$this->share->setDisplayName($displayName);
-		\OC::$server->getLogger()->error('share ' . json_encode($this->share));
 		$this->share = $this->shareMapper->update($this->share);
 
 		$this->eventDispatcher->dispatchTyped(new ShareChangedDisplayNameEvent($this->share));
