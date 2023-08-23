@@ -55,6 +55,7 @@ OC.L10N.register(
     "No description provided" : "Відсутній опис",
     "Preview" : "Перегляд",
     "User settings" : "Налаштування користувача",
+    "Share label" : "Мітка спільного ресурсу",
     "Shares" : "Спільний доступ",
     "As an admin you may edit this poll" : "Адміністратор може редагувати це опитування",
     "Description" : "Опис",
