@@ -442,6 +442,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Is granted admin rights for this poll",
     "Internal access" : "Internal access",
     "Token: {token}" : "Token: {token}",
+    "Public link: {token}" : "Public link: {token}",
     "This poll is private" : "This poll is private",
     "This is an openly accessible poll" : "This is an openly accessible poll",
     "Resolve this group first!" : "Resolve this group first!",

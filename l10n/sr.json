@@ -440,6 +440,7 @@
     "Is granted admin rights for this poll" : "Добио је администраторска права за ово гласање",
     "Internal access" : "Интерни приступ",
     "Token: {token}" : "Жетон: {token}",
+    "Public link: {token}" : "Јавни линк: {token}",
     "This poll is private" : "Ово гласање је приватно",
     "This is an openly accessible poll" : "Ово је гласање отворено за све",
     "Resolve this group first!" : "Најпре разреши ову групу!",

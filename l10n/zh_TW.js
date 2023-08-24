@@ -442,6 +442,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "被授予此投票的管理員權限",
     "Internal access" : "內部存取",
     "Token: {token}" : "權杖：{token}",
+    "Public link: {token}" : "公開連結：{token}",
     "This poll is private" : "此投票為私人投票",
     "This is an openly accessible poll" : "這是開放可存取的投票",
     "Resolve this group first!" : "先解散此群組！",

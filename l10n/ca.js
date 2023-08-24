@@ -395,6 +395,7 @@ OC.L10N.register(
     "Styles" : "Estils",
     "Has voted" : "Ha votat",
     "Has not voted" : "No ha votat",
+    "Share label" : "Etiqueta d'ús compartit",
     "Resend invitation mail" : "Torna a enviar el correu d'invitació",
     "Send invitation mail" : "Enviar correu d'invitació",
     "Grant poll admin access" : "Concedeix accés d'administrador de l'enquesta",
