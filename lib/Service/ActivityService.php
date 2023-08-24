@@ -39,20 +39,18 @@ use OCP\L10N\IFactory;
 
 class ActivityService {
 	protected const APP_ID = AppConstants::APP_ID;
+	private ActivityEvent $activityEvent;
+	private BaseEvent $baseEvent;
 
-	// protected IL10N $l10n;
-	protected string $shareType = '';
-	protected bool $userIsActor = true;
-	protected string $eventType = '';
+	private string $shareType = '';
+	private bool $userIsActor = true;
 	private const FIRST_PERSON_FULL = 'firstFull';
 	private const THIRD_PERSON_FULL = 'thirdFull';
 	private const FIRST_PERSON_FILTERED = 'firstFiltered';
 	private const THIRD_PERSON_FILTERED = 'thirdFiltered';
 
 	public function __construct(
-		private ActivityEvent $activityEvent,
 		private ActivityManager $activityManager,
-		private BaseEvent $baseEvent,
 		private IL10N $l10n,
 		private IFactory $transFactory,
 		private IUserSession $userSession,
