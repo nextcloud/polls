@@ -54,7 +54,7 @@ class ActivityProvider implements IProvider {
 		if ($event->getApp() !== AppConstants::APP_ID) {
 			throw new \InvalidArgumentException();
 		}
-
+		
 		$this->l10n = $this->transFactory->get($event->getApp(), $language);
 		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'polls-dark.svg')));
 		$this->setSubjects($event, $this->activityService->getActivityMessage($event, $language, $this->activityManager->isFormattingFilteredObject()));
