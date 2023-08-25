@@ -1,0 +1,33 @@
+# https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes
+changelog:
+  exclude:
+    authors:
+      - dependabot
+      - dependabot[bot]
+      - nextcloud-bot
+      - nextcloud-command
+    labels:
+      - automated
+      - dependencies
+      - duplicate
+      - invalid
+      - l10n
+      - question
+      - wontfix
+
+  categories:
+    - title: 🔐 Security
+      labels:
+        - security
+    - title: 💥 Breaking Changes
+      labels:
+        - breaking
+    - title: 🚀 Enhancements
+      labels:
+        - enhancements
+    - title: 🐛 Fixed bugs
+      labels:
+        - bug
+    - title: Other Changes
+      labels:
+        - "*"
