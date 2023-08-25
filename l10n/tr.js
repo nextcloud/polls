@@ -442,6 +442,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Bu anket için yönetici izinleri verildi",
     "Internal access" : "İç erişim",
     "Token: {token}" : "Kod: {token}",
+    "Public link: {token}" : "Herkese açık bağlantı: {token}",
     "This poll is private" : "Bu kapalı bir anket",
     "This is an openly accessible poll" : "Bu anket herkese açık",
     "Resolve this group first!" : "Önce bu grubu tamamlayın!",
