@@ -442,6 +442,7 @@ OC.L10N.register(
     "Is granted admin rights for this poll" : "Se le conceden permisos de administrador en esta votación",
     "Internal access" : "Acceso interno",
     "Token: {token}" : "Token: {token}",
+    "Public link: {token}" : "Enlace público: {token}",
     "This poll is private" : "Esta encuesta es privada",
     "This is an openly accessible poll" : "Esta es una encuesta de libre acceso",
     "Resolve this group first!" : "¡Resuelve este grupo primero!",

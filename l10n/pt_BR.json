@@ -440,6 +440,7 @@
     "Is granted admin rights for this poll" : "Tem direitos de administrador para esta enquete",
     "Internal access" : "Acesso interno",
     "Token: {token}" : "Token: {token}",
+    "Public link: {token}" : "Link público: {token}",
     "This poll is private" : "Esta enquete é privada",
     "This is an openly accessible poll" : "Esta é uma enquete aberta e acessível",
     "Resolve this group first!" : "Resolva este grupo primeiro!",
