@@ -36,6 +36,7 @@ use OCA\Polls\Model\Mail\ConfirmationMail;
 use OCA\Polls\Model\Mail\InvitationMail;
 use OCA\Polls\Model\Mail\NotificationMail;
 use OCA\Polls\Model\Mail\ReminderMail;
+use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\UserBase;
 use Psr\Log\LoggerInterface;
 
@@ -93,34 +94,34 @@ class MailService {
 		}
 	}
 
-	public function resendInvitation(string $token): Share {
-		$this->sendInvitation($token);
-		return $this->shareMapper->findByToken($token);
-	}
-
-	public function sendInvitation(string $token): array {
-		$share = $this->shareMapper->findByToken($token);
-		$sentMails = [];
-		$abortedMails = [];
+	public function sendInvitation(
+		Share $share,
+		SentResult &$sentResult = new SentResult(),
+		string $token = null,
+	): SentResult {
+		if ($token) {
+			$share = $this->shareMapper->findByToken($token);
+		}
 
 		foreach ($this->userService->getUserFromShare($share)->getMembers() as $recipient) {
 			$invitation = new InvitationMail($recipient->getId(), $share);
 
 			try {
 				$invitation->send();
-				$sentMails[] = $recipient;
+				$sentResult->AddSentMail($recipient);
 			} catch (InvalidEmailAddress $e) {
-				$abortedMails[] = $recipient;
+				$sentResult->AddAbortedMail($recipient, SentResult::INVALID_EMAIL_ADDRESS);
 				$this->logger->warning('Invalid or no email address for invitation: ' . json_encode($recipient));
 			} catch (\Exception $e) {
-				$abortedMails[] = $recipient;
+				$sentResult->AddAbortedMail($recipient);
 				$this->logger->error('Error sending Invitation to ' . json_encode($recipient));
 			}
 		}
 
 		$share->setInvitationSent(time());
 		$this->shareMapper->update($share);
-		return ['sentMails' => $sentMails, 'abortedMails' => $abortedMails];
+
+		return $sentResult;
 	}
 
 	public function sendAutoReminder(): void {
@@ -138,23 +139,25 @@ class MailService {
 	/**
 	 * Send a confirmation mail for the poll to all participants
 	 */
-	public function sendConfirmations(int $pollId): array {
-		$sentMails = [];
-		$abortedMails = [];
-
+	public function sendConfirmations(int $pollId): SentResult {
+		$sentResult = new SentResult();
+		/** @var UserBase[] */
 		$participants = $this->userService->getParticipants($pollId);
+
 		foreach ($participants as $participant) {
-			if ($this->sendConfirmationMail($participant, $pollId)) {
-				$sentMails[] = $participant->getDisplayName();
-			} else {
-				$abortedMails[] = $participant->getDisplayName();
+			try {
+				$this->sendConfirmationMail($sentResult, $participant, $pollId);
+				$sentResult->AddSentMail($participant);
+			} catch (InvalidEmailAddress $e) {
+				$sentResult->AddAbortedMail($participant, SentResult::INVALID_EMAIL_ADDRESS);
+				$this->logger->warning('Invalid or no email address for confirmation: ' . json_encode($participant));
+			} catch (\Exception $e) {
+				$sentResult->AddAbortedMail($participant);
+				$this->logger->error('Error sending confirmation to ' . json_encode($participant));
 			}
 		}
 
-		return [
-			'sent' => $sentMails,
-			'error' => $abortedMails
-		];
+		return $sentResult;
 	}
 
 	private function processSharesForAutoReminder(Poll $poll): void {
@@ -170,19 +173,21 @@ class MailService {
 		}
 	}
 
-	private function sendConfirmationMail(UserBase $participant, int $pollId) : bool {
+	private function sendConfirmationMail(SentResult &$sentResult, UserBase $participant, int $pollId) : SentResult {
 		$confirmation = new ConfirmationMail($participant->getId(), $pollId);
 
 		try {
 			$confirmation->send();
-			return true;
+			$sentResult->AddSentMail($participant);
 		} catch (InvalidEmailAddress $e) {
+			$sentResult->AddAbortedMail($participant, SentResult::INVALID_EMAIL_ADDRESS);
 			$this->logger->warning('Invalid or no email address for confirmation: ' . json_encode($participant));
 		} catch (\Exception $e) {
+			$sentResult->AddAbortedMail($participant);
 			$this->logger->error('Error sending confirmation to ' . json_encode($participant));
 		}
 
-		return false;
+		return $sentResult;
 	}
 
 	private function sendAutoReminderToRecipients(Share $share, Poll $poll): void {

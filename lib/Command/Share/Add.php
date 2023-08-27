@@ -95,7 +95,7 @@ class Add extends Base {
 		foreach ($userIds as $userId) {
 			try {
 				$share = $this->shareService->add($poll->getId(), User::TYPE, $userId);
-				$this->shareService->sendInvitation($share->getToken());
+				$this->shareService->sendInvitation($share);
 			} catch (ShareAlreadyExistsException $e) {
 				// silently ignore already existing shares
 			}
@@ -110,7 +110,7 @@ class Add extends Base {
 		foreach ($groupIds as $groupId) {
 			try {
 				$share = $this->shareService->add($poll->getId(), Group::TYPE, $groupId);
-				$this->shareService->sendInvitation($share->getToken());
+				$this->shareService->sendInvitation($share);
 			} catch (ShareAlreadyExistsException $e) {
 				// silently ignore already existing shares
 			}
@@ -125,7 +125,7 @@ class Add extends Base {
 		foreach ($emails as $email) {
 			try {
 				$share = $this->shareService->add($poll->getId(), Email::TYPE, $email);
-				$this->shareService->sendInvitation($share->getToken());
+				$this->shareService->sendInvitation($share);
 			} catch (ShareAlreadyExistsException $e) {
 				// silently ignore already existing shares
 			}

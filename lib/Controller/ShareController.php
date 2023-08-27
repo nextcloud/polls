@@ -24,8 +24,6 @@
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Share;
-use OCA\Polls\Exceptions\InvalidShareTypeException;
-use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\UserService;
 use OCP\AppFramework\Http\JSONResponse;
@@ -112,18 +110,31 @@ class ShareController extends BaseController {
 	 */
 
 	public function delete(string $token): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete($token)]);
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete(token: $token)]);
 	}
 
 	/**
-	 * Sent invitation mails for a share
+	 * Send invitation mails for a share
 	 * Additionally send notification via notifications
 	 * @NoAdminRequired
 	 */
 	public function sendInvitation(string $token): JSONResponse {
+		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
-			'share' => $this->shareService->get($token),
-			'sentResult' => $this->shareService->sendInvitation($token),
+			'share' => $share,
+			'sentResult' => $this->shareService->sendInvitation($share),
+		]);
+	}
+
+	/**
+	 * Send all invitation mails for a share and resolve groups
+	 * Additionally send notification via notifications
+	 * @NoAdminRequired
+	 */
+	public function sendAllInvitations(int $pollId): JSONResponse {
+		return $this->response(fn () => [
+			'poll' => $pollId,
+			'sentResult' => $this->shareService->sendAllInvitations($pollId),
 		]);
 	}
 
@@ -132,29 +143,8 @@ class ShareController extends BaseController {
 	 * @NoAdminRequired
 	 */
 	public function resolveGroup(string $token): JSONResponse {
-		return $this->response(function () use ($token) {
-			$shares = [];
-			$share = $this->shareService->get($token);
-			$resolvableShares = [
-				Share::TYPE_CIRCLE,
-				Share::TYPE_CONTACTGROUP
-			];
-
-			if (!in_array($share->getType(), $resolvableShares)) {
-				throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
-			}
-
-			foreach ($this->userService->getUser($share->getType(), $share->getUserId())->getMembers() as $member) {
-				try {
-					$newShare = $this->shareService->add($share->getPollId(), $member->getType(), $member->getId());
-					$shares[] = $newShare;
-				} catch (ShareAlreadyExistsException $e) {
-					continue;
-				}
-			}
-
-			$this->shareService->delete($token);
-			return ['shares' => $shares];
-		});
+		return $this->response(fn () => [
+			'shares' => $this->shareService->resolveGroup($token)
+		]);
 	}
 }

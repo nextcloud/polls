@@ -25,60 +25,49 @@
 		<template #icon>
 			<EmailAlertIcon />
 		</template>
+		<template #actions>
+			<NcButton v-tooltip="t('polls', 'Resolve and send all invitations')"
+				:aria-label="t('polls', 'Resolve and send all invitations')"
+				type="tertiary"
+				@click="sendAllInvitations()">
+				<template #icon>
+					<BulkMailIcon />
+				</template>
+			</NcButton>
+		</template>
 		<TransitionGroup :css="false" tag="div" class="shares-list">
-			<UserItem v-for="(share) in unsentInvitations"
+			<ShareItem v-for="(share) in unsentInvitations"
 				:key="share.id"
-				v-bind="share"
-				show-email
-				resolve-info
-				:icon="true">
-				<NcActions>
-					<NcActionButton v-if="share.emailAddress || share.type === 'group'"
-						@click="sendInvitation(share)">
-						<template #icon>
-							<SendEmailIcon />
-						</template>
-						{{ t('polls', 'Send invitation mail') }}
-					</NcActionButton>
-					<NcActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
-						@click="resolveGroup(share)">
-						<template #icon>
-							<ResolveGroupIcon />
-						</template>
-						{{ t('polls', 'Resolve into individual invitations') }}
-					</NcActionButton>
-				</NcActions>
-				<ActionDelete :title="t('polls', 'Remove invitation')"
-					@delete="removeShare({ share })" />
-			</UserItem>
+				:share="share" />
 		</TransitionGroup>
 	</ConfigBox>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapGetters, mapActions, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton } from '@nextcloud/vue'
-import ActionDelete from '../Actions/ActionDelete.vue'
+import { NcButton } from '@nextcloud/vue'
 import ConfigBox from '../Base/ConfigBox.vue'
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
-import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
-import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
+import ShareItem from './ShareItem.vue'
+import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
 
 export default {
 	name: 'SharesListUnsent',
 
 	components: {
 		EmailAlertIcon,
-		ResolveGroupIcon,
-		SendEmailIcon,
-		NcActions,
-		NcActionButton,
-		ActionDelete,
 		ConfigBox,
+		NcButton,
+		ShareItem,
+		BulkMailIcon,
 	},
 
 	computed: {
+		...mapState({
+			pollId: (state) => state.poll.id,
+		}),
+
 		...mapGetters({
 			unsentInvitations: 'shares/unsentInvitations',
 		}),
@@ -87,24 +76,12 @@ export default {
 	methods: {
 		...mapActions({
 			removeShare: 'shares/delete',
+			inviteAll: 'shares/inviteAll',
 		}),
 
-		async resolveGroup(share) {
-			try {
-				await this.$store.dispatch('shares/resolveGroup', { share })
-			} catch (e) {
-				if (e.response.status === 409 && e.response.data === 'Circles is not enabled for this user') {
-					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
-				} else if (e.response.status === 409 && e.response.data === 'Contacts is not enabled') {
-					showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.displayName }))
-				} else {
-					showError(t('polls', 'Error resolving {name}.', { name: share.displayName }))
-				}
-			}
-		},
+		async sendAllInvitations() {
 
-		async sendInvitation(share) {
-			const response = await this.$store.dispatch('shares/sendInvitation', { share })
+			const response = await this.inviteAll({ pollId: this.pollId })
 			if (response.data?.sentResult?.sentMails) {
 				response.data.sentResult.sentMails.forEach((item) => {
 					showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
@@ -116,6 +93,7 @@ export default {
 					showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
 				})
 			}
+
 		},
 	},
 }

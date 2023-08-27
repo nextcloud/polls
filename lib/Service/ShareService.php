@@ -23,6 +23,7 @@
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Event\ShareChangedDisplayNameEvent;
@@ -39,9 +40,10 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Db\MultipleObjectsReturnedException;
+use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IGroupManager;
 use OCP\IUserSession;
@@ -92,10 +94,31 @@ class ShareService {
 	}
 
 	/**
+	 * Read all univited shares of a poll based on the poll id and return list as array
+	 *
+	 * @return Share[]
+	 *
+	 * @psalm-return array<array-key, Share>
+	 */
+	public function listNotInvited(int $pollId): array {
+		try {
+			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+			$this->shares = $this->shareMapper->findByPollNotInvited($pollId);
+		} catch (ForbiddenException $e) {
+			return [];
+		} catch (DoesNotExistException $e) {
+			return [];
+		}
+		$this->sortByCategory();
+		return $this->shares;
+	}
+
+	/**
 	 * Get share by token for accessing the poll
 	 */
 	public function get(string $token, bool $validateShareType = false): Share {
 		$this->share = $this->shareMapper->findByToken($token);
+
 		if ($validateShareType) {
 			$this->validateShareType();
 		}
@@ -218,12 +241,12 @@ class ShareService {
 	 * or update an email share with the username
 	 */
 	public function register(
-		Share $share,
+		Share $publicShare,
 		string $userName,
 		string $emailAddress = '',
 		string $timeZone = ''
 	): Share {
-		$this->share = $share;
+		$this->share = $publicShare;
 		$this->systemService->validatePublicUsername($userName, $this->share);
 		
 		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
@@ -265,7 +288,7 @@ class ShareService {
 		// send invitation mail, if invitationSent has no timestamp
 		try {
 			if (!$this->share->getInvitationSent()) {
-				$this->mailService->resendInvitation($this->share->getToken());
+				$this->mailService->sendInvitation($this->share);
 			}
 		} catch (\Exception $e) {
 			$this->logger->error('Error sending Mail to ' . $this->share->getEmailAddress());
@@ -277,39 +300,83 @@ class ShareService {
 	/**
 	 * Delete share
 	 */
-	public function delete(string $token): string {
+	public function delete(Share $share = null, string $token = null): string {
 		try {
-			$this->share = $this->shareMapper->findByToken($token);
-			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
-			$this->shareMapper->delete($this->share);
+			if ($token) {
+				$share = $this->shareMapper->findByToken($token);
+			}
+			$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+			$this->shareMapper->delete($share);
 		} catch (ShareNotFoundException $e) {
 			// silently catch
 		}
 
-		$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($this->share));
+		$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($share));
 
-		return $token;
+		return $share->getToken();
+	}
+
+	public function sendAllInvitations(int $pollId): SentResult {
+		$sentResult = new SentResult();
+
+		// first resolve group shares
+		$shares = $this->listNotInvited($pollId);
+		foreach ($shares as $share) {
+			if (in_array($share->getType(), Share::RESOLVABLE_SHARES)) {
+				$this->resolveGroup(share: $share);
+			}
+		}
+
+		// finally send invitation for all not already invited sharees
+		$shares = $this->listNotInvited($pollId);
+		foreach ($shares as $share) {
+			if (!in_array($share->getType(), Share::RESOLVABLE_SHARES)) {
+				$this->sendInvitation($share, $sentResult);
+			}
+		}
+		return $sentResult;
+	}
+
+	public function resolveGroup(string $token = null, Share $share = null): array {
+		if ($token) {
+			$share = $this->get($token);
+		}
+
+		if (!in_array($share->getType(), Share::RESOLVABLE_SHARES)) {
+			throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
+		}
+
+		foreach ($this->userService->getUser($share->getType(), $share->getUserId())->getMembers() as $member) {
+			try {
+				$newShare = $this->add($share->getPollId(), $member->getType(), $member->getId());
+				$shares[] = $newShare;
+			} catch (ShareAlreadyExistsException $e) {
+				continue;
+			}
+		}
+
+		$this->delete($share);
+		return $shares;
 	}
 
 	/**
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
 	 */
-	public function sendInvitation(string $token): array {
-		$share = $this->get($token);
+	public function sendInvitation(Share $share = null, SentResult &$sentResult = new SentResult(), string $token = null): SentResult {
+		if ($token) {
+			$share = $this->get($token);
+		}
+
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
-
-			// TODO: skip this atm, to send invitations as mail too, if user is a site user
-			// $sentResult = ['sentMails' => [new User($share->getuserId())]];
-			// $this->shareService->setInvitationSent($token);
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
 			foreach ($this->userService->getUserFromShare($share)->getMembers() as $member) {
 				$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
 			}
 		}
 
-		return $this->mailService->sendInvitation($token);
+		return $this->mailService->sendInvitation($share, $sentResult);
 	}
 
 	private function generatePublicUserId(string $prefix = 'ex_'): string {
@@ -363,7 +430,7 @@ class ShareService {
 		string $type,
 		string $userId = '',
 		string $displayName = '',
-		string $emailAddress = '',
+		string $emailAddress = ''
 	): Share {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 
@@ -371,20 +438,17 @@ class ShareService {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
 		} else {
 			try {
-				$this->shareMapper->findByPollAndUser($pollId, $userId);
-				throw new ShareAlreadyExistsException;
-			} catch (MultipleObjectsReturnedException $e) {
-				throw new ShareAlreadyExistsException;
-			} catch (ShareNotFoundException $e) {
-				// continue
+				$share = $this->createNewShare($pollId, $this->userService->getUser($type, $userId, $displayName, $emailAddress));
+				$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
+			} catch (Exception $e) {
+				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+					throw new ShareAlreadyExistsException;
+				}
+				
+				throw $e;
 			}
 		}
-
-		$this->createNewShare($pollId, $this->userService->getUser($type, $userId, $displayName, $emailAddress));
-
-		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($this->share));
-
-		return $this->share;
+		return $share;
 	}
 
 	private function sortByCategory(): void {

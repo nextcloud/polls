@@ -81,18 +81,20 @@ export default {
 	methods: {
 		async clickAction() {
 			try {
-				this.confirmations = await PollsAPI.sendConfirmation(this.$route.params.id)
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-			}
+				const result = await PollsAPI.sendConfirmation(this.$route.params.id)
+				this.confirmations = result.data.confirmations
 
-			this.headerCaption = t('polls', 'Confirmations processed')
-			this.confirmations.sent.forEach((confirmation) => {
-				showSuccess(t('polls', `Confirmation sent to ${confirmation}`))
-			})
-			this.confirmations.error.forEach((confirmation) => {
-				showError(t('polls', `Confirmation could not be sent to ${confirmation}`))
-			})
+				this.headerCaption = n('polls', 'Confirmations send to {count} recipient', 'Confirmations send to {count} recipients', { count: this.confirmations.countSentMails })
+				this.confirmations.sentMails.forEach((confirmation) => {
+					showSuccess(t('polls', 'Confirmation sent to {participant} ({emailAddress})', { participant: confirmation.displayName, emailAddress: confirmation.emailAddress }))
+				})
+
+				this.confirmations.abortedMails.forEach((confirmation) => {
+					showError(t('polls', 'Confirmation could not be sent to {participant} ({emailAddress})', { participant: confirmation.displayName, emailAddress: confirmation.emailAddress }))
+				})
+			} catch (e) {
+				// ignore
+			}
 		},
 	},
 }

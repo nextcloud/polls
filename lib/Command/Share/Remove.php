@@ -95,7 +95,7 @@ class Remove extends Base {
 	private function removeUsers(Poll $poll, array $userIds): void {
 		foreach ($this->getUserShares($poll) as $share) {
 			if (in_array($share->getUserId(), $userIds, true)) {
-				$this->shareService->delete($share->getToken());
+				$this->shareService->delete($share);
 			}
 		}
 	}
@@ -107,7 +107,7 @@ class Remove extends Base {
 	private function removeGroups(Poll $poll, array $groupIds): void {
 		foreach ($this->getGroupShares($poll) as $share) {
 			if (in_array($share->getUserId(), $groupIds, true)) {
-				$this->shareService->delete($share->getToken());
+				$this->shareService->delete($share);
 			}
 		}
 	}
@@ -119,7 +119,7 @@ class Remove extends Base {
 	private function removeEmails(Poll $poll, array $emails): void {
 		foreach ($this->getEmailShares($poll) as $share) {
 			if (in_array($share->getEmailAddress(), $emails, true)) {
-				$this->shareService->delete($share->getToken());
+				$this->shareService->delete($share);
 			}
 		}
 	}

@@ -135,6 +135,19 @@ const actions = {
 		}
 	},
 
+	async inviteAll(context, payload) {
+		try {
+			const response = await SharesAPI.inviteAll(payload.pollId)
+			context.dispatch('list')
+			return response
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error sending invitation', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
+		}
+
+	},
 	async sendInvitation(context, payload) {
 		try {
 			const response = await SharesAPI.sendInvitation(payload.share.token)

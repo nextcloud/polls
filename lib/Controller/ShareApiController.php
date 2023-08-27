@@ -75,7 +75,7 @@ class ShareApiController extends BaseApiController {
 	 * @NoCSRFRequired
 	 */
 	public function delete(string $token): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete($token)]);
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete(token: $token)]);
 	}
 
 	/**
@@ -85,11 +85,10 @@ class ShareApiController extends BaseApiController {
 	 * @NoCSRFRequired
 	 */
 	public function sendInvitation(string $token): JSONResponse {
-		$sentResult = $this->mailService->sendInvitation($token);
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
 			'share' => $share,
-			'sentResult' => $sentResult
+			'sentResult' => $this->mailService->sendInvitation($share),
 		]);
 	}
 }
