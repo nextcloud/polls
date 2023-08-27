@@ -96,9 +96,9 @@ class MailService {
 
 	public function sendInvitation(
 		Share $share,
-		SentResult &$sentResult = new SentResult(),
+		SentResult &$sentResult = null,
 		string $token = null,
-	): SentResult {
+	): SentResult|null {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token);
 		}
@@ -108,12 +108,18 @@ class MailService {
 
 			try {
 				$invitation->send();
-				$sentResult->AddSentMail($recipient);
+				if ($sentResult) {
+					$sentResult->AddSentMail($recipient);
+				}
 			} catch (InvalidEmailAddress $e) {
-				$sentResult->AddAbortedMail($recipient, SentResult::INVALID_EMAIL_ADDRESS);
+				if ($sentResult) {
+					$sentResult->AddAbortedMail($recipient, SentResult::INVALID_EMAIL_ADDRESS);
+				}
 				$this->logger->warning('Invalid or no email address for invitation: ' . json_encode($recipient));
 			} catch (\Exception $e) {
-				$sentResult->AddAbortedMail($recipient);
+				if ($sentResult) {
+					$sentResult->AddAbortedMail($recipient);
+				}
 				$this->logger->error('Error sending Invitation to ' . json_encode($recipient));
 			}
 		}

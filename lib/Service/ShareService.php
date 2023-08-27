@@ -316,7 +316,7 @@ class ShareService {
 		return $share->getToken();
 	}
 
-	public function sendAllInvitations(int $pollId): SentResult {
+	public function sendAllInvitations(int $pollId): SentResult|null {
 		$sentResult = new SentResult();
 
 		// first resolve group shares
@@ -363,7 +363,7 @@ class ShareService {
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
 	 */
-	public function sendInvitation(Share $share = null, SentResult &$sentResult = new SentResult(), string $token = null): SentResult {
+	public function sendInvitation(Share $share = null, SentResult &$sentResult = null, string $token = null): SentResult|null {
 		if ($token) {
 			$share = $this->get($token);
 		}
