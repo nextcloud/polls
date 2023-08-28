@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2021 Daniel Rudolf <nextcloud.com@daniel-rudolf.de>
  *
@@ -100,12 +101,7 @@ class AddTest extends TestCase {
 			+ count($pollData['expectedInvitations']['group'] ?? [])
 			+ count($pollData['expectedInvitations']['email'] ?? []);
 
-		$expectedInvitationShareTokens = [];
-		foreach ($pollData['expectedInvitations'] ?? [] as $type => $shares) {
-			foreach ($shares as $userId) {
-				$expectedInvitationShareTokens[] = $this->getShareToken($pollData['pollId'], $type, $userId);
-			}
-		}
+		$expectedShares = [];
 
 		$this->pollMapper
 			->expects($this->once())
@@ -117,7 +113,7 @@ class AddTest extends TestCase {
 			->expects($this->exactly($expectedShareCount))
 			->method('add')
 			->with($pollData['pollId'], $this->logicalOr(User::TYPE, Group::TYPE, Email::TYPE), $this->anything())
-			->willReturnCallback(function (int $pollId, string $type, string $userId = '') use ($pollData): Share {
+			->willReturnCallback(function (int $pollId, string $type, string $userId = '') use ($pollData, &$expectedShares): Share {
 				$userIdConstraint = $this->logicalOr(...$pollData['expectedShares'][$type] ?? []);
 				$userIdConstraint->evaluate($userId);
 
@@ -125,13 +121,15 @@ class AddTest extends TestCase {
 					throw new ShareAlreadyExistsException();
 				}
 
-				return $this->createShareMock($pollId, $type, $userId);
+				$share = $this->createShareMock($pollId, $type, $userId);
+				$expectedShares[] = $share;
+				return $share;
 			});
 
 		$this->shareService
 			->expects($this->exactly($expectedInvitationCount))
 			->method('sendInvitation')
-			->with($this->logicalOr(...$expectedInvitationShareTokens));
+			->with($this->logicalOr(...$expectedShares));
 
 		$command = new Add(
 			$this->pollMapper,
