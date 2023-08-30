@@ -103,6 +103,16 @@ class AddTest extends TestCase {
 
 		$expectedShares = [];
 
+		foreach ($pollData['expectedInvitations'] ?? [] as $type => $shares) {
+			foreach ($shares as $userId) {
+				if (!in_array($userId, $pollData['initialShares'][$type] ?? [])) {
+					$share = $this->createShareMock($pollData['pollId'], $type, $userId);
+					$mockedShares[$type][$userId] = $share;
+					$expectedShares[] = $share;
+				}
+			}
+		}
+
 		$this->pollMapper
 			->expects($this->once())
 			->method('find')
@@ -113,7 +123,7 @@ class AddTest extends TestCase {
 			->expects($this->exactly($expectedShareCount))
 			->method('add')
 			->with($pollData['pollId'], $this->logicalOr(User::TYPE, Group::TYPE, Email::TYPE), $this->anything())
-			->willReturnCallback(function (int $pollId, string $type, string $userId = '') use ($pollData, &$expectedShares): Share {
+			->willReturnCallback(function (int $pollId, string $type, string $userId = '') use ($pollData, $mockedShares): Share {
 				$userIdConstraint = $this->logicalOr(...$pollData['expectedShares'][$type] ?? []);
 				$userIdConstraint->evaluate($userId);
 
@@ -121,9 +131,7 @@ class AddTest extends TestCase {
 					throw new ShareAlreadyExistsException();
 				}
 
-				$share = $this->createShareMock($pollId, $type, $userId);
-				$expectedShares[] = $share;
-				return $share;
+				return $mockedShares[$type][$userId];
 			});
 
 		$this->shareService
