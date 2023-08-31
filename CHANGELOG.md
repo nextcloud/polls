@@ -7,6 +7,7 @@ All notable changes to this project will be documented in this file.
  - Send all unsent invitations to a poll with one click (resolves contact groups and circles too)
 ### Fixes
  - Fix API calls
+ - Deleting comments in public polls was broken
 ### Changes
  - Refactorings and code maintenance
  - dependency updates
