@@ -116,7 +116,7 @@ const publicPoll = {
 	deleteComment(shareToken, commentId) {
 		return httpInstance.request({
 			method: 'DELETE',
-			url: `s/${shareToken}/${commentId}`,
+			url: `s/${shareToken}/comment/${commentId}`,
 			params: { time: +new Date() },
 
 			cancelToken: cancelTokenHandlerObject[this.deleteComment.name].handleRequestCancellation().token,
