@@ -115,7 +115,7 @@ class UserService {
 
 	/**
 	 * Get participans of a poll as array of user objects
-	 * @return array<array-key, mixed>
+	 * @return UserBase[]
 	 */
 	public function getParticipants(int $pollId) : array {
 		$users = [];

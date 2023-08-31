@@ -87,6 +87,10 @@ class Share extends Entity implements JsonSerializable {
 		self::TYPE_CIRCLE,
 		self::TYPE_CONTACTGROUP,
 	];
+	public const RESOLVABLE_SHARES = [
+		self::TYPE_CIRCLE,
+		self::TYPE_CONTACTGROUP
+	];
 
 	public $id = null;
 	protected IURLGenerator $urlGenerator;

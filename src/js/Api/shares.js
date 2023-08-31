@@ -94,6 +94,14 @@ const shares = {
 			cancelToken: cancelTokenHandlerObject[this.deleteShare.name].handleRequestCancellation().token,
 		})
 	},
+
+	inviteAll(pollId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `poll/${pollId}/inviteAll`,
+			cancelToken: cancelTokenHandlerObject[this.inviteAll.name].handleRequestCancellation().token,
+		})
+	},
 }
 
 const cancelTokenHandlerObject = createCancelTokenHandler(shares)

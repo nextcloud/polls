@@ -299,8 +299,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 */
 	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
+		$publicShare = $this->shareService->get($token);
+		$personalShare = $this->shareService->register($publicShare, $userName, $emailAddress, $timeZone);
 		return $this->responseCreate(fn () => [
-			'share' => $this->shareService->register($this->shareService->get($token), $userName, $emailAddress, $timeZone)
+			'share' => $personalShare,
 		], $token);
 	}
 
@@ -310,8 +312,10 @@ class PublicController extends BaseController {
 	 * @PublicPage
 	 */
 	public function resendInvitation(string $token): JSONResponse {
+		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
-			'share' => $this->mailService->resendInvitation($token)
+			'share' => $share,
+			'sentResult' => $this->mailService->sendInvitation($share)
 		], $token);
 	}
 }

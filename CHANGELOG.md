@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [5.3.0] - tbd
 ### New
  - Add label to public shares
+ - Send all unsent invitations to a poll with one click (resolves contact groups and circles too)
 ### Fixes
  - Fix API calls
 ### Changes

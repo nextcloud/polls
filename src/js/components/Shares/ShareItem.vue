@@ -21,7 +21,10 @@
   -->
 
 <template>
-	<UserItem show-email v-bind="share" :icon="true">
+	<UserItem v-bind="share"
+		show-email
+		resolve-info
+		:icon="true">
 		<template #status>
 			<div v-if="hasVoted(share.userId)">
 				<VotedIcon class="vote-status voted" :title="t('polls', 'Has voted')" />
@@ -50,6 +53,14 @@
 					<SendEmailIcon />
 				</template>
 				{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
+			</NcActionButton>
+
+			<NcActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
+				@click="resolveGroup(share)">
+				<template #icon>
+					<ResolveGroupIcon />
+				</template>
+				{{ t('polls', 'Resolve into individual invitations') }}
 			</NcActionButton>
 
 			<NcActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin()">
@@ -113,6 +124,7 @@ import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadi
 import ActionDelete from '../Actions/ActionDelete.vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
+import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
 import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
 import GrantAdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
 import EditIcon from 'vue-material-design-icons/Pencil.vue'
@@ -138,6 +150,7 @@ export default {
 		NcActionInput,
 		NcActionRadio,
 		ActionDelete,
+		ResolveGroupIcon,
 	},
 
 	props: {
@@ -173,6 +186,20 @@ export default {
 
 		async writeLabel() {
 			this.setLabel({ token: this.share.token, displayName: this.share.displayName })
+		},
+
+		async resolveGroup(share) {
+			try {
+				await this.$store.dispatch('shares/resolveGroup', { share })
+			} catch (e) {
+				if (e.response.status === 409 && e.response.data === 'Circles is not enabled for this user') {
+					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
+				} else if (e.response.status === 409 && e.response.data === 'Contacts is not enabled') {
+					showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.displayName }))
+				} else {
+					showError(t('polls', 'Error resolving {name}.', { name: share.displayName }))
+				}
+			}
 		},
 
 		async sendInvitation() {

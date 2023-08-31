@@ -89,6 +89,7 @@ return [
 
 		['name' => 'share#list', 'url' => '/poll/{pollId}/shares', 'verb' => 'GET'],
 		['name' => 'share#add', 'url' => '/poll/{pollId}/share', 'verb' => 'POST'],
+		['name' => 'share#send_all_invitations', 'url' => '/poll/{pollId}/inviteAll', 'verb' => 'PUT'],
 		['name' => 'share#delete', 'url' => '/share/{token}', 'verb' => 'DELETE'],
 		['name' => 'share#personal', 'url' => '/share/personal', 'verb' => 'POST'],
 		['name' => 'share#sendInvitation', 'url' => '/share/{token}/invite', 'verb' => 'POST'],
