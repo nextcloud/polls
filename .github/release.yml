@@ -25,6 +25,7 @@ changelog:
     - title: 🚀 Enhancements
       labels:
         - enhancements
+        - enhancement
     - title: 🐛 Fixed bugs
       labels:
         - bug
