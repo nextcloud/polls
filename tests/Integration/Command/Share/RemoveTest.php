@@ -116,7 +116,7 @@ class RemoveTest extends TestCase {
 		$this->shareService
 			->expects($this->exactly($expectedShareCount))
 			->method('delete')
-			->with($this->logicalOr(...$expectedShareTokens));
+			->with($this->logicalOr(...$initialShares));
 
 		$command = new Remove(
 			$this->pollMapper,
