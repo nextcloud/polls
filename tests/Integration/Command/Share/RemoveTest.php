@@ -90,13 +90,13 @@ class RemoveTest extends TestCase {
 	public function testValid(array $input, array $pollData): void {
 		$initialShares = [];
 		$expectedShareCount = 0;
-		$expectedShares = [];
+		$expectedShareTokens = [];
 		foreach ($pollData['initialShares'] ?? [] as $type => $shares) {
 			foreach ($shares as $userId) {
 				$initialShares[] = $this->createShareMock($pollData['pollId'], $type, $userId);
-				$expectedShares[] = $userId;
 
 				if (in_array($userId, $pollData['expectedShares'][$type] ?? [])) {
+					$expectedShares[] = $userId;
 					$expectedShareCount++;
 				}
 			}
@@ -116,7 +116,7 @@ class RemoveTest extends TestCase {
 		$this->shareService
 			->expects($this->exactly($expectedShareCount))
 			->method('delete')
-			->with($this->logicalOr(...$expectedShares));
+			->with($this->logicalOr(...$initialShares));
 
 		$command = new Remove(
 			$this->pollMapper,
