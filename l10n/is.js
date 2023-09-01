@@ -82,7 +82,6 @@ OC.L10N.register(
     "Error while copying link to clipboard" : "Villa við afritun tengils á klippispjald",
     "Shares" : "Sameignir",
     "Unsent invitations" : "Ósend boð",
-    "Remove invitation" : "Fjarlægja boð",
     "No activity" : "Engin virkni",
     "No comments" : "Engar athugasemdir",
     "Be the first." : "Vertu fyrst/ur.",

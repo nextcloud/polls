@@ -194,7 +194,6 @@ OC.L10N.register(
     "Error adding public link" : "Klaida pridedant viešąją nuorodą",
     "Shares" : "Viešiniai",
     "Unsent invitations" : "Neišsiųsti pakvietimai",
-    "Remove invitation" : "Šalinti pakvietimą",
     "No comments" : "Nėra komentarų",
     "Be the first." : "Būkite pirmieji.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Būkite atsargūs keisdami variantus, nes tai gali nepageidaujamai paveikti esamus balsus.",

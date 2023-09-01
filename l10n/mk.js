@@ -28,6 +28,7 @@ OC.L10N.register(
     "Submit" : "Испрати",
     "Close" : "Затвори",
     "never" : "никогаш",
+    "Private poll" : "Приватна анкета",
     "_%n Participant_::_%n Participants_" : ["%n Учесник","%n Учесници"],
     "Login" : "Најава",
     "Access" : "Пристап",
