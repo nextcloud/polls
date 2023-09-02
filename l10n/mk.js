@@ -9,6 +9,7 @@ OC.L10N.register(
     "Public link" : "Јавен линк",
     "User" : "Корисник",
     "Delete" : "Избриши",
+    "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Бришење за 1 секунда","Бришење за {countdown} секунди"],
     "Toggle Sidebar" : "Отвори странична лента",
     "Conflict" : "Конфликт",
     "New comment …" : "Нов коментар ...",
