@@ -189,6 +189,7 @@ OC.L10N.register(
     "Inform your participants about the confirmed options" : "通知您的參與者確認的選項",
     "Confirmation sent to {participant} ({emailAddress})" : "確認已傳送給 {participant}（{emailAddress}）",
     "Confirmation could not be sent to {participant} ({emailAddress})" : "確認無法傳送給 {participant}（{emailAddress}）",
+    "_Confirmations sent to {count} recipient_::_Confirmations sent to {count} recipients_" : ["確認已傳送給 {count} 名參與者"],
     "Date order" : "日期排序",
     "Original order" : "原始排序",
     "Ranked order" : "排名排序",

@@ -187,6 +187,7 @@
     "Inform your participants about the confirmed options" : "أبلغ المشاركين حول الخيارات المؤكدة",
     "Confirmation sent to {participant} ({emailAddress})" : "تمّ إرسال التأكيد إلى {participant} ({emailAddress})",
     "Confirmation could not be sent to {participant} ({emailAddress})" : "تعذّر إرسال التأكيد إلى {participant} ({emailAddress})",
+    "_Confirmations sent to {count} recipient_::_Confirmations sent to {count} recipients_" : ["تمّ إرسال التأكيد إلى {count} مُستَلِم","تمّ إرسال التأكيد إلى {count} مُستَلِم","تمّ إرسال التأكيد إلى {count} مُستَلِم","تمّ إرسال التأكيد إلى {count} مُستَلِم","تمّ إرسال التأكيد إلى {count} مُستَلِم","تمّ إرسال التأكيد إلى {count} مُستَلِم"],
     "Date order" : "ترتيب التاريخ",
     "Original order" : "الترتيب الأصلي",
     "Ranked order" : "الترتيب المصنف",

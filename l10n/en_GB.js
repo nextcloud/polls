@@ -189,6 +189,7 @@ OC.L10N.register(
     "Inform your participants about the confirmed options" : "Inform your participants about the confirmed options",
     "Confirmation sent to {participant} ({emailAddress})" : "Confirmation sent to {participant} ({emailAddress})",
     "Confirmation could not be sent to {participant} ({emailAddress})" : "Confirmation could not be sent to {participant} ({emailAddress})",
+    "_Confirmations sent to {count} recipient_::_Confirmations sent to {count} recipients_" : ["Confirmations sent to {count} recipient","Confirmations sent to {count} recipients"],
     "Date order" : "Date order",
     "Original order" : "Original order",
     "Ranked order" : "Ranked order",
