@@ -25,7 +25,7 @@
 		<NcCheckboxRadioSwitch :checked.sync="autoReminder" type="switch">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
-		<NcPopover>
+		<NcPopover :focus-trap="false">
 			<template #trigger>
 				<NcActions>
 					<NcActionButton>

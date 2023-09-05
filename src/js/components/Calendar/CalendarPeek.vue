@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcPopover v-if="events.length" class="calendar-peek">
+	<NcPopover v-if="events.length" :focus-trap="false" class="calendar-peek">
 		<template #trigger>
 			<div>
 				<div class="calendar-peek__conflict icon icon-calendar" />

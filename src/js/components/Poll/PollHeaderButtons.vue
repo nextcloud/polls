@@ -23,7 +23,7 @@
 <template>
 	<div class="poll-header-buttons">
 		<UserMenu v-if="showUserMenu" />
-		<NcPopover>
+		<NcPopover :focus-trap="false">
 			<template #trigger>
 				<NcButton v-tooltip="caption"
 					:aria-label="caption"
