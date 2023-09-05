@@ -187,6 +187,7 @@
     "Inform your participants about the confirmed options" : "通知您的參與者關於已確認的選項",
     "Confirmation sent to {participant} ({emailAddress})" : "確認已傳送給 {participant} ({emailAddress})",
     "Confirmation could not be sent to {participant} ({emailAddress})" : "確認無法傳送給 {participant} ({emailAddress})",
+    "_Confirmations sent to {count} recipient_::_Confirmations sent to {count} recipients_" : ["確認已傳送給 {count} 名接收者"],
     "Date order" : "日期順序",
     "Original order" : "原始順序",
     "Ranked order" : "排名順序",

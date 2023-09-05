@@ -187,6 +187,7 @@
     "Inform your participants about the confirmed options" : "Обавестите своје учеснике у вези са потврђеним опцијама",
     "Confirmation sent to {participant} ({emailAddress})" : "Потврда је постата учеснику {participant} ({emailAddress})",
     "Confirmation could not be sent to {participant} ({emailAddress})" : "Не може да се пошаље потврда учеснику {participant} ({emailAddress})",
+    "_Confirmations sent to {count} recipient_::_Confirmations sent to {count} recipients_" : ["Потврде су послате ка {count} кориснику","Потврде су послате ка {count} корисника","Потврде су послате ка {count} корисника"],
     "Date order" : "Редослед датума",
     "Original order" : "Оригинални редослед",
     "Ranked order" : "Рангирани редослед",
