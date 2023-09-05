@@ -50,8 +50,8 @@
 						</NcActionButton>
 					</NcActions>
 					<NcButton v-if="closed"
-						v-tooltip="confirmedButtonCaption"
-						:aria-label="confirmedButtonCaption"
+						v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+						:aria-label="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 						type="tertiary"
 						@click="confirmOption(option)">
 						<template #icon>
@@ -136,9 +136,6 @@ export default {
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
 		}),
-		confirmedButtonCaption() {
-			return this.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')
-		},
 	},
 
 	methods: {
