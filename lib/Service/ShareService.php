@@ -115,10 +115,10 @@ class ShareService {
 
 	/**
 	 * Get share by token for accessing the poll
-	 * 
+	 *
 	 * @param string $token             Token of share to get
 	 * @param bool   $validateShareType Set true, if the share should be validated for usage
-	 * @param bool   $publicRequest     Set true, to avoid preset displayname of public shares 
+	 * @param bool   $publicRequest     Set true, to avoid preset displayname of public shares
 	 */
 	public function get(string $token, bool $validateShareType = false, bool $publicRequest = false): Share {
 		$this->share = $this->shareMapper->findByToken($token);
@@ -130,7 +130,7 @@ class ShareService {
 		// deletes the displayname, to avoid displayname preset in case of public polls
 		if ($this->share->getType() === Share::TYPE_PUBLIC && $publicRequest) {
 			$this->share->setDisplayName('');
-		}	
+		}
 
 		// Exception: logged in user accesses the poll via public share link
 		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->isLoggedIn()) {
