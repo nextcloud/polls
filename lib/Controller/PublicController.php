@@ -107,8 +107,9 @@ class PublicController extends BaseController {
 	 */
 	public function getShare(string $token): JSONResponse {
 		$validateShareType = true;
+		$publicRequest = true;
 		return $this->response(fn () => [
-			'share' => $this->shareService->get($token, $validateShareType)
+			'share' => $this->shareService->get($token, $validateShareType, $publicRequest)
 		], $token);
 	}
 
