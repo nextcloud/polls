@@ -442,21 +442,23 @@ class ShareService {
 		string $emailAddress = ''
 	): Share {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-
+		
+		
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
-		} else {
-			try {
-				$share = $this->createNewShare($pollId, $this->userService->getUser($type, $userId, $displayName, $emailAddress));
-				$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
-			} catch (Exception $e) {
-				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-					throw new ShareAlreadyExistsException;
-				}
-				
-				throw $e;
-			}
 		}
+
+		try {
+			$share = $this->createNewShare($pollId, $this->userService->getUser($type, $userId, $displayName, $emailAddress));
+			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
+		} catch (Exception $e) {
+			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+				throw new ShareAlreadyExistsException;
+			}
+			
+			throw $e;
+		}
+		
 		return $share;
 	}
 
