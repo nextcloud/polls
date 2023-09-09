@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.3.1] - 2023-09-09
+### Fixes
+ - Fix creating public shares
 ## [5.3.0] - 2023-09-06
 ### New
  - Add label to public shares
