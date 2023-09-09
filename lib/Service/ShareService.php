@@ -446,7 +446,7 @@ class ShareService {
 		
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
-		} 
+		}
 
 		try {
 			$share = $this->createNewShare($pollId, $this->userService->getUser($type, $userId, $displayName, $emailAddress));
