@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.3.2] - 2023-09-11
+### Fixes
+ - Fix migration error ("poll_option_hash" is NotNull)
 ## [5.3.1] - 2023-09-09
 ### Fixes
  - Fix creating public shares
