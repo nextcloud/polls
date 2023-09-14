@@ -187,6 +187,7 @@
     "Inform your participants about the confirmed options" : "Informar os participantes sobre opções confirmadas",
     "Confirmation sent to {participant} ({emailAddress})" : "Confirmação enviada para {participant} ({emailAddress})",
     "Confirmation could not be sent to {participant} ({emailAddress})" : "Não foi possível enviar a confirmação para {participante} ({emailAddress})",
+    "_Confirmations sent to {count} recipient_::_Confirmations sent to {count} recipients_" : ["Confirmações enviadas para {count} destinatários","Confirmações enviadas para {count} destinatários","Confirmações enviadas para {count} destinatários"],
     "Date order" : "Ordenar por data",
     "Original order" : "Ordem original",
     "Ranked order" : "Ordenar por classificação",
