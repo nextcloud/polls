@@ -63,7 +63,7 @@
 				{{ t('polls', 'Resolve into individual invitations') }}
 			</NcActionButton>
 
-			<NcActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin()">
+			<NcActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin({ share: share })">
 				<template #icon>
 					<GrantAdminIcon v-if="share.type === 'user'" />
 					<WithdrawAdminIcon v-else />
