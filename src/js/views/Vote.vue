@@ -234,6 +234,7 @@ export default {
 	width: 44px;
 	height: 44px;
 }
+
 .card-with-action {
 	display: flex;
 	align-items: center;
