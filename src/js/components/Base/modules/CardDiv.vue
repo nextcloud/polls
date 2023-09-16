@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -19,41 +19,46 @@
   - along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -
   -->
+
 <template>
-	<span :aria-hidden="!title"
-		:aria-label="title"
-		class="material-design-icon publish-off-icon"
-		role="img"
-		v-bind="$attrs"
-		@click="$emit('click', $event)">
-		<svg :fill="fillColor"
-			class="material-design-icon__svg"
-			:width="size"
-			:height="size"
-			viewBox="0 0 24 24">
-			<path d="M20.8 22.7L15 16.9V20H9V14H5L8.6 10.4L1.1 3L2.4 1.7L22.1 21.4L20.8 22.7M19 6V4H7.2L9.2 6H19M17.2 14H19L12 7L11.1 7.9L17.2 14Z">
-				<title v-if="title">{{ title }}</title>
-			</path>
-		</svg>
-	</span>
+	<NcNoteCard v-bind="$attrs">
+		<div class="left-card-side">
+			<slot name="default" />
+		</div>
+		<div class="right-card-side">
+			<slot name="button" />
+		</div>
+	</NcNoteCard>
 </template>
 
 <script>
+import { NcNoteCard } from '@nextcloud/vue'
+
 export default {
-	name: 'PublishOff',
-	props: {
-		title: {
-			type: String,
-			default: 'Unpublished',
-		},
-		fillColor: {
-			type: String,
-			default: 'currentColor',
-		},
-		size: {
-			type: Number,
-			default: 24,
-		},
+	name: 'CardDiv',
+	components: {
+		NcNoteCard,
 	},
 }
+
 </script>
+
+<style lang="scss">
+	.left-card-side {
+		flex: 1;
+	}
+
+	.right-card-side {
+		flex: 0;
+		padding-right: 8px;
+	}
+
+	// hack
+	.notecard > div {
+		display: flex;
+		align-items: center;
+		flex: 1;
+		column-gap: 8px;
+	}
+
+</style>

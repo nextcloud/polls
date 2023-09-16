@@ -68,7 +68,7 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import ConfigBox from '../Base/ConfigBox.vue'
+import { ConfigBox } from '../Base/index.js'
 import OptionsDate from '../Options/OptionsDate.vue'
 import OptionsDateShift from '../Options/OptionsDateShift.vue'
 import OptionsText from '../Options/OptionsText.vue'

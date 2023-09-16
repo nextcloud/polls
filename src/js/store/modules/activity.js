@@ -21,7 +21,7 @@
  *
  */
 
-import { ActivityAPI } from '../../Api/activity.js'
+import { ActivityAPI } from '../../Api/index.js'
 
 const defaultActivities = () => ({
 	list: [],

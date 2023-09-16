@@ -47,7 +47,7 @@
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
-import ConfigBox from '../Base/ConfigBox.vue'
+import { ConfigBox } from '../Base/index.js'
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 import ShareItem from './ShareItem.vue'
 import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'

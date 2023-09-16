@@ -55,9 +55,9 @@
 import { mapActions, mapGetters, mapState } from 'vuex'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import ComboTable from '../components/Combo/ComboTable.vue'
-import ActionToggleSidebar from '../components/Actions/ActionToggleSidebar.vue'
-import HeaderBar from '../components/Base/HeaderBar.vue'
-import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import { ActionToggleSidebar } from '../components/Actions/index.js'
+import { HeaderBar } from '../components/Base/index.js'
+import { PollsAppIcon } from '../components/AppIcons/index.js'
 
 export default {
 	name: 'Combo',
@@ -69,7 +69,7 @@ export default {
 		NcEmptyContent,
 		HeaderBar,
 		PollsAppIcon,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
 	},
 
 	data() {

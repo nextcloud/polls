@@ -201,4 +201,4 @@ const publicPoll = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(publicPoll)
 
-export { publicPoll as PublicAPI }
+export default { publicPoll }

@@ -33,8 +33,8 @@
 
 <script>
 import { debounce } from 'lodash'
-import InputDiv from '../Base/InputDiv.vue'
-import { ValidatorAPI } from '../../Api/validators.js'
+import { InputDiv } from '../Base/index.js'
+import { ValidatorAPI } from '../../Api/index.js'
 
 export default {
 	name: 'PublicEmail',

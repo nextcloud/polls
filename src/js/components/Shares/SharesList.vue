@@ -55,13 +55,12 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { NcModal } from '@nextcloud/vue'
-import ConfigBox from '../Base/ConfigBox.vue'
+import { ConfigBox, QrModal } from '../Base/index.js'
 import ShareItem from './ShareItem.vue'
 import UserSearch from '../User/UserSearch.vue'
 import SharePublicAdd from './SharePublicAdd.vue'
 import ShareItemAllUsers from './ShareItemAllUsers.vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-import QrModal from '../Base/QrModal.vue'
 import MarkUpDescription from '../Poll/MarkUpDescription.vue'
 
 export default {

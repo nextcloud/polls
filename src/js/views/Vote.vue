@@ -65,17 +65,21 @@
 				</NcEmptyContent>
 			</div>
 
-			<div v-if="countHiddenParticipants" class="area__footer">
-				<h2>
-					{{ t('polls', 'Due to performance concerns {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
-				</h2>
-			</div>
+			<div class="area__footer">
+				<CardDiv v-if="countHiddenParticipants" type="warning">
+					{{ t('polls', 'Due to possible performance issues {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
+					{{ t('polls', 'You can reveal them, but you may expect an unwanted long loading time.') }}
+					<template #button>
+						<NcButton type="primary" @click="switchSafeTable">
+							{{ t('polls', 'Reveal them') }}
+						</NcButton>
+					</template>
+				</CardDiv>
 
-			<div v-if="poll.anonymous" class="area__footer">
-				<div>
+				<CardDiv v-if="poll.anonymous" type="warning">
 					{{ t('polls', 'Although participant\'s names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
 					{{ t('polls', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
-				</div>
+				</CardDiv>
 			</div>
 		</div>
 		<PublicRegisterModal v-if="showRegisterModal" />
@@ -84,16 +88,16 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapMutations } from 'vuex'
 import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
-import HeaderBar from '../components/Base/HeaderBar.vue'
+import { CardDiv, HeaderBar } from '../components/Base/index.js'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import ActionSendConfirmedOptions from '../components/Actions/ActionSendConfirmedOptions.vue'
+import { ActionSendConfirmedOptions } from '../components/Actions/index.js'
 
 export default {
 	name: 'Vote',
@@ -108,7 +112,8 @@ export default {
 		PollInfoLine,
 		DatePollIcon,
 		TextPollIcon,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		CardDiv,
+		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
 		OptionProposals: () => import('../components/Options/OptionProposals.vue'),
 		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal.vue'),
 		VoteTable: () => import('../components/VoteTable/VoteTable.vue'),
@@ -171,6 +176,10 @@ export default {
 	},
 
 	methods: {
+		...mapMutations({
+			switchSafeTable: 'poll/switchSafeTable',
+		}),
+
 		handleScroll() {
 			if (this.scrollElement.scrollTop > 20) {
 				this.scrolled = true
@@ -225,4 +234,23 @@ export default {
 	width: 44px;
 	height: 44px;
 }
+.card-with-action {
+	display: flex;
+	align-items: center;
+	column-gap: 8px;
+}
+
+.left-card-side {
+  flex: 1;
+}
+
+.right-card-side {
+  flex: 0;
+}
+
+// hack
+.notecard > div {
+  flex: 1;
+}
+
 </style>

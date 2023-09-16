@@ -67,7 +67,7 @@
 import moment from '@nextcloud/moment'
 import { NcButton, NcSelect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
-import InputDiv from '../Base/InputDiv.vue'
+import { InputDiv } from '../Base/index.js'
 
 export default {
 	name: 'OptionCloneDate',

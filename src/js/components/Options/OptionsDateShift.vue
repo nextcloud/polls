@@ -47,7 +47,7 @@
 <script>
 
 import { mapState, mapGetters } from 'vuex'
-import InputDiv from '../Base/InputDiv.vue'
+import { InputDiv } from '../Base/index.js'
 import { NcButton, NcSelect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'

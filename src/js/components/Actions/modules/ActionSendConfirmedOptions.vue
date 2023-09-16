@@ -60,7 +60,7 @@
 import { NcButton } from '@nextcloud/vue'
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 import { showError, showSuccess } from '@nextcloud/dialogs'
-import { PollsAPI } from '../../Api/polls.js'
+import { PollsAPI } from '../../../Api/index.js'
 
 export default {
 	name: 'ActionSendConfirmedOptions',

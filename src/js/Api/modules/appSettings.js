@@ -22,26 +22,42 @@
 
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
-const userSettings = {
-	getUserSettings() {
+const appSettings = {
+	getAppSettings() {
 		return httpInstance.request({
 			method: 'GET',
-			url: 'preferences',
+			url: 'settings/app',
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getUserSettings.name].handleRequestCancellation().token,
+			cancelToken: cancelTokenHandlerObject[this.getAppSettings.name].handleRequestCancellation().token,
 		})
 	},
 
-	writeUserSettings(preferences) {
+	writeAppSettings(appSettings) {
 		return httpInstance.request({
 			method: 'POST',
-			url: 'preferences',
-			data: { preferences },
-			cancelToken: cancelTokenHandlerObject[this.writeUserSettings.name].handleRequestCancellation().token,
+			url: 'settings/app',
+			data: { appSettings },
+			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
+		})
+	},
+
+	getGroups(query) {
+		return httpInstance.request({
+			method: 'GET',
+			url: `groups${query.trim() ? `/${query.trim()}` : ''}`,
+			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
+		})
+	},
+
+	getUsers(query) {
+		return httpInstance.request({
+			method: 'GET',
+			url: `search/users${query.trim() ? `/${query.trim()}` : ''}`,
+			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
 		})
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(userSettings)
+const cancelTokenHandlerObject = createCancelTokenHandler(appSettings)
 
-export { userSettings as UserSettingsAPI }
+export default { appSettings }

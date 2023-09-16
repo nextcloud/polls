@@ -23,7 +23,7 @@
 
 import { debounce } from 'lodash'
 import { mapState } from 'vuex'
-import { AppSettingsAPI } from '../Api/appSettings.js'
+import { AppSettingsAPI } from '../Api/index.js'
 
 export const loadGroups = {
 	data() {

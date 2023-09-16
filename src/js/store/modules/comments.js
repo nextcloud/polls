@@ -21,8 +21,7 @@
  *
  */
 
-import { CommentsAPI } from '../../Api/comments.js'
-import { PublicAPI } from '../../Api/public.js'
+import { CommentsAPI, PublicAPI } from '../../Api/index.js'
 
 const defaultComments = () => ({
 	list: [],

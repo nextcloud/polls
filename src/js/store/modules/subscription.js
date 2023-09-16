@@ -21,8 +21,7 @@
  *
  */
 
-import { PollsAPI } from '../../Api/polls.js'
-import { PublicAPI } from '../../Api/public.js'
+import { PollsAPI, PublicAPI } from '../../Api/index.js'
 
 const defaultSubscription = () => ({
 	subscribed: false,

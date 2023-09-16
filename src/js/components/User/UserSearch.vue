@@ -45,7 +45,7 @@
 import { debounce } from 'lodash'
 import { showError } from '@nextcloud/dialogs'
 import { NcSelect } from '@nextcloud/vue'
-import { AppSettingsAPI } from '../../Api/appSettings.js'
+import { AppSettingsAPI } from '../../Api/index.js'
 
 export default {
 	name: 'UserSearch',

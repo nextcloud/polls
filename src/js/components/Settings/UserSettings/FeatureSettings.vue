@@ -53,7 +53,7 @@
 <script>
 
 import { mapState } from 'vuex'
-import InputDiv from '../../Base/InputDiv.vue'
+import { InputDiv } from '../../Base/index.js'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 export default {

@@ -22,7 +22,7 @@
  */
 
 import { getCurrentUser } from '@nextcloud/auth'
-import { PollsAPI } from '../../Api/polls.js'
+import { PollsAPI } from '../../Api/index.js'
 
 const namespaced = true
 const state = {

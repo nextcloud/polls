@@ -47,7 +47,7 @@ import moment from '@nextcloud/moment'
 import linkifyStr from 'linkify-string'
 import { showError } from '@nextcloud/dialogs'
 import { mapState } from 'vuex'
-import ActionDelete from '../Actions/ActionDelete.vue'
+import { ActionDelete } from '../Actions/index.js'
 
 export default {
 	name: 'CommentItem',

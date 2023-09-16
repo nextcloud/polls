@@ -147,4 +147,4 @@ const polls = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(polls)
 
-export { polls as PollsAPI }
+export default { polls }

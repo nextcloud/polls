@@ -21,8 +21,7 @@
  *
  */
 
-import { VotesAPI } from '../../Api/votes.js'
-import { PublicAPI } from '../../Api/public.js'
+import { PublicAPI, VotesAPI } from '../../Api/index.js'
 
 const defaultVotes = () => ({
 	list: [],

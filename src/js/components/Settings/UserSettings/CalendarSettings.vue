@@ -63,7 +63,7 @@
 
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import InputDiv from '../../Base/InputDiv.vue'
+import { InputDiv } from '../../Base/index.js'
 
 export default {
 	name: 'CalendarSettings',

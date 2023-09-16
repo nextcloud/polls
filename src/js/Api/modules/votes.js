@@ -52,4 +52,4 @@ const votes = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(votes)
 
-export { votes as VotesAPI }
+export default { votes }

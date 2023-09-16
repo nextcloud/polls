@@ -75,7 +75,7 @@
 import { mapGetters, mapState } from 'vuex'
 import { NcButton, NcEmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
-import ActionDelete from '../Actions/ActionDelete.vue'
+import { ActionDelete } from '../Actions/index.js'
 import OptionItem from './OptionItem.vue'
 import OptionItemOwner from '../Options/OptionItemOwner.vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins.js'

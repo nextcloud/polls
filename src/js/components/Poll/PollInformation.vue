@@ -134,7 +134,7 @@
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { NcUserBubble } from '@nextcloud/vue'
-import BadgeDiv from '../Base/BadgeDiv.vue'
+import { BadgeDiv } from '../Base/index.js'
 import OwnerIcon from 'vue-material-design-icons/Crown.vue'
 import SubscribedIcon from 'vue-material-design-icons/Bell.vue'
 import ProposalsAllowedIcon from 'vue-material-design-icons/Offer.vue'
@@ -152,7 +152,7 @@ import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import EmailIcon from 'vue-material-design-icons/Email.vue'
-import MaybeIcon from '../AppIcons/MaybeIcon.vue'
+import { MaybeIcon } from '../AppIcons/index.js'
 
 export default {
 	name: 'PollInformation',

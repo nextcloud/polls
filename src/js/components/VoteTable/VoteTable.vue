@@ -54,7 +54,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { showSuccess } from '@nextcloud/dialogs'
-import ActionDelete from '../Actions/ActionDelete.vue'
+import { ActionDelete } from '../Actions/index.js'
 import VoteColumn from './VoteColumn.vue'
 import VoteMenu from './VoteMenu.vue'
 import { confirmOption } from '../../mixins/optionMixins.js'
@@ -98,7 +98,6 @@ export default {
 			await this.$store.dispatch('votes/deleteUser', { userId })
 			showSuccess(t('polls', 'User {userId} removed', { userId }))
 		},
-
 	},
 }
 </script>

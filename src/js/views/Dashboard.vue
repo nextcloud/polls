@@ -62,7 +62,7 @@ import { NcDashboardWidget } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import { PollsAppIcon } from '../components/AppIcons/index.js'
 import { mapGetters } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 

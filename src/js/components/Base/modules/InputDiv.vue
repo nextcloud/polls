@@ -57,7 +57,7 @@ import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
-import Spinner from '../AppIcons/Spinner.vue'
+import { Spinner } from '../../AppIcons/index.js'
 
 export default {
 	name: 'InputDiv',

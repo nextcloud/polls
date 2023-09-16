@@ -21,7 +21,7 @@
  *
  */
 
-import { SharesAPI } from '../../Api/shares.js'
+import { SharesAPI } from '../../Api/index.js'
 
 const defaultShares = () => ({
 	list: [],
