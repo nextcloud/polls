@@ -121,7 +121,7 @@
 import { mapGetters, mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
-import ActionDelete from '../Actions/ActionDelete.vue'
+import { ActionDelete } from '../Actions/index.js'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'

@@ -103,12 +103,12 @@
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcAppContent, NcEmptyContent } from '@nextcloud/vue'
-import HeaderBar from '../components/Base/HeaderBar.vue'
+import { HeaderBar } from '../components/Base/index.js'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
-import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import { PollsAppIcon } from '../components/AppIcons/index.js'
 
 export default {
 	name: 'PollList',
@@ -124,7 +124,7 @@ export default {
 		ArchivePollIcon,
 		RestorePollIcon,
 		PollsAppIcon,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
 		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},
 

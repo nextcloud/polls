@@ -22,28 +22,26 @@
 
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
-const validators = {
-	validateEmailAddress(emailAddress) {
+const userSettings = {
+	getUserSettings() {
 		return httpInstance.request({
 			method: 'GET',
-			url: `check/emailaddress/${emailAddress}`,
-			cancelToken: cancelTokenHandlerObject[this.validateEmailAddress.name].handleRequestCancellation().token,
+			url: 'preferences',
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getUserSettings.name].handleRequestCancellation().token,
 		})
 	},
 
-	validateName(pollToken, name) {
+	writeUserSettings(preferences) {
 		return httpInstance.request({
 			method: 'POST',
-			url: 'check/username',
-			cancelToken: cancelTokenHandlerObject[this.validateName.name].handleRequestCancellation().token,
-			data: {
-				userName: name,
-				token: pollToken,
-			},
+			url: 'preferences',
+			data: { preferences },
+			cancelToken: cancelTokenHandlerObject[this.writeUserSettings.name].handleRequestCancellation().token,
 		})
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(validators)
+const cancelTokenHandlerObject = createCancelTokenHandler(userSettings)
 
-export { validators as ValidatorAPI }
+export default { userSettings }

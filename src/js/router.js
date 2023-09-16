@@ -25,7 +25,7 @@ import Router from 'vue-router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, setCookie } from './helpers/cookieHelper.js'
-import { PublicAPI } from './Api/public.js'
+import { PublicAPI } from './Api/index.js'
 
 // Dynamic loading
 const List = () => import('./views/PollList.vue')

@@ -23,8 +23,7 @@
 
 import { orderBy } from 'lodash'
 import moment from '@nextcloud/moment'
-import { OptionsAPI } from '../../Api/options.js'
-import { PublicAPI } from '../../Api/public.js'
+import { OptionsAPI, PublicAPI } from '../../Api/index.js'
 
 const defaultOptions = () => ({
 	list: [],

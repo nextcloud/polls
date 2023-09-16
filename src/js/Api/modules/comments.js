@@ -54,4 +54,4 @@ const comments = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(comments)
 
-export { comments as CommentsAPI }
+export default { comments }

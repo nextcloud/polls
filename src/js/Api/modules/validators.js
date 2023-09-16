@@ -22,42 +22,28 @@
 
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
-const appSettings = {
-	getAppSettings() {
+const validators = {
+	validateEmailAddress(emailAddress) {
 		return httpInstance.request({
 			method: 'GET',
-			url: 'settings/app',
-			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getAppSettings.name].handleRequestCancellation().token,
+			url: `check/emailaddress/${emailAddress}`,
+			cancelToken: cancelTokenHandlerObject[this.validateEmailAddress.name].handleRequestCancellation().token,
 		})
 	},
 
-	writeAppSettings(appSettings) {
+	validateName(pollToken, name) {
 		return httpInstance.request({
 			method: 'POST',
-			url: 'settings/app',
-			data: { appSettings },
-			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
-		})
-	},
-
-	getGroups(query) {
-		return httpInstance.request({
-			method: 'GET',
-			url: `groups${query.trim() ? `/${query.trim()}` : ''}`,
-			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
-		})
-	},
-
-	getUsers(query) {
-		return httpInstance.request({
-			method: 'GET',
-			url: `search/users${query.trim() ? `/${query.trim()}` : ''}`,
-			cancelToken: cancelTokenHandlerObject[this.writeAppSettings.name].handleRequestCancellation().token,
+			url: 'check/username',
+			cancelToken: cancelTokenHandlerObject[this.validateName.name].handleRequestCancellation().token,
+			data: {
+				userName: name,
+				token: pollToken,
+			},
 		})
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(appSettings)
+const cancelTokenHandlerObject = createCancelTokenHandler(validators)
 
-export { appSettings as AppSettingsAPI }
+export default { validators }

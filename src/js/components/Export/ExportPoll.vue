@@ -65,7 +65,7 @@ import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
-import { PollsAPI } from '../../Api/polls.js'
+import { PollsAPI } from '../../Api/index.js'
 
 export default {
 	name: 'ExportPoll',

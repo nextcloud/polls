@@ -23,8 +23,7 @@
 
 import { mapState } from 'vuex'
 import { InvalidJSON } from '../Exceptions/Exceptions.js'
-import { PollsAPI } from '../Api/polls.js'
-import { PublicAPI } from '../Api/public.js'
+import { PollsAPI, PublicAPI } from '../Api/index.js'
 import { emit } from '@nextcloud/event-bus'
 
 const SLEEP_TIMEOUT_DEFAULT = 30

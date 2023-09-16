@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -19,41 +19,39 @@
   - along with this program.  If not, see <http://www.gnu.org/licenses/>.
   -
   -->
+
 <template>
-	<span :aria-hidden="!title"
-		:aria-label="title"
-		class="material-design-icon activity-app-icon"
-		role="img"
-		v-bind="$attrs"
-		@click="$emit('click', $event)">
-		<svg :fill="fillColor"
-			class="material-design-icon__svg"
-			:width="size"
-			:height="size"
-			viewBox="0 0 32 32">
-			<path d="m16 1-10 18h11l-1 12 10-18h-11z" :fill="fillColor">
-				<title v-if="title">{{ title }}</title>
-			</path>
-		</svg>
-	</span>
+	<div class="loading-overlay">
+		<Spinner :size="70" />
+	</div>
 </template>
 
 <script>
+import { Spinner } from '../../AppIcons/index.js'
+
 export default {
-	name: 'ActivityAppIcon',
-	props: {
-		title: {
-			type: String,
-			default: 'Activity',
-		},
-		fillColor: {
-			type: String,
-			default: 'currentColor',
-		},
-		size: {
-			type: Number,
-			default: 24,
-		},
+	name: 'LoadingOverlay',
+	components: {
+		Spinner,
 	},
 }
 </script>
+
+<style lang="scss">
+.loading-overlay {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100vw;
+	height: 100vh;
+	background: var(--color-main-background);
+	opacity: 0.9;
+	z-index: 9999;
+
+	.spinner {
+		position: fixed;
+		left: 50%;
+		top: 50%;
+	}
+}
+</style>

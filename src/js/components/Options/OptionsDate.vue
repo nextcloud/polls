@@ -82,7 +82,7 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
-import ActionDelete from '../Actions/ActionDelete.vue'
+import { ActionDelete } from '../Actions/index.js'
 import OptionCloneDate from './OptionCloneDate.vue'
 import OptionItem from './OptionItem.vue'
 import { confirmOption, removeOption } from '../../mixins/optionMixins.js'

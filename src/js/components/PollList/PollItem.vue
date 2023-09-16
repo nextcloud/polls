@@ -117,7 +117,7 @@
 <script>
 import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
-import BadgeDiv from '../Base/BadgeDiv.vue'
+import { BadgeDiv } from '../Base/index.js'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'

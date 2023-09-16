@@ -21,7 +21,7 @@
  *
  */
 
-import { PublicAPI } from '../../Api/public.js'
+import { PublicAPI } from '../../Api/index.js'
 
 const defaultShares = () => ({
 	displayName: '',

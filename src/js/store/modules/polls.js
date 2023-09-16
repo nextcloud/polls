@@ -25,7 +25,7 @@
 
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash'
-import { PollsAPI } from '../../Api/polls.js'
+import { PollsAPI } from '../../Api/index.js'
 
 const state = {
 	list: [],

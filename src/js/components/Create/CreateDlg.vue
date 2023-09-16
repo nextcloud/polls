@@ -61,11 +61,9 @@
 import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
-import ConfigBox from '../Base/ConfigBox.vue'
-import RadioGroupDiv from '../Base/RadioGroupDiv.vue'
+import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
-import InputDiv from '../Base/InputDiv.vue'
 
 export default {
 	name: 'CreateDlg',

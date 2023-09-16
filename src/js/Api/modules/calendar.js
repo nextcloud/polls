@@ -45,4 +45,4 @@ const calendar = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(calendar)
 
-export { calendar as CalendarAPI }
+export default { calendar }

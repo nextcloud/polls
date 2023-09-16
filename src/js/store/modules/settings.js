@@ -21,8 +21,7 @@
  *
  */
 
-import { CalendarAPI } from '../../Api/calendar.js'
-import { UserSettingsAPI } from '../../Api/userSettings.js'
+import { CalendarAPI, UserSettingsAPI } from '../../Api/index.js'
 
 const defaultSettings = () => ({
 	user: {

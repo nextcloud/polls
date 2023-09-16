@@ -21,7 +21,7 @@
  *
  */
 
-import { AppSettingsAPI } from '../../Api/appSettings.js'
+import { AppSettingsAPI } from '../../Api/index.js'
 
 const defaultAppSettings = () => ({
 	allAccessGroups: [],

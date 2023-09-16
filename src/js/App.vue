@@ -49,7 +49,7 @@ export default {
 	name: 'App',
 	components: {
 		NcContent,
-		LoadingOverlay: () => import('./components/Base/LoadingOverlay.vue'),
+		LoadingOverlay: () => import('./components/Base/modules/LoadingOverlay.vue'),
 		UserSettingsDlg,
 	},
 

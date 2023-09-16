@@ -38,7 +38,7 @@
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
-import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import { PollsAppIcon } from '../components/AppIcons/index.js'
 
 export default {
 	name: 'SideBarCombo',

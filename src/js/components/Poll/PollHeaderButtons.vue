@@ -43,7 +43,7 @@
 <script>
 import { mapState } from 'vuex'
 import { NcButton, NcPopover } from '@nextcloud/vue'
-import ActionToggleSidebar from '../Actions/ActionToggleSidebar.vue'
+import { ActionToggleSidebar } from '../Actions/index.js'
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
 export default {

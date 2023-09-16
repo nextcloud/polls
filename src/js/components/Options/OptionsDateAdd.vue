@@ -88,7 +88,7 @@
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
 import { NcButton, NcCheckboxRadioSwitch, NcDatetimePicker } from '@nextcloud/vue'
-import FlexSpacer from '../Base/FlexSpacer.vue'
+import { FlexSpacer } from '../Base/index.js'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 
 export default {

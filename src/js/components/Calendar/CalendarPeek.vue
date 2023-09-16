@@ -46,7 +46,7 @@ import { orderBy } from 'lodash'
 import { NcPopover } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import CalendarInfo from './CalendarInfo.vue'
-import { CalendarAPI } from '../../Api/calendar.js'
+import { CalendarAPI } from '../../Api/index.js'
 
 export default {
 	name: 'CalendarPeek',

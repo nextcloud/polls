@@ -134,8 +134,8 @@ import { mapGetters } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import { sortBy } from 'lodash'
-import HeaderBar from '../components/Base/HeaderBar.vue'
-import PollsAppIcon from '../components/AppIcons/PollsAppIcon.vue'
+import { HeaderBar } from '../components/Base/index.js'
+import { PollsAppIcon } from '../components/AppIcons/index.js'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
@@ -157,7 +157,7 @@ export default {
 		HeaderBar,
 		NcModal,
 		NcButton,
-		LoadingOverlay: () => import('../components/Base/LoadingOverlay.vue'),
+		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
 		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},
 

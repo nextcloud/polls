@@ -24,8 +24,7 @@
 import moment from '@nextcloud/moment'
 import acl from './subModules/acl.js'
 import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
-import { PollsAPI } from '../../Api/polls.js'
-import { PublicAPI } from '../../Api/public.js'
+import { PollsAPI, PublicAPI } from '../../Api/index.js'
 
 const defaultPoll = () => ({
 	id: 0,
@@ -50,6 +49,7 @@ const defaultPoll = () => ({
 	hideBookedUp: 0,
 	useNo: 1,
 	autoReminder: false,
+	revealParticipants: false,
 	owner: {
 		userId: '',
 		displayName: '',
@@ -76,6 +76,9 @@ const mutations = {
 
 	setDescriptionSafe(state, payload) {
 		state.descriptionSafe = payload.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+	},
+	switchSafeTable(state, toStatus) {
+		state.revealParticipants = toStatus ?? !state.revealParticipants
 	},
 }
 
@@ -157,7 +160,7 @@ const getters = {
 	proposalsExpirySet: (state, getters) => getters.proposalsAllowed && state.proposalsExpire,
 	proposalsExpireRelative: (state) => moment.unix(state.proposalsExpire).fromNow(),
 	isClosed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 1000),
-	safeTable: (state, getters, rootState) => getters.countCells > rootState.settings.user.performanceThreshold,
+	safeTable: (state, getters, rootState) => !state.revealParticipants && getters.countCells > rootState.settings.user.performanceThreshold,
 	countParticipants: (state, getters) => getters.participants.length,
 	countHiddenParticipants: (state, getters) => getters.participants.length - getters.safeParticipants.length,
 	countSafeParticipants: (state, getters) => getters.safeParticipants.length,
@@ -183,6 +186,7 @@ const actions = {
 				context.commit('acl/reset')
 				return
 			}
+			context.commit('switchSafeTable', false)
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
 		} catch (e) {

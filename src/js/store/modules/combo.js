@@ -23,9 +23,7 @@
 
 import { uniqueOptions, uniqueParticipants } from '../../helpers/arrayHelper.js'
 import { sortBy } from 'lodash'
-import { PollsAPI } from '../../Api/polls.js'
-import { OptionsAPI } from '../../Api/options.js'
-import { VotesAPI } from '../../Api/votes.js'
+import { OptionsAPI, PollsAPI, VotesAPI } from '../../Api/index.js'
 
 const defaultCombo = () => ({
 	id: 1,
