@@ -503,7 +503,6 @@
     "Some visual styling options." : "Niektoré možnosti vizuálneho štýlu.",
     "No vote options available" : "Žiadne možnosti hlasovania neboli nájdené",
     "Maybe the owner did not provide some until now." : "Možno niektoré majiteľ doteraz neposkytol.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Z dôvodu obáv o výkonnosť je {countHiddenParticipants} voličov skrytých.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Aj keď sú mená účastníkov skryté, nejedná sa o skutočný anonymný prieskum, pretože nie sú skryté pred vlastníkom.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Okrem toho môže vlastník kedykoľvek odstrániť anonymný príznak, ktorý odhalí mená účastníkov.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["ostáva %n z {maximalVotes} hlasu.","ostáva %n z {maximalVotes} hlasov.","ostáva %n z {maximalVotes} hlasov.","ostáva %n z {maximalVotes} hlasov."],

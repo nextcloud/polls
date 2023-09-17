@@ -238,7 +238,6 @@
     "Experimental styles" : "Istiles isperimentales",
     "No vote options available" : "Perunu sèberu de votu disponìbile",
     "Maybe the owner did not provide some until now." : "Fortzis sa propiedade no nd'at ancora frunidu.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Pro more de problemas de prestatzione is {countHiddenParticipants} votos sunt cuados.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Mancari is nùmenes de is partetzipantes siant cuados, no est a beru unu sondàgiu anònimu ca no sunt cuados pro sa propiedade.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "In prus, sa propiedade podet eliminare sa bandera anònima in cale si siat momento, cosa chi at a iscoviare is nùmenes de is partetzipantes.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Abarrat %n votu de {maximalVotes}.","Abarrant %n votos de {maximalVotes}."],

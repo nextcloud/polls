@@ -512,7 +512,6 @@
     "Some visual styling options." : "Algunes opcions d'estil visual.",
     "No vote options available" : "No hi ha opcions de vot disponibles",
     "Maybe the owner did not provide some until now." : "Potser el propietari no n'ha proporcionat fins ara.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "A causa de l’efecte en el rendiment, s'han amagat {countHiddenParticipants} votants.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Tot i que els noms dels participants estan ocults, aquesta no és una enquesta anònima real perquè no estan ocults al propietari.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "A més, el propietari pot suprimir la marca anònima en qualsevol moment, la qual cosa revelarà els noms dels participants.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Queda %n de {maximalVotes} vot.","Queden %n de {maximalVotes} vots."],

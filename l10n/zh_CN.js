@@ -414,7 +414,6 @@ OC.L10N.register(
     "Experimental styles" : "实验性样式",
     "No vote options available" : "无可用的投票选项",
     "Maybe the owner did not provide some until now." : "也许所有者直到现在才提供了一些。",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "出于性能担忧， 隐藏了 {countHiddenParticipants} 名投票者",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "虽然参与者的名字是隐藏的，但这并不是真正的匿名投票，因为它们对所有者不是隐藏的。",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "此外，所有者可以在任何时候删除匿名标志，这将显示参与者的姓名。 ",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["最多允许票数 {maximalVotes}，剩余 %n 票"],

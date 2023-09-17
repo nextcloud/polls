@@ -521,7 +521,6 @@
     "Some visual styling options." : "Bazı görsel biçem seçenekleri.",
     "No vote options available" : "Kullanılabilecek bir oy seçeneği yok",
     "Maybe the owner did not provide some until now." : "Sahibi şu ana kadar bir seçenek belirtmemiş olabilir.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Başarımı iyileştirmek için {countHiddenParticipants} oy veren gizlendi.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Katılımcı adları gizlenmiş olsa da, bu anket gerçekten anonim değildir. Kullanıcı adları anket sahibinden gizlenmez.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Ayrıca, anket sahibi anketin anonimlik durumunu istediği zaman değiştirebilir. Bu durumda katılımcının adları açığa çıkar.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n / {maximalVotes} oy kaldı.","%n / {maximalVotes} oy kaldı."],

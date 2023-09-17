@@ -437,7 +437,6 @@
     "Experimental styles" : "Экспериментальные стили",
     "No vote options available" : "Варианты голосования отсуствуют",
     "Maybe the owner did not provide some until now." : "Возможно, владелец не предоставил их до сих пор.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Из-за проблем с производительностью избиратели {countHiddenParticipants} скрыты.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Хотя имена участников скрыты, это не настоящий анонимный опрос, потому что они не скрыты от владельца опроса.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Кроме того, владелец может в любое время снять флаг анонимности, что раскроет имена участников.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n из {maximalVotes} голосов.","%n из {maximalVotes} голосов.","%n из {maximalVotes} голосов.","%n из {maximalVotes} голосов."],

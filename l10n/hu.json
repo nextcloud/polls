@@ -514,7 +514,6 @@
     "Some visual styling options." : "Egyes vizuális stílusok lehetőségei.",
     "No vote options available" : "Nincsenek szavazási lehetőségek megadva",
     "Maybe the owner did not provide some until now." : "Lehet, hogy a tulajdonos eddig nem adott meg semmit.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Teljesítménybeli okok miatt {countHiddenParticipants} szavazó rejtett.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Bár a résztvevők neve rejtve van, ez nem egy igazi névtelen szavazás, mert az eredmények nincsenek elrejtve a tulajdonos elől.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Ezenkívül a tulajdonos bármikor eltávolíthatja az anonim jelzést, amely felfedi a résztvevők nevét.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n / {maximalVotes} szavazat maradt.","%n / {maximalVotes} szavazat maradt."],

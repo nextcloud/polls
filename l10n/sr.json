@@ -521,7 +521,6 @@
     "Some visual styling options." : "Неке опције за промену визуелног стила.",
     "No vote options available" : "Нема достиупних опција гласања",
     "Maybe the owner did not provide some until now." : "Можда их власник још увек није понудио.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "{countHiddenParticipants} гласача је сакривено због бриге о перформансама.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Мада су имена учесника скривена, ово није право анонимно гласање јер власник може да види учеснике.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Уз то, власник у сваком тренутку може да уклони заставицу анонимности, што ће да открије имена учесника.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Преостало је %n од {maximalVotes} гласа.","Преостало је %n од {maximalVotes} гласа.","Преостало је %n од {maximalVotes} гласова."],

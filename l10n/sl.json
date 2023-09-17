@@ -384,7 +384,6 @@
     "Some visual styling options." : "Izbrane možnosti oblikovanja.",
     "No vote options available" : "Ni razpoložljive možnosti za glasovanje ali odziv",
     "Maybe the owner did not provide some until now." : "Morda jih lastnik še ni uspel dodati.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Zaradi izboljševanja delovanja je {countHiddenParticipants} glasovalcev skritih.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Čeprav so imena udeležencev skrita, to ni zares anonimna anketa. Lastnik ankete lahko imena vidi.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Prav tako lahko lastnik kadarkoli prekliče možnost skrivanja imen udeležencev, s čimer se vsa imena takoj pokažejo.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Preostal je še %n od {maximalVotes} glasov.","Preostala sta še %n od {maximalVotes} glasov.","Preostali so še %n od {maximalVotes} glasov.","Preostalih je še %n od {maximalVotes} glasov."],

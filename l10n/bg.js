@@ -514,7 +514,6 @@ OC.L10N.register(
     "Some visual styling options." : "Някои опции за визуалено стилизиране.",
     "No vote options available" : "Няма налични опции за гласуване",
     "Maybe the owner did not provide some until now." : "Може би собственикът не е предоставил някои досега.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Поради опасения за ефективността {countHiddenParticipants} гласоподавателите са скрити.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Въпреки че имената на участниците са скрити, това не е истинска анонимна анкета, защото не са скрити от собственика.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Освен това собственикът може да премахне анонимния флаг по всяко време, което ще разкрие имената на участниците.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Остават %n от {maximalVotes} гласа.","Остават %n от {maximalVotes} гласа."],

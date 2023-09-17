@@ -479,7 +479,6 @@ OC.L10N.register(
     "Some visual styling options." : "Κάποιες ρυθμίσεις εμφάνισης",
     "No vote options available" : "Δεν υπάρχουν διαθέσιμες επιλογές ψήφου",
     "Maybe the owner did not provide some until now." : "Ίσως ο ιδιοκτήτης δεν παρείχε κάποια μέχρι τώρα.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Λόγω πιθανόν προβλημάτων σχετικά με την απόδοση {countHiddenParticipants} οι συμμετέχοντες δεν εμφανίζονται.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Παρόλο που τα ονόματα των συμμετεχόντων είναι κρυμμένα, αυτή δεν είναι μια πραγματικά ανώνυμη δημοσκόπηση επειδή τα ονόματα δεν είναι κρυφά από τον κάτοχο.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Επιπλέον, ο κάτοχος μπορεί να απενεργοποιήσει την σημαία ανωνυμίας ανά πάσα στιγμή, γεγονός που θα αποκαλύψει τα ονόματα των συμμετεχόντων.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["απομένει %n από {maximalVotes} ψήφος.","απομένουν %n από {maximalVotes} ψήφους."],

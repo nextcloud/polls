@@ -518,7 +518,6 @@ OC.L10N.register(
     "Some visual styling options." : "Vissa visuella stylingalternativ.",
     "No vote options available" : "Inga röstalternativ tillgängliga",
     "Maybe the owner did not provide some until now." : "Kanske har ägaren inte gett några förrän nu.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "På grund av prestandaproblem är {countHiddenParticipants} väljare dolda.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Även om deltagarnas namn är dolda är detta inte en riktig anonym omröstning eftersom de inte är dolda för ägaren.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Dessutom kan ägaren ta bort den anonyma flaggan när som helst, vilket kommer att avslöja deltagarnas namn.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n av {maximalVotes} röster kvar.","%n av {maximalVotes} röster kvar."],

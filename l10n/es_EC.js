@@ -518,7 +518,6 @@ OC.L10N.register(
     "Some visual styling options." : "Algunas opciones de estilo visual.",
     "No vote options available" : "No hay opciones de voto disponibles",
     "Maybe the owner did not provide some until now." : "Tal vez el propietario aún no las haya proporcionado.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Debido a problemas de rendimiento, {countHiddenParticipants} votantes están ocultos.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Aunque los nombres de los participantes están ocultos, esta no es una encuesta verdaderamente anónima porque no están ocultos para el propietario.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Además, el propietario puede eliminar la marca de anónimo en cualquier momento, lo que revelará los nombres de los participantes.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Quedan %n de {maximalVotes} voto.","Quedan %n de {maximalVotes} votos.","Quedan %n de {maximalVotes} votos."],

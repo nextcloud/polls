@@ -277,7 +277,6 @@ OC.L10N.register(
     "Experimental styles" : "Eksperimentalni stilovi",
     "No vote options available" : "Nema dostupnih mogućnosti glasanja",
     "Maybe the owner did not provide some until now." : "Možda vlasnik nije dosad odredio nikakve mogućnosti.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Skriveno je {countHiddenParticipants} glasača radi bolje izvedbe ankete.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Iako su imena sudionika skrivena, ovo nije potpuno anonimna anketa jer nisu skrivena od vlasnika.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Vlasnik također može u bilo kojem trenutku ukloniti zastavicu anonimnosti i otkriti imena sudionika.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Preostao je %n glas od {maximalVotes}.","Preostala su %n glasa od {maximalVotes}.","Preostalo je %n glasova od {maximalVotes}."],

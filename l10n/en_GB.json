@@ -521,7 +521,6 @@
     "Some visual styling options." : "Some visual styling options.",
     "No vote options available" : "No vote options available",
     "Maybe the owner did not provide some until now." : "Maybe the owner did not provide some until now.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Due to performance concerns {countHiddenParticipants} voters are hidden.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n of {maximalVotes} vote left.","%n of {maximalVotes} votes left."],

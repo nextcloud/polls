@@ -512,7 +512,6 @@ OC.L10N.register(
     "Some visual styling options." : "Hainbat estilo bisual aukerak.",
     "No vote options available" : "Ez dago bozka aukerarik eskuragarri.",
     "Maybe the owner did not provide some until now." : "Agian jabeak ez du oraindik batere eskaini.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Errendimendu kezkak direla eta, {countHiddenParticipants} boto-emaileak ezkutatuta daude.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Parte-hartzaileen izenak ezkutatuta dauden arren, ez da benetako galdeketa anonimoa, jabearentzat ez baitaude ezkutatuta.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Gainera, jabeak anonimo marka kendu dezake edozein unetan, eta horrek parte-hartzailearen izenak agerian utziko ditu.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["{maximalVotes}(e)tik boto %n geratzen da.","{maximalVotes}(e)tik %n boto geratzen dira."],

@@ -439,7 +439,6 @@ OC.L10N.register(
     "Experimental styles" : "Experimentele stijlen",
     "No vote options available" : "Geen stemopties beschikbaar",
     "Maybe the owner did not provide some until now." : "Misschien heeft de eigenaar nog geen opties toegevoegd.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Vanwege prestatieproblemen zijn {countHiddenParticipants} stemmers verborgen.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Hoewel de namen van deelnemers verborgen zijn, is dit geen echte anonieme peiling, omdat ze niet verborgen zijn voor de eigenaar.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Bovendien kan de eigenaar de anonieme vlag op elk moment verwijderen, waardoor de namen van de deelnemers worden onthuld.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n van {maximalVotes} stem over.","%n van {maximalVotes} stemmen over."],

@@ -523,7 +523,6 @@ OC.L10N.register(
     "Some visual styling options." : "Předvolby pro vizuální styl.",
     "No vote options available" : "Nejsou k dispozici žádné možnosti volby",
     "Maybe the owner did not provide some until now." : "Vlastník nejspíš doposud žádné neposkytl.",
-    "Due to performance concerns {countHiddenParticipants} voters are hidden." : "Z důvodu obav o výkonnost je {countHiddenParticipants} hlasujících skryto.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Ačkoli jsou jména účastníků skryta, toto není ve skutečnosti anonymní anketa, protože vlastník ankety je může vidět.",
     "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "Vlastník může případně kdykoli vypnout anonymitu, což odhalí jména účastníků.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["Zbývá %n hlas z {maximalVotes}.","Zbývají %n hlasy z {maximalVotes}.","Zbývá %n hlasů z {maximalVotes}.","Zbývají %n hlasy z {maximalVotes}."],
