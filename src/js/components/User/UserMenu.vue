@@ -109,7 +109,7 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
-import { deleteCookieByValue, findCookieByValue } from '../../helpers/cookieHelper.js'
+import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.js'
 import { ValidatorAPI, PollsAPI } from '../../Api/index.js'
 
 const setError = (inputProps) => {

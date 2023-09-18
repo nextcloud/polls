@@ -21,7 +21,7 @@
  *
  */
 
-import { uniqueOptions, uniqueParticipants } from '../../helpers/arrayHelper.js'
+import { uniqueOptions, uniqueParticipants } from '../../helpers/index.js'
 import { sortBy } from 'lodash'
 import { OptionsAPI, PollsAPI, VotesAPI } from '../../Api/index.js'
 

@@ -60,4 +60,4 @@ const appSettings = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(appSettings)
 
-export default { appSettings }
+export default appSettings

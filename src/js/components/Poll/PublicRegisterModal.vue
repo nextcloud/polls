@@ -103,9 +103,8 @@ import { generateUrl } from '@nextcloud/router'
 import { NcButton, NcModal, NcCheckboxRadioSwitch, NcRichText } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import { InputDiv } from '../Base/index.js'
-import SimpleLink from '../../helpers/SimpleLink.js'
+import { SimpleLink, setCookie } from '../../helpers/index.js'
 import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
-import { setCookie } from '../../helpers/cookieHelper.js'
 
 const COOKIE_LIFETIME = 30
 

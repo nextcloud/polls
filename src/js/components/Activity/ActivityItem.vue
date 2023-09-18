@@ -32,8 +32,7 @@
 <script>
 import moment from '@nextcloud/moment'
 import { NcUserBubble, NcRichText } from '@nextcloud/vue'
-import SimpleLink from '../../helpers/SimpleLink.js'
-import GuestBubble from '../../helpers/GuestBubble.js'
+import { GuestBubble, SimpleLink } from '../../helpers/index.js'
 
 export default {
 	name: 'ActivityItem',

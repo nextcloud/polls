@@ -23,7 +23,7 @@
 
 import moment from '@nextcloud/moment'
 import acl from './subModules/acl.js'
-import { uniqueArrayOfObjects } from '../../helpers/arrayHelper.js'
+import { uniqueArrayOfObjects } from '../../helpers/index.js'
 import { PollsAPI, PublicAPI } from '../../Api/index.js'
 
 const defaultPoll = () => ({

@@ -46,4 +46,4 @@ const validators = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(validators)
 
-export default { validators }
+export default validators

@@ -118,4 +118,4 @@ const options = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(options)
 
-export default { options }
+export default options
