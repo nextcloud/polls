@@ -354,7 +354,7 @@
     "Hide email addresses of internal users" : "Ocultar las direcciones de correo electrónico de los usuarios internos",
     "Show email addresses of internal users to members of the following groups" : "Mostrar las direcciones de correo electrónico de los usuarios internos a los miembros de los siguientes grupos",
     "The privacy link and the legal notice link are automatically added to the registration dialog of public polls." : "El enlace de privacidad y el enlace del aviso legal se añaden automáticamente al diálogo de registro de las encuestas públicas.",
-    "As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms." : "Por defecto se utilizan los enlaces configurados en la aplicación temática. En el caso de los sondeos públicos, estos pueden ser anulados por términos individuales.",
+    "As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms." : "Por defecto se utilizan los enlaces configurados en la aplicación temática. En el caso de las votaciones públicas, estos pueden ser anulados por términos individuales.",
     "Privacy policy link:" : "Enlace a la política de privacidad",
     "Legal notice link:" : "Enlace al aviso legal",
     "Enter the URL of your privacy policy" : "Introduzca la URL de su política de privacidad",
