@@ -44,4 +44,4 @@ const userSettings = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(userSettings)
 
-export default { userSettings }
+export default userSettings

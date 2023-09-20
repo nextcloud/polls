@@ -42,4 +42,4 @@ const activity = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(activity)
 
-export default { activity }
+export default activity

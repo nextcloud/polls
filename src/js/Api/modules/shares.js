@@ -106,4 +106,4 @@ const shares = {
 
 const cancelTokenHandlerObject = createCancelTokenHandler(shares)
 
-export default { shares }
+export default shares
