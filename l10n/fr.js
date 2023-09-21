@@ -503,7 +503,7 @@ OC.L10N.register(
     "Error loading poll list" : "Erreur lors du chargement de la liste des sondages",
     "Add new Poll" : "Ajouter un nouveau sondage",
     "Combine polls" : "Combiner les sondages",
-    "Polls settings" : "Paramètres du sondage",
+    "Polls settings" : "Paramètres de Sondages",
     "Error cloning poll." : "Erreur de duplication du sondage.",
     "404 - poll not found" : "404 - sondage introuvable",
     "Enter a poll or start a new one." : "Choisissez un autre sondage ou ajoutez-en un nouveau.",
