@@ -1,6 +1,7 @@
 export { default as BadgeDiv } from './modules/BadgeDiv.vue'
 export { default as CardDiv } from './modules/CardDiv.vue'
 export { default as ConfigBox } from './modules/ConfigBox.vue'
+export { default as FlexSettings } from './modules/FlexSettings.vue'
 export { default as FlexSpacer } from './modules/FlexSpacer.vue'
 export { default as HeaderBar } from './modules/HeaderBar.vue'
 export { default as InputDiv } from './modules/InputDiv.vue'

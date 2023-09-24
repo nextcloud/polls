@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="polls_user_settings">
+	<FlexSettings>
 		<NcSettingsSection :title="t('polls', 'Calendar check')"
 			:description="t('polls', 'Search for conflicting calendar entries')">
 			<CalendarSettings />
@@ -40,17 +40,20 @@
 			:description="t('polls', 'Some visual styling options.')">
 			<StyleSettings />
 		</NcSettingsSection>
-	</div>
+	</FlexSettings>
 </template>
 
 <script>
 
 import { NcSettingsSection } from '@nextcloud/vue'
+import { FlexSettings } from '../components/Base/index.js'
+
 export default {
 	name: 'UserSettingsPage',
 
 	components: {
 		NcSettingsSection,
+		FlexSettings,
 		CalendarSettings: () => import('../components/Settings/UserSettings/CalendarSettings.vue'),
 		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings.vue'),
 		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings.vue'),
@@ -63,33 +66,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-.polls_user_settings {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: stretch;
-
-	.settings-section {
-		flex: 1 0 480px;
-		margin-bottom: 0;
-		border-bottom: 1px solid var(--color-border);
-	}
-}
-
-.user_settings {
-	padding-top: 16px;
-
-	textarea {
-		width: 99%;
-		resize: vertical;
-		height: 230px;
-	}
-}
-
-.settings_details {
-	padding-bottom: 16px;
-	margin-left: 36px;
-}
-
-</style>
