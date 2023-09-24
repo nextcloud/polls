@@ -82,8 +82,7 @@ export default {
 				subTexts.push({
 					id: 'no-access',
 					text: [
-						t('polls', 'This poll is unpublished'),
-						t('polls', 'Invite users via the share tab in the sidebar'),
+						t('polls', 'Unpublished'),
 					].join('. '),
 					class: 'unpublished',
 					iconComponent: unpublishedIcon,

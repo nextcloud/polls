@@ -33,6 +33,16 @@
 		</HeaderBar>
 
 		<div class="vote_main">
+			<CardDiv v-if="isNoAccessSet && options.length" type="warning">
+				{{ t('polls', 'This poll is unpublished.') }}
+				{{ t('polls', 'Invite users or allow internal access for all site users.') }}
+				<template #button>
+					<NcButton type="primary" @click="openShares">
+						{{ t('polls', 'Edit access') }}
+					</NcButton>
+				</template>
+			</CardDiv>
+
 			<div v-if="poll.description" class="area__description">
 				<MarkUpDescription />
 			</div>
@@ -144,7 +154,12 @@ export default {
 			countHiddenParticipants: 'poll/countHiddenParticipants',
 			safeTable: 'poll/safeTable',
 			confirmedOptions: 'options/confirmed',
+			hasShares: 'shares/hasShares',
 		}),
+
+		isNoAccessSet() {
+			return this.poll.access === 'private' && !this.hasShares && this.acl.allowEdit
+		},
 
 		showConfirmationMail() {
 			return this.acl.isOwner && this.closed && this.confirmedOptions.length > 0
@@ -190,6 +205,10 @@ export default {
 
 		openOptions() {
 			emit('polls:sidebar:toggle', { open: true, activeTab: 'options' })
+		},
+
+		openShares() {
+			emit('polls:sidebar:toggle', { open: true, activeTab: 'sharing' })
 		},
 	},
 }

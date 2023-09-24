@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcAppSidebar :active="active"
+	<NcAppSidebar :active.sync="activeTab"
 		:title="t('polls', 'Details')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab v-if="acl.allowEdit"
@@ -84,29 +84,17 @@
 <script>
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { mapState } from 'vuex'
-import { emit } from '@nextcloud/event-bus'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
-// test static loading
-// import SideBarTabConfiguration from '../components/SideBar/SideBarTabConfiguration.vue'
-// import SideBarTabComments from '../components/SideBar/SideBarTabComments.vue'
-// import SideBarTabOptions from '../components/SideBar/SideBarTabOptions.vue'
-// import SideBarTabShare from '../components/SideBar/SideBarTabShare.vue'
-// import SideBarTabActivity from '../components/SideBar/SideBarTabActivity.vue'
 
 export default {
 	name: 'SideBar',
 
 	components: {
-		// test static loading
-		// SideBarTabConfiguration,
-		// SideBarTabComments,
-		// SideBarTabOptions,
-		// SideBarTabShare,
-		// SideBarTabActivity,
 		SideBarTabConfiguration: () => import('../components/SideBar/SideBarTabConfiguration.vue'),
 		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments.vue'),
 		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions.vue'),
@@ -121,11 +109,10 @@ export default {
 		SidebarCommentsIcon,
 	},
 
-	props: {
-		active: {
-			type: String,
-			default: t('polls', 'Comments').toLowerCase(),
-		},
+	data() {
+		return {
+			activeTab: t('polls', 'Comments').toLowerCase(),
+		}
 	},
 
 	computed: {
@@ -135,6 +122,17 @@ export default {
 			useActivity: (state) => state.appSettings.useActivity,
 			useCollaboration: (state) => state.appSettings.useCollaboration,
 		}),
+
+	},
+
+	created() {
+		subscribe('polls:sidebar:changeTab', (payload) => {
+			this.activeTab = payload?.activeTab ?? this.activeTab
+		})
+	},
+
+	beforeDestroy() {
+		unsubscribe('polls:sidebar:changeTab')
 	},
 
 	methods: {

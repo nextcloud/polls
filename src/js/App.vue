@@ -24,7 +24,7 @@
 	<NcContent app-name="polls" :class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
-		<router-view v-show="sideBar.open" name="sidebar" :active="sideBar.activeTab" />
+		<router-view v-show="sideBar.open" name="sidebar" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
@@ -34,7 +34,7 @@
 import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState, mapActions } from 'vuex'
 import '@nextcloud/dialogs/dist/index.css'
 import './assets/scss/colors.scss'
@@ -59,7 +59,6 @@ export default {
 		return {
 			sideBar: {
 				open: (window.innerWidth > 920),
-				activeTab: 'comments',
 			},
 			transitionClass: 'transitions-active',
 			loading: false,
@@ -121,7 +120,7 @@ export default {
 		})
 
 		subscribe('polls:sidebar:toggle', (payload) => {
-			this.sideBar.activeTab = payload?.activeTab ?? this.sideBar.activeTab
+			emit('polls:sidebar:changeTab', { activeTab: payload.activeTab })
 			this.sideBar.open = payload?.open ?? !this.sideBar.open
 		})
 	},
