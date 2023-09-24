@@ -65,7 +65,7 @@ export default {
 	display: flex;
 	align-items: center;
 	justify-content: space-around;
-	gap: 4px;
+	gap: 4px 16px;
 	padding: 0 12px;
 	font-size: 1.1em;
 
