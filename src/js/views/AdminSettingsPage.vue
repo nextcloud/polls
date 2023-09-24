@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="polls_admin_settings">
+	<FlexSettings>
 		<NcSettingsSection :title="t('polls', 'Share restrictions')"
 			:description="t('polls', 'Restrict the share actions globally or on a group base')">
 			<AdminShareSettings />
@@ -54,7 +54,7 @@
 			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
 			<AdminPerformance />
 		</NcSettingsSection>
-	</div>
+	</FlexSettings>
 </template>
 
 <script>
@@ -67,6 +67,7 @@ import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCre
 import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
 import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings.vue'
 import AdminHideMailAddresses from '../components/Settings/AdminSettings/AdminHideMailAddresses.vue'
+import { FlexSettings } from '../components/Base/index.js'
 import { NcSettingsSection } from '@nextcloud/vue'
 import '../assets/scss/markdown.scss'
 
@@ -84,6 +85,7 @@ export default {
 		AdminShareSettings,
 		AdminHideMailAddresses,
 		NcSettingsSection,
+		FlexSettings,
 	},
 
 	created() {
@@ -91,38 +93,3 @@ export default {
 	},
 }
 </script>
-
-<style lang="scss">
-.polls_admin_settings {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: stretch;
-
-	.settings-section {
-		flex: 1 0 480px;
-		margin-bottom: 0;
-		border-bottom: 1px solid var(--color-border);
-	}
-}
-
-.settings-description {
-	margin-top: -.2em;
-	margin-bottom: 1em;
-	opacity: .7;
-}
-
-.user_settings {
-	padding-top: 16px;
-
-	textarea {
-		width: 99%;
-		resize: vertical;
-		height: 230px;
-	}
-}
-
-.settings_details {
-	padding-bottom: 16px;
-	margin-left: 36px;
-}
-</style>
