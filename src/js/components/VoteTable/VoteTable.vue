@@ -116,6 +116,7 @@ export default {
 		border-radius: 12px;
 		&.currentuser {
 			order:5;
+			margin-bottom: 30px;
 		}
 	}
 
@@ -153,22 +154,22 @@ export default {
 	.vote-column {
 		order: 2;
 		display: flex;
-		flex: 1 0 85px;
+		flex: 1 0 11em;
 		flex-direction: column;
 		align-items: stretch;
-		max-width: 280px;
+		max-width: 19em;
 		margin-bottom: 4px;
 
 		&>div {
 			display: flex;
-			justify-content: space-around;
+			justify-content: center;
 			align-items: center;
 		}
 		.option-item {
-			align-items: stretch;
 			flex: 1;
 			order: 1;
 		}
+
 	}
 
 	&.closed .vote-column {
@@ -233,6 +234,10 @@ export default {
 
 		.option-item .option-item__option--text {
 			text-align: center;
+			/* Notice: https://caniuse.com/css-text-wrap-balance */
+			text-wrap: balance;
+			hyphens: auto;
+			padding: 0 0.6em;
 		}
 	}
 
@@ -241,6 +246,7 @@ export default {
 
 		.vote-column {
 			flex-direction: row-reverse;
+			flex: 1 5.5em;
 			align-items: center;
 			max-width: initial;
 			position: relative;

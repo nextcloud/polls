@@ -253,6 +253,7 @@ export default {
 		justify-content: flex-start;
 		text-align: center;
 		hyphens: auto;
+		white-space: nowrap !important;
 	}
 
 	.event-date {
