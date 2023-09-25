@@ -293,8 +293,6 @@ OC.L10N.register(
     "Error adding options" : "Error al añadir opciones",
     "Poll informations" : "Información de la votación",
     "Archived" : "Archivada",
-    "This poll is unpublished" : "Esta votación está sin publicar",
-    "Invite users via the share tab in the sidebar" : "Invita a usuario vía la pestaña de compartir en la barra lateral",
     "A private poll from {name}" : "Una votación privada de {name}",
     "An openly accessible poll from {name}" : "Una votación libremente accesible de {name}",
     "Closing {relativeExpirationTime}" : "Cerrando {relativeExpirationTime}",

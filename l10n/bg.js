@@ -290,8 +290,6 @@ OC.L10N.register(
     "Error adding options" : "Грешка при добавяне на опции",
     "Poll informations" : "Информация за анкетата",
     "Archived" : "Архивирано",
-    "This poll is unpublished" : "Тази анкета не е публикувана",
-    "Invite users via the share tab in the sidebar" : "Поканете потребители чрез таблото за споделяне в страничната лента",
     "A private poll from {name}" : "Частна анкета от {name}",
     "An openly accessible poll from {name}" : "Свободно достъпна анкета от {name}",
     "Closing {relativeExpirationTime}" : "Затваряне {relativeExpirationTime}",

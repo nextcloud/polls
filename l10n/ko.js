@@ -157,7 +157,6 @@ OC.L10N.register(
     "Error adding options" : "옵션 추가중 오류 발생",
     "Poll informations" : "투표 정보",
     "Archived" : "보관된",
-    "This poll is unpublished" : "이 투표는 발표되지 않았습니다.",
     "never" : "하지 않음",
     "Poll owner:" : "투표 소유자:",
     "Proposals are allowed" : "제안이 허용되다",

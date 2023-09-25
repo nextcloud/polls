@@ -293,8 +293,6 @@ OC.L10N.register(
     "Error adding options" : "خطأ في إضافة الخيارات",
     "Poll informations" : "معلومات الاستطلاع",
     "Archived" : "مؤرشفة",
-    "This poll is unpublished" : "هذا الاستبيان غير منشور",
-    "Invite users via the share tab in the sidebar" : "دعوة المستخدمين عبر تبويب المشاركة في الشريط الجانبي",
     "A private poll from {name}" : "استبيان خاص من {name}",
     "An openly accessible poll from {name}" : "استبيان مفتوح من {name}",
     "Closing {relativeExpirationTime}" : "الإغلاق {relativeExpirationTime}",

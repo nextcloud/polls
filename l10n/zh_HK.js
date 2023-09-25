@@ -293,8 +293,6 @@ OC.L10N.register(
     "Error adding options" : "新增選項錯誤",
     "Poll informations" : "民意調查資訊",
     "Archived" : "已封存",
-    "This poll is unpublished" : "此投票未發佈",
-    "Invite users via the share tab in the sidebar" : "通過側邊欄中的共享選項卡邀請用戶",
     "A private poll from {name}" : "來自 {name} 的私人民意調查",
     "An openly accessible poll from {name}" : "來自 {name} 向所有註冊用戶開放的投票",
     "Closing {relativeExpirationTime}" : "{relativeExpirationTime} 結束",

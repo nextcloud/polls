@@ -288,8 +288,6 @@ OC.L10N.register(
     "Error adding options" : "Errorea aukerak gehitzean",
     "Poll informations" : "Galdeketaren informazioak",
     "Archived" : "Artxibatuta",
-    "This poll is unpublished" : "Galdeketa hau argitaratu gabe dago",
-    "Invite users via the share tab in the sidebar" : "Gonbidatu erabiltzaileak alboko barrako partekatze fitxaren bidez",
     "A private poll from {name}" : "{name}-(e)ren galdeketa pribatua",
     "An openly accessible poll from {name}" : "{name}-ren galdeketa modu irekian eskuragarria",
     "Closing {relativeExpirationTime}" : "{RelativeExpirationTime} ixten",

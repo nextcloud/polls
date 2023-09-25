@@ -293,8 +293,6 @@ OC.L10N.register(
     "Error adding options" : "Erro ao adicionar opções",
     "Poll informations" : "Informações da enquete",
     "Archived" : "Arquivado",
-    "This poll is unpublished" : "Esta enquete não foi publicada",
-    "Invite users via the share tab in the sidebar" : "Convide usuários por meio da guia de compartilhamento na barra lateral",
     "A private poll from {name}" : "Uma enquete privada de {name}",
     "An openly accessible poll from {name}" : "Uma enquete de {name} com acesso aberto",
     "Closing {relativeExpirationTime}" : "Encerra {relativeExpirationTime}",

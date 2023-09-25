@@ -290,8 +290,6 @@ OC.L10N.register(
     "Error adding options" : "Błąd podczas dodawania opcji",
     "Poll informations" : "Informacje sondy",
     "Archived" : "Zarchiwizowane",
-    "This poll is unpublished" : "Ta sonda nie została opublikowana",
-    "Invite users via the share tab in the sidebar" : "Zaproś użytkowników za pomocą zakładki udostępniania na pasku bocznym",
     "A private poll from {name}" : "Prywatna sonda od {name}",
     "An openly accessible poll from {name}" : "Swobodnie dostępna ankieta od {name}",
     "Closing {relativeExpirationTime}" : "Zamknięcie {relativeExpirationTime}",

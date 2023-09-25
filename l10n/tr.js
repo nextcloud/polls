@@ -293,8 +293,6 @@ OC.L10N.register(
     "Error adding options" : "Seçenekler eklenirken sorun çıktı",
     "Poll informations" : "Anket bilgileri",
     "Archived" : "Arşivlenmiş",
-    "This poll is unpublished" : "Bu anket yayından kaldırıldı",
-    "Invite users via the share tab in the sidebar" : "Kullanıcıları çağırmak için yan çubuktaki paylaş sekmesini kullanıın",
     "A private poll from {name}" : "{name} tarafından kapalı bir anket",
     "An openly accessible poll from {name}" : "{name} tarafından herkese açık bir anket",
     "Closing {relativeExpirationTime}" : "Kapanıyor {relativeExpirationTime}",

@@ -288,8 +288,6 @@
     "Error adding options" : "S'ha produït un error en afegir opcions",
     "Poll informations" : "Informacions de l'enquesta",
     "Archived" : "Arxivat",
-    "This poll is unpublished" : "Aquesta enquesta no s'ha publicat",
-    "Invite users via the share tab in the sidebar" : "Convida usuaris a través de la pestanya compartir a la barra lateral",
     "A private poll from {name}" : "Una enquesta privada de {name}",
     "An openly accessible poll from {name}" : "Una enquesta d'accés obert de {name}",
     "Closing {relativeExpirationTime}" : "Tancant {relativeExpirationTime}",

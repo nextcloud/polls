@@ -273,7 +273,6 @@ OC.L10N.register(
     "Error adding options" : "Errore durante l'aggiunta di opzioni",
     "Poll informations" : "Informazioni del sondaggio",
     "Archived" : "Archiviati",
-    "This poll is unpublished" : "Questo sondaggio è inedito",
     "A private poll from {name}" : "Sondaggio privato di {name}",
     "An openly accessible poll from {name}" : "Sondaggio pubblico di {name}",
     "Closing {relativeExpirationTime}" : "In chiusura {relativeExpirationTime}",

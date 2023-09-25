@@ -275,8 +275,6 @@ OC.L10N.register(
     "Error adding options" : "Σφάλμα κατά την προσθήκη επιλογών",
     "Poll informations" : "Πληροφορίες δημοσκόπησης",
     "Archived" : "Αρχειοθετήθηκε",
-    "This poll is unpublished" : "Αυτή η δημοσκόπηση είναι αδημοσίευτη",
-    "Invite users via the share tab in the sidebar" : "Προσκαλέστε χρήστες μέσω της καρτέλας κοινής χρήσης στην πλαϊνή γραμμή",
     "A private poll from {name}" : "Μια ιδιωτική δημοσκόπηση από τον/την {name}",
     "An openly accessible poll from {name}" : "Μια ανοιχτή δημοσκόπηση από τον/την {name}",
     "Closing {relativeExpirationTime}" : "Κλείσιμο {relativeExpirationTime}",

@@ -123,8 +123,6 @@
     "Error adding options" : "オプションを追加時にエラーになりました",
     "Poll informations" : "投票情報",
     "Archived" : "アーカイブ済み",
-    "This poll is unpublished" : "この投票は未公開です",
-    "Invite users via the share tab in the sidebar" : "サイドバーの共有タブでユーザーを招待してください",
     "A private poll from {name}" : "{name}からのプライベートな投票",
     "An openly accessible poll from {name}" : "{name}からの公開投票",
     "Closing {relativeExpirationTime}" : "{relativeExpirationTime}で終了",

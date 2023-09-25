@@ -293,8 +293,6 @@ OC.L10N.register(
     "Error adding options" : "Грешка приликом додавања опција",
     "Poll informations" : "Информације о гласању",
     "Archived" : "Архивирано",
-    "This poll is unpublished" : "Ово гласање више није објављено",
-    "Invite users via the share tab in the sidebar" : "Позовите кориснике преко картице за дељење на бочној траци",
     "A private poll from {name}" : "Приватно гласање корисника {name}",
     "An openly accessible poll from {name}" : "Слободно доступно гласање од корисника {name}",
     "Closing {relativeExpirationTime}" : "Затвара се за {relativeExpirationTime}",

@@ -196,7 +196,6 @@
     "Error adding options" : "Prišlo je do napake med dodajanjem možnosti",
     "Poll informations" : "Podrobnosti ankete",
     "Archived" : "Arhivirano",
-    "This poll is unpublished" : "Ta anketa ni objavljena",
     "A private poll from {name}" : "Zasebna anketa: {name}",
     "Closing {relativeExpirationTime}" : "Zapiranje {relativeExpirationTime}",
     "Proposal period ended {timeRelative}" : "Obdobje za zbiranje predlogov se je končal {timeRelative}.",

@@ -166,8 +166,6 @@ OC.L10N.register(
     "Add option" : "Lisää valinta",
     "Close" : "Sulje",
     "Archived" : "Arkistoitu",
-    "This poll is unpublished" : "Tämä kysely on julkaisematon",
-    "Invite users via the share tab in the sidebar" : "Kutsu käyttäjiä sivupalkin jakamisvälilehdeltä",
     "Closing {relativeExpirationTime}" : "Sulkeutuu {relativeExpirationTime}",
     "never" : "ei koskaan",
     "Poll owner:" : "Kyselyn omistaja:",

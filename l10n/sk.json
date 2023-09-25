@@ -286,8 +286,6 @@
     "Error adding options" : "Chyba pri pridávaní možností",
     "Poll informations" : "Informácie o ankete",
     "Archived" : "Archivované",
-    "This poll is unpublished" : "Táto anketa nie je publikovaná",
-    "Invite users via the share tab in the sidebar" : "Pozvite užívateľov cez kartu zdieľania na bočnom paneli",
     "A private poll from {name}" : "Privátna anketa od {name}",
     "An openly accessible poll from {name}" : "Otvorene prístupná anketa od užívateľa {name}",
     "Closing {relativeExpirationTime}" : "Zatváram {relativeExpirationTime}",

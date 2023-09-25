@@ -290,8 +290,6 @@ OC.L10N.register(
     "Error adding options" : "Hiba a lehetőségek hozzáadása során",
     "Poll informations" : "Szavazási információk",
     "Archived" : "Archiválva",
-    "This poll is unpublished" : "Ez a szavazás nincs közzétéve",
-    "Invite users via the share tab in the sidebar" : "Felhasználók meghívása az oldalsávban található megosztási lapon",
     "A private poll from {name}" : "{name} privát szavazása",
     "An openly accessible poll from {name}" : "{name} nyilvánosan elérhető szavazása",
     "Closing {relativeExpirationTime}" : "Lezárul: {relativeExpirationTime}",

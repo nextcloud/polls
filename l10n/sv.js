@@ -290,8 +290,6 @@ OC.L10N.register(
     "Error adding options" : "Det gick inte att lägga till alternativ",
     "Poll informations" : "Omröstningsinformation",
     "Archived" : "Arkiverad",
-    "This poll is unpublished" : "Den här omröstningen är opublicerad",
-    "Invite users via the share tab in the sidebar" : "Bjud in användare via delningsfliken i sidofältet",
     "A private poll from {name}" : "En privat omröstning från {name}",
     "An openly accessible poll from {name}" : "En öppet tillgänglig omröstning från {name}",
     "Closing {relativeExpirationTime}" : "Stänger {relativeExpirationTime}",
