@@ -145,8 +145,9 @@ class SystemService {
 			throw new InvalidUsernameException;
 		}
 
-		// get all groups
-		foreach (Group::search() as $group) {
+		// get all groups, that include the requested username in their gid
+		// or displayname and check if any match completely
+		foreach (Group::search($userName) as $group) {
 			if ($userName === strtolower(trim($group->getId()))
 				|| $userName === strtolower(trim($group->getDisplayName()))) {
 				throw new InvalidUsernameException;
