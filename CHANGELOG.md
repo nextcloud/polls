@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
  - Reveal hidden voters if hidden in case of performance concerns
  - Support better readability of vote page
 ### Changes
- - improved username chack for public polls with a large number of groups in the backend
+ - Improved username check for public polls with a large number of groups in the backend
 ## [5.3.2] - 2023-09-11
 ### Fixes
  - Fix migration error ("poll_option_hash" is NotNull)
@@ -119,7 +119,7 @@ All notable changes to this project will be documented in this file.
  - Error was thrown, when a owner of an option was null
  - Deleted shares prevented poll export and
  - avoid timestamp overflow for dates greater than 01-19-2038
- - increase length of option texts from 256 to 1024 characters
+ - Increase length of option texts from 256 to 1024 characters
  - fix access validation checks
  - avoid timestamp overflow with dates past 2038/01/19 (Timestamp 2147483647)
 ### Misc
@@ -800,8 +800,8 @@ See also https://github.com/nextcloud/polls/milestone/34?closed=1
 
 ## [1.3.0] - 2020-02-16
 
- - internal optimizations
- - in public poll ask for username in a modal
+ - Internal optimizations
+ - In public poll ask for username in a modal
  - Allow site user to vote in hidden poll via public link (#779)
  - New option: Allow admins to edit poll
  - Prevent deleted poll from beeing called via public link (#773)
@@ -833,7 +833,7 @@ See also https://github.com/nextcloud/polls/milestone/34?closed=1
  - huge update of polls
  - completely rewritten as a vue app
  - vote, edit poll in one page
- - instant persisting of votes and configuration
+ - Instant persisting of votes and configuration
  - changed sharing
 
 ## [0.10.4] - 2019-11-27
@@ -856,7 +856,7 @@ See also https://github.com/nextcloud/polls/milestone/34?closed=1
 
   - main list page
     - rewrite as a vue app
-    - improved UI
+    - Improved UI
   - ability to clone any poll and shift date options (#323, #245)
   - design updates to vote page
   - some more UI enhancements
@@ -898,9 +898,9 @@ See also https://github.com/nextcloud/polls/milestone/34?closed=1
 ### Added
   - create/edit page
     - rewrite as a vue app
-    - improved UI
-	- introduced new NC date time picker from vue-nextcloud
-	- introduced multiselect from vue-nextcloud
+    - Improved UI
+	- Introduced new NC date time picker from vue-nextcloud
+	- Introduced multiselect from vue-nextcloud
 	- added option to allow "maybe" vote
 
   - vote page
