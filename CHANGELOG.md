@@ -1,6 +1,15 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.4.0] - tbd
+### Fixes
+ - Fixed granting admin rights to shares
+ - Fixed a bug, where exports were prevented
+### New
+ - Reveal hidden voters if hidden in case of performance concerns
+ - Support better readability of vote page
+### Changes
+ - improved username chack for public polls with a large number of groups in the backend
 ## [5.3.2] - 2023-09-11
 ### Fixes
  - Fix migration error ("poll_option_hash" is NotNull)
