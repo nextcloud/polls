@@ -32,6 +32,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
+use OCA\Polls\Exceptions\InvalidMethodCallException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -65,8 +66,8 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 
 	private AppSettings $appSettings;
-	private Poll $poll;
-	private Share $share;
+	private ?Poll $poll;
+	private ?Share $share;
 
 	public function __construct(
 		private IUserManager $userManager,
@@ -77,49 +78,114 @@ class Acl implements JsonSerializable {
 		private VoteMapper $voteMapper,
 		private ShareMapper $shareMapper
 	) {
-		$this->poll = new Poll;
-		$this->share = new Share;
+		$this->poll = null;
+		$this->share = null;
 		$this->appSettings = new AppSettings;
 	}
 
+	public function jsonSerialize(): array {
+		return	[
+			'allowAddOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
+			'allowAllAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
+			'allowArchive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
+			'allowComment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
+			'allowDelete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
+			'allowEdit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+			'allowPollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
+			'allowPollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
+			'allowPublicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
+			'allowSeeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
+			'allowSeeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+			'allowSeeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
+			'allowSubscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
+			'allowView' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
+			'allowVote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
+			'displayName' => $this->getDisplayName(),
+			'isOwner' => $this->getIsOwner(),
+			'isVoteLimitExceeded' => $this->getIsVoteLimitExceeded(),
+			'loggedIn' => $this->getIsLoggedIn(),
+			'isNoUser' => !$this->getIsLoggedIn(),
+			'isGuest' => !$this->getIsLoggedIn(),
+			'pollId' => $this->getPollId(),
+			'token' => $this->getToken(),
+			'userHasVoted' => $this->getIsParticipant(),
+			'userId' => $this->getUserId(),
+			'userIsInvolved' => $this->getIsInvolved(),
+			'pollExpired' => $this->poll->getExpired(),
+			'pollExpire' => $this->poll->getExpire(),
+		];
+	}
+
 	/**
-	 * load share via token and than call setShare
+	 * Setters
 	 */
-	public function setToken(string $token = '',
-		string $permission = self::PERMISSION_POLL_VIEW,
-		?int $pollIdToValidate = null
-	): Acl {
+
+	/**
+	 * Set share token and load share if neccessary
+	 * All ends with self::setpoll(), where the permission is checked
+	 */
+	public function setToken(string $token = '', string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
-			$this->share = $this->shareMapper->findByToken($token);
-
-			if ($pollIdToValidate && $this->share->getPollId() !== $pollIdToValidate) {
-				throw new ForbiddenException('Share is not allowed accessing this poll');
+			if ($this->share?->$token === $token) {											// share matching the requested token is already loaded
+				$this->setPollId($this->share->getPollId(), $permission);					// Set the poll Id to verify the correct poll gets loaded and permissions get checked
+			} else {
+				$this->setShare($this->shareMapper->findByToken($token), $permission);		// load the share mathing the requested token
 			}
-
-			$this->poll = $this->pollMapper->find($this->share->getPollId());
-			$this->validateShareAccess();
-			$this->request($permission);
 		} catch (ShareNotFoundException $e) {
 			throw new NotFoundException('Error loading share ' . $token);
 		}
+		
+		return $this;
+	}
+
+	/**
+	 * Set share and load poll
+	 * All ends with self::setPoll(), where the permission is checked
+	 */
+	public function setShare(Share $share, string $permission = self::PERMISSION_POLL_VIEW): Acl {
+		$this->share = $share;
+		
+		if ($this->share->getRevoked()) {
+			throw new ShareNotFoundException();
+		}
+		
+		$this->validateShareAccess();														// check, if share is allowed for the user type
+		$this->setPollId($this->share->getPollId(), $permission);							// set the poll id to laod the poll corresponding to the share and check permissions
 
 		return $this;
 	}
 
+	/**
+	 * Set poll id and load poll
+	 */
 	public function setPollId(int $pollId = 0, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
-			$this->poll = $this->pollMapper->find($pollId);
-			$this->request($permission);
+			if ($this->poll?->getPollId() !== $pollId) {
+				$this->setPoll($this->pollMapper->find($pollId), $permission);					// load requested poll
+			} else {
+				$this->request($permission);													// just check the permissions in all cases
+			}
+
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Error loading poll with id ' . $pollId);
 		}
-
+		
 		return $this;
 	}
 
-	public function setPoll(Poll $poll): void {
+	/**
+	 * Set poll
+	 */
+	public function setPoll(Poll $poll, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		$this->poll = $poll;
+		$this->loadShare();
+		$this->request($permission);
+		return $this;
 	}
+
+	/**
+	 * Property getters
+	 */
 
 	public function getPoll(): Poll {
 		return $this->poll;
@@ -130,11 +196,27 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getToken(): string {
-		return strval($this->share->getToken());
+		return strval($this->share?->getToken());
+	}
+
+	public function getTokenIsValid(): bool {
+		return ($this->share?->getToken() && !$this->share?->getRevoked());
 	}
 
 	public function getUserId(): string {
 		return $this->userSession->getUser()?->getUID() ?? $this->share->getUserId();
+	}
+
+	private function getDisplayName(): string {
+		return ($this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())?->getDisplayName() : $this->share->getDisplayName()) ?? '';
+	}
+
+	/**
+	 * Validations
+	 */
+
+	public function getIsOwner(): bool {
+		return ($this->getIsLoggedIn() && $this->poll->getOwner() === $this->getUserId());
 	}
 
 	public function validateUserId(string $userId): void {
@@ -149,12 +231,13 @@ class Acl implements JsonSerializable {
 		}
 	}
 
-	public function getIsOwner(): bool {
-		return ($this->getIsLoggedIn() && $this->poll->getOwner() === $this->getUserId());
-	}
-
-	private function getDisplayName(): string {
-		return ($this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())?->getDisplayName() : $this->share->getDisplayName()) ?? '';
+	private function validateShareAccess(): void {
+		if ($this->getIsLoggedIn() && !$this->getIsShareValidForUsers()) {
+			throw new ForbiddenException('Share type "' . $this->share->getType() . '" is only valid for guests');
+		}
+		if (!$this->getIsShareValidForGuests()) {
+			throw new ForbiddenException('Share type "' . $this->share->getType() . '" is only valid for registered users');
+		};
 	}
 
 	public function getIsAllowed(string $permission): bool {
@@ -210,39 +293,6 @@ class Acl implements JsonSerializable {
 			return true;
 		}
 		return false;
-	}
-
-	public function jsonSerialize(): array {
-		return	[
-			'allowAddOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
-			'allowAllAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
-			'allowArchive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
-			'allowComment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
-			'allowDelete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
-			'allowEdit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
-			'allowPollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
-			'allowPollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
-			'allowPublicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
-			'allowSeeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
-			'allowSeeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
-			'allowSeeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
-			'allowSubscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
-			'allowView' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
-			'allowVote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
-			'displayName' => $this->getDisplayName(),
-			'isOwner' => $this->getIsOwner(),
-			'isVoteLimitExceeded' => $this->getIsVoteLimitExceeded(),
-			'loggedIn' => $this->getIsLoggedIn(),
-			'isNoUser' => !$this->getIsLoggedIn(),
-			'isGuest' => !$this->getIsLoggedIn(),
-			'pollId' => $this->getPollId(),
-			'token' => $this->getToken(),
-			'userHasVoted' => $this->getIsParticipant(),
-			'userId' => $this->getUserId(),
-			'userIsInvolved' => $this->getIsInvolved(),
-			'pollExpired' => $this->poll->getExpired(),
-			'pollExpire' => $this->poll->getExpire(),
-		];
 	}
 
 	/**
@@ -306,23 +356,16 @@ class Acl implements JsonSerializable {
 	 * This only affects logged in users.
 	 */
 	private function getIsPersonallyInvited(): bool {
-		if (!$this->getIsLoggedIn()) {
-			return false;
+		if ($this->getIsLoggedIn() && $this->share) {
+			return in_array($this->share->getType(), [
+				Share::TYPE_ADMIN,
+				Share::TYPE_USER,
+				Share::TYPE_EXTERNAL,
+				Share::TYPE_EMAIL,
+				Share::TYPE_CONTACT
+			]);
 		}
-
-		return 0 < count(
-			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-				return ($item->getUserId() === $this->getUserId()
-					&& in_array($item->getType(), [
-						Share::TYPE_ADMIN,
-						Share::TYPE_USER,
-						Share::TYPE_EXTERNAL,
-						Share::TYPE_EMAIL,
-						Share::TYPE_CONTACT
-					])
-				);
-			})
-		);
+		return false;
 	}
 
 	private function getIsDelegatedAdmin(): bool {
@@ -330,100 +373,84 @@ class Acl implements JsonSerializable {
 			return false;
 		}
 
-		$filteredList = array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-			return ($item->getUserId() === $this->getUserId()
-				&& in_array($item->getType(), [
-					Share::TYPE_ADMIN,
-				])
-			);
-		});
-
-		return 0 < count($filteredList);
-	}
-
-	private function validateShareAccess(): void {
-		if ($this->getIsLoggedIn() && !$this->getIsShareValidForUsers()) {
-			throw new ForbiddenException('Share type "' . $this->share->getType() . '" is only valid for guests');
-		}
-		if (!$this->getIsShareValidForGuests()) {
-			throw new ForbiddenException('Share type "' . $this->share->getType() . '" is only valid for registered users');
+		if ($this->loadShare()) {							// load share, if not loaded
+			return $this->share->getType() === Share::TYPE_ADMIN && !$this->share->getRevoked();
 		};
+		return false;
 	}
 
 	private function getIsShareValidForGuests(): bool {
-		return in_array($this->share->getType(), [
-			Share::TYPE_PUBLIC,
-			Share::TYPE_EMAIL,
-			Share::TYPE_CONTACT,
-			Share::TYPE_EXTERNAL
-		]);
+		return in_array($this->share->getType(), Share::SHARE_PUBLIC_ACCESS_ALLOWED);
 	}
 
 	private function getIsShareValidForUsers(): bool {
-		return in_array($this->share->getType(), [
-			Share::TYPE_PUBLIC,
-			Share::TYPE_ADMIN,
-			Share::TYPE_USER,
-			Share::TYPE_GROUP
-		]);
+		return in_array($this->share->getType(), Share::SHARE_AUTH_ACCESS_ALLOWED);
 	}
 
 	private function getHasEmail(): bool {
-		return $this->share->getToken() ? strlen($this->share->getEmailAddress()) > 0 : $this->getIsLoggedIn();
+		return $this->share?->getToken() ? strlen($this->share->getEmailAddress()) > 0 : $this->getIsLoggedIn();
+	}
+
+	/**
+	 * Load share for access checks, if it is not already loaded
+	 **/
+	private function loadShare(): bool {
+		if (!$this->poll) {
+			throw new InvalidMethodCallException('Loading share only possible with loaded poll');
+		}
+
+		try {
+			if ($this->share?->getUserId() !== $this->getUserId() || $this->share?->getPollId() !== $this->poll?->getId()) {
+				$this->share = $this->shareMapper->findByPollAndUser($this->poll->getId(), $this->getUserId());
+			}
+		} catch (\Throwable $th) {
+			$this->share = null;
+			return false;
+		}
+
+		return $this->share !== null;
 	}
 
 	/**
 	 * Checks, if user is allowed to edit the poll configuration
 	 **/
 	private function getAllowEditPoll(): bool {
-		// Console god mode
 		if (defined('OC_CONSOLE')) {
-			return true;
+			return true;										// Console god mode
 		}
 
-		// owner is always allowed to edit the poll configuration
 		if ($this->getIsOwner()) {
-			return true;
+			return true;										// owner is always allowed to edit the poll configuration
 		}
 
-		// user has delegated owner rights
 		if ($this->getIsDelegatedAdmin()) {
-			return true;
+			return true;										// user has delegated owner rights
 		}
 
-		return false;
+		return false;											// deny edit rights in all other cases
 	}
 
 	/**
 	 * Checks, if user is allowed to access poll
 	 **/
 	private function getAllowAccessPoll(): bool {
-		// edit rights include access to poll
 		if ($this->getAllowEditPoll()) {
-			return true;
+			return true;										// edit rights include access to poll
 		}
 
-		// No further access to poll, if it is deleted
 		if ($this->poll->getDeleted()) {
-			return false;
+			return false;										// No further access to poll, if it is deleted
 		}
 
-		// grant access if user is involved in poll in any way
 		if ($this->getIsInvolved()) {
-			return true;
+			return true;										// grant access if user is involved in poll in any way
 		}
-
-		// grant access if poll poll is an open poll (for logged in users)
+		
 		if ($this->poll->getAccess() === Poll::ACCESS_OPEN && $this->getIsLoggedIn()) {
-			return true;
+			return true;										// grant access if poll poll is an open poll (for logged in users)
 		}
 
-		// user has valid token of this poll
-		if ($this->getToken()) {
-			return true;
-		}
-
-		return false;
+		return $this->getTokenIsValid();						// return check result of an existing valid share for this user
 	}
 
 	/**
@@ -431,62 +458,54 @@ class Acl implements JsonSerializable {
 	 * includes the right to archive and take over
 	 **/
 	private function getAllowDeletePoll(): bool {
-		// users with edit rights are allowed to delete the poll
 		if ($this->getAllowEditPoll()) {
-			return true;
+			return true;										// users with edit rights are allowed to delete the poll
 		}
 
-		// admins are allowed to delete the poll
 		if ($this->getIsAdmin()) {
-			return true;
+			return true;										// admins are allowed to delete polls
 		}
 
-		return false;
+		return false;											// in all other cases deny poll deletion right
 	}
-
-	/**
-	 * User rights inside poll
-	 **/
 
 	/**
 	 * Checks, if user is allowed to add add vote options
 	 **/
 	private function getAllowAddOptions(): bool {
-		// Edit right includes adding new options
 		if ($this->getAllowEditPoll()) {
-			return true;
+			return true;													// Edit right includes adding new options
 		}
 
-		// deny, if user has no access right to this poll
 		if (!$this->getAllowAccessPoll()) {
-			return false;
+			return false;													// deny, if user has no access right to this poll
 		}
 
-		// public shares are not allowed to add options
-		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			return false;
+		if ($this->share?->getType() === Share::TYPE_PUBLIC) {
+			return false;													// public shares are not allowed to add options
 		}
 
-		// Request for option proposals is expired, deny
 		if ($this->poll->getProposalsExpired()) {
-			return false;
+			return false;													// Request for option proposals is expired, deny
 		}
 
-		return $this->poll->getAllowProposals() === Poll::PROPOSAL_ALLOW;
+		return $this->poll->getAllowProposals() === Poll::PROPOSAL_ALLOW;	// Allow, if poll requests proposals
 	}
 
 	/**
-	 * Checks, if user is allowed to comment
+	 * Checks, if user is allowed to see and write comments
 	 **/
 	private function getAllowComment(): bool {
-		// user has no access right to this poll
 		if (!$this->getAllowAccessPoll()) {
-			return false;
+			return false;											// user has no access right to this poll
 		}
 
-		// public shares are not allowed to comment
-		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			return false;
+		if ($this->share?->getType() === Share::TYPE_PUBLIC) {
+			return false;											// public shares are not allowed to comment
+		}
+
+		if ($this->share?->getRevoked()) {
+			return false;											// public shares are not allowed to comment
 		}
 
 		return (bool) $this->poll->getAllowComment();
@@ -496,43 +515,40 @@ class Acl implements JsonSerializable {
 	 * Checks, if user is allowed to comment
 	 **/
 	private function getAllowVote(): bool {
-		// user has no access right to this poll
 		if (!$this->getAllowAccessPoll()) {
-			return false;
+			return false;											// user has no access right to this poll
 		}
 
-		// public shares are not allowed to vote
-		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			return false;
+		if ($this->share?->getType() === Share::TYPE_PUBLIC) {
+			return false;											// public shares are not allowed to vote
 		}
 
-		// deny votes, if poll is expired
-		return !$this->poll->getExpired();
+		if ($this->share?->getRevoked()) {
+			return false;											// public shares are not allowed to vote
+		}
+
+		return !$this->poll->getExpired();							// deny votes, if poll is expired
 	}
 
 	private function getAllowSubscribeToPoll(): bool {
-		// user has no access right to this poll
 		if (!$this->getAllowAccessPoll()) {
-			return false;
+			return false;											// user has no access right to this poll
 		}
 
 		return $this->getHasEmail();
 	}
 
 	private function getShowResults(): bool {
-		// edit rights include access to results
 		if ($this->getAllowEditPoll()) {
-			return true;
+			return true;											// edit rights include access to results
 		}
 
-		// no access to poll, deny
 		if (!$this->getAllowAccessPoll()) {
-			return false;
+			return false;											// no access to poll, deny
 		}
 
-		// show results, when poll is cloed
 		if ($this->poll->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->poll->getExpired()) {
-			return true;
+			return true;											// show results, when poll is cloed
 		}
 
 		return $this->poll->getShowResults() === Poll::SHOW_RESULTS_ALWAYS;

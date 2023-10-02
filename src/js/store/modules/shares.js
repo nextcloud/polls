@@ -60,17 +60,23 @@ const mutations = {
 }
 
 const getters = {
-	invitation: (state) => {
+	active: (state) => {
 		// share types, which will be active, after the user gets his invitation
 		const invitationTypes = ['email', 'external', 'contact']
 		// sharetype which are active without sending an invitation
 		const directShareTypes = ['user', 'group', 'admin', 'public']
-		return state.list.filter((share) => (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent)) || directShareTypes.includes(share.type))
+		return state.list.filter((share) => (!share.revoked
+			&& (directShareTypes.includes(share.type)
+				|| (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent))
+			)
+		))
 	},
 
-	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent),
+	revoked: (state) => state.list.filter((share) => (!!share.revoked)),
+	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent && !share.revoked),
 	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
 	hasShares: (state) => state.list.length > 0,
+	hasRevoked: (state, getters) => getters.revoked.length > 0,
 }
 
 const actions = {
@@ -169,6 +175,32 @@ const actions = {
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
+			throw e
+		}
+	},
+
+	async revoke(context, payload) {
+		// context.commit('delete', { share: payload.share })
+		try {
+			await SharesAPI.revokeShare(payload.share.token)
+			context.dispatch('list')
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error revoking share', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
+		}
+	},
+
+	async reRevoke(context, payload) {
+		// context.commit('delete', { share: payload.share })
+		try {
+			await SharesAPI.reRevokeShare(payload.share.token)
+			context.dispatch('list')
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error re-revoking share', { error: e.response }, { payload })
+			context.dispatch('list')
 			throw e
 		}
 	},

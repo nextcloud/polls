@@ -151,6 +151,9 @@ abstract class TableSchema {
 
 	/**
 	 * define table structure
+	 * 
+	 * IMPORTANT: After adding or deletion check queries in ShareMapper
+	 * 
 	 */
 	public const TABLES = [
 		Poll::TABLE => [
@@ -215,6 +218,7 @@ abstract class TableSchema {
 			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null, 'length' => 256]],
 			'email_address' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null, 'length' => 256]],
 			'invitation_sent' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'revoked' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'reminder_sent' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'misc_settings' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => null, 'length' => 65535]],
 		],

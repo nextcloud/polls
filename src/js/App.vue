@@ -24,7 +24,7 @@
 	<NcContent app-name="polls" :class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
-		<router-view v-show="sideBar.open" name="sidebar" />
+		<router-view v-show="sideBar.open && (poll.acl.allowEdit || poll.acl.allowComment)" name="sidebar" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
@@ -120,7 +120,7 @@ export default {
 		})
 
 		subscribe('polls:sidebar:toggle', (payload) => {
-			emit('polls:sidebar:changeTab', { activeTab: payload.activeTab })
+			emit('polls:sidebar:changeTab', { activeTab: payload?.activeTab })
 			this.sideBar.open = payload?.open ?? !this.sideBar.open
 		})
 	},

@@ -83,7 +83,7 @@ class PollService {
 			
 			foreach ($polls as $poll) {
 				try {
-					$this->acl->setPollId($poll->getId());
+					$this->acl->setPoll($poll);
 					// TODO: Not the elegant way. Improvement neccessary
 					$relevantThreshold = max(
 						$poll->getCreated(),
