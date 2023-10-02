@@ -151,9 +151,9 @@ abstract class TableSchema {
 
 	/**
 	 * define table structure
-	 * 
+	 *
 	 * IMPORTANT: After adding or deletion check queries in ShareMapper
-	 * 
+	 *
 	 */
 	public const TABLES = [
 		Poll::TABLE => [

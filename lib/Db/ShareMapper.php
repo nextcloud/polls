@@ -58,30 +58,30 @@ class ShareMapper extends QBMapper {
 		// get all column names from TableSchema
 		foreach (TableSchema::TABLES[Share::TABLE] as $column => $values) {
 			$selectColumns[] = 'p.' . $column;
-		}		
+		}
 		// add vote counter
 		$selectColumns[] = $qb->func()->count('c1.id', 'voted');
 
 		// Build the following select (MySQL)
-		// 
+		//
 		// SELECT p.*, COUNT(c1.user_id) as voted
-		// FROM oc_polls_share p 
-		// LEFT JOIN oc_polls_votes c1 
+		// FROM oc_polls_share p
+		// LEFT JOIN oc_polls_votes c1
 		//   ON p.poll_id = c1.poll_id AND
 		// 	    p.user_id = c1.user_id
 		// GROUP BY p.poll_id, p.user_id
-		// 
+		//
 		$qb->select($selectColumns)
 		   ->from($this->getTableName(), 'p')
 		   ->where(
-			$qb->expr()->eq('p.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('p.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   )
-		   ->leftJoin('p', VOTE::TABLE, 'c1', 
-				$qb->expr()->andX(
-					$qb->expr()->eq('p.poll_id', 'c1.poll_id'),
-					$qb->expr()->eq('p.user_id', 'c1.user_id'),
-				)
-			)
+		   ->leftJoin('p', VOTE::TABLE, 'c1',
+		   	$qb->expr()->andX(
+		   		$qb->expr()->eq('p.poll_id', 'c1.poll_id'),
+		   		$qb->expr()->eq('p.user_id', 'c1.user_id'),
+		   	)
+		   )
 			->groupBy('poll_id', 'user_id');
 
 		return $this->findEntities($qb);
