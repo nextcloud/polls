@@ -186,8 +186,7 @@ class Acl implements JsonSerializable {
 	/**
 	 * Property getters
 	 */
-
-	public function getPoll(): Poll {
+	public function getPoll(): Poll|null {
 		return $this->poll;
 	}
 

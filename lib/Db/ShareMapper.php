@@ -76,7 +76,7 @@ class ShareMapper extends QBMapper {
 		   ->where(
 		   	$qb->expr()->eq('p.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 		   )
-		   ->leftJoin('p', VOTE::TABLE, 'c1',
+		   ->leftJoin('p', Vote::TABLE, 'c1',
 		   	$qb->expr()->andX(
 		   		$qb->expr()->eq('p.poll_id', 'c1.poll_id'),
 		   		$qb->expr()->eq('p.user_id', 'c1.user_id'),
