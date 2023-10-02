@@ -24,7 +24,7 @@
 	<NcAppNavigation>
 		<NcAppNavigationNew v-if="isPollCreationAllowed"
 			button-class="icon-add"
-			:text="t('polls', 'Add new Poll')"
+			:text="t('polls', 'New poll')"
 			@click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @close-create="closeCreate()" />
 
