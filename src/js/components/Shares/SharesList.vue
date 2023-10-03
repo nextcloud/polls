@@ -30,9 +30,9 @@
 		<ShareItemAllUsers v-if="allowAllAccess" />
 		<SharePublicAdd v-if="allowPublicShares" />
 
-		<div v-if="invitationShares.length" class="shares-list shared">
+		<div v-if="activeShares.length" class="shares-list shared">
 			<TransitionGroup :css="false" tag="div">
-				<ShareItem v-for="(share) in invitationShares"
+				<ShareItem v-for="(share) in activeShares"
 					:key="share.id"
 					:share="share"
 					@show-qr-code="openQrModal(share)" />
@@ -94,7 +94,7 @@ export default {
 			pollDescription: (state) => state.poll.description,
 		}),
 		...mapGetters({
-			invitationShares: 'shares/invitation',
+			activeShares: 'shares/active',
 		}),
 	},
 

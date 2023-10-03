@@ -66,7 +66,7 @@ export default {
 
 	computed: {
 		...mapState({
-			allowComment: (state) => state.poll.allowComment,
+			allowComment: (state) => state.poll.acl.allowComment,
 			allowEdit: (state) => state.poll.acl.allowEdit,
 			allowVote: (state) => state.poll.acl.allowVote,
 			allowPollDownload: (state) => state.poll.acl.allowPollDownload,

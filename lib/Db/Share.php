@@ -47,10 +47,14 @@ use OCP\IURLGenerator;
  * @method void setInvitationSent(integer $value)
  * @method int getReminderSent()
  * @method void setReminderSent(integer $value)
+ * @method int getRevoked()
+ * @method void setRevoked(integer $value)
  * @method string getDisplayName()
  * @method void setDisplayName(string $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
+ * @method int getVoted()
+ * @method void setVoted(int $value)
  */
 class Share extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_share';
@@ -75,6 +79,23 @@ class Share extends Entity implements JsonSerializable {
 	// no direct Access
 	public const TYPE_CIRCLE = 'circle';
 	public const TYPE_CONTACTGROUP = 'contactGroup';
+
+
+	// Share types, that are allowed for public access (without login)
+	public const SHARE_PUBLIC_ACCESS_ALLOWED = [
+		self::TYPE_PUBLIC,
+		self::TYPE_CONTACT,
+		self::TYPE_EMAIL,
+		self::TYPE_EXTERNAL,
+	];
+
+	// Share types, that are allowed for authenticated access (with login)
+	public const SHARE_AUTH_ACCESS_ALLOWED = [
+		self::TYPE_PUBLIC,
+		self::TYPE_ADMIN,
+		self::TYPE_GROUP,
+		self::TYPE_USER,
+	];
 
 	public const TYPE_SORT_ARRAY = [
 		self::TYPE_PUBLIC,
@@ -102,12 +123,15 @@ class Share extends Entity implements JsonSerializable {
 	protected ?string $emailAddress = null;
 	protected int $invitationSent = 0;
 	protected int $reminderSent = 0;
+	protected int $revoked = 0;
 	protected ?string $displayName = null;
 	protected ?string $miscSettings = '';
+	protected int $voted = 0;
 
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
+		$this->addType('Revoked', 'int');
 		$this->addType('reminderSent', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->appSettings = new AppSettings;
@@ -126,11 +150,13 @@ class Share extends Entity implements JsonSerializable {
 			'emailAddress' => $this->getEmailAddress(),
 			'invitationSent' => $this->getInvitationSent(),
 			'reminderSent' => $this->getReminderSent(),
+			'revoked' => $this->getRevoked(),
 			'displayName' => $this->getDisplayName(),
 			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getBooleanSetting(AppSettings::SETTING_SHOW_LOGIN),
 			'publicPollEmail' => $this->getPublicPollEmail(),
+			'voted' => $this->getVoted(),
 		];
 	}
 
@@ -200,6 +226,10 @@ class Share extends Entity implements JsonSerializable {
 
 	private function setMiscSettingsArray(array $value): void {
 		$this->setMiscSettings(json_encode($value));
+	}
+
+	private function getVoteCount(): int {
+		return 0;
 	}
 
 	private function getMiscSettingsArray(): array {

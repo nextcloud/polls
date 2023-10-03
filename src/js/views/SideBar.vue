@@ -21,7 +21,8 @@
   -->
 
 <template>
-	<NcAppSidebar :active.sync="activeTab"
+	<NcAppSidebar v-show="showSidebar"
+		:active.sync="activeTab"
 		:title="t('polls', 'Details')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab v-if="acl.allowEdit"
@@ -112,6 +113,7 @@ export default {
 	data() {
 		return {
 			activeTab: t('polls', 'Comments').toLowerCase(),
+			showSidebar: (window.innerWidth > 920),
 		}
 	},
 
@@ -129,10 +131,16 @@ export default {
 		subscribe('polls:sidebar:changeTab', (payload) => {
 			this.activeTab = payload?.activeTab ?? this.activeTab
 		})
+
+		subscribe('polls:sidebar:toggle', (payload) => {
+			emit('polls:sidebar:changeTab', { activeTab: payload?.activeTab })
+			this.showSidebar = payload?.open ?? !this.showSidebar
+		})
 	},
 
 	beforeDestroy() {
 		unsubscribe('polls:sidebar:changeTab')
+		unsubscribe('polls:sidebar:toggle')
 	},
 
 	methods: {

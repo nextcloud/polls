@@ -27,6 +27,7 @@ const defaultShares = () => ({
 	displayName: '',
 	id: null,
 	invitationSent: 0,
+	revoked: 0,
 	pollId: null,
 	token: '',
 	type: '',

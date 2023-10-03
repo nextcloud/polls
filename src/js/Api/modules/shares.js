@@ -95,6 +95,22 @@ const shares = {
 		})
 	},
 
+	revokeShare(shareToken) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `share/${shareToken}/revoke`,
+			cancelToken: cancelTokenHandlerObject[this.revokeShare.name].handleRequestCancellation().token,
+		})
+	},
+
+	reRevokeShare(shareToken) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `share/${shareToken}/rerevoke`,
+			cancelToken: cancelTokenHandlerObject[this.reRevokeShare.name].handleRequestCancellation().token,
+		})
+	},
+
 	inviteAll(pollId) {
 		return httpInstance.request({
 			method: 'PUT',

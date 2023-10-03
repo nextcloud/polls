@@ -24,7 +24,7 @@
 	<NcContent app-name="polls" :class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
-		<router-view v-show="sideBar.open" name="sidebar" />
+		<router-view v-if="poll.acl.allowEdit || poll.acl.allowComment" name="sidebar" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
@@ -34,7 +34,7 @@
 import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState, mapActions } from 'vuex'
 import '@nextcloud/dialogs/dist/index.css'
 import './assets/scss/colors.scss'
@@ -57,9 +57,6 @@ export default {
 
 	data() {
 		return {
-			sideBar: {
-				open: (window.innerWidth > 920),
-			},
 			transitionClass: 'transitions-active',
 			loading: false,
 			isLoggedin: !!getCurrentUser(),
@@ -119,16 +116,11 @@ export default {
 			this.loadPoll(silent)
 		})
 
-		subscribe('polls:sidebar:toggle', (payload) => {
-			emit('polls:sidebar:changeTab', { activeTab: payload.activeTab })
-			this.sideBar.open = payload?.open ?? !this.sideBar.open
-		})
 	},
 
 	beforeDestroy() {
 		this.cancelToken.cancel()
 		unsubscribe('polls:poll:load')
-		unsubscribe('polls:sidebar:toggle')
 		unsubscribe('polls:transitions:on')
 		unsubscribe('polls:transitions:off')
 	},

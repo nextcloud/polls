@@ -24,9 +24,10 @@
 	<UserItem v-bind="share"
 		show-email
 		resolve-info
+		:forced-description="share.revoked ? t('polls', 'User is only able to see the votes.') : null"
 		:icon="true">
 		<template #status>
-			<div v-if="hasVoted(share.userId)">
+			<div v-if="share.voted">
 				<VotedIcon class="vote-status voted" :title="t('polls', 'Has voted')" />
 			</div>
 			<div v-else-if="['public', 'group'].includes(share.type)">
@@ -37,7 +38,7 @@
 			</div>
 		</template>
 
-		<NcActions>
+		<NcActions v-if="!share.revoked">
 			<NcActionInput v-if="share.type === 'public'"
 				:show-trailing-button="false"
 				:value.sync="label"
@@ -112,13 +113,24 @@
 			</NcActionRadio>
 		</NcActions>
 
-		<ActionDelete :title="t('polls', 'Remove share')"
-			@delete="removeShare({ share })" />
+		<NcActions v-if="share.revoked">
+			<NcActionButton @click="reRevokeShare({ share })">
+				<template #icon>
+					<ReRevokeIcon />
+				</template>
+				{{ t('polls', 'Re-Revoke share') }}
+			</NcActionButton>
+		</NcActions>
+
+		<ActionDelete :timeout="share.revoked ? 4 : 0"
+			:revoke="!!share.voted && !share.revoked"
+			:title="deleteButtonCaption"
+			@delete="clickDeleted(share)" />
 	</UserItem>
 </template>
 
 <script>
-import { mapGetters, mapActions } from 'vuex'
+import { mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
 import { ActionDelete } from '../Actions/index.js'
@@ -131,6 +143,7 @@ import EditIcon from 'vue-material-design-icons/Pencil.vue'
 import WithdrawAdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
 import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import QrIcon from 'vue-material-design-icons/Qrcode.vue'
+import ReRevokeIcon from 'vue-material-design-icons/Recycle.vue'
 
 export default {
 	name: 'ShareItem',
@@ -151,6 +164,7 @@ export default {
 		NcActionRadio,
 		ActionDelete,
 		ResolveGroupIcon,
+		ReRevokeIcon,
 	},
 
 	props: {
@@ -161,10 +175,6 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			hasVoted: 'votes/hasVoted',
-		}),
-
 		label: {
 			get() {
 				return this.share.displayName
@@ -173,16 +183,49 @@ export default {
 				this.$store.commit('shares/setShareProperty', { id: this.share.id, displayName: value })
 			},
 		},
+		deleteButtonCaption() {
+			if (this.share.voted && this.share.revoked) {
+				return t('polls', 'Delete share and remove user from poll')
+			}
+
+			if (this.share.voted && !this.share.revoked) {
+				return t('polls', 'Revoke share')
+			}
+
+			return t('polls', 'Delete share')
+		},
 
 	},
 
 	methods: {
 		...mapActions({
-			removeShare: 'shares/delete',
+			deleteShare: 'shares/delete',
+			revokeShare: 'shares/revoke',
+			reRevokeShare: 'shares/reRevoke',
 			switchAdmin: 'shares/switchAdmin',
 			setPublicPollEmail: 'shares/setPublicPollEmail',
 			setLabel: 'shares/writeLabel',
+			deleteUser: 'votes/deleteUser',
 		}),
+
+		async clickDeleted(share) {
+			try {
+				if (share.voted && share.revoked) {
+					this.deleteShare({ share })
+					this.deleteUser({ userId: share.userId })
+					showSuccess(t('polls', 'Deleted share and votes for {displayName}', { displayName: share.displayName }))
+				} else if (share.voted && !share.revoked) {
+					this.revokeShare({ share })
+					showSuccess(t('polls', 'Share for user {displayName} revoked', { displayName: share.displayName }))
+				} else {
+					this.deleteShare({ share })
+					showSuccess(t('polls', 'Deleted share for user {displayName}', { displayName: share.displayName }))
+				}
+			} catch (e) {
+				showError(t('polls', 'Error deleting or revoking share for user {displayName}', { displayName: share.displayName }))
+				console.error('Error deleting or revoking share', { share }, e.response)
+			}
+		},
 
 		async writeLabel() {
 			this.setLabel({ token: this.share.token, displayName: this.share.displayName })

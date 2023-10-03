@@ -8,6 +8,8 @@ All notable changes to this project will be documented in this file.
 ### New
  - Reveal hidden voters if hidden in case of performance concerns
  - Support better readability of vote page
+ - added revoking of shares
+ - changed the behavior of share deletion
 ### Changes
  - Improved username check for public polls with a large number of groups in the backend
 ## [5.3.2] - 2023-09-11

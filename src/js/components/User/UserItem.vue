@@ -31,7 +31,8 @@
 			:show-user-status="showUserStatus"
 			:user="avatarUserId"
 			:display-name="name"
-			:is-no-user="isNoUser">
+			:is-no-user="isNoUser"
+			@click="showMenu()">
 			<template v-if="useIconSlot" #icon>
 				<LinkIcon v-if="type==='public'" :size="mdIconSize" />
 				<InternalLinkIcon v-if="type==='internalAccess'" :size="mdIconSize" />
@@ -124,6 +125,10 @@ export default {
 			type: String,
 			default: '',
 		},
+		forcedDescription: {
+			type: String,
+			default: null,
+		},
 		type: {
 			type: String,
 			default: 'user',
@@ -178,6 +183,7 @@ export default {
 			return !['user', 'admin'].includes(this.type)
 		},
 		description() {
+			if (this.forcedDescription) return this.forcedDescription
 			if (this.type === 'admin') return t('polls', 'Is granted admin rights for this poll')
 			if (this.displayEmailAddress) return this.displayEmailAddress
 			return ''

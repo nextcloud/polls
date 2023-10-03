@@ -114,6 +114,24 @@ class ShareController extends BaseController {
 	}
 
 	/**
+	 * Delete share
+	 * @NoAdminRequired
+	 */
+
+	public function revoke(string $token): JSONResponse {
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->revoke(token: $token)]);
+	}
+
+	/**
+	 * Delete share
+	 * @NoAdminRequired
+	 */
+
+	public function reRevoke(string $token): JSONResponse {
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->reRevoke(token: $token)]);
+	}
+
+	/**
 	 * Send invitation mails for a share
 	 * Additionally send notification via notifications
 	 * @NoAdminRequired
