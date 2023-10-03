@@ -494,7 +494,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Kombiniere mehrere Datumsumfragen in einer einzigen Ansicht",
     "Relevant polls" : "Relevante Umfragen",
     "Error loading poll list" : "Fehler beim Laden der Umfrageliste",
-    "Add new Poll" : "Neue Umfrage hinzufügen",
     "Combine polls" : "Umfragen kombinieren",
     "Polls settings" : "Umfragen-Einstellungen",
     "Error cloning poll." : "Fehler beim Klonen der Umfrage.",

@@ -420,7 +420,6 @@ OC.L10N.register(
     "Combined polls" : "Объединённые опросы",
     "Relevant polls" : "Актуальные опросы",
     "Error loading poll list" : "Не удалось загрузить опросы",
-    "Add new Poll" : "Добавить опрос",
     "Combine polls" : "Объеденить опросы",
     "Polls settings" : "Параметры опросов",
     "Error cloning poll." : "Не удалось скопировать опрос.",

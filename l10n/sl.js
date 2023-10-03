@@ -365,7 +365,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Združi več datumskih anket v en pogled",
     "Relevant polls" : "Pomembne ankete",
     "Error loading poll list" : "Prišlo je do napake nalaganja seznama anket",
-    "Add new Poll" : "Dodaj anketo",
     "Combine polls" : "Združi ankete",
     "Polls settings" : "Nastavitve ankete",
     "Error cloning poll." : "Napaka kloniranja ankete.",

@@ -244,7 +244,6 @@ OC.L10N.register(
     "Yes" : "예",
     "Administration" : "관리",
     "No polls selected" : "투표가 선택되지 않음",
-    "Add new Poll" : "새로운 투표 추가",
     "Combine polls" : "투표 통합",
     "Polls settings" : "투표 설정",
     "Error cloning poll." : "투표 복제중 오류 발생",

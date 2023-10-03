@@ -500,7 +500,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combine multiple date polls in a single view",
     "Relevant polls" : "Relevant polls",
     "Error loading poll list" : "Error loading poll list",
-    "Add new Poll" : "Add new Poll",
     "Combine polls" : "Combine polls",
     "Polls settings" : "Polls settings",
     "Error cloning poll." : "Error cloning poll.",

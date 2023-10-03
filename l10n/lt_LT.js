@@ -249,7 +249,6 @@ OC.L10N.register(
     "Error overtaking poll." : "Klaida perimant apklausą.",
     "Relevant polls" : "Aktualios apklausos",
     "Error loading poll list" : "Klaida įkeliant apklausų sąrašą",
-    "Add new Poll" : "Pridėti naują apklausą",
     "Polls settings" : "Apklausų nustatymai",
     "Error cloning poll." : "Klaida dubliuojant apklausą.",
     "404 - poll not found" : "404 - apklausa nerasta",

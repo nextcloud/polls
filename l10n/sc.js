@@ -225,7 +225,6 @@ OC.L10N.register(
     "Error overtaking poll." : "Errore in su rilievu de su sondàgiu.",
     "Relevant polls" : "Sondàgios importantes",
     "Error loading poll list" : "Errore in su carrigamentu de s'elencu de is sondàgios",
-    "Add new Poll" : "Agiunghe sondàgiu nou",
     "Error cloning poll." : "Errore in sa clonatzione de su sondàgiu.",
     "404 - poll not found" : "404 - sondàgiu no agatadu",
     "Enter a poll or start a new one." : "Inserta•nche unu sondàgiu o cumintza•nde unu nou.",

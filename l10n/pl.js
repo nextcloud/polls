@@ -490,7 +490,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Połącz wiele sond dat w jednym widoku",
     "Relevant polls" : "Istotne sondy",
     "Error loading poll list" : "Błąd ładowania listy sondy",
-    "Add new Poll" : "Dodaj nową sondę",
     "Combine polls" : "Połącz sondy",
     "Polls settings" : "Ustawienia Sondy",
     "Error cloning poll." : "Błąd podczas klonowania sondy.",

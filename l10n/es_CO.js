@@ -45,7 +45,6 @@ OC.L10N.register(
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Yes" : "Sí",
     "Administration" : "Administración",
-    "Add new Poll" : "Agregar nueva encuesta",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
     "Sharing" : "Compartiendo",

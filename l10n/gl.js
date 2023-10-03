@@ -499,7 +499,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combinar varias enquisas de datas nunha única vista",
     "Relevant polls" : "Enquisas relevantes",
     "Error loading poll list" : "Produciuse un erro ao cargar a lista de enquisas",
-    "Add new Poll" : "Engadir unha nova enquisa",
     "Combine polls" : "Combinar enquisas",
     "Polls settings" : "Axustes de Enquisas",
     "Error cloning poll." : "Produciuse un erro ao clonar a  enquisa.",

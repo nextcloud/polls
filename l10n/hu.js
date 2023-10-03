@@ -492,7 +492,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Több dátumszavazás összevonása egyetlen nézetbe",
     "Relevant polls" : "Releváns szavazások",
     "Error loading poll list" : "Hiba a szavazások betöltése során",
-    "Add new Poll" : "Új szavazás hozzáadása",
     "Combine polls" : "Szavazások összevonása",
     "Polls settings" : "Szavazások beállításai",
     "Error cloning poll." : "Hiba a szavazás klónozása során.",

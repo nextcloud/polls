@@ -500,7 +500,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Комбиновање више датумских гласања у јединсвени приказ",
     "Relevant polls" : "Релевантна гласања",
     "Error loading poll list" : "Грешка приликом учитавања списка гласања",
-    "Add new Poll" : "Додај ново гласање",
     "Combine polls" : "Комбинуј гласања",
     "Polls settings" : "Подешавања гласања",
     "Error cloning poll." : "Грешка приликом клонирања гласања.",

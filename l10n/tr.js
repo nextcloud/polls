@@ -500,7 +500,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Farklı tarihlerdeki anketleri tek görünümde birleştirin",
     "Relevant polls" : "İlişkili anketler",
     "Error loading poll list" : "Anket listesi yüklenirken sorun çıktı",
-    "Add new Poll" : "Anket ekle",
     "Combine polls" : "Anketleri birleştir",
     "Polls settings" : "Anketler ayarları",
     "Error cloning poll." : "Anket kopyalanırken sorun çıktı.",

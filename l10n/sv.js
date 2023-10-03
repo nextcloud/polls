@@ -494,7 +494,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Kombinera flera datumundersökningar i en enda vy",
     "Relevant polls" : "Relevanta omröstningar",
     "Error loading poll list" : "Det gick inte att läsa in omröstningslistan",
-    "Add new Poll" : "Lägg till omröstning",
     "Combine polls" : "Kombinera omröstningar",
     "Polls settings" : "Omröstningsinställningar",
     "Error cloning poll." : "Fel vid kloning av omröstning.",

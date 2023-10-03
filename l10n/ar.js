@@ -500,7 +500,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "الجمع بين استطلاعات متعددة التاريخ في عرض واحد",
     "Relevant polls" : "الاستطلاعات ذات الصلة",
     "Error loading poll list" : "خطأ في تحميل قائمة الاستطلاع",
-    "Add new Poll" : "إضافة استطلاع جديد",
     "Combine polls" : "الجمع بين الاستطلاعات",
     "Polls settings" : "إعدادات الاستطلاع",
     "Error cloning poll." : "خطأ في استنساخ الاستطلاع.",

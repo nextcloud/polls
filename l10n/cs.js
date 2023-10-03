@@ -500,7 +500,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Zkombinovat vícero anket ohledně data do jednoho zobrazení",
     "Relevant polls" : "Relevantní ankety",
     "Error loading poll list" : "Chyba při načítání seznamu anket",
-    "Add new Poll" : "Přidat novou anketu",
     "Combine polls" : "Zkombinovat anketu",
     "Polls settings" : "Nastavení pro ankety",
     "Error cloning poll." : "Chyba při klonování ankety.",

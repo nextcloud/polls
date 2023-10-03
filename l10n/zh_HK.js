@@ -500,7 +500,6 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "在一個檢視中組合多個日期投票",
     "Relevant polls" : "相關投票",
     "Error loading poll list" : "載入投票列表時發生錯誤",
-    "Add new Poll" : "新增投票",
     "Combine polls" : "聯合民意調查",
     "Polls settings" : "投票設定",
     "Error cloning poll." : "複製投票時發生錯誤。",

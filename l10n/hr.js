@@ -262,7 +262,6 @@ OC.L10N.register(
     "Error overtaking poll." : "Pogreška pri preuzimanju ankete.",
     "Relevant polls" : "Relevantne ankete",
     "Error loading poll list" : "Pogreška pri učitavanju popisa anketa",
-    "Add new Poll" : "Dodaj novu anketu",
     "Error cloning poll." : "Pogreška pri kloniranju ankete.",
     "404 - poll not found" : "404 – anketa nije pronađena",
     "Enter a poll or start a new one." : "Sudjelujte u anketi ili započnite novu.",

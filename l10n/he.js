@@ -87,7 +87,6 @@ OC.L10N.register(
     "Administration" : "ניהול",
     "Relevant polls" : "סקרים אפשריים",
     "Error loading poll list" : "שגיאה בטעינת רשימת הסקרים",
-    "Add new Poll" : "הוספת סקר חדש",
     "Error cloning poll." : "שגיאה בשכפול סקר.",
     "Enter a poll or start a new one." : "כניסה לסקר או הקמת אחד חדש.",
     "Error loading poll" : "שגיאה בטעינת הסקר",
