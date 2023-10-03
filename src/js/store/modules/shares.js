@@ -67,13 +67,15 @@ const getters = {
 		const directShareTypes = ['user', 'group', 'admin', 'public']
 		return state.list.filter((share) => (!share.revoked
 			&& (directShareTypes.includes(share.type)
-				|| (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent))
+				|| (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent || share.voted))
 			)
 		))
 	},
 
 	revoked: (state) => state.list.filter((share) => (!!share.revoked)),
-	unsentInvitations: (state) => state.list.filter((share) => (share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle') && !share.invitationSent && !share.revoked),
+	unsentInvitations: (state) => state.list.filter((share) =>
+		(share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle')
+		&& !share.invitationSent && !share.revoked && !share.voted),
 	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
 	hasShares: (state) => state.list.length > 0,
 	hasRevoked: (state, getters) => getters.revoked.length > 0,

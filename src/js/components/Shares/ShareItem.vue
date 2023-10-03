@@ -124,8 +124,8 @@
 
 		<ActionDelete :timeout="share.revoked ? 4 : 0"
 			:revoke="!!share.voted && !share.revoked"
-			:title="!!share.voted && !share.revoked ? t('polls', 'Revoke access') : t('polls', 'Delete share')"
-			@delete="!!share.voted && !share.revoked ? revokeShare({ share }) : deleteShare({ share })" />
+			:title="deleteButtonCaption"
+			@delete="clickDeleted(share)" />
 	</UserItem>
 </template>
 
@@ -183,6 +183,17 @@ export default {
 				this.$store.commit('shares/setShareProperty', { id: this.share.id, displayName: value })
 			},
 		},
+		deleteButtonCaption() {
+			if (this.share.voted && this.share.revoked) {
+				return t('polls', 'Delete share and remove user from poll')
+			}
+
+			if (this.share.voted && !this.share.revoked) {
+				return t('polls', 'Revoke share')
+			}
+
+			return t('polls', 'Delete share')
+		},
 
 	},
 
@@ -194,7 +205,27 @@ export default {
 			switchAdmin: 'shares/switchAdmin',
 			setPublicPollEmail: 'shares/setPublicPollEmail',
 			setLabel: 'shares/writeLabel',
+			deleteUser: 'votes/deleteUser',
 		}),
+
+		async clickDeleted(share) {
+			try {
+				if (share.voted && share.revoked) {
+					this.deleteShare({ share })
+					this.deleteUser({ userId: share.userId })
+					showSuccess(t('polls', 'Deleted share and votes for {displayName}', { displayName: share.displayName }))
+				} else if (share.voted && !share.revoked) {
+					this.revokeShare({ share })
+					showSuccess(t('polls', 'Share for user {displayName} revoked', { displayName: share.displayName }))
+				} else {
+					this.deleteShare({ share })
+					showSuccess(t('polls', 'Deleted share for user {displayName}', { displayName: share.displayName }))
+				}
+			} catch (e) {
+				showError(t('polls', 'Error deleting or revoking share for user {displayName}', { displayName: share.displayName }))
+				console.error('Error deleting or revoking share', { share }, e.response)
+			}
+		},
 
 		async writeLabel() {
 			this.setLabel({ token: this.share.token, displayName: this.share.displayName })
