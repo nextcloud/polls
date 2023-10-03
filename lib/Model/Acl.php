@@ -65,10 +65,7 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_PUBLIC_SHARES = 'publicShares';
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 
-	private AppSettings $appSettings;
-	private ?Poll $poll;
-	private ?Share $share;
-
+	
 	public function __construct(
 		private IUserManager $userManager,
 		private IUserSession $userSession,
@@ -76,7 +73,10 @@ class Acl implements JsonSerializable {
 		private OptionMapper $optionMapper,
 		private PollMapper $pollMapper,
 		private VoteMapper $voteMapper,
-		private ShareMapper $shareMapper
+		private ShareMapper $shareMapper,
+		private AppSettings $appSettings,
+		private ?Poll $poll,
+		private ?Share $share,
 	) {
 		$this->poll = null;
 		$this->share = null;
@@ -199,7 +199,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getTokenIsValid(): bool {
-		return ($this->share?->getToken() && !$this->share?->getRevoked());
+		return ($this->share?->getToken() && !$this->share->getRevoked());
 	}
 
 	public function getUserId(): string {
@@ -399,7 +399,7 @@ class Acl implements JsonSerializable {
 		}
 
 		try {
-			if ($this->share?->getUserId() !== $this->getUserId() || $this->share?->getPollId() !== $this->poll?->getId()) {
+			if ($this->share?->getUserId() !== $this->getUserId() || $this->share?->getPollId() !== $this->poll->getId()) {
 				$this->share = $this->shareMapper->findByPollAndUser($this->poll->getId(), $this->getUserId());
 			}
 		} catch (\Throwable $th) {
