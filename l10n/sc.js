@@ -164,7 +164,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Còpia su ligòngiu in punta de billete",
     "Email address is optional" : "S'indiritzu de posta eletrònica est optzionale",
     "Email address is mandatory" : "S'indiritzu de posta eletrònica est obligatòriu",
-    "Remove share" : "Boga cumpartzidura",
     "Resolving of {name} is not possible. The circles app is not enabled." : "No faghet a risòlvere {name}. S'aplicatzione de giros no est ativa.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "No faghet a risòlvere {name}. S'aplicatzione de cuntatos no est ativa.",
     "Error resolving {name}." : "Errore risolvende {name}.",

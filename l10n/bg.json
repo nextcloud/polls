@@ -399,7 +399,6 @@
     "Options for the registration dialog" : "Опции за диалоговия прозорец за регистрация",
     "Email address is optional" : "Имейл адресът е по избор",
     "Email address is mandatory" : "Имейл адресът е задължителен",
-    "Remove share" : "Премахване на споделяне ",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Разрешаването на {name} не е възможно. Приложението кръгове не е активирано.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Разрешаването на {name} не е възможно. Приложението за контакти не е активирано.",
     "Error resolving {name}." : "Грешка при разрешаването на {name}.",

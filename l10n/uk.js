@@ -56,6 +56,7 @@ OC.L10N.register(
     "Preview" : "Перегляд",
     "User settings" : "Налаштування користувача",
     "Share label" : "Мітка спільного ресурсу",
+    "Delete share" : "Вилучити спільний ресурс",
     "Shares" : "Спільний доступ",
     "As an admin you may edit this poll" : "Адміністратор може редагувати це опитування",
     "Description" : "Опис",

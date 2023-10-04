@@ -401,7 +401,6 @@
     "Options for the registration dialog" : "A regisztrációs párbeszédablak beállításai",
     "Email address is optional" : "Az e-mail-cím nem kötelező",
     "Email address is mandatory" : "Az e-mail-cím kötelező",
-    "Remove share" : "Megosztás eltávolítása",
     "Resolving of {name} is not possible. The circles app is not enabled." : "A(z) {name} feloldása nem lehetséges. A Körök alkalmazás nincs engedélyezve.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "A(z) {name} feloldása nem lehetséges. A Névjegyek alkalmazás nincs engedélyezve.",
     "Error resolving {name}." : "Hiba a(z) {name} feloldása során.",

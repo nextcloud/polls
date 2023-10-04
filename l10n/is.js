@@ -77,7 +77,7 @@ OC.L10N.register(
     "Resend invitation mail" : "Senda boðspóst aftur",
     "Send invitation mail" : "Senda boðspóst",
     "Copy link to clipboard" : "Afrita tengil á klippispjald",
-    "Remove share" : "Fjarlægja sameign",
+    "Delete share" : "Eyða sameign",
     "Link copied to clipboard" : "Tengill afritaður á klippispjald",
     "Error while copying link to clipboard" : "Villa við afritun tengils á klippispjald",
     "Shares" : "Sameignir",

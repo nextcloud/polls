@@ -349,7 +349,7 @@ OC.L10N.register(
     "Options for the registration dialog" : "Opties voor registratievenster",
     "Email address is optional" : "E-mailadres is optioneel",
     "Email address is mandatory" : "E-mailadres is verplicht",
-    "Remove share" : "Verwijderen share",
+    "Delete share" : "Verwijder share",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Uitsplitsen van {name} is niet mogelijk. De circles app is niet ingeschakeld.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Uitsplitsen van {name} is niet mogelijk. De contactpersonen app is niet ingeschakeld.",
     "Error resolving {name}." : "Fout bij uitsplitsen {name}.",

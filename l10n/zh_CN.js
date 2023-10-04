@@ -330,7 +330,7 @@ OC.L10N.register(
     "Options for the registration dialog" : "注册对话框选项",
     "Email address is optional" : "电子邮件地址可不填",
     "Email address is mandatory" : "必须填写电子邮件地址",
-    "Remove share" : "移除共享",
+    "Delete share" : "删除共享",
     "Resolving of {name} is not possible. The circles app is not enabled." : "不可能解析 {name}。未启用 circles 应用。",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "不可能解析 {name}。未启用联系人应用。",
     "Error resolving {name}." : "解决 {name} 出错",

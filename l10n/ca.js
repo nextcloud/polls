@@ -401,7 +401,6 @@ OC.L10N.register(
     "Options for the registration dialog" : "Opcions per al diàleg de registre",
     "Email address is optional" : "L'adreça de correu electrònic és opcional",
     "Email address is mandatory" : "L'adreça de correu electrònic és obligatòria",
-    "Remove share" : "Suprimir la compartició",
     "Resolving of {name} is not possible. The circles app is not enabled." : "La resolució de {name} no és possible. L'aplicació cercles no està habilitada.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "La resolució de {name} no és possible. L'aplicació de contactes no està habilitada.",
     "Error resolving {name}." : "Error en resoldre {name}.",

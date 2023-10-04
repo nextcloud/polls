@@ -231,7 +231,7 @@ OC.L10N.register(
     "Show QR code" : "Näytä QR-koodi",
     "Email address is optional" : "Sähköpostiosoite on valinnainen",
     "Email address is mandatory" : "Sähköpostiosoite on pakollinen",
-    "Remove share" : "Poista jako",
+    "Delete share" : "Poista jako",
     "Error resolving {name}." : "Virhe selvittäessä nimeä {name}.",
     "Invitation sent to {displayName} ({emailAddress})" : "Kutsu lähetetty käyttäjälle {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Virhe lähettäessä kutsua henkilölle {displayName} ({emailAddress})",

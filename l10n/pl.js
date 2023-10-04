@@ -401,7 +401,7 @@ OC.L10N.register(
     "Options for the registration dialog" : "Opcje okna dialogowego rejestracji",
     "Email address is optional" : "Adres e-mail jest opcjonalny",
     "Email address is mandatory" : "Adres e-mail jest obowiązkowy",
-    "Remove share" : "Usuń udostępnienie",
+    "Delete share" : "Usuń udostępnianie",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Rozwiązanie problemu {name} jest nie możliwe. Aplikacja kręgów jest wyłączona.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Rozwiązanie problemu {name} jest nie możliwe. Aplikacja do kontaktów jest wyłączona.",
     "Error resolving {name}." : "Błąd podczas rozwiązywania {name}.",

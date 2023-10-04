@@ -171,7 +171,7 @@ OC.L10N.register(
     "Resend invitation mail" : "招待メールを再送",
     "Send invitation mail" : "招待メールを送信",
     "Copy link to clipboard" : "リンクをクリップボードにコピーする",
-    "Remove share" : "共有を削除",
+    "Delete share" : "共有を解除",
     "Link copied to clipboard" : "クリップボードにリンクをコピーしました",
     "Error while copying link to clipboard" : "クリップボードへのリンクのコピー中にエラーが発生しました",
     "Shares" : "共有",

@@ -403,7 +403,7 @@
     "Email address is optional" : "Eine E-Mail-Adresse ist optional",
     "Email address is mandatory" : "Eine E-Mail-Adresse ist verpflichtend",
     "Do not ask for an email address" : "Nicht nach einer E-Mail-Adresse fragen",
-    "Remove share" : "Freigabe löschen",
+    "Delete share" : "Freigabe löschen",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Das Auflösen von {name} ist nicht möglich. Die Circles-App ist nicht aktiviert.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Das Auflösen von {name} ist nicht möglich. Die Kontakte-App ist nicht aktiviert.",
     "Error resolving {name}." : "Fehler beim Auflösen von {name}.",

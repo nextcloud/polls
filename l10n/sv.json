@@ -403,7 +403,7 @@
     "Email address is optional" : "E-postadress är frivillig",
     "Email address is mandatory" : "E-postadress är obligatorisk",
     "Do not ask for an email address" : "Fråga inte efter en e-postadress",
-    "Remove share" : "Ta bort delning",
+    "Delete share" : "Ta bort delning",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Det går inte att översätta {name}. Cirklar-appen är inte aktiverad.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Det går inte att läsa in {name}. Kontaktapplikationen är inte aktiverad.",
     "Error resolving {name}." : "Det gick inte att läsa in {name}.",

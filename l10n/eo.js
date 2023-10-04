@@ -39,6 +39,7 @@ OC.L10N.register(
     "Owner" : "Posedanto",
     "Created" : "Kreita",
     "Preview" : "Antaŭvidi",
+    "Delete share" : "Forigi kunhavigon",
     "Link copied to clipboard" : "Ligilo kopiita al tondujo",
     "Shares" : "Kunhavoj",
     "Description" : "Priskribo",

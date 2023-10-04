@@ -392,7 +392,6 @@ OC.L10N.register(
     "Options for the registration dialog" : "Možnosti pre dialógové okno registrácie",
     "Email address is optional" : "E-mail adresa je nepovinná",
     "Email address is mandatory" : "E-mail adresa je povinná",
-    "Remove share" : "Odstrániť zdieľanie",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Nie je možné preložiť {name}. Aplikácia Kruhy nie je zapnutá.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Nie je možné preložiť {name}. Aplikácia Kontakty nie je zapnutá.",
     "Error resolving {name}." : "Chyba pri preklade {name}.",

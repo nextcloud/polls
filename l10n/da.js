@@ -40,7 +40,6 @@ OC.L10N.register(
     "Owner" : "Ejer",
     "Created" : "Oprettet",
     "Preview" : "Forhåndsvisning",
-    "Remove share" : "Fjern deling",
     "Link copied to clipboard" : "Link kopieret til udklipsholder",
     "Shares" : "Delinger",
     "Description" : "Beskrivelse",

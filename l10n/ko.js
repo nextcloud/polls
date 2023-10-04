@@ -207,7 +207,7 @@ OC.L10N.register(
     "Resolve into individual invitations" : "개별 초대로 해결",
     "Email address is optional" : "이메일 주소는 선택 사항입니다.",
     "Email address is mandatory" : "이메일 주소는 필수 사항입니다.",
-    "Remove share" : "공유 삭제",
+    "Delete share" : "공유 삭제",
     "Link copied to clipboard" : "링크가 클립보드로 복사됨",
     "Shares" : "공유",
     "Unsent invitations" : "미발송된 초대",

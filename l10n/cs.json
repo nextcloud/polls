@@ -407,7 +407,7 @@
     "Email address is optional" : "E-mailová adresa je volitelná",
     "Email address is mandatory" : "E-mailová adresa je povinná",
     "Do not ask for an email address" : "Nepožadovat e-mailovou adresu",
-    "Remove share" : "Odebrat sdílení",
+    "Delete share" : "Smazat sdílení",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Překlad {name} není možný. Není zapnutá aplikace Okruhy.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Překlad {name} není možný. Není zapnutá aplikace Kontakty.",
     "Error resolving {name}." : "Chyba při překládání {name}.",

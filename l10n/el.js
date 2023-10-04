@@ -371,7 +371,6 @@ OC.L10N.register(
     "Options for the registration dialog" : "Επιλογές για το παράθυρο διαλόγου εγγραφής",
     "Email address is optional" : "Η διεύθυνση email είναι προαιρετική",
     "Email address is mandatory" : "Η διεύθυνση email είναι υποχρεωτική",
-    "Remove share" : "Κατάργηση διαμοιρασμού",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Δεν είναι δυνατή η επίλυση του {name}. Η εφαρμογή κύκλων δεν είναι ενεργοποιημένη.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Δεν είναι δυνατή η επίλυση του {name}. Η εφαρμογή επαφών δεν είναι ενεργοποιημένη.",
     "Error resolving {name}." : "Σφάλμα κατά την επίλυση {name}.",

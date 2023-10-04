@@ -362,7 +362,7 @@
     "Options for the registration dialog" : "Opzioni per il dialogo di registrazione",
     "Email address is optional" : "L'indirizzo email è facoltativa",
     "Email address is mandatory" : "L'indirizzo email è obbligatorio",
-    "Remove share" : "Rimuovi condivisione",
+    "Delete share" : "Elimina condivisione",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Impossibile risolvere {name}. L'applicazione delle cerchie non è abilitata.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Impossibile risolvere {name}. L'applicazione dei contatti non è abilitata.",
     "Error resolving {name}." : "Errore durante la risoluzione di {name}.",

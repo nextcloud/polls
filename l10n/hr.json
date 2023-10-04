@@ -198,7 +198,7 @@
     "Copy link to clipboard" : "Kopiraj poveznicu u međuspremnik",
     "Email address is optional" : "Adresa e-pošte nije obvezna",
     "Email address is mandatory" : "Adresa e-pošte je obvezna",
-    "Remove share" : "Ukloni dijeljenje",
+    "Delete share" : "Izbriši dijeljenje",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Nije moguće obraditi {name}. Nije omogućena aplikacija krugova.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Nije moguće obraditi {name}. Nije omogućena aplikacija kontakata.",
     "Error resolving {name}." : "Pogreška pri obrađivanju {name}.",

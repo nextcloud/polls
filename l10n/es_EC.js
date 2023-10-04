@@ -405,7 +405,6 @@ OC.L10N.register(
     "Email address is optional" : "La dirección de correo electrónico es opcional",
     "Email address is mandatory" : "La dirección de correo electrónico es obligatoria",
     "Do not ask for an email address" : "No solicitar una dirección de correo electrónico",
-    "Remove share" : "Eliminar compartir",
     "Resolving of {name} is not possible. The circles app is not enabled." : "No se puede resolver a {name}. La aplicación \"circles\" no está habilitada.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "No se puede resolver a {name}. La aplicación \"contacts\" no está habilitada.",
     "Error resolving {name}." : "Error al resolver a {name}.",

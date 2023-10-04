@@ -345,7 +345,7 @@
     "Options for the registration dialog" : "Параметры диалога регистрации",
     "Email address is optional" : "Адрес эл. почты указывать необязательно",
     "Email address is mandatory" : "Требуется указать адрес эл. почты",
-    "Remove share" : "Закрыть общий доступ",
+    "Delete share" : "Удалить общий ресурс",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Не удалось получить данные о {name}: приложение «Круги» не установлено.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Не удалось получить данные о {name}: приложение «Контакты» не установлено.",
     "Error resolving {name}." : "Не удалось получить данные о {name}.",

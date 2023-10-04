@@ -399,7 +399,6 @@ OC.L10N.register(
     "Options for the registration dialog" : "Erregistro modalaren aukerak",
     "Email address is optional" : "Helbide elektronikoa hautazkoa da",
     "Email address is mandatory" : "Helbide elektronikoa beharrezkoa da",
-    "Remove share" : "Kendu partekatzea",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Ez da posible {name} konpontzea. Zirkuluen aplikazioa ez dago gaituta.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Ez da posible {name} konpontzea. Kontaktuen aplikazioa ez dago gaituta.",
     "Error resolving {name}." : "Errorea {name} ebazterakoan.",

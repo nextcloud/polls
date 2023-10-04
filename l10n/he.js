@@ -67,7 +67,6 @@ OC.L10N.register(
     "User settings" : "הגדרות משתמש",
     "Share label" : "שתף תווית",
     "Copy link to clipboard" : "העתקת קישור ללוח הגזירים",
-    "Remove share" : "הסרת שיתוף",
     "Link copied to clipboard" : "הקישור הועתק ללוח הגזירים",
     "Error while copying link to clipboard" : "שגיאה בהעתקת קישור ללוח הגזירים",
     "Shares" : "שיתופים",

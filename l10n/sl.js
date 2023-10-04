@@ -286,7 +286,6 @@ OC.L10N.register(
     "Copy link to clipboard" : "Kopiraj povezavo v odložišče",
     "Email address is optional" : "Elektronski naslov ni obvezen podatek",
     "Email address is mandatory" : "Elektronski naslov je obvezen podatek",
-    "Remove share" : "Odstrani souporabo",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Ni mogoče razrešiti imena {name}. Program Krogi ni omogočen.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Ni mogoče razrešiti imena {name}. Program Stiki ni omogočen.",
     "Error resolving {name}." : "Napaka razreševanja imena {name}",

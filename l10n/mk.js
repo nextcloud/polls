@@ -38,7 +38,7 @@ OC.L10N.register(
     "Preview" : "Преглед",
     "User settings" : "Кориснички параметри",
     "Share label" : "Ознака на споделувањето",
-    "Remove share" : "Отстрани споделување",
+    "Delete share" : "Избриши споделување",
     "Shares" : "Споделувања",
     "Description" : "Опис",
     "Change name" : "Промени име",
