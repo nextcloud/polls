@@ -144,11 +144,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function setShare(Share $share, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		$this->share = $share;
-		
-		if ($this->share->getRevoked()) {
-			throw new ShareNotFoundException();
-		}
-		
+
 		$this->validateShareAccess();														// check, if share is allowed for the user type
 		$this->setPollId($this->share->getPollId(), $permission);							// set the poll id to laod the poll corresponding to the share and check permissions
 
@@ -199,7 +195,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getTokenIsValid(): bool {
-		return ($this->share?->getToken() && !$this->share->getRevoked());
+		return boolval($this->share?->getToken());
 	}
 
 	public function getUserId(): string {
@@ -461,11 +457,7 @@ class Acl implements JsonSerializable {
 			return true;										// users with edit rights are allowed to delete the poll
 		}
 
-		if ($this->getIsAdmin()) {
-			return true;										// admins are allowed to delete polls
-		}
-
-		return false;											// in all other cases deny poll deletion right
+		return $this->getIsAdmin();								// admins are allowed to delete polls, in all other cases deny poll deletion right
 	}
 
 	/**
@@ -485,6 +477,10 @@ class Acl implements JsonSerializable {
 		}
 
 		if ($this->poll->getProposalsExpired()) {
+			return false;													// Request for option proposals is expired, deny
+		}
+
+		if ($this->share?->getRevoked()) {
 			return false;													// Request for option proposals is expired, deny
 		}
 
