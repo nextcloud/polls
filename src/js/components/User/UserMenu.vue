@@ -42,7 +42,7 @@
 			</template>
 			{{ t('polls', 'Edit Email Address') }}
 		</NcActionInput>
-		<NcActionInput v-if="$route.name === 'publicVote'"
+		<NcActionInput v-if="$route.name === 'publicVote' && acl.allowVote"
 			v-bind="userName.inputProps"
 			:value.sync="userName.inputValue"
 			@update:value="validateDisplayName"
@@ -81,7 +81,7 @@
 			</template>
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</NcActionButton>
-		<NcActionButton @click="resetVotes()">
+		<NcActionButton v-if="acl.allowVote" @click="resetVotes()">
 			<template #icon>
 				<ResetVotesIcon />
 			</template>
