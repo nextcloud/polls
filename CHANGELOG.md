@@ -5,6 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Fixes
  - Fixed granting admin rights to shares
  - Fixed a bug, where exports were prevented
+ - Fixed a visually bug when using Nextcloud's Dark Mode
 ### New
  - Reveal hidden voters if hidden in case of performance concerns
  - Support better readability of vote page
