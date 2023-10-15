@@ -143,6 +143,7 @@ abstract class TableSchema {
 		Share::TABLE => [
 			'user', // dropped in 1.01
 			'user_email', // dropped in 1.06 and migrated to email_address
+			'revoked', // introduced in 5.4.0-beta3 and replaced with column 'locked' in 5.4.0-beta5, no migration
 		],
 		Log::TABLE => [
 			'message', // dropped in 1.07, orphaned
@@ -218,7 +219,7 @@ abstract class TableSchema {
 			'display_name' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null, 'length' => 256]],
 			'email_address' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null, 'length' => 256]],
 			'invitation_sent' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
-			'revoked' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'locked' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'reminder_sent' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'misc_settings' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => null, 'length' => 65535]],
 		],

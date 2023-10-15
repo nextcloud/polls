@@ -24,7 +24,7 @@
 	<div class="sidebar-share">
 		<SharesListUnsent class="shares unsent" />
 		<SharesList class="shares effective" />
-		<SharesListRevoked class="shares" />
+		<SharesListLocked class="shares" />
 	</div>
 </template>
 
@@ -32,7 +32,7 @@
 import { mapState } from 'vuex'
 import SharesList from '../Shares/SharesList.vue'
 import SharesListUnsent from '../Shares/SharesListUnsent.vue'
-import SharesListRevoked from '../Shares/SharesListRevoked.vue'
+import SharesListLocked from '../Shares/SharesListLocked.vue'
 
 export default {
 	name: 'SideBarTabShare',
@@ -40,7 +40,7 @@ export default {
 	components: {
 		SharesList,
 		SharesListUnsent,
-		SharesListRevoked,
+		SharesListLocked,
 	},
 
 	computed: {

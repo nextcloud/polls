@@ -95,19 +95,19 @@ const shares = {
 		})
 	},
 
-	revokeShare(shareToken) {
+	lockShare(shareToken) {
 		return httpInstance.request({
 			method: 'PUT',
-			url: `share/${shareToken}/revoke`,
-			cancelToken: cancelTokenHandlerObject[this.revokeShare.name].handleRequestCancellation().token,
+			url: `share/${shareToken}/lock`,
+			cancelToken: cancelTokenHandlerObject[this.lockShare.name].handleRequestCancellation().token,
 		})
 	},
 
-	reRevokeShare(shareToken) {
+	unlockShare(shareToken) {
 		return httpInstance.request({
 			method: 'PUT',
-			url: `share/${shareToken}/rerevoke`,
-			cancelToken: cancelTokenHandlerObject[this.reRevokeShare.name].handleRequestCancellation().token,
+			url: `share/${shareToken}/unlock`,
+			cancelToken: cancelTokenHandlerObject[this.unlockShare.name].handleRequestCancellation().token,
 		})
 	},
 

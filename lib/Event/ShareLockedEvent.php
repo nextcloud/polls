@@ -25,9 +25,9 @@ namespace OCA\Polls\Event;
 
 use OCA\Polls\Db\Share;
 
-class ShareRevokedEvent extends ShareEvent {
+class ShareLockedEvent extends ShareEvent {
 	public function __construct(Share $share) {
 		parent::__construct($share);
-		$this->eventId = self::REVOKED;
+		$this->eventId = self::LOCKED;
 	}
 }

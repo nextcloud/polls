@@ -10,9 +10,8 @@ All notable changes to this project will be documented in this file.
  - Reveal hidden voters if hidden in case of performance concerns
  - Support better readability of vote page
  - Added revoking of shares
- - Shares can now be revoked which works as a read only share mechanism. Revoked shares can still enter the poll, but all interaction (voting and commenting) is disabled.
- - Deletion of unsent shares have no more a redo timer
- - Deletion of revoked shares deletes the users votes as well
+ - Shares can now be locked which works as a read only share mechanism. Locked shares can still enter the poll, but every interaction (voting and commenting) is disabled.
+ - Deletion of locked shares deletes the users votes as well
 ### Changes
  - Improved username check for public polls with a large number of groups in the backend
 ## [5.3.2] - 2023-09-11

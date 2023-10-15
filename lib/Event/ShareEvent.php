@@ -35,7 +35,7 @@ abstract class ShareEvent extends BaseEvent {
 	public const CHANGE_REG_CONSTR = 'share_change_reg_const';
 	public const REGISTRATION = 'share_registration';
 	public const DELETE = 'share_delete';
-	public const REVOKED = 'share_revoked';
+	public const LOCKED = 'share_locked';
 
 	private Share $share;
 	// protected UserBase $sharee = null;

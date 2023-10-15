@@ -29,7 +29,7 @@
 				<UndoIcon v-if="deleteTimeout"
 					:size="iconSize"
 					@click="cancelDelete()" />
-				<RevokeIcon v-else-if="revoke"
+				<LockIcon v-else-if="lock"
 					:size="iconSize"
 					@click="deleteItem()" />
 				<DeleteIcon v-else
@@ -43,14 +43,14 @@
 <script>
 import { NcButton } from '@nextcloud/vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RevokeIcon from 'vue-material-design-icons/Close.vue'
+import LockIcon from 'vue-material-design-icons/Lock.vue'
 import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
 
 export default {
 	name: 'ActionDelete',
 	components: {
 		DeleteIcon,
-		RevokeIcon,
+		LockIcon,
 		UndoIcon,
 		NcButton,
 	},
@@ -69,7 +69,7 @@ export default {
 			type: Number,
 			default: 20,
 		},
-		revoke: {
+		lock: {
 			type: Boolean,
 			default: false,
 		},

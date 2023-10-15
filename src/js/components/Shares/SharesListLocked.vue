@@ -21,12 +21,12 @@
   -->
 
 <template>
-	<ConfigBox v-if="revokedShares.length" :title="t('polls', 'Revoked shares')">
+	<ConfigBox v-if="lockedShares.length" :title="t('polls', 'Locked shares (read only access)')">
 		<template #icon>
-			<DeletedIcon />
+			<LockedIcon />
 		</template>
 		<TransitionGroup :css="false" tag="div" class="shares-list">
-			<ShareItem v-for="(share) in revokedShares"
+			<ShareItem v-for="(share) in lockedShares"
 				:key="share.id"
 				:share="share" />
 		</TransitionGroup>
@@ -36,14 +36,14 @@
 <script>
 import { mapGetters, mapActions, mapState } from 'vuex'
 import { ConfigBox } from '../Base/index.js'
-import DeletedIcon from 'vue-material-design-icons/Delete.vue'
+import LockedIcon from 'vue-material-design-icons/Lock.vue'
 import ShareItem from './ShareItem.vue'
 
 export default {
-	name: 'SharesListRevoked',
+	name: 'SharesListLocked',
 
 	components: {
-		DeletedIcon,
+		LockedIcon,
 		ConfigBox,
 		ShareItem,
 	},
@@ -54,7 +54,7 @@ export default {
 		}),
 
 		...mapGetters({
-			revokedShares: 'shares/revoked',
+			lockedShares: 'shares/locked',
 		}),
 	},
 

@@ -36,7 +36,7 @@ use OCP\Migration\SimpleMigrationStep;
  * Changed class naming: Version[jjmmpp]Date[YYYYMMDDHHMMSS]
  * Version: jj = major version, mm = minor, pp = patch
  */
-class Version050400Date20231011211202 extends SimpleMigrationStep {
+class Version050400Date20231011211203 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;
 	
 	public function __construct(
