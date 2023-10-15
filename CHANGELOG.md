@@ -6,12 +6,17 @@ All notable changes to this project will be documented in this file.
  - Fixed granting admin rights to shares
  - Fixed a bug, where exports were prevented
  - Fixed a visually bug when using Nextcloud's Dark Mode
+ - Fixed result reporting about sent and failed confirmation mails
 ### New
  - Reveal hidden voters if hidden in case of performance concerns
  - Support better readability of vote page
  - Added revoking of shares
  - Shares can now be locked which works as a read only share mechanism. Locked shares can still enter the poll, but every interaction (voting and commenting) is disabled.
  - Deletion of locked shares deletes the users votes as well
+ - Moved request for option proposals to a card on top of the vote page
+ - Moved CTA for confirmation mails to card on top of the vote page
+ - Added a card with a more prominent hint for closed polls
+
 ### Changes
  - Improved username check for public polls with a large number of groups in the backend
 ## [5.3.2] - 2023-09-11

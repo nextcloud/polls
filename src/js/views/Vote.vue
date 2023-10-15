@@ -46,7 +46,7 @@
 			<CardDiv v-if="acl.allowAddOptions && proposalsOpen && !closed" type="success">
 				{{ t('polls', 'You are asked to propose more options. ') }}
 				<p v-if="proposalsExpirySet && !proposalsExpired">
-					{{ t('polls', 'The proposal period ends {timeRelative}', { timeRelative: proposalsExpireRelative }) }}
+					{{ t('polls', 'The proposal period ends {timeRelative}.', { timeRelative: proposalsExpireRelative }) }}
 				</p>
 				<OptionProposals v-if="poll.type === 'textPoll'" />
 				<template #button>
