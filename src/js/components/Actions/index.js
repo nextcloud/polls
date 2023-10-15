@@ -1,5 +1,5 @@
 export { default as ActionChangeView } from './modules/ActionChangeView.vue'
 export { default as ActionDelete } from './modules/ActionDelete.vue'
-export { default as ActionSendConfirmedOptions } from './modules/ActionSendConfirmedOptions.vue'
+export { default as ActionSendConfirmed } from './modules/ActionSendConfirmed.vue'
 export { default as ActionSortOptions } from './modules/ActionSortOptions.vue'
 export { default as ActionToggleSidebar } from './modules/ActionToggleSidebar.vue'
