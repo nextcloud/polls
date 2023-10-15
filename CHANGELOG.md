@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 ### New
  - Reveal hidden voters if hidden in case of performance concerns
  - Support better readability of vote page
- - Added revoking of shares
+ - Added locking of shares
  - Shares can now be locked which works as a read only share mechanism. Locked shares can still enter the poll, but every interaction (voting and commenting) is disabled.
  - Deletion of locked shares deletes the users votes as well
 ### Changes

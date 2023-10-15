@@ -212,8 +212,8 @@ export default {
 					showSuccess(t('polls', 'Share for user {displayName} locked', { displayName: share.displayName }))
 				}
 			} catch (e) {
-				showError(t('polls', 'Error deleting or revoking share for user {displayName}', { displayName: share.displayName }))
-				console.error('Error deleting or revoking share', { share }, e.response)
+				showError(t('polls', 'Error while changing lock status for user {displayName}', { displayName: share.displayName }))
+				console.error('Error locking or unlocking share', { share }, e.response)
 			}
 		},
 
@@ -228,8 +228,8 @@ export default {
 					showSuccess(t('polls', 'Deleted share for user {displayName}', { displayName: share.displayName }))
 				}
 			} catch (e) {
-				showError(t('polls', 'Error deleting or revoking share for user {displayName}', { displayName: share.displayName }))
-				console.error('Error deleting or revoking share', { share }, e.response)
+				showError(t('polls', 'Error deleting share for user {displayName}', { displayName: share.displayName }))
+				console.error('Error deleting share', { share }, e.response)
 			}
 		},
 
