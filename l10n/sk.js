@@ -486,6 +486,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Kombinovať viacero dátumových ankiet do jedného zobrazenia",
     "Relevant polls" : "Dôležité ankety",
     "Error loading poll list" : "Pri načítavaní zoznamu ankiet sa vyskytla chyba",
+    "New poll" : "Nová anketa",
     "Combine polls" : "Skombinovať ankety",
     "Polls settings" : "Nastavenia ankety",
     "Error cloning poll." : "Chyba pri zdvojení ankety.",
