@@ -79,6 +79,26 @@ class ShareApiController extends BaseApiController {
 	}
 
 	/**
+	 * Lock share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 */
+	public function lock(string $token): JSONResponse {
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->lock(token: $token)]);
+	}
+
+	/**
+	 * Unlock share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
+	 */
+	public function unlock(string $token): JSONResponse {
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->unlock(token: $token)]);
+	}
+
+	/**
 	 * Sent invitation mails for a share
 	 * @NoAdminRequired
 	 * @CORS

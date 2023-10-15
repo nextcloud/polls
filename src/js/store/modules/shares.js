@@ -186,7 +186,7 @@ const actions = {
 			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error revoking share', { error: e.response }, { payload })
+			console.error('Error locking share', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -198,7 +198,7 @@ const actions = {
 			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error re-revoking share', { error: e.response }, { payload })
+			console.error('Error unlocking share', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}

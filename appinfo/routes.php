@@ -152,8 +152,8 @@ return [
 		['name' => 'share_api#add', 'url' => '/api/v1.0/poll/{pollId}/share/{type}', 'verb' => 'POST'],
 		['name' => 'share_api#delete', 'url' => '/api/v1.0/share/{token}', 'verb' => 'DELETE'],
 		['name' => 'share_api#sendInvitation', 'url' => '/api/v1.0/share/send/{token}', 'verb' => 'PUT'],
-		['name' => 'share_api#revoke', 'url' => '/api/v1.0/share/revoke/{token}', 'verb' => 'PUT'],
-		['name' => 'share_api#re_revoke', 'url' => '/api/v1.0/share/rerevoke/{token}', 'verb' => 'PUT'],
+		['name' => 'share_api#lock', 'url' => '/api/v1.0/share/lock/{token}', 'verb' => 'PUT'],
+		['name' => 'share_api#unlock', 'url' => '/api/v1.0/share/unlock/{token}', 'verb' => 'PUT'],
 
 		['name' => 'subscription_api#get', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'GET'],
 		['name' => 'subscription_api#subscribe', 'url' => '/api/v1.0/poll/{pollId}/subscription', 'verb' => 'PUT'],
