@@ -369,7 +369,7 @@ class Acl implements JsonSerializable {
 		}
 
 		if ($this->loadShare()) {							// load share, if not loaded
-			return $this->share->getType() === Share::TYPE_ADMIN && !$this->share->getRevoked();
+			return $this->share->getType() === Share::TYPE_ADMIN && !$this->share->getLocked();
 		};
 		return false;
 	}
@@ -480,7 +480,7 @@ class Acl implements JsonSerializable {
 			return false;													// Request for option proposals is expired, deny
 		}
 
-		if ($this->share?->getRevoked()) {
+		if ($this->share?->getLocked()) {
 			return false;													// Request for option proposals is expired, deny
 		}
 
@@ -499,7 +499,7 @@ class Acl implements JsonSerializable {
 			return false;											// public shares are not allowed to comment
 		}
 
-		if ($this->share?->getRevoked()) {
+		if ($this->share?->getLocked()) {
 			return false;											// public shares are not allowed to comment
 		}
 
@@ -518,7 +518,7 @@ class Acl implements JsonSerializable {
 			return false;											// public shares are not allowed to vote
 		}
 
-		if ($this->share?->getRevoked()) {
+		if ($this->share?->getLocked()) {
 			return false;											// public shares are not allowed to vote
 		}
 

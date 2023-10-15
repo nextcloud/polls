@@ -43,6 +43,14 @@
 				</template>
 			</CardDiv>
 
+			<CardDiv v-if="closed" type="warning">
+				{{ t('polls', 'This poll is closed. No further action is possible.') }}
+			</CardDiv>
+
+			<CardDiv v-else-if="share.locked" type="warning">
+				{{ lockedShareCardCaption }}
+			</CardDiv>
+
 			<div v-if="poll.description" class="area__description">
 				<MarkUpDescription />
 			</div>
@@ -161,6 +169,10 @@ export default {
 			return this.poll.access === 'private' && !this.hasShares && this.acl.allowEdit
 		},
 
+		lockedShareCardCaption() {
+			return this.$route.name === 'publicVote' ? t('polls', 'This share is locked and allows only read access. Registering is not possible.') : t('polls', 'Your share is locked and you have just read access to this poll.')
+		},
+
 		showConfirmationMail() {
 			return this.acl.isOwner && this.closed && this.confirmedOptions.length > 0
 		},
@@ -174,6 +186,7 @@ export default {
 			return (this.$route.name === 'publicVote'
 				&& ['public', 'email', 'contact'].includes(this.share.type)
 				&& !this.closed
+				&& !this.share.locked
 				&& this.poll.id
 			)
 		},

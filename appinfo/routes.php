@@ -98,8 +98,8 @@ return [
 		['name' => 'share#admin_to_user', 'url' => '/share/{token}/user', 'verb' => 'PUT'],
 		['name' => 'share#set_label', 'url' => '/share/{token}/setlabel', 'verb' => 'PUT'],
 		['name' => 'share#set_public_poll_email', 'url' => '/share/{token}/publicpollemail/{value}', 'verb' => 'PUT'],
-		['name' => 'share#revoke', 'url' => '/share/{token}/revoke', 'verb' => 'PUT'],
-		['name' => 'share#re_revoke', 'url' => '/share/{token}/rerevoke', 'verb' => 'PUT'],
+		['name' => 'share#lock', 'url' => '/share/{token}/lock', 'verb' => 'PUT'],
+		['name' => 'share#unlock', 'url' => '/share/{token}/unlock', 'verb' => 'PUT'],
 
 		['name' => 'settings#getAppSettings', 'url' => '/settings/app', 'verb' => 'GET'],
 		['name' => 'settings#writeAppSettings', 'url' => '/settings/app', 'verb' => 'POST'],

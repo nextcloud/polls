@@ -31,8 +31,8 @@ use OCA\Polls\Event\ShareChangedEmailEvent;
 use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
 use OCA\Polls\Event\ShareCreateEvent;
 use OCA\Polls\Event\ShareDeletedEvent;
+use OCA\Polls\Event\ShareLockedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
-use OCA\Polls\Event\ShareRevokedEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
@@ -327,31 +327,31 @@ class ShareService {
 	}
 
 	/**
-	 * Revoke share
+	 * Lock share
 	 */
-	public function revoke(Share $share = null, string $token = null): string {
+	public function lock(Share $share = null, string $token = null): string {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token);
 		}
 		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
-		$share->setRevoked(time());
+		$share->setLocked(time());
 		$this->shareMapper->update($share);
-		$this->eventDispatcher->dispatchTyped(new ShareRevokedEvent($share));
+		$this->eventDispatcher->dispatchTyped(new ShareLockedEvent($share));
 
 		return $share->getToken();
 	}
 
 	/**
-	 * Re-revoke share
+	 * Unlock share
 	 */
-	public function reRevoke(Share $share = null, string $token = null): string {
+	public function unlock(Share $share = null, string $token = null): string {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token);
 		}
 		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
-		$share->setRevoked(0);
+		$share->setLocked(0);
 		$this->shareMapper->update($share);
 		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
 

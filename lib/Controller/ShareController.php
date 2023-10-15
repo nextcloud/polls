@@ -118,8 +118,8 @@ class ShareController extends BaseController {
 	 * @NoAdminRequired
 	 */
 
-	public function revoke(string $token): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->revoke(token: $token)]);
+	public function lock(string $token): JSONResponse {
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->lock(token: $token)]);
 	}
 
 	/**
@@ -127,8 +127,8 @@ class ShareController extends BaseController {
 	 * @NoAdminRequired
 	 */
 
-	public function reRevoke(string $token): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->reRevoke(token: $token)]);
+	public function unlock(string $token): JSONResponse {
+		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->unlock(token: $token)]);
 	}
 
 	/**

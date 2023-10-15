@@ -47,8 +47,8 @@ use OCP\IURLGenerator;
  * @method void setInvitationSent(integer $value)
  * @method int getReminderSent()
  * @method void setReminderSent(integer $value)
- * @method int getRevoked()
- * @method void setRevoked(integer $value)
+ * @method int getLocked()
+ * @method void setLocked(integer $value)
  * @method string getDisplayName()
  * @method void setDisplayName(string $value)
  * @method string getMiscSettings()
@@ -123,7 +123,7 @@ class Share extends Entity implements JsonSerializable {
 	protected ?string $emailAddress = null;
 	protected int $invitationSent = 0;
 	protected int $reminderSent = 0;
-	protected int $revoked = 0;
+	protected int $locked = 0;
 	protected ?string $displayName = null;
 	protected ?string $miscSettings = '';
 	protected int $voted = 0;
@@ -131,7 +131,7 @@ class Share extends Entity implements JsonSerializable {
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
-		$this->addType('Revoked', 'int');
+		$this->addType('Locked', 'int');
 		$this->addType('reminderSent', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->appSettings = new AppSettings;
@@ -150,7 +150,7 @@ class Share extends Entity implements JsonSerializable {
 			'emailAddress' => $this->getEmailAddress(),
 			'invitationSent' => $this->getInvitationSent(),
 			'reminderSent' => $this->getReminderSent(),
-			'revoked' => $this->getRevoked(),
+			'locked' => $this->getLocked(),
 			'displayName' => $this->getDisplayName(),
 			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
 			'URL' => $this->getURL(),

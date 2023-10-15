@@ -65,20 +65,20 @@ const getters = {
 		const invitationTypes = ['email', 'external', 'contact']
 		// sharetype which are active without sending an invitation
 		const directShareTypes = ['user', 'group', 'admin', 'public']
-		return state.list.filter((share) => (!share.revoked
+		return state.list.filter((share) => (!share.locked
 			&& (directShareTypes.includes(share.type)
 				|| (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent || share.voted))
 			)
 		))
 	},
 
-	revoked: (state) => state.list.filter((share) => (!!share.revoked)),
+	locked: (state) => state.list.filter((share) => (!!share.locked)),
 	unsentInvitations: (state) => state.list.filter((share) =>
 		(share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle')
-		&& !share.invitationSent && !share.revoked && !share.voted),
+		&& !share.invitationSent && !share.locked && !share.voted),
 	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
 	hasShares: (state) => state.list.length > 0,
-	hasRevoked: (state, getters) => getters.revoked.length > 0,
+	hasLocked: (state, getters) => getters.locked.length > 0,
 }
 
 const actions = {
@@ -170,7 +170,6 @@ const actions = {
 	},
 
 	async resolveGroup(context, payload) {
-
 		try {
 			await SharesAPI.resolveShare(payload.share.token)
 			context.dispatch('list')
@@ -181,10 +180,9 @@ const actions = {
 		}
 	},
 
-	async revoke(context, payload) {
-		// context.commit('delete', { share: payload.share })
+	async lock(context, payload) {
 		try {
-			await SharesAPI.revokeShare(payload.share.token)
+			await SharesAPI.lockShare(payload.share.token)
 			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
@@ -194,10 +192,9 @@ const actions = {
 		}
 	},
 
-	async reRevoke(context, payload) {
-		// context.commit('delete', { share: payload.share })
+	async unlock(context, payload) {
 		try {
-			await SharesAPI.reRevokeShare(payload.share.token)
+			await SharesAPI.unlockShare(payload.share.token)
 			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
