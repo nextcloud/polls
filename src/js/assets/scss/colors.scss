@@ -1,26 +1,8 @@
-// TODO: Remove :root selector after NC24
 :root {
-	--color-polls-foreground-yes: #49bc49;
-	--color-polls-foreground-no: #f45573;
-	--color-polls-foreground-maybe: #ffc107;
-	--color-polls-background-yes: #ebf5d6;
-	--color-polls-background-no: #ffede9;
-	--color-polls-background-maybe: #fcf7e1;
-}
-
-[data-theme-dark],
-[data-theme-dark-highcontrast] {
-	--color-polls-background-yes: #2e4600;
-	--color-polls-background-no: #4d0d00;
-	--color-polls-background-maybe: #665600;
-}
-
-@media (prefers-color-scheme: dark) {
-	body#body-public,
-	[data-theme-default] {
-		--color-polls-background-yes: #2e4600;
-		--color-polls-background-no: #4d0d00;
-		--color-polls-background-maybe: #665600;
-	}
-	
+	--color-polls-foreground-yes: var(--color-success);
+	--color-polls-foreground-no: var(--color-error);
+	--color-polls-foreground-maybe: var(--color-warning);
+	--color-polls-background-yes: rgba(var(--color-success-rgb), 0.2);
+	--color-polls-background-no: rgba(var(--color-error-rgb), 0.2);
+	--color-polls-background-maybe: rgba(var(--color-warning-rgb), 0.2);
 }
