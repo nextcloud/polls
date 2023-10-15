@@ -152,14 +152,14 @@ class MailService {
 
 		foreach ($participants as $participant) {
 			try {
-				$this->sendConfirmationMail($sentResult, $participant, $pollId);
+				$this->sendConfirmationMail($participant, $pollId);
 				$sentResult->AddSentMail($participant);
 			} catch (InvalidEmailAddress $e) {
-				$sentResult->AddAbortedMail($participant, SentResult::INVALID_EMAIL_ADDRESS);
 				$this->logger->warning('Invalid or no email address for confirmation: ' . json_encode($participant));
+				$sentResult->AddAbortedMail($participant, SentResult::INVALID_EMAIL_ADDRESS);
 			} catch (\Exception $e) {
-				$sentResult->AddAbortedMail($participant);
 				$this->logger->error('Error sending confirmation to ' . json_encode($participant));
+				$sentResult->AddAbortedMail($participant);
 			}
 		}
 
@@ -179,21 +179,9 @@ class MailService {
 		}
 	}
 
-	private function sendConfirmationMail(SentResult &$sentResult, UserBase $participant, int $pollId) : SentResult {
+	private function sendConfirmationMail(UserBase $participant, int $pollId): void {
 		$confirmation = new ConfirmationMail($participant->getId(), $pollId);
-
-		try {
-			$confirmation->send();
-			$sentResult->AddSentMail($participant);
-		} catch (InvalidEmailAddress $e) {
-			$sentResult->AddAbortedMail($participant, SentResult::INVALID_EMAIL_ADDRESS);
-			$this->logger->warning('Invalid or no email address for confirmation: ' . json_encode($participant));
-		} catch (\Exception $e) {
-			$sentResult->AddAbortedMail($participant);
-			$this->logger->error('Error sending confirmation to ' . json_encode($participant));
-		}
-
-		return $sentResult;
+		$confirmation->send();
 	}
 
 	private function sendAutoReminderToRecipients(Share $share, Poll $poll): void {

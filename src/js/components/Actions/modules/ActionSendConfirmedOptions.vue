@@ -83,8 +83,9 @@ export default {
 			try {
 				const result = await PollsAPI.sendConfirmation(this.$route.params.id)
 				this.confirmations = result.data.confirmations
-
-				this.headerCaption = n('polls', 'Confirmations sent to {count} recipient', 'Confirmations sent to {count} recipients', { count: this.confirmations.countSentMails })
+				console.log(this.confirmations)
+				console.log(this.confirmations.countSentMails)
+				this.headerCaption = n('polls', 'Confirmations sent to %n recipient', 'Confirmations sent to %n recipients', this.confirmations.countSentMails)
 				this.confirmations.sentMails.forEach((confirmation) => {
 					showSuccess(t('polls', 'Confirmation sent to {participant} ({emailAddress})', { participant: confirmation.displayName, emailAddress: confirmation.emailAddress }))
 				})
