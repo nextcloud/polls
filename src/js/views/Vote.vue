@@ -43,8 +43,26 @@
 				</template>
 			</CardDiv>
 
-			<CardDiv v-if="closed" type="warning">
+			<CardDiv v-if="acl.allowAddOptions && proposalsOpen && !closed" type="success">
+				{{ t('polls', 'You are asked to propose more options. ') }}
+				<p v-if="proposalsExpirySet && !proposalsExpired">
+					{{ t('polls', 'The proposal period ends {timeRelative}.', { timeRelative: proposalsExpireRelative }) }}
+				</p>
+				<OptionProposals v-if="poll.type === 'textPoll'" />
+				<template #button>
+					<OptionProposals v-if="poll.type === 'datePoll'" />
+				</template>
+			</CardDiv>
+
+			<CardDiv v-if="closed && !showConfirmationMail" type="warning">
 				{{ t('polls', 'This poll is closed. No further action is possible.') }}
+			</CardDiv>
+
+			<CardDiv v-else-if="showConfirmationMail" type="success">
+				{{ t('polls', 'You have confirmed options. Inform your participants about the result via email.') }}
+				<template #button>
+					<ActionSendConfirmed />
+				</template>
 			</CardDiv>
 
 			<CardDiv v-else-if="share.locked" type="warning">
@@ -53,13 +71,6 @@
 
 			<div v-if="poll.description" class="area__description">
 				<MarkUpDescription />
-			</div>
-
-			<div v-if="acl.allowAddOptions && proposalsOpen && !closed" class="area__proposal">
-				<OptionProposals />
-			</div>
-			<div v-if="showConfirmationMail" class="area__confirmation">
-				<ActionSendConfirmedOptions />
 			</div>
 
 			<div class="area__main" :class="viewMode">
@@ -115,12 +126,12 @@ import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
 import { CardDiv, HeaderBar } from '../components/Base/index.js'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import { ActionSendConfirmedOptions } from '../components/Actions/index.js'
+import { ActionSendConfirmed } from '../components/Actions/index.js'
 
 export default {
 	name: 'Vote',
 	components: {
-		ActionSendConfirmedOptions,
+		ActionSendConfirmed,
 		NcAppContent,
 		NcButton,
 		NcEmptyContent,
@@ -159,6 +170,8 @@ export default {
 			viewMode: 'poll/viewMode',
 			proposalsAllowed: 'poll/proposalsAllowed',
 			proposalsOpen: 'poll/proposalsOpen',
+			proposalsExpirySet: 'poll/proposalsExpirySet',
+			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 			countHiddenParticipants: 'poll/countHiddenParticipants',
 			safeTable: 'poll/safeTable',
 			confirmedOptions: 'options/confirmed',
