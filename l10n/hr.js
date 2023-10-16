@@ -51,6 +51,7 @@ OC.L10N.register(
     "Switch to table view" : "Prebacite na prikaz tablice",
     "Delete" : "Izbriši",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Brisanje za {countdown} sekundu","Brisanje za {countdown} sekunde","Brisanje za {countdown} sekundi"],
+    "Unknown error" : "Nepoznata pogreška",
     "Date order" : "Redoslijed po datumu",
     "Original order" : "Izvorni redoslijed",
     "Ranked order" : "Redoslijed po rangu",

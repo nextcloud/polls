@@ -175,7 +175,7 @@ OC.L10N.register(
     "Delete" : "Verwijderen",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Verwijderen over {countdown} seconde","Verwijderen over {countdown} seconden"],
     "Send confirmation emails" : "Stuur e-mailbevestigigingen",
-    "Emails could not be sent:" : "Emails konden niet verstuurd worden:",
+    "Unknown error" : "Onbekende fout",
     "Date order" : "Datum volgorde",
     "Original order" : "Originele volgorde",
     "Ranked order" : "Gerangschikte volgorde",

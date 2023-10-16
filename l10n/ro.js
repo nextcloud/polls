@@ -7,6 +7,7 @@ OC.L10N.register(
     "Public link" : "Link public",
     "User" : "Utilizator",
     "Delete" : "Șterge",
+    "Unknown error" : "Eroare necunoscută",
     "Conflict" : "Conflict",
     "New comment …" : "Comentariu nou...",
     "Delete comment" : "Șterge comentariu",

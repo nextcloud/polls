@@ -8,6 +8,7 @@ OC.L10N.register(
     "Contact" : "Kontakt",
     "User" : "Përdorues",
     "Delete" : "Fshij",
+    "Unknown error" : "Gabim i panjohur",
     "Conflict" : "Përplasje",
     "New comment …" : "Koment i ri ...",
     "Delete comment" : "Fshi komentin",

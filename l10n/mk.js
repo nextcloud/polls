@@ -10,6 +10,7 @@ OC.L10N.register(
     "User" : "Корисник",
     "Delete" : "Избриши",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Бришење за 1 секунда","Бришење за {countdown} секунди"],
+    "Unknown error" : "Непозната грешка",
     "Toggle Sidebar" : "Отвори странична лента",
     "Conflict" : "Конфликт",
     "New comment …" : "Нов коментар ...",

@@ -21,6 +21,7 @@
     "%s archived your poll" : "הסקר שלך הועבר לארכיון על ידי %s",
     "{actor} archived your poll \"%s\"." : "הסקר שלך „%s” הועבר לארכיון על ידי {actor}",
     "Delete" : "מחיקה",
+    "Unknown error" : "שגיאה בלתי ידועה",
     "Conflict" : "התנגשות",
     "New comment …" : "תגובה חדשה…",
     "Error while saving comment" : "שגיאה בעת שמירת הערה",

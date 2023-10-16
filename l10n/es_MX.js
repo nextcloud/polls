@@ -10,6 +10,7 @@ OC.L10N.register(
     "Public link" : "Liga pública",
     "User" : "Usuario",
     "Delete" : "Eliminar",
+    "Unknown error" : "Se presentó un error desconocido",
     "Conflict" : "Conflicto",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",

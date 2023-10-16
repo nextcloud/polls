@@ -38,6 +38,7 @@
     "{actor} deleted your poll \"%s\"." : "{actor} があなた投票「%s」を削除しました。",
     "%s archived your poll" : "%s があなたの投票をアーカイブしました",
     "Delete" : "削除",
+    "Unknown error" : "不明なエラー",
     "Date order" : "日付順",
     "Original order" : "オリジナル順",
     "Ranked order" : "順位順",

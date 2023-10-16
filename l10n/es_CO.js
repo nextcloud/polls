@@ -14,6 +14,7 @@ OC.L10N.register(
     "Public link" : "Liga pública",
     "User" : "Ususario",
     "Delete" : "Borrar",
+    "Unknown error" : "Error desconocido",
     "Conflict" : "Conflicto",
     "New comment …" : "Nuevo comentario ...",
     "Error while saving comment" : "Error guardando el comentario",
