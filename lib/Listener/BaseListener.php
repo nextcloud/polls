@@ -44,6 +44,8 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
 
+use function OCP\Log\logger;
+
 /**
  * @template-implements IEventListener<Event>
  */
@@ -64,7 +66,6 @@ abstract class BaseListener implements IEventListener {
 
 	public function handle(Event $event) : void {
 		$this->event = $event;
-
 		try {
 			// check if event is child of \OCA\Polls\Event\BaseEvent
 			$this->checkClass();
