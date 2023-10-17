@@ -44,8 +44,6 @@ use OCP\EventDispatcher\IEventListener;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
 
-use function OCP\Log\logger;
-
 /**
  * @template-implements IEventListener<Event>
  */

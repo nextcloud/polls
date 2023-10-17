@@ -353,7 +353,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function close(int $pollId): Poll {
-		return $this->toggleClose($pollId, time() -5);
+		return $this->toggleClose($pollId, time() - 5);
 	}
 
 	/**
