@@ -96,6 +96,22 @@ const polls = {
 		})
 	},
 
+	closePoll(pollId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `poll/${pollId}/close`,
+			cancelToken: cancelTokenHandlerObject[this.closePoll.name].handleRequestCancellation().token,
+		})
+	},
+
+	reopenPoll(pollId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `poll/${pollId}/reopen`,
+			cancelToken: cancelTokenHandlerObject[this.reopenPoll.name].handleRequestCancellation().token,
+		})
+	},
+
 	toggleArchive(pollId) {
 		return httpInstance.request({
 			method: 'PUT',

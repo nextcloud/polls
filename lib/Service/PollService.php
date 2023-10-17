@@ -29,9 +29,11 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\PollArchivedEvent;
+use OCA\Polls\Event\PollCloseEvent;
 use OCA\Polls\Event\PollCreatedEvent;
 use OCA\Polls\Event\PollDeletedEvent;
 use OCA\Polls\Event\PollOwnerChangeEvent;
+use OCA\Polls\Event\PollReopenEvent;
 use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
@@ -341,6 +343,44 @@ class PollService {
 		$this->eventDispatcher->dispatchTyped(new PollDeletedEvent($this->poll));
 
 		$this->pollMapper->delete($this->poll);
+
+		return $this->poll;
+	}
+
+	/**
+	 * Close poll
+	 *
+	 * @return Poll
+	 */
+	public function close(int $pollId): Poll {
+		return $this->toggleClose($pollId, time() - 5);
+	}
+
+	/**
+	 * Reopen poll
+	 *
+	 * @return Poll
+	 */
+	public function reopen(int $pollId): Poll {
+		return $this->toggleClose($pollId, 0);
+	}
+
+	/**
+	 * Close poll
+	 *
+	 * @return Poll
+	 */
+	private function toggleClose(int $pollId, $expiry): Poll {
+		$this->poll = $this->pollMapper->find($pollId);
+		$this->acl->setPoll($this->poll, Acl::PERMISSION_POLL_EDIT);
+		$this->poll->setExpire($expiry);
+		if ($expiry > 0) {
+			$this->eventDispatcher->dispatchTyped(new PollCloseEvent($this->poll));
+		} else {
+			$this->eventDispatcher->dispatchTyped(new PollReopenEvent($this->poll));
+		}
+		
+		$this->poll = $this->pollMapper->update($this->poll);
 
 		return $this->poll;
 	}

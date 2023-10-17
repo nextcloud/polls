@@ -28,11 +28,8 @@ use OCA\Polls\Db\Vote;
 abstract class VoteEvent extends BaseEvent {
 	public const SET = 'vote_set';
 
-	/** @var Vote */
-	private $vote;
-
 	public function __construct(
-		Vote $vote
+		protected Vote $vote
 	) {
 		parent::__construct($vote);
 		$this->activityObjectType = 'poll';

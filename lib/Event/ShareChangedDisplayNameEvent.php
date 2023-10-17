@@ -26,7 +26,9 @@ namespace OCA\Polls\Event;
 use OCA\Polls\Db\Share;
 
 class ShareChangedDisplayNameEvent extends ShareEvent {
-	public function __construct(Share $share) {
+	public function __construct(
+		protected Share $share
+	) {
 		parent::__construct($share);
 		$this->eventId = self::CHANGE_DISPLAY_NAME;
 	}

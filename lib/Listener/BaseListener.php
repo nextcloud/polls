@@ -64,7 +64,6 @@ abstract class BaseListener implements IEventListener {
 
 	public function handle(Event $event) : void {
 		$this->event = $event;
-
 		try {
 			// check if event is child of \OCA\Polls\Event\BaseEvent
 			$this->checkClass();
