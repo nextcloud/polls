@@ -34,10 +34,12 @@ use OCA\Polls\Event\OptionConfirmedEvent;
 use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\PollCloseEvent;
 use OCA\Polls\Event\PollEvent;
 use OCA\Polls\Event\PollExpiredEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Event\PollOwnerChangeEvent;
+use OCA\Polls\Event\PollReopenEvent;
 use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
@@ -104,6 +106,8 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(PollRestoredEvent::class, PollListener::class);
 		$context->registerEventListener(PollTakeoverEvent::class, PollListener::class);
 		$context->registerEventListener(PollUpdatedEvent::class, PollListener::class);
+		$context->registerEventListener(PollReopenEvent::class, PollListener::class);
+		$context->registerEventListener(PollCloseEvent::class, PollListener::class);
 
 		$context->registerEventListener(ShareEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareChangedDisplayNameEvent::class, ShareListener::class);

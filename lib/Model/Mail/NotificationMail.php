@@ -95,6 +95,8 @@ class NotificationMail extends MailBase {
 			PollEvent::DELETE => $this->l10n->t('The poll has been deleted.'),
 			PollEvent::RESTORE => $this->l10n->t('The poll has been restored.'),
 			PollEvent::EXPIRE => $this->l10n->t('The poll has been closed.'),
+			PollEvent::CLOSE => $this->l10n->t('The poll has been closed.'),
+			PollEvent::REOPEN => $this->l10n->t('The poll has been reopened.'),
 			PollEvent::OWNER_CHANGE => $this->l10n->t('The poll owner has been changed.'),
 			OptionEvent::ADD => $this->l10n->t('A voting option has been added.'),
 			OptionEvent::UPDATE => $this->l10n->t('A voting option has been changed.'),

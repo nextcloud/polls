@@ -205,9 +205,16 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getExpired(): bool {
+		$compareTime = time();
+		$expiry = $this->getExpire();
+		// \OC::$server->getLogger()->error('time:' . $compareTime);
+		// \OC::$server->getLogger()->error('expire:' . $expiry);
+		// \OC::$server->getLogger()->error('diff:' . $expiry - $compareTime);
+
 		return (
-			$this->getExpire() > 0
-			&& $this->getExpire() < time()
+			$expiry > 0
+			&& $expiry < $compareTime
+			// && $this->getExpire() < ($compareTime + 1)
 		);
 	}
 

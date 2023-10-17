@@ -63,7 +63,9 @@ return [
 		['name' => 'poll#add', 'url' => '/poll/add', 'verb' => 'POST'],
 		['name' => 'poll#update', 'url' => '/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll#delete', 'url' => '/poll/{pollId}', 'verb' => 'DELETE'],
-
+		
+		['name' => 'poll#close', 'url' => '/poll/{pollId}/close', 'verb' => 'PUT'],
+		['name' => 'poll#reopen', 'url' => '/poll/{pollId}/reopen', 'verb' => 'PUT'],
 		['name' => 'poll#toggleArchive', 'url' => '/poll/{pollId}/toggleArchive', 'verb' => 'PUT'],
 		['name' => 'poll#clone', 'url' => '/poll/{pollId}/clone', 'verb' => 'POST'],
 		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/poll/{pollId}/addresses', 'verb' => 'GET'],
