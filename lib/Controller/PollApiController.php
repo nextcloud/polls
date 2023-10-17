@@ -133,7 +133,7 @@ class PollApiController extends BaseApiController {
 	 */
 	public function close(int $pollId): JSONResponse {
 		try {
-			return new JSONResponse(['poll' =>$this->pollService->close($pollId)], Http::STATUS_OK);
+			return new JSONResponse(['poll' => $this->pollService->close($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
@@ -149,7 +149,7 @@ class PollApiController extends BaseApiController {
 	 */
 	public function reopen(int $pollId): JSONResponse {
 		try {
-			return new JSONResponse(['poll' =>$this->pollService->reopen($pollId)], Http::STATUS_OK);
+			return new JSONResponse(['poll' => $this->pollService->reopen($pollId)], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
 		} catch (Exception $e) {
