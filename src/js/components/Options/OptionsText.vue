@@ -45,8 +45,8 @@
 							:title="t('polls', 'Delete option')"
 							@delete="removeOption(option)" />
 						<NcButton v-if="closed"
-							v-tooltip="confirmationCaption"
-							:aria-label="confirmationCaption"
+							v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+							:aria-label="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 							type="tertiary"
 							@click="confirmOption(option)">
 							<template #icon>
@@ -122,10 +122,6 @@ export default {
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
 		}),
-
-		confirmationCaption() {
-			return this.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')
-		},
 
 		dragOptions() {
 			return {
