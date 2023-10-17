@@ -183,6 +183,7 @@ OC.L10N.register(
     "Delete" : "Изтриване",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Изтриване след {countdown} секунди","Изтриване след {countdown} секунди"],
     "Send confirmation emails" : "Изпращане на имейли за потвърждение",
+    "Unknown error" : "Неизвестна грешка",
     "Send information about confirmed options by email" : "Изпращане на информация за потвърдените опции по имейл",
     "Date order" : "Подредба по дата",
     "Original order" : "Оригинална подредба",

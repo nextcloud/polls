@@ -7,6 +7,7 @@ OC.L10N.register(
     "Public link" : "Openbare skakel",
     "User" : "Gebruiker",
     "Delete" : "Skrap",
+    "Unknown error" : "Onbekende fout",
     "New comment …" : "Nuwe kommentaar…",
     "Delete comment" : "Skrap kommentaar",
     "Title" : "Titel",
