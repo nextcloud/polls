@@ -115,12 +115,10 @@ export default {
 	methods: {
 		toggleClosed() {
 			if (this.closed) {
-				this.$store.commit('poll/setProperty', { expire: 0 })
+				this.$store.dispatch('poll/reopen')
 			} else {
-				this.$store.commit('poll/setProperty', { expire: -1 })
+				this.$store.dispatch('poll/close')
 			}
-			this.$emit('change')
-
 		},
 	},
 }

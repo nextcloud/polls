@@ -180,7 +180,7 @@ const getters = {
 		return orderBy(
 			state.list.filter((poll) => currentCategory.filterCondition(poll)),
 			[state.sort.by],
-			[state.sort.reverse ? 'desc' : 'asc']
+			[state.sort.reverse ? 'desc' : 'asc'],
 		)
 	},
 }

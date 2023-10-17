@@ -23,13 +23,13 @@
 
 namespace OCA\Polls\Event;
 
-use OCA\Polls\Db\Share;
+use OCA\Polls\Db\Poll;
 
-class ShareLockedEvent extends ShareEvent {
+class PollReopenEvent extends PollEvent {
 	public function __construct(
-		protected Share $share
+		protected Poll $poll,
 	) {
-		parent::__construct($share);
-		$this->eventId = self::LOCKED;
+		parent::__construct($poll);
+		$this->eventId = self::REOPEN;
 	}
 }
