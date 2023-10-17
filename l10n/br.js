@@ -5,6 +5,7 @@ OC.L10N.register(
     "Public link" : "Liamm publik",
     "User" : "Implijer",
     "Delete" : "Lemel",
+    "Unknown error" : "Fazi dizanv",
     "Conflict" : "Stourm",
     "Delete comment" : "Lemel an displegadenn",
     "Title" : "Titl",

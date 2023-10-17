@@ -183,6 +183,7 @@ OC.L10N.register(
     "Delete" : "Löschen",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Lösche in {countdown} Sekunde","Lösche in {countdown} Sekunden"],
     "Send confirmation emails" : "Sende Bestätigungs-E-Mails",
+    "Unknown error" : "Unbekannter Fehler",
     "Send information about confirmed options by email" : "Informationen über bestätigte Optionen per E-Mail senden",
     "Date order" : "Reihenfolge nach Datum",
     "Original order" : "Original Reihenfolge",
