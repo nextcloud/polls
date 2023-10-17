@@ -171,6 +171,7 @@ export default {
 			proposalsAllowed: 'poll/proposalsAllowed',
 			proposalsOpen: 'poll/proposalsOpen',
 			proposalsExpirySet: 'poll/proposalsExpirySet',
+			proposalsExpired: 'poll/proposalsExpired',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 			countHiddenParticipants: 'poll/countHiddenParticipants',
 			safeTable: 'poll/safeTable',
