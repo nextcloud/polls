@@ -10,6 +10,7 @@ OC.L10N.register(
     "Public link" : "Offentligt link",
     "User" : "Bruger",
     "Delete" : "Slet",
+    "Unknown error" : "Ukendt fejl",
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar…",
     "Delete comment" : "Slet kommentar",
