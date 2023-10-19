@@ -222,10 +222,10 @@ export default {
 				if (share.voted && share.locked) {
 					this.deleteShare({ share })
 					this.deleteUser({ userId: share.userId })
-					showSuccess(t('polls', 'Deleted share and votes for {displayName}', { displayName: share.displayName }))
+					showSuccess(t('polls', 'Share and votes for {displayName} deleted', { displayName: share.displayName }))
 				} else {
 					this.deleteShare({ share })
-					showSuccess(t('polls', 'Deleted share for user {displayName}', { displayName: share.displayName }))
+					showSuccess(t('polls', 'Share for user {displayName} deleted', { displayName: share.displayName }))
 				}
 			} catch (e) {
 				showError(t('polls', 'Error deleting share for user {displayName}', { displayName: share.displayName }))
