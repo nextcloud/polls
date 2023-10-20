@@ -26,10 +26,12 @@ namespace OCA\Polls\Settings;
 use OCA\Polls\AppConstants;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
+use OCP\Util;
 
 class PersonalSettings implements ISettings {
 	public function getForm(): TemplateResponse {
-		return new TemplateResponse(AppConstants::APP_ID, 'settings', []);
+		Util::addScript(AppConstants::APP_ID, 'polls-userSettings');
+		return new TemplateResponse(AppConstants::APP_ID, 'main', []);
 	}
 
 	public function getSection(): string {

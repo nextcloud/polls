@@ -27,9 +27,12 @@ use OCA\Polls\AppConstants;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
+use OCP\Util;
 
 class AdminController extends BaseController {
 	public function __construct(
@@ -37,7 +40,8 @@ class AdminController extends BaseController {
 		IRequest $request,
 		ISession $session,
 		private IURLGenerator $urlGenerator,
-		private PollService $pollService
+		private PollService $pollService,
+		private IEventDispatcher $eventDispatcher,
 	) {
 		parent::__construct($appName, $request, $session);
 	}
@@ -46,7 +50,9 @@ class AdminController extends BaseController {
 	 * @NoCSRFRequired
 	 */
 	public function index(): TemplateResponse {
-		return new TemplateResponse(AppConstants::APP_ID, 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+		Util::addScript(AppConstants::APP_ID, 'polls-main');
+		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());
+		return new TemplateResponse(AppConstants::APP_ID, 'main', ['urlGenerator' => $this->urlGenerator]);
 	}
 
 	/**
