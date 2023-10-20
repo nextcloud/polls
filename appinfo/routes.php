@@ -49,12 +49,13 @@ return [
 		['name' => 'public#watch_poll', 'url' => '/s/{token}/watch', 'verb' => 'GET'],
 
 		['name' => 'admin#index', 'url' => '/administration', 'verb' => 'GET'],
+
 		['name' => 'admin#list', 'url' => '/administration/polls', 'verb' => 'GET'],
 		['name' => 'admin#takeover', 'url' => '/administration/poll/{pollId}/takeover', 'verb' => 'PUT'],
 
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],
-		['name' => 'page#index', 'url' => '/list/{id}', 'verb' => 'GET', 'postfix' => 'list'],
+		['name' => 'page#index', 'url' => '/list/{category}', 'verb' => 'GET', 'postfix' => 'list', 'defaults' => array('category' => 'relevant')],
 		['name' => 'page#index', 'url' => '/combo', 'verb' => 'GET', 'postfix' => 'combo'],
 		['name' => 'page#vote', 'url' => '/vote/{id}', 'verb' => 'GET'],
 

@@ -45,12 +45,16 @@ class PageControllerTest extends UnitTestCase {
 		$notificationService = $this->getMockBuilder('OCA\Polls\Service\NotificationService')
 			->disableOriginalConstructor()
 			->getMock();
+		$eventDispatcher = $this->getMockBuilder('OCP\EventDispatcher\IEventDispatcher')
+			->disableOriginalConstructor()
+			->getMock();
 
 		$this->controller = new PageController(
 			'polls',
 			$request,
 			$urlGenerator,
-			$notificationService
+			$notificationService,
+			$eventDispatcher,
 		);
 	}
 
@@ -60,7 +64,7 @@ class PageControllerTest extends UnitTestCase {
 	public function testIndex() {
 		$result = $this->controller->index();
 
-		$this->assertEquals('polls.tmpl', $result->getTemplateName());
+		$this->assertEquals('main', $result->getTemplateName());
 		$this->assertInstanceOf(TemplateResponse::class, $result);
 	}
 }
