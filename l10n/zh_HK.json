@@ -426,8 +426,6 @@
     "Share for user {displayName} unlocked" : "已解鎖用戶 {displayName} 的分享",
     "Share for user {displayName} locked" : "已鎖上用戶 {displayName} 的分享",
     "Error while changing lock status for user {displayName}" : "更改用戶 {displayName} 的鎖定狀態時發生錯誤",
-    "Deleted share and votes for {displayName}" : "{displayName} 的已刪除分享與投票",
-    "Deleted share for user {displayName}" : "用戶 {displayName} 的分享已刪除",
     "Error deleting share for user {displayName}" : "刪除用戶 {displayName} 分享時發生錯誤",
     "Resolving of {name} is not possible. The circles app is not enabled." : "無法分拆 {name}。Circles 應用程式未啟用。",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "無法分拆 {name}。通訊錄應用程式未啟用。",

@@ -426,8 +426,6 @@
     "Share for user {displayName} unlocked" : "Sdílení pro uživatele {displayName} odemčeno",
     "Share for user {displayName} locked" : "Sdílení pro uživatele {displayName} zamčeno",
     "Error while changing lock status for user {displayName}" : "Chyba při měnění stavu zámku pro uživatele {displayName}",
-    "Deleted share and votes for {displayName}" : "Smazáno sdílení a hlasy pro {displayName}",
-    "Deleted share for user {displayName}" : "Smazáno sdílení pro uživatele {displayName}",
     "Error deleting share for user {displayName}" : "Chyba při mazání sdílení pro uživatele {displayName}",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Překlad {name} není možný. Není zapnutá aplikace Okruhy.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Překlad {name} není možný. Není zapnutá aplikace Kontakty.",

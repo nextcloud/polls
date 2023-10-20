@@ -425,8 +425,6 @@
     "Delete share" : "Megosztás törlése",
     "Share for user {displayName} unlocked" : "{displayName} megosztásának zárolása feloldva",
     "Share for user {displayName} locked" : "{displayName} megosztása zárolva",
-    "Deleted share and votes for {displayName}" : "{displayName} megosztása és szavazatai törlésre kerültek",
-    "Deleted share for user {displayName}" : "{displayName} felhasználó megosztása törölve",
     "Error deleting share for user {displayName}" : "Hiba lépett fel {displayName} felhasználó megosztásának törlése közben",
     "Resolving of {name} is not possible. The circles app is not enabled." : "A(z) {name} feloldása nem lehetséges. A Körök alkalmazás nincs engedélyezve.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "A(z) {name} feloldása nem lehetséges. A Névjegyek alkalmazás nincs engedélyezve.",

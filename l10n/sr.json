@@ -404,8 +404,6 @@
     "Do not ask for an email address" : "Не тражи и-мејл адресу",
     "Delete share and remove user from poll" : "Обриши дељење и уклони корисника из гласања",
     "Delete share" : "Обриши дељење",
-    "Deleted share and votes for {displayName}" : "Обрисани су дељење и гласови за {displayName}",
-    "Deleted share for user {displayName}" : "Обрисано је дељење за корисника {displayName}",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Није могуће разрешење {name}. Апликација кругови није укључена.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Није могуће разрешење {name}. Апликација контакти није укључена.",
     "Error resolving {name}." : "Грешка приликом разрешавања {name}",

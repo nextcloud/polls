@@ -413,8 +413,6 @@
     "Share for user {displayName} unlocked" : "El recurso compartido para el usuario {displayName} fue desbloqueado",
     "Share for user {displayName} locked" : "El recurso compartido para el usuario {displayName} fue bloqueado",
     "Error while changing lock status for user {displayName}" : "Ocurrió un error mientras se cambiaba el estado de bloqueo para el usuario {displayName}",
-    "Deleted share and votes for {displayName}" : "Eliminar recurso compartido y votos para {displayName}",
-    "Deleted share for user {displayName}" : "Se eliminó el recurso compartido para el usuario {displayName}",
     "Error deleting share for user {displayName}" : "Ocurrió un error mientras se eliminaba el recurso compartido para el usuario {displayName}",
     "Resolving of {name} is not possible. The circles app is not enabled." : "No se puede resolver {name}. La app de Círculos no está activada.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "No se puede resolver {name}. La app de Contactos no está activada.",

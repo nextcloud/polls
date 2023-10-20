@@ -428,8 +428,6 @@ OC.L10N.register(
     "Share for user {displayName} unlocked" : "{displayName} kullanıcısı için paylaşımın kilidi açıldı",
     "Share for user {displayName} locked" : "{displayName} kullanıcısı için paylaşım kilitlendi",
     "Error while changing lock status for user {displayName}" : "{displayName} kullanıcısı için kilit durumu değiştirilirken sorun çıktı",
-    "Deleted share and votes for {displayName}" : "{displayName} için paylaşım ve oylar silindi",
-    "Deleted share for user {displayName}" : "{displayName} kullanıcısı için paylaşım silindi",
     "Error deleting share for user {displayName}" : "{displayName} kullanıcısı için paylaşım silinirken sorun çıktı",
     "Resolving of {name} is not possible. The circles app is not enabled." : "{name} adı çözümlenemedi. Çevreler uygulaması etkinleştirilmedi.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "{name} adı çözümlenemedi. Kişiler uygulaması etkinleştirilmedi.",

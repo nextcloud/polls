@@ -406,8 +406,6 @@ OC.L10N.register(
     "Do not ask for an email address" : "Ne pas demander d'adresse email",
     "Delete share and remove user from poll" : "Supprimer le partage et retirer l'utilisateur du sondage",
     "Delete share" : "Supprimer le partage",
-    "Deleted share and votes for {displayName}" : "Partage et votes de {displayName} supprimés",
-    "Deleted share for user {displayName}" : "Le partage pour l'utilisateur {displayName} a été supprimé",
     "Resolving of {name} is not possible. The circles app is not enabled." : "La résolution de {name} n’est pas possible. L’application circles n’est pas activée.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "La résolution de {name} n’est pas possible. L’application contacts n’est pas activée.",
     "Error resolving {name}." : "Erreur à la résolution de {name}.",

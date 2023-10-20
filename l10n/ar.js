@@ -428,8 +428,6 @@ OC.L10N.register(
     "Share for user {displayName} unlocked" : "المشاركة مع المستخدِم {displayName} تمّ إلغاء قفلها",
     "Share for user {displayName} locked" : "المشاركة مع المستخدِم  {displayName} تمّ قفلها",
     "Error while changing lock status for user {displayName}" : "حدث خطأ أثناء تغيير حالة قفل المشاركة مع المستخدِم {displayName}",
-    "Deleted share and votes for {displayName}" : "تمّ حذف المشاركة و الأصوات بالنسبة لـ {displayName}",
-    "Deleted share for user {displayName}" : "تمّ حذف مشاركة المستخدِم {displayName}",
     "Error deleting share for user {displayName}" : "حدث خطأ أثناء حذف المشاركة مع المستخدِم {displayName}",
     "Resolving of {name} is not possible. The circles app is not enabled." : "البت في {name} غير ممكن. لم يتم تفعيل تطبيق الدوائر.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "البت في {name} غير ممكن. لم يتم تمكين تطبيق جهات الاتصال.",

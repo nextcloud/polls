@@ -428,8 +428,6 @@ OC.L10N.register(
     "Share for user {displayName} unlocked" : "已解鎖使用者 {displayName} 的分享",
     "Share for user {displayName} locked" : "已鎖定使用者 {displayName} 的分享",
     "Error while changing lock status for user {displayName}" : "變更使用者 {displayName} 的鎖定狀態失敗",
-    "Deleted share and votes for {displayName}" : "{displayName} 的已刪除分享與投票",
-    "Deleted share for user {displayName}" : "使用者 {displayName} 的已刪除分享",
     "Error deleting share for user {displayName}" : "刪除使用者 {displayName} 分享時發生錯誤",
     "Resolving of {name} is not possible. The circles app is not enabled." : "無法解析 {name}。Circles 應用程式未啟用。",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "無法解析 {name}。通訊錄應用程式未啟用。",
