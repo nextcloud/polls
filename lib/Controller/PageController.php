@@ -27,7 +27,6 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Service\NotificationService;
 use OCP\AppFramework\Controller;
-
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
