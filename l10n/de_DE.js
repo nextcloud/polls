@@ -428,6 +428,8 @@ OC.L10N.register(
     "Share for user {displayName} unlocked" : "Freigabe für Benutzer {displayName} entsperrt",
     "Share for user {displayName} locked" : "Freigabe für Benutzer {displayName} gesperrt",
     "Error while changing lock status for user {displayName}" : "Fehler beim Ändern des Sperrstatus für Benutzer {displayName}",
+    "Share and votes for {displayName} deleted" : "Freigabe und Stimmen von {displayName} gelöscht",
+    "Share for user {displayName} deleted" : "Freigabe für den Benutzer {displayName} gelöscht",
     "Error deleting share for user {displayName}" : "Fehler beim Löschen der Freigabe für Benutzer {displayName}",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Das Auflösen von {name} ist nicht möglich. Die Circles-App ist nicht aktiviert.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Das Auflösen von {name} ist nicht möglich. Die Kontakte-App ist nicht aktiviert.",

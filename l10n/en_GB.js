@@ -428,6 +428,8 @@ OC.L10N.register(
     "Share for user {displayName} unlocked" : "Share for user {displayName} unlocked",
     "Share for user {displayName} locked" : "Share for user {displayName} locked",
     "Error while changing lock status for user {displayName}" : "Error while changing lock status for user {displayName}",
+    "Share and votes for {displayName} deleted" : "Share and votes for {displayName} deleted",
+    "Share for user {displayName} deleted" : "Share for user {displayName} deleted",
     "Error deleting share for user {displayName}" : "Error deleting share for user {displayName}",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Resolving of {name} is not possible. The circles app is not enabled.",
     "Resolving of {name} is not possible. The contacts app is not enabled." : "Resolving of {name} is not possible. The contacts app is not enabled.",
