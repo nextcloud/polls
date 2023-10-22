@@ -97,6 +97,7 @@ OC.L10N.register(
     "You have deleted a public share from poll {pollTitle}" : "당신이 {pollTitle} 투표에서 공개 공유를 삭제했습니다.",
     "{actor} has deleted a public share from poll {pollTitle}" : "{actor}님이 {pollTitle} 투표에서 공개 공유를 삭제했습니다.",
     "Delete" : "삭제",
+    "Unknown error" : "알 수 없는 오류",
     "Conflict" : "충돌",
     "New comment …" : "새 댓글…",
     "Delete comment" : "댓글 삭제",

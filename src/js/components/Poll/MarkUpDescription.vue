@@ -55,7 +55,6 @@ export default {
 </script>
 
 <style lang="scss">
-
 .markup-description * {
 	margin: revert;
 	padding: revert;

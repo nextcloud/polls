@@ -25,11 +25,11 @@ namespace OCA\Polls\Event;
 
 use OCA\Polls\Db\Share;
 
-class ShareLockedEvent extends ShareEvent {
+class ShareUnlockedEvent extends ShareEvent {
 	public function __construct(
 		protected Share $share
 	) {
 		parent::__construct($share);
-		$this->eventId = self::LOCKED;
+		$this->eventId = self::UNLOCKED;
 	}
 }

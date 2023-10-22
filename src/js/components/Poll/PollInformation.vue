@@ -269,14 +269,14 @@ export default {
 	},
 }
 </script>
-<style lang="scss">
-	.poll-information {
-		padding: 8px;
-		> div {
-			opacity: 0.7;
-			margin: 8px 0 4px 0;
-			padding-left: 24px;
-		}
-	}
 
+<style lang="scss">
+.poll-information {
+	padding: 8px;
+	> div {
+		opacity: 0.7;
+		margin: 8px 0 4px 0;
+		padding-left: 24px;
+	}
+}
 </style>

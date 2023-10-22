@@ -27,11 +27,34 @@ namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Dashboard\PollWidget;
+use OCA\Polls\Event\CommentAddEvent;
+use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\CommentEvent;
+use OCA\Polls\Event\OptionConfirmedEvent;
+use OCA\Polls\Event\OptionCreatedEvent;
+use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionEvent;
+use OCA\Polls\Event\PollCloseEvent;
 use OCA\Polls\Event\PollEvent;
+use OCA\Polls\Event\PollExpiredEvent;
+use OCA\Polls\Event\PollOptionReorderedEvent;
+use OCA\Polls\Event\PollOwnerChangeEvent;
+use OCA\Polls\Event\PollReopenEvent;
+use OCA\Polls\Event\PollRestoredEvent;
+use OCA\Polls\Event\PollTakeoverEvent;
+use OCA\Polls\Event\PollUpdatedEvent;
+use OCA\Polls\Event\ShareChangedDisplayNameEvent;
+use OCA\Polls\Event\ShareChangedEmailEvent;
+use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
+use OCA\Polls\Event\ShareCreateEvent;
+use OCA\Polls\Event\ShareDeletedEvent;
 use OCA\Polls\Event\ShareEvent;
+use OCA\Polls\Event\ShareLockedEvent;
+use OCA\Polls\Event\ShareRegistrationEvent;
+use OCA\Polls\Event\ShareTypeChangedEvent;
+use OCA\Polls\Event\ShareUnlockedEvent;
 use OCA\Polls\Event\VoteEvent;
+use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Listener\CommentListener;
 use OCA\Polls\Listener\GroupDeletedListener;
 use OCA\Polls\Listener\OptionListener;
@@ -66,12 +89,39 @@ class Application extends App implements IBootstrap {
 
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);
 		$context->registerNotifierService(Notifier::class);
-
+		
 		$context->registerEventListener(CommentEvent::class, CommentListener::class);
+		$context->registerEventListener(CommentAddEvent::class, CommentListener::class);
+		$context->registerEventListener(CommentDeleteEvent::class, CommentListener::class);
+
 		$context->registerEventListener(OptionEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionConfirmedEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionCreatedEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionDeletedEvent::class, OptionListener::class);
+		
 		$context->registerEventListener(PollEvent::class, PollListener::class);
+		$context->registerEventListener(PollExpiredEvent::class, PollListener::class);
+		$context->registerEventListener(PollOptionReorderedEvent::class, PollListener::class);
+		$context->registerEventListener(PollOwnerChangeEvent::class, PollListener::class);
+		$context->registerEventListener(PollRestoredEvent::class, PollListener::class);
+		$context->registerEventListener(PollTakeoverEvent::class, PollListener::class);
+		$context->registerEventListener(PollUpdatedEvent::class, PollListener::class);
+		$context->registerEventListener(PollReopenEvent::class, PollListener::class);
+		$context->registerEventListener(PollCloseEvent::class, PollListener::class);
+
 		$context->registerEventListener(ShareEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedDisplayNameEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedEmailEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedRegistrationConstraintEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareCreateEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareDeletedEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareLockedEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareRegistrationEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareTypeChangedEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareUnlockedEvent::class, ShareListener::class);
+
 		$context->registerEventListener(VoteEvent::class, VoteListener::class);
+		$context->registerEventListener(VoteSetEvent::class, VoteListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
 		$context->registerSearchProvider(SearchProvider::class);

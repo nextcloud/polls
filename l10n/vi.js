@@ -7,6 +7,7 @@ OC.L10N.register(
     "Contact" : "Liên hệ",
     "User" : "Người dùng",
     "Delete" : "Xóa",
+    "Unknown error" : "Lỗi không xác định",
     "Conflict" : "Xung đột",
     "New comment …" : "Bình luận mới ...",
     "Delete comment" : " Xóa bình luận",

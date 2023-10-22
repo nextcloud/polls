@@ -8,6 +8,7 @@ OC.L10N.register(
     "Contact" : "Contacto",
     "User" : "Usuario",
     "Delete" : "Borrar",
+    "Unknown error" : "Error desconocido",
     "Conflict" : "Conflicto",
     "New comment …" : "Comentario nuevo ...",
     "Delete comment" : "Borrar comentario",

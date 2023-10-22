@@ -5,6 +5,7 @@ OC.L10N.register(
     "Group" : "Бүлэг",
     "User" : "Хэрэглэгч",
     "Delete" : "Устгах",
+    "Unknown error" : "үл мэдэгдэх алдаа",
     "Conflict" : "Давхцал",
     "New comment …" : "Шинэ сэтгэгдэл...",
     "Delete comment" : "Сэтгэгдэл устгах",

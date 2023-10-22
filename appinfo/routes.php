@@ -49,12 +49,13 @@ return [
 		['name' => 'public#watch_poll', 'url' => '/s/{token}/watch', 'verb' => 'GET'],
 
 		['name' => 'admin#index', 'url' => '/administration', 'verb' => 'GET'],
+
 		['name' => 'admin#list', 'url' => '/administration/polls', 'verb' => 'GET'],
 		['name' => 'admin#takeover', 'url' => '/administration/poll/{pollId}/takeover', 'verb' => 'PUT'],
 
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],
-		['name' => 'page#index', 'url' => '/list/{id}', 'verb' => 'GET', 'postfix' => 'list'],
+		['name' => 'page#index', 'url' => '/list/{category}', 'verb' => 'GET', 'postfix' => 'list', 'defaults' => array('category' => 'relevant')],
 		['name' => 'page#index', 'url' => '/combo', 'verb' => 'GET', 'postfix' => 'combo'],
 		['name' => 'page#vote', 'url' => '/vote/{id}', 'verb' => 'GET'],
 
@@ -63,7 +64,9 @@ return [
 		['name' => 'poll#add', 'url' => '/poll/add', 'verb' => 'POST'],
 		['name' => 'poll#update', 'url' => '/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll#delete', 'url' => '/poll/{pollId}', 'verb' => 'DELETE'],
-
+		
+		['name' => 'poll#close', 'url' => '/poll/{pollId}/close', 'verb' => 'PUT'],
+		['name' => 'poll#reopen', 'url' => '/poll/{pollId}/reopen', 'verb' => 'PUT'],
 		['name' => 'poll#toggleArchive', 'url' => '/poll/{pollId}/toggleArchive', 'verb' => 'PUT'],
 		['name' => 'poll#clone', 'url' => '/poll/{pollId}/clone', 'verb' => 'POST'],
 		['name' => 'poll#getParticipantsEmailAddresses', 'url' => '/poll/{pollId}/addresses', 'verb' => 'GET'],
@@ -136,6 +139,8 @@ return [
 		['name' => 'poll_api#clone', 'url' => '/api/v1.0/poll/{pollId}/clone', 'verb' => 'POST'],
 		['name' => 'poll_api#get_participants_email_addresses', 'url' => '/api/v1.0/poll/{pollId}/addresses', 'verb' => 'GET'],
 		['name' => 'poll_api#enum', 'url' => '/api/v1.0/enum/poll', 'verb' => 'GET'],
+		['name' => 'poll_api#close', 'url' => '/api/v1.0/poll/{pollId}/close', 'verb' => 'PUT'],
+		['name' => 'poll_api#reopen', 'url' => '/api/v1.0/poll/{pollId}/reopen', 'verb' => 'PUT'],
 
 		['name' => 'option_api#list', 'url' => '/api/v1.0/poll/{pollId}/options', 'verb' => 'GET'],
 		['name' => 'option_api#add', 'url' => '/api/v1.0/poll/{pollId}/option', 'verb' => 'POST'],

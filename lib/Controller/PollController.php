@@ -123,10 +123,36 @@ class PollController extends BaseController {
 	}
 
 	/**
+	 * Close poll
+	 * @NoAdminRequired
+	 */
+	public function close(int $pollId): JSONResponse {
+		return $this->response(fn () => [
+			'poll' => $this->pollService->close($pollId),
+			'acl' => $this->acl->setPollId($pollId),
+		]);
+	}
+
+	/**
+	 * Reopen poll
+	 * @NoAdminRequired
+	 */
+	public function reopen(int $pollId): JSONResponse {
+		return $this->response(fn () => [
+			'poll' => $this->pollService->reopen($pollId),
+			'acl' => $this->acl->setPollId($pollId),
+		]);
+	}
+
+	/**
 	 * Clone poll
 	 * @NoAdminRequired
 	 */
 	public function clone(int $pollId): JSONResponse {
+		return $this->response(fn () => $this->clonePoll($pollId));
+	}
+
+	private function clonePoll(int $pollId): JSONResponse {
 		$poll = $this->pollService->clone($pollId);
 		$this->optionService->clone($pollId, $poll->getId());
 		return $this->get($pollId);

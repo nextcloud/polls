@@ -180,6 +180,18 @@ class ActivityService {
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('This poll has been closed'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('This poll has been closed'),
 			],
+			PollEvent::CLOSE => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have closed the poll "{pollTitle}" '),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has closed the poll "{pollTitle}"'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have closed this poll'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has closed this poll'),
+			],
+			PollEvent::REOPEN => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have reopened the poll "{pollTitle}" '),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has reopened the poll "{pollTitle}"'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have reopened this poll'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has reopened this poll'),
+			],
 			PollEvent::OWNER_CHANGE => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed the owner of poll {pollTitle}'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has changed the owner of poll {pollTitle}'),
@@ -227,6 +239,18 @@ class ActivityService {
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has voted in poll {pollTitle}'),
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have voted'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has voted'),
+			],
+			ShareEvent::LOCKED => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have locked the share of {sharee}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has locked the share of {sharee}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have locked the share of {sharee}'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has locked the share of {sharee}'),
+			],
+			ShareEvent::UNLOCKED => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have unlocked the share of {sharee}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has unlocked the share of {sharee}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have unlocked the share of {sharee}'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has unlocked the share of {sharee}'),
 			],
 			ShareEvent::ADD => match ($this->shareType) {
 				Share::TYPE_PUBLIC => [

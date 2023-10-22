@@ -166,7 +166,7 @@ const actions = {
 						timestamp: payload.timestamp,
 						text: payload.text,
 						duration: payload.duration,
-					}
+					},
 				)
 			} else {
 				response = await OptionsAPI.addOption(
@@ -175,7 +175,7 @@ const actions = {
 						timestamp: payload.timestamp,
 						text: payload.text,
 						duration: payload.duration,
-					}
+					},
 				)
 			}
 			context.commit('setItem', { option: response.data.option })

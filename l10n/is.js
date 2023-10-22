@@ -18,6 +18,7 @@ OC.L10N.register(
     "User" : "Notandi",
     "%s invited you to a poll" : "%s bauð þér að taka þátt í könnun",
     "Delete" : "Eyða",
+    "Unknown error" : "Óþekkt villa",
     "Date order" : "Röðun eftir dagsetningu",
     "Original order" : "Upprunaleg röðun",
     "Toggle Sidebar" : "Víxla hliðarspjaldi af/á",

@@ -5,6 +5,7 @@ OC.L10N.register(
     "Public link" : "ลิงก์สาธารณะ",
     "User" : "ผู้ใช้",
     "Delete" : "ลบ",
+    "Unknown error" : "ข้อผิดพลาดที่ไม่รู้จัก",
     "Conflict" : "ความขัดแย้ง",
     "New comment …" : "ความคิดเห็นใหม่ ...",
     "Delete comment" : "ลบความคิดเห็น",

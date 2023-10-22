@@ -199,13 +199,13 @@ const actions = {
 	async add(context, payload) {
 		try {
 			const response = await PollsAPI.addPoll(payload.type, payload.title)
-			context.dispatch('polls/list', null, { root: true })
 			return response
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error adding poll:', { error: e.response }, { state: context.state })
-			context.dispatch('polls/list', null, { root: true })
 			throw e
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
 		}
 	},
 
@@ -214,49 +214,80 @@ const actions = {
 			const response = await PollsAPI.updatePoll(context.state)
 			context.commit('set', response.data)
 			context.commit('acl/set', response.data)
-			context.dispatch('polls/list', null, { root: true })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error updating poll:', { error: e.response }, { poll: context.state })
 			context.dispatch('get')
-			context.dispatch('polls/list', null, { root: true })
 			throw e
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
 		}
 	},
 
-	async delete(context, payload) {
+	async close(context) {
 		try {
-			await PollsAPI.deletePoll(payload.pollId)
-			context.dispatch('polls/list', null, { root: true })
+			const response = await PollsAPI.closePoll(context.state.id)
+			context.commit('set', { poll: response.data.poll })
+			context.commit('acl/set', { acl: response.data.acl })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting poll', { error: e.response }, { payload })
-			context.dispatch('polls/list', null, { root: true })
+			console.error('Error closing poll', { error: e.response }, { pollId: context.state.id })
+			context.dispatch('get')
 			throw e
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
+		}
+	},
+
+	async reopen(context) {
+		try {
+			const response = await PollsAPI.reopenPoll(context.state.id)
+			context.commit('set', { poll: response.data.poll })
+			context.commit('acl/set', { acl: response.data.acl })
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error reopening poll', { error: e.response }, { pollId: context.state.id })
+			context.dispatch('get')
+			throw e
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
 		}
 	},
 
 	async toggleArchive(context, payload) {
 		try {
 			await PollsAPI.toggleArchive(payload.pollId)
-			context.dispatch('polls/list', null, { root: true })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error archiving/restoring', { error: e.response }, { payload })
-			context.dispatch('polls/list', null, { root: true })
 			throw e
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
+		}
+	},
+
+	async delete(context, payload) {
+		try {
+			await PollsAPI.deletePoll(payload.pollId)
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error deleting poll', { error: e.response }, { payload })
+			throw e
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
 		}
 	},
 
 	async clone(context, payload) {
 		try {
 			const response = await PollsAPI.clonePoll(payload.pollId)
-			context.dispatch('polls/list', null, { root: true })
 			return response
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error cloning poll', { error: e.response }, { payload })
 			throw e
+		} finally {
+			context.dispatch('polls/list', null, { root: true })
 		}
 	},
 }

@@ -27,7 +27,7 @@ use OCA\Polls\Db\Poll;
 
 class PollOwnerChangeEvent extends PollEvent {
 	public function __construct(
-		Poll $poll
+		protected Poll $poll
 	) {
 		parent::__construct($poll);
 		$this->eventId = self::OWNER_CHANGE;

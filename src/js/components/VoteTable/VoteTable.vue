@@ -116,7 +116,6 @@ export default {
 		border-radius: 12px;
 		&.currentuser {
 			order:5;
-			margin-bottom: 30px;
 		}
 	}
 
@@ -238,6 +237,12 @@ export default {
 			text-wrap: balance;
 			hyphens: auto;
 			padding: 0 0.6em;
+		}
+
+		.participant, .vote-item {
+			&.currentuser {
+				margin-bottom: 30px;
+			}
 		}
 	}
 

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Public link" : "Hiperligação Pública",
     "User" : "Utilizador",
     "Delete" : "Apagar",
+    "Unknown error" : "Erro desconhecido",
     "Conflict" : "Conflito",
     "New comment …" : "Novo comentário…",
     "Delete comment" : "Eliminar comentário",

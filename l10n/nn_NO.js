@@ -5,6 +5,7 @@ OC.L10N.register(
     "Group" : "Gruppe",
     "User" : "Bruker",
     "Delete" : "Slett",
+    "Unknown error" : "Ukjend feil",
     "New comment …" : "Ny kommentar...",
     "Delete comment" : "Slett kommentar",
     "Title" : "Tittel",

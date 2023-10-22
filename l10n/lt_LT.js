@@ -64,7 +64,7 @@ OC.L10N.register(
     "Switch to table view" : "Perjungti į lentelės rodinį",
     "Delete" : "Ištrinti",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Ištrinama po {countdown} sekundės","Ištrinama po {countdown} sekundžių","Ištrinama po {countdown} sekundžių","Ištrinama po {countdown} sekundės"],
-    "Emails could not be sent:" : "Nepavyko išsiųsti el. laiškų:",
+    "Unknown error" : "Nežinoma klaida",
     "Date order" : "Datų tvarka",
     "Original order" : "Pradinė tvarka",
     "Ranked order" : "Išrikiuota tvarka",

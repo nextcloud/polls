@@ -173,6 +173,7 @@ OC.L10N.register(
     "Switch to table view" : "Αλλαγή σε προβολή πίνακα",
     "Delete" : "Διαγραφή",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Διαγραφή σε {countdown} δευτερόλεπτο","Διαγραφή σε {countdown} δευτερόλεπτα"],
+    "Unknown error" : "Άγνωστο σφάλμα",
     "Date order" : "Ταξινόμηση κατά ημερομηνία",
     "Original order" : "Αρχική ταξινόμηση",
     "Ranked order" : "Διαβαθμισμένη ταξινόμηση",

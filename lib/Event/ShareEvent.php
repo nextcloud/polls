@@ -36,11 +36,11 @@ abstract class ShareEvent extends BaseEvent {
 	public const REGISTRATION = 'share_registration';
 	public const DELETE = 'share_delete';
 	public const LOCKED = 'share_locked';
+	public const UNLOCKED = 'share_unlocked';
 
-	private Share $share;
-	// protected UserBase $sharee = null;
-
-	public function __construct(Share $share) {
+	public function __construct(
+		protected Share $share
+	) {
 		parent::__construct($share);
 		$this->activityObjectType = 'poll';
 		$this->log = false;

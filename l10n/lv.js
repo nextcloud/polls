@@ -8,6 +8,7 @@ OC.L10N.register(
     "Public link" : "Publiskā saite",
     "User" : "Lietotājs",
     "Delete" : "Dzēst",
+    "Unknown error" : "Nezināma kļūda",
     "Conflict" : "Konflikts",
     "New comment …" : "Jauns komentārs...",
     "Delete comment" : "Dzēst komentāru",

@@ -173,6 +173,7 @@ OC.L10N.register(
     "Switch to table view" : "Passa alla vista tabella",
     "Delete" : "Elimina",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Eliminazione in {countdown} secondo","Eliminazione in {countdown} secondi","Eliminazione in {countdown} secondi"],
+    "Unknown error" : "Errore sconosciuto",
     "Date order" : "Ordine per data",
     "Original order" : "Ordine originale",
     "Ranked order" : "Ordine classificato",

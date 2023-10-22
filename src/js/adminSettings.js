@@ -51,7 +51,7 @@ const store = new Store({
 
 /* eslint-disable-next-line no-new */
 new Vue({
-	el: '#admin_settings',
+	el: '#content_polls',
 	store,
 	render: (h) => h(AdminSettingsPage),
 })

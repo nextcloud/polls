@@ -34,6 +34,7 @@ use OCA\Polls\Event\ShareDeletedEvent;
 use OCA\Polls\Event\ShareLockedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
+use OCA\Polls\Event\ShareUnlockedEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
@@ -353,7 +354,7 @@ class ShareService {
 
 		$share->setLocked(0);
 		$this->shareMapper->update($share);
-		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
+		$this->eventDispatcher->dispatchTyped(new ShareUnlockedEvent($share));
 
 		return $share->getToken();
 	}

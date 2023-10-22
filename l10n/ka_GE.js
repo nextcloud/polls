@@ -9,6 +9,7 @@ OC.L10N.register(
     "Contact" : "კონტაქტი",
     "User" : "მომხმარებელი",
     "Delete" : "წაშლა",
+    "Unknown error" : "უცნობი შეცდომა",
     "Conflict" : "კონფლიქტი",
     "New comment …" : "ახალი კომენტარი ...",
     "Delete comment" : "კომენტარის გაუქმება",

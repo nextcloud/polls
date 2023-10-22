@@ -41,6 +41,7 @@ use OCP\IRequest;
 use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
+use OCP\Util;
 
 class PublicController extends BaseController {
 	public function __construct(
@@ -69,10 +70,11 @@ class PublicController extends BaseController {
 	 * @return TemplateResponse|PublicTemplateResponse
 	 */
 	public function votePage(string $token) {
+		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		if ($this->userSession->isLoggedIn()) {
-			return new TemplateResponse(AppConstants::APP_ID, 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+			return new TemplateResponse(AppConstants::APP_ID, 'main');
 		} else {
-			$template = new PublicTemplateResponse(AppConstants::APP_ID, 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+			$template = new PublicTemplateResponse(AppConstants::APP_ID, 'main');
 			$template->setFooterVisible(false);
 			return $template;
 		}

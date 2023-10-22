@@ -10,6 +10,7 @@ OC.L10N.register(
     "Public link" : "Avalik link",
     "User" : "Kasutaja",
     "Delete" : "Kustuta",
+    "Unknown error" : "Tundmatu viga",
     "Conflict" : "Konflikt",
     "New comment …" : "Uus kommentaar ...",
     "Delete comment" : "Kustuta kommentaar",

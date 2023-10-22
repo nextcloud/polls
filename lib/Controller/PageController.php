@@ -27,17 +27,20 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Service\NotificationService;
 use OCP\AppFramework\Controller;
-
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
+use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
 use OCP\IURLGenerator;
+use OCP\Util;
 
 class PageController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private IURLGenerator $urlGenerator,
-		private NotificationService $notificationService
+		private NotificationService $notificationService,
+		private IEventDispatcher $eventDispatcher,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -47,7 +50,9 @@ class PageController extends Controller {
 	 * @NoCSRFRequired
 	 */
 	public function index(): TemplateResponse {
-		return new TemplateResponse(AppConstants::APP_ID, 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+		Util::addScript(AppConstants::APP_ID, 'polls-main');
+		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());
+		return new TemplateResponse(AppConstants::APP_ID, 'main');
 	}
 
 	/**
@@ -56,6 +61,7 @@ class PageController extends Controller {
 	 */
 	public function vote(int $id): TemplateResponse {
 		$this->notificationService->removeNotification($id);
-		return new TemplateResponse(AppConstants::APP_ID, 'polls.tmpl', ['urlGenerator' => $this->urlGenerator]);
+		Util::addScript(AppConstants::APP_ID, 'polls-main');
+		return new TemplateResponse(AppConstants::APP_ID, 'main');
 	}
 }

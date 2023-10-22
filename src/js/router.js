@@ -94,6 +94,15 @@ export default new Router({
 			},
 		},
 		{
+			path: '/list',
+			redirect: {
+				name: 'list',
+				params: {
+					type: 'relevant',
+				},
+			},
+		},
+		{
 			path: '/list/:type?',
 			components: {
 				default: List,

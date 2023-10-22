@@ -11,6 +11,7 @@ OC.L10N.register(
     "Public link" : "Publika ligilo",
     "User" : "Uzanto",
     "Delete" : "Forigi",
+    "Unknown error" : "Nekonata eraro",
     "Conflict" : "Konflikto",
     "New comment …" : "Nova komento...",
     "Delete comment" : "Forigi komenton",
