@@ -65,7 +65,7 @@
 				</template>
 			</CardDiv>
 			<CardDiv v-else-if="useRegisterModal" type="success">
-				{{ t('polls', 'Participate in this poll and register.') }}
+				{{ registrationInvitationText }}
 				<template #button>
 					<NcButton type="primary" @click="showRegistration = true">
 						{{ t('polls', 'Register') }}
@@ -199,6 +199,16 @@ export default {
 
 		isNoAccessSet() {
 			return this.poll.access === 'private' && !this.hasShares && this.acl.allowEdit
+		},
+
+		registrationInvitationText() {
+			if (this.share.publicPollEmail === 'mandatory') {
+				return t('polls', 'To participate, register with your email address and a name.')
+			}
+			if (this.share.publicPollEmail === 'optional') {
+				return t('polls', 'To participate, register a name and optionally with your email address.')
+			}
+			return t('polls', 'To participate, register with a name.')
 		},
 
 		lockedShareCardCaption() {
