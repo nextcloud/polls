@@ -302,7 +302,7 @@ export default {
 					this.emailAddress,
 				)
 
-				if (this.saveCookie && this.$route.params.type === 'public') {
+				if (this.saveCookie && this.$route.name === 'publicVote') {
 					this.updateCookie(response.data.share.token)
 				}
 
