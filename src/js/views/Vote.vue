@@ -64,6 +64,14 @@
 					<ActionSendConfirmed />
 				</template>
 			</CardDiv>
+			<CardDiv v-else-if="useRegisterModal" type="success">
+				{{ t('polls', 'Participate in this poll and register.') }}
+				<template #button>
+					<NcButton type="primary" @click="showRegistration = true">
+						{{ t('polls', 'Register') }}
+					</NcButton>
+				</template>
+			</CardDiv>
 
 			<CardDiv v-else-if="share.locked" type="warning">
 				{{ lockedShareCardCaption }}
@@ -111,22 +119,29 @@
 				</CardDiv>
 			</div>
 		</div>
-		<PublicRegisterModal v-if="showRegisterModal" />
+		<div v-if="useRegisterModal">
+			<NcModal :show.sync="showRegistration"
+				:size="registerModalSize"
+				:can-close="true"
+				@close="closeRegisterModal()">
+				<PublicRegisterModal @close="closeRegisterModal()" />
+			</NcModal>
+		</div>
 		<LoadingOverlay v-if="isLoading" />
 	</NcAppContent>
 </template>
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
+import { NcModal, NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
 import { CardDiv, HeaderBar } from '../components/Base/index.js'
+import { ActionSendConfirmed } from '../components/Actions/index.js'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import { ActionSendConfirmed } from '../components/Actions/index.js'
 
 export default {
 	name: 'Vote',
@@ -135,6 +150,7 @@ export default {
 		NcAppContent,
 		NcButton,
 		NcEmptyContent,
+		NcModal,
 		HeaderBar,
 		MarkUpDescription,
 		PollHeaderButtons,
@@ -144,13 +160,15 @@ export default {
 		CardDiv,
 		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
 		OptionProposals: () => import('../components/Options/OptionProposals.vue'),
-		PublicRegisterModal: () => import('../components/Poll/PublicRegisterModal.vue'),
+		PublicRegisterModal: () => import('../components/Public/PublicRegisterModal.vue'),
 		VoteTable: () => import('../components/VoteTable/VoteTable.vue'),
 	},
 
 	data() {
 		return {
 			isLoading: false,
+			showRegistration: true,
+			registerModalSize: 'large',
 			scrolled: false,
 			scrollElement: null,
 		}
@@ -196,15 +214,14 @@ export default {
 			return `${t('polls', 'Polls')} - ${this.poll.title}`
 		},
 
-		showRegisterModal() {
+		useRegisterModal() {
 			return (this.$route.name === 'publicVote'
 				&& ['public', 'email', 'contact'].includes(this.share.type)
 				&& !this.closed
 				&& !this.share.locked
-				&& this.poll.id
+				&& !!this.poll.id
 			)
 		},
-
 	},
 
 	mounted() {
@@ -221,6 +238,10 @@ export default {
 		...mapMutations({
 			switchSafeTable: 'poll/switchSafeTable',
 		}),
+
+		closeRegisterModal() {
+			this.showRegistration = false
+		},
 
 		handleScroll() {
 			if (this.scrollElement.scrollTop > 20) {

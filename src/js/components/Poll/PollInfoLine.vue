@@ -176,6 +176,7 @@ export default {
 }
 
 </script>
+
 <style lang="scss">
 .poll-info-line {
 	display: flex;
