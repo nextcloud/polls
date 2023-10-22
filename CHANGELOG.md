@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
  - Moved request for option proposals to a card on top of the vote page
  - Moved CTA for confirmation mails to card on top of the vote page
  - Added a card with a more prominent hint for closed polls
+ - Changed user flow on public registration. When entering a public poll, the registration dialog does not pop up automatically anymore. A CTA has been added to open the registration
 
 ### Changes
  - Improved username check for public polls with a large number of groups in the backend

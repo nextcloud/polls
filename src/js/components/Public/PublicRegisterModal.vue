@@ -21,86 +21,84 @@
   -->
 
 <template lang="html">
-	<NcModal v-show="modal" :size="modalSize" :can-close="false">
-		<div class="modal__content">
-			<div class="modal__registration">
-				<div class="registration__registration">
-					<h2>{{ t('polls', 'Guest users') }}</h2>
-					<InputDiv v-model="userName"
-						class="section__username"
-						:signaling-class="checkStatus.userName"
-						:placeholder="t('polls', 'Enter your name or a nickname')"
-						:helper-text="userNameHint"
-						focus
-						@submit="submitRegistration" />
+	<div class="modal__content">
+		<div class="modal__registration">
+			<div class="registration__registration">
+				<h2>{{ t('polls', 'Guest users') }}</h2>
+				<InputDiv v-model="userName"
+					class="section__username"
+					:signaling-class="checkStatus.userName"
+					:placeholder="t('polls', 'Enter your name or a nickname')"
+					:helper-text="userNameHint"
+					focus
+					@submit="submitRegistration" />
 
-					<InputDiv v-if="share.publicPollEmail !== 'disabled'"
-						v-model="emailAddress"
-						class="section__email"
-						:signaling-class="checkStatus.email"
-						:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Email address (mandatory)' : 'Email address (optional)')"
-						:helper-text="emailAddressHint"
-						type="email"
-						inputmode="email"
-						@submit="submitRegistration" />
+				<InputDiv v-if="share.publicPollEmail !== 'disabled'"
+					v-model="emailAddress"
+					class="section__email"
+					:signaling-class="checkStatus.email"
+					:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Email address (mandatory)' : 'Email address (optional)')"
+					:helper-text="emailAddressHint"
+					type="email"
+					inputmode="email"
+					@submit="submitRegistration" />
 
-					<NcCheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
-						{{ t('polls', 'Remember me for 30 days') }}
-					</NcCheckboxRadioSwitch>
+				<NcCheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
+					{{ t('polls', 'Remember me for 30 days') }}
+				</NcCheckboxRadioSwitch>
 
-					<div v-if="privacyUrl" class="section__optin">
-						<NcRichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
-					</div>
-
-					<div class="modal__buttons">
-						<div class="left">
-							<div class="legal_links">
-								<SimpleLink v-if="imprintUrl"
-									:href="imprintUrl"
-									target="_blank"
-									:name="t('polls', 'Legal Notice')" />
-							</div>
-						</div>
-						<div class="right">
-							<NcButton @click="closeModal">
-								<template #default>
-									{{ t('polls', 'Cancel') }}
-								</template>
-							</NcButton>
-
-							<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
-								<template #default>
-									{{ t('polls', 'OK') }}
-								</template>
-							</NcButton>
-						</div>
-					</div>
+				<div v-if="privacyUrl" class="section__optin">
+					<NcRichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 				</div>
 
-				<div v-if="share.showLogin" class="registration__login">
-					<h2> {{ t('polls', 'Registered users') }} </h2>
-					<NcButton wide @click="login()">
-						<template #default>
-							{{ t('polls', 'Login') }}
-						</template>
-					</NcButton>
-					<div>
-						{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}
+				<div class="modal__buttons">
+					<div class="left">
+						<div class="legal_links">
+							<SimpleLink v-if="imprintUrl"
+								:href="imprintUrl"
+								target="_blank"
+								:name="t('polls', 'Legal Notice')" />
+						</div>
 					</div>
-					<div>
-						{{ t('polls', 'Otherwise participate as a guest user.') }}
+					<div class="right">
+						<NcButton @click="closeModal">
+							<template #default>
+								{{ t('polls', 'Cancel') }}
+							</template>
+						</NcButton>
+
+						<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
+							<template #default>
+								{{ t('polls', 'OK') }}
+							</template>
+						</NcButton>
 					</div>
 				</div>
 			</div>
+
+			<div v-if="share.showLogin" class="registration__login">
+				<h2> {{ t('polls', 'Registered users') }} </h2>
+				<NcButton wide @click="login()">
+					<template #default>
+						{{ t('polls', 'Login') }}
+					</template>
+				</NcButton>
+				<div>
+					{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}
+				</div>
+				<div>
+					{{ t('polls', 'Otherwise participate as a guest user.') }}
+				</div>
+			</div>
 		</div>
-	</NcModal>
+	</div>
 </template>
 
 <script>
 import { debounce } from 'lodash'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
-import { NcButton, NcModal, NcCheckboxRadioSwitch, NcRichText } from '@nextcloud/vue'
+import { NcButton, NcCheckboxRadioSwitch, NcRichText } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import { InputDiv } from '../Base/index.js'
 import { SimpleLink, setCookie } from '../../helpers/index.js'
@@ -114,7 +112,6 @@ export default {
 	components: {
 		NcCheckboxRadioSwitch,
 		InputDiv,
-		NcModal,
 		NcRichText,
 		SimpleLink,
 		NcButton,
@@ -129,8 +126,6 @@ export default {
 			userName: '',
 			emailAddress: '',
 			redirecting: false,
-			modal: true,
-			modalSize: 'large',
 			saveCookie: true,
 		}
 	},
@@ -226,7 +221,7 @@ export default {
 
 	methods: {
 		closeModal() {
-			this.modal = false
+			this.$emit('close')
 		},
 
 		login() {
@@ -307,7 +302,7 @@ export default {
 					this.emailAddress,
 				)
 
-				if (this.saveCookie && this.$route.params.type === 'public') {
+				if (this.saveCookie && this.$route.name === 'publicVote') {
 					this.updateCookie(response.data.share.token)
 				}
 
@@ -328,78 +323,78 @@ export default {
 </script>
 
 <style lang="scss">
-	.section__optin {
-		a {
-			text-decoration: underline;
-		}
+.section__optin {
+	a {
+		text-decoration: underline;
 	}
+}
 
-	.modal__registration {
+.modal__registration {
+	display: flex;
+	flex-wrap: wrap;
+	overflow: hidden;
+	&>div {
 		display: flex;
-		flex-wrap: wrap;
-		overflow: hidden;
-		&>div {
-			display: flex;
-			flex-direction: column;
-			flex: 1 auto;
-			min-width: 140px;
-			padding: 24px;
-			border-top: 1px solid;
-			border-right: 1px solid;
-			margin-top: -2px;
-			margin-right: -2px;
-			> button {
-				margin: 8px 0;
+		flex-direction: column;
+		flex: 1 auto;
+		min-width: 140px;
+		padding: 24px;
+		border-top: 1px solid;
+		border-right: 1px solid;
+		margin-top: -2px;
+		margin-right: -2px;
+		> button {
+			margin: 8px 0;
+		}
+	}
+
+	.registration__login {
+		flex: 1 180px;
+	}
+	.registration__registration {
+		flex: 1 480px;
+
+	}
+}
+
+[class*='section__'] {
+	margin: 4px 0;
+}
+
+.modal__content {
+	.enter__name, .enter__email {
+		margin-bottom: 12px;
+	}
+}
+
+.description {
+	hyphens: auto;
+	border-top: 1px solid var(--color-border);
+}
+
+.legal_links {
+	a {
+		color: var(--color-text-maxcontrast);
+		font-weight: bold;
+		white-space: nowrap;
+		padding: 10px;
+		margin: -10px;
+
+		&:hover, &:active {
+			color: var(--color-main-text);
+			&::after {
+				color: var(--color-text-maxcontrast);
 			}
 		}
 
-		.registration__login {
-			flex: 1 180px;
+		&:after {
+			content:"|";
+			padding: 0 4px;
 		}
-		.registration__registration {
-			flex: 1 480px;
 
-		}
-	}
-
-	[class*='section__'] {
-		margin: 4px 0;
-	}
-
-	.modal__content {
-		.enter__name, .enter__email {
-			margin-bottom: 12px;
+		&:last-child:after {
+			content:"";
 		}
 	}
-
-	.description {
-		hyphens: auto;
-		border-top: 1px solid var(--color-border);
-	}
-
-	.legal_links {
-		a {
-			color: var(--color-text-maxcontrast);
-			font-weight: bold;
-			white-space: nowrap;
-			padding: 10px;
-			margin: -10px;
-
-			&:hover, &:active {
-				color: var(--color-main-text);
-				&::after {
-					color: var(--color-text-maxcontrast);
-				}
-			}
-
-			&:after {
-			    content:"|";
-				padding: 0 4px;
-			}
-
-			&:last-child:after {
-			    content:"";
-			}
-		}
-	}
+}
 </style>
