@@ -167,7 +167,7 @@ export default {
 	data() {
 		return {
 			isLoading: false,
-			showRegistration: true,
+			showRegistration: false,
 			registerModalSize: 'large',
 			scrolled: false,
 			scrollElement: null,
