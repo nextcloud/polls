@@ -20,8 +20,8 @@ OC.L10N.register(
     "Submit" : "ส่ง",
     "Close" : "ปิด",
     "never" : "ไม่ต้องเลย",
-    "Login" : "เข้าสู่ระบบ",
     "Owner" : "เจ้าของ",
+    "Login" : "เข้าสู่ระบบ",
     "Preview" : "ตัวอย่าง",
     "Shares" : "การแชร์",
     "Description" : "รายละเอียด",
@@ -33,6 +33,7 @@ OC.L10N.register(
     "Sharing" : "การแชร์",
     "Comments" : "ความคิดเห็น",
     "Activity" : "กิจกรรม",
+    "Register" : "ลงทะเบียน",
     "Day" : "วัน",
     "Month" : "เดือน",
     "Archive" : "เก็บถาวร"
