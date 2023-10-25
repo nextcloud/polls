@@ -6,6 +6,7 @@ OC.L10N.register(
     "Legal Notice" : "Thông cáo pháp lý",
     "Contact" : "Liên hệ",
     "User" : "Người dùng",
+    "Switch to list view" : "Chuyển sang chế độ xem danh sách",
     "Delete" : "Xóa",
     "Unknown error" : "Lỗi không xác định",
     "Conflict" : "Xung đột",
