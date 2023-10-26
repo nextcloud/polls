@@ -1,10 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [5.4.0] - tbd
-### Fixes
+## [5.4.0] - 2023-10-26
  - Fixed granting admin rights to shares
- - Fixed a bug, where exports were prevented
+ - Fixed a bug which  prevented poll exports
  - Fixed a visually bug when using Nextcloud's Dark Mode
  - Fixed result reporting about sent and failed confirmation mails
 ### New
@@ -17,6 +16,7 @@ All notable changes to this project will be documented in this file.
  - Moved CTA for confirmation mails to card on top of the vote page
  - Added a card with a more prominent hint for closed polls
  - Changed user flow on public registration. When entering a public poll, the registration dialog does not pop up automatically anymore. A CTA has been added to open the registration
+ - Slighly changed vote colors by adopting the cores color scheme
 
 ### Changes
  - Improved username check for public polls with a large number of groups in the backend
