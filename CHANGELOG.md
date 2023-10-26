@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [5.4.0] - 2023-10-26
+## [5.4.0] - 2023-10-28
  - Fixed granting admin rights to shares
  - Fixed a bug which  prevented poll exports
  - Fixed a visually bug when using Nextcloud's Dark Mode
