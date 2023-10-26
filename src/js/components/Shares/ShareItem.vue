@@ -206,13 +206,13 @@ export default {
 			try {
 				if (share.locked) {
 					this.unlockShare({ share })
-					showSuccess(t('polls', 'Share for user {displayName} unlocked', { displayName: share.displayName }))
+					showSuccess(t('polls', 'Share of {displayName} unlocked', { displayName: share.displayName }))
 				} else {
 					this.lockShare({ share })
-					showSuccess(t('polls', 'Share for user {displayName} locked', { displayName: share.displayName }))
+					showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.displayName }))
 				}
 			} catch (e) {
-				showError(t('polls', 'Error while changing lock status for user {displayName}', { displayName: share.displayName }))
+				showError(t('polls', 'Error while changing lock status of user {displayName}', { displayName: share.displayName }))
 				console.error('Error locking or unlocking share', { share }, e.response)
 			}
 		},
@@ -222,13 +222,13 @@ export default {
 				if (share.voted && share.locked) {
 					this.deleteShare({ share })
 					this.deleteUser({ userId: share.userId })
-					showSuccess(t('polls', 'Share and votes for {displayName} deleted', { displayName: share.displayName }))
+					showSuccess(t('polls', 'Share and votes of {displayName} deleted', { displayName: share.displayName }))
 				} else {
 					this.deleteShare({ share })
-					showSuccess(t('polls', 'Share for user {displayName} deleted', { displayName: share.displayName }))
+					showSuccess(t('polls', 'Share of {displayName} deleted', { displayName: share.displayName }))
 				}
 			} catch (e) {
-				showError(t('polls', 'Error deleting share for user {displayName}', { displayName: share.displayName }))
+				showError(t('polls', 'Error deleting share of {displayName}', { displayName: share.displayName }))
 				console.error('Error deleting share', { share }, e.response)
 			}
 		},
