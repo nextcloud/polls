@@ -474,6 +474,7 @@ OC.L10N.register(
     "Try to change these parameters to handle big polls" : "Δοκιμάστε να αλλάξετε αυτές τις παραμέτρους για να χειριστείτε μεγάλες δημοσκοπήσεις",
     "Experimental styles" : "Πειραματικά στυλ",
     "Some visual styling options." : "Κάποιες ρυθμίσεις εμφάνισης",
+    "Register" : "Εγγραφή",
     "No vote options available" : "Δεν υπάρχουν διαθέσιμες επιλογές ψήφου",
     "Maybe the owner did not provide some until now." : "Ίσως ο ιδιοκτήτης δεν παρείχε κάποια μέχρι τώρα.",
     "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "Παρόλο που τα ονόματα των συμμετεχόντων είναι κρυμμένα, αυτή δεν είναι μια πραγματικά ανώνυμη δημοσκόπηση επειδή τα ονόματα δεν είναι κρυφά από τον κάτοχο.",

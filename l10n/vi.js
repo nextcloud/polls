@@ -30,6 +30,7 @@ OC.L10N.register(
     "Created" : "Đã tạo",
     "Login" : "Đăng nhập",
     "Preview" : "Xem trước",
+    "User settings" : "Thiết lập người dùng",
     "Share label" : "Chia sẻ nhãn",
     "Delete share" : "Xóa chia sẻ",
     "Shares" : "Chia sẻ",

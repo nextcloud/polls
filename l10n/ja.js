@@ -39,6 +39,7 @@ OC.L10N.register(
     "%s deleted your poll" : "%sがあなたの投票を削除しました",
     "{actor} deleted your poll \"%s\"." : "{actor} があなた投票「%s」を削除しました。",
     "%s archived your poll" : "%s があなたの投票をアーカイブしました",
+    "Switch to list view" : "リスト表示への切り替え",
     "Delete" : "削除",
     "Unknown error" : "不明なエラー",
     "Date order" : "日付順",

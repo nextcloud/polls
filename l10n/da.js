@@ -55,6 +55,7 @@ OC.L10N.register(
     "Sharing" : "Deling",
     "Comments" : "Kommentarer",
     "Activity" : "Aktivitet",
+    "Register" : "Registér",
     "Hour" : "Time",
     "Day" : "Dag",
     "Month" : "Måned",
