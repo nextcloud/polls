@@ -1,4 +1,5 @@
 <?php
+
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -25,7 +26,6 @@
 namespace OCA\Polls\Db;
 
 use OCA\Polls\Exceptions\ShareNotFoundException;
-use OCA\Polls\Migration\TableSchema;
 use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
@@ -55,34 +55,20 @@ class ShareMapper extends QBMapper {
 
 		$qb = $this->db->getQueryBuilder();
 
-		// get all column names from TableSchema
-		foreach (TableSchema::TABLES[Share::TABLE] as $column => $values) {
-			$selectColumns[] = 'p.' . $column;
-		}
-		// add vote counter
-		$selectColumns[] = $qb->func()->count('c1.id', 'voted');
-
-		// Build the following select (MySQL)
-		//
-		// SELECT p.*, COUNT(c1.user_id) as voted
-		// FROM oc_polls_share p
-		// LEFT JOIN oc_polls_votes c1
-		//   ON p.poll_id = c1.poll_id AND
-		// 	    p.user_id = c1.user_id
-		// GROUP BY p.poll_id, p.user_id
-		//
-		$qb->select($selectColumns)
-		   ->from($this->getTableName(), 'p')
-		   ->where(
-		   	$qb->expr()->eq('p.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-		   )
-		   ->leftJoin('p', Vote::TABLE, 'c1',
-		   	$qb->expr()->andX(
-		   		$qb->expr()->eq('p.poll_id', 'c1.poll_id'),
-		   		$qb->expr()->eq('p.user_id', 'c1.user_id'),
-		   	)
-		   )
-			->groupBy('poll_id', 'user_id');
+		$qb->select('shares.*')
+			->from($this->getTableName(), 'shares')
+			->groupBy('shares.poll_id', 'shares.user_id')
+			->where($qb->expr()->eq('shares.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->leftJoin(
+				'shares',
+				Vote::TABLE,
+				'votes',
+				$qb->expr()->andX(
+					$qb->expr()->eq('shares.poll_id', 'votes.poll_id'),
+					$qb->expr()->eq('shares.user_id', 'votes.user_id'),
+				)
+			)
+			->addSelect($qb->func()->count('votes.id', 'voted'));
 
 		return $this->findEntities($qb);
 	}
@@ -96,24 +82,11 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-		   )
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('invitation_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntities($qb);
-	}
-
-	public function countVotesByShare(Share $share): int {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-			->from($this->config->getSystemValue('dbtableprefix', 'oc_') . Vote::TABLE)
-			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($share->getPollId(), IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($share->getUserId(), IQueryBuilder::PARAM_STR)));
-
-		return count($this->findEntities($qb));
 	}
 
 	/**
@@ -125,9 +98,9 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-		   ->andWhere($qb->expr()->eq('reminder_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('reminder_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntities($qb);
 	}
@@ -139,13 +112,9 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-		   )
-		   ->andWhere(
-		   	$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
-		   );
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
 		try {
 			return $this->findEntity($qb);
@@ -177,11 +146,9 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		->from($this->getTableName())
-		->where(
-			$qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR))
-		);
-		
+			->from($this->getTableName())
+			->where($qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
+
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
