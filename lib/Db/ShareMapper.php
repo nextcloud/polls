@@ -54,10 +54,19 @@ class ShareMapper extends QBMapper {
 	public function findByPoll(int $pollId): array {
 
 		$qb = $this->db->getQueryBuilder();
+		// Build the following select (MySQL)
+		//
+		// SELECT *, COUNT(votes.user_id) as voted
+		// FROM oc_polls_share shares
+		// LEFT JOIN oc_polls_votes votes
+		// ON shares.poll_id = votes.poll_id AND shares.user_id = votes.user_id
+		// WHERE shares.poll_id = $pollId
+		// GROUP BY shares.id
+		//
 
 		$qb->select('shares.*')
 			->from($this->getTableName(), 'shares')
-			->groupBy('shares.poll_id', 'shares.user_id')
+			->groupBy('shares.id')
 			->where($qb->expr()->eq('shares.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->leftJoin(
 				'shares',
