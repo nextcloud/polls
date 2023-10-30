@@ -46,6 +46,7 @@
     "Hour" : "Tund",
     "Day" : "Päev",
     "Month" : "Kuu",
+    "Year" : "Aasta",
     "Archive" : "Arhiiv"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

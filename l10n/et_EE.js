@@ -48,6 +48,7 @@ OC.L10N.register(
     "Hour" : "Tund",
     "Day" : "Päev",
     "Month" : "Kuu",
+    "Year" : "Aasta",
     "Archive" : "Arhiiv"
 },
 "nplurals=2; plural=(n != 1);");
