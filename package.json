@@ -44,7 +44,7 @@
 		"@nextcloud/moment": "^1.2.2",
 		"@nextcloud/router": "^2.2.0",
 		"@nextcloud/vue": "^7.12.6",
-		"core-js": "^3.33.1",
+		"core-js": "^3.33.2",
 		"dompurify": "^3.0.6",
 		"file-saver": "^2.0.5",
 		"linkify-string": "^4.1.1",
