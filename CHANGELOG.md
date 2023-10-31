@@ -1,7 +1,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.4.1] - 2023-10-31
+### Fixes
+ - Fixed 7 ERROR: column reference "poll_id" is ambiguous
+
 ## [5.4.0] - 2023-10-28
+### Fixes
  - Fixed granting admin rights to shares
  - Fixed a bug which  prevented poll exports
  - Fixed a visually bug when using Nextcloud's Dark Mode
@@ -17,15 +22,17 @@ All notable changes to this project will be documented in this file.
  - Added a card with a more prominent hint for closed polls
  - Changed user flow on public registration. When entering a public poll, the registration dialog does not pop up automatically anymore. A CTA has been added to open the registration
  - Slighly changed vote colors by adopting the cores color scheme
-
 ### Changes
  - Improved username check for public polls with a large number of groups in the backend
+
 ## [5.3.2] - 2023-09-11
 ### Fixes
  - Fix migration error ("poll_option_hash" is NotNull)
+
 ## [5.3.1] - 2023-09-09
 ### Fixes
  - Fix creating public shares
+
 ## [5.3.0] - 2023-09-06
 ### New
  - Add label to public shares
@@ -36,6 +43,7 @@ All notable changes to this project will be documented in this file.
 ### Changes
  - Refactorings and code maintenance
  - dependency updates
+
 ## [5.2.0] - 2023-07-15
 ### Fixes
  - Fix date shifting and sequences when crossing daylight saving change
@@ -44,6 +52,7 @@ All notable changes to this project will be documented in this file.
  - Eliminate preferences error logging on first time usage
 ### Changes
  - Set default view to table layout even for text polls, list layout is still the default layout when in mobile mode
+
 ## [5.1.0] - 2023-06-27
 ### Changes
  - Added user option to remove outdated polls from th "Relevant" list
@@ -59,6 +68,7 @@ All notable changes to this project will be documented in this file.
 - Replace dropdown elements (NcSelect over NcMultiSelect)
 - Replace vue-richtext by NcRichText
 - minor updates caused by depencies
+
 ## [5.0.5] - 2023-05-07
 ### Fix
  - show unprocessed share invitations
@@ -67,16 +77,20 @@ All notable changes to this project will be documented in this file.
 ### Changes
  - change warning design (use NcNoteCard)
  - Support NC 27
+
 # [5.0.4] - 2023-04-25
 ### Fix
  - Ensure duplicate removal after migration and in repair command
  - Fix notification exception for nullish log entries (fix was not pushed to 5.0.3)
+
 ## [5.0.3] - 2023-04-20
 ### Fix
  - Fix notification exception for nullish log entries
+
 ## [5.0.2] - 2023-04-17
 ### Fix
  - Fix crash with shares which have nullish mail addresses
+
 ## [5.0.1] - 2023-04-13
 ### Fix
  - Polls cannot be edited when user has no mail address
@@ -116,10 +130,12 @@ All notable changes to this project will be documented in this file.
 ## [4.1.2] - 2023-01-23
 ### Fix
  - Invitations are not send out if poll has no description (fix 2)
+
 ## [4.1.1] - 2023-01-19
 ### Fix
  - Invitations are not send out if poll has no description
- # [4.1.0] - 2023-01-17
+
+## [4.1.0] - 2023-01-17
 ### New
 - Added a dashboard widget for relevant polls
 - Improved registration dialog for public polls
@@ -137,7 +153,13 @@ All notable changes to this project will be documented in this file.
 - Refactoring and fixes to background watcher
 - Accelerated installation and updates
 
-## [3.8.4] - tbd
+## [4.0.0] - 2022-10-13
+### New
+- Support Nextcloud version 25
+### Misc
+- Experimental designs have been removed
+
+## [3.8.4] - 2022-12-18
 ### Fix
  - Reset own votes as a logged in user without admin rights
  - Error was thrown, when a owner of an option was null
@@ -145,11 +167,7 @@ All notable changes to this project will be documented in this file.
 ## [3.8.3] - 2022-10-24
 ### Fix
  - Fix poll export containing participants with deleted shares
-## [4.0.0] - 2022-10-13
-### New
-- Support Nextcloud version 25
-### Misc
-- Experimental designs have been removed
+
 ## [3.8.2] - 2022-09-27
 ### Fix
  - fix a bug, which prevents voting in a public vote, when comments are disabled.
@@ -190,7 +208,6 @@ All notable changes to this project will be documented in this file.
 - Less noise in the registration dialog
 
 ## [3.7.0-beta5] - 2022-06-05
-
 ### Fix
 - Translations
 - legal links
