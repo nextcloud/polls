@@ -48,7 +48,7 @@ OC.L10N.register(
     "External Email" : "E-mail externe",
     "External user" : "Utilisateur externe",
     "Public link" : "Lien public",
-    "User" : "Utilisateur·trice",
+    "User" : "Utilisateur",
     "%s invited you to a poll" : "%s vous invite à participer à un sondage",
     "{actor} has invited you to the poll \"%s\"." : "{actor} vous a invité au sondage \"%s\".",
     "%s took over your poll" : "%s a repris le contrôle de votre sondage",
