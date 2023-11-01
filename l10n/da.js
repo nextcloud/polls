@@ -9,6 +9,7 @@ OC.L10N.register(
     "Contact" : "takt",
     "Public link" : "Offentligt link",
     "User" : "Bruger",
+    "Switch to list view" : "Skift til listevisning",
     "Delete" : "Slet",
     "Unknown error" : "Ukendt fejl",
     "Conflict" : "Konflikt",
