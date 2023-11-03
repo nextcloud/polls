@@ -170,8 +170,6 @@ body:
       description: |
         Select PHP engine version serving Nextcloud Server.
       options:
-        - "PHP 7.3"
-        - "PHP 7.4"
         - "PHP 8.0"
         - "PHP 8.1"
         - "Other/Don't know"
@@ -182,7 +180,7 @@ body:
     attributes:
       label: Other PHP version
       description: Add your _other_ PHP versoin
-      placeholder: i.e. PHP 5.4
+      placeholder: i.e. PHP 7.4
 
   - type: dropdown
     id: server-database
