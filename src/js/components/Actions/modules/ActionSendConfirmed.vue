@@ -31,7 +31,7 @@
 				<EmailCheckIcon />
 			</template>
 			<template #default>
-				{{ t('polls', 'Send confirmation emails') }}
+				{{ sendButtonCaption }}
 			</template>
 		</NcButton>
 
@@ -80,19 +80,31 @@ export default {
 			sendButtonCaption: t('polls', 'Send information about confirmed options by email'),
 			confirmations: null,
 			disableButton: false,
+			sentStatus: '',
 		}
 	},
 
 	methods: {
 		async clickAction() {
+			if (this.sendSatus === 'success') {
+				this.showModal = true
+				return
+			}
+
 			try {
 				this.disableButton = true
 				const result = await PollsAPI.sendConfirmation(this.$route.params.id)
-				this.disableButton = false
 				this.confirmations = result.data.confirmations
 				this.showModal = true
+				this.sendButtonCaption = t('polls', 'See result')
+				this.sentStatus = 'success'
+				this.$emit('success')
 			} catch (e) {
 				console.error(e)
+				this.sentStatus = 'error'
+				this.$emit('error')
+			} finally {
+				this.disableButton = false
 			}
 		},
 	},
