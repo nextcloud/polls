@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [6.0.0] - tbd
+### Changes
+ - Only Nextcloud 28 and up
+
 ## [5.4.1] - 2023-10-31
 ### Fixes
  - Fixed 7 ERROR: column reference "poll_id" is ambiguous
