@@ -34,14 +34,14 @@
 		<NcCheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">
 			{{ t('polls', 'Poll closing date') }}
 		</NcCheckboxRadioSwitch>
-		<NcDatetimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
+		<NcDateTimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { NcButton, NcDatetimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcButton, NcDateTimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
 
@@ -52,7 +52,7 @@ export default {
 		OpenPollIcon,
 		ClosePollIcon,
 		NcCheckboxRadioSwitch,
-		NcDatetimePicker,
+		NcDateTimePicker,
 		NcButton,
 	},
 

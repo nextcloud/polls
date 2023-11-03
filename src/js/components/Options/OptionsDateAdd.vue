@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcDatetimePicker v-model="pickerSelection"
+	<NcDateTimePicker v-model="pickerSelection"
 		v-bind="pickerOptions"
 		:open.sync="pickerOpen"
 		style="width: inherit;"
@@ -87,7 +87,7 @@
 
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import moment from '@nextcloud/moment'
-import { NcButton, NcCheckboxRadioSwitch, NcDatetimePicker } from '@nextcloud/vue'
+import { NcButton, NcCheckboxRadioSwitch, NcDateTimePicker } from '@nextcloud/vue'
 import { FlexSpacer } from '../Base/index.js'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 
@@ -98,7 +98,7 @@ export default {
 		AddDateIcon,
 		NcButton,
 		NcCheckboxRadioSwitch,
-		NcDatetimePicker,
+		NcDateTimePicker,
 		FlexSpacer,
 	},
 

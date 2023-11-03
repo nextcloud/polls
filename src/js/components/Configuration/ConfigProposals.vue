@@ -30,14 +30,14 @@
 			{{ t('polls', 'Proposal closing date') }}
 		</NcCheckboxRadioSwitch>
 
-		<NcDatetimePicker v-show="proposalExpiration && proposalsAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
+		<NcDateTimePicker v-show="proposalExpiration && proposalsAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
 <script>
 import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
-import { NcCheckboxRadioSwitch, NcDatetimePicker } from '@nextcloud/vue'
+import { NcCheckboxRadioSwitch, NcDateTimePicker } from '@nextcloud/vue'
 import { writePoll } from '../../mixins/writePoll.js'
 
 export default {
@@ -45,7 +45,7 @@ export default {
 
 	components: {
 		NcCheckboxRadioSwitch,
-		NcDatetimePicker,
+		NcDateTimePicker,
 	},
 
 	mixins: [writePoll],
