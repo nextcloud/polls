@@ -43,7 +43,7 @@
 				</template>
 			</CardDiv>
 
-			<CardDiv v-if="acl.allowAddOptions && proposalsOpen && !closed" type="success">
+			<CardDiv v-if="acl.allowAddOptions && proposalsOpen && !closed" type="info">
 				{{ t('polls', 'You are asked to propose more options. ') }}
 				<p v-if="proposalsExpirySet && !proposalsExpired">
 					{{ t('polls', 'The proposal period ends {timeRelative}.', { timeRelative: proposalsExpireRelative }) }}
@@ -58,16 +58,17 @@
 				{{ t('polls', 'This poll is closed. No further action is possible.') }}
 			</CardDiv>
 
-			<CardDiv v-else-if="showConfirmationMail" type="success">
-				{{ t('polls', 'You have confirmed options. Inform your participants about the result via email.') }}
+			<CardDiv v-else-if="showConfirmationMail" :type="confirmationSent">
+				{{ confirmationSendMessage }}
 				<template #button>
-					<ActionSendConfirmed />
+					<ActionSendConfirmed @error="confirmationSendError()"
+						@success="confirmationSendSuccess()" />
 				</template>
 			</CardDiv>
-			<CardDiv v-else-if="useRegisterModal" type="success">
+			<CardDiv v-else-if="useRegisterModal" type="info">
 				{{ registrationInvitationText }}
 				<template #button>
-					<NcButton type="primary" @click="showRegistration = true">
+					<NcButton type="info" @click="showRegistration = true">
 						{{ t('polls', 'Register') }}
 					</NcButton>
 				</template>
@@ -107,7 +108,7 @@
 					{{ t('polls', 'Due to possible performance issues {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
 					{{ t('polls', 'You can reveal them, but you may expect an unwanted long loading time.') }}
 					<template #button>
-						<NcButton type="primary" @click="switchSafeTable">
+						<NcButton type="info" @click="switchSafeTable">
 							{{ t('polls', 'Reveal them') }}
 						</NcButton>
 					</template>
@@ -171,6 +172,8 @@ export default {
 			registerModalSize: 'large',
 			scrolled: false,
 			scrollElement: null,
+			confirmationSent: 'info',
+			confirmationSendMessage: t('polls', 'You have confirmed options. Inform your participants about the result via email.'),
 		}
 	},
 
@@ -248,6 +251,16 @@ export default {
 		...mapMutations({
 			switchSafeTable: 'poll/switchSafeTable',
 		}),
+
+		confirmationSendError() {
+			this.confirmationSent = 'error'
+			this.confirmationSendMessage = t('polls', 'Some confirmation messages could not been sent.')
+		},
+
+		confirmationSendSuccess() {
+			this.confirmationSent = 'success'
+			this.confirmationSendMessage = t('polls', 'Messages sent.')
+		},
 
 		closeRegisterModal() {
 			this.showRegistration = false

@@ -22,9 +22,9 @@
 
 <template>
 	<div>
-		<NcNoteCard v-if="hasVotes" type="warning">
+		<CardDiv v-if="hasVotes" type="warning">
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
-		</NcNoteCard>
+		</CardDiv>
 
 		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
@@ -100,9 +100,9 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import { NcButton, NcNoteCard } from '@nextcloud/vue'
+import { NcButton } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
-import { ConfigBox } from '../Base/index.js'
+import { ConfigBox, CardDiv } from '../Base/index.js'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
 import ConfigAnonymous from '../Configuration/ConfigAnonymous.vue'
@@ -157,7 +157,7 @@ export default {
 		ConfigUseNo,
 		ConfigVoteLimit,
 		NcButton,
-		NcNoteCard,
+		CardDiv,
 	},
 
 	mixins: [writePoll],
