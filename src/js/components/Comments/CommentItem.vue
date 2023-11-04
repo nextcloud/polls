@@ -35,7 +35,7 @@
 				<!-- eslint-enable vue/no-v-html -->
 
 				<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
-					:title="t('polls', 'Delete comment')"
+					:name="t('polls', 'Delete comment')"
 					@delete="deleteComment(subComment)" />
 			</div>
 		</div>

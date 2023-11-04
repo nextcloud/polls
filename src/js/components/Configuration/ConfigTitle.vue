@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<InputDiv v-model="title"
+	<InputDiv v-model="pollTitle"
 		:signaling-class="checkTitle"
 		type="text"
 		@change="$emit('change')" />
@@ -47,7 +47,7 @@ export default {
 			return this.poll.title ? '' : 'error'
 		},
 
-		title: {
+		pollTitle: {
 			get() {
 				return this.poll.title
 			},

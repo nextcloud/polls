@@ -22,27 +22,27 @@
 
 <template>
 	<FlexSettings>
-		<NcSettingsSection :title="t('polls', 'Share restrictions')"
+		<NcSettingsSection :name="t('polls', 'Share restrictions')"
 			:description="t('polls', 'Restrict the share actions globally or on a group base')">
 			<AdminShareSettings />
 		</NcSettingsSection>
 
-		<NcSettingsSection :title="t('polls', 'Poll creation restrictions')"
+		<NcSettingsSection :name="t('polls', 'Poll creation restrictions')"
 			:description="t('polls', 'Restrict the creation of new polls globally or on a group base')">
 			<AdminPollCreation />
 		</NcSettingsSection>
 
-		<NcSettingsSection :title="t('polls', 'Legal terms for public poll registration')"
+		<NcSettingsSection :name="t('polls', 'Legal terms for public poll registration')"
 			:description="t('polls', 'Override the default links of your site to your legal terms. Leave empty to use the links, which are configured in the theming app.')">
 			<AdminLegal />
 		</NcSettingsSection>
 
-		<NcSettingsSection :title="t('polls', 'Email options')"
+		<NcSettingsSection :name="t('polls', 'Email options')"
 			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to emails.')">
 			<AdminEmail />
 		</NcSettingsSection>
 
-		<NcSettingsSection :title="t('polls', 'Other settings')"
+		<NcSettingsSection :name="t('polls', 'Other settings')"
 			:description="t('polls', 'Activate or disable individual features.')">
 			<AdminMisc />
 			<AdminCombo />
@@ -50,7 +50,7 @@
 			<AdminHideMailAddresses />
 		</NcSettingsSection>
 
-		<NcSettingsSection :title="t('polls', 'Performance settings')"
+		<NcSettingsSection :name="t('polls', 'Performance settings')"
 			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
 			<AdminPerformance />
 		</NcSettingsSection>
