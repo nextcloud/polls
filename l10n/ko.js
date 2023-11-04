@@ -96,6 +96,7 @@ OC.L10N.register(
     "{actor} has shared poll {pollTitle} with {sharee}" : "{actor}님이 {sharee}(와)과 {pollTitle} 투표를 공유합니다.",
     "You have deleted a public share from poll {pollTitle}" : "당신이 {pollTitle} 투표에서 공개 공유를 삭제했습니다.",
     "{actor} has deleted a public share from poll {pollTitle}" : "{actor}님이 {pollTitle} 투표에서 공개 공유를 삭제했습니다.",
+    "Switch to list view" : "목록 보기로 전환",
     "Delete" : "삭제",
     "Unknown error" : "알 수 없는 오류",
     "Conflict" : "충돌",
