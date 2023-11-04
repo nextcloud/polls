@@ -26,23 +26,23 @@
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
 		</CardDiv>
 
-		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
+		<ConfigBox v-if="!isOwner" :name="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
 
-		<ConfigBox :title="t('polls', 'Title')">
+		<ConfigBox :name="t('polls', 'Title')">
 			<template #icon>
 				<SpeakerIcon />
 			</template>
 			<ConfigTitle @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Description')">
+		<ConfigBox :name="t('polls', 'Description')">
 			<template #icon>
 				<DescriptionIcon />
 			</template>
 			<ConfigDescription @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll configurations')">
+		<ConfigBox :name="t('polls', 'Poll configurations')">
 			<template #icon>
 				<PollConfigIcon />
 			</template>
@@ -55,7 +55,7 @@
 			<ConfigOptionLimit @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll closing status')">
+		<ConfigBox :name="t('polls', 'Poll closing status')">
 			<template #icon>
 				<LockedIcon v-if="closed" />
 				<UnlockedIcon v-else />
@@ -65,7 +65,7 @@
 				@change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Result display')">
+		<ConfigBox :name="t('polls', 'Result display')">
 			<template #icon>
 				<ShowResultsIcon v-if="showResults === 'always'" />
 				<HideResultsUntilClosedIcon v-if="showResults === 'closed'" />

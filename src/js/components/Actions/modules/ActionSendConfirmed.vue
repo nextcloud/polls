@@ -36,7 +36,7 @@
 		</NcButton>
 
 		<NcModal :show.sync="showModal"
-			:title="t('polls', 'Result of sent confirmation mails')"
+			:name="t('polls', 'Result of sent confirmation mails')"
 			size="small">
 			<div class="modal-confirmation-result">
 				<div v-if="confirmations?.countSentMails > 0" class="sent-confirmations">

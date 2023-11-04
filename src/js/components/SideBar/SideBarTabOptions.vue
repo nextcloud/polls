@@ -22,22 +22,22 @@
 
 <template>
 	<div class="side-bar-tab-options">
-		<ConfigBox v-if="!isOwner" :title="t('polls', 'As an admin you may edit this poll')" />
-		<ConfigBox :title="t('polls', 'Allow proposals from users')">
+		<ConfigBox v-if="!isOwner" :name="t('polls', 'As an admin you may edit this poll')" />
+		<ConfigBox :name="t('polls', 'Allow proposals from users')">
 			<template #icon>
 				<AddDateIcon />
 			</template>
 			<ConfigProposals />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !closed" :title="t('polls', 'Shift all date options')">
+		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !closed" :name="t('polls', 'Shift all date options')">
 			<template #icon>
 				<ShiftDateIcon />
 			</template>
 			<OptionsDateShift />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll'" :title="t('polls', 'Available Options')">
+		<ConfigBox v-if="pollType === 'datePoll'" :name="t('polls', 'Available Options')">
 			<template #icon>
 				<DateOptionsIcon />
 			</template>
@@ -52,7 +52,7 @@
 			</template>
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'textPoll'" :title="t('polls', 'Available Options')">
+		<ConfigBox v-if="pollType === 'textPoll'" :name="t('polls', 'Available Options')">
 			<template #icon>
 				<TextOptionsIcon />
 			</template>

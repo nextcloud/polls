@@ -61,7 +61,7 @@ export default {
 			type: Number,
 			default: 4,
 		},
-		title: {
+		name: {
 			type: String,
 			default: t('polls', 'Delete'),
 		},
@@ -88,7 +88,7 @@ export default {
 			return n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', this.countdown, { countdown: this.countdown })
 		},
 		computedTitle() {
-			return this.deleteTimeout ? this.countdownTitle : this.title
+			return this.deleteTimeout ? this.countdownTitle : this.name
 		},
 	},
 

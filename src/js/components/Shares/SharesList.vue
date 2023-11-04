@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<ConfigBox :title="t('polls', 'Shares')">
+	<ConfigBox :name="t('polls', 'Shares')">
 		<template #icon>
 			<ShareIcon />
 		</template>
@@ -40,7 +40,7 @@
 		</div>
 
 		<NcModal v-if="qrModal" size="small" @close="qrModal=false">
-			<QrModal :title="pollTitle"
+			<QrModal :name="pollTitle"
 				:description="pollDescription"
 				:encode-text="qrText"
 				class="modal__content">

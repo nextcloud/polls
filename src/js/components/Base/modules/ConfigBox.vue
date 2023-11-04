@@ -25,7 +25,7 @@
 		<div class="config-box__header">
 			<slot name="icon" />
 			<div v-tooltip.auto="info" :class="['config-box__title', iconClassComputed, {indented: indented}]">
-				{{ title }}
+				{{ name }}
 				<div v-if="info" class="icon-info" />
 			</div>
 			<slot name="actions" />
@@ -40,7 +40,7 @@
 export default {
 	name: 'ConfigBox',
 	props: {
-		title: {
+		name: {
 			type: String,
 			default: '',
 		},

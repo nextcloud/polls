@@ -22,21 +22,21 @@
 
 <template>
 	<FlexSettings>
-		<NcSettingsSection :title="t('polls', 'Calendar check')"
+		<NcSettingsSection :name="t('polls', 'Calendar check')"
 			:description="t('polls', 'Search for conflicting calendar entries')">
 			<CalendarSettings />
 		</NcSettingsSection>
-		<NcSettingsSection :title="t('polls', 'Polls user settings')"
+		<NcSettingsSection :name="t('polls', 'Polls user settings')"
 			:description="t('polls', 'Set your personal preferences for the polls app')">
 			<FeatureSettings />
 		</NcSettingsSection>
 
-		<NcSettingsSection :title="t('polls', 'Performance settings')"
+		<NcSettingsSection :name="t('polls', 'Performance settings')"
 			:description="t('polls', 'Try to change these parameters to handle big polls')">
 			<PerformanceSettings />
 		</NcSettingsSection>
 
-		<NcSettingsSection :title="t('polls', 'Experimental styles')"
+		<NcSettingsSection :name="t('polls', 'Experimental styles')"
 			:description="t('polls', 'Some visual styling options.')">
 			<StyleSettings />
 		</NcSettingsSection>
