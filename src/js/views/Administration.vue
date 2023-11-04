@@ -30,7 +30,7 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<NcEmptyContent v-if="noPolls" :title="t('polls', 'No polls found for this category')">
+			<NcEmptyContent v-if="noPolls" :name="t('polls', 'No polls found for this category')">
 				<template #icon>
 					<PollsAppIcon />
 				</template>

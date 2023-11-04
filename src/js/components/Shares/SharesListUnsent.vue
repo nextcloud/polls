@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<ConfigBox v-if="unsentInvitations.length" :title="t('polls', 'Unsent invitations')">
+	<ConfigBox v-if="unsentInvitations.length" :name="t('polls', 'Unsent invitations')">
 		<template #icon>
 			<EmailAlertIcon />
 		</template>

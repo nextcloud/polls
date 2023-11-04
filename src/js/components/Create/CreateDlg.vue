@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div class="create-dialog">
-		<ConfigBox :title="t('polls', 'Title')">
+		<ConfigBox :name="t('polls', 'Title')">
 			<template #icon>
 				<SpeakerIcon />
 			</template>
@@ -33,7 +33,7 @@
 				@submit="confirm" />
 		</ConfigBox>
 
-		<ConfigBox :title="t('polls', 'Poll type')">
+		<ConfigBox :name="t('polls', 'Poll type')">
 			<template #icon>
 				<CheckIcon />
 			</template>
