@@ -48,7 +48,7 @@ class BaseController extends Controller {
 	 */
 	protected function response(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
-			$this->session->set('publicPollToken', $token);
+			$this->session->set('ncPollsPublicToken', $token);
 		}
 
 		try {
@@ -64,7 +64,7 @@ class BaseController extends Controller {
 	 */
 	protected function responseLong(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
-			$this->session->set('publicPollToken', $token);
+			$this->session->set('ncPollsPublicToken', $token);
 		}
 
 		try {
@@ -80,7 +80,7 @@ class BaseController extends Controller {
 	 */
 	protected function responseCreate(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
-			$this->session->set('publicPollToken', $token);
+			$this->session->set('ncPollsPublicToken', $token);
 		}
 
 		try {
@@ -96,7 +96,7 @@ class BaseController extends Controller {
 	 */
 	protected function responseDeleteTolerant(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
-			$this->session->set('publicPollToken', $token);
+			$this->session->set('ncPollsPublicToken', $token);
 		}
 
 		try {

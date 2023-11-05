@@ -86,19 +86,16 @@ class PollService {
 			foreach ($polls as $poll) {
 				try {
 					$this->acl->setPoll($poll);
-					// TODO: Not the elegant way. Improvement neccessary
-					$relevantThreshold = max(
-						$poll->getCreated(),
-						$poll->getLastInteraction(),
-						$poll->getExpire(),
-						$this->optionMapper->findDateBoundaries($poll->getId())['max'],
-					) + ($this->preferences->getRelevantOffsetTimestamp());
-						
+					$relevantThreshold = $poll->getRelevantThresholdNet() + $this->preferences->getRelevantOffsetTimestamp();
+
 					// mix poll settings, acl and relevantThreshold into one array
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
 						(array) json_decode(json_encode($this->acl)),
-						['relevantThreshold' => $relevantThreshold],
+						[
+							'relevantThreshold' => $relevantThreshold,
+							'relevantThresholdNet' => $poll->getRelevantThresholdNet()
+						],
 					);
 				} catch (ForbiddenException $e) {
 					continue;
@@ -134,8 +131,7 @@ class PollService {
 	}
 
 	/**
-	 *   * Get list of polls
-	 *
+	 * Get list of polls
 	 * @return Poll[]
 	 */
 	public function listForAdmin(): array {
@@ -153,7 +149,6 @@ class PollService {
 
 	/**
 	 * Update poll configuration
-	 *
 	 * @return Poll
 	 */
 	public function takeover(int $pollId): Poll {
@@ -169,7 +164,6 @@ class PollService {
 
 	/**
 	 * @return Poll[]
-	 *
 	 * @psalm-return array<Poll>
 	 */
 	public function transferPolls(string $sourceUser, string $targetUser): array {
@@ -202,10 +196,7 @@ class PollService {
 
 	/**
 	 * get poll configuration
-	 *
 	 * @return Poll
-	 *
-	 * @psalm-return Poll
 	 */
 	public function get(int $pollId) {
 		$this->acl->setPollId($pollId);
@@ -260,7 +251,6 @@ class PollService {
 
 	/**
 	 * Update poll configuration
-	 *
 	 * @return Poll
 	 */
 	public function update(int $pollId, array $poll): Poll {
@@ -312,7 +302,6 @@ class PollService {
 
 	/**
 	 * Move to archive or restore
-	 *
 	 * @return Poll
 	 */
 	public function toggleArchive(int $pollId): Poll {
@@ -333,7 +322,6 @@ class PollService {
 
 	/**
 	 * Delete poll
-	 *
 	 * @return Poll
 	 */
 	public function delete(int $pollId): Poll {
@@ -349,7 +337,6 @@ class PollService {
 
 	/**
 	 * Close poll
-	 *
 	 * @return Poll
 	 */
 	public function close(int $pollId): Poll {
@@ -358,7 +345,6 @@ class PollService {
 
 	/**
 	 * Reopen poll
-	 *
 	 * @return Poll
 	 */
 	public function reopen(int $pollId): Poll {
@@ -367,10 +353,9 @@ class PollService {
 
 	/**
 	 * Close poll
-	 *
 	 * @return Poll
 	 */
-	private function toggleClose(int $pollId, $expiry): Poll {
+	private function toggleClose(int $pollId, int $expiry): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
 		$this->acl->setPoll($this->poll, Acl::PERMISSION_POLL_EDIT);
 		$this->poll->setExpire($expiry);
@@ -387,7 +372,6 @@ class PollService {
 
 	/**
 	 * Clone poll
-	 *
 	 * @return Poll
 	 */
 	public function clone(int $pollId): Poll {

@@ -30,6 +30,7 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidMethodCallException;
@@ -69,6 +70,7 @@ class Acl implements JsonSerializable {
 	public function __construct(
 		private IUserManager $userManager,
 		private IUserSession $userSession,
+		private UserMapper $userMapper,
 		private IGroupManager $groupManager,
 		private OptionMapper $optionMapper,
 		private PollMapper $pollMapper,
@@ -199,7 +201,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getUserId(): string {
-		return $this->userSession->getUser()?->getUID() ?? $this->share->getUserId();
+		return $this->userMapper->getCurrentUserId();
 	}
 
 	private function getDisplayName(): string {

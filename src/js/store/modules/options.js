@@ -80,7 +80,7 @@ const mutations = {
 
 const getters = {
 	count: (state) => state.list.length,
-	rankedOptions: (state) => orderBy(state.list, state.ranked ? 'computed.rank' : 'order', 'asc'),
+	rankedOptions: (state) => state.ranked ? orderBy(state.list, ['yes', 'maybe'], ['desc', 'desc']) : state.list,
 	proposalsExist: (state) => !!state.list.filter((option) => option.owner.userId).length,
 	confirmed: (state) => state.list.filter((option) => option.confirmed > 0),
 
