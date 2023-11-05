@@ -74,7 +74,7 @@ class UserService {
 		}
 		
 		// Retrieve token and get current user from share
-		$token = $this->session->get('publicPollToken');
+		$token = $this->session->get('ncPollsPublicToken');
 
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token);

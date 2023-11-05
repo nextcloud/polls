@@ -44,14 +44,14 @@ class UserMapper extends QBMapper {
 		parent::__construct($db, Share::TABLE, Share::class);
 	}
 
-	 /**
+	/**
 	 * getCurrentUserId - Returns the user id of the current internal or share user
 	 */
 	public function getCurrentUserId(): string {
 		// try to get the right userId from all possible locations
 		// and use the first valid
-		$this->userId = $this->userId 
-			?? $this->userSession?->getUser()?->getUID()
+		$this->userId = $this->userId
+			?? $this->userSession->getUser()?->getUID()
 			?? $this->session->get('ncPollsUserId')
 			?? $this->getShareFromSessionToken()->getUserId();
 
