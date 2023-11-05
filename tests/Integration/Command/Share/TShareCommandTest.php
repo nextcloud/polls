@@ -33,23 +33,12 @@ use OCP\IUserManager;
 use PHPUnit\Framework\MockObject\MockObject;
 
 trait TShareCommandTest {
-	/** @var PollMapper|MockObject */
-	protected $pollMapper;
-
-	/** @var ShareMapper|MockObject */
-	protected $shareMapper;
-
-	/** @var ShareService|MockObject */
-	protected $shareService;
-
-	/** @var IUserManager|MockObject */
-	protected $userManager;
-
-	/** @var IGroupManager|MockObject */
-	protected $groupManager;
-
-	/** @var int */
-	protected $lastShareId = 0;
+	protected PollMapper|MockObject $pollMapper;
+	protected ShareMapper|MockObject $shareMapper;
+	protected ShareService|MockObject $shareService;
+	protected IUserManager|MockObject $userManager;
+	protected IGroupManager|MockObject $groupManager;
+	protected int $lastShareId = 0;
 
 	protected function setUpMocks(): void {
 		$this->pollMapper = $this->createMock(PollMapper::class);
