@@ -29,25 +29,14 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 
 class CommentMapperTest extends UnitTestCase {
-
-	/** @var IDBConnection */
-	private $con;
-
-	/** @var CommentMapper */
-	private $commentMapper;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var array */
-	private $polls = [];
-
-	/** @var array */
-	private $comments = [];
+	private IDBConnection $con;
+	private CommentMapper $commentMapper;
+	private PollMapper $pollMapper;
+	private array $polls = [];
+	private array $comments = [];
 
 	/**
 	 * {@inheritDoc}

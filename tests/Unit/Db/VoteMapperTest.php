@@ -23,37 +23,22 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use League\FactoryMuffin\Faker\Facade as Faker;
 use OCP\IDBConnection;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 
 class VoteMapperTest extends UnitTestCase {
-
-	/** @var IDBConnection */
-	private $con;
-	/** @var VoteMapper */
-	private $voteMapper;
-	/** @var PollMapper */
-	private $pollMapper;
-	/** @var OptionMapper */
-	private $optionMapper;
-
-
-	/** @var array */
-	private $polls = [];
-
-	/** @var array */
-	private $options = [];
-
-	/** @var array */
-	private $votes = [];
+	private IDBConnection $con;
+	private VoteMapper $voteMapper;
+	private PollMapper $pollMapper;
+	private OptionMapper $optionMapper;
+	private array $polls = [];
+	private array $options = [];
+	private array $votes = [];
 
 	/**
 	 * {@inheritDoc}

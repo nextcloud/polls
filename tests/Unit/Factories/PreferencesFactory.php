@@ -21,7 +21,6 @@
  *
  */
 
-use League\FactoryMuffin\Faker\Facade as Faker;
 
 /**
  * General factory for the poll model.
