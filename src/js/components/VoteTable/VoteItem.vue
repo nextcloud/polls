@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-item" :class="[answer, { confirmed: confirmed }, { active: isVotable }, {currentuser: isCurrentUser}]">
+	<div class="vote-item" :class="[answer, { active: isVotable }, {currentuser: isCurrentUser}]">
 		<div v-if="isActive" class="icon" @click="setVote()" />
 		<div v-else class="icon" />
 		<slot name="indicator" />
@@ -44,14 +44,6 @@ export default {
 			type: String,
 			default: '',
 		},
-		locked: {
-			type: Boolean,
-			default: false,
-		},
-		confirmed: {
-			type: Boolean,
-			default: false,
-		},
 	},
 
 	computed: {
@@ -69,7 +61,7 @@ export default {
 			return this.isActive
 				&& this.isValidUser
 				&& !this.closed
-				&& !this.locked
+				&& !this.option.locked
 		},
 
 		isActive() {
@@ -178,7 +170,7 @@ export default {
 
 }
 
-.vote-item.confirmed {
+.confirmed .vote-item {
 	background-color: transparent;
 	&:not(.yes):not(.maybe) .icon {
 		background-image: var(--icon-polls-no);

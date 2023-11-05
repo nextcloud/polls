@@ -207,14 +207,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function getExpired(): bool {
 		$compareTime = time();
 		$expiry = $this->getExpire();
-		// \OC::$server->getLogger()->error('time:' . $compareTime);
-		// \OC::$server->getLogger()->error('expire:' . $expiry);
-		// \OC::$server->getLogger()->error('diff:' . $expiry - $compareTime);
 
 		return (
 			$expiry > 0
 			&& $expiry < $compareTime
-			// && $this->getExpire() < ($compareTime + 1)
 		);
 	}
 
@@ -309,6 +305,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		throw new NoDeadLineException();
 	}
 
+	public function getRelevantThresholdNet(): int {
+		return max(
+			$this->getCreated(),
+			$this->getLastInteraction(),
+			$this->getExpire(),
+			intval($this->optionMapper->findDateBoundaries($this->getId())['max']),
+		);
+	}
+
 	public function getDeadline(): int {
 		if ($this->getExpire()) {
 			return $this->getExpire();
@@ -316,7 +321,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 		if ($this->getType() === Poll::TYPE_DATE) {
 			// use first date option as reminder deadline
-			return $this->optionMapper->findDateBoundaries($this->getId())['min'];
+			return intval($this->optionMapper->findDateBoundaries($this->getId())['min']);
 		}
 		throw new NoDeadLineException();
 	}

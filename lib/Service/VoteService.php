@@ -108,14 +108,14 @@ class VoteService {
 			$this->acl->setPollId($option->getPollId(), Acl::PERMISSION_VOTE_EDIT);
 		}
 
-		if ($setTo === 'yes') {
+		if ($setTo === Vote::VOTE_YES) {
 			$this->checkLimits($option, $this->acl->getUserId());
 		}
 
 		try {
 			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->acl->getUserId());
 
-			if (in_array(trim($setTo), ['no', '']) && !$this->acl->getPoll()->getUseNo()) {
+			if (in_array(trim($setTo), [Vote::VOTE_NO, '']) && !$this->acl->getPoll()->getUseNo()) {
 				$this->vote->setVoteAnswer('');
 				$this->voteMapper->delete($this->vote);
 			} else {
