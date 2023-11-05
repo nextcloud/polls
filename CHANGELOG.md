@@ -5,6 +5,9 @@ All notable changes to this project will be documented in this file.
 ### Changes
  - Only Nextcloud 28 and up
 
+### Fixes
+ - Anonymize poll proposal owner in case of hidden results
+
 ## [5.4.1] - 2023-10-31
 ### Fixes
  - Fixed 7 ERROR: column reference "poll_id" is ambiguous
