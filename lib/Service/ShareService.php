@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Event\ShareChangedDisplayNameEvent;
