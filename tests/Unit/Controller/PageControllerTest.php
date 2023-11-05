@@ -28,9 +28,7 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\AppFramework\Http\TemplateResponse;
 
 class PageControllerTest extends UnitTestCase {
-
-	/** @var PageController */
-	private $controller;
+	private PageController $controller;
 
 	/**
 	 * {@inheritDoc}

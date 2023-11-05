@@ -26,9 +26,7 @@ namespace OCA\Polls\Tests\Unit;
 use PHPUnit\Framework\TestCase;
 
 abstract class UnitTestCase extends TestCase {
-
-	/** @var FactoryMuffin */
-	protected $fm;
+	protected FactoryMuffin $fm;
 
 	/**
 	 * {@inheritDoc}

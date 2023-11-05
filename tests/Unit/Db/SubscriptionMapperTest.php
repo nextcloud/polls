@@ -23,35 +23,19 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use League\FactoryMuffin\Faker\Facade as Faker;
 use OCP\IDBConnection;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
 
 class SubscriptionMapperTest extends UnitTestCase {
-
-	/** @var IDBConnection */
-	private $con;
-
-	/** @var SubscriptionMapper */
-	private $subscriptionMapper;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var array */
-	private $polls = [];
-
-	/** @var array */
-	private $subscriptions = [];
-
-	/** @var array */
-	private $users = [];
-
+	private IDBConnection $con;
+	private SubscriptionMapper $subscriptionMapper;
+	private PollMapper $pollMapper;
+	private array $polls = [];
+	private array $subscriptions = [];
+	private array $users = [];
 
 	/**
 	 * {@inheritDoc}
