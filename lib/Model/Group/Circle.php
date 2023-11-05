@@ -36,8 +36,7 @@ class Circle extends UserBase {
 	public const TYPE = 'circle';
 	public const ICON = 'icon-circles';
 
-	/** @var CirclesCircle */
-	private $circle;
+	private CirclesCircle $circle;
 
 	public function __construct(
 		string $id
