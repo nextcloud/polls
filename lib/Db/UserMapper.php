@@ -35,11 +35,12 @@ use OCP\IUserSession;
 class UserMapper extends QBMapper {
 	public const TABLE = Share::TABLE;
 	protected ?string $userId;
+	protected ?string $userId;
 
 	public function __construct(
 		IDBConnection $db,
 		protected ISession $session,
-		protected IUserSession $userSession,
+		private IUserSession $userSession,
 	) {
 		parent::__construct($db, Share::TABLE, Share::class);
 	}

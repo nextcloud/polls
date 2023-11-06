@@ -30,13 +30,18 @@ use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCP\ISession;
 use OCP\IUserSession;
+use OCP\ISession;
+use OCP\IUserSession;
 
 class OptionMapperTest extends UnitTestCase {
 	private IDBConnection $con;
 	private ISession $session;
 	private IUserSession $userSession;
+	private ISession $session;
+	private IUserSession $userSession;
 	private OptionMapper $optionMapper;
 	private PollMapper $pollMapper;
+	private UserMapper $userMapper;
 	private UserMapper $userMapper;
 	private array $polls = [];
 	private array $options = [];
