@@ -30,12 +30,18 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\UserMapper;
+use OCP\ISession;
+use OCP\IUserSession;
 
 class VoteMapperTest extends UnitTestCase {
 	private IDBConnection $con;
+	private ISession $session;
+	private IUserSession $userSession;
 	private VoteMapper $voteMapper;
 	private PollMapper $pollMapper;
 	private OptionMapper $optionMapper;
+	private UserMapper $userMapper;
 	private array $polls = [];
 	private array $options = [];
 	private array $votes = [];
@@ -46,9 +52,12 @@ class VoteMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
+		$this->session = new ISession();
+		$this->userSession = new IUserSession();
+		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession);
 		$this->voteMapper = new VoteMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
-		$this->optionMapper = new OptionMapper($this->con);
+		$this->optionMapper = new OptionMapper($this->con, $this->session, $this->userMapper);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')

@@ -28,11 +28,16 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
+use OCP\ISession;
+use OCP\IUserSession;
 
 class OptionMapperTest extends UnitTestCase {
 	private IDBConnection $con;
+	private ISession $session;
+	private IUserSession $userSession;
 	private OptionMapper $optionMapper;
 	private PollMapper $pollMapper;
+	private UserMapper $userMapper;
 	private array $polls = [];
 	private array $options = [];
 
@@ -42,7 +47,10 @@ class OptionMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->optionMapper = new OptionMapper($this->con);
+		$this->session = new ISession();
+		$this->userSession = new IUserSession();
+		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession);
+		$this->optionMapper = new OptionMapper($this->con, $this->session, $this->userMapper);
 		$this->pollMapper = new PollMapper($this->con);
 
 		$this->polls = [
