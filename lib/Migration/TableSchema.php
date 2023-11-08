@@ -242,7 +242,7 @@ abstract class TableSchema {
 			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'table' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'updated' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
-			'session_id' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => null]],
+			'session_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null]],
 		],
 		Preferences::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
