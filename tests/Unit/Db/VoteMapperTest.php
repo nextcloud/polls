@@ -52,8 +52,8 @@ class VoteMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->session = new ISession();
-		$this->userSession = new IUserSession();
+		$this->session = $this->getMockBuilder(ISession::class)->getMock();
+		$this->userSession = $this->getMockBuilder(IUserSession::class)->getMock();
 		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession);
 		$this->voteMapper = new VoteMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
