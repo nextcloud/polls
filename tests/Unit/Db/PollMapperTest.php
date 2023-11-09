@@ -32,8 +32,7 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 class PollMapperTest extends UnitTestCase {
 	private IDBConnection $con;
 	private PollMapper $pollMapper;
-	private array$polls = [];
-
+	private array $polls = [];
 
 	/**
 	 * {@inheritDoc}
