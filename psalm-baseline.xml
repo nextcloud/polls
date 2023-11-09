@@ -1,2 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176"/>
+<files psalm-version="5.12.0@f90118cdeacd0088e7215e64c0c99ceca819e176">
+  <file src="lib/Model/Group/Circle.php">
+    <UndefinedClass>
+      <code><![CDATA[$this->circle]]></code>
+      <code>CirclesCircle</code>
+    </UndefinedClass>
+  </file>
+</files>

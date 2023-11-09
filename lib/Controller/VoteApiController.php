@@ -27,6 +27,9 @@ use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Service\VoteService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -41,10 +44,10 @@ class VoteApiController extends BaseApiController {
 
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
 	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
 	public function list(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
@@ -57,10 +60,10 @@ class VoteApiController extends BaseApiController {
 
 	/**
 	 * Set vote answer
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
 	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
 	public function set(int $optionId, string $answer): JSONResponse {
 		try {
 			return new JSONResponse(['vote' => $this->voteService->set($optionId, $answer)], Http::STATUS_OK);
