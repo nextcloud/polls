@@ -39,7 +39,6 @@ class OptionMapper extends QBMapper {
 		IDBConnection $db,
 		private ISession $session,
 		private UserMapper $userMapper,
-		private ?string $userId,
 	) {
 		parent::__construct($db, Option::TABLE, Option::class);
 	}
