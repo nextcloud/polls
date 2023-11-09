@@ -24,6 +24,8 @@
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\SettingsService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
@@ -40,9 +42,9 @@ class SettingsController extends BaseController {
 
 	/**
 	 * Read app settings
-	 * @PublicPage
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
+	#[PublicPage]
 	public function getAppSettings(): JSONResponse {
 		return $this->response(fn () => ['appSettings' => $this->settingsService->getAppSettings()]);
 	}

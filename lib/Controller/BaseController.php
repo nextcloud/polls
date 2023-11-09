@@ -26,6 +26,7 @@ namespace OCA\Polls\Controller;
 use Closure;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
@@ -44,8 +45,8 @@ class BaseController extends Controller {
 
 	/**
 	 * response
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	protected function response(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
 			$this->session->set('publicPollToken', $token);
@@ -60,8 +61,8 @@ class BaseController extends Controller {
 
 	/**
 	 * response
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	protected function responseLong(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
 			$this->session->set('publicPollToken', $token);
@@ -76,8 +77,8 @@ class BaseController extends Controller {
 
 	/**
 	 * responseCreate
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
 			$this->session->set('publicPollToken', $token);
@@ -92,8 +93,8 @@ class BaseController extends Controller {
 
 	/**
 	 * responseDeleteTolerant
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	protected function responseDeleteTolerant(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
 			$this->session->set('publicPollToken', $token);

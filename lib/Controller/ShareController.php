@@ -26,6 +26,7 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\UserService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
@@ -43,42 +44,40 @@ class ShareController extends BaseController {
 
 	/**
 	 * List shares
-	 * @NoAdminRequired
-	 *
-	 * @return JSONResponse
 	 */
+	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
 	}
 
 	/**
 	 * Add share
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)]);
 	}
 
 	/**
 	 * Convert user to poll admin
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function userToAdmin(string $token): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)]);
 	}
 
 	/**
 	 * Change the contraints for email addresses in public polls
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function setPublicPollEmail(string $token, string $value): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->setPublicPollEmail($token, $value)]);
 	}
 
 	/**
 	 * Change the contraints for email addresses in public polls
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function setLabel(string $token, string $label = ''): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->setDisplayName($this->shareService->get($token), $label)
@@ -87,16 +86,16 @@ class ShareController extends BaseController {
 
 	/**
 	 * Convert poll admin to user
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function adminToUser(string $token): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_USER)]);
 	}
 
 	/**
 	 * Set email address
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->setEmailAddress($this->shareService->get($token),
@@ -106,8 +105,8 @@ class ShareController extends BaseController {
 
 	/**
 	 * Delete share
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 
 	public function delete(string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete(token: $token)]);
@@ -115,8 +114,8 @@ class ShareController extends BaseController {
 
 	/**
 	 * Delete share
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 
 	public function lock(string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->lock(token: $token)]);
@@ -124,8 +123,8 @@ class ShareController extends BaseController {
 
 	/**
 	 * Delete share
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 
 	public function unlock(string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->unlock(token: $token)]);
@@ -134,8 +133,8 @@ class ShareController extends BaseController {
 	/**
 	 * Send invitation mails for a share
 	 * Additionally send notification via notifications
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function sendInvitation(string $token): JSONResponse {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
@@ -147,8 +146,8 @@ class ShareController extends BaseController {
 	/**
 	 * Send all invitation mails for a share and resolve groups
 	 * Additionally send notification via notifications
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function sendAllInvitations(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $pollId,
@@ -158,8 +157,8 @@ class ShareController extends BaseController {
 
 	/**
 	 * resolve contact group to individual shares
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function resolveGroup(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'shares' => $this->shareService->resolveGroup($token)
