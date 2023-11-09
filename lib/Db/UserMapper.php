@@ -40,7 +40,7 @@ class UserMapper extends QBMapper {
 	public function __construct(
 		IDBConnection $db,
 		protected ISession $session,
-		private IUserSession $userSession,
+		protected IUserSession $userSession,
 	) {
 		parent::__construct($db, Share::TABLE, Share::class);
 	}
