@@ -47,8 +47,9 @@ class OptionMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = \OC::$server->getDatabaseConnection();
-		$this->session = new ISession();
-		$this->userSession = new IUserSession();
+		$this->session = $this->getMockBuilder(ISession::class)->getMock();
+		$this->userSession = $this->getMockBuilder(IUserSession::class)->getMock();
+
 		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession);
 		$this->optionMapper = new OptionMapper($this->con, $this->session, $this->userMapper);
 		$this->pollMapper = new PollMapper($this->con);
