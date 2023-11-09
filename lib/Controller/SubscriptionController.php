@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\SubscriptionService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
@@ -42,8 +43,8 @@ class SubscriptionController extends BaseController {
 
 	/**
 	 * Get subscription status
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId))
@@ -52,8 +53,8 @@ class SubscriptionController extends BaseController {
 
 	/**
 	 * subscribe
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function subscribe(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->set(true, $this->acl->setPollId($pollId))
@@ -62,8 +63,8 @@ class SubscriptionController extends BaseController {
 
 	/**
 	 * Unsubscribe
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function unsubscribe(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->set(false, $this->acl->setPollId($pollId))

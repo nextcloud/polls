@@ -35,6 +35,7 @@ use OCA\Polls\Service\SystemService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
 use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
@@ -65,10 +66,9 @@ class PublicController extends BaseController {
 	}
 
 	/**
-	 * @NoCSRFRequired
-	 * @PublicPage
 	 * @return TemplateResponse|PublicTemplateResponse
 	 */
+	#[PublicPage]
 	public function votePage(string $token) {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		if ($this->userSession->isLoggedIn()) {
@@ -82,8 +82,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * get complete poll via token
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function getPoll(string $token): JSONResponse {
 		$this->acl->setToken($token);
 
@@ -95,8 +95,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Watch poll for updates
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function watchPoll(string $token, ?int $offset): JSONResponse {
 		return $this->responseLong(fn () => [
 			'updates' => $this->watchService->watchUpdates($this->acl->setToken($token)->getPollId(), $offset)
@@ -105,8 +105,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Get share
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function getShare(string $token): JSONResponse {
 		$validateShareType = true;
 		$publicRequest = true;
@@ -117,8 +117,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Get votes
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function getVotes(string $token): JSONResponse {
 		$this->acl->setToken($token);
 		
@@ -129,8 +129,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Delete user's votes
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function deleteUser(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'deleted' => $this->voteService->delete(acl: $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
@@ -139,8 +139,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Get options
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function getOptions(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'options' => $this->optionService->list(acl: $this->acl->setToken($token))
@@ -149,8 +149,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Add options
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => [
 			'option' => $this->optionService->add(
@@ -164,8 +164,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Delete option
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function deleteOption(string $token, int $optionId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => [
 			'option' => $this->optionService->delete($optionId, $this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW))
@@ -174,8 +174,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Set Vote
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function setVote(int $optionId, string $setTo, string $token): JSONResponse {
 		return $this->response(fn () => [
 			'vote' => $this->voteService->set($optionId, $setTo, $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
@@ -184,8 +184,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Get Comments
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function getComments(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'comments' => $this->commentService->list($this->acl->setToken($token))
@@ -194,8 +194,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function addComment(string $token, string $message): JSONResponse {
 		return $this->response(fn () => [
 			'comment' => $this->commentService->add($message, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD))
@@ -204,8 +204,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Delete Comment
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function deleteComment(int $commentId, string $token): JSONResponse {
 		$comment = $this->commentService->get($commentId);
 		return $this->responseDeleteTolerant(fn () => [
@@ -215,8 +215,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Get subscription status
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function getSubscription(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->get($this->acl->setToken($token))
@@ -225,8 +225,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * subscribe
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function subscribe(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->set(true, $this->acl->setToken($token))
@@ -235,8 +235,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Unsubscribe
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function unsubscribe(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->set(false, $this->acl->setToken($token))
@@ -247,8 +247,8 @@ class PublicController extends BaseController {
 	 * Validate it the user name is reservrd
 	 * return false, if this username already exists as a user or as
 	 * a participant of the poll
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function validatePublicUsername(string $userName, string $token): JSONResponse {
 		return $this->response(fn () => [
 			'result' => $this->systemService->validatePublicUsername($userName, $this->shareService->get($token)), 'name' => $userName
@@ -257,8 +257,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Validate email address (simple validation)
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function validateEmailAddress(string $emailAddress): JSONResponse {
 		return $this->response(fn () => [
 			'result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress
@@ -267,8 +267,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Change displayName
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function setDisplayName(string $token, string $displayName): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->setDisplayname($this->shareService->get($token), $displayName)
@@ -278,8 +278,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Set EmailAddress
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->setEmailAddress($this->shareService->get($token), $emailAddress, true)
@@ -288,8 +288,8 @@ class PublicController extends BaseController {
 
 	/**
 	 * Set EmailAddress
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function deleteEmailAddress(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->deleteEmailAddress($this->shareService->get($token))
@@ -299,8 +299,8 @@ class PublicController extends BaseController {
 	/**
 	 * Create a personal share from a public share
 	 * or update an email share with the username
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
 		$publicShare = $this->shareService->get($token);
 		$personalShare = $this->shareService->register($publicShare, $userName, $emailAddress, $timeZone);
@@ -312,8 +312,8 @@ class PublicController extends BaseController {
 	/**
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
-	 * @PublicPage
 	 */
+	#[PublicPage]
 	public function resendInvitation(string $token): JSONResponse {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [

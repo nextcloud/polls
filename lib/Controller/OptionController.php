@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\OptionService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
@@ -42,8 +43,8 @@ class OptionController extends BaseController {
 
 	/**
 	 * Get all options of given poll
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(function () use ($pollId) {
 			return ['options' => $this->optionService->list($pollId)];
@@ -52,72 +53,72 @@ class OptionController extends BaseController {
 
 	/**
 	 * Add a new option
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $text, $duration)]);
 	}
 	
 	/**
 	 * Add mulitple new option
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function addBulk(int $pollId, string $text = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['options' => $this->optionService->addBulk($pollId, $text)]);
 	}
 
 	/**
 	 * Update option
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function update(int $optionId, int $timestamp, string $text, int $duration): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $text, $duration)]);
 	}
 
 	/**
 	 * Delete option
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function delete(int $optionId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
 
 	/**
 	 * Switch option confirmation
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function confirm(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
 
 	/**
 	 * Reorder options
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function reorder(int $pollId, array $options): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->reorder($pollId, $options)]);
 	}
 
 	/**
 	 * Reorder options
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function sequence(int $optionId, int $step, string $unit, int $amount): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)]);
 	}
 
 	/**
 	 * Reorder options
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function shift(int $pollId, int $step, string $unit): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->shift($pollId, $step, $unit)]);
 	}
 
 	/**
 	 * findCalendarEvents
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function findCalendarEvents(int $optionId, string $tz): JSONResponse {
 		return $this->response(fn () => ['events' => $this->calendarService->getEvents($optionId)]);
 	}

@@ -26,6 +26,9 @@ namespace OCA\Polls\Controller;
 use \OCA\Polls\Db\Comment;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
+use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -41,10 +44,10 @@ class CommentApiController extends BaseApiController {
 
 	/**
 	 * Read all comments of a poll based on the poll id and return list as array
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
 	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'comments' => $this->commentService->list($this->acl->setPollId($pollId))
@@ -53,10 +56,10 @@ class CommentApiController extends BaseApiController {
 
 	/**
 	 * Add comment
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
 	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
 	public function add(int $pollId, string $comment): JSONResponse {
 		return $this->response(fn () => [
 			'comment' => $this->commentService->add($comment, $this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD))
@@ -65,10 +68,10 @@ class CommentApiController extends BaseApiController {
 
 	/**
 	 * Delete comment
-	 * @NoAdminRequired
-	 * @CORS
-	 * @NoCSRFRequired
 	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
 	public function delete(int $commentId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => [
 			'comment' => $this->deleteComment($commentId)

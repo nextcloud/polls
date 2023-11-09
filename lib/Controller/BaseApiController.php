@@ -26,6 +26,7 @@ namespace OCA\Polls\Controller;
 use Closure;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\ApiController;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
@@ -45,8 +46,8 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * response
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -57,8 +58,8 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * response
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -69,8 +70,8 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * responseCreate
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
@@ -81,8 +82,8 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * responseDeleteTolerant
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);

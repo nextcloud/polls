@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
+use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
@@ -42,8 +43,8 @@ class CommentController extends BaseController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'comments' => $this->commentService->list($this->acl->setPollId($pollId))
@@ -52,8 +53,8 @@ class CommentController extends BaseController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function add(int $pollId, string $message): JSONResponse {
 		return $this->response(fn () => [
 			'comment' => $this->commentService->add($message, $this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD))
@@ -62,8 +63,8 @@ class CommentController extends BaseController {
 
 	/**
 	 * Delete Comment
-	 * @NoAdminRequired
 	 */
+	#[NoAdminRequired]
 	public function delete(int $commentId): JSONResponse {
 		$comment = $this->commentService->get($commentId);
 
