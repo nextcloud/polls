@@ -47,7 +47,7 @@
 		"core-js": "^3.33.2",
 		"dompurify": "^3.0.6",
 		"file-saver": "^2.0.5",
-		"linkify-string": "^4.1.1",
+		"linkify-string": "^4.1.2",
 		"lodash": "^4.17.21",
 		"marked": "^9.1.5",
 		"marked-gfm-heading-id": "^3.1.0",
