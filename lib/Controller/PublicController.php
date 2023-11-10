@@ -34,6 +34,7 @@ use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\SystemService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
@@ -69,6 +70,7 @@ class PublicController extends BaseController {
 	 * @return TemplateResponse|PublicTemplateResponse
 	 */
 	#[PublicPage]
+	#[NoCSRFRequired]
 	public function votePage(string $token) {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		if ($this->userSession->isLoggedIn()) {
