@@ -68,7 +68,7 @@
 			<CardDiv v-else-if="useRegisterModal" type="info">
 				{{ registrationInvitationText }}
 				<template #button>
-					<NcButton type="info" @click="showRegistration = true">
+					<NcButton type="primary" @click="showRegistration = true">
 						{{ t('polls', 'Register') }}
 					</NcButton>
 				</template>

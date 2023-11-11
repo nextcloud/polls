@@ -4,9 +4,12 @@ All notable changes to this project will be documented in this file.
 ## [6.0.0] - tbd
 ### Changes
  - Only Nextcloud 28 and up
-
 ### Fixes
  - Anonymize poll proposal owner in case of hidden results
+
+## [5.4.2] - 2023-11-11
+### Fixes
+ - Fixed table definition
 
 ## [5.4.1] - 2023-10-31
 ### Fixes
