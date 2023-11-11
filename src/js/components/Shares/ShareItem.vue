@@ -27,13 +27,13 @@
 		:icon="true">
 		<template #status>
 			<div v-if="share.voted">
-				<VotedIcon class="vote-status voted" :title="t('polls', 'Has voted')" />
+				<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />
 			</div>
 			<div v-else-if="['public', 'group'].includes(share.type)">
 				<div class="vote-status empty" />
 			</div>
 			<div v-else>
-				<UnvotedIcon class="vote-status unvoted" :title="t('polls', 'Has not voted')" />
+				<UnvotedIcon class="vote-status unvoted" :name="t('polls', 'Has not voted')" />
 			</div>
 		</template>
 
@@ -85,7 +85,7 @@
 				{{ t('polls', 'Show QR code') }}
 			</NcActionButton>
 
-			<NcActionCaption v-if="share.type === 'public'" :title="t('polls', 'Options for the registration dialog')" />
+			<NcActionCaption v-if="share.type === 'public'" :name="t('polls', 'Options for the registration dialog')" />
 
 			<NcActionRadio v-if="share.type === 'public'"
 				name="publicPollEmail"
@@ -119,7 +119,7 @@
 			</NcActionButton>
 		</NcActions>
 
-		<ActionDelete :title="deleteButtonCaption"
+		<ActionDelete :name="deleteButtonCaption"
 			@delete="clickDeleted(share)" />
 	</UserItem>
 </template>

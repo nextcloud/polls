@@ -30,15 +30,9 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 
 class PollMapperTest extends UnitTestCase {
-
-	/** @var IDBConnection */
-	private $con;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var array */
-	private $polls = [];
+	private IDBConnection $con;
+	private PollMapper $pollMapper;
+	private array$polls = [];
 
 
 	/**

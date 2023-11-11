@@ -23,7 +23,7 @@
 <template>
 	<NcAppSidebar v-show="showSidebar"
 		:active.sync="activeTab"
-		:title="t('polls', 'Details')"
+		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab v-if="acl.allowEdit"
 			id="configuration"

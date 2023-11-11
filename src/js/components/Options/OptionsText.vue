@@ -42,7 +42,7 @@
 					</template>
 					<template v-if="acl.allowEdit" #actions>
 						<ActionDelete v-if="!closed"
-							:title="t('polls', 'Delete option')"
+							:name="t('polls', 'Delete option')"
 							@delete="removeOption(option)" />
 						<NcButton v-if="closed"
 							v-tooltip="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
@@ -59,7 +59,7 @@
 			</transition-group>
 		</draggable>
 
-		<NcEmptyContent v-else :title="t('polls', 'No vote options')">
+		<NcEmptyContent v-else :name="t('polls', 'No vote options')">
 			<template #icon>
 				<TextPollIcon />
 			</template>

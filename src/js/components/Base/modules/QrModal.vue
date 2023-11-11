@@ -22,7 +22,7 @@
 
 <template>
 	<div class="qr-code">
-		<h2>{{ title }}</h2>
+		<h2>{{ name }}</h2>
 		<slot name="description">
 			{{ description }}
 		</slot>
@@ -45,7 +45,7 @@ export default {
 	name: 'QrModal',
 
 	props: {
-		title: {
+		name: {
 			type: String,
 			default: '',
 		},

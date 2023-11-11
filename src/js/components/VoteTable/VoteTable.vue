@@ -33,7 +33,7 @@
 				<UserItem v-bind="participant" condensed />
 
 				<ActionDelete v-if="acl.allowEdit"
-					:title="t('polls', 'Delete votes')"
+					:name="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.userId)" />
 			</div>
 

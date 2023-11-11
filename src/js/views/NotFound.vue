@@ -22,7 +22,7 @@
 
 <template>
 	<NcAppContent>
-		<NcEmptyContent :title="t('polls', '404 - poll not found')">
+		<NcEmptyContent :name="t('polls', '404 - poll not found')">
 			<template #icon>
 				<SearchIcon />
 			</template>

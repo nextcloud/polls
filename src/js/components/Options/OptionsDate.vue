@@ -38,7 +38,7 @@
 				</template>
 				<template v-if="acl.allowEdit" #actions>
 					<ActionDelete v-if="!closed"
-						:title="t('polls', 'Delete option')"
+						:name="t('polls', 'Delete option')"
 						@delete="removeOption(option)" />
 
 					<NcActions v-if="!closed" class="action">
@@ -63,7 +63,7 @@
 			</OptionItem>
 		</transition-group>
 
-		<NcEmptyContent v-else :title="t('polls', 'No vote options')">
+		<NcEmptyContent v-else :name="t('polls', 'No vote options')">
 			<template #icon>
 				<DatePollIcon />
 			</template>

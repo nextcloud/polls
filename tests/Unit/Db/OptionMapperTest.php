@@ -22,35 +22,19 @@
  */
 
 namespace OCA\Polls\Db;
-
-use League\FactoryMuffin\Faker\Facade as Faker;
-
-use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
-
 use OCP\IDBConnection;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 
 class OptionMapperTest extends UnitTestCase {
-
-	/** @var IDBConnection */
-	private $con;
-
-	/** @var OptionMapper */
-	private $optionMapper;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var array */
-	private $polls = [];
-
-	/** @var array */
-	private $options = [];
+	private IDBConnection $con;
+	private OptionMapper $optionMapper;
+	private PollMapper $pollMapper;
+	private array $polls = [];
+	private array $options = [];
 
 	/**
 	 * {@inheritDoc}

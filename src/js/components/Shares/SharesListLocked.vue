@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<ConfigBox v-if="lockedShares.length" :title="t('polls', 'Locked shares (read only access)')">
+	<ConfigBox v-if="lockedShares.length" :name="t('polls', 'Locked shares (read only access)')">
 		<template #icon>
 			<LockedIcon />
 		</template>

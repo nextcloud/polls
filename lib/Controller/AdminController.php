@@ -25,6 +25,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Service\PollService;
+use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
@@ -46,9 +47,7 @@ class AdminController extends BaseController {
 		parent::__construct($appName, $request, $session);
 	}
 
-	/**
-	 * @NoCSRFRequired
-	 */
+	#[NoCSRFRequired]
 	public function index(): TemplateResponse {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());

@@ -37,7 +37,7 @@
 		<div class="area__main">
 			<ComboTable v-show="polls.length" />
 
-			<NcEmptyContent v-if="!polls.length" :title="t('polls', 'No polls selected')">
+			<NcEmptyContent v-if="!polls.length" :name="t('polls', 'No polls selected')">
 				<template #icon>
 					<PollsAppIcon />
 				</template>

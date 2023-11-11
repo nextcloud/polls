@@ -25,29 +25,16 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
-use League\FactoryMuffin\Faker\Facade as Faker;
 
 class LogMapperTest extends UnitTestCase {
-
-	/** @var IDBConnection */
-	private $con;
-
-	/** @var LogMapper */
-	private $logMapper;
-
-	/** @var PollMapper */
-	private $pollMapper;
-
-	/** @var array */
-	private $polls = [];
-
-	/** @var array */
-	private $logs = [];
-
+	private IDBConnection $con;
+	private LogMapper $logMapper;
+	private PollMapper $pollMapper;
+	private array $polls = [];
+	private array $logs = [];
 
 	/**
 	 * {@inheritDoc}
