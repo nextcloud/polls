@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.4.2] - 2023-11-11
+### Fixes
+ - Fixed table definition
+
 ## [5.4.1] - 2023-10-31
 ### Fixes
  - Fixed 7 ERROR: column reference "poll_id" is ambiguous
