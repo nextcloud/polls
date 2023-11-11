@@ -32,7 +32,8 @@
 		"lint": "eslint --ext .js,.vue src",
 		"lint:fix": "eslint --ext .js,.vue src --fix",
 		"stylelint": "stylelint src/**/*{.scss,.vue,.css}",
-		"stylelint:fix": "stylelint src --fix"
+		"stylelint:fix": "stylelint src --fix",
+		"version": "node update-app-version.mjs && git add ./appinfo/info.xml"
 	},
 	"dependencies": {
 		"@nextcloud/auth": "^2.2.1",
@@ -78,6 +79,7 @@
 		"eslint-config-prettier": "^9.0.0",
 		"eslint-plugin-prettier": "^4.2.1",
 		"prettier": "^2.8.8",
-		"vue-template-compiler": "^2.7.15"
+		"vue-template-compiler": "^2.7.15",
+		"xml2js": "^0.6.2"
 	}
 }
