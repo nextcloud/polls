@@ -238,6 +238,7 @@ OC.L10N.register(
     "Delete poll" : "Elimina sondaggio",
     "Clone to option sequence" : "Clona in sequenza di opzioni",
     "Create a sequence of date options starting with {dateOption}." : "Crea una sequenza di opzioni di date a partire da {dateOption}.",
+    "Amount" : "Quantità",
     "OK" : "OK",
     "Week" : "Settimana",
     "Delete option" : "Elimina opzione",
