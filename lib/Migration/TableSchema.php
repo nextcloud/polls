@@ -40,7 +40,7 @@ use OCP\DB\Types;
 /**
  * Database definition for installing and migrations
  * These definitions contain the base database layout
- * used for initial migration to version 3.x from all prior versoins
+ * used for initial migration to version 3.x from all prior versions
  */
 
 abstract class TableSchema {
@@ -125,7 +125,7 @@ abstract class TableSchema {
 		'polls_txts', // dropped in 0.9
 		'polls_particip', // dropped in 0.9
 		'polls_particip_text', // dropped in 0.9
-		'polls_test', // invalid table, accidentially introduced in an old beta version
+		'polls_test', // invalid table, accidentally introduced in an old beta version
 	];
 
 	/**
@@ -242,7 +242,7 @@ abstract class TableSchema {
 			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'table' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'updated' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
-			'session_id' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => null]],
+			'session_id' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null]],
 		],
 		Preferences::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
