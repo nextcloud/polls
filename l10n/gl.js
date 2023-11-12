@@ -182,7 +182,6 @@ OC.L10N.register(
     "Switch to table view" : "Cambiar á vista de táboa",
     "Delete" : "Eliminar",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Eliminando en {countdown} segundo","Eliminando en {countdown} segundos"],
-    "Send confirmation emails" : "Enviar correos de confirmación",
     "Unknown error" : "Produciuse un erro descoñecido",
     "Send information about confirmed options by email" : "Enviar por correo información sobre as opcións confirmadas",
     "Date order" : "Orde da data",

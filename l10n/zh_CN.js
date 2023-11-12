@@ -169,7 +169,6 @@ OC.L10N.register(
     "Switch to table view" : "切换为表格视图",
     "Delete" : "删除",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["将在{countdown}秒后删除"],
-    "Send confirmation emails" : "发送确认电子邮件",
     "Unknown error" : "未知错误",
     "Date order" : "日期顺序",
     "Original order" : "初始顺序",

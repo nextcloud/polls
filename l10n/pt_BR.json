@@ -180,7 +180,6 @@
     "Switch to table view" : "Mudar para exibição em tabela",
     "Delete" : "Deletar",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Excluir em {countdown} segundo","Excluindo em {countdown} segundos","Excluindo em {countdown} segundos"],
-    "Send confirmation emails" : "Enviar e-mails de confirmação",
     "Unknown error" : "Erro desconhecido",
     "Send information about confirmed options by email" : "Envie informações sobre opções confirmadas por e-mail",
     "Date order" : "Ordenar por data",

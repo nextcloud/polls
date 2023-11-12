@@ -93,7 +93,6 @@ OC.L10N.register(
     "Switch to table view" : "Vaihda taulukkonäkymään",
     "Delete" : "Poista",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Poistetaan {countdown} sekunnin kuluttua","Poistetaan {countdown} sekunnin kuluttua"],
-    "Send confirmation emails" : "Lähetä vahvistussähköpostit",
     "Unknown error" : "Tuntematon virhe",
     "Date order" : "Aikajärjestys",
     "Original order" : "Alkuperäinen järjestys",

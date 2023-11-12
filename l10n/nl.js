@@ -174,7 +174,6 @@ OC.L10N.register(
     "Switch to table view" : "Omschakelen naar tabeloverzicht",
     "Delete" : "Verwijderen",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Verwijderen over {countdown} seconde","Verwijderen over {countdown} seconden"],
-    "Send confirmation emails" : "Stuur e-mailbevestigigingen",
     "Unknown error" : "Onbekende fout",
     "Date order" : "Datum volgorde",
     "Original order" : "Originele volgorde",

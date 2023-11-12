@@ -178,7 +178,6 @@
     "Switch to table view" : "Prepnúť na zobrazenie v tabuľke",
     "Delete" : "Zmazať",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Odstraňuje sa za {countdown} sekundu","Odstraňuje sa za {countdown} sekúnd","Odstraňuje sa za {countdown} sekúnd","Odstraňuje sa za {countdown} sekúnd"],
-    "Send confirmation emails" : "Posielať potvrdenie e-mailom",
     "Unknown error" : "Neznáma chyba",
     "Send information about confirmed options by email" : "Poslať informácie o potvrdených možnostiach e-mailom",
     "Date order" : "Poradie podľa dátumu",

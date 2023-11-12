@@ -182,7 +182,6 @@ OC.L10N.register(
     "Switch to table view" : "Switch to table view",
     "Delete" : "حذف",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Deleting in {countdown} second","Deleting in {countdown} seconds"],
-    "Send confirmation emails" : "Send confirmation emails",
     "Unknown error" : "خطای ناشناخته",
     "Send information about confirmed options by email" : "Send information about confirmed options by email",
     "Date order" : "Date order",

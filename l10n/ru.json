@@ -175,7 +175,6 @@
     "Switch to table view" : "Переключение в режим просмотра таблицы",
     "Delete" : "Удалить",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Будет удалено через {countdown} секунду","Будет удалено через {countdown} секунды","Будет удалено через {countdown} секунд","Будет удалено через {countdown} секунды"],
-    "Send confirmation emails" : "Отправить письмо с подтверждением",
     "Unknown error" : "Неизвестная ошибка",
     "Send information about confirmed options by email" : "Отправлять информацию о подтвержденных опциях по электронной почте",
     "Date order" : "Дата заказа",

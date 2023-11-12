@@ -182,7 +182,6 @@ OC.L10N.register(
     "Switch to table view" : "Växla till tabellvy",
     "Delete" : "Radera",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Raderar om {countdown} sekund","Raderar om {countdown} sekunder"],
-    "Send confirmation emails" : "Skicka bekräftelsemejl",
     "Unknown error" : "Okänt fel",
     "Send information about confirmed options by email" : "Skicka information om bekräftade alternativ med mejl",
     "Date order" : "Datumordning",
