@@ -563,7 +563,7 @@ OC.L10N.register(
     "This share is locked and allows only read access. Registering is not possible." : "Diese Freigabe ist gesperrt und erlaubt nur den Lesezugriff. Eine Registrierung ist nicht möglich.",
     "Your share is locked and you have just read access to this poll." : "Ihre Freigabe ist gesperrt und Sie haben nur Lesezugriff auf diese Umfrage.",
     "Some confirmation messages could not been sent." : "Einige Bestätigungsnachrichten konnten nicht gesendet werden.",
-    "Messages sent." : "Nachricht gesendet.",
+    "Messages sent." : "Nachrichten gesendet.",
     "_%n of {maximalVotes} vote left._::_%n of {maximalVotes} votes left._" : ["%n von {maximalVotes} Stimme übrig.","%n von {maximalVotes} Stimmen übrig."],
     "Minute" : "Minute",
     "Hour" : "Stunde",
