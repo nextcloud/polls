@@ -122,7 +122,6 @@ class OptionMapper extends QBMapper {
 			)
 				// Count number of votes for this option
 				->addSelect($qb->createFunction('COUNT(DISTINCT(votes.id)) AS count_option_votes'))
-				// ->addSelect($qb->func()->count('votes.id', 'count_option_votes'))
 				// Count number of yes votes for this option
 				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN votes.vote_answer = \'yes\' THEN votes.id END)) AS votes_yes'))
 				// Count number of no votes for this option
@@ -175,7 +174,6 @@ class OptionMapper extends QBMapper {
 
 			// Count yes votes of the user in this poll
 			->addSelect($qb->createFunction('COUNT(DISTINCT(votes_user.id)) AS user_count_yes_votes'));
-			// ->addSelect($qb->func()->count('votes_user.id', 'user_count_yes_votes'));
 		return $qb;
 	}
 
