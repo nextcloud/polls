@@ -95,7 +95,6 @@
     "Switch to table view" : "Preklopi na preglednični pogled",
     "Delete" : "Izbriši",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Predmet bo izbrisan čez {countdown} sekundo","Predmet bo izbrisan čez {countdown} sekundi","Predmet bo izbrisan čez {countdown} sekunde","Predmet bo izbrisan čez {countdown} sekund"],
-    "Send confirmation emails" : "Pošlji potrditvena sporočila",
     "Unknown error" : "Neznana napaka",
     "Date order" : "Datumska razvrstitev",
     "Original order" : "Izvorna razvrstitev",

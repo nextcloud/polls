@@ -193,7 +193,6 @@
     "Switch to table view" : "Váltás táblázatnézetre",
     "Delete" : "Törlés",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Törlés {countdown} másodperc múlva","Törlés {countdown} másodperc múlva"],
-    "Send confirmation emails" : "Megerősítő e-mailek küldése",
     "Result of sent confirmation mails" : "Elküldött megerősítő emailek eredménye",
     "No valid email address" : "Nem érvényes email cím",
     "Unknown error" : "Ismeretlen hiba",

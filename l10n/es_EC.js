@@ -182,7 +182,6 @@ OC.L10N.register(
     "Switch to table view" : "Cambiar a vista de tabla",
     "Delete" : "Borrar",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Eliminando en {countdown} segundo","Eliminando en {countdown} segundos","Eliminando en {countdown} segundos"],
-    "Send confirmation emails" : "Enviar correos de confirmación",
     "Unknown error" : "Error desconocido",
     "Send information about confirmed options by email" : "Enviar información sobre opciones confirmadas por correo electrónico",
     "Date order" : "Orden de fechas",

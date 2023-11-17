@@ -180,7 +180,6 @@ OC.L10N.register(
     "Switch to table view" : "Aldatu taula ikuspegira",
     "Delete" : "Ezabatu",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Ezabatzen {countdown} segundotan","Ezabatzen {countdown} segundotan"],
-    "Send confirmation emails" : "Bidali berrespen e-postak",
     "Unknown error" : "Errore ezezaguna",
     "Send information about confirmed options by email" : "Bidali baieztatutako aukerei buruzko informazioa e-posta bidez",
     "Date order" : "Dataren ordena",
