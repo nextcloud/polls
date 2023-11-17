@@ -1,8 +1,11 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
  * @author Kai Schröer <git@schroeer.co>
+ * @author René Gieling <github@dartcafe.de>
  *
  * @license GNU AGPL version 3 or any later version
  *
@@ -22,6 +25,7 @@
  */
 
 namespace OCA\Polls\Db;
+
 use OCP\IDBConnection;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 
@@ -30,26 +34,32 @@ use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCP\ISession;
 use OCP\IUserSession;
+use OCP\Server;
 
 class OptionMapperTest extends UnitTestCase {
 	private IDBConnection $con;
 	private ISession $session;
 	private IUserSession $userSession;
 	private OptionMapper $optionMapper;
+	private VoteMapper $voteMapper;
 	private PollMapper $pollMapper;
 	private UserMapper $userMapper;
 	private array $polls = [];
 	private array $options = [];
+	private array $votes = [];
 
 	/**
 	 * {@inheritDoc}
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = \OC::$server->getDatabaseConnection();
-		$this->session = $this->getMockBuilder(ISession::class)->getMock();
-		$this->userSession = $this->getMockBuilder(IUserSession::class)->getMock();
+		$this->con = Server::get(IDBConnection::class);
+		$this->session = Server::get(ISession::class);
+		$this->userSession = Server::get(IUserSession::class);
+		$this->session->set('ncPollsUserId', 'TestUser');
 
+
+		$this->voteMapper = new VoteMapper($this->con);
 		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession);
 		$this->optionMapper = new OptionMapper($this->con, $this->session, $this->userMapper);
 		$this->pollMapper = new PollMapper($this->con);
@@ -61,10 +71,15 @@ class OptionMapperTest extends UnitTestCase {
 		foreach ($this->polls as &$poll) {
 			$poll = $this->pollMapper->insert($poll);
 
-			for ($count=0; $count < 2; $count++) {
+			for ($count = 0; $count < 2; $count++) {
 				$option = $this->fm->instance('OCA\Polls\Db\Option');
 				$option->setPollId($poll->getId());
-				array_push($this->options, $this->optionMapper->insert($option));
+				array_push($this->options, $this->optionMapper->add($option));
+				$vote = $this->fm->instance('OCA\Polls\Db\Vote');
+				$vote->setPollId($option->getPollId());
+				$vote->setUserId('TestUser');
+				$vote->setVoteOptionText($option->getPollOptionText());
+				array_push($this->votes, $this->voteMapper->insert($vote));
 			}
 		}
 		unset($poll);
