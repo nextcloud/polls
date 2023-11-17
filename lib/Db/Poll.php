@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -214,14 +216,14 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	public function getVoteUrl() : string {
+	public function getVoteUrl(): string {
 		return $this->urlGenerator->linkToRouteAbsolute(
 			AppConstants::APP_ID . '.page.vote',
 			['id' => $this->getId()]
 		);
 	}
 
-	public function setAutoReminder(bool $value) : void {
+	public function setAutoReminder(bool $value): void {
 		$this->setMiscSettingsByKey('autoReminder', $value);
 	}
 
@@ -235,12 +237,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	// alias of getOwner()
-	public function getUserId() : string {
+	public function getUserId(): string {
 		return $this->getOwner();
 	}
 
 	// alias of setOwner($value)
-	public function setUserId(string $userId) : void {
+	public function setUserId(string $userId): void {
 		$this->setOwner($userId);
 	}
 
@@ -270,15 +272,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 
-	private function setMiscSettingsArray(array $value) : void {
+	private function setMiscSettingsArray(array $value): void {
 		$this->setMiscSettings(json_encode($value));
 	}
 
-	private function getMiscSettingsArray() : array {
+	private function getMiscSettingsArray(): array {
 		if ($this->getMiscSettings()) {
 			return json_decode($this->getMiscSettings(), true);
 		}
-		
+
 		return [];
 	}
 
@@ -288,15 +290,17 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		$deadline = $this->getDeadline();
-		
-		if ($deadline - $this->getCreated() > self::FIVE_DAYS
+
+		if (
+			$deadline - $this->getCreated() > self::FIVE_DAYS
 			&& $deadline - $time < self::TWO_DAYS
 			&& $deadline > $time
 		) {
 			return self::TWO_DAYS;
 		}
 
-		if ($deadline - $this->getCreated() > self::TWO_DAYS
+		if (
+			$deadline - $this->getCreated() > self::TWO_DAYS
 			&& $deadline - $time < self::ONE_AND_HALF_DAY
 			&& $deadline > $time
 		) {

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -181,12 +183,12 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	// alias of getOwner()
-	public function getUserId() : ?string {
+	public function getUserId(): ?string {
 		return $this->getOwner();
 	}
 
 	// alias of setOwner($value)
-	public function setUserId(string $userId) : void {
+	public function setUserId(string $userId): void {
 		$this->setOwner($userId);
 	}
 

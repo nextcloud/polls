@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
  *
@@ -66,7 +68,7 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_PUBLIC_SHARES = 'publicShares';
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 
-	
+
 	public function __construct(
 		private IUserManager $userManager,
 		private IUserSession $userSession,
@@ -136,7 +138,7 @@ class Acl implements JsonSerializable {
 		} catch (ShareNotFoundException $e) {
 			throw new NotFoundException('Error loading share ' . $token);
 		}
-		
+
 		return $this;
 	}
 
@@ -163,11 +165,10 @@ class Acl implements JsonSerializable {
 			} else {
 				$this->request($permission);													// just check the permissions in all cases
 			}
-
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Error loading poll with id ' . $pollId);
 		}
-		
+
 		return $this;
 	}
 
@@ -285,7 +286,7 @@ class Acl implements JsonSerializable {
 				$voteCount++;
 			}
 		}
-		
+
 		if ($this->getPoll()->getVoteLimit() <= $voteCount) {
 			return true;
 		}
@@ -442,7 +443,7 @@ class Acl implements JsonSerializable {
 		if ($this->getIsInvolved()) {
 			return true;										// grant access if user is involved in poll in any way
 		}
-		
+
 		if ($this->poll->getAccess() === Poll::ACCESS_OPEN && $this->getIsLoggedIn()) {
 			return true;										// grant access if poll poll is an open poll (for logged in users)
 		}

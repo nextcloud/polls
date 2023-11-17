@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -65,14 +67,14 @@ class UserService {
 	 * @return Admin|Circle|Contact|ContactGroup|Email|GenericUser|Group|User
 	 */
 
-	public function getCurrentUser() : UserBase {
+	public function getCurrentUser(): UserBase {
 		// If there is a valid user session, get current user from session
 		$userId = $this->userSession->getUser()?->getUID();
 
 		if ($userId) {
 			return new User($userId);
 		}
-		
+
 		// Retrieve token and get current user from share
 		$token = $this->session->get('ncPollsPublicToken');
 
@@ -117,7 +119,7 @@ class UserService {
 	 * Get participans of a poll as array of user objects
 	 * @return UserBase[]
 	 */
-	public function getParticipants(int $pollId) : array {
+	public function getParticipants(int $pollId): array {
 		$users = [];
 		// get the distict list of usernames from the votes
 		$participants = $this->voteMapper->findParticipantsByPoll($pollId);
@@ -132,7 +134,7 @@ class UserService {
 	 * Create user from share
 	 * @return Admin|Circle|Contact|ContactGroup|Email|GenericUser|Group|User
 	 */
-	public function getUserFromShare(Share $share) : UserBase {
+	public function getUserFromShare(Share $share): UserBase {
 		return $this->getUser(
 			$share->getType(),
 			$share->getUserId(),
@@ -210,7 +212,7 @@ class UserService {
 			$items = array_merge($items, Contact::search($query));
 			$items = array_merge($items, ContactGroup::search($query));
 		}
-		
+
 		if (Circle::isEnabled()) {
 			foreach (($result['circles'] ?? []) as $item) {
 				$items[] = new Circle($item['value']['shareWith']);

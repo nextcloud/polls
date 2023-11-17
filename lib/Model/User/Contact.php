@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
@@ -24,7 +26,6 @@
 namespace OCA\Polls\Model\User;
 
 use OCA\Polls\Exceptions\ContactsNotEnabledExceptions;
-use OCA\Polls\Exceptions\MultipleContactsFound;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\UserBase;
 use OCP\Contacts\IManager as IContactsManager;
@@ -86,7 +87,6 @@ class Contact extends UserBase {
 		// workaround fur multiple found UIDs
 		// Don't throw an error, log the error and take the first entry
 		if (count($contacts) > 1) {
-			// throw new MultipleContactsFound('Multiple contacts found for id ' . $this->id);
 			$this->logger->warning('Multiple contacts found for id ' . $this->id);
 		}
 

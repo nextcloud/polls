@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -55,7 +57,7 @@ use OCP\Search\ISearchQuery;
 
 class PollService {
 	private string $userId;
-	
+
 	public function __construct(
 		private Acl $acl,
 		private AppSettings $appSettings,
@@ -82,7 +84,7 @@ class PollService {
 		$pollList = [];
 		try {
 			$polls = $this->pollMapper->findForMe($this->userId);
-			
+
 			foreach ($polls as $poll) {
 				try {
 					$this->acl->setPoll($poll);
@@ -364,7 +366,7 @@ class PollService {
 		} else {
 			$this->eventDispatcher->dispatchTyped(new PollReopenEvent($this->poll));
 		}
-		
+
 		$this->poll = $this->pollMapper->update($this->poll);
 
 		return $this->poll;
@@ -417,7 +419,8 @@ class PollService {
 			$list[] = [
 				'displayName' => $vote->getDisplayName(),
 				'emailAddress' => $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()),
-				'combined' => $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>'];
+				'combined' => $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>'
+			];
 		}
 		return $list;
 	}

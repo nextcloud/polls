@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -50,7 +52,7 @@ class VoteService {
 	 *
 	 * @return Vote[]
 	 */
-	public function list(int $pollId = 0, ?Acl $acl = null) : array {
+	public function list(int $pollId = 0, ?Acl $acl = null): array {
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
@@ -148,7 +150,7 @@ class VoteService {
 		} else {
 			$this->acl->setPollId($pollId);
 		}
-		
+
 		// if no user id is given, reset votes of current user
 		if (!$userId) {
 			$userId = $this->acl->getUserId();
@@ -156,11 +158,11 @@ class VoteService {
 			// otherwise edit rights must exist
 			$this->acl->request(Acl::PERMISSION_POLL_EDIT);
 		}
-		
+
 		if (!$pollId) {
 			throw new InvalidPollIdException('Poll id is missing');
 		}
-		
+
 		// fake a vote so that the event can be triggered
 		// suppress logging of this action
 		$this->vote = new Vote();

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
@@ -71,5 +73,4 @@ class UserMapper extends QBMapper {
 
 		return $this->findEntity($qb);
 	}
-
 }

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -123,7 +125,7 @@ class ShareService {
 	 */
 	public function get(string $token, bool $validateShareType = false, bool $publicRequest = false): Share {
 		$this->share = $this->shareMapper->findByToken($token);
-		
+
 		if ($validateShareType) {
 			$this->validateShareType();
 		}
@@ -225,7 +227,7 @@ class ShareService {
 		} else {
 			throw new InvalidShareTypeException('Displayname can only be changed in external or public shares.');
 		}
-		
+
 		$this->share->setDisplayName($displayName);
 		$this->share = $this->shareMapper->update($this->share);
 
@@ -258,7 +260,7 @@ class ShareService {
 	): Share {
 		$this->share = $publicShare;
 		$this->systemService->validatePublicUsername($userName, $this->share);
-		
+
 		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
 			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
 		}
@@ -276,8 +278,10 @@ class ShareService {
 				$timeZone
 			);
 			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
-		} elseif ($this->share->getType() === Share::TYPE_EMAIL
-				|| $this->share->getType() === Share::TYPE_CONTACT) {
+		} elseif (
+			$this->share->getType() === Share::TYPE_EMAIL
+			|| $this->share->getType() === Share::TYPE_CONTACT
+		) {
 			// Convert email and contact shares to external share, if user registers
 			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userId);
@@ -475,8 +479,8 @@ class ShareService {
 		string $emailAddress = ''
 	): Share {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		
-		
+
+
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
 		}
@@ -488,10 +492,10 @@ class ShareService {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw new ShareAlreadyExistsException;
 			}
-			
+
 			throw $e;
 		}
-		
+
 		return $share;
 	}
 

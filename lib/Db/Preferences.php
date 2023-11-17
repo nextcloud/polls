@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2020 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *

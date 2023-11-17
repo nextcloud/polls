@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -94,7 +96,6 @@ class OptionService {
 				// hide booked up options except the user has edit permission
 				$this->filterBookedUp();
 			}
-
 		} catch (DoesNotExistException $e) {
 			$this->options = [];
 		}
@@ -181,7 +182,7 @@ class OptionService {
 	 */
 	public function delete(int $optionId, ?Acl $acl = null): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		
+
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
@@ -259,7 +260,7 @@ class OptionService {
 			return $this->optionMapper->findByPoll($this->option->getPollId());
 		}
 
-		for ($i = 1; $i < ($amount + 1) ; $i++) {
+		for ($i = 1; $i < ($amount + 1); $i++) {
 			$clonedOption = new Option();
 			$clonedOption->setPollId($this->option->getPollId());
 			$clonedOption->setConfirmed(0);

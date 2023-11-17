@@ -1,5 +1,6 @@
 <?php
 
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 René Gieling <github@dartcafe.de>
  *
