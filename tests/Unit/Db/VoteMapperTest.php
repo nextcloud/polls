@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
@@ -30,12 +32,19 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\UserMapper;
+use OCP\ISession;
+use OCP\IUserSession;
+use OCP\Server;
 
 class VoteMapperTest extends UnitTestCase {
 	private IDBConnection $con;
+	private ISession $session;
+	private IUserSession $userSession;
 	private VoteMapper $voteMapper;
 	private PollMapper $pollMapper;
 	private OptionMapper $optionMapper;
+	private UserMapper $userMapper;
 	private array $polls = [];
 	private array $options = [];
 	private array $votes = [];
@@ -45,10 +54,15 @@ class VoteMapperTest extends UnitTestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = \OC::$server->getDatabaseConnection();
-		$this->voteMapper = new VoteMapper($this->con);
+		$this->con = Server::get(IDBConnection::class);
+		$this->session = Server::get(ISession::class);
+		$this->userSession = Server::get(IUserSession::class);
+		$this->session->set('ncPollsUserId', 'TestUser');
+
 		$this->pollMapper = new PollMapper($this->con);
-		$this->optionMapper = new OptionMapper($this->con);
+		$this->voteMapper = new VoteMapper($this->con);
+		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession);
+		$this->optionMapper = new OptionMapper($this->con, $this->session, $this->userMapper);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')
@@ -57,10 +71,10 @@ class VoteMapperTest extends UnitTestCase {
 		foreach ($this->polls as &$poll) {
 			$poll = $this->pollMapper->insert($poll);
 
-			for ($optionsCount=0; $optionsCount < 2; $optionsCount++) {
+			for ($optionsCount = 0; $optionsCount < 2; $optionsCount++) {
 				$option = $this->fm->instance('OCA\Polls\Db\Option');
 				$option->setPollId($poll->getId());
-				array_push($this->options, $this->optionMapper->insert($option));
+				array_push($this->options, $this->optionMapper->add($option));
 				$vote = $this->fm->instance('OCA\Polls\Db\Vote');
 				$vote->setPollId($option->getPollId());
 				$vote->setUserId('voter');
@@ -118,7 +132,7 @@ class VoteMapperTest extends UnitTestCase {
 	}
 
 	/**
-	* testUpdate
+	 * testUpdate
 	 */
 	public function testUpdate() {
 		foreach ($this->votes as &$vote) {
@@ -138,8 +152,8 @@ class VoteMapperTest extends UnitTestCase {
 	}
 
 	/**
-	* tearDown
-	*/
+	 * tearDown
+	 */
 	public function tearDown(): void {
 		parent::tearDown();
 		foreach ($this->options as $option) {

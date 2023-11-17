@@ -28,8 +28,6 @@ use DateTimeZone;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\Vote;
-use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\OptionConfirmedEvent;
 use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
@@ -51,9 +49,6 @@ class OptionService {
 	/** @var Option[] */
 	private array $options;
 
-	/** @var Vote[] */
-	private array $votes;
-
 	public function __construct(
 		private Acl $acl,
 		private AnonymizeService $anonymizer,
@@ -61,12 +56,9 @@ class OptionService {
 		private LoggerInterface $logger,
 		private Option $option,
 		private OptionMapper $optionMapper,
-		private VoteMapper $voteMapper,
 		private ISession $session,
-		private SystemService $systemService,
 	) {
 		$this->options = [];
-		$this->votes = [];
 	}
 
 	/**
@@ -84,9 +76,9 @@ class OptionService {
 		}
 
 		try {
-			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
+			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId(), !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW));
 
-			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
+			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW) || !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
 				$this->anonymizer->anonymize($this->options);
 			} elseif (!$this->acl->getIsLoggedIn()) {
@@ -98,36 +90,17 @@ class OptionService {
 				}
 			}
 
-			$this->votes = $this->voteMapper->findByPoll($this->acl->getPollId());
-
-			$this->calculateVotes();
-
 			if ($this->acl->getPoll()->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {
 				// hide booked up options except the user has edit permission
 				$this->filterBookedUp();
 			}
 
-			if ($this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
-				$this->calculateRanks();
-			}
 		} catch (DoesNotExistException $e) {
 			$this->options = [];
 		}
 
 		return array_values($this->options);
 	}
-
-	/**
-	 * Get option
-	 *
-	 * @return Option
-	 */
-	public function get(int $optionId): Option {
-		$option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($option->getPollId());
-		return $option;
-	}
-
 
 	/**
 	 * Add a new option
@@ -151,7 +124,7 @@ class OptionService {
 		}
 
 		try {
-			$this->option = $this->optionMapper->insert($this->option);
+			$this->option = $this->optionMapper->add($this->option);
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 				throw new DuplicateEntryException('This option already exists');
@@ -195,7 +168,7 @@ class OptionService {
 
 		$this->setOption($timestamp, $pollOptionText, $duration);
 
-		$this->option = $this->optionMapper->update($this->option);
+		$this->option = $this->optionMapper->change($this->option);
 		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
 
 		return $this->option;
@@ -208,7 +181,7 @@ class OptionService {
 	 */
 	public function delete(int $optionId, ?Acl $acl = null): Option {
 		$this->option = $this->optionMapper->find($optionId);
-
+		
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
@@ -239,7 +212,7 @@ class OptionService {
 		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
-		$this->option = $this->optionMapper->update($this->option);
+		$this->option = $this->optionMapper->change($this->option);
 
 		if ($this->option->getConfirmed()) {
 			$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($this->option));
@@ -283,7 +256,7 @@ class OptionService {
 		}
 
 		if ($step === 0) {
-			return $this->optionMapper->findByPoll($this->acl->getPollId());
+			return $this->optionMapper->findByPoll($this->option->getPollId());
 		}
 
 		for ($i = 1; $i < ($amount + 1) ; $i++) {
@@ -296,7 +269,7 @@ class OptionService {
 			$clonedOption->setDuration($newDates['duration']);
 
 			try {
-				$this->optionMapper->insert($clonedOption);
+				$this->optionMapper->add($clonedOption);
 			} catch (Exception $e) {
 				$this->logger->warning('skip adding ' . $newDates['from']->format('c') . 'for pollId ' . $this->option->getPollId() . '. Option already exists.');
 			}
@@ -322,7 +295,7 @@ class OptionService {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');
 		}
 
-		$this->options = $this->optionMapper->findByPoll($this->acl->getPollId());
+		$this->options = $this->optionMapper->findByPoll($pollId);
 
 		if ($step > 0) {
 			// start from last item if moving option into the future
@@ -337,7 +310,7 @@ class OptionService {
 			$this->optionMapper->update($option);
 		}
 
-		return $this->optionMapper->findByPoll($this->acl->getPollId());
+		return $this->optionMapper->findByPoll($pollId);
 	}
 
 	/**
@@ -358,7 +331,7 @@ class OptionService {
 			$option->setTimestamp($origin->getTimestamp());
 			$option->setDuration($origin->getDuration());
 			$option->setOrder($origin->getOrder());
-			$this->optionMapper->insert($option);
+			$this->optionMapper->add($option);
 			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}
 
@@ -382,7 +355,7 @@ class OptionService {
 		$i = 0;
 		foreach ($options as $option) {
 			$this->option = $this->optionMapper->find($option['id']);
-			if ($this->acl->getPollId() === intval($this->option->getPollId())) {
+			if ($pollId === intval($this->option->getPollId())) {
 				$this->option->setOrder(++$i);
 				$this->optionMapper->update($this->option);
 			}
@@ -390,7 +363,7 @@ class OptionService {
 
 		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
 
-		return $this->optionMapper->findByPoll($this->acl->getPollId());
+		return $this->optionMapper->findByPoll($pollId);
 	}
 
 	/**
@@ -467,108 +440,13 @@ class OptionService {
 	}
 
 	/**
-	 * Get all voteOptionTexts of the options, the user opted in
-	 * with yes or maybe
-	 *
-	 * @return array
-	 */
-	private function getUsersVotes() {
-		$userVotes = [];
-		foreach ($this->votes as $vote) {
-			if ($vote->getUserId() === $this->acl->getUserId() && in_array($vote->getVoteAnswer(), ['yes', 'maybe'])) {
-				$userVotes[] = $vote->getVoteOptionText();
-			}
-		}
-		return $userVotes;
-	}
-
-	/**
 	 * Remove booked up options, because they are not votable
 	 *
 	 * @return void
 	 */
 	private function filterBookedUp() {
-		$exceptVotes = $this->getUsersVotes();
-		$this->options = array_filter($this->options, function ($option) use ($exceptVotes) {
-			return (!$option->isBookedUp || in_array($option->getPollOptionText(), $exceptVotes));
-		});
-	}
-
-	/**
-	 * Calculate the votes of each option and determines if the option is booked up
-	 * - unvoted counts as no
-	 * - realNo reports the actually opted out votes
-	 *
-	 * @return void
-	 */
-	private function calculateVotes() {
-		foreach ($this->options as $option) {
-			$option->yes = count(
-				array_filter($this->votes, function ($vote) use ($option) {
-					return ($vote->getVoteOptionText() === $option->getPollOptionText()
-						&& $vote->getVoteAnswer() === 'yes') ;
-				})
-			);
-
-			$option->realNo = count(
-				array_filter($this->votes, function ($vote) use ($option) {
-					return ($vote->getVoteOptionText() === $option->getPollOptionText()
-						&& $vote->getVoteAnswer() === 'no');
-				})
-			);
-
-			$option->maybe = count(
-				array_filter($this->votes, function ($vote) use ($option) {
-					return ($vote->getVoteOptionText() === $option->getPollOptionText()
-						&& $vote->getVoteAnswer() === 'maybe');
-				})
-			);
-
-			$option->isBookedUp = $this->acl->getPoll()->getOptionLimit() ? $this->acl->getPoll()->getOptionLimit() <= $option->yes : false;
-
-			// remove details, if the results shall be hidden
-			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
-				$option->yes = 0;
-				$option->no = 0;
-				$option->maybe = 0;
-				$option->realNo = 0;
-			} else {
-				$option->no = count($this->voteMapper->findParticipantsByPoll($this->acl->getPollId())) - $option->maybe - $option->yes;
-				$option->no = $this->countParticipants() - $option->maybe - $option->yes;
-			}
-		}
-	}
-
-	private function countParticipants(): int {
-		return count($this->voteMapper->findParticipantsByPoll($this->acl->getPollId()));
-	}
-
-	/**
-	 * Calculate the rank of each option based on the
-	 * yes and maybe votes and recognize equal ranked options
-	 *
-	 * @return void
-	 */
-	private function calculateRanks() {
-		// sort array by yes and maybe votes
-		usort($this->options, function (Option $a, Option $b):int {
-			$diff = $b->yes - $a->yes;
-			return ($diff !== 0) ? $diff : $b->maybe - $a->maybe;
-		});
-
-		// calculate the rank
-		$count = count($this->options);
-		for ($i = 0; $i < $count; $i++) {
-			if ($i > 0 && $this->options[$i]->yes === $this->options[$i - 1]->yes && $this->options[$i]->maybe === $this->options[$i - 1]->maybe) {
-				$this->options[$i]->rank = $this->options[$i - 1]->rank;
-			} else {
-				$this->options[$i]->rank = $i + 1;
-			}
-		}
-
-		// restore original order
-		usort($this->options, function (Option $a, Option $b):int {
-			return $a->getOrder() - $b->getOrder();
+		$this->options = array_filter($this->options, function ($option) {
+			return (!$option->getIsLockedByOptionLimit());
 		});
 	}
 
@@ -578,11 +456,8 @@ class OptionService {
 	 *
 	 * @return int
 	 */
-	private function getHighestOrder(int $pollId): int {
-		$highestOrder = 0;
-		foreach ($this->optionMapper->findByPoll($pollId) as $option) {
-			$highestOrder = ($option->getOrder() > $highestOrder) ? $option->getOrder() : $highestOrder;
-		}
-		return $highestOrder;
+	public function getHighestOrder(int $pollId): int {
+		$result = intval($this->optionMapper->getOrderBoundaries($pollId)['max']);
+		return $result;
 	}
 }
