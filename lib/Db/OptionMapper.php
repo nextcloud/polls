@@ -121,8 +121,8 @@ class OptionMapper extends QBMapper {
 				)
 			)
 				// Count number of votes for this option
-				->addSelect($qb->func()->count('votes.id', 'count_option_votes'))
-				// ->addSelect($qb->createFunction('COUNT(DISTINCT(votes.id)) AS count_option_votes'))
+				->addSelect($qb->createFunction('COUNT(DISTINCT(votes.id)) AS count_option_votes'))
+				// ->addSelect($qb->func()->count('votes.id', 'count_option_votes'))
 				// Count number of yes votes for this option
 				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN votes.vote_answer = \'yes\' THEN votes.id END)) AS votes_yes'))
 				// Count number of no votes for this option
@@ -142,7 +142,7 @@ class OptionMapper extends QBMapper {
 
 			// force value into a MIN function to avoid grouping errors
 			->selectAlias($qb->func()->min('polls.option_limit'), 'option_limit')
-			->selectAlias($qb->func()->min('polls.option_limit'), 'vote_limit')
+			->selectAlias($qb->func()->min('polls.vote_limit'), 'vote_limit')
 
 			// Votes table join (#1)
 			// left join options' votes of the current user this option to get the current user's answer to this option
@@ -151,9 +151,9 @@ class OptionMapper extends QBMapper {
 				Vote::TABLE,
 				'option_vote_user',
 				$qb->expr()->andX(
-					$qb->expr()->eq('options.poll_id', 'option_vote_user.poll_id'),
+					$qb->expr()->eq('option_vote_user.poll_id', 'options.poll_id'),
 					$qb->expr()->eq('option_vote_user.user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR)),
-					$qb->expr()->eq('options.poll_option_text', 'option_vote_user.vote_option_text'),
+					$qb->expr()->eq('option_vote_user.vote_option_text', 'options.poll_option_text'),
 				)
 			)
 			// force value into a MIN function to avoid grouping errors
@@ -167,14 +167,15 @@ class OptionMapper extends QBMapper {
 				Vote::TABLE,
 				'votes_user',
 				$qb->expr()->andX(
-					$qb->expr()->eq('options.poll_id', 'votes_user.poll_id'),
+					$qb->expr()->eq('votes_user.poll_id', 'options.poll_id'),
 					$qb->expr()->eq('votes_user.user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR)),
 					$qb->expr()->eq('votes_user.vote_answer', $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR)),
 				)
 			)
 
 			// Count yes votes of the user in this poll
-			->addSelect($qb->func()->count('votes_user.id', 'user_count_yes_votes'));
+			->addSelect($qb->createFunction('COUNT(DISTINCT(votes_user.id)) AS user_count_yes_votes'));
+			// ->addSelect($qb->func()->count('votes_user.id', 'user_count_yes_votes'));
 		return $qb;
 	}
 
