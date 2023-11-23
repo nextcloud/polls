@@ -1,4 +1,5 @@
 { "translations": {
+    "Polls" : "Voturi",
     "Circle" : "Cerc",
     "Group" : "Grup",
     "Contact" : "Contact",
@@ -13,6 +14,7 @@
     "Title" : "Titlu",
     "Cancel" : "Anulează",
     "Apply" : "Aplică",
+    "Participants" : "Participanți",
     "From" : "De la",
     "To" : "Către",
     "Email address" : "Email",
@@ -25,6 +27,7 @@
     "never" : "niciodată",
     "Access" : "Acces",
     "Owner" : "Proprietar",
+    "Created" : "A fost creat",
     "Login" : "Autentificare",
     "Preview" : "Previzualizare",
     "User settings" : "Setările utilizatorului",

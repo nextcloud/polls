@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Voturi",
     "Circle" : "Cerc",
     "Group" : "Grup",
     "Contact" : "Contact",
@@ -15,6 +16,7 @@ OC.L10N.register(
     "Title" : "Titlu",
     "Cancel" : "Anulează",
     "Apply" : "Aplică",
+    "Participants" : "Participanți",
     "From" : "De la",
     "To" : "Către",
     "Email address" : "Email",
@@ -27,6 +29,7 @@ OC.L10N.register(
     "never" : "niciodată",
     "Access" : "Acces",
     "Owner" : "Proprietar",
+    "Created" : "A fost creat",
     "Login" : "Autentificare",
     "Preview" : "Previzualizare",
     "User settings" : "Setările utilizatorului",
