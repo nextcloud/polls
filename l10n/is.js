@@ -17,6 +17,7 @@ OC.L10N.register(
     "Public link" : "Opinber tengill",
     "User" : "Notandi",
     "%s invited you to a poll" : "%s bauð þér að taka þátt í könnun",
+    "Switch to list view" : "Skipta yfir í listasýn",
     "Delete" : "Eyða",
     "Unknown error" : "Óþekkt villa",
     "Date order" : "Röðun eftir dagsetningu",
