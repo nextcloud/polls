@@ -386,7 +386,7 @@ class Acl implements JsonSerializable {
 	}
 
 	private function getHasEmail(): bool {
-		return $this->share?->getToken() ? strlen($this->share->getEmailAddress()) > 0 : $this->getIsLoggedIn();
+		return $this->share?->getToken() ? boolval($this->share->getEmailAddress()) : $this->getIsLoggedIn();
 	}
 
 	/**
