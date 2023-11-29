@@ -41,8 +41,6 @@ use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
-use OCP\IUserManager;
-use OCP\IUserSession;
 
 /**
  * Class Acl
