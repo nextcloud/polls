@@ -31,6 +31,7 @@ OC.L10N.register(
     "Owner" : "Proprietar",
     "Created" : "A fost creat",
     "Login" : "Autentificare",
+    "As a regular user of this site, you can participate with your internal identity after logging in." : "Ca utilizator obișnuit al acestui site, puteți participa cu identitatea internă după ce vă autentificați.",
     "Preview" : "Previzualizare",
     "User settings" : "Setările utilizatorului",
     "Shares" : "Partajări",
