@@ -48,7 +48,6 @@ class OptionMapper extends QBMapper {
 	/**
 	 * Alias of update with joined and computed attributes
 	 * @param Option $option Option to update
-	 * @param string $currentUser The current user, needed for checking limits
 	 */
 	public function change(Option $option): Option {
 		$option->updatePollOptionText();
@@ -62,7 +61,6 @@ class OptionMapper extends QBMapper {
 	/**
 	 * Alias of insert with enhanced entity
 	 * @param Option $option Option to insert
-	 * @param string $currentUser The current user, needed for checking limits
 	 */
 	public function add(Option $option): Option {
 		$option->updatePollOptionText();
@@ -87,10 +85,10 @@ class OptionMapper extends QBMapper {
 
 	/**
 	 * Build the enhanced query with joined tables
-	 * @param string $currentUser The current user, needed for checking limits
+	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
 	 */
 	private function buildQuery(bool $hideVotes = false): IQueryBuilder {
-		$currentUser = $this->userMapper->getCurrentUserId();
+		$currentUserId = $this->userMapper->getCurrentUserId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('options.*')
@@ -151,7 +149,7 @@ class OptionMapper extends QBMapper {
 				'option_vote_user',
 				$qb->expr()->andX(
 					$qb->expr()->eq('option_vote_user.poll_id', 'options.poll_id'),
-					$qb->expr()->eq('option_vote_user.user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR)),
+					$qb->expr()->eq('option_vote_user.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
 					$qb->expr()->eq('option_vote_user.vote_option_text', 'options.poll_option_text'),
 				)
 			)
@@ -167,7 +165,7 @@ class OptionMapper extends QBMapper {
 				'votes_user',
 				$qb->expr()->andX(
 					$qb->expr()->eq('votes_user.poll_id', 'options.poll_id'),
-					$qb->expr()->eq('votes_user.user_id', $qb->createNamedParameter($currentUser, IQueryBuilder::PARAM_STR)),
+					$qb->expr()->eq('votes_user.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
 					$qb->expr()->eq('votes_user.vote_answer', $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR)),
 				)
 			)
@@ -179,7 +177,7 @@ class OptionMapper extends QBMapper {
 
 	/**
 	 * @return Option[]
-	 * @param string $currentUser The current user, needed for checking limits
+	 * @param bool $hideResults Whether the results should be hidden
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function findByPoll(int $pollId, bool $hideResults = false): array {
@@ -191,7 +189,6 @@ class OptionMapper extends QBMapper {
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @param string $currentUser The current user, needed for checking limits
 	 */
 	public function find(int $id): Option {
 		$qb = $this->buildQuery();

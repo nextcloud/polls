@@ -30,10 +30,12 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Model\CalendarEvent;
-use OCA\Polls\Model\User\CurrentUser;
+use OCA\Polls\Model\UserBase;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\ISession;
@@ -41,30 +43,32 @@ use OCP\ISession;
 class CalendarService {
 	/** @var ICalendar[] */
 	private array $calendars;
+	private UserBase $currentUser;
 	
 	public function __construct(
 		private CalendarManager $calendarManager,
-		private CurrentUser $currentUser,
 		private ISession $session,
 		private OptionMapper $optionMapper,
 		private Preferences $preferences,
 		private PreferencesService $preferencesService,
+		private UserMapper $userMapper,
 	) {
 		$this->preferences = $this->preferencesService->get();
+		$this->currentUser = $this->userMapper->getCurrentUser();
 		$this->getCalendarsForPrincipal();
 	}
 
 	/**
 	 * getCalendars -
 	 */
-	private function getCalendarsForPrincipal(string $userId = ''): void {
-		if ($userId) {
-			$principalUri = 'principals/users/' . $userId;
-		} else {
-			$principalUri = $this->currentUser->getPrincipalUri();
-		}
+	private function getCalendarsForPrincipal(): void {
+		$principalUri = $this->currentUser->getPrincipalUri();
 
-		$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
+		if ($principalUri) {
+			$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
+		} else {
+			$this->calendars = [];
+		}
 	}
 
 
@@ -96,6 +100,10 @@ class CalendarService {
 	}
 
 	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): array {
+		if (!$this->currentUser->getPrincipalUri()) {
+			return [];
+		}
+
 		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
@@ -116,7 +124,7 @@ class CalendarService {
 	 * @psalm-return list<CalendarEvent|null>
 	 */
 	public function getEvents(int $optionId): array {
-		$timezone = new DateTimeZone($this->session->get('ncPollsClientTimeZone'));
+		$timezone = new DateTimeZone($this->session->get(AppConstants::CLIENT_TZ));
 		$timerange = $this->getTimerange($optionId, $timezone);
 
 		$events = [];

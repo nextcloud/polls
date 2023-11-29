@@ -27,7 +27,6 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Service\ShareService;
-use OCA\Polls\Service\UserService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -39,7 +38,6 @@ class ShareController extends BaseController {
 		IRequest $request,
 		ISession $session,
 		private ShareService $shareService,
-		private UserService $userService
 	) {
 		parent::__construct($appName, $request, $session);
 	}
@@ -109,7 +107,6 @@ class ShareController extends BaseController {
 	 * Delete share
 	 */
 	#[NoAdminRequired]
-
 	public function delete(string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete(token: $token)]);
 	}
@@ -118,7 +115,6 @@ class ShareController extends BaseController {
 	 * Delete share
 	 */
 	#[NoAdminRequired]
-
 	public function lock(string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->lock(token: $token)]);
 	}
@@ -127,7 +123,6 @@ class ShareController extends BaseController {
 	 * Delete share
 	 */
 	#[NoAdminRequired]
-
 	public function unlock(string $token): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->unlock(token: $token)]);
 	}

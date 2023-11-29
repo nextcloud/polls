@@ -35,8 +35,8 @@ use OCP\ISession;
 class CommentController extends BaseController {
 	public function __construct(
 		string $appName,
-		ISession $session,
 		IRequest $request,
+		ISession $session,
 		private Acl $acl,
 		private CommentService $commentService
 	) {

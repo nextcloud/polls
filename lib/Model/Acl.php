@@ -70,8 +70,6 @@ class Acl implements JsonSerializable {
 
 
 	public function __construct(
-		private IUserManager $userManager,
-		private IUserSession $userSession,
 		private UserMapper $userMapper,
 		private IGroupManager $groupManager,
 		private OptionMapper $optionMapper,
@@ -206,7 +204,8 @@ class Acl implements JsonSerializable {
 	}
 
 	private function getDisplayName(): string {
-		return ($this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())?->getDisplayName() : $this->share->getDisplayName()) ?? '';
+		return $this->userMapper->getCurrentUser()->getDisplayName();
+		// return ($this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())?->getDisplayName() : $this->share->getDisplayName()) ?? '';
 	}
 
 	/**
@@ -297,7 +296,7 @@ class Acl implements JsonSerializable {
 	 * getIsLogged - Is user logged in to nextcloud?
 	 */
 	public function getIsLoggedIn(): bool {
-		return $this->userSession->isLoggedIn();
+		return $this->userMapper->isLoggedIn();
 	}
 
 	/**

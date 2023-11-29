@@ -248,7 +248,7 @@ class PublicController extends BaseController {
 	}
 
 	/**
-	 * Validate it the user name is reservrd
+	 * Validate it the user name is reserved
 	 * return false, if this username already exists as a user or as
 	 * a participant of the poll
 	 */

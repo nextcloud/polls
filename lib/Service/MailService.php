@@ -32,6 +32,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Model\Mail\ConfirmationMail;
@@ -52,15 +53,13 @@ class MailService {
 		private PollMapper $pollMapper,
 		private ShareMapper $shareMapper,
 		private SubscriptionMapper $subscriptionMapper,
-		private UserService $userService,
+		private UserMapper $userMapper,
 	) {
 		$this->logs = [];
 	}
 
 	public function resolveEmailAddress(int $pollId, string $userId): string {
-		$user = $this->userService->evaluateUser($userId, $pollId);
-
-		return $user->getEmailAddress();
+		return $this->userMapper->getParticipant($userId, $pollId)->getEmailAddress();
 	}
 
 	public function sendNotifications(): void {
@@ -105,7 +104,7 @@ class MailService {
 			$share = $this->shareMapper->findByToken($token);
 		}
 
-		foreach ($this->userService->getUserFromShare($share)->getMembers() as $recipient) {
+		foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $recipient) {
 			$invitation = new InvitationMail($recipient->getId(), $share);
 
 			try {
@@ -150,7 +149,7 @@ class MailService {
 	public function sendConfirmations(int $pollId): SentResult {
 		$sentResult = new SentResult();
 		/** @var UserBase[] */
-		$participants = $this->userService->getParticipants($pollId);
+		$participants = $this->userMapper->getParticipants($pollId);
 
 		foreach ($participants as $participant) {
 			try {
@@ -187,7 +186,7 @@ class MailService {
 	}
 
 	private function sendAutoReminderToRecipients(Share $share, Poll $poll): void {
-		foreach ($this->userService->getUserFromShare($share)->getMembers() as $recipient) {
+		foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $recipient) {
 			$reminder = new ReminderMail(
 				$recipient->getId(),
 				$poll->getId()

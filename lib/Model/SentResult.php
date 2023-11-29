@@ -32,17 +32,17 @@ class SentResult implements \JsonSerializable {
 	private array $sentMails = [];
 	private array $abortedMails = [];
 
-	public function AddSentMail(UserBase $user): void {
+	public function AddSentMail(UserBase $recipient): void {
 		array_push($this->sentMails, [
-			'emailAddress' => $user->getEmailAddress(),
-			'displayName' => $user->getDisplayName(),
+			'emailAddress' => $recipient->getEmailAddress(),
+			'displayName' => $recipient->getDisplayName(),
 		]);
 	}
 
-	public function AddAbortedMail(UserBase $user, string $reason = self::UNHANDELED_REASON): void {
+	public function AddAbortedMail(UserBase $recipient, string $reason = self::UNHANDELED_REASON): void {
 		array_push($this->abortedMails, [
-			'emailAddress' => $user->getEmailAddress(),
-			'displayName' => $user->getDisplayName(),
+			'emailAddress' => $recipient->getEmailAddress(),
+			'displayName' => $recipient->getDisplayName(),
 			'reason' => $reason,
 		]);
 	}

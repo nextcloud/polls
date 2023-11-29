@@ -2,6 +2,7 @@
 
 namespace OCA\Polls\Middleware;
 
+use OCA\Polls\AppConstants;
 use OCP\AppFramework\Middleware;
 use OCP\IRequest;
 use OCP\ISession;
@@ -25,10 +26,10 @@ class RequestAttributesMiddleware extends Middleware {
 		}
 
 		if ($clientId) {
-			$this->session->set('ncPollsClientId', $clientId);
+			$this->session->set(AppConstants::CLIENT_ID, $clientId);
 		}
 		if ($clientTimeZone) {
-			$this->session->set('ncPollsClientTimeZone', $clientTimeZone);
+			$this->session->set(AppConstants::CLIENT_TZ, $clientTimeZone);
 		}
 	}
 }

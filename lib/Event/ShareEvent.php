@@ -50,6 +50,6 @@ abstract class ShareEvent extends BaseEvent {
 	}
 
 	protected function getSharee() : UserBase {
-		return $this->userService->getUserFromShare($this->share);
+		return $this->userMapper->getUserFromShare($this->share);
 	}
 }
