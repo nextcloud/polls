@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -53,6 +55,16 @@ use OCP\IL10N;
  * @method void setReleased(int $value)
  * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
+ *
+ * Joined Attributes
+ * @method string getUserVoteAnswer()
+ * @method int getOptionLimit()
+ * @method int getVoteLimit()
+ * @method int getUserCountYesVotes()
+ * @method int getCountOptionVotes()
+ * @method int getVotesYes()
+ * @method int getVotesNo()
+ * @method int getVotesMaybe()
  */
 class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
@@ -68,14 +80,15 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $confirmed = 0;
 	protected int $duration = 0;
 
-	// public variables, not in the db
-	public int $rank = 0;
-	public int $yes = 0;
-	public int $no = 0;
-	public int $maybe = 0;
-	public int $realNo = 0;
-	public int $votes = 0;
-	public bool $isBookedUp = false;
+	// joined Attributes
+	protected ?string $userVoteAnswer = '';
+	protected int $optionLimit = 0;
+	protected int $voteLimit = 0;
+	protected int $userCountYesVotes = 0;
+	protected int $countOptionVotes = 0;
+	protected int $votesYes = 0;
+	protected int $votesNo = 0;
+	protected int $votesMaybe = 0;
 
 	public function __construct() {
 		$this->addType('released', 'int');
@@ -84,6 +97,15 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->addType('order', 'int');
 		$this->addType('confirmed', 'int');
 		$this->addType('duration', 'int');
+
+		// joined Attributes
+		$this->addType('optionLimit', 'int');
+		$this->addType('voteLimit', 'int');
+		$this->addType('userCountYesVotes', 'int');
+		$this->addType('countOptionVotes', 'int');
+		$this->addType('votesYes', 'int');
+		$this->addType('votesNo', 'int');
+		$this->addType('votesMaybe', 'int');
 	}
 
 	/**
@@ -98,15 +120,10 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
 			'duration' => $this->getDuration(),
-			'computed' => [
-				'rank' => $this->rank,
-				'no' => $this->no,
-				'yes' => $this->yes,
-				'maybe' => $this->maybe,
-				'realNo' => $this->realNo,
-				'votes' => $this->votes,
-				'isBookedUp' => $this->isBookedUp,
-			],
+			'locked' => $this->getIsLocked(),
+			'no' => $this->getVotesNo(),
+			'yes' => $this->getVotesYes(),
+			'maybe' => $this->getVotesMaybe(),
 			'owner' => $this->getUser(),
 		];
 	}
@@ -137,6 +154,26 @@ class Option extends EntityWithUser implements JsonSerializable {
 		}
 		return htmlspecialchars_decode($this->pollOptionText);
 	}
+	public function getIsLocked(): bool {
+		return $this->getUserVoteAnswer() !== Vote::VOTE_YES && $this->getUserVoteAnswer() !== Vote::VOTE_EVENTUALLY && ($this->getIsLockedByOptionLimit() || $this->getIsLockedByVotesLimit());
+	}
+
+	/**
+	 * @return bool Returns true, if this option is locked by the optionLimit and the user has not voted yes
+	 */
+	public function getIsLockedByOptionLimit(): bool {
+		return $this->getOptionLimit() && $this->getVotesYes() >= $this->getOptionLimit() && $this->getUserVoteAnswer() !== Vote::VOTE_YES;
+		// return $this->getOptionLimit() && !$this->getUserVote() === Vote::VOTE_YES && $this->getVotesYes() >= $this->getOptionLimit() ;
+	}
+
+	public function getIsLockedByVotesLimit(): bool {
+		// IF a vote limit is set
+		// AND the user did not vote yes for this option
+		// AND the count of yes votes of the current user is EQUAL OR GREATER THAN the vote limit
+		// return true (locked option)
+		return $this->getVoteLimit() && $this->getUserCountYesVotes() >= $this->getVoteLimit();
+		// return $this->getVoteLimit() && !$this->getUserVote() === Vote::VOTE_YES && $this->getUserCountYesVotes() >= $this->getVoteLimit();
+	}
 
 	public function getOrder(): int {
 		if ($this->timestamp) {
@@ -146,12 +183,12 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	// alias of getOwner()
-	public function getUserId() : ?string {
+	public function getUserId(): ?string {
 		return $this->getOwner();
 	}
 
 	// alias of setOwner($value)
-	public function setUserId(string $userId) : void {
+	public function setUserId(string $userId): void {
 		$this->setOwner($userId);
 	}
 

@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -50,7 +52,7 @@ class VoteService {
 	 *
 	 * @return Vote[]
 	 */
-	public function list(int $pollId = 0, ?Acl $acl = null) : array {
+	public function list(int $pollId = 0, ?Acl $acl = null): array {
 		if ($acl) {
 			$this->acl = $acl;
 		} else {
@@ -108,14 +110,14 @@ class VoteService {
 			$this->acl->setPollId($option->getPollId(), Acl::PERMISSION_VOTE_EDIT);
 		}
 
-		if ($setTo === 'yes') {
+		if ($setTo === Vote::VOTE_YES) {
 			$this->checkLimits($option, $this->acl->getUserId());
 		}
 
 		try {
 			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->acl->getUserId());
 
-			if (in_array(trim($setTo), ['no', '']) && !$this->acl->getPoll()->getUseNo()) {
+			if (in_array(trim($setTo), [Vote::VOTE_NO, '']) && !$this->acl->getPoll()->getUseNo()) {
 				$this->vote->setVoteAnswer('');
 				$this->voteMapper->delete($this->vote);
 			} else {
@@ -148,7 +150,7 @@ class VoteService {
 		} else {
 			$this->acl->setPollId($pollId);
 		}
-		
+
 		// if no user id is given, reset votes of current user
 		if (!$userId) {
 			$userId = $this->acl->getUserId();
@@ -156,11 +158,11 @@ class VoteService {
 			// otherwise edit rights must exist
 			$this->acl->request(Acl::PERMISSION_POLL_EDIT);
 		}
-		
+
 		if (!$pollId) {
 			throw new InvalidPollIdException('Poll id is missing');
 		}
-		
+
 		// fake a vote so that the event can be triggered
 		// suppress logging of this action
 		$this->vote = new Vote();

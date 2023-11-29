@@ -221,6 +221,7 @@ const actions = {
 			throw e
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
+			context.dispatch('options/list', null, { root: true })
 		}
 	},
 

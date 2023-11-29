@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
  *
@@ -207,25 +209,21 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function getExpired(): bool {
 		$compareTime = time();
 		$expiry = $this->getExpire();
-		// \OC::$server->getLogger()->error('time:' . $compareTime);
-		// \OC::$server->getLogger()->error('expire:' . $expiry);
-		// \OC::$server->getLogger()->error('diff:' . $expiry - $compareTime);
 
 		return (
 			$expiry > 0
 			&& $expiry < $compareTime
-			// && $this->getExpire() < ($compareTime + 1)
 		);
 	}
 
-	public function getVoteUrl() : string {
+	public function getVoteUrl(): string {
 		return $this->urlGenerator->linkToRouteAbsolute(
 			AppConstants::APP_ID . '.page.vote',
 			['id' => $this->getId()]
 		);
 	}
 
-	public function setAutoReminder(bool $value) : void {
+	public function setAutoReminder(bool $value): void {
 		$this->setMiscSettingsByKey('autoReminder', $value);
 	}
 
@@ -239,12 +237,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	// alias of getOwner()
-	public function getUserId() : string {
+	public function getUserId(): string {
 		return $this->getOwner();
 	}
 
 	// alias of setOwner($value)
-	public function setUserId(string $userId) : void {
+	public function setUserId(string $userId): void {
 		$this->setOwner($userId);
 	}
 
@@ -274,15 +272,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 
-	private function setMiscSettingsArray(array $value) : void {
+	private function setMiscSettingsArray(array $value): void {
 		$this->setMiscSettings(json_encode($value));
 	}
 
-	private function getMiscSettingsArray() : array {
+	private function getMiscSettingsArray(): array {
 		if ($this->getMiscSettings()) {
 			return json_decode($this->getMiscSettings(), true);
 		}
-		
+
 		return [];
 	}
 
@@ -292,21 +290,32 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		$deadline = $this->getDeadline();
-		
-		if ($deadline - $this->getCreated() > self::FIVE_DAYS
+
+		if (
+			$deadline - $this->getCreated() > self::FIVE_DAYS
 			&& $deadline - $time < self::TWO_DAYS
 			&& $deadline > $time
 		) {
 			return self::TWO_DAYS;
 		}
 
-		if ($deadline - $this->getCreated() > self::TWO_DAYS
+		if (
+			$deadline - $this->getCreated() > self::TWO_DAYS
 			&& $deadline - $time < self::ONE_AND_HALF_DAY
 			&& $deadline > $time
 		) {
 			return self::ONE_AND_HALF_DAY;
 		}
 		throw new NoDeadLineException();
+	}
+
+	public function getRelevantThresholdNet(): int {
+		return max(
+			$this->getCreated(),
+			$this->getLastInteraction(),
+			$this->getExpire(),
+			intval($this->optionMapper->findDateBoundaries($this->getId())['max']),
+		);
 	}
 
 	public function getDeadline(): int {
@@ -316,7 +325,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 		if ($this->getType() === Poll::TYPE_DATE) {
 			// use first date option as reminder deadline
-			return $this->optionMapper->findDateBoundaries($this->getId())['min'];
+			return intval($this->optionMapper->findDateBoundaries($this->getId())['min']);
 		}
 		throw new NoDeadLineException();
 	}

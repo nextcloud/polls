@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
@@ -32,8 +34,7 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 class PollMapperTest extends UnitTestCase {
 	private IDBConnection $con;
 	private PollMapper $pollMapper;
-	private array$polls = [];
-
+	private array $polls = [];
 
 	/**
 	 * {@inheritDoc}

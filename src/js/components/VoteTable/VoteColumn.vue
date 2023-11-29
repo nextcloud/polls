@@ -35,9 +35,7 @@
 		<VoteItem v-for="(participant) in participants"
 			:key="participant.userId"
 			:user-id="participant.userId"
-			:option="option"
-			:locked="isLocked"
-			:confirmed="isConfirmed" />
+			:option="option" />
 
 		<OptionItemOwner v-if="proposalsExist"
 			:option="option"
@@ -120,7 +118,7 @@ export default {
 
 		componentClass() {
 			const classList = ['vote-column']
-			if (this.isLocked) {
+			if (this.option.locked) {
 				classList.push('locked')
 			}
 
@@ -133,10 +131,6 @@ export default {
 			return classList
 		},
 
-		isConfirmed() {
-			return !!(this.option.confirmed && this.closed)
-		},
-
 		confirmButtonCaption() {
 			return this.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')
 		},
@@ -146,13 +140,6 @@ export default {
 				userId: this.currentUser,
 				option: this.option,
 			}).answer
-		},
-
-		isLocked() {
-			return (this.option.computed.isBookedUp || this.isVoteLimitExceeded)
-				&& !this.closed
-				&& this.ownAnswer !== 'yes'
-				&& this.ownAnswer !== 'maybe'
 		},
 
 		showCalendarPeek() {
