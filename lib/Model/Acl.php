@@ -41,8 +41,6 @@ use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IGroupManager;
-use OCP\IUserManager;
-use OCP\IUserSession;
 
 /**
  * Class Acl
@@ -70,8 +68,6 @@ class Acl implements JsonSerializable {
 
 
 	public function __construct(
-		private IUserManager $userManager,
-		private IUserSession $userSession,
 		private UserMapper $userMapper,
 		private IGroupManager $groupManager,
 		private OptionMapper $optionMapper,
@@ -206,7 +202,8 @@ class Acl implements JsonSerializable {
 	}
 
 	private function getDisplayName(): string {
-		return ($this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())?->getDisplayName() : $this->share->getDisplayName()) ?? '';
+		return $this->userMapper->getCurrentUser()->getDisplayName();
+		// return ($this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())?->getDisplayName() : $this->share->getDisplayName()) ?? '';
 	}
 
 	/**
@@ -297,7 +294,7 @@ class Acl implements JsonSerializable {
 	 * getIsLogged - Is user logged in to nextcloud?
 	 */
 	public function getIsLoggedIn(): bool {
-		return $this->userSession->isLoggedIn();
+		return $this->userMapper->isLoggedIn();
 	}
 
 	/**
@@ -386,7 +383,7 @@ class Acl implements JsonSerializable {
 	}
 
 	private function getHasEmail(): bool {
-		return $this->share?->getToken() ? strlen($this->share->getEmailAddress()) > 0 : $this->getIsLoggedIn();
+		return $this->share?->getToken() ? boolval($this->share->getEmailAddress()) : $this->getIsLoggedIn();
 	}
 
 	/**

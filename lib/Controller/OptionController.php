@@ -36,9 +36,9 @@ class OptionController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		protected ISession $session,
+		ISession $session,
 		private OptionService $optionService,
-		private CalendarService $calendarService
+		private CalendarService $calendarService,
 	) {
 		parent::__construct($appName, $request, $session);
 	}

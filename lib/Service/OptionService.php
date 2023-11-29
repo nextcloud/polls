@@ -27,6 +27,7 @@ namespace OCA\Polls\Service;
 
 use DateTime;
 use DateTimeZone;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
@@ -38,7 +39,7 @@ use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\ForbiddenException;
-use OCA\Polls\Exceptions\InvalidOptionPropertyException;
+use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -250,7 +251,7 @@ class OptionService {
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
-		$timezone = new DateTimeZone($this->session->get('ncPollsClientTimeZone'));
+		$timezone = new DateTimeZone($this->session->get(AppConstants::CLIENT_TZ));
 
 		if ($this->acl->getPoll()->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Sequences are only available in date polls');
@@ -290,7 +291,7 @@ class OptionService {
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		$timezone = new DateTimeZone($this->session->get('ncPollsClientTimeZone'));
+		$timezone = new DateTimeZone($this->session->get(AppConstants::CLIENT_TZ));
 
 		if ($this->acl->getPoll()->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');
@@ -436,7 +437,7 @@ class OptionService {
 		} elseif ($pollOptionText) {
 			$this->option->setPollOptionText($pollOptionText);
 		} else {
-			throw new InvalidOptionPropertyException('Option must have a value');
+			throw new InsufficientAttributesException('Option must have a value');
 		}
 	}
 

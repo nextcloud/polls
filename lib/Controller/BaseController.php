@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use Closure;
+use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCP\AppFramework\Controller;
@@ -40,7 +41,7 @@ class BaseController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private ISession $session,
+		protected ISession $session,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -51,7 +52,7 @@ class BaseController extends Controller {
 	#[NoAdminRequired]
 	protected function response(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
-			$this->session->set('ncPollsPublicToken', $token);
+			$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 		}
 
 		try {
@@ -67,7 +68,7 @@ class BaseController extends Controller {
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
-			$this->session->set('ncPollsPublicToken', $token);
+			$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 		}
 
 		try {
@@ -83,7 +84,7 @@ class BaseController extends Controller {
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
-			$this->session->set('ncPollsPublicToken', $token);
+			$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 		}
 
 		try {
@@ -99,7 +100,7 @@ class BaseController extends Controller {
 	#[NoAdminRequired]
 	protected function responseDeleteTolerant(Closure $callback, string $token = ''): JSONResponse {
 		if ($token) {
-			$this->session->set('ncPollsPublicToken', $token);
+			$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 		}
 
 		try {

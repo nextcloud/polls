@@ -54,7 +54,7 @@ class WatchMapper extends QBMapper {
 		   ->from($this->getTableName())
 		   ->where($qb->expr()->gt('updated', $qb->createNamedParameter($offset)))
 		   ->andWhere(
-		   	$qb->expr()->neq('session_id', $qb->createNamedParameter(hash('md5', $this->session->get('ncPollsClientId'))))
+		   	$qb->expr()->neq('session_id', $qb->createNamedParameter(hash('md5', $this->session->get(AppConstants::CLIENT_ID))))
 		   )
 		   ->andWhere($qb->expr()->orX(
 		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId)),
@@ -80,7 +80,7 @@ class WatchMapper extends QBMapper {
 		   	$qb->expr()->eq('table', $qb->createNamedParameter($table))
 		   )
 		   ->andWhere(
-		   	$qb->expr()->eq('session_id', $qb->createNamedParameter(hash('md5', $this->session->get('ncPollsClientId'))))
+		   	$qb->expr()->eq('session_id', $qb->createNamedParameter(hash('md5', $this->session->get(AppConstants::CLIENT_ID))))
 		   );
 
 		return $this->findEntity($qb);

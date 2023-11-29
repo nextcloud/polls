@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -23,14 +23,23 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Polls\Exceptions;
+namespace OCA\Polls\Model\User;
 
-use OCP\AppFramework\Http;
+class Ghost extends User {
+	public const TYPE = 'deleted';
+	public const ICON = 'icon-ghost';
 
-class InvalidOptionPropertyException extends Exception {
-	public function __construct(
-		string $e = 'Invalid option attributes'
-	) {
-		parent::__construct($e, Http::STATUS_CONFLICT);
+	public function __construct(string $id) {
+		parent::__construct($id, self::TYPE);
 	}
+
+	public function getDisplayName(): string {
+		// TODO: Just a quick fix, differentiate anoymous and deleted users on userGroup base
+		if (substr($this->getId(), 0, 9) === 'Anonymous') {
+			return $this->getId();
+		} else {
+			return 'Deleted User';
+		}
+	}
+
 }

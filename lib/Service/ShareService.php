@@ -27,6 +27,7 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Event\ShareChangedDisplayNameEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
 use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
@@ -70,7 +71,7 @@ class ShareService {
 		private MailService $mailService,
 		private Acl $acl,
 		private NotificationService $notificationService,
-		private UserService $userService,
+		private UserMapper $userMapper,
 	) {
 		$this->shares = [];
 		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
@@ -145,7 +146,7 @@ class ShareService {
 				// for this user and return the created share instead of the public share
 				return $this->createNewShare(
 					$this->share->getPollId(),
-					$this->userService->getUser(Share::TYPE_USER, $this->userId),
+					$this->userMapper->getUserObject(Share::TYPE_USER, $this->userId),
 					true
 				);
 			}
@@ -168,9 +169,14 @@ class ShareService {
 	public function setType(string $token, string $type): Share {
 		$this->share = $this->shareMapper->findByToken($token);
 		$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
-		$this->share->setType($type);
-		$this->share = $this->shareMapper->update($this->share);
-		$this->eventDispatcher->dispatchTyped(new ShareTypeChangedEvent($this->share));
+
+		// ATM only type user can transform to admin and vice versa
+		if (($type === Share::TYPE_ADMIN && $this->share->getType() === Share::TYPE_USER)
+		 || ($type === Share::TYPE_USER && $this->share->getType() === Share::TYPE_ADMIN)) {
+			$this->share->setType($type);
+			$this->share = $this->shareMapper->update($this->share);
+			$this->eventDispatcher->dispatchTyped(new ShareTypeChangedEvent($this->share));
+		}
 
 		return $this->share;
 	}
@@ -265,7 +271,7 @@ class ShareService {
 			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
 		}
 
-		$language = $this->userService->getGenericLanguage();
+		$language = $this->systemService->getGenericLanguage();
 		$userId = $this->generatePublicUserId();
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
@@ -273,7 +279,7 @@ class ShareService {
 			// prevent invtation sending, when no email address is given
 			$this->createNewShare(
 				$this->share->getPollId(),
-				$this->userService->getUser(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress, $language, $language, $timeZone),
+				$this->userMapper->getUserObject(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress, $language, $language, $timeZone),
 				!$emailAddress,
 				$timeZone
 			);
@@ -392,7 +398,7 @@ class ShareService {
 			throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
 		}
 
-		foreach ($this->userService->getUser($share->getType(), $share->getUserId())->getMembers() as $member) {
+		foreach ($this->userMapper->getUserObject($share->getType(), $share->getUserId())->getMembers() as $member) {
 			try {
 				$newShare = $this->add($share->getPollId(), $member->getType(), $member->getId());
 				$shares[] = $newShare;
@@ -417,7 +423,7 @@ class ShareService {
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
-			foreach ($this->userService->getUserFromShare($share)->getMembers() as $member) {
+			foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $member) {
 				$this->notificationService->sendInvitation($share->getPollId(), $member->getId());
 			}
 		}
@@ -486,7 +492,7 @@ class ShareService {
 		}
 
 		try {
-			$share = $this->createNewShare($pollId, $this->userService->getUser($type, $userId, $displayName, $emailAddress));
+			$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));
 			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
@@ -515,7 +521,7 @@ class ShareService {
 	 * or is accessibale for use by the current user
 	 */
 	private function validateShareType(): void {
-		$currentUser = $this->userService->getCurrentUser();
+		$currentUser = $this->userMapper->getCurrentUser();
 		$declineMessage = 'User is not allowed to use this share for poll access (' . $this->share->getType() . ')';
 
 		match ($this->share->getType()) {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2023 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -23,17 +23,12 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Polls;
+namespace OCA\Polls\Exceptions;
 
-abstract class AppConstants {
-	/** @var string */
-	public const APP_ID = 'polls';
-	/** @var string */
-	public const SESSION_KEY_USER_ID = 'ncPollsUserId';
-	/** @var string */
-	public const SESSION_KEY_SHARE_TOKEN = 'ncPollsPublicToken';
-	/** @var string */
-	public const CLIENT_ID = 'ncPollsClientId';
-	/** @var string */
-	public const CLIENT_TZ = 'ncPollsClientTimeZone';
+class UserNotFoundException extends NotFoundException {
+	public function __construct(
+		string $e = "User not found"
+	) {
+		parent::__construct($e);
+	}
 }

@@ -89,6 +89,10 @@ class UserBase implements \JsonSerializable {
 		return $this->id;
 	}
 
+	public function getPrincipalUri(): ?string {
+		return null;
+	}
+
 	public function getType(): string {
 		return $this->type;
 	}

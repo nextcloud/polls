@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Exceptions\NoUpdatesException;
@@ -84,7 +85,7 @@ class WatchService {
 	 * @return Watch
 	 */
 	public function writeUpdate(int $pollId, string $table): Watch {
-		$sessionId = hash('md5', $this->session->get('ncPollsClientId'));
+		$sessionId = hash('md5', $this->session->get(AppConstants::CLIENT_ID));
 		$this->watch = new Watch();
 		$this->watch->setPollId($pollId);
 		$this->watch->setTable($table);
