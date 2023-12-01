@@ -26,7 +26,7 @@
 			<slot name="icon" />
 			<div :title="info" :class="['config-box__title', iconClassComputed, {indented: indented}]">
 				{{ name }}
-				<div v-if="info" class="icon-info" />
+				<InformationIcon v-if="info" />
 			</div>
 			<slot name="actions" />
 		</div>
