@@ -26,7 +26,9 @@
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
 		</CardDiv>
 
-		<ConfigBox v-if="!isOwner" :name="t('polls', 'As an admin you may edit this poll')" icon-class="icon-checkmark" />
+		<CardDiv v-if="!isOwner" type="success">
+			{{ t('polls', 'As an admin you may edit this poll') }}
+		</CardDiv>
 
 		<ConfigBox :name="t('polls', 'Title')">
 			<template #icon>

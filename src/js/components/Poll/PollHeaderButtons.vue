@@ -25,7 +25,7 @@
 		<UserMenu v-if="showUserMenu" />
 		<NcPopover :focus-trap="false">
 			<template #trigger>
-				<NcButton v-tooltip="caption"
+				<NcButton :title="caption"
 					:aria-label="caption"
 					type="tertiary">
 					<template #icon>

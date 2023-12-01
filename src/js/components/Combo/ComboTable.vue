@@ -26,7 +26,7 @@
 			<div class="spacer" />
 			<div v-for="(poll) in polls"
 				:key="poll.id"
-				v-tooltip.auto="poll.title"
+				:title="poll.title"
 				class="poll-group">
 				<div v-for="(participant) in participantsByPoll(poll.id)"
 					:key="`${participant.userId}_${participant.pollId}`"

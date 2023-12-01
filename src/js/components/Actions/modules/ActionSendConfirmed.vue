@@ -22,7 +22,7 @@
 
 <template>
 	<div class="action send-confirmations">
-		<NcButton v-tooltip="sendButtonCaption"
+		<NcButton :title="sendButtonCaption"
 			type="primary"
 			:aria-label="sendButtonCaption"
 			:disabled="disableButton"

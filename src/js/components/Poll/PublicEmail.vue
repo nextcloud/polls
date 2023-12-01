@@ -23,7 +23,7 @@
 <template lang="html">
 	<div class="public-email">
 		<InputDiv v-model="emailAddress"
-			v-tooltip="check.result"
+			:title="check.result"
 			:signaling-class="check.status"
 			:placeholder="t('polls', 'Optional email address')"
 			submit

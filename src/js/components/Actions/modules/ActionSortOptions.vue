@@ -22,7 +22,7 @@
 
 <template>
 	<div class="action sort-options">
-		<NcButton v-tooltip="caption"
+		<NcButton :title="caption"
 			:aria-label="caption"
 			type="tertiary"
 			@click="clickAction()">
