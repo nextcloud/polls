@@ -28,12 +28,12 @@
 
 		<!-- eslint-disable vue/no-v-html -->
 		<div v-if="show === 'textBox'"
-			v-tooltip.auto="optionTooltip"
+			:title="optionTooltip"
 			class="option-item__option--text"
 			v-html="optionText" />
 		<!-- eslint-enable vue/no-v-html -->
 
-		<div v-if="show === 'dateBox'" v-tooltip.auto="dateLocalFormatUTC" class="option-item__option--datebox">
+		<div v-if="show === 'dateBox'" :title="dateLocalFormatUTC" class="option-item__option--datebox">
 			<div class="event-date">
 				<div class="event-from">
 					<div class="month">

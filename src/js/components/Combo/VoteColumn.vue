@@ -25,7 +25,7 @@
 		<OptionItem :option="option" poll-type="datePoll" display="dateBox" />
 		<div v-for="(poll) in polls"
 			:key="poll.id"
-			v-tooltip.auto="poll.title"
+			:title="poll.title"
 			class="poll-group">
 			<VoteItem v-for="(participant) in participantsByPoll(poll.id)"
 				:key="`${participant.userId}_${participant.pollId}`"

@@ -45,7 +45,7 @@
 		<FlexSpacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
 
 		<div v-if="acl.allowEdit && closed" class="action confirm">
-			<NcButton v-tooltip="confirmButtonCaption"
+			<NcButton :title="confirmButtonCaption"
 				:aria-label="confirmButtonCaption"
 				type="tertiary"
 				@click="confirmOption(option)">

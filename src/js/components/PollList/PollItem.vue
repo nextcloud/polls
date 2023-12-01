@@ -53,11 +53,10 @@
 	</div>
 
 	<div v-else class="poll-item__item">
-		<div v-tooltip.auto="pollTypeName" class="item__icon-spacer">
+		<div :title="pollTypeName" class="item__icon-spacer">
 			<TextPollIcon v-if="pollType === 'textPoll'" />
 			<DatePollIcon v-else />
 		</div>
-		<!-- <div v-tooltip.auto="pollTypeName" :class="['item__icon-spacer', pollTypeIcon]" /> -->
 
 		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
 			<div class="item__title__title">
@@ -83,7 +82,7 @@
 		</router-link>
 
 		<slot name="actions" />
-		<div v-tooltip.auto="accessType" class="item__access">
+		<div :title="accessType" class="item__access">
 			<ArchivedPollIcon v-if="poll.deleted" />
 			<OpenPollIcon v-else-if="poll.access === 'open'" />
 			<PrivatePollIcon v-else />

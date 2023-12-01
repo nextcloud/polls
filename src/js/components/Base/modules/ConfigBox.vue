@@ -24,7 +24,7 @@
 	<div class="config-box">
 		<div class="config-box__header">
 			<slot name="icon" />
-			<div v-tooltip.auto="info" :class="['config-box__title', iconClassComputed, {indented: indented}]">
+			<div :title="info" :class="['config-box__title', iconClassComputed, {indented: indented}]">
 				{{ name }}
 				<div v-if="info" class="icon-info" />
 			</div>
@@ -39,6 +39,9 @@
 <script>
 export default {
 	name: 'ConfigBox',
+	components: {
+		InformationIcon: () => import('vue-material-design-icons/InformationVariant.vue'),
+	},
 	props: {
 		name: {
 			type: String,
@@ -95,15 +98,6 @@ export default {
 		opacity: 0.7;
 		font-weight: bold;
 		margin: 0;
-
-		&[class*='icon-'] {
-			padding-left: 24px;
-		}
-
-		.icon-info {
-			opacity: 0.7;
-			width: 32px;
-		}
 	}
 
 	.config-box__container {

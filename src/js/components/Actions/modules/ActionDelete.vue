@@ -22,7 +22,7 @@
 
 <template>
 	<div class="">
-		<NcButton v-tooltip="computedTitle"
+		<NcButton :title="computedTitle"
 			type="tertiary"
 			:aria-label="computedTitle">
 			<template #icon>
