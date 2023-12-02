@@ -491,6 +491,7 @@ OC.L10N.register(
     "Disallow proposals" : "Να μην επιτρέπονται οι προτάσεις",
     "Allow proposals" : "Να επιτρέπονται οι προτάσεις",
     "Relevant" : "Σχετικές",
+    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to." : "Όλες οι δημοσκοπήσεις που είναι σχετικές ή σημαντικές για εσάς, επειδή συμμετέχετε ή είστε ο ιδιοκτήτης ή έχετε προσκληθεί.",
     "My polls" : "Οι δημοσκοπήσεις μου",
     "Your polls (in which you are the owner)." : "Οι δημοσκοπήσεις σας (στις οποίες είστε ο ιδιοκτήτης).",
     "Private polls" : "Ιδιωτικές δημοσκοπήσεις",
