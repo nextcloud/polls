@@ -60,7 +60,7 @@ class UserService {
 	}
 
 	public function isLoggedIn(): bool {
-				return $this->userMapper->isLoggedIn();
+		return $this->userMapper->isLoggedIn();
 	}
 
 	/**
