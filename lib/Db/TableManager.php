@@ -84,7 +84,7 @@ class TableManager {
 				$messages[] = 'Dropped ' . $this->dbPrefix . $tableName;
 			}
 		}
-		
+
 		// drop parent table
 		if ($this->connection->tableExists(TableSchema::FK_PARENT_TABLE)) {
 			$this->connection->dropTable(TableSchema::FK_PARENT_TABLE);
@@ -115,8 +115,6 @@ class TableManager {
 		$messages[] = '';
 		$messages[] = 'Please call \'occ app:remove polls\' now!';
 
-		// $this->refreshSchema();
-		
 		return $messages;
 	}
 

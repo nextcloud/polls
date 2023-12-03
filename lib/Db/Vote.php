@@ -53,8 +53,8 @@ class Vote extends EntityWithUser implements JsonSerializable {
 
 	public $id = null;
 	protected int $pollId = 0;
-	protected string $userId = '';
 	protected int $voteOptionId = 0;
+	protected string $userId = '';
 	protected string $voteOptionText = '';
 	protected string $voteOptionHash = '';
 	protected string $voteAnswer = '';

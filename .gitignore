@@ -5,6 +5,7 @@
 .psalm.cache
 .project/
 .idea/
+.vscode/
 build/
 css/*.map
 js/*
