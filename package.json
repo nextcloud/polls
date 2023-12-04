@@ -76,7 +76,7 @@
 		"@nextcloud/eslint-config": "^8.3.0",
 		"@nextcloud/stylelint-config": "^2.3.1",
 		"@nextcloud/webpack-vue-config": "^6.0.0",
-		"eslint-config-prettier": "^9.0.0",
+		"eslint-config-prettier": "^9.1.0",
 		"eslint-plugin-prettier": "^5.0.1",
 		"prettier": "^3.1.0",
 		"vue-template-compiler": "^2.7.15",
