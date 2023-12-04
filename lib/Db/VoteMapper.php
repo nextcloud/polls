@@ -112,6 +112,7 @@ class VoteMapper extends QBMapper {
 			->where(
 				$qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			);
+			$qb->addGroupBy(self::TABLE . '.user_id', self::TABLE . '.poll_id');
 		$this->joinDisplayNameFromShare($qb, self::TABLE);
 
 		return $this->findEntities($qb);
