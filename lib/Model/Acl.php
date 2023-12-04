@@ -203,7 +203,6 @@ class Acl implements JsonSerializable {
 
 	private function getDisplayName(): string {
 		return $this->userMapper->getCurrentUser()->getDisplayName();
-		// return ($this->getIsLoggedIn() ? $this->userManager->get($this->getUserId())?->getDisplayName() : $this->share->getDisplayName()) ?? '';
 	}
 
 	/**

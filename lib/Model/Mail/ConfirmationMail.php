@@ -77,10 +77,6 @@ class ConfirmationMail extends MailBase {
 			);
 		}
 
-		// $this->emailTemplate->addBodyText(
-		// 	$this->l10n->t('Used languageCode is %1$s, %2$s, %3$s', [$this->l10n->getLanguageCode(), $this->l10n->getLocaleCode(), $this->transFactory->localeExists($this->l10n->getLanguageCode())])
-		// );
-
 		if ($this->poll->getDescription()) {
 			$this->emailTemplate->addBodyText($this->getRichDescription(), $this->poll->getDescription());
 		}

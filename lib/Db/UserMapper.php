@@ -91,7 +91,7 @@ class UserMapper extends QBMapper {
 	 */
 	public function getCurrentUser(): UserBase {
 		if ($this->currentUser) {
-			// if already lodaed, return user
+			// if already loaded, return user
 			return $this->currentUser;
 		}
 

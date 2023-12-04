@@ -256,8 +256,6 @@ class PollService {
 	 * @return Poll
 	 */
 	public function update(int $pollId, array $poll): Poll {
-		// $this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		// $this->poll = $this->acl->getPoll();
 		$this->poll = $this->pollMapper->find($pollId);
 
 		// Validate valuess

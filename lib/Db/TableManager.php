@@ -103,7 +103,6 @@ class TableManager {
 		$messages[] = 'Removed all migration records from ' . $this->dbPrefix . 'migrations';
 		
 		// delete all app configs
-		// $query = $this->connection->getQueryBuilder();
 		$query->delete('appconfig')
 			->where('appid = :appid')
 			->setParameter('appid', AppConstants::APP_ID)
@@ -219,7 +218,6 @@ class TableManager {
 		$messages = [];
 
 		foreach (TableSchema::GONE_TABLES as $tableName) {
-			// $tableName = $this->dbPrefix . $tableName;
 			if ($this->connection->tableExists($tableName)) {
 				$dropped = true;
 				$this->connection->dropTable($tableName);

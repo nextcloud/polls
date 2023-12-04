@@ -163,7 +163,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 */
 	public function getIsLockedByOptionLimit(): bool {
 		return $this->getOptionLimit() && $this->getVotesYes() >= $this->getOptionLimit() && $this->getUserVoteAnswer() !== Vote::VOTE_YES;
-		// return $this->getOptionLimit() && !$this->getUserVote() === Vote::VOTE_YES && $this->getVotesYes() >= $this->getOptionLimit() ;
 	}
 
 	public function getIsLockedByVotesLimit(): bool {
@@ -172,7 +171,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 		// AND the count of yes votes of the current user is EQUAL OR GREATER THAN the vote limit
 		// return true (locked option)
 		return $this->getVoteLimit() && $this->getUserCountYesVotes() >= $this->getVoteLimit();
-		// return $this->getVoteLimit() && !$this->getUserVote() === Vote::VOTE_YES && $this->getUserCountYesVotes() >= $this->getVoteLimit();
 	}
 
 	public function getOrder(): int {
@@ -224,10 +222,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 
 		return (string) $dateTimeFrom . ' - ' . (string) $dateTimeTo;
 	}
-
-	// private function getOwnerIsNoUser(): bool {
-	// 	return !$this->userManager->get($this->getOwner()) instanceof IUser;
-	// }
 
 	/**
 	 * Check, if the date option spans one or more whole days (from 00:00 to 24:00)

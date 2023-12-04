@@ -49,10 +49,6 @@ abstract class EntityWithUser extends Entity {
 			return $this->displayName;
 		}
 
-		// if (!$this->getUserId()) {
-		// 	return 'No UserId';
-		// }
-
 		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName() ?? 'Deleted User';
 	}
 
