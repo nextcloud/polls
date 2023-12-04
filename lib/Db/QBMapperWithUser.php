@@ -29,8 +29,19 @@ use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 
 abstract class QbMapperWithUser extends QBMapper {
+
+
 	/**
 	 * Joins shares to fetch displayName from shares
+	 * 
+	 * Returns 
+	 *  - dispalyName (shares.display_name), 
+	 *  - share/user type (shares.user_type) and 
+	 *  - emailaddress (shares.email_address)
+	 * from joined share table matching poll id and user id
+	 * 
+	 * @param IQueryBuuilder &$qb queryBuilder object by reference
+	 * @param string $fromAlias alias used for the source table
 	 */
 	protected function joinDisplayNameFromShare(IQueryBuilder &$qb, string $fromAlias): void {
 		$joinAlias = 'shares';
@@ -51,6 +62,8 @@ abstract class QbMapperWithUser extends QBMapper {
 
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->min($joinAlias . '.display_name'), 'display_name');
+		$qb->selectAlias($qb->func()->min($joinAlias . '.type'), 'user_type');
+		$qb->selectAlias($qb->func()->min($joinAlias . '.email_address'), 'email_address');
 		$qb->leftJoin(
 			$fromAlias,
 			Share::TABLE,

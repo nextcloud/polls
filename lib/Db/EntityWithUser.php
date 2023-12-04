@@ -34,24 +34,63 @@ use OCP\IUserManager;
  * @method int getPollId()
  * @method string getUserId()
  * @method string getDisplayName()
+ * @method string getEmailAdress()
+ * @method string getUserType()
  */
 
 abstract class EntityWithUser extends Entity {
 	protected string $publicUserId = '';
 	protected ?string $displayName = '';
+	protected ?string $emailAddress = '';
+	protected ?string $userType = '';
 
 	public function getIsNoUser(): bool {
 		return !(Container::queryClass(IUserManager::class)->get($this->getUserId()) instanceof IUser);
 	}
 
+	/**
+	 * Returns the displayName
+	 *
+	 * - first tries to get displayname from internal user 
+	 * - then try to get it from joined share
+	 * - otherwise assume a deleted user
+	 **/
 	public function getDisplayName(): ?string {
-		if ($this->displayName) {
-			return $this->displayName;
-		}
-
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName() ?? 'Deleted User';
+		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName() 
+			?? $this->displayName 
+			?? 'Deleted User';
 	}
 
+	/**
+	 * Returns user type
+	 *
+	 * - first tries to get type from joined share
+	 * - then try to verify an internal user
+	 * - otherwise assume a deleted user
+	 **/
+	public function getUserType(): ?string {
+		return $this->userType 
+			?? Container::queryClass(IUserManager::class)->get($this->getUserId()) 
+				? 'user'
+				: 'deleted';
+	}
+
+	/**
+	 * Returns email address
+	 *
+	 * - first tries to get emeil address from internal user 
+	 * - then get it from joined share
+	 **/
+	public function getEmailAddress(): ?string {
+		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getEmailAddress()
+			?? $this->emailAddress;
+	}
+
+	/**
+	 * Returns an obfuscated userId 
+	 *
+	 * Avoids leaking internal userIds by replacing the actual userId by another string in public access
+	 **/
 	private function getPublicUserId(): string {
 		if (!$this->getUserId()) {
 			return '';
@@ -72,7 +111,9 @@ abstract class EntityWithUser extends Entity {
 		return [
 			'userId' => $this->getPublicUserId(),
 			'displayName' => $this->getDisplayName(),
+			'emailAddress' => $this->getEmailAddress(),
 			'isNoUser' => $this->getIsNoUser(),
+			'type' => $this->getUserType(),
 		];
 	}
 }
