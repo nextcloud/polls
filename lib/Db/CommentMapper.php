@@ -47,7 +47,7 @@ class CommentMapper extends QBMapper {
 	 */
 	public function find(int $id): Comment {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		return $this->findEntity($qb);
 	}
 
@@ -57,7 +57,7 @@ class CommentMapper extends QBMapper {
 	 */
 	public function findByPoll(int $pollId): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
 	}
 
