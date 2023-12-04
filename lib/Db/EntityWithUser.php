@@ -25,40 +25,35 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Helper\Container;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;
 
 /**
- * @method string getUserId()
  * @method int getPollId()
+ * @method string getUserId()
+ * @method string getDisplayName()
  */
 
 abstract class EntityWithUser extends Entity {
 	protected string $publicUserId = '';
+	protected ?string $displayName = '';
 
 	public function getIsNoUser(): bool {
 		return !(Container::queryClass(IUserManager::class)->get($this->getUserId()) instanceof IUser);
 	}
 
-	public function getDisplayName(): string {
-		if (!$this->getUserId()) {
-			return '';
-		}
-		if ($this->getIsNoUser()) {
-			// get displayName from share
-			try {
-				$share = Container::queryClass(ShareMapper::class)->findByPollAndUser($this->getPollId(), $this->getUserId());
-			} catch (ShareNotFoundException $e) {
-				// User seems to be probaly deleted, use fake share
-				$share = Container::queryClass(ShareMapper::class)->getReplacement($this->getPollId(), $this->getUserId());
-			}
-			return $share->getDisplayName();
+	public function getDisplayName(): ?string {
+		if ($this->displayName) {
+			return $this->displayName;
 		}
 
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())->getDisplayName();
+		// if (!$this->getUserId()) {
+		// 	return 'No UserId';
+		// }
+
+		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName() ?? 'Deleted User';
 	}
 
 	private function getPublicUserId(): string {

@@ -47,12 +47,8 @@ class PollMapper extends QBMapper {
 	 * @return Poll
 	 */
 	public function find(int $id): Poll {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-		   );
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		return $this->findEntity($qb);
 	}
 
@@ -62,13 +58,11 @@ class PollMapper extends QBMapper {
 	 */
 	public function findAutoReminderPolls(): array {
 		$autoReminderSearchString = '%"autoReminder":true%';
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where($qb->expr()->like(
-		   	'misc_settings',
-		   	$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
-		   ));
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->like(
+			self::TABLE . '.misc_settings',
+			$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
+		));
 		return $this->findEntities($qb);
 	}
 
@@ -77,11 +71,9 @@ class PollMapper extends QBMapper {
 	 * @return Poll[]
 	 */
 	public function findForMe(string $userId): array {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
-			->orWhere($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+			->orWhere($qb->expr()->eq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
 
@@ -90,10 +82,8 @@ class PollMapper extends QBMapper {
 	 * @return Poll[]
 	 */
 	public function findOwner(string $userId): array {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->eq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
 
@@ -102,20 +92,18 @@ class PollMapper extends QBMapper {
 	 * @return Poll[]
 	 */
 	public function search(ISearchQuery $query): array {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->eq(self::TABLE . '..deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->orX(
 				...array_map(function (string $token) use ($qb) {
 					return $qb->expr()->orX(
 						$qb->expr()->iLike(
-							'title',
+							self::TABLE . '.title',
 							$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($token) . '%', IQueryBuilder::PARAM_STR),
 							IQueryBuilder::PARAM_STR
 						),
 						$qb->expr()->iLike(
-							'description',
+							self::TABLE . '.description',
 							$qb->createNamedParameter('%' . $this->db->escapeLikeParameter($token) . '%', IQueryBuilder::PARAM_STR),
 							IQueryBuilder::PARAM_STR
 						)
@@ -130,12 +118,8 @@ class PollMapper extends QBMapper {
 	 * @return Poll[]
 	 */
 	public function findForAdmin(string $userId): array {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-		   	$qb->expr()->neq('owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
-		   );
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->neq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
 		return $this->findEntities($qb);
 	}
@@ -175,4 +159,38 @@ class PollMapper extends QBMapper {
 			->setParameter('userId', $userId);
 		$qb->executeStatement();
 	}
+
+	/**
+	 * Build the enhanced query with joined tables
+	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
+	 */
+	protected function buildQuery(): IQueryBuilder {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select(self::TABLE . '.*')
+			->from($this->getTableName(), self::TABLE)
+			->groupby(self::TABLE . '.id');
+
+		$this->joinDisplayNameFromShare($qb, self::TABLE);
+		return $qb;
+	}
+
+	/**
+	 * Joins shares to fetch displayName from shares
+	 */
+	protected function joinDisplayNameFromShare(IQueryBuilder & $qb, string $fromAlias): void {
+		$joinAlias = 'shares';
+		// force value into a MIN function to avoid grouping errors
+		$qb->selectAlias($qb->func()->min($joinAlias . '.display_name'), 'display_name');
+		$qb->leftJoin(
+			$fromAlias,
+			Share::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($fromAlias . '.owner', $joinAlias . '.user_id'),
+			)
+		);
+	}
+
 }

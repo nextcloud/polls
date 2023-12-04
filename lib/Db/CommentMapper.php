@@ -37,7 +37,7 @@ class CommentMapper extends QBMapper {
 	public const TABLE = Comment::TABLE;
 
 	public function __construct(IDBConnection $db) {
-		parent::__construct($db, Comment::TABLE, Comment::class);
+		parent::__construct($db, self::TABLE, Comment::class);
 	}
 
 	/**
@@ -46,14 +46,8 @@ class CommentMapper extends QBMapper {
 	 * @return Comment
 	 */
 	public function find(int $id): Comment {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-		   );
-
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		return $this->findEntity($qb);
 	}
 
@@ -62,14 +56,8 @@ class CommentMapper extends QBMapper {
 	 * @return Comment[]
 	 */
 	public function findByPoll(int $pollId): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-		   );
-
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
 	}
 
@@ -78,12 +66,8 @@ class CommentMapper extends QBMapper {
 	 */
 	public function deleteByPoll(int $pollId): void {
 		$qb = $this->db->getQueryBuilder();
-
 		$qb->delete($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-		   );
-
+		   ->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		$qb->executeStatement();
 	}
 
@@ -93,7 +77,7 @@ class CommentMapper extends QBMapper {
 	public function deleteComment(int $id): void {
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->delete($this->getTableName())
+		$qb->delete($this->getTableName(), self::TABLE)
 		   ->where(
 		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
@@ -106,9 +90,41 @@ class CommentMapper extends QBMapper {
 	 */
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
-		$query->update($this->getTableName())
+		$query->update($this->getTableName(), self::TABLE)
 			->set('user_id', $query->createNamedParameter($replacementName))
 			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
 			->executeStatement();
+	}
+
+	/**
+	 * Build the enhanced query with joined tables
+	 */
+	protected function buildQuery(): IQueryBuilder {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select(self::TABLE . '.*')
+			->from($this->getTableName(), self::TABLE)
+			->groupby(self::TABLE . '.id');
+
+		$this->joinDisplayNameFromShare($qb, self::TABLE);
+		return $qb;
+	}
+
+	/**
+	 * Joins shares to fetch displayName from shares
+	 */
+	protected function joinDisplayNameFromShare(IQueryBuilder &$qb, string $fromAlias): void {
+		$joinAlias = 'shares';
+		// force value into a MIN function to avoid grouping errors
+		$qb->selectAlias($qb->func()->min($joinAlias . '.display_name'), 'display_name');
+		$qb->leftJoin(
+			$fromAlias,
+			Share::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($fromAlias . '.user_id', $joinAlias . '.user_id'),
+			)
+		);
 	}
 }

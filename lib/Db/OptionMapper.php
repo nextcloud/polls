@@ -84,105 +84,13 @@ class OptionMapper extends QBMapper {
 	}
 
 	/**
-	 * Build the enhanced query with joined tables
-	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
-	 */
-	private function buildQuery(bool $hideVotes = false): IQueryBuilder {
-		$currentUserId = $this->userMapper->getCurrentUserId();
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('options.*')
-			->from($this->getTableName(), 'options')
-			->groupBy('options.id')
-			->orderBy('order', 'ASC');
-
-		// +++++++++
-		// The joins
-		// +++++++++
-
-		// left join this options' votes
-		// to count votes per option and answer
-		if ($hideVotes) {
-			// hide all vote counts
-			$qb->addSelect($qb->createFunction('0 AS count_option_votes'))
-				->addSelect($qb->createFunction('0 AS votes_yes'))
-				->addSelect($qb->createFunction('0 AS votes_no'))
-				->addSelect($qb->createFunction('0 AS votes_maybe'));
-		} else {
-			$qb->leftJoin(
-				'options',
-				Vote::TABLE,
-				'votes',
-				$qb->expr()->andX(
-					$qb->expr()->eq('options.poll_id', 'votes.poll_id'),
-					$qb->expr()->eq('options.poll_option_text', 'votes.vote_option_text'),
-				)
-			)
-				// Count number of votes for this option
-				->addSelect($qb->createFunction('COUNT(DISTINCT(votes.id)) AS count_option_votes'))
-				// Count number of yes votes for this option
-				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN votes.vote_answer = \'yes\' THEN votes.id END)) AS votes_yes'))
-				// Count number of no votes for this option
-				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN votes.vote_answer = \'no\' THEN votes.id END)) AS votes_no'))
-				// Count number of maybe votes for this option
-				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN votes.vote_answer = \'maybe\' THEN votes.id END)) AS votes_maybe'));
-		}
-
-		// left join poll
-		// to fetch option_limit and vote_limit
-		$qb->leftJoin(
-			'options',
-			Poll::TABLE,
-			'polls',
-			$qb->expr()->eq('options.poll_id', 'polls.id'),
-		)
-
-			// force value into a MIN function to avoid grouping errors
-			->selectAlias($qb->func()->min('polls.option_limit'), 'option_limit')
-			->selectAlias($qb->func()->min('polls.vote_limit'), 'vote_limit')
-
-			// Votes table join (#1)
-			// left join options' votes of the current user this option to get the current user's answer to this option
-			->leftJoin(
-				'options',
-				Vote::TABLE,
-				'option_vote_user',
-				$qb->expr()->andX(
-					$qb->expr()->eq('option_vote_user.poll_id', 'options.poll_id'),
-					$qb->expr()->eq('option_vote_user.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
-					$qb->expr()->eq('option_vote_user.vote_option_text', 'options.poll_option_text'),
-				)
-			)
-			// force value into a MIN function to avoid grouping errors
-			->selectAlias($qb->func()->min('option_vote_user.vote_answer'), 'user_vote_answer')
-
-			// Votes table join (#2)
-			// left join votes of user to be able to check against polls_polls.vote_limit
-			// in other words: returns all votes of current user and count them
-			->leftJoin(
-				'options',
-				Vote::TABLE,
-				'votes_user',
-				$qb->expr()->andX(
-					$qb->expr()->eq('votes_user.poll_id', 'options.poll_id'),
-					$qb->expr()->eq('votes_user.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
-					$qb->expr()->eq('votes_user.vote_answer', $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR)),
-				)
-			)
-
-			// Count yes votes of the user in this poll
-			->addSelect($qb->createFunction('COUNT(DISTINCT(votes_user.id)) AS user_count_yes_votes'));
-		return $qb;
-	}
-
-	/**
 	 * @return Option[]
 	 * @param bool $hideResults Whether the results should be hidden
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function findByPoll(int $pollId, bool $hideResults = false): array {
 		$qb = $this->buildQuery($hideResults);
-		$qb->where($qb->expr()->eq('options.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntities($qb);
 	}
@@ -192,7 +100,7 @@ class OptionMapper extends QBMapper {
 	 */
 	public function find(int $id): Option {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq('options.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntity($qb);
 	}
@@ -203,8 +111,8 @@ class OptionMapper extends QBMapper {
 	 */
 	public function findConfirmed(int $pollId): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq('options.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->gt('options.confirmed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->gt(self::TABLE . '.confirmed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntities($qb);
 	}
@@ -261,4 +169,139 @@ class OptionMapper extends QBMapper {
 			->where($query->expr()->eq('owner', $query->createNamedParameter($userId)))
 			->executeStatement();
 	}
+
+	/**
+	 * Build the enhanced query with joined tables
+	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
+	 */
+	protected function buildQuery(bool $hideVotes = false): IQueryBuilder {
+		$currentUserId = $this->userMapper->getCurrentUserId();
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select(self::TABLE . '.*')
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id')
+			->orderBy('order', 'ASC');
+
+		$this->joinVotesCount($qb, self::TABLE, $hideVotes);
+		$this->joinPollForLimits($qb, self::TABLE);
+		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
+		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
+		$this->joinDisplayNameFromShare($qb, self::TABLE);
+		return $qb;
+	}
+
+	/**
+	 * Joins shares to fetch displayName from shares
+	 *
+	 * @psalm-param 'polls_options' $fromAlias
+	 */
+	protected function joinDisplayNameFromShare(IQueryBuilder &$qb, string $fromAlias): void {
+		$joinAlias = 'shares';
+		// force value into a MIN function to avoid grouping errors
+		$qb->selectAlias($qb->func()->min($joinAlias . '.display_name'), 'display_name');
+		$qb->leftJoin(
+			$fromAlias,
+			Share::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($fromAlias . '.owner', $joinAlias . '.user_id'),
+			)
+		);
+	}
+
+	/**
+	 * Joins votes to count votes per option and answer
+	 */
+	protected function joinVotesCount(IQueryBuilder &$qb, string $fromAlias, bool $hideVotes = false): void {
+		$joinAlias = 'votes';
+		if ($hideVotes) {
+			// hide all vote counts
+			$qb->addSelect($qb->createFunction('0 AS count_option_votes'))
+				->addSelect($qb->createFunction('0 AS votes_yes'))
+				->addSelect($qb->createFunction('0 AS votes_no'))
+				->addSelect($qb->createFunction('0 AS votes_maybe'));
+		} else {
+			$qb->leftJoin(
+				$fromAlias,
+				Vote::TABLE,
+				$joinAlias,
+				$qb->expr()->andX(
+					$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
+					$qb->expr()->eq($fromAlias . '.poll_option_text', $joinAlias . '.vote_option_text'),
+				)
+			)
+				// Count number of votes for this option
+				->addSelect($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.id)) AS count_option_votes'))
+				// Count number of yes votes for this option
+				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'yes\' THEN ' . $joinAlias . '.id END)) AS votes_yes'))
+				// Count number of no votes for this option
+				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'no\' THEN ' . $joinAlias . '.id END)) AS votes_no'))
+				// Count number of maybe votes for this option
+				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'maybe\' THEN ' . $joinAlias . '.id END)) AS votes_maybe'));
+		}
+	}
+
+	/**
+	 * Joins poll to fetch option_limit and vote_limit
+	 */
+	protected function joinPollForLimits(IQueryBuilder &$qb, string $fromAlias): void {
+		$joinAlias = 'polls';
+
+		// force value into a MIN function to avoid grouping errors
+		$qb->selectAlias($qb->func()->min($joinAlias . '.option_limit'), 'option_limit')
+			->selectAlias($qb->func()->min($joinAlias . '.vote_limit'), 'vote_limit');
+
+		$qb->leftJoin(
+			$fromAlias,
+			Poll::TABLE,
+			$joinAlias,
+			$qb->expr()->eq($joinAlias . '.id', $fromAlias . '.poll_id'),
+		);
+	}
+
+	/**
+	 * Joins votes to get the current user's answer to this option
+	 */
+	protected function joinCurrentUserVote(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
+		$joinAlias = 'user_vote';
+
+		// force value into a MIN function to avoid grouping errors
+		$qb->selectAlias($qb->func()->min($joinAlias . '.vote_answer'), 'user_vote_answer');
+
+		$qb->leftJoin(
+			$fromAlias,
+			Vote::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+				$qb->expr()->eq($joinAlias . '.vote_option_text', $fromAlias . '.poll_option_text'),
+			)
+		);
+	}
+
+	/**
+	 * Joins votes to be able to check against polls_polls.vote_limit of the current user
+	 * in other words: returns all votes of current user and count them
+	 */
+	protected function joinCurrentUserVoteCount(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
+		$joinAlias = 'votes_user';
+
+		// Count yes votes of the user in this poll
+		$qb->addSelect($qb->createFunction('COUNT(DISTINCT(votes_user.id)) AS user_count_yes_votes'));
+
+		$qb->leftJoin(
+			$fromAlias,
+			Vote::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+				$qb->expr()->eq($joinAlias . '.vote_answer', $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR)),
+			)
+		);
+	}
+
 }

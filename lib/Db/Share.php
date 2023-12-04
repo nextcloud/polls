@@ -133,7 +133,7 @@ class Share extends Entity implements JsonSerializable {
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('invitationSent', 'int');
-		$this->addType('Locked', 'int');
+		$this->addType('locked', 'int');
 		$this->addType('reminderSent', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->appSettings = new AppSettings;
