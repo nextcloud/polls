@@ -132,7 +132,7 @@ class VoteMapper extends QBMapper {
 
 	public function deleteByPollAndUserId(int $pollId, string $userId): void {
 		$qb = $this->db->getQueryBuilder();
-		$qb->delete($this->getTableName(), 'votes')
+		$qb->delete($this->getTableName(), self::TABLE)
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
 			->executeStatement();
@@ -167,7 +167,7 @@ class VoteMapper extends QBMapper {
 
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
-		$query->update($this->getTableName(), 'votes')
+		$query->update($this->getTableName(), self::TABLE)
 			->set(self::TABLE . '.user_id', $query->createNamedParameter($replacementName))
 			->where($query->expr()->eq(self::TABLE . '.user_id', $query->createNamedParameter($userId)))
 			->executeStatement();
@@ -175,7 +175,7 @@ class VoteMapper extends QBMapper {
 
 	public function fixVoteOptionText(int $pollId, int $optionId, string $searchOptionText, string $replaceOptionText): void {
 		$query = $this->db->getQueryBuilder();
-		$query->update($this->getTableName(), 'votes')
+		$query->update($this->getTableName(), self::TABLE)
 			->set(self::TABLE . '.vote_option_text', $query->createNamedParameter($replaceOptionText))
 			->where($query->expr()->eq(self::TABLE . '.vote_option_text', $query->createNamedParameter($searchOptionText)))
 			->andWhere($query->expr()->eq(self::TABLE . '.poll_id', $query->createNamedParameter($pollId)))
