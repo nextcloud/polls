@@ -107,10 +107,10 @@ class VoteMapper extends QBMapper {
 	public function findParticipantsByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->selectDistinct([self::TABLE . '.user_id', self::TABLE . '.poll_id'])
-			->from($this->getTableName(), self::TABLE)
+		$qb->selectDistinct(['user_id', 'poll_id'])
+			->from($this->getTableName())
 			->where(
-				$qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
+				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			);
 		$this->joinDisplayNameFromShare($qb, self::TABLE);
 
@@ -132,9 +132,9 @@ class VoteMapper extends QBMapper {
 
 	public function deleteByPollAndUserId(int $pollId, string $userId): void {
 		$qb = $this->db->getQueryBuilder();
-		$qb->delete($this->getTableName(), self::TABLE)
-			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
+		$qb->delete($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
 			->executeStatement();
 	}
 
@@ -167,19 +167,19 @@ class VoteMapper extends QBMapper {
 
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
-		$query->update($this->getTableName(), self::TABLE)
-			->set(self::TABLE . '.user_id', $query->createNamedParameter($replacementName))
-			->where($query->expr()->eq(self::TABLE . '.user_id', $query->createNamedParameter($userId)))
+		$query->update($this->getTableName())
+			->set('user_id', $query->createNamedParameter($replacementName))
+			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
 			->executeStatement();
 	}
 
 	public function fixVoteOptionText(int $pollId, int $optionId, string $searchOptionText, string $replaceOptionText): void {
 		$query = $this->db->getQueryBuilder();
-		$query->update($this->getTableName(), self::TABLE)
-			->set(self::TABLE . '.vote_option_text', $query->createNamedParameter($replaceOptionText))
-			->where($query->expr()->eq(self::TABLE . '.vote_option_text', $query->createNamedParameter($searchOptionText)))
-			->andWhere($query->expr()->eq(self::TABLE . '.poll_id', $query->createNamedParameter($pollId)))
-			->andWhere($query->expr()->eq(self::TABLE . '.vote_option_id', $query->createNamedParameter($optionId)))
+		$query->update($this->getTableName())
+			->set('vote_option_text', $query->createNamedParameter($replaceOptionText))
+			->where($query->expr()->eq('vote_option_text', $query->createNamedParameter($searchOptionText)))
+			->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId)))
+			->andWhere($query->expr()->eq('vote_option_id', $query->createNamedParameter($optionId)))
 			->executeStatement();
 	}
 

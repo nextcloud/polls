@@ -145,7 +145,7 @@ class PollMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->getTableName())
 			->set('last_interaction', $qb->createNamedParameter($timestamp, IQueryBuilder::PARAM_INT))
-			->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		$qb->executeStatement();
 	}
 

@@ -47,7 +47,7 @@ class CommentMapper extends QBMapper {
 	 */
 	public function find(int $id): Comment {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		return $this->findEntity($qb);
 	}
 
@@ -57,7 +57,7 @@ class CommentMapper extends QBMapper {
 	 */
 	public function findByPoll(int $pollId): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		$qb->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
 	}
 
@@ -66,8 +66,8 @@ class CommentMapper extends QBMapper {
 	 */
 	public function deleteByPoll(int $pollId): void {
 		$qb = $this->db->getQueryBuilder();
-		$qb->delete($this->getTableName(), Self::TABLE)
-		   ->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		$qb->delete($this->getTableName())
+		   ->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		$qb->executeStatement();
 	}
 
@@ -77,9 +77,9 @@ class CommentMapper extends QBMapper {
 	public function deleteComment(int $id): void {
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->delete($this->getTableName(), Self::TABLE)
+		$qb->delete($this->getTableName(), self::TABLE)
 		   ->where(
-		   	$qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
+		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
 		   );
 
 		$qb->executeStatement();
@@ -90,9 +90,9 @@ class CommentMapper extends QBMapper {
 	 */
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
-		$query->update($this->getTableName(), Self::TABLE)
-			->set(self::TABLE . '.user_id', $query->createNamedParameter($replacementName))
-			->where($query->expr()->eq(self::TABLE . '.user_id', $query->createNamedParameter($userId)))
+		$query->update($this->getTableName(), self::TABLE)
+			->set('user_id', $query->createNamedParameter($replacementName))
+			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
 			->executeStatement();
 	}
 
@@ -103,9 +103,9 @@ class CommentMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), Self::TABLE);
+			->from($this->getTableName(), self::TABLE);
 
-		$this->joinDisplayNameFromShare($qb, Self::TABLE);
+		$this->joinDisplayNameFromShare($qb, self::TABLE);
 		return $qb;
 	}
 
