@@ -202,7 +202,8 @@ class VoteMapper extends QBMapper {
 	 */
 	protected function joinDisplayNameFromShare(IQueryBuilder &$qb, string $fromAlias): void {
 		$joinAlias = 'shares';
-		$qb->selectAlias($joinAlias . '.display_name', 'display_name');
+		// force value into a MIN function to avoid grouping errors
+		$qb->selectAlias($qb->func()->min($joinAlias . '.display_name'), 'display_name');
 		$qb->leftJoin(
 			$fromAlias,
 			Share::TABLE,
