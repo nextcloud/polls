@@ -103,7 +103,8 @@ class CommentMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE);
+			->from($this->getTableName(), self::TABLE)
+			->groupby(self::TABLE . '.id');
 
 		$this->joinDisplayNameFromShare($qb, self::TABLE);
 		return $qb;
