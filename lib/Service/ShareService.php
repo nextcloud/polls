@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
@@ -50,6 +51,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IGroupManager;
+use OCP\ISession;
 use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
@@ -64,6 +66,7 @@ class ShareService {
 		private IEventDispatcher $eventDispatcher,
 		private IGroupManager $groupManager,
 		private ISecureRandom $secureRandom,
+		private ISession $session,
 		private IUserSession $userSession,
 		private ShareMapper $shareMapper,
 		private SystemService $systemService,
@@ -313,6 +316,9 @@ class ShareService {
 		} catch (\Exception $e) {
 			$this->logger->error('Error sending Mail to ' . $this->share->getEmailAddress());
 		}
+		// Update session keys
+		$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
+		$this->session->set(AppConstants::SESSION_KEY_USER_ID, $this->share->getUserId());
 
 		return $this->share;
 	}

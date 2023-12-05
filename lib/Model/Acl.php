@@ -126,7 +126,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function setToken(string $token = '', string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
-			if ($this->share?->$token === $token) {											// share matching the requested token is already loaded
+			if ($this->share?->getToken() === $token) {											// share matching the requested token is already loaded
 				$this->setPollId($this->share->getPollId(), $permission);					// Set the poll Id to verify the correct poll gets loaded and permissions get checked
 			} else {
 				$this->setShare($this->shareMapper->findByToken($token), $permission);		// load the share mathing the requested token
