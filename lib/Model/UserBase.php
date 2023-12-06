@@ -33,6 +33,7 @@ use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Model\User\Admin;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\User\User;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\IDateTimeZone;
@@ -51,6 +52,7 @@ class UserBase implements \JsonSerializable {
 	public const TYPE_CONTACT = Contact::TYPE;
 	public const TYPE_CONTACTGROUP = ContactGroup::TYPE;
 	public const TYPE_EMAIL = Email::TYPE;
+	public const TYPE_GHOST = Ghost::TYPE;
 	public const TYPE_GROUP = Group::TYPE;
 	public const TYPE_USER = User::TYPE;
 	public const TYPE_ADMIN = Admin::TYPE;

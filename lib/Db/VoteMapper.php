@@ -27,14 +27,13 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\Entity;
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @template-extends QBMapper<Vote>
+ * @template-extends QBMapperWithUser<Vote>
  */
-class VoteMapper extends QBMapper {
+class VoteMapper extends QBMapperWithUser {
 	public const TABLE = Vote::TABLE;
 
 	public function __construct(IDBConnection $db) {
@@ -197,24 +196,6 @@ class VoteMapper extends QBMapper {
 
 		$this->joinDisplayNameFromShare($qb, self::TABLE);
 		return $qb;
-	}
-
-	/**
-	 * Joins shares to fetch displayName from shares
-	 */
-	protected function joinDisplayNameFromShare(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'shares';
-		// force value into a MIN function to avoid grouping errors
-		$qb->selectAlias($qb->func()->min($joinAlias . '.display_name'), 'display_name');
-		$qb->leftJoin(
-			$fromAlias,
-			Share::TABLE,
-			$joinAlias,
-			$qb->expr()->andX(
-				$qb->expr()->eq(self::TABLE . '.poll_id', $joinAlias . '.poll_id'),
-				$qb->expr()->eq(self::TABLE . '.user_id', $joinAlias . '.user_id'),
-			)
-		);
 	}
 
 }

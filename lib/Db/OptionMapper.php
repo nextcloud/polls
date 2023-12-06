@@ -26,15 +26,14 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\ISession;
 
 /**
- * @template-extends QBMapper<Option>
+ * @template-extends QBMapperWithUser<Option>
  */
-class OptionMapper extends QBMapper {
+class OptionMapper extends QBMapperWithUser {
 	public const TABLE = Option::TABLE;
 
 	public function __construct(
@@ -189,26 +188,6 @@ class OptionMapper extends QBMapper {
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
 		$this->joinDisplayNameFromShare($qb, self::TABLE);
 		return $qb;
-	}
-
-	/**
-	 * Joins shares to fetch displayName from shares
-	 *
-	 * @psalm-param 'polls_options' $fromAlias
-	 */
-	protected function joinDisplayNameFromShare(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'shares';
-		// force value into a MIN function to avoid grouping errors
-		$qb->selectAlias($qb->func()->min($joinAlias . '.display_name'), 'display_name');
-		$qb->leftJoin(
-			$fromAlias,
-			Share::TABLE,
-			$joinAlias,
-			$qb->expr()->andX(
-				$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
-				$qb->expr()->eq($fromAlias . '.owner', $joinAlias . '.user_id'),
-			)
-		);
 	}
 
 	/**
