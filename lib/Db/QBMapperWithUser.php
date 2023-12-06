@@ -27,20 +27,37 @@ namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
+use OCP\IDBConnection;
 
-abstract class QbMapperWithUser extends QBMapper {
+/**
+ * @template T1 of EntityWithUser
+ * @template-extends QBMapper<T1>
+ */
+abstract class QBMapperWithUser extends QBMapper {
+	/**
+	 * @param IDBConnection $db
+	 * @param string $tableName
+	 * @param class-string<T1>|null $entityClass
+	 */
+	public function __construct(
+		IDBConnection $db,
+		string $tableName,
+		string $entityClass = null
+	) {
+		parent::__construct($db, $tableName, $entityClass);
 
+	}
 
 	/**
 	 * Joins shares to fetch displayName from shares
-	 * 
-	 * Returns 
-	 *  - dispalyName (shares.display_name), 
-	 *  - share/user type (shares.user_type) and 
+	 *
+	 * Returns
+	 *  - dispalyName (shares.display_name),
+	 *  - share/user type (shares.user_type) and
 	 *  - emailaddress (shares.email_address)
 	 * from joined share table matching poll id and user id
-	 * 
-	 * @param IQueryBuuilder &$qb queryBuilder object by reference
+	 *
+	 * @param IQueryBuilder &$qb queryBuilder object by reference
 	 * @param string $fromAlias alias used for the source table
 	 */
 	protected function joinDisplayNameFromShare(IQueryBuilder &$qb, string $fromAlias): void {

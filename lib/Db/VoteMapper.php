@@ -27,12 +27,11 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\Entity;
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @template-extends QBMapper<Vote>
+ * @template-extends QBMapperWithUser<Vote>
  */
 class VoteMapper extends QBMapperWithUser {
 	public const TABLE = Vote::TABLE;

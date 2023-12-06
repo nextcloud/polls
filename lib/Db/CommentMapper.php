@@ -26,12 +26,11 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @template-extends QBMapper<Comment>
+ * @template-extends QBMapperWithUser<Comment>
  */
 class CommentMapper extends QBMapperWithUser {
 	public const TABLE = Comment::TABLE;

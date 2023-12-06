@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\User\User;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -51,13 +52,13 @@ abstract class EntityWithUser extends Entity {
 	/**
 	 * Returns the displayName
 	 *
-	 * - first tries to get displayname from internal user 
+	 * - first tries to get displayname from internal user
 	 * - then try to get it from joined share
 	 * - otherwise assume a deleted user
 	 **/
 	public function getDisplayName(): ?string {
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName() 
-			?? $this->displayName 
+		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName()
+			?? $this->displayName
 			?? 'Deleted User';
 	}
 
@@ -65,20 +66,20 @@ abstract class EntityWithUser extends Entity {
 	 * Returns user type
 	 *
 	 * - first tries to get type from joined share
-	 * - then try to verify an internal user
+	 * - then try to verify an internal user and set type user
 	 * - otherwise assume a deleted user
 	 **/
 	public function getUserType(): ?string {
-		return $this->userType 
-			?? Container::queryClass(IUserManager::class)->get($this->getUserId()) 
-				? 'user'
-				: 'deleted';
+		return $this->userType
+			?? Container::queryClass(IUserManager::class)->get($this->getUserId())
+				? User::TYPE_USER
+				: User::TYPE_GHOST;
 	}
 
 	/**
 	 * Returns email address
 	 *
-	 * - first tries to get emeil address from internal user 
+	 * - first tries to get emeil address from internal user
 	 * - then get it from joined share
 	 **/
 	public function getEmailAddress(): ?string {
@@ -87,7 +88,7 @@ abstract class EntityWithUser extends Entity {
 	}
 
 	/**
-	 * Returns an obfuscated userId 
+	 * Returns an obfuscated userId
 	 *
 	 * Avoids leaking internal userIds by replacing the actual userId by another string in public access
 	 **/

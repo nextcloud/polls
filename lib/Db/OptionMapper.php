@@ -26,13 +26,12 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\ISession;
 
 /**
- * @template-extends QBMapper<Option>
+ * @template-extends QBMapperWithUser<Option>
  */
 class OptionMapper extends QBMapperWithUser {
 	public const TABLE = Option::TABLE;
