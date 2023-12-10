@@ -40,13 +40,13 @@ class VoteMapper extends QBMapperWithUser {
 		parent::__construct($db, self::TABLE, Vote::class);
 	}
 
-	public function update(Entity $entity): Entity {
+	public function update(Entity $entity): Vote {
 		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
 		$entity = parent::update($entity);
 		return $this->find($entity->getId());
 	}
 	
-	public function insert(Entity $entity): Entity {
+	public function insert(Entity $entity): Vote {
 		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
 		$entity = parent::insert($entity);
 		return $this->find($entity->getId());
@@ -189,7 +189,7 @@ class VoteMapper extends QBMapperWithUser {
 	/**
 	 * Build the enhanced query with joined tables
 	 */
-	protected function find(int $id): Entity {
+	protected function find(int $id): Vote {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		return $this->findEntity($qb);

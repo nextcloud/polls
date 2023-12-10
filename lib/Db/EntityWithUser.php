@@ -33,10 +33,10 @@ use OCP\IUserManager;
 
 /**
  * @method int getPollId()
- * @method string getUserId()
- * @method string getDisplayName()
- * @method string getEmailAdress()
- * @method string getUserType()
+ * @method ?string getUserId()
+ * @method ?string getDisplayName()
+ * @method ?string getEmailAdress()
+ * @method ?string getUserType()
  */
 
 abstract class EntityWithUser extends Entity {

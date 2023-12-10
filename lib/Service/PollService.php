@@ -403,9 +403,6 @@ class PollService {
 	/**
 	 * Collect email addresses from particitipants
 	 *
-	 * @return string[][]
-	 *
-	 * @psalm-return list<array{displayName: string, emailAddress: string, combined: string}>
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
