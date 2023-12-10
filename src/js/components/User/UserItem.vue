@@ -22,30 +22,33 @@
 
 <template>
 	<div :class="['user-item', type, { disabled, condensed: condensed }]">
-		<NcAvatar :disable-menu="disableMenu"
-			:disable-tooltip="disableTooltip"
-			class="user-item__avatar"
-			:is-guest="isGuestComputed"
-			:menu-position="menuPosition"
-			:size="iconSize"
-			:show-user-status="showUserStatus"
-			:user="avatarUserId"
-			:display-name="name"
-			:is-no-user="isNoUser"
-			@click="showMenu()">
-			<template v-if="useIconSlot" #icon>
-				<LinkIcon v-if="type==='public'" :size="mdIconSize" />
-				<InternalLinkIcon v-if="type==='internalAccess'" :size="mdIconSize" />
-				<ContactIcon v-if="type==='contact'" :size="mdIconSize" />
-				<EmailIcon v-if="type==='email'" :size="mdIconSize" />
-				<ShareIcon v-if="type==='external'" :size="mdIconSize" />
-				<ContactGroupIcon v-if="type==='contactGroup'" :size="mdIconSize" />
-				<GroupIcon v-if="type==='group'" :size="mdIconSize" />
-				<CircleIcon v-if="type==='circle'" :size="mdIconSize" />
-			</template>
-		</NcAvatar>
+		<div class="avatar-wrapper">
+			<NcAvatar :disable-menu="disableMenu"
+				:disable-tooltip="disableTooltip"
+				class="user-item__avatar"
+				:is-guest="isGuestComputed"
+				:menu-position="menuPosition"
+				:size="iconSize"
+				:show-user-status="showUserStatus"
+				:user="avatarUserId"
+				:display-name="name"
+				:is-no-user="isNoUser"
+				@click="showMenu()">
+				<template v-if="useIconSlot" #icon>
+					<LinkIcon v-if="type==='public'" :size="mdIconSize" />
+					<InternalLinkIcon v-if="type==='internalAccess'" :size="mdIconSize" />
+					<ContactGroupIcon v-if="type==='contactGroup'" :size="mdIconSize" />
+					<GroupIcon v-if="type==='group'" :size="mdIconSize" />
+					<CircleIcon v-if="type==='circle'" :size="mdIconSize" />
+					<DeletedUserIcon v-if="type==='deleted'" :size="mdIconSize" />
+				</template>
+			</NcAvatar>
 
-		<AdminIcon v-if="icon && type === 'admin'" :size="16" class="type-icon" />
+			<AdminIcon v-if="type === 'admin' && showTypeIcon" :size="16" class="type-icon" />
+			<ContactIcon v-if="type==='contact' && showTypeIcon" :size="16" class="type-icon" />
+			<EmailIcon v-if="type==='email' && showTypeIcon" :size="16" class="type-icon" />
+			<ShareIcon v-if="type==='external' && showTypeIcon" :size="16" class="type-icon" />
+		</div>
 
 		<slot name="status" />
 
@@ -80,6 +83,7 @@ export default {
 		ContactGroupIcon: () => import('vue-material-design-icons/AccountGroupOutline.vue'),
 		GroupIcon: () => import('vue-material-design-icons/AccountMultiple.vue'),
 		CircleIcon: () => import('vue-material-design-icons/GoogleCirclesExtended.vue'),
+		DeletedUserIcon: () => import('vue-material-design-icons/AccountOff.vue'),
 	},
 
 	inheritAttrs: false,
@@ -144,6 +148,7 @@ export default {
 					'circle',
 					'external',
 					'email',
+					'deleted',
 				].includes(value)
 			},
 
@@ -152,11 +157,11 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-		isGuest: {
+		showTypeIcon: {
 			type: Boolean,
 			default: false,
 		},
-		icon: {
+		isGuest: {
 			type: Boolean,
 			default: false,
 		},
@@ -180,16 +185,19 @@ export default {
 		},
 
 		useIconSlot() {
-			return !['user', 'admin'].includes(this.type)
+			return ['internalAccess', 'public', 'contactGroup', 'group', 'circle', 'deleted'].includes(this.type)
 		},
 		description() {
+			if (this.condensed) return ''
 			if (this.forcedDescription) return this.forcedDescription
+			if (this.type === 'deleted') return t('polls', 'The participant got removed from this poll')
 			if (this.type === 'admin') return t('polls', 'Is granted admin rights for this poll')
 			if (this.displayEmailAddress) return this.displayEmailAddress
 			return ''
 		},
 
 		name() {
+			if (this.type === 'deleted') return t('polls', 'Deleted User')
 			if (this.type === 'internalAccess') return t('polls', 'Internal access')
 			if (this.displayName) return this.displayName
 			if (this.type === 'public' && this.userId !== 'addPublic') return t('polls', 'Public link')
@@ -236,6 +244,15 @@ export default {
 </script>
 
 <style lang="scss">
+.avatar-wrapper {
+	position: relative;
+	.type-icon {
+		position: absolute;
+		background-size: 16px;
+		top: -6px;
+		left: -6px;
+	}
+}
 .type-icon {
 	position: absolute;
 	background-size: 16px;

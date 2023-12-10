@@ -104,12 +104,12 @@ class VoteService {
 		$option = $this->optionMapper->find($optionId);
 
 		if ($acl) {
-			$this->acl = $acl; // ->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
-		// $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT, $option->getPollId());
+			$this->acl = $acl;
+			$this->acl->request(Acl::PERMISSION_VOTE_EDIT);
 		} else {
 			$this->acl->setPollId($option->getPollId(), Acl::PERMISSION_VOTE_EDIT);
 		}
-
+		
 		if ($setTo === Vote::VOTE_YES) {
 			$this->checkLimits($option, $this->acl->getUserId());
 		}
@@ -122,7 +122,7 @@ class VoteService {
 				$this->voteMapper->delete($this->vote);
 			} else {
 				$this->vote->setVoteAnswer($setTo);
-				$this->voteMapper->update($this->vote);
+				$this->vote = $this->voteMapper->update($this->vote);
 			}
 		} catch (DoesNotExistException $e) {
 			// Vote does not exist, insert as new Vote
@@ -133,7 +133,7 @@ class VoteService {
 			$this->vote->setVoteOptionText($option->getPollOptionText());
 			$this->vote->setVoteOptionId($option->getId());
 			$this->vote->setVoteAnswer($setTo);
-			$this->voteMapper->insert($this->vote);
+			$this->vote = $this->voteMapper->insert($this->vote);
 		}
 
 		$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote));
