@@ -70,7 +70,7 @@ abstract class BaseEvent extends Event {
 		return $this->poll->getOwner();
 	}
 
-	public function getActor(): string {
+	public function getActor(): ?string {
 		return $this->userSession->getUser()?->getUID() ?? $this->eventObject->getUserId();
 	}
 

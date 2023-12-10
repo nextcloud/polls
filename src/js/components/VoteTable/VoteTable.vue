@@ -33,6 +33,7 @@
 				<UserItem v-bind="participant" condensed />
 
 				<ActionDelete v-if="acl.allowEdit"
+					class="user-actions"
 					:name="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.userId)" />
 			</div>
@@ -124,14 +125,14 @@ export default {
 		align-self: stretch;
 		justify-content: center;
 
-		.material-design-icon {
+		.user-actions {
 			// display: none;
 			visibility: hidden;
 		}
 
 		&:hover {
 			background: var(--color-background-hover);
-			.material-design-icon {
+			.user-actions {
 				visibility: visible;
 			}
 		}

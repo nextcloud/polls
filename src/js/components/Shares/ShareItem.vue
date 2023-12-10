@@ -24,6 +24,7 @@
 	<UserItem v-bind="share"
 		show-email
 		resolve-info
+		show-type-icon
 		:icon="true">
 		<template #status>
 			<div v-if="share.voted">

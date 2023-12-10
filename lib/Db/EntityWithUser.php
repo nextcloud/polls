@@ -33,14 +33,14 @@ use OCP\IUserManager;
 
 /**
  * @method int getPollId()
- * @method string getUserId()
- * @method string getDisplayName()
- * @method string getEmailAdress()
- * @method string getUserType()
+ * @method ?string getUserId()
+ * @method ?string getDisplayName()
+ * @method ?string getEmailAdress()
+ * @method ?string getUserType()
  */
 
 abstract class EntityWithUser extends Entity {
-	protected string $publicUserId = '';
+	protected ?string $publicUserId = '';
 	protected ?string $displayName = '';
 	protected ?string $emailAddress = '';
 	protected ?string $userType = '';
@@ -57,6 +57,10 @@ abstract class EntityWithUser extends Entity {
 	 * - otherwise assume a deleted user
 	 **/
 	public function getDisplayName(): ?string {
+		if (!$this->getUserId()) {
+			return null;
+		}
+
 		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName()
 			?? $this->displayName
 			?? 'Deleted User';
@@ -68,12 +72,21 @@ abstract class EntityWithUser extends Entity {
 	 * - first tries to get type from joined share
 	 * - then try to verify an internal user and set type user
 	 * - otherwise assume a deleted user
-	 **/
-	public function getUserType(): ?string {
-		return $this->userType
-			?? Container::queryClass(IUserManager::class)->get($this->getUserId())
-				? User::TYPE_USER
-				: User::TYPE_GHOST;
+	 *
+	 * @return null|string
+	 */
+	public function getUserType(): string|null {
+		if (!$this->getUserId()) {
+			return null;
+		}
+
+		if ($this->userType) {
+			return $this->userType;
+		}
+
+		return Container::queryClass(IUserManager::class)->get($this->getUserId())
+			? User::TYPE_USER
+			: User::TYPE_GHOST;
 	}
 
 	/**
@@ -83,6 +96,9 @@ abstract class EntityWithUser extends Entity {
 	 * - then get it from joined share
 	 **/
 	public function getEmailAddress(): ?string {
+		if (!$this->getUserId()) {
+			return null;
+		}
 		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getEmailAddress()
 			?? $this->emailAddress;
 	}
@@ -92,9 +108,9 @@ abstract class EntityWithUser extends Entity {
 	 *
 	 * Avoids leaking internal userIds by replacing the actual userId by another string in public access
 	 **/
-	private function getPublicUserId(): string {
+	private function getPublicUserId(): ?string {
 		if (!$this->getUserId()) {
-			return '';
+			return null;
 		}
 
 		if ($this->publicUserId) {
@@ -105,6 +121,10 @@ abstract class EntityWithUser extends Entity {
 	}
 
 	public function generateHashedUserId(): void {
+		if (!$this->getUserId()) {
+			$this->publicUserId = null;
+		}
+
 		$this->publicUserId = hash('md5', $this->getUserId());
 	}
 
