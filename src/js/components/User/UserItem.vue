@@ -253,12 +253,6 @@ export default {
 		left: -6px;
 	}
 }
-.type-icon {
-	position: absolute;
-	background-size: 16px;
-	top: 3px;
-	left: 0;
-}
 
 .user-item {
 	position: relative;
