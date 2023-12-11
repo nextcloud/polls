@@ -22,16 +22,20 @@
 
 <template>
 	<div class="vote-item" :class="[answer, {empty: foreignOption}]">
-		<div class="icon" />
-		<slot name="indicator" />
+		<VoteIndicator :answer="iconAnswer" />
 	</div>
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
+import VoteIndicator from '../VoteTable/VoteIndicator.vue'
 
 export default {
 	name: 'VoteItem',
+
+	components: {
+		VoteIndicator,
+	},
 
 	props: {
 		option: {
@@ -60,6 +64,16 @@ export default {
 			}).answer
 		},
 
+		iconAnswer() {
+			if (this.answer === 'no') {
+				return (this.closed && this.option.confirmed) || this.isActive ? 'no' : ''
+			}
+			if (this.answer === '') {
+				return (this.closed && this.option.confirmed) ? 'no' : ''
+			}
+			return this.answer
+		},
+
 		foreignOption() {
 			return !this.optionBelongsToPoll({
 				text: this.option.text,
@@ -78,18 +92,6 @@ export default {
 	justify-content: center;
 	align-items: center;
 	background-color: var(--color-polls-background-no);
-	transition: background-color 1s ease-out;
-	background-clip: content-box;
-
-	> .icon {
-		color: var(--color-polls-foreground-no);
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: 90%;
-		width: 30px;
-		height: 30px;
-		flex: 0 0 auto;
-	}
 
 	&.empty {
 		background-color: transparent;
@@ -97,18 +99,10 @@ export default {
 
 	&.yes {
 		background-color: var(--color-polls-background-yes);
-		> .icon {
-			color: var(--color-polls-foreground-yes);
-			background-image: var(--icon-polls-yes)
-		}
 	}
 
 	&.maybe {
 		background-color: var(--color-polls-background-maybe);
-		> .icon {
-			color: var(--color-polls-foreground-maybe);
-			background-image: var(--icon-polls-maybe)
-		}
 	}
 
 	&.no {
