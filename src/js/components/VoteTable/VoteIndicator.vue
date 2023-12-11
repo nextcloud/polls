@@ -86,14 +86,14 @@ export default {
 
 <style lang="scss">
 
-.vote-indicator, .vote-indicator * {
-	transition: all 0.4s ease-in-out;
-	.active & {
-		cursor: pointer;
-	}
-}
-
 .vote-indicator {
+	&, * {
+		transition: all 0.4s ease-in-out;
+		.active & {
+			cursor: pointer;
+		}
+	}
+
 	display: flex;
 	justify-content: center;
 	align-content: end;
@@ -109,6 +109,14 @@ export default {
 			height: 26px;
 		}
 	}
+	.yes & {
+		color: var(--color-polls-foreground-yes);
+	}
+
+	.maybe & {
+		color: var(--color-polls-foreground-maybe);
+	}
+
 	.active:hover & {
 		width: 35px;
 		height: 35px;
@@ -119,12 +127,5 @@ export default {
 
 	}
 
-	.yes & {
-		color: var(--color-polls-foreground-yes);
-	}
-
-	.maybe & {
-		color: var(--color-polls-foreground-maybe);
-	}
 }
 </style>
