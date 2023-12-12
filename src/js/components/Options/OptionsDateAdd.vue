@@ -74,7 +74,11 @@
 				<NcButton v-if="dateOption.option.duration >= 0 && !added" type="primary" @click="addOption">
 					{{ t('polls', 'Add') }}
 				</NcButton>
-				<div v-if="added" :title="t('polls', 'Added')" class="icon-polls-yes" />
+				<CheckIcon v-if="added"
+					class="date-added"
+					:title="t('polls', 'Added')"
+					:fill-color="successColor"
+					:size="26" />
 			</div>
 			<div v-else>
 				{{ t('polls', 'Pick a day.') }}
@@ -90,6 +94,7 @@ import moment from '@nextcloud/moment'
 import { NcButton, NcCheckboxRadioSwitch, NcDateTimePicker } from '@nextcloud/vue'
 import { FlexSpacer } from '../Base/index.js'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 export default {
 	name: 'OptionsDateAdd',
@@ -100,6 +105,7 @@ export default {
 		NcCheckboxRadioSwitch,
 		NcDateTimePicker,
 		FlexSpacer,
+		CheckIcon,
 	},
 
 	props: {
@@ -119,6 +125,7 @@ export default {
 			showTimePanel: false,
 			lastPickedDate: moment(null),
 			added: false,
+			successColor: getComputedStyle(document.documentElement).getPropertyValue('--color-success'),
 		}
 	},
 
@@ -334,15 +341,14 @@ export default {
 	justify-content: flex-end;
 }
 
+// overwrite default color
+.mx-datepicker-main .date-added svg {
+	fill: var(--color-success);
+}
+
 .selection {
 	display: flex;
 	align-items: center;
-
-	.icon-polls-yes {
-		padding: 5px 1px 5px 1px;
-		height: 34px;
-		margin: 3px 0;
-	}
 }
 
 .range {

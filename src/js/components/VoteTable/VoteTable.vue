@@ -274,13 +274,6 @@ export default {
 		}
 
 		&.closed {
-			.vote-item:not(.confirmed) {
-				background-color: transparent;
-				&.no > .icon {
-					background-image: var(--icon-polls-no)
-				}
-			}
-
 			.vote-column {
 				padding: 2px 8px;
 				&.confirmed {

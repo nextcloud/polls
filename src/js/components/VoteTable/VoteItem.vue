@@ -22,9 +22,9 @@
 
 <template>
 	<div class="vote-item" :class="[answer, { active: isVotable }, {currentuser: isCurrentUser}]">
-		<div v-if="isActive" class="icon" @click="setVote()" />
-		<div v-else class="icon" />
-		<slot name="indicator" />
+		<VoteIndicator :answer="iconAnswer"
+			:active="isVotable"
+			@click="setVote()" />
 	</div>
 </template>
 
@@ -32,8 +32,14 @@
 
 import { mapGetters, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
+import VoteIndicator from './VoteIndicator.vue'
+
 export default {
 	name: 'VoteItem',
+
+	components: {
+		VoteIndicator,
+	},
 
 	props: {
 		option: {
@@ -79,6 +85,16 @@ export default {
 			}).answer
 		},
 
+		iconAnswer() {
+			if (this.answer === 'no') {
+				return (this.closed && this.option.confirmed) || this.isActive ? 'no' : ''
+			}
+			if (this.answer === '') {
+				return (this.closed && this.option.confirmed) ? 'no' : ''
+			}
+			return this.answer
+		},
+
 		nextAnswer() {
 			if (this.answerSequence.indexOf(this.answer) < 0) {
 				return this.answerSequence[1]
@@ -118,62 +134,24 @@ export default {
 	display: flex;
 	background-color: var(--color-polls-background-no);
 	transition: all 0.4s ease-in-out;
-	> .icon {
-		color: var(--color-polls-foreground-no);
-		background-position: center;
-		background-repeat: no-repeat;
-		background-size: 90%;
-		width: 30px;
-		height: 30px;
-		flex: 0 0 auto;
-		transition: all 0.4s ease-in-out;
-	}
 
 	&.yes {
 		background-color: var(--color-polls-background-yes);
-		> .icon {
-			color: var(--color-polls-foreground-yes);
-			background-image: var(--icon-polls-yes)
-		}
 	}
 
 	&.maybe {
 		background-color: var(--color-polls-background-maybe);
-		> .icon {
-			color: var(--color-polls-foreground-maybe);
-			background-image: var(--icon-polls-maybe)
-		}
 	}
 
 	&.active, &.active.no {
 		background-color: transparent;
-		> .icon {
-			cursor: pointer;
-			border: 2px solid;
-			border-radius: var(--border-radius);
-		}
 	}
 
 	&.no {
 		background-color: var(--color-polls-background-no);
-		&.active > .icon {
-			color: var(--color-polls-foreground-no);
-			background-image: var(--icon-polls-no)
-		}
 	}
-
-	&.active > .icon:hover {
-		background-size: 100%;
-		width: 35px;
-		height: 35px;
-	}
-
-}
-
-.confirmed .vote-item {
-	background-color: transparent;
-	&:not(.yes):not(.maybe) .icon {
-		background-image: var(--icon-polls-no);
+	.confirmed & {
+		background-color: transparent;
 	}
 }
 
