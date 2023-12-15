@@ -52,7 +52,6 @@
 		"lodash": "^4.17.21",
 		"marked": "^11.1.0",
 		"marked-gfm-heading-id": "^3.1.2",
-		"marked-mangle": "^1.1.6",
 		"qrcode": "^1.5.3",
 		"v-click-outside": "^3.2.0",
 		"vue": "^2.7.15",

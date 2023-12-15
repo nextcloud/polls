@@ -43,7 +43,6 @@
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { marked } from 'marked'
-import { mangle } from 'marked-mangle'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
 import DOMPurify from 'dompurify'
 
@@ -71,7 +70,6 @@ export default {
 
 		markedDisclaimer() {
 			marked.use(gfmHeadingId(markedPrefix))
-			marked.use(mangle())
 			return DOMPurify.sanitize(marked.parse(this.appSettings.disclaimer))
 		},
 
