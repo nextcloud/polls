@@ -132,7 +132,7 @@ OC.L10N.register(
     "Closing {relativeExpirationTime}" : "{relativeExpirationTime}で終了",
     "never" : "なし",
     "Poll owner:" : "投票所有者: ",
-    "Time zone: {timezoneString}" : "時間帯：{timezoneString}",
+    "Time zone: {timezoneString}" : "タイムゾーン：{timezoneString}",
     "You subscribed to this poll" : "この投票に登録しました",
     "Proposals are allowed" : "提案を許可",
     "No proposals are allowed" : "提案はできません",
