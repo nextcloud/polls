@@ -92,7 +92,7 @@ class PollMapper extends QBMapperWithUser {
 	 */
 	public function search(ISearchQuery $query): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '..deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->orX(
 				...array_map(function (string $token) use ($qb) {
 					return $qb->expr()->orX(
