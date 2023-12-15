@@ -81,7 +81,7 @@ export default {
 			font-weight: bold;
 			font-size: 1em;
 			line-height: 1.5em;
-			overflow: hidden;
+			overflow: clip;
 			text-overflow: ellipsis;
 			display: -webkit-box;
 			&.clamped {
