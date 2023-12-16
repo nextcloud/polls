@@ -27,7 +27,6 @@
 
 <script>
 import { marked } from 'marked'
-import { mangle } from 'marked-mangle'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
 import DOMPurify from 'dompurify'
 import { mapState } from 'vuex'
@@ -46,7 +45,6 @@ export default {
 
 		markedDescription() {
 			marked.use(gfmHeadingId(markedPrefix))
-			marked.use(mangle())
 			return DOMPurify.sanitize(marked.parse(this.description))
 		},
 	},
