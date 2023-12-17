@@ -95,6 +95,21 @@ class UserBase implements \JsonSerializable {
 		return null;
 	}
 
+	/**
+	 * Returns the users' type
+	 *
+	 * Returned Type will be one of
+	 * 		Contact::TYPE (Share),
+	 * 		Email::TYPE (Share),
+	 * 		Ghost::TYPE (deleted user),
+	 * 		User::TYPE (NC User),
+	 * 		Admin::TYPE (NC user with admin rights),
+	 * 		Group::TYPE (NC Group),
+	 * 		Circle::TYPE (Share),
+	 * 		ContactGroup::TYPE (Share)
+	 *
+	 * @return string
+	 **/
 	public function getType(): string {
 		return $this->type;
 	}

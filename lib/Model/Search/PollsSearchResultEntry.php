@@ -33,6 +33,6 @@ use OCP\Search\SearchResultEntry;
 
 class PollsSearchResultEntry extends SearchResultEntry {
 	public function __construct(Poll $poll) {
-		parent::__construct('', $poll->getTitle(), $poll->getDescription(), $poll->getVoteUrl(), 'icon-polls');
+		parent::__construct('', $poll->getTitle(), $poll->getDescription(), $poll->getVoteUrl(), 'icon-polls-dark');
 	}
 }
