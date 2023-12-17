@@ -25,7 +25,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model\User;
 
-class Ghost extends User {
+use OCA\Polls\Model\UserBase;
+
+class Ghost extends UserBase {
 	public const TYPE = 'deleted';
 	public const ICON = 'icon-ghost';
 
