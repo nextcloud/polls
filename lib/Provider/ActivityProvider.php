@@ -27,16 +27,14 @@ namespace OCA\Polls\Provider;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Service\ActivityService;
+use OCA\Polls\Service\UserService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IEventMerger;
 use OCP\Activity\IManager as ActivityManager;
 use OCP\Activity\IProvider;
 use OCP\IL10N;
 use OCP\IURLGenerator;
-use OCP\IUser;
-use OCP\IUserManager;
 use OCP\L10N\IFactory;
 
 class ActivityProvider implements IProvider {
@@ -46,9 +44,9 @@ class ActivityProvider implements IProvider {
 		protected IEventMerger $eventMerger,
 		protected IFactory $transFactory,
 		protected IURLGenerator $urlGenerator,
-		protected IUserManager $userManager,
 		protected ShareMapper $shareMapper,
 		protected IL10N $l10n,
+		protected UserService $userService,
 	) {
 	}
 
@@ -65,28 +63,14 @@ class ActivityProvider implements IProvider {
 
 	protected function setSubjects(IEvent $event, string $subject): void {
 		$parameters = $event->getSubjectParameters();
-		$actor = $this->userManager->get($event->getAuthor());
-
+		
 		try {
-			if ($actor instanceof IUser) {
-				$parameters['actor'] = [
-					'type' => 'user',
-					'id' => $actor->getUID(),
-					'name' => $actor->getDisplayName(),
-				];
-			} else {
-				try {
-					$share = $this->shareMapper->findByPollAndUser($event->getObjectId(), $event->getAuthor());
-				} catch (ShareNotFoundException $e) {
-					// User seems to be probaly deleted, use fake share
-					$share = $this->shareMapper->getReplacement($event->getObjectId(), $event->getAuthor());
-				}
-				$parameters['actor'] = [
-					'type' => 'guest',
-					'id' => $share->getUserId(),
-					'name' => $share->getDisplayName(),
-				];
-			}
+			$actor = $this->userService->getParticipant($event->getAuthor(), $event->getObjectId());
+			$parameters['actor'] = [
+				'type' => $actor->getSimpleType(),
+				'id' => $actor->getId(),
+				'name' => $actor->getDisplayName(),
+			];
 		} catch (\Exception $e) {
 			$parameters['actor'] = [
 				'type' => 'guest',
@@ -101,7 +85,6 @@ class ActivityProvider implements IProvider {
 			$placeholders[] = '{' . $placeholder . '}';
 			$replacements[] = $parameter['name'];
 		}
-
 		$event->setParsedSubject(str_replace($placeholders, $replacements, $subject))
 			->setRichSubject($subject, $parameters);
 	}

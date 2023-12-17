@@ -114,6 +114,10 @@ class UserBase implements \JsonSerializable {
 		return $this->type;
 	}
 
+	public function getSimpleType(): string {
+		return in_array($this->type, [User::TYPE, Admin::TYPE]) ? 'user' : 'guest';
+	}
+
 	public function getLanguageCode(): string {
 		return $this->languageCode;
 	}
