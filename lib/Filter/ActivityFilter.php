@@ -33,7 +33,6 @@ use OCA\Polls\Event\ShareEvent;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
-
 class ActivityFilter implements \OCP\Activity\IFilter {
 	private $l10n;
 	private $urlGenerator;
