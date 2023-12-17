@@ -65,13 +65,15 @@ export default {
 				const { type } = parameters[key]
 				switch (type) {
 				case 'highlight':
-					parameters[key] = {
-						component: SimpleLink,
-						props: {
-							href: parameters[key].link,
-							name: parameters[key].name,
-						},
-					}
+					parameters[key] = parameters[key].link
+						? {
+							component: SimpleLink,
+							props: {
+								href: parameters[key].link,
+								name: parameters[key].name,
+							},
+						}
+						: `${parameters[key].name}`
 					break
 				case 'user':
 					parameters[key] = {
