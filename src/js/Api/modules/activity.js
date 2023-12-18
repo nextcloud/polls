@@ -26,7 +26,7 @@ const activity = {
 	getActivities(pollId) {
 		const response = ocsInstance.request({
 			method: 'GET',
-			url: 'activity/api/v2/activity/filter',
+			url: 'activity/api/v2/activity/polls',
 			params: {
 				format: 'json',
 				since: 0,

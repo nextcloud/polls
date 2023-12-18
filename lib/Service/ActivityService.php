@@ -27,6 +27,7 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Share;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Event\BaseEvent;
 use OCA\Polls\Event\CommentEvent;
 use OCA\Polls\Event\OptionEvent;
@@ -36,7 +37,6 @@ use OCA\Polls\Event\VoteEvent;
 use OCP\Activity\IEvent as ActivityEvent;
 use OCP\Activity\IManager as ActivityManager;
 use OCP\IL10N;
-use OCP\IUserSession;
 use OCP\L10N\IFactory;
 
 class ActivityService {
@@ -55,7 +55,7 @@ class ActivityService {
 		private ActivityManager $activityManager,
 		private IL10N $l10n,
 		private IFactory $transFactory,
-		private IUserSession $userSession,
+		private UserMapper $usermapper,
 	) {
 	}
 
@@ -64,7 +64,7 @@ class ActivityService {
 		$this->l10n = $this->transFactory->get($this->activityEvent->getApp(), $language);
 
 		try {
-			$this->userIsActor = $this->activityEvent->getAuthor() === $this->userSession->getUser()?->getUID();
+			$this->userIsActor = $this->activityEvent->getAuthor() === $this->usermapper->getCurrentUserId();
 		} catch (\Exception $e) {
 			$this->userIsActor = false;
 		}

@@ -29,6 +29,9 @@
     <providers>
       <provider>OCA\Polls\Provider\ActivityProvider</provider>
     </providers>
+    <filters>
+      <filter>OCA\Polls\Filter\ActivityFilter</filter>
+    </filters>
   </activity>
   <background-jobs>
     <job>OCA\Polls\Cron\NotificationCron</job>
