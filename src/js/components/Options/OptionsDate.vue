@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div>
+	<div :style="cssVar">
 		<transition-group is="ul" v-if="countOptions">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
@@ -140,6 +140,12 @@ export default {
 			closed: 'poll/isClosed',
 			countOptions: 'options/count',
 		}),
+
+		cssVar() {
+			return {
+				'--content-deleted': `" (${t('polls', 'deleted')})"`,
+			}
+		},
 	},
 
 	methods: {
