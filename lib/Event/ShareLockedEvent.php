@@ -30,6 +30,6 @@ class ShareLockedEvent extends ShareEvent {
 		protected Share $share
 	) {
 		parent::__construct($share);
-		$this->eventId = self::LOCKED;
+		$this->eventId = $share->getLocked() ? self::UNLOCKED : self::LOCKED;
 	}
 }

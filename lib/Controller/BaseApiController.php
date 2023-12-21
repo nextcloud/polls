@@ -29,7 +29,6 @@ use Closure;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCP\AppFramework\ApiController;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -77,20 +76,6 @@ class BaseApiController extends ApiController {
 	protected function responseCreate(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * responseDeleteTolerant
-	 */
-	#[NoAdminRequired]
-	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback(), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['message' => 'Not found, assume already deleted'], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}

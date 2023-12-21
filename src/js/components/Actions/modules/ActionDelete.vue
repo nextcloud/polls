@@ -22,7 +22,7 @@
 
 <template>
 	<div class="">
-		<NcButton :title="computedTitle"
+		<NcButton :name="computedTitle"
 			type="tertiary"
 			:aria-label="computedTitle">
 			<template #icon>

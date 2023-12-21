@@ -29,6 +29,7 @@ use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Utility\ITimeFactory;
@@ -44,6 +45,7 @@ class JanitorCron extends TimedJob {
 		private WatchMapper $watchMapper,
 		private CommentMapper $commentMapper,
 		private OptionMapper $optionMapper,
+		private ShareMapper $shareMapper,
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day
@@ -68,8 +70,9 @@ class JanitorCron extends TimedJob {
 		$this->watchMapper->deleteOldEntries(time() - 86400);
 
 		// purge entries virtually deleted more than 12 hour ago
-		$this->commentMapper->purgeDeletedComments(time() - 4320);
-		$this->optionMapper->purgeDeletedOptions(time() - 4320);
+		// $this->commentMapper->purgeDeletedComments(time() - 4320);
+		// $this->optionMapper->purgeDeletedOptions(time() - 4320);
+		// $this->shareMapper->purgeDeletedShares(time() - 4320);
 
 		// archive polls after defined days after closing date
 		if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_AUTO_ARCHIVE) && $this->appSettings->getIntegerSetting(AppSettings::SETTING_AUTO_ARCHIVE_OFFSET) > 0) {

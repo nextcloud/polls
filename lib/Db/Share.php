@@ -138,6 +138,7 @@ class Share extends Entity implements JsonSerializable {
 		$this->addType('invitationSent', 'int');
 		$this->addType('locked', 'int');
 		$this->addType('reminderSent', 'int');
+		$this->addType('deleted', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->appSettings = new AppSettings;
 	}
@@ -155,13 +156,14 @@ class Share extends Entity implements JsonSerializable {
 			'emailAddress' => $this->getEmailAddress(),
 			'invitationSent' => $this->getInvitationSent(),
 			'reminderSent' => $this->getReminderSent(),
-			'locked' => $this->getLocked(),
+			'locked' => $this->getDeleted() ? 0 : $this->getLocked(),
 			'displayName' => $this->getDisplayName(),
 			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getBooleanSetting(AppSettings::SETTING_SHOW_LOGIN),
 			'publicPollEmail' => $this->getPublicPollEmail(),
 			'voted' => $this->getVoted(),
+			'deleted' => $this->getDeleted(),
 		];
 	}
 

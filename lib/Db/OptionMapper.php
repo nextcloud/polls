@@ -177,6 +177,9 @@ class OptionMapper extends QBMapperWithUser {
 		$query->delete($this->getTableName())
 			->where(
 				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
+			)
+			->andWhere(
+				$query->expr()->gt('deleted', $query->createNamedParameter(0))
 			);
 		$query->executeStatement();
 	}

@@ -52,7 +52,7 @@ class ShareMapper extends QBMapper {
 	 * @return Share[]
 	 * @psalm-return array<array-key, Share>
 	 */
-	public function findByPoll(int $pollId): array {
+	public function findByPoll(int $pollId, bool $getDeleted = false): array {
 
 		$qb = $this->db->getQueryBuilder();
 
@@ -71,6 +71,10 @@ class ShareMapper extends QBMapper {
 			)
 			->addSelect($qb->func()->count('votes.id', 'voted'));
 
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq('shares' . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+
 		return $this->findEntities($qb);
 	}
 
@@ -79,7 +83,7 @@ class ShareMapper extends QBMapper {
 	 * @return Share[]
 	 * @psalm-return array<array-key, Share>
 	 */
-	public function findByPollNotInvited(int $pollId): array {
+	public function findByPollNotInvited(int $pollId, bool $getDeleted = false): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -87,6 +91,10 @@ class ShareMapper extends QBMapper {
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('invitation_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+
 		return $this->findEntities($qb);
 	}
 
@@ -95,7 +103,7 @@ class ShareMapper extends QBMapper {
 	 * @return Share[]
 	 * @psalm-return array<array-key, Share>
 	 */
-	public function findByPollUnreminded(int $pollId): array {
+	public function findByPollUnreminded(int $pollId, bool $getDeleted = false): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -103,19 +111,27 @@ class ShareMapper extends QBMapper {
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('reminder_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+
 		return $this->findEntities($qb);
 	}
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 */
-	public function findByPollAndUser(int $pollId, string $userId): Share {
+	public function findByPollAndUser(int $pollId, string $userId, bool $getDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
 			->from($this->getTableName())
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
 
 		try {
 			return $this->findEntity($qb);
@@ -143,12 +159,16 @@ class ShareMapper extends QBMapper {
 		return $share;
 	}
 
-	public function findByToken(string $token): Share {
+	public function findByToken(string $token, bool $getDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
 			->from($this->getTableName())
 			->where($qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
+
+		// if (!$getDeleted) {
+		// 	$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		// }
 
 		try {
 			return $this->findEntity($qb);
@@ -169,4 +189,17 @@ class ShareMapper extends QBMapper {
 			->setParameter('type', $type);
 		$query->executeStatement();
 	}
+
+	public function purgeDeletedShares(int $offset): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
+			)
+			->andWhere(
+				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
+			);
+		$query->executeStatement();
+	}
+
 }

@@ -47,7 +47,7 @@ const mutations = {
 		state.list.push(payload)
 	},
 
-	updateShare(state, payload) {
+	update(state, payload) {
 		const foundIndex = state.list.findIndex((share) => share.id === payload.share.id)
 		Object.assign(state.list[foundIndex], payload.share)
 	},
@@ -95,8 +95,8 @@ const actions = {
 
 	async add(context, payload) {
 		try {
-			await SharesAPI.addShare(context.rootState.route.params.id, payload.share)
-			context.dispatch('list')
+			const response = await SharesAPI.addShare(context.rootState.route.params.id, payload.share)
+			context.commit('add', response.data.share)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing share', { error: e.response }, { payload })
@@ -109,8 +109,8 @@ const actions = {
 		const setTo = payload.share.type === 'user' ? 'admin' : 'user'
 
 		try {
-			await SharesAPI.switchAdmin(payload.share.token, setTo)
-			context.dispatch('list')
+			const response = await SharesAPI.switchAdmin(payload.share.token, setTo)
+			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error(`Error switching type to ${setTo}`, { error: e.response }, { payload })
@@ -121,8 +121,8 @@ const actions = {
 
 	async setPublicPollEmail(context, payload) {
 		try {
-			await SharesAPI.setEmailAddressConstraint(payload.share.token, payload.value)
-			context.dispatch('list')
+			const response = await SharesAPI.setEmailAddressConstraint(payload.share.token, payload.value)
+			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error changing email register setting', { error: e.response }, { payload })
@@ -133,8 +133,8 @@ const actions = {
 
 	async writeLabel(context, payload) {
 		try {
-			await SharesAPI.writeLabel(payload.token, payload.displayName)
-			// context.dispatch('list')
+			const response = await SharesAPI.writeLabel(payload.token, payload.displayName)
+			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing share label', { error: e.response }, { payload })
@@ -182,8 +182,8 @@ const actions = {
 
 	async lock(context, payload) {
 		try {
-			await SharesAPI.lockShare(payload.share.token)
-			context.dispatch('list')
+			const response = await SharesAPI.lockShare(payload.share.token)
+			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error locking share', { error: e.response }, { payload })
@@ -194,8 +194,8 @@ const actions = {
 
 	async unlock(context, payload) {
 		try {
-			await SharesAPI.unlockShare(payload.share.token)
-			context.dispatch('list')
+			const response = await SharesAPI.unlockShare(payload.share.token)
+			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error unlocking share', { error: e.response }, { payload })
@@ -205,13 +205,23 @@ const actions = {
 	},
 
 	async delete(context, payload) {
-		context.commit('delete', { share: payload.share })
 		try {
-			await SharesAPI.deleteShare(payload.share.token)
-			context.dispatch('list')
+			const response = await SharesAPI.deleteShare(payload.share.token)
+			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error removing share', { error: e.response }, { payload })
+			console.error('Error deleting share', { error: e.response }, { payload })
+			context.dispatch('list')
+			throw e
+		}
+	},
+	async restore(context, payload) {
+		try {
+			const response = await SharesAPI.restoreShare(payload.share.token)
+			context.commit('update', response.data)
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error restoring share', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}

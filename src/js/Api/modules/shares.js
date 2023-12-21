@@ -95,6 +95,14 @@ const shares = {
 		})
 	},
 
+	restoreShare(shareToken) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `share/${shareToken}/restore`,
+			cancelToken: cancelTokenHandlerObject[this.restoreShare.name].handleRequestCancellation().token,
+		})
+	},
+
 	lockShare(shareToken) {
 		return httpInstance.request({
 			method: 'PUT',

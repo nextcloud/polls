@@ -80,7 +80,6 @@ class OptionService {
 
 		try {
 			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId(), !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW));
-
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW) || !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
 				$this->anonymizer->anonymize($this->options);

@@ -114,7 +114,7 @@ class CommentService {
 	}
 
 	/**
-	 * Delete comment
+	 * Delete or restore comment
 	 * @param Comment $comment Comment to delete or restore
 	 * @param Acl $acl Acl
 	 * @param bool $restore Set true, if comment is to be restored

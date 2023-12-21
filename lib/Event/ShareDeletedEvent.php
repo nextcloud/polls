@@ -30,6 +30,6 @@ class ShareDeletedEvent extends ShareEvent {
 		protected Share $share
 	) {
 		parent::__construct($share);
-		$this->eventId = self::DELETE;
+		$this->eventId = $share->getDeleted() ? self::DELETE : self::RESTORE;
 	}
 }

@@ -222,7 +222,7 @@ class PublicController extends BaseController {
 	#[PublicPage]
 	public function deleteComment(int $commentId, string $token): JSONResponse {
 		$comment = $this->commentService->get($commentId);
-		return $this->responseDeleteTolerant(fn () => [
+		return $this->response(fn () => [
 			'comment' => $this->commentService->delete($comment, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD))
 		], $token);
 	}

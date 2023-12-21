@@ -21,115 +21,126 @@
   -->
 
 <template>
-	<UserItem v-bind="share"
-		show-email
-		resolve-info
-		show-type-icon
-		:icon="true">
-		<template #status>
-			<div v-if="share.voted">
-				<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />
-			</div>
-			<div v-else-if="['public', 'group'].includes(share.type)">
-				<div class="vote-status empty" />
-			</div>
-			<div v-else>
-				<UnvotedIcon class="vote-status unvoted" :name="t('polls', 'Has not voted')" />
-			</div>
-		</template>
+	<div :class="{ deleted: share.deleted }">
+		<UserItem v-bind="share"
+			show-email
+			resolve-info
+			:forced-description="share.deleted ? `(${t('polls', 'deleted')})` : null"
+			show-type-icon
+			:icon="true">
+			<template #status>
+				<div v-if="share.voted">
+					<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />
+				</div>
+				<div v-else-if="['public', 'group'].includes(share.type)">
+					<div class="vote-status empty" />
+				</div>
+				<div v-else>
+					<UnvotedIcon class="vote-status unvoted" :name="t('polls', 'Has not voted')" />
+				</div>
+			</template>
 
-		<NcActions>
-			<NcActionInput v-if="share.type === 'public'"
-				:show-trailing-button="false"
-				:value.sync="label"
-				@input="writeLabel()">
-				<template #icon>
-					<EditIcon />
-				</template>
-				{{ t('polls', 'Share label') }}
-			</NcActionInput>
+			<NcActions>
+				<NcActionInput v-if="share.type === 'public'"
+					:show-trailing-button="false"
+					:value.sync="label"
+					@input="writeLabel()">
+					<template #icon>
+						<EditIcon />
+					</template>
+					{{ t('polls', 'Share label') }}
+				</NcActionInput>
 
-			<NcActionButton v-if="share.emailAddress || share.type === 'group'" @click="sendInvitation()">
-				<template #icon>
-					<SendEmailIcon />
-				</template>
-				{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
-			</NcActionButton>
+				<NcActionButton v-if="share.emailAddress || share.type === 'group'" @click="sendInvitation()">
+					<template #icon>
+						<SendEmailIcon />
+					</template>
+					{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
+				</NcActionButton>
 
-			<NcActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
-				@click="resolveGroup(share)">
-				<template #icon>
-					<ResolveGroupIcon />
-				</template>
-				{{ t('polls', 'Resolve into individual invitations') }}
-			</NcActionButton>
+				<NcActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
+					@click="resolveGroup(share)">
+					<template #icon>
+						<ResolveGroupIcon />
+					</template>
+					{{ t('polls', 'Resolve into individual invitations') }}
+				</NcActionButton>
 
-			<NcActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin({ share: share })">
-				<template #icon>
-					<GrantAdminIcon v-if="share.type === 'user'" />
-					<WithdrawAdminIcon v-else />
-				</template>
-				{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
-			</NcActionButton>
+				<NcActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin({ share: share })">
+					<template #icon>
+						<GrantAdminIcon v-if="share.type === 'user'" />
+						<WithdrawAdminIcon v-else />
+					</template>
+					{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
+				</NcActionButton>
 
-			<NcActionButton @click="copyLink()">
-				<template #icon>
-					<ClippyIcon />
-				</template>
-				{{ t('polls', 'Copy link to clipboard') }}
-			</NcActionButton>
+				<NcActionButton @click="copyLink()">
+					<template #icon>
+						<ClippyIcon />
+					</template>
+					{{ t('polls', 'Copy link to clipboard') }}
+				</NcActionButton>
 
-			<NcActionButton v-if="share.URL" @click="$emit('show-qr-code')">
-				<template #icon>
-					<QrIcon />
-				</template>
-				{{ t('polls', 'Show QR code') }}
-			</NcActionButton>
+				<NcActionButton v-if="share.URL" @click="$emit('show-qr-code')">
+					<template #icon>
+						<QrIcon />
+					</template>
+					{{ t('polls', 'Show QR code') }}
+				</NcActionButton>
 
-			<NcActionCaption v-if="share.type === 'public'" :name="t('polls', 'Options for the registration dialog')" />
+				<NcActionCaption v-if="share.type === 'public'" :name="t('polls', 'Options for the registration dialog')" />
 
-			<NcActionRadio v-if="share.type === 'public'"
-				name="publicPollEmail"
-				value="optional"
-				:checked="share.publicPollEmail === 'optional'"
-				@change="setPublicPollEmail({ share, value: 'optional' })">
-				{{ t('polls', 'Email address is optional') }}
-			</NcActionRadio>
+				<NcActionRadio v-if="share.type === 'public'"
+					name="publicPollEmail"
+					value="optional"
+					:checked="share.publicPollEmail === 'optional'"
+					@change="setPublicPollEmail({ share, value: 'optional' })">
+					{{ t('polls', 'Email address is optional') }}
+				</NcActionRadio>
 
-			<NcActionRadio v-if="share.type === 'public'"
-				name="publicPollEmail"
-				value="mandatory"
-				:checked="share.publicPollEmail === 'mandatory'"
-				@change="setPublicPollEmail({ share, value: 'mandatory' })">
-				{{ t('polls', 'Email address is mandatory') }}
-			</NcActionRadio>
+				<NcActionRadio v-if="share.type === 'public'"
+					name="publicPollEmail"
+					value="mandatory"
+					:checked="share.publicPollEmail === 'mandatory'"
+					@change="setPublicPollEmail({ share, value: 'mandatory' })">
+					{{ t('polls', 'Email address is mandatory') }}
+				</NcActionRadio>
 
-			<NcActionRadio v-if="share.type === 'public'"
-				name="publicPollEmail"
-				value="disabled"
-				:checked="share.publicPollEmail === 'disabled'"
-				@change="setPublicPollEmail({ share, value: 'disabled' })">
-				{{ t('polls', 'Do not ask for an email address') }}
-			</NcActionRadio>
-			<NcActionButton @click="switchLocked(share)">
-				<template #icon>
-					<UnlockIcon v-if="share.locked" />
-					<LockIcon v-else />
-				</template>
-				{{ share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share') }}
-			</NcActionButton>
-		</NcActions>
-
-		<ActionDelete :name="deleteButtonCaption"
-			@delete="clickDeleted(share)" />
-	</UserItem>
+				<NcActionRadio v-if="share.type === 'public'"
+					name="publicPollEmail"
+					value="disabled"
+					:checked="share.publicPollEmail === 'disabled'"
+					@change="setPublicPollEmail({ share, value: 'disabled' })">
+					{{ t('polls', 'Do not ask for an email address') }}
+				</NcActionRadio>
+				<NcActionButton v-if="!share.deleted" @click="switchLocked(share)">
+					<template #icon>
+						<UnlockIcon v-if="share.locked" />
+						<LockIcon v-else />
+					</template>
+					{{ share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share') }}
+				</NcActionButton>
+				<NcActionButton v-if="!share.deleted" @click="deleteShare({ share })">
+					<template #icon>
+						<DeleteIcon />
+					</template>
+					{{ t('polls', 'Delete share') }}
+				</NcActionButton>
+				<NcActionButton v-if="share.deleted" @click="restoreShare({ share })">
+					<template #icon>
+						<RestoreIcon />
+					</template>
+					{{ t('polls', 'Restore share') }}
+				</NcActionButton>
+			</NcActions>
+		</UserItem>
+	</div>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
-import { ActionDelete } from '../Actions/index.js'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
@@ -141,6 +152,8 @@ import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 import QrIcon from 'vue-material-design-icons/Qrcode.vue'
 import LockIcon from 'vue-material-design-icons/Lock.vue'
 import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 
 export default {
 	name: 'ShareItem',
@@ -159,8 +172,9 @@ export default {
 		NcActionCaption,
 		NcActionInput,
 		NcActionRadio,
-		ActionDelete,
 		ResolveGroupIcon,
+		DeleteIcon,
+		RestoreIcon,
 		LockIcon,
 		UnlockIcon,
 	},
@@ -181,20 +195,12 @@ export default {
 				this.$store.commit('shares/setShareProperty', { id: this.share.id, displayName: value })
 			},
 		},
-
-		deleteButtonCaption() {
-			if (this.share.voted && this.share.locked) {
-				return t('polls', 'Delete share and remove user from poll')
-			}
-
-			return t('polls', 'Delete share')
-		},
-
 	},
 
 	methods: {
 		...mapActions({
 			deleteShare: 'shares/delete',
+			restoreShare: 'shares/restore',
 			lockShare: 'shares/lock',
 			unlockShare: 'shares/unlock',
 			switchAdmin: 'shares/switchAdmin',
@@ -215,22 +221,6 @@ export default {
 			} catch (e) {
 				showError(t('polls', 'Error while changing lock status of user {displayName}', { displayName: share.displayName }))
 				console.error('Error locking or unlocking share', { share }, e.response)
-			}
-		},
-
-		async clickDeleted(share) {
-			try {
-				if (share.voted && share.locked) {
-					this.deleteShare({ share })
-					this.deleteUser({ userId: share.userId })
-					showSuccess(t('polls', 'Share and votes of {displayName} deleted', { displayName: share.displayName }))
-				} else {
-					this.deleteShare({ share })
-					showSuccess(t('polls', 'Share of {displayName} deleted', { displayName: share.displayName }))
-				}
-			} catch (e) {
-				showError(t('polls', 'Error deleting share of {displayName}', { displayName: share.displayName }))
-				console.error('Error deleting share', { share }, e.response)
 			}
 		},
 
@@ -280,6 +270,9 @@ export default {
 </script>
 
 <style lang="scss">
+.deleted .user-item .description {
+	color: var(--color-error-text);
+}
 .vote-status {
 	margin-left: 8px;
 	width: 32px;

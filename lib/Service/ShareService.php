@@ -37,7 +37,6 @@ use OCA\Polls\Event\ShareDeletedEvent;
 use OCA\Polls\Event\ShareLockedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
-use OCA\Polls\Event\ShareUnlockedEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
@@ -324,54 +323,39 @@ class ShareService {
 	}
 
 	/**
-	 * Delete share
+	 * Delete or restore share
+	 * @param Share $share Share to delete or restore
+	 * @param string $token Share of token to delete
+	 * @param bool $restore Set true, if share is to be restored
 	 */
-	public function delete(Share $share = null, string $token = null): string {
-		try {
-			if ($token) {
-				$share = $this->shareMapper->findByToken($token);
-			}
-			$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
-			$this->shareMapper->delete($share);
-		} catch (ShareNotFoundException $e) {
-			// silently catch
+	public function delete(Share $share = null, string $token = null, bool $restore = false): Share {
+		if ($token) {
+			$share = $this->shareMapper->findByToken($token, true);
 		}
 
-		$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($share));
+		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
-		return $share->getToken();
+		$share->setDeleted($restore ? 0 : time());
+		$this->shareMapper->update($share);
+		$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($share));
+		return $share;
 	}
 
 	/**
-	 * Lock share
+	 * Lock or unlock share
 	 */
-	public function lock(Share $share = null, string $token = null): string {
+	public function lock(Share $share = null, string $token = null, bool $unlock = false): Share {
 		if ($token) {
-			$share = $this->shareMapper->findByToken($token);
+			$share = $this->shareMapper->findByToken($token, true);
 		}
+
 		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
-		$share->setLocked(time());
+		$share->setLocked($unlock ? 0 : time());
 		$this->shareMapper->update($share);
 		$this->eventDispatcher->dispatchTyped(new ShareLockedEvent($share));
 
-		return $share->getToken();
-	}
-
-	/**
-	 * Unlock share
-	 */
-	public function unlock(Share $share = null, string $token = null): string {
-		if ($token) {
-			$share = $this->shareMapper->findByToken($token);
-		}
-		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
-
-		$share->setLocked(0);
-		$this->shareMapper->update($share);
-		$this->eventDispatcher->dispatchTyped(new ShareUnlockedEvent($share));
-
-		return $share->getToken();
+		return $share;
 	}
 
 	public function sendAllInvitations(int $pollId): SentResult|null {
@@ -502,6 +486,18 @@ class ShareService {
 			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
 		} catch (Exception $e) {
 			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+
+				$share = $this->shareMapper->findByPollAndUser($pollId, $userId, true);
+				if ($share->getDeleted()) {
+					// Deleted share exist, restore deleted share and generate new token
+					$share->setDeleted(0);
+					$share->setLocked(0);
+					$share->setInvitationSent(0);
+					$share->setToken($this->generateToken());
+
+					return $this->shareMapper->update($share);
+				}
+
 				throw new ShareAlreadyExistsException;
 			}
 
@@ -539,6 +535,31 @@ class ShareService {
 		};
 	}
 
+	private function generateToken(): string {
+		$token = null;
+		$loopCounter = 0;
+		while (!$token) {
+			$loopCounter++;
+			$token = $this->secureRandom->generate(
+				8,
+				ISecureRandom::CHAR_DIGITS .
+				ISecureRandom::CHAR_LOWER .
+				ISecureRandom::CHAR_UPPER
+			);
+			try {
+				$this->shareMapper->findByToken($token, true);
+				// reset token, if it already exists
+				$token = null;
+			} catch (ShareNotFoundException) {
+				$loopCounter = 0;
+			}
+			if ($loopCounter > 10) {
+				// In case of uninspected situations, avoid an endless loop
+				throw new \Exception('Unexpected loop count while trying to create a token for a new share');
+			}
+		}
+		return $token;
+	}
 	/**
 	 * crate a new share
 	 */
@@ -550,29 +571,8 @@ class ShareService {
 	): Share {
 		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
 
-		$token = null;
-		$loopCounter = 0;
 		// Generate a unique id
-		while (!$token) {
-			$loopCounter++;
-			$token = $this->secureRandom->generate(
-				8,
-				ISecureRandom::CHAR_DIGITS .
-					ISecureRandom::CHAR_LOWER .
-					ISecureRandom::CHAR_UPPER
-			);
-			try {
-				$this->shareMapper->findByToken($token);
-				// reset token, if it already exists
-				$token = null;
-			} catch (ShareNotFoundException) {
-				$loopCounter = 0;
-			}
-			if ($loopCounter > 10) {
-				// In case of uninspected situations, avoid an endless loop
-				throw new \Exception('Unexpected loop count while trying to create a token for a new share');
-			}
-		}
+		$token = $this->generateToken();
 
 		$this->share = new Share();
 		$this->share->setToken($token);

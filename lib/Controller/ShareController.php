@@ -108,23 +108,31 @@ class ShareController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function delete(string $token): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->delete(token: $token)]);
+		return $this->response(fn () => ['share' => $this->shareService->delete(token: $token)]);
 	}
 
 	/**
 	 * Delete share
+	 */
+	#[NoAdminRequired]
+	public function restore(string $token): JSONResponse {
+		return $this->response(fn () => ['share' => $this->shareService->delete(token: $token, restore: true)]);
+	}
+
+	/**
+	 * Delete or restore share
 	 */
 	#[NoAdminRequired]
 	public function lock(string $token): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->lock(token: $token)]);
+		return $this->response(fn () => ['share' => $this->shareService->lock(token: $token)]);
 	}
 
 	/**
-	 * Delete share
+	 * Lock or unlock share
 	 */
 	#[NoAdminRequired]
 	public function unlock(string $token): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['share' => $this->shareService->unlock(token: $token)]);
+		return $this->response(fn () => ['share' => $this->shareService->lock(token: $token, unlock: true)]);
 	}
 
 	/**

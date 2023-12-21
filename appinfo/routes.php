@@ -98,6 +98,7 @@ return [
 		['name' => 'share#add', 'url' => '/poll/{pollId}/share', 'verb' => 'POST'],
 		['name' => 'share#send_all_invitations', 'url' => '/poll/{pollId}/inviteAll', 'verb' => 'PUT'],
 		['name' => 'share#delete', 'url' => '/share/{token}', 'verb' => 'DELETE'],
+		['name' => 'share#restore', 'url' => '/share/{token}/restore', 'verb' => 'PUT'],
 		['name' => 'share#personal', 'url' => '/share/personal', 'verb' => 'POST'],
 		['name' => 'share#sendInvitation', 'url' => '/share/{token}/invite', 'verb' => 'POST'],
 		['name' => 'share#resolveGroup', 'url' => '/share/{token}/resolve', 'verb' => 'GET'],
@@ -151,6 +152,7 @@ return [
 		['name' => 'option_api#add', 'url' => '/api/v1.0/poll/{pollId}/option', 'verb' => 'POST'],
 		['name' => 'option_api#update', 'url' => '/api/v1.0/option/{optionId}', 'verb' => 'PUT'],
 		['name' => 'option_api#delete', 'url' => '/api/v1.0/option/{optionId}', 'verb' => 'DELETE'],
+		['name' => 'option_api#restore', 'url' => '/api/v1.0/option/{optionId}/restore', 'verb' => 'PUT'],
 		['name' => 'option_api#setOrder', 'url' => '/api/v1.0/option/{optionId}/setorder/{order}', 'verb' => 'PUT'],
 		['name' => 'option_api#confirm', 'url' => '/api/v1.0/option/{optionId}/confirm', 'verb' => 'PUT'],
 
@@ -161,6 +163,7 @@ return [
 		['name' => 'share_api#get', 'url' => '/api/v1.0/share/{token}', 'verb' => 'GET'],
 		['name' => 'share_api#add', 'url' => '/api/v1.0/poll/{pollId}/share/{type}', 'verb' => 'POST'],
 		['name' => 'share_api#delete', 'url' => '/api/v1.0/share/{token}', 'verb' => 'DELETE'],
+		['name' => 'share_api#restore', 'url' => '/api/v1.0/share/{token}/restore', 'verb' => 'PUT'],
 		['name' => 'share_api#sendInvitation', 'url' => '/api/v1.0/share/send/{token}', 'verb' => 'PUT'],
 		['name' => 'share_api#lock', 'url' => '/api/v1.0/share/lock/{token}', 'verb' => 'PUT'],
 		['name' => 'share_api#unlock', 'url' => '/api/v1.0/share/unlock/{token}', 'verb' => 'PUT'],
@@ -172,6 +175,7 @@ return [
 		['name' => 'comment_api#list', 'url' => '/api/v1.0/poll/{pollId}/comments', 'verb' => 'GET'],
 		['name' => 'comment_api#add', 'url' => '/api/v1.0/poll/{pollId}/comment', 'verb' => 'POST'],
 		['name' => 'comment_api#delete', 'url' => '/api/v1.0/comment/{commentId}', 'verb' => 'DELETE'],
+		['name' => 'comment_api#restore', 'url' => '/api/v1.0/comment/{commentId}/restore', 'verb' => 'PUT'],
 
 	]
 ];
