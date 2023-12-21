@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div>
+	<div :style="cssVar">
 		<OptionsTextAdd v-if="!closed" />
 		<draggable v-if="countOptions"
 			v-model="reOrderedOptions"
@@ -42,8 +42,11 @@
 					</template>
 					<template v-if="acl.allowEdit" #actions>
 						<ActionDelete v-if="!closed"
-							:name="t('polls', 'Delete option')"
-							@delete="removeOption(option)" />
+							:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
+							:restore="!!option.deleted"
+							:timeout="0"
+							@restore="restoreOption(option)"
+							@delete="deleteOption(option)" />
 						<NcButton v-if="closed"
 							:title="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 							:aria-label="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
@@ -78,7 +81,7 @@ import draggable from 'vuedraggable'
 import { ActionDelete } from '../Actions/index.js'
 import OptionItem from './OptionItem.vue'
 import OptionItemOwner from '../Options/OptionItemOwner.vue'
-import { confirmOption, removeOption } from '../../mixins/optionMixins.js'
+import { confirmOption, deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
@@ -101,7 +104,8 @@ export default {
 
 	mixins: [
 		confirmOption,
-		removeOption,
+		deleteOption,
+		restoreOption,
 	],
 
 	data() {
@@ -129,6 +133,12 @@ export default {
 				group: 'description',
 				disabled: false,
 				ghostClass: 'ghost',
+			}
+		},
+
+		cssVar() {
+			return {
+				'--content-deleted': `" (${t('polls', 'deleted')})"`,
 			}
 		},
 

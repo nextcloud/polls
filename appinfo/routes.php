@@ -37,6 +37,8 @@ return [
 		['name' => 'public#set_vote', 'url' => '/s/{token}/vote', 'verb' => 'PUT'],
 		['name' => 'public#add_option', 'url' => '/s/{token}/option', 'verb' => 'POST'],
 		['name' => 'public#delete_option', 'url' => '/s/{token}/option/{optionId}', 'verb' => 'DELETE'],
+		['name' => 'public#restore_option', 'url' => '/s/{token}/option/{optionId}/restore', 'verb' => 'PUT'],
+
 		['name' => 'public#add_comment', 'url' => '/s/{token}/comment', 'verb' => 'POST'],
 		['name' => 'public#restore_comment', 'url' => '/s/{token}/comment/{commentId}/restore', 'verb' => 'PUT', 'postfix' => 'auth'],
 		['name' => 'public#delete_comment', 'url' => '/s/{token}/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'public'],
@@ -79,6 +81,7 @@ return [
 		['name' => 'option#addBulk', 'url' => '/option/bulk', 'verb' => 'POST'],
 		['name' => 'option#update', 'url' => '/option/{optionId}', 'verb' => 'PUT'],
 		['name' => 'option#delete', 'url' => '/option/{optionId}', 'verb' => 'DELETE'],
+		['name' => 'option#restore', 'url' => '/option/{optionId}/restore', 'verb' => 'PUT'],
 
 		['name' => 'option#shift', 'url' => '/poll/{pollId}/shift', 'verb' => 'POST'],
 		['name' => 'option#reorder', 'url' => '/poll/{pollId}/options/reorder', 'verb' => 'POST'],

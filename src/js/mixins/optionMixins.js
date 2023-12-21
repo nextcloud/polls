@@ -28,10 +28,18 @@ export const confirmOption = {
 	},
 }
 
-export const removeOption = {
+export const deleteOption = {
 	methods: {
-		removeOption(option) {
+		deleteOption(option) {
 			this.$store.dispatch('options/delete', { option })
+		},
+	},
+}
+
+export const restoreOption = {
+	methods: {
+		restoreOption(option) {
+			this.$store.dispatch('options/restore', { option })
 		},
 	},
 }

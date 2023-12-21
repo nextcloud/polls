@@ -171,8 +171,18 @@ class PublicController extends BaseController {
 	 */
 	#[PublicPage]
 	public function deleteOption(string $token, int $optionId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => [
+		return $this->response(fn () => [
 			'option' => $this->optionService->delete($optionId, $this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW))
+		], $token);
+	}
+
+	/**
+	 * Restore option
+	 */
+	#[PublicPage]
+	public function restoreOption(string $token, int $optionId): JSONResponse {
+		return $this->response(fn () => [
+			'option' => $this->optionService->delete($optionId, $this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW), true)
 		], $token);
 	}
 

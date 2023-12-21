@@ -38,8 +38,11 @@
 				</template>
 				<template v-if="acl.allowEdit" #actions>
 					<ActionDelete v-if="!closed"
-						:name="t('polls', 'Delete option')"
-						@delete="removeOption(option)" />
+						:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
+						:restore="!!option.deleted"
+						:timeout="0"
+						@restore="restoreOption(option)"
+						@delete="deleteOption(option)" />
 
 					<NcActions v-if="!closed" class="action">
 						<NcActionButton v-if="!closed" @click="cloneOptionModal(option)">
@@ -85,7 +88,7 @@ import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcModal } from '@n
 import { ActionDelete } from '../Actions/index.js'
 import OptionCloneDate from './OptionCloneDate.vue'
 import OptionItem from './OptionItem.vue'
-import { confirmOption, removeOption } from '../../mixins/optionMixins.js'
+import { confirmOption, deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
@@ -114,7 +117,8 @@ export default {
 	mixins: [
 		confirmOption,
 		dateUnits,
-		removeOption,
+		deleteOption,
+		restoreOption,
 	],
 
 	data() {

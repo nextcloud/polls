@@ -60,6 +60,16 @@ const options = {
 		})
 	},
 
+	restoreOption(optionId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `option/${optionId}/restore`,
+			params: { time: +new Date() },
+
+			cancelToken: cancelTokenHandlerObject[this.restoreOption.name].handleRequestCancellation().token,
+		})
+	},
+
 	addOptions(pollId, optionsBatch) {
 		return httpInstance.request({
 			method: 'POST',

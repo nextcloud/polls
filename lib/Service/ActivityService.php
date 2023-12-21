@@ -153,10 +153,16 @@ class ActivityService {
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has unconfirmed option {optionTitle}'),
 			],
 			OptionEvent::DELETE => [
-				self::FIRST_PERSON_FULL => $this->l10n->t('You have removed option {optionTitle} from poll {pollTitle}'),
-				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has removed option {optionTitle} from poll {pollTitle}'),
-				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have removed option {optionTitle}'),
-				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has removed option {optionTitle}'),
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have deleted option {optionTitle} from poll {pollTitle}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has deleted option {optionTitle} from poll {pollTitle}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have deleted option {optionTitle}'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has deleted option {optionTitle}'),
+			],
+			OptionEvent::RESTORE => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have restored option {optionTitle} from poll {pollTitle}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored option {optionTitle} from poll {pollTitle}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored option {optionTitle}'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored option {optionTitle}'),
 			],
 			PollEvent::ADD => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have added poll {pollTitle}'),

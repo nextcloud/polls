@@ -23,8 +23,11 @@
 <template>
 	<div class="option-item-owner">
 		<ActionDelete v-if="!acl.allowEdit && acl.userId === option.owner.userId"
-			:name="t('polls', 'Delete option')"
-			@delete="removeOption(option)" />
+			:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
+			:restore="!!option.deleted"
+			:timeout="0"
+			@restore="restoreOption(option)"
+			@delete="deleteOption(option)" />
 
 		<NcAvatar v-else-if="option.owner.userId && option.owner.userId !== pollOwner"
 			:user="option.owner.userId"
@@ -39,7 +42,7 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { NcAvatar } from '@nextcloud/vue'
-import { removeOption } from '../../mixins/optionMixins.js'
+import { deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import { ActionDelete } from '../Actions/index.js'
 
 export default {
@@ -51,7 +54,8 @@ export default {
 	},
 
 	mixins: [
-		removeOption,
+		deleteOption,
+		restoreOption,
 	],
 
 	props: {

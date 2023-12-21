@@ -178,10 +178,11 @@ class OptionService {
 
 	/**
 	 * Delete option
-	 *
-	 * @return Option
+	 * @param int $optionId Id of option to delete or restore
+	 * @param Acl $acl Acl
+	 * @param bool $restore Set true, if option is to be restored
 	 */
-	public function delete(int $optionId, ?Acl $acl = null): Option {
+	public function delete(int $optionId, ?Acl $acl = null, bool $restore = false): Option {
 		$this->option = $this->optionMapper->find($optionId);
 
 		if ($acl) {
@@ -191,14 +192,15 @@ class OptionService {
 		}
 
 		if ($this->option->getPollId() !== $this->acl->getPollid()) {
-			throw new ForbiddenException('Trying to delete an option with foreign poll id');
+			throw new ForbiddenException('Trying to delete or restore an option with foreign poll id');
 		}
 
 		if ($this->option->getOwner() !== $this->acl->getUserId()) {
 			$this->acl->request(Acl::PERMISSION_POLL_EDIT);
 		}
 
-		$this->optionMapper->delete($this->option);
+		$this->option->setDeleted($restore ? 0 : time());
+		$this->optionMapper->update($this->option);
 		$this->eventDispatcher->dispatchTyped(new OptionDeletedEvent($this->option));
 
 		return $this->option;

@@ -57,6 +57,8 @@ use OCP\IURLGenerator;
  * @method void setMiscSettings(string $value)
  * @method int getVoted()
  * @method void setVoted(int $value)
+ * @method int getDeleted()
+ * @method void setDeleted(integer $value)
  */
 class Share extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_share';
@@ -129,6 +131,7 @@ class Share extends Entity implements JsonSerializable {
 	protected ?string $displayName = null;
 	protected ?string $miscSettings = '';
 	protected int $voted = 0;
+	protected int $deleted = 0;
 
 	public function __construct() {
 		$this->addType('pollId', 'int');

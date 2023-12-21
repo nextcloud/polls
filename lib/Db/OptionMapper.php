@@ -87,9 +87,12 @@ class OptionMapper extends QBMapperWithUser {
 	 * @param bool $hideResults Whether the results should be hidden
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function findByPoll(int $pollId, bool $hideResults = false): array {
+	public function findByPoll(int $pollId, bool $hideResults = false, bool $getDeleted = false): array {
 		$qb = $this->buildQuery($hideResults);
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
 
 		return $this->findEntities($qb);
 	}
@@ -167,6 +170,15 @@ class OptionMapper extends QBMapperWithUser {
 			->set('owner', $query->createNamedParameter($replacementName))
 			->where($query->expr()->eq('owner', $query->createNamedParameter($userId)))
 			->executeStatement();
+	}
+
+	public function purgeDeletedOptions(int $offset): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
+			);
+		$query->executeStatement();
 	}
 
 	/**
