@@ -51,12 +51,17 @@ class CommentMapper extends QBMapperWithUser {
 	}
 
 	/**
+	 * @param int $pollId id of poll to get comments from
+	 * @param bool $getDeleted Get deleted comments as well
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Comment[]
 	 */
-	public function findByPoll(int $pollId): array {
+	public function findByPoll(int $pollId, bool $getDeleted = false): array {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
 		return $this->findEntities($qb);
 	}
 
@@ -73,26 +78,22 @@ class CommentMapper extends QBMapperWithUser {
 	/**
 	 * @return void
 	 */
-	public function deleteComment(int $id): void {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->delete($this->getTableName(), self::TABLE)
-		   ->where(
-		   	$qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT))
-		   );
-
-		$qb->executeStatement();
-	}
-
-	/**
-	 * @return void
-	 */
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName(), self::TABLE)
 			->set('user_id', $query->createNamedParameter($replacementName))
 			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
 			->executeStatement();
+	}
+
+	public function purgeDeletedComments(int $offset): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
+			);
+		$query->executeStatement();
+
 	}
 
 	/**

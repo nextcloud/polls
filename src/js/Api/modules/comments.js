@@ -50,6 +50,15 @@ const comments = {
 			cancelToken: cancelTokenHandlerObject[this.deleteComment.name].handleRequestCancellation().token,
 		})
 	},
+	restoreComment(commentId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `comment/${commentId}/restore`,
+			params: { time: +new Date() },
+
+			cancelToken: cancelTokenHandlerObject[this.restoreComment.name].handleRequestCancellation().token,
+		})
+	},
 }
 
 const cancelTokenHandlerObject = createCancelTokenHandler(comments)

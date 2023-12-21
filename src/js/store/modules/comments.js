@@ -22,6 +22,7 @@
  */
 
 import { CommentsAPI, PublicAPI } from '../../Api/index.js'
+import { transformComments } from '../../helpers/modules/arrayHelper.js'
 
 const defaultComments = () => ({
 	list: [],
@@ -44,13 +45,35 @@ const mutations = {
 		state.list.push(payload.comment)
 	},
 
-	delete(state, payload) {
-		state.list = state.list.filter((comment) => comment.id !== payload.comment.id)
+	setDeleted(state, payload) {
+		const index = state.list.findIndex((comment) =>
+			parseInt(comment.id) === payload.comment.id,
+		)
+
+		if (index > -1) {
+			state.list[index].deleted = payload.comment.deleted
+			return
+		}
+		state.list.push(payload.comment)
 	},
+
+	setItem(state, payload) {
+		const index = state.list.findIndex((comment) =>
+			parseInt(comment.id) === payload.comment.id,
+		)
+
+		if (index > -1) {
+			state.list[index] = Object.assign(state.list[index], payload.comment)
+			return
+		}
+		state.list.push(payload.commet)
+	},
+
 }
 
 const getters = {
 	count: (state) => state.list.length,
+	groupedComments: (state) => transformComments(state.list),
 }
 
 const actions = {
@@ -95,16 +118,34 @@ const actions = {
 
 	async delete(context, payload) {
 		try {
+			let response = null
 			if (context.rootState.route.name === 'publicVote') {
-				await PublicAPI.deleteComment(context.rootState.route.params.token, payload.comment.id)
+				response = await PublicAPI.deleteComment(context.rootState.route.params.token, payload.comment.id)
 			} else {
-				await CommentsAPI.deleteComment(payload.comment.id)
+				response = await CommentsAPI.deleteComment(payload.comment.id)
 			}
 
-			context.commit('delete', { comment: payload.comment })
+			context.commit('setDeleted', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting comment', { error: e.response }, { payload })
+			throw e
+		}
+	},
+
+	async restore(context, payload) {
+		try {
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.restoreComment(context.rootState.route.params.token, payload.comment.id, { comment: payload.comment })
+			} else {
+				response = await CommentsAPI.restoreComment(payload.comment.id)
+			}
+
+			context.commit('setDeleted', response.data)
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error restoring comment', { error: e.response }, { payload })
 			throw e
 		}
 	},

@@ -26,7 +26,10 @@
 			type="tertiary"
 			:aria-label="computedTitle">
 			<template #icon>
-				<UndoIcon v-if="deleteTimeout"
+				<RestoreIcon v-if="restore"
+					:size="iconSize"
+					@click="restoreItem()" />
+				<UndoIcon v-else-if="deleteTimeout"
 					:size="iconSize"
 					@click="cancelDelete()" />
 				<LockIcon v-else-if="lock"
@@ -43,6 +46,7 @@
 <script>
 import { NcButton } from '@nextcloud/vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import LockIcon from 'vue-material-design-icons/Lock.vue'
 import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
 
@@ -51,6 +55,7 @@ export default {
 	components: {
 		DeleteIcon,
 		LockIcon,
+		RestoreIcon,
 		UndoIcon,
 		NcButton,
 	},
@@ -68,6 +73,10 @@ export default {
 		iconSize: {
 			type: Number,
 			default: 20,
+		},
+		restore: {
+			type: Boolean,
+			default: false,
 		},
 		lock: {
 			type: Boolean,
@@ -121,6 +130,13 @@ export default {
 			this.deleteTimeout = null
 			this.deleteInterval = null
 			this.countdown = this.timeout
+		},
+		restoreItem() {
+			clearTimeout(this.deleteTimeout)
+			clearInterval(this.deleteInterval)
+			this.deleteTimeout = null
+			this.deleteInterval = null
+			this.$emit('restore')
 		},
 	},
 }

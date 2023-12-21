@@ -122,6 +122,12 @@ class ActivityService {
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have deleted a comment'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has deleted a comment'),
 			],
+			CommentEvent::RESTORE => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have restored a comment from poll {pollTitle}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored a comment from poll {pollTitle}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored a comment'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored a comment'),
+			],
 			OptionEvent::ADD => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have added an option to poll {pollTitle}'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has added an option to poll {pollTitle}'),

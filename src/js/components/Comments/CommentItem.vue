@@ -21,21 +21,23 @@
   -->
 
 <template>
-	<div :class="['comment-item' , {currentuser: isCurrentUser}]">
+	<div :class="['comment-item', {currentuser: isCurrentUser}]">
 		<UserItem v-bind="comment.user" hide-names />
 		<div class="comment-item__content">
 			<span class="comment-item__user">{{ comment.user.displayName }}</span>
 			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
-			<div v-for="(subComment) in comment.subComments"
+			<div v-for="(subComment) in comment.comments"
 				:key="subComment.id"
-				class="comment-item__subcomment">
+				:class="['comment-item__sub-comment', { deleted: subComment.deleted }]">
 				<!-- eslint-disable vue/no-v-html -->
-				<span class="comment-item__comment"
-					v-html="linkify(subComment.comment)" />
+				<span v-html="linkify(subComment.comment)" />
 				<!-- eslint-enable vue/no-v-html -->
 
-				<ActionDelete v-if="comment.user.userId === acl.userId || acl.isOwner"
-					:name="t('polls', 'Delete comment')"
+				<ActionDelete v-if="(comment.user.userId === acl.userId || acl.isOwner)"
+					:name="subComment.deleted ? t('polls', 'Restore comment') : t('polls', 'Delete comment')"
+					:restore="!!subComment.deleted"
+					:timeout="0"
+					@restore="restoreComment(subComment)"
 					@delete="deleteComment(subComment)" />
 			</div>
 		</div>
@@ -78,15 +80,23 @@ export default {
 	},
 
 	methods: {
-		linkify(comment) {
-			return linkifyStr(comment)
+		linkify(subComment) {
+			return linkifyStr(subComment)
 		},
 
-		async deleteComment(comment) {
+		async deleteComment(subComment) {
 			try {
-				await this.$store.dispatch({ type: 'comments/delete', comment })
+				await this.$store.dispatch({ type: 'comments/delete', subComment })
 			} catch {
 				showError(t('polls', 'Error while deleting the comment'))
+			}
+		},
+
+		async restoreComment(subComment) {
+			try {
+				await this.$store.dispatch({ type: 'comments/restore', subComment })
+			} catch {
+				showError(t('polls', 'Error while restoring the comment'))
 			}
 		},
 	},
@@ -123,7 +133,7 @@ export default {
 			visibility: hidden;
 		}
 
-		.comment-item__subcomment {
+		.comment-item__sub-comment {
 			display: flex;
 			align-items: center;
 
@@ -133,14 +143,30 @@ export default {
 					visibility: visible;
 				}
 			}
-		}
 
+			> span {
+				hyphens: auto;
+				flex: 1;
+				a {
+					text-decoration-line: underline;
+				}
+			}
+
+			&.deleted {
+				opacity: 0.6;
+
+				> span::after {
 		.comment-item__comment {
 			hyphens: auto;
 			flex: 1;
 			a {
 				text-decoration-line: underline;
 			}
+					font-weight: bold;
+					color: var(--color-error-text);
+				}
+			}
+
 		}
 	}
 
@@ -161,7 +187,7 @@ export default {
 			padding-left: 8px;
 			padding-bottom: 10px;
 
-			.comment-item__subcomment {
+			.comment-item__sub-comment {
 				margin-right: 4px;
 
 				&:hover {

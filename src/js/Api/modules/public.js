@@ -123,6 +123,16 @@ const publicPoll = {
 		})
 	},
 
+	restoreComment(shareToken, commentId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `s/${shareToken}/comment/${commentId}/restore`,
+			params: { time: +new Date() },
+
+			cancelToken: cancelTokenHandlerObject[this.restoreComment.name].handleRequestCancellation().token,
+		})
+	},
+
 	getShare(shareToken) {
 		return httpInstance.request({
 			method: 'GET',

@@ -218,6 +218,18 @@ class PublicController extends BaseController {
 	}
 
 	/**
+	 * Restore deleted Comment
+	 */
+	#[PublicPage]
+	public function restoreComment(int $commentId, string $token): JSONResponse {
+		$comment = $this->commentService->get($commentId);
+
+		return $this->response(fn () => [
+			'comment' => $this->commentService->delete($comment, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD), true)
+		]);
+	}
+
+	/**
 	 * Get subscription status
 	 */
 	#[PublicPage]

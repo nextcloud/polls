@@ -74,4 +74,19 @@ class CommentController extends BaseController {
 			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()))
 		]);
 	}
+
+	/**
+	 * Restore deleted Comment
+	 */
+	#[NoAdminRequired]
+	public function restore(int $commentId, ?array $commentToRestore = null): JSONResponse {
+		$comment = $this->commentService->get($commentId);
+		if ($commentToRestore) {
+			$comment->setComment($commentToRestore['comment'] ?? $comment->getComment());
+		}
+		
+		return $this->response(fn () => [
+			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()), true)
+		]);
+	}
 }

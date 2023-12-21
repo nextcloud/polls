@@ -38,6 +38,7 @@ return [
 		['name' => 'public#add_option', 'url' => '/s/{token}/option', 'verb' => 'POST'],
 		['name' => 'public#delete_option', 'url' => '/s/{token}/option/{optionId}', 'verb' => 'DELETE'],
 		['name' => 'public#add_comment', 'url' => '/s/{token}/comment', 'verb' => 'POST'],
+		['name' => 'public#restore_comment', 'url' => '/s/{token}/comment/{commentId}/restore', 'verb' => 'PUT', 'postfix' => 'auth'],
 		['name' => 'public#delete_comment', 'url' => '/s/{token}/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'public'],
 		['name' => 'public#subscribe', 'url' => '/s/{token}/subscribe', 'verb' => 'PUT'],
 		['name' => 'public#unsubscribe', 'url' => '/s/{token}/unsubscribe', 'verb' => 'PUT'],
@@ -114,6 +115,7 @@ return [
 
 		['name' => 'comment#list', 'url' => '/poll/{pollId}/comments', 'verb' => 'GET'],
 		['name' => 'comment#add', 'url' => '/poll/{pollId}/comment', 'verb' => 'POST'],
+		['name' => 'comment#restore', 'url' => '/comment/{commentId}/restore', 'verb' => 'PUT', 'postfix' => 'auth'],
 		['name' => 'comment#delete', 'url' => '/comment/{commentId}', 'verb' => 'DELETE', 'postfix' => 'auth'],
 
 		['name' => 'system#user_search', 'url' => '/search/users/{query}', 'verb' => 'GET'],
