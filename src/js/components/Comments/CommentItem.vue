@@ -156,12 +156,7 @@ export default {
 				opacity: 0.6;
 
 				> span::after {
-		.comment-item__comment {
-			hyphens: auto;
-			flex: 1;
-			a {
-				text-decoration-line: underline;
-			}
+					content: var(--content-deleted);
 					font-weight: bold;
 					color: var(--color-error-text);
 				}
