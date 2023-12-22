@@ -68,7 +68,7 @@ class Preferences extends Entity implements JsonSerializable {
 	}
 
 	public function getPreferences_decoded(): mixed {
-		return json_decode($this->getPreferences());
+		return json_decode((string) $this->getPreferences());
 	}
 
 	/**
@@ -107,7 +107,7 @@ class Preferences extends Entity implements JsonSerializable {
 	 */
 	public function jsonSerialize(): array {
 		return [
-			'preferences' => json_decode($this->preferences ?? ''),
+			'preferences' => json_decode((string) $this->preferences),
 		];
 	}
 }
