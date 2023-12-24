@@ -37,6 +37,7 @@ OC.L10N.register(
     "Hour" : "Jam",
     "Day" : "Hari",
     "Month" : "Bulan",
+    "Year" : "Tahun",
     "Archive" : "Arsip"
 },
 "nplurals=1; plural=0;");

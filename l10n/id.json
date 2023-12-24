@@ -35,6 +35,7 @@
     "Hour" : "Jam",
     "Day" : "Hari",
     "Month" : "Bulan",
+    "Year" : "Tahun",
     "Archive" : "Arsip"
 },"pluralForm" :"nplurals=1; plural=0;"
 }
