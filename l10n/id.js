@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Group" : "Grup",
+    "Contact" : "Kontak",
     "Public link" : "Tautan publik",
     "User" : "Pengguna",
     "Delete" : "Hapus",
