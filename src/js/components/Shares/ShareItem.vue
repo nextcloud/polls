@@ -273,6 +273,7 @@ export default {
 .deleted .user-item .description {
 	color: var(--color-error-text);
 }
+
 .vote-status {
 	margin-left: 8px;
 	width: 32px;
