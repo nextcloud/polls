@@ -22,7 +22,7 @@
  */
 
 import { CommentsAPI, PublicAPI } from '../../Api/index.js'
-import { transformComments } from '../../helpers/modules/arrayHelper.js'
+import { groupComments } from '../../helpers/index.js'
 
 const defaultComments = () => ({
 	list: [],
@@ -73,7 +73,7 @@ const mutations = {
 
 const getters = {
 	count: (state) => state.list.length,
-	groupedComments: (state) => transformComments(state.list),
+	groupedComments: (state) => groupComments(state.list),
 }
 
 const actions = {
