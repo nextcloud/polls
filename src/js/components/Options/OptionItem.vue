@@ -225,6 +225,11 @@ export default {
 		align-items: center;
 		flex: 1;
 		position: relative;
+
+		&.deleted {
+			opacity: 0.6;
+		}
+
 		&.date-box {
 			align-items: stretch;
 			flex-direction: column;

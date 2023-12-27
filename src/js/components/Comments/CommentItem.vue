@@ -84,17 +84,17 @@ export default {
 			return linkifyStr(subComment)
 		},
 
-		async deleteComment(subComment) {
+		async deleteComment(comment) {
 			try {
-				await this.$store.dispatch({ type: 'comments/delete', subComment })
+				await this.$store.dispatch({ type: 'comments/delete', comment })
 			} catch {
 				showError(t('polls', 'Error while deleting the comment'))
 			}
 		},
 
-		async restoreComment(subComment) {
+		async restoreComment(comment) {
 			try {
-				await this.$store.dispatch({ type: 'comments/restore', subComment })
+				await this.$store.dispatch({ type: 'comments/restore', comment })
 			} catch {
 				showError(t('polls', 'Error while restoring the comment'))
 			}
