@@ -461,6 +461,7 @@ OC.L10N.register(
     "Receive notification email on activity to {emailAddress}" : "Při aktivitě obdržet oznámení e-mailem na {emailAddress}",
     "Receive notification email on activity" : "Dostávat e-mailem upozornění na aktivitu",
     "Is granted admin rights for this poll" : "Pro tuto anketu jsou udělena oprávnění pro správu",
+    "Deleted User" : "Smazaný uživatel",
     "Internal access" : "Interní přístup",
     "Token: {token}" : "Token: {token}",
     "Public link: {token}" : "Veřejný odkaz: ({token})",
