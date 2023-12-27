@@ -53,7 +53,6 @@ use OCA\Polls\Event\ShareEvent;
 use OCA\Polls\Event\ShareLockedEvent;
 use OCA\Polls\Event\ShareRegistrationEvent;
 use OCA\Polls\Event\ShareTypeChangedEvent;
-use OCA\Polls\Event\ShareUnlockedEvent;
 use OCA\Polls\Event\VoteEvent;
 use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Listener\CommentListener;
@@ -119,12 +118,12 @@ class Application extends App implements IBootstrap {
 		$context->registerEventListener(ShareLockedEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareRegistrationEvent::class, ShareListener::class);
 		$context->registerEventListener(ShareTypeChangedEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareUnlockedEvent::class, ShareListener::class);
 
 		$context->registerEventListener(VoteEvent::class, VoteListener::class);
 		$context->registerEventListener(VoteSetEvent::class, VoteListener::class);
 		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
 		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
+
 		$context->registerSearchProvider(SearchProvider::class);
 		$context->registerDashboardWidget(PollWidget::class);
 	}

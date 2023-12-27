@@ -31,6 +31,7 @@ abstract class OptionEvent extends BaseEvent {
 	public const CONFIRM = 'option_confirm';
 	public const UNCONFIRM = 'option_unconfirm';
 	public const DELETE = 'option_delete';
+	public const RESTORE = 'option_restore';
 
 	public function __construct(
 		protected Option $option,

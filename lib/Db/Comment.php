@@ -40,6 +40,10 @@ use JsonSerializable;
  * @method void setComment(string $value)
  * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
+ * @method int getDeleted()
+ * @method void setDeleted(integer $value)
+ * @method int getParent()
+ * @method void setParent(integer $value)
  */
 class Comment extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_comments';
@@ -49,11 +53,14 @@ class Comment extends EntityWithUser implements JsonSerializable {
 	protected int $pollId = 0;
 	protected string $userId = '';
 	protected int $timestamp = 0;
+	protected int $deleted = 0;
 	protected ?string $comment = null;
+	protected int $parent = 0;
 
 	public function __construct() {
 		$this->addType('pollId', 'int');
 		$this->addType('timestamp', 'int');
+		$this->addType('deleted', 'int');
 	}
 
 	/**
@@ -66,6 +73,8 @@ class Comment extends EntityWithUser implements JsonSerializable {
 			'timestamp' => $this->getTimestamp(),
 			'comment' => $this->getComment(),
 			'user' => $this->getUser(),
+			'parent' => $this->getParent(),
+			'deleted' => $this->getDeleted(),
 			'subComments' => $this->getSubComments(),
 		];
 	}
@@ -74,6 +83,7 @@ class Comment extends EntityWithUser implements JsonSerializable {
 		$this->subComments[] = [
 			'id' => $comment->getId(),
 			'comment' => $comment->getComment(),
+			'deleted' => $comment->getDeleted(),
 			'timestamp' => $this->getTimestamp(),
 		];
 	}

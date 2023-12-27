@@ -74,22 +74,21 @@ class CommentService {
 	public function list(Acl $acl): array {
 		$comments = $this->listFlat($acl);
 		$timeTolerance = 5 * 60; // treat comments within 5 minutes as one comment
-		$groupedComments = [];
+		$tempId = null;
+		$tempUserId = null;
+		$tempTimestamp = null;
 
-		foreach ($comments as $comment) {
-			// Create a new comment if comment is from another user than the last in the list
-			// or the timespan beteen comments is less than the tolerance (i.e. 5 minutes)
-			if (!count($groupedComments)
-				|| !($comment->getDisplayName() === end($groupedComments)->getDisplayName()
-					&& $comment->getTimestamp() - end($groupedComments)->getTimestamp() < $timeTolerance)
-			) {
-				$groupedComments[] = $comment;
+		foreach ($comments as &$comment) {
+			if ($comment->getUserId() === $tempUserId && $comment->getTimestamp() - $tempTimestamp < $timeTolerance) {
+				$comment->setParent($tempId);
+			} else {
+				$tempUserId = $comment->getUserId();
+				$tempId = $comment->getId();
+				$tempTimestamp = $comment->getTimestamp();
 			}
-
-			// Add current comment as subComment element
-			$groupedComments[array_key_last($groupedComments)]->addSubComment($comment);
 		}
-		return $groupedComments;
+
+		return $comments;
 	}
 
 	/**
@@ -115,16 +114,18 @@ class CommentService {
 	}
 
 	/**
-	 * Delete comment
+	 * Delete or restore comment
+	 * @param Comment $comment Comment to delete or restore
+	 * @param Acl $acl Acl
+	 * @param bool $restore Set true, if comment is to be restored
 	 */
-	public function delete(Comment $comment, Acl $acl): Comment {
+	public function delete(Comment $comment, Acl $acl, bool $restore = false): Comment {
 		$acl->validatePollId($comment->getPollId());
-
 		if (!$acl->getIsOwner()) {
 			$acl->validateUserId($comment->getUserId());
 		}
-
-		$this->commentMapper->delete($comment);
+		$comment->setDeleted($restore ? 0 : time());
+		$this->commentMapper->update($comment);
 		$this->eventDispatcher->dispatchTyped(new CommentDeleteEvent($comment));
 
 		return $comment;

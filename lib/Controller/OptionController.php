@@ -82,7 +82,15 @@ class OptionController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function delete(int $optionId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['option' => $this->optionService->delete($optionId)]);
+		return $this->response(fn () => ['option' => $this->optionService->delete($optionId)]);
+	}
+
+	/**
+	 * Restore option
+	 */
+	#[NoAdminRequired]
+	public function restore(int $optionId): JSONResponse {
+		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, restore: true)]);
 	}
 
 	/**

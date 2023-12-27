@@ -55,6 +55,8 @@ use OCP\IL10N;
  * @method void setReleased(int $value)
  * @method int getTimestamp()
  * @method void setTimestamp(integer $value)
+ * @method int getDeleted()
+ * @method void setDeleted(integer $value)
  *
  * Joined Attributes
  * @method string getUserVoteAnswer()
@@ -79,6 +81,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $order = 0;
 	protected int $confirmed = 0;
 	protected int $duration = 0;
+	protected int $deleted = 0;
 
 	// joined Attributes
 	protected ?string $userVoteAnswer = '';
@@ -97,6 +100,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->addType('order', 'int');
 		$this->addType('confirmed', 'int');
 		$this->addType('duration', 'int');
+		$this->addType('deleted', 'int');
 
 		// joined Attributes
 		$this->addType('optionLimit', 'int');
@@ -117,6 +121,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'pollId' => $this->getPollId(),
 			'text' => $this->getPollOptionText(),
 			'timestamp' => $this->getTimestamp(),
+			'deleted' => $this->getDeleted(),
 			'order' => $this->getOrder(),
 			'confirmed' => $this->getConfirmed(),
 			'duration' => $this->getDuration(),

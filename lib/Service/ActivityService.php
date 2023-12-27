@@ -122,6 +122,12 @@ class ActivityService {
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have deleted a comment'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has deleted a comment'),
 			],
+			CommentEvent::RESTORE => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have restored a comment from poll {pollTitle}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored a comment from poll {pollTitle}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored a comment'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored a comment'),
+			],
 			OptionEvent::ADD => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have added an option to poll {pollTitle}'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has added an option to poll {pollTitle}'),
@@ -147,10 +153,16 @@ class ActivityService {
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has unconfirmed option {optionTitle}'),
 			],
 			OptionEvent::DELETE => [
-				self::FIRST_PERSON_FULL => $this->l10n->t('You have removed option {optionTitle} from poll {pollTitle}'),
-				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has removed option {optionTitle} from poll {pollTitle}'),
-				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have removed option {optionTitle}'),
-				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has removed option {optionTitle}'),
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have deleted option {optionTitle} from poll {pollTitle}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has deleted option {optionTitle} from poll {pollTitle}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have deleted option {optionTitle}'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has deleted option {optionTitle}'),
+			],
+			OptionEvent::RESTORE => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have restored option {optionTitle} from poll {pollTitle}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored option {optionTitle} from poll {pollTitle}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored option {optionTitle}'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored option {optionTitle}'),
 			],
 			PollEvent::ADD => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have added poll {pollTitle}'),
@@ -327,6 +339,44 @@ class ActivityService {
 					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has deleted a share from poll {pollTitle}'),
 					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have deleted share of {sharee}'),
 					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has deleted a share'),
+				],
+			},
+			ShareEvent::RESTORE => match ($this->shareType) {
+				Share::TYPE_USER, Share::TYPE_EMAIL, Share::TYPE_CONTACT, Share::TYPE_EXTERNAL => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored the share for {sharee} from poll {pollTitle}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored the share for {sharee} from poll {pollTitle}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored share of {sharee}'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored a share'),
+				],
+				Share::TYPE_PUBLIC => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored a public share from poll {pollTitle}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored a public share from poll {pollTitle}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored a public share'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored a public share'),
+				],
+				Share::TYPE_GROUP => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored the share for group {sharee} from poll {pollTitle}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored the share for group {sharee} from poll {pollTitle}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored the share for group {sharee}'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored the share for group {sharee}'),
+				],
+				Share::TYPE_CIRCLE => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored the share for circle {sharee} from poll {pollTitle}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored the share for circle {sharee} from poll {pollTitle}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored the share for circle {sharee}'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored the share for circle {sharee}'),
+				],
+				Share::TYPE_CONTACTGROUP => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored the share for contact group {sharee} from poll {pollTitle}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored the share for contact group {sharee} from poll {pollTitle}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored the share for contact group {sharee}'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored the share for contact group {sharee}'),
+				],
+				default => [
+					self::FIRST_PERSON_FULL => $this->l10n->t('You have restored a share from poll {pollTitle}'),
+					self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has restored a share from poll {pollTitle}'),
+					self::FIRST_PERSON_FILTERED => $this->l10n->t('You have restored share of {sharee}'),
+					self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has restored a share'),
 				],
 			},
 			default => [

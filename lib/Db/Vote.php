@@ -44,6 +44,8 @@ use JsonSerializable;
  * @method void setVoteOptionHash(string $value)
  * @method string getVoteAnswer()
  * @method void setVoteAnswer(string $value)
+ * @method int getDeleted()
+ * @method void setDeleted(integer $value)
  */
 class Vote extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_votes';
@@ -58,6 +60,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	protected string $voteOptionText = '';
 	protected string $voteOptionHash = '';
 	protected string $voteAnswer = '';
+	protected int $deleted = 0;
 
 	public function __construct() {
 		$this->addType('id', 'int');
@@ -74,6 +77,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 			'pollId' => $this->getPollId(),
 			'optionText' => $this->getVoteOptionText(),
 			'answer' => $this->getVoteAnswer(),
+			'deleted' => $this->getDeleted(),
 			'user' => $this->getUser(),
 		];
 	}

@@ -21,8 +21,11 @@
   -->
 
 <template>
-	<transition-group name="fade" :class="['comments' , {'alternativestyle': commentStyling}]" tag="ul">
-		<CommentItem v-for="(comment) in sortedList"
+	<transition-group name="fade"
+		:class="['comments' , {'alternativestyle': commentStyling}]"
+		:style="cssVar"
+		tag="ul">
+		<CommentItem v-for="(comment) in groupedComments"
 			:key="comment.id"
 			:comment="comment"
 			tag="li" />
@@ -30,34 +33,29 @@
 </template>
 
 <script>
-import { sortBy } from 'lodash'
+
 import CommentItem from './CommentItem.vue'
-import { mapState } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 
 export default {
 	name: 'Comments',
 	components: {
 		CommentItem,
 	},
-	data() {
-		return {
-			sort: 'timestamp',
-			reverse: true,
-		}
-	},
 
 	computed: {
 		...mapState({
-			comments: (state) => state.comments.list,
 			commentStyling: (state) => state.settings.user.useCommentsAlternativeStyling,
 		}),
 
-		sortedList() {
-			if (this.reverse) {
-				return sortBy(this.comments, this.sort).reverse()
-			}
-			return sortBy(this.comments, this.sort)
+		...mapGetters({
+			groupedComments: 'comments/groupedComments',
+		}),
 
+		cssVar() {
+			return {
+				'--content-deleted': `" (${t('polls', 'deleted')})"`,
+			}
 		},
 
 	},

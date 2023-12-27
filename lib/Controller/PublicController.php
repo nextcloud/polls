@@ -171,8 +171,18 @@ class PublicController extends BaseController {
 	 */
 	#[PublicPage]
 	public function deleteOption(string $token, int $optionId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => [
+		return $this->response(fn () => [
 			'option' => $this->optionService->delete($optionId, $this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW))
+		], $token);
+	}
+
+	/**
+	 * Restore option
+	 */
+	#[PublicPage]
+	public function restoreOption(string $token, int $optionId): JSONResponse {
+		return $this->response(fn () => [
+			'option' => $this->optionService->delete($optionId, $this->acl->setToken($token, Acl::PERMISSION_POLL_VIEW), true)
 		], $token);
 	}
 
@@ -212,9 +222,21 @@ class PublicController extends BaseController {
 	#[PublicPage]
 	public function deleteComment(int $commentId, string $token): JSONResponse {
 		$comment = $this->commentService->get($commentId);
-		return $this->responseDeleteTolerant(fn () => [
+		return $this->response(fn () => [
 			'comment' => $this->commentService->delete($comment, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD))
 		], $token);
+	}
+
+	/**
+	 * Restore deleted Comment
+	 */
+	#[PublicPage]
+	public function restoreComment(int $commentId, string $token): JSONResponse {
+		$comment = $this->commentService->get($commentId);
+
+		return $this->response(fn () => [
+			'comment' => $this->commentService->delete($comment, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD), true)
+		]);
 	}
 
 	/**

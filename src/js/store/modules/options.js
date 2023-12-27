@@ -57,6 +57,18 @@ const mutations = {
 		}
 	},
 
+	setDeleted(state, payload) {
+		const index = state.list.findIndex((option) =>
+			parseInt(option.id) === payload.option.id,
+		)
+
+		if (index > -1) {
+			state.list[index].deleted = payload.option.deleted
+			return
+		}
+		state.list.push(payload.option)
+	},
+
 	delete(state, payload) {
 		state.list = state.list.filter((option) => option.id !== payload.option.id)
 	},
@@ -200,16 +212,32 @@ const actions = {
 
 	async delete(context, payload) {
 		try {
+			let response = null
 			if (context.rootState.route.name === 'publicVote') {
-				await PublicAPI.deleteOption(context.rootState.route.params.token, payload.option.id)
+				response = await PublicAPI.deleteOption(context.rootState.route.params.token, payload.option.id)
 			} else {
-				await OptionsAPI.deleteOption(payload.option.id)
+				response = await OptionsAPI.deleteOption(payload.option.id)
 			}
-			context.commit('delete', { option: payload.option })
+			context.commit('setDeleted', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting option', { error: e.response }, { payload })
-			context.dispatch('list')
+			throw e
+		}
+	},
+
+	async restore(context, payload) {
+		try {
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.restoreOption(context.rootState.route.params.token, payload.option.id)
+			} else {
+				response = await OptionsAPI.restoreOption(payload.option.id)
+			}
+			context.commit('setDeleted', response.data)
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error restoring option', { error: e.response }, { payload })
 			throw e
 		}
 	},

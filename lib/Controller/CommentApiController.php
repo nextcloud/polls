@@ -75,13 +75,24 @@ class CommentApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function delete(int $commentId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => [
-			'comment' => $this->deleteComment($commentId)
+		$comment = $this->commentService->get($commentId);
+
+		return $this->response(fn () => [
+			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()))
 		]);
 	}
 
-	private function deleteComment(int $commentId): Comment {
+	/**
+	 * Restore comment
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function restore(int $commentId): JSONResponse {
 		$comment = $this->commentService->get($commentId);
-		return $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()));
+
+		return $this->response(fn () => [
+			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()), true)
+		]);
 	}
 }

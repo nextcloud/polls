@@ -68,6 +68,16 @@ const publicPoll = {
 		})
 	},
 
+	restoreOption(shareToken, optionId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `s/${shareToken}/option/${optionId}/restore`,
+			params: { time: +new Date() },
+
+			cancelToken: cancelTokenHandlerObject[this.restoreOption.name].handleRequestCancellation().token,
+		})
+	},
+
 	getVotes(shareToken) {
 		return httpInstance.request({
 			method: 'GET',
@@ -120,6 +130,16 @@ const publicPoll = {
 			params: { time: +new Date() },
 
 			cancelToken: cancelTokenHandlerObject[this.deleteComment.name].handleRequestCancellation().token,
+		})
+	},
+
+	restoreComment(shareToken, commentId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `s/${shareToken}/comment/${commentId}/restore`,
+			params: { time: +new Date() },
+
+			cancelToken: cancelTokenHandlerObject[this.restoreComment.name].handleRequestCancellation().token,
 		})
 	},
 

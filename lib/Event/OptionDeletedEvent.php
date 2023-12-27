@@ -30,6 +30,6 @@ class OptionDeletedEvent extends OptionEvent {
 		protected Option $option
 	) {
 		parent::__construct($option);
-		$this->eventId = self::DELETE;
+		$this->eventId = $option->getDeleted() ? self::DELETE : self::RESTORE;
 	}
 }

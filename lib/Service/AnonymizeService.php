@@ -67,7 +67,7 @@ class AnonymizeService {
 	public function set(int $pollId, string $userId): void {
 		$this->userId = $userId;
 		$votes = $this->voteMapper->findByPoll($pollId);
-		$comments = $this->commentMapper->findByPoll($pollId);
+		$comments = $this->commentMapper->findByPoll($pollId, true);
 		$options = $this->optionMapper->findByPoll($pollId);
 		$i = 0;
 

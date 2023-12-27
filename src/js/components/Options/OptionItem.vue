@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, 'date-box': show === 'dateBox' }">
+	<Component :is="tag" class="option-item" :class="{ draggable: isDraggable, deleted: option.deleted, 'date-box': show === 'dateBox' }">
 		<DragIcon v-if="isDraggable" :class="{ draggable: isDraggable }" />
 
 		<slot name="icon" />
@@ -225,6 +225,11 @@ export default {
 		align-items: center;
 		flex: 1;
 		position: relative;
+
+		&.deleted {
+			opacity: 0.6;
+		}
+
 		&.date-box {
 			align-items: stretch;
 			flex-direction: column;
@@ -303,6 +308,14 @@ export default {
 		flex: 1;
 		opacity: 1;
 		white-space: normal;
+	}
+
+	.deleted {
+		[class*='option-item__option']::after {
+			content: var(--content-deleted);
+			font-weight: bold;
+			color: var(--color-error-text);
+		}
 	}
 
 	.option-item__option--text {
