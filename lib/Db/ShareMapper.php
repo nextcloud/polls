@@ -194,7 +194,7 @@ class ShareMapper extends QBMapper {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->where(
-				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
+				$query->expr()->gt('deleted', $query->createNamedParameter(0))
 			)
 			->andWhere(
 				$query->expr()->lt('deleted', $query->createNamedParameter($offset))

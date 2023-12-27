@@ -175,11 +175,11 @@ class OptionMapper extends QBMapperWithUser {
 	public function purgeDeletedOptions(int $offset): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
-			->where(
-				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
-			)
 			->andWhere(
 				$query->expr()->gt('deleted', $query->createNamedParameter(0))
+			)
+			->andWhere(
+				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
 			);
 		$query->executeStatement();
 	}

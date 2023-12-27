@@ -70,9 +70,9 @@ class JanitorCron extends TimedJob {
 		$this->watchMapper->deleteOldEntries(time() - 86400);
 
 		// purge entries virtually deleted more than 12 hour ago
-		// $this->commentMapper->purgeDeletedComments(time() - 4320);
-		// $this->optionMapper->purgeDeletedOptions(time() - 4320);
-		// $this->shareMapper->purgeDeletedShares(time() - 4320);
+		$this->commentMapper->purgeDeletedComments(time() - 4320);
+		$this->optionMapper->purgeDeletedOptions(time() - 4320);
+		$this->shareMapper->purgeDeletedShares(time() - 4320);
 
 		// archive polls after defined days after closing date
 		if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_AUTO_ARCHIVE) && $this->appSettings->getIntegerSetting(AppSettings::SETTING_AUTO_ARCHIVE_OFFSET) > 0) {
