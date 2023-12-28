@@ -66,6 +66,7 @@ import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 import { PollsAPI } from '../../Api/index.js'
+import DOMPurify from 'dompurify'
 
 export default {
 	name: 'ExportPoll',
@@ -120,8 +121,8 @@ export default {
 
 			if (['html', 'xlsx', 'ods'].includes(type)) {
 				this.sheetData.push(
-					[this.poll.title],
-					[this.poll.description],
+					[DOMPurify.sanitize(this.poll.title)],
+					[DOMPurify.sanitize(this.poll.description)],
 				)
 			}
 
@@ -138,10 +139,17 @@ export default {
 			}
 
 			if (this.poll.type === 'textPoll') {
-				this.sheetData.push([
-					...participantsHeader,
-					...this.options.list.map((item) => item.text),
-				])
+				if (['html'].includes(type)) {
+					this.sheetData.push([
+						...participantsHeader,
+						...this.options.list.map((item) => DOMPurify.sanitize(`hello${item.text}`)),
+					])
+				} else {
+					this.sheetData.push([
+						...participantsHeader,
+						...this.options.list.map((item) => item.text),
+					])
+				}
 
 			} else if (['csv'].includes(type)) {
 				this.sheetData.push([
