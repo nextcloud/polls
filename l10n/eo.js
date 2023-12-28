@@ -15,6 +15,7 @@ OC.L10N.register(
     "Conflict" : "Konflikto",
     "New comment …" : "Nova komento...",
     "Delete comment" : "Forigi komenton",
+    "deleted" : "forigita",
     "Anonymous poll" : "Enketo sennoma",
     "Title" : "Titolo",
     "Poll type" : "Enketa tipo",

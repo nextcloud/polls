@@ -10,6 +10,7 @@ OC.L10N.register(
     "Conflict" : "Konflik",
     "New comment …" : "Komentar baru ...",
     "Delete comment" : "Hapus komentar",
+    "deleted" : "terhapus",
     "Title" : "Judul",
     "Cancel" : "Membatalkan",
     "Apply" : "Terapkan",

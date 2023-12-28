@@ -13,6 +13,7 @@ OC.L10N.register(
     "Conflict" : "კონფლიქტი",
     "New comment …" : "ახალი კომენტარი ...",
     "Delete comment" : "კომენტარის გაუქმება",
+    "deleted" : "გაუქმებულია",
     "Title" : "სათაური",
     "Cancel" : "უარყოფა",
     "Apply" : "გამოყენება",

@@ -20,6 +20,7 @@ OC.L10N.register(
     "Error while saving comment" : "Error guardando el comentario",
     "Delete comment" : "Borrar comentario",
     "Error while deleting the comment" : "Error borrando el comentario",
+    "deleted" : "Borrado",
     "Title" : "Título",
     "Enter Title" : "Escriba el título",
     "Poll type" : "Tipo de encuesta",

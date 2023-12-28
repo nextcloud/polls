@@ -12,6 +12,7 @@ OC.L10N.register(
     "Conflict" : "Përplasje",
     "New comment …" : "Koment i ri ...",
     "Delete comment" : "Fshi komentin",
+    "deleted" : "të fshira",
     "Title" : "Titulli",
     "Cancel" : "Anullo",
     "Apply" : "Apliko",

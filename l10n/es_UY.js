@@ -12,6 +12,7 @@ OC.L10N.register(
     "Conflict" : "Conflicto",
     "New comment …" : "Comentario nuevo ...",
     "Delete comment" : "Borrar comentario",
+    "deleted" : "Borrado",
     "Title" : "Título",
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "Conflict" : "Xung đột",
     "New comment …" : "Bình luận mới ...",
     "Delete comment" : " Xóa bình luận",
+    "deleted" : "đã xóa",
     "Title" : "Tên",
     "Cancel" : "Hủy bỏ",
     "Apply" : "Áp dụng",

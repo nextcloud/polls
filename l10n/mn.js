@@ -9,6 +9,7 @@ OC.L10N.register(
     "Conflict" : "Давхцал",
     "New comment …" : "Шинэ сэтгэгдэл...",
     "Delete comment" : "Сэтгэгдэл устгах",
+    "deleted" : "Устгагдсан",
     "Title" : "Цол/Албан тушаал",
     "Cancel" : "болиулах",
     "Apply" : "хэрэглэх",

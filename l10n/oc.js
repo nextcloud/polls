@@ -17,6 +17,7 @@ OC.L10N.register(
     "Unknown error" : "Error desconeguda",
     "New comment …" : "Nòu comentari…",
     "Delete comment" : "Suprimir comentari",
+    "deleted" : "suprimit",
     "Title" : "Títol",
     "Cancel" : "Anullar",
     "Apply" : "Aplicar",
