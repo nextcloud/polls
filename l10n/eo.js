@@ -42,6 +42,7 @@ OC.L10N.register(
     "Login" : "Login",
     "Preview" : "Antaŭvidi",
     "Delete share" : "Forigi kunhavigon",
+    "Restore share" : "Restaŭri kunhavon",
     "Link copied to clipboard" : "Ligilo kopiita al tondujo",
     "Shares" : "Kunhavoj",
     "Description" : "Priskribo",

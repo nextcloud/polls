@@ -421,6 +421,7 @@ OC.L10N.register(
     "Unlock share" : "Desbloquear recurso compartido",
     "Lock share" : "Bloquear recurso compartido",
     "Delete share" : "Borrar recurso compartido",
+    "Restore share" : "Restaurar recurso compartido",
     "Share of {displayName} unlocked" : "Compartir {displayName} desbloqueado",
     "Share of {displayName} locked" : "Compartir {displayName} bloqueado",
     "Error while changing lock status of user {displayName}" : "Error al cambiar el estado de bloqueo del usuario {displayName}",

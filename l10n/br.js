@@ -8,6 +8,7 @@ OC.L10N.register(
     "Unknown error" : "Fazi dizanv",
     "Conflict" : "Stourm",
     "Delete comment" : "Lemel an displegadenn",
+    "deleted" : "lemet",
     "Title" : "Titl",
     "Cancel" : "Arrest",
     "Apply" : "Lakaat",
