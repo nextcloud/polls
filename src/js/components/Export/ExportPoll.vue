@@ -142,7 +142,7 @@ export default {
 				if (['html'].includes(type)) {
 					this.sheetData.push([
 						...participantsHeader,
-						...this.options.list.map((item) => DOMPurify.sanitize(`hello${item.text}`)),
+						...this.options.list.map((item) => DOMPurify.sanitize(item.text)),
 					])
 				} else {
 					this.sheetData.push([
