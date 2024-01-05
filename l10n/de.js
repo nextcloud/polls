@@ -243,7 +243,7 @@ OC.L10N.register(
     "Delete comment" : "Kommentar löschen",
     "Error while deleting the comment" : "Fehler beim Löschen des Kommentars",
     "Error while restoring the comment" : "Fehler beim Wiederherstellen des Kommentars",
-    "deleted" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "deleted" : "gelöscht",
     "The automatic reminder is sent to all shares via email:" : "Die automatische Erinnerung wird per E-Mail an alle Teilnehmer gesendet:",
     "For polls with expiration:" : "Für Umfragen mit Ablaufdatum:",
     "48 hours before the expiration date, if the poll is created more than 5 days before the expiration." : "48 Stunden vor dem Ablaufdatum, wenn die Umfrage mehr als 5 Tage vor dem Ablaufdatum erstellt wird.",
