@@ -43,7 +43,7 @@
 				</template>
 			</CardDiv>
 
-			<CardDiv v-if="acl.allowAddOptions && proposalsOpen && !closed" type="info">
+			<CardDiv v-if="permissions.addOptions && proposalsOpen && !closed" type="info">
 				{{ t('polls', 'You are asked to propose more options. ') }}
 				<p v-if="proposalsExpirySet && !proposalsExpired">
 					{{ t('polls', 'The proposal period ends {timeRelative}.', { timeRelative: proposalsExpireRelative }) }}
@@ -91,12 +91,12 @@
 						<DatePollIcon v-else />
 					</template>
 					<template #action>
-						<NcButton v-if="acl.allowEdit" type="primary" @click="openOptions">
+						<NcButton v-if="permissions.edit" type="primary" @click="openOptions">
 							<template #default>
 								{{ t('polls', 'Add some!') }}
 							</template>
 						</NcButton>
-						<div v-if="!acl.allowEdit">
+						<div v-if="!permissions.edit">
 							{{ t('polls', 'Maybe the owner did not provide some until now.') }}
 						</div>
 					</template>
@@ -180,7 +180,7 @@ export default {
 	computed: {
 		...mapState({
 			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 			share: (state) => state.share,
 			settings: (state) => state.settings,
 		}),
@@ -201,7 +201,7 @@ export default {
 		}),
 
 		isNoAccessSet() {
-			return this.poll.access === 'private' && !this.hasShares && this.acl.allowEdit
+			return this.poll.access === 'private' && !this.hasShares && this.permissions.edit
 		},
 
 		registrationInvitationText() {
@@ -219,7 +219,7 @@ export default {
 		},
 
 		showConfirmationMail() {
-			return this.acl.isOwner && this.closed && this.confirmedOptions.length > 0
+			return this.permissions.edit && this.closed && this.confirmedOptions.length > 0
 		},
 
 		/* eslint-disable-next-line vue/no-unused-properties */

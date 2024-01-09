@@ -50,6 +50,23 @@ const defaultAcl = () => ({
 	userIsInvolved: '',
 	pollExpired: false,
 	pollExpire: 0,
+	permissions: {
+		addOptions: false,
+		allAccess: false,
+		archive: false,
+		comment: false,
+		delete: false,
+		edit: false,
+		pollCreation: false,
+		pollDownload: false,
+		publicShares: false,
+		seeResults: false,
+		seeUsernames: false,
+		seeMailAddresses: false,
+		subscribe: false,
+		view: false,
+		vote: false,
+	},
 })
 
 const namespaced = true

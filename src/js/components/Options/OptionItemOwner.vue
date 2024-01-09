@@ -22,7 +22,7 @@
 
 <template>
 	<div class="option-item-owner">
-		<ActionDelete v-if="!acl.allowEdit && acl.userId === option.owner.userId"
+		<ActionDelete v-if="!permissions.edit && acl.userId === option.owner.userId"
 			:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
 			:restore="!!option.deleted"
 			:timeout="0"
@@ -73,6 +73,7 @@ export default {
 		...mapState({
 			pollOwner: (state) => state.poll.owner.userId,
 			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 		}),
 
 		...mapGetters({

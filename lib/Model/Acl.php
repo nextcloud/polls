@@ -113,6 +113,23 @@ class Acl implements JsonSerializable {
 			'userIsInvolved' => $this->getIsInvolved(),
 			'pollExpired' => $this->poll->getExpired(),
 			'pollExpire' => $this->poll->getExpire(),
+			'permissions' => [
+				'addOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
+				'allAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
+				'archive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
+				'comment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
+				'delete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
+				'edit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+				'pollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
+				'pollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
+				'publicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
+				'seeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
+				'seeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+				'seeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
+				'subscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
+				'view' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
+				'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT)
+			]
 		];
 	}
 

@@ -27,8 +27,8 @@
 		</template>
 
 		<UserSearch class="add-share" />
-		<ShareItemAllUsers v-if="allowAllAccess" />
-		<SharePublicAdd v-if="allowPublicShares" />
+		<ShareItemAllUsers v-if="permissions.allAccess" />
+		<SharePublicAdd v-if="permissions.publicShares" />
 
 		<div v-if="activeShares.length" class="shares-list shared">
 			<TransitionGroup :css="false" tag="div">
@@ -87,8 +87,7 @@ export default {
 
 	computed: {
 		...mapState({
-			allowAllAccess: (state) => state.poll.acl.allowAllAccess,
-			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
+			permissions: (state) => state.poll.acl.permissions,
 			pollAccess: (state) => state.poll.access,
 			pollTitle: (state) => state.poll.title,
 			pollDescription: (state) => state.poll.description,

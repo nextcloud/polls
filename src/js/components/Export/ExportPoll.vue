@@ -98,7 +98,7 @@ export default {
 			poll: (state) => state.poll,
 			options: (state) => state.options,
 			votes: (state) => state.votes,
-			isOwner: (state) => state.poll.acl.allowEdit,
+			permissions: (state) => state.poll.acl.permissions,
 		}),
 
 		sheetName() {
@@ -126,7 +126,7 @@ export default {
 				)
 			}
 
-			if (this.isOwner) {
+			if (this.permissions.edit) {
 				try {
 					participantsHeader.push(t('polls', 'Email address'))
 					fromHeader.push('')
@@ -190,7 +190,7 @@ export default {
 			this.participants.forEach((participant) => {
 				const votesLine = [participant.displayName]
 				try {
-					if (this.isOwner) {
+					if (this.permissions.edit) {
 						votesLine.push(this.emailAddresses.find((item) => item.displayName === participant.displayName).emailAddress)
 					}
 

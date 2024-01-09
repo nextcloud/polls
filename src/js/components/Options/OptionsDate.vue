@@ -31,12 +31,12 @@
 				display="textBox"
 				tag="li">
 				<template #icon>
-					<OptionItemOwner v-if="acl.allowAddOptions"
+					<OptionItemOwner v-if="permissions.addOptions"
 						:avatar-size="16"
 						:option="option"
 						class="owner" />
 				</template>
-				<template v-if="acl.allowEdit" #actions>
+				<template v-if="permissions.edit" #actions>
 					<ActionDelete v-if="!closed"
 						:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
 						:restore="!!option.deleted"
@@ -133,6 +133,7 @@ export default {
 		...mapState({
 			options: (state) => state.options.list,
 			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 			isOwner: (state) => state.poll.acl.isOwner,
 		}),
 
