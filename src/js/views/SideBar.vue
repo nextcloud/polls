@@ -25,7 +25,7 @@
 		:active.sync="activeTab"
 		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
-		<NcAppSidebarTab v-if="acl.allowEdit"
+		<NcAppSidebarTab v-if="permissions.edit"
 			id="configuration"
 			:order="1"
 			:name="t('polls', 'Configuration')">
@@ -35,7 +35,7 @@
 			<SideBarTabConfiguration />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="acl.allowEdit"
+		<NcAppSidebarTab v-if="permissions.edit"
 			id="options"
 			:order="2"
 			:name="t('polls', 'Options')">
@@ -45,7 +45,7 @@
 			<SideBarTabOptions />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="acl.allowEdit"
+		<NcAppSidebarTab v-if="permissions.edit"
 			id="sharing"
 			:order="3"
 			:name="t('polls', 'Sharing')">
@@ -55,7 +55,7 @@
 			<SideBarTabShare />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="acl.allowComment"
+		<NcAppSidebarTab v-if="permissions.comment"
 			id="comments"
 			:order="5"
 			:name="t('polls', 'Comments')">
@@ -65,7 +65,7 @@
 			<SideBarTabComments />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="acl.allowEdit && useActivity"
+		<NcAppSidebarTab v-if="permissions.edit && useActivity"
 			id="activity"
 			:order="6"
 			:name="t('polls', 'Activity')">
@@ -115,7 +115,7 @@ export default {
 	computed: {
 		...mapState({
 			poll: (state) => state.poll,
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 			useActivity: (state) => state.appSettings.useActivity,
 			useCollaboration: (state) => state.appSettings.useCollaboration,
 		}),

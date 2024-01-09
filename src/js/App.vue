@@ -24,7 +24,7 @@
 	<NcContent app-name="polls" :class="appClass">
 		<router-view v-if="getCurrentUser()" name="navigation" />
 		<router-view />
-		<router-view v-if="poll.acl.allowEdit || poll.acl.allowComment" name="sidebar" />
+		<router-view v-if="permissions.edit || permissions.comment" name="sidebar" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
@@ -68,13 +68,13 @@ export default {
 			settings: (state) => state.settings.user,
 			appSettings: (state) => state.appSettings,
 			poll: (state) => state.poll,
-			allowEdit: (state) => state.poll.acl.allowEdit,
+			permissions: (state) => state.poll.acl.permissions,
 		}),
 
 		appClass() {
 			return [
 				this.transitionClass, {
-					edit: this.allowEdit,
+					edit: this.permissions.edit,
 				},
 			]
 		},

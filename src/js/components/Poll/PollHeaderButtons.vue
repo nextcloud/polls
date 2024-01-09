@@ -35,8 +35,8 @@
 			</template>
 			<PollInformation />
 		</NcPopover>
-		<ExportPoll v-if="acl.allowPollDownload" />
-		<ActionToggleSidebar v-if="acl.allowEdit || acl.allowComment" />
+		<ExportPoll v-if="permissions.pollDownload" />
+		<ActionToggleSidebar v-if="permissions.edit || permissions.comment" />
 	</div>
 </template>
 
@@ -66,11 +66,11 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 		}),
 
 		showUserMenu() {
-			return this.$route.name !== 'publicVote' || this.acl.allowVote || this.acl.allowSubscribe
+			return this.$route.name !== 'publicVote' || this.permissions.vote || this.permissions.subscribe
 		},
 	},
 

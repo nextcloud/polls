@@ -50,7 +50,7 @@ export default {
 			isDeleted: (state) => state.poll.deleted,
 			ownerDisplayName: (state) => state.poll.owner.displayName,
 			pollCreated: (state) => state.poll.created,
-			mayEdit: (state) => state.poll.acl.allowEdit,
+			mayEdit: (state) => state.poll.acl.permissions.edit,
 		}),
 
 		...mapGetters({

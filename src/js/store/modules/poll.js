@@ -122,7 +122,7 @@ const getters = {
 		const participants = getters.participantsVoted
 
 		// add current user, if not among participants and voting is allowed
-		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.permissions.vote) {
 			participants.push({
 				userId: state.acl.userId,
 				displayName: state.acl.displayName,

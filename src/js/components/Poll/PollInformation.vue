@@ -61,7 +61,7 @@
 			</template>
 			{{ resultsCaption }}
 		</BadgeDiv>
-		<BadgeDiv v-if="countParticipantsVoted && acl.allowSeeResults">
+		<BadgeDiv v-if="countParticipantsVoted && permissions.seeResults">
 			<template #icon>
 				<ParticipantsIcon />
 			</template>
@@ -183,7 +183,7 @@ export default {
 	computed: {
 		...mapState({
 			share: (state) => state.share,
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 			poll: (state) => state.poll,
 			subscribed: (state) => state.subscription.subscribed,
 			showResults: (state) => state.poll.showResults,
