@@ -8,6 +8,7 @@ OC.L10N.register(
     "Contact" : "Контакт",
     "Public link" : "Јавен линк",
     "User" : "Корисник",
+    "Switch to list view" : "Прикажи поглед во листа",
     "Delete" : "Избриши",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Бришење за 1 секунда","Бришење за {countdown} секунди"],
     "Unknown error" : "Непозната грешка",
