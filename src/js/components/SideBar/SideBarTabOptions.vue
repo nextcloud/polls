@@ -22,7 +22,7 @@
 
 <template>
 	<div class="side-bar-tab-options">
-		<ConfigBox v-if="!isOwner" :name="t('polls', 'As an admin you may edit this poll')" />
+		<ConfigBox v-if="!currentUser.isOwner" :name="t('polls', 'As an admin you may edit this poll')" />
 		<ConfigBox :name="t('polls', 'Allow proposals from users')">
 			<template #icon>
 				<AddDateIcon />
@@ -102,7 +102,7 @@ export default {
 		}),
 		...mapState({
 			pollType: (state) => state.poll.type,
-			isOwner: (state) => state.poll.acl.isOwner,
+			currentUser: (state) => state.poll.acl.currentUser,
 		}),
 	},
 }

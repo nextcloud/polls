@@ -152,12 +152,12 @@ const publicPoll = {
 		})
 	},
 
-	setEmail(shareToken, emailAddress) {
+	setEmailAddress(shareToken, emailAddress) {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/email/${emailAddress}`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.setEmail.name].handleRequestCancellation().token,
+			cancelToken: cancelTokenHandlerObject[this.setEmailAddress.name].handleRequestCancellation().token,
 		})
 	},
 
@@ -166,7 +166,7 @@ const publicPoll = {
 			method: 'DELETE',
 			url: `s/${shareToken}/email`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.setEmailAddress.name].handleRequestCancellation().token,
+			cancelToken: cancelTokenHandlerObject[this.deleteEmailAddress.name].handleRequestCancellation().token,
 		})
 	},
 

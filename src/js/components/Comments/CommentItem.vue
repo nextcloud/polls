@@ -22,7 +22,7 @@
 
 <template>
 	<div :class="['comment-item', {currentuser: isCurrentUser}]">
-		<UserItem v-bind="comment.user" hide-names />
+		<UserItem :user="comment.user" hide-names />
 		<div class="comment-item__content">
 			<span class="comment-item__user">{{ comment.user.displayName }}</span>
 			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
@@ -33,7 +33,7 @@
 				<span v-html="linkify(subComment.comment)" />
 				<!-- eslint-enable vue/no-v-html -->
 
-				<ActionDelete v-if="(comment.user.userId === acl.userId || acl.isOwner)"
+				<ActionDelete v-if="(comment.user.userId === currentUser.userId || currentUser.isOwner)"
 					:name="subComment.deleted ? t('polls', 'Restore comment') : t('polls', 'Delete comment')"
 					:restore="!!subComment.deleted"
 					:timeout="0"
@@ -66,8 +66,7 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: (state) => state.poll.acl,
-			currentUser: (state) => state.poll.acl.userId,
+			currentUser: (state) => state.poll.acl.currentUser,
 		}),
 
 		dateCommentedRelative() {
@@ -75,7 +74,7 @@ export default {
 		},
 
 		isCurrentUser() {
-			return this.currentUser === this.comment.user.userId
+			return this.currentUser.userId === this.comment.user.userId
 		},
 	},
 

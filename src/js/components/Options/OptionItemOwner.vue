@@ -22,7 +22,7 @@
 
 <template>
 	<div class="option-item-owner">
-		<ActionDelete v-if="!permissions.edit && acl.userId === option.owner.userId"
+		<ActionDelete v-if="!permissions.edit && currentUser.userId === option.owner.userId"
 			:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
 			:restore="!!option.deleted"
 			:timeout="0"
@@ -40,7 +40,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState } from 'vuex'
 import { NcAvatar } from '@nextcloud/vue'
 import { deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import { ActionDelete } from '../Actions/index.js'
@@ -72,11 +72,8 @@ export default {
 	computed: {
 		...mapState({
 			pollOwner: (state) => state.poll.owner.userId,
-			acl: (state) => state.poll.acl,
+			currentUser: (state) => state.poll.acl.currentUser,
 			permissions: (state) => state.poll.acl.permissions,
-		}),
-
-		...mapGetters({
 		}),
 	},
 }

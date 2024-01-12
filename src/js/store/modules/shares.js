@@ -66,17 +66,17 @@ const getters = {
 		// sharetype which are active without sending an invitation
 		const directShareTypes = ['user', 'group', 'admin', 'public']
 		return state.list.filter((share) => (!share.locked
-			&& (directShareTypes.includes(share.type)
-				|| (invitationTypes.includes(share.type) && (share.type === 'external' || share.invitationSent || share.voted))
+			&& (directShareTypes.includes(share.user.type)
+				|| (invitationTypes.includes(share.user.type) && (share.user.type === 'external' || share.invitationSent || share.voted))
 			)
 		))
 	},
 
 	locked: (state) => state.list.filter((share) => (!!share.locked)),
 	unsentInvitations: (state) => state.list.filter((share) =>
-		(share.emailAddress || share.type === 'group' || share.type === 'contactGroup' || share.type === 'circle')
+		(share.user.emailAddress || share.user.type === 'group' || share.user.type === 'contactGroup' || share.user.type === 'circle')
 		&& !share.invitationSent && !share.locked && !share.voted),
-	public: (state) => state.list.filter((share) => ['public'].includes(share.type)),
+	public: (state) => state.list.filter((share) => ['public'].includes(share.user.type)),
 	hasShares: (state) => state.list.length > 0,
 	hasLocked: (state, getters) => getters.locked.length > 0,
 }
@@ -106,7 +106,7 @@ const actions = {
 	},
 
 	async switchAdmin(context, payload) {
-		const setTo = payload.share.type === 'user' ? 'admin' : 'user'
+		const setTo = payload.share.user.type === 'user' ? 'admin' : 'user'
 
 		try {
 			const response = await SharesAPI.switchAdmin(payload.share.token, setTo)
@@ -133,7 +133,7 @@ const actions = {
 
 	async writeLabel(context, payload) {
 		try {
-			const response = await SharesAPI.writeLabel(payload.token, payload.displayName)
+			const response = await SharesAPI.writeLabel(payload.token, payload.label)
 			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return

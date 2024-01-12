@@ -22,7 +22,7 @@
 
 <template>
 	<div :class="{ deleted: share.deleted }">
-		<UserItem v-bind="share"
+		<UserItem :user="share.user"
 			show-email
 			resolve-info
 			:forced-description="share.deleted ? `(${t('polls', 'deleted')})` : null"
@@ -32,7 +32,7 @@
 				<div v-if="share.voted">
 					<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />
 				</div>
-				<div v-else-if="['public', 'group'].includes(share.type)">
+				<div v-else-if="['public', 'group'].includes(share.user.type)">
 					<div class="vote-status empty" />
 				</div>
 				<div v-else>
@@ -41,7 +41,7 @@
 			</template>
 
 			<NcActions>
-				<NcActionInput v-if="share.type === 'public'"
+				<NcActionInput v-if="share.user.type === 'public'"
 					:show-trailing-button="false"
 					:value.sync="label"
 					@input="writeLabel()">
@@ -51,14 +51,14 @@
 					{{ t('polls', 'Share label') }}
 				</NcActionInput>
 
-				<NcActionButton v-if="share.emailAddress || share.type === 'group'" @click="sendInvitation()">
+				<NcActionButton v-if="share.user.emailAddress || share.user.type === 'group'" @click="sendInvitation()">
 					<template #icon>
 						<SendEmailIcon />
 					</template>
 					{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="['contactGroup', 'circle'].includes(share.type)"
+				<NcActionButton v-if="['contactGroup', 'circle'].includes(share.user.type)"
 					@click="resolveGroup(share)">
 					<template #icon>
 						<ResolveGroupIcon />
@@ -66,12 +66,12 @@
 					{{ t('polls', 'Resolve into individual invitations') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="share.type === 'user' || share.type === 'admin'" @click="switchAdmin({ share: share })">
+				<NcActionButton v-if="share.user.type === 'user' || share.user.type === 'admin'" @click="switchAdmin({ share: share })">
 					<template #icon>
-						<GrantAdminIcon v-if="share.type === 'user'" />
+						<GrantAdminIcon v-if="share.user.type === 'user'" />
 						<WithdrawAdminIcon v-else />
 					</template>
-					{{ share.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
+					{{ share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 				</NcActionButton>
 
 				<NcActionButton @click="copyLink()">
@@ -88,9 +88,9 @@
 					{{ t('polls', 'Show QR code') }}
 				</NcActionButton>
 
-				<NcActionCaption v-if="share.type === 'public'" :name="t('polls', 'Options for the registration dialog')" />
+				<NcActionCaption v-if="share.user.type === 'public'" :name="t('polls', 'Options for the registration dialog')" />
 
-				<NcActionRadio v-if="share.type === 'public'"
+				<NcActionRadio v-if="share.user.type === 'public'"
 					name="publicPollEmail"
 					value="optional"
 					:checked="share.publicPollEmail === 'optional'"
@@ -98,7 +98,7 @@
 					{{ t('polls', 'Email address is optional') }}
 				</NcActionRadio>
 
-				<NcActionRadio v-if="share.type === 'public'"
+				<NcActionRadio v-if="share.user.type === 'public'"
 					name="publicPollEmail"
 					value="mandatory"
 					:checked="share.publicPollEmail === 'mandatory'"
@@ -106,7 +106,7 @@
 					{{ t('polls', 'Email address is mandatory') }}
 				</NcActionRadio>
 
-				<NcActionRadio v-if="share.type === 'public'"
+				<NcActionRadio v-if="share.user.type === 'public'"
 					name="publicPollEmail"
 					value="disabled"
 					:checked="share.publicPollEmail === 'disabled'"
@@ -189,10 +189,10 @@ export default {
 	computed: {
 		label: {
 			get() {
-				return this.share.displayName
+				return this.share.user.displayName
 			},
 			set(value) {
-				this.$store.commit('shares/setShareProperty', { id: this.share.id, displayName: value })
+				this.$store.commit('shares/setShareProperty', { id: this.share.id, user: { displayName: value } })
 			},
 		},
 	},
@@ -213,19 +213,19 @@ export default {
 			try {
 				if (share.locked) {
 					this.unlockShare({ share })
-					showSuccess(t('polls', 'Share of {displayName} unlocked', { displayName: share.displayName }))
+					showSuccess(t('polls', 'Share of {displayName} unlocked', { displayName: share.user.displayName }))
 				} else {
 					this.lockShare({ share })
-					showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.displayName }))
+					showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.user.displayName }))
 				}
 			} catch (e) {
-				showError(t('polls', 'Error while changing lock status of user {displayName}', { displayName: share.displayName }))
+				showError(t('polls', 'Error while changing lock status of user {displayName}', { displayName: share.user.displayName }))
 				console.error('Error locking or unlocking share', { share }, e.response)
 			}
 		},
 
 		async writeLabel() {
-			this.setLabel({ token: this.share.token, displayName: this.share.displayName })
+			this.setLabel({ token: this.share.token, label: this.share.user.displayName })
 		},
 
 		async resolveGroup(share) {
@@ -233,11 +233,11 @@ export default {
 				await this.$store.dispatch('shares/resolveGroup', { share })
 			} catch (e) {
 				if (e.response.status === 409 && e.response.data === 'Circles is not enabled for this user') {
-					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.displayName }))
+					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.user.displayName }))
 				} else if (e.response.status === 409 && e.response.data === 'Contacts is not enabled') {
-					showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.displayName }))
+					showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.user.displayName }))
 				} else {
-					showError(t('polls', 'Error resolving {name}.', { name: share.displayName }))
+					showError(t('polls', 'Error resolving {name}.', { name: share.user.displayName }))
 				}
 			}
 		},

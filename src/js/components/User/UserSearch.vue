@@ -88,7 +88,6 @@ export default {
 		async addShare(payload) {
 			try {
 				await this.$store.dispatch('shares/add', {
-					share: payload,
 					type: payload.type,
 					id: payload.id,
 					emailAddress: payload.emailAddress,

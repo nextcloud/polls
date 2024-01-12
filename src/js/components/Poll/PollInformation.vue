@@ -115,11 +115,11 @@
 			</template>
 			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="$route.name === 'publicVote' && share.emailAddress">
+		<BadgeDiv v-if="$route.name === 'publicVote' && share.user.emailAddress">
 			<template #icon>
 				<EmailIcon />
 			</template>
-			{{ share.emailAddress }}
+			{{ share.user.emailAddress }}
 		</BadgeDiv>
 		<BadgeDiv v-if="subscribed">
 			<template #icon>
