@@ -29,8 +29,8 @@
 
 			<div v-for="(participant) in participants"
 				:key="participant.userId"
-				:class="['participant', {currentuser: (participant.userId === userId) }]">
-				<UserItem v-bind="participant" condensed />
+				:class="['participant', {currentuser: (participant.userId === currentUser.userId) }]">
+				<UserItem :user="participant" condensed />
 
 				<ActionDelete v-if="permissions.edit"
 					class="user-actions"
@@ -83,7 +83,7 @@ export default {
 	computed: {
 		...mapState({
 			permissions: (state) => state.poll.acl.permissions,
-			userId: (state) => state.poll.acl.userId,
+			currentUser: (state) => state.poll.acl.currentUser,
 		}),
 
 		...mapGetters({

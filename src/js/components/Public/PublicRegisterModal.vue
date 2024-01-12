@@ -43,7 +43,7 @@
 					inputmode="email"
 					@submit="submitRegistration" />
 
-				<NcCheckboxRadioSwitch v-if="share.type === 'public'" :checked.sync="saveCookie">
+				<NcCheckboxRadioSwitch v-if="share.user.type === 'public'" :checked.sync="saveCookie">
 					{{ t('polls', 'Remember me for 30 days') }}
 				</NcCheckboxRadioSwitch>
 
@@ -188,7 +188,7 @@ export default {
 			if (this.emailGeneratedStatus === 'checking') return t('polls', 'Checking email address …')
 			if (this.emailGeneratedStatus === 'mandatory') return t('polls', 'An email address is required.')
 			if (this.emailGeneratedStatus === 'invalid') return t('polls', 'Invalid email address.')
-			if (this.share.type === 'public') {
+			if (this.share.user.type === 'public') {
 				if (this.emailGeneratedStatus === 'valid') return t('polls', 'You will receive your personal link after clicking "OK".')
 				return t('polls', 'Enter your email address to get your personal access link.')
 			}
@@ -210,12 +210,12 @@ export default {
 		if (this.$route.name === 'publicVote' && this.$route.query.name) {
 			this.userName = this.$route.query.name
 		} else {
-			this.userName = this.share.displayName
+			this.userName = this.share.user.displayName
 		}
 		if (this.$route.name === 'publicVote' && this.$route.query.email) {
 			this.emailAddress = this.$route.query.email
 		} else {
-			this.emailAddress = this.share.emailAddress
+			this.emailAddress = this.share.user.emailAddress
 		}
 	},
 
@@ -309,8 +309,8 @@ export default {
 				this.routeToPersonalShare(response.data.share.token)
 
 				// TODO: Is that correct, is this possible in any way?
-				if (this.share.emailAddress && !this.share.invitationSent) {
-					showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.emailAddress }))
+				if (this.share.user.emailAddress && !this.share.invitationSent) {
+					showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.user.emailAddress }))
 				}
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED') return

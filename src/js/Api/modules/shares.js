@@ -37,18 +37,22 @@ const shares = {
 			method: 'POST',
 			url: `poll/${pollId}/share`,
 			data: {
-				...share,
+				id: share.id,
+				type: share.user.type,
+				userId: share.user.userId,
+				displayName: share.user.displayName,
+				emailAddress: share.user.emailAddress,
 			},
 			cancelToken: cancelTokenHandlerObject[this.addShare.name].handleRequestCancellation().token,
 		})
 	},
 
-	writeLabel(shareToken, displayName) {
+	writeLabel(shareToken, label) {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/setlabel`,
 			data: {
-				label: displayName,
+				label,
 			},
 			cancelToken: cancelTokenHandlerObject[this.writeLabel.name].handleRequestCancellation().token,
 		})

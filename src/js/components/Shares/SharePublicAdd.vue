@@ -21,11 +21,9 @@
   -->
 
 <template>
-	<UserItem type="public"
-		class="add-public"
-		user-id="addPublic"
-		:display-name="t('polls', 'Add a new public link')"
-		is-no-user>
+	<UserItem :user="user"
+		type="public"
+		class="add-public">
 		<template #status>
 			<div class="vote-status" />
 		</template>
@@ -52,6 +50,16 @@ export default {
 		NcActions,
 		NcActionButton,
 		PlusIcon,
+	},
+
+	data() {
+		return {
+			user: {
+				userId: 'addPublic',
+				displayName: t('polls', 'Add a new public link'),
+				isNoUser: true,
+			},
+		}
 	},
 
 	methods: {

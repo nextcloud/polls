@@ -134,7 +134,6 @@ export default {
 			options: (state) => state.options.list,
 			acl: (state) => state.poll.acl,
 			permissions: (state) => state.poll.acl.permissions,
-			isOwner: (state) => state.poll.acl.isOwner,
 		}),
 
 		...mapGetters({

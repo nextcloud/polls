@@ -34,6 +34,13 @@ const defaultShares = () => ({
 	emailAddress: '',
 	userId: '',
 	publicPollEmail: 'optional',
+	user: {
+		type: '',
+		displayName: '',
+		userId: '',
+		emailAddress: '',
+		isNoUser: false,
+	},
 })
 
 const namespaced = true
@@ -45,7 +52,7 @@ const mutations = {
 	},
 
 	setEmailAddress(state, payload) {
-		state.emailAddress = payload
+		state.user.emailAddress = payload
 	},
 
 	reset(state) {
@@ -77,7 +84,7 @@ const actions = {
 		}
 
 		try {
-			const response = await PublicAPI.setEmail(context.rootState.route.params.token, payload.emailAddress)
+			const response = await PublicAPI.setEmailAddress(context.rootState.route.params.token, payload.emailAddress)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {

@@ -174,8 +174,8 @@ export default {
 			permissions: (state) => state.poll.acl.permissions,
 			share: (state) => state.share,
 			subscribed: (state) => state.subscription.subscribed,
-			emailAddress: (state) => state.share.emailAddress,
-			displayName: (state) => state.poll.acl.displayName,
+			emailAddress: (state) => state.share.user.emailAddress,
+			displayName: (state) => state.poll.acl.currentUser.displayName,
 		}),
 
 		hasCookie() {
@@ -287,9 +287,9 @@ export default {
 		async resendInvitation() {
 			try {
 				const response = await this.$store.dispatch('share/resendInvitation')
-				showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.emailAddress }))
+				showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.user.emailAddress }))
 			} catch {
-				showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: this.share.emailAddress }))
+				showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: this.share.user.emailAddress }))
 			}
 		},
 

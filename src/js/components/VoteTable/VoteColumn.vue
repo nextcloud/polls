@@ -104,7 +104,7 @@ export default {
 			permissions: (state) => state.poll.acl.permissions,
 			poll: (state) => state.poll,
 			settings: (state) => state.settings.user,
-			currentUser: (state) => state.poll.acl.userId,
+			currentUser: (state) => state.poll.acl.currentUser,
 			isVoteLimitExceeded: (state) => state.poll.acl.isVoteLimitExceeded,
 			voteLimit: (state) => state.poll.voteLimit,
 		}),
@@ -137,7 +137,7 @@ export default {
 
 		ownAnswer() {
 			return this.getVote({
-				userId: this.currentUser,
+				userId: this.currentUser.userId,
 				option: this.option,
 			}).answer
 		},

@@ -21,12 +21,10 @@
   -->
 
 <template>
-	<UserItem type="internalAccess"
-		:user-id="t('polls', 'Openly accessible poll')"
-		:display-name="t('polls', 'Openly accessible poll')"
+	<UserItem :user="user"
+		type="internalAccess"
 		:disabled="access==='private'"
-		show-email
-		is-no-user>
+		show-email>
 		<template #status>
 			<div class="vote-status" />
 		</template>
@@ -47,6 +45,16 @@ export default {
 	},
 
 	mixins: [writePoll],
+
+	data() {
+		return {
+			user: {
+				userId: t('polls', 'Openly accessible poll'),
+				displayName: t('polls', 'Openly accessible poll'),
+				isNoUser: true,
+			},
+		}
+	},
 
 	computed: {
 		...mapState({

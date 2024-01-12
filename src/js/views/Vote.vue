@@ -229,7 +229,7 @@ export default {
 
 		useRegisterModal() {
 			return (this.$route.name === 'publicVote'
-				&& ['public', 'email', 'contact'].includes(this.share.type)
+				&& ['public', 'email', 'contact'].includes(this.share.user.type)
 				&& !this.closed
 				&& !this.share.locked
 				&& !!this.poll.id

@@ -157,13 +157,20 @@ class Share extends Entity implements JsonSerializable {
 			'invitationSent' => $this->getInvitationSent(),
 			'reminderSent' => $this->getReminderSent(),
 			'locked' => $this->getDeleted() ? 0 : $this->getLocked(),
-			'displayName' => $this->getDisplayName(),
-			'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
+			// 'displayName' => $this->getDisplayName(),
+			'label' => $this->getDisplayName(),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getBooleanSetting(AppSettings::SETTING_SHOW_LOGIN),
 			'publicPollEmail' => $this->getPublicPollEmail(),
 			'voted' => $this->getVoted(),
 			'deleted' => $this->getDeleted(),
+			'user' => [
+				'displayName' => $this->getDisplayName(),
+				'emailAddress' => $this->getEmailAddress(),
+				'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
+				'type' => $this->getType(),
+				'userId' => $this->getUserId(),
+			]
 		];
 	}
 
@@ -233,10 +240,6 @@ class Share extends Entity implements JsonSerializable {
 
 	private function setMiscSettingsArray(array $value): void {
 		$this->setMiscSettings(json_encode($value));
-	}
-
-	private function getVoteCount(): int {
-		return 0;
 	}
 
 	private function getMiscSettingsArray(): array {

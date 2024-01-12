@@ -26,7 +26,7 @@
 			:key="poll.id"
 			:class="['poll-item', { listed: listed(poll.id) }]"
 			@click="toggle(poll.id)">
-			<UserItem v-bind="poll.owner" condensed />
+			<UserItem :user="poll.owner" condensed />
 			<div class="poll-title-box">
 				{{ poll.title }}
 			</div>
@@ -36,13 +36,9 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
-import UserItem from '../User/UserItem.vue'
+
 export default {
 	name: 'SideBarTabDatePolls',
-
-	components: {
-		UserItem,
-	},
 
 	computed: {
 		...mapGetters({

@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div :class="['user-item', type, { disabled, condensed: condensed }]">
+	<div :class="['user-item', typeComputed, { disabled, condensed: condensed }]">
 		<div class="avatar-wrapper">
 			<NcAvatar :disable-menu="disableMenu"
 				:disable-tooltip="disableTooltip"
@@ -31,30 +31,30 @@
 				:size="iconSize"
 				:show-user-status="showUserStatus"
 				:user="avatarUserId"
-				:display-name="name"
-				:is-no-user="isNoUser"
+				:display-name="displayName"
+				:is-no-user="user.isNoUser"
 				@click="showMenu()">
 				<template v-if="useIconSlot" #icon>
-					<LinkIcon v-if="type==='public'" :size="mdIconSize" />
-					<InternalLinkIcon v-if="type==='internalAccess'" :size="mdIconSize" />
-					<ContactGroupIcon v-if="type==='contactGroup'" :size="mdIconSize" />
-					<GroupIcon v-if="type==='group'" :size="mdIconSize" />
-					<CircleIcon v-if="type==='circle'" :size="mdIconSize" />
-					<DeletedUserIcon v-if="type==='deleted'" :size="mdIconSize" />
+					<LinkIcon v-if="typeComputed === 'public'" :size="mdIconSize" />
+					<InternalLinkIcon v-if="typeComputed === 'internalAccess'" :size="mdIconSize" />
+					<ContactGroupIcon v-if="typeComputed === 'contactGroup'" :size="mdIconSize" />
+					<GroupIcon v-if="typeComputed === 'group'" :size="mdIconSize" />
+					<CircleIcon v-if="typeComputed === 'circle'" :size="mdIconSize" />
+					<DeletedUserIcon v-if="typeComputed === 'deleted'" :size="mdIconSize" />
 				</template>
 			</NcAvatar>
 
-			<AdminIcon v-if="type === 'admin' && showTypeIcon" :size="16" class="type-icon" />
-			<ContactIcon v-if="type==='contact' && showTypeIcon" :size="16" class="type-icon" />
-			<EmailIcon v-if="type==='email' && showTypeIcon" :size="16" class="type-icon" />
-			<ShareIcon v-if="type==='external' && showTypeIcon" :size="16" class="type-icon" />
+			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="16" class="type-icon" />
+			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="16" class="type-icon" />
+			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="16" class="type-icon" />
+			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="16" class="type-icon" />
 		</div>
 
 		<slot name="status" />
 
 		<div v-if="!hideNames" class="user-item__name">
 			<div class="name">
-				{{ name }}
+				{{ displayName }}
 			</div>
 			<div class="description">
 				{{ description }}
@@ -117,18 +117,6 @@ export default {
 			type: String,
 			default: 'left',
 		},
-		userId: {
-			type: String,
-			default: undefined,
-		},
-		displayName: {
-			type: String,
-			default: undefined,
-		},
-		emailAddress: {
-			type: String,
-			default: '',
-		},
 		forcedDescription: {
 			type: String,
 			default: null,
@@ -153,15 +141,19 @@ export default {
 			},
 
 		},
-		isNoUser: {
-			type: Boolean,
-			default: false,
+		user: {
+			type: Object,
+			default() {
+				return {
+					userId: '',
+					displayName: '',
+					emailAddress: '',
+					isNoUser: false,
+					type: null,
+				}
+			},
 		},
 		showTypeIcon: {
-			type: Boolean,
-			default: false,
-		},
-		isGuest: {
 			type: Boolean,
 			default: false,
 		},
@@ -181,55 +173,58 @@ export default {
 
 	computed: {
 		isGuestComputed() {
-			return this.$route?.name === 'publicVote' || this.isGuest || this.isNoUser
+			return this.$route?.name === 'publicVote' || this.user.isNoUser
 		},
 
 		useIconSlot() {
-			return ['internalAccess', 'public', 'contactGroup', 'group', 'circle', 'deleted'].includes(this.type)
+			return ['internalAccess', 'public', 'contactGroup', 'group', 'circle', 'deleted'].includes(this.typeComputed)
+		},
+		typeComputed() {
+			return this.user.type ?? this.type
 		},
 		description() {
 			if (this.condensed) return ''
 			if (this.forcedDescription) return this.forcedDescription
-			if (this.type === 'deleted') return t('polls', 'The participant got removed from this poll')
-			if (this.type === 'admin') return t('polls', 'Is granted admin rights for this poll')
+			if (this.typeComputed === 'deleted') return t('polls', 'The participant got removed from this poll')
+			if (this.typeComputed === 'admin') return t('polls', 'Is granted admin rights for this poll')
 			if (this.displayEmailAddress) return this.displayEmailAddress
 			return ''
 		},
 
-		name() {
-			if (this.type === 'deleted') return t('polls', 'Deleted User')
-			if (this.type === 'internalAccess') return t('polls', 'Internal access')
-			if (this.displayName) return this.displayName
-			if (this.type === 'public' && this.userId !== 'addPublic') return t('polls', 'Public link')
-			return this.userId
+		displayName() {
+			if (this.typeComputed === 'deleted') return t('polls', 'Deleted User')
+			if (this.typeComputed === 'internalAccess') return t('polls', 'Internal access')
+			if (this.user.displayName) return this.user.displayName
+			if (this.typeComputed === 'public' && this.user.userId !== 'addPublic') return t('polls', 'Public link')
+			return this.user.userId
 		},
 
 		avatarUserId() {
-			if (this.isGuestComputed) return this.name
-			return this.userId
+			if (this.isGuestComputed) return this.user.displayName
+			return this.user.userId
 		},
 
 		displayEmailAddress() {
-			if (this.type === 'public' && this.userId !== 'addPublic') {
-				if (!this.displayName) {
-					return t('polls', 'Token: {token}', { token: this.userId })
+			if (this.typeComputed === 'public' && this.user.userId !== 'addPublic') {
+				if (!this.user.displayName) {
+					return t('polls', 'Token: {token}', { token: this.user.userId })
 				}
-				return t('polls', 'Public link: {token}', { token: this.userId })
+				return t('polls', 'Public link: {token}', { token: this.user.userId })
 			}
 
-			if (this.type === 'internalAccess') {
+			if (this.typeComputed === 'internalAccess') {
 				if (this.disabled) {
 					return t('polls', 'This poll is private')
 				}
 				return t('polls', 'This is an openly accessible poll')
 			}
 
-			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.type)) {
+			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.typeComputed)) {
 				return t('polls', 'Resolve this group first!')
 			}
 
-			if (this.showEmail && ['external', 'email'].includes(this.type) && this.emailAddress !== this.name) {
-				return this.emailAddress
+			if (this.showEmail && ['external', 'email'].includes(this.typeComputed) && this.user.emailAddress !== this.user.displayName) {
+				return this.user.emailAddress
 			}
 
 			return ''

@@ -89,7 +89,7 @@
 		</div>
 
 		<div class="item__owner">
-			<UserItem v-bind="poll.owner" condensed />
+			<UserItem :user="poll.owner" condensed />
 		</div>
 
 		<div class="wrapper">
