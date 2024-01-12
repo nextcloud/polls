@@ -126,7 +126,7 @@ class ShareService {
 	 * @param bool   $validateShareType Set true, if the share should be validated for usage
 	 * @param bool   $publicRequest     Set true, to avoid preset displayname of public shares
 	 */
-	public function get(string $token, bool $validateShareType = false, bool $publicRequest = false): Share {
+	public function request(string $token, bool $validateShareType = false, bool $publicRequest = false): Share {
 		$this->share = $this->shareMapper->findByToken($token);
 
 		if ($validateShareType) {
@@ -138,22 +138,35 @@ class ShareService {
 			$this->share->setDisplayName('');
 		}
 
-		// Exception: logged in user accesses the poll via public share link
+		// Exception: logged in user, accesses the poll via public share link
 		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->isLoggedIn()) {
+
 			try {
 				// Check, if he is already authorized for this poll
-				$this->acl->setPollId($this->share->getPollId());
+				$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_VOTE_EDIT);
+
 			} catch (ForbiddenException $e) {
 				// If user is not authorized for this poll, create a personal share
 				// for this user and return the created share instead of the public share
-				return $this->createNewShare(
+				$this->share = $this->createNewShare(
 					$this->share->getPollId(),
 					$this->userMapper->getUserObject(Share::TYPE_USER, $this->userId),
 					true
 				);
+				// remove the public token from session
+				$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
 			}
 		}
 		return $this->share;
+	}
+
+	/**
+	 * Get share by token for accessing the poll
+	 *
+	 * @param string $token             Token of share to get
+	 */
+	public function get(string $token): Share {
+		return $this->share = $this->shareMapper->findByToken($token);
 	}
 
 	/**
@@ -583,27 +596,44 @@ class ShareService {
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
 		$this->share->setUserId($userGroup->getPublicId());
 
+		// special treatment, if the user is a loggin user
 		if (
 			$userGroup->getType() === UserBase::TYPE_USER
 			|| $userGroup->getType() === UserBase::TYPE_ADMIN
 		) {
-			$this->share = $this->shareMapper->insert($this->share);
-			return $this->share;
+			try {
+				// try inserting the share
+				return $this->shareMapper->insert($this->share);
+			} catch (Exception $e) {
+
+				// currently the thrown exception is from private name space (OC)
+				// so check against the class
+				// Not sure, if another exception class can be thrown
+				if (get_class($e) === 'OC\DB\Exceptions\DbalException') {
+					// find probably existing deleted share
+					$share = $this->shareMapper->findByPollAndUser($pollId, $userGroup->getId(), true);
+					// reuse probaly soft deleted share and replace token with new created one.
+					// Assume deleted shares should no more be an admin
+					$share->setType(UserBase::TYPE_USER);
+					$share->setDeleted(0);
+					$share->setToken($token);
+					return $this->shareMapper->update($share);
+				} else {
+					throw $e;
+				}
+			}
 		}
 
+		// normal continuation
+		// public share to create, set token as userId
 		if ($userGroup->getType() === UserBase::TYPE_PUBLIC) {
 			$this->share->setUserId($token);
-
-			$this->share = $this->shareMapper->insert($this->share);
-			return $this->share;
 		}
 
 		// Convert user type contact to share type email
 		if ($userGroup->getType() === UserBase::TYPE_CONTACT) {
 			$this->share->setType(Share::TYPE_EMAIL);
 			$this->share->setUserId($userGroup->getEmailAddress());
-			$this->share = $this->shareMapper->insert($this->share);
-			return $this->share;
 		}
 
 		// user is created from public share. Store locale information for
