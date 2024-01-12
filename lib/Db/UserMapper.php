@@ -98,10 +98,10 @@ class UserMapper extends QBMapper {
 		$token = $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 
 
-		if ($token) {
-			$this->currentUser = $this->getUserFromShareToken($token);
-		} else {
+		if ($this->isLoggedIn()) {
 			$this->currentUser = $this->getUserFromUserBase($this->userSession->getUser()->getUID());
+		} else {
+			$this->currentUser = $this->getUserFromShareToken($token);
 		}
 
 		// store userId in session to avoid unecessary db access

@@ -115,7 +115,7 @@ class PublicController extends BaseController {
 		$validateShareType = true;
 		$publicRequest = true;
 		return $this->response(fn () => [
-			'share' => $this->shareService->get($token, $validateShareType, $publicRequest)
+			'share' => $this->shareService->request($token, $validateShareType, $publicRequest)
 		], $token);
 	}
 
@@ -308,7 +308,7 @@ class PublicController extends BaseController {
 	#[PublicPage]
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setEmailAddress($this->shareService->get($token), $emailAddress, true)
+			'share' => $this->shareService->setEmailAddress($this->shareService->get($token), $emailAddress)
 		], $token);
 	}
 
