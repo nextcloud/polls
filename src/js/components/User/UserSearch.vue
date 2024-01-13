@@ -31,7 +31,7 @@
 		:searchable="true"
 		:placeholder="placeholder"
 		label="displayName"
-		@option:selected="addShare"
+		@option:selected="clickAdd"
 		@search="loadUsersAsync">
 		<template #selection="{ values, isOpen }">
 			<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
@@ -43,6 +43,7 @@
 
 <script>
 import { debounce } from 'lodash'
+import { mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcSelect } from '@nextcloud/vue'
 import { AppSettingsAPI } from '../../Api/index.js'
@@ -62,10 +63,11 @@ export default {
 		}
 	},
 
-	computed: {
-	},
-
 	methods: {
+		...mapActions({
+			addShare: 'shares/add',
+		}),
+
 		loadUsersAsync: debounce(async function(query) {
 			if (!query) {
 				this.users = []
@@ -85,14 +87,14 @@ export default {
 			}
 		}, 250),
 
-		async addShare(payload) {
+		async clickAdd(payload) {
 			try {
-				await this.$store.dispatch('shares/add', {
-					type: payload.type,
-					id: payload.id,
-					emailAddress: payload.emailAddress,
-					displayName: payload.displayName,
-				})
+				await this.addShare({
+					user: {
+						...payload,
+					},
+				},
+				)
 			} catch {
 				showError(t('polls', 'Error while adding share'))
 			}

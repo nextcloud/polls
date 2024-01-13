@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
+ * @copyright Copyright (c) 2024 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -30,14 +30,13 @@ use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
 
-class BaseController extends Controller {
+class BasePublicController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -50,8 +49,8 @@ class BaseController extends Controller {
 	 * response
 	 */
 	#[NoAdminRequired]
-	protected function response(Closure $callback): JSONResponse {
-		$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
+	protected function response(Closure $callback, string $token): JSONResponse {
+		$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -64,8 +63,8 @@ class BaseController extends Controller {
 	 * response
 	 */
 	#[NoAdminRequired]
-	protected function responseLong(Closure $callback): JSONResponse {
-		$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
+	protected function responseLong(Closure $callback, string $token): JSONResponse {
+		$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -73,32 +72,15 @@ class BaseController extends Controller {
 			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
 		}
 	}
-
 	/**
 	 * responseCreate
 	 */
 	#[NoAdminRequired]
-	protected function responseCreate(Closure $callback): JSONResponse {
-		$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
+	protected function responseCreate(Closure $callback, string $token): JSONResponse {
+		$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * responseDeleteTolerant
-	 */
-	#[NoAdminRequired]
-	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
-		$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
-
-		try {
-			return new JSONResponse($callback(), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['message' => 'Not found, assume already deleted'], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}

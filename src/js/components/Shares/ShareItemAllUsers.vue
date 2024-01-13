@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<UserItem :user="user"
+	<UserItem :user="openPollUserItme"
 		type="internalAccess"
 		:disabled="access==='private'"
 		show-email>
@@ -48,7 +48,7 @@ export default {
 
 	data() {
 		return {
-			user: {
+			openPollUserItme: {
 				userId: t('polls', 'Openly accessible poll'),
 				displayName: t('polls', 'Openly accessible poll'),
 				isNoUser: true,
