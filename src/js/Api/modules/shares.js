@@ -32,17 +32,11 @@ const shares = {
 		})
 	},
 
-	addShare(pollId, share) {
+	addShare(pollId, user) {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/share`,
-			data: {
-				id: share.id,
-				type: share.user.type,
-				userId: share.user.userId,
-				displayName: share.user.displayName,
-				emailAddress: share.user.emailAddress,
-			},
+			data: { ...user },
 			cancelToken: cancelTokenHandlerObject[this.addShare.name].handleRequestCancellation().token,
 		})
 	},

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2020 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -47,7 +47,7 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Util;
 
-class PublicController extends BaseController {
+class PublicController extends BasePublicController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -236,7 +236,7 @@ class PublicController extends BaseController {
 
 		return $this->response(fn () => [
 			'comment' => $this->commentService->delete($comment, $this->acl->setToken($token, Acl::PERMISSION_COMMENT_ADD), true)
-		]);
+		], $token);
 	}
 
 	/**
@@ -285,10 +285,10 @@ class PublicController extends BaseController {
 	 * Validate email address (simple validation)
 	 */
 	#[PublicPage]
-	public function validateEmailAddress(string $emailAddress): JSONResponse {
+	public function validateEmailAddress(string $emailAddress, string $token = ''): JSONResponse {
 		return $this->response(fn () => [
 			'result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress
-		]);
+		], $token);
 	}
 
 	/**

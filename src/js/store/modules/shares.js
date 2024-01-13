@@ -95,8 +95,8 @@ const actions = {
 
 	async add(context, payload) {
 		try {
-			const response = await SharesAPI.addShare(context.rootState.route.params.id, payload.share)
-			context.commit('add', response.data.share)
+			await SharesAPI.addShare(context.rootState.route.params.id, payload.user)
+			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing share', { error: e.response }, { payload })

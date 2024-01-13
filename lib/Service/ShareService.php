@@ -494,28 +494,8 @@ class ShareService {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
 		}
 
-		try {
-			$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));
-			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
-		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-
-				$share = $this->shareMapper->findByPollAndUser($pollId, $userId, true);
-				if ($share->getDeleted()) {
-					// Deleted share exist, restore deleted share and generate new token
-					$share->setDeleted(0);
-					$share->setLocked(0);
-					$share->setInvitationSent(0);
-					$share->setToken($this->generateToken());
-
-					return $this->shareMapper->update($share);
-				}
-
-				throw new ShareAlreadyExistsException;
-			}
-
-			throw $e;
-		}
+		$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));
+		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
 
 		return $share;
 	}
@@ -597,32 +577,12 @@ class ShareService {
 		$this->share->setUserId($userGroup->getPublicId());
 
 		// special treatment, if the user is a loggin user
-		if (
-			$userGroup->getType() === UserBase::TYPE_USER
-			|| $userGroup->getType() === UserBase::TYPE_ADMIN
-		) {
-			try {
-				// try inserting the share
-				return $this->shareMapper->insert($this->share);
-			} catch (Exception $e) {
-
-				// currently the thrown exception is from private name space (OC)
-				// so check against the class
-				// Not sure, if another exception class can be thrown
-				if (get_class($e) === 'OC\DB\Exceptions\DbalException') {
-					// find probably existing deleted share
-					$share = $this->shareMapper->findByPollAndUser($pollId, $userGroup->getId(), true);
-					// reuse probaly soft deleted share and replace token with new created one.
-					// Assume deleted shares should no more be an admin
-					$share->setType(UserBase::TYPE_USER);
-					$share->setDeleted(0);
-					$share->setToken($token);
-					return $this->shareMapper->update($share);
-				} else {
-					throw $e;
-				}
-			}
-		}
+		// if (
+		// 	$userGroup->getType() === UserBase::TYPE_USER
+		// 	|| $userGroup->getType() === UserBase::TYPE_ADMIN
+		// ) {
+		// 	return $this->shareMapper->insert($this->share);
+		// }
 
 		// normal continuation
 		// public share to create, set token as userId
@@ -632,7 +592,6 @@ class ShareService {
 
 		// Convert user type contact to share type email
 		if ($userGroup->getType() === UserBase::TYPE_CONTACT) {
-			$this->share->setType(Share::TYPE_EMAIL);
 			$this->share->setUserId($userGroup->getEmailAddress());
 		}
 
@@ -642,8 +601,32 @@ class ShareService {
 			$this->share->setLanguage($userGroup->getLanguageCode());
 			$this->share->setTimeZoneName($timeZone);
 		}
+		
+		try {
+			$this->share = $this->shareMapper->insert($this->share);
+			// return new created share
+			return $this->share;
+		} catch (Exception $e) {
+			if (get_class($e) === 'OC\DB\Exceptions\DbalException') {
 
-		$this->share = $this->shareMapper->insert($this->share);
-		return $this->share;
+				$share = $this->shareMapper->findByPollAndUser($pollId, $this->share->getUserId(), true);
+				if ($share->getDeleted()) {
+					// Deleted share exist, restore deleted share and generate new token
+					$share->setDeleted(0);
+					$share->setLocked(0);
+					$share->setInvitationSent(0);
+					$share->setToken($this->generateToken());
+					if ($share->getType() === UserBase::TYPE_ADMIN) {
+						$share->setType(UserBase::TYPE_USER);
+					}
+					// return existing undeleted share
+					return $this->shareMapper->update($share);
+				}
+				// share already exists
+				throw new ShareAlreadyExistsException;
+			}
+			// other error
+			throw $e;
+		}
 	}
 }
