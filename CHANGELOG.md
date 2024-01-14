@@ -1,7 +1,21 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [6.0.0] - tbd
+## [6.1.0] - tbd
+### Changes
+ - Only Nextcloud 28 and up
+### New
+ - Removed deletion timer of shares and comments
+### Fixes
+ - Fix locked users, when registering with nextcloud user to a public poll
+ - Fixed typo which caused unnecessary error logging
+ - Fixed export of html files
+
+## [6.0.1] - 2023-12-10
+### Fixes
+ - Some minor fixes regarding user apperances
+
+## [6.0.0] - 2023-12-09
 ### Changes
  - Only Nextcloud 28 and up
 ### Fixes
