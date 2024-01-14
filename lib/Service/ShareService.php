@@ -397,6 +397,7 @@ class ShareService {
 			$share = $this->get($token);
 		}
 
+		$shares = [];
 		if (!in_array($share->getType(), Share::RESOLVABLE_SHARES)) {
 			throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
 		}
@@ -570,29 +571,16 @@ class ShareService {
 		$this->share = new Share();
 		$this->share->setToken($token);
 		$this->share->setPollId($pollId);
-		$this->share->setType($userGroup->getType());
+		$this->share->setType($userGroup->getShareType());
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setInvitationSent($preventInvitation ? time() : 0);
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
-		$this->share->setUserId($userGroup->getPublicId());
-
-		// special treatment, if the user is a loggin user
-		// if (
-		// 	$userGroup->getType() === UserBase::TYPE_USER
-		// 	|| $userGroup->getType() === UserBase::TYPE_ADMIN
-		// ) {
-		// 	return $this->shareMapper->insert($this->share);
-		// }
+		$this->share->setUserId($userGroup->getShareUserId());
 
 		// normal continuation
 		// public share to create, set token as userId
 		if ($userGroup->getType() === UserBase::TYPE_PUBLIC) {
 			$this->share->setUserId($token);
-		}
-
-		// Convert user type contact to share type email
-		if ($userGroup->getType() === UserBase::TYPE_CONTACT) {
-			$this->share->setUserId($userGroup->getEmailAddress());
 		}
 
 		// user is created from public share. Store locale information for
@@ -607,6 +595,10 @@ class ShareService {
 			// return new created share
 			return $this->share;
 		} catch (Exception $e) {
+			// TODO: Change exception catch to actual exception
+			// Currently OC\DB\Exceptions\DbalException is thrown instead of
+			// UniqueConstraintViolationException
+			// since the exception is from private namespace, we check the type string
 			if (get_class($e) === 'OC\DB\Exceptions\DbalException') {
 
 				$share = $this->shareMapper->findByPollAndUser($pollId, $this->share->getUserId(), true);
