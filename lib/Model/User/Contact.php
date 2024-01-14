@@ -52,7 +52,6 @@ class Contact extends UserBase {
 		}
 	}
 
-
 	/**
 	 * must use displayName for contact's user id, because contact id
 	 * is not accessable outside the owners's scope
@@ -64,9 +63,30 @@ class Contact extends UserBase {
 	}
 
 	/**
+	 * In shares, contact users are used as email users
+	 * return Email::TYPE (Share),
+	 *
+	 * @return string
+	 **/
+	public function getShareType(): string {
+		return UserBase::TYPE_EMAIL;
+	}
+
+	/**
+	 * In shares, contact users are used as email users
+	 * return Email::TYPE (Share),
+	 *
+	 * @return string
+	 **/
+	public function getShareUserId(): string {
+		return $this->emailAddress ?? $this->id;
+	}
+
+	/**
 	 * We just need the contact's UID, so make sure, the any prefix is removed
 	 */
 	private function resolveContactId(): void {
+		return;
 		$parts = explode(":", $this->id);
 		$this->id = end($parts);
 	}
