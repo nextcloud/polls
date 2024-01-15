@@ -87,7 +87,7 @@ class CalendarEvent implements \JsonSerializable {
 
 	// Getters for common event description
 	public function getId(): string {
-		return $this->iCal['id'];
+		return (string) $this->iCal['id'];
 	}
 
 	public function getUID(): string {
@@ -112,8 +112,9 @@ class CalendarEvent implements \JsonSerializable {
 	}
 
 	public function getType(): string {
+		// TODO: Properly Sabre Object handling
 		if (isset($this->event['DTSTART'][1]['VALUE'])) {
-			if (strtoupper($this->event['DTSTART'][1]['VALUE']) === 'DATE') {
+			if ($this->event['DTSTART'][1]['VALUE'] === 'DATE') {
 				return self::TYPE_DATE;
 			}
 		}
