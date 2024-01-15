@@ -43,12 +43,14 @@
 			<div v-if="permissions.edit && closed" class="confirm" />
 		</div>
 
-		<transition-group name="list" tag="div" class="vote-table__votes">
+		<TransitionGroup is="div"
+			name="list"
+			class="vote-table__votes">
 			<VoteColumn v-for="(item) in options"
 				:key="item.id"
 				:option="item"
 				:view-mode="viewMode" />
-		</transition-group>
+		</TransitionGroup>
 	</div>
 </template>
 

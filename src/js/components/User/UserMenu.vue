@@ -35,6 +35,8 @@
 		<NcActionInput v-if="$route.name === 'publicVote'"
 			v-bind="userEmail.inputProps"
 			:value.sync="userEmail.inputValue"
+			:label-outside="false"
+			:label="t('polls', 'Edit Email Address')"
 			@update:value="validateEmailAddress"
 			@submit="submitEmailAddress">
 			<template #icon>
@@ -45,6 +47,8 @@
 		<NcActionInput v-if="$route.name === 'publicVote' && permissions.vote"
 			v-bind="userName.inputProps"
 			:value.sync="userName.inputValue"
+			:label-outside="false"
+			:label="t('polls', 'Change name')"
 			@update:value="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
@@ -156,6 +160,8 @@ export default {
 					success: false,
 					error: false,
 					showTrailingButton: true,
+					labelOutside: false,
+					label: t('polls', 'Edit Email Address'),
 				},
 			},
 			userName: {
@@ -164,6 +170,8 @@ export default {
 					success: false,
 					error: false,
 					showTrailingButton: true,
+					labelOutside: false,
+					label: t('polls', 'Change name'),
 				},
 			},
 		}

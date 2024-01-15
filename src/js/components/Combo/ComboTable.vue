@@ -36,11 +36,13 @@
 			</div>
 		</div>
 
-		<transition-group name="list" tag="div" class="vote-grid">
+		<TransitionGroup name="list"
+			tag="div"
+			class="vote-grid">
 			<VoteColumn v-for="(option) in options"
 				:key="option.id"
 				:option="option" />
-		</transition-group>
+		</TransitionGroup>
 	</div>
 </template>
 

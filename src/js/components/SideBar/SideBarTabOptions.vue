@@ -123,10 +123,27 @@ export default {
 
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
+		padding: 8px 0;
+
 		&:active,
 		&:hover {
 			transition: var(--background-dark) 0.3s ease;
 			background-color: var(--color-background-dark);
+		}
+	}
+	.option-item__option--text {
+		-webkit-line-clamp: 2;
+		-webkit-box-orient: vertical;
+		display: -webkit-inline-box;
+		overflow: clip;
+		text-overflow: ellipsis;
+		transition: all 0.3s ease-in-out;
+		max-height: 4em;
+
+		&:hover,
+		&:active {
+			-webkit-line-clamp: initial;
+			max-height: 12em;
 		}
 	}
 }

@@ -234,16 +234,6 @@ export default {
 			align-items: stretch;
 			flex-direction: column;
 		}
-
-		.material-design-icon {
-			visibility: hidden;
-		}
-
-		&:hover {
-			.material-design-icon {
-				visibility: visible;
-			}
-		}
 	}
 
 	.devider {
@@ -332,13 +322,28 @@ export default {
 		margin-right: 8px;
 	}
 
-	.draggable, .draggable [class*='option-item__option']  {
+	.draggable {
 		cursor: grab;
 		&:active {
 			cursor: grabbing;
 			cursor: -moz-grabbing;
 			cursor: -webkit-grabbing;
 		}
+
+		.material-design-icon.draggable {
+			width: 0;
+			padding-right: 0px;
+			transition: all .3s ease-in-out;
+		}
+
+		&:active,
+		&:hover {
+			.material-design-icon.draggable {
+				width: initial;
+				padding-right: 7px;
+			}
+		}
+
 	}
 
 	.option-item__rank {

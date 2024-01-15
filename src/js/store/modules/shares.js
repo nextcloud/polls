@@ -135,6 +135,7 @@ const actions = {
 		try {
 			const response = await SharesAPI.writeLabel(payload.token, payload.label)
 			context.commit('update', response.data)
+			return response.data
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error writing share label', { error: e.response }, { payload })

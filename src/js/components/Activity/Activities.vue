@@ -21,12 +21,14 @@
   -->
 
 <template>
-	<transition-group name="fade" class="activities" tag="ul">
+	<TransitionGroup name="fade"
+		class="activities"
+		tag="ul">
 		<ActivityItem v-for="(item) in activities"
 			:key="item.activity_id"
 			:activity="item"
 			tag="li" />
-	</transition-group>
+	</TransitionGroup>
 </template>
 
 <script>

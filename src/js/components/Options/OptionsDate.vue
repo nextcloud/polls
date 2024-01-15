@@ -22,7 +22,9 @@
 
 <template>
 	<div :style="cssVar">
-		<transition-group is="ul" v-if="countOptions">
+		<TransitionGroup is="ul"
+			v-if="countOptions"
+			name="list">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
 				:option="option"
@@ -37,34 +39,37 @@
 						class="owner" />
 				</template>
 				<template v-if="permissions.edit" #actions>
-					<ActionDelete v-if="!closed"
-						:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
-						:restore="!!option.deleted"
-						:timeout="0"
-						@restore="restoreOption(option)"
-						@delete="deleteOption(option)" />
-
 					<NcActions v-if="!closed" class="action">
+						<NcActionButton v-if="!option.deleted" @click="deleteOption(option)">
+							<template #icon>
+								<DeleteIcon />
+							</template>
+							{{ t('polls', 'Delete option') }}
+						</NcActionButton>
+						<NcActionButton v-if="option.deleted" @click="restoreOption(option)">
+							<template #icon>
+								<RestoreIcon />
+							</template>
+							{{ t('polls', 'Restore option') }}
+						</NcActionButton>
 						<NcActionButton v-if="!closed" @click="cloneOptionModal(option)">
 							<template #icon>
 								<CloneDateIcon />
 							</template>
 							{{ t('polls', 'Clone option') }}
 						</NcActionButton>
+
+						<NcActionButton v-if="!option.deleted && !closed" type="tertiary" @click="confirmOption(option)">
+							<template #icon>
+								<UnconfirmIcon v-if="option.confirmed" />
+								<ConfirmIcon v-else />
+							</template>
+							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+						</NcActionButton>
 					</NcActions>
-					<NcButton v-if="closed"
-						:title="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
-						:aria-label="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
-						type="tertiary"
-						@click="confirmOption(option)">
-						<template #icon>
-							<UnconfirmIcon v-if="option.confirmed" />
-							<ConfirmIcon v-else />
-						</template>
-					</NcButton>
 				</template>
 			</OptionItem>
-		</transition-group>
+		</TransitionGroup>
 
 		<NcEmptyContent v-else :name="t('polls', 'No vote options')">
 			<template #icon>
@@ -84,33 +89,34 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { NcActions, NcActionButton, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
-import { ActionDelete } from '../Actions/index.js'
+import { NcActions, NcActionButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import OptionCloneDate from './OptionCloneDate.vue'
 import OptionItem from './OptionItem.vue'
 import { confirmOption, deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
-import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
-import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 
 export default {
 	name: 'OptionsDate',
 
 	components: {
 		CloneDateIcon,
+		DatePollIcon,
+		DeleteIcon,
+		RestoreIcon,
 		ConfirmIcon,
 		UnconfirmIcon,
 		NcActions,
 		NcActionButton,
-		ActionDelete,
 		NcEmptyContent,
 		NcModal,
 		OptionCloneDate,
 		OptionItem,
-		NcButton,
-		DatePollIcon,
 		OptionItemOwner: () => import('./OptionItemOwner.vue'),
 	},
 
