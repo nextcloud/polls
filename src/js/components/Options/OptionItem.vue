@@ -322,7 +322,7 @@ export default {
 		margin-right: 8px;
 	}
 
-	.draggable, .draggable [class*='option-item__option']  {
+	.draggable {
 		cursor: grab;
 		&:active {
 			cursor: grabbing;
@@ -336,8 +336,8 @@ export default {
 			transition: all .3s ease-in-out;
 		}
 
-		&:hover,
-		&:active {
+		&:active,
+		&:hover {
 			.material-design-icon.draggable {
 				width: initial;
 				padding-right: 7px;

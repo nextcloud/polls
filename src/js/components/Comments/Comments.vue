@@ -21,15 +21,15 @@
   -->
 
 <template>
-	<transition-group name="fade"
+	<TransitionGroup is="ul"
+		name="fade"
 		:class="['comments' , {'alternativestyle': commentStyling}]"
-		:style="cssVar"
-		tag="ul">
+		:style="cssVar">
 		<CommentItem v-for="(comment) in groupedComments"
 			:key="comment.id"
 			:comment="comment"
 			tag="li" />
-	</transition-group>
+	</TransitionGroup>
 </template>
 
 <script>

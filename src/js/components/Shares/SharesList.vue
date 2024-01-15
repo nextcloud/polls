@@ -31,7 +31,9 @@
 		<SharePublicAdd v-if="permissions.publicShares" />
 
 		<div v-if="activeShares.length" class="shares-list shared">
-			<TransitionGroup :css="false" tag="div">
+			<TransitionGroup is="div"
+				name="list"
+				:css="false">
 				<ShareItem v-for="(share) in activeShares"
 					:key="share.id"
 					:share="share"

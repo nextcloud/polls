@@ -22,7 +22,9 @@
 
 <template>
 	<div :style="cssVar">
-		<transition-group is="ul" v-if="countOptions">
+		<TransitionGroup is="ul"
+			v-if="countOptions"
+			name="list">
 			<OptionItem v-for="(option) in options"
 				:key="option.id"
 				:option="option"
@@ -67,7 +69,7 @@
 					</NcActions>
 				</template>
 			</OptionItem>
-		</transition-group>
+		</TransitionGroup>
 
 		<NcEmptyContent v-else :name="t('polls', 'No vote options')">
 			<template #icon>
