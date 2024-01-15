@@ -57,18 +57,6 @@ const mutations = {
 		}
 	},
 
-	setDeleted(state, payload) {
-		const index = state.list.findIndex((option) =>
-			parseInt(option.id) === payload.option.id,
-		)
-
-		if (index > -1) {
-			state.list[index].deleted = payload.option.deleted
-			return
-		}
-		state.list.push(payload.option)
-	},
-
 	delete(state, payload) {
 		state.list = state.list.filter((option) => option.id !== payload.option.id)
 	},
@@ -80,7 +68,9 @@ const mutations = {
 	},
 
 	setItem(state, payload) {
-		const index = state.list.findIndex((option) => option.id === payload.option.id)
+		const index = state.list.findIndex((option) =>
+			parseInt(option.id) === payload.option.id,
+		)
 
 		if (index < 0) {
 			state.list.push(payload.option)
@@ -218,7 +208,7 @@ const actions = {
 			} else {
 				response = await OptionsAPI.deleteOption(payload.option.id)
 			}
-			context.commit('setDeleted', response.data)
+			context.commit('setItem', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting option', { error: e.response }, { payload })
@@ -234,7 +224,7 @@ const actions = {
 			} else {
 				response = await OptionsAPI.restoreOption(payload.option.id)
 			}
-			context.commit('setDeleted', response.data)
+			context.commit('setItem', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error restoring option', { error: e.response }, { payload })
