@@ -4,12 +4,14 @@ All notable changes to this project will be documented in this file.
 ## [6.1.0] - tbd
 ### Changes
  - Only Nextcloud 28 and up
+ - Moved action buttons to action menu in sidebar lists of options and shares
 ### New
  - Removed deletion timer of shares, options and comments
 ### Fixes
  - Fix locked users, when registering with nextcloud user to a public poll
  - Fixed typo which caused unnecessary error logging
  - Fixed export of html files
+ - Fixed non available action buttons of options in mobile view
 
 ## [6.0.1] - 2023-12-10
 ### Fixes
