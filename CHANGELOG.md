@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ### Changes
  - Only Nextcloud 28 and up
 ### New
- - Removed deletion timer of shares and comments
+ - Removed deletion timer of shares, options and comments
 ### Fixes
  - Fix locked users, when registering with nextcloud user to a public poll
  - Fixed typo which caused unnecessary error logging

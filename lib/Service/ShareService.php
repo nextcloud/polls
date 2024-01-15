@@ -599,7 +599,7 @@ class ShareService {
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
 			// UniqueConstraintViolationException
 			// since the exception is from private namespace, we check the type string
-			if (get_class($e) === 'OC\DB\Exceptions\DbalException') {
+			if (get_class($e) === 'OC\DB\Exceptions\DbalException' || $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 
 				$share = $this->shareMapper->findByPollAndUser($pollId, $this->share->getUserId(), true);
 				if ($share->getDeleted()) {
