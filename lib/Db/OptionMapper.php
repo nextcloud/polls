@@ -84,7 +84,7 @@ class OptionMapper extends QBMapperWithUser {
 
 	/**
 	 * @return Option[]
-	 * @param int $pollId 
+	 * @param int $pollId
 	 * @param bool $hideResults Whether the results should be hidden
 	 * @param bool $getDeleted also search for deleted options
 	 * @psalm-return array<array-key, Option>
@@ -103,7 +103,6 @@ class OptionMapper extends QBMapperWithUser {
 	 * @param int $pollId
 	 * @param string $pollOptionText option text
 	 * @param bool $getDeleted also search for deleted options
-	 * @psalm-return array<array-key, Option>
 	 */
 	public function findByPollAndText(int $pollId, string $pollOptionText, bool $getDeleted = false): Option {
 		$qb = $this->buildQuery();

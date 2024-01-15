@@ -161,8 +161,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 	public function getIsLocked(): bool {
 		return $this->getDeleted()
-			||($this->getUserVoteAnswer() !== Vote::VOTE_YES 
-			&& $this->getUserVoteAnswer() !== Vote::VOTE_EVENTUALLY 
+			|| ($this->getUserVoteAnswer() !== Vote::VOTE_YES
+			&& $this->getUserVoteAnswer() !== Vote::VOTE_EVENTUALLY
 			&& ($this->getIsLockedByOptionLimit() || $this->getIsLockedByVotesLimit()));
 	}
 
