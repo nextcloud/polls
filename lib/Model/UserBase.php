@@ -87,6 +87,10 @@ class UserBase implements \JsonSerializable {
 		return $this->id;
 	}
 
+	public function getShareUserId(): string {
+		return $this->getId();
+	}
+
 	public function getPublicId(): string {
 		return $this->id;
 	}
@@ -111,6 +115,24 @@ class UserBase implements \JsonSerializable {
 	 * @return string
 	 **/
 	public function getType(): string {
+		return $this->type;
+	}
+
+	/**
+	 * Returns the users' type used in shares
+	 *
+	 * Returned Type will be one of
+	 * 		Email::TYPE (Share),
+	 * 		Ghost::TYPE (deleted user),
+	 * 		User::TYPE (NC User),
+	 * 		Admin::TYPE (NC user with admin rights),
+	 * 		Group::TYPE (NC Group),
+	 * 		Circle::TYPE (Share),
+	 * 		ContactGroup::TYPE (Share)
+	 *
+	 * @return string
+	 **/
+	public function getShareType(): string {
 		return $this->type;
 	}
 

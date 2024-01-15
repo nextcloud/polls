@@ -21,11 +21,9 @@
   -->
 
 <template>
-	<UserItem type="public"
-		class="add-public"
-		user-id="addPublic"
-		:display-name="t('polls', 'Add a new public link')"
-		is-no-user>
+	<UserItem :user="publicLinkUserItem"
+		type="public"
+		class="add-public">
 		<template #status>
 			<div class="vote-status" />
 		</template>
@@ -41,9 +39,19 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton } from '@nextcloud/vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
+
+const user = {
+	user: {
+		type: 'public',
+		userId: '',
+		displayName: '',
+		emailAddress: '',
+	},
+}
 
 export default {
 	name: 'SharePublicAdd',
@@ -54,12 +62,24 @@ export default {
 		PlusIcon,
 	},
 
+	data() {
+		return {
+			publicLinkUserItem: {
+				userId: 'addPublic',
+				displayName: t('polls', 'Add a new public link'),
+				isNoUser: true,
+			},
+		}
+	},
+
 	methods: {
+		...mapActions({
+			addShare: 'shares/add',
+		}),
+
 		async addPublicShare() {
 			try {
-				await this.$store.dispatch('shares/add', {
-					share: { type: 'public', userId: '' },
-				})
+				await this.addShare(user)
 			} catch {
 				showError(t('polls', 'Error adding public link'))
 			}

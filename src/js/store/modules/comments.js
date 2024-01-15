@@ -45,28 +45,16 @@ const mutations = {
 		state.list.push(payload.comment)
 	},
 
-	setDeleted(state, payload) {
-		const index = state.list.findIndex((comment) =>
-			parseInt(comment.id) === payload.comment.id,
-		)
-
-		if (index > -1) {
-			state.list[index].deleted = payload.comment.deleted
-			return
-		}
-		state.list.push(payload.comment)
-	},
-
 	setItem(state, payload) {
 		const index = state.list.findIndex((comment) =>
 			parseInt(comment.id) === payload.comment.id,
 		)
 
-		if (index > -1) {
+		if (index < 0) {
+			state.list.push(payload.commet)
+		} else {
 			state.list[index] = Object.assign(state.list[index], payload.comment)
-			return
 		}
-		state.list.push(payload.commet)
 	},
 
 }
@@ -125,7 +113,7 @@ const actions = {
 				response = await CommentsAPI.deleteComment(payload.comment.id)
 			}
 
-			context.commit('setDeleted', response.data)
+			context.commit('setItem', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting comment', { error: e.response }, { payload })
@@ -142,7 +130,7 @@ const actions = {
 				response = await CommentsAPI.restoreComment(payload.comment.id)
 			}
 
-			context.commit('setDeleted', response.data)
+			context.commit('setItem', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error restoring comment', { error: e.response }, { payload })

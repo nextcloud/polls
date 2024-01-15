@@ -54,8 +54,8 @@ export default {
 
 	computed: {
 		...mapState({
-			currentUser: (state) => state.poll.acl.userId,
-			allowVote: (state) => state.poll.acl.allowVote,
+			currentUser: (state) => state.poll.acl.currentUser,
+			allowVote: (state) => state.poll.acl.permissions.vote,
 		}),
 
 		...mapGetters({
@@ -75,7 +75,7 @@ export default {
 		},
 
 		isCurrentUser() {
-			return this.currentUser === this.userId
+			return this.currentUser.userId === this.userId
 		},
 
 		answer() {

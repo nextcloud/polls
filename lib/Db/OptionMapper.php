@@ -84,7 +84,9 @@ class OptionMapper extends QBMapperWithUser {
 
 	/**
 	 * @return Option[]
+	 * @param int $pollId
 	 * @param bool $hideResults Whether the results should be hidden
+	 * @param bool $getDeleted also search for deleted options
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function findByPoll(int $pollId, bool $hideResults = false, bool $getDeleted = false): array {
@@ -96,8 +98,25 @@ class OptionMapper extends QBMapperWithUser {
 
 		return $this->findEntities($qb);
 	}
+	/**
+	 * @return Option
+	 * @param int $pollId
+	 * @param string $pollOptionText option text
+	 * @param bool $getDeleted also search for deleted options
+	 */
+	public function findByPollAndText(int $pollId, string $pollOptionText, bool $getDeleted = false): Option {
+		$qb = $this->buildQuery();
+		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq(self::TABLE . '.poll_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR)));
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+
+		return $this->findEntity($qb);
+	}
 
 	/**
+	 * @return Option
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 */
 	public function find(int $id): Option {

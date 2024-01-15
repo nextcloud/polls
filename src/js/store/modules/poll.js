@@ -122,11 +122,11 @@ const getters = {
 		const participants = getters.participantsVoted
 
 		// add current user, if not among participants and voting is allowed
-		if (!participants.find((item) => item.userId === state.acl.userId) && state.acl.userId && state.acl.allowVote) {
+		if (!participants.find((participant) => participant.userId === state.acl.currentUser.userId) && state.acl.currentUser.userId && state.acl.permissions.vote) {
 			participants.push({
-				userId: state.acl.userId,
-				displayName: state.acl.displayName,
-				isNoUser: state.isNoUser,
+				userId: state.acl.currentUser.userId,
+				displayName: state.acl.currentUser.displayName,
+				isNoUser: state.acl.currentUser.isNoUser,
 			})
 		}
 
@@ -136,16 +136,16 @@ const getters = {
 	safeParticipants: (state, getters) => {
 		if (getters.safeTable) {
 			return [{
-				userId: state.acl.userId,
-				displayName: state.acl.displayName,
-				isNoUser: state.isNoUser,
+				userId: state.acl.currentUser.userId,
+				displayName: state.acl.currentUser.displayName,
+				isNoUser: state.acl.currentUser.isNoUser,
 			}]
 		}
 		return getters.participants
 	},
 
-	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((item) => (
-		item.user
+	participantsVoted: (state, getters, rootState) => uniqueArrayOfObjects(rootState.votes.list.map((vote) => (
+		vote.user
 	))),
 
 	proposalsOptions: () => [

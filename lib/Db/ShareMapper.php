@@ -121,7 +121,7 @@ class ShareMapper extends QBMapper {
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 */
-	public function findByPollAndUser(int $pollId, string $userId, bool $getDeleted = false): Share {
+	public function findByPollAndUser(int $pollId, string $userId, bool $findDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
@@ -129,7 +129,7 @@ class ShareMapper extends QBMapper {
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
-		if (!$getDeleted) {
+		if (!$findDeleted) {
 			$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
 

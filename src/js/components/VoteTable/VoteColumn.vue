@@ -24,7 +24,7 @@
 	<div :class="componentClass">
 		<OptionItem :option="option" :poll-type="poll.type" :display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
 
-		<Counter v-if="acl.allowSeeResults"
+		<Counter v-if="permissions.seeResults"
 			:show-maybe="!!poll.allowMaybe"
 			:option="option" />
 
@@ -44,7 +44,7 @@
 
 		<FlexSpacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
 
-		<div v-if="acl.allowEdit && closed" class="action confirm">
+		<div v-if="permissions.edit && closed" class="action confirm">
 			<NcButton :title="confirmButtonCaption"
 				:aria-label="confirmButtonCaption"
 				type="tertiary"
@@ -101,10 +101,10 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 			poll: (state) => state.poll,
 			settings: (state) => state.settings.user,
-			currentUser: (state) => state.poll.acl.userId,
+			currentUser: (state) => state.poll.acl.currentUser,
 			isVoteLimitExceeded: (state) => state.poll.acl.isVoteLimitExceeded,
 			voteLimit: (state) => state.poll.voteLimit,
 		}),
@@ -137,7 +137,7 @@ export default {
 
 		ownAnswer() {
 			return this.getVote({
-				userId: this.currentUser,
+				userId: this.currentUser.userId,
 				option: this.option,
 			}).answer
 		},

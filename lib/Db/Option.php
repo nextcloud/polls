@@ -160,7 +160,10 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return htmlspecialchars_decode($this->pollOptionText);
 	}
 	public function getIsLocked(): bool {
-		return $this->getUserVoteAnswer() !== Vote::VOTE_YES && $this->getUserVoteAnswer() !== Vote::VOTE_EVENTUALLY && ($this->getIsLockedByOptionLimit() || $this->getIsLockedByVotesLimit());
+		return $this->getDeleted()
+			|| ($this->getUserVoteAnswer() !== Vote::VOTE_YES
+			&& $this->getUserVoteAnswer() !== Vote::VOTE_EVENTUALLY
+			&& ($this->getIsLockedByOptionLimit() || $this->getIsLockedByVotesLimit()));
 	}
 
 	/**
@@ -174,7 +177,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		// IF a vote limit is set
 		// AND the user did not vote yes for this option
 		// AND the count of yes votes of the current user is EQUAL OR GREATER THAN the vote limit
-		// return true (locked option)
+		// return true (locked option for current user)
 		return $this->getVoteLimit() && $this->getUserCountYesVotes() >= $this->getVoteLimit();
 	}
 

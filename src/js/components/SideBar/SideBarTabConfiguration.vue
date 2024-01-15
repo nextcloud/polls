@@ -26,7 +26,7 @@
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
 		</CardDiv>
 
-		<CardDiv v-if="!isOwner" type="success">
+		<CardDiv v-if="!currentUser.isOwner" type="success">
 			{{ t('polls', 'As an admin you may edit this poll') }}
 		</CardDiv>
 
@@ -170,7 +170,7 @@ export default {
 			pollType: (state) => state.poll.type,
 			pollId: (state) => state.poll.id,
 			hasEpiration: (state) => state.poll.expire,
-			isOwner: (state) => state.poll.acl.isOwner,
+			currentUser: (state) => state.poll.acl.currentUser,
 			showResults: (state) => state.poll.showResults,
 		}),
 

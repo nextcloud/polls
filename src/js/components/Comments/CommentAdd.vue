@@ -22,7 +22,7 @@
 
 <template lang="html">
 	<div class="comment-add">
-		<UserItem v-bind="acl" hide-names />
+		<UserItem :user="currentUser" hide-names />
 
 		<InputDiv v-model="comment"
 			class="comment-add__input"
@@ -52,7 +52,7 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: (state) => state.poll.acl,
+			currentUser: (state) => state.poll.acl.currentUser,
 		}),
 
 	},

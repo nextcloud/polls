@@ -35,12 +35,12 @@
 					:poll-type="pollType"
 					:draggable="true">
 					<template #icon>
-						<OptionItemOwner v-if="acl.allowAddOptions"
+						<OptionItemOwner v-if="permissions.addOptions"
 							:avatar-size="16"
 							:option="option"
 							class="owner" />
 					</template>
-					<template v-if="acl.allowEdit" #actions>
+					<template v-if="permissions.edit" #actions>
 						<ActionDelete v-if="!closed"
 							:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
 							:restore="!!option.deleted"
@@ -118,8 +118,7 @@ export default {
 	computed: {
 		...mapState({
 			options: (state) => state.options.list,
-			acl: (state) => state.poll.acl,
-			isOwner: (state) => state.poll.acl.isOwner,
+			permissions: (state) => state.poll.acl.permissions,
 		}),
 
 		...mapGetters({

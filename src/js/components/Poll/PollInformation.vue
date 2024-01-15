@@ -61,7 +61,7 @@
 			</template>
 			{{ resultsCaption }}
 		</BadgeDiv>
-		<BadgeDiv v-if="countParticipantsVoted && acl.allowSeeResults">
+		<BadgeDiv v-if="countParticipantsVoted && permissions.seeResults">
 			<template #icon>
 				<ParticipantsIcon />
 			</template>
@@ -115,11 +115,11 @@
 			</template>
 			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="$route.name === 'publicVote' && share.emailAddress">
+		<BadgeDiv v-if="$route.name === 'publicVote' && share.user.emailAddress">
 			<template #icon>
 				<EmailIcon />
 			</template>
-			{{ share.emailAddress }}
+			{{ share.user.emailAddress }}
 		</BadgeDiv>
 		<BadgeDiv v-if="subscribed">
 			<template #icon>
@@ -183,7 +183,7 @@ export default {
 	computed: {
 		...mapState({
 			share: (state) => state.share,
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 			poll: (state) => state.poll,
 			subscribed: (state) => state.subscription.subscribed,
 			showResults: (state) => state.poll.showResults,

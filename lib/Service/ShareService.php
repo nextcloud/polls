@@ -126,7 +126,7 @@ class ShareService {
 	 * @param bool   $validateShareType Set true, if the share should be validated for usage
 	 * @param bool   $publicRequest     Set true, to avoid preset displayname of public shares
 	 */
-	public function get(string $token, bool $validateShareType = false, bool $publicRequest = false): Share {
+	public function request(string $token, bool $validateShareType = false, bool $publicRequest = false): Share {
 		$this->share = $this->shareMapper->findByToken($token);
 
 		if ($validateShareType) {
@@ -138,22 +138,35 @@ class ShareService {
 			$this->share->setDisplayName('');
 		}
 
-		// Exception: logged in user accesses the poll via public share link
+		// Exception: logged in user, accesses the poll via public share link
 		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->isLoggedIn()) {
+
 			try {
 				// Check, if he is already authorized for this poll
-				$this->acl->setPollId($this->share->getPollId());
+				$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_VOTE_EDIT);
+
 			} catch (ForbiddenException $e) {
 				// If user is not authorized for this poll, create a personal share
 				// for this user and return the created share instead of the public share
-				return $this->createNewShare(
+				$this->share = $this->createNewShare(
 					$this->share->getPollId(),
 					$this->userMapper->getUserObject(Share::TYPE_USER, $this->userId),
 					true
 				);
+				// remove the public token from session
+				$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
 			}
 		}
 		return $this->share;
+	}
+
+	/**
+	 * Get share by token for accessing the poll
+	 *
+	 * @param string $token             Token of share to get
+	 */
+	public function get(string $token): Share {
+		return $this->share = $this->shareMapper->findByToken($token);
 	}
 
 	/**
@@ -384,6 +397,7 @@ class ShareService {
 			$share = $this->get($token);
 		}
 
+		$shares = [];
 		if (!in_array($share->getType(), Share::RESOLVABLE_SHARES)) {
 			throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
 		}
@@ -481,28 +495,8 @@ class ShareService {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
 		}
 
-		try {
-			$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));
-			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
-		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-
-				$share = $this->shareMapper->findByPollAndUser($pollId, $userId, true);
-				if ($share->getDeleted()) {
-					// Deleted share exist, restore deleted share and generate new token
-					$share->setDeleted(0);
-					$share->setLocked(0);
-					$share->setInvitationSent(0);
-					$share->setToken($this->generateToken());
-
-					return $this->shareMapper->update($share);
-				}
-
-				throw new ShareAlreadyExistsException;
-			}
-
-			throw $e;
-		}
+		$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));
+		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
 
 		return $share;
 	}
@@ -577,33 +571,16 @@ class ShareService {
 		$this->share = new Share();
 		$this->share->setToken($token);
 		$this->share->setPollId($pollId);
-		$this->share->setType($userGroup->getType());
+		$this->share->setType($userGroup->getShareType());
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setInvitationSent($preventInvitation ? time() : 0);
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
-		$this->share->setUserId($userGroup->getPublicId());
+		$this->share->setUserId($userGroup->getShareUserId());
 
-		if (
-			$userGroup->getType() === UserBase::TYPE_USER
-			|| $userGroup->getType() === UserBase::TYPE_ADMIN
-		) {
-			$this->share = $this->shareMapper->insert($this->share);
-			return $this->share;
-		}
-
+		// normal continuation
+		// public share to create, set token as userId
 		if ($userGroup->getType() === UserBase::TYPE_PUBLIC) {
 			$this->share->setUserId($token);
-
-			$this->share = $this->shareMapper->insert($this->share);
-			return $this->share;
-		}
-
-		// Convert user type contact to share type email
-		if ($userGroup->getType() === UserBase::TYPE_CONTACT) {
-			$this->share->setType(Share::TYPE_EMAIL);
-			$this->share->setUserId($userGroup->getEmailAddress());
-			$this->share = $this->shareMapper->insert($this->share);
-			return $this->share;
 		}
 
 		// user is created from public share. Store locale information for
@@ -612,8 +589,36 @@ class ShareService {
 			$this->share->setLanguage($userGroup->getLanguageCode());
 			$this->share->setTimeZoneName($timeZone);
 		}
+		
+		try {
+			$this->share = $this->shareMapper->insert($this->share);
+			// return new created share
+			return $this->share;
+		} catch (Exception $e) {
+			// TODO: Change exception catch to actual exception
+			// Currently OC\DB\Exceptions\DbalException is thrown instead of
+			// UniqueConstraintViolationException
+			// since the exception is from private namespace, we check the type string
+			if (get_class($e) === 'OC\DB\Exceptions\DbalException' || $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 
-		$this->share = $this->shareMapper->insert($this->share);
-		return $this->share;
+				$share = $this->shareMapper->findByPollAndUser($pollId, $this->share->getUserId(), true);
+				if ($share->getDeleted()) {
+					// Deleted share exist, restore deleted share and generate new token
+					$share->setDeleted(0);
+					$share->setLocked(0);
+					$share->setInvitationSent(0);
+					$share->setToken($this->generateToken());
+					if ($share->getType() === UserBase::TYPE_ADMIN) {
+						$share->setType(UserBase::TYPE_USER);
+					}
+					// return existing undeleted share
+					return $this->shareMapper->update($share);
+				}
+				// share already exists
+				throw new ShareAlreadyExistsException;
+			}
+			// other error
+			throw $e;
+		}
 	}
 }

@@ -66,6 +66,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 		$this->addType('id', 'int');
 		$this->addType('pollId', 'int');
 		$this->addType('voteOptionId', 'int');
+		$this->addType('deleted', 'int');
 	}
 
 	/**

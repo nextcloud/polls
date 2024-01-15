@@ -42,7 +42,7 @@
 			</template>
 			{{ t('polls', 'Edit Email Address') }}
 		</NcActionInput>
-		<NcActionInput v-if="$route.name === 'publicVote' && acl.allowVote"
+		<NcActionInput v-if="$route.name === 'publicVote' && permissions.vote"
 			v-bind="userName.inputProps"
 			:value.sync="userName.inputValue"
 			@update:value="validateDisplayName"
@@ -62,7 +62,7 @@
 			{{ t('polls', 'Get your personal link per mail') }}
 		</NcActionButton>
 		<NcActionCheckbox :checked="subscribed"
-			:disabled="!acl.allowSubscribe"
+			:disabled="!permissions.subscribe"
 			title="check"
 			@change="toggleSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
@@ -75,13 +75,13 @@
 			</template>
 			{{ t('polls', 'Remove Email Address') }}
 		</NcActionButton>
-		<NcActionButton v-if="acl.allowEdit" @click="getAddresses()">
+		<NcActionButton v-if="permissions.edit" @click="getAddresses()">
 			<template #icon>
 				<ClippyIcon />
 			</template>
 			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</NcActionButton>
-		<NcActionButton v-if="acl.allowVote" @click="resetVotes()">
+		<NcActionButton v-if="permissions.vote" @click="resetVotes()">
 			<template #icon>
 				<ResetVotesIcon />
 			</template>
@@ -91,7 +91,7 @@
 			<template #icon>
 				<LogoutIcon />
 			</template>
-			{{ t('polls', 'Logout as {name} (delete cookie)', { name: acl.displayName }) }}
+			{{ t('polls', 'Logout as {name} (delete cookie)', { name: displayName }) }}
 		</NcActionButton>
 	</NcActions>
 </template>
@@ -171,11 +171,11 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 			share: (state) => state.share,
 			subscribed: (state) => state.subscription.subscribed,
-			emailAddress: (state) => state.share.emailAddress,
-			displayName: (state) => state.poll.acl.displayName,
+			emailAddress: (state) => state.share.user.emailAddress,
+			displayName: (state) => state.poll.acl.currentUser.displayName,
 		}),
 
 		hasCookie() {
@@ -287,9 +287,9 @@ export default {
 		async resendInvitation() {
 			try {
 				const response = await this.$store.dispatch('share/resendInvitation')
-				showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.emailAddress }))
+				showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.user.emailAddress }))
 			} catch {
-				showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: this.share.emailAddress }))
+				showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: this.share.user.emailAddress }))
 			}
 		},
 

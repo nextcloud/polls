@@ -127,7 +127,20 @@ class OptionService {
 		try {
 			$this->option = $this->optionMapper->add($this->option);
 		} catch (Exception $e) {
-			if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+			// TODO: Change exception catch to actual exception
+			// Currently OC\DB\Exceptions\DbalException is thrown instead of
+			// UniqueConstraintViolationException
+			// since the exception is from private namespace, we check the type string
+			if (get_class($e) === 'OC\DB\Exceptions\DbalException' || $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+
+				$option = $this->optionMapper->findByPollAndText($pollId, $this->option->getPollOptionText(), true);
+				if ($option->getDeleted()) {
+					// Deleted option exist, restore deleted option and generate new token
+					$option->setDeleted(0);
+					// return existing undeleted share
+					return $this->optionMapper->update($option);
+				}
+				// optionalready exists
 				throw new DuplicateEntryException('This option already exists');
 			}
 			throw $e;

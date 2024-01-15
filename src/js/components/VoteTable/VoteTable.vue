@@ -29,10 +29,10 @@
 
 			<div v-for="(participant) in participants"
 				:key="participant.userId"
-				:class="['participant', {currentuser: (participant.userId === acl.userId) }]">
-				<UserItem v-bind="participant" condensed />
+				:class="['participant', {currentuser: (participant.userId === currentUser.userId) }]">
+				<UserItem :user="participant" condensed />
 
-				<ActionDelete v-if="acl.allowEdit"
+				<ActionDelete v-if="permissions.edit"
 					class="user-actions"
 					:name="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.userId)" />
@@ -40,7 +40,7 @@
 
 			<div v-if="proposalsExist" class="owner" />
 
-			<div v-if="acl.allowEdit && closed" class="confirm" />
+			<div v-if="permissions.edit && closed" class="confirm" />
 		</div>
 
 		<transition-group name="list" tag="div" class="vote-table__votes">
@@ -82,7 +82,8 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
+			currentUser: (state) => state.poll.acl.currentUser,
 		}),
 
 		...mapGetters({

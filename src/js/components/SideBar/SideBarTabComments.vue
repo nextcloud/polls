@@ -22,7 +22,7 @@
 
 <template>
 	<div class="comments">
-		<CommentAdd v-if="acl.allowComment" />
+		<CommentAdd v-if="permissions.comment" />
 		<Comments v-if="!showEmptyContent" />
 		<NcEmptyContent v-else :name="t('polls', 'No comments')">
 			<template #icon>
@@ -53,7 +53,7 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: (state) => state.poll.acl,
+			permissions: (state) => state.poll.acl.permissions,
 		}),
 
 		...mapGetters({

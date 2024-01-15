@@ -48,9 +48,8 @@ const state = {
 				return !poll.deleted
 					&& (poll.relevantThreshold > (moment().unix()))
 					&& (poll.important
-						|| poll.userHasVoted
-						|| poll.isOwner
-						|| (poll.allowView && poll.access !== 'open')
+						|| poll.currentUser.isInvolved
+						|| (poll.permissions.allowView && poll.access !== 'open')
 					)
 			},
 		},
@@ -62,7 +61,7 @@ const state = {
 			pinned: false,
 			createDependent: true,
 			filterCondition(poll) {
-				return !poll.deleted && poll.isOwner
+				return !poll.deleted && poll.currentUser.isOwner
 			},
 		},
 		{
@@ -84,7 +83,7 @@ const state = {
 			pinned: false,
 			createDependent: false,
 			filterCondition(poll) {
-				return !poll.deleted && poll.userHasVoted
+				return !poll.deleted && poll.currentUser.hasVoted
 			},
 		},
 		{
