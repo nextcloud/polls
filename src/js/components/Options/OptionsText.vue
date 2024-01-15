@@ -41,22 +41,27 @@
 							class="owner" />
 					</template>
 					<template v-if="permissions.edit" #actions>
-						<ActionDelete v-if="!closed"
-							:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
-							:restore="!!option.deleted"
-							:timeout="0"
-							@restore="restoreOption(option)"
-							@delete="deleteOption(option)" />
-						<NcButton v-if="closed"
-							:title="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
-							:aria-label="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
-							type="tertiary"
-							@click="confirmOption(option)">
-							<template #icon>
-								<UnconfirmIcon v-if="option.confirmed" />
-								<ConfirmIcon v-else />
-							</template>
-						</NcButton>
+						<NcActions v-if="!closed" class="action">
+							<NcActionButton v-if="!option.deleted" @click="deleteOption(option)">
+								<template #icon>
+									<DeleteIcon />
+								</template>
+								{{ t('polls', 'Delete option') }}
+							</NcActionButton>
+							<NcActionButton v-if="option.deleted" @click="restoreOption(option)">
+								<template #icon>
+									<RestoreIcon />
+								</template>
+								{{ t('polls', 'Restore option') }}
+							</NcActionButton>
+							<NcActionButton v-if="!option.deleted && !closed" type="tertiary" @click="confirmOption(option)">
+								<template #icon>
+									<UnconfirmIcon v-if="option.confirmed" />
+									<ConfirmIcon v-else />
+								</template>
+								{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+							</NcActionButton>
+						</NcActions>
 					</template>
 				</OptionItem>
 			</transition-group>
@@ -76,29 +81,32 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
-import { NcButton, NcEmptyContent } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcEmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
-import { ActionDelete } from '../Actions/index.js'
 import OptionItem from './OptionItem.vue'
 import OptionItemOwner from '../Options/OptionItemOwner.vue'
 import { confirmOption, deleteOption, restoreOption } from '../../mixins/optionMixins.js'
-import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
-import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 
 export default {
 	name: 'OptionsText',
 
 	components: {
+		draggable,
+		DeleteIcon,
+		RestoreIcon,
+		TextPollIcon,
 		ConfirmIcon,
 		UnconfirmIcon,
-		ActionDelete,
 		NcEmptyContent,
-		draggable,
 		OptionItem,
 		OptionItemOwner,
-		NcButton,
-		TextPollIcon,
+		NcActions,
+		NcActionButton,
 		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
 	},
 

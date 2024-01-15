@@ -41,24 +41,23 @@
 			</template>
 
 			<NcActions>
-				<NcActionInput v-if="share.user.type === 'public'"
-					:show-trailing-button="false"
-					:value.sync="label"
-					@input="writeLabel()">
+				<NcActionInput v-if="isActivePublicShare"
+					v-bind="label.inputProps"
+					:value.sync="label.inputValue"
+					@submit="submitLabel()">
 					<template #icon>
 						<EditIcon />
 					</template>
-					{{ t('polls', 'Share label') }}
 				</NcActionInput>
 
-				<NcActionButton v-if="share.user.emailAddress || share.user.type === 'group'" @click="sendInvitation()">
+				<NcActionButton v-if="activateResendInvitation" @click="sendInvitation()">
 					<template #icon>
 						<SendEmailIcon />
 					</template>
 					{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="['contactGroup', 'circle'].includes(share.user.type)"
+				<NcActionButton v-if="activateResolveGroup"
 					@click="resolveGroup(share)">
 					<template #icon>
 						<ResolveGroupIcon />
@@ -66,7 +65,7 @@
 					{{ t('polls', 'Resolve into individual invitations') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="share.user.type === 'user' || share.user.type === 'admin'" @click="switchAdmin({ share: share })">
+				<NcActionButton v-if="activateSwitchAdmin" @click="switchAdmin({ share: share })">
 					<template #icon>
 						<GrantAdminIcon v-if="share.user.type === 'user'" />
 						<WithdrawAdminIcon v-else />
@@ -74,23 +73,23 @@
 					{{ share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 				</NcActionButton>
 
-				<NcActionButton @click="copyLink()">
+				<NcActionButton v-if="activateCopyLink" @click="copyLink()">
 					<template #icon>
 						<ClippyIcon />
 					</template>
 					{{ t('polls', 'Copy link to clipboard') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="share.URL" @click="$emit('show-qr-code')">
+				<NcActionButton v-if="activateShowQr" @click="$emit('show-qr-code')">
 					<template #icon>
 						<QrIcon />
 					</template>
 					{{ t('polls', 'Show QR code') }}
 				</NcActionButton>
 
-				<NcActionCaption v-if="share.user.type === 'public'" :name="t('polls', 'Options for the registration dialog')" />
+				<NcActionCaption v-if="isActivePublicShare" :name="t('polls', 'Options for the registration dialog')" />
 
-				<NcActionRadio v-if="share.user.type === 'public'"
+				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="optional"
 					:checked="share.publicPollEmail === 'optional'"
@@ -98,7 +97,7 @@
 					{{ t('polls', 'Email address is optional') }}
 				</NcActionRadio>
 
-				<NcActionRadio v-if="share.user.type === 'public'"
+				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="mandatory"
 					:checked="share.publicPollEmail === 'mandatory'"
@@ -106,7 +105,7 @@
 					{{ t('polls', 'Email address is mandatory') }}
 				</NcActionRadio>
 
-				<NcActionRadio v-if="share.user.type === 'public'"
+				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="disabled"
 					:checked="share.publicPollEmail === 'disabled'"
@@ -186,15 +185,44 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			label: {
+				inputValue: '',
+				inputProps: {
+					success: false,
+					error: false,
+					showTrailingButton: true,
+					labelOutside: false,
+					label: t('polls', 'Share label'),
+				},
+			},
+		}
+	},
+
 	computed: {
-		label: {
-			get() {
-				return this.share.user.displayName
-			},
-			set(value) {
-				this.$store.commit('shares/setShareProperty', { id: this.share.id, user: { displayName: value } })
-			},
+		isActivePublicShare() {
+			return !this.share.deleted && this.share.user.type === 'public'
 		},
+		activateResendInvitation() {
+			return !this.share.deleted && (this.share.user.emailAddress || this.share.user.type === 'group')
+		},
+		activateResolveGroup() {
+			return !this.share.deleted && ['contactGroup', 'circle'].includes(this.share.user.type)
+		},
+		activateSwitchAdmin() {
+			return !this.share.deleted && (this.share.user.type === 'user' || this.share.user.type === 'admin')
+		},
+		activateCopyLink() {
+			return !this.share.deleted
+		},
+		activateShowQr() {
+			return !this.share.deleted && !!this.share.URL
+		},
+	},
+
+	created() {
+		this.label.inputValue = this.share.label
 	},
 
 	methods: {
@@ -205,7 +233,7 @@ export default {
 			unlockShare: 'shares/unlock',
 			switchAdmin: 'shares/switchAdmin',
 			setPublicPollEmail: 'shares/setPublicPollEmail',
-			setLabel: 'shares/writeLabel',
+			writeLabel: 'shares/writeLabel',
 			deleteUser: 'votes/deleteUser',
 		}),
 
@@ -224,8 +252,8 @@ export default {
 			}
 		},
 
-		async writeLabel() {
-			this.setLabel({ token: this.share.token, label: this.share.user.displayName })
+		async submitLabel() {
+			this.writeLabel({ token: this.share.token, label: this.label.inputValue })
 		},
 
 		async resolveGroup(share) {
