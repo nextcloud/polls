@@ -35,7 +35,10 @@
 				</template>
 			</NcButton>
 		</template>
-		<TransitionGroup :css="false" tag="div" class="shares-list">
+		<TransitionGroup is="div"
+			name="list"
+			:css="false"
+			class="shares-list">
 			<ShareItem v-for="(share) in unsentInvitations"
 				:key="share.id"
 				:share="share" />

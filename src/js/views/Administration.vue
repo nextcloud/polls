@@ -39,9 +39,9 @@
 				</template>
 			</NcEmptyContent>
 
-			<transition-group v-else
+			<TransitionGroup is="div"
+				v-else
 				name="list"
-				tag="div"
 				class="poll-list__list">
 				<PollItem key="0"
 					:header="true"
@@ -79,7 +79,7 @@
 						</NcActions>
 					</template>
 				</PollItem>
-			</transition-group>
+			</TransitionGroup>
 		</div>
 
 		<LoadingOverlay v-if="isLoading" />
