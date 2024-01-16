@@ -31,6 +31,7 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Event\ShareChangedDisplayNameEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
+use OCA\Polls\Event\ShareChangedLabelEvent;
 use OCA\Polls\Event\ShareChangedRegistrationConstraintEvent;
 use OCA\Polls\Event\ShareCreateEvent;
 use OCA\Polls\Event\ShareDeletedEvent;
@@ -252,7 +253,11 @@ class ShareService {
 		$this->share->setDisplayName($displayName);
 		$this->share = $this->shareMapper->update($this->share);
 
-		$this->eventDispatcher->dispatchTyped(new ShareChangedDisplayNameEvent($this->share));
+		if ($this->share->getType() === Share::TYPE_PUBLIC) {
+		$this->eventDispatcher->dispatchTyped(new ShareChangedLabelEvent($this->share));
+		} else {
+			$this->eventDispatcher->dispatchTyped(new ShareChangedDisplayNameEvent($this->share));
+		}
 
 		return $this->share;
 	}
