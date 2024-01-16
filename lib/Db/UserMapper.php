@@ -95,7 +95,7 @@ class UserMapper extends QBMapper {
 			return $this->currentUser;
 		}
 
-		$token = $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
+		$token = $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN) ?? '';
 
 
 		if ($this->isLoggedIn()) {
