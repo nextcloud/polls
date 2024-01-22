@@ -254,7 +254,7 @@ class ShareService {
 		$this->share = $this->shareMapper->update($this->share);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-		$this->eventDispatcher->dispatchTyped(new ShareChangedLabelEvent($this->share));
+			$this->eventDispatcher->dispatchTyped(new ShareChangedLabelEvent($this->share));
 		} else {
 			$this->eventDispatcher->dispatchTyped(new ShareChangedDisplayNameEvent($this->share));
 		}
