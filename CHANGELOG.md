@@ -12,6 +12,8 @@ All notable changes to this project will be documented in this file.
  - Fixed typo which caused unnecessary error logging
  - Fixed export of html files
  - Fixed non available action buttons of options in mobile view
+ - Fixed calendar check
+ - Fixed some minor activity issues
 
 ## [6.0.1] - 2023-12-10
 ### Fixes
