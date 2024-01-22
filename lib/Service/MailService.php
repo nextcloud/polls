@@ -35,6 +35,7 @@ use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Exceptions\NoDeadLineException;
+use OCA\Polls\Exceptions\NoEmailAddress;
 use OCA\Polls\Model\Mail\ConfirmationMail;
 use OCA\Polls\Model\Mail\InvitationMail;
 use OCA\Polls\Model\Mail\NotificationMail;
@@ -47,6 +48,15 @@ class MailService {
 	/** @var Log[] **/
 	private array $logs;
 
+	// regular expression to extract the email address and name
+	private const REGEX_PARSE_MAIL_AND_NAME = '/(?:[^<]*<)?([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})(?:>)?$/';
+
+	// Regex for a check, if an email string is contained
+	private const REGEX_CONTAINS_EMAIL_ADDRESS = '/[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/';
+
+	// Regex for extracting only email address
+	//  private const REGEX_PARSE_MAIL = '/^([^<>@\s]+@[^\s<>]+\.[a-zA-Z]{2,})$/';
+
 	public function __construct(
 		private LoggerInterface $logger,
 		private LogMapper $logMapper,
@@ -58,8 +68,96 @@ class MailService {
 		$this->logs = [];
 	}
 
+	/**
+	 * Validate string as email address
+	 *
+	 * @return bool
+	 */
+	private static function isValidEmail(string $eMailAddress): bool {
+		# Rely on PHP's filter
+		return (bool) filter_var($eMailAddress, FILTER_VALIDATE_EMAIL);
+
+		// Alternative
+		// return (bool) preg_match(self::REGEX_VALID_MAIL, $eMailAddress);
+	}
+
+	/**
+	 * Validate email address and throw an exception
+	 * return true, if email address is a valid
+	 *
+	 * @return true
+	 */
+	public static function validateEmailAddress(string $eMailAddress, bool $emptyIsValid = false): bool {
+		if ((!$eMailAddress && $emptyIsValid) || self::isValidEmail($eMailAddress)) {
+			return true;
+		}
+
+		throw new InvalidEmailAddress;
+	}
+
 	public function resolveEmailAddress(int $pollId, string $userId): string {
 		return $this->userMapper->getParticipant($userId, $pollId)->getEmailAddress();
+	}
+
+	/**
+	 * Extracts the email address and name from an input string.
+	 *
+	 * Allows to parse and explode email strings into its email address and name parts
+	 * valid inputs:
+	 * - Peter User peter.user@foo.com, Peter User \<peter.user@foo.com\>
+	 * - peter.user@foo.com, \<peter.user@foo.com\>
+	 * - (Info: Please ignore backslashes if visible in front of "<" and ">")
+	 *
+	 * @param string $eMailString The input string containing an email address and optionally a name.
+	 * @return array Associative array with keys 'eMailString', 'email', and 'name'.
+	 * @throws InvalidEmailAddress If an invalid email address or inalid email format is found
+	 * @throws NoEmailAddress If no email address is found
+	 */
+	public static function extractEmailAddressAndName($eMailString): array {
+		// Trim the input string
+		$eMailString = trim($eMailString);
+
+		preg_match(self::REGEX_PARSE_MAIL_AND_NAME, $eMailString, $matches);
+
+		// Check if the found element is a valid email address
+		$emailAddress = !empty($matches[1]) ? trim($matches[1]) : null;
+
+		if ($emailAddress !== null && filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
+			// Extract the name based on the input string
+			$displayName = trim(str_replace(array('<', '>'), '', str_replace($emailAddress, '', $eMailString)));
+
+			return array('input' => $eMailString, 'emailAddress' => $emailAddress, 'displayName' => $displayName);
+		}
+
+		if (preg_match(self::REGEX_CONTAINS_EMAIL_ADDRESS, $eMailString)) {
+			throw new InvalidEmailAddress($eMailString);
+		}
+
+		throw new NoEmailAddress($eMailString);
+
+	}
+
+	public static function parseEmailStrings(array $emailArray): array {
+		$validEmails = array();
+		$invalidEmails = array();
+		$noEmails = array();
+
+		foreach ($emailArray as $emailString) {
+			try {
+				$validEmails[] = self::extractEmailAddressAndName($emailString);
+			} catch (NoEmailAddress $invalidEmail) {
+				$noEmails[] = $invalidEmail;
+			} catch (InvalidEmailAddress $invalidEmail) {
+				// Contained an email string, but this email string is an invalid email address
+				$invalidEmails[] = $invalidEmail;
+			}
+		}
+
+		return array(
+			'validEmails' => $validEmails,
+			'invalidEmails' => $invalidEmails,
+			'noEmails' => $noEmails,
+		);
 	}
 
 	public function sendNotifications(): void {
