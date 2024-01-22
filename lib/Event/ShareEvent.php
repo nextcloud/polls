@@ -31,6 +31,7 @@ abstract class ShareEvent extends BaseEvent {
 	public const ADD_PUBLIC = 'share_add_public';
 	public const CHANGE_EMAIL = 'share_change_email';
 	public const CHANGE_DISPLAY_NAME = 'share_change_display_name';
+	public const CHANGE_LABEL = 'share_change_label';
 	public const CHANGE_TYPE = 'share_change_type';
 	public const CHANGE_REG_CONSTR = 'share_change_reg_const';
 	public const REGISTRATION = 'share_registration';

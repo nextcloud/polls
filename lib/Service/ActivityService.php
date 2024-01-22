@@ -230,6 +230,10 @@ class ActivityService {
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have changed your name'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('Display name of {sharee} has been changed'),
 			],
+			ShareEvent::CHANGE_LABEL => [
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed the share label'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have changed the share label'),
+			],
 			ShareEvent::CHANGE_TYPE => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed the share type'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has changed the share type'),

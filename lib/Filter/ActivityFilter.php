@@ -41,6 +41,7 @@ class ActivityFilter implements \OCP\Activity\IFilter {
 		ShareEvent::ADD_PUBLIC,
 		ShareEvent::CHANGE_EMAIL,
 		ShareEvent::CHANGE_DISPLAY_NAME,
+		ShareEvent::CHANGE_LABEL,
 		ShareEvent::CHANGE_TYPE,
 		ShareEvent::CHANGE_REG_CONSTR,
 		ShareEvent::REGISTRATION,
