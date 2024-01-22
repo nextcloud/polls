@@ -220,7 +220,7 @@ class ShareService {
 	 */
 	public function setEmailAddress(Share $share, string $emailAddress, bool $emptyIsValid = false): Share {
 		if ($share->getType() === Share::TYPE_EXTERNAL) {
-			$this->systemService->validateEmailAddress($emailAddress, $emptyIsValid);
+			MailService::validateEmailAddress($emailAddress, $emptyIsValid);
 			$share->setEmailAddress($emailAddress);
 			// TODO: Send confirmation
 			$share = $this->shareMapper->update($share);
@@ -283,7 +283,7 @@ class ShareService {
 		$this->systemService->validatePublicUsername($userName, $this->share);
 
 		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
-			$this->systemService->validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
+			MailService::validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
 		}
 
 		$language = $this->systemService->getGenericLanguage();

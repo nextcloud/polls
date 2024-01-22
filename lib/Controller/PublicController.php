@@ -287,7 +287,7 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	public function validateEmailAddress(string $emailAddress, string $token = ''): JSONResponse {
 		return $this->response(fn () => [
-			'result' => $this->systemService->validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress
+			'result' => MailService::validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress
 		], $token);
 	}
 

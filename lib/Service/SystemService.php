@@ -25,15 +25,14 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
+use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\VoteMapper;
-use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\TooShortException;
-use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
@@ -41,15 +40,11 @@ use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\User;
 use OCP\Collaboration\Collaborators\ISearch;
-use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class SystemService {
-	private const REGEX_VALID_MAIL = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
-	private const REGEX_PARSE_MAIL = '/(?:"?([^"]*)"?\s)?(?:<?(.+@[^>]+)>?)/';
-	
 	public function __construct(
 		private IFactory $transFactory,
 		private ISearch $userSearch,
@@ -58,45 +53,6 @@ class SystemService {
 		private VoteMapper $voteMapper,
 		private UserMapper $userMapper,
 	) {
-	}
-
-	/**
-	 * Validate string as email address
-	 *
-	 * @return bool
-	 */
-	private static function isValidEmail(string $emailAddress): bool {
-		return (!preg_match(self::REGEX_VALID_MAIL, $emailAddress)) ? false : true;
-	}
-
-	/**
-	 * Validate email address and throw an exception
-	 * return true, if email address is a valid
-	 *
-	 * @return true
-	 */
-	public static function validateEmailAddress(string $emailAddress, bool $emptyIsValid = false): bool {
-		if (!$emailAddress && $emptyIsValid) {
-			return true;
-		} elseif (!self::isValidEmail($emailAddress)) {
-			throw new InvalidEmailAddress;
-		}
-		return true;
-	}
-
-	/**
-	 * Get a list of users
-	 *
-	 * @return User[]
-	 */
-	public static function getSiteUsers(string $query = '', array $skip = []): array {
-		$users = [];
-		foreach (Container::queryClass(IUserManager::class)->searchDisplayName($query) as $user) {
-			if (!in_array($user->getUID(), $skip) && $user->isEnabled()) {
-				$users[] = new User($user->getUID());
-			}
-		}
-		return $users;
 	}
 
 	/**
@@ -119,14 +75,14 @@ class SystemService {
 	public function getSiteUsersAndGroups(string $query = ''): array {
 		$list = [];
 		if ($query !== '') {
-			preg_match_all(self::REGEX_PARSE_MAIL, $query, $parsedQuery);
-
-			$emailAddress = isset($parsedQuery[2][0]) ? $parsedQuery[2][0] : '';
-			$displayName = isset($parsedQuery[1][0]) ? $parsedQuery[1][0] : '';
-			if ($emailAddress && self::isValidEmail($emailAddress)) {
-				$list[] = new Email($emailAddress, $displayName, $emailAddress);
+			try {
+				// try to identify an email address
+				$result = MailService::extractEmailAddressAndName($query);
+				$list[] = new Email($result['emailAddress'], $result['displayName'], $result['emailAddress']);
+			} catch (Exception $e) {
+				// catch silent
 			}
-
+			// search more matches in circles, users, groups and contacts
 			$list = array_merge($list, $this->search($query));
 		}
 
