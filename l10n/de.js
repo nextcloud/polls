@@ -609,7 +609,7 @@ OC.L10N.register(
     "Disallow proposals" : "Vorschläge verbieten",
     "Allow proposals" : "Vorschläge erlauben",
     "Relevant" : "Relevant",
-    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to." : "Alle Umfragen, die für Sie relevant oder wichtig sind, weil Sie Teilnehmer oder Eigentümer sind oder zu denen Sie eingeladen sind.",
+    "All polls which are relevant or important to you, because you are a participant or the owner or you are invited to." : "Alle Umfragen, die für dich relevant oder wichtig sind, weil du Teilnehmer oder Eigentümer bist oder zu denen du eingeladen bist.",
     "My polls" : "Meine Umfragen",
     "Your polls (in which you are the owner)." : "Deine Umfragen (deren Eigentümer du bist).",
     "Private polls" : "Private Umfragen",
