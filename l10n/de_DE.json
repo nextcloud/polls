@@ -131,6 +131,7 @@
     "You have changed your name" : "Sie haben Ihren Namen geändert",
     "{sharee} has changed the name" : "{sharee} hat den Namen geändert",
     "Display name of {sharee} has been changed" : "Anzeigename von {sharee} wurde geändert",
+    "You have changed the share label" : "Sie haben das Freigabelabel geändert",
     "You have changed the share type" : "Sie haben den Freigabetyp geändert",
     "{actor} has changed the share type" : "{actor} hat den Freigabetyp geändert",
     "You have changed the registration constraints for share {sharee}" : "Sie haben die Registrierungsbeschränkungen für die Freigabe {sharee} geändert",

@@ -133,6 +133,7 @@ OC.L10N.register(
     "You have changed your name" : "لقد قمت بتغيير اسمك",
     "{sharee} has changed the name" : "{sharee} غيّر الاسم",
     "Display name of {sharee} has been changed" : "تم تغيير الاسم المعروض لـ {sharee}",
+    "You have changed the share label" : "لقد قُمتَ بتغيير تسمية المُشاركة",
     "You have changed the share type" : "لقد قمت بتغيير نوع المشاركة",
     "{actor} has changed the share type" : "قام {actor} بتغيير نوع المشاركة",
     "You have changed the registration constraints for share {sharee}" : "لقد قمت بتغيير قيود التسجيل للمشاركة {sharee}",

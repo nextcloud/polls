@@ -133,6 +133,7 @@ OC.L10N.register(
     "You have changed your name" : "Променили сте своје име",
     "{sharee} has changed the name" : "{sharee} је променио име",
     "Display name of {sharee} has been changed" : "Име за приказ {sharee} је промењено",
+    "You have changed the share label" : "Променили сте ознаку дељења",
     "You have changed the share type" : "Променили сте тип дељења",
     "{actor} has changed the share type" : "{actor} је променио тип дељења",
     "You have changed the registration constraints for share {sharee}" : "Изменили сте ограничења регистрације за дељење {sharee}",

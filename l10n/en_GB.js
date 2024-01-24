@@ -133,6 +133,7 @@ OC.L10N.register(
     "You have changed your name" : "You have changed your name",
     "{sharee} has changed the name" : "{sharee} has changed the name",
     "Display name of {sharee} has been changed" : "Display name of {sharee} has been changed",
+    "You have changed the share label" : "You have changed the share label",
     "You have changed the share type" : "You have changed the share type",
     "{actor} has changed the share type" : "{actor} has changed the share type",
     "You have changed the registration constraints for share {sharee}" : "You have changed the registration constraints for share {sharee}",

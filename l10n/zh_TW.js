@@ -133,6 +133,7 @@ OC.L10N.register(
     "You have changed your name" : "您已變更您的名稱",
     "{sharee} has changed the name" : "{sharee} 變更了名稱",
     "Display name of {sharee} has been changed" : "{sharee} 的顯示名稱已變更",
+    "You have changed the share label" : "您已變更分享標籤",
     "You have changed the share type" : "您已變更分享類型",
     "{actor} has changed the share type" : "{actor} 已變更分享類型",
     "You have changed the registration constraints for share {sharee}" : "您已變更分享 {sharee} 的註冊限制",

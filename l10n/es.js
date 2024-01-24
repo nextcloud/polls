@@ -133,6 +133,7 @@ OC.L10N.register(
     "You have changed your name" : "Has cambiado tu nombre",
     "{sharee} has changed the name" : "{sharee} ha cambiado el nombre",
     "Display name of {sharee} has been changed" : "El nombre a mostrar de {sharee} ha sido cambiado",
+    "You have changed the share label" : "Ha cambiado la etiqueta del recurso compartido",
     "You have changed the share type" : "Has cambiado el tipo de recurso compartido",
     "{actor} has changed the share type" : "{actor} ha cambiado el tipo de recurso compartido",
     "You have changed the registration constraints for share {sharee}" : "Has cambiado los requerimientos de registro para el recurso compartido {sharee}",

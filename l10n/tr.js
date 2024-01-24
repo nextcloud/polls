@@ -133,6 +133,7 @@ OC.L10N.register(
     "You have changed your name" : "Adınızı değiştirdiniz",
     "{sharee} has changed the name" : "{sharee} adını değiştirdi",
     "Display name of {sharee} has been changed" : "{sharee} için görüntülenecek ad değiştirildi",
+    "You have changed the share label" : "Paylaşım etiketini değiştirdiniz",
     "You have changed the share type" : "Paylaşım türünü değiştirdiniz",
     "{actor} has changed the share type" : "{actor}, paylaşım türünü değiştirdi",
     "You have changed the registration constraints for share {sharee}" : "{sharee} paylaşımı için kayıt kısıtlamalarını değiştirdiniz",
