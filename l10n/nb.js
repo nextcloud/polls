@@ -31,6 +31,7 @@ OC.L10N.register(
     "Submit" : "Send inn",
     "Close" : "Lukk",
     "never" : "aldri",
+    "Private poll" : "Privat avstemning",
     "Access" : "Tilgang",
     "Owner" : "Eier",
     "Created" : "Opprettet",
