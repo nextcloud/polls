@@ -39,6 +39,7 @@ use OCA\Polls\Model\UserBase;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\ISession;
+use Psr\Log\LoggerInterface;
 
 class CalendarService {
 	/** @var ICalendar[] */
@@ -52,6 +53,7 @@ class CalendarService {
 		private Preferences $preferences,
 		private PreferencesService $preferencesService,
 		private UserMapper $userMapper,
+		private LoggerInterface $logger,
 	) {
 		$this->preferences = $this->preferencesService->get();
 		$this->currentUser = $this->userMapper->getCurrentUser();
@@ -130,16 +132,21 @@ class CalendarService {
 		$events = [];
 		$foundEvents = $this->searchEventsByTimeRange($timerange['from'], $timerange['to']);
 
-		if (!$foundEvents) {
-			return [];
-		}
-
+		// if (!$foundEvents) {
+		// 	return [];
+		// }
+		
 		foreach ($foundEvents as $event) {
 			$calendar = $this->getCalendarFromEvent($event);
 			if ($calendar === null) {
 				continue;
 			}
 
+			if (!isset($event['objects'][0])) {
+				$this->logger->warning('Skipping invalid calendar entry', ['calendarEvent' => json_encode($event)]);
+				continue;
+			}
+			
 			$calendarEvent = new CalendarEvent($event, $calendar, $timerange['from'], $timerange['to'], $timezone);
 
 			if ($calendarEvent->getOccurrences()) {
