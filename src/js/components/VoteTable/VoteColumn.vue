@@ -105,7 +105,6 @@ export default {
 			poll: (state) => state.poll,
 			settings: (state) => state.settings.user,
 			currentUser: (state) => state.poll.acl.currentUser,
-			isVoteLimitExceeded: (state) => state.poll.acl.isVoteLimitExceeded,
 			voteLimit: (state) => state.poll.voteLimit,
 		}),
 

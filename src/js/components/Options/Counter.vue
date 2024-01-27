@@ -24,11 +24,11 @@
 	<div class="counter">
 		<div class="yes">
 			<YesCounterIcon fill-color="var(--color-polls-foreground-yes)" :size="20" />
-			<span>{{ option.yes }}</span>
+			<span>{{ option.votes.yes }}</span>
 		</div>
 		<div v-if="showMaybe" class="maybe">
 			<MaybeCounterIcon fill-color="var(--color-polls-foreground-maybe)" :size="20" />
-			<span>{{ option.maybe }}</span>
+			<span>{{ option.votes.maybe }}</span>
 		</div>
 	</div>
 </template>

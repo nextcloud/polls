@@ -104,6 +104,14 @@ const publicPoll = {
 		})
 	},
 
+	removeOrphanedVotes(shareToken) {
+		return httpInstance.request({
+			method: 'DELETE',
+			url: `s/${shareToken}/votes/orphaned`,
+			cancelToken: cancelTokenHandlerObject[this.removeOrphanedVotes.name].handleRequestCancellation().token,
+		})
+	},
+
 	getComments(shareToken) {
 		return httpInstance.request({
 			method: 'GET',

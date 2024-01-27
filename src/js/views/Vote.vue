@@ -58,6 +58,29 @@
 				{{ t('polls', 'This poll is closed. No further action is possible.') }}
 			</CardDiv>
 
+			<CardDiv v-if="showLimitCard"
+				:heading="t('polls', 'Votes are limited.')"
+				:type="limitCardType">
+				<ul>
+					<li v-if="optionLimit">
+						{{ n('polls', '%n vote is allowed per option.', '%n votes are allowed per option.', optionLimit) }}
+					</li>
+					<li v-if="voteLimit">
+						{{ n('polls', '%n vote is allowed per user.', '%n votes are allowed per user.', voteLimit) }}
+					</li>
+					<li>{{ n('polls', 'You have %n vote left.', 'You have %n votes left.', votesLeft) }}</li>
+					<div v-if="orphanedVotes && voteLimit">
+						<b>{{ orphanedVotesText }}</b>
+					</div>
+				</ul>
+
+				<template v-if="orphanedVotes && voteLimit" #button>
+					<NcButton type="primary" @click="deleteOrphanedVotes">
+						{{ t('polls', 'Delete orphaned') }}
+					</NcButton>
+				</template>
+			</CardDiv>
+
 			<CardDiv v-else-if="showConfirmationMail" :type="confirmationSent">
 				{{ confirmationSendMessage }}
 				<template #button>
@@ -65,6 +88,7 @@
 						@success="confirmationSendSuccess()" />
 				</template>
 			</CardDiv>
+
 			<CardDiv v-else-if="useRegisterModal" type="info">
 				{{ registrationInvitationText }}
 				<template #button>
@@ -133,7 +157,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
 import { NcModal, NcAppContent, NcButton, NcEmptyContent } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
@@ -183,6 +207,11 @@ export default {
 			permissions: (state) => state.poll.acl.permissions,
 			share: (state) => state.share,
 			settings: (state) => state.settings,
+			votes: (state) => state.votes,
+			orphanedVotes: (state) => state.poll.summary.orphanedVotes,
+			yesByCurrentUser: (state) => state.poll.summary.yesByCurrentUser,
+			optionLimit: (state) => state.poll.optionLimit,
+			voteLimit: (state) => state.poll.voteLimit,
 		}),
 
 		...mapGetters({
@@ -204,6 +233,14 @@ export default {
 			return this.poll.access === 'private' && !this.hasShares && this.permissions.edit
 		},
 
+		orphanedVotesText() {
+			return n(
+				'polls',
+				'%n orphaned vote of a probaly deleted option is possibly blocking your vote limit.',
+				'%n orphaned votes of probaly deleted options are possibly blocking your vote limit.',
+				this.orphanedVotes)
+		},
+
 		registrationInvitationText() {
 			if (this.share.publicPollEmail === 'mandatory') {
 				return t('polls', 'To participate, register with your email address and a name.')
@@ -218,13 +255,27 @@ export default {
 			return this.$route.name === 'publicVote' ? t('polls', 'This share is locked and allows only read access. Registering is not possible.') : t('polls', 'Your share is locked and you have just read access to this poll.')
 		},
 
+		votesLeft() {
+			return (this.voteLimit - this.yesByCurrentUser) > 0
+				? this.voteLimit - this.yesByCurrentUser
+				: 0
+		},
+
 		showConfirmationMail() {
 			return this.permissions.edit && this.closed && this.confirmedOptions.length > 0
 		},
 
+		showLimitCard() {
+			return !this.closed && (this.optionLimit || this.voteLimit)
+		},
+
+		limitCardType() {
+			return this.voteLimit && this.votesLeft < 1 ? 'error' : 'info'
+		},
+
 		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
-			return `${t('polls', 'Polls')} - ${this.poll.title}`
+			return `${t('polls', 'Polls')} - ${this.title}`
 		},
 
 		useRegisterModal() {
@@ -250,6 +301,10 @@ export default {
 	methods: {
 		...mapMutations({
 			switchSafeTable: 'poll/switchSafeTable',
+		}),
+
+		...mapActions({
+			deleteOrphanedVotes: 'votes/removeOrphanedVotes',
 		}),
 
 		confirmationSendError() {

@@ -48,6 +48,14 @@ const votes = {
 			cancelToken: cancelTokenHandlerObject[this.removeUser.name].handleRequestCancellation().token,
 		})
 	},
+
+	removeOrphanedVotes(pollId) {
+		return httpInstance.request({
+			method: 'DELETE',
+			url: `poll/${pollId}/votes/orphaned`,
+			cancelToken: cancelTokenHandlerObject[this.removeOrphanedVotes.name].handleRequestCancellation().token,
+		})
+	},
 }
 
 const cancelTokenHandlerObject = createCancelTokenHandler(votes)

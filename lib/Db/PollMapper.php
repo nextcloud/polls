@@ -80,7 +80,7 @@ class PollMapper extends QBMapperWithUser {
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Poll[]
 	 */
-	public function findOwner(string $userId): array {
+	public function listByOwner(string $userId): array {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);

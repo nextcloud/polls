@@ -36,7 +36,10 @@ use OCP\IDBConnection;
 class VoteMapper extends QBMapperWithUser {
 	public const TABLE = Vote::TABLE;
 
-	public function __construct(IDBConnection $db) {
+	public function __construct(
+		IDBConnection $db,
+		private UserMapper $userMapper,
+		) {
 		parent::__construct($db, self::TABLE, Vote::class);
 	}
 
@@ -58,7 +61,9 @@ class VoteMapper extends QBMapperWithUser {
 	 * @psalm-return array<array-key, Vote>
 	 */
 	public function getAll(): array {
-		$qb = $this->buildQuery();
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('*')->from($this->getTableName());
 		return $this->findEntities($qb);
 	}
 	
@@ -70,8 +75,7 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	public function findByPoll(int $pollId): array {
 		$qb = $this->buildQuery();
-		
-		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
 	}
 
@@ -82,8 +86,7 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	public function findByPollAndUser(int $pollId, string $userId): array {
 		$qb = $this->buildQuery();
-
-		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
@@ -93,8 +96,7 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	public function findSingleVote(int $pollId, string $optionText, string $userId): Vote {
 		$qb = $this->buildQuery();
-
-		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.vote_option_text', $qb->createNamedParameter($optionText, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntity($qb);
@@ -127,7 +129,7 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	public function findParticipantsVotes(int $pollId, string $userId): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
@@ -136,8 +138,8 @@ class VoteMapper extends QBMapperWithUser {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->getTableName())
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
-			->executeStatement();
+			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$qb->executeStatement();
 	}
 
 	/**
@@ -147,7 +149,7 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	public function getYesVotesByParticipant(int $pollId, string $userId): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.vote_answer', $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
@@ -160,8 +162,7 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	public function getYesVotesByOption(int $pollId, string $pollOptionText): array {
 		$qb = $this->buildQuery();
-
-		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.vote_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.vote_answer', $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
@@ -185,25 +186,67 @@ class VoteMapper extends QBMapperWithUser {
 			->executeStatement();
 	}
 
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Vote[]
+	 * @psalm-return array<array-key, Vote>
+	 */
+	public function findOrphanedByPollandUser(int $pollId, string $userId): array {
+		$qb = $this->buildQuery(findOrphaned: true);
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+		 	->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		return $this->findEntities($qb);
+	}
 
 	/**
 	 * Build the enhanced query with joined tables
 	 */
 	protected function find(int $id): Vote {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
 		return $this->findEntity($qb);
 	}
 
-	protected function buildQuery(): IQueryBuilder {
+	protected function buildQuery(bool $findOrphaned = false): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
 			->groupby(self::TABLE . '.id');
-
+			
 		$this->joinDisplayNameFromShare($qb, self::TABLE);
+
+		$alias = $this->joinOption($qb, self::TABLE);
+
+		if ($findOrphaned) {
+			$qb->where($qb->expr()->isNull($alias . '.id'));
+		} else {
+			$qb->where($qb->expr()->isNotNull($alias . '.id'));
+		}
 		return $qb;
+	}
+
+	/**
+	 * Joins options to restrict query to votes with actually undeleted options
+	 * Avoid orphaned votes
+	 */
+	protected function joinOption(IQueryBuilder &$qb, string $fromAlias): string {
+		$joinAlias = 'options';
+		
+		$qb->selectAlias($joinAlias . '.id', 'option_id');
+
+		$qb->leftJoin(
+			$fromAlias,
+			Option::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.poll_option_text', $fromAlias . '.vote_option_text'),
+				$qb->expr()->eq($joinAlias . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)),
+			)
+		);
+
+		return $joinAlias;
 	}
 
 }

@@ -49,6 +49,7 @@ return [
 		['name' => 'public#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
 		['name' => 'public#validate_email_address', 'url' => '/check/emailaddress/{emailAddress}', 'verb' => 'GET'],
 		['name' => 'public#delete_user', 'url' => '/s/{token}/user', 'verb' => 'DELETE'],
+		['name' => 'public#delete_orphaned_votes', 'url' => '/s/{token}/votes/orphaned', 'verb' => 'DELETE'],
 		['name' => 'public#watch_poll', 'url' => '/s/{token}/watch', 'verb' => 'GET'],
 
 		['name' => 'admin#index', 'url' => '/administration', 'verb' => 'GET'],
@@ -93,6 +94,7 @@ return [
 		['name' => 'vote#set', 'url' => '/vote', 'verb' => 'PUT'],
 		['name' => 'vote#delete', 'url' => '/poll/{pollId}/user/{userId}', 'verb' => 'DELETE', 'postfix' => 'other'],
 		['name' => 'vote#delete', 'url' => '/poll/{pollId}/user', 'verb' => 'DELETE', 'postfix' => 'self'],
+		['name' => 'vote#delete_orphaned', 'url' => '/poll/{pollId}/votes/orphaned', 'verb' => 'DELETE'],
 
 		['name' => 'share#list', 'url' => '/poll/{pollId}/shares', 'verb' => 'GET'],
 		['name' => 'share#add', 'url' => '/poll/{pollId}/share', 'verb' => 'POST'],

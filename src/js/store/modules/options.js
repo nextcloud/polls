@@ -77,12 +77,13 @@ const mutations = {
 		} else {
 			state.list.splice(index, 1, payload.option)
 		}
+		state.list.sort((a, b) => (a.order < b.order) ? -1 : (a.order > b.order) ? 1 : 0)
 	},
 }
 
 const getters = {
 	count: (state) => state.list.length,
-	rankedOptions: (state) => state.ranked ? orderBy(state.list, ['yes', 'maybe'], ['desc', 'desc']) : state.list,
+	rankedOptions: (state) => state.ranked ? orderBy(state.list, ['votes.yes', 'votes.maybe'], ['desc', 'desc']) : state.list,
 	proposalsExist: (state) => !!state.list.filter((option) => option.owner.userId).length,
 	confirmed: (state) => state.list.filter((option) => option.confirmed > 0),
 
