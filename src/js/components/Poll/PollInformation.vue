@@ -103,17 +103,17 @@
 			</template>
 			{{ proposalsStatus }}
 		</BadgeDiv>
-		<BadgeDiv v-if="poll.voteLimit">
+		<BadgeDiv v-if="voteLimit">
 			<template #icon>
 				<CheckIcon />
 			</template>
-			{{ n('polls', '%n of {maximalVotes} vote left.', '%n of {maximalVotes} votes left.', poll.voteLimit - countVotes('yes'), { maximalVotes: poll.voteLimit }) }}
+			{{ n('polls', '{usedVotes} of %n vote left.', '{usedVotes} of %n votes left.', voteLimit, { maximalVotes: voteLimit, usedVotes: (voteLimit - yesByCurrentUser) }) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="poll.optionLimit">
+		<BadgeDiv v-if="optionLimit">
 			<template #icon>
 				<CloseIcon />
 			</template>
-			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', poll.optionLimit) }}
+			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', optionLimit) }}
 		</BadgeDiv>
 		<BadgeDiv v-if="$route.name === 'publicVote' && share.user.emailAddress">
 			<template #icon>
@@ -189,6 +189,9 @@ export default {
 			showResults: (state) => state.poll.showResults,
 			important: (state) => state.poll.important,
 			access: (state) => state.poll.access,
+			yesByCurrentUser: (state) => state.poll.summary.yesByCurrentUser,
+			optionLimit: (state) => state.poll.optionLimit,
+			voteLimit: (state) => state.poll.voteLimit,
 		}),
 
 		...mapGetters({
@@ -196,8 +199,7 @@ export default {
 			confirmedOptions: 'options/confirmed',
 			countOptions: 'options/count',
 			countParticipantsVoted: 'poll/countParticipantsVoted',
-			countVotes: 'votes/countVotes',
-			countAllVotes: 'votes/countAllVotes',
+			countAllVotes: 'votes/countAllVotesByAnswer',
 			proposalsAllowed: 'poll/proposalsAllowed',
 			proposalsExpirySet: 'poll/proposalsExpirySet',
 			proposalsExpired: 'poll/proposalsExpired',

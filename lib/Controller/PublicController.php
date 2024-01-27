@@ -132,12 +132,22 @@ class PublicController extends BasePublicController {
 	}
 
 	/**
-	 * Delete user's votes
+	 * Delete current user's votes
 	 */
 	#[PublicPage]
 	public function deleteUser(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'deleted' => $this->voteService->delete(acl: $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT))
+		], $token);
+	}
+
+	/**
+	 * Delete current user's orphaned votes
+	 */
+	#[PublicPage]
+	public function deleteOrphanedVotes(string $token): JSONResponse {
+		return $this->response(fn () => [
+			'deleted' => $this->voteService->delete(acl: $this->acl->setToken($token, Acl::PERMISSION_VOTE_EDIT), deleteOnlyOrphaned: true)
 		], $token);
 	}
 

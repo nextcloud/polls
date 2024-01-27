@@ -22,11 +22,13 @@
 
 <template>
 	<NcNoteCard v-bind="$attrs">
-		<div class="left-card-side">
-			<slot name="default" />
-		</div>
-		<div class="right-card-side">
-			<slot name="button" />
+		<div class="card-content">
+			<div class="left-card-side">
+				<slot name="default" />
+			</div>
+			<div class="right-card-side">
+				<slot name="button" />
+			</div>
 		</div>
 	</NcNoteCard>
 </template>
@@ -45,7 +47,10 @@ export default {
 
 <style lang="scss">
 	.left-card-side {
-		flex: 1;
+		flex: 1 0 180px;
+		ul {
+			list-style: initial;
+		}
 	}
 
 	.right-card-side {
@@ -53,8 +58,7 @@ export default {
 		padding-right: 8px;
 	}
 
-	// hack
-	.notecard > div {
+	.notecard .card-content {
 		display: flex;
 		align-items: center;
 		flex: 1;

@@ -22,7 +22,6 @@
  */
 
 const defaultAcl = () => ({
-	isVoteLimitExceeded: false,
 	pollId: null,
 	pollExpired: false,
 	pollExpire: 0,

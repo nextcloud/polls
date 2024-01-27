@@ -67,4 +67,11 @@ class VoteController extends BaseController {
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId)]);
 	}
+	/**
+	 * Relete orphaned votes
+	 */
+	#[NoAdminRequired]
+	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
+		return $this->response(fn () => ['deleted' => $this->voteService->delete(pollId: $pollId, userId: $userId, deleteOnlyOrphaned: true)]);
+	}
 }

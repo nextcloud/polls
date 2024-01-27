@@ -50,6 +50,11 @@ const defaultPoll = () => ({
 	useNo: 1,
 	autoReminder: false,
 	revealParticipants: false,
+	orphanedVotes: 0,
+	summary: {
+		yesByCurrentUser: 0,
+		orphanedVotes: 0,
+	},
 	owner: {
 		userId: '',
 		displayName: '',
