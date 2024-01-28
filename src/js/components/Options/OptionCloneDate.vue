@@ -25,8 +25,8 @@
 		<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
 		<p>{{ t('polls', 'Create a sequence of date options starting with {dateOption}.', { dateOption: dateBaseOptionString }) }}</p>
 
-		<h3> {{ t('polls', 'Step unit') }} </h3>
 		<NcSelect v-model="sequence.unit"
+			:input-label="t('polls', 'Step unit')"
 			:clearable="false"
 			:filterable="false"
 			:options="dateUnits"

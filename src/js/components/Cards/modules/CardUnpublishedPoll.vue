@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2024 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -20,42 +20,37 @@
   -
   -->
 
-<template>
-	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
-			:title="caption"
-			:aria-label="caption"
-			@click="clickAction()">
-			<template #icon>
-				<SidebarIcon />
-			</template>
-		</NcButton>
-	</div>
+<template lang="html">
+	<CardDiv :type="cardType">
+		{{ t('polls', 'This poll is unpublished.') }}
+		<span v-if="hasVotes">{{ t('polls', 'Existing participants will still have access.') }} </span>
+		{{ t('polls', 'Invite users or allow internal access for all site users.') }}
+		<template #button>
+			<ActionOpenSharesSidebar />
+		</template>
+	</CardDiv>
 </template>
 
 <script>
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+import { mapState } from 'vuex'
+import { CardDiv } from '../../Base/index.js'
 
 export default {
-	name: 'ActionToggleSidebar',
-
+	name: 'CardUnpublishedPoll',
 	components: {
-		SidebarIcon,
-		NcButton,
+		CardDiv,
+		ActionOpenSharesSidebar: () => import('../../Actions/modules/ActionOpenSharesSidebar.vue'),
 	},
 
 	data() {
 		return {
-			caption: t('polls', 'Toggle Sidebar'),
+			cardType: 'warning',
 		}
 	},
-
-	methods: {
-		clickAction() {
-			emit('polls:sidebar:toggle')
-		},
+	computed: {
+		...mapState({
+			hasVotes: (state) => state.votes.list.length,
+		}),
 	},
 }
 </script>

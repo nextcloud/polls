@@ -22,39 +22,38 @@
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
-			:title="caption"
+		<NcButton type="primary"
 			:aria-label="caption"
 			@click="clickAction()">
-			<template #icon>
-				<SidebarIcon />
-			</template>
+			{{ caption }}
 		</NcButton>
 	</div>
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 
 export default {
-	name: 'ActionToggleSidebar',
+	name: 'ActionDeleteOrphanedVotes',
 
 	components: {
-		SidebarIcon,
 		NcButton,
 	},
 
 	data() {
 		return {
-			caption: t('polls', 'Toggle Sidebar'),
+			caption: t('polls', 'Delete orphaned'),
 		}
 	},
 
 	methods: {
+		...mapActions({
+			deleteOrphanedVotes: 'votes/removeOrphanedVotes',
+		}),
+
 		clickAction() {
-			emit('polls:sidebar:toggle')
+			this.deleteOrphanedVotes()
 		},
 	},
 }

@@ -22,39 +22,38 @@
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
-			:title="caption"
+		<NcButton type="primary"
 			:aria-label="caption"
 			@click="clickAction()">
-			<template #icon>
-				<SidebarIcon />
-			</template>
+			{{ caption }}
 		</NcButton>
 	</div>
 </template>
 
 <script>
+import { mapMutations } from 'vuex'
 import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 
 export default {
-	name: 'ActionToggleSidebar',
+	name: 'ActionSwitchSafeTable',
 
 	components: {
-		SidebarIcon,
 		NcButton,
 	},
 
 	data() {
 		return {
-			caption: t('polls', 'Toggle Sidebar'),
+			caption: t('polls', 'Reveal them'),
 		}
 	},
 
 	methods: {
+		...mapMutations({
+			switchSafeTable: 'poll/switchSafeTable',
+		}),
+
 		clickAction() {
-			emit('polls:sidebar:toggle')
+			this.switchSafeTable()
 		},
 	},
 }

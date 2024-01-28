@@ -26,8 +26,8 @@
 			{{ t('polls', 'Disallow public shares') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="publicSharesLimited" class="settings_details">
-			<h3>{{ t('polls','Allow public shares for the following groups') }}</h3>
 			<NcSelect v-model="publicSharesGroups"
+				:input-label="t('polls','Allow public shares for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
@@ -44,6 +44,7 @@
 		<div v-if="allAccessLimited" class="settings_details">
 			<h3>{{ t('polls','Allow creating openly accessible polls for the following groups') }}</h3>
 			<NcSelect v-model="allAccessGroups"
+				:input-label="t('polls','Allow creating openly accessible polls for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

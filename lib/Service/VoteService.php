@@ -180,7 +180,7 @@ class VoteService {
 		$this->vote = new Vote();
 		$this->vote->setPollId($pollId);
 		$this->vote->setUserId($userId);
-		$this->voteMapper->deleteByPollAndUserId($pollId, $userId, $deleteOnlyOrphaned);
+		$this->voteMapper->deleteByPollAndUserId($pollId, $userId);
 
 		$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote, false));
 		return $userId;

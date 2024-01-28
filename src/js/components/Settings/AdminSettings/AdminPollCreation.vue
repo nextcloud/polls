@@ -26,8 +26,8 @@
 			{{ t('polls', 'Disallow poll creation for all users') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="createPollLimited" class="settings_details">
-			<h3>{{ t('polls','Allow poll creation for the following groups') }}</h3>
 			<NcSelect v-model="createPollGroups"
+				:input-label="t('polls','Allow poll creation for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

@@ -22,9 +22,9 @@
 
 <template>
 	<div class="action change-view">
-		<NcButton :title="caption"
+		<NcButton type="tertiary"
+			:title="caption"
 			:aria-label="caption"
-			type="tertiary"
 			@click="clickAction()">
 			<template #icon>
 				<ListViewIcon v-if="viewMode === 'table-view'" />

@@ -59,7 +59,7 @@
 							{{ t('polls', 'Clone option') }}
 						</NcActionButton>
 
-						<NcActionButton v-if="!option.deleted && !closed" type="tertiary" @click="confirmOption(option)">
+						<NcActionButton v-if="!option.deleted && !closed" @click="confirmOption(option)">
 							<template #icon>
 								<UnconfirmIcon v-if="option.confirmed" />
 								<ConfirmIcon v-else />
@@ -71,13 +71,11 @@
 			</OptionItem>
 		</TransitionGroup>
 
-		<NcEmptyContent v-else :name="t('polls', 'No vote options')">
+		<NcEmptyContent v-else
+			:name="t('polls', 'No vote options')"
+			:description="t('polls', 'Add some!')">
 			<template #icon>
 				<DatePollIcon />
-			</template>
-
-			<template #action>
-				{{ t('polls', 'Add some!') }}
 			</template>
 		</NcEmptyContent>
 

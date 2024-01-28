@@ -39,7 +39,7 @@ class VoteMapper extends QBMapperWithUser {
 	public function __construct(
 		IDBConnection $db,
 		private UserMapper $userMapper,
-		) {
+	) {
 		parent::__construct($db, self::TABLE, Vote::class);
 	}
 
@@ -194,7 +194,7 @@ class VoteMapper extends QBMapperWithUser {
 	public function findOrphanedByPollandUser(int $pollId, string $userId): array {
 		$qb = $this->buildQuery(findOrphaned: true);
 		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-		 	->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
 

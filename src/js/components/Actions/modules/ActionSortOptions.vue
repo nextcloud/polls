@@ -22,9 +22,9 @@
 
 <template>
 	<div class="action sort-options">
-		<NcButton :title="caption"
+		<NcButton type="tertiary"
+			:title="caption"
 			:aria-label="caption"
-			type="tertiary"
 			@click="clickAction()">
 			<template #icon>
 				<SortByDateOptionIcon v-if="isRanked && pollType === 'datePoll'" />

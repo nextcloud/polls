@@ -46,7 +46,7 @@ use JsonSerializable;
  * @method void setVoteAnswer(string $value)
  * @method int getDeleted()
  * @method void setDeleted(integer $value)
- * 
+ *
  * Joined Attributes
  * @method string getOptionId()
  */

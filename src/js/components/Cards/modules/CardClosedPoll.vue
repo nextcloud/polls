@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -20,42 +20,37 @@
   -
   -->
 
-<template>
-	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
-			:title="caption"
-			:aria-label="caption"
-			@click="clickAction()">
-			<template #icon>
-				<SidebarIcon />
-			</template>
-		</NcButton>
-	</div>
+<template lang="html">
+	<CardDiv :type="cardType">
+		{{ t('polls', 'This poll is closed.') }}
+		<span v-if="!allowEdit">
+			{{ t('polls', 'No further action is possible.') }}
+		</span>
+	</CardDiv>
 </template>
 
 <script>
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+import { CardDiv } from '../../Base/index.js'
+import { mapState } from 'vuex'
 
 export default {
-	name: 'ActionToggleSidebar',
+	name: 'CardClosedPoll',
 
 	components: {
-		SidebarIcon,
-		NcButton,
+		CardDiv,
 	},
 
 	data() {
 		return {
-			caption: t('polls', 'Toggle Sidebar'),
+			cardType: 'warning',
 		}
 	},
 
-	methods: {
-		clickAction() {
-			emit('polls:sidebar:toggle')
-		},
+	computed: {
+		...mapState({
+			allowEdit: (state) => state.poll.acl.permissions.edit,
+		}),
 	},
+
 }
 </script>
