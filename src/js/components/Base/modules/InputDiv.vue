@@ -22,9 +22,9 @@
 
 <template lang="html">
 	<div :class="['input-div', { numeric: useNumModifiers }]">
-		<h3 v-if="label">
+		<label v-if="label">
 			{{ label }}
-		</h3>
+		</label>
 
 		<div class="input-wrapper">
 			<input ref="input"
@@ -204,6 +204,11 @@ export default {
 		position: relative;
 		flex: 1;
 
+		label {
+			display: block;
+			margin-bottom: 2px;
+		}
+
 		input {
 			margin: 0;
 
@@ -231,7 +236,7 @@ export default {
 			position: relative;
 			display: flex;
 			& > input {
-				height: 48px !important;
+				height: 44px !important;
 				flex: 1;
 			}
 		}

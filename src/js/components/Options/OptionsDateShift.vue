@@ -99,7 +99,7 @@ export default {
 .select-unit {
 	display: flex;
 	flex-wrap: wrap;
-	align-items: center;
+	align-items: end;
 	.v-select {
 		margin: 0 8px;
 		width: unset !important;
