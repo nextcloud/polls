@@ -22,6 +22,7 @@ OC.L10N.register(
     "The poll owner has been changed." : "투표 소유자가 변경되었습니다.",
     "A voting option has been unconfirmed." : "투표 옵션이 확인되지 않았습니다.",
     "%s has left a comment." : "%s가 댓글을 남겼습니다.",
+    "Reminder for poll \"%s\"" : "투표 \"%s\"에 대한 알림",
     "Contact" : "연락처",
     "External Email" : "외부 이메일",
     "External user" : "외부 사용자",
