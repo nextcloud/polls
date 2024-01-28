@@ -20,50 +20,47 @@
   -
   -->
 
-<template>
-	<div class="comments">
-		<CommentAdd v-if="permissions.comment" />
-		<Comments v-if="!showEmptyContent" />
-		<NcEmptyContent v-else
-			:name="t('polls', 'No comments')"
-			:description="t('polls', 'Be the first.')">
-			<template #icon>
-				<CommentsIcon />
-			</template>
-		</NcEmptyContent>
-	</div>
+<template lang="html">
+	<CardDiv :type="cardType">
+		{{ registrationInvitationText }}
+		<template #button>
+			<ActionRegister />
+		</template>
+	</CardDiv>
 </template>
 
 <script>
-import CommentAdd from '../Comments/CommentAdd.vue'
-import Comments from '../Comments/Comments.vue'
-import { NcEmptyContent } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
-import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+import { mapState } from 'vuex'
+import { CardDiv } from '../../Base/index.js'
 
 export default {
-	name: 'SideBarTabComments',
+	name: 'CardRegister',
 	components: {
-		CommentAdd,
-		Comments,
-		NcEmptyContent,
-		CommentsIcon,
+		CardDiv,
+		ActionRegister: () => import('../../Actions/modules/ActionRegister.vue'),
+	},
+
+	data() {
+		return {
+			cardType: 'info',
+		}
 	},
 
 	computed: {
 		...mapState({
-			permissions: (state) => state.poll.acl.permissions,
+			publicPollEmailContraint: (state) => state.share.publicPollEmail,
 		}),
 
-		...mapGetters({
-			countComments: 'comments/count',
-		}),
-
-		showEmptyContent() {
-			return this.countComments === 0
+		registrationInvitationText() {
+			if (this.publicPollEmailContraint === 'mandatory') {
+				return t('polls', 'To participate, register with your email address and a name.')
+			}
+			if (this.publicPollEmailContraint === 'optional') {
+				return t('polls', 'To participate, register a name and optionally with your email address.')
+			}
+			return t('polls', 'To participate, register with a name.')
 		},
 
 	},
-
 }
 </script>

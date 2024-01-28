@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2024 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -20,41 +20,35 @@
   -
   -->
 
-<template>
-	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
-			:title="caption"
-			:aria-label="caption"
-			@click="clickAction()">
-			<template #icon>
-				<SidebarIcon />
-			</template>
-		</NcButton>
-	</div>
+<template lang="html">
+	<CardDiv :type="cardType">
+		{{ cardText }}
+		<template #button>
+			<ActionOpenSharesSidebar />
+		</template>
+	</CardDiv>
 </template>
 
 <script>
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+import { CardDiv } from '../../Base/index.js'
 
 export default {
-	name: 'ActionToggleSidebar',
+	name: 'CardLockedShare',
 
 	components: {
-		SidebarIcon,
-		NcButton,
+		CardDiv,
+		ActionOpenSharesSidebar: () => import('../../Actions/modules/ActionOpenSharesSidebar.vue'),
 	},
 
 	data() {
 		return {
-			caption: t('polls', 'Toggle Sidebar'),
+			cardType: 'warning',
 		}
 	},
 
-	methods: {
-		clickAction() {
-			emit('polls:sidebar:toggle')
+	computed: {
+		cardText() {
+			return this.$route.name === 'publicVote' ? t('polls', 'This share is locked and allows only read access. Registering is not possible.') : t('polls', 'Your share is locked and you have just read access to this poll.')
 		},
 	},
 }

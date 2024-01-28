@@ -22,17 +22,14 @@
 
 <template>
 	<div class="action send-confirmations">
-		<NcButton :title="sendButtonCaption"
-			type="primary"
+		<NcButton type="primary"
 			:aria-label="sendButtonCaption"
 			:disabled="disableButton"
 			@click="clickAction()">
 			<template #icon>
 				<EmailCheckIcon />
 			</template>
-			<template #default>
-				{{ sendButtonCaption }}
-			</template>
+			{{ sendButtonCaption }}
 		</NcButton>
 
 		<NcModal :show.sync="showModal"

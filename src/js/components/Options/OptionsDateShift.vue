@@ -26,8 +26,11 @@
 			{{ t('polls', 'Shifting dates is disabled to prevent shifting of other user\'s proposals.') }}
 		</div>
 		<div v-else class="select-unit">
-			<InputDiv v-model="shift.step" use-num-modifiers />
+			<InputDiv v-model="shift.step"
+				:label="t('polls', 'Step width')"
+				use-num-modifiers />
 			<NcSelect v-model="shift.unit"
+				:input-label="t('polls', 'Step unit')"
 				:clearable="false"
 				:filterable="false"
 				:options="dateUnits"

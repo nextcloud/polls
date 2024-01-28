@@ -184,7 +184,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'lastInteraction' => $this->getLastInteraction(),
 			'summary' => [
 				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserId())),
-				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->getUserId())),
+				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserId())),
 			]
 		];
 	}

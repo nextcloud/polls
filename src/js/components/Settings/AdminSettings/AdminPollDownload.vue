@@ -26,8 +26,8 @@
 			{{ t('polls', 'Disallow poll download') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="pollDownloadLimited" class="settings_details">
-			<h3>{{ t('polls','Allow poll download for the following groups') }}</h3>
 			<NcSelect v-model="pollDownloadGroups"
+				:input-label="t('polls','Allow poll download for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

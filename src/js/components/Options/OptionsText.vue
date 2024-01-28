@@ -67,13 +67,11 @@
 			</TransitionGroup>
 		</draggable>
 
-		<NcEmptyContent v-else :name="t('polls', 'No vote options')">
+		<NcEmptyContent v-else
+			:name="t('polls', 'No vote options')"
+			:description="t('polls', 'Add some!')">
 			<template #icon>
 				<TextPollIcon />
-			</template>
-
-			<template #action>
-				{{ t('polls', 'Add some!') }}
 			</template>
 		</NcEmptyContent>
 	</div>

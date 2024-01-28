@@ -37,12 +37,11 @@
 		<div class="area__main">
 			<ComboTable v-show="polls.length" />
 
-			<NcEmptyContent v-if="!polls.length" :name="t('polls', 'No polls selected')">
+			<NcEmptyContent v-if="!polls.length"
+				:name="t('polls', 'No polls selected')"
+				:description="t('polls', 'Select polls by clicking on them in the right sidebar!')">
 				<template #icon>
 					<PollsAppIcon />
-				</template>
-				<template #action>
-					{{ t('polls', 'Select polls by clicking on them in the right sidebar!') }}
 				</template>
 			</NcEmptyContent>
 		</div>

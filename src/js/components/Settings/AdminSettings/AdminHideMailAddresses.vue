@@ -26,8 +26,8 @@
 			{{ t('polls', 'Hide email addresses of internal users') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="hideMailAddresses" class="settings_details">
-			<h3>{{ t('polls','Show email addresses of internal users to members of the following groups') }}</h3>
 			<NcSelect v-model="showMailAddressesGroups"
+				:input-label="t('polls','Show email addresses of internal users to members of the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

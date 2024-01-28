@@ -60,6 +60,7 @@ export default {
 
 	.notecard .card-content {
 		display: flex;
+		flex-wrap: wrap;
 		align-items: center;
 		flex: 1;
 		column-gap: 8px;
