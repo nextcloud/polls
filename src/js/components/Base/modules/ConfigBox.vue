@@ -105,9 +105,9 @@ export default {
 		flex-direction: column;
 		padding-left: 24px;
 
-		label {
-			margin: 4px 0;
-		}
+		// label {
+			// margin: 4px 0;
+		// }
 	}
 }
 
