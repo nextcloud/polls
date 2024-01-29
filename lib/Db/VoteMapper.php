@@ -211,12 +211,13 @@ class VoteMapper extends QBMapperWithUser {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE)
-			->groupby(self::TABLE . '.id');
+			->from($this->getTableName(), self::TABLE);
 			
 		$this->joinDisplayNameFromShare($qb, self::TABLE);
-
+			
 		$alias = $this->joinOption($qb, self::TABLE);
+		
+		$qb->groupby(self::TABLE . '.id', $alias . '.id');
 
 		if ($findOrphaned) {
 			$qb->where($qb->expr()->isNull($alias . '.id'));
