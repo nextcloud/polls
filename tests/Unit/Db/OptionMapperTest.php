@@ -66,7 +66,7 @@ class OptionMapperTest extends UnitTestCase {
 
 
 		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession, $this->userManager, $this->logger);
-		$this->voteMapper = new VoteMapper($this->con, $this->userMapper);
+		$this->voteMapper = new VoteMapper($this->con, $this->userMapper, $this->logger);
 		$this->optionMapper = new OptionMapper($this->con, $this->session, $this->userMapper);
 		$this->pollMapper = new PollMapper($this->con);
 

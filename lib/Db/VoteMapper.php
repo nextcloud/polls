@@ -26,9 +26,11 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use Psr\Log\LoggerInterface;
 
 /**
  * @template-extends QBMapperWithUser<Vote>
@@ -39,6 +41,7 @@ class VoteMapper extends QBMapperWithUser {
 	public function __construct(
 		IDBConnection $db,
 		private UserMapper $userMapper,
+		private LoggerInterface $logger,
 	) {
 		parent::__construct($db, self::TABLE, Vote::class);
 	}
@@ -204,7 +207,17 @@ class VoteMapper extends QBMapperWithUser {
 	protected function find(int $id): Vote {
 		$qb = $this->buildQuery();
 		$qb->andWhere($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		return $this->findEntity($qb);
+		try {
+			return $this->findEntity($qb);
+		} catch (DoesNotExistException $e) {
+			// Possible orphaned vote entry without option, try to get it directly from the table
+			$this->logger->info('Possibly orphaned vote found, try fallback search.', ['vote_id' => $id]);
+			$qb = $this->db->getQueryBuilder();
+			$qb->select(self::TABLE . '.*')
+				->from($this->getTableName(), self::TABLE)
+				->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+			return $this->findEntity($qb);
+		}
 	}
 
 	protected function buildQuery(bool $findOrphaned = false): IQueryBuilder {
