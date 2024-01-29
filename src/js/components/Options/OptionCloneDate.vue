@@ -124,6 +124,7 @@ export default {
 	column-gap: 48px;
 	flex-wrap: wrap;
 }
+
 .option-clone-date {
 	&>.v-select, &>.sideways {
 		margin-top: 8px;
