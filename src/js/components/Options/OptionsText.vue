@@ -28,7 +28,7 @@
 			v-bind="dragOptions"
 			@start="drag = true"
 			@end="drag = false">
-			<TransitioGroup type="transition" :name="!drag ? 'flip-list' : 'list'">
+			<TransitionGroup type="transition" :name="!drag ? 'flip-list' : 'list'">
 				<OptionItem v-for="(option) in reOrderedOptions"
 					:key="option.id"
 					:option="option"
@@ -64,16 +64,14 @@
 						</NcActions>
 					</template>
 				</OptionItem>
-			</TransitioGroup>
+			</TransitionGroup>
 		</draggable>
 
-		<NcEmptyContent v-else :name="t('polls', 'No vote options')">
+		<NcEmptyContent v-else
+			:name="t('polls', 'No vote options')"
+			:description="t('polls', 'Add some!')">
 			<template #icon>
 				<TextPollIcon />
-			</template>
-
-			<template #action>
-				{{ t('polls', 'Add some!') }}
 			</template>
 		</NcEmptyContent>
 	</div>

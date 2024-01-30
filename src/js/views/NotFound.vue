@@ -22,12 +22,10 @@
 
 <template>
 	<NcAppContent>
-		<NcEmptyContent :name="t('polls', '404 - poll not found')">
+		<NcEmptyContent :name="t('polls', '404 - poll not found')"
+			:description="t('polls', 'Enter a poll or start a new one.')">
 			<template #icon>
 				<SearchIcon />
-			</template>
-			<template #action>
-				{{ t('polls', 'Enter a poll or start a new one.') }}
 			</template>
 		</NcEmptyContent>
 	</NcAppContent>

@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -20,42 +20,45 @@
   -
   -->
 
-<template>
-	<NcCheckboxRadioSwitch :checked.sync="adminAccess" type="switch">
-		{{ label }}
-	</NcCheckboxRadioSwitch>
+<template lang="html">
+	<CardDiv :type="cardType">
+		{{ registrationInvitationText }}
+		<template #button>
+			<ActionRegister />
+		</template>
+	</CardDiv>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { CardDiv } from '../../Base/index.js'
 
 export default {
-	name: 'ConfigAdminAccess',
-
+	name: 'CardRegister',
 	components: {
-		NcCheckboxRadioSwitch,
+		CardDiv,
+		ActionRegister: () => import('../../Actions/modules/ActionRegister.vue'),
 	},
 
 	data() {
 		return {
-			label: t('polls', 'Allow admins to edit this poll'),
+			cardType: 'info',
 		}
 	},
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			publicPollEmailContraint: (state) => state.share.publicPollEmail,
 		}),
 
-		adminAccess: {
-			get() {
-				return !!this.poll.adminAccess
-			},
-			set(value) {
-				this.$store.commit('poll/setProperty', { adminAccess: +value })
-				this.$emit('change')
-			},
+		registrationInvitationText() {
+			if (this.publicPollEmailContraint === 'mandatory') {
+				return t('polls', 'To participate, register with your email address and a name.')
+			}
+			if (this.publicPollEmailContraint === 'optional') {
+				return t('polls', 'To participate, register a name and optionally with your email address.')
+			}
+			return t('polls', 'To participate, register with a name.')
 		},
 
 	},

@@ -27,6 +27,7 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\VoteSetEvent;
@@ -44,6 +45,7 @@ class VoteService {
 		private OptionMapper $optionMapper,
 		private Vote $vote,
 		private VoteMapper $voteMapper,
+		private UserMapper $userMapper,
 	) {
 	}
 
@@ -84,14 +86,13 @@ class VoteService {
 		return $votes;
 	}
 
-	private function checkLimits(Option $option, string $userId): void {
+	private function checkLimits(Option $option): void {
 		// check, if the optionlimit is reached or exceeded, if one is set
-		if ($this->acl->getPoll()->getOptionLimit() > 0) {
-			if ($this->acl->getPoll()->getOptionLimit() <= count($this->voteMapper->getYesVotesByOption($option->getPollId(), $option->getPollOptionText()))) {
-				throw new VoteLimitExceededException;
-			}
+		if ($option->getIsLockedByOptionLimit()) {
+			throw new VoteLimitExceededException;
 		}
-		if ($this->acl->getIsVoteLimitExceeded()) {
+
+		if ($option->getIsLockedByVotesLimit()) {
 			throw new VoteLimitExceededException;
 		}
 		return;
@@ -111,7 +112,7 @@ class VoteService {
 		}
 		
 		if ($setTo === Vote::VOTE_YES) {
-			$this->checkLimits($option, $this->acl->getUserId());
+			$this->checkLimits($option);
 		}
 
 		try {
@@ -142,8 +143,12 @@ class VoteService {
 
 	/**
 	 * Remove user from poll
+	 * @param int $pollId poll id of the poll the votes get deleted from
+	 * @param string $userId user id of the user, the votes get deleted from. No user affects the current user
+	 * @param Acl $acl acl
+	 * @param bool $deleteOnlyOrphand - false deletes all votes of the specified user, true only the orphaned votes aka votes without an option
 	 */
-	public function delete(int $pollId = 0, string $userId = '', ?Acl $acl = null): string {
+	public function delete(int $pollId = 0, string $userId = '', ?Acl $acl = null, bool $deleteOnlyOrphaned = false): string {
 		if ($acl) {
 			$this->acl = $acl;
 			$pollId = $this->acl->getPollId();
@@ -163,12 +168,20 @@ class VoteService {
 			throw new InvalidPollIdException('Poll id is missing');
 		}
 
+		if ($deleteOnlyOrphaned) {
+			$votes = $this->voteMapper->findOrphanedByPollandUser($pollId, $userId);
+			foreach ($votes as $vote) {
+				$this->voteMapper->delete($vote);
+			}
+			return $userId;
+		}
 		// fake a vote so that the event can be triggered
 		// suppress logging of this action
 		$this->vote = new Vote();
 		$this->vote->setPollId($pollId);
 		$this->vote->setUserId($userId);
 		$this->voteMapper->deleteByPollAndUserId($pollId, $userId);
+
 		$this->eventDispatcher->dispatchTyped(new VoteSetEvent($this->vote, false));
 		return $userId;
 	}

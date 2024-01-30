@@ -57,9 +57,7 @@ const mutations = {
 }
 
 const getters = {
-	relevant: (state, getters, rootState) => state.list.filter((vote) => rootState.options.list.some((option) => option.pollId === vote.pollId && option.text === vote.optionText)),
-	countVotes: (state, getters, rootState) => (answer) => getters.relevant.filter((vote) => vote.user.userId === rootState.poll.acl.currentUser.userId && vote.answer === answer).length,
-	countAllVotes: (state, getters) => (answer) => getters.relevant.filter((vote) => vote.answer === answer).length,
+	countAllVotesByAnswer: (state) => (answer) => state.list.filter((vote) => vote.answer === answer).length,
 	hasVotes: (state) => state.list.length > 0,
 
 	getVote: (state) => (payload) => {
@@ -158,6 +156,21 @@ const actions = {
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error deleting votes', { error: e.response }, { payload })
+			throw e
+		}
+	},
+	async removeOrphanedVotes(context, payload) {
+		try {
+			if (context.rootState.route.name === 'publicVote') {
+				await PublicAPI.removeOrphanedVotes(context.rootState.route.params.token)
+			} else {
+				await VotesAPI.removeOrphanedVotes(context.rootState.route.params.id)
+			}
+			context.dispatch('poll/get', null, { root: true })
+			context.dispatch('options/list', null, { root: true })
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			console.error('Error deleting orphaned votes', { error: e.response }, { payload })
 			throw e
 		}
 	},

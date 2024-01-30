@@ -170,7 +170,7 @@ class PollService {
 	 */
 	public function transferPolls(string $sourceUser, string $targetUser): array {
 		if ($this->userManager->get($targetUser) instanceof IUser) {
-			$pollsToTransfer = $this->pollMapper->findOwner($sourceUser);
+			$pollsToTransfer = $this->pollMapper->listByOwner($sourceUser);
 			foreach ($pollsToTransfer as $poll) {
 				$poll->setOwner($targetUser);
 				$this->pollMapper->update($poll);

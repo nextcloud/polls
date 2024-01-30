@@ -22,6 +22,7 @@
 
 <template>
 	<NcSelect id="ajax"
+		:aria-label-combobox="t('polls', 'Add shares')"
 		:options="users"
 		:multiple="false"
 		:user-select="true"

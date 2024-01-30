@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -20,42 +20,41 @@
   -
   -->
 
-<template>
-	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
-			:title="caption"
-			:aria-label="caption"
-			@click="clickAction()">
-			<template #icon>
-				<SidebarIcon />
-			</template>
-		</NcButton>
-	</div>
+<template lang="html">
+	<CardDiv :type="cardType">
+		{{ t('polls', 'Due to possible performance issues {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
+		{{ t('polls', 'You can reveal them, but you may expect an unwanted long loading time.') }}
+		<template #button>
+			<ActionSwitchSafeTable />
+		</template>
+	</CardDiv>
 </template>
 
 <script>
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+import { mapState, mapGetters } from 'vuex'
+import { CardDiv } from '../../Base/index.js'
 
 export default {
-	name: 'ActionToggleSidebar',
-
+	name: 'CardHiddenParticipants',
 	components: {
-		SidebarIcon,
-		NcButton,
+		CardDiv,
+		ActionSwitchSafeTable: () => import('../../Actions/modules/ActionSwitchSafeTable.vue'),
 	},
 
 	data() {
 		return {
-			caption: t('polls', 'Toggle Sidebar'),
+			cardType: 'warning',
 		}
 	},
 
-	methods: {
-		clickAction() {
-			emit('polls:sidebar:toggle')
-		},
+	computed: {
+		...mapState({
+			pollType: (state) => state.poll.type,
+		}),
+
+		...mapGetters({
+			countHiddenParticipants: 'poll/countHiddenParticipants',
+		}),
 	},
 }
 </script>

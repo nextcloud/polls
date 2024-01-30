@@ -85,7 +85,6 @@ class Acl implements JsonSerializable {
 
 	public function jsonSerialize(): array {
 		return	[
-			'isVoteLimitExceeded' => $this->getIsVoteLimitExceeded(),
 			'pollId' => $this->getPollId(),
 			'pollExpired' => $this->poll->getExpired(),
 			'pollExpire' => $this->poll->getExpire(),

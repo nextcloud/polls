@@ -105,6 +105,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	private IURLGenerator $urlGenerator;
 	private OptionMapper $optionMapper;
+	private UserMapper $userMapper;
+	private VoteMapper $voteMapper;
 
 	public $id = null;
 	protected string $type = '';
@@ -129,6 +131,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $useNo = 0;
 	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
+	protected bool $hasOrphanedVotes = false;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -147,6 +150,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('lastInteraction', 'int');
 		$this->optionMapper = Container::queryClass(OptionMapper::class);
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
+		$this->userMapper = Container::queryClass(UserMapper::class);
+		$this->voteMapper = Container::queryClass(VoteMapper::class);
 	}
 
 	/**
@@ -156,7 +161,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return [
 			'id' => $this->getId(),
 			'access' => $this->getAccess(),
-			'adminAccess' => $this->getAdminAccess(),
 			'allowComment' => $this->getAllowComment(),
 			'allowMaybe' => $this->getAllowMaybe(),
 			'allowProposals' => $this->getAllowProposals(),
@@ -178,6 +182,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'useNo' => $this->getUseNo(),
 			'voteLimit' => $this->getVoteLimit(),
 			'lastInteraction' => $this->getLastInteraction(),
+			'summary' => [
+				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserId())),
+				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserId())),
+			]
 		];
 	}
 
@@ -316,6 +324,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			$this->getExpire(),
 			intval($this->optionMapper->findDateBoundaries($this->getId())['max']),
 		);
+	}
+
+	public function getOrphanedVotes() {
+		return count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserId()));
 	}
 
 	public function getDeadline(): int {

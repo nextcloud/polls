@@ -20,50 +20,47 @@
   -
   -->
 
-<template>
-	<div class="comments">
-		<CommentAdd v-if="permissions.comment" />
-		<Comments v-if="!showEmptyContent" />
-		<NcEmptyContent v-else
-			:name="t('polls', 'No comments')"
-			:description="t('polls', 'Be the first.')">
-			<template #icon>
-				<CommentsIcon />
-			</template>
-		</NcEmptyContent>
-	</div>
+<template lang="html">
+	<CardDiv :type="cardType">
+		{{ t('polls', 'You are asked to propose more options. ') }}
+		<p v-if="proposalsExpirySet && !proposalsExpired">
+			{{ t('polls', 'The proposal period ends {timeRelative}.',
+				{ timeRelative: proposalsExpireRelative }) }}
+		</p>
+		<OptionProposals v-if="pollType === 'textPoll'" />
+		<template #button>
+			<OptionProposals v-if="pollType === 'datePoll'" />
+		</template>
+	</CardDiv>
 </template>
 
 <script>
-import CommentAdd from '../Comments/CommentAdd.vue'
-import Comments from '../Comments/Comments.vue'
-import { NcEmptyContent } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
-import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+import { mapState, mapGetters } from 'vuex'
+import { CardDiv } from '../../Base/index.js'
 
 export default {
-	name: 'SideBarTabComments',
+	name: 'CardAddProposals',
 	components: {
-		CommentAdd,
-		Comments,
-		NcEmptyContent,
-		CommentsIcon,
+		CardDiv,
+		OptionProposals: () => import('../../Options/OptionProposals.vue'),
+	},
+
+	data() {
+		return {
+			cardType: 'info',
+		}
 	},
 
 	computed: {
 		...mapState({
-			permissions: (state) => state.poll.acl.permissions,
+			pollType: (state) => state.poll.type,
 		}),
 
 		...mapGetters({
-			countComments: 'comments/count',
+			proposalsExpirySet: 'poll/proposalsExpirySet',
+			proposalsExpired: 'poll/proposalsExpired',
+			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
-
-		showEmptyContent() {
-			return this.countComments === 0
-		},
-
 	},
-
 }
 </script>

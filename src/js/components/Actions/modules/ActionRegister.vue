@@ -22,39 +22,47 @@
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
-			:title="caption"
+		<NcButton type="primary"
 			:aria-label="caption"
 			@click="clickAction()">
-			<template #icon>
-				<SidebarIcon />
-			</template>
+			{{ caption }}
 		</NcButton>
+		<NcModal :show.sync="showRegistration"
+			:size="registerModalSize"
+			:can-close="true"
+			@close="closeRegisterModal()">
+			<PublicRegisterModal @close="closeRegisterModal()" />
+		</NcModal>
 	</div>
 </template>
 
 <script>
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+import { NcModal, NcButton } from '@nextcloud/vue'
 
 export default {
-	name: 'ActionToggleSidebar',
+	name: 'ActionRegister',
 
 	components: {
-		SidebarIcon,
 		NcButton,
+		NcModal,
+		PublicRegisterModal: () => import('../../Public/PublicRegisterModal.vue'),
 	},
 
 	data() {
 		return {
-			caption: t('polls', 'Toggle Sidebar'),
+			caption: t('polls', 'Register'),
+			showRegistration: false,
+			registerModalSize: 'large',
 		}
 	},
 
 	methods: {
 		clickAction() {
-			emit('polls:sidebar:toggle')
+			this.showRegistration = true
+		},
+
+		closeRegisterModal() {
+			this.showRegistration = false
 		},
 	},
 }

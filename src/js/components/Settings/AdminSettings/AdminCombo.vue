@@ -26,8 +26,8 @@
 			{{ t('polls', 'Deactivate combo view for all users') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="comboLimited" class="settings_details">
-			<h3>{{ t('polls','Allow combo view for the following groups') }}</h3>
 			<NcSelect v-model="comboGroups"
+				:input-label="t('polls','Allow combo view for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
