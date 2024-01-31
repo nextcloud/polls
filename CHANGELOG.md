@@ -1,6 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [5.4.3] - 2024-01-31
+### Fixes
+ - Fixed repair steps
+
 ## [5.4.2] - 2023-11-11
 ### Fixes
  - Fixed table definition
