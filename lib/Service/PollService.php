@@ -81,13 +81,14 @@ class PollService {
 					$this->acl->setPollId($poll->getId());
 					$relevantThreshold = $poll->getRelevantThresholdNet() + $this->preferences->getRelevantOffsetTimestamp();
 
-					// mix poll settings, acl and relevantThreshold into one array
+					// mix poll settings, currentUser attributes, permissions and relevantThreshold into one array
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
-						(array) json_decode(json_encode($this->acl)),
 						[
 							'relevantThreshold' => $relevantThreshold,
-							'relevantThresholdNet' => $poll->getRelevantThresholdNet()
+							'relevantThresholdNet' => $poll->getRelevantThresholdNet(),
+							'permissions' => $this->acl->getPermissionsArray(),
+							'currentUser' => $this->acl->getCurrentUserArray(),
 						],
 					);
 				} catch (ForbiddenException $e) {
