@@ -30,6 +30,7 @@ use OCP\IDBConnection;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
+use OCP\Server;
 
 class PollMapperTest extends UnitTestCase {
 	private IDBConnection $con;
@@ -41,7 +42,7 @@ class PollMapperTest extends UnitTestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = \OC::$server->getDatabaseConnection();
+		$this->con = Server::get(IDBConnection::class);
 		$this->pollMapper = new PollMapper($this->con);
 
 		$this->polls = [

@@ -55,8 +55,8 @@ class Group extends UserBase {
 	public function getMembers(): array {
 		$members = [];
 
-		foreach (array_keys(Container::queryClass(IGroupManager::class)->displayNamesInGroup($this->id)) as $member) {
-			$newMember = new User($member);
+		foreach (Container::queryClass(IGroupManager::class)->displayNamesInGroup($this->id) as $userId => $displayName) {
+			$newMember = new User((string) $userId);
 
 			if ($newMember->IsEnabled()) {
 				$members[] = $newMember;

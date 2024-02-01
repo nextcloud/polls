@@ -33,11 +33,11 @@ use League\CommonMark\MarkdownConverter;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
-use OCA\Polls\Service\UserService;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
@@ -59,7 +59,7 @@ abstract class MailBase {
 	protected Poll $poll;
 	protected UserBase $recipient;
 	protected IFactory $transFactory;
-	protected UserService $userService;
+	protected UserMapper $userMapper;
 
 	public function __construct(
 		protected string $recipientId,
@@ -71,7 +71,7 @@ abstract class MailBase {
 		$this->mailer = Container::queryClass(IMailer::class);
 		$this->optionMapper = Container::queryClass(OptionMapper::class);
 		$this->transFactory = Container::queryClass(IFactory::class);
-		$this->userService = Container::queryClass(UserService::class);
+		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->poll = $this->getPoll($pollId);
 		$this->recipient = $this->getUser($recipientId);
 		$this->url = $url === '' ? $this->poll->getVoteUrl() : '';
@@ -183,7 +183,7 @@ abstract class MailBase {
 	}
 
 	protected function getUser(string $userId) : UserBase {
-		return $this->userService->getParticipant($userId, $this->poll->getId());
+		return $this->userMapper->getParticipant($userId, $this->poll->getId());
 	}
 
 	protected function getRichDescription() : string {

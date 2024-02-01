@@ -106,6 +106,10 @@ class SystemService {
 
 		[$result, $more] = $this->userSearch->search($query, $types, false, 200, 0);
 
+		if ($more) {
+			$this->logger->info('Search reports more than 200 entries, only 200 will get returned.');
+		}
+
 		foreach (($result['users'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
 				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith']);

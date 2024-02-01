@@ -83,15 +83,6 @@ class Contact extends UserBase {
 	}
 
 	/**
-	 * We just need the contact's UID, so make sure, the any prefix is removed
-	 */
-	private function resolveContactId(): void {
-		return;
-		$parts = explode(":", $this->id);
-		$this->id = end($parts);
-	}
-
-	/**
 	 * The contacts app just provides a search, so we have to load the contact
 	 * after searching via the contact's id and use the first contact.
 	 * Currently only the contact's first email address is supported
@@ -114,7 +105,6 @@ class Contact extends UserBase {
 	}
 
 	private function getContact(): void {
-		$this->resolveContactId();
 		$this->loadContact();
 
 		$this->id = $this->contact['UID'];

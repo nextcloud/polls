@@ -119,7 +119,7 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @throws OCA\Polls\Exceptions\ShareNotFoundException if not found
+	 * @throws ShareNotFoundException if not found
 	 */
 	public function findByPollAndUser(int $pollId, string $userId, bool $findDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();

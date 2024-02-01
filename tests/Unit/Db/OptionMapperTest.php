@@ -32,6 +32,7 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
+use OCP\IGroupManager;
 use OCP\ISession;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -40,6 +41,7 @@ use Psr\Log\LoggerInterface;
 
 class OptionMapperTest extends UnitTestCase {
 	private IDBConnection $con;
+	private IGroupManager $groupManager;
 	private ISession $session;
 	private IUserManager $userManager;
 	private IUserSession $userSession;
@@ -59,13 +61,14 @@ class OptionMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->con = Server::get(IDBConnection::class);
 		$this->logger = Server::get(LoggerInterface::class);
+		$this->groupManager = Server::get(IGroupManager::class);
 		$this->session = Server::get(ISession::class);
 		$this->userManager = Server::get(IUserManager::class);
 		$this->userSession = Server::get(IUserSession::class);
 		$this->session->set('ncPollsUserId', 'TestUser');
 
 
-		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession, $this->userManager, $this->logger);
+		$this->userMapper = new UserMapper($this->con, $this->groupManager, $this->session, $this->userSession, $this->userManager, $this->logger);
 		$this->voteMapper = new VoteMapper($this->con, $this->userMapper, $this->logger);
 		$this->optionMapper = new OptionMapper($this->con, $this->session, $this->userMapper);
 		$this->pollMapper = new PollMapper($this->con);

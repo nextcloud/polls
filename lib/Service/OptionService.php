@@ -331,12 +331,8 @@ class OptionService {
 
 	/**
 	 * Copy options from $fromPoll to $toPoll
-	 *
-	 * @return Option[]
-	 *
-	 * @psalm-return array<array-key, Option>
 	 */
-	public function clone(int $fromPollId, int $toPollId): array {
+	public function clone(int $fromPollId, int $toPollId): void {
 		$this->acl->setPollId($fromPollId);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
@@ -350,8 +346,6 @@ class OptionService {
 			$this->optionMapper->add($option);
 			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}
-
-		return $this->optionMapper->findByPoll($toPollId);
 	}
 
 	/**

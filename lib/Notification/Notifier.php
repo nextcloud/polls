@@ -32,7 +32,6 @@ use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\NotificationService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IURLGenerator;
-use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
@@ -48,7 +47,6 @@ class Notifier implements INotifier {
 	public function __construct(
 		protected IFactory $l10nFactory,
 		protected IURLGenerator $urlGenerator,
-		protected IUserManager $userManager,
 		protected PollMapper $pollMapper,
 		private UserMapper $userMapper,
 		private NotificationService $notificationService
