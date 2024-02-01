@@ -208,7 +208,7 @@ class OptionMapper extends QBMapperWithUser {
 	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
 	 */
 	protected function buildQuery(bool $hideVotes = false): IQueryBuilder {
-		$currentUserId = $this->userMapper->getCurrentUserId();
+		$currentUserId = (string) $this->userMapper->getCurrentUser()?->getId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')

@@ -52,9 +52,9 @@ class PublicController extends BasePublicController {
 		string $appName,
 		IRequest $request,
 		ISession $session,
+		Acl $acl,
 		private IURLGenerator $urlGenerator,
 		private IUserSession $userSession,
-		private Acl $acl,
 		private CommentService $commentService,
 		private MailService $mailService,
 		private OptionService $optionService,
@@ -65,7 +65,7 @@ class PublicController extends BasePublicController {
 		private VoteService $voteService,
 		private WatchService $watchService
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request, $session, $acl);
 	}
 
 	/**
@@ -93,7 +93,7 @@ class PublicController extends BasePublicController {
 
 		return $this->response(fn () => [
 			'acl' => $this->acl,
-			'poll' => $this->pollService->get($this->acl->getPollId()),
+			'poll' => $this->pollService->get($this->acl->getShare()->getPollId()),
 		], $token);
 	}
 
@@ -338,10 +338,8 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
-		$publicShare = $this->shareService->get($token);
-		$personalShare = $this->shareService->register($publicShare, $userName, $emailAddress, $timeZone);
 		return $this->responseCreate(fn () => [
-			'share' => $personalShare,
+			'share' => $this->shareService->register($token, $userName, $emailAddress, $timeZone),
 		], $token);
 	}
 

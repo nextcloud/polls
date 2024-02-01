@@ -37,6 +37,7 @@ use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\User\User;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\IDateTimeZone;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IUserSession;
 use OCP\Share\IShare;
@@ -65,6 +66,7 @@ class UserBase implements \JsonSerializable {
 	protected string $organisation = '';
 	protected string $icon = '';
 	protected IDateTimeZone $timeZone;
+	protected IGroupManager $groupManager;
 	protected IL10N $l10n;
 	protected IUserSession $userSession;
 
@@ -79,6 +81,7 @@ class UserBase implements \JsonSerializable {
 	) {
 		$this->icon = 'icon-share';
 		$this->l10n = Container::getL10N();
+		$this->groupManager = Container::queryClass(IGroupManager::class);
 		$this->timeZone = Container::queryClass(IDateTimeZone::class);
 		$this->userSession = Container::queryClass(IUserSession::class);
 	}
@@ -190,6 +193,14 @@ class UserBase implements \JsonSerializable {
 
 	public function getIsLoggedIn(): bool {
 		return $this->userSession->isLoggedIn();
+	}
+
+	public function getIsAdmin(): bool {
+		return $this->groupManager->isAdmin($this->id);
+	}
+
+	public function getIsInGroup(string $groupName): bool {
+		return $this->groupManager->isInGroup($this->id, $groupName);
 	}
 
 	/**

@@ -50,9 +50,7 @@ use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\IGroupManager;
 use OCP\ISession;
-use OCP\IUserSession;
 use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
@@ -64,10 +62,8 @@ class ShareService {
 	public function __construct(
 		private LoggerInterface $logger,
 		private IEventDispatcher $eventDispatcher,
-		private IGroupManager $groupManager,
 		private ISecureRandom $secureRandom,
 		private ISession $session,
-		private IUserSession $userSession,
 		private ShareMapper $shareMapper,
 		private SystemService $systemService,
 		private Share $share,
@@ -77,7 +73,6 @@ class ShareService {
 		private UserMapper $userMapper,
 	) {
 		$this->shares = [];
-		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
 	}
 
 	/**
@@ -140,7 +135,7 @@ class ShareService {
 		}
 
 		// Exception: logged in user, accesses the poll via public share link
-		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->isLoggedIn()) {
+		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userMapper->getCurrentUser()?->getIsLoggedIn()) {
 
 			try {
 				// Check, if he is already authorized for this poll
@@ -151,7 +146,7 @@ class ShareService {
 				// for this user and return the created share instead of the public share
 				$this->share = $this->createNewShare(
 					$this->share->getPollId(),
-					$this->userMapper->getUserObject(Share::TYPE_USER, $this->userId),
+					$this->userMapper->getCurrentUser(),
 					true
 				);
 				// remove the public token from session
@@ -186,7 +181,7 @@ class ShareService {
 		$this->share = $this->shareMapper->findByToken($token);
 		$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
-		// ATM only type user can transform to admin and vice versa
+		// ATM only type user can transform to type admin and vice versa
 		if (($type === Share::TYPE_ADMIN && $this->share->getType() === Share::TYPE_USER)
 		 || ($type === Share::TYPE_USER && $this->share->getType() === Share::TYPE_ADMIN)) {
 			$this->share->setType($type);
@@ -279,12 +274,12 @@ class ShareService {
 	 * or update an email share with the username
 	 */
 	public function register(
-		Share $publicShare,
+		string $publicShareToken,
 		string $userName,
 		string $emailAddress = '',
 		string $timeZone = ''
 	): Share {
-		$this->share = $publicShare;
+		$this->share = $this->get($publicShareToken);
 		$this->systemService->validatePublicUsername($userName, $this->share);
 
 		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
@@ -334,8 +329,8 @@ class ShareService {
 			$this->logger->error('Error sending Mail to ' . $this->share->getEmailAddress());
 		}
 		// Update session keys
-		$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
-		$this->session->set(AppConstants::SESSION_KEY_USER_ID, $this->share->getUserId());
+		// $this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
+		// $this->session->set(AppConstants::SESSION_KEY_USER_ID, $this->share->getUserId());
 
 		return $this->share;
 	}
@@ -522,16 +517,17 @@ class ShareService {
 	 * or is accessibale for use by the current user
 	 */
 	private function validateShareType(): void {
-		$currentUser = $this->userMapper->getCurrentUser();
-		$declineMessage = 'User is not allowed to use this share for poll access (' . $this->share->getType() . ')';
-
-		match ($this->share->getType()) {
+		
+		$valid = match ($this->share->getType()) {
 			Share::TYPE_PUBLIC,	Share::TYPE_EMAIL, Share::TYPE_EXTERNAL => true,
-			Share::TYPE_USER => $this->share->getUserId() === $currentUser->getId() ? true : throw new ForbiddenException($declineMessage),
-			Share::TYPE_ADMIN => $this->share->getUserId() === $currentUser->getId() ? true : throw new ForbiddenException($declineMessage),
-			Share::TYPE_GROUP => $currentUser->getIsLoggedIn() || $this->groupManager->isInGroup($this->share->getUserId(), $this->userId) ? true : throw new ForbiddenException($declineMessage),
+			Share::TYPE_USER => $this->share->getUserId() === $this->userMapper->getCurrentUser()->getId(),
+			Share::TYPE_ADMIN => $this->share->getUserId() === $this->userMapper->getCurrentUser()->getId(),
+			Share::TYPE_GROUP => $this->userMapper->getCurrentUser()->getIsInGroup($this->share->getUserId()),
 			default => throw new ForbiddenException('Invalid share type ' . $this->share->getType()),
 		};
+		if (!$valid) {
+			throw new ForbiddenException('User is not allowed to use this share for poll access (' . $this->share->getType() . ')');
+		}
 	}
 
 	private function generateToken(): string {
