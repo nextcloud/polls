@@ -70,7 +70,7 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
 		$poll = $this->pollService->get($pollId);
-		$this->acl->setPoll($poll);
+		$this->acl->setPollId($pollId);
 		return $this->response(fn () => [
 			'acl' => $this->acl,
 			'poll' => $poll,

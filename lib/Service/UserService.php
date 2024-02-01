@@ -37,14 +37,6 @@ class UserService {
 	}
 
 	/**
-	 * Get current userId
-	 *
-	 * Returns userId of the current (share|nextcloud) user
-	 **/
-	public function getCurrentUserId(): string {
-		return $this->userMapper->getCurrentUserId();
-	}
-	/**
 	 * Get current user
 	 *
 	 * Returns a UserBase child for the current (share|nextcloud) user based on
@@ -56,11 +48,10 @@ class UserService {
 	 */
 	public function getCurrentUser(): UserBase {
 		return $this->userMapper->getCurrentUser();
-
 	}
 
 	public function isLoggedIn(): bool {
-		return $this->userMapper->isLoggedIn();
+		return (bool) $this->userMapper->getCurrentUser()?->getIsLoggedIn();
 	}
 
 	/**
@@ -72,7 +63,7 @@ class UserService {
 	 * @param int $pollId Can only be used together with $userId and will return the internal user or the share user
 	 * @return UserBase
 	 **/
-	public function getParticipant(string $userId, int $pollId = null): UserBase {
+	public function getParticipant(string $userId, int $pollId = null): ?UserBase {
 		return $this->userMapper->getParticipant($userId, $pollId);
 	}
 

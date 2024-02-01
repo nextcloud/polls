@@ -41,7 +41,7 @@ abstract class ShareEvent extends BaseEvent {
 	public const UNLOCKED = 'share_unlocked';
 
 	public function __construct(
-		protected Share $share
+		protected Share $share,
 	) {
 		parent::__construct($share);
 		$this->activityObjectType = 'poll';
@@ -52,6 +52,6 @@ abstract class ShareEvent extends BaseEvent {
 	}
 
 	protected function getSharee() : UserBase {
-		return $this->userService->getUserFromShare($this->share);
+		return $this->userMapper->getUserFromShare($this->share);
 	}
 }

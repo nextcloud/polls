@@ -183,8 +183,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'voteLimit' => $this->getVoteLimit(),
 			'lastInteraction' => $this->getLastInteraction(),
 			'summary' => [
-				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserId())),
-				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserId())),
+				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, (string) $this->userMapper->getCurrentUser()?->getId())),
+				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), (string) $this->userMapper->getCurrentUser()?->getId())),
 			]
 		];
 	}
@@ -327,7 +327,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getOrphanedVotes() {
-		return count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserId()));
+		return count($this->voteMapper->findOrphanedByPollandUser($this->id, (string) $this->userMapper->getCurrentUser()?->getId()));
 	}
 
 	public function getDeadline(): int {

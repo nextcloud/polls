@@ -246,7 +246,6 @@ class MailService {
 	 */
 	public function sendConfirmations(int $pollId): SentResult {
 		$sentResult = new SentResult();
-		/** @var UserBase[] */
 		$participants = $this->userMapper->getParticipants($pollId);
 
 		foreach ($participants as $participant) {
