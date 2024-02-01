@@ -86,41 +86,49 @@ class Acl implements JsonSerializable {
 		$this->appSettings = new AppSettings;
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function jsonSerialize(): array {
 		return	[
 			'pollId' => $this->getPoll()->getId(),
 			'pollExpired' => $this->getPoll()->getExpired(),
 			'pollExpire' => $this->getPoll()->getExpire(),
-			'token' => $this->getShare()?->getToken(),
-			'currentUser' => [
-				'displayName' => $this->getDisplayName(),
-				'hasVoted' => $this->getIsParticipant(),
-				'isInvolved' => $this->getIsInvolved(),
-				'isLoggedIn' => $this->getIsLoggedIn(),
-				'isNoUser' => !$this->getIsLoggedIn(),
-				'isOwner' => $this->getIsOwner(),
-				'userId' => $this->getUserId(),
-			],
-			'permissions' => [
-				'addOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
-				'allAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
-				'archive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
-				'comment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
-				'delete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
-				'edit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
-				'pollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
-				'pollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
-				'publicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
-				'seeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
-				'seeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
-				'seeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
-				'subscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
-				'view' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
-				'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT)
-			]
+			'currentUser' => $this->getCurrentUserArray(),
+			'permissions' => $this->getPermissionsArray(),
 		];
 	}
 
+	public function getPermissionsArray(): array {
+		return [
+			'addOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
+			'allAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
+			'archive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
+			'comment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
+			'delete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
+			'edit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+			'pollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
+			'pollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
+			'publicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
+			'seeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
+			'seeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+			'seeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
+			'subscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
+			'view' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
+			'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT)
+		];
+	}
+	public function getCurrentUserArray(): array {
+		return [
+			'displayName' => $this->getDisplayName(),
+			'hasVoted' => $this->getIsParticipant(),
+			'isInvolved' => $this->getIsInvolved(),
+			'isLoggedIn' => $this->getIsLoggedIn(),
+			'isNoUser' => !$this->getIsLoggedIn(),
+			'isOwner' => $this->getIsOwner(),
+			'userId' => $this->getUserId(),
+		];
+	}
 	/**
 	 * Setters
 	 */
