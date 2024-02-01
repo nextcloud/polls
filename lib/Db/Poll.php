@@ -326,7 +326,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	public function getOrphanedVotes() {
+	/**
+	 * @psalm-return int<0, max>
+	 */
+	public function getOrphanedVotes(): int {
 		return count($this->voteMapper->findOrphanedByPollandUser($this->id, (string) $this->userMapper->getCurrentUser()?->getId()));
 	}
 

@@ -55,7 +55,6 @@ class SearchProvider implements IProvider {
 	}
 
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
-		$cursor = $query->getCursor();
 		$polls = $this->pollService->search($query);
 
 		$results = array_map(function (Poll $poll) {

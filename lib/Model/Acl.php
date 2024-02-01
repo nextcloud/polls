@@ -28,7 +28,6 @@ namespace OCA\Polls\Model;
 
 use JsonSerializable;
 use OCA\Polls\AppConstants;
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
@@ -40,7 +39,6 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\IGroupManager;
 use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
@@ -73,9 +71,7 @@ class Acl implements JsonSerializable {
 
 	public function __construct(
 		private AppSettings $appSettings,
-		private IGroupManager $groupManager,
 		private LoggerInterface $logger,
-		private OptionMapper $optionMapper,
 		private PollMapper $pollMapper,
 		private ISession $session,
 		private ShareMapper $shareMapper,
@@ -186,7 +182,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getPollId(): int {
-		return $this->pollId;
+		return (int) $this->pollId;
 	}
 
 	public function getToken(): ?string {

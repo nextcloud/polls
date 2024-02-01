@@ -81,10 +81,7 @@ class WatchService {
 		}
 	}
 
-	/**
-	 * @return Watch
-	 */
-	public function writeUpdate(int $pollId, string $table): Watch {
+	public function writeUpdate(int $pollId, string $table): void {
 		$sessionId = hash('md5', $this->session->get(AppConstants::CLIENT_ID));
 		$this->watch = new Watch();
 		$this->watch->setPollId($pollId);
@@ -101,6 +98,6 @@ class WatchService {
 		}
 
 		$this->watch->setUpdated(time());
-		return $this->watchMapper->update($this->watch);
+		$this->watchMapper->update($this->watch);
 	}
 }

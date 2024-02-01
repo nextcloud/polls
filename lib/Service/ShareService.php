@@ -57,7 +57,6 @@ use Psr\Log\LoggerInterface;
 class ShareService {
 	/** @var Share[] **/
 	private array $shares;
-	private string $userId;
 
 	public function __construct(
 		private LoggerInterface $logger,
@@ -163,15 +162,6 @@ class ShareService {
 	 */
 	public function get(string $token): Share {
 		return $this->share = $this->shareMapper->findByToken($token);
-	}
-
-	/**
-	 * Flag invitation of this share as sent
-	 */
-	public function setInvitationSent(string $token): Share {
-		$share = $this->shareMapper->findByToken($token);
-		$share->setInvitationSent(time());
-		return $this->shareMapper->update($share);
 	}
 
 	/**
@@ -455,25 +445,6 @@ class ShareService {
 		}
 
 		return $publicUserId;
-	}
-
-	/**
-	 * convert this share to personal public (aka external) share
-	 */
-	private function convertToExternal(
-		UserBase $userGroup
-	): void {
-		$this->share->setType(Share::TYPE_EXTERNAL);
-		$this->share->setUserId($userGroup->getPublicId());
-		$this->share->setDisplayName($userGroup->getDisplayName());
-		$this->share->setTimeZoneName($userGroup->getTimeZoneName());
-		$this->share->setLanguage($userGroup->getLanguageCode());
-
-		// prepare for resending invitation to new email address
-		if ($userGroup->getEmailAddress() !== $this->share->getEmailAddress()) {
-			$this->share->setInvitationSent(0);
-		}
-		$this->share->setEmailAddress($userGroup->getEmailAddress());
 	}
 
 	/**

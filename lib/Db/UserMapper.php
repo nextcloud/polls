@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
@@ -143,8 +142,10 @@ class UserMapper extends QBMapper {
 	 * Get participans of a poll as array of user objects
 	 *
 	 * Returns a UserBase child build from a share
+	 *
+	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Ghost|Group|User
 	 */
-	public function getUserFromShare(Share $share): UserBase {
+	public function getUserFromShare(Share $share): GenericUser|Email|User|ContactGroup|Contact|Circle|Group|Ghost {
 		return $this->getUserObject(
 			$share->getType(),
 			$share->getUserId(),
@@ -156,23 +157,25 @@ class UserMapper extends QBMapper {
 		);
 	}
 
-	public function getUserFromUserBase(string $userId): UserBase {
+	public function getUserFromUserBase(string $userId): User {
 		$user = $this->userManager->get($userId);
 		if ($user instanceof IUser) {
-			return $this->getUserObject(User::TYPE, $userId);
+			return new User($userId);
 		}
 		throw new UserNotFoundException();
 	}
 
-	private function getUserFromShareToken(string $token): ?UserBase {
+	private function getUserFromShareToken(string $token): UserBase {
 		$share = $this->getShareByToken($token);
 		if ($share->getType() == Share::TYPE_PUBLIC) {
-			return null;
+			throw new DoesNotExistException('Share type is <Share::' . $share->getType() . '> and has no user.');
 		}
 		return $this->getUserFromShare($share);
 	}
-
-	public function getUserObject(string $type, string $id, string $displayName = '', ?string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): ?UserBase {
+	/**
+	 * @throws InvalidShareTypeException
+	 */
+	public function getUserObject(string $type, string $id, string $displayName = '', ?string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): Ghost|Group|Circle|Contact|ContactGroup|User|Email|GenericUser {
 		return match ($type) {
 			Ghost::TYPE => new Ghost($id),
 			Group::TYPE => new Group($id),
@@ -182,7 +185,6 @@ class UserMapper extends QBMapper {
 			User::TYPE => new User($id),
 			Admin::TYPE => new Admin($id),
 			Email::TYPE => new Email($id, $displayName, $emailAddress, $language),
-			UserBase::TYPE_PUBLIC => null,
 			UserBase::TYPE_EXTERNAL => new GenericUser($id, UserBase::TYPE_EXTERNAL, $displayName, $emailAddress, $language, $locale, $timeZoneName),
 			default => throw new InvalidShareTypeException('Invalid user type (' . $type . ')'),
 		};
@@ -215,7 +217,10 @@ class UserMapper extends QBMapper {
 
 	/**
 	 * Get distinct participans as Vote of a poll
-	 * @return Vote[]
+	 *
+	 * @return Share[]
+	 *
+	 * @psalm-return array<Share>
 	 */
 	private function findParticipantsByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();

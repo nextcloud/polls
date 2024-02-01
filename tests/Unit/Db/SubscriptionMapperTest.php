@@ -28,6 +28,7 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
+use OCP\Server;
 
 class SubscriptionMapperTest extends UnitTestCase {
 	private IDBConnection $con;
@@ -42,7 +43,7 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = \OC::$server->getDatabaseConnection();
+		$this->con = Server::get(IDBConnection::class);
 		$this->subscriptionMapper = new SubscriptionMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
 

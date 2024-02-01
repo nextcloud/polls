@@ -30,7 +30,6 @@ use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Exceptions\NotAuthorizedException;
-use OCP\AppFramework\Db\DoesNotExistException;
 
 class PreferencesService {
 	
@@ -42,14 +41,12 @@ class PreferencesService {
 		$this->load();
 	}
 
-	public function load(): Preferences {
+	public function load(): void {
 		try {
 			$this->preferences = $this->preferencesMapper->find($this->userMapper->getCurrentUser()?->getId());
 		} catch	(Exception $e) {
 			$this->preferences = new Preferences;
 		}
-
-		return $this->preferences;
 	}
 
 	public function get(): Preferences {

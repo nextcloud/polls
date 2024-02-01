@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Preferences;
@@ -51,21 +50,15 @@ use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\IGroupManager;
-use OCP\IUserManager;
 use OCP\Search\ISearchQuery;
 
 class PollService {
-	private string $userId;
 
 	public function __construct(
 		private Acl $acl,
 		private AppSettings $appSettings,
 		private IEventDispatcher $eventDispatcher,
-		private IGroupManager $groupManager,
-		private IUserManager $userManager,
 		private MailService $mailService,
-		private OptionMapper $optionMapper,
 		private Poll $poll,
 		private PollMapper $pollMapper,
 		private Preferences $preferences,
@@ -73,7 +66,6 @@ class PollService {
 		private UserMapper $userMapper,
 		private VoteMapper $voteMapper,
 	) {
-		$this->preferences = $this->preferencesService->get();
 	}
 
 	/**
@@ -83,7 +75,7 @@ class PollService {
 		$pollList = [];
 		try {
 			$polls = $this->pollMapper->findForMe($this->userMapper->getCurrentUser()->getId());
-
+			$this->preferences = $this->preferencesService->get();
 			foreach ($polls as $poll) {
 				try {
 					$this->acl->setPollId($poll->getId());

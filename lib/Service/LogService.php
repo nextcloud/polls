@@ -40,13 +40,13 @@ class LogService {
 	/**
 	 * Log poll activity
 	 */
-	public function setLog(int $pollId, string $messageId, ?string $userId = null): ?Log {
+	public function setLog(int $pollId, string $messageId, ?string $userId = null): void {
 		$this->log = new Log();
 		$this->log->setPollId($pollId);
 		$this->log->setCreated(time());
 		$this->log->setMessageId($messageId);
 		$this->log->setUserId($userId ?? $this->userMapper->getCurrentUser()->getId());
 
-		return $this->logMapper->insert($this->log);
+		$this->logMapper->insert($this->log);
 	}
 }

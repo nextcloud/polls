@@ -48,7 +48,7 @@ class NotificationService {
 		$this->notificationManager->markProcessed($notification);
 	}
 
-	public function sendInvitation(int $pollId, string $recipient): bool {
+	public function sendInvitation(int $pollId, string $recipient): void {
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp(AppConstants::APP_ID)
 			->setUser($recipient)
@@ -56,10 +56,9 @@ class NotificationService {
 			->setObject('poll', strval($pollId))
 			->setSubject(Notifier::NOTIFY_INVITATION, ['pollId' => $pollId, 'recipient' => $recipient]);
 		$this->notificationManager->notify($notification);
-		return true;
 	}
 
-	public function createNotification(array $params = []): bool {
+	public function createNotification(array $params = []): void {
 		$notification = $this->notificationManager->createNotification();
 		$notification->setApp(AppConstants::APP_ID)
 			->setUser($params['recipient'])
@@ -67,6 +66,5 @@ class NotificationService {
 			->setObject($params['objectType'], strval($params['objectValue']))
 			->setSubject($params['msgId'], $params);
 		$this->notificationManager->notify($notification);
-		return true;
 	}
 }

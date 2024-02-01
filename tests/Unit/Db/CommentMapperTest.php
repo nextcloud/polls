@@ -30,6 +30,7 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\PollMapper;
+use OCP\Server;
 
 class CommentMapperTest extends UnitTestCase {
 	private IDBConnection $con;
@@ -43,7 +44,7 @@ class CommentMapperTest extends UnitTestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = \OC::$server->getDatabaseConnection();
+		$this->con = Server::get(IDBConnection::class);
 		$this->commentMapper = new CommentMapper($this->con);
 		$this->pollMapper = new PollMapper($this->con);
 
