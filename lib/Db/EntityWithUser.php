@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -40,7 +41,6 @@ use OCP\IUserManager;
  */
 
 abstract class EntityWithUser extends Entity {
-	protected ?string $publicUserId = '';
 	protected ?string $displayName = '';
 	protected ?string $emailAddress = '';
 	protected ?string $userType = '';
@@ -103,38 +103,9 @@ abstract class EntityWithUser extends Entity {
 			?? $this->emailAddress;
 	}
 
-	/**
-	 * Returns an obfuscated userId
-	 *
-	 * Avoids leaking internal userIds by replacing the actual userId by another string in public access
-	 **/
-	private function getPublicUserId(): ?string {
-		if (!$this->getUserId()) {
-			return null;
-		}
-
-		if ($this->publicUserId) {
-			return $this->publicUserId;
-		}
-
-		return $this->getUserId();
-	}
-
-	public function generateHashedUserId(): void {
-		if (!$this->getUserId()) {
-			$this->publicUserId = null;
-		}
-
-		$this->publicUserId = hash('md5', $this->getUserId());
-	}
-
 	public function getUser(): array {
-		return [
-			'userId' => $this->getPublicUserId(),
-			'displayName' => $this->getDisplayName(),
-			'emailAddress' => $this->getEmailAddress(),
-			'isNoUser' => $this->getIsNoUser(),
-			'type' => $this->getUserType(),
-		];
+		/** @var UserMapper */
+		$userMapper = (Container::queryClass(UserMapper::class));
+		return $userMapper->getParticipant($this->getUserId(), $this->getPollId())->jsonSerialize();
 	}
 }

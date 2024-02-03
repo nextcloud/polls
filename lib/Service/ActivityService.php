@@ -64,7 +64,7 @@ class ActivityService {
 		$this->l10n = $this->transFactory->get($this->activityEvent->getApp(), $language);
 
 		try {
-			$this->userIsActor = $this->activityEvent->getAuthor() === $this->userMapper->getCurrentUser()->getId();
+			$this->userIsActor = $this->activityEvent->getAuthor() === $this->userMapper->getCurrentUserCached()->getId();
 		} catch (\Exception $e) {
 			$this->userIsActor = false;
 		}

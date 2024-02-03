@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Model;
 
 use DateTimeZone;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
@@ -49,6 +50,7 @@ class UserBase implements \JsonSerializable {
 	public const TYPE_PUBLIC = 'public';
 	/** @var string */
 	public const TYPE_EXTERNAL = 'external';
+	public const TYPE_EMPTY = 'empty';
 	public const TYPE_CIRCLE = Circle::TYPE;
 	public const TYPE_CONTACT = Contact::TYPE;
 	public const TYPE_CONTACTGROUP = ContactGroup::TYPE;
@@ -69,12 +71,13 @@ class UserBase implements \JsonSerializable {
 	protected IGroupManager $groupManager;
 	protected IL10N $l10n;
 	protected IUserSession $userSession;
+	protected UserMapper $userMapper;
 
 	public function __construct(
 		protected string $id,
 		protected string $type,
 		protected string $displayName = '',
-		protected ?string $emailAddress = '',
+		protected string $emailAddress = '',
 		protected string $languageCode = '',
 		protected string $localeCode = '',
 		protected string $timeZoneName = '',
@@ -83,6 +86,7 @@ class UserBase implements \JsonSerializable {
 		$this->l10n = Container::getL10N();
 		$this->groupManager = Container::queryClass(IGroupManager::class);
 		$this->timeZone = Container::queryClass(IDateTimeZone::class);
+		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->userSession = Container::queryClass(IUserSession::class);
 	}
 
@@ -95,11 +99,21 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getPublicId(): string {
-		return $this->id;
+		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+			return $this->getId();
+		}
+		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
+			return $this->getId();
+		} 
+		return $this->getHashedUserId();
 	}
 
 	public function getPrincipalUri(): ?string {
 		return null;
+	}
+
+	public function getHashedUserId(): string {
+		return hash('md5', $this->getId());
 	}
 
 	/**
@@ -179,12 +193,12 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getEmailAddress(): string {
-		return $this->emailAddress ?? '';
+		return $this->emailAddress;
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
 	public function getEmailAddressMasked(): string {
-		return $this->emailAddress ?? '';
+		return $this->emailAddress;
 	}
 
 	public function getOrganisation(): string {
@@ -315,14 +329,22 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function jsonSerialize(): array {
+		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+			return $this->getRichUserArray();
+		}
+		return $this->getSimpleUserArray();
+	}
+
+	private function getRichUserArray() {
 		return	[
+			'userId' => $this->getId(),
+			'displayName' => $this->getDisplayName(),
+			'emailAddress' => $this->getEmailAddressMasked(),
+			'isNoUser' => $this->getIsNoUser(),
+			'type' => $this->getType(),
 			'id' => $this->getId(),
 			'user' => $this->getId(),
-			'userId' => $this->getId(),
-			'type' => $this->getType(),
-			'displayName' => $this->getDisplayName(),
 			'organisation' => $this->getOrganisation(),
-			'emailAddress' => $this->getEmailAddressMasked(),
 			'languageCode' => $this->getLanguageCode(),
 			'localeCode' => $this->getLocaleCode(),
 			'timeZone' => $this->getTimeZoneName(),
@@ -330,7 +352,16 @@ class UserBase implements \JsonSerializable {
 			'subtitle' => $this->getDescription(),
 			'icon' => $this->getIcon(),
 			'categories' => $this->getCategories(),
+		];
+	}
+
+	private function getSimpleUserArray() {
+		return	[
+			'userId' => $this->getPublicId(),
+			'displayName' => $this->getDisplayName(),
+			'emailAddress' => $this->getEmailAddressMasked(),
 			'isNoUser' => $this->getIsNoUser(),
+			'type' => $this->getType(),
 		];
 	}
 }

@@ -37,11 +37,6 @@ interface IEntityWithUser {
 	public function getDisplayName(): string;
 
 	/**
-	 * Creates a hashed version of the userId
-	 */
-	public function generateHashedUserId(): void;
-
-	/**
 	 * Returns an array with user attributes for jsonSerialize()
 	 */
 	public function getUser(): array;

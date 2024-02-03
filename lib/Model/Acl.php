@@ -185,7 +185,7 @@ class Acl implements JsonSerializable {
 		return $this->share;
 	}
 
-	private function getCurrentUser(): ?UserBase {
+	private function getCurrentUser(): UserBase {
 		return $this->userMapper->getCurrentUser();
 	}
 
@@ -203,11 +203,11 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getUserId(): string {
-		return (string) $this->getCurrentUser()?->getId();
+		return $this->getCurrentUser()->getId();
 	}
 
 	private function getDisplayName(): string {
-		return (string) $this->getCurrentUser()?->getDisplayName();
+		return $this->getCurrentUser()->getDisplayName();
 	}
 
 	/**
@@ -272,7 +272,7 @@ class Acl implements JsonSerializable {
 	 * getIsLogged - Is user logged in to nextcloud?
 	 */
 	public function getIsLoggedIn(): bool {
-		return (bool) $this->getCurrentUser()?->getIsLoggedIn();
+		return $this->getCurrentUser()->getIsLoggedIn();
 	}
 
 	/**
@@ -280,7 +280,7 @@ class Acl implements JsonSerializable {
 	 * Returns true, if user is in admin group
 	 */
 	private function getIsAdmin(): bool {
-		return (bool) $this->getCurrentUser()?->getIsAdmin();
+		return $this->getCurrentUser()->getIsAdmin();
 	}
 
 	/**
@@ -357,7 +357,7 @@ class Acl implements JsonSerializable {
 	}
 
 	private function getHasEmail(): bool {
-		return (bool) $this->getCurrentUser()?->getEmailAddress();
+		return boolVal($this->getCurrentUser()->getEmailAddress());
 	}
 
 	/**

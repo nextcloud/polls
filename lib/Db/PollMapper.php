@@ -161,7 +161,6 @@ class PollMapper extends QBMapperWithUser {
 
 	/**
 	 * Build the enhanced query with joined tables
-	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
 	 */
 	protected function buildQuery(): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();

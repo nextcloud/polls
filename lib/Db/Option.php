@@ -126,13 +126,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'confirmed' => $this->getConfirmed(),
 			'duration' => $this->getDuration(),
 			'locked' => $this->getIsLocked(),
-			'debugging' => [
-				'getIsLockedByOptionLimit' => $this->getIsLockedByOptionLimit(),
-				'getIsLockedByVotesLimit' => $this->getIsLockedByVotesLimit(),
-				'getUserVoteAnswer' => $this->getUserVoteAnswer(),
-				'getOptionLimit' => $this->getOptionLimit(),
-				'getVotesYes' => $this->getVotesYes(),
-			],
 			'votes' => [
 				'no' => $this->getVotesNo(),
 				'yes' => $this->getVotesYes(),
@@ -200,8 +193,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	// alias of getOwner()
-	public function getUserId(): ?string {
-		return $this->getOwner();
+	public function getUserId(): string {
+		return (string) $this->getOwner();
 	}
 
 	// alias of setOwner($value)

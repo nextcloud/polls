@@ -29,7 +29,6 @@ use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCP\AppFramework\Db\Entity;
 use OCP\IURLGenerator;
 
 /**
@@ -60,7 +59,7 @@ use OCP\IURLGenerator;
  * @method int getDeleted()
  * @method void setDeleted(integer $value)
  */
-class Share extends Entity implements JsonSerializable {
+class Share extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_share';
 
 	public const EMAIL_OPTIONAL = 'optional';
@@ -132,6 +131,7 @@ class Share extends Entity implements JsonSerializable {
 	protected ?string $miscSettings = '';
 	protected int $voted = 0;
 	protected int $deleted = 0;
+	protected string $label = '';
 
 	public function __construct() {
 		$this->addType('pollId', 'int');
@@ -145,6 +145,8 @@ class Share extends Entity implements JsonSerializable {
 
 	/**
 	 * @return array
+	 * 
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function jsonSerialize(): array {
 		return [
@@ -158,19 +160,14 @@ class Share extends Entity implements JsonSerializable {
 			'reminderSent' => $this->getReminderSent(),
 			'locked' => $this->getDeleted() ? 0 : $this->getLocked(),
 			// 'displayName' => $this->getDisplayName(),
-			'label' => $this->getDisplayName(),
+			'label' => $this->getLabel(),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getBooleanSetting(AppSettings::SETTING_SHOW_LOGIN),
 			'publicPollEmail' => $this->getPublicPollEmail(),
 			'voted' => $this->getVoted(),
 			'deleted' => $this->getDeleted(),
-			'user' => [
-				'displayName' => $this->getDisplayName(),
-				'emailAddress' => $this->getEmailAddress(),
-				'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
-				'type' => $this->getType(),
-				'userId' => $this->getUserId(),
-			]
+			'type' => $this->getType(),
+			'user' => $this->getUser(),
 		];
 	}
 
@@ -180,6 +177,20 @@ class Share extends Entity implements JsonSerializable {
 
 	public function setPublicPollEmail(string $value): void {
 		$this->setMiscSettingsByKey('publicPollEmail', $value);
+	}
+
+	public function getLabel(): string {
+		if ($this->getType() === self::TYPE_PUBLIC && $this->label) {
+			return $this->label;
+		}
+		return $this->displayName;
+	}
+
+	public function getDisplayName(): string {
+		if ($this->getType() === self::TYPE_PUBLIC) {
+			return '';
+		}
+		return $this->displayName;
 	}
 
 	public function getTimeZoneName(): string {

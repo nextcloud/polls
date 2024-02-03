@@ -64,22 +64,16 @@ class VoteService {
 		try {
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				// Just return the participants votes, no further anoymizing or obfuscating is nessecary
-				return $this->voteMapper->findByPollAndUser($pollId, $this->userMapper->getCurrentUser()->getId());
+				return $this->voteMapper->findByPollAndUser($pollId, ($this->userMapper->getCurrentUserCached()->getId()));
 			}
 
 			$votes = $this->voteMapper->findByPoll($this->acl->getpollId());
 
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
-				$this->anonymizer->set($this->acl->getpollId(), $this->userMapper->getCurrentUser()->getId());
+				$this->anonymizer->set($this->acl->getpollId(), $this->userMapper->getCurrentUserCached()->getId());
 				$this->anonymizer->anonymize($votes);
-			} elseif (!$this->acl->getIsLoggedIn()) {
-				// if participant is not logged in avoid leaking user ids
-				foreach ($votes as $vote) {
-					if ($vote->getUserId() !== $this->userMapper->getCurrentUser()->getId()) {
-						$vote->generateHashedUserId();
-					}
-				}
 			}
+
 		} catch (DoesNotExistException $e) {
 			$votes = [];
 		}
@@ -116,7 +110,7 @@ class VoteService {
 		}
 
 		try {
-			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->userMapper->getCurrentUser()->getId());
+			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->userMapper->getCurrentUserCached()->getId());
 
 			if (in_array(trim($setTo), [Vote::VOTE_NO, '']) && !$this->acl->getPoll()->getUseNo()) {
 				$this->vote->setVoteAnswer('');
@@ -130,7 +124,7 @@ class VoteService {
 			$this->vote = new Vote();
 
 			$this->vote->setPollId($this->acl->getPollId());
-			$this->vote->setUserId($this->userMapper->getCurrentUser()->getId());
+			$this->vote->setUserId($this->userMapper->getCurrentUserCached()->getId());
 			$this->vote->setVoteOptionText($option->getPollOptionText());
 			$this->vote->setVoteOptionId($option->getId());
 			$this->vote->setVoteAnswer($setTo);
@@ -158,7 +152,7 @@ class VoteService {
 
 		// if no user id is given, reset votes of current user
 		if (!$userId) {
-			$userId = $this->userMapper->getCurrentUser()->getId();
+			$userId = $this->userMapper->getCurrentUserCached()->getId();
 		} else {
 			// otherwise edit rights must exist
 			$this->acl->request(Acl::PERMISSION_POLL_EDIT);

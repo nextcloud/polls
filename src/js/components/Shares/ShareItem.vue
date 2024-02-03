@@ -23,6 +23,7 @@
 <template>
 	<div :class="{ deleted: share.deleted }">
 		<UserItem :user="share.user"
+			:label="share.label"
 			show-email
 			resolve-info
 			:forced-description="share.deleted ? `(${t('polls', 'deleted')})` : null"

@@ -55,13 +55,13 @@ class CommentService {
 		if (!$acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
 			$this->anonymizer->set($acl->getPollId(), $acl->getUserId());
 			$this->anonymizer->anonymize($comments);
-		} elseif (!$acl->getIsLoggedIn()) {
-			// if participant is not logged in avoid leaking user ids
-			foreach ($comments as $comment) {
-				if ($comment->getUserId() !== $this->acl->getUserId()) {
-					$comment->generateHashedUserId();
-				}
-			}
+		// } elseif (!$acl->getIsLoggedIn()) {
+		// 	// if participant is not logged in avoid leaking user ids
+		// 	foreach ($comments as $comment) {
+		// 		if ($comment->getUserId() !== $this->acl->getUserId()) {
+		// 			$comment->generateHashedUserId();
+		// 		}
+		// 	}
 		}
 
 		return $comments;

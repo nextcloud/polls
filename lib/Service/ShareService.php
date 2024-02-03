@@ -134,7 +134,7 @@ class ShareService {
 		}
 
 		// Exception: logged in user, accesses the poll via public share link
-		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userMapper->getCurrentUser()?->getIsLoggedIn()) {
+		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userMapper->getCurrentUser()->getIsLoggedIn()) {
 
 			try {
 				// Check, if he is already authorized for this poll
@@ -145,7 +145,7 @@ class ShareService {
 				// for this user and return the created share instead of the public share
 				$this->share = $this->createNewShare(
 					$this->share->getPollId(),
-					$this->userMapper->getCurrentUser(),
+					$this->userMapper->getCurrentUserCached(),
 					true
 				);
 				// remove the public token from session
@@ -318,9 +318,6 @@ class ShareService {
 		} catch (\Exception $e) {
 			$this->logger->error('Error sending Mail to ' . $this->share->getEmailAddress());
 		}
-		// Update session keys
-		// $this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
-		// $this->session->set(AppConstants::SESSION_KEY_USER_ID, $this->share->getUserId());
 
 		return $this->share;
 	}
@@ -492,8 +489,9 @@ class ShareService {
 		$valid = match ($this->share->getType()) {
 			Share::TYPE_PUBLIC,	Share::TYPE_EMAIL, Share::TYPE_EXTERNAL => true,
 			Share::TYPE_USER => $this->share->getUserId() === $this->userMapper->getCurrentUser()->getId(),
-			Share::TYPE_ADMIN => $this->share->getUserId() === $this->userMapper->getCurrentUser()->getId(),
-			Share::TYPE_GROUP => $this->userMapper->getCurrentUser()->getIsInGroup($this->share->getUserId()),
+			Share::TYPE_ADMIN => $this->share->getUserId() === $this->userMapper->getCurrentUserCached()->getId(),
+			// Note: $this->share->getUserId() is actually the group name in case of Share::TYPE_GROUP
+			Share::TYPE_GROUP => $this->userMapper->getCurrentUserCached()->getIsInGroup($this->share->getUserId()),
 			default => throw new ForbiddenException('Invalid share type ' . $this->share->getType()),
 		};
 		if (!$valid) {
