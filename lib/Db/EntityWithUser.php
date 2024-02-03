@@ -27,7 +27,6 @@ namespace OCA\Polls\Db;
 
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\User;
-use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\Entity;
 use OCP\IUser;
 use OCP\IUserManager;

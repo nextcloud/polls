@@ -104,7 +104,7 @@ class UserBase implements \JsonSerializable {
 		}
 		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
 			return $this->getId();
-		} 
+		}
 		return $this->getHashedUserId();
 	}
 

@@ -35,7 +35,6 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Model\CalendarEvent;
-use OCA\Polls\Model\UserBase;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\ISession;
