@@ -44,8 +44,6 @@ use Psr\Log\LoggerInterface;
 class CalendarService {
 	/** @var ICalendar[] */
 	private array $calendars;
-	private UserBase $currentUser;
-	
 	public function __construct(
 		private CalendarManager $calendarManager,
 		private ISession $session,
@@ -56,7 +54,6 @@ class CalendarService {
 		private LoggerInterface $logger,
 	) {
 		$this->preferences = $this->preferencesService->get();
-		$this->currentUser = $this->userMapper->getCurrentUser();
 		$this->getCalendarsForPrincipal();
 	}
 
@@ -64,7 +61,7 @@ class CalendarService {
 	 * getCalendars -
 	 */
 	private function getCalendarsForPrincipal(): void {
-		$principalUri = $this->currentUser->getPrincipalUri();
+		$principalUri = $this->userMapper->getCurrentUser()->getPrincipalUri();
 
 		if ($principalUri) {
 			$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
@@ -102,11 +99,11 @@ class CalendarService {
 	}
 
 	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): array {
-		if (!$this->currentUser->getPrincipalUri()) {
+		if (!$this->userMapper->getCurrentUser()->getPrincipalUri()) {
 			return [];
 		}
 
-		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
+		$query = $this->calendarManager->newQuery($this->userMapper->getCurrentUser()->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
 

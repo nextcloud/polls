@@ -67,6 +67,7 @@ export default {
 			closed: 'poll/isClosed',
 			confirmedOptions: 'options/confirmed',
 			hasShares: 'shares/hasShares',
+			proposalsOpen: 'poll/proposalsOpen',
 		}),
 
 		showUnpublishedPollCard() {

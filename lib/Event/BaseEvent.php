@@ -69,8 +69,11 @@ abstract class BaseEvent extends Event {
 		return $this->poll->getOwner();
 	}
 
-	public function getActor(): ?string {
-		return $this->userMapper->getCurrentUser()?->getId() ?? $this->eventObject->getUserId();
+	public function getActor(): string {
+		if ($this->userMapper->getCurrentUserCached()->getId() !== '') {
+			return $this->userMapper->getCurrentUserCached()->getId();
+		}
+		return (string) $this->eventObject->getUserId();
 	}
 
 	public function getLogId(): string {

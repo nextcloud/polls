@@ -121,6 +121,10 @@ export default {
 			type: String,
 			default: null,
 		},
+		label: {
+			type: String,
+			default: null,
+		},
 		type: {
 			type: String,
 			default: 'user',
@@ -195,7 +199,7 @@ export default {
 			if (this.typeComputed === 'deleted') return t('polls', 'Deleted User')
 			if (this.typeComputed === 'internalAccess') return t('polls', 'Internal access')
 			if (this.user.displayName) return this.user.displayName
-			if (this.typeComputed === 'public' && this.user.userId !== 'addPublic') return t('polls', 'Public link')
+			if (this.typeComputed === 'public' && this.user.userId !== 'addPublic') return this.label ?? t('polls', 'Public link')
 			return this.user.userId
 		},
 

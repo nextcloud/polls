@@ -79,7 +79,10 @@ class Contact extends UserBase {
 	 * @return string
 	 **/
 	public function getShareUserId(): string {
-		return $this->emailAddress ?? $this->id;
+		if ($this->emailAddress !== '') {
+			return $this->emailAddress;
+		}
+		return $this->id;
 	}
 
 	/**

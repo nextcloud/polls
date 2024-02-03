@@ -61,7 +61,7 @@ class PreferencesController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function write(array $preferences): JSONResponse {
-		if (!$this->userMapper->getCurrentUser()?->getIsLoggedIn()) {
+		if (!$this->userMapper->getCurrentUser()->getIsLoggedIn()) {
 			return new JSONResponse([], Http::STATUS_OK);
 		}
 		return $this->response(fn () => $this->preferencesService->write($preferences));

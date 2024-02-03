@@ -60,6 +60,9 @@ class UserMapper extends QBMapper {
 	protected ?UserBase $currentUser = null;
 	protected string $currentUserId;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		IDBConnection $db,
 		private IGroupManager $groupManager,
@@ -80,22 +83,26 @@ class UserMapper extends QBMapper {
 	 * and stores userId to session
 	 *
 	 */
-	public function getCurrentUser(): ?UserBase {
+	public function getCurrentUser(): UserBase {
 		if ($this->userSession->isLoggedIn()) {
 			$this->currentUser = $this->getUserFromUserBase($this->userSession->getUser()->getUID());
 		} else {
 			try {
-				$this->currentUser = $this->getUserFromShareToken((string) $this->getToken());
+				$this->currentUser = $this->getUserFromShareToken($this->getToken());
 			} catch (DoesNotExistException $e) {
-				$this->currentUser = null;
+				$this->currentUser = new GenericUser('', Share::TYPE_PUBLIC);
 			}
 		}
 
 		return $this->currentUser;
 	}
 
-	private function getToken(): ?string {
-		return $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
+	public function getCurrentUserCached(): UserBase {
+		return $this->currentUser ?? $this->getCurrentUser();
+	}
+
+	private function getToken(): string {
+		return (string) $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 	}
 
 	/**
@@ -108,6 +115,10 @@ class UserMapper extends QBMapper {
 	 * @return UserBase
 	 **/
 	public function getParticipant(string $userId, int $pollId = null): UserBase {
+		if ($userId === '') {
+			return new UserBase($userId, UserBase::TYPE_EMPTY);
+		}
+
 		try {
 			return $this->getUserFromUserBase($userId);
 		} catch (UserNotFoundException $e) {
@@ -186,6 +197,7 @@ class UserMapper extends QBMapper {
 			Admin::TYPE => new Admin($id),
 			Email::TYPE => new Email($id, $displayName, $emailAddress, $language),
 			UserBase::TYPE_EXTERNAL => new GenericUser($id, UserBase::TYPE_EXTERNAL, $displayName, $emailAddress, $language, $locale, $timeZoneName),
+			UserBase::TYPE_PUBLIC => new GenericUser($id, UserBase::TYPE_PUBLIC, $displayName),
 			default => throw new InvalidShareTypeException('Invalid user type (' . $type . ')'),
 		};
 	}

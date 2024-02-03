@@ -48,6 +48,7 @@ use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\UserNotFoundException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Search\ISearchQuery;
@@ -74,7 +75,7 @@ class PollService {
 	public function list(): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->findForMe($this->userMapper->getCurrentUser()->getId());
+			$polls = $this->pollMapper->findForMe($this->userMapper->getCurrentUserCached()->getId());
 			$this->preferences = $this->preferencesService->get();
 			foreach ($polls as $poll) {
 				try {
@@ -130,9 +131,9 @@ class PollService {
 	 */
 	public function listForAdmin(): array {
 		$pollList = [];
-		if ($this->userMapper->getCurrentUser()->getIsAdmin()) {
+		if ($this->userMapper->getCurrentUserCached()->getIsAdmin()) {
 			try {
-				$pollList = $this->pollMapper->findForAdmin($this->userMapper->getCurrentUser()->getId());
+				$pollList = $this->pollMapper->findForAdmin($this->userMapper->getCurrentUserCached()->getId());
 			} catch (DoesNotExistException $e) {
 				// silent catch
 			}
@@ -144,12 +145,12 @@ class PollService {
 	 * Update poll configuration
 	 * @return Poll
 	 */
-	public function takeover(int $pollId): Poll {
+	public function takeover(int $pollId, UserBase $targetUser): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
 
 		$this->eventDispatcher->dispatchTyped(new PollTakeOverEvent($this->poll));
 
-		$this->poll->setOwner($this->userMapper->getCurrentUser()->getId());
+		$this->poll->setOwner($targetUser->getId());
 		$this->pollMapper->update($this->poll);
 
 		return $this->poll;
@@ -201,11 +202,6 @@ class PollService {
 	public function get(int $pollId) {
 		$this->acl->setPollId($pollId);
 		$this->poll = $this->pollMapper->find($pollId);
-
-		if (!$this->acl->getIsLoggedIn() && $this->poll->getUserId() !== $this->acl->getUserId()) {
-			$this->poll->generateHashedUserId();
-		}
-
 		return $this->poll;
 	}
 
@@ -229,7 +225,7 @@ class PollService {
 		$this->poll = new Poll();
 		$this->poll->setType($type);
 		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userMapper->getCurrentUser()->getId());
+		$this->poll->setOwner($this->userMapper->getCurrentUserCached()->getId());
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
 		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
@@ -378,7 +374,7 @@ class PollService {
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userMapper->getCurrentUser()->getId());
+		$this->poll->setOwner($this->userMapper->getCurrentUserCached()->getId());
 		$this->poll->setTitle('Clone of ' . $origin->getTitle());
 		$this->poll->setDeleted(0);
 		$this->poll->setAccess(Poll::ACCESS_PRIVATE);

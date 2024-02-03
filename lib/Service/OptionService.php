@@ -83,13 +83,6 @@ class OptionService {
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW) || !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
 				$this->anonymizer->anonymize($this->options);
-			} elseif (!$this->acl->getIsLoggedIn()) {
-				// if participant is not logged in avoid leaking user ids
-				foreach ($this->options as $option) {
-					if ($option->getUserId() !== $this->acl->getUserId()) {
-						$option->generateHashedUserId();
-					}
-				}
 			}
 
 			if ($this->acl->getPoll()->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {

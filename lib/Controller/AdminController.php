@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -45,6 +46,7 @@ class AdminController extends BaseController {
 		private IURLGenerator $urlGenerator,
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
+		private UserMapper $userMapper,
 	) {
 		parent::__construct($appName, $request, $session);
 	}
@@ -67,7 +69,7 @@ class AdminController extends BaseController {
 	 * Get list of polls for administrative purposes
 	 */
 	public function takeover(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->pollService->takeover($pollId));
+		return $this->response(fn () => $this->pollService->takeover($pollId, $this->userMapper->getCurrentUser()));
 	}
 
 	/**

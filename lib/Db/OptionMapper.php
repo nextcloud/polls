@@ -205,10 +205,10 @@ class OptionMapper extends QBMapperWithUser {
 
 	/**
 	 * Build the enhanced query with joined tables
-	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
+	 * @param bool $hideVotes Whether the votes should be hidden, skips vote counting
 	 */
 	protected function buildQuery(bool $hideVotes = false): IQueryBuilder {
-		$currentUserId = (string) $this->userMapper->getCurrentUser()?->getId();
+		$currentUserId = $this->userMapper->getCurrentUser()->getId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
