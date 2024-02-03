@@ -36,8 +36,9 @@ use OCP\AppFramework\Db\Entity;
  */
 
 abstract class EntityWithUser extends Entity {
-	// protected ?string $displayName = '';
-	// protected ?string $emailAddress = '';
+	protected ?string $displayName = '';
+	protected ?string $emailAddress = '';
+	protected ?string $userType = '';
 
 	/**
 	 * Returns the displayName
