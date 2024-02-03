@@ -32,6 +32,9 @@ use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class DropOrphanedColumns implements IRepairStep {
 	public function __construct(
 		private TableManager $tableManager,

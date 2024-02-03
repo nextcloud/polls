@@ -35,6 +35,9 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 
+/**
+ * @psalm-api
+ */
 class JanitorCron extends TimedJob {
 	private AppSettings $appSettings;
 

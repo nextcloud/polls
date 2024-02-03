@@ -47,6 +47,9 @@ use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Util;
 
+/**
+ * @psalm-api
+ */
 class PublicController extends BasePublicController {
 	public function __construct(
 		string $appName,

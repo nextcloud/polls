@@ -35,6 +35,9 @@ use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
 class GroupDeletedJob extends QueuedJob {
+	/**
+	 * @psalm-api
+	 */
 	public function __construct(
 		private ShareMapper $shareMapper,
 		private ISecureRandom $secureRandom,

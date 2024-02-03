@@ -37,6 +37,9 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
 
+/**
+ * @psalm-api
+ */
 class BaseController extends Controller {
 	public function __construct(
 		string $appName,

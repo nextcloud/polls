@@ -30,6 +30,9 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 use OCP\Util;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class AdminSettings implements ISettings {
 	public function getForm(): TemplateResponse {
 		Util::addScript(AppConstants::APP_ID, 'polls-adminSettings');

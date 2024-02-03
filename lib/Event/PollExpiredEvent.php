@@ -26,6 +26,9 @@ namespace OCA\Polls\Event;
 use OCA\Polls\Db\Poll;
 
 class PollExpiredEvent extends PollEvent {
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		protected Poll $poll
 	) {

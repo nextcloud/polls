@@ -31,6 +31,9 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 
 class PollWidget implements IWidget {
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private IL10N $l10n,
 		private IURLGenerator $urlGenerator

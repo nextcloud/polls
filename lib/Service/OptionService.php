@@ -52,6 +52,9 @@ class OptionService {
 	/** @var Option[] */
 	private array $options;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private Acl $acl,
 		private AnonymizeService $anonymizer,

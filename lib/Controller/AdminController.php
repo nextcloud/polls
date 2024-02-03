@@ -38,6 +38,9 @@ use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\Util;
 
+/**
+ * @psalm-api
+ */
 class AdminController extends BaseController {
 	public function __construct(
 		string $appName,

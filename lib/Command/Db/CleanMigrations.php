@@ -30,6 +30,9 @@ use OCA\Polls\Command\Command;
 use OCA\Polls\Db\TableManager;
 use OCP\IDBConnection;
 
+/**
+ * @psalm-api
+ */
 class CleanMigrations extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:clean-migrations';
 	protected string $description = 'Remove old migrations entries from Nextcloud\'s migration table';

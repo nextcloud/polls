@@ -45,6 +45,9 @@ use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class SystemService {
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private IFactory $transFactory,
 		private ISearch $userSearch,

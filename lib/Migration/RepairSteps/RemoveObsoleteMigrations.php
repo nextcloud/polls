@@ -35,6 +35,8 @@ use OCP\Migration\IRepairStep;
  * remove old migration entries from versions prior to polls 3.x
  * including migration versions from test releases
  * theoretically, only this migration should be existent. If not, no matter
+ *
+ * @psalm-suppress UnusedClass
  */
 class RemoveObsoleteMigrations implements IRepairStep {
 	public function __construct(

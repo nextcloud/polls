@@ -41,6 +41,9 @@ use OCP\BackgroundJob\QueuedJob;
 use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @psalm-api
+ */
 class UserDeletedJob extends QueuedJob {
 	public function __construct(
 		private CommentMapper $commentMapper,

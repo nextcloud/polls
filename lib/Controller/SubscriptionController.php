@@ -32,6 +32,9 @@ use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
 
+/**
+ * @psalm-api
+ */
 class SubscriptionController extends BaseController {
 	public function __construct(
 		string $appName,

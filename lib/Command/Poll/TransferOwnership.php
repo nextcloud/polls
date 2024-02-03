@@ -35,6 +35,9 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
 
+/**
+ * @psalm-api
+ */
 class TransferOwnership extends Command {
 	public function __construct(
 		private IUserManager $userManager,

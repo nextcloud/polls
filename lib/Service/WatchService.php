@@ -38,6 +38,9 @@ class WatchService {
 	private AppSettings $appSettings;
 	private Watch $watch;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private ISession $session,
 		private WatchMapper $watchMapper,

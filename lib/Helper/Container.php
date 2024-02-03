@@ -55,7 +55,7 @@ abstract class Container {
 			->findByPollAndUser($pollId, $userId);
 	}
 
-	public static function getL10N(string $lang = null): IL10N {
+	public static function getL10N(?string $lang = null): IL10N {
 		return self::queryClass(IFactory::class)->get(AppConstants::APP_ID, $lang);
 	}
 	public static function isAppEnabled(string $app): bool {

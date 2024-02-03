@@ -260,6 +260,7 @@ abstract class TableSchema {
 	/**
 	 * Iterate over tables and make sure, they are created or updated
 	 * according to the currently valid schema
+	 * @psalm-api
 	 */
 	public static function createOrUpdateSchema(ISchemaWrapper &$schema): array {
 		$messages = [];

@@ -33,6 +33,9 @@ use OCA\Polls\Db\Watch;
 use OCA\Polls\Migration\TableSchema;
 use OCP\IDBConnection;
 
+/**
+ * @psalm-api
+ */
 class ResetWatch extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:reset-watch';
 	protected string $description = 'Resets the Watch table';

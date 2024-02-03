@@ -114,7 +114,7 @@ class UserMapper extends QBMapper {
 	 * @param int $pollId Can only be used together with $userId and will return the internal user or the share user
 	 * @return UserBase
 	 **/
-	public function getParticipant(string $userId, int $pollId = null): UserBase {
+	public function getParticipant(string $userId, ?int $pollId = null): UserBase {
 		if ($userId === '') {
 			return new UserBase($userId, UserBase::TYPE_EMPTY);
 		}
