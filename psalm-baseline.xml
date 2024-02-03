@@ -81,6 +81,13 @@
       <code>deleteByPoll</code>
     </PossiblyUnusedMethod>
   </file>
+  <file src="lib/Db/EntityWithUser.php">
+    <PossiblyUnusedProperty>
+      <code>$displayName</code>
+      <code>$emailAddress</code>
+      <code>$userType</code>
+    </PossiblyUnusedProperty>
+  </file>
   <file src="lib/Db/IEntityWithUser.php">
     <UnusedClass>
       <code>IEntityWithUser</code>
@@ -176,7 +183,6 @@
   <file src="lib/Db/Share.php">
     <PossiblyUnusedProperty>
       <code>$deleted</code>
-      <code>$emailAddress</code>
       <code>$invitationSent</code>
       <code>$locked</code>
       <code>$miscSettings</code>
