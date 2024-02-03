@@ -37,6 +37,9 @@ use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
+/**
+ * @psalm-api
+ */
 class PollApiController extends BaseApiController {
 	public function __construct(
 		string $appName,

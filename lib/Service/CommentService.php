@@ -33,8 +33,10 @@ use OCA\Polls\Model\Acl;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class CommentService {
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
-		private Acl $acl,
 		private AnonymizeService $anonymizer,
 		private CommentMapper $commentMapper,
 		private Comment $comment,

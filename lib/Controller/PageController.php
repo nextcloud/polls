@@ -38,6 +38,9 @@ use OCP\IRequest;
 use OCP\IURLGenerator;
 use OCP\Util;
 
+/**
+ * @psalm-api
+ */
 class PageController extends Controller {
 	public function __construct(
 		string $appName,

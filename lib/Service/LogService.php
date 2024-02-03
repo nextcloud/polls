@@ -30,6 +30,9 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\UserMapper;
 
 class LogService {
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private LogMapper $logMapper,
 		private Log $log,

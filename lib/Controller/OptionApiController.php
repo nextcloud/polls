@@ -32,6 +32,9 @@ use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
+/**
+ * @psalm-api
+ */
 class OptionApiController extends BaseApiController {
 	public function __construct(
 		string $appName,

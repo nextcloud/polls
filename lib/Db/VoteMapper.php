@@ -38,6 +38,9 @@ use Psr\Log\LoggerInterface;
 class VoteMapper extends QBMapperWithUser {
 	public const TABLE = Vote::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		IDBConnection $db,
 		private UserMapper $userMapper,

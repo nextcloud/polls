@@ -35,6 +35,9 @@ use OCP\IDBConnection;
 class CommentMapper extends QBMapperWithUser {
 	public const TABLE = Comment::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, self::TABLE, Comment::class);
 	}

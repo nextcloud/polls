@@ -25,6 +25,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+/**
+ * @psalm-suppress PossiblyUnusedMethod
+ */
 interface IEntityWithUser {
 	/**
 	 * Is this object'suser or owner an internal user or external

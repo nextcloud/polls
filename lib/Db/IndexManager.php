@@ -35,6 +35,9 @@ class IndexManager {
 	
 	private string $dbPrefix;
 	
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private IConfig $config,
 		private IDBConnection $connection,

@@ -38,6 +38,8 @@ use OCP\Migration\SimpleMigrationStep;
  * Initial db creation
  * Changed class naming: Version[jjmmpp]Date[YYYYMMDDHHMMSS]
  * Version: jj = major version, mm = minor, pp = patch
+ *
+ * @psalm-suppress UnusedClass
  */
 class Version050100Date20230515083001 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;

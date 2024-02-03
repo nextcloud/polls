@@ -33,6 +33,9 @@ use OCA\Polls\Exceptions\NotAuthorizedException;
 
 class PreferencesService {
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private PreferencesMapper $preferencesMapper,
 		private Preferences $preferences,

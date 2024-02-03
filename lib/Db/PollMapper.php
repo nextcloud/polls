@@ -36,6 +36,9 @@ use OCP\Search\ISearchQuery;
 class PollMapper extends QBMapperWithUser {
 	public const TABLE = Poll::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, Poll::TABLE, Poll::class);
 	}

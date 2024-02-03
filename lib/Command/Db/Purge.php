@@ -29,6 +29,9 @@ use OCA\Polls\Command\Command;
 use OCA\Polls\Db\TableManager;
 use OCP\IDBConnection;
 
+/**
+ * @psalm-api
+ */
 class Purge extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:purge';
 	protected string $description = 'Remove all polls related tables and records';

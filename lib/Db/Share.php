@@ -159,14 +159,12 @@ class Share extends EntityWithUser implements JsonSerializable {
 			'invitationSent' => $this->getInvitationSent(),
 			'reminderSent' => $this->getReminderSent(),
 			'locked' => $this->getDeleted() ? 0 : $this->getLocked(),
-			// 'displayName' => $this->getDisplayName(),
 			'label' => $this->getLabel(),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getBooleanSetting(AppSettings::SETTING_SHOW_LOGIN),
 			'publicPollEmail' => $this->getPublicPollEmail(),
 			'voted' => $this->getVoted(),
 			'deleted' => $this->getDeleted(),
-			'type' => $this->getType(),
 			'user' => $this->getUser(),
 		];
 	}
@@ -183,14 +181,14 @@ class Share extends EntityWithUser implements JsonSerializable {
 		if ($this->getType() === self::TYPE_PUBLIC && $this->label) {
 			return $this->label;
 		}
-		return $this->displayName;
+		return $this->displayName ?? '';
 	}
 
 	public function getDisplayName(): string {
 		if ($this->getType() === self::TYPE_PUBLIC) {
 			return '';
 		}
-		return $this->displayName;
+		return (string) $this->displayName;
 	}
 
 	public function getTimeZoneName(): string {

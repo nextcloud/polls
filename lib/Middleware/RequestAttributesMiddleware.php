@@ -11,6 +11,9 @@ class RequestAttributesMiddleware extends Middleware {
 	private const CLIENT_ID_KEY = 'Nc-Polls-Client-Id';
 	private const TIME_ZONE_KEY = 'Nc-Polls-Client-Time-Zone';
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		protected IRequest $request,
 		protected ISession $session

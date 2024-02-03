@@ -27,6 +27,9 @@ namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\Entity;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 abstract class Model extends Entity {
 	/**
 	 * FactoryMuffin checks for the existence of setters with method_exists($obj, $attr) but that returns false.

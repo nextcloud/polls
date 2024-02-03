@@ -34,6 +34,9 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
+/**
+ * @psalm-api
+ */
 class BaseApiController extends ApiController {
 	public function __construct(
 		string $appName,

@@ -34,6 +34,9 @@ class AnonymizeService {
 	private array $anonList;
 	private ?string $userId;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private CommentMapper $commentMapper,
 		private OptionMapper $optionMapper,

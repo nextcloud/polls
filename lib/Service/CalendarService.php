@@ -43,6 +43,10 @@ use Psr\Log\LoggerInterface;
 class CalendarService {
 	/** @var ICalendar[] */
 	private array $calendars;
+
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private CalendarManager $calendarManager,
 		private ISession $session,

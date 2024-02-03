@@ -35,6 +35,8 @@ use OCP\Migration\IRepairStep;
  * Preparation before migration
  * Remove all indices and foreign key constraints to avoid errors
  * while changing the schema
+ *
+ * @psalm-suppress UnusedClass
  */
 class RemoveIndices implements IRepairStep {
 	public function __construct(

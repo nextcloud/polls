@@ -36,6 +36,9 @@ use OCP\ISession;
 class OptionMapper extends QBMapperWithUser {
 	public const TABLE = Option::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		IDBConnection $db,
 		private ISession $session,

@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use \OCA\Polls\Db\Comment;
+use OCA\Polls\Db\Comment;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCP\AppFramework\Http\Attribute\CORS;
@@ -34,6 +34,9 @@ use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
+/**
+ * @psalm-api
+ */
 class CommentApiController extends BaseApiController {
 	public function __construct(
 		string $appName,

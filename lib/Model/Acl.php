@@ -69,6 +69,9 @@ class Acl implements JsonSerializable {
 	private ?int $pollId;
 
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private AppSettings $appSettings,
 		private LoggerInterface $logger,
@@ -316,11 +319,11 @@ class Acl implements JsonSerializable {
 			return false;
 		}
 
-		return 0 < count(
+		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
 				return ($item->getType() === Share::TYPE_GROUP && $this->getCurrentUser()->getIsInGroup($item->getUserId()));
 			})
-		);
+		) > 0;
 	}
 
 	/**

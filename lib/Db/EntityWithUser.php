@@ -26,27 +26,18 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCA\Polls\Helper\Container;
-use OCA\Polls\Model\User\User;
 use OCP\AppFramework\Db\Entity;
-use OCP\IUser;
-use OCP\IUserManager;
 
 /**
  * @method int getPollId()
  * @method ?string getUserId()
  * @method ?string getDisplayName()
  * @method ?string getEmailAdress()
- * @method ?string getUserType()
  */
 
 abstract class EntityWithUser extends Entity {
-	protected ?string $displayName = '';
-	protected ?string $emailAddress = '';
-	protected ?string $userType = '';
-
-	public function getIsNoUser(): bool {
-		return !(Container::queryClass(IUserManager::class)->get($this->getUserId()) instanceof IUser);
-	}
+	// protected ?string $displayName = '';
+	// protected ?string $emailAddress = '';
 
 	/**
 	 * Returns the displayName
@@ -55,38 +46,15 @@ abstract class EntityWithUser extends Entity {
 	 * - then try to get it from joined share
 	 * - otherwise assume a deleted user
 	 **/
-	public function getDisplayName(): ?string {
-		if (!$this->getUserId()) {
-			return null;
-		}
+	// public function getDisplayName(): ?string {
+	// 	if (!$this->getUserId()) {
+	// 		return null;
+	// 	}
 
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName()
-			?? $this->displayName
-			?? 'Deleted User';
-	}
-
-	/**
-	 * Returns user type
-	 *
-	 * - first tries to get type from joined share
-	 * - then try to verify an internal user and set type user
-	 * - otherwise assume a deleted user
-	 *
-	 * @return null|string
-	 */
-	public function getUserType(): string|null {
-		if (!$this->getUserId()) {
-			return null;
-		}
-
-		if ($this->userType) {
-			return $this->userType;
-		}
-
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())
-			? User::TYPE_USER
-			: User::TYPE_GHOST;
-	}
+	// 	return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName()
+	// 		?? $this->displayName
+	// 		?? 'Deleted User';
+	// }
 
 	/**
 	 * Returns email address
@@ -94,13 +62,13 @@ abstract class EntityWithUser extends Entity {
 	 * - first tries to get emeil address from internal user
 	 * - then get it from joined share
 	 **/
-	public function getEmailAddress(): ?string {
-		if (!$this->getUserId()) {
-			return null;
-		}
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getEmailAddress()
-			?? $this->emailAddress;
-	}
+	// public function getEmailAddress(): ?string {
+	// 	if (!$this->getUserId()) {
+	// 		return null;
+	// 	}
+	// 	return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getEmailAddress()
+	// 		?? $this->emailAddress;
+	// }
 
 	public function getUser(): array {
 		/** @var UserMapper */

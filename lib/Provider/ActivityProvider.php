@@ -38,6 +38,9 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ActivityProvider implements IProvider {
 	public function __construct(
 		protected ActivityManager $activityManager,

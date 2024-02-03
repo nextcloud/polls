@@ -58,6 +58,9 @@ class ShareService {
 	/** @var Share[] **/
 	private array $shares;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private LoggerInterface $logger,
 		private IEventDispatcher $eventDispatcher,
@@ -328,7 +331,7 @@ class ShareService {
 	 * @param string $token Share of token to delete
 	 * @param bool $restore Set true, if share is to be restored
 	 */
-	public function delete(Share $share = null, string $token = null, bool $restore = false): Share {
+	public function delete(?Share $share = null, ?string $token = null, bool $restore = false): Share {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token, true);
 		}
@@ -344,7 +347,7 @@ class ShareService {
 	/**
 	 * Lock or unlock share
 	 */
-	public function lock(Share $share = null, string $token = null, bool $unlock = false): Share {
+	public function lock(?Share $share = null, ?string $token = null, bool $unlock = false): Share {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token, true);
 		}
@@ -379,7 +382,7 @@ class ShareService {
 		return $sentResult;
 	}
 
-	public function resolveGroup(string $token = null, Share $share = null): array {
+	public function resolveGroup(?string $token = null, ?Share $share = null): array {
 		if ($token) {
 			$share = $this->get($token);
 		}
@@ -406,7 +409,7 @@ class ShareService {
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
 	 */
-	public function sendInvitation(Share $share = null, SentResult &$sentResult = null, string $token = null): SentResult|null {
+	public function sendInvitation(?Share $share = null, ?SentResult &$sentResult = null, ?string $token = null): SentResult|null {
 		if ($token) {
 			$share = $this->get($token);
 		}

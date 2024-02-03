@@ -31,6 +31,9 @@ use OCA\Polls\Db\IndexManager;
 use OCA\Polls\Command\Command;
 use OCP\IDBConnection;
 
+/**
+ * @psalm-api
+ */
 class Rebuild extends Command {
 	protected string $name = parent::NAME_PREFIX . 'db:rebuild';
 	protected string $description = 'Rebuilds poll\'s table structure';

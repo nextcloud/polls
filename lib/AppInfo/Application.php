@@ -73,6 +73,9 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\User\Events\UserDeletedEvent;
 
+/**
+ * @psalm-api
+ */
 class Application extends App implements IBootstrap {
 	/** @var string */
 	public const APP_ID = AppConstants::APP_ID;
