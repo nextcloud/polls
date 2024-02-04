@@ -108,6 +108,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	private UserMapper $userMapper;
 	private VoteMapper $voteMapper;
 
+	// schema columns
 	public $id = null;
 	protected string $type = '';
 	protected string $title = '';
@@ -131,6 +132,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $useNo = 0;
 	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
+
+	// joined columns
 	protected bool $hasOrphanedVotes = false;
 
 	public function __construct() {
@@ -162,6 +165,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
+			'title' => $this->getTitle(),
+			'description' => $this->getDescription(),
+			'descriptionSafe' => $this->getDescriptionSafe(),
 			'access' => $this->getAccess(),
 			'allowComment' => $this->getAllowComment(),
 			'allowMaybe' => $this->getAllowMaybe(),
@@ -170,16 +176,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'autoReminder' => $this->getAutoReminder(),
 			'created' => $this->getCreated(),
 			'deleted' => $this->getDeleted(),
-			'description' => $this->getDescription(),
-			'descriptionSafe' => $this->getDescriptionSafe(),
 			'expire' => $this->getExpire(),
 			'hideBookedUp' => $this->getHideBookedUp(),
 			'important' => $this->getImportant(),
 			'optionLimit' => $this->getOptionLimit(),
-			'owner' => $this->getUser(),
 			'proposalsExpire' => $this->getProposalsExpire(),
 			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
-			'title' => $this->getTitle(),
 			'type' => $this->getType(),
 			'useNo' => $this->getUseNo(),
 			'voteLimit' => $this->getVoteLimit(),

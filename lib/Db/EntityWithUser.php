@@ -40,36 +40,6 @@ abstract class EntityWithUser extends Entity {
 	protected ?string $emailAddress = '';
 	protected ?string $userType = '';
 
-	/**
-	 * Returns the displayName
-	 *
-	 * - first tries to get displayname from internal user
-	 * - then try to get it from joined share
-	 * - otherwise assume a deleted user
-	 **/
-	// public function getDisplayName(): ?string {
-	// 	if (!$this->getUserId()) {
-	// 		return null;
-	// 	}
-
-	// 	return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName()
-	// 		?? $this->displayName
-	// 		?? 'Deleted User';
-	// }
-
-	/**
-	 * Returns email address
-	 *
-	 * - first tries to get emeil address from internal user
-	 * - then get it from joined share
-	 **/
-	// public function getEmailAddress(): ?string {
-	// 	if (!$this->getUserId()) {
-	// 		return null;
-	// 	}
-	// 	return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getEmailAddress()
-	// 		?? $this->emailAddress;
-	// }
 
 	public function getUser(): array {
 		/** @var UserMapper */

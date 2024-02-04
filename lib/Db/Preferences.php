@@ -55,6 +55,7 @@ class Preferences extends Entity implements JsonSerializable {
 		'relevantOffset' => 30,
 	];
 
+	// schema columns
 	public $id = 0;
 	protected string $userId = '';
 	protected int $timestamp = 0;

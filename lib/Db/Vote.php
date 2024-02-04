@@ -56,14 +56,17 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	public const VOTE_NO = 'no';
 	public const VOTE_EVENTUALLY = 'maybe';
 
+	// schema columns
 	public $id = null;
 	protected int $pollId = 0;
-	protected int $voteOptionId = 0;
 	protected string $userId = '';
+	protected int $voteOptionId = 0;
 	protected string $voteOptionText = '';
 	protected string $voteOptionHash = '';
 	protected string $voteAnswer = '';
 	protected int $deleted = 0;
+
+	// joined columns
 	protected ?int $optionId = null;
 
 	public function __construct() {
@@ -85,8 +88,8 @@ class Vote extends EntityWithUser implements JsonSerializable {
 			'optionText' => $this->getVoteOptionText(),
 			'answer' => $this->getVoteAnswer(),
 			'deleted' => $this->getDeleted(),
-			'user' => $this->getUser(),
 			'optionId' => $this->getOptionId(),
+			'user' => $this->getUser(),
 		];
 	}
 }
