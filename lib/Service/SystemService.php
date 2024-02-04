@@ -204,36 +204,29 @@ class SystemService {
 		// get all groups, that include the requested username in their gid
 		// or displayname and check if any match completely
 		foreach (Group::search($userName) as $group) {
-			if ($userName === strtolower(trim($group->getId()))
-				|| $userName === strtolower(trim($group->getDisplayName()))) {
+			if ($group->hasName($userName)) {
 				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all users
 		foreach (User::search($userName) as $user) {
-			if ($userName === strtolower(trim($user->getId()))
-				|| $userName === strtolower(trim($user->getDisplayName()))) {
+			if ($user->hasName($userName)) {
 				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all participants
 		foreach ($this->voteMapper->findParticipantsByPoll($share->getPollId()) as $vote) {
-			if ($vote->getUserId()) {
-				if ($userName === strtolower(trim($vote->getUserId()))) {
-					throw new InvalidUsernameException;
-				}
+			if ($vote->getUser()->hasName($userName)) {
+				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all shares for this poll
 		foreach ($this->shareMapper->findByPoll($share->getPollId()) as $share) {
-			if ($share->getUserId() && $share->getType() !== Circle::TYPE) {
-				if ($userName === strtolower(trim($share->getUserId()))
-					|| $userName === strtolower(trim($share->getDisplayName()))) {
-					throw new InvalidUsernameException;
-				}
+			if ($share->getType() !== Circle::TYPE && $share->getUser()->hasName($userName)) {
+				throw new InvalidUsernameException;
 			}
 		}
 		// return true, if username is allowed

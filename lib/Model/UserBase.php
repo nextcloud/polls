@@ -196,6 +196,10 @@ class UserBase implements \JsonSerializable {
 		return $this->emailAddress;
 	}
 
+	public function getEmailAndDisplayName(): string {
+		return $this->getDisplayName() . ' <' . $this->getEmailAddress() . '>';
+	}
+
 	// Function for obfuscating mail adresses; Default return the email address
 	public function getEmailAddressMasked(): string {
 		return $this->emailAddress;
@@ -217,6 +221,14 @@ class UserBase implements \JsonSerializable {
 		return $this->groupManager->isInGroup($this->id, $groupName);
 	}
 
+	/**
+	 * return true, if the $checkname is equal to the userid or displayName (case insensitive)
+	 */
+	public function hasName(string $checkName) {
+		return in_array(strtolower($checkName), [
+			strtolower($this->getDisplayName()), strtolower($this->getId()),
+		]);
+	}
 	/**
 	 * @return string[]
 	 *
