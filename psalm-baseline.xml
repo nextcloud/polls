@@ -161,7 +161,6 @@
       <code>$expire</code>
       <code>$hasOrphanedVotes</code>
       <code>$hideBookedUp</code>
-      <code>$important</code>
       <code>$lastInteraction</code>
       <code>$miscSettings</code>
       <code>$optionLimit</code>
@@ -187,6 +186,7 @@
       <code>$locked</code>
       <code>$miscSettings</code>
       <code>$reminderSent</code>
+      <code>$userId</code>
       <code>$voted</code>
     </PossiblyUnusedProperty>
   </file>
