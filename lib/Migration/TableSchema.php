@@ -137,6 +137,7 @@ abstract class TableSchema {
 			'full_anonymous', // dropped in 3.0, orphaned
 			'options', // dropped in 3.0, orphaned
 			'settings', // dropped in 3.0, orphaned
+			'important', // dropped in 6.1, not used anymore
 		],
 		Comment::TABLE => [
 			'dt', // dropped in 3.0, orphaned
@@ -176,7 +177,6 @@ abstract class TableSchema {
 			'option_limit' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'show_results' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'always', 'length' => 64]],
 			'admin_access' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
-			'important' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
 			'allow_comment' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 1, 'length' => 20]],
 			'hide_booked_up' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 1, 'length' => 20]],
 			'use_no' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 1, 'length' => 20]],
