@@ -25,7 +25,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use JsonSerializable;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -35,15 +37,19 @@ use OCP\AppFramework\Db\Entity;
  * @method ?string getEmailAdress()
  */
 
-abstract class EntityWithUser extends Entity {
-	protected ?string $displayName = '';
-	protected ?string $emailAddress = '';
-	protected ?string $userType = '';
+abstract class EntityWithUser extends Entity implements JsonSerializable {
+	// protected ?string $displayName = '';
+	// protected ?string $emailAddress = '';
+	// protected ?string $userType = '';
 
 
-	public function getUser(): array {
+	public function getUser(): UserBase {
 		/** @var UserMapper */
 		$userMapper = (Container::queryClass(UserMapper::class));
-		return $userMapper->getParticipant($this->getUserId(), $this->getPollId())->jsonSerialize();
+		return $userMapper->getParticipant($this->getUserId(), $this->getPollId());
+	}
+
+	public function getUserJson(): array {
+		return $this->getUser()->jsonSerialize();
 	}
 }

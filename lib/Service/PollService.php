@@ -62,7 +62,6 @@ class PollService {
 		private Acl $acl,
 		private AppSettings $appSettings,
 		private IEventDispatcher $eventDispatcher,
-		private MailService $mailService,
 		private Poll $poll,
 		private PollMapper $pollMapper,
 		private Preferences $preferences,
@@ -406,10 +405,11 @@ class PollService {
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
 		$list = [];
 		foreach ($votes as $vote) {
+			$user = $vote->getUser();
 			$list[] = [
-				'displayName' => $vote->getDisplayName(),
-				'emailAddress' => $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()),
-				'combined' => $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>'
+				'displayName' => $user->getDisplayName(),
+				'emailAddress' => $user->getEmailAddress(),
+				'combined' => $user->getEmailAndDisplayName(),
 			];
 		}
 		return $list;

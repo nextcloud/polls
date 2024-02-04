@@ -164,7 +164,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'title' => $this->getTitle(),
 			'description' => $this->getDescription(),
 			'descriptionSafe' => $this->getDescriptionSafe(),
-			'owner' => $this->getUser(),
+			'owner' => $this->getUserJson(),
 			'access' => $this->getAccess(),
 			'allowComment' => $this->getAllowComment(),
 			'allowMaybe' => $this->getAllowMaybe(),

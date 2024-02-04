@@ -98,10 +98,6 @@ class MailService {
 		throw new InvalidEmailAddress;
 	}
 
-	public function resolveEmailAddress(int $pollId, string $userId): string {
-		return $this->userMapper->getParticipant($userId, $pollId)->getEmailAddress();
-	}
-
 	/**
 	 * Extracts the email address and name from an input string.
 	 *

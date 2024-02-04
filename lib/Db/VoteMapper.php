@@ -28,14 +28,15 @@ namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
+use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
 
 /**
- * @template-extends QBMapperWithUser<Vote>
+ * @template-extends QBMapper<Vote>
  */
-class VoteMapper extends QBMapperWithUser {
+class VoteMapper extends QBMapper {
 	public const TABLE = Vote::TABLE;
 
 	/**
@@ -122,7 +123,6 @@ class VoteMapper extends QBMapperWithUser {
 				$qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			);
 		$qb->addGroupBy(self::TABLE . '.user_id', self::TABLE . '.poll_id');
-		$this->joinDisplayNameFromShare($qb, self::TABLE);
 
 		return $this->findEntities($qb);
 	}
@@ -228,9 +228,7 @@ class VoteMapper extends QBMapperWithUser {
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE);
-			
-		$this->joinDisplayNameFromShare($qb, self::TABLE);
-			
+
 		$alias = $this->joinOption($qb, self::TABLE);
 		
 		$qb->groupby(self::TABLE . '.id', $alias . '.id');

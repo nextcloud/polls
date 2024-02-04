@@ -89,7 +89,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 			'answer' => $this->getVoteAnswer(),
 			'deleted' => $this->getDeleted(),
 			'optionId' => $this->getOptionId(),
-			'user' => $this->getUser(),
+			'user' => $this->getUserJson(),
 		];
 	}
 }

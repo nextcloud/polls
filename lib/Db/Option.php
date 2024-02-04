@@ -136,7 +136,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 				'count' => $this->getCountOptionVotes(),
 				'currentUser' => $this->getUserVoteAnswer(),
 			],
-			'owner' => $this->getUser(),
+			'owner' => $this->getUserJson(),
 		];
 	}
 

@@ -169,7 +169,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 			'publicPollEmail' => $this->getPublicPollEmail(),
 			'voted' => $this->getVoted(),
 			'deleted' => $this->getDeleted(),
-			'user' => $this->getUser(),
+			'user' => $this->getUserJson(),
 		];
 	}
 

@@ -26,14 +26,15 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\ISession;
 
 /**
- * @template-extends QBMapperWithUser<Option>
+ * @template-extends QBMapper<Option>
  */
-class OptionMapper extends QBMapperWithUser {
+class OptionMapper extends QBMapper {
 	public const TABLE = Option::TABLE;
 
 	/**
@@ -223,7 +224,6 @@ class OptionMapper extends QBMapperWithUser {
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
-		$this->joinDisplayNameFromShare($qb, self::TABLE);
 		return $qb;
 	}
 
