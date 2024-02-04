@@ -116,22 +116,26 @@ class Share extends EntityWithUser implements JsonSerializable {
 		self::TYPE_CONTACTGROUP
 	];
 
-	public $id = null;
 	protected IURLGenerator $urlGenerator;
 	protected AppSettings $appSettings;
+
+	// schema columns
+	public $id = null;
 	protected int $pollId = 0;
 	protected string $token = '';
 	protected string $type = '';
+	protected string $label = '';
 	protected string $userId = '';
+	protected ?string $displayName = null;
 	protected ?string $emailAddress = null;
 	protected int $invitationSent = 0;
 	protected int $reminderSent = 0;
 	protected int $locked = 0;
-	protected ?string $displayName = null;
 	protected ?string $miscSettings = '';
-	protected int $voted = 0;
 	protected int $deleted = 0;
-	protected string $label = '';
+
+	// joined columns
+	protected int $voted = 0;
 
 	public function __construct() {
 		$this->addType('pollId', 'int');
@@ -240,10 +244,6 @@ class Share extends EntityWithUser implements JsonSerializable {
 		} else {
 			return '';
 		}
-	}
-
-	public function getUserId(): string {
-		return $this->userId;
 	}
 
 	public function getRichObjectString(): array {

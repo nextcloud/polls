@@ -245,6 +245,7 @@ export default {
 <style lang="scss">
 .avatar-wrapper {
 	position: relative;
+	display: flex;
 	.type-icon {
 		position: absolute;
 		background-size: 16px;
@@ -257,6 +258,7 @@ export default {
 	position: relative;
 	display: flex;
 	align-items: center;
+	justify-content: space-around;
 	padding: 4px;
 	max-width: 100%;
 	&.disabled {
