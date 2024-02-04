@@ -239,7 +239,6 @@ class PollService {
 		$this->poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
-		$this->poll->setImportant(0);
 		$this->poll->setLastInteraction(time());
 		$this->poll = $this->pollMapper->insert($this->poll);
 
@@ -390,7 +389,6 @@ class PollService {
 		$this->poll->setVoteLimit($origin->getVoteLimit());
 		$this->poll->setShowResults($origin->getShowResults());
 		$this->poll->setAdminAccess($origin->getAdminAccess());
-		$this->poll->setImportant($origin->getImportant());
 
 		$this->poll = $this->pollMapper->insert($this->poll);
 		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));

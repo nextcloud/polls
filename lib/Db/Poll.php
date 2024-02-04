@@ -70,8 +70,6 @@ use OCP\IURLGenerator;
  * @method void setShowResults(string $value)
  * @method int getAdminAccess()
  * @method void setAdminAccess(integer $value)
- * @method int getImportant()
- * @method void setImportant(integer $value)
  * @method int getHideBookedUp()
  * @method void setHideBookedUp(integer $value)
  * @method int getUseNo()
@@ -126,7 +124,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $optionLimit = 0;
 	protected string $showResults = '';
 	protected int $adminAccess = 0;
-	protected int $important = 0;
 	protected int $allowComment = 0;
 	protected int $hideBookedUp = 0;
 	protected int $useNo = 0;
@@ -147,7 +144,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('voteLimit', 'int');
 		$this->addType('optionLimit', 'int');
 		$this->addType('adminAccess', 'int');
-		$this->addType('important', 'int');
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
 		$this->addType('lastInteraction', 'int');
@@ -178,7 +174,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'deleted' => $this->getDeleted(),
 			'expire' => $this->getExpire(),
 			'hideBookedUp' => $this->getHideBookedUp(),
-			'important' => $this->getImportant(),
 			'optionLimit' => $this->getOptionLimit(),
 			'proposalsExpire' => $this->getProposalsExpire(),
 			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
@@ -208,7 +203,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setDeleted($array['deleted'] ?? $this->getDeleted());
 		$this->setExpire($array['expire'] ?? $this->getExpire());
 		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
-		$this->setImportant($array['important'] ?? $this->getImportant());
 		$this->setOptionLimit($array['optionLimit'] ?? $this->getOptionLimit());
 		$this->setProposalsExpire($array['proposalsExpire'] ?? $this->getProposalsExpire());
 		$this->setShowResults($array['showResults'] ?? $this->getShowResults());

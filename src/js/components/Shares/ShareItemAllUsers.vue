@@ -66,7 +66,6 @@ export default {
 				return this.access === 'open'
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { important: +value })
 				this.$store.commit('poll/setProperty', { access: value ? 'open' : 'private' })
 				this.writePoll()
 			},

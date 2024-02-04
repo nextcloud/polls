@@ -187,7 +187,6 @@ export default {
 			poll: (state) => state.poll,
 			subscribed: (state) => state.subscription.subscribed,
 			showResults: (state) => state.poll.showResults,
-			important: (state) => state.poll.important,
 			access: (state) => state.poll.access,
 			yesByCurrentUser: (state) => state.poll.summary.yesByCurrentUser,
 			optionLimit: (state) => state.poll.optionLimit,
@@ -237,9 +236,6 @@ export default {
 		accessCaption() {
 			if (this.access === 'private') {
 				return t('polls', 'Private poll')
-			}
-			if (this.important) {
-				return t('polls', 'Openly accessible and relevant poll')
 			}
 			return t('polls', 'Openly accessible poll')
 		},
