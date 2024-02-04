@@ -169,14 +169,24 @@ class Share extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
+	/**
+	 * Setting, if email is optional, mandatory or hidden on public poll registration
+	 */
 	public function getPublicPollEmail(): string {
 		return $this->getMiscSettingsArray()['publicPollEmail'] ?? 'optional';
 	}
 
+	/**
+	 * Setting, if email is optional, mandatory or hidden on public poll registration
+	 */
 	public function setPublicPollEmail(string $value): void {
 		$this->setMiscSettingsByKey('publicPollEmail', $value);
 	}
 
+	/**
+	 * Share label for public shares, falls back to username until migrated
+	 * TODO: remove fallback after migration was introduced
+	 */
 	public function getLabel(): string {
 		if ($this->getType() === self::TYPE_PUBLIC && $this->label) {
 			return $this->label;
@@ -184,6 +194,10 @@ class Share extends EntityWithUser implements JsonSerializable {
 		return $this->displayName ?? '';
 	}
 
+	/**
+	 * Sharee's displayName. In case of public poll label is used instead
+	 * TODO: remove public poll chaeck after migration to label
+	 */
 	public function getDisplayName(): string {
 		if ($this->getType() === self::TYPE_PUBLIC) {
 			return '';
@@ -203,13 +217,13 @@ class Share extends EntityWithUser implements JsonSerializable {
 		return $this->getMiscSettingsArray()['language'] ?? '';
 	}
 
+	public function setLanguage(string $value): void {
+		$this->setMiscSettingsByKey('language', $value);
+	}
+	
 	// Fallback for now; use language as locale
 	public function getLocale(): string {
 		return $this->getLanguage();
-	}
-
-	public function setLanguage(string $value): void {
-		$this->setMiscSettingsByKey('language', $value);
 	}
 
 	public function getURL(): string {
@@ -229,13 +243,6 @@ class Share extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getUserId(): string {
-		if ($this->type === self::TYPE_CONTACTGROUP) {
-			// contactsgroup had the prefix contactgroup_ until version 1.5
-			// strip it out
-			$parts = explode("contactgroup_", $this->userId);
-			$userId = end($parts);
-			return $userId;
-		}
 		return $this->userId;
 	}
 
