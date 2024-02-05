@@ -183,6 +183,13 @@ class Share extends EntityWithUser implements JsonSerializable {
 	/**
 	 * Setting, if email is optional, mandatory or hidden on public poll registration
 	 */
+	public function getUserId(): string {
+		return $this->userId;
+	}
+
+	/**
+	 * Setting, if email is optional, mandatory or hidden on public poll registration
+	 */
 	public function setPublicPollEmail(string $value): void {
 		$this->setMiscSettingsByKey('publicPollEmail', $value);
 	}
