@@ -56,7 +56,6 @@ $fm->define('OCA\Polls\Db\Poll')->setDefinitions([
 	'optionLimit' => 0,
 	'showResults' => 'always',
 	'adminAccess' => 0,
-	'important' => 0,
 	'hideBookedUp' => 0,
 	'useNo' => 0,
 	'misc_settings' => '',
