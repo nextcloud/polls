@@ -180,7 +180,6 @@
       <code>$locked</code>
       <code>$miscSettings</code>
       <code>$reminderSent</code>
-      <code>$userId</code>
       <code>$voted</code>
     </PossiblyUnusedProperty>
   </file>
