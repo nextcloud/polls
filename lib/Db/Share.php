@@ -58,6 +58,8 @@ use OCP\IURLGenerator;
  * @method void setVoted(int $value)
  * @method int getDeleted()
  * @method void setDeleted(integer $value)
+ * @method string getLabel()
+ * @method void setLabel(string $value)
  */
 class Share extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_share';

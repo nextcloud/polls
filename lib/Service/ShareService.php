@@ -232,20 +232,24 @@ class ShareService {
 
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
 			$this->systemService->validatePublicUsername($displayName, $this->share);
+			$this->share->setDisplayName($displayName);
+			$dispatchEvent = new ShareChangedDisplayNameEvent($this->share);
+
 		} elseif ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$this->acl->setPollId($share->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+			$this->share->setLabel($displayName);
+
+			// overwrite any possible displayName
+			// TODO: Remove afte rmigratiuon to label
+			$this->share->setDisplayName('');
+
+			$dispatchEvent = new ShareChangedLabelEvent($this->share);
 		} else {
 			throw new InvalidShareTypeException('Displayname can only be changed in external or public shares.');
 		}
-
-		$this->share->setDisplayName($displayName);
+		
 		$this->share = $this->shareMapper->update($this->share);
-
-		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			$this->eventDispatcher->dispatchTyped(new ShareChangedLabelEvent($this->share));
-		} else {
-			$this->eventDispatcher->dispatchTyped(new ShareChangedDisplayNameEvent($this->share));
-		}
+		$this->eventDispatcher->dispatchTyped($dispatchEvent);
 
 		return $this->share;
 	}

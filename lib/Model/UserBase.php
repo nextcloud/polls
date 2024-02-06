@@ -224,7 +224,7 @@ class UserBase implements \JsonSerializable {
 	/**
 	 * return true, if the $checkname is equal to the userid or displayName (case insensitive)
 	 */
-	public function hasName(string $checkName) {
+	public function hasName(string $checkName): bool {
 		return in_array(strtolower($checkName), [
 			strtolower($this->getDisplayName()), strtolower($this->getId()),
 		]);
@@ -347,7 +347,12 @@ class UserBase implements \JsonSerializable {
 		return $this->getSimpleUserArray();
 	}
 
-	private function getRichUserArray() {
+	/**
+	 * @return (bool|string|string[])[]
+	 *
+	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, desc: string, subtitle: string, icon: string, categories: array<string>}
+	 */
+	private function getRichUserArray(): array {
 		return	[
 			'userId' => $this->getId(),
 			'displayName' => $this->getDisplayName(),
@@ -367,7 +372,12 @@ class UserBase implements \JsonSerializable {
 		];
 	}
 
-	private function getSimpleUserArray() {
+	/**
+	 * @return (bool|string)[]
+	 *
+	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
+	 */
+	private function getSimpleUserArray(): array {
 		return	[
 			'userId' => $this->getPublicId(),
 			'displayName' => $this->getDisplayName(),
