@@ -26,14 +26,13 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
- * @template-extends QBMapper<Comment>
+ * @template-extends QBMapperWithUser<Comment>
  */
-class CommentMapper extends QBMapper {
+class CommentMapper extends QBMapperWithUser {
 	public const TABLE = Comment::TABLE;
 
 	/**
@@ -113,6 +112,7 @@ class CommentMapper extends QBMapper {
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
 			->groupby(self::TABLE . '.id');
+		$this->joinAnon($qb, self::TABLE);
 
 		return $qb;
 	}

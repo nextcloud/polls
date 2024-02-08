@@ -80,7 +80,7 @@ class Comment extends EntityWithUser implements JsonSerializable {
 			'parent' => $this->getParent(),
 			'deleted' => $this->getDeleted(),
 			'subComments' => $this->getSubComments(),
-			'user' => $this->getUserJson(),
+			'user' => $this->getUser(),
 		];
 	}
 

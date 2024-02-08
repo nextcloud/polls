@@ -54,14 +54,14 @@ class SystemController extends BaseController {
 			$query)], Http::STATUS_OK);
 	}
 	/**
-	 * Get a combined list of NC groups
+	 * Get a combined list of all NC groups
 	 */
 	public function groupAll(): JSONResponse {
 		return new JSONResponse(['groups' => $this->systemService->getGroups()], Http::STATUS_OK);
 	}
 
 	/**
-	 * Get a combined list of NC groups
+	 * Get a combined list of NC groups matching $query
 	 */
 	public function groupSearch(string $query = ''): JSONResponse {
 		return new JSONResponse(['groups' => $this->systemService->getGroups(

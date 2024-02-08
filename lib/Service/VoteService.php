@@ -43,7 +43,6 @@ class VoteService {
 	 */
 	public function __construct(
 		private Acl $acl,
-		private AnonymizeService $anonymizer,
 		private IEventDispatcher $eventDispatcher,
 		private OptionMapper $optionMapper,
 		private Vote $vote,
@@ -71,11 +70,6 @@ class VoteService {
 			}
 
 			$votes = $this->voteMapper->findByPoll($this->acl->getpollId());
-
-			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
-				$this->anonymizer->set($this->acl->getpollId(), $this->userMapper->getCurrentUserCached()->getId());
-				$this->anonymizer->anonymize($votes);
-			}
 
 		} catch (DoesNotExistException $e) {
 			$votes = [];

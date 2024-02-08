@@ -37,7 +37,6 @@ class CommentService {
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function __construct(
-		private AnonymizeService $anonymizer,
 		private CommentMapper $commentMapper,
 		private Comment $comment,
 		private IEventDispatcher $eventDispatcher,
@@ -47,27 +46,10 @@ class CommentService {
 	/**
 	 * Get comments
 	 * Read all comments of a poll based on the poll id and return list as array
-	 *
 	 * @return Comment[]
-	 *
-	 */
-	private function listFlat(Acl $acl) : array {
-		$comments = $this->commentMapper->findByPoll($acl->getPollId());
-
-		if (!$acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW)) {
-			$this->anonymizer->set($acl->getPollId(), $acl->getUserId());
-			$this->anonymizer->anonymize($comments);
-		}
-
-		return $comments;
-	}
-
-	/**
-	 * Get comments
-	 * Read all comments of a poll based on the poll id and return list as array
 	 */
 	public function list(Acl $acl): array {
-		$comments = $this->listFlat($acl);
+		$comments = $this->commentMapper->findByPoll($acl->getPollId());
 		$timeTolerance = 5 * 60; // treat comments within 5 minutes as one comment
 		$tempId = null;
 		$tempUserId = null;

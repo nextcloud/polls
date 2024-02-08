@@ -81,10 +81,10 @@
       <code>deleteByPoll</code>
     </PossiblyUnusedMethod>
   </file>
-  <file src="lib/Db/IEntityWithUser.php">
-    <UnusedClass>
-      <code>IEntityWithUser</code>
-    </UnusedClass>
+  <file src="lib/Db/EntityWithUser.php">
+    <PossiblyUnusedProperty>
+      <code>$anonymous</code>
+    </PossiblyUnusedProperty>
   </file>
   <file src="lib/Db/IndexManager.php">
     <UnusedProperty>
@@ -148,7 +148,6 @@
       <code>$allowComment</code>
       <code>$allowMaybe</code>
       <code>$allowProposals</code>
-      <code>$anonymous</code>
       <code>$created</code>
       <code>$deleted</code>
       <code>$expire</code>

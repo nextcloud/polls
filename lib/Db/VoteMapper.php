@@ -28,15 +28,14 @@ namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use Psr\Log\LoggerInterface;
 
 /**
- * @template-extends QBMapper<Vote>
+ * @template-extends QBMapperWithUser<Vote>
  */
-class VoteMapper extends QBMapper {
+class VoteMapper extends QBMapperWithUser {
 	public const TABLE = Vote::TABLE;
 
 	/**
@@ -232,12 +231,13 @@ class VoteMapper extends QBMapper {
 		$alias = $this->joinOption($qb, self::TABLE);
 		
 		$qb->groupby(self::TABLE . '.id', $alias . '.id');
-
+		
 		if ($findOrphaned) {
 			$qb->where($qb->expr()->isNull($alias . '.id'));
 		} else {
 			$qb->where($qb->expr()->isNotNull($alias . '.id'));
 		}
+		$this->joinAnon($qb, self::TABLE);
 		return $qb;
 	}
 
@@ -263,5 +263,4 @@ class VoteMapper extends QBMapper {
 
 		return $joinAlias;
 	}
-
 }

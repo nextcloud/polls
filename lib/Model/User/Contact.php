@@ -58,7 +58,7 @@ class Contact extends UserBase {
 	 *
 	 * @return string
 	 */
-	public function getPublicId(): string {
+	public function getSafeId(): string {
 		return $this->displayName;
 	}
 
