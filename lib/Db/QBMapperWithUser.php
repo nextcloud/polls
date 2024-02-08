@@ -50,7 +50,7 @@ abstract class QBMapperWithUser extends QBMapper {
 	/**
 	 * Joins anonymous setting of poll
 	 */
-	protected function joinAnon(IQueryBuilder &$qb, string $fromAlias): void {
+	protected function joinAnon(IQueryBuilder &$qb, string $fromAlias): string {
 		$joinAlias = 'anon';
 
 		$qb->selectAlias($joinAlias . '.anonymous', 'anonymized')
