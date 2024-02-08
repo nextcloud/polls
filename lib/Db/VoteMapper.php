@@ -228,16 +228,18 @@ class VoteMapper extends QBMapperWithUser {
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE);
 
-		$alias = $this->joinOption($qb, self::TABLE);
+		$optionAlias = $this->joinOption($qb, self::TABLE);
 		
-		$qb->groupby(self::TABLE . '.id', $alias . '.id');
 		
 		if ($findOrphaned) {
-			$qb->where($qb->expr()->isNull($alias . '.id'));
+			$qb->where($qb->expr()->isNull($optionAlias . '.id'));
 		} else {
-			$qb->where($qb->expr()->isNotNull($alias . '.id'));
+			$qb->where($qb->expr()->isNotNull($optionAlias . '.id'));
 		}
-		$this->joinAnon($qb, self::TABLE);
+		$anonAlias = $this->joinAnon($qb, self::TABLE);
+
+		$qb->groupby(self::TABLE . '.id', $optionAlias . '.id', $anonAlias . '.anonymous');
+		
 		return $qb;
 	}
 

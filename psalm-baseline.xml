@@ -83,7 +83,9 @@
   </file>
   <file src="lib/Db/EntityWithUser.php">
     <PossiblyUnusedProperty>
-      <code>$anonymous</code>
+      <code>$pollExpire</code>
+      <code>$pollOwnerId</code>
+      <code>$pollShowResults</code>
     </PossiblyUnusedProperty>
   </file>
   <file src="lib/Db/IndexManager.php">
@@ -148,6 +150,7 @@
       <code>$allowComment</code>
       <code>$allowMaybe</code>
       <code>$allowProposals</code>
+      <code>$anonymous</code>
       <code>$created</code>
       <code>$deleted</code>
       <code>$expire</code>
@@ -302,6 +305,7 @@
   </file>
   <file src="lib/Model/UserBase.php">
     <PossiblyUnusedMethod>
+      <code>jsonSerialize</code>
       <code>setDescription</code>
       <code>setDisplayName</code>
       <code>setEmailAddress</code>

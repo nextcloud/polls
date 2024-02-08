@@ -113,7 +113,7 @@ class CommentMapper extends QBMapperWithUser {
 			->from($this->getTableName(), self::TABLE);
 		$alias = $this->joinAnon($qb, self::TABLE);
 
-		$qb->groupby(self::TABLE . '.id', $alias . 'anonymous');
+		$qb->groupby(self::TABLE . '.id', $alias . '.anonymous');
 
 		return $qb;
 	}

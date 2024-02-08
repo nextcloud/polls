@@ -86,7 +86,7 @@ class SystemService {
 				// catch silent
 			}
 			// search more matches in circles, users, groups and contacts
-			$list = array_merge($list, $this->search($query, true));
+			$list = array_merge($list, $this->search($query));
 		}
 
 		return $list;
@@ -95,7 +95,7 @@ class SystemService {
 	/**
 	 * get a list of user objects from the backend matching the query string
 	 */
-	public function search(string $query = '', bool $forcedSafeReturn = false): array {
+	public function search(string $query = ''): array {
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
