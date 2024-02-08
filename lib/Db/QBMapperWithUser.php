@@ -65,5 +65,6 @@ abstract class QBMapperWithUser extends QBMapper {
 			$joinAlias,
 			$qb->expr()->eq($joinAlias . '.id', $fromAlias . '.poll_id'),
 		);
+		return $joinAlias;
 	}
 }
