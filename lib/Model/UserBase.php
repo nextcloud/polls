@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Model;
 
 use DateTimeZone;
+use OCA\Polls\Db\EntityWithUser;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Circle;
@@ -62,6 +63,7 @@ class UserBase implements \JsonSerializable {
 
 	/** @var string[] */
 	protected array $categories = [];
+	protected string $anonymizeLevel = EntityWithUser::ANON_PRIVACY;
 	protected bool $isNoUser = true;
 	protected string $description = '';
 	protected string $richObjectType = 'user';
@@ -98,13 +100,23 @@ class UserBase implements \JsonSerializable {
 		return $this->getId();
 	}
 
-	public function getPublicId(): string {
+	public function setAnonymized(string $anonymizeLevel = EntityWithUser::ANON_PRIVACY): void {
+		$this->anonymizeLevel = $anonymizeLevel;
+	}
+
+	public function getSafeId(): string {
 		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
 			return $this->getId();
 		}
+
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return $this->getHashedUserId();
+		}
+
 		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
 			return $this->getId();
 		}
+
 		return $this->getHashedUserId();
 	}
 
@@ -112,7 +124,10 @@ class UserBase implements \JsonSerializable {
 		return null;
 	}
 
-	public function getHashedUserId(): string {
+	public function getHashedUserId(?string $name = null): string {
+		if ($name) {
+			return hash('md5', $name);
+		}
 		return hash('md5', $this->getId());
 	}
 
@@ -184,6 +199,13 @@ class UserBase implements \JsonSerializable {
 		return $this->displayName;
 	}
 
+	public function getsafeDisplayName(): string {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return 'Anon';
+		}
+		return $this->displayName;
+	}
+
 	public function getDescription(): string {
 		return $this->description;
 	}
@@ -205,6 +227,14 @@ class UserBase implements \JsonSerializable {
 		return $this->emailAddress;
 	}
 
+	// Function for obfuscating mail adresses; Default return the email address
+	public function getEmailAddressSafe(): string {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return '';
+		}
+
+		return $this->getEmailAddressMasked();
+	}
 	public function getOrganisation(): string {
 		return $this->organisation;
 	}
@@ -239,6 +269,9 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getIsNoUser(): bool {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL && $this->userMapper->getCurrentUser()->getId() !== $this->getId()) {
+			return true;
+		}
 		return $this->isNoUser;
 	}
 
@@ -350,9 +383,9 @@ class UserBase implements \JsonSerializable {
 	/**
 	 * @return (bool|string|string[])[]
 	 *
-	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, desc: string, subtitle: string, icon: string, categories: array<string>}
+	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, desc: string, subname: string, subtitle: string, icon: string, categories: array<string>}
 	 */
-	private function getRichUserArray(): array {
+	public function getRichUserArray(): array {
 		return	[
 			'userId' => $this->getId(),
 			'displayName' => $this->getDisplayName(),
@@ -366,6 +399,7 @@ class UserBase implements \JsonSerializable {
 			'localeCode' => $this->getLocaleCode(),
 			'timeZone' => $this->getTimeZoneName(),
 			'desc' => $this->getDescription(),
+			'subname' => $this->getDescription(),
 			'subtitle' => $this->getDescription(),
 			'icon' => $this->getIcon(),
 			'categories' => $this->getCategories(),
@@ -375,13 +409,14 @@ class UserBase implements \JsonSerializable {
 	/**
 	 * @return (bool|string)[]
 	 *
-	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
+	 * @psalm-return array{id: string, userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
 	 */
 	private function getSimpleUserArray(): array {
 		return	[
-			'userId' => $this->getPublicId(),
-			'displayName' => $this->getDisplayName(),
-			'emailAddress' => $this->getEmailAddressMasked(),
+			'id' => $this->getSafeId(),
+			'userId' => $this->getSafeId(),
+			'displayName' => $this->getSafeDisplayName(),
+			'emailAddress' => $this->getEmailAddressSafe(),
 			'isNoUser' => $this->getIsNoUser(),
 			'type' => $this->getType(),
 		];

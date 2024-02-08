@@ -26,15 +26,14 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\ISession;
 
 /**
- * @template-extends QBMapper<Option>
+ * @template-extends QBMapperWithUser<Option>
  */
-class OptionMapper extends QBMapper {
+class OptionMapper extends QBMapperWithUser {
 	public const TABLE = Option::TABLE;
 
 	/**
@@ -224,6 +223,7 @@ class OptionMapper extends QBMapper {
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
+		$this->joinAnon($qb, self::TABLE);
 		return $qb;
 	}
 
@@ -263,7 +263,7 @@ class OptionMapper extends QBMapper {
 	 * Joins poll to fetch option_limit and vote_limit
 	 */
 	protected function joinPollForLimits(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'polls';
+		$joinAlias = 'limits';
 
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->min($joinAlias . '.option_limit'), 'option_limit')

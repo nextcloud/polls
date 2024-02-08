@@ -57,7 +57,6 @@ class OptionService {
 	 */
 	public function __construct(
 		private Acl $acl,
-		private AnonymizeService $anonymizer,
 		private IEventDispatcher $eventDispatcher,
 		private LoggerInterface $logger,
 		private Option $option,
@@ -83,10 +82,6 @@ class OptionService {
 
 		try {
 			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId(), !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW));
-			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW) || !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
-				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
-				$this->anonymizer->anonymize($this->options);
-			}
 
 			if ($this->acl->getPoll()->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {
 				// hide booked up options except the user has edit permission

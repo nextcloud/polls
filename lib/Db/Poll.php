@@ -103,7 +103,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	private IURLGenerator $urlGenerator;
 	private OptionMapper $optionMapper;
-	private UserMapper $userMapper;
+	protected UserMapper $userMapper;
 	private VoteMapper $voteMapper;
 
 	// schema columns
@@ -164,7 +164,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'title' => $this->getTitle(),
 			'description' => $this->getDescription(),
 			'descriptionSafe' => $this->getDescriptionSafe(),
-			'owner' => $this->getUserJson(),
+			'owner' => $this->getUser(),
 			'access' => $this->getAccess(),
 			'allowComment' => $this->getAllowComment(),
 			'allowMaybe' => $this->getAllowMaybe(),
@@ -185,7 +185,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'summary' => [
 				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserCached()->getId())),
 				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserCached()->getId())),
-			]
+			],
 		];
 	}
 

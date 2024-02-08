@@ -86,7 +86,7 @@ class SystemService {
 				// catch silent
 			}
 			// search more matches in circles, users, groups and contacts
-			$list = array_merge($list, $this->search($query));
+			$list = array_merge($list, $this->search($query, true));
 		}
 
 		return $list;
@@ -95,7 +95,7 @@ class SystemService {
 	/**
 	 * get a list of user objects from the backend matching the query string
 	 */
-	public function search(string $query = ''): array {
+	public function search(string $query = '', bool $forcedSafeReturn = false): array {
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
@@ -110,12 +110,12 @@ class SystemService {
 		[$result, $more] = $this->userSearch->search($query, $types, false, 200, 0);
 
 		if ($more) {
-			$this->logger->info('Search reports more than 200 entries, only 200 will get returned.');
+			$this->logger->info('Only first 200 matches will be returned.');
 		}
 
 		foreach (($result['users'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
-				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith']);
+				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
 			} else {
 				$this->handleFailedSearchResult($query, $item);
 			}
@@ -123,7 +123,7 @@ class SystemService {
 
 		foreach (($result['exact']['users'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
-				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith']);
+				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
 			} else {
 				$this->handleFailedSearchResult($query, $item);
 			}
@@ -131,7 +131,7 @@ class SystemService {
 
 		foreach (($result['groups'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
-				$items[] = new Group($item['value']['shareWith']);
+				$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
 			} else {
 				$this->handleFailedSearchResult($query, $item);
 			}
@@ -139,24 +139,30 @@ class SystemService {
 
 		foreach (($result['exact']['groups'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
-				$items[] = new Group($item['value']['shareWith']);
+				$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
 			} else {
 				$this->handleFailedSearchResult($query, $item);
 			}
 		}
 
 		if (Contact::isEnabled()) {
-			$items = array_merge($items, Contact::search($query));
-			$items = array_merge($items, ContactGroup::search($query));
+			foreach (Contact::search($query) as $contact) {
+				$items[] = $contact->getRichUserArray();
+			}
+			foreach (ContactGroup::search($query) as $contact) {
+				$items[] = $contact->getRichUserArray();
+			}
+			// $items = array_merge($items, Contact::search($query));
+			// $items = array_merge($items, ContactGroup::search($query));
 		}
 
 		if (Circle::isEnabled()) {
 			foreach (($result['circles'] ?? []) as $item) {
-				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith']);
+				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
 			}
 
 			foreach (($result['exact']['circles'] ?? []) as $item) {
-				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith']);
+				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
 			}
 		}
 

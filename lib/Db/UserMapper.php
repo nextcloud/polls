@@ -183,6 +183,7 @@ class UserMapper extends QBMapper {
 		}
 		return $this->getUserFromShare($share);
 	}
+
 	/**
 	 * @throws InvalidShareTypeException
 	 */
