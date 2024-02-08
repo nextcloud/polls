@@ -1,3 +1,8 @@
+# This workflow is provided via the organization template repository
+#
+# https://github.com/nextcloud/.github
+# https://docs.github.com/en/actions/learn-github-actions/sharing-workflows-with-your-organization
+
 name: 'Ask for feedback on PRs'
 on:
   schedule:
@@ -25,5 +30,5 @@ jobs:
             Thank you for contributing to Nextcloud and we hope to hear from you soon!
           days-before-feedback: 14
           start-date: "2023-07-10"
-          exempt-authors: "${{ steps.scrape.outputs.users }},nextcloud-command,nextcloud-android-bot"
+          exempt-authors: "${{ steps.scrape.outputs.users }},nextcloud-command,nextcloud-android-bot,skjnldsv,datenangebot"
           exempt-bots: true
