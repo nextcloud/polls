@@ -388,7 +388,7 @@ OC.L10N.register(
     "Optional email address" : "Adresse e-mail (optionnel)",
     "Checking email address …" : "Vérification de l'adresse e-mail …",
     "valid email address." : "adresse e-mail valide",
-    "Invalid email address." : "Adresse e-mail invalide.",
+    "Invalid email address." : "Adresse électronique invalide.",
     "Access" : "Accès",
     "Owner" : "Propriétaire",
     "Created" : "Créé",
