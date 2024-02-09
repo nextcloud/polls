@@ -53,12 +53,11 @@ abstract class QBMapperWithUser extends QBMapper {
 	protected function joinAnon(IQueryBuilder &$qb, string $fromAlias): string {
 		$joinAlias = 'anon';
 
-		$qb->selectDistinct([
-			$qb->createFunction($joinAlias . '.anonymous AS anonymized'),
-			$qb->createFunction($joinAlias . '.owner AS poll_owner_id'),
-			$qb->createFunction($joinAlias . '.show_results AS poll_show_results'),
-			$qb->createFunction($joinAlias . '.expire AS poll_expire'),
-		]);
+		$qb->selectAlias($joinAlias . '.anonymous', 'anonymized')
+			->selectAlias($joinAlias . '.owner', 'poll_owner_id')
+			->selectAlias($joinAlias . '.show_results', 'poll_show_results')
+			->selectAlias($joinAlias . '.expire', 'poll_expire')
+		;
 
 		$qb->leftJoin(
 			$fromAlias,

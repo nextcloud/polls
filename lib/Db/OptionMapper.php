@@ -222,9 +222,15 @@ class OptionMapper extends QBMapperWithUser {
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
-		$alias = $this->joinAnon($qb, self::TABLE);
+		$anonAlias = $this->joinAnon($qb, self::TABLE);
 
-		$qb->groupby(self::TABLE . '.id', $alias . '.anonymous');
+		$qb->groupby(
+			self::TABLE . '.id',
+			$anonAlias . '.anonymous',
+			$anonAlias . '.owner',
+			$anonAlias . '.show_results',
+			$anonAlias . '.expire',
+		);
 
 		return $qb;
 	}

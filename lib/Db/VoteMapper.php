@@ -238,7 +238,14 @@ class VoteMapper extends QBMapperWithUser {
 		}
 		$anonAlias = $this->joinAnon($qb, self::TABLE);
 
-		$qb->groupby(self::TABLE . '.id', $optionAlias . '.id', $anonAlias . '.anonymous');
+		$qb->groupby(
+			self::TABLE . '.id', 
+			$optionAlias . '.id',
+			$anonAlias . '.anonymous',
+			$anonAlias . '.owner',
+			$anonAlias . '.show_results',
+			$anonAlias . '.expire',
+		);
 		
 		return $qb;
 	}
