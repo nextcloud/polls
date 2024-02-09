@@ -230,8 +230,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	public function setAutoReminder(bool $value): void {
-		$this->setMiscSettingsByKey('autoReminder', $value);
+	public function setAutoReminder(bool|int $value): void {
+		$this->setMiscSettingsByKey('autoReminder', (bool) $value);
 	}
 
 	public function getAutoReminder(): bool {

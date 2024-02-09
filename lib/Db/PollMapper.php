@@ -171,7 +171,7 @@ class PollMapper extends QBMapper {
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
-			->groupby(self::TABLE . '.id');
+			->groupBy(self::TABLE . '.id');
 
 		return $qb;
 	}
