@@ -136,6 +136,7 @@ return [
 
 		// REST-API calls
 		['name' => 'base_api#preflighted_cors', 'url' => '/api/v1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+		['name' => 'poll_api#test_autoreminder', 'url' => 'api/v1.0/test', 'verb' => 'GET'],
 		['name' => 'poll_api#list', 'url' => '/api/v1.0/polls', 'verb' => 'GET'],
 		['name' => 'poll_api#transfer_polls', 'url' => '/api/v1.0/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#transfer_poll', 'url' => '/api/v1.0/poll/{pollId}/transfer/{destinationUser}', 'verb' => 'PUT'],

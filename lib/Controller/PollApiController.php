@@ -28,12 +28,14 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -45,9 +47,22 @@ class PollApiController extends BaseApiController {
 		string $appName,
 		IRequest $request,
 		private Acl $acl,
-		private PollService $pollService
+		private PollService $pollService,
+		private MailService $mailService,
 	) {
 		parent::__construct($appName, $request);
+	}
+
+	/**
+	 * get complete poll via token
+	 */
+	#[PublicPage]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function testAutoreminder(): JSONResponse {
+		return $this->response(fn () => [
+			'poll' => $this->mailService->sendAutoReminder(),
+		], '');
 	}
 
 	/**

@@ -228,16 +228,19 @@ class MailService {
 		return $sentResult;
 	}
 
-	public function sendAutoReminder(): void {
+	public function sendAutoReminder(): array {
 		$polls = $this->pollMapper->findAutoReminderPolls();
-		
+		// $polls = $this->pollMapper->findForMe('dartcafe');
+		$messages = [];
 		foreach ($polls as $poll) {
 			try {
+				$messages[] = $poll->getPollId();
 				$this->processSharesForAutoReminder($poll);
 			} catch (NoDeadLineException $e) {
 				continue;
 			}
 		}
+		return $messages;
 	}
 
 	/**
@@ -264,7 +267,8 @@ class MailService {
 	}
 
 	private function processSharesForAutoReminder(Poll $poll): void {
-		$shares = $this->shareMapper->findByPollUnreminded($poll->getId());
+		// $shares = $this->shareMapper->findByPollUnreminded($poll->getId());
+		$shares = $this->shareMapper->findByPoll($poll->getId());
 		foreach ($shares as $share) {
 			if (in_array($share->getType(), [Share::TYPE_CIRCLE, Share::TYPE_CONTACTGROUP])) {
 				continue;
