@@ -55,33 +55,30 @@ abstract class EntityWithUser extends Entity {
 		$this->addType('anonymized', 'int');
 		$this->addType('poll_expire', 'int');
 	}
-
-	public function getToAnonymize(): string {
+	/**
+	 * Anonymized the user completely (ANON_FULL) or just strips out personal information
+	 */
+	public function getAnonymizeLevel(): string {
 		$currentUserId = Container::queryClass(UserMapper::class)->getCurrentUser()->getId();
-		// Don't censor for poll owner
-		if ($this->getPollOwnerId() === $currentUserId) {
+		// Don't censor for poll owner or it is the current user's entity
+		if ($this->getPollOwnerId() === $currentUserId || $this->getUserId() === $currentUserId) {
 			return self::ANON_NONE;
 		}
 
-		// Don't anonymize current user's entity
-		if ($this->getUserId() === $currentUserId) {
-			return self::ANON_NONE;
-		}
-
-		// Anonymize if votes are always hidden
-		if ($this->getPollShowResults() === Poll::SHOW_RESULTS_NEVER) {
-			return self::ANON_FULL;
-		}
-
-		// Anonymize if votes are hidden until poll is closed
-		if ($this->getPollShowResults() === Poll::SHOW_RESULTS_CLOSED && (!$this->getPollExpire() || $this->getPollExpire() > time())) {
-			return self::ANON_FULL;
-		}
-		
 		// Anonymize if poll's anonymize setting is true
 		if ((bool) $this->anonymized) {
 			return self::ANON_FULL;
 		}
+
+		// Anonymize if votes are hidden
+		if ($this->getPollShowResults() === Poll::SHOW_RESULTS_NEVER 
+			|| ($this->getPollShowResults() === Poll::SHOW_RESULTS_CLOSED && (
+				!$this->getPollExpire() || $this->getPollExpire() > time()
+				))
+		) {
+			return self::ANON_FULL;
+		}
+		
 		return self::ANON_PRIVACY;
 	}
 
@@ -89,7 +86,7 @@ abstract class EntityWithUser extends Entity {
 		/** @var UserMapper */
 		$userMapper = (Container::queryClass(UserMapper::class));
 		$user = $userMapper->getParticipant($this->getUserId(), $this->getPollId());
-		$user->setAnonymized($this->getToAnonymize());
+		$user->setAnonymizeLevel($this->getAnonymizeLevel());
 		return $user;
 	}
 }

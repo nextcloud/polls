@@ -32,6 +32,7 @@ use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\User\Admin;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
@@ -74,6 +75,7 @@ class UserBase implements \JsonSerializable {
 	protected IL10N $l10n;
 	protected IUserSession $userSession;
 	protected UserMapper $userMapper;
+	protected AppSettings $appSettings;
 
 	public function __construct(
 		protected string $id,
@@ -90,6 +92,7 @@ class UserBase implements \JsonSerializable {
 		$this->timeZone = Container::queryClass(IDateTimeZone::class);
 		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->userSession = Container::queryClass(IUserSession::class);
+		$this->appSettings = Container::queryClass(AppSettings::class);
 	}
 
 	public function getId(): string {
@@ -100,31 +103,45 @@ class UserBase implements \JsonSerializable {
 		return $this->getId();
 	}
 
-	public function setAnonymized(string $anonymizeLevel = EntityWithUser::ANON_PRIVACY): void {
+	public function setAnonymizeLevel(string $anonymizeLevel = EntityWithUser::ANON_PRIVACY): void {
 		$this->anonymizeLevel = $anonymizeLevel;
 	}
 
+	/**
+	 * returns the safe id to avoid leaking the userId
+	 */
 	public function getSafeId(): string {
+		// always return real userId for the current user
 		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
 			return $this->getId();
 		}
 
+		// return userId, if fully anonimized
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
 			return $this->getHashedUserId();
 		}
 
+		// internal users may see the real userId
 		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
 			return $this->getId();
 		}
 
+		// otherwise return the obfuscated userId
 		return $this->getHashedUserId();
 	}
 
+	/**
+	 * for later use
+	 */
 	public function getPrincipalUri(): ?string {
 		return null;
 	}
 
+	/**
+	 * hash the real userId to obfuscate the real userId
+	 */
 	public function getHashedUserId(?string $name = null): string {
+		// TODO: add a session salt
 		if ($name) {
 			return hash('md5', $name);
 		}
@@ -168,6 +185,9 @@ class UserBase implements \JsonSerializable {
 		return $this->type;
 	}
 
+	/**
+	 * used for telling internal from guest users
+	 */
 	public function getSimpleType(): string {
 		return in_array($this->type, [User::TYPE, Admin::TYPE]) ? 'user' : 'guest';
 	}
@@ -199,10 +219,14 @@ class UserBase implements \JsonSerializable {
 		return $this->displayName;
 	}
 
-	public function getsafeDisplayName(): string {
+	/**
+	 * anonymize the displayname in case of anonymous settings
+	 */
+	public function getSafeDisplayName(): string {
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
 			return 'Anon';
 		}
+
 		return $this->displayName;
 	}
 
@@ -210,6 +234,9 @@ class UserBase implements \JsonSerializable {
 		return $this->description;
 	}
 
+	/**
+	 * @deprecated Not used anymore?
+	 */
 	public function getIcon(): string {
 		return $this->icon;
 	}
@@ -223,17 +250,16 @@ class UserBase implements \JsonSerializable {
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
-	public function getEmailAddressMasked(): string {
-		return $this->emailAddress;
-	}
-
-	// Function for obfuscating mail adresses; Default return the email address
-	public function getEmailAddressSafe(): string {
+	public function getSafeEmailAddress(): string {
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
 			return '';
 		}
 
-		return $this->getEmailAddressMasked();
+		if ($this->appSettings->getAllowSeeMailAddresses()) {
+			return $this->getEmailAddress();
+		}
+
+		return '';
 	}
 	public function getOrganisation(): string {
 		return $this->organisation;
@@ -389,7 +415,7 @@ class UserBase implements \JsonSerializable {
 		return	[
 			'userId' => $this->getId(),
 			'displayName' => $this->getDisplayName(),
-			'emailAddress' => $this->getEmailAddressMasked(),
+			'emailAddress' => $this->getEmailAddress(),
 			'isNoUser' => $this->getIsNoUser(),
 			'type' => $this->getType(),
 			'id' => $this->getId(),
@@ -416,7 +442,7 @@ class UserBase implements \JsonSerializable {
 			'id' => $this->getSafeId(),
 			'userId' => $this->getSafeId(),
 			'displayName' => $this->getSafeDisplayName(),
-			'emailAddress' => $this->getEmailAddressSafe(),
+			'emailAddress' => $this->getSafeEmailAddress(),
 			'isNoUser' => $this->getIsNoUser(),
 			'type' => $this->getType(),
 		];
