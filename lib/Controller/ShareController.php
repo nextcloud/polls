@@ -60,14 +60,6 @@ class ShareController extends BaseController {
 	}
 
 	/**
-	 * Convert user to poll admin
-	 */
-	#[NoAdminRequired]
-	public function userToAdmin(string $token): JSONResponse {
-		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)]);
-	}
-
-	/**
 	 * Change the contraints for email addresses in public polls
 	 */
 	#[NoAdminRequired]
@@ -91,6 +83,14 @@ class ShareController extends BaseController {
 	#[NoAdminRequired]
 	public function adminToUser(string $token): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_USER)]);
+	}
+
+	/**
+	 * Convert user to poll admin
+	 */
+	#[NoAdminRequired]
+	public function userToAdmin(string $token): JSONResponse {
+		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)]);
 	}
 
 	/**
