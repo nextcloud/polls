@@ -28,11 +28,10 @@
 		<NcPopover :focus-trap="false">
 			<template #trigger>
 				<NcActions>
-					<NcActionButton>
+					<NcActionButton :name="t('polls', 'Autoreminder informations')">
 						<template #icon>
 							<InformationIcon />
 						</template>
-						{{ t('polls', 'Autoreminder informations') }}
 					</NcActionButton>
 				</NcActions>
 			</template>

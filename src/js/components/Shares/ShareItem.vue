@@ -45,41 +45,45 @@
 					</template>
 				</NcActionInput>
 
-				<NcActionButton v-if="activateResendInvitation" @click="sendInvitation()">
+				<NcActionButton v-if="activateResendInvitation"
+					:name="share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail')"
+					@click="sendInvitation()">
 					<template #icon>
 						<SendEmailIcon />
 					</template>
-					{{ share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail') }}
 				</NcActionButton>
 
 				<NcActionButton v-if="activateResolveGroup"
+					:name="t('polls', 'Resolve into individual invitations')"
 					@click="resolveGroup(share)">
 					<template #icon>
 						<ResolveGroupIcon />
 					</template>
-					{{ t('polls', 'Resolve into individual invitations') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="activateSwitchAdmin" @click="switchAdmin({ share: share })">
+				<NcActionButton v-if="activateSwitchAdmin"
+					:name="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
+					@click="switchAdmin({ share: share })">
 					<template #icon>
 						<GrantAdminIcon v-if="share.user.type === 'user'" />
 						<WithdrawAdminIcon v-else />
 					</template>
-					{{ share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="activateCopyLink" @click="copyLink()">
+				<NcActionButton v-if="activateCopyLink"
+					:name="t('polls', 'Copy link to clipboard')"
+					@click="copyLink()">
 					<template #icon>
 						<ClippyIcon />
 					</template>
-					{{ t('polls', 'Copy link to clipboard') }}
 				</NcActionButton>
 
-				<NcActionButton v-if="activateShowQr" @click="$emit('show-qr-code')">
+				<NcActionButton v-if="activateShowQr"
+					:name="t('polls', 'Show QR code')"
+					@click="$emit('show-qr-code')">
 					<template #icon>
 						<QrIcon />
 					</template>
-					{{ t('polls', 'Show QR code') }}
 				</NcActionButton>
 
 				<NcActionCaption v-if="isActivePublicShare" :name="t('polls', 'Options for the registration dialog')" />
@@ -107,20 +111,24 @@
 					@change="setPublicPollEmail({ share, value: 'disabled' })">
 					{{ t('polls', 'Do not ask for an email address') }}
 				</NcActionRadio>
-				<NcActionButton v-if="!share.deleted" @click="switchLocked(share)">
+				<NcActionButton v-if="!share.deleted"
+					:name="share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share')"
+					@click="switchLocked(share)">
 					<template #icon>
 						<UnlockIcon v-if="share.locked" />
 						<LockIcon v-else />
 					</template>
-					{{ share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share') }}
 				</NcActionButton>
-				<NcActionButton v-if="!share.deleted" @click="deleteShare({ share })">
+				<NcActionButton v-if="!share.deleted"
+					:name="t('polls', 'Delete share')"
+					@click="deleteShare({ share })">
 					<template #icon>
 						<DeleteIcon />
 					</template>
-					{{ t('polls', 'Delete share') }}
 				</NcActionButton>
-				<NcActionButton v-if="share.deleted" @click="restoreShare({ share })">
+				<NcActionButton v-if="share.deleted"
+					:name="t('polls', 'Restore share')"
+					@click="restoreShare({ share })">
 					<template #icon>
 						<RestoreIcon />
 					</template>

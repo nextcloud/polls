@@ -25,11 +25,12 @@
 		<template #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
-		<NcActionButton v-if="$route.name === 'publicVote'" @click="copyLink()">
+		<NcActionButton v-if="$route.name === 'publicVote'"
+			:name="t('polls', 'Copy your personal link to clipboard')"
+			@click="copyLink()">
 			<template #icon>
 				<ClippyIcon />
 			</template>
-			{{ t('polls', 'Copy your personal link to clipboard') }}
 		</NcActionButton>
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
 		<NcActionInput v-if="$route.name === 'publicVote'"
@@ -57,13 +58,13 @@
 			{{ t('polls', 'Change name') }}
 		</NcActionInput>
 		<NcActionButton v-if="$route.name === 'publicVote'"
+			:name="t('polls', 'Get your personal link per mail')"
 			:disabled="!emailAddress"
 			:value="emailAddress"
 			@click="resendInvitation()">
 			<template #icon>
 				<SendLinkPerEmailIcon />
 			</template>
-			{{ t('polls', 'Get your personal link per mail') }}
 		</NcActionButton>
 		<NcActionCheckbox :checked="subscribed"
 			:disabled="!permissions.subscribe"
@@ -72,30 +73,33 @@
 			{{ t('polls', 'Subscribe to notifications') }}
 		</NcActionCheckbox>
 		<NcActionButton v-if="$route.name === 'publicVote' && emailAddress"
+			:name="t('polls', 'Remove Email Address')"
 			:disabled="!emailAddress"
 			@click="deleteEmailAddress">
 			<template #icon>
 				<DeleteIcon />
 			</template>
-			{{ t('polls', 'Remove Email Address') }}
 		</NcActionButton>
-		<NcActionButton v-if="permissions.edit" @click="getAddresses()">
+		<NcActionButton v-if="permissions.edit"
+			:name="t('polls', 'Copy list of email addresses to clipboard')"
+			@click="getAddresses()">
 			<template #icon>
 				<ClippyIcon />
 			</template>
-			{{ t('polls', 'Copy list of email addresses to clipboard') }}
 		</NcActionButton>
-		<NcActionButton v-if="permissions.vote" @click="resetVotes()">
+		<NcActionButton v-if="permissions.vote"
+			:name="t('polls', 'Reset your votes')"
+			@click="resetVotes()">
 			<template #icon>
 				<ResetVotesIcon />
 			</template>
-			{{ t('polls', 'Reset your votes') }}
 		</NcActionButton>
-		<NcActionButton v-if="$route.name === 'publicVote' && hasCookie" @click="logout()">
+		<NcActionButton v-if="$route.name === 'publicVote' && hasCookie"
+			:name="t('polls', 'Logout as {name} (delete cookie)', { name: displayName })"
+			@click="logout()">
 			<template #icon>
 				<LogoutIcon />
 			</template>
-			{{ t('polls', 'Logout as {name} (delete cookie)', { name: displayName }) }}
 		</NcActionButton>
 	</NcActions>
 </template>

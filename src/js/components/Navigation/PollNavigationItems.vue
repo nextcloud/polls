@@ -30,36 +30,36 @@
 		</template>
 		<template #actions>
 			<NcActionButton v-if="isPollCreationAllowed"
+				:name="t('polls', 'Clone poll')"
 				@click="$emit('clone-poll')">
 				<template #icon>
 					<ClonePollIcon />
 				</template>
-				{{ t('polls', 'Clone poll') }}
 			</NcActionButton>
 
 			<NcActionButton v-if="poll.allowEdit && !poll.deleted"
+				:name="t('polls', 'Archive poll')"
 				@click="$emit('toggle-archive')">
 				<template #icon>
 					<ArchivePollIcon />
 				</template>
-				{{ t('polls', 'Archive poll') }}
 			</NcActionButton>
 
 			<NcActionButton v-if="poll.allowEdit && poll.deleted"
+				:name="t('polls', 'Restore poll')"
 				@click="$emit('toggle-archive')">
 				<template #icon>
 					<RestorePollIcon />
 				</template>
-				{{ t('polls', 'Restore poll') }}
 			</NcActionButton>
 
 			<NcActionButton v-if="poll.allowEdit && poll.deleted"
 				class="danger"
+				:name="t('polls', 'Delete poll')"
 				@click="$emit('delete-poll')">
 				<template #icon>
 					<DeletePollIcon />
 				</template>
-				{{ t('polls', 'Delete poll') }}
 			</NcActionButton>
 		</template>
 	</NcAppNavigationItem>
