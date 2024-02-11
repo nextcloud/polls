@@ -29,6 +29,9 @@ use OCA\Polls\Service\MailService;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 
+/**
+ * @psalm-api
+ */
 class AutoReminderCron extends TimedJob {
 	public function __construct(
 		protected ITimeFactory $time,

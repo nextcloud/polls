@@ -23,19 +23,11 @@
 <template>
 	<div :class="['user-item', typeComputed, { disabled, condensed: condensed }]">
 		<div class="avatar-wrapper">
-			<NcAvatar :disable-menu="disableMenu"
-				:disable-tooltip="disableTooltip"
-				class="user-item__avatar"
-				:is-guest="isGuestComputed"
-				:menu-position="menuPosition"
-				:size="iconSize"
-				:show-user-status="showUserStatus"
-				:user="avatarUserId"
-				:display-name="displayName"
-				:is-no-user="user.isNoUser"
-				@click="showMenu()">
+			<NcAvatar v-bind="avatarProps" class="user-item__avatar" @click="showMenu()">
 				<template v-if="useIconSlot" #icon>
 					<LinkIcon v-if="typeComputed === 'public'" :size="mdIconSize" />
+					<LinkIcon v-if="typeComputed === 'addPublicLink'" :size="mdIconSize" />
+					<AnoymousIcon v-if="typeComputed === 'anonymous'" :size="mdIconSize" />
 					<InternalLinkIcon v-if="typeComputed === 'internalAccess'" :size="mdIconSize" />
 					<ContactGroupIcon v-if="typeComputed === 'contactGroup'" :size="mdIconSize" />
 					<GroupIcon v-if="typeComputed === 'group'" :size="mdIconSize" />
@@ -44,20 +36,20 @@
 				</template>
 			</NcAvatar>
 
-			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="16" class="type-icon" />
-			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="16" class="type-icon" />
-			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="16" class="type-icon" />
-			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="16" class="type-icon" />
+			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="typeIconSize" class="type-icon" />
+			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="typeIconSize" class="type-icon" />
+			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="typeIconSize" class="type-icon" />
+			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="typeIconSize" class="type-icon" />
 		</div>
 
 		<slot name="status" />
 
 		<div v-if="!hideNames" class="user-item__name">
 			<div class="name">
-				{{ displayName }}
+				{{ labelComputed }}
 			</div>
 			<div class="description">
-				{{ description }}
+				{{ descriptionComputed }}
 			</div>
 		</div>
 
@@ -84,6 +76,7 @@ export default {
 		GroupIcon: () => import('vue-material-design-icons/AccountMultiple.vue'),
 		CircleIcon: () => import('vue-material-design-icons/GoogleCirclesExtended.vue'),
 		DeletedUserIcon: () => import('vue-material-design-icons/AccountOff.vue'),
+		AnoymousIcon: () => import('vue-material-design-icons/Incognito.vue'),
 	},
 
 	inheritAttrs: false,
@@ -117,13 +110,17 @@ export default {
 			type: String,
 			default: 'left',
 		},
-		forcedDescription: {
+		description: {
 			type: String,
-			default: null,
+			default: '',
+		},
+		label: {
+			type: String,
+			default: '',
 		},
 		type: {
 			type: String,
-			default: 'user',
+			default: '',
 			validator(value) {
 				return [
 					'public',
@@ -137,6 +134,8 @@ export default {
 					'external',
 					'email',
 					'deleted',
+					'addPublicLink',
+					'',
 				].includes(value)
 			},
 
@@ -148,7 +147,7 @@ export default {
 					userId: '',
 					displayName: '',
 					emailAddress: '',
-					isNoUser: false,
+					isNoUser: true,
 					type: null,
 				}
 			},
@@ -165,6 +164,14 @@ export default {
 			type: Number,
 			default: 20,
 		},
+		typeIconSize: {
+			type: Number,
+			default: 16,
+		},
+		hideUserStatus: {
+			type: Boolean,
+			default: false,
+		},
 		condensed: {
 			type: Boolean,
 			default: false,
@@ -176,27 +183,52 @@ export default {
 			return this.$route?.name === 'publicVote' || this.user.isNoUser
 		},
 
-		useIconSlot() {
-			return ['internalAccess', 'public', 'contactGroup', 'group', 'circle', 'deleted'].includes(this.typeComputed)
+		avatarProps() {
+			return {
+				disableMenu: this.disableMenu,
+				disableTooltip: this.disableTooltip,
+				isGuest: this.isGuestComputed,
+				menuPosition: this.menuPosition,
+				size: this.iconSize,
+				showUserStatus: this.showUserStatus,
+				user: this.avatarUserId,
+				displayName: this.displayName,
+				isNoUser: this.user.isNoUser,
+			}
 		},
+
+		useIconSlot() {
+			return [
+				'internalAccess',
+				'public',
+				'addPublicLink',
+				'contactGroup',
+				'group',
+				'circle',
+				'deleted',
+				'anonymous',
+			].includes(this.typeComputed)
+		},
+
 		typeComputed() {
 			return this.user.type ?? this.type
 		},
-		description() {
+
+		descriptionComputed() {
 			if (this.condensed) return ''
-			if (this.forcedDescription) return this.forcedDescription
+			if (this.description !== '') return this.description
+			if (this.typeComputed === 'public') return this.publicShareDescription
 			if (this.typeComputed === 'deleted') return t('polls', 'The participant got removed from this poll')
 			if (this.typeComputed === 'admin') return t('polls', 'Is granted admin rights for this poll')
-			if (this.displayEmailAddress) return this.displayEmailAddress
-			return ''
+			if (this.typeComputed === 'anonymous') return t('polls', 'Anonymized user')
+			return this.emailAddressComputed
 		},
 
-		displayName() {
+		labelComputed() {
+			if (this.label !== '') return this.label
+			if (this.typeComputed === 'public') return this.publicShareLabel
 			if (this.typeComputed === 'deleted') return t('polls', 'Deleted User')
-			if (this.typeComputed === 'internalAccess') return t('polls', 'Internal access')
-			if (this.user.displayName) return this.user.displayName
-			if (this.typeComputed === 'public' && this.user.userId !== 'addPublic') return t('polls', 'Public link')
-			return this.user.userId
+			return this.user.displayName ?? this.user.userId
 		},
 
 		avatarUserId() {
@@ -204,21 +236,21 @@ export default {
 			return this.user.userId
 		},
 
-		displayEmailAddress() {
-			if (this.typeComputed === 'public' && this.user.userId !== 'addPublic') {
-				if (!this.user.displayName) {
-					return t('polls', 'Token: {token}', { token: this.user.userId })
-				}
-				return t('polls', 'Public link: {token}', { token: this.user.userId })
+		publicShareDescription() {
+			if (this.label === '') {
+				return t('polls', 'Token: {token}', { token: this.user.userId })
 			}
+			return t('polls', 'Public link: {token}', { token: this.user.userId })
+		},
 
-			if (this.typeComputed === 'internalAccess') {
-				if (this.disabled) {
-					return t('polls', 'This poll is private')
-				}
-				return t('polls', 'This is an openly accessible poll')
+		publicShareLabel() {
+			if (this.label === '') {
+				return t('polls', 'Public link')
 			}
+			return this.label
+		},
 
+		emailAddressComputed() {
 			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.typeComputed)) {
 				return t('polls', 'Resolve this group first!')
 			}
@@ -231,7 +263,7 @@ export default {
 		},
 
 		showUserStatus() {
-			return Boolean(getCurrentUser())
+			return !this.hideUserStatus && Boolean(getCurrentUser())
 		},
 	},
 }
@@ -241,6 +273,7 @@ export default {
 <style lang="scss">
 .avatar-wrapper {
 	position: relative;
+	display: flex;
 	.type-icon {
 		position: absolute;
 		background-size: 16px;
@@ -253,6 +286,7 @@ export default {
 	position: relative;
 	display: flex;
 	align-items: center;
+	justify-content: space-around;
 	padding: 4px;
 	max-width: 100%;
 	&.disabled {

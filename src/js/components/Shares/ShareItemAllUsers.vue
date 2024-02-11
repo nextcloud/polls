@@ -21,10 +21,7 @@
   -->
 
 <template>
-	<UserItem :user="openPollUserItme"
-		type="internalAccess"
-		:disabled="access==='private'"
-		show-email>
+	<UserItem v-bind="userItemProps">
 		<template #status>
 			<div class="vote-status" />
 		</template>
@@ -46,27 +43,25 @@ export default {
 
 	mixins: [writePoll],
 
-	data() {
-		return {
-			openPollUserItme: {
-				userId: t('polls', 'Openly accessible poll'),
-				displayName: t('polls', 'Openly accessible poll'),
-				isNoUser: true,
-			},
-		}
-	},
-
 	computed: {
 		...mapState({
 			access: (state) => state.poll.access,
 		}),
+
+		userItemProps() {
+			return {
+				label: t('polls', 'Internal access'),
+				type: 'internalAccess',
+				disabled: this.access === 'private',
+				description: this.access === 'private' ? t('polls', 'This poll is private') : t('polls', 'This is an openly accessible poll'),
+			}
+		},
 
 		pollAccess: {
 			get() {
 				return this.access === 'open'
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { important: +value })
 				this.$store.commit('poll/setProperty', { access: value ? 'open' : 'private' })
 				this.writePoll()
 			},

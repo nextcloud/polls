@@ -35,6 +35,9 @@ class IndexManager {
 	
 	private string $dbPrefix;
 	
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private IConfig $config,
 		private IDBConnection $connection,
@@ -49,6 +52,8 @@ class IndexManager {
 
 	/**
 	 * Create all indices
+	 *
+	 * @return string[] logged messages
 	 */
 	public function createIndices(): array {
 		$messages = [];
@@ -62,6 +67,8 @@ class IndexManager {
 
 	/**
 	 * add on delete fk contraints to all tables referencing the main polls table
+	 *
+	 * @return string[] logged messages
 	 */
 	public function createForeignKeyConstraints(): array {
 		$messages = [];
@@ -75,6 +82,10 @@ class IndexManager {
 
 	/**
 	 * add an on delete fk contraint
+	 *
+	 * @param string $parentTableName name of reffered table
+	 * @param string $childTableName name of referring table
+	 * @return string log message
 	 */
 	public function createForeignKeyConstraint(string $parentTableName, string $childTableName): string {
 		$parentTableName = $this->dbPrefix . $parentTableName;
@@ -87,7 +98,13 @@ class IndexManager {
 	}
 
 	/**
-	 * Create index
+	 * Create named index for table
+	 *
+	 * @param string $tableName name of table to add the index to
+	 * @param string $indexName index name
+	 * @param string[] $columns columns to inclue to the index
+	 * @param bool $unique create a unique index
+	 * @return string log message
 	 */
 	public function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false): string {
 		$tableName = $this->dbPrefix . $tableName;
@@ -108,7 +125,9 @@ class IndexManager {
 	}
 
 	/**
-	 * 	remove all foreign keys from $tableName
+	 * remove all foreign keys
+	 *
+	 * @return string[] logged messages
 	 */
 	public function removeAllForeignKeyConstraints(): array {
 		$messages = [];
@@ -121,7 +140,9 @@ class IndexManager {
 	}
 
 	/**
-	 * 	remove all foreign keys from $tableName
+	 * remove all generic indices
+	 *
+	 * @return string[] logged messages
 	 */
 	public function removeAllGenericIndices(): array {
 		$messages = [];
@@ -134,12 +155,14 @@ class IndexManager {
 	}
 
 	/**
-	 * 	remove all foreign keys from $tableName
+	 * remove all unique indices
+	 *
+	 * @return string[] logged messages
 	 */
 	public function removeAllUniqueIndices(): array {
 		$messages = [];
 
-		foreach (TableSchema::UNIQUE_INDICES as $tableName => $value) {
+		foreach (array_keys(TableSchema::UNIQUE_INDICES) as $tableName) {
 			$messages = array_merge($messages, $this->removeUniqueIndicesFromTable($tableName));
 		}
 
@@ -147,7 +170,10 @@ class IndexManager {
 	}
 
 	/**
-	 * 	remove all foreign keys from $tableName
+	 * remove all foreign keys from $tableName
+	 *
+	 * @param string $tableName name of table to remove fk from
+	 * @return string[] logged messages
 	 */
 	public function removeForeignKeysFromTable(string $tableName): array {
 		$messages = [];
@@ -165,6 +191,9 @@ class IndexManager {
 
 	/**
 	 * remove all UNIQUE indices from $table
+	 *
+	 * @param string $tableName table name of table to remove unique incices from
+	 * @return string[] logged messages
 	 */
 	public function removeUniqueIndicesFromTable(string $tableName): array {
 		$messages = [];
@@ -182,7 +211,10 @@ class IndexManager {
 	}
 
 	/**
-	 * remove all UNIQUE indices from $table
+	 * remove all generic indices from $table
+	 *
+	 * @param string $tableName table name of table to remove incices from
+	 * @return string[] logged messages
 	 */
 	public function removeGenericIndicesFromTable(string $tableName): array {
 		$messages = [];

@@ -22,34 +22,33 @@
 
 <template>
 	<div class="option-item-owner">
-		<ActionDelete v-if="!permissions.edit && currentUser.userId === option.owner.userId"
+		<ActionDelete v-if="showDelete"
 			:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
 			:restore="!!option.deleted"
 			:timeout="0"
 			@restore="restoreOption(option)"
 			@delete="deleteOption(option)" />
 
-		<NcAvatar v-else-if="option.owner.userId && option.owner.userId !== pollOwner"
-			:user="option.owner.userId"
-			:display-name="option.owner.displayName"
-			:is-no-user="option.owner.isNoUser"
-			disable-menu
-			:size="avatarSize"
+		<UserItem v-else-if="showOwner"
+			:user="option.owner"
+			:icon-size="avatarSize"
+			hide-names
+			hide-user-status
 			:tooltip-message="t('polls', '{displayName}\'s proposal', { displayName: option.owner.displayName })" />
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
-import { NcAvatar } from '@nextcloud/vue'
 import { deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import { ActionDelete } from '../Actions/index.js'
+import UserItem from '../User/UserItem.vue'
 
 export default {
 	name: 'OptionItemOwner',
 
 	components: {
-		NcAvatar,
+		UserItem,
 		ActionDelete,
 	},
 
@@ -75,6 +74,14 @@ export default {
 			currentUser: (state) => state.poll.acl.currentUser,
 			permissions: (state) => state.poll.acl.permissions,
 		}),
+
+		showDelete() {
+			return !this.permissions.edit && this.currentUser.userId === this.option.owner.userId
+
+		},
+		showOwner() {
+			return this.option.owner.type !== 'empty' && this.option.owner.userId !== this.pollOwner
+		},
 	},
 }
 

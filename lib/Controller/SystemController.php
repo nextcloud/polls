@@ -30,16 +30,17 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
+/**
+ * @psalm-api
+ */
 class SystemController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		private SystemService $systemService
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -51,14 +52,14 @@ class SystemController extends BaseController {
 			$query)], Http::STATUS_OK);
 	}
 	/**
-	 * Get a combined list of NC groups
+	 * Get a combined list of all NC groups
 	 */
 	public function groupAll(): JSONResponse {
 		return new JSONResponse(['groups' => $this->systemService->getGroups()], Http::STATUS_OK);
 	}
 
 	/**
-	 * Get a combined list of NC groups
+	 * Get a combined list of NC groups matching $query
 	 */
 	public function groupSearch(string $query = ''): JSONResponse {
 		return new JSONResponse(['groups' => $this->systemService->getGroups(

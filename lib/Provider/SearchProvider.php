@@ -39,6 +39,9 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 
 class SearchProvider implements IProvider {
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private IL10N $l10n,
 		// private IURLGenerator $urlGenerator,
@@ -55,7 +58,6 @@ class SearchProvider implements IProvider {
 	}
 
 	public function search(IUser $user, ISearchQuery $query): SearchResult {
-		$cursor = $query->getCursor();
 		$polls = $this->pollService->search($query);
 
 		$results = array_map(function (Poll $poll) {

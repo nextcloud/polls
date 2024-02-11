@@ -50,7 +50,8 @@ class GenericUser extends UserBase {
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->icon = self::ICON_PUBLIC;
-			$this->description = $this->l10n->t('Public link');
+			// $this->description = $this->l10n->t('Public link');
+			$this->description = '';
 		}
 	}
 }

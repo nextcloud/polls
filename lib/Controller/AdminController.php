@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -33,20 +34,22 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
-use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\Util;
 
+/**
+ * @psalm-api
+ */
 class AdminController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		private IURLGenerator $urlGenerator,
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
+		private UserMapper $userMapper,
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	#[NoCSRFRequired]
@@ -67,7 +70,7 @@ class AdminController extends BaseController {
 	 * Get list of polls for administrative purposes
 	 */
 	public function takeover(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->pollService->takeover($pollId));
+		return $this->response(fn () => $this->pollService->takeover($pollId, $this->userMapper->getCurrentUser()));
 	}
 
 	/**

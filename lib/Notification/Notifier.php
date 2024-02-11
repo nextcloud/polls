@@ -28,11 +28,10 @@ namespace OCA\Polls\Notification;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\PollMapper;
-
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\NotificationService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\IURLGenerator;
-use OCP\IUserManager;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
@@ -45,11 +44,14 @@ class Notifier implements INotifier {
 	private const SUBJECT_PARSED = 'parsedSubject';
 	private const SUBJECT_RICH = 'richSubject';
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		protected IFactory $l10nFactory,
 		protected IURLGenerator $urlGenerator,
-		protected IUserManager $userManager,
 		protected PollMapper $pollMapper,
+		private UserMapper $userMapper,
 		private NotificationService $notificationService
 	) {
 	}
@@ -74,12 +76,12 @@ class Notifier implements INotifier {
 	 * @psalm-return array{actor: array{type: 'user', id: string, name: string}}
 	 */
 	private function getActor(string $actorId): array {
-		$actor = $this->userManager->get($actorId);
+		$actor = $this->userMapper->getUserFromUserBase($actorId);
 		return [
 			'actor' => [
 				'type' => 'user',
-				'id' => $actor?->getUID() ?? '',
-				'name' => $actor?->getDisplayName() ?? '',
+				'id' => $actor->getId(),
+				'name' => $actor->getDisplayName(),
 			]
 		];
 	}

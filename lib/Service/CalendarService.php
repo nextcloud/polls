@@ -35,7 +35,6 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Model\CalendarEvent;
-use OCA\Polls\Model\UserBase;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
 use OCP\ISession;
@@ -44,8 +43,10 @@ use Psr\Log\LoggerInterface;
 class CalendarService {
 	/** @var ICalendar[] */
 	private array $calendars;
-	private UserBase $currentUser;
-	
+
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private CalendarManager $calendarManager,
 		private ISession $session,
@@ -56,7 +57,6 @@ class CalendarService {
 		private LoggerInterface $logger,
 	) {
 		$this->preferences = $this->preferencesService->get();
-		$this->currentUser = $this->userMapper->getCurrentUser();
 		$this->getCalendarsForPrincipal();
 	}
 
@@ -64,7 +64,7 @@ class CalendarService {
 	 * getCalendars -
 	 */
 	private function getCalendarsForPrincipal(): void {
-		$principalUri = $this->currentUser->getPrincipalUri();
+		$principalUri = $this->userMapper->getCurrentUser()->getPrincipalUri();
 
 		if ($principalUri) {
 			$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
@@ -102,11 +102,11 @@ class CalendarService {
 	}
 
 	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): array {
-		if (!$this->currentUser->getPrincipalUri()) {
+		if (!$this->userMapper->getCurrentUser()->getPrincipalUri()) {
 			return [];
 		}
 
-		$query = $this->calendarManager->newQuery($this->currentUser->getPrincipalUri());
+		$query = $this->calendarManager->newQuery($this->userMapper->getCurrentUser()->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
 

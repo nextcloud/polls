@@ -57,6 +57,9 @@ class MailService {
 	// Regex for extracting only email address
 	//  private const REGEX_PARSE_MAIL = '/^([^<>@\s]+@[^\s<>]+\.[a-zA-Z]{2,})$/';
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private LoggerInterface $logger,
 		private LogMapper $logMapper,
@@ -95,10 +98,6 @@ class MailService {
 		throw new InvalidEmailAddress;
 	}
 
-	public function resolveEmailAddress(int $pollId, string $userId): string {
-		return $this->userMapper->getParticipant($userId, $pollId)->getEmailAddress();
-	}
-
 	/**
 	 * Extracts the email address and name from an input string.
 	 *
@@ -124,9 +123,9 @@ class MailService {
 
 		if ($emailAddress !== null && filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
 			// Extract the name based on the input string
-			$displayName = trim(str_replace(array('<', '>'), '', str_replace($emailAddress, '', $eMailString)));
+			$displayName = trim(str_replace(['<', '>'], '', str_replace($emailAddress, '', $eMailString)));
 
-			return array('input' => $eMailString, 'emailAddress' => $emailAddress, 'displayName' => $displayName);
+			return ['input' => $eMailString, 'emailAddress' => $emailAddress, 'displayName' => $displayName];
 		}
 
 		if (preg_match(self::REGEX_CONTAINS_EMAIL_ADDRESS, $eMailString)) {
@@ -138,9 +137,9 @@ class MailService {
 	}
 
 	public static function parseEmailStrings(array $emailArray): array {
-		$validEmails = array();
-		$invalidEmails = array();
-		$noEmails = array();
+		$validEmails = [];
+		$invalidEmails = [];
+		$noEmails = [];
 
 		foreach ($emailArray as $emailString) {
 			try {
@@ -153,11 +152,11 @@ class MailService {
 			}
 		}
 
-		return array(
+		return [
 			'validEmails' => $validEmails,
 			'invalidEmails' => $invalidEmails,
 			'noEmails' => $noEmails,
-		);
+		];
 	}
 
 	public function sendNotifications(): void {
@@ -195,8 +194,8 @@ class MailService {
 
 	public function sendInvitation(
 		Share $share,
-		SentResult &$sentResult = null,
-		string $token = null,
+		?SentResult &$sentResult = null,
+		?string $token = null,
 	): SentResult|null {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token);
@@ -246,7 +245,6 @@ class MailService {
 	 */
 	public function sendConfirmations(int $pollId): SentResult {
 		$sentResult = new SentResult();
-		/** @var UserBase[] */
 		$participants = $this->userMapper->getParticipants($pollId);
 
 		foreach ($participants as $participant) {

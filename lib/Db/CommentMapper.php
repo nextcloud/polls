@@ -35,6 +35,9 @@ use OCP\IDBConnection;
 class CommentMapper extends QBMapperWithUser {
 	public const TABLE = Comment::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, self::TABLE, Comment::class);
 	}
@@ -107,10 +110,17 @@ class CommentMapper extends QBMapperWithUser {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE)
-			->groupby(self::TABLE . '.id');
+			->from($this->getTableName(), self::TABLE);
+		$anonAlias = $this->joinAnon($qb, self::TABLE);
 
-		$this->joinDisplayNameFromShare($qb, self::TABLE);
+		$qb->groupBy(
+			self::TABLE . '.id',
+			$anonAlias . '.anonymous',
+			$anonAlias . '.owner',
+			$anonAlias . '.show_results',
+			$anonAlias . '.expire',
+		);
+
 		return $qb;
 	}
 }

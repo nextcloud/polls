@@ -34,19 +34,20 @@ use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
+/**
+ * @psalm-api
+ */
 class PollController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		private Acl $acl,
 		private MailService $mailService,
 		private OptionService $optionService,
 		private PollService $pollService,
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -70,7 +71,7 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
 		$poll = $this->pollService->get($pollId);
-		$this->acl->setPoll($poll);
+		$this->acl->setPollId($pollId);
 		return $this->response(fn () => [
 			'acl' => $this->acl,
 			'poll' => $poll,

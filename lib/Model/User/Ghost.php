@@ -36,12 +36,7 @@ class Ghost extends UserBase {
 	}
 
 	public function getDisplayName(): string {
-		// TODO: Just a quick fix, differentiate anoymous and deleted users on userGroup base
-		if (substr($this->getId(), 0, 9) === 'Anonymous') {
-			return $this->getId();
-		} else {
-			return 'Deleted User';
-		}
+		return 'Deleted User';
 	}
 
 }

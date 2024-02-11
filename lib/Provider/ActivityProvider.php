@@ -28,8 +28,8 @@ namespace OCA\Polls\Provider;
 use InvalidArgumentException;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\ActivityService;
-use OCA\Polls\Service\UserService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IEventMerger;
 use OCP\Activity\IManager as ActivityManager;
@@ -38,6 +38,9 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ActivityProvider implements IProvider {
 	public function __construct(
 		protected ActivityManager $activityManager,
@@ -47,7 +50,7 @@ class ActivityProvider implements IProvider {
 		protected IURLGenerator $urlGenerator,
 		protected ShareMapper $shareMapper,
 		protected IL10N $l10n,
-		protected UserService $userService,
+		protected UserMapper $userMapper,
 	) {
 	}
 
@@ -70,7 +73,7 @@ class ActivityProvider implements IProvider {
 		$parameters = $event->getSubjectParameters();
 		
 		try {
-			$actor = $this->userService->getParticipant($event->getAuthor(), $event->getObjectId());
+			$actor = $this->userMapper->getParticipant($event->getAuthor(), $event->getObjectId());
 			$parameters['actor'] = [
 				'type' => $actor->getSimpleType(),
 				'id' => $actor->getId(),

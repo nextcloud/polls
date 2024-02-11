@@ -48,13 +48,16 @@ use JsonSerializable;
 class Comment extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_comments';
 
+	// schema columns
 	public $id = null;
-	protected array $subComments = [];
 	protected int $pollId = 0;
 	protected string $userId = '';
+	protected ?string $comment = null;
 	protected int $timestamp = 0;
 	protected int $deleted = 0;
-	protected ?string $comment = null;
+
+	// computed attributes
+	protected array $subComments = [];
 	protected int $parent = 0;
 
 	public function __construct() {
@@ -65,6 +68,8 @@ class Comment extends EntityWithUser implements JsonSerializable {
 
 	/**
 	 * @return array
+	 *
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function jsonSerialize(): array {
 		return [
@@ -72,10 +77,10 @@ class Comment extends EntityWithUser implements JsonSerializable {
 			'pollId' => $this->getPollId(),
 			'timestamp' => $this->getTimestamp(),
 			'comment' => $this->getComment(),
-			'user' => $this->getUser(),
 			'parent' => $this->getParent(),
 			'deleted' => $this->getDeleted(),
 			'subComments' => $this->getSubComments(),
+			'user' => $this->getUser(),
 		];
 	}
 

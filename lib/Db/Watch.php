@@ -49,6 +49,7 @@ class Watch extends Entity implements JsonSerializable {
 	public const OBJECT_COMMENTS = "comments";
 	public const OBJECT_SHARES = "shares";
 
+	// schema columns
 	public $id = null;
 	protected int $pollId = 0;
 	protected string $table = '';
@@ -62,6 +63,8 @@ class Watch extends Entity implements JsonSerializable {
 
 	/**
 	 * @return array
+	 *
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function jsonSerialize(): array {
 		return [

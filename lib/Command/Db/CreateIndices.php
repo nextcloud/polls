@@ -30,6 +30,9 @@ use OCA\Polls\Command\Command;
 use OCA\Polls\Db\IndexManager;
 use OCP\IDBConnection;
 
+/**
+ * @psalm-api
+ */
 class CreateIndices extends Command {
 	protected string $name = parent::NAME_PREFIX . 'index:create';
 	protected string $description = 'Add all indices and foreign key constraints';

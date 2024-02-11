@@ -36,6 +36,9 @@ use OCP\ISession;
 class OptionMapper extends QBMapperWithUser {
 	public const TABLE = Option::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		IDBConnection $db,
 		private ISession $session,
@@ -205,22 +208,30 @@ class OptionMapper extends QBMapperWithUser {
 
 	/**
 	 * Build the enhanced query with joined tables
-	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
+	 * @param bool $hideVotes Whether the votes should be hidden, skips vote counting
 	 */
 	protected function buildQuery(bool $hideVotes = false): IQueryBuilder {
-		$currentUserId = $this->userMapper->getCurrentUserId();
+		$currentUserId = $this->userMapper->getCurrentUser()->getId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
-			->groupBy(self::TABLE . '.id')
 			->orderBy('order', 'ASC');
 
 		$this->joinVotesCount($qb, self::TABLE, $hideVotes);
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
-		$this->joinDisplayNameFromShare($qb, self::TABLE);
+		$anonAlias = $this->joinAnon($qb, self::TABLE);
+
+		$qb->groupBy(
+			self::TABLE . '.id',
+			$anonAlias . '.anonymous',
+			$anonAlias . '.owner',
+			$anonAlias . '.show_results',
+			$anonAlias . '.expire',
+		);
+
 		return $qb;
 	}
 
@@ -260,7 +271,7 @@ class OptionMapper extends QBMapperWithUser {
 	 * Joins poll to fetch option_limit and vote_limit
 	 */
 	protected function joinPollForLimits(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'polls';
+		$joinAlias = 'limits';
 
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->min($joinAlias . '.option_limit'), 'option_limit')

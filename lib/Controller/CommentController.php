@@ -25,22 +25,21 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
+/**
+ * @psalm-api
+ */
 class CommentController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
-		private Acl $acl,
 		private CommentService $commentService
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -49,7 +48,7 @@ class CommentController extends BaseController {
 	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => [
-			'comments' => $this->commentService->list($this->acl->setPollId($pollId))
+			'comments' => $this->commentService->list($pollId)
 		]);
 	}
 
@@ -59,7 +58,7 @@ class CommentController extends BaseController {
 	#[NoAdminRequired]
 	public function add(int $pollId, string $message): JSONResponse {
 		return $this->response(fn () => [
-			'comment' => $this->commentService->add($message, $this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD))
+			'comment' => $this->commentService->add($message, $pollId)
 		]);
 	}
 
@@ -71,7 +70,7 @@ class CommentController extends BaseController {
 		$comment = $this->commentService->get($commentId);
 
 		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()))
+			'comment' => $this->commentService->delete($comment)
 		]);
 	}
 
@@ -83,7 +82,7 @@ class CommentController extends BaseController {
 		$comment = $this->commentService->get($commentId);
 
 		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($comment, $this->acl->setPollId($comment->getPollId()), true)
+			'comment' => $this->commentService->delete($comment, true)
 		]);
 	}
 }

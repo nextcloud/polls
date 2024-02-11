@@ -58,7 +58,7 @@ class Contact extends UserBase {
 	 *
 	 * @return string
 	 */
-	public function getPublicId(): string {
+	public function getSafeId(): string {
 		return $this->displayName;
 	}
 
@@ -79,16 +79,10 @@ class Contact extends UserBase {
 	 * @return string
 	 **/
 	public function getShareUserId(): string {
-		return $this->emailAddress ?? $this->id;
-	}
-
-	/**
-	 * We just need the contact's UID, so make sure, the any prefix is removed
-	 */
-	private function resolveContactId(): void {
-		return;
-		$parts = explode(":", $this->id);
-		$this->id = end($parts);
+		if ($this->emailAddress !== '') {
+			return $this->emailAddress;
+		}
+		return $this->id;
 	}
 
 	/**
@@ -114,7 +108,6 @@ class Contact extends UserBase {
 	}
 
 	private function getContact(): void {
-		$this->resolveContactId();
 		$this->loadContact();
 
 		$this->id = $this->contact['UID'];

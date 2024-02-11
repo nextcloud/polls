@@ -70,8 +70,6 @@ use OCP\IURLGenerator;
  * @method void setShowResults(string $value)
  * @method int getAdminAccess()
  * @method void setAdminAccess(integer $value)
- * @method int getImportant()
- * @method void setImportant(integer $value)
  * @method int getHideBookedUp()
  * @method void setHideBookedUp(integer $value)
  * @method int getUseNo()
@@ -105,9 +103,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	private IURLGenerator $urlGenerator;
 	private OptionMapper $optionMapper;
-	private UserMapper $userMapper;
+	protected UserMapper $userMapper;
 	private VoteMapper $voteMapper;
 
+	// schema columns
 	public $id = null;
 	protected string $type = '';
 	protected string $title = '';
@@ -125,12 +124,13 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $optionLimit = 0;
 	protected string $showResults = '';
 	protected int $adminAccess = 0;
-	protected int $important = 0;
 	protected int $allowComment = 0;
 	protected int $hideBookedUp = 0;
 	protected int $useNo = 0;
 	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
+
+	// joined columns
 	protected bool $hasOrphanedVotes = false;
 
 	public function __construct() {
@@ -144,7 +144,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('voteLimit', 'int');
 		$this->addType('optionLimit', 'int');
 		$this->addType('adminAccess', 'int');
-		$this->addType('important', 'int');
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
 		$this->addType('lastInteraction', 'int');
@@ -156,10 +155,16 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	/**
 	 * @return array
+	 *
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
+			'title' => $this->getTitle(),
+			'description' => $this->getDescription(),
+			'descriptionSafe' => $this->getDescriptionSafe(),
+			'owner' => $this->getUser(),
 			'access' => $this->getAccess(),
 			'allowComment' => $this->getAllowComment(),
 			'allowMaybe' => $this->getAllowMaybe(),
@@ -168,24 +173,19 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'autoReminder' => $this->getAutoReminder(),
 			'created' => $this->getCreated(),
 			'deleted' => $this->getDeleted(),
-			'description' => $this->getDescription(),
-			'descriptionSafe' => $this->getDescriptionSafe(),
 			'expire' => $this->getExpire(),
 			'hideBookedUp' => $this->getHideBookedUp(),
-			'important' => $this->getImportant(),
 			'optionLimit' => $this->getOptionLimit(),
-			'owner' => $this->getUser(),
 			'proposalsExpire' => $this->getProposalsExpire(),
 			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
-			'title' => $this->getTitle(),
 			'type' => $this->getType(),
 			'useNo' => $this->getUseNo(),
 			'voteLimit' => $this->getVoteLimit(),
 			'lastInteraction' => $this->getLastInteraction(),
 			'summary' => [
-				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserId())),
-				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserId())),
-			]
+				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserCached()->getId())),
+				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserCached()->getId())),
+			],
 		];
 	}
 
@@ -204,7 +204,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setDeleted($array['deleted'] ?? $this->getDeleted());
 		$this->setExpire($array['expire'] ?? $this->getExpire());
 		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
-		$this->setImportant($array['important'] ?? $this->getImportant());
 		$this->setOptionLimit($array['optionLimit'] ?? $this->getOptionLimit());
 		$this->setProposalsExpire($array['proposalsExpire'] ?? $this->getProposalsExpire());
 		$this->setShowResults($array['showResults'] ?? $this->getShowResults());
@@ -231,8 +230,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	public function setAutoReminder(bool $value): void {
-		$this->setMiscSettingsByKey('autoReminder', $value);
+	public function setAutoReminder(bool|int $value): void {
+		$this->setMiscSettingsByKey('autoReminder', (bool) $value);
 	}
 
 	public function getAutoReminder(): bool {
@@ -326,8 +325,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	public function getOrphanedVotes() {
-		return count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserId()));
+	/**
+	 * @psalm-return int<0, max>
+	 */
+	public function getOrphanedVotes(): int {
+		return count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserCached()->getId()));
 	}
 
 	public function getDeadline(): int {

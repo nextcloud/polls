@@ -26,16 +26,20 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Search\ISearchQuery;
 
 /**
- * @template-extends QBMapperWithUser<Poll>
+ * @template-extends QBMapper<Poll>
  */
-class PollMapper extends QBMapperWithUser {
+class PollMapper extends QBMapper {
 	public const TABLE = Poll::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, Poll::TABLE, Poll::class);
 	}
@@ -161,16 +165,13 @@ class PollMapper extends QBMapperWithUser {
 
 	/**
 	 * Build the enhanced query with joined tables
-	 * @param bool $hideResults Whether the results should be hidden, skips vote counting
 	 */
 	protected function buildQuery(): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE)
-			->groupby(self::TABLE . '.id');
+			->from($this->getTableName(), self::TABLE);
 
-		$this->joinDisplayNameFromShare($qb, self::TABLE);
 		return $qb;
 	}
 

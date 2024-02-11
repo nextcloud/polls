@@ -40,6 +40,9 @@ use OCP\IDBConnection;
 class ShareMapper extends QBMapper {
 	public const TABLE = Share::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		IDBConnection $db,
 		private IConfig $config,
@@ -119,7 +122,7 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @throws ShareNotFoundException if not found
 	 */
 	public function findByPollAndUser(int $pollId, string $userId, bool $findDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();

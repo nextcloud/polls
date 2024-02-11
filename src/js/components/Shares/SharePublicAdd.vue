@@ -21,8 +21,7 @@
   -->
 
 <template>
-	<UserItem :user="publicLinkUserItem"
-		type="public"
+	<UserItem v-bind="userItemProps"
 		class="add-public">
 		<template #status>
 			<div class="vote-status" />
@@ -64,10 +63,9 @@ export default {
 
 	data() {
 		return {
-			publicLinkUserItem: {
-				userId: 'addPublic',
-				displayName: t('polls', 'Add a new public link'),
-				isNoUser: true,
+			userItemProps: {
+				label: t('polls', 'Add a new public link'),
+				type: 'addPublicLink',
 			},
 		}
 	},

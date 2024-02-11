@@ -25,22 +25,21 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\SubscriptionService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
+/**
+ * @psalm-api
+ */
 class SubscriptionController extends BaseController {
 	public function __construct(
 		string $appName,
-		ISession $session,
 		IRequest $request,
-		private Acl $acl,
 		private SubscriptionService $subscriptionService
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -49,7 +48,7 @@ class SubscriptionController extends BaseController {
 	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId))
+			'subscribed' => $this->subscriptionService->get($pollId)
 		]);
 	}
 
@@ -59,7 +58,7 @@ class SubscriptionController extends BaseController {
 	#[NoAdminRequired]
 	public function subscribe(int $pollId): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->set(true, $this->acl->setPollId($pollId))
+			'subscribed' => $this->subscriptionService->set(true, $pollId)
 		]);
 	}
 
@@ -69,7 +68,7 @@ class SubscriptionController extends BaseController {
 	#[NoAdminRequired]
 	public function unsubscribe(int $pollId): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->set(false, $this->acl->setPollId($pollId))
+			'subscribed' => $this->subscriptionService->set(false, $pollId)
 		]);
 	}
 }

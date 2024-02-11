@@ -26,10 +26,13 @@ declare(strict_types=1);
 namespace OCA\Polls\Model;
 
 use DateTimeZone;
+use OCA\Polls\Db\EntityWithUser;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\User\Admin;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
@@ -37,6 +40,7 @@ use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\User\User;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\IDateTimeZone;
+use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IUserSession;
 use OCP\Share\IShare;
@@ -48,6 +52,8 @@ class UserBase implements \JsonSerializable {
 	public const TYPE_PUBLIC = 'public';
 	/** @var string */
 	public const TYPE_EXTERNAL = 'external';
+	public const TYPE_EMPTY = 'empty';
+	public const TYPE_ANON = 'anonymous';
 	public const TYPE_CIRCLE = Circle::TYPE;
 	public const TYPE_CONTACT = Contact::TYPE;
 	public const TYPE_CONTACTGROUP = ContactGroup::TYPE;
@@ -59,28 +65,35 @@ class UserBase implements \JsonSerializable {
 
 	/** @var string[] */
 	protected array $categories = [];
+	protected string $anonymizeLevel = EntityWithUser::ANON_PRIVACY;
 	protected bool $isNoUser = true;
 	protected string $description = '';
 	protected string $richObjectType = 'user';
 	protected string $organisation = '';
 	protected string $icon = '';
 	protected IDateTimeZone $timeZone;
+	protected IGroupManager $groupManager;
 	protected IL10N $l10n;
 	protected IUserSession $userSession;
+	protected UserMapper $userMapper;
+	protected AppSettings $appSettings;
 
 	public function __construct(
 		protected string $id,
 		protected string $type,
 		protected string $displayName = '',
-		protected ?string $emailAddress = '',
+		protected string $emailAddress = '',
 		protected string $languageCode = '',
 		protected string $localeCode = '',
 		protected string $timeZoneName = '',
 	) {
 		$this->icon = 'icon-share';
 		$this->l10n = Container::getL10N();
+		$this->groupManager = Container::queryClass(IGroupManager::class);
 		$this->timeZone = Container::queryClass(IDateTimeZone::class);
+		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->userSession = Container::queryClass(IUserSession::class);
+		$this->appSettings = Container::queryClass(AppSettings::class);
 	}
 
 	public function getId(): string {
@@ -91,12 +104,26 @@ class UserBase implements \JsonSerializable {
 		return $this->getId();
 	}
 
-	public function getPublicId(): string {
-		return $this->id;
+	public function setAnonymizeLevel(string $anonymizeLevel = EntityWithUser::ANON_PRIVACY): void {
+		$this->anonymizeLevel = $anonymizeLevel;
 	}
 
+	/**
+	 * for later use
+	 */
 	public function getPrincipalUri(): ?string {
 		return null;
+	}
+
+	/**
+	 * hash the real userId to obfuscate the real userId
+	 */
+	public function getHashedUserId(?string $name = null): string {
+		// TODO: add a session salt
+		if ($name) {
+			return hash('md5', $name);
+		}
+		return hash('md5', $this->getId());
 	}
 
 	/**
@@ -136,6 +163,9 @@ class UserBase implements \JsonSerializable {
 		return $this->type;
 	}
 
+	/**
+	 * used for telling internal from guest users
+	 */
 	public function getSimpleType(): string {
 		return in_array($this->type, [User::TYPE, Admin::TYPE]) ? 'user' : 'guest';
 	}
@@ -171,25 +201,28 @@ class UserBase implements \JsonSerializable {
 		return $this->description;
 	}
 
+	/**
+	 * @deprecated Not used anymore?
+	 */
 	public function getIcon(): string {
 		return $this->icon;
 	}
 
 	public function getEmailAddress(): string {
-		return $this->emailAddress ?? '';
+		return $this->emailAddress;
 	}
 
-	// Function for obfuscating mail adresses; Default return the email address
-	public function getEmailAddressMasked(): string {
-		return $this->emailAddress ?? '';
+	public function getEmailAndDisplayName(): string {
+		return $this->getDisplayName() . ' <' . $this->getEmailAddress() . '>';
 	}
 
-	public function getOrganisation(): string {
-		return $this->organisation;
-	}
-
-	public function getIsLoggedIn(): bool {
-		return $this->userSession->isLoggedIn();
+	/**
+	 * return true, if the $checkname is equal to the userid or displayName (case insensitive)
+	 */
+	public function hasName(string $checkName): bool {
+		return in_array(strtolower($checkName), [
+			strtolower($this->getDisplayName()), strtolower($this->getId()),
+		]);
 	}
 
 	/**
@@ -202,6 +235,9 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getIsNoUser(): bool {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL && $this->userMapper->getCurrentUser()->getId() !== $this->getId()) {
+			return true;
+		}
 		return $this->isNoUser;
 	}
 
@@ -296,7 +332,7 @@ class UserBase implements \JsonSerializable {
 	}
 
 	/**
-	 * Default is array with self as single element
+	 * Default is an array with self as single element
 	 * @return array
 	 */
 	public function getMembers(): array {
@@ -304,22 +340,138 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function jsonSerialize(): array {
+		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+			return $this->getRichUserArray();
+		}
+		return $this->getSimpleUserArray();
+	}
+
+	/**
+	 * Full user array for poll owners, delegated poll admins and the current user himself
+	 * without obfuscating/anonymizing
+	 * @return (bool|string|string[])[]
+	 *
+	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, desc: string, subname: string, subtitle: string, icon: string, categories: array<string>}
+	 */
+	public function getRichUserArray(): array {
 		return	[
+			'userId' => $this->getId(),
+			'displayName' => $this->getDisplayName(),
+			'emailAddress' => $this->getEmailAddress(),
+			'isNoUser' => $this->getIsNoUser(),
+			'type' => $this->getType(),
 			'id' => $this->getId(),
 			'user' => $this->getId(),
-			'userId' => $this->getId(),
-			'type' => $this->getType(),
-			'displayName' => $this->getDisplayName(),
 			'organisation' => $this->getOrganisation(),
-			'emailAddress' => $this->getEmailAddressMasked(),
 			'languageCode' => $this->getLanguageCode(),
 			'localeCode' => $this->getLocaleCode(),
 			'timeZone' => $this->getTimeZoneName(),
 			'desc' => $this->getDescription(),
+			'subname' => $this->getDescription(),
 			'subtitle' => $this->getDescription(),
 			'icon' => $this->getIcon(),
 			'categories' => $this->getCategories(),
-			'isNoUser' => $this->getIsNoUser(),
 		];
 	}
+
+	/**
+	 * privacy and anonymizing section
+	 */
+
+	/**
+	 * Simply user array returning safe attributes
+	 * @return (bool|string)[]
+	 *
+	 * @psalm-return array{id: string, userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
+	 */
+	private function getSimpleUserArray(): array {
+		return	[
+			'id' => $this->getSafeId(),
+			'userId' => $this->getSafeId(),
+			'displayName' => $this->getSafeDisplayName(),
+			'emailAddress' => $this->getSafeEmailAddress(),
+			'isNoUser' => $this->getIsNoUser(),
+			'type' => $this->getSafeType(),
+		];
+	}
+
+	/**
+	 * returns the safe id to avoid leaking the userId
+	 */
+	public function getSafeId(): string {
+		// always return real userId for the current user
+		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+			return $this->getId();
+		}
+
+		// return hashed userId, if fully anonimized
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return $this->getHashedUserId();
+		}
+
+		// internal users may see the real userId
+		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
+			return $this->getId();
+		}
+
+		// otherwise return the obfuscated userId
+		return $this->getHashedUserId();
+	}
+
+	/**
+	 * anonymize the displayname in case of anonymous settings
+	 */
+	public function getSafeDisplayName(): string {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return 'Anon';
+		}
+
+		return $this->displayName;
+	}
+
+	// Function for obfuscating mail adresses; Default return the email address
+	public function getSafeEmailAddress(): string {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return '';
+		}
+
+		if ($this->appSettings->getAllowSeeMailAddresses()) {
+			return $this->getEmailAddress();
+		}
+
+		return '';
+	}
+	public function getOrganisation(): string {
+		return $this->organisation;
+	}
+
+	public function getIsLoggedIn(): bool {
+		return $this->userSession->isLoggedIn();
+	}
+
+	public function getIsAdmin(): bool {
+		return $this->groupManager->isAdmin($this->id);
+	}
+
+	public function getIsInGroup(string $groupName): bool {
+		return $this->groupManager->isInGroup($this->id, $groupName);
+	}
+
+	/**
+	 * returns the safe id to avoid leaking thereal user type
+	 */
+	public function getSafeType(): string {
+		// always return real userId for the current user
+		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+			return $this->getType();
+		}
+
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return self::TYPE_ANON;
+		}
+
+		return $this->getType();
+	}
+
+
 }

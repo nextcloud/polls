@@ -30,17 +30,18 @@ use OCA\Polls\Service\OptionService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
+/**
+ * @psalm-api
+ */
 class OptionController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		private OptionService $optionService,
 		private CalendarService $calendarService,
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -90,7 +91,7 @@ class OptionController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function restore(int $optionId): JSONResponse {
-		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, restore: true)]);
+		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)]);
 	}
 
 	/**

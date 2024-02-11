@@ -38,9 +38,6 @@ use OCA\Polls\Event\VoteEvent;
 class NotificationMail extends MailBase {
 	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Notification';
 
-	/** @var Log[] */
-	protected array $log = [];
-
 	public function __construct(
 		protected Subscription $subscription
 	) {

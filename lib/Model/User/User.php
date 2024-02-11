@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Model\User;
 
 use OCA\Polls\Helper\Container;
-use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
 use OCP\IConfig;
 use OCP\IUser;
@@ -41,7 +40,6 @@ class User extends UserBase {
 	public const PRINCIPAL_PREFIX = 'principals/users/';
 
 	private IConfig $config;
-	protected AppSettings $appSettings;
 	private IUser $user;
 
 	public function __construct(
@@ -56,22 +54,14 @@ class User extends UserBase {
 		$this->config = Container::queryClass(IConfig::class);
 		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
 		$this->displayName = $this->user->getDisplayName();
-		$this->emailAddress = $this->user->getEmailAddress();
+		$this->emailAddress = (string) $this->user->getEmailAddress();
 		$this->languageCode = $this->config->getUserValue($this->id, 'core', 'lang');
 		$this->localeCode = $this->config->getUserValue($this->id, 'core', 'locale');
 		$this->timeZoneName = $this->config->getUserValue($this->id, 'core', 'timezone');
-		$this->appSettings = new AppSettings;
 	}
 
 	public function isEnabled(): bool {
 		return $this->user->isEnabled();
-	}
-
-	public function getEmailAddressMasked(): string {
-		if ($this->appSettings->getAllowSeeMailAddresses() && $this->emailAddress) {
-			return $this->emailAddress;
-		}
-		return '';
 	}
 
 	public function getDescription(): string {

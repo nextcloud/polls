@@ -41,14 +41,13 @@ const state = {
 			id: 'relevant',
 			title: t('polls', 'Relevant'),
 			titleExt: t('polls', 'Relevant polls'),
-			description: t('polls', 'All polls which are relevant or important to you, because you are a participant or the owner or you are invited to.'),
+			description: t('polls', 'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to.'),
 			pinned: false,
 			createDependent: false,
 			filterCondition(poll) {
 				return !poll.deleted
 					&& (poll.relevantThreshold > (moment().unix()))
-					&& (poll.important
-						|| poll.currentUser.isInvolved
+					&& (poll.currentUser.isInvolved
 						|| (poll.permissions.allowView && poll.access !== 'open')
 					)
 			},

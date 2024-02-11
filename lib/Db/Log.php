@@ -61,13 +61,14 @@ class Log extends Entity implements JsonSerializable {
 	public const MSG_ID_SETVOTE = 'setVote';
 	public const MSG_ID_OWNERCHANGE = 'updateOwner';
 
+	// schema columns
 	public $id = null;
 	protected int $pollId = 0;
-	protected int $created = 0;
-	protected int $processed = 0;
 	protected ?string $userId = '';
 	protected ?string $displayName = '';
 	protected ?string $messageId = '';
+	protected int $created = 0;
+	protected int $processed = 0;
 
 	public function __construct() {
 		$this->addType('pollId', 'int');
@@ -77,6 +78,8 @@ class Log extends Entity implements JsonSerializable {
 
 	/**
 	 * @return array
+	 *
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function jsonSerialize(): array {
 		return [

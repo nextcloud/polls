@@ -53,6 +53,9 @@ abstract class BaseListener implements IEventListener {
 	protected Event|BaseEvent|GroupDeletedEvent|UserDeletedEvent|null $event = null;
 	protected const WATCH_TABLES = [];
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		protected ActivityService $activityService,
 		protected AppSettings $appSettings,

@@ -29,7 +29,6 @@ use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCP\AppFramework\Db\Entity;
 use OCP\IURLGenerator;
 
 /**
@@ -59,8 +58,10 @@ use OCP\IURLGenerator;
  * @method void setVoted(int $value)
  * @method int getDeleted()
  * @method void setDeleted(integer $value)
+ * @method string getLabel()
+ * @method void setLabel(string $value)
  */
-class Share extends Entity implements JsonSerializable {
+class Share extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_share';
 
 	public const EMAIL_OPTIONAL = 'optional';
@@ -117,21 +118,26 @@ class Share extends Entity implements JsonSerializable {
 		self::TYPE_CONTACTGROUP
 	];
 
-	public $id = null;
 	protected IURLGenerator $urlGenerator;
 	protected AppSettings $appSettings;
+
+	// schema columns
+	public $id = null;
 	protected int $pollId = 0;
 	protected string $token = '';
 	protected string $type = '';
+	protected string $label = '';
 	protected string $userId = '';
+	protected ?string $displayName = null;
 	protected ?string $emailAddress = null;
 	protected int $invitationSent = 0;
 	protected int $reminderSent = 0;
 	protected int $locked = 0;
-	protected ?string $displayName = null;
 	protected ?string $miscSettings = '';
-	protected int $voted = 0;
 	protected int $deleted = 0;
+
+	// joined columns
+	protected int $voted = 0;
 
 	public function __construct() {
 		$this->addType('pollId', 'int');
@@ -145,6 +151,8 @@ class Share extends Entity implements JsonSerializable {
 
 	/**
 	 * @return array
+	 *
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function jsonSerialize(): array {
 		return [
@@ -157,29 +165,57 @@ class Share extends Entity implements JsonSerializable {
 			'invitationSent' => $this->getInvitationSent(),
 			'reminderSent' => $this->getReminderSent(),
 			'locked' => $this->getDeleted() ? 0 : $this->getLocked(),
-			// 'displayName' => $this->getDisplayName(),
-			'label' => $this->getDisplayName(),
+			'label' => $this->getLabel(),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getBooleanSetting(AppSettings::SETTING_SHOW_LOGIN),
 			'publicPollEmail' => $this->getPublicPollEmail(),
 			'voted' => $this->getVoted(),
 			'deleted' => $this->getDeleted(),
-			'user' => [
-				'displayName' => $this->getDisplayName(),
-				'emailAddress' => $this->getEmailAddress(),
-				'isNoUser' => !(in_array($this->getType(), [self::TYPE_USER, self::TYPE_ADMIN], true)),
-				'type' => $this->getType(),
-				'userId' => $this->getUserId(),
-			]
+			'user' => $this->getUser()->getRichUserArray(),
 		];
 	}
 
+	/**
+	 * Setting, if email is optional, mandatory or hidden on public poll registration
+	 */
 	public function getPublicPollEmail(): string {
 		return $this->getMiscSettingsArray()['publicPollEmail'] ?? 'optional';
 	}
 
+	/**
+	 * Get userId of share user
+	 */
+	public function getUserId(): string {
+		return $this->userId;
+	}
+
+	/**
+	 * Setting, if email is optional, mandatory or hidden on public poll registration
+	 */
 	public function setPublicPollEmail(string $value): void {
 		$this->setMiscSettingsByKey('publicPollEmail', $value);
+	}
+
+	/**
+	 * Share label for public shares, falls back to username until migrated
+	 * TODO: remove fallback after migration was introduced
+	 */
+	public function getLabel(): string {
+		if ($this->getType() === self::TYPE_PUBLIC && $this->label) {
+			return $this->label;
+		}
+		return $this->displayName ?? '';
+	}
+
+	/**
+	 * Sharee's displayName. In case of public poll label is used instead
+	 * TODO: remove public poll chaeck after migration to label
+	 */
+	public function getDisplayName(): string {
+		if ($this->getType() === self::TYPE_PUBLIC) {
+			return '';
+		}
+		return (string) $this->displayName;
 	}
 
 	public function getTimeZoneName(): string {
@@ -194,13 +230,13 @@ class Share extends Entity implements JsonSerializable {
 		return $this->getMiscSettingsArray()['language'] ?? '';
 	}
 
+	public function setLanguage(string $value): void {
+		$this->setMiscSettingsByKey('language', $value);
+	}
+	
 	// Fallback for now; use language as locale
 	public function getLocale(): string {
 		return $this->getLanguage();
-	}
-
-	public function setLanguage(string $value): void {
-		$this->setMiscSettingsByKey('language', $value);
 	}
 
 	public function getURL(): string {
@@ -217,17 +253,6 @@ class Share extends Entity implements JsonSerializable {
 		} else {
 			return '';
 		}
-	}
-
-	public function getUserId(): string {
-		if ($this->type === self::TYPE_CONTACTGROUP) {
-			// contactsgroup had the prefix contactgroup_ until version 1.5
-			// strip it out
-			$parts = explode("contactgroup_", $this->userId);
-			$userId = end($parts);
-			return $userId;
-		}
-		return $this->userId;
 	}
 
 	public function getRichObjectString(): array {

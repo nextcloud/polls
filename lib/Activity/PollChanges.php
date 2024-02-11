@@ -29,6 +29,9 @@ use OCP\Activity\IFilter;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class PollChanges implements IFilter {
 	public function __construct(
 		protected IL10N $l10n,

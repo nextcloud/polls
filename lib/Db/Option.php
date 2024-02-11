@@ -71,19 +71,20 @@ use OCP\IL10N;
 class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
 
+	// schema columns
 	public $id = null;
 	protected int $pollId = 0;
-	protected string $owner = '';
-	protected int $released = 0;
 	protected string $pollOptionText = '';
 	protected string $pollOptionHash = '';
 	protected int $timestamp = 0;
+	protected int $duration = 0;
 	protected int $order = 0;
 	protected int $confirmed = 0;
-	protected int $duration = 0;
+	protected string $owner = '';
+	protected int $released = 0;
 	protected int $deleted = 0;
 
-	// joined Attributes
+	// joined columns
 	protected ?string $userVoteAnswer = '';
 	protected int $optionLimit = 0;
 	protected int $voteLimit = 0;
@@ -114,6 +115,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 
 	/**
 	 * @return array
+	 *
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function jsonSerialize(): array {
 		return [
@@ -126,13 +129,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'confirmed' => $this->getConfirmed(),
 			'duration' => $this->getDuration(),
 			'locked' => $this->getIsLocked(),
-			'debugging' => [
-				'getIsLockedByOptionLimit' => $this->getIsLockedByOptionLimit(),
-				'getIsLockedByVotesLimit' => $this->getIsLockedByVotesLimit(),
-				'getUserVoteAnswer' => $this->getUserVoteAnswer(),
-				'getOptionLimit' => $this->getOptionLimit(),
-				'getVotesYes' => $this->getVotesYes(),
-			],
 			'votes' => [
 				'no' => $this->getVotesNo(),
 				'yes' => $this->getVotesYes(),
@@ -200,8 +196,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 	}
 
 	// alias of getOwner()
-	public function getUserId(): ?string {
-		return $this->getOwner();
+	public function getUserId(): string {
+		return (string) $this->getOwner();
 	}
 
 	// alias of setOwner($value)

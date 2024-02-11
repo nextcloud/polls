@@ -176,6 +176,8 @@ class AppSettings implements JsonSerializable {
 
 	/**
 	 * @return array
+	 *
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function jsonSerialize(): array {
 		// convert group ids to group objects

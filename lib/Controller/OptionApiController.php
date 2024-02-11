@@ -32,6 +32,9 @@ use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
+/**
+ * @psalm-api
+ */
 class OptionApiController extends BaseApiController {
 	public function __construct(
 		string $appName,
@@ -89,7 +92,7 @@ class OptionApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function restore(int $optionId): JSONResponse {
-		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, restore: true)]);
+		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)]);
 	}
 
 	/**

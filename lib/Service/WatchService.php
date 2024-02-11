@@ -29,6 +29,7 @@ use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Exceptions\NoUpdatesException;
+use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
@@ -38,9 +39,13 @@ class WatchService {
 	private AppSettings $appSettings;
 	private Watch $watch;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private ISession $session,
 		private WatchMapper $watchMapper,
+		private Acl $acl,
 	) {
 		$this->appSettings = new AppSettings;
 		$this->watch = new Watch;
@@ -49,7 +54,9 @@ class WatchService {
 	/**
 	 * Watch poll for updates
 	 */
-	public function watchUpdates(int $pollId, ?int $offset): array {
+	public function watchUpdates(?int $pollId = null, ?int $offset = null): array {
+		$this->acl->setPollId($pollId);
+
 		$start = time();
 		$timeout = 30;
 		$offset = $offset ?? $start;
@@ -57,10 +64,10 @@ class WatchService {
 		if ($this->appSettings->getUpdateType() === AppSettings::SETTING_UPDATE_TYPE_LONG_POLLING) {
 			while (empty($updates) && time() <= $start + $timeout) {
 				sleep(1);
-				$updates = $this->getUpdates($pollId, $offset);
+				$updates = $this->getUpdates($this->acl->getPollId(), $offset);
 			}
 		} else {
-			$updates = $this->getUpdates($pollId, $offset);
+			$updates = $this->getUpdates($this->acl->getPollId(), $offset);
 		}
 
 		if (empty($updates)) {
@@ -73,7 +80,7 @@ class WatchService {
 	/**
 	 * @return Watch[]
 	 */
-	public function getUpdates(int $pollId, int $offset): array {
+	private function getUpdates(int $pollId, int $offset): array {
 		try {
 			return $this->watchMapper->findUpdatesForPollId($pollId, $offset);
 		} catch (DoesNotExistException $e) {
@@ -81,10 +88,7 @@ class WatchService {
 		}
 	}
 
-	/**
-	 * @return Watch
-	 */
-	public function writeUpdate(int $pollId, string $table): Watch {
+	public function writeUpdate(int $pollId, string $table): void {
 		$sessionId = hash('md5', $this->session->get(AppConstants::CLIENT_ID));
 		$this->watch = new Watch();
 		$this->watch->setPollId($pollId);
@@ -101,6 +105,6 @@ class WatchService {
 		}
 
 		$this->watch->setUpdated(time());
-		return $this->watchMapper->update($this->watch);
+		$this->watchMapper->update($this->watch);
 	}
 }

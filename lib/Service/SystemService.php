@@ -45,6 +45,9 @@ use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class SystemService {
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private IFactory $transFactory,
 		private ISearch $userSearch,
@@ -106,9 +109,13 @@ class SystemService {
 
 		[$result, $more] = $this->userSearch->search($query, $types, false, 200, 0);
 
+		if ($more) {
+			$this->logger->info('Only first 200 matches will be returned.');
+		}
+
 		foreach (($result['users'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
-				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith']);
+				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
 			} else {
 				$this->handleFailedSearchResult($query, $item);
 			}
@@ -116,7 +123,7 @@ class SystemService {
 
 		foreach (($result['exact']['users'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
-				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith']);
+				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
 			} else {
 				$this->handleFailedSearchResult($query, $item);
 			}
@@ -124,7 +131,7 @@ class SystemService {
 
 		foreach (($result['groups'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
-				$items[] = new Group($item['value']['shareWith']);
+				$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
 			} else {
 				$this->handleFailedSearchResult($query, $item);
 			}
@@ -132,24 +139,30 @@ class SystemService {
 
 		foreach (($result['exact']['groups'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
-				$items[] = new Group($item['value']['shareWith']);
+				$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
 			} else {
 				$this->handleFailedSearchResult($query, $item);
 			}
 		}
 
 		if (Contact::isEnabled()) {
-			$items = array_merge($items, Contact::search($query));
-			$items = array_merge($items, ContactGroup::search($query));
+			foreach (Contact::search($query) as $contact) {
+				$items[] = $contact->getRichUserArray();
+			}
+			foreach (ContactGroup::search($query) as $contact) {
+				$items[] = $contact->getRichUserArray();
+			}
+			// $items = array_merge($items, Contact::search($query));
+			// $items = array_merge($items, ContactGroup::search($query));
 		}
 
 		if (Circle::isEnabled()) {
 			foreach (($result['circles'] ?? []) as $item) {
-				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith']);
+				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
 			}
 
 			foreach (($result['exact']['circles'] ?? []) as $item) {
-				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith']);
+				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
 			}
 		}
 
@@ -197,36 +210,29 @@ class SystemService {
 		// get all groups, that include the requested username in their gid
 		// or displayname and check if any match completely
 		foreach (Group::search($userName) as $group) {
-			if ($userName === strtolower(trim($group->getId()))
-				|| $userName === strtolower(trim($group->getDisplayName()))) {
+			if ($group->hasName($userName)) {
 				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all users
 		foreach (User::search($userName) as $user) {
-			if ($userName === strtolower(trim($user->getId()))
-				|| $userName === strtolower(trim($user->getDisplayName()))) {
+			if ($user->hasName($userName)) {
 				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all participants
 		foreach ($this->voteMapper->findParticipantsByPoll($share->getPollId()) as $vote) {
-			if ($vote->getUserId()) {
-				if ($userName === strtolower(trim($vote->getUserId()))) {
-					throw new InvalidUsernameException;
-				}
+			if ($vote->getUser()->hasName($userName)) {
+				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all shares for this poll
 		foreach ($this->shareMapper->findByPoll($share->getPollId()) as $share) {
-			if ($share->getUserId() && $share->getType() !== Circle::TYPE) {
-				if ($userName === strtolower(trim($share->getUserId()))
-					|| $userName === strtolower(trim($share->getDisplayName()))) {
-					throw new InvalidUsernameException;
-				}
+			if ($share->getType() !== Circle::TYPE && $share->getUser()->hasName($userName)) {
+				throw new InvalidUsernameException;
 			}
 		}
 		// return true, if username is allowed

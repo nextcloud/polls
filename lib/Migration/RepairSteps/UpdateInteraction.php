@@ -31,6 +31,9 @@ use OCP\IDBConnection;
 use OCP\Migration\IOutput;
 use OCP\Migration\IRepairStep;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class UpdateInteraction implements IRepairStep {
 	public function __construct(
 		private TableManager $tableManager,

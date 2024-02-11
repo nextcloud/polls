@@ -27,28 +27,29 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
-use OCP\IUserSession;
+use OCA\Polls\Db\UserMapper;
 
 class LogService {
-	private string $userId;
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
-		private IUserSession $userSession,
 		private LogMapper $logMapper,
-		private Log $log
+		private Log $log,
+		private UserMapper $userMapper,
 	) {
-		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
 	}
 
 	/**
 	 * Log poll activity
 	 */
-	public function setLog(int $pollId, string $messageId, ?string $userId = null): ?Log {
+	public function setLog(int $pollId, string $messageId, ?string $userId = null): void {
 		$this->log = new Log();
 		$this->log->setPollId($pollId);
 		$this->log->setCreated(time());
 		$this->log->setMessageId($messageId);
-		$this->log->setUserId($userId ?? $this->userId);
+		$this->log->setUserId($userId ?? $this->userMapper->getCurrentUser()->getId());
 
-		return $this->logMapper->insert($this->log);
+		$this->logMapper->insert($this->log);
 	}
 }

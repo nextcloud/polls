@@ -51,11 +51,14 @@ class ActivityService {
 	private const FIRST_PERSON_FILTERED = 'firstFiltered';
 	private const THIRD_PERSON_FILTERED = 'thirdFiltered';
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private ActivityManager $activityManager,
 		private IL10N $l10n,
 		private IFactory $transFactory,
-		private UserMapper $usermapper,
+		private UserMapper $userMapper,
 	) {
 	}
 
@@ -64,7 +67,7 @@ class ActivityService {
 		$this->l10n = $this->transFactory->get($this->activityEvent->getApp(), $language);
 
 		try {
-			$this->userIsActor = $this->activityEvent->getAuthor() === $this->usermapper->getCurrentUserId();
+			$this->userIsActor = $this->activityEvent->getAuthor() === $this->userMapper->getCurrentUserCached()->getId();
 		} catch (\Exception $e) {
 			$this->userIsActor = false;
 		}

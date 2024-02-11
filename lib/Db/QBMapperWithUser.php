@@ -42,53 +42,29 @@ abstract class QBMapperWithUser extends QBMapper {
 	public function __construct(
 		IDBConnection $db,
 		string $tableName,
-		string $entityClass = null
+		?string $entityClass = null
 	) {
 		parent::__construct($db, $tableName, $entityClass);
-
 	}
 
 	/**
-	 * Joins shares to fetch displayName from shares
-	 *
-	 * Returns
-	 *  - dispalyName (shares.display_name),
-	 *  - share/user type (shares.user_type) and
-	 *  - emailaddress (shares.email_address)
-	 * from joined share table matching poll id and user id
-	 *
-	 * @param IQueryBuilder &$qb queryBuilder object by reference
-	 * @param string $fromAlias alias used for the source table
+	 * Joins anonymous setting of poll
 	 */
-	protected function joinDisplayNameFromShare(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'shares';
+	protected function joinAnon(IQueryBuilder &$qb, string $fromAlias): string {
+		$joinAlias = 'anon';
 
-		$fromPollIdColumn = $fromAlias . '.poll_id';
-		$fromUserIdColumn = $fromAlias . '.user_id';
+		$qb->selectAlias($joinAlias . '.anonymous', 'anonymized')
+			->selectAlias($joinAlias . '.owner', 'poll_owner_id')
+			->selectAlias($joinAlias . '.show_results', 'poll_show_results')
+			->selectAlias($joinAlias . '.expire', 'poll_expire')
+		;
 
-		$joinPollIdColumn = $joinAlias . '.poll_id';
-		$joinUserIdColumn = $joinAlias . '.user_id';
-
-		// adjust joined columns for particular tables
-		if ($fromAlias === Poll::TABLE) {
-			$fromPollIdColumn = $fromAlias . '.id';
-			$fromUserIdColumn = $fromAlias . '.owner';
-		} elseif ($fromAlias === Option::TABLE) {
-			$fromUserIdColumn = $fromAlias . '.owner';
-		}
-
-		// force value into a MIN function to avoid grouping errors
-		$qb->selectAlias($qb->func()->min($joinAlias . '.display_name'), 'display_name');
-		$qb->selectAlias($qb->func()->min($joinAlias . '.type'), 'user_type');
-		$qb->selectAlias($qb->func()->min($joinAlias . '.email_address'), 'email_address');
 		$qb->leftJoin(
 			$fromAlias,
-			Share::TABLE,
+			Poll::TABLE,
 			$joinAlias,
-			$qb->expr()->andX(
-				$qb->expr()->eq($fromPollIdColumn, $joinPollIdColumn),
-				$qb->expr()->eq($fromUserIdColumn, $joinUserIdColumn),
-			)
+			$qb->expr()->eq($joinAlias . '.id', $fromAlias . '.poll_id'),
 		);
+		return $joinAlias;
 	}
 }

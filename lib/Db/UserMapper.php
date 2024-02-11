@@ -43,6 +43,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use OCP\IGroupManager;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -59,24 +60,18 @@ class UserMapper extends QBMapper {
 	protected ?UserBase $currentUser = null;
 	protected string $currentUserId;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		IDBConnection $db,
+		private IGroupManager $groupManager,
 		protected ISession $session,
 		protected IUserSession $userSession,
 		protected IUserManager $userManager,
 		protected LoggerInterface $logger,
 	) {
 		parent::__construct($db, Share::TABLE, Share::class);
-	}
-
-	/**
-	 * Get current userId
-	 *
-	 * Returns userId of the current (share|nextcloud) user
-	 **/
-	public function getCurrentUserId(): string {
-		$userId = $this->session->get(AppConstants::SESSION_KEY_USER_ID);
-		return $userId ?? $this->getCurrentUser()->getId();
 	}
 
 	/**
@@ -87,30 +82,28 @@ class UserMapper extends QBMapper {
 	 * - the user session stored userId
 	 * and stores userId to session
 	 *
-	 * !! The share is prioritised to tell User from Admin class
 	 */
 	public function getCurrentUser(): UserBase {
-		if ($this->currentUser) {
-			// if already loaded, return user
-			return $this->currentUser;
-		}
-
-		$token = $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN) ?? '';
-
-
-		if ($this->isLoggedIn()) {
+		if ($this->userSession->isLoggedIn()) {
 			$this->currentUser = $this->getUserFromUserBase($this->userSession->getUser()->getUID());
 		} else {
-			$this->currentUser = $this->getUserFromShareToken($token);
+			try {
+				$this->currentUser = $this->getUserFromShareToken($this->getToken());
+			} catch (DoesNotExistException $e) {
+				$this->logger->debug('no user found, returned fake user');
+				$this->currentUser = new GenericUser('', Share::TYPE_PUBLIC);
+			}
 		}
 
-		// store userId in session to avoid unecessary db access
-		$this->session->set(AppConstants::SESSION_KEY_USER_ID, $this->currentUser->getId());
 		return $this->currentUser;
 	}
 
-	public function isLoggedIn(): bool {
-		return $this->userSession->isLoggedIn();
+	public function getCurrentUserCached(): UserBase {
+		return $this->currentUser ?? $this->getCurrentUser();
+	}
+
+	private function getToken(): string {
+		return (string) $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 	}
 
 	/**
@@ -122,7 +115,11 @@ class UserMapper extends QBMapper {
 	 * @param int $pollId Can only be used together with $userId and will return the internal user or the share user
 	 * @return UserBase
 	 **/
-	public function getParticipant(string $userId, int $pollId = null): UserBase {
+	public function getParticipant(string $userId, ?int $pollId = null): UserBase {
+		if ($userId === '') {
+			return new UserBase($userId, UserBase::TYPE_EMPTY);
+		}
+
 		try {
 			return $this->getUserFromUserBase($userId);
 		} catch (UserNotFoundException $e) {
@@ -157,8 +154,10 @@ class UserMapper extends QBMapper {
 	 * Get participans of a poll as array of user objects
 	 *
 	 * Returns a UserBase child build from a share
+	 *
+	 * @return Circle|Contact|ContactGroup|Email|GenericUser|Ghost|Group|User
 	 */
-	public function getUserFromShare(Share $share): UserBase {
+	public function getUserFromShare(Share $share): GenericUser|Email|User|ContactGroup|Contact|Circle|Group|Ghost {
 		return $this->getUserObject(
 			$share->getType(),
 			$share->getUserId(),
@@ -170,20 +169,26 @@ class UserMapper extends QBMapper {
 		);
 	}
 
-	public function getUserFromUserBase(string $userId): UserBase {
+	public function getUserFromUserBase(string $userId): User {
 		$user = $this->userManager->get($userId);
 		if ($user instanceof IUser) {
-			return $this->getUserObject(User::TYPE, $userId);
+			return new User($userId);
 		}
 		throw new UserNotFoundException();
 	}
 
-	private function getUserFromShareToken(string $token):UserBase {
+	private function getUserFromShareToken(string $token): UserBase {
 		$share = $this->getShareByToken($token);
+		if ($share->getType() === Share::TYPE_PUBLIC) {
+			throw new DoesNotExistException('Share type is <Share::' . $share->getType() . '> and has no user.');
+		}
 		return $this->getUserFromShare($share);
 	}
 
-	public function getUserObject(string $type, string $id, string $displayName = '', ?string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): UserBase {
+	/**
+	 * @throws InvalidShareTypeException
+	 */
+	public function getUserObject(string $type, string $id, string $displayName = '', ?string $emailAddress = '', string $language = '', string $locale = '', string $timeZoneName = ''): Ghost|Group|Circle|Contact|ContactGroup|User|Email|GenericUser {
 		return match ($type) {
 			Ghost::TYPE => new Ghost($id),
 			Group::TYPE => new Group($id),
@@ -193,8 +198,8 @@ class UserMapper extends QBMapper {
 			User::TYPE => new User($id),
 			Admin::TYPE => new Admin($id),
 			Email::TYPE => new Email($id, $displayName, $emailAddress, $language),
-			UserBase::TYPE_PUBLIC => new GenericUser($id, UserBase::TYPE_PUBLIC),
 			UserBase::TYPE_EXTERNAL => new GenericUser($id, UserBase::TYPE_EXTERNAL, $displayName, $emailAddress, $language, $locale, $timeZoneName),
+			UserBase::TYPE_PUBLIC => new GenericUser($id, UserBase::TYPE_PUBLIC, $displayName),
 			default => throw new InvalidShareTypeException('Invalid user type (' . $type . ')'),
 		};
 	}
@@ -224,6 +229,13 @@ class UserMapper extends QBMapper {
 		}
 	}
 
+	/**
+	 * Get distinct participans as Vote of a poll
+	 *
+	 * @return Share[]
+	 *
+	 * @psalm-return array<Share>
+	 */
 	private function findParticipantsByPoll(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 

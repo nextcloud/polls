@@ -22,12 +22,7 @@
 
 <template>
 	<div :class="{ deleted: share.deleted }">
-		<UserItem :user="share.user"
-			show-email
-			resolve-info
-			:forced-description="share.deleted ? `(${t('polls', 'deleted')})` : null"
-			show-type-icon
-			:icon="true">
+		<UserItem v-bind="userItemProps">
 			<template #status>
 				<div v-if="share.voted">
 					<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />
@@ -218,6 +213,18 @@ export default {
 		},
 		activateShowQr() {
 			return !this.share.deleted && !!this.share.URL
+		},
+		userItemProps() {
+			return {
+				user: this.share.user,
+				label: this.share.label,
+				showEmail: true,
+				resolveInfo: true,
+				forcedDescription: this.share.deleted ? `(${t('polls', 'deleted')})` : null,
+				showTypeIcon: true,
+				icon: true,
+
+			}
 		},
 	},
 

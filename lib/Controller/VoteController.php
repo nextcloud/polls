@@ -30,16 +30,17 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
+/**
+ * @psalm-api
+ */
 class VoteController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		private VoteService $voteService
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -72,6 +73,6 @@ class VoteController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
-		return $this->response(fn () => ['deleted' => $this->voteService->delete(pollId: $pollId, userId: $userId, deleteOnlyOrphaned: true)]);
+		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId, true)]);
 	}
 }

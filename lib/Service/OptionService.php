@@ -38,7 +38,6 @@ use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\DuplicateEntryException;
-use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Acl;
@@ -52,9 +51,11 @@ class OptionService {
 	/** @var Option[] */
 	private array $options;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private Acl $acl,
-		private AnonymizeService $anonymizer,
 		private IEventDispatcher $eventDispatcher,
 		private LoggerInterface $logger,
 		private Option $option,
@@ -71,26 +72,11 @@ class OptionService {
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function list(int $pollId = 0, ?Acl $acl = null): array {
-		if ($acl) {
-			$this->acl = $acl;
-		} else {
-			$this->acl->setPollId($pollId);
-		}
+	public function list(?int $pollId = null): array {
+		$this->acl->setPollId($pollId);
 
 		try {
 			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId(), !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW));
-			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_USERNAMES_VIEW) || !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
-				$this->anonymizer->set($this->acl->getpollId(), $this->acl->getUserId());
-				$this->anonymizer->anonymize($this->options);
-			} elseif (!$this->acl->getIsLoggedIn()) {
-				// if participant is not logged in avoid leaking user ids
-				foreach ($this->options as $option) {
-					if ($option->getUserId() !== $this->acl->getUserId()) {
-						$option->generateHashedUserId();
-					}
-				}
-			}
 
 			if ($this->acl->getPoll()->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {
 				// hide booked up options except the user has edit permission
@@ -108,12 +94,8 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function add(int $pollId = 0, int $timestamp = 0, string $pollOptionText = '', int $duration = 0, ?Acl $acl = null): Option {
-		if ($acl) {
-			$this->acl = $acl;
-		} else {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
-		}
+	public function add(?int $pollId = null, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
+		$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
 
 		$this->option = new Option();
 		$this->option->setPollId($this->acl->getPollId());
@@ -191,25 +173,11 @@ class OptionService {
 	/**
 	 * Delete option
 	 * @param int $optionId Id of option to delete or restore
-	 * @param Acl $acl Acl
 	 * @param bool $restore Set true, if option is to be restored
 	 */
-	public function delete(int $optionId, ?Acl $acl = null, bool $restore = false): Option {
+	public function delete(int $optionId, bool $restore = false): Option {
 		$this->option = $this->optionMapper->find($optionId);
-
-		if ($acl) {
-			$this->acl = $acl;
-		} else {
-			$this->acl->setPollId($this->option->getPollId());
-		}
-
-		if ($this->option->getPollId() !== $this->acl->getPollid()) {
-			throw new ForbiddenException('Trying to delete or restore an option with foreign poll id');
-		}
-
-		if ($this->option->getOwner() !== $this->acl->getUserId()) {
-			$this->acl->request(Acl::PERMISSION_POLL_EDIT);
-		}
+		$this->acl->request(Acl::PERMISSION_OPTION_DELETE, $this->option->getUserId(), $this->option->getPollId());
 
 		$this->option->setDeleted($restore ? 0 : time());
 		$this->optionMapper->update($this->option);
@@ -331,12 +299,8 @@ class OptionService {
 
 	/**
 	 * Copy options from $fromPoll to $toPoll
-	 *
-	 * @return Option[]
-	 *
-	 * @psalm-return array<array-key, Option>
 	 */
-	public function clone(int $fromPollId, int $toPollId): array {
+	public function clone(int $fromPollId, int $toPollId): void {
 		$this->acl->setPollId($fromPollId);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
@@ -350,8 +314,6 @@ class OptionService {
 			$this->optionMapper->add($option);
 			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}
-
-		return $this->optionMapper->findByPoll($toPollId);
 	}
 
 	/**

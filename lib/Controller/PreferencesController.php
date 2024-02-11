@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\PreferencesService;
 use OCP\AppFramework\Http;
@@ -32,19 +33,19 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
-use OCP\IUserSession;
 
+/**
+ * @psalm-api
+ */
 class PreferencesController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		private PreferencesService $preferencesService,
 		private CalendarService $calendarService,
-		private IUserSession $userSession,
+		private UserMapper $userMapper,
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -61,7 +62,7 @@ class PreferencesController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function write(array $preferences): JSONResponse {
-		if (!$this->userSession->isLoggedIn()) {
+		if (!$this->userMapper->getCurrentUser()->getIsLoggedIn()) {
 			return new JSONResponse([], Http::STATUS_OK);
 		}
 		return $this->response(fn () => $this->preferencesService->write($preferences));

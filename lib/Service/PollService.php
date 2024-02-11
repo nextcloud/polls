@@ -25,10 +25,10 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Preferences;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollCloseEvent;
@@ -45,36 +45,30 @@ use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
+use OCA\Polls\Exceptions\UserNotFoundException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\IGroupManager;
-use OCP\IUser;
-use OCP\IUserManager;
-use OCP\IUserSession;
 use OCP\Search\ISearchQuery;
 
 class PollService {
-	private string $userId;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		private Acl $acl,
 		private AppSettings $appSettings,
 		private IEventDispatcher $eventDispatcher,
-		private IGroupManager $groupManager,
-		private IUserManager $userManager,
-		private IUserSession $userSession,
-		private MailService $mailService,
-		private OptionMapper $optionMapper,
 		private Poll $poll,
 		private PollMapper $pollMapper,
 		private Preferences $preferences,
 		private PreferencesService $preferencesService,
+		private UserMapper $userMapper,
 		private VoteMapper $voteMapper,
 	) {
-		$this->userId = $this->userSession->getUser()?->getUID() ?? '';
-		$this->preferences = $this->preferencesService->get();
 	}
 
 	/**
@@ -83,20 +77,21 @@ class PollService {
 	public function list(): array {
 		$pollList = [];
 		try {
-			$polls = $this->pollMapper->findForMe($this->userId);
-
+			$polls = $this->pollMapper->findForMe($this->userMapper->getCurrentUserCached()->getId());
+			$this->preferences = $this->preferencesService->get();
 			foreach ($polls as $poll) {
 				try {
-					$this->acl->setPoll($poll);
+					$this->acl->setPollId($poll->getId());
 					$relevantThreshold = $poll->getRelevantThresholdNet() + $this->preferences->getRelevantOffsetTimestamp();
 
-					// mix poll settings, acl and relevantThreshold into one array
+					// mix poll settings, currentUser attributes, permissions and relevantThreshold into one array
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
-						(array) json_decode(json_encode($this->acl)),
 						[
 							'relevantThreshold' => $relevantThreshold,
-							'relevantThresholdNet' => $poll->getRelevantThresholdNet()
+							'relevantThresholdNet' => $poll->getRelevantThresholdNet(),
+							'permissions' => $this->acl->getPermissionsArray(),
+							'currentUser' => $this->acl->getCurrentUserArray(),
 						],
 					);
 				} catch (ForbiddenException $e) {
@@ -138,10 +133,9 @@ class PollService {
 	 */
 	public function listForAdmin(): array {
 		$pollList = [];
-		$userId = $this->userId;
-		if ($this->groupManager->isAdmin($userId)) {
+		if ($this->userMapper->getCurrentUserCached()->getIsAdmin()) {
 			try {
-				$pollList = $this->pollMapper->findForAdmin($userId);
+				$pollList = $this->pollMapper->findForAdmin($this->userMapper->getCurrentUserCached()->getId());
 			} catch (DoesNotExistException $e) {
 				// silent catch
 			}
@@ -153,12 +147,12 @@ class PollService {
 	 * Update poll configuration
 	 * @return Poll
 	 */
-	public function takeover(int $pollId): Poll {
+	public function takeover(int $pollId, UserBase $targetUser): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
 
 		$this->eventDispatcher->dispatchTyped(new PollTakeOverEvent($this->poll));
 
-		$this->poll->setOwner($this->userId);
+		$this->poll->setOwner($targetUser->getId());
 		$this->pollMapper->update($this->poll);
 
 		return $this->poll;
@@ -169,33 +163,40 @@ class PollService {
 	 * @psalm-return array<Poll>
 	 */
 	public function transferPolls(string $sourceUser, string $targetUser): array {
-		if ($this->userManager->get($targetUser) instanceof IUser) {
-			$pollsToTransfer = $this->pollMapper->listByOwner($sourceUser);
-			foreach ($pollsToTransfer as $poll) {
-				$poll->setOwner($targetUser);
-				$this->pollMapper->update($poll);
-				$this->eventDispatcher->dispatchTyped(new PollOwnerChangeEvent($poll));
-			}
-			return $pollsToTransfer;
+		try {
+			$this->userMapper->getUserFromUserBase($targetUser);
+		} catch (UserNotFoundException $e) {
+			throw new InvalidUsernameException('The user id "' . $targetUser . '" for the target user is not valid.');
 		}
-		throw new InvalidUsernameException('The user id "' . $targetUser . '" is not valid.');
+
+		$pollsToTransfer = $this->pollMapper->listByOwner($sourceUser);
+
+		foreach ($pollsToTransfer as &$poll) {
+			$poll = $this->executeTransfer($poll, $targetUser);
+		}
+		return $pollsToTransfer;
 	}
 
 	/**
 	 * @return Poll
 	 */
 	public function transferPoll(int $pollId, string $targetUser): Poll {
-		if ($this->userManager->get($targetUser) instanceof IUser) {
-			$poll = $this->pollMapper->find($pollId);
-			$poll->setOwner($targetUser);
-			$this->pollMapper->update($poll);
-			$this->eventDispatcher->dispatchTyped(new PollOwnerChangeEvent($poll));
-			return $poll;
+		try {
+			$this->userMapper->getUserFromUserBase($targetUser);
+		} catch (UserNotFoundException $e) {
+			throw new InvalidUsernameException('The user id "' . $targetUser . '" for the target user is not valid.');
 		}
-		throw new InvalidUsernameException('The user id "' . $targetUser . '" is not valid.');
+
+		return $this->executeTransfer($this->pollMapper->find($pollId), $targetUser);
 	}
 
+	private function executeTransfer(Poll $poll, string $targetUser): Poll {
+		$poll->setOwner($targetUser);
+		$this->pollMapper->update($poll);
+		$this->eventDispatcher->dispatchTyped(new PollOwnerChangeEvent($poll));
+		return $poll;
 
+	}
 	/**
 	 * get poll configuration
 	 * @return Poll
@@ -203,11 +204,6 @@ class PollService {
 	public function get(int $pollId) {
 		$this->acl->setPollId($pollId);
 		$this->poll = $this->pollMapper->find($pollId);
-
-		if (!$this->acl->getIsLoggedIn() && $this->poll->getUserId() !== $this->acl->getUserId()) {
-			$this->poll->generateHashedUserId();
-		}
-
 		return $this->poll;
 	}
 
@@ -231,7 +227,7 @@ class PollService {
 		$this->poll = new Poll();
 		$this->poll->setType($type);
 		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userId);
+		$this->poll->setOwner($this->userMapper->getCurrentUserCached()->getId());
 		$this->poll->setTitle($title);
 		$this->poll->setDescription('');
 		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
@@ -242,7 +238,6 @@ class PollService {
 		$this->poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
-		$this->poll->setImportant(0);
 		$this->poll->setLastInteraction(time());
 		$this->poll = $this->pollMapper->insert($this->poll);
 
@@ -357,7 +352,7 @@ class PollService {
 	 */
 	private function toggleClose(int $pollId, int $expiry): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPoll($this->poll, Acl::PERMISSION_POLL_EDIT);
+		$this->acl->setPollId($this->poll->getId(), Acl::PERMISSION_POLL_EDIT);
 		$this->poll->setExpire($expiry);
 		if ($expiry > 0) {
 			$this->eventDispatcher->dispatchTyped(new PollCloseEvent($this->poll));
@@ -380,7 +375,7 @@ class PollService {
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userId);
+		$this->poll->setOwner($this->userMapper->getCurrentUserCached()->getId());
 		$this->poll->setTitle('Clone of ' . $origin->getTitle());
 		$this->poll->setDeleted(0);
 		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
@@ -393,7 +388,6 @@ class PollService {
 		$this->poll->setVoteLimit($origin->getVoteLimit());
 		$this->poll->setShowResults($origin->getShowResults());
 		$this->poll->setAdminAccess($origin->getAdminAccess());
-		$this->poll->setImportant($origin->getImportant());
 
 		$this->poll = $this->pollMapper->insert($this->poll);
 		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));
@@ -411,10 +405,11 @@ class PollService {
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
 		$list = [];
 		foreach ($votes as $vote) {
+			$user = $vote->getUser();
 			$list[] = [
-				'displayName' => $vote->getDisplayName(),
-				'emailAddress' => $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()),
-				'combined' => $vote->getDisplayName() . ' <' . $this->mailService->resolveEmailAddress($this->poll->getId(), $vote->getUserId()) . '>'
+				'displayName' => $user->getDisplayName(),
+				'emailAddress' => $user->getEmailAddress(),
+				'combined' => $user->getEmailAndDisplayName(),
 			];
 		}
 		return $list;

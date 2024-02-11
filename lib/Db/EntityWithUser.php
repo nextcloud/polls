@@ -26,115 +26,67 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCA\Polls\Helper\Container;
-use OCA\Polls\Model\User\User;
+use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\Entity;
-use OCP\IUser;
-use OCP\IUserManager;
 
 /**
+ * @method string getUserId()
  * @method int getPollId()
- * @method ?string getUserId()
- * @method ?string getDisplayName()
- * @method ?string getEmailAdress()
- * @method ?string getUserType()
+ *
+ * Joined Attributes
+ * @method string getAnonymized()
+ * @method int getPollOwnerId()
+ * @method int getPollShowResults()
+ * @method int getPollExpire()
  */
 
 abstract class EntityWithUser extends Entity {
-	protected ?string $publicUserId = '';
-	protected ?string $displayName = '';
-	protected ?string $emailAddress = '';
-	protected ?string $userType = '';
+	protected int $anonymized = 0;
+	protected string $pollOwnerId = '';
+	protected string $pollShowResults = '';
+	protected int $pollExpire = 0;
 
-	public function getIsNoUser(): bool {
-		return !(Container::queryClass(IUserManager::class)->get($this->getUserId()) instanceof IUser);
+	public const ANON_FULL = 'anonymous';
+	public const ANON_PRIVACY = 'privacy';
+	public const ANON_NONE = 'ful_view';
+
+	public function __construct() {
+		// joined Attributes
+		$this->addType('anonymized', 'int');
+		$this->addType('poll_expire', 'int');
 	}
-
 	/**
-	 * Returns the displayName
-	 *
-	 * - first tries to get displayname from internal user
-	 * - then try to get it from joined share
-	 * - otherwise assume a deleted user
-	 **/
-	public function getDisplayName(): ?string {
-		if (!$this->getUserId()) {
-			return null;
-		}
-
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getDisplayName()
-			?? $this->displayName
-			?? 'Deleted User';
-	}
-
-	/**
-	 * Returns user type
-	 *
-	 * - first tries to get type from joined share
-	 * - then try to verify an internal user and set type user
-	 * - otherwise assume a deleted user
-	 *
-	 * @return null|string
+	 * Anonymized the user completely (ANON_FULL) or just strips out personal information
 	 */
-	public function getUserType(): string|null {
-		if (!$this->getUserId()) {
-			return null;
+	public function getAnonymizeLevel(): string {
+		$currentUserId = Container::queryClass(UserMapper::class)->getCurrentUser()->getId();
+		// Don't censor for poll owner or it is the current user's entity
+		if ($this->getPollOwnerId() === $currentUserId || $this->getUserId() === $currentUserId) {
+			return self::ANON_NONE;
 		}
 
-		if ($this->userType) {
-			return $this->userType;
+		// Anonymize if poll's anonymize setting is true
+		if ((bool) $this->anonymized) {
+			return self::ANON_FULL;
 		}
 
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())
-			? User::TYPE_USER
-			: User::TYPE_GHOST;
+		// Anonymize if votes are hidden
+		if ($this->getPollShowResults() === Poll::SHOW_RESULTS_NEVER
+			|| ($this->getPollShowResults() === Poll::SHOW_RESULTS_CLOSED && (
+				!$this->getPollExpire() || $this->getPollExpire() > time()
+			))
+		) {
+			return self::ANON_FULL;
+		}
+		
+		return self::ANON_PRIVACY;
 	}
 
-	/**
-	 * Returns email address
-	 *
-	 * - first tries to get emeil address from internal user
-	 * - then get it from joined share
-	 **/
-	public function getEmailAddress(): ?string {
-		if (!$this->getUserId()) {
-			return null;
-		}
-		return Container::queryClass(IUserManager::class)->get($this->getUserId())?->getEmailAddress()
-			?? $this->emailAddress;
-	}
-
-	/**
-	 * Returns an obfuscated userId
-	 *
-	 * Avoids leaking internal userIds by replacing the actual userId by another string in public access
-	 **/
-	private function getPublicUserId(): ?string {
-		if (!$this->getUserId()) {
-			return null;
-		}
-
-		if ($this->publicUserId) {
-			return $this->publicUserId;
-		}
-
-		return $this->getUserId();
-	}
-
-	public function generateHashedUserId(): void {
-		if (!$this->getUserId()) {
-			$this->publicUserId = null;
-		}
-
-		$this->publicUserId = hash('md5', $this->getUserId());
-	}
-
-	public function getUser(): array {
-		return [
-			'userId' => $this->getPublicUserId(),
-			'displayName' => $this->getDisplayName(),
-			'emailAddress' => $this->getEmailAddress(),
-			'isNoUser' => $this->getIsNoUser(),
-			'type' => $this->getUserType(),
-		];
+	public function getUser(): UserBase {
+		/** @var UserMapper */
+		$userMapper = (Container::queryClass(UserMapper::class));
+		$user = $userMapper->getParticipant($this->getUserId(), $this->getPollId());
+		$user->setAnonymizeLevel($this->getAnonymizeLevel());
+		return $user;
 	}
 }

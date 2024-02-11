@@ -47,6 +47,9 @@ class SentResult implements \JsonSerializable {
 		]);
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function jsonSerialize(): array {
 		return	[
 			'sentMails' => $this->sentMails,

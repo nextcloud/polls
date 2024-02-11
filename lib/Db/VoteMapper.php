@@ -38,6 +38,9 @@ use Psr\Log\LoggerInterface;
 class VoteMapper extends QBMapperWithUser {
 	public const TABLE = Vote::TABLE;
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function __construct(
 		IDBConnection $db,
 		private UserMapper $userMapper,
@@ -119,7 +122,6 @@ class VoteMapper extends QBMapperWithUser {
 				$qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			);
 		$qb->addGroupBy(self::TABLE . '.user_id', self::TABLE . '.poll_id');
-		$this->joinDisplayNameFromShare($qb, self::TABLE);
 
 		return $this->findEntities($qb);
 	}
@@ -225,18 +227,26 @@ class VoteMapper extends QBMapperWithUser {
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE);
-			
-		$this->joinDisplayNameFromShare($qb, self::TABLE);
-			
-		$alias = $this->joinOption($qb, self::TABLE);
-		
-		$qb->groupby(self::TABLE . '.id', $alias . '.id');
 
+		$optionAlias = $this->joinOption($qb, self::TABLE);
+		
+		
 		if ($findOrphaned) {
-			$qb->where($qb->expr()->isNull($alias . '.id'));
+			$qb->where($qb->expr()->isNull($optionAlias . '.id'));
 		} else {
-			$qb->where($qb->expr()->isNotNull($alias . '.id'));
+			$qb->where($qb->expr()->isNotNull($optionAlias . '.id'));
 		}
+		$anonAlias = $this->joinAnon($qb, self::TABLE);
+
+		$qb->groupBy(
+			self::TABLE . '.id',
+			$optionAlias . '.id',
+			$anonAlias . '.anonymous',
+			$anonAlias . '.owner',
+			$anonAlias . '.show_results',
+			$anonAlias . '.expire',
+		);
+		
 		return $qb;
 	}
 
@@ -262,5 +272,4 @@ class VoteMapper extends QBMapperWithUser {
 
 		return $joinAlias;
 	}
-
 }
