@@ -168,6 +168,10 @@ export default {
 			type: Number,
 			default: 16,
 		},
+		hideUserStatus: {
+			type: Boolean,
+			default: false,
+		},
 		condensed: {
 			type: Boolean,
 			default: false,
@@ -259,7 +263,7 @@ export default {
 		},
 
 		showUserStatus() {
-			return Boolean(getCurrentUser())
+			return !this.hideUserStatus && Boolean(getCurrentUser())
 		},
 	},
 }
