@@ -2,19 +2,29 @@
 All notable changes to this project will be documented in this file.
 ##
 ## [6.1.0] - tbd
+
+#### This minor version contains a huge change in the internal user and Access management. 
+This is a step further to a public poll creation. The next major version will be a long time necessary technical migration to the current Vue 3 framework. 
+So this 6.x branch will get only bug fixes and compatibility updates. Any other featues are scheduled after the migration.
+
 ### Changes
  - Only Nextcloud 28 and up
  - Moved action buttons to action menu in sidebar lists of options and shares
-### New
- - Removed deletion timer of shares, options and comments
-### Fixes
+ - rewritten internal user base
+ - optimized access management
+ - optimized privacy and anonymity in anonymous  and public polls
+ ### New
+ - Removed deletion timer of shares, options and comments with better undelete
+ ### Fixes
  - Fix locked users, when registering with nextcloud user to a public poll
  - Fixed typo which caused unnecessary error logging
  - Fixed export of html files
  - Fixed non available action buttons of options in mobile view
  - Fixed calendar check
  - Fixed some minor activity issues
-
+ - Fixed autoreminder could not be set
+ - Fixed migration error which could cause data loss (when comming from 3.x)
+ 
 ## [6.0.1] - 2023-12-10
 ### Fixes
  - Some minor fixes regarding user apperances
