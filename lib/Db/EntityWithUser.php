@@ -71,10 +71,10 @@ abstract class EntityWithUser extends Entity {
 		}
 
 		// Anonymize if votes are hidden
-		if ($this->getPollShowResults() === Poll::SHOW_RESULTS_NEVER 
+		if ($this->getPollShowResults() === Poll::SHOW_RESULTS_NEVER
 			|| ($this->getPollShowResults() === Poll::SHOW_RESULTS_CLOSED && (
 				!$this->getPollExpire() || $this->getPollExpire() > time()
-				))
+			))
 		) {
 			return self::ANON_FULL;
 		}

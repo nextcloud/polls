@@ -53,6 +53,7 @@ class UserBase implements \JsonSerializable {
 	/** @var string */
 	public const TYPE_EXTERNAL = 'external';
 	public const TYPE_EMPTY = 'empty';
+	public const TYPE_ANON = 'anonymous';
 	public const TYPE_CIRCLE = Circle::TYPE;
 	public const TYPE_CONTACT = Contact::TYPE;
 	public const TYPE_CONTACTGROUP = ContactGroup::TYPE;
@@ -105,29 +106,6 @@ class UserBase implements \JsonSerializable {
 
 	public function setAnonymizeLevel(string $anonymizeLevel = EntityWithUser::ANON_PRIVACY): void {
 		$this->anonymizeLevel = $anonymizeLevel;
-	}
-
-	/**
-	 * returns the safe id to avoid leaking the userId
-	 */
-	public function getSafeId(): string {
-		// always return real userId for the current user
-		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
-			return $this->getId();
-		}
-
-		// return userId, if fully anonimized
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
-			return $this->getHashedUserId();
-		}
-
-		// internal users may see the real userId
-		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
-			return $this->getId();
-		}
-
-		// otherwise return the obfuscated userId
-		return $this->getHashedUserId();
 	}
 
 	/**
@@ -219,17 +197,6 @@ class UserBase implements \JsonSerializable {
 		return $this->displayName;
 	}
 
-	/**
-	 * anonymize the displayname in case of anonymous settings
-	 */
-	public function getSafeDisplayName(): string {
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
-			return 'Anon';
-		}
-
-		return $this->displayName;
-	}
-
 	public function getDescription(): string {
 		return $this->description;
 	}
@@ -249,34 +216,6 @@ class UserBase implements \JsonSerializable {
 		return $this->getDisplayName() . ' <' . $this->getEmailAddress() . '>';
 	}
 
-	// Function for obfuscating mail adresses; Default return the email address
-	public function getSafeEmailAddress(): string {
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
-			return '';
-		}
-
-		if ($this->appSettings->getAllowSeeMailAddresses()) {
-			return $this->getEmailAddress();
-		}
-
-		return '';
-	}
-	public function getOrganisation(): string {
-		return $this->organisation;
-	}
-
-	public function getIsLoggedIn(): bool {
-		return $this->userSession->isLoggedIn();
-	}
-
-	public function getIsAdmin(): bool {
-		return $this->groupManager->isAdmin($this->id);
-	}
-
-	public function getIsInGroup(string $groupName): bool {
-		return $this->groupManager->isInGroup($this->id, $groupName);
-	}
-
 	/**
 	 * return true, if the $checkname is equal to the userid or displayName (case insensitive)
 	 */
@@ -285,6 +224,7 @@ class UserBase implements \JsonSerializable {
 			strtolower($this->getDisplayName()), strtolower($this->getId()),
 		]);
 	}
+
 	/**
 	 * @return string[]
 	 *
@@ -392,7 +332,7 @@ class UserBase implements \JsonSerializable {
 	}
 
 	/**
-	 * Default is array with self as single element
+	 * Default is an array with self as single element
 	 * @return array
 	 */
 	public function getMembers(): array {
@@ -407,6 +347,8 @@ class UserBase implements \JsonSerializable {
 	}
 
 	/**
+	 * Full user array for poll owners, delegated poll admins and the current user himself
+	 * without obfuscating/anonymizing
 	 * @return (bool|string|string[])[]
 	 *
 	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, desc: string, subname: string, subtitle: string, icon: string, categories: array<string>}
@@ -433,6 +375,11 @@ class UserBase implements \JsonSerializable {
 	}
 
 	/**
+	 * privacy and anonymizing section
+	 */
+
+	/**
+	 * Simply user array returning safe attributes
 	 * @return (bool|string)[]
 	 *
 	 * @psalm-return array{id: string, userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
@@ -444,7 +391,87 @@ class UserBase implements \JsonSerializable {
 			'displayName' => $this->getSafeDisplayName(),
 			'emailAddress' => $this->getSafeEmailAddress(),
 			'isNoUser' => $this->getIsNoUser(),
-			'type' => $this->getType(),
+			'type' => $this->getSafeType(),
 		];
 	}
+
+	/**
+	 * returns the safe id to avoid leaking the userId
+	 */
+	public function getSafeId(): string {
+		// always return real userId for the current user
+		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+			return $this->getId();
+		}
+
+		// return hashed userId, if fully anonimized
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return $this->getHashedUserId();
+		}
+
+		// internal users may see the real userId
+		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
+			return $this->getId();
+		}
+
+		// otherwise return the obfuscated userId
+		return $this->getHashedUserId();
+	}
+
+	/**
+	 * anonymize the displayname in case of anonymous settings
+	 */
+	public function getSafeDisplayName(): string {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return 'Anon';
+		}
+
+		return $this->displayName;
+	}
+
+	// Function for obfuscating mail adresses; Default return the email address
+	public function getSafeEmailAddress(): string {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return '';
+		}
+
+		if ($this->appSettings->getAllowSeeMailAddresses()) {
+			return $this->getEmailAddress();
+		}
+
+		return '';
+	}
+	public function getOrganisation(): string {
+		return $this->organisation;
+	}
+
+	public function getIsLoggedIn(): bool {
+		return $this->userSession->isLoggedIn();
+	}
+
+	public function getIsAdmin(): bool {
+		return $this->groupManager->isAdmin($this->id);
+	}
+
+	public function getIsInGroup(string $groupName): bool {
+		return $this->groupManager->isInGroup($this->id, $groupName);
+	}
+
+	/**
+	 * returns the safe id to avoid leaking thereal user type
+	 */
+	public function getSafeType(): string {
+		// always return real userId for the current user
+		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+			return $this->getType();
+		}
+
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+			return self::TYPE_ANON;
+		}
+
+		return $this->getType();
+	}
+
+
 }

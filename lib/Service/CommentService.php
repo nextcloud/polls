@@ -40,6 +40,7 @@ class CommentService {
 		private CommentMapper $commentMapper,
 		private Comment $comment,
 		private IEventDispatcher $eventDispatcher,
+		protected Acl $acl,
 	) {
 	}
 
@@ -48,20 +49,22 @@ class CommentService {
 	 * Read all comments of a poll based on the poll id and return list as array
 	 * @return Comment[]
 	 */
-	public function list(Acl $acl): array {
-		$comments = $this->commentMapper->findByPoll($acl->getPollId());
-		$timeTolerance = 5 * 60; // treat comments within 5 minutes as one comment
-		$tempId = null;
-		$tempUserId = null;
-		$tempTimestamp = null;
+	public function list(?int $pollId = null): array {
+		$this->acl->setPollId($pollId);
+		$comments = $this->commentMapper->findByPoll($this->acl->getPollId());
+		// treat comments from the same user within 5 minutes as grouped comments
+		$timeTolerance = 5 * 60;
+		$predecessorId = null;
+		$predecessorUserId = null;
+		$predecessorTimestamp = null;
 
 		foreach ($comments as &$comment) {
-			if ($comment->getUserId() === $tempUserId && $comment->getTimestamp() - $tempTimestamp < $timeTolerance) {
-				$comment->setParent($tempId);
+			if ($comment->getUserId() === $predecessorUserId && $comment->getTimestamp() - $predecessorTimestamp < $timeTolerance) {
+				$comment->setParent($predecessorId);
 			} else {
-				$tempUserId = $comment->getUserId();
-				$tempId = $comment->getId();
-				$tempTimestamp = $comment->getTimestamp();
+				$predecessorUserId = $comment->getUserId();
+				$predecessorId = $comment->getId();
+				$predecessorTimestamp = $comment->getTimestamp();
 			}
 		}
 
@@ -77,10 +80,12 @@ class CommentService {
 	/**
 	 * Add comment
 	 */
-	public function add(string $message, Acl $acl): Comment {
+	public function add(string $message, ?int $pollId = null): Comment {
+		$this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD);
+
 		$this->comment = new Comment();
-		$this->comment->setPollId($acl->getPollId());
-		$this->comment->setUserId($acl->getUserId());
+		$this->comment->setPollId($this->acl->getPollId());
+		$this->comment->setUserId($this->acl->getUserId());
 		$this->comment->setComment($message);
 		$this->comment->setTimestamp(time());
 		$this->comment = $this->commentMapper->insert($this->comment);
@@ -93,14 +98,11 @@ class CommentService {
 	/**
 	 * Delete or restore comment
 	 * @param Comment $comment Comment to delete or restore
-	 * @param Acl $acl Acl
 	 * @param bool $restore Set true, if comment is to be restored
 	 */
-	public function delete(Comment $comment, Acl $acl, bool $restore = false): Comment {
-		$acl->validatePollId($comment->getPollId());
-		if (!$acl->getIsOwner()) {
-			$acl->validateUserId($comment->getUserId());
-		}
+	public function delete(Comment $comment, bool $restore = false): Comment {
+		$this->acl->request(Acl::PERMISSION_COMMENT_DELETE, $comment->getUserId(), $comment->getPollId());
+	
 		$comment->setDeleted($restore ? 0 : time());
 		$this->commentMapper->update($comment);
 		$this->eventDispatcher->dispatchTyped(new CommentDeleteEvent($comment));

@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use Closure;
-use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCP\AppFramework\Controller;
@@ -35,7 +34,6 @@ use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
 /**
  * @psalm-api
@@ -44,7 +42,6 @@ class BaseController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		protected ISession $session,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -54,8 +51,6 @@ class BaseController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
-		$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
-
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (Exception $e) {
@@ -68,8 +63,6 @@ class BaseController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
-		$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
-
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (NoUpdatesException $e) {
@@ -82,8 +75,6 @@ class BaseController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {
-		$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
-
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
 		} catch (Exception $e) {
@@ -96,8 +87,6 @@ class BaseController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
-		$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
-
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

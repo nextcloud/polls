@@ -34,7 +34,6 @@ use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
 /**
  * @psalm-api
@@ -43,13 +42,12 @@ class PollController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		private Acl $acl,
 		private MailService $mailService,
 		private OptionService $optionService,
 		private PollService $pollService,
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	/**

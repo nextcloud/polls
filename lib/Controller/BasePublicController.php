@@ -55,7 +55,7 @@ class BasePublicController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback, string $token): JSONResponse {
-		$this->updateToken($token);
+		$this->updateSessionToken($token);
 
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -69,7 +69,7 @@ class BasePublicController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback, string $token): JSONResponse {
-		$this->updateToken($token);
+		$this->updateSessionToken($token);
 
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -82,7 +82,7 @@ class BasePublicController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback, string $token): JSONResponse {
-		$this->updateToken($token);
+		$this->updateSessionToken($token);
 
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
@@ -91,7 +91,7 @@ class BasePublicController extends Controller {
 		}
 	}
 
-	private function updateToken(string $token): void {
+	private function updateSessionToken(string $token): void {
 		if ($token !== $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN)) {
 			$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 		}

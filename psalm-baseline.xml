@@ -218,7 +218,6 @@
   <file src="lib/Db/UserMapper.php">
     <PossiblyUnusedProperty>
       <code>$currentUserId</code>
-      <code>$logger</code>
     </PossiblyUnusedProperty>
     <UnusedProperty>
       <code>$groupManager</code>
@@ -266,11 +265,6 @@
     <UnusedClass>
       <code>ActivityFilter</code>
     </UnusedClass>
-  </file>
-  <file src="lib/Model/Acl.php">
-    <UnusedMethod>
-      <code>validateShareAccess</code>
-    </UnusedMethod>
   </file>
   <file src="lib/Model/Group/Circle.php">
     <UndefinedClass>

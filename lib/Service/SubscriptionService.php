@@ -35,12 +35,16 @@ class SubscriptionService {
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
-	public function __construct(private SubscriptionMapper $subscriptionMapper) {
+	public function __construct(
+		private SubscriptionMapper $subscriptionMapper,
+		private Acl $acl,
+	) {
 	}
 
-	public function get(Acl $acl): bool {
+	public function get(?int $pollId = null): bool {
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_SUBSCRIBE);
 		try {
-			$this->subscriptionMapper->findByPollAndUser($acl->getPollId(), $acl->getUserId());
+			$this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 			// Subscription exists
 			return true;
 		} catch (DoesNotExistException $e) {
@@ -48,17 +52,18 @@ class SubscriptionService {
 		}
 	}
 
-	public function set(bool $subscribed, Acl $acl): bool {
+	public function set(bool $subscribed, ?int $pollId = null): bool {
+		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_SUBSCRIBE);
 		if (!$subscribed) {
 			try {
-				$subscription = $this->subscriptionMapper->findByPollAndUser($acl->getPollId(), $acl->getUserId());
+				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 				$this->subscriptionMapper->delete($subscription);
 			} catch (DoesNotExistException $e) {
 				// catch silently (assume already unsubscribed)
 			}
 		} else {
 			try {
-				$this->add($acl->getPollId(), $acl->getUserId());
+				$this->add($this->acl->getPollId(), $this->acl->getUserId());
 			} catch (Exception $e) {
 				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 					// catch silently (assume already subscribed)

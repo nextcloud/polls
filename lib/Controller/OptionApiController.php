@@ -92,7 +92,7 @@ class OptionApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function restore(int $optionId): JSONResponse {
-		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, restore: true)]);
+		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)]);
 	}
 
 	/**

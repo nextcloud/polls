@@ -27,6 +27,7 @@
 				<template v-if="useIconSlot" #icon>
 					<LinkIcon v-if="typeComputed === 'public'" :size="mdIconSize" />
 					<LinkIcon v-if="typeComputed === 'addPublicLink'" :size="mdIconSize" />
+					<AnoymousIcon v-if="typeComputed === 'anonymous'" :size="mdIconSize" />
 					<InternalLinkIcon v-if="typeComputed === 'internalAccess'" :size="mdIconSize" />
 					<ContactGroupIcon v-if="typeComputed === 'contactGroup'" :size="mdIconSize" />
 					<GroupIcon v-if="typeComputed === 'group'" :size="mdIconSize" />
@@ -35,10 +36,10 @@
 				</template>
 			</NcAvatar>
 
-			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="16" class="type-icon" />
-			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="16" class="type-icon" />
-			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="16" class="type-icon" />
-			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="16" class="type-icon" />
+			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="typeIconSize" class="type-icon" />
+			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="typeIconSize" class="type-icon" />
+			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="typeIconSize" class="type-icon" />
+			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="typeIconSize" class="type-icon" />
 		</div>
 
 		<slot name="status" />
@@ -75,6 +76,7 @@ export default {
 		GroupIcon: () => import('vue-material-design-icons/AccountMultiple.vue'),
 		CircleIcon: () => import('vue-material-design-icons/GoogleCirclesExtended.vue'),
 		DeletedUserIcon: () => import('vue-material-design-icons/AccountOff.vue'),
+		AnoymousIcon: () => import('vue-material-design-icons/Incognito.vue'),
 	},
 
 	inheritAttrs: false,
@@ -162,6 +164,10 @@ export default {
 			type: Number,
 			default: 20,
 		},
+		typeIconSize: {
+			type: Number,
+			default: 16,
+		},
 		condensed: {
 			type: Boolean,
 			default: false,
@@ -196,6 +202,7 @@ export default {
 				'group',
 				'circle',
 				'deleted',
+				'anonymous',
 			].includes(this.typeComputed)
 		},
 
@@ -209,6 +216,7 @@ export default {
 			if (this.typeComputed === 'public') return this.publicShareDescription
 			if (this.typeComputed === 'deleted') return t('polls', 'The participant got removed from this poll')
 			if (this.typeComputed === 'admin') return t('polls', 'Is granted admin rights for this poll')
+			if (this.typeComputed === 'anonymous') return t('polls', 'Anonymized user')
 			return this.emailAddressComputed
 		},
 

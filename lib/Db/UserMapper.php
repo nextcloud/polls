@@ -90,6 +90,7 @@ class UserMapper extends QBMapper {
 			try {
 				$this->currentUser = $this->getUserFromShareToken($this->getToken());
 			} catch (DoesNotExistException $e) {
+				$this->logger->debug('no user found, returned fake user');
 				$this->currentUser = new GenericUser('', Share::TYPE_PUBLIC);
 			}
 		}
@@ -178,7 +179,7 @@ class UserMapper extends QBMapper {
 
 	private function getUserFromShareToken(string $token): UserBase {
 		$share = $this->getShareByToken($token);
-		if ($share->getType() == Share::TYPE_PUBLIC) {
+		if ($share->getType() === Share::TYPE_PUBLIC) {
 			throw new DoesNotExistException('Share type is <Share::' . $share->getType() . '> and has no user.');
 		}
 		return $this->getUserFromShare($share);

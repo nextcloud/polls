@@ -34,7 +34,6 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
-use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\Util;
 
@@ -45,13 +44,12 @@ class AdminController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		private IURLGenerator $urlGenerator,
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
 		private UserMapper $userMapper,
 	) {
-		parent::__construct($appName, $request, $session);
+		parent::__construct($appName, $request);
 	}
 
 	#[NoCSRFRequired]

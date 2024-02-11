@@ -145,7 +145,7 @@ export const watchPolls = {
 			}
 
 			// Watch has to be canceled
-			if (e?.code === 'ERR_CANCELED') {
+			if (e?.code === 'ERR_CANCELED' || e?.code === 'ECONNABORTED') {
 				console.debug('[polls]', 'Watch canceled')
 			} else {
 				console.debug('[polls]', e.message ?? `No response - ${this.updateType} aborted - failed request ${this.retryCounter}/${MAX_TRIES}`, e)

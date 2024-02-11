@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Exceptions\Exception;
-use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\SubscriptionService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\CORS;
@@ -42,7 +41,6 @@ class SubscriptionApiController extends BaseApiController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private Acl $acl,
 		private SubscriptionService $subscriptionService,
 	) {
 		parent::__construct($appName, $request);
@@ -58,7 +56,7 @@ class SubscriptionApiController extends BaseApiController {
 		try {
 			return new JSONResponse([
 				'pollId' => $pollId,
-				'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId)),
+				'subscribed' => $this->subscriptionService->get($pollId),
 			], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
@@ -73,10 +71,10 @@ class SubscriptionApiController extends BaseApiController {
 	#[NoCSRFRequired]
 	public function subscribe(int $pollId): JSONResponse {
 		try {
-			$this->subscriptionService->set(true, $this->acl->setPollId($pollId));
+			$this->subscriptionService->set(true, $pollId);
 			return new JSONResponse([
 				'pollId' => $pollId,
-				'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId)),
+				'subscribed' => $this->subscriptionService->get($pollId),
 			], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
@@ -91,10 +89,10 @@ class SubscriptionApiController extends BaseApiController {
 	#[NoCSRFRequired]
 	public function unsubscribe(int $pollId): JSONResponse {
 		try {
-			$this->subscriptionService->set(false, $this->acl->setPollId($pollId));
+			$this->subscriptionService->set(false, $pollId);
 			return new JSONResponse([
 				'pollId' => $pollId,
-				'subscribed' => $this->subscriptionService->get($this->acl->setPollId($pollId)),
+				'subscribed' => $this->subscriptionService->get($pollId),
 			], Http::STATUS_OK);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
