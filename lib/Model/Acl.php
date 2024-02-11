@@ -227,8 +227,9 @@ class Acl implements JsonSerializable {
 
 		$this->share = $this->shareMapper->findByToken((string) $this->getToken());
 
-		// ensure, the poll is reset
+		// ensure, poll and currentUser get reset
 		$this->poll = null;
+		$this->currentUser = null;
 		
 		// set the poll id based on the share
 		$this->pollId = $this->share->getPollId();
