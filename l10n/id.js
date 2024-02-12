@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Group" : "Grup",
     "Contact" : "Kontak",
-    "Public link" : "Tautan publik",
     "User" : "Pengguna",
     "Delete" : "Hapus",
     "Register" : "Daftar",
@@ -28,6 +27,7 @@ OC.L10N.register(
     "Preview" : "Pratinjau",
     "Shares" : "Dibagikan",
     "Description" : "Deskrisi",
+    "Public link" : "Tautan publik",
     "Yes" : "Ya",
     "Administration" : "Administrasi",
     "Details" : "Detil",

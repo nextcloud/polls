@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Group" : "กลุ่ม",
-    "Public link" : "ลิงก์สาธารณะ",
     "User" : "ผู้ใช้",
     "Delete" : "ลบ",
     "Register" : "ลงทะเบียน",
@@ -26,6 +25,7 @@ OC.L10N.register(
     "Preview" : "ตัวอย่าง",
     "Shares" : "การแชร์",
     "Description" : "รายละเอียด",
+    "Public link" : "ลิงก์สาธารณะ",
     "Change name" : "เปลี่ยนชื่อ",
     "Email options" : "ตัวเลือกอีเมล",
     "Yes" : "ใช่",
