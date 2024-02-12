@@ -77,6 +77,8 @@ export default {
 		InputDiv,
 	},
 
+	emits: ['close-create'],
+
 	data() {
 		return {
 			pollType: 'datePoll',

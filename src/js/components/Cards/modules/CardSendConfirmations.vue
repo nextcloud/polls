@@ -41,6 +41,8 @@ export default {
 		ActionSendConfirmed: () => import('../../Actions/modules/ActionSendConfirmed.vue'),
 	},
 
+	emits: ['send-confirmation-success', 'send-confirmation-error'],
+
 	data() {
 		return {
 			cardType: 'info',

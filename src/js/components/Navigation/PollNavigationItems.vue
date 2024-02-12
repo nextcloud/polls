@@ -97,6 +97,8 @@ export default {
 		},
 	},
 
+	emits: ['clone-poll', 'toggle-archive', 'delete-poll'],
+
 	computed: {
 		...mapState({
 			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,

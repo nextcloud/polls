@@ -135,6 +135,8 @@ export default {
 		},
 	},
 
+	emits: ['input', 'change', 'submit'],
+
 	computed: {
 		computedSignalingClass() {
 			if (this.signalingClass === 'valid') return 'success'

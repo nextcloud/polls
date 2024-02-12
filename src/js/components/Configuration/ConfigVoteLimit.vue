@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="useVoteLimit" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="useVoteLimit" type="switch">
 			{{ t('polls', 'Limit "Yes" votes per user') }}
 		</NcCheckboxRadioSwitch>
 
@@ -47,6 +47,8 @@ export default {
 		NcCheckboxRadioSwitch,
 		InputDiv,
 	},
+
+	emits: ['change'],
 
 	computed: {
 		...mapState({

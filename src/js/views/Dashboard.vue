@@ -26,9 +26,7 @@
 		<NcDashboardWidget :items="relevantPolls"
 			:empty-content-message="t('polls', 'No polls found for this category')"
 			:show-more-text="t('polls', 'Relevant polls')"
-			:loading="loading"
-			@hide="() => {}"
-			@markDone="() => {}">
+			:loading="loading">
 			<template #emptyContentIcon>
 				<PollsAppIcon />
 			</template>

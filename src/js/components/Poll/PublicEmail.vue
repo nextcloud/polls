@@ -50,6 +50,8 @@ export default {
 		},
 	},
 
+	emits: ['update'],
+
 	data() {
 		return {
 			emailAddress: this.value,

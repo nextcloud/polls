@@ -37,6 +37,8 @@ export default {
 		RadioGroupDiv,
 	},
 
+	emits: ['change'],
+
 	data() {
 		return {
 			pollShowResultsOptions: [
