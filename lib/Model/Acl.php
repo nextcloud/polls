@@ -173,14 +173,6 @@ class Acl implements JsonSerializable {
 
 		return $this->share;
 	}
-
-	private function verifyConstraints(): void {
-		if ($this->getToken()) {
-			$this->loadShare();
-		}
-		$this->getCurrentUser();
-		$this->loadPoll();
-	}
 	
 	/**
 	 * load poll
@@ -201,34 +193,37 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * load share from db by session token or rely on cahced share
+	 * load share from db by session token or rely on cached share
 	 * If the share token has changed, the share gets loaded from the db,
 	 * the poll will get invalidated (set to null)
 	 * and the pollId will get set to the share's pollId
 	 */
 	private function loadShare(): void {
-		// if share is already cached, verify against session token
+		// no token in session, try to find a user, who matches
 		if (!$this->getToken()) {
 			if ($this->getCurrentUser()->getIsLoggedIn()) {
 				// search for logged in user's share, load it and return
 				$this->share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
 				// store share in session for further validations
-				$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
+				// $this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
 				return;
 			} else {
+				$this->share = new Share();
 				// must fail, if no token is present and not logged in
 				throw new ShareNotFoundException('No token was set for ACL');
 			}
 		}
-
+		
+		// if share is already cached, verify against session token
 		if ($this->share?->getToken() === $this->getToken()) {
 			return;
 		}
 
 		$this->share = $this->shareMapper->findByToken((string) $this->getToken());
 
-		// ensure, the poll is reset
+		// ensure, poll and currentUser get reset
 		$this->poll = null;
+		$this->currentUser = null;
 		
 		// set the poll id based on the share
 		$this->pollId = $this->share->getPollId();
@@ -278,7 +273,7 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getIsAllowed(string $permission, ?string $userId = null, ?int $pollId = null): bool|null {
-		$this->verifyConstraints();
+		// $this->verifyConstraints();
 		return match ($permission) {
 			self::PERMISSION_OVERRIDE => true,
 			self::PERMISSION_POLL_CREATE => $this->appSettings->getPollCreationAllowed(),

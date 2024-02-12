@@ -25,32 +25,36 @@
 		<template #icon>
 			<ExportIcon />
 		</template>
-		<NcActionButton close-after-click @click="exportFile('xlsx')">
+		<NcActionButton close-after-click
+			:name="t('polls', 'Download Excel spreadsheet')"
+			@click="exportFile('xlsx')">
 			<template #icon>
 				<ExcelIcon />
 			</template>
-			{{ t('polls', 'Download Excel spreadsheet') }}
 		</NcActionButton>
 
-		<NcActionButton close-after-click @click="exportFile('ods')">
+		<NcActionButton close-after-click
+			:name="t('polls', 'Download Open Document spreadsheet')"
+			@click="exportFile('ods')">
 			<template #icon>
 				<FileTableIcon />
 			</template>
-			{{ t('polls', 'Download Open Document spreadsheet') }}
 		</NcActionButton>
 
-		<NcActionButton close-after-click @click="exportFile('csv')">
+		<NcActionButton close-after-click
+			:name="t('polls', 'Download CSV file')"
+			@click="exportFile('csv')">
 			<template #icon>
 				<CsvIcon />
 			</template>
-			{{ t('polls', 'Download CSV file') }}
 		</NcActionButton>
 
-		<NcActionButton close-after-click @click="exportFile('html')">
+		<NcActionButton close-after-click
+			:name="t('polls', 'Download HTML file')"
+			@click="exportFile('html')">
 			<template #icon>
 				<XmlIcon />
 			</template>
-			{{ t('polls', 'Download HTML file') }}
 		</NcActionButton>
 	</NcActions>
 </template>

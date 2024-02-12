@@ -40,31 +40,29 @@
 				</template>
 				<template v-if="permissions.edit" #actions>
 					<NcActions v-if="!closed" class="action">
-						<NcActionButton v-if="!option.deleted" @click="deleteOption(option)">
+						<NcActionButton v-if="!option.deleted" :name="t('polls', 'Delete option')" @click="deleteOption(option)">
 							<template #icon>
 								<DeleteIcon />
 							</template>
-							{{ t('polls', 'Delete option') }}
 						</NcActionButton>
-						<NcActionButton v-if="option.deleted" @click="restoreOption(option)">
+						<NcActionButton v-if="option.deleted" :name="t('polls', 'Restore option')" @click="restoreOption(option)">
 							<template #icon>
 								<RestoreIcon />
 							</template>
-							{{ t('polls', 'Restore option') }}
 						</NcActionButton>
-						<NcActionButton v-if="!closed" @click="cloneOptionModal(option)">
+						<NcActionButton v-if="!closed" :name="t('polls', 'Clone option')" @click="cloneOptionModal(option)">
 							<template #icon>
 								<CloneDateIcon />
 							</template>
-							{{ t('polls', 'Clone option') }}
 						</NcActionButton>
 
-						<NcActionButton v-if="!option.deleted && !closed" @click="confirmOption(option)">
+						<NcActionButton v-if="!option.deleted && !closed"
+							:name="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+							@click="confirmOption(option)">
 							<template #icon>
 								<UnconfirmIcon v-if="option.confirmed" />
 								<ConfirmIcon v-else />
 							</template>
-							{{ option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
 						</NcActionButton>
 					</NcActions>
 				</template>

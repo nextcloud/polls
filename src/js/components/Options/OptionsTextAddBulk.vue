@@ -23,11 +23,10 @@
 <template>
 	<div>
 		<NcActions>
-			<NcActionButton @click="showModal = true">
+			<NcActionButton :name="caption" @click="showModal = true">
 				<template #icon>
 					<PasteIcon />
 				</template>
-				{{ caption }}
 			</NcActionButton>
 		</NcActions>
 

@@ -54,14 +54,17 @@
 					no-link>
 					<template #actions>
 						<NcActions :force-menu="true">
-							<NcActionButton close-after-click @click="confirmTakeOver(poll.id, poll.owner)">
+							<NcActionButton :name="t('polls', 'Take over')"
+								close-after-click
+								@click="confirmTakeOver(poll.id, poll.owner)">
 								<template #icon>
 									<PlusIcon />
 								</template>
-								{{ t('polls', 'Take over') }}
 							</NcActionButton>
 
-							<NcActionButton close-after-click @click="toggleArchive(poll.id)">
+							<NcActionButton :name="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+								close-after-click
+								@click="toggleArchive(poll.id)">
 								<template #icon>
 									<RestorePollIcon v-if="poll.deleted" />
 									<ArchivePollIcon v-else />
@@ -69,7 +72,10 @@
 								{{ poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
 							</NcActionButton>
 
-							<NcActionButton class="danger" close-after-click @click="confirmDelete(poll.id, poll.owner)">
+							<NcActionButton class="danger"
+								:name="t('polls', 'Delete poll')"
+								close-after-click
+								@click="confirmDelete(poll.id, poll.owner)">
 								<template #icon>
 									<DeleteIcon />
 								</template>

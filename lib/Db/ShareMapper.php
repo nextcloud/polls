@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use Exception;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -56,27 +57,18 @@ class ShareMapper extends QBMapper {
 	 * @psalm-return array<array-key, Share>
 	 */
 	public function findByPoll(int $pollId, bool $getDeleted = false): array {
-
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->select('shares.*')
-			->from($this->getTableName(), 'shares')
-			->groupBy('shares.id')
-			->where($qb->expr()->eq('shares.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->leftJoin(
-				'shares',
-				Vote::TABLE,
-				'votes',
-				$qb->expr()->andX(
-					$qb->expr()->eq('shares.poll_id', 'votes.poll_id'),
-					$qb->expr()->eq('shares.user_id', 'votes.user_id'),
-				)
-			)
-			->addSelect($qb->func()->count('votes.id', 'voted'));
+		$qb->select(self::TABLE . '.*')
+		->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id')
+			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq('shares' . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
+
+		$this->joinUserVoteCount($qb, self::TABLE);
 
 		return $this->findEntities($qb);
 	}
@@ -127,18 +119,20 @@ class ShareMapper extends QBMapper {
 	public function findByPollAndUser(int $pollId, string $userId, bool $findDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$qb->select(self::TABLE . '.*')
+		->from($this->getTableName(), self::TABLE)
+			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
+			->andWhere($qb->expr()->isNotNull(self::TABLE . '.id'));
 
 		if (!$findDeleted) {
-			$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
+		$this->joinUserVoteCount($qb, self::TABLE);
 
 		try {
 			return $this->findEntity($qb);
-		} catch (DoesNotExistException $e) {
+		} catch (Exception $e) {
 			throw new ShareNotFoundException("Share not found by userId and pollId");
 		}
 	}
@@ -165,13 +159,15 @@ class ShareMapper extends QBMapper {
 	public function findByToken(string $token, bool $getDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
+		$qb->select(self::TABLE . '.*')
+		->from($this->getTableName(), self::TABLE)
+			->where($qb->expr()->eq(self::TABLE . '.token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
 
-		// if (!$getDeleted) {
-		// 	$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
-		// }
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+		}
+
+		$this->joinUserVoteCount($qb, self::TABLE);
 
 		try {
 			return $this->findEntity($qb);
@@ -203,6 +199,27 @@ class ShareMapper extends QBMapper {
 				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
 			);
 		$query->executeStatement();
+	}
+
+	/**
+	 * Joins votes count of the share user in the given poll
+	 */
+	protected function joinUserVoteCount(IQueryBuilder &$qb, string $fromAlias): void {
+		$joinAlias = 'votes';
+
+		$qb->addSelect($qb->func()->count($joinAlias . '.id', 'voted'));
+
+		$qb->leftJoin(
+			$fromAlias,
+			Vote::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($fromAlias . '.user_id', $joinAlias . '.user_id'),
+			)
+		);
+		// avoid result with nulled columns
+		$qb->groupBy($fromAlias . '.id');
 	}
 
 }

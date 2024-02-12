@@ -25,6 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
@@ -121,7 +122,7 @@ class UserMapper extends QBMapper {
 		}
 
 		try {
-			return $this->getUserFromUserBase($userId);
+			return $this->getUserFromUserBase($userId, $pollId);
 		} catch (UserNotFoundException $e) {
 			// just catch and continue if not found and try to find user by share;
 		}
@@ -169,9 +170,17 @@ class UserMapper extends QBMapper {
 		);
 	}
 
-	public function getUserFromUserBase(string $userId): User {
+	public function getUserFromUserBase(string $userId, ?int $pollId = null): User {
 		$user = $this->userManager->get($userId);
 		if ($user instanceof IUser) {
+			try {
+				// check if we find a share, where the user got admin rights for the particular poll
+				if ($this->getShareByPollAndUser($userId, $pollId)->getType() === Share::TYPE_ADMIN) {
+					return new Admin($userId);
+				}
+			} catch (Exception $e) {
+				// silent catch
+			}
 			return new User($userId);
 		}
 		throw new UserNotFoundException();

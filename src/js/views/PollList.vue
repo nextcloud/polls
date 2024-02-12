@@ -54,16 +54,17 @@
 					<template #actions>
 						<NcActions force-menu>
 							<NcActionButton v-if="isPollCreationAllowed"
-								:close-after-click="true"
+								:name="t('polls', 'Clone poll')"
+								close-after-click
 								@click="clonePoll(poll.id)">
 								<template #icon>
 									<ClonePollIcon />
 								</template>
-								{{ t('polls', 'Clone poll') }}
 							</NcActionButton>
 
 							<NcActionButton v-if="poll.allowEdit && !poll.deleted"
-								:close-after-click="true"
+								:name="t('polls', 'Archive poll')"
+								close-after-click
 								@click="toggleArchive(poll.id)">
 								<template #icon>
 									<ArchivePollIcon />
@@ -72,7 +73,8 @@
 							</NcActionButton>
 
 							<NcActionButton v-if="poll.allowEdit && poll.deleted"
-								:close-after-click="true"
+								:name="t('polls', 'Restore poll')"
+								close-after-click
 								@click="toggleArchive(poll.id)">
 								<template #icon>
 									<RestorePollIcon />
@@ -82,7 +84,8 @@
 
 							<NcActionButton v-if="poll.allowEdit && poll.deleted"
 								class="danger"
-								:close-after-click="true"
+								:name="t('polls', 'Delete poll')"
+								close-after-click
 								@click="deletePoll(poll.id)">
 								<template #icon>
 									<DeletePollIcon />

@@ -27,6 +27,7 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Model\Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
@@ -42,37 +43,44 @@ class SubscriptionService {
 	}
 
 	public function get(?int $pollId = null): bool {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_SUBSCRIBE);
 		try {
+			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_SUBSCRIBE);
 			$this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 			// Subscription exists
 			return true;
 		} catch (DoesNotExistException $e) {
 			return false;
+		} catch (ForbiddenException $e) {
+			return false;
 		}
 	}
 
-	public function set(bool $subscribed, ?int $pollId = null): bool {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_SUBSCRIBE);
-		if (!$subscribed) {
+	public function set(bool $setToSubscribed, ?int $pollId = null): bool {
+		if (!$setToSubscribed) {
+			// user wants to unsubscribe
 			try {
 				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 				$this->subscriptionMapper->delete($subscription);
 			} catch (DoesNotExistException $e) {
-				// catch silently (assume already unsubscribed)
+				// Not found, assume already unsubscribed
+				return false;
 			}
 		} else {
 			try {
+				$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_SUBSCRIBE);
 				$this->add($this->acl->getPollId(), $this->acl->getUserId());
+			} catch (ForbiddenException $e) {
+				return false;
 			} catch (Exception $e) {
 				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
-					// catch silently (assume already subscribed)
+					// Already subscribed
+					return true;
 				} else {
 					throw $e;
 				}
 			}
 		}
-		return $subscribed;
+		return $setToSubscribed;
 	}
 
 	private function add(int $pollId, string $userId): void {
