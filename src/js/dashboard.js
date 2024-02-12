@@ -23,7 +23,7 @@
  */
 
 import { createApp } from 'vue'
-import storePolls from './store/store-polls.js'
+import pineaPolls from './store/pinea-polls.js'
 import { getCurrentUser } from '@nextcloud/auth'
 import { translate, translatePlural } from '@nextcloud/l10n'
 
@@ -36,7 +36,7 @@ import './assets/scss/polls-icon.scss'
 document.addEventListener('DOMContentLoaded', () => {
 	OCA.Dashboard.register('polls', (el) => {
 		const PollsDashboard = createApp(Dashboard)
-			.use(storePolls)
+			.use(pineaPolls)
 			.mount(el)
 		PollsDashboard.config.globalProperties.t = translate
 		PollsDashboard.config.globalProperties.n = translatePlural
