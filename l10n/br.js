@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Group" : "Stollad",
-    "Public link" : "Liamm publik",
     "User" : "Implijer",
     "Delete" : "Lemel",
     "Unknown error" : "Fazi dizanv",
@@ -25,6 +24,7 @@ OC.L10N.register(
     "Preview" : "Ragwell",
     "Shares" : "Rannañ",
     "Description" : "Diskrivadur",
+    "Public link" : "Liamm publik",
     "Change name" : "Cheñch env",
     "Yes" : "Ya",
     "Administration" : "Merouriez",
