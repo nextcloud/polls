@@ -146,7 +146,7 @@ export default {
 		this.loadPolls()
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		window.clearInterval(this.reloadTimer)
 	},
 

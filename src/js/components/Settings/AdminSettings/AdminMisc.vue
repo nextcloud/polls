@@ -23,15 +23,15 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="useActivity" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="useActivity" type="switch">
 				{{ t('polls', 'Track activities') }}
 			</NcCheckboxRadioSwitch>
 
-			<NcCheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="hideLogin" type="switch">
 				{{ t('polls', 'Hide login option in public polls') }}
 			</NcCheckboxRadioSwitch>
 
-			<NcCheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="autoArchive" type="switch">
 				{{ t('polls', 'Archive closed polls automatically') }}
 			</NcCheckboxRadioSwitch>
 			<InputDiv v-if="autoArchive"

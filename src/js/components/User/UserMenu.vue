@@ -35,7 +35,7 @@
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
 		<NcActionInput v-if="$route.name === 'publicVote'"
 			v-bind="userEmail.inputProps"
-			:value.sync="userEmail.inputValue"
+			v-model:value="userEmail.inputValue"
 			:label-outside="false"
 			:label="t('polls', 'Edit Email Address')"
 			@update:value="validateEmailAddress"
@@ -47,7 +47,7 @@
 		</NcActionInput>
 		<NcActionInput v-if="$route.name === 'publicVote' && permissions.vote"
 			v-bind="userName.inputProps"
-			:value.sync="userName.inputValue"
+			v-model:value="userName.inputValue"
 			:label-outside="false"
 			:label="t('polls', 'Change name')"
 			@update:value="validateDisplayName"

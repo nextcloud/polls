@@ -22,7 +22,7 @@
 
 <template>
 	<NcAppSidebar v-show="showSidebar"
-		:active.sync="activeTab"
+		v-model:active="activeTab"
 		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab v-if="permissions.edit"
@@ -133,7 +133,7 @@ export default {
 		})
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('polls:sidebar:changeTab')
 		unsubscribe('polls:sidebar:toggle')
 	},
