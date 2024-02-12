@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div :class="['combo-table', viewMode]">
 		<div class="user-column">
 			<div class="spacer" />

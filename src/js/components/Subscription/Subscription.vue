@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="subscription">
 		<NcCheckboxRadioSwitch :checked.sync="subscribe" type="switch">
 			{{ label }}

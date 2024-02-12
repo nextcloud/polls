@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div :class="componentClass">
 		<OptionItem :option="option" :poll-type="poll.type" :display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
 

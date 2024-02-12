@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="comment-add">
 		<UserItem :user="currentUser" hide-names />
 

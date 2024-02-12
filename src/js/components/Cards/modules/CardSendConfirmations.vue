@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<CardDiv :type="cardType">
 		{{ confirmationSendMessage }}
 		<template #button>

@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div :class="['vote-indicator', active]" @click="onClick()">
 		<MaybeIcon v-if="answer==='maybe'" :size="iconSize" />
 		<CheckIcon v-if="answer==='yes'" :fill-color="foregroundColor" :size="iconSize" />

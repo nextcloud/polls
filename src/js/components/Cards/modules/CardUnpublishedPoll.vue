@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'This poll is unpublished.') }}
 		<span v-if="hasVotes">{{ t('polls', 'Existing participants will still have access.') }} </span>

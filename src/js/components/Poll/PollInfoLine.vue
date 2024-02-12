@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="poll-info-line">
 		<span v-for="(subText) in subTexts" :key="subText.id" :class="['sub-text', subText.class]">
 			<Component :is="subText.iconComponent" :size="16" />
