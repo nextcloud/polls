@@ -21,39 +21,27 @@
  *
  */
 
-import Vue from 'vue'
-import Vuex, { Store } from 'vuex'
+import { createApp } from 'vue'
+import { createStore } from 'vuex'
 import settings from './store/modules/settings.js'
 import { translate, translatePlural } from '@nextcloud/l10n'
-import { getRequestToken } from '@nextcloud/auth'
-import { generateFilePath } from '@nextcloud/router'
 
 import UserSettingsPage from './views/UserSettingsPage.vue'
 
-/* eslint-disable-next-line camelcase, no-undef */
-__webpack_nonce__ = btoa(getRequestToken())
-/* eslint-disable-next-line camelcase, no-undef */
-__webpack_public_path__ = generateFilePath('polls', '', 'js/')
+// Vue.config.debug = import.meta.env.MODE === 'development'
+// Vue.config.devtools = import.meta.env.MODE === 'development'
 
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
-
-// Vue.config.debug = process.env.NODE_ENV !== 'production'
-// Vue.config.devTools = process.env.NODE_ENV !== 'production'
-// eslint-disable-next-line vue/match-component-file-name
-
-Vue.use(Vuex)
-
-const store = new Store({
+const store = createStore({
 	modules: {
 		settings,
 	},
-	strict: process.env.NODE_ENV !== 'production',
+	strict: import.meta.env.MODE === 'development',
 })
 
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content_polls',
-	store,
-	render: (h) => h(UserSettingsPage),
-})
+const PollsUserSettings = createApp(UserSettingsPage)
+	.use(store)
+
+PollsUserSettings.config.globalProperties.t = translate
+PollsUserSettings.config.globalProperties.n = translatePlural
+
+PollsUserSettings.mount('#user_settings')

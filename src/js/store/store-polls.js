@@ -21,16 +21,12 @@
  *
  */
 
-import Vue from 'vue'
-import Vuex, { Store } from 'vuex'
+import { createStore } from 'vuex'
 import polls from './modules/polls.js'
 
-Vue.use(Vuex)
+// const debug = import.meta.env.MODE === 'development'
 
-/* eslint-disable-next-line no-unused-vars */
-const debug = process.env.NODE_ENV !== 'production'
-
-export default new Store({
+export default createStore({
 	modules: { polls },
-	strict: process.env.NODE_ENV !== 'production',
+	// strict: debug,
 })
