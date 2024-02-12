@@ -175,7 +175,7 @@ class UserMapper extends QBMapper {
 		if ($user instanceof IUser) {
 			try {
 				// check if we find a share, where the user got admin rights for the particular poll
-				if ($this->getShareByPollAndUser($userId, $pollId)?->getType() === SHARE::TYPE_ADMIN) {
+				if ($this->getShareByPollAndUser($userId, $pollId)->getType() === Share::TYPE_ADMIN) {
 					return new Admin($userId);
 				}
 			} catch (Exception $e) {

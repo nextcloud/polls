@@ -189,9 +189,6 @@
     <PossiblyUnusedMethod>
       <code>getReplacement</code>
     </PossiblyUnusedMethod>
-    <PossiblyUnusedParam>
-      <code>$getDeleted</code>
-    </PossiblyUnusedParam>
     <UnusedProperty>
       <code>$config</code>
     </UnusedProperty>

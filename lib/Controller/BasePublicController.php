@@ -92,8 +92,6 @@ class BasePublicController extends Controller {
 	}
 
 	private function updateSessionToken(string $token): void {
-		if ($token !== $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN)) {
-			$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
-		}
+		$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 	}
 }
