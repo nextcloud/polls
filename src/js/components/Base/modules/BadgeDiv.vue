@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<Component :is="tag" class="badge">
 		<div>
 			<slot name="icon" />

@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="poll-information">
 		<BadgeDiv>
 			<template #icon>

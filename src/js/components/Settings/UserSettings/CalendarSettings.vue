@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="calendarPeek" type="switch">
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
 			</NcCheckboxRadioSwitch>
 

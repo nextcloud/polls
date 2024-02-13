@@ -22,7 +22,7 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="pollDownloadLimited" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="pollDownloadLimited" type="switch">
 			{{ t('polls', 'Disallow poll download') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="pollDownloadLimited" class="settings_details">

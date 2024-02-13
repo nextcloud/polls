@@ -22,7 +22,7 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="publicSharesLimited" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="publicSharesLimited" type="switch">
 			{{ t('polls', 'Disallow public shares') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="publicSharesLimited" class="settings_details">
@@ -37,7 +37,7 @@
 				@search="loadGroups" />
 		</div>
 
-		<NcCheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="allAccessLimited" type="switch">
 			{{ t('polls', 'Disallow openly accessible polls') }}
 		</NcCheckboxRadioSwitch>
 

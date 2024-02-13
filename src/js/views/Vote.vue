@@ -139,7 +139,7 @@ export default {
 		this.scrollElement.addEventListener('scroll', this.handleScroll)
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.scrollElement.removeEventListener('scroll', this.handleScroll)
 		this.resetPoll()
 	},

@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcAppSettingsDialog :open.sync="show" :show-navigation="true">
+	<NcAppSettingsDialog v-model:open="show" :show-navigation="true">
 		<NcAppSettingsSection id="calendar" :name="t('polls', 'Calendar check')">
 			<CalendarSettings />
 		</NcAppSettingsSection>
@@ -79,7 +79,7 @@ export default {
 
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		unsubscribe('polls:settings:show')
 	},
 }

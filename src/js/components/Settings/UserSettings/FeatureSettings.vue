@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="defaultViewTextPoll" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="defaultViewTextPoll" type="switch">
 				{{ t('polls', 'Text polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -32,7 +32,7 @@
 		</div>
 
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="defaultViewDatePoll" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="defaultViewDatePoll" type="switch">
 				{{ t('polls', 'Date polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">

@@ -38,7 +38,7 @@
 			<NcActions>
 				<NcActionInput v-if="isActivePublicShare"
 					v-bind="label.inputProps"
-					:value.sync="label.inputValue"
+					v-model:value="label.inputValue"
 					@submit="submitLabel()">
 					<template #icon>
 						<EditIcon />
@@ -187,6 +187,8 @@ export default {
 			default: undefined,
 		},
 	},
+
+	emits: ['show-qr-code'],
 
 	data() {
 		return {

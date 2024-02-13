@@ -20,24 +20,22 @@
  * along with this program. If not, see <http://www.gnu.org/licenses/>.
  *
  */
-import Vue from 'vue'
-import Router from 'vue-router'
+import { createRouter, createWebHistory } from 'vue-router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, setCookie } from './helpers/index.js'
 import { PublicAPI } from './Api/index.js'
+import { defineAsyncComponent } from 'vue'
 
 // Dynamic loading
-const List = () => import('./views/PollList.vue')
-const Administration = () => import('./views/Administration.vue')
-const Vote = () => import('./views/Vote.vue')
-const NotFound = () => import('./views/NotFound.vue')
-const SideBar = () => import('./views/SideBar.vue')
-const SideBarCombo = () => import('./views/SideBarCombo.vue')
-const Navigation = () => import('./views/Navigation.vue')
-const Combo = () => import('./views/Combo.vue')
-
-Vue.use(Router)
+const List = defineAsyncComponent(() => import('./views/PollList.vue'))
+const Administration = defineAsyncComponent(() => import('./views/Administration.vue'))
+const Vote = defineAsyncComponent(() => import('./views/Vote.vue'))
+const NotFound = defineAsyncComponent(() => import('./views/NotFound.vue'))
+const SideBar = defineAsyncComponent(() => import('./views/SideBar.vue'))
+const SideBarCombo = defineAsyncComponent(() => import('./views/SideBarCombo.vue'))
+const Navigation = defineAsyncComponent(() => import('./views/Navigation.vue'))
+const Combo = defineAsyncComponent(() => import('./views/Combo.vue'))
 
 /**
  * @callback nextCallback
@@ -79,9 +77,8 @@ async function validateToken(to, from, next) {
 	}
 }
 
-export default new Router({
-	mode: 'history',
-	base: generateUrl('/apps/polls'),
+const router = createRouter({
+	history: createWebHistory('/apps/polls'),
 	linkActiveClass: 'active',
 	routes: [
 		{
@@ -158,3 +155,5 @@ export default new Router({
 		},
 	],
 })
+
+export default router

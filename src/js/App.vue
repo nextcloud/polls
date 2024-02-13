@@ -36,7 +36,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { mapState, mapActions } from 'vuex'
-import '@nextcloud/dialogs/style.css'
+// import '@nextcloud/dialogs/style.css'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/print.scss'
@@ -117,7 +117,7 @@ export default {
 
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.cancelToken.cancel()
 		unsubscribe('polls:poll:load')
 		unsubscribe('polls:transitions:on')

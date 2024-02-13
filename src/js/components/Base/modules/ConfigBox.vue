@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="config-box">
 		<div class="config-box__header">
 			<slot name="icon" />

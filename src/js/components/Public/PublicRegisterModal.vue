@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="modal__content">
 		<div class="modal__registration">
 			<div class="registration__registration">
@@ -43,7 +43,7 @@
 					inputmode="email"
 					@submit="submitRegistration" />
 
-				<NcCheckboxRadioSwitch v-if="share.user.type === 'public'" :checked.sync="saveCookie">
+				<NcCheckboxRadioSwitch v-if="share.user.type === 'public'" v-model:checked="saveCookie">
 					{{ t('polls', 'Remember me for 30 days') }}
 				</NcCheckboxRadioSwitch>
 
@@ -116,6 +116,8 @@ export default {
 		SimpleLink,
 		NcButton,
 	},
+
+	emits: ['close'],
 
 	data() {
 		return {

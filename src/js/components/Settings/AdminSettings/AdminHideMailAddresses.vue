@@ -22,7 +22,7 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="hideMailAddresses" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="hideMailAddresses" type="switch">
 			{{ t('polls', 'Hide email addresses of internal users') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="hideMailAddresses" class="settings_details">

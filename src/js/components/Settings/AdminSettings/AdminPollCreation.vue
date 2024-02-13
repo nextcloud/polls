@@ -22,7 +22,7 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="createPollLimited" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="createPollLimited" type="switch">
 			{{ t('polls', 'Disallow poll creation for all users') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="createPollLimited" class="settings_details">

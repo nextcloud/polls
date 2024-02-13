@@ -20,9 +20,9 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="subscription">
-		<NcCheckboxRadioSwitch :checked.sync="subscribe" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="subscribe" type="switch">
 			{{ label }}
 		</NcCheckboxRadioSwitch>
 	</div>

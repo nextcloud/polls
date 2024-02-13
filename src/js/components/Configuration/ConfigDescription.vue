@@ -32,6 +32,8 @@ import { mapState } from 'vuex'
 export default {
 	name: 'ConfigDescription',
 
+	emits: ['change'],
+
 	computed: {
 		...mapState({
 			poll: (state) => state.poll,

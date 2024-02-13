@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked.sync="allowComment" type="switch">
+	<NcCheckboxRadioSwitch v-model:checked="allowComment" type="switch">
 		{{ t('polls', 'Allow Comments') }}
 	</NcCheckboxRadioSwitch>
 </template>
@@ -36,6 +36,8 @@ export default {
 	components: {
 		NcCheckboxRadioSwitch,
 	},
+
+	emits: ['change'],
 
 	computed: {
 		...mapState({

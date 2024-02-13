@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<CardDiv :type="cardType">
 		{{ confirmationSendMessage }}
 		<template #button>
@@ -40,6 +40,8 @@ export default {
 		CardDiv,
 		ActionSendConfirmed: () => import('../../Actions/modules/ActionSendConfirmed.vue'),
 	},
+
+	emits: ['send-confirmation-success', 'send-confirmation-error'],
 
 	data() {
 		return {

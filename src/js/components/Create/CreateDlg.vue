@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="create-dialog">
 		<ConfigBox :name="t('polls', 'Title')">
 			<template #icon>
@@ -76,6 +76,8 @@ export default {
 		RadioGroupDiv,
 		InputDiv,
 	},
+
+	emits: ['close-create'],
 
 	data() {
 		return {

@@ -21,44 +21,31 @@
  *
  */
 
-import Vue from 'vue'
+import { createApp } from 'vue'
 import App from './App.vue'
-import { sync } from 'vuex-router-sync'
+// import { sync } from 'vuex-router-sync'
 import store from './store/index.js'
 import router from './router.js'
 import ClickOutside from 'v-click-outside'
-import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
+import { getCurrentUser } from '@nextcloud/auth'
 import { translate, translatePlural } from '@nextcloud/l10n'
-import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
 import UserItem from './components/User/UserItem.vue'
 
-/* eslint-disable-next-line camelcase, no-undef */
-__webpack_nonce__ = btoa(getRequestToken())
-/* eslint-disable-next-line camelcase, no-undef */
-__webpack_public_path__ = generateFilePath('polls', '', 'js/')
+// Vue.config.debug = import.meta.env.MODE === 'development'
+// Vue.config.devtools = import.meta.env.MODE === 'development'
 
-sync(store, router)
+const Polls = createApp(App)
+	.component('UserItem', UserItem)
+	.component('tooltip', Tooltip)
+	.use(router)
+	.use(store)
+	.use(ClickOutside)
+	.config.debug(process.env.NODE_ENV !== 'production')
+	.config.devTools(process.env.NODE_ENV !== 'production')
 
-Vue.config.debug = process.env.NODE_ENV !== 'production'
-Vue.config.devTools = process.env.NODE_ENV !== 'production'
-
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
-Vue.prototype.getCurrentUser = getCurrentUser
-
-// eslint-disable-next-line vue/match-component-file-name
-Vue.component('UserItem', UserItem)
-// eslint-disable-next-line vue/match-component-file-name
-Vue.directive('tooltip', Tooltip)
-
-Vue.use(ClickOutside)
-
-/* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content',
-	router,
-	store,
-	render: (h) => h(App),
-})
+Polls.config.globalProperties.t = translate
+Polls.config.globalProperties.n = translatePlural
+Polls.config.globalProperties.getCurrentUser = getCurrentUser
+Polls.mount('#content')

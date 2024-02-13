@@ -84,6 +84,8 @@ export default {
 		},
 	},
 
+	emits: ['delete', 'restore'],
+
 	data() {
 		return {
 			deleteInterval: null,

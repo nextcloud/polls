@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="vote-column">
 		<OptionItem :option="option" poll-type="datePoll" display="dateBox" />
 		<div v-for="(poll) in polls"

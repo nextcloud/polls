@@ -22,11 +22,11 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="allowProposals" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="allowProposals" type="switch">
 			{{ t('polls', 'Allow Proposals') }}
 		</NcCheckboxRadioSwitch>
 
-		<NcCheckboxRadioSwitch v-show="proposalsAllowed" :checked.sync="proposalExpiration" type="switch">
+		<NcCheckboxRadioSwitch v-show="proposalsAllowed" v-model:checked="proposalExpiration" type="switch">
 			{{ t('polls', 'Proposal closing date') }}
 		</NcCheckboxRadioSwitch>
 

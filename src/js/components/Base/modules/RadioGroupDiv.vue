@@ -20,11 +20,11 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="radio-group-div">
 		<NcCheckboxRadioSwitch v-for="(option, index) in options"
 			:key="option.value"
-			:checked.sync="selectedValue"
+			v-model:checked="selectedValue"
 			:value="option.value"
 			:name="id + '_' + index"
 			type="radio"
@@ -61,6 +61,7 @@ export default {
 		},
 	},
 
+	emits: ['input'],
 	computed: {
 		selectedValue: {
 			get() {

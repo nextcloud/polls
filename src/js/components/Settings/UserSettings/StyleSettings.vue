@@ -24,12 +24,12 @@
 	<div>
 		<b> {{ t('polls', 'The style settings are still experimental!') }}</b>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="useCommentsAlternativeStyling" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="useCommentsAlternativeStyling" type="switch">
 				{{ t('polls', 'Use alternative styling for the comments sidebar') }}
 			</NcCheckboxRadioSwitch>
 		</div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="useAlternativeStyling" type="switch">
+			<NcCheckboxRadioSwitch v-model:checked="useAlternativeStyling" type="switch">
 				{{ t('polls', 'Use alternative vote page styling') }}
 			</NcCheckboxRadioSwitch>
 		</div>

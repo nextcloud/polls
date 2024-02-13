@@ -22,7 +22,7 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="comboLimited" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="comboLimited" type="switch">
 			{{ t('polls', 'Deactivate combo view for all users') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="comboLimited" class="settings_details">

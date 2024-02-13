@@ -22,33 +22,26 @@
  *
  */
 
-import Vue from 'vue'
-import store from './store/store-polls.js'
-import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
+import { createApp } from 'vue'
+import storePolls from './store/store-polls.js'
+import { getCurrentUser } from '@nextcloud/auth'
 import { translate, translatePlural } from '@nextcloud/l10n'
-import { generateFilePath } from '@nextcloud/router'
 
 import Dashboard from './views/Dashboard.vue'
 import './assets/scss/polls-icon.scss'
 
-Vue.config.debug = process.env.NODE_ENV !== 'production'
-Vue.config.devTools = process.env.NODE_ENV !== 'production'
-
-/* eslint-disable-next-line camelcase, no-undef */
-__webpack_nonce__ = btoa(getRequestToken())
-/* eslint-disable-next-line camelcase, no-undef */
-__webpack_public_path__ = generateFilePath('polls', '', 'js/')
-
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
-Vue.prototype.getCurrentUser = getCurrentUser
+// Vue.config.debug = import.meta.env.MODE === 'development'
+// Vue.config.devtools = import.meta.env.MODE === 'development'
 
 document.addEventListener('DOMContentLoaded', () => {
 	OCA.Dashboard.register('polls', (el) => {
-		const View = Vue.extend(Dashboard)
-		new View({
-			propsData: {},
-			store,
-		}).$mount(el)
+		const PollsDashboard = createApp(Dashboard)
+			.use(storePolls)
+			.mount(el)
+		PollsDashboard.config.globalProperties.t = translate
+		PollsDashboard.config.globalProperties.n = translatePlural
+		PollsDashboard.config.globalProperties.getCurrentUser = getCurrentUser
+
+		return PollsDashboard
 	})
 })

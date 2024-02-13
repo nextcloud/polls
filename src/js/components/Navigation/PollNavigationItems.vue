@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<NcAppNavigationItem :name="poll.title"
 		:to="{name: 'vote', params: {id: poll.id}}"
 		:class="{ closed: closed }">
@@ -96,6 +96,8 @@ export default {
 			default: undefined,
 		},
 	},
+
+	emits: ['clone-poll', 'toggle-archive', 'delete-poll'],
 
 	computed: {
 		...mapState({

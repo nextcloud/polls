@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'This poll is closed.') }}
 		<span v-if="!allowEdit">

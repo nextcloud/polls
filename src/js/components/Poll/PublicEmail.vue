@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="public-email">
 		<InputDiv v-model="emailAddress"
 			:title="check.result"
@@ -49,6 +49,8 @@ export default {
 			default: '',
 		},
 	},
+
+	emits: ['update'],
 
 	data() {
 		return {

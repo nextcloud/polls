@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<NcAppNavigation>
 		<NcAppNavigationNew v-if="isPollCreationAllowed"
 			button-class="icon-add"
@@ -146,7 +146,7 @@ export default {
 		this.loadPolls()
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		window.clearInterval(this.reloadTimer)
 	},
 

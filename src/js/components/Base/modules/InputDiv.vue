@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div :class="['input-div', { numeric: useNumModifiers }]">
 		<label v-if="label">
 			{{ label }}
@@ -134,6 +134,8 @@ export default {
 			default: null,
 		},
 	},
+
+	emits: ['input', 'change', 'submit'],
 
 	computed: {
 		computedSignalingClass() {

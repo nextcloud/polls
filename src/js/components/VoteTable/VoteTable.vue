@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="vote-table" :class="[viewMode, { closed: closed }]">
 		<div class="vote-table__users">
 			<VoteMenu />

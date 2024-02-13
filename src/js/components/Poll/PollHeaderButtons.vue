@@ -74,7 +74,7 @@ export default {
 		},
 	},
 
-	beforeDestroy() {
+	beforeUnmount() {
 		this.$store.dispatch({ type: 'poll/reset' })
 	},
 }

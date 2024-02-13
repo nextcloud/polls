@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="auto-reminder-information">
 		<h1> {{ t('polls', 'The automatic reminder is sent to all shares via email:') }} </h1>
 		<h2> {{ t('polls', 'For polls with expiration:') }} </h2>

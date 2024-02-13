@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<NcActions>
 		<NcActionCheckbox v-model="subscribe" :label="label" />
 	</NcActions>

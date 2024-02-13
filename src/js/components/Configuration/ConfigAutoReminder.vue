@@ -22,7 +22,7 @@
 
 <template>
 	<div class="auto-reminder-switch">
-		<NcCheckboxRadioSwitch :checked.sync="autoReminder" type="switch">
+		<NcCheckboxRadioSwitch v-model:checked="autoReminder" type="switch">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
 		<NcPopover :focus-trap="false">
@@ -56,6 +56,8 @@ export default {
 		InformationIcon,
 		AutoReminderInformation: () => import('./AutoReminderInformation.vue'),
 	},
+
+	emits: ['change'],
 
 	computed: {
 		...mapState({
