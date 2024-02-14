@@ -502,24 +502,28 @@ class Acl implements JsonSerializable {
 	 * @return bool|null
 	 */
 	private function getAllowDeleteOption(?string $optionOwner, ?int $pollId) {
-		if (!$optionOwner || !$pollId) {
-			$this->logger->warning('Option owner or poll id missing');
+		
+		if (!$pollId) {
+			$this->logger->warning('Poll id missing');
 			return false;
 		}
 
 		$this->setPollId($pollId);
 
-		if ($this->matchUser($optionOwner)) {
-			return true;
-		};
-
 		if ($this->getAllowEditPoll()) {
-			// Edit right includes adding new options
+			// Edit right includes deleting options
 			return true;
 		}
 
+		if (!$optionOwner) {
+			$this->logger->warning('Option owner missing');
+			return false;
+		}
+		
 
-		// Poll owner is allowed to delete every option
+		if ($this->matchUser($optionOwner)) {
+			return true;
+		};
 	}
 
 	/**
