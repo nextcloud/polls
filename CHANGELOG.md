@@ -1,10 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [6.1.0] - tbd
+## [6.1.0] - 2024-02-16
 
 #### This minor version contains a huge change in the internal user and Access management. 
 This is a step further to a public poll creation. The next major version will be a long time necessary technical migration to the current Vue 3 framework. 
+
 So this 6.x branch will get only bug fixes and compatibility updates. Any other featues are scheduled after the migration.
 
 ### Changes
