@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [6.1.1] - 2024-02-16
+### Changes
+ - Consolidated migration to avoid double database validation
 ## [6.1.0] - 2024-02-16
 
 #### This minor version contains a huge change in the internal user and Access management. 
