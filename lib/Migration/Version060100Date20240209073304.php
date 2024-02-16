@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Migration;
 
 use Doctrine\DBAL\Types\Type;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\TableManager;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
@@ -42,7 +43,7 @@ use OCP\Migration\SimpleMigrationStep;
  */
 class Version060100Date20240209073304 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;
-	
+
 	public function __construct(
 		private TableManager $tableManager,
 		private IDBConnection $connection,
@@ -62,6 +63,19 @@ class Version060100Date20240209073304 extends SimpleMigrationStep {
 
 		return $this->schema;
 	}
+
+	/**
+	 * @return void
+	 */
+	public function postSchemaChange(IOutput $output, \Closure $schemaClosure, array $options) {
+		$now = time();
+		$query = $this->connection->getQueryBuilder();
+		$query->update(Poll::TABLE)
+			->set('last_interaction', $query->createNamedParameter($now))
+			->where($query->expr()->eq('last_interaction', $query->createNamedParameter(0)));
+		$query->executeStatement();
+	}
+
 
 	/**
 	 * @return string[]
@@ -117,7 +131,4 @@ class Version060100Date20240209073304 extends SimpleMigrationStep {
 		}
 		return $messages;
 	}
-
-
-
 }
