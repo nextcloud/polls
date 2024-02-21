@@ -281,9 +281,9 @@ class PublicController extends BasePublicController {
 	 * return false, if this username already exists as a user or as a participant of the poll
 	 */
 	#[PublicPage]
-	public function validatePublicUsername(string $userName, string $token): JSONResponse {
+	public function validatePublicDisplayName(string $displayName, string $token): JSONResponse {
 		return $this->response(fn () => [
-			'result' => $this->systemService->validatePublicUsername($userName, token: $token), 'name' => $userName
+			'name' => $this->systemService->validatePublicUsername($displayName, token: $token)
 		], $token);
 	}
 
@@ -333,9 +333,9 @@ class PublicController extends BasePublicController {
 	 * or update an email share with the username
 	 */
 	#[PublicPage]
-	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
+	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
 		return $this->responseCreate(fn () => [
-			'share' => $this->shareService->register($token, $userName, $emailAddress, $timeZone),
+			'share' => $this->shareService->register($token, $displayName, $emailAddress, $timeZone),
 		], $token);
 	}
 

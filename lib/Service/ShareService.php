@@ -280,16 +280,16 @@ class ShareService {
 
 	/**
 	 * Create a personal share from a public share
-	 * or update an email share with the username
+	 * or update an email share with the displayName
 	 */
 	public function register(
 		string $publicShareToken,
-		string $userName,
+		string $displayName,
 		string $emailAddress = '',
 		string $timeZone = ''
 	): Share {
 		$this->share = $this->get($publicShareToken);
-		$this->systemService->validatePublicUsername($userName, share: $this->share);
+		$this->systemService->validatePublicUsername($displayName, share: $this->share);
 
 		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
 			MailService::validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
@@ -303,7 +303,7 @@ class ShareService {
 			// prevent invtation sending, when no email address is given
 			$this->createNewShare(
 				$this->share->getPollId(),
-				$this->userMapper->getUserObject(Share::TYPE_EXTERNAL, $userId, $userName, $emailAddress, $language, $language, $timeZone),
+				$this->userMapper->getUserObject(Share::TYPE_EXTERNAL, $userId, $displayName, $emailAddress, $language, $language, $timeZone),
 				!$emailAddress,
 				$timeZone
 			);
@@ -315,7 +315,7 @@ class ShareService {
 			// Convert email and contact shares to external share, if user registers
 			$this->share->setType(Share::TYPE_EXTERNAL);
 			$this->share->setUserId($userId);
-			$this->share->setDisplayName($userName);
+			$this->share->setDisplayName($displayName);
 			$this->share->setTimeZoneName($timeZone);
 			$this->share->setLanguage($language);
 
@@ -454,12 +454,11 @@ class ShareService {
 
 			try {
 				// make sure, the user id is unique
-				$this->systemService->validatePublicUsername($publicUserId, share: $this->share);
-			} catch (InvalidUsernameException $th) {
+				$publicUserId = $this->systemService->validatePublicUsername($publicUserId, share: $this->share);
+			} catch (InvalidUsernameException $e) {
 				$publicUserId = '';
 			}
 		}
-
 		return $publicUserId;
 	}
 
