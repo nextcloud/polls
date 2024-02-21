@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [6.1.2] - tbd
+## [6.1.2] - 2024-02-21
 ### Fix
  - Fixing bug, when an internal user tries to enter a poll using a public share a second time
  - Fix error message of watchpoll, trying to access pollId 0
