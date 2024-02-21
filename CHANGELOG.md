@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [6.1.2] - tbd
 ### Fix
  - Fixing bug, when an internal user tries to enter a poll using a public share a second time
+ - Fix error message of watchpoll, trying to access pollId 0
 ## [6.1.1] - 2024-02-16
 ### Changes
  - Consolidated migration to avoid double database validation

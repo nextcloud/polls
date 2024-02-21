@@ -54,8 +54,10 @@ class WatchService {
 	/**
 	 * Watch poll for updates
 	 */
-	public function watchUpdates(?int $pollId = null, ?int $offset = null): array {
-		$this->acl->setPollId($pollId);
+	public function watchUpdates(int $pollId = 0, ?int $offset = null): array {
+		if ($pollId !== 0) {
+			$this->acl->setPollId($pollId);
+		}
 
 		$start = time();
 		$timeout = 30;
@@ -64,10 +66,10 @@ class WatchService {
 		if ($this->appSettings->getUpdateType() === AppSettings::SETTING_UPDATE_TYPE_LONG_POLLING) {
 			while (empty($updates) && time() <= $start + $timeout) {
 				sleep(1);
-				$updates = $this->getUpdates($this->acl->getPollId(), $offset);
+				$updates = $this->getUpdates($pollId, $offset);
 			}
 		} else {
-			$updates = $this->getUpdates($this->acl->getPollId(), $offset);
+			$updates = $this->getUpdates($pollId, $offset);
 		}
 
 		if (empty($updates)) {
