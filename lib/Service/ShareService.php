@@ -121,18 +121,14 @@ class ShareService {
 	 * Get share by token for accessing the poll
 	 *
 	 * @param string $token             Token of share to get
-	 * @param bool   $validateShareType Set true, if the share should be validated for usage
-	 * @param bool   $publicRequest     Set true, to avoid preset displayname of public shares
 	 */
-	public function request(string $token, bool $validateShareType = false, bool $publicRequest = false): Share {
+	public function request(string $token): Share {
 		$this->share = $this->shareMapper->findByToken($token);
 
-		if ($validateShareType) {
-			$this->validateShareType();
-		}
+		$this->validateShareType();
 
 		// deletes the displayname, to avoid displayname preset in case of public polls
-		if ($this->share->getType() === Share::TYPE_PUBLIC && $publicRequest) {
+		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			$this->share->setDisplayName('');
 		}
 
@@ -140,10 +136,6 @@ class ShareService {
 		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userMapper->getCurrentUser()->getIsLoggedIn()) {
 
 			try {
-				// Check, if he is already authorized for this poll
-				$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_VOTE_EDIT);
-
-			} catch (ForbiddenException $e) {
 				// If user is not authorized for this poll, create a personal share
 				// for this user and return the created share instead of the public share
 				$this->share = $this->createNewShare(
@@ -151,8 +143,10 @@ class ShareService {
 					$this->userMapper->getCurrentUserCached(),
 					true
 				);
+			} catch (ShareAlreadyExistsException $e) {
 				// remove the public token from session
-				$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
+				$this->share = $e->getShare();
+				$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
 			}
 		}
 		return $this->share;
@@ -223,21 +217,39 @@ class ShareService {
 	}
 
 	/**
-	 * Set displayName of personal share or label of a public share
+	 * Set displayName of personal share
 	 *
 	 * @return Share
 	 */
-	public function setDisplayName(Share $share, string $displayName): Share {
-		$this->share = $share;
+	public function setDisplayName(string $displayName, string $token): Share {
+		$this->share = $this->shareMapper->findByToken($token);
 
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
-			$this->systemService->validatePublicUsername($displayName, $this->share);
+			$this->systemService->validatePublicUsername($displayName, share: $this->share);
 			$this->share->setDisplayName($displayName);
 			$dispatchEvent = new ShareChangedDisplayNameEvent($this->share);
 
-		} elseif ($this->share->getType() === Share::TYPE_PUBLIC) {
-			$this->acl->setPollId($share->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
-			$this->share->setLabel($displayName);
+		} else {
+			throw new InvalidShareTypeException('Displayname can only be set for external shares.');
+		}
+		
+		$this->share = $this->shareMapper->update($this->share);
+		$this->eventDispatcher->dispatchTyped($dispatchEvent);
+
+		return $this->share;
+	}
+
+	/**
+	 * Set label of public share
+	 *
+	 * @return Share
+	 */
+	public function setLabel(string $label, string $token): Share {
+		$this->share = $this->shareMapper->findByToken($token);
+
+		if ($this->share->getType() === Share::TYPE_PUBLIC) {
+			$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+			$this->share->setLabel($label);
 
 			// overwrite any possible displayName
 			// TODO: Remove afte rmigratiuon to label
@@ -245,7 +257,7 @@ class ShareService {
 
 			$dispatchEvent = new ShareChangedLabelEvent($this->share);
 		} else {
-			throw new InvalidShareTypeException('Displayname can only be changed in external or public shares.');
+			throw new InvalidShareTypeException('Label can only be set for public shares.');
 		}
 		
 		$this->share = $this->shareMapper->update($this->share);
@@ -277,7 +289,7 @@ class ShareService {
 		string $timeZone = ''
 	): Share {
 		$this->share = $this->get($publicShareToken);
-		$this->systemService->validatePublicUsername($userName, $this->share);
+		$this->systemService->validatePublicUsername($userName, share: $this->share);
 
 		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
 			MailService::validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);
@@ -442,7 +454,7 @@ class ShareService {
 
 			try {
 				// make sure, the user id is unique
-				$this->systemService->validatePublicUsername($publicUserId, $this->share);
+				$this->systemService->validatePublicUsername($publicUserId, share: $this->share);
 			} catch (InvalidUsernameException $th) {
 				$publicUserId = '';
 			}
@@ -576,7 +588,7 @@ class ShareService {
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
 			// UniqueConstraintViolationException
 			// since the exception is from private namespace, we check the type string
-			if (get_class($e) === 'OC\DB\Exceptions\DbalException' || $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+			if (get_class($e) === 'OC\DB\Exceptions\DbalException' && $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 
 				$share = $this->shareMapper->findByPollAndUser($pollId, $this->share->getUserId(), true);
 				if ($share->getDeleted()) {
@@ -588,11 +600,10 @@ class ShareService {
 					if ($share->getType() === UserBase::TYPE_ADMIN) {
 						$share->setType(UserBase::TYPE_USER);
 					}
-					// return existing undeleted share
-					return $this->shareMapper->update($share);
+					$share = $this->shareMapper->update($share);
 				}
-				// share already exists
-				throw new ShareAlreadyExistsException;
+				// return existing undeleted share
+				throw new ShareAlreadyExistsException(existingShare: $share);
 			}
 			// other error
 			throw $e;

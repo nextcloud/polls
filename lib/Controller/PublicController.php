@@ -114,10 +114,8 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	public function getShare(string $token): JSONResponse {
-		$validateShareType = true;
-		$publicRequest = true;
 		return $this->response(fn () => [
-			'share' => $this->shareService->request($token, $validateShareType, $publicRequest)
+			'share' => $this->shareService->request($token)
 		], $token);
 	}
 
@@ -280,13 +278,12 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Validate it the user name is reserved
-	 * return false, if this username already exists as a user or as
-	 * a participant of the poll
+	 * return false, if this username already exists as a user or as a participant of the poll
 	 */
 	#[PublicPage]
 	public function validatePublicUsername(string $userName, string $token): JSONResponse {
 		return $this->response(fn () => [
-			'result' => $this->systemService->validatePublicUsername($userName, $this->shareService->get($token)), 'name' => $userName
+			'result' => $this->systemService->validatePublicUsername($userName, token: $token), 'name' => $userName
 		], $token);
 	}
 
@@ -306,7 +303,7 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	public function setDisplayName(string $token, string $displayName): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setDisplayname($this->shareService->get($token), $displayName)
+			'share' => $this->shareService->setDisplayname($displayName, $token)
 		], $token);
 	}
 

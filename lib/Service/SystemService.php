@@ -191,10 +191,12 @@ class SystemService {
 	 *
 	 * @return true
 	 */
-	public function validatePublicUsername(string $userName, Share $share): bool {
+	public function validatePublicUsername(string $userName, ?Share $share = null, ?string $token = null): bool {
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');
 		}
+
+		$share = $share ?? $this->shareMapper->findByToken($token);
 
 		if ($share->getDisplayName() === $userName) {
 			return true;
