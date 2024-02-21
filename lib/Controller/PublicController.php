@@ -114,10 +114,8 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	public function getShare(string $token): JSONResponse {
-		$validateShareType = true;
-		$publicRequest = true;
 		return $this->response(fn () => [
-			'share' => $this->shareService->request($token, $validateShareType, $publicRequest)
+			'share' => $this->shareService->request($token)
 		], $token);
 	}
 
@@ -280,13 +278,12 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Validate it the user name is reserved
-	 * return false, if this username already exists as a user or as
-	 * a participant of the poll
+	 * return false, if this username already exists as a user or as a participant of the poll
 	 */
 	#[PublicPage]
-	public function validatePublicUsername(string $userName, string $token): JSONResponse {
+	public function validatePublicDisplayName(string $displayName, string $token): JSONResponse {
 		return $this->response(fn () => [
-			'result' => $this->systemService->validatePublicUsername($userName, $this->shareService->get($token)), 'name' => $userName
+			'name' => $this->systemService->validatePublicUsername($displayName, token: $token)
 		], $token);
 	}
 
@@ -306,7 +303,7 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	public function setDisplayName(string $token, string $displayName): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setDisplayname($this->shareService->get($token), $displayName)
+			'share' => $this->shareService->setDisplayname($displayName, $token)
 		], $token);
 	}
 
@@ -336,9 +333,9 @@ class PublicController extends BasePublicController {
 	 * or update an email share with the username
 	 */
 	#[PublicPage]
-	public function register(string $token, string $userName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
+	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
 		return $this->responseCreate(fn () => [
-			'share' => $this->shareService->register($token, $userName, $emailAddress, $timeZone),
+			'share' => $this->shareService->register($token, $displayName, $emailAddress, $timeZone),
 		], $token);
 	}
 

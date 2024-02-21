@@ -212,12 +212,12 @@ const publicPoll = {
 		})
 	},
 
-	register(shareToken, userName, emailAddress, timeZone) {
+	register(shareToken, displayName, emailAddress, timeZone) {
 		return httpInstance.request({
 			method: 'POST',
 			url: `s/${shareToken}/register`,
 			data: {
-				userName,
+				displayName,
 				emailAddress,
 				timeZone,
 			},

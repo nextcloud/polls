@@ -25,12 +25,17 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Exceptions;
 
+use OCA\Polls\Db\Share;
 use OCP\AppFramework\Http;
 
 class ShareAlreadyExistsException extends Exception {
 	public function __construct(
-		string $e = 'Share already exists'
+		string $e = 'Share already exists',
+		private ?Share $existingShare = null,
 	) {
 		parent::__construct($e, Http::STATUS_OK);
+	}
+	public function getShare(): ?Share {
+		return $this->existingShare;
 	}
 }

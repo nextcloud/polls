@@ -46,7 +46,7 @@ return [
 		['name' => 'public#unsubscribe', 'url' => '/s/{token}/unsubscribe', 'verb' => 'PUT'],
 		['name' => 'public#register', 'url' => '/s/{token}/register', 'verb' => 'POST'],
 		['name' => 'public#resend_invitation', 'url' => '/s/{token}/resend', 'verb' => 'POST'],
-		['name' => 'public#validate_public_username', 'url' => '/check/username', 'verb' => 'POST'],
+		['name' => 'public#validate_public_display_name', 'url' => '/check/username', 'verb' => 'POST'],
 		['name' => 'public#validate_email_address', 'url' => '/check/emailaddress/{emailAddress}', 'verb' => 'GET'],
 		['name' => 'public#delete_user', 'url' => '/s/{token}/user', 'verb' => 'DELETE'],
 		['name' => 'public#delete_orphaned_votes', 'url' => '/s/{token}/votes/orphaned', 'verb' => 'DELETE'],

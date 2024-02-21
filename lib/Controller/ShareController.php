@@ -68,12 +68,12 @@ class ShareController extends BaseController {
 	}
 
 	/**
-	 * Change the contraints for email addresses in public polls
+	 * Change Label of a public share
 	 */
 	#[NoAdminRequired]
 	public function setLabel(string $token, string $label = ''): JSONResponse {
 		return $this->response(fn () => [
-			'share' => $this->shareService->setDisplayName($this->shareService->get($token), $label)
+			'share' => $this->shareService->setLabel($label, $token)
 		]);
 	}
 
