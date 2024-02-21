@@ -225,7 +225,7 @@ class ShareService {
 		$this->share = $this->shareMapper->findByToken($token);
 
 		if ($this->share->getType() === Share::TYPE_EXTERNAL) {
-			$this->systemService->validatePublicUsername($displayName, share: $this->share);
+			$displayName = $this->systemService->validatePublicUsername($displayName, share: $this->share);
 			$this->share->setDisplayName($displayName);
 			$dispatchEvent = new ShareChangedDisplayNameEvent($this->share);
 
@@ -289,7 +289,7 @@ class ShareService {
 		string $timeZone = ''
 	): Share {
 		$this->share = $this->get($publicShareToken);
-		$this->systemService->validatePublicUsername($displayName, share: $this->share);
+		$displayName = $this->systemService->validatePublicUsername($displayName, share: $this->share);
 
 		if ($this->share->getPublicPollEmail() !== Share::EMAIL_DISABLED) {
 			MailService::validateEmailAddress($emailAddress, $this->share->getPublicPollEmail() !== Share::EMAIL_MANDATORY);

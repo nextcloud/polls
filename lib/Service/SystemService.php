@@ -192,9 +192,9 @@ class SystemService {
 	 * @param string $userName displayName or userId to check for existance
 	 * @param Share|null $share the share referencing the poll
 	 * @param string|null $token the share referencing the poll
-	 * @return true
+	 * @return string returns the allowed username
 	 */
-	public function validatePublicUsername(string $userName, ?Share $share = null, ?string $token = null): bool {
+	public function validatePublicUsername(string $userName, ?Share $share = null, ?string $token = null): string {
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');
 		}
@@ -202,7 +202,7 @@ class SystemService {
 		$share = $share ?? $this->shareMapper->findByToken($token);
 
 		if ($share->getDisplayName() === $userName) {
-			return true;
+			return $userName;
 		}
 
 		$userName = strtolower(trim($userName));
@@ -240,7 +240,7 @@ class SystemService {
 				throw new InvalidUsernameException;
 			}
 		}
-		// return true, if username is allowed
-		return true;
+		// return $userName, if username is allowed
+		return $userName;
 	}
 }
