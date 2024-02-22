@@ -40,6 +40,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Public link" : "Liga pública",
     "Change name" : "Cambiar nombre",
+    "Email options" : "Opciones de correo electrónico",
     "Yes" : "Sí",
     "Administration" : "Administración",
     "Details" : "Detalles",
