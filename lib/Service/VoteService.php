@@ -62,7 +62,7 @@ class VoteService {
 		try {
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				// Just return the participants votes, no further anoymizing or obfuscating is nessecary
-				return $this->voteMapper->findByPollAndUser($pollId, ($this->userMapper->getCurrentUserCached()->getId()));
+				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), ($this->userMapper->getCurrentUserCached()->getId()));
 			}
 
 			$votes = $this->voteMapper->findByPoll($this->acl->getpollId());
