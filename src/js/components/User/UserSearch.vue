@@ -22,7 +22,16 @@
 
 <template>
 	<NcSelect id="ajax"
-		v-model="selectProps"
+		:aria-label-combobox="t('polls', 'Add shares')"
+		:options="users"
+		:multiple="false"
+		:user-select="true"
+		:tag-width="80"
+		:limit="30"
+		:loading="isLoading"
+		:searchable="true"
+		:placeholder="placeholder"
+		:close-on-select="false"
 		label="displayName"
 		@option:selected="clickAdd"
 		@search="loadUsersAsync">
@@ -54,23 +63,6 @@ export default {
 			isLoading: false,
 			placeholder: t('polls', 'Type to add an individual share'),
 		}
-	},
-
-	computed: {
-		selectProps() {
-			return {
-				ariaLabelCombobox: t('polls', 'Add shares'),
-				options: this.users,
-				multiple: false,
-				userSelect: true,
-				// tagWidth: 80,
-				limit: 30,
-				loading: this.isLoading,
-				searchable: true,
-				placeholder: this.placeholder,
-				closeOnSelect: false,
-			}
-		},
 	},
 
 	methods: {
