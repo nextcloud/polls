@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [6.1.5] - tbd
+## [6.1.4] - 2024-02-24
 ### Fix
  - Fixing 404 error when using public share where the poll has hidden results
  - Partially fix email shares
