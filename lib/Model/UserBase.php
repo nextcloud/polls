@@ -201,6 +201,10 @@ class UserBase implements \JsonSerializable {
 		return $this->description;
 	}
 
+	public function getSubName(): string {
+		return $this->getDescription();
+	}
+
 	/**
 	 * @deprecated Not used anymore?
 	 */
@@ -349,16 +353,20 @@ class UserBase implements \JsonSerializable {
 	/**
 	 * Full user array for poll owners, delegated poll admins and the current user himself
 	 * without obfuscating/anonymizing
+	 *
 	 * @return (bool|string|string[])[]
 	 *
-	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, desc: string, subname: string, subtitle: string, icon: string, categories: array<string>}
+	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, subName: string, subtitle: string, isNoUser: bool, desc: string, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, icon: string, categories: array<string>}
 	 */
 	public function getRichUserArray(): array {
 		return	[
 			'userId' => $this->getId(),
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getEmailAddress(),
+			'subName' => $this->getSubName(),
+			'subtitle' => $this->getDescription(),
 			'isNoUser' => $this->getIsNoUser(),
+			'desc' => $this->getDescription(),
 			'type' => $this->getType(),
 			'id' => $this->getId(),
 			'user' => $this->getId(),
@@ -366,9 +374,6 @@ class UserBase implements \JsonSerializable {
 			'languageCode' => $this->getLanguageCode(),
 			'localeCode' => $this->getLocaleCode(),
 			'timeZone' => $this->getTimeZoneName(),
-			'desc' => $this->getDescription(),
-			'subname' => $this->getDescription(),
-			'subtitle' => $this->getDescription(),
 			'icon' => $this->getIcon(),
 			'categories' => $this->getCategories(),
 		];
@@ -384,7 +389,7 @@ class UserBase implements \JsonSerializable {
 	 *
 	 * @psalm-return array{id: string, userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
 	 */
-	private function getSimpleUserArray(): array {
+	protected function getSimpleUserArray(): array {
 		return	[
 			'id' => $this->getSafeId(),
 			'userId' => $this->getSafeId(),
@@ -441,6 +446,7 @@ class UserBase implements \JsonSerializable {
 
 		return '';
 	}
+
 	public function getOrganisation(): string {
 		return $this->organisation;
 	}

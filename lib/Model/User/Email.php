@@ -49,4 +49,18 @@ class Email extends UserBase {
 	public function getDisplayName(): string {
 		return $this->displayName ? $this->displayName : $this->id;
 	}
+
+	public function jsonSerialize(): array {
+		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
+			return $this->getRichUserArray();
+		}
+		return $this->getSimpleUserArray();
+	}
+
+	public function getDescription(): string {
+		if ($this->getDisplayName()) {
+			return $this->getEmailAndDisplayName();
+		}
+		return $this->getEmailAddress();
+	}
 }
