@@ -34,9 +34,9 @@ use OCP\AppFramework\Db\Entity;
  * @method int getPollId()
  *
  * Joined Attributes
- * @method string getAnonymized()
- * @method int getPollOwnerId()
- * @method int getPollShowResults()
+ * @method int getAnonymized()
+ * @method string getPollOwnerId()
+ * @method string getPollShowResults()
  * @method int getPollExpire()
  */
 
