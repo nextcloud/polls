@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<CardDiv :heading="t('polls', 'Limited votes.')"
 		:type="cardType">
 		<ul>

@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<NcActions>
 		<NcActionCheckbox v-model="subscribe" :label="label" />
 	</NcActions>
@@ -47,7 +47,6 @@ export default {
 				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.emailAddress })
 			}
 			return t('polls', 'Receive notification email on activity')
-
 		},
 
 		subscribe: {

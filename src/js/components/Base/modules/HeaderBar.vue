@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="header_bar">
 		<div class="header_bar_top">
 			<div class="bar_top_left">

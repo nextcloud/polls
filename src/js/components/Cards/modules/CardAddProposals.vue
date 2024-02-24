@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'You are asked to propose more options. ') }}
 		<p v-if="proposalsExpirySet && !proposalsExpired">

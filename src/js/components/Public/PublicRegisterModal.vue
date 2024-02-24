@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="modal__content">
 		<div class="modal__registration">
 			<div class="registration__registration">

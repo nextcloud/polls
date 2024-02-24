@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="radio-group-div">
 		<NcCheckboxRadioSwitch v-for="(option, index) in options"
 			:key="option.value"

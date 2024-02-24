@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<NcAppNavigationItem :name="poll.title"
 		:to="{name: 'vote', params: {id: poll.id}}"
 		:class="{ closed: closed }">

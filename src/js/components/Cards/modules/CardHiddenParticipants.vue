@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'Due to possible performance issues {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
 		{{ t('polls', 'You can reveal them, but you may expect an unwanted long loading time.') }}

@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<!-- eslint-disable-next-line vue/no-v-html -->
 	<div class="markup-description" v-html="markedDescription" />
 </template>

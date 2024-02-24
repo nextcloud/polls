@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="info-section">
 		<CardUnpublishedPoll v-if="showUnpublishedPollCard" />
 		<CardAddProposals v-if="showAddProposalsCard" />

@@ -20,7 +20,7 @@
   -
   -->
 
-<template lang="html">
+<template>
 	<div class="create-dialog">
 		<ConfigBox :name="t('polls', 'Title')">
 			<template #icon>
