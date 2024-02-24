@@ -353,9 +353,10 @@ class UserBase implements \JsonSerializable {
 	/**
 	 * Full user array for poll owners, delegated poll admins and the current user himself
 	 * without obfuscating/anonymizing
+	 *
 	 * @return (bool|string|string[])[]
 	 *
-	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, desc: string, subname: string, subtitle: string, icon: string, categories: array<string>}
+	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, subName: string, subtitle: string, isNoUser: bool, desc: string, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, icon: string, categories: array<string>}
 	 */
 	public function getRichUserArray(): array {
 		return	[
