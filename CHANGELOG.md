@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [6.1.4] - tbd
 ### Fix
  - Fixing 404 error when using public share where the poll has hidden results
+ - fix user name check for public participants
 
 ## [6.1.3] - 2024-02-21
 ### Fix
