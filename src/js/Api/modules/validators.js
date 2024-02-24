@@ -37,7 +37,7 @@ const validators = {
 			url: 'check/username',
 			cancelToken: cancelTokenHandlerObject[this.validateName.name].handleRequestCancellation().token,
 			data: {
-				userName: name,
+				displayName: name,
 				token: pollToken,
 			},
 		})
