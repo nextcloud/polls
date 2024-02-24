@@ -201,6 +201,10 @@ class UserBase implements \JsonSerializable {
 		return $this->description;
 	}
 
+	public function getSubName(): string {
+		return $this->getDescription();
+	}
+
 	/**
 	 * @deprecated Not used anymore?
 	 */
@@ -358,7 +362,10 @@ class UserBase implements \JsonSerializable {
 			'userId' => $this->getId(),
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getEmailAddress(),
+			'subName' => $this->getSubName(),
+			'subtitle' => $this->getDescription(),
 			'isNoUser' => $this->getIsNoUser(),
+			'desc' => $this->getDescription(),
 			'type' => $this->getType(),
 			'id' => $this->getId(),
 			'user' => $this->getId(),
@@ -366,9 +373,6 @@ class UserBase implements \JsonSerializable {
 			'languageCode' => $this->getLanguageCode(),
 			'localeCode' => $this->getLocaleCode(),
 			'timeZone' => $this->getTimeZoneName(),
-			'desc' => $this->getDescription(),
-			'subname' => $this->getDescription(),
-			'subtitle' => $this->getDescription(),
 			'icon' => $this->getIcon(),
 			'categories' => $this->getCategories(),
 		];
@@ -384,7 +388,7 @@ class UserBase implements \JsonSerializable {
 	 *
 	 * @psalm-return array{id: string, userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
 	 */
-	private function getSimpleUserArray(): array {
+	protected function getSimpleUserArray(): array {
 		return	[
 			'id' => $this->getSafeId(),
 			'userId' => $this->getSafeId(),
@@ -441,6 +445,7 @@ class UserBase implements \JsonSerializable {
 
 		return '';
 	}
+
 	public function getOrganisation(): string {
 		return $this->organisation;
 	}
