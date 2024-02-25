@@ -58,7 +58,7 @@ OC.L10N.register(
     "Submit" : "שליחה",
     "Close" : "סגירה",
     "never" : "מעולם לא",
-    "_%n Participant_::_%n Participants_" : ["משתתף אחד","%n משתתפים","%n משתתפים","%n משתתפים"],
+    "_%n Participant_::_%n Participants_" : ["משתתף אחד","%n משתתפים","%n משתתפים"],
     "Access" : "גישה",
     "Owner" : "בעלות",
     "Created" : "יצירה",
@@ -110,4 +110,4 @@ OC.L10N.register(
     "All polls, where you have access to." : "כל הסקרים אליהם יש לך גישה.",
     "Archive" : "לארכיון"
 },
-"nplurals=4; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
+"nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: (n % 10 == 0 && n % 1 == 0 && n > 10) ? 2 : 3;");
