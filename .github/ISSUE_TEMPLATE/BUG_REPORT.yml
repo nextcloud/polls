@@ -25,7 +25,7 @@ body:
     attributes:
       value: |
         ---
-        # Bug description 
+        # Bug description
         Please try to explain your bug as detailed as possible. This helps us to reproduce this error and get it fixed faster.
   - type: textarea
     id: bug-description
@@ -48,10 +48,10 @@ body:
   - type: textarea
     id: reproduce-bug
     attributes:
-      label: What steps does it need to replay this bug? 
+      label: What steps does it need to replay this bug?
       description: |
         Try to describe as precisely as you can, what led to this bug, so that we are able to reproduce it.
-        Describe the poll configuration and other relevant circumstances. 
+        Describe the poll configuration and other relevant circumstances.
         The better your description is _(go 'here', click 'there'...)_ the faster you'll get an _(accurate)_ answer.
         A picture describes more than 1000 words: Add screenshots which illustrate the bug.
       value: |
@@ -69,7 +69,7 @@ body:
     attributes:
       label: Installation method
       description: |
-        How did you install the Polls version, you are referring to, especially when experiencing update errors 
+        How did you install the Polls version, you are referring to, especially when experiencing update errors
       options:
         - "Installed/updated from the appstore (Apps section of your site)"
         - "Installed/updated using occ"
@@ -154,6 +154,8 @@ body:
         - "Nextcloud 25 (Nextcloud Hub 3)"
         - "Nextcloud 26 (Nextcloud Hub 4)"
         - "Nextcloud 27 (Nextcloud Hub 5)"
+        - "Nextcloud 27 (Nextcloud Hub 5)"
+        - "Nextcloud 28 (Nextcloud Hub 7)"
         - "Other/Don't know"
     validations:
       required: true
@@ -172,6 +174,8 @@ body:
       options:
         - "PHP 8.0"
         - "PHP 8.1"
+        - "PHP 8.2"
+        - "PHP 8.3"
         - "Other/Don't know"
     validations:
       required: true
@@ -279,7 +283,7 @@ body:
         Provide Nextcloud Signing status.
         Login as an admin user into your Nextcloud, then access this URL:
         ```shell
-        https://yournextcloud.tld/index.php/settings/integrity/failed 
+        https://yournextcloud.tld/index.php/settings/integrity/failed
         ```
       placeholder: This will be automatically formatted into code for better readability.
       render: shell
