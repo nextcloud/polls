@@ -407,7 +407,8 @@ class TableManager {
 			$count = 0;
 			if ($table->hasColumn('poll_option_hash')) {
 				foreach ($this->optionMapper->getAll() as $option) {
-					$option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
+					$option->syncOption();
+					// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
 					
 					$this->optionMapper->update($option);
 					$count++;

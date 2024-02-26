@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use DateTime;
 use DateTimeZone;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Option;
@@ -38,7 +37,6 @@ use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\DuplicateEntryException;
-use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -98,17 +96,19 @@ class OptionService {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
 
 		$this->option = new Option();
-		$this->option->setPollId($this->acl->getPollId());
-		$this->option->setOrder($this->getHighestOrder($this->acl->getPollId()) + 1);
-		$this->setOption($timestamp, $pollOptionText, $duration);
+		$this->option->setPollId($pollId);
+		$order = $this->getHighestOrder($pollId) + 1;
+
+		$this->option->setOption($timestamp, $duration, $pollOptionText, $order);
 
 		if (!$this->acl->getIsOwner()) {
 			$this->option->setOwner($this->acl->getUserId());
 		}
 
 		try {
-			$this->option = $this->optionMapper->add($this->option);
+			$this->option = $this->optionMapper->insert($this->option);
 		} catch (Exception $e) {
+			
 			// TODO: Change exception catch to actual exception
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
 			// UniqueConstraintViolationException
@@ -117,7 +117,7 @@ class OptionService {
 
 				$option = $this->optionMapper->findByPollAndText($pollId, $this->option->getPollOptionText(), true);
 				if ($option->getDeleted()) {
-					// Deleted option exist, restore deleted option and generate new token
+					// Deleted option exist, restore deleted option
 					$option->setDeleted(0);
 					// return existing undeleted share
 					return $this->optionMapper->update($option);
@@ -158,13 +158,13 @@ class OptionService {
 	 *
 	 * @return Option
 	 */
-	public function update(int $optionId, int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): Option {
+	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
-		$this->setOption($timestamp, $pollOptionText, $duration);
+		$this->option->setOption($timestamp, $duration, $pollOptionText);
 
-		$this->option = $this->optionMapper->change($this->option);
+		$this->option = $this->optionMapper->update($this->option);
 		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
 
 		return $this->option;
@@ -196,7 +196,7 @@ class OptionService {
 		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
-		$this->option = $this->optionMapper->change($this->option);
+		$this->option = $this->optionMapper->update($this->option);
 
 		if ($this->option->getConfirmed()) {
 			$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($this->option));
@@ -205,22 +205,6 @@ class OptionService {
 		}
 
 		return $this->option;
-	}
-
-	private function getModifiedDateOption(Option $option, DateTimeZone $timeZone, int $step, string $unit): array {
-		$from = (new DateTime())
-			->setTimestamp($option->getTimestamp())
-			->setTimezone($timeZone)
-			->modify($step . ' ' . $unit);
-		$to = (new DateTime())
-			->setTimestamp($option->getTimestamp() + $option->getDuration())
-			->setTimezone($timeZone)
-			->modify($step . ' ' . $unit);
-		return [
-			'from' => $from,
-			'to' => $to,
-			'duration' => $to->getTimestamp() - $from->getTimestamp(),
-		];
 	}
 
 	/**
@@ -233,7 +217,6 @@ class OptionService {
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$this->option = $this->optionMapper->find($optionId);
 		$this->acl->setPollId($this->option->getPollId(), Acl::PERMISSION_POLL_EDIT);
-		$timezone = new DateTimeZone($this->session->get(AppConstants::CLIENT_TZ));
 
 		if ($this->acl->getPoll()->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Sequences are only available in date polls');
@@ -243,19 +226,18 @@ class OptionService {
 			return $this->optionMapper->findByPoll($this->option->getPollId());
 		}
 
+		$timezone = new DateTimeZone($this->session->get(AppConstants::CLIENT_TZ));
+
 		for ($i = 1; $i < ($amount + 1); $i++) {
 			$clonedOption = new Option();
 			$clonedOption->setPollId($this->option->getPollId());
-			$clonedOption->setConfirmed(0);
-
-			$newDates = $this->getModifiedDateOption($this->option, $timezone, ($step * $i), $unit);
-			$clonedOption->setTimestamp($newDates['from']->getTimestamp());
-			$clonedOption->setDuration($newDates['duration']);
+			$clonedOption->setOption($this->option->getTimestamp(), $this->option->getDuration());
+			$clonedOption->shiftOption($timezone, ($step * $i), $unit);
 
 			try {
-				$this->optionMapper->add($clonedOption);
+				$this->optionMapper->insert($clonedOption);
 			} catch (Exception $e) {
-				$this->logger->warning('skip adding ' . $newDates['from']->format('c') . 'for pollId ' . $this->option->getPollId() . '. Option already exists.');
+				$this->logger->warning('Skip sequence no. ' . $i . 'of option ' . $this->option->getId() . '. Option possibly already exists.');
 			}
 		}
 
@@ -288,9 +270,7 @@ class OptionService {
 		}
 
 		foreach ($this->options as $option) {
-			$newDates = $this->getModifiedDateOption($option, $timezone, $step, $unit);
-			$option->setTimestamp($newDates['from']->getTimestamp());
-			$option->setDuration($newDates['duration']);
+			$option->shiftOption($timezone, $step, $unit);
 			$this->optionMapper->update($option);
 		}
 
@@ -307,11 +287,13 @@ class OptionService {
 			$option = new Option();
 			$option->setPollId($toPollId);
 			$option->setConfirmed(0);
-			$option->setPollOptionText($origin->getPollOptionText());
-			$option->setTimestamp($origin->getTimestamp());
-			$option->setDuration($origin->getDuration());
+			$option->setOption(
+				$origin->getTimestamp(),
+				$origin->getDuration(),
+				$origin->getPollOptionText(),
+			);
 			$option->setOrder($origin->getOrder());
-			$this->optionMapper->add($option);
+			$option = $this->optionMapper->insert($option);
 			$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($option));
 		}
 	}
@@ -393,28 +375,6 @@ class OptionService {
 			return $moveTo;
 		}
 		return $currentPosition + $moveModifier;
-	}
-
-	/**
-	 * Set option entities validated
-	 *
-	 * @return void
-	 */
-	private function setOption(int $timestamp = 0, ?string $pollOptionText = '', ?int $duration = 0): void {
-		if ($timestamp) {
-			$this->option->setTimestamp($timestamp);
-			$this->option->setOrder($timestamp);
-			$this->option->setDuration($duration ?? 0);
-			if ($duration > 0) {
-				$this->option->setPollOptionText(date('c', $timestamp) . ' - ' . date('c', $timestamp + $duration));
-			} else {
-				$this->option->setPollOptionText(date('c', $timestamp));
-			}
-		} elseif ($pollOptionText) {
-			$this->option->setPollOptionText($pollOptionText);
-		} else {
-			throw new InsufficientAttributesException('Option must have a value');
-		}
 	}
 
 	/**

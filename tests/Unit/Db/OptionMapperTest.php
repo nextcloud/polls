@@ -83,7 +83,7 @@ class OptionMapperTest extends UnitTestCase {
 			for ($count = 0; $count < 2; $count++) {
 				$option = $this->fm->instance('OCA\Polls\Db\Option');
 				$option->setPollId($poll->getId());
-				array_push($this->options, $this->optionMapper->add($option));
+				array_push($this->options, $this->optionMapper->insert($option));
 				$vote = $this->fm->instance('OCA\Polls\Db\Vote');
 				$vote->setPollId($option->getPollId());
 				$vote->setUserId('TestUser');
