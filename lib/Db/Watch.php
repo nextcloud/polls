@@ -31,13 +31,13 @@ use OCP\AppFramework\Db\Entity;
 
 /**
  * @method int getId()
- * @method void setId(integer $value)
+ * @method void setId(int $value)
  * @method int getPollId()
- * @method void setPollId(integer $value)
+ * @method void setPollId(int $value)
  * @method string getTable()
  * @method void setTable(string $value)
  * @method int getUpdated()
- * @method void setUpdated(integer $value)
+ * @method void setUpdated(int $value)
  * @method int getSessionId()
  * @method void setSessionId(string $value)
  */

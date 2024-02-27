@@ -48,32 +48,6 @@ class OptionMapper extends QBMapperWithUser {
 	}
 
 	/**
-	 * Alias of update with joined and computed attributes
-	 * @param Option $option Option to update
-	 */
-	public function change(Option $option): Option {
-		$option->updatePollOptionText();
-		if ($option->getTimestamp() > 0) {
-			$option->setOrder($option->getTimestamp());
-		}
-		$option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
-		return $this->find($this->update($option)->getId());
-	}
-
-	/**
-	 * Alias of insert with enhanced entity
-	 * @param Option $option Option to insert
-	 */
-	public function add(Option $option): Option {
-		$option->updatePollOptionText();
-		if ($option->getTimestamp() > 0) {
-			$option->setOrder($option->getTimestamp());
-		}
-		$option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
-		return $this->find($this->insert($option)->getId());
-	}
-
-	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Option[]
 	 * @psalm-return array<array-key, Option>

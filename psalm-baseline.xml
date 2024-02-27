@@ -115,13 +115,11 @@
   <file src="lib/Db/Option.php">
     <PossiblyUnusedMethod>
       <code>getPollOptionTextEnd</code>
-      <code>setUserId</code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedProperty>
       <code>$confirmed</code>
       <code>$countOptionVotes</code>
       <code>$deleted</code>
-      <code>$duration</code>
       <code>$optionLimit</code>
       <code>$owner</code>
       <code>$pollId</code>

@@ -32,21 +32,22 @@ use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
 use JsonSerializable;
+use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCP\IL10N;
 
 /**
  * @method int getId()
- * @method void setId(integer $value)
+ * @method void setId(int $value)
  * @method int getConfirmed()
- * @method void setConfirmed(integer $value)
+ * @method void setConfirmed(int $value)
  * @method int getDuration()
- * @method void setDuration(integer $value)
+ * @method void setDuration(int $value)
  * @method int getOrder()
- * @method void setOrder(integer $value)
+ * @method void setOrder(int $value)
  * @method string getOwner()
  * @method void setOwner(string $value)
  * @method int getPollId()
- * @method void setPollId(integer $value)
+ * @method void setPollId(int $value)
  * @method string getPollOptionText()
  * @method void setPollOptionText(string $value)
  * @method string getPollOptionHash()
@@ -54,9 +55,9 @@ use OCP\IL10N;
  * @method int getReleased()
  * @method void setReleased(int $value)
  * @method int getTimestamp()
- * @method void setTimestamp(integer $value)
+ * @method void setTimestamp(int $value)
  * @method int getDeleted()
- * @method void setDeleted(integer $value)
+ * @method void setDeleted(int $value)
  *
  * Joined Attributes
  * @method string getUserVoteAnswer()
@@ -129,6 +130,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'confirmed' => $this->getConfirmed(),
 			'duration' => $this->getDuration(),
 			'locked' => $this->getIsLocked(),
+			'hash' => $this->getPollOptionHash(),
 			'votes' => [
 				'no' => $this->getVotesNo(),
 				'yes' => $this->getVotesYes(),
@@ -140,17 +142,84 @@ class Option extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
-	public function getPollOptionText(): string {
-		if ($this->getTimestamp() && $this->getDuration()) {
-			return date('c', $this->getTimestamp()) . ' - ' . date('c', $this->getTimestamp() + $this->getDuration());
-		} elseif ($this->getTimestamp() && !$this->getDuration()) {
-			return date('c', $this->getTimestamp());
+	/**
+	 * cumulative Set option entities cumulative and validated
+	 * if timestamp is given, the pollOptionText will be synced according to the timestamp and duration
+	 *
+	 * @param int $timestamp Timestamp to set
+	 * @param int $duration Set duration of option in seconds and used together with timestamp, defaults to 0
+	 * @param string $pollOptionText Option text, ignored if $timestamp is set
+	 * @param int $order Set order of this option inside the poll, defaults to 0, ignored if timestap is set
+	 * @return void
+	 */
+	public function setOption(int $timestamp = 0, int $duration = 0, string $pollOptionText = '', int $order = 0): void {
+		
+		if ($timestamp) {
+			$this->setTimestamp($timestamp);
+			$this->setDuration($duration);
+		} elseif ($pollOptionText) {
+			$this->setPollOptionText($pollOptionText);
+			if ($order > 0) {
+				$this->setOrder($order);
+			}
+		} else {
+			throw new InsufficientAttributesException('Option must have a value');
 		}
-		return htmlspecialchars_decode($this->pollOptionText);
+
+		$this->syncOption();
 	}
 
-	public function updatePollOptionText(): void {
-		$this->setPollOptionText($this->getPollOptionText());
+	public function shiftOption(DateTimeZone $timeZone, int $step, string $unit): void {
+		$from = (new DateTime())
+			->setTimestamp($this->getTimestamp())
+			->setTimezone($timeZone)
+			->modify($step . ' ' . $unit);
+		$to = (new DateTime())
+			->setTimestamp($this->getTimestamp() + $this->getDuration())
+			->setTimezone($timeZone)
+			->modify($step . ' ' . $unit);
+		$this->setTimestamp($from->getTimestamp());
+		$this->setDuration($to->getTimestamp() - $from->getTimestamp());
+		$this->syncOption();
+	}
+
+	/**
+	 * Syncs pollOptionText and order according to timestamp and duration if timestamp > 0
+	 * Updates hash
+	 */
+	public function syncOption(): void {
+		// make sure, pollOptionText matches timestamp and duration
+		// timestamp gets precedence over pollOptionText
+		if ($this->getTimestamp()) {
+			$this->setOrder($this->getTimestamp());
+	
+			if ($this->duration) {
+				$this->setPollOptionText(date('c', $this->getTimestamp()) . ' - ' . date('c', $this->getTimestamp() + $this->getDuration()));
+			} else {
+				$this->setPollOptionText(date('c', $this->timestamp));
+			}
+		}
+
+		// update hash
+		$this->updateHash();
+	}
+	
+	private function updateHash(): void {
+		$this->setPollOptionHash(hash('md5', $this->getPollId() . $this->getPollOptionText() . $this->getTimestamp()));
+	}
+
+	public function getPollOptionText(): string {
+		if ($this->getTimestamp() === 0) {
+			return htmlspecialchars_decode($this->pollOptionText);
+		}
+
+		// return timespan, if duration is set
+		if ($this->getDuration()) {
+			return date('c', $this->getTimestamp()) . ' - ' . date('c', $this->getTimestamp() + $this->getDuration());
+		}
+
+		// else return formatted timestamp
+		return date('c', $this->getTimestamp());
 	}
 
 	public function getPollOptionTextEnd(): string {
@@ -159,13 +228,14 @@ class Option extends EntityWithUser implements JsonSerializable {
 		}
 		return htmlspecialchars_decode($this->pollOptionText);
 	}
-
+	
 	public function getPollOptionTextStart(): string {
 		if ($this->getTimestamp()) {
 			return date('c', $this->getTimestamp());
 		}
 		return htmlspecialchars_decode($this->pollOptionText);
 	}
+
 	public function getIsLocked(): bool {
 		return $this->getDeleted()
 			|| ($this->getUserVoteAnswer() !== Vote::VOTE_YES
@@ -198,11 +268,6 @@ class Option extends EntityWithUser implements JsonSerializable {
 	// alias of getOwner()
 	public function getUserId(): string {
 		return (string) $this->getOwner();
-	}
-
-	// alias of setOwner($value)
-	public function setUserId(string $userId): void {
-		$this->setOwner($userId);
 	}
 
 	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n): string {

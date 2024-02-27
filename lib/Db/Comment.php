@@ -31,19 +31,19 @@ use JsonSerializable;
 
 /**
  * @method int getId()
- * @method void setId(integer $value)
+ * @method void setId(int $value)
  * @method int getPollId()
- * @method void setPollId(integer $value)
+ * @method void setPollId(int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getComment()
  * @method void setComment(string $value)
  * @method int getTimestamp()
- * @method void setTimestamp(integer $value)
+ * @method void setTimestamp(int $value)
  * @method int getDeleted()
- * @method void setDeleted(integer $value)
+ * @method void setDeleted(int $value)
  * @method int getParent()
- * @method void setParent(integer $value)
+ * @method void setParent(int $value)
  */
 class Comment extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_comments';

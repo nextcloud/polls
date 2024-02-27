@@ -52,8 +52,11 @@ class VoteMapperTest extends UnitTestCase {
 	private PollMapper $pollMapper;
 	private OptionMapper $optionMapper;
 	private UserMapper $userMapper;
+	/** @var Poll[] $polls */
 	private array $polls = [];
+	/** @var Option[] $options */
 	private array $options = [];
+	/** @var Vote[] $votes */
 	private array $votes = [];
 
 	/**
@@ -84,7 +87,8 @@ class VoteMapperTest extends UnitTestCase {
 			for ($optionsCount = 0; $optionsCount < 2; $optionsCount++) {
 				$option = $this->fm->instance('OCA\Polls\Db\Option');
 				$option->setPollId($poll->getId());
-				array_push($this->options, $this->optionMapper->add($option));
+				$option->syncOption();
+				array_push($this->options, $this->optionMapper->insert($option));
 				$vote = $this->fm->instance('OCA\Polls\Db\Vote');
 				$vote->setPollId($option->getPollId());
 				$vote->setUserId('voter');

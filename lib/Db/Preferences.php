@@ -29,12 +29,12 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
- * @method integer getId()
- * @method void setId(integer $value)
+ * @method int getId()
+ * @method void setId(int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getTimestamp()
- * @method void setTimestamp(integer $value)
+ * @method void setTimestamp(int $value)
  * @method string getPreferences()
  * @method void setPreferences(string $value)
  */
