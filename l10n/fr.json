@@ -413,7 +413,7 @@
     "An email address is required." : "Une adresse e-mail est requise.",
     "You will receive your personal link after clicking \"OK\"." : "Vous recevrez votre lien personnel après avoir cliqué sur \"OK\".",
     "Enter your email address to get your personal access link." : "Saisissez votre adresse électronique pour obtenir votre lien d'accès personnel.",
-    "Email could not be sent to {emailAddress}" : "L'e-mail n'a pas pu être envoyé à {emailAddress}",
+    "Email could not be sent to {emailAddress}" : "Le courriel n'a pas pu être envoyé à {emailAddress}",
     "Error registering to poll" : "Problème d’inscription au sondage",
     "Deactivate combo view for all users" : "Désactiver la vue combinée pour tous les utilisateurs",
     "Allow combo view for the following groups" : "Autoriser la vue combinée pour les groupes suivants",
