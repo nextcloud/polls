@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Circle" : "Círculu",
     "Contact" : "Contautu",
+    "User" : "Usuariu",
     "Switch to list view" : "Cambiar a la vista de llista",
     "Delete" : "Desaniciar",
     "Unknown error" : "Fallu desconocíu",
