@@ -81,4 +81,28 @@ class VoteApiController extends BaseApiController {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
+
+	/**
+	 * Remove user from poll
+	 * @param int $pollId poll id
+	 * @param string $userId User to remove
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function delete(int $pollId, string $userId = ''): JSONResponse {
+		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId)]);
+	}
+
+	/**
+	 * Delete orphaned votes
+	 * @param int $pollId poll id
+	 * @param string $userId User to delete orphan votes from
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
+		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId, true)]);
+	}
 }

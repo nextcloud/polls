@@ -160,6 +160,9 @@ return [
 
 		['name' => 'vote_api#list', 'url' => '/api/v1.0/poll/{pollId}/votes', 'verb' => 'GET'],
 		['name' => 'vote_api#set', 'url' => '/api/v1.0/option/{optionId}/vote/{answer}', 'verb' => 'PUT'],
+		['name' => 'vote_api#delete', 'url' => '/api/v1.0/poll/{pollId}/user/{userId}', 'verb' => 'DELETE', 'postfix' => 'other'],
+		['name' => 'vote_api#delete', 'url' => '/api/v1.0/poll/{pollId}/user', 'verb' => 'DELETE', 'postfix' => 'self'],
+		['name' => 'vote_api#delete_orphaned', 'url' => '/api/v1.0/poll/{pollId}/votes/orphaned', 'verb' => 'DELETE'],
 
 		['name' => 'share_api#list', 'url' => '/api/v1.0/poll/{pollId}/shares', 'verb' => 'GET'],
 		['name' => 'share_api#get', 'url' => '/api/v1.0/share/{token}', 'verb' => 'GET'],
