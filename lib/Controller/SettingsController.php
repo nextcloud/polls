@@ -54,6 +54,7 @@ class SettingsController extends BaseController {
 
 	/**
 	 * Write app settings
+	 * @param array $appSettings Settings as array
 	 */
 	public function writeAppSettings(array $appSettings): JSONResponse {
 		$this->settingsService->writeAppSettings($appSettings);

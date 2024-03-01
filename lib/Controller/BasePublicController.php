@@ -52,6 +52,8 @@ class BasePublicController extends Controller {
 
 	/**
 	 * response
+	 * @param Closure $callback Callback function
+	 * @param string $token share token
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback, string $token): JSONResponse {
@@ -66,6 +68,8 @@ class BasePublicController extends Controller {
 
 	/**
 	 * response
+	 * @param Closure $callback Callback function
+	 * @param string $token share token
 	 */
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback, string $token): JSONResponse {
@@ -79,6 +83,8 @@ class BasePublicController extends Controller {
 	}
 	/**
 	 * responseCreate
+	 * @param Closure $callback Callback function
+	 * @param string $token share token
 	 */
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback, string $token): JSONResponse {

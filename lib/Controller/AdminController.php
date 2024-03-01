@@ -52,6 +52,9 @@ class AdminController extends BaseController {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * Load admin page
+	 */
 	#[NoCSRFRequired]
 	public function index(): TemplateResponse {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
@@ -67,7 +70,8 @@ class AdminController extends BaseController {
 	}
 
 	/**
-	 * Get list of polls for administrative purposes
+	 * Takeover ownership of a poll
+	 * @param int $pollId PollId to take over
 	 */
 	public function takeover(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->takeover($pollId, $this->userMapper->getCurrentUser()));
@@ -75,6 +79,7 @@ class AdminController extends BaseController {
 
 	/**
 	 * Switch deleted status (move to deleted polls)
+	 * @param int $pollId poll id
 	 */
 	public function toggleArchive(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
@@ -82,6 +87,7 @@ class AdminController extends BaseController {
 
 	/**
 	 * Delete poll
+	 * @param int $pollId poll id
 	 */
 	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));

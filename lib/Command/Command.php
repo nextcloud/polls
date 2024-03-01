@@ -54,6 +54,9 @@ class Command extends \Symfony\Component\Console\Command\Command {
 			->setDescription($this->description);
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedProperty
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$this->setOutput($output);
 		$this->setInput($input);

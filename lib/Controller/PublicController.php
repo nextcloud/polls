@@ -71,6 +71,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * @return TemplateResponse|PublicTemplateResponse
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
@@ -87,6 +88,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * get complete poll via token
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function getPoll(string $token): JSONResponse {
@@ -101,6 +103,8 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Watch poll for updates
+	 * @param string $token Share token
+	 * @param ?int $offset only watch changes after this timestamp 
 	 */
 	#[PublicPage]
 	public function watchPoll(string $token, ?int $offset): JSONResponse {
@@ -111,6 +115,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Get share
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function getShare(string $token): JSONResponse {
@@ -121,6 +126,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Get votes
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function getVotes(string $token): JSONResponse {
@@ -131,6 +137,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Delete current user's votes
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function deleteUser(string $token): JSONResponse {
@@ -141,6 +148,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Delete current user's orphaned votes
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function deleteOrphanedVotes(string $token): JSONResponse {
@@ -151,6 +159,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Get options
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function getOptions(string $token): JSONResponse {
@@ -161,6 +170,10 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Add options
+	 * @param string $token Share token
+	 * @param int $timestamp timestamp for datepoll
+	 * @param string $text Option text for text poll
+	 * @param int duration duration of option
 	 */
 	#[PublicPage]
 	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
@@ -175,6 +188,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Delete option
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function deleteOption(string $token, int $optionId): JSONResponse {
@@ -185,6 +199,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Restore option
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function restoreOption(string $token, int $optionId): JSONResponse {
@@ -195,6 +210,9 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Set Vote
+	 * @param int $optionId poll id
+	 * @param string $setTo Answer string
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function setVote(int $optionId, string $setTo, string $token): JSONResponse {
@@ -205,6 +223,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Get Comments
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function getComments(string $token): JSONResponse {
@@ -215,6 +234,8 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
+	 * @param string $token Share token
+	 * @param string $message Comment text to add
 	 */
 	#[PublicPage]
 	public function addComment(string $token, string $message): JSONResponse {
@@ -225,6 +246,8 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Delete Comment
+	 * @param string $token Share token
+	 * @param int $commentId Id of comment to delete
 	 */
 	#[PublicPage]
 	public function deleteComment(int $commentId, string $token): JSONResponse {
@@ -236,6 +259,8 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Restore deleted Comment
+	 * @param string $token Share token
+	 * @param int $commentId Id of comment to restore
 	 */
 	#[PublicPage]
 	public function restoreComment(int $commentId, string $token): JSONResponse {
@@ -248,6 +273,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Get subscription status
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function getSubscription(string $token): JSONResponse {
@@ -258,6 +284,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * subscribe
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function subscribe(string $token): JSONResponse {
@@ -268,6 +295,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Unsubscribe
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function unsubscribe(string $token): JSONResponse {
@@ -279,6 +307,8 @@ class PublicController extends BasePublicController {
 	/**
 	 * Validate it the user name is reserved
 	 * return false, if this username already exists as a user or as a participant of the poll
+	 * @param string $displayName Name string to check for validation
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function validatePublicDisplayName(string $displayName, string $token): JSONResponse {
@@ -289,6 +319,8 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Validate email address (simple validation)
+	 * @param string $emailAddress Email address string to check for validation
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function validateEmailAddress(string $emailAddress, string $token = ''): JSONResponse {
@@ -299,6 +331,8 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Change displayName
+	 * @param string $displayName New name
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function setDisplayName(string $token, string $displayName): JSONResponse {
@@ -310,6 +344,8 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Set EmailAddress
+	 * @param string $token Share token
+	 * @param string $emailAddress New email address
 	 */
 	#[PublicPage]
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
@@ -320,6 +356,7 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Set EmailAddress
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function deleteEmailAddress(string $token): JSONResponse {
@@ -331,6 +368,10 @@ class PublicController extends BasePublicController {
 	/**
 	 * Create a personal share from a public share
 	 * or update an email share with the username
+	 * @param string $token Share token
+	 * @param string $displayName Name
+	 * @param string $emailAddress Email address
+	 * @param string $timeZone timezone string
 	 */
 	#[PublicPage]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
@@ -342,6 +383,7 @@ class PublicController extends BasePublicController {
 	/**
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
+	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	public function resendInvitation(string $token): JSONResponse {

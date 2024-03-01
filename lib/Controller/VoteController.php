@@ -45,6 +45,7 @@ class VoteController extends BaseController {
 
 	/**
 	 * list votes per poll
+	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
@@ -54,6 +55,8 @@ class VoteController extends BaseController {
 
 	/**
 	 * set vote answer
+	 * @param int $optionId poll id
+	 * @param string $setTo Answer string
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
@@ -63,13 +66,18 @@ class VoteController extends BaseController {
 
 	/**
 	 * Remove user from poll
+	 * @param int $pollId poll id
+	 * @param string $userId User to remove
 	 */
 	#[NoAdminRequired]
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId)]);
 	}
+
 	/**
-	 * Relete orphaned votes
+	 * Delete orphaned votes
+	 * @param int $pollId poll id
+	 * @param string $userId User to delete orphan votes from
 	 */
 	#[NoAdminRequired]
 	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {

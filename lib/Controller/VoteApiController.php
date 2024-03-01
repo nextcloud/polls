@@ -49,6 +49,7 @@ class VoteApiController extends BaseApiController {
 
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
+	 * @param int $pollId poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -65,6 +66,8 @@ class VoteApiController extends BaseApiController {
 
 	/**
 	 * Set vote answer
+	 * @param int $optionId poll id
+	 * @param string $answer Answer string ('yes', 'no', 'maybe')
 	 */
 	#[CORS]
 	#[NoAdminRequired]

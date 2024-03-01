@@ -59,6 +59,7 @@ class PreferencesController extends BaseController {
 
 	/**
 	 * Write preferences
+	 * @param array $preferences
 	 */
 	#[NoAdminRequired]
 	public function write(array $preferences): JSONResponse {

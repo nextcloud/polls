@@ -50,6 +50,7 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * response
+	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
@@ -62,6 +63,7 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * response
+	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
@@ -74,6 +76,7 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * responseCreate
+	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {

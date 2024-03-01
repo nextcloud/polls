@@ -45,6 +45,7 @@ class ShareController extends BaseController {
 
 	/**
 	 * List shares
+	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {
@@ -53,6 +54,11 @@ class ShareController extends BaseController {
 
 	/**
 	 * Add share
+	 * @param int $pollId poll id
+	 * @param string $type Share type
+	 * @param string $userId User id
+	 * @param string $displayName Displayname of user
+	 * @param string $emailAddress Email address of user
 	 */
 	#[NoAdminRequired]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): JSONResponse {
@@ -61,6 +67,8 @@ class ShareController extends BaseController {
 
 	/**
 	 * Change the contraints for email addresses in public polls
+	 * @param string $token Share token
+	 * @param string $value new value
 	 */
 	#[NoAdminRequired]
 	public function setPublicPollEmail(string $token, string $value): JSONResponse {
@@ -69,6 +77,8 @@ class ShareController extends BaseController {
 
 	/**
 	 * Change Label of a public share
+	 * @param string $token Share token
+	 * @param string $label new label of oublic poll
 	 */
 	#[NoAdminRequired]
 	public function setLabel(string $token, string $label = ''): JSONResponse {
@@ -79,6 +89,7 @@ class ShareController extends BaseController {
 
 	/**
 	 * Convert poll admin to user
+	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
 	public function adminToUser(string $token): JSONResponse {
@@ -87,6 +98,7 @@ class ShareController extends BaseController {
 
 	/**
 	 * Convert user to poll admin
+	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
 	public function userToAdmin(string $token): JSONResponse {
@@ -95,6 +107,8 @@ class ShareController extends BaseController {
 
 	/**
 	 * Set email address
+	 * @param string $token Share token
+	 * @param string $emailAddress Email address
 	 */
 	#[NoAdminRequired]
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
@@ -106,6 +120,7 @@ class ShareController extends BaseController {
 
 	/**
 	 * Delete share
+	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
 	public function delete(string $token): JSONResponse {
@@ -113,7 +128,8 @@ class ShareController extends BaseController {
 	}
 
 	/**
-	 * Delete share
+	 * Restore deleted share
+	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
 	public function restore(string $token): JSONResponse {
@@ -121,7 +137,8 @@ class ShareController extends BaseController {
 	}
 
 	/**
-	 * Delete or restore share
+	 * Lock a share (read only)
+	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
 	public function lock(string $token): JSONResponse {
@@ -129,7 +146,8 @@ class ShareController extends BaseController {
 	}
 
 	/**
-	 * Lock or unlock share
+	 * Unlock share
+	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
 	public function unlock(string $token): JSONResponse {
@@ -139,6 +157,7 @@ class ShareController extends BaseController {
 	/**
 	 * Send invitation mails for a share
 	 * Additionally send notification via notifications
+	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
 	public function sendInvitation(string $token): JSONResponse {
@@ -152,6 +171,7 @@ class ShareController extends BaseController {
 	/**
 	 * Send all invitation mails for a share and resolve groups
 	 * Additionally send notification via notifications
+	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
 	public function sendAllInvitations(int $pollId): JSONResponse {
@@ -163,6 +183,7 @@ class ShareController extends BaseController {
 
 	/**
 	 * resolve contact group to individual shares
+	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
 	public function resolveGroup(string $token): JSONResponse {

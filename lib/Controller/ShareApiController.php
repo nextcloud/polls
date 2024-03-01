@@ -47,7 +47,8 @@ class ShareApiController extends BaseApiController {
 	}
 
 	/**
-	 * Read all shares of a poll based on the poll id and return list as array
+	 * List shares
+	 * @param int $pollId poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -68,16 +69,22 @@ class ShareApiController extends BaseApiController {
 
 	/**
 	 * Add share
+	 * @param int $pollId poll id
+	 * @param string $type Share type
+	 * @param string $userId User id
+	 * @param string $displayName Displayname of user
+	 * @param string $emailAddress Email address of user
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function add(int $pollId, string $type, string $userId = ''): JSONResponse {
-		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId)]);
+	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): JSONResponse {
+		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)]);
 	}
 
 	/**
 	 * Delete share
+	 * @param string $token Share token
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -87,7 +94,8 @@ class ShareApiController extends BaseApiController {
 	}
 
 	/**
-	 * Delete share
+	 * Restore deleted share
+	 * @param string $token Share token
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -97,7 +105,8 @@ class ShareApiController extends BaseApiController {
 	}
 
 	/**
-	 * Lock share
+	 * Lock a share (read only)
+	 * @param string $token Share token
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -108,6 +117,7 @@ class ShareApiController extends BaseApiController {
 
 	/**
 	 * Unlock share
+	 * @param string $token Share token
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -117,7 +127,9 @@ class ShareApiController extends BaseApiController {
 	}
 
 	/**
-	 * Sent invitation mails for a share
+	 * Send invitation mails for a share
+	 * Additionally send notification via notifications
+	 * @param string $token Share token
 	 */
 	#[CORS]
 	#[NoAdminRequired]

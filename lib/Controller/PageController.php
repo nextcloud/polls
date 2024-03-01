@@ -52,7 +52,9 @@ class PageController extends Controller {
 		parent::__construct($appName, $request);
 	}
 
-
+	/**
+	 * reder index page
+	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function index(): TemplateResponse {
@@ -61,6 +63,10 @@ class PageController extends Controller {
 		return new TemplateResponse(AppConstants::APP_ID, 'main');
 	}
 
+	/**
+	 * reder vote page
+	 * @param $id poll id
+	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function vote(int $id): TemplateResponse {

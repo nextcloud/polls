@@ -46,6 +46,7 @@ class CommentApiController extends BaseApiController {
 
 	/**
 	 * Read all comments of a poll based on the poll id and return list as array
+	 * @param int pollId poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -58,6 +59,8 @@ class CommentApiController extends BaseApiController {
 
 	/**
 	 * Add comment
+	 * @param int $pollId poll id
+	 * @param string $comment Comment text to add
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -70,6 +73,7 @@ class CommentApiController extends BaseApiController {
 
 	/**
 	 * Delete comment
+	 * @param int $commentId Id of comment to delete
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -83,6 +87,7 @@ class CommentApiController extends BaseApiController {
 
 	/**
 	 * Restore comment
+	 * @param int $commentId Id of comment to restore
 	 */
 	#[CORS]
 	#[NoAdminRequired]

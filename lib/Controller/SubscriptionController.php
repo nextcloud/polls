@@ -44,6 +44,7 @@ class SubscriptionController extends BaseController {
 
 	/**
 	 * Get subscription status
+	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
@@ -53,7 +54,8 @@ class SubscriptionController extends BaseController {
 	}
 
 	/**
-	 * subscribe
+	 * Subscribe
+	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
 	public function subscribe(int $pollId): JSONResponse {
@@ -64,6 +66,7 @@ class SubscriptionController extends BaseController {
 
 	/**
 	 * Unsubscribe
+	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
 	public function unsubscribe(int $pollId): JSONResponse {
