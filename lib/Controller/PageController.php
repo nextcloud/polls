@@ -35,7 +35,6 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
-use OCP\IURLGenerator;
 use OCP\Util;
 
 /**
@@ -45,7 +44,6 @@ class PageController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private IURLGenerator $urlGenerator,
 		private NotificationService $notificationService,
 		private IEventDispatcher $eventDispatcher,
 	) {

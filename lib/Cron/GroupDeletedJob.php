@@ -31,7 +31,6 @@ use OCA\Polls\Db\ShareMapper;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\QueuedJob;
 
-use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
 class GroupDeletedJob extends QueuedJob {
@@ -40,7 +39,6 @@ class GroupDeletedJob extends QueuedJob {
 	 */
 	public function __construct(
 		private ShareMapper $shareMapper,
-		private ISecureRandom $secureRandom,
 		protected ITimeFactory $time,
 		private LoggerInterface $logger,
 	) {

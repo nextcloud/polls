@@ -50,7 +50,14 @@ class User extends UserBase {
 		$this->icon = self::ICON;
 		$this->isNoUser = false;
 		$this->description = $this->l10n->t('User');
+		
+		$this->setUp();
+	}
 
+	/**
+	 * setUp
+	 */
+	private function setUp(): void {
 		$this->config = Container::queryClass(IConfig::class);
 		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
 		$this->displayName = $this->user->getDisplayName();

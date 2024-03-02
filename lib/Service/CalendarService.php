@@ -56,6 +56,13 @@ class CalendarService {
 		private UserMapper $userMapper,
 		private LoggerInterface $logger,
 	) {
+		$this->setUp();
+	}
+
+	/**
+	 * setUp
+	 */
+	private function setUp(): void {
 		$this->preferences = $this->preferencesService->get();
 		$this->getCalendarsForPrincipal();
 	}

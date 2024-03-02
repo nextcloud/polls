@@ -25,11 +25,14 @@ namespace OCA\Polls\Event;
 
 use OCA\Polls\Db\Comment;
 
+/**
+ * @psalm-suppress UnusedProperty
+ */
 abstract class CommentEvent extends BaseEvent {
 	public const ADD = 'comment_add';
 	public const DELETE = 'comment_delete';
 	public const RESTORE = 'comment_restore';
-	
+
 	public function __construct(
 		protected Comment $comment,
 	) {

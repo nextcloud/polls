@@ -42,7 +42,6 @@ use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
 use OCP\ISession;
-use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Util;
 
@@ -55,7 +54,6 @@ class PublicController extends BasePublicController {
 		IRequest $request,
 		ISession $session,
 		Acl $acl,
-		private IURLGenerator $urlGenerator,
 		private IUserSession $userSession,
 		private CommentService $commentService,
 		private MailService $mailService,
@@ -71,11 +69,10 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * @return TemplateResponse|PublicTemplateResponse
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
-	public function votePage(string $token) {
+	public function votePage() {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		if ($this->userSession->isLoggedIn()) {
 			return new TemplateResponse(AppConstants::APP_ID, 'main');
@@ -104,7 +101,7 @@ class PublicController extends BasePublicController {
 	/**
 	 * Watch poll for updates
 	 * @param string $token Share token
-	 * @param ?int $offset only watch changes after this timestamp 
+	 * @param ?int $offset only watch changes after this timestamp
 	 */
 	#[PublicPage]
 	public function watchPoll(string $token, ?int $offset): JSONResponse {

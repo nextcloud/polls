@@ -50,7 +50,6 @@ abstract class MailBase {
 
 	protected AppSettings $appSettings;
 	protected IEmailTemplate $emailTemplate;
-	protected string $footer = '';
 	protected IL10N $l10n;
 	protected LoggerInterface $logger;
 	protected IMailer $mailer;
@@ -66,16 +65,37 @@ abstract class MailBase {
 		protected int $pollId,
 		protected string $url = ''
 	) {
+		$this->setup();
+	}
+
+	/**
+	 * setUp
+	 */
+	private function setUp(): void {
 		$this->appSettings = Container::queryClass(AppSettings::class);
 		$this->logger = Container::queryClass(LoggerInterface::class);
 		$this->mailer = Container::queryClass(IMailer::class);
 		$this->optionMapper = Container::queryClass(OptionMapper::class);
 		$this->transFactory = Container::queryClass(IFactory::class);
 		$this->userMapper = Container::queryClass(UserMapper::class);
-		$this->poll = $this->getPoll($pollId);
-		$this->recipient = $this->getUser($recipientId);
-		$this->url = $url === '' ? $this->poll->getVoteUrl() : '';
-		$this->initializeClass();
+		$this->poll = $this->getPoll($this->pollId);
+		$this->recipient = $this->getUser($this->recipientId);
+		$this->url = $this->url === '' ? $this->poll->getVoteUrl() : '';
+		$this->owner = $this->getUser($this->poll->getOwner());
+
+		$this->owner = $this->getUser($this->poll->getOwner());
+
+		if ($this->recipient->getIsNoUser()) {
+			$this->url = $this->getShareURL();
+		}
+
+		$languageCode = $this->recipient->getLanguageCode() !== '' ? $this->recipient->getLanguageCode() : $this->transFactory->findGenericLanguage();
+
+		$this->l10n = $this->transFactory->get(
+			AppConstants::APP_ID,
+			$languageCode,
+			$this->recipient->getLocaleCode()
+		);
 	}
 
 	public function send(): void {
@@ -91,22 +111,6 @@ abstract class MailBase {
 			$this->logger->alert($e->getMessage());
 			throw $e;
 		}
-	}
-
-	protected function initializeClass(): void {
-		$this->owner = $this->getUser($this->poll->getOwner());
-
-		if ($this->recipient->getIsNoUser()) {
-			$this->url = $this->getShareURL();
-		}
-
-		$languageCode = $this->recipient->getLanguageCode() !== '' ? $this->recipient->getLanguageCode() : $this->transFactory->findGenericLanguage();
-
-		$this->l10n = $this->transFactory->get(
-			AppConstants::APP_ID,
-			$languageCode,
-			$this->recipient->getLocaleCode()
-		);
 	}
 
 	private function getEmailTemplate() : IEMailTemplate {

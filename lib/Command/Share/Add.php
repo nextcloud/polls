@@ -71,6 +71,9 @@ class Add extends Base {
 			);
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedParam
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$pollId = $input->getArgument('id');
 		$users = $input->getOption('user');
@@ -95,6 +98,7 @@ class Add extends Base {
 	/**
 	 * @param Poll     $poll
 	 * @param string[] $userIds
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function inviteUsers(Poll $poll, array $userIds): void {
 		foreach ($userIds as $userId) {
@@ -106,10 +110,11 @@ class Add extends Base {
 			}
 		}
 	}
-
+	
 	/**
 	 * @param Poll     $poll
 	 * @param string[] $groupIds
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function inviteGroups(Poll $poll, array $groupIds): void {
 		foreach ($groupIds as $groupId) {
@@ -125,6 +130,7 @@ class Add extends Base {
 	/**
 	 * @param Poll     $poll
 	 * @param string[] $emails
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function inviteEmails(Poll $poll, array $emails): void {
 		foreach ($emails as $email) {
@@ -137,6 +143,9 @@ class Add extends Base {
 		}
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedParam
+	 */
 	public function completeOptionValues($optionName, CompletionContext $context) {
 		return match ($optionName) {
 			'user' => $this->completeUserValues($context),

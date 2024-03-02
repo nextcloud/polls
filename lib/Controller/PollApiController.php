@@ -67,7 +67,7 @@ class PollApiController extends BaseApiController {
 	}
 	
 	/**
-	 * get poll 
+	 * get poll
 	 * @param $pollId Poll id
 	 */
 	#[CORS]

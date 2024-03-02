@@ -29,7 +29,6 @@ namespace OCA\Polls\Db;
 use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Migration\TableSchema;
 use OCP\IConfig;
-use OCP\IDBConnection;
 
 class IndexManager {
 	
@@ -40,9 +39,12 @@ class IndexManager {
 	 */
 	public function __construct(
 		private IConfig $config,
-		private IDBConnection $connection,
 		private Schema $schema,
 	) {
+		$this->setUp();
+	}
+	
+	private function setUp(): void {
 		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
 

@@ -28,7 +28,6 @@ namespace OCA\Polls\Db;
 
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\ISession;
 
 /**
  * @template-extends QBMapperWithUser<Option>
@@ -38,10 +37,10 @@ class OptionMapper extends QBMapperWithUser {
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
+	 * @psalm-suppress UnusedProperty
 	 */
 	public function __construct(
 		IDBConnection $db,
-		private ISession $session,
 		private UserMapper $userMapper,
 	) {
 		parent::__construct($db, Option::TABLE, Option::class);

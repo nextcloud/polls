@@ -169,7 +169,7 @@ class SystemService {
 		return $items;
 	}
 
-	private function handleFailedSearchResult(string $query, $item): void {
+	private function handleFailedSearchResult(string $query, mixed $item): void {
 		$this->logger->debug('Unrecognized result for query: \"{query}\". Result: {result]', [
 			'query' => $query,
 			'result' => json_encode($item),
@@ -185,7 +185,7 @@ class SystemService {
 
 
 	/**
-	 * Validate it the user name is reserved
+	 * Validate if the user name is reserved
 	 * return false, if the requested userId or displayName exists as a user or as
 	 * a participant of refenced poll
 	 * The check spans over userId and displayName
@@ -199,7 +199,9 @@ class SystemService {
 			throw new TooShortException('Username must not be empty');
 		}
 
-		$share = $share ?? $this->shareMapper->findByToken($token);
+		if ($token && !$share) {
+			$share = $this->shareMapper->findByToken($token);
+		}
 
 		if ($share->getDisplayName() === $userName) {
 			return $userName;

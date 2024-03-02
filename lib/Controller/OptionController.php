@@ -46,7 +46,7 @@ class OptionController extends BaseController {
 
 	/**
 	 * Get all options of given poll
-	 * @param int $pollId Poll id 
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {

@@ -32,6 +32,7 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCP\IURLGenerator;
 
 /**
+ * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
  * @method string getToken()

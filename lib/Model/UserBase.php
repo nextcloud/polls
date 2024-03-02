@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Model;
 
 use DateTimeZone;
+use JsonSerializable;
 use OCA\Polls\Db\EntityWithUser;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Helper\Container;
@@ -45,7 +46,7 @@ use OCP\IL10N;
 use OCP\IUserSession;
 use OCP\Share\IShare;
 
-class UserBase implements \JsonSerializable {
+class UserBase implements JsonSerializable {
 	/** @var string */
 	public const TYPE = 'generic';
 	/** @var string */

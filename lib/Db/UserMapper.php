@@ -44,7 +44,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\IGroupManager;
 use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserManager;
@@ -59,14 +58,12 @@ use Psr\Log\LoggerInterface;
 class UserMapper extends QBMapper {
 	public const TABLE = Share::TABLE;
 	protected ?UserBase $currentUser = null;
-	protected string $currentUserId;
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function __construct(
 		IDBConnection $db,
-		private IGroupManager $groupManager,
 		protected ISession $session,
 		protected IUserSession $userSession,
 		protected IUserManager $userManager,

@@ -72,6 +72,9 @@ class Remove extends Base {
 			);
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedParam
+	 */
 	protected function execute(InputInterface $input, OutputInterface $output): int {
 		$pollId = $input->getArgument('id');
 		$users = $input->getOption('user');
@@ -96,6 +99,7 @@ class Remove extends Base {
 	/**
 	 * @param Poll     $poll
 	 * @param string[] $userIds
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function removeUsers(Poll $poll, array $userIds): void {
 		foreach ($this->getUserShares($poll) as $share) {
@@ -108,6 +112,7 @@ class Remove extends Base {
 	/**
 	 * @param Poll     $poll
 	 * @param string[] $groupIds
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function removeGroups(Poll $poll, array $groupIds): void {
 		foreach ($this->getGroupShares($poll) as $share) {
@@ -120,6 +125,7 @@ class Remove extends Base {
 	/**
 	 * @param Poll     $poll
 	 * @param string[] $emails
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function removeEmails(Poll $poll, array $emails): void {
 		foreach ($this->getEmailShares($poll) as $share) {
@@ -132,6 +138,7 @@ class Remove extends Base {
 	/**
 	 * @param Poll $poll
 	 * @return Share[]
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function getUserShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());
@@ -143,6 +150,7 @@ class Remove extends Base {
 	/**
 	 * @param Poll $poll
 	 * @return Share[]
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function getGroupShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());
@@ -154,6 +162,7 @@ class Remove extends Base {
 	/**
 	 * @param Poll $poll
 	 * @return Share[]
+	 * @psalm-suppress UnusedMethod
 	 */
 	private function getEmailShares(Poll $poll): array {
 		$shares = $this->shareMapper->findByPoll($poll->getId());

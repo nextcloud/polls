@@ -46,7 +46,7 @@ class OptionApiController extends BaseApiController {
 
 	/**
 	 * Get all options of given poll
-	 * @param int $pollId Poll id 
+	 * @param int $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]

@@ -30,6 +30,7 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 /**
+ * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
  * @method int getPollId()
