@@ -1,5 +1,6 @@
 { "translations": {
     "Circle" : "Círculu",
+    "Group" : "Grupu",
     "Contact" : "Contautu",
     "User" : "Usuariu",
     "Switch to list view" : "Cambiar a la vista de llista",
@@ -17,8 +18,11 @@
     "Submit" : "Unviar",
     "Close" : "Zarrar",
     "_%n Participant_::_%n Participants_" : ["%n participante","%n participantes"],
+    "Access" : "Accesu",
     "Owner" : "Propietariu",
+    "Preview" : "Previsualizar",
     "Performance settings" : "Configuración del rindimientu",
+    "Copy link to clipboard" : "Copiar l'enllaz nel cartafueyu",
     "Shares" : "Comparticiones",
     "Description" : "Descripción",
     "Public link" : "Enllaz públicu",
