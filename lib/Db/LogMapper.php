@@ -59,22 +59,6 @@ class LogMapper extends QBMapper {
 	 * @return Log[]
 	 * @psalm-return array<array-key, Log>
 	 */
-	public function findByPollId(int $pollId): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-			->from($this->getTableName())
-			->where(
-				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-			);
-
-		return $this->findEntities($qb);
-	}
-
-	/**
-	 * @return Log[]
-	 * @psalm-return array<array-key, Log>
-	 */
 	public function findUnprocessed(): array {
 		$qb = $this->db->getQueryBuilder();
 
@@ -82,31 +66,6 @@ class LogMapper extends QBMapper {
 			->from($this->getTableName())
 			->where($qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		return $this->findEntities($qb);
-	}
-
-	/**
-	 * @return Log[]
-	 * @psalm-return array<array-key, Log>
-	 */
-	public function findUnprocessedPolls(): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->selectDistinct('poll_id')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
-		return $this->findEntities($qb);
-	}
-
-	public function getLastRecord(int $pollId): Log {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->setMaxResults(1)
-			->orderBy('id', 'DESC');
-
-		return $this->findEntity($qb);
 	}
 
 	public function deleteByUserId(string $userId): void {

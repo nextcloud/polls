@@ -63,35 +63,10 @@ class LogMapperTest extends UnitTestCase {
 	}
 
 	/**
-	 * testFindByPollId
-	 */
-	public function testFindByPollId() {
-		foreach ($this->polls as $poll) {
-			$this->assertTrue(count($this->logMapper->findByPollId($poll->getId())) > 0);
-		}
-	}
-
-	/**
 	 * testFindUnprocessed
 	 */
 	public function testFindUnprocessed() {
 		$this->assertTrue(count($this->logMapper->findUnprocessed()) > 0);
-	}
-
-	/**
-	 * testFindUnprocessedPolls
-	 */
-	public function testFindUnprocessedPolls() {
-		$this->assertTrue(count($this->logMapper->findUnprocessedPolls()) > 0);
-	}
-
-	/**
-	 * testGetLastRecord
-	 */
-	public function testGetLastRecord() {
-		foreach ($this->polls as $poll) {
-			$this->assertInstanceOf(Log::class, $this->logMapper->getLastRecord($poll->getId()));
-		}
 	}
 
 	/**
