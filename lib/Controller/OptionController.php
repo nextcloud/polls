@@ -64,7 +64,7 @@ class OptionController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): JSONResponse {
-		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)]);
+		return $this->responseCreate(fn () => ['option' => $this->optionService->addForPoll($pollId, $timestamp, $pollOptionText, $duration)]);
 	}
 
 	/**

@@ -124,7 +124,7 @@ class ShareController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function delete(string $token): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->delete(token: $token)]);
+		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token)]);
 	}
 
 	/**
@@ -133,7 +133,7 @@ class ShareController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function restore(string $token): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->delete(token: $token, restore: true)]);
+		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token, restore: true)]);
 	}
 
 	/**
@@ -142,7 +142,7 @@ class ShareController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function lock(string $token): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->lock(token: $token)]);
+		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token)]);
 	}
 
 	/**
@@ -151,7 +151,7 @@ class ShareController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function unlock(string $token): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->lock(token: $token, unlock: true)]);
+		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token, unlock: true)]);
 	}
 
 	/**
@@ -188,7 +188,7 @@ class ShareController extends BaseController {
 	#[NoAdminRequired]
 	public function resolveGroup(string $token): JSONResponse {
 		return $this->response(fn () => [
-			'shares' => $this->shareService->resolveGroup($token)
+			'shares' => $this->shareService->resolveGroupByToken($token)
 		]);
 	}
 }

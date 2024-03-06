@@ -50,21 +50,22 @@ class CommentService {
 	 * @return Comment[]
 	 */
 	public function list(?int $pollId = null): array {
-		$this->acl->setPollId($pollId);
+		if ($pollId !== null) {
+			$this->acl->setPollId($pollId);
+		}
+		$this->acl->request(Acl::PERMISSION_COMMENT_ADD);
+
 		$comments = $this->commentMapper->findByPoll($this->acl->getPollId());
 		// treat comments from the same user within 5 minutes as grouped comments
 		$timeTolerance = 5 * 60;
-		$predecessorId = null;
-		$predecessorUserId = null;
-		$predecessorTimestamp = null;
+		// init predecessor as empty Comment
+		$predecessor = new Comment();
 
 		foreach ($comments as &$comment) {
-			if ($comment->getUserId() === $predecessorUserId && $comment->getTimestamp() - $predecessorTimestamp < $timeTolerance) {
-				$comment->setParent($predecessorId);
+			if ($comment->getUserId() === $predecessor->getUserId() && $comment->getTimestamp() - $predecessor->getTimestamp() < $timeTolerance) {
+				$comment->setParent($predecessor->getId());
 			} else {
-				$predecessorUserId = $comment->getUserId();
-				$predecessorId = $comment->getId();
-				$predecessorTimestamp = $comment->getTimestamp();
+				$predecessor = $comment;
 			}
 		}
 
@@ -81,7 +82,10 @@ class CommentService {
 	 * Add comment
 	 */
 	public function add(string $message, ?int $pollId = null): Comment {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_COMMENT_ADD);
+		if ($pollId !== null) {
+			$this->acl->setPollId($pollId);
+		}
+		$this->acl->request(Acl::PERMISSION_COMMENT_ADD);
 
 		$this->comment = new Comment();
 		$this->comment->setPollId($this->acl->getPollId());
@@ -101,7 +105,11 @@ class CommentService {
 	 * @param bool $restore Set true, if comment is to be restored
 	 */
 	public function delete(Comment $comment, bool $restore = false): Comment {
-		$this->acl->request(Acl::PERMISSION_COMMENT_DELETE, $comment->getUserId(), $comment->getPollId());
+		$this->acl->setPollId($comment->getPollId());
+
+		if (!$this->acl->matchUser($comment->getUserId())) {
+			$this->acl->request(Acl::PERMISSION_COMMENT_DELETE);
+		}
 	
 		$comment->setDeleted($restore ? 0 : time());
 		$this->commentMapper->update($comment);

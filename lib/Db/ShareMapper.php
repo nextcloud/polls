@@ -135,6 +135,9 @@ class ShareMapper extends QBMapper {
 		}
 	}
 
+	/**
+	 * @throws ShareNotFoundException
+	 */
 	public function findByToken(string $token, bool $getDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();
 

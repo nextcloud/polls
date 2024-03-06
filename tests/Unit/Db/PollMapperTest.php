@@ -35,6 +35,7 @@ use OCP\Server;
 class PollMapperTest extends UnitTestCase {
 	private IDBConnection $con;
 	private PollMapper $pollMapper;
+	/** @var Poll[] $polls*/
 	private array $polls = [];
 
 	/**

@@ -35,21 +35,24 @@ class Email extends UserBase {
 	public function __construct(
 		string $id,
 		string $displayName = '',
-		?string $emailAddress = '',
+		string $emailAddress = '',
 		string $languageCode = ''
 	) {
-		parent::__construct($id, self::TYPE);
+		parent::__construct($id, self::TYPE, languageCode: $languageCode);
 		$this->icon = self::ICON;
-		$this->description = $emailAddress ?? $this->l10n->t('External Email');
 		$this->richObjectType = 'email';
-		$this->emailAddress = $emailAddress ? $emailAddress : $id;
-		$this->displayName = $displayName ? $displayName : $this->displayName;
+		$this->description = $emailAddress !== '' ? $emailAddress : $this->l10n->t('External Email');
+		$this->emailAddress = $emailAddress !== '' ? $emailAddress : $id;
+		$this->displayName = $displayName !== '' ? $displayName : $this->displayName;
 	}
 
 	public function getDisplayName(): string {
 		return $this->displayName ? $this->displayName : $this->id;
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function jsonSerialize(): array {
 		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
 			return $this->getRichUserArray();

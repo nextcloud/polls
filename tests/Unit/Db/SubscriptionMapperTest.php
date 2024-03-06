@@ -25,6 +25,7 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCP\IDBConnection;
 use OCA\Polls\Tests\Unit\UnitTestCase;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
@@ -34,7 +35,9 @@ class SubscriptionMapperTest extends UnitTestCase {
 	private IDBConnection $con;
 	private SubscriptionMapper $subscriptionMapper;
 	private PollMapper $pollMapper;
+	/** @var Poll[] $polls */
 	private array $polls = [];
+	/** @var Poll[] $polls */ 
 	private array $subscriptions = [];
 	private array $users = [];
 

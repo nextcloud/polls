@@ -271,7 +271,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 
 	// alias of getOwner()
 	public function getUserId(): string {
-		return (string) $this->getOwner();
+		return $this->getOwner();
 	}
 
 	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n): string {

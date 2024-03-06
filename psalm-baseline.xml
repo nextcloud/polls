@@ -1,13 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.20.0@3f284e96c9d9be6fe6b15c79416e1d1903dcfef4">
-  <file src="lib/Db/LogMapper.php">
-    <PossiblyUnusedMethod>
-      <code>find</code>
-      <code>findByPollId</code>
-      <code>findUnprocessedPolls</code>
-      <code>getLastRecord</code>
-    </PossiblyUnusedMethod>
-  </file>
   <file src="lib/Filter/ActivityFilter.php">
     <UnusedClass>
       <code>ActivityFilter</code>
@@ -19,30 +11,7 @@
       <code>CirclesCircle</code>
     </UndefinedClass>
   </file>
-  <file src="lib/Model/Group/Group.php">
-    <UnusedForeachValue>
-      <code>$displayName</code>
-    </UnusedForeachValue>
-    <UnusedProperty>
-      <code>$group</code>
-    </UnusedProperty>
-  </file>
-  <file src="lib/Model/User/Email.php">
-    <PossiblyUnusedParam>
-      <code>$languageCode</code>
-    </PossiblyUnusedParam>
-  </file>
   <file src="lib/Model/UserBase.php">
-    <PossiblyUnusedMethod>
-      <code>jsonSerialize</code>
-      <code>setDescription</code>
-      <code>setDisplayName</code>
-      <code>setEmailAddress</code>
-      <code>setLanguageCode</code>
-      <code>setLocaleCode</code>
-      <code>setOrganisation</code>
-      <code>setType</code>
-    </PossiblyUnusedMethod>
     <UnusedVariable>
       <code>$more</code>
     </UnusedVariable>

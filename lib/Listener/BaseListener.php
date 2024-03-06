@@ -172,8 +172,8 @@ abstract class BaseListener implements IEventListener {
 	 */
 	protected function addActivity() : void {
 		if (($this->event instanceof BaseEvent)
-		  && $this->event->getActivityType()
-		  && $this->event->getActivityObjectType()) {
+		  && boolval($this->event->getActivityType())
+		  && boolval($this->event->getActivityObjectType())) {
 			$this->activityService->addActivity($this->event);
 		}
 	}

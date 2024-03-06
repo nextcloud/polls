@@ -48,7 +48,6 @@ class User extends UserBase {
 	) {
 		parent::__construct($id, $type);
 		$this->icon = self::ICON;
-		$this->isNoUser = false;
 		$this->description = $this->l10n->t('User');
 		
 		$this->setUp();

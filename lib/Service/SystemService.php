@@ -183,6 +183,19 @@ class SystemService {
 		return $this->transFactory->findGenericLanguage(AppConstants::APP_ID);
 	}
 
+	/**
+	 * Validate if the user name is reserved
+	 * return false, if the requested userId or displayName exists as a user or as
+	 * a participant of refenced poll
+	 * The check spans over userId and displayName
+	 * @param string $userName displayName or userId to check for existance
+	 * @param string $token the share referencing the poll
+	 * @return string returns the allowed username
+	 */
+	public function validatePublicUsernameByToken(string $userName, string $token): string {
+		$share = $this->shareMapper->findByToken($token);
+		return $this->validatePublicUsername($userName, $share);
+	}
 
 	/**
 	 * Validate if the user name is reserved
@@ -190,17 +203,12 @@ class SystemService {
 	 * a participant of refenced poll
 	 * The check spans over userId and displayName
 	 * @param string $userName displayName or userId to check for existance
-	 * @param Share|null $share the share referencing the poll
-	 * @param string|null $token the share referencing the poll
+	 * @param Share $share the share referencing the poll
 	 * @return string returns the allowed username
 	 */
-	public function validatePublicUsername(string $userName, ?Share $share = null, ?string $token = null): string {
+	public function validatePublicUsername(string $userName, Share $share): string {
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');
-		}
-
-		if ($token && !$share) {
-			$share = $this->shareMapper->findByToken($token);
 		}
 
 		if ($share->getDisplayName() === $userName) {

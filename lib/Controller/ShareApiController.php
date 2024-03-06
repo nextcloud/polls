@@ -90,7 +90,7 @@ class ShareApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function delete(string $token): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->delete(token: $token)]);
+		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token)]);
 	}
 
 	/**
@@ -101,7 +101,7 @@ class ShareApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function restore(string $token): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->delete(token: $token, restore: true)]);
+		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token, restore: true)]);
 	}
 
 	/**
@@ -112,7 +112,7 @@ class ShareApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function lock(string $token): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->lock(token: $token)]);
+		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token)]);
 	}
 
 	/**
@@ -123,7 +123,7 @@ class ShareApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function unlock(string $token): JSONResponse {
-		return $this->response(fn () => ['share' => $this->shareService->lock(token: $token, unlock: true)]);
+		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token, unlock: true)]);
 	}
 
 	/**

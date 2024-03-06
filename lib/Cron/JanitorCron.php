@@ -52,9 +52,6 @@ class JanitorCron extends TimedJob {
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day
-		$this->logMapper = $logMapper;
-		$this->pollMapper = $pollMapper;
-		$this->watchMapper = $watchMapper;
 		$this->appSettings = new AppSettings;
 	}
 

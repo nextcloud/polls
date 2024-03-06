@@ -25,6 +25,7 @@ namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\IDBConnection;
@@ -34,8 +35,10 @@ class LogMapperTest extends UnitTestCase {
 	private IDBConnection $con;
 	private LogMapper $logMapper;
 	private PollMapper $pollMapper;
-	private array $polls = [];
+	/** @var Log[] $logs*/
 	private array $logs = [];
+	/** @var Poll[] $polls*/
+	private array $polls = [];
 
 	/**
 	 * {@inheritDoc}
@@ -87,8 +90,8 @@ class LogMapperTest extends UnitTestCase {
 	 */
 	public function testDelete() {
 		foreach ($this->logs as $log) {
-			$before = $this->logMapper->find($log->getId());
-			$this->assertInstanceOf(Log::class, $this->logMapper->delete($before));
+			// $before = $this->logMapper->find($log->getId());
+			$this->assertInstanceOf(Log::class, $this->logMapper->delete($log));
 		}
 	}
 

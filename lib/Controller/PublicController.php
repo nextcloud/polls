@@ -139,7 +139,7 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	public function deleteUser(string $token): JSONResponse {
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->delete()
+			'deleted' => $this->voteService->deleteCurrentUserFromPoll()
 		], $token);
 	}
 
@@ -150,7 +150,7 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	public function deleteOrphanedVotes(string $token): JSONResponse {
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->delete(deleteOnlyOrphaned: true)
+			'deleted' => $this->voteService->deleteCurrentUserFromPoll(deleteOnlyOrphaned: true)
 		], $token);
 	}
 
@@ -175,7 +175,7 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => [
-			'option' => $this->optionService->add(
+			'option' => $this->optionService->addForCurrentPoll(
 				timestamp: $timestamp,
 				pollOptionText: $text,
 				duration: $duration,
@@ -310,7 +310,7 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	public function validatePublicDisplayName(string $displayName, string $token): JSONResponse {
 		return $this->response(fn () => [
-			'name' => $this->systemService->validatePublicUsername($displayName, token: $token)
+			'name' => $this->systemService->validatePublicUsernameByToken($displayName, $token)
 		], $token);
 	}
 

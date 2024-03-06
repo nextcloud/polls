@@ -34,6 +34,9 @@ use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\User;
 use OCA\Polls\Model\UserBase;
 
+/**
+ * @psam-supress
+ */
 class Circle extends UserBase {
 	public const TYPE = 'circle';
 	public const ICON = 'icon-circles';

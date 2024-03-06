@@ -91,7 +91,7 @@ class VoteApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
-		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId)]);
+		return $this->response(fn () => ['deleted' => $this->voteService->deletUserFromPoll($pollId, $userId)]);
 	}
 
 	/**
@@ -103,6 +103,6 @@ class VoteApiController extends BaseApiController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
-		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId, true)]);
+		return $this->response(fn () => ['deleted' => $this->voteService->deletUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
 	}
 }
