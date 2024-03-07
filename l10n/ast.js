@@ -25,6 +25,7 @@ OC.L10N.register(
     "Preview" : "Previsualizar",
     "Performance settings" : "Configuración del rindimientu",
     "Copy link to clipboard" : "Copiar l'enllaz nel cartafueyu",
+    "Delete share" : "Desaniciar la compartición",
     "Shares" : "Comparticiones",
     "Description" : "Descripción",
     "Public link" : "Enllaz públicu",
