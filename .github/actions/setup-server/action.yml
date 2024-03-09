@@ -53,7 +53,7 @@ runs:
   using: "composite"
   steps:
     - name: Checkout server ${{ inputs.server-version }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: ${{ inputs.server-path }}
         repository: nextcloud/server
@@ -68,7 +68,7 @@ runs:
         git -c "http.extraheader=$auth_header" -c protocol.version=2 submodule update --init --force --recursive --depth=1
 
     - name: Checkout ${{ inputs.app-name }}
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
       with:
         path: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
 
