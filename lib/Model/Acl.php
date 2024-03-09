@@ -140,34 +140,22 @@ class Acl implements JsonSerializable {
 	 */
 	public function setPollId(int $pollId, string $permission = self::PERMISSION_POLL_VIEW): void {
 		if ($this->isSessionTokenSet()) {
-			// load pollId via share and ignore $pollId
-			$this->loadShare();
-
-			if ($pollId !== $this->share->getPollId()) {
+			if ($pollId !== $this->getShare()->getPollId()) {
 				throw new ForbiddenException('pollId does not match share');
 			}
 		} else {
 			$this->pollId = $pollId;
 		}
 		
-		$this->loadPoll();
+		$this->getPoll();
 		$this->request($permission);
 	}
 
-	public function getPoll(): Poll {
-		return $this->loadPoll();
-	}
-
-	private function getShare(): Share {
-		$this->loadShare();
-		return $this->share;
-	}
-
 	/**
-	 * load poll
+	 * get poll
 	 * @throws InsufficientAttributesException Thrown if stored pollId is null
 	 */
-	private function loadPoll(): Poll {
+	public function getPoll(): Poll {
 		if ($this->pollId === null) {
 			throw new InsufficientAttributesException('PollId may not be mull');
 		}
@@ -176,9 +164,31 @@ class Acl implements JsonSerializable {
 			$this->poll = $this->pollMapper->find($this->pollId);
 		}
 
-		// sideload existing share for internal user
+		// sideload existing share for internal user, if no token is set
 		$this->sideLoadShare();
+
 		return $this->poll;
+	}
+
+	/**
+	 * Get share
+	 * load share from db by session stored token or rely on cached share
+	 */
+	private function getShare(): Share {
+		if ($this->validateShareToken()) {
+			$this->share = $this->shareMapper->findByToken((string) $this->getToken());
+			$this->pollId = $this->share->getPollId();
+		}
+
+		return $this->share;
+	}
+
+	private function validateShareToken(): bool {
+		return $this->isSessionTokenSet() && $this->getToken() !== $this->share->getToken();
+	}
+
+	private function isSessionTokenSet(): bool {
+		return boolval($this->getToken());
 	}
 
 	private function sideLoadShare(): void {
@@ -208,33 +218,12 @@ class Acl implements JsonSerializable {
 		}
 		
 	}
-	/**
-	 * load share from db by session stored token or rely on cached share
-	 * If the share token has changed, the share gets loaded from the db,
-	 * the poll will get invalidated (set to null)
-	 * and the pollId will get set to the share's pollId
-	 */
-	private function loadShare(): void {
-		if ($this->isSessionTokenSet()) {
-			return;
-		}
-
-		if ($this->getToken() === $this->share->getToken()) {
-			return;
-		}
-
-		$this->share = $this->shareMapper->findByToken((string) $this->getToken());
-		$this->pollId = $this->share->getPollId();
-		return;
-	}
 
 	/**
 	 * loads the current user from the userMapper or returns the cached one
 	 */
 	private function getCurrentUser(): UserBase {
-		if (!$this->currentUser) {
-			$this->currentUser = $this->userMapper->getCurrentUser();
-		}
+		$this->currentUser = $this->userMapper->getCurrentUser();
 		return $this->currentUser;
 	}
 
@@ -255,10 +244,6 @@ class Acl implements JsonSerializable {
 		return $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 	}
 
-	private function isSessionTokenSet(): bool {
-		return boolval($this->getToken());
-	}
-
 	/**
 	 * Shortcut for currentUser->userId
 	 */
@@ -277,6 +262,7 @@ class Acl implements JsonSerializable {
 	 * Check perticular rights and inform via boolean value, if the right is granted  or denied
 	 */
 	public function getIsAllowed(string $permission): bool {
+		$this->getShare();
 		// $this->verifyConstraints();
 		return match ($permission) {
 			self::PERMISSION_OVERRIDE => true,
