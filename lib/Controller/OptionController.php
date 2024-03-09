@@ -155,7 +155,7 @@ class OptionController extends BaseController {
 	 * @param $tz Timezone to use
 	 */
 	#[NoAdminRequired]
-	public function findCalendarEvents(int $optionId, string $tz): JSONResponse {
+	public function findCalendarEvents(int $optionId): JSONResponse {
 		return $this->response(fn () => ['events' => $this->calendarService->getEvents($optionId)]);
 	}
 }
