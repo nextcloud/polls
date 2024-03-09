@@ -18,7 +18,7 @@
 		"optimize-autoloader": true,
 		"autoloader-suffix": "Polls",
 		"platform": {
-        "php": "8.0"
+        "php": "8.1"
       }
     },
 	"autoload": {
