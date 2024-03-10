@@ -30,6 +30,7 @@ use OCA\Polls\Service\PollService;
 use OCP\IUser;
 use OCP\IUserManager;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -91,6 +92,7 @@ class TransferOwnership extends Command {
 
 	private function requestConfirmation(InputInterface $input, OutputInterface $output): int {
 		if ($input->isInteractive()) {
+			/** @var QuestionHelper */
 			$helper = $this->getHelper('question');
 			$output->writeln('<comment>This command will change the ownership of all polls of ' . $input->getArgument('source-user') . ' to ' . $input->getArgument('target-user') . '.</comment>');
 			$output->writeln('<comment>NO notifications will be sent to the users.</comment>');

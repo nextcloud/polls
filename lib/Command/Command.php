@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Command;
 
 use Symfony\Component\Console\Exception\LogicException;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\ConfirmationQuestion;
@@ -73,6 +74,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
 
 	protected function requestConfirmation(InputInterface $input, OutputInterface $output): int {
 		if ($input->isInteractive()) {
+			/** @var QuestionHelper */
 			$this->helper = $this->getHelper('question');
 			foreach ($this->operationHints as $hint) {
 				$this->printComment($hint);
