@@ -28,11 +28,10 @@ namespace OCA\Polls\Db;
 
 use Exception;
 use OCA\Polls\Exceptions\ShareNotFoundException;
-use OCA\Polls\Model\UserBase;
+// use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IConfig;
 use OCP\IDBConnection;
 
 /**
@@ -46,7 +45,6 @@ class ShareMapper extends QBMapper {
 	 */
 	public function __construct(
 		IDBConnection $db,
-		private IConfig $config,
 	) {
 		parent::__construct($db, Share::TABLE, Share::class);
 	}
@@ -138,24 +136,8 @@ class ShareMapper extends QBMapper {
 	}
 
 	/**
-	 * Returns a fake share in case of deleted shares
+	 * @throws ShareNotFoundException
 	 */
-	public function getReplacement(int $pollId, string $userId): Share {
-		$share = new Share;
-		$share->setUserId($userId);
-		$share->setPollId($pollId);
-		$share->setType(UserBase::TYPE_EXTERNAL);
-		$share->setToken('deleted_share_' . $userId . '_' . $pollId);
-
-		// TODO: Just a quick fix, differentiate anoymous and deleted users on userGroup base
-		if (substr($userId, 0, 9) === 'Anonymous') {
-			$share->setDisplayName($userId);
-		} else {
-			$share->setDisplayName('Deleted User');
-		}
-		return $share;
-	}
-
 	public function findByToken(string $token, bool $getDeleted = false): Share {
 		$qb = $this->db->getQueryBuilder();
 

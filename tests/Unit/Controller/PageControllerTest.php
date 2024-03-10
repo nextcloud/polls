@@ -37,9 +37,6 @@ class PageControllerTest extends UnitTestCase {
 		$request = $this->getMockBuilder('OCP\IRequest')
 			->disableOriginalConstructor()
 			->getMock();
-		$urlGenerator = $this->getMockBuilder('OCP\IURLGenerator')
-			->disableOriginalConstructor()
-			->getMock();
 		$notificationService = $this->getMockBuilder('OCA\Polls\Service\NotificationService')
 			->disableOriginalConstructor()
 			->getMock();
@@ -50,7 +47,6 @@ class PageControllerTest extends UnitTestCase {
 		$this->controller = new PageController(
 			'polls',
 			$request,
-			$urlGenerator,
 			$notificationService,
 			$eventDispatcher,
 		);

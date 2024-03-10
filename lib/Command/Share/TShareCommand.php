@@ -45,12 +45,18 @@ trait TShareCommand {
 		parent::__construct();
 	}
 
+	/**
+	 * @psalm-suppress UnusedMethod
+	 */
 	private function completeUserValues(CompletionContext $context): array {
 		return array_map(function (IUser $user) {
 			return $user->getUID();
 		}, $this->userManager->search($context->getCurrentWord()));
 	}
 
+	/**
+	 * @psalm-suppress UnusedMethod
+	 */
 	private function completeGroupValues(CompletionContext $context): array {
 		return array_map(function (IGroup $group) {
 			return $group->getGID();

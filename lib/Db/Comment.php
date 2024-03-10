@@ -30,6 +30,7 @@ namespace OCA\Polls\Db;
 use JsonSerializable;
 
 /**
+ * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
  * @method int getPollId()
@@ -57,7 +58,6 @@ class Comment extends EntityWithUser implements JsonSerializable {
 	protected int $deleted = 0;
 
 	// computed attributes
-	protected array $subComments = [];
 	protected int $parent = 0;
 
 	public function __construct() {
@@ -79,21 +79,8 @@ class Comment extends EntityWithUser implements JsonSerializable {
 			'comment' => $this->getComment(),
 			'parent' => $this->getParent(),
 			'deleted' => $this->getDeleted(),
-			'subComments' => $this->getSubComments(),
 			'user' => $this->getUser(),
 		];
 	}
 
-	public function addSubComment(Comment $comment): void {
-		$this->subComments[] = [
-			'id' => $comment->getId(),
-			'comment' => $comment->getComment(),
-			'deleted' => $comment->getDeleted(),
-			'timestamp' => $this->getTimestamp(),
-		];
-	}
-
-	public function getSubComments(): array {
-		return $this->subComments;
-	}
 }

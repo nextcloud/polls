@@ -192,15 +192,7 @@ class MailService {
 		}
 	}
 
-	public function sendInvitation(
-		Share $share,
-		?SentResult &$sentResult = null,
-		?string $token = null,
-	): SentResult|null {
-		if ($token) {
-			$share = $this->shareMapper->findByToken($token);
-		}
-
+	public function sendInvitation(Share $share, ?SentResult &$sentResult = null): SentResult|null {
 		foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $recipient) {
 			$invitation = new InvitationMail($recipient->getId(), $share);
 

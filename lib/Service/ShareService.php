@@ -118,9 +118,29 @@ class ShareService {
 	}
 
 	/**
+	 * Converts the public share to a personal share for hte current logged in user
+	 * If user is not authorized for this poll, create a personal share
+	 * for this user and return the created share instead of the public share
+	 */
+	private function convertPublicToPersonalShare(): void {
+		try {
+			$this->share = $this->createNewShare(
+				$this->share->getPollId(),
+				$this->userMapper->getCurrentUserCached(),
+				preventInvitation: true
+			);
+		} catch (ShareAlreadyExistsException $e) {
+			// replace share by existing personal share
+			$this->share = $e->getShare()
+				?? $this->share = $this->shareMapper->findByPollAndUser($this->share->getPollId(), $this->userMapper->getCurrentUserCached()->getId());
+			// remove the public token from session
+			$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
+		}
+	}
+	/**
 	 * Get share by token for accessing the poll
 	 *
-	 * @param string $token             Token of share to get
+	 * @param string $token Token of share to get
 	 */
 	public function request(string $token): Share {
 		$this->share = $this->shareMapper->findByToken($token);
@@ -134,20 +154,7 @@ class ShareService {
 
 		// Exception: logged in user, accesses the poll via public share link
 		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userMapper->getCurrentUser()->getIsLoggedIn()) {
-
-			try {
-				// If user is not authorized for this poll, create a personal share
-				// for this user and return the created share instead of the public share
-				$this->share = $this->createNewShare(
-					$this->share->getPollId(),
-					$this->userMapper->getCurrentUserCached(),
-					true
-				);
-			} catch (ShareAlreadyExistsException $e) {
-				// remove the public token from session
-				$this->share = $e->getShare();
-				$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
-			}
+			$this->convertPublicToPersonalShare();
 		}
 		return $this->share;
 	}
@@ -248,7 +255,7 @@ class ShareService {
 		$this->share = $this->shareMapper->findByToken($token);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			$this->acl->setPollId($this->share->getPollId())->request(Acl::PERMISSION_POLL_EDIT);
+			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 			$this->share->setLabel($label);
 
 			// overwrite any possible displayName
@@ -342,16 +349,21 @@ class ShareService {
 	}
 
 	/**
-	 * Delete or restore share
-	 * @param Share $share Share to delete or restore
+	 * Delete or restore share by Token
 	 * @param string $token Share of token to delete
 	 * @param bool $restore Set true, if share is to be restored
 	 */
-	public function delete(?Share $share = null, ?string $token = null, bool $restore = false): Share {
-		if ($token) {
-			$share = $this->shareMapper->findByToken($token, true);
-		}
+	public function deleteByToken(string $token, bool $restore = false): Share {
+		$share = $this->shareMapper->findByToken($token, true);
+		return $this->delete($share, $restore);
+	}
 
+	/**
+	 * Delete or restore share
+	 * @param Share $share Share to delete or restore
+	 * @param bool $restore Set true, if share is to be restored
+	 */
+	public function delete(Share $share, bool $restore = false): Share {
 		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
 		$share->setDeleted($restore ? 0 : time());
@@ -362,11 +374,20 @@ class ShareService {
 
 	/**
 	 * Lock or unlock share
+	 * @param string $token Share of token to lock/unlock
+	 * @param bool $unlock Set true, if share is to be unlocked
 	 */
-	public function lock(?Share $share = null, ?string $token = null, bool $unlock = false): Share {
-		if ($token) {
-			$share = $this->shareMapper->findByToken($token, true);
-		}
+	public function lockByToken(string $token, bool $unlock = false): Share {
+		$share = $this->shareMapper->findByToken($token, getDeleted: true);
+		return $this->lock($share, unlock: $unlock);
+	}
+
+	/**
+	 * Lock or unlock share
+	 * @param Share $share Share to lock/unlock
+	 * @param bool $unlock Set true, if share is to be unlocked
+	 */
+	private function lock(Share $share, bool $unlock = false): Share {
 
 		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
 
@@ -384,7 +405,7 @@ class ShareService {
 		$shares = $this->listNotInvited($pollId);
 		foreach ($shares as $share) {
 			if (in_array($share->getType(), Share::RESOLVABLE_SHARES)) {
-				$this->resolveGroup(share: $share);
+				$this->resolveGroup($share);
 			}
 		}
 
@@ -398,11 +419,21 @@ class ShareService {
 		return $sentResult;
 	}
 
-	public function resolveGroup(?string $token = null, ?Share $share = null): array {
-		if ($token) {
-			$share = $this->get($token);
-		}
+	/**
+	 * Resolve a group share into it's member shares and and replace the group share
+	 * @param string $token Token of share to lock/unlock
+	 */
+	public function resolveGroupByToken(string $token): array {
+		$share = $this->get($token);
+		return $this->resolveGroup($share);
 
+	}
+
+	/**
+	 * Resolve a group share into it's member shares and and replace the group share
+	 * @param Share $share Share to lock/unlock
+	 */
+	private function resolveGroup(Share $share): array {
 		$shares = [];
 		if (!in_array($share->getType(), Share::RESOLVABLE_SHARES)) {
 			throw new InvalidShareTypeException('Cannot resolve members from share type ' . $share->getType());
@@ -424,12 +455,10 @@ class ShareService {
 	/**
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
+	 * @param Share $share
+	 * @param SentResult $sentResult to collect results
 	 */
-	public function sendInvitation(?Share $share = null, ?SentResult &$sentResult = null, ?string $token = null): SentResult|null {
-		if ($token) {
-			$share = $this->get($token);
-		}
-
+	public function sendInvitation(Share $share, ?SentResult &$sentResult = null): SentResult|null {
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
@@ -520,7 +549,7 @@ class ShareService {
 	private function generateToken(): string {
 		$token = null;
 		$loopCounter = 0;
-		while (!$token) {
+		while ($token === null) {
 			$loopCounter++;
 			$token = $this->secureRandom->generate(
 				8,

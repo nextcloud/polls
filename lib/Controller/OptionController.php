@@ -46,6 +46,7 @@ class OptionController extends BaseController {
 
 	/**
 	 * Get all options of given poll
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {
@@ -56,14 +57,20 @@ class OptionController extends BaseController {
 
 	/**
 	 * Add a new option
+	 * @param int $pollId poll id
+	 * @param int $timestamp timestamp for datepoll
+	 * @param string $pollOptionText Option text for text poll
+	 * @param int duration duration of option
 	 */
 	#[NoAdminRequired]
-	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
-		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $text, $duration)]);
+	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): JSONResponse {
+		return $this->responseCreate(fn () => ['option' => $this->optionService->addForPoll($pollId, $timestamp, $pollOptionText, $duration)]);
 	}
-	
+
 	/**
-	 * Add mulitple new option
+	 * Add mulitple new options
+	 * @param int $pollId poll id
+	 * @param string $text Options text for text poll
 	 */
 	#[NoAdminRequired]
 	public function addBulk(int $pollId, string $text = ''): JSONResponse {
@@ -72,6 +79,10 @@ class OptionController extends BaseController {
 
 	/**
 	 * Update option
+	 * @param int $optionId option id
+	 * @param int $timestamp timestamp for datepoll
+	 * @param string $text Option text for text poll
+	 * @param int duration duration of option
 	 */
 	#[NoAdminRequired]
 	public function update(int $optionId, int $timestamp, string $text, int $duration): JSONResponse {
@@ -80,6 +91,7 @@ class OptionController extends BaseController {
 
 	/**
 	 * Delete option
+	 * @param int $optionId option id
 	 */
 	#[NoAdminRequired]
 	public function delete(int $optionId): JSONResponse {
@@ -88,6 +100,7 @@ class OptionController extends BaseController {
 
 	/**
 	 * Restore option
+	 * @param int $optionId option id
 	 */
 	#[NoAdminRequired]
 	public function restore(int $optionId): JSONResponse {
@@ -96,6 +109,7 @@ class OptionController extends BaseController {
 
 	/**
 	 * Switch option confirmation
+	 * @param int $optionId option id
 	 */
 	#[NoAdminRequired]
 	public function confirm(int $optionId): JSONResponse {
@@ -104,6 +118,8 @@ class OptionController extends BaseController {
 
 	/**
 	 * Reorder options
+	 * @param int $pollId option id
+	 * @param array $options options in new order
 	 */
 	#[NoAdminRequired]
 	public function reorder(int $pollId, array $options): JSONResponse {
@@ -111,7 +127,11 @@ class OptionController extends BaseController {
 	}
 
 	/**
-	 * Reorder options
+	 * clone options in date poll
+	 * @param int $optionId clone template
+	 * @param int $step step width
+	 * @param string $unit unit of step width
+	 * @param int $amount number of new options to create
 	 */
 	#[NoAdminRequired]
 	public function sequence(int $optionId, int $step, string $unit, int $amount): JSONResponse {
@@ -119,7 +139,10 @@ class OptionController extends BaseController {
 	}
 
 	/**
-	 * Reorder options
+	 * Shift options
+	 * @param int $pollId poll id
+	 * @param int $step step width
+	 * @param string $unit Unit for shift steps
 	 */
 	#[NoAdminRequired]
 	public function shift(int $pollId, int $step, string $unit): JSONResponse {
@@ -128,9 +151,11 @@ class OptionController extends BaseController {
 
 	/**
 	 * findCalendarEvents
+	 * @param int $optionId option id
+	 * @param $tz Timezone to use
 	 */
 	#[NoAdminRequired]
-	public function findCalendarEvents(int $optionId, string $tz): JSONResponse {
+	public function findCalendarEvents(int $optionId): JSONResponse {
 		return $this->response(fn () => ['events' => $this->calendarService->getEvents($optionId)]);
 	}
 }

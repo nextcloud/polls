@@ -147,7 +147,11 @@ class PollService {
 	 * Update poll configuration
 	 * @return Poll
 	 */
-	public function takeover(int $pollId, UserBase $targetUser): Poll {
+	public function takeover(int $pollId, ?UserBase $targetUser = null): Poll {
+		if (!$targetUser) {
+			$targetUser = $this->userMapper->getCurrentUser();
+		}
+
 		$this->poll = $this->pollMapper->find($pollId);
 
 		$this->eventDispatcher->dispatchTyped(new PollTakeOverEvent($this->poll));

@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -47,11 +46,13 @@ class AdminController extends BaseController {
 		private IURLGenerator $urlGenerator,
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
-		private UserMapper $userMapper,
 	) {
 		parent::__construct($appName, $request);
 	}
 
+	/**
+	 * Load admin page
+	 */
 	#[NoCSRFRequired]
 	public function index(): TemplateResponse {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
@@ -67,14 +68,16 @@ class AdminController extends BaseController {
 	}
 
 	/**
-	 * Get list of polls for administrative purposes
+	 * Takeover ownership of a poll
+	 * @param int $pollId PollId to take over
 	 */
 	public function takeover(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->pollService->takeover($pollId, $this->userMapper->getCurrentUser()));
+		return $this->response(fn () => $this->pollService->takeover($pollId));
 	}
 
 	/**
 	 * Switch deleted status (move to deleted polls)
+	 * @param int $pollId poll id
 	 */
 	public function toggleArchive(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
@@ -82,6 +85,7 @@ class AdminController extends BaseController {
 
 	/**
 	 * Delete poll
+	 * @param int $pollId poll id
 	 */
 	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));

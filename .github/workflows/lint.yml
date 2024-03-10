@@ -14,13 +14,13 @@ jobs:
 
     strategy:
       matrix:
-        php-versions: ['8.0', '8.1']
+        php-versions: ['8.1', '8.2']
 
     name: PHP-CS
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4
 
     - name: Setup composer and PHP
       uses: ./.github/actions/setup-composer
@@ -38,7 +38,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup node
         uses: ./.github/actions/setup-node
@@ -53,7 +53,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Setup node
         uses: ./.github/actions/setup-node

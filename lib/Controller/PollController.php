@@ -67,6 +67,7 @@ class PollController extends BaseController {
 
 	/**
 	 * get complete poll
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
@@ -80,6 +81,8 @@ class PollController extends BaseController {
 
 	/**
 	 * Add poll
+	 * @param string $title Poll title
+	 * @param string $type Poll type ('datePoll', 'textPoll')
 	 */
 	#[NoAdminRequired]
 	public function add(string $type, string $title): JSONResponse {
@@ -88,6 +91,8 @@ class PollController extends BaseController {
 
 	/**
 	 * Update poll configuration
+	 * @param int $pollId Poll id
+	 * @param array $poll poll config
 	 */
 	#[NoAdminRequired]
 	public function update(int $pollId, array $poll): JSONResponse {
@@ -100,6 +105,7 @@ class PollController extends BaseController {
 
 	/**
 	 * Send confirmation mails
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function sendConfirmation(int $pollId): JSONResponse {
@@ -111,6 +117,7 @@ class PollController extends BaseController {
 
 	/**
 	 * Switch deleted status (move to deleted polls)
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function toggleArchive(int $pollId): JSONResponse {
@@ -119,6 +126,7 @@ class PollController extends BaseController {
 
 	/**
 	 * Delete poll
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 
@@ -128,6 +136,7 @@ class PollController extends BaseController {
 
 	/**
 	 * Close poll
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function close(int $pollId): JSONResponse {
@@ -139,6 +148,7 @@ class PollController extends BaseController {
 
 	/**
 	 * Reopen poll
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function reopen(int $pollId): JSONResponse {
@@ -150,6 +160,7 @@ class PollController extends BaseController {
 
 	/**
 	 * Clone poll
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function clone(int $pollId): JSONResponse {
@@ -164,6 +175,8 @@ class PollController extends BaseController {
 
 	/**
 	 * Transfer polls between users
+	 * @param string $sourceUser User to transfer polls from
+	 * @param string $targetUser User to transfer polls to
 	 */
 	public function transferPolls(string $sourceUser, string $targetUser): JSONResponse {
 		return $this->response(fn () => $this->pollService->transferPolls($sourceUser, $targetUser));
@@ -171,6 +184,7 @@ class PollController extends BaseController {
 
 	/**
 	 * Collect email addresses from particitipants
+	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {

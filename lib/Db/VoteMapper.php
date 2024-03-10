@@ -43,7 +43,6 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	public function __construct(
 		IDBConnection $db,
-		private UserMapper $userMapper,
 		private LoggerInterface $logger,
 	) {
 		parent::__construct($db, self::TABLE, Vote::class);
@@ -156,19 +155,6 @@ class VoteMapper extends QBMapperWithUser {
 		$qb = $this->buildQuery();
 		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
-			->andWhere($qb->expr()->eq(self::TABLE . '.vote_answer', $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR)));
-		return $this->findEntities($qb);
-	}
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Vote[]
-	 * @psalm-return array<array-key, Vote>
-	 */
-	public function getYesVotesByOption(int $pollId, string $pollOptionText): array {
-		$qb = $this->buildQuery();
-		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq(self::TABLE . '.vote_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.vote_answer', $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}

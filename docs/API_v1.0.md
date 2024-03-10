@@ -107,10 +107,13 @@ send the full or a partial structure
 
 
 # Votes
-| Method    | Endpoint                             | Description                  | Return codes       |
-| --------- | -----------------------------------  | ---------------------------- | ------------------ |
-| GET       | /api/v1.0/poll/{pollId}/votes        | Get votes                    | 200, 403, 404      |
-| POST      | /api/v1.0/vote                       | Set vote with Payload        | 200, 403, 404      |
+| Method    | Endpoint                               | Description                          | Return codes       |
+| --------- | -------------------------------------- | ------------------------------------ | ------------------ |
+| GET       | /api/v1.0/poll/{pollId}/votes          | Get votes                            | 200, 403, 404      |
+| POST      | /api/v1.0/vote                         | Set vote with Payload                | 200, 403, 404      |
+| DELETE    | /api/v1.0/poll/{pollId}/user/{userId}  | Delete user from poll                | 200, 403, 404      |
+| DELETE    | /api/v1.0/poll/{pollId}/user           | Delete current user from poll        | 200, 403, 404      |
+| DELETE    | /api/v1.0/poll/{pollId}/votes/orphaned | Delete current user's orphaned votes | 200, 403, 404      |
 
 ## set vote
 ```json

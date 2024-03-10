@@ -29,6 +29,7 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
+ * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
  * @method string getUserId()
@@ -69,7 +70,7 @@ class Preferences extends Entity implements JsonSerializable {
 	}
 
 	public function getPreferences_decoded(): mixed {
-		return json_decode((string) $this->getPreferences());
+		return json_decode($this->getPreferences());
 	}
 
 	/**

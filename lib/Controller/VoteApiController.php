@@ -49,6 +49,7 @@ class VoteApiController extends BaseApiController {
 
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
+	 * @param int $pollId poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -65,6 +66,8 @@ class VoteApiController extends BaseApiController {
 
 	/**
 	 * Set vote answer
+	 * @param int $optionId poll id
+	 * @param string $answer Answer string ('yes', 'no', 'maybe')
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -77,5 +80,29 @@ class VoteApiController extends BaseApiController {
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
+	}
+
+	/**
+	 * Remove user from poll
+	 * @param int $pollId poll id
+	 * @param string $userId User to remove
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function delete(int $pollId, string $userId = ''): JSONResponse {
+		return $this->response(fn () => ['deleted' => $this->voteService->deletUserFromPoll($pollId, $userId)]);
+	}
+
+	/**
+	 * Delete orphaned votes
+	 * @param int $pollId poll id
+	 * @param string $userId User to delete orphan votes from
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
+		return $this->response(fn () => ['deleted' => $this->voteService->deletUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
 	}
 }

@@ -45,6 +45,10 @@ class Group extends UserBase {
 		$this->description = $this->l10n->t('Group');
 		$this->richObjectType = 'user-group';
 
+		$this->setUp();
+	}
+
+	private function setUp(): void {
 		$this->group = Container::queryClass(IGroupManager::class)->get($this->id);
 		$this->displayName = $this->group->getDisplayName();
 	}
@@ -54,9 +58,10 @@ class Group extends UserBase {
 	 */
 	public function getMembers(): array {
 		$members = [];
+		$usersInGroup = Container::queryClass(IGroupManager::class)->displayNamesInGroup($this->id);
 
-		foreach (Container::queryClass(IGroupManager::class)->displayNamesInGroup($this->id) as $userId => $displayName) {
-			$newMember = new User((string) $userId);
+		foreach ($usersInGroup as $user) {
+			$newMember = new User((string) key($user));
 
 			if ($newMember->IsEnabled()) {
 				$members[] = $newMember;

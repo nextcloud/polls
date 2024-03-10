@@ -43,8 +43,12 @@ class SubscriptionService {
 	}
 
 	public function get(?int $pollId = null): bool {
+		if ($pollId !== null) {
+			$this->acl->setPollId($pollId);
+		}
+
 		try {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_SUBSCRIBE);
+			$this->acl->request(Acl::PERMISSION_POLL_SUBSCRIBE);
 			$this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 			// Subscription exists
 			return true;
@@ -56,8 +60,12 @@ class SubscriptionService {
 	}
 
 	public function set(bool $setToSubscribed, ?int $pollId = null): bool {
+		if ($pollId !== null) {
+			$this->acl->setPollId($pollId);
+		}
+
 		if (!$setToSubscribed) {
-			// user wants to unsubscribe
+			// user wants to unsubscribe, allow unsubscribe neverteheless the permissions are set
 			try {
 				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
 				$this->subscriptionMapper->delete($subscription);
@@ -67,7 +75,7 @@ class SubscriptionService {
 			}
 		} else {
 			try {
-				$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_SUBSCRIBE);
+				$this->acl->request(Acl::PERMISSION_POLL_SUBSCRIBE);
 				$this->add($this->acl->getPollId(), $this->acl->getUserId());
 			} catch (ForbiddenException $e) {
 				return false;

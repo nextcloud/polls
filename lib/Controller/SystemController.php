@@ -45,6 +45,7 @@ class SystemController extends BaseController {
 
 	/**
 	 * Get a combined list of NC users, groups and contacts
+	 * @param string $query Search string
 	 */
 	#[NoAdminRequired]
 	public function userSearch(string $query = ''): JSONResponse {
@@ -60,6 +61,7 @@ class SystemController extends BaseController {
 
 	/**
 	 * Get a combined list of NC groups matching $query
+	 * @param string $query Search string
 	 */
 	public function groupSearch(string $query = ''): JSONResponse {
 		return new JSONResponse(['groups' => $this->systemService->getGroups(

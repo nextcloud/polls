@@ -30,6 +30,7 @@ use JsonSerializable;
 use OCP\AppFramework\Db\Entity;
 
 /**
+ * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
  * @method int getPollId()

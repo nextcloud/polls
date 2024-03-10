@@ -48,6 +48,7 @@ class SubscriptionApiController extends BaseApiController {
 
 	/**
 	 * Get subscription status
+	 * @param int $pollId poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -65,6 +66,7 @@ class SubscriptionApiController extends BaseApiController {
 
 	/**
 	 * Subscribe to poll
+	 * @param int $pollId poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -83,6 +85,7 @@ class SubscriptionApiController extends BaseApiController {
 
 	/**
 	 * Unsubscribe from poll
+	 * @param int $pollId poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]

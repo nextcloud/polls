@@ -73,12 +73,12 @@ abstract class BaseEvent extends Event {
 		if ($this->userMapper->getCurrentUserCached()->getId() !== '') {
 			return $this->userMapper->getCurrentUserCached()->getId();
 		}
-		return (string) $this->eventObject->getUserId();
+		return $this->eventObject->getUserId();
 	}
 
 	public function getLogId(): string {
-		if ($this->log && $this->eventId) {
-			return $this->eventId;
+		if ($this->log && boolval($this->eventId)) {
+			return (string) $this->eventId;
 		}
 		return '';
 	}

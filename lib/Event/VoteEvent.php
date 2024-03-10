@@ -25,6 +25,9 @@ namespace OCA\Polls\Event;
 
 use OCA\Polls\Db\Vote;
 
+/**
+ * @psalm-suppress UnusedProperty
+ */
 abstract class VoteEvent extends BaseEvent {
 	public const SET = 'vote_set';
 

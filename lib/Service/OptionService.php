@@ -71,13 +71,15 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function list(?int $pollId = null): array {
-		$this->acl->setPollId($pollId);
+		if ($pollId !== null) {
+			$this->acl->setPollId($pollId);
+		}
 
 		try {
 			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId(), !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW));
 
 			if ($this->acl->getPoll()->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {
-				// hide booked up options except the user has edit permission
+				// hide booked up options, except the user has edit permission
 				$this->filterBookedUp();
 			}
 		} catch (DoesNotExistException $e) {
@@ -88,12 +90,43 @@ class OptionService {
 	}
 
 	/**
-	 * Add a new option
+	 * Add a new option to the current poll, stored in Acl
 	 *
+	 * @param int $timestamp timestamp in case of date poll
+	 * @param string $pollOptionText option text in case of text poll
+	 * @param int $duration duration of option in case of date poll
 	 * @return Option
 	 */
-	public function add(?int $pollId = null, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
+	public function addForCurrentPoll(int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
+		$pollId = $this->acl->getPollId();
+		return $this->add($pollId, $timestamp, $pollOptionText, $duration);
+	}
+
+	/**
+	 * Add a new option to a poll
+	 *
+	 * @param int $pollId poll id of poll to add option to
+	 * @param int $timestamp timestamp in case of date poll
+	 * @param string $pollOptionText option text in case of text poll
+	 * @param int $duration duration of option in case of date poll
+	 * @return Option
+	 */
+	public function addForPoll(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
+		$this->acl->setPollId($pollId);
+		return $this->add($pollId, $timestamp, $pollOptionText, $duration);
+	}
+
+	/**
+	 * Add a new option
+	 *
+	 * @param int $pollId poll id of poll to add option to
+	 * @param int $timestamp timestamp in case of date poll
+	 * @param string $pollOptionText option text in case of text poll
+	 * @param int $duration duration of option in case of date poll
+	 * @return Option
+	 */
+	private function add(int $pollId, int $timestamp, string $pollOptionText, int $duration): Option {
+		$this->acl->request(Acl::PERMISSION_OPTIONS_ADD);
 
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
@@ -101,7 +134,7 @@ class OptionService {
 
 		$this->option->setOption($timestamp, $duration, $pollOptionText, $order);
 
-		if (!$this->acl->getIsOwner()) {
+		if (!$this->acl->getIsPollOwner()) {
 			$this->option->setOwner($this->acl->getUserId());
 		}
 
@@ -144,7 +177,7 @@ class OptionService {
 		foreach ($newOptions as $option) {
 			if ($option) {
 				try {
-					$this->add($pollId, 0, $option);
+					$this->addForPoll($pollId, pollOptionText: $option);
 				} catch (DuplicateEntryException $e) {
 					continue;
 				}
@@ -177,7 +210,12 @@ class OptionService {
 	 */
 	public function delete(int $optionId, bool $restore = false): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->acl->request(Acl::PERMISSION_OPTION_DELETE, $this->option->getUserId(), $this->option->getPollId());
+
+		$this->acl->setPollId($this->option->getPollId());
+
+		if (!$this->acl->matchUser($this->option->getUserId())) {
+			$this->acl->request(Acl::PERMISSION_OPTION_DELETE);
+		}
 
 		$this->option->setDeleted($restore ? 0 : time());
 		$this->optionMapper->update($this->option);

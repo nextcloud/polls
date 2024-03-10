@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Model;
 
 use DateTimeZone;
+use JsonSerializable;
 use OCA\Polls\Db\EntityWithUser;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Helper\Container;
@@ -45,7 +46,7 @@ use OCP\IL10N;
 use OCP\IUserSession;
 use OCP\Share\IShare;
 
-class UserBase implements \JsonSerializable {
+class UserBase implements JsonSerializable {
 	/** @var string */
 	public const TYPE = 'generic';
 	/** @var string */
@@ -66,7 +67,6 @@ class UserBase implements \JsonSerializable {
 	/** @var string[] */
 	protected array $categories = [];
 	protected string $anonymizeLevel = EntityWithUser::ANON_PRIVACY;
-	protected bool $isNoUser = true;
 	protected string $description = '';
 	protected string $richObjectType = 'user';
 	protected string $organisation = '';
@@ -111,18 +111,15 @@ class UserBase implements \JsonSerializable {
 	/**
 	 * for later use
 	 */
-	public function getPrincipalUri(): ?string {
-		return null;
+	public function getPrincipalUri(): string {
+		return 'principals/users/' . $this->getId();
 	}
 
 	/**
 	 * hash the real userId to obfuscate the real userId
 	 */
-	public function getHashedUserId(?string $name = null): string {
+	public function getHashedUserId(): string {
 		// TODO: add a session salt
-		if ($name) {
-			return hash('md5', $name);
-		}
 		return hash('md5', $this->getId());
 	}
 
@@ -208,7 +205,7 @@ class UserBase implements \JsonSerializable {
 	/**
 	 * @deprecated Not used anymore?
 	 */
-	public function getIcon(): string {
+	private function getIcon(): string {
 		return $this->icon;
 	}
 
@@ -218,6 +215,10 @@ class UserBase implements \JsonSerializable {
 
 	public function getEmailAndDisplayName(): string {
 		return $this->getDisplayName() . ' <' . $this->getEmailAddress() . '>';
+	}
+
+	public function getHasEmail(): bool {
+		return boolVal($this->getEmailAddress());
 	}
 
 	/**
@@ -239,45 +240,10 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getIsNoUser(): bool {
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL && $this->userMapper->getCurrentUser()->getId() !== $this->getId()) {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL && $this->getIsCurrentUser()) {
 			return true;
 		}
-		return $this->isNoUser;
-	}
-
-	public function setType(string $type): string {
-		$this->type = $type;
-		return $this->type;
-	}
-
-	public function setDisplayName(string $displayName): string {
-		$this->displayName = $displayName;
-		return $this->displayName;
-	}
-
-	public function setDescription(string $description): string {
-		$this->description = $description;
-		return $this->description;
-	}
-
-	public function setEmailAddress(string $emailAddress) : string {
-		$this->emailAddress = $emailAddress;
-		return $this->emailAddress;
-	}
-
-	public function setLanguageCode(string $languageCode): string {
-		$this->languageCode = $languageCode;
-		return $this->languageCode;
-	}
-
-	public function setLocaleCode(string $localeCode): string {
-		$this->localeCode = $localeCode;
-		return $this->localeCode;
-	}
-
-	public function setOrganisation(string $organisation): string {
-		$this->organisation = $organisation;
-		return $this->organisation;
+		return $this->getSimpleType() !== 'user';
 	}
 
 	public function getRichObjectString() : array {
@@ -343,8 +309,11 @@ class UserBase implements \JsonSerializable {
 		return [$this];
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function jsonSerialize(): array {
-		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+		if ($this->getIsCurrentUser()) {
 			return $this->getRichUserArray();
 		}
 		return $this->getSimpleUserArray();
@@ -405,7 +374,7 @@ class UserBase implements \JsonSerializable {
 	 */
 	public function getSafeId(): string {
 		// always return real userId for the current user
-		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+		if ($this->getIsCurrentUser()) {
 			return $this->getId();
 		}
 
@@ -415,7 +384,7 @@ class UserBase implements \JsonSerializable {
 		}
 
 		// internal users may see the real userId
-		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
+		if ($this->getIsLoggedIn()) {
 			return $this->getId();
 		}
 
@@ -455,12 +424,16 @@ class UserBase implements \JsonSerializable {
 		return $this->userSession->isLoggedIn();
 	}
 
+	public function getIsCurrentUser(): bool {
+		return $this->getId() === $this->userMapper->getCurrentUserCached()->getId();
+	}
+
 	public function getIsAdmin(): bool {
-		return $this->groupManager->isAdmin($this->id);
+		return $this->groupManager->isAdmin($this->getId());
 	}
 
 	public function getIsInGroup(string $groupName): bool {
-		return $this->groupManager->isInGroup($this->id, $groupName);
+		return $this->groupManager->isInGroup($this->getId(), $groupName);
 	}
 
 	/**
@@ -468,7 +441,7 @@ class UserBase implements \JsonSerializable {
 	 */
 	public function getSafeType(): string {
 		// always return real userId for the current user
-		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+		if ($this->getIsCurrentUser()) {
 			return $this->getType();
 		}
 

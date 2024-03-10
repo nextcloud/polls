@@ -30,6 +30,7 @@ use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\Entity;
 
 /**
+ * @psalm-suppress UnusedProperty
  * @method string getUserId()
  * @method int getPollId()
  *

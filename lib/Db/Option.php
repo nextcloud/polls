@@ -36,6 +36,7 @@ use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCP\IL10N;
 
 /**
+ * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
  * @method int getConfirmed()
@@ -222,6 +223,9 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return date('c', $this->getTimestamp());
 	}
 
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
 	public function getPollOptionTextEnd(): string {
 		if ($this->getTimestamp()) {
 			return date('c', $this->getTimestamp() + $this->getDuration());
@@ -267,7 +271,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 
 	// alias of getOwner()
 	public function getUserId(): string {
-		return (string) $this->getOwner();
+		return $this->getOwner();
 	}
 
 	public function getDateStringLocalized(DateTimeZone $timeZone, IL10N $l10n): string {

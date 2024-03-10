@@ -53,6 +53,13 @@ class TableManager {
 		private Schema $schema,
 		private WatchMapper $watchMapper,
 	) {
+		$this->setUp();
+	}
+
+	/**
+	 * setUp
+	 */
+	private function setUp(): void {
 		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
 
@@ -117,28 +124,6 @@ class TableManager {
 		$messages[] = '';
 		$messages[] = 'Please call \'occ app:remove polls\' now!';
 
-		return $messages;
-	}
-
-	/**
-	 * @return string[]
-	 *
-	 * @psalm-return non-empty-list<string>
-	 */
-	public function resetWatch(): array {
-		$messages = [];
-		$tableName = $this->dbPrefix . Watch::TABLE;
-		$columns = TableSchema::TABLES[Watch::TABLE];
-
-		$table = $this->schema->createTable($tableName);
-		$messages[] = 'Creating table ' . $tableName;
-
-		foreach ($columns as $columnName => $columnDefinition) {
-			$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
-			$messages[] = 'Added ' . $tableName . ', ' . $columnName . ' (' . $columnDefinition['type'] . ')';
-		}
-
-		$table->setPrimaryKey(['id']);
 		return $messages;
 	}
 

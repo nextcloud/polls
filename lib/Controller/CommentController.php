@@ -44,6 +44,7 @@ class CommentController extends BaseController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
+	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {
@@ -54,6 +55,8 @@ class CommentController extends BaseController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
+	 * @param int $pollId Poll id
+	 * @param string $message Comment text to add
 	 */
 	#[NoAdminRequired]
 	public function add(int $pollId, string $message): JSONResponse {
@@ -64,6 +67,7 @@ class CommentController extends BaseController {
 
 	/**
 	 * Delete Comment
+	 * @param int $commentId Id of comment to delete
 	 */
 	#[NoAdminRequired]
 	public function delete(int $commentId): JSONResponse {
@@ -76,6 +80,7 @@ class CommentController extends BaseController {
 
 	/**
 	 * Restore deleted Comment
+	 * @param int $commentId Id of comment to restore
 	 */
 	#[NoAdminRequired]
 	public function restore(int $commentId): JSONResponse {

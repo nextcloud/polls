@@ -80,20 +80,6 @@ class SubscriptionMapper extends QBMapper {
 		return $this->findEntity($qb);
 	}
 
-	public function unsubscribe(int $pollId, string $userId): void {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->delete($this->getTableName())
-		->where(
-			$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
-		)
-		->andWhere(
-			$qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR))
-		);
-
-		$qb->executeStatement();
-	}
-
 	public function deleteByUserId(string $userId): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())

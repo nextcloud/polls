@@ -48,6 +48,7 @@ class BaseController extends Controller {
 
 	/**
 	 * response
+	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
@@ -60,6 +61,7 @@ class BaseController extends Controller {
 
 	/**
 	 * response
+	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
@@ -72,6 +74,7 @@ class BaseController extends Controller {
 
 	/**
 	 * responseCreate
+	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {
@@ -84,6 +87,7 @@ class BaseController extends Controller {
 
 	/**
 	 * responseDeleteTolerant
+	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
 	protected function responseDeleteTolerant(Closure $callback): JSONResponse {

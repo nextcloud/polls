@@ -34,6 +34,7 @@ use OCA\Polls\Helper\Container;
 use OCP\IURLGenerator;
 
 /**
+ * @psalm-api
  * @method int getId()
  * @method void setId(int $value)
  * @method string getType()

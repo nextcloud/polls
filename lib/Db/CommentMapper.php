@@ -71,16 +71,6 @@ class CommentMapper extends QBMapperWithUser {
 	/**
 	 * @return void
 	 */
-	public function deleteByPoll(int $pollId): void {
-		$qb = $this->db->getQueryBuilder();
-		$qb->delete($this->getTableName())
-		   ->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
-		$qb->executeStatement();
-	}
-
-	/**
-	 * @return void
-	 */
 	public function renameUserId(string $userId, string $replacementName): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName(), self::TABLE)

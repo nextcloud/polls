@@ -35,7 +35,6 @@ use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\IRequest;
-use OCP\IURLGenerator;
 use OCP\Util;
 
 /**
@@ -45,14 +44,15 @@ class PageController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private IURLGenerator $urlGenerator,
 		private NotificationService $notificationService,
 		private IEventDispatcher $eventDispatcher,
 	) {
 		parent::__construct($appName, $request);
 	}
 
-
+	/**
+	 * reder index page
+	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function index(): TemplateResponse {
@@ -61,6 +61,10 @@ class PageController extends Controller {
 		return new TemplateResponse(AppConstants::APP_ID, 'main');
 	}
 
+	/**
+	 * reder vote page
+	 * @param $id poll id
+	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function vote(int $id): TemplateResponse {

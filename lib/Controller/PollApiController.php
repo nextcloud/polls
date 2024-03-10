@@ -65,9 +65,10 @@ class PollApiController extends BaseApiController {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
-
+	
 	/**
-	 * get poll configuration
+	 * get poll
+	 * @param $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -84,6 +85,8 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Add poll
+	 * @param string $title Poll title
+	 * @param string $type Poll type ('datePoll', 'textPoll')
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -98,6 +101,8 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Update poll configuration
+	 * @param int $pollId Poll id
+	 * @param array $poll poll config
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -119,6 +124,7 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Switch deleted status (move to deleted polls)
+	 * @param int $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -135,6 +141,7 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Close poll
+	 * @param int $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -151,6 +158,7 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Reopen poll
+	 * @param int $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -167,6 +175,7 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Delete poll
+	 * @param int $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -183,6 +192,7 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Clone poll
+	 * @param int $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
@@ -229,6 +239,7 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Collect email addresses from particitipants
+	 * @param int $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
