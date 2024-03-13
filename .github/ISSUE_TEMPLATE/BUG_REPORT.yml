@@ -151,11 +151,11 @@ body:
       description: |
         Which Nextcloud Server version are you running.
       options:
-        - "Nextcloud 25 (Nextcloud Hub 3)"
-        - "Nextcloud 26 (Nextcloud Hub 4)"
-        - "Nextcloud 27 (Nextcloud Hub 5)"
-        - "Nextcloud 27 (Nextcloud Hub 5)"
-        - "Nextcloud 28 (Nextcloud Hub 7)"
+        - "Nextcloud 25"
+        - "Nextcloud 26"
+        - "Nextcloud 27"
+        - "Nextcloud 28"
+        - "Nextcloud 29"
         - "Other/Don't know"
     validations:
       required: true
