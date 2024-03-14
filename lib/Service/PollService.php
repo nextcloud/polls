@@ -52,10 +52,11 @@ use OCP\IUser;
 use OCP\IUserManager;
 use OCP\IUserSession;
 use OCP\Search\ISearchQuery;
+use function array_map;
 
 class PollService {
 	private string $userId;
-	
+
 	public function __construct(
 		private Acl $acl,
 		private AppSettings $appSettings,
@@ -82,7 +83,10 @@ class PollService {
 		$pollList = [];
 		try {
 			$polls = $this->pollMapper->findForMe($this->userId);
-			
+			$maxTimestamps = $this->optionMapper->findMaxTimestamps(array_map(function(Poll $poll) {
+				return $poll->getId();
+			}, $polls));
+
 			foreach ($polls as $poll) {
 				try {
 					$this->acl->setPoll($poll);
@@ -91,9 +95,9 @@ class PollService {
 						$poll->getCreated(),
 						$poll->getLastInteraction(),
 						$poll->getExpire(),
-						$this->optionMapper->findDateBoundaries($poll->getId())['max'],
+						$maxTimestamps[$poll->getId()],
 					) + ($this->preferences->getRelevantOffsetTimestamp());
-						
+
 					// mix poll settings, acl and relevantThreshold into one array
 					$pollList[] = (object) array_merge(
 						(array) json_decode(json_encode($poll)),
