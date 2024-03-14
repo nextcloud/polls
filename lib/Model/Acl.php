@@ -323,9 +323,7 @@ class Acl implements JsonSerializable {
 	 * Returns true, if the current user is already a particitipant of the current poll.
 	 */
 	private function getIsParticipant(): bool {
-		return count(
-			$this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())
-		) > 0;
+		return $this->voteMapper->countParticipantsVotes($this->getPollId(), $this->getUserId()) > 0;
 	}
 
 	/**
