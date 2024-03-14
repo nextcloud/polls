@@ -28,6 +28,7 @@ use OCP\AppFramework\Db\Entity;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
+use function array_chunk;
 
 /**
  * @template-extends QBMapper<Option>
@@ -160,6 +161,27 @@ class OptionMapper extends QBMapper {
 		   );
 
 		$qb->executeStatement();
+	}
+
+	public function findMaxTimestamps(array $pollIds): array {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('poll_id')
+			->selectAlias($qb->func()->max('timestamp'), 'max')
+			->from($this->getTableName())
+			->groupBy('poll_id')
+			->where($qb->expr()->in('poll_id', $qb->createParameter('ids')), IQueryBuilder::PARAM_INT_ARRAY);
+		$maxs = [];
+
+		foreach (array_chunk($pollIds, 1000) as $ids) {
+			$qb->setParameter('ids', $ids, IQueryBuilder::PARAM_INT_ARRAY);
+			$result = $qb->executeQuery();
+			while ($row = $result->fetch()) {
+				$maxs[$row['poll_id']] = $row['max'];
+			}
+			$result->closeCursor();
+		}
+
+		return $maxs;
 	}
 
 	/**
