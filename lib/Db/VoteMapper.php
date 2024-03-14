@@ -136,6 +136,21 @@ class VoteMapper extends QBMapper {
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * @return int
+	 */
+	public function countParticipantsVotes(int $pollId, string $userId): ?int {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select($qb->func()->count('poll_id'))
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
+		$result = $qb->executeQuery();
+		$count = $result->fetchOne();
+		$result->closeCursor();
+		return $count;
+	}
+
 	public function deleteByPollAndUserId(int $pollId, string $userId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->getTableName())
