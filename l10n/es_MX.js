@@ -52,6 +52,7 @@ OC.L10N.register(
     "Hour" : "Hora",
     "Day" : "Día",
     "Month" : "Mes",
+    "Year" : "Año",
     "Archive" : "Archivar",
     "Maybe" : "Tal vez"
 },
