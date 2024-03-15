@@ -65,7 +65,9 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_PUBLIC_SHARES = 'publicShares';
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 
-	
+	private $cachedIsInvolved = null;
+
+
 	public function __construct(
 		private IUserManager $userManager,
 		private IUserSession $userSession,
@@ -174,6 +176,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function setPoll(Poll $poll, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		$this->poll = $poll;
+		$this->cachedIsInvolved = null;
 		$this->loadShare();
 		$this->request($permission);
 		return $this;
@@ -311,11 +314,15 @@ class Acl implements JsonSerializable {
 	 * as a participant or as the poll owner.
 	 */
 	private function getIsInvolved(): bool {
-		return (
-			$this->getIsOwner()
-			|| $this->getIsParticipant()
-			|| $this->getIsInvitedViaGroupShare()
-			|| $this->getIsPersonallyInvited());
+		if ($this->cachedIsInvolved === null) {
+			$this->cachedIsInvolved = (
+				$this->getIsOwner()
+				|| $this->getIsParticipant()
+				|| $this->getIsInvitedViaGroupShare()
+				|| $this->getIsPersonallyInvited());
+		}
+
+		return $this->cachedIsInvolved;
 	}
 
 	/**
