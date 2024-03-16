@@ -136,6 +136,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected bool $hasOrphanedVotes = false;
 	protected int $maxDate = 0;
 	protected int $minDate = 0;
+	protected int $currentUserVotes = 0;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -153,6 +154,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('lastInteraction', 'int');
 		$this->addType('maxDate', 'int');
 		$this->addType('minDate', 'int');
+		$this->addType('currentUserVotes', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->voteMapper = Container::queryClass(VoteMapper::class);
@@ -190,6 +192,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'summary' => [
 				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserCached()->getId())),
 				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserCached()->getId())),
+				'countVotes' => $this->getCurrentUserCountVotes(),
 			],
 		];
 	}
@@ -273,6 +276,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			$this->getProposalsExpire() > 0
 			&& $this->getProposalsExpire() < time()
 		);
+	}
+
+	public function getCurrentUserCountVotes(): int {
+		return $this->currentUserVotes;
 	}
 
 	public function getDescription(): string {

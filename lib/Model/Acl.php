@@ -33,7 +33,6 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
-use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Exceptions\InvalidPollIdException;
@@ -79,7 +78,6 @@ class Acl implements JsonSerializable {
 		private ISession $session,
 		private ShareMapper $shareMapper,
 		private UserMapper $userMapper,
-		private VoteMapper $voteMapper,
 		private Poll $poll,
 		private Share $share,
 	) {
@@ -322,9 +320,7 @@ class Acl implements JsonSerializable {
 	 * @return bool Returns true, if the current user is already a particitipant of the current poll.
 	 */
 	private function getIsParticipant(): bool {
-		return count(
-			$this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())
-		) > 0;
+		return $this->getPoll()->getCurrentUserCountVotes() > 0;
 	}
 
 	/**
