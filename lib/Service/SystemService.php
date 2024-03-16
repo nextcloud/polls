@@ -197,7 +197,7 @@ class SystemService {
 	 * @return string returns the allowed username
 	 */
 	public function validatePublicUsername(string $userName, ?Share $share = null, ?string $token = null): string {
-		$userName = preg_replace(self::REGEX_INVALID_USERNAME_CHARACTERS, '', $userName);
+		$userName = trim(preg_replace(self::REGEX_INVALID_USERNAME_CHARACTERS, '', $userName));
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');
 		}
@@ -208,7 +208,7 @@ class SystemService {
 			return $userName;
 		}
 
-		$compareUserName = strtolower(trim($userName));
+		$compareUserName = strtolower($userName);
 
 		// reserved usernames
 		if (str_contains($compareUserName, 'deleted user') || str_contains($compareUserName, 'anonymous')) {
