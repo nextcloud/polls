@@ -4,14 +4,6 @@
     <PossiblyUnusedProperty>
       <code><![CDATA[$input]]></code>
     </PossiblyUnusedProperty>
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[ask]]></code>
-    </UndefinedInterfaceMethod>
-  </file>
-  <file src="lib/Command/Poll/TransferOwnership.php">
-    <UndefinedInterfaceMethod>
-      <code><![CDATA[ask]]></code>
-    </UndefinedInterfaceMethod>
   </file>
   <file src="lib/Command/Share/Add.php">
     <PossiblyUnusedParam>
