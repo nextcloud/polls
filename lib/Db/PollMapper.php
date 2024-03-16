@@ -173,7 +173,32 @@ class PollMapper extends QBMapper {
 			// TODO: check if this is necessary, in case of empty table to avoid possibly nulled columns
 			// ->groupBy(self::TABLE . '.id')
 			->from($this->getTableName(), self::TABLE);
+		$this->joinOptionsForMaxDate($qb, self::TABLE);
+		$qb->groupBy(self::TABLE . '.id');
 		return $qb;
+	}
+
+	/**
+	 * Joins options to evaluate min and max option date for date polls
+	 * if text poll or no options are set, 
+	 * the min value is the current time,
+	 * the max value is null
+	 */
+	protected function joinOptionsForMaxDate(IQueryBuilder &$qb, string $fromAlias): void {
+		$joinAlias = 'options';
+		$saveMin = (string) time();
+
+		// force value into a MIN function to avoid grouping errors
+		// $qb->selectAlias($qb->func()->max($joinAlias . '.timestamp'), 'max_date');
+		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), 0) AS max_date'))
+			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'));
+
+		$qb->leftJoin(
+			$fromAlias,
+			Option::TABLE,
+			$joinAlias,
+			$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+		);
 	}
 
 }
