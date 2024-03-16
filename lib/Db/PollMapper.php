@@ -180,7 +180,7 @@ class PollMapper extends QBMapper {
 
 	/**
 	 * Joins options to evaluate min and max option date for date polls
-	 * if text poll or no options are set, 
+	 * if text poll or no options are set,
 	 * the min value is the current time,
 	 * the max value is null
 	 */

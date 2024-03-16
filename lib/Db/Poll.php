@@ -79,6 +79,8 @@ use OCP\IURLGenerator;
  * @method void setLastInteraction(int $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
+ * @method int getMinDate()
+ * @method int getMaxDate()
  */
 
 class Poll extends EntityWithUser implements JsonSerializable {
@@ -336,7 +338,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getDeadline(): int {
-		// if expiration is set return expiration date 
+		// if expiration is set return expiration date
 		if ($this->getExpire()) {
 			return $this->getExpire();
 		}
