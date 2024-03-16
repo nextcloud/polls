@@ -45,6 +45,7 @@ use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class SystemService {
+	private const REGEX_INVALID_USERNAME_CHARACTERS = '/[\x{2000}-\x{206F}]/u';
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
@@ -207,6 +208,8 @@ class SystemService {
 	 * @return string returns the allowed username
 	 */
 	public function validatePublicUsername(string $userName, Share $share): string {
+		$userName = trim(preg_replace(self::REGEX_INVALID_USERNAME_CHARACTERS, '', $userName));
+
 		if (!$userName) {
 			throw new TooShortException('Username must not be empty');
 		}
@@ -215,38 +218,38 @@ class SystemService {
 			return $userName;
 		}
 
-		$userName = strtolower(trim($userName));
+		$compareUserName = strtolower($userName);
 
 		// reserved usernames
-		if (str_contains($userName, 'deleted user') || str_contains($userName, 'anonymous')) {
+		if (str_contains($compareUserName, 'deleted user') || str_contains($compareUserName, 'anonymous')) {
 			throw new InvalidUsernameException;
 		}
 
 		// get all groups, that include the requested username in their gid
 		// or displayname and check if any match completely
-		foreach (Group::search($userName) as $group) {
-			if ($group->hasName($userName)) {
+		foreach (Group::search($compareUserName) as $group) {
+			if ($group->hasName($compareUserName)) {
 				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all users
-		foreach (User::search($userName) as $user) {
-			if ($user->hasName($userName)) {
+		foreach (User::search($compareUserName) as $user) {
+			if ($user->hasName($compareUserName)) {
 				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all participants
 		foreach ($this->voteMapper->findParticipantsByPoll($share->getPollId()) as $vote) {
-			if ($vote->getUser()->hasName($userName)) {
+			if ($vote->getUser()->hasName($compareUserName)) {
 				throw new InvalidUsernameException;
 			}
 		}
 
 		// get all shares for this poll
 		foreach ($this->shareMapper->findByPoll($share->getPollId()) as $share) {
-			if ($share->getType() !== Circle::TYPE && $share->getUser()->hasName($userName)) {
+			if ($share->getType() !== Circle::TYPE && $share->getUser()->hasName($compareUserName)) {
 				throw new InvalidUsernameException;
 			}
 		}
