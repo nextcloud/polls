@@ -43,6 +43,7 @@ use OCP\IDateTimeZone;
 use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\IUserSession;
+use OCP\Server;
 use OCP\Share\IShare;
 
 class UserBase implements \JsonSerializable {
@@ -89,11 +90,11 @@ class UserBase implements \JsonSerializable {
 	) {
 		$this->icon = 'icon-share';
 		$this->l10n = Container::getL10N();
-		$this->groupManager = Container::queryClass(IGroupManager::class);
-		$this->timeZone = Container::queryClass(IDateTimeZone::class);
-		$this->userMapper = Container::queryClass(UserMapper::class);
-		$this->userSession = Container::queryClass(IUserSession::class);
-		$this->appSettings = Container::queryClass(AppSettings::class);
+		$this->groupManager = Server::get(IGroupManager::class);
+		$this->timeZone = Server::get(IDateTimeZone::class);
+		$this->userMapper = Server::get(UserMapper::class);
+		$this->userSession = Server::get(IUserSession::class);
+		$this->appSettings = Server::get(AppSettings::class);
 	}
 
 	public function getId(): string {

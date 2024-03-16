@@ -28,6 +28,13 @@ namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Dashboard\PollWidget;
+use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -64,6 +71,7 @@ use OCA\Polls\Listener\ShareListener;
 use OCA\Polls\Listener\UserDeletedListener;
 use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Middleware\RequestAttributesMiddleware;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\SearchProvider;
 use OCP\AppFramework\App;
@@ -71,7 +79,15 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
+use OCP\IConfig;
+use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\User\Events\UserDeletedEvent;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-api

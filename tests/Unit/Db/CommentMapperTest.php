@@ -24,19 +24,21 @@
 namespace OCA\Polls\Tests\Unit\Db;
 
 use League\FactoryMuffin\Faker\Facade as Faker;
-use OCP\IDBConnection;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCP\Server;
 
 class CommentMapperTest extends UnitTestCase {
-	private IDBConnection $con;
+	private ISession $session;
 	private CommentMapper $commentMapper;
 	private PollMapper $pollMapper;
+	/** @var Poll[] $polls */ 
 	private array $polls = [];
+	/** @var Comment[] $comments */ 
 	private array $comments = [];
 
 	/**
@@ -44,9 +46,11 @@ class CommentMapperTest extends UnitTestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = Server::get(IDBConnection::class);
-		$this->commentMapper = new CommentMapper($this->con);
-		$this->pollMapper = new PollMapper($this->con);
+		$this->session = Server::get(ISession::class);
+		$this->session->set('ncPollsUserId', 'TestUser');
+
+		$this->commentMapper = Server::get(CommentMapper::class);
+		$this->pollMapper = Server::get(PollMapper::class);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')

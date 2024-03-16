@@ -87,7 +87,6 @@ class Acl implements JsonSerializable {
 		private ?Share $share = null,
 	) {
 		$this->pollId = null;
-		$this->appSettings = new AppSettings;
 	}
 
 	/**

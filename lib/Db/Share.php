@@ -27,9 +27,9 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 use OCA\Polls\AppConstants;
-use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\IURLGenerator;
+use OCP\Server;
 
 /**
  * @method int getId()
@@ -145,8 +145,8 @@ class Share extends EntityWithUser implements JsonSerializable {
 		$this->addType('locked', 'int');
 		$this->addType('reminderSent', 'int');
 		$this->addType('deleted', 'int');
-		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
-		$this->appSettings = new AppSettings;
+		$this->urlGenerator = Server::get(IURLGenerator::class);
+		$this->appSettings = Server::get(AppSettings::class);
 	}
 
 	/**
