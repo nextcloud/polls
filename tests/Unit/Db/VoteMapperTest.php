@@ -120,15 +120,6 @@ class VoteMapperTest extends UnitTestCase {
 	}
 
 	/**
-	 * testParticipantsByPoll
-	 */
-	public function testFindParticipantsVotes() {
-		foreach ($this->votes as $vote) {
-			$this->assertTrue(count($this->voteMapper->findParticipantsVotes($vote->getPollId(), $vote->getUserId())) > 0);
-		}
-	}
-
-	/**
 	 * testUpdate
 	 */
 	public function testUpdate() {

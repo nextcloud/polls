@@ -28,11 +28,17 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\UserMapper;
+use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
+use Psr\Log\LoggerInterface;
 
 class SubscriptionMapperTest extends UnitTestCase {
 	private SubscriptionMapper $subscriptionMapper;
 	private PollMapper $pollMapper;
+	private UserMapper $userMapper;
 	/** @var Poll[] $polls */
 	private array $polls = [];
 	/** @var Subscription[] $subscriptions */ 
