@@ -36,7 +36,6 @@ use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\UserMapper;
-use OCP\IGroupManager;
 use OCP\ISession;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -76,7 +75,7 @@ class OptionMapperTest extends UnitTestCase {
 		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession, $this->userManager, $this->logger);
 		$this->voteMapper = new VoteMapper($this->con, $this->logger);
 		$this->optionMapper = new OptionMapper($this->con, $this->userMapper);
-		$this->pollMapper = new PollMapper($this->con);
+		$this->pollMapper = new PollMapper($this->con, $this->userMapper);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')

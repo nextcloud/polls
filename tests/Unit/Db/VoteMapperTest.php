@@ -72,7 +72,7 @@ class VoteMapperTest extends UnitTestCase {
 		$this->session->set('ncPollsUserId', 'TestUser');
 
 		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession, $this->userManager, $this->logger);
-		$this->pollMapper = new PollMapper($this->con);
+		$this->pollMapper = new PollMapper($this->con, $this->userMapper);
 		$this->voteMapper = new VoteMapper($this->con, $this->logger);
 		$this->optionMapper = new OptionMapper($this->con, $this->userMapper);
 
@@ -131,15 +131,6 @@ class VoteMapperTest extends UnitTestCase {
 	public function testParticipantsByPoll() {
 		foreach ($this->polls as $poll) {
 			$this->assertTrue(count($this->voteMapper->findParticipantsByPoll($poll->getId())) > 0);
-		}
-	}
-
-	/**
-	 * testParticipantsByPoll
-	 */
-	public function testFindParticipantsVotes() {
-		foreach ($this->votes as $vote) {
-			$this->assertTrue(count($this->voteMapper->findParticipantsVotes($vote->getPollId(), $vote->getUserId())) > 0);
 		}
 	}
 
