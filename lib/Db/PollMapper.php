@@ -40,7 +40,10 @@ class PollMapper extends QBMapper {
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
-	public function __construct(IDBConnection $db) {
+	public function __construct(
+		IDBConnection $db,
+		private UserMapper $userMapper,
+	) {
 		parent::__construct($db, Poll::TABLE, Poll::class);
 	}
 
@@ -167,6 +170,7 @@ class PollMapper extends QBMapper {
 	 * Build the enhanced query with joined tables
 	 */
 	protected function buildQuery(): IQueryBuilder {
+		$currentUserId = $this->userMapper->getCurrentUser()->getId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
@@ -174,6 +178,7 @@ class PollMapper extends QBMapper {
 			// ->groupBy(self::TABLE . '.id')
 			->from($this->getTableName(), self::TABLE);
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
+		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
 		$qb->groupBy(self::TABLE . '.id');
 		return $qb;
 	}
@@ -198,6 +203,28 @@ class PollMapper extends QBMapper {
 			Option::TABLE,
 			$joinAlias,
 			$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+		);
+	}
+
+	/**
+	 * Joins options to evaluate min and max option date for date polls
+	 * if text poll or no options are set,
+	 * the min value is the current time,
+	 * the max value is null
+	 */
+	protected function joinCurrentUserVotes(IQueryBuilder &$qb, string $fromAlias, $currentUserId): void {
+		$joinAlias = 'user_vote';
+		// force value into a MIN function to avoid grouping errors
+		$qb->selectAlias($qb->func()->count($joinAlias . '.vote_answer'), 'current_user_votes');
+
+		$qb->leftJoin(
+			$fromAlias,
+			Vote::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
+				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+			)
 		);
 	}
 
