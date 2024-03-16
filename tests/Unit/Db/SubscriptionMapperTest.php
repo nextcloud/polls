@@ -29,12 +29,22 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\UserMapper;
+use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
+use Psr\Log\LoggerInterface;
 
 class SubscriptionMapperTest extends UnitTestCase {
 	private IDBConnection $con;
+	private ISession $session;
+	private IUserManager $userManager;
+	private IUserSession $userSession;
+	private LoggerInterface $logger;
 	private SubscriptionMapper $subscriptionMapper;
 	private PollMapper $pollMapper;
+	private UserMapper $userMapper;
 	/** @var Poll[] $polls */
 	private array $polls = [];
 	/** @var Poll[] $polls */ 
@@ -47,8 +57,15 @@ class SubscriptionMapperTest extends UnitTestCase {
 	protected function setUp(): void {
 		parent::setUp();
 		$this->con = Server::get(IDBConnection::class);
+		$this->logger = Server::get(LoggerInterface::class);
+		$this->session = Server::get(ISession::class);
+		$this->userManager = Server::get(IUserManager::class);
+		$this->userSession = Server::get(IUserSession::class);
+		$this->session->set('ncPollsUserId', 'TestUser');
+
 		$this->subscriptionMapper = new SubscriptionMapper($this->con);
-		$this->pollMapper = new PollMapper($this->con);
+		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession, $this->userManager, $this->logger);
+		$this->pollMapper = new PollMapper($this->con, $this->userMapper);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')
