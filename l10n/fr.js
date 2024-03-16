@@ -256,7 +256,7 @@ OC.L10N.register(
     "This share is locked and allows only read access. Registering is not possible." : "Le partage est verrouillé et ne permet que l'accès en lecture. S'inscrire n'est pas possible.",
     "Your share is locked and you have just read access to this poll." : "Votre partage est verrouillé et vous ne pouvez qu'accéder à ce sondage en lecture seule.",
     "To participate, register with your email address and a name." : "Pour participer, inscrivez-vous avec votre adresse e-mail et votre nom.",
-    "To participate, register a name and optionally with your email address." : "Pour participez, inscrivez-vous avec un nom et, facultativement, avec un votre adresse e-mail.",
+    "To participate, register a name and optionally with your email address." : "Pour participer, inscrivez-vous avec un nom et éventuellement votre adresse e-mail.",
     "To participate, register with a name." : "Pour participer, inscrivez-vous avec un nom.",
     "You have confirmed options. Inform your participants about the result via email." : "Vous avez des choix confirmés. Informez vos participants du résultat par e-mail.",
     "Some confirmation messages could not been sent." : "Certains messages de confirmation n'ont pas pu être envoyés.",
