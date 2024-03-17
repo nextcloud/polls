@@ -26,14 +26,12 @@ declare(strict_types=1);
 namespace OCA\Polls\Tests\Unit\Db;
 
 use League\FactoryMuffin\Faker\Facade as Faker;
-use OCP\IDBConnection;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\Server;
 
 class PollMapperTest extends UnitTestCase {
-	private IDBConnection $con;
 	private PollMapper $pollMapper;
 	/** @var Poll[] $polls*/
 	private array $polls = [];
@@ -43,8 +41,7 @@ class PollMapperTest extends UnitTestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = Server::get(IDBConnection::class);
-		$this->pollMapper = new PollMapper($this->con);
+		$this->pollMapper = Server::get(PollMapper::class);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll'),

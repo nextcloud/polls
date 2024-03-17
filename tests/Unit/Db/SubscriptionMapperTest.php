@@ -23,7 +23,6 @@
 
 namespace OCA\Polls\Tests\Unit\Db;
 
-use OCP\IDBConnection;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
@@ -32,12 +31,11 @@ use OCA\Polls\Db\SubscriptionMapper;
 use OCP\Server;
 
 class SubscriptionMapperTest extends UnitTestCase {
-	private IDBConnection $con;
 	private SubscriptionMapper $subscriptionMapper;
 	private PollMapper $pollMapper;
 	/** @var Poll[] $polls */
 	private array $polls = [];
-	/** @var Poll[] $polls */ 
+	/** @var Subscription[] $subscriptions */ 
 	private array $subscriptions = [];
 	private array $users = [];
 
@@ -46,9 +44,8 @@ class SubscriptionMapperTest extends UnitTestCase {
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = Server::get(IDBConnection::class);
-		$this->subscriptionMapper = new SubscriptionMapper($this->con);
-		$this->pollMapper = new PollMapper($this->con);
+		$this->subscriptionMapper = Server::get(SubscriptionMapper::class);
+		$this->pollMapper = Server::get(PollMapper::class);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')

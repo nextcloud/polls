@@ -28,7 +28,13 @@ namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Dashboard\PollWidget;
+use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -101,7 +107,7 @@ class Application extends App implements IBootstrap {
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 
-		$context->registerService(UserMapper::class, function(ContainerInterface $c): UserMapper {
+		$context->registerService(UserMapper::class, function (ContainerInterface $c): UserMapper {
 			return new UserMapper(
 				$c->get(IDBConnection::class),
 				$c->get(ISession::class),
@@ -111,11 +117,49 @@ class Application extends App implements IBootstrap {
 			);
 		});
 
-		$context->registerService(AppSettings::class, function(ContainerInterface $c): AppSettings {
+		$context->registerService(AppSettings::class, function (ContainerInterface $c): AppSettings {
 			return new AppSettings(
 				$c->get(IConfig::class),
 				$c->get(IGroupManager::class),
 				$c->get(IUserSession::class),
+			);
+		});
+
+		$context->registerService(PollMapper::class, function (ContainerInterface $c): PollMapper {
+			return new PollMapper(
+				$c->get(IDBConnection::class),
+			);
+		});
+
+		$context->registerService(CommentMapper::class, function (ContainerInterface $c): CommentMapper {
+			return new CommentMapper(
+				$c->get(IDBConnection::class),
+			);
+		});
+
+		$context->registerService(VoteMapper::class, function (ContainerInterface $c): VoteMapper {
+			return new VoteMapper(
+				$c->get(IDBConnection::class),
+				$c->get(LoggerInterface::class),
+			);
+		});
+
+		$context->registerService(OptionMapper::class, function (ContainerInterface $c): OptionMapper {
+			return new OptionMapper(
+				$c->get(IDBConnection::class),
+				$c->get(UserMapper::class),
+			);
+		});
+
+		$context->registerService(SubscriptionMapper::class, function (ContainerInterface $c): SubscriptionMapper {
+			return new SubscriptionMapper(
+				$c->get(IDBConnection::class),
+			);
+		});
+
+		$context->registerService(LogMapper::class, function (ContainerInterface $c): LogMapper {
+			return new LogMapper(
+				$c->get(IDBConnection::class),
 			);
 		});
 

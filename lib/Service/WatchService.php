@@ -36,7 +36,6 @@ use OCP\DB\Exception;
 use OCP\ISession;
 
 class WatchService {
-	private Watch $watch;
 	
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -46,8 +45,8 @@ class WatchService {
 		private WatchMapper $watchMapper,
 		private Acl $acl,
 		private AppSettings $appSettings,
+		private Watch $watch,
 	) {
-		$this->watch = new Watch;
 	}
 
 	/**
