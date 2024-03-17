@@ -71,7 +71,7 @@ class VoteMapperTest extends UnitTestCase {
 		$this->userSession = Server::get(IUserSession::class);
 		$this->session->set('ncPollsUserId', 'TestUser');
 
-		$this->userMapper = new UserMapper($this->con, $this->session, $this->userSession, $this->userManager, $this->logger);
+		$this->userMapper = Server::get(UserMapper::class);
 		$this->pollMapper = new PollMapper($this->con);
 		$this->voteMapper = new VoteMapper($this->con, $this->logger);
 		$this->optionMapper = new OptionMapper($this->con, $this->userMapper);

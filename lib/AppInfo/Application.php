@@ -28,6 +28,7 @@ namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Dashboard\PollWidget;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -71,7 +72,13 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
+use OCP\IDBConnection;
+use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\User\Events\UserDeletedEvent;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-api
@@ -90,6 +97,16 @@ class Application extends App implements IBootstrap {
 
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
+
+		$context->registerService(UserMapper::class, function(ContainerInterface $c): UserMapper {
+			return new UserMapper(
+				$c->get(IDBConnection::class),
+				$c->get(ISession::class),
+				$c->get(IUserSession::class),
+				$c->get(IUserManager::class),
+				$c->get(LoggerInterface::class),
+			);
+		});
 
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);
 		$context->registerNotifierService(Notifier::class);
