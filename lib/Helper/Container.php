@@ -31,34 +31,27 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCP\App\IAppManager;
-use OCP\AppFramework\App;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
-use Psr\Container\ContainerInterface;
+use OCP\Server;
 
 abstract class Container {
-	public static function getContainer(): ContainerInterface {
-		$app = new App(AppConstants::APP_ID);
-		return $app->getContainer();
-	}
-
 	public static function queryClass(string $class): mixed {
-		return self::getContainer()->get($class);
+		return Server::get($class);
 	}
 
 	public static function queryPoll(int $pollId): Poll {
-		return self::queryClass(PollMapper::class)->find($pollId);
+		return Server::get(PollMapper::class)->find($pollId);
 	}
 
 	public static function findShare(int $pollId, string $userId): Share {
-		return self::queryClass(ShareMapper::class)
-			->findByPollAndUser($pollId, $userId);
+		return Server::get(ShareMapper::class)->findByPollAndUser($pollId, $userId);
 	}
 
 	public static function getL10N(?string $lang = null): IL10N {
-		return self::queryClass(IFactory::class)->get(AppConstants::APP_ID, $lang);
+		return Server::get(IFactory::class)->get(AppConstants::APP_ID, $lang);
 	}
 	public static function isAppEnabled(string $app): bool {
-		return self::queryClass(IAppManager::class)->isEnabledForUser($app);
+		return Server::get(IAppManager::class)->isEnabledForUser($app);
 	}
 }

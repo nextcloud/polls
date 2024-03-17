@@ -106,7 +106,54 @@ class Application extends App implements IBootstrap {
 
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
+		$this->registerServices($context);
 
+		$context->registerMiddleWare(RequestAttributesMiddleware::class);
+		$context->registerNotifierService(Notifier::class);
+		
+		$context->registerEventListener(CommentEvent::class, CommentListener::class);
+		$context->registerEventListener(CommentAddEvent::class, CommentListener::class);
+		$context->registerEventListener(CommentDeleteEvent::class, CommentListener::class);
+
+		$context->registerEventListener(OptionEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionConfirmedEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionCreatedEvent::class, OptionListener::class);
+		$context->registerEventListener(OptionDeletedEvent::class, OptionListener::class);
+		
+		$context->registerEventListener(PollEvent::class, PollListener::class);
+		$context->registerEventListener(PollExpiredEvent::class, PollListener::class);
+		$context->registerEventListener(PollOptionReorderedEvent::class, PollListener::class);
+		$context->registerEventListener(PollOwnerChangeEvent::class, PollListener::class);
+		$context->registerEventListener(PollRestoredEvent::class, PollListener::class);
+		$context->registerEventListener(PollTakeoverEvent::class, PollListener::class);
+		$context->registerEventListener(PollUpdatedEvent::class, PollListener::class);
+		$context->registerEventListener(PollReopenEvent::class, PollListener::class);
+		$context->registerEventListener(PollCloseEvent::class, PollListener::class);
+
+		$context->registerEventListener(ShareEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedDisplayNameEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedLabelEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedEmailEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareChangedRegistrationConstraintEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareCreateEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareDeletedEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareLockedEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareRegistrationEvent::class, ShareListener::class);
+		$context->registerEventListener(ShareTypeChangedEvent::class, ShareListener::class);
+
+		$context->registerEventListener(VoteEvent::class, VoteListener::class);
+		$context->registerEventListener(VoteSetEvent::class, VoteListener::class);
+		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
+		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
+
+		$context->registerSearchProvider(SearchProvider::class);
+		$context->registerDashboardWidget(PollWidget::class);
+	}
+
+	/**
+	 * Register some Services
+	 */
+	private function registerServices(IRegistrationContext $context) {
 		$context->registerService(UserMapper::class, function (ContainerInterface $c): UserMapper {
 			return new UserMapper(
 				$c->get(IDBConnection::class),
@@ -162,46 +209,5 @@ class Application extends App implements IBootstrap {
 				$c->get(IDBConnection::class),
 			);
 		});
-
-		$context->registerMiddleWare(RequestAttributesMiddleware::class);
-		$context->registerNotifierService(Notifier::class);
-		
-		$context->registerEventListener(CommentEvent::class, CommentListener::class);
-		$context->registerEventListener(CommentAddEvent::class, CommentListener::class);
-		$context->registerEventListener(CommentDeleteEvent::class, CommentListener::class);
-
-		$context->registerEventListener(OptionEvent::class, OptionListener::class);
-		$context->registerEventListener(OptionConfirmedEvent::class, OptionListener::class);
-		$context->registerEventListener(OptionCreatedEvent::class, OptionListener::class);
-		$context->registerEventListener(OptionDeletedEvent::class, OptionListener::class);
-		
-		$context->registerEventListener(PollEvent::class, PollListener::class);
-		$context->registerEventListener(PollExpiredEvent::class, PollListener::class);
-		$context->registerEventListener(PollOptionReorderedEvent::class, PollListener::class);
-		$context->registerEventListener(PollOwnerChangeEvent::class, PollListener::class);
-		$context->registerEventListener(PollRestoredEvent::class, PollListener::class);
-		$context->registerEventListener(PollTakeoverEvent::class, PollListener::class);
-		$context->registerEventListener(PollUpdatedEvent::class, PollListener::class);
-		$context->registerEventListener(PollReopenEvent::class, PollListener::class);
-		$context->registerEventListener(PollCloseEvent::class, PollListener::class);
-
-		$context->registerEventListener(ShareEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareChangedDisplayNameEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareChangedLabelEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareChangedEmailEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareChangedRegistrationConstraintEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareCreateEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareDeletedEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareLockedEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareRegistrationEvent::class, ShareListener::class);
-		$context->registerEventListener(ShareTypeChangedEvent::class, ShareListener::class);
-
-		$context->registerEventListener(VoteEvent::class, VoteListener::class);
-		$context->registerEventListener(VoteSetEvent::class, VoteListener::class);
-		$context->registerEventListener(UserDeletedEvent::class, UserDeletedListener::class);
-		$context->registerEventListener(GroupDeletedEvent::class, GroupDeletedListener::class);
-
-		$context->registerSearchProvider(SearchProvider::class);
-		$context->registerDashboardWidget(PollWidget::class);
 	}
 }
