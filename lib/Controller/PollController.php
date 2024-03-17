@@ -34,6 +34,7 @@ use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
+use OCP\Server;
 
 /**
  * @psalm-api
@@ -56,7 +57,7 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	public function list(): JSONResponse {
 		return $this->response(function () {
-			$appSettings = new AppSettings;
+			$appSettings = Server::get(AppSettings::class);
 			return [
 				'list' => $this->pollService->list(),
 				'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),

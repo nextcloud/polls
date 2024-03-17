@@ -65,6 +65,7 @@ use OCA\Polls\Listener\ShareListener;
 use OCA\Polls\Listener\UserDeletedListener;
 use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Middleware\RequestAttributesMiddleware;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\SearchProvider;
 use OCP\AppFramework\App;
@@ -72,7 +73,9 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
+use OCP\IConfig;
 use OCP\IDBConnection;
+use OCP\IGroupManager;
 use OCP\ISession;
 use OCP\IUserManager;
 use OCP\IUserSession;
@@ -105,6 +108,14 @@ class Application extends App implements IBootstrap {
 				$c->get(IUserSession::class),
 				$c->get(IUserManager::class),
 				$c->get(LoggerInterface::class),
+			);
+		});
+
+		$context->registerService(AppSettings::class, function(ContainerInterface $c): AppSettings {
+			return new AppSettings(
+				$c->get(IConfig::class),
+				$c->get(IGroupManager::class),
+				$c->get(IUserSession::class),
 			);
 		});
 
