@@ -27,7 +27,6 @@ namespace OCA\Polls\Model\Settings;
 
 use JsonSerializable;
 use OCA\Polls\AppConstants;
-use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Group;
 use OCP\IConfig;
 use OCP\IGroupManager;
@@ -64,16 +63,15 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_UPDATE_TYPE_PERIODIC_POLLING = 'periodicPolling';
 	public const SETTING_UPDATE_TYPE_DEFAULT = self::SETTING_UPDATE_TYPE_NO_POLLING;
 
-	private IConfig $config;
-	private IGroupManager $groupManager;
-	private IUserSession $session;
 	private string $userId = '';
+	
+	public function __construct(
+		private IConfig $config,
+		private IGroupManager $groupManager,
+		private IUserSession $session,
 
-	public function __construct() {
-		$this->config = Container::queryClass(IConfig::class);
-		$this->session = Container::queryClass(IUserSession::class);
-		$this->userId = Container::queryClass(IUserSession::class)->getUser()?->getUId() ?? '';
-		$this->groupManager = Container::queryClass(IGroupManager::class);
+	) {
+		$this->userId = $this->session->getUser()?->getUId() ?? '';
 	}
 
 	// Getters

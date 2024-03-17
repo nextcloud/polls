@@ -28,6 +28,13 @@ namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Dashboard\PollWidget;
+use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\LogMapper;
+use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -64,6 +71,7 @@ use OCA\Polls\Listener\ShareListener;
 use OCA\Polls\Listener\UserDeletedListener;
 use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Middleware\RequestAttributesMiddleware;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\SearchProvider;
 use OCP\AppFramework\App;
@@ -71,7 +79,15 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
+use OCP\IConfig;
+use OCP\IDBConnection;
+use OCP\IGroupManager;
+use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\User\Events\UserDeletedEvent;
+use Psr\Container\ContainerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-api
@@ -90,6 +106,7 @@ class Application extends App implements IBootstrap {
 
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
+		$this->registerServices($context);
 
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);
 		$context->registerNotifierService(Notifier::class);
@@ -131,5 +148,66 @@ class Application extends App implements IBootstrap {
 
 		$context->registerSearchProvider(SearchProvider::class);
 		$context->registerDashboardWidget(PollWidget::class);
+	}
+
+	/**
+	 * Register some Services
+	 */
+	private function registerServices(IRegistrationContext $context) {
+		$context->registerService(UserMapper::class, function (ContainerInterface $c): UserMapper {
+			return new UserMapper(
+				$c->get(IDBConnection::class),
+				$c->get(ISession::class),
+				$c->get(IUserSession::class),
+				$c->get(IUserManager::class),
+				$c->get(LoggerInterface::class),
+			);
+		});
+
+		$context->registerService(AppSettings::class, function (ContainerInterface $c): AppSettings {
+			return new AppSettings(
+				$c->get(IConfig::class),
+				$c->get(IGroupManager::class),
+				$c->get(IUserSession::class),
+			);
+		});
+
+		$context->registerService(PollMapper::class, function (ContainerInterface $c): PollMapper {
+			return new PollMapper(
+				$c->get(IDBConnection::class),
+			);
+		});
+
+		$context->registerService(CommentMapper::class, function (ContainerInterface $c): CommentMapper {
+			return new CommentMapper(
+				$c->get(IDBConnection::class),
+			);
+		});
+
+		$context->registerService(VoteMapper::class, function (ContainerInterface $c): VoteMapper {
+			return new VoteMapper(
+				$c->get(IDBConnection::class),
+				$c->get(LoggerInterface::class),
+			);
+		});
+
+		$context->registerService(OptionMapper::class, function (ContainerInterface $c): OptionMapper {
+			return new OptionMapper(
+				$c->get(IDBConnection::class),
+				$c->get(UserMapper::class),
+			);
+		});
+
+		$context->registerService(SubscriptionMapper::class, function (ContainerInterface $c): SubscriptionMapper {
+			return new SubscriptionMapper(
+				$c->get(IDBConnection::class),
+			);
+		});
+
+		$context->registerService(LogMapper::class, function (ContainerInterface $c): LogMapper {
+			return new LogMapper(
+				$c->get(IDBConnection::class),
+			);
+		});
 	}
 }
