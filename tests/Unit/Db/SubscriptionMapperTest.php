@@ -32,12 +32,17 @@ use OCA\Polls\Db\UserMapper;
 use OCP\ISession;
 use OCP\IUserManager;
 use OCP\IUserSession;
+use OCA\Polls\Db\UserMapper;
+use OCP\ISession;
+use OCP\IUserManager;
+use OCP\IUserSession;
 use OCP\Server;
 use Psr\Log\LoggerInterface;
 
 class SubscriptionMapperTest extends UnitTestCase {
 	private SubscriptionMapper $subscriptionMapper;
 	private PollMapper $pollMapper;
+	private UserMapper $userMapper;
 	private UserMapper $userMapper;
 	/** @var Poll[] $polls */
 	private array $polls = [];

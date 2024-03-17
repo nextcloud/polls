@@ -28,13 +28,16 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCP\Server;
+use Psr\Log\LoggerInterface;
 use Psr\Log\LoggerInterface;
 
 class LogMapperTest extends UnitTestCase {
 	private LogMapper $logMapper;
 	private PollMapper $pollMapper;
+	private UserMapper $userMapper;
 	private UserMapper $userMapper;
 	/** @var Log[] $logs*/
 	private array $logs = [];
