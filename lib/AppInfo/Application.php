@@ -175,6 +175,7 @@ class Application extends App implements IBootstrap {
 		$context->registerService(PollMapper::class, function (ContainerInterface $c): PollMapper {
 			return new PollMapper(
 				$c->get(IDBConnection::class),
+				$c->get(UserMapper::class)
 			);
 		});
 
