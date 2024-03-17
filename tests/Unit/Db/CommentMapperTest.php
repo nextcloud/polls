@@ -29,24 +29,12 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Poll;
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\UserMapper;
-use OCP\ISession;
-use OCP\IUserManager;
-use OCP\IUserSession;
-use OCA\Polls\Db\UserMapper;
-use OCP\ISession;
-use OCP\IUserManager;
-use OCP\IUserSession;
 use OCP\Server;
-use Psr\Log\LoggerInterface;
-use Psr\Log\LoggerInterface;
 
 class CommentMapperTest extends UnitTestCase {
 	private CommentMapper $commentMapper;
 	private PollMapper $pollMapper;
-	private UserMapper $userMapper;
 	/** @var Poll[] $polls */ 
 	private array $polls = [];
 	/** @var Comment[] $comments */ 

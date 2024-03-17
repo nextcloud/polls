@@ -28,19 +28,11 @@ namespace OCA\Polls\Tests\Unit\Db;
 use League\FactoryMuffin\Faker\Facade as Faker;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\UserMapper;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\ISession;
-use OCP\IUserManager;
-use OCP\IUserSession;
 use OCP\Server;
-use Psr\Log\LoggerInterface;
 
 class PollMapperTest extends UnitTestCase {
 	private PollMapper $pollMapper;
-	private UserMapper $userMapper;
-	private UserMapper $userMapper;
 	/** @var Poll[] $polls*/
 	private array $polls = [];
 
