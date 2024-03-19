@@ -87,6 +87,35 @@ class ShareMapper extends QBMapper {
 	 * @return Share[]
 	 * @psalm-return array<array-key, Share>
 	 */
+	public function findByPollAndType(int $pollId, string $type): array {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select('shares.*')
+			->from($this->getTableName(), 'shares')
+			->groupBy('shares.id')
+			->where(
+				$qb->expr()->eq('shares.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)),
+				$qb->expr()->eq('shares.type', $qb->createNamedParameter($type)),
+			)
+			->leftJoin(
+				'shares',
+				Vote::TABLE,
+				'votes',
+				$qb->expr()->andX(
+					$qb->expr()->eq('shares.poll_id', 'votes.poll_id'),
+					$qb->expr()->eq('shares.user_id', 'votes.user_id'),
+				)
+			)
+			->addSelect($qb->func()->count('votes.id', 'voted'));
+
+		return $this->findEntities($qb);
+	}
+
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Share[]
+	 * @psalm-return array<array-key, Share>
+	 */
 	public function findByPollNotInvited(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 

@@ -339,8 +339,8 @@ class Acl implements JsonSerializable {
 		}
 
 		return 0 < count(
-			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
-				return ($item->getType() === Share::TYPE_GROUP && $this->groupManager->isInGroup($this->getUserId(), $item->getUserId()));
+			array_filter($this->shareMapper->findByPollAndType($this->getPollId(), Share::TYPE_GROUP), function ($item) {
+				return $this->groupManager->isInGroup($this->getUserId(), $item->getUserId());
 			})
 		);
 	}
