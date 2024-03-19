@@ -140,8 +140,8 @@ class Acl implements JsonSerializable {
 	 * Set poll id and load poll
 	 */
 	public function setPollId(?int $pollId = null, string $permission = self::PERMISSION_POLL_VIEW): Acl {
-		if ($this->getToken() && $pollId !== $this->getShare()->getPollId()) {
-			$this->logger->warning('Ignoring requested pollId ' . $pollId . '. Keeping share pollId of share(' . $this->getToken() . '): ' . $this->getShare()->getPollId());
+		if ($this->getSessionStoredShareToken() && $pollId !== $this->getShare()->getPollId()) {
+			$this->logger->warning('Ignoring requested pollId ' . $pollId . '. Keeping share pollId of share(' . $this->getSessionStoredShareToken() . '): ' . $this->getShare()->getPollId());
 		} else {
 			$this->pollId = $pollId;
 		}
@@ -273,7 +273,7 @@ class Acl implements JsonSerializable {
 		return (int) $this->getPoll()->getId();
 	}
 
-	public function getToken(): ?string {
+	private function getSessionStoredShareToken(): ?string {
 		return $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 	}
 

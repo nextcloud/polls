@@ -179,8 +179,30 @@ class PollMapper extends QBMapper {
 			->from($this->getTableName(), self::TABLE);
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
+		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$qb->groupBy(self::TABLE . '.id');
 		return $qb;
+	}
+
+	/**
+	 * Joins options to evaluate min and max option date for date polls
+	 * if text poll or no options are set,
+	 * the min value is the current time,
+	 * the max value is null
+	 */
+	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
+		$joinAlias = 'shares';
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, "") AS user_role'));
+
+		$qb->leftJoin(
+			$fromAlias,
+			Share::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+			)
+		);
 	}
 
 	/**
@@ -193,8 +215,6 @@ class PollMapper extends QBMapper {
 		$joinAlias = 'options';
 		$saveMin = (string) time();
 
-		// force value into a MIN function to avoid grouping errors
-		// $qb->selectAlias($qb->func()->max($joinAlias . '.timestamp'), 'max_date');
 		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), 0) AS max_date'))
 			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'));
 
