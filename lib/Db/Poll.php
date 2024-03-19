@@ -137,6 +137,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $maxDate = 0;
 	protected int $minDate = 0;
 	protected int $currentUserVotes = 0;
+	protected string $userRole = "none";
+	protected ?int $isCurrentUserLocked = 0;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -168,6 +170,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return [
 			'id' => $this->getId(),
+			'type' => $this->getType(),
 			'title' => $this->getTitle(),
 			'description' => $this->getDescription(),
 			'descriptionSafe' => $this->getDescriptionSafe(),
@@ -185,14 +188,14 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'optionLimit' => $this->getOptionLimit(),
 			'proposalsExpire' => $this->getProposalsExpire(),
 			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
-			'type' => $this->getType(),
 			'useNo' => $this->getUseNo(),
 			'voteLimit' => $this->getVoteLimit(),
 			'lastInteraction' => $this->getLastInteraction(),
 			'summary' => [
-				'orphanedVotes' => count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserCached()->getId())),
-				'yesByCurrentUser' => count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserCached()->getId())),
+				'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
+				'yesByCurrentUser' => $this->getCurrentUserYesVotes(),
 				'countVotes' => $this->getCurrentUserCountVotes(),
+				'userRole' => $this->getUserRole(),
 			],
 		];
 	}
@@ -231,6 +234,13 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
+	public function getUserRole(): string {
+		if ($this->userMapper->getCurrentUser()->getId() === $this->getOwner()) {
+			return 'owner';
+		}
+		return $this->userRole;		
+	}
+	
 	public function getVoteUrl(): string {
 		return $this->urlGenerator->linkToRouteAbsolute(
 			AppConstants::APP_ID . '.page.vote',
@@ -276,10 +286,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			$this->getProposalsExpire() > 0
 			&& $this->getProposalsExpire() < time()
 		);
-	}
-
-	public function getCurrentUserCountVotes(): int {
-		return $this->currentUserVotes;
 	}
 
 	public function getDescription(): string {
@@ -337,11 +343,26 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
+	public function getCurrentUserCountVotes(): int {
+		return $this->currentUserVotes;
+	}
+
+	public function getIsCurrentUserLocked(): bool {
+		return (bool) $this->isCurrentUserLocked;
+	}
+
 	/**
 	 * @psalm-return int<0, max>
 	 */
-	public function getOrphanedVotes(): int {
+	public function getCurrentUserOrphanedVotes(): int {
 		return count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserCached()->getId()));
+	}
+
+	/**
+	 * @psalm-return int<0, max>
+	 */
+	public function getCurrentUserYesVotes(): int {
+		return count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserCached()->getId()));
 	}
 
 	public function getDeadline(): int {

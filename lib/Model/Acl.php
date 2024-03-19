@@ -173,7 +173,7 @@ class Acl implements JsonSerializable {
 	 */
 	private function getShare(): Share {
 		if ($this->validateShareToken()) {
-			$this->share = $this->shareMapper->findByToken((string) $this->getToken());
+			$this->share = $this->shareMapper->findByToken((string) $this->getSessionStoredShareToken());
 			$this->pollId = $this->share->getPollId();
 		}
 
@@ -181,11 +181,11 @@ class Acl implements JsonSerializable {
 	}
 
 	private function validateShareToken(): bool {
-		return $this->isSessionTokenSet() && $this->getToken() !== $this->share->getToken();
+		return $this->isSessionTokenSet() && $this->getSessionStoredShareToken() !== $this->share->getToken();
 	}
 
 	private function isSessionTokenSet(): bool {
-		return boolval($this->getToken());
+		return boolval($this->getSessionStoredShareToken());
 	}
 
 	private function sideLoadShare(): void {
@@ -237,7 +237,7 @@ class Acl implements JsonSerializable {
 		return $this->getPoll()->getId();
 	}
 
-	private function getToken(): ?string {
+	private function getSessionStoredShareToken(): ?string {
 		return $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 	}
 

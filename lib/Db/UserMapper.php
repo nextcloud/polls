@@ -96,7 +96,7 @@ class UserMapper extends QBMapper {
 
 		} else {
 			try {
-				$this->currentUser = $this->getUserFromShareToken($this->getToken());
+				$this->currentUser = $this->getUserFromShareToken($this->getSessionStoredShareToken());
 			} catch (DoesNotExistException $e) {
 				$this->logger->debug('no user found, returned fake user');
 				$this->currentUser = new GenericUser('', Share::TYPE_PUBLIC);
@@ -114,7 +114,7 @@ class UserMapper extends QBMapper {
 		return $this->currentUser ?? $this->getCurrentUser();
 	}
 
-	private function getToken(): string {
+	public function getSessionStoredShareToken(): string {
 		return (string) $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 	}
 
