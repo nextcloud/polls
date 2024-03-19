@@ -93,6 +93,9 @@ class AppSettings implements JsonSerializable {
 	}
 
 	// Checks
+	/**
+	 * Poll creation permission is controlled by app settings
+	 */
 	public function getPollCreationAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_CREATION) || $this->isMember($this->getGroupSetting(self::SETTING_POLL_CREATION_GROUPS));
@@ -100,6 +103,9 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
+	/**
+	 * Permission to see emailaddresses is controlled by app settings
+	 */
 	public function getAllowSeeMailAddresses(): bool {
 		if ($this->session->isLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES) || $this->isMember($this->getGroupSetting(self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS));
@@ -107,6 +113,9 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
+	/**
+	 * Permission to download emailaddresses is controlled by app settings
+	 */
 	public function getPollDownloadAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD) || $this->isMember($this->getGroupSetting(self::SETTING_POLL_DOWNLOAD_GROUPS));
@@ -114,6 +123,9 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
+	/**
+	 * Permission to share polls with all internal users is controlled by app settings (open poll)
+	 */
 	public function getAllAccessAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_ALL_ACCESS) || $this->isMember($this->getGroupSetting(self::SETTING_ALL_ACCESS_GROUPS));
@@ -121,6 +133,9 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
+	/**
+	 * Permission to create public shares is controlled by app settings
+	 */
 	public function getPublicSharesAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_PUBLIC_SHARES) || $this->isMember($this->getGroupSetting(self::SETTING_PUBLIC_SHARES_GROUPS));
@@ -128,6 +143,9 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
+	/**
+	 * Permission to combine polls is controlled by app settings and only for internal users
+	 */
 	public function getComboAllowed(): bool {
 		if ($this->session->isLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_COMBO)

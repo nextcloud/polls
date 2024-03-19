@@ -76,7 +76,7 @@ class OptionService {
 		}
 
 		try {
-			$this->options = $this->optionMapper->findByPoll($this->acl->getPollId(), !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW));
+			$this->options = $this->optionMapper->findByPoll($this->acl->getPoll()->getId(), !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW));
 
 			if ($this->acl->getPoll()->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {
 				// hide booked up options, except the user has edit permission
@@ -98,7 +98,7 @@ class OptionService {
 	 * @return Option
 	 */
 	public function addForCurrentPoll(int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
-		$pollId = $this->acl->getPollId();
+		$pollId = $this->acl->getPoll()->getId();
 		return $this->add($pollId, $timestamp, $pollOptionText, $duration);
 	}
 
@@ -281,7 +281,7 @@ class OptionService {
 
 		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($this->option));
 
-		return $this->optionMapper->findByPoll($this->acl->getPollId());
+		return $this->optionMapper->findByPoll($this->acl->getPoll()->getId());
 	}
 
 	/**
@@ -381,18 +381,18 @@ class OptionService {
 
 		if ($newOrder < 1) {
 			$newOrder = 1;
-		} elseif ($newOrder > $this->getHighestOrder($this->acl->getPollId())) {
-			$newOrder = $this->getHighestOrder($this->acl->getPollId());
+		} elseif ($newOrder > $this->getHighestOrder($this->acl->getPoll()->getId())) {
+			$newOrder = $this->getHighestOrder($this->acl->getPoll()->getId());
 		}
 
-		foreach ($this->optionMapper->findByPoll($this->acl->getPollId()) as $option) {
+		foreach ($this->optionMapper->findByPoll($this->acl->getPoll()->getId()) as $option) {
 			$option->setOrder($this->moveModifier($this->option->getOrder(), $newOrder, $option->getOrder()));
 			$this->optionMapper->update($option);
 		}
 
 		$this->eventDispatcher->dispatchTyped(new PollOptionReorderedEvent($this->acl->getPoll()));
 
-		return $this->optionMapper->findByPoll($this->acl->getPollId());
+		return $this->optionMapper->findByPoll($this->acl->getPoll()->getId());
 	}
 
 	/**

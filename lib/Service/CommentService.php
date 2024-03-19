@@ -55,7 +55,7 @@ class CommentService {
 		}
 		$this->acl->request(Acl::PERMISSION_COMMENT_ADD);
 
-		$comments = $this->commentMapper->findByPoll($this->acl->getPollId());
+		$comments = $this->commentMapper->findByPoll($this->acl->getPoll()->getId());
 		// treat comments from the same user within 5 minutes as grouped comments
 		$timeTolerance = 5 * 60;
 		// init predecessor as empty Comment
@@ -88,7 +88,7 @@ class CommentService {
 		$this->acl->request(Acl::PERMISSION_COMMENT_ADD);
 
 		$this->comment = new Comment();
-		$this->comment->setPollId($this->acl->getPollId());
+		$this->comment->setPollId($this->acl->getPoll()->getId());
 		$this->comment->setUserId($this->acl->getUserId());
 		$this->comment->setComment($message);
 		$this->comment->setTimestamp(time());

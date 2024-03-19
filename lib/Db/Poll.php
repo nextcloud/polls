@@ -104,6 +104,16 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TWO_DAYS = 172800;
 	public const ONE_AND_HALF_DAY = 129600;
 
+	public const ROLE_USER = Share::TYPE_USER;
+	public const ROLE_ADMIN = Share::TYPE_ADMIN;
+	public const ROLE_EMAIL = Share::TYPE_EMAIL;
+	public const ROLE_CONTACT = Share::TYPE_CONTACT;
+	public const ROLE_EXTERNAL = Share::TYPE_EXTERNAL;
+	public const ROLE_OWNER = 'owner';
+	public const ROLE_NONE = 'none';
+
+
+
 	private IURLGenerator $urlGenerator;
 	protected UserMapper $userMapper;
 	private VoteMapper $voteMapper;
@@ -137,7 +147,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $maxDate = 0;
 	protected int $minDate = 0;
 	protected int $currentUserVotes = 0;
-	protected string $userRole = "none";
+	protected string $userRole = self::ROLE_NONE;
 	protected ?int $isCurrentUserLocked = 0;
 
 	public function __construct() {
@@ -236,9 +246,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function getUserRole(): string {
 		if ($this->userMapper->getCurrentUser()->getId() === $this->getOwner()) {
-			return 'owner';
+			return self::ROLE_OWNER;
 		}
-		return $this->userRole;		
+		return $this->userRole;
 	}
 	
 	public function getVoteUrl(): string {
