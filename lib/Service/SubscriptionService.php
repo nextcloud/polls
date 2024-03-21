@@ -49,7 +49,7 @@ class SubscriptionService {
 
 		try {
 			$this->acl->request(Acl::PERMISSION_POLL_SUBSCRIBE);
-			$this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
+			$this->subscriptionMapper->findByPollAndUser($this->acl->getPoll()->getId(), $this->acl->getUserId());
 			// Subscription exists
 			return true;
 		} catch (DoesNotExistException $e) {
@@ -67,7 +67,7 @@ class SubscriptionService {
 		if (!$setToSubscribed) {
 			// user wants to unsubscribe, allow unsubscribe neverteheless the permissions are set
 			try {
-				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPollId(), $this->acl->getUserId());
+				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPoll()->getId(), $this->acl->getUserId());
 				$this->subscriptionMapper->delete($subscription);
 			} catch (DoesNotExistException $e) {
 				// Not found, assume already unsubscribed
@@ -76,7 +76,7 @@ class SubscriptionService {
 		} else {
 			try {
 				$this->acl->request(Acl::PERMISSION_POLL_SUBSCRIBE);
-				$this->add($this->acl->getPollId(), $this->acl->getUserId());
+				$this->add($this->acl->getPoll()->getId(), $this->acl->getUserId());
 			} catch (ForbiddenException $e) {
 				return false;
 			} catch (Exception $e) {

@@ -63,10 +63,10 @@ class VoteService {
 		try {
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				// Just return the participants votes, no further anoymizing or obfuscating is nessecary
-				return $this->voteMapper->findByPollAndUser($this->acl->getpollId(), ($this->userMapper->getCurrentUserId()));
+				return $this->voteMapper->findByPollAndUser($this->acl->getPoll()->getId(), ($this->userMapper->getCurrentUserId()));
 			}
 
-			$votes = $this->voteMapper->findByPoll($this->acl->getpollId());
+			$votes = $this->voteMapper->findByPoll($this->acl->getPoll()->getId());
 
 		} catch (DoesNotExistException $e) {
 			$votes = [];
@@ -100,7 +100,7 @@ class VoteService {
 		$deleteVoteInsteadOfNoVote = in_array(trim($setTo), [Vote::VOTE_NO, '']) && !boolval($this->acl->getPoll()->getUseNo());
 
 		try {
-			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPollId(), $option->getPollOptionText(), $this->userMapper->getCurrentUserId());
+			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPoll()->getId(), $option->getPollOptionText(), $this->userMapper->getCurrentUserId());
 
 			if ($deleteVoteInsteadOfNoVote) {
 				$this->vote->setVoteAnswer('');
@@ -113,7 +113,7 @@ class VoteService {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();
 
-			$this->vote->setPollId($this->acl->getPollId());
+			$this->vote->setPollId($this->acl->getPoll()->getId());
 			$this->vote->setUserId($this->userMapper->getCurrentUserId());
 			$this->vote->setVoteOptionText($option->getPollOptionText());
 			$this->vote->setVoteOptionId($option->getId());
@@ -134,7 +134,7 @@ class VoteService {
 	 */
 	public function deleteCurrentUserFromPoll(bool $deleteOnlyOrphaned = false): string {
 		$this->acl->request(Acl::PERMISSION_VOTE_EDIT);
-		$pollId = $this->acl->getPollId();
+		$pollId = $this->acl->getPoll()->getId();
 		$userId = $this->userMapper->getCurrentUser()->getId();
 		return $this->delete($pollId, $userId, $deleteOnlyOrphaned);
 	}
