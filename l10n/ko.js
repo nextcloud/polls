@@ -209,7 +209,7 @@ OC.L10N.register(
     "Email address is mandatory" : "이메일 주소는 필수 사항입니다.",
     "Delete share" : "공유 삭제",
     "Restore share" : "공유 복원",
-    "Share label" : "레이블 공유",
+    "Share label" : "공유 이름",
     "Invitation sent to {displayName} ({emailAddress})" : "초대가 {displayName} ({emailAddress})에게 전송됨",
     "Error sending invitation to {displayName} ({emailAddress})" : "초대를 {displayName} ({emailAddress})에게 전송하는 중 오류 발생",
     "Link copied to clipboard" : "링크가 클립보드로 복사됨",
