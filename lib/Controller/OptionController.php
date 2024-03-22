@@ -63,8 +63,8 @@ class OptionController extends BaseController {
 	 * @param int duration duration of option
 	 */
 	#[NoAdminRequired]
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): JSONResponse {
-		return $this->responseCreate(fn () => ['option' => $this->optionService->addForPoll($pollId, $timestamp, $pollOptionText, $duration)]);
+	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
+		return $this->responseCreate(fn () => ['option' => $this->optionService->addForPoll($pollId, $timestamp, $text, $duration)]);
 	}
 
 	/**
