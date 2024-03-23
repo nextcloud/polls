@@ -78,6 +78,8 @@ use OCP\IURLGenerator;
  * @method void setLastInteraction(int $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
+ * @method int getMinDate()
+ * @method int getMaxDate()
  */
 
 class Poll extends EntityWithUser implements JsonSerializable {
@@ -102,7 +104,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const ONE_AND_HALF_DAY = 129600;
 
 	private IURLGenerator $urlGenerator;
-	private OptionMapper $optionMapper;
 	protected UserMapper $userMapper;
 	private VoteMapper $voteMapper;
 
@@ -132,6 +133,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	// joined columns
 	protected bool $hasOrphanedVotes = false;
+	protected int $maxDate = 0;
+	protected int $minDate = 0;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -147,7 +150,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
 		$this->addType('lastInteraction', 'int');
-		$this->optionMapper = Container::queryClass(OptionMapper::class);
+		$this->addType('maxDate', 'int');
+		$this->addType('minDate', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->voteMapper = Container::queryClass(VoteMapper::class);
@@ -321,7 +325,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			$this->getCreated(),
 			$this->getLastInteraction(),
 			$this->getExpire(),
-			intval($this->optionMapper->findDateBoundaries($this->getId())['max']),
+			$this->getMaxDate(),
 		);
 	}
 
@@ -333,13 +337,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getDeadline(): int {
+		// if expiration is set return expiration date
 		if ($this->getExpire()) {
 			return $this->getExpire();
 		}
 
 		if ($this->getType() === Poll::TYPE_DATE) {
-			// use first date option as reminder deadline
-			return intval($this->optionMapper->findDateBoundaries($this->getId())['min']);
+			// use lowest date option as reminder deadline threshold
+			// if no options are set return is the current time
+			return $this->getMinDate();
 		}
 		throw new NoDeadLineException();
 	}

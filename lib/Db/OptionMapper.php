@@ -118,20 +118,6 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * @return (int|null)[]
 	 */
-	public function findDateBoundaries(int $pollId): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->selectAlias($qb->func()->min('timestamp'), 'min')
-			->selectAlias($qb->func()->max('timestamp'), 'max')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
-
-		return $qb->executeQuery()->fetchAll()[0];
-	}
-
-	/**
-	 * @return (int|null)[]
-	 */
 	public function getOrderBoundaries(int $pollId): array {
 		$qb = $this->db->getQueryBuilder();
 
