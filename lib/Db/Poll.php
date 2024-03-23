@@ -195,17 +195,22 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'deleted' => $this->getDeleted(),
 			'expire' => $this->getExpire(),
 			'hideBookedUp' => $this->getHideBookedUp(),
-			'optionLimit' => $this->getOptionLimit(),
 			'proposalsExpire' => $this->getProposalsExpire(),
-			'showResults' => $this->getShowResults() === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->getShowResults(),
+			'showResults' => $this->getShowResults(),
 			'useNo' => $this->getUseNo(),
-			'voteLimit' => $this->getVoteLimit(),
-			'lastInteraction' => $this->getLastInteraction(),
-			'summary' => [
-				'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
-				'yesByCurrentUser' => $this->getCurrentUserYesVotes(),
-				'countVotes' => $this->getCurrentUserCountVotes(),
+			'limits' => [
+				'maxVotesPerOption' => $this->getOptionLimit(),
+				'maxVotesPerUser' => $this->getVoteLimit(),
+			],
+			'status' => [
+				'lastInteraction' => $this->getLastInteraction(),
+			],
+			'currentUserStatus' => [
 				'userRole' => $this->getUserRole(),
+				'isLocked' => boolval($this->getIsCurrentUserLocked()),
+				'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
+				'yesVotes' => $this->getCurrentUserYesVotes(),
+				'countVotes' => $this->getCurrentUserCountVotes(),
 			],
 		];
 	}
@@ -225,12 +230,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setDeleted($array['deleted'] ?? $this->getDeleted());
 		$this->setExpire($array['expire'] ?? $this->getExpire());
 		$this->setHideBookedUp($array['hideBookedUp'] ?? $this->getHideBookedUp());
-		$this->setOptionLimit($array['optionLimit'] ?? $this->getOptionLimit());
 		$this->setProposalsExpire($array['proposalsExpire'] ?? $this->getProposalsExpire());
 		$this->setShowResults($array['showResults'] ?? $this->getShowResults());
 		$this->setTitle($array['title'] ?? $this->getTitle());
 		$this->setUseNo($array['useNo'] ?? $this->getUseNo());
-		$this->setVoteLimit($array['voteLimit'] ?? $this->getVoteLimit());
+		$this->setOptionLimit($array['limits']['maxVotesPerOption'] ?? $this->getOptionLimit());
+		$this->setVoteLimit($array['limits']['maxVotesPerUser'] ?? $this->getVoteLimit());
 		return $this;
 	}
 
@@ -248,6 +253,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		if ($this->userMapper->getCurrentUser()->getId() === $this->getOwner()) {
 			return self::ROLE_OWNER;
 		}
+		if ($this->getIsCurrentUserLocked() && $this->userRole === self::ROLE_ADMIN) {
+			return self::ROLE_USER;
+		}
+
 		return $this->userRole;
 	}
 	
@@ -296,6 +305,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			$this->getProposalsExpire() > 0
 			&& $this->getProposalsExpire() < time()
 		);
+	}
+
+	public function getPollShowResults() {
+		// avoiding migration, expired has been renamed to closed 
+		return $this->showResults === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->showResults;
 	}
 
 	public function getDescription(): string {

@@ -105,7 +105,6 @@ export default {
 			poll: (state) => state.poll,
 			settings: (state) => state.settings.user,
 			currentUser: (state) => state.poll.acl.currentUser,
-			voteLimit: (state) => state.poll.voteLimit,
 		}),
 
 		...mapGetters({

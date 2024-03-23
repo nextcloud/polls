@@ -41,18 +41,25 @@ const defaultPoll = () => ({
 	allowMaybe: 0,
 	allowProposals: 'disallow',
 	proposalsExpire: 0,
-	voteLimit: 0,
-	optionLimit: 0,
 	showResults: 'always',
 	adminAccess: 0,
 	hideBookedUp: 0,
 	useNo: 1,
 	autoReminder: false,
 	revealParticipants: false,
-	orphanedVotes: 0,
-	summary: {
-		yesByCurrentUser: 0,
+	limits: {
+		maxVotesPerOption: 0,
+		maxVotesPerUser: 0,
+	},
+	status: {
+		lastInteraction: 0,
+	},
+	currentUserStatus: {
+		userRole: 'none',
+		isLocked: false,
 		orphanedVotes: 0,
+		yesVotes: 0,
+		countVotes: 0,
 	},
 	owner: {
 		userId: '',
@@ -76,6 +83,10 @@ const mutations = {
 
 	setProperty(state, payload) {
 		Object.assign(state, payload)
+	},
+
+	setLimit(state, payload) {
+		Object.assign(state.limits, payload)
 	},
 
 	setDescriptionSafe(state, payload) {

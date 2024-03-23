@@ -27,7 +27,7 @@
 		<CardLimitedVotes v-if="showLimitCard" />
 		<CardClosedPoll v-if="showClosedCard" />
 		<CardSendConfirmations v-if="showSendConfirmationsCard" />
-		<CardLockedShare v-if="shareLocked" />
+		<CardLockedShare v-if="isLocked" />
 		<CardRegister v-if="showRegisterCard" />
 	</div>
 </template>
@@ -56,11 +56,11 @@ export default {
 			allowEdit: (state) => state.poll.acl.permissions.edit,
 			allowVote: (state) => state.poll.acl.permissions.vote,
 			allowAddOptions: (state) => state.poll.acl.permissions.addOptions,
-			optionLimit: (state) => state.poll.optionLimit,
-			voteLimit: (state) => state.poll.voteLimit,
-			shareLocked: (state) => state.share.locked,
-			shareUserType: (state) => state.share.user.type,
+			maxVotesPerOption: (state) => state.poll.limits.maxVotesPerOption,
+			maxVotesPerUser: (state) => state.poll.limits.maxVotesPerUser,
 			optionsCount: (state) => state.options.list.length,
+			isLocked: (state) => state.poll.currentUserStatus.isLocked,
+			userRole: (state) => state.poll.currentUserStatus.userRole,
 		}),
 
 		...mapGetters({
@@ -87,14 +87,14 @@ export default {
 		},
 
 		showLimitCard() {
-			return this.allowVote && !this.closed && (this.optionLimit || this.voteLimit)
+			return this.allowVote && !this.closed && (this.maxVotesPerOption || this.maxVotesPerUser)
 		},
 
 		showRegisterCard() {
 			return (this.$route.name === 'publicVote'
-				&& ['public', 'email', 'contact'].includes(this.shareUserType)
+				&& ['public', 'email', 'contact'].includes(this.userRole)
 				&& !this.closed
-				&& !this.shareLocked
+				&& !this.isLocked
 				&& !!this.pollId
 			)
 		},
