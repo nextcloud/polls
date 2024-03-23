@@ -50,10 +50,10 @@ export default {
 
 		allowMaybe: {
 			get() {
-				return !!this.poll.allowMaybe
+				return this.poll.allowMaybe
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { allowMaybe: +value })
+				this.$store.commit('poll/setProperty', { allowMaybe: value })
 				this.$emit('change')
 			},
 		},

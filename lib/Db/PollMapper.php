@@ -193,6 +193,7 @@ class PollMapper extends QBMapper {
 	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'shares';
 		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, "") AS user_role'));
+		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked');
 
 		$qb->leftJoin(
 			$fromAlias,
@@ -201,6 +202,7 @@ class PollMapper extends QBMapper {
 			$qb->expr()->andX(
 				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
 				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+				$qb->expr()->eq($joinAlias . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
 	}
@@ -232,7 +234,7 @@ class PollMapper extends QBMapper {
 	 * the min value is the current time,
 	 * the max value is null
 	 */
-	protected function joinCurrentUserVotes(IQueryBuilder &$qb, string $fromAlias, $currentUserId): void {
+	protected function joinCurrentUserVotes(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'user_vote';
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->count($joinAlias . '.vote_answer'), 'current_user_votes');

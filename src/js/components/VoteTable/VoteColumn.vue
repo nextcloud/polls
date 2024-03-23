@@ -25,7 +25,7 @@
 		<OptionItem :option="option" :poll-type="poll.type" :display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
 
 		<Counter v-if="permissions.seeResults"
-			:show-maybe="!!poll.allowMaybe"
+			:show-maybe="poll.allowMaybe"
 			:option="option" />
 
 		<CalendarPeek v-if="showCalendarPeek"
@@ -105,7 +105,6 @@ export default {
 			poll: (state) => state.poll,
 			settings: (state) => state.settings.user,
 			currentUser: (state) => state.poll.acl.currentUser,
-			voteLimit: (state) => state.poll.voteLimit,
 		}),
 
 		...mapGetters({

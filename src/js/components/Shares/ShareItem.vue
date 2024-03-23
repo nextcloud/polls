@@ -22,7 +22,9 @@
 
 <template>
 	<div :class="{ deleted: share.deleted }">
-		<UserItem v-bind="userItemProps">
+		<UserItem v-bind="userItemProps"
+			:deleted-state="share.deleted"
+			:locked-state="share.locked">
 			<template #status>
 				<div v-if="share.voted">
 					<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />

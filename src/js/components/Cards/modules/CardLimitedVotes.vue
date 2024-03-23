@@ -24,19 +24,19 @@
 	<CardDiv :heading="t('polls', 'Limited votes.')"
 		:type="cardType">
 		<ul>
-			<li v-if="optionLimit">
-				{{ n('polls', '%n vote is allowed per option.', '%n votes are allowed per option.', optionLimit) }}
+			<li v-if="maxVotesPerOption">
+				{{ n('polls', '%n vote is allowed per option.', '%n votes are allowed per option.', maxVotesPerOption) }}
 			</li>
-			<li v-if="voteLimit">
-				{{ n('polls', '%n vote is allowed per user.', '%n votes are allowed per user.', voteLimit) }}
+			<li v-if="maxVotesPerUser">
+				{{ n('polls', '%n vote is allowed per user.', '%n votes are allowed per user.', maxVotesPerUser) }}
 				{{ n('polls', 'You have %n vote left.', 'You have %n votes left.', votesLeft) }}
 			</li>
-			<div v-if="orphanedVotes && voteLimit">
+			<div v-if="orphanedVotes && maxVotesPerUser">
 				<b>{{ orphanedVotesText }}</b>
 			</div>
 		</ul>
 
-		<template v-if="orphanedVotes && voteLimit" #button>
+		<template v-if="orphanedVotes && maxVotesPerUser" #button>
 			<ActionDeleteOrphanedVotes />
 		</template>
 	</CardDiv>
@@ -55,10 +55,10 @@ export default {
 
 	computed: {
 		...mapState({
-			orphanedVotes: (state) => state.poll.summary.orphanedVotes,
-			yesByCurrentUser: (state) => state.poll.summary.yesByCurrentUser,
-			optionLimit: (state) => state.poll.optionLimit,
-			voteLimit: (state) => state.poll.voteLimit,
+			orphanedVotes: (state) => state.poll.currentUserStatus.orphanedVotes,
+			yesVotes: (state) => state.poll.currentUserStatus.yesVotes,
+			maxVotesPerOption: (state) => state.poll.limits.maxVotesPerOption,
+			maxVotesPerUser: (state) => state.poll.limits.maxVotesPerUser,
 		}),
 
 		...mapGetters({
@@ -74,13 +74,13 @@ export default {
 		},
 
 		votesLeft() {
-			return (this.voteLimit - this.yesByCurrentUser) > 0
-				? this.voteLimit - this.yesByCurrentUser
+			return (this.maxVotesPerUser - this.yesVotes) > 0
+				? this.maxVotesPerUser - this.yesVotes
 				: 0
 		},
 
 		cardType() {
-			return this.voteLimit && this.votesLeft < 1 ? 'error' : 'info'
+			return this.maxVotesPerUser && this.votesLeft < 1 ? 'error' : 'info'
 		},
 
 	},

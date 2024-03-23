@@ -26,8 +26,8 @@
 			{{ t('polls', 'Limit "Yes" votes per user') }}
 		</NcCheckboxRadioSwitch>
 
-		<InputDiv v-if="voteLimit"
-			v-model="voteLimit"
+		<InputDiv v-if="maxVotesPerUser"
+			v-model="maxVotesPerUser"
 			class="indented"
 			type="number"
 			inputmode="numeric"
@@ -56,17 +56,17 @@ export default {
 
 		useVoteLimit: {
 			get() {
-				return (this.poll.voteLimit !== 0)
+				return (this.poll.limits.maxVotesPerUser !== 0)
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { voteLimit: value ? 1 : 0 })
+				this.$store.commit('poll/setLimit', { maxVotesPerUser: value ? 1 : 0 })
 				this.$emit('change')
 			},
 		},
 
-		voteLimit: {
+		maxVotesPerUser: {
 			get() {
-				return this.poll.voteLimit
+				return this.poll.limits.maxVotesPerUser
 			},
 			set(value) {
 				if (!this.useVoteLimit) {
@@ -76,7 +76,7 @@ export default {
 				} else if (value > this.countOptions) {
 					value = 1
 				}
-				this.$store.commit('poll/setProperty', { voteLimit: value })
+				this.$store.commit('poll/setLimit', { maxVotesPerUser: value })
 				this.$emit('change')
 			},
 		},

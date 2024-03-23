@@ -163,15 +163,15 @@ class Share extends EntityWithUser implements JsonSerializable {
 			'pollId' => $this->getPollId(),
 			'userId' => $this->getUserId(),
 			'emailAddress' => $this->getEmailAddress(),
-			'invitationSent' => $this->getInvitationSent(),
-			'reminderSent' => $this->getReminderSent(),
-			'locked' => $this->getDeleted() ? 0 : $this->getLocked(),
+			'invitationSent' => boolval($this->getInvitationSent()),
+			'reminderSent' => boolval($this->getReminderSent()),
+			'locked' => boolval($this->getDeleted() ? 0 : $this->getLocked()),
 			'label' => $this->getLabel(),
 			'URL' => $this->getURL(),
 			'showLogin' => $this->appSettings->getBooleanSetting(AppSettings::SETTING_SHOW_LOGIN),
 			'publicPollEmail' => $this->getPublicPollEmail(),
-			'voted' => $this->getVoted(),
-			'deleted' => $this->getDeleted(),
+			'voted' => boolval($this->getVoted()),
+			'deleted' => boolval($this->getDeleted()),
 			'user' => $this->getUser()->getRichUserArray(),
 		];
 	}
@@ -188,6 +188,16 @@ class Share extends EntityWithUser implements JsonSerializable {
 	 */
 	public function getUserId(): string {
 		return $this->userId;
+	}
+
+	/**
+	 * Get userId of share user
+	 */
+	public function getType(): string {
+		if (($this->getDeleted() || $this->getLocked()) && $this->type === self::TYPE_ADMIN) {
+			return self::TYPE_USER;
+		}
+		return $this->type;
 	}
 
 	/**

@@ -86,6 +86,14 @@ export default {
 			type: Boolean,
 			default: false,
 		},
+		deletedState: {
+			type: Boolean,
+			default: false,
+		},
+		lockedState: {
+			type: Boolean,
+			default: false,
+		},
 		hideNames: {
 			type: Boolean,
 			default: false,
@@ -216,6 +224,8 @@ export default {
 
 		descriptionComputed() {
 			if (this.condensed) return ''
+			if (this.deletedState) return t('polls', '(deleted)')
+			if (this.lockedState) return t('polls', '(locked)')
 			if (this.description !== '') return this.description
 			if (this.typeComputed === 'public') return this.publicShareDescription
 			if (this.typeComputed === 'deleted') return t('polls', 'The participant got removed from this poll')

@@ -44,10 +44,10 @@ export default {
 
 		anonymous: {
 			get() {
-				return !!this.poll.anonymous
+				return this.poll.anonymous
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { anonymous: +value })
+				this.$store.commit('poll/setProperty', { anonymous: value })
 				this.$emit('change')
 			},
 		},

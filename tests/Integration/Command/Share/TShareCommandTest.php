@@ -65,8 +65,8 @@ trait TShareCommandTest {
 		/** @var Share|MockObject $share */
 		$share = $this->createMock(
 			Share::class,
-			['getId', 'getPollId', 'getType', 'getEmailAddress', 'getToken'],
-			['getUserId']
+			['getId', 'getPollId', 'getEmailAddress', 'getToken'],
+			['getType', 'getUserId']
 		);
 
 		$id = ++$this->lastShareId;
