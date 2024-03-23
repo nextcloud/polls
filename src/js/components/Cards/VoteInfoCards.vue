@@ -27,7 +27,7 @@
 		<CardLimitedVotes v-if="showLimitCard" />
 		<CardClosedPoll v-if="showClosedCard" />
 		<CardSendConfirmations v-if="showSendConfirmationsCard" />
-		<CardLockedUser v-if="isLocked" />
+		<CardLocked v-if="isLocked" />
 		<CardRegister v-if="showRegisterCard" />
 	</div>
 </template>
