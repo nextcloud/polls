@@ -1,6 +1,9 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [6.2.0] - tbd
+### Fix
+ - Fix preventing option suggestions
 ## [6.1.6] - 2024-02-27
 ### Fix
  - Fixing vanishing votes after shifting date options or creating sequences
