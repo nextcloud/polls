@@ -25,7 +25,7 @@
 		<OptionItem :option="option" :poll-type="poll.type" :display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
 
 		<Counter v-if="permissions.seeResults"
-			:show-maybe="!!poll.allowMaybe"
+			:show-maybe="poll.allowMaybe"
 			:option="option" />
 
 		<CalendarPeek v-if="showCalendarPeek"

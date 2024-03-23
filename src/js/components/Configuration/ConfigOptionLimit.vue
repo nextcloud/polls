@@ -87,10 +87,10 @@ export default {
 
 		hideBookedUp: {
 			get() {
-				return (this.poll.hideBookedUp > 0)
+				return (this.poll.hideBookedUp)
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { hideBookedUp: +value })
+				this.$store.commit('poll/setProperty', { hideBookedUp: value })
 				this.$emit('change')
 			},
 		},

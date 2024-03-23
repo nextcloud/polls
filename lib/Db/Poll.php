@@ -186,18 +186,18 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'descriptionSafe' => $this->getDescriptionSafe(),
 			'owner' => $this->getUser(),
 			'access' => $this->getAccess(),
-			'allowComment' => $this->getAllowComment(),
-			'allowMaybe' => $this->getAllowMaybe(),
+			'allowComment' => boolval($this->getAllowComment()),
+			'allowMaybe' => boolval($this->getAllowMaybe()),
 			'allowProposals' => $this->getAllowProposals(),
-			'anonymous' => $this->getAnonymous(),
+			'anonymous' => boolval($this->getAnonymous()),
 			'autoReminder' => $this->getAutoReminder(),
 			'created' => $this->getCreated(),
-			'deleted' => $this->getDeleted(),
+			'deleted' => boolval($this->getDeleted()),
 			'expire' => $this->getExpire(),
-			'hideBookedUp' => $this->getHideBookedUp(),
+			'hideBookedUp' => boolval($this->getHideBookedUp()),
 			'proposalsExpire' => $this->getProposalsExpire(),
 			'showResults' => $this->getShowResults(),
-			'useNo' => $this->getUseNo(),
+			'useNo' => boolval($this->getUseNo()),
 			'limits' => [
 				'maxVotesPerOption' => $this->getOptionLimit(),
 				'maxVotesPerUser' => $this->getVoteLimit(),
@@ -223,7 +223,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setAllowComment($array['allowComment'] ?? $this->getAllowComment());
 		$this->setAllowMaybe($array['allowMaybe'] ?? $this->getAllowMaybe());
 		$this->setAllowProposals($array['allowProposals'] ?? $this->getAllowProposals());
-		$this->setAdminAccess($array['adminAccess'] ?? $this->getAdminAccess());
 		$this->setAnonymous($array['anonymous'] ?? $this->getAnonymous());
 		$this->setAutoReminder($array['autoReminder'] ?? $this->getAutoReminder());
 		$this->setDescription($array['description'] ?? $this->getDescription());
@@ -308,7 +307,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getPollShowResults() {
-		// avoiding migration, expired has been renamed to closed 
+		// avoiding migration, expired has been renamed to closed
 		return $this->showResults === 'expired' ? Poll::SHOW_RESULTS_CLOSED : $this->showResults;
 	}
 

@@ -53,7 +53,7 @@ export default {
 				return !this.poll.useNo
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { useNo: +(!value) })
+				this.$store.commit('poll/setProperty', { useNo: !value })
 				this.$emit('change')
 			},
 		},

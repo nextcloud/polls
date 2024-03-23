@@ -44,10 +44,10 @@ export default {
 
 		allowComment: {
 			get() {
-				return !!this.poll.allowComment
+				return this.poll.allowComment
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { allowComment: +value })
+				this.$store.commit('poll/setProperty', { allowComment: value })
 				this.$emit('change')
 			},
 		},

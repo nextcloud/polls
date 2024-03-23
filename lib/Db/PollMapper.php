@@ -234,7 +234,7 @@ class PollMapper extends QBMapper {
 	 * the min value is the current time,
 	 * the max value is null
 	 */
-	protected function joinCurrentUserVotes(IQueryBuilder &$qb, string $fromAlias, $currentUserId): void {
+	protected function joinCurrentUserVotes(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'user_vote';
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->count($joinAlias . '.vote_answer'), 'current_user_votes');
