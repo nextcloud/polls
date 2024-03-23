@@ -23,9 +23,6 @@
 <template>
 	<CardDiv :type="cardType">
 		{{ cardText }}
-		<template #button>
-			<ActionOpenSharesSidebar />
-		</template>
 	</CardDiv>
 </template>
 
@@ -33,11 +30,10 @@
 import { CardDiv } from '../../Base/index.js'
 
 export default {
-	name: 'CardLockedShare',
+	name: 'CardLocked',
 
 	components: {
 		CardDiv,
-		ActionOpenSharesSidebar: () => import('../../Actions/modules/ActionOpenSharesSidebar.vue'),
 	},
 
 	data() {
@@ -48,7 +44,7 @@ export default {
 
 	computed: {
 		cardText() {
-			return this.$route.name === 'publicVote' ? t('polls', 'This share is locked and allows only read access. Registering is not possible.') : t('polls', 'Your share is locked and you have just read access to this poll.')
+			return this.$route.name === 'publicVote' ? t('polls', 'This share is locked and allows only read access. Registering is not possible.') : t('polls', 'Voting is locked and you have just read access to this poll.')
 		},
 	},
 }

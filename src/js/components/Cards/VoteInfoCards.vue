@@ -27,7 +27,7 @@
 		<CardLimitedVotes v-if="showLimitCard" />
 		<CardClosedPoll v-if="showClosedCard" />
 		<CardSendConfirmations v-if="showSendConfirmationsCard" />
-		<CardLockedShare v-if="isLocked" />
+		<CardLockedUser v-if="isLocked" />
 		<CardRegister v-if="showRegisterCard" />
 	</div>
 </template>
@@ -42,7 +42,7 @@ export default {
 		CardAddProposals: () => import('./modules/CardAddProposals.vue'),
 		CardClosedPoll: () => import('./modules/CardClosedPoll.vue'),
 		CardLimitedVotes: () => import('./modules/CardLimitedVotes.vue'),
-		CardLockedShare: () => import('./modules/CardLockedShare.vue'),
+		CardLocked: () => import('./modules/CardLocked.vue'),
 		CardRegister: () => import('./modules/CardRegister.vue'),
 		CardSendConfirmations: () => import('./modules/CardSendConfirmations.vue'),
 		CardUnpublishedPoll: () => import('./modules/CardUnpublishedPoll.vue'),
