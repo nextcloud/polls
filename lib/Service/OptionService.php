@@ -95,6 +95,9 @@ class OptionService {
 	public function add(?int $pollId = null, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_OPTIONS_ADD);
 
+		//quick fix for missing pollIds in public polls
+		$pollId = $this->acl->getPollId();
+
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
 		$order = $this->getHighestOrder($pollId) + 1;
@@ -108,6 +111,7 @@ class OptionService {
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
 		} catch (Exception $e) {
+			// \OC::$this->getLogger()->error(json_encode($this->option));
 			
 			// TODO: Change exception catch to actual exception
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
