@@ -59,8 +59,8 @@ class OptionController extends BaseController {
 	 * Add a new option
 	 * @param int $pollId poll id
 	 * @param int $timestamp timestamp for datepoll
-	 * @param string $pollOptionText Option text for text poll
-	 * @param int duration duration of option
+	 * @param string $text Option text for text poll
+	 * @param int $duration duration of option
 	 */
 	#[NoAdminRequired]
 	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
