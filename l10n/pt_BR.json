@@ -254,7 +254,6 @@
     "_You have %n vote left._::_You have %n votes left._" : ["Você tem %n votos restantes.","Você tem %n votos restantes.","Você tem %n votos restantes."],
     "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n votos órfãos de opções provavelmente excluídas estão possivelmente bloqueando seu limite de votos.","%n votos órfãos de opções provavelmente excluídas estão possivelmente bloqueando seu limite de votos.","%n votos órfãos de opções provavelmente excluídas estão possivelmente bloqueando seu limite de votos."],
     "This share is locked and allows only read access. Registering is not possible." : "Este compartilhamento está bloqueado e permite apenas acesso de leitura. O registro não é possível.",
-    "Your share is locked and you have just read access to this poll." : "Seu compartilhamento está bloqueado e você acabou de ler o acesso a esta enquete.",
     "To participate, register with your email address and a name." : "Para participar, registre-se com seu endereço de e-mail e um nome.",
     "To participate, register a name and optionally with your email address." : "Para participar, registre um nome e opcionalmente seu endereço de e-mail.",
     "To participate, register with a name." : "Para participar, registre-se com um nome.",

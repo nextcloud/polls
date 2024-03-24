@@ -237,7 +237,6 @@ OC.L10N.register(
     "Due to possible performance issues {countHiddenParticipants} voters are hidden." : "Kvůli možným problémům s výkonem je skryto {countHiddenParticipants} hlasujících.",
     "You can reveal them, but you may expect an unwanted long loading time." : "Je možné si je nechat zobrazit, ale očekávejte neúměrně dlouhou dobu načítání.",
     "This share is locked and allows only read access. Registering is not possible." : "Sdílení je uzamčeno a umožňuje přístup pouze pro čtení. Registrace není možná",
-    "Your share is locked and you have just read access to this poll." : "Vaše sdílení je uzamčené a k této anketě máte přístup pouze pro čtení.",
     "To participate, register with your email address and a name." : "Pokud se chcete zúčastnit, zaregistrujte se pomocí své e-mailové adresy a jména.",
     "To participate, register a name and optionally with your email address." : "Pokud se chcete zúčastnit, zaregistrujte se jménem a případně připojte i svou e-mailovou adresu.",
     "To participate, register with a name." : "Pokud se chcete zúčastnit, zaregistrujte se jménem.",

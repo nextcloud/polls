@@ -254,7 +254,6 @@
     "_You have %n vote left._::_You have %n votes left._" : ["مازال عندك %n صوتاً.","مازال عندك %n صوتاً.","مازال عندك %n صوتاً.","مازال عندك %n أصوات.","مازال عندك %n صوتاً.","مازال عندك %n صوتاً."],
     "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n صوتاً متيتماً بسبب خيارات محذوفة هي غالباً السبب في عرقلة حدود تصويتك.","%nصوتاً متيتماً بسبب خيارات محذوفة هي غالباً السبب في عرقلة حدود تصويتك.","%nصوتاً متيتماً بسبب خيارات محذوفة هي غالباً السبب في عرقلة حدود تصويتك.","%n أصوات متيتمة بسبب خيارات محذوفة هي غالباً السبب في عرقلة حدود تصويتك.","%n صوتاً متيتماً بسبب خيارات محذوفة هي غالباً السبب في عرقلة حدود تصويتك.","%n صوتاً متيتماً بسبب خيارات محذوفة هي غالباً السبب في عرقلة حدود تصويتك."],
     "This share is locked and allows only read access. Registering is not possible." : "هذا الاستبيان مقفل، و يمكنك فقط قراءته. التسجيل غير ممكن.",
-    "Your share is locked and you have just read access to this poll." : "مشاركتك مقفلة، و يمكنك فقط قراءة الاستبيان.",
     "To participate, register with your email address and a name." : "للمُساهمة، سجِّل بريدك الالكتروني و اسماً.",
     "To participate, register a name and optionally with your email address." : "للمُساهمة، سجِّل اسماً و بريدك الالكتروني اختيارياً.",
     "To participate, register with a name." : "للمُساهمة، سجِّل اسماً.",

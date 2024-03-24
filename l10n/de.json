@@ -245,7 +245,6 @@
     "Due to possible performance issues {countHiddenParticipants} voters are hidden." : "Aufgrund möglicher Leistungsprobleme werden {countHiddenParticipants} Abstimmende ausgeblendet.",
     "You can reveal them, but you may expect an unwanted long loading time." : "Du kannst diese zwar anzeigen, musst aber mit einer ungewollt langen Ladezeit rechnen.",
     "This share is locked and allows only read access. Registering is not possible." : "Diese Freigabe ist gesperrt und erlaubt nur den Lesezugriff. Eine Registrierung ist nicht möglich.",
-    "Your share is locked and you have just read access to this poll." : "Deine Freigabe ist gesperrt und Du hast nur Lesezugriff auf diese Umfrage.",
     "To participate, register with your email address and a name." : "Um teilzunehmen, registriere Dich mit Deiner E-Mail-Adresse und einem Namen.",
     "To participate, register a name and optionally with your email address." : "Um teilzunehmen, registriere Dich mit einem Namen und optional Deiner E-Mail-Adresse.",
     "To participate, register with a name." : "Um teilzunehmen, registriere Dich sich mit einem Namen",

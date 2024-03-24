@@ -252,7 +252,6 @@
     "_%n vote is allowed per user._::_%n votes are allowed per user._" : ["%n vote est autorisé par l'utilisateur.","%n votes sont autorisés par utilisateur.","%n votes sont autorisés par utilisateur."],
     "_You have %n vote left._::_You have %n votes left._" : ["Il vous reste %n vote.","Il vous reste %n votes.","Il vous reste %n votes."],
     "This share is locked and allows only read access. Registering is not possible." : "Le partage est verrouillé et ne permet que l'accès en lecture. S'inscrire n'est pas possible.",
-    "Your share is locked and you have just read access to this poll." : "Votre partage est verrouillé et vous ne pouvez qu'accéder à ce sondage en lecture seule.",
     "To participate, register with your email address and a name." : "Pour participer, inscrivez-vous avec votre adresse e-mail et votre nom.",
     "To participate, register a name and optionally with your email address." : "Pour participer, inscrivez-vous avec un nom et éventuellement votre adresse e-mail.",
     "To participate, register with a name." : "Pour participer, inscrivez-vous avec un nom.",

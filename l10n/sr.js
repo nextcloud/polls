@@ -256,7 +256,6 @@ OC.L10N.register(
     "_You have %n vote left._::_You have %n votes left._" : ["Преостао вам је још %n глас.","Преостало вам је још %n гласа.","Преостало вам је још %n гласова."],
     "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["Вашу границу гласова највероватније блокира %n заостали глас неке можда обрисане опције.","Вашу границу гласова највероватније блокира %n заостала гласа неке можда обрисане опције.","Вашу границу гласова највероватније блокира %n заосталих гласова неке можда обрисане опције."],
     "This share is locked and allows only read access. Registering is not possible." : "Ово дељење је закључано и можете само да га читате. Регистрација није могућа.",
-    "Your share is locked and you have just read access to this poll." : "Ваше дељење је закључано и имате право само да читате ово гласање.",
     "To participate, register with your email address and a name." : "Ако желите да учествујете, региструјте се својом и-мејл адресом и именом.",
     "To participate, register a name and optionally with your email address." : "Ако желите да учествујете, региструјте се својим именом и ако желите и и-мејл адресом.",
     "To participate, register with a name." : "Ако желите да учествујете, региструјте се својом и-мејл адресом и именом.",

@@ -256,7 +256,6 @@ OC.L10N.register(
     "_You have %n vote left._::_You have %n votes left._" : ["You have %n vote left.","You have %n votes left."],
     "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n orphaned vote of a probaly deleted option is possibly blocking your vote limit.","%n orphaned votes of probaly deleted options are possibly blocking your vote limit."],
     "This share is locked and allows only read access. Registering is not possible." : "This share is locked and allows only read access. Registering is not possible.",
-    "Your share is locked and you have just read access to this poll." : "Your share is locked and you have just read access to this poll.",
     "To participate, register with your email address and a name." : "To participate, register with your email address and a name.",
     "To participate, register a name and optionally with your email address." : "To participate, register a name and optionally with your email address.",
     "To participate, register with a name." : "To participate, register with a name.",
