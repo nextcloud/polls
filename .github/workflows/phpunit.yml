@@ -38,17 +38,16 @@ jobs:
         with:
           server-version: ${{ matrix.server-versions }}
           php-version: ${{ matrix.php-versions }}
-          php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: sqlite
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.xml
+        run: composer run phpunit:unit
 
       - name: PHPUnit integration
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.integration.xml
+        run: composer run phpunit:integration
 
   mysql:
     runs-on: ubuntu-latest
@@ -80,17 +79,16 @@ jobs:
         with:
           server-version: ${{ matrix.server-versions }}
           php-version: ${{ matrix.php-versions }}
-          php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: 'mysql'
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.xml
+        run: composer run phpunit:unit
 
       - name: PHPUnit integration
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.integration.xml
+        run: composer run phpunit:integration
 
   pgsql:
     runs-on: ubuntu-latest
@@ -124,14 +122,13 @@ jobs:
         with:
           server-version: ${{ matrix.server-versions }}
           php-version: ${{ matrix.php-versions }}
-          php-tools: phpunit:9
           server-path: ${{ env.SERVER_PATH }}
           db-engine: 'pgsql'
 
       - name: PHPUnit
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.xml
+        run: composer run phpunit:unit
 
       - name: PHPUnit integration
         working-directory: ${{ env.SERVER_PATH }}/apps/${{ env.APP_NAME }}
-        run: phpunit -c tests/phpunit.integration.xml
+        run: composer run phpunit:integration
