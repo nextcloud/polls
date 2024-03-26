@@ -35,6 +35,7 @@
 		}
 	},
 	"require-dev": {
+		"bamarni/composer-bin-plugin": "^1.8",
 		"doctrine/dbal": "^3.6",
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
@@ -45,10 +46,21 @@
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "psalm --no-diff",
+		"phpunit:unit": "phpunit -c tests/phpunit.xml",
+		"phpunit:integration": "phpunit -c tests/phpunit.xml",
 		"psalm:fix": "psalm --alter --php-version=8.0 --issues=MissingReturnType,InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
 		"psalm:info": "psalm --no-diff --show-info=true",
 		"psalm:baseline": "psalm --set-baseline=psalm-baseline.xml",
-		"psalm:baseline:update": "psalm --update-baseline"
+		"psalm:baseline:update": "psalm --update-baseline",
+		"bin": "echo 'bin not installed'",
+		"post-install-cmd": [
+			"@composer bin all install --ansi",
+			"composer dump-autoload"
+		],
+		"post-update-cmd": [
+			"@composer bin all update --ansi",
+			"composer dump-autoload"
+		]
 	},
 	"require": {
 		"league/commonmark": "^2.1",
