@@ -484,6 +484,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Batu data-galdeketa anitz ikuspegi bakarrean",
     "Relevant polls" : "Bozketa esanguratsuak",
     "Error loading poll list" : "Errorea bozketa zerrenda kargatzean",
+    "New poll" : "Galdeketa berria",
     "Combine polls" : "Batu galdeketak",
     "Polls settings" : "Galdeketa ezarpenak",
     "Error cloning poll." : "Errorea bozketa klonatzean.",
