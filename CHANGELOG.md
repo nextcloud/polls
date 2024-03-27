@@ -1,7 +1,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [7.0.0] - tbd
+## [7.0.0] - 2024-03-27
 ### changes
  - Support for Nextcloud 29
  - Removed PHP 8.0 Support
