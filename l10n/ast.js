@@ -7,6 +7,7 @@ OC.L10N.register(
     "User" : "Usuariu",
     "Switch to list view" : "Cambiar a la vista de llista",
     "Delete" : "Desaniciar",
+    "Register" : "Rexistrase",
     "Unknown error" : "Fallu desconocíu",
     "Delete comment" : "Desaniciar el comentariu",
     "Title" : "Tñitulu",
