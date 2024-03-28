@@ -70,7 +70,7 @@ class Preferences extends Entity implements JsonSerializable {
 	}
 
 	public function getPreferences_decoded(): mixed {
-		return json_decode($this->getPreferences());
+		return json_decode($this->getPreferences() ?? '');
 	}
 
 	/**
