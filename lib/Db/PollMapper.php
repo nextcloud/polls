@@ -179,6 +179,7 @@ class PollMapper extends QBMapper {
 			->from($this->getTableName(), self::TABLE);
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
+		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$qb->groupBy(self::TABLE . '.id');
 		return $qb;
 	}
