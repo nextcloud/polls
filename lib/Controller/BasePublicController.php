@@ -27,6 +27,7 @@ namespace OCA\Polls\Controller;
 
 use Closure;
 use OCA\Polls\AppConstants;
+use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Model\Acl;
@@ -46,6 +47,7 @@ class BasePublicController extends Controller {
 		IRequest $request,
 		protected ISession $session,
 		protected Acl $acl,
+		protected ShareMapper $shareMapper,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -98,6 +100,13 @@ class BasePublicController extends Controller {
 	}
 
 	private function updateSessionToken(string $token): void {
+		if (!$token) {
+			$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
+			$this->session->remove(AppConstants::SESSION_KEY_SHARE_TYPE);
+			return;
+		}
+		$share = $this->shareMapper->findByToken($token);
 		$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
+		$this->session->set(AppConstants::SESSION_KEY_SHARE_TYPE, $share->getType());
 	}
 }

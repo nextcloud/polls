@@ -44,6 +44,7 @@ class RequestAttributesMiddleware extends Middleware {
 		if (!$this->hasAttribute($reflectionMethod, PublicPage::class)) {
 			// authenticated session don't use share tokens
 			$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
+			$this->session->remove(AppConstants::SESSION_KEY_SHARE_TYPE);
 		}
 
 	}

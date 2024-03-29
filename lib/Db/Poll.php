@@ -31,6 +31,7 @@ use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
+use OCP\ISession;
 use OCP\IURLGenerator;
 
 /**
@@ -117,6 +118,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	private IURLGenerator $urlGenerator;
 	protected UserMapper $userMapper;
 	private VoteMapper $voteMapper;
+	private ISession $session;
 
 	// schema columns
 	public $id = null;
@@ -170,6 +172,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->voteMapper = Container::queryClass(VoteMapper::class);
+		$this->session = Container::queryClass(ISession::class);
 	}
 
 	/**
@@ -254,6 +257,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 		if ($this->getIsCurrentUserLocked() && $this->userRole === self::ROLE_ADMIN) {
 			return self::ROLE_USER;
+		}
+
+		if ($this->session->get(AppConstants::SESSION_KEY_SHARE_TYPE) === Share::TYPE_PUBLIC) {
+			return Share::TYPE_PUBLIC;
 		}
 
 		return $this->userRole;
