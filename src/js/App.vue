@@ -22,9 +22,9 @@
 
 <template>
 	<NcContent app-name="polls" :class="appClass">
-		<router-view v-if="getCurrentUser()" name="navigation" />
+		<router-view v-if="useNavigation" name="navigation" />
 		<router-view />
-		<router-view v-if="permissions.edit || permissions.comment" name="sidebar" />
+		<router-view v-if="useSidebar" name="sidebar" />
 		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
@@ -77,6 +77,16 @@ export default {
 					edit: this.permissions.edit,
 				},
 			]
+		},
+
+		useNavigation() {
+			return this.getCurrentUser()
+		},
+
+		useSidebar() {
+			return this.permissions.edit
+				|| this.permissions.comment
+				|| this.$route.name === 'combo'
 		},
 	},
 
