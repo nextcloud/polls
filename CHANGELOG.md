@@ -1,13 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [7.0.2] - 2024-03-29
+### Fix
+ - Combo view was not usable
 ## [7.0.1] - 2024-03-29
-### changes
+### Fix
  - Fix database error with PostgreSQL
  - Fix public poll access
 
 ## [7.0.0] - 2024-03-27
-### changes
+### Changes
  - Support for Nextcloud 29
  - Removed PHP 8.0 Support
  - Performance optimizations
