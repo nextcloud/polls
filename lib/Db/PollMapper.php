@@ -174,8 +174,6 @@ class PollMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			// TODO: check if this is necessary, in case of empty table to avoid possibly nulled columns
-			// ->groupBy(self::TABLE . '.id')
 			->from($this->getTableName(), self::TABLE);
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
@@ -194,7 +192,7 @@ class PollMapper extends QBMapper {
 		$joinAlias = 'shares';
 		$emptyString = $qb->createNamedParameter("", IQueryBuilder::PARAM_STR);
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type,'. $emptyString . ') AS user_role'));
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, '. $emptyString . ') AS user_role'));
 		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked');
 
 		$qb->leftJoin(
@@ -207,7 +205,7 @@ class PollMapper extends QBMapper {
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
-		$qb->addGroupBy($joinAlias . '.type');
+		$qb->addGroupBy($fromAlias . '.user_role');
 		$qb->addGroupBy($joinAlias . '.locked');
 	}
 
