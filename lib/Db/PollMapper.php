@@ -175,15 +175,12 @@ class PollMapper extends QBMapper {
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE);
+
+		$qb->groupBy(self::TABLE . '.id');
+
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
-		$joinUserRole = $this->joinUserRole($qb, self::TABLE, $currentUserId);
-
-		$qb->groupBy(
-			self::TABLE . '.id',
-			$joinUserRole . '.type',
-			$joinUserRole . '.locked',
-		);
+		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		return $qb;
 	}
 
@@ -193,7 +190,7 @@ class PollMapper extends QBMapper {
 	 * the min value is the current time,
 	 * the max value is null
 	 */
-	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): string {
+	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'shares';
 		$emptyString = $qb->createNamedParameter("", IQueryBuilder::PARAM_STR);
 
@@ -210,7 +207,11 @@ class PollMapper extends QBMapper {
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
-		return $joinAlias;
+
+		$qb->addGroupBy(
+			$joinAlias . '.type',
+			$joinAlias . '.locked',
+		);
 	}
 
 	/**

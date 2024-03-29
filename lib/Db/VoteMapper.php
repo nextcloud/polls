@@ -120,8 +120,8 @@ class VoteMapper extends QBMapperWithUser {
 			->where(
 				$qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			);
-		$qb->addGroupBy(self::TABLE . '.user_id', self::TABLE . '.poll_id');
-
+		$qb->groupBy(self::TABLE . '.user_id', self::TABLE . '.poll_id');
+		\OC::$server->getLogger()->error($qb->getSQL());
 		return $this->findEntities($qb);
 	}
 
