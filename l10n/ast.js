@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Encuestes",
     "Circle" : "Círculu",
     "Group" : "Grupu",
     "Contact" : "Contautu",
@@ -17,9 +18,11 @@ OC.L10N.register(
     "Email address" : "Direición de corréu electrónicu",
     "No" : "Non",
     "OK" : "Normal",
+    "Week" : "Selmana",
     "Add" : "Amestar",
     "Submit" : "Unviar",
     "Close" : "Zarrar",
+    "Private poll" : "Encuesta privada",
     "_%n Participant_::_%n Participants_" : ["%n participante","%n participantes"],
     "Access" : "Accesu",
     "Owner" : "Propietariu",
