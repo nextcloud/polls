@@ -1,6 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [7.0.1] - 2024-03-29
+### changes
+ - Fix database error with PostgreSQL
+ - Fix public poll access
+
 ## [7.0.0] - 2024-03-27
 ### changes
  - Support for Nextcloud 29
