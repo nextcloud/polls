@@ -72,6 +72,15 @@ class PollMapperTest extends UnitTestCase {
 	/**
 	 * Delete the previously created entry from the database.
 	 */
+	public function testFind() {
+		foreach ($this->polls as $poll) {
+			$this->assertInstanceOf(Poll::class, $this->pollMapper->find($poll->getId()));
+		}
+	}
+
+	/**
+	 * Delete the previously created entry from the database.
+	 */
 	public function testDelete() {
 		foreach ($this->polls as $poll) {
 			$this->assertInstanceOf(Poll::class, $this->pollMapper->delete($poll));

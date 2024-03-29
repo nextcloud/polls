@@ -58,7 +58,7 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-		->from($this->getTableName(), self::TABLE)
+			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 
@@ -80,7 +80,7 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-		->from($this->getTableName(), self::TABLE)
+			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.type', $qb->createNamedParameter(Share::TYPE_GROUP, IQueryBuilder::PARAM_STR)));
@@ -141,7 +141,8 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-		->from($this->getTableName(), self::TABLE)
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->isNotNull(self::TABLE . '.id'));
@@ -165,7 +166,8 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-		->from($this->getTableName(), self::TABLE)
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
 
 		if (!$getDeleted) {
@@ -223,8 +225,6 @@ class ShareMapper extends QBMapper {
 				$qb->expr()->eq($fromAlias . '.user_id', $joinAlias . '.user_id'),
 			)
 		);
-		// avoid result with nulled columns
-		$qb->groupBy($fromAlias . '.id');
 	}
 
 }

@@ -174,13 +174,13 @@ class PollMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			// TODO: check if this is necessary, in case of empty table to avoid possibly nulled columns
-			// ->groupBy(self::TABLE . '.id')
-			->from($this->getTableName(), self::TABLE);
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id');
+
+
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
-		$qb->groupBy(self::TABLE . '.id');
 		return $qb;
 	}
 
@@ -192,8 +192,13 @@ class PollMapper extends QBMapper {
 	 */
 	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'shares';
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, "") AS user_role'));
-		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked');
+		$emptyString = $qb->createNamedParameter("", IQueryBuilder::PARAM_STR);
+
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, '. $emptyString . ') AS user_role'))
+			->addGroupBy($joinAlias . '.type');
+
+		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked')
+			->addGroupBy($joinAlias . '.locked');
 
 		$qb->leftJoin(
 			$fromAlias,
@@ -205,6 +210,7 @@ class PollMapper extends QBMapper {
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
+
 	}
 
 	/**
@@ -215,9 +221,11 @@ class PollMapper extends QBMapper {
 	 */
 	protected function joinOptionsForMaxDate(IQueryBuilder &$qb, string $fromAlias): void {
 		$joinAlias = 'options';
-		$saveMin = (string) time();
 
-		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), 0) AS max_date'))
+		$zero = $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT);
+		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
+
+		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), '. $zero  . ') AS max_date'))
 			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'));
 
 		$qb->leftJoin(
