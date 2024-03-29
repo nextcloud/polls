@@ -117,11 +117,11 @@ class VoteMapper extends QBMapperWithUser {
 
 		$qb->selectDistinct([self::TABLE . '.user_id', self::TABLE . '.poll_id'])
 			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.user_id', self::TABLE . '.poll_id')
 			->where(
 				$qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			);
-		$qb->groupBy(self::TABLE . '.user_id', self::TABLE . '.poll_id');
-		\OC::$server->getLogger()->error($qb->getSQL());
+
 		return $this->findEntities($qb);
 	}
 
@@ -197,28 +197,20 @@ class VoteMapper extends QBMapperWithUser {
 
 	protected function buildQuery(bool $findOrphaned = false): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
-
+		
 		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE);
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id');
 
 		$optionAlias = $this->joinOption($qb, self::TABLE);
-		
 		
 		if ($findOrphaned) {
 			$qb->where($qb->expr()->isNull($optionAlias . '.id'));
 		} else {
 			$qb->where($qb->expr()->isNotNull($optionAlias . '.id'));
 		}
-		$anonAlias = $this->joinAnon($qb, self::TABLE);
+		$this->joinAnon($qb, self::TABLE);
 
-		$qb->groupBy(
-			self::TABLE . '.id',
-			$optionAlias . '.id',
-			$anonAlias . '.anonymous',
-			$anonAlias . '.owner',
-			$anonAlias . '.show_results',
-			$anonAlias . '.expire',
-		);
 		
 		return $qb;
 	}
@@ -230,7 +222,8 @@ class VoteMapper extends QBMapperWithUser {
 	protected function joinOption(IQueryBuilder &$qb, string $fromAlias): string {
 		$joinAlias = 'options';
 		
-		$qb->selectAlias($joinAlias . '.id', 'option_id');
+		$qb->selectAlias($joinAlias . '.id', 'option_id')
+			->addGroupBy($joinAlias . '.id');
 
 		$qb->leftJoin(
 			$fromAlias,

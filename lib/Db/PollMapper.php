@@ -174,9 +174,9 @@ class PollMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE);
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id');
 
-		$qb->groupBy(self::TABLE . '.id');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
@@ -194,8 +194,11 @@ class PollMapper extends QBMapper {
 		$joinAlias = 'shares';
 		$emptyString = $qb->createNamedParameter("", IQueryBuilder::PARAM_STR);
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, '. $emptyString . ') AS user_role'));
-		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked');
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, '. $emptyString . ') AS user_role'))
+			->addGroupBy($joinAlias . '.type');
+
+		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked')
+			->addGroupBy($joinAlias . '.locked');
 
 		$qb->leftJoin(
 			$fromAlias,
@@ -208,10 +211,6 @@ class PollMapper extends QBMapper {
 			)
 		);
 
-		$qb->addGroupBy(
-			$joinAlias . '.type',
-			$joinAlias . '.locked',
-		);
 	}
 
 	/**
