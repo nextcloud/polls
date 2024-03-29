@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
+use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
@@ -58,6 +59,7 @@ class PublicController extends BasePublicController {
 		IRequest $request,
 		ISession $session,
 		Acl $acl,
+		ShareMapper $shareMapper,
 		private IUserSession $userSession,
 		private CommentService $commentService,
 		private MailService $mailService,
@@ -68,7 +70,7 @@ class PublicController extends BasePublicController {
 		private VoteService $voteService,
 		private WatchService $watchService
 	) {
-		parent::__construct($appName, $request, $session, $acl);
+		parent::__construct($appName, $request, $session, $acl, $shareMapper);
 	}
 
 	/**

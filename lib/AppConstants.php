@@ -33,6 +33,8 @@ abstract class AppConstants {
 	/** @var string */
 	public const SESSION_KEY_SHARE_TOKEN = 'ncPollsPublicToken';
 	/** @var string */
+	public const SESSION_KEY_SHARE_TYPE = 'ncPollsShareType';
+	/** @var string */
 	public const CLIENT_ID = 'ncPollsClientId';
 	/** @var string */
 	public const CLIENT_TZ = 'ncPollsClientTimeZone';

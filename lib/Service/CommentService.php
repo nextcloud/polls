@@ -29,6 +29,7 @@ use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Model\Acl;
 use OCP\EventDispatcher\IEventDispatcher;
 
@@ -53,7 +54,11 @@ class CommentService {
 		if ($pollId !== null) {
 			$this->acl->setPollId($pollId);
 		}
-		$this->acl->request(Acl::PERMISSION_COMMENT_ADD);
+		try {
+			$this->acl->request(Acl::PERMISSION_COMMENT_ADD);
+		} catch (ForbiddenException $e) {
+			return [];
+		}
 
 		$comments = $this->commentMapper->findByPoll($this->acl->getPoll()->getId());
 		// treat comments from the same user within 5 minutes as grouped comments
