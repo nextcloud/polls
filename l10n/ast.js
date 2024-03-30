@@ -26,6 +26,7 @@ OC.L10N.register(
     "_%n Participant_::_%n Participants_" : ["%n participante","%n participantes"],
     "Access" : "Accesu",
     "Owner" : "Propietariu",
+    "Registered users" : "Usuarios rexistraos",
     "Preview" : "Previsualizar",
     "Performance settings" : "Configuración del rindimientu",
     "Copy link to clipboard" : "Copiar l'enllaz nel cartafueyu",
@@ -44,6 +45,7 @@ OC.L10N.register(
     "Activity" : "Actividá",
     "Minute" : "Minutu",
     "Hour" : "Hora",
-    "Year" : "Añu"
+    "Year" : "Añu",
+    "Archive" : "Archivar"
 },
 "nplurals=2; plural=(n != 1);");

@@ -24,6 +24,7 @@
     "_%n Participant_::_%n Participants_" : ["%n participante","%n participantes"],
     "Access" : "Accesu",
     "Owner" : "Propietariu",
+    "Registered users" : "Usuarios rexistraos",
     "Preview" : "Previsualizar",
     "Performance settings" : "Configuración del rindimientu",
     "Copy link to clipboard" : "Copiar l'enllaz nel cartafueyu",
@@ -42,6 +43,7 @@
     "Activity" : "Actividá",
     "Minute" : "Minutu",
     "Hour" : "Hora",
-    "Year" : "Añu"
+    "Year" : "Añu",
+    "Archive" : "Archivar"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }
