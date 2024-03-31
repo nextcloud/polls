@@ -19,6 +19,7 @@ OC.L10N.register(
     "No" : "Non",
     "OK" : "Normal",
     "Week" : "Selmana",
+    "Delete option" : "Desaniciar la opción",
     "Add" : "Amestar",
     "Submit" : "Unviar",
     "Close" : "Zarrar",
