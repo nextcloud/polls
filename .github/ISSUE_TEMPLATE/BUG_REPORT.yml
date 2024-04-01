@@ -129,7 +129,7 @@ body:
       description: |
         Provide the content of your browser console or network tab in case of errors (see developer tools of your browser).
       placeholder: This will be automatically formatted into code for better readability.
-      render: shell
+      render: json
 
   - type: textarea
     id: client-additional-info
