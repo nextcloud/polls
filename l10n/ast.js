@@ -15,6 +15,7 @@ OC.L10N.register(
     "Cancel" : "Encaboxar",
     "Apply" : "Aplicar",
     "Participants" : "Participantes",
+    "From" : "De",
     "Email address" : "Direición de corréu electrónicu",
     "No" : "Non",
     "OK" : "Normal",
