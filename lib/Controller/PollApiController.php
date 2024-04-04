@@ -84,6 +84,24 @@ class PollApiController extends BaseApiController {
 	}
 
 	/**
+	 * get acl for poll
+	 * @param $pollId Poll id
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function getAcl(int $pollId): JSONResponse {
+		try {
+			$this->acl->setPollId($pollId);
+			return new JSONResponse(['acl' => $this->acl], Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			return new JSONResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
+		} catch (Exception $e) {
+			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+		}
+	}
+
+	/**
 	 * Add poll
 	 * @param string $title Poll title
 	 * @param string $type Poll type ('datePoll', 'textPoll')
