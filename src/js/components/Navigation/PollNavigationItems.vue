@@ -21,23 +21,19 @@
   -->
 
 <template>
-	<NcAppNavigationItem :name="poll.title"
-		:to="{name: 'vote', params: {id: poll.id}}"
-		:class="{ closed: closed }">
+	<NcAppNavigationItem :name="poll.title" :to="{name: 'vote', params: {id: poll.id}}" :class="{ closed: closed }">
 		<template #icon>
 			<TextPollIcon v-if="poll.type === 'textPoll'" />
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>
-			<NcActionButton v-if="isPollCreationAllowed"
-				:name="t('polls', 'Clone poll')"
-				@click="$emit('clone-poll')">
+			<NcActionButton v-if="isPollCreationAllowed" :name="t('polls', 'Clone poll')" @click="$emit('clone-poll')">
 				<template #icon>
 					<ClonePollIcon />
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="poll.allowEdit && !poll.deleted"
+			<NcActionButton v-if="poll.permissions.edit && !poll.deleted"
 				:name="t('polls', 'Archive poll')"
 				@click="$emit('toggle-archive')">
 				<template #icon>
@@ -45,7 +41,7 @@
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="poll.allowEdit && poll.deleted"
+			<NcActionButton v-if="poll.permissions.edit && poll.deleted"
 				:name="t('polls', 'Restore poll')"
 				@click="$emit('toggle-archive')">
 				<template #icon>
@@ -53,7 +49,7 @@
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="poll.allowEdit && poll.deleted"
+			<NcActionButton v-if="poll.permissions.edit && poll.deleted"
 				class="danger"
 				:name="t('polls', 'Delete poll')"
 				@click="$emit('delete-poll')">

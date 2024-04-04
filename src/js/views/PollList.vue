@@ -62,7 +62,7 @@
 								</template>
 							</NcActionButton>
 
-							<NcActionButton v-if="poll.allowEdit && !poll.deleted"
+							<NcActionButton v-if="poll.permissions.edit && !poll.deleted"
 								:name="t('polls', 'Archive poll')"
 								close-after-click
 								@click="toggleArchive(poll.id)">
@@ -72,7 +72,7 @@
 								{{ t('polls', 'Archive poll') }}
 							</NcActionButton>
 
-							<NcActionButton v-if="poll.allowEdit && poll.deleted"
+							<NcActionButton v-if="poll.permissions.edit && poll.deleted"
 								:name="t('polls', 'Restore poll')"
 								close-after-click
 								@click="toggleArchive(poll.id)">
@@ -82,7 +82,7 @@
 								{{ t('polls', 'Restore poll') }}
 							</NcActionButton>
 
-							<NcActionButton v-if="poll.allowEdit && poll.deleted"
+							<NcActionButton v-if="poll.permissions.edit && poll.deleted"
 								class="danger"
 								:name="t('polls', 'Delete poll')"
 								close-after-click
