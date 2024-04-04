@@ -369,6 +369,7 @@ OC.L10N.register(
     "Options for the registration dialog" : "Επιλογές για το παράθυρο διαλόγου εγγραφής",
     "Email address is optional" : "Η διεύθυνση email είναι προαιρετική",
     "Email address is mandatory" : "Η διεύθυνση email είναι υποχρεωτική",
+    "Delete share" : "Διαγραφή κοινόχρηστου",
     "Restore share" : "Επαναφορά κοινόχρηστου",
     "Share label" : "Ετικέτα διαμοιρασμού",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Δεν είναι δυνατή η επίλυση του {name}. Η εφαρμογή κύκλων δεν είναι ενεργοποιημένη.",
