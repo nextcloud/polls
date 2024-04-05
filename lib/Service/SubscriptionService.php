@@ -43,11 +43,11 @@ class SubscriptionService {
 	}
 
 	public function get(?int $pollId = null): bool {
-		if ($pollId !== null) {
-			$this->acl->setPollId($pollId);
-		}
-
 		try {
+			if ($pollId !== null) {
+				$this->acl->setPollId($pollId);
+			}
+
 			$this->acl->request(Acl::PERMISSION_POLL_SUBSCRIBE);
 			$this->subscriptionMapper->findByPollAndUser($this->acl->getPoll()->getId(), $this->acl->getUserId());
 			// Subscription exists

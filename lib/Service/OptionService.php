@@ -71,11 +71,11 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function list(?int $pollId = null): array {
-		if ($pollId !== null) {
-			$this->acl->setPollId($pollId);
-		}
-
 		try {
+			if ($pollId !== null) {
+				$this->acl->setPollId($pollId);
+			}
+
 			$this->options = $this->optionMapper->findByPoll($this->acl->getPoll()->getId(), !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW));
 
 			if ($this->acl->getPoll()->getHideBookedUp() && !$this->acl->getIsAllowed(Acl::PERMISSION_POLL_EDIT)) {

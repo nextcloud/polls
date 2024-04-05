@@ -56,7 +56,6 @@ class VoteService {
 	 * @return Vote[]
 	 */
 	public function list(?int $pollId = null): array {
-		
 		try {
 			if ($pollId !== null) {
 				$this->acl->setPollId($pollId);

@@ -51,10 +51,11 @@ class CommentService {
 	 * @return Comment[]
 	 */
 	public function list(?int $pollId = null): array {
-		if ($pollId !== null) {
-			$this->acl->setPollId($pollId);
-		}
 		try {
+			if ($pollId !== null) {
+				$this->acl->setPollId($pollId);
+			}
+
 			$this->acl->request(Acl::PERMISSION_COMMENT_ADD);
 		} catch (ForbiddenException $e) {
 			return [];
@@ -90,6 +91,7 @@ class CommentService {
 		if ($pollId !== null) {
 			$this->acl->setPollId($pollId);
 		}
+
 		$this->acl->request(Acl::PERMISSION_COMMENT_ADD);
 
 		$this->comment = new Comment();
