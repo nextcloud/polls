@@ -179,6 +179,7 @@ OC.L10N.register(
     "Owner" : "Propietariu",
     "No description provided" : "Nun se fornió nenguna descripción",
     "Registered users" : "Usuarios rexistraos",
+    "Login" : "Aniciar la sesión",
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "La calcar el botón «D'acuerdu» aceptes la política de privacidá de «{privacyPolicy}»",
     "privacy policy" : "política de privacidá",
     "Checking name …" : "Comprobando'l nome…",
