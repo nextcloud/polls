@@ -49,7 +49,7 @@ class Group extends UserBase {
 	}
 
 	private function setUp(): void {
-		$this->group = Container::queryClass(IGroupManager::class)->get($this->id);
+		$this->group = $this->groupManager->get($this->id);
 		$this->displayName = $this->group->getDisplayName();
 	}
 
@@ -58,10 +58,10 @@ class Group extends UserBase {
 	 */
 	public function getMembers(): array {
 		$members = [];
-		$usersInGroup = Container::queryClass(IGroupManager::class)->displayNamesInGroup($this->id);
+		$usersIdsInGroup = array_keys($this->groupManager->displayNamesInGroup($this->id));
 
-		foreach ($usersInGroup as $user) {
-			$newMember = new User((string) key($user));
+		foreach ($usersIdsInGroup as $userId) {
+			$newMember = new User($userId);
 
 			if ($newMember->IsEnabled()) {
 				$members[] = $newMember;
