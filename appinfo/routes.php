@@ -140,6 +140,7 @@ return [
 		['name' => 'poll_api#transfer_polls', 'url' => '/api/v1.0/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#transfer_poll', 'url' => '/api/v1.0/poll/{pollId}/transfer/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#add', 'url' => '/api/v1.0/poll', 'verb' => 'POST'],
+		['name' => 'poll_api#get_acl', 'url' => '/api/v1.0/poll/{pollId}/acl', 'verb' => 'GET'],
 		['name' => 'poll_api#get', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll_api#update', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll_api#delete', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'DELETE'],
