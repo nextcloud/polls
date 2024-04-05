@@ -4,6 +4,7 @@ All notable changes to this project will be documented in this file.
 ## [7.0.3] - tbd
 ### Fix
  - Archive, restore and delete polls in poll list was missing, braught the options back to the action menu
+ - fix a situation, where votes of a non existing poll are requested
  - Fix getting group members
 ### New
  - Added an endpoint to the Api to be able to fetch the acl of a poll
