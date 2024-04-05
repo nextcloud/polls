@@ -56,11 +56,12 @@ class VoteService {
 	 * @return Vote[]
 	 */
 	public function list(?int $pollId = null): array {
-		if ($pollId !== null) {
-			$this->acl->setPollId($pollId);
-		}
-
+		
 		try {
+			if ($pollId !== null) {
+				$this->acl->setPollId($pollId);
+			}
+
 			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
 				// Just return the participants votes, no further anoymizing or obfuscating is nessecary
 				return $this->voteMapper->findByPollAndUser($this->acl->getPoll()->getId(), ($this->userMapper->getCurrentUserId()));
@@ -71,6 +72,7 @@ class VoteService {
 		} catch (DoesNotExistException $e) {
 			$votes = [];
 		}
+
 		return $votes;
 	}
 
