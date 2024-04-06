@@ -269,10 +269,12 @@ class IndexManager {
 	/**
 	 * remove all generic indices from $table
 	 *
-	 * @param string $tableName table name of table to remove incices from
-	 * @return string[] logged messages
+	 * @param string $tableName table name of table to remove the index from
+	 * @param string $indexName name of index to remove
+	 *
+	 * @return null|string
 	 */
-	public function removeNamedIndexFromTable(string $tableName, string $indexName): ?string {
+	public function removeNamedIndexFromTable(string $tableName, string $indexName): string|null {
 		$tableName = $this->dbPrefix . $tableName;
 
 		try {
