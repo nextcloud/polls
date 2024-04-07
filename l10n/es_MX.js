@@ -34,6 +34,7 @@ OC.L10N.register(
     "Created" : "Creado",
     "Login" : "Iniciar sesión",
     "Preview" : "Previsualizar",
+    "Copy link to clipboard" : "Copiar enlace al portapapeles",
     "Delete share" : "Borrar recurso compartido",
     "Restore share" : "Restaurar recurso compartido",
     "Share label" : "Etiqueta del recurso compartido",
