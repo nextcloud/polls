@@ -23,16 +23,8 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="useActivity" type="switch">
-				{{ t('polls', 'Track activities') }}
-			</NcCheckboxRadioSwitch>
-
-			<NcCheckboxRadioSwitch :checked.sync="hideLogin" type="switch">
-				{{ t('polls', 'Hide login option in public polls') }}
-			</NcCheckboxRadioSwitch>
-
 			<NcCheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
-				{{ t('polls', 'Archive closed polls automatically') }}
+				{{ t('polls', 'Enable automatic poll archiving') }}
 			</NcCheckboxRadioSwitch>
 			<InputDiv v-if="autoArchive"
 				v-model="autoArchiveOffset"
@@ -40,7 +32,7 @@
 				type="number"
 				inputmode="numeric"
 				use-num-modifiers
-				:label="t('polls', 'After how many days are closed polls to be archived:')" />
+				:label="t('polls', 'Days after which polls should be archived after closing')" />
 		</div>
 	</div>
 </template>
@@ -50,14 +42,17 @@
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../../Base/index.js'
+import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
-	name: 'AdminMisc',
+	name: 'AdminArchivePolls',
 
 	components: {
 		NcCheckboxRadioSwitch,
 		InputDiv,
 	},
+
+	mixins: [writeValue],
 
 	computed: {
 		...mapState({
@@ -65,22 +60,6 @@ export default {
 		}),
 
 		// Add bindings
-		hideLogin: {
-			get() {
-				return !this.appSettings.showLogin
-			},
-			set(value) {
-				this.writeValue({ showLogin: !value })
-			},
-		},
-		useActivity: {
-			get() {
-				return this.appSettings.useActivity
-			},
-			set(value) {
-				this.writeValue({ useActivity: value })
-			},
-		},
 		autoArchive: {
 			get() {
 				return this.appSettings.autoArchive
@@ -97,13 +76,6 @@ export default {
 				value = value < 1 ? 1 : value
 				this.writeValue({ autoArchiveOffset: value })
 			},
-		},
-	},
-
-	methods: {
-		async writeValue(value) {
-			await this.$store.commit('appSettings/set', value)
-			this.$store.dispatch('appSettings/write')
 		},
 	},
 }

@@ -24,7 +24,7 @@
 	<div class="modal__content">
 		<div class="modal__registration">
 			<div class="registration__registration">
-				<h2>{{ t('polls', 'Guest users') }}</h2>
+				<h2>{{ t('polls', 'Guest participants') }}</h2>
 				<InputDiv v-model="userName"
 					class="section__username"
 					:signaling-class="checkStatus.userName"
@@ -77,17 +77,17 @@
 			</div>
 
 			<div v-if="share.showLogin" class="registration__login">
-				<h2> {{ t('polls', 'Registered users') }} </h2>
+				<h2> {{ t('polls', 'Registered accounts') }} </h2>
 				<NcButton wide @click="login()">
 					<template #default>
 						{{ t('polls', 'Login') }}
 					</template>
 				</NcButton>
 				<div>
-					{{ t('polls', 'As a regular user of this site, you can participate with your internal identity after logging in.') }}
+					{{ t('polls', 'You can also log in and participate with your regular account.') }}
 				</div>
 				<div>
-					{{ t('polls', 'Otherwise participate as a guest user.') }}
+					{{ t('polls', 'Otherwise participate as a guest participant.') }}
 				</div>
 			</div>
 		</div>

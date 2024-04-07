@@ -23,7 +23,7 @@
 <template>
 	<div class="side-bar-tab-options">
 		<ConfigBox v-if="!currentUser.isOwner" :name="t('polls', 'As an admin you may edit this poll')" />
-		<ConfigBox :name="t('polls', 'Allow proposals from users')">
+		<ConfigBox :name="t('polls', 'Allow proposals from participants')">
 			<template #icon>
 				<AddDateIcon />
 			</template>

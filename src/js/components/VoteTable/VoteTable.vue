@@ -100,7 +100,7 @@ export default {
 	methods: {
 		async removeUser(userId) {
 			await this.$store.dispatch('votes/deleteUser', { userId })
-			showSuccess(t('polls', 'User {userId} removed', { userId }))
+			showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
 		},
 	},
 }

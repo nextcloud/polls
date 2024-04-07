@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -22,18 +22,18 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="allowPollCreation" type="switch">
-			{{ t('polls', 'Enable poll creation globally') }}
+		<NcCheckboxRadioSwitch :checked.sync="showMailAddresses" type="switch">
+			{{ t('polls', 'Show email addresses of internal accounts') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!allowPollCreation" class="settings_details">
-			<NcSelect v-model="pollCreationGroups"
-				:input-label="t('polls','Enable poll creation only for the following groups')"
+		<div v-if="!showMailAddresses" class="settings_details">
+			<NcSelect v-model="showMailAddressesGroups"
+				:input-label="t('polls','Show email addresses of internal accounts only to members of the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disable globally')"
+				:placeholder="t('polls', 'Leave empty to disable globally.')"
 				@search="loadGroups" />
 		</div>
 	</div>
@@ -41,11 +41,11 @@
 
 <script>
 
-import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
+import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
-	name: 'AdminPollCreation',
+	name: 'AdminShowMailAddresses',
 
 	components: {
 		NcCheckboxRadioSwitch,
@@ -56,20 +56,20 @@ export default {
 
 	computed: {
 		// Add bindings
-		allowPollCreation: {
+		showMailAddresses: {
 			get() {
-				return this.appSettings.allowPollCreation
+				return this.appSettings.showMailAddresses
 			},
 			set(value) {
-				this.writeValue({ allowPollCreation: value })
+				this.writeValue({ showMailAddresses: value })
 			},
 		},
-		pollCreationGroups: {
+		showMailAddressesGroups: {
 			get() {
-				return this.appSettings.pollCreationGroups
+				return this.appSettings.showMailAddressesGroups
 			},
 			set(value) {
-				this.writeValue({ pollCreationGroups: value })
+				this.writeValue({ showMailAddressesGroups: value })
 			},
 		},
 	},

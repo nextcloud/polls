@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -22,18 +22,19 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="hideMailAddresses" type="switch">
-			{{ t('polls', 'Hide email addresses of internal users') }}
+		<NcCheckboxRadioSwitch :checked.sync="allowAllAccess" type="switch">
+			{{ t('polls', 'Enable openly accessible polls globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="hideMailAddresses" class="settings_details">
-			<NcSelect v-model="showMailAddressesGroups"
-				:input-label="t('polls','Show email addresses of internal users to members of the following groups')"
+
+		<div v-if="!allowAllAccess" class="settings_details">
+			<NcSelect v-model="allAccessGroups"
+				:input-label="t('polls','Enable creating openly accessible polls only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all.')"
+				:placeholder="t('polls', 'Leave empty to disable globally')"
 				@search="loadGroups" />
 		</div>
 	</div>
@@ -45,7 +46,7 @@ import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
-	name: 'AdminHideMailAddresses',
+	name: 'AdminShareOpenPoll',
 
 	components: {
 		NcCheckboxRadioSwitch,
@@ -56,20 +57,20 @@ export default {
 
 	computed: {
 		// Add bindings
-		hideMailAddresses: {
+		allowAllAccess: {
 			get() {
-				return !this.appSettings.showMailAddresses
+				return this.appSettings.allowAllAccess
 			},
 			set(value) {
-				this.writeValue({ showMailAddresses: !value })
+				this.writeValue({ allowAllAccess: value })
 			},
 		},
-		showMailAddressesGroups: {
+		allAccessGroups: {
 			get() {
-				return this.appSettings.showMailAddressesGroups
+				return this.appSettings.allAccessGroups
 			},
 			set(value) {
-				this.writeValue({ showMailAddressesGroups: value })
+				this.writeValue({ allAccessGroups: value })
 			},
 		},
 	},

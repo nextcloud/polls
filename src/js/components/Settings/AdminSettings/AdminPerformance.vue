@@ -30,6 +30,7 @@
 
 import { mapState } from 'vuex'
 import { RadioGroupDiv } from '../../Base/index.js'
+import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
 	name: 'AdminPerformance',
@@ -37,6 +38,8 @@ export default {
 	components: {
 		RadioGroupDiv,
 	},
+
+	mixins: [writeValue],
 
 	data() {
 		return {
@@ -61,13 +64,6 @@ export default {
 			set(value) {
 				this.writeValue({ updateType: value })
 			},
-		},
-	},
-
-	methods: {
-		async writeValue(value) {
-			await this.$store.commit('appSettings/set', value)
-			this.$store.dispatch('appSettings/write')
 		},
 	},
 }

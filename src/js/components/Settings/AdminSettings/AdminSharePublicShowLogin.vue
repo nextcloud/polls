@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2021 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -22,62 +22,41 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="useVoteLimit" type="switch">
-			{{ t('polls', 'Limit "Yes" votes per participant') }}
-		</NcCheckboxRadioSwitch>
-
-		<InputDiv v-if="maxVotesPerUser"
-			v-model="maxVotesPerUser"
-			class="indented"
-			type="number"
-			inputmode="numeric"
-			use-num-modifiers />
+		<div class="user_settings">
+			<NcCheckboxRadioSwitch :checked.sync="showLogin" type="switch">
+				{{ t('polls', 'Enable login option in public polls') }}
+			</NcCheckboxRadioSwitch>
+		</div>
 	</div>
 </template>
 
 <script>
+
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { InputDiv } from '../Base/index.js'
+import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
-	name: 'ConfigVoteLimit',
+	name: 'AdminSharePublicShowLogin',
 
 	components: {
 		NcCheckboxRadioSwitch,
-		InputDiv,
 	},
+
+	mixins: [writeValue],
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
-			countOptions: (state) => state.options.list.length,
+			appSettings: (state) => state.appSettings,
 		}),
 
-		useVoteLimit: {
+		// Add bindings
+		showLogin: {
 			get() {
-				return (this.poll.limits.maxVotesPerUser !== 0)
+				return this.appSettings.showLogin
 			},
 			set(value) {
-				this.$store.commit('poll/setLimit', { maxVotesPerUser: value ? 1 : 0 })
-				this.$emit('change')
-			},
-		},
-
-		maxVotesPerUser: {
-			get() {
-				return this.poll.limits.maxVotesPerUser
-			},
-			set(value) {
-				if (!this.useVoteLimit) {
-					value = 0
-				} else if (value < 1) {
-					value = this.countOptions
-				} else if (value > this.countOptions) {
-					value = 1
-				}
-				this.$store.commit('poll/setLimit', { maxVotesPerUser: value })
-				this.$emit('change')
+				this.writeValue({ showLogin: value })
 			},
 		},
 	},

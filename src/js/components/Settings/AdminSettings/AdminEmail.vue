@@ -27,7 +27,10 @@
 		</NcCheckboxRadioSwitch>
 
 		<div class="disclaimer_group">
-			<span class="grow_title">{{ t('polls', 'Additional email disclaimer') }}</span>
+			<div class="grow_title">
+				<span>{{ t('polls', 'Additional email disclaimer') }}</span>
+				<LanguageMarkdownIcon />
+			</div>
 			<NcCheckboxRadioSwitch :checked.sync="preview" type="switch">
 				{{ t('polls', 'Preview') }}
 			</NcCheckboxRadioSwitch>
@@ -45,6 +48,8 @@ import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
 import DOMPurify from 'dompurify'
+import { writeValue } from '../../../mixins/adminSettingsMixin.js'
+import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
 
 const markedPrefix = {
 	prefix: 'disclaimer-',
@@ -55,7 +60,10 @@ export default {
 
 	components: {
 		NcCheckboxRadioSwitch,
+		LanguageMarkdownIcon,
 	},
+
+	mixins: [writeValue],
 
 	data() {
 		return {
@@ -96,11 +104,6 @@ export default {
 		saveSettings() {
 			this.$store.dispatch('appSettings/write')
 		},
-
-		async writeValue(value) {
-			await this.$store.commit('appSettings/set', value)
-			this.$store.dispatch('appSettings/write')
-		},
 	},
 }
 </script>
@@ -110,12 +113,14 @@ export default {
 		display: flex;
 		align-items: center;
 
-		span {
-			margin-right: 12px;
-		}
-
 		.grow_title {
+			display: flex;
 			flex-grow: 1;
+			margin-right: 12px;
+
+			.material-design-icon {
+				margin-left: 4px;
+			}
 		}
 	}
 </style>

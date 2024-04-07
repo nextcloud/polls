@@ -22,18 +22,18 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="pollDownloadLimited" type="switch">
-			{{ t('polls', 'Disallow poll download') }}
+		<NcCheckboxRadioSwitch :checked.sync="allowPollDownload" type="switch">
+			{{ t('polls', 'Enable poll download globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="pollDownloadLimited" class="settings_details">
+		<div v-if="!allowPollDownload" class="settings_details">
 			<NcSelect v-model="pollDownloadGroups"
-				:input-label="t('polls','Allow poll download for the following groups')"
+				:input-label="t('polls','Enable poll download only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all.')"
+				:placeholder="t('polls', 'Leave empty to disable globally')"
 				@search="loadGroups" />
 		</div>
 	</div>
@@ -56,12 +56,12 @@ export default {
 
 	computed: {
 		// Add bindings
-		pollDownloadLimited: {
+		allowPollDownload: {
 			get() {
-				return !this.appSettings.allowPollDownload
+				return this.appSettings.allowPollDownload
 			},
 			set(value) {
-				this.writeValue({ allowPollDownload: !value })
+				this.writeValue({ allowPollDownload: value })
 			},
 		},
 		pollDownloadGroups: {

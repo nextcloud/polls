@@ -264,7 +264,7 @@ export default {
 					showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.user.displayName }))
 				}
 			} catch (e) {
-				showError(t('polls', 'Error while changing lock status of user {displayName}', { displayName: share.user.displayName }))
+				showError(t('polls', 'Error while changing lock status of share {displayName}', { displayName: share.user.displayName }))
 				console.error('Error locking or unlocking share', { share }, e.response)
 			}
 		},

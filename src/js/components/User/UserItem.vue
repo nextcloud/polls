@@ -230,14 +230,14 @@ export default {
 			if (this.typeComputed === 'public') return this.publicShareDescription
 			if (this.typeComputed === 'deleted') return t('polls', 'The participant got removed from this poll')
 			if (this.typeComputed === 'admin') return t('polls', 'Is granted admin rights for this poll')
-			if (this.typeComputed === 'anonymous') return t('polls', 'Anonymized user')
+			if (this.typeComputed === 'anonymous') return t('polls', 'Anonymized participant')
 			return this.emailAddressComputed
 		},
 
 		labelComputed() {
 			if (this.label !== '') return this.label
 			if (this.typeComputed === 'public') return this.publicShareLabel
-			if (this.typeComputed === 'deleted') return t('polls', 'Deleted User')
+			if (this.typeComputed === 'deleted') return t('polls', 'Deleted participant')
 			return this.user.displayName ?? this.user.userId
 		},
 

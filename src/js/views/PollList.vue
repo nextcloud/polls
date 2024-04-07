@@ -69,7 +69,6 @@
 								<template #icon>
 									<ArchivePollIcon />
 								</template>
-								{{ t('polls', 'Archive poll') }}
 							</NcActionButton>
 
 							<NcActionButton v-if="poll.permissions.edit && poll.deleted"
@@ -79,7 +78,6 @@
 								<template #icon>
 									<RestorePollIcon />
 								</template>
-								{{ t('polls', 'Restore poll') }}
 							</NcActionButton>
 
 							<NcActionButton v-if="poll.permissions.edit && poll.deleted"
@@ -90,7 +88,6 @@
 								<template #icon>
 									<DeletePollIcon />
 								</template>
-								{{ t('polls', 'Delete poll') }}
 							</NcActionButton>
 						</NcActions>
 					</template>

@@ -22,14 +22,17 @@
 
 <template>
 	<FlexSettings>
-		<NcSettingsSection :name="t('polls', 'Share restrictions')"
-			:description="t('polls', 'Restrict the share actions globally or on a group base')">
-			<AdminShareSettings />
+		<NcSettingsSection :name="t('polls', 'Share settings')"
+			:description="t('polls', 'Change share settings globally (for all accounts)')">
+			<AdminSharePublicCreate />
+			<AdminShareOpenPoll />
+			<AdminSharePublicShowLogin />
 		</NcSettingsSection>
 
-		<NcSettingsSection :name="t('polls', 'Poll creation restrictions')"
-			:description="t('polls', 'Restrict the creation of new polls globally or on a group base')">
+		<NcSettingsSection :name="t('polls', 'Poll settings')"
+			:description="t('polls', 'Change poll settings globally (for all accounts)')">
 			<AdminPollCreation />
+			<AdminPollDownload />
 		</NcSettingsSection>
 
 		<NcSettingsSection :name="t('polls', 'Legal terms for public poll registration')"
@@ -43,11 +46,11 @@
 		</NcSettingsSection>
 
 		<NcSettingsSection :name="t('polls', 'Other settings')"
-			:description="t('polls', 'Activate or disable individual features.')">
-			<AdminMisc />
+			:description="t('polls', 'Enable or disable individual features.')">
+			<AdminActivities />
+			<AdminArchivePolls />
 			<AdminCombo />
-			<AdminPollDownload />
-			<AdminHideMailAddresses />
+			<AdminShowMailAddresses />
 		</NcSettingsSection>
 
 		<NcSettingsSection :name="t('polls', 'Performance settings')"
@@ -58,15 +61,18 @@
 </template>
 
 <script>
+import AdminActivities from '../components/Settings/AdminSettings/AdminActivities.vue'
+import AdminArchivePolls from '../components/Settings/AdminSettings/AdminArchivePolls.vue'
 import AdminCombo from '../components/Settings/AdminSettings/AdminCombo.vue'
 import AdminEmail from '../components/Settings/AdminSettings/AdminEmail.vue'
 import AdminLegal from '../components/Settings/AdminSettings/AdminLegal.vue'
-import AdminMisc from '../components/Settings/AdminSettings/AdminMisc.vue'
 import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance.vue'
 import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation.vue'
 import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
-import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings.vue'
-import AdminHideMailAddresses from '../components/Settings/AdminSettings/AdminHideMailAddresses.vue'
+import AdminShareOpenPoll from '../components/Settings/AdminSettings/AdminShareOpenPoll.vue'
+import AdminSharePublicCreate from '../components/Settings/AdminSettings/AdminSharePublicCreate.vue'
+import AdminSharePublicShowLogin from '../components/Settings/AdminSettings/AdminSharePublicShowLogin.vue'
+import AdminShowMailAddresses from '../components/Settings/AdminSettings/AdminShowMailAddresses.vue'
 import { FlexSettings } from '../components/Base/index.js'
 import { NcSettingsSection } from '@nextcloud/vue'
 import '../assets/scss/markdown.scss'
@@ -75,15 +81,18 @@ export default {
 	name: 'AdminSettingsPage',
 
 	components: {
+		AdminActivities,
+		AdminArchivePolls,
 		AdminCombo,
 		AdminEmail,
 		AdminLegal,
-		AdminMisc,
 		AdminPerformance,
 		AdminPollCreation,
 		AdminPollDownload,
-		AdminShareSettings,
-		AdminHideMailAddresses,
+		AdminShareOpenPoll,
+		AdminSharePublicCreate,
+		AdminSharePublicShowLogin,
+		AdminShowMailAddresses,
 		NcSettingsSection,
 		FlexSettings,
 	},

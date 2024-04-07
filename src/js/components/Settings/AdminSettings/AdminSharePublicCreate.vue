@@ -22,35 +22,18 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="publicSharesLimited" type="switch">
-			{{ t('polls', 'Disallow public shares') }}
+		<NcCheckboxRadioSwitch :checked.sync="allowPublicShares" type="switch">
+			{{ t('polls', 'Enable public shares globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="publicSharesLimited" class="settings_details">
+		<div v-if="!allowPublicShares" class="settings_details">
 			<NcSelect v-model="publicSharesGroups"
-				:input-label="t('polls','Allow public shares for the following groups')"
+				:input-label="t('polls','Enable public shares only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all.')"
-				@search="loadGroups" />
-		</div>
-
-		<NcCheckboxRadioSwitch :checked.sync="allAccessLimited" type="switch">
-			{{ t('polls', 'Disallow openly accessible polls') }}
-		</NcCheckboxRadioSwitch>
-
-		<div v-if="allAccessLimited" class="settings_details">
-			<h3>{{ t('polls','Allow creating openly accessible polls for the following groups') }}</h3>
-			<NcSelect v-model="allAccessGroups"
-				:input-label="t('polls','Allow creating openly accessible polls for the following groups')"
-				label="displayName"
-				:options="groups"
-				:user-select="true"
-				:multiple="true"
-				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all.')"
+				:placeholder="t('polls', 'Leave empty to disable globally')"
 				@search="loadGroups" />
 		</div>
 	</div>
@@ -62,7 +45,7 @@ import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
-	name: 'AdminShareSettings',
+	name: 'AdminSharePublicCreate',
 
 	components: {
 		NcCheckboxRadioSwitch,
@@ -73,12 +56,12 @@ export default {
 
 	computed: {
 		// Add bindings
-		publicSharesLimited: {
+		allowPublicShares: {
 			get() {
-				return !this.appSettings.allowPublicShares
+				return this.appSettings.allowPublicShares
 			},
 			set(value) {
-				this.writeValue({ allowPublicShares: !value })
+				this.writeValue({ allowPublicShares: value })
 			},
 		},
 		publicSharesGroups: {
@@ -87,22 +70,6 @@ export default {
 			},
 			set(value) {
 				this.writeValue({ publicSharesGroups: value })
-			},
-		},
-		allAccessLimited: {
-			get() {
-				return !this.appSettings.allowAllAccess
-			},
-			set(value) {
-				this.writeValue({ allowAllAccess: !value })
-			},
-		},
-		allAccessGroups: {
-			get() {
-				return this.appSettings.allAccessGroups
-			},
-			set(value) {
-				this.writeValue({ allAccessGroups: value })
 			},
 		},
 	},
