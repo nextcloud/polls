@@ -27,7 +27,7 @@
 		</NcCheckboxRadioSwitch>
 		<div v-if="!showMailAddresses" class="settings_details">
 			<NcSelect v-model="showMailAddressesGroups"
-				:input-label="t('polls','Show email addresses of internal accounts only to members of the following groups')"
+				:input-label="t('polls','Show only to members of the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

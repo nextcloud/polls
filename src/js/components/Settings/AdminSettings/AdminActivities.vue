@@ -21,12 +21,10 @@
   -->
 
 <template>
-	<div>
-		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="useActivity" type="switch">
-				{{ t('polls', 'Enable tracking activities') }}
-			</NcCheckboxRadioSwitch>
-		</div>
+	<div class="user_settings">
+		<NcCheckboxRadioSwitch :checked.sync="useActivity" type="switch">
+			{{ t('polls', 'Enable the tracking of activities with the Activities app') }}
+		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 

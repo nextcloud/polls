@@ -23,11 +23,11 @@
 <template>
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="allowPollCreation" type="switch">
-			{{ t('polls', 'Enable poll creation globally') }}
+			{{ t('polls', 'Enable the poll creation globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!allowPollCreation" class="settings_details">
 			<NcSelect v-model="pollCreationGroups"
-				:input-label="t('polls','Enable poll creation only for the following groups')"
+				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

@@ -23,11 +23,11 @@
 <template>
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="allowCombo" type="switch">
-			{{ t('polls', 'Enable usage of the combo view globally') }}
+			{{ t('polls', 'Enable the usage of the combo view globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!allowCombo" class="settings_details">
 			<NcSelect v-model="comboGroups"
-				:input-label="t('polls','Enable combo view for the following groups')"
+				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

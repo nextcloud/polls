@@ -23,8 +23,7 @@
 <template>
 	<div class="user_settings">
 		<p class="settings-description">
-			{{ t('polls', 'The privacy link and the legal notice link are automatically added to the registration dialog of public polls.') }}
-			{{ t('polls', 'As a default the links configured in the theming app are used. For public polls these can be overriden by individual terms.') }}
+			{{ t('polls', 'If you use different legal terms and privacy policy for public polls, enter the links below. Leave empty to use your default terms.') }}
 		</p>
 
 		<InputDiv v-model="privacyUrl"
@@ -36,7 +35,7 @@
 		<InputDiv v-model="imprintUrl"
 			type="url"
 			inputmode="url"
-			:label="t('polls', 'Legal notice link:')"
+			:label="t('polls', 'Legal terms link:')"
 			:placeholder="placeholder.imprint"
 			@change="saveSettings()" />
 	</div>

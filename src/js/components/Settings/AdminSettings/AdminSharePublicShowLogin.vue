@@ -21,12 +21,10 @@
   -->
 
 <template>
-	<div>
-		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="showLogin" type="switch">
-				{{ t('polls', 'Enable login option in public polls') }}
-			</NcCheckboxRadioSwitch>
-		</div>
+	<div class="user_settings">
+		<NcCheckboxRadioSwitch :checked.sync="showLogin" type="switch">
+			{{ t('polls', 'Enable the login option in the registration dialog of public polls') }}
+		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 

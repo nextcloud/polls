@@ -21,19 +21,17 @@
   -->
 
 <template>
-	<div>
-		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
-				{{ t('polls', 'Enable automatic poll archiving') }}
-			</NcCheckboxRadioSwitch>
-			<InputDiv v-if="autoArchive"
-				v-model="autoArchiveOffset"
-				class="settings_details"
-				type="number"
-				inputmode="numeric"
-				use-num-modifiers
-				:label="t('polls', 'Days after which polls should be archived after closing')" />
-		</div>
+	<div class="user_settings">
+		<NcCheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
+			{{ t('polls', 'Enable the automatic poll archiving') }}
+		</NcCheckboxRadioSwitch>
+		<InputDiv v-if="autoArchive"
+			v-model="autoArchiveOffset"
+			class="settings_details"
+			type="number"
+			inputmode="numeric"
+			use-num-modifiers
+			:label="t('polls', 'Days after which polls should be archived after closing')" />
 	</div>
 </template>
 

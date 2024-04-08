@@ -22,27 +22,16 @@
 
 <template>
 	<FlexSettings>
-		<NcSettingsSection :name="t('polls', 'Share settings')"
-			:description="t('polls', 'Change share settings globally (for all accounts)')">
-			<AdminSharePublicCreate />
-			<AdminShareOpenPoll />
-			<AdminSharePublicShowLogin />
-		</NcSettingsSection>
-
 		<NcSettingsSection :name="t('polls', 'Poll settings')"
 			:description="t('polls', 'Change poll settings globally (for all accounts)')">
 			<AdminPollCreation />
 			<AdminPollDownload />
 		</NcSettingsSection>
 
-		<NcSettingsSection :name="t('polls', 'Legal terms for public poll registration')"
-			:description="t('polls', 'Override the default links of your site to your legal terms. Leave empty to use the links, which are configured in the theming app.')">
-			<AdminLegal />
-		</NcSettingsSection>
-
-		<NcSettingsSection :name="t('polls', 'Email options')"
-			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to emails.')">
-			<AdminEmail />
+		<NcSettingsSection :name="t('polls', 'Share settings')"
+			:description="t('polls', 'Change share settings globally (for all accounts)')">
+			<AdminShareOpenPoll />
+			<AdminSharePublicCreate />
 		</NcSettingsSection>
 
 		<NcSettingsSection :name="t('polls', 'Other settings')"
@@ -56,6 +45,17 @@
 		<NcSettingsSection :name="t('polls', 'Performance settings')"
 			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
 			<AdminPerformance />
+		</NcSettingsSection>
+
+		<NcSettingsSection :name="t('polls', 'Public poll registration dialog options')"
+			:description="t('polls', 'Options for the registration dialog of public polls.')">
+			<AdminSharePublicShowLogin />
+			<AdminLegal />
+		</NcSettingsSection>
+
+		<NcSettingsSection :name="t('polls', 'Email options')"
+			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to emails.')">
+			<AdminEmail />
 		</NcSettingsSection>
 	</FlexSettings>
 </template>

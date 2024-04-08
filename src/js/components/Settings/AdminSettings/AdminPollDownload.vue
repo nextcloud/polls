@@ -23,11 +23,11 @@
 <template>
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="allowPollDownload" type="switch">
-			{{ t('polls', 'Enable poll download globally') }}
+			{{ t('polls', 'Enable the spreadsheet download of polls globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!allowPollDownload" class="settings_details">
 			<NcSelect v-model="pollDownloadGroups"
-				:input-label="t('polls','Enable poll download only for the following groups')"
+				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

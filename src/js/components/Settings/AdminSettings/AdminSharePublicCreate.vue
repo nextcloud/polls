@@ -23,11 +23,11 @@
 <template>
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="allowPublicShares" type="switch">
-			{{ t('polls', 'Enable public shares globally') }}
+			{{ t('polls', 'Enable public shares of polls globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!allowPublicShares" class="settings_details">
 			<NcSelect v-model="publicSharesGroups"
-				:input-label="t('polls','Enable public shares only for the following groups')"
+				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"

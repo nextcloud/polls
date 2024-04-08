@@ -23,12 +23,12 @@
 <template>
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="allowAllAccess" type="switch">
-			{{ t('polls', 'Enable openly accessible polls globally') }}
+			{{ t('polls', 'Enable the creation of openly accessible polls globally') }}
 		</NcCheckboxRadioSwitch>
 
 		<div v-if="!allowAllAccess" class="settings_details">
 			<NcSelect v-model="allAccessGroups"
-				:input-label="t('polls','Enable creating openly accessible polls only for the following groups')"
+				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
