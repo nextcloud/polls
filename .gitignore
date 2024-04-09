@@ -9,6 +9,7 @@
 build/
 css/*.map
 js/*
+css/*
 nbproject/
 node_modules/
 tests/.phpunit.result.cache
