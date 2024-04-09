@@ -30,6 +30,7 @@
 
 import { mapState } from 'vuex'
 import { RadioGroupDiv } from '../../Base/index.js'
+import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
 	name: 'AdminPerformance',
@@ -38,12 +39,14 @@ export default {
 		RadioGroupDiv,
 	},
 
+	mixins: [writeValue],
+
 	data() {
 		return {
 			updateTypeOptions: [
-				{ value: 'longPolling', label: t('polls', 'Activate long polling for instant updates') },
-				{ value: 'periodicPolling', label: t('polls', 'Activate periodic polling of updates from the client') },
-				{ value: 'noPolling', label: t('polls', 'Disable automatic updates (reload app for updates)') },
+				{ value: 'longPolling', label: t('polls', 'Enable "long polling" for instant updates') },
+				{ value: 'periodicPolling', label: t('polls', 'Enable periodic requests of poll updates from the client') },
+				{ value: 'noPolling', label: t('polls', 'Disable automatic updates (poll must be reloaded to get updates)') },
 			],
 		}
 	},
@@ -61,13 +64,6 @@ export default {
 			set(value) {
 				this.writeValue({ updateType: value })
 			},
-		},
-	},
-
-	methods: {
-		async writeValue(value) {
-			await this.$store.commit('appSettings/set', value)
-			this.$store.dispatch('appSettings/write')
 		},
 	},
 }

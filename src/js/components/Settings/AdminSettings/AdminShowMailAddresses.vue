@@ -1,5 +1,5 @@
 <!--
-  - @copyright Copyright (c) 2018 René Gieling <github@dartcafe.de>
+  - @copyright Copyright (c) 2022 René Gieling <github@dartcafe.de>
   -
   - @author René Gieling <github@dartcafe.de>
   -
@@ -22,18 +22,18 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="allowPollDownload" type="switch">
-			{{ t('polls', 'Enable the spreadsheet download of polls globally') }}
+		<NcCheckboxRadioSwitch :checked.sync="showMailAddresses" type="switch">
+			{{ t('polls', 'Show email addresses of internal accounts') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!allowPollDownload" class="settings_details">
-			<NcSelect v-model="pollDownloadGroups"
-				:input-label="t('polls','Enable only for the following groups')"
+		<div v-if="!showMailAddresses" class="settings_details">
+			<NcSelect v-model="showMailAddressesGroups"
+				:input-label="t('polls','Show only to members of the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disable globally')"
+				:placeholder="t('polls', 'Leave empty to disable globally.')"
 				@search="loadGroups" />
 		</div>
 	</div>
@@ -45,7 +45,7 @@ import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
-	name: 'AdminPollDownload',
+	name: 'AdminShowMailAddresses',
 
 	components: {
 		NcCheckboxRadioSwitch,
@@ -56,20 +56,20 @@ export default {
 
 	computed: {
 		// Add bindings
-		allowPollDownload: {
+		showMailAddresses: {
 			get() {
-				return this.appSettings.allowPollDownload
+				return this.appSettings.showMailAddresses
 			},
 			set(value) {
-				this.writeValue({ allowPollDownload: value })
+				this.writeValue({ showMailAddresses: value })
 			},
 		},
-		pollDownloadGroups: {
+		showMailAddressesGroups: {
 			get() {
-				return this.appSettings.pollDownloadGroups
+				return this.appSettings.showMailAddressesGroups
 			},
 			set(value) {
-				this.writeValue({ pollDownloadGroups: value })
+				this.writeValue({ showMailAddressesGroups: value })
 			},
 		},
 	},

@@ -22,18 +22,18 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="comboLimited" type="switch">
-			{{ t('polls', 'Deactivate combo view for all users') }}
+		<NcCheckboxRadioSwitch :checked.sync="allowCombo" type="switch">
+			{{ t('polls', 'Enable the usage of the combo view globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="comboLimited" class="settings_details">
+		<div v-if="!allowCombo" class="settings_details">
 			<NcSelect v-model="comboGroups"
-				:input-label="t('polls','Allow combo view for the following groups')"
+				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all.')"
+				:placeholder="t('polls', 'Leave empty to disable globally')"
 				@search="loadGroups" />
 		</div>
 	</div>
@@ -56,12 +56,12 @@ export default {
 
 	computed: {
 		// Add bindings
-		comboLimited: {
+		allowCombo: {
 			get() {
-				return !this.appSettings.allowCombo
+				return this.appSettings.allowCombo
 			},
 			set(value) {
-				this.writeValue({ allowCombo: !value })
+				this.writeValue({ allowCombo: value })
 			},
 		},
 		comboGroups: {

@@ -70,7 +70,7 @@ class NotificationMail extends MailBase {
 	private function evaluateDisplayName(Log $logItem): string {
 		if (!$logItem->getUserId() || $this->poll->getAnonymous() || $this->poll->getShowResults() !== Poll::SHOW_RESULTS_ALWAYS) {
 			// hide actor's name if poll is anonymous or results are hidden
-			return $this->l10n->t('A user');
+			return $this->l10n->t('A participant');
 		}
 
 		return $this->getUser($logItem->getUserId())->getDisplayName();

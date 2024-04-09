@@ -26,7 +26,7 @@
 			:description="t('polls', 'Search for conflicting calendar entries')">
 			<CalendarSettings />
 		</NcSettingsSection>
-		<NcSettingsSection :name="t('polls', 'Polls user settings')"
+		<NcSettingsSection :name="t('polls', 'Personal preferences')"
 			:description="t('polls', 'Set your personal preferences for the polls app')">
 			<FeatureSettings />
 		</NcSettingsSection>

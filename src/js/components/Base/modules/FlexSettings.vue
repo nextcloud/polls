@@ -53,7 +53,7 @@ export default {
 }
 
 .user_settings {
-	padding-top: 16px;
+	padding-top: 8px;
 
 	textarea {
 		width: 99%;

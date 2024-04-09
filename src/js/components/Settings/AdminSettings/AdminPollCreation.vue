@@ -22,18 +22,18 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="createPollLimited" type="switch">
-			{{ t('polls', 'Disallow poll creation for all users') }}
+		<NcCheckboxRadioSwitch :checked.sync="allowPollCreation" type="switch">
+			{{ t('polls', 'Enable the poll creation globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="createPollLimited" class="settings_details">
-			<NcSelect v-model="createPollGroups"
-				:input-label="t('polls','Allow poll creation for the following groups')"
+		<div v-if="!allowPollCreation" class="settings_details">
+			<NcSelect v-model="pollCreationGroups"
+				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
 				:user-select="true"
 				:multiple="true"
 				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disallow for all.')"
+				:placeholder="t('polls', 'Leave empty to disable globally')"
 				@search="loadGroups" />
 		</div>
 	</div>
@@ -56,15 +56,15 @@ export default {
 
 	computed: {
 		// Add bindings
-		createPollLimited: {
+		allowPollCreation: {
 			get() {
-				return !this.appSettings.allowPollCreation
+				return this.appSettings.allowPollCreation
 			},
 			set(value) {
-				this.writeValue({ allowPollCreation: !value })
+				this.writeValue({ allowPollCreation: value })
 			},
 		},
-		createPollGroups: {
+		pollCreationGroups: {
 			get() {
 				return this.appSettings.pollCreationGroups
 			},

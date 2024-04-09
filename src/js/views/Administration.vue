@@ -26,7 +26,7 @@
 			<template #title>
 				{{ t('polls', 'Administrative poll management') }}
 			</template>
-			{{ t('polls', 'Manage polls of other users. You can take over the ownership or delete polls.') }}
+			{{ t('polls', 'Manage polls of other accounts. You can take over the ownership or delete polls.') }}
 		</HeaderBar>
 
 		<div class="area__main">
@@ -69,7 +69,6 @@
 									<RestorePollIcon v-if="poll.deleted" />
 									<ArchivePollIcon v-else />
 								</template>
-								{{ poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
 							</NcActionButton>
 
 							<NcActionButton class="danger"
@@ -79,7 +78,6 @@
 								<template #icon>
 									<DeleteIcon />
 								</template>
-								{{ t('polls', 'Delete poll') }}
 							</NcActionButton>
 						</NcActions>
 					</template>

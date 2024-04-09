@@ -26,7 +26,7 @@
 			<CalendarSettings />
 		</NcAppSettingsSection>
 
-		<NcAppSettingsSection id="div-settings" :name="t('polls', 'User settings')">
+		<NcAppSettingsSection id="div-settings" :name="t('polls', 'Personal preferences')">
 			<FeatureSettings />
 		</NcAppSettingsSection>
 

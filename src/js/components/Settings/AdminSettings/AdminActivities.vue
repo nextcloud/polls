@@ -22,54 +22,39 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="allowPollDownload" type="switch">
-			{{ t('polls', 'Enable the spreadsheet download of polls globally') }}
+		<NcCheckboxRadioSwitch :checked.sync="useActivity" type="switch">
+			{{ t('polls', 'Enable the tracking of activities with the Activities app') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!allowPollDownload" class="settings_details">
-			<NcSelect v-model="pollDownloadGroups"
-				:input-label="t('polls','Enable only for the following groups')"
-				label="displayName"
-				:options="groups"
-				:user-select="true"
-				:multiple="true"
-				:loading="isLoading"
-				:placeholder="t('polls', 'Leave empty to disable globally')"
-				@search="loadGroups" />
-		</div>
 	</div>
 </template>
 
 <script>
 
-import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
-import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { mapState } from 'vuex'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
-	name: 'AdminPollDownload',
+	name: 'AdminActivities',
 
 	components: {
 		NcCheckboxRadioSwitch,
-		NcSelect,
 	},
 
-	mixins: [loadGroups, writeValue],
+	mixins: [writeValue],
 
 	computed: {
+		...mapState({
+			appSettings: (state) => state.appSettings,
+		}),
+
 		// Add bindings
-		allowPollDownload: {
+		useActivity: {
 			get() {
-				return this.appSettings.allowPollDownload
+				return this.appSettings.useActivity
 			},
 			set(value) {
-				this.writeValue({ allowPollDownload: value })
-			},
-		},
-		pollDownloadGroups: {
-			get() {
-				return this.appSettings.pollDownloadGroups
-			},
-			set(value) {
-				this.writeValue({ pollDownloadGroups: value })
+				this.writeValue({ useActivity: value })
 			},
 		},
 	},

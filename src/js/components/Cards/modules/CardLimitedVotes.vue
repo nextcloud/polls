@@ -21,14 +21,13 @@
   -->
 
 <template>
-	<CardDiv :heading="t('polls', 'Limited votes.')"
-		:type="cardType">
+	<CardDiv :heading="t('polls', 'Limited votes.')" :type="cardType">
 		<ul>
 			<li v-if="maxVotesPerOption">
 				{{ n('polls', '%n vote is allowed per option.', '%n votes are allowed per option.', maxVotesPerOption) }}
 			</li>
 			<li v-if="maxVotesPerUser">
-				{{ n('polls', '%n vote is allowed per user.', '%n votes are allowed per user.', maxVotesPerUser) }}
+				{{ n('polls', '%n vote is allowed per participant.', '%n votes are allowed per participant.', maxVotesPerUser) }}
 				{{ n('polls', 'You have %n vote left.', 'You have %n votes left.', votesLeft) }}
 			</li>
 			<div v-if="orphanedVotes && maxVotesPerUser">

@@ -23,7 +23,7 @@
 <template>
 	<div>
 		<NcCheckboxRadioSwitch :checked.sync="useVoteLimit" type="switch">
-			{{ t('polls', 'Limit "Yes" votes per user') }}
+			{{ t('polls', 'Limit "Yes" votes per participant') }}
 		</NcCheckboxRadioSwitch>
 
 		<InputDiv v-if="maxVotesPerUser"

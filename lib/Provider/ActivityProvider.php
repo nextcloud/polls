@@ -83,7 +83,7 @@ class ActivityProvider implements IProvider {
 			$parameters['actor'] = [
 				'type' => 'guest',
 				'id' => $event->getAuthor(),
-				'name' => 'An unknown user',
+				'name' => 'An unknown participant',
 			];
 		}
 
