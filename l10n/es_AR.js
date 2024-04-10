@@ -32,6 +32,7 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Change name" : "Cambiar nombre",
     "Yes" : "Si",
+    "Preferences" : "Preferencias",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
     "Options" : "Opciones",

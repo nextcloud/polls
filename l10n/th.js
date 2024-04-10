@@ -29,6 +29,7 @@ OC.L10N.register(
     "Change name" : "เปลี่ยนชื่อ",
     "Email options" : "ตัวเลือกอีเมล",
     "Yes" : "ใช่",
+    "Preferences" : "การกำหนดลักษณะ",
     "Details" : "รายละเอียด",
     "Configuration" : "การกำหนดค่า",
     "Sharing" : "การแชร์",

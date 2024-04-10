@@ -30,6 +30,7 @@ OC.L10N.register(
     "Public link" : "Tautan publik",
     "Yes" : "Ya",
     "Administration" : "Administrasi",
+    "Preferences" : "Preferensi",
     "Details" : "Detil",
     "Configuration" : "Konfigurasi",
     "Options" : "Pilihan",

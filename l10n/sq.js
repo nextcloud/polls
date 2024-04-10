@@ -32,6 +32,7 @@ OC.L10N.register(
     "Shares" : "Shpërndarje",
     "Description" : "Përshkrim",
     "Yes" : "Yes",
+    "Preferences" : "Preferencat",
     "Details" : "Detajet",
     "Configuration" : "Formësim",
     "Sharing" : "Ndarje",

@@ -40,6 +40,7 @@ OC.L10N.register(
     "Email options" : "Opções de e-mail",
     "Yes" : "Sim",
     "Administration" : "Administração",
+    "Preferences" : "Preferências",
     "Details" : "Detalhes",
     "Configuration" : "Configuração",
     "Options" : "Opções",
