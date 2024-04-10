@@ -48,7 +48,7 @@
 		</NcSettingsSection>
 
 		<NcSettingsSection :name="t('polls', 'Public poll registration dialog options')"
-			:description="t('polls', 'Options for the registration dialog of public polls.')">
+			:description="t('polls', 'These options regard the appearence of the registration dialog of public polls.')">
 			<AdminSharePublicShowLogin />
 			<AdminLegal />
 		</NcSettingsSection>
