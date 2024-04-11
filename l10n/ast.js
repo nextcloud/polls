@@ -239,6 +239,7 @@ OC.L10N.register(
     "Error loading poll list" : "Hebo un error al cargar la llista d'encuestes",
     "New poll" : "Encuesta nueva",
     "Combine polls" : "Mecer les encuestes",
+    "Preferences" : "Preferencies",
     "Error cloning poll." : "Hebo un error al clonar la encuesta.",
     "404 - poll not found" : "404 - nun s'atopó la encuesta",
     "Enter a poll or start a new one." : "Introduz una encuesta o anicia una.",

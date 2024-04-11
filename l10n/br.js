@@ -28,6 +28,7 @@ OC.L10N.register(
     "Change name" : "Cheñch env",
     "Yes" : "Ya",
     "Administration" : "Merouriez",
+    "Preferences" : "Dibaboù",
     "Details" : "Munudoù",
     "Configuration" : "Stumm",
     "Sharing" : "Rannan",

@@ -53,6 +53,7 @@ OC.L10N.register(
     "Email options" : "E-mail muligheder",
     "Yes" : "Ja",
     "Administration" : "Administration",
+    "Preferences" : "Indstillinger",
     "Details" : "Detaljer",
     "Configuration" : "sætning",
     "Options" : "Valgmuligheder",
