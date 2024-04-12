@@ -561,6 +561,7 @@ OC.L10N.register(
     "Enable or disable individual features." : "啟用或停用個別功能。",
     "If you are experiencing connection problems, change how auto updates are retrieved." : "若您遇到連線問題，請變更取得自動更新的方式。",
     "Public poll registration dialog options" : "公開投票註冊對話方塊選項",
+    "These options regard the appearence of the registration dialog of public polls." : "這些選項涉及投票的註冊對話方塊的外觀。",
     "Email options" : "電子郵件選項",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "新增指向法律條款的連結（若存在）並新增選擇性的免責聲明至電子郵件。",
     "Administrative poll management" : "行政投票管理",
