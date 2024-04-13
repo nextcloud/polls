@@ -126,7 +126,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function setToken(string $token = '', string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		try {
-			if ($this->share?->$token === $token) {											// share matching the requested token is already loaded
+			if ($token === $this->share?->$token) {											// share matching the requested token is already loaded
 				$this->setPollId($this->share->getPollId(), $permission);					// Set the poll Id to verify the correct poll gets loaded and permissions get checked
 			} else {
 				$this->setShare($this->shareMapper->findByToken($token), $permission);		// load the share mathing the requested token
@@ -338,11 +338,11 @@ class Acl implements JsonSerializable {
 			return false;
 		}
 
-		return 0 < count(
+		return count(
 			array_filter($this->shareMapper->findByPoll($this->getPollId()), function ($item) {
 				return ($item->getType() === Share::TYPE_GROUP && $this->groupManager->isInGroup($this->getUserId(), $item->getUserId()));
 			})
-		);
+		) > 0;
 	}
 
 	/**
