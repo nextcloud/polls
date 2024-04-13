@@ -106,7 +106,8 @@ class IndexManager {
 					return 'Added unique index ' . $indexName . ' for ' . json_encode($columns) . ' to ' . $tableName;
 				} else {
 					$table->addIndex($columns, $indexName);
-					return 'Added index ' . $indexName . ' for ' . json_encode($columns) . ' to ' . $tableName;				}
+					return 'Added index ' . $indexName . ' for ' . json_encode($columns) . ' to ' . $tableName;
+				}
 			}
 			return 'Index ' . $indexName . ' already exists in ' . $tableName;
 		}
