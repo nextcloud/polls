@@ -24,6 +24,7 @@
 
 namespace OCA\Polls\Db;
 
+use Doctrine\DBAL\Schema\Exception\IndexDoesNotExist;
 use Doctrine\DBAL\Schema\Schema;
 use OCA\Polls\Migration\TableSchema;
 use OCP\IConfig;
@@ -53,6 +54,10 @@ class IndexManager {
 
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $values) {
 			$messages[] = $this->createIndex($tableName, $values['name'], $values['columns'], $values['unique']);
+		}
+
+		foreach (TableSchema::COMMON_INDICES as $index) {
+			$messages[] = $this->createIndex($index['table'], $index['name'], $index['columns'], $index['unique']);
 		}
 
 		return $messages;
@@ -88,19 +93,22 @@ class IndexManager {
 	 * Create index
 	 */
 	public function createIndex(string $tableName, string $indexName, array $columns, bool $unique = false): string {
+
 		$tableName = $this->dbPrefix . $tableName;
+
 		if ($this->schema->hasTable($tableName)) {
+
 			$table = $this->schema->getTable($tableName);
+
 			if (!$table->hasIndex($indexName)) {
 				if ($unique) {
 					$table->addUniqueIndex($columns, $indexName);
 					return 'Added unique index ' . $indexName . ' for ' . json_encode($columns) . ' to ' . $tableName;
 				} else {
 					$table->addIndex($columns, $indexName);
-					return 'Added index ' . $indexName . ' to ' . $tableName;
-				}
+					return 'Added index ' . $indexName . ' for ' . json_encode($columns) . ' to ' . $tableName;				}
 			}
-			return 'Unique index ' . $indexName . ' already exists in ' . $tableName;
+			return 'Index ' . $indexName . ' already exists in ' . $tableName;
 		}
 		return 'Table ' . $tableName . ' does not exist';
 	}
@@ -132,6 +140,24 @@ class IndexManager {
 	}
 
 	/**
+	 * remove all generic indices
+	 *
+	 * @return string[] logged messages
+	 */
+	public function removeNamedIndices(): array {
+		$messages = [];
+
+		foreach (TableSchema::COMMON_INDICES as $index) {
+			$message = $this->removeNamedIndexFromTable($index['table'], $index['name']);
+			if ($message) {
+				$messages[] = $message;
+			}
+		}
+
+		return $messages;
+	}
+	
+	/**
 	 * 	remove all foreign keys from $tableName
 	 */
 	public function removeAllUniqueIndices(): array {
@@ -150,8 +176,11 @@ class IndexManager {
 	public function removeForeignKeysFromTable(string $tableName): array {
 		$messages = [];
 		$tableName = $this->dbPrefix . $tableName;
+		
 		if ($this->schema->hasTable($tableName)) {
+		
 			$table = $this->schema->getTable($tableName);
+		
 			foreach ($table->getForeignKeys() as $foreignKey) {
 				$table->removeForeignKey($foreignKey->getName());
 				$messages[] = 'Removed ' . $foreignKey->getName() . ' from ' . $tableName;
@@ -167,8 +196,11 @@ class IndexManager {
 	public function removeUniqueIndicesFromTable(string $tableName): array {
 		$messages = [];
 		$tableName = $this->dbPrefix . $tableName;
+
 		if ($this->schema->hasTable($tableName)) {
+		
 			$table = $this->schema->getTable($tableName);
+		
 			foreach ($table->getIndexes() as $index) {
 				if (strpos($index->getName(), 'UNIQ_') === 0) {
 					$table->dropIndex($index->getName());
@@ -185,8 +217,11 @@ class IndexManager {
 	public function removeGenericIndicesFromTable(string $tableName): array {
 		$messages = [];
 		$tableName = $this->dbPrefix . $tableName;
+
 		if ($this->schema->hasTable($tableName)) {
+		
 			$table = $this->schema->getTable($tableName);
+		
 			foreach ($table->getIndexes() as $index) {
 				if (strpos($index->getName(), 'IDX_') === 0) {
 					$table->dropIndex($index->getName());
@@ -195,5 +230,29 @@ class IndexManager {
 			}
 		}
 		return $messages;
+	}
+
+	/**
+	 * remove all generic indices from $table
+	 *
+	 * @param string $tableName table name of table to remove the index from
+	 * @param string $indexName name of index to remove
+	 *
+	 * @return null|string
+	 */
+	public function removeNamedIndexFromTable(string $tableName, string $indexName): string|null {
+		$tableName = $this->dbPrefix . $tableName;
+
+		try {
+			if ($this->schema->hasTable($tableName)) {
+				$table = $this->schema->getTable($tableName);
+				$table->dropIndex($indexName);
+				$message = 'Removed ' . $indexName . ' from ' . $tableName;
+			}
+		} catch (IndexDoesNotExist $e) {
+			// common index does not exist, skip it
+			$message = null;
+		}
+		return $message;
 	}
 }

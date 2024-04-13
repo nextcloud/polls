@@ -55,6 +55,7 @@ class Rebuild extends Command {
 		$this->deleteForeignKeyConstraints();
 		$this->deleteGenericIndices();
 		$this->deleteUniqueIndices();
+		$this->deleteNamedIndices();
 
 		$this->printComment('Step 2. Remove all orphaned tables and columns');
 		$this->removeObsoleteTables();
@@ -154,6 +155,9 @@ class Rebuild extends Command {
 		$this->printInfo($messages, '   ');
 	}
 
+	/**
+	 * remove on delete fk contraint from all tables referencing the main polls table
+	 */
 	private function deleteForeignKeyConstraints(): void {
 		$this->printComment(' - Remove foreign key constraints');
 		$messages = $this->indexManager->removeAllForeignKeyConstraints();
@@ -161,7 +165,7 @@ class Rebuild extends Command {
 	}
 
 	/**
-	 * add an on delete fk contraint to all tables referencing the main polls table
+	 * remove all generic indices
 	 */
 	private function deleteGenericIndices(): void {
 		$this->printComment(' - Remove generic indices');
@@ -170,11 +174,20 @@ class Rebuild extends Command {
 	}
 
 	/**
-	 * add an on delete fk contraint to all tables referencing the main polls table
+	 * remove all unique indices
 	 */
 	private function deleteUniqueIndices(): void {
 		$this->printComment(' - Remove unique indices');
 		$messages = $this->indexManager->removeAllUniqueIndices();
 		$this->printInfo($messages, '   ');
+	}
+
+	/**
+	 * remove all named indices
+	 */
+	private function deleteNamedIndices(): void {
+		$this->printComment(' - Remove common indices');
+		$messages = $this->indexManager->removeNamedIndices();
+		$this->printInfo($messages, ' - ');
 	}
 }
