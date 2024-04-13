@@ -23,7 +23,7 @@
 
 namespace OCA\Polls\Controller;
 
-use \OCA\Polls\Db\Comment;
+use OCA\Polls\Db\Comment;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCP\AppFramework\Http\JSONResponse;

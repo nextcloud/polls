@@ -36,12 +36,10 @@ setup-dev: setup-dev-composer npm-init
 # install composer deps for ci (tests and analysis)
 setup-build-composer: composer
 	composer install --no-dev -o
-	composer dump-autoload -o
 
 # install composer deps for release package
 setup-dev-composer: composer
 	composer install -o
-	composer dump-autoload -o
 
 # install node deps
 npm-init:
@@ -89,10 +87,6 @@ ifeq (,$(composer))
 	php $(build_tools_dir)/composer.phar install --prefer-dist
 	php $(build_tools_dir)/composer.phar update --prefer-dist
 endif
-
-#install additional dev tools
-tools: composer
-	composer global require phpunit/phpunit vimeo/psalm friendsofphp/php-cs-fixer
 
 # Builds the source package for the appstore
 # signs, if certificate is present

@@ -55,7 +55,7 @@ return [
 
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],
-		['name' => 'page#index', 'url' => '/list/{category}', 'verb' => 'GET', 'postfix' => 'list', 'defaults' => array('category' => 'relevant')],
+		['name' => 'page#index', 'url' => '/list/{category}', 'verb' => 'GET', 'postfix' => 'list', 'defaults' => ['category' => 'relevant']],
 		['name' => 'page#index', 'url' => '/combo', 'verb' => 'GET', 'postfix' => 'combo'],
 		['name' => 'page#vote', 'url' => '/vote/{id}', 'verb' => 'GET'],
 
@@ -127,7 +127,7 @@ return [
 		['name' => 'preferences#get_calendars', 'url' => '/calendars', 'verb' => 'GET'],
 
 		// REST-API calls
-		['name' => 'base_api#preflighted_cors', 'url' => '/api/v1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => array('path' => '.+')],
+		['name' => 'base_api#preflighted_cors', 'url' => '/api/v1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 		['name' => 'poll_api#list', 'url' => '/api/v1.0/polls', 'verb' => 'GET'],
 		['name' => 'poll_api#transfer_polls', 'url' => '/api/v1.0/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#transfer_poll', 'url' => '/api/v1.0/poll/{pollId}/transfer/{destinationUser}', 'verb' => 'PUT'],

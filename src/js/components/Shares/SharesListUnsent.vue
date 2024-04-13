@@ -75,7 +75,6 @@ export default {
 
 	methods: {
 		...mapActions({
-			removeShare: 'shares/delete',
 			inviteAll: 'shares/inviteAll',
 		}),
 

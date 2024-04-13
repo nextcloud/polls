@@ -34,7 +34,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapGetters } from 'vuex'
 import { ConfigBox } from '../Base/index.js'
 import LockedIcon from 'vue-material-design-icons/Lock.vue'
 import ShareItem from './ShareItem.vue'
@@ -49,19 +49,8 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollId: (state) => state.poll.id,
-		}),
-
 		...mapGetters({
 			lockedShares: 'shares/locked',
-		}),
-	},
-
-	methods: {
-		...mapActions({
-			removeShare: 'shares/delete',
-			inviteAll: 'shares/inviteAll',
 		}),
 	},
 }

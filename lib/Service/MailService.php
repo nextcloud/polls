@@ -96,8 +96,8 @@ class MailService {
 
 	public function sendInvitation(
 		Share $share,
-		SentResult &$sentResult = null,
-		string $token = null,
+		?SentResult &$sentResult = null,
+		?string $token = null,
 	): SentResult|null {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token);

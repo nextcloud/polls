@@ -108,7 +108,6 @@ export default {
 			settings: (state) => state.settings.user,
 			currentUser: (state) => state.poll.acl.userId,
 			isVoteLimitExceeded: (state) => state.poll.acl.isVoteLimitExceeded,
-			voteLimit: (state) => state.poll.voteLimit,
 		}),
 
 		...mapGetters({

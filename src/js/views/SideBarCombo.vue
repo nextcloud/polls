@@ -36,7 +36,6 @@
 
 <script>
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-import { mapGetters } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 
@@ -50,18 +49,11 @@ export default {
 		PollsAppIcon,
 	},
 
-	computed: {
-		...mapGetters({
-			polls: 'polls/datePolls',
-		}),
-	},
-
 	methods: {
 		closeSideBar() {
 			emit('polls:sidebar:toggle', { open: false })
 		},
 	},
-
 }
 
 </script>

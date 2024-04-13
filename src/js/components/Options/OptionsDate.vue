@@ -129,7 +129,6 @@ export default {
 		...mapState({
 			options: (state) => state.options.list,
 			acl: (state) => state.poll.acl,
-			isOwner: (state) => state.poll.acl.isOwner,
 		}),
 
 		...mapGetters({

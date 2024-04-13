@@ -23,10 +23,10 @@
 
 namespace OCA\Polls\Model;
 
-use \OCP\Calendar\ICalendar;
 use DateInterval;
 use DateTimeImmutable;
 use DateTimeZone;
+use OCP\Calendar\ICalendar;
 use RRule\RRule;
 
 class CalendarEvent implements \JsonSerializable {
