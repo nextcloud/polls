@@ -47,7 +47,6 @@ export default {
 
 	computed: {
 		...mapState({
-			acl: (state) => state.poll.acl,
 			activities: (state) => state.activity.list,
 		}),
 

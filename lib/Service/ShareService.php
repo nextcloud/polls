@@ -311,7 +311,7 @@ class ShareService {
 	/**
 	 * Delete share
 	 */
-	public function delete(Share $share = null, string $token = null): string {
+	public function delete(?Share $share = null, ?string $token = null): string {
 		try {
 			if ($token) {
 				$share = $this->shareMapper->findByToken($token);
@@ -330,7 +330,7 @@ class ShareService {
 	/**
 	 * Lock share
 	 */
-	public function lock(Share $share = null, string $token = null): string {
+	public function lock(?Share $share = null, ?string $token = null): string {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token);
 		}
@@ -346,7 +346,7 @@ class ShareService {
 	/**
 	 * Unlock share
 	 */
-	public function unlock(Share $share = null, string $token = null): string {
+	public function unlock(?Share $share = null, ?string $token = null): string {
 		if ($token) {
 			$share = $this->shareMapper->findByToken($token);
 		}
@@ -380,7 +380,7 @@ class ShareService {
 		return $sentResult;
 	}
 
-	public function resolveGroup(string $token = null, Share $share = null): array {
+	public function resolveGroup(?string $token = null, ?Share $share = null): array {
 		if ($token) {
 			$share = $this->get($token);
 		}
@@ -406,7 +406,7 @@ class ShareService {
 	 * Sent invitation mails for a share
 	 * Additionally send notification via notifications
 	 */
-	public function sendInvitation(Share $share = null, SentResult &$sentResult = null, string $token = null): SentResult|null {
+	public function sendInvitation(?Share $share = null, ?SentResult &$sentResult = null, ?string $token = null): SentResult|null {
 		if ($token) {
 			$share = $this->get($token);
 		}

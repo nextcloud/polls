@@ -45,7 +45,6 @@ export default {
 	computed: {
 		...mapState({
 			access: (state) => state.poll.access,
-			title: (state) => state.poll.title,
 			expire: (state) => state.poll.expire,
 			isDeleted: (state) => state.poll.deleted,
 			ownerDisplayName: (state) => state.poll.owner.displayName,

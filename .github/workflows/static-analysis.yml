@@ -24,7 +24,7 @@ jobs:
         uses: ./.github/actions/setup-composer
         with:
           php-version: ${{ matrix.php-versions }}
-          php-tools: composer, psalm
+          php-tools: composer
 
       - name: Install Nextcloud API
         run: composer require --dev nextcloud/ocp:dev-${{ matrix.ocp-version }}
