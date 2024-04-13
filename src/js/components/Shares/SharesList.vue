@@ -89,7 +89,6 @@ export default {
 		...mapState({
 			allowAllAccess: (state) => state.poll.acl.allowAllAccess,
 			allowPublicShares: (state) => state.poll.acl.allowPublicShares,
-			pollAccess: (state) => state.poll.access,
 			pollTitle: (state) => state.poll.title,
 			pollDescription: (state) => state.poll.description,
 		}),

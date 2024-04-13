@@ -193,7 +193,6 @@ export default {
 
 		...mapGetters({
 			closed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
 			countOptions: 'options/count',
 			countParticipantsVoted: 'poll/countParticipantsVoted',
 			countVotes: 'votes/countVotes',
@@ -203,7 +202,6 @@ export default {
 			proposalsExpired: 'poll/proposalsExpired',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 			proposalsOpen: 'poll/proposalsOpen',
-			displayResults: 'polls/displayResults',
 		}),
 
 		proposalsStatus() {

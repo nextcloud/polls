@@ -119,10 +119,8 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
 			acl: (state) => state.poll.acl,
 			useActivity: (state) => state.appSettings.useActivity,
-			useCollaboration: (state) => state.appSettings.useCollaboration,
 		}),
 
 	},

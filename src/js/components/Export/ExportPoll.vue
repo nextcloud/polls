@@ -96,7 +96,6 @@ export default {
 		...mapState({
 			poll: (state) => state.poll,
 			options: (state) => state.options,
-			votes: (state) => state.votes,
 			isOwner: (state) => state.poll.acl.allowEdit,
 		}),
 
