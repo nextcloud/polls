@@ -15,6 +15,7 @@ node_modules/
 tests/.phpunit.result.cache
 npm-debug.log
 vendor
+vendor-bin/**/vendor/
 Thumbs.db
 yarn-error.log
 *.cmd
