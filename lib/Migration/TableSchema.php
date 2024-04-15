@@ -283,13 +283,13 @@ abstract class TableSchema {
 				if ($table->hasColumn($columnName)) {
 					$column = $table->getColumn($columnName);
 					$column->setOptions($columnDefinition['options']);
-					if (Type::lookupName($column->getType()) !== $columnDefinition['type']) {
+					if ($column->getType()->getName() !== $columnDefinition['type']) {
 						$messages[] = 'Migrating type of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['type'];
 						$column->setType(Type::getType($columnDefinition['type']));
 					}
 
 					// force change to current options definition
-					$table->modifyColumn($columnName, $columnDefinition['options']);
+					$table->changeColumn($columnName, $columnDefinition['options']);
 				} else {
 					$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
 				}
