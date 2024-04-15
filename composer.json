@@ -19,7 +19,10 @@
 		"autoloader-suffix": "Polls",
 		"platform": {
         "php": "8.0"
-      }
+      },
+		"allow-plugins": {
+			"bamarni/composer-bin-plugin": true
+		}
     },
 	"autoload": {
 		"psr-4": {
