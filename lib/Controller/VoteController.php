@@ -26,8 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\VoteService;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -45,33 +43,33 @@ class VoteController extends BaseController {
 
 	/**
 	 * list votes per poll
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 */
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['votes' => $this->voteService->list($pollId)]);
 	}
 
 	/**
 	 * set vote answer
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 */
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function set(int $optionId, string $setTo): JSONResponse {
 		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $setTo)]);
 	}
 
 	/**
 	 * Remove user from poll
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId)]);
 	}
 	/**
 	 * Relete orphaned votes
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->delete($pollId, $userId, true)]);
 	}

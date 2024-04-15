@@ -50,8 +50,8 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * response
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -62,8 +62,8 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * response
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -74,8 +74,8 @@ class BaseApiController extends ApiController {
 
 	/**
 	 * responseCreate
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);

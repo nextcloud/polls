@@ -27,9 +27,6 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
-use OCP\AppFramework\Http\Attribute\CORS;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -48,80 +45,80 @@ class ShareApiController extends BaseApiController {
 
 	/**
 	 * Read all shares of a poll based on the poll id and return list as array
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
 	}
 
 	/**
 	 * Get share by token
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function get(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->get($token)]);
 	}
 
 	/**
 	 * Add share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function add(int $pollId, string $type, string $userId = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId)]);
 	}
 
 	/**
 	 * Delete share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function delete(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->delete(token: $token)]);
 	}
 
 	/**
 	 * Delete share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function restore(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->delete(token: $token, restore: true)]);
 	}
 
 	/**
 	 * Lock share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function lock(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->lock(token: $token)]);
 	}
 
 	/**
 	 * Unlock share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function unlock(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->lock(token: $token, unlock: true)]);
 	}
 
 	/**
 	 * Sent invitation mails for a share
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function sendInvitation(string $token): JSONResponse {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
