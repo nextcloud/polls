@@ -29,8 +29,6 @@ use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\PreferencesService;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -50,17 +48,17 @@ class PreferencesController extends BaseController {
 
 	/**
 	 * Read all preferences
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 */
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function get(): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->get());
 	}
 
 	/**
 	 * Write preferences
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function write(array $preferences): JSONResponse {
 		if (!$this->userMapper->getCurrentUser()->getIsLoggedIn()) {
 			return new JSONResponse([], Http::STATUS_OK);
@@ -70,9 +68,9 @@ class PreferencesController extends BaseController {
 
 	/**
 	 * Read all preferences
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
 	 */
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function getCalendars(): JSONResponse {
 		return new JSONResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
 	}

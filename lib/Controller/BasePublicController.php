@@ -32,7 +32,6 @@ use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Model\Acl;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 use OCP\ISession;
@@ -52,8 +51,8 @@ class BasePublicController extends Controller {
 
 	/**
 	 * response
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function response(Closure $callback, string $token): JSONResponse {
 		$this->updateSessionToken($token);
 
@@ -66,8 +65,8 @@ class BasePublicController extends Controller {
 
 	/**
 	 * response
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function responseLong(Closure $callback, string $token): JSONResponse {
 		$this->updateSessionToken($token);
 
@@ -79,8 +78,8 @@ class BasePublicController extends Controller {
 	}
 	/**
 	 * responseCreate
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback, string $token): JSONResponse {
 		$this->updateSessionToken($token);
 

@@ -27,7 +27,6 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\SystemService;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -45,8 +44,8 @@ class SystemController extends BaseController {
 
 	/**
 	 * Get a combined list of NC users, groups and contacts
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function userSearch(string $query = ''): JSONResponse {
 		return new JSONResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
 			$query)], Http::STATUS_OK);

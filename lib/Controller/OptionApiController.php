@@ -26,9 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\OptionService;
-use OCP\AppFramework\Http\Attribute\CORS;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -46,20 +43,20 @@ class OptionApiController extends BaseApiController {
 
 	/**
 	 * Get all options of given poll
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->list($pollId)]);
 	}
 
 	/**
 	 * Add a new option
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)]);
 	}
@@ -67,50 +64,50 @@ class OptionApiController extends BaseApiController {
 
 	/**
 	 * Update option
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $pollOptionText, $duration)]);
 	}
 
 	/**
 	 * Delete option
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function delete(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
 
 	/**
 	 * Restore option
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function restore(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)]);
 	}
 
 	/**
 	 * Switch option confirmation
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function confirm(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
 
 	/**
 	 * Set order position for option
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function setOrder(int $optionId, int $order): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->setOrder($optionId, $order)]);
 	}
