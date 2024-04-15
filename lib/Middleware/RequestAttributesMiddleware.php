@@ -3,7 +3,6 @@
 namespace OCA\Polls\Middleware;
 
 use OCA\Polls\AppConstants;
-use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Middleware;
 use OCP\IRequest;

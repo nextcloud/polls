@@ -27,7 +27,6 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Service\ShareService;
-use OCA\Polls\Service\UserService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
