@@ -38,6 +38,7 @@ OC.L10N.register(
     "Delete share" : "Borrar recurso compartido",
     "Restore share" : "Restaurar recurso compartido",
     "Share label" : "Etiqueta del recurso compartido",
+    "Link copied to clipboard" : "Enlace copiado al portapapeles",
     "Shares" : "Elementos compartidos",
     "No activity" : "Sin actividad",
     "Description" : "Descripción",
