@@ -81,7 +81,7 @@ class PollService {
 			$this->preferences = $this->preferencesService->get();
 			foreach ($polls as $poll) {
 				try {
-					$this->acl->setPollId($poll->getId());
+					$this->acl->setPoll($poll);
 					$relevantThreshold = $poll->getRelevantThresholdNet() + $this->preferences->getRelevantOffsetTimestamp();
 
 					// mix poll settings, currentUser attributes, permissions and relevantThreshold into one array
