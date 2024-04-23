@@ -138,13 +138,16 @@ class UserMapper extends QBMapper {
 			// just catch and continue if not found and try to find user by share;
 		}
 
-		try {
-			$share = $this->getShareByPollAndUser($userId, $pollId);
-			return $this->getUserFromShare($share);
-		} catch (ShareNotFoundException $e) {
-			// User seems to be probaly deleted, use fake share
-			return new Ghost($userId);
+		if ($pollId !== null) {
+			try {
+				$share = $this->getShareByPollAndUser($userId, $pollId);
+				return $this->getUserFromShare($share);
+			} catch (ShareNotFoundException $e) {
+				// User seems to be probably deleted, use fake share
+				return new Ghost($userId);
+			}
 		}
+		return new Ghost($userId);
 	}
 
 	/**
