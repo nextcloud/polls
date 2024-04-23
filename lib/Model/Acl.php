@@ -66,6 +66,8 @@ class Acl implements JsonSerializable {
 
 	private ?int $pollId = null;
 	private ?UserBase $currentUser = null;
+	// Cache whether the current poll has shares
+	private bool $noShare = false;
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
