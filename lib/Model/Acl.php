@@ -70,6 +70,8 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 	private ?int $pollId = null;
 	private ?UserBase $currentUser = null;
+	// Cache whether the current poll has shares
+	private bool $noShare = false;
 
 
 	/**
@@ -148,7 +150,7 @@ class Acl implements JsonSerializable {
 		} else {
 			$this->pollId = $pollId;
 		}
-		
+
 		$this->loadPoll();
 		$this->request($permission);
 
@@ -162,6 +164,7 @@ class Acl implements JsonSerializable {
 	public function setPoll(Poll $poll, string $permission = self::PERMISSION_POLL_VIEW): static {
 		$this->pollId = $poll->getId();
 		$this->poll = $poll;
+		$this->noShare = false;
 		$this->request($permission);
 
 		return $this;
@@ -185,7 +188,7 @@ class Acl implements JsonSerializable {
 
 		return $this->share;
 	}
-	
+
 	/**
 	 * load poll
 	 * @throws NotFoundException Thrown if poll not found
@@ -199,6 +202,7 @@ class Acl implements JsonSerializable {
 		try {
 			// otherwise load poll from db
 			$this->poll = $this->pollMapper->find((int) $this->pollId);
+			$this->noShare = false;
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Error loading poll with id ' . $this->pollId);
 		}
@@ -211,16 +215,26 @@ class Acl implements JsonSerializable {
 	 * and the pollId will get set to the share's pollId
 	 */
 	private function loadShare(): void {
+		if ($this->noShare) {
+			throw new ShareNotFoundException('No token was set for ACL');
+		}
+
 		// no token in session, try to find a user, who matches
 		if (!$this->getToken()) {
 			if ($this->getCurrentUser()->getIsLoggedIn()) {
 				// search for logged in user's share, load it and return
-				$this->share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
+				try {
+					$this->share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
+				} catch (\Throwable $ex) {
+					$this->noShare = true;
+					throw $ex;
+				}
 				// store share in session for further validations
 				// $this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
 				return;
 			} else {
 				$this->share = new Share();
+				$this->noShare = true;
 				// must fail, if no token is present and not logged in
 				throw new ShareNotFoundException('No token was set for ACL');
 			}
@@ -514,7 +528,7 @@ class Acl implements JsonSerializable {
 	 * @return bool|null
 	 */
 	private function getAllowDeleteOption(?string $optionOwner, ?int $pollId) {
-		
+
 		if (!$pollId) {
 			$this->logger->warning('Poll id missing');
 			return false;
@@ -531,7 +545,7 @@ class Acl implements JsonSerializable {
 			$this->logger->warning('Option owner missing');
 			return false;
 		}
-		
+
 
 		if ($this->matchUser($optionOwner)) {
 			return true;
