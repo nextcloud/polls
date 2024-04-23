@@ -239,7 +239,7 @@ class Acl implements JsonSerializable {
 				throw new ShareNotFoundException('No token was set for ACL');
 			}
 		}
-		
+
 		// if share is already cached, verify against session token
 		if ($this->share?->getToken() === $this->getToken()) {
 			return;
@@ -250,7 +250,7 @@ class Acl implements JsonSerializable {
 		// ensure, poll and currentUser get reset
 		$this->poll = null;
 		$this->currentUser = null;
-		
+
 		// set the poll id based on the share
 		$this->pollId = $this->share->getPollId();
 	}
