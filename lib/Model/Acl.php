@@ -155,6 +155,18 @@ class Acl implements JsonSerializable {
 		return $this;
 	}
 
+	/**
+	 * Set poll id and load poll
+	 * @return $this
+	 */
+	public function setPoll(Poll $poll, string $permission = self::PERMISSION_POLL_VIEW): static {
+		$this->pollId = $poll->getId();
+		$this->poll = $poll;
+		$this->request($permission);
+
+		return $this;
+	}
+
 	public function getPoll(): ?Poll {
 		if ($this->getToken()) {
 			// first verify working share
