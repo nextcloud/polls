@@ -30,7 +30,11 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<NcEmptyContent v-if="noPolls"
+			<NcEmptyContent v-if="noPolls && isLoading"
+				:name="t('polls', 'Loading polls…')">
+				<NcLoadingIcon slot="icon" :size="64" />
+			</NcEmptyContent>
+			<NcEmptyContent v-else-if="noPolls"
 				:name="t('polls', 'No polls found for this category')"
 				:description="t('polls', 'Add one or change category!')">
 				<template #icon>
@@ -38,8 +42,8 @@
 				</template>
 			</NcEmptyContent>
 
-			<TransitionGroup is="div"
-				v-else
+			<TransitionGroup v-else
+				tag="div"
 				name="list"
 				class="poll-list__list">
 				<PollItem key="0"
@@ -94,14 +98,13 @@
 				</PollItem>
 			</TransitionGroup>
 		</div>
-		<LoadingOverlay v-if="isLoading" />
 	</NcAppContent>
 </template>
 
 <script>
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton, NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { HeaderBar } from '../components/Base/index.js'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
@@ -117,26 +120,21 @@ export default {
 		NcActions,
 		NcActionButton,
 		NcEmptyContent,
+		NcLoadingIcon,
 		HeaderBar,
 		DeletePollIcon,
 		ClonePollIcon,
 		ArchivePollIcon,
 		RestorePollIcon,
 		PollsAppIcon,
-		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
 		PollItem: () => import('../components/PollList/PollItem.vue'),
-	},
-
-	data() {
-		return {
-			isLoading: false,
-		}
 	},
 
 	computed: {
 		...mapState({
 			pollCategories: (state) => state.polls.categories,
 			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
+			isLoading: (state) => state.polls.pollsLoading,
 		}),
 
 		...mapGetters({
