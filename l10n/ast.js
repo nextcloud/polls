@@ -196,6 +196,8 @@ OC.L10N.register(
     "Copy link to clipboard" : "Copiar l'enllaz nel cartafueyu",
     "Show QR code" : "Amosar el códigu QR",
     "Delete share" : "Desaniciar la compartición",
+    "Restore share" : "Restaurar l'elementu compartíu",
+    "Share label" : "Etiqueta d'usu compartíu",
     "Error resolving {name}." : "Hebo un error al resolver «{name}»",
     "Link copied to clipboard" : "L'enllaz copióse nel cartafueyu",
     "Error while copying link to clipboard" : "Hebo un error mentanto se copiaba l'enllaz nel cartafueyu",
