@@ -237,9 +237,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		if ($this->userMapper->getCurrentUser()->getId() === $this->getOwner()) {
 			return 'owner';
 		}
-		return $this->userRole;		
+		return $this->userRole;
 	}
-	
+
 	public function getVoteUrl(): string {
 		return $this->urlGenerator->linkToRouteAbsolute(
 			AppConstants::APP_ID . '.page.vote',
