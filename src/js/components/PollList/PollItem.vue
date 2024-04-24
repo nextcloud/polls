@@ -21,49 +21,53 @@
   -->
 
 <template>
-	<div v-if="header" class="poll-item__header">
-		<div class="item__title sortable" @click="$emit('sort-list', { sortBy: 'title'})">
+	<div v-if="header" class="poll-item header">
+		<div class="item__type" />
+		<div :class="['item__title', 'sortable', { 'sort': sortBy === 'title'}, { reverse }]"
+			@click="$emit('sort-list', { sortBy: 'title'})">
 			{{ t('polls', 'Title') }}
-			<span :class="['sort-indicator', { 'hidden': sortBy !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 		</div>
 
-		<div class="item__icon-spacer" />
+		<div class="item__action" />
 
-		<div class="item__access sortable" @click="$emit('sort-list', { sortBy: 'access'})">
+		<div :class="['item__access', 'sortable', { 'sort': sortBy === 'access'}, { reverse }]"
+			@click="$emit('sort-list', { sortBy: 'access'})">
 			{{ t('polls', 'Access') }}
-			<span :class="['sort-indicator', { 'hidden': sortBy !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 		</div>
 
-		<div class="item__owner sortable" @click="$emit('sort-list', { sortBy: 'owner.displayName'})">
+		<div :class="['item__owner', 'sortable', { 'sort': sortBy === 'owner.displayName'}, { reverse }]"
+			@click="$emit('sort-list', { sortBy: 'owner.displayName'})">
 			{{ t('polls', 'Owner') }}
-			<span :class="['sort-indicator', { 'hidden': sortBy !== 'owner.displayName'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+			<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'owner.displayName'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 		</div>
 
-		<div class="wrapper">
-			<div class="item__created sortable" @click="$emit('sort-list', { sortBy: 'created'})">
+		<div class="poll-item__wrapper">
+			<div :class="['item__created', 'sortable', { 'sort': sortBy === 'created'}, { reverse }]"
+				@click="$emit('sort-list', { sortBy: 'created'})">
 				{{ t('polls', 'Created') }}
-				<span :class="['sort-indicator', { 'hidden': sortBy !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+				<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 			</div>
 
-			<div class="item__expiry sortable" @click="$emit('sort-list', { sortBy: 'expire'})">
+			<div :class="['item__expiry', 'sortable', { 'sort': sortBy === 'expire'}, { reverse }]"
+				@click="$emit('sort-list', { sortBy: 'expire'})">
 				{{ t('polls', 'Closing date') }}
-				<span :class="['sort-indicator', { 'hidden': sortBy !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" />
+				<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 			</div>
 		</div>
 	</div>
 
-	<div v-else class="poll-item__item">
-		<div :title="pollTypeName" class="item__icon-spacer">
-			<TextPollIcon v-if="pollType === 'textPoll'" />
-			<DatePollIcon v-else />
-		</div>
+	<div v-else class="poll-item content">
+		<TextPollIcon v-if="pollType === 'textPoll'" class="item__type" :title="pollTypeName" />
+		<DatePollIcon v-else class="item__type" :title="pollTypeName" />
 
 		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
-			<div class="item__title__title">
+			<div class="title">
 				{{ poll.title }}
 			</div>
 
-			<div class="item__title__description">
+			<div class="description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</div>
@@ -72,43 +76,38 @@
 			class="item__title"
 			:to="{ name: 'vote', params: { id: poll.id }}"
 			:class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
-			<div class="item__title__title">
+			<div class="title">
 				{{ poll.title }}
 			</div>
 
-			<div class="item__title__description">
+			<div class="description">
 				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
 			</div>
 		</router-link>
 
 		<slot name="actions" />
-		<div :title="accessType" class="item__access">
-			<ArchivedPollIcon v-if="poll.deleted" />
-			<OpenPollIcon v-else-if="poll.access === 'open'" />
-			<PrivatePollIcon v-else />
-		</div>
+
+		<ArchivedPollIcon v-if="poll.deleted" :title="accessType" class="item__access" />
+		<OpenPollIcon v-else-if="poll.access === 'open'" :title="accessType" class="item__access" />
+		<PrivatePollIcon v-else :title="accessType" class="item__access" />
 
 		<div class="item__owner">
 			<UserItem :user="poll.owner" condensed />
 		</div>
 
-		<div class="wrapper">
-			<div class="item__created">
-				<BadgeDiv>
-					<template #icon>
-						<CreationIcon />
-					</template>
-					{{ timeCreatedRelative }}
-				</BadgeDiv>
-			</div>
-			<div class="item__expiry">
-				<BadgeDiv :class="expiryClass">
-					<template #icon>
-						<ExpirationIcon />
-					</template>
-					{{ timeExpirationRelative }}
-				</BadgeDiv>
-			</div>
+		<div class="poll-item__wrapper">
+			<BadgeDiv class="item__created">
+				<template #icon>
+					<CreationIcon />
+				</template>
+				{{ timeCreatedRelative }}
+			</BadgeDiv>
+			<BadgeDiv :class="['item__expiry', expiryClass]">
+				<template #icon>
+					<ExpirationIcon />
+				</template>
+				{{ timeExpirationRelative }}
+			</BadgeDiv>
 		</div>
 	</div>
 </template>
@@ -155,7 +154,7 @@ export default {
 
 	computed: {
 		...mapState({
-			sortBy: (state) => state.polls.sort.sortby,
+			sortBy: (state) => state.polls.sort.by,
 			reverse: (state) => state.polls.sort.reverse,
 		}),
 
@@ -222,110 +221,115 @@ export default {
 </script>
 
 <style lang="scss">
-	[class^='poll-item__'] {
+
+	.poll-item {
 		display: flex;
-		flex: 1;
-		padding: 4px 8px;
+		column-gap: 4px;
+		align-items: center;
+		padding: 4px 0;
 		border-bottom: 1px solid var(--color-border-dark);
-	}
 
-	[class^='item__'],
-	.poll-item__item .action-item {
-		display: flex;
-		align-items: center;
-		flex: 0 0 auto;
-		overflow: hidden;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-	}
-
-	.item__title {
-		display: flex;
-		flex-direction: column;
-		flex: 1 0 155px;
-		align-items: stretch;
-		justify-content: center;
-
-		.item__title__title {
-			display: block;
-		}
-
-		.item__title__description {
-			opacity: 0.5;
-			display: block;
-		}
-	}
-
-	.poll-item__header {
-		opacity: 0.7;
-		flex: auto;
-		height: 4em;
-		align-items: center;
-		padding-left: 52px;
-
-		.sortable {
-			cursor: pointer;
-			&:hover {
-				.sort-indicator.hidden {
-					visibility: visible;
-					display: block;
-				}
-			}
+		.item__type {
+			flex: 0 0 44px;
 		}
 
 		.item__title {
-			flex-direction: row;
-			justify-content: flex-start;
+			flex: 1 0 170px;
 		}
-	}
 
-	.poll-item__item {
-		&> .action-item {
+		.item__action,
+		.action-item,
+		.item__access,
+		.item__owner {
 			display: flex;
+			flex: 0 0 80px;
+			justify-content: center;
 		}
-		&.active {
-			background-color: var(--color-primary-element-light);
+
+		.item__created,
+		.item__expiry {
+			flex: 0 1 148px;
 		}
-		&:hover {
-			background-color: var(--color-background-hover);
+
+		.poll-item__wrapper {
+			display: flex;
+			flex: 0 1 300px;
+			column-gap: 4px;
+			flex-wrap: wrap;
+			align-items: center;
+			overflow: hidden;
+
+			.badge {
+				height: 2.5em;
+			}
 		}
-	}
 
-	.item__icon-spacer {
-		width: 44px;
-		min-width: 44px;
-	}
+		&.header {
+			opacity: 0.7;
+			height: 4em;
 
-	.wrapper {
-		display: flex;
-		flex: 0 1 auto;
-		flex-wrap: wrap;
-	}
+			[class^="item__"] {
+				display: flex;
+				align-items: baseline;
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
 
-	.item__access,
-	.item__owner {
-		width: 78px;
-		justify-content: center;
-	}
+			.sortable {
+				cursor: pointer;
+			}
 
-	.item__created,
-	.item__expiry {
-		width: 145px;
-		.badge {
-			width: 100%;
+			.sort::after {
+				display: inline-block;
+				content: '';
+				width: 8px;
+				height: 8px;
+				margin-left: 4px;
+				background-image: var(--icon-triangle-n-dark);
+				background-repeat: no-repeat;
+				background-position: center;
+			}
+
+			.sort.reverse::after {
+				background-image: var(--icon-triangle-s-dark);
+			}
 		}
-	}
 
-	[class^='item__type'] {
-		width: 44px;
-		min-width: 16px;
-		min-height: 16px;
-	}
+		&.content {
+			.item__title {
+				overflow: hidden;
 
-	[class^='item__access'] {
-		width: 70px;
-		min-width: 16px;
-		min-height: 16px;
-		justify-content: center;
+				> * {
+					overflow: hidden;
+					text-overflow: ellipsis;
+					white-space: nowrap;
+				}
+
+				.title {
+					font-weight: 600;
+				}
+
+				.description {
+					opacity: 0.5;
+				}
+			}
+
+			.item__created,
+			.item__expiry {
+				overflow: hidden;
+				text-overflow: ellipsis;
+				white-space: nowrap;
+			}
+
+			&.active {
+				background-color: var(--color-primary-element-light);
+			}
+
+			&:hover {
+				background-color: var(--color-background-hover);
+			}
+		}
+
 	}
 </style>
