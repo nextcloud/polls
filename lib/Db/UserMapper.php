@@ -127,13 +127,16 @@ class UserMapper extends QBMapper {
 			// just catch and continue if not found and try to find user by share;
 		}
 
-		try {
-			$share = $this->getShareByPollAndUser($userId, $pollId);
-			return $this->getUserFromShare($share);
-		} catch (ShareNotFoundException $e) {
-			// User seems to be probaly deleted, use fake share
-			return new Ghost($userId);
+		if ($pollId !== null) {
+			try {
+				$share = $this->getShareByPollAndUser($userId, $pollId);
+				return $this->getUserFromShare($share);
+			} catch (ShareNotFoundException $e) {
+				// User seems to be probably deleted, use fake share
+				return new Ghost($userId);
+			}
 		}
+		return new Ghost($userId);
 	}
 
 	/**
@@ -175,7 +178,7 @@ class UserMapper extends QBMapper {
 		if ($user instanceof IUser) {
 			try {
 				// check if we find a share, where the user got admin rights for the particular poll
-				if ($this->getShareByPollAndUser($userId, $pollId)->getType() === Share::TYPE_ADMIN) {
+				if (($pollId !== null) && $this->getShareByPollAndUser($userId, $pollId)->getType() === Share::TYPE_ADMIN) {
 					return new Admin($userId);
 				}
 			} catch (Exception $e) {
@@ -215,15 +218,15 @@ class UserMapper extends QBMapper {
 
 	private function getShareByToken(string $token): Share {
 		$qb = $this->db->getQueryBuilder();
-	
+
 		$qb->select('*')
 			->from($this->getTableName())
 			->where($qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
-	
+
 		return $this->findEntity($qb);
 	}
 
-	private function getShareByPollAndUser(string $userId, ?int $pollId = null): Share {
+	private function getShareByPollAndUser(string $userId, int $pollId): Share {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
