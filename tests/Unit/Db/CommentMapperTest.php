@@ -1,4 +1,6 @@
-<?php declare(strict_types=1);
+<?php
+
+declare(strict_types=1);
 /**
  * @copyright Copyright (c) 2017 Kai Schröer <git@schroeer.co>
  *
@@ -24,21 +26,22 @@
 namespace OCA\Polls\Tests\Unit\Db;
 
 use League\FactoryMuffin\Faker\Facade as Faker;
-use OCA\Polls\Tests\Unit\UnitTestCase;
-
 use OCA\Polls\Db\Comment;
+
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Tests\Unit\UnitTestCase;
+use OCP\ISession;
 use OCP\Server;
 
 class CommentMapperTest extends UnitTestCase {
 	private ISession $session;
 	private CommentMapper $commentMapper;
 	private PollMapper $pollMapper;
-	/** @var Poll[] $polls */ 
+	/** @var Poll[] $polls */
 	private array $polls = [];
-	/** @var Comment[] $comments */ 
+	/** @var Comment[] $comments */
 	private array $comments = [];
 
 	/**
@@ -59,7 +62,7 @@ class CommentMapperTest extends UnitTestCase {
 		foreach ($this->polls as &$poll) {
 			$poll = $this->pollMapper->insert($poll);
 
-			for ($count=0; $count < 2; $count++) {
+			for ($count = 0; $count < 2; $count++) {
 				$comment = $this->fm->instance('OCA\Polls\Db\Comment');
 				$comment->setPollId($poll->getId());
 				array_push($this->comments, $this->commentMapper->insert($comment));
@@ -68,14 +71,14 @@ class CommentMapperTest extends UnitTestCase {
 		unset($poll);
 	}
 
-	 /**
- 	 * testFind
- 	 */
- 	public function testFind() {
- 		foreach ($this->comments as $comment) {
- 			$this->assertInstanceOf(Comment::class, $this->commentMapper->find($comment->getId()));
- 		}
- 	}
+	/**
+	 * testFind
+	 */
+	public function testFind() {
+		foreach ($this->comments as $comment) {
+			$this->assertInstanceOf(Comment::class, $this->commentMapper->find($comment->getId()));
+		}
+	}
 
 	/**
 	 * testFindByPoll

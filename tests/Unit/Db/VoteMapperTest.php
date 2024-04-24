@@ -31,6 +31,7 @@ use OCA\Polls\Tests\Unit\UnitTestCase;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Db\OptionMapper;
 use OCP\ISession;
 use OCP\Server;
 
