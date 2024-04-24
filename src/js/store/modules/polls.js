@@ -32,6 +32,7 @@ const state = {
 	isPollCreationAllowed: false,
 	isComboAllowed: false,
 	currentCategoryId: 'all',
+	pollsLoading: false,
 	sort: {
 		by: 'created',
 		reverse: true,
@@ -141,6 +142,10 @@ const mutations = {
 		Object.assign(state, payload)
 	},
 
+	setLoading(state, loading) {
+		state.pollsLoading = loading ?? true
+	},
+
 	setFilter(state, payload) {
 		state.currentCategoryId = payload.currentCategoryId
 	},
@@ -195,6 +200,7 @@ const actions = {
 	async list(context) {
 
 		try {
+			context.commit('setLoading')
 			const response = await PollsAPI.getPolls()
 			context.commit('set', { list: response.data.list })
 			context.commit('setPollCreationAllowed', { pollCreationAllowed: response.data.pollCreationAllowed })
@@ -203,6 +209,8 @@ const actions = {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loading polls', { error: e.response })
 			throw e
+		} finally {
+			context.commit('setLoading', false)
 		}
 	},
 }
