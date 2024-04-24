@@ -34,6 +34,7 @@ use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
+use OCP\Server;
 
 /**
  * @psalm-api
@@ -52,10 +53,7 @@ class JanitorCron extends TimedJob {
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day
-		$this->logMapper = $logMapper;
-		$this->pollMapper = $pollMapper;
-		$this->watchMapper = $watchMapper;
-		$this->appSettings = new AppSettings;
+		$this->appSettings = Server::get(AppSettings::class);
 	}
 
 	/**

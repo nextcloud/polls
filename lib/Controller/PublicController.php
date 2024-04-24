@@ -45,6 +45,10 @@ use OCP\IUserSession;
 use OCP\Util;
 
 /**
+ * Always use parent's classe response* methods to make sure, the token gets set correctly.
+ * Requesting the token inside the controller is not possible, because the token is submitted
+ * as a paramter and not known while contruction time
+ * i.e. ACL requests are not valid before calling the response* method
  * @psalm-api
  */
 class PublicController extends BasePublicController {
@@ -88,13 +92,14 @@ class PublicController extends BasePublicController {
 	 * @PublicPage
 	 */
 	public function getPoll(string $token): JSONResponse {
-		$this->acl->request(Acl::PERMISSION_POLL_VIEW);
-
-		// load poll through acl
-		return $this->response(fn () => [
-			'acl' => $this->acl,
-			'poll' => $this->acl->getPoll(),
-		], $token);
+		return $this->response(function () {
+			$this->acl->request(Acl::PERMISSION_POLL_VIEW);
+			// load poll through acl
+			return [
+				'acl' => $this->acl,
+				'poll' => $this->acl->getPoll(),
+			];
+		}, $token);
 	}
 
 	/**

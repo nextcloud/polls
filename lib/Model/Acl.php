@@ -33,7 +33,6 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
-use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidPollIdException;
 use OCA\Polls\Exceptions\NotFoundException;
@@ -84,14 +83,10 @@ class Acl implements JsonSerializable {
 		private ISession $session,
 		private ShareMapper $shareMapper,
 		private UserMapper $userMapper,
-		private VoteMapper $voteMapper,
 		private ?Poll $poll = null,
 		private ?Share $share = null,
 	) {
 		$this->pollId = null;
-		$this->poll = $poll;
-		$this->share = $share;
-		$this->appSettings = new AppSettings;
 	}
 
 	/**
@@ -145,8 +140,8 @@ class Acl implements JsonSerializable {
 	 * Set poll id and load poll
 	 */
 	public function setPollId(?int $pollId = null, string $permission = self::PERMISSION_POLL_VIEW): Acl {
-		if ($this->getToken() && $pollId !== $this->getShare()->getPollId()) {
-			$this->logger->warning('Ignoring requested pollId ' . $pollId . '. Keeping share pollId of share(' . $this->getToken() . '): ' . $this->getShare()->getPollId());
+		if ($this->getSessionStoredShareToken() && $pollId !== $this->getShare()->getPollId()) {
+			$this->logger->warning('Ignoring requested pollId ' . $pollId . '. Keeping share pollId of share(' . $this->getSessionStoredShareToken() . '): ' . $this->getShare()->getPollId());
 		} else {
 			$this->pollId = $pollId;
 		}
@@ -239,7 +234,7 @@ class Acl implements JsonSerializable {
 				throw new ShareNotFoundException('No token was set for ACL');
 			}
 		}
-		
+
 		// if share is already cached, verify against session token
 		if ($this->share?->getToken() === $this->getToken()) {
 			return;
@@ -250,7 +245,7 @@ class Acl implements JsonSerializable {
 		// ensure, poll and currentUser get reset
 		$this->poll = null;
 		$this->currentUser = null;
-		
+
 		// set the poll id based on the share
 		$this->pollId = $this->share->getPollId();
 	}
@@ -278,7 +273,7 @@ class Acl implements JsonSerializable {
 		return (int) $this->getPoll()->getId();
 	}
 
-	public function getToken(): ?string {
+	private function getSessionStoredShareToken(): ?string {
 		return $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 	}
 
@@ -368,9 +363,7 @@ class Acl implements JsonSerializable {
 	 * Returns true, if the current user is already a particitipant of the current poll.
 	 */
 	private function getIsParticipant(): bool {
-		return count(
-			$this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())
-		) > 0;
+		return $this->getPoll()->getCurrentUserCountVotes() > 0;
 	}
 
 	/**
