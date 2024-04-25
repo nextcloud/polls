@@ -64,7 +64,7 @@ In this example, we set an expiration date on January 1, 1970 at 00:00:01 UTC.
     }
 }
 ```
-### Return value
+## Return value
 A poll newly created will look like this. Expiration is set to "0" to indicate that no expiration date has been set yet.
 ```json
 {
@@ -81,7 +81,7 @@ A poll newly created will look like this. Expiration is set to "0" to indicate t
 			"isNoUser": false,
 			"desc": "User",
 			"type":"user",
-			"id":"Username",
+			"id":"username",
 			"user":"Username",
 			"organisation":"",
 			"languageCode":"en",
@@ -126,6 +126,50 @@ A poll newly created will look like this. Expiration is set to "0" to indicate t
 | expire      | integer | Unix timestamp (0 if no expiration date)                           |
 | access      | string  | "open" if anyone can access it, "private" otherwise                |
 | showResults | string  | "never", "always" or "closed" (to show when the poll is closed)    |
+| type        | string  | "textPoll" or "datePoll"                                           |
+
+# Acl
+## Default functions
+| Method    | Endpoint                     | Payload | Description            | Return codes       | Return value   |
+| --------- | ---------------------------- | ------- | ---------------------- | ------------------ | -------------- |
+| GET       | /api/v1.0/poll/{pollId}/acl  | no      | Get acl for {pollId}   | 200, 403, 404      | requested acl  |
+
+## Return value
+```json
+{
+	"acl": {
+		"pollId":1,
+		"pollExpired":false,
+		"pollExpire":0,
+		"currentUser": {
+			"displayName":"Username",
+			"hasVoted":false,
+			"isInvolved":true,
+			"isLoggedIn":true,
+			"isNoUser":false,
+			"isOwner":true,
+			"userId":"username"
+		},
+		"permissions": {
+			"addOptions":true,
+			"allAccess":true,
+			"archive":true,
+			"comment":true,
+			"delete":true,
+			"edit":true,
+			"pollCreation":true,
+			"pollDownload":true,
+			"publicShares":true,
+			"seeResults":true,
+			"seeUsernames":true,
+			"seeMailAddresses":true,
+			"subscribe":false,
+			"view":true,
+			"vote":true
+		}
+	}
+}
+```
 
 # Options
 ## Default functions
