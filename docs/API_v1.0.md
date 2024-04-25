@@ -14,6 +14,10 @@ Example calls:
 ```bash
 `curl -u username:password -X GET https://nextcloud.local/index.php/apps/polls/api/v1.0/poll/1/comments`
 ```
+* Create a new poll
+```bash
+`curl  -u username -X POST https://nextcloud.local/index.php/apps/polls/api/v1.0/poll -H "Content-Type: application/json;charset=utf-8" -d "{\"title\": \"New poll\", \"type\": \"datePoll\"}"`
+```
 
 # Poll
 ## Default functions
@@ -44,13 +48,13 @@ Example calls:
 
 ### Update poll
 send the full or a partial structure
-In this example, we set an expiration date on January 1, 1970 at 00:00:00 UTC.
+In this example, we set an expiration date on January 1, 1970 at 00:00:01 UTC.
 ```json
 {
     "poll": {
         "title": "Changed Title",
         "description": "Updated description",
-        "expire": 0,
+        "expire": 1,
         "access": "private",
         "anonymous": true,
         "allowMaybe": true,
@@ -60,11 +64,68 @@ In this example, we set an expiration date on January 1, 1970 at 00:00:00 UTC.
     }
 }
 ```
+### Return value
+A poll newly created will look like this. Expiration is set to "0" to indicate that no expiration date has been set yet.
+```json
+{
+	"poll": {
+		"title": "New Poll",
+		"description": "",
+		"descriptionSafe": "",
+		"owner": {
+			"userId": "username",
+			"displayName": "Username",
+			"emailAddress": "username@example.com",
+			"subName": "User",
+			"subtitle": "User",
+			"isNoUser": false,
+			"desc": "User",
+			"type":"user",
+			"id":"Username",
+			"user":"Username",
+			"organisation":"",
+			"languageCode":"en",
+			"localeCode":"en",
+			"timeZone":"UTC",
+			"icon":"icon-user",
+			"categories":[]
+		},
+		"access":"private",
+		"allowComment":false,
+		"allowMaybe":false,
+		"allowProposals":"",
+		"anonymous":false,
+		"autoReminder":false,
+		"created":1714078369,
+		"deleted":false,
+		"expire":0,
+		"hideBookedUp":false,
+		"proposalsExpire":0,
+		"showResults":"always",
+		"useNo":false,
+		"limits": {
+			"maxVotesPerOption":0,
+			"maxVotesPerUser":0
+		},
+		"status": {
+			"lastInteraction":1714078369
+		},
+		"currentUserStatus": {
+			"userRole":"owner",
+			"isLocked":false,
+			"orphanedVotes":0,
+			"yesVotes":0,
+			"countVotes":0
+		}
+	}
+}
+```
 ### Keys and values
-| Key     | Type    | description        |
-| ------- | ------- | -------------------|
-| expire  | integer | unix timestamp     |
-| deleted | integer | unix timestamp     |
+| Key         | Type    | description                                                        |
+| ----------- | ------- | ------------------------------------------------------------------ |
+| expire      | integer | Unix timestamp (0 if no expiration date)                           |
+| access      | string  | "open" if anyone can access it, "private" otherwise                |
+| showResults | string  | "never", "always" or "closed" (to show when the poll is closed)    |
 
 # Options
 ## Default functions
