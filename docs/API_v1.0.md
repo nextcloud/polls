@@ -44,18 +44,19 @@ Example calls:
 
 ### Update poll
 send the full or a partial structure
+In this example, we set an expiration date on January 1, 1970 at 00:00:00 UTC.
 ```json
 {
     "poll": {
         "title": "Changed Title",
         "description": "Updated description",
         "expire": 0,
-        "deleted": 0,
-        "access": "hidden",
-        "anonymous": 1,
-        "allowMaybe": 1,
-        "showResults": "never",
-        "adminAccess": 1
+        "access": "private",
+        "anonymous": true,
+        "allowMaybe": true,
+        "allowComment": true,
+        "allowProposals": true,
+        "showResults": "never"
     }
 }
 ```
