@@ -47,7 +47,7 @@ Example calls:
 ```
 
 ### Update poll
-send the full or a partial structure
+Send the full or a partial structure.
 In this example, we set an expiration date on January 1, 1970 at 00:00:01 UTC.
 ```json
 {
@@ -342,8 +342,8 @@ tbd
 		"user": {
 			"userId":"username",
 			"displayName":"Username",
-			"emailAddress":"","
-			subName":"User",
+			"emailAddress":"",
+			"subName":"User",
 			"subtitle":"User",
 			"isNoUser":false,
 			"desc":"User",
