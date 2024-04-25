@@ -216,6 +216,7 @@
     "Token: {token}" : "Pase: {token}",
     "Public link: {token}" : "Enllaz públicu: {token}",
     "Public link" : "Enllaz públicu",
+    "Change name" : "Camudar el nome",
     "Error deleting email address {emailAddress}" : "Hebo un error mentanto se desaniciaba la direición de corréu electrónicu {emailAddress}",
     "Email address {emailAddress} saved." : "Guardóse la direición de corréu electrónicu {emailAddress}",
     "Error saving email address {emailAddress}" : "Hebo un error al guardar la direición de corréu electrónicu {emailAddress}",
