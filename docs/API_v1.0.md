@@ -34,7 +34,7 @@ Example calls:
 | Method    | Endpoint                      | Payload | Description                  | Return codes       | Return value   |
 | --------- | ------------------------------| ------- | ---------------------------- | ------------------ | -------------- |
 | POST      | /api/v1.0/poll/{pollId}/clone | no      | Clone poll from {pollId}     | 201, 403, 404      | cloned poll    |
-| POST      | /api/v1.0/poll/{pollId}/trash | no      | Move to/remome from trash    | 200, 403, 404      | updated poll   |
+| POST      | /api/v1.0/poll/{pollId}/trash | no      | Move to/remove from trash    | 200, 403, 404      | updated poll   |
 | GET       | /api/v1.0/enum/poll           | no      | Get valid enums              | 200, 403, 404      | array          |
 
 ## Valid payloads
