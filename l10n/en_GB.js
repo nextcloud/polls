@@ -589,6 +589,7 @@ OC.L10N.register(
     "Error cloning poll." : "Error cloning poll.",
     "404 - poll not found" : "404 - poll not found",
     "Enter a poll or start a new one." : "Enter a poll or start a new one.",
+    "Loading polls…" : "Loading polls…",
     "Error loading poll" : "Error loading poll",
     "Details" : "Details",
     "Configuration" : "Configuration",

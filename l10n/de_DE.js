@@ -589,6 +589,7 @@ OC.L10N.register(
     "Error cloning poll." : "Fehler beim Klonen der Umfrage.",
     "404 - poll not found" : "404 - Umfrage nicht gefunden",
     "Enter a poll or start a new one." : "Treten Sie einer Umfrage bei oder starten Sie eine neue.",
+    "Loading polls…" : "Lade Umfragen…",
     "Error loading poll" : "Fehler beim Laden der Umfrage",
     "Details" : "Details",
     "Configuration" : "Konfiguration",

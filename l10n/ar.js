@@ -589,6 +589,7 @@ OC.L10N.register(
     "Error cloning poll." : "خطأ في استنساخ الاستبيان.",
     "404 - poll not found" : "404 - الاستبيان غير موجود",
     "Enter a poll or start a new one." : "الدخول لاستبيان أو بدء استبيان جديد.",
+    "Loading polls…" : "تحميل الاستبيانات جارٍ ...",
     "Error loading poll" : "حدث خطأ أثناء تحميل الاستبيان",
     "Details" : "التفاصيل",
     "Configuration" : "إعداد",
