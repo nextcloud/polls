@@ -580,6 +580,7 @@
     "Error cloning poll." : "Erreur de duplication du sondage.",
     "404 - poll not found" : "404 - sondage introuvable",
     "Enter a poll or start a new one." : "Choisissez un autre sondage ou ajoutez-en un nouveau.",
+    "Loading polls…" : "Chargement des sondages…",
     "Error loading poll" : "Erreur lors du chargement du sondage",
     "Details" : "Détails",
     "Configuration" : "Configuration",

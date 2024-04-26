@@ -589,6 +589,7 @@ OC.L10N.register(
     "Error cloning poll." : "Грешка приликом клонирања гласања.",
     "404 - poll not found" : "404 - гласање није пронађено",
     "Enter a poll or start a new one." : "Одаберите гласање или започните ново.",
+    "Loading polls…" : "Учитавају се гласања…",
     "Error loading poll" : "Грешка при учитавању гласања",
     "Details" : "Детаљи",
     "Configuration" : "Конфигурација",
