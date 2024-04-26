@@ -31,11 +31,13 @@ Example calls:
 
 
 ## Special functions
-| Method    | Endpoint                      | Payload | Description                  | Return codes       | Return value   |
-| --------- | ------------------------------| ------- | ---------------------------- | ------------------ | -------------- |
-| POST      | /api/v1.0/poll/{pollId}/clone | no      | Clone poll from {pollId}     | 201, 403, 404      | cloned poll    |
-| POST      | /api/v1.0/poll/{pollId}/trash | no      | Move to/remove from trash    | 200, 403, 404      | updated poll   |
-| GET       | /api/v1.0/enum/poll           | no      | Get valid enums              | 200, 403, 404      | array          |
+| Method    | Endpoint                       | Payload | Description                  | Return codes       | Return value   |
+| --------- | ------------------------------ | ------- | ---------------------------- | ------------------ | -------------- |
+| POST      | /api/v1.0/poll/{pollId}/clone  | no      | Clone poll from {pollId}     | 201, 403, 404      | cloned poll    |
+| POST      | /api/v1.0/poll/{pollId}/trash  | no      | Move to/remove from trash    | 200, 403, 404      | updated poll   |
+| GET       | /api/v1.0/enum/poll            | no      | Get valid enums              | 200, 403, 404      | array          |
+| PUT       | /api/v1.0/poll/{pollId}/close  | no      | Close poll with {pollId}     | 200. 403, 404      | closed poll    |
+| PUT       | /api/v1.0/poll/{pollId}/reopen | no      | Close poll with {pollId}     | 200. 403, 404      | reopened poll  |
 
 ## Valid payloads
 ### Add new poll
@@ -48,7 +50,8 @@ Example calls:
 
 ### Update poll
 Send the full or a partial structure.
-In this example, we set an expiration date on January 1, 1970 at 00:00:01 UTC.
+`expire' field is set to 0 to make it an endless poll (without an expiration date). This field can be set to a date in the future to automatically close the poll on that date.
+A poll can be closed immediately by using the endpoint `poll/{pollId}/close` and reopened by using `poll/{pollId}/reopen` or by setting `expire` to 0.
 ```json
 {
     "poll": {
@@ -65,7 +68,7 @@ In this example, we set an expiration date on January 1, 1970 at 00:00:01 UTC.
 }
 ```
 ## Return value
-A poll newly created will look like this. Expiration is set to "0" to indicate that no expiration date has been set yet.
+A poll newly created will look like this.
 ```json
 {
 	"poll": {
