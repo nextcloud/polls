@@ -30,73 +30,65 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<NcEmptyContent v-if="noPolls && isLoading"
-				:name="t('polls', 'Loading polls…')">
-				<NcLoadingIcon slot="icon" :size="64" />
-			</NcEmptyContent>
-			<NcEmptyContent v-else-if="noPolls"
-				:name="t('polls', 'No polls found for this category')"
-				:description="t('polls', 'Add one or change category!')">
+			<TransitionGroup tag="div" name="list" class="poll-list__list">
+				<PollItem key="0" :header="true" @sort-list="setSortColumn($event)" />
+
+				<template v-if="!emptyPollListnoPolls">
+					<PollItem v-for="(poll) in pollList"
+						:key="poll.id"
+						:poll="poll"
+						@goto-poll="gotoPoll(poll.id)"
+						@load-poll="loadPoll(poll.id)">
+						<template #actions>
+							<NcActions force-menu>
+								<NcActionButton v-if="isPollCreationAllowed"
+									:name="t('polls', 'Clone poll')"
+									close-after-click
+									@click="clonePoll(poll.id)">
+									<template #icon>
+										<ClonePollIcon />
+									</template>
+								</NcActionButton>
+
+								<NcActionButton v-if="poll.permissions.edit && !poll.deleted"
+									:name="t('polls', 'Archive poll')"
+									close-after-click
+									@click="toggleArchive(poll.id)">
+									<template #icon>
+										<ArchivePollIcon />
+									</template>
+								</NcActionButton>
+
+								<NcActionButton v-if="poll.permissions.edit && poll.deleted"
+									:name="t('polls', 'Restore poll')"
+									close-after-click
+									@click="toggleArchive(poll.id)">
+									<template #icon>
+										<RestorePollIcon />
+									</template>
+								</NcActionButton>
+
+								<NcActionButton v-if="poll.permissions.edit && poll.deleted"
+									class="danger"
+									:name="t('polls', 'Delete poll')"
+									close-after-click
+									@click="deletePoll(poll.id)">
+									<template #icon>
+										<DeletePollIcon />
+									</template>
+								</NcActionButton>
+							</NcActions>
+						</template>
+					</PollItem>
+				</template>
+			</TransitionGroup>
+
+			<NcEmptyContent v-if="emptyPollListnoPolls" v-bind="emptyContent">
 				<template #icon>
-					<PollsAppIcon />
+					<NcLoadingIcon v-if="isLoading" :size="64" />
+					<PollsAppIcon v-else />
 				</template>
 			</NcEmptyContent>
-
-			<TransitionGroup v-else
-				tag="div"
-				name="list"
-				class="poll-list__list">
-				<PollItem key="0"
-					:header="true"
-					@sort-list="setSortColumn($event)" />
-
-				<PollItem v-for="(poll) in pollList"
-					:key="poll.id"
-					:poll="poll"
-					@goto-poll="gotoPoll(poll.id)"
-					@load-poll="loadPoll(poll.id)">
-					<template #actions>
-						<NcActions force-menu>
-							<NcActionButton v-if="isPollCreationAllowed"
-								:name="t('polls', 'Clone poll')"
-								close-after-click
-								@click="clonePoll(poll.id)">
-								<template #icon>
-									<ClonePollIcon />
-								</template>
-							</NcActionButton>
-
-							<NcActionButton v-if="poll.permissions.edit && !poll.deleted"
-								:name="t('polls', 'Archive poll')"
-								close-after-click
-								@click="toggleArchive(poll.id)">
-								<template #icon>
-									<ArchivePollIcon />
-								</template>
-							</NcActionButton>
-
-							<NcActionButton v-if="poll.permissions.edit && poll.deleted"
-								:name="t('polls', 'Restore poll')"
-								close-after-click
-								@click="toggleArchive(poll.id)">
-								<template #icon>
-									<RestorePollIcon />
-								</template>
-							</NcActionButton>
-
-							<NcActionButton v-if="poll.permissions.edit && poll.deleted"
-								class="danger"
-								:name="t('polls', 'Delete poll')"
-								close-after-click
-								@click="deletePoll(poll.id)">
-								<template #icon>
-									<DeletePollIcon />
-								</template>
-							</NcActionButton>
-						</NcActions>
-					</template>
-				</PollItem>
-			</TransitionGroup>
 		</div>
 	</NcAppContent>
 </template>
@@ -116,15 +108,15 @@ export default {
 	name: 'PollList',
 
 	components: {
+		ArchivePollIcon,
+		ClonePollIcon,
+		DeletePollIcon,
+		HeaderBar,
 		NcAppContent,
 		NcActions,
 		NcActionButton,
 		NcEmptyContent,
 		NcLoadingIcon,
-		HeaderBar,
-		DeletePollIcon,
-		ClonePollIcon,
-		ArchivePollIcon,
 		RestorePollIcon,
 		PollsAppIcon,
 		PollItem: () => import('../components/PollList/PollItem.vue'),
@@ -140,6 +132,20 @@ export default {
 		...mapGetters({
 			filteredPolls: 'polls/filtered',
 		}),
+
+		emptyContent() {
+			if (this.isLoading) {
+				return {
+					name: t('polls', 'Loading polls…'),
+					description: '',
+				}
+			}
+
+			return {
+				name: t('polls', 'No polls found for this category'),
+				description: t('polls', 'Add one or change category!'),
+			}
+		},
 
 		title() {
 			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.titleExt
@@ -158,7 +164,7 @@ export default {
 			return this.filteredPolls(this.$route.params.type)
 		},
 
-		noPolls() {
+		emptyPollListnoPolls() {
 			return this.pollList.length < 1
 		},
 
