@@ -22,9 +22,7 @@
 
 <template>
 	<Component :is="tag" class="badge">
-		<div>
-			<slot name="icon" />
-		</div>
+		<slot name="icon" />
 		<span>
 			<slot />
 		</span>
@@ -44,18 +42,23 @@ export default {
 </script>
 
 <style lang="scss">
+
 	.badge {
 		display: flex;
 		align-items: center;
 		gap: 5px;
 		border-radius: var(--border-radius);
 		padding: 5px;
-		margin: 8px 4px;
 		text-align: center;
 		line-height: 1.1em;
-		overflow: hidden;
-		text-overflow: ellipsis;
 		font-size: 0.9em;
+		overflow: hidden;
+
+		span {
+			overflow: hidden;
+			text-overflow: ellipsis;
+			white-space: nowrap;
+		}
 
 		h2 & {
 			font-size: 0.6em;
