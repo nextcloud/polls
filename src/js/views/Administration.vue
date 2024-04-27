@@ -30,62 +30,58 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<NcEmptyContent v-if="noPolls"
-				:name="t('polls', 'No polls found for this category')"
-				:description="t('polls', 'Add one or change category!')">
-				<template #icon>
-					<PollsAppIcon />
-				</template>
-			</NcEmptyContent>
-
-			<TransitionGroup is="div"
-				v-else
-				name="list"
-				class="poll-list__list">
+			<TransitionGroup is="div" name="list" class="poll-list__list">
 				<PollItem key="0"
 					:header="true"
 					:sort="sort"
 					:reverse="reverse"
 					@sort-list="setSort($event)" />
 
-				<PollItem v-for="(poll) in sortedList"
-					:key="poll.id"
-					:poll="poll"
-					no-link>
-					<template #actions>
-						<NcActions :force-menu="true">
-							<NcActionButton :name="t('polls', 'Take over')"
-								close-after-click
-								@click="confirmTakeOver(poll.id, poll.owner)">
-								<template #icon>
-									<PlusIcon />
-								</template>
-							</NcActionButton>
+				<template v-if="!isEmptyPollList">
+					<PollItem v-for="(poll) in sortedList"
+						:key="poll.id"
+						:poll="poll"
+						no-link>
+						<template #actions>
+							<NcActions :force-menu="true">
+								<NcActionButton :name="t('polls', 'Take over')"
+									close-after-click
+									@click="confirmTakeOver(poll.id, poll.owner)">
+									<template #icon>
+										<PlusIcon />
+									</template>
+								</NcActionButton>
 
-							<NcActionButton :name="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
-								close-after-click
-								@click="toggleArchive(poll.id)">
-								<template #icon>
-									<RestorePollIcon v-if="poll.deleted" />
-									<ArchivePollIcon v-else />
-								</template>
-							</NcActionButton>
+								<NcActionButton :name="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+									close-after-click
+									@click="toggleArchive(poll.id)">
+									<template #icon>
+										<RestorePollIcon v-if="poll.deleted" />
+										<ArchivePollIcon v-else />
+									</template>
+								</NcActionButton>
 
-							<NcActionButton class="danger"
-								:name="t('polls', 'Delete poll')"
-								close-after-click
-								@click="confirmDelete(poll.id, poll.owner)">
-								<template #icon>
-									<DeleteIcon />
-								</template>
-							</NcActionButton>
-						</NcActions>
-					</template>
-				</PollItem>
+								<NcActionButton class="danger"
+									:name="t('polls', 'Delete poll')"
+									close-after-click
+									@click="confirmDelete(poll.id, poll.owner)">
+									<template #icon>
+										<DeleteIcon />
+									</template>
+								</NcActionButton>
+							</NcActions>
+						</template>
+					</PollItem>
+				</template>
 			</TransitionGroup>
-		</div>
 
-		<LoadingOverlay v-if="isLoading" />
+			<NcEmptyContent v-if="isEmptyPollList" v-bind="emptyContent">
+				<template #icon>
+					<NcLoadingIcon v-if="isLoading" :size="64" />
+					<PollsAppIcon v-else />
+				</template>
+			</NcEmptyContent>
+		</div>
 
 		<NcModal v-if="takeOverModal" size="small" @close="takeOverModal = false">
 			<div class="modal__content">
@@ -133,9 +129,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
+import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcLoadingIcon, NcModal } from '@nextcloud/vue'
 import { sortBy } from 'lodash'
 import { HeaderBar } from '../components/Base/index.js'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
@@ -149,24 +145,23 @@ export default {
 
 	components: {
 		ArchivePollIcon,
-		RestorePollIcon,
-		PlusIcon,
 		DeleteIcon,
-		PollsAppIcon,
+		HeaderBar,
 		NcAppContent,
 		NcActions,
 		NcActionButton,
-		NcEmptyContent,
-		HeaderBar,
-		NcModal,
 		NcButton,
-		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
+		NcEmptyContent,
+		NcLoadingIcon,
+		NcModal,
+		PlusIcon,
+		PollsAppIcon,
+		RestorePollIcon,
 		PollItem: () => import('../components/PollList/PollItem.vue'),
 	},
 
 	data() {
 		return {
-			isLoading: false,
 			sort: 'created',
 			reverse: true,
 			takeOverModal: false,
@@ -179,9 +174,27 @@ export default {
 	},
 
 	computed: {
+		...mapState({
+			isLoading: (state) => state.polls.pollsLoading,
+		}),
+
 		...mapGetters({
 			filteredPolls: 'pollsAdmin/filtered',
 		}),
+
+		emptyContent() {
+			if (this.isLoading) {
+				return {
+					name: t('polls', 'Loading polls…'),
+					description: '',
+				}
+			}
+
+			return {
+				name: t('polls', 'No polls found for this category'),
+				description: '',
+			}
+		},
 
 		title() {
 			return t('polls', 'Administration')
@@ -199,7 +212,7 @@ export default {
 			return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
 		},
 
-		noPolls() {
+		isEmptyPollList() {
 			return this.sortedList.length < 1
 		},
 
