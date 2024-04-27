@@ -48,7 +48,6 @@ export default {
 		gap: 5px;
 		border-radius: var(--border-radius);
 		padding: 5px;
-		// margin: 8px 4px;
 		text-align: center;
 		line-height: 1.1em;
 		font-size: 0.9em;
