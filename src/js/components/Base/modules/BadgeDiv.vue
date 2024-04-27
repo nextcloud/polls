@@ -42,6 +42,7 @@ export default {
 </script>
 
 <style lang="scss">
+
 	.badge {
 		display: flex;
 		align-items: center;
