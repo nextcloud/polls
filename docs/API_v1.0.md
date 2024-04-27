@@ -14,6 +14,10 @@ Example calls:
 ```bash
 `curl -u username:password -X GET https://nextcloud.local/index.php/apps/polls/api/v1.0/poll/1/comments`
 ```
+* Create a new poll
+```bash
+`curl  -u username -X POST https://nextcloud.local/index.php/apps/polls/api/v1.0/poll -H "Content-Type: application/json;charset=utf-8" -d "{\"title\": \"New poll\", \"type\": \"datePoll\"}"`
+```
 
 # Poll
 ## Default functions
@@ -27,11 +31,13 @@ Example calls:
 
 
 ## Special functions
-| Method    | Endpoint                      | Payload | Description                  | Return codes       | Return value   |
-| --------- | ------------------------------| ------- | ---------------------------- | ------------------ | -------------- |
-| POST      | /api/v1.0/poll/{pollId}/clone | no      | Clone poll from {pollId}     | 201, 403, 404      | cloned poll    |
-| POST      | /api/v1.0/poll/{pollId}/trash | no      | Move to/remome from trash    | 200, 403, 404      | updated poll   |
-| GET       | /api/v1.0/enum/poll           | no      | Get valid enums              | 200, 403, 404      | array          |
+| Method    | Endpoint                       | Payload | Description                  | Return codes       | Return value   |
+| --------- | ------------------------------ | ------- | ---------------------------- | ------------------ | -------------- |
+| POST      | /api/v1.0/poll/{pollId}/clone  | no      | Clone poll from {pollId}     | 201, 403, 404      | cloned poll    |
+| POST      | /api/v1.0/poll/{pollId}/trash  | no      | Move to/remove from trash    | 200, 403, 404      | updated poll   |
+| GET       | /api/v1.0/enum/poll            | no      | Get valid enums              | 200, 403, 404      | array          |
+| PUT       | /api/v1.0/poll/{pollId}/close  | no      | Close poll with {pollId}     | 200. 403, 404      | closed poll    |
+| PUT       | /api/v1.0/poll/{pollId}/reopen | no      | Close poll with {pollId}     | 200. 403, 404      | reopened poll  |
 
 ## Valid payloads
 ### Add new poll
@@ -43,27 +49,130 @@ Example calls:
 ```
 
 ### Update poll
-send the full or a partial structure
+Send the full or a partial structure.
+`expire' field is set to 0 to make it an endless poll (without an expiration date). This field can be set to a date in the future to automatically close the poll on that date.
+A poll can be closed immediately by using the endpoint `poll/{pollId}/close` and reopened by using `poll/{pollId}/reopen` or by setting `expire` to 0.
 ```json
 {
     "poll": {
         "title": "Changed Title",
         "description": "Updated description",
-        "expire": 0,
-        "deleted": 0,
-        "access": "hidden",
-        "anonymous": 1,
-        "allowMaybe": 1,
-        "showResults": "never",
-        "adminAccess": 1
+        "expire": 1,
+        "access": "private",
+        "anonymous": true,
+        "allowMaybe": true,
+        "allowComment": true,
+        "allowProposals": true,
+        "showResults": "never"
     }
 }
 ```
+## Return value
+A poll newly created will look like this.
+```json
+{
+	"poll": {
+		"title": "New Poll",
+		"description": "",
+		"descriptionSafe": "",
+		"owner": {
+			"userId": "username",
+			"displayName": "Username",
+			"emailAddress": "username@example.com",
+			"subName": "User",
+			"subtitle": "User",
+			"isNoUser": false,
+			"desc": "User",
+			"type":"user",
+			"id":"username",
+			"user":"Username",
+			"organisation":"",
+			"languageCode":"en",
+			"localeCode":"en",
+			"timeZone":"UTC",
+			"icon":"icon-user",
+			"categories":[]
+		},
+		"access":"private",
+		"allowComment":false,
+		"allowMaybe":false,
+		"allowProposals":"",
+		"anonymous":false,
+		"autoReminder":false,
+		"created":1714078369,
+		"deleted":false,
+		"expire":0,
+		"hideBookedUp":false,
+		"proposalsExpire":0,
+		"showResults":"always",
+		"useNo":false,
+		"limits": {
+			"maxVotesPerOption":0,
+			"maxVotesPerUser":0
+		},
+		"status": {
+			"lastInteraction":1714078369
+		},
+		"currentUserStatus": {
+			"userRole":"owner",
+			"isLocked":false,
+			"orphanedVotes":0,
+			"yesVotes":0,
+			"countVotes":0
+		}
+	}
+}
+```
 ### Keys and values
-| Key     | Type    | description        |
-| ------- | ------- | -------------------|
-| expire  | integer | unix timestamp     |
-| deleted | integer | unix timestamp     |
+| Key         | Type    | description                                                        |
+| ----------- | ------- | ------------------------------------------------------------------ |
+| expire      | integer | Unix timestamp (0 if no expiration date)                           |
+| access      | string  | "open" if anyone can access it, "private" otherwise                |
+| showResults | string  | "never", "always" or "closed" (to show when the poll is closed)    |
+| type        | string  | "textPoll" or "datePoll"                                           |
+
+# Acl
+## Default functions
+| Method    | Endpoint                     | Payload | Description            | Return codes       | Return value   |
+| --------- | ---------------------------- | ------- | ---------------------- | ------------------ | -------------- |
+| GET       | /api/v1.0/poll/{pollId}/acl  | no      | Get acl for {pollId}   | 200, 403, 404      | requested acl  |
+
+## Return value
+```json
+{
+	"acl": {
+		"pollId":1,
+		"pollExpired":false,
+		"pollExpire":0,
+		"currentUser": {
+			"displayName":"Username",
+			"hasVoted":false,
+			"isInvolved":true,
+			"isLoggedIn":true,
+			"isNoUser":false,
+			"isOwner":true,
+			"userId":"username"
+		},
+		"permissions": {
+			"addOptions":true,
+			"allAccess":true,
+			"archive":true,
+			"comment":true,
+			"delete":true,
+			"edit":true,
+			"pollCreation":true,
+			"pollDownload":true,
+			"publicShares":true,
+			"seeResults":true,
+			"seeUsernames":true,
+			"seeMailAddresses":true,
+			"subscribe":false,
+			"view":true,
+			"vote":true
+		}
+	}
+}
+```
 
 # Options
 ## Default functions
@@ -143,29 +252,157 @@ send the full or a partial structure
 | --------- | -----------------------------------  | ---------------------------- | ------------------ |
 | GET       | /api/v1.0/poll/{pollId}/shares       | Get shares                   | 200, 403, 404      |
 | GET       | /api/v1.0/share/{token}              | Get share by token           | 200, 403, 404      |
-| POST      | /api/v1.0/share                      | Add new share with Payload   | 201, 403, 404      |
+| POST      | /api/v1.0/poll/{pollId}/share/{type} | Add new share with Payload   | 201, 403, 404      |
 | DELETE    | /api/v1.0/share/{token}              | Delete share                 | 200, 404, 409      |
 
-# Add share
-
-## public share
+## Valid payloads
+### Add a public share
 ```json
 {
-    "type": "public",
-    "pollId": 1
+    "type": "public"
 }
 ```
-## user share
+### Add a user share
+```json
+{
+    "type": "user",
+    "userId": "user"
+}
+```
+### Add a email share
+```json
+{
+    "type": "email",
+    "userId": "email@example.com",
+    "displayName": "email@example.com"
+}
+```
+
+### Add a contact share
 tbd
 
-## email share
-tbd
-
-## contact share
-tbd
-
-
-
+## Return value
+### Public share
+```json
+{
+	"share": {
+		"type": "public",
+		"id": 5,
+		"token":"K4I4nR7C",
+		"type":"public",
+		"pollId":1,
+		"userId":"K4I4nR7C",
+		"emailAddress":"",
+		"invitationSent":true,
+		"reminderSent":false,
+		"locked":false,
+		"label":"",
+		"URL":"https:\/\/example.com\/index.php\/apps\/polls\/s\/K4I4nR7C",
+		"showLogin":true,
+		"publicPollEmail":"optional",
+		"voted":false,
+		"deleted":false,
+		"user" {
+			"userId":"K4I4nR7C",
+			"displayName":"",
+			"emailAddress":"",
+			"subName":"",
+			"subtitle":"",
+			"isNoUser":true,
+			"desc":"",
+			"type":"public",
+			"id":"K4I4nR7C",
+			"user":"K4I4nR7C",
+			"organisation":"",
+			"languageCode":"",
+			"localeCode":"",
+			"timeZone":"",
+			"icon":"icon-public",
+			"categories":[]
+		}
+	}
+}
+```
+### User share
+```json
+{
+	"share": {
+		"id":6,
+		"token":"be4ILI62",
+		"type":"user",
+		"pollId":1,
+		"userId":"username",
+		"emailAddress":"",
+		"invitationSent":false,
+		"reminderSent":false,
+		"locked":false,
+		"label":"username",
+		"URL":"https:\/\/example.com\/index.php\/apps\/polls\/vote\/1",
+		"showLogin":true,
+		"publicPollEmail":"optional",
+		"voted":false,
+		"deleted":false,
+		"user": {
+			"userId":"username",
+			"displayName":"Username",
+			"emailAddress":"",
+			"subName":"User",
+			"subtitle":"User",
+			"isNoUser":false,
+			"desc":"User",
+			"type":"user",
+			"id":"Username",
+			"user":"Username",
+			"organisation":"",
+			"languageCode":"de",
+			"localeCode":"de",
+			"timeZone":"Europe\/Berlin",
+			"icon":"icon-user",
+			"categories":[]
+		}
+	}
+}
+```
+### Email share
+```json
+{
+	"share": {
+		"id":7,
+		"token":"o4MI8tGC",
+		"type":"email",
+		"pollId":1,
+		"userId":"email@example.com",
+		"emailAddress":"email@example.com",
+		"invitationSent":false,
+		"reminderSent":false,
+		"locked":false,
+		"label":"email@example.com",
+		"URL":"https:\/\/example.com\/index.php\/apps\/polls\/s\/o4MI8tGC",
+		"showLogin":true,
+		"publicPollEmail":"optional",
+		"voted":false,
+		"deleted":false,
+		"user": {
+			"userId":"email@example.com",
+			"displayName":"email@example.com",
+			"emailAddress":"email@example.com",
+			"subName":"email@example.com \u003Cemail@example.com\u003E",
+			"subtitle":"email@example.com \u003Cemail@example.com\u003E",
+			"isNoUser":true,
+			"desc":"email@example.com \u003Cemail@example.com\u003E",
+			"type":"email",
+			"id":"email@example.com",
+			"user":"email@example.com",
+			"organisation":"",
+			"languageCode":"",
+			"localeCode":"",
+			"timeZone":"",
+			"icon":"icon-mail",
+			"categories":[]
+		}
+	}
+}
+```
 # Subscription
 | Method    | Endpoint                             | Description                  | Return codes       |
 | --------- | -----------------------------------  | ---------------------------- | ------------------ |
