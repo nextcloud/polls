@@ -38,7 +38,7 @@ const defaultAppSettings = () => ({
 	imprintUrl: '',
 	legalTermsInEmail: false,
 	privacyUrl: '',
-	showMailAddresses: 'false',
+	showMailAddresses: false,
 	showLogin: true,
 	updateType: 'noPolling',
 	useActivity: false,
