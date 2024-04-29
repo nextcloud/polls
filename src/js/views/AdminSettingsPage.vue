@@ -45,6 +45,7 @@
 		<NcSettingsSection :name="t('polls', 'Performance settings')"
 			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
 			<AdminPerformance />
+			<AdminPollsInNavigation />
 		</NcSettingsSection>
 
 		<NcSettingsSection :name="t('polls', 'Public poll registration dialog options')"
@@ -69,6 +70,7 @@ import AdminLegal from '../components/Settings/AdminSettings/AdminLegal.vue'
 import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance.vue'
 import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation.vue'
 import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
+import AdminPollsInNavigation from '../components/Settings/AdminSettings/AdminPollsInNavigation.vue'
 import AdminShareOpenPoll from '../components/Settings/AdminSettings/AdminShareOpenPoll.vue'
 import AdminSharePublicCreate from '../components/Settings/AdminSettings/AdminSharePublicCreate.vue'
 import AdminSharePublicShowLogin from '../components/Settings/AdminSettings/AdminSharePublicShowLogin.vue'
@@ -89,6 +91,7 @@ export default {
 		AdminPerformance,
 		AdminPollCreation,
 		AdminPollDownload,
+		AdminPollsInNavigation,
 		AdminShareOpenPoll,
 		AdminSharePublicCreate,
 		AdminSharePublicShowLogin,
