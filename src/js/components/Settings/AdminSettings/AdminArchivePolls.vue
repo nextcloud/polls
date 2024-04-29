@@ -36,8 +36,6 @@
 </template>
 
 <script>
-
-import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../../Base/index.js'
 import { writeValue } from '../../../mixins/adminSettingsMixin.js'
@@ -53,10 +51,6 @@ export default {
 	mixins: [writeValue],
 
 	computed: {
-		...mapState({
-			appSettings: (state) => state.appSettings,
-		}),
-
 		// Add bindings
 		autoArchive: {
 			get() {

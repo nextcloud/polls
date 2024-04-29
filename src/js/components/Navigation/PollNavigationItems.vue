@@ -95,7 +95,7 @@ export default {
 
 	computed: {
 		...mapState({
-			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
+			isPollCreationAllowed: (state) => state.polls.meta.permissions.isPollCreationAllowed,
 		}),
 
 		...mapGetters({

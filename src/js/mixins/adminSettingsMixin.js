@@ -33,6 +33,7 @@ export const loadGroups = {
 			isLoading: false,
 		}
 	},
+
 	computed: {
 		...mapState({
 			appSettings: (state) => state.appSettings,
@@ -61,6 +62,12 @@ export const loadGroups = {
 }
 
 export const writeValue = {
+	computed: {
+		...mapState({
+			appSettings: (state) => state.appSettings,
+		}),
+	},
+
 	methods: {
 		async writeValue(value) {
 			await this.$store.commit('appSettings/set', value)

@@ -27,8 +27,6 @@
 </template>
 
 <script>
-
-import { mapState } from 'vuex'
 import { RadioGroupDiv } from '../../Base/index.js'
 import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 
@@ -52,10 +50,6 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			appSettings: (state) => state.appSettings,
-		}),
-
 		// Add bindings
 		updateType: {
 			get() {

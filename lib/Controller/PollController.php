@@ -27,7 +27,6 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
-
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
@@ -60,8 +59,10 @@ class PollController extends BaseController {
 			$appSettings = Server::get(AppSettings::class);
 			return [
 				'list' => $this->pollService->list(),
-				'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),
-				'comboAllowed' => $appSettings->getComboAllowed(),
+				'permissions' => [
+					'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),
+					'comboAllowed' => $appSettings->getComboAllowed(),
+				],
 			];
 		});
 	}

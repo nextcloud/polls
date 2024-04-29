@@ -125,7 +125,7 @@ export default {
 	computed: {
 		...mapState({
 			pollCategories: (state) => state.polls.categories,
-			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
+			isPollCreationAllowed: (state) => state.polls.meta.permissions.isPollCreationAllowed,
 			isLoading: (state) => state.polls.pollsLoading,
 		}),
 

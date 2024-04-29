@@ -129,8 +129,8 @@ export default {
 
 	computed: {
 		...mapState({
-			isPollCreationAllowed: (state) => state.polls.isPollCreationAllowed,
-			isComboActivated: (state) => state.polls.isComboAllowed,
+			isPollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
+			isComboActivated: (state) => state.polls.meta.permissions.comboAllowed,
 		}),
 
 		...mapGetters({
