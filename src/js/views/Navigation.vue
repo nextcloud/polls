@@ -32,14 +32,14 @@
 			<NcAppNavigationItem v-for="(pollCategory) in pollCategories"
 				:key="pollCategory.id"
 				:name="pollCategory.title"
-				:allow-collapse="true"
+				:allow-collapse="navigationPollsInList"
 				:pinned="pollCategory.pinned"
 				:to="{ name: 'list', params: {type: pollCategory.id}}"
 				:open="false">
 				<template #icon>
 					<Component :is="getIconComponent(pollCategory.id)" :size="iconSize" />
 				</template>
-				<ul>
+				<ul v-if="navigationPollsInList">
 					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
 						:key="poll.id"
 						:poll="poll"
@@ -131,6 +131,7 @@ export default {
 		...mapState({
 			isPollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
 			isComboActivated: (state) => state.polls.meta.permissions.comboAllowed,
+			navigationPollsInList: (state) => state.appSettings.navigationPollsInList,
 		}),
 
 		...mapGetters({
