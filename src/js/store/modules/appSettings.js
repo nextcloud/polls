@@ -43,6 +43,7 @@ const defaultAppSettings = () => ({
 	updateType: 'noPolling',
 	useActivity: false,
 	useCollaboration: true,
+	navigationPollsInList: true,
 	usePrivacyUrl: '',
 	useImprintUrl: '',
 	comboGroups: [],

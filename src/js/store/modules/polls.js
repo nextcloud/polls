@@ -29,9 +29,14 @@ import { PollsAPI } from '../../Api/index.js'
 
 const state = {
 	list: [],
-	isPollCreationAllowed: false,
-	isComboAllowed: false,
-	currentCategoryId: 'all',
+	meta: {
+		currentCategoryId: 'all',
+		permissions: {
+			pollCreationAllowed: false,
+			comboAllowed: false,
+		},
+	},
+
 	pollsLoading: false,
 	sort: {
 		by: 'created',
@@ -147,7 +152,7 @@ const mutations = {
 	},
 
 	setFilter(state, payload) {
-		state.currentCategoryId = payload.currentCategoryId
+		state.meta.currentCategoryId = payload.currentCategoryId
 	},
 
 	setSort(state, payload) {
@@ -159,17 +164,14 @@ const mutations = {
 		state.sort.by = payload.sortBy
 	},
 
-	setPollCreationAllowed(state, payload) {
-		state.isPollCreationAllowed = payload.pollCreationAllowed
-	},
-	setComboAllowed(state, payload) {
-		state.isComboAllowed = payload.comboAllowed
+	setPollsPermissions(state, payload) {
+		state.meta.permissions = payload.permissions
 	},
 }
 
 const getters = {
 	categories(state) {
-		if (state.isPollCreationAllowed) {
+		if (state.meta.permissions.pollCreationAllowed) {
 			return state.categories
 		}
 		return state.categories.filter((category) => (!category.createDependent))
@@ -198,13 +200,11 @@ const actions = {
 	},
 
 	async list(context) {
-
 		try {
 			context.commit('setLoading')
 			const response = await PollsAPI.getPolls()
 			context.commit('set', { list: response.data.list })
-			context.commit('setPollCreationAllowed', { pollCreationAllowed: response.data.pollCreationAllowed })
-			context.commit('setComboAllowed', { comboAllowed: response.data.comboAllowed })
+			context.commit('setPollsPermissions', { permissions: response.data.permissions })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error loading polls', { error: e.response })

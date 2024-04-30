@@ -22,51 +22,37 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="autoArchive" type="switch">
-			{{ t('polls', 'Enable the automatic poll archiving') }}
+		<NcCheckboxRadioSwitch :checked.sync="navigationPollsInList" type="switch">
+			{{ t('polls', 'Load polls into the navigation.') }}
 		</NcCheckboxRadioSwitch>
-		<InputDiv v-if="autoArchive"
-			v-model="autoArchiveOffset"
-			class="settings_details"
-			type="number"
-			inputmode="numeric"
-			use-num-modifiers
-			:label="t('polls', 'Days after which polls should be archived after closing')" />
 	</div>
 </template>
 
 <script>
+
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { InputDiv } from '../../Base/index.js'
 import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 
 export default {
-	name: 'AdminArchivePolls',
+	name: 'AdminPollsInNavigation',
 
 	components: {
 		NcCheckboxRadioSwitch,
-		InputDiv,
 	},
 
 	mixins: [writeValue],
 
 	computed: {
 		// Add bindings
-		autoArchive: {
+		navigationPollsInList: {
 			get() {
-				return this.appSettings.autoArchive
+				return this.appSettings.navigationPollsInList
 			},
 			set(value) {
-				this.writeValue({ autoArchive: value })
-			},
-		},
-		autoArchiveOffset: {
-			get() {
-				return this.appSettings.autoArchiveOffset
-			},
-			set(value) {
-				value = value < 1 ? 1 : value
-				this.writeValue({ autoArchiveOffset: value })
+				if (value < 0) {
+					value = 0
+				}
+				this.writeValue({ navigationPollsInList: value })
 			},
 		},
 	},
