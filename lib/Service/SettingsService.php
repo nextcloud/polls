@@ -56,7 +56,8 @@ class SettingsService {
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_SHOW_LOGIN, $settingsArray[AppSettings::SETTING_SHOW_LOGIN]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_USE_ACTIVITY, $settingsArray[AppSettings::SETTING_USE_ACTIVITY]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL, $settingsArray[AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL]);
-		
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_LOAD_POLLS_IN_NAVIGATION, $settingsArray[AppSettings::SETTING_LOAD_POLLS_IN_NAVIGATION]);
+
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_SHOW_MAIL_ADDRESSES_GROUPS, array_column($settingsArray[AppSettings::SETTING_SHOW_MAIL_ADDRESSES_GROUPS], 'id'));
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_ALL_ACCESS_GROUPS, array_column($settingsArray[AppSettings::SETTING_ALL_ACCESS_GROUPS], 'id'));
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_PUBLIC_SHARES_GROUPS, array_column($settingsArray[AppSettings::SETTING_PUBLIC_SHARES_GROUPS], 'id'));
