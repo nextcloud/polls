@@ -27,24 +27,23 @@ use OCA\Polls\Db\Log;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Tests\Unit\UnitTestCase;
-use OCP\IDBConnection;
 use OCP\Server;
 
 class LogMapperTest extends UnitTestCase {
-	private IDBConnection $con;
 	private LogMapper $logMapper;
 	private PollMapper $pollMapper;
-	private array $polls = [];
+	/** @var Log[] $logs*/
 	private array $logs = [];
+	/** @var Poll[] $polls*/
+	private array $polls = [];
 
 	/**
 	 * {@inheritDoc}
 	 */
 	protected function setUp(): void {
 		parent::setUp();
-		$this->con = Server::get(IDBConnection::class);
-		$this->logMapper = new LogMapper($this->con);
-		$this->pollMapper = new PollMapper($this->con);
+		$this->logMapper = Server::get(LogMapper::class);
+		$this->pollMapper = Server::get(PollMapper::class);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')

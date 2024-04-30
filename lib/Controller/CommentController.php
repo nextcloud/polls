@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\CommentService;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -44,8 +43,8 @@ class CommentController extends BaseController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'comments' => $this->commentService->list($pollId)
@@ -54,8 +53,8 @@ class CommentController extends BaseController {
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function add(int $pollId, string $message): JSONResponse {
 		return $this->response(fn () => [
 			'comment' => $this->commentService->add($message, $pollId)
@@ -64,8 +63,8 @@ class CommentController extends BaseController {
 
 	/**
 	 * Delete Comment
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function delete(int $commentId): JSONResponse {
 		$comment = $this->commentService->get($commentId);
 
@@ -76,8 +75,8 @@ class CommentController extends BaseController {
 
 	/**
 	 * Restore deleted Comment
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function restore(int $commentId): JSONResponse {
 		$comment = $this->commentService->get($commentId);
 

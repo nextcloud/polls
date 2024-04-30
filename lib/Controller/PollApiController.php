@@ -31,9 +31,6 @@ use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
-use OCP\AppFramework\Http\Attribute\CORS;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -52,10 +49,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Get list of polls
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function list(): JSONResponse {
 		try {
 			return new JSONResponse([AppConstants::APP_ID => $this->pollService->list()], Http::STATUS_OK);
@@ -68,10 +65,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * get poll configuration
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function get(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse(['poll' => $this->pollService->get($pollId)], Http::STATUS_OK);
@@ -84,10 +81,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Add poll
+	 * @NoAdminRequired
+	 * @NoCSRFRequired
+	 * @CORS
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function add(string $type, string $title): JSONResponse {
 		try {
 			return new JSONResponse(['poll' => $this->pollService->add($type, $title)], Http::STATUS_CREATED);
@@ -98,10 +95,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Update poll configuration
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function update(int $pollId, array $poll): JSONResponse {
 		try {
 			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
@@ -119,10 +116,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Switch deleted status (move to deleted polls)
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function toggleArchive(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse(['poll' => $this->pollService->toggleArchive($pollId)], Http::STATUS_OK);
@@ -135,10 +132,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Close poll
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function close(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse(['poll' => $this->pollService->close($pollId)], Http::STATUS_OK);
@@ -151,10 +148,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Reopen poll
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function reopen(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse(['poll' => $this->pollService->reopen($pollId)], Http::STATUS_OK);
@@ -167,10 +164,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Delete poll
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function delete(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
@@ -183,10 +180,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Clone poll
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function clone(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse(['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
@@ -199,11 +196,11 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Transfer all polls from one user to another (change owner of poll)
+	 * @CORS
+	 * @NoCSRFRequired
 	 * @param string $sourceUser User to transfer polls from
 	 * @param string $destinationUser User to transfer polls to
 	 */
-	#[CORS]
-	#[NoCSRFRequired]
 	public function transferPolls(string $sourceUser, string $destinationUser): JSONResponse {
 		try {
 			return new JSONResponse(['transferred' => $this->pollService->transferPolls($sourceUser, $destinationUser)], Http::STATUS_CREATED);
@@ -214,11 +211,11 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Transfer singe poll to another user (change owner of poll)
+	 * @CORS
+	 * @NoCSRFRequired
 	 * @param int $pollId Poll to transfer
 	 * @param string $destinationUser User to transfer the poll to
 	 */
-	#[CORS]
-	#[NoCSRFRequired]
 	public function transferPoll(int $pollId, string $destinationUser): JSONResponse {
 		try {
 			return new JSONResponse(['transferred' => $this->pollService->transferPoll($pollId, $destinationUser)], Http::STATUS_CREATED);
@@ -229,10 +226,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Collect email addresses from particitipants
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
@@ -245,10 +242,10 @@ class PollApiController extends BaseApiController {
 
 	/**
 	 * Get valid values for configuration options
+	 * @NoAdminRequired
+	 * @CORS
+	 * @NoCSRFRequired
 	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
 	public function enum(): JSONResponse {
 		return new JSONResponse($this->pollService->getValidEnum(), Http::STATUS_OK);
 	}

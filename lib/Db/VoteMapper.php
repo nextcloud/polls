@@ -126,19 +126,6 @@ class VoteMapper extends QBMapperWithUser {
 		return $this->findEntities($qb);
 	}
 
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Vote[]
-	 * @psalm-return array<array-key, Vote>
-	 */
-	public function findParticipantsVotes(int $pollId, string $userId): array {
-		$qb = $this->buildQuery();
-		$qb->andWhere($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
-		return $this->findEntities($qb);
-	}
-
 	public function deleteByPollAndUserId(int $pollId, string $userId): void {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->getTableName())

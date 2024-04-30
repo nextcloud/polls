@@ -28,13 +28,11 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Model\Settings\AppSettings;
 
 class SettingsService {
-	private AppSettings $appSettings;
-
+	
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
-	public function __construct() {
-		$this->appSettings = new AppSettings;
+	public function __construct(private AppSettings $appSettings) {
 	}
 
 	/**

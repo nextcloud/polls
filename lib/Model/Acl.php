@@ -33,7 +33,6 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
-use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidPollIdException;
 use OCA\Polls\Exceptions\NotFoundException;
@@ -70,6 +69,8 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 	private ?int $pollId = null;
 	private ?UserBase $currentUser = null;
+	// Cache whether the current poll has shares
+	private bool $noShare = false;
 
 
 	/**
@@ -82,14 +83,10 @@ class Acl implements JsonSerializable {
 		private ISession $session,
 		private ShareMapper $shareMapper,
 		private UserMapper $userMapper,
-		private VoteMapper $voteMapper,
 		private ?Poll $poll = null,
 		private ?Share $share = null,
 	) {
 		$this->pollId = null;
-		$this->poll = $poll;
-		$this->share = $share;
-		$this->appSettings = new AppSettings;
 	}
 
 	/**
@@ -148,8 +145,21 @@ class Acl implements JsonSerializable {
 		} else {
 			$this->pollId = $pollId;
 		}
-		
+
 		$this->loadPoll();
+		$this->request($permission);
+
+		return $this;
+	}
+
+	/**
+	 * Set poll id and load poll
+	 * @return $this
+	 */
+	public function setPoll(Poll $poll, string $permission = self::PERMISSION_POLL_VIEW): static {
+		$this->pollId = $poll->getId();
+		$this->poll = $poll;
+		$this->noShare = false;
 		$this->request($permission);
 
 		return $this;
@@ -173,7 +183,7 @@ class Acl implements JsonSerializable {
 
 		return $this->share;
 	}
-	
+
 	/**
 	 * load poll
 	 * @throws NotFoundException Thrown if poll not found
@@ -187,6 +197,7 @@ class Acl implements JsonSerializable {
 		try {
 			// otherwise load poll from db
 			$this->poll = $this->pollMapper->find((int) $this->pollId);
+			$this->noShare = false;
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Error loading poll with id ' . $this->pollId);
 		}
@@ -199,21 +210,31 @@ class Acl implements JsonSerializable {
 	 * and the pollId will get set to the share's pollId
 	 */
 	private function loadShare(): void {
+		if ($this->noShare) {
+			throw new ShareNotFoundException('No token was set for ACL');
+		}
+
 		// no token in session, try to find a user, who matches
 		if (!$this->getToken()) {
 			if ($this->getCurrentUser()->getIsLoggedIn()) {
 				// search for logged in user's share, load it and return
-				$this->share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
+				try {
+					$this->share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
+				} catch (\Throwable $ex) {
+					$this->noShare = true;
+					throw $ex;
+				}
 				// store share in session for further validations
 				// $this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
 				return;
 			} else {
 				$this->share = new Share();
+				$this->noShare = true;
 				// must fail, if no token is present and not logged in
 				throw new ShareNotFoundException('No token was set for ACL');
 			}
 		}
-		
+
 		// if share is already cached, verify against session token
 		if ($this->share?->getToken() === $this->getToken()) {
 			return;
@@ -224,7 +245,7 @@ class Acl implements JsonSerializable {
 		// ensure, poll and currentUser get reset
 		$this->poll = null;
 		$this->currentUser = null;
-		
+
 		// set the poll id based on the share
 		$this->pollId = $this->share->getPollId();
 	}
@@ -342,9 +363,7 @@ class Acl implements JsonSerializable {
 	 * Returns true, if the current user is already a particitipant of the current poll.
 	 */
 	private function getIsParticipant(): bool {
-		return count(
-			$this->voteMapper->findParticipantsVotes($this->getPollId(), $this->getUserId())
-		) > 0;
+		return $this->getPoll()->getCurrentUserCountVotes() > 0;
 	}
 
 	/**
@@ -502,7 +521,7 @@ class Acl implements JsonSerializable {
 	 * @return bool|null
 	 */
 	private function getAllowDeleteOption(?string $optionOwner, ?int $pollId) {
-		
+
 		if (!$pollId) {
 			$this->logger->warning('Poll id missing');
 			return false;
@@ -519,7 +538,7 @@ class Acl implements JsonSerializable {
 			$this->logger->warning('Option owner missing');
 			return false;
 		}
-		
+
 
 		if ($this->matchUser($optionOwner)) {
 			return true;

@@ -48,8 +48,8 @@ class BaseController extends Controller {
 
 	/**
 	 * response
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -60,8 +60,8 @@ class BaseController extends Controller {
 
 	/**
 	 * response
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
@@ -72,8 +72,8 @@ class BaseController extends Controller {
 
 	/**
 	 * responseCreate
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
@@ -84,8 +84,8 @@ class BaseController extends Controller {
 
 	/**
 	 * responseDeleteTolerant
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);

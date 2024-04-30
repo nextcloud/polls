@@ -31,9 +31,9 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
-use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
+use OCP\Server;
 
 /**
  * @psalm-api
@@ -52,11 +52,11 @@ class PollController extends BaseController {
 
 	/**
 	 * Get list of polls
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function list(): JSONResponse {
 		return $this->response(function () {
-			$appSettings = new AppSettings;
+			$appSettings = Server::get(AppSettings::class);
 			return [
 				'list' => $this->pollService->list(),
 				'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),
@@ -67,8 +67,8 @@ class PollController extends BaseController {
 
 	/**
 	 * get complete poll
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
 		$poll = $this->pollService->get($pollId);
 		$this->acl->setPollId($pollId);
@@ -80,16 +80,16 @@ class PollController extends BaseController {
 
 	/**
 	 * Add poll
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function add(string $type, string $title): JSONResponse {
 		return $this->responseCreate(fn () => $this->pollService->add($type, $title));
 	}
 
 	/**
 	 * Update poll configuration
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function update(int $pollId, array $poll): JSONResponse {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		return $this->response(fn () => [
@@ -100,8 +100,8 @@ class PollController extends BaseController {
 
 	/**
 	 * Send confirmation mails
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function sendConfirmation(int $pollId): JSONResponse {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		return $this->response(fn () => [
@@ -111,16 +111,16 @@ class PollController extends BaseController {
 
 	/**
 	 * Switch deleted status (move to deleted polls)
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function toggleArchive(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
 	}
 
 	/**
 	 * Delete poll
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 
 	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
@@ -128,8 +128,8 @@ class PollController extends BaseController {
 
 	/**
 	 * Close poll
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function close(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->close($pollId),
@@ -139,8 +139,8 @@ class PollController extends BaseController {
 
 	/**
 	 * Reopen poll
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function reopen(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->reopen($pollId),
@@ -150,8 +150,8 @@ class PollController extends BaseController {
 
 	/**
 	 * Clone poll
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function clone(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->clonePoll($pollId));
 	}
@@ -171,8 +171,8 @@ class PollController extends BaseController {
 
 	/**
 	 * Collect email addresses from particitipants
+	 * @NoAdminRequired
 	 */
-	#[NoAdminRequired]
 	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->getParticipantsEmailAddresses($pollId));
 	}
