@@ -49,6 +49,7 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_PUBLIC_SHARES_GROUPS = 'publicSharesGroups';
 	public const SETTING_SHOW_MAIL_ADDRESSES_GROUPS = 'showMailAddressesGroups';
 	public const SETTING_COMBO_GROUPS = 'comboGroups';
+	public const SETTING_LOAD_POLLS_IN_NAVIGATION = 'navigationPollsInList';
 
 	public const SETTING_SHOW_MAIL_ADDRESSES = 'showMailAddresses';
 	public const SETTING_AUTO_ARCHIVE_OFFSET = 'autoArchiveOffset';
@@ -217,6 +218,7 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_ALLOW_POLL_CREATION => $this->getBooleanSetting(self::SETTING_ALLOW_POLL_CREATION),
 			self::SETTING_ALLOW_POLL_DOWNLOAD => $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD),
 			self::SETTING_LEGAL_TERMS_IN_EMAIL => $this->getBooleanSetting(self::SETTING_LEGAL_TERMS_IN_EMAIL),
+			self::SETTING_LOAD_POLLS_IN_NAVIGATION => $this->getBooleanSetting(self::SETTING_LOAD_POLLS_IN_NAVIGATION),
 			self::SETTING_SHOW_LOGIN => $this->getBooleanSetting(self::SETTING_SHOW_LOGIN),
 			self::SETTING_SHOW_MAIL_ADDRESSES => $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES),
 			self::SETTING_USE_ACTIVITY => $this->getBooleanSetting(self::SETTING_USE_ACTIVITY),

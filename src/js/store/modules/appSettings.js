@@ -37,6 +37,7 @@ const defaultAppSettings = () => ({
 	disclaimer: '',
 	imprintUrl: '',
 	legalTermsInEmail: false,
+	navigationPollsInList: true,
 	privacyUrl: '',
 	showMailAddresses: false,
 	showLogin: true,

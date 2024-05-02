@@ -29,6 +29,9 @@ changelog:
     - title: 🐛 Fixed bugs
       labels:
         - bug
+    - title: ⚡ Performance related changes
+      labels:
+        - performance
     - title: Other Changes
       labels:
         - "*"

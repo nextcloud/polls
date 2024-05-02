@@ -53,6 +53,7 @@
 		<NcSettingsSection :name="t('polls', 'Performance settings')"
 			:description="t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')">
 			<AdminPerformance />
+			<AdminPollsInNavigation />
 		</NcSettingsSection>
 	</FlexSettings>
 </template>
@@ -65,6 +66,7 @@ import AdminMisc from '../components/Settings/AdminSettings/AdminMisc.vue'
 import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance.vue'
 import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation.vue'
 import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
+import AdminPollsInNavigation from '../components/Settings/AdminSettings/AdminPollsInNavigation.vue'
 import AdminShareSettings from '../components/Settings/AdminSettings/AdminShareSettings.vue'
 import AdminHideMailAddresses from '../components/Settings/AdminSettings/AdminHideMailAddresses.vue'
 import { FlexSettings } from '../components/Base/index.js'
@@ -82,6 +84,7 @@ export default {
 		AdminPerformance,
 		AdminPollCreation,
 		AdminPollDownload,
+		AdminPollsInNavigation,
 		AdminShareSettings,
 		AdminHideMailAddresses,
 		NcSettingsSection,
