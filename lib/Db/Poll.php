@@ -136,6 +136,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $maxDate = 0;
 	protected int $minDate = 0;
 	protected int $currentUserVotes = 0;
+	protected int $currentUserYesVotes = 0;
 	protected string $userRole = "none";
 	protected ?int $isCurrentUserLocked = 0;
 
@@ -156,6 +157,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('maxDate', 'int');
 		$this->addType('minDate', 'int');
 		$this->addType('currentUserVotes', 'int');
+		$this->addType('currentUserYesVotes', 'int');
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userMapper = Container::queryClass(UserMapper::class);
 		$this->voteMapper = Container::queryClass(VoteMapper::class);
@@ -361,6 +363,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * @psalm-return int<0, max>
 	 */
 	public function getCurrentUserYesVotes(): int {
+		// return $this->currentUserYesVotes;
 		return count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserCached()->getId()));
 	}
 

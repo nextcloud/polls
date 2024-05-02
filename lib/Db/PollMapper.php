@@ -236,6 +236,12 @@ class PollMapper extends QBMapper {
 		$joinAlias = 'user_vote';
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->count($joinAlias . '.vote_answer'), 'current_user_votes');
+		$qb->selectAlias(
+			$qb->createFunction(
+				'COUNT(CASE WHEN '.$qb->getColumnName($joinAlias . '.vote_answer').' = '.$qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR).' then 1 END)'
+			),
+			'current_user_yes_votes'
+		);
 
 		$qb->leftJoin(
 			$fromAlias,
