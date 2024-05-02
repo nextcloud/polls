@@ -1,28 +1,39 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [6.2.0] - 2024-03-27
+## [6.3.0] - tbd
 This will be the last version supporting PHP 8.0. Please note, that this version is not tested very well. So if possible please update to PHP > 8.1 and Polls v7.x.
 ### Fix
  - Fix preventing option suggestions
+ - Fixing some performance issues
+ - Fixing an error that possibly prevents users from adding suggestions
+### Changes
+ - Added a new admin option to allow disabling polls loading into the navigation aout of performance concerns with a huge amount of polls in the database
+ - Support Nextcloud 26 to 28
+
 ## [6.1.6] - 2024-02-27
 ### Fix
  - Fixing vanishing votes after shifting date options or creating sequences
+
 ## [6.1.5] - 2024-02-24
 ### Fix
  - Fixing select error
+
 ## [6.1.4] - 2024-02-24
 ### Fix
  - Fixing 404 error when using public share where the poll has hidden results
  - Partially fix email shares
  - fix user name check for public participants
+
 ## [6.1.3] - 2024-02-21
 ### Fix
  - Fixing bug, when an internal user tries to enter a poll using a public share a second time
  - Fix error message of watchpoll, trying to access pollId 0
+
 ## [6.1.1] - 2024-02-16
 ### Changes
  - Consolidated migration to avoid double database validation
+
 ## [6.1.0] - 2024-02-16
 
 #### This minor version contains a huge change in the internal user and Access management. 
