@@ -438,6 +438,7 @@ OC.L10N.register(
     "Disable automatic updates (poll must be reloaded to get updates)" : "Automatische Aktualisierungen deaktivieren (Umfrage muss zur Aktualisierung neu geladen werden)",
     "Enable the poll creation globally" : "Umfrageerstellung global aktivieren",
     "Enable the spreadsheet download of polls globally" : "Herunterladen von Tabellenansichten der Umfragen global aktivieren",
+    "Load polls into the navigation." : "Umfragen in die Navigationsleiste laden.",
     "Enable the creation of openly accessible polls globally" : "Erstellung öffentlich zugänglicher Umfragen global aktivieren",
     "Enable public shares of polls globally" : "Öffentliche Freigaben von Umfragen global aktivieren",
     "Enable the login option in the registration dialog of public polls" : "Die Anmeldeoption im Registrierungsdialog öffentlicher Umfragen aktivieren",

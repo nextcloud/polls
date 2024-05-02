@@ -436,6 +436,7 @@
     "Disable automatic updates (poll must be reloaded to get updates)" : "Искључи аутоматска ажурирања (да би се примила ажурирања гласање мора поново да се учита)",
     "Enable the poll creation globally" : "Укључи могућност креирања гласања свима",
     "Enable the spreadsheet download of polls globally" : "Укључи могућност преузимања табеле гласања свима",
+    "Load polls into the navigation." : "Учитава гласања у навигацију.",
     "Enable the creation of openly accessible polls globally" : "Укључи могућност креирања отворених гласања свима",
     "Enable public shares of polls globally" : "Укључи могућност јавног дељења гласања свима",
     "Enable the login option in the registration dialog of public polls" : "Укључи опцију пријаве у дијалогу регистрације јавних гласања",

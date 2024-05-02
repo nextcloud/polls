@@ -435,6 +435,7 @@ OC.L10N.register(
     "Disable automatic updates (poll must be reloaded to get updates)" : "Désactiver les mises à jour automatiques (le sondage doit être rechargé pour obtenir les mises à jour)",
     "Enable the poll creation globally" : "Activer la création de sondages globalement",
     "Enable the spreadsheet download of polls globally" : "Activer le téléchargement sous format tableau de sondages globalement",
+    "Load polls into the navigation." : "Charger les sondages dans la navigation.",
     "Enable the creation of openly accessible polls globally" : "Activer la création de sondage librement accessible globalement",
     "Enable public shares of polls globally" : "Activer les partages publics de sondages globalement",
     "Enable the login option in the registration dialog of public polls" : "Activer l’option de connexion dans la fenêtre d’inscription des sondages publics",

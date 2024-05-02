@@ -436,6 +436,7 @@
     "Disable automatic updates (poll must be reloaded to get updates)" : "تعطيل التحديثات الفورية (أي يجب إعادة تحميل الاستبيان للحصول على التحديثات)",
     "Enable the poll creation globally" : "تمكين إنشاء الاستبيان على المستوى الشامل",
     "Enable the spreadsheet download of polls globally" : "تمكين تنزيل جداول إكسل للاستبيانات الشاملة",
+    "Load polls into the navigation." : "تحميل الاستبيانات في التنقل.",
     "Enable the creation of openly accessible polls globally" : "تمكين إنشاء استبيانات متاحة الوصول بشكل مفتوح على المستوى الشامل",
     "Enable public shares of polls globally" : "تمكين المشاركة العامة public shares للاستبيانات على المستوى الشامل",
     "Enable the login option in the registration dialog of public polls" : "تمكين خيار الدخول من نافذة التسجيل للاستبيانات العامة",

@@ -436,6 +436,7 @@
     "Disable automatic updates (poll must be reloaded to get updates)" : "Disable automatic updates (poll must be reloaded to get updates)",
     "Enable the poll creation globally" : "Enable the poll creation globally",
     "Enable the spreadsheet download of polls globally" : "Enable the spreadsheet download of polls globally",
+    "Load polls into the navigation." : "Load polls into the navigation.",
     "Enable the creation of openly accessible polls globally" : "Enable the creation of openly accessible polls globally",
     "Enable public shares of polls globally" : "Enable public shares of polls globally",
     "Enable the login option in the registration dialog of public polls" : "Enable the login option in the registration dialog of public polls",
