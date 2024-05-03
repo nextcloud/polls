@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IParameter;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Search\ISearchQuery;
@@ -177,13 +178,17 @@ class PollMapper extends QBMapper {
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $currentUserId)->getSQL() . ')'), 'current_user_votes_sub');
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $currentUserId, Vote::VOTE_YES)->getSQL() . ')'), 'current_user_votes_yes_sub');
+		$paramUser = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
+		$paramAnswerYes = $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR);
+
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_votes_sub');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_votes_yes_sub');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$qb->groupBy(self::TABLE . '.id');
+
 		return $qb;
 	}
 
@@ -251,17 +256,17 @@ class PollMapper extends QBMapper {
 	 * the min value is the current time,
 	 * the max value is null
 	 */
-	protected function subQueryVotesCount(string $fromAlias, string $currentUserId, string $answerFilter = ''): IQueryBuilder {
+	protected function subQueryVotesCount(string $fromAlias, IParameter $currentUserId, ?IParameter $answerFilter = null): IQueryBuilder {
 		$subAlias = 'user_vote_sub';
 
 		$subQuery = $this->db->getQueryBuilder();
 		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
 			->from(Vote::TABLE, $subAlias)
 			->where($subQuery->expr()->eq($subAlias . '.poll_id', $fromAlias . '.id'))
-			->andWhere($subQuery->expr()->eq($subAlias . '.user_id', $subQuery->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)));
+			->andWhere($subQuery->expr()->eq($subAlias . '.user_id', $currentUserId));
 
-		if ($answerFilter === Vote::VOTE_YES) {
-			$subQuery->andWhere($subQuery->expr()->eq($subAlias . '.vote_answer', $subQuery->createNamedParameter($answerFilter, IQueryBuilder::PARAM_STR)));
+		if ($answerFilter) {
+			$subQuery->andWhere($subQuery->expr()->eq($subAlias . '.vote_answer', $answerFilter));
 		}
 		return $subQuery;
 
