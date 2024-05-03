@@ -80,6 +80,8 @@ use OCP\IURLGenerator;
  * @method void setMiscSettings(string $value)
  * @method int getMinDate()
  * @method int getMaxDate()
+ * @method int getCurrentUserVotes()
+ * @method int getCurrentUserVotesYes()
  */
 
 class Poll extends EntityWithUser implements JsonSerializable {
@@ -135,11 +137,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected bool $hasOrphanedVotes = false;
 	protected int $maxDate = 0;
 	protected int $minDate = 0;
-	protected int $currentUserVotes = 0;
 	protected string $userRole = "none";
 	protected ?int $isCurrentUserLocked = 0;
-	protected ?int $currentUserVotesSub = 0;
-	protected ?int $currentUserVotesYesSub = 0;
+	
+	// subqueried columns
+	protected int $currentUserVotes = 0;
+	protected int $currentUserVotesYes = 0;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -193,12 +196,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'voteLimit' => $this->getVoteLimit(),
 			'lastInteraction' => $this->getLastInteraction(),
 			'summary' => [
-				'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
-				'yesByCurrentUser' => $this->getCurrentUserYesVotes(),
-				'countVotes' => $this->getCurrentUserCountVotes(),
 				'userRole' => $this->getUserRole(),
-				'yesVotesSub' => $this->getCurrentUserVotesYesSub(),
-				'countVotesSub' => $this->getCurrentUserVotesSub(),
+				'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
+				'yesVotes' => $this->getCurrentUserVotesYes(),
+				'countVotes' => $this->getCurrentUserVotes(),
 			],
 		];
 	}
@@ -346,10 +347,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
-	public function getCurrentUserCountVotes(): int {
-		return $this->currentUserVotes;
-	}
-
 	public function getIsCurrentUserLocked(): bool {
 		return (bool) $this->isCurrentUserLocked;
 	}
@@ -359,13 +356,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 */
 	public function getCurrentUserOrphanedVotes(): int {
 		return count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserCached()->getId()));
-	}
-
-	/**
-	 * @psalm-return int<0, max>
-	 */
-	public function getCurrentUserYesVotes(): int {
-		return count($this->voteMapper->getYesVotesByParticipant($this->getPollId(), $this->userMapper->getCurrentUserCached()->getId()));
 	}
 
 	public function getDeadline(): int {

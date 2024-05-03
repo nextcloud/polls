@@ -181,11 +181,10 @@ class PollMapper extends QBMapper {
 		$paramUser = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
 		$paramAnswerYes = $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR);
 
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_votes_sub');
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_votes_yes_sub');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_votes');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_votes_yes');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
-		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$qb->groupBy(self::TABLE . '.id');
 
@@ -251,10 +250,7 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
-	 * Joins options to evaluate min and max option date for date polls
-	 * if text poll or no options are set,
-	 * the min value is the current time,
-	 * the max value is null
+	 * Subquery for votes count
 	 */
 	protected function subQueryVotesCount(string $fromAlias, IParameter $currentUserId, ?IParameter $answerFilter = null): IQueryBuilder {
 		$subAlias = 'user_vote_sub';
