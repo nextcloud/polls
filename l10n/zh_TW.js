@@ -438,6 +438,7 @@ OC.L10N.register(
     "Disable automatic updates (poll must be reloaded to get updates)" : "停用自動更新（必須重新載入投票才能取得更新）",
     "Enable the poll creation globally" : "全域啟用投票建立",
     "Enable the spreadsheet download of polls globally" : "全域啟用投票試算表下載",
+    "Load polls into the navigation." : "將投票載入至導覽。",
     "Enable the creation of openly accessible polls globally" : "全域啟用建立可公開存取的投票",
     "Enable public shares of polls globally" : "全域啟用投票公開分享",
     "Enable the login option in the registration dialog of public polls" : "在公開投票的註冊對話方塊中啟用登入選項",
