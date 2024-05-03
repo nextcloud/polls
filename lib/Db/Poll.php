@@ -151,6 +151,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $currentUserVotes = 0;
 	protected string $userRole = self::ROLE_NONE;
 	protected ?int $isCurrentUserLocked = 0;
+	protected ?int $currentUserVotesSub = 0;
+	protected ?int $currentUserVotesYesSub = 0;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -214,6 +216,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 				'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
 				'yesVotes' => $this->getCurrentUserYesVotes(),
 				'countVotes' => $this->getCurrentUserCountVotes(),
+				'yesVotesSub' => $this->getCurrentUserVotesYesSub(),
+				'countVotesSub' => $this->getCurrentUserVotesSub(),
 			],
 		];
 	}

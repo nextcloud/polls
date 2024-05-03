@@ -177,6 +177,8 @@ class PollMapper extends QBMapper {
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $currentUserId)->getSQL() . ')'), 'current_user_votes_sub');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $currentUserId, Vote::VOTE_YES)->getSQL() . ')'), 'current_user_votes_yes_sub');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
@@ -185,10 +187,7 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
-	 * Joins options to evaluate min and max option date for date polls
-	 * if text poll or no options are set,
-	 * the min value is the current time,
-	 * the max value is null
+	 * Joins shares to evaluate user role
 	 */
 	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'shares';
@@ -237,14 +236,11 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
-	 * Joins options to evaluate min and max option date for date polls
-	 * if text poll or no options are set,
-	 * the min value is the current time,
-	 * the max value is null
+	 * Joins votes to evaluate current user votes
 	 */
 	protected function joinCurrentUserVotes(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'user_vote';
-		// force value into a MIN function to avoid grouping errors
+
 		$qb->selectAlias($qb->func()->count($joinAlias . '.vote_answer'), 'current_user_votes');
 
 		$qb->leftJoin(
@@ -256,6 +252,28 @@ class PollMapper extends QBMapper {
 				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
 			)
 		);
+	}
+
+	/**
+	 * Joins options to evaluate min and max option date for date polls
+	 * if text poll or no options are set,
+	 * the min value is the current time,
+	 * the max value is null
+	 */
+	protected function subQueryVotesCount(string $fromAlias, string $currentUserId, string $answerFilter = ''): IQueryBuilder {
+		$subAlias = 'user_vote_sub';
+
+		$subQuery = $this->db->getQueryBuilder();
+		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
+			->from(Vote::TABLE, $subAlias)
+			->where($subQuery->expr()->eq($subAlias . '.poll_id', $fromAlias . '.id'))
+			->andWhere($subQuery->expr()->eq($subAlias . '.user_id', $subQuery->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)));
+
+		if ($answerFilter === Vote::VOTE_YES) {
+			$subQuery->andWhere($subQuery->expr()->eq($subAlias . '.vote_answer', $subQuery->createNamedParameter($answerFilter, IQueryBuilder::PARAM_STR)));
+		}
+		return $subQuery;
+
 	}
 
 }
