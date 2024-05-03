@@ -181,8 +181,8 @@ class PollMapper extends QBMapper {
 		$paramUser = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
 		$paramAnswerYes = $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR);
 
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_votes');
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_votes_yes');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_votes');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_count_votes_yes');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
@@ -227,25 +227,6 @@ class PollMapper extends QBMapper {
 			Option::TABLE,
 			$joinAlias,
 			$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
-		);
-	}
-
-	/**
-	 * Joins votes to evaluate current user votes
-	 */
-	protected function joinCurrentUserVotes(IQueryBuilder &$qb, string $fromAlias, $currentUserId): void {
-		$joinAlias = 'user_vote';
-
-		$qb->selectAlias($qb->func()->count($joinAlias . '.vote_answer'), 'current_user_votes');
-
-		$qb->leftJoin(
-			$fromAlias,
-			Vote::TABLE,
-			$joinAlias,
-			$qb->expr()->andX(
-				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
-				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
-			)
 		);
 	}
 
