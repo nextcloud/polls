@@ -82,8 +82,8 @@ use OCP\IURLGenerator;
  * @method void setMiscSettings(string $value)
  * @method int getMinDate()
  * @method int getMaxDate()
- * @method int getCurrentUserVotes()
- * @method int getCurrentUserVotesYes()
+ * @method int getCurrentUserCountVotes()
+ * @method int getCurrentUserCountVotesYes()
  */
 
 class Poll extends EntityWithUser implements JsonSerializable {
@@ -154,8 +154,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected ?int $isCurrentUserLocked = 0;
 	
 	// subqueried columns
-	protected int $currentUserVotes = 0;
-	protected int $currentUserVotesYes = 0;
+	protected int $currentUserCountVotes = 0;
+	protected int $currentUserCountVotesYes = 0;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -217,8 +217,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 				'userRole' => $this->getUserRole(),
 				'isLocked' => boolval($this->getIsCurrentUserLocked()),
 				'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
-				'yesVotes' => $this->getCurrentUserVotesYes(),
-				'countVotes' => $this->getCurrentUserVotes(),
+				'yesVotes' => $this->getCurrentUserCountVotesYes(),
+				'countVotes' => $this->getCurrentUserCountVotes(),
 			],
 		];
 	}
