@@ -80,13 +80,11 @@ use OCP\IURLGenerator;
  * @method void setLastInteraction(int $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
- * 
+ *
  * Magic functions for joined columns
- * @method ?int getIsCurrentUserLocked()
  * @method int getMinDate()
  * @method int getMaxDate()
- * @method int getUserRole()
- * 
+ *
  * Magic functions for subqueried columns
  * @method int getCurrentUserCountOrphanedVotes()
  * @method int getCurrentUserCountVotes()
@@ -392,7 +390,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getIsCurrentUserLocked(): bool {
-		return (bool) $this->isCurrentUserLocked;
+		return boolval($this->isCurrentUserLocked);
 	}
 
 	public function getDeadline(): int {
