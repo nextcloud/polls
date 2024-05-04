@@ -264,7 +264,7 @@ class PollMapper extends QBMapper {
 		// use subQueryVotesCount as base query
 		$subQuery = $this->subQueryVotesCount($fromAlias, $currentUserId);
 
-		// superseed select, group result by voteId and add an additional condition 
+		// superseed select, group result by voteId and add an additional condition
 		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
 			->andWhere($subQuery->expr()->isNull($subJoinAlias . '.id'));
 
