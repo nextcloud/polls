@@ -78,8 +78,15 @@ use OCP\IURLGenerator;
  * @method void setLastInteraction(int $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
+ * 
+ * Magic functions for joined columns
+ * @method ?int getIsCurrentUserLocked()
  * @method int getMinDate()
  * @method int getMaxDate()
+ * @method int getUserRole()
+ * 
+ * Magic functions for subqueried columns
+ * @method int getCurrentUserCountOrphanedVotes()
  * @method int getCurrentUserCountVotes()
  * @method int getCurrentUserCountVotesYes()
  */
@@ -107,7 +114,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	private IURLGenerator $urlGenerator;
 	protected UserMapper $userMapper;
-	private VoteMapper $voteMapper;
 
 	// schema columns
 	public $id = null;
@@ -134,13 +140,13 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected ?string $miscSettings = '';
 
 	// joined columns
-	protected bool $hasOrphanedVotes = false;
+	protected ?int $isCurrentUserLocked = 0;
 	protected int $maxDate = 0;
 	protected int $minDate = 0;
 	protected string $userRole = "none";
-	protected ?int $isCurrentUserLocked = 0;
 	
 	// subqueried columns
+	protected int $currentUserCountOrphanedVotes = 0;
 	protected int $currentUserCountVotes = 0;
 	protected int $currentUserCountVotesYes = 0;
 
@@ -158,12 +164,19 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('hideBookedUp', 'int');
 		$this->addType('useNo', 'int');
 		$this->addType('lastInteraction', 'int');
+		
+		// joined columns
+		$this->addType('isCurrentUserLocked', 'int');
 		$this->addType('maxDate', 'int');
 		$this->addType('minDate', 'int');
-		$this->addType('currentUserVotes', 'int');
+
+		// subqueried columns
+		$this->addType('currentUserCountVotes', 'int');
+		$this->addType('currentUserCountVotesYes', 'int');
+		$this->addType('currentUserCountOrphanedVotes', 'int');
+
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userMapper = Container::queryClass(UserMapper::class);
-		$this->voteMapper = Container::queryClass(VoteMapper::class);
 	}
 
 	/**
@@ -197,7 +210,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'lastInteraction' => $this->getLastInteraction(),
 			'summary' => [
 				'userRole' => $this->getUserRole(),
-				'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
+				'orphanedVotes' => $this->getCurrentUserCountOrphanedVotes(),
 				'yesVotes' => $this->getCurrentUserCountVotesYes(),
 				'countVotes' => $this->getCurrentUserCountVotes(),
 			],
@@ -349,13 +362,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function getIsCurrentUserLocked(): bool {
 		return (bool) $this->isCurrentUserLocked;
-	}
-
-	/**
-	 * @psalm-return int<0, max>
-	 */
-	public function getCurrentUserOrphanedVotes(): int {
-		return count($this->voteMapper->findOrphanedByPollandUser($this->id, $this->userMapper->getCurrentUserCached()->getId()));
 	}
 
 	public function getDeadline(): int {

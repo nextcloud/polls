@@ -227,7 +227,7 @@ class VoteMapper extends QBMapperWithUser {
 			$qb->expr()->andX(
 				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
 				$qb->expr()->eq($joinAlias . '.poll_option_text', $fromAlias . '.vote_option_text'),
-				$qb->expr()->eq($joinAlias . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)),
+				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
 
