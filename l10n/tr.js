@@ -252,6 +252,7 @@ OC.L10N.register(
     "You can reveal them, but you may expect an unwanted long loading time." : "Gizlenen oy verenleri görüntüleyebilirsiniz ancak yükleme süresi istenmeyecek kadar uzun olabilir.",
     "Limited votes." : "Sınırlı oy.",
     "_%n vote is allowed per option._::_%n votes are allowed per option._" : ["Her seçenek için %n oy verilebilir.","Her seçenek için %n oy verilebilir."],
+    "_%n vote is allowed per participant._::_%n votes are allowed per participant._" : ["Her katılımcı %n oy verebilir.","Her katılımcı %n oy verebilir."],
     "_You have %n vote left._::_You have %n votes left._" : ["Verebileceğiniz %n oy kaldı.","Verebileceğiniz %n oy kaldı."],
     "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["Büyük olasılıkla silinmiş seçeneklerdeki %n sahipsiz oy, sayı sınırınızı aşıyor.","Büyük olasılıkla silinmiş seçeneklerdeki %n sahipsiz oy, sayı sınırınızı aşıyor."],
     "This share is locked and allows only read access. Registering is not possible." : "Bu paylaşım kilitli ve yalnızca salt okunur erişime izin veriyor. Kayıt olunamaz.",
