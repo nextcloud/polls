@@ -1,0 +1,27 @@
+# version control systems directories
+**/.git
+**/.svn
+**/.hg
+
+# 3rdparty dependencies
+**/node_modules
+**/vendor
+**/vendor-bin
+
+# Compiled JS output
+js/
+
+# PHP
+appinfo/
+lib/
+tests/
+templates/
+**/*.php
+
+# individual files
+screenshots/
+img/
+cache/
+build/
+*.md
+
