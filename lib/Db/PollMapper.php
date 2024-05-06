@@ -27,6 +27,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IParameter;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Search\ISearchQuery;
@@ -177,18 +178,21 @@ class PollMapper extends QBMapper {
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
+		$paramUser = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
+		$paramAnswerYes = $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR);
+
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_votes');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_count_votes_yes');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_orphaned_votes');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
-		$this->joinCurrentUserVotes($qb, self::TABLE, $currentUserId);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
+
 		return $qb;
 	}
 
 	/**
-	 * Joins options to evaluate min and max option date for date polls
-	 * if text poll or no options are set,
-	 * the min value is the current time,
-	 * the max value is null
+	 * Joins shares to evaluate user role
 	 */
 	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'shares';
@@ -207,7 +211,7 @@ class PollMapper extends QBMapper {
 			$qb->expr()->andX(
 				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
 				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
-				$qb->expr()->eq($joinAlias . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)),
+				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
 
@@ -236,26 +240,54 @@ class PollMapper extends QBMapper {
 		);
 	}
 
-	/**
-	 * Joins options to evaluate min and max option date for date polls
-	 * if text poll or no options are set,
-	 * the min value is the current time,
-	 * the max value is null
-	 */
-	protected function joinCurrentUserVotes(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
-		$joinAlias = 'user_vote';
-		// force value into a MIN function to avoid grouping errors
-		$qb->selectAlias($qb->func()->count($joinAlias . '.vote_answer'), 'current_user_votes');
 
-		$qb->leftJoin(
-			$fromAlias,
-			Vote::TABLE,
-			$joinAlias,
-			$qb->expr()->andX(
-				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
-				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+
+	/**
+	 * Subquery for votes count
+	 */
+	protected function subQueryVotesCount(string $fromAlias, IParameter $currentUserId, ?IParameter $answerFilter = null): IQueryBuilder {
+		$subAlias = 'user_vote_sub';
+
+		$subQuery = $this->db->getQueryBuilder();
+		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
+			->from(Vote::TABLE, $subAlias)
+			->where($subQuery->expr()->eq($subAlias . '.poll_id', $fromAlias . '.id'))
+			->andWhere($subQuery->expr()->eq($subAlias . '.user_id', $currentUserId));
+
+		// filter by answer
+		if ($answerFilter) {
+			$subQuery->andWhere($subQuery->expr()->eq($subAlias . '.vote_answer', $answerFilter));
+		}
+
+		return $subQuery;
+	}
+
+	/**
+	 * Subquery for count of orphaned votes
+	 */
+	protected function subQueryOrphanedVotesCount(string $fromAlias, IParameter $currentUserId): IQueryBuilder {
+		$subAlias = 'user_vote_sub';
+		$subJoinAlias = 'vote_options_join';
+
+		// use subQueryVotesCount as base query
+		$subQuery = $this->subQueryVotesCount($fromAlias, $currentUserId);
+
+		// superseed select, group result by voteId and add an additional condition
+		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
+			->andWhere($subQuery->expr()->isNull($subJoinAlias . '.id'));
+
+		// join options to restrict query to votes with actually undeleted options
+		$subQuery->leftJoin(
+			$subAlias,
+			Option::TABLE,
+			$subJoinAlias,
+			$subQuery->expr()->andX(
+				$subQuery->expr()->eq($subJoinAlias . '.poll_id', $subAlias . '.poll_id'),
+				$subQuery->expr()->eq($subJoinAlias . '.poll_option_text', $subAlias . '.vote_option_text'),
+				$subQuery->expr()->eq($subJoinAlias . '.deleted', $subQuery->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
+		return $subQuery;
 	}
 
 }
