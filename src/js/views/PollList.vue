@@ -83,6 +83,16 @@
 				</template>
 			</TransitionGroup>
 
+			<IntersectionObserver v-if="showMore"
+				key="observer"
+				class="observer_section"
+				@visible="loadMore">
+				<div class="clickable_load_more" @click="loadMore">
+					{{ infoLoaded }}
+					{{ t('polls', 'Click here to load more') }}
+				</div>
+			</IntersectionObserver>
+
 			<NcEmptyContent v-if="emptyPollListnoPolls" v-bind="emptyContent">
 				<template #icon>
 					<NcLoadingIcon v-if="isLoading" :size="64" />
@@ -94,10 +104,10 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions } from 'vuex'
+import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-import { HeaderBar } from '../components/Base/index.js'
+import { HeaderBar, IntersectionObserver } from '../components/Base/index.js'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
@@ -112,6 +122,7 @@ export default {
 		ClonePollIcon,
 		DeletePollIcon,
 		HeaderBar,
+		IntersectionObserver,
 		NcAppContent,
 		NcActions,
 		NcActionButton,
@@ -131,6 +142,8 @@ export default {
 
 		...mapGetters({
 			filteredPolls: 'polls/filtered',
+			countPolls: 'polls/count',
+			loadedPolls: 'polls/loaded',
 		}),
 
 		emptyContent() {
@@ -151,6 +164,22 @@ export default {
 			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.titleExt
 		},
 
+		showMore() {
+			return this.loadedPolls < this.countAvailablePolls && !this.isLoading
+		},
+		countAvailablePolls() {
+			return this.countPolls
+		},
+
+		countLoadedPolls() {
+			return Math.min(this.loadedPolls, this.countPolls)
+		},
+
+		infoLoaded() {
+			return n('polls', '{loadedPolls} of {countPolls} poll loaded.', '{loadedPolls} of {countPolls} polls loaded.', this.countAvailablePolls,
+				{ loadedPolls: this.countLoadedPolls, countPolls: this.countAvailablePolls })
+		},
+
 		description() {
 			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.description
 		},
@@ -161,7 +190,7 @@ export default {
 		},
 
 		pollList() {
-			return this.filteredPolls(this.$route.params.type)
+			return this.filteredPolls
 		},
 
 		emptyPollListnoPolls() {
@@ -184,10 +213,21 @@ export default {
 		...mapActions({
 			setSortColumn: 'polls/setSort',
 		}),
+		...mapMutations({
+			addChunk: 'polls/addChunk',
+		}),
 
 		gotoPoll(pollId) {
 			this.$router
 				.push({ name: 'vote', params: { id: pollId } })
+		},
+
+		async loadMore() {
+			try {
+				await this.addChunk()
+			} catch {
+				showError(t('polls', 'Error loading more polls'))
+			}
 		},
 
 		async loadPoll(pollId) {
@@ -236,5 +276,17 @@ export default {
 		flex-direction: column;
 		overflow: scroll;
 		padding-bottom: 14px;
+	}
+
+	.observer_section {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		padding: 14px 0;
+	}
+
+	.clickable_load_more {
+		cursor: pointer;
+		font-weight: bold;
 	}
 </style>

@@ -39,6 +39,11 @@
 				<template #icon>
 					<Component :is="getIconComponent(pollCategory.id)" :size="iconSize" />
 				</template>
+				<template #counter>
+					<NcCounterBubble>
+						{{ countPolls(pollCategory.id) }}
+					</NcCounterBubble>
+				</template>
 				<ul v-if="navigationPollsInList">
 					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
 						:key="poll.id"
@@ -46,6 +51,16 @@
 						@toggle-archive="toggleArchive(poll.id)"
 						@clone-poll="clonePoll(poll.id)"
 						@delete-poll="deletePoll(poll.id)" />
+					<NcAppNavigationItem v-if="filteredPolls(pollCategory.id).length === 0"
+						:name="t('polls', 'No polls found for this category')" />
+					<NcAppNavigationItem v-if="countPolls(pollCategory.id) > maxPolls"
+						class="force-not-active"
+						:to="{ name: 'list', params: {type: pollCategory.id}}"
+						:name="t('polls', 'Show all')">
+						<template #icon>
+							<GoToIcon :size="iconSize" />
+						</template>
+					</NcAppNavigationItem>
 				</ul>
 			</NcAppNavigationItem>
 		</template>
@@ -78,7 +93,7 @@
 
 <script>
 
-import { NcAppNavigation, NcAppNavigationNew, NcAppNavigationItem } from '@nextcloud/vue'
+import { NcAppNavigation, NcAppNavigationNew, NcAppNavigationItem, NcCounterBubble } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
@@ -96,6 +111,7 @@ import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
+import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 export default {
 	name: 'Navigation',
@@ -103,7 +119,9 @@ export default {
 		NcAppNavigation,
 		NcAppNavigationNew,
 		NcAppNavigationItem,
+		NcCounterBubble,
 		CreateDlg,
+		GoToIcon,
 		PollNavigationItems,
 		ComboIcon,
 		SettingsIcon,
@@ -132,11 +150,13 @@ export default {
 			isPollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
 			isComboActivated: (state) => state.polls.meta.permissions.comboAllowed,
 			navigationPollsInList: (state) => state.appSettings.navigationPollsInList,
+			maxPolls: (state) => state.polls.meta.maxPollsInNavigation,
 		}),
 
 		...mapGetters({
 			pollCategories: 'polls/categories',
-			filteredPolls: 'polls/filtered',
+			filteredPolls: 'polls/filteredByCategory',
+			countPolls: 'polls/countByCategory',
 		}),
 
 		showAdminSection() {
@@ -221,6 +241,13 @@ export default {
 	.closed {
 		.app-navigation-entry-icon, .app-navigation-entry__title {
 			opacity: 0.6;
+		}
+	}
+
+	.app-navigation-entry-wrapper.force-not-active .app-navigation-entry.active {
+		background-color: transparent !important;
+		* {
+			color: unset !important;
 		}
 	}
 

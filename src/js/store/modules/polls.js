@@ -31,6 +31,9 @@ const state = {
 	list: [],
 	meta: {
 		currentCategoryId: 'all',
+		chunksize: 20,
+		loadedChunks: 1,
+		maxPollsInNavigation: 6,
 		permissions: {
 			pollCreationAllowed: false,
 			comboAllowed: false,
@@ -151,6 +154,14 @@ const mutations = {
 		state.pollsLoading = loading ?? true
 	},
 
+	addChunk(state) {
+		state.meta.loadedChunks = state.meta.loadedChunks + 1
+	},
+
+	resetChunks(state) {
+		state.meta.loadedChunks = 1
+	},
+
 	setFilter(state, payload) {
 		state.meta.currentCategoryId = payload.currentCategoryId
 	},
@@ -177,17 +188,30 @@ const getters = {
 		return state.categories.filter((category) => (!category.createDependent))
 	},
 
-	activePolls: (state, getters) => getters.filtered('all'),
+	// activePolls: (state, getters) => getters.filtered('all').slice(0, getters.loaded),
+	count: (state, getters) => getters.filteredRaw.length,
+	loaded: (state, getters) => state.meta.loadedChunks * state.meta.chunksize,
 	datePolls: (state) => state.list.filter((poll) => (poll.type === 'datePoll' && !poll.deleted)),
+	currentCategory: (state) => state.categories.find((category) => category.id === state.meta.currentCategoryId),
 
-	filtered: (state, getters) => (filterId) => {
+	filteredRaw: (state, getters) => orderBy(
+		state.list.filter((poll) => getters.currentCategory.filterCondition(poll)),
+		[state.sort.by],
+		[state.sort.reverse ? 'desc' : 'asc'],
+	),
+
+	filtered: (state, getters) => getters.filteredRaw.slice(0, getters.loaded),
+
+	countByCategory: (state) => (filterId) => state.list.filter((poll) => state.categories.find((category) => category.id === filterId).filterCondition(poll)).length,
+	filteredByCategory: (state, getters) => (filterId) => {
 		const currentCategory = state.categories.find((category) => category.id === filterId)
 		return orderBy(
 			state.list.filter((poll) => currentCategory.filterCondition(poll)),
 			[state.sort.by],
 			[state.sort.reverse ? 'desc' : 'asc'],
-		)
+		).slice(0, state.meta.maxPollsInNavigation)
 	},
+
 }
 
 const actions = {
@@ -197,6 +221,7 @@ const actions = {
 
 	async setFilter(context, payload) {
 		context.commit('setFilter', { currentCategoryId: payload })
+		context.commit('resetChunks')
 	},
 
 	async list(context) {
