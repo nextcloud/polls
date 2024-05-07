@@ -27,17 +27,11 @@ import { sync } from 'vuex-router-sync'
 import store from './store/index.js'
 import router from './router.js'
 import ClickOutside from 'v-click-outside'
-import { getRequestToken, getCurrentUser } from '@nextcloud/auth'
+import { getCurrentUser } from '@nextcloud/auth'
 import { translate, translatePlural } from '@nextcloud/l10n'
-import { generateFilePath } from '@nextcloud/router'
 import { Tooltip } from '@nextcloud/vue'
 
 import UserItem from './components/User/UserItem.vue'
-
-/* eslint-disable-next-line camelcase, no-undef */
-__webpack_nonce__ = btoa(getRequestToken())
-/* eslint-disable-next-line camelcase, no-undef */
-__webpack_public_path__ = generateFilePath('polls', '', 'js/')
 
 sync(store, router)
 

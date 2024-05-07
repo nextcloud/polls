@@ -83,7 +83,7 @@ export default {
 
 	computed: {
 		...mapGetters({
-			filteredPolls: 'polls/filtered',
+			filteredPolls: 'polls/filteredByCategory',
 		}),
 
 		relevantPolls() {
