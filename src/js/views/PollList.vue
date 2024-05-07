@@ -30,13 +30,15 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<TransitionGroup tag="div" name="list" class="poll-list__list">
-				<PollItem key="0" :header="true" @sort-list="setSortColumn($event)" />
+			<PollItem key="0" :header="true" @sort-list="setSortColumn($event)" />
 
-				<template v-if="!emptyPollListnoPolls">
-					<PollItem v-for="(poll) in pollList"
-						:key="poll.id"
-						:poll="poll"
+			<RecycleScroller v-if="!emptyPollListnoPolls"
+				:items="pollList"
+				:item-size="73"
+				key-field="id">
+				<template #default="{ item: poll }">
+					<PollItem :poll="poll"
+
 						@goto-poll="gotoPoll(poll.id)"
 						@load-poll="loadPoll(poll.id)">
 						<template #actions>
@@ -81,7 +83,7 @@
 						</template>
 					</PollItem>
 				</template>
-			</TransitionGroup>
+			</RecycleScroller>
 
 			<IntersectionObserver v-if="showMore"
 				key="observer"
@@ -113,6 +115,8 @@ import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
+import { RecycleScroller } from 'vue-virtual-scroller'
+import 'vue-virtual-scroller/dist/vue-virtual-scroller.css'
 
 export default {
 	name: 'PollList',
@@ -131,6 +135,7 @@ export default {
 		RestorePollIcon,
 		PollsAppIcon,
 		PollItem: () => import('../components/PollList/PollItem.vue'),
+		RecycleScroller,
 	},
 
 	computed: {
@@ -270,6 +275,15 @@ export default {
 </script>
 
 <style lang="scss">
+.poll-list {
+	.area__main {
+		flex-grow: 1;
+		height: 0;
+		display: flex;
+		flex-direction: column;
+	}
+}
+
 	.poll-list__list {
 		width: 100%;
 		display: flex;
