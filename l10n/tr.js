@@ -551,6 +551,7 @@ OC.L10N.register(
     "Relevant polls" : "İlişkili anketler",
     "Error loading poll list" : "Anket listesi yüklenirken sorun çıktı",
     "New poll" : "Yeni anket",
+    "Show all" : "Tümünü görüntüle",
     "Combine polls" : "Anketleri birleştir",
     "Preferences" : "Tercihler",
     "Error cloning poll." : "Anket kopyalanırken sorun çıktı.",

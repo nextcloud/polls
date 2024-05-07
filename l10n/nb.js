@@ -540,6 +540,7 @@ OC.L10N.register(
     "Relevant polls" : "Relevante avstemninger",
     "Error loading poll list" : "Feil ved lasting av avstemningsliste",
     "New poll" : "Ny avstemning",
+    "Show all" : "Vis alt",
     "Combine polls" : "Kombiner avstemninger",
     "Preferences" : "Innstillinger",
     "Error cloning poll." : "Feil ved kloning av avstemning.",

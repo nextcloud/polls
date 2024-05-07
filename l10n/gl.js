@@ -489,6 +489,7 @@ OC.L10N.register(
     "Relevant polls" : "Enquisas relevantes",
     "Error loading poll list" : "Produciuse un erro ao cargar a lista de enquisas",
     "New poll" : "Nova enquisa",
+    "Show all" : "Amosar todo",
     "Combine polls" : "Combinar enquisas",
     "Preferences" : "Preferencias",
     "Error cloning poll." : "Produciuse un erro ao clonar a  enquisa.",

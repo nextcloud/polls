@@ -373,6 +373,7 @@
     "Error overtaking poll." : "接管投票时出错",
     "Relevant polls" : "相关投票",
     "Error loading poll list" : "加载投票列表时出错",
+    "Show all" : "显示全部",
     "Preferences" : "设置偏好",
     "Error cloning poll." : "复制投票时出错。",
     "404 - poll not found" : "404 - 投票未找到",

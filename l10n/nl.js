@@ -394,6 +394,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combineer meerdere datum peilingen in één weergave",
     "Relevant polls" : "Relevante peilingen",
     "Error loading poll list" : "Fout bij laden peilingenoverzicht",
+    "Show all" : "Toon alles",
     "Combine polls" : "Combineer peilingen",
     "Preferences" : "Voorkeuren",
     "Error cloning poll." : "Fout bij klonen peiling.",

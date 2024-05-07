@@ -108,6 +108,7 @@ OC.L10N.register(
     "Administration" : "Stjórnun",
     "Relevant polls" : "Tengdar kannanir",
     "Error loading poll list" : "Villa við að hlaða inn lista yfir kannanir",
+    "Show all" : "Birta allt",
     "Preferences" : "Kjörstillingar",
     "Error cloning poll." : "Villa við að klóna könnun.",
     "404 - poll not found" : "404 - könnun fannst ekki",

@@ -445,6 +445,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combine multiple date polls in a single view",
     "Relevant polls" : "Relevant polls",
     "Error loading poll list" : "Error loading poll list",
+    "Show all" : "نمایش همه",
     "Combine polls" : "Combine polls",
     "Preferences" : "اولویت ها",
     "Error cloning poll." : "خطای کلون نظرسنجی",

@@ -585,6 +585,7 @@ OC.L10N.register(
     "Relevant polls" : "Relevant polls",
     "Error loading poll list" : "Error loading poll list",
     "New poll" : "New poll",
+    "Show all" : "Show all",
     "Combine polls" : "Combine polls",
     "Preferences" : "Preferences",
     "Error cloning poll." : "Error cloning poll.",

@@ -411,6 +411,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combina più sondaggi di date in un'unica visualizzazione",
     "Relevant polls" : "Sondaggi importanti",
     "Error loading poll list" : "Errore durante il caricamento dell'elenco dei sondaggi",
+    "Show all" : "Mostra tutto",
     "Combine polls" : "Combina i sondaggi",
     "Preferences" : "Preferenze",
     "Error cloning poll." : "Errore durante la clonazione del sondaggio.",

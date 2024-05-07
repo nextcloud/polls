@@ -585,6 +585,7 @@ OC.L10N.register(
     "Relevant polls" : "相關投票",
     "Error loading poll list" : "載入投票列表時發生錯誤",
     "New poll" : "新民意調查",
+    "Show all" : "全部顯示",
     "Combine polls" : "聯合民意調查",
     "Preferences" : "設定",
     "Error cloning poll." : "複製投票時發生錯誤。",

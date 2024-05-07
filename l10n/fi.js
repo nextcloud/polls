@@ -279,6 +279,7 @@ OC.L10N.register(
     "No polls selected" : "Kyselyitä ei ole valittu",
     "Relevant polls" : "Oleelliset äänestykset",
     "Error loading poll list" : "Virhe ladatessa kyselylistaa",
+    "Show all" : "Näytä kaikki",
     "Combine polls" : "Yhdistä kyselyt",
     "Preferences" : "Asetukset",
     "Error cloning poll." : "Virhe kyselyä kloonatessa.",

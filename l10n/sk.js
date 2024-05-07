@@ -510,6 +510,7 @@ OC.L10N.register(
     "Relevant polls" : "Dôležité ankety",
     "Error loading poll list" : "Pri načítavaní zoznamu ankiet sa vyskytla chyba",
     "New poll" : "Nová anketa",
+    "Show all" : "Zobraziť všetko",
     "Combine polls" : "Skombinovať ankety",
     "Preferences" : "Nastavenia",
     "Error cloning poll." : "Chyba pri zdvojení ankety.",

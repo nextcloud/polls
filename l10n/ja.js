@@ -195,6 +195,7 @@ OC.L10N.register(
     "Administration" : "管理",
     "Relevant polls" : "関連する投票",
     "Error loading poll list" : "投票リストの読み込み中にエラーが発生しました",
+    "Show all" : "全て表示",
     "Preferences" : "環境設定",
     "Error cloning poll." : "投票のクローン中にエラーが発生しました",
     "Enter a poll or start a new one." : "投票を入力するか新しい投票を開始してください。",

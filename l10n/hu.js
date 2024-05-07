@@ -475,6 +475,7 @@ OC.L10N.register(
     "Relevant polls" : "Releváns szavazások",
     "Error loading poll list" : "Hiba a szavazások betöltése során",
     "New poll" : "Új szavazás",
+    "Show all" : "Összes megjelenítése",
     "Combine polls" : "Szavazások összevonása",
     "Preferences" : "Beállítások",
     "Error cloning poll." : "Hiba a szavazás klónozása során.",

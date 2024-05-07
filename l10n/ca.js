@@ -442,6 +442,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Combina diverses enquestes de dates en una sola vista",
     "Relevant polls" : "Enquestes rellevants",
     "Error loading poll list" : "S'ha produït un error carregant la llista de enquestes",
+    "Show all" : "Mostra-ho tot",
     "Combine polls" : "Combinar enquestes",
     "Preferences" : "Preferències",
     "Error cloning poll." : "Error clonant l’enquesta.",

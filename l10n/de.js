@@ -583,6 +583,7 @@ OC.L10N.register(
     "Relevant polls" : "Relevante Umfragen",
     "Error loading poll list" : "Fehler beim Laden der Umfrageliste",
     "New poll" : "Neue Umfrage",
+    "Show all" : "Alle anzeigen",
     "Combine polls" : "Umfragen kombinieren",
     "Preferences" : "Einstellungen",
     "Error cloning poll." : "Fehler beim Klonen der Umfrage.",

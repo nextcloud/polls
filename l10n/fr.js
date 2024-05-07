@@ -578,6 +578,7 @@ OC.L10N.register(
     "Relevant polls" : "Sondages qui me concernent",
     "Error loading poll list" : "Erreur lors du chargement de la liste des sondages",
     "New poll" : "Nouveau sondage",
+    "Show all" : "Tout afficher",
     "Combine polls" : "Combiner les sondages",
     "Preferences" : "Préférences",
     "Error cloning poll." : "Erreur de duplication du sondage.",

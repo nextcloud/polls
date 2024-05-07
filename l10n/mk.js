@@ -56,6 +56,7 @@ OC.L10N.register(
     "Email options" : "Е-пошта параметри",
     "Yes" : "Да",
     "Administration" : "Администрација",
+    "Show all" : "Прикажи ги сите",
     "Preferences" : "Перформанси",
     "Details" : "Детали",
     "Configuration" : "Конфигурација",

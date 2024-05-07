@@ -442,6 +442,7 @@ OC.L10N.register(
     "Relevant polls" : "Bozketa esanguratsuak",
     "Error loading poll list" : "Errorea bozketa zerrenda kargatzean",
     "New poll" : "Galdeketa berria",
+    "Show all" : "Erakutsi denak",
     "Combine polls" : "Batu galdeketak",
     "Preferences" : "Hobespenak",
     "Error cloning poll." : "Errorea bozketa klonatzean.",

@@ -416,6 +416,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Συνδυάστε πολλαπλές δημοσκοπήσεις ημερομηνίας σε μια ενιαία προβολή",
     "Relevant polls" : "Σχετικές δημοσκοπήσεις",
     "Error loading poll list" : "Σφάλμα φόρτωσης λίστας δημοσκοπήσεων",
+    "Show all" : "Εμφάνιση όλων",
     "Combine polls" : "Συνδυάστε δημοσκοπήσεις",
     "Preferences" : "Προτιμήσεις",
     "Error cloning poll." : "Σφάλμα κλωνοποίησης δημοσκόπησης.",

@@ -585,6 +585,7 @@ OC.L10N.register(
     "Relevant polls" : "Релевантна гласања",
     "Error loading poll list" : "Грешка приликом учитавања списка гласања",
     "New poll" : "Ново гласање",
+    "Show all" : "Прикажи све",
     "Combine polls" : "Комбинуј гласања",
     "Preferences" : "Поставке",
     "Error cloning poll." : "Грешка приликом клонирања гласања.",
