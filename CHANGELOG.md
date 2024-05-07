@@ -1,7 +1,16 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [7.0.3] - tbd
+## [7.1.0] - tbd
+### Fix
+ - fixed counting of orphaned votes
+### Changes
+ - mainly performance improvements
+### Performance
+ - Added an option to allow to add polls to the navigation (default)
+ - Limited polls inside the navigation to 6 items
+ - Render the polls list in chunks of 20 items
+ ## [7.0.3] - 2024-04-05
 ### Fix
  - Archive, restore and delete polls in poll list was missing, braught the options back to the action menu
  - fix a situation, where votes of a non existing poll are requested
