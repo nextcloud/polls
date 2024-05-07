@@ -14,17 +14,17 @@
   "license": "AGPL-3.0",
   "main": "src/js/main.js",
   "scripts": {
-    "build": "webpack --mode=production --progress",
-    "dev": "webpack --mode=development",
+    "webpack:build": "webpack --mode=production --progress",
+    "webpack:dev": "webpack --mode=development",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix",
     "stylelint": "stylelint src/**/*{.scss,.vue,.css}",
     "stylelint:fix": "stylelint src --fix",
     "version": "node update-app-version.mjs && git add ./appinfo/info.xml",
-    "vite:build": "vite --mode production build",
-    "vite:dev": "vite --mode development build",
-    "vite:watch": "vite --mode development build --watch",
-    "watch": "webpack --mode=development --progress --watch"
+    "build": "vite --mode production build",
+    "dev": "vite --mode development build",
+    "watch": "vite --mode development build --watch",
+    "webpack:watch": "webpack --mode=development --progress --watch"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
