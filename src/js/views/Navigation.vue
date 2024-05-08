@@ -243,12 +243,14 @@ export default {
 			opacity: 0.6;
 		}
 	}
+
 	.app-navigation-entry-wrapper.force-not-active .app-navigation-entry.active {
 		background-color: transparent !important;
 		* {
 			color: unset !important;
 		}
 	}
+
 	.app-navigation-footer {
 		// height: auto !important;
 		// overflow: hidden !important;
