@@ -8,8 +8,15 @@ This will be the last version supporting PHP 8.0. Please note, that this version
  - Fixing some performance issues
  - Fixing an error that possibly prevents users from adding suggestions
 ### Changes
- - Added a new admin option to allow disabling polls loading into the navigation aout of performance concerns with a huge amount of polls in the database
+#### Changes are partially also included in 7.1.0
+ - Added an option to allow to add polls to the navigation (default)
+ - Limited polls inside the navigation to 6 items
+ - Render the polls list in chunks of 20 items
  - Support Nextcloud 26 to 28
+
+## [6.2.0] - 2024-03-27
+### Fix
+ - Fix preventing option suggestions
 
 ## [6.1.6] - 2024-02-27
 ### Fix
