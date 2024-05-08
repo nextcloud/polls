@@ -1,5 +1,8 @@
 <?php
-
+/**
+ * SPDX-FileCopyrightText: 2022 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 namespace OCA\Polls\Middleware;
 
 use OCA\Polls\Attributes\ShareTokenRequired;

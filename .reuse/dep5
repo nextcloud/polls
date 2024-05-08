@@ -1,0 +1,16 @@
+Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: polls
+Upstream-Contact: Nextcloud <info@nextcloud.com>
+Source: https://github.com/nextcloud/polls
+
+Files: .gitattributes .github/* .editorconfig babel.config.js .php-cs-fixer.dist.php package-lock.json package.json composer.json composer.lock */composer.json */composer.lock webpack.js stylelint.config.js .eslintrc.js .gitignore .jshintrc .l10nignore action/.gitignore action/package.json action/package-lock.json action/dist/index.js tests/* psalm.xml cypress/.env cypress/.eslintrc.js cypress/docker-compose.yml cypress/plugins/index.js cypress/tsconfig.json cypress.config.ts vendor-bin/*/composer.json stylelint.config.cjs vendor-bin/*/composer.lock .tx/config webpack.config.js tsconfig.json vite.config.ts js/vendor.LICENSE.txt krankerl.toml .npmignore cypress/fixtures/* postcss.config.js cypress/dockerNode.ts jest.config.js cypress.config.js relativeci.config.js .nextcloudignore .devcontainer/devcontainer.json .scrutinizer.yml .stylelintrc.js .tx/backport
+Copyright: none
+License: CC0-1.0
+
+Files: l10n/*.js l10n/*.json js/*.js.map js/*.js js/*.mjs js/*.mjs.map js/templates/*.handlebars emptyTemplates/* jsconfig.json img/app.svg img/polls.svg img/polls-dark.svg src/js/assets/icons/loading-small.gif src/js/assets/icons/maybe-vote.svg src/js/assets/icons/no-vote.svg src/js/assets/icons/spinner.svg src/js/assets/icons/yes-vote.svg
+Copyright: 2016 Nextcloud contributors
+License: AGPL-3.0-or-later
+
+Files: screenshots/edit-poll.png screenshots/overview.png screenshots/share.png screenshots/vote.png
+Copyright: Nextcloud contributors
+License: CC0-1.0

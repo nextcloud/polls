@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2016 Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # Polls - an app, similar to doodle or dudle, for Nextcloud written in PHP and JS/Vue.
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
 ![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)

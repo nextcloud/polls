@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 export { default as ActionChangeView } from './modules/ActionChangeView.vue'
 export { default as ActionDelete } from './modules/ActionDelete.vue'
 export { default as ActionDeleteOrphanedVotes } from './modules/ActionDeleteOrphanedVotes.vue'
