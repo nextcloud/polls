@@ -32,8 +32,19 @@ All notable changes to this project will be documented in this file.
  - Performance optimizations
  - A lot for code maintenance and tidy
 
+## [6.3.0] - 2024-05-06
+### Fix
+ - Fix preventing option suggestions
+ - Fixing some performance issues
+ - Fixing an error that possibly prevents users from adding suggestions
+### Changes
+#### Changes are partially also included in 7.1.0
+ - Added an option to allow to add polls to the navigation (default)
+ - Limited polls inside the navigation to 6 items
+ - Render the polls list in chunks of 20 items
+ - Support Nextcloud 26 to 28
+
 ## [6.2.0] - 2024-03-27
-This will be the last version supporting PHP 8.0. Please note, that this version is not tested very well. So if possible please update to PHP > 8.1 and Polls v7.x.
 ### Fix
  - Fix preventing option suggestions
 
