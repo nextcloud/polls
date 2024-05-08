@@ -66,26 +66,27 @@
 		</template>
 
 		<template #footer>
-			<NcAppNavigationItem v-if="isComboActivated"
-				:name="t('polls', 'Combine polls')"
-				:to="{ name: 'combo' }">
-				<template #icon>
-					<ComboIcon :size="iconSize" />
-				</template>
-			</NcAppNavigationItem>
-			<NcAppNavigationItem v-if="showAdminSection"
-				:name="t('polls', 'Administration')"
-				:to="{ name: 'administration' }">
-				<template #icon>
-					<AdministrationIcon :size="iconSize" />
-				</template>
-			</NcAppNavigationItem>
-			<NcAppNavigationItem :name="t('polls', 'Polls settings')"
-				@click="showSettings()">
-				<template #icon>
-					<SettingsIcon :size="iconSize" />
-				</template>
-			</NcAppNavigationItem>
+			<ul class="app-navigation-footer">
+				<NcAppNavigationItem v-if="isComboActivated"
+					:name="t('polls', 'Combine polls')"
+					:to="{ name: 'combo' }">
+					<template #icon>
+						<ComboIcon :size="iconSize" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem v-if="showAdminSection"
+					:name="t('polls', 'Administration')"
+					:to="{ name: 'administration' }">
+					<template #icon>
+						<AdministrationIcon :size="iconSize" />
+					</template>
+				</NcAppNavigationItem>
+				<NcAppNavigationItem :name="t('polls', 'Preferences')" @click="showSettings()">
+					<template #icon>
+						<SettingsIcon :size="iconSize" />
+					</template>
+				</NcAppNavigationItem>
+			</ul>
 		</template>
 	</NcAppNavigation>
 </template>
@@ -248,5 +249,10 @@ export default {
 			color: unset !important;
 		}
 	}
-
+	.app-navigation-footer {
+		// height: auto !important;
+		// overflow: hidden !important;
+		// padding-top: 0 !important;
+		flex: 0 0 auto;
+	}
 </style>
