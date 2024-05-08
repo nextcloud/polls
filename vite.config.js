@@ -11,7 +11,7 @@ export default createAppConfig(
 	{
 		config: {
 			build: {
-				cssCodeSplit: false,
+				cssCodeSplit: true,
 				rollupOptions: {
 					output: {
 						manualChunks: {
@@ -21,6 +21,6 @@ export default createAppConfig(
 				},
 			},
 		},
-		inlineCSS: true,
+		inlineCSS: false,
 	},
 )
