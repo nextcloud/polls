@@ -32,6 +32,9 @@ const state = {
 	isPollCreationAllowed: false,
 	isComboAllowed: false,
 	currentCategoryId: 'all',
+	chunksize: 20,
+	loadedChunks: 1,
+	maxPollsInNavigation: 6,
 	pollsLoading: false,
 	sort: {
 		by: 'created',
@@ -165,6 +168,14 @@ const mutations = {
 	setComboAllowed(state, payload) {
 		state.isComboAllowed = payload.comboAllowed
 	},
+
+	addChunk(state) {
+		state.loadedChunks = state.loadedChunks + 1
+	},
+
+	resetChunks(state) {
+		state.loadedChunks = 1
+	},
 }
 
 const getters = {
@@ -175,16 +186,28 @@ const getters = {
 		return state.categories.filter((category) => (!category.createDependent))
 	},
 
-	activePolls: (state, getters) => getters.filtered('all'),
+	// activePolls: (state, getters) => getters.filtered('all').slice(0, getters.loaded),
+	count: (state, getters) => getters.filteredRaw.length,
+	loaded: (state, getters) => state.loadedChunks * state.chunksize,
 	datePolls: (state) => state.list.filter((poll) => (poll.type === 'datePoll' && !poll.deleted)),
+	currentCategory: (state) => state.categories.find((category) => category.id === state.currentCategoryId),
 
-	filtered: (state, getters) => (filterId) => {
+	filteredRaw: (state, getters) => orderBy(
+		state.list.filter((poll) => getters.currentCategory.filterCondition(poll)),
+		[state.sort.by],
+		[state.sort.reverse ? 'desc' : 'asc'],
+	),
+
+	filtered: (state, getters) => getters.filteredRaw.slice(0, getters.loaded),
+
+	countByCategory: (state) => (filterId) => state.list.filter((poll) => state.categories.find((category) => category.id === filterId).filterCondition(poll)).length,
+	filteredByCategory: (state, getters) => (filterId) => {
 		const currentCategory = state.categories.find((category) => category.id === filterId)
 		return orderBy(
 			state.list.filter((poll) => currentCategory.filterCondition(poll)),
 			[state.sort.by],
 			[state.sort.reverse ? 'desc' : 'asc'],
-		)
+		).slice(0, state.maxPollsInNavigation)
 	},
 }
 
@@ -195,6 +218,7 @@ const actions = {
 
 	async setFilter(context, payload) {
 		context.commit('setFilter', { currentCategoryId: payload })
+		context.commit('resetChunks')
 	},
 
 	async list(context) {
