@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2024 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 export { default as SideBarTabConfiguration } from './SideBarTabConfiguration.vue'
 export { default as SideBarTabComments } from './SideBarTabComments.vue'
 export { default as SideBarTabOptions } from './SideBarTabOptions.vue'

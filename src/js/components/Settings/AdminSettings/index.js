@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2024 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 export { default as AdminActivities } from './AdminActivities.vue'
 export { default as AdminArchivePolls } from './AdminArchivePolls.vue'
 export { default as AdminCombo } from './AdminCombo.vue'
