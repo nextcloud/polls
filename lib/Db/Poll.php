@@ -31,6 +31,7 @@ use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\UserSession;
 use OCP\IURLGenerator;
 
 /**
@@ -111,7 +112,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const ONE_AND_HALF_DAY = 129600;
 
 	private IURLGenerator $urlGenerator;
-	protected UserMapper $userMapper;
+	protected UserSession $userSession;
 
 	// schema columns
 	public $id = null;
@@ -174,7 +175,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('currentUserCountOrphanedVotes', 'int');
 
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
-		$this->userMapper = Container::queryClass(UserMapper::class);
+		$this->userSession = Container::queryClass(UserSession::class);
 	}
 
 	/**
@@ -250,7 +251,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getUserRole(): string {
-		if ($this->userMapper->getCurrentUser()->getId() === $this->getOwner()) {
+		if ($this->userSession->getCurrentUserId() === $this->getOwner()) {
 			return 'owner';
 		}
 		return $this->userRole;

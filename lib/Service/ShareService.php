@@ -25,7 +25,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
@@ -47,10 +46,10 @@ use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\UserBase;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\ISession;
 use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
@@ -65,7 +64,6 @@ class ShareService {
 		private LoggerInterface $logger,
 		private IEventDispatcher $eventDispatcher,
 		private ISecureRandom $secureRandom,
-		private ISession $session,
 		private ShareMapper $shareMapper,
 		private SystemService $systemService,
 		private Share $share,
@@ -73,6 +71,7 @@ class ShareService {
 		private Acl $acl,
 		private NotificationService $notificationService,
 		private UserMapper $userMapper,
+		private UserSession $userSession,
 	) {
 		$this->shares = [];
 	}
@@ -118,6 +117,26 @@ class ShareService {
 	}
 
 	/**
+	 * Converts the public share to a personal share for hte current logged in user
+	 * If user is not authorized for this poll, create a personal share
+	 * for this user and return the created share instead of the public share
+	 */
+	private function convertPublicToPersonalShare(): void {
+		try {
+			$this->share = $this->createNewShare(
+				$this->share->getPollId(),
+				$this->userSession->getUser(),
+				preventInvitation: true
+			);
+		} catch (ShareAlreadyExistsException $e) {
+			// replace share by existing personal share
+			$this->share = $e->getShare()
+				?? $this->share = $this->shareMapper->findByPollAndUser($this->share->getPollId(), $this->userSession->getCurrentUserId());
+			// remove the public token from session
+			$this->userSession->setShareToken($this->share->getToken());
+		}
+	}
+	/**
 	 * Get share by token for accessing the poll
 	 *
 	 * @param string $token             Token of share to get
@@ -133,21 +152,8 @@ class ShareService {
 		}
 
 		// Exception: logged in user, accesses the poll via public share link
-		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userMapper->getCurrentUser()->getIsLoggedIn()) {
-
-			try {
-				// If user is not authorized for this poll, create a personal share
-				// for this user and return the created share instead of the public share
-				$this->share = $this->createNewShare(
-					$this->share->getPollId(),
-					$this->userMapper->getCurrentUserCached(),
-					true
-				);
-			} catch (ShareAlreadyExistsException $e) {
-				// remove the public token from session
-				$this->share = $e->getShare();
-				$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
-			}
+		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->getIsLoggedIn()) {
+			$this->convertPublicToPersonalShare();
 		}
 		return $this->share;
 	}
@@ -506,10 +512,10 @@ class ShareService {
 		
 		$valid = match ($this->share->getType()) {
 			Share::TYPE_PUBLIC,	Share::TYPE_EMAIL, Share::TYPE_EXTERNAL => true,
-			Share::TYPE_USER => $this->share->getUserId() === $this->userMapper->getCurrentUser()->getId(),
-			Share::TYPE_ADMIN => $this->share->getUserId() === $this->userMapper->getCurrentUserCached()->getId(),
+			Share::TYPE_USER => $this->share->getUserId() === $this->userSession->getCurrentUserId(),
+			Share::TYPE_ADMIN => $this->share->getUserId() === $this->userSession->getCurrentUserId(),
 			// Note: $this->share->getUserId() is actually the group name in case of Share::TYPE_GROUP
-			Share::TYPE_GROUP => $this->userMapper->getCurrentUserCached()->getIsInGroup($this->share->getUserId()),
+			Share::TYPE_GROUP => $this->userSession->getUser()->getIsInGroup($this->share->getUserId()),
 			default => throw new ForbiddenException('Invalid share type ' . $this->share->getType()),
 		};
 		if (!$valid) {

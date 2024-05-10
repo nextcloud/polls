@@ -30,14 +30,12 @@ use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use DateTimeZone;
-use OCA\Polls\AppConstants;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Preferences;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Model\CalendarEvent;
+use OCA\Polls\UserSession;
 use OCP\Calendar\ICalendar;
 use OCP\Calendar\IManager as CalendarManager;
-use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class CalendarService {
@@ -49,11 +47,10 @@ class CalendarService {
 	 */
 	public function __construct(
 		private CalendarManager $calendarManager,
-		private ISession $session,
 		private OptionMapper $optionMapper,
 		private Preferences $preferences,
 		private PreferencesService $preferencesService,
-		private UserMapper $userMapper,
+		private UserSession $userSession,
 		private LoggerInterface $logger,
 	) {
 		$this->preferences = $this->preferencesService->get();
@@ -64,7 +61,7 @@ class CalendarService {
 	 * getCalendars -
 	 */
 	private function getCalendarsForPrincipal(): void {
-		$principalUri = $this->userMapper->getCurrentUser()->getPrincipalUri();
+		$principalUri = $this->userSession->getUser()->getPrincipalUri();
 
 		if ($principalUri) {
 			$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
@@ -102,11 +99,11 @@ class CalendarService {
 	}
 
 	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): array {
-		if (!$this->userMapper->getCurrentUser()->getPrincipalUri()) {
+		if (!$this->userSession->getUser()->getPrincipalUri()) {
 			return [];
 		}
 
-		$query = $this->calendarManager->newQuery($this->userMapper->getCurrentUser()->getPrincipalUri());
+		$query = $this->calendarManager->newQuery($this->userSession->getUser()->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
 
@@ -126,7 +123,7 @@ class CalendarService {
 	 * @psalm-return list<CalendarEvent|null>
 	 */
 	public function getEvents(int $optionId): array {
-		$timezone = new DateTimeZone($this->session->get(AppConstants::CLIENT_TZ));
+		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
 		$timerange = $this->getTimerange($optionId, $timezone);
 
 		$events = [];

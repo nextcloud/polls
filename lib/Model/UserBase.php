@@ -27,7 +27,6 @@ namespace OCA\Polls\Model;
 
 use DateTimeZone;
 use OCA\Polls\Db\EntityWithUser;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
@@ -38,11 +37,11 @@ use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\User\User;
+use OCA\Polls\UserSession;
 use OCP\Collaboration\Collaborators\ISearch;
 use OCP\IDateTimeZone;
 use OCP\IGroupManager;
 use OCP\IL10N;
-use OCP\IUserSession;
 use OCP\Server;
 use OCP\Share\IShare;
 
@@ -75,8 +74,7 @@ class UserBase implements \JsonSerializable {
 	protected IDateTimeZone $timeZone;
 	protected IGroupManager $groupManager;
 	protected IL10N $l10n;
-	protected IUserSession $userSession;
-	protected UserMapper $userMapper;
+	protected UserSession $userSession;
 	protected AppSettings $appSettings;
 
 	public function __construct(
@@ -92,8 +90,7 @@ class UserBase implements \JsonSerializable {
 		$this->l10n = Container::getL10N();
 		$this->groupManager = Server::get(IGroupManager::class);
 		$this->timeZone = Server::get(IDateTimeZone::class);
-		$this->userMapper = Server::get(UserMapper::class);
-		$this->userSession = Server::get(IUserSession::class);
+		$this->userSession = Server::get(UserSession::class);
 		$this->appSettings = Server::get(AppSettings::class);
 	}
 
@@ -416,7 +413,7 @@ class UserBase implements \JsonSerializable {
 		}
 
 		// internal users may see the real userId
-		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getId();
 		}
 
@@ -452,8 +449,8 @@ class UserBase implements \JsonSerializable {
 		return $this->organisation;
 	}
 
-	public function getIsLoggedIn(): bool {
-		return $this->userSession->isLoggedIn();
+	public function getIsCurrentUser(): bool {
+		return $this->getId() === $this->userSession->getCurrentUserId();
 	}
 
 	public function getIsAdmin(): bool {

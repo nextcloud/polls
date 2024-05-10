@@ -28,6 +28,7 @@ namespace OCA\Polls\Service;
 use DateTime;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Notification\Notifier;
+use OCA\Polls\UserSession;
 use OCP\Notification\IManager;
 
 class NotificationService {
@@ -36,18 +37,17 @@ class NotificationService {
 	 */
 	public function __construct(
 		protected IManager $notificationManager,
-		protected ?string $userId,
+		protected UserSession $userSession,
 	) {
 	}
 
 	public function removeNotification(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
-		if (!$this->userId) {
-			return;
-		}
+		$userId = $this->userSession->getCurrentUserId();
+
 		$notification->setApp(AppConstants::APP_ID)
 			->setObject('poll', strval($pollId))
-			->setUser($this->userId);
+			->setUser($userId);
 		$this->notificationManager->markProcessed($notification);
 	}
 

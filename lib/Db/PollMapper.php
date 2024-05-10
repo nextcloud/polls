@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IParameter;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -43,7 +44,7 @@ class PollMapper extends QBMapper {
 	 */
 	public function __construct(
 		IDBConnection $db,
-		private UserMapper $userMapper,
+		private UserSession $userSession,
 	) {
 		parent::__construct($db, Poll::TABLE, Poll::class);
 	}
@@ -171,7 +172,7 @@ class PollMapper extends QBMapper {
 	 * Build the enhanced query with joined tables
 	 */
 	protected function buildQuery(): IQueryBuilder {
-		$currentUserId = $this->userMapper->getCurrentUser()->getId();
+		$currentUserId = $this->userSession->getCurrentUserId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')

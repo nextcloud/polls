@@ -27,12 +27,10 @@ declare(strict_types=1);
 namespace OCA\Polls\Model;
 
 use JsonSerializable;
-use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidPollIdException;
 use OCA\Polls\Exceptions\NotFoundException;
@@ -41,6 +39,7 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\ISession;
 use Psr\Log\LoggerInterface;
+use OCA\Polls\UserSession;
 
 /**
  * Class Acl
@@ -68,10 +67,8 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_PUBLIC_SHARES = 'publicShares';
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 	private ?int $pollId = null;
-	private ?UserBase $currentUser = null;
 	// Cache whether the current poll has shares
 	private bool $noShare = false;
-
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -80,9 +77,8 @@ class Acl implements JsonSerializable {
 		private AppSettings $appSettings,
 		private LoggerInterface $logger,
 		private PollMapper $pollMapper,
-		private ISession $session,
 		private ShareMapper $shareMapper,
-		private UserMapper $userMapper,
+		private UserSession $userSession,
 		private ?Poll $poll = null,
 		private ?Share $share = null,
 	) {
@@ -126,8 +122,8 @@ class Acl implements JsonSerializable {
 			'displayName' => $this->getDisplayName(),
 			'hasVoted' => $this->getIsParticipant(),
 			'isInvolved' => $this->getIsInvolved(),
-			'isLoggedIn' => $this->getIsLoggedIn(),
-			'isNoUser' => !$this->getIsLoggedIn(),
+			'isLoggedIn' => $this->userSession->getIsLoggedIn(),
+			'isNoUser' => !$this->userSession->getIsLoggedIn(),
 			'isOwner' => $this->getIsOwner(),
 			'userId' => $this->getUserId(),
 		];
@@ -140,7 +136,7 @@ class Acl implements JsonSerializable {
 	 * Set poll id and load poll
 	 */
 	public function setPollId(?int $pollId = null, string $permission = self::PERMISSION_POLL_VIEW): Acl {
-		if ($this->getToken() && $pollId !== $this->getShare()->getPollId()) {
+		if ($this->userSession->hasShare() && $pollId !== $this->getShare()->getPollId()) {
 			$this->logger->warning('Ignoring requested pollId ' . $pollId . '. Keeping share pollId of share(' . $this->getToken() . '): ' . $this->getShare()->getPollId());
 		} else {
 			$this->pollId = $pollId;
@@ -166,22 +162,12 @@ class Acl implements JsonSerializable {
 	}
 
 	public function getPoll(): ?Poll {
-		if ($this->getToken()) {
-			// first verify working share
-			$this->loadShare();
+		if ($this->userSession->hasShare()) {
+			// if a share token is set, force usage of the share's pollId
+			$this->pollId = $this->getShare()->getPollId();
 		}
 		$this->loadPoll();
 		return $this->poll;
-	}
-
-	public function getShare(): ?Share {
-		try {
-			$this->loadShare();
-		} catch (ShareNotFoundException $e) {
-			return null;
-		}
-
-		return $this->share;
 	}
 
 	/**
@@ -204,67 +190,25 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * load share from db by session token or rely on cached share
-	 * If the share token has changed, the share gets loaded from the db,
-	 * the poll will get invalidated (set to null)
-	 * and the pollId will get set to the share's pollId
+	 * Get share
+	 * load share from db by session stored token or rely on cached share
 	 */
-	private function loadShare(): void {
-		if ($this->noShare) {
-			throw new ShareNotFoundException('No token was set for ACL');
-		}
-
-		// no token in session, try to find a user, who matches
-		if (!$this->getToken()) {
-			if ($this->getCurrentUser()->getIsLoggedIn()) {
-				// search for logged in user's share, load it and return
-				try {
-					$this->share = $this->shareMapper->findByPollAndUser($this->getPollId(), $this->getUserId());
-				} catch (\Throwable $ex) {
-					$this->noShare = true;
-					throw $ex;
-				}
-				// store share in session for further validations
-				// $this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $this->share->getToken());
-				return;
-			} else {
-				$this->share = new Share();
-				$this->noShare = true;
-				// must fail, if no token is present and not logged in
-				throw new ShareNotFoundException('No token was set for ACL');
-			}
-		}
-
-		// if share is already cached, verify against session token
-		if ($this->share?->getToken() === $this->getToken()) {
-			return;
-		}
-
-		$this->share = $this->shareMapper->findByToken((string) $this->getToken());
-
-		// ensure, poll and currentUser get reset
-		$this->poll = null;
-		$this->currentUser = null;
-
-		// set the poll id based on the share
-		$this->pollId = $this->share->getPollId();
+	private function getShare(): Share|null {
+		return $this->userSession->getShare();
 	}
 
 	/**
-	 * loads the current user from the userMapper or returns the cached one
+	 * loads the current user from the userSession or returns the cached one
 	 */
 	private function getCurrentUser(): UserBase {
-		if (!$this->currentUser) {
-			$this->currentUser = $this->userMapper->getCurrentUser();
-		}
-		return $this->currentUser;
+		return $this->userSession->getUser();
 	}
 
 	/**
 	 * returns the current pollId; Either from share or from setPollId()
 	 */
 	public function getPollId(): int {
-		if ($this->getToken()) {
+		if ($this->userSession->hasShare()) {
 			$this->pollId = $this->getShare()->getPollId();
 		}
 		if (!$this->getPoll()->getId()) {
@@ -372,7 +316,7 @@ class Acl implements JsonSerializable {
 	 * where the current user is member of. This only affects logged in users.
 	 */
 	private function getIsInvitedViaGroupShare(): bool {
-		if (!$this->getIsLoggedIn()) {
+		if (!$this->userSession->getIsLoggedIn()) {
 			return false;
 		}
 
@@ -460,7 +404,7 @@ class Acl implements JsonSerializable {
 			return true;
 		}
 
-		if ($this->getPoll()->getAccess() === Poll::ACCESS_OPEN && $this->getIsLoggedIn()) {
+		if ($this->getPoll()->getAccess() === Poll::ACCESS_OPEN && $this->userSession->getIsLoggedIn()) {
 			// grant access if poll poll is an open poll (for logged in users)
 			return true;
 		}

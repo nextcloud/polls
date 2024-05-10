@@ -51,7 +51,7 @@ class Email extends UserBase {
 	}
 
 	public function jsonSerialize(): array {
-		if ($this->userMapper->getCurrentUserCached()->getIsLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getRichUserArray();
 		}
 		return $this->getSimpleUserArray();

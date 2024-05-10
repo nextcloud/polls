@@ -71,7 +71,7 @@ class AdminController extends BaseController {
 	 * Get list of polls for administrative purposes
 	 */
 	public function takeover(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->pollService->takeover($pollId, $this->userMapper->getCurrentUser()));
+		return $this->response(fn () => $this->pollService->takeover($pollId));
 	}
 
 	/**

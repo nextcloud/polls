@@ -27,6 +27,7 @@ namespace OCA\Polls\Db;
 
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\UserBase;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\Entity;
 
 /**
@@ -59,7 +60,7 @@ abstract class EntityWithUser extends Entity {
 	 * Anonymized the user completely (ANON_FULL) or just strips out personal information
 	 */
 	public function getAnonymizeLevel(): string {
-		$currentUserId = Container::queryClass(UserMapper::class)->getCurrentUser()->getId();
+		$currentUserId = Container::queryClass(UserSession::class)->getCurrentUserId();
 		// Don't censor for poll owner or it is the current user's entity
 		if ($this->getPollOwnerId() === $currentUserId || $this->getUserId() === $currentUserId) {
 			return self::ANON_NONE;

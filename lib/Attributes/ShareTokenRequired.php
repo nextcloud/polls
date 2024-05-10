@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * @copyright Copyright (c) 2017 Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
+ * @copyright Copyright (c) 2024 René Gieling <github@dartcafe.de>
  *
  * @author René Gieling <github@dartcafe.de>
  *
@@ -23,33 +23,13 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Polls\Service;
+namespace OCA\Polls\Attribute;
 
-use OCA\Polls\Db\Log;
-use OCA\Polls\Db\LogMapper;
-use OCA\Polls\UserSession;
+use Attribute;
 
-class LogService {
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
-	public function __construct(
-		private LogMapper $logMapper,
-		private Log $log,
-		private UserSession $userSession,
-	) {
-	}
-
-	/**
-	 * Log poll activity
-	 */
-	public function setLog(int $pollId, string $messageId, ?string $userId = null): void {
-		$this->log = new Log();
-		$this->log->setPollId($pollId);
-		$this->log->setCreated(time());
-		$this->log->setMessageId($messageId);
-		$this->log->setUserId($userId ?? $this->userSession->getCurrentUserId());
-
-		$this->logMapper->insert($this->log);
-	}
+/**
+ * Attribute for permission check against Acl
+ */
+#[Attribute]
+class ShareTokenRequired {
 }

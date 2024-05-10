@@ -29,10 +29,6 @@ abstract class AppConstants {
 	/** @var string */
 	public const APP_ID = 'polls';
 	/** @var string */
-	public const SESSION_KEY_USER_ID = 'ncPollsUserId';
-	/** @var string */
-	public const SESSION_KEY_SHARE_TOKEN = 'ncPollsPublicToken';
-	/** @var string */
 	public const CLIENT_ID = 'ncPollsClientId';
 	/** @var string */
 	public const CLIENT_TZ = 'ncPollsClientTimeZone';

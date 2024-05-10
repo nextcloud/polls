@@ -34,7 +34,6 @@ use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\ISession;
 
 /**
  * @psalm-api
@@ -43,7 +42,6 @@ class BasePublicController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		protected ISession $session,
 		protected Acl $acl,
 	) {
 		parent::__construct($appName, $request);
@@ -51,11 +49,10 @@ class BasePublicController extends Controller {
 
 	/**
 	 * response
+	 * @param Closure $callback Callback function
 	 * @NoAdminRequired
 	 */
-	protected function response(Closure $callback, string $token): JSONResponse {
-		$this->updateSessionToken($token);
-
+	protected function response(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (Exception $e) {
@@ -65,11 +62,10 @@ class BasePublicController extends Controller {
 
 	/**
 	 * response
+	 * @param Closure $callback Callback function
 	 * @NoAdminRequired
 	 */
-	protected function responseLong(Closure $callback, string $token): JSONResponse {
-		$this->updateSessionToken($token);
-
+	protected function responseLong(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_OK);
 		} catch (NoUpdatesException $e) {
@@ -78,19 +74,14 @@ class BasePublicController extends Controller {
 	}
 	/**
 	 * responseCreate
+	 * @param Closure $callback Callback function
 	 * @NoAdminRequired
 	 */
-	protected function responseCreate(Closure $callback, string $token): JSONResponse {
-		$this->updateSessionToken($token);
-
+	protected function responseCreate(Closure $callback): JSONResponse {
 		try {
 			return new JSONResponse($callback(), Http::STATUS_CREATED);
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
-	}
-
-	private function updateSessionToken(string $token): void {
-		$this->session->set(AppConstants::SESSION_KEY_SHARE_TOKEN, $token);
 	}
 }

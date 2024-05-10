@@ -26,6 +26,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCA\Polls\UserSession;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\ISession;
@@ -41,8 +42,7 @@ class OptionMapper extends QBMapperWithUser {
 	 */
 	public function __construct(
 		IDBConnection $db,
-		private ISession $session,
-		private UserMapper $userMapper,
+		private UserSession $userSession,
 	) {
 		parent::__construct($db, Option::TABLE, Option::class);
 	}
@@ -171,7 +171,7 @@ class OptionMapper extends QBMapperWithUser {
 	 * @param bool $hideVotes Whether the votes should be hidden, skips vote counting
 	 */
 	protected function buildQuery(bool $hideVotes = false): IQueryBuilder {
-		$currentUserId = $this->userMapper->getCurrentUser()->getId();
+		$currentUserId = $this->userSession->getCurrentUserId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
