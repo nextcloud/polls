@@ -25,9 +25,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\PreferencesService;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
@@ -43,7 +43,7 @@ class PreferencesController extends BaseController {
 		IRequest $request,
 		private PreferencesService $preferencesService,
 		private CalendarService $calendarService,
-		private UserMapper $userMapper,
+		private UserSession $userSession,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -63,7 +63,7 @@ class PreferencesController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function write(array $preferences): JSONResponse {
-		if (!$this->userMapper->getCurrentUser()->getIsLoggedIn()) {
+		if (!$this->userSession->getIsLoggedIn()) {
 			return new JSONResponse([], Http::STATUS_OK);
 		}
 		return $this->response(fn () => $this->preferencesService->write($preferences));

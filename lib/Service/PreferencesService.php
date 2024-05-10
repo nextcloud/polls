@@ -28,8 +28,8 @@ namespace OCA\Polls\Service;
 use Exception;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\PreferencesMapper;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Exceptions\NotAuthorizedException;
+use OCA\Polls\UserSession;
 
 class PreferencesService {
 
@@ -39,14 +39,14 @@ class PreferencesService {
 	public function __construct(
 		private PreferencesMapper $preferencesMapper,
 		private Preferences $preferences,
-		private UserMapper $userMapper,
+		private UserSession $userSession,
 	) {
 		$this->load();
 	}
 
 	public function load(): void {
 		try {
-			$this->preferences = $this->preferencesMapper->find($this->userMapper->getCurrentUser()->getId());
+			$this->preferences = $this->preferencesMapper->find($this->userSession->getCurrentUserId());
 		} catch	(Exception $e) {
 			$this->preferences = new Preferences;
 		}
@@ -60,13 +60,13 @@ class PreferencesService {
 	 * Write references
 	 */
 	public function write(array $preferences): Preferences {
-		if (!$this->userMapper->getCurrentUserCached()->getId()) {
+		if (!$this->userSession->getCurrentUserId()) {
 			throw new NotAuthorizedException();
 		}
 
 		$this->preferences->setPreferences(json_encode($preferences));
 		$this->preferences->setTimestamp(time());
-		$this->preferences->setUserId($this->userMapper->getCurrentUserCached()->getId());
+		$this->preferences->setUserId($this->userSession->getCurrentUserId());
 		
 		if ($this->preferences->getId() > 0) {
 			return $this->preferencesMapper->update($this->preferences);

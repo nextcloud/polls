@@ -40,6 +40,9 @@ const validators = {
 				displayName: name,
 				token: pollToken,
 			},
+			headers: {
+				'Nc-Polls-Share-Token': pollToken,
+			}
 		})
 	},
 }

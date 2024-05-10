@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use Exception;
-use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Exceptions\UserNotFoundException;
@@ -44,11 +43,8 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\ISession;
 use OCP\IUser;
 use OCP\IUserManager;
-use OCP\IUserSession;
-use Psr\Log\LoggerInterface;
 
 /**
  * @template-extends QBMapper<Share>
@@ -57,65 +53,15 @@ use Psr\Log\LoggerInterface;
  */
 class UserMapper extends QBMapper {
 	public const TABLE = Share::TABLE;
-	protected ?UserBase $currentUser = null;
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function __construct(
 		IDBConnection $db,
-		protected ISession $session,
-		protected IUserSession $userSession,
 		protected IUserManager $userManager,
-		protected LoggerInterface $logger,
 	) {
 		parent::__construct($db, Share::TABLE, Share::class);
-	}
-
-	/**
-	 * Get current user
-	 *
-	 * Returns a UserBase child for the current (share|nextcloud) user based on
-	 * - the session stored share token or
-	 * - the user session stored userId
-	 * and stores userId to session
-	 *
-	 */
-	public function getCurrentUser(): UserBase {
-		if ($this->userSession->isLoggedIn()) {
-
-			$userId = $this->userSession->getUser()?->getUID();
-
-			if ($userId === null) {
-				throw new UserNotFoundException('User is reported to be logged in but has no user id');
-			}
-
-			if (!$this->currentUser || $userId !== $this->currentUser->getId()) {
-				$this->currentUser = $this->getUserFromUserBase($userId);
-			}
-
-		} else {
-			try {
-				$this->currentUser = $this->getUserFromShareToken($this->getSessionStoredShareToken());
-			} catch (DoesNotExistException $e) {
-				$this->logger->debug('no user found, returned fake user');
-				$this->currentUser = new GenericUser('', Share::TYPE_PUBLIC);
-			}
-		}
-
-		return $this->currentUser;
-	}
-
-	public function getCurrentUserId(): string {
-		return $this->getCurrentUser()->getId();
-	}
-
-	public function getCurrentUserCached(): UserBase {
-		return $this->currentUser ?? $this->getCurrentUser();
-	}
-
-	public function getSessionStoredShareToken(): string {
-		return (string) $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
 	}
 
 	/**
@@ -197,11 +143,9 @@ class UserMapper extends QBMapper {
 		);
 	}
 
-	private function getUserFromShareToken(string $token): UserBase {
+	public function getUserFromShareToken(string $token): UserBase {
 		$share = $this->getShareByToken($token);
-		if ($share->getType() === Share::TYPE_PUBLIC) {
-			throw new DoesNotExistException('Share type is <Share::' . $share->getType() . '> and has no user.');
-		}
+
 		return $this->getUserFromShare($share);
 	}
 

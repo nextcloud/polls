@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use DateTimeZone;
-use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
@@ -39,10 +38,10 @@ use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Acl;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
-use OCP\ISession;
 use Psr\Log\LoggerInterface;
 
 class OptionService {
@@ -58,7 +57,7 @@ class OptionService {
 		private LoggerInterface $logger,
 		private Option $option,
 		private OptionMapper $optionMapper,
-		private ISession $session,
+		private UserSession $userSession,
 	) {
 		$this->options = [];
 	}
@@ -264,7 +263,7 @@ class OptionService {
 			return $this->optionMapper->findByPoll($this->option->getPollId());
 		}
 
-		$timezone = new DateTimeZone($this->session->get(AppConstants::CLIENT_TZ));
+		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
 
 		for ($i = 1; $i < ($amount + 1); $i++) {
 			$clonedOption = new Option();
@@ -293,7 +292,7 @@ class OptionService {
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
 		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		$timezone = new DateTimeZone($this->session->get(AppConstants::CLIENT_TZ));
+		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
 
 		if ($this->acl->getPoll()->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');

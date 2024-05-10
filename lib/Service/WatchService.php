@@ -25,15 +25,14 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
-use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
-use OCP\ISession;
 
 class WatchService {
 	
@@ -41,11 +40,11 @@ class WatchService {
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function __construct(
-		private ISession $session,
 		private WatchMapper $watchMapper,
 		private Acl $acl,
 		private AppSettings $appSettings,
 		private Watch $watch,
+		private UserSession $userSession,
 	) {
 	}
 
@@ -89,11 +88,10 @@ class WatchService {
 	}
 
 	public function writeUpdate(int $pollId, string $table): void {
-		$sessionId = hash('md5', $this->session->get(AppConstants::CLIENT_ID));
 		$this->watch = new Watch();
 		$this->watch->setPollId($pollId);
 		$this->watch->setTable($table);
-		$this->watch->setSessionId($sessionId);
+		$this->watch->setSessionId($this->userSession->getClientIdHashed());
 
 		try {
 			$this->watch = $this->watchMapper->insert($this->watch);
