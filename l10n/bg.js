@@ -441,6 +441,7 @@ OC.L10N.register(
     "Combine multiple date polls in a single view" : "Комбинирайте няколко анкети за дати в един изглед",
     "Relevant polls" : "Съответни анкети",
     "Error loading poll list" : "Грешка при зареждането на списъка с анкети",
+    "Show all" : "Показване на всички",
     "Combine polls" : "Комбиниране на анкети",
     "Preferences" : "Предпочитания",
     "Error cloning poll." : "Грешка при клониране на анкета.",

@@ -30,6 +30,7 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\UserSession;
 use OCP\EventDispatcher\Event;
 
 abstract class BaseEvent extends Event {
@@ -39,6 +40,7 @@ abstract class BaseEvent extends Event {
 	protected bool $log = true;
 	protected Poll $poll;
 	protected UserMapper $userMapper;
+	protected UserSession $userSession;
 
 
 	public function __construct(
@@ -47,6 +49,7 @@ abstract class BaseEvent extends Event {
 		parent::__construct();
 		$this->poll = Container::queryPoll($this->getPollId());
 		$this->userMapper = Container::queryClass(UserMapper::class);
+		$this->userSession = Container::queryClass(UserSession::class);
 
 		// Default
 		$this->activitySubjectParams['pollTitle'] = [
@@ -70,8 +73,8 @@ abstract class BaseEvent extends Event {
 	}
 
 	public function getActor(): string {
-		if ($this->userMapper->getCurrentUserCached()->getId() !== '') {
-			return $this->userMapper->getCurrentUserCached()->getId();
+		if ($this->userSession->getCurrentUserId() !== '') {
+			return $this->userSession->getCurrentUserId();
 		}
 		return $this->eventObject->getUserId();
 	}

@@ -27,16 +27,14 @@ declare(strict_types=1);
 namespace OCA\Polls\Model;
 
 use JsonSerializable;
-use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCP\ISession;
+use OCA\Polls\UserSession;
 
 /**
  * Class Acl
@@ -65,7 +63,6 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 
 	private ?int $pollId = null;
-	private ?UserBase $currentUser = null;
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -73,11 +70,9 @@ class Acl implements JsonSerializable {
 	public function __construct(
 		private AppSettings $appSettings,
 		private PollMapper $pollMapper,
-		private ISession $session,
 		private ShareMapper $shareMapper,
-		private UserMapper $userMapper,
+		private UserSession $userSession,
 		private Poll $poll,
-		private Share $share,
 	) {
 	}
 
@@ -119,8 +114,8 @@ class Acl implements JsonSerializable {
 			'displayName' => $this->getCurrentUser()->getDisplayName(),
 			'hasVoted' => $this->getIsParticipant(),
 			'isInvolved' => $this->getIsInvolved(),
-			'isLoggedIn' => $this->getCurrentUser()->getIsLoggedIn(),
-			'isNoUser' => !$this->getCurrentUser()->getIsLoggedIn(),
+			'isLoggedIn' => $this->userSession->getIsLoggedIn(),
+			'isNoUser' => !$this->userSession->getIsLoggedIn(),
 			'isOwner' => $this->getIsPollOwner(),
 			'userId' => $this->getUserId(),
 		];
@@ -142,7 +137,7 @@ class Acl implements JsonSerializable {
 	 * @throws InsufficientAttributesException Thrown if stored pollId is null
 	 */
 	public function getPoll(): Poll {
-		if ($this->isSessionStoredShareTokenSet()) {
+		if ($this->userSession->hasShare()) {
 			// if a share token is set, force usage of the share's pollId
 			$this->pollId = $this->getShare()->getPollId();
 		}
@@ -163,30 +158,15 @@ class Acl implements JsonSerializable {
 	 * Get share
 	 * load share from db by session stored token or rely on cached share
 	 */
-	private function getShare(): Share {
-		if ($this->isSessionStoredShareTokenSet() &&
-			$this->getSessionStoredShareToken() !== $this->share->getToken()) {
-			// Session stored token differs from share's token,
-			// reload share from db for session stored share token
-			$this->share = $this->shareMapper->findByToken((string) $this->getSessionStoredShareToken());
-		}
-		return $this->share;
-	}
-
-	private function isSessionStoredShareTokenSet(): bool {
-		return boolval($this->getSessionStoredShareToken());
+	private function getShare(): Share|null {
+		return $this->userSession->getShare();
 	}
 
 	/**
-	 * loads the current user from the userMapper or returns the cached one
+	 * loads the current user from the userSession or returns the cached one
 	 */
 	private function getCurrentUser(): UserBase {
-		$this->currentUser = $this->userMapper->getCurrentUser();
-		return $this->currentUser;
-	}
-
-	private function getSessionStoredShareToken(): ?string {
-		return $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
+		return $this->userSession->getUser();
 	}
 
 	/**
@@ -257,7 +237,7 @@ class Acl implements JsonSerializable {
 	 * Check, if poll settings is set to open access for internal users
 	 */
 	private function getIsOpenPoll(): bool {
-		return $this->getPoll()->getAccess() === Poll::ACCESS_OPEN && $this->getCurrentUser()->getIsLoggedIn();
+		return $this->getPoll()->getAccess() === Poll::ACCESS_OPEN && $this->userSession->getIsLoggedIn();
 	}
 
 	/**
@@ -274,7 +254,7 @@ class Acl implements JsonSerializable {
 	 * @return bool Returns true, if the current poll contains a group share with a group,
 	 */
 	private function getIsInvitedViaGroupShare(): bool {
-		if (!$this->getCurrentUser()->getIsLoggedIn()) {
+		if (!$this->userSession->getIsLoggedIn()) {
 			return false;
 		}
 
@@ -351,7 +331,7 @@ class Acl implements JsonSerializable {
 		}
 
 		// grant access if poll poll is an open poll (for logged in users)
-		if ($this->getIsOpenPoll() && $this->getCurrentUser()->getIsLoggedIn()) {
+		if ($this->getIsOpenPoll() && $this->userSession->getIsLoggedIn()) {
 			return true;
 		}
 

@@ -28,9 +28,8 @@ namespace OCA\Polls\Model\Settings;
 use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Model\Group\Group;
+use OCA\Polls\UserSession;
 use OCP\IConfig;
-use OCP\IGroupManager;
-use OCP\IUserSession;
 
 class AppSettings implements JsonSerializable {
 	public const SETTING_ALLOW_PUBLIC_SHARES = 'allowPublicShares';
@@ -64,15 +63,11 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_UPDATE_TYPE_PERIODIC_POLLING = 'periodicPolling';
 	public const SETTING_UPDATE_TYPE_DEFAULT = self::SETTING_UPDATE_TYPE_NO_POLLING;
 
-	private string $userId = '';
-	
 	public function __construct(
 		private IConfig $config,
-		private IGroupManager $groupManager,
-		private IUserSession $session,
+		private UserSession $userSession,
 
 	) {
-		$this->userId = $this->session->getUser()?->getUId() ?? '';
 	}
 
 	// Getters
@@ -98,7 +93,7 @@ class AppSettings implements JsonSerializable {
 	 * Poll creation permission is controlled by app settings
 	 */
 	public function getPollCreationAllowed(): bool {
-		if ($this->session->isLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_CREATION) || $this->isMember($this->getGroupSetting(self::SETTING_POLL_CREATION_GROUPS));
 		}
 		return false;
@@ -108,7 +103,7 @@ class AppSettings implements JsonSerializable {
 	 * Permission to see emailaddresses is controlled by app settings
 	 */
 	public function getAllowSeeMailAddresses(): bool {
-		if ($this->session->isLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES) || $this->isMember($this->getGroupSetting(self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS));
 		}
 		return false;
@@ -118,7 +113,7 @@ class AppSettings implements JsonSerializable {
 	 * Permission to download emailaddresses is controlled by app settings
 	 */
 	public function getPollDownloadAllowed(): bool {
-		if ($this->session->isLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD) || $this->isMember($this->getGroupSetting(self::SETTING_POLL_DOWNLOAD_GROUPS));
 		}
 		return false;
@@ -128,7 +123,7 @@ class AppSettings implements JsonSerializable {
 	 * Permission to share polls with all internal users is controlled by app settings (open poll)
 	 */
 	public function getAllAccessAllowed(): bool {
-		if ($this->session->isLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_ALL_ACCESS) || $this->isMember($this->getGroupSetting(self::SETTING_ALL_ACCESS_GROUPS));
 		}
 		return false;
@@ -138,7 +133,7 @@ class AppSettings implements JsonSerializable {
 	 * Permission to create public shares is controlled by app settings
 	 */
 	public function getPublicSharesAllowed(): bool {
-		if ($this->session->isLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_PUBLIC_SHARES) || $this->isMember($this->getGroupSetting(self::SETTING_PUBLIC_SHARES_GROUPS));
 		}
 		return false;
@@ -148,7 +143,7 @@ class AppSettings implements JsonSerializable {
 	 * Permission to combine polls is controlled by app settings and only for internal users
 	 */
 	public function getComboAllowed(): bool {
-		if ($this->session->isLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getBooleanSetting(self::SETTING_ALLOW_COMBO)
 			  || $this->isMember($this->getGroupSetting(self::SETTING_COMBO_GROUPS));
 		}
@@ -261,7 +256,7 @@ class AppSettings implements JsonSerializable {
 
 	private function isMember(array $groups): bool {
 		foreach ($groups as $GID) {
-			if ($this->groupManager->isInGroup($this->userId, $GID)) {
+			if ($this->userSession->getUser()->getIsInGroup($GID)) {
 				return true;
 			}
 		}

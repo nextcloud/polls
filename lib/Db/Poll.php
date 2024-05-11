@@ -31,7 +31,7 @@ use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
-use OCP\ISession;
+use OCA\Polls\UserSession;
 use OCP\IURLGenerator;
 
 /**
@@ -123,8 +123,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 
 	private IURLGenerator $urlGenerator;
-	protected UserMapper $userMapper;
-	private ISession $session;
+	protected UserSession $userSession;
 
 	// schema columns
 	public $id = null;
@@ -187,8 +186,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('currentUserCountOrphanedVotes', 'int');
 
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
-		$this->userMapper = Container::queryClass(UserMapper::class);
-		$this->session = Container::queryClass(ISession::class);
+		$this->userSession = Container::queryClass(UserSession::class);
 	}
 
 	/**
@@ -268,14 +266,14 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getUserRole(): string {
-		if ($this->userMapper->getCurrentUser()->getId() === $this->getOwner()) {
+		if ($this->userSession->getCurrentUserId() === $this->getOwner()) {
 			return self::ROLE_OWNER;
 		}
 		if ($this->getIsCurrentUserLocked() && $this->userRole === self::ROLE_ADMIN) {
 			return self::ROLE_USER;
 		}
 
-		if ($this->session->get(AppConstants::SESSION_KEY_SHARE_TYPE) === Share::TYPE_PUBLIC) {
+		if ($this->userSession->getShareType() === Share::TYPE_PUBLIC) {
 			return Share::TYPE_PUBLIC;
 		}
 

@@ -74,6 +74,7 @@ use OCA\Polls\Middleware\RequestAttributesMiddleware;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\SearchProvider;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
@@ -81,10 +82,7 @@ use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IConfig;
 use OCP\IDBConnection;
-use OCP\IGroupManager;
-use OCP\ISession;
 use OCP\IUserManager;
-use OCP\IUserSession;
 use OCP\User\Events\UserDeletedEvent;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -157,25 +155,21 @@ class Application extends App implements IBootstrap {
 		$context->registerService(UserMapper::class, function (ContainerInterface $c): UserMapper {
 			return new UserMapper(
 				$c->get(IDBConnection::class),
-				$c->get(ISession::class),
-				$c->get(IUserSession::class),
 				$c->get(IUserManager::class),
-				$c->get(LoggerInterface::class),
 			);
 		});
 
 		$context->registerService(AppSettings::class, function (ContainerInterface $c): AppSettings {
 			return new AppSettings(
 				$c->get(IConfig::class),
-				$c->get(IGroupManager::class),
-				$c->get(IUserSession::class),
+				$c->get(UserSession::class),
 			);
 		});
 
 		$context->registerService(PollMapper::class, function (ContainerInterface $c): PollMapper {
 			return new PollMapper(
 				$c->get(IDBConnection::class),
-				$c->get(UserMapper::class)
+				$c->get(UserSession::class),
 			);
 		});
 
@@ -195,7 +189,7 @@ class Application extends App implements IBootstrap {
 		$context->registerService(OptionMapper::class, function (ContainerInterface $c): OptionMapper {
 			return new OptionMapper(
 				$c->get(IDBConnection::class),
-				$c->get(UserMapper::class),
+				$c->get(UserSession::class),
 			);
 		});
 
