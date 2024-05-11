@@ -76,7 +76,7 @@
 				</div>
 			</div>
 
-			<div v-if="share.showLogin" class="registration__login">
+			<div v-if="showLogin" class="registration__login">
 				<h2> {{ t('polls', 'Registered accounts') }} </h2>
 				<NcButton wide @click="login()">
 					<template #default>
@@ -136,6 +136,7 @@ export default {
 			share: (state) => state.share,
 			privacyUrl: (state) => state.appSettings.usePrivacyUrl,
 			imprintUrl: (state) => state.appSettings.useImprintUrl,
+			showLogin: (state) => state.appSettings.useLogin,
 		}),
 
 		registrationIsValid() {

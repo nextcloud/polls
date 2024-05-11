@@ -26,6 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
+use OCA\Polls\Attribute\ShareTokenRequired;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
@@ -36,14 +37,13 @@ use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\SystemService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
-use OCP\ISession;
-use OCP\IUserSession;
 use OCP\Util;
 
 /**
@@ -57,10 +57,9 @@ class PublicController extends BasePublicController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		ISession $session,
 		Acl $acl,
 		ShareMapper $shareMapper,
-		private IUserSession $userSession,
+		UserSession $userSession,
 		private CommentService $commentService,
 		private MailService $mailService,
 		private OptionService $optionService,
@@ -70,7 +69,7 @@ class PublicController extends BasePublicController {
 		private VoteService $voteService,
 		private WatchService $watchService
 	) {
-		parent::__construct($appName, $request, $session, $acl, $shareMapper);
+		parent::__construct($appName, $request, $acl, $shareMapper, $userSession);
 	}
 
 	/**
@@ -78,9 +77,10 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[NoCSRFRequired]
+	#[ShareTokenRequired]
 	public function votePage() {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
-		if ($this->userSession->isLoggedIn()) {
+		if ($this->userSession->getIsLoggedIn()) {
 			return new TemplateResponse(AppConstants::APP_ID, 'main');
 		} else {
 			$template = new PublicTemplateResponse(AppConstants::APP_ID, 'main');
@@ -91,10 +91,10 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * get complete poll via token
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function getPoll(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function getPoll(): JSONResponse {
 		return $this->response(function () {
 			$this->acl->request(Acl::PERMISSION_POLL_VIEW);
 			// load poll through acl
@@ -102,19 +102,19 @@ class PublicController extends BasePublicController {
 				'acl' => $this->acl,
 				'poll' => $this->acl->getPoll(),
 			];
-		}, $token);
+		});
 	}
 
 	/**
 	 * Watch poll for updates
-	 * @param string $token Share token
 	 * @param ?int $offset only watch changes after this timestamp
 	 */
 	#[PublicPage]
-	public function watchPoll(string $token, ?int $offset): JSONResponse {
+	#[ShareTokenRequired]
+	public function watchPoll(?int $offset): JSONResponse {
 		return $this->responseLong(fn () => [
 			'updates' => $this->watchService->watchUpdates(offset: $offset)
-		], $token);
+		]);
 	}
 
 	/**
@@ -122,190 +122,193 @@ class PublicController extends BasePublicController {
 	 * @param string $token Share token
 	 */
 	#[PublicPage]
+	#[ShareTokenRequired]
 	public function getShare(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->request($token)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Get votes
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function getVotes(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function getVotes(): JSONResponse {
 		return $this->response(fn () => [
 			'votes' => $this->voteService->list()
-		], $token);
+		]);
 	}
 
 	/**
 	 * Delete current user's votes
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function deleteUser(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function deleteUser(): JSONResponse {
 		return $this->response(fn () => [
 			'deleted' => $this->voteService->deleteCurrentUserFromPoll()
-		], $token);
+		]);
 	}
 
 	/**
 	 * Delete current user's orphaned votes
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function deleteOrphanedVotes(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function deleteOrphanedVotes(): JSONResponse {
 		return $this->response(fn () => [
 			'deleted' => $this->voteService->deleteCurrentUserFromPoll(deleteOnlyOrphaned: true)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Get options
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function getOptions(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function getOptions(): JSONResponse {
 		return $this->response(fn () => [
 			'options' => $this->optionService->list()
-		], $token);
+		]);
 	}
 
 	/**
 	 * Add options
-	 * @param string $token Share token
 	 * @param int $timestamp timestamp for datepoll
 	 * @param string $text Option text for text poll
 	 * @param int duration duration of option
 	 */
 	#[PublicPage]
-	public function addOption(string $token, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
+	#[ShareTokenRequired]
+	public function addOption(int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => [
 			'option' => $this->optionService->addForCurrentPoll(
 				timestamp: $timestamp,
 				pollOptionText: $text,
 				duration: $duration,
 			)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Delete option
-	 * @param string $token Share token
+	 * @param int $optionId Option Id to delete
 	 */
 	#[PublicPage]
-	public function deleteOption(string $token, int $optionId): JSONResponse {
+	#[ShareTokenRequired]
+	public function deleteOption(int $optionId): JSONResponse {
 		return $this->response(fn () => [
 			'option' => $this->optionService->delete($optionId)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Restore option
-	 * @param string $token Share token
+	 * @param int $optionId Option Id to restore
 	 */
 	#[PublicPage]
-	public function restoreOption(string $token, int $optionId): JSONResponse {
+	#[ShareTokenRequired]
+	public function restoreOption(int $optionId): JSONResponse {
 		return $this->response(fn () => [
 			'option' => $this->optionService->delete($optionId, true)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Set Vote
 	 * @param int $optionId poll id
 	 * @param string $setTo Answer string
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function setVote(int $optionId, string $setTo, string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function setVote(int $optionId, string $setTo): JSONResponse {
 		return $this->response(fn () => [
 			'vote' => $this->voteService->set($optionId, $setTo)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Get Comments
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function getComments(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function getComments(): JSONResponse {
 		return $this->response(fn () => [
 			'comments' => $this->commentService->list()
-		], $token);
+		]);
 	}
 
 	/**
 	 * Write a new comment to the db and returns the new comment as array
-	 * @param string $token Share token
 	 * @param string $message Comment text to add
 	 */
 	#[PublicPage]
-	public function addComment(string $token, string $message): JSONResponse {
+	#[ShareTokenRequired]
+	public function addComment(string $message): JSONResponse {
 		return $this->response(fn () => [
 			'comment' => $this->commentService->add($message)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Delete Comment
-	 * @param string $token Share token
 	 * @param int $commentId Id of comment to delete
 	 */
 	#[PublicPage]
-	public function deleteComment(int $commentId, string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function deleteComment(int $commentId): JSONResponse {
 		$comment = $this->commentService->get($commentId);
 		return $this->response(fn () => [
 			'comment' => $this->commentService->delete($comment)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Restore deleted Comment
-	 * @param string $token Share token
 	 * @param int $commentId Id of comment to restore
 	 */
 	#[PublicPage]
-	public function restoreComment(int $commentId, string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function restoreComment(int $commentId): JSONResponse {
 		$comment = $this->commentService->get($commentId);
 
 		return $this->response(fn () => [
 			'comment' => $this->commentService->delete($comment, true)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Get subscription status
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function getSubscription(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function getSubscription(): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->get()
-		], $token);
+		]);
 	}
 
 	/**
 	 * subscribe
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function subscribe(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function subscribe(): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->set(true)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Unsubscribe
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function unsubscribe(string $token): JSONResponse {
+	#[ShareTokenRequired]
+	public function unsubscribe(): JSONResponse {
 		return $this->response(fn () => [
 			'subscribed' => $this->subscriptionService->set(false)
-		], $token);
+		]);
 	}
 
 	/**
@@ -315,22 +318,23 @@ class PublicController extends BasePublicController {
 	 * @param string $token Share token
 	 */
 	#[PublicPage]
+	#[ShareTokenRequired]
 	public function validatePublicDisplayName(string $displayName, string $token): JSONResponse {
 		return $this->response(fn () => [
 			'name' => $this->systemService->validatePublicUsernameByToken($displayName, $token)
-		], $token);
+		]);
 	}
 
 	/**
 	 * Validate email address (simple validation)
 	 * @param string $emailAddress Email address string to check for validation
-	 * @param string $token Share token
 	 */
 	#[PublicPage]
-	public function validateEmailAddress(string $emailAddress, string $token = ''): JSONResponse {
+	#[ShareTokenRequired]
+	public function validateEmailAddress(string $emailAddress): JSONResponse {
 		return $this->response(fn () => [
 			'result' => MailService::validateEmailAddress($emailAddress), 'emailAddress' => $emailAddress
-		], $token);
+		]);
 	}
 
 	/**
@@ -339,10 +343,11 @@ class PublicController extends BasePublicController {
 	 * @param string $token Share token
 	 */
 	#[PublicPage]
+	#[ShareTokenRequired]
 	public function setDisplayName(string $token, string $displayName): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->setDisplayname($displayName, $token)
-		], $token);
+		]);
 	}
 
 
@@ -352,10 +357,11 @@ class PublicController extends BasePublicController {
 	 * @param string $emailAddress New email address
 	 */
 	#[PublicPage]
+	#[ShareTokenRequired]
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->setEmailAddress($this->shareService->get($token), $emailAddress)
-		], $token);
+		]);
 	}
 
 	/**
@@ -363,10 +369,11 @@ class PublicController extends BasePublicController {
 	 * @param string $token Share token
 	 */
 	#[PublicPage]
+	#[ShareTokenRequired]
 	public function deleteEmailAddress(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->deleteEmailAddress($this->shareService->get($token))
-		], $token);
+		]);
 	}
 
 	/**
@@ -378,10 +385,11 @@ class PublicController extends BasePublicController {
 	 * @param string $timeZone timezone string
 	 */
 	#[PublicPage]
+	#[ShareTokenRequired]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
 		return $this->responseCreate(fn () => [
 			'share' => $this->shareService->register($token, $displayName, $emailAddress, $timeZone),
-		], $token);
+		]);
 	}
 
 	/**
@@ -390,11 +398,12 @@ class PublicController extends BasePublicController {
 	 * @param string $token Share token
 	 */
 	#[PublicPage]
+	#[ShareTokenRequired]
 	public function resendInvitation(string $token): JSONResponse {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
 			'share' => $share,
 			'sentResult' => $this->mailService->sendInvitation($share)
-		], $token);
+		]);
 	}
 }
