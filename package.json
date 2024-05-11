@@ -14,8 +14,6 @@
   "license": "AGPL-3.0",
   "main": "src/js/main.js",
   "scripts": {
-    "webpack:build": "webpack --mode=production --progress",
-    "webpack:dev": "webpack --mode=development",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix",
     "stylelint": "stylelint src/**/*{.scss,.vue,.css}",
@@ -23,8 +21,7 @@
     "version": "node update-app-version.mjs && git add ./appinfo/info.xml",
     "build": "vite --mode production build",
     "dev": "vite --mode development build",
-    "watch": "vite --mode development build --watch",
-    "webpack:watch": "webpack --mode=development --progress --watch"
+    "watch": "vite --mode development build --watch"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
@@ -57,13 +54,11 @@
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
   },
   "devDependencies": {
-    "@nextcloud/babel-config": "^1.1.1",
     "@nextcloud/browserslist-config": "^3.0.1",
     "@nextcloud/eslint-config": "^8.3.0",
     "@nextcloud/prettier-config": "^1.1.0",
     "@nextcloud/stylelint-config": "^3.0.1",
     "@nextcloud/vite-config": "^1.2.3",
-    "@nextcloud/webpack-vue-config": "^6.0.1",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-prettier": "^5.1.3",
     "prettier": "^3.2.5",
@@ -73,7 +68,7 @@
   },
   "engines": {
     "node": "^20.0.0",
-    "npm": "^9.0.0"
+    "npm": "^10.0.0"
   },
   "type": "module",
   "authors": [
