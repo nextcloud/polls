@@ -95,7 +95,6 @@ package: clean
 	mkdir -p $(appstore_build_dir)
 	rsync -zarh \
 	$(project_dir)/appinfo \
-	$(project_dir)/css \
 	$(project_dir)/img \
 	$(project_dir)/js \
 	$(project_dir)/l10n \
