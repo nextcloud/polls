@@ -341,7 +341,7 @@ class Acl implements JsonSerializable {
 		}
 
 		// return check result of an existing valid share for this user
-		return boolval($this->getShare()->getToken());
+		return boolval($this->getShare()?->getToken());
 	}
 
 	/**
@@ -373,7 +373,7 @@ class Acl implements JsonSerializable {
 		}
 
 		// public shares are not allowed to add options
-		if ($this->getShare()->getType() === Share::TYPE_PUBLIC) {
+		if ($this->getShare()?->getType() === Share::TYPE_PUBLIC) {
 			return false;
 		}
 
@@ -415,7 +415,7 @@ class Acl implements JsonSerializable {
 		}
 
 		// public shares are not allowed to comment
-		if ($this->getShare()->getType() === Share::TYPE_PUBLIC) {
+		if ($this->getShare()?->getType() === Share::TYPE_PUBLIC) {
 			return false;
 		}
 
@@ -444,7 +444,7 @@ class Acl implements JsonSerializable {
 		}
 
 		// public shares are not allowed to vote
-		if ($this->getShare()->getType() === Share::TYPE_PUBLIC) {
+		if ($this->getShare()?->getType() === Share::TYPE_PUBLIC) {
 			return false;
 		}
 
