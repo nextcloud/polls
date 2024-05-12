@@ -35,8 +35,8 @@ import UserItem from './components/User/UserItem.vue'
 
 sync(store, router)
 
-Vue.config.debug = import.meta.env.MODE !== 'production'
 Vue.config.devtools = import.meta.env.MODE !== 'production'
+
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 Vue.prototype.getCurrentUser = getCurrentUser

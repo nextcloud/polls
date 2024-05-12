@@ -30,8 +30,7 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 import Dashboard from './views/Dashboard.vue'
 import './assets/scss/polls-icon.scss'
 
-Vue.config.debug = process.env.NODE_ENV !== 'production'
-Vue.config.devTools = process.env.NODE_ENV !== 'production'
+Vue.config.devtools = process.env.NODE_ENV !== 'production'
 
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural

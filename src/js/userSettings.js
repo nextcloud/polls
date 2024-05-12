@@ -31,8 +31,7 @@ import UserSettingsPage from './views/UserSettingsPage.vue'
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 
-Vue.config.debug = process.env.NODE_ENV !== 'production'
-Vue.config.devTools = process.env.NODE_ENV !== 'production'
+Vue.config.devtools = process.env.NODE_ENV !== 'production'
 
 Vue.use(Vuex)
 
