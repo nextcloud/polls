@@ -28,17 +28,10 @@ import { translate, translatePlural } from '@nextcloud/l10n'
 
 import AdminSettingsPage from './views/AdminSettingsPage.vue'
 
-// /* eslint-disable-next-line camelcase, no-undef */
-// __webpack_nonce__ = btoa(getRequestToken())
-// /* eslint-disable-next-line camelcase, no-undef */
-// __webpack_public_path__ = generateFilePath('polls', '', 'js/')
-
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 
-Vue.config.debug = process.env.NODE_ENV !== 'production'
-Vue.config.devTools = process.env.NODE_ENV !== 'production'
-// eslint-disable-next-line vue/match-component-file-name
+Vue.config.devtools = process.env.NODE_ENV !== 'production'
 
 Vue.use(Vuex)
 

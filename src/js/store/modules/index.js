@@ -21,18 +21,13 @@
  *
  */
 
-import { camelCase } from 'lodash'
-const requireModule = require.context('.', false, /\.js$/)
-const modules = {}
+const files = import.meta.glob('./*.js', { eager: true })
 
-requireModule.keys().forEach((fileName) => {
-	if (fileName === './index.js') return
-	const moduleName = camelCase(
-		fileName.replace(/(\.\/|\.js)/g, ''),
-	)
-	modules[moduleName] = {
-		namespaced: false,
-		...requireModule(fileName).default,
+const modules = {}
+for (const key in files) {
+	if (key !== './index.js') {
+		modules[key.replace(/(\.\/|\.js)/g, '')] = files[key].default
 	}
-})
+}
+
 export default modules
