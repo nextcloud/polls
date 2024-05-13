@@ -453,7 +453,6 @@ OC.L10N.register(
     "Enter the amount of days, polls without activity stay in the relevant list:" : "Saisissez le nombre de jours pendant lesquels les sondages sans activité restent dans la liste « Me concernant » :",
     "A poll with many options and voters can have a heavy impact on client performance." : "Un sondage avec de nombreuses options et participants peut avoir un impact important sur les performances des utilisateurs.",
     "Set the amount of voting cells (options x participants) up to which all voting cells should be displayed." : "Déterminez le nombre de cellules de vote (options x participants) affichées au maximum ",
-    "If this threshold gets tresspasses only the current participant will be displayed, to avoid a performance breakdown." : "Si ce seuil est dépassé, seul le participant courant sera affiché pour éviter des problèmes de performance.",
     "The default threshold of 1000 should be a good and safe value." : "Le seuil par défaut de 1 000 semble être un choix raisonnable.",
     "The style settings are still experimental!" : "Le paramétrage des styles est encore expérimental !",
     "Use alternative styling for the comments sidebar" : "Utiliser un style alternatif pour le panneau latéral des commentaires",

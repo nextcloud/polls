@@ -456,7 +456,6 @@ OC.L10N.register(
     "Enter the amount of days, polls without activity stay in the relevant list:" : "Унесите број дана током којих ће гласање без активности остати у листи битних:",
     "A poll with many options and voters can have a heavy impact on client performance." : "Гласање са много опција и гласача може значајно да утиче на перформансе клијента.",
     "Set the amount of voting cells (options x participants) up to which all voting cells should be displayed." : "Поставите број гласачких ћелија (опције x учесници) до којег би све гласачке ћелије требало да се прикажу.",
-    "If this threshold gets tresspasses only the current participant will be displayed, to avoid a performance breakdown." : "Ако се прекорачи овај праг, приказаће се само текући учесник како би се спречиo слом перформанси.",
     "The default threshold of 1000 should be a good and safe value." : "Подразумевани праг од 1000 би требало да буде добра и сигурна вредност.",
     "The style settings are still experimental!" : "Подешавања стила су још увек експериментална!",
     "Use alternative styling for the comments sidebar" : "Користите алтернативни стил за бочну траку за коментаре",

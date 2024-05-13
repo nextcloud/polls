@@ -453,7 +453,6 @@
     "Enter the amount of days, polls without activity stay in the relevant list:" : "Digite a quantidade de dias, as pesquisas sem atividade permanecem na lista relevante:",
     "A poll with many options and voters can have a heavy impact on client performance." : "Uma enquete com muitas opções e eleitores pode ter um grande impacto no desempenho do cliente.",
     "Set the amount of voting cells (options x participants) up to which all voting cells should be displayed." : "Defina a quantidade de células de votação (opções x participantes) até a qual todas as células de votação devem ser exibidas.",
-    "If this threshold gets tresspasses only the current participant will be displayed, to avoid a performance breakdown." : "Se esse limite for ultrapassado, apenas o participante atual será exibido, para evitar quebra de desempenho.",
     "The default threshold of 1000 should be a good and safe value." : "O limite padrão de 1000 deve ser um valor bom e seguro.",
     "The style settings are still experimental!" : "As configurações de estilo ainda são experimentais! ",
     "Use alternative styling for the comments sidebar" : "Use um estilo alternativo para a barra lateral de comentários",
