@@ -209,7 +209,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'summary' => [
 				'userRole' => $this->getUserRole(),
 				'orphanedVotes' => $this->getCurrentUserCountOrphanedVotes(),
-				'yesVotes' => $this->getCurrentUserCountVotesYes(),
+				'yesByCurrentUser' => $this->getCurrentUserCountVotesYes(),
 				'countVotes' => $this->getCurrentUserCountVotes(),
 			],
 		];
