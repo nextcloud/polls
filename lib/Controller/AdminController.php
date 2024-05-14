@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
-use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
@@ -46,7 +45,6 @@ class AdminController extends BaseController {
 		private IURLGenerator $urlGenerator,
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
-		private UserMapper $userMapper,
 	) {
 		parent::__construct($appName, $request);
 	}

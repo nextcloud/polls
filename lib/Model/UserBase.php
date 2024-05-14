@@ -449,6 +449,7 @@ class UserBase implements \JsonSerializable {
 		return $this->organisation;
 	}
 
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function getIsCurrentUser(): bool {
 		return $this->getId() === $this->userSession->getCurrentUserId();
 	}

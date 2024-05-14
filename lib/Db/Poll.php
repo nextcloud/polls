@@ -145,8 +145,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected string $userRole = "none";
 	
 	// subqueried columns
+	/** @psalm-suppress PossiblyUnusedProperty */
 	protected int $currentUserCountOrphanedVotes = 0;
+	/** @psalm-suppress PossiblyUnusedProperty */
 	protected int $currentUserCountVotes = 0;
+	/** @psalm-suppress PossiblyUnusedProperty */
 	protected int $currentUserCountVotesYes = 0;
 
 	public function __construct() {
@@ -359,6 +362,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		);
 	}
 
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function getIsCurrentUserLocked(): bool {
 		return boolval($this->isCurrentUserLocked);
 	}

@@ -63,6 +63,7 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_UPDATE_TYPE_PERIODIC_POLLING = 'periodicPolling';
 	public const SETTING_UPDATE_TYPE_DEFAULT = self::SETTING_UPDATE_TYPE_NO_POLLING;
 
+	/** @psalm-suppress PossiblyUnusedMethod used by dependency injection */
 	public function __construct(
 		private IConfig $config,
 		private UserSession $userSession,

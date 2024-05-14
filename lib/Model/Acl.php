@@ -65,8 +65,6 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_PUBLIC_SHARES = 'publicShares';
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
 	private ?int $pollId = null;
-	// Cache whether the current poll has shares
-	private bool $noShare = false;
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -135,7 +133,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function setPollId(?int $pollId = null, string $permission = self::PERMISSION_POLL_VIEW): Acl {
 		if ($this->userSession->hasShare() && $pollId !== $this->getShare()->getPollId()) {
-			$this->logger->warning('Ignoring requested pollId ' . $pollId . '. Keeping share pollId of share(' . $this->getToken() . '): ' . $this->getShare()->getPollId());
+			$this->logger->warning('Ignoring requested pollId ' . $pollId . '. Keeping share pollId of share: ' . $this->getShare()->getPollId());
 		} else {
 			$this->pollId = $pollId;
 		}
@@ -153,7 +151,6 @@ class Acl implements JsonSerializable {
 	public function setPoll(Poll $poll, string $permission = self::PERMISSION_POLL_VIEW): static {
 		$this->pollId = $poll->getId();
 		$this->poll = $poll;
-		$this->noShare = false;
 		$this->request($permission);
 
 		return $this;
@@ -181,7 +178,6 @@ class Acl implements JsonSerializable {
 		try {
 			// otherwise load poll from db
 			$this->poll = $this->pollMapper->find((int) $this->pollId);
-			$this->noShare = false;
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Error loading poll with id ' . $this->pollId);
 		}
@@ -268,13 +264,6 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * getIsLoggedIn - Shortcut for UserMapper::getCurrentUser()->getId()
-	 */
-	public function getIsLoggedIn(): bool {
-		return $this->getCurrentUser()->getIsLoggedIn();
-	}
-
-	/**
 	 * getIsAdmin - Is the user a site admin
 	 * Returns true, if user is in admin group
 	 * Shortcut for UserMapper::getCurrentUser()->getIsAdmin()
@@ -327,7 +316,7 @@ class Acl implements JsonSerializable {
 	 * This only affects logged in users.
 	 */
 	private function getIsPersonallyInvited(): bool {
-		if ($this->getIsLoggedIn() && $this->getShare()) {
+		if ($this->userSession->getIsLoggedIn() && $this->getShare()) {
 			return in_array($this->getShare()->getType(), [
 				Share::TYPE_ADMIN,
 				Share::TYPE_USER,

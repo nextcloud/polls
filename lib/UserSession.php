@@ -155,6 +155,7 @@ class UserSession {
 	 * Returns the stored session share type
 	 *
 	 * @return string
+	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function getShareType(): string {
 		if (!$this->hasShare()) {

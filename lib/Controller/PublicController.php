@@ -78,7 +78,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function votePage() {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
-		if ($this->userSession->getIsLoggedIn()) {
+		if ($this->userSession->isLoggedIn()) {
 			return new TemplateResponse(AppConstants::APP_ID, 'main');
 		} else {
 			$template = new PublicTemplateResponse(AppConstants::APP_ID, 'main');
@@ -316,7 +316,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function validatePublicDisplayName(string $displayName, string $token): JSONResponse {
 		return $this->response(fn () => [
-			'name' => $this->systemService->validatePublicUsernameByToken($displayName, $token)
+			'name' => $this->systemService->validatePublicUsername($displayName, token: $token)
 		]);
 	}
 

@@ -135,26 +135,6 @@ class VoteService {
 
 	/**
 	 * Remove user from poll
-	 *
-	 * @param int $pollId poll id of the poll the votes get deleted from
-	 * @param string $userId user id of the user, the votes get deleted from
-	 * @param bool $deleteOnlyOrphaned - false deletes all votes of the specified user, true only the orphaned votes aka votes without an option
-	 */
-	public function deletUserFromPoll(int $pollId, string $userId, bool $deleteOnlyOrphaned = false): string {
-		if ($userId === '') {
-			$userId = $this->userSession->getCurrentUserId();
-		}
-		if ($userId === $this->userSession->getCurrentUserId()) {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_VOTE_EDIT);
-		} else {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		}
-
-		return $this->delete($pollId, $userId, $deleteOnlyOrphaned);
-	}
-
-	/**
-	 * Remove user from poll
 	 * @param int $pollId poll id of the poll the votes get deleted from
 	 * @param string $userId user id of the user, the votes get deleted from. No user affects the current user
 	 * @param bool $deleteOnlyOrphaned - false deletes all votes of the specified user, true only the orphaned votes aka votes without an option
@@ -168,7 +148,7 @@ class VoteService {
 
 		// if no user id is given, reset votes of current user
 		if (!$userId) {
-			$userId = $this->userMapper->getCurrentUserCached()->getId();
+			$userId = $this->userSession->getCurrentUserId();
 			$this->acl->request(Acl::PERMISSION_VOTE_EDIT);
 		} else {
 			// otherwise edit rights must exist

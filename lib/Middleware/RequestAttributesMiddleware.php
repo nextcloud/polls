@@ -25,7 +25,7 @@ class RequestAttributesMiddleware extends Middleware {
 	) {
 	}
 
-	public function beforeController(Controller $controller, string $methodName): void {
+	public function beforeController($controller, $methodName): void {
 		$reflectionMethod = new ReflectionMethod($controller, $methodName);
 		$clientId = $this->request->getHeader(self::CLIENT_ID_KEY);
 		$clientTimeZone = $this->request->getHeader(self::TIME_ZONE_KEY);
