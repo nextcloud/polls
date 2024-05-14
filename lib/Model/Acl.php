@@ -34,12 +34,10 @@ use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidPollIdException;
 use OCA\Polls\Exceptions\NotFoundException;
-use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Settings\AppSettings;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\ISession;
-use Psr\Log\LoggerInterface;
 use OCA\Polls\UserSession;
+use OCP\AppFramework\Db\DoesNotExistException;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Acl

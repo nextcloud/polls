@@ -66,15 +66,11 @@ use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Middleware\RequestAttributesMiddleware;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\SearchProvider;
-use OCA\Polls\UserSession;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
-use OCP\IConfig;
-use OCP\IDBConnection;
-use OCP\IUserManager;
 use OCP\User\Events\UserDeletedEvent;
 
 /**

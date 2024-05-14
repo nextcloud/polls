@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use Closure;
-use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCA\Polls\Model\Acl;

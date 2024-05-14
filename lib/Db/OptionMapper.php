@@ -29,7 +29,6 @@ namespace OCA\Polls\Db;
 use OCA\Polls\UserSession;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
-use OCP\ISession;
 
 /**
  * @template-extends QBMapperWithUser<Option>

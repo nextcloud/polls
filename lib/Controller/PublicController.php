@@ -27,7 +27,6 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attribute\ShareTokenRequired;
-use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
@@ -37,14 +36,10 @@ use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\SystemService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
-use OCA\Polls\UserSession;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
-use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\IRequest;
-use OCP\ISession;
 use OCP\IURLGenerator;
 use OCP\IUserSession;
 use OCP\Util;
@@ -80,7 +75,6 @@ class PublicController extends BasePublicController {
 	 * @PublicPage
 	 * @return TemplateResponse|PublicTemplateResponse
 	 */
-	public function votePage(string $token) {
 	#[ShareTokenRequired]
 	public function votePage() {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
