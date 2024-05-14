@@ -456,6 +456,7 @@ OC.L10N.register(
     "Enter the amount of days, polls without activity stay in the relevant list:" : "أدخِل عدد الأيام التي يمكن للاستبيانات الغير نشطة أن تبقى في القائمة:",
     "A poll with many options and voters can have a heavy impact on client performance." : "يمكن أن يكون لاستبيانات متعددة الخيارات و كثيرة المصوتين تأثير كبير على سرعة أداء العميل.",
     "Set the amount of voting cells (options x participants) up to which all voting cells should be displayed." : "قم بتعيين عدد خلايا التصويت (الخيارات × المشاركون) والتي يجب أن يتم عرض جميع خلايا التصويت عليها.",
+    "If this threshold gets trespassed, only the current participant will be displayed, to avoid a performance breakdown." : "إذا تم تجاوز هذا الحد، فسيتم عرض المشارك الحالي فقط، لتجنب انهيار الأداء.",
     "The default threshold of 1000 should be a good and safe value." : "العتبة الافتراضية بقيمة 1000 يفترض أن تمثل قيمة جيدة وآمنة.",
     "The style settings are still experimental!" : "لا تزال إعدادات النمط قيد التجربة!",
     "Use alternative styling for the comments sidebar" : "استخدام تصميمًا بديلًا للشريط الجانبي للتعليقات",
