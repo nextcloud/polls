@@ -215,10 +215,6 @@ class Acl implements JsonSerializable {
 		return (int) $this->getPoll()->getId();
 	}
 
-	public function getToken(): ?string {
-		return $this->session->get(AppConstants::SESSION_KEY_SHARE_TOKEN);
-	}
-
 	public function getTokenIsValid(): bool {
 		return boolval($this->getShare()?->getToken());
 	}
