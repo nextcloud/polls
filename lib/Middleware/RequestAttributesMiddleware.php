@@ -4,7 +4,6 @@ namespace OCA\Polls\Middleware;
 
 use OCA\Polls\Attribute\ShareTokenRequired;
 use OCA\Polls\UserSession;
-use OCP\AppFramework\Controller;
 use OCP\AppFramework\Middleware;
 use OCP\IRequest;
 use OCP\ISession;
