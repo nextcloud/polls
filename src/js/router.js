@@ -26,16 +26,23 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, setCookie } from './helpers/index.js'
 import { PublicAPI } from './Api/index.js'
+import Vote from './views/Vote.vue'
+import SideBar from './views/SideBar.vue'
+
+import List from './views/PollList.vue'
+import Administration from './views/Administration.vue'
+import NotFound from './views/NotFound.vue'
+import SideBarCombo from './views/SideBarCombo.vue'
+import Navigation from './views/Navigation.vue'
+import Combo from './views/Combo.vue'
 
 // Dynamic loading
-const List = () => import('./views/PollList.vue')
-const Administration = () => import('./views/Administration.vue')
-const Vote = () => import('./views/Vote.vue')
-const NotFound = () => import('./views/NotFound.vue')
-const SideBar = () => import('./views/SideBar.vue')
-const SideBarCombo = () => import('./views/SideBarCombo.vue')
-const Navigation = () => import('./views/Navigation.vue')
-const Combo = () => import('./views/Combo.vue')
+// const List = () => import('./views/PollList.vue')
+// const Administration = () => import('./views/Administration.vue')
+// const NotFound = () => import('./views/NotFound.vue')
+// const SideBarCombo = () => import('./views/SideBarCombo.vue')
+// const Navigation = () => import('./views/Navigation.vue')
+// const Combo = () => import('./views/Combo.vue')
 
 Vue.use(Router)
 

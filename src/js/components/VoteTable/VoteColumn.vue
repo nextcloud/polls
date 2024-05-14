@@ -68,6 +68,8 @@ import VoteItem from './VoteItem.vue'
 import { confirmOption } from '../../mixins/optionMixins.js'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import CalendarPeek from '../Calendar/CalendarPeek.vue'
+import OptionItemOwner from '../Options/OptionItemOwner.vue'
 
 export default {
 	name: 'VoteColumn',
@@ -79,8 +81,8 @@ export default {
 		FlexSpacer,
 		VoteItem,
 		NcButton,
-		CalendarPeek: () => import('../Calendar/CalendarPeek.vue'),
-		OptionItemOwner: () => import('../Options/OptionItemOwner.vue'),
+		CalendarPeek,
+		OptionItemOwner,
 	},
 
 	mixins: [confirmOption],

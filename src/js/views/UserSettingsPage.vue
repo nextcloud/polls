@@ -47,6 +47,7 @@
 
 import { NcSettingsSection } from '@nextcloud/vue'
 import { FlexSettings } from '../components/Base/index.js'
+import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from '../components/Settings/UserSettings/index.js'
 
 export default {
 	name: 'UserSettingsPage',
@@ -54,10 +55,10 @@ export default {
 	components: {
 		NcSettingsSection,
 		FlexSettings,
-		CalendarSettings: () => import('../components/Settings/UserSettings/CalendarSettings.vue'),
-		FeatureSettings: () => import('../components/Settings/UserSettings/FeatureSettings.vue'),
-		StyleSettings: () => import('../components/Settings/UserSettings/StyleSettings.vue'),
-		PerformanceSettings: () => import('../components/Settings/UserSettings/PerformanceSettings.vue'),
+		CalendarSettings,
+		FeatureSettings,
+		StyleSettings,
+		PerformanceSettings,
 	},
 
 	created() {

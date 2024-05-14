@@ -44,6 +44,7 @@
 
 import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
 
 export default {
 	name: 'UserSettingsDlg',
@@ -51,10 +52,10 @@ export default {
 	components: {
 		NcAppSettingsDialog,
 		NcAppSettingsSection,
-		CalendarSettings: () => import('./UserSettings/CalendarSettings.vue'),
-		FeatureSettings: () => import('./UserSettings/FeatureSettings.vue'),
-		StyleSettings: () => import('./UserSettings/StyleSettings.vue'),
-		PerformanceSettings: () => import('./UserSettings/PerformanceSettings.vue'),
+		CalendarSettings,
+		FeatureSettings,
+		StyleSettings,
+		PerformanceSettings,
 	},
 
 	data() {

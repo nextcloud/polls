@@ -28,7 +28,7 @@
 					<LinkIcon v-if="typeComputed === 'public'" :size="mdIconSize" />
 					<LinkIcon v-if="typeComputed === 'addPublicLink'" :size="mdIconSize" />
 					<AnoymousIcon v-if="typeComputed === 'anonymous'" :size="mdIconSize" />
-					<InternalLinkIcon v-if="typeComputed === 'internalAccess'" :size="mdIconSize" />
+					<LinkIcon v-if="typeComputed === 'internalAccess'" :size="mdIconSize" />
 					<ContactGroupIcon v-if="typeComputed === 'contactGroup'" :size="mdIconSize" />
 					<GroupIcon v-if="typeComputed === 'group'" :size="mdIconSize" />
 					<CircleIcon v-if="typeComputed === 'circle'" :size="mdIconSize" />
@@ -60,23 +60,33 @@
 <script>
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcAvatar } from '@nextcloud/vue'
+import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
+import LinkIcon from 'vue-material-design-icons/LinkVariant.vue'
+import ContactIcon from 'vue-material-design-icons/CardAccountDetails.vue'
+import EmailIcon from 'vue-material-design-icons/Email.vue'
+import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+import ContactGroupIcon from 'vue-material-design-icons/AccountGroupOutline.vue'
+import GroupIcon from 'vue-material-design-icons/AccountMultiple.vue'
+import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
+import DeletedUserIcon from 'vue-material-design-icons/AccountOff.vue'
+import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
+
 
 export default {
 	name: 'UserItem',
 
 	components: {
 		NcAvatar,
-		AdminIcon: () => import('vue-material-design-icons/ShieldCrown.vue'),
-		LinkIcon: () => import('vue-material-design-icons/LinkVariant.vue'),
-		InternalLinkIcon: () => import('vue-material-design-icons/LinkVariant.vue'),
-		ContactIcon: () => import('vue-material-design-icons/CardAccountDetails.vue'),
-		EmailIcon: () => import('vue-material-design-icons/Email.vue'),
-		ShareIcon: () => import('vue-material-design-icons/ShareVariant.vue'),
-		ContactGroupIcon: () => import('vue-material-design-icons/AccountGroupOutline.vue'),
-		GroupIcon: () => import('vue-material-design-icons/AccountMultiple.vue'),
-		CircleIcon: () => import('vue-material-design-icons/GoogleCirclesExtended.vue'),
-		DeletedUserIcon: () => import('vue-material-design-icons/AccountOff.vue'),
-		AnoymousIcon: () => import('vue-material-design-icons/Incognito.vue'),
+		AdminIcon,
+		LinkIcon,
+		ContactIcon,
+		EmailIcon,
+		ShareIcon,
+		ContactGroupIcon,
+		GroupIcon,
+		CircleIcon,
+		DeletedUserIcon,
+		AnoymousIcon,
 	},
 
 	inheritAttrs: false,

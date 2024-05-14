@@ -57,6 +57,7 @@ import ComboTable from '../components/Combo/ComboTable.vue'
 import { ActionToggleSidebar } from '../components/Actions/index.js'
 import { HeaderBar } from '../components/Base/index.js'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
+import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 
 export default {
 	name: 'Combo',
@@ -68,7 +69,7 @@ export default {
 		NcEmptyContent,
 		HeaderBar,
 		PollsAppIcon,
-		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
+		LoadingOverlay,
 	},
 
 	data() {

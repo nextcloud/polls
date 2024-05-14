@@ -34,12 +34,13 @@
 <script>
 import { mapState } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
+import ActionOpenSharesSidebar from '../../Actions/modules/ActionOpenSharesSidebar.vue'
 
 export default {
 	name: 'CardUnpublishedPoll',
 	components: {
 		CardDiv,
-		ActionOpenSharesSidebar: () => import('../../Actions/modules/ActionOpenSharesSidebar.vue'),
+		ActionOpenSharesSidebar,
 	},
 
 	data() {

@@ -37,12 +37,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
+import OptionProposals from '../../Options/OptionProposals.vue'
 
 export default {
 	name: 'CardAddProposals',
 	components: {
 		CardDiv,
-		OptionProposals: () => import('../../Options/OptionProposals.vue'),
+		OptionProposals,
 	},
 
 	data() {

@@ -86,16 +86,17 @@ import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
 
 export default {
 	name: 'SideBar',
 
 	components: {
-		SideBarTabConfiguration: () => import('../components/SideBar/SideBarTabConfiguration.vue'),
-		SideBarTabComments: () => import('../components/SideBar/SideBarTabComments.vue'),
-		SideBarTabOptions: () => import('../components/SideBar/SideBarTabOptions.vue'),
-		SideBarTabShare: () => import('../components/SideBar/SideBarTabShare.vue'),
-		SideBarTabActivity: () => import('../components/SideBar/SideBarTabActivity.vue'),
+		SideBarTabConfiguration,
+		SideBarTabComments,
+		SideBarTabOptions,
+		SideBarTabShare,
+		SideBarTabActivity,
 		NcAppSidebar,
 		NcAppSidebarTab,
 		SidebarActivityIcon,

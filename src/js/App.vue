@@ -43,12 +43,13 @@ import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls.js'
+import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 
 export default {
 	name: 'App',
 	components: {
 		NcContent,
-		LoadingOverlay: () => import('./components/Base/modules/LoadingOverlay.vue'),
+		LoadingOverlay,
 		UserSettingsDlg,
 	},
 

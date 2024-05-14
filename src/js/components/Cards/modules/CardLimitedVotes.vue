@@ -44,12 +44,13 @@
 <script>
 import { mapState, mapGetters, mapActions } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
+import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
 
 export default {
 	name: 'CardLimitedVotes',
 	components: {
 		CardDiv,
-		ActionDeleteOrphanedVotes: () => import('../../Actions/modules/ActionDeleteOrphanedVotes.vue'),
+		ActionDeleteOrphanedVotes,
 	},
 
 	computed: {

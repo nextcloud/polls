@@ -33,12 +33,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
+import ActionSendConfirmed from '../../Actions/modules/ActionSendConfirmed.vue'
 
 export default {
 	name: 'CardSendConfirmations',
 	components: {
 		CardDiv,
-		ActionSendConfirmed: () => import('../../Actions/modules/ActionSendConfirmed.vue'),
+		ActionSendConfirmed,
 	},
 
 	data() {

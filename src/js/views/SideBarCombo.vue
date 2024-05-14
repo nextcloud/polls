@@ -39,12 +39,13 @@ import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { mapGetters } from 'vuex'
 import { emit } from '@nextcloud/event-bus'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
+import { SideBarTabDatePolls } from '../components/SideBar/index.js'
 
 export default {
 	name: 'SideBarCombo',
 
 	components: {
-		SideBarTabDatePolls: () => import('../components/SideBar/SideBarTabDatePolls.vue'),
+		SideBarTabDatePolls,
 		NcAppSidebar,
 		NcAppSidebarTab,
 		PollsAppIcon,

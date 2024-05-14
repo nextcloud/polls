@@ -37,10 +37,12 @@
 </template>
 
 <script>
+import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
+
 export default {
 	name: 'ConfigBox',
 	components: {
-		InformationIcon: () => import('vue-material-design-icons/InformationVariant.vue'),
+		InformationIcon,
 	},
 	props: {
 		name: {
