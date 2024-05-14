@@ -237,7 +237,7 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function getIsNoUser(): bool {
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL && $this->userMapper->getCurrentUser()->getId() !== $this->getId()) {
+		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL && $this->userSession->getCurrentUserId() !== $this->getId()) {
 			return true;
 		}
 		return $this->isNoUser;
@@ -342,7 +342,7 @@ class UserBase implements \JsonSerializable {
 	}
 
 	public function jsonSerialize(): array {
-		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+		if ($this->getId() === $this->userSession->getCurrentUserId()) {
 			return $this->getRichUserArray();
 		}
 		return $this->getSimpleUserArray();
@@ -403,7 +403,7 @@ class UserBase implements \JsonSerializable {
 	 */
 	public function getSafeId(): string {
 		// always return real userId for the current user
-		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+		if ($this->getId() === $this->userSession->getCurrentUserId()) {
 			return $this->getId();
 		}
 
@@ -466,7 +466,7 @@ class UserBase implements \JsonSerializable {
 	 */
 	public function getSafeType(): string {
 		// always return real userId for the current user
-		if ($this->getId() === $this->userMapper->getCurrentUserCached()->getId()) {
+		if ($this->getId() === $this->userSession->getCurrentUserId()) {
 			return $this->getType();
 		}
 
