@@ -76,6 +76,10 @@ import { HeaderBar } from '../components/Base/index.js'
 import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import VoteTable from '../components/VoteTable/VoteTable.vue'
+import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
+import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
 
 export default {
 	name: 'Vote',
@@ -89,11 +93,11 @@ export default {
 		DatePollIcon,
 		TextPollIcon,
 		ActionOpenOptionsSidebar,
-		CardAnonymousPollHint: () => import('../components/Cards/modules/CardAnonymousPollHint.vue'),
-		CardHiddenParticipants: () => import('../components/Cards/modules/CardHiddenParticipants.vue'),
-		LoadingOverlay: () => import('../components/Base/modules/LoadingOverlay.vue'),
-		VoteTable: () => import('../components/VoteTable/VoteTable.vue'),
-		VoteInfoCards: () => import('../components/Cards/VoteInfoCards.vue'),
+		CardAnonymousPollHint,
+		CardHiddenParticipants,
+		LoadingOverlay,
+		VoteTable,
+		VoteInfoCards,
 	},
 
 	data() {

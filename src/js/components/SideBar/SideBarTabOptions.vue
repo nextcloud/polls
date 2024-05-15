@@ -77,6 +77,8 @@ import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
 import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
 import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
+import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 
 export default {
 	name: 'SideBarTabOptions',
@@ -91,8 +93,8 @@ export default {
 		OptionsDate,
 		OptionsDateShift,
 		OptionsText,
-		OptionsDateAdd: () => import('../Options/OptionsDateAdd.vue'),
-		OptionsTextAddBulk: () => import('../Options/OptionsTextAddBulk.vue'),
+		OptionsDateAdd,
+		OptionsTextAddBulk,
 	},
 
 	computed: {

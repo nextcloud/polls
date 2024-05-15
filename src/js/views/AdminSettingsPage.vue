@@ -62,19 +62,10 @@
 </template>
 
 <script>
-import AdminActivities from '../components/Settings/AdminSettings/AdminActivities.vue'
-import AdminArchivePolls from '../components/Settings/AdminSettings/AdminArchivePolls.vue'
-import AdminCombo from '../components/Settings/AdminSettings/AdminCombo.vue'
-import AdminEmail from '../components/Settings/AdminSettings/AdminEmail.vue'
-import AdminLegal from '../components/Settings/AdminSettings/AdminLegal.vue'
-import AdminPerformance from '../components/Settings/AdminSettings/AdminPerformance.vue'
-import AdminPollCreation from '../components/Settings/AdminSettings/AdminPollCreation.vue'
-import AdminPollDownload from '../components/Settings/AdminSettings/AdminPollDownload.vue'
-import AdminPollsInNavigation from '../components/Settings/AdminSettings/AdminPollsInNavigation.vue'
-import AdminShareOpenPoll from '../components/Settings/AdminSettings/AdminShareOpenPoll.vue'
-import AdminSharePublicCreate from '../components/Settings/AdminSettings/AdminSharePublicCreate.vue'
-import AdminSharePublicShowLogin from '../components/Settings/AdminSettings/AdminSharePublicShowLogin.vue'
-import AdminShowMailAddresses from '../components/Settings/AdminSettings/AdminShowMailAddresses.vue'
+import {
+	AdminActivities, AdminArchivePolls, AdminCombo, AdminEmail, AdminLegal,
+	AdminPerformance, AdminPollCreation, AdminPollDownload, AdminPollsInNavigation, AdminShareOpenPoll, AdminSharePublicCreate, AdminSharePublicShowLogin, AdminShowMailAddresses
+} from '../components/Settings/AdminSettings/index.js'
 import { FlexSettings } from '../components/Base/index.js'
 import { NcSettingsSection } from '@nextcloud/vue'
 import '../assets/scss/markdown.scss'

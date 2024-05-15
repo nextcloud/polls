@@ -113,6 +113,7 @@ import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
+import PollItem from '../components/PollList/PollItem.vue'
 
 export default {
 	name: 'PollList',
@@ -130,7 +131,7 @@ export default {
 		NcLoadingIcon,
 		RestorePollIcon,
 		PollsAppIcon,
-		PollItem: () => import('../components/PollList/PollItem.vue'),
+		PollItem,
 	},
 
 	computed: {

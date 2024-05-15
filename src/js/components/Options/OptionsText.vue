@@ -93,6 +93,7 @@ import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import OptionsTextAdd from './OptionsTextAdd.vue'
 
 export default {
 	name: 'OptionsText',
@@ -109,7 +110,7 @@ export default {
 		OptionItemOwner,
 		NcActions,
 		NcActionButton,
-		OptionsTextAdd: () => import('./OptionsTextAdd.vue'),
+		OptionsTextAdd,
 	},
 
 	mixins: [

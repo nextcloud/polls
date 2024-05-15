@@ -96,6 +96,7 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import OptionItemOwner from './OptionItemOwner.vue'
 
 export default {
 	name: 'OptionsDate',
@@ -113,7 +114,7 @@ export default {
 		NcModal,
 		OptionCloneDate,
 		OptionItem,
-		OptionItemOwner: () => import('./OptionItemOwner.vue'),
+		OptionItemOwner,
 	},
 
 	mixins: [

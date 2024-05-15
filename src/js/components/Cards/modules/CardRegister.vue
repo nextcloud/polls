@@ -32,12 +32,13 @@
 <script>
 import { mapState } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
+import ActionRegister from '../../Actions/modules/ActionRegister.vue'
 
 export default {
 	name: 'CardRegister',
 	components: {
 		CardDiv,
-		ActionRegister: () => import('../../Actions/modules/ActionRegister.vue'),
+		ActionRegister,
 	},
 
 	data() {

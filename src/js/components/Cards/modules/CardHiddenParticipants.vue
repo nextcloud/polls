@@ -33,12 +33,13 @@
 <script>
 import { mapState, mapGetters } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
+import ActionSwitchSafeTable from '../../Actions/modules/ActionSwitchSafeTable.vue'
 
 export default {
 	name: 'CardHiddenParticipants',
 	components: {
 		CardDiv,
-		ActionSwitchSafeTable: () => import('../../Actions/modules/ActionSwitchSafeTable.vue'),
+		ActionSwitchSafeTable,
 	},
 
 	data() {

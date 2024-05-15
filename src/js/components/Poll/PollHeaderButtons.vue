@@ -45,6 +45,9 @@ import { mapState } from 'vuex'
 import { NcButton, NcPopover } from '@nextcloud/vue'
 import { ActionToggleSidebar } from '../Actions/index.js'
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
+import PollInformation from '../Poll/PollInformation.vue'
+import UserMenu from '../User/UserMenu.vue'
+import ExportPoll from '../Export/ExportPoll.vue'
 
 export default {
 	name: 'PollHeaderButtons',
@@ -53,9 +56,9 @@ export default {
 		PollInformationIcon,
 		NcPopover,
 		NcButton,
-		UserMenu: () => import('../User/UserMenu.vue'),
-		ExportPoll: () => import('../Export/ExportPoll.vue'),
-		PollInformation: () => import('../Poll/PollInformation.vue'),
+		UserMenu,
+		ExportPoll,
+		PollInformation,
 	},
 
 	data() {

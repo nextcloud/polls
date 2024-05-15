@@ -34,18 +34,19 @@
 
 <script>
 import { mapState, mapGetters } from 'vuex'
+import { CardAddProposals, CardClosedPoll, CardLimitedVotes, CardLocked, CardRegister, CardSendConfirmations, CardUnpublishedPoll } from './index.js'
 
 export default {
 	name: 'VoteInfoCards',
 
 	components: {
-		CardAddProposals: () => import('./modules/CardAddProposals.vue'),
-		CardClosedPoll: () => import('./modules/CardClosedPoll.vue'),
-		CardLimitedVotes: () => import('./modules/CardLimitedVotes.vue'),
-		CardLocked: () => import('./modules/CardLocked.vue'),
-		CardRegister: () => import('./modules/CardRegister.vue'),
-		CardSendConfirmations: () => import('./modules/CardSendConfirmations.vue'),
-		CardUnpublishedPoll: () => import('./modules/CardUnpublishedPoll.vue'),
+		CardAddProposals,
+		CardClosedPoll,
+		CardLimitedVotes,
+		CardLocked,
+		CardRegister,
+		CardSendConfirmations,
+		CardUnpublishedPoll,
 
 	},
 

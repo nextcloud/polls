@@ -38,6 +38,7 @@
 
 <script>
 import { NcModal, NcButton } from '@nextcloud/vue'
+import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
 
 export default {
 	name: 'ActionRegister',
@@ -45,7 +46,7 @@ export default {
 	components: {
 		NcButton,
 		NcModal,
-		PublicRegisterModal: () => import('../../Public/PublicRegisterModal.vue'),
+		PublicRegisterModal,
 	},
 
 	data() {

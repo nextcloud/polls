@@ -139,6 +139,7 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import PollItem from '../components/PollList/PollItem.vue'
 
 export default {
 	name: 'Administration',
@@ -157,7 +158,7 @@ export default {
 		PlusIcon,
 		PollsAppIcon,
 		RestorePollIcon,
-		PollItem: () => import('../components/PollList/PollItem.vue'),
+		PollItem,
 	},
 
 	data() {
