@@ -23,7 +23,7 @@ declare(strict_types=1);
  *
  */
 
-namespace OCA\Polls\Attribute;
+namespace OCA\Polls\Attributes;
 
 use Attribute;
 

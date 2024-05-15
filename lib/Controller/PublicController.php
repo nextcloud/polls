@@ -26,7 +26,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
-use OCA\Polls\Attribute\ShareTokenRequired;
+use OCA\Polls\Attributes\ShareTokenRequired;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CommentService;
