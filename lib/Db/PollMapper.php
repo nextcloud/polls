@@ -42,6 +42,7 @@ use OCP\Search\ISearchQuery;
  */
 class PollMapper extends QBMapper {
 	public const TABLE = Poll::TABLE;
+	public const CONCAT_SEPARATOR = ",";
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -232,15 +233,15 @@ class PollMapper extends QBMapper {
 		$joinAlias = 'group_shares';
 
 		if ($this->db->getDatabasePlatform() instanceof PostgreSQLPlatform) {
-			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \',\') AS group_shares'));
+			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
 		} elseif ($this->db->getDatabasePlatform() instanceof OraclePlatform) {
-			$qb->addSelect($qb->createFunction('listagg(distinct ' . $joinAlias . '.user_id, \',\') WITHIN GROUP (ORDER BY ' . $joinAlias . '.user_id) AS group_shares'));
+			$qb->addSelect($qb->createFunction('listagg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') WITHIN GROUP (ORDER BY ' . $joinAlias . '.user_id) AS group_shares'));
 		} elseif ($this->db->getDatabasePlatform() instanceof SqlitePlatform) {
-			$qb->addSelect($qb->createFunction('group_concat( distinct ' . $joinAlias . '.user_id, ",") AS group_shares'));
+			$qb->addSelect($qb->createFunction('group_concat( distinct ' . $joinAlias . '.user_id, "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
 		// } elseif ($this->db->getDatabasePlatform() instanceof MySQLPlatform) {
 		// 	$qb->addSelect($qb->createFunction('group_concat( distinct ' . $joinAlias . '.user_id) AS group_shares'));
 		} else {
-			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR ",") AS group_shares'));
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
 		}
 
 		$qb->leftJoin(
