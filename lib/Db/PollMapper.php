@@ -26,6 +26,10 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+// use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\OraclePlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+// use Doctrine\DBAL\Platforms\SqlitePlatform;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IParameter;
@@ -188,7 +192,8 @@ class PollMapper extends QBMapper {
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
-
+		$this->joinGroupShares($qb, self::TABLE);
+		// \OC::$server->getLogger()->error(json_encode($qb->getSQL()));;
 		return $qb;
 	}
 
@@ -196,14 +201,17 @@ class PollMapper extends QBMapper {
 	 * Joins shares to evaluate user role
 	 */
 	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
-		$joinAlias = 'shares';
-		$emptyString = $qb->createNamedParameter("", IQueryBuilder::PARAM_STR);
+		$joinAlias = 'user_shares';
+		$emptyString = $qb->expr()->literal("");
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, '. $emptyString . ') AS user_role'))
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'))
 			->addGroupBy($joinAlias . '.type');
 
 		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked')
 			->addGroupBy($joinAlias . '.locked');
+
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.token, '. $emptyString . ') AS share_token'))
+			->addGroupBy($joinAlias . '.token');
 
 		$qb->leftJoin(
 			$fromAlias,
@@ -216,6 +224,36 @@ class PollMapper extends QBMapper {
 			)
 		);
 
+	}
+
+	/**
+	 * Join group shares
+	 */
+	protected function joinGroupShares(IQueryBuilder &$qb, string $fromAlias): void {
+		$joinAlias = 'group_shares';
+
+		if ($this->db->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \',\') AS group_shares'));
+		} elseif ($this->db->getDatabasePlatform() instanceof OraclePlatform) {
+			$qb->addSelect($qb->createFunction('listagg(distinct ' . $joinAlias . '.user_id, \',\') WITHIN GROUP (ORDER BY ' . $joinAlias . '.user_id) AS group_shares'));
+		// } elseif ($this->db->getDatabasePlatform() instanceof SqlitePlatform) {
+		// 	$qb->addSelect($qb->createFunction('group_concat( distinct ' . $joinAlias . '.user_id) AS group_shares'));
+		// } elseif ($this->db->getDatabasePlatform() instanceof MySQLPlatform) {
+		// 	$qb->addSelect($qb->createFunction('group_concat( distinct ' . $joinAlias . '.user_id) AS group_shares'));
+		} else {
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "\'") AS group_shares'));
+		}
+
+		$qb->leftJoin(
+			$fromAlias,
+			Share::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.type', $qb->expr()->literal(Share::TYPE_GROUP)),
+				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
+			)
+		);
 	}
 
 	/**

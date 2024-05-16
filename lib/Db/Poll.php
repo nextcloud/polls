@@ -154,6 +154,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $maxDate = 0;
 	protected int $minDate = 0;
 	protected string $userRole = self::ROLE_NONE;
+	protected string $shareToken = '';
+	protected ?string $groupShares = '';
 	
 	// subqueried columns
 	protected int $currentUserCountOrphanedVotes = 0;
@@ -228,6 +230,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 				'orphanedVotes' => $this->getCurrentUserCountOrphanedVotes(),
 				'yesVotes' => $this->getCurrentUserCountVotesYes(),
 				'countVotes' => $this->getCurrentUserCountVotes(),
+				'shareToken' => $this->getShareToken(),
 			],
 		];
 	}
