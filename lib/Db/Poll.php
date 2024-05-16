@@ -84,6 +84,8 @@ use OCP\IURLGenerator;
  * Magic functions for joined columns
  * @method int getMinDate()
  * @method int getMaxDate()
+ * @method int getShareToken()
+ * @method int getGroupShares()
  *
  * Magic functions for subqueried columns
  * @method int getCurrentUserCountOrphanedVotes()

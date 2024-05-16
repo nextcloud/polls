@@ -29,7 +29,7 @@ namespace OCA\Polls\Db;
 // use Doctrine\DBAL\Platforms\MySQLPlatform;
 use Doctrine\DBAL\Platforms\OraclePlatform;
 use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
-// use Doctrine\DBAL\Platforms\SqlitePlatform;
+use Doctrine\DBAL\Platforms\SqlitePlatform;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IParameter;
@@ -193,7 +193,6 @@ class PollMapper extends QBMapper {
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$this->joinGroupShares($qb, self::TABLE);
-		// \OC::$server->getLogger()->error(json_encode($qb->getSQL()));;
 		return $qb;
 	}
 
@@ -236,12 +235,12 @@ class PollMapper extends QBMapper {
 			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \',\') AS group_shares'));
 		} elseif ($this->db->getDatabasePlatform() instanceof OraclePlatform) {
 			$qb->addSelect($qb->createFunction('listagg(distinct ' . $joinAlias . '.user_id, \',\') WITHIN GROUP (ORDER BY ' . $joinAlias . '.user_id) AS group_shares'));
-		// } elseif ($this->db->getDatabasePlatform() instanceof SqlitePlatform) {
-		// 	$qb->addSelect($qb->createFunction('group_concat( distinct ' . $joinAlias . '.user_id) AS group_shares'));
+		} elseif ($this->db->getDatabasePlatform() instanceof SqlitePlatform) {
+			$qb->addSelect($qb->createFunction('group_concat( distinct ' . $joinAlias . '.user_id, ",") AS group_shares'));
 		// } elseif ($this->db->getDatabasePlatform() instanceof MySQLPlatform) {
 		// 	$qb->addSelect($qb->createFunction('group_concat( distinct ' . $joinAlias . '.user_id) AS group_shares'));
 		} else {
-			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "\'") AS group_shares'));
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR ",") AS group_shares'));
 		}
 
 		$qb->leftJoin(
