@@ -31,7 +31,7 @@ use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Exceptions\VoteLimitExceededException;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\AclLegacy as Acl;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;

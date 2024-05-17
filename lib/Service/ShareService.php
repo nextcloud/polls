@@ -43,7 +43,7 @@ use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\AclLegacy as Acl;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;

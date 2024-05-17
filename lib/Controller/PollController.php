@@ -25,7 +25,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\AclLegacy as Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;

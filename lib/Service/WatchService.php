@@ -28,7 +28,7 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Exceptions\NoUpdatesException;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\AclLegacy as Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;

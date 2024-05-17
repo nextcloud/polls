@@ -29,7 +29,7 @@ use Closure;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\AclLegacy as Acl;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;

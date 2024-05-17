@@ -28,7 +28,7 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\AclLegacy as Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 

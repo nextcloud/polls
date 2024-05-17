@@ -30,7 +30,7 @@ use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Exceptions\ForbiddenException;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\AclLegacy as Acl;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class CommentService {
