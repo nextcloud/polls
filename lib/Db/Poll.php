@@ -29,6 +29,7 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 use OCA\Polls\AppConstants;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\UserSession;
@@ -85,7 +86,6 @@ use OCP\IURLGenerator;
  * @method int getMinDate()
  * @method int getMaxDate()
  * @method int getShareToken()
- * @method int getGroupShares()
  *
  * Magic functions for subqueried columns
  * @method int getCurrentUserCountOrphanedVotes()
@@ -122,6 +122,20 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const ROLE_OWNER = 'owner';
 	public const ROLE_NONE = 'none';
 
+	public const PERMISSION_OVERRIDE = 'override_permission';
+	public const PERMISSION_POLL_VIEW = 'view';
+	public const PERMISSION_POLL_EDIT = 'edit';
+	public const PERMISSION_POLL_DELETE = 'delete';
+	public const PERMISSION_POLL_ARCHIVE = 'archive';
+	public const PERMISSION_POLL_RESULTS_VIEW = 'seeResults';
+	public const PERMISSION_POLL_USERNAMES_VIEW = 'seeUserNames';
+	public const PERMISSION_POLL_TAKEOVER = 'takeOver';
+	public const PERMISSION_POLL_SUBSCRIBE = 'subscribe';
+	public const PERMISSION_COMMENT_ADD = 'addComment';
+	public const PERMISSION_COMMENT_DELETE = 'deleteComment';
+	public const PERMISSION_OPTIONS_ADD = 'addOptions';
+	public const PERMISSION_OPTION_DELETE = 'deleteOption';
+	public const PERMISSION_VOTE_EDIT = 'vote';
 
 
 	private IURLGenerator $urlGenerator;
@@ -315,6 +329,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setOwner($userId);
 	}
 
+	public function getGroupShares(): array {
+		if ($this->groupShares) {
+			// explode with separator and remove empty elements
+			return array_filter(explode(PollMapper::CONCAT_SEPARATOR, PollMapper::CONCAT_SEPARATOR . $this->groupShares));
+		}
+
+		return [];
+	}
+
 	public function getAccess() {
 		if ($this->access === self::ACCESS_PUBLIC) {
 			return self::ACCESS_OPEN;
@@ -418,4 +441,332 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$miscSettings[$key] = $value;
 		$this->setMiscSettingsArray($miscSettings);
 	}
+
+	/**
+	 * 
+	 * Check Permissions
+	 * 
+	 */
+
+	 /**
+	 * Request a permission level and get exception if denied
+	 * @throws ForbiddenException Thrown if access is denied
+	 */
+	public function request(string $permission): void {
+		if (!$this->getIsAllowed($permission)) {
+			throw new ForbiddenException('denied permission ' . $permission);
+		}
+	}
+
+
+	/**
+	 * Check perticular rights and inform via boolean value, if the right is granted  or denied
+	 */
+	public function getIsAllowed(string $permission): bool {
+		return match ($permission) {
+			self::PERMISSION_OVERRIDE => true,
+			self::PERMISSION_POLL_VIEW => $this->getAllowAccessPoll(),
+			self::PERMISSION_POLL_EDIT => $this->getAllowEditPoll(),
+			self::PERMISSION_POLL_DELETE => $this->getAllowDeletePoll(),
+			self::PERMISSION_POLL_ARCHIVE => $this->getAllowEditPoll(),
+			self::PERMISSION_POLL_TAKEOVER => $this->getAllowEditPoll(),
+			self::PERMISSION_POLL_SUBSCRIBE => $this->getAllowSubscribeToPoll(),
+			self::PERMISSION_POLL_RESULTS_VIEW => $this->getAllowShowResults(),
+			self::PERMISSION_POLL_USERNAMES_VIEW => $this->getAllowEditPoll() || !$this->getAnonymous(),
+			self::PERMISSION_OPTIONS_ADD => $this->getAllowAddOptions(),
+			self::PERMISSION_OPTION_DELETE => $this->getAllowDeleteOption(),
+			self::PERMISSION_COMMENT_ADD => $this->getAllowCommenting(),
+			self::PERMISSION_COMMENT_DELETE => $this->getAllowDeleteComment(),
+			self::PERMISSION_VOTE_EDIT => $this->getAllowVote(),
+			default => false,
+		};
+	}
+
+	public function getPermissionsArray(): array {
+		return [
+			'addOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
+			'archive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
+			'comment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
+			'delete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
+			'edit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+			'seeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
+			'seeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+			'subscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
+			'view' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
+			'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
+		];
+	}
+
+	/**
+	 * getIsInvolved - Is current user involved in current poll?
+	 * @return bool Returns true, if the current user is involved in the poll via share, as a participant or as the poll owner.
+	 */
+	private function getIsInvolved(): bool {
+		return (
+			$this->getIsPollOwner()
+			|| $this->getIsParticipant()
+			|| $this->getIsPersonallyInvited())
+			|| $this->getIsInvitedViaGroupShare();
+	}
+
+	/**
+	 * Check, if poll settings is set to open access for internal users
+	 */
+	private function getIsOpenPoll(): bool {
+		return $this->getAccess() === Poll::ACCESS_OPEN && $this->userSession->getIsLoggedIn();
+	}
+
+	/**
+	 * getIsParticipant - Is user a participant?
+	 * @return bool Returns true, if the current user is already a particitipant of the current poll.
+	 */
+	private function getIsParticipant(): bool {
+		return $this->getCurrentUserCountVotes() > 0;
+	}
+
+	/**
+	 * getIsInvitedViaGroupShare - Is the poll shared via group share?
+	 * where the current user is member of. This only affects logged in users.
+	 * @return bool Returns true, if the current poll contains a group share with a group,
+	 */
+	private function getIsInvitedViaGroupShare(): bool {
+		if (!$this->userSession->getIsLoggedIn()) {
+			return false;
+		}
+
+		return count(
+			array_filter($this->getGroupShares(), function ($groupName) {
+				return ($this->getCurrentUser()->getIsInGroup($groupName));
+			})
+		) > 0;
+	}
+
+	/**
+	 * getIsPersonallyInvited - Is the poll shared via user share with the current user?
+	 * Checking via user role
+	 * @return bool  Returns true, if the current poll contains a user role which matches a share type
+	 */
+	private function getIsPersonallyInvited(): bool {
+		return in_array($this->getUserRole(), [
+			Poll::ROLE_ADMIN,
+			Poll::ROLE_USER,
+			Poll::ROLE_EXTERNAL,
+			Poll::ROLE_EMAIL,
+			Poll::ROLE_CONTACT,
+		]);
+	}
+
+	/**
+	 * The detailed checks - For the sake of readability, the queries and selections
+	 * were kept detailed and with low complexity
+	 */
+	
+	/**
+	 * Checks, if the user has delegated admin rights to edit poll settings via share
+	 */
+	private function getIsDelegatedAdmin(): bool {
+		return $this->getUserRole() === Poll::ROLE_ADMIN
+			&& !$this->getIsCurrentUserLocked();
+	}
+
+	/**
+	 * Checks, if user is allowed to edit the poll configuration
+	 **/
+	private function getAllowEditPoll(): bool {
+		// Console has god mode
+		if (defined('OC_CONSOLE')) {
+			return true;
+		}
+
+		// owner is always allowed to edit the poll configuration
+		if ($this->getIsPollOwner()) {
+			return true;
+		}
+
+		// user has delegated owner rights
+		if ($this->getIsDelegatedAdmin()) {
+			return true;
+		}
+
+		// deny edit rights in all other cases
+		return false;
+	}
+
+	/**
+	 * Checks, if user is allowed to access (view) poll
+	 */
+	private function getAllowAccessPoll(): bool {
+		// edit rights include access to poll
+		if ($this->getAllowEditPoll()) {
+			return true;
+		}
+
+		// No further access to poll, if it is deleted
+		if ($this->getDeleted()) {
+			return false;
+		}
+
+		// grant access if poll poll is an open poll (for logged in users)
+		if ($this->getIsOpenPoll() && $this->userSession->getIsLoggedIn()) {
+			return true;
+		}
+
+		// grant access if user is involved in poll in any way
+		if ($this->getIsInvolved()) {
+			return true;
+		}
+
+		// return check result of an existing valid share for this user
+		return boolval($this->userSession->getShare()?->getPollId() === $this->getId());
+	}
+
+	/**
+	 * Checks, if user is allowed to delete the poll
+	 * includes the right to archive and take over
+	 **/
+	private function getAllowDeletePoll(): bool {
+		if ($this->getAllowEditPoll()) {
+			// users with edit rights are allowed to delete the poll
+			return true;
+		}
+
+		// additionally site admins are allowed to delete polls, in all other cases deny poll deletion right
+		return $this->getCurrentUser()->getIsAdmin();
+	}
+
+	/**
+	 * Checks, if user is allowed to add add vote options
+	 **/
+	private function getAllowAddOptions(): bool {
+		// Edit right includes adding new options
+		if ($this->getAllowEditPoll()) {
+			return true;
+		}
+
+		// deny, if user has no access right to this poll
+		if (!$this->getAllowAccessPoll()) {
+			return false;
+		}
+
+		// public shares are not allowed to add options
+		if ($this->userSession->getShare()?->getType() === Share::TYPE_PUBLIC) {
+			return false;
+		}
+
+		// Request for option proposals is expired, deny
+		if ($this->getProposalsExpired()) {
+			return false;
+		}
+
+		// Locked Users are not allowed to add options
+		if (boolval($this->getIsCurrentUserLocked())) {
+			return false;
+		}
+
+		// Allow, if poll requests proposals
+		return $this->getAllowProposals() === Poll::PROPOSAL_ALLOW;
+	}
+	
+	/**
+	 * Is current user allowed to delete options from poll
+	 */
+	private function getAllowDeleteOption(): bool {
+		return $this->getIsPollOwner() || $this->getIsDelegatedAdmin();
+	}
+
+	/**
+	 * Compare $userId with current user's id
+	 */
+	public function matchUser(string $userId): bool {
+		return $this->getCurrentUser()->getId() === $userId;
+	}
+
+	/**
+	 * Checks, if user is allowed to see and write comments
+	 **/
+	private function getAllowCommenting(): bool {
+		// user has no access right to this poll
+		if (!$this->getAllowAccessPoll()) {
+			return false;
+		}
+
+		// public shares are not allowed to comment
+		if ($this->userSession->getShare()?->getType() === Share::TYPE_PUBLIC) {
+			return false;
+		}
+
+		// public shares are not allowed to comment
+		if (boolval($this->getIsCurrentUserLocked())) {
+			return false;
+		}
+
+		return (bool) $this->getAllowComment();
+	}
+
+	/**
+	 * Checks, if user is allowed to delete comments from poll
+	 **/
+	private function getAllowDeleteComment(): bool {
+		return $this->getAllowEditPoll();
+	}
+
+	/**
+	 * Checks, if user is allowed to vote
+	 **/
+	private function getAllowVote(): bool {
+		// user has no access right to this poll
+		if (!$this->getAllowAccessPoll()) {
+			return false;
+		}
+
+		// public shares are not allowed to vote
+		if ($this->userSession->getShare()?->getType() === Share::TYPE_PUBLIC) {
+			return false;
+		}
+
+		// Locked users are not allowed to vote
+		if (boolval($this->getIsCurrentUserLocked())) {
+			return false;
+		}
+
+		// deny votes, if poll is expired
+		return !$this->getExpired();
+	}
+
+	/**
+	 * Checks, if user is allowed to subscribe to updates
+	 **/
+	private function getAllowSubscribeToPoll(): bool {
+		// user with access to poll are always allowed to subscribe
+		if (!$this->getAllowAccessPoll()) {
+			return false;
+		}
+
+		return $this->getCurrentUser()->getHasEmail();
+	}
+
+	/**
+	 * Checks, if user is allowed to see results of current poll
+	 **/
+	private function getAllowShowResults(): bool {
+		// edit rights include access to results
+		if ($this->getAllowEditPoll()) {
+			return true;
+		}
+
+		// no access to poll, deny
+		if (!$this->getAllowAccessPoll()) {
+			return false;
+		}
+
+		// show results, when poll is closed
+		if ($this->getShowResults() === Poll::SHOW_RESULTS_CLOSED && $this->getExpired()) {
+			return true;
+		}
+
+		// return poll settings
+		return $this->getShowResults() === Poll::SHOW_RESULTS_ALWAYS;
+	}
+
+
 }
