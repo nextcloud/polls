@@ -302,6 +302,7 @@ OC.L10N.register(
     "Hide results until poll is closed" : "Sonuçlar anket sona erene kadar gizlensin",
     "Never show results" : "Sonuçlar asla görüntülenmesin",
     "Delete vote when switched to \"No\"" : "Oy, \"Hayır\" olarak değiştirildiğinde silinsin",
+    "Limit \"Yes\" votes per participant" : "Her katılımcı için \"Evet\" oyları sınırlansın",
     "Title" : "Başlık",
     "Enter Title" : "Başlığı yazın",
     "Poll type" : "Anket türü",
