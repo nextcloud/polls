@@ -58,7 +58,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapActions } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
 import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
@@ -89,16 +89,16 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-		}),
-
 		titleEmpty() {
 			return this.title === ''
 		},
 	},
 
 	methods: {
+		...mapActions({
+			addPoll: 'poll/add',
+		}),
+
 		/** @public */
 		setFocus() {
 			this.$refs.pollTitle.setFocus()
@@ -112,7 +112,7 @@ export default {
 
 		async confirm() {
 			try {
-				const response = await this.$store.dispatch('poll/add', { title: this.title, type: this.pollType })
+				const response = await this.addPoll({ title: this.title, type: this.pollType })
 				this.cancel()
 				showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.title }))
 				this.$router.push({ name: 'vote', params: { id: response.data.id } })

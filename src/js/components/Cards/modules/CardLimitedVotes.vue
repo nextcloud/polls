@@ -42,7 +42,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
 import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
 
@@ -57,12 +57,8 @@ export default {
 		...mapState({
 			orphanedVotes: (state) => state.poll.currentUserStatus.orphanedVotes,
 			yesVotes: (state) => state.poll.currentUserStatus.yesVotes,
-			maxVotesPerOption: (state) => state.poll.limits.maxVotesPerOption,
-			maxVotesPerUser: (state) => state.poll.limits.maxVotesPerUser,
-		}),
-
-		...mapGetters({
-			closed: 'poll/isClosed',
+			maxVotesPerOption: (state) => state.poll.configuration.maxVotesPerOption,
+			maxVotesPerUser: (state) => state.poll.configuration.maxVotesPerUser,
 		}),
 
 		orphanedVotesText() {
@@ -83,12 +79,6 @@ export default {
 			return this.maxVotesPerUser && this.votesLeft < 1 ? 'error' : 'info'
 		},
 
-	},
-
-	methods: {
-		...mapActions({
-			deleteOrphanedVotes: 'votes/removeOrphanedVotes',
-		}),
 	},
 }
 </script>

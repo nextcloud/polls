@@ -23,7 +23,7 @@
 <template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'You are asked to propose more options. ') }}
-		<p v-if="proposalsExpirySet && !proposalsExpired">
+		<p v-if="isProposalExpirySet && !isProposalExpired">
 			{{ t('polls', 'The proposal period ends {timeRelative}.',
 				{ timeRelative: proposalsExpireRelative }) }}
 		</p>
@@ -58,8 +58,8 @@ export default {
 		}),
 
 		...mapGetters({
-			proposalsExpirySet: 'poll/proposalsExpirySet',
-			proposalsExpired: 'poll/proposalsExpired',
+			isProposalExpirySet: 'poll/isProposalExpirySet',
+			isProposalExpired: 'poll/isProposalExpired',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
 	},

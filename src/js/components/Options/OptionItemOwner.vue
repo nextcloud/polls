@@ -72,7 +72,7 @@ export default {
 		...mapState({
 			pollOwner: (state) => state.poll.owner.userId,
 			currentUser: (state) => state.poll.acl.currentUser,
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 		}),
 
 		showDelete() {

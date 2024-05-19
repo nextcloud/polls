@@ -49,12 +49,12 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		pollShowResults: {
 			get() {
-				return this.poll.showResults
+				return this.pollConfiguration.showResults
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { showResults: value })

@@ -89,11 +89,11 @@ export default {
 
 	computed: {
 		...mapState({
-			permissions: (state) => state.poll.acl.permissions,
-			pollAccess: (state) => state.poll.access,
-			pollTitle: (state) => state.poll.title,
-			pollDescription: (state) => state.poll.description,
+			permissions: (state) => state.poll.permissions,
+			pollTitle: (state) => state.poll.configuration.title,
+			pollDescription: (state) => state.poll.configuration.description,
 		}),
+
 		...mapGetters({
 			activeShares: 'shares/active',
 		}),

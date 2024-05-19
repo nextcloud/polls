@@ -251,7 +251,6 @@ export default {
 			switchAdmin: 'shares/switchAdmin',
 			setPublicPollEmail: 'shares/setPublicPollEmail',
 			writeLabel: 'shares/writeLabel',
-			deleteUser: 'votes/deleteUser',
 		}),
 
 		async switchLocked(share) {

@@ -26,7 +26,7 @@
 			<div class="spacer" />
 			<div v-for="(poll) in polls"
 				:key="poll.id"
-				:title="poll.title"
+				:title="poll.configuration.title"
 				class="poll-group">
 				<div v-for="(participant) in participantsByPoll(poll.id)"
 					:key="`${participant.userId}_${participant.pollId}`"

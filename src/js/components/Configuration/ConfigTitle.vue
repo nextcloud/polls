@@ -40,16 +40,16 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		checkTitle() {
-			return this.poll.title ? '' : 'error'
+			return this.pollConfiguration.title ? '' : 'error'
 		},
 
 		pollTitle: {
 			get() {
-				return this.poll.title
+				return this.pollConfiguration.title
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { title: value })

@@ -27,12 +27,13 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\VoteSetEvent;
 use OCA\Polls\Exceptions\VoteLimitExceededException;
-use OCA\Polls\Model\AclLegacy as Acl;
-use OCA\Polls\UserSession;
+use OCA\Polls\Model\Acl as Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 
@@ -44,9 +45,9 @@ class VoteService {
 		private Acl $acl,
 		private IEventDispatcher $eventDispatcher,
 		private OptionMapper $optionMapper,
+		private PollMapper $pollMapper,
 		private Vote $vote,
 		private VoteMapper $voteMapper,
-		private UserSession $userSession,
 	) {
 	}
 
@@ -55,22 +56,16 @@ class VoteService {
 	 *
 	 * @return Vote[]
 	 */
-	public function list(?int $pollId = null): array {
-		try {
-			if ($pollId !== null) {
-				$this->acl->setPollId($pollId);
-			}
-
-			if (!$this->acl->getIsAllowed(Acl::PERMISSION_POLL_RESULTS_VIEW)) {
-				// Just return the participants votes, no further anoymizing or obfuscating is nessecary
-				return $this->voteMapper->findByPollAndUser($this->acl->getPoll()->getId(), ($this->userSession->getCurrentUserId()));
-			}
-
-			$votes = $this->voteMapper->findByPoll($this->acl->getPoll()->getId());
-
-		} catch (DoesNotExistException $e) {
-			$votes = [];
+	public function list(int $pollId): array {
+		$poll = $this->pollMapper->find($pollId);
+		$poll->request(Poll::PERMISSION_POLL_VIEW);
+		
+		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW)) {
+			// Just return the participants votes, no further anoymizing or obfuscating is nessecary
+			return $this->voteMapper->findByPollAndUser($pollId, ($this->acl->getCurrentUserId()));
 		}
+
+		$votes = $this->voteMapper->findByPoll($pollId);
 
 		return $votes;
 	}
@@ -92,16 +87,17 @@ class VoteService {
 	 */
 	public function set(int $optionId, string $setTo): ?Vote {
 		$option = $this->optionMapper->find($optionId);
-		$this->acl->setPollId($option->getPollId(), Acl::PERMISSION_VOTE_EDIT);
+		$poll = $this->pollMapper->find($option->getPollId());
+		$poll->request(Poll::PERMISSION_VOTE_EDIT);
 		
 		if ($setTo === Vote::VOTE_YES) {
 			$this->checkLimits($option);
 		}
 		//  delete no votes, if poll setting is set to useNo === 0
-		$deleteVoteInsteadOfNoVote = in_array(trim($setTo), [Vote::VOTE_NO, '']) && !boolval($this->acl->getPoll()->getUseNo());
+		$deleteVoteInsteadOfNoVote = in_array(trim($setTo), [Vote::VOTE_NO, '']) && !boolval($poll->getUseNo());
 
 		try {
-			$this->vote = $this->voteMapper->findSingleVote($this->acl->getPoll()->getId(), $option->getPollOptionText(), $this->userSession->getCurrentUserId());
+			$this->vote = $this->voteMapper->findSingleVote($poll->getId(), $option->getPollOptionText(), $this->acl->getCurrentUserId());
 
 			if ($deleteVoteInsteadOfNoVote) {
 				$this->vote->setVoteAnswer('');
@@ -114,8 +110,8 @@ class VoteService {
 			// Vote does not exist, insert as new Vote
 			$this->vote = new Vote();
 
-			$this->vote->setPollId($this->acl->getPoll()->getId());
-			$this->vote->setUserId($this->userSession->getCurrentUserId());
+			$this->vote->setPollId($poll->getId());
+			$this->vote->setUserId($this->acl->getCurrentUserId());
 			$this->vote->setVoteOptionText($option->getPollOptionText());
 			$this->vote->setVoteOptionId($option->getId());
 			$this->vote->setVoteAnswer($setTo);
@@ -126,20 +122,6 @@ class VoteService {
 		return $this->vote;
 	}
 
-
-
-
-	/**
-	 * Remove current user from poll
-	 * @param bool $deleteOnlyOrphaned - false deletes all votes of the current user, true only the orphaned votes aka votes without an option
-	 */
-	public function deleteCurrentUserFromPoll(bool $deleteOnlyOrphaned = false): string {
-		$this->acl->request(Acl::PERMISSION_VOTE_EDIT);
-		$pollId = $this->acl->getPoll()->getId();
-		$userId = $this->userSession->getCurrentUserId();
-		return $this->delete($pollId, $userId, $deleteOnlyOrphaned);
-	}
-
 	/**
 	 * Remove user from poll
 	 *
@@ -147,15 +129,20 @@ class VoteService {
 	 * @param string $userId user id of the user, the votes get deleted from
 	 * @param bool $deleteOnlyOrphaned - false deletes all votes of the specified user, true only the orphaned votes aka votes without an option
 	 */
-	public function deletUserFromPoll(int $pollId, string $userId, bool $deleteOnlyOrphaned = false): string {
+	public function deleteUserFromPoll(int $pollId, string $userId = '', bool $deleteOnlyOrphaned = false): string {
 		if ($userId === '') {
-			$userId = $this->userSession->getCurrentUserId();
+			// if no user set, use current user
+			$userId = $this->acl->getCurrentUserId();
 		}
-		if ($userId === $this->userSession->getCurrentUserId()) {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_VOTE_EDIT);
-		} else {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+
+		// Set default right to delete all votes of the user
+		$checkRight = Poll::PERMISSION_POLL_EDIT;
+		if ($userId === $this->acl->getCurrentUserId()) {
+			// allow current user to remove his votes
+			$checkRight = Poll::PERMISSION_VOTE_EDIT;
 		}
+
+		$this->pollMapper->find($pollId)->request($checkRight);
 
 		return $this->delete($pollId, $userId, $deleteOnlyOrphaned);
 	}

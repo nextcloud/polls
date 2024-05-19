@@ -27,11 +27,11 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ShareTokenRequired;
-use OCA\Polls\Db\ShareMapper;
-use OCA\Polls\Model\AclLegacy as Acl;
+use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\SystemService;
@@ -57,19 +57,19 @@ class PublicController extends BasePublicController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		Acl $acl,
-		ShareMapper $shareMapper,
-		UserSession $userSession,
+		private Acl $acl,
+		private UserSession $userSession,
 		private CommentService $commentService,
 		private MailService $mailService,
 		private OptionService $optionService,
+		private PollService $pollService,
 		private ShareService $shareService,
 		private SubscriptionService $subscriptionService,
 		private SystemService $systemService,
 		private VoteService $voteService,
 		private WatchService $watchService
 	) {
-		parent::__construct($appName, $request, $acl, $shareMapper, $userSession);
+		parent::__construct($appName, $request);
 	}
 
 	/**
@@ -96,11 +96,9 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function getPoll(): JSONResponse {
 		return $this->response(function () {
-			$this->acl->request(Acl::PERMISSION_POLL_VIEW);
-			// load poll through acl
 			return [
+				'poll' => $this->pollService->get($this->userSession->getShare()->getPollId()),
 				'acl' => $this->acl,
-				'poll' => $this->acl->getPoll(),
 			];
 		});
 	}
@@ -113,7 +111,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function watchPoll(?int $offset): JSONResponse {
 		return $this->responseLong(fn () => [
-			'updates' => $this->watchService->watchUpdates(offset: $offset)
+			'updates' => $this->watchService->watchUpdates($this->userSession->getShare()->getPollId(), $offset)
 		]);
 	}
 
@@ -136,7 +134,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function getVotes(): JSONResponse {
 		return $this->response(fn () => [
-			'votes' => $this->voteService->list()
+			'votes' => $this->voteService->list($this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -147,7 +145,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function deleteUser(): JSONResponse {
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->deleteCurrentUserFromPoll()
+			'deleted' => $this->voteService->deleteUserFromPoll($this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -158,7 +156,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function deleteOrphanedVotes(): JSONResponse {
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->deleteCurrentUserFromPoll(deleteOnlyOrphaned: true)
+			'deleted' => $this->voteService->deleteUserFromPoll($this->userSession->getShare()->getPollId(), deleteOnlyOrphaned: true)
 		]);
 	}
 
@@ -169,7 +167,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function getOptions(): JSONResponse {
 		return $this->response(fn () => [
-			'options' => $this->optionService->list()
+			'options' => $this->optionService->list($this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -183,7 +181,8 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function addOption(int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => [
-			'option' => $this->optionService->addForCurrentPoll(
+			'option' => $this->optionService->add(
+				pollId: $this->userSession->getShare()->getPollId(),
 				timestamp: $timestamp,
 				pollOptionText: $text,
 				duration: $duration,
@@ -235,7 +234,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function getComments(): JSONResponse {
 		return $this->response(fn () => [
-			'comments' => $this->commentService->list()
+			'comments' => $this->commentService->list($this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -247,7 +246,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function addComment(string $message): JSONResponse {
 		return $this->response(fn () => [
-			'comment' => $this->commentService->add($message)
+			'comment' => $this->commentService->add($message, $this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -258,9 +257,8 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	#[ShareTokenRequired]
 	public function deleteComment(int $commentId): JSONResponse {
-		$comment = $this->commentService->get($commentId);
 		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($comment)
+			'comment' => $this->commentService->delete($commentId)
 		]);
 	}
 
@@ -271,10 +269,8 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	#[ShareTokenRequired]
 	public function restoreComment(int $commentId): JSONResponse {
-		$comment = $this->commentService->get($commentId);
-
 		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($comment, true)
+			'comment' => $this->commentService->delete($commentId, true)
 		]);
 	}
 
@@ -285,7 +281,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function getSubscription(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->get()
+			'subscribed' => $this->subscriptionService->get($this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -296,7 +292,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function subscribe(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->set(true)
+			'subscribed' => $this->subscriptionService->set(true, $this->userSession->getShare()->getPollId())
 		]);
 	}
 
@@ -307,7 +303,7 @@ class PublicController extends BasePublicController {
 	#[ShareTokenRequired]
 	public function unsubscribe(): JSONResponse {
 		return $this->response(fn () => [
-			'subscribed' => $this->subscriptionService->set(false)
+			'subscribed' => $this->subscriptionService->set(false, $this->userSession->getShare()->getPollId())
 		]);
 	}
 

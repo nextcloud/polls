@@ -55,18 +55,18 @@ export default {
 	computed: {
 		...mapState({
 			currentUser: (state) => state.poll.acl.currentUser,
-			allowVote: (state) => state.poll.acl.permissions.vote,
+			allowVote: (state) => state.poll.permissions.vote,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			answerSequence: 'poll/answerSequence',
 		}),
 
 		isVotable() {
 			return this.isActive
 				&& this.isValidUser
-				&& !this.closed
+				&& !this.isPollClosed
 				&& !this.option.locked
 		},
 
@@ -87,10 +87,10 @@ export default {
 
 		iconAnswer() {
 			if (this.answer === 'no') {
-				return (this.closed && this.option.confirmed) || this.isActive ? 'no' : ''
+				return (this.isPollClosed && this.option.confirmed) || this.isActive ? 'no' : ''
 			}
 			if (this.answer === '') {
-				return (this.closed && this.option.confirmed) ? 'no' : ''
+				return (this.isPollClosed && this.option.confirmed) ? 'no' : ''
 			}
 			return this.answer
 		},

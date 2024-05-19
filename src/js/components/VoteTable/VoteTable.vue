@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<div class="vote-table" :class="[viewMode, { closed: closed }]">
+	<div class="vote-table" :class="[viewMode, { closed: isPollClosed }]">
 		<div class="vote-table__users">
 			<VoteMenu />
 
@@ -40,7 +40,7 @@
 
 			<div v-if="proposalsExist" class="owner" />
 
-			<div v-if="permissions.edit && closed" class="confirm" />
+			<div v-if="permissions.edit && isPollClosed" class="confirm" />
 		</div>
 
 		<TransitionGroup is="div"
@@ -84,12 +84,12 @@ export default {
 
 	computed: {
 		...mapState({
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 			currentUser: (state) => state.poll.acl.currentUser,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			participants: 'poll/safeParticipants',
 			options: 'options/rankedOptions',
 			proposalsExist: 'options/proposalsExist',

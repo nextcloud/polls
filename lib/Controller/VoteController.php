@@ -71,7 +71,7 @@ class VoteController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
-		return $this->response(fn () => ['deleted' => $this->voteService->deletUserFromPoll($pollId, $userId)]);
+		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId)]);
 	}
 
 	/**
@@ -81,6 +81,6 @@ class VoteController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
-		return $this->response(fn () => ['deleted' => $this->voteService->deletUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
+		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
 	}
 }

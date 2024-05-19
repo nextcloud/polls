@@ -2,10 +2,12 @@
 All notable changes to this project will be documented in this file.
 ##
 ## [7.1.0] - tbd
+###  !!! changed API structure, please refer to the documentation
 ### Fix
  - fixed counting of orphaned votes
 ### Changes
  - mainly performance improvements
+ - Changed API structure for polls, please refer to the documentation
 ### Performance
  - Added an option to allow to add polls to the navigation (default)
  - Limited polls inside the navigation to 6 items

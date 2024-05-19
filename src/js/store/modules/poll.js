@@ -29,42 +29,61 @@ import { PollsAPI, PublicAPI } from '../../Api/index.js'
 const defaultPoll = () => ({
 	id: 0,
 	type: 'datePoll',
-	title: '',
-	description: '',
 	descriptionSafe: '',
-	created: 0,
-	expire: 0,
-	deleted: false,
-	access: 'private',
-	anonymous: false,
-	allowComment: false,
-	allowMaybe: false,
-	allowProposals: 'disallow',
-	proposalsExpire: 0,
-	showResults: 'always',
-	hideBookedUp: false,
-	useNo: true,
-	autoReminder: false,
-	revealParticipants: false,
-	limits: {
+	configuration: {
+		title: '',
+		description: '',
+		access: 'private',
+		allowComment: false,
+		allowMaybe: false,
+		allowProposals: 'disallow',
+		anonymous: false,
+		autoReminder: false,
+		expire: 0,
+		hideBookedUp: false,
+		proposalsExpire: 0,
+		showResults: 'always',
+		useNo: true,
 		maxVotesPerOption: 0,
 		maxVotesPerUser: 0,
-	},
-	status: {
-		lastInteraction: 0,
-	},
-	currentUserStatus: {
-		userRole: 'none',
-		isLocked: false,
-		orphanedVotes: 0,
-		yesVotes: 0,
-		countVotes: 0,
 	},
 	owner: {
 		userId: '',
 		displayName: '',
 		isNoUser: false,
 	},
+	status: {
+		lastInteraction: 0,
+		created: 0,
+		deleted: false,
+		expired: false,
+	},
+	currentUserStatus: {
+		userRole: '',
+		isLocked: false,
+		isInvolved: false,
+		isLoggedIn: false,
+		isNoUser: true,
+		isOwner: false,
+		userId: '',
+		orphanedVotes: 0,
+		yesVotes: 0,
+		countVotes: 0,
+		shareToken: '',
+	},
+	permissions: {
+		addOptions: false,
+		archive: false,
+		comment: false,
+		delete: false,
+		edit: false,
+		seeResults: false,
+		seeUsernames: false,
+		subscribe: false,
+		view: false,
+		vote: false,
+	},
+	revealParticipants: false,
 })
 
 const namespaced = true
@@ -81,11 +100,11 @@ const mutations = {
 	},
 
 	setProperty(state, payload) {
-		Object.assign(state, payload)
+		Object.assign(state.configuration, payload)
 	},
 
 	setLimit(state, payload) {
-		Object.assign(state.limits, payload)
+		Object.assign(state.configuration, payload)
 	},
 
 	setDescriptionSafe(state, payload) {
@@ -123,20 +142,20 @@ const getters = {
 		return t('polls', 'Date poll')
 	},
 
-	answerSequence: (state, getters, rootState) => {
-		const noString = rootState.poll.useNo ? 'no' : ''
-		if (state.allowMaybe) {
+	answerSequence: (state) => {
+		const noString = state.configuration.useNo ? 'no' : ''
+		if (state.configuration.allowMaybe) {
 			return [noString, 'yes', 'maybe']
 		}
 		return [noString, 'yes']
 
 	},
 
-	participants: (state, getters, rootState) => {
+	participants: (state, getters) => {
 		const participants = getters.participantsVoted
 
 		// add current user, if not among participants and voting is allowed
-		if (!participants.find((participant) => participant.userId === state.acl.currentUser.userId) && state.acl.currentUser.userId && state.acl.permissions.vote) {
+		if (!participants.find((participant) => participant.userId === state.acl.currentUser.userId) && state.acl.currentUser.userId && state.permissions.vote) {
 			participants.push({
 				userId: state.acl.currentUser.userId,
 				displayName: state.acl.currentUser.displayName,
@@ -148,7 +167,7 @@ const getters = {
 	},
 
 	safeParticipants: (state, getters) => {
-		if (getters.safeTable) {
+		if (getters.getSafeTable) {
 			return [{
 				userId: state.acl.currentUser.userId,
 				displayName: state.acl.currentUser.displayName,
@@ -162,19 +181,19 @@ const getters = {
 		vote.user
 	))),
 
-	proposalsOptions: () => [
+	getProposalsOptions: () => [
 		{ value: 'disallow', label: t('polls', 'Disallow proposals') },
 		{ value: 'allow', label: t('polls', 'Allow proposals') },
 	],
 
-	displayResults: (state, getters) => state.showResults === 'always' || (state.showResults === 'closed' && !getters.closed),
-	proposalsAllowed: (state) => state.allowProposals === 'allow' || state.allowProposals === 'review',
-	proposalsOpen: (state, getters) => getters.proposalsAllowed && !getters.proposalsExpired,
-	proposalsExpired: (state, getters) => getters.proposalsAllowed && state.proposalsExpire && moment.unix(state.proposalsExpire).diff() < 0,
-	proposalsExpirySet: (state, getters) => getters.proposalsAllowed && state.proposalsExpire,
-	proposalsExpireRelative: (state) => moment.unix(state.proposalsExpire).fromNow(),
+	displayResults: (state, getters) => state.configuration.showResults === 'always' || (state.configuration.showResults === 'closed' && !getters.closed),
+	isProposalAllowed: (state) => state.configuration.allowProposals === 'allow' || state.configuration.allowProposals === 'review',
+	isProposalOpen: (state, getters) => getters.isProposalAllowed && !getters.isProposalExpired,
+	isProposalExpired: (state, getters) => getters.isProposalAllowed && state.configuration.proposalsExpire && moment.unix(state.configuration.proposalsExpire).diff() < 0,
+	isProposalExpirySet: (state, getters) => getters.isProposalAllowed && state.configuration.proposalsExpire,
+	proposalsExpireRelative: (state) => moment.unix(state.configuration.proposalsExpire).fromNow(),
 	isClosed: (state) => (state.expire > 0 && moment.unix(state.expire).diff() < 1000),
-	safeTable: (state, getters, rootState) => !state.revealParticipants && getters.countCells > rootState.settings.user.performanceThreshold,
+	getSafeTable: (state, getters, rootState) => !state.revealParticipants && getters.countCells > rootState.settings.user.performanceThreshold,
 	countParticipants: (state, getters) => getters.participants.length,
 	countHiddenParticipants: (state, getters) => getters.participants.length - getters.safeParticipants.length,
 	countSafeParticipants: (state, getters) => getters.safeParticipants.length,
@@ -201,8 +220,8 @@ const actions = {
 				return
 			}
 			context.commit('switchSafeTable', false)
-			context.commit('set', response.data)
-			context.commit('acl/set', response.data)
+			context.commit('set', { poll: response.data.poll })
+			context.commit('acl/set', { acl: response.data.acl })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error loading poll', { error: e })
@@ -212,7 +231,7 @@ const actions = {
 
 	async add(context, payload) {
 		try {
-			const response = await PollsAPI.addPoll(payload.type, payload.title)
+			const response = await PollsAPI.addPoll(payload.type, payload.configuration.title)
 			return response
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
@@ -225,9 +244,9 @@ const actions = {
 
 	async update(context) {
 		try {
-			const response = await PollsAPI.updatePoll(context.state)
-			context.commit('set', response.data)
-			context.commit('acl/set', response.data)
+			const response = await PollsAPI.updatePoll(context.state.id, context.state.configuration)
+			context.commit('set', { poll: response.data.poll })
+			context.commit('acl/set', { acl: response.data.acl })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error updating poll:', { error: e.response }, { poll: context.state })

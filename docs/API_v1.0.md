@@ -49,32 +49,57 @@ Example calls:
 ```
 
 ### Update poll
-Send the full or a partial structure.
-`expire' field is set to 0 to make it an endless poll (without an expiration date). This field can be set to a date in the future to automatically close the poll on that date.
-A poll can be closed immediately by using the endpoint `poll/{pollId}/close` and reopened by using `poll/{pollId}/reopen` or by setting `expire` to 0.
+Send the full or a partial structure of "configuration" (see return strucure below).
+`expire` field is set to 0 to make it an endless poll (without an expiration date). This field can be set to a date in the future to automatically close the poll on that date.
+A poll can be closed immediately by using the endpoint `poll/{pollId}/close` or by setting `expire` to a negative number and reopened by using `poll/{pollId}/reopen` or by setting `expire` to 0.
 ```json
 {
     "poll": {
         "title": "Changed Title",
         "description": "Updated description",
-        "expire": 1,
+        "expire": 0,
         "access": "private",
         "anonymous": true,
         "allowMaybe": true,
         "allowComment": true,
         "allowProposals": true,
-        "showResults": "never"
-    }
+        "showResults": "never",
+		"autoReminder": false,
+		"hideBookedUp": false,
+		"proposalsExpire": 0,
+		"useNo": true,
+		"maxVotesPerOption": 0,
+		"maxVotesPerUser": 0
+   }
 }
 ```
 ## Return value
 A poll newly created will look like this.
+#### Notice: Only the attributes of the "configuration" section are changeable.
+
 ```json
 {
 	"poll": {
-		"title": "New Poll",
-		"description": "",
-		"descriptionSafe": "",
+		"id": 1,
+		"type": "datePoll",
+	    "configuration": {
+			"title": "New Poll",
+			"description": "Description of poll",
+			"access":"private",
+			"allowComment":false,
+			"allowMaybe":false,
+			"allowProposals":"",
+			"anonymous":false,
+			"autoReminder":false,
+			"expire":0,
+			"hideBookedUp":false,
+			"proposalsExpire":0,
+			"showResults":"always",
+			"useNo":false,
+			"maxVotesPerOption":0,
+			"maxVotesPerUser":0
+		},
+		"descriptionSafe": "Description of poll",
 		"owner": {
 			"userId": "username",
 			"displayName": "Username",
@@ -93,33 +118,37 @@ A poll newly created will look like this.
 			"icon":"icon-user",
 			"categories":[]
 		},
-		"access":"private",
-		"allowComment":false,
-		"allowMaybe":false,
-		"allowProposals":"",
-		"anonymous":false,
-		"autoReminder":false,
-		"created":1714078369,
-		"deleted":false,
-		"expire":0,
-		"hideBookedUp":false,
-		"proposalsExpire":0,
-		"showResults":"always",
-		"useNo":false,
-		"limits": {
-			"maxVotesPerOption":0,
-			"maxVotesPerUser":0
-		},
 		"status": {
-			"lastInteraction":1714078369
+			"lastInteraction":1714078369,
+			"created":1714078369,
+			"deleted":false,
+			"expired": false,
+			"relevandThreshold" : 1714078369
 		},
 		"currentUserStatus": {
 			"userRole":"owner",
 			"isLocked":false,
+		    "isLoggedIn": true,
+			"isNoUser": false,
+			"isOwner": true,
+			"userId": "username",
 			"orphanedVotes":0,
 			"yesVotes":0,
-			"countVotes":0
-		}
+			"countVotes":0,
+			"shareToken": ""
+		},
+		"permissions": {
+			"addOptions": true,
+			"archive": true,
+			"comment": true,
+			"delete": true,
+			"edit": true,
+			"seeResults": true,
+			"seeUsernames": true,
+			"subscribe": true,
+			"view": true,
+			"vote": true
+			}
 	}
 }
 ```

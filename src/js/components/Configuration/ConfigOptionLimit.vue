@@ -57,12 +57,12 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		useOptionLimit: {
 			get() {
-				return (this.poll.limits.maxVotesPerOption !== 0)
+				return (this.pollConfiguration.maxVotesPerOption !== 0)
 			},
 			set(value) {
 				this.$store.commit('poll/setLimit', { maxVotesPerOption: value ? 1 : 0 })
@@ -72,7 +72,7 @@ export default {
 
 		maxVotesPerOption: {
 			get() {
-				return this.poll.limits.maxVotesPerOption
+				return this.pollConfiguration.maxVotesPerOption
 			},
 			set(value) {
 				if (!this.useOptionLimit) {
@@ -87,7 +87,7 @@ export default {
 
 		hideBookedUp: {
 			get() {
-				return (this.poll.hideBookedUp)
+				return (this.pollConfiguration.hideBookedUp)
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { hideBookedUp: value })

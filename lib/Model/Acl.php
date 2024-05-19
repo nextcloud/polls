@@ -57,7 +57,7 @@ class Acl implements JsonSerializable {
 	public function jsonSerialize(): array {
 		return	[
 			'currentUser' => $this->userSession->getUser(),
-			'permissions' => $this->getPermissionsArray(),
+			'appPermissions' => $this->getPermissionsArray(),
 		];
 	}
 
@@ -94,10 +94,10 @@ class Acl implements JsonSerializable {
 	}
 
 	/**
-	 * Shortcut for currentUser->userId
+	 * Shortcut for UserSession::getCurrentUserId()
 	 */
-	public function getUserId(): string {
-		return $this->getCurrentUser()->getId();
+	public function getCurrentUserId(): string {
+		return $this->userSession->getCurrentUserId();
 	}
 
 	/**

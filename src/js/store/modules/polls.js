@@ -27,6 +27,19 @@ import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash'
 import { PollsAPI } from '../../Api/index.js'
 
+const filterRelevantCondition = (poll, relevantOffset) => !poll.status.deleted
+	&& moment().diff(moment.unix(poll.status.relevantThreshold), 'days') < relevantOffset
+	&& (poll.currentUserStatus.isInvolved || (poll.permissions.view && poll.configuration.access !== 'open'))
+
+const filterMyPolls = (poll) => !poll.status.deleted && poll.currentUserStatus.isOwner
+const filterPrivatePolls = (poll) => !poll.status.deleted && poll.configuration.access === 'private'
+const filterParticipatedPolls = (poll) => !poll.status.deleted && poll.currentUserStatus.countVotes > 0
+const filterOpenPolls = (poll) => !poll.status.deleted && poll.configuration.access === 'open'
+const filterAllPolls = (poll) => !poll.status.deleted
+const filterClosedPolls = (poll) => !poll.status.deleted && poll.configuration.expire && moment.unix(poll.configuration.expire).diff() < 0
+const filterArchivedPolls = (poll) => poll.status.deleted
+
+		
 const state = {
 	list: [],
 	meta: {
@@ -53,13 +66,7 @@ const state = {
 			description: t('polls', 'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to.'),
 			pinned: false,
 			createDependent: false,
-			filterCondition(poll) {
-				return !poll.deleted
-					&& (poll.relevantThreshold > (moment().unix()))
-					&& (poll.currentUser.isInvolved
-						|| (poll.permissions.allowView && poll.access !== 'open')
-					)
-			},
+			filterCondition: (poll, relevantOffset) => filterRelevantCondition(poll, relevantOffset),
 		},
 		{
 			id: 'my',
@@ -68,9 +75,7 @@ const state = {
 			description: t('polls', 'Your polls (in which you are the owner).'),
 			pinned: false,
 			createDependent: true,
-			filterCondition(poll) {
-				return !poll.deleted && poll.currentUser.isOwner
-			},
+			filterCondition: (poll) => filterMyPolls(poll),
 		},
 		{
 			id: 'private',
@@ -79,9 +84,7 @@ const state = {
 			description: t('polls', 'All private polls, to which you have access.'),
 			pinned: false,
 			createDependent: true,
-			filterCondition(poll) {
-				return !poll.deleted && poll.access === 'private'
-			},
+			filterCondition: (poll) => filterPrivatePolls(poll),
 		},
 		{
 			id: 'participated',
@@ -90,9 +93,7 @@ const state = {
 			description: t('polls', 'All polls, where you placed a vote.'),
 			pinned: false,
 			createDependent: false,
-			filterCondition(poll) {
-				return !poll.deleted && poll.currentUser.hasVoted
-			},
+			filterCondition: (poll) => filterParticipatedPolls(poll),
 		},
 		{
 			id: 'open',
@@ -101,9 +102,7 @@ const state = {
 			description: t('polls', 'A complete list with all openly accessible polls on this site, regardless who is the owner.'),
 			pinned: false,
 			createDependent: true,
-			filterCondition(poll) {
-				return !poll.deleted && poll.access === 'open'
-			},
+			filterCondition: (poll) => filterOpenPolls(poll),
 		},
 		{
 			id: 'all',
@@ -112,9 +111,7 @@ const state = {
 			description: t('polls', 'All polls, where you have access to.'),
 			pinned: false,
 			createDependent: false,
-			filterCondition(poll) {
-				return !poll.deleted
-			},
+			filterCondition: (poll) => filterAllPolls(poll),
 		},
 		{
 			id: 'closed',
@@ -123,11 +120,7 @@ const state = {
 			description: t('polls', 'All closed polls, where voting is disabled.'),
 			pinned: false,
 			createDependent: false,
-			filterCondition(poll) {
-				return !poll.deleted
-                    && poll.expire > 0
-                    && moment.unix(poll.expire).diff() < 0
-			},
+			filterCondition: (poll) => filterClosedPolls(poll),
 		},
 		{
 			id: 'archived',
@@ -136,9 +129,7 @@ const state = {
 			description: t('polls', 'Your archived polls are only accessible to you.'),
 			pinned: true,
 			createDependent: true,
-			filterCondition(poll) {
-				return poll.deleted
-			},
+			filterCondition: (poll) => filterArchivedPolls(poll),
 		},
 	],
 }
@@ -187,26 +178,25 @@ const getters = {
 		}
 		return state.categories.filter((category) => (!category.createDependent))
 	},
-
 	// activePolls: (state, getters) => getters.filtered('all').slice(0, getters.loaded),
 	count: (state, getters) => getters.filteredRaw.length,
-	loaded: (state, getters) => state.meta.loadedChunks * state.meta.chunksize,
-	datePolls: (state) => state.list.filter((poll) => (poll.type === 'datePoll' && !poll.deleted)),
+	loaded: (state) => state.meta.loadedChunks * state.meta.chunksize,
+	datePolls: (state) => state.list.filter((poll) => (poll.type === 'datePoll' && !poll.status.deleted)),
 	currentCategory: (state) => state.categories.find((category) => category.id === state.meta.currentCategoryId),
 
-	filteredRaw: (state, getters) => orderBy(
-		state.list.filter((poll) => getters.currentCategory.filterCondition(poll)),
+	filteredRaw: (state, getters, rootState) => orderBy(
+		state.list.filter((poll) => getters.currentCategory.filterCondition(poll, rootState.settings.relevantPollsOffset)),
 		[state.sort.by],
 		[state.sort.reverse ? 'desc' : 'asc'],
 	),
 
 	filtered: (state, getters) => getters.filteredRaw.slice(0, getters.loaded),
 
-	countByCategory: (state) => (filterId) => state.list.filter((poll) => state.categories.find((category) => category.id === filterId).filterCondition(poll)).length,
-	filteredByCategory: (state, getters) => (filterId) => {
+	countByCategory: (state, getters, rootState) => (filterId) => state.list.filter((poll) => state.categories.find((category) => category.id === filterId).filterCondition(poll, rootState.settings.relevantPollsOffset)).length,
+	filteredByCategory: (state, getters, rootState) => (filterId) => {
 		const currentCategory = state.categories.find((category) => category.id === filterId)
 		return orderBy(
-			state.list.filter((poll) => currentCategory.filterCondition(poll)),
+			state.list.filter((poll) => currentCategory.filterCondition(poll, rootState.settings.relevantPollsOffset)),
 			[state.sort.by],
 			[state.sort.reverse ? 'desc' : 'asc'],
 		).slice(0, state.meta.maxPollsInNavigation)

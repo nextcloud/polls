@@ -26,11 +26,8 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use Closure;
-use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
-use OCA\Polls\Model\AclLegacy as Acl;
-use OCA\Polls\UserSession;
 use OCP\AppFramework\Controller;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -44,9 +41,6 @@ class BasePublicController extends Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		protected Acl $acl,
-		protected ShareMapper $shareMapper,
-		protected UserSession $userSession,
 	) {
 		parent::__construct($appName, $request);
 	}

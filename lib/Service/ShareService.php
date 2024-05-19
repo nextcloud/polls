@@ -25,6 +25,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
@@ -43,7 +45,7 @@ use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
-use OCA\Polls\Model\AclLegacy as Acl;
+use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
@@ -70,6 +72,7 @@ class ShareService {
 		private MailService $mailService,
 		private Acl $acl,
 		private NotificationService $notificationService,
+		private PollMapper $pollMapper,
 		private UserMapper $userMapper,
 		private UserSession $userSession,
 	) {
@@ -85,7 +88,7 @@ class ShareService {
 	 */
 	public function list(int $pollId): array {
 		try {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+			$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
 			$this->shares = $this->shareMapper->findByPoll($pollId);
 		} catch (ForbiddenException $e) {
 			return [];
@@ -105,7 +108,7 @@ class ShareService {
 	 */
 	public function listNotInvited(int $pollId): array {
 		try {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+			$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
 			$this->shares = $this->shareMapper->findByPollNotInvited($pollId);
 		} catch (ForbiddenException $e) {
 			return [];
@@ -172,7 +175,7 @@ class ShareService {
 	 */
 	public function setType(string $token, string $type): Share {
 		$this->share = $this->shareMapper->findByToken($token);
-		$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+		$this->pollMapper->find($this->share->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
 
 		// ATM only type user can transform to type admin and vice versa
 		if (($type === Share::TYPE_ADMIN && $this->share->getType() === Share::TYPE_USER)
@@ -191,7 +194,7 @@ class ShareService {
 	public function setPublicPollEmail(string $token, string $value): Share {
 		try {
 			$this->share = $this->shareMapper->findByToken($token);
-			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+			$this->pollMapper->find($this->share->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
 			$this->share->setPublicPollEmail($value);
 			$this->share = $this->shareMapper->update($this->share);
 		} catch (ShareNotFoundException $e) {
@@ -254,7 +257,7 @@ class ShareService {
 		$this->share = $this->shareMapper->findByToken($token);
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
-			$this->acl->setPollId($this->share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+			$this->pollMapper->find($this->share->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
 			$this->share->setLabel($label);
 
 			// overwrite any possible displayName
@@ -363,7 +366,7 @@ class ShareService {
 	 * @param bool $restore Set true, if share is to be restored
 	 */
 	public function delete(Share $share, bool $restore = false): Share {
-		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+		$this->pollMapper->find($share->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
 
 		$share->setDeleted($restore ? 0 : time());
 		$this->shareMapper->update($share);
@@ -387,8 +390,7 @@ class ShareService {
 	 * @param bool $unlock Set true, if share is to be unlocked
 	 */
 	private function lock(Share $share, bool $unlock = false): Share {
-
-		$this->acl->setPollId($share->getPollId(), Acl::PERMISSION_POLL_EDIT);
+		$this->pollMapper->find($share->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
 
 		$share->setLocked($unlock ? 0 : time());
 		$this->shareMapper->update($share);
@@ -502,7 +504,7 @@ class ShareService {
 		string $displayName = '',
 		string $emailAddress = ''
 	): Share {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
+		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
 
 
 		if ($type === UserBase::TYPE_PUBLIC) {

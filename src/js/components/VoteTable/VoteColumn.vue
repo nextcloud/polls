@@ -22,10 +22,10 @@
 
 <template>
 	<div :class="componentClass">
-		<OptionItem :option="option" :poll-type="poll.type" :display="poll.type === 'datePoll' ? 'dateBox' : 'textBox'" />
+		<OptionItem :option="option" :poll-type="pollType" :display="pollType === 'datePoll' ? 'dateBox' : 'textBox'" />
 
 		<Counter v-if="permissions.seeResults"
-			:show-maybe="poll.allowMaybe"
+			:show-maybe="permissions.allowMaybe"
 			:option="option" />
 
 		<CalendarPeek v-if="showCalendarPeek"
@@ -42,9 +42,9 @@
 			:avatar-size="24"
 			class="owner" />
 
-		<FlexSpacer v-if="poll.type === 'datePoll' && viewMode === 'list-view'" />
+		<FlexSpacer v-if="pollType === 'datePoll' && viewMode === 'list-view'" />
 
-		<div v-if="permissions.edit && closed" class="action confirm">
+		<div v-if="permissions.edit && isPollClosed" class="action confirm">
 			<NcButton :title="confirmButtonCaption"
 				:aria-label="confirmButtonCaption"
 				type="tertiary"
@@ -103,14 +103,14 @@ export default {
 
 	computed: {
 		...mapState({
-			permissions: (state) => state.poll.acl.permissions,
-			poll: (state) => state.poll,
+			permissions: (state) => state.poll.permissions,
+			pollType: (state) => state.poll.type,
 			settings: (state) => state.settings.user,
 			currentUser: (state) => state.poll.acl.currentUser,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			getVote: 'votes/getVote',
 			participants: 'poll/safeParticipants',
 			proposalsExist: 'options/proposalsExist',
@@ -122,7 +122,7 @@ export default {
 				classList.push('locked')
 			}
 
-			if (this.option.confirmed && this.closed) {
+			if (this.option.confirmed && this.isPollClosed) {
 				classList.push('confirmed')
 			}
 
@@ -143,7 +143,7 @@ export default {
 		},
 
 		showCalendarPeek() {
-			return this.poll.type === 'datePoll' && this.getCurrentUser() && this.settings.calendarPeek
+			return this.pollType === 'datePoll' && this.getCurrentUser() && this.settings.calendarPeek
 		},
 	},
 }

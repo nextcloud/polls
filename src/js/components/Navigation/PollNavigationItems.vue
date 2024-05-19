@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcAppNavigationItem :name="poll.title" :to="{name: 'vote', params: {id: poll.id}}" :class="{ closed: closed }">
+	<NcAppNavigationItem :name="poll.configuration.title" :to="{name: 'vote', params: {id: poll.id}}" :class="{ closed: isPollClosed }">
 		<template #icon>
 			<TextPollIcon v-if="poll.type === 'textPoll'" />
 			<DatePollIcon v-else />
@@ -33,7 +33,7 @@
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="poll.permissions.edit && !poll.deleted"
+			<NcActionButton v-if="poll.permissions.edit && !poll.status.deleted"
 				:name="t('polls', 'Archive poll')"
 				@click="$emit('toggle-archive')">
 				<template #icon>
@@ -41,7 +41,7 @@
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="poll.permissions.edit && poll.deleted"
+			<NcActionButton v-if="poll.permissions.edit && poll.status.deleted"
 				:name="t('polls', 'Restore poll')"
 				@click="$emit('toggle-archive')">
 				<template #icon>
@@ -49,7 +49,7 @@
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="poll.permissions.edit && poll.deleted"
+			<NcActionButton v-if="poll.permissions.edit && poll.status.deleted"
 				class="danger"
 				:name="t('polls', 'Delete poll')"
 				@click="$emit('delete-poll')">
@@ -99,7 +99,7 @@ export default {
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 		}),
 	},
 }

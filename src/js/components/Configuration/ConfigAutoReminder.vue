@@ -60,12 +60,12 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		autoReminder: {
 			get() {
-				return !!this.poll.autoReminder
+				return !!this.pollConfiguration.autoReminder
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { autoReminder: +value })

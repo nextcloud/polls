@@ -71,7 +71,7 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		detectAllDay() {
@@ -86,25 +86,25 @@ export default {
 
 		sortedEvents() {
 			const sortedEvents = [...this.events]
-			sortedEvents.push(this.thisOption)
+			sortedEvents.push(this.currentOption)
 			return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
 		},
 
-		thisOption() {
+		currentOption() {
 			return {
 				id: this.option.id,
 				UID: this.option.id,
-				calendarUri: this.poll.uri,
+				calendarUri: '',
 				calendarKey: 0,
 				calendarName: 'Polls',
 				displayColor: 'transparent',
 				allDay: this.detectAllDay.allDay,
-				description: this.poll.description,
+				description: this.pollConfiguration.description,
 				start: this.option.timestamp,
 				location: '',
 				end: this.option.timestamp + this.option.duration,
 				status: 'self',
-				summary: this.poll.title,
+				summary: this.pollConfiguration.title,
 				type: this.detectAllDay.type,
 			}
 		},

@@ -59,11 +59,11 @@
 
 		<ConfigBox :name="t('polls', 'Poll closing status')">
 			<template #icon>
-				<LockedIcon v-if="closed" />
+				<LockedIcon v-if="isPollClosed" />
 				<UnlockedIcon v-else />
 			</template>
 			<ConfigClosing @change="writePoll" />
-			<ConfigAutoReminder v-if="pollType === 'datePoll' || hasEpiration"
+			<ConfigAutoReminder v-if="pollType === 'datePoll' || hasExpiration"
 				@change="writePoll" />
 		</ConfigBox>
 
@@ -166,16 +166,16 @@ export default {
 
 	computed: {
 		...mapState({
-			isPollArchived: (state) => state.poll.deleted,
-			pollType: (state) => state.poll.type,
 			pollId: (state) => state.poll.id,
-			hasEpiration: (state) => state.poll.expire,
+			pollType: (state) => state.poll.type,
+			isPollArchived: (state) => state.poll.status.deleted,
+			hasExpiration: (state) => state.poll.configuration.expire,
+			showResults: (state) => state.poll.configuration.showResults,
 			currentUser: (state) => state.poll.acl.currentUser,
-			showResults: (state) => state.poll.showResults,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			hasVotes: 'votes/hasVotes',
 		}),
 	},

@@ -22,7 +22,7 @@
 
 <template>
 	<div :style="cssVar">
-		<OptionsTextAdd v-if="!closed" />
+		<OptionsTextAdd v-if="!isPollClosed" />
 		<draggable v-if="countOptions"
 			v-model="reOrderedOptions"
 			v-bind="dragOptions"
@@ -41,7 +41,7 @@
 							class="owner" />
 					</template>
 					<template v-if="permissions.edit" #actions>
-						<NcActions v-if="!closed" class="action">
+						<NcActions v-if="!isPollClosed" class="action">
 							<NcActionButton v-if="!option.deleted"
 								:name="t('polls', 'Delete option')"
 								@click="deleteOption(option)">
@@ -56,7 +56,7 @@
 									<RestoreIcon />
 								</template>
 							</NcActionButton>
-							<NcActionButton v-if="!option.deleted && !closed"
+							<NcActionButton v-if="!option.deleted && !isPollClosed"
 								:name="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 								type="tertiary"
 								@click="confirmOption(option)">
@@ -129,11 +129,11 @@ export default {
 	computed: {
 		...mapState({
 			options: (state) => state.options.list,
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			countOptions: 'options/count',
 		}),
 

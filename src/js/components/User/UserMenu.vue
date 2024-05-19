@@ -183,7 +183,7 @@ export default {
 
 	computed: {
 		...mapState({
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 			share: (state) => state.share,
 			subscribed: (state) => state.subscription.subscribed,
 			emailAddress: (state) => state.share.user.emailAddress,

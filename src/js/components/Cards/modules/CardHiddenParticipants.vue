@@ -31,7 +31,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
 import ActionSwitchSafeTable from '../../Actions/modules/ActionSwitchSafeTable.vue'
 
@@ -49,10 +49,6 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollType: (state) => state.poll.type,
-		}),
-
 		...mapGetters({
 			countHiddenParticipants: 'poll/countHiddenParticipants',
 		}),

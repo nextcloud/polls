@@ -27,7 +27,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\Exception;
-use OCA\Polls\Model\AclLegacy as Acl;
+use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
@@ -90,9 +90,8 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function getAcl(int $pollId): JSONResponse {
+	public function getAcl(): JSONResponse {
 		try {
-			$this->acl->setPollId($pollId);
 			return new JSONResponse(['acl' => $this->acl], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {
 			return new JSONResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
@@ -120,15 +119,13 @@ class PollApiController extends BaseApiController {
 	/**
 	 * Update poll configuration
 	 * @param int $pollId Poll id
-	 * @param array $poll poll config
+	 * @param array $pollConfiguration poll config
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function update(int $pollId, array $poll): JSONResponse {
 		try {
-			$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-			
 			return new JSONResponse([
 				'poll' => $this->pollService->update($pollId, $poll),
 				'acl' => $this->acl,

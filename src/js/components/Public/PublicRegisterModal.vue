@@ -132,7 +132,6 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
 			share: (state) => state.share,
 			privacyUrl: (state) => state.appSettings.usePrivacyUrl,
 			imprintUrl: (state) => state.appSettings.useImprintUrl,
