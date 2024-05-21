@@ -30,6 +30,7 @@ OC.L10N.register(
     "Login" : "Autorizēties",
     "Preview" : "Priekšskatīt",
     "Privacy policy link:" : "Privātuma politikas saite:",
+    "Show QR code" : "Parādīt kvadrātkodu",
     "Restore share" : "Atjaunot koplietojumu",
     "Shares" : "Koplietots",
     "No activity" : "Nav nekādas aktivitātes",
