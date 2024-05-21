@@ -140,6 +140,7 @@
   </file>
   <file src="lib/Db/Poll.php">
     <PossiblyUnusedMethod>
+      <code><![CDATA[getIsCurrentUserLocked]]></code>
       <code><![CDATA[setUserId]]></code>
     </PossiblyUnusedMethod>
     <PossiblyUnusedProperty>
@@ -149,6 +150,9 @@
       <code><![CDATA[$allowProposals]]></code>
       <code><![CDATA[$anonymous]]></code>
       <code><![CDATA[$created]]></code>
+      <code><![CDATA[$currentUserCountOrphanedVotes]]></code>
+      <code><![CDATA[$currentUserCountVotes]]></code>
+      <code><![CDATA[$currentUserCountVotesYes]]></code>
       <code><![CDATA[$deleted]]></code>
       <code><![CDATA[$expire]]></code>
       <code><![CDATA[$hideBookedUp]]></code>
