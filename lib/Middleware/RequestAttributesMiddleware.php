@@ -3,7 +3,6 @@
 namespace OCA\Polls\Middleware;
 
 use OCA\Polls\AppConstants;
-use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Middleware;
 use OCP\IRequest;
 use OCP\ISession;
@@ -40,25 +39,15 @@ class RequestAttributesMiddleware extends Middleware {
 			$this->session->set(AppConstants::CLIENT_TZ, $clientTimeZone);
 		}
 
-		if (!$this->hasAttribute($reflectionMethod, PublicPage::class)) {
+		if (!$this->hasAttribute($reflectionMethod, 'PublicPage')) {
 			// authenticated session don't use share tokens
 			$this->session->remove(AppConstants::SESSION_KEY_SHARE_TOKEN);
 		}
 
 	}
-	/**
-	 * @template T
-	 *
-	 * @param ReflectionMethod $reflectionMethod
-	 * @param class-string<T> $attributeClass
-	 * @return boolean
-	 */
-	protected function hasAttribute(ReflectionMethod $reflectionMethod, string $attributeClass): bool {
-		if (empty($reflectionMethod->getAttributes($attributeClass))) {
-			return false;
-		}
-		
-		return true;
+
+	protected function hasAttribute(ReflectionMethod $reflectionMethod, string $attribute): bool {
+		return preg_match('/\*\s+@'.preg_quote($attribute, '/').'\s+/', $reflectionMethod->getDocComment()) === 1;
 	}
 
 }
