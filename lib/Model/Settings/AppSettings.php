@@ -66,6 +66,9 @@ class AppSettings implements JsonSerializable {
 
 	private string $userId = '';
 	
+	/**
+	 * @psalm-suppress PossiblyUnusedMethod used by Dependency Injection
+	 */
 	public function __construct(
 		private IConfig $config,
 		private IGroupManager $groupManager,
