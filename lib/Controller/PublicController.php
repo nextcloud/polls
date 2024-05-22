@@ -104,6 +104,18 @@ class PublicController extends BasePublicController {
 	}
 
 	/**
+	 * get complete poll via token
+	 */
+	#[PublicPage]
+	#[ShareTokenRequired]
+	public function getAcl(): JSONResponse {
+		return $this->response(fn () => [
+			'acl' => $this->acl
+		]);
+	}
+
+
+	/**
 	 * Watch poll for updates
 	 * @param ?int $offset only watch changes after this timestamp
 	 */

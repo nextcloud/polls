@@ -21,6 +21,8 @@
  *
  */
 
+import { UserSettingsAPI, PublicAPI } from '../../Api/index.js'
+
 const defaultAcl = () => ({
 	token: '',
 	currentUser: {
@@ -48,6 +50,14 @@ const defaultAcl = () => ({
 		seeMailAddresses: false,
 		pollDownload: false,
 	},
+	appSettings: {
+		usePrivacyUrl: '',
+		useImprintUrl: '',
+		useLogin: false,
+		useActivity: false,
+		navigationPollsInList: false,
+		updateType: 'noPolling',
+	}
 })
 
 const namespaced = true
@@ -64,5 +74,22 @@ const mutations = {
 	},
 
 }
-
-export default { namespaced, state, mutations }
+const actions = {
+	async get(context) {
+		try {
+			let response = null
+			if (context.rootState.route.name === 'publicVote') {
+				response = await PublicAPI.getAcl(context.rootState.route.params.token)
+			} else {
+				response = await UserSettingsAPI.getAcl()
+			}
+			// context.commit('reset')
+			context.commit('set', { acl: response.data.acl })
+		} catch (e) {
+			if (e?.code === 'ERR_CANCELED') return
+			context.commit('reset')
+			throw e
+		}
+	},
+}
+export default { namespaced, state, mutations, actions }

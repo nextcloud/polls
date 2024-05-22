@@ -187,7 +187,7 @@ export default {
 			share: (state) => state.share,
 			subscribed: (state) => state.subscription.subscribed,
 			emailAddress: (state) => state.share.user.emailAddress,
-			displayName: (state) => state.poll.acl.currentUser.displayName,
+			displayName: (state) => state.acl.currentUser.displayName,
 		}),
 
 		hasCookie() {

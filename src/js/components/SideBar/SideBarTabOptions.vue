@@ -104,7 +104,7 @@ export default {
 		}),
 		...mapState({
 			pollType: (state) => state.poll.type,
-			currentUser: (state) => state.poll.acl.currentUser,
+			currentUser: (state) => state.acl.currentUser,
 		}),
 	},
 }

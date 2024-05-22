@@ -31,6 +31,7 @@ use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
+use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Model\Acl as Acl;
 use OCP\EventDispatcher\IEventDispatcher;
 
@@ -53,6 +54,11 @@ class CommentService {
 	 * @return Comment[]
 	 */
 	public function list(int $pollId): array {
+		try {
+			$this->pollMapper->find($pollId)->request(Poll::PERMISSION_COMMENT_ADD);
+		} catch (Exception $e) {
+			return [];
+		}
 		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_COMMENT_ADD);
 
 		$comments = $this->commentMapper->findByPoll($pollId);

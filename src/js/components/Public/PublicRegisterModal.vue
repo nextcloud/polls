@@ -133,9 +133,9 @@ export default {
 	computed: {
 		...mapState({
 			share: (state) => state.share,
-			privacyUrl: (state) => state.appSettings.usePrivacyUrl,
-			imprintUrl: (state) => state.appSettings.useImprintUrl,
-			showLogin: (state) => state.appSettings.useLogin,
+			privacyUrl: (state) => state.acl.appSettings.usePrivacyUrl,
+			imprintUrl: (state) => state.acl.appSettings.useImprintUrl,
+			showLogin: (state) => state.acl.appSettings.useLogin,
 		}),
 
 		registrationIsValid() {

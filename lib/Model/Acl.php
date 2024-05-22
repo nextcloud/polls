@@ -58,6 +58,7 @@ class Acl implements JsonSerializable {
 		return	[
 			'currentUser' => $this->userSession->getUser(),
 			'appPermissions' => $this->getPermissionsArray(),
+			'appSettings' => $this->getAppSettings(),
 		];
 	}
 
@@ -76,7 +77,10 @@ class Acl implements JsonSerializable {
 		};
 	}
 
-	public function getPermissionsArray(): array {
+	/**
+	 * Get all permissions as array
+	 */
+	private function getPermissionsArray(): array {
 		return [
 			'allAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
 			'publicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
@@ -86,6 +90,43 @@ class Acl implements JsonSerializable {
 		];
 	}
 
+	private function getAppSettings(): array {
+		$appSettingsArray = [
+			'usePrivacyUrl' => '',
+			'useImprintUrl' => '',
+			'useLogin' => true,
+			'useActivity' => false,
+			'navigationPollsInList' => false,
+			'updateType' => $this->appSettings->getUpdateType(),
+		];
+
+		if ($this->userSession->getIsLoggedIn()) {
+			return array_merge($appSettingsArray, $this->getInternalAppSettings());
+		}
+
+		return array_merge($appSettingsArray, $this->getPublicAppSettings());
+	}
+
+	/**
+	 * Get public app settings
+	 */
+	private function getPublicAppSettings(): array {
+		return [
+			'usePrivacyUrl' => $this->appSettings->getUsePrivacyUrl(),
+			'useImprintUrl' => $this->appSettings->getUseImprintUrl(),
+			'useLogin' => $this->appSettings->getShowLogin(),
+		];
+	}
+
+	/**
+	 * Get internal app settings
+	 */
+	private function getInternalAppSettings(): array {
+		return [
+			'useActivity' => $this->appSettings->getUseActivity(),
+			'navigationPollsInList' => $this->appSettings->getLoadPollsInNavigation(),
+		];
+	}
 	/**
 	 * loads the current user from the userSession or returns the cached one
 	 */

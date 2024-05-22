@@ -43,7 +43,7 @@ const filterArchivedPolls = (poll) => poll.status.deleted
 const state = {
 	list: [],
 	meta: {
-		currentCategoryId: 'all',
+		currentCategoryId: 'relevant',
 		chunksize: 20,
 		loadedChunks: 1,
 		maxPollsInNavigation: 6,
@@ -134,6 +134,14 @@ const state = {
 	],
 }
 
+const sortColumnsMapping = {
+	created: 'status.created',
+	title: 'configuration.title',
+	access: 'configuration.access',
+	owner: 'owner.displayName',
+	expire: 'configuration.expire',
+}
+
 const namespaced = true
 
 const mutations = {
@@ -158,12 +166,12 @@ const mutations = {
 	},
 
 	setSort(state, payload) {
-		if (state.sort.by === payload.sortBy) {
+		if (state.sort.by === sortColumnsMapping[payload.sortBy]) {
 			state.sort.reverse = !state.sort.reverse
 		} else {
 			state.sort.reverse = true
 		}
-		state.sort.by = payload.sortBy
+		state.sort.by = sortColumnsMapping[payload.sortBy]
 	},
 
 	setPollsPermissions(state, payload) {
@@ -185,18 +193,18 @@ const getters = {
 	currentCategory: (state) => state.categories.find((category) => category.id === state.meta.currentCategoryId),
 
 	filteredRaw: (state, getters, rootState) => orderBy(
-		state.list.filter((poll) => getters.currentCategory.filterCondition(poll, rootState.settings.relevantPollsOffset)),
+		state.list.filter((poll) => getters.currentCategory.filterCondition(poll, rootState.settings.user.relevantOffset)),
 		[state.sort.by],
 		[state.sort.reverse ? 'desc' : 'asc'],
 	),
 
 	filtered: (state, getters) => getters.filteredRaw.slice(0, getters.loaded),
 
-	countByCategory: (state, getters, rootState) => (filterId) => state.list.filter((poll) => state.categories.find((category) => category.id === filterId).filterCondition(poll, rootState.settings.relevantPollsOffset)).length,
+	countByCategory: (state, getters, rootState) => (filterId) => state.list.filter((poll) => state.categories.find((category) => category.id === filterId).filterCondition(poll, rootState.settings.user.relevantOffset)).length,
 	filteredByCategory: (state, getters, rootState) => (filterId) => {
 		const currentCategory = state.categories.find((category) => category.id === filterId)
 		return orderBy(
-			state.list.filter((poll) => currentCategory.filterCondition(poll, rootState.settings.relevantPollsOffset)),
+			state.list.filter((poll) => currentCategory.filterCondition(poll, rootState.settings.user.relevantOffset)),
 			[state.sort.by],
 			[state.sort.reverse ? 'desc' : 'asc'],
 		).slice(0, state.meta.maxPollsInNavigation)

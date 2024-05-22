@@ -25,10 +25,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Service\CalendarService;
+use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Service\PreferencesService;
-use OCA\Polls\UserSession;
-use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -37,44 +36,44 @@ use OCP\IRequest;
 /**
  * @psalm-api
  */
-class PreferencesController extends BaseController {
+class UserApiController extends BaseApiController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private PreferencesService $preferencesService,
-		private CalendarService $calendarService,
-		private UserSession $userSession,
+		private Acl $acl,
 	) {
 		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * Read all preferences
+	 * Get user preferences
 	 */
+	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function get(): JSONResponse {
+	public function getPreferences(): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->get());
 	}
-
+	
 	/**
-	 * Write preferences
-	 * @param array $preferences
+	 * Get user preferences
 	 */
-	#[NoAdminRequired]
-	public function write(array $preferences): JSONResponse {
-		if (!$this->userSession->getIsLoggedIn()) {
-			return new JSONResponse([], Http::STATUS_OK);
-		}
-		return $this->response(fn () => $this->preferencesService->write($preferences));
-	}
-
-	/**
-	 * Read all preferences
-	 */
+	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function getCalendars(): JSONResponse {
-		return new JSONResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
+	public function writePreferences($preferences): JSONResponse {
+		return $this->response(fn () => $this->preferencesService->write($preferences));
+	}
+	
+	/**
+	 * get acl for poll
+	 * @param $pollId Poll id
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function getAcl(): JSONResponse {
+		return $this->response(fn () => ['acl' => $this->acl]);
 	}
 }

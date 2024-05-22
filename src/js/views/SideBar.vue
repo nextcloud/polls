@@ -116,7 +116,7 @@ export default {
 	computed: {
 		...mapState({
 			permissions: (state) => state.poll.permissions,
-			useActivity: (state) => state.appSettings.useActivity,
+			useActivity: (state) => state.acl.appSettings.useActivity,
 		}),
 
 	},

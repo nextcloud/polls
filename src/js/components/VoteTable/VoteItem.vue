@@ -54,7 +54,7 @@ export default {
 
 	computed: {
 		...mapState({
-			currentUser: (state) => state.poll.acl.currentUser,
+			currentUser: (state) => state.acl.currentUser,
 			allowVote: (state) => state.poll.permissions.vote,
 		}),
 

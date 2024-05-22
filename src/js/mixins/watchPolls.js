@@ -43,7 +43,7 @@ export const watchPolls = {
 
 	computed: {
 		...mapState({
-			updateType: (state) => state.appSettings.updateType,
+			updateType: (state) => state.acl.appSettings.updateType,
 		}),
 
 		watchDisabled() {

@@ -90,23 +90,12 @@ export default {
 
 	watch: {
 		$route(to, from) {
-			if (this.$route.name === 'list') {
-				this.setFilter(this.$route.params.type)
-			}
-			this.loadPoll()
+			this.loadContext()
 			this.watchPolls()
 		},
 	},
 
 	created() {
-		this.$store.dispatch('appSettings/get')
-		if (getCurrentUser()) {
-			this.$store.dispatch('settings/get')
-			if (this.$route.params.id && !this.$route.params.token) {
-				this.loadPoll(true)
-			}
-		}
-
 		subscribe('polls:transitions:off', (delay) => {
 			this.transitionsOff(delay)
 		})
@@ -125,6 +114,10 @@ export default {
 
 	},
 
+	mounted() {
+		this.loadContext(true)
+	},
+
 	beforeDestroy() {
 		this.cancelToken.cancel()
 		unsubscribe('polls:poll:load')
@@ -135,7 +128,25 @@ export default {
 	methods: {
 		...mapActions({
 			setFilter: 'polls/setFilter',
+			loadAcl: 'acl/get',
+			loadSettings: 'settings/get',
 		}),
+
+		loadContext(silent) {
+			this.loadAcl()
+
+			if (getCurrentUser()) {
+				this.loadSettings()
+
+				if (this.$route.name === 'list') {
+					this.setFilter(this.$route.params.type)
+				}
+			}
+
+			if (this.$route.name === 'vote' || this.$route.name === 'publicVote') {
+				this.loadPoll(silent)
+			}
+		},
 
 		transitionsOn() {
 			this.transitionClass = 'transitions-active'
@@ -156,6 +167,7 @@ export default {
 			let dispatches = [
 				'activity/list',
 				'appSettings/get',
+				'acl/get',
 			]
 
 			stores.forEach((item) => {

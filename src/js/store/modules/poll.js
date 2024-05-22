@@ -22,7 +22,6 @@
  */
 
 import moment from '@nextcloud/moment'
-import acl from './subModules/acl.js'
 import { uniqueArrayOfObjects } from '../../helpers/index.js'
 import { PollsAPI, PublicAPI } from '../../Api/index.js'
 
@@ -87,7 +86,6 @@ const defaultPoll = () => ({
 })
 
 const namespaced = true
-const modules = { acl }
 const state = defaultPoll()
 
 const mutations = {
@@ -151,27 +149,27 @@ const getters = {
 
 	},
 
-	participants: (state, getters) => {
+	participants: (state, getters, rootState) => {
 		const participants = getters.participantsVoted
 
 		// add current user, if not among participants and voting is allowed
-		if (!participants.find((participant) => participant.userId === state.acl.currentUser.userId) && state.acl.currentUser.userId && state.permissions.vote) {
+		if (!participants.find((participant) => participant.userId === rootState.acl.currentUser.userId) && rootState.acl.currentUser.userId && state.permissions.vote) {
 			participants.push({
-				userId: state.acl.currentUser.userId,
-				displayName: state.acl.currentUser.displayName,
-				isNoUser: state.acl.currentUser.isNoUser,
+				userId: rootState.acl.currentUser.userId,
+				displayName: rootState.acl.currentUser.displayName,
+				isNoUser: rootState.acl.currentUser.isNoUser,
 			})
 		}
 
 		return participants
 	},
 
-	safeParticipants: (state, getters) => {
+	safeParticipants: (state, getters, rootState) => {
 		if (getters.getSafeTable) {
 			return [{
-				userId: state.acl.currentUser.userId,
-				displayName: state.acl.currentUser.displayName,
-				isNoUser: state.acl.currentUser.isNoUser,
+				userId: rootState.acl.currentUser.userId,
+				displayName: rootState.acl.currentUser.displayName,
+				isNoUser: rootState.acl.currentUser.isNoUser,
 			}]
 		}
 		return getters.participants
@@ -216,12 +214,10 @@ const actions = {
 				response = await PollsAPI.getPoll(context.rootState.route.params.id)
 			} else {
 				context.commit('reset')
-				context.commit('acl/reset')
 				return
 			}
 			context.commit('switchSafeTable', false)
 			context.commit('set', { poll: response.data.poll })
-			context.commit('acl/set', { acl: response.data.acl })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.debug('Error loading poll', { error: e })
@@ -231,7 +227,7 @@ const actions = {
 
 	async add(context, payload) {
 		try {
-			const response = await PollsAPI.addPoll(payload.type, payload.configuration.title)
+			const response = await PollsAPI.addPoll(payload.type, payload.title)
 			return response
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
@@ -246,7 +242,6 @@ const actions = {
 		try {
 			const response = await PollsAPI.updatePoll(context.state.id, context.state.configuration)
 			context.commit('set', { poll: response.data.poll })
-			context.commit('acl/set', { acl: response.data.acl })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error updating poll:', { error: e.response }, { poll: context.state })
@@ -262,7 +257,6 @@ const actions = {
 		try {
 			const response = await PollsAPI.closePoll(context.state.id)
 			context.commit('set', { poll: response.data.poll })
-			context.commit('acl/set', { acl: response.data.acl })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error closing poll', { error: e.response }, { pollId: context.state.id })
@@ -277,7 +271,6 @@ const actions = {
 		try {
 			const response = await PollsAPI.reopenPoll(context.state.id)
 			context.commit('set', { poll: response.data.poll })
-			context.commit('acl/set', { acl: response.data.acl })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
 			console.error('Error reopening poll', { error: e.response }, { pollId: context.state.id })
@@ -326,4 +319,4 @@ const actions = {
 	},
 }
 
-export default { namespaced, state, mutations, getters, actions, modules }
+export default { namespaced, state, mutations, getters, actions }

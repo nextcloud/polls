@@ -106,7 +106,7 @@ export default {
 			permissions: (state) => state.poll.permissions,
 			pollType: (state) => state.poll.type,
 			settings: (state) => state.settings.user,
-			currentUser: (state) => state.poll.acl.currentUser,
+			currentUser: (state) => state.acl.currentUser,
 		}),
 
 		...mapGetters({

@@ -71,9 +71,11 @@ class PollMapper extends QBMapper {
 	 */
 	public function findAutoReminderPolls(): array {
 		$autoReminderSearchString = '%"autoReminder":true%';
-		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->like(
-			self::TABLE . '.misc_settings',
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+		    ->where($qb->expr()->like(
+			'misc_settings',
 			$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
 		));
 		return $this->findEntities($qb);

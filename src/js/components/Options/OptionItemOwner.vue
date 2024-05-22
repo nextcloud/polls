@@ -71,7 +71,7 @@ export default {
 	computed: {
 		...mapState({
 			pollOwner: (state) => state.poll.owner.userId,
-			currentUser: (state) => state.poll.acl.currentUser,
+			currentUser: (state) => state.acl.currentUser,
 			permissions: (state) => state.poll.permissions,
 		}),
 

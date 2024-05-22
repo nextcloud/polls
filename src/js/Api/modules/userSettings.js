@@ -32,6 +32,15 @@ const userSettings = {
 		})
 	},
 
+	getAcl() {
+		return httpInstance.request({
+			method: 'GET',
+			url: 'acl',
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getAcl.name].handleRequestCancellation().token,
+		})
+	},
+
 	writeUserSettings(preferences) {
 		return httpInstance.request({
 			method: 'POST',

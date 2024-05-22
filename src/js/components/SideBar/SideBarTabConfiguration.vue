@@ -171,7 +171,7 @@ export default {
 			isPollArchived: (state) => state.poll.status.deleted,
 			hasExpiration: (state) => state.poll.configuration.expire,
 			showResults: (state) => state.poll.configuration.showResults,
-			currentUser: (state) => state.poll.acl.currentUser,
+			currentUser: (state) => state.acl.currentUser,
 		}),
 
 		...mapGetters({

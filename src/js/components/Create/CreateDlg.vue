@@ -114,7 +114,7 @@ export default {
 			try {
 				const response = await this.addPoll({ title: this.title, type: this.pollType })
 				this.cancel()
-				showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.title }))
+				showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.configuration.title }))
 				this.$router.push({ name: 'vote', params: { id: response.data.id } })
 			} catch {
 				showError(t('polls', 'Error while creating Poll "{pollTitle}"', { pollTitle: this.title }))
