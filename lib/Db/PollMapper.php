@@ -74,10 +74,10 @@ class PollMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
-		    ->where($qb->expr()->like(
-			'misc_settings',
-			$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
-		));
+			->where($qb->expr()->like(
+				'misc_settings',
+				$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
+			));
 		return $this->findEntities($qb);
 	}
 

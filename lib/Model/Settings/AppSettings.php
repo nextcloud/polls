@@ -265,23 +265,6 @@ class AppSettings implements JsonSerializable {
 		];
 	}
 
-	public function getPublicAppSettings(): array {
-		return [
-			self::SETTING_SHOW_LOGIN => $this->getBooleanSetting(self::SETTING_SHOW_LOGIN),
-			self::SETTING_SHOW_MAIL_ADDRESSES => $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES),
-			self::SETTING_USE_ACTIVITY => $this->getBooleanSetting(self::SETTING_USE_ACTIVITY),
-			self::SETTING_AUTO_ARCHIVE => $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE),
-			self::SETTING_AUTO_ARCHIVE_OFFSET => $this->getAutoarchiveOffset(),
-			self::SETTING_DISCLAIMER => $this->getStringSetting(self::SETTING_DISCLAIMER),
-			self::SETTING_IMPRINT_URL => $this->getStringSetting(self::SETTING_IMPRINT_URL),
-			self::SETTING_PRIVACY_URL => $this->getStringSetting(self::SETTING_PRIVACY_URL),
-			self::SETTING_UPDATE_TYPE => $this->getUpdateType(),
-			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
-			'useImprintUrl' => $this->getUseImprintUrl(),
-			'defaultPrivacyUrl' => $this->config->getAppValue('theming', 'privacyUrl'),
-			'defaultImprintUrl' => $this->config->getAppValue('theming', 'imprintUrl'),
-		];
-	}
 	private function isMember(array $groups): bool {
 		foreach ($groups as $GID) {
 			if ($this->userSession->getUser()->getIsInGroup($GID)) {

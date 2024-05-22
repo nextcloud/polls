@@ -73,23 +73,6 @@ class Preferences extends Entity implements JsonSerializable {
 		return json_decode($this->getPreferences() ?? '');
 	}
 
-	/**
-	 * getRelevantOffset - Offset for relevant polls in days
-	 */
-	public function getRelevantOffset(): int {
-		if (isset($this->getPreferences_decoded()->relevantOffset)) {
-			return intval($this->getPreferences_decoded()->relevantOffset);
-		}
-		return 30;
-	}
-
-	/**
-	 * getRelevantOffsetTimestamp - Offset for relevant polls in seconds (unix timestamp)
-	 */
-	// public function getRelevantOffsetTimestamp(): int {
-	// 	return $this->getRelevantOffset() * 24 * 60 * 60;
-	// }
-
 	public function getCheckCalendarsBefore(): int {
 		if (isset($this->getPreferences_decoded()->checkCalendarsBefore)) {
 			return intval($this->getPreferences_decoded()->checkCalendarsBefore);
