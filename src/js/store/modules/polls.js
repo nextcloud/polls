@@ -26,6 +26,7 @@
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash'
 import { PollsAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const filterRelevantCondition = (poll, relevantOffset) => !poll.status.deleted
 	&& moment().diff(moment.unix(poll.status.relevantThreshold), 'days') < relevantOffset
@@ -230,7 +231,7 @@ const actions = {
 			context.commit('setPollsPermissions', { permissions: response.data.permissions })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error loading polls', { error: e.response })
+			Logger.error('Error loading polls', { error: e.response })
 			throw e
 		} finally {
 			context.commit('setLoading', false)

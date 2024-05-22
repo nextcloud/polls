@@ -22,6 +22,7 @@
  */
 
 import { PollsAPI, PublicAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultSubscription = () => ({
 	subscribed: false,
@@ -77,7 +78,7 @@ const actions = {
 			context.commit('set', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error(e.response)
+			Logger.error(e.response)
 			throw e
 		}
 	},

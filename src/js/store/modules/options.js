@@ -24,6 +24,7 @@
 import { orderBy } from 'lodash'
 import moment from '@nextcloud/moment'
 import { OptionsAPI, PublicAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultOptions = () => ({
 	list: [],
@@ -153,7 +154,7 @@ const actions = {
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })
+			Logger.error('Error loding options', { error: e.response }, { pollId: context.rootState.route.params.id })
 			throw e
 		}
 	},
@@ -184,7 +185,7 @@ const actions = {
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
+			Logger.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -195,7 +196,7 @@ const actions = {
 			const response = await OptionsAPI.updateOption(payload.option)
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
-			console.error('Error updating option', { error: e.response }, { payload })
+			Logger.error('Error updating option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -212,7 +213,7 @@ const actions = {
 			context.commit('setItem', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting option', { error: e.response }, { payload })
+			Logger.error('Error deleting option', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -228,7 +229,7 @@ const actions = {
 			context.commit('setItem', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error restoring option', { error: e.response }, { payload })
+			Logger.error('Error restoring option', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -239,7 +240,7 @@ const actions = {
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
+			Logger.error(`Error adding option: ${e.response.data}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -252,7 +253,7 @@ const actions = {
 			context.commit('setItem', { option: response.data.option })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error confirming option', { error: e.response }, { payload })
+			Logger.error('Error confirming option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -265,7 +266,7 @@ const actions = {
 			const response = await OptionsAPI.reorderOptions(context.rootState.route.params.id, payload)
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
-			console.error('Error reordering option', { error: e.response }, { payload })
+			Logger.error('Error reordering option', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -282,7 +283,7 @@ const actions = {
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error creating sequence', { error: e.response }, { payload })
+			Logger.error('Error creating sequence', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -298,7 +299,7 @@ const actions = {
 			context.commit('set', { options: response.data.options })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error shifting dates', { error: e.response }, { payload })
+			Logger.error('Error shifting dates', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}

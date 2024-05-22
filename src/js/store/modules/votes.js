@@ -22,6 +22,7 @@
  */
 
 import { PublicAPI, VotesAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultVotes = () => ({
 	list: [],
@@ -127,7 +128,7 @@ const actions = {
 				context.dispatch('list')
 				context.dispatch('options/list', null, { root: true })
 			} else {
-				console.error('Error setting vote', { error: e.response }, { payload })
+				Logger.error('Error setting vote', { error: e.response }, { payload })
 				throw e
 			}
 		}
@@ -144,7 +145,7 @@ const actions = {
 			context.commit('deleteVotes', { userId: response.data.deleted })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting votes', { error: e.response })
+			Logger.error('Error deleting votes', { error: e.response })
 			throw e
 		}
 	},
@@ -155,7 +156,7 @@ const actions = {
 			context.commit('deleteVotes', payload)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting votes', { error: e.response }, { payload })
+			Logger.error('Error deleting votes', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -170,7 +171,7 @@ const actions = {
 			context.dispatch('options/list', null, { root: true })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting orphaned votes', { error: e.response }, { payload })
+			Logger.error('Error deleting orphaned votes', { error: e.response }, { payload })
 			throw e
 		}
 	},

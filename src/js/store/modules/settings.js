@@ -22,6 +22,7 @@
  */
 
 import { CalendarAPI, UserSettingsAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultSettings = () => ({
 	user: {
@@ -131,7 +132,7 @@ const actions = {
 			context.commit('setPreference', response.data.preferences)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing preferences', { error: e.response }, { preferences: state.user })
+			Logger.error('Error writing preferences', { error: e.response }, { preferences: state.user })
 			throw e
 		}
 	},

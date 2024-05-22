@@ -54,6 +54,7 @@ import { ConfigBox } from '../Base/index.js'
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 import ShareItem from './ShareItem.vue'
 import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
+import { Logger } from '../../helpers/index.js'
 
 export default {
 	name: 'SharesListUnsent',
@@ -91,7 +92,7 @@ export default {
 			}
 			if (response.data?.sentResult?.abortedMails) {
 				response.data.sentResult.abortedMails.forEach((item) => {
-					console.error('Mail could not be sent!', { recipient: item })
+					Logger.error('Mail could not be sent!', { recipient: item })
 					showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
 				})
 			}

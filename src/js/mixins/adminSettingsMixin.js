@@ -24,6 +24,8 @@
 import { debounce } from 'lodash'
 import { mapState } from 'vuex'
 import { AppSettingsAPI } from '../Api/index.js'
+import { Logger } from '../helpers/index.js'
+
 
 export const loadGroups = {
 	data() {
@@ -54,7 +56,7 @@ export const loadGroups = {
 				this.isLoading = false
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED') return
-				console.error(e.response)
+				Logger.error(e.response)
 				this.isLoading = false
 			}
 		}, 250),

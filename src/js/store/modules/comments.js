@@ -22,7 +22,7 @@
  */
 
 import { CommentsAPI, PublicAPI } from '../../Api/index.js'
-import { groupComments } from '../../helpers/index.js'
+import { groupComments, Logger } from '../../helpers/index.js'
 
 const defaultComments = () => ({
 	list: [],
@@ -99,7 +99,7 @@ const actions = {
 			// context.commit('add', { comment: response.data.comment })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing comment', { error: e.response }, { payload })
+			Logger.error('Error writing comment', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -116,7 +116,7 @@ const actions = {
 			context.commit('setItem', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting comment', { error: e.response }, { payload })
+			Logger.error('Error deleting comment', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -133,7 +133,7 @@ const actions = {
 			context.commit('setItem', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error restoring comment', { error: e.response }, { payload })
+			Logger.error('Error restoring comment', { error: e.response }, { payload })
 			throw e
 		}
 	},

@@ -158,6 +158,7 @@ import LockIcon from 'vue-material-design-icons/Lock.vue'
 import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import { Logger } from '../../helpers/index.js'
 
 export default {
 	name: 'ShareItem',
@@ -264,7 +265,7 @@ export default {
 				}
 			} catch (e) {
 				showError(t('polls', 'Error while changing lock status of share {displayName}', { displayName: share.user.displayName }))
-				console.error('Error locking or unlocking share', { share }, e.response)
+				Logger.error('Error locking or unlocking share', { share }, e.response)
 			}
 		},
 
@@ -295,7 +296,7 @@ export default {
 			}
 			if (response.data?.sentResult?.abortedMails) {
 				response.data.sentResult.abortedMails.forEach((item) => {
-					console.error('Mail could not be sent!', { recipient: item })
+					Logger.error('Mail could not be sent!', { recipient: item })
 					showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
 				})
 			}

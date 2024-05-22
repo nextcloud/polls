@@ -25,6 +25,7 @@ import { mapState } from 'vuex'
 import { InvalidJSON } from '../Exceptions/Exceptions.js'
 import { PollsAPI, PublicAPI } from '../Api/index.js'
 import { emit } from '@nextcloud/event-bus'
+import { Logger } from '../helpers/index.js'
 
 const SLEEP_TIMEOUT_DEFAULT = 30
 const MAX_TRIES = 5
@@ -83,29 +84,29 @@ export const watchPolls = {
 				// sleep if request was invalid or polling is set to "peeriodicPolling"
 				if (this.watchDisabled || this.retryCounter) {
 					await this.sleep()
-					console.debug('[polls]', `Continue ${this.updateType} after sleep`)
+					Logger.debug(`Continue ${this.updateType} after sleep`)
 				}
 
 				// avoid requests when app is in background and pause
 				while (document.hidden || !navigator.onLine) {
 					if (navigator.onLine) {
-						console.debug('[polls]', `App in background, pause ${this.updateType}`)
+						Logger.debug(`App in background, pause ${this.updateType}`)
 					} else {
-						console.debug('[polls]', `Browser is offline, pause ${this.updateType}`)
+						Logger.debug(`Browser is offline, pause ${this.updateType}`)
 					}
 					await new Promise((resolve) => setTimeout(resolve, 5000))
-					console.debug('[polls]', 'Resume')
+					Logger.debug('Resume')
 				}
 
 			}
 
 			if (this.retryCounter) {
-				console.debug('[polls]', `Cancel watch after ${this.retryCounter} failed requests`)
+				Logger.debug(`Cancel watch after ${this.retryCounter} failed requests`)
 			}
 		},
 
 		async fetchUpdates() {
-			console.debug('[polls]', 'Fetch updates')
+			Logger.debug('Fetch updates')
 
 			if (this.$route.name === 'publicVote') {
 				return await PublicAPI.watchPoll(this.$route.params.token, this.lastUpdated)
@@ -116,7 +117,7 @@ export const watchPolls = {
 
 		sleep() {
 			const reason = this.retryCounter ? `Connection error, Attempt: ${this.retryCounter}/${MAX_TRIES})` : this.updateType
-			console.debug('[polls]', `Sleep for ${this.sleepTimeout} seconds (reason: ${reason})`)
+			Logger.debug(`Sleep for ${this.sleepTimeout} seconds (reason: ${reason})`)
 			return new Promise((resolve) => setTimeout(resolve, this.sleepTimeout * 1000))
 		},
 
@@ -124,13 +125,13 @@ export const watchPolls = {
 			if (e.response?.status === 304) {
 				// this is a wanted response, no updates where found.
 				// resume to normal operation
-				console.debug('[polls]', `No updates - continue ${this.updateType}`)
+				Logger.debug(`No updates - continue ${this.updateType}`)
 				this.retryCounter = 0
 				return
 			}
 
 			if (e?.code === 'ERR_NETWORK') {
-				console.debug('[polls]', `Possibly offline - continue ${this.updateType}`)
+				Logger.debug(`Possibly offline - continue ${this.updateType}`)
 				return
 			}
 
@@ -140,15 +141,15 @@ export const watchPolls = {
 			if (e?.response?.status === 503) {
 				// Server possibly in maintenance mode
 				this.sleepTimeout = e?.response?.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
-				console.debug('[polls]', `Service not avaiable - retry ${this.updateType} after ${this.sleepTimeout} seconds`)
+				Logger.debug(`Service not avaiable - retry ${this.updateType} after ${this.sleepTimeout} seconds`)
 				return
 			}
 
 			// Watch has to be canceled
 			if (e?.code === 'ERR_CANCELED' || e?.code === 'ECONNABORTED') {
-				console.debug('[polls]', 'Watch canceled')
+				Logger.debug('Watch canceled')
 			} else {
-				console.debug('[polls]', e.message ?? `No response - ${this.updateType} aborted - failed request ${this.retryCounter}/${MAX_TRIES}`, e)
+				Logger.debug(e.message ?? `No response - ${this.updateType} aborted - failed request ${this.retryCounter}/${MAX_TRIES}`, e)
 			}
 
 			this.retryCounter = null

@@ -61,6 +61,7 @@
 import { NcButton, NcModal } from '@nextcloud/vue'
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 import { PollsAPI } from '../../../Api/index.js'
+import { Logger } from '../../../helpers/index.js'
 
 export default {
 	name: 'ActionSendConfirmed',
@@ -97,7 +98,7 @@ export default {
 				this.sentStatus = 'success'
 				this.$emit('success')
 			} catch (e) {
-				console.error(e)
+				Logger.error(e)
 				this.sentStatus = 'error'
 				this.$emit('error')
 			} finally {

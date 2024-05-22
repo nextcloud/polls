@@ -47,6 +47,7 @@ import { NcPopover } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 export default {
 	name: 'CalendarPeek',
@@ -121,7 +122,7 @@ export default {
 				this.events = response.data.events
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED') return
-				console.error('Error fetching events', { error: e.response })
+				Logger.error('Error fetching events', { error: e.response })
 			}
 		},
 

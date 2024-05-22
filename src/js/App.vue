@@ -44,6 +44,7 @@ import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls.js'
 import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
+import { Logger } from './helpers/index.js'
 
 export default {
 	name: 'App',
@@ -162,7 +163,7 @@ export default {
 		},
 
 		async loadStores(stores) {
-			console.debug('[polls]', 'Updates detected', stores)
+			Logger.debug('Updates detected', stores)
 
 			let dispatches = [
 				'activity/list',

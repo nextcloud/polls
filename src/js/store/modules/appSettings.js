@@ -22,6 +22,7 @@
  */
 
 import { AppSettingsAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultAppSettings = () => ({
 	allAccessGroups: [],
@@ -84,7 +85,7 @@ const actions = {
 			context.commit('set', response.data.appSettings)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing appSettings', { error: e.response }, { appSettings: state })
+			Logger.error('Error writing appSettings', { error: e.response }, { appSettings: state })
 			throw e
 		}
 	},

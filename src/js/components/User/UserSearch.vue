@@ -49,6 +49,7 @@ import { mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcSelect } from '@nextcloud/vue'
 import { AppSettingsAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 export default {
 	name: 'UserSearch',
@@ -84,7 +85,7 @@ export default {
 				this.isLoading = false
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED') return
-				console.error(e.response)
+				Logger.error(e.response)
 				this.isLoading = false
 			}
 		}, 250),

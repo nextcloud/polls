@@ -22,6 +22,7 @@
  */
 
 import { SharesAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultShares = () => ({
 	list: [],
@@ -88,7 +89,7 @@ const actions = {
 			context.commit('set', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })
+			Logger.error('Error loading shares', { error: e.response }, { pollId: context.rootState.route.params.id })
 			throw e
 		}
 	},
@@ -99,7 +100,7 @@ const actions = {
 			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing share', { error: e.response }, { payload })
+			Logger.error('Error writing share', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -113,7 +114,7 @@ const actions = {
 			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error(`Error switching type to ${setTo}`, { error: e.response }, { payload })
+			Logger.error(`Error switching type to ${setTo}`, { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -125,7 +126,7 @@ const actions = {
 			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error changing email register setting', { error: e.response }, { payload })
+			Logger.error('Error changing email register setting', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -138,7 +139,7 @@ const actions = {
 			return response.data
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing share label', { error: e.response }, { payload })
+			Logger.error('Error writing share label', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -151,7 +152,7 @@ const actions = {
 			return response
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error sending invitation', { error: e.response }, { payload })
+			Logger.error('Error sending invitation', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -164,7 +165,7 @@ const actions = {
 			return response
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error sending invitation', { error: e.response }, { payload })
+			Logger.error('Error sending invitation', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -176,7 +177,7 @@ const actions = {
 			context.dispatch('list')
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error exploding group', e.response.data, { error: e.response }, { payload })
+			Logger.error('Error exploding group', e.response.data, { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -187,7 +188,7 @@ const actions = {
 			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error locking share', { error: e.response }, { payload })
+			Logger.error('Error locking share', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -199,7 +200,7 @@ const actions = {
 			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error unlocking share', { error: e.response }, { payload })
+			Logger.error('Error unlocking share', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -211,7 +212,7 @@ const actions = {
 			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting share', { error: e.response }, { payload })
+			Logger.error('Error deleting share', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}
@@ -222,7 +223,7 @@ const actions = {
 			context.commit('update', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error restoring share', { error: e.response }, { payload })
+			Logger.error('Error restoring share', { error: e.response }, { payload })
 			context.dispatch('list')
 			throw e
 		}

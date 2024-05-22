@@ -22,6 +22,7 @@
  */
 
 import { PublicAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultShares = () => ({
 	displayName: '',
@@ -73,7 +74,7 @@ const actions = {
 			return response.data
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.debug('Error retrieving share', { error: e.response })
+			Logger.debug('Error retrieving share', { error: e.response })
 			throw e
 		}
 	},
@@ -89,7 +90,7 @@ const actions = {
 			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing email address', { error: e.response }, { payload })
+			Logger.error('Error writing email address', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -108,7 +109,7 @@ const actions = {
 			context.dispatch('options/list', null, { root: true })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error changing name', { error: e.response }, { payload })
+			Logger.error('Error changing name', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -125,7 +126,7 @@ const actions = {
 			context.dispatch('poll/get', null, { root: true })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing email address', { error: e.response }, { payload })
+			Logger.error('Error writing email address', { error: e.response }, { payload })
 			throw e
 		}
 	},
@@ -139,7 +140,7 @@ const actions = {
 			return await PublicAPI.resendInvitation(context.rootState.route.params.token)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error sending invitation', { error: e.response }, { payload })
+			Logger.error('Error sending invitation', { error: e.response }, { payload })
 			throw e
 		}
 	},

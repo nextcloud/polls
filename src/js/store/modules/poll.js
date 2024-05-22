@@ -22,7 +22,7 @@
  */
 
 import moment from '@nextcloud/moment'
-import { uniqueArrayOfObjects } from '../../helpers/index.js'
+import { uniqueArrayOfObjects, Logger } from '../../helpers/index.js'
 import { PollsAPI, PublicAPI } from '../../Api/index.js'
 
 const defaultPoll = () => ({
@@ -220,7 +220,7 @@ const actions = {
 			context.commit('set', { poll: response.data.poll })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.debug('Error loading poll', { error: e })
+			Logger.debug('Error loading poll', { error: e })
 			throw e
 		}
 	},
@@ -231,7 +231,7 @@ const actions = {
 			return response
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error adding poll:', { error: e.response }, { state: context.state })
+			Logger.error('Error adding poll:', { error: e.response }, { state: context.state })
 			throw e
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
@@ -244,7 +244,7 @@ const actions = {
 			context.commit('set', { poll: response.data.poll })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error updating poll:', { error: e.response }, { poll: context.state })
+			Logger.error('Error updating poll:', { error: e.response }, { poll: context.state })
 			context.dispatch('get')
 			throw e
 		} finally {
@@ -259,7 +259,7 @@ const actions = {
 			context.commit('set', { poll: response.data.poll })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error closing poll', { error: e.response }, { pollId: context.state.id })
+			Logger.error('Error closing poll', { error: e.response }, { pollId: context.state.id })
 			context.dispatch('get')
 			throw e
 		} finally {
@@ -273,7 +273,7 @@ const actions = {
 			context.commit('set', { poll: response.data.poll })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error reopening poll', { error: e.response }, { pollId: context.state.id })
+			Logger.error('Error reopening poll', { error: e.response }, { pollId: context.state.id })
 			context.dispatch('get')
 			throw e
 		} finally {
@@ -286,7 +286,7 @@ const actions = {
 			await PollsAPI.toggleArchive(payload.pollId)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error archiving/restoring', { error: e.response }, { payload })
+			Logger.error('Error archiving/restoring', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
@@ -298,7 +298,7 @@ const actions = {
 			await PollsAPI.deletePoll(payload.pollId)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting poll', { error: e.response }, { payload })
+			Logger.error('Error deleting poll', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
@@ -311,7 +311,7 @@ const actions = {
 			return response
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error cloning poll', { error: e.response }, { payload })
+			Logger.error('Error cloning poll', { error: e.response }, { payload })
 			throw e
 		} finally {
 			context.dispatch('polls/list', null, { root: true })

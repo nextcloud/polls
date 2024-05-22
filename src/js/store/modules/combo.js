@@ -21,7 +21,7 @@
  *
  */
 
-import { uniqueOptions, uniqueParticipants } from '../../helpers/index.js'
+import { uniqueOptions, uniqueParticipants, Logger } from '../../helpers/index.js'
 import { sortBy } from 'lodash'
 import { OptionsAPI, PollsAPI, VotesAPI } from '../../Api/index.js'
 
@@ -146,7 +146,7 @@ const actions = {
 			context.commit('addPoll', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.debug('Error loading poll for combo', { error: e.response })
+			Logger.debug('Error loading poll for combo', { error: e.response })
 		}
 	},
 
@@ -156,7 +156,7 @@ const actions = {
 			context.commit('addOptions', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.debug('Error loading options for combo', { error: e.response })
+			Logger.debug('Error loading options for combo', { error: e.response })
 		}
 	},
 
@@ -166,7 +166,7 @@ const actions = {
 			context.commit('addVotes', response.data)
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.debug('Error loading options for combo', { error: e.response })
+			Logger.debug('Error loading options for combo', { error: e.response })
 		}
 	},
 }

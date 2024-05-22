@@ -23,6 +23,7 @@
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { PollsAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const namespaced = true
 const state = {
@@ -50,7 +51,7 @@ const actions = {
 			context.commit('set', { list: response.data })
 		} catch (e) {
 			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error loading polls', { error: e.response })
+			Logger.error('Error loading polls', { error: e.response })
 			throw e
 		}
 	},
