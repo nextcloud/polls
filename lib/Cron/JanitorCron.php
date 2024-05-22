@@ -82,4 +82,9 @@ class JanitorCron extends TimedJob {
 			);
 		}
 	}
+	public function manuallyRun(): string {
+		$this->run(null);
+		return 'JanitorCron manually run.';
+	}
+
 }

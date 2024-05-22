@@ -57,6 +57,9 @@ return [
 
 		['name' => 'admin#list', 'url' => '/administration/polls', 'verb' => 'GET'],
 		['name' => 'admin#takeover', 'url' => '/administration/poll/{pollId}/takeover', 'verb' => 'PUT'],
+		['name' => 'admin#run_auto_reminder_job', 'url' => 'administration/autoreminder/run', 'verb' => 'GET'],
+		['name' => 'admin#run_janitor_job', 'url' => 'administration/janitor/run', 'verb' => 'GET'],
+		['name' => 'admin#run_notification_job', 'url' => 'administration/notification/run', 'verb' => 'GET'],
 
 		['name' => 'page#index', 'url' => '/', 'verb' => 'GET'],
 		['name' => 'page#index', 'url' => '/not-found', 'verb' => 'GET', 'postfix' => 'notfound'],

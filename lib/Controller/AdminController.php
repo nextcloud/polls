@@ -26,6 +26,9 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
+use OCA\Polls\Cron\AutoReminderCron;
+use OCA\Polls\Cron\JanitorCron;
+use OCA\Polls\Cron\NotificationCron;
 use OCA\Polls\Service\PollService;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -46,6 +49,9 @@ class AdminController extends BaseController {
 		private IURLGenerator $urlGenerator,
 		private PollService $pollService,
 		private IEventDispatcher $eventDispatcher,
+		private AutoReminderCron $autoReminderCron,
+		private JanitorCron $janitorCron,
+		private NotificationCron $notificationCron,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -89,5 +95,15 @@ class AdminController extends BaseController {
 	 */
 	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
+	}
+
+	public function runAutoReminderJob(): JSONResponse {
+		return $this->response(fn () => $this->autoReminderCron->manuallyRun());
+	}
+	public function runJanitorJob(): JSONResponse {
+		return $this->response(fn () => $this->janitorCron->manuallyRun());
+	}
+	public function runNotificationJob(): JSONResponse {
+		return $this->response(fn () => $this->notificationCron->manuallyRun());
 	}
 }
