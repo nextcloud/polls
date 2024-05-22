@@ -109,8 +109,8 @@ class UserBase implements JsonSerializable {
 	/**
 	 * for later use
 	 */
-	public function getPrincipalUri(): string {
-		return 'principals/users/' . $this->getId();
+	public function getPrincipalUri(): ?string {
+		return null;
 	}
 
 	/**
