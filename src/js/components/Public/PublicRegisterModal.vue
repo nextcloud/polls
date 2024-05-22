@@ -367,11 +367,6 @@ export default {
 	}
 }
 
-.description {
-	hyphens: auto;
-	border-top: 1px solid var(--color-border);
-}
-
 .legal_links {
 	a {
 		color: var(--color-text-maxcontrast);
