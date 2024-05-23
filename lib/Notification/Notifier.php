@@ -105,7 +105,7 @@ class Notifier implements INotifier {
 			$pollTitle = $poll->getTitle();
 			$notification->setLink($poll->getVoteUrl());
 		} catch (DoesNotExistException $e) {
-			$this->notificationService->removeNotification(intval($notification->getObjectId()));
+			$this->notificationService->removeNotification(intval($notification->getObjectId()), $actor['actor']['id']);
 			return $notification;
 		}
 
