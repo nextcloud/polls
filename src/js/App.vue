@@ -91,6 +91,7 @@ export default {
 
 	watch: {
 		$route(to, from) {
+			Logger.debug('Route changed', { from, to })
 			this.loadContext()
 			this.watchPolls()
 		},
@@ -112,7 +113,6 @@ export default {
 		subscribe('polls:poll:load', (silent) => {
 			this.loadPoll(silent)
 		})
-
 	},
 
 	mounted() {
@@ -134,7 +134,9 @@ export default {
 		}),
 
 		loadContext(silent) {
-			this.loadAcl()
+			if (this.$route.name !== null) {
+				this.loadAcl()
+			}
 
 			if (getCurrentUser()) {
 				this.loadSettings()

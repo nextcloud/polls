@@ -99,6 +99,11 @@ export default new Router({
 					type: 'relevant',
 				},
 			},
+			name: 'root',
+			meta: {
+				publicPage: false,
+			}
+
 		},
 		{
 			path: '/list',
@@ -108,6 +113,9 @@ export default new Router({
 					type: 'relevant',
 				},
 			},
+			meta: {
+				publicPage: false,
+			}
 		},
 		{
 			path: '/list/:type?',
@@ -117,6 +125,9 @@ export default new Router({
 			},
 			props: true,
 			name: 'list',
+			meta: {
+				publicPage: false,
+			}
 		},
 		{
 			path: '/administration',
@@ -125,6 +136,9 @@ export default new Router({
 				navigation: Navigation,
 			},
 			name: 'administration',
+			meta: {
+				publicPage: false,
+			}
 		},
 		{
 			path: '/combo',
@@ -134,6 +148,9 @@ export default new Router({
 				sidebar: SideBarCombo,
 			},
 			name: 'combo',
+			meta: {
+				publicPage: false,
+			}
 		},
 		{
 			path: '/not-found',
@@ -142,6 +159,9 @@ export default new Router({
 				navigation: Navigation,
 			},
 			name: 'notfound',
+			meta: {
+				publicPage: false,
+			}
 		},
 		{
 			path: '/vote/:id',
@@ -152,6 +172,9 @@ export default new Router({
 			},
 			props: true,
 			name: 'vote',
+			meta: {
+				publicPage: false,
+			}
 		},
 		{
 			path: '/s/:token',
@@ -162,6 +185,9 @@ export default new Router({
 			beforeEnter: validateToken,
 			props: true,
 			name: 'publicVote',
+			meta: {
+				publicPage: true,
+			}
 		},
 	],
 })
