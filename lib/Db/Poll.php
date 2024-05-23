@@ -270,6 +270,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'yesVotes' => $this->getCurrentUserCountVotesYes(),
 			'countVotes' => $this->getCurrentUserCountVotes(),
 			'shareToken' => $this->getShareToken(),
+			'groupInvitations' => $this->getGroupShares(),
 		];
 	}
 	public function getPermissionsArray(): array {
@@ -555,13 +556,14 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			return false;
 		}
 
-		return count(
-			array_filter($this->getGroupShares(), function ($groupName) {
-				return ($this->userSession->getUser()->getIsInGroup($groupName));
-			})
-		) > 0;
+		return count($this->getGroupSharesForUser()) > 0;
 	}
 
+	private function getGroupSharesForUser(): array {
+		return array_filter($this->getGroupShares(), function ($groupName) {
+			return ($this->userSession->getUser()->getIsInGroup($groupName));
+		});
+	}
 	/**
 	 * getIsPersonallyInvited - Is the poll shared via user share with the current user?
 	 * Checking via user role

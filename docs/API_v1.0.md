@@ -135,7 +135,11 @@ A poll newly created will look like this.
 			"orphanedVotes":0,
 			"yesVotes":0,
 			"countVotes":0,
-			"shareToken": ""
+			"shareToken": "",
+			"groupInvitations": {
+				"1": "Users",
+				"2": "Administrators",
+			},
 		},
 		"permissions": {
 			"addOptions": true,

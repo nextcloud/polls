@@ -69,6 +69,7 @@ const defaultPoll = () => ({
 		yesVotes: 0,
 		countVotes: 0,
 		shareToken: '',
+		groupInvitations: [],
 	},
 	permissions: {
 		addOptions: false,
