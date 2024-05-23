@@ -43,7 +43,10 @@ class NotificationService {
 
 	public function removeNotification(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
-		$userId = $this->userSession->getCurrentUserId();
+		$userId = '';
+		if ($this->userSession->getIsLoggedIn()) {
+			$userId = $this->userSession->getCurrentUserId();
+		}
 
 		$notification->setApp(AppConstants::APP_ID)
 			->setObject('poll', strval($pollId))
