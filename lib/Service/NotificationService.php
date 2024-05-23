@@ -30,7 +30,6 @@ use OCA\Polls\AppConstants;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\UserSession;
 use OCP\Notification\IManager;
-use Psr\Log\LoggerInterface;
 
 class NotificationService {
 	/**
@@ -39,17 +38,12 @@ class NotificationService {
 	public function __construct(
 		protected IManager $notificationManager,
 		protected UserSession $userSession,
-		protected LoggerInterface $logger
 	) {
 	}
 
-	public function removeNotification(int $pollId, ?string $userId): void {
+	public function removeNotification(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
-		if (!$userId) {
-			$userId = $this->userSession->getCurrentUserId();
-		}  else {
-			$this->logger->debug('remove notification for ' . $userId);
-		}
+		$userId = $this->userSession->getCurrentUserId();
 
 		$notification->setApp(AppConstants::APP_ID)
 			->setObject('poll', strval($pollId))
