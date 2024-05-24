@@ -40,6 +40,10 @@ abstract class Container {
 		return Server::get($class);
 	}
 
+	public static function getPoll(int $pollId): Poll {
+		return Server::get(PollMapper::class)->get($pollId);
+	}
+
 	public static function queryPoll(int $pollId): Poll {
 		return Server::get(PollMapper::class)->find($pollId);
 	}

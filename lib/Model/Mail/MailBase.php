@@ -215,7 +215,7 @@ abstract class MailBase {
 	}
 
 	private function getPoll(int $pollId) : Poll {
-		return Container::queryPoll($pollId);
+		return Container::getPoll($pollId);
 	}
 
 	private function validateEmailAddress(): void {
