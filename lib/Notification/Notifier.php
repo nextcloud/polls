@@ -35,7 +35,6 @@ use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
-use Psr\Log\LoggerInterface;
 
 class Notifier implements INotifier {
 	public const NOTIFY_POLL_DELETED_BY_OTHER = 'deletePollByOther';
@@ -54,7 +53,6 @@ class Notifier implements INotifier {
 		protected PollMapper $pollMapper,
 		private UserMapper $userMapper,
 		private NotificationService $notificationService,
-		private LoggerInterface $logger,
 	) {
 	}
 
@@ -102,12 +100,11 @@ class Notifier implements INotifier {
 		);
 
 		try {
-			$poll = $this->pollMapper->find(intval($notification->getObjectId()));
+			$poll = $this->pollMapper->get(intval($notification->getObjectId()));
 			$actor = $this->getActor($parameters['actor'] ?? $poll->getOwner());
 			$pollTitle = $poll->getTitle();
 			$notification->setLink($poll->getVoteUrl());
 		} catch (DoesNotExistException $e) {
-			$this->logger->debug('Notification exception', ['pollId' => $notification->getObjectId(), 'actor' => $parameters, $e]);
 			$this->notificationService->removeNotification(intval($notification->getObjectId()));
 			return $notification;
 		}
