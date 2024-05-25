@@ -5,6 +5,8 @@ All notable changes to this project will be documented in this file.
 ###  !!! changed API structure, please refer to the documentation
 ### Fix
  - fixed counting of orphaned votes
+ - disable registration button while registration is pending
+ - disable "resolve group share" while resolving
 ### Changes
  - mainly performance improvements
  - Changed API structure for polls, please refer to the documentation
