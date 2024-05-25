@@ -45,12 +45,12 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		deleteVoteOnNo: {
 			get() {
-				return !this.poll.useNo
+				return !this.pollConfiguration.useNo
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { useNo: !value })

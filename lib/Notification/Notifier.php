@@ -52,7 +52,7 @@ class Notifier implements INotifier {
 		protected IURLGenerator $urlGenerator,
 		protected PollMapper $pollMapper,
 		private UserMapper $userMapper,
-		private NotificationService $notificationService
+		private NotificationService $notificationService,
 	) {
 	}
 
@@ -100,7 +100,7 @@ class Notifier implements INotifier {
 		);
 
 		try {
-			$poll = $this->pollMapper->find(intval($notification->getObjectId()));
+			$poll = $this->pollMapper->get(intval($notification->getObjectId()));
 			$actor = $this->getActor($parameters['actor'] ?? $poll->getOwner());
 			$pollTitle = $poll->getTitle();
 			$notification->setLink($poll->getVoteUrl());

@@ -39,7 +39,7 @@
 						class="owner" />
 				</template>
 				<template v-if="permissions.edit" #actions>
-					<NcActions v-if="!closed" class="action">
+					<NcActions v-if="!isPollClosed" class="action">
 						<NcActionButton v-if="!option.deleted" :name="t('polls', 'Delete option')" @click="deleteOption(option)">
 							<template #icon>
 								<DeleteIcon />
@@ -50,13 +50,13 @@
 								<RestoreIcon />
 							</template>
 						</NcActionButton>
-						<NcActionButton v-if="!closed" :name="t('polls', 'Clone option')" @click="cloneOptionModal(option)">
+						<NcActionButton v-if="!isPollClosed" :name="t('polls', 'Clone option')" @click="cloneOptionModal(option)">
 							<template #icon>
 								<CloneDateIcon />
 							</template>
 						</NcActionButton>
 
-						<NcActionButton v-if="!option.deleted && !closed"
+						<NcActionButton v-if="!option.deleted && !isPollClosed"
 							:name="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 							@click="confirmOption(option)">
 							<template #icon>
@@ -135,12 +135,11 @@ export default {
 	computed: {
 		...mapState({
 			options: (state) => state.options.list,
-			acl: (state) => state.poll.acl,
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			countOptions: 'options/count',
 		}),
 

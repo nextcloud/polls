@@ -24,17 +24,17 @@
 	<div>
 		<NcButton @click="toggleClosed()">
 			<template #icon>
-				<OpenPollIcon v-if="closed" />
+				<OpenPollIcon v-if="isPollClosed" />
 				<ClosePollIcon v-else />
 			</template>
 			<template #default>
-				{{ closed ? t('polls', 'Reopen poll') : t('polls', 'Close poll') }}
+				{{ isPollClosed ? t('polls', 'Reopen poll') : t('polls', 'Close poll') }}
 			</template>
 		</NcButton>
-		<NcCheckboxRadioSwitch v-show="!closed" :checked.sync="useExpire" type="switch">
+		<NcCheckboxRadioSwitch v-show="!isPollClosed" :checked.sync="useExpire" type="switch">
 			{{ t('polls', 'Poll closing date') }}
 		</NcCheckboxRadioSwitch>
-		<NcDateTimePicker v-show="useExpire && !closed" v-model="expire" v-bind="expirationDatePicker" />
+		<NcDateTimePicker v-show="useExpire && !isPollClosed" v-model="expire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
@@ -80,16 +80,16 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 		}),
 
 		expire: {
 			get() {
-				return moment.unix(this.poll.expire)._d
+				return moment.unix(this.pollConfiguration.expire)._d
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { expire: moment(value).unix() })
@@ -99,7 +99,7 @@ export default {
 
 		useExpire: {
 			get() {
-				return !!this.poll.expire
+				return !!this.pollConfiguration.expire
 			},
 			set(value) {
 				if (value) {
@@ -114,7 +114,7 @@ export default {
 
 	methods: {
 		toggleClosed() {
-			if (this.closed) {
+			if (this.isPollClosed) {
 				this.$store.dispatch('poll/reopen')
 			} else {
 				this.$store.dispatch('poll/close')

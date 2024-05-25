@@ -28,7 +28,7 @@ import { mapState } from 'vuex'
 export const writePoll = {
 	computed: {
 		...mapState({
-			pollTitle: (state) => state.poll.title,
+			pollTitle: (state) => state.poll.configuration.title,
 		}),
 
 	},

@@ -45,7 +45,7 @@ export default {
 
 	computed: {
 		...mapState({
-			access: (state) => state.poll.access,
+			access: (state) => state.poll.configuration.access,
 		}),
 
 		userItemProps() {

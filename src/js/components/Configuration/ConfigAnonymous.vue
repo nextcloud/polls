@@ -39,12 +39,12 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		anonymous: {
 			get() {
-				return this.poll.anonymous
+				return this.pollConfiguration.anonymous
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { anonymous: value })

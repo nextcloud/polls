@@ -48,4 +48,9 @@ class AutoReminderCron extends TimedJob {
 	protected function run($argument) {
 		$this->mailService->sendAutoReminder();
 	}
+
+	public function manuallyRun(): string {
+		$this->run(null);
+		return 'AutoReminderCron manually run.';
+	}
 }

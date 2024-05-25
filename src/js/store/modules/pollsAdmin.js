@@ -23,6 +23,7 @@
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { PollsAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const namespaced = true
 const state = {
@@ -48,10 +49,10 @@ const actions = {
 		try {
 			const response = await PollsAPI.getPollsForAdmin()
 			context.commit('set', { list: response.data })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error loading polls', { error: e.response })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error loading polls', { error })
+			throw error
 		}
 	},
 
@@ -63,9 +64,9 @@ const actions = {
 		try {
 			await PollsAPI.takeOver(payload.pollId)
 			context.dispatch('list')
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			throw error
 		}
 	},
 }

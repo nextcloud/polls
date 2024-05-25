@@ -48,7 +48,7 @@ export default {
 
 	computed: {
 		...mapState({
-			allowEdit: (state) => state.poll.acl.permissions.edit,
+			allowEdit: (state) => state.poll.permissions.edit,
 		}),
 	},
 

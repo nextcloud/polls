@@ -58,13 +58,20 @@
 			:description="t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to emails.')">
 			<AdminEmail />
 		</NcSettingsSection>
+
+		<NcSettingsSection :name="t('polls', 'Job control')"
+			:description="t('polls', 'Manually start backgropund jobs, independent from the cron schedule.')">
+			<AdminJobs />
+		</NcSettingsSection>
 	</FlexSettings>
 </template>
 
 <script>
 import {
-	AdminActivities, AdminArchivePolls, AdminCombo, AdminEmail, AdminLegal,
-	AdminPerformance, AdminPollCreation, AdminPollDownload, AdminPollsInNavigation, AdminShareOpenPoll, AdminSharePublicCreate, AdminSharePublicShowLogin, AdminShowMailAddresses
+	AdminActivities, AdminArchivePolls, AdminCombo, AdminEmail, AdminJobs, AdminLegal, 
+	AdminPerformance, AdminPollCreation, AdminPollDownload, AdminPollsInNavigation,
+	AdminShareOpenPoll, AdminSharePublicCreate, AdminSharePublicShowLogin,
+	AdminShowMailAddresses
 } from '../components/Settings/AdminSettings/index.js'
 import { FlexSettings } from '../components/Base/index.js'
 import { NcSettingsSection } from '@nextcloud/vue'
@@ -78,6 +85,7 @@ export default {
 		AdminArchivePolls,
 		AdminCombo,
 		AdminEmail,
+		AdminJobs,
 		AdminLegal,
 		AdminPerformance,
 		AdminPollCreation,

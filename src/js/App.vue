@@ -44,6 +44,7 @@ import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls.js'
 import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
+import { Logger } from './helpers/index.js'
 
 export default {
 	name: 'App',
@@ -66,10 +67,7 @@ export default {
 
 	computed: {
 		...mapState({
-			settings: (state) => state.settings.user,
-			appSettings: (state) => state.appSettings,
-			poll: (state) => state.poll,
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 		}),
 
 		appClass() {
@@ -93,23 +91,13 @@ export default {
 
 	watch: {
 		$route(to, from) {
-			if (this.$route.name === 'list') {
-				this.setFilter(this.$route.params.type)
-			}
-			this.loadPoll()
+			Logger.debug('Route changed', { from, to })
+			this.loadContext()
 			this.watchPolls()
 		},
 	},
 
 	created() {
-		this.$store.dispatch('appSettings/get')
-		if (getCurrentUser()) {
-			this.$store.dispatch('settings/get')
-			if (this.$route.params.id && !this.$route.params.token) {
-				this.loadPoll(true)
-			}
-		}
-
 		subscribe('polls:transitions:off', (delay) => {
 			this.transitionsOff(delay)
 		})
@@ -125,7 +113,10 @@ export default {
 		subscribe('polls:poll:load', (silent) => {
 			this.loadPoll(silent)
 		})
+	},
 
+	mounted() {
+		this.loadContext(true)
 	},
 
 	beforeDestroy() {
@@ -138,7 +129,27 @@ export default {
 	methods: {
 		...mapActions({
 			setFilter: 'polls/setFilter',
+			loadAcl: 'acl/get',
+			loadSettings: 'settings/get',
 		}),
+
+		loadContext(silent) {
+			if (this.$route.name !== null) {
+				this.loadAcl()
+			}
+
+			if (getCurrentUser()) {
+				this.loadSettings()
+
+				if (this.$route.name === 'list') {
+					this.setFilter(this.$route.params.type)
+				}
+			}
+
+			if (this.$route.name === 'vote' || this.$route.name === 'publicVote') {
+				this.loadPoll(silent)
+			}
+		},
 
 		transitionsOn() {
 			this.transitionClass = 'transitions-active'
@@ -154,11 +165,12 @@ export default {
 		},
 
 		async loadStores(stores) {
-			console.debug('[polls]', 'Updates detected', stores)
+			Logger.debug('Updates detected', { stores })
 
 			let dispatches = [
 				'activity/list',
 				'appSettings/get',
+				'acl/get',
 			]
 
 			stores.forEach((item) => {

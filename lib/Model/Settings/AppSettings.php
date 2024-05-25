@@ -172,6 +172,17 @@ class AppSettings implements JsonSerializable {
 		return $this->getStringSetting(self::SETTING_UPDATE_TYPE, self::SETTING_UPDATE_TYPE_DEFAULT);
 	}
 
+	public function getShowLogin(): bool {
+		return $this->getBooleanSetting(self::SETTING_SHOW_LOGIN);
+	}
+
+	public function getUseActivity(): bool {
+		return $this->getBooleanSetting(self::SETTING_USE_ACTIVITY);
+	}
+	public function getLoadPollsInNavigation(): bool {
+		return $this->getBooleanSetting(self::SETTING_LOAD_POLLS_IN_NAVIGATION);
+	}
+	
 	// Setters
 	// generic setters
 	public function setBooleanSetting(string $key, bool $value): void {

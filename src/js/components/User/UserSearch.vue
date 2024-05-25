@@ -49,6 +49,7 @@ import { mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcSelect } from '@nextcloud/vue'
 import { AppSettingsAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 export default {
 	name: 'UserSearch',
@@ -82,9 +83,9 @@ export default {
 				const response = await AppSettingsAPI.getUsers(query)
 				this.users = response.data.siteusers
 				this.isLoading = false
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				console.error(e.response)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error(error.response)
 				this.isLoading = false
 			}
 		}, 250),

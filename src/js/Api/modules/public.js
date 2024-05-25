@@ -32,6 +32,15 @@ const publicPoll = {
 		})
 	},
 
+	getAcl(shareToken) {
+		return httpInstance.request({
+			method: 'GET',
+			url: `/s/${shareToken}/acl`,
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getAcl.name].handleRequestCancellation().token,
+		})
+	},
+
 	watchPoll(shareToken, lastUpdated) {
 		return httpInstance.request({
 			method: 'GET',

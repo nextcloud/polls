@@ -45,12 +45,12 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		allowMaybe: {
 			get() {
-				return this.poll.allowMaybe
+				return this.pollConfiguration.allowMaybe
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { allowMaybe: value })

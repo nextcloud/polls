@@ -70,7 +70,7 @@ class CalendarService {
 	private function getCalendarsForPrincipal(): void {
 		$principalUri = $this->userSession->getUser()->getPrincipalUri();
 
-		if ($principalUri) {
+		if (!empty($principalUri)) {
 			$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
 		} else {
 			$this->calendars = [];
@@ -106,7 +106,7 @@ class CalendarService {
 	}
 
 	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): array {
-		if (!$this->userSession->getUser()->getPrincipalUri()) {
+		if ($this->userSession->getUser()->getPrincipalUri() === '') {
 			return [];
 		}
 
@@ -127,7 +127,7 @@ class CalendarService {
 	 *
 	 * @return CalendarEvent[]
 	 *
-	 * @psalm-return list<CalendarEvent|null>
+	 * @psalm-return list<CalendarEvent>
 	 */
 	public function getEvents(int $optionId): array {
 		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
@@ -136,10 +136,6 @@ class CalendarService {
 		$events = [];
 		$foundEvents = $this->searchEventsByTimeRange($timerange['from'], $timerange['to']);
 
-		// if (!$foundEvents) {
-		// 	return [];
-		// }
-		
 		foreach ($foundEvents as $event) {
 			$calendar = $this->getCalendarFromEvent($event);
 			if ($calendar === null) {

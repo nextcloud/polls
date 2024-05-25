@@ -22,7 +22,7 @@
  */
 
 import { CommentsAPI, PublicAPI } from '../../Api/index.js'
-import { groupComments } from '../../helpers/index.js'
+import { groupComments, Logger } from '../../helpers/index.js'
 
 const defaultComments = () => ({
 	list: [],
@@ -78,8 +78,8 @@ const actions = {
 			}
 
 			context.commit('set', response.data)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
 			context.commit('reset')
 		}
 	},
@@ -97,10 +97,10 @@ const actions = {
 
 			context.dispatch('list')
 			// context.commit('add', { comment: response.data.comment })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing comment', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error writing comment', { error, payload })
+			throw error
 		}
 	},
 
@@ -114,10 +114,10 @@ const actions = {
 			}
 
 			context.commit('setItem', response.data)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting comment', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error deleting comment', { error, payload })
+			throw error
 		}
 	},
 
@@ -131,10 +131,10 @@ const actions = {
 			}
 
 			context.commit('setItem', response.data)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error restoring comment', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error restoring comment', { error, payload })
+			throw error
 		}
 	},
 }

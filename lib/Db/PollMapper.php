@@ -26,6 +26,10 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use Doctrine\DBAL\Platforms\MySQLPlatform;
+use Doctrine\DBAL\Platforms\OraclePlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
+use Doctrine\DBAL\Platforms\SqlitePlatform;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IParameter;
@@ -38,6 +42,7 @@ use OCP\Search\ISearchQuery;
  */
 class PollMapper extends QBMapper {
 	public const TABLE = Poll::TABLE;
+	public const CONCAT_SEPARATOR = ",";
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -50,6 +55,24 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
+	 * Get active poll without any joins for backend operations
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
+	 * @return Poll
+	 */
+	public function get(int $id, bool $getDeleted = false): Poll {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		}
+		return $this->findEntity($qb);
+	}
+
+	/**
+	 * Get poll with joins for operations with permissions and user informations
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Poll
@@ -66,11 +89,13 @@ class PollMapper extends QBMapper {
 	 */
 	public function findAutoReminderPolls(): array {
 		$autoReminderSearchString = '%"autoReminder":true%';
-		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->like(
-			self::TABLE . '.misc_settings',
-			$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
-		));
+		$qb = $this->db->getQueryBuilder();
+		$qb->select('*')
+			->from($this->getTableName())
+			->where($qb->expr()->like(
+				'misc_settings',
+				$qb->createNamedParameter($autoReminderSearchString, IQueryBuilder::PARAM_STR)
+			));
 		return $this->findEntities($qb);
 	}
 
@@ -80,7 +105,7 @@ class PollMapper extends QBMapper {
 	 */
 	public function findForMe(string $userId): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)))
 			->orWhere($qb->expr()->eq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
@@ -101,7 +126,7 @@ class PollMapper extends QBMapper {
 	 */
 	public function search(ISearchQuery $query): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->orX(
 				...array_map(function (string $token) use ($qb) {
 					return $qb->expr()->orX(
@@ -141,7 +166,7 @@ class PollMapper extends QBMapper {
 		$qb->update($this->getTableName())
 			->set('deleted', $qb->createNamedParameter($archiveDate))
 			->where($qb->expr()->lt('expire', $qb->createNamedParameter($offset)))
-			->andWhere($qb->expr()->gt('expire', $qb->createNamedParameter(0)));
+			->andWhere($qb->expr()->gt('expire', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		$qb->executeStatement();
 	}
 
@@ -188,7 +213,7 @@ class PollMapper extends QBMapper {
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
-
+		$this->joinGroupShares($qb, self::TABLE);
 		return $qb;
 	}
 
@@ -196,14 +221,17 @@ class PollMapper extends QBMapper {
 	 * Joins shares to evaluate user role
 	 */
 	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
-		$joinAlias = 'shares';
-		$emptyString = $qb->createNamedParameter("", IQueryBuilder::PARAM_STR);
+		$joinAlias = 'user_shares';
+		$emptyString = $qb->expr()->literal("");
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, '. $emptyString . ') AS user_role'))
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'))
 			->addGroupBy($joinAlias . '.type');
 
 		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked')
 			->addGroupBy($joinAlias . '.locked');
+
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.token, '. $emptyString . ') AS share_token'))
+			->addGroupBy($joinAlias . '.token');
 
 		$qb->leftJoin(
 			$fromAlias,
@@ -216,6 +244,40 @@ class PollMapper extends QBMapper {
 			)
 		);
 
+	}
+
+	/**
+	 * Join group shares
+	 */
+	protected function joinGroupShares(IQueryBuilder &$qb, string $fromAlias): void {
+		$joinAlias = 'group_shares';
+
+		if ($this->db->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
+
+		} elseif ($this->db->getDatabasePlatform() instanceof OraclePlatform) {
+			$qb->addSelect($qb->createFunction('listagg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') WITHIN GROUP (ORDER BY ' . $joinAlias . '.user_id) AS group_shares'));
+
+		} elseif ($this->db->getDatabasePlatform() instanceof SqlitePlatform) {
+			$qb->addSelect($qb->createFunction('group_concat(replace(distinct ' . $joinAlias . '.user_id ,\'\',\'\'), \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
+
+		} elseif ($this->db->getDatabasePlatform() instanceof MySQLPlatform) {
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
+
+		} else {
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
+		}
+
+		$qb->leftJoin(
+			$fromAlias,
+			Share::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.type', $qb->expr()->literal(Share::TYPE_GROUP)),
+				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
+			)
+		);
 	}
 
 	/**

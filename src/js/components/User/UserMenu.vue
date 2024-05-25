@@ -183,11 +183,11 @@ export default {
 
 	computed: {
 		...mapState({
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 			share: (state) => state.share,
 			subscribed: (state) => state.subscription.subscribed,
 			emailAddress: (state) => state.share.user.emailAddress,
-			displayName: (state) => state.poll.acl.currentUser.displayName,
+			displayName: (state) => state.acl.currentUser.displayName,
 		}),
 
 		hasCookie() {
@@ -319,8 +319,8 @@ export default {
 				const response = await PollsAPI.getParticipantsEmailAddresses(this.$route.params.id)
 				await navigator.clipboard.writeText(response.data.map((item) => item.combined))
 				showSuccess(t('polls', 'Link copied to clipboard'))
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
 				showError(t('polls', 'Error while copying link to clipboard'))
 			}
 		},

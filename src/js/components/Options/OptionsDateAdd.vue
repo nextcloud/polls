@@ -307,8 +307,8 @@ export default {
 				await this.$store.dispatch('options/add', this.dateOption.option)
 				this.added = true
 				showSuccess(t('polls', '{optionText} added', { optionText: this.dateOption.text }))
-			} catch (e) {
-				if (e.response.status === 409) {
+			} catch (error) {
+				if (error.response.status === 409) {
 					showError(t('polls', '{optionText} already exists', { optionText: this.dateOption.text }))
 				} else {
 					showError(t('polls', 'Error adding {optionText}', { optionText: this.dateOption.text }))

@@ -27,7 +27,6 @@ namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\PollArchivedEvent;
@@ -46,7 +45,7 @@ use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\UserNotFoundException;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
@@ -65,8 +64,6 @@ class PollService {
 		private IEventDispatcher $eventDispatcher,
 		private Poll $poll,
 		private PollMapper $pollMapper,
-		private Preferences $preferences,
-		private PreferencesService $preferencesService,
 		private UserMapper $userMapper,
 		private UserSession $userSession,
 		private VoteMapper $voteMapper,
@@ -77,32 +74,7 @@ class PollService {
 	 * Get list of polls including acl and Threshold for "relevant polls"
 	 */
 	public function list(): array {
-		$pollList = [];
-		try {
-			$polls = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
-			$this->preferences = $this->preferencesService->get();
-			foreach ($polls as $poll) {
-				try {
-					$this->acl->setPollId($poll->getId());
-					$relevantThreshold = $poll->getRelevantThresholdNet() + $this->preferences->getRelevantOffsetTimestamp();
-
-					// mix poll settings, currentUser attributes, permissions and relevantThreshold into one array
-					$pollList[] = (object) array_merge(
-						(array) json_decode(json_encode($poll)),
-						[
-							'relevantThreshold' => $relevantThreshold,
-							'relevantThresholdNet' => $poll->getRelevantThresholdNet(),
-							'permissions' => $this->acl->getPermissionsArray(),
-							'currentUser' => $this->acl->getCurrentUserArray(),
-						],
-					);
-				} catch (ForbiddenException $e) {
-					continue;
-				}
-			}
-		} catch (DoesNotExistException $e) {
-			// silent catch
-		}
+		$pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
 		return $pollList;
 	}
 
@@ -116,8 +88,7 @@ class PollService {
 
 			foreach ($polls as $poll) {
 				try {
-					$this->acl->setPollId($poll->getId());
-					// TODO: Not the elegant way. Improvement neccessary
+					$poll->request(Poll::PERMISSION_POLL_VIEW);
 					$pollList[] = $poll;
 				} catch (ForbiddenException $e) {
 					continue;
@@ -208,8 +179,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function get(int $pollId) {
-		$this->acl->setPollId($pollId);
 		$this->poll = $this->pollMapper->find($pollId);
+		$this->poll->request(Poll::PERMISSION_POLL_VIEW);
 		return $this->poll;
 	}
 
@@ -256,35 +227,36 @@ class PollService {
 	 * Update poll configuration
 	 * @return Poll
 	 */
-	public function update(int $pollId, array $poll): Poll {
+	public function update(int $pollId, array $pollConfiguration): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
+		$this->poll->request(Poll::PERMISSION_POLL_EDIT);
 
 		// Validate valuess
-		if (isset($poll['showResults']) && !in_array($poll['showResults'], $this->getValidShowResults())) {
+		if (isset($pollConfiguration['showResults']) && !in_array($pollConfiguration['showResults'], $this->getValidShowResults())) {
 			throw new InvalidShowResultsException('Invalid value for prop showResults');
 		}
 
-		if (isset($poll['title']) && !$poll['title']) {
+		if (isset($pollConfiguration['title']) && !$pollConfiguration['title']) {
 			throw new EmptyTitleException('Title must not be empty');
 		}
 
-		if (isset($poll['access']) && !in_array($poll['access'], $this->getValidAccess())) {
-			if (!in_array($poll['access'], $this->getValidAccess())) {
-				throw new InvalidAccessException('Invalid value for prop access ' . $poll['access']);
+		if (isset($pollConfiguration['access']) && !in_array($pollConfiguration['access'], $this->getValidAccess())) {
+			if (!in_array($pollConfiguration['access'], $this->getValidAccess())) {
+				throw new InvalidAccessException('Invalid value for prop access ' . $pollConfiguration['access']);
 			}
 
-			if ($poll['access'] === (Poll::ACCESS_OPEN)) {
-				$this->acl->setPollId($pollId, Acl::PERMISSION_ALL_ACCESS);
+			if ($pollConfiguration['access'] === (Poll::ACCESS_OPEN)) {
+				$this->acl->request(Acl::PERMISSION_ALL_ACCESS);
 			}
 		}
 
 		// Set the expiry time to the actual servertime to avoid an
 		// expiry misinterpration when using acl
-		if (isset($poll['expire']) && $poll['expire'] < 0) {
-			$poll['expire'] = time();
+		if (isset($pollConfiguration['expire']) && $pollConfiguration['expire'] < 0) {
+			$pollConfiguration['expire'] = time();
 		}
 
-		$this->poll->deserializeArray($poll);
+		$this->poll->deserializeArray($pollConfiguration);
 		$this->pollMapper->update($this->poll);
 		$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($this->poll));
 
@@ -306,8 +278,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function toggleArchive(int $pollId): Poll {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_DELETE);
-		$this->poll = $this->acl->getPoll();
+		$this->poll = $this->pollMapper->find($pollId);
+		$this->poll->request(Poll::PERMISSION_POLL_DELETE);
 
 		$this->poll->setDeleted($this->poll->getDeleted() ? 0 : time());
 		$this->poll = $this->pollMapper->update($this->poll);
@@ -326,8 +298,8 @@ class PollService {
 	 * @return Poll
 	 */
 	public function delete(int $pollId): Poll {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_DELETE);
-		$this->poll = $this->acl->getPoll();
+		$this->poll = $this->pollMapper->find($pollId);
+		$this->poll->request(Poll::PERMISSION_POLL_DELETE);
 
 		$this->eventDispatcher->dispatchTyped(new PollDeletedEvent($this->poll));
 
@@ -341,6 +313,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function close(int $pollId): Poll {
+		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
 		return $this->toggleClose($pollId, time() - 5);
 	}
 
@@ -349,6 +322,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function reopen(int $pollId): Poll {
+		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
 		return $this->toggleClose($pollId, 0);
 	}
 
@@ -358,7 +332,8 @@ class PollService {
 	 */
 	private function toggleClose(int $pollId, int $expiry): Poll {
 		$this->poll = $this->pollMapper->find($pollId);
-		$this->acl->setPollId($this->poll->getId(), Acl::PERMISSION_POLL_EDIT);
+		$this->poll->request(Poll::PERMISSION_POLL_EDIT);
+
 		$this->poll->setExpire($expiry);
 		if ($expiry > 0) {
 			$this->eventDispatcher->dispatchTyped(new PollCloseEvent($this->poll));
@@ -376,8 +351,9 @@ class PollService {
 	 * @return Poll
 	 */
 	public function clone(int $pollId): Poll {
-		$this->acl->setPollId($pollId);
-		$origin = $this->acl->getPoll();
+		$origin = $this->pollMapper->find($pollId);
+		$origin->request(Poll::PERMISSION_POLL_VIEW);
+		$this->acl->request(Acl::PERMISSION_POLL_CREATE);
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());
@@ -405,8 +381,8 @@ class PollService {
 	 *
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
-		$this->poll = $this->acl->getPoll();
+		$this->poll = $this->pollMapper->find($pollId);
+		$this->poll->request(Poll::PERMISSION_POLL_EDIT);
 
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());
 		$list = [];

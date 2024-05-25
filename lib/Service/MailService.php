@@ -236,7 +236,9 @@ class MailService {
 	 * Send a confirmation mail for the poll to all participants
 	 */
 	public function sendConfirmations(int $pollId): SentResult {
+		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
 		$sentResult = new SentResult();
+
 		$participants = $this->userMapper->getParticipants($pollId);
 
 		foreach ($participants as $participant) {

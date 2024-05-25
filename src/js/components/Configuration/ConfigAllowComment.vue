@@ -39,12 +39,12 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		allowComment: {
 			get() {
-				return this.poll.allowComment
+				return this.pollConfiguration.allowComment
 			},
 			set(value) {
 				this.$store.commit('poll/setProperty', { allowComment: value })

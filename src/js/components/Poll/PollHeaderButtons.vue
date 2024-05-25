@@ -69,7 +69,7 @@ export default {
 
 	computed: {
 		...mapState({
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 		}),
 
 		showUserMenu() {

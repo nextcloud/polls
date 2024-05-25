@@ -64,11 +64,11 @@
 
 		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
 			<div class="title">
-				{{ poll.title }}
+				{{ pollConfiguration.title }}
 			</div>
 
 			<div class="description">
-				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+				{{ pollConfiguration.description ? pollConfiguration.description : t('polls', 'No description provided') }}
 			</div>
 		</div>
 
@@ -77,18 +77,18 @@
 			:to="{ name: 'vote', params: { id: poll.id }}"
 			:class="{ closed: closed, active: (poll.id === $store.state.poll.id) }">
 			<div class="title">
-				{{ poll.title }}
+				{{ pollConfiguration.title }}
 			</div>
 
 			<div class="description">
-				{{ poll.description ? poll.description : t('polls', 'No description provided') }}
+				{{ pollConfiguration.description ? pollConfiguration.description : t('polls', 'No description provided') }}
 			</div>
 		</router-link>
 
 		<slot name="actions" />
 
-		<ArchivedPollIcon v-if="poll.deleted" :title="accessType" class="item__access" />
-		<OpenPollIcon v-else-if="poll.access === 'open'" :title="accessType" class="item__access" />
+		<ArchivedPollIcon v-if="pollStatus.deleted" :title="accessType" class="item__access" />
+		<OpenPollIcon v-else-if="pollConfiguration.access === 'open'" :title="accessType" class="item__access" />
 		<PrivatePollIcon v-else :title="accessType" class="item__access" />
 
 		<div class="item__owner">
@@ -159,19 +159,27 @@ export default {
 		}),
 
 		closeToClosing() {
-			return (!this.closed && this.poll.expire && moment.unix(this.poll.expire).diff() < 86400000)
+			return (!this.closed && this.pollConfiguration.expire && moment.unix(this.pollConfiguration.expire).diff() < 86400000)
 		},
 
 		closed() {
-			return this.poll.pollExpired
+			return this.pollStatus.expired
+		},
+
+		pollConfiguration() {
+			return this.poll.configuration
+		},
+
+		pollStatus() {
+			return this.poll.status
 		},
 
 		accessType() {
-			if (this.poll.deleted) {
+			if (this.pollConfiguration.deleted) {
 				return t('polls', 'Archived')
 			}
 
-			if (this.poll.access === 'open') {
+			if (this.pollConfiguration.access === 'open') {
 				return t('polls', 'Openly accessible poll')
 			}
 
@@ -190,8 +198,8 @@ export default {
 		},
 
 		timeExpirationRelative() {
-			if (this.poll.expire) {
-				return moment.unix(this.poll.expire).fromNow()
+			if (this.pollConfiguration.expire) {
+				return moment.unix(this.pollConfiguration.expire).fromNow()
 			}
 			return t('polls', 'never')
 
@@ -202,11 +210,11 @@ export default {
 				return 'error'
 			}
 
-			if (this.poll.expire && this.closeToClosing) {
+			if (this.pollConfiguration.expire && this.closeToClosing) {
 				return 'warning'
 			}
 
-			if (this.poll.expire && !this.closed) {
+			if (this.pollConfiguration.expire && !this.closed) {
 				return 'success'
 			}
 
@@ -214,7 +222,7 @@ export default {
 		},
 
 		timeCreatedRelative() {
-			return moment.unix(this.poll.created).fromNow()
+			return moment.unix(this.pollStatus.created).fromNow()
 		},
 	},
 }

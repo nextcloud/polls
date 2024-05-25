@@ -173,7 +173,7 @@ class IndexManager {
 
 		foreach (TableSchema::COMMON_INDICES as $index) {
 			$message = $this->removeNamedIndexFromTable($index['table'], $index['name']);
-			if ($message) {
+			if ($message !== null && $message !== '') {
 				$messages[] = $message;
 			}
 		}
@@ -276,7 +276,7 @@ class IndexManager {
 	 */
 	public function removeNamedIndexFromTable(string $tableName, string $indexName): string|null {
 		$tableName = $this->dbPrefix . $tableName;
-
+		$message = null;
 		try {
 			if ($this->schema->hasTable($tableName)) {
 				$table = $this->schema->getTable($tableName);
@@ -285,7 +285,6 @@ class IndexManager {
 			}
 		} catch (IndexDoesNotExist $e) {
 			// common index does not exist, skip it
-			$message = null;
 		}
 		return $message;
 	}

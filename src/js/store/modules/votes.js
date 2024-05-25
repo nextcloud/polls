@@ -22,6 +22,7 @@
  */
 
 import { PublicAPI, VotesAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultVotes = () => ({
 	list: [],
@@ -102,10 +103,10 @@ const actions = {
 				votes.push(vote)
 			})
 			context.commit('set', votes)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
 			context.commit('reset')
-			throw e
+			throw error
 		}
 	},
 
@@ -121,14 +122,14 @@ const actions = {
 			context.dispatch('options/list', null, { root: true })
 			context.dispatch('poll/get', null, { root: true })
 			return response
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			if (e.response.status === 409) {
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			if (error.response.status === 409) {
 				context.dispatch('list')
 				context.dispatch('options/list', null, { root: true })
 			} else {
-				console.error('Error setting vote', { error: e.response }, { payload })
-				throw e
+				Logger.error('Error setting vote', { error, payload })
+				throw error
 			}
 		}
 	},
@@ -142,10 +143,10 @@ const actions = {
 				response = await VotesAPI.removeUser(context.rootState.route.params.id)
 			}
 			context.commit('deleteVotes', { userId: response.data.deleted })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting votes', { error: e.response })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error deleting votes', { error })
+			throw error
 		}
 	},
 
@@ -153,10 +154,10 @@ const actions = {
 		try {
 			await VotesAPI.removeUser(context.rootState.route.params.id, payload.userId)
 			context.commit('deleteVotes', payload)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting votes', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error deleting votes', { error, payload })
+			throw error
 		}
 	},
 	async removeOrphanedVotes(context, payload) {
@@ -168,10 +169,10 @@ const actions = {
 			}
 			context.dispatch('poll/get', null, { root: true })
 			context.dispatch('options/list', null, { root: true })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error deleting orphaned votes', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error deleting orphaned votes', { error, payload })
+			throw error
 		}
 	},
 }

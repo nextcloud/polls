@@ -25,25 +25,24 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\PreferencesService;
-use OCA\Polls\UserSession;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
 /**
  * @psalm-api
  */
-class PreferencesController extends BaseController {
+class UserController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
 		private PreferencesService $preferencesService,
 		private CalendarService $calendarService,
-		private UserSession $userSession,
+		private Acl $acl,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -52,8 +51,7 @@ class PreferencesController extends BaseController {
 	 * Read all preferences
 	 */
 	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	public function get(): JSONResponse {
+	public function getPreferences(): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->get());
 	}
 
@@ -62,18 +60,24 @@ class PreferencesController extends BaseController {
 	 * @param array $preferences
 	 */
 	#[NoAdminRequired]
-	public function write(array $preferences): JSONResponse {
-		if (!$this->userSession->getIsLoggedIn()) {
-			return new JSONResponse([], Http::STATUS_OK);
-		}
+	public function writePreferences(array $preferences): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
-
+	
 	/**
-	 * Read all preferences
+	 * get acl for user
+	 * @param $pollId Poll id
 	 */
 	#[NoAdminRequired]
-	#[NoCSRFRequired]
+	public function getAcl(): JSONResponse {
+		return new JSONResponse(['acl' => $this->acl], Http::STATUS_OK);
+	}
+
+
+	/**
+	 * Read all calendars
+	 */
+	#[NoAdminRequired]
 	public function getCalendars(): JSONResponse {
 		return new JSONResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
 	}

@@ -22,6 +22,7 @@
  */
 
 import { PollsAPI, PublicAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultSubscription = () => ({
 	subscribed: false,
@@ -56,10 +57,10 @@ const actions = {
 				return
 			}
 			context.commit('set', response.data)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
 			context.commit('set', false)
-			throw e
+			throw error
 		}
 	},
 
@@ -75,10 +76,10 @@ const actions = {
 				return
 			}
 			context.commit('set', response.data)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error(e.response)
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error on changing subscription' , error)
+			throw error
 		}
 	},
 }

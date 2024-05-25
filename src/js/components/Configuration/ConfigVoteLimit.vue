@@ -50,13 +50,13 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 			countOptions: (state) => state.options.list.length,
 		}),
 
 		useVoteLimit: {
 			get() {
-				return (this.poll.limits.maxVotesPerUser !== 0)
+				return (this.pollConfiguration.maxVotesPerUser !== 0)
 			},
 			set(value) {
 				this.$store.commit('poll/setLimit', { maxVotesPerUser: value ? 1 : 0 })
@@ -66,7 +66,7 @@ export default {
 
 		maxVotesPerUser: {
 			get() {
-				return this.poll.limits.maxVotesPerUser
+				return this.pollConfiguration.maxVotesPerUser
 			},
 			set(value) {
 				if (!this.useVoteLimit) {

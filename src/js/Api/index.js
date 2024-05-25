@@ -1,4 +1,5 @@
 export { default as ActivityAPI } from './modules/activity.js'
+export { default as AdminAPI } from './modules/admin.js'
 export { default as AppSettingsAPI } from './modules/appSettings.js'
 export { default as CalendarAPI } from './modules/calendar.js'
 export { default as CommentsAPI } from './modules/comments.js'

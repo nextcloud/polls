@@ -31,7 +31,6 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
 import ActionSendConfirmed from '../../Actions/modules/ActionSendConfirmed.vue'
 
@@ -49,17 +48,6 @@ export default {
 		}
 	},
 
-	computed: {
-		...mapState({
-			pollType: (state) => state.poll.type,
-		}),
-
-		...mapGetters({
-			proposalsExpirySet: 'poll/proposalsExpirySet',
-			proposalsExpired: 'poll/proposalsExpired',
-			proposalsExpireRelative: 'poll/proposalsExpireRelative',
-		}),
-	},
 	methods: {
 		confirmationSendError() {
 			this.cardType = 'error'

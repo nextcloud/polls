@@ -46,7 +46,7 @@ class UserSession {
 
 	public const TABLE = Share::TABLE;
 	protected ?UserBase $currentUser = null;
-	protected ?Share $share = null;
+	// protected ?Share $share = null;
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -56,6 +56,8 @@ class UserSession {
 		protected IUserSession $userSession,
 		protected UserMapper $userMapper,
 		protected ShareMapper $shareMapper,
+		protected Share $share,
+
 	) {
 	}
 
@@ -71,7 +73,7 @@ class UserSession {
 		if (!$this->currentUser) {
 
 			if ($this->getIsLoggedIn()) {
-				$this->currentUser = $this->userMapper->getUserFromUserBase($this->userSession->getUser()->getUID());
+				$this->currentUser = $this->userMapper->getUserFromUserBase((string) $this->userSession->getUser()?->getUID());
 			} else {
 				$this->currentUser = $this->userMapper->getUserFromShareToken($this->getShareToken());
 			}
@@ -96,7 +98,7 @@ class UserSession {
 		$this->session->remove(self::SESSION_KEY_SHARE_TOKEN);
 		$this->session->remove(self::SESSION_KEY_SHARE_TYPE);
 		$this->session->remove(self::SESSION_KEY_USER_ID);
-		$this->share = null;
+		$this->share = new Share();
 		$this->currentUser = null;
 	}
 
@@ -142,8 +144,8 @@ class UserSession {
 	 *
 	 * @return Share
 	 */
-	public function getShare(): ?Share {
-		if ($this->hasShare() && !$this->share) {
+	public function getShare(): Share {
+		if ($this->hasShare() && !$this->share->getId()) {
 			$this->share = $this->shareMapper->findByToken($this->getShareToken());
 		}
 		return $this->share;
@@ -182,7 +184,7 @@ class UserSession {
 	}
 
 	public function getClientTimeZone(): string {
-		return (string) $this->session->get(self::CLIENT_TZ);
+		return $this->session->get(self::CLIENT_TZ) ?? date_default_timezone_get();
 	}
 
 	public function setClientTimeZone(string $clientTimeZone): void {

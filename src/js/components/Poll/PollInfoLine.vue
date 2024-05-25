@@ -44,31 +44,28 @@ export default {
 
 	computed: {
 		...mapState({
-			access: (state) => state.poll.access,
-			title: (state) => state.poll.title,
-			expire: (state) => state.poll.expire,
-			isDeleted: (state) => state.poll.deleted,
+			pollConfiguration: (state) => state.poll.configuration,
+			pollStatus: (state) => state.poll.status,
 			ownerDisplayName: (state) => state.poll.owner.displayName,
-			pollCreated: (state) => state.poll.created,
-			mayEdit: (state) => state.poll.acl.permissions.edit,
+			mayEdit: (state) => state.poll.permissions.edit,
 		}),
 
 		...mapGetters({
-			isClosed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			hasShares: 'shares/hasShares',
-			proposalsExpirySet: 'poll/proposalsExpirySet',
-			proposalsExpired: 'poll/proposalsExpired',
+			isProposalExpirySet: 'poll/isProposalExpirySet',
+			isProposalExpired: 'poll/isProposalExpired',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
 
 		isNoAccessSet() {
-			return this.access === 'private' && !this.hasShares && this.mayEdit
+			return this.pollConfiguration.access === 'private' && !this.hasShares && this.mayEdit
 		},
 
 		subTexts() {
 			const subTexts = []
 
-			if (this.isDeleted) {
+			if (this.pollStatus.deleted) {
 				subTexts.push({
 					id: 'deleted',
 					text: t('polls', 'Archived'),
@@ -90,23 +87,23 @@ export default {
 				return subTexts
 			}
 
-			if (this.access === 'private') {
+			if (this.pollConfiguration.access === 'private') {
 				subTexts.push({
-					id: this.access,
+					id: this.pollConfiguration.access,
 					text: t('polls', 'A private poll from {name}', { name: this.ownerDisplayName }),
 					class: '',
 					iconComponent: null,
 				})
 			} else {
 				subTexts.push({
-					id: this.access,
+					id: this.pollConfiguration.access,
 					text: t('polls', 'An openly accessible poll from {name}', { name: this.ownerDisplayName }),
 					class: '',
 					iconComponent: null,
 				})
 			}
 
-			if (this.isClosed) {
+			if (this.isPollClosed) {
 				subTexts.push({
 					id: 'closed',
 					text: this.timeExpirationRelative,
@@ -116,7 +113,7 @@ export default {
 				return subTexts
 			}
 
-			if (!this.isClosed && this.expire) {
+			if (!this.isPollClosed && this.pollConfiguration.expire) {
 				subTexts.push({
 					id: 'expiring',
 					text: t('polls', 'Closing {relativeExpirationTime}', { relativeExpirationTime: this.timeExpirationRelative }),
@@ -126,7 +123,7 @@ export default {
 				return subTexts
 			}
 
-			if (this.proposalsExpirySet && this.proposalsExpired) {
+			if (this.isProposalExpirySet && this.isProposalExpired) {
 				subTexts.push({
 					id: 'expired',
 					text: t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
@@ -136,7 +133,7 @@ export default {
 				return subTexts
 			}
 
-			if (this.proposalsExpirySet && !this.proposalsExpired) {
+			if (this.isProposalExpirySet && !this.isProposalExpired) {
 				subTexts.push({
 					id: 'proposal-open',
 					text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
@@ -158,16 +155,16 @@ export default {
 		},
 
 		dateCreatedRelative() {
-			return moment.unix(this.pollCreated).fromNow()
+			return moment.unix(this.pollStatus.created).fromNow()
 		},
 
 		closeToClosing() {
-			return (!this.isClosed && this.expire && moment.unix(this.expire).diff() < 86400000)
+			return (!this.isPollClosed && this.pollConfiguration.expire && moment.unix(this.pollConfiguration.expire).diff() < 86400000)
 		},
 
 		timeExpirationRelative() {
-			if (this.expire) {
-				return moment.unix(this.expire).fromNow()
+			if (this.pollConfiguration.expire) {
+				return moment.unix(this.pollConfiguration.expire).fromNow()
 			}
 			return t('polls', 'never')
 

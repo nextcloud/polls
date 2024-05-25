@@ -40,6 +40,7 @@
 <script>
 
 import QRCode from 'qrcode'
+import { Logger } from '../../../helpers/index.js'
 
 export default {
 	name: 'QrModal',
@@ -80,8 +81,8 @@ export default {
 		async generateQr() {
 			try {
 				this.qrUri = await QRCode.toDataURL(this.encodeText)
-			} catch (err) {
-				console.error(err)
+			} catch (error) {
+				Logger.error('Error on generating QR code', { error: error.message })
 			}
 		},
 	},

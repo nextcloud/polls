@@ -71,10 +71,8 @@ class CommentController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function delete(int $commentId): JSONResponse {
-		$comment = $this->commentService->get($commentId);
-
 		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($comment)
+			'comment' => $this->commentService->delete($commentId)
 		]);
 	}
 
@@ -84,10 +82,8 @@ class CommentController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function restore(int $commentId): JSONResponse {
-		$comment = $this->commentService->get($commentId);
-
 		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($comment, true)
+			'comment' => $this->commentService->delete($commentId, true)
 		]);
 	}
 }

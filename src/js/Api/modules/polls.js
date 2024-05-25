@@ -79,10 +79,10 @@ const polls = {
 		})
 	},
 
-	updatePoll(poll) {
+	updatePoll(pollId, poll) {
 		return httpInstance.request({
 			method: 'PUT',
-			url: `poll/${poll.id}`,
+			url: `poll/${pollId}`,
 			data: { poll },
 			cancelToken: cancelTokenHandlerObject[this.updatePoll.name].handleRequestCancellation().token,
 		})

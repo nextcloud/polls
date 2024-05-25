@@ -26,11 +26,11 @@
 			<template #icon>
 				<OwnerIcon />
 			</template>
-			{{ t('polls', 'Poll owner:') }} <NcUserBubble v-if="poll.owner.userId" :user="poll.owner.userId" :display-name="poll.owner.displayName" />
+			{{ t('polls', 'Poll owner:') }} <NcUserBubble v-if="pollOwner.userId" :user="pollOwner.userId" :display-name="pollOwner.displayName" />
 		</BadgeDiv>
 		<BadgeDiv>
 			<template #icon>
-				<PrivatePollIcon v-if="access === 'private'" />
+				<PrivatePollIcon v-if="pollConfiguration.access === 'private'" />
 				<OpenPollIcon v-else />
 			</template>
 			{{ accessCaption }}
@@ -41,13 +41,13 @@
 			</template>
 			{{ t('polls', 'Created {dateRelative}', { dateRelative: dateCreatedRelative }) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="poll.expire">
+		<BadgeDiv v-if="pollConfiguration.expire">
 			<template #icon>
 				<ClosedIcon />
 			</template>
 			{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="poll.anonymous">
+		<BadgeDiv v-if="pollConfiguration.anonymous">
 			<template #icon>
 				<AnoymousIcon />
 			</template>
@@ -55,8 +55,8 @@
 		</BadgeDiv>
 		<BadgeDiv>
 			<template #icon>
-				<HideResultsIcon v-if="showResults === 'never'" />
-				<ShowResultsOnClosedIcon v-else-if="showResults === 'closed' && closed" />
+				<HideResultsIcon v-if="pollConfiguration.showResults === 'never'" />
+				<ShowResultsOnClosedIcon v-else-if="pollConfiguration.showResults === 'closed' && isPollClosed" />
 				<ShowResultsIcon v-else />
 			</template>
 			{{ resultsCaption }}
@@ -97,23 +97,23 @@
 			</template>
 			{{ t('polls', 'Time zone: {timezoneString}', { timezoneString: currentTimeZone}) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="proposalsAllowed">
+		<BadgeDiv v-if="isProposalAllowed">
 			<template #icon>
 				<ProposalsAllowedIcon />
 			</template>
 			{{ proposalsStatus }}
 		</BadgeDiv>
-		<BadgeDiv v-if="maxVotesPerUser">
+		<BadgeDiv v-if="pollConfiguration.maxVotesPerUser">
 			<template #icon>
 				<CheckIcon />
 			</template>
-			{{ n('polls', '{usedVotes} of %n vote left.', '{usedVotes} of %n votes left.', maxVotesPerUser, { maximalVotes: maxVotesPerUser, usedVotes: (maxVotesPerUser - yesVotes) }) }}
+			{{ n('polls', '{usedVotes} of %n vote left.', '{usedVotes} of %n votes left.', pollConfiguration.maxVotesPerUser, { maximalVotes: pollConfiguration.maxVotesPerUser, usedVotes: countUsedVotes }) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="maxVotesPerOption">
+		<BadgeDiv v-if="pollConfiguration.maxVotesPerOption">
 			<template #icon>
 				<CloseIcon />
 			</template>
-			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', maxVotesPerOption) }}
+			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', pollConfiguration.maxVotesPerOption) }}
 		</BadgeDiv>
 		<BadgeDiv v-if="$route.name === 'publicVote' && share.user.emailAddress">
 			<template #icon>
@@ -183,69 +183,65 @@ export default {
 	computed: {
 		...mapState({
 			share: (state) => state.share,
-			permissions: (state) => state.poll.acl.permissions,
-			poll: (state) => state.poll,
+			permissions: (state) => state.poll.permissions,
+			pollOwner: (state) => state.poll.owner,
+			pollConfiguration: (state) => state.poll.configuration,
+			pollStatus: (state) => state.poll.status,
 			subscribed: (state) => state.subscription.subscribed,
-			showResults: (state) => state.poll.showResults,
-			access: (state) => state.poll.access,
 			yesVotes: (state) => state.poll.currentUserStatus.yesVotes,
-			maxVotesPerOption: (state) => state.poll.limits.maxVotesPerOption,
-			maxVotesPerUser: (state) => state.poll.limits.maxVotesPerUser,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
+			isPollClosed: 'poll/isClosed',
 			countOptions: 'options/count',
 			countParticipantsVoted: 'poll/countParticipantsVoted',
 			countAllVotes: 'votes/countAllVotesByAnswer',
-			proposalsAllowed: 'poll/proposalsAllowed',
-			proposalsExpirySet: 'poll/proposalsExpirySet',
-			proposalsExpired: 'poll/proposalsExpired',
+			isProposalAllowed: 'poll/isProposalAllowed',
+			isProposalExpirySet: 'poll/isProposalExpirySet',
+			isProposalExpired: 'poll/isProposalExpired',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
-			proposalsOpen: 'poll/proposalsOpen',
-			displayResults: 'polls/displayResults',
+			isProposalsOpen: 'poll/isProposalsOpen',
 		}),
 
 		proposalsStatus() {
-			if (this.proposalsOpen && !this.proposalsExpirySet) {
+			if (this.isProposalsOpen && !this.isProposalExpirySet) {
 				return t('polls', 'Proposals are allowed')
 			}
-			if (this.proposalsExpirySet && !this.proposalsExpired) {
+			if (this.isProposalExpirySet && !this.isProposalExpired) {
 				return t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative })
 			}
-			if (this.proposalsExpirySet && this.proposalsExpired) {
+			if (this.isProposalExpirySet && this.isProposalExpired) {
 				return t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative })
 			}
 			return t('polls', 'No proposals are allowed')
 		},
 
 		resultsCaption() {
-			if (this.showResults === 'closed' && !this.closed) {
+			if (this.pollConfiguration.showResults === 'closed' && !this.isPollClosed) {
 				return t('polls', 'Results are hidden until closing poll')
 			}
-			if (this.showResults === 'closed' && this.closed) {
+			if (this.pollConfiguration.showResults === 'closed' && this.isPollClosed) {
 				return t('polls', 'Results are visible since closing poll')
 			}
-			if (this.showResults === 'never') {
+			if (this.pollConfiguration.showResults === 'never') {
 				return t('polls', 'Results are always hidden')
 			}
 			return t('polls', 'Results are visible')
 		},
 
 		accessCaption() {
-			if (this.access === 'private') {
+			if (this.pollConfiguration.access === 'private') {
 				return t('polls', 'Private poll')
 			}
 			return t('polls', 'Openly accessible poll')
 		},
 
 		dateCreatedRelative() {
-			return moment.unix(this.poll.created).fromNow()
+			return moment.unix(this.pollStatus.created).fromNow()
 		},
 
 		dateExpiryRelative() {
-			return moment.unix(this.poll.expire).fromNow()
+			return moment.unix(this.pollConfiguration.expire).fromNow()
 		},
 
 		currentTimeZone() {
@@ -263,7 +259,9 @@ export default {
 		countAllMaybeVotes() {
 			return this.countAllVotes('maybe')
 		},
-
+		countUsedVotes() {
+			return this.pollConfiguration.maxVotesPerUser - this.yesVotes
+		},
 	},
 }
 </script>

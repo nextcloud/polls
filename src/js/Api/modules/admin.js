@@ -22,35 +22,30 @@
 
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 
-const userSettings = {
-	getUserSettings() {
+const adminJobs = {
+	runAutoReminder() {
 		return httpInstance.request({
 			method: 'GET',
-			url: 'preferences',
-			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getUserSettings.name].handleRequestCancellation().token,
+			url: 'administration/autoreminder/run',
+			cancelToken: cancelTokenHandlerObject[this.runAutoReminder.name].handleRequestCancellation().token,
 		})
 	},
-
-	getAcl() {
+	runJanitor() {
 		return httpInstance.request({
 			method: 'GET',
-			url: 'acl',
-			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getAcl.name].handleRequestCancellation().token,
+			url: 'administration/janitor/run',
+			cancelToken: cancelTokenHandlerObject[this.runJanitor.name].handleRequestCancellation().token,
 		})
 	},
-
-	writeUserSettings(preferences) {
+	runNotification() {
 		return httpInstance.request({
-			method: 'POST',
-			url: 'preferences',
-			data: { preferences },
-			cancelToken: cancelTokenHandlerObject[this.writeUserSettings.name].handleRequestCancellation().token,
+			method: 'GET',
+			url: 'administration/notification/run',
+			cancelToken: cancelTokenHandlerObject[this.runNotification.name].handleRequestCancellation().token,
 		})
 	},
 }
 
-const cancelTokenHandlerObject = createCancelTokenHandler(userSettings)
+const cancelTokenHandlerObject = createCancelTokenHandler(adminJobs)
 
-export default userSettings
+export default adminJobs

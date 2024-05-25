@@ -25,10 +25,12 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\Acl as Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 
@@ -38,18 +40,16 @@ class SubscriptionService {
 	 */
 	public function __construct(
 		private SubscriptionMapper $subscriptionMapper,
+		private PollMapper $pollMapper,
 		private Acl $acl,
 	) {
 	}
 
-	public function get(?int $pollId = null): bool {
-		try {
-			if ($pollId !== null) {
-				$this->acl->setPollId($pollId);
-			}
+	public function get(int $pollId): bool {
+		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_VIEW);
 
-			$this->acl->request(Acl::PERMISSION_POLL_SUBSCRIBE);
-			$this->subscriptionMapper->findByPollAndUser($this->acl->getPoll()->getId(), $this->acl->getUserId());
+		try {
+			$this->subscriptionMapper->findByPollAndUser($pollId, $this->acl->getCurrentUserId());
 			// Subscription exists
 			return true;
 		} catch (DoesNotExistException $e) {
@@ -59,15 +59,11 @@ class SubscriptionService {
 		}
 	}
 
-	public function set(bool $setToSubscribed, ?int $pollId = null): bool {
-		if ($pollId !== null) {
-			$this->acl->setPollId($pollId);
-		}
-
+	public function set(bool $setToSubscribed, int $pollId): bool {
 		if (!$setToSubscribed) {
 			// user wants to unsubscribe, allow unsubscribe neverteheless the permissions are set
 			try {
-				$subscription = $this->subscriptionMapper->findByPollAndUser($this->acl->getPoll()->getId(), $this->acl->getUserId());
+				$subscription = $this->subscriptionMapper->findByPollAndUser($pollId, $this->acl->getCurrentUserId());
 				$this->subscriptionMapper->delete($subscription);
 			} catch (DoesNotExistException $e) {
 				// Not found, assume already unsubscribed
@@ -75,8 +71,8 @@ class SubscriptionService {
 			}
 		} else {
 			try {
-				$this->acl->request(Acl::PERMISSION_POLL_SUBSCRIBE);
-				$this->add($this->acl->getPoll()->getId(), $this->acl->getUserId());
+				$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_SUBSCRIBE);
+				$this->add($pollId, $this->acl->getCurrentUserId());
 			} catch (ForbiddenException $e) {
 				return false;
 			} catch (Exception $e) {

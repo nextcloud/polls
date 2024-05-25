@@ -22,6 +22,7 @@
  */
 
 import { AppSettingsAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 const defaultAppSettings = () => ({
 	allAccessGroups: [],
@@ -73,7 +74,7 @@ const actions = {
 		try {
 			const response = await AppSettingsAPI.getAppSettings()
 			context.commit('set', response.data.appSettings)
-		} catch (e) {
+		} catch (error) {
 			// context.commit('reset')
 		}
 	},
@@ -82,10 +83,10 @@ const actions = {
 		try {
 			const response = await AppSettingsAPI.writeAppSettings(context.state)
 			context.commit('set', response.data.appSettings)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			console.error('Error writing appSettings', { error: e.response }, { appSettings: state })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error writing appSettings', { error, appSettings: state })
+			throw error
 		}
 	},
 }

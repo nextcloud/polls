@@ -99,23 +99,23 @@ export default {
 			explodeDates: 'options/explodeDates',
 		}),
 		...mapState({
-			poll: (state) => state.poll,
+			pollType: (state) => state.poll.type,
+			pollConfiguration: (state) => state.poll.configuration,
 			options: (state) => state.options,
-			votes: (state) => state.votes,
-			permissions: (state) => state.poll.acl.permissions,
+			permissions: (state) => state.poll.permissions,
 		}),
 
 		sheetName() {
 			// Not allowed characters for the sheet name: : \ / ? * [ ]
 			// Strip them out
-			// Stonger regex i.e. for file names: /[&/\\#,+()$~%.'":*?<>{}]/g
+			// Stonger regex i.error. for file names: /[&/\\#,+()$~%.'":*?<>{}]/g
 			const regex = /[\\/?*[\]]/g
-			return this.poll.title.replaceAll(regex, '').slice(0, 31)
+			return this.pollConfiguration.title.replaceAll(regex, '').slice(0, 31)
 		},
 	},
 
 	methods: {
-		async exportFile(type) {
+		async exportFile(exportType) {
 			const participantsHeader = [t('polls', 'Participants')]
 			const fromHeader = [t('polls', 'From')]
 			const toHeader = [t('polls', 'To')]
@@ -123,10 +123,10 @@ export default {
 			this.workBook.SheetNames.push(this.sheetName)
 			this.sheetData = []
 
-			if (['html', 'xlsx', 'ods'].includes(type)) {
+			if (['html', 'xlsx', 'ods'].includes(exportType)) {
 				this.sheetData.push(
-					[DOMPurify.sanitize(this.poll.title)],
-					[DOMPurify.sanitize(this.poll.description)],
+					[DOMPurify.sanitize(this.pollConfiguration.title)],
+					[DOMPurify.sanitize(this.pollConfiguration.description)],
 				)
 			}
 
@@ -142,8 +142,8 @@ export default {
 				}
 			}
 
-			if (this.poll.type === 'textPoll') {
-				if (['html'].includes(type)) {
+			if (this.pollType === 'textPoll') {
+				if (['html'].includes(exportType)) {
 					this.sheetData.push([
 						...participantsHeader,
 						...this.options.list.map((item) => DOMPurify.sanitize(item.text)),
@@ -155,13 +155,13 @@ export default {
 					])
 				}
 
-			} else if (['csv'].includes(type)) {
+			} else if (['csv'].includes(exportType)) {
 				this.sheetData.push([
 					...participantsHeader,
 					...this.options.list.map((option) => this.explodeDates(option).iso),
 				])
 
-			} else if (['html'].includes(type)) {
+			} else if (['html'].includes(exportType)) {
 				this.sheetData.push([
 					...participantsHeader,
 					...this.options.list.map((option) => this.explodeDates(option).raw),
@@ -178,16 +178,16 @@ export default {
 				])
 			}
 
-			if (['html', 'ods', 'xlsx'].includes(type)) {
+			if (['html', 'ods', 'xlsx'].includes(exportType)) {
 				this.addVotesArray('symbols')
-			} else if (['csv'].includes(type)) {
+			} else if (['csv'].includes(exportType)) {
 				this.addVotesArray('raw')
 			} else {
 				this.addVotesArray()
 			}
 
-			const workBookOutput = xlsxWrite(this.workBook, { bookType: type, type: 'binary' })
-			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${type}`)
+			const workBookOutput = xlsxWrite(this.workBook, { bookType: exportType, type: 'binary' })
+			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${exportType}`)
 		},
 
 		addVotesArray(style) {
@@ -209,7 +209,7 @@ export default {
 					})
 
 					this.sheetData.push(votesLine)
-				} catch (e) {
+				} catch (error) {
 					// just skip this participant
 				}
 			})

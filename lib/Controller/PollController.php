@@ -25,7 +25,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
@@ -73,11 +74,9 @@ class PollController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
-		$poll = $this->pollService->get($pollId);
-		$this->acl->setPollId($pollId);
 		return $this->response(fn () => [
+			'poll' => $this->pollService->get($pollId),
 			'acl' => $this->acl,
-			'poll' => $poll,
 		]);
 	}
 
@@ -98,10 +97,9 @@ class PollController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function update(int $pollId, array $poll): JSONResponse {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		return $this->response(fn () => [
 			'poll' => $this->pollService->update($pollId, $poll),
-			'acl' => $this->acl->setPollId($pollId),
+			'acl' => $this->acl,
 		]);
 	}
 
@@ -111,7 +109,6 @@ class PollController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	public function sendConfirmation(int $pollId): JSONResponse {
-		$this->acl->setPollId($pollId, Acl::PERMISSION_POLL_EDIT);
 		return $this->response(fn () => [
 			'confirmations' => $this->mailService->sendConfirmations($pollId),
 		]);
@@ -144,7 +141,7 @@ class PollController extends BaseController {
 	public function close(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->close($pollId),
-			'acl' => $this->acl->setPollId($pollId),
+			'acl' => $this->acl,
 		]);
 	}
 
@@ -156,7 +153,7 @@ class PollController extends BaseController {
 	public function reopen(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->reopen($pollId),
-			'acl' => $this->acl->setPollId($pollId),
+			'acl' => $this->acl,
 		]);
 	}
 

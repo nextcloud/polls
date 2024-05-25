@@ -47,6 +47,7 @@ import { NcPopover } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
 import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.js'
 
 export default {
 	name: 'CalendarPeek',
@@ -71,7 +72,7 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		detectAllDay() {
@@ -86,25 +87,25 @@ export default {
 
 		sortedEvents() {
 			const sortedEvents = [...this.events]
-			sortedEvents.push(this.thisOption)
+			sortedEvents.push(this.currentOption)
 			return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
 		},
 
-		thisOption() {
+		currentOption() {
 			return {
 				id: this.option.id,
 				UID: this.option.id,
-				calendarUri: this.poll.uri,
+				calendarUri: '',
 				calendarKey: 0,
 				calendarName: 'Polls',
 				displayColor: 'transparent',
 				allDay: this.detectAllDay.allDay,
-				description: this.poll.description,
+				description: this.pollConfiguration.description,
 				start: this.option.timestamp,
 				location: '',
 				end: this.option.timestamp + this.option.duration,
 				status: 'self',
-				summary: this.poll.title,
+				summary: this.pollConfiguration.title,
 				type: this.detectAllDay.type,
 			}
 		},
@@ -119,9 +120,9 @@ export default {
 			try {
 				const response = await CalendarAPI.getEvents(this.option.id)
 				this.events = response.data.events
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				console.error('Error fetching events', { error: e.response })
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error fetching events', { error })
 			}
 		},
 

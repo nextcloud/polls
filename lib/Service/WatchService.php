@@ -25,10 +25,11 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Watch;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Exceptions\NoUpdatesException;
-use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -40,22 +41,20 @@ class WatchService {
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function __construct(
-		private WatchMapper $watchMapper,
-		private Acl $acl,
 		private AppSettings $appSettings,
-		private Watch $watch,
+		private PollMapper $pollMapper,
 		private UserSession $userSession,
+		private Watch $watch,
+		private WatchMapper $watchMapper,
 	) {
 	}
 
 	/**
 	 * Watch poll for updates
 	 */
-	public function watchUpdates(int $pollId = 0, ?int $offset = null): array {
-		if ($pollId !== 0) {
-			$this->acl->setPollId($pollId);
-		}
-
+	public function watchUpdates(int $pollId, ?int $offset = null): array {
+		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_VIEW);
+		
 		$start = time();
 		$timeout = 30;
 		$offset = $offset ?? $start;

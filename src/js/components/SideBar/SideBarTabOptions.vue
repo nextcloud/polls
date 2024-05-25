@@ -30,7 +30,7 @@
 			<ConfigProposals />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !closed" :name="t('polls', 'Shift all date options')">
+		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !isPollClosed" :name="t('polls', 'Shift all date options')">
 			<template #icon>
 				<ShiftDateIcon />
 			</template>
@@ -45,7 +45,7 @@
 			<OptionsDate />
 
 			<template #actions>
-				<OptionsDateAdd v-if="!closed"
+				<OptionsDateAdd v-if="!isPollClosed"
 					:caption="t('polls', 'Add a date')"
 					show-caption
 					primary />
@@ -60,7 +60,7 @@
 			<OptionsText />
 
 			<template #actions>
-				<OptionsTextAddBulk v-if="!closed" />
+				<OptionsTextAddBulk v-if="!isPollClosed" />
 			</template>
 		</ConfigBox>
 	</div>
@@ -99,12 +99,12 @@ export default {
 
 	computed: {
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			countOptions: 'options/count',
 		}),
 		...mapState({
 			pollType: (state) => state.poll.type,
-			currentUser: (state) => state.poll.acl.currentUser,
+			currentUser: (state) => state.acl.currentUser,
 		}),
 	},
 }

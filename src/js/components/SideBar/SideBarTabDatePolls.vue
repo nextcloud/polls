@@ -28,7 +28,7 @@
 			@click="toggle(poll.id)">
 			<UserItem :user="poll.owner" condensed />
 			<div class="poll-title-box">
-				{{ poll.title }}
+				{{ poll.configuration.title }}
 			</div>
 		</div>
 	</div>

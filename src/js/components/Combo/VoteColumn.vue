@@ -25,7 +25,7 @@
 		<OptionItem :option="option" poll-type="datePoll" display="dateBox" />
 		<div v-for="(poll) in polls"
 			:key="poll.id"
-			:title="poll.title"
+			:title="poll.configuration.title"
 			class="poll-group">
 			<VoteItem v-for="(participant) in participantsByPoll(poll.id)"
 				:key="`${participant.userId}_${participant.pollId}`"
@@ -58,11 +58,9 @@ export default {
 	computed: {
 		...mapGetters({
 			participantsByPoll: 'combo/participantsInPoll',
-			optionBelongsToPoll: 'combo/optionBelongsToPoll',
 		}),
 		...mapState({
 			polls: (state) => state.combo.polls,
-			participants: (state) => state.combo.participants,
 		}),
 	},
 }

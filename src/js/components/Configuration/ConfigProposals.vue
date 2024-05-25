@@ -26,11 +26,11 @@
 			{{ t('polls', 'Allow Proposals') }}
 		</NcCheckboxRadioSwitch>
 
-		<NcCheckboxRadioSwitch v-show="proposalsAllowed" :checked.sync="proposalExpiration" type="switch">
+		<NcCheckboxRadioSwitch v-show="isProposalAllowed" :checked.sync="proposalExpiration" type="switch">
 			{{ t('polls', 'Proposal closing date') }}
 		</NcCheckboxRadioSwitch>
 
-		<NcDateTimePicker v-show="proposalExpiration && proposalsAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
+		<NcDateTimePicker v-show="proposalExpiration && isProposalAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
@@ -52,18 +52,17 @@ export default {
 
 	computed: {
 		...mapState({
-			poll: (state) => state.poll,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		...mapGetters({
-			proposalsAllowed: 'poll/proposalsAllowed',
-			proposalsOptions: 'poll/proposalsOptions',
+			isProposalAllowed: 'poll/isProposalAllowed',
 		}),
 
 		// Add bindings
 		allowProposals: {
 			get() {
-				return (this.poll.allowProposals === 'allow')
+				return (this.pollConfiguration.allowProposals === 'allow')
 			},
 			set(value) {
 				this.writeValue({ allowProposals: value ? 'allow' : 'disallow' })
@@ -72,7 +71,7 @@ export default {
 
 		pollExpire: {
 			get() {
-				return moment.unix(this.poll.proposalsExpire)._d
+				return moment.unix(this.pollConfiguration.proposalsExpire)._d
 			},
 			set(value) {
 				this.writeValue({ proposalsExpire: moment(value).unix() })
@@ -81,7 +80,7 @@ export default {
 
 		proposalExpiration: {
 			get() {
-				return !!this.poll.proposalsExpire
+				return !!this.pollConfiguration.proposalsExpire
 			},
 			set(value) {
 				if (value) {
@@ -123,8 +122,8 @@ export default {
 	},
 
 	methods: {
-		writeValue(e) {
-			this.$store.commit('poll/setProperty', e)
+		writeValue(error) {
+			this.$store.commit('poll/setProperty', error)
 			this.writePoll() // from mixin
 		},
 	},

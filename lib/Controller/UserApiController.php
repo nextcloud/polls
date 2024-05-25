@@ -25,7 +25,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Service\CommentService;
+use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\Service\PreferencesService;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
@@ -35,64 +36,44 @@ use OCP\IRequest;
 /**
  * @psalm-api
  */
-class CommentApiController extends BaseApiController {
+class UserApiController extends BaseApiController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private CommentService $commentService
+		private PreferencesService $preferencesService,
+		private Acl $acl,
 	) {
 		parent::__construct($appName, $request);
 	}
 
 	/**
-	 * Read all comments of a poll based on the poll id and return list as array
-	 * @param int pollId poll id
+	 * Get user preferences
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function list(int $pollId): JSONResponse {
-		return $this->response(fn () => [
-			'comments' => $this->commentService->list($pollId)
-		]);
+	public function getPreferences(): JSONResponse {
+		return $this->response(fn () => $this->preferencesService->get());
 	}
-
+	
 	/**
-	 * Add comment
-	 * @param int $pollId poll id
-	 * @param string $comment Comment text to add
+	 * Get user preferences
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function add(int $pollId, string $comment): JSONResponse {
-		return $this->response(fn () => [
-			'comment' => $this->commentService->add($comment, $pollId)
-		]);
+	public function writePreferences(array $preferences): JSONResponse {
+		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
-
+	
 	/**
-	 * Delete comment
-	 * @param int $commentId Id of comment to delete
+	 * get acl for poll
+	 * @param $pollId Poll id
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function delete(int $commentId): JSONResponse {
-		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($commentId)]);
-	}
-
-	/**
-	 * Restore comment
-	 * @param int $commentId Id of comment to restore
-	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	public function restore(int $commentId): JSONResponse {
-		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($commentId, true)
-		]);
+	public function getAcl(): JSONResponse {
+		return $this->response(fn () => ['acl' => $this->acl]);
 	}
 }

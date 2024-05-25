@@ -52,49 +52,47 @@ export default {
 
 	computed: {
 		...mapState({
-			pollAccess: (state) => state.poll.access,
+			pollAccess: (state) => state.poll.configuration.access,
 			pollId: (state) => state.poll.id,
-			allowEdit: (state) => state.poll.acl.permissions.edit,
-			allowVote: (state) => state.poll.acl.permissions.vote,
-			allowAddOptions: (state) => state.poll.acl.permissions.addOptions,
-			maxVotesPerOption: (state) => state.poll.limits.maxVotesPerOption,
-			maxVotesPerUser: (state) => state.poll.limits.maxVotesPerUser,
+			permissions: (state) => state.poll.permissions,
+			maxVotesPerOption: (state) => state.poll.configuration.maxVotesPerOption,
+			maxVotesPerUser: (state) => state.poll.configuration.maxVotesPerUser,
 			optionsCount: (state) => state.options.list.length,
 			isLocked: (state) => state.poll.currentUserStatus.isLocked,
 			userRole: (state) => state.poll.currentUserStatus.userRole,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			confirmedOptions: 'options/confirmed',
 			hasShares: 'shares/hasShares',
-			proposalsOpen: 'poll/proposalsOpen',
+			isProposalOpen: 'poll/isProposalOpen',
 		}),
 
 		showUnpublishedPollCard() {
-			return this.pollAccess === 'private' && !this.hasShares && this.allowEdit && this.optionsCount
+			return this.pollAccess === 'private' && !this.hasShares && this.permissions.edit && this.optionsCount
 		},
 
 		showAddProposalsCard() {
-			return this.allowAddOptions && this.proposalsOpen && !this.closed
+			return this.permissions.addOptions && this.isProposalOpen && !this.isPollClosed
 		},
 
 		showClosedCard() {
-			return this.closed && !this.showSendConfirmationsCard
+			return this.isPollClosed && !this.showSendConfirmationsCard
 		},
 
 		showSendConfirmationsCard() {
-			return this.allowEdit && this.closed && this.confirmedOptions.length > 0
+			return this.permissions.edit && this.isPollClosed && this.confirmedOptions.length > 0
 		},
 
 		showLimitCard() {
-			return this.allowVote && !this.closed && (this.maxVotesPerOption || this.maxVotesPerUser)
+			return this.permissions.vote && !this.isPollClosed && (this.maxVotesPerOption || this.maxVotesPerUser)
 		},
 
 		showRegisterCard() {
 			return (this.$route.name === 'publicVote'
 				&& ['public', 'email', 'contact'].includes(this.userRole)
-				&& !this.closed
+				&& !this.isPollClosed
 				&& !this.isLocked
 				&& !!this.pollId
 			)

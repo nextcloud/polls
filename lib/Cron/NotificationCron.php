@@ -48,4 +48,9 @@ class NotificationCron extends TimedJob {
 	protected function run($argument) {
 		$this->mailService->sendNotifications();
 	}
+
+	public function manuallyRun(): string {
+		$this->run(null);
+		return 'NotificationCron manually run.';
+	}
 }

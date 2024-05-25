@@ -98,7 +98,7 @@ export default {
 					await this.$store.dispatch('options/addBulk', { text: this.newPollTexts })
 					showSuccess(t('polls', 'Options added'))
 					this.newPollTexts = ''
-				} catch (e) {
+				} catch (error) {
 					showError(t('polls', 'Error adding options', { optionText: this.newPollText }))
 				}
 			}

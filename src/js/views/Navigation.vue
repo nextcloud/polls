@@ -149,7 +149,7 @@ export default {
 		...mapState({
 			isPollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
 			isComboActivated: (state) => state.polls.meta.permissions.comboAllowed,
-			navigationPollsInList: (state) => state.appSettings.navigationPollsInList,
+			navigationPollsInList: (state) => state.acl.appSettings.navigationPollsInList,
 			maxPolls: (state) => state.polls.meta.maxPollsInNavigation,
 		}),
 

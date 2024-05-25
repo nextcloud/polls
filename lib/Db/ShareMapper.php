@@ -28,7 +28,6 @@ namespace OCA\Polls\Db;
 
 use Exception;
 use OCA\Polls\Exceptions\ShareNotFoundException;
-// use OCA\Polls\Model\UserBase;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -61,29 +60,6 @@ class ShareMapper extends QBMapper {
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
-
-		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
-		}
-
-		$this->joinUserVoteCount($qb, self::TABLE);
-
-		return $this->findEntities($qb);
-	}
-
-	/**
-	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
-	 * @return Share[]
-	 * @psalm-return array<array-key, Share>
-	 */
-	public function findGroupShareByPoll(int $pollId, bool $getDeleted = false): array {
-		$qb = $this->db->getQueryBuilder();
-
-		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE)
-			->groupBy(self::TABLE . '.id')
-			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq(self::TABLE . '.type', $qb->createNamedParameter(Share::TYPE_GROUP, IQueryBuilder::PARAM_STR)));
 
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));

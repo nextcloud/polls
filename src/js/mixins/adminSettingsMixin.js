@@ -24,6 +24,8 @@
 import { debounce } from 'lodash'
 import { mapState } from 'vuex'
 import { AppSettingsAPI } from '../Api/index.js'
+import { Logger } from '../helpers/index.js'
+
 
 export const loadGroups = {
 	data() {
@@ -52,9 +54,9 @@ export const loadGroups = {
 				const response = await AppSettingsAPI.getGroups(query)
 				this.groups = response.data.groups
 				this.isLoading = false
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				console.error(e.response)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error getting groups' , { error: error.response})
 				this.isLoading = false
 			}
 		}, 250),

@@ -21,7 +21,7 @@
   -->
 
 <template>
-	<NcAppContent :class="[{ closed: closed, scrolled: scrolled, 'vote-style-beta-510': useAlternativeStyling }, pollType]">
+	<NcAppContent :class="[{ closed: isPollClosed, scrolled: scrolled, 'vote-style-beta-510': useAlternativeStyling }, pollType]">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ pollTitle }}
@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -110,16 +110,16 @@ export default {
 
 	computed: {
 		...mapState({
-			pollTitle: (state) => state.poll.title,
 			pollType: (state) => state.poll.type,
-			pollDescription: (state) => state.poll.description,
-			pollAnonymous: (state) => state.poll.anonymous,
-			permissions: (state) => state.poll.acl.permissions,
+			pollTitle: (state) => state.poll.configuration.title,
+			pollDescription: (state) => state.poll.configuration.description,
+			pollAnonymous: (state) => state.poll.configuration.anonymous,
+			permissions: (state) => state.poll.permissions,
 			useAlternativeStyling: (state) => state.settings.user.useAlternativeStyling,
 		}),
 
 		...mapGetters({
-			closed: 'poll/isClosed',
+			isPollClosed: 'poll/isClosed',
 			options: 'options/rankedOptions',
 			viewMode: 'poll/viewMode',
 			countHiddenParticipants: 'poll/countHiddenParticipants',
@@ -149,12 +149,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations({
-			switchSafeTable: 'poll/switchSafeTable',
-		}),
-
 		...mapActions({
-			deleteOrphanedVotes: 'votes/removeOrphanedVotes',
 			resetPoll: 'poll/reset',
 		}),
 
