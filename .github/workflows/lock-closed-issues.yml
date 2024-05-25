@@ -1,6 +1,8 @@
 name: 'Lock Issues'
 
-on: workflow_dispatch
+on: 
+  schedule:
+    - cron: '2 1 * * *'
 
 concurrency: lock_issues
 
