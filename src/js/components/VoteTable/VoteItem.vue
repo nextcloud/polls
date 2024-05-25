@@ -118,7 +118,7 @@ export default {
 					setTo: this.nextAnswer,
 				})
 				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
-			} catch (error) {
+			} catch (e) {
 				showError(t('polls', 'Error saving vote'))
 
 			}
@@ -128,7 +128,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .vote-item {
 	display: flex;

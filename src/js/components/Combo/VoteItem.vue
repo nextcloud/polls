@@ -85,7 +85,7 @@ export default {
 
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 
 .vote-item {
 	display: flex;
