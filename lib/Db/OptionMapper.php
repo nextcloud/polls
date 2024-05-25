@@ -214,7 +214,8 @@ class OptionMapper extends QBMapperWithUser {
 			// Count number of maybe votes for this option
 			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'maybe\' THEN ' . $joinAlias . '.id END)) AS votes_maybe'))
 			// inject if the votes should be hidden
-			->addSelect($qb->createFunction(intval(!$hideResults) . ' as show_results'));	}
+			->addSelect($qb->createFunction(intval(!$hideResults) . ' as show_results'));
+	}
 
 	/**
 	 * Joins poll to fetch option_limit and vote_limit
