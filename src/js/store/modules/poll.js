@@ -56,6 +56,8 @@ const defaultPoll = () => ({
 		created: 0,
 		deleted: false,
 		expired: false,
+		relevantThreshold: 0,
+		countOptions: 0,
 	},
 	currentUserStatus: {
 		userRole: '',
