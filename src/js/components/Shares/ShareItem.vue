@@ -56,6 +56,7 @@
 				</NcActionButton>
 
 				<NcActionButton v-if="activateResolveGroup"
+					:disabled="resolving"
 					:name="t('polls', 'Resolve into individual invitations')"
 					@click="resolveGroup(share)">
 					<template #icon>
@@ -193,6 +194,7 @@ export default {
 
 	data() {
 		return {
+			resolving: false,
 			label: {
 				inputValue: '',
 				inputProps: {
@@ -274,6 +276,12 @@ export default {
 		},
 
 		async resolveGroup(share) {
+			if (this.resolving) {
+				return
+			}
+
+			this.resolving = true
+
 			try {
 				await this.$store.dispatch('shares/resolveGroup', { share })
 			} catch (error) {
@@ -284,6 +292,8 @@ export default {
 				} else {
 					showError(t('polls', 'Error resolving {name}.', { name: share.user.displayName }))
 				}
+			} finally {
+				this.resolving = false
 			}
 		},
 

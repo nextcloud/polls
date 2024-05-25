@@ -123,6 +123,7 @@ export default {
 				email: 'empty',
 				userName: 'empty',
 			},
+			sendRegistration: false,
 			userName: '',
 			emailAddress: '',
 			redirecting: false,
@@ -143,7 +144,7 @@ export default {
 		},
 
 		disableSubmit() {
-			return !this.registrationIsValid || this.checkStatus.userName === 'checking'
+			return !this.registrationIsValid || this.checkStatus.userName === 'checking' || this.sendRegistration
 		},
 
 		privacyRich() {
@@ -291,9 +292,11 @@ export default {
 		},
 
 		async submitRegistration() {
-			if (!this.registrationIsValid) {
+			if (!this.registrationIsValid || this.sendRegistration) {
 				return
 			}
+
+			this.sendRegistration = true
 
 			try {
 				const response = await PublicAPI.register(
@@ -316,6 +319,9 @@ export default {
 				if (error?.code === 'ERR_CANCELED') return
 				showError(t('polls', 'Error registering to poll', { error }))
 				throw error
+			}
+			finally {
+				this.sendRegistration = false
 			}
 		},
 	},
