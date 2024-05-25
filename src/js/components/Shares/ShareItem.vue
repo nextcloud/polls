@@ -263,9 +263,9 @@ export default {
 					this.lockShare({ share })
 					showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.user.displayName }))
 				}
-			} catch (e) {
+			} catch (error) {
 				showError(t('polls', 'Error while changing lock status of share {displayName}', { displayName: share.user.displayName }))
-				Logger.error('Error locking or unlocking share', { share }, e.response)
+				Logger.error('Error locking or unlocking share', { share, error })
 			}
 		},
 
@@ -276,10 +276,10 @@ export default {
 		async resolveGroup(share) {
 			try {
 				await this.$store.dispatch('shares/resolveGroup', { share })
-			} catch (e) {
-				if (e.response.status === 409 && e.response.data === 'Circles is not enabled for this user') {
+			} catch (error) {
+				if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
 					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.user.displayName }))
-				} else if (e.response.status === 409 && e.response.data === 'Contacts is not enabled') {
+				} else if (error.response.status === 409 && error.response.data === 'Contacts is not enabled') {
 					showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.user.displayName }))
 				} else {
 					showError(t('polls', 'Error resolving {name}.', { name: share.user.displayName }))

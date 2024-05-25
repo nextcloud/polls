@@ -83,9 +83,9 @@ export default {
 				const response = await AppSettingsAPI.getUsers(query)
 				this.users = response.data.siteusers
 				this.isLoading = false
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				Logger.error(e.response)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error(error.response)
 				this.isLoading = false
 			}
 		}, 250),

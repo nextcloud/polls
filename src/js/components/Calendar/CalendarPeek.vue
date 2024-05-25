@@ -120,9 +120,9 @@ export default {
 			try {
 				const response = await CalendarAPI.getEvents(this.option.id)
 				this.events = response.data.events
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				Logger.error('Error fetching events', { error: e.response })
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error fetching events', { error })
 			}
 		},
 

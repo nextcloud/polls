@@ -118,7 +118,7 @@ export default {
 					setTo: this.nextAnswer,
 				})
 				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
-			} catch (e) {
+			} catch (error) {
 				showError(t('polls', 'Error saving vote'))
 
 			}

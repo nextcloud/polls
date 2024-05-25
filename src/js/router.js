@@ -76,7 +76,7 @@ async function validateToken(to, from, next) {
 				next()
 			}
 		}
-	} catch (e) {
+	} catch (error) {
 		if (getCurrentUser()) {
 			next({ name: 'notfound' })
 		} else {

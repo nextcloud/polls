@@ -86,17 +86,17 @@ const actions = {
 			}
 			// context.commit('reset')
 			context.commit('set', { acl: response.data.acl })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
 
 			context.commit('reset')
 			if (context.rootState.route.name === null) {
 				// TODO: for some reason unauthorized users first get the root route resulting in a 401 
 				// and after that the publicVote route is called as next route
 				// therefore we just debug the error and reset the acl
-				Logger.debug('getAcl failed', e)
+				Logger.debug('getAcl failed', error)
 			} else {
-				throw e
+				throw error
 			}
 		}
 	},

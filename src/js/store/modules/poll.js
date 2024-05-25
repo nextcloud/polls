@@ -219,10 +219,10 @@ const actions = {
 			}
 			context.commit('switchSafeTable', false)
 			context.commit('set', { poll: response.data.poll })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.debug('Error loading poll', { error: e })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.debug('Error loading poll', { error })
+			throw error
 		}
 	},
 
@@ -230,10 +230,10 @@ const actions = {
 		try {
 			const response = await PollsAPI.addPoll(payload.type, payload.title)
 			return response
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error adding poll:', { error: e.response }, { state: context.state })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error adding poll:', { error, state: context.state })
+			throw error
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
 		}
@@ -243,11 +243,11 @@ const actions = {
 		try {
 			const response = await PollsAPI.updatePoll(context.state.id, context.state.configuration)
 			context.commit('set', { poll: response.data.poll })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error updating poll:', { error: e.response }, { poll: context.state })
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error updating poll:', { error, poll: context.state })
 			context.dispatch('get')
-			throw e
+			throw error
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
 			context.dispatch('options/list', null, { root: true })
@@ -258,11 +258,11 @@ const actions = {
 		try {
 			const response = await PollsAPI.closePoll(context.state.id)
 			context.commit('set', { poll: response.data.poll })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error closing poll', { error: e.response }, { pollId: context.state.id })
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error closing poll', { error, pollId: context.state.id })
 			context.dispatch('get')
-			throw e
+			throw error
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
 		}
@@ -272,11 +272,11 @@ const actions = {
 		try {
 			const response = await PollsAPI.reopenPoll(context.state.id)
 			context.commit('set', { poll: response.data.poll })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error reopening poll', { error: e.response }, { pollId: context.state.id })
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error reopening poll', { error, pollId: context.state.id })
 			context.dispatch('get')
-			throw e
+			throw error
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
 		}
@@ -285,10 +285,10 @@ const actions = {
 	async toggleArchive(context, payload) {
 		try {
 			await PollsAPI.toggleArchive(payload.pollId)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error archiving/restoring', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error archiving/restoring', { error, payload })
+			throw error
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
 		}
@@ -297,10 +297,10 @@ const actions = {
 	async delete(context, payload) {
 		try {
 			await PollsAPI.deletePoll(payload.pollId)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error deleting poll', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error deleting poll', { error, payload })
+			throw error
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
 		}
@@ -310,10 +310,10 @@ const actions = {
 		try {
 			const response = await PollsAPI.clonePoll(payload.pollId)
 			return response
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error cloning poll', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error cloning poll', { error, payload })
+			throw error
 		} finally {
 			context.dispatch('polls/list', null, { root: true })
 		}

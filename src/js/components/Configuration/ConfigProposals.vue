@@ -122,8 +122,8 @@ export default {
 	},
 
 	methods: {
-		writeValue(e) {
-			this.$store.commit('poll/setProperty', e)
+		writeValue(error) {
+			this.$store.commit('poll/setProperty', error)
 			this.writePoll() // from mixin
 		},
 	},

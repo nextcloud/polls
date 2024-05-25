@@ -25,7 +25,7 @@
 		<div class="job_hints">
 			<p>
 				{{ t('polls', 'Please understand, that the jobs were defined as asynchronous jobs by intention.') }}
-				{{ t('polls', 'Only use them, if it is absolutely neccessary (i.e. your cron does not work properly) or for testing.') }}
+				{{ t('polls', 'Only use them, if it is absolutely neccessary (i.error. your cron does not work properly) or for testing.') }}
 				{{ t('polls', 'Starting the jobs does not mean, that the rules for these actions are overridden.') }}
 			</p>
 			<p>
@@ -95,7 +95,7 @@ export default {
 				this.autoreminder.text = t('polls', 'Autoreminder started')
 			} catch (error) {
 				this.autoreminder.text = t('polls', 'Autoreminder failed')
-				Logger.error(error)
+				Logger.error('Error on executing autoreminder job', { error })
 			} finally {
 				this.autoreminder.disabled = true
 			}
@@ -106,7 +106,7 @@ export default {
 				this.janitor.text = t('polls', 'Janitor started')
 			} catch (error) {
 				this.janitor.text = t('polls', 'Janitor failed')
-				Logger.error(error)
+				Logger.error('Error on executing janitor job', { error })
 			} finally {
 				this.janitor.disabled = true
 			}
@@ -117,7 +117,7 @@ export default {
 				this.notification.text = t('polls', 'Notification started')
 			} catch (error) {
 				this.notification.text = t('polls', 'Notification failed')
-				Logger.error(error)
+				Logger.error('Error on executing notification job', { error })
 			} finally {
 				this.notification.disabled = true
 			}

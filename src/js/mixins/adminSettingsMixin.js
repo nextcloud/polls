@@ -54,9 +54,9 @@ export const loadGroups = {
 				const response = await AppSettingsAPI.getGroups(query)
 				this.groups = response.data.groups
 				this.isLoading = false
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				Logger.error(e.response)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error getting groups' , { error: error.response})
 				this.isLoading = false
 			}
 		}, 250),

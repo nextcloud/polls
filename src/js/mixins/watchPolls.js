@@ -73,8 +73,8 @@ export const watchPolls = {
 						throw new InvalidJSON(`No JSON response recieved, got "${response.headers['content-type']}"`)
 					}
 
-				} catch (e) {
-					await this.handleConnectionException(e)
+				} catch (error) {
+					await this.handleConnectionException(error)
 				}
 
 				if (this.watchDisabled) {
@@ -121,8 +121,8 @@ export const watchPolls = {
 			return new Promise((resolve) => setTimeout(resolve, this.sleepTimeout * 1000))
 		},
 
-		async handleConnectionException(e) {
-			if (e.response?.status === 304) {
+		async handleConnectionException(error) {
+			if (error.response?.status === 304) {
 				// this is a wanted response, no updates where found.
 				// resume to normal operation
 				Logger.debug(`No updates - continue ${this.updateType}`)
@@ -130,7 +130,7 @@ export const watchPolls = {
 				return
 			}
 
-			if (e?.code === 'ERR_NETWORK') {
+			if (error?.code === 'ERR_NETWORK') {
 				Logger.debug(`Possibly offline - continue ${this.updateType}`)
 				return
 			}
@@ -138,18 +138,18 @@ export const watchPolls = {
 			// Errors, which allow a retry. Increase counter and resume to normal operation
 			this.retryCounter += 1
 
-			if (e?.response?.status === 503) {
+			if (error?.response?.status === 503) {
 				// Server possibly in maintenance mode
-				this.sleepTimeout = e?.response?.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
+				this.sleepTimeout = error?.response?.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
 				Logger.debug(`Service not avaiable - retry ${this.updateType} after ${this.sleepTimeout} seconds`)
 				return
 			}
 
 			// Watch has to be canceled
-			if (e?.code === 'ERR_CANCELED' || e?.code === 'ECONNABORTED') {
+			if (error?.code === 'ERR_CANCELED' || error?.code === 'ECONNABORTED') {
 				Logger.debug('Watch canceled')
 			} else {
-				Logger.debug(e.message ?? `No response - ${this.updateType} aborted - failed request ${this.retryCounter}/${MAX_TRIES}`, e)
+				Logger.debug(`No response - ${this.updateType} aborted - failed request ${this.retryCounter}/${MAX_TRIES}`, error)
 			}
 
 			this.retryCounter = null

@@ -108,7 +108,7 @@ export default {
 		sheetName() {
 			// Not allowed characters for the sheet name: : \ / ? * [ ]
 			// Strip them out
-			// Stonger regex i.e. for file names: /[&/\\#,+()$~%.'":*?<>{}]/g
+			// Stonger regex i.error. for file names: /[&/\\#,+()$~%.'":*?<>{}]/g
 			const regex = /[\\/?*[\]]/g
 			return this.pollConfiguration.title.replaceAll(regex, '').slice(0, 31)
 		},
@@ -209,7 +209,7 @@ export default {
 					})
 
 					this.sheetData.push(votesLine)
-				} catch (e) {
+				} catch (error) {
 					// just skip this participant
 				}
 			})

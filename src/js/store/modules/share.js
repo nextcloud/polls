@@ -72,10 +72,10 @@ const actions = {
 			const response = await PublicAPI.getShare(context.rootState.route.params.token)
 			context.commit('set', { share: response.data.share })
 			return response.data
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.debug('Error retrieving share', { error: e.response })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.debug('Error retrieving share', { error })
+			throw error
 		}
 	},
 
@@ -88,10 +88,10 @@ const actions = {
 			const response = await PublicAPI.setEmailAddress(context.rootState.route.params.token, payload.emailAddress)
 			context.commit('set', { share: response.data.share })
 			context.dispatch('poll/get', null, { root: true })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error writing email address', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error writing email address', { error, payload })
+			throw error
 		}
 	},
 
@@ -107,10 +107,10 @@ const actions = {
 			context.dispatch('comments/list', null, { root: true })
 			context.dispatch('votes/list', null, { root: true })
 			context.dispatch('options/list', null, { root: true })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error changing name', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error changing name', { error, payload })
+			throw error
 		}
 	},
 
@@ -124,10 +124,10 @@ const actions = {
 			context.commit('set', { share: response.data.share })
 			context.dispatch('subscription/update', false, { root: true })
 			context.dispatch('poll/get', null, { root: true })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error writing email address', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error writing email address', { error, payload })
+			throw error
 		}
 	},
 
@@ -138,10 +138,10 @@ const actions = {
 
 		try {
 			return await PublicAPI.resendInvitation(context.rootState.route.params.token)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error sending invitation', { error: e.response }, { payload })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error sending invitation', { error, payload })
+			throw error
 		}
 	},
 }

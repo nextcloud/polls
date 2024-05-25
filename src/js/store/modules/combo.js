@@ -144,9 +144,9 @@ const actions = {
 		try {
 			const response = await PollsAPI.getPoll(payload.pollId)
 			context.commit('addPoll', response.data)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.debug('Error loading poll for combo', { error: e.response })
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.debug('Error loading poll for combo', { error })
 		}
 	},
 
@@ -154,9 +154,9 @@ const actions = {
 		try {
 			const response = await OptionsAPI.getOptions(payload.pollId)
 			context.commit('addOptions', response.data)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.debug('Error loading options for combo', { error: e.response })
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.debug('Error loading options for combo', { error })
 		}
 	},
 
@@ -164,9 +164,9 @@ const actions = {
 		try {
 			const response = await VotesAPI.getVotes(payload.pollId)
 			context.commit('addVotes', response.data)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.debug('Error loading options for combo', { error: e.response })
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.debug('Error loading options for combo', { error })
 		}
 	},
 }

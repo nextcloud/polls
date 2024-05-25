@@ -49,10 +49,10 @@ const actions = {
 		try {
 			const response = await PollsAPI.getPollsForAdmin()
 			context.commit('set', { list: response.data })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error loading polls', { error: e.response })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error loading polls', { error })
+			throw error
 		}
 	},
 
@@ -64,9 +64,9 @@ const actions = {
 		try {
 			await PollsAPI.takeOver(payload.pollId)
 			context.dispatch('list')
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			throw error
 		}
 	},
 }

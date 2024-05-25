@@ -165,7 +165,7 @@ export default {
 		},
 
 		async loadStores(stores) {
-			Logger.debug('Updates detected', stores)
+			Logger.debug('Updates detected', { stores })
 
 			let dispatches = [
 				'activity/list',

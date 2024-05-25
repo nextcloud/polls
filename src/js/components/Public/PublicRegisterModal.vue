@@ -239,13 +239,13 @@ export default {
 			try {
 				await ValidatorAPI.validateName(this.$route.params.token, this.userName)
 				this.checkStatus.userName = 'valid'
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				if (e?.code === 'ERR_BAD_REQUEST') {
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				if (error?.code === 'ERR_BAD_REQUEST') {
 					this.checkStatus.userName = 'invalid'
 					return
 				}
-				throw e
+				throw error
 			}
 		}, 500),
 
@@ -259,13 +259,13 @@ export default {
 			try {
 				await ValidatorAPI.validateEmailAddress(this.emailAddress)
 				this.checkStatus.email = 'valid'
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				if (e?.code === 'ERR_BAD_REQUEST') {
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				if (error?.code === 'ERR_BAD_REQUEST') {
 					this.checkStatus.email = 'invalid'
 					return
 				}
-				throw e
+				throw error
 			}
 		}, 500),
 
@@ -277,7 +277,7 @@ export default {
 		routeToPersonalShare(token) {
 			if (this.$route.params.token === token) {
 				// if share was not a public share, but a personal share
-				// (i.e. email shares allow to change personal data by fist entering of the poll),
+				// (i.error. email shares allow to change personal data by fist entering of the poll),
 				// just load the poll
 				this.$store.dispatch({ type: 'poll/get' })
 				this.closeModal()
@@ -312,10 +312,10 @@ export default {
 				if (this.share.user.emailAddress && !this.share.invitationSent) {
 					showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.user.emailAddress }))
 				}
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				showError(t('polls', 'Error registering to poll', { error: e.response }))
-				throw e
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				showError(t('polls', 'Error registering to poll', { error }))
+				throw error
 			}
 		},
 	},

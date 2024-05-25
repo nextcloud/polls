@@ -229,10 +229,10 @@ const actions = {
 			const response = await PollsAPI.getPolls()
 			context.commit('set', { list: response.data.list })
 			context.commit('setPollsPermissions', { permissions: response.data.permissions })
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error loading polls', { error: e.response })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error loading polls', { error })
+			throw error
 		} finally {
 			context.commit('setLoading', false)
 		}

@@ -103,8 +103,8 @@ export default {
 					await ValidatorAPI.validateEmailAddress(this.emailAddress)
 					this.checkResult = t('polls', 'valid email address.')
 					this.checkStatus = 'success'
-				} catch (e) {
-					if (e?.code === 'ERR_CANCELED') return
+				} catch (error) {
+					if (error?.code === 'ERR_CANCELED') return
 					this.checkResult = t('polls', 'Invalid email address.')
 					this.checkStatus = 'error'
 				} finally {

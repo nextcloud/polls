@@ -81,8 +81,8 @@ export default {
 		async generateQr() {
 			try {
 				this.qrUri = await QRCode.toDataURL(this.encodeText)
-			} catch (err) {
-				Logger.error(err)
+			} catch (error) {
+				Logger.error('Error on generating QR code', { error: error.message })
 			}
 		},
 	},

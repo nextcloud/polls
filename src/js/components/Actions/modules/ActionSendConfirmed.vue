@@ -97,8 +97,8 @@ export default {
 				this.sendButtonCaption = t('polls', 'See result')
 				this.sentStatus = 'success'
 				this.$emit('success')
-			} catch (e) {
-				Logger.error(e)
+			} catch (error) {
+				Logger.error('Error on sending confirmation mails', { error })
 				this.sentStatus = 'error'
 				this.$emit('error')
 			} finally {

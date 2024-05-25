@@ -112,10 +112,10 @@ const actions = {
 		try {
 			const response = await UserSettingsAPI.getUserSettings()
 			context.commit('setPreference', response.data.preferences)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
 			context.commit('reset')
-			throw e
+			throw error
 		}
 	},
 
@@ -130,10 +130,10 @@ const actions = {
 		try {
 			const response = await UserSettingsAPI.writeUserSettings(context.state.user)
 			context.commit('setPreference', response.data.preferences)
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			Logger.error('Error writing preferences', { error: e.response }, { preferences: state.user })
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error writing preferences', { error }, { preferences: state.user })
+			throw error
 		}
 	},
 
@@ -142,9 +142,9 @@ const actions = {
 			const response = await CalendarAPI.getCalendars()
 			context.commit('setCalendars', { calendars: response.data.calendars })
 			return response
-		} catch (e) {
-			if (e?.code === 'ERR_CANCELED') return
-			throw e
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			throw error
 		}
 	},
 }
