@@ -69,6 +69,7 @@ use OCP\IL10N;
  * @method int getVotesYes()
  * @method int getVotesNo()
  * @method int getVotesMaybe()
+ * @method int getShowResults()
  */
 class Option extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_options';
@@ -95,6 +96,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $votesYes = 0;
 	protected int $votesNo = 0;
 	protected int $votesMaybe = 0;
+	protected int $showResults = 0;
 
 	public function __construct() {
 		$this->addType('released', 'int');
@@ -113,6 +115,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		$this->addType('votesYes', 'int');
 		$this->addType('votesNo', 'int');
 		$this->addType('votesMaybe', 'int');
+		$this->addType('showResults', 'int');
 	}
 
 	/**
@@ -132,17 +135,20 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'duration' => $this->getDuration(),
 			'locked' => $this->getIsLocked(),
 			'hash' => $this->getPollOptionHash(),
-			'votes' => [
-				'no' => $this->getVotesNo(),
-				'yes' => $this->getVotesYes(),
-				'maybe' => $this->getVotesMaybe(),
-				'count' => $this->getCountOptionVotes(),
-				'currentUser' => $this->getUserVoteAnswer(),
-			],
+			'votes' => $this->getVotes(),
 			'owner' => $this->getUser(),
 		];
 	}
 
+	private function getVotes(): array {
+		return [
+			'no' => $this->getVotesNo() * $this->getShowResults(),
+			'yes' => $this->getVotesYes() * $this->getShowResults(),
+			'maybe' => $this->getVotesMaybe() * $this->getShowResults(),
+			'count' => $this->getCountOptionVotes() * $this->getShowResults(),
+			'currentUser' => $this->getUserVoteAnswer(),
+		];
+	}
 	/**
 	 * cumulative Set option entities cumulative and validated
 	 * if timestamp is given, the pollOptionText will be synced according to the timestamp and duration

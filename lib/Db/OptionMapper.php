@@ -168,9 +168,10 @@ class OptionMapper extends QBMapperWithUser {
 
 	/**
 	 * Build the enhanced query with joined tables
-	 * @param bool $hideVotes Whether the votes should be hidden, skips vote counting
+	 * @param bool $hideResults Whether poll results are defined as beeing hidden
+	 *             injects the poll permission allowdSeeResults into the query
 	 */
-	protected function buildQuery(bool $hideVotes = false): IQueryBuilder {
+	protected function buildQuery(bool $hideResults = false): IQueryBuilder {
 		$currentUserId = $this->userSession->getCurrentUserId();
 		$qb = $this->db->getQueryBuilder();
 
@@ -180,7 +181,7 @@ class OptionMapper extends QBMapperWithUser {
 			->orderBy('order', 'ASC');
 
 
-		$this->joinVotesCount($qb, self::TABLE, $hideVotes);
+		$this->joinVotesCount($qb, self::TABLE, $hideResults);
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
@@ -193,33 +194,27 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * Joins votes to count votes per option and answer
 	 */
-	protected function joinVotesCount(IQueryBuilder &$qb, string $fromAlias, bool $hideVotes = false): void {
+	protected function joinVotesCount(IQueryBuilder &$qb, string $fromAlias, bool $hideResults = false): void {
 		$joinAlias = 'votes';
-		if ($hideVotes) {
-			// hide all vote counts
-			$qb->addSelect($qb->createFunction('0 AS count_option_votes'))
-				->addSelect($qb->createFunction('0 AS votes_yes'))
-				->addSelect($qb->createFunction('0 AS votes_no'))
-				->addSelect($qb->createFunction('0 AS votes_maybe'));
-		} else {
-			$qb->leftJoin(
-				$fromAlias,
-				Vote::TABLE,
-				$joinAlias,
-				$qb->expr()->andX(
-					$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
-					$qb->expr()->eq($fromAlias . '.poll_option_text', $joinAlias . '.vote_option_text'),
-				)
+		$qb->leftJoin(
+			$fromAlias,
+			Vote::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($fromAlias . '.poll_option_text', $joinAlias . '.vote_option_text'),
 			)
-				// Count number of votes for this option
-				->addSelect($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.id)) AS count_option_votes'))
-				// Count number of yes votes for this option
-				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'yes\' THEN ' . $joinAlias . '.id END)) AS votes_yes'))
-				// Count number of no votes for this option
-				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'no\' THEN ' . $joinAlias . '.id END)) AS votes_no'))
-				// Count number of maybe votes for this option
-				->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'maybe\' THEN ' . $joinAlias . '.id END)) AS votes_maybe'));
-		}
+		)
+			// Count number of votes for this option
+			->addSelect($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.id)) AS count_option_votes'))
+			// Count number of yes votes for this option
+			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'yes\' THEN ' . $joinAlias . '.id END)) AS votes_yes'))
+			// Count number of no votes for this option
+			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'no\' THEN ' . $joinAlias . '.id END)) AS votes_no'))
+			// Count number of maybe votes for this option
+			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'maybe\' THEN ' . $joinAlias . '.id END)) AS votes_maybe'))
+			// inject if the votes should be hidden
+			->addSelect($qb->createFunction(intval(!$hideResults) . ' as show_results'));
 	}
 
 	/**

@@ -86,6 +86,7 @@ use OCP\IURLGenerator;
  * @method int getMinDate()
  * @method int getMaxDate()
  * @method int getShareToken()
+ * @method int getCountOptions()
  *
  * Magic functions for subqueried columns
  * @method int getCurrentUserCountOrphanedVotes()
@@ -172,6 +173,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected string $userRole = self::ROLE_NONE;
 	protected string $shareToken = '';
 	protected ?string $groupShares = '';
+	protected int $countOptions = 0;
 	
 	// subqueried columns
 	protected int $currentUserCountOrphanedVotes = 0;
@@ -197,6 +199,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('isCurrentUserLocked', 'int');
 		$this->addType('maxDate', 'int');
 		$this->addType('minDate', 'int');
+		$this->addType('countOptions', 'int');
 
 		// subqueried columns
 		$this->addType('currentUserCountVotes', 'int');
@@ -235,6 +238,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'deleted' => boolval($this->getDeleted()),
 			'expired' => $this->getExpired(),
 			'relevantThreshold' => $this->getRelevantThreshold(),
+			'countOptions' => $this->getCountOptions(),
 		];
 	}
 	public function getConfigurationArray(): array {

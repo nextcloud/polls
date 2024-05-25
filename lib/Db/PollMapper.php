@@ -284,6 +284,7 @@ class PollMapper extends QBMapper {
 	 * if text poll or no options are set,
 	 * the min value is the current time,
 	 * the max value is null
+	 * and adds the number of available options
 	 */
 	protected function joinOptionsForMaxDate(IQueryBuilder &$qb, string $fromAlias): void {
 		$joinAlias = 'options';
@@ -293,12 +294,16 @@ class PollMapper extends QBMapper {
 
 		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), '. $zero  . ') AS max_date'))
 			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'));
+		$qb->selectAlias($qb->func()->count($joinAlias . '.id'), 'count_options');
 
 		$qb->leftJoin(
 			$fromAlias,
 			Option::TABLE,
 			$joinAlias,
-			$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+			$qb->expr()->andX(
+				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
+			),
 		);
 	}
 

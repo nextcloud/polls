@@ -4,11 +4,12 @@ All notable changes to this project will be documented in this file.
 ## [7.1.0] - tbd
 ###  !!! changed API structure, please refer to the documentation
 ### Fix
- - fixed counting of orphaned votes
- - disable registration button while registration is pending
- - disable "resolve group share" while resolving
+ - Fixed counting of orphaned votes
+ - Disable registration button while registration is pending
+ - Disable "resolve group share" while resolving
+ - Fix showing booked up options in polls with hidden results 
 ### Changes
- - mainly performance improvements
+ - Mainly performance improvements
  - Changed API structure for polls, please refer to the documentation
 ### Performance
  - Added an option to allow to add polls to the navigation (default)

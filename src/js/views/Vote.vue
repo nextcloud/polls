@@ -111,6 +111,7 @@ export default {
 	computed: {
 		...mapState({
 			pollType: (state) => state.poll.type,
+			countOptionsInPoll: (state) => state.poll.status.countOptions,
 			pollTitle: (state) => state.poll.configuration.title,
 			pollDescription: (state) => state.poll.configuration.description,
 			pollAnonymous: (state) => state.poll.configuration.anonymous,
@@ -126,6 +127,13 @@ export default {
 		}),
 
 		emptyContentProps() {
+			if (this.countOptionsInPoll > 0) {
+				return {
+					name: t('polls', 'We are sorry, but there are no more vote options available'),
+					description: t('polls', 'All options are booked up.'),
+				}
+			}
+
 			return {
 				name: t('polls', 'No vote options available'),
 				description: this.permissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
