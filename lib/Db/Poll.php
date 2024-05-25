@@ -716,7 +716,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Permission checks
 	 */
 
-	 /**
+	/**
 	 * Checks, if user is allowed to see and write comments
 	 **/
 	private function getAllowCommenting(): bool {

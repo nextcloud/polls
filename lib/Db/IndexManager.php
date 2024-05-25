@@ -173,7 +173,7 @@ class IndexManager {
 
 		foreach (TableSchema::COMMON_INDICES as $index) {
 			$message = $this->removeNamedIndexFromTable($index['table'], $index['name']);
-			if ($message !== null && $message !== '') {	
+			if ($message !== null && $message !== '') {
 				$messages[] = $message;
 			}
 		}
