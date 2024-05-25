@@ -26,7 +26,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use DateTime;
-use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\UserSession;
@@ -44,17 +43,13 @@ class NotificationService {
 
 	public function removeNotification(int $pollId): void {
 		$notification = $this->notificationManager->createNotification();
-		try {
-			// try to get current user id and mark notification as processed
-			$userId = $this->userSession->getCurrentUserId();
-			$notification->setApp(AppConstants::APP_ID)
-				->setObject('poll', strval($pollId))
-				->setUser($userId);
-		} catch (Exception $e) {
-			// if we have no user context, mark all notifications for this poll as processed
-			// The reason must be a background job, so we can't get the current user
-			$notification->setApp(AppConstants::APP_ID)
-				->setObject('poll', strval($pollId));
+
+		$notification->setApp(AppConstants::APP_ID)
+			->setObject('poll', strval($pollId));
+
+		if ($this->userSession->getIsLoggedIn()) {
+			// With user context remove only the notifications of the current user
+			$notification->setUser($this->userSession->getCurrentUserId());
 		}
 
 		$this->notificationManager->markProcessed($notification);

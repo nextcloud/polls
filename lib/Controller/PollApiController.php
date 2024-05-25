@@ -124,10 +124,10 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function update(int $pollId, array $poll): JSONResponse {
+	public function update(int $pollId, array $pollConfiguration): JSONResponse {
 		try {
 			return new JSONResponse([
-				'poll' => $this->pollService->update($pollId, $poll),
+				'poll' => $this->pollService->update($pollId, $pollConfiguration),
 				'acl' => $this->acl,
 			], Http::STATUS_OK);
 		} catch (DoesNotExistException $e) {

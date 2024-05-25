@@ -62,7 +62,7 @@ class UserApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function writePreferences($preferences): JSONResponse {
+	public function writePreferences(array $preferences): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
 	

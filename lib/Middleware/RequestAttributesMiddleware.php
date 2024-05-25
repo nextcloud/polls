@@ -51,11 +51,17 @@ class RequestAttributesMiddleware extends Middleware {
 	}
 
 	private function getShareTokenFromURI(): string {
-		$uri = "$_SERVER[REQUEST_URI]";
-		$pattern = '/\/s\/(.*?)(\/|$)/';
-		
-		if (preg_match($pattern, $uri, $matches)) {
-			return $matches[1];
+		if ($this->request->getParam('token')) {
+			return $this->request->getParam('token');
+		}
+
+		if (isset($_SERVER['REQUEST_URI'])) {
+			$uri = "$_SERVER[REQUEST_URI]";
+			$pattern = '/\/s\/(.*?)(\/|$)/';
+			
+			if (preg_match($pattern, $uri, $matches)) {
+				return $matches[1];
+			}
 		}
 
 		// Fallback: check sessionToken in header

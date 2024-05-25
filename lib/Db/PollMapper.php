@@ -55,16 +55,19 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
-	 * Get poll without any joins for backend operations
+	 * Get active poll without any joins for backend operations
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Poll
 	 */
-	public function get(int $id): Poll {
+	public function get(int $id, bool $getDeleted = false): Poll {
 		$qb = $this->db->getQueryBuilder();
 		$qb->select('*')
 			->from($this->getTableName())
-			->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+			if (!$getDeleted) {
+				$qb->andWhere($qb->expr()->eq('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+			}
 		return $this->findEntity($qb);
 	}
 
@@ -102,7 +105,7 @@ class PollMapper extends QBMapper {
 	 */
 	public function findForMe(string $userId): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)))
 			->orWhere($qb->expr()->eq(self::TABLE . '.owner', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 		return $this->findEntities($qb);
 	}
@@ -123,7 +126,7 @@ class PollMapper extends QBMapper {
 	 */
 	public function search(ISearchQuery $query): array {
 		$qb = $this->buildQuery();
-		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)))
+		$qb->where($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->orX(
 				...array_map(function (string $token) use ($qb) {
 					return $qb->expr()->orX(
@@ -163,7 +166,7 @@ class PollMapper extends QBMapper {
 		$qb->update($this->getTableName())
 			->set('deleted', $qb->createNamedParameter($archiveDate))
 			->where($qb->expr()->lt('expire', $qb->createNamedParameter($offset)))
-			->andWhere($qb->expr()->gt('expire', $qb->createNamedParameter(0)));
+			->andWhere($qb->expr()->gt('expire', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		$qb->executeStatement();
 	}
 

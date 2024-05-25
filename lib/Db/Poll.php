@@ -367,7 +367,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getGroupShares(): array {
-		if ($this->groupShares) {
+		if (!empty($this->groupShares)) {
 			// explode with separator and remove empty elements
 			return array_filter(explode(PollMapper::CONCAT_SEPARATOR, PollMapper::CONCAT_SEPARATOR . $this->groupShares));
 		}
@@ -638,9 +638,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		if ($this->getIsInvolved()) {
 			return true;
 		}
-
+		$share = $this->userSession->getShare();
 		// return check result of an existing valid share for this user
-		return boolval($this->userSession->getShare()?->getPollId() === $this->getId());
+		return boolval($share->getId() && $share->getPollId() === $this->getId());
 	}
 
 	/**
@@ -672,7 +672,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		// public shares are not allowed to add options
-		if ($this->userSession->getShare()?->getType() === Share::TYPE_PUBLIC) {
+		if ($this->userSession->getShare()->getType() === Share::TYPE_PUBLIC) {
 			return false;
 		}
 
@@ -701,14 +701,22 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Compare $userId with current user's id
 	 */
 	public function matchUser(string $userId): bool {
-		return $this->userSession->getUser()->getId() === $userId;
+		return (bool) $this->userSession->getUser()->getId() && $this->userSession->getUser()->getId() === $userId;
 	}
 
+	/**
+	 * Checks, if the current user is the poll owner
+	 **/
 	public function getIsPollOwner(): bool {
 		return ($this->getUserRole() === Poll::ROLE_OWNER);
 	}
 
+
 	/**
+	 * Permission checks
+	 */
+
+	 /**
 	 * Checks, if user is allowed to see and write comments
 	 **/
 	private function getAllowCommenting(): bool {
@@ -718,7 +726,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		// public shares are not allowed to comment
-		if ($this->userSession->getShare()?->getType() === Share::TYPE_PUBLIC) {
+		if ($this->userSession->getShare()->getType() === Share::TYPE_PUBLIC) {
 			return false;
 		}
 
@@ -727,6 +735,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			return false;
 		}
 
+		// return the poll setting for comments
 		return (bool) $this->getAllowComment();
 	}
 
@@ -747,7 +756,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		// public shares are not allowed to vote
-		if ($this->userSession->getShare()?->getType() === Share::TYPE_PUBLIC) {
+		if ($this->userSession->getShare()->getType() === Share::TYPE_PUBLIC) {
 			return false;
 		}
 
