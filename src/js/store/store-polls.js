@@ -24,13 +24,11 @@
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 import polls from './modules/polls.js'
+import settings from './modules/settings.js'
 
 Vue.use(Vuex)
 
-/* eslint-disable-next-line no-unused-vars */
-const debug = process.env.NODE_ENV !== 'production'
-
 export default new Store({
-	modules: { polls },
+	modules: { polls, settings },
 	strict: process.env.NODE_ENV !== 'production',
 })
