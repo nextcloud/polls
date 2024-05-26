@@ -22,7 +22,7 @@
 
 <template>
 	<div>
-		<NcButton @click="toggleClosed()">
+		<NcButton @click="clickToggleClosed()">
 			<template #icon>
 				<OpenPollIcon v-if="isPollClosed" />
 				<ClosePollIcon v-else />
@@ -39,7 +39,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import moment from '@nextcloud/moment'
 import { NcButton, NcDateTimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
@@ -113,11 +113,15 @@ export default {
 	},
 
 	methods: {
-		toggleClosed() {
+		...mapActions({
+			closePoll: 'poll/close',
+			reopenPoll: 'poll/reopen',
+		}),
+		clickToggleClosed() {
 			if (this.isPollClosed) {
-				this.$store.dispatch('poll/reopen')
+				this.reopenPoll()
 			} else {
-				this.$store.dispatch('poll/close')
+				this.closePoll()
 			}
 		},
 	},

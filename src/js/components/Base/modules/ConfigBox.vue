@@ -106,10 +106,6 @@ export default {
 		display: flex;
 		flex-direction: column;
 		padding-left: 24px;
-
-		// label {
-			// margin: 4px 0;
-		// }
 	}
 }
 

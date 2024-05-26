@@ -129,7 +129,6 @@ export default {
 		justify-content: center;
 
 		.user-actions {
-			// display: none;
 			visibility: hidden;
 		}
 

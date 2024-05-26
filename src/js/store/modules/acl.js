@@ -84,7 +84,6 @@ const actions = {
 			} else {
 				response = await UserSettingsAPI.getAcl()
 			}
-			// context.commit('reset')
 			context.commit('set', { acl: response.data.acl })
 		} catch (error) {
 			if (error?.code === 'ERR_CANCELED') return
@@ -94,7 +93,9 @@ const actions = {
 				// TODO: for some reason unauthorized users first get the root route resulting in a 401 
 				// and after that the publicVote route is called as next route
 				// therefore we just debug the error and reset the acl
+
 				Logger.debug('getAcl failed', error)
+				context.commit('reset')
 			} else {
 				throw error
 			}

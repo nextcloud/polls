@@ -101,6 +101,7 @@ export default {
 			showError(t('polls', 'Error loading poll list'))
 		})
 	},
+
 	methods: {
 		...mapActions({
 			loadPolls: 'polls/list',
