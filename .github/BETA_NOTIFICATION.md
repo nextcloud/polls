@@ -1,5 +1,5 @@
 ---
-title: Polls {{ env.VERSION }} released ({{ date | date('DD-MM-YYYY') }})
+title: Polls {{ env.VERSION }} released ({{ date | date('YYYY-MM-DD') }})
 labels: Announcement
 ---
 # Changelog for the upcomming release (preview)
