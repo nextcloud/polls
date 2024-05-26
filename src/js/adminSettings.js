@@ -31,7 +31,7 @@ import AdminSettingsPage from './views/AdminSettingsPage.vue'
 Vue.prototype.t = translate
 Vue.prototype.n = translatePlural
 
-Vue.config.devtools = process.env.NODE_ENV !== 'production'
+Vue.config.devtools = import.meta.env.MODE !== 'production'
 
 Vue.use(Vuex)
 

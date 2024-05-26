@@ -26,9 +26,8 @@
 		<NcDashboardWidget :items="relevantPolls"
 			:empty-content-message="t('polls', 'No polls found for this category')"
 			:show-more-text="t('polls', 'Relevant polls')"
-			:loading="loading"
-			@hide="() => {}"
-			@markDone="() => {}">
+			:loading="loading">
+
 			<template #emptyContentIcon>
 				<PollsAppIcon />
 			</template>
@@ -43,11 +42,11 @@
 
 						<div class="item__title">
 							<div class="item__title__title">
-								{{ item.title }}
+								{{ item.configuration.title }}
 							</div>
 
 							<div class="item__title__description">
-								{{ item.description ? item.description : t('polls', 'No description provided') }}
+								{{ item.configuration.description ? item.configuration.description : t('polls', 'No description provided') }}
 							</div>
 						</div>
 					</div>
@@ -63,7 +62,7 @@ import { showError } from '@nextcloud/dialogs'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
-import { mapGetters } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 
 export default {
@@ -75,13 +74,11 @@ export default {
 		TextPollIcon,
 	},
 
-	data() {
-		return {
-			loading: false,
-		}
-	},
-
 	computed: {
+		...mapState({
+			loading: (state) => state.polls.pollsLoading,
+		}),
+
 		...mapGetters({
 			filteredPolls: 'polls/filteredByCategory',
 		}),
@@ -99,13 +96,15 @@ export default {
 	},
 
 	beforeMount() {
-		this.loading = true
-		this.$store.dispatch('polls/list').then(() => {
-			this.loading = false
-			return null
+		this.loadPolls().then(() => {
 		}).catch(() => {
 			showError(t('polls', 'Error loading poll list'))
 		})
+	},
+	methods: {
+		...mapActions({
+			loadPolls: 'polls/list',
+		}),
 	},
 }
 
