@@ -75,7 +75,7 @@ const actions = {
 			const response = await AppSettingsAPI.getAppSettings()
 			context.commit('set', response.data.appSettings)
 		} catch (error) {
-			// context.commit('reset')
+			Logger.debug('Error getting appSettings', { error })
 		}
 	},
 

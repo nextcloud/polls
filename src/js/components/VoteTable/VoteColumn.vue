@@ -155,7 +155,6 @@ export default {
 
 	&:hover {
 		background-color: var(--color-background-dark);
-		// box-shadow: 3px 3px 9px var(--color-background-darker);
 	}
 
 	&.locked:hover {

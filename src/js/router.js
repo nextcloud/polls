@@ -36,14 +36,6 @@ import SideBarCombo from './views/SideBarCombo.vue'
 import Navigation from './views/Navigation.vue'
 import Combo from './views/Combo.vue'
 
-// Dynamic loading
-// const List = () => import('./views/PollList.vue')
-// const Administration = () => import('./views/Administration.vue')
-// const NotFound = () => import('./views/NotFound.vue')
-// const SideBarCombo = () => import('./views/SideBarCombo.vue')
-// const Navigation = () => import('./views/Navigation.vue')
-// const Combo = () => import('./views/Combo.vue')
-
 Vue.use(Router)
 
 /**
