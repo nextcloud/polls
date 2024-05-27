@@ -57,7 +57,12 @@ abstract class QBMapperWithUser extends QBMapper {
 			->selectAlias($joinAlias . '.owner', 'poll_owner_id')
 			->selectAlias($joinAlias . '.show_results', 'poll_show_results')
 			->selectAlias($joinAlias . '.expire', 'poll_expire')
-		;
+			->addGroupBy(
+				$joinAlias . '.anonymous',
+				$joinAlias . '.owner',
+				$joinAlias . '.show_results',
+				$joinAlias . '.expire',
+			);
 
 		$qb->leftJoin(
 			$fromAlias,

@@ -60,7 +60,7 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-		->from($this->getTableName(), self::TABLE)
+			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 
@@ -83,6 +83,7 @@ class ShareMapper extends QBMapper {
 
 		$qb->select('*')
 			->from($this->getTableName())
+			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('invitation_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
@@ -103,6 +104,7 @@ class ShareMapper extends QBMapper {
 
 		$qb->select('*')
 			->from($this->getTableName())
+			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('reminder_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
@@ -120,7 +122,8 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-		->from($this->getTableName(), self::TABLE)
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)))
 			->andWhere($qb->expr()->isNotNull(self::TABLE . '.id'));
@@ -160,7 +163,8 @@ class ShareMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-		->from($this->getTableName(), self::TABLE)
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
 
 		if (!$getDeleted) {
