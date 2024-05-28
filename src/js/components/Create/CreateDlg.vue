@@ -58,7 +58,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
 import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
@@ -89,10 +88,6 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			poll: (state) => state.poll,
-		}),
-
 		titleEmpty() {
 			return this.title === ''
 		},

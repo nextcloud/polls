@@ -1,7 +1,11 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [7.0.3] - tbd
+## [7.0.4] - 2024-05-28
+### Changes
+ - Bring back PHP 8.0
+ - updated dependencies
+## [7.0.3] - 2024-04-05
 ### Fix
  - Archive, restore and delete polls in poll list was missing, braught the options back to the action menu
  - fix a situation, where votes of a non existing poll are requested
@@ -24,7 +28,6 @@ All notable changes to this project will be documented in this file.
  - A lot for code maintenance and tidy
 
 ## [6.2.0] - 2024-03-27
-This will be the last version supporting PHP 8.0. Please note, that this version is not tested very well. So if possible please update to PHP > 8.1 and Polls v7.x.
 ### Fix
  - Fix preventing option suggestions
 

@@ -51,10 +51,7 @@ export default {
 		}),
 
 		...mapGetters({
-			proposalsExpirySet: 'poll/proposalsExpirySet',
-			proposalsExpired: 'poll/proposalsExpired',
 			proposalsOpen: 'poll/proposalsOpen',
-			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
 	},
 }

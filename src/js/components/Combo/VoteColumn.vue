@@ -58,11 +58,9 @@ export default {
 	computed: {
 		...mapGetters({
 			participantsByPoll: 'combo/participantsInPoll',
-			optionBelongsToPoll: 'combo/optionBelongsToPoll',
 		}),
 		...mapState({
 			polls: (state) => state.combo.polls,
-			participants: (state) => state.combo.participants,
 		}),
 	},
 }

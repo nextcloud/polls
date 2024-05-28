@@ -90,7 +90,6 @@ export default {
 	computed: {
 		...mapState({
 			permissions: (state) => state.poll.acl.permissions,
-			pollAccess: (state) => state.poll.access,
 			pollTitle: (state) => state.poll.title,
 			pollDescription: (state) => state.poll.description,
 		}),

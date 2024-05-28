@@ -67,7 +67,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapMutations, mapActions } from 'vuex'
+import { mapState, mapGetters, mapActions } from 'vuex'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -145,12 +145,7 @@ export default {
 	},
 
 	methods: {
-		...mapMutations({
-			switchSafeTable: 'poll/switchSafeTable',
-		}),
-
 		...mapActions({
-			deleteOrphanedVotes: 'votes/removeOrphanedVotes',
 			resetPoll: 'poll/reset',
 		}),
 

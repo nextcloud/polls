@@ -101,7 +101,6 @@ export default {
 		...mapState({
 			poll: (state) => state.poll,
 			options: (state) => state.options,
-			votes: (state) => state.votes,
 			permissions: (state) => state.poll.acl.permissions,
 		}),
 

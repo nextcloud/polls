@@ -57,7 +57,6 @@ export default {
 
 		...mapGetters({
 			proposalsAllowed: 'poll/proposalsAllowed',
-			proposalsOptions: 'poll/proposalsOptions',
 		}),
 
 		// Add bindings

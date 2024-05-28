@@ -49,7 +49,7 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { mapGetters } from 'vuex'
 import { InputDiv } from '../Base/index.js'
 import { NcButton, NcSelect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
@@ -77,10 +77,6 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			options: (state) => state.options.list,
-		}),
-
 		...mapGetters({
 			proposalsExist: 'options/proposalsExist',
 		}),

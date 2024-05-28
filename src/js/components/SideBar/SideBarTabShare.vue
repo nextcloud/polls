@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import SharesList from '../Shares/SharesList.vue'
 import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 import SharesListLocked from '../Shares/SharesListLocked.vue'
@@ -41,14 +40,6 @@ export default {
 		SharesList,
 		SharesListUnsent,
 		SharesListLocked,
-	},
-
-	computed: {
-		...mapState({
-			pollId: (state) => state.poll.id,
-			pollTitle: (state) => state.poll.title,
-		}),
-
 	},
 }
 </script>

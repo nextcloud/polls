@@ -43,7 +43,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapState } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
 
 export default {
@@ -59,10 +59,6 @@ export default {
 			yesVotes: (state) => state.poll.currentUserStatus.yesVotes,
 			maxVotesPerOption: (state) => state.poll.limits.maxVotesPerOption,
 			maxVotesPerUser: (state) => state.poll.limits.maxVotesPerUser,
-		}),
-
-		...mapGetters({
-			closed: 'poll/isClosed',
 		}),
 
 		orphanedVotesText() {
@@ -83,12 +79,6 @@ export default {
 			return this.maxVotesPerUser && this.votesLeft < 1 ? 'error' : 'info'
 		},
 
-	},
-
-	methods: {
-		...mapActions({
-			deleteOrphanedVotes: 'votes/removeOrphanedVotes',
-		}),
 	},
 }
 </script>
