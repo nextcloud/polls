@@ -118,6 +118,7 @@ class VoteMapper extends QBMapperWithUser {
 
 		$qb->selectDistinct([self::TABLE . '.user_id', self::TABLE . '.poll_id'])
 			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.user_id', self::TABLE . '.poll_id')
 			->where(
 				$qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT))
 			);
@@ -187,7 +188,8 @@ class VoteMapper extends QBMapperWithUser {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
-			->from($this->getTableName(), self::TABLE);
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id');
 
 		$optionAlias = $this->joinOption($qb, self::TABLE);
 		
@@ -197,17 +199,9 @@ class VoteMapper extends QBMapperWithUser {
 		} else {
 			$qb->where($qb->expr()->isNotNull($optionAlias . '.id'));
 		}
-		$anonAlias = $this->joinAnon($qb, self::TABLE);
-
-		$qb->groupBy(
-			self::TABLE . '.id',
-			$optionAlias . '.id',
-			$anonAlias . '.anonymous',
-			$anonAlias . '.owner',
-			$anonAlias . '.show_results',
-			$anonAlias . '.expire',
-		);
 		
+		$this->joinAnon($qb, self::TABLE);
+	
 		return $qb;
 	}
 
@@ -218,7 +212,8 @@ class VoteMapper extends QBMapperWithUser {
 	protected function joinOption(IQueryBuilder &$qb, string $fromAlias): string {
 		$joinAlias = 'options';
 		
-		$qb->selectAlias($joinAlias . '.id', 'option_id');
+		$qb->selectAlias($joinAlias . '.id', 'option_id')
+			->addGroupBy($joinAlias . '.id');
 
 		$qb->leftJoin(
 			$fromAlias,
