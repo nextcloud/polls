@@ -1,8 +1,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [6.4.0] - 2024-05-28
+### Fix
+ - Fix database error with PostgreSQL
 ## [6.3.0] - 2024-05-06
-This will be the last version supporting PHP 8.0. Please note, that this version is not tested very well. So if possible please update to PHP > 8.1 and Polls v7.x.
 ### Fix
  - Fix preventing option suggestions
  - Fixing some performance issues
