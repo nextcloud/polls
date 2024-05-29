@@ -253,7 +253,7 @@ class PollMapper extends QBMapper {
 
 		if ($this->db->getDatabasePlatform() instanceof PostgreSQLPlatform) {
 			// TODO: replace with array_agg(expression)
-			$qb->addSelect($qb->createFunction('array_agg(distinct ' . $joinAlias . '.user_id) AS group_shares'));
+			$qb->addSelect($qb->createFunction('array_agg(distinct ' . $joinAlias . '.user_id) AS group_shares_array'));
 			// $qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
 			
 		} elseif ($this->db->getDatabasePlatform() instanceof OraclePlatform) {
