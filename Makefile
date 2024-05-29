@@ -1,9 +1,5 @@
-# This file is licensed under the Affero General Public License version 3 or
-# later. See the COPYING file.
-# @author Bernhard Posselt <dev@bernhard-posselt.com>
-# @author Vinzenz Rosenkranz <vinzenz.rosenkranz@gmail.com>
-# @author René Gieling <github@dartcafe.de>
-# @copyright Bernhard Posselt 2016
+# SPDX-FileCopyrightText: 2016 Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 
 # Dependencies:
 # * make

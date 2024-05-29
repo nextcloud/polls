@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 export { default as ActivityAPI } from './modules/activity.js'
 export { default as AdminAPI } from './modules/admin.js'
 export { default as AppSettingsAPI } from './modules/appSettings.js'

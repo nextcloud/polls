@@ -1,3 +1,7 @@
+<!--
+  - SPDX-FileCopyrightText: 2016 Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # Polls - an app, similar to doodle or dudle, for Nextcloud written in PHP and JS/Vue.
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
 ![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)
@@ -5,6 +9,7 @@
 ![lint](https://github.com/nextcloud/polls/actions/workflows/lint.yml/badge.svg)
 [![Dependabot status](https://img.shields.io/badge/Dependabot-enabled-brightgreen.svg?longCache=true&style=flat-square&logo=dependabot)](https://dependabot.com)
 [![Software License](https://img.shields.io/badge/license-AGPL-brightgreen.svg?style=flat-square)](COPYING)
+[![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/polls)](https://api.reuse.software/info/github.com/nextcloud/polls)
 
 # Free meeting schedule tool
 

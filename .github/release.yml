@@ -1,4 +1,6 @@
 # https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes
+# SPDX-FileCopyrightText: 2023 Nextcloud contributors
+# SPDX-License-Identifier: AGPL-3.0-or-later
 changelog:
   exclude:
     authors:

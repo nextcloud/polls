@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 export { default as CardAddProposals } from './modules/CardAddProposals.vue'
 export { default as CardAnonymousPollHint } from './modules/CardAnonymousPollHint.vue'
 export { default as CardClosedPoll } from './modules/CardClosedPoll.vue'

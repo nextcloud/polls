@@ -1,4 +1,7 @@
-
+<!--
+  - SPDX-FileCopyrightText: 2020 Nextcloud contributors
+  - SPDX-License-Identifier: AGPL-3.0-or-later
+-->
 # DRAFT
 
 This documentation and the API are not final and may contain issues and bugs!

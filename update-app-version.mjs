@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 import fs from 'fs/promises'
 import { parseString, Builder } from 'xml2js'
 

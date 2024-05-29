@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2023 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 export { default as BadgeDiv } from './modules/BadgeDiv.vue'
 export { default as CardDiv } from './modules/CardDiv.vue'
 export { default as ConfigBox } from './modules/ConfigBox.vue'
