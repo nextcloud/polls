@@ -253,7 +253,8 @@ class PollMapper extends QBMapper {
 
 		if ($this->db->getDatabasePlatform() instanceof PostgreSQLPlatform) {
 			// TODO: replace with array_agg(expression)
-			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
+			$qb->addSelect($qb->createFunction('array_agg(distinct ' . $joinAlias . '.user_id) AS group_shares'));
+			// $qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
 			
 		} elseif ($this->db->getDatabasePlatform() instanceof OraclePlatform) {
 			// TODO: replace with LISTAGG(col_or_expr, delimiter) WITHIN GROUP (ORDER BY col_or_expr)
@@ -266,7 +267,7 @@ class PollMapper extends QBMapper {
 		} elseif ($this->db->getDatabasePlatform() instanceof MySQLPlatform) {
 			// TODO: replace with JSON_ARRAYAGG(col_or_expr) or JSON_OBJECTAGG(key, value)
 			$qb->addSelect($qb->createFunction('json_arrayagg(distinct ' . $joinAlias . '.user_id) AS group_shares_array'));
-			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
+			// $qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
 
 		} else {
 			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
