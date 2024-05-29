@@ -87,6 +87,7 @@ use OCP\IURLGenerator;
  * @method int getMaxDate()
  * @method int getShareToken()
  * @method int getCountOptions()
+ * @method string getGroupSharesArray()
  *
  * Magic functions for subqueried columns
  * @method int getCurrentUserCountOrphanedVotes()
@@ -173,6 +174,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected string $userRole = self::ROLE_NONE;
 	protected string $shareToken = '';
 	protected ?string $groupShares = '';
+	protected ?string $groupSharesArray = '';
 	protected int $countOptions = 0;
 	
 	// subqueried columns
@@ -371,6 +373,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getGroupShares(): array {
+		if (!empty($this->groupSharesArray)) {
+			return json_decode($this->groupSharesArray);
+		}
+
 		if (!empty($this->groupShares)) {
 			// explode with separator and remove empty elements
 			return array_filter(explode(PollMapper::CONCAT_SEPARATOR, PollMapper::CONCAT_SEPARATOR . $this->groupShares));

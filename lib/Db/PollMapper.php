@@ -42,7 +42,7 @@ use OCP\Search\ISearchQuery;
  */
 class PollMapper extends QBMapper {
 	public const TABLE = Poll::TABLE;
-	public const CONCAT_SEPARATOR = ",";
+	public const CONCAT_SEPARATOR = "- this is an intentionally very weird separator, to prevent accidentially misinterprations of commas inside a group name - ";
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -252,15 +252,20 @@ class PollMapper extends QBMapper {
 		$joinAlias = 'group_shares';
 
 		if ($this->db->getDatabasePlatform() instanceof PostgreSQLPlatform) {
+			// TODO: replace with array_agg(expression)
 			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
-
+			
 		} elseif ($this->db->getDatabasePlatform() instanceof OraclePlatform) {
+			// TODO: replace with LISTAGG(col_or_expr, delimiter) WITHIN GROUP (ORDER BY col_or_expr)
 			$qb->addSelect($qb->createFunction('listagg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') WITHIN GROUP (ORDER BY ' . $joinAlias . '.user_id) AS group_shares'));
 
 		} elseif ($this->db->getDatabasePlatform() instanceof SqlitePlatform) {
+			// TODO: find a better solution to aggregate as an array or json
 			$qb->addSelect($qb->createFunction('group_concat(replace(distinct ' . $joinAlias . '.user_id ,\'\',\'\'), \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
 
 		} elseif ($this->db->getDatabasePlatform() instanceof MySQLPlatform) {
+			// TODO: replace with JSON_ARRAYAGG(col_or_expr) or JSON_OBJECTAGG(key, value)
+			$qb->addSelect($qb->createFunction('json_arrayagg(distinct ' . $joinAlias . '.user_id) AS group_shares_array'));
 			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
 
 		} else {
