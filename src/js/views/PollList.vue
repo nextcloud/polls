@@ -24,7 +24,7 @@
 						@load-poll="loadPoll(poll.id)">
 						<template #actions>
 							<NcActions force-menu>
-								<NcActionButton v-if="isPollCreationAllowed"
+								<NcActionButton v-if="pollCreationAllowed"
 									:name="t('polls', 'Clone poll')"
 									close-after-click
 									@click="clonePoll(poll.id)">
@@ -78,7 +78,7 @@
 
 			<NcEmptyContent v-if="emptyPollListnoPolls" v-bind="emptyContent">
 				<template #icon>
-					<NcLoadingIcon v-if="isLoading" :size="64" />
+					<NcLoadingIcon v-if="pollsLoading" :size="64" />
 					<PollsAppIcon v-else />
 				</template>
 			</NcEmptyContent>
@@ -120,8 +120,8 @@ export default {
 	computed: {
 		...mapState({
 			pollCategories: (state) => state.polls.categories,
-			isPollCreationAllowed: (state) => state.polls.meta.permissions.isPollCreationAllowed,
-			isLoading: (state) => state.polls.pollsLoading,
+			pollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
+			pollsLoading: (state) => state.polls.status.loading,
 		}),
 
 		...mapGetters({
@@ -131,7 +131,7 @@ export default {
 		}),
 
 		emptyContent() {
-			if (this.isLoading) {
+			if (this.pollsLoading) {
 				return {
 					name: t('polls', 'Loading polls…'),
 					description: '',
@@ -149,7 +149,7 @@ export default {
 		},
 
 		showMore() {
-			return this.loadedPolls < this.countAvailablePolls && !this.isLoading
+			return this.loadedPolls < this.countAvailablePolls && !this.pollsLoading
 		},
 		countAvailablePolls() {
 			return this.countPolls

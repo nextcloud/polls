@@ -10,7 +10,10 @@
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>
-			<NcActionButton v-if="isPollCreationAllowed" :name="t('polls', 'Clone poll')" @click="$emit('clone-poll')">
+			<NcActionButton v-if="pollCreationAllowed"
+				:name="t('polls', 'Clone poll')"
+				:aria-label="t('polls', 'Clone poll')"
+				@click="$emit('clone-poll')">
 				<template #icon>
 					<ClonePollIcon />
 				</template>
@@ -18,6 +21,7 @@
 
 			<NcActionButton v-if="poll.permissions.edit && !poll.status.deleted"
 				:name="t('polls', 'Archive poll')"
+				:aria-label="t('polls', 'Archive poll')"
 				@click="$emit('toggle-archive')">
 				<template #icon>
 					<ArchivePollIcon />
@@ -26,6 +30,7 @@
 
 			<NcActionButton v-if="poll.permissions.edit && poll.status.deleted"
 				:name="t('polls', 'Restore poll')"
+				:aria-label="t('polls', 'Restore poll')"
 				@click="$emit('toggle-archive')">
 				<template #icon>
 					<RestorePollIcon />
@@ -35,6 +40,7 @@
 			<NcActionButton v-if="poll.permissions.edit && poll.status.deleted"
 				class="danger"
 				:name="t('polls', 'Delete poll')"
+				:aria-label="t('polls', 'Delete poll')"
 				@click="$emit('delete-poll')">
 				<template #icon>
 					<DeletePollIcon />
@@ -78,7 +84,7 @@ export default {
 
 	computed: {
 		...mapState({
-			isPollCreationAllowed: (state) => state.polls.meta.permissions.isPollCreationAllowed,
+			pollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
 		}),
 
 		...mapGetters({

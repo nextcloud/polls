@@ -33,12 +33,15 @@ const state = {
 			comboAllowed: false,
 		},
 	},
+	status: {
+		loading: false
+	},
 
-	pollsLoading: false,
 	sort: {
 		by: 'created',
 		reverse: true,
 	},
+
 	categories: [
 		{
 			id: 'relevant',
@@ -131,7 +134,7 @@ const mutations = {
 	},
 
 	setLoading(state, loading) {
-		state.pollsLoading = loading ?? true
+		state.status.loading = loading ?? true
 	},
 
 	addChunk(state) {
