@@ -6,7 +6,9 @@
 <template>
 	<div>
 		<NcActions>
-			<NcActionButton :name="caption" @click="showModal = true">
+			<NcActionButton :name="caption" 
+				:aria-label="caption"
+				@click="showModal = true">
 				<template #icon>
 					<PasteIcon />
 				</template>

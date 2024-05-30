@@ -10,6 +10,7 @@
 		</template>
 		<NcActionButton close-after-click
 			:name="t('polls', 'Download Excel spreadsheet')"
+			:aria-label="t('polls', 'Download Excel spreadsheet')"
 			@click="exportFile('xlsx')">
 			<template #icon>
 				<ExcelIcon />
@@ -18,6 +19,7 @@
 
 		<NcActionButton close-after-click
 			:name="t('polls', 'Download Open Document spreadsheet')"
+			:aria-label="t('polls', 'Download Open Document spreadsheet')"
 			@click="exportFile('ods')">
 			<template #icon>
 				<FileTableIcon />
@@ -26,6 +28,7 @@
 
 		<NcActionButton close-after-click
 			:name="t('polls', 'Download CSV file')"
+			::aria-label="t('polls', 'Download CSV file')"
 			@click="exportFile('csv')">
 			<template #icon>
 				<CsvIcon />
@@ -34,6 +37,7 @@
 
 		<NcActionButton close-after-click
 			:name="t('polls', 'Download HTML file')"
+			:aria-label="t('polls', 'Download HTML file')"
 			@click="exportFile('html')">
 			<template #icon>
 				<XmlIcon />

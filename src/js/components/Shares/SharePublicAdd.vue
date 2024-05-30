@@ -10,7 +10,9 @@
 			<div class="vote-status" />
 		</template>
 		<NcActions>
-			<NcActionButton :name="t('polls', 'Add a new public link')" @click="addPublicShare()">
+			<NcActionButton :name="t('polls', 'Add a new public link')" 
+				:aria-label="t('polls', 'Add a new public link')"
+				@click="addPublicShare()">
 				<template #icon>
 					<PlusIcon />
 				</template>

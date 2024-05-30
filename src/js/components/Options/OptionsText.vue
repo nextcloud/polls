@@ -27,6 +27,7 @@
 						<NcActions v-if="!isPollClosed" class="action">
 							<NcActionButton v-if="!option.deleted"
 								:name="t('polls', 'Delete option')"
+								:aria-label="t('polls', 'Delete option')"
 								@click="deleteOption(option)">
 								<template #icon>
 									<DeleteIcon />
@@ -34,6 +35,7 @@
 							</NcActionButton>
 							<NcActionButton v-if="option.deleted"
 								:name="t('polls', 'Restore option')"
+								:aria-label="t('polls', 'Restore option')"
 								@click="restoreOption(option)">
 								<template #icon>
 									<RestoreIcon />
@@ -41,6 +43,7 @@
 							</NcActionButton>
 							<NcActionButton v-if="!option.deleted && !isPollClosed"
 								:name="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+								:aria-label="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 								type="tertiary"
 								@click="confirmOption(option)">
 								<template #icon>

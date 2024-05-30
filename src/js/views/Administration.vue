@@ -28,6 +28,7 @@
 						<template #actions>
 							<NcActions :force-menu="true">
 								<NcActionButton :name="t('polls', 'Take over')"
+									:aria-label="t('polls', 'Take over')"
 									close-after-click
 									@click="confirmTakeOver(poll.id, poll.owner)">
 									<template #icon>
@@ -36,6 +37,7 @@
 								</NcActionButton>
 
 								<NcActionButton :name="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+									:aria-label="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
 									close-after-click
 									@click="toggleArchive(poll.id)">
 									<template #icon>
@@ -46,6 +48,7 @@
 
 								<NcActionButton class="danger"
 									:name="t('polls', 'Delete poll')"
+									:aria-label="t('polls', 'Delete poll')"
 									close-after-click
 									@click="confirmDelete(poll.id, poll.owner)">
 									<template #icon>

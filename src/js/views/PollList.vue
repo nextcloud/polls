@@ -26,6 +26,7 @@
 							<NcActions force-menu>
 								<NcActionButton v-if="pollCreationAllowed"
 									:name="t('polls', 'Clone poll')"
+									:aria-label="t('polls', 'Clone poll')"
 									close-after-click
 									@click="clonePoll(poll.id)">
 									<template #icon>
@@ -35,6 +36,7 @@
 
 								<NcActionButton v-if="poll.permissions.edit && !poll.deleted"
 									:name="t('polls', 'Archive poll')"
+									:aria-label="t('polls', 'Archive poll')"
 									close-after-click
 									@click="toggleArchive(poll.id)">
 									<template #icon>
@@ -44,6 +46,7 @@
 
 								<NcActionButton v-if="poll.permissions.edit && poll.deleted"
 									:name="t('polls', 'Restore poll')"
+									:aria-label="t('polls', 'Restore poll')"
 									close-after-click
 									@click="toggleArchive(poll.id)">
 									<template #icon>
@@ -54,6 +57,7 @@
 								<NcActionButton v-if="poll.permissions.edit && poll.deleted"
 									class="danger"
 									:name="t('polls', 'Delete poll')"
+									:aria-label="t('polls', 'Delete poll')"
 									close-after-click
 									@click="deletePoll(poll.id)">
 									<template #icon>

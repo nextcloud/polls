@@ -10,6 +10,7 @@
 		</template>
 		<NcActionButton v-if="$route.name === 'publicVote'"
 			:name="t('polls', 'Copy your personal link to clipboard')"
+			:aria-label="t('polls', 'Copy your personal link to clipboard')"
 			@click="copyLink()">
 			<template #icon>
 				<ClippyIcon />
@@ -42,6 +43,7 @@
 		</NcActionInput>
 		<NcActionButton v-if="$route.name === 'publicVote'"
 			:name="t('polls', 'Get your personal link per mail')"
+			:aria-label="t('polls', 'Get your personal link per mail')"
 			:disabled="!emailAddress"
 			:value="emailAddress"
 			@click="resendInvitation()">
@@ -57,6 +59,7 @@
 		</NcActionCheckbox>
 		<NcActionButton v-if="$route.name === 'publicVote' && emailAddress"
 			:name="t('polls', 'Remove Email Address')"
+			:aria-label="t('polls', 'Remove Email Address')"
 			:disabled="!emailAddress"
 			@click="deleteEmailAddress">
 			<template #icon>
@@ -65,6 +68,7 @@
 		</NcActionButton>
 		<NcActionButton v-if="permissions.edit"
 			:name="t('polls', 'Copy list of email addresses to clipboard')"
+			:aria-label="t('polls', 'Copy list of email addresses to clipboard')"
 			@click="getAddresses()">
 			<template #icon>
 				<ClippyIcon />
@@ -72,6 +76,7 @@
 		</NcActionButton>
 		<NcActionButton v-if="permissions.vote"
 			:name="t('polls', 'Reset your votes')"
+			:aria-label="t('polls', 'Reset your votes')"
 			@click="resetVotes()">
 			<template #icon>
 				<ResetVotesIcon />
@@ -79,6 +84,7 @@
 		</NcActionButton>
 		<NcActionButton v-if="$route.name === 'publicVote' && hasCookie"
 			:name="t('polls', 'Logout as {name} (delete cookie)', { name: displayName })"
+			:aria-label="t('polls', 'Logout as {name} (delete cookie)', { name: displayName })"
 			@click="logout()">
 			<template #icon>
 				<LogoutIcon />

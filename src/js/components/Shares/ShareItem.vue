@@ -32,6 +32,7 @@
 
 				<NcActionButton v-if="activateResendInvitation"
 					:name="share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail')"
+					:aria-label="share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail')"
 					@click="sendInvitation()">
 					<template #icon>
 						<SendEmailIcon />
@@ -41,6 +42,7 @@
 				<NcActionButton v-if="activateResolveGroup"
 					:disabled="resolving"
 					:name="t('polls', 'Resolve into individual invitations')"
+					:aria-label="t('polls', 'Resolve into individual invitations')"
 					@click="resolveGroup(share)">
 					<template #icon>
 						<ResolveGroupIcon />
@@ -49,6 +51,7 @@
 
 				<NcActionButton v-if="activateSwitchAdmin"
 					:name="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
+					:aria-label="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
 					@click="switchAdmin({ share: share })">
 					<template #icon>
 						<GrantAdminIcon v-if="share.user.type === 'user'" />
@@ -58,6 +61,7 @@
 
 				<NcActionButton v-if="activateCopyLink"
 					:name="t('polls', 'Copy link to clipboard')"
+					:aria-label="t('polls', 'Copy link to clipboard')"
 					@click="copyLink()">
 					<template #icon>
 						<ClippyIcon />
@@ -66,6 +70,7 @@
 
 				<NcActionButton v-if="activateShowQr"
 					:name="t('polls', 'Show QR code')"
+					:aria-label="t('polls', 'Show QR code')"
 					@click="$emit('show-qr-code')">
 					<template #icon>
 						<QrIcon />
@@ -99,6 +104,7 @@
 				</NcActionRadio>
 				<NcActionButton v-if="!share.deleted"
 					:name="share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share')"
+					:aria-label="share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share')"
 					@click="switchLocked(share)">
 					<template #icon>
 						<UnlockIcon v-if="share.locked" />
@@ -107,6 +113,7 @@
 				</NcActionButton>
 				<NcActionButton v-if="!share.deleted"
 					:name="t('polls', 'Delete share')"
+					:aria-label="t('polls', 'Delete share')"
 					@click="deleteShare({ share })">
 					<template #icon>
 						<DeleteIcon />
@@ -114,6 +121,7 @@
 				</NcActionButton>
 				<NcActionButton v-if="share.deleted"
 					:name="t('polls', 'Restore share')"
+					:aria-label="t('polls', 'Restore share')"
 					@click="restoreShare({ share })">
 					<template #icon>
 						<RestoreIcon />
