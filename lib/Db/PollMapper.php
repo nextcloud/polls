@@ -196,7 +196,8 @@ class PollMapper extends QBMapper {
 	 */
 	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'shares';
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, "") AS user_role'))
+		$emptyString = "";
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'))
 			->addGroupBy($joinAlias . '.type');
 		
 		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked')
