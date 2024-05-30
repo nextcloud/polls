@@ -11,7 +11,7 @@
 		<NcPopover :focus-trap="false">
 			<template #trigger>
 				<NcActions>
-					<NcActionButton :name="t('polls', 'Autoreminder informations')">
+					<NcActionButton :name="t('polls', 'Autoreminder informations')" :aria-label="t('polls', 'Autoreminder informations')">
 						<template #icon>
 							<InformationIcon />
 						</template>

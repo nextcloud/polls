@@ -58,7 +58,7 @@ export default {
 
 	computed: {
 		...mapState({
-			loading: (state) => state.polls.pollsLoading,
+			loading: (state) => state.polls.status.loading,
 		}),
 
 		...mapGetters({

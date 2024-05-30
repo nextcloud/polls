@@ -24,8 +24,9 @@
 						@load-poll="loadPoll(poll.id)">
 						<template #actions>
 							<NcActions force-menu>
-								<NcActionButton v-if="isPollCreationAllowed"
+								<NcActionButton v-if="pollCreationAllowed"
 									:name="t('polls', 'Clone poll')"
+									:aria-label="t('polls', 'Clone poll')"
 									close-after-click
 									@click="clonePoll(poll.id)">
 									<template #icon>
@@ -35,6 +36,7 @@
 
 								<NcActionButton v-if="poll.permissions.edit && !poll.deleted"
 									:name="t('polls', 'Archive poll')"
+									:aria-label="t('polls', 'Archive poll')"
 									close-after-click
 									@click="toggleArchive(poll.id)">
 									<template #icon>
@@ -44,6 +46,7 @@
 
 								<NcActionButton v-if="poll.permissions.edit && poll.deleted"
 									:name="t('polls', 'Restore poll')"
+									:aria-label="t('polls', 'Restore poll')"
 									close-after-click
 									@click="toggleArchive(poll.id)">
 									<template #icon>
@@ -54,6 +57,7 @@
 								<NcActionButton v-if="poll.permissions.edit && poll.deleted"
 									class="danger"
 									:name="t('polls', 'Delete poll')"
+									:aria-label="t('polls', 'Delete poll')"
 									close-after-click
 									@click="deletePoll(poll.id)">
 									<template #icon>
@@ -78,7 +82,7 @@
 
 			<NcEmptyContent v-if="emptyPollListnoPolls" v-bind="emptyContent">
 				<template #icon>
-					<NcLoadingIcon v-if="isLoading" :size="64" />
+					<NcLoadingIcon v-if="pollsLoading" :size="64" />
 					<PollsAppIcon v-else />
 				</template>
 			</NcEmptyContent>
@@ -120,8 +124,8 @@ export default {
 	computed: {
 		...mapState({
 			pollCategories: (state) => state.polls.categories,
-			isPollCreationAllowed: (state) => state.polls.meta.permissions.isPollCreationAllowed,
-			isLoading: (state) => state.polls.pollsLoading,
+			pollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
+			pollsLoading: (state) => state.polls.status.loading,
 		}),
 
 		...mapGetters({
@@ -131,7 +135,7 @@ export default {
 		}),
 
 		emptyContent() {
-			if (this.isLoading) {
+			if (this.pollsLoading) {
 				return {
 					name: t('polls', 'Loading polls…'),
 					description: '',
@@ -149,7 +153,7 @@ export default {
 		},
 
 		showMore() {
-			return this.loadedPolls < this.countAvailablePolls && !this.isLoading
+			return this.loadedPolls < this.countAvailablePolls && !this.pollsLoading
 		},
 		countAvailablePolls() {
 			return this.countPolls

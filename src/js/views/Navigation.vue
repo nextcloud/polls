@@ -5,7 +5,7 @@
 
 <template>
 	<NcAppNavigation>
-		<NcAppNavigationNew v-if="isPollCreationAllowed"
+		<NcAppNavigationNew v-if="pollCreationAllowed"
 			button-class="icon-add"
 			:text="t('polls', 'New poll')"
 			@click="toggleCreateDlg" />
@@ -36,7 +36,7 @@
 						@delete-poll="deletePoll(poll.id)" />
 					<NcAppNavigationItem v-if="filteredPolls(pollCategory.id).length === 0"
 						:name="t('polls', 'No polls found for this category')" />
-					<NcAppNavigationItem v-if="countPolls(pollCategory.id) > maxPolls"
+					<NcAppNavigationItem v-if="countPolls(pollCategory.id) > maxPollsInNavigation"
 						class="force-not-active"
 						:to="{ name: 'list', params: {type: pollCategory.id}}"
 						:name="t('polls', 'Show all')">
@@ -50,7 +50,7 @@
 
 		<template #footer>
 			<ul class="app-navigation-footer">
-				<NcAppNavigationItem v-if="isComboActivated"
+				<NcAppNavigationItem v-if="comboAllowed"
 					:name="t('polls', 'Combine polls')"
 					:to="{ name: 'combo' }">
 					<template #icon>
@@ -130,10 +130,10 @@ export default {
 
 	computed: {
 		...mapState({
-			isPollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
-			isComboActivated: (state) => state.polls.meta.permissions.comboAllowed,
+			pollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
+			comboAllowed: (state) => state.polls.meta.permissions.comboAllowed,
 			navigationPollsInList: (state) => state.acl.appSettings.navigationPollsInList,
-			maxPolls: (state) => state.polls.meta.maxPollsInNavigation,
+			maxPollsInNavigation: (state) => state.polls.meta.maxPollsInNavigation,
 		}),
 
 		...mapGetters({

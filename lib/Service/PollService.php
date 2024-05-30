@@ -58,7 +58,11 @@ class PollService {
 	 */
 	public function list(): array {
 		$pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
-		return $pollList;
+		// return $pollList;
+		return array_values(array_filter($pollList, function (Poll $poll): bool {
+			return $poll->getIsAllowed(Poll::PERMISSION_POLL_VIEW);
+		}));
+
 	}
 
 	/**
