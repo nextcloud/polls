@@ -107,6 +107,7 @@ import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
 import { t } from '@nextcloud/l10n'
+import UserItem from '../User/UserItem.vue'
 
 export default {
 	name: 'PollItem',
@@ -119,6 +120,7 @@ export default {
 		PrivatePollIcon,
 		OpenPollIcon,
 		ArchivedPollIcon,
+		UserItem,
 	},
 
 	props: {

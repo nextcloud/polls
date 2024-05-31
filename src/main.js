@@ -10,14 +10,11 @@ import store from './store/index.js'
 import router from './router.js'
 import ClickOutside from 'v-click-outside'
 import { Tooltip } from '@nextcloud/vue'
-import UserItem from './components/User/UserItem.vue'
 
 sync(store, router)
 
 Vue.config.devtools = import.meta.env.MODE !== 'production'
 
-// eslint-disable-next-line vue/match-component-file-name
-Vue.component('UserItem', UserItem)
 // eslint-disable-next-line vue/match-component-file-name
 Vue.directive('tooltip', Tooltip)
 

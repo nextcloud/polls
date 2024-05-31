@@ -45,6 +45,7 @@ import VoteColumn from './VoteColumn.vue'
 import VoteMenu from './VoteMenu.vue'
 import { confirmOption } from '../../mixins/optionMixins.js'
 import { t } from '@nextcloud/l10n'
+import UserItem from '../User/UserItem.vue'
 
 export default {
 	name: 'VoteTable',
@@ -52,6 +53,7 @@ export default {
 		ActionDelete,
 		VoteColumn,
 		VoteMenu,
+		UserItem,
 	},
 
 	mixins: [confirmOption],

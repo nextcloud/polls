@@ -28,6 +28,7 @@ import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton } from '@nextcloud/vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { t } from '@nextcloud/l10n'
+import UserItem from '../User/UserItem.vue'
 
 const user = {
 	user: {
@@ -45,6 +46,7 @@ export default {
 		NcActions,
 		NcActionButton,
 		PlusIcon,
+		UserItem,
 	},
 
 	data() {
