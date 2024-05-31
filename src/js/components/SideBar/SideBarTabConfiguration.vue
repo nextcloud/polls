@@ -113,6 +113,7 @@ import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vu
 import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SideBarTabConfiguration',
@@ -164,6 +165,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		toggleArchive() {
 			if (this.isPollArchived) {
 				this.$store.commit('poll/setProperty', { deleted: 0 })

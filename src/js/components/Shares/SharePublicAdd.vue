@@ -27,6 +27,7 @@ import { mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton } from '@nextcloud/vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import { t } from '@nextcloud/l10n'
 
 const user = {
 	user: {
@@ -56,6 +57,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		...mapActions({
 			addShare: 'shares/add',
 		}),

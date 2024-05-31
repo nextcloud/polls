@@ -23,6 +23,7 @@
 
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'StyleSettings',
@@ -57,6 +58,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		async writeValue(value) {
 			await this.$store.commit('settings/setPreference', value)
 			this.$store.dispatch('settings/write')

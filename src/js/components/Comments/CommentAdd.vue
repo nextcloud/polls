@@ -19,6 +19,7 @@
 import { mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { InputDiv } from '../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CommentAdd',
@@ -41,6 +42,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		async writeComment() {
 			if (this.comment) {
 				try {

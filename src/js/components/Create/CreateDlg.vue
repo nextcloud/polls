@@ -47,6 +47,7 @@ import { NcButton } from '@nextcloud/vue'
 import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CreateDlg',
@@ -78,6 +79,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		...mapActions({
 			addPoll: 'poll/add',
 		}),

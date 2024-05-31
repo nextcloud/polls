@@ -70,6 +70,7 @@ import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SideBar',
@@ -121,6 +122,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		closeSideBar() {
 			emit('polls:sidebar:toggle', { open: false })
 		},

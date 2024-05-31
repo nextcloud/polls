@@ -16,6 +16,7 @@
 import { mapGetters, mapState } from 'vuex'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import VoteIndicator from './VoteIndicator.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'VoteItem',

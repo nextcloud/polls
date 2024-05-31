@@ -6,8 +6,8 @@
 <template>
 	<div>
 		<NcDashboardWidget :items="relevantPolls"
-			:empty-content-message="t('polls', 'No polls found for this category')"
-			:show-more-text="t('polls', 'Relevant polls')"
+			:empty-content-message="dashboardWidgetProperties.emptyContentMessage"
+			:show-more-text="dashboardWidgetProperties.showMoreText"
 			:loading="loading">
 
 			<template #emptyContentIcon>
@@ -46,6 +46,7 @@ import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 import { mapGetters, mapState, mapActions } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'Dashboard',
@@ -56,6 +57,15 @@ export default {
 		TextPollIcon,
 	},
 
+	data() {
+		return {
+			dashboardWidgetProperties: {
+				emptyContentMessage: t('polls', 'No polls found for this category'),
+				showMoreText: t('polls', 'Relevant polls'),
+			},
+		}
+	},
+
 	computed: {
 		...mapState({
 			loading: (state) => state.polls.status.loading,
@@ -64,6 +74,7 @@ export default {
 		...mapGetters({
 			filteredPolls: 'polls/filteredByCategory',
 		}),
+
 
 		relevantPolls() {
 			const list = [
@@ -88,6 +99,7 @@ export default {
 		...mapActions({
 			loadPolls: 'polls/list',
 		}),
+		t,
 	},
 }
 

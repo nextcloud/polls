@@ -24,6 +24,7 @@ import { NcButton } from '@nextcloud/vue'
 import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ActionSortOptions',

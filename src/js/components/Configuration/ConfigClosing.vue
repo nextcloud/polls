@@ -27,6 +27,7 @@ import moment from '@nextcloud/moment'
 import { NcButton, NcDateTimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ConfigClosing',
@@ -96,6 +97,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		...mapActions({
 			closePoll: 'poll/close',
 			reopenPoll: 'poll/reopen',

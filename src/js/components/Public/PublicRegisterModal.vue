@@ -86,6 +86,7 @@ import { mapState } from 'vuex'
 import { InputDiv } from '../Base/index.js'
 import { SimpleLink, setCookie } from '../../helpers/index.js'
 import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
+import { t } from '@nextcloud/l10n'
 
 const COOKIE_LIFETIME = 30
 
@@ -204,6 +205,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		closeModal() {
 			this.$emit('close')
 		},

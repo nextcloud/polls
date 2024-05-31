@@ -6,6 +6,7 @@
 import moment from '@nextcloud/moment'
 import { uniqueArrayOfObjects, Logger } from '../../helpers/index.js'
 import { PollsAPI, PublicAPI } from '../../Api/index.js'
+import { t } from '@nextcloud/l10n'
 
 const defaultPoll = () => ({
 	id: 0,

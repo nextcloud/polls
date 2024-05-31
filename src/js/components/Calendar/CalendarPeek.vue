@@ -31,6 +31,7 @@ import moment from '@nextcloud/moment'
 import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api/index.js'
 import { Logger } from '../../helpers/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CalendarPeek',
@@ -99,6 +100,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		async getEvents() {
 			try {
 				const response = await CalendarAPI.getEvents(this.option.id)

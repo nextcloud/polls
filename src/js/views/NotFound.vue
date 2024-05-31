@@ -5,8 +5,7 @@
 
 <template>
 	<NcAppContent>
-		<NcEmptyContent :name="t('polls', '404 - poll not found')"
-			:description="t('polls', 'Enter a poll or start a new one.')">
+		<NcEmptyContent v-bind="emptyContentProps">
 			<template #icon>
 				<SearchIcon />
 			</template>
@@ -17,6 +16,7 @@
 <script>
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import SearchIcon from 'vue-material-design-icons/Magnify.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'NotFound',
@@ -24,6 +24,15 @@ export default {
 		SearchIcon,
 		NcAppContent,
 		NcEmptyContent,
+	},
+
+	data() {
+		return {
+			emptyContentProps: {
+				name: t('polls', '404 - poll not found'),
+				description: t('polls', 'Enter a poll or start a new one.'),
+			}
+		}
 	},
 }
 </script>

@@ -32,6 +32,7 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import LockIcon from 'vue-material-design-icons/Lock.vue'
 import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
+import { t, n } from '@nextcloud/l10n'
 
 export default {
 	name: 'ActionDelete',

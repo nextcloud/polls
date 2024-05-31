@@ -12,6 +12,7 @@
 
 <script>
 import { CardDiv } from '../../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CardAnonymousPollHint',
@@ -24,6 +25,10 @@ export default {
 		return {
 			cardType: 'warning',
 		}
+	},
+
+	methods: {
+		t,
 	},
 
 }

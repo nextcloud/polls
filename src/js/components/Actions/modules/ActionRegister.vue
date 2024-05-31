@@ -22,7 +22,7 @@
 <script>
 import { NcModal, NcButton } from '@nextcloud/vue'
 import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
-
+import { t } from '@nextcloud/l10n'
 export default {
 	name: 'ActionRegister',
 

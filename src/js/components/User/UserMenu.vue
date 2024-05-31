@@ -108,6 +108,7 @@ import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.js'
 import { ValidatorAPI, PollsAPI } from '../../Api/index.js'
+import { t } from '@nextcloud/l10n'
 
 const setError = (inputProps) => {
 	inputProps.success = false
@@ -207,6 +208,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		logout() {
 			const reRouteTo = deleteCookieByValue(this.$route.params.token)
 			if (reRouteTo) {

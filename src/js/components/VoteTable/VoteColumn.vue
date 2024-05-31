@@ -53,6 +53,8 @@ import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
 import OptionItemOwner from '../Options/OptionItemOwner.vue'
+import { t } from '@nextcloud/l10n'
+import { getCurrentUser } from '@nextcloud/auth'
 
 export default {
 	name: 'VoteColumn',
@@ -126,7 +128,7 @@ export default {
 		},
 
 		showCalendarPeek() {
-			return this.pollType === 'datePoll' && this.getCurrentUser() && this.settings.calendarPeek
+			return this.pollType === 'datePoll' && getCurrentUser() && this.settings.calendarPeek
 		},
 	},
 }

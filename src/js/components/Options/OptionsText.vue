@@ -80,6 +80,7 @@ import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import OptionsTextAdd from './OptionsTextAdd.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'OptionsText',
@@ -146,7 +147,9 @@ export default {
 				this.$store.dispatch('options/reorder', value)
 			},
 		},
-
+	},
+	methods: {
+		t,
 	},
 }
 </script>

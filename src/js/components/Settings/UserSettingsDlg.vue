@@ -28,6 +28,7 @@
 import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'UserSettingsDlg',
@@ -65,6 +66,10 @@ export default {
 
 	beforeDestroy() {
 		unsubscribe('polls:settings:show')
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>

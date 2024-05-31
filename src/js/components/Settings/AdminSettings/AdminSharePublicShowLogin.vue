@@ -14,6 +14,7 @@
 <script>
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminSharePublicShowLogin',
@@ -34,6 +35,10 @@ export default {
 				this.writeValue({ showLogin: value })
 			},
 		},
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>

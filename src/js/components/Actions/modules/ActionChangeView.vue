@@ -23,6 +23,7 @@ import { NcButton } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
 import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ActionChangeView',

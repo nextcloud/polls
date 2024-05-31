@@ -7,9 +7,7 @@
 	<div class="comments">
 		<CommentAdd v-if="permissions.comment" />
 		<Comments v-if="!showEmptyContent" />
-		<NcEmptyContent v-else
-			:name="t('polls', 'No comments')"
-			:description="t('polls', 'Be the first.')">
+		<NcEmptyContent v-else v-bind="emptyContentProps">
 			<template #icon>
 				<CommentsIcon />
 			</template>
@@ -23,6 +21,7 @@ import Comments from '../Comments/Comments.vue'
 import { NcEmptyContent } from '@nextcloud/vue'
 import { mapGetters, mapState } from 'vuex'
 import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SideBarTabComments',
@@ -31,6 +30,15 @@ export default {
 		Comments,
 		NcEmptyContent,
 		CommentsIcon,
+	},
+
+	data() {
+		return {
+			emptyContentProps: {
+				name: t('polls', 'No comments'),
+				description: t('polls', 'Be the first.'),
+			}
+		}
 	},
 
 	computed: {

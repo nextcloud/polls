@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<ConfigBox v-if="lockedShares.length" :name="t('polls', 'Locked shares (read only access)')">
+	<ConfigBox v-if="lockedShares.length" v-bind=" configBoxProps.lockedShares">
 		<template #icon>
 			<LockedIcon />
 		</template>
@@ -24,6 +24,7 @@ import { mapGetters } from 'vuex'
 import { ConfigBox } from '../Base/index.js'
 import LockedIcon from 'vue-material-design-icons/Lock.vue'
 import ShareItem from './ShareItem.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SharesListLocked',
@@ -32,6 +33,16 @@ export default {
 		LockedIcon,
 		ConfigBox,
 		ShareItem,
+	},
+
+	data() {
+		return {
+			configBoxProps: {
+				lockedShares: {
+					name: t('polls', 'Locked shares (read only access)'),
+				},
+			},
+		}
 	},
 
 	computed: {

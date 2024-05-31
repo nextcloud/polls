@@ -126,6 +126,7 @@ import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import PollItem from '../components/PollList/PollItem.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'Administration',
@@ -216,6 +217,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		confirmTakeOver(pollId, currentOwner) {
 			this.currentPoll.pollId = pollId
 			this.currentPoll.owner = currentOwner

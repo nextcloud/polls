@@ -6,12 +6,7 @@
 import Vue from 'vue'
 import Vuex, { Store } from 'vuex'
 import settings from './store/modules/settings.js'
-import { translate, translatePlural } from '@nextcloud/l10n'
-
 import UserSettingsPage from './views/UserSettingsPage.vue'
-
-Vue.prototype.t = translate
-Vue.prototype.n = translatePlural
 
 Vue.config.devtools = import.meta.env.MODE !== 'production'
 

@@ -6,6 +6,7 @@
 import { debounce } from 'lodash'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { mapState } from 'vuex'
+import { t } from '@nextcloud/l10n'
 
 export const writePoll = {
 	computed: {

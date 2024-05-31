@@ -11,6 +11,7 @@
 
 <script>
 import { CardDiv } from '../../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CardLocked',

@@ -58,6 +58,7 @@ import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 import { PollsAPI } from '../../Api/index.js'
 import DOMPurify from 'dompurify'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ExportPoll',
@@ -102,6 +103,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		async exportFile(exportType) {
 			const participantsHeader = [t('polls', 'Participants')]
 			const fromHeader = [t('polls', 'From')]

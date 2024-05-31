@@ -60,6 +60,7 @@ import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'PollNavigationItems',
@@ -90,6 +91,10 @@ export default {
 		...mapGetters({
 			isPollClosed: 'poll/isClosed',
 		}),
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

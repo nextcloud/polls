@@ -21,6 +21,7 @@
 import { mapState, mapGetters } from 'vuex'
 import OptionsDateAdd from './OptionsDateAdd.vue'
 import OptionsTextAdd from './OptionsTextAdd.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'OptionProposals',
@@ -38,6 +39,10 @@ export default {
 		...mapGetters({
 			isProposalOpen: 'poll/isProposalOpen',
 		}),
+	},
+	
+	methods: {
+		t,
 	},
 }
 

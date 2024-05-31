@@ -28,6 +28,7 @@
 import { mapState } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
 import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
+import { t, n } from '@nextcloud/l10n'
 
 export default {
 	name: 'CardLimitedVotes',
@@ -61,7 +62,11 @@ export default {
 		cardType() {
 			return this.maxVotesPerUser && this.votesLeft < 1 ? 'error' : 'info'
 		},
+	},
 
+	methods: {
+		t,
+		n,
 	},
 }
 </script>

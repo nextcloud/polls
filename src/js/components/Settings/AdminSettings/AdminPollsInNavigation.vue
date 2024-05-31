@@ -15,6 +15,7 @@
 
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminPollsInNavigation',
@@ -38,6 +39,10 @@ export default {
 				this.writeValue({ navigationPollsInList: value })
 			},
 		},
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>

@@ -22,6 +22,7 @@
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../../Base/index.js'
 import { writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminArchivePolls',
@@ -52,6 +53,10 @@ export default {
 				this.writeValue({ autoArchiveOffset: value })
 			},
 		},
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>

@@ -22,6 +22,7 @@ import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 import { SideBarTabDatePolls } from '../components/SideBar/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SideBarCombo',
@@ -34,6 +35,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		closeSideBar() {
 			emit('polls:sidebar:toggle', { open: false })
 		},

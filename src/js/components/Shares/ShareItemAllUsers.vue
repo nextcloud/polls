@@ -16,6 +16,7 @@
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { writePoll } from '../../mixins/writePoll.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ShareItemAllUsers',

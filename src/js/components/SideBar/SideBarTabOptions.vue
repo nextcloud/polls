@@ -5,22 +5,23 @@
 
 <template>
 	<div class="side-bar-tab-options">
-		<ConfigBox v-if="!currentUser.isOwner" :name="t('polls', 'As an admin you may edit this poll')" />
-		<ConfigBox :name="t('polls', 'Allow proposals from participants')">
+		<ConfigBox v-if="!currentUser.isOwner"
+			v-bind="configBoxProps.delegatedAdminHint" />
+		<ConfigBox v-bind="configBoxProps.allowProposals">
 			<template #icon>
 				<AddDateIcon />
 			</template>
 			<ConfigProposals />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !isPollClosed" :name="t('polls', 'Shift all date options')">
+		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !isPollClosed" v-bind="configBoxProps.shiftDate">
 			<template #icon>
 				<ShiftDateIcon />
 			</template>
 			<OptionsDateShift />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll'" :name="t('polls', 'Available Options')">
+		<ConfigBox v-if="pollType === 'datePoll'" v-bind="configBoxProps.dateOptions">
 			<template #icon>
 				<DateOptionsIcon />
 			</template>
@@ -28,14 +29,11 @@
 			<OptionsDate />
 
 			<template #actions>
-				<OptionsDateAdd v-if="!isPollClosed"
-					:caption="t('polls', 'Add a date')"
-					show-caption
-					primary />
+				<OptionsDateAdd v-if="!isPollClosed" v-bind="optionAddDatesProps" />
 			</template>
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'textPoll'" :name="t('polls', 'Available Options')">
+		<ConfigBox v-if="pollType === 'textPoll'" v-bind="configBoxProps.textOptions">
 			<template #icon>
 				<TextOptionsIcon />
 			</template>
@@ -62,6 +60,7 @@ import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
 import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SideBarTabOptions',
@@ -78,6 +77,33 @@ export default {
 		OptionsText,
 		OptionsDateAdd,
 		OptionsTextAddBulk,
+	},
+
+	data() {
+		return {
+			configBoxProps: {
+				delegatedAdminHint: {
+					name: t('polls', 'As an admin you may edit this poll'),
+				},
+				allowProposals: {
+					name: t('polls', 'Allow proposals from participants'),
+				},
+				shiftDate: {
+					name: t('polls', 'Shift all date options'),
+				},
+				dateOptions: {
+					name: t('polls', 'Available Options'),
+				},
+				textOptions: {
+					name: t('polls', 'Available Options'),
+				},
+			},
+			optionAddDatesProps: {
+				caption: t('polls', 'Add a date'),
+				showCaption: true,
+				primary: true,
+			},
+		}
 	},
 
 	computed: {

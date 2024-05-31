@@ -28,6 +28,7 @@ import { mapState } from 'vuex'
 import { NcActions, NcActionButton, NcPopover, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 import AutoReminderInformation from './AutoReminderInformation.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ConfigAutoReminder',
@@ -55,7 +56,10 @@ export default {
 				this.$emit('change')
 			},
 		},
+	},
 
+	methods: {
+		t,
 	},
 }
 </script>

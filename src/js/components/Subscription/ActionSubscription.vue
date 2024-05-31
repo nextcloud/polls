@@ -12,6 +12,8 @@
 <script>
 import { mapState } from 'vuex'
 import { NcActions, NcActionCheckbox } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
+
 export default {
 	name: 'ActionSubscription',
 

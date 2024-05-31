@@ -27,6 +27,7 @@
 
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminShareOpenPoll',
@@ -56,6 +57,10 @@ export default {
 				this.writeValue({ allAccessGroups: value })
 			},
 		},
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>

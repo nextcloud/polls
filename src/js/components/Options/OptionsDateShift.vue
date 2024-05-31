@@ -35,6 +35,7 @@ import { InputDiv } from '../Base/index.js'
 import { NcButton, NcSelect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'OptionsDateShift',
@@ -64,6 +65,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		shiftDates(payload) {
 			this.$store.dispatch('options/shift', { shift: payload })
 		},

@@ -27,9 +27,14 @@
 </template>
 
 <script>
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AutoReminderInformation',
+	
+	methods: {
+		t,
+	},
 }
 </script>
 <style lang="scss">

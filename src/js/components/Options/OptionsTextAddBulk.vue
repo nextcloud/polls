@@ -46,6 +46,7 @@
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
 import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'OptionsTextAddBulk',
@@ -77,6 +78,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		async addOptionsList() {
 			if (this.newPollTexts) {
 				try {

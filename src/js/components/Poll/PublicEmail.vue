@@ -18,6 +18,7 @@
 import { debounce } from 'lodash'
 import { InputDiv } from '../Base/index.js'
 import { ValidatorAPI } from '../../Api/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'PublicEmail',
@@ -76,6 +77,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		validateEmailAddress: debounce(async function() {
 			if (this.emailAddress.length < 1 || this.emailAddressUnchanged) {
 				this.checkResult = ''

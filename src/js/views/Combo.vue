@@ -41,6 +41,7 @@ import { ActionToggleSidebar } from '../components/Actions/index.js'
 import { HeaderBar } from '../components/Base/index.js'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'Combo',
@@ -92,6 +93,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		...mapActions({
 			setPollCombo: 'settings/setPollCombo',
 			verifyPolls: 'combo/verifyPollsFromSettings',

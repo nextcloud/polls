@@ -45,6 +45,7 @@ import { NcButton, NcModal } from '@nextcloud/vue'
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 import { PollsAPI } from '../../../Api/index.js'
 import { Logger } from '../../../helpers/index.js'
+import { t, n } from '@nextcloud/l10n'
 
 export default {
 	name: 'ActionSendConfirmed',
@@ -66,6 +67,8 @@ export default {
 	},
 
 	methods: {
+		t,
+		n,
 		async clickAction() {
 			if (this.sendSatus === 'success') {
 				this.showModal = true

@@ -31,6 +31,7 @@ import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vu
 import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
 import ExportPoll from '../Export/ExportPoll.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'PollHeaderButtons',

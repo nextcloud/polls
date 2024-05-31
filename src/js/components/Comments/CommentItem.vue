@@ -33,6 +33,7 @@ import linkifyStr from 'linkify-string'
 import { showError } from '@nextcloud/dialogs'
 import { mapState } from 'vuex'
 import { ActionDelete } from '../Actions/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CommentItem',
@@ -62,6 +63,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		linkify(subComment) {
 			return linkifyStr(subComment)
 		},

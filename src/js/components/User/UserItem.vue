@@ -53,7 +53,7 @@ import GroupIcon from 'vue-material-design-icons/AccountMultiple.vue'
 import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
 import DeletedUserIcon from 'vue-material-design-icons/AccountOff.vue'
 import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
-
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'UserItem',
