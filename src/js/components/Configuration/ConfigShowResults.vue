@@ -12,6 +12,7 @@
 <script>
 import { mapState } from 'vuex'
 import { RadioGroupDiv } from '../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ConfigShowResults',

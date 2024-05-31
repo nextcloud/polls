@@ -33,6 +33,7 @@ import { gfmHeadingId } from 'marked-gfm-heading-id'
 import DOMPurify from 'dompurify'
 import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
+import { t } from '@nextcloud/l10n'
 
 const markedPrefix = {
 	prefix: 'disclaimer-',
@@ -84,6 +85,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		saveSettings() {
 			this.$store.dispatch('appSettings/write')
 		},

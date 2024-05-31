@@ -26,6 +26,7 @@ import { mapState } from 'vuex'
 import { deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import { ActionDelete } from '../Actions/index.js'
 import UserItem from '../User/UserItem.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'OptionItemOwner',
@@ -65,6 +66,10 @@ export default {
 		showOwner() {
 			return this.option.owner.type !== 'empty' && this.option.owner.userId !== this.pollOwner
 		},
+	},
+	
+	methods: {
+		t,
 	},
 }
 

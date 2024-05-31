@@ -16,6 +16,7 @@
 import { mapState } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
 import ActionRegister from '../../Actions/modules/ActionRegister.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CardRegister',

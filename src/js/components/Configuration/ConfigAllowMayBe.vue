@@ -12,6 +12,7 @@
 <script>
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ConfigAllowMayBe',

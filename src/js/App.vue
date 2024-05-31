@@ -62,7 +62,7 @@ export default {
 		},
 
 		useNavigation() {
-			return this.getCurrentUser()
+			return getCurrentUser()
 		},
 
 		useSidebar() {

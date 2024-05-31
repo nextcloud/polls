@@ -16,6 +16,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import { NcButton } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ActionSwitchSafeTable',

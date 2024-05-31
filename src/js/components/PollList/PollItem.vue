@@ -106,6 +106,7 @@ import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
 import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'PollItem',
@@ -207,6 +208,9 @@ export default {
 		timeCreatedRelative() {
 			return moment.unix(this.pollStatus.created).fromNow()
 		},
+	},
+	methods: {
+		t,
 	},
 }
 </script>

@@ -7,6 +7,7 @@ import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash'
 import { PollsAPI } from '../../Api/index.js'
 import { Logger } from '../../helpers/index.js'
+import { t } from '@nextcloud/l10n'
 
 const filterRelevantCondition = (poll, relevantOffset) => !poll.status.deleted
 	&& moment().diff(moment.unix(poll.status.relevantThreshold), 'days') < relevantOffset

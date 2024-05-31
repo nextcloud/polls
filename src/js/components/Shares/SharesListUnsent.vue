@@ -38,6 +38,7 @@ import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 import ShareItem from './ShareItem.vue'
 import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
 import { Logger } from '../../helpers/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SharesListUnsent',
@@ -61,6 +62,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		...mapActions({
 			inviteAll: 'shares/inviteAll',
 		}),

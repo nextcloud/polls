@@ -28,6 +28,7 @@
 
 import { mapState } from 'vuex'
 import { InputDiv } from '../../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminLegal',
@@ -74,6 +75,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		saveSettings() {
 			this.$store.dispatch('appSettings/write')
 		},

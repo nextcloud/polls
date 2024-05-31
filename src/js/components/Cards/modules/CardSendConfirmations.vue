@@ -16,6 +16,7 @@
 <script>
 import { CardDiv } from '../../Base/index.js'
 import ActionSendConfirmed from '../../Actions/modules/ActionSendConfirmed.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CardSendConfirmations',

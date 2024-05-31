@@ -101,6 +101,7 @@ import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 import PollItem from '../components/PollList/PollItem.vue'
+import { t, n } from '@nextcloud/l10n'
 
 export default {
 	name: 'PollList',
@@ -198,6 +199,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		...mapActions({
 			setSortColumn: 'polls/setSort',
 		}),

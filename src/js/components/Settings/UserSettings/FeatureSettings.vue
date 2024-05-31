@@ -38,6 +38,7 @@
 import { mapState } from 'vuex'
 import { InputDiv } from '../../Base/index.js'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'FeatureSettings',
@@ -89,6 +90,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		async writeValue(value) {
 			await this.$store.commit('settings/setPreference', value)
 			this.$store.dispatch('settings/write')

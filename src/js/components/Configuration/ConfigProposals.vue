@@ -22,6 +22,7 @@ import { mapState, mapGetters } from 'vuex'
 import moment from '@nextcloud/moment'
 import { NcCheckboxRadioSwitch, NcDateTimePicker } from '@nextcloud/vue'
 import { writePoll } from '../../mixins/writePoll.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ConfigProposals',
@@ -105,6 +106,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		writeValue(error) {
 			this.$store.commit('poll/setProperty', error)
 			this.writePoll() // from mixin

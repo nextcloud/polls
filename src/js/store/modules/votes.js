@@ -5,6 +5,7 @@
  */
 import { PublicAPI, VotesAPI } from '../../Api/index.js'
 import { Logger } from '../../helpers/index.js'
+import { t } from '@nextcloud/l10n'
 
 const defaultVotes = () => ({
 	list: [],

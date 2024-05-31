@@ -95,6 +95,7 @@ import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'Navigation',
@@ -156,6 +157,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		closeCreate() {
 			this.createDlg = false
 		},

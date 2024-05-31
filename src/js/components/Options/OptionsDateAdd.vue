@@ -78,6 +78,7 @@ import { NcButton, NcCheckboxRadioSwitch, NcDateTimePicker } from '@nextcloud/vu
 import { FlexSpacer } from '../Base/index.js'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'OptionsDateAdd',
@@ -224,6 +225,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		// if picker returned a valid selection
 		changedDate(value, type) {
 			this.added = false

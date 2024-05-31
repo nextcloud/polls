@@ -29,6 +29,7 @@
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ConfigOptionLimit',
@@ -77,7 +78,10 @@ export default {
 				this.$emit('change')
 			},
 		},
-
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>

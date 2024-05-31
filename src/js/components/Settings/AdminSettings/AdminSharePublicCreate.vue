@@ -26,6 +26,7 @@
 
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminSharePublicCreate',
@@ -55,6 +56,10 @@ export default {
 				this.writeValue({ publicSharesGroups: value })
 			},
 		},
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>

@@ -151,6 +151,7 @@ import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import { Logger } from '../../helpers/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'ShareItem',
@@ -237,6 +238,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		...mapActions({
 			deleteShare: 'shares/delete',
 			restoreShare: 'shares/restore',

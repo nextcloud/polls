@@ -80,6 +80,7 @@ import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import OptionItemOwner from './OptionItemOwner.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'OptionsDate',
@@ -134,6 +135,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		closeModal() {
 			this.cloneModal = false
 		},

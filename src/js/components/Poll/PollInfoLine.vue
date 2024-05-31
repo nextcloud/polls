@@ -21,6 +21,7 @@ import closedPollIcon from 'vue-material-design-icons/Lock.vue'
 import creationIcon from 'vue-material-design-icons/ClockOutline.vue'
 import ProposalsIcon from 'vue-material-design-icons/Offer.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'PollInfoLine',

@@ -5,22 +5,18 @@
 
 <template>
 	<FlexSettings>
-		<NcSettingsSection :name="t('polls', 'Calendar check')"
-			:description="t('polls', 'Search for conflicting calendar entries')">
+		<NcSettingsSection v-bind="calendarSettings">
 			<CalendarSettings />
 		</NcSettingsSection>
-		<NcSettingsSection :name="t('polls', 'Personal preferences')"
-			:description="t('polls', 'Set your personal preferences for the polls app')">
+		<NcSettingsSection v-bind="personalSettings">
 			<FeatureSettings />
 		</NcSettingsSection>
 
-		<NcSettingsSection :name="t('polls', 'Performance settings')"
-			:description="t('polls', 'Try to change these parameters to handle big polls')">
+		<NcSettingsSection v-bind="performanceSettings">
 			<PerformanceSettings />
 		</NcSettingsSection>
 
-		<NcSettingsSection :name="t('polls', 'Experimental styles')"
-			:description="t('polls', 'Some visual styling options.')">
+		<NcSettingsSection v-bind="styleSettings">
 			<StyleSettings />
 		</NcSettingsSection>
 	</FlexSettings>
@@ -31,6 +27,7 @@
 import { NcSettingsSection } from '@nextcloud/vue'
 import { FlexSettings } from '../components/Base/index.js'
 import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from '../components/Settings/UserSettings/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'UserSettingsPage',
@@ -42,6 +39,27 @@ export default {
 		FeatureSettings,
 		StyleSettings,
 		PerformanceSettings,
+	},
+
+	data() {
+		return {
+			calendarSettings: {
+				name: t('polls', 'Calendar check'),
+				description: t('polls', 'Search for conflicting calendar entries'),
+			},
+			personalSettings: {
+				name: t('polls', 'Personal preferences'),
+				description: t('polls', 'Set your personal preferences for the polls app'),
+			},
+			performanceSettings: {
+				name: t('polls', 'Performance settings'),
+				description: t('polls', 'Try to change these parameters to handle big polls'),
+			},
+			styleSettings: {
+				name: t('polls', 'Experimental styles'),
+				description: t('polls', 'Some visual styling options.'),
+			},
+		}
 	},
 
 	created() {

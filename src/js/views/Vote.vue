@@ -63,6 +63,7 @@ import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import VoteTable from '../components/VoteTable/VoteTable.vue'
 import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
 import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'Vote',

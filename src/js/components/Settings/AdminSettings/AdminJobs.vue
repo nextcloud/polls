@@ -46,6 +46,7 @@
 import { NcButton } from '@nextcloud/vue'
 import { AdminAPI } from '../../../Api/index.js'
 import { Logger } from '../../../helpers/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminJobs',
@@ -71,6 +72,7 @@ export default {
 		}
 	},
 	methods: {
+		t,
 		async runAutoReminderJob() {
 			try {
 				AdminAPI.runAutoReminder()

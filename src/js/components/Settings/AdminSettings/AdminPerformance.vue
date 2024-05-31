@@ -12,6 +12,7 @@
 <script>
 import { RadioGroupDiv } from '../../Base/index.js'
 import { writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminPerformance',

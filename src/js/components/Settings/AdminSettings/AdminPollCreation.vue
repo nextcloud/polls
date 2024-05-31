@@ -26,6 +26,7 @@
 
 import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'AdminPollCreation',
@@ -55,6 +56,10 @@ export default {
 				this.writeValue({ pollCreationGroups: value })
 			},
 		},
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>

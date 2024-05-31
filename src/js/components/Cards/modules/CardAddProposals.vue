@@ -21,6 +21,7 @@
 import { mapState, mapGetters } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
 import OptionProposals from '../../Options/OptionProposals.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CardAddProposals',
@@ -45,6 +46,10 @@ export default {
 			isProposalExpired: 'poll/isProposalExpired',
 			proposalsExpireRelative: 'poll/proposalsExpireRelative',
 		}),
+	},
+
+	methods: {
+		t,
 	},
 }
 </script>

@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<ConfigBox :name="t('polls', 'Shares')">
+	<ConfigBox v-bind="configBoxProps.sharesList">
 		<template #icon>
 			<ShareIcon />
 		</template>
@@ -47,6 +47,7 @@ import SharePublicAdd from './SharePublicAdd.vue'
 import ShareItemAllUsers from './ShareItemAllUsers.vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import MarkUpDescription from '../Poll/MarkUpDescription.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SharesList',
@@ -67,6 +68,12 @@ export default {
 		return {
 			qrModal: false,
 			qrText: '',
+			configBoxProps: {
+				sharesList: {
+					name: t('polls', 'Locked shares (read only access)'),
+				},
+			},
+
 		}
 	},
 

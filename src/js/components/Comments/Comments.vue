@@ -19,6 +19,7 @@
 
 import CommentItem from './CommentItem.vue'
 import { mapGetters, mapState } from 'vuex'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'Comments',

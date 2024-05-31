@@ -6,7 +6,7 @@
 <template>
 	<div class="comments">
 		<Activities v-if="!showEmptyContent" />
-		<NcEmptyContent v-else :name="t('polls', 'No activity')">
+		<NcEmptyContent v-else v-bind="emptyContentProps">
 			<template #icon>
 				<ActivityIcon />
 			</template>
@@ -19,6 +19,7 @@ import Activities from '../Activity/Activities.vue'
 import { NcEmptyContent } from '@nextcloud/vue'
 import { mapState } from 'vuex'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'SideBarTabActivity',
@@ -26,6 +27,14 @@ export default {
 		ActivityIcon,
 		Activities,
 		NcEmptyContent,
+	},
+
+	data() {
+		return {
+			emptyContentProps: {
+				name: t('polls', 'No comments'),
+			}
+		}
 	},
 
 	computed: {

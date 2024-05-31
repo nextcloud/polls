@@ -44,6 +44,7 @@ import { ActionDelete } from '../Actions/index.js'
 import VoteColumn from './VoteColumn.vue'
 import VoteMenu from './VoteMenu.vue'
 import { confirmOption } from '../../mixins/optionMixins.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'VoteTable',
@@ -81,6 +82,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		async removeUser(userId) {
 			await this.$store.dispatch('votes/deleteUser', { userId })
 			showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))

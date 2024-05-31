@@ -51,6 +51,7 @@ import moment from '@nextcloud/moment'
 import { NcButton, NcSelect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import { InputDiv } from '../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'OptionCloneDate',
@@ -87,6 +88,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		createSequence() {
 			this.$store
 				.dispatch('options/sequence', {

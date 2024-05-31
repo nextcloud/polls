@@ -33,6 +33,7 @@ import { showError } from '@nextcloud/dialogs'
 import { NcSelect } from '@nextcloud/vue'
 import { AppSettingsAPI } from '../../Api/index.js'
 import { Logger } from '../../helpers/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'UserSearch',
@@ -50,6 +51,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		...mapActions({
 			addShare: 'shares/add',
 		}),

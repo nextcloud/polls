@@ -47,6 +47,7 @@
 import { mapState } from 'vuex'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CalendarSettings',
@@ -113,6 +114,7 @@ export default {
 	},
 
 	methods: {
+		t,
 		async writeValue(value) {
 			await this.$store.commit('settings/setPreference', value)
 			this.$store.dispatch('settings/write')

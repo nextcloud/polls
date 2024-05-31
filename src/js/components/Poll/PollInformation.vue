@@ -136,6 +136,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import EmailIcon from 'vue-material-design-icons/Email.vue'
 import { MaybeIcon } from '../AppIcons/index.js'
+import { t, n } from '@nextcloud/l10n'
 
 export default {
 	name: 'PollInformation',
@@ -245,6 +246,11 @@ export default {
 		countUsedVotes() {
 			return this.pollConfiguration.maxVotesPerUser - this.yesVotes
 		},
+	},
+	
+	methods: {
+		t,
+		n,
 	},
 }
 </script>

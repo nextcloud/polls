@@ -15,6 +15,7 @@
 <script>
 import { CardDiv } from '../../Base/index.js'
 import { mapState } from 'vuex'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CardClosedPoll',
@@ -33,6 +34,10 @@ export default {
 		...mapState({
 			allowEdit: (state) => state.poll.permissions.edit,
 		}),
+	},
+
+	methods: {
+		t,
 	},
 
 }

@@ -18,6 +18,7 @@
 import { mapState } from 'vuex'
 import { CardDiv } from '../../Base/index.js'
 import ActionOpenSharesSidebar from '../../Actions/modules/ActionOpenSharesSidebar.vue'
+import { t } from '@nextcloud/l10n'
 
 export default {
 	name: 'CardUnpublishedPoll',
@@ -35,6 +36,10 @@ export default {
 		...mapState({
 			hasVotes: (state) => state.votes.list.length,
 		}),
+	},
+	
+	methods: {
+		t,
 	},
 }
 </script>
