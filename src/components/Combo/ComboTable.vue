@@ -32,11 +32,13 @@
 <script>
 import { mapGetters, mapState } from 'vuex'
 import VoteColumn from './VoteColumn.vue'
+import UserItem from '../User/UserItem.vue'
 
 export default {
 	name: 'ComboTable',
 	components: {
 		VoteColumn,
+		UserItem
 	},
 
 	props: {

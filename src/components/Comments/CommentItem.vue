@@ -34,11 +34,13 @@ import { showError } from '@nextcloud/dialogs'
 import { mapState } from 'vuex'
 import { ActionDelete } from '../Actions/index.js'
 import { t } from '@nextcloud/l10n'
+import UserItem from '../User/UserItem.vue'
 
 export default {
 	name: 'CommentItem',
 	components: {
 		ActionDelete,
+		UserItem,
 	},
 
 	props: {

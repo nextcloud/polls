@@ -152,6 +152,7 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import { Logger } from '../../helpers/index.js'
 import { t } from '@nextcloud/l10n'
+import UserItem from '../User/UserItem.vue'
 
 export default {
 	name: 'ShareItem',
@@ -175,6 +176,7 @@ export default {
 		RestoreIcon,
 		LockIcon,
 		UnlockIcon,
+		UserItem,
 	},
 
 	props: {

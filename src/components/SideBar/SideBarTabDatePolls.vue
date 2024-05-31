@@ -19,10 +19,15 @@
 
 <script>
 import { mapActions, mapGetters } from 'vuex'
+import UserItem from '../User/UserItem.vue'
 
 export default {
 	name: 'SideBarTabDatePolls',
 
+	components: {
+		UserItem,
+	},
+	
 	computed: {
 		...mapGetters({
 			polls: 'polls/datePolls',

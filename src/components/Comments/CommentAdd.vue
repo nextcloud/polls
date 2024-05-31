@@ -20,12 +20,14 @@ import { mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { InputDiv } from '../Base/index.js'
 import { t } from '@nextcloud/l10n'
+import UserItem from '../User/UserItem.vue'
 
 export default {
 	name: 'CommentAdd',
 
 	components: {
 		InputDiv,
+		UserItem,
 	},
 
 	data() {
