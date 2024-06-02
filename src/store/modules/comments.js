@@ -33,7 +33,7 @@ const mutations = {
 		)
 
 		if (index < 0) {
-			state.list.push(payload.commet)
+			state.list.push(payload.comment)
 		} else {
 			state.list[index] = Object.assign(state.list[index], payload.comment)
 		}
