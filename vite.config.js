@@ -9,7 +9,7 @@ export default createAppConfig({
 	main: resolve(join('src', 'main.js')),
 	userSettings: resolve(join('src', 'userSettings.js')),
 	adminSettings: resolve(join('src', 'adminSettings.js')),
-	dashboard: resolve(join('src', 'dashboard.js')),
+	dashboard: resolve(join('src', 'dashboard.ts')),
 }, {
 	inlineCSS: { relativeCSSInjection: true },
 })

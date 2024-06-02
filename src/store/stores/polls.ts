@@ -15,6 +15,8 @@ import { Logger } from '../../helpers/index.ts'
 
 export type sortType = 'created' | 'title' | 'access' | 'owner' | 'expire'
 export type filterType = 'relevant' | 'my' | 'private' | 'participated' | 'open' | 'all' | 'closed' | 'archived'
+export type StoreStatusType = 'loading' | 'loaded' | 'error'
+
 export interface PollCategory {
 	id: filterType
 	title: string
@@ -36,12 +38,12 @@ export interface Meta {
 	loadedChunks: number
 	maxPollsInNavigation: number
 	permissions: AppPermissions
+	status: StoreStatusType
 }
 
 export interface PollList {
 	list: Poll[]
 	meta: Meta
-	pollsLoading: boolean
 	sort: {
 		by: sortType
 		reverse: boolean
@@ -78,12 +80,12 @@ export const usePollsStore = defineStore('polls', {
 			chunksize: 20,
 			loadedChunks: 1,
 			maxPollsInNavigation: 6,
+			status: 'loaded',
 			permissions: {
 				pollCreationAllowed: false,
 				comboAllowed: false,
 			},
 		},
-		pollsLoading: false,
 		sort: {
 			by: 'created',
 			reverse: true,
@@ -177,8 +179,8 @@ export const usePollsStore = defineStore('polls', {
 		* polls list, filtered by category 
 		*/
 		pollsByCategory: (state: PollList) => (filterId: filterType) => {
-			const currentCategory = state.categories.find((category) => category.id === filterId)
-			return state.list.filter((poll) => currentCategory.filterCondition(poll))
+			const useCategory = state.categories.find((category) => category.id === filterId)
+			return state.list.filter((poll) => useCategory.filterCondition(poll))
 		},
 		
 		/*
@@ -203,9 +205,9 @@ export const usePollsStore = defineStore('polls', {
 		* Sliced filtered and sorted polls for navigation
 		*/
 		navigationList: (state: PollList) => (filterId: filterType) => {
-			const currentCategory = state.categories.find((category) => category.id === filterId)
+			const useCategory = state.categories.find((category) => category.id === filterId)
 			return orderBy(
-				state.list.filter((poll) => currentCategory.filterCondition(poll)),
+				state.list.filter((poll) => useCategory.filterCondition(poll)),
 				['created'],
 				['desc'],
 			).slice(0, state.meta.maxPollsInNavigation)
@@ -215,9 +217,9 @@ export const usePollsStore = defineStore('polls', {
 		* Sliced filtered and sorted polls for dashboard
 		*/
 		dashboardList(state: PollList): Poll[] {
-			const currentCategory = state.categories.find((category) => category.id === 'relevant')
+			const useCategory = state.categories.find((category) => category.id === 'relevant')
 			return orderBy(
-				state.list.filter((poll) => currentCategory.filterCondition(poll)),
+				state.list.filter((poll) => useCategory.filterCondition(poll)),
 				['created'],
 				['desc'],
 			).slice(0, 7)
@@ -238,7 +240,11 @@ export const usePollsStore = defineStore('polls', {
 		currentCategory(state: PollList): PollCategory {
 			return state.categories.find((category) => category.id === state.meta.currentCategoryId)
 		},
-	
+
+		pollsLoading(state): boolean {
+			return state.meta.status === 'loading'
+		},
+
 		countByCategory: (state: PollList) => (filterId: string) =>
 			state.list.filter((poll: Poll) =>
 			state.categories.find((category: PollCategory) =>
@@ -249,19 +255,20 @@ export const usePollsStore = defineStore('polls', {
 
 	actions: {
 		async load(): Promise<void> {
-			Logger.debug('Loading polls in store')
+			this.setLoadingStatus('loading')
 			try {
-				this.setLoadingStatus()
 				const response = await PollsAPI.getPolls()
 				this.list = response.data.list
 				this.meta.permissions = response.data.permissions
-				Logger.debug('Polls loaded', { polls: this.list })
+				this.setLoadingStatus('loaded')
 			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
-				console.error('Error loading polls', { error: e.response })
+				if (e?.code === 'ERR_CANCELED') {
+					// this.loadingStatus('loaded')
+					return
+				}
+				this.setLoadingStatus('error')
+				Logger.error('Error loading polls', { error: e.response })
 				throw e
-			} finally {
-				this.setLoadingStatus(false)
 			}
 		},
 
@@ -274,6 +281,10 @@ export const usePollsStore = defineStore('polls', {
 			this.sort.by = payload.sortBy
 		},
 
+		addChunk(): void {
+			this.meta.loadedChunks = this.meta.loadedChunks + 1
+		},
+
 		resetChunks(): void {
 			this.meta.loadedChunks = 1
 		},
@@ -283,8 +294,8 @@ export const usePollsStore = defineStore('polls', {
 			this.resetChunks()
 		},
 
-		setLoadingStatus(loading: void|boolean): void {
-			this.pollsLoading = loading ?? true
+		setLoadingStatus(status: StoreStatusType): void {
+			this.meta.status = status
 		},
 	},
 })

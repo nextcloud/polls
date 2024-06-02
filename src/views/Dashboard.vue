@@ -5,10 +5,10 @@
 
 <template>
 	<div>
-		<NcDashboardWidget :items="relevantPolls"
+		<NcDashboardWidget :items="pollsStore.dashboardList"
 			:empty-content-message="dashboardWidgetProperties.emptyContentMessage"
 			:show-more-text="dashboardWidgetProperties.showMoreText"
-			:loading="loading">
+			:loading="pollsStore.pollsLoading">
 
 			<template #emptyContentIcon>
 				<PollsAppIcon />
@@ -44,9 +44,11 @@ import { showError } from '@nextcloud/dialogs'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
-import { mapGetters, mapState, mapActions } from 'vuex'
 import { generateUrl } from '@nextcloud/router'
 import { t } from '@nextcloud/l10n'
+import { mapStores } from 'pinia';
+import { usePollsStore } from '../store/stores/polls.ts'
+import { Logger } from '../helpers/index.ts'
 
 export default {
 	name: 'Dashboard',
@@ -67,38 +69,25 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			loading: (state) => state.polls.status.loading,
-		}),
-
-		...mapGetters({
-			filteredPolls: 'polls/filteredByCategory',
-		}),
-
-
-		relevantPolls() {
-			const list = [
-				...this.filteredPolls('relevant'),
-			]
-			return list.slice(0, 6)
-		},
+		...mapStores(usePollsStore),
 
 		pollLink() {
 			return (poll) => generateUrl(`/apps/polls/vote/${poll.id}`)
 		},
+
 	},
 
 	beforeMount() {
-		this.loadPolls().then(() => {
-		}).catch(() => {
-			showError(t('polls', 'Error loading poll list'))
-		})
+		this.loadPolls()
 	},
 
 	methods: {
-		...mapActions({
-			loadPolls: 'polls/list',
-		}),
+		async loadPolls() {
+			Logger.debug('Loading polls in dashboard widget')
+			this.pollsStore.load().then(() => null).catch(() => {
+				showError(t('polls', 'Error loading poll list'))
+			})
+		},
 		t,
 	},
 }
