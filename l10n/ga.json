@@ -15,9 +15,11 @@
     "Email address" : "Seoladh ríomhphoist",
     "No" : "Níl",
     "OK" : "Ceart go leor",
+    "Week" : "Seachtain",
     "Add" : "Cuir",
     "Submit" : "Cuir isteach",
     "Close" : "Dún",
+    "never" : "riamh",
     "Owner" : "Úinéir",
     "Created" : "Cruthaithe",
     "Login" : "Logáil isteach",
@@ -26,6 +28,7 @@
     "Delete share" : "Scrios an sciar",
     "Restore share" : "Athchóirigh sciar",
     "Share label" : "Comhroinn lipéad",
+    "Link copied to clipboard" : "Cóipeáladh an nasc chuig an ngearrthaisce",
     "Shares" : "Scaireanna",
     "Description" : "Cur síos",
     "Public link" : "Nasc poiblí",
@@ -39,6 +42,8 @@
     "Sharing" : "Roinnt",
     "Comments" : "Tuairimí",
     "Activity" : "Gníomhaíocht",
+    "Day" : "Lá",
+    "Month" : "Mí",
     "Year" : "Bliain",
     "Archive" : "Cartlann"
 },"pluralForm" :"nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);"
