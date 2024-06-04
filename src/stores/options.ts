@@ -5,9 +5,9 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, OptionsAPI } from '../../Api/index.js'
-import { User } from '../../Interfaces/interfaces.ts'
-import { Logger } from '../../helpers/index.js'
+import { PublicAPI, OptionsAPI } from '../Api/index.js'
+import { User } from '../Interfaces/interfaces.ts'
+import { Logger } from '../helpers/index.js'
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash/orderBy'
 import { usePollStore } from './poll.ts'

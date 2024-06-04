@@ -5,7 +5,7 @@
  */
 import { PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
-import { pinia } from './store/index.ts'
+import { pinia } from './stores/index.ts'
 
 import Dashboard from './views/Dashboard.vue'
 import './assets/scss/polls-icon.scss'

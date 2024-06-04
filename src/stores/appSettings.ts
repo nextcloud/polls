@@ -5,8 +5,8 @@
  */
 
 import { defineStore } from 'pinia'
-import { AppSettingsAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
+import { AppSettingsAPI } from '../Api/index.js'
+import { Logger } from '../helpers/index.js'
 
 export interface AppSettings {
 	allAccessGroups: string[]

@@ -5,9 +5,9 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, VotesAPI } from '../../Api/index.js'
-import { User } from '../../Interfaces/interfaces.ts'
-import { Logger } from '../../helpers/index.js'
+import { PublicAPI, VotesAPI } from '../Api/index.js'
+import { User } from '../Interfaces/interfaces.ts'
+import { Logger } from '../helpers/index.js'
 import { t } from '@nextcloud/l10n'
 import { Option, useOptionsStore } from './options.ts'
 import { usePollStore } from './poll.ts'

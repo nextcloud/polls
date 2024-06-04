@@ -5,9 +5,9 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, PollsAPI } from '../../Api/index.js'
-import { User } from '../../Interfaces/interfaces.ts'
-import { Logger, uniqueArrayOfObjects } from '../../helpers/index.js'
+import { PublicAPI, PollsAPI } from '../Api/index.js'
+import { User } from '../Interfaces/interfaces.ts'
+import { Logger, uniqueArrayOfObjects } from '../helpers/index.js'
 import moment from '@nextcloud/moment'
 import { usePreferencesStore } from './preferences.ts'
 import { useAclStore } from './acl.ts'

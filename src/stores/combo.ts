@@ -5,9 +5,9 @@
  */
 
 import { defineStore } from 'pinia'
-import { VotesAPI, OptionsAPI, PollsAPI } from '../../Api/index.js'
-import { User } from '../../Interfaces/interfaces.ts'
-import { Logger, uniqueOptions, uniqueParticipants } from '../../helpers/index.js'
+import { VotesAPI, OptionsAPI, PollsAPI } from '../Api/index.js'
+import { User } from '../Interfaces/interfaces.ts'
+import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.js'
 import { Option } from './options.ts'
 import { Poll } from './poll.ts'
 import { Vote } from './votes.ts'

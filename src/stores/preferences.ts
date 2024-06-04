@@ -5,8 +5,8 @@
  */
 
 import { defineStore } from 'pinia'
-import { CalendarAPI, UserSettingsAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
+import { CalendarAPI, UserSettingsAPI } from '../Api/index.js'
+import { Logger } from '../helpers/index.js'
 
 type ViewMode = 'table-view' | 'list-view'
 
@@ -108,7 +108,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			this.session.manualViewTextPoll = payload
 		},
 	
-		async get(): Promise<void> {
+		async load(): Promise<void> {
 			try {
 				const response = await UserSettingsAPI.getUserSettings()
 				this.setPreference(response.data.preferences)

@@ -5,8 +5,8 @@
  */
 
 import { defineStore } from 'pinia'
-import { SharesAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
+import { SharesAPI } from '../Api/index.js'
+import { Logger } from '../helpers/index.js'
 import { Share } from './share.ts'
 
 interface Shares {

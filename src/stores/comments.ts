@@ -5,9 +5,9 @@
  */
 
 import { defineStore } from 'pinia'
-import { CommentsAPI, PublicAPI } from '../../Api/index.js'
-import { User } from '../../Interfaces/interfaces.ts'
-import { groupComments, Logger } from '../../helpers/index.js'
+import { CommentsAPI, PublicAPI } from '../Api/index.js'
+import { User } from '../Interfaces/interfaces.ts'
+import { groupComments, Logger } from '../helpers/index.js'
 
 interface Comment {
 	comment: string

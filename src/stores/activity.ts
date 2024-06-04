@@ -5,8 +5,8 @@
  */
 
 import { defineStore } from 'pinia'
-import { ActivityAPI } from '../../Api/index.js'
-import { User, AppSettings, AppPermissions } from '../../Interfaces/interfaces.ts'
+import { ActivityAPI } from '../Api/index.js'
+import { User, AppSettings, AppPermissions } from '../Interfaces/interfaces.ts'
 import { Vote } from './votes.ts'
 
 interface Activity {
@@ -20,7 +20,7 @@ interface Activities {
 	list: Activity[]
 }
 
-export const useAclStore = defineStore('acl', {
+export const useActivityStore = defineStore('activity', {
 	state: (): Activities => ({
 		list: [],
 	}),

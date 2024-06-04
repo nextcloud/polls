@@ -5,8 +5,8 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, PollsAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
+import { PublicAPI, PollsAPI } from '../Api/index.js'
+import { Logger } from '../helpers/index.js'
 
 interface Subscription {
 	subscribed: boolean

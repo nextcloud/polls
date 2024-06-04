@@ -7,10 +7,10 @@
 import { defineStore } from 'pinia'
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash'
-import { PollsAPI } from '../../Api/index.js'
+import { PollsAPI } from '../Api/index.js'
 import { Poll } from './poll.ts'
 import { t } from '@nextcloud/l10n'
-import { Logger } from '../../helpers/index.ts'
+import { Logger } from '../helpers/index.ts'
 // import { usePreferencesStore } from './preferences.ts'
 
 export type sortType = 'created' | 'title' | 'access' | 'owner' | 'expire'

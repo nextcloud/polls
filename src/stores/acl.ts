@@ -5,9 +5,9 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, UserSettingsAPI } from '../../Api/index.js'
-import { User, AppPermissions } from '../../Interfaces/interfaces.ts'
-import { Logger } from '../../helpers/index.js'
+import { PublicAPI, UserSettingsAPI } from '../Api/index.js'
+import { User, AppPermissions } from '../Interfaces/interfaces.ts'
+import { Logger } from '../helpers/index.js'
 import { AppSettings } from './appSettings.ts'
 
 interface Acl {
@@ -77,7 +77,7 @@ export const useAclStore = defineStore('acl', {
 	}),
 
 	actions: {
-		async get() {
+		async load() {
 			try {
 				let response = null
 				if (this.$router.route.name === 'publicVote') {

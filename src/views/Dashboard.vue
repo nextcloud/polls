@@ -47,7 +47,7 @@ import { PollsAppIcon } from '../components/AppIcons/index.js'
 import { generateUrl } from '@nextcloud/router'
 import { t } from '@nextcloud/l10n'
 import { mapStores } from 'pinia';
-import { usePollsStore } from '../store/stores/polls.ts'
+import { usePollsStore } from '../stores/polls.ts'
 import { Logger } from '../helpers/index.ts'
 
 export default {
@@ -130,3 +130,4 @@ export default {
 		min-width: 44px;
 	}
 </style>
+../stores/polls.ts

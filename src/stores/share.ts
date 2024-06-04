@@ -5,14 +5,14 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
+import { PublicAPI } from '../Api/index.js'
+import { Logger } from '../helpers/index.js'
 import { usePollStore } from './poll.ts'
 import { useCommentsStore } from './comments.ts'
 import { useVotesStore } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { useSubscriptionStore } from './subscription.ts'
-import { User } from '../../Interfaces/interfaces.ts'
+import { User } from '../Interfaces/interfaces.ts'
 
 export type ShareType = 'email' | 'external' | 'contact' | 'user' | 'group' | 'admin' | 'public'
 

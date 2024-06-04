@@ -5,7 +5,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { PollsAPI } from '../../Api/index.js'
+import { PollsAPI } from '../Api/index.js'
 import { Poll } from './poll.ts'
 import { getCurrentUser } from '@nextcloud/auth'
 
@@ -13,7 +13,7 @@ export interface PollsAdminList {
 	list: Poll[]
 }
 
-export const usePollsStore = defineStore('polls', {
+export const usePollsAdminStore = defineStore('pollsAdmin', {
 	state: (): PollsAdminList => ({
 		list: [],
 	}),
