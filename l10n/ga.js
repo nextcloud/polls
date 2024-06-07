@@ -34,6 +34,7 @@ OC.L10N.register(
     "Shares" : "Scaireanna",
     "Description" : "Cur síos",
     "Public link" : "Nasc poiblí",
+    "Change name" : "Athrú ainm",
     "Email options" : "Roghanna ríomhphoist",
     "Manually start backgropund jobs, independent from the cron schedule." : "Cuir tús le poist chúlra de láimh, neamhspleách ar an sceideal cron.",
     "Yes" : "Tá",
