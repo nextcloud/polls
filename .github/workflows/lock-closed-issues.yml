@@ -16,7 +16,7 @@ jobs:
         with:
           github-token: ${{ github.token }}
           issue-inactive-days: '31'
-          exclude-issue-created-before: ''
+          exclude-issue-created-before: '2024-01-01T00:00:00Z'
           exclude-any-issue-labels: ''
           add-issue-labels: ''
           issue-comment: >
