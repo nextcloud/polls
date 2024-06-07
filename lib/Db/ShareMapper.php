@@ -104,7 +104,7 @@ class ShareMapper extends QBMapper {
 
 		$qb->select('*')
 			->from($this->getTableName())
-			->groupBy(self::TABLE . '.id')
+			->groupBy('id')
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('reminder_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 
