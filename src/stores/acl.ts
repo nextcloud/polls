@@ -9,6 +9,7 @@ import { PublicAPI, UserSettingsAPI } from '../Api/index.js'
 import { User, AppPermissions } from '../Interfaces/interfaces.ts'
 import { Logger } from '../helpers/index.js'
 import { AppSettings } from './appSettings.ts'
+import { useRouterStore } from './router.ts'
 
 interface Acl {
 	token: string,
@@ -73,24 +74,26 @@ export const useAclStore = defineStore('acl', {
 			pollCreationGroups: [],
 			pollDownloadGroups: [],
 			showMailAddressesGroups: [],
-		}
+		},
 	}),
 
 	actions: {
 		async load() {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.getAcl(this.$router.route.params.token)
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.getAcl(routerStore.params.token)
 				} else {
 					response = await UserSettingsAPI.getAcl()
 				}
-				this.$patch(response.data)
+				
+				this.$patch(response.data.acl)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 	
 				this.$reset()
-				if (this.$router.route.name === null) {
+				if (routerStore.name === null) {
 					// TODO: for some reason unauthorized users first get the root route resulting in a 401 
 					// and after that the publicVote route is called as next route
 					// therefore we just debug the error and reset the acl

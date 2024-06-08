@@ -8,6 +8,7 @@ import { defineStore } from 'pinia'
 import { ActivityAPI } from '../Api/index.js'
 import { User, AppSettings, AppPermissions } from '../Interfaces/interfaces.ts'
 import { Vote } from './votes.ts'
+import { useRouterStore } from './router.ts'
 
 interface Activity {
 	token: string,
@@ -27,9 +28,10 @@ export const useActivityStore = defineStore('activity', {
 
 	actions: {
 		async load() {
+			const routerStore = useRouterStore()
 			try {
-				const response = await ActivityAPI.getActivities(this.$router.route.params.id)
-				this.$patch({ list: response.data.ocs.data })
+				const response = await ActivityAPI.getActivities(routerStore.params.id)
+				this.list = response.data.ocs.data
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				this.$reset()

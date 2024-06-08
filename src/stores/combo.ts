@@ -126,7 +126,7 @@ export const useComboStore = defineStore('combo', {
 				this.polls.push(response.data.poll)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.debug('Error loading poll for combo', { error })
+				Logger.error('Error loading poll for combo', { error })
 			}
 		},
 	
@@ -136,7 +136,7 @@ export const useComboStore = defineStore('combo', {
 				this.options.push(...response.data.options)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.debug('Error loading options for combo', { error })
+				Logger.error('Error loading options for combo', { error })
 			}
 		},
 	
@@ -148,7 +148,7 @@ export const useComboStore = defineStore('combo', {
 			
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.debug('Error loading options for combo', { error })
+				Logger.error('Error loading options for combo', { error })
 			}
 		},
 	},

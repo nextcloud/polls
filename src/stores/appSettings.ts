@@ -38,7 +38,7 @@ export interface AppSettings {
 	showMailAddressesGroups: string[]
 }
 
-export const useAclStore = defineStore('acl', {
+export const useAppSettingsStore = defineStore('appSettings', {
 	state: (): AppSettings => ({
 		allAccessGroups: [],
 		allowCombo: true,
@@ -75,7 +75,7 @@ export const useAclStore = defineStore('acl', {
 				const response = await AppSettingsAPI.getAppSettings()
 				this.$patch(response.data.appSettings)
 			} catch (error) {
-				Logger.debug('Error getting appSettings', { error })
+				Logger.error('Error getting appSettings', { error })
 			}
 		},
 	

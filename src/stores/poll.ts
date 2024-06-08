@@ -14,6 +14,7 @@ import { useAclStore } from './acl.ts'
 import { useVotesStore } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
+import { useRouterStore } from './router.ts'
 import { t } from '@nextcloud/l10n'
 
 
@@ -88,12 +89,6 @@ export interface Poll {
 	permissions: PollPermissions
 	revealParticipants: boolean
 }
-
-const preferencesStore = usePreferencesStore()
-const aclStore = useAclStore()
-const votesStore = useVotesStore()
-const optionsStore = useOptionsStore()
-const pollsStore = usePollsStore()
 
 export const usePollStore = defineStore('poll', {
 	state: (): Poll => ({
@@ -174,6 +169,7 @@ export const usePollStore = defineStore('poll', {
 
 	getters: {
 		viewMode(state) {
+			const preferencesStore = usePreferencesStore()
 			if (state.type === 'textPoll') {
 				return preferencesStore.$state.user.defaultViewTextPoll
 			}
@@ -185,6 +181,7 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		getNextViewMode() {
+			const preferencesStore = usePreferencesStore()
 			if (preferencesStore.viewModes.indexOf(this.viewMode) < 0) {
 				return preferencesStore.viewModes[1]
 			}
@@ -209,6 +206,7 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		participants(state) {
+			const aclStore = useAclStore()
 			const participants = this.participantsVoted
 	
 			// add current user, if not among participants and voting is allowed
@@ -224,6 +222,7 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		safeParticipants() {
+			const aclStore = useAclStore()
 			if (this.getSafeTable) {
 				return [{
 					userId: aclStore.currentUser.userId,
@@ -234,9 +233,13 @@ export const usePollStore = defineStore('poll', {
 			return this.participants
 		},
 	
-		participantsVoted: () => uniqueArrayOfObjects(votesStore.list.map((vote) => (
-			vote.user
-		))),
+		participantsVoted() {
+			const votesStore = useVotesStore()
+
+			return uniqueArrayOfObjects(votesStore.list.map((vote) => (
+				vote.user
+			)))
+		},
 	
 		getProposalsOptions: () => [
 			{ value: 'disallow', label: t('polls', 'Disallow proposals') },
@@ -272,6 +275,7 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		getSafeTable(state) {
+			const preferencesStore = usePreferencesStore()
 			return !state.revealParticipants && this.countCells > preferencesStore.user.performanceThreshold
 		},
 
@@ -292,6 +296,7 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		countCells() {
+			const optionsStore = useOptionsStore()
 			return this.countParticipants * optionsStore.count
 		},
 
@@ -303,26 +308,30 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		async load() {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.getPoll(this.$router.route.params.token)
-				} else if (this.$router.route.name === 'vote') {
-					response = await PollsAPI.getPoll(this.$router.route.params.id)
+
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.getPoll(routerStore.params.token)
+				} else if (routerStore.name === 'vote') {
+					response = await PollsAPI.getPoll(routerStore.params.id)
 				} else {
 					this.reset()
 					return
 				}
-				this.revealParticipants = false ?? !this.revealParticipants
+				
 				this.$patch(response.data.poll)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.debug('Error loading poll', { error })
+				Logger.error('Error loading poll', { error })
 				throw error
 			}
 		},
 	
 		async add(payload: { type: PollType; title: string }) {
+			const pollsStore = usePollsStore()
+
 			try {
 				const response = await PollsAPI.addPoll(payload.type, payload.title)
 				return response
@@ -336,6 +345,9 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		async update() {
+			const optionsStore = useOptionsStore()
+			const pollsStore = usePollsStore()
+
 			try {
 				const response = await PollsAPI.updatePoll(this.id, this.configuration)
 				this.$patch(response.data.poll)
@@ -351,6 +363,8 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		async close() {
+			const pollsStore = usePollsStore()
+
 			try {
 				const response = await PollsAPI.closePoll(this.id)
 				this.$patch(response.data.poll)
@@ -365,6 +379,8 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		async reopen() {
+			const pollsStore = usePollsStore()
+
 			try {
 				const response = await PollsAPI.reopenPoll(this.id)
 				this.$patch(response.data.poll)
@@ -379,6 +395,8 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		async toggleArchive(payload: { pollId: number }) {
+			const pollsStore = usePollsStore()
+
 			try {
 				await PollsAPI.toggleArchive(payload.pollId)
 			} catch (error) {
@@ -391,6 +409,8 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		async delete(payload: { pollId: number }) {
+			const pollsStore = usePollsStore()
+
 			try {
 				await PollsAPI.deletePoll(payload.pollId)
 			} catch (error) {
@@ -403,6 +423,7 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		async clone(payload: { pollId: number }) {
+			const pollsStore = usePollsStore()
 			try {
 				const response = await PollsAPI.clonePoll(payload.pollId)
 				return response

@@ -7,6 +7,7 @@
 import { defineStore } from 'pinia'
 import { PublicAPI, PollsAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
+import { useRouterStore } from './router.ts'
 
 interface Subscription {
 	subscribed: boolean
@@ -18,13 +19,14 @@ export const useSubscriptionStore = defineStore('subscription', {
 	}),
 
 	actions: {
-		async get() {
+		async load() {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.getSubscription(this.$router.route.params.token)
-				} else if (this.$router.route.name === 'vote') {
-					response = await PollsAPI.getSubscription(this.$router.route.params.id)
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.getSubscription(routerStore.params.token)
+				} else if (routerStore.name === 'vote') {
+					response = await PollsAPI.getSubscription(routerStore.params.id)
 				} else {
 					this.$reset()
 					return
@@ -38,12 +40,13 @@ export const useSubscriptionStore = defineStore('subscription', {
 		},
 	
 		async update() {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.setSubscription(this.$router.route.params.token, !this.subscribed)
-				} else if (this.$router.route.name === 'vote') {
-					response = await PollsAPI.setSubscription(this.$router.route.params.id, !this.subscribed)
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.setSubscription(routerStore.params.token, !this.subscribed)
+				} else if (routerStore.name === 'vote') {
+					response = await PollsAPI.setSubscription(routerStore.params.id, !this.subscribed)
 				} else {
 					this.$reset()
 					return

@@ -4,6 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import Vue from 'vue'
+import { pinia } from './stores/index.ts'
+import { PiniaVuePlugin } from 'pinia'
 import App from './App.vue'
 import { sync } from 'vuex-router-sync'
 import store from './store/index.js'
@@ -19,11 +21,13 @@ Vue.config.devtools = import.meta.env.MODE !== 'production'
 Vue.directive('tooltip', Tooltip)
 
 Vue.use(ClickOutside)
+Vue.use(PiniaVuePlugin)
 
 /* eslint-disable-next-line no-new */
 new Vue({
 	el: '#content',
 	router,
 	store,
+	pinia,
 	render: (h) => h(App),
 })

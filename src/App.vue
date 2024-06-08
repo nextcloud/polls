@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -26,8 +25,21 @@ import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls.js'
+import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 import { Logger } from './helpers/index.js'
+import { mapStores } from 'pinia';
+import { useRouterStore } from './stores/router.ts'
+import { usePollStore } from './stores/poll.ts'
+import { useOptionsStore } from './stores/options.ts'
+import { useVotesStore } from './stores/votes.ts'
+import { useCommentsStore } from './stores/comments.ts'
+import { useSubscriptionStore } from './stores/subscription.ts'
+import { useActivityStore } from './stores/activity.ts'
+import { useSharesStore } from './stores/shares.ts'
+import { useAclStore } from './stores/acl.ts'
+import { usePollsAdminStore } from './stores/pollsAdmin.ts'
+
 
 export default {
 	name: 'App',
@@ -49,6 +61,18 @@ export default {
 	},
 
 	computed: {
+		...mapStores(
+			useRouterStore,
+			usePollStore,
+			useOptionsStore,
+			useVotesStore,
+			useCommentsStore,
+			useSubscriptionStore,
+			useActivityStore,
+			useSharesStore,
+			useAclStore,
+			usePollsAdminStore,
+		),
 		...mapState({
 			permissions: (state) => state.poll.permissions,
 		}),
@@ -62,7 +86,7 @@ export default {
 		},
 
 		useNavigation() {
-			return getCurrentUser()
+			return !!getCurrentUser()
 		},
 
 		useSidebar() {
@@ -100,6 +124,7 @@ export default {
 
 	mounted() {
 		this.loadContext(true)
+
 	},
 
 	beforeDestroy() {
@@ -119,16 +144,17 @@ export default {
 		loadContext(silent) {
 			if (this.$route.name !== null) {
 				this.loadAcl()
+				this.routerStore.set(this.$route)
 			}
-
+			
 			if (getCurrentUser()) {
 				this.loadSettings()
-
+				
 				if (this.$route.name === 'list') {
 					this.setFilter(this.$route.params.type)
 				}
 			}
-
+			
 			if (this.$route.name === 'vote' || this.$route.name === 'publicVote') {
 				this.loadPoll(silent)
 			}
@@ -179,7 +205,9 @@ export default {
 				}
 			})
 			dispatches = [...new Set(dispatches)] // remove duplicates and add combo
-			return Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
+			// TODO: replace call to loadPiniaStores with loadStoresProxy after finishing pinia migration
+			return this.loadStoresProxy(dispatches)
+			// return Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
 		},
 
 		async loadPoll(silent) {
@@ -207,9 +235,8 @@ export default {
 					dispatches.push('activity/list')
 				}
 
-				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
-				await Promise.all(requests)
-
+				// replace call to loadStoresProxy with loadPiniaStores after finishing pinia migration
+				await this.loadStoresProxy(dispatches)
 			} catch {
 				this.$router.replace({ name: 'notfound' })
 			} finally {
@@ -218,6 +245,34 @@ export default {
 			}
 		},
 
+		// TODO: remove this function after finishing pinia migration
+		async loadStoresProxy(dispatches) {
+			await this.loadVuexStores(dispatches)
+			Logger.debug('Loaded vuex stores', { dispatches })	
+			await this.LoadPiniaStores(dispatches)
+			Logger.debug('Loaded piniastores', { dispatches })	
+		},
+
+		async loadVuexStores(dispatches) {
+			Logger.debug('Loading vuex stores', { dispatches })
+			const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
+			return Promise.all(requests)
+		},
+
+		async LoadPiniaStores(dispatches) {
+			Logger.debug('Loading pinia stores', { dispatches })
+			return Promise.all((dispatches) => {
+				if (dispatches.includes('poll/get')) this.pollStore.load()
+				if (dispatches.includes('acl/get')) this.aclStore.load()
+				if (dispatches.includes('options/list')) this.optionsStore.load()
+				if (dispatches.includes('votes/list')) this.votesStore.load()
+				if (dispatches.includes('comments/list')) this.commentsStore.load()
+				if (dispatches.includes('subscription/get')) this.subscriptionStore.load()
+				if (dispatches.includes('activity/list')) this.activityStore.load()
+				if (dispatches.includes('shares/list')) this.sharesStore.load()
+				if (dispatches.includes('pollsAdmin/list')) this.pollsAdminStore.load()
+			})
+		},
 	},
 }
 
@@ -298,3 +353,4 @@ export default {
 }
 
 </style>
+./stores/router.ts

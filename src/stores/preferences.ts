@@ -86,12 +86,6 @@ export const usePreferencesStore = defineStore('preferences', {
 	},
 
 	actions: {
-		setPreference(payload): void {
-			Object.keys(payload).filter((key) => key in this.user).forEach((key) => {
-				this.user[key] = payload[key]
-			})
-		},
-
 		setCalendars(payload) {
 			this.availableCalendars = payload.calendars
 		},
@@ -111,7 +105,7 @@ export const usePreferencesStore = defineStore('preferences', {
 		async load(): Promise<void> {
 			try {
 				const response = await UserSettingsAPI.getUserSettings()
-				this.setPreference(response.data.preferences)
+				this.$patch({ user: response.data.preferences })
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				this.$reset()
@@ -127,7 +121,7 @@ export const usePreferencesStore = defineStore('preferences', {
 		async write(): Promise<void> {
 			try {
 				const response = await UserSettingsAPI.writeUserSettings(this.user)
-				this.setPreference(response.data.preferences)
+				this.$patch({ user: response.data.preferences })
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error writing preferences', { error, preferences: this.user })

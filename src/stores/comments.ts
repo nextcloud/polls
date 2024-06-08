@@ -8,6 +8,7 @@ import { defineStore } from 'pinia'
 import { CommentsAPI, PublicAPI } from '../Api/index.js'
 import { User } from '../Interfaces/interfaces.ts'
 import { groupComments, Logger } from '../helpers/index.js'
+import { useRouterStore } from './router.ts'
 
 interface Comment {
 	comment: string
@@ -34,18 +35,18 @@ export const useCommentsStore = defineStore('comments', {
 	},	
 	actions: {
 		async load() {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.getComments(this.$router.route.params.token)
-				} else if (this.$router.route.name === 'vote') {
-					response = await CommentsAPI.getComments(this.$router.route.params.id)
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.getComments(routerStore.params.token)
+				} else if (routerStore.name === 'vote') {
+					response = await CommentsAPI.getComments(routerStore.params.id)
 				} else {
 					this.$reset()
 					return
 				}
-	
-				this.$set(response.data.comments)
+				this.list = response.data.comments
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				this.$reset()
@@ -53,11 +54,12 @@ export const useCommentsStore = defineStore('comments', {
 		},
 	
 		async add(payload: { message: string }) {
+			const routerStore = useRouterStore()
 			try {
-				if (this.$router.route.name === 'publicVote') {
-					await PublicAPI.addComment(this.$router.route.params.token, payload.message)
-				} else if (this.$router.route.name === 'vote') {
-					await CommentsAPI.addComment(this.$router.route.params.id, payload.message)
+				if (routerStore.name === 'publicVote') {
+					await PublicAPI.addComment(routerStore.params.token, payload.message)
+				} else if (routerStore.name === 'vote') {
+					await CommentsAPI.addComment(routerStore.params.id, payload.message)
 				} else {
 					this.$reset()
 					return
@@ -83,10 +85,11 @@ export const useCommentsStore = defineStore('comments', {
 		},
 	
 		async delete(payload: { comment: Comment }) {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.deleteComment(this.$router.route.params.token, payload.comment.id)
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.deleteComment(routerStore.params.token, payload.comment.id)
 				} else {
 					response = await CommentsAPI.deleteComment(payload.comment.id)
 				}
@@ -101,10 +104,11 @@ export const useCommentsStore = defineStore('comments', {
 		},
 	
 		async restore(payload) {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.restoreComment(this.$router.route.params.token, payload.comment.id, { comment: payload.comment })
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.restoreComment(routerStore.params.token, payload.comment.id, { comment: payload.comment })
 				} else {
 					response = await CommentsAPI.restoreComment(payload.comment.id)
 				}

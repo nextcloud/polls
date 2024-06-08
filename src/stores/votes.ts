@@ -11,6 +11,7 @@ import { Logger } from '../helpers/index.js'
 import { t } from '@nextcloud/l10n'
 import { Option, useOptionsStore } from './options.ts'
 import { usePollStore } from './poll.ts'
+import { useRouterStore } from './router.ts'
 
 export type Answer = 'yes' | 'no' | 'maybe'
 export type AnswerSymbol = '✔' | '❔' | '❌'
@@ -30,9 +31,6 @@ export interface Vote {
 export interface Votes {
 	list: Vote[]
 }
-
-const optionsStore = useOptionsStore()
-const pollsStore = usePollStore()
 
 export const useVotesStore = defineStore('votes', {
 	state: (): Votes => ({
@@ -59,18 +57,20 @@ export const useVotesStore = defineStore('votes', {
 
 	actions: {
 		async load() {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.getVotes(this.$router.route.params.token)
-				} else if (this.$router.route.name === 'vote') {
-					response = await VotesAPI.getVotes(this.$router.route.params.id)
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.getVotes(routerStore.params.token)
+				} else if (routerStore.name === 'vote') {
+					Logger.debug('Loading votes for poll', { pollId: routerStore.params.id })
+					response = await VotesAPI.getVotes(routerStore.params.id)
 				} else {
 					this.$reset()
 					return
 				}
 	
-				const votes = []
+				const votes: Vote[] = []
 				response.data.votes.forEach((vote: Vote) => {
 					if (vote.answer === 'yes') {
 						vote.answerTranslated = t('polls', 'Yes')
@@ -84,7 +84,8 @@ export const useVotesStore = defineStore('votes', {
 					}
 					votes.push(vote)
 				})
-				this.$patch(votes)
+
+				this.list = votes
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				this.$reset()
@@ -92,9 +93,9 @@ export const useVotesStore = defineStore('votes', {
 			}
 		},
 	
-		setItem(payload) {
+		setItem(payload: { option: Option; vote: Vote }) {
 			const index = this.list.findIndex((vote: Vote) =>
-				vote.pollId === payload.pollId
+				vote.pollId === payload.option.pollId
 				&& vote.user.userId === payload.vote.user.userId
 				&& vote.optionText === payload.option.text)
 			if (index > -1) {
@@ -105,16 +106,19 @@ export const useVotesStore = defineStore('votes', {
 		},
 	
 		async set(payload: { option: Option; setTo: Answer }) {
+			const routerStore = useRouterStore()
+			const optionsStore = useOptionsStore()
+			const pollStore = usePollStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.setVote(this.$router.route.params.token, payload.option.id, payload.setTo)
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.setVote(routerStore.params.token, payload.option.id, payload.setTo)
 				} else {
 					response = await VotesAPI.setVote(payload.option.id, payload.setTo)
 				}
-				this.setItem({ option: payload.option, pollId: this.$router.poll.id, vote: response.data.vote })
+				this.setItem({ option: payload.option, vote: response.data.vote })
 				optionsStore.load()
-				pollsStore.load()
+				pollStore.load()
 				return response
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -129,12 +133,13 @@ export const useVotesStore = defineStore('votes', {
 		},
 	
 		async resetVotes() {
+			const routerStore = useRouterStore()
 			try {
 				let response = null
-				if (this.$router.route.name === 'publicVote') {
-					response = await PublicAPI.removeVotes(this.$router.route.params.token)
+				if (routerStore.name === 'publicVote') {
+					response = await PublicAPI.removeVotes(routerStore.params.token)
 				} else {
-					response = await VotesAPI.removeUser(this.$router.route.params.id)
+					response = await VotesAPI.removeUser(routerStore.params.id)
 				}
 				this.list = this.list.filter((vote: Vote) => vote.user.userId !== response.data.deleted)
 
@@ -146,8 +151,9 @@ export const useVotesStore = defineStore('votes', {
 		},
 	
 		async deleteUser(payload) {
+			const routerStore = useRouterStore()
 			try {
-				await VotesAPI.removeUser(this.$router.route.params.id, payload.userId)
+				await VotesAPI.removeUser(routerStore.params.id, payload.userId)
 				this.list = this.list.filter((vote: Vote) => vote.user.userId !== payload.userId)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -157,13 +163,16 @@ export const useVotesStore = defineStore('votes', {
 		},
 
 		async removeOrphanedVotes() {
+			const routerStore = useRouterStore()
+			const pollStore = usePollStore()
+			const optionsStore = useOptionsStore()
 			try {
-				if (this.$router.route.name === 'publicVote') {
-					await PublicAPI.removeOrphanedVotes(this.$router.route.params.token)
+				if (routerStore.name === 'publicVote') {
+					await PublicAPI.removeOrphanedVotes(routerStore.params.token)
 				} else {
-					await VotesAPI.removeOrphanedVotes(this.$router.route.params.id)
+					await VotesAPI.removeOrphanedVotes(routerStore.params.id)
 				}
-				pollsStore.load()
+				pollStore.load()
 				optionsStore.load()
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
