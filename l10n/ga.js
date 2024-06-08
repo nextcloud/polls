@@ -14,6 +14,8 @@ OC.L10N.register(
     "deleted" : "scriosta",
     "Title" : "Teideal",
     "Cancel" : "Cealaigh",
+    "From" : "Ó",
+    "To" : "Chun",
     "Email address" : "Seoladh ríomhphoist",
     "No" : "Níl",
     "OK" : "Ceart go leor",
