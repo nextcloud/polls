@@ -32,6 +32,15 @@ const polls = {
 		})
 	},
 
+	getFullPoll(pollId) {
+		return httpInstance.request({
+			method: 'GET',
+			url: `poll/${pollId}`,
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getPoll.name].handleRequestCancellation().token,
+		})
+	},
+
 	watchPoll(pollId = 0, lastUpdated) {
 		return httpInstance.request({
 			method: 'GET',

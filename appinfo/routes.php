@@ -52,6 +52,7 @@ return [
 
 		['name' => 'poll#list', 'url' => '/polls', 'verb' => 'GET'],
 		['name' => 'poll#get', 'url' => '/poll/{pollId}/poll', 'verb' => 'GET'],
+		['name' => 'poll#get_full', 'url' => '/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#add', 'url' => '/poll/add', 'verb' => 'POST'],
 		['name' => 'poll#update', 'url' => '/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll#delete', 'url' => '/poll/{pollId}', 'verb' => 'DELETE'],
@@ -130,6 +131,7 @@ return [
 		['name' => 'poll_api#transfer_polls', 'url' => '/api/v1.0/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#transfer_poll', 'url' => '/api/v1.0/poll/{pollId}/transfer/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#add', 'url' => '/api/v1.0/poll', 'verb' => 'POST'],
+		['name' => 'poll_api#get_full', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll_api#get', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll_api#update', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll_api#delete', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'DELETE'],

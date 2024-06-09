@@ -11,7 +11,12 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\Service\CommentService;
+use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
+use OCA\Polls\Service\ShareService;
+use OCA\Polls\Service\SubscriptionService;
+use OCA\Polls\Service\VoteService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\CORS;
@@ -28,7 +33,12 @@ class PollApiController extends BaseApiController {
 		string $appName,
 		IRequest $request,
 		private Acl $acl,
-		private PollService $pollService
+		private CommentService $commentService,
+		private PollService $pollService,
+		private OptionService $optionService,
+		private ShareService $shareService,
+		private SubscriptionService $subscriptionService,
+		private VoteService $voteService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -65,6 +75,26 @@ class PollApiController extends BaseApiController {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
+
+	/**
+	 * get complete poll
+	 * @param int $pollId Poll id
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function getFull(int $pollId): JSONResponse {
+		return $this->response(fn () => [
+			'poll' => $this->pollService->get($pollId),
+			'options' => $this->optionService->list($pollId),
+			'votes' => $this->voteService->list($pollId),
+			'comments' => $this->commentService->list($pollId),
+			'shares' => $this->shareService->list($pollId),
+			'subscribed' => $this->subscriptionService->get($pollId),
+			'acl' => $this->acl,
+		]);
+	}
+
 
 	/**
 	 * get acl for poll

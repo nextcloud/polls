@@ -15,7 +15,10 @@ import { useVotesStore } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
 import { useRouterStore } from './router.ts'
+import { useSubscriptionStore } from './subscription.ts'
 import { t } from '@nextcloud/l10n'
+import { useSharesStore } from './shares.ts'
+import { useCommentsStore } from './comments.ts'
 
 
 export enum PollType {
@@ -325,19 +328,32 @@ export const usePollStore = defineStore('poll', {
 	
 		async load() {
 			const routerStore = useRouterStore()
+			const votesStore = useVotesStore()
+			const aclStore = useAclStore()
+			const optionsStore = useOptionsStore()
+			const sharesStore = useSharesStore()
+			const commentsStore = useCommentsStore()
+			const subscriptionStore = useSubscriptionStore()
+
 			try {
 				let response = null
 
 				if (routerStore.name === 'publicVote') {
 					response = await PublicAPI.getPoll(routerStore.params.token)
 				} else if (routerStore.name === 'vote') {
-					response = await PollsAPI.getPoll(routerStore.params.id)
+					response = await PollsAPI.getFullPoll(routerStore.params.id)
 				} else {
 					this.reset()
 					return
 				}
 				
 				this.$patch(response.data.poll)
+				votesStore.list = response.data.votes
+				optionsStore.list = response.data.options
+				sharesStore.list = response.data.shares
+				commentsStore.list = response.data.comments
+				subscriptionStore.subscribed = response.data.subscribed
+				aclStore.$patch(response.data.acl)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error loading poll', { error })
