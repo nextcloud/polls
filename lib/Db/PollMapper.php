@@ -191,6 +191,7 @@ class PollMapper extends QBMapper {
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_votes');
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_count_votes_yes');
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_orphaned_votes');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryParticipantsCount(self::TABLE, $paramUser)->getSQL() . ')'), 'participants_count');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
@@ -338,5 +339,16 @@ class PollMapper extends QBMapper {
 		);
 		return $subQuery;
 	}
+	/**
+	 * Subquery for count of orphaned votes
+	 */
+	protected function subQueryParticipantsCount(string $fromAlias): IQueryBuilder {
+		$subAlias = 'user_vote_sub';
 
+		$subQuery = $this->db->getQueryBuilder();
+		$subQuery->select($subQuery->createFunction('COUNT(DISTINCT ' . $subAlias . '.user_id)'))
+			->from(Vote::TABLE, $subAlias)
+			->where($subQuery->expr()->eq($subAlias . '.poll_id', $fromAlias . '.id'));
+		return $subQuery;
+	}
 }

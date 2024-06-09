@@ -73,6 +73,7 @@ use OCP\IURLGenerator;
  * @method int getCurrentUserCountOrphanedVotes()
  * @method int getCurrentUserCountVotes()
  * @method int getCurrentUserCountVotesYes()
+ * @method int getParticipantsCount()
  */
 
 class Poll extends EntityWithUser implements JsonSerializable {
@@ -160,6 +161,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $currentUserCountOrphanedVotes = 0;
 	protected int $currentUserCountVotes = 0;
 	protected int $currentUserCountVotesYes = 0;
+	protected int $participantsCount = 0;
 
 	public function __construct() {
 		$this->addType('created', 'int');
@@ -186,6 +188,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('currentUserCountVotes', 'int');
 		$this->addType('currentUserCountVotesYes', 'int');
 		$this->addType('currentUserCountOrphanedVotes', 'int');
+		$this->addType('participantsCount', 'int');
 
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userSession = Container::queryClass(UserSession::class);
@@ -204,7 +207,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'configuration' => $this->getConfigurationArray(),
 			// read only properties
 			'descriptionSafe' => $this->getDescriptionSafe(),
-			// read only properties
 			'owner' => $this->getUser(),
 			'status' => $this->getStatusArray(),
 			'currentUserStatus' => $this->getCurrentUserStatus(),
@@ -220,6 +222,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'expired' => $this->getExpired(),
 			'relevantThreshold' => $this->getRelevantThreshold(),
 			'countOptions' => $this->getCountOptions(),
+			'countParticipants' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getParticipantsCount() : 0,
 		];
 	}
 	public function getConfigurationArray(): array {
