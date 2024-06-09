@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [7.1.0] - tbd
+## [7.1.0] - 2024-06-09
 ###  !!! changed API structure, please refer to the documentation
 ### Fix
  - Fixed counting of orphaned votes
