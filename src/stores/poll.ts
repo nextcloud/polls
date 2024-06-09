@@ -6,7 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, PollsAPI } from '../Api/index.js'
-import { User } from '../Interfaces/interfaces.ts'
+import { User, UserType } from '../Interfaces/interfaces.ts'
 import { Logger, uniqueArrayOfObjects } from '../helpers/index.js'
 import moment from '@nextcloud/moment'
 import { usePreferencesStore } from './preferences.ts'
@@ -18,10 +18,27 @@ import { useRouterStore } from './router.ts'
 import { t } from '@nextcloud/l10n'
 
 
-export type PollType = 'datePoll' | 'textPoll'
-export type AccessType = 'private' | 'open'
-export type ShowResultsType = 'always' | 'closed' | 'never'
-export type allowProposalsType = 'allow' | 'disallow' | 'review'
+export enum PollType {
+	Text = 'textPoll',
+	Date = 'datePoll',
+}
+
+export enum AccessType {
+	Private = 'private',
+	Open = 'open',
+}
+
+export enum ShowResults {
+	Always = 'always',
+	Closed = 'closed',
+	Never = 'never',
+}
+
+export enum allowProposals {
+	Allow = 'allow',
+	Disallow = 'disallow',
+	Review = 'review',
+}
 
 export interface PollConfiguration {
 	title: string
@@ -29,13 +46,13 @@ export interface PollConfiguration {
 	access: AccessType
 	allowComment: boolean
 	allowMaybe: boolean
-	allowProposals: allowProposalsType
+	allowProposals: allowProposals
 	anonymous: boolean
 	autoReminder: boolean
 	expire: number
 	hideBookedUp: boolean
 	proposalsExpire: number
-	showResults: ShowResultsType
+	showResults: ShowResults
 	useNo: boolean
 	maxVotesPerOption: number
 	maxVotesPerUser: number
@@ -93,21 +110,21 @@ export interface Poll {
 export const usePollStore = defineStore('poll', {
 	state: (): Poll => ({
 		id: 0,
-		type: 'datePoll',
+		type: PollType.Date,
 		descriptionSafe: '',
 		configuration: {
 			title: '',
 			description: '',
-			access: 'private',
+			access: AccessType.Private,
 			allowComment: false,
 			allowMaybe: false,
-			allowProposals: 'disallow',
+			allowProposals: allowProposals.Disallow,
 			anonymous: false,
 			autoReminder: false,
 			expire: 0,
 			hideBookedUp: false,
 			proposalsExpire: 0,
-			showResults: 'always',
+			showResults: ShowResults.Always,
 			useNo: true,
 			maxVotesPerOption: 0,
 			maxVotesPerUser: 0,
@@ -120,14 +137,13 @@ export const usePollStore = defineStore('poll', {
 			subtitle: '',
 			isNoUser: false,
 			desc: '',
-			type: 'user',
+			type: UserType.User,
 			id: '',
 			user: '',
 			organisation: '',
 			languageCode: '',
 			localeCode: '',
 			timeZone: '',
-			icon: '',
 			categories: [],
 		},
 		status: {
@@ -170,11 +186,11 @@ export const usePollStore = defineStore('poll', {
 	getters: {
 		viewMode(state) {
 			const preferencesStore = usePreferencesStore()
-			if (state.type === 'textPoll') {
+			if (state.type === PollType.Text) {
 				return preferencesStore.$state.user.defaultViewTextPoll
 			}
 	
-			if (state.type === 'datePoll') {
+			if (state.type === PollType.Date) {
 				return preferencesStore.$state.user.defaultViewDatePoll
 			}
 			return 'table-view'
@@ -190,7 +206,7 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		typeName(state) {
-			if (state.type === 'textPoll') {
+			if (state.type === PollType.Text) {
 				return t('polls', 'Text poll')
 			}
 			return t('polls', 'Date poll')

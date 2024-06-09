@@ -8,14 +8,35 @@ import { defineStore } from 'pinia'
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash'
 import { PollsAPI } from '../Api/index.js'
-import { Poll } from './poll.ts'
+import { Poll , PollType } from './poll.ts'
 import { t } from '@nextcloud/l10n'
 import { Logger } from '../helpers/index.ts'
 // import { usePreferencesStore } from './preferences.ts'
 
-export type sortType = 'created' | 'title' | 'access' | 'owner' | 'expire'
-export type filterType = 'relevant' | 'my' | 'private' | 'participated' | 'open' | 'all' | 'closed' | 'archived'
-export type StoreStatusType = 'loading' | 'loaded' | 'error'
+export enum sortType {
+	Created = 'created',
+	Title = 'title',
+	Access = 'access',
+	Owner = 'owner',
+	Expire = 'expire',
+}
+
+export enum filterType {
+	Relevant = 'relevant',
+	My = 'my',
+	Private = 'private',
+	Participated = 'participated',
+	Open = 'open',
+	All = 'all',
+	Closed = 'closed',
+	Archived = 'archived',
+}
+
+export enum StoreStatusType {
+	Loading = 'loading',
+	Loaded = 'loaded',
+	Error = 'error',
+}
 
 export interface PollCategory {
 	id: filterType
@@ -80,19 +101,19 @@ export const usePollsStore = defineStore('polls', {
 			chunksize: 20,
 			loadedChunks: 1,
 			maxPollsInNavigation: 6,
-			status: 'loaded',
+			status: StoreStatusType.Loaded,
 			permissions: {
 				pollCreationAllowed: false,
 				comboAllowed: false,
 			},
 		},
 		sort: {
-			by: 'created',
+			by: sortType.Created,
 			reverse: true,
 		},
 		categories: [
 			{
-				id: 'relevant',
+				id: filterType.Relevant,
 				title: t('polls', 'Relevant'),
 				titleExt: t('polls', 'Relevant polls'),
 				description: t('polls', 'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to.'),
@@ -101,7 +122,7 @@ export const usePollsStore = defineStore('polls', {
 				filterCondition: (poll) => filterRelevantCondition(poll),
 			},
 			{
-				id: 'my',
+				id: filterType.My,
 				title: t('polls', 'My polls'),
 				titleExt: t('polls', 'My polls'),
 				description: t('polls', 'Your polls (in which you are the owner).'),
@@ -110,7 +131,7 @@ export const usePollsStore = defineStore('polls', {
 				filterCondition: (poll) => filterMyPolls(poll),
 			},
 			{
-				id: 'private',
+				id: filterType.Private,
 				title: t('polls', 'Private polls'),
 				titleExt: t('polls', 'Private polls'),
 				description: t('polls', 'All private polls, to which you have access.'),
@@ -119,7 +140,7 @@ export const usePollsStore = defineStore('polls', {
 				filterCondition: (poll) => filterPrivatePolls(poll),
 			},
 			{
-				id: 'participated',
+				id: filterType.Participated,
 				title: t('polls', 'Participated'),
 				titleExt: t('polls', 'Participated'),
 				description: t('polls', 'All polls, where you placed a vote.'),
@@ -128,7 +149,7 @@ export const usePollsStore = defineStore('polls', {
 				filterCondition: (poll) => filterParticipatedPolls(poll),
 			},
 			{
-				id: 'open',
+				id: filterType.Open,
 				title: t('polls', 'Openly accessible polls'),
 				titleExt: t('polls', 'Openly accessible polls'),
 				description: t('polls', 'A complete list with all openly accessible polls on this site, regardless who is the owner.'),
@@ -137,7 +158,7 @@ export const usePollsStore = defineStore('polls', {
 				filterCondition: (poll) => filterOpenPolls(poll),
 			},
 			{
-				id: 'all',
+				id: filterType.All,
 				title: t('polls', 'All polls'),
 				titleExt: t('polls', 'All polls'),
 				description: t('polls', 'All polls, where you have access to.'),
@@ -146,7 +167,7 @@ export const usePollsStore = defineStore('polls', {
 				filterCondition: (poll) => filterAllPolls(poll),
 			},
 			{
-				id: 'closed',
+				id: filterType.Closed,
 				title: t('polls', 'Closed polls'),
 				titleExt: t('polls', 'Closed polls'),
 				description: t('polls', 'All closed polls, where voting is disabled.'),
@@ -155,7 +176,7 @@ export const usePollsStore = defineStore('polls', {
 				filterCondition: (poll) => filterClosedPolls(poll),
 			},
 			{
-				id: 'archived',
+				id: filterType.Archived,
 				title: t('polls', 'Archive'),
 				titleExt: t('polls', 'My archived polls'),
 				description: t('polls', 'Your archived polls are only accessible to you.'),
@@ -234,7 +255,7 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		datePolls(state: PollList): Poll[] {
-			return state.list.filter((poll) => (poll.type === 'datePoll' && !poll.status.deleted))
+			return state.list.filter((poll) => (poll.type === PollType.Date && !poll.status.deleted))
 		},
 
 		currentCategory(state: PollList): PollCategory {

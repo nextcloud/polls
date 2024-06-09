@@ -9,6 +9,8 @@ import { SharesAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
 import { Share } from './share.ts'
 import { useRouterStore } from './router.ts'
+import { UserType } from '../Interfaces/interfaces.ts'
+
 
 interface Shares {
 	list: Share[]
@@ -22,21 +24,22 @@ export const useSharesStore = defineStore('shares', {
 	getters: {
 		active: (state) => {
 			// share types, which will be active, after the user gets his invitation
+			// const invitationTypes = Object.values(InvitationType)
 			const invitationTypes = ['email', 'external', 'contact']
 			// sharetype which are active without sending an invitation
 			const directShareTypes = ['user', 'group', 'admin', 'public']
 			return state.list.filter((share) => (!share.locked
 				&& (directShareTypes.includes(share.user.type)
-					|| (invitationTypes.includes(share.user.type) && (share.user.type === 'external' || share.invitationSent || share.voted))
+					|| (invitationTypes.includes(share.user.type) && (share.user.type === UserType.External || share.invitationSent || share.voted))
 				)
 			))
 		},
 	
 		locked: (state) => state.list.filter((share) => (!!share.locked)),
 		unsentInvitations: (state) => state.list.filter((share) =>
-			(share.user.emailAddress || share.user.type === 'group' || share.user.type === 'contactGroup' || share.user.type === 'circle')
+			(share.user.emailAddress || share.user.type === UserType.Group || share.user.type === UserType.ContactGroup || share.user.type === UserType.Circle)
 			&& !share.invitationSent && !share.locked && !share.voted),
-		public: (state) => state.list.filter((share) => ['public'].includes(share.user.type)),
+		public: (state) => state.list.filter((share) => share.user.type === UserType.Public),
 		hasShares: (state) => state.list.length > 0,
 		hasLocked() {
 			return this.locked.length > 0
@@ -75,7 +78,7 @@ export const useSharesStore = defineStore('shares', {
 		},
 	
 		async switchAdmin(payload: { share: Share }): Promise<void>{
-			const setTo = payload.share.user.type === 'user' ? 'admin' : 'user'
+			const setTo = payload.share.user.type === UserType.User ? UserType.Admin : UserType.User
 	
 			try {
 				const response = await SharesAPI.switchAdmin(payload.share.token, setTo)

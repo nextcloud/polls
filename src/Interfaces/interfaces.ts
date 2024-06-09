@@ -11,8 +11,21 @@ export interface PollPermissions {
 	vote: boolean
 }
 
-export type UserType = 'email' | 'external' | 'contact' | 'user' | 'group' | 'admin' | 'public' | 'circle' | 'contactGroup'
-export type UpdateType = 'noPolling'
+export enum UserType {
+	Email = 'email',
+	External = 'external',
+	Contact = 'contact',
+	User = 'user',
+	Group = 'group',
+	Admin = 'admin',
+	Public = 'public',
+	Circle = 'circle',
+	ContactGroup = 'contactGroup'
+}
+
+export enum UpdateType {
+	NoPolling = 'noPolling'
+}
 
 export interface AppSettings {
 	usePrivacyUrl: string,
@@ -46,6 +59,5 @@ export interface User {
 	languageCode: string
 	localeCode: string
 	timeZone: string
-	icon: string
 	categories: string[]
 }

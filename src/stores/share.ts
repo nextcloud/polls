@@ -12,10 +12,36 @@ import { useCommentsStore } from './comments.ts'
 import { useVotesStore } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { useSubscriptionStore } from './subscription.ts'
-import { User } from '../Interfaces/interfaces.ts'
+import { User, UserType } from '../Interfaces/interfaces.ts'
 import { useRouterStore } from './router.ts'
 
-export type ShareType = 'email' | 'external' | 'contact' | 'user' | 'group' | 'admin' | 'public'
+export enum InvitationTypes {
+	Email = 'email',
+	External = 'external',
+	Contact = 'contact',
+}
+
+export enum DirectShareTypes {
+	User = 'user',
+	Group = 'group',
+	Admin = 'admin',
+	Public = 'public',
+}
+
+export enum ShareTypes {
+	None = '',
+	Email = 'email',
+	External = 'external',
+	Contact = 'contact',
+	User = 'user',
+	Group = 'group',
+	Admin = 'admin',
+	Public = 'public'
+}
+
+export type InvitationType = keyof typeof InvitationTypes
+export type DirectShareType = keyof typeof DirectShareTypes
+export type ShareType = ShareTypes
 
 export interface Share {
 	displayName: string
@@ -24,7 +50,7 @@ export interface Share {
 	locked: boolean
 	pollId: number | null
 	token: string
-	type: '' | ShareType
+	type: ShareTypes
 	emailAddress: string
 	userId: string
 	publicPollEmail: string
@@ -50,7 +76,7 @@ export const useShareStore = defineStore('share', {
 		locked: false,
 		pollId: null,
 		token: '',
-		type: '',
+		type: ShareTypes.None,
 		emailAddress: '',
 		userId: '',
 		publicPollEmail: 'optional',
@@ -62,14 +88,13 @@ export const useShareStore = defineStore('share', {
 			subtitle: '',
 			isNoUser: true,
 			desc: '',
-			type: 'user',
+			type: UserType.User,
 			id: '',
 			user: '',
 			organisation: '', 
 			languageCode: '',
 			localeCode: '',
 			timeZone: '',
-			icon: 'icon-user',
 			categories: []
 		},
 		reminderSent: false,

@@ -13,8 +13,16 @@ import { Option, useOptionsStore } from './options.ts'
 import { usePollStore } from './poll.ts'
 import { useRouterStore } from './router.ts'
 
-export type Answer = 'yes' | 'no' | 'maybe'
-export type AnswerSymbol = '✔' | '❔' | '❌'
+export enum Answer {
+	Yes = 'yes',
+	No = 'no',
+	Maybe = 'maybe',
+}
+export enum AnswerSymbol {
+	Yes = '✔',
+	Maybe = '❔',
+	No = '❌',
+}
 
 export interface Vote {
 	id: number
@@ -74,13 +82,13 @@ export const useVotesStore = defineStore('votes', {
 				response.data.votes.forEach((vote: Vote) => {
 					if (vote.answer === 'yes') {
 						vote.answerTranslated = t('polls', 'Yes')
-						vote.answerSymbol = '✔'
+						vote.answerSymbol = AnswerSymbol.Yes
 					} else if (vote.answer === 'maybe') {
 						vote.answerTranslated = t('polls', 'Maybe')
-						vote.answerSymbol = '❔'
+						vote.answerSymbol = AnswerSymbol.Maybe
 					} else {
 						vote.answerTranslated = t('polls', 'No')
-						vote.answerSymbol = '❌'
+						vote.answerSymbol = AnswerSymbol.No
 					}
 					votes.push(vote)
 				})

@@ -6,7 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, UserSettingsAPI } from '../Api/index.js'
-import { User, AppPermissions } from '../Interfaces/interfaces.ts'
+import { User, AppPermissions, UserType } from '../Interfaces/interfaces.ts'
 import { Logger } from '../helpers/index.js'
 import { AppSettings } from './appSettings.ts'
 import { useRouterStore } from './router.ts'
@@ -29,14 +29,13 @@ export const useAclStore = defineStore('acl', {
 			subtitle: '',
 			isNoUser: true,
 			desc: '',
-			type: 'user',
+			type: UserType.User,
 			id: '',
 			user: '',
 			organisation: '', 
 			languageCode: '',
 			localeCode: '',
 			timeZone: '',
-			icon: 'icon-user',
 			categories: []
 		  },
 		appPermissions: {

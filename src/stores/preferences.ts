@@ -8,7 +8,10 @@ import { defineStore } from 'pinia'
 import { CalendarAPI, UserSettingsAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
 
-type ViewMode = 'table-view' | 'list-view'
+enum ViewMode {
+	TableView = 'table-view',
+	ListView = 'list-view',
+}
 
 interface UserPreferences {
 	useCommentsAlternativeStyling: boolean
@@ -45,8 +48,8 @@ export const usePreferencesStore = defineStore('preferences', {
 			checkCalendars: [],
 			checkCalendarsBefore: 0,
 			checkCalendarsAfter: 0,
-			defaultViewTextPoll: 'table-view',
-			defaultViewDatePoll: 'table-view',
+			defaultViewTextPoll: ViewMode.TableView,
+			defaultViewDatePoll: ViewMode.TableView,
 			performanceThreshold: 1000,
 			pollCombo: [],
 			relevantOffset: 30,
@@ -56,10 +59,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			manualViewTextPoll: '',
 		},
 		availableCalendars: [],
-		viewModes: [
-			'list-view',
-			'table-view',
-		],
+		viewModes: Object.values(ViewMode),
 	}),
 
 	getters: {
@@ -70,7 +70,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			if (window.innerWidth > 480) {
 				return state.user.defaultViewTextPoll
 			}
-			return 'list-view'
+			return ViewMode.ListView
 		},
 
 		viewDatePoll(state): ViewMode {
@@ -80,7 +80,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			if (window.innerWidth > 480) {
 				return state.user.defaultViewDatePoll
 			}
-			return 'list-view'
+			return ViewMode.ListView
 	
 		},
 	},

@@ -10,9 +10,8 @@ import { User } from '../Interfaces/interfaces.ts'
 import { Logger } from '../helpers/index.js'
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash/orderBy'
-import { usePollStore } from './poll.ts'
+import { usePollStore, PollType } from './poll.ts'
 import { useRouterStore } from './router.ts'
-
 
 interface Sequence {
 	step: number
@@ -83,9 +82,11 @@ export const useOptionsStore = defineStore('options', {
 			// to set the begin of the to day to the end of the previous date
 			const toModified = moment(to).subtract(dayModifier, 'days')
 			const pollStore = usePollStore()
-			if (pollStore.type !== 'datePoll') {
+
+			if (pollStore.type !== PollType.Date) {
 				return {}
 			}
+
 			return {
 				from: {
 					month: from.format(moment().year() === from.year() ? 'MMM' : 'MMM [ \']YY'),
