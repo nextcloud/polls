@@ -10,13 +10,13 @@ namespace OCA\Polls\AppInfo;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Dashboard\PollWidget;
-use OCA\Polls\Db\CommentMapper;
-use OCA\Polls\Db\LogMapper;
-use OCA\Polls\Db\OptionMapper;
-use OCA\Polls\Db\PollMapper;
-use OCA\Polls\Db\SubscriptionMapper;
-use OCA\Polls\Db\UserMapper;
-use OCA\Polls\Db\VoteMapper;
+// use OCA\Polls\Db\CommentMapper;
+// use OCA\Polls\Db\LogMapper;
+// use OCA\Polls\Db\OptionMapper;
+// use OCA\Polls\Db\PollMapper;
+// use OCA\Polls\Db\SubscriptionMapper;
+// use OCA\Polls\Db\UserMapper;
+// use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Event\CommentEvent;
@@ -53,21 +53,21 @@ use OCA\Polls\Listener\ShareListener;
 use OCA\Polls\Listener\UserDeletedListener;
 use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Middleware\RequestAttributesMiddleware;
-use OCA\Polls\Model\Settings\AppSettings;
+// use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\SearchProvider;
-use OCA\Polls\UserSession;
+// use OCA\Polls\UserSession;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
-use OCP\IConfig;
-use OCP\IDBConnection;
-use OCP\IUserManager;
+// use OCP\IConfig;
+// use OCP\IDBConnection;
+// use OCP\IUserManager;
 use OCP\User\Events\UserDeletedEvent;
-use Psr\Container\ContainerInterface;
-use Psr\Log\LoggerInterface;
+// use Psr\Container\ContainerInterface;
+// use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-api
@@ -86,7 +86,7 @@ class Application extends App implements IBootstrap {
 
 	public function register(IRegistrationContext $context): void {
 		include_once __DIR__ . '/../../vendor/autoload.php';
-		$this->registerServices($context);
+		// $this->registerServices($context);
 
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);
 		$context->registerNotifierService(Notifier::class);
@@ -133,7 +133,7 @@ class Application extends App implements IBootstrap {
 	/**
 	 * Register some Services
 	 */
-	private function registerServices(IRegistrationContext $context): void {
+	// private function registerServices(IRegistrationContext $context): void {
 		// $context->registerService(UserMapper::class, function (ContainerInterface $c): UserMapper {
 		// 	return new UserMapper(
 		// 		$c->get(IDBConnection::class),
@@ -186,5 +186,5 @@ class Application extends App implements IBootstrap {
 		// 		$c->get(IDBConnection::class),
 		// 	);
 		// });
-	}
+	// }
 }
