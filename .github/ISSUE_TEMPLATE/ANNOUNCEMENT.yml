@@ -5,4 +5,4 @@ labels: ["announcement"]
 body:
   - type: textarea
     attributes:
-      label: Annoncement
+      label: Announcement
