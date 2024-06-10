@@ -9,7 +9,9 @@ All notable changes to this project will be documented in this file.
 ### Fix
  - Fix opening and closing of sidebar after changed component
  - try avoiding update error by removing class registering
- ## [7.1.0] - 2024-06-09
+## Change
+ - Support Nextcloud 27
+## [7.1.0] - 2024-06-09
 ###  !!! changed API structure, please refer to the documentation
 ### Fix
  - Fixed counting of orphaned votes
