@@ -270,7 +270,10 @@ abstract class TableSchema {
 				if ($table->hasColumn($columnName)) {
 					$column = $table->getColumn($columnName);
 					$column->setOptions($columnDefinition['options']);
-					if (Type::lookupName($column->getType()) !== $columnDefinition['type']) {
+
+				// TODO: reactivate after drop of NC27 support
+				// if (Type::lookupName($column->getType()) !== $columnDefinition['type']) {
+				if ($column->getType()->getName() !== $columnDefinition['type']) {
 						$messages[] = 'Migrating type of ' . $tableName . ', ' . $columnName . ' to ' . $columnDefinition['type'];
 						$column->setType(Type::getType($columnDefinition['type']));
 					}
