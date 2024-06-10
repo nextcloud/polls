@@ -279,7 +279,9 @@ abstract class TableSchema {
 					}
 
 					// force change to current options definition
-					$table->modifyColumn($columnName, $columnDefinition['options']);
+					// TODO: reactivate after drop of NC27 support
+					// $table->modifyColumn($columnName, $columnDefinition['options']);
+					$table->changeColumn($columnName, $columnDefinition['options']);
 				} else {
 					$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
 				}
