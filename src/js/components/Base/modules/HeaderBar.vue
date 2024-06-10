@@ -81,6 +81,10 @@ export default {
 			display: flex;
 			margin-bottom: 16px;
 		}
+		.bar_top_right {
+			padding-top: 3px;
+			padding-right: 44px;
+		}
 	}
 
 	[class*="bar_"] {

@@ -19,14 +19,12 @@
 			<PollInformation />
 		</NcPopover>
 		<ExportPoll v-if="permissions.pollDownload" />
-		<ActionToggleSidebar v-if="permissions.edit || permissions.comment" />
 	</div>
 </template>
 
 <script>
 import { mapState } from 'vuex'
 import { NcButton, NcPopover } from '@nextcloud/vue'
-import { ActionToggleSidebar } from '../Actions/index.js'
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
@@ -35,7 +33,6 @@ import ExportPoll from '../Export/ExportPoll.vue'
 export default {
 	name: 'PollHeaderButtons',
 	components: {
-		ActionToggleSidebar,
 		PollInformationIcon,
 		NcPopover,
 		NcButton,

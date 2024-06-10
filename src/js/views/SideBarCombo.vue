@@ -4,7 +4,8 @@
 -->
 
 <template>
-	<NcAppSidebar :name="t('polls', 'Select polls to combine')"
+	<NcAppSidebar :open.sync="showSidebar"
+		:name="t('polls', 'Select polls to combine')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab :id="'polls'"
 			:order="1"
@@ -31,6 +32,12 @@ export default {
 		NcAppSidebar,
 		NcAppSidebarTab,
 		PollsAppIcon,
+	},
+
+	data() {
+		return {
+			showSidebar: (window.innerWidth > 920),
+		}
 	},
 
 	methods: {
