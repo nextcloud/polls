@@ -141,50 +141,50 @@ class Application extends App implements IBootstrap {
 		// 	);
 		// });
 
-		$context->registerService(AppSettings::class, function (ContainerInterface $c): AppSettings {
-			return new AppSettings(
-				$c->get(IConfig::class),
-				$c->get(UserSession::class),
-			);
-		});
+		// $context->registerService(AppSettings::class, function (ContainerInterface $c): AppSettings {
+		// 	return new AppSettings(
+		// 		$c->get(IConfig::class),
+		// 		$c->get(UserSession::class),
+		// 	);
+		// });
 
-		$context->registerService(PollMapper::class, function (ContainerInterface $c): PollMapper {
-			return new PollMapper(
-				$c->get(IDBConnection::class),
-				$c->get(UserSession::class),
-			);
-		});
+		// $context->registerService(PollMapper::class, function (ContainerInterface $c): PollMapper {
+		// 	return new PollMapper(
+		// 		$c->get(IDBConnection::class),
+		// 		$c->get(UserSession::class),
+		// 	);
+		// });
 
-		$context->registerService(CommentMapper::class, function (ContainerInterface $c): CommentMapper {
-			return new CommentMapper(
-				$c->get(IDBConnection::class),
-			);
-		});
+		// $context->registerService(CommentMapper::class, function (ContainerInterface $c): CommentMapper {
+		// 	return new CommentMapper(
+		// 		$c->get(IDBConnection::class),
+		// 	);
+		// });
 
-		$context->registerService(VoteMapper::class, function (ContainerInterface $c): VoteMapper {
-			return new VoteMapper(
-				$c->get(IDBConnection::class),
-				$c->get(LoggerInterface::class),
-			);
-		});
+		// $context->registerService(VoteMapper::class, function (ContainerInterface $c): VoteMapper {
+		// 	return new VoteMapper(
+		// 		$c->get(IDBConnection::class),
+		// 		$c->get(LoggerInterface::class),
+		// 	);
+		// });
 
-		$context->registerService(OptionMapper::class, function (ContainerInterface $c): OptionMapper {
-			return new OptionMapper(
-				$c->get(IDBConnection::class),
-				$c->get(UserSession::class),
-			);
-		});
+		// $context->registerService(OptionMapper::class, function (ContainerInterface $c): OptionMapper {
+		// 	return new OptionMapper(
+		// 		$c->get(IDBConnection::class),
+		// 		$c->get(UserSession::class),
+		// 	);
+		// });
 
-		$context->registerService(SubscriptionMapper::class, function (ContainerInterface $c): SubscriptionMapper {
-			return new SubscriptionMapper(
-				$c->get(IDBConnection::class),
-			);
-		});
+		// $context->registerService(SubscriptionMapper::class, function (ContainerInterface $c): SubscriptionMapper {
+		// 	return new SubscriptionMapper(
+		// 		$c->get(IDBConnection::class),
+		// 	);
+		// });
 
-		$context->registerService(LogMapper::class, function (ContainerInterface $c): LogMapper {
-			return new LogMapper(
-				$c->get(IDBConnection::class),
-			);
-		});
+		// $context->registerService(LogMapper::class, function (ContainerInterface $c): LogMapper {
+		// 	return new LogMapper(
+		// 		$c->get(IDBConnection::class),
+		// 	);
+		// });
 	}
 }
