@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcAppSidebar v-show="showSidebar"
+	<NcAppSidebar :open.sync="showSidebar"
 		:active.sync="activeTab"
 		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
