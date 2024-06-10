@@ -5,7 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [7.1.0] - 2024-06-09
+## [7.1.1] - tbd
+### Fix
+ - Fix opening and closing of sidebar after changed component
+ ## [7.1.0] - 2024-06-09
 ###  !!! changed API structure, please refer to the documentation
 ### Fix
  - Fixed counting of orphaned votes
