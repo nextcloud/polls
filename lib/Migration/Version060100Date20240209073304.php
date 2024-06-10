@@ -81,8 +81,12 @@ class Version060100Date20240209073304 extends SimpleMigrationStep {
 		foreach ($columns as $columnName => $columnDefinition) {
 			if ($table->hasColumn($columnName)) {
 				$column = $table->getColumn($columnName);
-				if (Type::lookupName($column->getType()) !== $columnDefinition['type']) {
-					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . Type::lookupName($column->getType()) . ' to ' . $columnDefinition['type'];
+
+				// TODO: reactivate after drop of NC27 support
+				// if (Type::lookupName($column->getType()) !== $columnDefinition['type']) {
+					// $messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . Type::lookupName($column->getType()) . ' to ' . $columnDefinition['type'];
+				if ($column->getType()->getName() !== $columnDefinition['type']) {
+					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
 					$column->setType(Type::getType($columnDefinition['type']));
 				}
 				$column->setOptions($columnDefinition['options']);
