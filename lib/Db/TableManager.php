@@ -150,7 +150,7 @@ class TableManager {
 
 				// TODO: reactivate after drop of NC27 support
 				// if (Type::lookupName($column->getType()) !== $columnDefinition['type']) {
-					// $messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . Type::lookupName($column->getType()) . ' to ' . $columnDefinition['type'];
+				// 	$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . Type::lookupName($column->getType()) . ' to ' . $columnDefinition['type'];
 				if ($column->getType()->getName() !== $columnDefinition['type']) {
 					$messages[] = 'Migrated type of ' . $table->getName() . '[\'' . $columnName . '\'] from ' . $column->getType()->getName() . ' to ' . $columnDefinition['type'];
 					$column->setType(Type::getType($columnDefinition['type']));
