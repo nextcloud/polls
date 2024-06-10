@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Pobalbhreith",
     "Circle" : "Ciorcal",
     "Group" : "Grúpa",
     "Contact" : "Teagmháil",
@@ -14,6 +15,7 @@ OC.L10N.register(
     "deleted" : "scriosta",
     "Title" : "Teideal",
     "Cancel" : "Cealaigh",
+    "Participants" : "Rannpháirtithe",
     "From" : "Ó",
     "To" : "Chun",
     "Email address" : "Seoladh ríomhphoist",
@@ -24,6 +26,7 @@ OC.L10N.register(
     "Submit" : "Cuir isteach",
     "Close" : "Dún",
     "never" : "riamh",
+    "Private poll" : "Vótaíocht phríobháideach",
     "Owner" : "Úinéir",
     "Created" : "Cruthaithe",
     "Login" : "Logáil isteach",
