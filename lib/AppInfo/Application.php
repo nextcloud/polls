@@ -134,12 +134,12 @@ class Application extends App implements IBootstrap {
 	 * Register some Services
 	 */
 	private function registerServices(IRegistrationContext $context): void {
-		$context->registerService(UserMapper::class, function (ContainerInterface $c): UserMapper {
-			return new UserMapper(
-				$c->get(IDBConnection::class),
-				$c->get(IUserManager::class),
-			);
-		});
+		// $context->registerService(UserMapper::class, function (ContainerInterface $c): UserMapper {
+		// 	return new UserMapper(
+		// 		$c->get(IDBConnection::class),
+		// 		$c->get(IUserManager::class),
+		// 	);
+		// });
 
 		$context->registerService(AppSettings::class, function (ContainerInterface $c): AppSettings {
 			return new AppSettings(
