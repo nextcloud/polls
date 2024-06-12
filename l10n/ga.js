@@ -28,6 +28,7 @@ OC.L10N.register(
     "Close" : "Dún",
     "never" : "riamh",
     "Private poll" : "Vótaíocht phríobháideach",
+    "Access" : "Rochtain",
     "Owner" : "Úinéir",
     "Created" : "Cruthaithe",
     "Login" : "Logáil isteach",
