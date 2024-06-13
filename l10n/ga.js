@@ -15,6 +15,7 @@ OC.L10N.register(
     "deleted" : "scriosta",
     "Title" : "Teideal",
     "Cancel" : "Cealaigh",
+    "Apply" : "Cuir iarratas isteach",
     "Participants" : "Rannpháirtithe",
     "From" : "Ó",
     "To" : "Chun",
