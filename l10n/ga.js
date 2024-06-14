@@ -54,6 +54,8 @@ OC.L10N.register(
     "Sharing" : "Roinnt",
     "Comments" : "Tuairimí",
     "Activity" : "Gníomhaíocht",
+    "Minute" : "Nóiméad",
+    "Hour" : "Uair",
     "Day" : "Lá",
     "Month" : "Mí",
     "Year" : "Bliain",
