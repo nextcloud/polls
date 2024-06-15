@@ -352,7 +352,7 @@ OC.L10N.register(
     "Enter your name or a nickname" : "Introduza o seu nome ou un alcume",
     "Remember me for 30 days" : "Lémbrame durante 30 días",
     "Login" : "Acceso",
-    "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Ao premer no botón «Aceptar», acepta a nosa {privacyPolicy",
+    "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Ao premer no botón «Aceptar», acepta a nosa {privacyPolicy}.",
     "privacy policy" : "directiva de privacidade",
     "Checking name …" : "Comprobando o nome…",
     "A name is required." : "Precísase dun nome.",
