@@ -86,7 +86,6 @@
 import { mapGetters, mapState } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
-import moment from '@nextcloud/moment'
 import { ConfigBox, CardDiv } from '../Base/index.js'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
@@ -164,13 +163,13 @@ export default {
 	},
 
 	methods: {
-		toggleArchive() {
-			if (this.isPollArchived) {
-				this.$store.commit('poll/setProperty', { deleted: 0 })
-			} else {
-				this.$store.commit('poll/setProperty', { deleted: moment.utc().unix() })
+		async toggleArchive() {
+			try {
+				await this.$store.dispatch('poll/toggleArchive', { pollId: this.pollId })
+			} catch {
+				showError(t('polls', 'Error {action} poll.', { action: this.isPollArchived ? 'restoring' : 'archiving' }))
 			}
-			this.writePoll() // from mixin
+			this.writePoll()
 		},
 
 		async deletePoll() {
