@@ -47,6 +47,7 @@ OC.L10N.register(
     "Manually start backgropund jobs, independent from the cron schedule." : "Cuir tús le poist chúlra de láimh, neamhspleách ar an sceideal cron.",
     "Yes" : "Tá",
     "Administration" : "Riarachán",
+    "Show all" : "Taispeáin gach rud",
     "Preferences" : "Roghanna",
     "Details" : "Sonraí",
     "Configuration" : "Cumraíocht",
