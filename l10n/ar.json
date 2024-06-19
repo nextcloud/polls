@@ -523,6 +523,7 @@
     "Poll configurations" : "تكوين الاستبيان",
     "Poll closing status" : "وضعية إغلاق التصويت",
     "Result display" : "عرض النتيجة",
+    "Error {action} poll." : "خطأ في {action} الاستبيان.",
     "Error deleting poll." : "خطأ في حذف الاستبيان.",
     "Allow proposals from participants" : "السماح باستقبال عروض من المشاركين",
     "Shift all date options" : "تبديل جميع خيارات التاريخ",

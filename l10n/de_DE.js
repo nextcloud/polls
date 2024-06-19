@@ -525,6 +525,7 @@ OC.L10N.register(
     "Poll configurations" : "Umfragekonfigurationen",
     "Poll closing status" : "Status zum Schließen der Umfrage",
     "Result display" : "Ergebnisanzeige",
+    "Error {action} poll." : "Fehler {action} Umfrage.",
     "Error deleting poll." : "Fehler beim Löschen der Umfrage.",
     "Allow proposals from participants" : "Vorschläge von Teilnehmern zulassen",
     "Shift all date options" : "Datumsoptionen verschieben",
