@@ -94,6 +94,8 @@ body:
     attributes:
       label: Affected polls version
       placeholder: Your installed polls version
+    validations:
+      required: true
 
   - type: markdown
     attributes:
@@ -229,7 +231,7 @@ body:
         Provide Nextcloud logs lines, which can give information about the bug.
         Copy all relevant contents from `data/nextcloud.log` or copy the a RAW entries from `/settings/admin/logging` section:
       placeholder: This will be automatically formatted into code for better readability.
-      render: shell
+      render: json
 
   - type: textarea
     id: additional-environment-info
@@ -258,7 +260,7 @@ body:
         ./occ config:list system
         ```
       placeholder: This will be automatically formatted into code for better readability.
-      render: shell
+      render: json
 
   - type: textarea
     id: nextcloud-apps
