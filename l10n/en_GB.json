@@ -523,6 +523,7 @@
     "Poll configurations" : "Poll configurations",
     "Poll closing status" : "Poll closing status",
     "Result display" : "Result display",
+    "Error {action} poll." : "Error {action} poll.",
     "Error deleting poll." : "Error deleting poll.",
     "Allow proposals from participants" : "Allow proposals from participants",
     "Shift all date options" : "Shift all date options",
