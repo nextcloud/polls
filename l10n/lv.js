@@ -18,6 +18,7 @@ OC.L10N.register(
     "Cancel" : "Atcelt",
     "Apply" : "Apstiprināt",
     "Participants" : "Dalībnieki",
+    "Email address" : "E-pasta adrese",
     "No" : "Nē",
     "OK" : "Labi",
     "Week" : "Nedēļa",

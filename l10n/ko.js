@@ -196,6 +196,7 @@ OC.L10N.register(
     "Resend invitation mail" : "초대 메일 재전송",
     "Send invitation mail" : "초대 메일 전송",
     "Resolve into individual invitations" : "개별 초대로 해결",
+    "Copy link to clipboard" : "링크를 클립보드에 복사",
     "Email address is optional" : "이메일 주소는 선택 사항입니다.",
     "Email address is mandatory" : "이메일 주소는 필수 사항입니다.",
     "Delete share" : "공유 삭제",
