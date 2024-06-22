@@ -5,17 +5,17 @@
 
 <template>
 	<NcAppNavigation>
-		<NcAppNavigationNew v-if="pollCreationAllowed"
+		<NcAppNavigationNew v-if="pollsStore.meta.permissions.pollCreationAllowed"
 			button-class="icon-add"
 			:text="t('polls', 'New poll')"
 			@click="toggleCreateDlg" />
 		<CreateDlg v-show="createDlg" ref="createDlg" @close-create="closeCreate()" />
 
 		<template #list>
-			<NcAppNavigationItem v-for="(pollCategory) in pollCategories"
+			<NcAppNavigationItem v-for="(pollCategory) in pollsStore.categories"
 				:key="pollCategory.id"
 				:name="pollCategory.title"
-				:allow-collapse="navigationPollsInList"
+				:allow-collapse="aclStore.appSettings.navigationPollsInList"
 				:pinned="pollCategory.pinned"
 				:to="{ name: 'list', params: {type: pollCategory.id}}"
 				:open="false">
@@ -24,19 +24,19 @@
 				</template>
 				<template #counter>
 					<NcCounterBubble>
-						{{ countPolls(pollCategory.id) }}
+						{{ pollsStore.pollsByCategory(pollCategory.id).length }}
 					</NcCounterBubble>
 				</template>
-				<ul v-if="navigationPollsInList">
-					<PollNavigationItems v-for="(poll) in filteredPolls(pollCategory.id)"
+				<ul v-if="aclStore.appSettings.navigationPollsInList">
+					<PollNavigationItems v-for="(poll) in pollsStore.navigationList(pollCategory.id)"
 						:key="poll.id"
 						:poll="poll"
 						@toggle-archive="toggleArchive(poll.id)"
 						@clone-poll="clonePoll(poll.id)"
 						@delete-poll="deletePoll(poll.id)" />
-					<NcAppNavigationItem v-if="filteredPolls(pollCategory.id).length === 0"
+					<NcAppNavigationItem v-if="pollsStore.navigationList(pollCategory.id).length === 0"
 						:name="t('polls', 'No polls found for this category')" />
-					<NcAppNavigationItem v-if="countPolls(pollCategory.id) > maxPollsInNavigation"
+					<NcAppNavigationItem v-if="pollsStore.pollsByCategory(pollCategory.id) > pollsStore.meta.maxPollsInNavigation"
 						class="force-not-active"
 						:to="{ name: 'list', params: {type: pollCategory.id}}"
 						:name="t('polls', 'Show all')">
@@ -50,7 +50,7 @@
 
 		<template #footer>
 			<ul class="app-navigation-footer">
-				<NcAppNavigationItem v-if="comboAllowed"
+				<NcAppNavigationItem v-if="pollsStore.meta.permissions.comboAllowed"
 					:name="t('polls', 'Combine polls')"
 					:to="{ name: 'combo' }">
 					<template #icon>
@@ -76,8 +76,8 @@
 
 <script>
 
+import { mapStores } from 'pinia'
 import { NcAppNavigation, NcAppNavigationNew, NcAppNavigationItem, NcCounterBubble } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
 import { getCurrentUser } from '@nextcloud/auth'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
@@ -96,6 +96,10 @@ import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../stores/poll.ts'
+import { usePollsStore } from '../stores/polls.ts'
+import { useAclStore } from '../stores/acl.ts'
+import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
 
 export default {
 	name: 'Navigation',
@@ -130,18 +134,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
-			comboAllowed: (state) => state.polls.meta.permissions.comboAllowed,
-			navigationPollsInList: (state) => state.acl.appSettings.navigationPollsInList,
-			maxPollsInNavigation: (state) => state.polls.meta.maxPollsInNavigation,
-		}),
-
-		...mapGetters({
-			pollCategories: 'polls/categories',
-			filteredPolls: 'polls/filteredByCategory',
-			countPolls: 'polls/countByCategory',
-		}),
+		...mapStores(usePollStore, useAclStore, usePollsStore, usePollsAdminStore ),
 
 		showAdminSection() {
 			return getCurrentUser().isAdmin
@@ -179,19 +172,19 @@ export default {
 
 		async loadPolls() {
 			try {
-				this.$store.dispatch('polls/list')
+				this.pollsStore.load()
 
 				if (getCurrentUser().isAdmin) {
-					this.$store.dispatch('pollsAdmin/list')
+					this.pollsAdminStore.load()
 				}
 			} catch {
-				showError(t('polls', 'Error loading poll list'))
+				showError(t('polls', 'Error loading poll list app navigation'))
 			}
 		},
 
 		async clonePoll(pollId) {
 			try {
-				const response = await this.$store.dispatch('poll/clone', { pollId })
+				const response = await this.pollsStore.clone({ pollId })
 				this.$router.push({ name: 'vote', params: { id: response.data.id } })
 			} catch {
 				showError(t('polls', 'Error cloning poll.'))
@@ -200,7 +193,7 @@ export default {
 
 		async toggleArchive(pollId) {
 			try {
-				await this.$store.dispatch('poll/toggleArchive', { pollId })
+				await this.pollsStore.toggleArchive({ pollId })
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
 			}
@@ -208,7 +201,7 @@ export default {
 
 		async deletePoll(pollId) {
 			try {
-				await this.$store.dispatch('poll/delete', { pollId })
+				await this.pollsStore.delete({ pollId })
 				// if we delete current selected poll,
 				// reload deleted polls route
 				if (this.$route.params.id && this.$route.params.id === pollId) {

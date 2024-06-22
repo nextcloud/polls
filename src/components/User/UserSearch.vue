@@ -28,12 +28,13 @@
 
 <script>
 import { debounce } from 'lodash'
-import { mapActions } from 'vuex'
+import { mapStores } from 'pinia'
 import { showError } from '@nextcloud/dialogs'
 import { NcSelect } from '@nextcloud/vue'
 import { AppSettingsAPI } from '../../Api/index.js'
 import { Logger } from '../../helpers/index.js'
 import { t } from '@nextcloud/l10n'
+import { useSharesStore } from '../../stores/shares.ts'
 
 export default {
 	name: 'UserSearch',
@@ -50,11 +51,11 @@ export default {
 		}
 	},
 
+	computed: {
+		...mapStores(useSharesStore),
+	},
 	methods: {
 		t,
-		...mapActions({
-			addShare: 'shares/add',
-		}),
 
 		loadUsersAsync: debounce(async function(query) {
 			if (!query) {
@@ -77,7 +78,7 @@ export default {
 
 		async clickAdd(payload) {
 			try {
-				await this.addShare({
+				await this.sharesStore.add({
 					user: {
 						...payload,
 					},

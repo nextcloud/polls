@@ -61,10 +61,5 @@ export default {
 			},
 		}
 	},
-
-	created() {
-		this.$store.dispatch('settings/getCalendars')
-		this.$store.dispatch('settings/get')
-	},
 }
 </script>

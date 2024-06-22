@@ -7,7 +7,7 @@
 	<TransitionGroup name="fade"
 		class="activities"
 		tag="ul">
-		<ActivityItem v-for="(item) in activities"
+		<ActivityItem v-for="(item) in activityStore.list"
 			:key="item.activity_id"
 			:activity="item"
 			tag="li" />
@@ -15,8 +15,10 @@
 </template>
 
 <script>
+import { mapStores } from 'pinia'
+
 import ActivityItem from './ActivityItem.vue'
-import { mapState } from 'vuex'
+import { useActivityStore } from '../../stores/activity.ts';
 
 export default {
 	name: 'Activities',
@@ -25,10 +27,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			activities: (state) => state.activity.list,
-		}),
-
+		...mapStores(useActivityStore),
 	},
 }
 </script>

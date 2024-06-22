@@ -10,8 +10,9 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import VoteIndicator from '../VoteTable/VoteIndicator.vue'
+import { useComboStore } from '../../stores/combo.ts'
 
 export default {
 	name: 'VoteItem',
@@ -36,12 +37,10 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			optionBelongsToPoll: 'combo/optionBelongsToPoll',
-		}),
+		...mapStores(useComboStore),
 
 		answer() {
-			return this.$store.getters['combo/getVote']({
+			return this.comboStore.getVote({
 				option: this.option,
 				user: this.user,
 			}).answer
@@ -58,7 +57,7 @@ export default {
 		},
 
 		foreignOption() {
-			return !this.optionBelongsToPoll({
+			return !this.comboStore.optionBelongsToPoll({
 				text: this.option.text,
 				pollId: this.pollId,
 			})

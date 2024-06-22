@@ -5,7 +5,7 @@
 
 <template>
 	<div class="comments">
-		<CommentAdd v-if="permissions.comment" />
+		<CommentAdd v-if="pollStore.permissions.comment" />
 		<Comments v-if="!showEmptyContent" />
 		<NcEmptyContent v-else v-bind="emptyContentProps">
 			<template #icon>
@@ -19,9 +19,11 @@
 import CommentAdd from '../Comments/CommentAdd.vue'
 import Comments from '../Comments/Comments.vue'
 import { NcEmptyContent } from '@nextcloud/vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useCommentsStore } from '../../stores/comments.ts'
 
 export default {
 	name: 'SideBarTabComments',
@@ -42,16 +44,10 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			permissions: (state) => state.poll.permissions,
-		}),
-
-		...mapGetters({
-			countComments: 'comments/count',
-		}),
+		...mapStores(usePollStore, useCommentsStore),
 
 		showEmptyContent() {
-			return this.countComments === 0
+			return this.commentsStore.list.length === 0
 		},
 
 	},

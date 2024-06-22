@@ -5,7 +5,9 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="navigationPollsInList" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.navigationPollsInList" 
+			type="switch"
+			@change="appSettingsStore.write()">
 			{{ t('polls', 'Load polls into the navigation.') }}
 		</NcCheckboxRadioSwitch>
 	</div>
@@ -13,9 +15,10 @@
 
 <script>
 
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminPollsInNavigation',
@@ -24,21 +27,8 @@ export default {
 		NcCheckboxRadioSwitch,
 	},
 
-	mixins: [writeValue],
-
 	computed: {
-		// Add bindings
-		navigationPollsInList: {
-			get() {
-				return this.appSettings.navigationPollsInList
-			},
-			set(value) {
-				if (value < 0) {
-					value = 0
-				}
-				this.writeValue({ navigationPollsInList: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

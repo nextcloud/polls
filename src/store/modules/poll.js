@@ -226,7 +226,7 @@ const actions = {
 
 	async update(context) {
 		try {
-			const response = await PollsAPI.updatePoll(context.state.id, context.state.configuration)
+			const response = await PollsAPI.writePoll(context.state.id, context.state.configuration)
 			context.commit('set', { poll: response.data.poll })
 		} catch (error) {
 			if (error?.code === 'ERR_CANCELED') return

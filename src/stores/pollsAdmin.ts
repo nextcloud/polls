@@ -5,18 +5,38 @@
  */
 
 import { defineStore } from 'pinia'
+import { orderBy } from 'lodash'
 import { PollsAPI } from '../Api/index.js'
 import { Poll } from './poll.ts'
 import { getCurrentUser } from '@nextcloud/auth'
+import { sortType, sortColumnsMapping } from './polls.ts'
 
 export interface PollsAdminList {
 	list: Poll[]
+	sort: {
+		by: sortType
+		reverse: boolean
+	}
 }
 
 export const usePollsAdminStore = defineStore('pollsAdmin', {
 	state: (): PollsAdminList => ({
 		list: [],
+		sort: {
+			by: sortType.Created,
+			reverse: true,
+		},
 	}),
+
+	getters: {
+		sorted(state: PollsAdminList): Poll[] {
+			return orderBy(
+				this.list,
+				[state.sort.by],
+				[state.sort.reverse ? 'desc' : 'asc'],
+			)
+		},
+	},
 
 	actions: {
 		async load(): Promise<void> {
@@ -33,6 +53,16 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 				throw error
 			}
 		},
+
+		async setSort(payload: { sortBy: sortType }): Promise<void> {
+			if (this.sort.by === sortColumnsMapping[payload.sortBy]) {
+				this.sort.reverse = !this.sort.reverse
+			} else {
+				this.sort.reverse = true
+			}
+			this.sort.by = payload.sortBy
+		},
+
 
 		async takeOver(payload: { pollId: number }): Promise<void> {
 			if (!getCurrentUser().isAdmin) {

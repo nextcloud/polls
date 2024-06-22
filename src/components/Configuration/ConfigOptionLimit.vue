@@ -5,31 +5,37 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="useOptionLimit" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="useLimit" 
+			type="switch"
+			@update:checked="validateLimit()">
 			{{ t('polls', 'Limit "Yes" votes per option') }}
 		</NcCheckboxRadioSwitch>
 
-		<InputDiv v-if="maxVotesPerOption"
-			v-model="maxVotesPerOption"
+		<InputDiv v-if="useLimit"
+			v-model="pollStore.configuration.maxVotesPerOption"
 			class="indented"
 			type="number"
 			inputmode="numeric"
-			use-num-modifiers />
+			:num-min="1"
+			use-num-modifiers
+			@change="pollStore.write()" />
 
 		<NcCheckboxRadioSwitch v-if="maxVotesPerOption"
 			class="indented"
-			:checked.sync="hideBookedUp"
-			type="switch">
+			:checked.sync="pollStore.configuration.hideBookedUp"
+			type="switch"
+			@change="pollsStore.write()">
 			{{ t('polls', 'Hide not available Options') }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../Base/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ConfigOptionLimit',
@@ -40,48 +46,32 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
+		...mapStores(usePollStore),
 
-		useOptionLimit: {
+		useLimit: {
 			get() {
-				return (this.pollConfiguration.maxVotesPerOption !== 0)
+				return !!this.pollStore.configuration.maxVotesPerOption
 			},
 			set(value) {
-				this.$store.commit('poll/setLimit', { maxVotesPerOption: value ? 1 : 0 })
-				this.$emit('change')
-			},
-		},
-
-		maxVotesPerOption: {
-			get() {
-				return this.pollConfiguration.maxVotesPerOption
-			},
-			set(value) {
-				if (!this.useOptionLimit) {
-					value = 0
-				} else if (value < 1) {
-					value = 1
-				}
-				this.$store.commit('poll/setLimit', { maxVotesPerOption: value })
-				this.$emit('change')
-			},
-		},
-
-		hideBookedUp: {
-			get() {
-				return (this.pollConfiguration.hideBookedUp)
-			},
-			set(value) {
-				this.$store.commit('poll/setProperty', { hideBookedUp: value })
-				this.$emit('change')
+				this.pollStore.configuration.maxVotesPerOption = value ? 1 : 0
 			},
 		},
 	},
+
 	
 	methods: {
 		t,
+		validateLimit() {
+			if (!this.useLimit) {
+				this.pollStore.configuration.maxVotesPerOption = 0
+			} else if (this.maxVotesPerOption < 1) {
+				this.pollStore.configuration.maxVotesPerOption = 1
+			}
+
+			this.pollStore.write()
+		},
+		
+
 	},
 }
 </script>

@@ -5,14 +5,15 @@
 
 <template>
 	<div class="user_settings">
-		<RadioGroupDiv v-model="updateType" :options="updateTypeOptions" />
+		<RadioGroupDiv v-model="appSettingsStore.updateType" :options="updateTypeOptions" />
 	</div>
 </template>
 
 <script>
+import { mapStores } from 'pinia'
 import { RadioGroupDiv } from '../../Base/index.js'
-import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminPerformance',
@@ -20,8 +21,6 @@ export default {
 	components: {
 		RadioGroupDiv,
 	},
-
-	mixins: [writeValue],
 
 	data() {
 		return {
@@ -34,15 +33,7 @@ export default {
 	},
 
 	computed: {
-		// Add bindings
-		updateType: {
-			get() {
-				return this.appSettings.updateType
-			},
-			set(value) {
-				this.writeValue({ updateType: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 }
 </script>

@@ -4,10 +4,10 @@
 -->
 
 <template>
-	<NcAppContent :class="[{ closed: isPollClosed, scrolled: scrolled, 'vote-style-beta-510': useAlternativeStyling }, pollType]">
+	<NcAppContent :class="[{ closed: pollStore.isClosed, scrolled: scrolled, 'vote-style-beta-510': preferencesStore.user.useAlternativeStyling }, pollStore.type]">
 		<HeaderBar class="area__header">
 			<template #title>
-				{{ pollTitle }}
+				{{ pollStore.configuration.title }}
 			</template>
 
 			<template #right>
@@ -24,24 +24,24 @@
 				<MarkUpDescription />
 			</div>
 
-			<div class="area__main" :class="viewMode">
-				<VoteTable v-show="options.length" :view-mode="viewMode" />
+			<div class="area__main" :class="pollStore.viewMode">
+				<VoteTable v-show="optionsStore.rankedOptions.length" :view-mode="pollStore.viewMode" />
 
-				<NcEmptyContent v-if="!options.length"
+				<NcEmptyContent v-if="!optionsStore.rankedOptions.length"
 					v-bind="emptyContentProps">
 					<template #icon>
-						<TextPollIcon v-if="pollType === 'textPoll'" />
+						<TextPollIcon v-if="pollStore.type === 'textPoll'" />
 						<DatePollIcon v-else />
 					</template>
 					<template #action>
-						<ActionOpenOptionsSidebar v-if="permissions.edit" />
+						<ActionOpenOptionsSidebar v-if="pollStore.permissions.edit" />
 					</template>
 				</NcEmptyContent>
 			</div>
 
 			<div class="area__footer">
-				<CardHiddenParticipants v-if="countHiddenParticipants" />
-				<CardAnonymousPollHint v-if="pollAnonymous" />
+				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants" />
+				<CardAnonymousPollHint v-if="pollStore.configuration.anonymous" />
 			</div>
 		</div>
 
@@ -50,7 +50,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -64,6 +64,10 @@ import VoteTable from '../components/VoteTable/VoteTable.vue'
 import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
 import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../stores/poll.ts'
+import { useAclStore } from '../stores/acl.ts'
+import { useOptionsStore } from '../stores/options.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
 
 export default {
 	name: 'Vote',
@@ -93,25 +97,10 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollType: (state) => state.poll.type,
-			countOptionsInPoll: (state) => state.poll.status.countOptions,
-			pollTitle: (state) => state.poll.configuration.title,
-			pollDescription: (state) => state.poll.configuration.description,
-			pollAnonymous: (state) => state.poll.configuration.anonymous,
-			permissions: (state) => state.poll.permissions,
-			useAlternativeStyling: (state) => state.settings.user.useAlternativeStyling,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			options: 'options/rankedOptions',
-			viewMode: 'poll/viewMode',
-			countHiddenParticipants: 'poll/countHiddenParticipants',
-		}),
+		...mapStores(usePollStore, useAclStore, useOptionsStore, usePreferencesStore),
 
 		emptyContentProps() {
-			if (this.countOptionsInPoll > 0) {
+			if (this.pollStore.status.countOptions > 0) {
 				return {
 					name: t('polls', 'We are sorry, but there are no more vote options available'),
 					description: t('polls', 'All options are booked up.'),
@@ -120,7 +109,7 @@ export default {
 
 			return {
 				name: t('polls', 'No vote options available'),
-				description: this.permissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
+				description: this.pollStore.permissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
 			}
 		},
 
@@ -137,14 +126,10 @@ export default {
 
 	beforeDestroy() {
 		this.scrollElement.removeEventListener('scroll', this.handleScroll)
-		this.resetPoll()
+		this.pollStore.$reset()
 	},
 
 	methods: {
-		...mapActions({
-			resetPoll: 'poll/reset',
-		}),
-
 		handleScroll() {
 			if (this.scrollElement.scrollTop > 20) {
 				this.scrolled = true

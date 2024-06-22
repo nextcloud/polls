@@ -14,17 +14,16 @@
 
 		<div class="area__main">
 			<TransitionGroup tag="div" name="list" class="poll-list__list">
-				<PollItem key="0" :header="true" @sort-list="setSortColumn($event)" />
+				<PollItem key="0" :header="true" @sort-list="pollsStore.setSort($event)" />
 
 				<template v-if="!emptyPollListnoPolls">
-					<PollItem v-for="(poll) in pollList"
+					<PollItem v-for="(poll) in pollsStore.chunkedList"
 						:key="poll.id"
 						:poll="poll"
-						@goto-poll="gotoPoll(poll.id)"
-						@load-poll="loadPoll(poll.id)">
+						@goto-poll="gotoPoll(poll.id)">
 						<template #actions>
 							<NcActions force-menu>
-								<NcActionButton v-if="pollCreationAllowed"
+								<NcActionButton v-if="pollsStore.meta.permissions.pollCreationAllowed"
 									:name="t('polls', 'Clone poll')"
 									:aria-label="t('polls', 'Clone poll')"
 									close-after-click
@@ -82,7 +81,7 @@
 
 			<NcEmptyContent v-if="emptyPollListnoPolls" v-bind="emptyContent">
 				<template #icon>
-					<NcLoadingIcon v-if="pollsLoading" :size="64" />
+					<NcLoadingIcon v-if="pollsStore.meta.status === 'loading'" :size="64" />
 					<PollsAppIcon v-else />
 				</template>
 			</NcEmptyContent>
@@ -91,7 +90,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState, mapActions, mapMutations } from 'vuex'
+import { mapStores } from 'pinia'
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 import { HeaderBar, IntersectionObserver } from '../components/Base/index.js'
@@ -102,6 +101,7 @@ import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 import PollItem from '../components/PollList/PollItem.vue'
 import { t, n } from '@nextcloud/l10n'
+import { usePollsStore } from '../stores/polls.ts'
 
 export default {
 	name: 'PollList',
@@ -123,20 +123,10 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollCategories: (state) => state.polls.categories,
-			pollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
-			pollsLoading: (state) => state.polls.status.loading,
-		}),
-
-		...mapGetters({
-			filteredPolls: 'polls/filtered',
-			countPolls: 'polls/count',
-			loadedPolls: 'polls/loaded',
-		}),
+		...mapStores(usePollsStore),
 
 		emptyContent() {
-			if (this.pollsLoading) {
+			if (this.pollsStore.meta.status === 'loading') {
 				return {
 					name: t('polls', 'Loading polls…'),
 					description: '',
@@ -150,27 +140,24 @@ export default {
 		},
 
 		title() {
-			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.titleExt
+			return this.pollsStore.categories.find((category) => (category.id === this.$route.params.type))?.titleExt
 		},
 
 		showMore() {
-			return this.loadedPolls < this.countAvailablePolls && !this.pollsLoading
-		},
-		countAvailablePolls() {
-			return this.countPolls
+			return this.pollsStore.chunkedList.length < this.pollsStore.pollsFilteredSorted.length && this.pollsStore.meta.status !== 'loading'
 		},
 
 		countLoadedPolls() {
-			return Math.min(this.loadedPolls, this.countPolls)
+			return Math.min(this.pollsStore.chunkedList.length, this.pollsStore.pollsFilteredSorted.length)
 		},
 
 		infoLoaded() {
-			return n('polls', '{loadedPolls} of {countPolls} poll loaded.', '{loadedPolls} of {countPolls} polls loaded.', this.countAvailablePolls,
-				{ loadedPolls: this.countLoadedPolls, countPolls: this.countAvailablePolls })
+			return n('polls', '{loadedPolls} of {countPolls} poll loaded.', '{loadedPolls} of {countPolls} polls loaded.', this.pollsStore.pollsFilteredSorted.length,
+				{ loadedPolls: this.countLoadedPolls, countPolls: this.pollsStore.pollsFilteredSorted.length })
 		},
 
 		description() {
-			return this.pollCategories.find((category) => (category.id === this.$route.params.type))?.description
+			return this.pollsStore.categories.find((category) => (category.id === this.$route.params.type))?.description
 		},
 
 		/* eslint-disable-next-line vue/no-unused-properties */
@@ -178,12 +165,8 @@ export default {
 			return `${t('polls', 'Polls')} - ${this.title}`
 		},
 
-		pollList() {
-			return this.filteredPolls
-		},
-
 		emptyPollListnoPolls() {
-			return this.pollList.length < 1
+			return this.pollsStore.pollsFilteredSorted.length < 1
 		},
 
 	},
@@ -200,12 +183,6 @@ export default {
 
 	methods: {
 		t,
-		...mapActions({
-			setSortColumn: 'polls/setSort',
-		}),
-		...mapMutations({
-			addChunk: 'polls/addChunk',
-		}),
 
 		gotoPoll(pollId) {
 			this.$router
@@ -214,17 +191,9 @@ export default {
 
 		async loadMore() {
 			try {
-				await this.addChunk()
+				await this.pollsStore.addChunk()
 			} catch {
 				showError(t('polls', 'Error loading more polls'))
-			}
-		},
-
-		async loadPoll(pollId) {
-			try {
-				await this.$store.dispatch({ type: 'poll/get', pollId })
-			} catch {
-				showError(t('polls', 'Error loading poll'))
 			}
 		},
 
@@ -234,7 +203,7 @@ export default {
 
 		async toggleArchive(pollId) {
 			try {
-				await this.$store.dispatch('poll/toggleArchive', { pollId })
+				await this.pollsStore.toggleArchive({ pollId })
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
 			}
@@ -242,7 +211,7 @@ export default {
 
 		async deletePoll(pollId) {
 			try {
-				await this.$store.dispatch('poll/delete', { pollId })
+				await this.pollsStore.delete({ pollId })
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
 			}
@@ -250,7 +219,7 @@ export default {
 
 		async clonePoll(pollId) {
 			try {
-				await this.$store.dispatch('poll/clone', { pollId })
+				await this.pollsStore.clone({ pollId })
 			} catch {
 				showError(t('polls', 'Error cloning poll.'))
 			}

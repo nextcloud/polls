@@ -5,36 +5,29 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="useActivity" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.useActivity" 
+		type="switch"
+		@change="appSettingsStore.write()">
 			{{ t('polls', 'Enable the tracking of activities with the Activities app') }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminActivities',
-
+	
 	components: {
 		NcCheckboxRadioSwitch,
 	},
-
-	mixins: [writeValue],
-
+	
 	computed: {
-		// Add bindings
-		useActivity: {
-			get() {
-				return this.appSettings.useActivity
-			},
-			set(value) {
-				this.writeValue({ useActivity: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

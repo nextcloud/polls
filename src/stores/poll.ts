@@ -19,7 +19,8 @@ import { useSubscriptionStore } from './subscription.ts'
 import { t } from '@nextcloud/l10n'
 import { useSharesStore } from './shares.ts'
 import { useCommentsStore } from './comments.ts'
-
+import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
 
 export enum PollType {
 	Text = 'textPoll',
@@ -68,6 +69,7 @@ export interface PollStatus {
 	expired: boolean
 	relevantThreshold: number
 	countOptions: number
+	countParticipants: number
 }
 
 export interface PollPermissions {
@@ -156,6 +158,7 @@ export const usePollStore = defineStore('poll', {
 			expired: false,
 			relevantThreshold: 0,
 			countOptions: 0,
+			countParticipants: 0,
 		},
 		currentUserStatus: {
 			userRole: '',
@@ -289,6 +292,10 @@ export const usePollStore = defineStore('poll', {
 			return moment.unix(state.configuration.proposalsExpire).fromNow()
 		},
 
+		proposalsExpire_d(state) {
+			return moment.unix(state.configuration.proposalsExpire)._d
+		},
+
 		isClosed(state) {
 			return (state.configuration.expire > 0 && moment.unix(state.configuration.expire).diff() < 1000)
 		},
@@ -325,7 +332,17 @@ export const usePollStore = defineStore('poll', {
 		reset() {
 			this.$reset()
 		},
-	
+
+		setProposalExpiration(payload: { expire: number }) {
+			this.configuration.proposalExpire = moment(payload.expire).unix()
+			this.update()
+		},
+
+		setExpiration(payload: { expire: number }) {
+			this.configuration.proposalExpire = moment(payload.expire).unix()
+			this.update()
+		},
+
 		async load() {
 			const routerStore = useRouterStore()
 			const votesStore = useVotesStore()
@@ -376,24 +393,32 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 	
-		async update() {
-			const optionsStore = useOptionsStore()
+		// write: debounce(async function() {
+		async write() {
 			const pollsStore = usePollsStore()
+			if (this.configuration.title === '') {
+				showError(t('polls', 'Title must not be empty!'))
+				return
+			}
 
 			try {
-				const response = await PollsAPI.updatePoll(this.id, this.configuration)
+				const response = await PollsAPI.writePoll(this.id, this.configuration)
 				this.$patch(response.data.poll)
+				emit('polls:updated', { store: 'poll', message: t('polls', 'Poll updated') })
+				
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error updating poll:', { error, poll: this.$state })
+				showError(t('polls', 'Error writing poll'))
 				this.load()
 				throw error
 			} finally {
 				pollsStore.load()
-				optionsStore.load()
 			}
-		},
-	
+			
+		}
+		// , 500),
+		,
 		async close() {
 			const pollsStore = usePollsStore()
 

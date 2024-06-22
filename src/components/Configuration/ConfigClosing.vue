@@ -7,27 +7,28 @@
 	<div>
 		<NcButton @click="clickToggleClosed()">
 			<template #icon>
-				<OpenPollIcon v-if="isPollClosed" />
+				<OpenPollIcon v-if="pollStore.isClosed" />
 				<ClosePollIcon v-else />
 			</template>
 			<template #default>
-				{{ isPollClosed ? t('polls', 'Reopen poll') : t('polls', 'Close poll') }}
+				{{ pollStore.isClosed ? t('polls', 'Reopen poll') : t('polls', 'Close poll') }}
 			</template>
 		</NcButton>
-		<NcCheckboxRadioSwitch v-show="!isPollClosed" :checked.sync="useExpire" type="switch">
+		<NcCheckboxRadioSwitch v-show="!pollStore.isClosed" :checked.sync="useExpire" type="switch">
 			{{ t('polls', 'Poll closing date') }}
 		</NcCheckboxRadioSwitch>
-		<NcDateTimePicker v-show="useExpire && !isPollClosed" v-model="expire" v-bind="expirationDatePicker" />
+		<NcDateTimePicker v-show="useExpire && !pollStore.isClosed" v-model="expire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters, mapActions } from 'vuex'
+import { mapStores } from 'pinia'
 import moment from '@nextcloud/moment'
 import { NcButton, NcDateTimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ConfigClosing',
@@ -63,50 +64,40 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-		}),
+		...mapStores(usePollStore),
 
 		expire: {
 			get() {
-				return moment.unix(this.pollConfiguration.expire)._d
+				return moment.unix(this.pollStore.configuration.expire)._d
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { expire: moment(value).unix() })
-				this.$emit('change')
+				this.pollStore.configuration.expire = moment(value).unix()
+				this.pollStore.write()
 			},
 		},
 
 		useExpire: {
 			get() {
-				return !!this.pollConfiguration.expire
+				return !!this.pollStore.configuration.expire
 			},
 			set(value) {
 				if (value) {
-					this.$store.commit('poll/setProperty', { expire: moment().add(1, 'week').unix() })
+					this.pollStore.configuration.expire = moment().add(1, 'week').unix()
 				} else {
-					this.$store.commit('poll/setProperty', { expire: 0 })
+					this.pollStore.configuration.expire = 0
 				}
-				this.$emit('change')
+				this.pollStore.write()
 			},
 		},
 	},
 
 	methods: {
 		t,
-		...mapActions({
-			closePoll: 'poll/close',
-			reopenPoll: 'poll/reopen',
-		}),
 		clickToggleClosed() {
-			if (this.isPollClosed) {
-				this.reopenPoll()
+			if (this.pollStore.isClosed) {
+				this.pollStore.reopen()
 			} else {
-				this.closePoll()
+				this.pollStore.close()
 			}
 		},
 	},

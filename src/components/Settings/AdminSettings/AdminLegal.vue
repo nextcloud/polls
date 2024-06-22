@@ -9,26 +9,26 @@
 			{{ t('polls', 'If you use different legal terms and privacy policy for public polls, enter the links below. Leave empty to use your default terms.') }}
 		</p>
 
-		<InputDiv v-model="privacyUrl"
+		<InputDiv v-model="appSettingsStore.privacyUrl"
 			type="url"
 			:placeholder="placeholder.privacy"
 			:label="t('polls', 'Privacy policy link:')"
-			@change="saveSettings()" />
+			@change="appSettingsStore.write()" />
 
-		<InputDiv v-model="imprintUrl"
+		<InputDiv v-model="appSettingsStore.imprintUrl"
 			type="url"
 			inputmode="url"
 			:label="t('polls', 'Legal terms link:')"
 			:placeholder="placeholder.imprint"
-			@change="saveSettings()" />
+			@change="appSettingsStore.write()" />
 	</div>
 </template>
 
 <script>
-
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { InputDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminLegal',
@@ -38,47 +38,23 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			appSettings: (state) => state.appSettings,
-		}),
+		...mapStores(useAppSettingsStore),
 
 		placeholder() {
 			let privacy = t('polls', 'Enter the URL of your privacy policy')
 			let imprint = t('polls', 'Enter the URL of your legal notice')
-			if (this.appSettings.defaultPrivacyUrl) {
-				privacy = this.appSettings.defaultPrivacyUrl
+			if (this.appSettingsStore.defaultPrivacyUrl) {
+				privacy = this.appSettingsStore.defaultPrivacyUrl
 			}
-			if (this.appSettings.defaultImprintUrl) {
-				imprint = this.appSettings.defaultImprintUrl
+			if (this.appSettingsStore.defaultImprintUrl) {
+				imprint = this.appSettingsStore.defaultImprintUrl
 			}
 			return { privacy, imprint }
-		},
-
-		// Add bindings
-		privacyUrl: {
-			get() {
-				return this.appSettings.privacyUrl
-			},
-			set(value) {
-				this.$store.commit('appSettings/set', { privacyUrl: value })
-			},
-		},
-
-		imprintUrl: {
-			get() {
-				return this.appSettings.imprintUrl
-			},
-			set(value) {
-				this.$store.commit('appSettings/set', { imprintUrl: value })
-			},
 		},
 	},
 
 	methods: {
 		t,
-		saveSettings() {
-			this.$store.dispatch('appSettings/write')
-		},
 	},
 }
 </script>

@@ -29,6 +29,8 @@ import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
 import { t } from '@nextcloud/l10n'
+import { mapStores } from 'pinia'
+import { usePreferencesStore } from '../../stores/preferences.ts'
 
 export default {
 	name: 'UserSettingsDlg',
@@ -48,11 +50,14 @@ export default {
 		}
 	},
 
+	computed: {
+		...mapStores(usePreferencesStore),
+	},
 	watch: {
 		async show() {
 			if (this.show === true) {
-				this.$store.dispatch('settings/get')
-				this.$store.dispatch('settings/getCalendars')
+				this.preferencesStore.get()
+				this.preferencesStore.getCalendars()
 			}
 		},
 	},

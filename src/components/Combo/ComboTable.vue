@@ -7,11 +7,11 @@
 	<div :class="['combo-table', viewMode]">
 		<div class="user-column">
 			<div class="spacer" />
-			<div v-for="(poll) in polls"
+			<div v-for="(poll) in comboStore.polls"
 				:key="poll.id"
 				:title="poll.configuration.title"
 				class="poll-group">
-				<div v-for="(participant) in participantsByPoll(poll.id)"
+				<div v-for="(participant) in comboStore.poll.status.countParticipants"
 					:key="`${participant.userId}_${participant.pollId}`"
 					class="participant">
 					<UserItem v-bind="participant" condensed />
@@ -22,7 +22,7 @@
 		<TransitionGroup name="list"
 			tag="div"
 			class="vote-grid">
-			<VoteColumn v-for="(option) in options"
+			<VoteColumn v-for="(option) in comboStore.uniqueOptions"
 				:key="option.id"
 				:option="option" />
 		</TransitionGroup>
@@ -30,9 +30,10 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import VoteColumn from './VoteColumn.vue'
 import UserItem from '../User/UserItem.vue'
+import { useComboStore } from '../../stores/combo.ts'
 
 export default {
 	name: 'ComboTable',
@@ -52,14 +53,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			polls: (state) => state.combo.polls,
-		}),
-
-		...mapGetters({
-			options: 'combo/uniqueOptions',
-			participantsByPoll: 'combo/participantsInPoll',
-		}),
+		...mapStores(useComboStore),
 	},
 
 }

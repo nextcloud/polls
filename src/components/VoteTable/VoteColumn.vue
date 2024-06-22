@@ -5,33 +5,33 @@
 
 <template>
 	<div :class="componentClass">
-		<OptionItem :option="option" :poll-type="pollType" :display="pollType === 'datePoll' ? 'dateBox' : 'textBox'" />
+		<OptionItem :option="option" :poll-type="pollStore.type" :display="pollStore.type === 'datePoll' ? 'dateBox' : 'textBox'" />
 
-		<Counter v-if="permissions.seeResults"
-			:show-maybe="permissions.allowMaybe"
+		<Counter v-if="pollStore.permissions.seeResults"
+			:show-maybe="pollStore.permissions.allowMaybe"
 			:option="option" />
 
 		<CalendarPeek v-if="showCalendarPeek"
 			:focus-trap="false"
 			:option="option" />
 
-		<VoteItem v-for="(participant) in participants"
+		<VoteItem v-for="(participant) in pollStore.safeParticipants"
 			:key="participant.userId"
 			:user-id="participant.userId"
 			:option="option" />
 
-		<OptionItemOwner v-if="proposalsExist"
+		<OptionItemOwner v-if="pollStore.proposalsExist"
 			:option="option"
 			:avatar-size="24"
 			class="owner" />
 
-		<FlexSpacer v-if="pollType === 'datePoll' && viewMode === 'list-view'" />
+		<FlexSpacer v-if="pollStore.type === 'datePoll' && viewMode === 'list-view'" />
 
-		<div v-if="permissions.edit && isPollClosed" class="action confirm">
+		<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="action confirm">
 			<NcButton :title="confirmButtonCaption"
 				:aria-label="confirmButtonCaption"
 				type="tertiary"
-				@click="confirmOption(option)">
+				@click="optionsStore.confirm(option)">
 				<template #icon>
 					<UnconfirmIcon v-if="option.confirmed" :size="20" />
 					<ConfirmIcon v-else :size="20" />
@@ -42,19 +42,23 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcButton } from '@nextcloud/vue'
 import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import { FlexSpacer } from '../Base/index.js'
 import VoteItem from './VoteItem.vue'
-import { confirmOption } from '../../mixins/optionMixins.js'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
 import OptionItemOwner from '../Options/OptionItemOwner.vue'
 import { t } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
+import { usePollStore } from '../../stores/poll.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useAclStore } from '../../stores/acl.ts'
+import { useVotesStore } from '../../stores/votes.ts'
+import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
 	name: 'VoteColumn',
@@ -69,8 +73,6 @@ export default {
 		CalendarPeek,
 		OptionItemOwner,
 	},
-
-	mixins: [confirmOption],
 
 	props: {
 		option: {
@@ -87,19 +89,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			permissions: (state) => state.poll.permissions,
-			pollType: (state) => state.poll.type,
-			settings: (state) => state.settings.user,
-			currentUser: (state) => state.acl.currentUser,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			getVote: 'votes/getVote',
-			participants: 'poll/safeParticipants',
-			proposalsExist: 'options/proposalsExist',
-		}),
+		...mapStores(usePollStore, usePreferencesStore, useAclStore, useVotesStore, useOptionsStore),
 
 		componentClass() {
 			const classList = ['vote-column']
@@ -107,7 +97,7 @@ export default {
 				classList.push('locked')
 			}
 
-			if (this.option.confirmed && this.isPollClosed) {
+			if (this.option.confirmed && this.pollStore.isClosed) {
 				classList.push('confirmed')
 			}
 
@@ -121,14 +111,14 @@ export default {
 		},
 
 		ownAnswer() {
-			return this.getVote({
-				userId: this.currentUser.userId,
+			return this.votesStore.getVote({
+				userId: this.aclStore.currentUser.userId,
 				option: this.option,
 			}).answer
 		},
 
 		showCalendarPeek() {
-			return this.pollType === 'datePoll' && getCurrentUser() && this.settings.calendarPeek
+			return this.pollStore.type === 'datePoll' && getCurrentUser() && this.preferencesStore.calendarPeek
 		},
 	},
 }

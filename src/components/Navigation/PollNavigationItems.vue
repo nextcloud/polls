@@ -4,13 +4,13 @@
 -->
 
 <template>
-	<NcAppNavigationItem :name="poll.configuration.title" :to="{name: 'vote', params: {id: poll.id}}" :class="{ closed: isPollClosed }">
+	<NcAppNavigationItem :name="poll.configuration.title" :to="{name: 'vote', params: {id: poll.id}}" :class="{ closed: poll.status.expired }">
 		<template #icon>
 			<TextPollIcon v-if="poll.type === 'textPoll'" />
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>
-			<NcActionButton v-if="pollCreationAllowed"
+			<NcActionButton v-if="pollsStore.meta.permissions.pollCreationAllowed"
 				:name="t('polls', 'Clone poll')"
 				:aria-label="t('polls', 'Clone poll')"
 				@click="$emit('clone-poll')">
@@ -52,7 +52,7 @@
 
 <script>
 
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcActionButton, NcAppNavigationItem } from '@nextcloud/vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
@@ -61,6 +61,7 @@ import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollsStore } from '../../stores/polls.ts'
 
 export default {
 	name: 'PollNavigationItems',
@@ -84,13 +85,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollCreationAllowed: (state) => state.polls.meta.permissions.pollCreationAllowed,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-		}),
+		...mapStores(usePollsStore),
 	},
 
 	methods: {

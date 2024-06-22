@@ -10,7 +10,7 @@
 			:aria-label="caption"
 			@click="clickAction()">
 			<template #icon>
-				<ListViewIcon v-if="viewMode === 'table-view'" />
+				<ListViewIcon v-if="pollStore.viewMode === 'table-view'" />
 				<TableViewIcon v-else />
 			</template>
 		</NcButton>
@@ -18,12 +18,14 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcButton } from '@nextcloud/vue'
 import { emit } from '@nextcloud/event-bus'
 import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
 import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 export default {
 	name: 'ActionChangeView',
@@ -35,19 +37,10 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollType: (state) => state.poll.type,
-			manualViewDatePoll: (state) => state.settings.manualViewDatePoll,
-			manualViewTextPoll: (state) => state.settings.manualViewTextPoll,
-		}),
-
-		...mapGetters({
-			viewMode: 'poll/viewMode',
-			getNextViewMode: 'poll/getNextViewMode',
-		}),
+		...mapStores(usePollStore, usePreferencesStore),
 
 		caption() {
-			if (this.viewMode === 'table-view') {
+			if (this.pollStore.viewMode === 'table-view') {
 				return t('polls', 'Switch to list view')
 			}
 			return t('polls', 'Switch to table view')
@@ -57,10 +50,10 @@ export default {
 
 	methods: {
 		changeView() {
-			if (this.pollType === 'datePoll') {
-				this.$store.commit('settings/setViewDatePoll', this.manualViewDatePoll ? '' : this.getNextViewMode)
-			} else if (this.pollType === 'textPoll') {
-				this.$store.commit('settings/setViewTextPoll', this.manualViewTextPoll ? '' : this.getNextViewMode)
+			if (this.pollStore.type === 'datePoll') {
+				this.preferencesStore.setViewDatePoll(this.settings.manualViewDatePoll ? '' : this.pollStore.getNextViewMode)
+			} else if (this.pollStore.type === 'textPoll') {
+				this.preferencesStore.setViewTextPoll(this.settings.manualViewTextPoll ? '' : this.pollStore.getNextViewMode)
 			}
 		},
 

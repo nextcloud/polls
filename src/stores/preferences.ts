@@ -18,8 +18,8 @@ interface UserPreferences {
 	useAlternativeStyling: boolean
 	calendarPeek: boolean
 	checkCalendars: [],
-	checkCalendarsBefore: number,
-	checkCalendarsAfter: number,
+	checkCalendarsHoursBefore: number,
+	checkCalendarsHoursAfter: number,
 	defaultViewTextPoll: ViewMode
 	defaultViewDatePoll: ViewMode
 	performanceThreshold: number,
@@ -46,8 +46,8 @@ export const usePreferencesStore = defineStore('preferences', {
 			useAlternativeStyling: false,
 			calendarPeek: false,
 			checkCalendars: [],
-			checkCalendarsBefore: 0,
-			checkCalendarsAfter: 0,
+			checkCalendarsHoursBefore: 0,
+			checkCalendarsHoursAfter: 0,
 			defaultViewTextPoll: ViewMode.TableView,
 			defaultViewDatePoll: ViewMode.TableView,
 			performanceThreshold: 1000,
@@ -86,12 +86,18 @@ export const usePreferencesStore = defineStore('preferences', {
 	},
 
 	actions: {
+		writePreference(payload: { key: string, value: boolean|number|string|Array<string> }) {
+			this.$patch(payload)
+			this.write()
+		},
+
 		setCalendars(payload) {
 			this.availableCalendars = payload.calendars
 		},
 	
 		addCheckCalendar(payload) {
-			this.user.checkCalendars.push(payload.calendar.key)
+			this.user.checkCalendars.push(payload.key)
+			this.write()
 		},
 	
 		setViewDatePoll(payload) {

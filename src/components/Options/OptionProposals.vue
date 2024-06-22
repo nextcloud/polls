@@ -6,22 +6,23 @@
 <template>
 	<div class="option-proposals">
 		<!-- <div>{{ proposalsStatus }}</div> -->
-		<div v-if="isProposalOpen" class="option-proposals__add-proposal">
-			<OptionsDateAdd v-if="pollType === 'datePoll'"
+		<div v-if="pollStore.isProposalOpen" class="option-proposals__add-proposal">
+			<OptionsDateAdd v-if="pollStore.type === 'datePoll'"
 				:caption="t('polls', 'Propose a date')"
 				class="add-date-proposal"
 				show-caption
 				primary />
-			<OptionsTextAdd v-if="pollType === 'textPoll'" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
+			<OptionsTextAdd v-if="pollStore.type === 'textPoll'" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
 		</div>
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import OptionsDateAdd from './OptionsDateAdd.vue'
 import OptionsTextAdd from './OptionsTextAdd.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'OptionProposals',
@@ -32,13 +33,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollType: (state) => state.poll.type,
-		}),
-
-		...mapGetters({
-			isProposalOpen: 'poll/isProposalOpen',
-		}),
+		...mapStores(usePollStore),
 	},
 	
 	methods: {

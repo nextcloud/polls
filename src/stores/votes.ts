@@ -46,11 +46,17 @@ export const useVotesStore = defineStore('votes', {
 	}),
 
 	getters: {
-		countAllVotesByAnswer: (state) => (answer: Answer) => state.list.filter((vote) => vote.answer === answer).length,
 		hasVotes: (state) => state.list.length > 0,
 	
-		getVote: (state) => (payload: { userId: string; option: { text: string } }) => {
-			const found = state.list.find((vote) => (vote.user.userId === payload.userId
+	},
+
+	actions: {
+		countAllVotesByAnswer(answer: Answer): number {
+			return this.list.filter((vote) => vote.answer === answer).length
+		},
+
+		getVote(payload: { userId: string; option: { text: string } }) {
+			const found = this.list.find((vote: Vote) => (vote.user.userId === payload.userId
 					&& vote.optionText === payload.option.text))
 			if (found === undefined) {
 				return {
@@ -61,9 +67,7 @@ export const useVotesStore = defineStore('votes', {
 			}
 			return found
 		},
-	},
 
-	actions: {
 		async load() {
 			const routerStore = useRouterStore()
 			try {

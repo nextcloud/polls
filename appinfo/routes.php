@@ -51,8 +51,8 @@ return [
 		['name' => 'page#vote', 'url' => '/vote/{id}', 'verb' => 'GET'],
 
 		['name' => 'poll#list', 'url' => '/polls', 'verb' => 'GET'],
-		['name' => 'poll#get', 'url' => '/poll/{pollId}/poll', 'verb' => 'GET'],
 		['name' => 'poll#get_full', 'url' => '/poll/{pollId}', 'verb' => 'GET'],
+		['name' => 'poll#get', 'url' => '/poll/{pollId}/poll', 'verb' => 'GET'],
 		['name' => 'poll#add', 'url' => '/poll/add', 'verb' => 'POST'],
 		['name' => 'poll#update', 'url' => '/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll#delete', 'url' => '/poll/{pollId}', 'verb' => 'DELETE'],

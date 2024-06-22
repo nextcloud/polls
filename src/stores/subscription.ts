@@ -39,7 +39,7 @@ export const useSubscriptionStore = defineStore('subscription', {
 			}
 		},
 	
-		async update() {
+		async write() {
 			const routerStore = useRouterStore()
 			try {
 				let response = null

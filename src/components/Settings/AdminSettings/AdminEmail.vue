@@ -5,7 +5,10 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="legalTermsInEmail" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.legalTermsInEmail" 
+			type="switch"
+			@change="appSettingsStore.write()">
+
 			{{ t('polls', 'Add terms links also to the email footer') }}
 		</NcCheckboxRadioSwitch>
 
@@ -14,26 +17,27 @@
 				<span>{{ t('polls', 'Additional email disclaimer') }}</span>
 				<LanguageMarkdownIcon />
 			</div>
-			<NcCheckboxRadioSwitch :checked.sync="preview" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="preview" 
+				type="switch"
+				@change="appSettingsStore.write()">
 				{{ t('polls', 'Preview') }}
 			</NcCheckboxRadioSwitch>
 		</div>
-		<textarea v-show="!preview" v-model="disclaimer" @change="saveSettings()" />
+		<textarea v-show="!preview" v-model="appSettingsStore.disclaimer" @change="appSettingsStore.write()" />
 		<!-- eslint-disable-next-line vue/no-v-html -->
 		<div v-show="preview" class="polls-markdown" v-html="markedDisclaimer" />
 	</div>
 </template>
 
 <script>
-
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
 import DOMPurify from 'dompurify'
-import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 const markedPrefix = {
 	prefix: 'disclaimer-',
@@ -47,8 +51,6 @@ export default {
 		LanguageMarkdownIcon,
 	},
 
-	mixins: [writeValue],
-
 	data() {
 		return {
 			preview: false,
@@ -56,39 +58,16 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			appSettings: (state) => state.appSettings,
-		}),
+		...mapStores(useAppSettingsStore),
 
 		markedDisclaimer() {
 			marked.use(gfmHeadingId(markedPrefix))
-			return DOMPurify.sanitize(marked.parse(this.appSettings.disclaimer))
-		},
-
-		// Add bindings
-		legalTermsInEmail: {
-			get() {
-				return !!this.appSettings.legalTermsInEmail
-			},
-			set(value) {
-				this.writeValue({ legalTermsInEmail: !!value })
-			},
-		},
-		disclaimer: {
-			get() {
-				return this.appSettings.disclaimer
-			},
-			set(value) {
-				this.$store.commit('appSettings/set', { disclaimer: value })
-			},
+			return DOMPurify.sanitize(marked.parse(this.appSettingsStore.disclaimer))
 		},
 	},
 
 	methods: {
 		t,
-		saveSettings() {
-			this.$store.dispatch('appSettings/write')
-		},
 	},
 }
 </script>

@@ -14,9 +14,10 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcButton } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { useVotesStore } from '../../../stores/votes.ts'
 export default {
 	name: 'ActionDeleteOrphanedVotes',
 
@@ -30,13 +31,13 @@ export default {
 		}
 	},
 
-	methods: {
-		...mapActions({
-			deleteOrphanedVotes: 'votes/removeOrphanedVotes',
-		}),
+	computed: {
+		...mapStores(useVotesStore),
+	},
 
+	methods: {
 		clickAction() {
-			this.deleteOrphanedVotes()
+			this.votesStore.removeOrphanedVotes()
 		},
 	},
 }

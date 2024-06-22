@@ -47,11 +47,13 @@
 
 <script>
 
+import { mapStores } from 'pinia'
 import moment from '@nextcloud/moment'
 import { NcButton, NcSelect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import { InputDiv } from '../Base/index.js'
 import { t } from '@nextcloud/l10n'
+import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
 	name: 'OptionCloneDate',
@@ -82,6 +84,8 @@ export default {
 	},
 
 	computed: {
+		...mapStores(useOptionsStore),
+
 		dateBaseOptionString() {
 			return moment.unix(this.option.timestamp).format('LLLL')
 		},
@@ -90,8 +94,7 @@ export default {
 	methods: {
 		t,
 		createSequence() {
-			this.$store
-				.dispatch('options/sequence', {
+			this.optionsStore.sequence({
 					option: this.option,
 					sequence: this.sequence,
 				})

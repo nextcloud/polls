@@ -4,15 +4,18 @@
 -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked.sync="deleteVoteOnNo" type="switch">
+	<NcCheckboxRadioSwitch :checked.sync="pollStore.configuration.useNo" 
+		type="switch"
+		@update:checked="pollStore.write()">
 		{{ label }}
 	</NcCheckboxRadioSwitch>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ConfigUseNo',
@@ -28,19 +31,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
-
-		deleteVoteOnNo: {
-			get() {
-				return !this.pollConfiguration.useNo
-			},
-			set(value) {
-				this.$store.commit('poll/setProperty', { useNo: !value })
-				this.$emit('change')
-			},
-		},
+		...mapStores(usePollStore),
 
 	},
 }

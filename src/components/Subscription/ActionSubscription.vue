@@ -5,14 +5,16 @@
 
 <template>
 	<NcActions>
-		<NcActionCheckbox v-model="subscribe" :label="label" />
+		<NcActionCheckbox v-model="subscriptionStore.subscribed" :label="label" />
 	</NcActions>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcActions, NcActionCheckbox } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { useSubscriptionStore } from '../../stores/subscription.ts'
+import { useShareStore } from '../../stores/share.ts'
 
 export default {
 	name: 'ActionSubscription',
@@ -22,26 +24,15 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			subscribed: (state) => state.subscription.subscribed,
-			emailAddress: (state) => state.share.user.emailAddress,
-		}),
+		...mapStores(useSubscriptionStore, useShareStore),
 
 		label() {
-			if (this.emailAddress) {
-				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.emailAddress })
+			if (this.shareStore.user.emailAddress) {
+				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress })
 			}
 			return t('polls', 'Receive notification email on activity')
 		},
 
-		subscribe: {
-			get() {
-				return this.subscribed
-			},
-			set(value) {
-				this.$store.dispatch('subscription/update', value)
-			},
-		},
 	},
 }
 </script>

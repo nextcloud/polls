@@ -6,11 +6,11 @@
 <template>
 	<div class="vote-column">
 		<OptionItem :option="option" poll-type="datePoll" display="dateBox" />
-		<div v-for="(poll) in polls"
+		<div v-for="(poll) in comboStore.polls"
 			:key="poll.id"
 			:title="poll.configuration.title"
 			class="poll-group">
-			<VoteItem v-for="(participant) in participantsByPoll(poll.id)"
+			<VoteItem v-for="(participant) in poll.status.countParticipants"
 				:key="`${participant.userId}_${participant.pollId}`"
 				:poll-id="poll.id"
 				:user="participant"
@@ -20,9 +20,10 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import VoteItem from './VoteItem.vue'
 import OptionItem from '../Options/OptionItem.vue'
+import { useComboStore } from '../../stores/combo.ts'
 
 export default {
 	name: 'VoteColumn',
@@ -39,12 +40,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			participantsByPoll: 'combo/participantsInPoll',
-		}),
-		...mapState({
-			polls: (state) => state.combo.polls,
-		}),
+		...mapStores(useComboStore),
 	},
 }
 </script>

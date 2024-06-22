@@ -5,7 +5,7 @@
 
 <template>
 	<div class="side-bar-tab-options">
-		<ConfigBox v-if="!currentUser.isOwner"
+		<ConfigBox v-if="!aclStore.currentUser.isOwner"
 			v-bind="configBoxProps.delegatedAdminHint" />
 		<ConfigBox v-bind="configBoxProps.allowProposals">
 			<template #icon>
@@ -14,14 +14,14 @@
 			<ConfigProposals />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll' && countOptions && !isPollClosed" v-bind="configBoxProps.shiftDate">
+		<ConfigBox v-if="pollStore.type === 'datePoll' && optionsStore.list.length && !pollStore.isClosed" v-bind="configBoxProps.shiftDate">
 			<template #icon>
 				<ShiftDateIcon />
 			</template>
 			<OptionsDateShift />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'datePoll'" v-bind="configBoxProps.dateOptions">
+		<ConfigBox v-if="pollStore.type === 'datePoll'" v-bind="configBoxProps.dateOptions">
 			<template #icon>
 				<DateOptionsIcon />
 			</template>
@@ -29,11 +29,11 @@
 			<OptionsDate />
 
 			<template #actions>
-				<OptionsDateAdd v-if="!isPollClosed" v-bind="optionAddDatesProps" />
+				<OptionsDateAdd v-if="!pollStore.isClosed" v-bind="optionAddDatesProps" />
 			</template>
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'textPoll'" v-bind="configBoxProps.textOptions">
+		<ConfigBox v-if="pollStore.type === 'textPoll'" v-bind="configBoxProps.textOptions">
 			<template #icon>
 				<TextOptionsIcon />
 			</template>
@@ -41,14 +41,14 @@
 			<OptionsText />
 
 			<template #actions>
-				<OptionsTextAddBulk v-if="!isPollClosed" />
+				<OptionsTextAddBulk v-if="!pollStore.isClosed" />
 			</template>
 		</ConfigBox>
 	</div>
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { ConfigBox } from '../Base/index.js'
 import OptionsDate from '../Options/OptionsDate.vue'
 import OptionsDateShift from '../Options/OptionsDateShift.vue'
@@ -61,6 +61,9 @@ import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.
 import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 import { t } from '@nextcloud/l10n'
+import { useAclStore } from '../../stores/acl.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'SideBarTabOptions',
@@ -107,14 +110,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			countOptions: 'options/count',
-		}),
-		...mapState({
-			pollType: (state) => state.poll.type,
-			currentUser: (state) => state.acl.currentUser,
-		}),
+		...mapStores(useAclStore, useOptionsStore, usePollStore),
 	},
 }
 </script>

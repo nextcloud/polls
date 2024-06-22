@@ -108,9 +108,5 @@ export default {
 		}
 		}
 	},
-
-	created() {
-		this.$store.dispatch('appSettings/get')
-	},
 }
 </script>

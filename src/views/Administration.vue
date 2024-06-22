@@ -9,7 +9,7 @@
 			<template #title>
 				{{ t('polls', 'Administrative poll management') }}
 			</template>
-			{{ t('polls', 'Manage polls of other accounts. You can take over the ownership or delete polls.') }}
+			{{ t('polls', 'Manage polls of other accounts. You can take over the ownership or delete pollsStore.') }}
 		</HeaderBar>
 
 		<div class="area__main">
@@ -18,7 +18,7 @@
 					:header="true"
 					:sort="sort"
 					:reverse="reverse"
-					@sort-list="setSort($event)" />
+					@sort-list="pollsAdminStore.setSort($event)" />
 
 				<template v-if="!isEmptyPollList">
 					<PollItem v-for="(poll) in sortedList"
@@ -63,7 +63,7 @@
 
 			<NcEmptyContent v-if="isEmptyPollList" v-bind="emptyContent">
 				<template #icon>
-					<NcLoadingIcon v-if="isLoading" :size="64" />
+					<NcLoadingIcon v-if="pollsStore.status.loading" :size="64" />
 					<PollsAppIcon v-else />
 				</template>
 			</NcEmptyContent>
@@ -115,7 +115,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcLoadingIcon, NcModal } from '@nextcloud/vue'
 import { sortBy } from 'lodash'
@@ -127,6 +127,8 @@ import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import PollItem from '../components/PollList/PollItem.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollsStore } from '../stores/polls.ts'
+import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
 
 export default {
 	name: 'Administration',
@@ -162,16 +164,10 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			isLoading: (state) => state.polls.status.loading,
-		}),
-
-		...mapGetters({
-			filteredPolls: 'pollsAdmin/filtered',
-		}),
+		...mapStores(usePollsStore, usePollsAdminStore),
 
 		emptyContent() {
-			if (this.isLoading) {
+			if (this.pollsStore.status.loading) {
 				return {
 					name: t('polls', 'Loading polls…'),
 					description: '',
@@ -195,9 +191,9 @@ export default {
 
 		sortedList() {
 			if (this.reverse) {
-				return sortBy(this.filteredPolls(this.$route.params.type), this.sort).reverse()
+				return sortBy(this.pollsAdminStore.list, this.sort).reverse()
 			}
-			return sortBy(this.filteredPolls(this.$route.params.type), this.sort)
+			return sortBy(this.pollsAdminStore.list, this.sort)
 		},
 
 		isEmptyPollList() {
@@ -232,7 +228,7 @@ export default {
 
 		async toggleArchive(pollId) {
 			try {
-				await this.$store.dispatch('poll/toggleArchive', { pollId })
+				await this.pollsStore.toggleArchive({ pollId })
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
 			}
@@ -240,7 +236,7 @@ export default {
 
 		async deletePoll() {
 			try {
-				await this.$store.dispatch('poll/delete', { pollId: this.currentPoll.pollId })
+				await this.pollsStore.delete({ pollId: this.currentPoll.pollId })
 				this.deleteModal = false
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
@@ -250,7 +246,7 @@ export default {
 
 		async takeOverPoll() {
 			try {
-				await this.$store.dispatch('pollsAdmin/takeOver', { pollId: this.currentPoll.pollId })
+				await this.pollsAdminStore.takeOver({ pollId: this.currentPoll.pollId })
 				this.takeOverModal = false
 			} catch {
 				showError(t('polls', 'Error overtaking poll.'))
@@ -261,16 +257,6 @@ export default {
 		refreshView() {
 			window.document.title = `${t('polls', 'Polls')} - ${this.title}`
 		},
-
-		setSort(payload) {
-			if (this.sort === payload.sort) {
-				this.reverse = !this.reverse
-			} else {
-				this.sort = payload.sort
-				this.reverse = true
-			}
-		},
-
 	},
 }
 </script>

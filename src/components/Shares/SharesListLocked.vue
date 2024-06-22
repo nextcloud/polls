@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<ConfigBox v-if="lockedShares.length" v-bind=" configBoxProps.lockedShares">
+	<ConfigBox v-if="sharesStore.locked.length" v-bind="configBoxProps.lockedShares">
 		<template #icon>
 			<LockedIcon />
 		</template>
@@ -12,7 +12,7 @@
 			name="list"
 			:css="false"
 			class="shares-list">
-			<ShareItem v-for="(share) in lockedShares"
+			<ShareItem v-for="(share) in sharesStore.locked"
 				:key="share.id"
 				:share="share" />
 		</TransitionGroup>
@@ -20,11 +20,12 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { ConfigBox } from '../Base/index.js'
 import LockedIcon from 'vue-material-design-icons/Lock.vue'
 import ShareItem from './ShareItem.vue'
 import { t } from '@nextcloud/l10n'
+import { useSharesStore } from '../../stores/shares.ts'
 
 export default {
 	name: 'SharesListLocked',
@@ -46,9 +47,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			lockedShares: 'shares/locked',
-		}),
+		...mapStores(useSharesStore),
 	},
 }
 </script>

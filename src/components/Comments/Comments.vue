@@ -6,9 +6,9 @@
 <template>
 	<TransitionGroup is="ul"
 		name="fade"
-		:class="['comments' , {'alternativestyle': commentStyling}]"
+		:class="['comments' , { 'alternativestyle': preferencesStore.user.commentStyling }]"
 		:style="cssVar">
-		<CommentItem v-for="(comment) in groupedComments"
+		<CommentItem v-for="(comment) in commentsStore.groupedComments"
 			:key="comment.id"
 			:comment="comment"
 			tag="li" />
@@ -18,8 +18,10 @@
 <script>
 
 import CommentItem from './CommentItem.vue'
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { t } from '@nextcloud/l10n'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useCommentsStore } from '../../stores/comments.ts'
 
 export default {
 	name: 'Comments',
@@ -28,14 +30,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			commentStyling: (state) => state.settings.user.useCommentsAlternativeStyling,
-		}),
-
-		...mapGetters({
-			groupedComments: 'comments/groupedComments',
-		}),
-
+		...mapStores(usePreferencesStore, useCommentsStore),
 		cssVar() {
 			return {
 				'--content-deleted': `" (${t('polls', 'deleted')})"`,

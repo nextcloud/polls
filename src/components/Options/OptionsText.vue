@@ -5,8 +5,8 @@
 
 <template>
 	<div :style="cssVar">
-		<OptionsTextAdd v-if="!isPollClosed" />
-		<draggable v-if="countOptions"
+		<OptionsTextAdd v-if="!pollStore.isClosed" />
+		<draggable v-if="optionsStore.list.length"
 			v-model="reOrderedOptions"
 			v-bind="dragOptions"
 			@start="drag = true"
@@ -18,17 +18,17 @@
 					:poll-type="pollType"
 					:draggable="true">
 					<template #icon>
-						<OptionItemOwner v-if="permissions.addOptions"
+						<OptionItemOwner v-if="pollStore.permissions.addOptions"
 							:avatar-size="16"
 							:option="option"
 							class="owner" />
 					</template>
-					<template v-if="permissions.edit" #actions>
-						<NcActions v-if="!isPollClosed" class="action">
+					<template v-if="pollStore.permissions.edit" #actions>
+						<NcActions v-if="!pollStore.isClosed" class="action">
 							<NcActionButton v-if="!option.deleted"
 								:name="t('polls', 'Delete option')"
 								:aria-label="t('polls', 'Delete option')"
-								@click="deleteOption(option)">
+								@click="optionsStore.delete(option)">
 								<template #icon>
 									<DeleteIcon />
 								</template>
@@ -36,16 +36,16 @@
 							<NcActionButton v-if="option.deleted"
 								:name="t('polls', 'Restore option')"
 								:aria-label="t('polls', 'Restore option')"
-								@click="restoreOption(option)">
+								@click="optionsStore.restore(option)">
 								<template #icon>
 									<RestoreIcon />
 								</template>
 							</NcActionButton>
-							<NcActionButton v-if="!option.deleted && !isPollClosed"
+							<NcActionButton v-if="!option.deleted && !pollStore.isClosed"
 								:name="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 								:aria-label="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 								type="tertiary"
-								@click="confirmOption(option)">
+								@click="optionsStore.confirm(option)">
 								<template #icon>
 									<UnconfirmIcon v-if="option.confirmed" />
 									<ConfirmIcon v-else />
@@ -68,12 +68,11 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcActions, NcActionButton, NcEmptyContent } from '@nextcloud/vue'
 import draggable from 'vuedraggable'
 import OptionItem from './OptionItem.vue'
 import OptionItemOwner from '../Options/OptionItemOwner.vue'
-import { confirmOption, deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
@@ -81,6 +80,8 @@ import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import OptionsTextAdd from './OptionsTextAdd.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
 	name: 'OptionsText',
@@ -100,12 +101,6 @@ export default {
 		OptionsTextAdd,
 	},
 
-	mixins: [
-		confirmOption,
-		deleteOption,
-		restoreOption,
-	],
-
 	data() {
 		return {
 			pollType: 'textPoll',
@@ -114,15 +109,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			options: (state) => state.options.list,
-			permissions: (state) => state.poll.permissions,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			countOptions: 'options/count',
-		}),
+		...mapStores(useOptionsStore, usePollStore),
 
 		dragOptions() {
 			return {
@@ -141,10 +128,10 @@ export default {
 
 		reOrderedOptions: {
 			get() {
-				return this.options
+				return this.optionsStore.list
 			},
 			set(value) {
-				this.$store.dispatch('options/reorder', value)
+				this.optionsStore.reorder(value)
 			},
 		},
 	},

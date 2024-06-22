@@ -41,13 +41,14 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapStores } from 'pinia'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
 import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'CreateDlg',
@@ -73,6 +74,8 @@ export default {
 	},
 
 	computed: {
+		...mapStores(usePollStore),
+
 		titleEmpty() {
 			return this.title === ''
 		},
@@ -80,10 +83,6 @@ export default {
 
 	methods: {
 		t,
-		...mapActions({
-			addPoll: 'poll/add',
-		}),
-
 		/** @public */
 		setFocus() {
 			this.$refs.pollTitle.setFocus()
@@ -97,7 +96,7 @@ export default {
 
 		async confirm() {
 			try {
-				const response = await this.addPoll({ title: this.title, type: this.pollType })
+				const response = await this.pollStore.add({ title: this.title, type: this.pollType })
 				this.cancel()
 				showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.configuration.title }))
 				this.$router.push({ name: 'vote', params: { id: response.data.id } })

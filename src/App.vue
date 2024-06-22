@@ -17,7 +17,6 @@
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState, mapActions } from 'vuex'
 import '@nextcloud/dialogs/style.css'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
@@ -38,8 +37,12 @@ import { useSubscriptionStore } from './stores/subscription.ts'
 import { useActivityStore } from './stores/activity.ts'
 import { useSharesStore } from './stores/shares.ts'
 import { useAclStore } from './stores/acl.ts'
+import { usePollsStore } from './stores/polls.ts'
 import { usePollsAdminStore } from './stores/pollsAdmin.ts'
-
+import { useShareStore } from './stores/share.ts'
+import { usePreferencesStore } from './stores/preferences.ts'
+import { showSuccess } from '@nextcloud/dialogs'
+import { debounce } from 'lodash'
 
 export default {
 	name: 'App',
@@ -62,25 +65,25 @@ export default {
 
 	computed: {
 		...mapStores(
-			useRouterStore,
-			usePollStore,
-			useOptionsStore,
-			useVotesStore,
-			useCommentsStore,
-			useSubscriptionStore,
-			useActivityStore,
-			useSharesStore,
 			useAclStore,
+			useActivityStore,
+			useCommentsStore,
+			useOptionsStore,
+			usePollsStore,
 			usePollsAdminStore,
+			usePollStore,
+			useRouterStore,
+			useSharesStore,
+			useShareStore,
+			useSubscriptionStore,
+			useVotesStore,
+			usePreferencesStore,
 		),
-		...mapState({
-			permissions: (state) => state.poll.permissions,
-		}),
 
 		appClass() {
 			return [
 				this.transitionClass, {
-					edit: this.permissions.edit,
+					edit: this.pollStore.permissions.edit,
 				},
 			]
 		},
@@ -90,8 +93,8 @@ export default {
 		},
 
 		useSidebar() {
-			return this.permissions.edit
-				|| this.permissions.comment
+			return this.pollStore.permissions.edit
+				|| this.pollStore.permissions.comment
 				|| this.$route.name === 'combo'
 		},
 	},
@@ -120,6 +123,9 @@ export default {
 		subscribe('polls:poll:load', (silent) => {
 			this.loadPoll(silent)
 		})
+		subscribe('polls:updated', (payload) => {
+			this.notify(payload)
+		})
 	},
 
 	mounted() {
@@ -132,26 +138,27 @@ export default {
 		unsubscribe('polls:poll:load')
 		unsubscribe('polls:transitions:on')
 		unsubscribe('polls:transitions:off')
+		unsubscribe('polls:updated')
 	},
 
 	methods: {
-		...mapActions({
-			setFilter: 'polls/setFilter',
-			loadAcl: 'acl/get',
-			loadSettings: 'settings/get',
-		}),
+		notify: debounce(async function (payload) {
+			if (payload.store === 'poll') {
+				showSuccess(payload.message)
+			}
+		}, 1500),
 
 		loadContext(silent) {
 			if (this.$route.name !== null) {
-				this.loadAcl()
+				this.aclStore.load()
 				this.routerStore.set(this.$route)
 			}
 			
 			if (getCurrentUser()) {
-				this.loadSettings()
+				this.preferencesStore.load()
 				
 				if (this.$route.name === 'list') {
-					this.setFilter(this.$route.params.type)
+					this.pollsStore.setFilter(this.$route.params.type)
 				}
 			}
 			
@@ -186,28 +193,35 @@ export default {
 				if (item.table === 'polls') {
 
 					// If user is an admin, also load admin list
-					if (this.isAdmin) dispatches = [...dispatches, 'pollsAdmin/list']
+					if (this.isAdmin) dispatches = [...dispatches, 'pollsAdmin']
 
 					// if user is an authorized user load polls list and combo
-					if (this.isLoggedin) dispatches = [...dispatches, `${item.table}/list`, 'combo/cleanUp']
+					if (this.isLoggedin) dispatches = [...dispatches, `${item.table}`, 'combo']
 
 					// if current poll is affected, load current poll configuration
-					if (item.pollId === this.$store.state.poll.id) {
-						dispatches = [...dispatches, 'poll/get']
+					if (item.pollId === this.pollStore.id) {
+						dispatches = [...dispatches, 'poll']
 					}
 
 				} else if (!this.isLoggedin && (item.table === 'shares')) {
 					// if current user is guest and table is shares only reload current share
-					dispatches = [...dispatches, 'share/get']
+					dispatches = [...dispatches, 'share']
 				} else {
 					// otherwise just load particulair store
-					dispatches = [...dispatches, `${item.table}/list`]
+					dispatches = [...dispatches, `${item.table}`]
 				}
 			})
-			dispatches = [...new Set(dispatches)] // remove duplicates and add combo
-			// TODO: replace call to loadPiniaStores with loadStoresProxy after finishing pinia migration
-			return this.loadStoresProxy(dispatches)
-			// return Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
+
+			// deduplicate dispatches
+			dispatches = [...new Set(dispatches)]
+			if (dispatches.includes('poll')) {
+				dispatches.remove('poll')
+				
+			}
+			this.pollStore.load()
+			this.pollsStore.load()
+			this.pollsAdminStore.load()
+			this.activityStore.load()
 		},
 
 		async loadPoll(silent) {
@@ -247,31 +261,24 @@ export default {
 
 		// TODO: remove this function after finishing pinia migration
 		async loadStoresProxy(dispatches) {
-			await this.loadVuexStores(dispatches)
-			Logger.debug('Loaded vuex stores', { dispatches })	
+			// await this.loadVuexStores(dispatches)
+			// Logger.debug('Loaded vuex stores', { dispatches })	
 			await this.LoadPiniaStores(dispatches)
 			Logger.debug('Loaded piniastores', { dispatches })	
 		},
 
-		async loadVuexStores(dispatches) {
-			Logger.debug('Loading vuex stores', { dispatches })
-			const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
-			return Promise.all(requests)
-		},
+		// async loadVuexStores(dispatches) {
+		// 	Logger.debug('Loading vuex stores', { dispatches })
+		// 	const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
+		// 	return Promise.all(requests)
+		// },
 
-		async LoadPiniaStores(dispatches) {
+		LoadPiniaStores(dispatches) {
 			Logger.debug('Loading pinia stores', { dispatches })
-			return Promise.all((dispatches) => {
-				if (dispatches.includes('poll/get')) this.pollStore.load()
-				if (dispatches.includes('acl/get')) this.aclStore.load()
-				if (dispatches.includes('options/list')) this.optionsStore.load()
-				if (dispatches.includes('votes/list')) this.votesStore.load()
-				if (dispatches.includes('comments/list')) this.commentsStore.load()
-				if (dispatches.includes('subscription/get')) this.subscriptionStore.load()
-				if (dispatches.includes('activity/list')) this.activityStore.load()
-				if (dispatches.includes('shares/list')) this.sharesStore.load()
-				if (dispatches.includes('pollsAdmin/list')) this.pollsAdminStore.load()
-			})
+			this.pollStore.load()
+			this.pollsStore.load()
+			this.pollsAdminStore.load()
+			this.activityStore.load()
 		},
 	},
 }

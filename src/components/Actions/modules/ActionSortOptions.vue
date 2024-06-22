@@ -8,10 +8,10 @@
 		<NcButton type="tertiary"
 			:title="caption"
 			:aria-label="caption"
-			@click="clickAction()">
+			@click="optionsStore.setRankOrder()">
 			<template #icon>
-				<SortByDateOptionIcon v-if="isRanked && pollType === 'datePoll'" />
-				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textPoll'" />
+				<SortByDateOptionIcon v-if="optionsStore.ranked && pollStore.type === 'datePoll'" />
+				<SortByOriginalOrderIcon v-else-if="optionsStore.ranked && pollStore.type === 'textPoll'" />
 				<SortByRankIcon v-else />
 			</template>
 		</NcButton>
@@ -19,12 +19,14 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcButton } from '@nextcloud/vue'
 import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 import { t } from '@nextcloud/l10n'
+import { useOptionsStore } from '../../../stores/options.ts'
+import { usePollStore } from '../../../stores/poll.ts'
 
 export default {
 	name: 'ActionSortOptions',
@@ -37,28 +39,19 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			isRanked: (state) => state.options.ranked,
-			pollType: (state) => state.poll.type,
-		}),
+		...mapStores(usePollStore, useOptionsStore),
 
 		caption() {
-			if (this.isRanked && this.pollType === 'datePoll') {
+			if (this.optionsStore.ranked && this.pollStore.type === 'datePoll') {
 				return t('polls', 'Date order')
 			}
 
-			if (this.isRanked && this.pollType === 'textPoll') {
+			if (this.optionsStore.ranked && this.pollStore.type === 'textPoll') {
 				return t('polls', 'Original order')
 			}
 
 			return t('polls', 'Ranked order')
 		},
-	},
-
-	methods: {
-		...mapMutations({
-			clickAction: 'options/setRankOrder',
-		}),
 	},
 }
 </script>

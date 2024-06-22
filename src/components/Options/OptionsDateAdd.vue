@@ -79,6 +79,8 @@ import { FlexSpacer } from '../Base/index.js'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import { t } from '@nextcloud/l10n'
+import { mapStores } from 'pinia'
+import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
 	name: 'OptionsDateAdd',
@@ -114,6 +116,8 @@ export default {
 	},
 
 	computed: {
+		...mapStores(useOptionsStore),
+
 		buttonAriaLabel() {
 			return this.caption ?? t('polls', 'Add date')
 		},
@@ -289,7 +293,7 @@ export default {
 				this.pickerSelection = [this.dateOption.from.valueOf(), this.dateOption.to.valueOf()]
 			}
 			try {
-				await this.$store.dispatch('options/add', this.dateOption.option)
+				await this.optionsStore.add(this.dateOption.option)
 				this.added = true
 				showSuccess(t('polls', '{optionText} added', { optionText: this.dateOption.text }))
 			} catch (error) {

@@ -5,14 +5,16 @@
 
 <template>
 	<div>
-		<RadioGroupDiv v-model="pollShowResults" :options="pollShowResultsOptions" />
+		<RadioGroupDiv v-model="pollShowResults" 
+			:options="pollShowResultsOptions" />
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { RadioGroupDiv } from '../Base/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ConfigShowResults',
@@ -32,19 +34,19 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
+		...mapStores(usePollStore),
 
 		pollShowResults: {
 			get() {
-				return this.pollConfiguration.showResults
+				return this.pollStore.configuration.showResults
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { showResults: value })
-				this.$emit('change')
+				this.pollStore.configuration.showResults = value 
+				this.pollStore.write()
 			},
 		},
+
+
 	},
 }
 </script>

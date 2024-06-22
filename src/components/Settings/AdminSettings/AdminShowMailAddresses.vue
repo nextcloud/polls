@@ -5,11 +5,13 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="showMailAddresses" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.showMailAddresses" 
+			type="switch"
+			@change="appSettingsStore.write()">
 			{{ t('polls', 'Show email addresses of internal accounts') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!showMailAddresses" class="settings_details">
-			<NcSelect v-model="showMailAddressesGroups"
+		<div v-if="!appSettingsStore.showMailAddresses" class="settings_details">
+			<NcSelect v-model="appSettingsStore.showMailAddressesGroups"
 				:input-label="t('polls','Show only to members of the following groups')"
 				label="displayName"
 				:options="groups"
@@ -23,10 +25,11 @@
 </template>
 
 <script>
-
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
-import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { loadGroups } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminShowMailAddresses',
@@ -36,26 +39,10 @@ export default {
 		NcSelect,
 	},
 
-	mixins: [loadGroups, writeValue],
+	mixins: [loadGroups],
 
 	computed: {
-		// Add bindings
-		showMailAddresses: {
-			get() {
-				return this.appSettings.showMailAddresses
-			},
-			set(value) {
-				this.writeValue({ showMailAddresses: value })
-			},
-		},
-		showMailAddressesGroups: {
-			get() {
-				return this.appSettings.showMailAddressesGroups
-			},
-			set(value) {
-				this.writeValue({ showMailAddressesGroups: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

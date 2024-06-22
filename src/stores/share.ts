@@ -62,12 +62,6 @@ export interface Share {
 	deleted: boolean
 }
 
-const pollStore = usePollStore()
-const commentsStore = useCommentsStore()
-const votesStore = useVotesStore()
-const optionsStore = useOptionsStore()
-const subscriptionStore = useSubscriptionStore()
-
 export const useShareStore = defineStore('share', {
 	state: (): Share => ({
 		displayName: '',
@@ -124,7 +118,9 @@ export const useShareStore = defineStore('share', {
 		},
 	
 		async updateEmailAddress(payload) {
+			const pollStore = usePollStore()
 			const routerStore = useRouterStore()
+
 			if (routerStore.name !== 'publicVote') {
 				return
 			}
@@ -132,8 +128,8 @@ export const useShareStore = defineStore('share', {
 			try {
 				const response = await PublicAPI.setEmailAddress(routerStore.params.token, payload.emailAddress)
 				this.$patch(response.data.share)
-
 				pollStore.load()
+
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error writing email address', { error, payload })
@@ -142,7 +138,12 @@ export const useShareStore = defineStore('share', {
 		},
 	
 		async updateDisplayName(payload) {
+			const pollStore = usePollStore()
+			const commentsStore = useCommentsStore()
+			const votesStore = useVotesStore()
+			const optionsStore = useOptionsStore()
 			const routerStore = useRouterStore()
+
 			if (routerStore.name !== 'publicVote') {
 				return
 			}
@@ -163,7 +164,10 @@ export const useShareStore = defineStore('share', {
 		},
 	
 		async deleteEmailAddress() {
+			const pollStore = usePollStore()
+			const subscriptionStore = useSubscriptionStore()
 			const routerStore = useRouterStore()
+
 			if (routerStore.name !== 'publicVote') {
 				return
 			}
@@ -172,7 +176,7 @@ export const useShareStore = defineStore('share', {
 				const response = await PublicAPI.deleteEmailAddress(routerStore.params.token)
 				this.$patch(response.data.share)
 				subscriptionStore.$state.subscribed = false
-				subscriptionStore.update()
+				subscriptionStore.write()
 				pollStore.load()
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return

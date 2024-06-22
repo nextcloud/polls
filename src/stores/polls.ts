@@ -11,7 +11,6 @@ import { PollsAPI } from '../Api/index.js'
 import { Poll , PollType } from './poll.ts'
 import { t } from '@nextcloud/l10n'
 import { Logger } from '../helpers/index.ts'
-// import { usePreferencesStore } from './preferences.ts'
 
 export enum sortType {
 	Created = 'created',
@@ -32,7 +31,7 @@ export enum filterType {
 	Archived = 'archived',
 }
 
-export enum StoreStatusType {
+export enum StoreStatus {
 	Loading = 'loading',
 	Loaded = 'loaded',
 	Error = 'error',
@@ -59,7 +58,7 @@ export interface Meta {
 	loadedChunks: number
 	maxPollsInNavigation: number
 	permissions: AppPermissions
-	status: StoreStatusType
+	status: StoreStatus
 }
 
 export interface PollList {
@@ -72,7 +71,7 @@ export interface PollList {
 	categories: PollCategory[]
 }
 
-const sortColumnsMapping = {
+export const sortColumnsMapping = {
 	created: 'status.created',
 	title: 'configuration.title',
 	access: 'configuration.access',
@@ -101,7 +100,7 @@ export const usePollsStore = defineStore('polls', {
 			chunksize: 20,
 			loadedChunks: 1,
 			maxPollsInNavigation: 6,
-			status: StoreStatusType.Loaded,
+			status: StoreStatus.Loaded,
 			permissions: {
 				pollCreationAllowed: false,
 				comboAllowed: false,
@@ -315,8 +314,47 @@ export const usePollsStore = defineStore('polls', {
 			this.resetChunks()
 		},
 
-		setLoadingStatus(status: StoreStatusType): void {
+		setLoadingStatus(status: StoreStatus): void {
 			this.meta.status = status
 		},
+
+		async clone(payload: { pollId: number }) {
+			const pollsStore = usePollsStore()
+			try {
+				const response = await PollsAPI.clonePoll(payload.pollId)
+				return response
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error cloning poll', { error, payload })
+				throw error
+			} finally {
+				pollsStore.load()
+			}
+		},
+
+		async delete(payload: { pollId: number }) {
+			try {
+				await PollsAPI.deletePoll(payload.pollId)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error deleting poll', { error, payload })
+				throw error
+			} finally {
+				this.load()
+			}
+		},
+
+		async toggleArchive(payload: { pollId: number }) {
+			try {
+				await PollsAPI.toggleArchive(payload.pollId)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error archiving/restoring poll', { error, payload })
+				throw error
+			} finally {
+				this.load()
+			}
+		},
+
 	},
 })

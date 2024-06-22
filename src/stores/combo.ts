@@ -29,9 +29,6 @@ interface Combo {
 	votes: Vote[],
 }
 
-const preferencesStore = usePreferencesStore()
-const pollsStore = usePollsStore()
-
 export const useComboStore = defineStore('combo', {
 	state: (): Combo => ({
 		id: 1,
@@ -97,6 +94,7 @@ export const useComboStore = defineStore('combo', {
 		},
 	
 		async verifyPollsFromSettings() {
+			const preferencesStore = usePreferencesStore()
 			preferencesStore.user.pollCombo.forEach(pollId => {
 				if (!this.pollCombo.includes(pollId)) {
 					this.add(pollId)
@@ -105,6 +103,7 @@ export const useComboStore = defineStore('combo', {
 		},
 	
 		async cleanUp() {
+			const pollsStore = usePollsStore()
 			this.polls.forEach((comboPoll: Poll) => {
 				if (pollsStore.list.findIndex((poll) => poll.id === comboPoll.id && !poll.status.deleted) < 0) {
 					this.removePoll({ pollId: comboPoll.id })

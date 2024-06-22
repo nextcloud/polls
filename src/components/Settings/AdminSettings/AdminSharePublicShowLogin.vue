@@ -5,16 +5,19 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="showLogin" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.showLogin" 
+			type="switch"
+			@change="appSettingsStore.write()">
 			{{ t('polls', 'Enable the login option in the registration dialog of public polls') }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { writeValue } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminSharePublicShowLogin',
@@ -23,18 +26,8 @@ export default {
 		NcCheckboxRadioSwitch,
 	},
 
-	mixins: [writeValue],
-
 	computed: {
-		// Add bindings
-		showLogin: {
-			get() {
-				return this.appSettings.showLogin
-			},
-			set(value) {
-				this.writeValue({ showLogin: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

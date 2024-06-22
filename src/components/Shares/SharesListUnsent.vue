@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<ConfigBox v-if="unsentInvitations.length" :name="t('polls', 'Unsent invitations')">
+	<ConfigBox v-if="sharesStore.unsentInvitations.length" :name="t('polls', 'Unsent invitations')">
 		<template #icon>
 			<EmailAlertIcon />
 		</template>
@@ -22,7 +22,7 @@
 			name="list"
 			:css="false"
 			class="shares-list">
-			<ShareItem v-for="(share) in unsentInvitations"
+			<ShareItem v-for="(share) in sharesStore.unsentInvitations"
 				:key="share.id"
 				:share="share" />
 		</TransitionGroup>
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapGetters, mapActions, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
 import { ConfigBox } from '../Base/index.js'
@@ -39,6 +39,8 @@ import ShareItem from './ShareItem.vue'
 import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
 import { Logger } from '../../helpers/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 export default {
 	name: 'SharesListUnsent',
@@ -52,24 +54,14 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollId: (state) => state.poll.id,
-		}),
-
-		...mapGetters({
-			unsentInvitations: 'shares/unsentInvitations',
-		}),
+		...mapStores(usePollStore, useSharesStore),
 	},
 
 	methods: {
 		t,
-		...mapActions({
-			inviteAll: 'shares/inviteAll',
-		}),
-
 		async sendAllInvitations() {
 
-			const response = await this.inviteAll({ pollId: this.pollId })
+			const response = await this.sharesStore.inviteAll({ pollId: this.pollStore.id })
 			if (response.data?.sentResult?.sentMails) {
 				response.data.sentResult.sentMails.forEach((item) => {
 					showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))

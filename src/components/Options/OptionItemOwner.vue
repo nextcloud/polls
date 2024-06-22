@@ -9,8 +9,8 @@
 			:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
 			:restore="!!option.deleted"
 			:timeout="0"
-			@restore="restoreOption(option)"
-			@delete="deleteOption(option)" />
+			@restore="optionsStore.restore(option)"
+			@delete="optionsStore.delete(option)" />
 
 		<UserItem v-else-if="showOwner"
 			:user="option.owner"
@@ -22,11 +22,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { deleteOption, restoreOption } from '../../mixins/optionMixins.js'
+import { mapStores } from 'pinia'
 import { ActionDelete } from '../Actions/index.js'
 import UserItem from '../User/UserItem.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useAclStore } from '../../stores/acl.ts'
+import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
 	name: 'OptionItemOwner',
@@ -35,11 +37,6 @@ export default {
 		UserItem,
 		ActionDelete,
 	},
-
-	mixins: [
-		deleteOption,
-		restoreOption,
-	],
 
 	props: {
 		option: {
@@ -53,18 +50,14 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollOwner: (state) => state.poll.owner.userId,
-			currentUser: (state) => state.acl.currentUser,
-			permissions: (state) => state.poll.permissions,
-		}),
+		...mapStores(usePollStore, useAclStore, useOptionsStore),
 
 		showDelete() {
-			return !this.permissions.edit && this.currentUser.userId === this.option.owner.userId
+			return !this.pollStore.permissions.edit && this.aclStore.currentUser.userId === this.option.owner.userId
 
 		},
 		showOwner() {
-			return this.option.owner.type !== 'empty' && this.option.owner.userId !== this.pollOwner
+			return this.option.owner.type !== 'empty' && this.option.owner.userId !== this.pollStore.owner.userId
 		},
 	},
 	

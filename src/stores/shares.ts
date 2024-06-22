@@ -9,7 +9,7 @@ import { SharesAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
 import { Share } from './share.ts'
 import { useRouterStore } from './router.ts'
-import { UserType } from '../Interfaces/interfaces.ts'
+import { User, UserType } from '../Interfaces/interfaces.ts'
 
 
 interface Shares {
@@ -47,7 +47,7 @@ export const useSharesStore = defineStore('shares', {
 	},
 	
 	actions: {
-		async load() {
+		async load(): Promise<void>{
 			const routerStore = useRouterStore()
 			try {
 				const response = await SharesAPI.getShares(routerStore.params.id)
@@ -59,7 +59,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		async add(payload) {
+		async add(payload: { user: User }): Promise<void> {
 			const routerStore = useRouterStore()
 			try {
 				await SharesAPI.addShare(routerStore.params.id, payload.user)
@@ -72,7 +72,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		update(payload): void {
+		update(payload: { share: Share }): void {
 			const foundIndex = this.list.findIndex((share: Share) => share.id === payload.share.id)
 			Object.assign(this.list[foundIndex], payload.share)
 		},
@@ -103,7 +103,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		async writeLabel(payload: { token: string; label: string }) {
+		async writeLabel(payload: { token: string; label: string }): Promise<void> {
 			try {
 				const response = await SharesAPI.writeLabel(payload.token, payload.label)
 				this.update(response.data)
@@ -116,7 +116,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		async inviteAll(payload: { pollId: number }) {
+		async inviteAll(payload: { pollId: number }): Promise<void> {
 			try {
 				const response = await SharesAPI.inviteAll(payload.pollId)
 				return response
@@ -129,7 +129,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 	
 		},
-		async sendInvitation(payload: { share: Share }) {
+		async sendInvitation(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.sendInvitation(payload.share.token)
 				return response
@@ -142,7 +142,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		async resolveGroup(payload: { share: Share }) {
+		async resolveGroup(payload: { share: Share }): Promise<void> {
 			try {
 				await SharesAPI.resolveShare(payload.share.token)
 				this.load()
@@ -153,7 +153,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		async lock(payload: { share: Share }) {
+		async lock(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.lockShare(payload.share.token)
 				this.update(response.data)
@@ -165,7 +165,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		async unlock(payload: { share: Share }) {
+		async unlock(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.unlockShare(payload.share.token)
 				this.update(response.data)
@@ -177,7 +177,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		async delete(payload: { share: Share }) {
+		async delete(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.deleteShare(payload.share.token)
 				this.update(response.data)
@@ -188,7 +188,7 @@ export const useSharesStore = defineStore('shares', {
 				throw error
 			}
 		},
-		async restore(payload: { share: Share }) {
+		async restore(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.restoreShare(payload.share.token)
 				this.update(response.data)

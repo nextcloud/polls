@@ -5,7 +5,7 @@
 
 <template>
 	<div class="comment-add">
-		<UserItem :user="currentUser" hide-names />
+		<UserItem :user="aclStore.currentUser" hide-names />
 
 		<InputDiv v-model="comment"
 			class="comment-add__input"
@@ -16,11 +16,13 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { showError } from '@nextcloud/dialogs'
 import { InputDiv } from '../Base/index.js'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
+import { useAclStore } from '../../stores/acl.ts'
+import { useCommentsStore } from '../../stores/comments.ts'
 
 export default {
 	name: 'CommentAdd',
@@ -37,10 +39,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			currentUser: (state) => state.acl.currentUser,
-		}),
-
+		...mapStores(useAclStore, useCommentsStore),
 	},
 
 	methods: {
@@ -48,7 +47,7 @@ export default {
 		async writeComment() {
 			if (this.comment) {
 				try {
-					await this.$store.dispatch('comments/add', { message: this.comment })
+					await this.commentsStore.add ({ message: this.comment })
 					this.comment = ''
 				} catch {
 					showError(t('polls', 'Error while saving comment'))

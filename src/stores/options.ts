@@ -68,7 +68,10 @@ export const useOptionsStore = defineStore('options', {
 			return state.list.filter((option) => option.confirmed > 0)
 		},
 	
-		explodeDates: () => (option) => {
+	},
+
+	actions: {
+		explodeDates(option: Option) {
 			const from = moment.unix(option.timestamp)
 			const to = moment.unix(option.timestamp + Math.max(0, option.duration))
 			// does the event start at 00:00 local time and
@@ -115,9 +118,7 @@ export const useOptionsStore = defineStore('options', {
 			}
 	
 		},
-	},
 
-	actions: {
 		async load() {
 			const routerStore = useRouterStore()
 			try {

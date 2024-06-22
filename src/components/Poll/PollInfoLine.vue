@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import moment from '@nextcloud/moment'
 import unpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
 import archivedPollIcon from 'vue-material-design-icons/Archive.vue'
@@ -22,34 +22,23 @@ import creationIcon from 'vue-material-design-icons/ClockOutline.vue'
 import ProposalsIcon from 'vue-material-design-icons/Offer.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 export default {
 	name: 'PollInfoLine',
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-			pollStatus: (state) => state.poll.status,
-			ownerDisplayName: (state) => state.poll.owner.displayName,
-			mayEdit: (state) => state.poll.permissions.edit,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			hasShares: 'shares/hasShares',
-			isProposalExpirySet: 'poll/isProposalExpirySet',
-			isProposalExpired: 'poll/isProposalExpired',
-			proposalsExpireRelative: 'poll/proposalsExpireRelative',
-		}),
+		...mapStores(usePollStore, useSharesStore),
 
 		isNoAccessSet() {
-			return this.pollConfiguration.access === 'private' && !this.hasShares && this.mayEdit
+			return this.pollStore.configuration.access === 'private' && !this.sharesStore.hasShares && this.pollStore.permissions.edit
 		},
 
 		subTexts() {
 			const subTexts = []
 
-			if (this.pollStatus.deleted) {
+			if (this.pollStore.status.deleted) {
 				subTexts.push({
 					id: 'deleted',
 					text: t('polls', 'Archived'),
@@ -71,23 +60,23 @@ export default {
 				return subTexts
 			}
 
-			if (this.pollConfiguration.access === 'private') {
+			if (this.pollStore.configuration.access === 'private') {
 				subTexts.push({
-					id: this.pollConfiguration.access,
-					text: t('polls', 'A private poll from {name}', { name: this.ownerDisplayName }),
+					id: this.pollStore.configuration.access,
+					text: t('polls', 'A private poll from {name}', { name: this.pollStore.owner.displayName }),
 					class: '',
 					iconComponent: null,
 				})
 			} else {
 				subTexts.push({
-					id: this.pollConfiguration.access,
-					text: t('polls', 'An openly accessible poll from {name}', { name: this.ownerDisplayName }),
+					id: this.pollStore.configuration.access,
+					text: t('polls', 'An openly accessible poll from {name}', { name: this.pollStore.owner.displayName }),
 					class: '',
 					iconComponent: null,
 				})
 			}
 
-			if (this.isPollClosed) {
+			if (this.pollStore.isClosed) {
 				subTexts.push({
 					id: 'closed',
 					text: this.timeExpirationRelative,
@@ -97,7 +86,7 @@ export default {
 				return subTexts
 			}
 
-			if (!this.isPollClosed && this.pollConfiguration.expire) {
+			if (!this.pollStore.isClosed && this.pollStore.configuration.expire) {
 				subTexts.push({
 					id: 'expiring',
 					text: t('polls', 'Closing {relativeExpirationTime}', { relativeExpirationTime: this.timeExpirationRelative }),
@@ -107,20 +96,20 @@ export default {
 				return subTexts
 			}
 
-			if (this.isProposalExpirySet && this.isProposalExpired) {
+			if (this.pollStore.isProposalExpirySet && this.pollStore.isProposalExpired) {
 				subTexts.push({
 					id: 'expired',
-					text: t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
+					text: t('polls', 'Proposal period ended {timeRelative}', { timeRelative: this.pollStore.proposalsExpireRelative }),
 					class: 'proposal',
 					iconComponent: ProposalsIcon,
 				})
 				return subTexts
 			}
 
-			if (this.isProposalExpirySet && !this.isProposalExpired) {
+			if (this.pollStore.isProposalExpirySet && !this.pollStore.isProposalExpired) {
 				subTexts.push({
 					id: 'proposal-open',
-					text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.proposalsExpireRelative }),
+					text: t('polls', 'Proposal period ends {timeRelative}', { timeRelative: this.pollStore.proposalsExpireRelative }),
 					class: 'proposal',
 					iconComponent: ProposalsIcon,
 				})
@@ -139,16 +128,16 @@ export default {
 		},
 
 		dateCreatedRelative() {
-			return moment.unix(this.pollStatus.created).fromNow()
+			return moment.unix(this.pollStore.status.created).fromNow()
 		},
 
 		closeToClosing() {
-			return (!this.isPollClosed && this.pollConfiguration.expire && moment.unix(this.pollConfiguration.expire).diff() < 86400000)
+			return (!this.pollStore.isClosed && this.pollStore.configuration.expire && moment.unix(this.pollStore.configuration.expire).diff() < 86400000)
 		},
 
 		timeExpirationRelative() {
-			if (this.pollConfiguration.expire) {
-				return moment.unix(this.pollConfiguration.expire).fromNow()
+			if (this.pollStore.configuration.expire) {
+				return moment.unix(this.pollStore.configuration.expire).fromNow()
 			}
 			return t('polls', 'never')
 

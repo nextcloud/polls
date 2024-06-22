@@ -6,16 +6,17 @@
 <template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'This poll is closed.') }}
-		<span v-if="!allowEdit">
+		<span v-if="!pollStore.permissions.allowEdit">
 			{{ t('polls', 'No further action is possible.') }}
 		</span>
 	</CardDiv>
 </template>
 
 <script>
+import { mapStores } from 'pinia'
 import { CardDiv } from '../../Base/index.js'
-import { mapState } from 'vuex'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
 
 export default {
 	name: 'CardClosedPoll',
@@ -31,9 +32,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			allowEdit: (state) => state.poll.permissions.edit,
-		}),
+		...mapStores(usePollStore),
 	},
 
 	methods: {
