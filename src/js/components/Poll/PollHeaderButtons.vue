@@ -18,7 +18,7 @@
 			</template>
 			<PollInformation />
 		</NcPopover>
-		<ExportPoll v-if="permissions.pollDownload" />
+		<ExportPoll v-if="allowDownload" />
 	</div>
 </template>
 
@@ -50,6 +50,7 @@ export default {
 	computed: {
 		...mapState({
 			permissions: (state) => state.poll.permissions,
+			allowDownload: (state) => state.acl.appPermissions.pollDownload,
 		}),
 
 		showUserMenu() {
