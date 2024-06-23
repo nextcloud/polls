@@ -52,7 +52,7 @@
 				<NcActionButton v-if="activateSwitchAdmin"
 					:name="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
 					:aria-label="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
-					@click="switchAdmin({ share: share })">
+					@click="sharesStore.switchAdmin({ share: share })">
 					<template #icon>
 						<GrantAdminIcon v-if="share.user.type === 'user'" />
 						<WithdrawAdminIcon v-else />
@@ -83,7 +83,7 @@
 					name="publicPollEmail"
 					value="optional"
 					:checked="share.publicPollEmail === 'optional'"
-					@change="setPublicPollEmail({ share, value: 'optional' })">
+					@change="sharesStore.setPublicPollEmail({ share, value: 'optional' })">
 					{{ t('polls', 'Email address is optional') }}
 				</NcActionRadio>
 
@@ -91,7 +91,7 @@
 					name="publicPollEmail"
 					value="mandatory"
 					:checked="share.publicPollEmail === 'mandatory'"
-					@change="setPublicPollEmail({ share, value: 'mandatory' })">
+					@change="sharesStore.setPublicPollEmail({ share, value: 'mandatory' })">
 					{{ t('polls', 'Email address is mandatory') }}
 				</NcActionRadio>
 
@@ -99,7 +99,7 @@
 					name="publicPollEmail"
 					value="disabled"
 					:checked="share.publicPollEmail === 'disabled'"
-					@change="setPublicPollEmail({ share, value: 'disabled' })">
+					@change="sharesStore.setPublicPollEmail({ share, value: 'disabled' })">
 					{{ t('polls', 'Do not ask for an email address') }}
 				</NcActionRadio>
 				<NcActionButton v-if="!share.deleted"
@@ -114,7 +114,7 @@
 				<NcActionButton v-if="!share.deleted"
 					:name="t('polls', 'Delete share')"
 					:aria-label="t('polls', 'Delete share')"
-					@click="deleteShare({ share })">
+					@click="sharesStore.delete({ share })">
 					<template #icon>
 						<DeleteIcon />
 					</template>
@@ -122,7 +122,7 @@
 				<NcActionButton v-if="share.deleted"
 					:name="t('polls', 'Restore share')"
 					:aria-label="t('polls', 'Restore share')"
-					@click="restoreShare({ share })">
+					@click="sharesStore.restore({ share })">
 					<template #icon>
 						<RestoreIcon />
 					</template>
@@ -134,7 +134,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapStores } from 'pinia'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
 import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
@@ -153,6 +153,7 @@ import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import { Logger } from '../../helpers/index.js'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
+import { useSharesStore } from '../../stores/shares.ts'
 
 export default {
 	name: 'ShareItem',
@@ -203,6 +204,8 @@ export default {
 	},
 
 	computed: {
+		...mapStores(useSharesStore),
+
 		isActivePublicShare() {
 			return !this.share.deleted && this.share.user.type === 'public'
 		},
@@ -241,23 +244,13 @@ export default {
 
 	methods: {
 		t,
-		...mapActions({
-			deleteShare: 'shares/delete',
-			restoreShare: 'shares/restore',
-			lockShare: 'shares/lock',
-			unlockShare: 'shares/unlock',
-			switchAdmin: 'shares/switchAdmin',
-			setPublicPollEmail: 'shares/setPublicPollEmail',
-			writeLabel: 'shares/writeLabel',
-		}),
-
 		async switchLocked(share) {
 			try {
 				if (share.locked) {
-					this.unlockShare({ share })
+					this.sharesStore.unlock({ share })
 					showSuccess(t('polls', 'Share of {displayName} unlocked', { displayName: share.user.displayName }))
 				} else {
-					this.lockShare({ share })
+					this.sharesStore.lock({ share })
 					showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.user.displayName }))
 				}
 			} catch (error) {
@@ -267,7 +260,7 @@ export default {
 		},
 
 		async submitLabel() {
-			this.writeLabel({ token: this.share.token, label: this.label.inputValue })
+			this.sharesStore.writeLabel({ token: this.share.token, label: this.label.inputValue })
 		},
 
 		async resolveGroup(share) {
@@ -278,7 +271,7 @@ export default {
 			this.resolving = true
 
 			try {
-				await this.$store.dispatch('shares/resolveGroup', { share })
+				await this.sharesStore.resolveGroup ({ share })
 			} catch (error) {
 				if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
 					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.user.displayName }))
@@ -293,7 +286,7 @@ export default {
 		},
 
 		async sendInvitation() {
-			const response = await this.$store.dispatch('shares/sendInvitation', { share: this.share })
+			const response = await this.sharesStore.sendInvitation({ share: this.share })
 			if (response.data?.sentResult?.sentMails) {
 				response.data.sentResult.sentMails.forEach((item) => {
 					showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))

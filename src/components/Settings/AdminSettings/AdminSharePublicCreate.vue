@@ -5,11 +5,13 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="allowPublicShares" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.allowPublicShares" 
+			type="switch"
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable public shares of polls globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!allowPublicShares" class="settings_details">
-			<NcSelect v-model="publicSharesGroups"
+		<div v-if="!appSettingsStore.allowPublicShares" class="settings_details">
+			<NcSelect v-model="appSettingsStore.publicSharesGroups"
 				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
@@ -23,10 +25,11 @@
 </template>
 
 <script>
-
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
-import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { loadGroups } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminSharePublicCreate',
@@ -36,26 +39,10 @@ export default {
 		NcSelect,
 	},
 
-	mixins: [loadGroups, writeValue],
+	mixins: [loadGroups],
 
 	computed: {
-		// Add bindings
-		allowPublicShares: {
-			get() {
-				return this.appSettings.allowPublicShares
-			},
-			set(value) {
-				this.writeValue({ allowPublicShares: value })
-			},
-		},
-		publicSharesGroups: {
-			get() {
-				return this.appSettings.publicSharesGroups
-			},
-			set(value) {
-				this.writeValue({ publicSharesGroups: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

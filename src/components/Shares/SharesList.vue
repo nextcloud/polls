@@ -10,14 +10,14 @@
 		</template>
 
 		<UserSearch class="add-share" />
-		<ShareItemAllUsers v-if="appPermissions.allAccess" />
-		<SharePublicAdd v-if="appPermissions.publicShares" />
+		<ShareItemAllUsers v-if="sessionStore.appPermissions.allAccess" />
+		<SharePublicAdd v-if="sessionStore.appPermissions.publicShares" />
 
-		<div v-if="activeShares.length" class="shares-list shared">
+		<div v-if="sharesStore.active.length" class="shares-list shared">
 			<TransitionGroup is="div"
 				name="list"
 				:css="false">
-				<ShareItem v-for="(share) in activeShares"
+				<ShareItem v-for="(share) in sharesStore.active"
 					:key="share.id"
 					:share="share"
 					@show-qr-code="openQrModal(share)" />
@@ -25,8 +25,8 @@
 		</div>
 
 		<NcModal v-if="qrModal" size="small" @close="qrModal=false">
-			<QrModal :name="pollTitle"
-				:description="pollDescription"
+			<QrModal :name="pollStore.configuration.title"
+				:description="pollStore.configuration.description"
 				:encode-text="qrText"
 				class="modal__content">
 				<template #description>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcModal } from '@nextcloud/vue'
 import { ConfigBox, QrModal } from '../Base/index.js'
 import ShareItem from './ShareItem.vue'
@@ -48,6 +48,9 @@ import ShareItemAllUsers from './ShareItemAllUsers.vue'
 import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 import MarkUpDescription from '../Poll/MarkUpDescription.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSharesStore } from '../../stores/shares.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 export default {
 	name: 'SharesList',
@@ -78,15 +81,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			appPermissions: (state) => state.acl.appPermissions,
-			pollTitle: (state) => state.poll.configuration.title,
-			pollDescription: (state) => state.poll.configuration.description,
-		}),
-
-		...mapGetters({
-			activeShares: 'shares/active',
-		}),
+		...mapStores(usePollStore, useSharesStore, useSessionStore),
 	},
 
 	methods: {

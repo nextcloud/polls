@@ -16,14 +16,14 @@
 				:inputmode="inputmode"
 				:placeholder="placeholder"
 				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, computedSignalingClass]"
-				@input="$emit('input', $event.target.value)"
-				@change="$emit('change', $event.target.value)"
-				@keyup.enter="$emit('submit', $event.target.value)">
+				@input="emitValidated('input', $event.target.value)"
+				@change="emitValidated('change', $event.target.value)"
+				@keyup.enter="emitValidated('submit'), $event.target.value">
 
 			<Spinner v-if="checking" class="signaling-icon spinner" />
-			<ArrowRightIcon v-if="showSubmit" class="signaling-icon submit" @click="$emit('submit', $refs.input.value)" />
-			<AlertIcon v-if="error" class="signaling-icon error" />
-			<CheckIcon v-if="success" class="signaling-icon success" />
+			<AlertIcon v-else-if="error" class="signaling-icon error" />
+			<CheckIcon v-else-if="success" class="signaling-icon success" />
+			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="emitValidated('submit', $event.target.value)" />
 			<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="subtract()" />
 			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
 		</div>
@@ -41,6 +41,7 @@ import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import { Spinner } from '../../AppIcons/index.js'
+import { Logger } from '../../../helpers/index.js'
 
 export default {
 	name: 'InputDiv',
@@ -92,13 +93,17 @@ export default {
 			type: Number,
 			default: 1,
 		},
-		modifierMax: {
+		numMax: {
 			type: Number,
 			default: null,
 		},
-		modifierMin: {
+		numMin: {
 			type: Number,
 			default: null,
+		},
+		numWrap: {
+			type: Boolean,
+			default: false,
 		},
 		focus: {
 			type: Boolean,
@@ -125,6 +130,13 @@ export default {
 			return this.signalingClass
 		},
 
+		isNumMinSet() {
+			return this.numMin !== null
+		},
+
+		isNumMaxSet() {
+			return this.numMax !== null
+		},
 		error() {
 			return !this.checking && !this.useNumModifiers && this.computedSignalingClass === 'error'
 		},
@@ -143,6 +155,7 @@ export default {
 		if (this.focus) {
 			this.setFocus()
 		}
+		this.assertBoundaries()
 	},
 
 	methods: {
@@ -152,28 +165,74 @@ export default {
 			})
 		},
 
-		add() {
-			let newValue = this.value
-			if (this.modifierMax && (newValue + this.modifierStepValue) > this.modifierMax) {
-				if (this.modifierMin) {
-					newValue = this.modifierMin
-				}
-			} else {
-				newValue += this.modifierStepValue
+		assertBoundaries() {
+			if (this.isNumMinSet && this.isNumMaxSet && this.numMin >= this.numMax) {
+				Logger.warning('numMin is greater or equal than numMax. Validation will be skipped.')
+				return false
 			}
-			this.$emit('input', newValue)
+			return true
+		},	
+
+		add() {
+			const value = this.numWrapper(this.value + this.modifierStepValue)
+			if (value !== this.value) {
+				this.emitValidated('change', value)
+			}
 		},
 
 		subtract() {
-			let newValue = this.value
-			if (this.modifierMin && (newValue - this.modifierStepValue) < this.modifierMin) {
-				if (this.modifierMax) {
-					newValue = this.modifierMax
-				}
-			} else {
-				newValue -= this.modifierStepValue
+			const value = this.numWrapper(this.value - this.modifierStepValue)
+			if (value !== this.value) {
+				this.emitValidated('change', value)
 			}
-			this.$emit('input', newValue)
+		},
+
+		numWrapper(value) {
+			if (!this.assertBoundaries() || (!this.isNumMaxSet && !this.isNumMinSet)) {	
+				this.$emit('input', value)
+				return value
+			}	
+
+			if (this.isNumMaxSet && value > this.numMax) {
+				if (this.numWrap) {
+					value = this.numMin ?? 0
+				} else {
+					value = this.numMax
+				}
+			} 
+
+			if (this.isNumMinSet && value < this.numMin) {
+				if (this.numWrap) {
+					value = this.numMax ?? value
+				} else {
+					value = this.numMin
+				}
+			}
+
+			this.$emit('input', value)
+			return value
+		},
+
+		numCheckBoundaries(value) {
+			if (this.type === 'number' && (this.isNumMinSet || this.isNumMaxSet)) {
+				if (this.isNumMaxSet && value > this.numMax) {
+					value = this.numMax
+				}
+
+				if (this.isNumMinSet && value < this.numMin) {
+					value = this.numMin
+				}
+			}
+
+			return value
+		},
+
+		emitValidated(eventName = 'input', value) {
+			if (eventName === 'change') {
+				value = this.numCheckBoundaries(value)
+			}
+
+			this.$emit(eventName, value)
 		},
 	},
 }

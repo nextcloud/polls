@@ -5,11 +5,13 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="allowPollCreation" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.allowPollCreation" 
+			type="switch"
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the poll creation globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!allowPollCreation" class="settings_details">
-			<NcSelect v-model="pollCreationGroups"
+		<div v-if="!appSettingsStore.allowPollCreation" class="settings_details">
+			<NcSelect v-model="appSettingsStore.pollCreationGroups"
 				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
@@ -17,16 +19,18 @@
 				:multiple="true"
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disable globally')"
+				@option:selected="appSettingsStore.write()"
 				@search="loadGroups" />
 		</div>
 	</div>
 </template>
 
 <script>
-
-import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { mapStores } from 'pinia'
+import { loadGroups} from '../../../mixins/adminSettingsMixin.js'
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminPollCreation',
@@ -36,26 +40,10 @@ export default {
 		NcSelect,
 	},
 
-	mixins: [loadGroups, writeValue],
+	mixins: [loadGroups],
 
 	computed: {
-		// Add bindings
-		allowPollCreation: {
-			get() {
-				return this.appSettings.allowPollCreation
-			},
-			set(value) {
-				this.writeValue({ allowPollCreation: value })
-			},
-		},
-		pollCreationGroups: {
-			get() {
-				return this.appSettings.pollCreationGroups
-			},
-			set(value) {
-				this.writeValue({ pollCreationGroups: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

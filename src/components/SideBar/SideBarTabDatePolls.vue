@@ -5,10 +5,10 @@
 
 <template>
 	<div class="side-bar-tab-polls">
-		<div v-for="(poll) in polls"
+		<div v-for="(poll) in pollsStore.datePolls"
 			:key="poll.id"
-			:class="['poll-item', { listed: listed(poll.id) }]"
-			@click="toggle(poll.id)">
+			:class="['poll-item', { listed: comboStore.pollIsListed(poll.id) }]"
+			@click="comboStore.pollIsListed(poll.id)">
 			<UserItem :user="poll.owner" condensed />
 			<div class="poll-title-box">
 				{{ poll.configuration.title }}
@@ -18,8 +18,10 @@
 </template>
 
 <script>
-import { mapActions, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import UserItem from '../User/UserItem.vue'
+import { usePollsStore } from '../../stores/polls.ts'
+import { useComboStore } from '../../stores/combo.ts'
 
 export default {
 	name: 'SideBarTabDatePolls',
@@ -29,16 +31,7 @@ export default {
 	},
 	
 	computed: {
-		...mapGetters({
-			polls: 'polls/datePolls',
-			listed: 'combo/pollIsListed',
-		}),
-	},
-	methods: {
-		...mapActions({
-			toggle: 'combo/togglePollItem',
-		}),
-
+		...mapStores(usePollsStore, useComboStore),
 	},
 }
 </script>

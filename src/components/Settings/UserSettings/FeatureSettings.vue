@@ -6,7 +6,9 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="defaultViewTextPoll" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.defaultViewTextPoll" 
+				type ="switch"
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Text polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -15,7 +17,9 @@
 		</div>
 
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="defaultViewDatePoll" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.defaultViewDatePoll" 
+				type="switch"
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Date polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -24,21 +28,23 @@
 		</div>
 
 		<div class="user_settings">
-			<InputDiv v-model="relevantOffset"
+			<InputDiv v-model="preferencesStore.user.relevantOffset"
 				type="number"
 				inputmode="numeric"
 				use-num-modifiers
-				:label="t('polls', 'Enter the amount of days, polls without activity stay in the relevant list:')" />
+				:label="t('polls', 'Enter the amount of days, polls without activity stay in the relevant list:')" 
+				@change="preferencesStore.write()" />
 		</div>
 	</div>
 </template>
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { InputDiv } from '../../Base/index.js'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 export default {
 	name: 'FeatureSettings',
@@ -49,52 +55,11 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			settings: (state) => state.settings.user,
-		}),
-
-		relevantOffset: {
-			get() {
-				return this.settings.relevantOffset
-			},
-			set(value) {
-				value = value < 1 ? 1 : value
-				this.writeValue({ relevantOffset: value })
-			},
-		},
-
-		defaultViewTextPoll: {
-			get() {
-				return (this.settings.defaultViewTextPoll === 'list-view')
-			},
-			set(value) {
-				if (value) {
-					this.writeValue({ defaultViewTextPoll: 'list-view' })
-				} else {
-					this.writeValue({ defaultViewTextPoll: 'table-view' })
-				}
-			},
-		},
-		defaultViewDatePoll: {
-			get() {
-				return (this.settings.defaultViewDatePoll === 'list-view')
-			},
-			set(value) {
-				if (value) {
-					this.writeValue({ defaultViewDatePoll: 'list-view' })
-				} else {
-					this.writeValue({ defaultViewDatePoll: 'table-view' })
-				}
-			},
-		},
+		...mapStores(usePreferencesStore),
 	},
 
 	methods: {
 		t,
-		async writeValue(value) {
-			await this.$store.commit('settings/setPreference', value)
-			this.$store.dispatch('settings/write')
-		},
 	},
 }
 </script>

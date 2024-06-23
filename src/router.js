@@ -26,6 +26,7 @@ Vue.use(Router)
  * @param {object} route
  */
 
+
 /**
  * @param {object} to Target route
  * @param {object} from  Route navigated from
@@ -61,7 +62,7 @@ async function validateToken(to, from, next) {
 	}
 }
 
-export default new Router({
+const router = new Router({
 	mode: 'history',
 	base: generateUrl('/apps/polls'),
 	linkActiveClass: 'active',
@@ -166,3 +167,13 @@ export default new Router({
 		},
 	],
 })
+
+// router.beforeEach((to, from, next) => {
+// 	console.log('beforeEach', to);
+// 	next()
+// 	const sessionStore = useSessionStore()
+// 	sessionStore.setRouter(to)
+// })
+
+
+export default router

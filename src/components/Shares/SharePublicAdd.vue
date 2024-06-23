@@ -23,12 +23,13 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapStores } from 'pinia'
 import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton } from '@nextcloud/vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
+import { useSharesStore } from '../../stores/shares.ts'
 
 const user = {
 	user: {
@@ -58,15 +59,15 @@ export default {
 		}
 	},
 
+	computed: {
+		...mapStores(useSharesStore),
+	},
 	methods: {
 		t,
-		...mapActions({
-			addShare: 'shares/add',
-		}),
 
 		async addPublicShare() {
 			try {
-				await this.addShare(user)
+				await this.sharesStore.add(user)
 			} catch {
 				showError(t('polls', 'Error adding public link'))
 			}

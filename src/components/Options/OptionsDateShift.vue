@@ -5,7 +5,7 @@
 
 <template>
 	<div>
-		<div v-if="proposalsExist">
+		<div v-if="optionsStore.proposalsExist">
 			{{ t('polls', 'Shifting dates is disabled to prevent shifting of proposals of other participants.') }}
 		</div>
 		<div v-else class="select-unit">
@@ -30,12 +30,13 @@
 
 <script>
 
-import { mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { InputDiv } from '../Base/index.js'
 import { NcButton, NcSelect } from '@nextcloud/vue'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 import { t } from '@nextcloud/l10n'
+import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
 	name: 'OptionsDateShift',
@@ -59,15 +60,13 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			proposalsExist: 'options/proposalsExist',
-		}),
+		...mapStores(useOptionsStore),
 	},
 
 	methods: {
 		t,
 		shiftDates(payload) {
-			this.$store.dispatch('options/shift', { shift: payload })
+			this.optionsStore.shift({ shift: payload })
 		},
 	},
 }

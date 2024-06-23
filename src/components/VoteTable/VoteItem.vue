@@ -13,10 +13,13 @@
 
 <script>
 
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import VoteIndicator from './VoteIndicator.vue'
 import { t } from '@nextcloud/l10n'
+import { useSessionStore } from '../../stores/session.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 export default {
 	name: 'VoteItem',
@@ -37,33 +40,25 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			currentUser: (state) => state.acl.currentUser,
-			allowVote: (state) => state.poll.permissions.vote,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			answerSequence: 'poll/answerSequence',
-		}),
+		...mapStores(usePollStore, useVotesStore, useSessionStore),
 
 		isVotable() {
 			return this.isActive
 				&& this.isValidUser
-				&& !this.isPollClosed
+				&& !this.pollStore.isClosed
 				&& !this.option.locked
 		},
 
 		isActive() {
-			return this.isCurrentUser && this.allowVote
+			return this.isCurrentUser && this.pollStore.permissions.vote
 		},
 
 		isCurrentUser() {
-			return this.currentUser.userId === this.userId
+			return this.sessionStore.currentUser.userId === this.userId
 		},
 
 		answer() {
-			return this.$store.getters['votes/getVote']({
+			return this.votesStore.getVote({
 				option: this.option,
 				userId: this.userId,
 			}).answer
@@ -71,19 +66,19 @@ export default {
 
 		iconAnswer() {
 			if (this.answer === 'no') {
-				return (this.isPollClosed && this.option.confirmed) || this.isActive ? 'no' : ''
+				return (this.pollStore.isClosed && this.option.confirmed) || this.isActive ? 'no' : ''
 			}
 			if (this.answer === '') {
-				return (this.isPollClosed && this.option.confirmed) ? 'no' : ''
+				return (this.pollStore.isClosed && this.option.confirmed) ? 'no' : ''
 			}
 			return this.answer
 		},
 
 		nextAnswer() {
-			if (this.answerSequence.indexOf(this.answer) < 0) {
-				return this.answerSequence[1]
+			if (this.pollStore.answerSequence.indexOf(this.answer) < 0) {
+				return this.pollStore.answerSequence[1]
 			}
-			return this.answerSequence[(this.answerSequence.indexOf(this.answer) + 1) % this.answerSequence.length]
+			return this.pollStore.answerSequence[(this.pollStore.answerSequence.indexOf(this.answer) + 1) % this.pollStore.answerSequence.length]
 
 		},
 
@@ -96,9 +91,8 @@ export default {
 	methods: {
 		async setVote() {
 			try {
-				await this.$store.dispatch('votes/set', {
+				await this.votesStore.set({
 					option: this.option,
-					userId: this.userId,
 					setTo: this.nextAnswer,
 				})
 				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })

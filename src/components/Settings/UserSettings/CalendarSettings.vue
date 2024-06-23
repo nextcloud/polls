@@ -6,11 +6,13 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="calendarPeek" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.calendarPeek" 
+				type="switch"
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
 			</NcCheckboxRadioSwitch>
 
-			<div v-show="calendarPeek" class="settings_details">
+			<div v-show="preferencesStore.user.calendarPeek" class="settings_details">
 				{{ t('polls', 'Select the calendars to use for lookup.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
@@ -25,29 +27,38 @@
 		</div>
 
 		<div class="user_settings">
-			<InputDiv v-model="checkCalendarsBefore"
+			<InputDiv v-model="preferencesStore.user.checkCalendarsHoursBefore"
 				:label="t('polls', 'Specify in which period (in hours) before the option existing appointments should be included in the search results.')"
 				type="number"
 				inputmode="numeric"
-				use-num-modifiers />
+				use-num-modifiers
+				:num-min="0"
+				:num-max="24"
+				num-wrap
+				@change="preferencesStore.write()" />
 		</div>
 
 		<div class="user_settings">
-			<InputDiv v-model="checkCalendarsAfter"
+			<InputDiv v-model="preferencesStore.user.checkCalendarsHoursAfter"
 				:label="t('polls', 'Specify in which period (in hours) after the option existing appointments should be included in the search results.')"
 				type="number"
 				inputmode="numeric"
-				use-num-modifiers />
+				:num-min="0"
+				:num-max="24"
+				num-wrap
+				use-num-modifiers 
+				@change="preferencesStore.write()" />
 		</div>
 	</div>
 </template>
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 export default {
 	name: 'CalendarSettings',
@@ -58,56 +69,14 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			settings: (state) => state.settings.user,
-			calendars: (state) => state.settings.availableCalendars,
-		}),
-
-		checkCalendarsBefore: {
-			get() {
-				return this.settings.checkCalendarsBefore
-			},
-			set(value) {
-				if (value < 0) {
-					value = 24
-				}
-				if (value > 24) {
-					value = 0
-				}
-				this.writeValue({ checkCalendarsBefore: +value })
-			},
-		},
-
-		checkCalendarsAfter: {
-			get() {
-				return this.settings.checkCalendarsAfter
-			},
-			set(value) {
-				if (value < 0) {
-					value = 24
-				}
-				if (value > 24) {
-					value = 0
-				}
-				this.writeValue({ checkCalendarsAfter: +value })
-			},
-		},
-
-		calendarPeek: {
-			get() {
-				return !!this.settings.calendarPeek
-			},
-			set(value) {
-				this.writeValue({ calendarPeek: value })
-			},
-		},
+		...mapStores(usePreferencesStore),
 
 		calendarChoices() {
-			return this.calendars.map((calendar) => ({
+			return this.preferencesStore.availableCalendars.map((calendar) => ({
 				key: calendar.key.toString(),
 				name: calendar.name,
 				displayColor: calendar.displayColor,
-				selected: this.settings.checkCalendars.includes(calendar.key.toString()),
+				selected: this.preferencesStore.user.checkCalendars.includes(calendar.key.toString()),
 			}), this)
 		},
 
@@ -115,18 +84,12 @@ export default {
 
 	methods: {
 		t,
-		async writeValue(value) {
-			await this.$store.commit('settings/setPreference', value)
-			this.$store.dispatch('settings/write')
-		},
-
 		async clickedCalendar(calendar) {
-			if (this.settings.checkCalendars.includes(calendar.key)) {
-				await this.writeValue({ checkCalendars: this.settings.checkCalendars.filter((item) => item !== calendar.key.toString()) })
+			if (this.preferencesStore.user.checkCalendars.includes(calendar.key)) {
+				this.preferencesStore.removeCheckCalendar(calendar)
 			} else {
-				await this.$store.commit('settings/addCheckCalendar', { calendar })
+				this.preferencesStore.addCheckCalendar(calendar)
 			}
-			this.$store.dispatch('settings/write')
 		},
 	},
 }

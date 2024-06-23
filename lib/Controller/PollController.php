@@ -8,12 +8,15 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
+use OCA\Polls\Service\ShareService;
+use OCA\Polls\Service\SubscriptionService;
+use OCA\Polls\Service\VoteService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -30,6 +33,10 @@ class PollController extends BaseController {
 		private MailService $mailService,
 		private OptionService $optionService,
 		private PollService $pollService,
+		private VoteService $voteService,
+		private CommentService $commentService,
+		private SubscriptionService $subscriptionService,
+		private ShareService $shareService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -52,13 +59,30 @@ class PollController extends BaseController {
 	}
 
 	/**
-	 * get complete poll
+	 * get poll
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
 	public function get(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->get($pollId),
+			'acl' => $this->acl,
+		]);
+	}
+
+	/**
+	 * get complete poll
+	 * @param int $pollId Poll id
+	 */
+	#[NoAdminRequired]
+	public function getFull(int $pollId): JSONResponse {
+		return $this->response(fn () => [
+			'poll' => $this->pollService->get($pollId),
+			'options' => $this->optionService->list($pollId),
+			'votes' => $this->voteService->list($pollId),
+			'comments' => $this->commentService->list($pollId),
+			'shares' => $this->shareService->list($pollId),
+			'subscribed' => $this->subscriptionService->get($pollId),
 			'acl' => $this->acl,
 		]);
 	}

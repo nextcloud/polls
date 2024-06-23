@@ -5,11 +5,13 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="allowPollDownload" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.allowPollDownload" 
+			type="switch"
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the spreadsheet download of polls globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!allowPollDownload" class="settings_details">
-			<NcSelect v-model="pollDownloadGroups"
+		<div v-if="!appSettingsStore.allowPollDownload" class="settings_details">
+			<NcSelect v-model="appSettingsStore.pollDownloadGroups"
 				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
@@ -17,16 +19,18 @@
 				:multiple="true"
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disable globally')"
+				@option:selected="appSettingsStore.write()"
 				@search="loadGroups" />
 		</div>
 	</div>
 </template>
 
 <script>
-
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
-import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { loadGroups } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminPollDownload',
@@ -36,26 +40,10 @@ export default {
 		NcSelect,
 	},
 
-	mixins: [loadGroups, writeValue],
+	mixins: [loadGroups],
 
 	computed: {
-		// Add bindings
-		allowPollDownload: {
-			get() {
-				return this.appSettings.allowPollDownload
-			},
-			set(value) {
-				this.writeValue({ allowPollDownload: value })
-			},
-		},
-		pollDownloadGroups: {
-			get() {
-				return this.appSettings.pollDownloadGroups
-			},
-			set(value) {
-				this.writeValue({ pollDownloadGroups: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

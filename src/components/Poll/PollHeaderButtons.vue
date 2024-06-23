@@ -18,13 +18,13 @@
 			</template>
 			<PollInformation />
 		</NcPopover>
-		<ExportPoll v-if="permissions.pollDownload" />
-		<ActionToggleSidebar v-if="permissions.edit || permissions.comment" />
+		<ExportPoll v-if="sessionStore.appPermissions.pollDownload" />
+		<ActionToggleSidebar v-if="pollStore.permissions.edit || pollStore.permissions.comment" />
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcButton, NcPopover } from '@nextcloud/vue'
 import { ActionToggleSidebar } from '../Actions/index.js'
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
@@ -32,6 +32,9 @@ import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
 import ExportPoll from '../Export/ExportPoll.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+
 
 export default {
 	name: 'PollHeaderButtons',
@@ -52,17 +55,15 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			permissions: (state) => state.poll.permissions,
-		}),
+		...mapStores(usePollStore, useSessionStore),
 
 		showUserMenu() {
-			return this.$route.name !== 'publicVote' || this.permissions.vote || this.permissions.subscribe
+			return this.$route.name !== 'publicVote' || this.pollStore.permissions.vote || this.pollStore.permissions.subscribe
 		},
 	},
 
 	beforeDestroy() {
-		this.$store.dispatch({ type: 'poll/reset' })
+		this.pollStore.$reset()
 	},
 }
 

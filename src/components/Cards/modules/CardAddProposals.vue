@@ -6,22 +6,23 @@
 <template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'You are asked to propose more options. ') }}
-		<p v-if="isProposalExpirySet && !isProposalExpired">
+		<p v-if="pollStore.isProposalExpirySet && !pollStore.isProposalExpired">
 			{{ t('polls', 'The proposal period ends {timeRelative}.',
-				{ timeRelative: proposalsExpireRelative }) }}
+				{ timeRelative: pollStore.proposalsExpireRelative }) }}
 		</p>
-		<OptionProposals v-if="pollType === 'textPoll'" />
+		<OptionProposals v-if="pollStore.type === 'textPoll'" />
 		<template #button>
-			<OptionProposals v-if="pollType === 'datePoll'" />
+			<OptionProposals v-if="pollStore.type === 'datePoll'" />
 		</template>
 	</CardDiv>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { CardDiv } from '../../Base/index.js'
 import OptionProposals from '../../Options/OptionProposals.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
 
 export default {
 	name: 'CardAddProposals',
@@ -37,15 +38,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollType: (state) => state.poll.type,
-		}),
-
-		...mapGetters({
-			isProposalExpirySet: 'poll/isProposalExpirySet',
-			isProposalExpired: 'poll/isProposalExpired',
-			proposalsExpireRelative: 'poll/proposalsExpireRelative',
-		}),
+		...mapStores(usePollStore),
 	},
 
 	methods: {

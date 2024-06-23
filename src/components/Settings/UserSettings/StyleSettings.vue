@@ -7,12 +7,16 @@
 	<div>
 		<b> {{ t('polls', 'The style settings are still experimental!') }}</b>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="useCommentsAlternativeStyling" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.useCommentsAlternativeStyling" 
+				type="switch"
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Use alternative styling for the comments sidebar') }}
 			</NcCheckboxRadioSwitch>
 		</div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="useAlternativeStyling" type="switch">
+			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.useAlternativeStyling" 
+				type="switch"
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Use alternative vote page styling') }}
 			</NcCheckboxRadioSwitch>
 		</div>
@@ -21,9 +25,10 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 export default {
 	name: 'StyleSettings',
@@ -33,36 +38,11 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			settings: (state) => state.settings.user,
-		}),
-
-		useCommentsAlternativeStyling: {
-			get() {
-				return !!this.settings.useCommentsAlternativeStyling
-			},
-			set(value) {
-				this.writeValue({ useCommentsAlternativeStyling: +value })
-			},
-		},
-
-		useAlternativeStyling: {
-			get() {
-				return !!this.settings.useAlternativeStyling
-			},
-			set(value) {
-				this.writeValue({ useAlternativeStyling: +value })
-			},
-		},
-
+		...mapStores(usePreferencesStore),
 	},
 
 	methods: {
 		t,
-		async writeValue(value) {
-			await this.$store.commit('settings/setPreference', value)
-			this.$store.dispatch('settings/write')
-		},
 	},
 }
 </script>

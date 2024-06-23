@@ -6,9 +6,9 @@
 <template>
 	<div :style="cssVar">
 		<TransitionGroup is="ul"
-			v-if="countOptions"
+			v-if="optionsStore.list.length"
 			name="list">
-			<OptionItem v-for="(option) in options"
+			<OptionItem v-for="(option) in optionsStore.list"
 				:key="option.id"
 				:option="option"
 				:show-confirmed="true"
@@ -16,32 +16,32 @@
 				display="textBox"
 				tag="li">
 				<template #icon>
-					<OptionItemOwner v-if="permissions.addOptions"
+					<OptionItemOwner v-if="pollStore.permissions.addOptions"
 						:avatar-size="16"
 						:option="option"
 						class="owner" />
 				</template>
-				<template v-if="permissions.edit" #actions>
-					<NcActions v-if="!isPollClosed" class="action">
-						<NcActionButton v-if="!option.deleted" :name="t('polls', 'Delete option')" @click="deleteOption(option)">
+				<template v-if="pollStore.permissions.edit" #actions>
+					<NcActions v-if="!pollStore.isClosed" class="action">
+						<NcActionButton v-if="!option.deleted" :name="t('polls', 'Delete option')" @click="optionsStore.delete(option)">
 							<template #icon>
 								<DeleteIcon />
 							</template>
 						</NcActionButton>
-						<NcActionButton v-if="option.deleted" :name="t('polls', 'Restore option')" @click="restoreOption(option)">
+						<NcActionButton v-if="option.deleted" :name="t('polls', 'Restore option')" @click="optionsStore.restore(option)">
 							<template #icon>
 								<RestoreIcon />
 							</template>
 						</NcActionButton>
-						<NcActionButton v-if="!isPollClosed" :name="t('polls', 'Clone option')" @click="cloneOptionModal(option)">
+						<NcActionButton v-if="!pollStore.isClosed" :name="t('polls', 'Clone option')" @click="cloneOptionModal(option)">
 							<template #icon>
 								<CloneDateIcon />
 							</template>
 						</NcActionButton>
 
-						<NcActionButton v-if="!option.deleted && !isPollClosed"
+						<NcActionButton v-if="!option.deleted && !pollStore.isClosed"
 							:name="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
-							@click="confirmOption(option)">
+							@click="option.confirm(option)">
 							<template #icon>
 								<UnconfirmIcon v-if="option.confirmed" />
 								<ConfirmIcon v-else />
@@ -67,11 +67,10 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcActions, NcActionButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
 import OptionCloneDate from './OptionCloneDate.vue'
 import OptionItem from './OptionItem.vue'
-import { confirmOption, deleteOption, restoreOption } from '../../mixins/optionMixins.js'
 import { dateUnits } from '../../mixins/dateMixins.js'
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
@@ -81,6 +80,8 @@ import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 import OptionItemOwner from './OptionItemOwner.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
 	name: 'OptionsDate',
@@ -102,10 +103,7 @@ export default {
 	},
 
 	mixins: [
-		confirmOption,
 		dateUnits,
-		deleteOption,
-		restoreOption,
 	],
 
 	data() {
@@ -117,15 +115,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			options: (state) => state.options.list,
-			permissions: (state) => state.poll.permissions,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			countOptions: 'options/count',
-		}),
+		...mapStores(usePollStore, useOptionsStore),
 
 		cssVar() {
 			return {

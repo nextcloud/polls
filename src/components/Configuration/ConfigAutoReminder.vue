@@ -5,7 +5,9 @@
 
 <template>
 	<div class="auto-reminder-switch">
-		<NcCheckboxRadioSwitch :checked.sync="autoReminder" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="pollStore.configuration.autoReminder" 
+			type="switch"
+			@update:checked="pollStore.write()">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
 		<NcPopover :focus-trap="false">
@@ -24,11 +26,12 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcActions, NcActionButton, NcPopover, NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 import AutoReminderInformation from './AutoReminderInformation.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ConfigAutoReminder',
@@ -43,19 +46,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
-
-		autoReminder: {
-			get() {
-				return !!this.pollConfiguration.autoReminder
-			},
-			set(value) {
-				this.$store.commit('poll/setProperty', { autoReminder: +value })
-				this.$emit('change')
-			},
-		},
+		...mapStores(usePollStore),
 	},
 
 	methods: {

@@ -12,7 +12,8 @@
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
 import DOMPurify from 'dompurify'
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
+import { usePollStore } from '../../stores/poll.ts'
 
 const markedPrefix = {
 	prefix: 'desc-',
@@ -22,13 +23,11 @@ export default {
 	name: 'MarkUpDescription',
 
 	computed: {
-		...mapState({
-			description: (state) => state.poll.descriptionSafe,
-		}),
+		...mapStores(usePollStore),
 
 		markedDescription() {
 			marked.use(gfmHeadingId(markedPrefix))
-			return DOMPurify.sanitize(marked.parse(this.description))
+			return DOMPurify.sanitize(marked.parse(this.pollStore.descriptionSafe))
 		},
 	},
 }

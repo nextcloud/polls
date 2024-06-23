@@ -47,6 +47,8 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
 import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 import { t } from '@nextcloud/l10n'
+import { mapStores } from 'pinia'
+import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
 	name: 'OptionsTextAddBulk',
@@ -77,12 +79,15 @@ export default {
 		}
 	},
 
+	computed: {
+		...mapStores(useOptionsStore),
+	},
 	methods: {
 		t,
 		async addOptionsList() {
 			if (this.newPollTexts) {
 				try {
-					await this.$store.dispatch('options/addBulk', { text: this.newPollTexts })
+					await this.optionsStore.addBulk({ text: this.newPollTexts })
 					showSuccess(t('polls', 'Options added'))
 					this.newPollTexts = ''
 				} catch (error) {

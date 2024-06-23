@@ -6,29 +6,30 @@
 <template>
 	<CardDiv :heading="t('polls', 'Limited votes.')" :type="cardType">
 		<ul>
-			<li v-if="maxVotesPerOption">
-				{{ n('polls', '%n vote is allowed per option.', '%n votes are allowed per option.', maxVotesPerOption) }}
+			<li v-if="pollStore.configuration.maxVotesPerOption">
+				{{ n('polls', '%n vote is allowed per option.', '%n votes are allowed per option.', pollStore.configuration.maxVotesPerOption) }}
 			</li>
-			<li v-if="maxVotesPerUser">
-				{{ n('polls', '%n vote is allowed per participant.', '%n votes are allowed per participant.', maxVotesPerUser) }}
+			<li v-if="pollStore.configuration.maxVotesPerUser">
+				{{ n('polls', '%n vote is allowed per participant.', '%n votes are allowed per participant.', pollStore.configuration.maxVotesPerUser) }}
 				{{ n('polls', 'You have %n vote left.', 'You have %n votes left.', votesLeft) }}
 			</li>
-			<div v-if="orphanedVotes && maxVotesPerUser">
+			<div v-if="pollStore.currentUserStatus.orphanedVotes && pollStore.configuration.maxVotesPerUser">
 				<b>{{ orphanedVotesText }}</b>
 			</div>
 		</ul>
 
-		<template v-if="orphanedVotes && maxVotesPerUser" #button>
+		<template v-if="pollStore.currentUserStatus.orphanedVotes && pollStore.configuration.maxVotesPerUser" #button>
 			<ActionDeleteOrphanedVotes />
 		</template>
 	</CardDiv>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { CardDiv } from '../../Base/index.js'
 import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
 import { t, n } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
 
 export default {
 	name: 'CardLimitedVotes',
@@ -38,29 +39,24 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			orphanedVotes: (state) => state.poll.currentUserStatus.orphanedVotes,
-			yesVotes: (state) => state.poll.currentUserStatus.yesVotes,
-			maxVotesPerOption: (state) => state.poll.configuration.maxVotesPerOption,
-			maxVotesPerUser: (state) => state.poll.configuration.maxVotesPerUser,
-		}),
+		...mapStores(usePollStore),
 
 		orphanedVotesText() {
 			return n(
 				'polls',
 				'%n orphaned vote of a probaly deleted option is possibly blocking your vote limit.',
 				'%n orphaned votes of probaly deleted options are possibly blocking your vote limit.',
-				this.orphanedVotes)
+				this.pollStore.currentUserStatus.orphanedVotes)
 		},
 
 		votesLeft() {
-			return (this.maxVotesPerUser - this.yesVotes) > 0
-				? this.maxVotesPerUser - this.yesVotes
+			return (this.pollStore.configuration.maxVotesPerUser - this.pollStore.currentUserStatus.yesVotes) > 0
+				? this.pollStore.configuration.maxVotesPerUser - this.pollStore.currentUserStatus.yesVotes
 				: 0
 		},
 
 		cardType() {
-			return this.maxVotesPerUser && this.votesLeft < 1 ? 'error' : 'info'
+			return this.pollStore.configuration.maxVotesPerUser && this.votesLeft < 1 ? 'error' : 'info'
 		},
 	},
 

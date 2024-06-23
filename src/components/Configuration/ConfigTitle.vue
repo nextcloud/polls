@@ -7,12 +7,13 @@
 	<InputDiv v-model="pollTitle"
 		:signaling-class="checkTitle"
 		type="text"
-		@change="$emit('change')" />
+		@change="pollStore.write()" />
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { InputDiv } from '../Base/index.js'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ConfigTitle',
@@ -22,20 +23,18 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
+		...mapStores(usePollStore),
 
 		checkTitle() {
-			return this.pollConfiguration.title ? '' : 'error'
+			return this.pollStore.configuration.title ? '' : 'error'
 		},
 
 		pollTitle: {
 			get() {
-				return this.pollConfiguration.title
+				return this.pollStore.configuration.title
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { title: value })
+				this.pollStore.configuration.title = value
 			},
 		},
 	},

@@ -4,32 +4,32 @@
 -->
 
 <template>
-	<div class="vote-table" :class="[viewMode, { closed: isPollClosed }]">
+	<div class="vote-table" :class="[viewMode, { closed: pollStore.isClosed }]">
 		<div class="vote-table__users">
 			<VoteMenu />
 
 			<div class="spacer" />
 
-			<div v-for="(participant) in participants"
+			<div v-for="(participant) in pollStore.safeParticipants"
 				:key="participant.userId"
-				:class="['participant', {currentuser: (participant.userId === currentUser.userId) }]">
+				:class="['participant', {currentuser: (participant.userId === sessionStore.currentUser.userId) }]">
 				<UserItem :user="participant" condensed />
 
-				<ActionDelete v-if="permissions.edit"
+				<ActionDelete v-if="pollStore.permissions.edit"
 					class="user-actions"
 					:name="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.userId)" />
 			</div>
 
-			<div v-if="proposalsExist" class="owner" />
+			<div v-if="optionsStore.proposalsExist" class="owner" />
 
-			<div v-if="permissions.edit && isPollClosed" class="confirm" />
+			<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="confirm" />
 		</div>
 
 		<TransitionGroup is="div"
 			name="list"
 			class="vote-table__votes">
-			<VoteColumn v-for="(item) in options"
+			<VoteColumn v-for="(item) in optionsStore.rankedOptions"
 				:key="item.id"
 				:option="item"
 				:view-mode="viewMode" />
@@ -38,14 +38,17 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { showSuccess } from '@nextcloud/dialogs'
 import { ActionDelete } from '../Actions/index.js'
 import VoteColumn from './VoteColumn.vue'
 import VoteMenu from './VoteMenu.vue'
-import { confirmOption } from '../../mixins/optionMixins.js'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 export default {
 	name: 'VoteTable',
@@ -55,8 +58,6 @@ export default {
 		VoteMenu,
 		UserItem,
 	},
-
-	mixins: [confirmOption],
 
 	props: {
 		viewMode: {
@@ -69,24 +70,13 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			permissions: (state) => state.poll.permissions,
-			currentUser: (state) => state.acl.currentUser,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			participants: 'poll/safeParticipants',
-			options: 'options/rankedOptions',
-			proposalsExist: 'options/proposalsExist',
-		}),
-
+		...mapStores(usePollStore, useSessionStore, useOptionsStore, useVotesStore),
 	},
 
 	methods: {
 		t,
 		async removeUser(userId) {
-			await this.$store.dispatch('votes/deleteUser', { userId })
+			await this.votesStore.deleteUser({ userId })
 			showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
 		},
 	},

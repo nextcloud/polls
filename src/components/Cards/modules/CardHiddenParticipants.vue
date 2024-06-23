@@ -5,7 +5,7 @@
 
 <template>
 	<CardDiv :type="cardType">
-		{{ t('polls', 'Due to possible performance issues {countHiddenParticipants} voters are hidden.', { countHiddenParticipants }) }}
+		{{ t('polls', 'Due to possible performance issues {countHiddenParticipants} voters are hidden.', { countHiddenParticipants: pollStore.countHiddenParticipants }) }}
 		{{ t('polls', 'You can reveal them, but you may expect an unwanted long loading time.') }}
 		<template #button>
 			<ActionSwitchSafeTable />
@@ -14,10 +14,11 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { CardDiv } from '../../Base/index.js'
 import ActionSwitchSafeTable from '../../Actions/modules/ActionSwitchSafeTable.vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
 
 export default {
 	name: 'CardHiddenParticipants',
@@ -33,9 +34,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			countHiddenParticipants: 'poll/countHiddenParticipants',
-		}),
+		...mapStores(usePollStore),
 	},
 
 	methods: {

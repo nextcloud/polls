@@ -16,7 +16,7 @@
 				<span v-html="linkify(subComment.comment)" />
 				<!-- eslint-enable vue/no-v-html -->
 
-				<ActionDelete v-if="(comment.user.userId === currentUser.userId || currentUser.isOwner)"
+				<ActionDelete v-if="(comment.user.userId === sessionStore.currentUser.userId || sessionStore.currentUser.isOwner)"
 					:name="subComment.deleted ? t('polls', 'Restore comment') : t('polls', 'Delete comment')"
 					:restore="!!subComment.deleted"
 					:timeout="0"
@@ -31,10 +31,11 @@
 import moment from '@nextcloud/moment'
 import linkifyStr from 'linkify-string'
 import { showError } from '@nextcloud/dialogs'
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { ActionDelete } from '../Actions/index.js'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
+import { useSessionStore } from '../../stores/session.ts'
 
 export default {
 	name: 'CommentItem',
@@ -51,16 +52,14 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			currentUser: (state) => state.acl.currentUser,
-		}),
+		...mapStores(useSessionStore),
 
 		dateCommentedRelative() {
 			return moment.unix(this.comment.timestamp).fromNow()
 		},
 
 		isCurrentUser() {
-			return this.currentUser.userId === this.comment.user.userId
+			return this.sessionStore.currentUser.userId === this.comment.user.userId
 		},
 	},
 
@@ -72,7 +71,7 @@ export default {
 
 		async deleteComment(comment) {
 			try {
-				await this.$store.dispatch({ type: 'comments/delete', comment })
+				await this.comments.delete({ comment })
 			} catch {
 				showError(t('polls', 'Error while deleting the comment'))
 			}
@@ -80,7 +79,7 @@ export default {
 
 		async restoreComment(comment) {
 			try {
-				await this.$store.dispatch({ type: 'comments/restore', comment })
+				await this.comments.restore({ comment })
 			} catch {
 				showError(t('polls', 'Error while restoring the comment'))
 			}

@@ -4,10 +4,8 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { debounce } from 'lodash'
-import { mapState } from 'vuex'
 import { AppSettingsAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
-
 
 export const loadGroups = {
 	data() {
@@ -16,12 +14,6 @@ export const loadGroups = {
 			groups: [],
 			isLoading: false,
 		}
-	},
-
-	computed: {
-		...mapState({
-			appSettings: (state) => state.appSettings,
-		}),
 	},
 
 	created() {
@@ -42,20 +34,5 @@ export const loadGroups = {
 				this.isLoading = false
 			}
 		}, 250),
-	},
-}
-
-export const writeValue = {
-	computed: {
-		...mapState({
-			appSettings: (state) => state.appSettings,
-		}),
-	},
-
-	methods: {
-		async writeValue(value) {
-			await this.$store.commit('appSettings/set', value)
-			this.$store.dispatch('appSettings/write')
-		},
 	},
 }

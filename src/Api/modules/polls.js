@@ -32,6 +32,15 @@ const polls = {
 		})
 	},
 
+	getFullPoll(pollId) {
+		return httpInstance.request({
+			method: 'GET',
+			url: `poll/${pollId}`,
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getPoll.name].handleRequestCancellation().token,
+		})
+	},
+
 	watchPoll(pollId = 0, lastUpdated) {
 		return httpInstance.request({
 			method: 'GET',
@@ -61,12 +70,12 @@ const polls = {
 		})
 	},
 
-	updatePoll(pollId, poll) {
+	writePoll(pollId, poll) {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}`,
 			data: { poll },
-			cancelToken: cancelTokenHandlerObject[this.updatePoll.name].handleRequestCancellation().token,
+			cancelToken: cancelTokenHandlerObject[this.writePoll.name].handleRequestCancellation().token,
 		})
 	},
 

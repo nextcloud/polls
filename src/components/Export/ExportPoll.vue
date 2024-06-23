@@ -47,7 +47,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { saveAs } from 'file-saver'
 import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
 import { NcActions, NcActionButton } from '@nextcloud/vue'
@@ -59,6 +59,10 @@ import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 import { PollsAPI } from '../../Api/index.js'
 import DOMPurify from 'dompurify'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+
 
 export default {
 	name: 'ExportPoll',
@@ -81,24 +85,14 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			participants: 'poll/participantsVoted',
-			getVote: 'votes/getVote',
-			explodeDates: 'options/explodeDates',
-		}),
-		...mapState({
-			pollType: (state) => state.poll.type,
-			pollConfiguration: (state) => state.poll.configuration,
-			options: (state) => state.options,
-			permissions: (state) => state.poll.permissions,
-		}),
+		...mapStores(usePollStore, useVotesStore, useOptionsStore),
 
 		sheetName() {
 			// Not allowed characters for the sheet name: : \ / ? * [ ]
 			// Strip them out
 			// Stonger regex i.error. for file names: /[&/\\#,+()$~%.'":*?<>{}]/g
 			const regex = /[\\/?*[\]]/g
-			return this.pollConfiguration.title.replaceAll(regex, '').slice(0, 31)
+			return this.pollStore.configuration.title.replaceAll(regex, '').slice(0, 31)
 		},
 	},
 
@@ -114,12 +108,12 @@ export default {
 
 			if (['html', 'xlsx', 'ods'].includes(exportType)) {
 				this.sheetData.push(
-					[DOMPurify.sanitize(this.pollConfiguration.title)],
-					[DOMPurify.sanitize(this.pollConfiguration.description)],
+					[DOMPurify.sanitize(this.pollStore.configuration.title)],
+					[DOMPurify.sanitize(this.pollStore.configuration.description)],
 				)
 			}
 
-			if (this.permissions.edit) {
+			if (this.pollStore.permissions.edit) {
 				try {
 					participantsHeader.push(t('polls', 'Email address'))
 					fromHeader.push('')
@@ -131,39 +125,39 @@ export default {
 				}
 			}
 
-			if (this.pollType === 'textPoll') {
+			if (this.pollStore.type === 'textPoll') {
 				if (['html'].includes(exportType)) {
 					this.sheetData.push([
 						...participantsHeader,
-						...this.options.list.map((item) => DOMPurify.sanitize(item.text)),
+						...this.optionsStore.list.map((item) => DOMPurify.sanitize(item.text)),
 					])
 				} else {
 					this.sheetData.push([
 						...participantsHeader,
-						...this.options.list.map((item) => item.text),
+						...this.optionsStore.list.map((item) => item.text),
 					])
 				}
 
 			} else if (['csv'].includes(exportType)) {
 				this.sheetData.push([
 					...participantsHeader,
-					...this.options.list.map((option) => this.explodeDates(option).iso),
+					...this.optionsStore.list.map((option) => this.optionsStore.explodeDates(option).iso),
 				])
 
 			} else if (['html'].includes(exportType)) {
 				this.sheetData.push([
 					...participantsHeader,
-					...this.options.list.map((option) => this.explodeDates(option).raw),
+					...this.optionsStore.list.map((option) => this.optionsStore.explodeDates(option).raw),
 				])
 
 			} else {
 				this.sheetData.push([
 					...fromHeader,
-					...this.options.list.map((option) => this.explodeDates(option).from.dateTime),
+					...this.optionsStore.list.map((option) => this.optionsStore.explodeDates(option).from.dateTime),
 				])
 				this.sheetData.push([
 					...toHeader,
-					...this.options.list.map((option) => this.explodeDates(option).to.dateTime),
+					...this.optionsStore.list.map((option) => this.optionsStore.explodeDates(option).to.dateTime),
 				])
 			}
 
@@ -176,24 +170,24 @@ export default {
 			}
 
 			const workBookOutput = xlsxWrite(this.workBook, { bookType: exportType, type: 'binary' })
-			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${exportType}`)
+			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `pollStore.${exportType}`)
 		},
 
 		addVotesArray(style) {
-			this.participants.forEach((participant) => {
+			this.pollStore.participants.forEach((participant) => {
 				const votesLine = [participant.displayName]
 				try {
-					if (this.permissions.edit) {
+					if (this.pollStore.permissions.edit) {
 						votesLine.push(this.emailAddresses.find((item) => item.displayName === participant.displayName).emailAddress)
 					}
 
-					this.options.list.forEach((option, i) => {
+					this.optionsStore.list.forEach((option, i) => {
 						if (style === 'symbols') {
-							votesLine.push(this.getVote({ userId: participant.userId, option }).answerSymbol ?? '❌')
+							votesLine.push(this.votesStore.getVote({ userId: participant.userId, option }).answerSymbol ?? '❌')
 						} else if (style === 'raw') {
-							votesLine.push(this.getVote({ userId: participant.userId, option }).answer)
+							votesLine.push(this.votesStore.getVote({ userId: participant.userId, option }).answer)
 						} else {
-							votesLine.push(this.getVote({ userId: participant.userId, option }).answerTranslated ?? t('polls', 'No'))
+							votesLine.push(this.votesStore.getVote({ userId: participant.userId, option }).answerTranslated ?? t('polls', 'No'))
 						}
 					})
 

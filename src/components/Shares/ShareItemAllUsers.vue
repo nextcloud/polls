@@ -13,11 +13,11 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { writePoll } from '../../mixins/writePoll.js'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ShareItemAllUsers',
@@ -27,31 +27,28 @@ export default {
 		UserItem,
 	},
 
-	mixins: [writePoll],
-
 	computed: {
-		...mapState({
-			access: (state) => state.poll.configuration.access,
-		}),
+		...mapStores(usePollStore),
 
 		userItemProps() {
 			return {
 				label: t('polls', 'Internal access'),
 				type: 'internalAccess',
-				disabled: this.access === 'private',
-				description: this.access === 'private' ? t('polls', 'This poll is private') : t('polls', 'This is an openly accessible poll'),
+				disabled: this.pollStore.configuration.access === 'private',
+				description: this.pollStore.configuration.access === 'private' ? t('polls', 'This poll is private') : t('polls', 'This is an openly accessible poll'),
 			}
 		},
 
 		pollAccess: {
 			get() {
-				return this.access === 'open'
+				return this.pollStore.configuration.access === 'open'
 			},
 			set(value) {
-				this.$store.commit('poll/setProperty', { access: value ? 'open' : 'private' })
-				this.writePoll()
+				this.pollStore.access = value ? 'open' : 'private' 
+				this.pollStore.write()
 			},
 		},
+
 	},
 }
 </script>

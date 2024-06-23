@@ -24,10 +24,12 @@
 
 <script>
 
+import { mapStores } from 'pinia'
 import { NcSettingsSection } from '@nextcloud/vue'
 import { FlexSettings } from '../components/Base/index.js'
 import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from '../components/Settings/UserSettings/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePreferencesStore } from '../stores/preferences.ts'
 
 export default {
 	name: 'UserSettingsPage',
@@ -62,9 +64,14 @@ export default {
 		}
 	},
 
-	created() {
-		this.$store.dispatch('settings/getCalendars')
-		this.$store.dispatch('settings/get')
+	computed: {
+		...mapStores(
+			usePreferencesStore,
+		),
+	},
+	mounted() {
+		this.preferencesStore.load()
+		// this.preferencesStore.getCalendars()
 	},
 }
 </script>

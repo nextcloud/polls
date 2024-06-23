@@ -11,21 +11,23 @@
 			{{ t('polls', 'If this threshold gets trespassed, only the current participant will be displayed, to avoid a performance breakdown.') }}
 			{{ t('polls', 'The default threshold of 1000 should be a good and safe value.') }}
 		</h3>
-		<InputDiv v-model="threshold"
+		<InputDiv v-model="preferencesStore.user.performanceThreshold"
 			type="number"
 			inputmode="numeric"
 			use-num-modifiers
 			:placeholder="'1000'"
 			:modifier-step-value="100"
-			:modifier-min="200" />
+			:num-min="200" 
+			@change="preferencesStore.write()" />
 	</div>
 </template>
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { InputDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 export default {
 	name: 'PerformanceSettings',
@@ -35,29 +37,11 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			settings: (state) => state.settings.user,
-		}),
-
-		threshold: {
-			get() {
-				return this.settings.performanceThreshold
-			},
-			set(value) {
-				if (value < 1) {
-					value = 1000
-				}
-				this.writeValue({ performanceThreshold: +value })
-			},
-		},
+		...mapStores(usePreferencesStore),
 	},
 
 	methods: {
 		t,
-		async writeValue(value) {
-			await this.$store.commit('settings/setPreference', value)
-			this.$store.dispatch('settings/write')
-		},
 	},
 }
 </script>

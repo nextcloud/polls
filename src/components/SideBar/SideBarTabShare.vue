@@ -15,6 +15,9 @@
 import SharesList from '../Shares/SharesList.vue'
 import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 import SharesListLocked from '../Shares/SharesListLocked.vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { useSharesStore } from '../../stores/shares.ts'
+import { mapStores } from 'pinia'
 
 export default {
 	name: 'SideBarTabShare',
@@ -24,6 +27,18 @@ export default {
 		SharesListUnsent,
 		SharesListLocked,
 	},
+	computed: {
+		...mapStores(useSharesStore),
+	},
+
+	created() {
+		subscribe('polls:change:shares', this.sharesStore.load())
+	},
+
+	beforeDestroy() {
+		unsubscribe('polls:change:shares')
+	},
+
 }
 </script>
 

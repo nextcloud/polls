@@ -9,20 +9,20 @@
 			{{ t('polls', 'Allow Proposals') }}
 		</NcCheckboxRadioSwitch>
 
-		<NcCheckboxRadioSwitch v-show="isProposalAllowed" :checked.sync="proposalExpiration" type="switch">
+		<NcCheckboxRadioSwitch v-show="pollStore.isProposalAllowed" :checked.sync="proposalExpiration" type="switch">
 			{{ t('polls', 'Proposal closing date') }}
 		</NcCheckboxRadioSwitch>
 
-		<NcDateTimePicker v-show="proposalExpiration && isProposalAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
+		<NcDateTimePicker v-show="proposalExpiration && pollStore.isProposalAllowed" v-model="pollExpire" v-bind="expirationDatePicker" />
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import moment from '@nextcloud/moment'
 import { NcCheckboxRadioSwitch, NcDateTimePicker } from '@nextcloud/vue'
-import { writePoll } from '../../mixins/writePoll.js'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ConfigProposals',
@@ -32,46 +32,41 @@ export default {
 		NcDateTimePicker,
 	},
 
-	mixins: [writePoll],
-
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
-
-		...mapGetters({
-			isProposalAllowed: 'poll/isProposalAllowed',
-		}),
+		...mapStores(usePollStore),
 
 		// Add bindings
 		allowProposals: {
 			get() {
-				return (this.pollConfiguration.allowProposals === 'allow')
+				return (this.pollStore.configuration.allowProposals === 'allow')
 			},
 			set(value) {
-				this.writeValue({ allowProposals: value ? 'allow' : 'disallow' })
+				this.pollStore.configuration.allowProposals = value ? 'allow' : 'disallow'
+				this.pollStore.write()
 			},
 		},
 
 		pollExpire: {
 			get() {
-				return moment.unix(this.pollConfiguration.proposalsExpire)._d
+				return moment.unix(this.pollStore.configuration.proposalsExpire)._d
 			},
 			set(value) {
-				this.writeValue({ proposalsExpire: moment(value).unix() })
+				this.pollStore.configuration.proposalsExpire = moment(value).unix()
+				this.pollStore.write()
 			},
 		},
 
 		proposalExpiration: {
 			get() {
-				return !!this.pollConfiguration.proposalsExpire
+				return !!this.pollStore.configuration.proposalsExpire
 			},
 			set(value) {
 				if (value) {
-					this.writeValue({ proposalsExpire: moment().add(1, 'week').unix() })
+					this.pollStore.configuration.proposalsExpire = moment().add(1, 'week').unix()
 				} else {
-					this.writeValue({ proposalsExpire: 0 })
+					this.pollStore.configuration.proposalsExpire= 0
 				}
+				this.pollStore.write()
 			},
 		},
 
@@ -107,10 +102,6 @@ export default {
 
 	methods: {
 		t,
-		writeValue(error) {
-			this.$store.commit('poll/setProperty', error)
-			this.writePoll() // from mixin
-		},
 	},
 }
 </script>

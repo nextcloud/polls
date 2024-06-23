@@ -14,11 +14,8 @@
 </template>
 
 <script>
-import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
-import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { mapState, mapActions } from 'vuex'
 import '@nextcloud/dialogs/style.css'
 import './assets/scss/colors.scss'
 import './assets/scss/hacks.scss'
@@ -26,8 +23,14 @@ import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
 import { watchPolls } from './mixins/watchPolls.js'
+import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 import { Logger } from './helpers/index.js'
+import { mapStores } from 'pinia';
+import { useSessionStore } from './stores/session.ts'
+import { usePreferencesStore } from './stores/preferences.ts'
+import { showSuccess } from '@nextcloud/dialogs'
+import { debounce } from 'lodash'
 
 export default {
 	name: 'App',
@@ -39,36 +42,41 @@ export default {
 
 	mixins: [watchPolls],
 
+	beforeRouteUpdate(to, from, next) {
+		Logger.debug('Route changed (update)', { from, to })
+		this.loadContext()
+		next()
+	},
+
 	data() {
 		return {
 			transitionClass: 'transitions-active',
 			loading: false,
-			isLoggedin: !!getCurrentUser(),
-			isAdmin: !!getCurrentUser()?.isAdmin,
 		}
 	},
 
 	computed: {
-		...mapState({
-			permissions: (state) => state.poll.permissions,
-		}),
+		...mapStores(
+			useSessionStore,
+			usePreferencesStore,
+		),
 
 		appClass() {
 			return [
 				this.transitionClass, {
-					edit: this.permissions.edit,
+					edit: this.sessionStore.pollPermissions.edit,
 				},
 			]
 		},
 
 		useNavigation() {
-			return getCurrentUser()
+			return this.sessionStore.userStatus.isLoggedin
 		},
 
 		useSidebar() {
-			return this.permissions.edit
-				|| this.permissions.comment
-				|| this.$route.name === 'combo'
+			return this.sessionStore.pollPermissions.edit
+				|| this.sessionStore.pollPermissions.comment
+				|| this.sessionStore.router.name === 'combo'
 		},
 	},
 
@@ -79,7 +87,6 @@ export default {
 			this.watchPolls()
 		},
 	},
-
 	created() {
 		subscribe('polls:transitions:off', (delay) => {
 			this.transitionsOff(delay)
@@ -89,48 +96,37 @@ export default {
 			this.transitionsOn()
 		})
 
-		subscribe('polls:stores:load', (stores) => {
-			this.loadStores(stores)
-		})
-
-		subscribe('polls:poll:load', (silent) => {
-			this.loadPoll(silent)
+		subscribe('polls:poll:update', (payload) => {
+			this.notify(payload)
 		})
 	},
 
 	mounted() {
 		this.loadContext(true)
+
 	},
 
 	beforeDestroy() {
-		this.cancelToken.cancel()
-		unsubscribe('polls:poll:load')
 		unsubscribe('polls:transitions:on')
 		unsubscribe('polls:transitions:off')
+		unsubscribe('polls:poll:updated')
 	},
 
 	methods: {
-		...mapActions({
-			setFilter: 'polls/setFilter',
-			loadAcl: 'acl/get',
-			loadSettings: 'settings/get',
-		}),
+		notify: debounce(async function (payload) {
+			if (payload.store === 'poll') {
+				showSuccess(payload.message)
+			}
+		}, 1500),
 
-		loadContext(silent) {
+		loadContext() {
 			if (this.$route.name !== null) {
-				this.loadAcl()
+				this.sessionStore.setRouter(this.$route)
+				this.sessionStore.load()
 			}
-
-			if (getCurrentUser()) {
-				this.loadSettings()
-
-				if (this.$route.name === 'list') {
-					this.setFilter(this.$route.params.type)
-				}
-			}
-
-			if (this.$route.name === 'vote' || this.$route.name === 'publicVote') {
-				this.loadPoll(silent)
+			
+			if (this.sessionStore.userStatus.isLoggedin) {
+				this.preferencesStore.load()
 			}
 		},
 
@@ -146,78 +142,6 @@ export default {
 				}, delay)
 			}
 		},
-
-		async loadStores(stores) {
-			Logger.debug('Updates detected', { stores })
-
-			let dispatches = [
-				'activity/list',
-				'appSettings/get',
-				'acl/get',
-			]
-
-			stores.forEach((item) => {
-				if (item.table === 'polls') {
-
-					// If user is an admin, also load admin list
-					if (this.isAdmin) dispatches = [...dispatches, 'pollsAdmin/list']
-
-					// if user is an authorized user load polls list and combo
-					if (this.isLoggedin) dispatches = [...dispatches, `${item.table}/list`, 'combo/cleanUp']
-
-					// if current poll is affected, load current poll configuration
-					if (item.pollId === this.$store.state.poll.id) {
-						dispatches = [...dispatches, 'poll/get']
-					}
-
-				} else if (!this.isLoggedin && (item.table === 'shares')) {
-					// if current user is guest and table is shares only reload current share
-					dispatches = [...dispatches, 'share/get']
-				} else {
-					// otherwise just load particulair store
-					dispatches = [...dispatches, `${item.table}/list`]
-				}
-			})
-			dispatches = [...new Set(dispatches)] // remove duplicates and add combo
-			return Promise.all(dispatches.map((dispatches) => this.$store.dispatch(dispatches)))
-		},
-
-		async loadPoll(silent) {
-			if (!silent) {
-				this.loading = true
-				this.transitionsOff()
-			}
-
-			try {
-				if (this.$route.name === 'vote' && !this.$route.params.id) {
-					throw new Error('No pollId for vote page')
-				}
-				const dispatches = [
-					'poll/get',
-					'comments/list',
-					'options/list',
-					'votes/list',
-					'subscription/get',
-				]
-
-				if (this.$route.name === 'publicVote') {
-					dispatches.push('share/get')
-				} else if (this.$route.name === 'vote') {
-					dispatches.push('shares/list')
-					dispatches.push('activity/list')
-				}
-
-				const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
-				await Promise.all(requests)
-
-			} catch {
-				this.$router.replace({ name: 'notfound' })
-			} finally {
-				this.loading = false
-				this.transitionsOn()
-			}
-		},
-
 	},
 }
 

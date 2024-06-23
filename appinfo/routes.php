@@ -7,6 +7,7 @@
 return [
 	'routes' => [
 		['name' => 'public#get_acl', 'url' => '/s/{token}/acl', 'verb' => 'GET'],
+		['name' => 'public#get_session', 'url' => '/s/{token}/session', 'verb' => 'GET'],
 		['name' => 'public#vote_page', 'url' => '/s/{token}', 'verb' => 'GET'],
 		['name' => 'public#get_share', 'url' => '/s/{token}/share', 'verb' => 'GET'],
 		['name' => 'public#get_poll', 'url' => '/s/{token}/poll', 'verb' => 'GET'],
@@ -51,6 +52,7 @@ return [
 		['name' => 'page#vote', 'url' => '/vote/{id}', 'verb' => 'GET'],
 
 		['name' => 'poll#list', 'url' => '/polls', 'verb' => 'GET'],
+		['name' => 'poll#get_full', 'url' => '/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll#get', 'url' => '/poll/{pollId}/poll', 'verb' => 'GET'],
 		['name' => 'poll#add', 'url' => '/poll/add', 'verb' => 'POST'],
 		['name' => 'poll#update', 'url' => '/poll/{pollId}', 'verb' => 'PUT'],
@@ -118,6 +120,7 @@ return [
 		['name' => 'watch#watch_poll', 'url' => '/poll/{pollId}/watch', 'verb' => 'GET'],
 
 		['name' => 'user#get_acl', 'url' => '/acl', 'verb' => 'GET'],
+		['name' => 'user#get_session', 'url' => '/session', 'verb' => 'GET'],
 		['name' => 'user#write_preferences', 'url' => '/preferences', 'verb' => 'POST'],
 		['name' => 'user#get_preferences', 'url' => '/preferences', 'verb' => 'GET'],
 		['name' => 'user#get_calendars', 'url' => '/calendars', 'verb' => 'GET'],
@@ -125,11 +128,13 @@ return [
 
 		// REST-API calls
 		['name' => 'user_api#get_acl', 'url' => '/api/v1.0/acl', 'verb' => 'GET'],
+		['name' => 'user_api#get_session', 'url' => '/session', 'verb' => 'GET'],
 		['name' => 'base_api#preflighted_cors', 'url' => '/api/v1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 		['name' => 'poll_api#list', 'url' => '/api/v1.0/polls', 'verb' => 'GET'],
 		['name' => 'poll_api#transfer_polls', 'url' => '/api/v1.0/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#transfer_poll', 'url' => '/api/v1.0/poll/{pollId}/transfer/{destinationUser}', 'verb' => 'PUT'],
 		['name' => 'poll_api#add', 'url' => '/api/v1.0/poll', 'verb' => 'POST'],
+		['name' => 'poll_api#get_full', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll_api#get', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'GET'],
 		['name' => 'poll_api#update', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'PUT'],
 		['name' => 'poll_api#delete', 'url' => '/api/v1.0/poll/{pollId}', 'verb' => 'DELETE'],

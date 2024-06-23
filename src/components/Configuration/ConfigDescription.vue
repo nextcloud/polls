@@ -4,31 +4,20 @@
 -->
 
 <template>
-	<textarea v-model="description"
+	<textarea v-model="pollStore.configuration.description"
 		class="edit-description"
-		@change="$emit('change')" />
+		@change="pollStore.write()" />
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'ConfigDescription',
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
-
-		description: {
-			get() {
-				return this.pollConfiguration.description
-			},
-			set(value) {
-				this.$store.commit('poll/setProperty', { description: value })
-				this.$store.commit('poll/setDescriptionSafe', value)
-			},
-		},
+		...mapStores(usePollStore),
 	},
 }
 </script>

@@ -16,29 +16,29 @@
 					focus
 					@submit="submitRegistration" />
 
-				<InputDiv v-if="share.publicPollEmail !== 'disabled'"
+				<InputDiv v-if="shareStore.publicPollEmail !== 'disabled'"
 					v-model="emailAddress"
 					class="section__email"
 					:signaling-class="checkStatus.email"
-					:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Email address (mandatory)' : 'Email address (optional)')"
+					:placeholder="t('polls', shareStore.publicPollEmail === 'mandatory' ? 'Email address (mandatory)' : 'Email address (optional)')"
 					:helper-text="emailAddressHint"
 					type="email"
 					inputmode="email"
 					@submit="submitRegistration" />
 
-				<NcCheckboxRadioSwitch v-if="share.user.type === 'public'" :checked.sync="saveCookie">
+				<NcCheckboxRadioSwitch v-if="shareStore.user.type === 'public'" :checked.sync="saveCookie">
 					{{ t('polls', 'Remember me for 30 days') }}
 				</NcCheckboxRadioSwitch>
 
-				<div v-if="privacyUrl" class="section__optin">
+				<div v-if="sessionStore.appSettings.usePrivacyUrl" class="section__optin">
 					<NcRichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 				</div>
 
 				<div class="modal__buttons">
 					<div class="left">
 						<div class="legal_links">
-							<SimpleLink v-if="imprintUrl"
-								:href="imprintUrl"
+							<SimpleLink v-if="sessionStore.appSettings.useImprintUrl"
+								:href="sessionStore.appSettings.useImprintUrl"
 								target="_blank"
 								:name="t('polls', 'Legal Notice')" />
 						</div>
@@ -59,7 +59,7 @@
 				</div>
 			</div>
 
-			<div v-if="showLogin" class="registration__login">
+			<div v-if="sessionStore.appSettings.useLogin" class="registration__login">
 				<h2> {{ t('polls', 'Registered accounts') }} </h2>
 				<NcButton wide @click="login()">
 					<template #default>
@@ -82,11 +82,14 @@ import { debounce } from 'lodash'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { NcButton, NcCheckboxRadioSwitch, NcRichText } from '@nextcloud/vue'
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { InputDiv } from '../Base/index.js'
 import { SimpleLink, setCookie } from '../../helpers/index.js'
 import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
 import { t } from '@nextcloud/l10n'
+import { useShareStore } from '../../stores/share.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const COOKIE_LIFETIME = 30
 
@@ -116,15 +119,10 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			share: (state) => state.share,
-			privacyUrl: (state) => state.acl.appSettings.usePrivacyUrl,
-			imprintUrl: (state) => state.acl.appSettings.useImprintUrl,
-			showLogin: (state) => state.acl.appSettings.useLogin,
-		}),
+		...mapStores(useShareStore, useSessionStore, usePollStore),
 
 		registrationIsValid() {
-			return this.checkStatus.userName === 'valid' && (this.checkStatus.email === 'valid' || (this.emailAddress.length === 0 && this.share.publicPollEmail !== 'mandatory'))
+			return this.checkStatus.userName === 'valid' && (this.checkStatus.email === 'valid' || (this.emailAddress.length === 0 && this.shareStore.publicPollEmail !== 'mandatory'))
 		},
 
 		disableSubmit() {
@@ -137,7 +135,7 @@ export default {
 				privacyPolicy: {
 					component: SimpleLink,
 					props: {
-						href: this.privacyUrl,
+						href: this.sessionStore.appSettings.usePrivacyUrl,
 						name: t('polls', 'privacy policy'),
 						target: '_blank',
 					},
@@ -166,14 +164,14 @@ export default {
 		},
 
 		emailGeneratedStatus() {
-			return this.checkStatus.email === 'empty' ? this.share.publicPollEmail : this.checkStatus.email
+			return this.checkStatus.email === 'empty' ? this.shareStore.publicPollEmail : this.checkStatus.email
 		},
 
 		emailAddressHint() {
 			if (this.emailGeneratedStatus === 'checking') return t('polls', 'Checking email address …')
 			if (this.emailGeneratedStatus === 'mandatory') return t('polls', 'An email address is required.')
 			if (this.emailGeneratedStatus === 'invalid') return t('polls', 'Invalid email address.')
-			if (this.share.user.type === 'public') {
+			if (this.shareStore.user.type === 'public') {
 				if (this.emailGeneratedStatus === 'valid') return t('polls', 'You will receive your personal link after clicking "OK".')
 				return t('polls', 'Enter your email address to get your personal access link.')
 			}
@@ -195,12 +193,12 @@ export default {
 		if (this.$route.name === 'publicVote' && this.$route.query.name) {
 			this.userName = this.$route.query.name
 		} else {
-			this.userName = this.share.user.displayName
+			this.userName = this.shareStore.user.displayName
 		}
 		if (this.$route.name === 'publicVote' && this.$route.query.email) {
 			this.emailAddress = this.$route.query.email
 		} else {
-			this.emailAddress = this.share.user.emailAddress
+			this.emailAddress = this.shareStore.user.emailAddress
 		}
 	},
 
@@ -265,7 +263,7 @@ export default {
 				// if share was not a public share, but a personal share
 				// (i.error. email shares allow to change personal data by fist entering of the poll),
 				// just load the poll
-				this.$store.dispatch({ type: 'poll/get' })
+				this.pollStore.get()
 				this.closeModal()
 			} else {
 				// in case of a public share, redirect to the generated share
@@ -291,14 +289,14 @@ export default {
 				)
 
 				if (this.saveCookie && this.$route.name === 'publicVote') {
-					this.updateCookie(response.data.share.token)
+					this.updateCookie(response.data.shareStore.token)
 				}
 
-				this.routeToPersonalShare(response.data.share.token)
+				this.routeToPersonalShare(response.data.shareStore.token)
 
 				// TODO: Is that correct, is this possible in any way?
-				if (this.share.user.emailAddress && !this.share.invitationSent) {
-					showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.share.user.emailAddress }))
+				if (this.shareStore.user.emailAddress && !this.shareStore.invitationSent) {
+					showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress }))
 				}
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return

@@ -10,14 +10,17 @@
 		<CardLimitedVotes v-if="showLimitCard" />
 		<CardClosedPoll v-if="showClosedCard" />
 		<CardSendConfirmations v-if="showSendConfirmationsCard" />
-		<CardLocked v-if="isLocked" />
+		<CardLocked v-if="pollStore.currentUserStatus.isLocked" />
 		<CardRegister v-if="showRegisterCard" />
 	</div>
 </template>
 
 <script>
-import { mapState, mapGetters } from 'vuex'
+import { mapStores } from 'pinia'
 import { CardAddProposals, CardClosedPoll, CardLimitedVotes, CardLocked, CardRegister, CardSendConfirmations, CardUnpublishedPoll } from './index.js'
+import { usePollStore } from '../../stores/poll.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { useSharesStore } from '../../stores/shares.ts'
 
 export default {
 	name: 'VoteInfoCards',
@@ -30,54 +33,37 @@ export default {
 		CardRegister,
 		CardSendConfirmations,
 		CardUnpublishedPoll,
-
 	},
 
 	computed: {
-		...mapState({
-			pollAccess: (state) => state.poll.configuration.access,
-			pollId: (state) => state.poll.id,
-			permissions: (state) => state.poll.permissions,
-			maxVotesPerOption: (state) => state.poll.configuration.maxVotesPerOption,
-			maxVotesPerUser: (state) => state.poll.configuration.maxVotesPerUser,
-			optionsCount: (state) => state.options.list.length,
-			isLocked: (state) => state.poll.currentUserStatus.isLocked,
-			userRole: (state) => state.poll.currentUserStatus.userRole,
-		}),
-
-		...mapGetters({
-			isPollClosed: 'poll/isClosed',
-			confirmedOptions: 'options/confirmed',
-			hasShares: 'shares/hasShares',
-			isProposalOpen: 'poll/isProposalOpen',
-		}),
+		...mapStores(usePollStore, useOptionsStore, useSharesStore),
 
 		showUnpublishedPollCard() {
-			return this.pollAccess === 'private' && !this.hasShares && this.permissions.edit && this.optionsCount
+			return this.pollStore.configuration.access === 'private' && !this.sharesStore.hasShares && this.pollStore.permissions.edit && this.optionsStore.list.length
 		},
 
 		showAddProposalsCard() {
-			return this.permissions.addOptions && this.isProposalOpen && !this.isPollClosed
+			return this.pollStore.permissions.addOptions && this.pollStore.isProposalOpen && !this.pollStore.isPollClosed
 		},
 
 		showClosedCard() {
-			return this.isPollClosed && !this.showSendConfirmationsCard
+			return this.pollStore.isPollClosed && !this.showSendConfirmationsCard
 		},
 
 		showSendConfirmationsCard() {
-			return this.permissions.edit && this.isPollClosed && this.confirmedOptions.length > 0
+			return this.pollStore.permissions.edit && this.pollStore.isPollClosed && this.pollStore.confirmedOptions.length > 0
 		},
 
 		showLimitCard() {
-			return this.permissions.vote && !this.isPollClosed && (this.maxVotesPerOption || this.maxVotesPerUser)
+			return this.pollStore.permissions.vote && !this.pollStore.isPollClosed && (this.pollStore.configuration.maxVotesPerOption || this.pollStore.configuration.maxVotesPerUser)
 		},
 
 		showRegisterCard() {
 			return (this.$route.name === 'publicVote'
-				&& ['public', 'email', 'contact'].includes(this.userRole)
-				&& !this.isPollClosed
-				&& !this.isLocked
-				&& !!this.pollId
+				&& ['public', 'email', 'contact'].includes(this.pollStore.currentUserStatus.userRole)
+				&& !this.pollStore.isPollClosed
+				&& !this.pollStore.currentUserStatus.isLocked
+				&& !!this.pollStore.id
 			)
 		},
 

@@ -5,12 +5,14 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="allowAllAccess" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.allowAllAccess" 
+			type="switch"
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the creation of openly accessible polls globally') }}
 		</NcCheckboxRadioSwitch>
 
-		<div v-if="!allowAllAccess" class="settings_details">
-			<NcSelect v-model="allAccessGroups"
+		<div v-if="!appSettingsStore.allowAllAccess" class="settings_details">
+			<NcSelect v-model="appSettingsStore.allAccessGroups"
 				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
@@ -25,9 +27,11 @@
 
 <script>
 
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
-import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { loadGroups } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminShareOpenPoll',
@@ -37,26 +41,10 @@ export default {
 		NcSelect,
 	},
 
-	mixins: [loadGroups, writeValue],
+	mixins: [loadGroups],
 
 	computed: {
-		// Add bindings
-		allowAllAccess: {
-			get() {
-				return this.appSettings.allowAllAccess
-			},
-			set(value) {
-				this.writeValue({ allowAllAccess: value })
-			},
-		},
-		allAccessGroups: {
-			get() {
-				return this.appSettings.allAccessGroups
-			},
-			set(value) {
-				this.writeValue({ allAccessGroups: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

@@ -5,16 +5,20 @@
 
 <template>
 	<div class="subscription">
-		<NcCheckboxRadioSwitch :checked.sync="subscribe" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="subscriptionStore.subscribed" 
+			type="switch"
+			@change="subscription.write()">
 			{{ label }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { useSubscriptionStore } from '../../stores/subscription.ts'
+import { useShareStore } from '../../stores/share.ts'
 
 export default {
 	name: 'Subscription',
@@ -24,26 +28,14 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			subscribed: (state) => state.subscription.subscribed,
-			emailAddress: (state) => state.share.user.emailAddress,
-		}),
+		...mapStores(useSubscriptionStore, useShareStore),
 
 		label() {
-			if (this.emailAddress) {
-				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.emailAddress })
+			if (this.shareStore.user.emailAddress) {
+				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress })
 			}
 			return t('polls', 'Receive notification email on activity')
 
-		},
-
-		subscribe: {
-			get() {
-				return !!this.subscribed
-			},
-			set(value) {
-				this.$store.dispatch('subscription/update', value)
-			},
 		},
 	},
 }

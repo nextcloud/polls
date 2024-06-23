@@ -8,7 +8,7 @@
 		:active.sync="activeTab"
 		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
-		<NcAppSidebarTab v-if="permissions.edit"
+		<NcAppSidebarTab v-if="pollStore.permissions.edit"
 			id="configuration"
 			:order="1"
 			:name="t('polls', 'Configuration')">
@@ -18,7 +18,7 @@
 			<SideBarTabConfiguration />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="permissions.edit"
+		<NcAppSidebarTab v-if="pollStore.permissions.edit"
 			id="options"
 			:order="2"
 			:name="t('polls', 'Options')">
@@ -28,7 +28,7 @@
 			<SideBarTabOptions />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="permissions.edit"
+		<NcAppSidebarTab v-if="pollStore.permissions.edit"
 			id="sharing"
 			:order="3"
 			:name="t('polls', 'Sharing')">
@@ -38,7 +38,7 @@
 			<SideBarTabShare />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="permissions.comment"
+		<NcAppSidebarTab v-if="pollStore.permissions.comment"
 			id="comments"
 			:order="5"
 			:name="t('polls', 'Comments')">
@@ -48,7 +48,7 @@
 			<SideBarTabComments />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="permissions.edit && useActivity"
+		<NcAppSidebarTab v-if="pollStore.permissions.edit && sessionStore.appSettings.useActivity"
 			id="activity"
 			:order="6"
 			:name="t('polls', 'Activity')">
@@ -61,8 +61,8 @@
 </template>
 
 <script>
+import { mapStores } from 'pinia'
 import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-import { mapState } from 'vuex'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
@@ -71,6 +71,8 @@ import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue
 import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../stores/poll.ts'
+import { useSessionStore } from '../stores/session.ts'
 
 export default {
 	name: 'SideBar',
@@ -98,11 +100,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			permissions: (state) => state.poll.permissions,
-			useActivity: (state) => state.acl.appSettings.useActivity,
-		}),
-
+		...mapStores(usePollStore, useSessionStore),
 	},
 
 	created() {

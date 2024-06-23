@@ -14,9 +14,10 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapStores } from 'pinia'
 import { NcButton } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
 
 export default {
 	name: 'ActionSwitchSafeTable',
@@ -31,13 +32,13 @@ export default {
 		}
 	},
 
-	methods: {
-		...mapMutations({
-			switchSafeTable: 'poll/switchSafeTable',
-		}),
+	computed: {
+		...mapStores(usePollStore),
+	},
 
+	methods: {
 		clickAction() {
-			this.switchSafeTable()
+			this.pollStore.switchSafeTable()
 		},
 	},
 }

@@ -5,11 +5,13 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="allowCombo" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.allowCombo" 
+			type="switch" 
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the usage of the combo view globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!allowCombo" class="settings_details">
-			<NcSelect v-model="comboGroups"
+		<div v-if="!appSettingsStore.allowCombo" class="settings_details">
+			<NcSelect v-model="appSettingsStore.comboGroups"
 				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="groups"
@@ -17,16 +19,18 @@
 				:multiple="true"
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disable globally')"
+				@option:selected="appSettingsStore.write()"
 				@search="loadGroups" />
 		</div>
 	</div>
 </template>
 
 <script>
-
+import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch, NcSelect } from '@nextcloud/vue'
-import { loadGroups, writeValue } from '../../../mixins/adminSettingsMixin.js'
+import { loadGroups } from '../../../mixins/adminSettingsMixin.js'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 export default {
 	name: 'AdminCombo',
@@ -36,26 +40,10 @@ export default {
 		NcSelect,
 	},
 
-	mixins: [loadGroups, writeValue],
+	mixins: [loadGroups],
 
 	computed: {
-		// Add bindings
-		allowCombo: {
-			get() {
-				return this.appSettings.allowCombo
-			},
-			set(value) {
-				this.writeValue({ allowCombo: value })
-			},
-		},
-		comboGroups: {
-			get() {
-				return this.appSettings.comboGroups
-			},
-			set(value) {
-				this.writeValue({ comboGroups: value })
-			},
-		},
+		...mapStores(useAppSettingsStore),
 	},
 	
 	methods: {

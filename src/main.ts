@@ -3,15 +3,13 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import { PiniaVuePlugin } from 'pinia'
 import Vue from 'vue'
+import { pinia } from './stores/index.ts'
 import App from './App.vue'
-import { sync } from 'vuex-router-sync'
-import store from './store/index.js'
 import router from './router.js'
 import ClickOutside from 'v-click-outside'
 import { Tooltip } from '@nextcloud/vue'
-
-sync(store, router)
 
 Vue.config.devtools = import.meta.env.MODE !== 'production'
 
@@ -19,11 +17,12 @@ Vue.config.devtools = import.meta.env.MODE !== 'production'
 Vue.directive('tooltip', Tooltip)
 
 Vue.use(ClickOutside)
+Vue.use(PiniaVuePlugin)
 
 /* eslint-disable-next-line no-new */
-new Vue({
-	el: '#content',
+const app = new Vue({
 	router,
-	store,
+	pinia,
 	render: (h) => h(App),
 })
+app.$mount('#content')

@@ -11,7 +11,7 @@
 			:value="option.value"
 			:name="id + '_' + index"
 			type="radio"
-			@update:checked="$emit('input', option.value)">
+			@update:checked="$emit('update', option.value)">
 			{{ option.label }}
 		</NcCheckboxRadioSwitch>
 	</div>

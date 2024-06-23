@@ -18,9 +18,9 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<ComboTable v-show="polls.length" />
+			<ComboTable v-show="comboStore.polls.length" />
 
-			<NcEmptyContent v-if="!polls.length"
+			<NcEmptyContent v-if="!comboStore.polls.length"
 				:name="t('polls', 'No polls selected')"
 				:description="t('polls', 'Select polls by clicking on them in the right sidebar!')">
 				<template #icon>
@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapState } from 'vuex'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 import ComboTable from '../components/Combo/ComboTable.vue'
 import { ActionToggleSidebar } from '../components/Actions/index.js'
@@ -42,6 +41,8 @@ import { HeaderBar } from '../components/Base/index.js'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import { t } from '@nextcloud/l10n'
+import { mapStores } from 'pinia'
+import { useComboStore } from '../stores/combo.ts'
 
 export default {
 	name: 'Combo',
@@ -65,13 +66,7 @@ export default {
 	},
 
 	computed: {
-		...mapGetters({
-			pollCombo: 'combo/pollCombo',
-		}),
-		...mapState({
-			polls: (state) => state.combo.polls,
-			savePollCombo: (state) => state.settings.user.pollCombo,
-		}),
+		...mapStores(useComboStore),
 
 		/* eslint-disable-next-line vue/no-unused-properties */
 		windowTitle() {
@@ -80,24 +75,20 @@ export default {
 	},
 
 	watch: {
-		pollCombo() {
-			this.setPollCombo({ pollCombo: this.pollCombo })
+		'comboStore.pollCombo'() {
+			this.settings.setPollCombo({ pollCombo: this.comboStore.pollCombo })
 		},
-		savePollCombo() {
-			this.verifyPolls()
+		'settings.user.pollCombo'() {
+			this.comboStore.verifyPollsFromSettings()
 		},
 	},
 
 	created() {
-		this.verifyPolls()
+		this.comboStore.verifyPollsFromSettings()
 	},
 
 	methods: {
 		t,
-		...mapActions({
-			setPollCombo: 'settings/setPollCombo',
-			verifyPolls: 'combo/verifyPollsFromSettings',
-		}),
 	},
 
 }

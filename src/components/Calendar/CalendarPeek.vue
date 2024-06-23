@@ -24,7 +24,7 @@
 
 <script>
 
-import { mapState } from 'vuex'
+import { mapStores } from 'pinia'
 import { orderBy } from 'lodash'
 import { NcPopover } from '@nextcloud/vue'
 import moment from '@nextcloud/moment'
@@ -32,6 +32,7 @@ import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api/index.js'
 import { Logger } from '../../helpers/index.js'
 import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
 
 export default {
 	name: 'CalendarPeek',
@@ -55,9 +56,7 @@ export default {
 	},
 
 	computed: {
-		...mapState({
-			pollConfiguration: (state) => state.poll.configuration,
-		}),
+		...mapStores(usePollStore),
 
 		detectAllDay() {
 			const from = moment.unix(this.option.timestamp)
@@ -84,12 +83,12 @@ export default {
 				calendarName: 'Polls',
 				displayColor: 'transparent',
 				allDay: this.detectAllDay.allDay,
-				description: this.pollConfiguration.description,
+				description: this.pollStore.configuration.description,
 				start: this.option.timestamp,
 				location: '',
 				end: this.option.timestamp + this.option.duration,
 				status: 'self',
-				summary: this.pollConfiguration.title,
+				summary: this.pollStore.configuration.title,
 				type: this.detectAllDay.type,
 			}
 		},
