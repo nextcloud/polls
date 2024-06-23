@@ -16,7 +16,7 @@
 				<span v-html="linkify(subComment.comment)" />
 				<!-- eslint-enable vue/no-v-html -->
 
-				<ActionDelete v-if="(comment.user.userId === currentUser.userId || currentUser.isOwner)"
+				<ActionDelete v-if="(comment.user.userId === currentUser.userId || isOwner)"
 					:name="subComment.deleted ? t('polls', 'Restore comment') : t('polls', 'Delete comment')"
 					:restore="!!subComment.deleted"
 					:timeout="0"
@@ -50,6 +50,7 @@ export default {
 	computed: {
 		...mapState({
 			currentUser: (state) => state.acl.currentUser,
+			isOwner: (state) => state.poll.currentUserStatus.isOwner,
 		}),
 
 		dateCommentedRelative() {
