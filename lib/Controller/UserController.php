@@ -11,7 +11,6 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\Model\Acl;
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\PreferencesService;
-use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -49,19 +48,34 @@ class UserController extends BaseController {
 	
 	/**
 	 * get acl for user
-	 * @param $pollId Poll id
+	 * @deprecated 8.0.0 Use getSession instead
 	 */
 	#[NoAdminRequired]
 	public function getAcl(): JSONResponse {
-		return new JSONResponse(['acl' => $this->acl], Http::STATUS_OK);
+		return $this->response(fn () => [
+			'acl' => $this->acl,
+		]);
 	}
-
+	
+	/**
+	 * get session information
+	 */
+	public function getSession(): JSONResponse {
+		return $this->response(fn () => [
+			'token' => $this->request->getParam('token'),
+			'currentUser' => $this->acl->getCurrentUser(),
+			'appPermissions' => $this->acl->getPermissionsArray(),
+			'appSettings' => $this->acl->getAppSettings(),
+		]);
+	}
 
 	/**
 	 * Read all calendars
 	 */
 	#[NoAdminRequired]
 	public function getCalendars(): JSONResponse {
-		return new JSONResponse(['calendars' => $this->calendarService->getCalendars()], Http::STATUS_OK);
+		return $this->response(fn () => [
+			'calendars' => $this->calendarService->getCalendars(),
+		]);
 	}
 }

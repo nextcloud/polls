@@ -5,29 +5,29 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, UserSettingsAPI } from '../Api/index.js'
+import { getCurrentUser } from '@nextcloud/auth'
+import { PublicAPI, SessionAPI } from '../Api/index.js'
 import { User, AppPermissions, UserType } from '../Interfaces/interfaces.ts'
-import { Logger } from '../helpers/index.js'
 import { AppSettings } from './appSettings.ts'
-import { useRouterStore } from './router.ts'
+import { usePreferencesStore } from './preferences.ts'
+import { FilterType } from './polls.ts'
+import { PollPermissions, usePollStore } from './poll.ts'
+import { Share } from './share.ts'
 
 enum ViewMode {
 	TableView = 'table-view',
 	ListView = 'list-view',
 }
 
-interface UserPreferences {
-	useCommentsAlternativeStyling: boolean
-	useAlternativeStyling: boolean
-	calendarPeek: boolean
-	checkCalendars: [],
-	checkCalendarsBefore: number,
-	checkCalendarsAfter: number,
-	defaultViewTextPoll: ViewMode
-	defaultViewDatePoll: ViewMode
-	performanceThreshold: number,
-	pollCombo: number[],
-	relevantOffset: number,
+interface Router {
+	currentRoute: string
+	name: string
+	path: string
+	params: {
+		id: number
+		token: string
+		type: FilterType
+	}
 }
 
 export interface SessionSettings {
@@ -35,36 +35,26 @@ export interface SessionSettings {
 	manualViewTextPoll: '' | ViewMode
 }
 
+export interface UserStatus { 
+	isLoggedin: boolean
+	isAdmin: boolean
+}
+
 interface Session {
 	token: string
 	appPermissions: AppPermissions
 	appSettings: AppSettings
 	currentUser: User
-	preferences: UserPreferences
-	params: SessionSettings
+	sessionSettings: SessionSettings
 	viewModes: ViewMode[]
+	router: Router
+	userStatus: UserStatus
+	share: Share | null
 }
 
 export const useSessionStore = defineStore('session', {
 	state: (): Session => ({
-		viewModes: Object.values(ViewMode),
-		params: {
-			manualViewDatePoll: '',
-			manualViewTextPoll: '',
-		},
-		preferences: {
-			useCommentsAlternativeStyling: false,
-			useAlternativeStyling: false,
-			calendarPeek: false,
-			checkCalendars: [],
-			checkCalendarsBefore: 0,
-			checkCalendarsAfter: 0,
-			defaultViewTextPoll: ViewMode.TableView,
-			defaultViewDatePoll: ViewMode.TableView,
-			performanceThreshold: 1000,
-			pollCombo: [],
-			relevantOffset: 30,
-		},
+		token: '',
 		currentUser: {
 			userId: '',
 			displayName: '',
@@ -82,13 +72,17 @@ export const useSessionStore = defineStore('session', {
 			timeZone: '',
 			categories: []
 		},
-		token: '',
 		appPermissions: {
 			allAccess: false,
 			publicShares: false,
 			pollCreation: false,
 			seeMailAddresses: false,
 			pollDownload: false,
+		},
+		viewModes: Object.values(ViewMode),
+		sessionSettings: {
+			manualViewDatePoll: '',
+			manualViewTextPoll: '',
 		},
 		appSettings: {
 			allAccessGroups: [],
@@ -118,43 +112,86 @@ export const useSessionStore = defineStore('session', {
 			pollCreationGroups: [],
 			pollDownloadGroups: [],
 			showMailAddressesGroups: [],
-		}
+		},
+		router: {
+			currentRoute: '',
+			name: '',
+			path: '',
+			params: {
+				id: 0,
+				token: '',
+				type: FilterType.Relevant,
+			}
+		},
+		userStatus: {
+			isLoggedin: !!getCurrentUser(),
+			isAdmin: !!getCurrentUser()?.isAdmin,
+		},
+		share: null,
 	}),
+	getters: {
+		viewTextPoll(state): ViewMode {
+			const preferencesStore = usePreferencesStore()
+			
+			if (state.sessionSettings.manualViewTextPoll) {
+				return state.sessionSettings.manualViewTextPoll
+			}
+			if (window.innerWidth > 480) {
+				return preferencesStore.user.defaultViewTextPoll
+			}
+			return ViewMode.ListView
+		},
+
+		viewDatePoll(state): ViewMode {
+			const preferencesStore = usePreferencesStore()
+			if (state.sessionSettings.manualViewDatePoll) {
+				return state.sessionSettings.manualViewDatePoll
+			}
+			if (window.innerWidth > 480) {
+				return preferencesStore.user.defaultViewDatePoll
+			}
+			return ViewMode.ListView
+		},
+		
+		pollPermissions(): PollPermissions {
+			const pollStore = usePollStore()
+			return pollStore.permissions
+		}
+	},
 
 	actions: {
 		async load() {
-			const routerStore = useRouterStore()
-			const response = {
-				acl: null,
-				preferences: null,
-			}
+			let response = null
 
 			try {
-				if (routerStore.name === 'publicVote') {
-					response.acl = await PublicAPI.getAcl(routerStore.params.token)
+				if (this.router.name === 'publicVote') {
+					response = await PublicAPI.getSession(this.router.params.token)
 				} else {
-					response.acl = await UserSettingsAPI.getAcl()
-					response.preferences = await UserSettingsAPI.getUserSettings()
-					Logger.debug('getAcl response', response.acl.data)
+					response = await SessionAPI.getSession()
 				}
-				this.$patch(response.acl.data.acl)
-				this.$patch({ preferences: response.preferences.data.preferences })
-				Logger.debug('Acl loaded', this.$state)
+				this.$patch(response.data)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 	
 				this.$reset()
-				if (routerStore.name === null) {
-					// TODO: for some reason unauthorized users first get the root route resulting in a 401 
-					// and after that the publicVote route is called as next route
-					// therefore we just debug the error and reset the acl
-	
-					Logger.debug('getAcl failed', error)
+				if (this.router.name === null) {
 					this.$reset()
 				} else {
 					throw error
 				}
 			}
+		},
+
+		setViewDatePoll(viewMode: ViewMode) {
+			this.sessionSettings.manualViewDatePoll = viewMode
+		},
+
+		setViewTextPoll(viewMode: ViewMode) {
+			this.sessionSettings.manualViewTextPoll = viewMode
+		},
+
+		setRouter(payload: Router) {
+			this.router = payload
 		},
 	},
 })

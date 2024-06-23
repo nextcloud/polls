@@ -7,7 +7,7 @@
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.allowPublicShares" 
 			type="switch"
-			@change="appSettingsStore.write()">
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable public shares of polls globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!appSettingsStore.allowPublicShares" class="settings_details">

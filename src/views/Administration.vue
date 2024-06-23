@@ -9,7 +9,7 @@
 			<template #title>
 				{{ t('polls', 'Administrative poll management') }}
 			</template>
-			{{ t('polls', 'Manage polls of other accounts. You can take over the ownership or delete pollsStore.') }}
+			{{ t('polls', 'Manage polls of other accounts. You can take over the ownership or delete polls.') }}
 		</HeaderBar>
 
 		<div class="area__main">
@@ -63,7 +63,7 @@
 
 			<NcEmptyContent v-if="isEmptyPollList" v-bind="emptyContent">
 				<template #icon>
-					<NcLoadingIcon v-if="pollsStore.status.loading" :size="64" />
+					<NcLoadingIcon v-if="pollsAdminStore.status.loading" :size="64" />
 					<PollsAppIcon v-else />
 				</template>
 			</NcEmptyContent>
@@ -127,7 +127,6 @@ import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import PollItem from '../components/PollList/PollItem.vue'
 import { t } from '@nextcloud/l10n'
-import { usePollsStore } from '../stores/polls.ts'
 import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
 
 export default {
@@ -164,10 +163,10 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollsStore, usePollsAdminStore),
+		...mapStores(usePollsAdminStore),
 
 		emptyContent() {
-			if (this.pollsStore.status.loading) {
+			if (this.pollsAdminStore.status.loading) {
 				return {
 					name: t('polls', 'Loading polls…'),
 					description: '',
@@ -208,6 +207,10 @@ export default {
 		},
 	},
 
+	created() {
+		this.loadPolls()
+	},
+
 	mounted() {
 		this.refreshView()
 	},
@@ -228,7 +231,7 @@ export default {
 
 		async toggleArchive(pollId) {
 			try {
-				await this.pollsStore.toggleArchive({ pollId })
+				await this.pollsAdminStore.toggleArchive({ pollId })
 			} catch {
 				showError(t('polls', 'Error archiving/restoring poll.'))
 			}
@@ -236,7 +239,7 @@ export default {
 
 		async deletePoll() {
 			try {
-				await this.pollsStore.delete({ pollId: this.currentPoll.pollId })
+				await this.pollsAdminStore.delete({ pollId: this.currentPoll.pollId })
 				this.deleteModal = false
 			} catch {
 				showError(t('polls', 'Error deleting poll.'))
@@ -251,6 +254,14 @@ export default {
 			} catch {
 				showError(t('polls', 'Error overtaking poll.'))
 				this.takeOverModal = false
+			}
+		},
+
+		async loadPolls() {
+			try {
+				this.pollsAdminStore.load()
+			} catch {
+				showError(t('polls', 'Error loading polls list for admins'))
 			}
 		},
 

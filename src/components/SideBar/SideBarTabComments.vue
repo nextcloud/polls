@@ -24,6 +24,7 @@ import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'
 import { useCommentsStore } from '../../stores/comments.ts'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'SideBarTabComments',
@@ -49,8 +50,14 @@ export default {
 		showEmptyContent() {
 			return this.commentsStore.list.length === 0
 		},
-
 	},
 
+	created() {
+		subscribe('polls:comments:update', this.commentsStore.load())
+	},
+
+	beforeDestroy() {
+		unsubscribe('polls:comments:update')
+	},
 }
 </script>

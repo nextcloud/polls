@@ -20,8 +20,9 @@ Vue.use(ClickOutside)
 Vue.use(PiniaVuePlugin)
 
 /* eslint-disable-next-line no-new */
-new Vue({
+const app = new Vue({
 	router,
 	pinia,
 	render: (h) => h(App),
-}).$mount('#content')
+})
+app.$mount('#content')

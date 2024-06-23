@@ -7,7 +7,7 @@
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.useActivity" 
 		type="switch"
-		@change="appSettingsStore.write()">
+		@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the tracking of activities with the Activities app') }}
 		</NcCheckboxRadioSwitch>
 	</div>

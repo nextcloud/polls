@@ -30,15 +30,15 @@
 					{{ t('polls', 'Remember me for 30 days') }}
 				</NcCheckboxRadioSwitch>
 
-				<div v-if="aclStore.appSettings.usePrivacyUrl" class="section__optin">
+				<div v-if="sessionStore.appSettings.usePrivacyUrl" class="section__optin">
 					<NcRichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 				</div>
 
 				<div class="modal__buttons">
 					<div class="left">
 						<div class="legal_links">
-							<SimpleLink v-if="aclStore.appSettings.useImprintUrl"
-								:href="aclStore.appSettings.useImprintUrl"
+							<SimpleLink v-if="sessionStore.appSettings.useImprintUrl"
+								:href="sessionStore.appSettings.useImprintUrl"
 								target="_blank"
 								:name="t('polls', 'Legal Notice')" />
 						</div>
@@ -59,7 +59,7 @@
 				</div>
 			</div>
 
-			<div v-if="aclStore.appSettings.useLogin" class="registration__login">
+			<div v-if="sessionStore.appSettings.useLogin" class="registration__login">
 				<h2> {{ t('polls', 'Registered accounts') }} </h2>
 				<NcButton wide @click="login()">
 					<template #default>
@@ -88,7 +88,7 @@ import { SimpleLink, setCookie } from '../../helpers/index.js'
 import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
 import { t } from '@nextcloud/l10n'
 import { useShareStore } from '../../stores/share.ts'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
 
 const COOKIE_LIFETIME = 30
@@ -119,7 +119,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(useShareStore, useAclStore, usePollStore),
+		...mapStores(useShareStore, useSessionStore, usePollStore),
 
 		registrationIsValid() {
 			return this.checkStatus.userName === 'valid' && (this.checkStatus.email === 'valid' || (this.emailAddress.length === 0 && this.shareStore.publicPollEmail !== 'mandatory'))
@@ -135,7 +135,7 @@ export default {
 				privacyPolicy: {
 					component: SimpleLink,
 					props: {
-						href: this.aclStore.appSettings.usePrivacyUrl,
+						href: this.sessionStore.appSettings.usePrivacyUrl,
 						name: t('polls', 'privacy policy'),
 						target: '_blank',
 					},

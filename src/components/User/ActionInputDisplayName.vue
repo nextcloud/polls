@@ -24,7 +24,7 @@ import { mapStores } from 'pinia'
 import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 import { ValidatorAPI } from '../../Api/index.js'
 import { t } from '@nextcloud/l10n'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { useShareStore } from '../../stores/share.ts'
 
 const setError = (inputProps) => {
@@ -65,7 +65,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(useAclStore, useShareStore),
+		...mapStores(useSessionStore, useShareStore),
 	
 	},
 
@@ -77,7 +77,7 @@ export default {
 				return
 			}
 
-			if (this.shareStore.displayName === this.aclStore.currentUser.displayName) {
+			if (this.shareStore.displayName === this.sessionStore.currentUser.displayName) {
 				setUnchanged(inputProps)
 				return
 			}

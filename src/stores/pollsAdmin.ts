@@ -9,12 +9,15 @@ import { orderBy } from 'lodash'
 import { PollsAPI } from '../Api/index.js'
 import { Poll } from './poll.ts'
 import { getCurrentUser } from '@nextcloud/auth'
-import { sortType, sortColumnsMapping } from './polls.ts'
-
+import { SortType, sortColumnsMapping, StoreStatus } from './polls.ts'
+import { Logger } from '../helpers/index.ts'
 export interface PollsAdminList {
 	list: Poll[]
+	meta: {
+		status: StoreStatus
+	}
 	sort: {
-		by: sortType
+		by: SortType
 		reverse: boolean
 	}
 }
@@ -22,8 +25,11 @@ export interface PollsAdminList {
 export const usePollsAdminStore = defineStore('pollsAdmin', {
 	state: (): PollsAdminList => ({
 		list: [],
+		meta: {
+			status: StoreStatus.Loaded,
+		},
 		sort: {
-			by: sortType.Created,
+			by: SortType.Created,
 			reverse: true,
 		},
 	}),
@@ -40,6 +46,7 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 
 	actions: {
 		async load(): Promise<void> {
+			this.meta.status = StoreStatus.Loading
 			if (!getCurrentUser().isAdmin) {
 				return
 			}
@@ -47,14 +54,16 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 			try {
 				const response = await PollsAPI.getPollsForAdmin()
 				this.list = response.data
+				this.meta.status = StoreStatus.Loaded
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
+				this.meta.status = StoreStatus.Error
 				console.error('Error loading polls', { error })
 				throw error
 			}
 		},
 
-		async setSort(payload: { sortBy: sortType }): Promise<void> {
+		async setSort(payload: { sortBy: SortType }): Promise<void> {
 			if (this.sort.by === sortColumnsMapping[payload.sortBy]) {
 				this.sort.reverse = !this.sort.reverse
 			} else {
@@ -77,5 +86,30 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 				throw error
 			}
 		},
+
+		async delete(payload: { pollId: number }) {
+			try {
+				await PollsAPI.deletePoll(payload.pollId)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error deleting poll', { error, payload })
+				throw error
+			} finally {
+				this.load()
+			}
+		},
+
+		async toggleArchive(payload: { pollId: number }) {
+			try {
+				await PollsAPI.toggleArchive(payload.pollId)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error archiving/restoring poll', { error, payload })
+				throw error
+			} finally {
+				this.load()
+			}
+		},
+
 	},
 })

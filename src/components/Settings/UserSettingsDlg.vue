@@ -56,7 +56,7 @@ export default {
 	watch: {
 		async show() {
 			if (this.show === true) {
-				this.preferencesStore.get()
+				this.preferencesStore.load()
 				this.preferencesStore.getCalendars()
 			}
 		},

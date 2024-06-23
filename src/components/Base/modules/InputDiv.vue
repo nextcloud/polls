@@ -130,6 +130,13 @@ export default {
 			return this.signalingClass
 		},
 
+		isNumMinSet() {
+			return this.numMin !== null
+		},
+
+		isNumMaxSet() {
+			return this.numMax !== null
+		},
 		error() {
 			return !this.checking && !this.useNumModifiers && this.computedSignalingClass === 'error'
 		},
@@ -159,7 +166,7 @@ export default {
 		},
 
 		assertBoundaries() {
-			if (this.numMin && this.numMax && this.numMin >= this.numMax) {
+			if (this.isNumMinSet && this.isNumMaxSet && this.numMin >= this.numMax) {
 				Logger.warning('numMin is greater or equal than numMax. Validation will be skipped.')
 				return false
 			}
@@ -181,12 +188,12 @@ export default {
 		},
 
 		numWrapper(value) {
-			if (!this.assertBoundaries() || (this.numMax === null && this.numMin === null)) {	
+			if (!this.assertBoundaries() || (!this.isNumMaxSet && !this.isNumMinSet)) {	
 				this.$emit('input', value)
 				return value
-			}
+			}	
 
-			if (this.numMax && value > this.numMax) {
+			if (this.isNumMaxSet && value > this.numMax) {
 				if (this.numWrap) {
 					value = this.numMin ?? 0
 				} else {
@@ -194,7 +201,7 @@ export default {
 				}
 			} 
 
-			if (this.numMin && value < this.numMin) {
+			if (this.isNumMinSet && value < this.numMin) {
 				if (this.numWrap) {
 					value = this.numMax ?? value
 				} else {
@@ -207,12 +214,12 @@ export default {
 		},
 
 		numCheckBoundaries(value) {
-			if (this.type === 'number' && (this.numMin !== null || this.numMax !== null)) {
-				if (this.numMax && value > this.numMax) {
+			if (this.type === 'number' && (this.isNumMinSet || this.isNumMaxSet)) {
+				if (this.isNumMaxSet && value > this.numMax) {
 					value = this.numMax
 				}
 
-				if (this.numMin && value < this.numMin) {
+				if (this.isNumMinSet && value < this.numMin) {
 					value = this.numMin
 				}
 			}

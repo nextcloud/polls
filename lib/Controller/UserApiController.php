@@ -52,11 +52,27 @@ class UserApiController extends BaseApiController {
 	/**
 	 * get acl for poll
 	 * @param $pollId Poll id
+	 * @deprecated 8.0.0 Use getSession instead
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function getAcl(): JSONResponse {
 		return $this->response(fn () => ['acl' => $this->acl]);
+	}
+	/**
+	 * get acl for poll
+	 * @param $pollId Poll id
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	public function getSession(): JSONResponse {
+		return new JSONResponse([
+			'token' => $this->request->getParam('token'),
+			'currentUser' => $this->acl->getCurrentUser(),
+			'appPermissions' => $this->acl->getPermissionsArray(),
+			'appSettings' => $this->acl->getAppSettings(),
+		]);
 	}
 }

@@ -9,7 +9,7 @@
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
 		</CardDiv>
 
-		<CardDiv v-if="!aclStore.currentUser.isOwner" type="success">
+		<CardDiv v-if="!sessionStore.currentUser.isOwner" type="success">
 			{{ t('polls', 'As an admin you may edit this poll') }}
 		</CardDiv>
 
@@ -113,7 +113,7 @@ import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
 export default {
@@ -148,7 +148,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, useAclStore, useVotesStore),
+		...mapStores(usePollStore, useSessionStore, useVotesStore),
 	},
 
 	methods: {

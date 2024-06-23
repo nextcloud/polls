@@ -18,7 +18,7 @@
 			</template>
 			<PollInformation />
 		</NcPopover>
-		<ExportPoll v-if="pollStore.permissions.pollDownload" />
+		<ExportPoll v-if="sessionStore.appPermissions.pollDownload" />
 		<ActionToggleSidebar v-if="pollStore.permissions.edit || pollStore.permissions.comment" />
 	</div>
 </template>
@@ -33,6 +33,8 @@ import UserMenu from '../User/UserMenu.vue'
 import ExportPoll from '../Export/ExportPoll.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+
 
 export default {
 	name: 'PollHeaderButtons',
@@ -53,7 +55,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore),
+		...mapStores(usePollStore, useSessionStore),
 
 		showUserMenu() {
 			return this.$route.name !== 'publicVote' || this.pollStore.permissions.vote || this.pollStore.permissions.subscribe

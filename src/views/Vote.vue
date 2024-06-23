@@ -20,7 +20,7 @@
 		<div class="vote_main">
 			<VoteInfoCards />
 
-			<div v-if="pollDescription" class="area__description">
+			<div v-if="pollStore.configuration.description" class="area__description">
 				<MarkUpDescription />
 			</div>
 
@@ -52,6 +52,7 @@
 <script>
 import { mapStores } from 'pinia'
 import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
@@ -65,9 +66,10 @@ import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
 import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../stores/poll.ts'
-import { useAclStore } from '../stores/acl.ts'
+import { useSessionStore } from '../stores/session.ts'
 import { useOptionsStore } from '../stores/options.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
+import { Logger } from '../helpers/index.js'
 
 export default {
 	name: 'Vote',
@@ -97,7 +99,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, useAclStore, useOptionsStore, usePreferencesStore),
+		...mapStores(usePollStore, useSessionStore, useOptionsStore, usePreferencesStore),
 
 		emptyContentProps() {
 			if (this.pollStore.status.countOptions > 0) {
@@ -109,7 +111,7 @@ export default {
 
 			return {
 				name: t('polls', 'No vote options available'),
-				description: this.pollStore.permissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
+				description: this.sessionStore.pollPermissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
 			}
 		},
 
@@ -119,14 +121,29 @@ export default {
 		},
 	},
 
+	watch: {
+		$route(to, from) {
+			Logger.debug('Route changed', this.sessionStore.router)
+			this.pollStore.load()
+		},
+	},
+
+	created() {
+		subscribe('polls:poll:load', this.pollStore.load())
+		emit('polls:transition:off', 500)
+	},
+
 	mounted() {
 		this.scrollElement = document.getElementById('app-content-vue')
 		this.scrollElement.addEventListener('scroll', this.handleScroll)
+		Logger.debug('Poll view mounted', this.sessionStore.router)
+		this.loadPoll()
 	},
 
 	beforeDestroy() {
 		this.scrollElement.removeEventListener('scroll', this.handleScroll)
-		this.pollStore.$reset()
+		this.pollStore.reset()
+		unsubscribe('polls:poll:load')
 	},
 
 	methods: {
@@ -136,6 +153,13 @@ export default {
 			} else {
 				this.scrolled = false
 			}
+		},
+		loadPoll() {
+			// TODO: remove temporary action against race condition:
+			// SessionStore must be loaded before pollStore
+			setTimeout(() => {
+				this.pollStore.load()
+			}, 500);
 		},
 	},
 }

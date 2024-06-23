@@ -14,7 +14,6 @@
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
 import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import '@nextcloud/dialogs/style.css'
@@ -28,18 +27,7 @@ import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 import { Logger } from './helpers/index.js'
 import { mapStores } from 'pinia';
-import { useRouterStore } from './stores/router.ts'
-import { usePollStore } from './stores/poll.ts'
-import { useOptionsStore } from './stores/options.ts'
-import { useVotesStore } from './stores/votes.ts'
-import { useCommentsStore } from './stores/comments.ts'
-import { useSubscriptionStore } from './stores/subscription.ts'
-import { useActivityStore } from './stores/activity.ts'
-import { useSharesStore } from './stores/shares.ts'
-import { useAclStore } from './stores/acl.ts'
-import { usePollsStore } from './stores/polls.ts'
-import { usePollsAdminStore } from './stores/pollsAdmin.ts'
-import { useShareStore } from './stores/share.ts'
+import { useSessionStore } from './stores/session.ts'
 import { usePreferencesStore } from './stores/preferences.ts'
 import { showSuccess } from '@nextcloud/dialogs'
 import { debounce } from 'lodash'
@@ -54,48 +42,41 @@ export default {
 
 	mixins: [watchPolls],
 
+	beforeRouteUpdate(to, from, next) {
+		Logger.debug('Route changed (update)', { from, to })
+		this.loadContext()
+		next()
+	},
+
 	data() {
 		return {
 			transitionClass: 'transitions-active',
 			loading: false,
-			isLoggedin: !!getCurrentUser(),
-			isAdmin: !!getCurrentUser()?.isAdmin,
 		}
 	},
 
 	computed: {
 		...mapStores(
-			useAclStore,
-			useActivityStore,
-			useCommentsStore,
-			useOptionsStore,
-			usePollsStore,
-			usePollsAdminStore,
-			usePollStore,
-			useRouterStore,
-			useSharesStore,
-			useShareStore,
-			useSubscriptionStore,
-			useVotesStore,
+			useSessionStore,
 			usePreferencesStore,
 		),
 
 		appClass() {
 			return [
 				this.transitionClass, {
-					edit: this.pollStore.permissions.edit,
+					edit: this.sessionStore.pollPermissions.edit,
 				},
 			]
 		},
 
 		useNavigation() {
-			return !!getCurrentUser()
+			return this.sessionStore.userStatus.isLoggedin
 		},
 
 		useSidebar() {
-			return this.pollStore.permissions.edit
-				|| this.pollStore.permissions.comment
-				|| this.$route.name === 'combo'
+			return this.sessionStore.pollPermissions.edit
+				|| this.sessionStore.pollPermissions.comment
+				|| this.sessionStore.router.name === 'combo'
 		},
 	},
 
@@ -106,7 +87,6 @@ export default {
 			this.watchPolls()
 		},
 	},
-
 	created() {
 		subscribe('polls:transitions:off', (delay) => {
 			this.transitionsOff(delay)
@@ -116,14 +96,7 @@ export default {
 			this.transitionsOn()
 		})
 
-		subscribe('polls:stores:load', (stores) => {
-			this.loadStores(stores)
-		})
-
-		subscribe('polls:poll:load', (silent) => {
-			this.loadPoll(silent)
-		})
-		subscribe('polls:updated', (payload) => {
+		subscribe('polls:poll:update', (payload) => {
 			this.notify(payload)
 		})
 	},
@@ -134,11 +107,9 @@ export default {
 	},
 
 	beforeDestroy() {
-		this.cancelToken.cancel()
-		unsubscribe('polls:poll:load')
 		unsubscribe('polls:transitions:on')
 		unsubscribe('polls:transitions:off')
-		unsubscribe('polls:updated')
+		unsubscribe('polls:poll:updated')
 	},
 
 	methods: {
@@ -148,22 +119,14 @@ export default {
 			}
 		}, 1500),
 
-		loadContext(silent) {
+		loadContext() {
 			if (this.$route.name !== null) {
-				this.aclStore.load()
-				this.routerStore.set(this.$route)
+				this.sessionStore.setRouter(this.$route)
+				this.sessionStore.load()
 			}
 			
-			if (getCurrentUser()) {
+			if (this.sessionStore.userStatus.isLoggedin) {
 				this.preferencesStore.load()
-				
-				if (this.$route.name === 'list') {
-					this.pollsStore.setFilter(this.$route.params.type)
-				}
-			}
-			
-			if (this.$route.name === 'vote' || this.$route.name === 'publicVote') {
-				this.loadPoll(silent)
 			}
 		},
 
@@ -178,107 +141,6 @@ export default {
 					this.transitionClass = 'transitions-active'
 				}, delay)
 			}
-		},
-
-		async loadStores(stores) {
-			Logger.debug('Updates detected', { stores })
-
-			let dispatches = [
-				'activity/list',
-				'appSettings/get',
-				'acl/get',
-			]
-
-			stores.forEach((item) => {
-				if (item.table === 'polls') {
-
-					// If user is an admin, also load admin list
-					if (this.isAdmin) dispatches = [...dispatches, 'pollsAdmin']
-
-					// if user is an authorized user load polls list and combo
-					if (this.isLoggedin) dispatches = [...dispatches, `${item.table}`, 'combo']
-
-					// if current poll is affected, load current poll configuration
-					if (item.pollId === this.pollStore.id) {
-						dispatches = [...dispatches, 'poll']
-					}
-
-				} else if (!this.isLoggedin && (item.table === 'shares')) {
-					// if current user is guest and table is shares only reload current share
-					dispatches = [...dispatches, 'share']
-				} else {
-					// otherwise just load particulair store
-					dispatches = [...dispatches, `${item.table}`]
-				}
-			})
-
-			// deduplicate dispatches
-			dispatches = [...new Set(dispatches)]
-			if (dispatches.includes('poll')) {
-				dispatches.remove('poll')
-				
-			}
-			this.pollStore.load()
-			this.pollsStore.load()
-			this.pollsAdminStore.load()
-			this.activityStore.load()
-		},
-
-		async loadPoll(silent) {
-			if (!silent) {
-				this.loading = true
-				this.transitionsOff()
-			}
-
-			try {
-				if (this.$route.name === 'vote' && !this.$route.params.id) {
-					throw new Error('No pollId for vote page')
-				}
-				const dispatches = [
-					'poll/get',
-					'comments/list',
-					'options/list',
-					'votes/list',
-					'subscription/get',
-				]
-
-				if (this.$route.name === 'publicVote') {
-					dispatches.push('share/get')
-				} else if (this.$route.name === 'vote') {
-					dispatches.push('shares/list')
-					dispatches.push('activity/list')
-				}
-
-				// replace call to loadStoresProxy with loadPiniaStores after finishing pinia migration
-				await this.loadStoresProxy(dispatches)
-			} catch {
-				this.$router.replace({ name: 'notfound' })
-			} finally {
-				this.loading = false
-				this.transitionsOn()
-			}
-		},
-
-		// TODO: remove this function after finishing pinia migration
-		async loadStoresProxy(dispatches) {
-			// await this.loadVuexStores(dispatches)
-			// Logger.debug('Loaded vuex stores', { dispatches })	
-			await this.LoadPiniaStores(dispatches)
-			Logger.debug('Loaded piniastores', { dispatches })	
-		},
-
-		// async loadVuexStores(dispatches) {
-		// 	Logger.debug('Loading vuex stores', { dispatches })
-		// 	const requests = dispatches.map((dispatches) => this.$store.dispatch(dispatches))
-		// 	return Promise.all(requests)
-		// },
-
-		LoadPiniaStores(dispatches) {
-			Logger.debug('Loading pinia stores', { dispatches })
-			this.pollStore.load()
-			this.pollsStore.load()
-			this.pollsAdminStore.load()
-			this.activityStore.load()
 		},
 	},
 }
@@ -360,4 +222,3 @@ export default {
 }
 
 </style>
-./stores/router.ts

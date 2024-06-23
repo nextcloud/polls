@@ -7,7 +7,7 @@
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.allowPollDownload" 
 			type="switch"
-			@change="appSettingsStore.write()">
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the spreadsheet download of polls globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!appSettingsStore.allowPollDownload" class="settings_details">
@@ -19,6 +19,7 @@
 				:multiple="true"
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disable globally')"
+				@option:selected="appSettingsStore.write()"
 				@search="loadGroups" />
 		</div>
 	</div>

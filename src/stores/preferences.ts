@@ -32,10 +32,18 @@ export interface SessionSettings {
 	manualViewTextPoll: '' | ViewMode
 }
 
+export interface Calendar {
+	key: string
+	name: string
+	calendarUri: string
+	displayColor: string
+	permissions: number
+}
+
 export interface Preferences {
 	user: UserPreferences
 	session: SessionSettings,
-	availableCalendars: [],
+	availableCalendars: Calendar[],
 	viewModes: ViewMode[],
 }
 
@@ -95,17 +103,25 @@ export const usePreferencesStore = defineStore('preferences', {
 			this.availableCalendars = payload.calendars
 		},
 	
-		addCheckCalendar(payload) {
-			this.user.checkCalendars.push(payload.key)
+		addCheckCalendar(calendar: Calendar ) {
+			this.user.checkCalendars.push(calendar.key)
 			this.write()
 		},
 	
-		setViewDatePoll(payload) {
-			this.session.manualViewDatePoll = payload
+		removeCheckCalendar(calendar: Calendar) {
+			const index = this.user.checkCalendars.indexOf(calendar.key);
+			if (index !== -1) {
+				this.user.checkCalendars.splice(index, 1);
+			}
+			this.write()
+		},
+	
+		setViewDatePoll(viewMode: ViewMode) {
+			this.session.manualViewDatePoll = viewMode
 		},
 
-		setViewTextPoll(payload) {
-			this.session.manualViewTextPoll = payload
+		setViewTextPoll(viewMode: ViewMode) {
+			this.session.manualViewTextPoll = viewMode
 		},
 	
 		async load(): Promise<void> {
@@ -135,18 +151,10 @@ export const usePreferencesStore = defineStore('preferences', {
 			}
 		},
 	
-		resetChunks(): void {
-			this.meta.loadedChunks = 1
-		},
-
-		async setFilter(newCategoryId: string): Promise<void>{
-			this.meta.currentCategoryId = newCategoryId
-			this.resetChunks()
-		},
-
 		async getCalendars() {
 			try {
 				const response = await CalendarAPI.getCalendars()
+				// this.availableCalendars = response.data.calendars
 				this.setCalendars({ calendars: response.data.calendars })
 				return response
 			} catch (error) {

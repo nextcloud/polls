@@ -7,7 +7,7 @@
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.allowAllAccess" 
 			type="switch"
-			@change="appSettingsStore.write()">
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the creation of openly accessible polls globally') }}
 		</NcCheckboxRadioSwitch>
 

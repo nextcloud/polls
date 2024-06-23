@@ -48,7 +48,7 @@
 			<SideBarTabComments />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="pollStore.permissions.edit && aclStore.appSettings.useActivity"
+		<NcAppSidebarTab v-if="pollStore.permissions.edit && sessionStore.appSettings.useActivity"
 			id="activity"
 			:order="6"
 			:name="t('polls', 'Activity')">
@@ -72,7 +72,7 @@ import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../stores/poll.ts'
-import { useAclStore } from '../stores/acl.ts'
+import { useSessionStore } from '../stores/session.ts'
 
 export default {
 	name: 'SideBar',
@@ -100,7 +100,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, useAclStore),
+		...mapStores(usePollStore, useSessionStore),
 	},
 
 	created() {

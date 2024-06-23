@@ -24,7 +24,7 @@ import { mapStores } from 'pinia'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 import { ValidatorAPI } from '../../Api/index.js'
 import { t } from '@nextcloud/l10n'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { useShareStore } from '../../stores/share.ts'
 
 const setError = (inputProps) => {
@@ -65,14 +65,14 @@ export default {
 	},
 
 	computed: {
-		...mapStores(useAclStore, useShareStore),
+		...mapStores(useSessionStore, useShareStore),
 	},
 
 	methods: {
 		validate: debounce(async function() {
 			const inputProps = this.inputProps
 
-			if (this.shareStore.emailAddress === this.aclStore.currentUser.emailAddress) {
+			if (this.shareStore.emailAddress === this.sessionStore.currentUser.emailAddress) {
 				setUnchanged(inputProps)
 				return
 			}

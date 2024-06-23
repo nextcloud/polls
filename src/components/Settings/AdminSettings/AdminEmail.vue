@@ -7,7 +7,7 @@
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.legalTermsInEmail" 
 			type="switch"
-			@change="appSettingsStore.write()">
+			@update:checked="appSettingsStore.write()">
 
 			{{ t('polls', 'Add terms links also to the email footer') }}
 		</NcCheckboxRadioSwitch>

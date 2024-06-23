@@ -30,8 +30,8 @@ class Preferences extends Entity implements JsonSerializable {
 		'useAlternativeStyling' => false,
 		'calendarPeek' => false,
 		'checkCalendars' => [],
-		'checkCalendarsBefore' => 0,
-		'checkCalendarsAfter' => 0,
+		'checkCalendarsHoursBefore' => 0,
+		'checkCalendarsHoursAfter' => 0,
 		'defaultViewTextPoll' => 'table-view',
 		'defaultViewDatePoll' => 'table-view',
 		'performanceThreshold' => 1000,
@@ -56,14 +56,24 @@ class Preferences extends Entity implements JsonSerializable {
 		return json_decode($this->getPreferences() ?? '');
 	}
 
-	public function getCheckCalendarsBefore(): int {
+	public function getCheckCalendarsHoursBefore(): int {
+		if (isset($this->getPreferences_decoded()->checkCalendarsHoursBefore)) {
+			return intval($this->getPreferences_decoded()->checkCalendarsHoursBefore);
+		}
+
+		// in case old property name is used, return the value
 		if (isset($this->getPreferences_decoded()->checkCalendarsBefore)) {
 			return intval($this->getPreferences_decoded()->checkCalendarsBefore);
 		}
 		return 0;
 	}
 	
-	public function getCheckCalendarsAfter(): int {
+	public function getCheckCalendarsHoursAfter(): int {
+		if (isset($this->getPreferences_decoded()->checkCalendarsHoursAfter)) {
+			return intval($this->getPreferences_decoded()->checkCalendarsHoursAfter);
+		}
+
+		// in case old property name is used, return the value
 		if (isset($this->getPreferences_decoded()->checkCalendarsAfter)) {
 			return intval($this->getPreferences_decoded()->checkCalendarsAfter);
 		}

@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 import { ActivityAPI } from '../Api/index.js'
 import { User, AppSettings, AppPermissions } from '../Interfaces/interfaces.ts'
 import { Vote } from './votes.ts'
-import { useRouterStore } from './router.ts'
+import { useSessionStore } from './session.ts'
 
 interface Activity {
 	token: string,
@@ -28,9 +28,9 @@ export const useActivityStore = defineStore('activity', {
 
 	actions: {
 		async load() {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
-				const response = await ActivityAPI.getActivities(routerStore.params.id)
+				const response = await ActivityAPI.getActivities(sessionStore.router.params.id)
 				this.list = response.data.ocs.data
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return

@@ -81,19 +81,40 @@ class PublicController extends BasePublicController {
 		return $this->response(function () {
 			return [
 				'poll' => $this->pollService->get($this->userSession->getShare()->getPollId()),
+				'options' => $this->optionService->list($this->userSession->getShare()->getPollId()),
+				'votes' => $this->voteService->list($this->userSession->getShare()->getPollId()),
+				'comments' => $this->commentService->list($this->userSession->getShare()->getPollId()),
+				'shares' => $this->shareService->list($this->userSession->getShare()->getPollId()),
+				'subscribed' => $this->subscriptionService->get($this->userSession->getShare()->getPollId()),
 				'acl' => $this->acl,
 			];
 		});
 	}
 
 	/**
-	 * get complete poll via token
+	 * get acl for user
+	 * @deprecated 8.0.0 Use getSession instead
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
 	public function getAcl(): JSONResponse {
 		return $this->response(fn () => [
 			'acl' => $this->acl
+		]);
+	}
+
+	/**
+	 * get session information
+	 */
+	#[PublicPage]
+	#[ShareTokenRequired]
+	public function getSession(): JSONResponse {
+		return $this->response(fn () => [
+			'token' => $this->request->getParam('token'),
+			'currentUser' => $this->userSession->getUser(),
+			'appPermissions' => $this->acl->getPermissionsArray(),
+			'appSettings' => $this->acl->getAppSettings(),
+			'share' => $this->userSession->getShare(),
 		]);
 	}
 

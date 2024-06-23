@@ -63,7 +63,7 @@ class Acl implements JsonSerializable {
 	/**
 	 * Get all permissions as array
 	 */
-	private function getPermissionsArray(): array {
+	public function getPermissionsArray(): array {
 		return [
 			'allAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
 			'publicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
@@ -73,7 +73,7 @@ class Acl implements JsonSerializable {
 		];
 	}
 
-	private function getAppSettings(): array {
+	public function getAppSettings(): array {
 		$appSettingsArray = [
 			'usePrivacyUrl' => '',
 			'useImprintUrl' => '',
@@ -113,7 +113,7 @@ class Acl implements JsonSerializable {
 	/**
 	 * loads the current user from the userSession or returns the cached one
 	 */
-	private function getCurrentUser(): UserBase {
+	public function getCurrentUser(): UserBase {
 		return $this->userSession->getUser();
 	}
 

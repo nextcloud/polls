@@ -9,14 +9,14 @@
 		<div class="user_settings">
 			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.useCommentsAlternativeStyling" 
 				type="switch"
-				@change="preferencesStore.write()">
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Use alternative styling for the comments sidebar') }}
 			</NcCheckboxRadioSwitch>
 		</div>
 		<div class="user_settings">
 			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.useAlternativeStyling" 
 				type="switch"
-				@change="preferencesStore.write()">
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Use alternative vote page styling') }}
 			</NcCheckboxRadioSwitch>
 		</div>

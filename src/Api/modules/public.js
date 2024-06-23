@@ -14,12 +14,12 @@ const publicPoll = {
 		})
 	},
 
-	getAcl(shareToken) {
+	getSession(shareToken) {
 		return httpInstance.request({
 			method: 'GET',
-			url: `/s/${shareToken}/acl`,
+			url: `/s/${shareToken}/session`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getAcl.name].handleRequestCancellation().token,
+			cancelToken: cancelTokenHandlerObject[this.getSession.name].handleRequestCancellation().token,
 		})
 	},
 

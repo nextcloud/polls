@@ -178,6 +178,7 @@ export default {
 	},
 
 	mounted() {
+		this.pollsStore.load()
 		this.refreshView()
 	},
 

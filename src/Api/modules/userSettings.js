@@ -14,15 +14,6 @@ const userSettings = {
 		})
 	},
 
-	getAcl() {
-		return httpInstance.request({
-			method: 'GET',
-			url: 'acl',
-			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getAcl.name].handleRequestCancellation().token,
-		})
-	},
-
 	writeUserSettings(preferences) {
 		return httpInstance.request({
 			method: 'POST',
@@ -31,6 +22,17 @@ const userSettings = {
 			cancelToken: cancelTokenHandlerObject[this.writeUserSettings.name].handleRequestCancellation().token,
 		})
 	},
+
+	getSession() {
+		return httpInstance.request({
+			method: 'GET',
+			url: 'session',
+			params: { time: +new Date() },
+			cancelToken: cancelTokenHandlerObject[this.getSession.name].handleRequestCancellation().token,
+		})
+	},
+
+
 }
 
 const cancelTokenHandlerObject = createCancelTokenHandler(userSettings)

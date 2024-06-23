@@ -5,7 +5,7 @@
 
 <template>
 	<div class="comment-add">
-		<UserItem :user="aclStore.currentUser" hide-names />
+		<UserItem :user="sessionStore.currentUser" hide-names />
 
 		<InputDiv v-model="comment"
 			class="comment-add__input"
@@ -21,7 +21,7 @@ import { showError } from '@nextcloud/dialogs'
 import { InputDiv } from '../Base/index.js'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { useCommentsStore } from '../../stores/comments.ts'
 
 export default {
@@ -39,7 +39,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(useAclStore, useCommentsStore),
+		...mapStores(useSessionStore, useCommentsStore),
 	},
 
 	methods: {

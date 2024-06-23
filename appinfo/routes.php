@@ -7,6 +7,7 @@
 return [
 	'routes' => [
 		['name' => 'public#get_acl', 'url' => '/s/{token}/acl', 'verb' => 'GET'],
+		['name' => 'public#get_session', 'url' => '/s/{token}/session', 'verb' => 'GET'],
 		['name' => 'public#vote_page', 'url' => '/s/{token}', 'verb' => 'GET'],
 		['name' => 'public#get_share', 'url' => '/s/{token}/share', 'verb' => 'GET'],
 		['name' => 'public#get_poll', 'url' => '/s/{token}/poll', 'verb' => 'GET'],
@@ -119,6 +120,7 @@ return [
 		['name' => 'watch#watch_poll', 'url' => '/poll/{pollId}/watch', 'verb' => 'GET'],
 
 		['name' => 'user#get_acl', 'url' => '/acl', 'verb' => 'GET'],
+		['name' => 'user#get_session', 'url' => '/session', 'verb' => 'GET'],
 		['name' => 'user#write_preferences', 'url' => '/preferences', 'verb' => 'POST'],
 		['name' => 'user#get_preferences', 'url' => '/preferences', 'verb' => 'GET'],
 		['name' => 'user#get_calendars', 'url' => '/calendars', 'verb' => 'GET'],
@@ -126,6 +128,7 @@ return [
 
 		// REST-API calls
 		['name' => 'user_api#get_acl', 'url' => '/api/v1.0/acl', 'verb' => 'GET'],
+		['name' => 'user_api#get_session', 'url' => '/session', 'verb' => 'GET'],
 		['name' => 'base_api#preflighted_cors', 'url' => '/api/v1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 		['name' => 'poll_api#list', 'url' => '/api/v1.0/polls', 'verb' => 'GET'],
 		['name' => 'poll_api#transfer_polls', 'url' => '/api/v1.0/polls/transfer/{sourceUser}/{destinationUser}', 'verb' => 'PUT'],

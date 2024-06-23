@@ -5,8 +5,9 @@
 
 <template>
 	<div>
-		<RadioGroupDiv v-model="pollShowResults" 
-			:options="pollShowResultsOptions" />
+		<RadioGroupDiv v-model="pollStore.configuration.showResults" 
+			:options="pollShowResultsOptions" 
+			@update="pollStore.write()" />
 	</div>
 </template>
 
@@ -35,18 +36,6 @@ export default {
 
 	computed: {
 		...mapStores(usePollStore),
-
-		pollShowResults: {
-			get() {
-				return this.pollStore.configuration.showResults
-			},
-			set(value) {
-				this.pollStore.configuration.showResults = value 
-				this.pollStore.write()
-			},
-		},
-
-
 	},
 }
 </script>

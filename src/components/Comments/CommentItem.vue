@@ -16,7 +16,7 @@
 				<span v-html="linkify(subComment.comment)" />
 				<!-- eslint-enable vue/no-v-html -->
 
-				<ActionDelete v-if="(comment.user.userId === aclStore.currentUser.userId || aclStore.currentUser.isOwner)"
+				<ActionDelete v-if="(comment.user.userId === sessionStore.currentUser.userId || sessionStore.currentUser.isOwner)"
 					:name="subComment.deleted ? t('polls', 'Restore comment') : t('polls', 'Delete comment')"
 					:restore="!!subComment.deleted"
 					:timeout="0"
@@ -35,7 +35,7 @@ import { mapStores } from 'pinia'
 import { ActionDelete } from '../Actions/index.js'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 export default {
 	name: 'CommentItem',
@@ -52,14 +52,14 @@ export default {
 	},
 
 	computed: {
-		...mapStores(useAclStore),
+		...mapStores(useSessionStore),
 
 		dateCommentedRelative() {
 			return moment.unix(this.comment.timestamp).fromNow()
 		},
 
 		isCurrentUser() {
-			return this.aclStore.currentUser.userId === this.comment.user.userId
+			return this.sessionStore.currentUser.userId === this.comment.user.userId
 		},
 	},
 

@@ -10,11 +10,10 @@ import { User, UserType } from '../Interfaces/interfaces.ts'
 import { Logger, uniqueArrayOfObjects } from '../helpers/index.js'
 import moment from '@nextcloud/moment'
 import { usePreferencesStore } from './preferences.ts'
-import { useAclStore } from './acl.ts'
 import { useVotesStore } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
-import { useRouterStore } from './router.ts'
+import { useSessionStore } from './session.ts'
 import { useSubscriptionStore } from './subscription.ts'
 import { t } from '@nextcloud/l10n'
 import { useSharesStore } from './shares.ts'
@@ -228,15 +227,15 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		participants(state) {
-			const aclStore = useAclStore()
+			const sessionStore = useSessionStore()
 			const participants = this.participantsVoted
 	
 			// add current user, if not among participants and voting is allowed
-			if (!participants.find((participant) => participant.userId === aclStore.currentUser.userId) && aclStore.currentUser.userId && state.permissions.vote) {
+			if (!participants.find((participant) => participant.userId === sessionStore.currentUser.userId) && sessionStore.currentUser.userId && state.permissions.vote) {
 				participants.push({
-					userId: aclStore.currentUser.userId,
-					displayName: aclStore.currentUser.displayName,
-					isNoUser: aclStore.currentUser.isNoUser,
+					userId: sessionStore.currentUser.userId,
+					displayName: sessionStore.currentUser.displayName,
+					isNoUser: sessionStore.currentUser.isNoUser,
 				})
 			}
 	
@@ -244,12 +243,12 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		safeParticipants() {
-			const aclStore = useAclStore()
+			const sessionStore = useSessionStore()
 			if (this.getSafeTable) {
 				return [{
-					userId: aclStore.currentUser.userId,
-					displayName: aclStore.currentUser.displayName,
-					isNoUser: aclStore.currentUser.isNoUser,
+					userId: sessionStore.currentUser.userId,
+					displayName: sessionStore.currentUser.displayName,
+					isNoUser: sessionStore.currentUser.isNoUser,
 				}]
 			}
 			return this.participants
@@ -343,22 +342,34 @@ export const usePollStore = defineStore('poll', {
 			this.update()
 		},
 
-		async load() {
-			const routerStore = useRouterStore()
+		async resetPoll() {
 			const votesStore = useVotesStore()
-			const aclStore = useAclStore()
 			const optionsStore = useOptionsStore()
 			const sharesStore = useSharesStore()
 			const commentsStore = useCommentsStore()
 			const subscriptionStore = useSubscriptionStore()
+			this.$reset()
+			votesStore.$reset()
+			optionsStore.$reset()
+			sharesStore.$reset()
+			commentsStore.$reset()
+			subscriptionStore.$reset()
+		},
 
+		async load() {
+			const votesStore = useVotesStore()
+			const sessionStore = useSessionStore()
+			const optionsStore = useOptionsStore()
+			const sharesStore = useSharesStore()
+			const commentsStore = useCommentsStore()
+			const subscriptionStore = useSubscriptionStore()
 			try {
 				let response = null
 
-				if (routerStore.name === 'publicVote') {
-					response = await PublicAPI.getPoll(routerStore.params.token)
-				} else if (routerStore.name === 'vote') {
-					response = await PollsAPI.getFullPoll(routerStore.params.id)
+				if (sessionStore.router.name === 'publicVote') {
+					response = await PublicAPI.getPoll(sessionStore.router.params.token)
+				} else if (sessionStore.router.name === 'vote') {
+					response = await PollsAPI.getFullPoll(sessionStore.router.params.id)
 				} else {
 					this.reset()
 					return
@@ -370,7 +381,7 @@ export const usePollStore = defineStore('poll', {
 				sharesStore.list = response.data.shares
 				commentsStore.list = response.data.comments
 				subscriptionStore.subscribed = response.data.subscribed
-				aclStore.$patch(response.data.acl)
+				sessionStore.$patch(response.data.acl)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error loading poll', { error })
@@ -404,7 +415,7 @@ export const usePollStore = defineStore('poll', {
 			try {
 				const response = await PollsAPI.writePoll(this.id, this.configuration)
 				this.$patch(response.data.poll)
-				emit('polls:updated', { store: 'poll', message: t('polls', 'Poll updated') })
+				emit('polls:poll:updated', { store: 'poll', message: t('polls', 'Poll updated') })
 				
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return

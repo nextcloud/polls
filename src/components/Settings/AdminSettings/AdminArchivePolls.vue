@@ -5,7 +5,8 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.autoArchive" type="switch">
+		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.autoArchive" type="switch"
+		@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the automatic poll archiving') }}
 		</NcCheckboxRadioSwitch>
 		<InputDiv v-if="appSettingsStore.autoArchive"

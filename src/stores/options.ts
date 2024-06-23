@@ -11,7 +11,7 @@ import { Logger } from '../helpers/index.js'
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash/orderBy'
 import { usePollStore, PollType } from './poll.ts'
-import { useRouterStore } from './router.ts'
+import { useSessionStore } from './session.ts'
 
 interface Sequence {
 	step: number
@@ -120,14 +120,14 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		async load() {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
 				let response = null
 	
-				if (routerStore.name === 'publicVote') {
-					response = await PublicAPI.getOptions(routerStore.params.token)
-				} else if (routerStore.params.id) {
-					response = await OptionsAPI.getOptions(routerStore.params.id)
+				if (sessionStore.router.name === 'publicVote') {
+					response = await PublicAPI.getOptions(sessionStore.router.params.token)
+				} else if (sessionStore.router.params.id) {
+					response = await OptionsAPI.getOptions(sessionStore.router.params.id)
 				} else {
 					this.$reset()
 					return
@@ -136,7 +136,7 @@ export const useOptionsStore = defineStore('options', {
 				this.list = response.data.options
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error loding options', { error, pollId: routerStore.params.id })
+				Logger.error('Error loding options', { error, pollId: sessionStore.router.params.id })
 				throw error
 			}
 		},
@@ -155,14 +155,14 @@ export const useOptionsStore = defineStore('options', {
 		},
 	
 		async add(payload: { timestamp: number; text: string; duration: number }) {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (routerStore.name === 'publicVote') {
+				if (sessionStore.router.name === 'publicVote') {
 					response = await PublicAPI.addOption(
-						routerStore.params.token,
+						sessionStore.router.params.token,
 						{
-							pollId: routerStore.params.id,
+							pollId: sessionStore.router.params.id,
 							timestamp: payload.timestamp,
 							text: payload.text,
 							duration: payload.duration,
@@ -171,7 +171,7 @@ export const useOptionsStore = defineStore('options', {
 				} else {
 					response = await OptionsAPI.addOption(
 						{
-							pollId: routerStore.params.id,
+							pollId: sessionStore.router.params.id,
 							timestamp: payload.timestamp,
 							text: payload.text,
 							duration: payload.duration,
@@ -199,11 +199,11 @@ export const useOptionsStore = defineStore('options', {
 		},
 	
 		async delete(payload: { option: Option }) {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (routerStore.name === 'publicVote') {
-					response = await PublicAPI.deleteOption(routerStore.params.token, payload.option.id)
+				if (sessionStore.router.name === 'publicVote') {
+					response = await PublicAPI.deleteOption(sessionStore.router.params.token, payload.option.id)
 				} else {
 					response = await OptionsAPI.deleteOption(payload.option.id)
 				}
@@ -216,11 +216,11 @@ export const useOptionsStore = defineStore('options', {
 		},
 	
 		async restore(payload: { option: Option }) {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (routerStore.name === 'publicVote') {
-					response = await PublicAPI.restoreOption(routerStore.params.token, payload.option.id)
+				if (sessionStore.router.name === 'publicVote') {
+					response = await PublicAPI.restoreOption(sessionStore.router.params.token, payload.option.id)
 				} else {
 					response = await OptionsAPI.restoreOption(payload.option.id)
 				}
@@ -233,9 +233,9 @@ export const useOptionsStore = defineStore('options', {
 		},
 	
 		async addBulk(payload: { text: string }) {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
-				const response = await OptionsAPI.addOptions(routerStore.params.id, payload.text)
+				const response = await OptionsAPI.addOptions(sessionStore.router.params.id, payload.text)
 				this.$patch({ options: response.data.options })
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -267,14 +267,14 @@ export const useOptionsStore = defineStore('options', {
 		},
 	
 		async reorder(payload: { options: Option[] }) {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			payload.options.forEach((item, i) => {
 				item.order = i + 1
 			})
 			this.list = payload.options
 	
 			try {
-				const response = await OptionsAPI.reorderOptions(routerStore.params.id, payload)
+				const response = await OptionsAPI.reorderOptions(sessionStore.router.params.id, payload)
 				this.$patch({ options: response.data.options })
 			} catch (error) {
 				Logger.error('Error reordering option', { error, payload })
@@ -301,10 +301,10 @@ export const useOptionsStore = defineStore('options', {
 		},
 	
 		async shift(payload: { shift: Shift }) {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
 				const response = await OptionsAPI.shiftOptions(
-					routerStore.params.id,
+					sessionStore.router.params.id,
 					payload.shift.step,
 					payload.shift.unit.value,
 				)

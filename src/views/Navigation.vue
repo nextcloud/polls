@@ -15,7 +15,7 @@
 			<NcAppNavigationItem v-for="(pollCategory) in pollsStore.categories"
 				:key="pollCategory.id"
 				:name="pollCategory.title"
-				:allow-collapse="aclStore.appSettings.navigationPollsInList"
+				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
 				:pinned="pollCategory.pinned"
 				:to="{ name: 'list', params: {type: pollCategory.id}}"
 				:open="false">
@@ -24,10 +24,10 @@
 				</template>
 				<template #counter>
 					<NcCounterBubble>
-						{{ pollsStore.pollsByCategory(pollCategory.id).length }}
+						{{ pollsStore.pollsCount[pollCategory.id] }}
 					</NcCounterBubble>
 				</template>
-				<ul v-if="aclStore.appSettings.navigationPollsInList">
+				<ul v-if="sessionStore.appSettings.navigationPollsInList">
 					<PollNavigationItems v-for="(poll) in pollsStore.navigationList(pollCategory.id)"
 						:key="poll.id"
 						:poll="poll"
@@ -96,9 +96,8 @@ import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../stores/poll.ts'
 import { usePollsStore } from '../stores/polls.ts'
-import { useAclStore } from '../stores/acl.ts'
+import { useSessionStore } from '../stores/session.ts'
 import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
 
 export default {
@@ -134,7 +133,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, useAclStore, usePollsStore, usePollsAdminStore ),
+		...mapStores(useSessionStore, usePollsStore, usePollsAdminStore ),
 
 		showAdminSection() {
 			return getCurrentUser().isAdmin
@@ -178,7 +177,7 @@ export default {
 					this.pollsAdminStore.load()
 				}
 			} catch {
-				showError(t('polls', 'Error loading poll list app navigation'))
+				showError(t('polls', 'Error loading poll list'))
 			}
 		},
 

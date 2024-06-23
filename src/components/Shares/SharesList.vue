@@ -10,8 +10,8 @@
 		</template>
 
 		<UserSearch class="add-share" />
-		<ShareItemAllUsers v-if="aclStore.appPermissions.allAccess" />
-		<SharePublicAdd v-if="aclStore.appPermissions.publicShares" />
+		<ShareItemAllUsers v-if="sessionStore.appPermissions.allAccess" />
+		<SharePublicAdd v-if="sessionStore.appPermissions.publicShares" />
 
 		<div v-if="sharesStore.active.length" class="shares-list shared">
 			<TransitionGroup is="div"
@@ -50,7 +50,7 @@ import MarkUpDescription from '../Poll/MarkUpDescription.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'
 import { useSharesStore } from '../../stores/shares.ts'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
 export default {
 	name: 'SharesList',
@@ -81,7 +81,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, useSharesStore, useAclStore),
+		...mapStores(usePollStore, useSharesStore, useSessionStore),
 	},
 
 	methods: {

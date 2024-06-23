@@ -7,7 +7,7 @@
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.navigationPollsInList" 
 			type="switch"
-			@change="appSettingsStore.write()">
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Load polls into the navigation.') }}
 		</NcCheckboxRadioSwitch>
 	</div>

@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 import { SharesAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
 import { Share } from './share.ts'
-import { useRouterStore } from './router.ts'
+import { useSessionStore } from './session.ts'
 import { User, UserType } from '../Interfaces/interfaces.ts'
 
 
@@ -48,21 +48,21 @@ export const useSharesStore = defineStore('shares', {
 	
 	actions: {
 		async load(): Promise<void>{
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
-				const response = await SharesAPI.getShares(routerStore.params.id)
+				const response = await SharesAPI.getShares(sessionStore.router.params.id)
 				this.list = response.data.shares
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error loading shares', { error, pollId: routerStore.params.id })
+				Logger.error('Error loading shares', { error, pollId: sessionStore.router.params.id })
 				throw error
 			}
 		},
 	
 		async add(payload: { user: User }): Promise<void> {
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 			try {
-				await SharesAPI.addShare(routerStore.params.id, payload.user)
+				await SharesAPI.addShare(sessionStore.router.params.id, payload.user)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error writing share', { error, payload })

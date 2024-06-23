@@ -5,7 +5,8 @@
 
 <template>
 	<div class="user_settings">
-		<RadioGroupDiv v-model="appSettingsStore.updateType" :options="updateTypeOptions" />
+		<RadioGroupDiv v-model="appSettingsStore.updateType" :options="updateTypeOptions" 
+		@update="appSettingsStore.write()" />
 	</div>
 </template>
 

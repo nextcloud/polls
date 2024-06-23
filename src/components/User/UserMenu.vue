@@ -59,8 +59,8 @@
 			</template>
 		</NcActionButton>
 		<NcActionButton v-if="$route.name === 'publicVote' && hasCookie"
-			:name="t('polls', 'Logout as {name} (delete cookie)', { name: aclStore.currentUser.displayName })"
-			:aria-label="t('polls', 'Logout as {name} (delete cookie)', { name: aclStore.currentUser.displayName })"
+			:name="t('polls', 'Logout as {name} (delete cookie)', { name: sessionStore.currentUser.displayName })"
+			:aria-label="t('polls', 'Logout as {name} (delete cookie)', { name: sessionStore.currentUser.displayName })"
 			@click="logout()">
 			<template #icon>
 				<LogoutIcon />
@@ -82,7 +82,7 @@ import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.js'
 import { PollsAPI } from '../../Api/index.js'
 import { t } from '@nextcloud/l10n'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { useShareStore } from '../../stores/share.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
@@ -108,7 +108,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(useAclStore, usePollStore, useShareStore, useSubscriptionStore),
+		...mapStores(useSessionStore, usePollStore, useShareStore, useSubscriptionStore),
 		
 		hasCookie() {
 			return !!findCookieByValue(this.$route.params.token)

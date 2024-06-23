@@ -21,6 +21,7 @@ import { mapStores } from 'pinia'
 import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 import { t } from '@nextcloud/l10n'
 import { useActivityStore } from '../../stores/activity.ts'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 export default {
 	name: 'SideBarTabActivity',
@@ -45,6 +46,13 @@ export default {
 			return this.activityStore.list.length === 0
 		},
 
+	},
+	created() {
+		subscribe('polls:activity:update', this.activityStore.load())
+	},
+
+	beforeDestroy() {
+		unsubscribe('polls:activity:update')
 	},
 
 }

@@ -17,7 +17,7 @@ import { mapStores } from 'pinia'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import VoteIndicator from './VoteIndicator.vue'
 import { t } from '@nextcloud/l10n'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
@@ -40,7 +40,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, useVotesStore, useAclStore),
+		...mapStores(usePollStore, useVotesStore, useSessionStore),
 
 		isVotable() {
 			return this.isActive
@@ -54,7 +54,7 @@ export default {
 		},
 
 		isCurrentUser() {
-			return this.aclStore.currentUser.userId === this.userId
+			return this.sessionStore.currentUser.userId === this.userId
 		},
 
 		answer() {

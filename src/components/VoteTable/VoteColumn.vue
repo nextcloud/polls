@@ -56,7 +56,7 @@ import { t } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
 import { usePollStore } from '../../stores/poll.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 
@@ -89,7 +89,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, usePreferencesStore, useAclStore, useVotesStore, useOptionsStore),
+		...mapStores(usePollStore, usePreferencesStore, useSessionStore, useVotesStore, useOptionsStore),
 
 		componentClass() {
 			const classList = ['vote-column']
@@ -112,7 +112,7 @@ export default {
 
 		ownAnswer() {
 			return this.votesStore.getVote({
-				userId: this.aclStore.currentUser.userId,
+				userId: this.sessionStore.currentUser.userId,
 				option: this.option,
 			}).answer
 		},

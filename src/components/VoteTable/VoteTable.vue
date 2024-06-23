@@ -12,7 +12,7 @@
 
 			<div v-for="(participant) in pollStore.safeParticipants"
 				:key="participant.userId"
-				:class="['participant', {currentuser: (participant.userId === aclStore.currentUser.userId) }]">
+				:class="['participant', {currentuser: (participant.userId === sessionStore.currentUser.userId) }]">
 				<UserItem :user="participant" condensed />
 
 				<ActionDelete v-if="pollStore.permissions.edit"
@@ -46,7 +46,7 @@ import VoteMenu from './VoteMenu.vue'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
 import { usePollStore } from '../../stores/poll.ts'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
@@ -70,7 +70,7 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, useAclStore, useOptionsStore, useVotesStore),
+		...mapStores(usePollStore, useSessionStore, useOptionsStore, useVotesStore),
 	},
 
 	methods: {

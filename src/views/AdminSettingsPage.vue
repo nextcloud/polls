@@ -43,6 +43,7 @@
 </template>
 
 <script>
+import { mapStores } from 'pinia'
 import {
 	AdminActivities, AdminArchivePolls, AdminCombo, AdminEmail, AdminJobs, AdminLegal, 
 	AdminPerformance, AdminPollCreation, AdminPollDownload, AdminPollsInNavigation,
@@ -53,6 +54,7 @@ import { FlexSettings } from '../components/Base/index.js'
 import { NcSettingsSection } from '@nextcloud/vue'
 import '../assets/scss/markdown.scss'
 import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../stores/appSettings.ts'
 
 export default {
 	name: 'AdminSettingsPage',
@@ -107,6 +109,12 @@ export default {
 			description: t('polls', 'Manually start backgropund jobs, independent from the cron schedule.')
 		}
 		}
+	},
+	computed: {
+		...mapStores(useAppSettingsStore),
+	},
+	mounted() {
+		this.appSettingsStore.load()
 	},
 }
 </script>

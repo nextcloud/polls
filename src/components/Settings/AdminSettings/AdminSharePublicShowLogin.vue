@@ -7,7 +7,7 @@
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.showLogin" 
 			type="switch"
-			@change="appSettingsStore.write()">
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Enable the login option in the registration dialog of public polls') }}
 		</NcCheckboxRadioSwitch>
 	</div>

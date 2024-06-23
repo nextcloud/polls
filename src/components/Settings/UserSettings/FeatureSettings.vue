@@ -6,9 +6,9 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.defaultViewTextPoll" 
+			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.defaultViewTextPoll" 
 				type ="switch"
-				@change="preferencesStore.write()">
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Text polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -17,9 +17,9 @@
 		</div>
 
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.defaultViewDatePoll" 
+			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.defaultViewDatePoll" 
 				type="switch"
-				@change="preferencesStore.write()">
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Date polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -28,7 +28,7 @@
 		</div>
 
 		<div class="user_settings">
-			<InputDiv v-model="preferencesStore.relevantOffset"
+			<InputDiv v-model="preferencesStore.user.relevantOffset"
 				type="number"
 				inputmode="numeric"
 				use-num-modifiers

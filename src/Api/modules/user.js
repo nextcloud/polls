@@ -14,12 +14,12 @@ const userSettings = {
 		})
 	},
 
-	getAcl() {
+	getSession() {
 		return httpInstance.request({
 			method: 'GET',
-			url: 'acl',
+			url: 'session',
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getAcl.name].handleRequestCancellation().token,
+			cancelToken: cancelTokenHandlerObject[this.getSession.name].handleRequestCancellation().token,
 		})
 	},
 

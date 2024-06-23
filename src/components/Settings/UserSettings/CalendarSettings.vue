@@ -6,13 +6,13 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.calendarPeek" 
+			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.calendarPeek" 
 				type="switch"
-				@change="preferencesStore.write()">
+				@update:checked="preferencesStore.write()">
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
 			</NcCheckboxRadioSwitch>
 
-			<div v-show="preferencesStore.calendarPeek" class="settings_details">
+			<div v-show="preferencesStore.user.calendarPeek" class="settings_details">
 				{{ t('polls', 'Select the calendars to use for lookup.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
@@ -27,24 +27,24 @@
 		</div>
 
 		<div class="user_settings">
-			<InputDiv v-model="preferencesStore.checkCalendarsHoursBefore"
+			<InputDiv v-model="preferencesStore.user.checkCalendarsHoursBefore"
 				:label="t('polls', 'Specify in which period (in hours) before the option existing appointments should be included in the search results.')"
 				type="number"
 				inputmode="numeric"
-				num-min="0"
-				num-max="24"
+				use-num-modifiers
+				:num-min="0"
+				:num-max="24"
 				num-wrap
-				use-num-modifiers 
 				@change="preferencesStore.write()" />
 		</div>
 
 		<div class="user_settings">
-			<InputDiv v-model="preferencesStore.checkCalendarsHoursAfter"
+			<InputDiv v-model="preferencesStore.user.checkCalendarsHoursAfter"
 				:label="t('polls', 'Specify in which period (in hours) after the option existing appointments should be included in the search results.')"
 				type="number"
 				inputmode="numeric"
-				num-min="0"
-				num-max="24"
+				:num-min="0"
+				:num-max="24"
 				num-wrap
 				use-num-modifiers 
 				@change="preferencesStore.write()" />
@@ -76,7 +76,7 @@ export default {
 				key: calendar.key.toString(),
 				name: calendar.name,
 				displayColor: calendar.displayColor,
-				selected: this.preferencesStore.checkCalendars.includes(calendar.key.toString()),
+				selected: this.preferencesStore.user.checkCalendars.includes(calendar.key.toString()),
 			}), this)
 		},
 
@@ -85,10 +85,10 @@ export default {
 	methods: {
 		t,
 		async clickedCalendar(calendar) {
-			if (this.preferencesStore.checkCalendars.includes(calendar.key)) {
-				await this.writePreference({ checkCalendars: this.preferencesStore.checkCalendars.filter((item) => item !== calendar.key.toString()) })
+			if (this.preferencesStore.user.checkCalendars.includes(calendar.key)) {
+				this.preferencesStore.removeCheckCalendar(calendar)
 			} else {
-				await this.preferencesStore.addCheckCalendar(calendar)
+				this.preferencesStore.addCheckCalendar(calendar)
 			}
 		},
 	},

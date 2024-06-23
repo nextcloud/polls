@@ -7,7 +7,7 @@
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.showMailAddresses" 
 			type="switch"
-			@change="appSettingsStore.write()">
+			@update:checked="appSettingsStore.write()">
 			{{ t('polls', 'Show email addresses of internal accounts') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!appSettingsStore.showMailAddresses" class="settings_details">
@@ -19,6 +19,7 @@
 				:multiple="true"
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disable globally.')"
+				@option:selected="appSettingsStore.write()"
 				@search="loadGroups" />
 		</div>
 	</div>

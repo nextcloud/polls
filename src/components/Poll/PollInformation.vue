@@ -229,7 +229,7 @@ export default {
 			return this.votesStore.countAllVotesByAnswer('maybe')
 		},
 		countUsedVotes() {
-			return this.pollStore.configuration.maxVotesPerUser - this.currentUserStatus.yesVotes
+			return this.pollStore.configuration.maxVotesPerUser - this.pollStore.currentUserStatus.yesVotes
 		},
 	},
 	

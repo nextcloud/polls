@@ -27,7 +27,7 @@ import { ActionDelete } from '../Actions/index.js'
 import UserItem from '../User/UserItem.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../stores/poll.ts'
-import { useAclStore } from '../../stores/acl.ts'
+import { useSessionStore } from '../../stores/session.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 
 export default {
@@ -50,10 +50,10 @@ export default {
 	},
 
 	computed: {
-		...mapStores(usePollStore, useAclStore, useOptionsStore),
+		...mapStores(usePollStore, useSessionStore, useOptionsStore),
 
 		showDelete() {
-			return !this.pollStore.permissions.edit && this.aclStore.currentUser.userId === this.option.owner.userId
+			return !this.pollStore.permissions.edit && this.sessionStore.currentUser.userId === this.option.owner.userId
 
 		},
 		showOwner() {

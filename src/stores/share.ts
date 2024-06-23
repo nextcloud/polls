@@ -13,7 +13,7 @@ import { useVotesStore } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { useSubscriptionStore } from './subscription.ts'
 import { User, UserType } from '../Interfaces/interfaces.ts'
-import { useRouterStore } from './router.ts'
+import { useSessionStore } from './session.ts'
 
 export enum InvitationTypes {
 	Email = 'email',
@@ -100,14 +100,14 @@ export const useShareStore = defineStore('share', {
 
 	actions: {
 		async load() {
-			const routerStore = useRouterStore()
-			if (routerStore.name !== 'publicVote') {
+			const sessionStore = useSessionStore()
+			if (sessionStore.router.name !== 'publicVote') {
 				this.$reset()
 				return
 			}
 	
 			try {
-				const response = await PublicAPI.getShare(routerStore.params.token)
+				const response = await PublicAPI.getShare(sessionStore.router.params.token)
 				this.$patch(response.data.share)
 				return response.data
 			} catch (error) {
@@ -119,14 +119,14 @@ export const useShareStore = defineStore('share', {
 	
 		async updateEmailAddress(payload) {
 			const pollStore = usePollStore()
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 
-			if (routerStore.name !== 'publicVote') {
+			if (sessionStore.router.name !== 'publicVote') {
 				return
 			}
 	
 			try {
-				const response = await PublicAPI.setEmailAddress(routerStore.params.token, payload.emailAddress)
+				const response = await PublicAPI.setEmailAddress(sessionStore.router.params.token, payload.emailAddress)
 				this.$patch(response.data.share)
 				pollStore.load()
 
@@ -142,14 +142,14 @@ export const useShareStore = defineStore('share', {
 			const commentsStore = useCommentsStore()
 			const votesStore = useVotesStore()
 			const optionsStore = useOptionsStore()
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 
-			if (routerStore.name !== 'publicVote') {
+			if (sessionStore.router.name !== 'publicVote') {
 				return
 			}
 	
 			try {
-				const response = await PublicAPI.setDisplayName(routerStore.params.token, payload.displayName)
+				const response = await PublicAPI.setDisplayName(sessionStore.router.params.token, payload.displayName)
 				this.$patch(response.data.share)
 				pollStore.load()
 				commentsStore.load()
@@ -166,14 +166,14 @@ export const useShareStore = defineStore('share', {
 		async deleteEmailAddress() {
 			const pollStore = usePollStore()
 			const subscriptionStore = useSubscriptionStore()
-			const routerStore = useRouterStore()
+			const sessionStore = useSessionStore()
 
-			if (routerStore.name !== 'publicVote') {
+			if (sessionStore.router.name !== 'publicVote') {
 				return
 			}
 	
 			try {
-				const response = await PublicAPI.deleteEmailAddress(routerStore.params.token)
+				const response = await PublicAPI.deleteEmailAddress(sessionStore.router.params.token)
 				this.$patch(response.data.share)
 				subscriptionStore.$state.subscribed = false
 				subscriptionStore.write()
@@ -186,13 +186,13 @@ export const useShareStore = defineStore('share', {
 		},
 	
 		async resendInvitation(payload) {
-			const routerStore = useRouterStore()
-			if (routerStore.name !== 'publicVote') {
+			const sessionStore = useSessionStore()
+			if (sessionStore.router.name !== 'publicVote') {
 				return
 			}
 	
 			try {
-				return await PublicAPI.resendInvitation(routerStore.params.token)
+				return await PublicAPI.resendInvitation(sessionStore.router.params.token)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error sending invitation', { error, payload })
