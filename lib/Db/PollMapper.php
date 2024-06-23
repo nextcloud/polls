@@ -191,7 +191,7 @@ class PollMapper extends QBMapper {
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_votes');
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_count_votes_yes');
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_orphaned_votes');
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryParticipantsCount(self::TABLE, $paramUser)->getSQL() . ')'), 'participants_count');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryParticipantsCount(self::TABLE)->getSQL() . ')'), 'participants_count');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);

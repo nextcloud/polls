@@ -47,7 +47,7 @@ class PreferencesService {
 			throw new NotAuthorizedException();
 		}
 
-		$preferences= $this->tidyPreferences($preferences);
+		$preferences = $this->tidyPreferences($preferences);
 		$this->preferences->setPreferences(json_encode($preferences));
 		$this->preferences->setTimestamp(time());
 		$this->preferences->setUserId($this->userSession->getCurrentUserId());
@@ -63,14 +63,14 @@ class PreferencesService {
 
 	/**
 	 * Tidy preferences
-	 * @param array $preferences 
+	 * @param array $preferences
 	 */
 	private function tidyPreferences(array $preferences): array {
 
 		// remove old properties (checkCalendarsBefore)
 		if (isset($preferences['checkCalendarsBefore'])) {
 			if (isset($preferences['checkCalendarsHoursBefore'])) {
-				unset($cars['checkCalendarsBefore']);
+				unset($preferences['checkCalendarsBefore']);
 			} else {
 				$preferences['checkCalendarsHoursBefore'] = $preferences['checkCalendarsBefore'];
 				unset($preferences['checkCalendarsBefore']);
