@@ -34,7 +34,7 @@
 									</template>
 								</NcActionButton>
 
-								<NcActionButton v-if="poll.permissions.edit && !poll.deleted"
+								<NcActionButton v-if="poll.permissions.edit && !poll.status.deleted"
 									:name="t('polls', 'Archive poll')"
 									:aria-label="t('polls', 'Archive poll')"
 									close-after-click
@@ -44,7 +44,7 @@
 									</template>
 								</NcActionButton>
 
-								<NcActionButton v-if="poll.permissions.edit && poll.deleted"
+								<NcActionButton v-if="poll.permissions.edit && poll.status.deleted"
 									:name="t('polls', 'Restore poll')"
 									:aria-label="t('polls', 'Restore poll')"
 									close-after-click
@@ -54,7 +54,7 @@
 									</template>
 								</NcActionButton>
 
-								<NcActionButton v-if="poll.permissions.edit && poll.deleted"
+								<NcActionButton v-if="poll.permissions.edit && poll.status.deleted"
 									class="danger"
 									:name="t('polls', 'Delete poll')"
 									:aria-label="t('polls', 'Delete poll')"
