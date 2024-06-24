@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
  - Fix owner detection (prevented deleting comments by poll owners)
  - Fix exporting of polls
  - Fix poll loading on some MySQL configurations
+ - Fix context menu in polls list
 
 ## [7.1.1] - 2024-06-10
 ### Fix
