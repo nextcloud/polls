@@ -108,7 +108,7 @@ const actions = {
 
 	async cleanUp(context) {
 		context.state.polls.forEach((comboPoll) => {
-			if (context.rootState.polls.list.findIndex((poll) => poll.id === comboPoll.id && !poll.deleted) < 0) {
+			if (context.rootState.polls.list.findIndex((poll) => poll.id === comboPoll.id && !poll.status.deleted) < 0) {
 				context.commit('removePoll', { pollId: comboPoll.id })
 			}
 		})
