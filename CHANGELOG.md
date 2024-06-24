@@ -5,12 +5,19 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [7.1.1] - tbd
+## [7.1.2] - tbd
+### Fix
+ - Fix owner detection (prevented deleting comments by poll owners)
+ - Fix exporting of polls
+ - Fix poll loading on some MySQL configurations
+
+## [7.1.1] - 2024-06-10
 ### Fix
  - Fix opening and closing of sidebar after changed component
  - try avoiding update error by removing class registering
 ## Change
  - Support Nextcloud 27
+
 ## [7.1.0] - 2024-06-09
 ###  !!! changed API structure, please refer to the documentation
 ### Fix
@@ -25,16 +32,19 @@ All notable changes to this project will be documented in this file.
  - Added an option to allow to add polls to the navigation (default)
  - Limited polls inside the navigation to 6 items
  - Render the polls list in chunks of 20 items
- ## [7.0.3] - 2024-04-05
+
+## [7.0.3] - 2024-04-05
 ### Fix
  - Archive, restore and delete polls in poll list was missing, braught the options back to the action menu
  - fix a situation, where votes of a non existing poll are requested
  - Fix getting group members
 ### New
  - Added an endpoint to the Api to be able to fetch the acl of a poll
+
 ## [7.0.2] - 2024-03-29
 ### Fix
  - Combo view was not usable
+
 ## [7.0.1] - 2024-03-29
 ### Fix
  - Fix database error with PostgreSQL
