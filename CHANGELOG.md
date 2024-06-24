@@ -5,7 +5,7 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [7.1.2] - tbd
+## [7.1.2] - 2024-06-24
 ### Fix
  - Fix owner detection (prevented deleting comments by poll owners)
  - Fix exporting of polls
