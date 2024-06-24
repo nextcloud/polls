@@ -243,10 +243,10 @@ class PollMapper extends QBMapper {
 			$qb->addSelect($qb->createFunction('group_concat(replace(distinct ' . $joinAlias . '.user_id ,\'\',\'\'), \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
 
 		} elseif ($this->db->getDatabasePlatform() instanceof MySQLPlatform) {
-			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
 
 		} else {
-			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
 		}
 
 		$qb->leftJoin(
