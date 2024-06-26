@@ -24,12 +24,13 @@
 
 <script>
 
+import { defineComponent } from 'vue'
 import { mapStores } from 'pinia'
 import { InputDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
 import { usePreferencesStore } from '../../../stores/preferences.ts'
 
-export default {
+export default defineComponent({
 	name: 'PerformanceSettings',
 
 	components: {
@@ -43,5 +44,5 @@ export default {
 	methods: {
 		t,
 	},
-}
+})
 </script>

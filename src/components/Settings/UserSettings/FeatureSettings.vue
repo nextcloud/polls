@@ -6,9 +6,9 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.defaultViewTextPoll" 
+			<NcCheckboxRadioSwitch :model-value="defaultViewTextPoll" 
 				type ="switch"
-				@update:checked="preferencesStore.write()">
+				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Text polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -17,9 +17,9 @@
 		</div>
 
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.defaultViewDatePoll" 
+			<NcCheckboxRadioSwitch :model-value="defaultViewDatePoll" 
 				type="switch"
-				@update:checked="preferencesStore.write()">
+				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Date polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -40,13 +40,14 @@
 
 <script>
 
+import { defineComponent } from 'vue'
 import { mapStores } from 'pinia'
 import { InputDiv } from '../../Base/index.js'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
 import { usePreferencesStore } from '../../../stores/preferences.ts'
 
-export default {
+export default defineComponent({
 	name: 'FeatureSettings',
 
 	components: {
@@ -56,10 +57,27 @@ export default {
 
 	computed: {
 		...mapStores(usePreferencesStore),
+
+		defaultViewTextPoll: {
+			get() {
+				return this.preferencesStore.user.defaultViewTextPoll === 'list-view'
+			},
+			set(value) {
+				this.preferencesStore.user.defaultViewTextPoll = value ? 'list-view' : 'table-view'
+			},
+		},
+		defaultViewDatePoll: {
+			get() {
+				return this.preferencesStore.user.defaultViewDatePoll === 'list-view'
+			},
+			set(value) {
+				this.preferencesStore.user.defaultViewDatePoll = value ? 'list-view' : 'table-view'
+			},
+		},
 	},
 
 	methods: {
 		t,
 	},
-}
+})
 </script>
