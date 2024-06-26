@@ -4,7 +4,7 @@
 -->
 
 <template>
-	<NcAppSettingsDialog :open.sync="show" :show-navigation="true">
+	<NcAppSettingsDialog v-model:open="show" show-navigation>
 		<NcAppSettingsSection id="calendar" :name="t('polls', 'Calendar check')">
 			<CalendarSettings />
 		</NcAppSettingsSection>
@@ -75,6 +75,13 @@ export default {
 	
 	methods: {
 		t,
+		// loadPreferences() {
+		// 	this.show = !this.show
+		// 	if (this.show === true) {
+		// 		this.preferencesStore.load()
+		// 		this.preferencesStore.getCalendars()
+		// 	}
+		// },
 	},
 }
 </script>

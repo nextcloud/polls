@@ -6,9 +6,9 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.calendarPeek" 
+			<NcCheckboxRadioSwitch :model-value="preferencesStore.user.calendarPeek" 
 				type="switch"
-				@update:checked="preferencesStore.write()">
+				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
 			</NcCheckboxRadioSwitch>
 
@@ -16,9 +16,9 @@
 				{{ t('polls', 'Select the calendars to use for lookup.') }}
 
 				<div v-for="(calendar) in calendarChoices" :key="calendar.key" class="calendar-item">
-					<NcCheckboxRadioSwitch :checked="calendar.selected"
+					<NcCheckboxRadioSwitch :model-value="calendar.selected"
 						type="switch"
-						@update:checked="clickedCalendar(calendar)">
+						@update:model-value="clickedCalendar(calendar)">
 						<span class="bully" :style="{ backgroundColor: calendar.displayColor }" />
 						{{ calendar.name }}
 					</NcCheckboxRadioSwitch>
@@ -54,13 +54,14 @@
 
 <script>
 
+import { defineComponent } from 'vue'
 import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
 import { usePreferencesStore } from '../../../stores/preferences.ts'
 
-export default {
+export default defineComponent({
 	name: 'CalendarSettings',
 
 	components: {
@@ -92,7 +93,7 @@ export default {
 			}
 		},
 	},
-}
+})
 </script>
 
 <style>

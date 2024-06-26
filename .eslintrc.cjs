@@ -19,6 +19,7 @@ module.exports = {
 		'no-negated-condition': 'error',
 		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
 		'prefer-template': 'error',
+		'vue/no-v-model-argument': 'off',
 		'vue/no-unused-properties': ['error', {
 			groups: ['props', 'data', 'computed', 'methods'],
 			deepData: true,

@@ -35,6 +35,7 @@
 </template>
 
 <script>
+import { defineComponent } from 'vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
@@ -43,7 +44,7 @@ import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import { Spinner } from '../../AppIcons/index.js'
 import { Logger } from '../../../helpers/index.js'
 
-export default {
+export default defineComponent({
 	name: 'InputDiv',
 
 	components: {
@@ -235,7 +236,7 @@ export default {
 			this.$emit(eventName, value)
 		},
 	},
-}
+})
 
 </script>
 
