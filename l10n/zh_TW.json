@@ -523,6 +523,7 @@
     "Poll configurations" : "投票設定",
     "Poll closing status" : "投票關閉狀態",
     "Result display" : "結果顯示",
+    "Error {action} poll." : "錯誤 {action} 投票。",
     "Error deleting poll." : "刪除投票時發生錯誤。",
     "Allow proposals from participants" : "允許從參與者而來的提議",
     "Shift all date options" : "轉移所有日期選項",
