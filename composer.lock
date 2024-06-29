@@ -469,16 +469,16 @@
         },
         {
             "name": "rlanvin/php-rrule",
-            "version": "v2.5.0",
+            "version": "v2.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/rlanvin/php-rrule.git",
-                "reference": "75b76c85c949fdfb39024a36d83f08dc95c90c8c"
+                "reference": "cb5c6f44f2208144968f7f16b3461bc4566995c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/rlanvin/php-rrule/zipball/75b76c85c949fdfb39024a36d83f08dc95c90c8c",
-                "reference": "75b76c85c949fdfb39024a36d83f08dc95c90c8c",
+                "url": "https://api.github.com/repos/rlanvin/php-rrule/zipball/cb5c6f44f2208144968f7f16b3461bc4566995c9",
+                "reference": "cb5c6f44f2208144968f7f16b3461bc4566995c9",
                 "shasum": ""
             },
             "require": {
@@ -512,9 +512,9 @@
             ],
             "support": {
                 "issues": "https://github.com/rlanvin/php-rrule/issues",
-                "source": "https://github.com/rlanvin/php-rrule/tree/v2.5.0"
+                "source": "https://github.com/rlanvin/php-rrule/tree/v2.5.1"
             },
-            "time": "2024-06-08T06:10:35+00:00"
+            "time": "2024-06-23T07:45:45+00:00"
         },
         {
             "name": "symfony/deprecation-contracts",
