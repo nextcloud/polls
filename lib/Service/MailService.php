@@ -267,8 +267,9 @@ class MailService {
 
 			try {
 				$reminder->send();
+				$this->logger->info('Reminder for poll id ' . $poll->getId() . ' sent to ' . json_encode($recipient));
 			} catch (InvalidEmailAddress $e) {
-				$this->logger->warning('Invalid or no email address for reminder: ' . json_encode($share));
+				$this->logger->warning('Invalid or missing email address for sending out reminder for poll id ' . $poll->getid() . ' to share id ' . $share->getId());
 			} catch (\Exception $e) {
 				$this->logger->error('Error sending reminder to ' . json_encode($share));
 			}

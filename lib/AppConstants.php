@@ -15,4 +15,7 @@ abstract class AppConstants {
 	public const CLIENT_ID = 'ncPollsClientId';
 	/** @var string */
 	public const CLIENT_TZ = 'ncPollsClientTimeZone';
+	/** @var string */
+	public const SESSION_KEY_CRON_JOB = 'ncPollsCronJob';
+
 }
