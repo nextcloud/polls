@@ -18,6 +18,7 @@ use OCA\Polls\Model\Group\Group;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\User\Admin;
 use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\User\Cron;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\User\User;
@@ -46,6 +47,7 @@ class UserBase implements JsonSerializable {
 	public const TYPE_GROUP = Group::TYPE;
 	public const TYPE_USER = User::TYPE;
 	public const TYPE_ADMIN = Admin::TYPE;
+	public const TYPE_CRON = Cron::TYPE;
 
 	/** @var string[] */
 	protected array $categories = [];
@@ -354,10 +356,15 @@ class UserBase implements JsonSerializable {
 	 * returns the safe id to avoid leaking the userId
 	 */
 	public function getSafeId(): string {
+		// return real userId for cron jobs
+		if ($this->userSession->getUser()->getIsSystemUser()) {
+			return $this->getId();
+		}
+
 		// always return real userId for the current user
 		if ($this->getIsCurrentUser()) {
 			return $this->getId();
-		}
+		}	
 
 		// return hashed userId, if fully anonimized
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
@@ -386,6 +393,16 @@ class UserBase implements JsonSerializable {
 
 	// Function for obfuscating mail adresses; Default return the email address
 	public function getSafeEmailAddress(): string {
+		// return real email address for cron jobs
+		if ($this->userSession->getUser()->getIsSystemUser()) {
+			return $this->getEmailAddress();
+		}
+
+		// always return real email address for the current user
+		if ($this->getIsCurrentUser()) {
+			return $this->getEmailAddress();
+		}
+
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
 			return '';
 		}
@@ -409,19 +426,29 @@ class UserBase implements JsonSerializable {
 		return $this->groupManager->isAdmin($this->getId());
 	}
 
+	public function getIsSystemUser(): bool {
+		return $this->groupManager->isAdmin($this->getId());
+	}
+
 	public function getIsInGroup(string $groupName): bool {
 		return $this->groupManager->isInGroup($this->getId(), $groupName);
 	}
 
 	/**
-	 * returns the safe id to avoid leaking thereal user type
+	 * returns the safe id to avoid leaking the real user type
 	 */
 	public function getSafeType(): string {
-		// always return real userId for the current user
+		// return real type for cron jobs
+		if ($this->userSession->getUser()->getIsSystemUser()) {
+			return $this->getType();
+		}
+
+		// always return real type for the current user
 		if ($this->getIsCurrentUser()) {
 			return $this->getType();
 		}
 
+		// return hashed userId, if fully anonimized
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
 			return self::TYPE_ANON;
 		}

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Cron;
 
+use OCA\Polls\AppConstants;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
@@ -17,6 +18,7 @@ use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
+use OCP\ISession;
 use OCP\Server;
 
 /**
@@ -33,6 +35,7 @@ class JanitorCron extends TimedJob {
 		private CommentMapper $commentMapper,
 		private OptionMapper $optionMapper,
 		private ShareMapper $shareMapper,
+		private ISession $session,
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day
@@ -44,6 +47,7 @@ class JanitorCron extends TimedJob {
 	 * @return void
 	 */
 	protected function run($argument) {
+		$this->session->set(AppConstants::SESSION_KEY_CRON_JOB, true);
 		// delete processed log entries
 		$this->logMapper->deleteProcessedEntries();
 		
@@ -64,7 +68,9 @@ class JanitorCron extends TimedJob {
 				time() - ($this->appSettings->getAutoarchiveOffset() * 86400)
 			);
 		}
+		$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
 	}
+
 	public function manuallyRun(): string {
 		$this->run(null);
 		return 'JanitorCron manually run.';
