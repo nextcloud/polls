@@ -11,11 +11,14 @@ namespace OCA\Polls;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Model\User\Cron;
 use OCA\Polls\Model\UserBase;
 use OCP\ISession;
 use OCP\IUserSession;
 
 class UserSession {
+	/** @var string */
+	public const SESSION_KEY_CRON_JOB = AppConstants::SESSION_KEY_CRON_JOB;
 	/** @var string */
 	public const SESSION_KEY_USER_ID = 'ncPollsUserId';
 	/** @var string */
@@ -57,6 +60,8 @@ class UserSession {
 
 			if ($this->getIsLoggedIn()) {
 				$this->currentUser = $this->userMapper->getUserFromUserBase((string) $this->userSession->getUser()?->getUID());
+			} elseif ($this->session->get(self::SESSION_KEY_CRON_JOB)) {
+				$this->currentUser = new Cron();
 			} else {
 				$this->currentUser = $this->userMapper->getUserFromShareToken($this->getShareToken());
 			}
