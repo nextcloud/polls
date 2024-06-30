@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [7.1.3] - 2024-06-30
+### Fix
+ - Fix autoreminder
+
 ## [7.1.2] - 2024-06-24
 ### Fix
  - Fix owner detection (prevented deleting comments by poll owners)
