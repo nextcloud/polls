@@ -86,7 +86,6 @@
 import { mapStores } from 'pinia'
 import { showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
-import moment from '@nextcloud/moment'
 import { ConfigBox, CardDiv } from '../Base/index.js'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
@@ -152,14 +151,13 @@ export default {
 	},
 
 	methods: {
-		t,
-		toggleArchive() {
-			if (this.pollStore.status.deleted) {
-				this.pollStore.status.deleted = 0
-			} else {
-				this.pollStore.status.deleted = moment.utc().unix()
+		async toggleArchive() {
+			try {
+				await this.$store.dispatch('poll/toggleArchive', { pollId: this.pollId })
+			} catch {
+				showError(t('polls', 'Error {action} poll.', { action: this.isPollArchived ? 'restoring' : 'archiving' }))
 			}
-			this.pollStore.write()
+			this.writePoll() // from mixin
 		},
 
 		async deletePoll() {
