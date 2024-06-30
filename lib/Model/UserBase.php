@@ -364,7 +364,7 @@ class UserBase implements JsonSerializable {
 		// always return real userId for the current user
 		if ($this->getIsCurrentUser()) {
 			return $this->getId();
-		}	
+		}
 
 		// return hashed userId, if fully anonimized
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {

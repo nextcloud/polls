@@ -60,7 +60,7 @@ class UserSession {
 
 			if ($this->getIsLoggedIn()) {
 				$this->currentUser = $this->userMapper->getUserFromUserBase((string) $this->userSession->getUser()?->getUID());
-			} else if ($this->session->get(self::SESSION_KEY_CRON_JOB)){
+			} elseif ($this->session->get(self::SESSION_KEY_CRON_JOB)) {
 				$this->currentUser = new Cron();
 			} else {
 				$this->currentUser = $this->userMapper->getUserFromShareToken($this->getShareToken());
