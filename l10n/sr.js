@@ -525,6 +525,7 @@ OC.L10N.register(
     "Poll configurations" : "Конфигурације гласања",
     "Poll closing status" : "Статус затварања гласања",
     "Result display" : "Приказ резултата",
+    "Error {action} poll." : "Грешка приликом {action} гласања.",
     "Error deleting poll." : "Грешка приликом брисања гласања.",
     "Allow proposals from participants" : "Дозволи да учесници дају предлоге",
     "Shift all date options" : "Помери све ставке са датумима",
