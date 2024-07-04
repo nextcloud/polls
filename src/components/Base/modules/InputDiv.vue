@@ -10,20 +10,21 @@
 		</label>
 
 		<div class="input-wrapper">
-			<input ref="input"
+			<!-- <input ref="input" -->
+			<input v-model="model"
+				v-focus
 				:type="type"
-				:value="value"
 				:inputmode="inputmode"
 				:placeholder="placeholder"
 				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, computedSignalingClass]"
-				@input="emitValidated('input', $event.target.value)"
-				@change="emitValidated('change', $event.target.value)"
-				@keyup.enter="emitValidated('submit'), $event.target.value">
+				@input="$emit('input')"
+				@change="$emit('change')"
+				@keyup.enter="$emit('change')">
 
 			<Spinner v-if="checking" class="signaling-icon spinner" />
 			<AlertIcon v-else-if="error" class="signaling-icon error" />
 			<CheckIcon v-else-if="success" class="signaling-icon success" />
-			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="emitValidated('submit', $event.target.value)" />
+			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="$emit('change')" />
 			<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="subtract()" />
 			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
 		</div>
@@ -34,8 +35,8 @@
 	</div>
 </template>
 
-<script>
-import { defineComponent } from 'vue'
+<script setup>
+import { computed, onMounted  } from 'vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
@@ -44,198 +45,169 @@ import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
 import { Spinner } from '../../AppIcons/index.js'
 import { Logger } from '../../../helpers/index.js'
 
-export default defineComponent({
-	name: 'InputDiv',
+const model = defineModel({
+	required: true,
+	type: String | Number,
+})
 
-	components: {
-		ArrowRightIcon,
-		PlusIcon,
-		MinusIcon,
-		AlertIcon,
-		CheckIcon,
-		Spinner,
-	},
+const vFocus = {
+	mounted: (el) => {
+		if (props.focus) el.focus()
+	}
+}
 
-	props: {
-		value: {
-			type: [String, Number],
-			required: true,
-		},
-		signalingClass: {
-			type: String,
-			default: '',
-			validator(value) {
-				return ['', 'empty', 'error', 'valid', 'invalid', 'success', 'checking'].includes(value)
-			},
-		},
-		placeholder: {
-			type: String,
-			default: '',
-		},
-		type: {
-			type: String,
-			default: 'text',
-			validator(value) {
-				return ['text', 'email', 'number', 'url'].includes(value)
-			},
-		},
-		inputmode: {
-			type: String,
-			default: null,
-			validator(value) {
-				return ['text', 'none', 'numeric', 'email', 'url'].includes(value)
-			},
-		},
-		useNumModifiers: {
-			type: Boolean,
-			default: false,
-		},
-		modifierStepValue: {
-			type: Number,
-			default: 1,
-		},
-		numMax: {
-			type: Number,
-			default: null,
-		},
-		numMin: {
-			type: Number,
-			default: null,
-		},
-		numWrap: {
-			type: Boolean,
-			default: false,
-		},
-		focus: {
-			type: Boolean,
-			default: false,
-		},
-		submit: {
-			type: Boolean,
-			default: false,
-		},
-		helperText: {
-			type: String,
-			default: null,
-		},
-		label: {
-			type: String,
-			default: null,
+const props = defineProps({
+	signalingClass: {
+		type: String,
+		default: '',
+		validator(value) {
+			return ['', 'empty', 'error', 'valid', 'invalid', 'success', 'checking'].includes(value)
 		},
 	},
-
-	computed: {
-		computedSignalingClass() {
-			if (this.signalingClass === 'valid') return 'success'
-			if (this.signalingClass === 'invalid') return 'error'
-			return this.signalingClass
-		},
-
-		isNumMinSet() {
-			return this.numMin !== null
-		},
-
-		isNumMaxSet() {
-			return this.numMax !== null
-		},
-		error() {
-			return !this.checking && !this.useNumModifiers && this.computedSignalingClass === 'error'
-		},
-		success() {
-			return !this.checking && !this.useNumModifiers && this.computedSignalingClass === 'success' && !this.submit
-		},
-		showSubmit() {
-			return !this.checking && !this.useNumModifiers && this.submit && this.computedSignalingClass !== 'error'
-		},
-		checking() {
-			return !this.useNumModifiers && this.computedSignalingClass === 'checking'
+	placeholder: {
+		type: String,
+		default: '',
+	},
+	type: {
+		type: String,
+		default: 'text',
+		validator(value) {
+			return ['text', 'email', 'number', 'url'].includes(value)
 		},
 	},
+	inputmode: {
+		type: String,
+		default: null,
+		validator(value) {
+			return ['text', 'none', 'numeric', 'email', 'url'].includes(value)
+		},
+	},
+	useNumModifiers: {
+		type: Boolean,
+		default: false,
+	},
+	modifierStepValue: {
+		type: Number,
+		default: 1,
+	},
+	numMax: {
+		type: Number,
+		default: null,
+	},
+	numMin: {
+		type: Number,
+		default: null,
+	},
+	numWrap: {
+		type: Boolean,
+		default: false,
+	},
+	focus: {
+		type: Boolean,
+		default: false,
+	},
+	submit: {
+		type: Boolean,
+		default: false,
+	},
+	helperText: {
+		type: String,
+		default: null,
+	},
+	label: {
+		type: String,
+		default: null,
+	},
+})
 
-	mounted() {
-		if (this.focus) {
-			this.setFocus()
+const emit = defineEmits(['input', 'change', 'submit'])
+
+const computedSignalingClass = computed(() => {
+	if (props.signalingClass === 'valid') return 'success'
+	if (props.signalingClass === 'invalid') return 'error'
+	return props.signalingClass
+})
+
+const isNumMinSet = computed(() => props.numMin !== null)
+const isNumMaxSet = computed(() => props.numMax !== null)
+const checking = computed(() => !props.useNumModifiers && computedSignalingClass.value === 'checking')
+const error = computed(() => !checking.value && !props.useNumModifiers && computedSignalingClass.value === 'error')
+const success = computed(() => !checking.value && !props.useNumModifiers && computedSignalingClass.value === 'success' && !props.submit)
+const showSubmit = computed(() => !checking.value && !props.useNumModifiers && props.submit && computedSignalingClass.value !== 'error')
+
+/**
+ * Check if numMin is less than numMax, if both are set
+ * Returns false in case of failed validation and just logs a warning
+ */
+function assertBoundaries() {
+	if (isNumMinSet.value && isNumMaxSet.value && props.numMin >= props.numMax) {
+		Logger.warning('numMin is greater or equal than numMax. Validation will be skipped.')
+		return false
+	}
+	return true
+}	
+
+/**
+ * Check if value is within numMin and numMax
+ * @param {number} value Value to be checked
+ * @return {number} value kept within defined boundaries
+ */
+ function numCheckBoundaries(value) {
+	if (isNumMaxSet.value && value > props.numMax) {
+		if (
+			props.numWrap && isNumMinSet.value
+			&& assertBoundaries()
+			&& model.value === props.numMax
+		) {
+			value = props.numMin
+		} else {
+			value = props.numMax
 		}
-		this.assertBoundaries()
-	},
+	}
 
-	methods: {
-		setFocus() {
-			this.$nextTick(() => {
-				this.$refs.input.focus()
-			})
-		},
+	if (isNumMinSet.value && value < props.numMin) {
+		if (
+			props.numWrap &&
+			isNumMaxSet.value
+			&& assertBoundaries()
+			&& model.value === props.numMin
+		) {
+			value = props.numMax
+		} else {
+			value = props.numMin
+		}
+	}
 
-		assertBoundaries() {
-			if (this.isNumMinSet && this.isNumMaxSet && this.numMin >= this.numMax) {
-				Logger.warning('numMin is greater or equal than numMax. Validation will be skipped.')
-				return false
-			}
-			return true
-		},	
+	return value
+}
 
-		add() {
-			const value = this.numWrapper(this.value + this.modifierStepValue)
-			if (value !== this.value) {
-				this.emitValidated('change', value)
-			}
-		},
+/**
+ *  Add modifierStepValue to value
+ */
+function add() {
+	const nextValue = numCheckBoundaries(model.value + props.modifierStepValue)
+	
+	if (model.value !== nextValue) {
+		model.value = nextValue
+		emit('change')
+	}
+}
 
-		subtract() {
-			const value = this.numWrapper(this.value - this.modifierStepValue)
-			if (value !== this.value) {
-				this.emitValidated('change', value)
-			}
-		},
+/**
+ * Subtract modifierStepValue from value respecting wrapping and boundaries
+ * emits 'change' event if model.value has changed
+ */
+ function subtract() {
+	const nextValue = numCheckBoundaries(model.value - props.modifierStepValue)
+	
+	if (model.value !== nextValue) {
+		model.value = nextValue
+		emit('change')
+	}
+ }
 
-		numWrapper(value) {
-			if (!this.assertBoundaries() || (!this.isNumMaxSet && !this.isNumMinSet)) {	
-				this.$emit('input', value)
-				return value
-			}	
-
-			if (this.isNumMaxSet && value > this.numMax) {
-				if (this.numWrap) {
-					value = this.numMin ?? 0
-				} else {
-					value = this.numMax
-				}
-			} 
-
-			if (this.isNumMinSet && value < this.numMin) {
-				if (this.numWrap) {
-					value = this.numMax ?? value
-				} else {
-					value = this.numMin
-				}
-			}
-
-			this.$emit('input', value)
-			return value
-		},
-
-		numCheckBoundaries(value) {
-			if (this.type === 'number' && (this.isNumMinSet || this.isNumMaxSet)) {
-				if (this.isNumMaxSet && value > this.numMax) {
-					value = this.numMax
-				}
-
-				if (this.isNumMinSet && value < this.numMin) {
-					value = this.numMin
-				}
-			}
-
-			return value
-		},
-
-		emitValidated(eventName = 'input', value) {
-			if (eventName === 'change') {
-				value = this.numCheckBoundaries(value)
-			}
-
-			this.$emit(eventName, value)
-		},
-	},
+onMounted(() => {
+	assertBoundaries()
 })
 
 </script>
