@@ -6,7 +6,7 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :model-value="preferencesStore.user.calendarPeek" 
+			<NcCheckboxRadioSwitch v-model="preferencesStore.user.calendarPeek" 
 				type="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
@@ -52,48 +52,29 @@
 	</div>
 </template>
 
-<script>
-
-import { defineComponent } from 'vue'
-import { mapStores } from 'pinia'
+<script setup>
+import { computed } from 'vue'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
 import { usePreferencesStore } from '../../../stores/preferences.ts'
+const preferencesStore = usePreferencesStore()
 
-export default defineComponent({
-	name: 'CalendarSettings',
+const calendarChoices = computed(() => preferencesStore.availableCalendars.map((calendar) => ({
+	key: calendar.key.toString(),
+	name: calendar.name,
+	displayColor: calendar.displayColor,
+	selected: preferencesStore.user.checkCalendars.includes(calendar.key.toString()),
+})))
 
-	components: {
-		NcCheckboxRadioSwitch,
-		InputDiv,
-	},
+const clickedCalendar = (calendar) => {
+	if (preferencesStore.user.checkCalendars.includes(calendar.key)) {
+		preferencesStore.removeCheckCalendar(calendar)
+	} else {
+		preferencesStore.addCheckCalendar(calendar)
+	}
+}
 
-	computed: {
-		...mapStores(usePreferencesStore),
-
-		calendarChoices() {
-			return this.preferencesStore.availableCalendars.map((calendar) => ({
-				key: calendar.key.toString(),
-				name: calendar.name,
-				displayColor: calendar.displayColor,
-				selected: this.preferencesStore.user.checkCalendars.includes(calendar.key.toString()),
-			}), this)
-		},
-
-	},
-
-	methods: {
-		t,
-		async clickedCalendar(calendar) {
-			if (this.preferencesStore.user.checkCalendars.includes(calendar.key)) {
-				this.preferencesStore.removeCheckCalendar(calendar)
-			} else {
-				this.preferencesStore.addCheckCalendar(calendar)
-			}
-		},
-	},
-})
 </script>
 
 <style>

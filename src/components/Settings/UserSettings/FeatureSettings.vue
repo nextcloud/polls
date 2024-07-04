@@ -6,7 +6,7 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :model-value="defaultViewTextPoll" 
+			<NcCheckboxRadioSwitch v-model="defaultViewTextPoll" 
 				type ="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Text polls default to list view') }}
@@ -17,7 +17,7 @@
 		</div>
 
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :model-value="defaultViewDatePoll" 
+			<NcCheckboxRadioSwitch v-model="defaultViewDatePoll" 
 				type="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Date polls default to list view') }}
@@ -38,46 +38,32 @@
 	</div>
 </template>
 
-<script>
+<script setup>
 
-import { defineComponent } from 'vue'
-import { mapStores } from 'pinia'
+import { computed } from 'vue'
 import { InputDiv } from '../../Base/index.js'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
 import { usePreferencesStore } from '../../../stores/preferences.ts'
 
-export default defineComponent({
-	name: 'FeatureSettings',
+const preferencesStore = usePreferencesStore()
 
-	components: {
-		NcCheckboxRadioSwitch,
-		InputDiv,
+const defaultViewTextPoll = computed({
+	get() {
+		return preferencesStore.user.defaultViewTextPoll === 'list-view'
 	},
-
-	computed: {
-		...mapStores(usePreferencesStore),
-
-		defaultViewTextPoll: {
-			get() {
-				return this.preferencesStore.user.defaultViewTextPoll === 'list-view'
-			},
-			set(value) {
-				this.preferencesStore.user.defaultViewTextPoll = value ? 'list-view' : 'table-view'
-			},
-		},
-		defaultViewDatePoll: {
-			get() {
-				return this.preferencesStore.user.defaultViewDatePoll === 'list-view'
-			},
-			set(value) {
-				this.preferencesStore.user.defaultViewDatePoll = value ? 'list-view' : 'table-view'
-			},
-		},
-	},
-
-	methods: {
-		t,
+	set(value) {
+		preferencesStore.user.defaultViewTextPoll = value ? 'list-view' : 'table-view'
 	},
 })
+
+const defaultViewDatePoll = computed({
+	get() {
+		return preferencesStore.user.defaultViewDatePoll === 'list-view'
+	},
+	set(value) {
+		preferencesStore.user.defaultViewDatePoll = value ? 'list-view' : 'table-view'
+	},
+})
+
 </script>
