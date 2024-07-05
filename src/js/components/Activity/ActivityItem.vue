@@ -75,6 +75,15 @@ export default {
 						}
 						: `${parameters[key].name}`
 					break
+				case 'circle':
+					parameters[key] =  {
+						component: SimpleLink,
+						props: {
+							href: parameters[key].link,
+							name: parameters[key].name,
+						},
+					}
+					break
 				case 'user':
 					parameters[key] = {
 						component: NcUserBubble,
