@@ -7,52 +7,38 @@
 	<div class="radio-group-div">
 		<NcCheckboxRadioSwitch v-for="(option, index) in options"
 			:key="option.value"
-			:checked.sync="selectedValue"
+			v-model="model"
 			:value="option.value"
-			:name="id + '_' + index"
+			:name="elementId + index"
 			type="radio"
-			@update:checked="$emit('update', option.value)">
+			@update:model-value="$emit('update')">
 			{{ option.label }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 
-<script>
+<script setup>
+import { computed } from 'vue'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
 
-export default {
-	name: 'RadioGroupDiv',
-
-	components: {
-		NcCheckboxRadioSwitch,
+const props = defineProps({
+	id: {
+		type: String,
+		default: null,
 	},
-
-	props: {
-		id: {
-			type: String,
-			default: () => `rg-${RandId()}`,
-		},
-		options: {
-			type: Array,
-			required: true,
-		},
-		value: {
-			type: String,
-			default: null,
-		},
+	options: {
+		type: Array,
+		required: true,
 	},
+})
 
-	computed: {
-		selectedValue: {
-			get() {
-				return this.value
-			},
-			set(value) {
-				this.$emit('input', value)
-			},
-		},
-	},
-}
+const model = defineModel({
+	type: String,
+	default: null,
+})
+
+const elementId = computed(() => props.id ?? `rg-${RandId()}`)
+
 </script>
