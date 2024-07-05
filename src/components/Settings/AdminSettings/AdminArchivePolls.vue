@@ -5,8 +5,8 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.autoArchive" type="switch"
-		@update:checked="appSettingsStore.write()">
+		<NcCheckboxRadioSwitch v-model="appSettingsStore.autoArchive" type="switch"
+		@update:model-value="appSettingsStore.write()">
 			{{ t('polls', 'Enable the automatic poll archiving') }}
 		</NcCheckboxRadioSwitch>
 		<InputDiv v-if="appSettingsStore.autoArchive"
@@ -20,27 +20,11 @@
 	</div>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
+<script setup>
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { InputDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
 import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-export default {
-	name: 'AdminArchivePolls',
-
-	components: {
-		NcCheckboxRadioSwitch,
-		InputDiv,
-	},
-
-	computed: {
-		...mapStores(useAppSettingsStore),
-	},
-	
-	methods: {
-		t,
-	},
-}
+const appSettingsStore = useAppSettingsStore()
 </script>

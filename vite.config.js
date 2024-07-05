@@ -15,7 +15,7 @@ const customConfig = {
 export default createAppConfig({
 	// main: resolve(join('src', 'main.ts')),
 	userSettings: resolve(join('src', 'userSettings.ts')),
-	// adminSettings: resolve(join('src', 'adminSettings.ts')),
+	adminSettings: resolve(join('src', 'adminSettings.ts')),
 	dashboard: resolve(join('src', 'dashboard.ts')),
 }, {
 	inlineCSS: { relativeCSSInjection: true },

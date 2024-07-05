@@ -25,37 +25,23 @@
 	</div>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
+<script setup>
 import { InputDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
 import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+import { computed } from 'vue';
 
-export default {
-	name: 'AdminLegal',
+const appSettingsStore = useAppSettingsStore()
+const placeholder = computed(() => {
+	let privacy = t('polls', 'Enter the URL of your privacy policy')
+	let imprint = t('polls', 'Enter the URL of your legal notice')
+	if (appSettingsStore.defaultPrivacyUrl) {
+		privacy = appSettingsStore.defaultPrivacyUrl
+	}
+	if (appSettingsStore.defaultImprintUrl) {
+		imprint = appSettingsStore.defaultImprintUrl
+	}
+	return { privacy, imprint }
+})
 
-	components: {
-		InputDiv,
-	},
-
-	computed: {
-		...mapStores(useAppSettingsStore),
-
-		placeholder() {
-			let privacy = t('polls', 'Enter the URL of your privacy policy')
-			let imprint = t('polls', 'Enter the URL of your legal notice')
-			if (this.appSettingsStore.defaultPrivacyUrl) {
-				privacy = this.appSettingsStore.defaultPrivacyUrl
-			}
-			if (this.appSettingsStore.defaultImprintUrl) {
-				imprint = this.appSettingsStore.defaultImprintUrl
-			}
-			return { privacy, imprint }
-		},
-	},
-
-	methods: {
-		t,
-	},
-}
 </script>

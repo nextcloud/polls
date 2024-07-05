@@ -5,34 +5,20 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.navigationPollsInList" 
+		<NcCheckboxRadioSwitch v-model="appSettingsStore.navigationPollsInList" 
 			type="switch"
-			@update:checked="appSettingsStore.write()">
+			@update:model-value="appSettingsStore.write()">
 			{{ t('polls', 'Load polls into the navigation.') }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
 
-<script>
+<script setup>
 
-import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
 import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-export default {
-	name: 'AdminPollsInNavigation',
+const { appSettingsStore } = useAppSettingsStore()
 
-	components: {
-		NcCheckboxRadioSwitch,
-	},
-
-	computed: {
-		...mapStores(useAppSettingsStore),
-	},
-	
-	methods: {
-		t,
-	},
-}
 </script>

@@ -5,9 +5,9 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.legalTermsInEmail" 
+		<NcCheckboxRadioSwitch v-model="appSettingsStore.legalTermsInEmail" 
 			type="switch"
-			@update:checked="appSettingsStore.write()">
+			@update:model-value="appSettingsStore.write()">
 
 			{{ t('polls', 'Add terms links also to the email footer') }}
 		</NcCheckboxRadioSwitch>
@@ -17,7 +17,7 @@
 				<span>{{ t('polls', 'Additional email disclaimer') }}</span>
 				<LanguageMarkdownIcon />
 			</div>
-			<NcCheckboxRadioSwitch :checked.sync="preview" 
+			<NcCheckboxRadioSwitch v-model="preview" 
 				type="switch"
 				@change="appSettingsStore.write()">
 				{{ t('polls', 'Preview') }}
@@ -29,8 +29,8 @@
 	</div>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
+<script setup>
+import { computed, ref } from 'vue'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
@@ -39,37 +39,18 @@ import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue
 import { t } from '@nextcloud/l10n'
 import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
+const appSettingsStore = useAppSettingsStore()
+
 const markedPrefix = {
 	prefix: 'disclaimer-',
 }
 
-export default {
-	name: 'AdminEmail',
+const preview = ref(false)
+const markedDisclaimer = computed(() => {
+	marked.use(gfmHeadingId(markedPrefix))
+	return DOMPurify.sanitize(marked.parse(appSettingsStore.disclaimer))
+})
 
-	components: {
-		NcCheckboxRadioSwitch,
-		LanguageMarkdownIcon,
-	},
-
-	data() {
-		return {
-			preview: false,
-		}
-	},
-
-	computed: {
-		...mapStores(useAppSettingsStore),
-
-		markedDisclaimer() {
-			marked.use(gfmHeadingId(markedPrefix))
-			return DOMPurify.sanitize(marked.parse(this.appSettingsStore.disclaimer))
-		},
-	},
-
-	methods: {
-		t,
-	},
-}
 </script>
 
 <style lang="scss">

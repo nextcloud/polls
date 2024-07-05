@@ -5,36 +5,22 @@
 
 <template>
 	<div class="user_settings">
-		<RadioGroupDiv v-model="appSettingsStore.updateType" :options="updateTypeOptions" 
-		@update="appSettingsStore.write()" />
+		<RadioGroupDiv v-model="appSettingsStore.updateType" 
+			:options="updateTypeOptions" 
+			@update="appSettingsStore.write()" />
 	</div>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
+<script setup>
 import { RadioGroupDiv } from '../../Base/index.js'
 import { t } from '@nextcloud/l10n'
 import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-export default {
-	name: 'AdminPerformance',
+const appSettingsStore = useAppSettingsStore()
+const updateTypeOptions = [
+	{ value: 'longPolling', label: t('polls', 'Enable "long polling" for instant updates') },
+	{ value: 'periodicPolling', label: t('polls', 'Enable periodic requests of poll updates from the client') },
+	{ value: 'noPolling', label: t('polls', 'Disable automatic updates (poll must be reloaded to get updates)') },
+]
 
-	components: {
-		RadioGroupDiv,
-	},
-
-	data() {
-		return {
-			updateTypeOptions: [
-				{ value: 'longPolling', label: t('polls', 'Enable "long polling" for instant updates') },
-				{ value: 'periodicPolling', label: t('polls', 'Enable periodic requests of poll updates from the client') },
-				{ value: 'noPolling', label: t('polls', 'Disable automatic updates (poll must be reloaded to get updates)') },
-			],
-		}
-	},
-
-	computed: {
-		...mapStores(useAppSettingsStore),
-	},
-}
 </script>
