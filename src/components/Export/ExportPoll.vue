@@ -50,6 +50,7 @@
 import { mapStores } from 'pinia'
 import { saveAs } from 'file-saver'
 import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
+import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton } from '@nextcloud/vue'
 import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
