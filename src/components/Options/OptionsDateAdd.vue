@@ -6,7 +6,7 @@
 <template>
 	<NcDateTimePicker v-model="pickerSelection"
 		v-bind="pickerOptions"
-		:open.sync="pickerOpen"
+		v-model:open="pickerOpen"
 		style="width: inherit;"
 		@change="changedDate"
 		@pick="pickedDate">
@@ -22,7 +22,7 @@
 		</template>
 
 		<template #header>
-			<NcCheckboxRadioSwitch :checked.sync="useRange" class="range" type="switch">
+			<NcCheckboxRadioSwitch v-model="useRange" class="range" type="switch">
 				{{ t('polls', 'Select range') }}
 			</NcCheckboxRadioSwitch>
 			<div class="picker-buttons">

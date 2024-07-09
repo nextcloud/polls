@@ -5,9 +5,9 @@
 
 <template>
 	<div class="auto-reminder-switch">
-		<NcCheckboxRadioSwitch :checked.sync="pollStore.configuration.autoReminder" 
+		<NcCheckboxRadioSwitch v-model="pollStore.configuration.autoReminder" 
 			type="switch"
-			@update:checked="pollStore.write()">
+			@update:model-value="pollStore.write()">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
 		<NcPopover :focus-trap="false">

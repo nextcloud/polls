@@ -4,9 +4,9 @@
 -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked.sync="pollStore.configuration.allowMaybe" 
+	<NcCheckboxRadioSwitch v-model="pollStore.configuration.allowMaybe" 
 		type="switch"
-		@update:checked="pollStore.write()">
+		@update:model-value="pollStore.write()">
 		{{ label }}
 	</NcCheckboxRadioSwitch>
 </template>

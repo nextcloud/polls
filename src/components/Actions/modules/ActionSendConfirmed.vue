@@ -15,7 +15,7 @@
 			{{ sendButtonCaption }}
 		</NcButton>
 
-		<NcModal :show.sync="showModal"
+		<NcModal v-model:show="showModal"
 			:name="t('polls', 'Result of sent confirmation mails')"
 			size="small">
 			<div class="modal-confirmation-result">

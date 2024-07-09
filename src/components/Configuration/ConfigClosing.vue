@@ -14,7 +14,7 @@
 				{{ pollStore.isClosed ? t('polls', 'Reopen poll') : t('polls', 'Close poll') }}
 			</template>
 		</NcButton>
-		<NcCheckboxRadioSwitch v-show="!pollStore.isClosed" :checked.sync="useExpire" type="switch">
+		<NcCheckboxRadioSwitch v-show="!pollStore.isClosed" v-model="useExpire" type="switch">
 			{{ t('polls', 'Poll closing date') }}
 		</NcCheckboxRadioSwitch>
 		<NcDateTimePicker v-show="useExpire && !pollStore.isClosed" v-model="expire" v-bind="expirationDatePicker" />

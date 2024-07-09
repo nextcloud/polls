@@ -5,11 +5,11 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="allowProposals" type="switch">
+		<NcCheckboxRadioSwitch v-model="allowProposals" type="switch">
 			{{ t('polls', 'Allow Proposals') }}
 		</NcCheckboxRadioSwitch>
 
-		<NcCheckboxRadioSwitch v-show="pollStore.isProposalAllowed" :checked.sync="proposalExpiration" type="switch">
+		<NcCheckboxRadioSwitch v-show="pollStore.isProposalAllowed" v-model="proposalExpiration" type="switch">
 			{{ t('polls', 'Proposal closing date') }}
 		</NcCheckboxRadioSwitch>
 

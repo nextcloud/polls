@@ -10,7 +10,7 @@
 			@click="clickAction()">
 			{{ caption }}
 		</NcButton>
-		<NcModal :show.sync="showRegistration"
+		<NcModal v-model:show="showRegistration"
 			:size="registerModalSize"
 			:can-close="true"
 			@close="closeRegisterModal()">

@@ -23,7 +23,7 @@
 			<NcActions>
 				<NcActionInput v-if="isActivePublicShare"
 					v-bind="label.inputProps"
-					:value.sync="label.inputValue"
+					v-model="label.inputValue"
 					@submit="submitLabel()">
 					<template #icon>
 						<EditIcon />

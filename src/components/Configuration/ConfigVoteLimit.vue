@@ -5,9 +5,9 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="useLimit" 
+		<NcCheckboxRadioSwitch v-model="useLimit" 
 			type="switch"
-			@update:checked="validateLimit()">
+			@update:model-value="validateLimit()">
 			{{ t('polls', 'Limit "Yes" votes per participant') }}
 		</NcCheckboxRadioSwitch>
 

@@ -26,7 +26,7 @@
 					inputmode="email"
 					@submit="submitRegistration" />
 
-				<NcCheckboxRadioSwitch v-if="shareStore.user.type === 'public'" :checked.sync="saveCookie">
+				<NcCheckboxRadioSwitch v-if="shareStore.user.type === 'public'" v-model="saveCookie">
 					{{ t('polls', 'Remember me for 30 days') }}
 				</NcCheckboxRadioSwitch>
 

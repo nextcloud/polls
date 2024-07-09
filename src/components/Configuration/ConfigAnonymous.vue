@@ -4,9 +4,9 @@
 -->
 
 <template>
-	<NcCheckboxRadioSwitch :checked.sync="pollStore.configuration.anonymous" 
+	<NcCheckboxRadioSwitch v-model="pollStore.configuration.anonymous" 
 		type="switch"
-		@update:checked="pollStore.write()">
+		@update:model-value="pollStore.write()">
 		{{ t('polls', 'Anonymous poll') }}
 	</NcCheckboxRadioSwitch>
 </template>

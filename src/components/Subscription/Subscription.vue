@@ -5,7 +5,7 @@
 
 <template>
 	<div class="subscription">
-		<NcCheckboxRadioSwitch :checked.sync="subscriptionStore.subscribed" 
+		<NcCheckboxRadioSwitch v-model="subscriptionStore.subscribed" 
 			type="switch"
 			@change="subscription.write()">
 			{{ label }}

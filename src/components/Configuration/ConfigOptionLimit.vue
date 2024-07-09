@@ -5,9 +5,9 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="useLimit" 
+		<NcCheckboxRadioSwitch v-model="useLimit" 
 			type="switch"
-			@update:checked="validateLimit()">
+			@update:model-value="validateLimit()">
 			{{ t('polls', 'Limit "Yes" votes per option') }}
 		</NcCheckboxRadioSwitch>
 
@@ -22,7 +22,7 @@
 
 		<NcCheckboxRadioSwitch v-if="maxVotesPerOption"
 			class="indented"
-			:checked.sync="pollStore.configuration.hideBookedUp"
+			v-model="pollStore.configuration.hideBookedUp"
 			type="switch"
 			@change="pollsStore.write()">
 			{{ t('polls', 'Hide not available Options') }}
