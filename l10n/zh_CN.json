@@ -303,6 +303,7 @@
     "Grant poll admin access" : "授予投票管理员权限",
     "Withdraw poll admin access" : "撤销投票管理员权限",
     "Copy link to clipboard" : "复制链接到剪贴板",
+    "Show QR code" : "显示二维码",
     "Options for the registration dialog" : "注册对话框选项",
     "Email address is optional" : "电子邮件地址可不填",
     "Email address is mandatory" : "必须填写电子邮件地址",

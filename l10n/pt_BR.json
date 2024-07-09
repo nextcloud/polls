@@ -523,6 +523,7 @@
     "Poll configurations" : "Configurações de enquete",
     "Poll closing status" : "Status das enquetes encerradas",
     "Result display" : "Mostrar resultado",
+    "Error {action} poll." : "Erro {ação} pesquisa.",
     "Error deleting poll." : "Erro ao excluir enquete.",
     "Allow proposals from participants" : "Permitir propostas dos participantes",
     "Shift all date options" : "Mudar todas as opções de data",
