@@ -20,56 +20,50 @@
 	</div>
 </template>
 
-<script>
+<script setup>
 
 import QRCode from 'qrcode'
 import { Logger } from '../../../helpers/index.js'
+import { onMounted, ref } from 'vue';
 
-export default {
-	name: 'QrModal',
-
-	props: {
-		name: {
-			type: String,
-			default: '',
-		},
-		subTitle: {
-			type: String,
-			default: '',
-		},
-		description: {
-			type: String,
-			default: '',
-		},
-		encodeText: {
-			type: String,
-			default: '',
-		},
+const props = defineProps({
+	name: {
+		type: String,
+		default: '',
 	},
-
-	data() {
-		return {
-			qrUri: {
-				type: String,
-				default: '',
-			},
-		}
+	subTitle: {
+		type: String,
+		default: '',
 	},
-
-	created() {
-		this.generateQr()
+	description: {
+		type: String,
+		default: '',
 	},
-
-	methods: {
-		async generateQr() {
-			try {
-				this.qrUri = await QRCode.toDataURL(this.encodeText)
-			} catch (error) {
-				Logger.error('Error on generating QR code', { error: error.message })
-			}
-		},
+	encodeText: {
+		type: String,
+		default: '',
 	},
+})
+
+const qrUri = ref({
+	type: String,
+	default: '',
+})
+
+/**
+ * Generate QR code
+ */
+async function generateQr() {
+	try {
+		qrUri.value = await QRCode.toDataURL(props.encodeText)
+	} catch (error) {
+		Logger.error('Error on generating QR code', { error: error.message })
+	}
 }
+
+onMounted(() => {
+	generateQr()
+})
 
 </script>
 

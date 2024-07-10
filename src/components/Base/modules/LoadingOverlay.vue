@@ -9,15 +9,10 @@
 	</div>
 </template>
 
-<script>
+<script setup>
+
 import { Spinner } from '../../AppIcons/index.js'
 
-export default {
-	name: 'LoadingOverlay',
-	components: {
-		Spinner,
-	},
-}
 </script>
 
 <style lang="scss">

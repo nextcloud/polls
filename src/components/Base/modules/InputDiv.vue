@@ -3,38 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div :class="['input-div', { numeric: useNumModifiers }]">
-		<label v-if="label">
-			{{ label }}
-		</label>
-
-		<div class="input-wrapper">
-			<!-- <input ref="input" -->
-			<input v-model="model"
-				v-focus
-				:type="type"
-				:inputmode="inputmode"
-				:placeholder="placeholder"
-				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, computedSignalingClass]"
-				@input="$emit('input')"
-				@change="$emit('change')"
-				@keyup.enter="$emit('change')">
-
-			<Spinner v-if="checking" class="signaling-icon spinner" />
-			<AlertIcon v-else-if="error" class="signaling-icon error" />
-			<CheckIcon v-else-if="success" class="signaling-icon success" />
-			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="$emit('change')" />
-			<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="subtract()" />
-			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
-		</div>
-
-		<div v-if="helperText!==null" :class="['helper', computedSignalingClass]">
-			{{ helperText }}
-		</div>
-	</div>
-</template>
-
 <script setup>
 import { computed, onMounted  } from 'vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
@@ -211,6 +179,39 @@ onMounted(() => {
 })
 
 </script>
+
+
+<template>
+	<div :class="['input-div', { numeric: useNumModifiers }]">
+		<label v-if="label">
+			{{ label }}
+		</label>
+
+		<div class="input-wrapper">
+			<!-- <input ref="input" -->
+			<input v-model="model"
+				v-focus
+				:type="type"
+				:inputmode="inputmode"
+				:placeholder="placeholder"
+				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, computedSignalingClass]"
+				@input="$emit('input')"
+				@change="$emit('change')"
+				@keyup.enter="$emit('change')">
+
+			<Spinner v-if="checking" class="signaling-icon spinner" />
+			<AlertIcon v-else-if="error" class="signaling-icon error" />
+			<CheckIcon v-else-if="success" class="signaling-icon success" />
+			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="$emit('change')" />
+			<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="subtract()" />
+			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
+		</div>
+
+		<div v-if="helperText!==null" :class="['helper', computedSignalingClass]">
+			{{ helperText }}
+		</div>
+	</div>
+</template>
 
 <style lang="scss" scoped>
 	$input-height: 44px;

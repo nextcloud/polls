@@ -3,6 +3,18 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+
+import { defineProps } from 'vue'
+
+defineProps({
+	tag: {
+		type: String,
+		default: 'span',
+	},
+})
+</script>
+
 <template>
 	<Component :is="tag" class="badge">
 		<slot name="icon" />
@@ -11,18 +23,6 @@
 		</span>
 	</Component>
 </template>
-
-<script>
-export default {
-	name: 'BadgeDiv',
-	props: {
-		tag: {
-			type: String,
-			default: 'span',
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 

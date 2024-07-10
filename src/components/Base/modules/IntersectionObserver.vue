@@ -9,33 +9,30 @@
 	</div>
 </template>
 
-<script>
-export default {
-	data() {
-		return {
-			inViewport: false,
-			observer: null,
-		}
-	},
-	mounted() {
-		this.observer = new IntersectionObserver((entries) => {
-			entries.forEach((entry) => {
-				if (entry.isIntersecting) {
-					this.inViewport = true
-					this.$emit('visible')
-				} else {
-					this.inViewport = false
-				}
-			})
+<script setup>
+import { onBeforeUnmount, onMounted, ref } from 'vue'
+
+const inViewport = ref(false)
+const observer = ref(null)
+const observerTarget = ref(null)
+
+onMounted(() => {
+	const observer = new IntersectionObserver((entries) => {
+		entries.forEach((entry) => {
+			if (entry.isIntersecting) {
+				inViewport.value = true
+			} else {
+				inViewport.value = false
+			}
 		})
+	})
 
-		this.observer.observe(this.$refs.observerTarget)
-	},
+	observer.observe(observerTarget)
+})
 
-	beforeDestroy() {
-		if (this.observer) {
-			this.observer.disconnect()
-		}
-	},
-}
+onBeforeUnmount(() => {
+	if (observer.value) {
+		observer.value.disconnect()
+	}
+})
 </script>

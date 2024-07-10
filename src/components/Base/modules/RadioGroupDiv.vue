@@ -3,20 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="radio-group-div">
-		<NcCheckboxRadioSwitch v-for="(option, index) in options"
-			:key="option.value"
-			v-model="model"
-			:value="option.value"
-			:name="elementId + index"
-			type="radio"
-			@update:model-value="$emit('update')">
-			{{ option.label }}
-		</NcCheckboxRadioSwitch>
-	</div>
-</template>
-
 <script setup>
 import { computed } from 'vue'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
@@ -42,3 +28,17 @@ const model = defineModel({
 const elementId = computed(() => props.id ?? `rg-${RandId()}`)
 
 </script>
+
+<template>
+	<div class="radio-group-div">
+		<NcCheckboxRadioSwitch v-for="(option, index) in options"
+			:key="option.value"
+			v-model="model"
+			:value="option.value"
+			:name="elementId + index"
+			type="radio"
+			@update:model-value="$emit('update')">
+			{{ option.label }}
+		</NcCheckboxRadioSwitch>
+	</div>
+</template>

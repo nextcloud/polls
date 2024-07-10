@@ -3,23 +3,22 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+import { defineProps } from 'vue'
+
+const props = defineProps({
+	tag: {
+		type: String,
+		default: 'div',
+	},
+})
+</script>
+
 <template>
-	<Component :is="tag" class="spacer">
+	<Component :is="props.tag" class="spacer">
 		<slot />
 	</Component>
 </template>
-
-<script>
-export default {
-	name: 'FlexSpacer',
-	props: {
-		tag: {
-			type: String,
-			default: 'div',
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 	.spacer {

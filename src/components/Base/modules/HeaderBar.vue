@@ -3,6 +3,20 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+import { ref } from 'vue'
+
+const clamped = ref(true)
+
+/**
+ * Toggles the clamped state
+ */
+function toggleClamp() {
+	clamped.value = !clamped.value
+}
+
+</script>
+
 <template>
 	<div class="header_bar">
 		<div class="header_bar_top">
@@ -19,26 +33,12 @@
 			</div>
 		</div>
 		<div class="header_bar_bottom">
-			<slot name="default" />
+			<slot />
 		</div>
 	</div>
 </template>
 
-<script>
-export default {
-	name: 'HeaderBar',
-	data() {
-		return {
-			clamped: true,
-		}
-	},
-	methods: {
-		toggleClamp() {
-			this.clamped = !this.clamped
-		},
-	},
-}
-</script>
+
 
 <style lang="scss">
 .page--scrolled .header_bar_bottom {
