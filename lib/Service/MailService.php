@@ -156,15 +156,14 @@ class MailService {
 		}
 
 		foreach ($subscriptions as $subscription) {
-			$subscription->setNotifyLogs($this->logs);
-			$notication = new NotificationMail($subscription);
-
 			try {
+				$subscription->setNotifyLogs($this->logs);
+				$notication = new NotificationMail($subscription);
 				$notication->send();
 			} catch (InvalidEmailAddress $e) {
-				$this->logger->warning('Invalid or no email address for notification: ' . json_encode($subscription));
+				$this->logger->warning('Invalid or no email address for notification: ' . json_encode($subscription), ['exception' => $e]);
 			} catch (\Exception $e) {
-				$this->logger->error('Error sending notification to ' . json_encode($subscription));
+				$this->logger->error('Error sending notification to ' . json_encode($subscription), ['exception' => $e]);
 				continue;
 			}
 		}
