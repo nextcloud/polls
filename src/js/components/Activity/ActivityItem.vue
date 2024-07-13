@@ -76,7 +76,7 @@ export default {
 						: `${parameters[key].name}`
 					break
 				case 'circle':
-					parameters[key] =  {
+					parameters[key] = {
 						component: SimpleLink,
 						props: {
 							href: parameters[key].link,
