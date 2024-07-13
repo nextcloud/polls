@@ -43,7 +43,7 @@ export enum allowProposals {
 	Review = 'review',
 }
 
-export interface PollConfiguration {
+export type PollConfiguration = {
 	title: string
 	description: string
 	access: AccessType
@@ -61,7 +61,7 @@ export interface PollConfiguration {
 	maxVotesPerUser: number
 }
 
-export interface PollStatus {
+export type PollStatus = {
 	lastInteraction: number
 	created: number
 	deleted: boolean
@@ -71,7 +71,7 @@ export interface PollStatus {
 	countParticipants: number
 }
 
-export interface PollPermissions {
+export type PollPermissions = {
 	addOptions: boolean
 	archive: boolean
 	comment: boolean
@@ -84,7 +84,7 @@ export interface PollPermissions {
 	vote: boolean
 }
 
-export interface CurrentUserStatus {
+export type CurrentUserStatus = {
 	userRole: string
 	isLocked: boolean
 	isInvolved: boolean
@@ -99,7 +99,7 @@ export interface CurrentUserStatus {
 	groupInvitations: string[]
 }
 
-export interface Poll {
+export type Poll = {
 	id: number
 	type: PollType
 	descriptionSafe: string

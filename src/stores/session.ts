@@ -13,6 +13,7 @@ import { usePreferencesStore } from './preferences.ts'
 import { FilterType } from './polls.ts'
 import { PollPermissions, usePollStore } from './poll.ts'
 import { Share } from './share.ts'
+import { RouteLocationNormalized } from 'vue-router'
 
 enum ViewMode {
 	TableView = 'table-view',
@@ -112,6 +113,10 @@ export const useSessionStore = defineStore('session', {
 			pollCreationGroups: [],
 			pollDownloadGroups: [],
 			showMailAddressesGroups: [],
+			groups: [],
+			status: {
+				loadingGroups: false
+			}
 		},
 		router: {
 			currentRoute: '',
@@ -190,8 +195,11 @@ export const useSessionStore = defineStore('session', {
 			this.sessionSettings.manualViewTextPoll = viewMode
 		},
 
-		setRouter(payload: Router) {
-			this.router = payload
+		setRouter(payload: RouteLocationNormalized) {
+			this.router.currentRoute = payload.fullPath
+			this.router.name = payload.name
+			this.router.path = payload.path
+			this.router.params = payload.params
 		},
 	},
 })

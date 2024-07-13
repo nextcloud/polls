@@ -3,26 +3,20 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { PiniaVuePlugin } from 'pinia'
-import Vue from 'vue'
+import { createApp } from 'vue'
 import { pinia } from './stores/index.ts'
+import { router } from './router.ts'
+
 import App from './App.vue'
-import router from './router.js'
 import ClickOutside from 'v-click-outside'
-import { Tooltip } from '@nextcloud/vue'
 
-Vue.config.devtools = import.meta.env.MODE !== 'production'
+// TODO: FInd a way to use the devtools in the browser
+// Vue.config.devtools = import.meta.env.MODE !== 'production'
 
-// eslint-disable-next-line vue/match-component-file-name
-Vue.directive('tooltip', Tooltip)
+console.log('Polls app loaded')
 
-Vue.use(ClickOutside)
-Vue.use(PiniaVuePlugin)
-
-/* eslint-disable-next-line no-new */
-const app = new Vue({
-	router,
-	pinia,
-	render: (h) => h(App),
-})
-app.$mount('#content')
+const Polls = createApp(App)
+	.use(pinia)
+	.use(router)
+	.use(ClickOutside)	
+Polls.mount('#content_polls')
