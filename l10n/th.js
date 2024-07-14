@@ -37,6 +37,7 @@ OC.L10N.register(
     "Activity" : "กิจกรรม",
     "Day" : "วัน",
     "Month" : "เดือน",
+    "Year" : "ปี",
     "Archive" : "เก็บถาวร"
 },
 "nplurals=1; plural=0;");
