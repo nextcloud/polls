@@ -4,7 +4,7 @@
  */
 module.exports = {
 	extends: [
-		'@nextcloud',
+		'@nextcloud/eslint-config/vue3',
 		'prettier',
 	],
 	plugins: [

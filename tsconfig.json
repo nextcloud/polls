@@ -2,8 +2,8 @@
 	"compilerOptions": {
 		"allowImportingTsExtensions": true,
 		"noEmit": true,
-		"module": "es2022",
-		"moduleResolution": "Node",
+		"module": "esnext",
+		"moduleResolution": "Bundler",
 		"types" :["node", "vite/client"]
 	}
 
