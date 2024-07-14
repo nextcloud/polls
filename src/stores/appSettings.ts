@@ -9,6 +9,12 @@ import { AppSettingsAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
 import { debounce } from 'lodash'
 
+export enum UpdateType {
+	NoPolling = 'noPolling',
+	Periodic = 'periodicPolling',
+	LongPolling = 'longPolling',
+
+}
 export type Group = {
 	id: string,
 	userId: string,
@@ -35,7 +41,7 @@ export type AppSettings = {
 	privacyUrl: string
 	showMailAddresses: boolean
 	showLogin: boolean
-	updateType: string
+	updateType: UpdateType
 	useActivity: boolean
 	useCollaboration: boolean
 	navigationPollsInList: boolean
@@ -70,7 +76,7 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		privacyUrl: '',
 		showMailAddresses: false,
 		showLogin: true,
-		updateType: 'noPolling',
+		updateType: UpdateType.NoPolling,
 		useActivity: false,
 		useCollaboration: true,
 		navigationPollsInList: true,

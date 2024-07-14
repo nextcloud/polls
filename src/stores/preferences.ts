@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 import { CalendarAPI, UserSettingsAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
 
-enum ViewMode {
+export enum ViewMode {
 	TableView = 'table-view',
 	ListView = 'list-view',
 }

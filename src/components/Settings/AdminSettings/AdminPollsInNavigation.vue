@@ -3,16 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.navigationPollsInList" 
-			type="switch"
-			@update:model-value="appSettingsStore.write()">
-			{{ t('polls', 'Load polls into the navigation.') }}
-		</NcCheckboxRadioSwitch>
-	</div>
-</template>
-
 <script setup>
 
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
@@ -22,3 +12,13 @@ import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 const { appSettingsStore } = useAppSettingsStore()
 
 </script>
+
+<template>
+	<div class="user_settings">
+		<NcCheckboxRadioSwitch v-model="appSettingsStore.navigationPollsInList" 
+			type="switch"
+			@update:model-value="appSettingsStore.write()">
+			{{ t('polls', 'Load polls into the navigation.') }}
+		</NcCheckboxRadioSwitch>
+	</div>
+</template>

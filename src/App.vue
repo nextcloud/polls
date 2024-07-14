@@ -3,16 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<NcContent app-name="polls" :class="appClass">
-		<router-view v-if="useNavigation" name="navigation" />
-		<router-view />
-		<router-view v-if="useSidebar" name="sidebar" />
-		<LoadingOverlay v-if="loading" />
-		<UserSettingsDlg />
-	</NcContent>
-</template>
-
 <script setup>
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { NcContent } from '@nextcloud/vue'
@@ -75,7 +65,6 @@ function notify(payload) {
 }
 
 onMounted(() => {
-	console.log('App mounted')
 	subscribe('polls:transitions:off', (delay) => {
 		transitionsOff(delay)
 	})
@@ -116,6 +105,16 @@ onUnmounted(() => {
 
 
 </script>
+
+<template>
+	<NcContent app-name="polls" :class="appClass">
+		<router-view v-if="useNavigation" name="navigation" />
+		<router-view />
+		<router-view v-if="useSidebar" name="sidebar" />
+		<LoadingOverlay v-if="loading" />
+		<UserSettingsDlg />
+	</NcContent>
+</template>
 
 <style lang="scss">
 .app-content {
@@ -190,5 +189,4 @@ onUnmounted(() => {
 .modal__buttons__link {
 	text-decoration: underline;
 }
-
 </style>

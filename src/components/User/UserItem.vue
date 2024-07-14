@@ -4,30 +4,30 @@
 -->
 
 <template>
-	<div :class="['user-item', typeComputed, { disabled, condensed: condensed }]">
+	<div :class="['user-item', typeComputed, { disabled, condensed: props.condensed }]">
 		<div class="avatar-wrapper">
 			<NcAvatar v-bind="avatarProps" class="user-item__avatar" @click="showMenu()">
 				<template v-if="useIconSlot" #icon>
-					<LinkIcon v-if="typeComputed === 'public'" :size="mdIconSize" />
-					<LinkIcon v-if="typeComputed === 'addPublicLink'" :size="mdIconSize" />
-					<AnoymousIcon v-if="typeComputed === 'anonymous'" :size="mdIconSize" />
-					<LinkIcon v-if="typeComputed === 'internalAccess'" :size="mdIconSize" />
-					<ContactGroupIcon v-if="typeComputed === 'contactGroup'" :size="mdIconSize" />
-					<GroupIcon v-if="typeComputed === 'group'" :size="mdIconSize" />
-					<CircleIcon v-if="typeComputed === 'circle'" :size="mdIconSize" />
-					<DeletedUserIcon v-if="typeComputed === 'deleted'" :size="mdIconSize" />
+					<LinkIcon v-if="typeComputed === 'public'" :size="props.mdIconSize" />
+					<LinkIcon v-if="typeComputed === 'addPublicLink'" :size="props.mdIconSize" />
+					<AnoymousIcon v-if="typeComputed === 'anonymous'" :size="props.mdIconSize" />
+					<LinkIcon v-if="typeComputed === 'internalAccess'" :size="props.mdIconSize" />
+					<ContactGroupIcon v-if="typeComputed === 'contactGroup'" :size="props.mdIconSize" />
+					<GroupIcon v-if="typeComputed === 'group'" :size="props.mdIconSize" />
+					<CircleIcon v-if="typeComputed === 'circle'" :size="props.mdIconSize" />
+					<DeletedUserIcon v-if="typeComputed === 'deleted'" :size="props.mdIconSize" />
 				</template>
 			</NcAvatar>
 
-			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="typeIconSize" class="type-icon" />
-			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="typeIconSize" class="type-icon" />
-			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="typeIconSize" class="type-icon" />
-			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="typeIconSize" class="type-icon" />
+			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
+			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
+			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
+			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
 		</div>
 
 		<slot name="status" />
 
-		<div v-if="!hideNames" class="user-item__name">
+		<div v-if="!props.hideNames" class="user-item__name">
 			<div class="name">
 				{{ labelComputed }}
 			</div>
@@ -40,7 +40,9 @@
 	</div>
 </template>
 
-<script>
+<script setup lang="ts">
+import { computed, defineProps, defineOptions, type PropType } from 'vue'
+import { useRoute } from 'vue-router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { NcAvatar } from '@nextcloud/vue'
 import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
@@ -54,223 +56,200 @@ import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
 import DeletedUserIcon from 'vue-material-design-icons/AccountOff.vue'
 import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
 import { t } from '@nextcloud/l10n'
+import { User, UserType, VirtualUserItemType } from '../../Interfaces/interfaces.ts'
 
-export default {
-	name: 'UserItem',
+const route = useRoute()
 
-	components: {
-		NcAvatar,
-		AdminIcon,
-		LinkIcon,
-		ContactIcon,
-		EmailIcon,
-		ShareIcon,
-		ContactGroupIcon,
-		GroupIcon,
-		CircleIcon,
-		DeletedUserIcon,
-		AnoymousIcon,
+defineOptions({
+  inheritAttrs: true
+})
+
+const props = defineProps({
+	disabled: {
+		type: Boolean,
+		default: false,
 	},
-
-	inheritAttrs: false,
-
-	props: {
-		disabled: {
-			type: Boolean,
-			default: false,
-		},
-		deletedState: {
-			type: Boolean,
-			default: false,
-		},
-		lockedState: {
-			type: Boolean,
-			default: false,
-		},
-		hideNames: {
-			type: Boolean,
-			default: false,
-		},
-		showEmail: {
-			type: Boolean,
-			default: false,
-		},
-		disableMenu: {
-			type: Boolean,
-			default: true,
-		},
-		disableTooltip: {
-			type: Boolean,
-			default: false,
-		},
-		resolveInfo: {
-			type: Boolean,
-			default: false,
-		},
-		menuPosition: {
-			type: String,
-			default: 'left',
-		},
-		description: {
-			type: String,
-			default: '',
-		},
-		label: {
-			type: String,
-			default: '',
-		},
-		type: {
-			type: String,
-			default: '',
-			validator(value) {
-				return [
-					'public',
-					'internalAccess',
-					'user',
-					'admin',
-					'group',
-					'contact',
-					'contactGroup',
-					'circle',
-					'external',
-					'email',
-					'deleted',
-					'addPublicLink',
-					'',
-				].includes(value)
-			},
-
-		},
-		user: {
-			type: Object,
-			default() {
-				return {
-					userId: '',
-					displayName: '',
-					emailAddress: '',
-					isNoUser: true,
-					type: null,
-				}
-			},
-		},
-		showTypeIcon: {
-			type: Boolean,
-			default: false,
-		},
-		iconSize: {
-			type: Number,
-			default: 32,
-		},
-		mdIconSize: {
-			type: Number,
-			default: 20,
-		},
-		typeIconSize: {
-			type: Number,
-			default: 16,
-		},
-		hideUserStatus: {
-			type: Boolean,
-			default: false,
-		},
-		condensed: {
-			type: Boolean,
-			default: false,
-		},
+	deletedState: {
+		type: Boolean,
+		default: false,
 	},
-
-	computed: {
-		isGuestComputed() {
-			return this.$route?.name === 'publicVote' || this.user.isNoUser
-		},
-
-		avatarProps() {
-			return {
-				disableMenu: this.disableMenu,
-				disableTooltip: this.disableTooltip,
-				isGuest: this.isGuestComputed,
-				menuPosition: this.menuPosition,
-				size: this.iconSize,
-				showUserStatus: this.showUserStatus,
-				user: this.avatarUserId,
-				displayName: this.displayName,
-				isNoUser: this.user.isNoUser,
-			}
-		},
-
-		useIconSlot() {
+	lockedState: {
+		type: Boolean,
+		default: false,
+	},
+	hideNames: {
+		type: Boolean,
+		default: false,
+	},
+	showEmail: {
+		type: Boolean,
+		default: false,
+	},
+	disableMenu: {
+		type: Boolean,
+		default: true,
+	},
+	disableTooltip: {
+		type: Boolean,
+		default: false,
+	},
+	resolveInfo: {
+		type: Boolean,
+		default: false,
+	},
+	description: {
+		type: String,
+		default: '',
+	},
+	label: {
+		type: String,
+		default: '',
+	},
+	type: {
+		type: Object as PropType<UserType | VirtualUserItemType>,
+		default: VirtualUserItemType.None,
+		validator(value: UserType | VirtualUserItemType) {
 			return [
-				'internalAccess',
 				'public',
-				'addPublicLink',
-				'contactGroup',
+				'internalAccess',
+				'user',
+				'admin',
 				'group',
+				'contact',
+				'contactGroup',
 				'circle',
+				'external',
+				'email',
 				'deleted',
-				'anonymous',
-			].includes(this.typeComputed)
+				'addPublicLink',
+				'',
+			].includes(value)
 		},
 
-		typeComputed() {
-			return this.user.type ?? this.type
-		},
-
-		descriptionComputed() {
-			if (this.condensed) return ''
-			if (this.deletedState) return t('polls', '(deleted)')
-			if (this.lockedState) return t('polls', '(locked)')
-			if (this.description !== '') return this.description
-			if (this.typeComputed === 'public') return this.publicShareDescription
-			if (this.typeComputed === 'deleted') return t('polls', 'The participant got removed from this poll')
-			if (this.typeComputed === 'admin') return t('polls', 'Is granted admin rights for this poll')
-			if (this.typeComputed === 'anonymous') return t('polls', 'Anonymized participant')
-			return this.emailAddressComputed
-		},
-
-		labelComputed() {
-			if (this.label !== '') return this.label
-			if (this.typeComputed === 'public') return this.publicShareLabel
-			if (this.typeComputed === 'deleted') return t('polls', 'Deleted participant')
-			return this.user.displayName ?? this.user.userId
-		},
-
-		avatarUserId() {
-			if (this.isGuestComputed) return this.user.displayName
-			return this.user.userId
-		},
-
-		publicShareDescription() {
-			if (this.label === '') {
-				return t('polls', 'Token: {token}', { token: this.user.userId })
+	},
+	user: {
+		type: Object as PropType<User>,
+		default() {
+			return {
+				userId: '',
+				displayName: '',
+				emailAddress: '',
+				isNoUser: true,
+				type: null,
 			}
-			return t('polls', 'Public link: {token}', { token: this.user.userId })
-		},
-
-		publicShareLabel() {
-			if (this.label === '') {
-				return t('polls', 'Public link')
-			}
-			return this.label
-		},
-
-		emailAddressComputed() {
-			if (this.resolveInfo && ['contactGroup', 'circle'].includes(this.typeComputed)) {
-				return t('polls', 'Resolve this group first!')
-			}
-
-			if (this.showEmail && ['external', 'email'].includes(this.typeComputed) && this.user.emailAddress !== this.user.displayName) {
-				return this.user.emailAddress
-			}
-
-			return ''
-		},
-
-		showUserStatus() {
-			return !this.hideUserStatus && Boolean(getCurrentUser())
 		},
 	},
-}
+	showTypeIcon: {
+		type: Boolean,
+		default: false,
+	},
+	iconSize: {
+		type: Number,
+		default: 32,
+	},
+	mdIconSize: {
+		type: Number,
+		default: 20,
+	},
+	typeIconSize: {
+		type: Number,
+		default: 16,
+	},
+	hideUserStatus: {
+		type: Boolean,
+		default: false,
+	},
+	condensed: {
+		type: Boolean,
+		default: false,
+	},
 
+})
+
+const isGuestComputed = computed(() => route.name === 'publicVote' || props.user.isNoUser)
+const avatarProps = computed(() => ({
+	user: avatarUserId.value,
+	showUserStatus: showUserStatusComputed.value,
+	isGuest: isGuestComputed.value,
+	displayName: labelComputed.value,
+	size: props.iconSize,
+	disableTooltip: props.disableTooltip,
+	disableMenu: props.disableMenu,
+	isNoUser: props.user.isNoUser,
+}))
+
+const useIconSlot = computed(() => [
+	VirtualUserItemType.InternalAccess,
+	VirtualUserItemType.AddPublicLink,
+	UserType.Public,
+	UserType.ContactGroup,
+	UserType.Group,
+	UserType.Circle,
+	VirtualUserItemType.Deleted,
+	VirtualUserItemType.Anonymous,
+].includes(typeComputed.value))
+
+const typeComputed = computed(() => props.user.type ?? props.type)
+const descriptionComputed = computed(() => {
+	if (props.condensed) return ''
+	if (props.deletedState) return t('polls', '(deleted)')
+	if (props.lockedState) return t('polls', '(locked)')
+	if (props.description !== '') return props.description
+	if (typeComputed.value === UserType.Public) return publicShareDescription
+	if (typeComputed.value === VirtualUserItemType.Deleted) return t('polls', 'The participant got removed from this poll')
+	if (typeComputed.value === UserType.Admin) return t('polls', 'Is granted admin rights for this poll')
+	if (typeComputed.value === VirtualUserItemType.Anonymous) return t('polls', 'Anonymized participant')
+	return emailAddressComputed
+})
+const labelComputed = computed(() => {
+	if (props.label !== '') return props.label
+	if (typeComputed.value === UserType.Public) return publicShareLabel.value
+	if (typeComputed.value === VirtualUserItemType.Deleted) return t('polls', 'Deleted participant')
+	return props.user.displayName ?? props.user.userId
+})
+
+const avatarUserId = computed(() => {
+	if (isGuestComputed.value) return props.user.displayName
+	return props.user.userId
+})
+
+const publicShareDescription = computed(() => {
+	if (props.label === '') {
+		return t('polls', 'Token: {token}', { token: props.user.userId })
+	}
+	return t('polls', 'Public link: {token}', { token: props.user.userId })
+})
+
+const publicShareLabel = computed(() => {
+	if (props.label === '') {
+		return t('polls', 'Public link')
+	}
+	return props.label
+})
+
+const emailAddressComputed = computed(() => {
+	if (props.resolveInfo && (typeComputed.value === UserType.ContactGroup || typeComputed.value === UserType.Circle)) {
+		return t('polls', 'Resolve this group first!')
+	}
+
+	if (props.showEmail
+		&& props.user.emailAddress !== props.user.displayName
+		&& (typeComputed.value === UserType.External || typeComputed.value === UserType.Email)
+	) {
+		return props.user.emailAddress
+	}
+
+	return ''
+})
+const showUserStatusComputed = computed(() => !props.hideUserStatus && Boolean(getCurrentUser()))
+
+/**
+ *
+ */
+function showMenu() {
+	// TODO: implement
+	return true
+}
 </script>
 
 <style lang="scss">

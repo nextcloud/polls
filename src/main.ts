@@ -13,10 +13,11 @@ import ClickOutside from 'v-click-outside'
 // TODO: FInd a way to use the devtools in the browser
 // Vue.config.devtools = import.meta.env.MODE !== 'production'
 
-console.log('Polls app loaded')
-
 const Polls = createApp(App)
 	.use(pinia)
 	.use(router)
 	.use(ClickOutside)	
+	.directive('focus', {
+		mounted: (el) => el.focus()
+	})
 Polls.mount('#content_polls')

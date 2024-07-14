@@ -3,6 +3,13 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+	import { InputDiv } from '../../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore } from '../../../stores/preferences.ts'
+	const preferencesStore = usePreferencesStore()
+</script>
+
 <template>
 	<div class="user_settings">
 		<h3>
@@ -21,11 +28,3 @@
 			@change="preferencesStore.write()" />
 	</div>
 </template>
-
-<script setup>
-	import { InputDiv } from '../../Base/index.js'
-	import { t } from '@nextcloud/l10n'
-	import { usePreferencesStore } from '../../../stores/preferences.ts'
-	const preferencesStore = usePreferencesStore()
-</script>
-

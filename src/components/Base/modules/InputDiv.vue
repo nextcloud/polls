@@ -18,7 +18,7 @@ const model = defineModel({
 	type: String | Number,
 })
 
-const vFocus = {
+const vInputFocus = {
 	mounted: (el) => {
 		if (props.focus) el.focus()
 	}
@@ -190,7 +190,7 @@ onMounted(() => {
 		<div class="input-wrapper">
 			<!-- <input ref="input" -->
 			<input v-model="model"
-				v-focus
+				v-input-focus
 				:type="type"
 				:inputmode="inputmode"
 				:placeholder="placeholder"

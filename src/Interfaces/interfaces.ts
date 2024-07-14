@@ -4,7 +4,14 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-export interface PollPermissions {
+export enum StatusResults {
+	Error = 'error',
+	Warning = 'warning',
+	Success = 'success',
+	Loading = 'loading',
+	Loaded = 'loaded',
+}
+export type PollPermissions = {
 	addOptions: boolean
 	archive: boolean
 	comment: boolean
@@ -29,11 +36,19 @@ export enum UserType {
 	ContactGroup = 'contactGroup'
 }
 
+export enum VirtualUserItemType {
+	AddPublicLink = 'addPublicLink',
+	InternalAccess = 'internalAccess',
+	Deleted = 'deleted',
+	Anonymous = 'anonymous',
+	None = '',
+}
+
 export enum UpdateType {
 	NoPolling = 'noPolling'
 }
 
-export interface AppSettings {
+export type AppSettings = {
 	usePrivacyUrl: string,
 	useImprintUrl: string,
 	useLogin: boolean
@@ -42,7 +57,7 @@ export interface AppSettings {
 	updateType: UpdateType,
 }
 
-export interface AppPermissions {
+export type AppPermissions = {
 	allAccess: boolean
 	publicShares: boolean
 	pollCreation: boolean
@@ -50,7 +65,7 @@ export interface AppPermissions {
 	pollDownload: boolean
 }
 
-export interface User {
+export type User = {
 	userId: string
 	displayName: string
 	emailAddress: string

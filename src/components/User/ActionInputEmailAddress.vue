@@ -7,7 +7,7 @@
 	<NcActionInput v-if="$route.name === 'publicVote'"
 		v-bind="inputProps"
 		v-model="shareStore.emailAddress"
-		@update:value="validate"
+		@update:model-value="validate"
 		@submit="submit">
 		<template #icon>
 			<EditEmailIcon />

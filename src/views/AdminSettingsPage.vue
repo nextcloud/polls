@@ -3,45 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<FlexSettings>
-		<NcSettingsSection v-bind="sections.pollSettings">
-			<AdminPollCreation />
-			<AdminPollDownload />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.shareSettings">
-			<AdminShareOpenPoll />
-			<AdminSharePublicCreate />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.otherSettings">
-			<AdminActivities />
-			<AdminArchivePolls />
-			<AdminCombo />
-			<AdminShowMailAddresses />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.performanceSettings">
-			<AdminPerformance />
-			<AdminPollsInNavigation />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.publicSettings">
-			<AdminSharePublicShowLogin />
-			<AdminLegal />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.emailSettings">
-			<AdminEmail />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.jobSettings">
-			<AdminJobs />
-		</NcSettingsSection>
-	</FlexSettings>
-</template>
-
 <script setup>
 import { onMounted } from 'vue'
 import {
@@ -93,5 +54,43 @@ const sections = {
 onMounted(() => {
 	appSettingsStore.load()
 })
-
 </script>
+
+<template>
+	<FlexSettings>
+		<NcSettingsSection v-bind="sections.pollSettings">
+			<AdminPollCreation />
+			<AdminPollDownload />
+		</NcSettingsSection>
+
+		<NcSettingsSection v-bind="sections.shareSettings">
+			<AdminShareOpenPoll />
+			<AdminSharePublicCreate />
+		</NcSettingsSection>
+
+		<NcSettingsSection v-bind="sections.otherSettings">
+			<AdminActivities />
+			<AdminArchivePolls />
+			<AdminCombo />
+			<AdminShowMailAddresses />
+		</NcSettingsSection>
+
+		<NcSettingsSection v-bind="sections.performanceSettings">
+			<AdminPerformance />
+			<AdminPollsInNavigation />
+		</NcSettingsSection>
+
+		<NcSettingsSection v-bind="sections.publicSettings">
+			<AdminSharePublicShowLogin />
+			<AdminLegal />
+		</NcSettingsSection>
+
+		<NcSettingsSection v-bind="sections.emailSettings">
+			<AdminEmail />
+		</NcSettingsSection>
+
+		<NcSettingsSection v-bind="sections.jobSettings">
+			<AdminJobs />
+		</NcSettingsSection>
+	</FlexSettings>
+</template>

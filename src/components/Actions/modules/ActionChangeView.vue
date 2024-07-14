@@ -3,6 +3,46 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { computed } from 'vue'
+import { NcButton } from '@nextcloud/vue'
+import { emit } from '@nextcloud/event-bus'
+import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
+import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
+import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
+import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
+
+const pollStore = usePollStore()
+const preferencesStore = usePreferencesStore()
+
+const caption = computed(() => {
+	if (pollStore.viewMode === ViewMode.TableView) {
+		return t('polls', 'Switch to list view')
+	}
+	return t('polls', 'Switch to table view')
+})
+
+/**
+ *
+ */
+function clickAction(): void {
+	emit('polls:transitions:off', 500)
+	changeView()
+}
+
+/**
+ *
+ */
+function changeView(): void {
+	if (pollStore.type === 'datePoll') {
+		preferencesStore.setViewDatePoll(pollStore.viewMode === ViewMode.TableView ? ViewMode.ListView : ViewMode.TableView)
+	} else if (pollStore.type === 'textPoll') {
+		preferencesStore.setViewTextPoll(pollStore.viewMode === ViewMode.TableView ? ViewMode.ListView : ViewMode.TableView)
+	}
+}
+</script>
+
 <template>
 	<div class="action change-view">
 		<NcButton type="tertiary"
@@ -17,50 +57,3 @@
 	</div>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
-import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
-import { usePreferencesStore } from '../../../stores/preferences.ts'
-
-export default {
-	name: 'ActionChangeView',
-
-	components: {
-		ListViewIcon,
-		TableViewIcon,
-		NcButton,
-	},
-
-	computed: {
-		...mapStores(usePollStore, usePreferencesStore),
-
-		caption() {
-			if (this.pollStore.viewMode === 'table-view') {
-				return t('polls', 'Switch to list view')
-			}
-			return t('polls', 'Switch to table view')
-		},
-
-	},
-
-	methods: {
-		changeView() {
-			if (this.pollStore.type === 'datePoll') {
-				this.preferencesStore.setViewDatePoll(this.settings.manualViewDatePoll ? '' : this.pollStore.getNextViewMode)
-			} else if (this.pollStore.type === 'textPoll') {
-				this.preferencesStore.setViewTextPoll(this.settings.manualViewTextPoll ? '' : this.pollStore.getNextViewMode)
-			}
-		},
-
-		clickAction() {
-			emit('polls:transitions:off', 500)
-			this.changeView()
-		},
-	},
-}
-</script>

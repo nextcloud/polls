@@ -71,7 +71,7 @@
 				<NcActionButton v-if="activateShowQr"
 					:name="t('polls', 'Show QR code')"
 					:aria-label="t('polls', 'Show QR code')"
-					@click="$emit('show-qr-code')">
+					@click="$emit('showQrCode')">
 					<template #icon>
 						<QrIcon />
 					</template>
@@ -82,24 +82,24 @@
 				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="optional"
-					:checked="share.publicPollEmail === 'optional'"
-					@change="sharesStore.setPublicPollEmail({ share, value: 'optional' })">
+					:model-value="share.publicPollEmail === 'optional'"
+					@update:model-value="sharesStore.setPublicPollEmail({ share, value: 'optional' })">
 					{{ t('polls', 'Email address is optional') }}
 				</NcActionRadio>
 
 				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="mandatory"
-					:checked="share.publicPollEmail === 'mandatory'"
-					@change="sharesStore.setPublicPollEmail({ share, value: 'mandatory' })">
+					:model-value="share.publicPollEmail === 'mandatory'"
+					@update:model-value="sharesStore.setPublicPollEmail({ share, value: 'mandatory' })">
 					{{ t('polls', 'Email address is mandatory') }}
 				</NcActionRadio>
 
 				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="disabled"
-					:checked="share.publicPollEmail === 'disabled'"
-					@change="sharesStore.setPublicPollEmail({ share, value: 'disabled' })">
+					:model-value="share.publicPollEmail === 'disabled'"
+					@update:model-value="sharesStore.setPublicPollEmail({ share, value: 'disabled' })">
 					{{ t('polls', 'Do not ask for an email address') }}
 				</NcActionRadio>
 				<NcActionButton v-if="!share.deleted"
@@ -186,6 +186,7 @@ export default {
 			default: undefined,
 		},
 	},
+emits: ['showQrCode'],
 
 	data() {
 		return {
@@ -233,7 +234,6 @@ export default {
 				forcedDescription: this.share.deleted ? `(${t('polls', 'deleted')})` : null,
 				showTypeIcon: true,
 				icon: true,
-
 			}
 		},
 	},

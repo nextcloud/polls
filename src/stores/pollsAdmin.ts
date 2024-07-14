@@ -9,12 +9,13 @@ import { orderBy } from 'lodash'
 import { PollsAPI } from '../Api/index.js'
 import { Poll } from './poll.ts'
 import { getCurrentUser } from '@nextcloud/auth'
-import { SortType, sortColumnsMapping, StoreStatus } from './polls.ts'
+import { SortType, sortColumnsMapping } from './polls.ts'
+import { StatusResults } from '../Interfaces/interfaces.ts'
 import { Logger } from '../helpers/index.ts'
 export interface PollsAdminList {
 	list: Poll[]
 	meta: {
-		status: StoreStatus
+		status: StatusResults
 	}
 	sort: {
 		by: SortType
@@ -26,7 +27,7 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 	state: (): PollsAdminList => ({
 		list: [],
 		meta: {
-			status: StoreStatus.Loaded,
+			status: StatusResults.Loaded,
 		},
 		sort: {
 			by: SortType.Created,
@@ -46,7 +47,7 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 
 	actions: {
 		async load(): Promise<void> {
-			this.meta.status = StoreStatus.Loading
+			this.meta.status = StatusResults.Loading
 			if (!getCurrentUser().isAdmin) {
 				return
 			}
@@ -54,10 +55,10 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 			try {
 				const response = await PollsAPI.getPollsForAdmin()
 				this.list = response.data
-				this.meta.status = StoreStatus.Loaded
+				this.meta.status = StatusResults.Loaded
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				this.meta.status = StoreStatus.Error
+				this.meta.status = StatusResults.Error
 				console.error('Error loading polls', { error })
 				throw error
 			}

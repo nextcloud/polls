@@ -3,6 +3,30 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+import { computed, ref } from 'vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import DOMPurify from 'dompurify'
+import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
+import { t } from '@nextcloud/l10n'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+
+const appSettingsStore = useAppSettingsStore()
+
+const markedPrefix = {
+	prefix: 'disclaimer-',
+}
+
+const preview = ref(false)
+const markedDisclaimer = computed(() => {
+	marked.use(gfmHeadingId(markedPrefix))
+	return DOMPurify.sanitize(marked.parse(appSettingsStore.disclaimer))
+})
+
+</script>
+
 <template>
 	<div class="user_settings">
 		<NcCheckboxRadioSwitch v-model="appSettingsStore.legalTermsInEmail" 
@@ -28,30 +52,6 @@
 		<div v-show="preview" class="polls-markdown" v-html="markedDisclaimer" />
 	</div>
 </template>
-
-<script setup>
-import { computed, ref } from 'vue'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { marked } from 'marked'
-import { gfmHeadingId } from 'marked-gfm-heading-id'
-import DOMPurify from 'dompurify'
-import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
-import { t } from '@nextcloud/l10n'
-import { useAppSettingsStore } from '../../../stores/appSettings.ts'
-
-const appSettingsStore = useAppSettingsStore()
-
-const markedPrefix = {
-	prefix: 'disclaimer-',
-}
-
-const preview = ref(false)
-const markedDisclaimer = computed(() => {
-	marked.use(gfmHeadingId(markedPrefix))
-	return DOMPurify.sanitize(marked.parse(appSettingsStore.disclaimer))
-})
-
-</script>
 
 <style lang="scss">
 	.disclaimer_group {

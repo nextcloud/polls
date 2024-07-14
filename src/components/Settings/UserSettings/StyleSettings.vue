@@ -3,6 +3,13 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore } from '../../../stores/preferences.ts'
+	const preferencesStore = usePreferencesStore()
+</script>
+
 <template>
 	<div>
 		<b> {{ t('polls', 'The style settings are still experimental!') }}</b>
@@ -22,10 +29,3 @@
 		</div>
 	</div>
 </template>
-
-<script setup>
-	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-	import { t } from '@nextcloud/l10n'
-	import { usePreferencesStore } from '../../../stores/preferences.ts'
-	const preferencesStore = usePreferencesStore()
-</script>

@@ -10,7 +10,7 @@ import { User, UserType } from '../Interfaces/interfaces.ts'
 import { Logger, uniqueArrayOfObjects } from '../helpers/index.js'
 import moment from '@nextcloud/moment'
 import { usePreferencesStore } from './preferences.ts'
-import { useVotesStore } from './votes.ts'
+import { useVotesStore, Answer } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
 import { useSessionStore } from './session.ts'
@@ -37,7 +37,7 @@ export enum ShowResults {
 	Never = 'never',
 }
 
-export enum allowProposals {
+export enum AllowProposals {
 	Allow = 'allow',
 	Disallow = 'disallow',
 	Review = 'review',
@@ -49,7 +49,7 @@ export type PollConfiguration = {
 	access: AccessType
 	allowComment: boolean
 	allowMaybe: boolean
-	allowProposals: allowProposals
+	allowProposals: AllowProposals
 	anonymous: boolean
 	autoReminder: boolean
 	expire: number
@@ -122,7 +122,7 @@ export const usePollStore = defineStore('poll', {
 			access: AccessType.Private,
 			allowComment: false,
 			allowMaybe: false,
-			allowProposals: allowProposals.Disallow,
+			allowProposals: AllowProposals.Disallow,
 			anonymous: false,
 			autoReminder: false,
 			expire: 0,
@@ -218,20 +218,20 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		answerSequence(state) {
-			const noString = state.configuration.useNo ? 'no' : ''
+			const noString = state.configuration.useNo ? Answer.No : Answer.None
 			if (state.configuration.allowMaybe) {
-				return [noString, 'yes', 'maybe']
+				return [noString, Answer.Yes, Answer.Maybe]
 			}
-			return [noString, 'yes']
+			return [noString, Answer.Yes]
 	
 		},
 	
-		participants(state) {
+		participants(state): User[] {
 			const sessionStore = useSessionStore()
 			const participants = this.participantsVoted
 	
 			// add current user, if not among participants and voting is allowed
-			if (!participants.find((participant) => participant.userId === sessionStore.currentUser.userId) && sessionStore.currentUser.userId && state.permissions.vote) {
+			if (!participants.find((participant: User) => participant.userId === sessionStore.currentUser.userId) && sessionStore.currentUser.userId && state.permissions.vote) {
 				participants.push({
 					userId: sessionStore.currentUser.userId,
 					displayName: sessionStore.currentUser.displayName,
@@ -254,7 +254,7 @@ export const usePollStore = defineStore('poll', {
 			return this.participants
 		},
 	
-		participantsVoted() {
+		participantsVoted(): User[] {
 			const votesStore = useVotesStore()
 
 			return uniqueArrayOfObjects(votesStore.list.map((vote) => (
@@ -268,7 +268,7 @@ export const usePollStore = defineStore('poll', {
 		],
 	
 		displayResults(state) {
-			return state.configuration.showResults === 'always' || (state.configuration.showResults === 'closed' && !this.closed)
+			return state.configuration.showResults === ShowResults.Always || (state.configuration.showResults === ShowResults.Closed && !this.closed)
 		},
 
 		isProposalOpen() {
@@ -276,7 +276,7 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isProposalAllowed(state) {
-			return state.configuration.allowProposals === 'allow' || state.configuration.allowProposals === 'review'
+			return state.configuration.allowProposals === AllowProposals.Allow || state.configuration.allowProposals === AllowProposals.Review
 		},
 
 		isProposalExpired(state) {

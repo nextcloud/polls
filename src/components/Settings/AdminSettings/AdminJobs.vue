@@ -3,46 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="user_settings">
-		<div class="job_hints">
-			<p>
-				{{ t('polls', 'Please understand, that the jobs were defined as asynchronous jobs by intention.') }}
-				{{ t('polls', 'Only use them, if it is absolutely neccessary (i.error. your cron does not work properly) or for testing.') }}
-				{{ t('polls', 'Starting the jobs does not mean, that the rules for these actions are overridden.') }}
-			</p>
-			<p>
-				{{ t('polls', 'Each job can only be run once. If you want to rerun them, you have to refresh the page.') }}
-				{{ t('polls', 'If you want to see the result, please check the logs.') }}
-			</p>
-		</div>
-		<div class="job_buttons_section">
-			<NcButton type="primary"
-				:aria-label="autoreminder.text"
-				:disabled="autoreminder.disabled"
-				@click="runAutoReminderJob()">
-				{{ autoreminder.text }}
-			</NcButton>
-
-			<NcButton type="primary"
-				:aria-label="janitor.text"
-				:disabled="janitor.disabled"
-				@click="runJanitorJob()">
-				{{ janitor.text }}
-			</NcButton>
-
-			<NcButton type="primary"
-				:aria-label="notification.text"
-				:disabled="notification.disabled"
-				@click="runNotificationJob()">
-				{{ notification.text }}
-			</NcButton>
-		</div>
-	</div>
-</template>
-
 <script setup>
-
 import { NcButton } from '@nextcloud/vue'
 import { AdminAPI } from '../../../Api/index.js'
 import { Logger } from '../../../helpers/index.js'
@@ -108,9 +69,45 @@ async function runNotificationJob() {
 		notification.disabled = true
 	}
 }
-
 </script>
 
+<template>
+	<div class="user_settings">
+		<div class="job_hints">
+			<p>
+				{{ t('polls', 'Please understand, that the jobs were defined as asynchronous jobs by intention.') }}
+				{{ t('polls', 'Only use them, if it is absolutely neccessary (i.error. your cron does not work properly) or for testing.') }}
+				{{ t('polls', 'Starting the jobs does not mean, that the rules for these actions are overridden.') }}
+			</p>
+			<p>
+				{{ t('polls', 'Each job can only be run once. If you want to rerun them, you have to refresh the page.') }}
+				{{ t('polls', 'If you want to see the result, please check the logs.') }}
+			</p>
+		</div>
+		<div class="job_buttons_section">
+			<NcButton type="primary"
+				:aria-label="autoreminder.text"
+				:disabled="autoreminder.disabled"
+				@click="runAutoReminderJob()">
+				{{ autoreminder.text }}
+			</NcButton>
+
+			<NcButton type="primary"
+				:aria-label="janitor.text"
+				:disabled="janitor.disabled"
+				@click="runJanitorJob()">
+				{{ janitor.text }}
+			</NcButton>
+
+			<NcButton type="primary"
+				:aria-label="notification.text"
+				:disabled="notification.disabled"
+				@click="runNotificationJob()">
+				{{ notification.text }}
+			</NcButton>
+		</div>
+	</div>
+</template>
 
 <style lang="scss">
 .user_settings {

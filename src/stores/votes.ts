@@ -17,11 +17,13 @@ export enum Answer {
 	Yes = 'yes',
 	No = 'no',
 	Maybe = 'maybe',
+	None = '',
 }
 export enum AnswerSymbol {
 	Yes = '✔',
 	Maybe = '❔',
 	No = '❌',
+	None = '',
 }
 
 export interface Vote {
