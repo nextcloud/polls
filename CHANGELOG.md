@@ -5,6 +5,12 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [7.1.4] - 2024-07-15
+### Fix
+ - Fix autoreminder again
+ - Fix acticities display of circles
+ - remove colons from exported file names
+
 ## [7.1.3] - 2024-06-30
 ### Fix
  - Fix autoreminder
