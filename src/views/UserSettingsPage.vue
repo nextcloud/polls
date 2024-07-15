@@ -3,26 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<FlexSettings>
-		<NcSettingsSection v-bind="sections.calendarSettings">
-			<CalendarSettings />
-		</NcSettingsSection>
-		<NcSettingsSection v-bind="sections.personalSettings">
-			<FeatureSettings />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.performanceSettings">
-			<PerformanceSettings />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.styleSettings">
-			<StyleSettings />
-		</NcSettingsSection>
-	</FlexSettings>
-</template>
-
-<script setup>
+<script setup lang="ts">
 
 import { onMounted } from 'vue'
 import { NcSettingsSection } from '@nextcloud/vue'
@@ -58,3 +39,22 @@ onMounted(() => {
 })
 
 </script>
+
+<template>
+	<FlexSettings>
+		<NcSettingsSection v-bind="sections.calendarSettings">
+			<CalendarSettings />
+		</NcSettingsSection>
+		<NcSettingsSection v-bind="sections.personalSettings">
+			<FeatureSettings />
+		</NcSettingsSection>
+
+		<NcSettingsSection v-bind="sections.performanceSettings">
+			<PerformanceSettings />
+		</NcSettingsSection>
+
+		<NcSettingsSection v-bind="sections.styleSettings">
+			<StyleSettings />
+		</NcSettingsSection>
+	</FlexSettings>
+</template>

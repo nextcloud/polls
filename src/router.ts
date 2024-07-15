@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2019 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -74,7 +73,7 @@ async function validateToken(to: RouteLocationNormalized) {
  */
 async function loadPoll(to: RouteLocationNormalized) {
 	const pollStore = usePollStore()
-	await pollStore.load({pollId: +to.params.id})
+	await pollStore.load()
 	return {
 		name: 'vote',
 		params: {

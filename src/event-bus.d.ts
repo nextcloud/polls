@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2024 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 declare module '@nextcloud/event-bus' {
 	interface NextcloudEvents {
 		'polls:transitions:off': number
