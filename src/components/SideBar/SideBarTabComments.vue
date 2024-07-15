@@ -3,6 +3,39 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted } from 'vue'
+import { NcEmptyContent } from '@nextcloud/vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
+
+import { usePollStore } from '../../stores/poll.ts'
+import { useCommentsStore } from '../../stores/comments.ts'
+
+import CommentAdd from '../Comments/CommentAdd.vue'
+import Comments from '../Comments/Comments.vue'
+import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+
+const pollStore = usePollStore()
+const commentsStore = useCommentsStore()
+
+const emptyContentProps = {
+	name: t('polls', 'No comments'),
+	description: t('polls', 'Be the first.'),
+}
+
+const showEmptyContent = computed(() => commentsStore.list.length === 0)
+
+onMounted(() => {
+	subscribe('polls:comments:update', () => commentsStore.load())
+})
+
+onUnmounted(() => {
+	unsubscribe('polls:comments:update', () => commentsStore.load())
+})
+
+</script>
+
 <template>
 	<div class="comments">
 		<CommentAdd v-if="pollStore.permissions.comment" />
@@ -14,50 +47,3 @@
 		</NcEmptyContent>
 	</div>
 </template>
-
-<script>
-import CommentAdd from '../Comments/CommentAdd.vue'
-import Comments from '../Comments/Comments.vue'
-import { NcEmptyContent } from '@nextcloud/vue'
-import { mapStores } from 'pinia'
-import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-
-export default {
-	name: 'SideBarTabComments',
-	components: {
-		CommentAdd,
-		Comments,
-		NcEmptyContent,
-		CommentsIcon,
-	},
-
-	data() {
-		return {
-			emptyContentProps: {
-				name: t('polls', 'No comments'),
-				description: t('polls', 'Be the first.'),
-			}
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore, useCommentsStore),
-
-		showEmptyContent() {
-			return this.commentsStore.list.length === 0
-		},
-	},
-
-	created() {
-		subscribe('polls:comments:update', this.commentsStore.load())
-	},
-
-	beforeDestroy() {
-		unsubscribe('polls:comments:update')
-	},
-}
-</script>

@@ -3,6 +3,36 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+import { defineEmits, ref } from 'vue'
+import { CardDiv } from '../../Base/index.js'
+import ActionSendConfirmed from '../../Actions/modules/ActionSendConfirmed.vue'
+import { t } from '@nextcloud/l10n'
+
+const emit = defineEmits(['sendConfirmationSuccess', 'sendConfirmationError'])
+const cardType = ref('info')
+const confirmationSendMessage = ref(t('polls', 'You have confirmed options. Inform your participants about the result via email.'))
+
+/**
+ *
+ */
+function confirmationSendError() {
+	cardType.value = 'error'
+	confirmationSendMessage.value = t('polls', 'Some confirmation messages could not been sent.')
+	emit('sendConfirmationSuccess')
+}
+
+/**
+ *
+ */
+function confirmationSendSuccess() {
+	cardType.value = 'success'
+	confirmationSendMessage.value = t('polls', 'Messages sent.')
+	emit('sendConfirmationError')
+}
+
+</script>
+
 <template>
 	<CardDiv :type="cardType">
 		{{ confirmationSendMessage }}
@@ -13,38 +43,3 @@
 	</CardDiv>
 </template>
 
-<script>
-import { CardDiv } from '../../Base/index.js'
-import ActionSendConfirmed from '../../Actions/modules/ActionSendConfirmed.vue'
-import { t } from '@nextcloud/l10n'
-
-export default {
-	name: 'CardSendConfirmations',
-	components: {
-		CardDiv,
-		ActionSendConfirmed,
-	},
-
-	data() {
-		return {
-			cardType: 'info',
-			confirmationSendMessage: t('polls', 'You have confirmed options. Inform your participants about the result via email.'),
-		}
-	},
-
-	methods: {
-		confirmationSendError() {
-			this.cardType = 'error'
-			this.confirmationSendMessage = t('polls', 'Some confirmation messages could not been sent.')
-			this.$emit('send-confirmation-success')
-		},
-
-		confirmationSendSuccess() {
-			this.cardType = 'success'
-			this.confirmationSendMessage = t('polls', 'Messages sent.')
-			this.$emit('send-confirmation-error')
-		},
-
-	},
-}
-</script>

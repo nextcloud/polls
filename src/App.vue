@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from 'vue'
 import { NcContent } from '@nextcloud/vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
@@ -43,7 +43,7 @@ function transitionsOn() {
  * Turn on transitions
  * @param {number} delay - optional delay
  */
-function transitionsOff(delay) {
+function transitionsOff(delay: number) {
 	this.transitionClass = ''
 	if (delay) {
 		setTimeout(() => {
@@ -55,8 +55,10 @@ function transitionsOff(delay) {
 /**
  *
  * @param {object} payload - payload
+ * @param payload.store - store
+ * @param payload.message - message
  */
-function notify(payload) {
+function notify(payload: { store: string, message: string }) {
 	debounce(async function () {
 		if (payload.store === 'poll') {
 			showSuccess(payload.message)
@@ -79,9 +81,15 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:transitions:on')
-	unsubscribe('polls:transitions:off')
-	unsubscribe('polls:poll:updated')
+	unsubscribe('polls:transitions:on', () => {
+		transitionsOn()
+	})
+	unsubscribe('polls:transitions:off', () => {
+		transitionsOff(0)
+	})
+	unsubscribe('polls:poll:updated', () => {
+		notify(null)
+	})
 })
 
 	// watch: {

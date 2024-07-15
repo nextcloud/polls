@@ -1,3 +1,7 @@
+/**
+ * SPDX-FileCopyrightText: 2024 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 
 import { RouteLocationNormalized } from 'vue-router'
 import { useSessionStore } from '../stores/session.ts'

@@ -3,6 +3,16 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { usePollsStore } from '../../stores/polls.ts'
+import { useComboStore } from '../../stores/combo.ts'
+
+import UserItem from '../User/UserItem.vue'
+
+const pollsStore = usePollsStore()
+const comboStore = useComboStore()
+</script>
+
 <template>
 	<div class="side-bar-tab-polls">
 		<div v-for="(poll) in pollsStore.datePolls"
@@ -16,25 +26,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import UserItem from '../User/UserItem.vue'
-import { usePollsStore } from '../../stores/polls.ts'
-import { useComboStore } from '../../stores/combo.ts'
-
-export default {
-	name: 'SideBarTabDatePolls',
-
-	components: {
-		UserItem,
-	},
-	
-	computed: {
-		...mapStores(usePollsStore, useComboStore),
-	},
-}
-</script>
 
 <style lang="scss">
 .poll-item {

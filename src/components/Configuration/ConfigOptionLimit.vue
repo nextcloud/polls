@@ -3,33 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div>
-		<NcCheckboxRadioSwitch v-model="useLimit" 
-			type="switch"
-			@update:model-value="validateLimit()">
-			{{ t('polls', 'Limit "Yes" votes per option') }}
-		</NcCheckboxRadioSwitch>
-
-		<InputDiv v-if="useLimit"
-			v-model="pollStore.configuration.maxVotesPerOption"
-			class="indented"
-			type="number"
-			inputmode="numeric"
-			:num-min="1"
-			use-num-modifiers
-			@change="pollStore.write()" />
-
-		<NcCheckboxRadioSwitch v-if="maxVotesPerOption"
-			class="indented"
-			v-model="pollStore.configuration.hideBookedUp"
-			type="switch"
-			@change="pollsStore.write()">
-			{{ t('polls', 'Hide not available Options') }}
-		</NcCheckboxRadioSwitch>
-	</div>
-</template>
-
 <script>
 import { mapStores } from 'pinia'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
@@ -75,3 +48,30 @@ export default {
 	},
 }
 </script>
+
+<template>
+	<div>
+		<NcCheckboxRadioSwitch v-model="useLimit" 
+			type="switch"
+			@update:model-value="validateLimit()">
+			{{ t('polls', 'Limit "Yes" votes per option') }}
+		</NcCheckboxRadioSwitch>
+
+		<InputDiv v-if="useLimit"
+			v-model="pollStore.configuration.maxVotesPerOption"
+			class="indented"
+			type="number"
+			inputmode="numeric"
+			:num-min="1"
+			use-num-modifiers
+			@change="pollStore.write()" />
+
+		<NcCheckboxRadioSwitch v-if="maxVotesPerOption"
+			v-model="pollStore.configuration.hideBookedUp"
+			class="indented"
+			type="switch"
+			@change="pollsStore.write()">
+			{{ t('polls', 'Hide not available Options') }}
+		</NcCheckboxRadioSwitch>
+	</div>
+</template>

@@ -77,12 +77,13 @@
 	</div>
 </template>
 
-<script>
+<script setup>
+import { ref, computed, onMounted } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
 import { debounce } from 'lodash'
 import { showError } from '@nextcloud/dialogs'
 import { generateUrl } from '@nextcloud/router'
 import { NcButton, NcCheckboxRadioSwitch, NcRichText } from '@nextcloud/vue'
-import { mapStores } from 'pinia'
 import { InputDiv } from '../Base/index.js'
 import { SimpleLink, setCookie } from '../../helpers/index.js'
 import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
@@ -91,224 +92,219 @@ import { useShareStore } from '../../stores/share.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
 
+const route = useRoute()
+const router = useRouter()
+
+const shareStore = useShareStore()
+const sessionStore = useSessionStore()
+const pollStore = usePollStore()
+
 const COOKIE_LIFETIME = 30
+const checkStatus = ref({
+	email: 'empty',
+	userName: 'empty',
+})
 
-export default {
-	name: 'PublicRegisterModal',
+const sendRegistration = ref(false)
+const userName = ref('')
+const emailAddress = ref('')
+const redirecting = ref(false)
+const saveCookie = ref(true)
 
-	components: {
-		NcCheckboxRadioSwitch,
-		InputDiv,
-		NcRichText,
-		SimpleLink,
-		NcButton,
-	},
+const registrationIsValid = computed(() => checkStatus.value.userName === 'valid' && (checkStatus.value.email === 'valid' || (emailAddress.value.length === 0 && shareStore.publicPollEmail !== 'mandatory')))
+const disableSubmit = computed(() => !registrationIsValid.value || checkStatus.value.userName === 'checking' || sendRegistration.value)
+const emailGeneratedStatus = computed(() => checkStatus.value.email === 'empty' ? shareStore.publicPollEmail : checkStatus.value.email)
 
-	data() {
-		return {
-			checkStatus: {
-				email: 'empty',
-				userName: 'empty',
+const privacyRich = computed(() => {
+	const subject = t('polls', 'By clicking the "OK" button you accept our {privacyPolicy}.')
+	const parameters = {
+		privacyPolicy: {
+			component: SimpleLink,
+			props: {
+				href: sessionStore.appSettings.usePrivacyUrl,
+				name: t('polls', 'privacy policy'),
+				target: '_blank',
 			},
-			sendRegistration: false,
-			userName: '',
-			emailAddress: '',
-			redirecting: false,
-			saveCookie: true,
-		}
-	},
-
-	computed: {
-		...mapStores(useShareStore, useSessionStore, usePollStore),
-
-		registrationIsValid() {
-			return this.checkStatus.userName === 'valid' && (this.checkStatus.email === 'valid' || (this.emailAddress.length === 0 && this.shareStore.publicPollEmail !== 'mandatory'))
 		},
+	}
+	return { subject, parameters }
+})
 
-		disableSubmit() {
-			return !this.registrationIsValid || this.checkStatus.userName === 'checking' || this.sendRegistration
-		},
+const loginLink = computed(() => {
+	const redirectUrl = this.$router.resolve({
+		name: 'publicVote',
+		params: { token: this.$route.params.token },
+	}).href
 
-		privacyRich() {
-			const subject = t('polls', 'By clicking the "OK" button you accept our {privacyPolicy}.')
-			const parameters = {
-				privacyPolicy: {
-					component: SimpleLink,
-					props: {
-						href: this.sessionStore.appSettings.usePrivacyUrl,
-						name: t('polls', 'privacy policy'),
-						target: '_blank',
-					},
-				},
-			}
-			return { subject, parameters }
-		},
+	return `${generateUrl('/login')}?redirect_url=${redirectUrl}`
+})
 
-		loginLink() {
-			const redirectUrl = this.$router.resolve({
-				name: 'publicVote',
-				params: { token: this.$route.params.token },
-			}).href
+const userNameHint = computed(() => {
+	if (checkStatus.value.userName === 'checking') return t('polls', 'Checking name …')
+	if (checkStatus.value.userName === 'empty') return t('polls', 'A name is required.')
+	if (checkStatus.value.userName === 'invalid') return t('polls', 'The name {username} is invalid or reserved.', { username: userName.value })
+	return ''
+})
 
-			return `${generateUrl('/login')}?redirect_url=${redirectUrl}`
 
-			// TODO: broken?
-			// return generateUrl('/login', { redirect_url: redirectUrl })
-		},
+const emailAddressHint = computed(() => {
+	if (emailGeneratedStatus.value === 'checking') return t('polls', 'Checking email address …')
+	if (emailGeneratedStatus.value === 'mandatory') return t('polls', 'An email address is required.')
+	if (emailGeneratedStatus.value === 'invalid') return t('polls', 'Invalid email address.')
+	if (shareStore.user.type === 'public') {
+		if (emailGeneratedStatus.value === 'valid') return t('polls', 'You will receive your personal link after clicking "OK".')
+		return t('polls', 'Enter your email address to get your personal access link.')
+	}
+	return ''
+})
 
-		userNameHint() {
-			if (this.checkStatus.userName === 'checking') return t('polls', 'Checking name …')
-			if (this.checkStatus.userName === 'empty') return t('polls', 'A name is required.')
-			if (this.checkStatus.userName === 'invalid') return t('polls', 'The name {username} is invalid or reserved.', { username: this.userName })
-			return ''
-		},
+onMounted(() => {
+	if (route.name === 'publicVote' && route.query.name) {
+		userName.value = route.query.name
+	} else {
+		userName.value = shareStore.user.displayName
+	}
+	if (route.name === 'publicVote' && route.query.email) {
+		emailAddress.value = route.query.email
+	} else {
+		emailAddress.value = shareStore.user.emailAddress
+	}
+})
 
-		emailGeneratedStatus() {
-			return this.checkStatus.email === 'empty' ? this.shareStore.publicPollEmail : this.checkStatus.email
-		},
-
-		emailAddressHint() {
-			if (this.emailGeneratedStatus === 'checking') return t('polls', 'Checking email address …')
-			if (this.emailGeneratedStatus === 'mandatory') return t('polls', 'An email address is required.')
-			if (this.emailGeneratedStatus === 'invalid') return t('polls', 'Invalid email address.')
-			if (this.shareStore.user.type === 'public') {
-				if (this.emailGeneratedStatus === 'valid') return t('polls', 'You will receive your personal link after clicking "OK".')
-				return t('polls', 'Enter your email address to get your personal access link.')
-			}
-			return ''
-		},
-	},
-
-	watch: {
-		userName() {
-			this.validatePublicUsername()
-		},
-
-		emailAddress() {
-			this.validateEmailAddress()
-		},
-	},
-
-	mounted() {
-		if (this.$route.name === 'publicVote' && this.$route.query.name) {
-			this.userName = this.$route.query.name
-		} else {
-			this.userName = this.shareStore.user.displayName
-		}
-		if (this.$route.name === 'publicVote' && this.$route.query.email) {
-			this.emailAddress = this.$route.query.email
-		} else {
-			this.emailAddress = this.shareStore.user.emailAddress
-		}
-	},
-
-	methods: {
-		t,
-		closeModal() {
-			this.$emit('close')
-		},
-
-		login() {
-			window.location.assign(`${window.location.protocol}//${window.location.host}${this.loginLink}`)
-		},
-
-		validatePublicUsername: debounce(async function() {
-			if (this.userName.length < 1) {
-				this.checkStatus.userName = 'empty'
-				return
-			}
-
-			this.checkStatus.userName = 'checking'
-
-			try {
-				await ValidatorAPI.validateName(this.$route.params.token, this.userName)
-				this.checkStatus.userName = 'valid'
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				if (error?.code === 'ERR_BAD_REQUEST') {
-					this.checkStatus.userName = 'invalid'
-					return
-				}
-				throw error
-			}
-		}, 500),
-
-		validateEmailAddress: debounce(async function() {
-			if (this.emailAddress.length < 1) {
-				this.checkStatus.email = 'empty'
-				return
-			}
-
-			this.checkStatus.email = 'checking'
-			try {
-				await ValidatorAPI.validateEmailAddress(this.emailAddress)
-				this.checkStatus.email = 'valid'
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				if (error?.code === 'ERR_BAD_REQUEST') {
-					this.checkStatus.email = 'invalid'
-					return
-				}
-				throw error
-			}
-		}, 500),
-
-		updateCookie(value) {
-			const cookieExpiration = (COOKIE_LIFETIME * 24 * 60 * 1000)
-			setCookie(this.$route.params.token, value, cookieExpiration)
-		},
-
-		routeToPersonalShare(token) {
-			if (this.$route.params.token === token) {
-				// if share was not a public share, but a personal share
-				// (i.error. email shares allow to change personal data by fist entering of the poll),
-				// just load the poll
-				this.pollStore.get()
-				this.closeModal()
-			} else {
-				// in case of a public share, redirect to the generated share
-				this.redirecting = true
-				this.$router.replace({ name: 'publicVote', params: { token } })
-				this.closeModal()
-			}
-
-		},
-
-		async submitRegistration() {
-			if (!this.registrationIsValid || this.sendRegistration) {
-				return
-			}
-
-			this.sendRegistration = true
-
-			try {
-				const response = await PublicAPI.register(
-					this.$route.params.token,
-					this.userName,
-					this.emailAddress,
-				)
-
-				if (this.saveCookie && this.$route.name === 'publicVote') {
-					this.updateCookie(response.data.shareStore.token)
-				}
-
-				this.routeToPersonalShare(response.data.shareStore.token)
-
-				// TODO: Is that correct, is this possible in any way?
-				if (this.shareStore.user.emailAddress && !this.shareStore.invitationSent) {
-					showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress }))
-				}
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				showError(t('polls', 'Error registering to poll', { error }))
-				throw error
-			}
-			finally {
-				this.sendRegistration = false
-			}
-		},
-	},
+/**
+ *
+ * @param {string} token - token of the poll
+ */
+function routeToPersonalShare(token) {
+	if (route.params.token === token) {
+		// if share was not a public share, but a personal share
+		// (i.error. email shares allow to change personal data by fist entering of the poll),
+		// just load the poll
+		pollStore.get()
+		closeModal()
+	} else {
+		// in case of a public share, redirect to the generated share
+		redirecting.value = true
+		router.replace({ name: 'publicVote', params: { token } })
+		closeModal()
+	}
 }
+
+/**
+ *
+ * @param {string} value - value to be stored in the cookie
+ */
+function updateCookie(value) {
+	const cookieExpiration = (COOKIE_LIFETIME * 24 * 60 * 1000)
+	setCookie(route.params.token, value, cookieExpiration)
+}
+
+/**
+ *
+ */
+function closeModal() {
+	this.$emit('close')
+}
+
+/**
+ *
+ */
+function login() {
+	window.location.assign(`${window.location.protocol}//${window.location.host}${loginLink.value}`)
+}
+
+/**
+ *
+ */
+function validatePublicUsername() {
+	debounce(async function() {
+		if (userName.value.length < 1) {
+			checkStatus.value.userName = 'empty'
+			return
+		}
+
+		checkStatus.value.userName = 'checking'
+		try {
+			await ValidatorAPI.validateName(route.params.token, userName.value)
+			checkStatus.value.userName = 'valid'
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			if (error?.code === 'ERR_BAD_REQUEST') {
+				checkStatus.value.userName = 'invalid'
+				return
+			}
+			throw error
+		}
+	}, 500)
+}
+
+/**
+ *
+ */
+function validateEmailAddress() {
+	debounce(async function() {
+		if (emailAddress.value.length < 1) {
+			checkStatus.value.email = 'empty'
+			return
+		}
+
+		checkStatus.value.email = 'checking'
+		try {
+			await ValidatorAPI.validateEmailAddress(emailAddress.value)
+			checkStatus.value.email = 'valid'
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			if (error?.code === 'ERR_BAD_REQUEST') {
+				checkStatus.value.email = 'invalid'
+				return
+			}
+			throw error
+		}
+	}, 500)
+}
+
+/**
+ *
+ */
+async function submitRegistration() {
+	if (!registrationIsValid.value || sendRegistration) {
+		return
+	}
+
+	sendRegistration.value = true
+
+	try {
+		const response = await PublicAPI.register(
+			route.params.token,
+			userName.value,
+			emailAddress.value,
+		)
+
+		if (saveCookie.value && route.name === 'publicVote') {
+			updateCookie(response.data.shareStore.token)
+		}
+
+		routeToPersonalShare(response.data.shareStore.token)
+
+		if (shareStore.user.emailAddress && !shareStore.invitationSent) {
+			showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress }))
+		}
+	} catch (error) {
+		if (error?.code === 'ERR_CANCELED') return
+			showError(t('polls', 'Error registering to poll', { error }))
+			throw error
+	} finally {
+		this.sendRegistration = false
+	}
+}
+
+watch(userName, () => {
+	validatePublicUsername()
+})
+
+watch(emailAddress, () => {
+	validateEmailAddress()
+})
 </script>
 
 <style lang="scss">

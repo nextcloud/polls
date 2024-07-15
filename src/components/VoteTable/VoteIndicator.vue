@@ -3,6 +3,48 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+import CheckIcon from 'vue-material-design-icons/Check.vue'
+import CloseIcon from 'vue-material-design-icons/Close.vue'
+import { MaybeIcon } from '../AppIcons/index.js'
+
+const props = defineProps({
+	answer: {
+		type: String,
+		default: '',
+	},
+	active: {
+		type: Boolean,
+		default: false,
+	},
+})
+
+const emit = defineEmits(['click'])
+const iconSize = 31
+const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue('--color-error')
+const colorCodeYes = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
+const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyValue('--color-warning')
+
+const foregroundColor = computed(() => {
+	if (props.answer === 'yes') {
+		return colorCodeYes
+	}
+	if (props.answer === 'maybe') {
+		return colorCodeMaybe
+	}
+	return colorCodeNo
+})
+
+/**
+ *
+ */
+function onClick() {
+	if (props.active) {
+		emit('click')
+	}
+}
+</script>
+
 <template>
 	<div :class="['vote-indicator', active]" @click="onClick()">
 		<MaybeIcon v-if="answer==='maybe'" :size="iconSize" />
@@ -10,62 +52,6 @@
 		<CloseIcon v-if="answer==='no'" :fill-color="foregroundColor" :size="iconSize" />
 	</div>
 </template>
-
-<script>
-
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
-import { MaybeIcon } from '../AppIcons/index.js'
-
-export default {
-	name: 'VoteIndicator',
-	components: {
-		CloseIcon,
-		CheckIcon,
-		MaybeIcon,
-	},
-
-	props: {
-		answer: {
-			type: String,
-			default: '',
-		},
-		active: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
-	data() {
-		return {
-			iconSize: 31,
-			colorCodeNo: getComputedStyle(document.documentElement).getPropertyValue('--color-error'),
-			colorCodeYes: getComputedStyle(document.documentElement).getPropertyValue('--color-success'),
-			colorCodeMaybe: getComputedStyle(document.documentElement).getPropertyValue('--color-warning'),
-		}
-	},
-
-	computed: {
-		foregroundColor() {
-			if (this.answer === 'yes') {
-				return this.colorCodeYes
-			}
-			if (this.answer === 'maybe') {
-				return this.colorCodeMaybe
-			}
-			return this.colorCodeNo
-		},
-	},
-
-	methods: {
-		onClick() {
-			if (this.active) {
-				this.$emit('click')
-			}
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 

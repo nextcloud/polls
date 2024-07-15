@@ -3,9 +3,14 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<script setup>
-import { computed } from 'vue'
+<script setup lang="ts">
+import { computed, defineEmits, defineModel, defineProps, PropType } from 'vue'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+
+export type CheckboxOption = {
+	value: string
+	label: string
+}
 
 const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
 
@@ -15,7 +20,7 @@ const props = defineProps({
 		default: null,
 	},
 	options: {
-		type: Array,
+		type: Array as PropType<CheckboxOption[]>,
 		required: true,
 	},
 })
@@ -24,6 +29,8 @@ const model = defineModel({
 	type: String,
 	default: null,
 })
+
+const emit = defineEmits(['update'])
 
 const elementId = computed(() => props.id ?? `rg-${RandId()}`)
 
@@ -37,7 +44,7 @@ const elementId = computed(() => props.id ?? `rg-${RandId()}`)
 			:value="option.value"
 			:name="elementId + index"
 			type="radio"
-			@update:model-value="$emit('update')">
+			@update:model-value="emit('update')">
 			{{ option.label }}
 		</NcCheckboxRadioSwitch>
 	</div>

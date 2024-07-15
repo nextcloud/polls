@@ -37,7 +37,6 @@ export interface Option {
 	hash: string
 	votes: number
 	owner: User
-
 }
 
 interface Options {

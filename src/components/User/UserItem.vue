@@ -3,43 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div :class="['user-item', typeComputed, { disabled, condensed: props.condensed }]">
-		<div class="avatar-wrapper">
-			<NcAvatar v-bind="avatarProps" class="user-item__avatar" @click="showMenu()">
-				<template v-if="useIconSlot" #icon>
-					<LinkIcon v-if="typeComputed === 'public'" :size="props.mdIconSize" />
-					<LinkIcon v-if="typeComputed === 'addPublicLink'" :size="props.mdIconSize" />
-					<AnoymousIcon v-if="typeComputed === 'anonymous'" :size="props.mdIconSize" />
-					<LinkIcon v-if="typeComputed === 'internalAccess'" :size="props.mdIconSize" />
-					<ContactGroupIcon v-if="typeComputed === 'contactGroup'" :size="props.mdIconSize" />
-					<GroupIcon v-if="typeComputed === 'group'" :size="props.mdIconSize" />
-					<CircleIcon v-if="typeComputed === 'circle'" :size="props.mdIconSize" />
-					<DeletedUserIcon v-if="typeComputed === 'deleted'" :size="props.mdIconSize" />
-				</template>
-			</NcAvatar>
-
-			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
-			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
-			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
-			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
-		</div>
-
-		<slot name="status" />
-
-		<div v-if="!props.hideNames" class="user-item__name">
-			<div class="name">
-				{{ labelComputed }}
-			</div>
-			<div class="description">
-				{{ descriptionComputed }}
-			</div>
-		</div>
-
-		<slot />
-	</div>
-</template>
-
 <script setup lang="ts">
 import { computed, defineProps, defineOptions, type PropType } from 'vue'
 import { useRoute } from 'vue-router'
@@ -251,6 +214,43 @@ function showMenu() {
 	return true
 }
 </script>
+
+<template>
+	<div :class="['user-item', typeComputed, { disabled, condensed: props.condensed }]">
+		<div class="avatar-wrapper">
+			<NcAvatar v-bind="avatarProps" class="user-item__avatar" @click="showMenu()">
+				<template v-if="useIconSlot" #icon>
+					<LinkIcon v-if="typeComputed === 'public'" :size="props.mdIconSize" />
+					<LinkIcon v-if="typeComputed === 'addPublicLink'" :size="props.mdIconSize" />
+					<AnoymousIcon v-if="typeComputed === 'anonymous'" :size="props.mdIconSize" />
+					<LinkIcon v-if="typeComputed === 'internalAccess'" :size="props.mdIconSize" />
+					<ContactGroupIcon v-if="typeComputed === 'contactGroup'" :size="props.mdIconSize" />
+					<GroupIcon v-if="typeComputed === 'group'" :size="props.mdIconSize" />
+					<CircleIcon v-if="typeComputed === 'circle'" :size="props.mdIconSize" />
+					<DeletedUserIcon v-if="typeComputed === 'deleted'" :size="props.mdIconSize" />
+				</template>
+			</NcAvatar>
+
+			<AdminIcon v-if="typeComputed === 'admin' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
+			<ContactIcon v-if="typeComputed === 'contact' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
+			<EmailIcon v-if="typeComputed === 'email' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
+			<ShareIcon v-if="typeComputed === 'external' && showTypeIcon" :size="props.typeIconSize" class="type-icon" />
+		</div>
+
+		<slot name="status" />
+
+		<div v-if="!props.hideNames" class="user-item__name">
+			<div class="name">
+				{{ labelComputed }}
+			</div>
+			<div class="description">
+				{{ descriptionComputed }}
+			</div>
+		</div>
+
+		<slot />
+	</div>
+</template>
 
 <style lang="scss">
 .avatar-wrapper {

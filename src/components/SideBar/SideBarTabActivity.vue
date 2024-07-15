@@ -3,6 +3,31 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { computed, onMounted, onUnmounted } from 'vue'
+import Activities from '../Activity/Activities.vue'
+import { NcEmptyContent } from '@nextcloud/vue'
+import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import { t } from '@nextcloud/l10n'
+import { useActivityStore } from '../../stores/activity.ts'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+
+const activityStore = useActivityStore()
+const emptyContentProps = {
+	name: t('polls', 'No comments'),
+}
+
+const showEmptyContent = computed(() => activityStore.list.length === 0)
+
+onMounted(() => {
+	subscribe('polls:activity:update', () => activityStore.load())
+})
+
+onUnmounted(() => {
+	unsubscribe('polls:activity:update', () => activityStore.load())
+})
+</script>
+
 <template>
 	<div class="comments">
 		<Activities v-if="!showEmptyContent" />
@@ -13,47 +38,3 @@
 		</NcEmptyContent>
 	</div>
 </template>
-
-<script>
-import Activities from '../Activity/Activities.vue'
-import { NcEmptyContent } from '@nextcloud/vue'
-import { mapStores } from 'pinia'
-import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
-import { t } from '@nextcloud/l10n'
-import { useActivityStore } from '../../stores/activity.ts'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-
-export default {
-	name: 'SideBarTabActivity',
-	components: {
-		ActivityIcon,
-		Activities,
-		NcEmptyContent,
-	},
-
-	data() {
-		return {
-			emptyContentProps: {
-				name: t('polls', 'No comments'),
-			}
-		}
-	},
-
-	computed: {
-		...mapStores(useActivityStore),
-
-		showEmptyContent() {
-			return this.activityStore.list.length === 0
-		},
-
-	},
-	created() {
-		subscribe('polls:activity:update', this.activityStore.load())
-	},
-
-	beforeDestroy() {
-		unsubscribe('polls:activity:update')
-	},
-
-}
-</script>

@@ -3,6 +3,48 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+import { defineEmits, ref } from 'vue'
+import { NcButton, NcModal } from '@nextcloud/vue'
+import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
+import { PollsAPI } from '../../../Api/index.js'
+import { Logger } from '../../../helpers/index.js'
+import { t, n } from '@nextcloud/l10n'
+
+const showModal = ref(false)
+const sendButtonCaption = ref(t('polls', 'Send information about confirmed options by email'))
+const confirmations = ref(null)
+const disableButton = ref(false)
+const sentStatus = ref('')
+const $emit = defineEmits(['success', 'error'])
+
+/**
+ *
+ */
+async function clickAction() {
+	if (sentStatus.value === 'success') {
+		showModal.value = true
+		return
+	}
+
+	try {
+		disableButton.value = true
+		const result = await PollsAPI.sendConfirmation($route.params.id)
+		confirmations.value = result.data.confirmations
+		showModal.value = true
+		sendButtonCaption.value = t('polls', 'See result')
+		sentStatus.value = 'success'
+		$emit('success')
+	} catch (error) {
+		Logger.error('Error on sending confirmation mails', { error })
+		sentStatus.value = 'error'
+		$emit('error')
+	} finally {
+		disableButton.value = false
+	}
+}
+</script>
+
 <template>
 	<div class="action send-confirmations">
 		<NcButton type="primary"
@@ -39,61 +81,6 @@
 		</NcModal>
 	</div>
 </template>
-
-<script>
-import { NcButton, NcModal } from '@nextcloud/vue'
-import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
-import { PollsAPI } from '../../../Api/index.js'
-import { Logger } from '../../../helpers/index.js'
-import { t, n } from '@nextcloud/l10n'
-
-export default {
-	name: 'ActionSendConfirmed',
-
-	components: {
-		EmailCheckIcon,
-		NcButton,
-		NcModal,
-	},
-
-	data() {
-		return {
-			showModal: false,
-			sendButtonCaption: t('polls', 'Send information about confirmed options by email'),
-			confirmations: null,
-			disableButton: false,
-			sentStatus: '',
-		}
-	},
-
-	methods: {
-		t,
-		n,
-		async clickAction() {
-			if (this.sendSatus === 'success') {
-				this.showModal = true
-				return
-			}
-
-			try {
-				this.disableButton = true
-				const result = await PollsAPI.sendConfirmation(this.$route.params.id)
-				this.confirmations = result.data.confirmations
-				this.showModal = true
-				this.sendButtonCaption = t('polls', 'See result')
-				this.sentStatus = 'success'
-				this.$emit('success')
-			} catch (error) {
-				Logger.error('Error on sending confirmation mails', { error })
-				this.sentStatus = 'error'
-				this.$emit('error')
-			} finally {
-				this.disableButton = false
-			}
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 .modal-confirmation-result {

@@ -3,6 +3,69 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { showError } from '@nextcloud/dialogs'
+import { NcButton } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
+
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useVotesStore } from '../../stores/votes.ts'
+
+import { ConfigBox, CardDiv } from '../Base/index.js'
+import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
+import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
+import ConfigAnonymous from '../Configuration/ConfigAnonymous.vue'
+import ConfigAutoReminder from '../Configuration/ConfigAutoReminder.vue'
+import ConfigClosing from '../Configuration/ConfigClosing.vue'
+import ConfigDescription from '../Configuration/ConfigDescription.vue'
+import ConfigOptionLimit from '../Configuration/ConfigOptionLimit.vue'
+import ConfigShowResults from '../Configuration/ConfigShowResults.vue'
+import ConfigTitle from '../Configuration/ConfigTitle.vue'
+import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
+import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
+
+import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
+import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
+import LockedIcon from 'vue-material-design-icons/Lock.vue'
+import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
+import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
+import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
+import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+
+const pollStore = usePollStore()
+const sessionStore = useSessionStore()
+const votesStore = useVotesStore()
+
+/**
+ *
+ */
+function toggleArchive() {
+	try {
+		pollStore.toggleArchive()
+	} catch {
+		showError(t('polls', 'Error {action} poll.', { action: pollStore.status.deleted ? 'restoring' : 'archiving' }))
+	}
+}
+
+/**
+ *
+ */
+function deletePoll() {
+	if (!pollStore.status.deleted) return
+	try {
+		pollStore.delete()
+	} catch {
+		showError(t('polls', 'Error deleting pollStore.'))
+	}
+}
+
+</script>
+
 <template>
 	<div>
 		<CardDiv v-if="votesStore.hasVotes" type="warning">
@@ -81,97 +144,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { showError } from '@nextcloud/dialogs'
-import { NcButton } from '@nextcloud/vue'
-import { ConfigBox, CardDiv } from '../Base/index.js'
-import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
-import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
-import ConfigAnonymous from '../Configuration/ConfigAnonymous.vue'
-import ConfigAutoReminder from '../Configuration/ConfigAutoReminder.vue'
-import ConfigClosing from '../Configuration/ConfigClosing.vue'
-import ConfigDescription from '../Configuration/ConfigDescription.vue'
-import ConfigOptionLimit from '../Configuration/ConfigOptionLimit.vue'
-import ConfigShowResults from '../Configuration/ConfigShowResults.vue'
-import ConfigTitle from '../Configuration/ConfigTitle.vue'
-import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
-import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
-
-import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
-import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
-import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
-import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
-import LockedIcon from 'vue-material-design-icons/Lock.vue'
-import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
-import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
-import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
-import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
-import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
-import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-
-export default {
-	name: 'SideBarTabConfiguration',
-
-	components: {
-		ArchivePollIcon,
-		DeletePollIcon,
-		DescriptionIcon,
-		LockedIcon,
-		HideResultsUntilClosedIcon,
-		PollConfigIcon,
-		RestorePollIcon,
-		ShowResultsIcon,
-		ShowResultsNeverIcon,
-		SpeakerIcon,
-		UnlockedIcon,
-		ConfigBox,
-		ConfigAllowComment,
-		ConfigAllowMayBe,
-		ConfigAnonymous,
-		ConfigAutoReminder,
-		ConfigClosing,
-		ConfigDescription,
-		ConfigOptionLimit,
-		ConfigShowResults,
-		ConfigTitle,
-		ConfigUseNo,
-		ConfigVoteLimit,
-		NcButton,
-		CardDiv,
-	},
-
-	computed: {
-		...mapStores(usePollStore, useSessionStore, useVotesStore),
-	},
-
-	methods: {
-		async toggleArchive() {
-			try {
-				await this.$store.dispatch('poll/toggleArchive', { pollId: this.pollId })
-			} catch {
-				showError(t('polls', 'Error {action} poll.', { action: this.isPollArchived ? 'restoring' : 'archiving' }))
-			}
-			this.writePoll() // from mixin
-		},
-
-		async deletePoll() {
-			if (!this.pollStore.status.deleted) return
-			try {
-				await this.pollStore.delete({ pollId: this.pollStore.id })
-				this.$router.push({ name: 'list', params: { type: 'relevant' } })
-			} catch {
-				showError(t('polls', 'Error deleting pollStore.'))
-			}
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 .delete-area {

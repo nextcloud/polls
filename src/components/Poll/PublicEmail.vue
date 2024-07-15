@@ -101,7 +101,7 @@ export default {
 
 		async submitEmailAddress() {
 			if (this.checkResult === 'success' || this.emailAddress.length > 0) {
-				this.$emit('update', this.emailAddress)
+				// this.$emit('update', this.emailAddress)
 			}
 		},
 	},

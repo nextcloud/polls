@@ -19,6 +19,8 @@ import NotFound from './views/NotFound.vue'
 import SideBarCombo from './views/SideBarCombo.vue'
 import Navigation from './views/Navigation.vue'
 import Combo from './views/Combo.vue'
+import { usePollStore } from './stores/poll.ts'
+
 
 /**
  * @param {RouteLocationNormalized} to Target route
@@ -66,7 +68,20 @@ async function validateToken(to: RouteLocationNormalized) {
 		window.location.replace(generateUrl('login'))
 	}
 }
-
+/**
+ *
+ * @param {RouteLocationNormalized} to Target route
+ */
+async function loadPoll(to: RouteLocationNormalized) {
+	const pollStore = usePollStore()
+	await pollStore.load({pollId: +to.params.id})
+	return {
+		name: 'vote',
+		params: {
+			id: to.params.id
+		}
+	}
+}
 const routes: RouteRecordRaw[] = [
 	{
 		path: '/',
@@ -147,6 +162,7 @@ const routes: RouteRecordRaw[] = [
 			navigation: Navigation,
 			sidebar: SideBar,
 		},
+		beforeEnter: loadPoll,
 		props: true,
 		name: 'vote',
 		meta: {

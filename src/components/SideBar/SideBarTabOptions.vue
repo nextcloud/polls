@@ -3,6 +3,65 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { onMounted, onUnmounted } from 'vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
+
+import { useSessionStore } from '../../stores/session.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
+
+import { ConfigBox } from '../Base/index.js'
+import OptionsDate from '../Options/OptionsDate.vue'
+import OptionsDateShift from '../Options/OptionsDateShift.vue'
+import OptionsText from '../Options/OptionsText.vue'
+import ConfigProposals from '../Configuration/ConfigProposals.vue'
+import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
+import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
+import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
+import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
+import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
+
+const sessionStore = useSessionStore()
+const optionsStore = useOptionsStore()
+const pollStore = usePollStore()
+
+const configBoxProps = {
+	delegatedAdminHint: {
+		name: t('polls', 'As an admin you may edit this poll'),
+	},
+	allowProposals: {
+		name: t('polls', 'Allow proposals from participants'),
+	},
+	shiftDate: {
+		name: t('polls', 'Shift all date options'),
+	},
+	dateOptions: {
+		name: t('polls', 'Available Options'),
+	},
+	textOptions: {
+		name: t('polls', 'Available Options'),
+	},
+}
+
+const optionAddDatesProps = {
+	caption: t('polls', 'Add a date'),
+	showCaption: true,
+	primary: true,
+}
+
+onMounted(() => {
+	subscribe('polls:options:update', () => optionsStore.load())
+})
+
+onUnmounted(() => {
+	unsubscribe('polls:options:update', () => optionsStore.load())
+})
+
+</script>
+
 <template>
 	<div class="side-bar-tab-options">
 		<ConfigBox v-if="!sessionStore.currentUser.isOwner"
@@ -46,84 +105,6 @@
 		</ConfigBox>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { ConfigBox } from '../Base/index.js'
-import OptionsDate from '../Options/OptionsDate.vue'
-import OptionsDateShift from '../Options/OptionsDateShift.vue'
-import OptionsText from '../Options/OptionsText.vue'
-import ConfigProposals from '../Configuration/ConfigProposals.vue'
-import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
-import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
-import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
-import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
-import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
-import { t } from '@nextcloud/l10n'
-import { useSessionStore } from '../../stores/session.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-
-export default {
-	name: 'SideBarTabOptions',
-
-	components: {
-		AddDateIcon,
-		DateOptionsIcon,
-		ShiftDateIcon,
-		TextOptionsIcon,
-		ConfigBox,
-		ConfigProposals,
-		OptionsDate,
-		OptionsDateShift,
-		OptionsText,
-		OptionsDateAdd,
-		OptionsTextAddBulk,
-	},
-
-	data() {
-		return {
-			configBoxProps: {
-				delegatedAdminHint: {
-					name: t('polls', 'As an admin you may edit this poll'),
-				},
-				allowProposals: {
-					name: t('polls', 'Allow proposals from participants'),
-				},
-				shiftDate: {
-					name: t('polls', 'Shift all date options'),
-				},
-				dateOptions: {
-					name: t('polls', 'Available Options'),
-				},
-				textOptions: {
-					name: t('polls', 'Available Options'),
-				},
-			},
-			optionAddDatesProps: {
-				caption: t('polls', 'Add a date'),
-				showCaption: true,
-				primary: true,
-			},
-		}
-	},
-
-	computed: {
-		...mapStores(useSessionStore, useOptionsStore, usePollStore),
-	},
-
-	created() {
-		subscribe('polls:options:update', this.optionsStore.load())
-	},
-
-	beforeDestroy() {
-		unsubscribe('polls:options:update')
-	},
-
-}
-</script>
 
 <style lang="scss">
 .side-bar-tab-options {

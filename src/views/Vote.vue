@@ -3,6 +3,105 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+import { useRoute } from 'vue-router'
+import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
+
+import { usePollStore } from '../stores/poll.ts'
+import { useSessionStore } from '../stores/session.ts'
+import { useOptionsStore } from '../stores/options.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
+
+import { useHandleScroll } from '../composables/handleScroll.ts'
+import { Logger } from '../helpers/index.js'
+
+import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
+import { HeaderBar } from '../components/Base/index.js'
+import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
+import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
+import PollInfoLine from '../components/Poll/PollInfoLine.vue'
+import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
+import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import VoteTable from '../components/VoteTable/VoteTable.vue'
+import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
+
+import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+
+const pollStore = usePollStore()
+const sessionStore = useSessionStore()
+const optionsStore = useOptionsStore()
+const preferencesStore = usePreferencesStore()
+
+const { scrolled } = useHandleScroll()
+
+const isLoading = ref(false)
+const scrollElement = ref(null)
+
+const route = useRoute()
+
+const emptyContentProps = computed(() => {
+	if (pollStore.status.countOptions > 0) {
+		return {
+			name: t('polls', 'We are sorry, but there are no more vote options available'),
+			description: t('polls', 'All options are booked up.'),
+		}
+	}
+
+	return {
+		name: t('polls', 'No vote options available'),
+		description: sessionStore.pollPermissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
+	}
+})
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const windowTitle = computed(() => `${t('polls', 'Polls')} - ${pollStore.configuration.title}`)
+
+/**
+ *
+ */
+function handleScroll() {
+	if (scrollElement.value.scrollTop > 20) {
+		scrolled.value = true
+	} else {
+		scrolled.value = false
+	}
+}
+
+/**
+ *
+ */
+function loadPoll() {
+	setTimeout(() => {
+		pollStore.load()
+	}, 500)
+}
+
+
+onMounted(() => {
+	subscribe('polls:poll:load', () => pollStore.load())
+	emit('polls:transitions:off', 500)
+	scrollElement.value = document.getElementById('app-content-vue')
+	scrollElement.value.addEventListener('scroll', handleScroll)
+	Logger.debug('Poll view mounted', sessionStore.router)
+	loadPoll()
+})
+
+onUnmounted(() => {
+	scrollElement.value.removeEventListener('scroll', handleScroll)
+	pollStore.reset()
+	unsubscribe('polls:poll:load', () => pollStore.load())
+})
+
+watch(() => route.params.id, () => {
+    loadPoll()
+  }
+)
+</script>
+
 <template>
 	<NcAppContent :class="[{ closed: pollStore.isClosed, scrolled: scrolled, 'vote-style-beta-510': preferencesStore.user.useAlternativeStyling }, pollStore.type]">
 		<HeaderBar class="area__header">
@@ -48,123 +147,6 @@
 		<LoadingOverlay v-if="isLoading" />
 	</NcAppContent>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
-import PollInfoLine from '../components/Poll/PollInfoLine.vue'
-import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
-import { HeaderBar } from '../components/Base/index.js'
-import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
-import VoteTable from '../components/VoteTable/VoteTable.vue'
-import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
-import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../stores/poll.ts'
-import { useSessionStore } from '../stores/session.ts'
-import { useOptionsStore } from '../stores/options.ts'
-import { usePreferencesStore } from '../stores/preferences.ts'
-import { Logger } from '../helpers/index.js'
-
-export default {
-	name: 'Vote',
-	components: {
-		NcAppContent,
-		NcEmptyContent,
-		HeaderBar,
-		MarkUpDescription,
-		PollHeaderButtons,
-		PollInfoLine,
-		DatePollIcon,
-		TextPollIcon,
-		ActionOpenOptionsSidebar,
-		CardAnonymousPollHint,
-		CardHiddenParticipants,
-		LoadingOverlay,
-		VoteTable,
-		VoteInfoCards,
-	},
-
-	data() {
-		return {
-			isLoading: false,
-			scrolled: false,
-			scrollElement: null,
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore, useSessionStore, useOptionsStore, usePreferencesStore),
-
-		emptyContentProps() {
-			if (this.pollStore.status.countOptions > 0) {
-				return {
-					name: t('polls', 'We are sorry, but there are no more vote options available'),
-					description: t('polls', 'All options are booked up.'),
-				}
-			}
-
-			return {
-				name: t('polls', 'No vote options available'),
-				description: this.sessionStore.pollPermissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
-			}
-		},
-
-		/* eslint-disable-next-line vue/no-unused-properties */
-		windowTitle() {
-			return `${t('polls', 'Polls')} - ${this.PollTitle}`
-		},
-	},
-
-	watch: {
-		$route(to, from) {
-			Logger.debug('Route changed', this.sessionStore.router)
-			this.pollStore.load()
-		},
-	},
-
-	created() {
-		subscribe('polls:poll:load', this.pollStore.load())
-		emit('polls:transition:off', 500)
-	},
-
-	mounted() {
-		this.scrollElement = document.getElementById('app-content-vue')
-		this.scrollElement.addEventListener('scroll', this.handleScroll)
-		Logger.debug('Poll view mounted', this.sessionStore.router)
-		this.loadPoll()
-	},
-
-	beforeDestroy() {
-		this.scrollElement.removeEventListener('scroll', this.handleScroll)
-		this.pollStore.reset()
-		unsubscribe('polls:poll:load')
-	},
-
-	methods: {
-		handleScroll() {
-			if (this.scrollElement.scrollTop > 20) {
-				this.scrolled = true
-			} else {
-				this.scrolled = false
-			}
-		},
-		loadPoll() {
-			// TODO: remove temporary action against race condition:
-			// SessionStore must be loaded before pollStore
-			setTimeout(() => {
-				this.pollStore.load()
-			}, 500);
-		},
-	},
-}
-
-</script>
 
 <style lang="scss">
 .vote_main {
