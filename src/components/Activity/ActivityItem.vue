@@ -48,6 +48,15 @@ const message = computed(() => {
 				},
 			}
 			break
+		case 'circle':
+			parameters[key] =  {
+				component: SimpleLink,
+				props: {
+					href: parameters[key].link,
+					name: parameters[key].name,
+				},
+			}
+			break
 		case 'guest':
 			parameters[key] = {
 				component: GuestBubble,
