@@ -50,6 +50,7 @@
 import { mapGetters, mapState } from 'vuex'
 import { saveAs } from 'file-saver'
 import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
+import { showError } from '@nextcloud/dialogs'
 import { NcActions, NcActionButton } from '@nextcloud/vue'
 import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
@@ -96,8 +97,9 @@ export default {
 			// Not allowed characters for the sheet name: : \ / ? * [ ]
 			// Strip them out
 			// Stonger regex i.error. for file names: /[&/\\#,+()$~%.'":*?<>{}]/g
-			const regex = /[\\/?*[\]]/g
-			return this.pollConfiguration.title.replaceAll(regex, '').slice(0, 31)
+			const regex = /[:\\/?*[\]]/g
+			const title = this.pollConfiguration.title.replaceAll(regex, '').slice(0, 31)
+			return title || 'polls_export'
 		},
 	},
 
@@ -173,8 +175,13 @@ export default {
 				this.addVotesArray()
 			}
 
-			const workBookOutput = xlsxWrite(this.workBook, { bookType: exportType, type: 'binary' })
-			saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${exportType}`)
+			try {
+				const workBookOutput = xlsxWrite(this.workBook, { bookType: exportType, type: 'binary' })
+				saveAs(new Blob([this.s2ab(workBookOutput)], { type: 'application/octet-stream' }), `poll.${exportType}`)
+			} catch (error) {
+				console.error(error)
+				showError(t('polls', 'Error exporting file.'))
+			}
 		},
 
 		addVotesArray(style) {
