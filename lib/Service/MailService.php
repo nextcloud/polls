@@ -158,8 +158,8 @@ class MailService {
 		foreach ($subscriptions as $subscription) {
 			try {
 				$subscription->setNotifyLogs($this->logs);
-				$notication = new NotificationMail($subscription);
-				$notication->send();
+				$notification = new NotificationMail($subscription);
+				$notification->send();
 			} catch (InvalidEmailAddress $e) {
 				$this->logger->warning('Invalid or no email address for notification: ' . json_encode($subscription), ['exception' => $e]);
 			} catch (\Exception $e) {
