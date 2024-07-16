@@ -57,16 +57,16 @@ Send the full or a partial structure of "configuration" (see return strucure bel
 A poll can be closed immediately by using the endpoint `poll/{pollId}/close` or by setting `expire` to a negative number and reopened by using `poll/{pollId}/reopen` or by setting `expire` to 0.
 ```json
 {
-    "poll": {
-        "title": "Changed Title",
-        "description": "Updated description",
-        "expire": 0,
-        "access": "private",
-        "anonymous": true,
-        "allowMaybe": true,
-        "allowComment": true,
-        "allowProposals": true,
-        "showResults": "never",
+	"pollConfiguration": {
+		"title": "Changed Title",
+		"description": "Updated description",
+		"expire": 0,
+		"access": "private",
+		"anonymous": true,
+		"allowMaybe": true,
+		"allowComment": true,
+		"allowProposals": true,
+		"showResults": "never",
 		"autoReminder": false,
 		"hideBookedUp": false,
 		"proposalsExpire": 0,
