@@ -5,18 +5,20 @@
 
 <script setup lang="ts">
 import { defineProps, defineEmits, PropType } from 'vue'
-import { mapStores } from 'pinia'
 import { NcActionButton, NcAppNavigationItem } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
+
+import { useSessionStore } from '../../stores/session.ts'
+import { Poll } from '../../stores/poll.ts'
+
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollsStore } from '../../stores/polls.ts'
 
-const pollsStore = mapStores(usePollsStore)
+const sessionStore = useSessionStore()
 
 const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
 const props = defineProps({
@@ -34,7 +36,7 @@ const props = defineProps({
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>
-			<NcActionButton v-if="pollsStore.meta.permissions.pollCreationAllowed"
+			<NcActionButton v-if="sessionStore.appPermissions.pollCreation"
 				:name="t('polls', 'Clone poll')"
 				:aria-label="t('polls', 'Clone poll')"
 				@click="emit('clonePoll')">

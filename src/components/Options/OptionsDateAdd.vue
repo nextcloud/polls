@@ -122,6 +122,7 @@ const dateOption = computed(() => {
 		option: {
 			timestamp: from.unix(),
 			duration: moment(to).add(useTime.value ? 0 : 1, 'day').unix() - from.unix(),
+			text: '',
 		},
 	}
 })

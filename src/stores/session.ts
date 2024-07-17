@@ -8,7 +8,7 @@ import { defineStore } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
 import { PublicAPI, SessionAPI } from '../Api/index.js'
 import { User, AppPermissions, UserType } from '../Interfaces/interfaces.ts'
-import { AppSettings } from './appSettings.ts'
+import { AppSettings, UpdateType } from './appSettings.ts'
 import { usePreferencesStore } from './preferences.ts'
 import { FilterType } from './polls.ts'
 import { PollPermissions, usePollStore } from './poll.ts'
@@ -20,7 +20,7 @@ enum ViewMode {
 	ListView = 'list-view',
 }
 
-interface Router {
+type Router = {
 	currentRoute: string
 	name: string
 	path: string
@@ -31,17 +31,17 @@ interface Router {
 	}
 }
 
-export interface SessionSettings {
+export type SessionSettings = {
 	manualViewDatePoll: '' | ViewMode
 	manualViewTextPoll: '' | ViewMode
 }
 
-export interface UserStatus { 
+export type UserStatus = { 
 	isLoggedin: boolean
 	isAdmin: boolean
 }
 
-interface Session {
+type Session = {
 	token: string
 	appPermissions: AppPermissions
 	appSettings: AppSettings
@@ -79,6 +79,7 @@ export const useSessionStore = defineStore('session', {
 			pollCreation: false,
 			seeMailAddresses: false,
 			pollDownload: false,
+			comboView: false,
 		},
 		viewModes: Object.values(ViewMode),
 		sessionSettings: {
@@ -102,7 +103,7 @@ export const useSessionStore = defineStore('session', {
 			privacyUrl: '',
 			showMailAddresses: false,
 			showLogin: true,
-			updateType: 'noPolling',
+			updateType: UpdateType.NoPolling,
 			useActivity: false,
 			useCollaboration: true,
 			navigationPollsInList: true,

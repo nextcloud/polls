@@ -5,12 +5,14 @@
  */
 
 import { defineStore } from 'pinia'
-import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash'
-import { PollsAPI } from '../Api/index.js'
-import { Poll , PollType } from './poll.ts'
+import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
+
 import { Logger } from '../helpers/index.ts'
+import { PollsAPI } from '../Api/index.js'
+
+import { Poll , PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { StatusResults } from '../Interfaces/interfaces.ts'
 
@@ -33,7 +35,7 @@ export enum FilterType {
 	Archived = 'archived',
 }
 
-export interface PollCategory {
+export type PollCategory = {
 	id: FilterType
 	title: string
 	titleExt: string
@@ -43,20 +45,14 @@ export interface PollCategory {
 	filterCondition(poll: Poll): boolean
 }
 
-export interface AppPermissions {
-	pollCreationAllowed: boolean
-	comboAllowed: boolean
-}
-
-export interface Meta {
+export type Meta = {
 	chunksize: number
 	loadedChunks: number
 	maxPollsInNavigation: number
-	permissions: AppPermissions
 	status: StatusResults
 }
 
-export interface PollList {
+export type PollList = {
 	list: Poll[]
 	meta: Meta
 	sort: {
@@ -95,10 +91,6 @@ export const usePollsStore = defineStore('polls', {
 			loadedChunks: 1,
 			maxPollsInNavigation: 6,
 			status: StatusResults.Loaded,
-			permissions: {
-				pollCreationAllowed: false,
-				comboAllowed: false,
-			},
 		},
 		sort: {
 			by: SortType.Created,
@@ -183,7 +175,9 @@ export const usePollsStore = defineStore('polls', {
 	getters: {
 		// TODO: find out dated references: was cagegories
 		navigationCategories(state: PollList): PollCategory[] {
-			if (state.meta.permissions.pollCreationAllowed) {
+			const sessionStore = useSessionStore()
+
+			if (sessionStore.appPermissions.pollCreation) {
 				return state.categories
 			}
 			return state.categories.filter((category) => (!category.createDependent))
@@ -191,6 +185,7 @@ export const usePollsStore = defineStore('polls', {
 
 		currentCategory(state: PollList): PollCategory | null {
 			const sessionStore = useSessionStore()
+
 			if (sessionStore.router.name === 'list' && sessionStore.router.params.type) {
 				return state.categories.find((category) => category.id === sessionStore.router.params.type)
 			}
@@ -284,7 +279,6 @@ export const usePollsStore = defineStore('polls', {
 			try {
 				const response = await PollsAPI.getPolls()
 				this.list = response.data.list
-				this.meta.permissions = response.data.permissions
 				this.meta.status = StatusResults.Loaded
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED')	return

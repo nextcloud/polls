@@ -22,17 +22,24 @@ import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
 
+export interface Props {
+	header: boolean
+	poll?: Poll
+	noLink: boolean
+}
+
+
 const pollsStore = usePollsStore()
 const pollStore = usePollStore()
 
 
-const emit = defineEmits(['sortList'])
+const props = withDefaults(defineProps<Props>(), {
+	header: false,
+	poll: undefined,
+	noLink: false,
+})
 
-const props = defineProps<{
-	header: boolean,
-	poll: Poll,
-	noLink: boolean,
-}>()
+const emit = defineEmits(['sortList'])
 
 const closeToClosing = computed(() => !props.poll.status.expired && props.poll.configuration.expire && moment.unix(props.poll.configuration.expire).diff() < 86400000)
 

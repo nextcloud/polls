@@ -6,14 +6,13 @@
 
 import { defineStore } from 'pinia'
 import { ActivityAPI } from '../Api/index.js'
-import { User, AppSettings, AppPermissions } from '../Interfaces/interfaces.ts'
+import { User, AppSettings } from '../Interfaces/interfaces.ts'
 import { Vote } from './votes.ts'
 import { useSessionStore } from './session.ts'
 
 interface Activity {
 	token: string,
 	currentUser: User,
-	appPermissions: AppPermissions
 	appSettings: AppSettings
 }
 

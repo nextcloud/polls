@@ -63,6 +63,7 @@ export type AppPermissions = {
 	pollCreation: boolean
 	seeMailAddresses: boolean
 	pollDownload: boolean
+	comboView: boolean
 }
 
 export type User = {

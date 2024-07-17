@@ -141,7 +141,7 @@ onMounted(() => {
 
 <template>
 	<NcAppNavigation>
-		<NcAppNavigationNew v-if="pollsStore.meta.permissions.pollCreationAllowed"
+		<NcAppNavigationNew v-if="sessionStore.appPermissions.pollCreation"
 			button-class="icon-add"
 			:text="t('polls', 'New poll')"
 			@click="toggleCreateDlg" />
@@ -186,7 +186,7 @@ onMounted(() => {
 
 		<template #footer>
 			<ul class="app-navigation-footer">
-				<NcAppNavigationItem v-if="pollsStore.meta.permissions.comboAllowed"
+				<NcAppNavigationItem v-if="sessionStore.appPermissions.comboView"
 					:name="t('polls', 'Combine polls')"
 					:to="{ name: 'combo' }">
 					<template #icon>

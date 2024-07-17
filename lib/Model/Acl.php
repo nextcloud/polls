@@ -25,6 +25,7 @@ class Acl implements JsonSerializable {
 	public const PERMISSION_POLL_CREATE = 'pollCreate';
 	public const PERMISSION_POLL_MAILADDRESSES_VIEW = 'seeMailAddresses';
 	public const PERMISSION_POLL_DOWNLOAD = 'pollDownload';
+	public const PERMISSION_COMBO_VIEW = 'comboView';
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
@@ -56,6 +57,7 @@ class Acl implements JsonSerializable {
 			self::PERMISSION_POLL_CREATE => $this->appSettings->getPollCreationAllowed(),
 			self::PERMISSION_POLL_MAILADDRESSES_VIEW => $this->appSettings->getAllowSeeMailAddresses(),
 			self::PERMISSION_POLL_DOWNLOAD => $this->appSettings->getPollDownloadAllowed(),
+			self::PERMISSION_COMBO_VIEW => $this->appSettings->getComboAllowed(),
 			default => false,
 		};
 	}
@@ -70,6 +72,7 @@ class Acl implements JsonSerializable {
 			'pollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
 			'seeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
 			'pollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
+			'comboView' => $this->getIsAllowed(self::PERMISSION_COMBO_VIEW),
 		];
 	}
 
