@@ -320,6 +320,7 @@ OC.L10N.register(
     "From" : "من :",
     "To" : "إلى :",
     "Email address" : "عنوان البريد الإلكتروني",
+    "Error exporting file." : "حدث خطأ أثناء تصدير الملف.",
     "No" : "لا",
     "Clone poll" : "استنساخ الاستبيان",
     "Archive poll" : "أرشفة الاستبيان",

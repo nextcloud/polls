@@ -320,6 +320,7 @@ OC.L10N.register(
     "From" : "Од",
     "To" : "За",
     "Email address" : "Адреса е-поште",
+    "Error exporting file." : "Грешка приликом извоза фајла.",
     "No" : "Не",
     "Clone poll" : "Клонирај гласање",
     "Archive poll" : "Архивирај гласање",

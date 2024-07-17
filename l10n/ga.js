@@ -320,6 +320,7 @@ OC.L10N.register(
     "From" : "Ó",
     "To" : "Chun",
     "Email address" : "Seoladh ríomhphoist",
+    "Error exporting file." : "Earráid agus an comhad á easpórtáil.",
     "No" : "Níl",
     "Clone poll" : "Vótaíocht Clón",
     "Archive poll" : "Pobalbhreith cartlainne",

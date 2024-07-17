@@ -320,6 +320,7 @@ OC.L10N.register(
     "From" : "從",
     "To" : "至",
     "Email address" : "電子郵件地址",
+    "Error exporting file." : "匯出檔案時發生錯誤。",
     "No" : "否",
     "Clone poll" : "再製投票",
     "Archive poll" : "封存投票",

@@ -320,6 +320,7 @@ OC.L10N.register(
     "From" : "Von",
     "To" : "Bis",
     "Email address" : "E-Mail-Adresse",
+    "Error exporting file." : "Fehler beim Exportieren der Datei.",
     "No" : "Nein",
     "Clone poll" : "Umfrage duplizieren",
     "Archive poll" : "Umfrage archivieren",
