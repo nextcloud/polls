@@ -253,6 +253,7 @@ OC.L10N.register(
     "Resend invitation mail" : "招待メールを再送",
     "Send invitation mail" : "招待メールを送信",
     "Copy link to clipboard" : "リンクをクリップボードにコピーする",
+    "Show QR code" : "QRコードを表示",
     "Delete share" : "共有を解除",
     "Restore share" : "共有を復元する",
     "Share label" : "共有ラベル",
