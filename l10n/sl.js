@@ -260,6 +260,7 @@ OC.L10N.register(
     "Copy link to clipboard" : "Kopiraj povezavo v odložišče",
     "Email address is optional" : "Elektronski naslov ni obvezen podatek",
     "Email address is mandatory" : "Elektronski naslov je obvezen podatek",
+    "Delete share" : "Izbriši mesto souporabe",
     "Restore share" : "Obnovi mesto souporabe",
     "Share label" : "Naziv mesta souporabe",
     "Resolving of {name} is not possible. The circles app is not enabled." : "Ni mogoče razrešiti imena {name}. Program Krogi ni omogočen.",

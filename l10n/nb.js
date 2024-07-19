@@ -320,6 +320,7 @@ OC.L10N.register(
     "From" : "Fra",
     "To" : "Til",
     "Email address" : "E-post adresse",
+    "Error exporting file." : "Feil ved eksport av fil.",
     "No" : "Nei",
     "Clone poll" : "Klone avstemning",
     "Archive poll" : "Arkiver avstemning",
