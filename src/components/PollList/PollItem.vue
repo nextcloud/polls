@@ -12,7 +12,7 @@ import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
 import { usePollsStore, SortType } from '../../stores/polls.ts'
 import { usePollStore, AccessType, Poll, PollType } from '../../stores/poll'
-import { StatusResults } from '../../Interfaces/interfaces.ts'
+import { StatusResults } from '../../Types/index.ts'
 
 // Icons
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'

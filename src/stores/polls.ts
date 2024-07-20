@@ -14,7 +14,7 @@ import { PollsAPI } from '../Api/index.js'
 
 import { Poll , PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
-import { StatusResults } from '../Interfaces/interfaces.ts'
+import { StatusResults } from '../Types/index.ts'
 
 export enum SortType {
 	Created = 'created',

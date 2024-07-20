@@ -12,7 +12,7 @@ import { useCommentsStore } from './comments.ts'
 import { useVotesStore } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { useSubscriptionStore } from './subscription.ts'
-import { User, UserType } from '../Interfaces/interfaces.ts'
+import { User, UserType } from '../Types/index.ts'
 import { useSessionStore } from './session.ts'
 
 export enum InvitationTypes {
@@ -43,7 +43,7 @@ export type InvitationType = keyof typeof InvitationTypes
 export type DirectShareType = keyof typeof DirectShareTypes
 export type ShareType = ShareTypes
 
-export interface Share {
+export type Share = {
 	displayName: string
 	id: string | null
 	invitationSent: boolean

@@ -10,7 +10,7 @@ import linkifyStr from 'linkify-string'
 import DragIcon from 'vue-material-design-icons/DragHorizontalVariant.vue'
 import { Option } from '../../stores/options.ts'
 import { PollType } from '../../stores/poll.ts'
-import { BoxType } from '../../Interfaces/interfaces.ts'
+import { BoxType } from '../../Types/index.ts'
 
 const props = defineProps({
 	draggable: {

@@ -7,7 +7,7 @@
 import { defineStore } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
 import { PublicAPI, SessionAPI } from '../Api/index.js'
-import { User, AppPermissions, UserType } from '../Interfaces/interfaces.ts'
+import { User, AppPermissions, UserType } from '../Types/index.ts'
 import { AppSettings, UpdateType } from './appSettings.ts'
 import { usePreferencesStore } from './preferences.ts'
 import { FilterType } from './polls.ts'

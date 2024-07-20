@@ -6,7 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, OptionsAPI } from '../Api/index.js'
-import { User } from '../Interfaces/interfaces.ts'
+import { User } from '../Types/index.ts'
 import { Logger } from '../helpers/index.js'
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash/orderBy'

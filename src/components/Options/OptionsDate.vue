@@ -15,7 +15,7 @@ import OptionItemOwner from './OptionItemOwner.vue'
 import { usePollStore, PollType } from '../../stores/poll.ts'
 import { useOptionsStore, Option } from '../../stores/options.ts'
 
-import { BoxType } from '../../Interfaces/interfaces.ts'
+import { BoxType } from '../../Types/index.ts'
 
 import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
@@ -104,3 +104,4 @@ function cloneOptionModal(option: Option) {
 		</NcModal>
 	</div>
 </template>
+

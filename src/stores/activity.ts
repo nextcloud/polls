@@ -25,7 +25,7 @@ type Activity = {
 	datetime: string
 }
 
-interface Activities {
+type Activities = {
 	list: Activity[]
 }
 

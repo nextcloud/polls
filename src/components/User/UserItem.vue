@@ -19,7 +19,7 @@ import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
 import DeletedUserIcon from 'vue-material-design-icons/AccountOff.vue'
 import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
 import { t } from '@nextcloud/l10n'
-import { User, UserType, VirtualUserItemType } from '../../Interfaces/interfaces.ts'
+import { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
 
 const route = useRoute()
 

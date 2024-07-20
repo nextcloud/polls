@@ -13,7 +13,7 @@ export enum ViewMode {
 	ListView = 'list-view',
 }
 
-interface UserPreferences {
+type UserPreferences = {
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
 	calendarPeek: boolean
@@ -27,12 +27,12 @@ interface UserPreferences {
 	relevantOffset: number,
 }
 
-export interface SessionSettings {
+export type SessionSettings = {
 	manualViewDatePoll: '' | ViewMode
 	manualViewTextPoll: '' | ViewMode
 }
 
-export interface Calendar {
+export type Calendar = {
 	key: string
 	name: string
 	calendarUri: string
@@ -40,7 +40,7 @@ export interface Calendar {
 	permissions: number
 }
 
-export interface Preferences {
+export type Preferences = {
 	user: UserPreferences
 	session: SessionSettings,
 	availableCalendars: Calendar[],

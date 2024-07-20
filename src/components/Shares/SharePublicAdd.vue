@@ -10,7 +10,7 @@ import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
 import { useSharesStore } from '../../stores/shares.ts'
-import { VirtualUserItemType } from '../../Interfaces/interfaces.ts'
+import { VirtualUserItemType } from '../../Types/index.ts'
 
 const sharesStore = useSharesStore()
 

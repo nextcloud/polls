@@ -12,7 +12,7 @@ import { Logger } from '../helpers/index.ts'
 import { PollsAPI } from '../Api/index.js'
 import { SortType, sortColumnsMapping, PollList, FilterType } from './polls.ts'
 import { Poll } from './poll.ts'
-import { StatusResults } from '../Interfaces/interfaces.ts'
+import { StatusResults } from '../Types/index.ts'
 
 export const usePollsAdminStore = defineStore('pollsAdmin', {
 	state: (): PollList => ({

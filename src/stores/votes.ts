@@ -6,7 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api/index.js'
-import { User } from '../Interfaces/interfaces.ts'
+import { User } from '../Types/index.ts'
 import { Logger } from '../helpers/index.js'
 import { t } from '@nextcloud/l10n'
 import { Option, useOptionsStore } from './options.ts'
@@ -26,7 +26,7 @@ export enum AnswerSymbol {
 	None = '',
 }
 
-export interface Vote {
+export type Vote = {
 	id: number
 	pollId: number
 	optionText: string
@@ -38,7 +38,7 @@ export interface Vote {
 	user: User
 }
 
-export interface Votes {
+export type Votes = {
 	list: Vote[]
 }
 

@@ -6,7 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { CommentsAPI, PublicAPI } from '../Api/index.js'
-import { User } from '../Interfaces/interfaces.ts'
+import { User } from '../Types/index.ts'
 import { groupComments, Logger } from '../helpers/index.js'
 import { useSessionStore } from './session.ts'
 

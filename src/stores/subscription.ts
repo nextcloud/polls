@@ -9,7 +9,7 @@ import { PublicAPI, PollsAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
 import { useSessionStore } from './session.ts'
 
-interface Subscription {
+type Subscription = {
 	subscribed: boolean
 }
 

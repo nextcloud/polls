@@ -19,7 +19,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { usePollStore, PollType } from '../../stores/poll.ts'
 import { usePreferencesStore, ViewMode } from '../../stores/preferences.ts'
 import { useOptionsStore, Option } from '../../stores/options.ts'
-import { BoxType } from '../../Interfaces/interfaces.ts'
+import { BoxType } from '../../Types/index.ts'
 
 const pollStore = usePollStore()
 const preferencesStore = usePreferencesStore()

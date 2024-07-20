@@ -9,10 +9,10 @@ import { SharesAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.js'
 import { Share } from './share.ts'
 import { useSessionStore } from './session.ts'
-import { User, UserType } from '../Interfaces/interfaces.ts'
+import { User, UserType } from '../Types/index.ts'
 
 
-interface Shares {
+type Shares = {
 	list: Share[]
 }
 

@@ -19,7 +19,7 @@ import { t } from '@nextcloud/l10n'
 import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
 import { Poll } from '../stores/poll.ts'
 
-import { StatusResults } from '../Interfaces/interfaces.ts'
+import { StatusResults } from '../Types/index.ts'
 
 const pollsAdminStore = usePollsAdminStore()
 
@@ -231,3 +231,4 @@ onMounted(() => {
 	padding-bottom: 14px;
 }
 </style>
+../Types/index.ts

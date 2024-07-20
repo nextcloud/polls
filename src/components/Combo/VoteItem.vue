@@ -8,7 +8,7 @@ import VoteIndicator from '../VoteTable/VoteIndicator.vue'
 import { useComboStore } from '../../stores/combo.ts'
 import { computed, defineProps, PropType } from 'vue'
 import { Option } from '../../stores/options.ts'
-import { User } from '../../Interfaces/interfaces.ts'
+import { User } from '../../Types/index.ts'
 
 const comboStore = useComboStore()
 

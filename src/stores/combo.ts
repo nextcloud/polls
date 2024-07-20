@@ -6,7 +6,7 @@
 
 import { defineStore } from 'pinia'
 import { VotesAPI, OptionsAPI, PollsAPI } from '../Api/index.js'
-import { User } from '../Interfaces/interfaces.ts'
+import { User } from '../Types/index.ts'
 import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.js'
 import { Option } from './options.ts'
 import { Poll } from './poll.ts'
@@ -15,13 +15,13 @@ import { sortBy } from 'lodash'
 import { usePreferencesStore } from './preferences.ts'
 import { usePollsStore } from './polls.ts'
 
-interface Participant {
+type Participant = {
 	userId: string
 	displayName: string
 	pollId: number
 	user: User
 }
-interface Combo {
+type Combo = {
 	id: number
 	options: Option[],
 	polls: Poll[],
