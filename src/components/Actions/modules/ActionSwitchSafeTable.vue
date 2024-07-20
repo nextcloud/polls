@@ -3,43 +3,22 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="action toggle-sidebar">
-		<NcButton type="primary"
-			:aria-label="caption"
-			@click="clickAction()">
-			{{ caption }}
-		</NcButton>
-	</div>
-</template>
-
-<script>
-import { mapStores } from 'pinia'
+<script setup lang="ts">
 import { NcButton } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../../stores/poll.ts'
 
-export default {
-	name: 'ActionSwitchSafeTable',
+const pollStore = usePollStore()
+const caption = t('polls', 'Reveal them')
 
-	components: {
-		NcButton,
-	},
-
-	data() {
-		return {
-			caption: t('polls', 'Reveal them'),
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-	},
-
-	methods: {
-		clickAction() {
-			this.pollStore.switchSafeTable()
-		},
-	},
-}
 </script>
+
+<template>
+	<div class="action toggle-sidebar">
+		<NcButton type="primary"
+			:aria-label="caption"
+			@click="pollStore.switchSafeTable()">
+			{{ caption }}
+		</NcButton>
+	</div>
+</template>

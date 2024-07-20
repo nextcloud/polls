@@ -33,7 +33,8 @@ export enum UserType {
 	Admin = 'admin',
 	Public = 'public',
 	Circle = 'circle',
-	ContactGroup = 'contactGroup'
+	ContactGroup = 'contactGroup',
+	Empty = 'empty',
 }
 
 export enum VirtualUserItemType {
@@ -46,6 +47,11 @@ export enum VirtualUserItemType {
 
 export enum UpdateType {
 	NoPolling = 'noPolling'
+}
+
+export enum BoxType {
+	Text = 'textBox',
+	Date = 'dateBox',
 }
 
 export type AppSettings = {

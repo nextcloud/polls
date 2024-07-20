@@ -3,6 +3,84 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+
+import { defineProps, computed, withDefaults } from 'vue'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+
+import { useSessionStore } from '../../stores/session.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useVotesStore } from '../../stores/votes.ts'
+import { Option } from '../../stores/options.ts'
+
+import { t } from '@nextcloud/l10n'
+import VoteIndicator from './VoteIndicator.vue'
+
+export interface Props {
+	option?: Option
+	userId: string
+}
+
+const pollStore = usePollStore()
+const sessionStore = useSessionStore()
+const votesStore = useVotesStore()
+
+const props = withDefaults(defineProps<Props>(), {
+	option: undefined,
+	userId: '',
+})
+
+const isVotable = computed(() => isActive.value
+		&& isValidUser.value
+		&& !pollStore.isClosed
+		&& !props.option.locked)
+
+const isActive = computed(() => isCurrentUser.value && pollStore.permissions.vote)
+
+const isCurrentUser = computed(() => sessionStore.currentUser.userId === props.userId)
+
+const answer = computed(() => votesStore.getVote({
+		option: props.option,
+		userId: props.userId,
+	}).answer)
+
+const iconAnswer = computed(() => {
+	if (answer.value === 'no') {
+		return (pollStore.isClosed && props.option.confirmed) || isActive.value ? 'no' : ''
+	}
+	if (answer.value === '') {
+		return (pollStore.isClosed && props.option.confirmed) ? 'no' : ''
+	}
+	return answer.value
+})
+
+const nextAnswer = computed(() => {
+	if (pollStore.answerSequence.indexOf(answer.value) < 0) {
+		return pollStore.answerSequence[1]
+	}
+	return pollStore.answerSequence[(pollStore.answerSequence.indexOf(answer.value) + 1) % pollStore.answerSequence.length]
+
+})
+
+const isValidUser = computed(() => (props.userId !== '' && props.userId !== null))
+
+/**
+ *
+ */
+function setVote() {
+	if (isVotable.value) {
+		votesStore.set({
+			option: props.option,
+			setTo: nextAnswer.value,
+		})
+		showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
+	} else {
+		showError(t('polls', 'Error saving vote'))
+	}
+}
+
+</script>
+
 <template>
 	<div class="vote-item" :class="[answer, { active: isVotable }, {currentuser: isCurrentUser}]">
 		<VoteIndicator :answer="iconAnswer"
@@ -10,101 +88,6 @@
 			@click="setVote()" />
 	</div>
 </template>
-
-<script>
-
-import { mapStores } from 'pinia'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import VoteIndicator from './VoteIndicator.vue'
-import { t } from '@nextcloud/l10n'
-import { useSessionStore } from '../../stores/session.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-
-export default {
-	name: 'VoteItem',
-
-	components: {
-		VoteIndicator,
-	},
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined,
-		},
-		userId: {
-			type: String,
-			default: '',
-		},
-	},
-
-	computed: {
-		...mapStores(usePollStore, useVotesStore, useSessionStore),
-
-		isVotable() {
-			return this.isActive
-				&& this.isValidUser
-				&& !this.pollStore.isClosed
-				&& !this.option.locked
-		},
-
-		isActive() {
-			return this.isCurrentUser && this.pollStore.permissions.vote
-		},
-
-		isCurrentUser() {
-			return this.sessionStore.currentUser.userId === this.userId
-		},
-
-		answer() {
-			return this.votesStore.getVote({
-				option: this.option,
-				userId: this.userId,
-			}).answer
-		},
-
-		iconAnswer() {
-			if (this.answer === 'no') {
-				return (this.pollStore.isClosed && this.option.confirmed) || this.isActive ? 'no' : ''
-			}
-			if (this.answer === '') {
-				return (this.pollStore.isClosed && this.option.confirmed) ? 'no' : ''
-			}
-			return this.answer
-		},
-
-		nextAnswer() {
-			if (this.pollStore.answerSequence.indexOf(this.answer) < 0) {
-				return this.pollStore.answerSequence[1]
-			}
-			return this.pollStore.answerSequence[(this.pollStore.answerSequence.indexOf(this.answer) + 1) % this.pollStore.answerSequence.length]
-
-		},
-
-		isValidUser() {
-			return (this.userId !== '' && this.userId !== null)
-		},
-
-	},
-
-	methods: {
-		async setVote() {
-			try {
-				await this.votesStore.set({
-					option: this.option,
-					setTo: this.nextAnswer,
-				})
-				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
-			} catch (e) {
-				showError(t('polls', 'Error saving vote'))
-
-			}
-		},
-	},
-}
-
-</script>
 
 <style lang="scss" scoped>
 

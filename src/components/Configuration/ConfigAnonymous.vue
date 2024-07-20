@@ -3,6 +3,14 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+
+const pollStore = usePollStore()
+</script>
+
 <template>
 	<NcCheckboxRadioSwitch v-model="pollStore.configuration.anonymous" 
 		type="switch"
@@ -10,26 +18,3 @@
 		{{ t('polls', 'Anonymous poll') }}
 	</NcCheckboxRadioSwitch>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'ConfigAnonymous',
-
-	components: {
-		NcCheckboxRadioSwitch,
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-	},
-
-	methods: {
-		t,
-	},
-}
-</script>

@@ -14,8 +14,10 @@ const loadContext = (to: RouteLocationNormalized) => {
 	const sessionStore = useSessionStore()
 	sessionStore.setRouter(to)
 	sessionStore.load()
+	console.log('loaded session')
 	if (sessionStore.userStatus.isLoggedin) {
 		preferencesStore.load()
+		console.log('loaded preferences for logged in user')
 	}
 	Logger.debug('Context loaded', {
 		'route': to,

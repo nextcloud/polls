@@ -3,29 +3,19 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<NcActionInput v-if="$route.name === 'publicVote'"
-		v-bind="inputProps"
-		v-model="shareStore.displayName"
-		@update:value-value="validate"
-		@submit="submit">
-		<template #icon>
-			<EditAccountIcon />
-		</template>
-		{{ inputProps.label }}
-	</NcActionInput>
-</template>
-
-<script>
+<script setup lang="ts">
 import { debounce } from 'lodash'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { NcActionInput } from '@nextcloud/vue'
-import { mapStores } from 'pinia'
 import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 import { ValidatorAPI } from '../../Api/index.js'
 import { t } from '@nextcloud/l10n'
 import { useSessionStore } from '../../stores/session.ts'
 import { useShareStore } from '../../stores/share.ts'
+import { ref } from 'vue'
+
+const sessionStore = useSessionStore()
+const shareStore = useShareStore()
 
 const setError = (inputProps) => {
 	inputProps.success = false
@@ -44,62 +34,58 @@ const setUnchanged = (inputProps) => {
 	inputProps.showTrailingButton = false
 }
 
-export default {
-	name: 'ActionInputDisplayName',
+const inputProps = ref({
+	success: false,
+	error: false,
+	showTrailingButton: true,
+	labelOutside: false,
+	label: t('polls', 'Change name'),
+})
 
-	components: {
-		NcActionInput,
-		EditAccountIcon,
-	},
 
-	data() {
-		return {
-			inputProps: {
-				success: false,
-				error: false,
-				showTrailingButton: true,
-				labelOutside: false,
-				label: t('polls', 'Change name'),
-			},
+function validate() {
+	debounce(async function () {
+		if (shareStore.displayName.length < 1) {
+			setError(inputProps.value)
+			return
 		}
-	},
 
-	computed: {
-		...mapStores(useSessionStore, useShareStore),
-	
-	},
+		if (shareStore.displayName === sessionStore.currentUser.displayName) {
+			setUnchanged(inputProps.value)
+			return
+		}
 
-	methods: {
-		validate: debounce(async function() {
-			const inputProps = this.userName.inputProps
-			if (this.shareStore.displayName.length < 1) {
-				setError(inputProps)
-				return
-			}
-
-			if (this.shareStore.displayName === this.sessionStore.currentUser.displayName) {
-				setUnchanged(inputProps)
-				return
-			}
-
-			try {
-				await ValidatorAPI.validateName(this.$route.params.token, this.shareStore.displayName)
-				setSuccess(inputProps)
-			} catch {
-				setError(inputProps)
-			}
-		}, 500),
-
-		async submit() {
-			try {
-				await this.shareStore.updateDisplayName({ displayName: this.shareStore.displayName })
-				showSuccess(t('polls', 'Name changed.'))
-				setUnchanged(this.inputProps)
-			} catch {
-				showError(t('polls', 'Error changing name.'))
-				setError(this.inputProps)
-			}
-		},
-	},
+		try {
+			await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
+			setSuccess(inputProps.value)
+		} catch {
+			setError(inputProps.value)
+		}
+	})
 }
+
+async function submit() {
+	try {
+		await this.shareStore.updateDisplayName({ displayName: this.shareStore.displayName })
+		showSuccess(t('polls', 'Name changed.'))
+		setUnchanged(this.inputProps)
+	} catch {
+		showError(t('polls', 'Error changing name.'))
+		setError(this.inputProps)
+	}
+}
+
 </script>
+
+<template>
+	<NcActionInput v-if="$route.name === 'publicVote'"
+		v-bind="inputProps"
+		v-model="shareStore.displayName"
+		@update:value-value="validate"
+		@submit="submit">
+		<template #icon>
+			<EditAccountIcon />
+		</template>
+		{{ inputProps.label }}
+	</NcActionInput>
+</template>

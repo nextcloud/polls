@@ -3,6 +3,17 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { CardDiv } from '../../Base/index.js'
+import ActionOpenSharesSidebar from '../../Actions/modules/ActionOpenSharesSidebar.vue'
+import { t } from '@nextcloud/l10n'
+import { useVotesStore } from '../../../stores/votes.ts'
+
+const votesStore = useVotesStore()
+const cardType = 'warning'
+
+</script>
+
 <template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'This poll is unpublished.') }}
@@ -13,32 +24,3 @@
 		</template>
 	</CardDiv>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { CardDiv } from '../../Base/index.js'
-import ActionOpenSharesSidebar from '../../Actions/modules/ActionOpenSharesSidebar.vue'
-import { t } from '@nextcloud/l10n'
-import { useVotesStore } from '../../../stores/votes.ts'
-
-export default {
-	name: 'CardUnpublishedPoll',
-	components: {
-		CardDiv,
-		ActionOpenSharesSidebar,
-	},
-
-	data() {
-		return {
-			cardType: 'warning',
-		}
-	},
-	computed: {
-		...mapStores(useVotesStore),
-	},
-	
-	methods: {
-		t,
-	},
-}
-</script>

@@ -3,82 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="modal__content">
-		<div class="modal__registration">
-			<div class="registration__registration">
-				<h2>{{ t('polls', 'Guest participants') }}</h2>
-				<InputDiv v-model="userName"
-					class="section__username"
-					:signaling-class="checkStatus.userName"
-					:placeholder="t('polls', 'Enter your name or a nickname')"
-					:helper-text="userNameHint"
-					focus
-					@submit="submitRegistration" />
-
-				<InputDiv v-if="shareStore.publicPollEmail !== 'disabled'"
-					v-model="emailAddress"
-					class="section__email"
-					:signaling-class="checkStatus.email"
-					:placeholder="t('polls', shareStore.publicPollEmail === 'mandatory' ? 'Email address (mandatory)' : 'Email address (optional)')"
-					:helper-text="emailAddressHint"
-					type="email"
-					inputmode="email"
-					@submit="submitRegistration" />
-
-				<NcCheckboxRadioSwitch v-if="shareStore.user.type === 'public'" v-model="saveCookie">
-					{{ t('polls', 'Remember me for 30 days') }}
-				</NcCheckboxRadioSwitch>
-
-				<div v-if="sessionStore.appSettings.usePrivacyUrl" class="section__optin">
-					<NcRichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
-				</div>
-
-				<div class="modal__buttons">
-					<div class="left">
-						<div class="legal_links">
-							<SimpleLink v-if="sessionStore.appSettings.useImprintUrl"
-								:href="sessionStore.appSettings.useImprintUrl"
-								target="_blank"
-								:name="t('polls', 'Legal Notice')" />
-						</div>
-					</div>
-					<div class="right">
-						<NcButton @click="closeModal">
-							<template #default>
-								{{ t('polls', 'Cancel') }}
-							</template>
-						</NcButton>
-
-						<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
-							<template #default>
-								{{ t('polls', 'OK') }}
-							</template>
-						</NcButton>
-					</div>
-				</div>
-			</div>
-
-			<div v-if="sessionStore.appSettings.useLogin" class="registration__login">
-				<h2> {{ t('polls', 'Registered accounts') }} </h2>
-				<NcButton wide @click="login()">
-					<template #default>
-						{{ t('polls', 'Login') }}
-					</template>
-				</NcButton>
-				<div>
-					{{ t('polls', 'You can also log in and participate with your regular account.') }}
-				</div>
-				<div>
-					{{ t('polls', 'Otherwise participate as a guest participant.') }}
-				</div>
-			</div>
-		</div>
-	</div>
-</template>
-
-<script setup>
-import { ref, computed, onMounted } from 'vue'
+<script setup lang="ts">
+import { ref, computed, onMounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { debounce } from 'lodash'
 import { showError } from '@nextcloud/dialogs'
@@ -131,9 +57,9 @@ const privacyRich = computed(() => {
 })
 
 const loginLink = computed(() => {
-	const redirectUrl = this.$router.resolve({
+	const redirectUrl = router.resolve({
 		name: 'publicVote',
-		params: { token: this.$route.params.token },
+		params: { token: route.params.token },
 	}).href
 
 	return `${generateUrl('/login')}?redirect_url=${redirectUrl}`
@@ -180,7 +106,7 @@ function routeToPersonalShare(token) {
 		// if share was not a public share, but a personal share
 		// (i.error. email shares allow to change personal data by fist entering of the poll),
 		// just load the poll
-		pollStore.get()
+		pollStore.load()
 		closeModal()
 	} else {
 		// in case of a public share, redirect to the generated share
@@ -306,6 +232,80 @@ watch(emailAddress, () => {
 	validateEmailAddress()
 })
 </script>
+
+<template>
+	<div class="modal__content">
+		<div class="modal__registration">
+			<div class="registration__registration">
+				<h2>{{ t('polls', 'Guest participants') }}</h2>
+				<InputDiv v-model="userName"
+					class="section__username"
+					:signaling-class="checkStatus.userName"
+					:placeholder="t('polls', 'Enter your name or a nickname')"
+					:helper-text="userNameHint"
+					focus
+					@submit="submitRegistration" />
+
+				<InputDiv v-if="shareStore.publicPollEmail !== 'disabled'"
+					v-model="emailAddress"
+					class="section__email"
+					:signaling-class="checkStatus.email"
+					:placeholder="t('polls', shareStore.publicPollEmail === 'mandatory' ? 'Email address (mandatory)' : 'Email address (optional)')"
+					:helper-text="emailAddressHint"
+					type="email"
+					inputmode="email"
+					@submit="submitRegistration" />
+
+				<NcCheckboxRadioSwitch v-if="shareStore.user.type === 'public'" v-model="saveCookie">
+					{{ t('polls', 'Remember me for 30 days') }}
+				</NcCheckboxRadioSwitch>
+
+				<div v-if="sessionStore.appSettings.usePrivacyUrl" class="section__optin">
+					<NcRichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
+				</div>
+
+				<div class="modal__buttons">
+					<div class="left">
+						<div class="legal_links">
+							<SimpleLink v-if="sessionStore.appSettings.useImprintUrl"
+								:href="sessionStore.appSettings.useImprintUrl"
+								target="_blank"
+								:name="t('polls', 'Legal Notice')" />
+						</div>
+					</div>
+					<div class="right">
+						<NcButton @click="closeModal">
+							<template #default>
+								{{ t('polls', 'Cancel') }}
+							</template>
+						</NcButton>
+
+						<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
+							<template #default>
+								{{ t('polls', 'OK') }}
+							</template>
+						</NcButton>
+					</div>
+				</div>
+			</div>
+
+			<div v-if="sessionStore.appSettings.showLogin" class="registration__login">
+				<h2> {{ t('polls', 'Registered accounts') }} </h2>
+				<NcButton wide @click="login()">
+					<template #default>
+						{{ t('polls', 'Login') }}
+					</template>
+				</NcButton>
+				<div>
+					{{ t('polls', 'You can also log in and participate with your regular account.') }}
+				</div>
+				<div>
+					{{ t('polls', 'Otherwise participate as a guest participant.') }}
+				</div>
+			</div>
+		</div>
+	</div>
+</template>
 
 <style lang="scss">
 .section__optin {

@@ -3,13 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div ref="observerTarget">
-		<slot :in-viewport="inViewport" />
-	</div>
-</template>
-
-<script setup>
+<script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const inViewport = ref(false)
@@ -36,3 +30,9 @@ onBeforeUnmount(() => {
 	}
 })
 </script>
+
+<template>
+	<div ref="observerTarget">
+		<slot :in-viewport="inViewport" />
+	</div>
+</template>

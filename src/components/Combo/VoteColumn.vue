@@ -3,46 +3,38 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+//TODO: Check correct usage of participants in template (v-for)
 <template>
 	<div class="vote-column">
-		<OptionItem :option="option" poll-type="datePoll" display="dateBox" />
+		<OptionItem :option="props.option" poll-type="datePoll" display="dateBox" />
 		<div v-for="(poll) in comboStore.polls"
 			:key="poll.id"
 			:title="poll.configuration.title"
 			class="poll-group">
-			<VoteItem v-for="(participant) in poll.status.countParticipants"
+			<VoteItem v-for="(participant) in comboStore.participants"
 				:key="`${participant.userId}_${participant.pollId}`"
 				:poll-id="poll.id"
-				:user="participant"
+				:user="participant.user"
 				:option="option" />
 		</div>
 	</div>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
+<script setup lang="ts">
+import { defineProps, PropType } from 'vue'
 import VoteItem from './VoteItem.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import { useComboStore } from '../../stores/combo.ts'
+import { Option } from '../../stores/options.ts'
 
-export default {
-	name: 'VoteColumn',
-	components: {
-		VoteItem,
-		OptionItem,
-	},
+const comboStore = useComboStore()
 
-	props: {
-		option: {
-			type: Object,
-			default: undefined,
-		},
+const props = defineProps({
+	option: {
+		type: Object as PropType<Option>,
+		default: undefined,
 	},
-
-	computed: {
-		...mapStores(useComboStore),
-	},
-}
+})
 </script>
 
 <style lang="scss">

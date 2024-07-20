@@ -26,6 +26,7 @@ const activeTab = ref(t('polls', 'Comments').toLowerCase())
 onMounted(() => {
 	subscribe('polls:sidebar:toggle', (payload) => {
 		showSidebar.value = payload?.open ?? !showSidebar.value
+		activeTab.value = payload?.activeTab ?? activeTab.value
 	})
 	subscribe('polls:sidebar:changeTab', (payload) => {
 		activeTab.value = payload?.activeTab ?? activeTab.value
@@ -33,8 +34,12 @@ onMounted(() => {
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:sidebar:changeTab')
-	unsubscribe('polls:sidebar:toggle')
+	unsubscribe('polls:sidebar:changeTab', () => {
+		activeTab.value = 'comments'
+	})
+	unsubscribe('polls:sidebar:toggle', () => {
+		showSidebar.value = false
+	})
 })
 
 /**

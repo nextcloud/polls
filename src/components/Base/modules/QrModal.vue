@@ -3,25 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="qr-code">
-		<h2>{{ name }}</h2>
-		<slot name="description">
-			{{ description }}
-		</slot>
-		<div class="canvas">
-			<img :src="qrUri" :alt="encodeText">
-		</div>
-		<h3>{{ subTitle }}</h3>
-		<p />
-		<p class="qr-url">
-			{{ encodeText }}
-		</p>
-	</div>
-</template>
-
-<script setup>
-
+<script setup lang="ts">
 import QRCode from 'qrcode'
 import { Logger } from '../../../helpers/index.js'
 import { onMounted, ref } from 'vue';
@@ -66,6 +48,23 @@ onMounted(() => {
 })
 
 </script>
+
+<template>
+	<div class="qr-code">
+		<h2>{{ name }}</h2>
+		<slot name="description">
+			{{ description }}
+		</slot>
+		<div class="canvas">
+			<img :src="qrUri" :alt="encodeText">
+		</div>
+		<h3>{{ subTitle }}</h3>
+		<p />
+		<p class="qr-url">
+			{{ encodeText }}
+		</p>
+	</div>
+</template>
 
 <style lang="scss">
 .canvas {

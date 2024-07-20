@@ -3,6 +3,16 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { CardDiv } from '../../Base/index.js'
+import ActionSwitchSafeTable from '../../Actions/modules/ActionSwitchSafeTable.vue'
+import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
+
+const pollStore = usePollStore()
+const cardType = 'warning'
+</script>
+
 <template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'Due to possible performance issues {countHiddenParticipants} voters are hidden.', { countHiddenParticipants: pollStore.countHiddenParticipants }) }}
@@ -13,32 +23,3 @@
 	</CardDiv>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
-import { CardDiv } from '../../Base/index.js'
-import ActionSwitchSafeTable from '../../Actions/modules/ActionSwitchSafeTable.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
-
-export default {
-	name: 'CardHiddenParticipants',
-	components: {
-		CardDiv,
-		ActionSwitchSafeTable,
-	},
-
-	data() {
-		return {
-			cardType: 'warning',
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-	},
-
-	methods: {
-		t,
-	},
-}
-</script>

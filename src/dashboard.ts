@@ -11,6 +11,7 @@ import Dashboard from './views/Dashboard.vue'
 import './assets/scss/polls-icon.scss'
 
 // Vue.config.devtools = import.meta.env.MODE !== 'production'
+/** global: OCA */
 
 document.addEventListener('DOMContentLoaded', () => {
 	OCA.Dashboard.register('polls', (el) => {

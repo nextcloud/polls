@@ -3,6 +3,45 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { ref } from 'vue'
+import { NcActions, NcActionButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
+import { t } from '@nextcloud/l10n'
+
+import OptionCloneDate from './OptionCloneDate.vue'
+import OptionItem from './OptionItem.vue'
+import OptionItemOwner from './OptionItemOwner.vue'
+
+import { usePollStore, PollType } from '../../stores/poll.ts'
+import { useOptionsStore, Option } from '../../stores/options.ts'
+
+import { BoxType } from '../../Interfaces/interfaces.ts'
+
+import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
+import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+
+const pollStore = usePollStore()
+const optionsStore = useOptionsStore()
+
+const cloneModal = ref(false)
+const optionToClone = ref({})
+const pollType = ref(PollType.Date)
+
+const cssVar = {
+	'var(--content-deleted)': `" (${t('polls', 'deleted')})"`
+}
+
+function cloneOptionModal(option: Option) {
+	optionToClone.value = option
+	cloneModal.value = true
+}
+
+</script>
+
 <template>
 	<div :style="cssVar">
 		<TransitionGroup is="ul"
@@ -13,7 +52,7 @@
 				:option="option"
 				:show-confirmed="true"
 				:poll-type="pollType"
-				display="textBox"
+				:display="BoxType.Date"
 				tag="li">
 				<template #icon>
 					<OptionItemOwner v-if="pollStore.permissions.addOptions"
@@ -23,12 +62,12 @@
 				</template>
 				<template v-if="pollStore.permissions.edit" #actions>
 					<NcActions v-if="!pollStore.isClosed" class="action">
-						<NcActionButton v-if="!option.deleted" :name="t('polls', 'Delete option')" @click="optionsStore.delete(option)">
+						<NcActionButton v-if="!option.deleted" :name="t('polls', 'Delete option')" @click="optionsStore.delete({ option })">
 							<template #icon>
 								<DeleteIcon />
 							</template>
 						</NcActionButton>
-						<NcActionButton v-if="option.deleted" :name="t('polls', 'Restore option')" @click="optionsStore.restore(option)">
+						<NcActionButton v-if="option.deleted" :name="t('polls', 'Restore option')" @click="optionsStore.restore({ option })">
 							<template #icon>
 								<RestoreIcon />
 							</template>
@@ -41,7 +80,7 @@
 
 						<NcActionButton v-if="!option.deleted && !pollStore.isClosed"
 							:name="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
-							@click="option.confirm(option)">
+							@click="optionsStore.confirm({ option })">
 							<template #icon>
 								<UnconfirmIcon v-if="option.confirmed" />
 								<ConfirmIcon v-else />
@@ -61,80 +100,7 @@
 		</NcEmptyContent>
 
 		<NcModal v-if="cloneModal" size="small" :can-close="false">
-			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
+			<OptionCloneDate :option="optionToClone" class="modal__content" @close="cloneModal = false" />
 		</NcModal>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcActions, NcActionButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
-import OptionCloneDate from './OptionCloneDate.vue'
-import OptionItem from './OptionItem.vue'
-import { dateUnits } from '../../mixins/dateMixins.js'
-import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
-import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
-import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
-import OptionItemOwner from './OptionItemOwner.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-
-export default {
-	name: 'OptionsDate',
-
-	components: {
-		CloneDateIcon,
-		DatePollIcon,
-		DeleteIcon,
-		RestoreIcon,
-		ConfirmIcon,
-		UnconfirmIcon,
-		NcActions,
-		NcActionButton,
-		NcEmptyContent,
-		NcModal,
-		OptionCloneDate,
-		OptionItem,
-		OptionItemOwner,
-	},
-
-	mixins: [
-		dateUnits,
-	],
-
-	data() {
-		return {
-			cloneModal: false,
-			optionToClone: {},
-			pollType: 'datePoll',
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore, useOptionsStore),
-
-		cssVar() {
-			return {
-				'--content-deleted': `" (${t('polls', 'deleted')})"`,
-			}
-		},
-	},
-
-	methods: {
-		t,
-		closeModal() {
-			this.cloneModal = false
-		},
-
-		cloneOptionModal(option) {
-			this.optionToClone = option
-			this.cloneModal = true
-		},
-
-	},
-}
-</script>

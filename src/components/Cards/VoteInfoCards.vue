@@ -3,6 +3,38 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { computed } from 'vue'
+import { CardAddProposals, CardClosedPoll, CardLimitedVotes, CardLocked, CardRegister, CardSendConfirmations, CardUnpublishedPoll } from './index.js'
+import { usePollStore } from '../../stores/poll.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { useSharesStore } from '../../stores/shares.ts'
+import { useSessionStore } from '../../stores/session.ts'
+
+const pollStore = usePollStore()
+const optionsStore = useOptionsStore()
+const sharesStore = useSharesStore()
+const sessionStore = useSessionStore()
+
+const showUnpublishedPollCard = computed(() => pollStore.configuration.access === 'private' && !sharesStore.hasShares && pollStore.permissions.edit && optionsStore.list.length)
+
+const showAddProposalsCard = computed(() => pollStore.permissions.addOptions && pollStore.isProposalOpen && !pollStore.isClosed)
+
+const showClosedCard = computed(() => pollStore.isClosed && !showSendConfirmationsCard.value)
+
+const showSendConfirmationsCard = computed(() => pollStore.permissions.edit && pollStore.isClosed && optionsStore.confirmed.length > 0)
+
+const showLimitCard = computed(() => pollStore.permissions.vote && !pollStore.isClosed && (pollStore.configuration.maxVotesPerOption || pollStore.configuration.maxVotesPerUser))
+
+const showRegisterCard = computed(() => (sessionStore.route.name === 'publicVote'
+		&& ['public', 'email', 'contact'].includes(pollStore.currentUserStatus.userRole)
+		&& !pollStore.isClosed
+		&& !pollStore.currentUserStatus.isLocked
+		&& !!pollStore.id
+	))
+
+</script>
+
 <template>
 	<div class="info-section">
 		<CardUnpublishedPoll v-if="showUnpublishedPollCard" />
@@ -15,58 +47,3 @@
 	</div>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
-import { CardAddProposals, CardClosedPoll, CardLimitedVotes, CardLocked, CardRegister, CardSendConfirmations, CardUnpublishedPoll } from './index.js'
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { useSharesStore } from '../../stores/shares.ts'
-
-export default {
-	name: 'VoteInfoCards',
-
-	components: {
-		CardAddProposals,
-		CardClosedPoll,
-		CardLimitedVotes,
-		CardLocked,
-		CardRegister,
-		CardSendConfirmations,
-		CardUnpublishedPoll,
-	},
-
-	computed: {
-		...mapStores(usePollStore, useOptionsStore, useSharesStore),
-
-		showUnpublishedPollCard() {
-			return this.pollStore.configuration.access === 'private' && !this.sharesStore.hasShares && this.pollStore.permissions.edit && this.optionsStore.list.length
-		},
-
-		showAddProposalsCard() {
-			return this.pollStore.permissions.addOptions && this.pollStore.isProposalOpen && !this.pollStore.isPollClosed
-		},
-
-		showClosedCard() {
-			return this.pollStore.isPollClosed && !this.showSendConfirmationsCard
-		},
-
-		showSendConfirmationsCard() {
-			return this.pollStore.permissions.edit && this.pollStore.isPollClosed && this.pollStore.confirmedOptions.length > 0
-		},
-
-		showLimitCard() {
-			return this.pollStore.permissions.vote && !this.pollStore.isPollClosed && (this.pollStore.configuration.maxVotesPerOption || this.pollStore.configuration.maxVotesPerUser)
-		},
-
-		showRegisterCard() {
-			return (this.$route.name === 'publicVote'
-				&& ['public', 'email', 'contact'].includes(this.pollStore.currentUserStatus.userRole)
-				&& !this.pollStore.isPollClosed
-				&& !this.pollStore.currentUserStatus.isLocked
-				&& !!this.pollStore.id
-			)
-		},
-
-	},
-}
-</script>

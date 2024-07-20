@@ -366,10 +366,10 @@ export const usePollStore = defineStore('poll', {
 			try {
 				let response = null
 
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.getPoll(sessionStore.router.params.token)
-				} else if (sessionStore.router.name === 'vote') {
-					response = await PollsAPI.getFullPoll(sessionStore.router.params.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.getPoll(sessionStore.route.params.token)
+				} else if (sessionStore.route.name === 'vote') {
+					response = await PollsAPI.getFullPoll(sessionStore.route.params.id)
 				} else {
 					this.reset()
 					return

@@ -3,14 +3,44 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { computed, defineProps, PropType } from 'vue'
+import { ActionDelete } from '../Actions/index.js'
+import UserItem from '../User/UserItem.vue'
+import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useOptionsStore, Option } from '../../stores/options.ts'
+import { UserType } from '../../Interfaces/interfaces.ts'
+
+const pollStore = usePollStore()
+const sessionStore = useSessionStore()
+const optionsStore = useOptionsStore()
+
+const props = defineProps({
+	option: {
+		type: Object as PropType<Option>,
+		default: undefined,
+	},
+	avatarSize: {
+		type: Number,
+		default: 32,
+	},
+})
+
+const showDelete = computed(() => !pollStore.permissions.edit && sessionStore.currentUser.userId === props.option.owner.userId)
+const showOwner = computed(() => props.option.owner.type !== UserType.Empty && props.option.owner.userId !== pollStore.owner.userId)
+
+</script>
+
 <template>
 	<div class="option-item-owner">
 		<ActionDelete v-if="showDelete"
 			:name="option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option')"
 			:restore="!!option.deleted"
 			:timeout="0"
-			@restore="optionsStore.restore(option)"
-			@delete="optionsStore.delete(option)" />
+			@restore="optionsStore.restore({ option: props.option })"
+			@delete="optionsStore.delete({ option: props.option })" />
 
 		<UserItem v-else-if="showOwner"
 			:user="option.owner"
@@ -20,53 +50,6 @@
 			:tooltip-message="t('polls', '{displayName}\'s proposal', { displayName: option.owner.displayName })" />
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { ActionDelete } from '../Actions/index.js'
-import UserItem from '../User/UserItem.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-
-export default {
-	name: 'OptionItemOwner',
-
-	components: {
-		UserItem,
-		ActionDelete,
-	},
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined,
-		},
-		avatarSize: {
-			type: Number,
-			default: 32,
-		},
-	},
-
-	computed: {
-		...mapStores(usePollStore, useSessionStore, useOptionsStore),
-
-		showDelete() {
-			return !this.pollStore.permissions.edit && this.sessionStore.currentUser.userId === this.option.owner.userId
-
-		},
-		showOwner() {
-			return this.option.owner.type !== 'empty' && this.option.owner.userId !== this.pollStore.owner.userId
-		},
-	},
-	
-	methods: {
-		t,
-	},
-}
-
-</script>
 
 <style lang="scss">
 

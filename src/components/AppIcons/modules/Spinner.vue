@@ -2,7 +2,7 @@
   - SPDX-FileCopyrightText: 2022 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<script setup>
+<script setup lang="ts">
 import { defineProps } from 'vue'
 
 const props = defineProps(

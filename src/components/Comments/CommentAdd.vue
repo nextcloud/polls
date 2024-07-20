@@ -3,6 +3,32 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { ref } from 'vue'
+import { showError } from '@nextcloud/dialogs'
+import { InputDiv } from '../Base/index.js'
+import { t } from '@nextcloud/l10n'
+import UserItem from '../User/UserItem.vue'
+import { useSessionStore } from '../../stores/session.ts'
+import { useCommentsStore } from '../../stores/comments.ts'
+
+const commentsStore = useCommentsStore()
+const sessionStore = useSessionStore()
+const comment = ref('')
+
+async function writeComment() {
+	if (comment.value) {
+		try {
+			await commentsStore.add({ message: comment.value })
+			comment.value = ''
+		} catch {
+			showError(t('polls', 'Error while saving comment'))
+		}
+	}
+}
+
+</script>
+
 <template>
 	<div class="comment-add">
 		<UserItem :user="sessionStore.currentUser" hide-names />
@@ -14,49 +40,6 @@
 			@submit="writeComment()" />
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { showError } from '@nextcloud/dialogs'
-import { InputDiv } from '../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { useSessionStore } from '../../stores/session.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
-
-export default {
-	name: 'CommentAdd',
-
-	components: {
-		InputDiv,
-		UserItem,
-	},
-
-	data() {
-		return {
-			comment: '',
-		}
-	},
-
-	computed: {
-		...mapStores(useSessionStore, useCommentsStore),
-	},
-
-	methods: {
-		t,
-		async writeComment() {
-			if (this.comment) {
-				try {
-					await this.commentsStore.add ({ message: this.comment })
-					this.comment = ''
-				} catch {
-					showError(t('polls', 'Error while saving comment'))
-				}
-			}
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 	.comment-add {

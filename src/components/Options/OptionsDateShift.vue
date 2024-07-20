@@ -3,6 +3,30 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { ref } from 'vue'
+import { t } from '@nextcloud/l10n'
+import { NcButton, NcSelect } from '@nextcloud/vue'
+
+import { InputDiv } from '../Base/index.js'
+import { dateUnits } from '../../constants/dateUnits.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+
+import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
+
+const optionsStore = useOptionsStore()
+
+const shift = ref({
+	step: 1,
+	unit: { name: t('polls', 'Week'), value: 'week' },
+})
+
+function shiftDates(payload) {
+	optionsStore.shift({ shift: payload })
+}
+
+</script>
+
 <template>
 	<div>
 		<div v-if="optionsStore.proposalsExist">
@@ -27,51 +51,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-
-import { mapStores } from 'pinia'
-import { InputDiv } from '../Base/index.js'
-import { NcButton, NcSelect } from '@nextcloud/vue'
-import { dateUnits } from '../../mixins/dateMixins.js'
-import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
-import { t } from '@nextcloud/l10n'
-import { useOptionsStore } from '../../stores/options.ts'
-
-export default {
-	name: 'OptionsDateShift',
-
-	components: {
-		InputDiv,
-		NcButton,
-		NcSelect,
-		SubmitIcon,
-	},
-
-	mixins: [dateUnits],
-
-	data() {
-		return {
-			shift: {
-				step: 1,
-				unit: { name: t('polls', 'Week'), value: 'week' },
-			},
-		}
-	},
-
-	computed: {
-		...mapStores(useOptionsStore),
-	},
-
-	methods: {
-		t,
-		shiftDates(payload) {
-			this.optionsStore.shift({ shift: payload })
-		},
-	},
-}
-
-</script>
 
 <style lang="scss">
 .select-unit {

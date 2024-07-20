@@ -3,6 +3,41 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { showError } from '@nextcloud/dialogs'
+import { NcActions, NcActionButton } from '@nextcloud/vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import { t } from '@nextcloud/l10n'
+import UserItem from '../User/UserItem.vue'
+import { useSharesStore } from '../../stores/shares.ts'
+import { VirtualUserItemType } from '../../Interfaces/interfaces.ts'
+
+const sharesStore = useSharesStore()
+
+const userItemProps = {
+	label: t('polls', 'Add a new public link'),
+	type: VirtualUserItemType.AddPublicLink,
+}
+
+const user = {
+	user: {
+		type: 'public',
+		userId: '',
+		displayName: '',
+		emailAddress: '',
+	},
+}
+
+async function addPublicShare() {
+	try {
+		await sharesStore.add({ user })
+	} catch {
+		showError(t('polls', 'Error adding public link'))
+	}
+}
+
+</script>
+
 <template>
 	<UserItem v-bind="userItemProps"
 		class="add-public">
@@ -21,57 +56,3 @@
 		</NcActions>
 	</UserItem>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton } from '@nextcloud/vue'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { useSharesStore } from '../../stores/shares.ts'
-
-const user = {
-	user: {
-		type: 'public',
-		userId: '',
-		displayName: '',
-		emailAddress: '',
-	},
-}
-
-export default {
-	name: 'SharePublicAdd',
-
-	components: {
-		NcActions,
-		NcActionButton,
-		PlusIcon,
-		UserItem,
-	},
-
-	data() {
-		return {
-			userItemProps: {
-				label: t('polls', 'Add a new public link'),
-				type: 'addPublicLink',
-			},
-		}
-	},
-
-	computed: {
-		...mapStores(useSharesStore),
-	},
-	methods: {
-		t,
-
-		async addPublicShare() {
-			try {
-				await this.sharesStore.add(user)
-			} catch {
-				showError(t('polls', 'Error adding public link'))
-			}
-		},
-	},
-}
-</script>

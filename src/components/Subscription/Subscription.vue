@@ -3,43 +3,32 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="subscription">
-		<NcCheckboxRadioSwitch v-model="subscriptionStore.subscribed" 
-			type="switch"
-			@change="subscription.write()">
-			{{ label }}
-		</NcCheckboxRadioSwitch>
-	</div>
-</template>
-
-<script>
-import { mapStores } from 'pinia'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useShareStore } from '../../stores/share.ts'
 
-export default {
-	name: 'Subscription',
+const shareStore = useShareStore()
+const subscriptionStore = useSubscriptionStore()
 
-	components: {
-		NcCheckboxRadioSwitch,
-	},
+const label = computed(() => shareStore.user.emailAddress
+	? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: shareStore.user.emailAddress })
+	: t('polls', 'Receive notification email on activity')
+)
 
-	computed: {
-		...mapStores(useSubscriptionStore, useShareStore),
-
-		label() {
-			if (this.shareStore.user.emailAddress) {
-				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress })
-			}
-			return t('polls', 'Receive notification email on activity')
-
-		},
-	},
-}
 </script>
+
+<template>
+	<div class="subscription">
+		<NcCheckboxRadioSwitch v-model="subscriptionStore.subscribed" 
+			type="switch"
+			@change="subscriptionStore.write()">
+			{{ label }}
+		</NcCheckboxRadioSwitch>
+	</div>
+</template>
 
 <style lang="css">
 	.subscription {

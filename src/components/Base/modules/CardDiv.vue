@@ -3,10 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<script setup>
-
-import { NcNoteCard } from '@nextcloud/vue'
-
+<script setup lang="ts">
+	import { NcNoteCard } from '@nextcloud/vue'
 </script>
 
 <template>

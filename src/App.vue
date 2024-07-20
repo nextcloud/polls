@@ -30,7 +30,7 @@ const appClass = computed(() => [
 ])
 
 const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
-const useSidebar = computed(() => sessionStore.pollPermissions.edit || sessionStore.pollPermissions.comment || sessionStore.router.name === 'combo')
+const useSidebar = computed(() => sessionStore.pollPermissions.edit || sessionStore.pollPermissions.comment || sessionStore.route.name === 'combo')
 
 /**
  * Turn off transitions
@@ -52,12 +52,6 @@ function transitionsOff(delay: number) {
 	}
 }
 
-/**
- *
- * @param {object} payload - payload
- * @param payload.store - store
- * @param payload.message - message
- */
 function notify(payload: { store: string, message: string }) {
 	debounce(async function () {
 		if (payload.store === 'poll') {

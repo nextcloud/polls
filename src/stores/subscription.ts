@@ -23,10 +23,10 @@ export const useSubscriptionStore = defineStore('subscription', {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.getSubscription(sessionStore.router.params.token)
-				} else if (sessionStore.router.name === 'vote') {
-					response = await PollsAPI.getSubscription(sessionStore.router.params.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.getSubscription(sessionStore.route.params.token)
+				} else if (sessionStore.route.name === 'vote') {
+					response = await PollsAPI.getSubscription(sessionStore.route.params.id)
 				} else {
 					this.$reset()
 					return
@@ -43,10 +43,10 @@ export const useSubscriptionStore = defineStore('subscription', {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.setSubscription(sessionStore.router.params.token, !this.subscribed)
-				} else if (sessionStore.router.name === 'vote') {
-					response = await PollsAPI.setSubscription(sessionStore.router.params.id, !this.subscribed)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.setSubscription(sessionStore.route.params.token, !this.subscribed)
+				} else if (sessionStore.route.name === 'vote') {
+					response = await PollsAPI.setSubscription(sessionStore.route.params.id, !this.subscribed)
 				} else {
 					this.$reset()
 					return

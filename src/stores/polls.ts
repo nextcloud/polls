@@ -33,6 +33,7 @@ export enum FilterType {
 	All = 'all',
 	Closed = 'closed',
 	Archived = 'archived',
+	Admin = 'admin',
 }
 
 export type PollCategory = {
@@ -186,8 +187,8 @@ export const usePollsStore = defineStore('polls', {
 		currentCategory(state: PollList): PollCategory | null {
 			const sessionStore = useSessionStore()
 
-			if (sessionStore.router.name === 'list' && sessionStore.router.params.type) {
-				return state.categories.find((category) => category.id === sessionStore.router.params.type)
+			if (sessionStore.route.name === 'list' && sessionStore.route.params.type) {
+				return state.categories.find((category) => category.id === sessionStore.route.params.type)
 			}
 			return state.categories.find((category) => category.id === 'relevant')
 		},

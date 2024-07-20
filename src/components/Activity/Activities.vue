@@ -3,6 +3,14 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+
+import ActivityItem from './ActivityItem.vue'
+import { useActivityStore } from '../../stores/activity.ts';
+
+const activityStore = useActivityStore()
+</script>
+
 <template>
 	<TransitionGroup name="fade"
 		class="activities"
@@ -14,20 +22,3 @@
 	</TransitionGroup>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
-
-import ActivityItem from './ActivityItem.vue'
-import { useActivityStore } from '../../stores/activity.ts';
-
-export default {
-	name: 'Activities',
-	components: {
-		ActivityItem,
-	},
-
-	computed: {
-		...mapStores(useActivityStore),
-	},
-}
-</script>

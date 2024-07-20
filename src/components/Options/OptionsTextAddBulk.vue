@@ -3,11 +3,50 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { ref } from 'vue'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
+
+import { useOptionsStore } from '../../stores/options.ts'
+
+import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
+
+const optionsStore = useOptionsStore()
+
+const newPollTexts = ref('')
+const showModal = ref(false)
+
+const props = defineProps({
+	placeholder: {
+		type: String,
+		default: t('polls', 'Add options list (one option per line)'),
+	},
+	caption: {
+		type: String,
+		default: t('polls', 'Paste option list'),
+	},
+})
+
+async function addOptionsList() {
+	if (newPollTexts.value) {
+		try {
+			await optionsStore.addBulk({ text: newPollTexts.value })
+			showSuccess(t('polls', 'Options added'))
+			newPollTexts.value = ''
+		} catch (error) {
+			showError(t('polls', 'Error adding options', { optionText: newPollTexts.value }))
+		}
+	}
+}
+</script>
+
 <template>
 	<div>
 		<NcActions>
-			<NcActionButton :name="caption" 
-				:aria-label="caption"
+			<NcActionButton :name="props.caption" 
+				:aria-label="props.caption"
 				@click="showModal = true">
 				<template #icon>
 					<PasteIcon />
@@ -22,7 +61,7 @@
 
 				<textarea v-model="newPollTexts"
 					class="add-options-list"
-					:placeholder="placeholder" />
+					:placeholder="props.placeholder" />
 
 				<div class="modal__buttons">
 					<NcButton @click="showModal = false">
@@ -41,63 +80,6 @@
 		</NcModal>
 	</div>
 </template>
-
-<script>
-import { showError, showSuccess } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
-import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
-import { t } from '@nextcloud/l10n'
-import { mapStores } from 'pinia'
-import { useOptionsStore } from '../../stores/options.ts'
-
-export default {
-	name: 'OptionsTextAddBulk',
-
-	components: {
-		PasteIcon,
-		NcActions,
-		NcActionButton,
-		NcModal,
-		NcButton,
-	},
-
-	props: {
-		placeholder: {
-			type: String,
-			default: t('polls', 'Add options list (one option per line)'),
-		},
-		caption: {
-			type: String,
-			default: t('polls', 'Paste option list'),
-		},
-	},
-
-	data() {
-		return {
-			newPollTexts: '',
-			showModal: false,
-		}
-	},
-
-	computed: {
-		...mapStores(useOptionsStore),
-	},
-	methods: {
-		t,
-		async addOptionsList() {
-			if (this.newPollTexts) {
-				try {
-					await this.optionsStore.addBulk({ text: this.newPollTexts })
-					showSuccess(t('polls', 'Options added'))
-					this.newPollTexts = ''
-				} catch (error) {
-					showError(t('polls', 'Error adding options', { optionText: this.newPollText }))
-				}
-			}
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 	.option-clone-date.modal__content {

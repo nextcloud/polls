@@ -6,7 +6,7 @@ import { RouteLocationNormalized, RouteRecordRaw, createMemoryHistory, createRou
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
-import { getCookieValue, setCookie } from './helpers/index.ts'
+import { getCookieValue, Logger, setCookie } from './helpers/index.ts'
 import { PublicAPI } from './Api/index.js'
 import { loadContext } from './composables/context.ts'
 import Vote from './views/Vote.vue'
@@ -69,45 +69,20 @@ async function validateToken(to: RouteLocationNormalized) {
 }
 /**
  *
- * @param {RouteLocationNormalized} to Target route
  */
-async function loadPoll(to: RouteLocationNormalized) {
+async function loadPoll() {
+	console.log('loadPoll before enter');
+	
 	const pollStore = usePollStore()
 	await pollStore.load()
-	return {
-		name: 'vote',
-		params: {
-			id: to.params.id
-		}
-	}
+	// return {
+	// 	name: 'vote',
+	// 	params: {
+	// 		id: to.params.id
+	// 	}
+	// }
 }
 const routes: RouteRecordRaw[] = [
-	{
-		path: '/',
-		redirect: {
-			name: 'list',
-			params: {
-				type: 'relevant',
-			},
-		},
-		name: 'root',
-		meta: {
-			publicPage: false,
-		}
-
-	},
-	{
-		path: '/list',
-		redirect: {
-			name: 'list',
-			params: {
-				type: 'relevant',
-			},
-		},
-		meta: {
-			publicPage: false,
-		}
-	},
 	{
 		path: '/list/:type?',
 		components: {
@@ -181,16 +156,57 @@ const routes: RouteRecordRaw[] = [
 			publicPage: true,
 		}
 	},
+	{
+		path: '/',
+		redirect: {
+			name: 'list',
+			params: {
+				type: 'relevant',
+			},
+		},
+		name: 'root',
+		meta: {
+			publicPage: false,
+		}
+
+	},
+	{
+		path: '/list',
+		redirect: {
+			name: 'list',
+			params: {
+				type: 'relevant',
+			},
+		},
+		meta: {
+			publicPage: false,
+		}
+	},
 ]
 
 const router = createRouter({
-	history: createMemoryHistory('/apps/polls'),
+	history: createMemoryHistory(generateUrl('/apps/polls')),
 	routes,
 	linkActiveClass: 'active',
 })
 
+router.beforeResolve((to: RouteLocationNormalized) => {
+	console.log('beforeResolve', to)
+})
+
 router.beforeEach((to: RouteLocationNormalized) => {
-	loadContext(to)
+	console.log('beforeEach', to)
+	try {
+		loadContext(to)
+		console.log('context loaded')
+		// if (to.name === 'vote') {
+		// 	loadPoll(to)
+		// }
+		// return to
+	} catch (error) {
+		Logger.error('Could not load context')
+		return false
+	}
 })
 
 export { router }

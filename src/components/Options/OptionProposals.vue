@@ -2,6 +2,15 @@
   - SPDX-FileCopyrightText: 2018 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+  
+<script setup lang="ts">
+	import OptionsDateAdd from './OptionsDateAdd.vue'
+	import OptionsTextAdd from './OptionsTextAdd.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+
+	const pollStore = usePollStore()
+</script>
 
 <template>
 	<div class="option-proposals">
@@ -16,32 +25,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import OptionsDateAdd from './OptionsDateAdd.vue'
-import OptionsTextAdd from './OptionsTextAdd.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'OptionProposals',
-
-	components: {
-		OptionsDateAdd,
-		OptionsTextAdd,
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-	},
-	
-	methods: {
-		t,
-	},
-}
-
-</script>
 
 <style lang="scss">
 	.option-proposals {

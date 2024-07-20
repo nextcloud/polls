@@ -4,7 +4,8 @@
 -->
 
 <script setup lang="ts">
-import { computed, defineProps, defineEmits } from 'vue'
+import { RouterLink } from 'vue-router'
+import { computed, defineProps, defineEmits, withDefaults } from 'vue'
 import moment from '@nextcloud/moment'
 import { BadgeDiv } from '../Base/index.js'
 import { t } from '@nextcloud/l10n'
@@ -141,7 +142,7 @@ const timeCreatedRelative = computed(() => moment.unix(props.poll.status.created
 			</div>
 		</div>
 
-		<router-link v-else
+		<RouterLink v-else
 			class="item__title"
 			:to="{ name: 'vote', params: { id: props.poll.id }}"
 			:class="{ closed: props.poll.status.expired, active: (props.poll.id === pollStore.id) }">
@@ -152,7 +153,7 @@ const timeCreatedRelative = computed(() => moment.unix(props.poll.status.created
 			<div class="description">
 				{{ props.poll.configuration.description ? props.poll.configuration.description : t('polls', 'No description provided') }}
 			</div>
-		</router-link>
+		</RouterLink>
 
 		<slot name="actions" />
 

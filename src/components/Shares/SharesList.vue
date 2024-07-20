@@ -3,6 +3,44 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { ref } from 'vue'
+import { t } from '@nextcloud/l10n'
+import { NcModal } from '@nextcloud/vue'
+
+import { usePollStore } from '../../stores/poll.ts'
+import { useSharesStore } from '../../stores/shares.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { Share } from '../../stores/share.ts'
+
+import { ConfigBox, QrModal } from '../Base/index.js'
+import ShareItem from './ShareItem.vue'
+import UserSearch from '../User/UserSearch.vue'
+import SharePublicAdd from './SharePublicAdd.vue'
+import ShareItemAllUsers from './ShareItemAllUsers.vue'
+import MarkUpDescription from '../Poll/MarkUpDescription.vue'
+
+import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+
+const pollStore = usePollStore()
+const sharesStore = useSharesStore()
+const sessionStore = useSessionStore()
+
+const qrModal = ref(false)
+const qrText = ref('')
+const configBoxProps = {
+	sharesList: {
+		name: t('polls', 'Locked shares (read only access)'),
+	},
+}
+
+function openQrModal(share: Share) {
+	qrText.value = share.URL
+	qrModal.value = true
+}
+
+</script>
+
 <template>
 	<ConfigBox v-bind="configBoxProps.sharesList">
 		<template #icon>
@@ -36,62 +74,6 @@
 		</NcModal>
 	</ConfigBox>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcModal } from '@nextcloud/vue'
-import { ConfigBox, QrModal } from '../Base/index.js'
-import ShareItem from './ShareItem.vue'
-import UserSearch from '../User/UserSearch.vue'
-import SharePublicAdd from './SharePublicAdd.vue'
-import ShareItemAllUsers from './ShareItemAllUsers.vue'
-import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-import MarkUpDescription from '../Poll/MarkUpDescription.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSharesStore } from '../../stores/shares.ts'
-import { useSessionStore } from '../../stores/session.ts'
-
-export default {
-	name: 'SharesList',
-
-	components: {
-		ShareIcon,
-		UserSearch,
-		ConfigBox,
-		SharePublicAdd,
-		ShareItemAllUsers,
-		ShareItem,
-		QrModal,
-		NcModal,
-		MarkUpDescription,
-	},
-
-	data() {
-		return {
-			qrModal: false,
-			qrText: '',
-			configBoxProps: {
-				sharesList: {
-					name: t('polls', 'Locked shares (read only access)'),
-				},
-			},
-
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore, useSharesStore, useSessionStore),
-	},
-
-	methods: {
-		openQrModal(share) {
-			this.qrText = share.URL
-			this.qrModal = true
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 .shares-list.shared {

@@ -3,6 +3,28 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { computed } from 'vue'
+import { CardDiv } from '../../Base/index.js'
+import ActionRegister from '../../Actions/modules/ActionRegister.vue'
+import { t } from '@nextcloud/l10n'
+import { useShareStore } from '../../../stores/share.ts'
+
+const shareStore = useShareStore()
+const cardType = 'info'
+
+const registrationInvitationText = computed(() => {
+	if (shareStore.publicPollEmail === 'mandatory') {
+		return t('polls', 'To participate, register with your email address and a name.')
+	}
+	if (shareStore.publicPollEmail === 'optional') {
+		return t('polls', 'To participate, register a name and optionally with your email address.')
+	}
+	return t('polls', 'To participate, register with a name.')
+})
+
+</script>
+
 <template>
 	<CardDiv :type="cardType">
 		{{ registrationInvitationText }}
@@ -11,40 +33,3 @@
 		</template>
 	</CardDiv>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { CardDiv } from '../../Base/index.js'
-import ActionRegister from '../../Actions/modules/ActionRegister.vue'
-import { t } from '@nextcloud/l10n'
-import { useShareStore } from '../../../stores/share.ts'
-
-export default {
-	name: 'CardRegister',
-	components: {
-		CardDiv,
-		ActionRegister,
-	},
-
-	data() {
-		return {
-			cardType: 'info',
-		}
-	},
-
-	computed: {
-		...mapStores(useShareStore),
-
-		registrationInvitationText() {
-			if (this.shareStore.publicPollEmail === 'mandatory') {
-				return t('polls', 'To participate, register with your email address and a name.')
-			}
-			if (this.shareStore.publicPollEmail === 'optional') {
-				return t('polls', 'To participate, register a name and optionally with your email address.')
-			}
-			return t('polls', 'To participate, register with a name.')
-		},
-
-	},
-}
-</script>

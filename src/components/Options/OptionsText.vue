@@ -3,6 +3,46 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import { computed } from 'vue'
+import draggable from 'vuedraggable'
+import { t } from '@nextcloud/l10n'
+import { NcActions, NcActionButton, NcEmptyContent } from '@nextcloud/vue'
+
+import OptionItem from './OptionItem.vue'
+import OptionItemOwner from '../Options/OptionItemOwner.vue'
+import OptionsTextAdd from './OptionsTextAdd.vue'
+
+import { usePollStore } from '../../stores/poll.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+
+const pollStore = usePollStore()
+const optionsStore = useOptionsStore()
+
+const dragOptions = {
+	animation: 200,
+	group: 'description',
+	disabled: false,
+	ghostClass: 'ghost',
+}
+
+const cssVar = {
+	'--content-deleted': `" (${t('polls', 'deleted')})"`,
+}
+
+const reOrderedOptions = computed({
+	get: () => optionsStore.list,
+	set: (value) => optionsStore.reorder(value),
+})
+
+</script>
+
 <template>
 	<div :style="cssVar">
 		<OptionsTextAdd v-if="!pollStore.isClosed" />
@@ -66,80 +106,6 @@
 		</NcEmptyContent>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcActions, NcActionButton, NcEmptyContent } from '@nextcloud/vue'
-import draggable from 'vuedraggable'
-import OptionItem from './OptionItem.vue'
-import OptionItemOwner from '../Options/OptionItemOwner.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
-import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
-import OptionsTextAdd from './OptionsTextAdd.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-
-export default {
-	name: 'OptionsText',
-
-	components: {
-		draggable,
-		DeleteIcon,
-		RestoreIcon,
-		TextPollIcon,
-		ConfirmIcon,
-		UnconfirmIcon,
-		NcEmptyContent,
-		OptionItem,
-		OptionItemOwner,
-		NcActions,
-		NcActionButton,
-		OptionsTextAdd,
-	},
-
-	data() {
-		return {
-			pollType: 'textPoll',
-			drag: false,
-		}
-	},
-
-	computed: {
-		...mapStores(useOptionsStore, usePollStore),
-
-		dragOptions() {
-			return {
-				animation: 200,
-				group: 'description',
-				disabled: false,
-				ghostClass: 'ghost',
-			}
-		},
-
-		cssVar() {
-			return {
-				'--content-deleted': `" (${t('polls', 'deleted')})"`,
-			}
-		},
-
-		reOrderedOptions: {
-			get() {
-				return this.optionsStore.list
-			},
-			set(value) {
-				this.optionsStore.reorder(value)
-			},
-		},
-	},
-	methods: {
-		t,
-	},
-}
-</script>
 
 <style lang="scss">
 	.optionAdd {

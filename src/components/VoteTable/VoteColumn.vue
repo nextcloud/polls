@@ -3,46 +3,8 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div :class="componentClass">
-		<OptionItem :option="option" :poll-type="pollStore.type" :display="pollStore.type === 'datePoll' ? 'dateBox' : 'textBox'" />
-
-		<Counter v-if="pollStore.permissions.seeResults"
-			:show-maybe="pollStore.permissions.allowMaybe"
-			:option="option" />
-
-		<CalendarPeek v-if="showCalendarPeek"
-			:focus-trap="false"
-			:option="option" />
-
-		<VoteItem v-for="(participant) in pollStore.safeParticipants"
-			:key="participant.userId"
-			:user-id="participant.userId"
-			:option="option" />
-
-		<OptionItemOwner v-if="pollStore.proposalsExist"
-			:option="option"
-			:avatar-size="24"
-			class="owner" />
-
-		<FlexSpacer v-if="pollStore.type === 'datePoll' && viewMode === 'list-view'" />
-
-		<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="action confirm">
-			<NcButton :title="confirmButtonCaption"
-				:aria-label="confirmButtonCaption"
-				type="tertiary"
-				@click="optionsStore.confirm(option)">
-				<template #icon>
-					<UnconfirmIcon v-if="option.confirmed" :size="20" />
-					<ConfirmIcon v-else :size="20" />
-				</template>
-			</NcButton>
-		</div>
-	</div>
-</template>
-
-<script>
-import { mapStores } from 'pinia'
+<script setup lang="ts">
+import { computed, defineProps, PropType } from 'vue'
 import { NcButton } from '@nextcloud/vue'
 import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
@@ -54,75 +16,88 @@ import CalendarPeek from '../Calendar/CalendarPeek.vue'
 import OptionItemOwner from '../Options/OptionItemOwner.vue'
 import { t } from '@nextcloud/l10n'
 import { getCurrentUser } from '@nextcloud/auth'
-import { usePollStore } from '../../stores/poll.ts'
-import { usePreferencesStore } from '../../stores/preferences.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore, PollType } from '../../stores/poll.ts'
+import { usePreferencesStore, ViewMode } from '../../stores/preferences.ts'
+import { useOptionsStore, Option } from '../../stores/options.ts'
+import { BoxType } from '../../Interfaces/interfaces.ts'
 
-export default {
-	name: 'VoteColumn',
-	components: {
-		ConfirmIcon,
-		UnconfirmIcon,
-		Counter,
-		OptionItem,
-		FlexSpacer,
-		VoteItem,
-		NcButton,
-		CalendarPeek,
-		OptionItemOwner,
+const pollStore = usePollStore()
+const preferencesStore = usePreferencesStore()
+const optionsStore = useOptionsStore()
+
+const props = defineProps({
+	option: {
+		type: Object as PropType<Option>,
+		default: undefined,
 	},
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined,
-		},
-		viewMode: {
-			type: String,
-			default: 'table-view',
-			validator(value) {
-				return ['table-view', 'list-view'].includes(value)
-			},
+	viewMode: {
+		type: String as PropType<ViewMode>,
+		default: ViewMode.TableView,
+		validator(value: ViewMode) {
+			return ['table-view', 'list-view'].includes(value)
 		},
 	},
+})
 
-	computed: {
-		...mapStores(usePollStore, usePreferencesStore, useSessionStore, useVotesStore, useOptionsStore),
+const componentClass = computed(() => {
+	const classList = ['vote-column']
+	if (props.option.locked) {
+		classList.push('locked')
+	}
 
-		componentClass() {
-			const classList = ['vote-column']
-			if (this.option.locked) {
-				classList.push('locked')
-			}
+	if (props.option.confirmed && pollStore.isClosed) {
+		classList.push('confirmed')
+	}
+	if (props.option.votes.currentUser) {
+		classList.push(props.option.votes.currentUser)
+	}
 
-			if (this.option.confirmed && this.pollStore.isClosed) {
-				classList.push('confirmed')
-			}
+	return classList
+})
 
-			classList.push(this.ownAnswer)
+const confirmButtonCaption = computed(() => props.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option'))
+const showCalendarPeek = computed(() => pollStore.type === PollType.Date && getCurrentUser() && preferencesStore.user.calendarPeek)
 
-			return classList
-		},
 
-		confirmButtonCaption() {
-			return this.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')
-		},
-
-		ownAnswer() {
-			return this.votesStore.getVote({
-				userId: this.sessionStore.currentUser.userId,
-				option: this.option,
-			}).answer
-		},
-
-		showCalendarPeek() {
-			return this.pollStore.type === 'datePoll' && getCurrentUser() && this.preferencesStore.calendarPeek
-		},
-	},
-}
 </script>
+
+<template>
+	<div :class="componentClass">
+		<OptionItem :option="option" :poll-type="pollStore.type" :display="pollStore.type === PollType.Date ? BoxType.Date : BoxType.Text" />
+
+		<Counter v-if="pollStore.permissions.seeResults"
+			:show-maybe="pollStore.configuration.allowMaybe"
+			:option="option" />
+
+		<CalendarPeek v-if="showCalendarPeek"
+			:focus-trap="false"
+			:option="option" />
+
+		<VoteItem v-for="(participant) in pollStore.safeParticipants"
+			:key="participant.userId"
+			:user-id="participant.userId"
+			:option="option" />
+
+		<OptionItemOwner v-if="optionsStore.proposalsExist"
+			:option="option"
+			:avatar-size="24"
+			class="owner" />
+
+		<FlexSpacer v-if="pollStore.type === PollType.Date && viewMode === ViewMode.ListView" />
+
+		<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="action confirm">
+			<NcButton :title="confirmButtonCaption"
+				:aria-label="confirmButtonCaption"
+				type="tertiary"
+				@click="optionsStore.confirm({option: props.option})">
+				<template #icon>
+					<UnconfirmIcon v-if="option.confirmed" :size="20" />
+					<ConfirmIcon v-else :size="20" />
+				</template>
+			</NcButton>
+		</div>
+	</div>
+</template>
 
 <style lang="scss">
 .vote-style-beta-510 .vote-column {

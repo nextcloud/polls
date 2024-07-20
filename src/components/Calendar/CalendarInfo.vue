@@ -3,6 +3,96 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+import moment from '@nextcloud/moment'
+import { computed, defineProps, PropType } from 'vue'
+import { Option } from '../../stores/options.ts'
+
+const props = defineProps(
+	{
+		calendarEvent: {
+			type: Object,
+			default: undefined,
+		},
+
+		option: {
+			type: Object as PropType<Option>,
+			default: undefined,
+		},
+	}
+)
+
+const calendarStyle = computed(() => ({
+		backgroundColor: props.calendarEvent.displayColor,
+		color: fontColor.value,
+	}))
+
+const fontColor = computed(() => {
+	if (props.calendarEvent.displayColor === 'transparent') {
+		return 'var(--color-main-text)'
+	}
+
+	const hex = props.calendarEvent.displayColor.replace(/#/, '')
+	const r = parseInt(hex.slice(0, 2), 16)
+	const g = parseInt(hex.slice(2, 4), 16)
+	const b = parseInt(hex.slice(4, 6), 16)
+
+	const l = [
+		0.299 * r,
+		0.587 * g,
+		0.114 * b,
+	].reduce((a, b) => a + b) / 255
+
+	return l > 0.5 ? '#222' : '#ddd'
+})
+
+const dayStart = computed(() => moment.unix(props.calendarEvent.start).format('ddd'))
+
+const dayEnd = computed(() => moment.unix(props.calendarEvent.end - 1).format('ddd'))
+
+const dayDisplay = computed(() => {
+	if (dayEnd.value === dayStart.value) {
+		return dayStart.value
+	}
+
+	return `${dayStart.value} - ${dayEnd.value}`
+})
+
+const timeStart = computed(() => moment.unix(props.calendarEvent.start).format('LT'))
+
+const timeEnd = computed(() => moment.unix(props.calendarEvent.end).format('LT'))
+
+const timeDisplay = computed(() => {
+	if (timeEnd.value === timeStart.value) {
+		return timeStart.value
+	}
+	return `${timeStart.value} - ${timeEnd.value}`
+})
+
+const showJustDays = computed(() => dayStart.value !== dayEnd.value || props.calendarEvent.allDay)
+
+const statusClass = computed(() => props.calendarEvent.status.toLowerCase())
+
+const conflictLevel = computed(() => {
+	if (props.calendarEvent.calendarKey === 0) {
+		return 'conflict-ignore'
+	}
+
+	// No conflict, if calendarEvent starts after end of option
+	if (props.calendarEvent.start >= props.option.timestamp + props.option.duration) {
+		return 'conflict-no'
+	}
+
+	// No conflict, if calendarEvent ends before option
+	if (props.calendarEvent.end <= props.option.timestamp) {
+		return 'conflict-no'
+	}
+
+	return 'conflict-yes'
+})
+
+</script>
+
 <template>
 	<div class="calendar-info"
 		:class="[conflictLevel, statusClass]"
@@ -15,113 +105,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-
-import moment from '@nextcloud/moment'
-export default {
-	name: 'CalendarInfo',
-
-	props: {
-		calendarEvent: {
-			type: Object,
-			default: undefined,
-		},
-
-		option: {
-			type: Object,
-			default: undefined,
-		},
-
-	},
-
-	computed: {
-		calendarStyle() {
-			return {
-				backgroundColor: this.calendarEvent.displayColor,
-				color: this.fontColor,
-			}
-		},
-
-		dayStart() {
-			return moment.unix(this.calendarEvent.start).format('ddd')
-		},
-
-		dayEnd() {
-			return moment.unix(this.calendarEvent.end - 1).format('ddd')
-		},
-
-		dayDisplay() {
-			if (this.dayEnd === this.dayStart) {
-				return this.dayStart
-			}
-
-			return `${this.dayStart} - ${this.dayEnd}`
-		},
-
-		timeStart() {
-			return moment.unix(this.calendarEvent.start).format('LT')
-		},
-
-		timeEnd() {
-			return moment.unix(this.calendarEvent.end).format('LT')
-		},
-
-		timeDisplay() {
-			if (this.timeEnd === this.timeStart) {
-				return this.timeStart
-			}
-			return `${this.timeStart} - ${this.timeEnd}`
-		},
-
-		showJustDays() {
-			return this.dayStart !== this.dayEnd || this.calendarEvent.allDay
-		},
-
-		statusClass() {
-			return this.calendarEvent.status.toLowerCase()
-		},
-
-		fontColor() {
-			if (this.calendarEvent.displayColor === 'transparent') {
-				return 'var(--color-main-text)'
-			}
-
-			const hex = this.calendarEvent.displayColor.replace(/#/, '')
-			const r = parseInt(hex.slice(0, 2), 16)
-			const g = parseInt(hex.slice(2, 4), 16)
-			const b = parseInt(hex.slice(4, 6), 16)
-
-			const l = [
-				0.299 * r,
-				0.587 * g,
-				0.114 * b,
-			].reduce((a, b) => a + b) / 255
-
-			return l > 0.5 ? '#222' : '#ddd'
-		},
-
-		conflictLevel() {
-			if (this.calendarEvent.calendarKey === 0) {
-				return 'conflict-ignore'
-			}
-
-			// No conflict, if calendarEvent starts after end of option
-			if (this.calendarEvent.start >= this.option.timestamp + this.option.duration) {
-				return 'conflict-no'
-			}
-
-			// No conflict, if calendarEvent ends before option
-			if (this.calendarEvent.end <= this.option.timestamp) {
-				return 'conflict-no'
-			}
-
-			return 'conflict-yes'
-		},
-	},
-}
-
-</script>
 
 <style lang="scss">
 

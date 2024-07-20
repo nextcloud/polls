@@ -3,44 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="create-dialog">
-		<ConfigBox :name="t('polls', 'Title')">
-			<template #icon>
-				<SpeakerIcon />
-			</template>
-			<InputDiv v-model="title"
-				focus
-				type="text"
-				:placeholder="t('polls', 'Enter Title')"
-				@submit="confirm" />
-		</ConfigBox>
-
-		<ConfigBox :name="t('polls', 'Poll type')">
-			<template #icon>
-				<CheckIcon />
-			</template>
-			<RadioGroupDiv v-model="pollType" :options="pollTypeOptions" />
-		</ConfigBox>
-
-		<div class="create-buttons">
-			<NcButton @click="cancel">
-				<template #default>
-					{{ t('polls', 'Cancel') }}
-				</template>
-			</NcButton>
-			<NcButton :disabled="titleEmpty"
-				type="primary"
-				@click="confirm">
-				<template #default>
-					{{ t('polls', 'Apply') }}
-				</template>
-			</NcButton>
-		</div>
-	</div>
-</template>
-
-<script setup>
+<script setup lang="ts">
 import { ref, computed, defineEmits } from 'vue'
 import { useRouter } from 'vue-router'
 import { showSuccess, showError } from '@nextcloud/dialogs'
@@ -85,6 +48,43 @@ const confirm = async () => {
 }
 
 </script>
+
+<template>
+	<div class="create-dialog">
+		<ConfigBox :name="t('polls', 'Title')">
+			<template #icon>
+				<SpeakerIcon />
+			</template>
+			<InputDiv v-model="title"
+				focus
+				type="text"
+				:placeholder="t('polls', 'Enter Title')"
+				@submit="confirm" />
+		</ConfigBox>
+
+		<ConfigBox :name="t('polls', 'Poll type')">
+			<template #icon>
+				<CheckIcon />
+			</template>
+			<RadioGroupDiv v-model="pollType" :options="pollTypeOptions" />
+		</ConfigBox>
+
+		<div class="create-buttons">
+			<NcButton @click="cancel">
+				<template #default>
+					{{ t('polls', 'Cancel') }}
+				</template>
+			</NcButton>
+			<NcButton :disabled="titleEmpty"
+				type="primary"
+				@click="confirm">
+				<template #default>
+					{{ t('polls', 'Apply') }}
+				</template>
+			</NcButton>
+		</div>
+	</div>
+</template>
 
 <style lang="css">
 .create-dialog {

@@ -20,7 +20,7 @@ enum ViewMode {
 	ListView = 'list-view',
 }
 
-type Router = {
+type Route = {
 	currentRoute: string
 	name: string
 	path: string
@@ -48,7 +48,7 @@ type Session = {
 	currentUser: User
 	sessionSettings: SessionSettings
 	viewModes: ViewMode[]
-	router: Router
+	route: Route
 	userStatus: UserStatus
 	share: Share | null
 }
@@ -119,7 +119,7 @@ export const useSessionStore = defineStore('session', {
 				loadingGroups: false
 			}
 		},
-		router: {
+		route: {
 			currentRoute: '',
 			name: '',
 			path: '',
@@ -170,7 +170,7 @@ export const useSessionStore = defineStore('session', {
 			let response = null
 
 			try {
-				if (this.router.name === 'publicVote') {
+				if (this.route.name === 'publicVote') {
 					response = await PublicAPI.getSession(this.router.params.token)
 				} else {
 					response = await SessionAPI.getSession()
@@ -180,7 +180,7 @@ export const useSessionStore = defineStore('session', {
 				if (error?.code === 'ERR_CANCELED') return
 	
 				this.$reset()
-				if (this.router.name === null) {
+				if (this.route.name === null) {
 					this.$reset()
 				} else {
 					throw error
@@ -197,10 +197,10 @@ export const useSessionStore = defineStore('session', {
 		},
 
 		setRouter(payload: RouteLocationNormalized) {
-			this.router.currentRoute = payload.fullPath
-			this.router.name = payload.name
-			this.router.path = payload.path
-			this.router.params = payload.params
+			this.route.currentRoute = payload.fullPath
+			this.route.name = payload.name
+			this.route.path = payload.path
+			this.route.params = payload.params
 		},
 	},
 })

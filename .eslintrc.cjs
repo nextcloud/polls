@@ -12,6 +12,11 @@ module.exports = {
 	],
 	rules: {
 		'arrow-body-style': 'error',
+		"jsdoc/require-jsdoc": ["error" | "warn", {
+			"publicOnly": {
+				"ancestorsOnly": true,
+			},
+		}],
 		'no-array-constructor': 'error',
 		'no-continue': 'error',
 		'no-else-return': ['error', { allowElseIf: false }],

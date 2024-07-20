@@ -3,39 +3,27 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<NcActions>
-		<NcActionCheckbox v-model="subscriptionStore.subscribed" :label="label" />
-	</NcActions>
-</template>
-
-<script>
-import { mapStores } from 'pinia'
+<script setup lang="ts">
+import { computed } from 'vue'
 import { NcActions, NcActionCheckbox } from '@nextcloud/vue'
 import { t } from '@nextcloud/l10n'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useShareStore } from '../../stores/share.ts'
 
-export default {
-	name: 'ActionSubscription',
+const subscriptionStore = useSubscriptionStore()
+const shareStore = useShareStore()
 
-	components: {
-		NcActions, NcActionCheckbox,
-	},
+const label = computed(() => shareStore.user.emailAddress
+	? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: shareStore.user.emailAddress })
+	: t('polls', 'Receive notification email on activity'))
 
-	computed: {
-		...mapStores(useSubscriptionStore, useShareStore),
-
-		label() {
-			if (this.shareStore.user.emailAddress) {
-				return t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress })
-			}
-			return t('polls', 'Receive notification email on activity')
-		},
-
-	},
-}
 </script>
+
+<template>
+	<NcActions>
+		<NcActionCheckbox v-model="subscriptionStore.subscribed" :label="label" />
+	</NcActions>
+</template>
 
 <style lang="css">
 	.subscription {

@@ -75,9 +75,10 @@ function handleScroll() {
  *
  */
 function loadPoll() {
-	setTimeout(() => {
+	console.log('loadPoll  upon route update')
+	// setTimeout(() => {
 		pollStore.load()
-	}, 500)
+	// }, 500)
 }
 
 
@@ -86,7 +87,7 @@ onMounted(() => {
 	emit('polls:transitions:off', 500)
 	scrollElement.value = document.getElementById('app-content-vue')
 	scrollElement.value.addEventListener('scroll', handleScroll)
-	Logger.debug('Poll view mounted', sessionStore.router)
+	Logger.debug('Poll view mounted', sessionStore.route)
 	loadPoll()
 })
 
@@ -97,6 +98,7 @@ onUnmounted(() => {
 })
 
 watch(() => route.params.id, () => {
+	console.log('Poll view route update')
     loadPoll()
   }
 )
