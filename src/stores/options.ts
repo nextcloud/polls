@@ -279,23 +279,21 @@ export const useOptionsStore = defineStore('options', {
 			}
 		},
 	
-		async reorder(payload: { options: Option[] }) {
+		async changeOrder(oldIndex: number, newIndex: number) {
 			const sessionStore = useSessionStore()
-			payload.options.forEach((item, i) => {
-				item.order = i + 1
-			})
-			this.list = payload.options
-	
+			
+			this.list.splice(newIndex, 0, this.list.splice(oldIndex, 1)[0]);
+
 			try {
-				const response = await OptionsAPI.reorderOptions(sessionStore.route.params.id, payload)
+				const response = await OptionsAPI.reorderOptions(sessionStore.route.params.id, this.list.map(({ id, text }) => ({ id, text })))
 				this.$patch({ options: response.data.options })
 			} catch (error) {
-				Logger.error('Error reordering option', { error, payload })
+				Logger.error('Error reordering option', { error, options: this.list, oldIndex, newIndex})
 				this.load()
 				throw error
 			}
 		},
-	
+		
 		async sequence(payload: { option: Option; sequence: Sequence }) {
 			try {
 				const response = await OptionsAPI.addOptionsSequence(
