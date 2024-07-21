@@ -7,7 +7,7 @@
 	import OptionsDateAdd from './OptionsDateAdd.vue'
 	import OptionsTextAdd from './OptionsTextAdd.vue'
 	import { t } from '@nextcloud/l10n'
-	import { usePollStore } from '../../stores/poll.ts'
+	import { usePollStore, PollType } from '../../stores/poll.ts'
 
 	const pollStore = usePollStore()
 </script>
@@ -16,12 +16,12 @@
 	<div class="option-proposals">
 		<!-- <div>{{ proposalsStatus }}</div> -->
 		<div v-if="pollStore.isProposalOpen" class="option-proposals__add-proposal">
-			<OptionsDateAdd v-if="pollStore.type === 'datePoll'"
+			<OptionsDateAdd v-if="pollStore.type === PollType.Date"
 				:caption="t('polls', 'Propose a date')"
 				class="add-date-proposal"
 				show-caption
 				primary />
-			<OptionsTextAdd v-if="pollStore.type === 'textPoll'" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
+			<OptionsTextAdd v-if="pollStore.type === PollType.Text" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
 		</div>
 	</div>
 </template>

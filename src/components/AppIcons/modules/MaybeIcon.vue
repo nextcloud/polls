@@ -4,24 +4,24 @@
 -->
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+	import { defineProps } from 'vue'
 
-const props = defineProps(
-	{ 
-		title: { 
-			type: String, 
-			default: 'Maybe', 
-		}, 
-		fillColor: { 
-			type: String, 
-			default: '#ffc107', 
-		}, 
-		size: { 
-			type: Number, 
-			default: 24, 
-		}, 
-	} 
-)
+	const props = defineProps(
+		{ 
+			title: { 
+				type: String, 
+				default: 'Maybe', 
+			}, 
+			fillColor: { 
+				type: String, 
+				default: '#ffc107', 
+			}, 
+			size: { 
+				type: Number, 
+				default: 24, 
+			}, 
+		} 
+	)
 </script>
 
 <template>

@@ -1,13 +1,13 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2021 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { InvalidJSON } from '../Exceptions/Exceptions.js'
 import { PollsAPI, PublicAPI } from '../Api/index.js'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 import { mapStores } from 'pinia'
 import { useSessionStore } from '../stores/session.ts'
+import { UpdateType } from '../Types/index.ts'
 
 const SLEEP_TIMEOUT_DEFAULT = 30
 const MAX_TRIES = 5
@@ -28,7 +28,7 @@ export const watchPolls = {
 		...mapStores(useSessionStore),
 
 		watchDisabled() {
-			return this.sessionStore.appSettings.updateType === 'noPolling'
+			return this.sessionStore.appSettings.updateType === UpdateType.NoPolling
 				|| this.retryCounter === null
 				|| this.retryCounter >= MAX_TRIES
 		},
@@ -59,7 +59,7 @@ export const watchPolls = {
 					return
 				}
 
-				// sleep if request was invalid or polling is set to "peeriodicPolling"
+				// sleep if request was invalid or polling is set to "periodicPolling"
 				if (this.watchDisabled || this.retryCounter) {
 					await this.sleep()
 					Logger.debug(`Continue ${this.sessionStore.appSettings.updateType} after sleep`)

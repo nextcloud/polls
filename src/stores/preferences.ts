@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,14 +5,14 @@
 
 import { defineStore } from 'pinia'
 import { CalendarAPI, UserSettingsAPI } from '../Api/index.js'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 
 export enum ViewMode {
 	TableView = 'table-view',
 	ListView = 'list-view',
 }
 
-type UserPreferences = {
+export type UserPreferences = {
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
 	calendarPeek: boolean

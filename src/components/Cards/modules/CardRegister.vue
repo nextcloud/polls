@@ -4,24 +4,24 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { CardDiv } from '../../Base/index.js'
-import ActionRegister from '../../Actions/modules/ActionRegister.vue'
-import { t } from '@nextcloud/l10n'
-import { useShareStore } from '../../../stores/share.ts'
+	import { computed } from 'vue'
+	import { CardDiv } from '../../Base/index.js'
+	import ActionRegister from '../../Actions/modules/ActionRegister.vue'
+	import { t } from '@nextcloud/l10n'
+	import { useShareStore } from '../../../stores/share.ts'
 
-const shareStore = useShareStore()
-const cardType = 'info'
+	const shareStore = useShareStore()
+	const cardType = 'info'
 
-const registrationInvitationText = computed(() => {
-	if (shareStore.publicPollEmail === 'mandatory') {
-		return t('polls', 'To participate, register with your email address and a name.')
-	}
-	if (shareStore.publicPollEmail === 'optional') {
-		return t('polls', 'To participate, register a name and optionally with your email address.')
-	}
-	return t('polls', 'To participate, register with a name.')
-})
+	const registrationInvitationText = computed(() => {
+		if (shareStore.publicPollEmail === 'mandatory') {
+			return t('polls', 'To participate, register with your email address and a name.')
+		}
+		if (shareStore.publicPollEmail === 'optional') {
+			return t('polls', 'To participate, register a name and optionally with your email address.')
+		}
+		return t('polls', 'To participate, register with a name.')
+	})
 
 </script>
 

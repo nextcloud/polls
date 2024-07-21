@@ -4,37 +4,37 @@
 -->
 
 <script setup lang="ts">
-import { showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton } from '@nextcloud/vue'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { useSharesStore } from '../../stores/shares.ts'
-import { VirtualUserItemType } from '../../Types/index.ts'
+	import { showError } from '@nextcloud/dialogs'
+	import { NcActions, NcActionButton } from '@nextcloud/vue'
+	import PlusIcon from 'vue-material-design-icons/Plus.vue'
+	import { t } from '@nextcloud/l10n'
+	import UserItem from '../User/UserItem.vue'
+	import { useSharesStore } from '../../stores/shares.ts'
+	import { VirtualUserItemType } from '../../Types/index.ts'
 
-const sharesStore = useSharesStore()
+	const sharesStore = useSharesStore()
 
-const userItemProps = {
-	label: t('polls', 'Add a new public link'),
-	type: VirtualUserItemType.AddPublicLink,
-}
-
-const user = {
-	user: {
-		type: 'public',
-		userId: '',
-		displayName: '',
-		emailAddress: '',
-	},
-}
-
-async function addPublicShare() {
-	try {
-		await sharesStore.add({ user })
-	} catch {
-		showError(t('polls', 'Error adding public link'))
+	const userItemProps = {
+		label: t('polls', 'Add a new public link'),
+		type: VirtualUserItemType.AddPublicLink,
 	}
-}
+
+	const user = {
+		user: {
+			type: 'public',
+			userId: '',
+			displayName: '',
+			emailAddress: '',
+		},
+	}
+
+	async function addPublicShare() {
+		try {
+			await sharesStore.add(user)
+		} catch {
+			showError(t('polls', 'Error adding public link'))
+		}
+	}
 
 </script>
 

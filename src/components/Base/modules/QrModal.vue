@@ -4,48 +4,45 @@
 -->
 
 <script setup lang="ts">
-import QRCode from 'qrcode'
-import { Logger } from '../../../helpers/index.js'
-import { onMounted, ref } from 'vue';
+	import QRCode from 'qrcode'
+	import { Logger } from '../../../helpers/index.ts'
+	import { onMounted, ref } from 'vue';
 
-const props = defineProps({
-	name: {
-		type: String,
-		default: '',
-	},
-	subTitle: {
-		type: String,
-		default: '',
-	},
-	description: {
-		type: String,
-		default: '',
-	},
-	encodeText: {
-		type: String,
-		default: '',
-	},
-})
+	const props = defineProps({
+		name: {
+			type: String,
+			default: '',
+		},
+		subTitle: {
+			type: String,
+			default: '',
+		},
+		description: {
+			type: String,
+			default: '',
+		},
+		encodeText: {
+			type: String,
+			default: '',
+		},
+	})
 
-const qrUri = ref({
-	type: String,
-	default: '',
-})
+	const qrUri = ref<string>('')
 
-/**
- * Generate QR code
- */
-async function generateQr() {
-	try {
-		qrUri.value = await QRCode.toDataURL(props.encodeText)
-	} catch (error) {
-		Logger.error('Error on generating QR code', { error: error.message })
+	/**
+	 * Generate QR code
+	 */
+	async function generateQr() {
+		try {
+			qrUri.value = await QRCode.toDataURL(props.encodeText)
+		} catch (error) {
+			Logger.error('Error on generating QR code', { error: error.message })
+		}
 	}
-}
 
-onMounted(() => {
-	generateQr()
-})
+	onMounted(() => {
+		generateQr()
+	})
 
 </script>
 

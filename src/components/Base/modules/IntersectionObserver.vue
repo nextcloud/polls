@@ -4,31 +4,32 @@
 -->
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+	import { onBeforeUnmount, onMounted, ref } from 'vue'
 
-const inViewport = ref(false)
-const observer = ref(null)
-const observerTarget = ref(null)
+	const inViewport = ref(false)
+	const observer = ref(null)
 
-onMounted(() => {
-	const observer = new IntersectionObserver((entries) => {
-		entries.forEach((entry) => {
-			if (entry.isIntersecting) {
-				inViewport.value = true
-			} else {
-				inViewport.value = false
-			}
+	const observerTarget = ref<Element>(null)
+
+	onMounted(() => {
+		const observer = new IntersectionObserver((entries) => {
+			entries.forEach((entry) => {
+				if (entry.isIntersecting) {
+					inViewport.value = true
+				} else {
+					inViewport.value = false
+				}
+			})
 		})
+
+		observer.observe(observerTarget.value)
 	})
 
-	observer.observe(observerTarget)
-})
-
-onBeforeUnmount(() => {
-	if (observer.value) {
-		observer.value.disconnect()
-	}
-})
+	onBeforeUnmount(() => {
+		if (observer.value) {
+			observer.value.disconnect()
+		}
+	})
 </script>
 
 <template>

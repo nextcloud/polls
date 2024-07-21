@@ -5,10 +5,10 @@
 
 <script setup lang="ts">
 
-import ActivityItem from './ActivityItem.vue'
-import { useActivityStore } from '../../stores/activity.ts';
+	import ActivityItem from './ActivityItem.vue'
+	import { useActivityStore } from '../../stores/activity.ts';
 
-const activityStore = useActivityStore()
+	const activityStore = useActivityStore()
 </script>
 
 <template>

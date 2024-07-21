@@ -4,67 +4,65 @@
 -->
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
+	import { onMounted, onUnmounted } from 'vue'
+	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import { t } from '@nextcloud/l10n'
 
-import { useSessionStore } from '../../stores/session.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { usePollStore } from '../../stores/poll.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
+	import { PollType, usePollStore } from '../../stores/poll.ts'
 
-import { ConfigBox } from '../Base/index.js'
-import OptionsDate from '../Options/OptionsDate.vue'
-import OptionsDateShift from '../Options/OptionsDateShift.vue'
-import OptionsText from '../Options/OptionsText.vue'
-import ConfigProposals from '../Configuration/ConfigProposals.vue'
-import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
-import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
-import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
-import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
-import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
+	import { ConfigBox } from '../Base/index.js'
+	import OptionsDate from '../Options/OptionsDate.vue'
+	import OptionsDateShift from '../Options/OptionsDateShift.vue'
+	import OptionsText from '../Options/OptionsText.vue'
+	import ConfigProposals from '../Configuration/ConfigProposals.vue'
+	import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
+	import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
+	import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
+	import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
+	import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 
-const sessionStore = useSessionStore()
-const optionsStore = useOptionsStore()
-const pollStore = usePollStore()
+	const optionsStore = useOptionsStore()
+	const pollStore = usePollStore()
 
-const configBoxProps = {
-	delegatedAdminHint: {
-		name: t('polls', 'As an admin you may edit this poll'),
-	},
-	allowProposals: {
-		name: t('polls', 'Allow proposals from participants'),
-	},
-	shiftDate: {
-		name: t('polls', 'Shift all date options'),
-	},
-	dateOptions: {
-		name: t('polls', 'Available Options'),
-	},
-	textOptions: {
-		name: t('polls', 'Available Options'),
-	},
-}
+	const configBoxProps = {
+		delegatedAdminHint: {
+			name: t('polls', 'As an admin you may edit this poll'),
+		},
+		allowProposals: {
+			name: t('polls', 'Allow proposals from participants'),
+		},
+		shiftDate: {
+			name: t('polls', 'Shift all date options'),
+		},
+		dateOptions: {
+			name: t('polls', 'Available Options'),
+		},
+		textOptions: {
+			name: t('polls', 'Available Options'),
+		},
+	}
 
-const optionAddDatesProps = {
-	caption: t('polls', 'Add a date'),
-	showCaption: true,
-	primary: true,
-}
+	const optionAddDatesProps = {
+		caption: t('polls', 'Add a date'),
+		showCaption: true,
+		primary: true,
+	}
 
-onMounted(() => {
-	subscribe('polls:options:update', () => optionsStore.load())
-})
+	onMounted(() => {
+		subscribe('polls:options:update', () => optionsStore.load())
+	})
 
-onUnmounted(() => {
-	unsubscribe('polls:options:update', () => optionsStore.load())
-})
+	onUnmounted(() => {
+		unsubscribe('polls:options:update', () => optionsStore.load())
+	})
 
 </script>
 
 <template>
 	<div class="side-bar-tab-options">
-		<ConfigBox v-if="!sessionStore.currentUser.isOwner"
+		<ConfigBox v-if="!pollStore.currentUserStatus.isOwner"
 			v-bind="configBoxProps.delegatedAdminHint" />
 		<ConfigBox v-bind="configBoxProps.allowProposals">
 			<template #icon>
@@ -73,14 +71,14 @@ onUnmounted(() => {
 			<ConfigProposals />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollStore.type === 'datePoll' && optionsStore.list.length && !pollStore.isClosed" v-bind="configBoxProps.shiftDate">
+		<ConfigBox v-if="pollStore.type === PollType.Date && optionsStore.list.length && !pollStore.isClosed" v-bind="configBoxProps.shiftDate">
 			<template #icon>
 				<ShiftDateIcon />
 			</template>
 			<OptionsDateShift />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollStore.type === 'datePoll'" v-bind="configBoxProps.dateOptions">
+		<ConfigBox v-if="pollStore.type === PollType.Date" v-bind="configBoxProps.dateOptions">
 			<template #icon>
 				<DateOptionsIcon />
 			</template>
@@ -92,7 +90,7 @@ onUnmounted(() => {
 			</template>
 		</ConfigBox>
 
-		<ConfigBox v-if="pollStore.type === 'textPoll'" v-bind="configBoxProps.textOptions">
+		<ConfigBox v-if="pollStore.type === PollType.Text" v-bind="configBoxProps.textOptions">
 			<template #icon>
 				<TextOptionsIcon />
 			</template>

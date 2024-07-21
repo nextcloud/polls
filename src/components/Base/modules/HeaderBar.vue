@@ -4,16 +4,16 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+	import { ref } from 'vue'
 
-const clamped = ref(true)
+	const clamped = ref(true)
 
-/**
- * Toggles the clamped state
- */
-function toggleClamp() {
-	clamped.value = !clamped.value
-}
+	/**
+	 * Toggles the clamped state
+	 */
+	function toggleClamp() {
+		clamped.value = !clamped.value
+	}
 
 </script>
 

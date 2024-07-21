@@ -4,33 +4,33 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
-import ComboTable from '../components/Combo/ComboTable.vue'
-import { ActionToggleSidebar } from '../components/Actions/index.js'
-import { HeaderBar } from '../components/Base/index.js'
-import { PollsAppIcon } from '../components/AppIcons/index.js'
-import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
-import { t } from '@nextcloud/l10n'
-import { useComboStore } from '../stores/combo.ts'
+	import { ref, onMounted } from 'vue'
+	import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+	import ComboTable from '../components/Combo/ComboTable.vue'
+	import { ActionToggleSidebar } from '../components/Actions/index.js'
+	import { HeaderBar } from '../components/Base/index.js'
+	import { PollsAppIcon } from '../components/AppIcons/index.js'
+	import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+	import { t } from '@nextcloud/l10n'
+	import { useComboStore } from '../stores/combo.ts'
 
-const comboStore = useComboStore()
-const isLoading = ref(false)
-const title = t('polls', 'Combined polls')
-const description = t('polls', 'Combine multiple date polls in a single view')
+	const comboStore = useComboStore()
+	const isLoading = ref(false)
+	const title = t('polls', 'Combined polls')
+	const description = t('polls', 'Combine multiple date polls in a single view')
 
-// watch: {
-// 	'comboStore.pollCombo'() {
-// 		this.settings.setPollCombo({ pollCombo: this.comboStore.pollCombo })
-// 	},
-// 	'settings.user.pollCombo'() {
-// 		this.comboStore.verifyPollsFromSettings()
-// 	},
-// },
+	// watch: {
+	// 	'comboStore.pollCombo'() {
+	// 		this.settings.setPollCombo({ pollCombo: this.comboStore.pollCombo })
+	// 	},
+	// 	'settings.user.pollCombo'() {
+	// 		this.comboStore.verifyPollsFromSettings()
+	// 	},
+	// },
 
-onMounted(() => {
-	comboStore.verifyPollsFromSettings()
-})
+	onMounted(() => {
+		comboStore.verifyPollsFromSettings()
+	})
 
 </script>
 

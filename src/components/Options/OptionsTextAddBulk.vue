@@ -4,42 +4,42 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { showError, showSuccess } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
+	import { ref } from 'vue'
+	import { showError, showSuccess } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+	import { NcActions, NcActionButton, NcButton, NcModal } from '@nextcloud/vue'
 
-import { useOptionsStore } from '../../stores/options.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
 
-import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
+	import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 
-const optionsStore = useOptionsStore()
+	const optionsStore = useOptionsStore()
 
-const newPollTexts = ref('')
-const showModal = ref(false)
+	const newPollTexts = ref('')
+	const showModal = ref(false)
 
-const props = defineProps({
-	placeholder: {
-		type: String,
-		default: t('polls', 'Add options list (one option per line)'),
-	},
-	caption: {
-		type: String,
-		default: t('polls', 'Paste option list'),
-	},
-})
+	const props = defineProps({
+		placeholder: {
+			type: String,
+			default: t('polls', 'Add options list (one option per line)'),
+		},
+		caption: {
+			type: String,
+			default: t('polls', 'Paste option list'),
+		},
+	})
 
-async function addOptionsList() {
-	if (newPollTexts.value) {
-		try {
-			await optionsStore.addBulk({ text: newPollTexts.value })
-			showSuccess(t('polls', 'Options added'))
-			newPollTexts.value = ''
-		} catch (error) {
-			showError(t('polls', 'Error adding options', { optionText: newPollTexts.value }))
+	async function addOptionsList() {
+		if (newPollTexts.value) {
+			try {
+				await optionsStore.addBulk({ text: newPollTexts.value })
+				showSuccess(t('polls', 'Options added'))
+				newPollTexts.value = ''
+			} catch (error) {
+				showError(t('polls', 'Error adding options', { optionText: newPollTexts.value }))
+			}
 		}
 	}
-}
 </script>
 
 <template>

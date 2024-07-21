@@ -4,53 +4,54 @@
 -->
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed } from 'vue'
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
-import { MaybeIcon } from '../AppIcons/index.js'
+	import { defineProps, defineEmits, computed } from 'vue'
+	import CheckIcon from 'vue-material-design-icons/Check.vue'
+	import CloseIcon from 'vue-material-design-icons/Close.vue'
+	import { MaybeIcon } from '../AppIcons/index.js'
+	import { Answer } from '../../Types/index.ts'
 
-const props = defineProps({
-	answer: {
-		type: String,
-		default: '',
-	},
-	active: {
-		type: Boolean,
-		default: false,
-	},
-})
+	const props = defineProps({
+		answer: {
+			type: String,
+			default: '',
+		},
+		active: {
+			type: Boolean,
+			default: false,
+		},
+	})
 
-const emit = defineEmits(['click'])
-const iconSize = 31
-const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue('--color-error')
-const colorCodeYes = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
-const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyValue('--color-warning')
+	const emit = defineEmits(['click'])
+	const iconSize = 31
+	const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue('--color-error')
+	const colorCodeYes = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
+	const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyValue('--color-warning')
 
-const foregroundColor = computed(() => {
-	if (props.answer === 'yes') {
-		return colorCodeYes
+	const foregroundColor = computed(() => {
+		if (props.answer === Answer.Yes) {
+			return colorCodeYes
+		}
+		if (props.answer === Answer.Maybe) {
+			return colorCodeMaybe
+		}
+		return colorCodeNo
+	})
+
+	/**
+	 *
+	 */
+	function onClick() {
+		if (props.active) {
+			emit('click')
+		}
 	}
-	if (props.answer === 'maybe') {
-		return colorCodeMaybe
-	}
-	return colorCodeNo
-})
-
-/**
- *
- */
-function onClick() {
-	if (props.active) {
-		emit('click')
-	}
-}
 </script>
 
 <template>
 	<div :class="['vote-indicator', active]" @click="onClick()">
-		<MaybeIcon v-if="answer==='maybe'" :size="iconSize" />
-		<CheckIcon v-if="answer==='yes'" :fill-color="foregroundColor" :size="iconSize" />
-		<CloseIcon v-if="answer==='no'" :fill-color="foregroundColor" :size="iconSize" />
+		<MaybeIcon v-if="answer === Answer.Maybe" :size="iconSize" />
+		<CheckIcon v-if="answer === Answer.Yes" :fill-color="foregroundColor" :size="iconSize" />
+		<CloseIcon v-if="answer === Answer.No" :fill-color="foregroundColor" :size="iconSize" />
 	</div>
 </template>
 

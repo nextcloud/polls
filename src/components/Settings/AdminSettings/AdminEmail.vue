@@ -4,26 +4,26 @@
 -->
 
 <script setup>
-import { computed, ref } from 'vue'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { marked } from 'marked'
-import { gfmHeadingId } from 'marked-gfm-heading-id'
-import DOMPurify from 'dompurify'
-import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
-import { t } from '@nextcloud/l10n'
-import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+	import { computed, ref } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { marked } from 'marked'
+	import { gfmHeadingId } from 'marked-gfm-heading-id'
+	import DOMPurify from 'dompurify'
+	import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
+	import { t } from '@nextcloud/l10n'
+	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-const appSettingsStore = useAppSettingsStore()
+	const appSettingsStore = useAppSettingsStore()
 
-const markedPrefix = {
-	prefix: 'disclaimer-',
-}
+	const markedPrefix = {
+		prefix: 'disclaimer-',
+	}
 
-const preview = ref(false)
-const markedDisclaimer = computed(() => {
-	marked.use(gfmHeadingId(markedPrefix))
-	return DOMPurify.sanitize(marked.parse(appSettingsStore.disclaimer))
-})
+	const preview = ref(false)
+	const markedDisclaimer = computed(() => {
+		marked.use(gfmHeadingId(markedPrefix))
+		return DOMPurify.sanitize(marked.parse(appSettingsStore.disclaimer))
+	})
 
 </script>
 

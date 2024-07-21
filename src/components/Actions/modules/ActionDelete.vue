@@ -4,93 +4,93 @@
 -->
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, computed } from 'vue'
-import { NcButton } from '@nextcloud/vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
-import LockIcon from 'vue-material-design-icons/Lock.vue'
-import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
-import { t, n } from '@nextcloud/l10n'
+	import { defineProps, defineEmits, ref, computed } from 'vue'
+	import { NcButton } from '@nextcloud/vue'
+	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+	import LockIcon from 'vue-material-design-icons/Lock.vue'
+	import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
+	import { t, n } from '@nextcloud/l10n'
 
-const props = defineProps({
-	timeout: {
-		type: Number,
-		default: 4,
-	},
-	name: {
-		type: String,
-		default: t('polls', 'Delete'),
-	},
-	iconSize: {
-		type: Number,
-		default: 20,
-	},
-	restore: {
-		type: Boolean,
-		default: false,
-	},
-	lock: {
-		type: Boolean,
-		default: false,
-	},
-})
+	const props = defineProps({
+		timeout: {
+			type: Number,
+			default: 4,
+		},
+		name: {
+			type: String,
+			default: t('polls', 'Delete'),
+		},
+		iconSize: {
+			type: Number,
+			default: 20,
+		},
+		restore: {
+			type: Boolean,
+			default: false,
+		},
+		lock: {
+			type: Boolean,
+			default: false,
+		},
+	})
 
-const deleteInterval = ref(null)
-const deleteTimeout = ref(null)
-const countdown = ref(4)
+	const deleteInterval = ref(null)
+	const deleteTimeout = ref(null)
+	const countdown = ref(4)
 
-const countdownTitle = computed(() => n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', countdown.value, { countdown: countdown.value }))
+	const countdownTitle = computed(() => n('polls', 'Deleting in {countdown} second', 'Deleting in {countdown} seconds', countdown.value, { countdown: countdown.value }))
 
-const computedTitle = computed(() => deleteTimeout.value ? countdownTitle.value : props.name)
+	const computedTitle = computed(() => deleteTimeout.value ? countdownTitle.value : props.name)
 
-const emit = defineEmits(['delete', 'restore'])
+	const emit = defineEmits(['delete', 'restore'])
 
-/**
- *
- */
-function deleteItem() {
-	// delete immediately
-	if (props.timeout === 0) {
-		emit('delete')
-		return
+	/**
+	 *
+	 */
+	function deleteItem() {
+		// delete immediately
+		if (props.timeout === 0) {
+			emit('delete')
+			return
+		}
+
+		countdown.value = props.timeout
+		deleteInterval.value = setInterval(() => {
+			countdown.value -= 1
+			if (countdown.value < 0) {
+				countdown.value = 0
+			}
+		}, 1000)
+		deleteTimeout.value = setTimeout(() => {
+			emit('delete')
+			deleteTimeout.value = null
+			deleteInterval.value = null
+			countdown.value = props.timeout
+		}, props.timeout * 1000)
 	}
 
-	countdown.value = props.timeout
-	deleteInterval.value = setInterval(() => {
-		countdown.value -= 1
-		if (countdown.value < 0) {
-			countdown.value = 0
-		}
-	}, 1000)
-	deleteTimeout.value = setTimeout(() => {
-		emit('delete')
+	/**
+	 *
+	 */
+	function cancelDelete() {
+		clearTimeout(deleteTimeout.value)
+		clearInterval(deleteInterval.value)
 		deleteTimeout.value = null
 		deleteInterval.value = null
 		countdown.value = props.timeout
-	}, props.timeout * 1000)
-}
+	}
 
-/**
- *
- */
-function cancelDelete() {
-	clearTimeout(deleteTimeout.value)
-	clearInterval(deleteInterval.value)
-	deleteTimeout.value = null
-	deleteInterval.value = null
-	countdown.value = props.timeout
-}
-
-/**
- *
- */
-function restoreItem() {
-	clearTimeout(deleteTimeout.value)
-	clearInterval(deleteInterval.value)
-	deleteTimeout.value = null
-	deleteInterval.value = null
-	emit('restore')
-}
+	/**
+	 *
+	 */
+	function restoreItem() {
+		clearTimeout(deleteTimeout.value)
+		clearInterval(deleteInterval.value)
+		deleteTimeout.value = null
+		deleteInterval.value = null
+		emit('restore')
+	}
 
 </script>
 

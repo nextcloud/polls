@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -9,18 +8,13 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { PublicAPI, SessionAPI } from '../Api/index.js'
 import { User, AppPermissions, UserType } from '../Types/index.ts'
 import { AppSettings, UpdateType } from './appSettings.ts'
-import { usePreferencesStore } from './preferences.ts'
+import { usePreferencesStore, ViewMode, SessionSettings } from './preferences.ts'
 import { FilterType } from './polls.ts'
 import { PollPermissions, usePollStore } from './poll.ts'
 import { Share } from './share.ts'
 import { RouteLocationNormalized } from 'vue-router'
 
-enum ViewMode {
-	TableView = 'table-view',
-	ListView = 'list-view',
-}
-
-type Route = {
+export type Route = {
 	currentRoute: string
 	name: string
 	path: string
@@ -31,17 +25,12 @@ type Route = {
 	}
 }
 
-export type SessionSettings = {
-	manualViewDatePoll: '' | ViewMode
-	manualViewTextPoll: '' | ViewMode
-}
-
 export type UserStatus = { 
 	isLoggedin: boolean
 	isAdmin: boolean
 }
 
-type Session = {
+export type Session = {
 	token: string
 	appPermissions: AppPermissions
 	appSettings: AppSettings

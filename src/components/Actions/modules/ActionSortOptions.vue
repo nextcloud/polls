@@ -4,29 +4,29 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { NcButton } from '@nextcloud/vue'
-import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
-import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
-import { t } from '@nextcloud/l10n'
-import { useOptionsStore } from '../../../stores/options.ts'
-import { usePollStore, PollType } from '../../../stores/poll.ts'
+	import { computed } from 'vue'
+	import { NcButton } from '@nextcloud/vue'
+	import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
+	import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
+	import { t } from '@nextcloud/l10n'
+	import { useOptionsStore } from '../../../stores/options.ts'
+	import { usePollStore, PollType } from '../../../stores/poll.ts'
 
-const pollStore = usePollStore()
-const optionsStore = useOptionsStore()
+	const pollStore = usePollStore()
+	const optionsStore = useOptionsStore()
 
-const caption = computed(() => {
-	if (optionsStore.ranked && pollStore.type === PollType.Date) {
-		return t('polls', 'Date order')
-	}
+	const caption = computed(() => {
+		if (optionsStore.ranked && pollStore.type === PollType.Date) {
+			return t('polls', 'Date order')
+		}
 
-	if (optionsStore.ranked && pollStore.type === PollType.Text) {
-		return t('polls', 'Original order')
-	}
+		if (optionsStore.ranked && pollStore.type === PollType.Text) {
+			return t('polls', 'Original order')
+		}
 
-	return t('polls', 'Ranked order')
-})
+		return t('polls', 'Ranked order')
+	})
 
 </script>
 

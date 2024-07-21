@@ -4,28 +4,28 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { showError } from '@nextcloud/dialogs'
-import { InputDiv } from '../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { useSessionStore } from '../../stores/session.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
+	import { ref } from 'vue'
+	import { showError } from '@nextcloud/dialogs'
+	import { InputDiv } from '../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import UserItem from '../User/UserItem.vue'
+	import { useSessionStore } from '../../stores/session.ts'
+	import { useCommentsStore } from '../../stores/comments.ts'
 
-const commentsStore = useCommentsStore()
-const sessionStore = useSessionStore()
-const comment = ref('')
+	const commentsStore = useCommentsStore()
+	const sessionStore = useSessionStore()
+	const comment = ref('')
 
-async function writeComment() {
-	if (comment.value) {
-		try {
-			await commentsStore.add({ message: comment.value })
-			comment.value = ''
-		} catch {
-			showError(t('polls', 'Error while saving comment'))
+	async function writeComment() {
+		if (comment.value) {
+			try {
+				await commentsStore.add({ message: comment.value })
+				comment.value = ''
+			} catch {
+				showError(t('polls', 'Error while saving comment'))
+			}
 		}
 	}
-}
 
 </script>
 

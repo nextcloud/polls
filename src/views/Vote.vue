@@ -4,104 +4,104 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
+	import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
+	import { useRoute } from 'vue-router'
+	import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import { t } from '@nextcloud/l10n'
 
-import { usePollStore } from '../stores/poll.ts'
-import { useSessionStore } from '../stores/session.ts'
-import { useOptionsStore } from '../stores/options.ts'
-import { usePreferencesStore } from '../stores/preferences.ts'
+	import { usePollStore, PollType } from '../stores/poll.ts'
+	import { useSessionStore } from '../stores/session.ts'
+	import { useOptionsStore } from '../stores/options.ts'
+	import { usePreferencesStore } from '../stores/preferences.ts'
 
-import { useHandleScroll } from '../composables/handleScroll.ts'
-import { Logger } from '../helpers/index.js'
+	import { useHandleScroll } from '../composables/handleScroll.ts'
+	import { Logger } from '../helpers/index.ts'
 
-import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
-import { HeaderBar } from '../components/Base/index.js'
-import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
-import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
-import PollInfoLine from '../components/Poll/PollInfoLine.vue'
-import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
-import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
-import VoteTable from '../components/VoteTable/VoteTable.vue'
-import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
+	import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
+	import { HeaderBar } from '../components/Base/index.js'
+	import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
+	import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
+	import PollInfoLine from '../components/Poll/PollInfoLine.vue'
+	import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
+	import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+	import VoteTable from '../components/VoteTable/VoteTable.vue'
+	import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
 
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
-const pollStore = usePollStore()
-const sessionStore = useSessionStore()
-const optionsStore = useOptionsStore()
-const preferencesStore = usePreferencesStore()
+	const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
+	const optionsStore = useOptionsStore()
+	const preferencesStore = usePreferencesStore()
 
-const { scrolled } = useHandleScroll()
+	const { scrolled } = useHandleScroll()
 
-const isLoading = ref(false)
-const scrollElement = ref(null)
+	const isLoading = ref(false)
+	const scrollElement = ref(null)
 
-const route = useRoute()
+	const route = useRoute()
 
-const emptyContentProps = computed(() => {
-	if (pollStore.status.countOptions > 0) {
+	const emptyContentProps = computed(() => {
+		if (pollStore.status.countOptions > 0) {
+			return {
+				name: t('polls', 'We are sorry, but there are no more vote options available'),
+				description: t('polls', 'All options are booked up.'),
+			}
+		}
+
 		return {
-			name: t('polls', 'We are sorry, but there are no more vote options available'),
-			description: t('polls', 'All options are booked up.'),
+			name: t('polls', 'No vote options available'),
+			description: sessionStore.pollPermissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
+		}
+	})
+
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	const windowTitle = computed(() => `${t('polls', 'Polls')} - ${pollStore.configuration.title}`)
+
+	/**
+	 *
+	 */
+	function handleScroll() {
+		if (scrollElement.value.scrollTop > 20) {
+			scrolled.value = true
+		} else {
+			scrolled.value = false
 		}
 	}
 
-	return {
-		name: t('polls', 'No vote options available'),
-		description: sessionStore.pollPermissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
-	}
-})
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const windowTitle = computed(() => `${t('polls', 'Polls')} - ${pollStore.configuration.title}`)
-
-/**
- *
- */
-function handleScroll() {
-	if (scrollElement.value.scrollTop > 20) {
-		scrolled.value = true
-	} else {
-		scrolled.value = false
-	}
-}
-
-/**
- *
- */
-function loadPoll() {
-	console.log('loadPoll  upon route update')
-	// setTimeout(() => {
+	/**
+	 *
+	 */
+	function loadPoll() {
+		console.log('loadPoll  upon route update')
+		// setTimeout(() => {
 		pollStore.load()
 	// }, 500)
-}
+	}
 
 
-onMounted(() => {
-	subscribe('polls:poll:load', () => pollStore.load())
-	emit('polls:transitions:off', 500)
-	scrollElement.value = document.getElementById('app-content-vue')
-	scrollElement.value.addEventListener('scroll', handleScroll)
-	Logger.debug('Poll view mounted', sessionStore.route)
-	loadPoll()
-})
+	onMounted(() => {
+		subscribe('polls:poll:load', () => pollStore.load())
+		emit('polls:transitions:off', 500)
+		scrollElement.value = document.getElementById('app-content-vue')
+		scrollElement.value.addEventListener('scroll', handleScroll)
+		Logger.debug('Poll view mounted', sessionStore.route)
+		loadPoll()
+	})
 
-onUnmounted(() => {
-	scrollElement.value.removeEventListener('scroll', handleScroll)
-	pollStore.reset()
-	unsubscribe('polls:poll:load', () => pollStore.load())
-})
+	onUnmounted(() => {
+		scrollElement.value.removeEventListener('scroll', handleScroll)
+		pollStore.reset()
+		unsubscribe('polls:poll:load', () => pollStore.load())
+	})
 
-watch(() => route.params.id, () => {
-	console.log('Poll view route update')
-    loadPoll()
-  }
-)
+	watch(() => route.params.id, () => {
+		console.log('Poll view route update')
+		loadPoll()
+	}
+	)
 </script>
 
 <template>
@@ -131,7 +131,7 @@ watch(() => route.params.id, () => {
 				<NcEmptyContent v-if="!optionsStore.rankedOptions.length"
 					v-bind="emptyContentProps">
 					<template #icon>
-						<TextPollIcon v-if="pollStore.type === 'textPoll'" />
+						<TextPollIcon v-if="pollStore.type === PollType.Text" />
 						<DatePollIcon v-else />
 					</template>
 					<template #action>

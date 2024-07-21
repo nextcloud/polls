@@ -4,14 +4,14 @@
 -->
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+	import { defineProps } from 'vue'
 
-defineProps({
-	tag: {
-		type: String,
-		default: 'span',
-	},
-})
+	defineProps({
+		tag: {
+			type: String,
+			default: 'span',
+		},
+	})
 </script>
 
 <template>

@@ -5,79 +5,79 @@
 
 <script setup lang="ts">
 
-import { defineProps, computed, withDefaults } from 'vue'
-import { showSuccess, showError } from '@nextcloud/dialogs'
+	import { defineProps, computed, withDefaults } from 'vue'
+	import { showSuccess, showError } from '@nextcloud/dialogs'
 
-import { useSessionStore } from '../../stores/session.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-import { Option } from '../../stores/options.ts'
+	import { useSessionStore } from '../../stores/session.ts'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useVotesStore } from '../../stores/votes.ts'
+	import { Option } from '../../Types/index.ts'
 
-import { t } from '@nextcloud/l10n'
-import VoteIndicator from './VoteIndicator.vue'
+	import { t } from '@nextcloud/l10n'
+	import VoteIndicator from './VoteIndicator.vue'
 
-export interface Props {
-	option?: Option
-	userId: string
-}
+	export interface Props {
+		option?: Option
+		userId: string
+	}
 
-const pollStore = usePollStore()
-const sessionStore = useSessionStore()
-const votesStore = useVotesStore()
+	const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
+	const votesStore = useVotesStore()
 
-const props = withDefaults(defineProps<Props>(), {
-	option: undefined,
-	userId: '',
-})
+	const props = withDefaults(defineProps<Props>(), {
+		option: undefined,
+		userId: '',
+	})
 
-const isVotable = computed(() => isActive.value
+	const isVotable = computed(() => isActive.value
 		&& isValidUser.value
 		&& !pollStore.isClosed
 		&& !props.option.locked)
 
-const isActive = computed(() => isCurrentUser.value && pollStore.permissions.vote)
+	const isActive = computed(() => isCurrentUser.value && pollStore.permissions.vote)
 
-const isCurrentUser = computed(() => sessionStore.currentUser.userId === props.userId)
+	const isCurrentUser = computed(() => sessionStore.currentUser.userId === props.userId)
 
-const answer = computed(() => votesStore.getVote({
+	const answer = computed(() => votesStore.getVote({
 		option: props.option,
 		userId: props.userId,
 	}).answer)
 
-const iconAnswer = computed(() => {
-	if (answer.value === 'no') {
-		return (pollStore.isClosed && props.option.confirmed) || isActive.value ? 'no' : ''
-	}
-	if (answer.value === '') {
-		return (pollStore.isClosed && props.option.confirmed) ? 'no' : ''
-	}
-	return answer.value
-})
+	const iconAnswer = computed(() => {
+		if (answer.value === 'no') {
+			return (pollStore.isClosed && props.option.confirmed) || isActive.value ? 'no' : ''
+		}
+		if (answer.value === '') {
+			return (pollStore.isClosed && props.option.confirmed) ? 'no' : ''
+		}
+		return answer.value
+	})
 
-const nextAnswer = computed(() => {
-	if (pollStore.answerSequence.indexOf(answer.value) < 0) {
-		return pollStore.answerSequence[1]
+	const nextAnswer = computed(() => {
+		if (pollStore.answerSequence.indexOf(answer.value) < 0) {
+			return pollStore.answerSequence[1]
+		}
+		return pollStore.answerSequence[(pollStore.answerSequence.indexOf(answer.value) + 1) % pollStore.answerSequence.length]
+
+	})
+
+	const isValidUser = computed(() => (props.userId !== '' && props.userId !== null))
+
+	/**
+	 *
+	 */
+	function setVote() {
+		if (isVotable.value) {
+			votesStore.set({
+				option: props.option,
+				setTo: nextAnswer.value,
+			})
+			showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
+		} else {
+			showError(t('polls', 'Error saving vote'))
+		}
 	}
-	return pollStore.answerSequence[(pollStore.answerSequence.indexOf(answer.value) + 1) % pollStore.answerSequence.length]
-
-})
-
-const isValidUser = computed(() => (props.userId !== '' && props.userId !== null))
-
-/**
- *
- */
-function setVote() {
-	if (isVotable.value) {
-		votesStore.set({
-			option: props.option,
-			setTo: nextAnswer.value,
-		})
-		showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
-	} else {
-		showError(t('polls', 'Error saving vote'))
-	}
-}
 
 </script>
 

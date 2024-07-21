@@ -4,42 +4,43 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import draggable from 'vuedraggable'
-import { t } from '@nextcloud/l10n'
-import { NcActions, NcActionButton, NcEmptyContent } from '@nextcloud/vue'
+	import { computed, ref } from 'vue'
+	import draggable from 'vuedraggable'
+	import { t } from '@nextcloud/l10n'
+	import { NcActions, NcActionButton, NcEmptyContent } from '@nextcloud/vue'
 
-import OptionItem from './OptionItem.vue'
-import OptionItemOwner from '../Options/OptionItemOwner.vue'
-import OptionsTextAdd from './OptionsTextAdd.vue'
+	import OptionItem from './OptionItem.vue'
+	import OptionItemOwner from '../Options/OptionItemOwner.vue'
+	import OptionsTextAdd from './OptionsTextAdd.vue'
 
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
 
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
-import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 
-const pollStore = usePollStore()
-const optionsStore = useOptionsStore()
+	const pollStore = usePollStore()
+	const optionsStore = useOptionsStore()
+	const drag = ref(false)
 
-const dragOptions = {
-	animation: 200,
-	group: 'description',
-	disabled: false,
-	ghostClass: 'ghost',
-}
+	const dragOptions = {
+		animation: 200,
+		group: 'description',
+		disabled: false,
+		ghostClass: 'ghost',
+	}
 
-const cssVar = {
-	'--content-deleted': `" (${t('polls', 'deleted')})"`,
-}
+	const cssVar = {
+		'--content-deleted': `" (${t('polls', 'deleted')})"`,
+	}
 
-const reOrderedOptions = computed({
-	get: () => optionsStore.list,
-	set: (value) => optionsStore.reorder(value),
-})
+	const reOrderedOptions = computed({
+		get: () => optionsStore.list,
+		set: (value) => optionsStore.reorder({ options: value }),
+	})
 
 </script>
 
@@ -55,7 +56,7 @@ const reOrderedOptions = computed({
 				<OptionItem v-for="(option) in reOrderedOptions"
 					:key="option.id"
 					:option="option"
-					:poll-type="pollType"
+					:poll-type="pollStore.type"
 					:draggable="true">
 					<template #icon>
 						<OptionItemOwner v-if="pollStore.permissions.addOptions"
@@ -68,7 +69,7 @@ const reOrderedOptions = computed({
 							<NcActionButton v-if="!option.deleted"
 								:name="t('polls', 'Delete option')"
 								:aria-label="t('polls', 'Delete option')"
-								@click="optionsStore.delete(option)">
+								@click="optionsStore.delete({ option })">
 								<template #icon>
 									<DeleteIcon />
 								</template>
@@ -76,7 +77,7 @@ const reOrderedOptions = computed({
 							<NcActionButton v-if="option.deleted"
 								:name="t('polls', 'Restore option')"
 								:aria-label="t('polls', 'Restore option')"
-								@click="optionsStore.restore(option)">
+								@click="optionsStore.restore({ option })">
 								<template #icon>
 									<RestoreIcon />
 								</template>
@@ -85,7 +86,7 @@ const reOrderedOptions = computed({
 								:name="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 								:aria-label="option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
 								type="tertiary"
-								@click="optionsStore.confirm(option)">
+								@click="optionsStore.confirm({ option })">
 								<template #icon>
 									<UnconfirmIcon v-if="option.confirmed" />
 									<ConfirmIcon v-else />

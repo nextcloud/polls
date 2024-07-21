@@ -4,15 +4,15 @@
 -->
 
 <script setup lang="ts">
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
+	import { NcButton } from '@nextcloud/vue'
+	import { emit } from '@nextcloud/event-bus'
+	import { t } from '@nextcloud/l10n'
 
-const caption = t('polls', 'Add some!')
+	const caption = t('polls', 'Add some!')
 
-function clickAction() {
-	emit('polls:sidebar:toggle', { open: true, activeTab: 'options' })
-}
+	function clickAction() {
+		emit('polls:sidebar:toggle', { open: true, activeTab: 'options' })
+	}
 
 </script>
 

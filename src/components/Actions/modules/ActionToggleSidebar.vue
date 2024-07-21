@@ -4,15 +4,15 @@
 -->
 
 <script setup lang="ts">
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
-import { t } from '@nextcloud/l10n'
+	import { NcButton } from '@nextcloud/vue'
+	import { emit } from '@nextcloud/event-bus'
+	import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+	import { t } from '@nextcloud/l10n'
 
-const caption = t('polls', 'Toggle Sidebar')
-function clickAction() {
-	emit('polls:sidebar:toggle', null)
-}
+	const caption = t('polls', 'Toggle Sidebar')
+	function clickAction() {
+		emit('polls:sidebar:toggle', null)
+	}
 
 </script>
 

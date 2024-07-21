@@ -4,13 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { CardDiv } from '../../Base/index.js'
-import ActionOpenSharesSidebar from '../../Actions/modules/ActionOpenSharesSidebar.vue'
-import { t } from '@nextcloud/l10n'
-import { useVotesStore } from '../../../stores/votes.ts'
+	import { CardDiv } from '../../Base/index.js'
+	import ActionOpenSharesSidebar from '../../Actions/modules/ActionOpenSharesSidebar.vue'
+	import { t } from '@nextcloud/l10n'
+	import { useVotesStore } from '../../../stores/votes.ts'
 
-const votesStore = useVotesStore()
-const cardType = 'warning'
+	const votesStore = useVotesStore()
+	const cardType = 'warning'
 
 </script>
 

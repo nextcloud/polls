@@ -4,59 +4,59 @@
 -->
 
 <script setup lang="ts">
-import { computed, defineProps, PropType } from 'vue'
-import { NcButton } from '@nextcloud/vue'
-import Counter from '../Options/Counter.vue'
-import OptionItem from '../Options/OptionItem.vue'
-import { FlexSpacer } from '../Base/index.js'
-import VoteItem from './VoteItem.vue'
-import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
-import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
-import CalendarPeek from '../Calendar/CalendarPeek.vue'
-import OptionItemOwner from '../Options/OptionItemOwner.vue'
-import { t } from '@nextcloud/l10n'
-import { getCurrentUser } from '@nextcloud/auth'
-import { usePollStore, PollType } from '../../stores/poll.ts'
-import { usePreferencesStore, ViewMode } from '../../stores/preferences.ts'
-import { useOptionsStore, Option } from '../../stores/options.ts'
-import { BoxType } from '../../Types/index.ts'
+	import { computed, defineProps, PropType } from 'vue'
+	import { NcButton } from '@nextcloud/vue'
+	import Counter from '../Options/Counter.vue'
+	import OptionItem from '../Options/OptionItem.vue'
+	import { FlexSpacer } from '../Base/index.js'
+	import VoteItem from './VoteItem.vue'
+	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+	import CalendarPeek from '../Calendar/CalendarPeek.vue'
+	import OptionItemOwner from '../Options/OptionItemOwner.vue'
+	import { t } from '@nextcloud/l10n'
+	import { getCurrentUser } from '@nextcloud/auth'
+	import { usePollStore, PollType } from '../../stores/poll.ts'
+	import { usePreferencesStore, ViewMode } from '../../stores/preferences.ts'
+	import { useOptionsStore, Option } from '../../stores/options.ts'
+	import { BoxType } from '../../Types/index.ts'
 
-const pollStore = usePollStore()
-const preferencesStore = usePreferencesStore()
-const optionsStore = useOptionsStore()
+	const pollStore = usePollStore()
+	const preferencesStore = usePreferencesStore()
+	const optionsStore = useOptionsStore()
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		default: undefined,
-	},
-	viewMode: {
-		type: String as PropType<ViewMode>,
-		default: ViewMode.TableView,
-		validator(value: ViewMode) {
-			return ['table-view', 'list-view'].includes(value)
+	const props = defineProps({
+		option: {
+			type: Object as PropType<Option>,
+			default: undefined,
 		},
-	},
-})
+		viewMode: {
+			type: String as PropType<ViewMode>,
+			default: ViewMode.TableView,
+			validator(value: ViewMode) {
+				return [ViewMode.ListView, ViewMode.TableView].includes(value)
+			},
+		},
+	})
 
-const componentClass = computed(() => {
-	const classList = ['vote-column']
-	if (props.option.locked) {
-		classList.push('locked')
-	}
+	const componentClass = computed(() => {
+		const classList = ['vote-column']
+		if (props.option.locked) {
+			classList.push('locked')
+		}
 
-	if (props.option.confirmed && pollStore.isClosed) {
-		classList.push('confirmed')
-	}
-	if (props.option.votes.currentUser) {
-		classList.push(props.option.votes.currentUser)
-	}
+		if (props.option.confirmed && pollStore.isClosed) {
+			classList.push('confirmed')
+		}
+		if (props.option.votes.currentUser) {
+			classList.push(props.option.votes.currentUser)
+		}
 
-	return classList
-})
+		return classList
+	})
 
-const confirmButtonCaption = computed(() => props.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option'))
-const showCalendarPeek = computed(() => pollStore.type === PollType.Date && getCurrentUser() && preferencesStore.user.calendarPeek)
+	const confirmButtonCaption = computed(() => props.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option'))
+	const showCalendarPeek = computed(() => pollStore.type === PollType.Date && getCurrentUser() && preferencesStore.user.calendarPeek)
 
 
 </script>

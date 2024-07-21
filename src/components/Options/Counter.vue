@@ -4,21 +4,21 @@
 -->
 
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue'
-import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
-import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
-import { Option } from '../../stores/options.ts'
+	import { defineProps, PropType } from 'vue'
+	import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
+	import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
+	import { Option } from '../../Types/index.ts'
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		default: undefined,
-	},
-	showMaybe: {
-		type: Boolean,
-		default: false,
-	},
-})
+	const props = defineProps({
+		option: {
+			type: Object as PropType<Option>,
+			default: undefined,
+		},
+		showMaybe: {
+			type: Boolean,
+			default: false,
+		},
+	})
 </script>
 
 <template>

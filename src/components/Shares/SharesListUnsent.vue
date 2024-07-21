@@ -4,34 +4,34 @@
 -->
 
 <script setup lang="ts">
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { NcButton } from '@nextcloud/vue'
-import { ConfigBox } from '../Base/index.js'
-import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
-import ShareItem from './ShareItem.vue'
-import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
-import { Logger } from '../../helpers/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSharesStore } from '../../stores/shares.ts'
+	import { showSuccess, showError } from '@nextcloud/dialogs'
+	import { NcButton } from '@nextcloud/vue'
+	import { ConfigBox } from '../Base/index.js'
+	import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
+	import ShareItem from './ShareItem.vue'
+	import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
+	import { Logger } from '../../helpers/index.ts'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useSharesStore } from '../../stores/shares.ts'
 
-const pollStore = usePollStore()
-const sharesStore = useSharesStore()
+	const pollStore = usePollStore()
+	const sharesStore = useSharesStore()
 
-async function sendAllInvitations() {
-	const response = await sharesStore.inviteAll({ pollId: pollStore.id })
-	if (response.data?.sentResult?.sentMails) {
-		response.data.sentResult.sentMails.forEach((item) => {
-			showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
-		})
+	async function sendAllInvitations() {
+		const response = await sharesStore.inviteAll({ pollId: pollStore.id })
+		if (response.data?.sentResult?.sentMails) {
+			response.data.sentResult.sentMails.forEach((item) => {
+				showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
+			})
+		}
+		if (response.data?.sentResult?.abortedMails) {
+			response.data.sentResult.abortedMails.forEach((item) => {
+				Logger.error('Mail could not be sent!', { recipient: item })
+				showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
+			})
+		}
 	}
-	if (response.data?.sentResult?.abortedMails) {
-		response.data.sentResult.abortedMails.forEach((item) => {
-			Logger.error('Mail could not be sent!', { recipient: item })
-			showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
-		})
-	}
-}
 
 </script>
 

@@ -4,50 +4,50 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
-import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
-import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
-import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
-import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../stores/poll.ts'
-import { useSessionStore } from '../stores/session.ts'
+	import { ref, onMounted, onUnmounted } from 'vue'
+	import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
+	import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
+	import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+	import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+	import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+	import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../stores/poll.ts'
+	import { useSessionStore } from '../stores/session.ts'
 
-const pollStore = usePollStore()
-const sessionStore = useSessionStore()
+	const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
 
-const showSidebar = ref((window.innerWidth > 920))
-const activeTab = ref(t('polls', 'Comments').toLowerCase())
+	const showSidebar = ref((window.innerWidth > 920))
+	const activeTab = ref(t('polls', 'Comments').toLowerCase())
 
-onMounted(() => {
-	subscribe('polls:sidebar:toggle', (payload) => {
-		showSidebar.value = payload?.open ?? !showSidebar.value
-		activeTab.value = payload?.activeTab ?? activeTab.value
+	onMounted(() => {
+		subscribe('polls:sidebar:toggle', (payload) => {
+			showSidebar.value = payload?.open ?? !showSidebar.value
+			activeTab.value = payload?.activeTab ?? activeTab.value
+		})
+		subscribe('polls:sidebar:changeTab', (payload) => {
+			activeTab.value = payload?.activeTab ?? activeTab.value
+		})
 	})
-	subscribe('polls:sidebar:changeTab', (payload) => {
-		activeTab.value = payload?.activeTab ?? activeTab.value
-	})
-})
 
-onUnmounted(() => {
-	unsubscribe('polls:sidebar:changeTab', () => {
-		activeTab.value = 'comments'
+	onUnmounted(() => {
+		unsubscribe('polls:sidebar:changeTab', () => {
+			activeTab.value = 'comments'
+		})
+		unsubscribe('polls:sidebar:toggle', () => {
+			showSidebar.value = false
+		})
 	})
-	unsubscribe('polls:sidebar:toggle', () => {
-		showSidebar.value = false
-	})
-})
 
-/**
- *
- */
-function closeSideBar() {
-	emit('polls:sidebar:toggle', { open: false })
-}
+	/**
+	 *
+	 */
+	function closeSideBar() {
+		emit('polls:sidebar:toggle', { open: false })
+	}
 </script>
 
 

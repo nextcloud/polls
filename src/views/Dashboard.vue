@@ -4,46 +4,47 @@
 -->
 
 <script setup>
-import { onMounted } from 'vue'
-import { showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-import { generateUrl } from '@nextcloud/router'
-import { NcDashboardWidget } from '@nextcloud/vue'
-import { usePollsStore } from '../stores/polls.ts'
-import { Logger } from '../helpers/index.ts'
+	import { onMounted } from 'vue'
+	import { showError } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+	import { generateUrl } from '@nextcloud/router'
+	import { NcDashboardWidget } from '@nextcloud/vue'
+	import { usePollsStore } from '../stores/polls.ts'
+	import { PollType } from '../Types/index.ts'
+	import { Logger } from '../helpers/index.ts'
 
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import { PollsAppIcon } from '../components/AppIcons/index.js'
+	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+	import { PollsAppIcon } from '../components/AppIcons/index.js'
 
-const dashboardWidgetProperties = {
-	emptyContentMessage: t('polls', 'No polls found for this category'),
-	showMoreText: t('polls', 'Relevant polls'),
-}
+	const dashboardWidgetProperties = {
+		emptyContentMessage: t('polls', 'No polls found for this category'),
+		showMoreText: t('polls', 'Relevant polls'),
+	}
 
-const pollsStore = usePollsStore()
+	const pollsStore = usePollsStore()
 
-/**
- *
- * @param {object} poll - The poll object
- */
-function pollLink(poll) {
-	generateUrl(`/apps/polls/vote/${poll.id}`)
-}
+	/**
+	 *
+	 * @param {object} poll - The poll object
+	 */
+	function pollLink(poll) {
+		generateUrl(`/apps/polls/vote/${poll.id}`)
+	}
 
-/**
- * Load the polls
- */
-function loadPolls() {
-	Logger.debug('Loading polls in dashboard widget')
-	pollsStore.load().then(() => null).catch(() => {
-		showError(t('polls', 'Error loading poll list'))
+	/**
+	 * Load the polls
+	 */
+	function loadPolls() {
+		Logger.debug('Loading polls in dashboard widget')
+		pollsStore.load().then(() => null).catch(() => {
+			showError(t('polls', 'Error loading poll list'))
+		})
+	}
+
+	onMounted(() => {
+		loadPolls()
 	})
-}
-
-onMounted(() => {
-	loadPolls()
-})
 
 </script>
 
@@ -62,7 +63,7 @@ onMounted(() => {
 				<a :href="pollLink(item)">
 					<div class="poll-item__item">
 						<div class="item__icon-spacer">
-							<TextPollIcon v-if="item.type === 'textPoll'" />
+							<TextPollIcon v-if="item.type === PollType.Text" />
 							<DatePollIcon v-else />
 						</div>
 
@@ -118,4 +119,3 @@ onMounted(() => {
 		min-width: 44px;
 	}
 </style>
-../stores/polls.ts

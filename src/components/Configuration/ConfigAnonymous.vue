@@ -4,11 +4,11 @@
 -->
 
 <script setup lang="ts">
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
 
-const pollStore = usePollStore()
+	const pollStore = usePollStore()
 </script>
 
 <template>

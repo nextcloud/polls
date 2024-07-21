@@ -4,14 +4,14 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { NcModal, NcButton } from '@nextcloud/vue'
-import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
-import { t } from '@nextcloud/l10n'
+	import { ref } from 'vue'
+	import { NcModal, NcButton } from '@nextcloud/vue'
+	import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
+	import { t } from '@nextcloud/l10n'
 
-const caption = t('polls', 'Register')
-const showRegistration = ref(false)
-const registerModalSize = 'large'
+	const caption = t('polls', 'Register')
+	const showRegistration = ref(false)
+	const registerModalSize = 'large'
 
 </script>
 

@@ -4,61 +4,61 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import moment from '@nextcloud/moment'
-import { NcButton, NcDateTimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
-import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
+	import { computed } from 'vue'
+	import moment from '@nextcloud/moment'
+	import { NcButton, NcDateTimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+	import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
 
-const pollStore = usePollStore()
+	const pollStore = usePollStore()
 
-const expirationDatePicker = {
-	editable: true,
-	minuteStep: 5,
-	type: 'datetime',
-	format: moment.localeData().longDateFormat('L LT'),
-	placeholder: t('polls', 'Poll closing date'),
-	confirm: true,
-	lang: {
-		formatLocale: {
-			firstDayOfWeek: moment.localeData()._week.dow === 0 ? 7 : moment.localeData()._week.dow,
-			months: moment.months(),
-			monthsShort: moment.monthsShort(),
-			weekdays: moment.weekdays(),
-			weekdaysMin: moment.weekdaysMin(),
+	const expirationDatePicker = {
+		editable: true,
+		minuteStep: 5,
+		type: 'datetime',
+		format: moment.localeData().longDateFormat('L LT'),
+		placeholder: t('polls', 'Poll closing date'),
+		confirm: true,
+		lang: {
+			formatLocale: {
+				firstDayOfWeek: moment.localeData()._week.dow === 0 ? 7 : moment.localeData()._week.dow,
+				months: moment.months(),
+				monthsShort: moment.monthsShort(),
+				weekdays: moment.weekdays(),
+				weekdaysMin: moment.weekdaysMin(),
+			},
 		},
-	},
-}
-
-const expire = computed({
-	get: () => moment.unix(pollStore.configuration.expire)._d,
-	set: (value) => {
-		pollStore.configuration.expire = moment(value).unix()
-		pollStore.write()
-	},
-})
-
-const useExpire = computed({
-	get: () => !!pollStore.configuration.expire,
-	set: (value) => {
-		if (value) {
-			pollStore.configuration.expire = moment().add(1, 'week').unix()
-		} else {
-			pollStore.configuration.expire = 0
-		}
-		pollStore.write()
-	},
-})
-
-function clickToggleClosed() {
-	if (pollStore.isClosed) {
-		pollStore.reopen()
-	} else {
-		pollStore.close()
 	}
-}
+
+	const expire = computed({
+		get: () => moment.unix(pollStore.configuration.expire)._d,
+		set: (value) => {
+			pollStore.configuration.expire = moment(value).unix()
+			pollStore.write()
+		},
+	})
+
+	const useExpire = computed({
+		get: () => !!pollStore.configuration.expire,
+		set: (value) => {
+			if (value) {
+				pollStore.configuration.expire = moment().add(1, 'week').unix()
+			} else {
+				pollStore.configuration.expire = 0
+			}
+			pollStore.write()
+		},
+	})
+
+	function clickToggleClosed() {
+		if (pollStore.isClosed) {
+			pollStore.reopen()
+		} else {
+			pollStore.close()
+		}
+	}
 </script>
 
 <template>

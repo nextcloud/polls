@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -7,7 +6,7 @@
 import { defineStore } from 'pinia'
 import { CommentsAPI, PublicAPI } from '../Api/index.js'
 import { User } from '../Types/index.ts'
-import { groupComments, Logger } from '../helpers/index.js'
+import { groupComments, Logger } from '../helpers/index.ts'
 import { useSessionStore } from './session.ts'
 
 export type Comment = {
@@ -20,7 +19,7 @@ export type Comment = {
 	user: User
 }
 
-type Comments = {
+export type Comments = {
 	list: Comment[]
 }
 

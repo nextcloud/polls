@@ -4,31 +4,31 @@
 -->
 
 <script setup>
-import { computed } from 'vue'
-import { InputDiv } from '../../Base/index.js'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { usePreferencesStore } from '../../../stores/preferences.ts'
+	import { computed } from 'vue'
+	import { InputDiv } from '../../Base/index.js'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
 
-const preferencesStore = usePreferencesStore()
+	const preferencesStore = usePreferencesStore()
 
-const defaultViewTextPoll = computed({
-	get() {
-		return preferencesStore.user.defaultViewTextPoll === 'list-view'
-	},
-	set(value) {
-		preferencesStore.user.defaultViewTextPoll = value ? 'list-view' : 'table-view'
-	},
-})
+	const defaultViewTextPoll = computed({
+		get() {
+			return preferencesStore.user.defaultViewTextPoll === ViewMode.ListView
+		},
+		set(value) {
+			preferencesStore.user.defaultViewTextPoll = value ? ViewMode.ListView : ViewMode.TableView
+		},
+	})
 
-const defaultViewDatePoll = computed({
-	get() {
-		return preferencesStore.user.defaultViewDatePoll === 'list-view'
-	},
-	set(value) {
-		preferencesStore.user.defaultViewDatePoll = value ? 'list-view' : 'table-view'
-	},
-})
+	const defaultViewDatePoll = computed({
+		get() {
+			return preferencesStore.user.defaultViewDatePoll === ViewMode.ListView
+		},
+		set(value) {
+			preferencesStore.user.defaultViewDatePoll = value ? ViewMode.ListView : ViewMode.TableView
+		},
+	})
 </script>
 
 <template>

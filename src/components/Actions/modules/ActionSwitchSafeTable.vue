@@ -4,12 +4,12 @@
 -->
 
 <script setup lang="ts">
-import { NcButton } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
+	import { NcButton } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../../stores/poll.ts'
 
-const pollStore = usePollStore()
-const caption = t('polls', 'Reveal them')
+	const pollStore = usePollStore()
+	const caption = t('polls', 'Reveal them')
 
 </script>
 

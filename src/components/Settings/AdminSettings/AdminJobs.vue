@@ -4,71 +4,71 @@
 -->
 
 <script setup>
-import { NcButton } from '@nextcloud/vue'
-import { AdminAPI } from '../../../Api/index.js'
-import { Logger } from '../../../helpers/index.js'
-import { t } from '@nextcloud/l10n'
+	import { NcButton } from '@nextcloud/vue'
+	import { AdminAPI } from '../../../Api/index.js'
+	import { Logger } from '../../../helpers/index.ts'
+	import { t } from '@nextcloud/l10n'
 
-const autoreminder = {
-	text: t('polls', 'Run autoreminder'),
-	disabled: false,
-}
-
-const janitor = {
-	text: t('polls', 'Run janitor'),
-	disabled: false,
-}
-
-const notification = {
-	text: t('polls', 'Run notification'),
-	disabled: false,
-}
-
-/**
- * start AutoReminder job
- */
-async function runAutoReminderJob()  {
-	try {
-		AdminAPI.runAutoReminder()
-		autoreminder.disabled = true
-		autoreminder.text = t('polls', 'Autoreminder started')
-	} catch (error) {
-		autoreminder.text = t('polls', 'Autoreminder failed')
-		Logger.error('Error on executing autoreminder job', { error })
-	} finally {
-		autoreminder.disabled = true
+	const autoreminder = {
+		text: t('polls', 'Run autoreminder'),
+		disabled: false,
 	}
-}
 
-/**
- * start Janitor job
- */
-async function runJanitorJob() {
-	try {
-		AdminAPI.runJanitor()
-		janitor.text = t('polls', 'Janitor started')
-	} catch (error) {
-		janitor.text = t('polls', 'Janitor failed')
-		Logger.error('Error on executing janitor job', { error })
-	} finally {
-		janitor.disabled = true
+	const janitor = {
+		text: t('polls', 'Run janitor'),
+		disabled: false,
 	}
-}
 
-/**
- * start Notification job
- */
-async function runNotificationJob() {
-	try {
-		AdminAPI.runNotification()
-		notification.text = t('polls', 'Notification started')
-	} catch (error) {
-		notification.text = t('polls', 'Notification failed')
-		Logger.error('Error on executing notification job', { error })
-	} finally {
-		notification.disabled = true
+	const notification = {
+		text: t('polls', 'Run notification'),
+		disabled: false,
 	}
-}
+
+	/**
+	 * start AutoReminder job
+	 */
+	async function runAutoReminderJob()  {
+		try {
+			AdminAPI.runAutoReminder()
+			autoreminder.disabled = true
+			autoreminder.text = t('polls', 'Autoreminder started')
+		} catch (error) {
+			autoreminder.text = t('polls', 'Autoreminder failed')
+			Logger.error('Error on executing autoreminder job', { error })
+		} finally {
+			autoreminder.disabled = true
+		}
+	}
+
+	/**
+	 * start Janitor job
+	 */
+	async function runJanitorJob() {
+		try {
+			AdminAPI.runJanitor()
+			janitor.text = t('polls', 'Janitor started')
+		} catch (error) {
+			janitor.text = t('polls', 'Janitor failed')
+			Logger.error('Error on executing janitor job', { error })
+		} finally {
+			janitor.disabled = true
+		}
+	}
+
+	/**
+	 * start Notification job
+	 */
+	async function runNotificationJob() {
+		try {
+			AdminAPI.runNotification()
+			notification.text = t('polls', 'Notification started')
+		} catch (error) {
+			notification.text = t('polls', 'Notification failed')
+			Logger.error('Error on executing notification job', { error })
+		} finally {
+			notification.disabled = true
+		}
+	}
 </script>
 
 <template>

@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -7,7 +6,7 @@
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api/index.js'
 import { User } from '../Types/index.ts'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 import { t } from '@nextcloud/l10n'
 import { Option, useOptionsStore } from './options.ts'
 import { usePollStore } from './poll.ts'
@@ -86,10 +85,10 @@ export const useVotesStore = defineStore('votes', {
 	
 				const votes: Vote[] = []
 				response.data.votes.forEach((vote: Vote) => {
-					if (vote.answer === 'yes') {
+					if (vote.answer === Answer.Yes) {
 						vote.answerTranslated = t('polls', 'Yes')
 						vote.answerSymbol = AnswerSymbol.Yes
-					} else if (vote.answer === 'maybe') {
+					} else if (vote.answer === Answer.Maybe) {
 						vote.answerTranslated = t('polls', 'Maybe')
 						vote.answerSymbol = AnswerSymbol.Maybe
 					} else {

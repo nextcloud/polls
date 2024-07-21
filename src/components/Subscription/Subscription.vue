@@ -4,19 +4,19 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { useSubscriptionStore } from '../../stores/subscription.ts'
-import { useShareStore } from '../../stores/share.ts'
+	import { computed } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { useSubscriptionStore } from '../../stores/subscription.ts'
+	import { useShareStore } from '../../stores/share.ts'
 
-const shareStore = useShareStore()
-const subscriptionStore = useSubscriptionStore()
+	const shareStore = useShareStore()
+	const subscriptionStore = useSubscriptionStore()
 
-const label = computed(() => shareStore.user.emailAddress
-	? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: shareStore.user.emailAddress })
-	: t('polls', 'Receive notification email on activity')
-)
+	const label = computed(() => shareStore.user.emailAddress
+		? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: shareStore.user.emailAddress })
+		: t('polls', 'Receive notification email on activity')
+	)
 
 </script>
 

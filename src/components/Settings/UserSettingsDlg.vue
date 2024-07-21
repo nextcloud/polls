@@ -3,34 +3,34 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue'
-import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePreferencesStore } from '../../stores/preferences.ts'
+	import { ref, onMounted, onUnmounted } from 'vue'
+	import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
+	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore } from '../../stores/preferences.ts'
 
-const preferencesStore = usePreferencesStore()
-const show = ref(false)
+	const preferencesStore = usePreferencesStore()
+	const show = ref(false)
 
-/**
- *
- */
-function loadPreferences() {
-	preferencesStore.load()
-	preferencesStore.getCalendars()
-}
+	/**
+	 *
+	 */
+	function loadPreferences() {
+		preferencesStore.load()
+		preferencesStore.getCalendars()
+	}
 
-onMounted(() => {
-	subscribe('polls:settings:show', () => {
-		show.value = true
-		loadPreferences()
+	onMounted(() => {
+		subscribe('polls:settings:show', () => {
+			show.value = true
+			loadPreferences()
+		})
 	})
-})
 
-onUnmounted(() => {
-	unsubscribe('polls:settings:show')
-})
+	onUnmounted(() => {
+		unsubscribe('polls:settings:show')
+	})
 
 </script>
 

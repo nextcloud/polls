@@ -4,23 +4,23 @@
 -->
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
-import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
+	import { defineProps } from 'vue'
+	import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 
-defineProps({
-	name: {
-		type: String,
-		default: '',
-	},
-	info: {
-		type: String,
-		default: '',
-	},
-	indented: {
-		type: Boolean,
-		default: false,
-	},
-})
+	defineProps({
+		name: {
+			type: String,
+			default: '',
+		},
+		info: {
+			type: String,
+			default: '',
+		},
+		indented: {
+			type: Boolean,
+			default: false,
+		},
+	})
 
 
 </script>

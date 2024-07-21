@@ -4,31 +4,32 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { useRoute } from 'vue-router'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
+	import { computed, onBeforeUnmount } from 'vue'
+	import { useRoute } from 'vue-router'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 
-import { NcButton, NcPopover } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
+	import { NcButton, NcPopover } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
 
-import { ActionToggleSidebar } from '../Actions/index.js'
-import PollInformation from '../Poll/PollInformation.vue'
-import UserMenu from '../User/UserMenu.vue'
-import ExportPoll from '../Export/ExportPoll.vue'
+	import { ActionToggleSidebar } from '../Actions/index.js'
+	import PollInformation from '../Poll/PollInformation.vue'
+	import UserMenu from '../User/UserMenu.vue'
+	import ExportPoll from '../Export/ExportPoll.vue'
 
-import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
+	import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
-const route = useRoute()
-const pollStore = usePollStore()
-const sessionStore = useSessionStore()
-const caption = t('polls', 'Poll informations')
+	const route = useRoute()
+	const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
+	const caption = t('polls', 'Poll informations')
 
-const showUserMenu = computed(() => (route.name !== 'publicVote' || pollStore.permissions.vote || pollStore.permissions.subscribe))
+	const showUserMenu = computed(() => (route.name !== 'publicVote' || pollStore.permissions.vote || pollStore.permissions.subscribe))
 
-beforeUnmount(() => {
-	pollStore.$reset()
-})
+	onBeforeUnmount(() => {
+		pollStore.$reset()
+	})
+
 </script>
 
 <template>

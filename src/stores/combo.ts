@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -7,7 +6,7 @@
 import { defineStore } from 'pinia'
 import { VotesAPI, OptionsAPI, PollsAPI } from '../Api/index.js'
 import { User } from '../Types/index.ts'
-import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.js'
+import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.ts'
 import { Option } from './options.ts'
 import { Poll } from './poll.ts'
 import { Vote } from './votes.ts'
@@ -15,13 +14,13 @@ import { sortBy } from 'lodash'
 import { usePreferencesStore } from './preferences.ts'
 import { usePollsStore } from './polls.ts'
 
-type Participant = {
+export type Participant = {
 	userId: string
 	displayName: string
 	pollId: number
 	user: User
 }
-type Combo = {
+export type Combo = {
 	id: number
 	options: Option[],
 	polls: Poll[],

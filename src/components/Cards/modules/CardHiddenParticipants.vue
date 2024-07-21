@@ -4,13 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { CardDiv } from '../../Base/index.js'
-import ActionSwitchSafeTable from '../../Actions/modules/ActionSwitchSafeTable.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
+	import { CardDiv } from '../../Base/index.js'
+	import ActionSwitchSafeTable from '../../Actions/modules/ActionSwitchSafeTable.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../../stores/poll.ts'
 
-const pollStore = usePollStore()
-const cardType = 'warning'
+	const pollStore = usePollStore()
+	const cardType = 'warning'
 </script>
 
 <template>

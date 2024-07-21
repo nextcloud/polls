@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,13 +5,13 @@
 
 import { defineStore } from 'pinia'
 import { SharesAPI } from '../Api/index.js'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 import { Share } from './share.ts'
 import { useSessionStore } from './session.ts'
-import { User, UserType } from '../Types/index.ts'
+import { UserType } from '../Types/index.ts'
 
 
-type Shares = {
+export type Shares = {
 	list: Share[]
 }
 
@@ -24,10 +23,10 @@ export const useSharesStore = defineStore('shares', {
 	getters: {
 		active: (state) => {
 			// share types, which will be active, after the user gets his invitation
-			// const invitationTypes = Object.values(InvitationType)
-			const invitationTypes = ['email', 'external', 'contact']
+			const invitationTypes = [UserType.Email, UserType.External, UserType.Contact]
+
 			// sharetype which are active without sending an invitation
-			const directShareTypes = ['user', 'group', 'admin', 'public']
+			const directShareTypes = [UserType.User, UserType.Group, UserType.Admin, UserType.Public]
 			return state.list.filter((share) => (!share.locked
 				&& (directShareTypes.includes(share.user.type)
 					|| (invitationTypes.includes(share.user.type) && (share.user.type === UserType.External || share.invitationSent || share.voted))
@@ -59,7 +58,7 @@ export const useSharesStore = defineStore('shares', {
 			}
 		},
 	
-		async add(payload: { user: User }): Promise<void> {
+		async add(payload: { user: { type: string, userId: string, displayName: string, emailAddress: string }} ): Promise<void> {
 			const sessionStore = useSessionStore()
 			try {
 				await SharesAPI.addShare(sessionStore.route.params.id, payload.user)

@@ -4,13 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { CardDiv } from '../../Base/index.js'
-import OptionProposals from '../../Options/OptionProposals.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
+	import { CardDiv } from '../../Base/index.js'
+	import OptionProposals from '../../Options/OptionProposals.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore, PollType } from '../../../stores/poll.ts'
 
-const pollStore = usePollStore()
-const cardType = 'info'
+	const pollStore = usePollStore()
+	const cardType = 'info'
 
 </script>
 
@@ -21,9 +21,9 @@ const cardType = 'info'
 			{{ t('polls', 'The proposal period ends {timeRelative}.',
 				{ timeRelative: pollStore.proposalsExpireRelative }) }}
 		</p>
-		<OptionProposals v-if="pollStore.type === 'textPoll'" />
+		<OptionProposals v-if="pollStore.type === PollType.Text" />
 		<template #button>
-			<OptionProposals v-if="pollStore.type === 'datePoll'" />
+			<OptionProposals v-if="pollStore.type === PollType.Date" />
 		</template>
 	</CardDiv>
 </template>

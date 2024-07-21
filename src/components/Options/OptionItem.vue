@@ -4,148 +4,146 @@
 -->
 
 <script setup lang="ts">
-import { defineProps, computed, PropType } from 'vue'
-import moment from '@nextcloud/moment'
-import linkifyStr from 'linkify-string'
-import DragIcon from 'vue-material-design-icons/DragHorizontalVariant.vue'
-import { Option } from '../../stores/options.ts'
-import { PollType } from '../../stores/poll.ts'
-import { BoxType } from '../../Types/index.ts'
+	import { defineProps, computed, PropType } from 'vue'
+	import moment from '@nextcloud/moment'
+	import linkifyStr from 'linkify-string'
+	import DragIcon from 'vue-material-design-icons/DragHorizontalVariant.vue'
+	import { Option, PollType, BoxType } from '../../Types/index.ts'
 
-const props = defineProps({
-	draggable: {
-		type: Boolean,
-		default: false,
-	},
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-	tag: {
-		type: String,
-		default: 'div',
-	},
-	display: {
-		type: String as PropType<BoxType>,
-		default: 'textBox',
-	},
-	pollType: {
-		type: String as PropType<PollType>,
-		default: PollType.Text,
-	},
-})
-
-const eventOption = computed(() => {
-	const from = moment.unix(props.option.timestamp)
-	const to = moment.unix(props.option.timestamp + Math.max(0, props.option.duration))
-	// does the event start at 00:00 local time and
-	// is the duration divisable through 24 hours without rest
-	// then we have a day long event (one or multiple days)
-	// In this case we want to suppress the display of any time information
-	const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
-
-	const dayModifier = dayLongEvent ? 1 : 0
-	// modified to date, in case of day long events, a second gets substracted
-	// to set the begin of the to day to the end of the previous date
-	const toModified = moment(to).subtract(dayModifier, 'days')
-
-	if (props.pollType !== PollType.Date) {
-		return {}
-	}
-	return {
-		from: {
-			month: from.format(moment().year() === from.year() ? 'MMM' : 'MMM [ \']YY'),
-			day: from.format('D'),
-			dow: from.format('ddd'),
-			time: from.format('LT'),
-			date: from.format('ll'),
-			dateTime: from.format('llll'),
-			utc: moment(from).utc().format('llll'),
+	const props = defineProps({
+		draggable: {
+			type: Boolean,
+			default: false,
 		},
-		to: {
-			month: toModified.format(moment().year() === toModified.year() ? 'MMM' : 'MMM [ \']YY'),
-			day: toModified.format('D'),
-			dow: toModified.format('ddd'),
-			time: to.format('LT'),
-			date: toModified.format('ll'),
-			dateTime: to.format('llll'),
-			utc: moment(to).utc().format('llll'),
-			sameDay: from.format('L') === toModified.format('L'),
+		option: {
+			type: Object as PropType<Option>,
+			required: true,
 		},
-		dayLong: dayLongEvent,
-	}
-})
+		tag: {
+			type: String,
+			default: 'div',
+		},
+		display: {
+			type: String as PropType<BoxType>,
+			default: BoxType.Text,
+		},
+		pollType: {
+			type: String as PropType<PollType>,
+			default: PollType.Text,
+		},
+	})
 
-const dateLocalFormat = computed(() => {
-	if (props.pollType !== PollType.Date) {
-		return {}
-	}
+	const eventOption = computed(() => {
+		const from = moment.unix(props.option.timestamp)
+		const to = moment.unix(props.option.timestamp + Math.max(0, props.option.duration))
+		// does the event start at 00:00 local time and
+		// is the duration divisable through 24 hours without rest
+		// then we have a day long event (one or multiple days)
+		// In this case we want to suppress the display of any time information
+		const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
 
-	if (props.option.duration === 0) {
-		return eventOption.value.from.dateTime
-	}
+		const dayModifier = dayLongEvent ? 1 : 0
+		// modified to date, in case of day long events, a second gets substracted
+		// to set the begin of the to day to the end of the previous date
+		const toModified = moment(to).subtract(dayModifier, 'days')
 
-	if (eventOption.value.dayLong && eventOption.value.to.sameDay) {
-		return eventOption.value.from.date
-	}
+		if (props.pollType !== PollType.Date) {
+			return {}
+		}
+		return {
+			from: {
+				month: from.format(moment().year() === from.year() ? 'MMM' : 'MMM [ \']YY'),
+				day: from.format('D'),
+				dow: from.format('ddd'),
+				time: from.format('LT'),
+				date: from.format('ll'),
+				dateTime: from.format('llll'),
+				utc: moment(from).utc().format('llll'),
+			},
+			to: {
+				month: toModified.format(moment().year() === toModified.year() ? 'MMM' : 'MMM [ \']YY'),
+				day: toModified.format('D'),
+				dow: toModified.format('ddd'),
+				time: to.format('LT'),
+				date: toModified.format('ll'),
+				dateTime: to.format('llll'),
+				utc: moment(to).utc().format('llll'),
+				sameDay: from.format('L') === toModified.format('L'),
+			},
+			dayLong: dayLongEvent,
+		}
+	})
 
-	if (eventOption.value.dayLong && !eventOption.value.to.sameDay) {
-		return `${eventOption.value.from.date} - ${eventOption.value.to.date}`
-	}
+	const dateLocalFormat = computed(() => {
+		if (props.pollType !== PollType.Date) {
+			return {}
+		}
 
-	if (eventOption.value.to.sameDay) {
-		return `${eventOption.value.from.dateTime} - ${eventOption.value.to.time}`
-	}
+		if (props.option.duration === 0) {
+			return eventOption.value.from.dateTime
+		}
 
-	return `${eventOption.value.from.dateTime} - ${eventOption.value.to.dateTime}`
-})
+		if (eventOption.value.dayLong && eventOption.value.to.sameDay) {
+			return eventOption.value.from.date
+		}
 
-const dateLocalFormatUTC = computed(() => 
-	props.option.duration
-		? `${eventOption.value.from.utc} - ${eventOption.value.to.utc} UTC`
-		: `${eventOption.value.from.utc} UTC`
-)
+		if (eventOption.value.dayLong && !eventOption.value.to.sameDay) {
+			return `${eventOption.value.from.date} - ${eventOption.value.to.date}`
+		}
 
-const optionTooltip = computed(() => {
-	if (props.pollType === PollType.Date) {
-		return dateLocalFormatUTC.value
-	}
+		if (eventOption.value.to.sameDay) {
+			return `${eventOption.value.from.dateTime} - ${eventOption.value.to.time}`
+		}
 
-	return props.option.text
-})
+		return `${eventOption.value.from.dateTime} - ${eventOption.value.to.dateTime}`
+	})
 
-const optionText = computed(() => {
-	if (props.pollType === PollType.Date) {
-		return dateLocalFormat.value
-	}
+	const dateLocalFormatUTC = computed(() => 
+		props.option.duration
+			? `${eventOption.value.from.utc} - ${eventOption.value.to.utc} UTC`
+			: `${eventOption.value.from.utc} UTC`
+	)
 
-	return linkifyStr(props.option.text)
-})
+	const optionTooltip = computed(() => {
+		if (props.pollType === PollType.Date) {
+			return dateLocalFormatUTC.value
+		}
 
-const show = computed(() => {
-	if (props.pollType === PollType.Date && props.display === BoxType.Date) {
-		return BoxType.Date
-	}
+		return props.option.text
+	})
 
-	return BoxType.Text
-})
+	const optionText = computed(() => {
+		if (props.pollType === PollType.Date) {
+			return dateLocalFormat.value
+		}
+
+		return linkifyStr(props.option.text)
+	})
+
+	const show = computed(() => {
+		if (props.pollType === PollType.Date && props.display === BoxType.Date) {
+			return BoxType.Date
+		}
+
+		return BoxType.Text
+	})
 
 </script>
 
 <template>
-	<Component :is="tag" class="option-item" :class="{ draggable: props.draggable, deleted: (props.option.deleted !== 0), 'date-box': show === 'dateBox' }">
+	<Component :is="tag" class="option-item" :class="{ draggable: props.draggable, deleted: (props.option.deleted !== 0), 'date-box': show === BoxType.Date }">
 		<DragIcon v-if="props.draggable" :class="{ draggable: props.draggable }" />
 
 		<slot name="icon" />
 
 		<!-- eslint-disable vue/no-v-html -->
-		<div v-if="show === 'textBox'"
+		<div v-if="show === BoxType.Text"
 			:title="optionTooltip"
 			class="option-item__option--text"
 			v-html="optionText" />
 		<!-- eslint-enable vue/no-v-html -->
 
-		<div v-if="show === 'dateBox'" :title="dateLocalFormatUTC" class="option-item__option--datebox">
+		<div v-if="show === BoxType.Date" :title="dateLocalFormatUTC" class="option-item__option--datebox">
 			<div class="event-date">
 				<div class="event-from">
 					<div class="month">

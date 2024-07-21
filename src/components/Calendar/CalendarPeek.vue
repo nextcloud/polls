@@ -5,45 +5,45 @@
 
 <script setup lang="ts">
 
-import { computed, defineProps, onMounted, ref, PropType } from 'vue'
-import { orderBy } from 'lodash'
-import { NcPopover } from '@nextcloud/vue'
-import moment from '@nextcloud/moment'
-import CalendarInfo from './CalendarInfo.vue'
-import { CalendarAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { Option } from '../../stores/options.ts'
+	import { computed, defineProps, onMounted, ref, PropType } from 'vue'
+	import { orderBy } from 'lodash'
+	import { NcPopover } from '@nextcloud/vue'
+	import moment from '@nextcloud/moment'
+	import CalendarInfo from './CalendarInfo.vue'
+	import { CalendarAPI } from '../../Api/index.js'
+	import { Logger } from '../../helpers/index.ts'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { Option } from '../../Types/index.ts'
 
-const pollStore = usePollStore()
+	const pollStore = usePollStore()
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		default: undefined,
-	},
-})
+	const props = defineProps({
+		option: {
+			type: Object as PropType<Option>,
+			default: undefined,
+		},
+	})
 
-const events = ref([])
+	const events = ref([])
 
-const detectAllDay = computed(() => {
-	const from = moment.unix(props.option.timestamp)
-	const to = moment.unix(props.option.timestamp + Math.max(0, props.option.duration))
-	const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
-	return {
-		allDay: dayLongEvent,
-		type: dayLongEvent ? 'date' : 'dateTime',
-	}
-})
+	const detectAllDay = computed(() => {
+		const from = moment.unix(props.option.timestamp)
+		const to = moment.unix(props.option.timestamp + Math.max(0, props.option.duration))
+		const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
+		return {
+			allDay: dayLongEvent,
+			type: dayLongEvent ? 'date' : 'dateTime',
+		}
+	})
 
-const sortedEvents = computed(() => {
-	const sortedEvents = [...events.value]
-	sortedEvents.push(currentOption.value)
-	return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
-})
+	const sortedEvents = computed(() => {
+		const sortedEvents = [...events.value]
+		sortedEvents.push(currentOption.value)
+		return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
+	})
 
-const currentOption = computed(() => ({
+	const currentOption = computed(() => ({
 		id: props.option.id,
 		UID: props.option.id,
 		calendarUri: '',
@@ -60,15 +60,15 @@ const currentOption = computed(() => ({
 		type: detectAllDay.value.type,
 	}))
 
-onMounted(async () => {
-	try {
-		const response = await CalendarAPI.getEvents(props.option.id)
-		events.value = response.data.events
-	} catch (error) {
-		if (error?.code === 'ERR_CANCELED') return
-		Logger.error('Error fetching events', { error })
-	}
-})
+	onMounted(async () => {
+		try {
+			const response = await CalendarAPI.getEvents(props.option.id)
+			events.value = response.data.events
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error fetching events', { error })
+		}
+	})
 
 </script>
 

@@ -4,12 +4,12 @@
 -->
 
 <script setup>
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { InputDiv } from '../../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { InputDiv } from '../../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-const appSettingsStore = useAppSettingsStore()
+	const appSettingsStore = useAppSettingsStore()
 </script>
 
 <template>

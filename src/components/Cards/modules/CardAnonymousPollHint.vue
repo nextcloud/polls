@@ -4,9 +4,9 @@
 -->
 
 <script setup lang="ts">
-import { CardDiv } from '../../Base/index.js'
-import { t } from '@nextcloud/l10n'
-const cardType = 'warning'
+	import { CardDiv } from '../../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	const cardType = 'warning'
 </script>
 
 <template>

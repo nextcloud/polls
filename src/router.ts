@@ -19,6 +19,7 @@ import SideBarCombo from './views/SideBarCombo.vue'
 import Navigation from './views/Navigation.vue'
 import Combo from './views/Combo.vue'
 import { usePollStore } from './stores/poll.ts'
+import { FilterType } from './stores/polls.ts'
 
 
 /**
@@ -161,7 +162,7 @@ const routes: RouteRecordRaw[] = [
 		redirect: {
 			name: 'list',
 			params: {
-				type: 'relevant',
+				type: FilterType.Relevant,
 			},
 		},
 		name: 'root',
@@ -175,7 +176,7 @@ const routes: RouteRecordRaw[] = [
 		redirect: {
 			name: 'list',
 			params: {
-				type: 'relevant',
+				type: FilterType.Relevant,
 			},
 		},
 		meta: {

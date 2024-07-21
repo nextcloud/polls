@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -12,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 import { Logger } from '../helpers/index.ts'
 import { PollsAPI } from '../Api/index.js'
 
-import { Poll , PollType } from './poll.ts'
+import { AccessType, Poll , PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { StatusResults } from '../Types/index.ts'
 
@@ -63,7 +62,7 @@ export type PollList = {
 	categories: PollCategory[]
 }
 
-export const sortColumnsMapping = {
+export const sortColumnsMapping: { [key in SortType]: string } = {
 	created: 'status.created',
 	title: 'configuration.title',
 	access: 'configuration.access',
@@ -74,12 +73,12 @@ export const sortColumnsMapping = {
 // const preferencesStore = usePreferencesStore()
 const filterRelevantCondition = (poll) => !poll.status.deleted
 	&& moment().diff(moment.unix(poll.status.relevantThreshold), 'days') < 100
-	&& (poll.currentUserStatus.isInvolved || (poll.permissions.view && poll.configuration.access !== 'open'))
+	&& (poll.currentUserStatus.isInvolved || (poll.permissions.view && poll.configuration.access !== AccessType.Open))
 
 const filterMyPolls = (poll) => !poll.status.deleted && poll.currentUserStatus.isOwner
-const filterPrivatePolls = (poll) => !poll.status.deleted && poll.configuration.access === 'private'
+const filterPrivatePolls = (poll) => !poll.status.deleted && poll.configuration.access === AccessType.Private
 const filterParticipatedPolls = (poll) => !poll.status.deleted && poll.currentUserStatus.countVotes > 0
-const filterOpenPolls = (poll) => !poll.status.deleted && poll.configuration.access === 'open'
+const filterOpenPolls = (poll) => !poll.status.deleted && poll.configuration.access === AccessType.Open
 const filterAllPolls = (poll) => !poll.status.deleted
 const filterClosedPolls = (poll) => !poll.status.deleted && poll.configuration.expire && moment.unix(poll.configuration.expire).diff() < 0
 const filterArchivedPolls = (poll) => poll.status.deleted
@@ -174,7 +173,6 @@ export const usePollsStore = defineStore('polls', {
 	}),
 
 	getters: {
-		// TODO: find out dated references: was cagegories
 		navigationCategories(state: PollList): PollCategory[] {
 			const sessionStore = useSessionStore()
 
@@ -190,7 +188,7 @@ export const usePollsStore = defineStore('polls', {
 			if (sessionStore.route.name === 'list' && sessionStore.route.params.type) {
 				return state.categories.find((category) => category.id === sessionStore.route.params.type)
 			}
-			return state.categories.find((category) => category.id === 'relevant')
+			return state.categories.find((category) => category.id === FilterType.Relevant)
 		},
 
 		/*
@@ -233,7 +231,7 @@ export const usePollsStore = defineStore('polls', {
 			const useCategory = state.categories.find((category) => category.id === filterId)
 			return orderBy(
 				state.list.filter((poll) => useCategory.filterCondition(poll)),
-				['created'],
+				[SortType.Created],
 				['desc'],
 			).slice(0, state.meta.maxPollsInNavigation)
 		},
@@ -242,10 +240,10 @@ export const usePollsStore = defineStore('polls', {
 		* Sliced filtered and sorted polls for dashboard
 		*/
 		dashboardList(state: PollList): Poll[] {
-			const useCategory = state.categories.find((category) => category.id === 'relevant')
+			const useCategory = state.categories.find((category) => category.id === FilterType.Relevant)
 			return orderBy(
 				state.list.filter((poll) => useCategory.filterCondition(poll)),
-				['created'],
+				[SortType.Created],
 				['desc'],
 			).slice(0, 7)
 		},

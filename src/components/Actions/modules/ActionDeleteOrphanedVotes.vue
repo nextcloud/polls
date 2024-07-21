@@ -4,12 +4,12 @@
 -->
 
 <script setup lang="ts">
-import { NcButton } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { useVotesStore } from '../../../stores/votes.ts'
+	import { NcButton } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { useVotesStore } from '../../../stores/votes.ts'
 
-const votesStore = useVotesStore()
-const caption = t('polls', 'Delete orphaned')
+	const votesStore = useVotesStore()
+	const caption = t('polls', 'Delete orphaned')
 
 </script>
 

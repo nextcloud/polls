@@ -4,32 +4,32 @@
 -->
 
 <script setup lang="ts">
-import { computed, defineProps, PropType } from 'vue'
-import { ActionDelete } from '../Actions/index.js'
-import UserItem from '../User/UserItem.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useOptionsStore, Option } from '../../stores/options.ts'
-import { UserType } from '../../Types/index.ts'
+	import { computed, defineProps, PropType } from 'vue'
+	import { ActionDelete } from '../Actions/index.js'
+	import UserItem from '../User/UserItem.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useSessionStore } from '../../stores/session.ts'
+	import { useOptionsStore, Option } from '../../stores/options.ts'
+	import { UserType } from '../../Types/index.ts'
 
-const pollStore = usePollStore()
-const sessionStore = useSessionStore()
-const optionsStore = useOptionsStore()
+	const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
+	const optionsStore = useOptionsStore()
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		default: undefined,
-	},
-	avatarSize: {
-		type: Number,
-		default: 32,
-	},
-})
+	const props = defineProps({
+		option: {
+			type: Object as PropType<Option>,
+			default: undefined,
+		},
+		avatarSize: {
+			type: Number,
+			default: 32,
+		},
+	})
 
-const showDelete = computed(() => !pollStore.permissions.edit && sessionStore.currentUser.userId === props.option.owner.userId)
-const showOwner = computed(() => props.option.owner.type !== UserType.Empty && props.option.owner.userId !== pollStore.owner.userId)
+	const showDelete = computed(() => !pollStore.permissions.edit && sessionStore.currentUser.userId === props.option.owner.userId)
+	const showOwner = computed(() => props.option.owner.type !== UserType.None && props.option.owner.userId !== pollStore.owner.userId)
 
 </script>
 

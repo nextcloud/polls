@@ -4,27 +4,27 @@
 -->
 
 <script setup>
-import { computed } from 'vue'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { InputDiv } from '../../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePreferencesStore } from '../../../stores/preferences.ts'
-const preferencesStore = usePreferencesStore()
+	import { computed } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { InputDiv } from '../../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore } from '../../../stores/preferences.ts'
+	const preferencesStore = usePreferencesStore()
 
-const calendarChoices = computed(() => preferencesStore.availableCalendars.map((calendar) => ({
-	key: calendar.key.toString(),
-	name: calendar.name,
-	displayColor: calendar.displayColor,
-	selected: preferencesStore.user.checkCalendars.includes(calendar.key.toString()),
-})))
+	const calendarChoices = computed(() => preferencesStore.availableCalendars.map((calendar) => ({
+		key: calendar.key.toString(),
+		name: calendar.name,
+		displayColor: calendar.displayColor,
+		selected: preferencesStore.user.checkCalendars.includes(calendar.key.toString()),
+	})))
 
-const clickedCalendar = (calendar) => {
-	if (preferencesStore.user.checkCalendars.includes(calendar.key)) {
-		preferencesStore.removeCheckCalendar(calendar)
-	} else {
-		preferencesStore.addCheckCalendar(calendar)
+	const clickedCalendar = (calendar) => {
+		if (preferencesStore.user.checkCalendars.includes(calendar.key)) {
+			preferencesStore.removeCheckCalendar(calendar)
+		} else {
+			preferencesStore.addCheckCalendar(calendar)
+		}
 	}
-}
 </script>
 
 <template>

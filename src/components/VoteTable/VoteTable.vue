@@ -4,35 +4,35 @@
 -->
 
 <script setup lang="ts">
-import { defineProps, PropType } from 'vue'
-import { showSuccess } from '@nextcloud/dialogs'
-import { ActionDelete } from '../Actions/index.js'
-import VoteColumn from './VoteColumn.vue'
-import VoteMenu from './VoteMenu.vue'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-import { ViewMode } from '../../stores/preferences.ts'
+	import { defineProps, PropType } from 'vue'
+	import { showSuccess } from '@nextcloud/dialogs'
+	import { ActionDelete } from '../Actions/index.js'
+	import VoteColumn from './VoteColumn.vue'
+	import VoteMenu from './VoteMenu.vue'
+	import { t } from '@nextcloud/l10n'
+	import UserItem from '../User/UserItem.vue'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useSessionStore } from '../../stores/session.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
+	import { useVotesStore } from '../../stores/votes.ts'
+	import { ViewMode } from '../../Types/index.ts'
 
-const pollStore = usePollStore()
-const sessionStore = useSessionStore()
-const optionsStore = useOptionsStore()
-const votesStore = useVotesStore()
+	const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
+	const optionsStore = useOptionsStore()
+	const votesStore = useVotesStore()
 
-const props = defineProps({
-	viewMode: {
-		type: String as PropType<ViewMode>,
-		default: ViewMode.TableView,
-	},
-})
+	const props = defineProps({
+		viewMode: {
+			type: String as PropType<ViewMode>,
+			default: ViewMode.TableView,
+		},
+	})
 
-async function removeUser(userId: string) {
-	await votesStore.deleteUser({ userId })
-	showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
-}
+	async function removeUser(userId: string) {
+		await votesStore.deleteUser({ userId })
+		showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
+	}
 
 </script>
 

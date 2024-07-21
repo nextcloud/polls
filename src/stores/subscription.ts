@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,10 +5,10 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, PollsAPI } from '../Api/index.js'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 import { useSessionStore } from './session.ts'
 
-type Subscription = {
+export type Subscription = {
 	subscribed: boolean
 }
 

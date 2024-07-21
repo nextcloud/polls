@@ -4,53 +4,53 @@
 -->
 
 <script setup lang="ts">
-import { computed, defineProps, PropType } from 'vue'
-import moment from '@nextcloud/moment'
-import linkifyStr from 'linkify-string'
-import { showError } from '@nextcloud/dialogs'
-import { ActionDelete } from '../Actions/index.js'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { useSessionStore } from '../../stores/session.ts'
-import { usePollStore } from '../../stores/poll.ts'
-import { Comment, CommentsGrouped } from '../../stores/comments.ts'
+	import { computed, defineProps, PropType } from 'vue'
+	import moment from '@nextcloud/moment'
+	import linkifyStr from 'linkify-string'
+	import { showError } from '@nextcloud/dialogs'
+	import { ActionDelete } from '../Actions/index.js'
+	import { t } from '@nextcloud/l10n'
+	import UserItem from '../User/UserItem.vue'
+	import { useSessionStore } from '../../stores/session.ts'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { Comment, CommentsGrouped } from '../../Types/index.ts'
 
 
-const sessionStore = useSessionStore()
-const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
+	const pollStore = usePollStore()
 
-const props = defineProps(
-	{
-		comment: {
-			type: Object as PropType<CommentsGrouped>,
-			default: null,
+	const props = defineProps(
+		{
+			comment: {
+				type: Object as PropType<CommentsGrouped>,
+				default: null,
+			},
 		},
-	},
-)
+	)
 
-const dateCommentedRelative = computed(() => moment.unix(props.comment.timestamp).fromNow())
+	const dateCommentedRelative = computed(() => moment.unix(props.comment.timestamp).fromNow())
 
-const isCurrentUser = computed(() => sessionStore.currentUser.userId === props.comment.user.userId)
+	const isCurrentUser = computed(() => sessionStore.currentUser.userId === props.comment.user.userId)
 
-function linkify(subComment: string) {
-	return linkifyStr(subComment)
-}
-
-async function deleteComment(comment: Comment) {
-	try {
-		await this.comments.delete({ comment })
-	} catch {
-		showError(t('polls', 'Error while deleting the comment'))
+	function linkify(subComment: string) {
+		return linkifyStr(subComment)
 	}
-}
 
-async function restoreComment(comment: Comment) {
-	try {
-		await this.comments.restore({ comment })
-	} catch {
-		showError(t('polls', 'Error while restoring the comment'))
+	async function deleteComment(comment: Comment) {
+		try {
+			await this.comments.delete({ comment })
+		} catch {
+			showError(t('polls', 'Error while deleting the comment'))
+		}
 	}
-}
+
+	async function restoreComment(comment: Comment) {
+		try {
+			await this.comments.restore({ comment })
+		} catch {
+			showError(t('polls', 'Error while restoring the comment'))
+		}
+	}
 
 </script>
 

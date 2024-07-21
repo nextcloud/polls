@@ -4,41 +4,41 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { NcActions, NcActionButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
+	import { ref } from 'vue'
+	import { NcActions, NcActionButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
 
-import OptionCloneDate from './OptionCloneDate.vue'
-import OptionItem from './OptionItem.vue'
-import OptionItemOwner from './OptionItemOwner.vue'
+	import OptionCloneDate from './OptionCloneDate.vue'
+	import OptionItem from './OptionItem.vue'
+	import OptionItemOwner from './OptionItemOwner.vue'
 
-import { usePollStore, PollType } from '../../stores/poll.ts'
-import { useOptionsStore, Option } from '../../stores/options.ts'
+	import { usePollStore, PollType } from '../../stores/poll.ts'
+	import { useOptionsStore, Option } from '../../stores/options.ts'
 
-import { BoxType } from '../../Types/index.ts'
+	import { BoxType } from '../../Types/index.ts'
 
-import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
-import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
-import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+	import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
+	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 
-const pollStore = usePollStore()
-const optionsStore = useOptionsStore()
+	const pollStore = usePollStore()
+	const optionsStore = useOptionsStore()
 
-const cloneModal = ref(false)
-const optionToClone = ref({})
-const pollType = ref(PollType.Date)
+	const cloneModal = ref(false)
+	const optionToClone = ref({})
+	const pollType = ref(PollType.Date)
 
-const cssVar = {
-	'var(--content-deleted)': `" (${t('polls', 'deleted')})"`
-}
+	const cssVar = {
+		'var(--content-deleted)': `" (${t('polls', 'deleted')})"`
+	}
 
-function cloneOptionModal(option: Option) {
-	optionToClone.value = option
-	cloneModal.value = true
-}
+	function cloneOptionModal(option: Option) {
+		optionToClone.value = option
+		cloneModal.value = true
+	}
 
 </script>
 

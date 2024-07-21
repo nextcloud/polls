@@ -4,35 +4,35 @@
 -->
 
 <script setup lang="ts">
-import { defineProps, defineEmits, PropType } from 'vue'
-import { NcActionButton, NcAppNavigationItem } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
+	import { defineProps, defineEmits, PropType } from 'vue'
+	import { NcActionButton, NcAppNavigationItem } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
 
-import { useSessionStore } from '../../stores/session.ts'
-import { Poll } from '../../stores/poll.ts'
+	import { useSessionStore } from '../../stores/session.ts'
+	import { Poll, PollType } from '../../Types/index.ts'
 
-import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
-import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
-import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
-import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+	import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+	import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
+	import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+	import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
-const sessionStore = useSessionStore()
+	const sessionStore = useSessionStore()
 
-const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
-const props = defineProps({
-	poll: {
-		type: Object as PropType<Poll>,
-		default: undefined,
-	},
-})
+	const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
+	const props = defineProps({
+		poll: {
+			type: Object as PropType<Poll>,
+			default: undefined,
+		},
+	})
 </script>
 
 <template>
 	<NcAppNavigationItem :name="props.poll.configuration.title" :to="{name: 'vote', params: {id: props.poll.id}}" :class="{ closed: props.poll.status.expired }">
 		<template #icon>
-			<TextPollIcon v-if="props.poll.type === 'textPoll'" />
+			<TextPollIcon v-if="props.poll.type === PollType.Text" />
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>

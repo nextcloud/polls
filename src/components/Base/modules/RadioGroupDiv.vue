@@ -4,35 +4,35 @@
 -->
 
 <script setup lang="ts">
-import { computed, defineEmits, defineModel, defineProps, PropType } from 'vue'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { computed, defineEmits, defineModel, defineProps, PropType } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
-export type CheckboxOption = {
-	value: string
-	label: string
-}
+	export type CheckboxOption = {
+		value: string
+		label: string
+	}
 
-const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
+	const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
 
-const props = defineProps({
-	id: {
+	const props = defineProps({
+		id: {
+			type: String,
+			default: null,
+		},
+		options: {
+			type: Array as PropType<CheckboxOption[]>,
+			required: true,
+		},
+	})
+
+	const model = defineModel({
 		type: String,
 		default: null,
-	},
-	options: {
-		type: Array as PropType<CheckboxOption[]>,
-		required: true,
-	},
-})
+	})
 
-const model = defineModel({
-	type: String,
-	default: null,
-})
+	const emit = defineEmits(['update'])
 
-const emit = defineEmits(['update'])
-
-const elementId = computed(() => props.id ?? `rg-${RandId()}`)
+	const elementId = computed(() => props.id ?? `rg-${RandId()}`)
 
 </script>
 

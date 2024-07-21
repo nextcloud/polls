@@ -4,25 +4,25 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { CardDiv } from '../../Base/index.js'
-import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
-import { t, n } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
+	import { computed } from 'vue'
+	import { CardDiv } from '../../Base/index.js'
+	import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
+	import { t, n } from '@nextcloud/l10n'
+	import { usePollStore } from '../../../stores/poll.ts'
 
-const pollStore = usePollStore()
+	const pollStore = usePollStore()
 
-const orphanedVotesText = computed(() => n(
+	const orphanedVotesText = computed(() => n(
 		'polls',
 		'%n orphaned vote of a probaly deleted option is possibly blocking your vote limit.',
 		'%n orphaned votes of probaly deleted options are possibly blocking your vote limit.',
 		pollStore.currentUserStatus.orphanedVotes))
 
-const votesLeft = computed(() => (pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes) > 0
+	const votesLeft = computed(() => (pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes) > 0
 		? pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes
 		: 0)
 
-const cardType = computed(() => pollStore.configuration.maxVotesPerUser && votesLeft.value < 1 ? 'error' : 'info')
+	const cardType = computed(() => pollStore.configuration.maxVotesPerUser && votesLeft.value < 1 ? 'error' : 'info')
 </script>
 
 <template>

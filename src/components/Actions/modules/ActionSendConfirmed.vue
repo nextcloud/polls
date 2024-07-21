@@ -4,45 +4,48 @@
 -->
 
 <script setup lang="ts">
-import { defineEmits, ref } from 'vue'
-import { NcButton, NcModal } from '@nextcloud/vue'
-import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
-import { PollsAPI } from '../../../Api/index.js'
-import { Logger } from '../../../helpers/index.js'
-import { t, n } from '@nextcloud/l10n'
+	import { useRoute } from 'vue-router'
+	import { defineEmits, ref } from 'vue'
+	import { NcButton, NcModal } from '@nextcloud/vue'
+	import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
+	import { PollsAPI } from '../../../Api/index.js'
+	import { Logger } from '../../../helpers/index.ts'
+	import { t, n } from '@nextcloud/l10n'
+	import { StatusResults } from '../../../Types/index.ts'
 
-const showModal = ref(false)
-const sendButtonCaption = ref(t('polls', 'Send information about confirmed options by email'))
-const confirmations = ref(null)
-const disableButton = ref(false)
-const sentStatus = ref('')
-const $emit = defineEmits(['success', 'error'])
+	const route = useRoute()
+	const showModal = ref(false)
+	const sendButtonCaption = ref(t('polls', 'Send information about confirmed options by email'))
+	const confirmations = ref(null)
+	const disableButton = ref(false)
+	const sentStatus = ref('')
+	const emit = defineEmits(['success', 'error'])
 
-/**
- *
- */
-async function clickAction() {
-	if (sentStatus.value === 'success') {
-		showModal.value = true
-		return
+	/**
+	 *
+	 */
+	async function clickAction() {
+		if (sentStatus.value === 'success') {
+			showModal.value = true
+			return
+		}
+
+		try {
+			disableButton.value = true
+			const result = await PollsAPI.sendConfirmation(route.params.id)
+			confirmations.value = result.data.confirmations
+			showModal.value = true
+			sendButtonCaption.value = t('polls', 'See result')
+			sentStatus.value = StatusResults.Success
+			emit('success')
+		} catch (error) {
+			Logger.error('Error on sending confirmation mails', { error })
+			sentStatus.value = StatusResults.Error
+			emit('error')
+		} finally {
+			disableButton.value = false
+		}
 	}
-
-	try {
-		disableButton.value = true
-		const result = await PollsAPI.sendConfirmation($route.params.id)
-		confirmations.value = result.data.confirmations
-		showModal.value = true
-		sendButtonCaption.value = t('polls', 'See result')
-		sentStatus.value = 'success'
-		$emit('success')
-	} catch (error) {
-		Logger.error('Error on sending confirmation mails', { error })
-		sentStatus.value = 'error'
-		$emit('error')
-	} finally {
-		disableButton.value = false
-	}
-}
 </script>
 
 <template>

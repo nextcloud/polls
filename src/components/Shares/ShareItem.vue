@@ -4,137 +4,137 @@
 -->
 
 <script setup lang="ts">
-import { defineProps, defineEmits, ref, computed, onMounted, PropType } from 'vue'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { t } from '@nextcloud/l10n'
-import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
+	import { defineProps, defineEmits, ref, computed, onMounted, PropType } from 'vue'
+	import { showSuccess, showError } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+	import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
 
-import { Logger } from '../../helpers/index.js'
-import UserItem from '../User/UserItem.vue'
+	import { Logger } from '../../helpers/index.ts'
+	import UserItem from '../User/UserItem.vue'
 
-import { useSharesStore } from '../../stores/shares.ts'
-import { Share } from '../../stores/share.ts'
+	import { useSharesStore } from '../../stores/shares.ts'
+	import { Share, UserType } from '../../Types/index.ts'
 
-import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
-import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
-import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
-import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
-import GrantAdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
-import EditIcon from 'vue-material-design-icons/Pencil.vue'
-import WithdrawAdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
-import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
-import QrIcon from 'vue-material-design-icons/Qrcode.vue'
-import LockIcon from 'vue-material-design-icons/Lock.vue'
-import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+	import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
+	import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
+	import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
+	import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
+	import GrantAdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
+	import EditIcon from 'vue-material-design-icons/Pencil.vue'
+	import WithdrawAdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
+	import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
+	import QrIcon from 'vue-material-design-icons/Qrcode.vue'
+	import LockIcon from 'vue-material-design-icons/Lock.vue'
+	import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 
-const sharesStore = useSharesStore()
-const props = defineProps( {
-	share: {
-		type: Object as PropType<Share>,
-		default: undefined,
-	},
-})
+	const sharesStore = useSharesStore()
+	const props = defineProps( {
+		share: {
+			type: Object as PropType<Share>,
+			default: undefined,
+		},
+	})
 
-const emit = defineEmits(['showQrCode'])
+	const emit = defineEmits(['showQrCode'])
 
-const resolving = ref(false)
-const label = ref({
-	inputValue: '',
-	inputProps: {
-		success: false,
-		error: false,
-		showTrailingButton: true,
-		labelOutside: false,
-		label: t('polls', 'Share label'),
-	},
-})
+	const resolving = ref(false)
+	const label = ref({
+		inputValue: '',
+		inputProps: {
+			success: false,
+			error: false,
+			showTrailingButton: true,
+			labelOutside: false,
+			label: t('polls', 'Share label'),
+		},
+	})
 
-const isActivePublicShare = computed(() => !props.share.deleted && props.share.user.type === 'public')
-const activateResendInvitation = computed(() => !props.share.deleted && (props.share.user.emailAddress || props.share.user.type === 'group'))
-const activateResolveGroup = computed(() => !props.share.deleted && ['contactGroup', 'circle'].includes(props.share.user.type))
-const activateSwitchAdmin = computed(() => !props.share.deleted && (props.share.user.type === 'user' || props.share.user.type === 'admin'))
-const activateCopyLink = computed(() => !props.share.deleted)
-const activateShowQr = computed(() => !props.share.deleted && !!props.share.URL)
-const userItemProps = computed(() => ({
-	user: props.share.user,
-	label: props.share.label,
-	showEmail: true,
-	resolveInfo: true,
-	forcedDescription: props.share.deleted ? `(${t('polls', 'deleted')})` : null,
-	showTypeIcon: true,
-	icon: true,
-}))
+	const isActivePublicShare = computed(() => !props.share.deleted && props.share.user.type === UserType.Public)
+	const activateResendInvitation = computed(() => !props.share.deleted && (props.share.user.emailAddress || props.share.user.type === UserType.Group))
+	const activateResolveGroup = computed(() => !props.share.deleted && [UserType.ContactGroup, UserType.Circle].includes(props.share.user.type))
+	const activateSwitchAdmin = computed(() => !props.share.deleted && (props.share.user.type === UserType.User || props.share.user.type === UserType.Admin))
+	const activateCopyLink = computed(() => !props.share.deleted)
+	const activateShowQr = computed(() => !props.share.deleted && !!props.share.URL)
+	const userItemProps = computed(() => ({
+		user: props.share.user,
+		label: props.share.label,
+		showEmail: true,
+		resolveInfo: true,
+		forcedDescription: props.share.deleted ? `(${t('polls', 'deleted')})` : null,
+		showTypeIcon: true,
+		icon: true,
+	}))
 
-onMounted(() => {
-	label.value.inputValue = props.share.label
-})
+	onMounted(() => {
+		label.value.inputValue = props.share.label
+	})
 
-async function switchLocked(share: Share) {
-	try {
-		if (share.locked) {
-			sharesStore.unlock({ share })
-			showSuccess(t('polls', 'Share of {displayName} unlocked', { displayName: share.user.displayName }))
-		} else {
-			sharesStore.lock({ share })
-			showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.user.displayName }))
+	async function switchLocked(share: Share) {
+		try {
+			if (share.locked) {
+				sharesStore.unlock({ share })
+				showSuccess(t('polls', 'Share of {displayName} unlocked', { displayName: share.user.displayName }))
+			} else {
+				sharesStore.lock({ share })
+				showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.user.displayName }))
+			}
+		} catch (error) {
+			showError(t('polls', 'Error while changing lock status of share {displayName}', { displayName: share.user.displayName }))
+			Logger.error('Error locking or unlocking share', { share, error })
 		}
-	} catch (error) {
-		showError(t('polls', 'Error while changing lock status of share {displayName}', { displayName: share.user.displayName }))
-		Logger.error('Error locking or unlocking share', { share, error })
-	}
-}
-
-async function submitLabel() {
-	sharesStore.writeLabel({ token: props.share.token, label: label.value.inputValue })
-}
-
-async function resolveGroup(share: Share) {
-	if (resolving.value) {
-		return
 	}
 
-	resolving.value = true
+	async function submitLabel() {
+		sharesStore.writeLabel({ token: props.share.token, label: label.value.inputValue })
+	}
 
-	try {
-		await sharesStore.resolveGroup ({ share })
-	} catch (error) {
-		if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
-			showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.user.displayName }))
-		} else if (error.response.status === 409 && error.response.data === 'Contacts is not enabled') {
-			showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.user.displayName }))
-		} else {
-			showError(t('polls', 'Error resolving {name}.', { name: share.user.displayName }))
+	async function resolveGroup(share: Share) {
+		if (resolving.value) {
+			return
 		}
-	} finally {
-		resolving.value = false
-	}
-}
 
-async function sendInvitation() {
-	const response = await sharesStore.sendInvitation({ share: props.share })
-	if (response.data?.sentResult?.sentMails) {
-		response.data.sentResult.sentMails.forEach((item) => {
-			showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
-		})
-	}
-	if (response.data?.sentResult?.abortedMails) {
-		response.data.sentResult.abortedMails.forEach((item) => {
-			Logger.error('Mail could not be sent!', { recipient: item })
-			showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
-		})
-	}
-}
+		resolving.value = true
 
-function copyLink() {
-	try {
-		navigator.clipboard.writeText(props.share.URL)
-		showSuccess(t('polls', 'Link copied to clipboard'))
-	} catch {
-		showError(t('polls', 'Error while copying link to clipboard'))
+		try {
+			await sharesStore.resolveGroup ({ share })
+		} catch (error) {
+			if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
+				showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.user.displayName }))
+			} else if (error.response.status === 409 && error.response.data === 'Contacts is not enabled') {
+				showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.user.displayName }))
+			} else {
+				showError(t('polls', 'Error resolving {name}.', { name: share.user.displayName }))
+			}
+		} finally {
+			resolving.value = false
+		}
 	}
-}
+
+	async function sendInvitation() {
+		const response = await sharesStore.sendInvitation({ share: props.share })
+		if (response.data?.sentResult?.sentMails) {
+			response.data.sentResult.sentMails.forEach((item) => {
+				showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
+			})
+		}
+		if (response.data?.sentResult?.abortedMails) {
+			response.data.sentResult.abortedMails.forEach((item) => {
+				Logger.error('Mail could not be sent!', { recipient: item })
+				showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
+			})
+		}
+	}
+
+	function copyLink() {
+		try {
+			navigator.clipboard.writeText(props.share.URL)
+			showSuccess(t('polls', 'Link copied to clipboard'))
+		} catch {
+			showError(t('polls', 'Error while copying link to clipboard'))
+		}
+	}
 </script>
 
 <template>
@@ -146,7 +146,7 @@ function copyLink() {
 				<div v-if="share.voted">
 					<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />
 				</div>
-				<div v-else-if="['public', 'group'].includes(share.user.type)">
+				<div v-else-if="[UserType.Public, UserType.Group].includes(share.user.type)">
 					<div class="vote-status empty" />
 				</div>
 				<div v-else>
@@ -184,11 +184,11 @@ function copyLink() {
 				</NcActionButton>
 
 				<NcActionButton v-if="activateSwitchAdmin"
-					:name="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
-					:aria-label="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
+					:name="share.user.type === UserType.User ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
+					:aria-label="share.user.type === UserType.User ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
 					@click="sharesStore.switchAdmin({ share: share })">
 					<template #icon>
-						<GrantAdminIcon v-if="share.user.type === 'user'" />
+						<GrantAdminIcon v-if="share.user.type === UserType.User" />
 						<WithdrawAdminIcon v-else />
 					</template>
 				</NcActionButton>

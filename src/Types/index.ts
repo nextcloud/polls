@@ -1,8 +1,21 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+
+export { Activity, Activities } from '../stores/activity.ts'
+export { UpdateType, Group, AppSettings } from '../stores/appSettings.ts'
+export { Subscription } from '../stores/subscription.ts'
+export { Combo, Participant } from '../stores/combo.ts'
+export { Comment, Comments, CommentsGrouped } from '../stores/comments.ts'
+export { Poll, PollType, AccessType, ShowResults, AllowProposals, PollConfiguration, PollStatus, PollPermissions, CurrentUserStatus } from '../stores/poll.ts'
+export { SortType, FilterType, PollCategory, Meta, PollList } from '../stores/polls.ts'
+export { Option, OptionVotes, Sequence, Shift, SimpleOption, Options } from '../stores/options.ts'
+export { Share } from '../stores/share.ts'
+export { Shares } from '../stores/shares.ts'
+export { Route, UserStatus, Session } from '../stores/session.ts'
+export { UserPreferences, SessionSettings, Calendar, Preferences, ViewMode } from '../stores/preferences.ts'
+export { Answer, AnswerSymbol, Vote, Votes } from '../stores/votes.ts'
 
 export enum StatusResults {
 	Error = 'error',
@@ -11,17 +24,15 @@ export enum StatusResults {
 	Loading = 'loading',
 	Loaded = 'loaded',
 }
-export type PollPermissions = {
-	addOptions: boolean
-	archive: boolean
-	comment: boolean
-	delete: boolean
-	edit: boolean
-	seeResults: boolean
-	seeUsernames: boolean
-	subscribe: boolean
-	view: boolean
-	vote: boolean
+
+export enum SignalingType {
+	None = '',
+	Empty = 'empty',
+	Error = 'error',
+	Valid = 'valid',
+	InValid = 'invalid',
+	Success = 'success',
+	Checking = 'checking',
 }
 
 export enum UserType {
@@ -34,7 +45,7 @@ export enum UserType {
 	Public = 'public',
 	Circle = 'circle',
 	ContactGroup = 'contactGroup',
-	Empty = 'empty',
+	None = '',
 }
 
 export enum VirtualUserItemType {
@@ -42,11 +53,6 @@ export enum VirtualUserItemType {
 	InternalAccess = 'internalAccess',
 	Deleted = 'deleted',
 	Anonymous = 'anonymous',
-	None = '',
-}
-
-export enum UpdateType {
-	NoPolling = 'noPolling'
 }
 
 export enum BoxType {
@@ -54,14 +60,14 @@ export enum BoxType {
 	Date = 'dateBox',
 }
 
-export type AppSettings = {
-	usePrivacyUrl: string,
-	useImprintUrl: string,
-	useLogin: boolean
-	useActivity: boolean
-	navigationPollsInList: boolean
-	updateType: UpdateType,
-}
+// export type AppSettings = {
+// 	usePrivacyUrl: string,
+// 	useImprintUrl: string,
+// 	useLogin: boolean
+// 	useActivity: boolean
+// 	navigationPollsInList: boolean
+// 	updateType: UpdateType,
+// }
 
 export type AppPermissions = {
 	allAccess: boolean

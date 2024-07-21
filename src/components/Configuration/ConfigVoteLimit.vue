@@ -4,37 +4,37 @@
 -->
 
 <script setup lang="ts">
-import { mapStores } from 'pinia'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { InputDiv } from '../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+	import { computed } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { InputDiv } from '../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
 
-const { pollStore } = mapStores(usePollStore)
-const { optionsStore } = mapStores(useOptionsStore)
+	const pollStore = usePollStore()
+	const optionsStore = useOptionsStore()
 
-const useLimit = computed({
-	get: () => !!pollStore.configuration.maxVotesPerUser,
-	set(value) {
-		pollStore.configuration.maxVotesPerUser = value ? 1 : 0
+	const useLimit = computed({
+		get: () => !!pollStore.configuration.maxVotesPerUser,
+		set(value) {
+			pollStore.configuration.maxVotesPerUser = value ? 1 : 0
+		}
+	})
+
+	/**
+	 *
+	 */
+	function validateLimit() {
+		if (!useLimit.value) {
+			pollStore.configuration.maxVotesPerUser = 0
+		} else if (pollStore.configuration.maxVotesPerUser < 1) {
+			pollStore.configuration.maxVotesPerUser = 1
+		} else if (pollStore.configuration.maxVotesPerUser > optionsStore.list.length) {
+			pollStore.configuration.maxVotesPerUser = optionsStore.list.length
+		}
+
+		pollStore.write()
 	}
-})
-
-/**
- *
- */
-function validateLimit() {
-	if (!useLimit.value) {
-		pollStore.configuration.maxVotesPerUser = 0
-	} else if (pollStore.configuration.maxVotesPerUser < 1) {
-		pollStore.configuration.maxVotesPerUser = 1
-	} else if (pollStore.configuration.maxVotesPerUser > optionsStore.list.length) {
-		pollStore.configuration.maxVotesPerUser = optionsStore.list.length
-	}
-
-	pollStore.write()
-}
 </script>
 
 <template>

@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -7,22 +6,22 @@
 import { defineStore } from 'pinia'
 import { PublicAPI, OptionsAPI } from '../Api/index.js'
 import { User } from '../Types/index.ts'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 import moment from '@nextcloud/moment'
 import { orderBy } from 'lodash/orderBy'
 import { usePollStore, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { Answer } from './votes.ts'
 
-type Sequence = {
+export type Sequence = {
+	unit: { name?: string, value: string }
 	step: number
-	unit: { value: number }
 	amount: number
 }
 
-type Shift = {
+export type Shift = {
 	step: number
-	unit: { value: number }	
+	unit: { name?: string, value: string }	
 }
 
 export type OptionVotes = {
@@ -54,7 +53,7 @@ export type Option = {
 	owner: User
 }
 
-type Options = {
+export type Options = {
 	list: Option[]
 	ranked: boolean
 }

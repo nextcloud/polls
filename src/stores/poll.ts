@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -7,9 +6,9 @@
 import { defineStore } from 'pinia'
 import { PublicAPI, PollsAPI } from '../Api/index.js'
 import { User, UserType } from '../Types/index.ts'
-import { Logger, uniqueArrayOfObjects } from '../helpers/index.js'
+import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
 import moment from '@nextcloud/moment'
-import { usePreferencesStore } from './preferences.ts'
+import { usePreferencesStore, ViewMode } from './preferences.ts'
 import { useVotesStore, Answer } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
@@ -85,7 +84,7 @@ export type PollPermissions = {
 }
 
 export type CurrentUserStatus = {
-	userRole: string
+	userRole: UserType
 	isLocked: boolean
 	isInvolved: boolean
 	isLoggedIn: boolean
@@ -160,7 +159,7 @@ export const usePollStore = defineStore('poll', {
 			countParticipants: 0,
 		},
 		currentUserStatus: {
-			userRole: '',
+			userRole: UserType.None,
 			isLocked: false,
 			isInvolved: false,
 			isLoggedIn: false,
@@ -198,7 +197,7 @@ export const usePollStore = defineStore('poll', {
 			if (state.type === PollType.Date) {
 				return preferencesStore.$state.user.defaultViewDatePoll
 			}
-			return 'table-view'
+			return ViewMode.TableView
 		},
 	
 		getNextViewMode() {
@@ -263,8 +262,8 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		getProposalsOptions: () => [
-			{ value: 'disallow', label: t('polls', 'Disallow proposals') },
-			{ value: 'allow', label: t('polls', 'Allow proposals') },
+			{ value: AllowProposals.Disallow, label: t('polls', 'Disallow proposals') },
+			{ value: AllowProposals.Allow, label: t('polls', 'Allow proposals') },
 		],
 	
 		displayResults(state) {

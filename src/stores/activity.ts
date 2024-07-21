@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -9,7 +8,7 @@ import { ActivityAPI } from '../Api/index.js'
 import { Vote } from './votes.ts'
 import { useSessionStore } from './session.ts'
 
-type Activity = {
+export type Activity = {
 	activity_id: number
 	app: string
 	type: string
@@ -25,7 +24,7 @@ type Activity = {
 	datetime: string
 }
 
-type Activities = {
+export type Activities = {
 	list: Activity[]
 }
 

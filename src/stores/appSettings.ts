@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { AppSettingsAPI } from '../Api/index.js'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 import { debounce } from 'lodash'
 
 export enum UpdateType {

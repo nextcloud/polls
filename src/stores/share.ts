@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI } from '../Api/index.js'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 import { usePollStore } from './poll.ts'
 import { useCommentsStore } from './comments.ts'
 import { useVotesStore } from './votes.ts'
@@ -15,34 +14,6 @@ import { useSubscriptionStore } from './subscription.ts'
 import { User, UserType } from '../Types/index.ts'
 import { useSessionStore } from './session.ts'
 
-export enum InvitationTypes {
-	Email = 'email',
-	External = 'external',
-	Contact = 'contact',
-}
-
-export enum DirectShareTypes {
-	User = 'user',
-	Group = 'group',
-	Admin = 'admin',
-	Public = 'public',
-}
-
-export enum ShareTypes {
-	None = '',
-	Email = 'email',
-	External = 'external',
-	Contact = 'contact',
-	User = 'user',
-	Group = 'group',
-	Admin = 'admin',
-	Public = 'public'
-}
-
-export type InvitationType = keyof typeof InvitationTypes
-export type DirectShareType = keyof typeof DirectShareTypes
-export type ShareType = ShareTypes
-
 export type Share = {
 	displayName: string
 	id: string | null
@@ -50,7 +21,7 @@ export type Share = {
 	locked: boolean
 	pollId: number | null
 	token: string
-	type: ShareTypes
+	type: UserType
 	emailAddress: string
 	userId: string
 	publicPollEmail: string
@@ -70,7 +41,7 @@ export const useShareStore = defineStore('share', {
 		locked: false,
 		pollId: null,
 		token: '',
-		type: ShareTypes.None,
+		type: UserType.None,
 		emailAddress: '',
 		userId: '',
 		publicPollEmail: 'optional',
@@ -82,7 +53,7 @@ export const useShareStore = defineStore('share', {
 			subtitle: '',
 			isNoUser: true,
 			desc: '',
-			type: UserType.User,
+			type: UserType.None,
 			id: '',
 			user: '',
 			organisation: '', 

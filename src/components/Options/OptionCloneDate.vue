@@ -4,43 +4,47 @@
 -->
 
 <script setup lang="ts">
-import { defineProps, defineEmits, computed, ref } from 'vue'
-import moment from '@nextcloud/moment'
-import { NcButton, NcSelect } from '@nextcloud/vue'
-import { InputDiv } from '../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { useOptionsStore, Option } from '../../stores/options.ts'
-import { dateUnits } from '../../constants/dateUnits.ts'
+	import { defineProps, defineEmits, computed, ref, PropType } from 'vue'
+	import moment from '@nextcloud/moment'
+	import { NcButton, NcSelect } from '@nextcloud/vue'
+	import { InputDiv } from '../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
+	import { dateUnits } from '../../constants/dateUnits.ts'
 
-const { optionsStore } = mapStores(useOptionsStore)
+	const optionsStore = useOptionsStore()
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		default: undefined,
-	},
-})
 
-const emit = defineEmits(['close'])
-
-const sequence = ref({
-	unit: { name: t('polls', 'Week'), value: 'week' },
-	step: 1,
-	amount: 1,
-})
-
-const dateBaseOptionString = computed(() => moment.unix(props.option.timestamp).format('LLLL'))
-
-/**
- *
- */
-function createSequence() {
-	optionsStore.sequence({
-		option: props.option,
-		sequence: sequence.value,
+	const props = defineProps({
+		option: {
+			type: Object as PropType<Option>,
+			default: undefined,
+		},
 	})
-	emit('close')
-}
+
+	const emit = defineEmits(['close'])
+
+	const sequence = ref<Sequence>({
+		unit: {
+			name: t('polls', 'Week'),
+			value: 'week',
+		},
+		step: 1,
+		amount: 1,
+	})
+
+	const dateBaseOptionString = computed(() => moment.unix(props.option.timestamp).format('LLLL'))
+
+	/**
+	 *
+	 */
+	function createSequence() {
+		optionsStore.sequence({
+			option: props.option,
+			sequence: sequence.value,
+		})
+		emit('close')
+	}
 
 </script>
 

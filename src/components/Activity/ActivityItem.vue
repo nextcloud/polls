@@ -4,78 +4,79 @@
 -->
 
 <script setup lang="ts">
-import moment from '@nextcloud/moment'
-import { NcUserBubble, NcRichText } from '@nextcloud/vue'
-import { GuestBubble, SimpleLink } from '../../helpers/index.js'
+	import { computed, defineProps } from 'vue'
+	import moment from '@nextcloud/moment'
+	import { NcUserBubble, NcRichText } from '@nextcloud/vue'
+	import { GuestBubble, SimpleLink } from '../../helpers/index.ts'
 
-const props = defineProps({
-	activity: {
-		type: Object,
-		default: null,
-	},
-})
-
-const dateActivityRelative = computed(() => moment(props.activity.datetime).fromNow())
-
-const message = computed(() => {
-	const subject = props.activity.subject_rich[0]
-	const parameters = JSON.parse(JSON.stringify(props.activity.subject_rich[1]))
-	if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
-		const dateTime = parameters.after.id.slice(3)
-		parameters.after.name = moment(dateTime).format('L LTS')
-	}
-
-	Object.keys(parameters).forEach(function(key) {
-		const { type } = parameters[key]
-		switch (type) {
-		case 'highlight':
-			parameters[key] = parameters[key].link
-				? {
-					component: SimpleLink,
-					props: {
-						href: parameters[key].link,
-						name: parameters[key].name,
-					},
-				}
-				: `${parameters[key].name}`
-			break
-		case 'user':
-			parameters[key] = {
-				component: NcUserBubble,
-				props: {
-					user: parameters[key].id,
-					displayName: parameters[key].name,
-				},
-			}
-			break
-		case 'circle':
-			parameters[key] =  {
-				component: SimpleLink,
-				props: {
-					href: parameters[key].link,
-					name: parameters[key].name,
-				},
-			}
-			break
-		case 'guest':
-			parameters[key] = {
-				component: GuestBubble,
-				props: {
-					user: parameters[key].id,
-					displayName: parameters[key].name,
-				},
-			}
-			break
-		default:
-			parameters[key] = `{${key}}`
-		}
-
+	const props = defineProps({
+		activity: {
+			type: Object,
+			default: null,
+		},
 	})
 
-	return {
-		subject, parameters,
-	}
-})
+	const dateActivityRelative = computed(() => moment(props.activity.datetime).fromNow())
+
+	const message = computed(() => {
+		const subject = props.activity.subject_rich[0]
+		const parameters = JSON.parse(JSON.stringify(props.activity.subject_rich[1]))
+		if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
+			const dateTime = parameters.after.id.slice(3)
+			parameters.after.name = moment(dateTime).format('L LTS')
+		}
+
+		Object.keys(parameters).forEach(function(key) {
+			const { type } = parameters[key]
+			switch (type) {
+				case 'highlight':
+					parameters[key] = parameters[key].link
+						? {
+							component: SimpleLink,
+							props: {
+								href: parameters[key].link,
+								name: parameters[key].name,
+							},
+						}
+						: `${parameters[key].name}`
+					break
+				case 'user':
+					parameters[key] = {
+						component: NcUserBubble,
+						props: {
+							user: parameters[key].id,
+							displayName: parameters[key].name,
+						},
+					}
+					break
+				case 'circle':
+					parameters[key] =  {
+						component: SimpleLink,
+						props: {
+							href: parameters[key].link,
+							name: parameters[key].name,
+						},
+					}
+					break
+				case 'guest':
+					parameters[key] = {
+						component: GuestBubble,
+						props: {
+							user: parameters[key].id,
+							displayName: parameters[key].name,
+						},
+					}
+					break
+				default:
+					parameters[key] = `{${key}}`
+			}
+
+		})
+
+		return {
+			subject, parameters,
+		}
+	})
 </script>
 
 <template>

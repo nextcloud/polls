@@ -4,14 +4,14 @@
 -->
 
 <script setup lang="ts">
-import { defineProps } from 'vue'
+	import { defineProps } from 'vue'
 
-const props = defineProps({
-	tag: {
-		type: String,
-		default: 'div',
-	},
-})
+	const props = defineProps({
+		tag: {
+			type: String,
+			default: 'div',
+		},
+	})
 </script>
 
 <template>

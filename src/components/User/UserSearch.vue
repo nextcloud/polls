@@ -4,53 +4,53 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { debounce } from 'lodash'
-import { showError } from '@nextcloud/dialogs'
-import { NcSelect } from '@nextcloud/vue'
-import { AppSettingsAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
-import { t } from '@nextcloud/l10n'
-import { useSharesStore } from '../../stores/shares.ts'
+	import { ref } from 'vue'
+	import { debounce } from 'lodash'
+	import { showError } from '@nextcloud/dialogs'
+	import { NcSelect } from '@nextcloud/vue'
+	import { AppSettingsAPI } from '../../Api/index.js'
+	import { Logger } from '../../helpers/index.ts'
+	import { t } from '@nextcloud/l10n'
+	import { useSharesStore } from '../../stores/shares.ts'
 
-const sharesStore = useSharesStore()
-const users = ref([])
-const isLoading = ref(false)
-const placeholder = t('polls', 'Type to add an individual share')
+	const sharesStore = useSharesStore()
+	const users = ref([])
+	const isLoading = ref(false)
+	const placeholder = t('polls', 'Type to add an individual share')
 
-function loadUsersAsync() {
-	debounce(async function(query) {
-		if (!query) {
-			users.value = []
-			return
-		}
+	function loadUsersAsync() {
+		debounce(async function(query) {
+			if (!query) {
+				users.value = []
+				return
+			}
 
-		isLoading.value = true
+			isLoading.value = true
 
-		try {
-			const response = await AppSettingsAPI.getUsers(query)
-			users.value = response.data.siteusers
-			isLoading.value = false
-		} catch (error) {
-			if (error?.code === 'ERR_CANCELED') return
-			Logger.error(error.response)
-			isLoading.value = false
-		}
-	}, 250)()
-}
-
-async function clickAdd(payload) {
-	try {
-		await sharesStore.add({
-			user: {
-				...payload,
-			},
-		},
-		)
-	} catch {
-		showError(t('polls', 'Error while adding share'))
+			try {
+				const response = await AppSettingsAPI.getUsers(query)
+				users.value = response.data.siteusers
+				isLoading.value = false
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error(error.response)
+				isLoading.value = false
+			}
+		}, 250)()
 	}
-}
+
+	async function clickAdd(payload) {
+		try {
+			await sharesStore.add({
+				user: {
+					...payload,
+				},
+			},
+			)
+		} catch {
+			showError(t('polls', 'Error while adding share'))
+		}
+	}
 
 </script>
 

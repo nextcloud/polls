@@ -4,26 +4,26 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { t } from '@nextcloud/l10n'
-import { NcButton, NcSelect } from '@nextcloud/vue'
+	import { ref } from 'vue'
+	import { t } from '@nextcloud/l10n'
+	import { NcButton, NcSelect } from '@nextcloud/vue'
 
-import { InputDiv } from '../Base/index.js'
-import { dateUnits } from '../../constants/dateUnits.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+	import { InputDiv } from '../Base/index.js'
+	import { dateUnits } from '../../constants/dateUnits.ts'
+	import { useOptionsStore, Shift } from '../../stores/options.ts'
 
-import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
+	import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
-const optionsStore = useOptionsStore()
+	const optionsStore = useOptionsStore()
 
-const shift = ref({
-	step: 1,
-	unit: { name: t('polls', 'Week'), value: 'week' },
-})
+	const shift = ref<Shift>({
+		step: 1,
+		unit: { name: t('polls', 'Week'), value: 'week' },
+	})
 
-function shiftDates(payload) {
-	optionsStore.shift({ shift: payload })
-}
+	function shiftDates(shift: Shift) {
+		optionsStore.shift({ shift })
+	}
 
 </script>
 

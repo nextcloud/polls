@@ -3,24 +3,24 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script setup lang="ts">
-import { defineProps } from 'vue'
+	import { defineProps } from 'vue'
 
-const props = defineProps(
-	{ 
-		title: { 
-			type: String, 
-			default: 'Admin Access',
-		}, 
-		fillColor: { 
-			type: String, 
-			default: 'currentColor',
-		}, 
-		size: { 
-			type: Number, 
-			default: 24, 
-		}, 
-	} 
-)
+	const props = defineProps(
+		{ 
+			title: { 
+				type: String, 
+				default: 'Admin Access',
+			}, 
+			fillColor: { 
+				type: String, 
+				default: 'currentColor',
+			}, 
+			size: { 
+				type: Number, 
+				default: 24, 
+			}, 
+		} 
+	)
 </script>
 
 <template>

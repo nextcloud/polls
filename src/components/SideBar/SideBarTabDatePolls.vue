@@ -4,13 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { usePollsStore } from '../../stores/polls.ts'
-import { useComboStore } from '../../stores/combo.ts'
+	import { usePollsStore } from '../../stores/polls.ts'
+	import { useComboStore } from '../../stores/combo.ts'
 
-import UserItem from '../User/UserItem.vue'
+	import UserItem from '../User/UserItem.vue'
 
-const pollsStore = usePollsStore()
-const comboStore = useComboStore()
+	const pollsStore = usePollsStore()
+	const comboStore = useComboStore()
 </script>
 
 <template>

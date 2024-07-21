@@ -4,12 +4,12 @@
 -->
 
 <script setup lang="ts">
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
 
-const pollStore = usePollStore()
-const label = t('polls', 'Delete vote when switched to "No"')
+	const pollStore = usePollStore()
+	const label = t('polls', 'Delete vote when switched to "No"')
 
 </script>
 

@@ -4,22 +4,22 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { marked } from 'marked'
-import { gfmHeadingId } from 'marked-gfm-heading-id'
-import DOMPurify from 'dompurify'
-import { usePollStore } from '../../stores/poll.ts'
+	import { computed } from 'vue'
+	import { marked } from 'marked'
+	import { gfmHeadingId } from 'marked-gfm-heading-id'
+	import DOMPurify from 'dompurify'
+	import { usePollStore } from '../../stores/poll.ts'
 
-const pollStore = usePollStore()
+	const pollStore = usePollStore()
 
-const markedPrefix = {
-	prefix: 'desc-',
-}
+	const markedPrefix = {
+		prefix: 'desc-',
+	}
 
-const markedDescription = computed(() => {
-	marked.use(gfmHeadingId(markedPrefix))
-	return DOMPurify.sanitize(marked.parse(pollStore.descriptionSafe).toString())
-})
+	const markedDescription = computed(() => {
+		marked.use(gfmHeadingId(markedPrefix))
+		return DOMPurify.sanitize(marked.parse(pollStore.descriptionSafe).toString())
+	})
 
 </script>
 

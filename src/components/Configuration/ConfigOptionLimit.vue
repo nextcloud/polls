@@ -4,29 +4,29 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { InputDiv } from '../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
+	import { computed } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { InputDiv } from '../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
 
-const pollStore = usePollStore()
-const useLimit = computed({
-	get: () => !!pollStore.configuration.maxVotesPerOption,
-	set: (value) => {
-		pollStore.configuration.maxVotesPerOption = value ? 1 : 0
-	},
-})
+	const pollStore = usePollStore()
+	const useLimit = computed({
+		get: () => !!pollStore.configuration.maxVotesPerOption,
+		set: (value) => {
+			pollStore.configuration.maxVotesPerOption = value ? 1 : 0
+		},
+	})
 
-function validateLimit() {
-	if (!useLimit.value) {
-		pollStore.configuration.maxVotesPerOption = 0
-	} else if (pollStore.configuration.maxVotesPerOption < 1) {
-		pollStore.configuration.maxVotesPerOption = 1
+	function validateLimit() {
+		if (!useLimit.value) {
+			pollStore.configuration.maxVotesPerOption = 0
+		} else if (pollStore.configuration.maxVotesPerOption < 1) {
+			pollStore.configuration.maxVotesPerOption = 1
+		}
+
+		pollStore.write()
 	}
-
-	pollStore.write()
-}
 </script>
 
 <template>
