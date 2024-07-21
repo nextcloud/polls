@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2019 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { RouteLocationNormalized, RouteRecordRaw, createMemoryHistory, createRouter } from 'vue-router'
+import { RouteLocationNormalized, RouteRecordRaw, createWebHistory, createRouter } from 'vue-router'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
@@ -186,7 +186,7 @@ const routes: RouteRecordRaw[] = [
 ]
 
 const router = createRouter({
-	history: createMemoryHistory(generateUrl('/apps/polls')),
+	history: createWebHistory(generateUrl('/apps/polls')),
 	routes,
 	linkActiveClass: 'active',
 })

@@ -31,15 +31,17 @@
 	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
+	
 	const pollStore = usePollStore()
 	const sessionStore = useSessionStore()
 	const optionsStore = useOptionsStore()
 	const preferencesStore = usePreferencesStore()
-
-	const { scrolled } = useHandleScroll()
+	
+	// FIXME: Fix this, since it is not 'vote-main' that is scrolled
+	const voteMainId = 'vote-main'
+	const { scrolled } = useHandleScroll(voteMainId)
 
 	const isLoading = ref(false)
-	const scrollElement = ref(null)
 
 	const route = useRoute()
 
@@ -63,52 +65,34 @@
 	/**
 	 *
 	 */
-	function handleScroll() {
-		if (scrollElement.value.scrollTop > 20) {
-			scrolled.value = true
-		} else {
-			scrolled.value = false
-		}
-	}
-
-	/**
-	 *
-	 */
 	function loadPoll() {
-		console.log('loadPoll  upon route update')
-		// setTimeout(() => {
 		pollStore.load()
-	// }, 500)
 	}
 
 
 	onMounted(() => {
 		subscribe('polls:poll:load', () => pollStore.load())
 		emit('polls:transitions:off', 500)
-		scrollElement.value = document.getElementById('app-content-vue')
-		scrollElement.value.addEventListener('scroll', handleScroll)
 		Logger.debug('Poll view mounted', sessionStore.route)
 		loadPoll()
 	})
 
 	onUnmounted(() => {
-		scrollElement.value.removeEventListener('scroll', handleScroll)
 		pollStore.reset()
 		unsubscribe('polls:poll:load', () => pollStore.load())
 	})
-
+	
 	watch(() => route.params.id, () => {
 		console.log('Poll view route update')
 		loadPoll()
-	}
-	)
+	})
 </script>
 
 <template>
-	<NcAppContent :class="[{ closed: pollStore.isClosed, scrolled: scrolled, 'vote-style-beta-510': preferencesStore.user.useAlternativeStyling }, pollStore.type]">
+	<NcAppContent :class="[{ closed: pollStore.isClosed, scrolled: (scrolled > 0), 'vote-style-beta-510': preferencesStore.user.useAlternativeStyling }, pollStore.type]">
 		<HeaderBar class="area__header">
 			<template #title>
-				{{ pollStore.configuration.title }}
+				{{ pollStore.configuration.title }} scrolled: {{ scrolled }}
 			</template>
 
 			<template #right>
@@ -118,7 +102,7 @@
 			<PollInfoLine />
 		</HeaderBar>
 
-		<div class="vote_main">
+		<div :id="voteMainId" class="vote_main">
 			<VoteInfoCards />
 
 			<div v-if="pollStore.configuration.description" class="area__description">
