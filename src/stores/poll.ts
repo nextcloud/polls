@@ -383,7 +383,7 @@ export const usePollStore = defineStore('poll', {
 				sessionStore.$patch(response.data.acl)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error loading poll', { error })
+				Logger.error('Error loading poll', { error: error.response })
 				throw error
 			}
 		},

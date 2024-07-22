@@ -4,8 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { ref, computed, onMounted, onUnmounted, watch } from 'vue'
-	import { useRoute } from 'vue-router'
+	import { ref, computed, onMounted, onUnmounted } from 'vue'
 	import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
 	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
@@ -43,8 +42,6 @@
 
 	const isLoading = ref(false)
 
-	const route = useRoute()
-
 	const emptyContentProps = computed(() => {
 		if (pollStore.status.countOptions > 0) {
 			return {
@@ -62,29 +59,15 @@
 	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const windowTitle = computed(() => `${t('polls', 'Polls')} - ${pollStore.configuration.title}`)
 
-	/**
-	 *
-	 */
-	function loadPoll() {
-		pollStore.load()
-	}
-
-
 	onMounted(() => {
 		subscribe('polls:poll:load', () => pollStore.load())
 		emit('polls:transitions:off', 500)
 		Logger.debug('Poll view mounted', sessionStore.route)
-		loadPoll()
 	})
 
 	onUnmounted(() => {
 		pollStore.reset()
 		unsubscribe('polls:poll:load', () => pollStore.load())
-	})
-	
-	watch(() => route.params.id, () => {
-		console.log('Poll view route update')
-		loadPoll()
 	})
 </script>
 

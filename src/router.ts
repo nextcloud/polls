@@ -21,7 +21,6 @@ import Combo from './views/Combo.vue'
 import { usePollStore } from './stores/poll.ts'
 import { FilterType } from './stores/polls.ts'
 
-
 /**
  * @param {RouteLocationNormalized} to Target route
  */
@@ -38,15 +37,20 @@ async function validateToken(to: RouteLocationNormalized) {
 				}
 			}
 		} catch (error) {
+			// in case of an error, reroute to the not found page
 			return {
 				name: 'notfound'
 			}
 		}
 	}
 	
+	// continue for external users
 	try {
-		// first get an existing private token from the cookie 
-		// mathing the public token
+		// first validate the existance of the public token
+		await PublicAPI.getShare(to.params.token)
+
+		// then look for an existing private token from the user's client stored cookie
+		// matching the public token
 		const privateToken = getCookieValue(to.params.token)
 		if (privateToken && privateToken !== to.params.token) {
 			// participant has already access to the poll and a private token
@@ -63,26 +67,31 @@ async function validateToken(to: RouteLocationNormalized) {
 			}
 		}
 
+		// if no private token is found, load the poll
+		const pollStore = usePollStore()
+		await pollStore.load()
+
 	} catch (error) {
-		// in all not found cases reroute to the lokgin page
+		// in case of an error, reroute to the login page
 		window.location.replace(generateUrl('login'))
 	}
 }
+
 /**
  *
  */
 async function loadPoll() {
-	console.log('loadPoll before enter');
-	
-	const pollStore = usePollStore()
-	await pollStore.load()
-	// return {
-	// 	name: 'vote',
-	// 	params: {
-	// 		id: to.params.id
-	// 	}
-	// }
+
+	try {
+		const pollStore = usePollStore()
+		await pollStore.load()
+	} catch (error) {
+		return {
+			name: 'notfound',
+		}
+	}
 }
+
 const routes: RouteRecordRaw[] = [
 	{
 		path: '/list/:type?',
@@ -192,18 +201,12 @@ const router = createRouter({
 })
 
 router.beforeResolve((to: RouteLocationNormalized) => {
-	console.log('beforeResolve', to)
+	console.debug('beforeResolve', to)
 })
 
 router.beforeEach((to: RouteLocationNormalized) => {
-	console.log('beforeEach', to)
 	try {
 		loadContext(to)
-		console.log('context loaded')
-		// if (to.name === 'vote') {
-		// 	loadPoll(to)
-		// }
-		// return to
 	} catch (error) {
 		Logger.error('Could not load context')
 		return false
