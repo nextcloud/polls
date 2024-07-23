@@ -20,6 +20,7 @@ OC.L10N.register(
     "Close" : "Seriñ",
     "never" : "james",
     "Owner" : "Perc'henner",
+    "Created" : "Krouet",
     "Login" : "Anv arveriad",
     "Preview" : "Ragwell",
     "Shares" : "Rannañ",
