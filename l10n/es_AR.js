@@ -28,6 +28,7 @@ OC.L10N.register(
     "Created" : "Creado",
     "Login" : "Inicio de sesión",
     "Preview" : "Vista previa",
+    "Link copied to clipboard" : "Enlace copiado al portapapeles",
     "Shares" : "Shares",
     "Description" : "Descripción",
     "Change name" : "Cambiar nombre",
