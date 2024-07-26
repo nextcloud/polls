@@ -13,11 +13,13 @@
 	import UserItem from '../User/UserItem.vue'
 	import { useSessionStore } from '../../stores/session.ts'
 	import { usePollStore } from '../../stores/poll.ts'
+	import { useCommentsStore } from '../../stores/comments.ts'
 	import { Comment, CommentsGrouped } from '../../Types/index.ts'
 
 
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()
+	const commentsStore = useCommentsStore()
 
 	const props = defineProps(
 		{
@@ -38,7 +40,7 @@
 
 	async function deleteComment(comment: Comment) {
 		try {
-			await this.comments.delete({ comment })
+			await commentsStore.delete({ comment })
 		} catch {
 			showError(t('polls', 'Error while deleting the comment'))
 		}
@@ -46,7 +48,7 @@
 
 	async function restoreComment(comment: Comment) {
 		try {
-			await this.comments.restore({ comment })
+			await commentsStore.restore({ comment })
 		} catch {
 			showError(t('polls', 'Error while restoring the comment'))
 		}
