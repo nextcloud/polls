@@ -60,6 +60,7 @@ class UserController extends BaseController {
 	/**
 	 * get session information
 	 */
+	#[NoAdminRequired]
 	public function getSession(): JSONResponse {
 		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
