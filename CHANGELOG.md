@@ -5,6 +5,10 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
+## [7.2.0] - 2024-08-01
+### Changes
+ - Add Nextcloud 30
+
 ## [7.1.4] - 2024-07-15
 ### Fix
  - Fix autoreminder again
