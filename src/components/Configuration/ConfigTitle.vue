@@ -3,40 +3,25 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { computed } from 'vue'
+	import { InputDiv } from '../Base/index.js'
+	import { usePollStore } from '../../stores/poll.ts'
+
+	const pollStore = usePollStore()	
+	const checkTitle = computed(() => pollStore.configuration.title ? '' : 'error')
+	const pollTitle = computed({
+		get: () => pollStore.configuration.title,
+		set: (value) => {
+			pollStore.configuration.title = value
+		},
+	})
+
+</script>
+
 <template>
 	<InputDiv v-model="pollTitle"
 		:signaling-class="checkTitle"
 		type="text"
 		@change="pollStore.write()" />
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { InputDiv } from '../Base/index.js'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'ConfigTitle',
-
-	components: {
-		InputDiv,
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-
-		checkTitle() {
-			return this.pollStore.configuration.title ? '' : 'error'
-		},
-
-		pollTitle: {
-			get() {
-				return this.pollStore.configuration.title
-			},
-			set(value) {
-				this.pollStore.configuration.title = value
-			},
-		},
-	},
-}
-</script>

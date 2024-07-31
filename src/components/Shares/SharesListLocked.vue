@@ -3,6 +3,23 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { ConfigBox } from '../Base/index.js'
+	import LockedIcon from 'vue-material-design-icons/Lock.vue'
+	import ShareItem from './ShareItem.vue'
+	import { t } from '@nextcloud/l10n'
+	import { useSharesStore } from '../../stores/shares.ts'
+
+	const sharesStore = useSharesStore()
+
+	const configBoxProps = {
+		lockedShares: {
+			name: t('polls', 'Locked shares (read only access)'),
+		},
+	}
+
+</script>
+
 <template>
 	<ConfigBox v-if="sharesStore.locked.length" v-bind="configBoxProps.lockedShares">
 		<template #icon>
@@ -18,36 +35,3 @@
 		</TransitionGroup>
 	</ConfigBox>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { ConfigBox } from '../Base/index.js'
-import LockedIcon from 'vue-material-design-icons/Lock.vue'
-import ShareItem from './ShareItem.vue'
-import { t } from '@nextcloud/l10n'
-import { useSharesStore } from '../../stores/shares.ts'
-
-export default {
-	name: 'SharesListLocked',
-
-	components: {
-		LockedIcon,
-		ConfigBox,
-		ShareItem,
-	},
-
-	data() {
-		return {
-			configBoxProps: {
-				lockedShares: {
-					name: t('polls', 'Locked shares (read only access)'),
-				},
-			},
-		}
-	},
-
-	computed: {
-		...mapStores(useSharesStore),
-	},
-}
-</script>

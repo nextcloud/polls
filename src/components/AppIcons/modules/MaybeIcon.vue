@@ -2,17 +2,37 @@
   - SPDX-FileCopyrightText: 2022 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
+<script setup lang="ts">
+	import { defineProps } from 'vue'
+
+	const props = defineProps(
+		{ 
+			title: { 
+				type: String, 
+				default: 'Maybe', 
+			}, 
+			fillColor: { 
+				type: String, 
+				default: '#ffc107', 
+			}, 
+			size: { 
+				type: Number, 
+				default: 24, 
+			}, 
+		} 
+	)
+</script>
+
 <template>
-	<span :aria-hidden="!title"
-		:aria-label="title"
+	<span :aria-hidden="!props.title"
+		:aria-label="props.title"
 		class="material-design-icon polls-maybe-icon"
-		role="img"
-		v-bind="$attrs"
-		@click="$emit('click', $event)">
-		<svg :fill="fillColor"
+		role="img">
+		<svg :fill="props.fillColor"
 			class="material-design-icon__svg"
-			:width="size"
-			:height="size"
+			:width="props.size"
+			:height="props.size"
 			viewBox="0 0 16 16">
 			<g id="open-brace"
 				style="font-style:normal;font-weight:normal;font-size:10.03817844px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;word-spacing:0px;fill:#ffc10f;fill-opacity:0.94117647;stroke:none;stroke-width:0.6844213"
@@ -30,23 +50,3 @@
 		</svg>
 	</span>
 </template>
-
-<script>
-export default {
-	name: 'MaybeIcon',
-	props: {
-		title: {
-			type: String,
-			default: 'Maybe',
-		},
-		fillColor: {
-			type: String,
-			default: '#ffc107',
-		},
-		size: {
-			type: Number,
-			default: 24,
-		},
-	},
-}
-</script>

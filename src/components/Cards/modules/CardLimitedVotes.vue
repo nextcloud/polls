@@ -3,6 +3,28 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { computed } from 'vue'
+	import { CardDiv } from '../../Base/index.js'
+	import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
+	import { t, n } from '@nextcloud/l10n'
+	import { usePollStore } from '../../../stores/poll.ts'
+
+	const pollStore = usePollStore()
+
+	const orphanedVotesText = computed(() => n(
+		'polls',
+		'%n orphaned vote of a probaly deleted option is possibly blocking your vote limit.',
+		'%n orphaned votes of probaly deleted options are possibly blocking your vote limit.',
+		pollStore.currentUserStatus.orphanedVotes))
+
+	const votesLeft = computed(() => (pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes) > 0
+		? pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes
+		: 0)
+
+	const cardType = computed(() => pollStore.configuration.maxVotesPerUser && votesLeft.value < 1 ? 'error' : 'info')
+</script>
+
 <template>
 	<CardDiv :heading="t('polls', 'Limited votes.')" :type="cardType">
 		<ul>
@@ -23,46 +45,3 @@
 		</template>
 	</CardDiv>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { CardDiv } from '../../Base/index.js'
-import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
-import { t, n } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
-
-export default {
-	name: 'CardLimitedVotes',
-	components: {
-		CardDiv,
-		ActionDeleteOrphanedVotes,
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-
-		orphanedVotesText() {
-			return n(
-				'polls',
-				'%n orphaned vote of a probaly deleted option is possibly blocking your vote limit.',
-				'%n orphaned votes of probaly deleted options are possibly blocking your vote limit.',
-				this.pollStore.currentUserStatus.orphanedVotes)
-		},
-
-		votesLeft() {
-			return (this.pollStore.configuration.maxVotesPerUser - this.pollStore.currentUserStatus.yesVotes) > 0
-				? this.pollStore.configuration.maxVotesPerUser - this.pollStore.currentUserStatus.yesVotes
-				: 0
-		},
-
-		cardType() {
-			return this.pollStore.configuration.maxVotesPerUser && this.votesLeft < 1 ? 'error' : 'info'
-		},
-	},
-
-	methods: {
-		t,
-		n,
-	},
-}
-</script>

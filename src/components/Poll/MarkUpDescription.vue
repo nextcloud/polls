@@ -3,36 +3,15 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { usePollStore } from '../../stores/poll.ts'
+	const pollStore = usePollStore()
+</script>
+
 <template>
 	<!-- eslint-disable-next-line vue/no-v-html -->
-	<div class="markup-description" v-html="markedDescription" />
+	<div class="markup-description" v-html="pollStore.descriptionMarkUp" />
 </template>
-
-<script>
-import { marked } from 'marked'
-import { gfmHeadingId } from 'marked-gfm-heading-id'
-import DOMPurify from 'dompurify'
-import { mapStores } from 'pinia'
-import { usePollStore } from '../../stores/poll.ts'
-
-const markedPrefix = {
-	prefix: 'desc-',
-}
-
-export default {
-	name: 'MarkUpDescription',
-
-	computed: {
-		...mapStores(usePollStore),
-
-		markedDescription() {
-			marked.use(gfmHeadingId(markedPrefix))
-			return DOMPurify.sanitize(marked.parse(this.pollStore.descriptionSafe))
-		},
-	},
-}
-
-</script>
 
 <style lang="scss">
 .markup-description * {

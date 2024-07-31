@@ -3,52 +3,40 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { computed } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import UserItem from '../User/UserItem.vue'
+	import { usePollStore, AccessType } from '../../stores/poll.ts'
+	import { VirtualUserItemType } from '../../Types/index.ts'
+
+
+	const pollStore = usePollStore()
+
+	const userItemProps = computed(() => ({
+		label: t('polls', 'Internal access'),
+		type: VirtualUserItemType.InternalAccess,
+		disabled: pollStore.configuration.access === AccessType.Private,
+		description: pollStore.configuration.access === AccessType.Private ? t('polls', 'This poll is private') : t('polls', 'This is an openly accessible poll'),
+	}))
+
+	const pollAccess = computed({
+		get() {
+			return pollStore.configuration.access === AccessType.Open
+		},
+		set(value) {
+			pollStore.configuration.access = value ? AccessType.Open : AccessType.Private
+			pollStore.write()
+		},
+	})
+</script>
+
 <template>
 	<UserItem v-bind="userItemProps">
 		<template #status>
 			<div class="vote-status" />
 		</template>
-		<NcCheckboxRadioSwitch :checked.sync="pollAccess" type="switch" />
+		<NcCheckboxRadioSwitch v-model="pollAccess" type="switch" />
 	</UserItem>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'ShareItemAllUsers',
-
-	components: {
-		NcCheckboxRadioSwitch,
-		UserItem,
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-
-		userItemProps() {
-			return {
-				label: t('polls', 'Internal access'),
-				type: 'internalAccess',
-				disabled: this.pollStore.configuration.access === 'private',
-				description: this.pollStore.configuration.access === 'private' ? t('polls', 'This poll is private') : t('polls', 'This is an openly accessible poll'),
-			}
-		},
-
-		pollAccess: {
-			get() {
-				return this.pollStore.configuration.access === 'open'
-			},
-			set(value) {
-				this.pollStore.access = value ? 'open' : 'private' 
-				this.pollStore.write()
-			},
-		},
-
-	},
-}
-</script>

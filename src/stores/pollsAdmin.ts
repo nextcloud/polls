@@ -1,41 +1,46 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import { defineStore } from 'pinia'
-import { orderBy } from 'lodash'
-import { PollsAPI } from '../Api/index.js'
-import { Poll } from './poll.ts'
+import orderBy from 'lodash/orderBy'
 import { getCurrentUser } from '@nextcloud/auth'
-import { SortType, sortColumnsMapping, StoreStatus } from './polls.ts'
+import { t } from '@nextcloud/l10n'
 import { Logger } from '../helpers/index.ts'
-export interface PollsAdminList {
-	list: Poll[]
-	meta: {
-		status: StoreStatus
-	}
-	sort: {
-		by: SortType
-		reverse: boolean
-	}
-}
+import { PollsAPI } from '../Api/index.js'
+import { SortType, sortColumnsMapping, PollList, FilterType } from './polls.ts'
+import { Poll } from './poll.ts'
+import { StatusResults } from '../Types/index.ts'
 
 export const usePollsAdminStore = defineStore('pollsAdmin', {
-	state: (): PollsAdminList => ({
+	state: (): PollList => ({
 		list: [],
 		meta: {
-			status: StoreStatus.Loaded,
+			chunksize: 20,
+			loadedChunks: 1,
+			maxPollsInNavigation: 6,
+			status: StatusResults.Loaded,
 		},
 		sort: {
 			by: SortType.Created,
 			reverse: true,
 		},
+		categories: [
+			{
+				id: FilterType.Admin,
+				title: t('polls', 'Relevant'),
+				titleExt: t('polls', 'Relevant polls'),
+				description: t('polls', 'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to.'),
+				pinned: false,
+				createDependent: false,
+				filterCondition: () => null,
+			},
+		],
 	}),
 
 	getters: {
-		sorted(state: PollsAdminList): Poll[] {
+		sorted(state: PollList): Poll[] {
 			return orderBy(
 				this.list,
 				[state.sort.by],
@@ -46,7 +51,7 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 
 	actions: {
 		async load(): Promise<void> {
-			this.meta.status = StoreStatus.Loading
+			this.meta.status = StatusResults.Loading
 			if (!getCurrentUser().isAdmin) {
 				return
 			}
@@ -54,10 +59,10 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 			try {
 				const response = await PollsAPI.getPollsForAdmin()
 				this.list = response.data
-				this.meta.status = StoreStatus.Loaded
+				this.meta.status = StatusResults.Loaded
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				this.meta.status = StoreStatus.Error
+				this.meta.status = StatusResults.Error
 				console.error('Error loading polls', { error })
 				throw error
 			}

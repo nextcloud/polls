@@ -3,25 +3,16 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { ActionSortOptions, ActionChangeView } from '../Actions/index.js'
+</script>
+
 <template>
 	<div class="vote_menu">
 		<ActionSortOptions button-mode />
 		<ActionChangeView />
 	</div>
 </template>
-
-<script>
-import { ActionSortOptions, ActionChangeView } from '../Actions/index.js'
-
-export default {
-	name: 'VoteMenu',
-
-	components: {
-		ActionChangeView,
-		ActionSortOptions,
-	},
-}
-</script>
 
 <style lang="scss">
 .vote_menu {

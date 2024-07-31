@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -7,19 +6,14 @@
 import { defineStore } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
 import { PublicAPI, SessionAPI } from '../Api/index.js'
-import { User, AppPermissions, UserType } from '../Interfaces/interfaces.ts'
-import { AppSettings } from './appSettings.ts'
-import { usePreferencesStore } from './preferences.ts'
+import { User, AppPermissions, UserType } from '../Types/index.ts'
+import { AppSettings, UpdateType } from './appSettings.ts'
+import { usePreferencesStore, ViewMode, SessionSettings } from './preferences.ts'
 import { FilterType } from './polls.ts'
-import { PollPermissions, usePollStore } from './poll.ts'
 import { Share } from './share.ts'
+import { RouteLocationNormalized } from 'vue-router'
 
-enum ViewMode {
-	TableView = 'table-view',
-	ListView = 'list-view',
-}
-
-interface Router {
+export type Route = {
 	currentRoute: string
 	name: string
 	path: string
@@ -30,24 +24,19 @@ interface Router {
 	}
 }
 
-export interface SessionSettings {
-	manualViewDatePoll: '' | ViewMode
-	manualViewTextPoll: '' | ViewMode
-}
-
-export interface UserStatus { 
+export type UserStatus = { 
 	isLoggedin: boolean
 	isAdmin: boolean
 }
 
-interface Session {
+export type Session = {
 	token: string
 	appPermissions: AppPermissions
 	appSettings: AppSettings
 	currentUser: User
 	sessionSettings: SessionSettings
 	viewModes: ViewMode[]
-	router: Router
+	route: Route
 	userStatus: UserStatus
 	share: Share | null
 }
@@ -78,6 +67,7 @@ export const useSessionStore = defineStore('session', {
 			pollCreation: false,
 			seeMailAddresses: false,
 			pollDownload: false,
+			comboView: false,
 		},
 		viewModes: Object.values(ViewMode),
 		sessionSettings: {
@@ -101,7 +91,7 @@ export const useSessionStore = defineStore('session', {
 			privacyUrl: '',
 			showMailAddresses: false,
 			showLogin: true,
-			updateType: 'noPolling',
+			updateType: UpdateType.NoPolling,
 			useActivity: false,
 			useCollaboration: true,
 			navigationPollsInList: true,
@@ -112,8 +102,12 @@ export const useSessionStore = defineStore('session', {
 			pollCreationGroups: [],
 			pollDownloadGroups: [],
 			showMailAddressesGroups: [],
+			groups: [],
+			status: {
+				loadingGroups: false
+			}
 		},
-		router: {
+		route: {
 			currentRoute: '',
 			name: '',
 			path: '',
@@ -152,19 +146,13 @@ export const useSessionStore = defineStore('session', {
 			}
 			return ViewMode.ListView
 		},
-		
-		pollPermissions(): PollPermissions {
-			const pollStore = usePollStore()
-			return pollStore.permissions
-		}
 	},
 
 	actions: {
 		async load() {
 			let response = null
-
 			try {
-				if (this.router.name === 'publicVote') {
+				if (this.route.name === 'publicVote') {
 					response = await PublicAPI.getSession(this.router.params.token)
 				} else {
 					response = await SessionAPI.getSession()
@@ -174,7 +162,7 @@ export const useSessionStore = defineStore('session', {
 				if (error?.code === 'ERR_CANCELED') return
 	
 				this.$reset()
-				if (this.router.name === null) {
+				if (this.route.name === null) {
 					this.$reset()
 				} else {
 					throw error
@@ -190,8 +178,11 @@ export const useSessionStore = defineStore('session', {
 			this.sessionSettings.manualViewTextPoll = viewMode
 		},
 
-		setRouter(payload: Router) {
-			this.router = payload
+		setRouter(payload: RouteLocationNormalized) {
+			this.route.currentRoute = payload.fullPath
+			this.route.name = payload.name
+			this.route.path = payload.path
+			this.route.params = payload.params
 		},
 	},
 })

@@ -3,6 +3,51 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { defineProps, defineEmits, computed, ref, PropType } from 'vue'
+	import moment from '@nextcloud/moment'
+	import { NcButton, NcSelect } from '@nextcloud/vue'
+	import { InputDiv } from '../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
+	import { dateUnits } from '../../constants/dateUnits.ts'
+
+	const optionsStore = useOptionsStore()
+
+
+	const props = defineProps({
+		option: {
+			type: Object as PropType<Option>,
+			default: undefined,
+		},
+	})
+
+	const emit = defineEmits(['close'])
+
+	const sequence = ref<Sequence>({
+		unit: {
+			name: t('polls', 'Week'),
+			value: 'week',
+		},
+		step: 1,
+		amount: 1,
+	})
+
+	const dateBaseOptionString = computed(() => moment.unix(props.option.timestamp).format('LLLL'))
+
+	/**
+	 *
+	 */
+	function createSequence() {
+		optionsStore.sequence({
+			option: props.option,
+			sequence: sequence.value,
+		})
+		emit('close')
+	}
+
+</script>
+
 <template>
 	<div class="option-clone-date">
 		<h2>{{ t('polls', 'Clone to option sequence') }}</h2>
@@ -30,7 +75,7 @@
 		</div>
 
 		<div class="modal__buttons">
-			<NcButton @click="$emit('close')">
+			<NcButton @click="emit('close')">
 				<template #default>
 					{{ t('polls', 'Cancel') }}
 				</template>
@@ -44,66 +89,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-
-import { mapStores } from 'pinia'
-import moment from '@nextcloud/moment'
-import { NcButton, NcSelect } from '@nextcloud/vue'
-import { dateUnits } from '../../mixins/dateMixins.js'
-import { InputDiv } from '../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { useOptionsStore } from '../../stores/options.ts'
-
-export default {
-	name: 'OptionCloneDate',
-
-	components: {
-		InputDiv,
-		NcSelect,
-		NcButton,
-	},
-
-	mixins: [dateUnits],
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined,
-		},
-	},
-
-	data() {
-		return {
-			sequence: {
-				unit: { name: t('polls', 'Week'), value: 'week' },
-				step: 1,
-				amount: 1,
-			},
-		}
-	},
-
-	computed: {
-		...mapStores(useOptionsStore),
-
-		dateBaseOptionString() {
-			return moment.unix(this.option.timestamp).format('LLLL')
-		},
-	},
-
-	methods: {
-		t,
-		createSequence() {
-			this.optionsStore.sequence({
-					option: this.option,
-					sequence: this.sequence,
-				})
-			this.$emit('close')
-		},
-	},
-}
-
-</script>
 
 <style lang="scss">
 

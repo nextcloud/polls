@@ -1,20 +1,16 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2021 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { PiniaVuePlugin } from 'pinia'
-import Vue from 'vue'
+import { createApp } from 'vue'
 import { pinia } from './stores/index.ts'
+
 import AdminSettingsPage from './views/AdminSettingsPage.vue'
 
-Vue.config.devtools = import.meta.env.MODE !== 'production'
+// Vue.config.devtools = import.meta.env.MODE !== 'production'
 
-Vue.use(PiniaVuePlugin)
+const Polls = createApp(AdminSettingsPage)
+	.use(pinia)
+Polls.mount('#content_polls')
 
-/* eslint-disable-next-line no-new */
-new Vue({
-	pinia,
-	render: (h) => h(AdminSettingsPage),
-}).$mount('#content_polls')

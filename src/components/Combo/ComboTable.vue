@@ -3,15 +3,34 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { defineProps, PropType } from 'vue'
+	import VoteColumn from './VoteColumn.vue'
+	import UserItem from '../User/UserItem.vue'
+	import { useComboStore } from '../../stores/combo.ts'
+	import { ViewMode } from '../../Types/index.ts'
+
+	const comboStore = useComboStore()
+
+	const props = defineProps({
+		viewMode: {
+			type: String as PropType<ViewMode>,
+			default: ViewMode.TableView,
+		},
+	})
+
+
+</script>
+
 <template>
-	<div :class="['combo-table', viewMode]">
+	<div :class="['combo-table', props.viewMode]">
 		<div class="user-column">
 			<div class="spacer" />
 			<div v-for="(poll) in comboStore.polls"
 				:key="poll.id"
 				:title="poll.configuration.title"
 				class="poll-group">
-				<div v-for="(participant) in comboStore.poll.status.countParticipants"
+				<div v-for="(participant) in poll.status.countParticipants"
 					:key="`${participant.userId}_${participant.pollId}`"
 					class="participant">
 					<UserItem v-bind="participant" condensed />
@@ -28,37 +47,6 @@
 		</TransitionGroup>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import VoteColumn from './VoteColumn.vue'
-import UserItem from '../User/UserItem.vue'
-import { useComboStore } from '../../stores/combo.ts'
-
-export default {
-	name: 'ComboTable',
-	components: {
-		VoteColumn,
-		UserItem
-	},
-
-	props: {
-		viewMode: {
-			type: String,
-			default: 'table-view',
-			validator(value) {
-				return ['table-view', 'list-view'].includes(value)
-			},
-		},
-	},
-
-	computed: {
-		...mapStores(useComboStore),
-	},
-
-}
-
-</script>
 
 <style lang="scss">
 .combo-title {

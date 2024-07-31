@@ -1,25 +1,32 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, PollsAPI } from '../Api/index.js'
-import { User, UserType } from '../Interfaces/interfaces.ts'
-import { Logger, uniqueArrayOfObjects } from '../helpers/index.js'
+import { debounce } from 'lodash'
+import DOMPurify from 'dompurify'
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+
+import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import { usePreferencesStore } from './preferences.ts'
-import { useVotesStore } from './votes.ts'
+import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+
+import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
+import { PublicAPI, PollsAPI } from '../Api/index.js'
+import { User, UserType } from '../Types/index.ts'
+
+import { usePreferencesStore, ViewMode } from './preferences.ts'
+import { useVotesStore, Answer } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
 import { useSessionStore } from './session.ts'
 import { useSubscriptionStore } from './subscription.ts'
-import { t } from '@nextcloud/l10n'
 import { useSharesStore } from './shares.ts'
 import { useCommentsStore } from './comments.ts'
-import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
+
 
 export enum PollType {
 	Text = 'textPoll',
@@ -37,19 +44,19 @@ export enum ShowResults {
 	Never = 'never',
 }
 
-export enum allowProposals {
+export enum AllowProposals {
 	Allow = 'allow',
 	Disallow = 'disallow',
 	Review = 'review',
 }
 
-export interface PollConfiguration {
+export type PollConfiguration = {
 	title: string
 	description: string
 	access: AccessType
 	allowComment: boolean
 	allowMaybe: boolean
-	allowProposals: allowProposals
+	allowProposals: AllowProposals
 	anonymous: boolean
 	autoReminder: boolean
 	expire: number
@@ -61,7 +68,7 @@ export interface PollConfiguration {
 	maxVotesPerUser: number
 }
 
-export interface PollStatus {
+export type PollStatus = {
 	lastInteraction: number
 	created: number
 	deleted: boolean
@@ -71,7 +78,7 @@ export interface PollStatus {
 	countParticipants: number
 }
 
-export interface PollPermissions {
+export type PollPermissions = {
 	addOptions: boolean
 	archive: boolean
 	comment: boolean
@@ -84,8 +91,8 @@ export interface PollPermissions {
 	vote: boolean
 }
 
-export interface CurrentUserStatus {
-	userRole: string
+export type CurrentUserStatus = {
+	userRole: UserType
 	isLocked: boolean
 	isInvolved: boolean
 	isLoggedIn: boolean
@@ -99,7 +106,7 @@ export interface CurrentUserStatus {
 	groupInvitations: string[]
 }
 
-export interface Poll {
+export type Poll = {
 	id: number
 	type: PollType
 	descriptionSafe: string
@@ -109,6 +116,10 @@ export interface Poll {
 	currentUserStatus: CurrentUserStatus
 	permissions: PollPermissions
 	revealParticipants: boolean
+}
+
+const markedPrefix = {
+	prefix: 'desc-',
 }
 
 export const usePollStore = defineStore('poll', {
@@ -122,7 +133,7 @@ export const usePollStore = defineStore('poll', {
 			access: AccessType.Private,
 			allowComment: false,
 			allowMaybe: false,
-			allowProposals: allowProposals.Disallow,
+			allowProposals: AllowProposals.Disallow,
 			anonymous: false,
 			autoReminder: false,
 			expire: 0,
@@ -160,7 +171,7 @@ export const usePollStore = defineStore('poll', {
 			countParticipants: 0,
 		},
 		currentUserStatus: {
-			userRole: '',
+			userRole: UserType.None,
 			isLocked: false,
 			isInvolved: false,
 			isLoggedIn: false,
@@ -192,13 +203,13 @@ export const usePollStore = defineStore('poll', {
 		viewMode(state) {
 			const preferencesStore = usePreferencesStore()
 			if (state.type === PollType.Text) {
-				return preferencesStore.$state.user.defaultViewTextPoll
+				return preferencesStore.viewTextPoll
 			}
 	
 			if (state.type === PollType.Date) {
-				return preferencesStore.$state.user.defaultViewDatePoll
+				return preferencesStore.viewDatePoll
 			}
-			return 'table-view'
+			return ViewMode.TableView
 		},
 	
 		getNextViewMode() {
@@ -218,20 +229,20 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		answerSequence(state) {
-			const noString = state.configuration.useNo ? 'no' : ''
+			const noString = state.configuration.useNo ? Answer.No : Answer.None
 			if (state.configuration.allowMaybe) {
-				return [noString, 'yes', 'maybe']
+				return [noString, Answer.Yes, Answer.Maybe]
 			}
-			return [noString, 'yes']
+			return [noString, Answer.Yes]
 	
 		},
 	
-		participants(state) {
+		participants(state): User[] {
 			const sessionStore = useSessionStore()
 			const participants = this.participantsVoted
 	
 			// add current user, if not among participants and voting is allowed
-			if (!participants.find((participant) => participant.userId === sessionStore.currentUser.userId) && sessionStore.currentUser.userId && state.permissions.vote) {
+			if (!participants.find((participant: User) => participant.userId === sessionStore.currentUser.userId) && sessionStore.currentUser.userId && state.permissions.vote) {
 				participants.push({
 					userId: sessionStore.currentUser.userId,
 					displayName: sessionStore.currentUser.displayName,
@@ -254,7 +265,7 @@ export const usePollStore = defineStore('poll', {
 			return this.participants
 		},
 	
-		participantsVoted() {
+		participantsVoted(): User[] {
 			const votesStore = useVotesStore()
 
 			return uniqueArrayOfObjects(votesStore.list.map((vote) => (
@@ -263,12 +274,12 @@ export const usePollStore = defineStore('poll', {
 		},
 	
 		getProposalsOptions: () => [
-			{ value: 'disallow', label: t('polls', 'Disallow proposals') },
-			{ value: 'allow', label: t('polls', 'Allow proposals') },
+			{ value: AllowProposals.Disallow, label: t('polls', 'Disallow proposals') },
+			{ value: AllowProposals.Allow, label: t('polls', 'Allow proposals') },
 		],
 	
 		displayResults(state) {
-			return state.configuration.showResults === 'always' || (state.configuration.showResults === 'closed' && !this.closed)
+			return state.configuration.showResults === ShowResults.Always || (state.configuration.showResults === ShowResults.Closed && !this.closed)
 		},
 
 		isProposalOpen() {
@@ -276,7 +287,7 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isProposalAllowed(state) {
-			return state.configuration.allowProposals === 'allow' || state.configuration.allowProposals === 'review'
+			return state.configuration.allowProposals === AllowProposals.Allow || state.configuration.allowProposals === AllowProposals.Review
 		},
 
 		isProposalExpired(state) {
@@ -325,6 +336,10 @@ export const usePollStore = defineStore('poll', {
 			return this.countParticipants * optionsStore.count
 		},
 
+		descriptionMarkUp() {
+			marked.use(gfmHeadingId(markedPrefix))
+			return DOMPurify.sanitize(marked.parse(this.configuration.description).toString())
+		},
 	},
 	
 	actions: {
@@ -366,10 +381,10 @@ export const usePollStore = defineStore('poll', {
 			try {
 				let response = null
 
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.getPoll(sessionStore.router.params.token)
-				} else if (sessionStore.router.name === 'vote') {
-					response = await PollsAPI.getFullPoll(sessionStore.router.params.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.getPoll(sessionStore.route.params.token)
+				} else if (sessionStore.route.name === 'vote') {
+					response = await PollsAPI.getFullPoll(sessionStore.route.params.id)
 				} else {
 					this.reset()
 					return
@@ -384,7 +399,7 @@ export const usePollStore = defineStore('poll', {
 				sessionStore.$patch(response.data.acl)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error loading poll', { error })
+				Logger.error('Error loading poll', { error: error.response })
 				throw error
 			}
 		},
@@ -404,8 +419,7 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 	
-		// write: debounce(async function() {
-		async write() {
+		write: debounce(async function() {
 			const pollsStore = usePollsStore()
 			if (this.configuration.title === '') {
 				showError(t('polls', 'Title must not be empty!'))
@@ -426,10 +440,8 @@ export const usePollStore = defineStore('poll', {
 			} finally {
 				pollsStore.load()
 			}
-			
-		}
-		// , 500),
-		,
+		}, 500),
+
 		async close() {
 			const pollsStore = usePollsStore()
 

@@ -3,13 +3,151 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+	import { ref, computed, onMounted } from 'vue'
+	import { NcAppNavigation, NcAppNavigationNew, NcAppNavigationItem, NcCounterBubble } from '@nextcloud/vue'
+	import { getCurrentUser } from '@nextcloud/auth'
+	import { showError } from '@nextcloud/dialogs'
+	import { emit } from '@nextcloud/event-bus'
+	import CreateDlg from '../components/Create/CreateDlg.vue'
+	import { t } from '@nextcloud/l10n'
+	import { FilterType, usePollsStore } from '../stores/polls.ts'
+	import { useSessionStore } from '../stores/session.ts'
+	import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
+	import { Logger } from '../helpers/index.ts'
+
+	// Icons
+	import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
+	import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
+	import AdministrationIcon from 'vue-material-design-icons/Cog.vue'
+	import SettingsIcon from 'vue-material-design-icons/AccountCog.vue'
+	import RelevantIcon from 'vue-material-design-icons/ExclamationThick.vue'
+	import MyPollsIcon from 'vue-material-design-icons/Crown.vue'
+	import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
+	import ParticipatedIcon from 'vue-material-design-icons/AccountCheck.vue'
+	import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+	import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
+	import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
+	import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
+	import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
+
+	const iconSize = 20
+	const icons = [
+		{ id: FilterType.Relevant, iconComponent: RelevantIcon },
+		{ id: FilterType.My, iconComponent: MyPollsIcon },
+		{ id: FilterType.Private, iconComponent: PrivatePollsIcon },
+		{ id: FilterType.Participated, iconComponent: ParticipatedIcon },
+		{ id: FilterType.Open, iconComponent: OpenPollIcon },
+		{ id: FilterType.All, iconComponent: AllPollsIcon },
+		{ id: FilterType.Closed, iconComponent: ClosedPollsIcon },
+		{ id: FilterType.Archived, iconComponent: ArchivedPollsIcon },
+	]
+
+	const createDlgToggle = ref(false)
+	const showAdminSection = computed(() => getCurrentUser().isAdmin)
+
+	/**
+	 *
+	 * @param {string} iconId id of the icon
+	 */
+	function getIconComponent(iconId) {
+		return icons.find((icon) => icon.id === iconId).iconComponent
+	}
+
+	/**
+	 *
+	 */
+	function toggleCreateDlg() {
+		createDlgToggle.value = !createDlgToggle.value
+	// if (createDlgToggle.value) {
+	// 	this.$refs.createDlg.setFocus()
+	// }
+	}
+
+	/**
+	 *
+	 */
+	function closeCreate() {
+		createDlgToggle.value = false
+	}
+
+	/**
+	 *
+	 */
+	function loadPolls() {
+		try {
+			Logger.debug('Loading polls in navigation')
+			pollsStore.load()
+
+			if (getCurrentUser().isAdmin) {
+				pollsAdminStore.load()
+			}
+		} catch {
+			showError(t('polls', 'Error loading poll list'))
+		}
+	}
+
+	/**
+	 * Archive or restore a poll
+	 * @param {number} pollId poll id to archive/unarchive
+	 */
+	function toggleArchive(pollId) {
+		try {
+			pollsStore.toggleArchive({ pollId })
+		} catch {
+			showError(t('polls', 'Error archiving/restoring poll.'))
+		}
+	}
+
+	/**
+	 * Delete a poll
+	 * @param {number} pollId poll id to delete
+	 */
+	function deletePoll(pollId) {
+		try {
+			pollsStore.delete({ pollId })
+		} catch {
+			showError(t('polls', 'Error deleting poll.'))
+		}
+	}
+
+	/**
+	 *
+	 * @param {number} pollId poll id to clone
+	 */
+	function clonePoll(pollId) {
+		try {
+			pollsStore.clone({ pollId })
+		} catch {
+			showError(t('polls', 'Error cloning poll.'))
+		}
+	}
+
+	/**
+	 * Show the settings dialog
+	 */
+	function showSettings() {
+		emit('polls:settings:show')
+	}
+
+	const pollsStore = usePollsStore()
+	const sessionStore = useSessionStore()
+	const pollsAdminStore = usePollsAdminStore()
+
+
+	onMounted(() => {
+		loadPolls()
+	})
+
+</script>
+
 <template>
 	<NcAppNavigation>
-		<NcAppNavigationNew v-if="pollsStore.meta.permissions.pollCreationAllowed"
+		<NcAppNavigationNew v-if="sessionStore.appPermissions.pollCreation"
 			button-class="icon-add"
 			:text="t('polls', 'New poll')"
 			@click="toggleCreateDlg" />
-		<CreateDlg v-show="createDlg" ref="createDlg" @close-create="closeCreate()" />
+		<CreateDlg v-show="createDlgToggle" ref="createDlg" @close-create="closeCreate()" />
 
 		<template #list>
 			<NcAppNavigationItem v-for="(pollCategory) in pollsStore.categories"
@@ -50,7 +188,7 @@
 
 		<template #footer>
 			<ul class="app-navigation-footer">
-				<NcAppNavigationItem v-if="pollsStore.meta.permissions.comboAllowed"
+				<NcAppNavigationItem v-if="sessionStore.appPermissions.comboView"
 					:name="t('polls', 'Combine polls')"
 					:to="{ name: 'combo' }">
 					<template #icon>
@@ -74,146 +212,6 @@
 	</NcAppNavigation>
 </template>
 
-<script>
-
-import { mapStores } from 'pinia'
-import { NcAppNavigation, NcAppNavigationNew, NcAppNavigationItem, NcCounterBubble } from '@nextcloud/vue'
-import { getCurrentUser } from '@nextcloud/auth'
-import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
-import CreateDlg from '../components/Create/CreateDlg.vue'
-import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
-import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
-import AdministrationIcon from 'vue-material-design-icons/Cog.vue'
-import SettingsIcon from 'vue-material-design-icons/AccountCog.vue'
-import RelevantIcon from 'vue-material-design-icons/ExclamationThick.vue'
-import MyPollsIcon from 'vue-material-design-icons/Crown.vue'
-import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
-import ParticipatedIcon from 'vue-material-design-icons/AccountCheck.vue'
-import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
-import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
-import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
-import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
-import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollsStore } from '../stores/polls.ts'
-import { useSessionStore } from '../stores/session.ts'
-import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
-
-export default {
-	name: 'Navigation',
-	components: {
-		NcAppNavigation,
-		NcAppNavigationNew,
-		NcAppNavigationItem,
-		NcCounterBubble,
-		CreateDlg,
-		GoToIcon,
-		PollNavigationItems,
-		ComboIcon,
-		SettingsIcon,
-		AdministrationIcon,
-	},
-
-	data() {
-		return {
-			iconSize: 20,
-			createDlg: false,
-			icons: [
-				{ id: 'relevant', iconComponent: RelevantIcon },
-				{ id: 'my', iconComponent: MyPollsIcon },
-				{ id: 'private', iconComponent: PrivatePollsIcon },
-				{ id: 'participated', iconComponent: ParticipatedIcon },
-				{ id: 'open', iconComponent: OpenPollIcon },
-				{ id: 'all', iconComponent: AllPollsIcon },
-				{ id: 'closed', iconComponent: ClosedPollsIcon },
-				{ id: 'archived', iconComponent: ArchivedPollsIcon },
-			],
-		}
-	},
-
-	computed: {
-		...mapStores(useSessionStore, usePollsStore, usePollsAdminStore ),
-
-		showAdminSection() {
-			return getCurrentUser().isAdmin
-		},
-	},
-
-	created() {
-		this.loadPolls()
-	},
-
-	beforeDestroy() {
-		window.clearInterval(this.reloadTimer)
-	},
-
-	methods: {
-		t,
-		closeCreate() {
-			this.createDlg = false
-		},
-
-		getIconComponent(iconId) {
-			return this.icons.find((icon) => icon.id === iconId).iconComponent
-		},
-
-		toggleCreateDlg() {
-			this.createDlg = !this.createDlg
-			if (this.createDlg) {
-				this.$refs.createDlg.setFocus()
-			}
-		},
-
-		showSettings() {
-			emit('polls:settings:show')
-		},
-
-		async loadPolls() {
-			try {
-				this.pollsStore.load()
-
-				if (getCurrentUser().isAdmin) {
-					this.pollsAdminStore.load()
-				}
-			} catch {
-				showError(t('polls', 'Error loading poll list'))
-			}
-		},
-
-		async clonePoll(pollId) {
-			try {
-				const response = await this.pollsStore.clone({ pollId })
-				this.$router.push({ name: 'vote', params: { id: response.data.id } })
-			} catch {
-				showError(t('polls', 'Error cloning poll.'))
-			}
-		},
-
-		async toggleArchive(pollId) {
-			try {
-				await this.pollsStore.toggleArchive({ pollId })
-			} catch {
-				showError(t('polls', 'Error archiving/restoring poll.'))
-			}
-		},
-
-		async deletePoll(pollId) {
-			try {
-				await this.pollsStore.delete({ pollId })
-				// if we delete current selected poll,
-				// reload deleted polls route
-				if (this.$route.params.id && this.$route.params.id === pollId) {
-					this.$router.push({ name: 'list', params: { type: 'deleted' } })
-				}
-			} catch {
-				showError(t('polls', 'Error deleting poll.'))
-			}
-		},
-	},
-}
-</script>
-
 <style lang="scss">
 	.closed {
 		.app-navigation-entry-icon, .app-navigation-entry__title {
@@ -229,9 +227,6 @@ export default {
 	}
 
 	.app-navigation-footer {
-		// height: auto !important;
-		// overflow: hidden !important;
-		// padding-top: 0 !important;
 		flex: 0 0 auto;
 	}
 </style>

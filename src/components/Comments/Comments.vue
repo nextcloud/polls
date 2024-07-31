@@ -3,10 +3,23 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import CommentItem from './CommentItem.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore } from '../../stores/preferences.ts'
+	import { useCommentsStore } from '../../stores/comments.ts'
+
+	const commentsStore = useCommentsStore()
+	const preferencesStore = usePreferencesStore()
+	const cssVar = {
+		'--content-deleted': `" (${t('polls', 'deleted')})"`,
+	}
+</script>
+
 <template>
 	<TransitionGroup is="ul"
 		name="fade"
-		:class="['comments' , { 'alternativestyle': preferencesStore.user.commentStyling }]"
+		:class="['comments' , { 'alternativestyle': preferencesStore.user.useCommentsAlternativeStyling }]"
 		:style="cssVar">
 		<CommentItem v-for="(comment) in commentsStore.groupedComments"
 			:key="comment.id"
@@ -14,29 +27,3 @@
 			tag="li" />
 	</TransitionGroup>
 </template>
-
-<script>
-
-import CommentItem from './CommentItem.vue'
-import { mapStores } from 'pinia'
-import { t } from '@nextcloud/l10n'
-import { usePreferencesStore } from '../../stores/preferences.ts'
-import { useCommentsStore } from '../../stores/comments.ts'
-
-export default {
-	name: 'Comments',
-	components: {
-		CommentItem,
-	},
-
-	computed: {
-		...mapStores(usePreferencesStore, useCommentsStore),
-		cssVar() {
-			return {
-				'--content-deleted': `" (${t('polls', 'deleted')})"`,
-			}
-		},
-
-	},
-}
-</script>

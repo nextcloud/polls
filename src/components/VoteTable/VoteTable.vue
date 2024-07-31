@@ -3,8 +3,34 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { showSuccess } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+
+	import { ActionDelete } from '../Actions/index.js'
+
+	import VoteColumn from './VoteColumn.vue'
+	import VoteMenu from './VoteMenu.vue'
+	import UserItem from '../User/UserItem.vue'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useSessionStore } from '../../stores/session.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
+	import { useVotesStore } from '../../stores/votes.ts'
+
+	const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
+	const optionsStore = useOptionsStore()
+	const votesStore = useVotesStore()
+
+	async function removeUser(userId: string) {
+		await votesStore.deleteUser({ userId })
+		showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
+	}
+
+</script>
+
 <template>
-	<div class="vote-table" :class="[viewMode, { closed: pollStore.isClosed }]">
+	<div class="vote-table" :class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
 		<div class="vote-table__users">
 			<VoteMenu />
 
@@ -32,56 +58,10 @@
 			<VoteColumn v-for="(item) in optionsStore.rankedOptions"
 				:key="item.id"
 				:option="item"
-				:view-mode="viewMode" />
+				:view-mode="pollStore.viewMode" />
 		</TransitionGroup>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { showSuccess } from '@nextcloud/dialogs'
-import { ActionDelete } from '../Actions/index.js'
-import VoteColumn from './VoteColumn.vue'
-import VoteMenu from './VoteMenu.vue'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { usePollStore } from '../../stores/poll.ts'
-import { useSessionStore } from '../../stores/session.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-import { useVotesStore } from '../../stores/votes.ts'
-
-export default {
-	name: 'VoteTable',
-	components: {
-		ActionDelete,
-		VoteColumn,
-		VoteMenu,
-		UserItem,
-	},
-
-	props: {
-		viewMode: {
-			type: String,
-			default: 'table-view',
-			validator(value) {
-				return ['table-view', 'list-view'].includes(value)
-			},
-		},
-	},
-
-	computed: {
-		...mapStores(usePollStore, useSessionStore, useOptionsStore, useVotesStore),
-	},
-
-	methods: {
-		t,
-		async removeUser(userId) {
-			await this.votesStore.deleteUser({ userId })
-			showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 .vote-table {

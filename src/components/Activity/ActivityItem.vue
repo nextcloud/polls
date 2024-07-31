@@ -3,50 +3,32 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="activity-item">
-		<div class="activity-item__content">
-			<span class="activity-item__date">{{ dateActivityRelative }}</span>
-			<NcRichText :text="message.subject" :arguments="message.parameters" />
-		</div>
-	</div>
-</template>
+<script setup lang="ts">
+	import { computed, defineProps } from 'vue'
+	import moment from '@nextcloud/moment'
+	import { NcUserBubble, NcRichText } from '@nextcloud/vue'
+	import { GuestBubble, SimpleLink } from '../../helpers/index.ts'
 
-<script>
-import moment from '@nextcloud/moment'
-import { NcUserBubble, NcRichText } from '@nextcloud/vue'
-import { GuestBubble, SimpleLink } from '../../helpers/index.js'
-
-export default {
-	name: 'ActivityItem',
-
-	components: {
-		NcRichText,
-	},
-
-	props: {
+	const props = defineProps({
 		activity: {
 			type: Object,
 			default: null,
 		},
-	},
+	})
 
-	computed: {
-		dateActivityRelative() {
-			return moment(this.activity.datetime).fromNow()
-		},
+	const dateActivityRelative = computed(() => moment(props.activity.datetime).fromNow())
 
-		message() {
-			const subject = this.activity.subject_rich[0]
-			const parameters = JSON.parse(JSON.stringify(this.activity.subject_rich[1]))
-			if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
-				const dateTime = parameters.after.id.slice(3)
-				parameters.after.name = moment(dateTime).format('L LTS')
-			}
+	const message = computed(() => {
+		const subject = props.activity.subject_rich[0]
+		const parameters = JSON.parse(JSON.stringify(props.activity.subject_rich[1]))
+		if (parameters.after && typeof parameters.after.id === 'string' && parameters.after.id.startsWith('dt:')) {
+			const dateTime = parameters.after.id.slice(3)
+			parameters.after.name = moment(dateTime).format('L LTS')
+		}
 
-			Object.keys(parameters).forEach(function(key, index) {
-				const { type } = parameters[key]
-				switch (type) {
+		Object.keys(parameters).forEach(function(key) {
+			const { type } = parameters[key]
+			switch (type) {
 				case 'highlight':
 					parameters[key] = parameters[key].link
 						? {
@@ -58,21 +40,21 @@ export default {
 						}
 						: `${parameters[key].name}`
 					break
-				case 'circle':
-					parameters[key] =  {
-						component: SimpleLink,
-						props: {
-							href: parameters[key].link,
-							name: parameters[key].name,
-						},
-					}
-					break
 				case 'user':
 					parameters[key] = {
 						component: NcUserBubble,
 						props: {
 							user: parameters[key].id,
 							displayName: parameters[key].name,
+						},
+					}
+					break
+				case 'circle':
+					parameters[key] =  {
+						component: SimpleLink,
+						props: {
+							href: parameters[key].link,
+							name: parameters[key].name,
 						},
 					}
 					break
@@ -87,17 +69,24 @@ export default {
 					break
 				default:
 					parameters[key] = `{${key}}`
-				}
-
-			})
-
-			return {
-				subject, parameters,
 			}
-		},
-	},
-}
+
+		})
+
+		return {
+			subject, parameters,
+		}
+	})
 </script>
+
+<template>
+	<div class="activity-item">
+		<div class="activity-item__content">
+			<span class="activity-item__date">{{ dateActivityRelative }}</span>
+			<NcRichText :text="message.subject" :arguments="message.parameters" />
+		</div>
+	</div>
+</template>
 
 <style lang="scss">
 	.activity-item {

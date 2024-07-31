@@ -27,6 +27,7 @@ use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
+use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\UserNotFoundException;
 use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -166,9 +167,13 @@ class PollService {
 	 * @return Poll
 	 */
 	public function get(int $pollId) {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->poll->request(Poll::PERMISSION_POLL_VIEW);
-		return $this->poll;
+		try {
+			$this->poll = $this->pollMapper->find($pollId);
+			$this->poll->request(Poll::PERMISSION_POLL_VIEW);
+			return $this->poll;
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Poll not found');
+		}
 	}
 
 	/**

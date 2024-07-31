@@ -2,45 +2,44 @@
   - SPDX-FileCopyrightText: 2022 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+<script setup lang="ts">
+	import { defineProps } from 'vue'
+
+	const props = defineProps(
+		{ 
+			title: { 
+				type: String, 
+				default: 'Admin Access',
+			}, 
+			fillColor: { 
+				type: String, 
+				default: 'currentColor',
+			}, 
+			size: { 
+				type: Number, 
+				default: 24, 
+			}, 
+		} 
+	)
+</script>
+
 <template>
-	<span :aria-hidden="!title"
-		:aria-label="title"
+	<span :aria-hidden="!props.title"
+		:aria-label="props.title"
 		class="material-design-icon spinner"
-		role="img"
-		v-bind="$attrs"
-		@click="$emit('click', $event)">
+		role="img">
 		<svg viewBox="0 0 100 100"
-			:width="size"
-			:height="size">
+			:width="props.size"
+			:height="props.size">
 			<circle cx="50"
 				cy="50"
 				r="45"
-				:stroke="fillColor" />
+				:stroke="props.fillColor" />
 		</svg>
 	</span>
 </template>
 
-<script>
-export default {
-	name: 'Spinner',
-	props: {
-		title: {
-			type: String,
-			default: 'Admin Access',
-		},
-		fillColor: {
-			type: String,
-			default: 'currentColor',
-		},
-		size: {
-			type: Number,
-			default: 24,
-		},
-	},
-}
-</script>
-
-<style land="css" scoped>
+<style lang="scss" scoped>
 svg {
   animation: 2s linear infinite svg-animation;
   max-width: 100px;

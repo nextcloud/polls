@@ -2,9 +2,41 @@
   - SPDX-FileCopyrightText: 2018 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+<script setup>
+	import { ref, onMounted, onUnmounted } from 'vue'
+	import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
+	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore } from '../../stores/preferences.ts'
+
+	const preferencesStore = usePreferencesStore()
+	const show = ref(false)
+
+	/**
+	 *
+	 */
+	function loadPreferences() {
+		preferencesStore.load()
+		preferencesStore.getCalendars()
+	}
+
+	onMounted(() => {
+		subscribe('polls:settings:show', () => {
+			show.value = true
+			loadPreferences()
+		})
+	})
+
+	onUnmounted(() => {
+		unsubscribe('polls:settings:show')
+	})
+
+</script>
+
 
 <template>
-	<NcAppSettingsDialog :open.sync="show" :show-navigation="true">
+	<NcAppSettingsDialog v-model:open="show" show-navigation>
 		<NcAppSettingsSection id="calendar" :name="t('polls', 'Calendar check')">
 			<CalendarSettings />
 		</NcAppSettingsSection>
@@ -23,58 +55,3 @@
 	</NcAppSettingsDialog>
 </template>
 
-<script>
-
-import { NcAppSettingsDialog, NcAppSettingsSection } from '@nextcloud/vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
-import { t } from '@nextcloud/l10n'
-import { mapStores } from 'pinia'
-import { usePreferencesStore } from '../../stores/preferences.ts'
-
-export default {
-	name: 'UserSettingsDlg',
-
-	components: {
-		NcAppSettingsDialog,
-		NcAppSettingsSection,
-		CalendarSettings,
-		FeatureSettings,
-		StyleSettings,
-		PerformanceSettings,
-	},
-
-	data() {
-		return {
-			show: false,
-		}
-	},
-
-	computed: {
-		...mapStores(usePreferencesStore),
-	},
-	watch: {
-		async show() {
-			if (this.show === true) {
-				this.preferencesStore.load()
-				this.preferencesStore.getCalendars()
-			}
-		},
-	},
-
-	created() {
-		subscribe('polls:settings:show', () => {
-			this.show = true
-		})
-
-	},
-
-	beforeDestroy() {
-		unsubscribe('polls:settings:show')
-	},
-	
-	methods: {
-		t,
-	},
-}
-</script>

@@ -3,45 +3,36 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="counter">
-		<div class="yes">
-			<YesCounterIcon fill-color="var(--color-polls-foreground-yes)" :size="20" />
-			<span>{{ option.votes.yes }}</span>
-		</div>
-		<div v-if="showMaybe" class="maybe">
-			<MaybeCounterIcon fill-color="var(--color-polls-foreground-maybe)" :size="20" />
-			<span>{{ option.votes.maybe }}</span>
-		</div>
-	</div>
-</template>
+<script setup lang="ts">
+	import { defineProps, PropType } from 'vue'
+	import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
+	import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
+	import { Option } from '../../Types/index.ts'
 
-<script>
-
-import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
-import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
-
-export default {
-	name: 'Counter',
-
-	components: {
-		YesCounterIcon,
-		MaybeCounterIcon,
-	},
-
-	props: {
+	const props = defineProps({
 		option: {
-			type: Object,
+			type: Object as PropType<Option>,
 			default: undefined,
 		},
 		showMaybe: {
 			type: Boolean,
 			default: false,
 		},
-	},
-}
-
+	})
 </script>
+
+<template>
+	<div class="counter">
+		<div class="yes">
+			<YesCounterIcon fill-color="var(--color-polls-foreground-yes)" :size="20" />
+			<span>{{ props.option.votes.yes }}</span>
+		</div>
+		<div v-if="showMaybe" class="maybe">
+			<MaybeCounterIcon fill-color="var(--color-polls-foreground-maybe)" :size="20" />
+			<span>{{ props.option.votes.maybe }}</span>
+		</div>
+	</div>
+</template>
 
 <style lang="scss">
 .counter {

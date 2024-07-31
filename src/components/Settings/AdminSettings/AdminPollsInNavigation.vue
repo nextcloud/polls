@@ -3,36 +3,22 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+
+	const { appSettingsStore } = useAppSettingsStore()
+
+</script>
+
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch :checked.sync="appSettingsStore.navigationPollsInList" 
+		<NcCheckboxRadioSwitch v-model="appSettingsStore.navigationPollsInList" 
 			type="switch"
-			@update:checked="appSettingsStore.write()">
+			@update:model-value="appSettingsStore.write()">
 			{{ t('polls', 'Load polls into the navigation.') }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
-
-<script>
-
-import { mapStores } from 'pinia'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { useAppSettingsStore } from '../../../stores/appSettings.ts'
-
-export default {
-	name: 'AdminPollsInNavigation',
-
-	components: {
-		NcCheckboxRadioSwitch,
-	},
-
-	computed: {
-		...mapStores(useAppSettingsStore),
-	},
-	
-	methods: {
-		t,
-	},
-}
-</script>

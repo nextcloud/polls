@@ -3,33 +3,18 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+
+	const pollStore = usePollStore()
+</script>
+
 <template>
-	<NcCheckboxRadioSwitch :checked.sync="pollStore.configuration.allowComment" 
+	<NcCheckboxRadioSwitch v-model="pollStore.configuration.allowComment" 
 		type="switch"
-		@update:checked="pollStore.write()">
+		@update:model-value="pollStore.write()">
 		{{ t('polls', 'Allow Comments') }}
 	</NcCheckboxRadioSwitch>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'ConfigAllowComment',
-
-	components: {
-		NcCheckboxRadioSwitch,
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-	},
-	
-	methods: {
-		t,
-	},
-}
-</script>

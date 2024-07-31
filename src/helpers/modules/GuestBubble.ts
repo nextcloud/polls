@@ -2,10 +2,9 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-const GuestBubble = {
-	name: 'GuestBubble',
-	functional: true,
+import { h } from 'vue'
 
+const GuestBubble = {
 	props: {
 		user: {
 			type: String,
@@ -17,9 +16,9 @@ const GuestBubble = {
 		},
 	},
 
-	render(createElement, context) {
-		return createElement('span', context.props.displayName)
+	setup(props: { user: string; displayName: string }) {
+		return () => h('span', props.displayName)
 	},
 }
 
-export default GuestBubble
+export { GuestBubble }

@@ -3,6 +3,13 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+	import { InputDiv } from '../../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore } from '../../../stores/preferences.ts'
+	const preferencesStore = usePreferencesStore()
+</script>
+
 <template>
 	<div class="user_settings">
 		<h3>
@@ -11,7 +18,7 @@
 			{{ t('polls', 'If this threshold gets trespassed, only the current participant will be displayed, to avoid a performance breakdown.') }}
 			{{ t('polls', 'The default threshold of 1000 should be a good and safe value.') }}
 		</h3>
-		<InputDiv v-model="preferencesStore.user.performanceThreshold"
+		<InputDiv v-model.lazy="preferencesStore.user.performanceThreshold"
 			type="number"
 			inputmode="numeric"
 			use-num-modifiers
@@ -21,27 +28,3 @@
 			@change="preferencesStore.write()" />
 	</div>
 </template>
-
-<script>
-
-import { mapStores } from 'pinia'
-import { InputDiv } from '../../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePreferencesStore } from '../../../stores/preferences.ts'
-
-export default {
-	name: 'PerformanceSettings',
-
-	components: {
-		InputDiv,
-	},
-
-	computed: {
-		...mapStores(usePreferencesStore),
-	},
-
-	methods: {
-		t,
-	},
-}
-</script>

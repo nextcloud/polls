@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,11 +5,11 @@
 
 import { defineStore } from 'pinia'
 import { CommentsAPI, PublicAPI } from '../Api/index.js'
-import { User } from '../Interfaces/interfaces.ts'
-import { groupComments, Logger } from '../helpers/index.js'
+import { User } from '../Types/index.ts'
+import { groupComments, Logger } from '../helpers/index.ts'
 import { useSessionStore } from './session.ts'
 
-interface Comment {
+export type Comment = {
 	comment: string
 	deleted: number
 	id: number
@@ -20,8 +19,12 @@ interface Comment {
 	user: User
 }
 
-interface Comments {
+export type Comments = {
 	list: Comment[]
+}
+
+export interface CommentsGrouped extends Comment {
+	comments: Comment[]
 }
 
 export const useCommentsStore = defineStore('comments', {
@@ -38,10 +41,10 @@ export const useCommentsStore = defineStore('comments', {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.getComments(sessionStore.router.params.token)
-				} else if (sessionStore.router.name === 'vote') {
-					response = await CommentsAPI.getComments(sessionStore.router.params.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.getComments(sessionStore.route.params.token)
+				} else if (sessionStore.route.name === 'vote') {
+					response = await CommentsAPI.getComments(sessionStore.route.params.id)
 				} else {
 					this.$reset()
 					return
@@ -56,10 +59,10 @@ export const useCommentsStore = defineStore('comments', {
 		async add(payload: { message: string }) {
 			const sessionStore = useSessionStore()
 			try {
-				if (sessionStore.router.name === 'publicVote') {
-					await PublicAPI.addComment(sessionStore.router.params.token, payload.message)
-				} else if (sessionStore.router.name === 'vote') {
-					await CommentsAPI.addComment(sessionStore.router.params.id, payload.message)
+				if (sessionStore.route.name === 'publicVote') {
+					await PublicAPI.addComment(sessionStore.route.params.token, payload.message)
+				} else if (sessionStore.route.name === 'vote') {
+					await CommentsAPI.addComment(sessionStore.route.params.id, payload.message)
 				} else {
 					this.$reset()
 					return
@@ -86,10 +89,11 @@ export const useCommentsStore = defineStore('comments', {
 	
 		async delete(payload: { comment: Comment }) {
 			const sessionStore = useSessionStore()
+			
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.deleteComment(sessionStore.router.params.token, payload.comment.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.deleteComment(sessionStore.route.params.token, payload.comment.id)
 				} else {
 					response = await CommentsAPI.deleteComment(payload.comment.id)
 				}
@@ -107,8 +111,8 @@ export const useCommentsStore = defineStore('comments', {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.restoreComment(sessionStore.router.params.token, payload.comment.id, { comment: payload.comment })
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.restoreComment(sessionStore.route.params.token, payload.comment.id, { comment: payload.comment })
 				} else {
 					response = await CommentsAPI.restoreComment(payload.comment.id)
 				}

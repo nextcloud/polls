@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,25 +5,40 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, OptionsAPI } from '../Api/index.js'
-import { User } from '../Interfaces/interfaces.ts'
-import { Logger } from '../helpers/index.js'
+import { User } from '../Types/index.ts'
+import { Logger } from '../helpers/index.ts'
 import moment from '@nextcloud/moment'
-import { orderBy } from 'lodash/orderBy'
+import orderBy from 'lodash/orderBy'
 import { usePollStore, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
+import { Answer } from './votes.ts'
 
-interface Sequence {
+export type Sequence = {
+	unit: { name?: string, value: string }
 	step: number
-	unit: { value: number }
 	amount: number
 }
 
-interface Shift {
+export type Shift = {
 	step: number
-	unit: { value: number }	
+	unit: { name?: string, value: string }	
 }
 
-export interface Option {
+export type OptionVotes = {
+	yes: number
+	maybe: number
+	no: number
+	count: number
+	currentUser?: Answer
+}
+
+export type SimpleOption = {
+	text?: string
+	timestamp?: number
+	duration?: number
+}
+
+export type Option = {
 	id: number
 	pollId: number
 	text: string
@@ -35,12 +49,11 @@ export interface Option {
 	duration: number
 	locked: boolean
 	hash: string
-	votes: number
+	votes: OptionVotes
 	owner: User
-
 }
 
-interface Options {
+export type Options = {
 	list: Option[]
 	ranked: boolean
 }
@@ -124,10 +137,10 @@ export const useOptionsStore = defineStore('options', {
 			try {
 				let response = null
 	
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.getOptions(sessionStore.router.params.token)
-				} else if (sessionStore.router.params.id) {
-					response = await OptionsAPI.getOptions(sessionStore.router.params.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.getOptions(sessionStore.route.params.token)
+				} else if (sessionStore.route.params.id) {
+					response = await OptionsAPI.getOptions(sessionStore.route.params.id)
 				} else {
 					this.$reset()
 					return
@@ -136,7 +149,7 @@ export const useOptionsStore = defineStore('options', {
 				this.list = response.data.options
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error loding options', { error, pollId: sessionStore.router.params.id })
+				Logger.error('Error loding options', { error, pollId: sessionStore.route.params.id })
 				throw error
 			}
 		},
@@ -154,15 +167,15 @@ export const useOptionsStore = defineStore('options', {
 			this.list.sort((a, b) => (a.order < b.order) ? -1 : (a.order > b.order) ? 1 : 0)
 		},
 	
-		async add(payload: { timestamp: number; text: string; duration: number }) {
+		async add(payload: SimpleOption) {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
+				if (sessionStore.route.name === 'publicVote') {
 					response = await PublicAPI.addOption(
-						sessionStore.router.params.token,
+						sessionStore.route.params.token,
 						{
-							pollId: sessionStore.router.params.id,
+							pollId: sessionStore.route.params.id,
 							timestamp: payload.timestamp,
 							text: payload.text,
 							duration: payload.duration,
@@ -171,7 +184,7 @@ export const useOptionsStore = defineStore('options', {
 				} else {
 					response = await OptionsAPI.addOption(
 						{
-							pollId: sessionStore.router.params.id,
+							pollId: sessionStore.route.params.id,
 							timestamp: payload.timestamp,
 							text: payload.text,
 							duration: payload.duration,
@@ -202,8 +215,8 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.deleteOption(sessionStore.router.params.token, payload.option.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.deleteOption(sessionStore.route.params.token, payload.option.id)
 				} else {
 					response = await OptionsAPI.deleteOption(payload.option.id)
 				}
@@ -219,8 +232,8 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.restoreOption(sessionStore.router.params.token, payload.option.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.restoreOption(sessionStore.route.params.token, payload.option.id)
 				} else {
 					response = await OptionsAPI.restoreOption(payload.option.id)
 				}
@@ -235,7 +248,7 @@ export const useOptionsStore = defineStore('options', {
 		async addBulk(payload: { text: string }) {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await OptionsAPI.addOptions(sessionStore.router.params.id, payload.text)
+				const response = await OptionsAPI.addOptions(sessionStore.route.params.id, payload.text)
 				this.$patch({ options: response.data.options })
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -266,23 +279,21 @@ export const useOptionsStore = defineStore('options', {
 			}
 		},
 	
-		async reorder(payload: { options: Option[] }) {
+		async changeOrder(oldIndex: number, newIndex: number) {
 			const sessionStore = useSessionStore()
-			payload.options.forEach((item, i) => {
-				item.order = i + 1
-			})
-			this.list = payload.options
-	
+			
+			this.list.splice(newIndex, 0, this.list.splice(oldIndex, 1)[0]);
+
 			try {
-				const response = await OptionsAPI.reorderOptions(sessionStore.router.params.id, payload)
+				const response = await OptionsAPI.reorderOptions(sessionStore.route.params.id, this.list.map(({ id, text }) => ({ id, text })))
 				this.$patch({ options: response.data.options })
 			} catch (error) {
-				Logger.error('Error reordering option', { error, payload })
+				Logger.error('Error reordering option', { error, options: this.list, oldIndex, newIndex})
 				this.load()
 				throw error
 			}
 		},
-	
+		
 		async sequence(payload: { option: Option; sequence: Sequence }) {
 			try {
 				const response = await OptionsAPI.addOptionsSequence(
@@ -304,7 +315,7 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await OptionsAPI.shiftOptions(
-					sessionStore.router.params.id,
+					sessionStore.route.params.id,
 					payload.shift.step,
 					payload.shift.unit.value,
 				)

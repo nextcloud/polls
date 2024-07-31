@@ -3,12 +3,40 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+	import { computed } from 'vue'
+	import { InputDiv } from '../../Base/index.js'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
+
+	const preferencesStore = usePreferencesStore()
+
+	const defaultViewTextPoll = computed({
+		get() {
+			return preferencesStore.user.defaultViewTextPoll === ViewMode.ListView
+		},
+		set(value) {
+			preferencesStore.user.defaultViewTextPoll = value ? ViewMode.ListView : ViewMode.TableView
+		},
+	})
+
+	const defaultViewDatePoll = computed({
+		get() {
+			return preferencesStore.user.defaultViewDatePoll === ViewMode.ListView
+		},
+		set(value) {
+			preferencesStore.user.defaultViewDatePoll = value ? ViewMode.ListView : ViewMode.TableView
+		},
+	})
+</script>
+
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.defaultViewTextPoll" 
+			<NcCheckboxRadioSwitch v-model="defaultViewTextPoll" 
 				type ="switch"
-				@update:checked="preferencesStore.write()">
+				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Text polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -17,9 +45,9 @@
 		</div>
 
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch :checked.sync="preferencesStore.user.defaultViewDatePoll" 
+			<NcCheckboxRadioSwitch v-model="defaultViewDatePoll" 
 				type="switch"
-				@update:checked="preferencesStore.write()">
+				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Date polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
@@ -37,29 +65,3 @@
 		</div>
 	</div>
 </template>
-
-<script>
-
-import { mapStores } from 'pinia'
-import { InputDiv } from '../../Base/index.js'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { usePreferencesStore } from '../../../stores/preferences.ts'
-
-export default {
-	name: 'FeatureSettings',
-
-	components: {
-		NcCheckboxRadioSwitch,
-		InputDiv,
-	},
-
-	computed: {
-		...mapStores(usePreferencesStore),
-	},
-
-	methods: {
-		t,
-	},
-}
-</script>

@@ -3,29 +3,14 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div :class="['vote-indicator', active]" @click="onClick()">
-		<MaybeIcon v-if="answer==='maybe'" :size="iconSize" />
-		<CheckIcon v-if="answer==='yes'" :fill-color="foregroundColor" :size="iconSize" />
-		<CloseIcon v-if="answer==='no'" :fill-color="foregroundColor" :size="iconSize" />
-	</div>
-</template>
+<script setup lang="ts">
+	import { defineProps, defineEmits, computed } from 'vue'
+	import CheckIcon from 'vue-material-design-icons/Check.vue'
+	import CloseIcon from 'vue-material-design-icons/Close.vue'
+	import { MaybeIcon } from '../AppIcons/index.js'
+	import { Answer } from '../../Types/index.ts'
 
-<script>
-
-import CheckIcon from 'vue-material-design-icons/Check.vue'
-import CloseIcon from 'vue-material-design-icons/Close.vue'
-import { MaybeIcon } from '../AppIcons/index.js'
-
-export default {
-	name: 'VoteIndicator',
-	components: {
-		CloseIcon,
-		CheckIcon,
-		MaybeIcon,
-	},
-
-	props: {
+	const props = defineProps({
 		answer: {
 			type: String,
 			default: '',
@@ -34,54 +19,58 @@ export default {
 			type: Boolean,
 			default: false,
 		},
-	},
+	})
 
-	data() {
-		return {
-			iconSize: 31,
-			colorCodeNo: getComputedStyle(document.documentElement).getPropertyValue('--color-error'),
-			colorCodeYes: getComputedStyle(document.documentElement).getPropertyValue('--color-success'),
-			colorCodeMaybe: getComputedStyle(document.documentElement).getPropertyValue('--color-warning'),
+	const emit = defineEmits(['click'])
+	const iconSize = 31
+	const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue('--color-error')
+	const colorCodeYes = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
+	const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyValue('--color-warning')
+
+	const foregroundColor = computed(() => {
+		if (props.answer === Answer.Yes) {
+			return colorCodeYes
 		}
-	},
+		if (props.answer === Answer.Maybe) {
+			return colorCodeMaybe
+		}
+		return colorCodeNo
+	})
 
-	computed: {
-		foregroundColor() {
-			if (this.answer === 'yes') {
-				return this.colorCodeYes
-			}
-			if (this.answer === 'maybe') {
-				return this.colorCodeMaybe
-			}
-			return this.colorCodeNo
-		},
-	},
-
-	methods: {
-		onClick() {
-			if (this.active) {
-				this.$emit('click')
-			}
-		},
-	},
-}
+	/**
+	 *
+	 */
+	function onClick() {
+		if (props.active) {
+			emit('click')
+		}
+	}
 </script>
+
+<template>
+	<div :class="['vote-indicator', active]" @click="onClick()">
+		<MaybeIcon v-if="answer === Answer.Maybe" :size="iconSize" />
+		<CheckIcon v-if="answer === Answer.Yes" :fill-color="foregroundColor" :size="iconSize" />
+		<CloseIcon v-if="answer === Answer.No" :fill-color="foregroundColor" :size="iconSize" />
+	</div>
+</template>
 
 <style lang="scss">
 
 .vote-indicator {
-	&, * {
-		transition: all 0.4s ease-in-out;
-		.active & {
-			cursor: pointer;
-		}
-	}
 	display: flex;
 	justify-content: center;
 	align-content: end;
 	color: var(--color-polls-foreground-no);
 	width: 30px;
 	height: 30px;
+
+	&, * {
+		transition: all 0.4s ease-in-out;
+		.active & {
+			cursor: pointer;
+		}
+	}
 
 	.active & {
 		border: 2px solid;

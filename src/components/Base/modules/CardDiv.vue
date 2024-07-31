@@ -3,6 +3,10 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { NcNoteCard } from '@nextcloud/vue'
+</script>
+
 <template>
 	<NcNoteCard v-bind="$attrs">
 		<div class="card-content">
@@ -15,18 +19,6 @@
 		</div>
 	</NcNoteCard>
 </template>
-
-<script>
-import { NcNoteCard } from '@nextcloud/vue'
-
-export default {
-	name: 'CardDiv',
-	components: {
-		NcNoteCard,
-	},
-}
-
-</script>
 
 <style lang="scss">
 	.left-card-side {

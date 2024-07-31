@@ -3,42 +3,23 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { NcButton } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { useVotesStore } from '../../../stores/votes.ts'
+
+	const votesStore = useVotesStore()
+	const caption = t('polls', 'Delete orphaned')
+
+</script>
+
 <template>
 	<div class="action toggle-sidebar">
 		<NcButton type="primary"
 			:aria-label="caption"
-			@click="clickAction()">
+			@click="votesStore.removeOrphanedVotes()">
 			{{ caption }}
 		</NcButton>
 	</div>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
-import { NcButton } from '@nextcloud/vue'
-import { t } from '@nextcloud/l10n'
-import { useVotesStore } from '../../../stores/votes.ts'
-export default {
-	name: 'ActionDeleteOrphanedVotes',
-
-	components: {
-		NcButton,
-	},
-
-	data() {
-		return {
-			caption: t('polls', 'Delete orphaned'),
-		}
-	},
-
-	computed: {
-		...mapStores(useVotesStore),
-	},
-
-	methods: {
-		clickAction() {
-			this.votesStore.removeOrphanedVotes()
-		},
-	},
-}
-</script>

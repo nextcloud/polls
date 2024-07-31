@@ -9,13 +9,6 @@
 	</div>
 </template>
 
-<script>
-
-export default {
-	name: 'FlexSettings',
-}
-</script>
-
 <style lang="scss">
 .flex_settings {
 	display: flex;

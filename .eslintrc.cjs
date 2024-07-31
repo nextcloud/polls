@@ -4,7 +4,7 @@
  */
 module.exports = {
 	extends: [
-		'@nextcloud',
+		'@nextcloud/eslint-config/vue3',
 		'prettier',
 	],
 	plugins: [
@@ -12,6 +12,11 @@ module.exports = {
 	],
 	rules: {
 		'arrow-body-style': 'error',
+		"jsdoc/require-jsdoc": ["error" | "warn", {
+			"publicOnly": {
+				"ancestorsOnly": true,
+			},
+		}],
 		'no-array-constructor': 'error',
 		'no-continue': 'error',
 		'no-else-return': ['error', { allowElseIf: false }],
@@ -19,6 +24,11 @@ module.exports = {
 		'no-negated-condition': 'error',
 		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
 		'prefer-template': 'error',
+		'vue/script-indent': ['error', 'tab', {
+			baseIndent: 1,
+			switchCase: 1,
+		}],
+		'vue/no-v-model-argument': 'off',
 		'vue/no-unused-properties': ['error', {
 			groups: ['props', 'data', 'computed', 'methods'],
 			deepData: true,

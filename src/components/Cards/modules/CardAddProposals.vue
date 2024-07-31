@@ -3,6 +3,17 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { CardDiv } from '../../Base/index.js'
+	import OptionProposals from '../../Options/OptionProposals.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore, PollType } from '../../../stores/poll.ts'
+
+	const pollStore = usePollStore()
+	const cardType = 'info'
+
+</script>
+
 <template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'You are asked to propose more options. ') }}
@@ -10,39 +21,9 @@
 			{{ t('polls', 'The proposal period ends {timeRelative}.',
 				{ timeRelative: pollStore.proposalsExpireRelative }) }}
 		</p>
-		<OptionProposals v-if="pollStore.type === 'textPoll'" />
+		<OptionProposals v-if="pollStore.type === PollType.Text" />
 		<template #button>
-			<OptionProposals v-if="pollStore.type === 'datePoll'" />
+			<OptionProposals v-if="pollStore.type === PollType.Date" />
 		</template>
 	</CardDiv>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { CardDiv } from '../../Base/index.js'
-import OptionProposals from '../../Options/OptionProposals.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../../stores/poll.ts'
-
-export default {
-	name: 'CardAddProposals',
-	components: {
-		CardDiv,
-		OptionProposals,
-	},
-
-	data() {
-		return {
-			cardType: 'info',
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-	},
-
-	methods: {
-		t,
-	},
-}
-</script>

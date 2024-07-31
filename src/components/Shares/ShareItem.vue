@@ -3,6 +3,140 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { defineProps, defineEmits, ref, computed, onMounted, PropType } from 'vue'
+	import { showSuccess, showError } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+	import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
+
+	import { Logger } from '../../helpers/index.ts'
+	import UserItem from '../User/UserItem.vue'
+
+	import { useSharesStore } from '../../stores/shares.ts'
+	import { Share, UserType } from '../../Types/index.ts'
+
+	import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
+	import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
+	import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
+	import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
+	import GrantAdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
+	import EditIcon from 'vue-material-design-icons/Pencil.vue'
+	import WithdrawAdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
+	import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
+	import QrIcon from 'vue-material-design-icons/Qrcode.vue'
+	import LockIcon from 'vue-material-design-icons/Lock.vue'
+	import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+
+	const sharesStore = useSharesStore()
+	const props = defineProps( {
+		share: {
+			type: Object as PropType<Share>,
+			default: undefined,
+		},
+	})
+
+	const emit = defineEmits(['showQrCode'])
+
+	const resolving = ref(false)
+	const label = ref({
+		inputValue: '',
+		inputProps: {
+			success: false,
+			error: false,
+			showTrailingButton: true,
+			labelOutside: false,
+			label: t('polls', 'Share label'),
+		},
+	})
+
+	const isActivePublicShare = computed(() => !props.share.deleted && props.share.user.type === UserType.Public)
+	const activateResendInvitation = computed(() => !props.share.deleted && (props.share.user.emailAddress || props.share.user.type === UserType.Group))
+	const activateResolveGroup = computed(() => !props.share.deleted && [UserType.ContactGroup, UserType.Circle].includes(props.share.user.type))
+	const activateSwitchAdmin = computed(() => !props.share.deleted && (props.share.user.type === UserType.User || props.share.user.type === UserType.Admin))
+	const activateCopyLink = computed(() => !props.share.deleted)
+	const activateShowQr = computed(() => !props.share.deleted && !!props.share.URL)
+	const userItemProps = computed(() => ({
+		user: props.share.user,
+		label: props.share.label,
+		showEmail: true,
+		resolveInfo: true,
+		forcedDescription: props.share.deleted ? `(${t('polls', 'deleted')})` : null,
+		showTypeIcon: true,
+		icon: true,
+	}))
+
+	onMounted(() => {
+		label.value.inputValue = props.share.label
+	})
+
+	async function switchLocked(share: Share) {
+		try {
+			if (share.locked) {
+				sharesStore.unlock({ share })
+				showSuccess(t('polls', 'Share of {displayName} unlocked', { displayName: share.user.displayName }))
+			} else {
+				sharesStore.lock({ share })
+				showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.user.displayName }))
+			}
+		} catch (error) {
+			showError(t('polls', 'Error while changing lock status of share {displayName}', { displayName: share.user.displayName }))
+			Logger.error('Error locking or unlocking share', { share, error })
+		}
+	}
+
+	async function submitLabel() {
+		sharesStore.writeLabel({ token: props.share.token, label: label.value.inputValue })
+	}
+
+	async function resolveGroup(share: Share) {
+		if (resolving.value) {
+			return
+		}
+
+		resolving.value = true
+
+		try {
+			await sharesStore.resolveGroup ({ share })
+		} catch (error) {
+			if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
+				showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.user.displayName }))
+			} else if (error.response.status === 409 && error.response.data === 'Contacts is not enabled') {
+				showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.user.displayName }))
+			} else {
+				showError(t('polls', 'Error resolving {name}.', { name: share.user.displayName }))
+			}
+		} finally {
+			resolving.value = false
+		}
+	}
+
+	async function sendInvitation() {
+		const response = await sharesStore.sendInvitation({ share: props.share })
+		if (response.data?.sentResult?.sentMails) {
+			response.data.sentResult.sentMails.forEach((item) => {
+				showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
+			})
+		}
+		if (response.data?.sentResult?.abortedMails) {
+			response.data.sentResult.abortedMails.forEach((item) => {
+				Logger.error('Mail could not be sent!', { recipient: item })
+				showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
+			})
+		}
+	}
+
+	function copyLink() {
+		try {
+			navigator.clipboard.writeText(props.share.URL)
+			showSuccess(t('polls', 'Link copied to clipboard'))
+		} catch {
+			showError(t('polls', 'Error while copying link to clipboard'))
+		}
+	}
+</script>
+
 <template>
 	<div :class="{ deleted: share.deleted }">
 		<UserItem v-bind="userItemProps"
@@ -12,7 +146,7 @@
 				<div v-if="share.voted">
 					<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />
 				</div>
-				<div v-else-if="['public', 'group'].includes(share.user.type)">
+				<div v-else-if="[UserType.Public, UserType.Group].includes(share.user.type)">
 					<div class="vote-status empty" />
 				</div>
 				<div v-else>
@@ -23,7 +157,7 @@
 			<NcActions>
 				<NcActionInput v-if="isActivePublicShare"
 					v-bind="label.inputProps"
-					:value.sync="label.inputValue"
+					v-model="label.inputValue"
 					@submit="submitLabel()">
 					<template #icon>
 						<EditIcon />
@@ -50,11 +184,11 @@
 				</NcActionButton>
 
 				<NcActionButton v-if="activateSwitchAdmin"
-					:name="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
-					:aria-label="share.user.type === 'user' ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
+					:name="share.user.type === UserType.User ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
+					:aria-label="share.user.type === UserType.User ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
 					@click="sharesStore.switchAdmin({ share: share })">
 					<template #icon>
-						<GrantAdminIcon v-if="share.user.type === 'user'" />
+						<GrantAdminIcon v-if="share.user.type === UserType.User" />
 						<WithdrawAdminIcon v-else />
 					</template>
 				</NcActionButton>
@@ -71,7 +205,7 @@
 				<NcActionButton v-if="activateShowQr"
 					:name="t('polls', 'Show QR code')"
 					:aria-label="t('polls', 'Show QR code')"
-					@click="$emit('show-qr-code')">
+					@click="emit('showQrCode')">
 					<template #icon>
 						<QrIcon />
 					</template>
@@ -82,24 +216,24 @@
 				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="optional"
-					:checked="share.publicPollEmail === 'optional'"
-					@change="sharesStore.setPublicPollEmail({ share, value: 'optional' })">
+					:model-value="share.publicPollEmail === 'optional'"
+					@update:model-value="sharesStore.setPublicPollEmail({ share, value: 'optional' })">
 					{{ t('polls', 'Email address is optional') }}
 				</NcActionRadio>
 
 				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="mandatory"
-					:checked="share.publicPollEmail === 'mandatory'"
-					@change="sharesStore.setPublicPollEmail({ share, value: 'mandatory' })">
+					:model-value="share.publicPollEmail === 'mandatory'"
+					@update:model-value="sharesStore.setPublicPollEmail({ share, value: 'mandatory' })">
 					{{ t('polls', 'Email address is mandatory') }}
 				</NcActionRadio>
 
 				<NcActionRadio v-if="isActivePublicShare"
 					name="publicPollEmail"
 					value="disabled"
-					:checked="share.publicPollEmail === 'disabled'"
-					@change="sharesStore.setPublicPollEmail({ share, value: 'disabled' })">
+					:model-value="share.publicPollEmail === 'disabled'"
+					@update:model-value="sharesStore.setPublicPollEmail({ share, value: 'disabled' })">
 					{{ t('polls', 'Do not ask for an email address') }}
 				</NcActionRadio>
 				<NcActionButton v-if="!share.deleted"
@@ -132,185 +266,6 @@
 		</UserItem>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { showSuccess, showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
-import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
-import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
-import ResolveGroupIcon from 'vue-material-design-icons/CallSplit.vue'
-import SendEmailIcon from 'vue-material-design-icons/EmailArrowRight.vue'
-import GrantAdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
-import EditIcon from 'vue-material-design-icons/Pencil.vue'
-import WithdrawAdminIcon from 'vue-material-design-icons/ShieldCrownOutline.vue'
-import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
-import QrIcon from 'vue-material-design-icons/Qrcode.vue'
-import LockIcon from 'vue-material-design-icons/Lock.vue'
-import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
-import { Logger } from '../../helpers/index.js'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { useSharesStore } from '../../stores/shares.ts'
-
-export default {
-	name: 'ShareItem',
-
-	components: {
-		WithdrawAdminIcon,
-		GrantAdminIcon,
-		ClippyIcon,
-		EditIcon,
-		QrIcon,
-		SendEmailIcon,
-		UnvotedIcon,
-		VotedIcon,
-		NcActions,
-		NcActionButton,
-		NcActionCaption,
-		NcActionInput,
-		NcActionRadio,
-		ResolveGroupIcon,
-		DeleteIcon,
-		RestoreIcon,
-		LockIcon,
-		UnlockIcon,
-		UserItem,
-	},
-
-	props: {
-		share: {
-			type: Object,
-			default: undefined,
-		},
-	},
-
-	data() {
-		return {
-			resolving: false,
-			label: {
-				inputValue: '',
-				inputProps: {
-					success: false,
-					error: false,
-					showTrailingButton: true,
-					labelOutside: false,
-					label: t('polls', 'Share label'),
-				},
-			},
-		}
-	},
-
-	computed: {
-		...mapStores(useSharesStore),
-
-		isActivePublicShare() {
-			return !this.share.deleted && this.share.user.type === 'public'
-		},
-		activateResendInvitation() {
-			return !this.share.deleted && (this.share.user.emailAddress || this.share.user.type === 'group')
-		},
-		activateResolveGroup() {
-			return !this.share.deleted && ['contactGroup', 'circle'].includes(this.share.user.type)
-		},
-		activateSwitchAdmin() {
-			return !this.share.deleted && (this.share.user.type === 'user' || this.share.user.type === 'admin')
-		},
-		activateCopyLink() {
-			return !this.share.deleted
-		},
-		activateShowQr() {
-			return !this.share.deleted && !!this.share.URL
-		},
-		userItemProps() {
-			return {
-				user: this.share.user,
-				label: this.share.label,
-				showEmail: true,
-				resolveInfo: true,
-				forcedDescription: this.share.deleted ? `(${t('polls', 'deleted')})` : null,
-				showTypeIcon: true,
-				icon: true,
-
-			}
-		},
-	},
-
-	created() {
-		this.label.inputValue = this.share.label
-	},
-
-	methods: {
-		t,
-		async switchLocked(share) {
-			try {
-				if (share.locked) {
-					this.sharesStore.unlock({ share })
-					showSuccess(t('polls', 'Share of {displayName} unlocked', { displayName: share.user.displayName }))
-				} else {
-					this.sharesStore.lock({ share })
-					showSuccess(t('polls', 'Share of {displayName} locked', { displayName: share.user.displayName }))
-				}
-			} catch (error) {
-				showError(t('polls', 'Error while changing lock status of share {displayName}', { displayName: share.user.displayName }))
-				Logger.error('Error locking or unlocking share', { share, error })
-			}
-		},
-
-		async submitLabel() {
-			this.sharesStore.writeLabel({ token: this.share.token, label: this.label.inputValue })
-		},
-
-		async resolveGroup(share) {
-			if (this.resolving) {
-				return
-			}
-
-			this.resolving = true
-
-			try {
-				await this.sharesStore.resolveGroup ({ share })
-			} catch (error) {
-				if (error.response.status === 409 && error.response.data === 'Circles is not enabled for this user') {
-					showError(t('polls', 'Resolving of {name} is not possible. The circles app is not enabled.', { name: share.user.displayName }))
-				} else if (error.response.status === 409 && error.response.data === 'Contacts is not enabled') {
-					showError(t('polls', 'Resolving of {name} is not possible. The contacts app is not enabled.', { name: share.user.displayName }))
-				} else {
-					showError(t('polls', 'Error resolving {name}.', { name: share.user.displayName }))
-				}
-			} finally {
-				this.resolving = false
-			}
-		},
-
-		async sendInvitation() {
-			const response = await this.sharesStore.sendInvitation({ share: this.share })
-			if (response.data?.sentResult?.sentMails) {
-				response.data.sentResult.sentMails.forEach((item) => {
-					showSuccess(t('polls', 'Invitation sent to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
-				})
-			}
-			if (response.data?.sentResult?.abortedMails) {
-				response.data.sentResult.abortedMails.forEach((item) => {
-					Logger.error('Mail could not be sent!', { recipient: item })
-					showError(t('polls', 'Error sending invitation to {displayName} ({emailAddress})', { emailAddress: item.emailAddress, displayName: item.displayName }))
-				})
-			}
-		},
-
-		copyLink() {
-			try {
-				navigator.clipboard.writeText(this.share.URL)
-				showSuccess(t('polls', 'Link copied to clipboard'))
-			} catch {
-				showError(t('polls', 'Error while copying link to clipboard'))
-			}
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 .deleted .user-item .description {

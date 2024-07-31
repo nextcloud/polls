@@ -3,11 +3,45 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { computed } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import { InputDiv } from '../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
+
+	const pollStore = usePollStore()
+	const optionsStore = useOptionsStore()
+
+	const useLimit = computed({
+		get: () => !!pollStore.configuration.maxVotesPerUser,
+		set(value) {
+			pollStore.configuration.maxVotesPerUser = value ? 1 : 0
+		}
+	})
+
+	/**
+	 *
+	 */
+	function validateLimit() {
+		if (!useLimit.value) {
+			pollStore.configuration.maxVotesPerUser = 0
+		} else if (pollStore.configuration.maxVotesPerUser < 1) {
+			pollStore.configuration.maxVotesPerUser = 1
+		} else if (pollStore.configuration.maxVotesPerUser > optionsStore.list.length) {
+			pollStore.configuration.maxVotesPerUser = optionsStore.list.length
+		}
+
+		pollStore.write()
+	}
+</script>
+
 <template>
 	<div>
-		<NcCheckboxRadioSwitch :checked.sync="useLimit" 
+		<NcCheckboxRadioSwitch v-model="useLimit" 
 			type="switch"
-			@update:checked="validateLimit()">
+			@update:model-value="validateLimit()">
 			{{ t('polls', 'Limit "Yes" votes per participant') }}
 		</NcCheckboxRadioSwitch>
 
@@ -23,48 +57,3 @@
 			@change="pollStore.write()"/>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { InputDiv } from '../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
-
-export default {
-	name: 'ConfigVoteLimit',
-	components: {
-		NcCheckboxRadioSwitch,
-		InputDiv,
-	},
-
-	computed: {
-		...mapStores(usePollStore, useOptionsStore),
-
-		useLimit: {
-			get() {
-				return !!this.pollStore.configuration.maxVotesPerUser
-			},
-			set(value) {
-				this.pollStore.configuration.maxVotesPerUser = value ? 1 : 0
-			},
-		},
-	},
-	
-	methods: {
-		t,
-		validateLimit(useLimit) {
-			if (!this.useLimit) {
-				this.pollStore.configuration.maxVotesPerUser = 0
-			} else if (this.pollStore.configuration.maxVotesPerUser < 1) {
-				this.pollStore.configuration.maxVotesPerUser = 1
-			} else if (this.pollStore.configuration.maxVotesPerUser > this.optionsStore.list.length) {
-				this.pollStore.configuration.maxVotesPerUser = this.optionsStore.list.length
-			}
-
-			this.pollStore.write()
-		},
-	},
-}
-</script>

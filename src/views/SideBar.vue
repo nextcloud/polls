@@ -3,9 +3,57 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { ref, onMounted, onUnmounted } from 'vue'
+	import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
+	import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
+	import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+	import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+	import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+	import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../stores/poll.ts'
+	import { useSessionStore } from '../stores/session.ts'
+
+	const pollStore = usePollStore()
+	const sessionStore = useSessionStore()
+
+	const showSidebar = ref((window.innerWidth > 920))
+	const activeTab = ref(t('polls', 'Comments').toLowerCase())
+
+	onMounted(() => {
+		subscribe('polls:sidebar:toggle', (payload) => {
+			showSidebar.value = payload?.open ?? !showSidebar.value
+			activeTab.value = payload?.activeTab ?? activeTab.value
+		})
+		subscribe('polls:sidebar:changeTab', (payload) => {
+			activeTab.value = payload?.activeTab ?? activeTab.value
+		})
+	})
+
+	onUnmounted(() => {
+		unsubscribe('polls:sidebar:changeTab', () => {
+			activeTab.value = 'comments'
+		})
+		unsubscribe('polls:sidebar:toggle', () => {
+			showSidebar.value = false
+		})
+	})
+
+	/**
+	 *
+	 */
+	function closeSideBar() {
+		emit('polls:sidebar:toggle', { open: false })
+	}
+</script>
+
+
 <template>
 	<NcAppSidebar v-show="showSidebar"
-		:active.sync="activeTab"
+		v-model="activeTab"
 		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
 		<NcAppSidebarTab v-if="pollStore.permissions.edit"
@@ -59,72 +107,3 @@
 		</NcAppSidebarTab>
 	</NcAppSidebar>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
-import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
-import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
-import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
-import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
-import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../stores/poll.ts'
-import { useSessionStore } from '../stores/session.ts'
-
-export default {
-	name: 'SideBar',
-
-	components: {
-		SideBarTabConfiguration,
-		SideBarTabComments,
-		SideBarTabOptions,
-		SideBarTabShare,
-		SideBarTabActivity,
-		NcAppSidebar,
-		NcAppSidebarTab,
-		SidebarActivityIcon,
-		SidebarConfigurationIcon,
-		SidebarOptionsIcon,
-		SidebarShareIcon,
-		SidebarCommentsIcon,
-	},
-
-	data() {
-		return {
-			activeTab: t('polls', 'Comments').toLowerCase(),
-			showSidebar: (window.innerWidth > 920),
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore, useSessionStore),
-	},
-
-	created() {
-		subscribe('polls:sidebar:changeTab', (payload) => {
-			this.activeTab = payload?.activeTab ?? this.activeTab
-		})
-
-		subscribe('polls:sidebar:toggle', (payload) => {
-			emit('polls:sidebar:changeTab', { activeTab: payload?.activeTab })
-			this.showSidebar = payload?.open ?? !this.showSidebar
-		})
-	},
-
-	beforeDestroy() {
-		unsubscribe('polls:sidebar:changeTab')
-		unsubscribe('polls:sidebar:toggle')
-	},
-
-	methods: {
-		t,
-		closeSideBar() {
-			emit('polls:sidebar:toggle', { open: false })
-		},
-	},
-}
-
-</script>

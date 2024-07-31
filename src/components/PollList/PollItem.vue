@@ -3,38 +3,125 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { RouterLink } from 'vue-router'
+	import { computed, defineProps, defineEmits, withDefaults } from 'vue'
+	import moment from '@nextcloud/moment'
+	import { BadgeDiv } from '../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+	import UserItem from '../User/UserItem.vue'
+	import { usePollsStore, SortType } from '../../stores/polls.ts'
+	import { usePollStore, AccessType, Poll, PollType } from '../../stores/poll'
+	import { StatusResults } from '../../Types/index.ts'
+
+	// Icons
+	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+	import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
+	import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
+	import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
+	import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
+	import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
+
+	export interface Props {
+		header: boolean
+		poll?: Poll
+		noLink: boolean
+	}
+
+
+	const pollsStore = usePollsStore()
+	const pollStore = usePollStore()
+
+
+	const props = withDefaults(defineProps<Props>(), {
+		header: false,
+		poll: undefined,
+		noLink: false,
+	})
+
+	const emit = defineEmits(['sortList'])
+
+	const closeToClosing = computed(() => !props.poll.status.expired && props.poll.configuration.expire && moment.unix(props.poll.configuration.expire).diff() < 86400000)
+
+	const accessType = computed(() => {
+		if (props.poll.status.deleted) {
+			return t('polls', 'Archived')
+		}
+
+		if (props.poll.configuration.access === AccessType.Open) {
+			return t('polls', 'Openly accessible poll')
+		}
+
+		return t('polls', 'Private poll')
+	})
+
+	const pollTypeName = computed(() => {
+		if (props.poll.type === PollType.Text) {
+			return t('polls', 'Text poll')
+		}
+		return t('polls', 'Date poll')
+	})
+
+	const timeExpirationRelative = computed(() => {
+		if (props.poll.configuration.expire) {
+			return moment.unix(props.poll.configuration.expire).fromNow()
+		}
+		return t('polls', 'never')
+	})
+
+	const expiryClass = computed(() => {
+		if (props.poll.status.expired) {
+			return StatusResults.Error
+		}
+
+		if (props.poll.configuration.expire && closeToClosing.value) {
+			return StatusResults.Warning
+		}
+
+		if (props.poll.configuration.expire && !props.poll.status.expired) {
+			return StatusResults.Success
+		}
+
+		return StatusResults.Success
+	})
+
+	const timeCreatedRelative = computed(() => moment.unix(props.poll.status.created).fromNow())
+
+</script>
+
 <template>
-	<div v-if="header" class="poll-item header">
+	<div v-if="props.header" class="poll-item header">
 		<div class="item__type" />
-		<div :class="['item__title', 'sortable', { 'sort': pollsStore.sort.by === 'title'}, { reverse: pollsStore.sort.reverse }]"
-			@click="$emit('sort-list', { sortBy: 'title'})">
+		<div :class="['item__title', 'sortable', { 'sort': pollsStore.sort.by === SortType.Title}, { reverse: pollsStore.sort.reverse }]"
+			@click="emit('sortList', { sortBy: SortType.Title})">
 			{{ t('polls', 'Title') }}
 			<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'title'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 		</div>
 
 		<div class="item__action" />
 
-		<div :class="['item__access', 'sortable', { 'sort': pollsStore.sort.by === 'access'}, { reverse: pollsStore.sort.reverse }]"
-			@click="$emit('sort-list', { sortBy: 'access'})">
+		<div :class="['item__access', 'sortable', { 'sort': pollsStore.sort.by === SortType.Access}, { reverse: pollsStore.sort.reverse }]"
+			@click="emit('sortList', { sortBy: SortType.Access})">
 			{{ t('polls', 'Access') }}
 			<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'access'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 		</div>
 
-		<div :class="['item__owner', 'sortable', { 'sort': pollsStore.sort.by === 'owner.displayName'}, { reverse: pollsStore.sort.reverse }]"
-			@click="$emit('sort-list', { sortBy: 'owner.displayName'})">
+		<div :class="['item__owner', 'sortable', { 'sort': pollsStore.sort.by === SortType.Owner}, { reverse: pollsStore.sort.reverse }]"
+			@click="emit('sortList', { sortBy: SortType.Owner})">
 			{{ t('polls', 'Owner') }}
 			<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'owner.displayName'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 		</div>
 
 		<div class="poll-item__wrapper">
-			<div :class="['item__created', 'sortable', { 'sort': pollsStore.sort.by === 'created'}, { reverse: pollsStore.sort.reverse }]"
-				@click="$emit('sort-list', { sortBy: 'created'})">
+			<div :class="['item__created', 'sortable', { 'sort': pollsStore.sort.by === SortType.Created}, { reverse: pollsStore.sort.reverse }]"
+				@click="emit('sortList', { sortBy: SortType.Created})">
 				{{ t('polls', 'Created') }}
 				<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'created'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 			</div>
 
-			<div :class="['item__expiry', 'sortable', { 'sort': pollsStore.sort.by === 'expire'}, { reverse: pollsStore.sort.reverse }]"
-				@click="$emit('sort-list', { sortBy: 'expire'})">
+			<div :class="['item__expiry', 'sortable', { 'sort': pollsStore.sort.by === SortType.Expire}, { reverse: pollsStore.sort.reverse }]"
+				@click="emit('sortList', { sortBy: SortType.Expire})">
 				{{ t('polls', 'Closing date') }}
 				<!-- <span :class="['sort-indicator', { 'hidden': sortBy !== 'expire'}, reverse ? 'icon-triangle-s' : 'icon-triangle-n']" /> -->
 			</div>
@@ -42,40 +129,40 @@
 	</div>
 
 	<div v-else class="poll-item content">
-		<TextPollIcon v-if="poll.type === 'textPoll'" class="item__type" :title="pollTypeName" />
+		<TextPollIcon v-if="props.poll.type === PollType.Text" class="item__type" :title="pollTypeName" />
 		<DatePollIcon v-else class="item__type" :title="pollTypeName" />
 
-		<div v-if="noLink" class="item__title" :class="{ closed: poll.status.expired }">
+		<div v-if="props.noLink" class="item__title" :class="{ closed: props.poll.status.expired }">
 			<div class="title">
-				{{ poll.configuration.title }}
+				{{ props.poll.configuration.title }}
 			</div>
 
 			<div class="description">
-				{{ poll.configuration.description ? poll.configuration.description : t('polls', 'No description provided') }}
+				{{ props.poll.configuration.description ? props.poll.configuration.description : t('polls', 'No description provided') }}
 			</div>
 		</div>
 
-		<router-link v-else
+		<RouterLink v-else
 			class="item__title"
-			:to="{ name: 'vote', params: { id: poll.id }}"
-			:class="{ closed: poll.status.expired, active: (poll.id === pollsStore.id) }">
+			:to="{ name: 'vote', params: { id: props.poll.id }}"
+			:class="{ closed: props.poll.status.expired, active: (props.poll.id === pollStore.id) }">
 			<div class="title">
-				{{ poll.configuration.title }}
+				{{ props.poll.configuration.title }}
 			</div>
 
 			<div class="description">
-				{{ poll.configuration.description ? poll.configuration.description : t('polls', 'No description provided') }}
+				{{ props.poll.configuration.description ? props.poll.configuration.description : t('polls', 'No description provided') }}
 			</div>
-		</router-link>
+		</RouterLink>
 
 		<slot name="actions" />
 
-		<ArchivedPollIcon v-if="poll.status.deleted" :title="accessType" class="item__access" />
-		<OpenPollIcon v-else-if="poll.configuration.access === 'open'" :title="accessType" class="item__access" />
+		<ArchivedPollIcon v-if="props.poll.status.deleted" :title="accessType" class="item__access" />
+		<OpenPollIcon v-else-if="props.poll.configuration.access === AccessType.Open" :title="accessType" class="item__access" />
 		<PrivatePollIcon v-else :title="accessType" class="item__access" />
 
 		<div class="item__owner">
-			<UserItem :user="poll.owner" condensed />
+			<UserItem :user="props.poll.owner" condensed />
 		</div>
 
 		<div class="poll-item__wrapper">
@@ -94,111 +181,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import moment from '@nextcloud/moment'
-import { BadgeDiv } from '../Base/index.js'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
-import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
-import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
-import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
-import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
-import { t } from '@nextcloud/l10n'
-import UserItem from '../User/UserItem.vue'
-import { usePollsStore } from '../../stores/polls.ts'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'PollItem',
-	components: {
-		BadgeDiv,
-		TextPollIcon,
-		DatePollIcon,
-		CreationIcon,
-		ExpirationIcon,
-		PrivatePollIcon,
-		OpenPollIcon,
-		ArchivedPollIcon,
-		UserItem,
-	},
-
-	props: {
-		header: {
-			type: Boolean,
-			default: false,
-		},
-		poll: {
-			type: Object,
-			default: undefined,
-		},
-		noLink: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
-	computed: {
-		...mapStores(usePollsStore, usePollStore),
-
-		closeToClosing() {
-			return (!this.poll.status.expired && this.poll.configuration.expire && moment.unix(this.poll.configuration.expire).diff() < 86400000)
-		},
-
-		accessType() {
-			if (this.poll.configuration.deleted) {
-				return t('polls', 'Archived')
-			}
-
-			if (this.poll.configuration.access === 'open') {
-				return t('polls', 'Openly accessible poll')
-			}
-
-			return t('polls', 'Private poll')
-		},
-
-		pollTypeName() {
-			if (this.poll.type === 'textPoll') {
-				return t('polls', 'Text poll')
-			}
-			return t('polls', 'Date poll')
-		},
-
-		timeExpirationRelative() {
-			if (this.poll.configuration.expire) {
-				return moment.unix(this.poll.configuration.expire).fromNow()
-			}
-			return t('polls', 'never')
-
-		},
-
-		expiryClass() {
-			if (this.poll.status.expired) {
-				return 'error'
-			}
-
-			if (this.poll.configuration.expire && this.closeToClosing) {
-				return 'warning'
-			}
-
-			if (this.poll.configuration.expire && !this.poll.status.expired) {
-				return 'success'
-			}
-
-			return 'success'
-		},
-
-		timeCreatedRelative() {
-			return moment.unix(this.poll.status.created).fromNow()
-		},
-	},
-	methods: {
-		t,
-	},
-}
-</script>
 
 <style lang="scss">
 

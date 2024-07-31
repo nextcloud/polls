@@ -5,6 +5,13 @@
 import { createAppConfig } from '@nextcloud/vite-config'
 import { join, resolve } from 'path'
 
+const customConfig = {
+	resolve: {
+		alias: {
+			'@': resolve('src/js'),
+		}
+	},
+}
 export default createAppConfig({
 	main: resolve(join('src', 'main.ts')),
 	userSettings: resolve(join('src', 'userSettings.ts')),
@@ -12,4 +19,5 @@ export default createAppConfig({
 	dashboard: resolve(join('src', 'dashboard.ts')),
 }, {
 	inlineCSS: { relativeCSSInjection: true },
+	config: customConfig,
 })

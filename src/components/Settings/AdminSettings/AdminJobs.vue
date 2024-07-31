@@ -3,6 +3,74 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+	import { NcButton } from '@nextcloud/vue'
+	import { AdminAPI } from '../../../Api/index.js'
+	import { Logger } from '../../../helpers/index.ts'
+	import { t } from '@nextcloud/l10n'
+
+	const autoreminder = {
+		text: t('polls', 'Run autoreminder'),
+		disabled: false,
+	}
+
+	const janitor = {
+		text: t('polls', 'Run janitor'),
+		disabled: false,
+	}
+
+	const notification = {
+		text: t('polls', 'Run notification'),
+		disabled: false,
+	}
+
+	/**
+	 * start AutoReminder job
+	 */
+	async function runAutoReminderJob()  {
+		try {
+			AdminAPI.runAutoReminder()
+			autoreminder.disabled = true
+			autoreminder.text = t('polls', 'Autoreminder started')
+		} catch (error) {
+			autoreminder.text = t('polls', 'Autoreminder failed')
+			Logger.error('Error on executing autoreminder job', { error })
+		} finally {
+			autoreminder.disabled = true
+		}
+	}
+
+	/**
+	 * start Janitor job
+	 */
+	async function runJanitorJob() {
+		try {
+			AdminAPI.runJanitor()
+			janitor.text = t('polls', 'Janitor started')
+		} catch (error) {
+			janitor.text = t('polls', 'Janitor failed')
+			Logger.error('Error on executing janitor job', { error })
+		} finally {
+			janitor.disabled = true
+		}
+	}
+
+	/**
+	 * start Notification job
+	 */
+	async function runNotificationJob() {
+		try {
+			AdminAPI.runNotification()
+			notification.text = t('polls', 'Notification started')
+		} catch (error) {
+			notification.text = t('polls', 'Notification failed')
+			Logger.error('Error on executing notification job', { error })
+		} finally {
+			notification.disabled = true
+		}
+	}
+</script>
+
 <template>
 	<div class="user_settings">
 		<div class="job_hints">
@@ -40,76 +108,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-
-import { NcButton } from '@nextcloud/vue'
-import { AdminAPI } from '../../../Api/index.js'
-import { Logger } from '../../../helpers/index.js'
-import { t } from '@nextcloud/l10n'
-
-export default {
-	name: 'AdminJobs',
-
-	components: {
-		NcButton,
-	},
-
-	data() {
-		return {
-			autoreminder: {
-				text: t('polls', 'Run autoreminder'),
-				disabled: false,
-			},
-			janitor: {
-				text: t('polls', 'Run janitor'),
-				disabled: false,
-			},
-			notification: {
-				text: t('polls', 'Run notification'),
-				disabled: false,
-			},
-		}
-	},
-	methods: {
-		t,
-		async runAutoReminderJob() {
-			try {
-				AdminAPI.runAutoReminder()
-				this.autoreminder.disabled = true
-				this.autoreminder.text = t('polls', 'Autoreminder started')
-			} catch (error) {
-				this.autoreminder.text = t('polls', 'Autoreminder failed')
-				Logger.error('Error on executing autoreminder job', { error })
-			} finally {
-				this.autoreminder.disabled = true
-			}
-		},
-		async runJanitorJob() {
-			try {
-				AdminAPI.runJanitor()
-				this.janitor.text = t('polls', 'Janitor started')
-			} catch (error) {
-				this.janitor.text = t('polls', 'Janitor failed')
-				Logger.error('Error on executing janitor job', { error })
-			} finally {
-				this.janitor.disabled = true
-			}
-		},
-		async runNotificationJob() {
-			try {
-				AdminAPI.runNotification()
-				this.notification.text = t('polls', 'Notification started')
-			} catch (error) {
-				this.notification.text = t('polls', 'Notification failed')
-				Logger.error('Error on executing notification job', { error })
-			} finally {
-				this.notification.disabled = true
-			}
-		},
-	}
-}
-</script>
 
 <style lang="scss">
 .user_settings {

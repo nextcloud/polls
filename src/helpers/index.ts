@@ -6,4 +6,5 @@ export { Logger } from './modules/logger.ts'
 export { getCookieValue, findCookie, setCookie, deleteCookie, deleteCookieByValue, findCookieByValue } from './modules/cookieHelper.ts'
 export { uniqueArrayOfObjects, uniqueOptions, uniqueParticipants } from './modules/arrayHelper.ts'
 export { groupComments } from './modules/comments.ts'
-
+export { SimpleLink } from './modules/SimpleLink.ts'
+export { GuestBubble } from './modules/GuestBubble.ts'

@@ -3,24 +3,16 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { usePollStore } from '../../stores/poll.ts'
+	const pollStore = usePollStore()
+</script>
+
 <template>
 	<textarea v-model="pollStore.configuration.description"
 		class="edit-description"
 		@change="pollStore.write()" />
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'ConfigDescription',
-
-	computed: {
-		...mapStores(usePollStore),
-	},
-}
-</script>
 
 <style lang="scss">
 	textarea.edit-description {

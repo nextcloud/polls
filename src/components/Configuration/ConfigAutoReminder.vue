@@ -3,11 +3,21 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { NcActions, NcActionButton, NcPopover, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
+	import AutoReminderInformation from './AutoReminderInformation.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+
+	const pollStore = usePollStore()
+</script>
+
 <template>
 	<div class="auto-reminder-switch">
-		<NcCheckboxRadioSwitch :checked.sync="pollStore.configuration.autoReminder" 
+		<NcCheckboxRadioSwitch v-model="pollStore.configuration.autoReminder" 
 			type="switch"
-			@update:checked="pollStore.write()">
+			@update:model-value="pollStore.write()">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
 		<NcPopover :focus-trap="false">
@@ -24,36 +34,6 @@
 		</NcPopover>
 	</div>
 </template>
-
-<script>
-import { mapStores } from 'pinia'
-import { NcActions, NcActionButton, NcPopover, NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
-import AutoReminderInformation from './AutoReminderInformation.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'ConfigAutoReminder',
-
-	components: {
-		NcCheckboxRadioSwitch,
-		NcActions,
-		NcActionButton,
-		NcPopover,
-		InformationIcon,
-		AutoReminderInformation,
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-	},
-
-	methods: {
-		t,
-	},
-}
-</script>
 
 <style lang="scss">
 	.auto-reminder-switch {

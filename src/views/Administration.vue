@@ -3,6 +3,112 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { computed, onMounted, ref } from 'vue'
+	import { showError } from '@nextcloud/dialogs'
+	import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcLoadingIcon, NcModal } from '@nextcloud/vue'
+	import { sortBy } from 'lodash'
+	import { HeaderBar } from '../components/Base/index.js'
+	import { PollsAppIcon } from '../components/AppIcons/index.js'
+	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+	import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+	import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+	import PlusIcon from 'vue-material-design-icons/Plus.vue'
+	import PollItem from '../components/PollList/PollItem.vue'
+	import { t } from '@nextcloud/l10n'
+	import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
+	import { SortType, Poll, StatusResults } from '../Types/index.ts'
+
+	const pollsAdminStore = usePollsAdminStore()
+
+	const sort = ref(SortType.Created)
+	const reverse = ref(true)
+	const takeOverModal = ref(false)
+	const deleteModal = ref(false)
+	const currentPoll = ref(null)
+
+	const emptyContent = computed(() => {
+		if (pollsAdminStore.meta.status === StatusResults.Loading) {
+			return {
+				name: t('polls', 'Loading polls…'),
+				description: '',
+			}
+		}
+
+		return {
+			name: t('polls', 'No polls found for this category'),
+			description: '',
+		}
+	})
+
+	const title = computed(() => t('polls', 'Administration'))
+
+	const sortedList = computed<Poll[]>(() => {
+		if (reverse.value) {
+			return sortBy(pollsAdminStore.list, sort.value).reverse()
+		}
+		return sortBy(pollsAdminStore.list, sort.value)
+	})
+
+	const isEmptyPollList = computed(() => sortedList.value.length < 1)
+
+	function confirmTakeOver(poll: Poll) {
+		currentPoll.value = poll
+		takeOverModal.value = true
+	}
+
+	function confirmDelete(poll: Poll) {
+		currentPoll.value = poll
+		deleteModal.value = true
+	}
+
+	async function toggleArchive(pollId: number) {
+		try {
+			await pollsAdminStore.toggleArchive({ pollId })
+		} catch {
+			showError(t('polls', 'Error archiving/restoring poll.'))
+		}
+	}
+
+	async function deletePoll() {
+		try {
+			await pollsAdminStore.delete({ pollId: currentPoll.value.pollId })
+			deleteModal.value = false
+		} catch {
+			showError(t('polls', 'Error deleting poll.'))
+			deleteModal.value = false
+		}
+	}
+
+	async function takeOverPoll() {
+		try {
+			await pollsAdminStore.takeOver({ pollId: currentPoll.value.pollId })
+			takeOverModal.value = false
+		} catch {
+			showError(t('polls', 'Error overtaking poll.'))
+			takeOverModal.value = false
+		}
+	}
+
+	function loadPolls() {
+		try {
+			pollsAdminStore.load()
+		} catch {
+			showError(t('polls', 'Error loading polls list for admins'))
+		}
+	}
+
+	function refreshView() {
+		window.document.title = `${t('polls', 'Polls')} - ${title.value}`
+	}
+
+	onMounted(() => {
+		loadPolls()
+		refreshView()
+	})
+
+</script>
+
 <template>
 	<NcAppContent class="poll-list">
 		<HeaderBar class="area__header">
@@ -30,18 +136,18 @@
 								<NcActionButton :name="t('polls', 'Take over')"
 									:aria-label="t('polls', 'Take over')"
 									close-after-click
-									@click="confirmTakeOver(poll.id, poll.owner)">
+									@click="confirmTakeOver(poll)">
 									<template #icon>
 										<PlusIcon />
 									</template>
 								</NcActionButton>
 
-								<NcActionButton :name="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
-									:aria-label="poll.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+								<NcActionButton :name="poll.status.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+									:aria-label="poll.status.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
 									close-after-click
 									@click="toggleArchive(poll.id)">
 									<template #icon>
-										<RestorePollIcon v-if="poll.deleted" />
+										<RestorePollIcon v-if="poll.status.deleted" />
 										<ArchivePollIcon v-else />
 									</template>
 								</NcActionButton>
@@ -50,7 +156,7 @@
 									:name="t('polls', 'Delete poll')"
 									:aria-label="t('polls', 'Delete poll')"
 									close-after-click
-									@click="confirmDelete(poll.id, poll.owner)">
+									@click="confirmDelete(poll)">
 									<template #icon>
 										<DeleteIcon />
 									</template>
@@ -63,7 +169,7 @@
 
 			<NcEmptyContent v-if="isEmptyPollList" v-bind="emptyContent">
 				<template #icon>
-					<NcLoadingIcon v-if="pollsAdminStore.status.loading" :size="64" />
+					<NcLoadingIcon v-if="pollsAdminStore.meta.status === StatusResults.Loading" :size="64" />
 					<PollsAppIcon v-else />
 				</template>
 			</NcEmptyContent>
@@ -114,164 +220,6 @@
 	</NcAppContent>
 </template>
 
-<script>
-import { mapStores } from 'pinia'
-import { showError } from '@nextcloud/dialogs'
-import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcLoadingIcon, NcModal } from '@nextcloud/vue'
-import { sortBy } from 'lodash'
-import { HeaderBar } from '../components/Base/index.js'
-import { PollsAppIcon } from '../components/AppIcons/index.js'
-import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
-import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-import PollItem from '../components/PollList/PollItem.vue'
-import { t } from '@nextcloud/l10n'
-import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
-
-export default {
-	name: 'Administration',
-
-	components: {
-		ArchivePollIcon,
-		DeleteIcon,
-		HeaderBar,
-		NcAppContent,
-		NcActions,
-		NcActionButton,
-		NcButton,
-		NcEmptyContent,
-		NcLoadingIcon,
-		NcModal,
-		PlusIcon,
-		PollsAppIcon,
-		RestorePollIcon,
-		PollItem,
-	},
-
-	data() {
-		return {
-			sort: 'created',
-			reverse: true,
-			takeOverModal: false,
-			currentPoll: {
-				owner: '',
-				pollId: 0,
-			},
-			deleteModal: false,
-		}
-	},
-
-	computed: {
-		...mapStores(usePollsAdminStore),
-
-		emptyContent() {
-			if (this.pollsAdminStore.status.loading) {
-				return {
-					name: t('polls', 'Loading polls…'),
-					description: '',
-				}
-			}
-
-			return {
-				name: t('polls', 'No polls found for this category'),
-				description: '',
-			}
-		},
-
-		title() {
-			return t('polls', 'Administration')
-		},
-
-		/* eslint-disable-next-line vue/no-unused-properties */
-		windowTitle() {
-			return `${t('polls', 'Polls')} - ${this.title}`
-		},
-
-		sortedList() {
-			if (this.reverse) {
-				return sortBy(this.pollsAdminStore.list, this.sort).reverse()
-			}
-			return sortBy(this.pollsAdminStore.list, this.sort)
-		},
-
-		isEmptyPollList() {
-			return this.sortedList.length < 1
-		},
-
-	},
-
-	watch: {
-		$route() {
-			this.refreshView()
-		},
-	},
-
-	created() {
-		this.loadPolls()
-	},
-
-	mounted() {
-		this.refreshView()
-	},
-
-	methods: {
-		t,
-		confirmTakeOver(pollId, currentOwner) {
-			this.currentPoll.pollId = pollId
-			this.currentPoll.owner = currentOwner
-			this.takeOverModal = true
-		},
-
-		confirmDelete(pollId, currentOwner) {
-			this.currentPoll.pollId = pollId
-			this.currentPoll.owner = currentOwner
-			this.deleteModal = true
-		},
-
-		async toggleArchive(pollId) {
-			try {
-				await this.pollsAdminStore.toggleArchive({ pollId })
-			} catch {
-				showError(t('polls', 'Error archiving/restoring poll.'))
-			}
-		},
-
-		async deletePoll() {
-			try {
-				await this.pollsAdminStore.delete({ pollId: this.currentPoll.pollId })
-				this.deleteModal = false
-			} catch {
-				showError(t('polls', 'Error deleting poll.'))
-				this.deleteModal = false
-			}
-		},
-
-		async takeOverPoll() {
-			try {
-				await this.pollsAdminStore.takeOver({ pollId: this.currentPoll.pollId })
-				this.takeOverModal = false
-			} catch {
-				showError(t('polls', 'Error overtaking poll.'))
-				this.takeOverModal = false
-			}
-		},
-
-		async loadPolls() {
-			try {
-				this.pollsAdminStore.load()
-			} catch {
-				showError(t('polls', 'Error loading polls list for admins'))
-			}
-		},
-
-		refreshView() {
-			window.document.title = `${t('polls', 'Polls')} - ${this.title}`
-		},
-	},
-}
-</script>
-
 <style lang="scss">
 .poll-list__list {
 	width: 100%;
@@ -281,3 +229,4 @@ export default {
 	padding-bottom: 14px;
 }
 </style>
+../Types/index.ts

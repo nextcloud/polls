@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,14 +5,14 @@
 
 import { defineStore } from 'pinia'
 import { CalendarAPI, UserSettingsAPI } from '../Api/index.js'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
 
-enum ViewMode {
+export enum ViewMode {
 	TableView = 'table-view',
 	ListView = 'list-view',
 }
 
-interface UserPreferences {
+export type UserPreferences = {
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
 	calendarPeek: boolean
@@ -27,12 +26,12 @@ interface UserPreferences {
 	relevantOffset: number,
 }
 
-export interface SessionSettings {
+export type SessionSettings = {
 	manualViewDatePoll: '' | ViewMode
 	manualViewTextPoll: '' | ViewMode
 }
 
-export interface Calendar {
+export type Calendar = {
 	key: string
 	name: string
 	calendarUri: string
@@ -40,7 +39,7 @@ export interface Calendar {
 	permissions: number
 }
 
-export interface Preferences {
+export type Preferences = {
 	user: UserPreferences
 	session: SessionSettings,
 	availableCalendars: Calendar[],
@@ -88,7 +87,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			if (window.innerWidth > 480) {
 				return state.user.defaultViewDatePoll
 			}
-			return ViewMode.ListView
+			return ViewMode.TableView
 	
 		},
 	},

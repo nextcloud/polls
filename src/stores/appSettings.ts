@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,9 +5,25 @@
 
 import { defineStore } from 'pinia'
 import { AppSettingsAPI } from '../Api/index.js'
-import { Logger } from '../helpers/index.js'
+import { Logger } from '../helpers/index.ts'
+import { debounce } from 'lodash'
 
-export interface AppSettings {
+export enum UpdateType {
+	NoPolling = 'noPolling',
+	Periodic = 'periodicPolling',
+	LongPolling = 'longPolling',
+
+}
+export type Group = {
+	id: string,
+	userId: string,
+	displayName: string,
+	emailAddress: string,
+	isNoUser: boolean,
+	type: string
+}
+
+export type AppSettings = {
 	allAccessGroups: string[]
 	allowCombo: boolean
 	allowPublicShares: boolean
@@ -25,7 +40,7 @@ export interface AppSettings {
 	privacyUrl: string
 	showMailAddresses: boolean
 	showLogin: boolean
-	updateType: string
+	updateType: UpdateType
 	useActivity: boolean
 	useCollaboration: boolean
 	navigationPollsInList: boolean
@@ -36,6 +51,10 @@ export interface AppSettings {
 	pollCreationGroups: string[]
 	pollDownloadGroups: string[]
 	showMailAddressesGroups: string[]
+	groups: Group[]
+	status: {
+		loadingGroups: boolean
+	}
 }
 
 export const useAppSettingsStore = defineStore('appSettings', {
@@ -56,7 +75,7 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		privacyUrl: '',
 		showMailAddresses: false,
 		showLogin: true,
-		updateType: 'noPolling',
+		updateType: UpdateType.NoPolling,
 		useActivity: false,
 		useCollaboration: true,
 		navigationPollsInList: true,
@@ -67,6 +86,10 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		pollCreationGroups: [],
 		pollDownloadGroups: [],
 		showMailAddressesGroups: [],
+		groups: [],
+		status: {
+			loadingGroups: false,
+		},
 	}),
 
 	actions: {
@@ -89,5 +112,20 @@ export const useAppSettingsStore = defineStore('appSettings', {
 				throw error
 			}
 		},
+
+		loadGroups: debounce(async function (query: string) {
+			this.status.loadingGroups = true
+
+			try {
+				const response = await AppSettingsAPI.getGroups(query)
+				this.groups = response.data.groups
+				this.status.loadingGroups = false
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error getting groups', { error: error.response })
+				this.status.loadingGroups = false
+			}
+		}, 500),
 	},
 })
+

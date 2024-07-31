@@ -3,11 +3,33 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { defineProps } from 'vue'
+	import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
+
+	defineProps({
+		name: {
+			type: String,
+			default: '',
+		},
+		info: {
+			type: String,
+			default: '',
+		},
+		indented: {
+			type: Boolean,
+			default: false,
+		},
+	})
+
+
+</script>
+
 <template>
 	<div class="config-box">
 		<div class="config-box__header">
 			<slot name="icon" />
-			<div :title="info" :class="['config-box__title', iconClassComputed, {indented: indented}]">
+			<div :title="info" :class="['config-box__title', { indented }]">
 				{{ name }}
 				<InformationIcon v-if="info" />
 			</div>
@@ -18,47 +40,6 @@
 		</div>
 	</div>
 </template>
-
-<script>
-import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
-
-export default {
-	name: 'ConfigBox',
-	components: {
-		InformationIcon,
-	},
-	props: {
-		name: {
-			type: String,
-			default: '',
-		},
-		iconClass: {
-			type: String,
-			default: null,
-		},
-		info: {
-			type: String,
-			default: '',
-		},
-		indented: {
-			type: Boolean,
-			default: false,
-		},
-	},
-
-	computed: {
-		hasIconSlot() {
-			return !!this.$slots.icon
-		},
-
-		iconClassComputed() {
-			// presence of an icon slot overrides the icon class
-			return this.hasIconSlot ? null : this.iconClass
-		},
-	},
-}
-
-</script>
 
 <style lang="scss">
 .config-box__header {

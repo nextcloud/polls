@@ -3,6 +3,11 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+
+<script setup lang="ts">
+	import { t } from '@nextcloud/l10n'
+</script>
+
 <template>
 	<div class="auto-reminder-information">
 		<h1> {{ t('polls', 'The automatic reminder is sent to all shares via email:') }} </h1>
@@ -26,17 +31,6 @@
 	</div>
 </template>
 
-<script>
-import { t } from '@nextcloud/l10n'
-
-export default {
-	name: 'AutoReminderInformation',
-	
-	methods: {
-		t,
-	},
-}
-</script>
 <style lang="scss">
 	.auto-reminder-information {
 		padding: 8px;

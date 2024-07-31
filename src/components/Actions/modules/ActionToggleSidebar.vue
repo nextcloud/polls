@@ -3,6 +3,20 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { NcButton } from '@nextcloud/vue'
+	import { emit } from '@nextcloud/event-bus'
+	import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+	import { t } from '@nextcloud/l10n'
+
+	const caption = t('polls', 'Toggle Sidebar')
+	function clickAction() {
+		emit('polls:sidebar:toggle', null)
+	}
+
+</script>
+
+
 <template>
 	<div class="action toggle-sidebar">
 		<NcButton type="tertiary"
@@ -15,31 +29,3 @@
 		</NcButton>
 	</div>
 </template>
-
-<script>
-import { NcButton } from '@nextcloud/vue'
-import { emit } from '@nextcloud/event-bus'
-import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
-import { t } from '@nextcloud/l10n'
-
-export default {
-	name: 'ActionToggleSidebar',
-
-	components: {
-		SidebarIcon,
-		NcButton,
-	},
-
-	data() {
-		return {
-			caption: t('polls', 'Toggle Sidebar'),
-		}
-	},
-
-	methods: {
-		clickAction() {
-			emit('polls:sidebar:toggle')
-		},
-	},
-}
-</script>

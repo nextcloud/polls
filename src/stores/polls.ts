@@ -1,17 +1,19 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
 import { defineStore } from 'pinia'
+import orderBy from 'lodash/orderBy'
 import moment from '@nextcloud/moment'
-import { orderBy } from 'lodash'
-import { PollsAPI } from '../Api/index.js'
-import { Poll , PollType } from './poll.ts'
 import { t } from '@nextcloud/l10n'
+
 import { Logger } from '../helpers/index.ts'
+import { PollsAPI } from '../Api/index.js'
+
+import { AccessType, Poll , PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
+import { StatusResults } from '../Types/index.ts'
 
 export enum SortType {
 	Created = 'created',
@@ -30,15 +32,10 @@ export enum FilterType {
 	All = 'all',
 	Closed = 'closed',
 	Archived = 'archived',
+	Admin = 'admin',
 }
 
-export enum StoreStatus {
-	Loading = 'loading',
-	Loaded = 'loaded',
-	Error = 'error',
-}
-
-export interface PollCategory {
+export type PollCategory = {
 	id: FilterType
 	title: string
 	titleExt: string
@@ -48,20 +45,14 @@ export interface PollCategory {
 	filterCondition(poll: Poll): boolean
 }
 
-export interface AppPermissions {
-	pollCreationAllowed: boolean
-	comboAllowed: boolean
-}
-
-export interface Meta {
+export type Meta = {
 	chunksize: number
 	loadedChunks: number
 	maxPollsInNavigation: number
-	permissions: AppPermissions
-	status: StoreStatus
+	status: StatusResults
 }
 
-export interface PollList {
+export type PollList = {
 	list: Poll[]
 	meta: Meta
 	sort: {
@@ -71,7 +62,7 @@ export interface PollList {
 	categories: PollCategory[]
 }
 
-export const sortColumnsMapping = {
+export const sortColumnsMapping: { [key in SortType]: string } = {
 	created: 'status.created',
 	title: 'configuration.title',
 	access: 'configuration.access',
@@ -82,12 +73,12 @@ export const sortColumnsMapping = {
 // const preferencesStore = usePreferencesStore()
 const filterRelevantCondition = (poll) => !poll.status.deleted
 	&& moment().diff(moment.unix(poll.status.relevantThreshold), 'days') < 100
-	&& (poll.currentUserStatus.isInvolved || (poll.permissions.view && poll.configuration.access !== 'open'))
+	&& (poll.currentUserStatus.isInvolved || (poll.permissions.view && poll.configuration.access !== AccessType.Open))
 
 const filterMyPolls = (poll) => !poll.status.deleted && poll.currentUserStatus.isOwner
-const filterPrivatePolls = (poll) => !poll.status.deleted && poll.configuration.access === 'private'
+const filterPrivatePolls = (poll) => !poll.status.deleted && poll.configuration.access === AccessType.Private
 const filterParticipatedPolls = (poll) => !poll.status.deleted && poll.currentUserStatus.countVotes > 0
-const filterOpenPolls = (poll) => !poll.status.deleted && poll.configuration.access === 'open'
+const filterOpenPolls = (poll) => !poll.status.deleted && poll.configuration.access === AccessType.Open
 const filterAllPolls = (poll) => !poll.status.deleted
 const filterClosedPolls = (poll) => !poll.status.deleted && poll.configuration.expire && moment.unix(poll.configuration.expire).diff() < 0
 const filterArchivedPolls = (poll) => poll.status.deleted
@@ -99,11 +90,7 @@ export const usePollsStore = defineStore('polls', {
 			chunksize: 20,
 			loadedChunks: 1,
 			maxPollsInNavigation: 6,
-			status: StoreStatus.Loaded,
-			permissions: {
-				pollCreationAllowed: false,
-				comboAllowed: false,
-			},
+			status: StatusResults.Loaded,
 		},
 		sort: {
 			by: SortType.Created,
@@ -186,9 +173,10 @@ export const usePollsStore = defineStore('polls', {
 	}),
 
 	getters: {
-		// TODO: find out dated references: was cagegories
 		navigationCategories(state: PollList): PollCategory[] {
-			if (state.meta.permissions.pollCreationAllowed) {
+			const sessionStore = useSessionStore()
+
+			if (sessionStore.appPermissions.pollCreation) {
 				return state.categories
 			}
 			return state.categories.filter((category) => (!category.createDependent))
@@ -196,10 +184,11 @@ export const usePollsStore = defineStore('polls', {
 
 		currentCategory(state: PollList): PollCategory | null {
 			const sessionStore = useSessionStore()
-			if (sessionStore.router.name === 'list' && sessionStore.router.params.type) {
-				return state.categories.find((category) => category.id === sessionStore.router.params.type)
+
+			if (sessionStore.route.name === 'list' && sessionStore.route.params.type) {
+				return state.categories.find((category) => category.id === sessionStore.route.params.type)
 			}
-			return state.categories.find((category) => category.id === 'relevant')
+			return state.categories.find((category) => category.id === FilterType.Relevant)
 		},
 
 		/*
@@ -242,7 +231,7 @@ export const usePollsStore = defineStore('polls', {
 			const useCategory = state.categories.find((category) => category.id === filterId)
 			return orderBy(
 				state.list.filter((poll) => useCategory.filterCondition(poll)),
-				['created'],
+				[SortType.Created],
 				['desc'],
 			).slice(0, state.meta.maxPollsInNavigation)
 		},
@@ -251,10 +240,10 @@ export const usePollsStore = defineStore('polls', {
 		* Sliced filtered and sorted polls for dashboard
 		*/
 		dashboardList(state: PollList): Poll[] {
-			const useCategory = state.categories.find((category) => category.id === 'relevant')
+			const useCategory = state.categories.find((category) => category.id === FilterType.Relevant)
 			return orderBy(
 				state.list.filter((poll) => useCategory.filterCondition(poll)),
-				['created'],
+				[SortType.Created],
 				['desc'],
 			).slice(0, 7)
 		},
@@ -272,7 +261,7 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		pollsLoading(state): boolean {
-			return state.meta.status === StoreStatus.Loading
+			return state.meta.status === StatusResults.Loading
 		},
 
 		countByCategory: (state: PollList) => (filterId: string) =>
@@ -285,15 +274,14 @@ export const usePollsStore = defineStore('polls', {
 
 	actions: {
 		async load(): Promise<void> {
-			this.meta.status = StoreStatus.Loading
+			this.meta.status = StatusResults.Loading
 			try {
 				const response = await PollsAPI.getPolls()
 				this.list = response.data.list
-				this.meta.permissions = response.data.permissions
-				this.meta.status = StoreStatus.Loaded
+				this.meta.status = StatusResults.Loaded
 			} catch (e) {
 				if (e?.code === 'ERR_CANCELED')	return
-				this.meta.status = StoreStatus.Error
+				this.meta.status = StatusResults.Error
 				Logger.error('Error loading polls', { error: e.response })
 				throw e
 			}
@@ -317,7 +305,6 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		async clone(payload: { pollId: number }) {
-			const pollsStore = usePollsStore()
 			try {
 				const response = await PollsAPI.clonePoll(payload.pollId)
 				return response
@@ -326,7 +313,7 @@ export const usePollsStore = defineStore('polls', {
 				Logger.error('Error cloning poll', { error, payload })
 				throw error
 			} finally {
-				pollsStore.load()
+				this.load()
 			}
 		},
 

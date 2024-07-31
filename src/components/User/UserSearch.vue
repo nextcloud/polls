@@ -3,6 +3,57 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { ref } from 'vue'
+	import { debounce } from 'lodash'
+	import { showError } from '@nextcloud/dialogs'
+	import { NcSelect } from '@nextcloud/vue'
+	import { AppSettingsAPI } from '../../Api/index.js'
+	import { Logger } from '../../helpers/index.ts'
+	import { t } from '@nextcloud/l10n'
+	import { useSharesStore } from '../../stores/shares.ts'
+
+	const sharesStore = useSharesStore()
+	const users = ref([])
+	const isLoading = ref(false)
+	const placeholder = t('polls', 'Type to add an individual share')
+
+	function loadUsersAsync() {
+		debounce(async function(query) {
+			if (!query) {
+				users.value = []
+				return
+			}
+
+			isLoading.value = true
+
+			try {
+				const response = await AppSettingsAPI.getUsers(query)
+				users.value = response.data.siteusers
+				isLoading.value = false
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error(error.response)
+				isLoading.value = false
+			}
+		}, 250)()
+	}
+
+	async function clickAdd(payload) {
+		try {
+			await sharesStore.add({
+				user: {
+					...payload,
+				},
+			},
+			)
+		} catch {
+			showError(t('polls', 'Error while adding share'))
+		}
+	}
+
+</script>
+
 <template>
 	<NcSelect id="ajax"
 		:aria-label-combobox="t('polls', 'Add shares')"
@@ -17,7 +68,7 @@
 		:close-on-select="false"
 		label="displayName"
 		@option:selected="clickAdd"
-		@search="loadUsersAsync">
+		@search="loadUsersAsync()">
 		<template #selection="{ values, isOpen }">
 			<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
 				{{ values.length }} users selected
@@ -25,72 +76,6 @@
 		</template>
 	</NcSelect>
 </template>
-
-<script>
-import { debounce } from 'lodash'
-import { mapStores } from 'pinia'
-import { showError } from '@nextcloud/dialogs'
-import { NcSelect } from '@nextcloud/vue'
-import { AppSettingsAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
-import { t } from '@nextcloud/l10n'
-import { useSharesStore } from '../../stores/shares.ts'
-
-export default {
-	name: 'UserSearch',
-
-	components: {
-		NcSelect,
-	},
-
-	data() {
-		return {
-			users: [],
-			isLoading: false,
-			placeholder: t('polls', 'Type to add an individual share'),
-		}
-	},
-
-	computed: {
-		...mapStores(useSharesStore),
-	},
-	methods: {
-		t,
-
-		loadUsersAsync: debounce(async function(query) {
-			if (!query) {
-				this.users = []
-				return
-			}
-
-			this.isLoading = true
-
-			try {
-				const response = await AppSettingsAPI.getUsers(query)
-				this.users = response.data.siteusers
-				this.isLoading = false
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error(error.response)
-				this.isLoading = false
-			}
-		}, 250),
-
-		async clickAdd(payload) {
-			try {
-				await this.sharesStore.add({
-					user: {
-						...payload,
-					},
-				},
-				)
-			} catch {
-				showError(t('polls', 'Error while adding share'))
-			}
-		},
-	},
-}
-</script>
 
 <style lang="scss">
 	.multiselect {

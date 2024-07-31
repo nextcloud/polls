@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,8 +5,8 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api/index.js'
-import { User } from '../Interfaces/interfaces.ts'
-import { Logger } from '../helpers/index.js'
+import { User } from '../Types/index.ts'
+import { Logger } from '../helpers/index.ts'
 import { t } from '@nextcloud/l10n'
 import { Option, useOptionsStore } from './options.ts'
 import { usePollStore } from './poll.ts'
@@ -17,14 +16,16 @@ export enum Answer {
 	Yes = 'yes',
 	No = 'no',
 	Maybe = 'maybe',
+	None = '',
 }
 export enum AnswerSymbol {
 	Yes = '✔',
 	Maybe = '❔',
 	No = '❌',
+	None = '',
 }
 
-export interface Vote {
+export type Vote = {
 	id: number
 	pollId: number
 	optionText: string
@@ -36,7 +37,7 @@ export interface Vote {
 	user: User
 }
 
-export interface Votes {
+export type Votes = {
 	list: Vote[]
 }
 
@@ -72,11 +73,11 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.getVotes(sessionStore.router.params.token)
-				} else if (sessionStore.router.name === 'vote') {
-					Logger.debug('Loading votes for poll', { pollId: sessionStore.router.params.id })
-					response = await VotesAPI.getVotes(sessionStore.router.params.id)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.getVotes(sessionStore.route.params.token)
+				} else if (sessionStore.route.name === 'vote') {
+					Logger.debug('Loading votes for poll', { pollId: sessionStore.route.params.id })
+					response = await VotesAPI.getVotes(sessionStore.route.params.id)
 				} else {
 					this.$reset()
 					return
@@ -84,10 +85,10 @@ export const useVotesStore = defineStore('votes', {
 	
 				const votes: Vote[] = []
 				response.data.votes.forEach((vote: Vote) => {
-					if (vote.answer === 'yes') {
+					if (vote.answer === Answer.Yes) {
 						vote.answerTranslated = t('polls', 'Yes')
 						vote.answerSymbol = AnswerSymbol.Yes
-					} else if (vote.answer === 'maybe') {
+					} else if (vote.answer === Answer.Maybe) {
 						vote.answerTranslated = t('polls', 'Maybe')
 						vote.answerSymbol = AnswerSymbol.Maybe
 					} else {
@@ -123,8 +124,8 @@ export const useVotesStore = defineStore('votes', {
 			const pollStore = usePollStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.setVote(sessionStore.router.params.token, payload.option.id, payload.setTo)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.setVote(sessionStore.route.params.token, payload.option.id, payload.setTo)
 				} else {
 					response = await VotesAPI.setVote(payload.option.id, payload.setTo)
 				}
@@ -148,10 +149,10 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-				if (sessionStore.router.name === 'publicVote') {
-					response = await PublicAPI.removeVotes(sessionStore.router.params.token)
+				if (sessionStore.route.name === 'publicVote') {
+					response = await PublicAPI.removeVotes(sessionStore.route.params.token)
 				} else {
-					response = await VotesAPI.removeUser(sessionStore.router.params.id)
+					response = await VotesAPI.removeUser(sessionStore.route.params.id)
 				}
 				this.list = this.list.filter((vote: Vote) => vote.user.userId !== response.data.deleted)
 
@@ -165,7 +166,7 @@ export const useVotesStore = defineStore('votes', {
 		async deleteUser(payload) {
 			const sessionStore = useSessionStore()
 			try {
-				await VotesAPI.removeUser(sessionStore.router.params.id, payload.userId)
+				await VotesAPI.removeUser(sessionStore.route.params.id, payload.userId)
 				this.list = this.list.filter((vote: Vote) => vote.user.userId !== payload.userId)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -179,10 +180,10 @@ export const useVotesStore = defineStore('votes', {
 			const pollStore = usePollStore()
 			const optionsStore = useOptionsStore()
 			try {
-				if (sessionStore.router.name === 'publicVote') {
-					await PublicAPI.removeOrphanedVotes(sessionStore.router.params.token)
+				if (sessionStore.route.name === 'publicVote') {
+					await PublicAPI.removeOrphanedVotes(sessionStore.route.params.token)
 				} else {
-					await VotesAPI.removeOrphanedVotes(sessionStore.router.params.id)
+					await VotesAPI.removeOrphanedVotes(sessionStore.route.params.id)
 				}
 				pollStore.load()
 				optionsStore.load()

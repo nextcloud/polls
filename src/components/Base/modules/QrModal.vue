@@ -3,32 +3,12 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<div class="qr-code">
-		<h2>{{ name }}</h2>
-		<slot name="description">
-			{{ description }}
-		</slot>
-		<div class="canvas">
-			<img :src="qrUri" :alt="encodeText">
-		</div>
-		<h3>{{ subTitle }}</h3>
-		<p />
-		<p class="qr-url">
-			{{ encodeText }}
-		</p>
-	</div>
-</template>
+<script setup lang="ts">
+	import QRCode from 'qrcode'
+	import { Logger } from '../../../helpers/index.ts'
+	import { onMounted, ref } from 'vue';
 
-<script>
-
-import QRCode from 'qrcode'
-import { Logger } from '../../../helpers/index.js'
-
-export default {
-	name: 'QrModal',
-
-	props: {
+	const props = defineProps({
 		name: {
 			type: String,
 			default: '',
@@ -45,33 +25,43 @@ export default {
 			type: String,
 			default: '',
 		},
-	},
+	})
 
-	data() {
-		return {
-			qrUri: {
-				type: String,
-				default: '',
-			},
+	const qrUri = ref<string>('')
+
+	/**
+	 * Generate QR code
+	 */
+	async function generateQr() {
+		try {
+			qrUri.value = await QRCode.toDataURL(props.encodeText)
+		} catch (error) {
+			Logger.error('Error on generating QR code', { error: error.message })
 		}
-	},
+	}
 
-	created() {
-		this.generateQr()
-	},
-
-	methods: {
-		async generateQr() {
-			try {
-				this.qrUri = await QRCode.toDataURL(this.encodeText)
-			} catch (error) {
-				Logger.error('Error on generating QR code', { error: error.message })
-			}
-		},
-	},
-}
+	onMounted(() => {
+		generateQr()
+	})
 
 </script>
+
+<template>
+	<div class="qr-code">
+		<h2>{{ name }}</h2>
+		<slot name="description">
+			{{ description }}
+		</slot>
+		<div class="canvas">
+			<img :src="qrUri" :alt="encodeText">
+		</div>
+		<h3>{{ subTitle }}</h3>
+		<p />
+		<p class="qr-url">
+			{{ encodeText }}
+		</p>
+	</div>
+</template>
 
 <style lang="scss">
 .canvas {

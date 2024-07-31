@@ -3,6 +3,113 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { ref, computed, onMounted, onUnmounted } from 'vue'
+	import { NcContent } from '@nextcloud/vue'
+	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import '@nextcloud/dialogs/style.css'
+	import './assets/scss/colors.scss'
+	import './assets/scss/hacks.scss'
+	import './assets/scss/print.scss'
+	import './assets/scss/transitions.scss'
+	import './assets/scss/markdown.scss'
+	import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
+	import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
+	import { useSessionStore } from './stores/session.ts'
+	import { usePollStore } from './stores/poll.ts'
+	import { showSuccess } from '@nextcloud/dialogs'
+	import { debounce } from 'lodash'
+
+	const sessionStore = useSessionStore()
+	const pollStore = usePollStore()
+	const transitionClass = ref('transitions-active')
+	const loading = ref(false)
+
+	const appClass = computed(() => [
+		transitionClass, {
+			edit: pollStore.permissions.edit,
+		},
+	])
+
+	const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
+	const useSidebar = computed(() => pollStore.permissions.edit || pollStore.permissions.edit || sessionStore.route.name === 'combo')
+
+	/**
+	 * Turn off transitions
+	 */
+	function transitionsOn() {
+		transitionClass.value = 'transitions-active'
+	}
+
+	/**
+	 * Turn on transitions
+	 * @param {number} delay - optional delay
+	 */
+	function transitionsOff(delay: number) {
+		transitionClass.value = ''
+		if (delay) {
+			setTimeout(() => {
+				transitionClass.value = 'transitions-active'
+			}, delay)
+		}
+	}
+
+	function notify(payload: { store: string, message: string }) {
+		debounce(async function () {
+			if (payload.store === 'poll') {
+				showSuccess(payload.message)
+			}
+		}, 1500)
+	}
+
+	onMounted(() => {
+		subscribe('polls:transitions:off', (delay) => {
+			transitionsOff(delay)
+		})
+
+		subscribe('polls:transitions:on', () => {
+			transitionsOn()
+		})
+
+		subscribe('polls:poll:update', (payload) => {
+			notify(payload)
+		})
+	})
+
+	onUnmounted(() => {
+		unsubscribe('polls:transitions:on', () => {
+			transitionsOn()
+		})
+		unsubscribe('polls:transitions:off', () => {
+			transitionsOff(0)
+		})
+		unsubscribe('polls:poll:updated', () => {
+			notify(null)
+		})
+	})
+
+	// watch: {
+	// 	$route(to, from) {
+	// 		Logger.debug('Route changed', { from, to })
+	// 		this.loadContext()
+	// 		this.watchPolls()
+	// 	},
+	// },
+
+	// loadContext() {
+	// 	if (this.$route.name !== null) {
+	// 		this.sessionStore.setRouter(this.$route)
+	// 		this.sessionStore.load()
+	// 	}
+		
+	// 	if (this.sessionStore.userStatus.isLoggedin) {
+	// 		this.preferencesStore.load()
+	// 	}
+	// },
+
+
+</script>
+
 <template>
 	<NcContent app-name="polls" :class="appClass">
 		<router-view v-if="useNavigation" name="navigation" />
@@ -12,140 +119,6 @@
 		<UserSettingsDlg />
 	</NcContent>
 </template>
-
-<script>
-import { NcContent } from '@nextcloud/vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import '@nextcloud/dialogs/style.css'
-import './assets/scss/colors.scss'
-import './assets/scss/hacks.scss'
-import './assets/scss/print.scss'
-import './assets/scss/transitions.scss'
-import './assets/scss/markdown.scss'
-import { watchPolls } from './mixins/watchPolls.js'
-import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
-import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
-import { Logger } from './helpers/index.js'
-import { mapStores } from 'pinia';
-import { useSessionStore } from './stores/session.ts'
-import { usePreferencesStore } from './stores/preferences.ts'
-import { showSuccess } from '@nextcloud/dialogs'
-import { debounce } from 'lodash'
-
-export default {
-	name: 'App',
-	components: {
-		NcContent,
-		LoadingOverlay,
-		UserSettingsDlg,
-	},
-
-	mixins: [watchPolls],
-
-	beforeRouteUpdate(to, from, next) {
-		Logger.debug('Route changed (update)', { from, to })
-		this.loadContext()
-		next()
-	},
-
-	data() {
-		return {
-			transitionClass: 'transitions-active',
-			loading: false,
-		}
-	},
-
-	computed: {
-		...mapStores(
-			useSessionStore,
-			usePreferencesStore,
-		),
-
-		appClass() {
-			return [
-				this.transitionClass, {
-					edit: this.sessionStore.pollPermissions.edit,
-				},
-			]
-		},
-
-		useNavigation() {
-			return this.sessionStore.userStatus.isLoggedin
-		},
-
-		useSidebar() {
-			return this.sessionStore.pollPermissions.edit
-				|| this.sessionStore.pollPermissions.comment
-				|| this.sessionStore.router.name === 'combo'
-		},
-	},
-
-	watch: {
-		$route(to, from) {
-			Logger.debug('Route changed', { from, to })
-			this.loadContext()
-			this.watchPolls()
-		},
-	},
-	created() {
-		subscribe('polls:transitions:off', (delay) => {
-			this.transitionsOff(delay)
-		})
-
-		subscribe('polls:transitions:on', () => {
-			this.transitionsOn()
-		})
-
-		subscribe('polls:poll:update', (payload) => {
-			this.notify(payload)
-		})
-	},
-
-	mounted() {
-		this.loadContext(true)
-
-	},
-
-	beforeDestroy() {
-		unsubscribe('polls:transitions:on')
-		unsubscribe('polls:transitions:off')
-		unsubscribe('polls:poll:updated')
-	},
-
-	methods: {
-		notify: debounce(async function (payload) {
-			if (payload.store === 'poll') {
-				showSuccess(payload.message)
-			}
-		}, 1500),
-
-		loadContext() {
-			if (this.$route.name !== null) {
-				this.sessionStore.setRouter(this.$route)
-				this.sessionStore.load()
-			}
-			
-			if (this.sessionStore.userStatus.isLoggedin) {
-				this.preferencesStore.load()
-			}
-		},
-
-		transitionsOn() {
-			this.transitionClass = 'transitions-active'
-		},
-
-		transitionsOff(delay) {
-			this.transitionClass = ''
-			if (delay) {
-				setTimeout(() => {
-					this.transitionClass = 'transitions-active'
-				}, delay)
-			}
-		},
-	},
-}
-
-</script>
 
 <style lang="scss">
 .app-content {
@@ -220,5 +193,4 @@ export default {
 .modal__buttons__link {
 	text-decoration: underline;
 }
-
 </style>

@@ -3,56 +3,49 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { computed, defineEmits, defineModel, defineProps, PropType } from 'vue'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+
+	export type CheckboxOption = {
+		value: string
+		label: string
+	}
+
+	const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
+
+	const props = defineProps({
+		id: {
+			type: String,
+			default: null,
+		},
+		options: {
+			type: Array as PropType<CheckboxOption[]>,
+			required: true,
+		},
+	})
+
+	const model = defineModel({
+		type: String,
+		default: null,
+	})
+
+	const emit = defineEmits(['update'])
+
+	const elementId = computed(() => props.id ?? `rg-${RandId()}`)
+
+</script>
+
 <template>
 	<div class="radio-group-div">
 		<NcCheckboxRadioSwitch v-for="(option, index) in options"
 			:key="option.value"
-			:checked.sync="selectedValue"
+			v-model="model"
 			:value="option.value"
-			:name="id + '_' + index"
+			:name="elementId + index"
 			type="radio"
-			@update:checked="$emit('update', option.value)">
+			@update:model-value="emit('update')">
 			{{ option.label }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
-
-<script>
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
-
-const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
-
-export default {
-	name: 'RadioGroupDiv',
-
-	components: {
-		NcCheckboxRadioSwitch,
-	},
-
-	props: {
-		id: {
-			type: String,
-			default: () => `rg-${RandId()}`,
-		},
-		options: {
-			type: Array,
-			required: true,
-		},
-		value: {
-			type: String,
-			default: null,
-		},
-	},
-
-	computed: {
-		selectedValue: {
-			get() {
-				return this.value
-			},
-			set(value) {
-				this.$emit('input', value)
-			},
-		},
-	},
-}
-</script>

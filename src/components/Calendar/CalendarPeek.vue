@@ -3,6 +3,75 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+
+	import { computed, defineProps, onMounted, ref, PropType } from 'vue'
+	import orderBy from 'lodash/orderBy'
+	import { NcPopover } from '@nextcloud/vue'
+	import moment from '@nextcloud/moment'
+	import CalendarInfo from './CalendarInfo.vue'
+	import { CalendarAPI } from '../../Api/index.js'
+	import { Logger } from '../../helpers/index.ts'
+	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { Option } from '../../Types/index.ts'
+
+	const pollStore = usePollStore()
+
+	const props = defineProps({
+		option: {
+			type: Object as PropType<Option>,
+			default: undefined,
+		},
+	})
+
+	const events = ref([])
+
+	const detectAllDay = computed(() => {
+		const from = moment.unix(props.option.timestamp)
+		const to = moment.unix(props.option.timestamp + Math.max(0, props.option.duration))
+		const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
+		return {
+			allDay: dayLongEvent,
+			type: dayLongEvent ? 'date' : 'dateTime',
+		}
+	})
+
+	const sortedEvents = computed(() => {
+		const sortedEvents = [...events.value]
+		sortedEvents.push(currentOption.value)
+		return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
+	})
+
+	const currentOption = computed(() => ({
+		id: props.option.id,
+		UID: props.option.id,
+		calendarUri: '',
+		calendarKey: 0,
+		calendarName: 'Polls',
+		displayColor: 'transparent',
+		allDay: detectAllDay.value.allDay,
+		description: pollStore.configuration.description,
+		start: props.option.timestamp,
+		location: '',
+		end: props.option.timestamp + props.option.duration,
+		status: 'self',
+		summary: pollStore.configuration.title,
+		type: detectAllDay.value.type,
+	}))
+
+	onMounted(async () => {
+		try {
+			const response = await CalendarAPI.getEvents(props.option.id)
+			events.value = response.data.events
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error('Error fetching events', { error })
+		}
+	})
+
+</script>
+
 <template>
 	<NcPopover v-if="events.length" :focus-trap="false" class="calendar-peek">
 		<template #trigger>
@@ -21,99 +90,6 @@
 		</div>
 	</NcPopover>
 </template>
-
-<script>
-
-import { mapStores } from 'pinia'
-import { orderBy } from 'lodash'
-import { NcPopover } from '@nextcloud/vue'
-import moment from '@nextcloud/moment'
-import CalendarInfo from './CalendarInfo.vue'
-import { CalendarAPI } from '../../Api/index.js'
-import { Logger } from '../../helpers/index.js'
-import { t } from '@nextcloud/l10n'
-import { usePollStore } from '../../stores/poll.ts'
-
-export default {
-	name: 'CalendarPeek',
-
-	components: {
-		CalendarInfo,
-		NcPopover,
-	},
-
-	props: {
-		option: {
-			type: Object,
-			default: undefined,
-		},
-	},
-
-	data() {
-		return {
-			events: [],
-		}
-	},
-
-	computed: {
-		...mapStores(usePollStore),
-
-		detectAllDay() {
-			const from = moment.unix(this.option.timestamp)
-			const to = moment.unix(this.option.timestamp + Math.max(0, this.option.duration))
-			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
-			return {
-				allDay: dayLongEvent,
-				type: dayLongEvent ? 'date' : 'dateTime',
-			}
-		},
-
-		sortedEvents() {
-			const sortedEvents = [...this.events]
-			sortedEvents.push(this.currentOption)
-			return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
-		},
-
-		currentOption() {
-			return {
-				id: this.option.id,
-				UID: this.option.id,
-				calendarUri: '',
-				calendarKey: 0,
-				calendarName: 'Polls',
-				displayColor: 'transparent',
-				allDay: this.detectAllDay.allDay,
-				description: this.pollStore.configuration.description,
-				start: this.option.timestamp,
-				location: '',
-				end: this.option.timestamp + this.option.duration,
-				status: 'self',
-				summary: this.pollStore.configuration.title,
-				type: this.detectAllDay.type,
-			}
-		},
-	},
-
-	mounted() {
-		this.getEvents()
-	},
-
-	methods: {
-		t,
-		async getEvents() {
-			try {
-				const response = await CalendarAPI.getEvents(this.option.id)
-				this.events = response.data.events
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error fetching events', { error })
-			}
-		},
-
-	},
-}
-
-</script>
 
 <style lang="scss">
 

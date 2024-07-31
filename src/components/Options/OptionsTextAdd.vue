@@ -3,62 +3,49 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<template>
-	<InputDiv v-model="newPollText"
-		:placeholder="placeholder"
-		submit
-		@submit="addOption()" />
-</template>
+<script setup lang="ts">
+	import { defineProps, ref } from 'vue'
+	import { showError, showSuccess } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
 
-<script>
-import { showError, showSuccess } from '@nextcloud/dialogs'
-import { InputDiv } from '../Base/index.js'
-import { t } from '@nextcloud/l10n'
-import { mapStores } from 'pinia'
-import { useOptionsStore } from '../../stores/options.ts'
+	import { InputDiv } from '../Base/index.js'
+	import { useOptionsStore } from '../../stores/options.ts'
 
-export default {
-	name: 'OptionsTextAdd',
+	const optionsStore = useOptionsStore()
 
-	components: {
-		InputDiv,
-	},
-
-	props: {
+	const props = defineProps({
 		placeholder: {
 			type: String,
 			default: t('polls', 'Add option'),
 		},
-	},
+	})
 
-	data() {
-		return {
-			newPollText: '',
-		}
-	},
+	const newPollText = ref('')
 
-	computed: {
-		...mapStores(useOptionsStore),
-	},
-	methods: {
-		async addOption() {
-			if (this.newPollText) {
-				try {
-					await this.optionsStore.add({ text: this.newPollText })
-					showSuccess(t('polls', '{optionText} added', { optionText: this.newPollText }))
-					this.newPollText = ''
-				} catch (error) {
-					if (error.response.status === 409) {
-						showError(t('polls', '{optionText} already exists', { optionText: this.newPollText }))
-					} else {
-						showError(t('polls', 'Error adding {optionText}', { optionText: this.newPollText }))
-					}
+	async function addOption() {
+		if (newPollText.value) {
+			try {
+				await optionsStore.add({ text: newPollText.value })
+				showSuccess(t('polls', '{optionText} added', { optionText: newPollText.value }))
+				newPollText.value = ''
+			} catch (error) {
+				if (error.response.status === 409) {
+					showError(t('polls', '{optionText} already exists', { optionText: newPollText.value }))
+				} else {
+					showError(t('polls', 'Error adding {optionText}', { optionText: newPollText.value }))
 				}
 			}
-		},
-	},
-}
+		}
+	}
+
 </script>
+
+<template>
+	<InputDiv v-model="newPollText"
+		:placeholder="props.placeholder"
+		submit
+		@change="addOption()" />
+</template>
 
 <style lang="scss">
 	.optionAdd {

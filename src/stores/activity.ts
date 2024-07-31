@@ -1,4 +1,3 @@
-/* jshint esversion: 6 */
 /**
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
@@ -6,18 +5,26 @@
 
 import { defineStore } from 'pinia'
 import { ActivityAPI } from '../Api/index.js'
-import { User, AppSettings, AppPermissions } from '../Interfaces/interfaces.ts'
 import { Vote } from './votes.ts'
 import { useSessionStore } from './session.ts'
 
-interface Activity {
-	token: string,
-	currentUser: User,
-	appPermissions: AppPermissions
-	appSettings: AppSettings
+export type Activity = {
+	activity_id: number
+	app: string
+	type: string
+	user: string
+	subject: string
+	subject_rich: []
+	message: string
+	message_rich: []
+	object_type: string
+	object_id: number
+	link: string
+	icon: string
+	datetime: string
 }
 
-interface Activities {
+export type Activities = {
 	list: Activity[]
 }
 
@@ -30,7 +37,7 @@ export const useActivityStore = defineStore('activity', {
 		async load() {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await ActivityAPI.getActivities(sessionStore.router.params.id)
+				const response = await ActivityAPI.getActivities(sessionStore.route.params.id)
 				this.list = response.data.ocs.data
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return

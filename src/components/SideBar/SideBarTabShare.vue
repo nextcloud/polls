@@ -3,6 +3,27 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+	import { onMounted, onUnmounted } from 'vue'
+	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+
+	import { useSharesStore } from '../../stores/shares.ts'
+
+	import SharesList from '../Shares/SharesList.vue'
+	import SharesListUnsent from '../Shares/SharesListUnsent.vue'
+	import SharesListLocked from '../Shares/SharesListLocked.vue'
+
+	const sharesStore = useSharesStore()
+
+	onMounted(() => {
+		subscribe('polls:change:shares', () => sharesStore.load())
+	})
+
+	onUnmounted(() => {
+		unsubscribe('polls:change:shares', () => sharesStore.load())
+	})
+</script>
+
 <template>
 	<div class="sidebar-share">
 		<SharesListUnsent class="shares unsent" />
@@ -10,37 +31,6 @@
 		<SharesListLocked class="shares" />
 	</div>
 </template>
-
-<script>
-import SharesList from '../Shares/SharesList.vue'
-import SharesListUnsent from '../Shares/SharesListUnsent.vue'
-import SharesListLocked from '../Shares/SharesListLocked.vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { useSharesStore } from '../../stores/shares.ts'
-import { mapStores } from 'pinia'
-
-export default {
-	name: 'SideBarTabShare',
-
-	components: {
-		SharesList,
-		SharesListUnsent,
-		SharesListLocked,
-	},
-	computed: {
-		...mapStores(useSharesStore),
-	},
-
-	created() {
-		subscribe('polls:change:shares', this.sharesStore.load())
-	},
-
-	beforeDestroy() {
-		unsubscribe('polls:change:shares')
-	},
-
-}
-</script>
 
 <style lang="scss">
 	.sidebar-share {

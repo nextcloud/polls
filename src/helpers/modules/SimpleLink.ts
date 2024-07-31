@@ -2,10 +2,10 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-const SimpleLink = {
-	name: 'SimpleLink',
-	functional: true,
 
+import { h } from 'vue'
+
+const SimpleLink = {
 	props: {
 		href: {
 			type: String,
@@ -21,14 +21,14 @@ const SimpleLink = {
 		},
 	},
 
-	render(createElement, context) {
-		return createElement('a', {
+	setup(props: { href: string; target: string; name: string }) {
+		return () => h('a', {
 			attrs: {
-				href: context.props.href,
-				target: context.props.target,
+				href: props.href,
+				target: props.target,
 			},
-		}, context.props.name)
-	},
+		}, props.name)
+	}
 }
 
-export default SimpleLink
+export { SimpleLink }

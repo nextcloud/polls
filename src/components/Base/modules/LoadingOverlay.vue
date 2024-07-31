@@ -3,22 +3,17 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup lang="ts">
+
+	import { Spinner } from '../../AppIcons/index.js'
+
+</script>
+
 <template>
 	<div class="loading-overlay">
 		<Spinner :size="70" />
 	</div>
 </template>
-
-<script>
-import { Spinner } from '../../AppIcons/index.js'
-
-export default {
-	name: 'LoadingOverlay',
-	components: {
-		Spinner,
-	},
-}
-</script>
 
 <style lang="scss">
 .loading-overlay {

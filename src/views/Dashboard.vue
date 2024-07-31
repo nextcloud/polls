@@ -3,6 +3,51 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
+<script setup>
+	import { onMounted } from 'vue'
+	import { showError } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+	import { generateUrl } from '@nextcloud/router'
+	import { NcDashboardWidget } from '@nextcloud/vue'
+	import { usePollsStore } from '../stores/polls.ts'
+	import { PollType } from '../Types/index.ts'
+	import { Logger } from '../helpers/index.ts'
+
+	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+	import { PollsAppIcon } from '../components/AppIcons/index.js'
+
+	const dashboardWidgetProperties = {
+		emptyContentMessage: t('polls', 'No polls found for this category'),
+		showMoreText: t('polls', 'Relevant polls'),
+	}
+
+	const pollsStore = usePollsStore()
+
+	/**
+	 *
+	 * @param {object} poll - The poll object
+	 */
+	function pollLink(poll) {
+		generateUrl(`/apps/polls/vote/${poll.id}`)
+	}
+
+	/**
+	 * Load the polls
+	 */
+	function loadPolls() {
+		Logger.debug('Loading polls in dashboard widget')
+		pollsStore.load().then(() => null).catch(() => {
+			showError(t('polls', 'Error loading poll list'))
+		})
+	}
+
+	onMounted(() => {
+		loadPolls()
+	})
+
+</script>
+
 <template>
 	<div>
 		<NcDashboardWidget :items="pollsStore.dashboardList"
@@ -18,7 +63,7 @@
 				<a :href="pollLink(item)">
 					<div class="poll-item__item">
 						<div class="item__icon-spacer">
-							<TextPollIcon v-if="item.type === 'textPoll'" />
+							<TextPollIcon v-if="item.type === PollType.Text" />
 							<DatePollIcon v-else />
 						</div>
 
@@ -37,62 +82,6 @@
 		</NcDashboardWidget>
 	</div>
 </template>
-
-<script>
-import { NcDashboardWidget } from '@nextcloud/vue'
-import { showError } from '@nextcloud/dialogs'
-import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import { PollsAppIcon } from '../components/AppIcons/index.js'
-import { generateUrl } from '@nextcloud/router'
-import { t } from '@nextcloud/l10n'
-import { mapStores } from 'pinia';
-import { usePollsStore } from '../stores/polls.ts'
-import { Logger } from '../helpers/index.ts'
-
-export default {
-	name: 'Dashboard',
-	components: {
-		NcDashboardWidget,
-		DatePollIcon,
-		PollsAppIcon,
-		TextPollIcon,
-	},
-
-	data() {
-		return {
-			dashboardWidgetProperties: {
-				emptyContentMessage: t('polls', 'No polls found for this category'),
-				showMoreText: t('polls', 'Relevant polls'),
-			},
-		}
-	},
-
-	computed: {
-		...mapStores(usePollsStore),
-
-		pollLink() {
-			return (poll) => generateUrl(`/apps/polls/vote/${poll.id}`)
-		},
-
-	},
-
-	beforeMount() {
-		this.loadPolls()
-	},
-
-	methods: {
-		async loadPolls() {
-			Logger.debug('Loading polls in dashboard widget')
-			this.pollsStore.load().then(() => null).catch(() => {
-				showError(t('polls', 'Error loading poll list'))
-			})
-		},
-		t,
-	},
-}
-
-</script>
 
 <style lang="scss" scoped>
 	.poll-item__item {
@@ -130,4 +119,3 @@ export default {
 		min-width: 44px;
 	}
 </style>
-../stores/polls.ts
