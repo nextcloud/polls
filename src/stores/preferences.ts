@@ -87,7 +87,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			if (window.innerWidth > 480) {
 				return state.user.defaultViewDatePoll
 			}
-			return ViewMode.ListView
+			return ViewMode.TableView
 	
 		},
 	},

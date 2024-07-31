@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { orderBy } from 'lodash'
+import orderBy from 'lodash/orderBy'
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import { Logger } from '../helpers/index.ts'

@@ -6,6 +6,7 @@
 <script setup lang="ts">
 	import { computed, onMounted, watch } from 'vue'
 	import { showError } from '@nextcloud/dialogs'
+	import { Logger } from '../helpers/index.ts'
 	import { NcActions, NcActionButton, NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
 	import { HeaderBar, IntersectionObserver } from '../components/Base/index.js'
 	import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
@@ -49,11 +50,13 @@
 
 
 	onMounted(() => {
+		Logger.debug('Loading polls onMounted')
 		pollsStore.load()
 		refreshView()
 	})
 
 	watch(() => route.params.id, () => {
+		Logger.debug('Loading polls on watch')
 		pollsStore.load()
 		refreshView()
 	})

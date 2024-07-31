@@ -27,7 +27,6 @@
 
 		return t('polls', 'Ranked order')
 	})
-
 </script>
 
 <template>

@@ -14,6 +14,7 @@
 	import { FilterType, usePollsStore } from '../stores/polls.ts'
 	import { useSessionStore } from '../stores/session.ts'
 	import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
+	import { Logger } from '../helpers/index.ts'
 
 	// Icons
 	import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
@@ -75,6 +76,7 @@
 	 */
 	function loadPolls() {
 		try {
+			Logger.debug('Loading polls in navigation')
 			pollsStore.load()
 
 			if (getCurrentUser().isAdmin) {

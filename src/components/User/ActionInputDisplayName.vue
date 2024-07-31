@@ -66,12 +66,12 @@
 
 	async function submit() {
 		try {
-			await this.shareStore.updateDisplayName({ displayName: this.shareStore.displayName })
+			await shareStore.updateDisplayName({ displayName: shareStore.displayName })
 			showSuccess(t('polls', 'Name changed.'))
-			setUnchanged(this.inputProps)
+			setUnchanged(inputProps.value)
 		} catch {
 			showError(t('polls', 'Error changing name.'))
-			setError(this.inputProps)
+			setError(inputProps.value)
 		}
 	}
 

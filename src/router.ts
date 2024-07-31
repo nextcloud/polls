@@ -20,6 +20,7 @@ import Navigation from './views/Navigation.vue'
 import Combo from './views/Combo.vue'
 import { usePollStore } from './stores/poll.ts'
 import { FilterType } from './stores/polls.ts'
+import { useSessionStore } from './stores/session.ts'
 
 /**
  * @param {RouteLocationNormalized} to Target route
@@ -77,21 +78,6 @@ async function validateToken(to: RouteLocationNormalized) {
 	}
 }
 
-/**
- *
- */
-async function loadPoll() {
-
-	try {
-		const pollStore = usePollStore()
-		await pollStore.load()
-	} catch (error) {
-		return {
-			name: 'notfound',
-		}
-	}
-}
-
 const routes: RouteRecordRaw[] = [
 	{
 		path: '/list/:type?',
@@ -146,7 +132,6 @@ const routes: RouteRecordRaw[] = [
 			navigation: Navigation,
 			sidebar: SideBar,
 		},
-		beforeEnter: loadPoll,
 		props: true,
 		name: 'vote',
 		meta: {
@@ -200,16 +185,26 @@ const router = createRouter({
 	linkActiveClass: 'active',
 })
 
-router.beforeResolve((to: RouteLocationNormalized) => {
-	console.debug('beforeResolve', to)
-})
-
-router.beforeEach((to: RouteLocationNormalized) => {
+router.beforeEach(async (to: RouteLocationNormalized) => {
+	const sessionStore = useSessionStore()
+	sessionStore.setRouter(to)
 	try {
 		loadContext(to)
 	} catch (error) {
 		Logger.error('Could not load context')
 		return false
+	}
+
+	try {
+		if (to.name === 'vote') {
+			const pollStore = usePollStore()
+			await pollStore.load()
+		}
+	} catch (error) {
+		Logger.warn('Could not load poll', error)
+		return {
+			name: 'notfound',
+		}
 	}
 })
 

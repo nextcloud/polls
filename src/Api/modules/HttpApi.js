@@ -35,7 +35,6 @@ const ocsInstance = axios.create(axiosOcsConfig)
  */
 const createCancelTokenHandler = (apiObject) => {
 	const cancelTokenHandler = {}
-
 	Object.getOwnPropertyNames(apiObject)
 		.forEach((propertyName) => {
 			const cancelTokenRequestHandler = {

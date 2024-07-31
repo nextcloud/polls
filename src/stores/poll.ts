@@ -4,21 +4,29 @@
  */
 
 import { defineStore } from 'pinia'
+import { debounce } from 'lodash'
+import DOMPurify from 'dompurify'
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+
+import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
+import { showError } from '@nextcloud/dialogs'
+import { emit } from '@nextcloud/event-bus'
+
+import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
 import { PublicAPI, PollsAPI } from '../Api/index.js'
 import { User, UserType } from '../Types/index.ts'
-import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
-import moment from '@nextcloud/moment'
+
 import { usePreferencesStore, ViewMode } from './preferences.ts'
 import { useVotesStore, Answer } from './votes.ts'
 import { useOptionsStore } from './options.ts'
 import { usePollsStore } from './polls.ts'
 import { useSessionStore } from './session.ts'
 import { useSubscriptionStore } from './subscription.ts'
-import { t } from '@nextcloud/l10n'
 import { useSharesStore } from './shares.ts'
 import { useCommentsStore } from './comments.ts'
-import { showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
+
 
 export enum PollType {
 	Text = 'textPoll',
@@ -110,6 +118,10 @@ export type Poll = {
 	revealParticipants: boolean
 }
 
+const markedPrefix = {
+	prefix: 'desc-',
+}
+
 export const usePollStore = defineStore('poll', {
 	state: (): Poll => ({
 		id: 0,
@@ -191,11 +203,11 @@ export const usePollStore = defineStore('poll', {
 		viewMode(state) {
 			const preferencesStore = usePreferencesStore()
 			if (state.type === PollType.Text) {
-				return preferencesStore.$state.user.defaultViewTextPoll
+				return preferencesStore.viewTextPoll
 			}
 	
 			if (state.type === PollType.Date) {
-				return preferencesStore.$state.user.defaultViewDatePoll
+				return preferencesStore.viewDatePoll
 			}
 			return ViewMode.TableView
 		},
@@ -324,6 +336,10 @@ export const usePollStore = defineStore('poll', {
 			return this.countParticipants * optionsStore.count
 		},
 
+		descriptionMarkUp() {
+			marked.use(gfmHeadingId(markedPrefix))
+			return DOMPurify.sanitize(marked.parse(this.configuration.description).toString())
+		},
 	},
 	
 	actions: {
@@ -403,8 +419,7 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 	
-		// write: debounce(async function() {
-		async write() {
+		write: debounce(async function() {
 			const pollsStore = usePollsStore()
 			if (this.configuration.title === '') {
 				showError(t('polls', 'Title must not be empty!'))
@@ -425,10 +440,8 @@ export const usePollStore = defineStore('poll', {
 			} finally {
 				pollsStore.load()
 			}
-			
-		}
-		// , 500),
-		,
+		}, 500),
+
 		async close() {
 			const pollsStore = usePollsStore()
 

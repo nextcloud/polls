@@ -10,7 +10,6 @@ import { User, AppPermissions, UserType } from '../Types/index.ts'
 import { AppSettings, UpdateType } from './appSettings.ts'
 import { usePreferencesStore, ViewMode, SessionSettings } from './preferences.ts'
 import { FilterType } from './polls.ts'
-import { PollPermissions, usePollStore } from './poll.ts'
 import { Share } from './share.ts'
 import { RouteLocationNormalized } from 'vue-router'
 
@@ -147,17 +146,11 @@ export const useSessionStore = defineStore('session', {
 			}
 			return ViewMode.ListView
 		},
-		
-		pollPermissions(): PollPermissions {
-			const pollStore = usePollStore()
-			return pollStore.permissions
-		}
 	},
 
 	actions: {
 		async load() {
 			let response = null
-
 			try {
 				if (this.route.name === 'publicVote') {
 					response = await PublicAPI.getSession(this.router.params.token)

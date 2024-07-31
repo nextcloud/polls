@@ -10,12 +10,10 @@
 	import { t } from '@nextcloud/l10n'
 
 	import { usePollStore, PollType } from '../stores/poll.ts'
-	import { useSessionStore } from '../stores/session.ts'
 	import { useOptionsStore } from '../stores/options.ts'
 	import { usePreferencesStore } from '../stores/preferences.ts'
 
 	import { useHandleScroll } from '../composables/handleScroll.ts'
-	import { Logger } from '../helpers/index.ts'
 
 	import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
 	import { HeaderBar } from '../components/Base/index.js'
@@ -32,7 +30,6 @@
 
 	
 	const pollStore = usePollStore()
-	const sessionStore = useSessionStore()
 	const optionsStore = useOptionsStore()
 	const preferencesStore = usePreferencesStore()
 	
@@ -52,7 +49,7 @@
 
 		return {
 			name: t('polls', 'No vote options available'),
-			description: sessionStore.pollPermissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
+			description: pollStore.permissions.edit ? '' : t('polls', 'Maybe the owner did not provide some until now.'),
 		}
 	})
 
@@ -62,7 +59,6 @@
 	onMounted(() => {
 		subscribe('polls:poll:load', () => pollStore.load())
 		emit('polls:transitions:off', 500)
-		Logger.debug('Poll view mounted', sessionStore.route)
 	})
 
 	onUnmounted(() => {
@@ -93,7 +89,7 @@
 			</div>
 
 			<div class="area__main" :class="pollStore.viewMode">
-				<VoteTable v-show="optionsStore.rankedOptions.length" :view-mode="pollStore.viewMode" />
+				<VoteTable v-show="optionsStore.rankedOptions.length" />
 
 				<NcEmptyContent v-if="!optionsStore.rankedOptions.length"
 					v-bind="emptyContentProps">
@@ -115,6 +111,7 @@
 
 		<LoadingOverlay v-if="isLoading" />
 	</NcAppContent>
+
 </template>
 
 <style lang="scss">

@@ -244,7 +244,7 @@
 					:placeholder="t('polls', 'Enter your name or a nickname')"
 					:helper-text="userNameHint"
 					focus
-					@submit="submitRegistration" />
+					@change="submitRegistration" />
 
 				<InputDiv v-if="shareStore.publicPollEmail !== 'disabled'"
 					v-model="emailAddress"
@@ -254,7 +254,7 @@
 					:helper-text="emailAddressHint"
 					type="email"
 					inputmode="email"
-					@submit="submitRegistration" />
+					@change="submitRegistration" />
 
 				<NcCheckboxRadioSwitch v-if="shareStore.user.type === 'public'" v-model="saveCookie">
 					{{ t('polls', 'Remember me for 30 days') }}

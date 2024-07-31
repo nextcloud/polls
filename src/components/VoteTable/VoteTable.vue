@@ -4,30 +4,23 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, PropType } from 'vue'
 	import { showSuccess } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+
 	import { ActionDelete } from '../Actions/index.js'
+
 	import VoteColumn from './VoteColumn.vue'
 	import VoteMenu from './VoteMenu.vue'
-	import { t } from '@nextcloud/l10n'
 	import UserItem from '../User/UserItem.vue'
 	import { usePollStore } from '../../stores/poll.ts'
 	import { useSessionStore } from '../../stores/session.ts'
 	import { useOptionsStore } from '../../stores/options.ts'
 	import { useVotesStore } from '../../stores/votes.ts'
-	import { ViewMode } from '../../Types/index.ts'
 
 	const pollStore = usePollStore()
 	const sessionStore = useSessionStore()
 	const optionsStore = useOptionsStore()
 	const votesStore = useVotesStore()
-
-	const props = defineProps({
-		viewMode: {
-			type: String as PropType<ViewMode>,
-			default: ViewMode.TableView,
-		},
-	})
 
 	async function removeUser(userId: string) {
 		await votesStore.deleteUser({ userId })
@@ -37,7 +30,7 @@
 </script>
 
 <template>
-	<div class="vote-table" :class="[props.viewMode, { closed: pollStore.isClosed }]">
+	<div class="vote-table" :class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
 		<div class="vote-table__users">
 			<VoteMenu />
 
@@ -65,7 +58,7 @@
 			<VoteColumn v-for="(item) in optionsStore.rankedOptions"
 				:key="item.id"
 				:option="item"
-				:view-mode="props.viewMode" />
+				:view-mode="pollStore.viewMode" />
 		</TransitionGroup>
 	</div>
 </template>

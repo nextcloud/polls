@@ -11,10 +11,11 @@ const loadContext = (to: RouteLocationNormalized) => {
 	const preferencesStore = usePreferencesStore()
 	const sessionStore = useSessionStore()
 	sessionStore.setRouter(to)
-	sessionStore.load()
-	if (sessionStore.userStatus.isLoggedin) {
-		preferencesStore.load()
-	}
+	sessionStore.load().then(() => {
+		if (sessionStore.userStatus.isLoggedin) {
+			preferencesStore.load()
+		}
+	})
 }
 
 export { loadContext }

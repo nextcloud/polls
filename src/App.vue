@@ -16,21 +16,23 @@
 	import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 	import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 	import { useSessionStore } from './stores/session.ts'
+	import { usePollStore } from './stores/poll.ts'
 	import { showSuccess } from '@nextcloud/dialogs'
 	import { debounce } from 'lodash'
 
 	const sessionStore = useSessionStore()
+	const pollStore = usePollStore()
 	const transitionClass = ref('transitions-active')
 	const loading = ref(false)
 
 	const appClass = computed(() => [
 		transitionClass, {
-			edit: sessionStore.pollPermissions.edit,
+			edit: pollStore.permissions.edit,
 		},
 	])
 
 	const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
-	const useSidebar = computed(() => sessionStore.pollPermissions.edit || sessionStore.pollPermissions.comment || sessionStore.route.name === 'combo')
+	const useSidebar = computed(() => pollStore.permissions.edit || pollStore.permissions.edit || sessionStore.route.name === 'combo')
 
 	/**
 	 * Turn off transitions

@@ -6,7 +6,7 @@
 <script setup lang="ts">
 
 	import { computed, defineProps, onMounted, ref, PropType } from 'vue'
-	import { orderBy } from 'lodash'
+	import orderBy from 'lodash/orderBy'
 	import { NcPopover } from '@nextcloud/vue'
 	import moment from '@nextcloud/moment'
 	import CalendarInfo from './CalendarInfo.vue'

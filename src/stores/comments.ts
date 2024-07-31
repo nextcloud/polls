@@ -89,6 +89,7 @@ export const useCommentsStore = defineStore('comments', {
 	
 		async delete(payload: { comment: Comment }) {
 			const sessionStore = useSessionStore()
+			
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {

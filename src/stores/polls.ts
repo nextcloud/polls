@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { orderBy } from 'lodash'
+import orderBy from 'lodash/orderBy'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 
@@ -305,7 +305,6 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		async clone(payload: { pollId: number }) {
-			const pollsStore = usePollsStore()
 			try {
 				const response = await PollsAPI.clonePoll(payload.pollId)
 				return response
@@ -314,7 +313,7 @@ export const usePollsStore = defineStore('polls', {
 				Logger.error('Error cloning poll', { error, payload })
 				throw error
 			} finally {
-				pollsStore.load()
+				this.load()
 			}
 		},
 
