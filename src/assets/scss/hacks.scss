@@ -4,6 +4,12 @@
  */
 // some hacks, do alter the display of third parity components
 
+// FIXME: remove this hack after the issue is fixed
+.avatardiv .material-design-icon {
+	width: var(--size);
+	height: var(--size);
+}
+
 // raltive position to be able to get sticky toolbar
 .app-content {
 	position: relative !important;
