@@ -18,26 +18,24 @@
 	const isLoading = ref(false)
 	const placeholder = t('polls', 'Type to add an individual share')
 
-	function loadUsersAsync() {
-		debounce(async function(query) {
-			if (!query) {
-				users.value = []
-				return
-			}
+	const loadUsersAsync = debounce(async function(query: string) {
+		if (!query) {
+			users.value = []
+			return
+		}
 
-			isLoading.value = true
+		isLoading.value = true
 
-			try {
-				const response = await AppSettingsAPI.getUsers(query)
-				users.value = response.data.siteusers
-				isLoading.value = false
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error(error.response)
-				isLoading.value = false
-			}
-		}, 250)()
-	}
+		try {
+			const response = await AppSettingsAPI.getUsers(query)
+			users.value = response.data.siteusers
+			isLoading.value = false
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			Logger.error(error.response)
+			isLoading.value = false
+		}
+	}, 250)
 
 	async function clickAdd(payload) {
 		try {
@@ -68,7 +66,7 @@
 		:close-on-select="false"
 		label="displayName"
 		@option:selected="clickAdd"
-		@search="loadUsersAsync()">
+		@search="loadUsersAsync">
 		<template #selection="{ values, isOpen }">
 			<span v-if="values.length &amp;&amp; !isOpen" class="multiselect__single">
 				{{ values.length }} users selected
