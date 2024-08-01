@@ -30,7 +30,7 @@
 	const qrText = ref('')
 	const configBoxProps = {
 		sharesList: {
-			name: t('polls', 'Locked shares (read only access)'),
+			name: t('polls', 'Shares'),
 		},
 	}
 
