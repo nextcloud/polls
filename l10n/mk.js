@@ -49,6 +49,7 @@ OC.L10N.register(
     "Delete share" : "Избриши споделување",
     "Restore share" : "Врати споделување",
     "Share label" : "Ознака на споделувањето",
+    "Link copied to clipboard" : "Линкот е копиран во клипборд",
     "Shares" : "Споделувања",
     "Description" : "Опис",
     "Public link" : "Јавен линк",
