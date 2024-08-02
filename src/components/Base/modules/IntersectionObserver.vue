@@ -4,18 +4,20 @@
 -->
 
 <script setup lang="ts">
-	import { onBeforeUnmount, onMounted, ref } from 'vue'
+	import { defineEmits, onBeforeUnmount, onMounted, ref } from 'vue'
 
 	const inViewport = ref(false)
 	const observer = ref(null)
 
 	const observerTarget = ref<Element>(null)
+	const emit = defineEmits(['visible'])
 
 	onMounted(() => {
 		const observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					inViewport.value = true
+					emit('visible')
 				} else {
 					inViewport.value = false
 				}
