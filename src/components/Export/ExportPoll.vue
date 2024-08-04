@@ -6,7 +6,7 @@
 <script setup lang="ts">
 	import { ref, computed } from 'vue'
 	import { useRoute } from 'vue-router'
-	import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
+	import { utils as xlsxUtils, write as xlsxWrite, WorkBook } from 'xlsx'
 	import { saveAs } from 'file-saver'
 	import DOMPurify from 'dompurify'
 	import { t } from '@nextcloud/l10n'
@@ -32,7 +32,7 @@
 
 	const regex = /[:\\/?*[\]]/g
 
-	const workBook = ref([])
+	const workBook = ref<WorkBook>(null)
 	const sheetData = ref([])
 	const emailAddresses = ref([])
 	const sheetName = computed(() => pollStore.configuration.title.replaceAll(regex, '').slice(0, 31))

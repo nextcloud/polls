@@ -3,35 +3,29 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-/**
- * @param {Array} array Array of objects to unify
- */
-const uniqueArrayOfObjects = (array) =>
+import { Comment, Option, Vote, Participant } from "../../Types"
+
+const uniqueArrayOfObjects = (array: unknown[]) =>
 	[...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) => JSON.parse(string))
 
-/**
- * @param {Array} options Array of poll options to unify
- */
-const uniqueOptions = (options) =>
+const uniqueOptions = (options: Option[]) =>
 	options.filter((option, index, array) =>
 		array.findIndex((compare) =>
 			(compare.text === option.text)) === index)
 
-/**
- * @param {Array} votes Array of votes to gerneate a unique array of participants from
- */
-const uniqueParticipants = (votes) => {
-	const participants = votes.map((vote) => ({
+const uniqueParticipants = (votes: Vote[]): Participant[] => {
+	const participants: Participant[] = votes.map((vote) => ({
 		userId: vote.user.userId,
 		displayName: vote.user.displayName,
 		isNoUser: vote.user.isNoUser,
 		user: vote.user,
 		pollId: vote.pollId,
 	}))
+
 	return uniqueArrayOfObjects(participants)
 }
 
-const transformComments = (inputArray) => {
+const transformComments = (inputArray: Comment[]): Comment[] => {
 	const idToElement = inputArray.reduce((acc, item) => {
 		acc[item.id] = item
 		return acc
@@ -68,11 +62,7 @@ const transformComments = (inputArray) => {
 			}
 		})
 
-	/**
-	 *
-	 * @param {object} parentId parent comment
-	 */
-	function getComments(parentId) {
+	function getComments(parentId: number): Comment[] {
 		const comments = []
 		const stack = [parentId]
 
