@@ -10,7 +10,7 @@
 	import { InputDiv } from '../Base/index.js'
 	import { t } from '@nextcloud/l10n'
 	import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
-	import { dateUnits } from '../../constants/dateUnits.ts'
+	import { dateUnits, DateUnitValue } from '../../constants/dateUnits.ts'
 
 	const optionsStore = useOptionsStore()
 
@@ -27,7 +27,7 @@
 	const sequence = ref<Sequence>({
 		unit: {
 			name: t('polls', 'Week'),
-			value: 'week',
+			value: DateUnitValue.Week,
 		},
 		step: 1,
 		amount: 1,
