@@ -31,10 +31,10 @@
 
 <template>
 	<div class="vote-table" :class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
-		<div class="vote-table__users">
-			<VoteMenu />
-
-			<div class="spacer" />
+		<div class="vote-table__users sticky-left">
+			<div class="column-header">
+				<VoteMenu />
+			</div>
 
 			<div v-for="(participant) in pollStore.safeParticipants"
 				:key="participant.userId"
@@ -64,9 +64,11 @@
 </template>
 
 <style lang="scss">
+
 .vote-table {
 	display: flex;
 	flex: 1;
+	overflow-x: scroll;
 
 	.participant, .vote-item {
 		flex: 0 0 auto;
@@ -102,6 +104,13 @@
 		flex-direction: column;
 		padding-bottom: 4px;
 		align-items: flex-start;
+
+		&.sticky-left {
+			position: sticky;
+			left: 0;
+			z-index: 2;
+			background-color: var(--color-main-background);
+		}
 	}
 
 	.vote-table__votes {
@@ -178,13 +187,22 @@
 	}
 
 	&.table-view {
+		.column-header {
+			flex: 1;
+			flex-direction: column;
+			&.sticky-top {
+				position: sticky;
+				top: 78px;
+				background-color: var(--color-main-background);
+				padding-bottom: 4px;
+				z-index: 1;
+			}
+		}
+
 		.vote-table__users::after, .vote-column::after {
 			content: '';
 			height: 8px;
 			order: 99;
-		}
-		.vote-table__users {
-			overflow-x: scroll;
 		}
 
 		.participant {
@@ -219,6 +237,13 @@
 			border-left: none;
 			padding: 0;
 
+			.column-header {
+				flex-direction: row-reverse;
+				order: 1;
+				flex: 1;
+				justify-content: space-between;
+			}
+
 			&.locked {
 				background-color: var(--color-polls-background-no);
 			}
@@ -247,8 +272,8 @@
 
 		.owner {
 			order: 0;
-			flex: 1;
-			justify-content: flex-end;
+			flex: 0;
+			// justify-content: flex-end;
 		}
 
 		.counter {
