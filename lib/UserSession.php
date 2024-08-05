@@ -15,6 +15,7 @@ use OCA\Polls\Model\User\Cron;
 use OCA\Polls\Model\UserBase;
 use OCP\ISession;
 use OCP\IUserSession;
+use OCA\Polls\AppConstants;
 
 class UserSession {
 	/** @var string */
