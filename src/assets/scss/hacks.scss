@@ -10,7 +10,13 @@
 	height: var(--size);
 }
 
-// raltive position to be able to get sticky toolbar
+// h2 in notecard gets a margin-top of -6px instead of 24px for better alignment
+.notecard h2 {
+	margin-top: -6px;
+}
+
+
+// relative position to be able to get sticky toolbar
 .app-content {
 	position: relative !important;
 }
