@@ -42,21 +42,19 @@
 		label: t('polls', 'Edit Email Address'),
 	})
 
-	function validate() {
-		debounce(async function () {
-			if (shareStore.emailAddress === sessionStore.currentUser.emailAddress) {
-				setUnchanged(inputProps.value)
-				return
-			}
+	const validate = debounce(async function () {
+		if (shareStore.emailAddress === sessionStore.currentUser.emailAddress) {
+			setUnchanged(inputProps.value)
+			return
+		}
 
-			try {
-				await ValidatorAPI.validateEmailAddress(shareStore.emailAddress)
-				setSuccess(inputProps.value)
-			} catch {
-				setError(inputProps.value)
-			}
-		}, 500)()
-	}
+		try {
+			await ValidatorAPI.validateEmailAddress(shareStore.emailAddress)
+			setSuccess(inputProps.value)
+		} catch {
+			setError(inputProps.value)
+		}
+	}, 500)
 
 	async function submit() {
 		try {

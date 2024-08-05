@@ -43,26 +43,24 @@
 	})
 
 
-	function validate() {
-		debounce(async function () {
-			if (shareStore.displayName.length < 1) {
-				setError(inputProps.value)
-				return
-			}
+	const validate = debounce(async function () {
+		if (shareStore.displayName.length < 1) {
+			setError(inputProps.value)
+			return
+		}
 
-			if (shareStore.displayName === sessionStore.currentUser.displayName) {
-				setUnchanged(inputProps.value)
-				return
-			}
+		if (shareStore.displayName === sessionStore.currentUser.displayName) {
+			setUnchanged(inputProps.value)
+			return
+		}
 
-			try {
-				await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
-				setSuccess(inputProps.value)
-			} catch {
-				setError(inputProps.value)
-			}
-		})
-	}
+		try {
+			await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
+			setSuccess(inputProps.value)
+		} catch {
+			setError(inputProps.value)
+		}
+	}, 500)
 
 	async function submit() {
 		try {

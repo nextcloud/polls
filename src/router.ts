@@ -21,16 +21,15 @@ import Combo from './views/Combo.vue'
 import { usePollStore } from './stores/poll.ts'
 import { FilterType } from './stores/polls.ts'
 import { useSessionStore } from './stores/session.ts'
+import { useShareStore } from './stores/share.ts'
 
-/**
- * @param {RouteLocationNormalized} to Target route
- */
 async function validateToken(to: RouteLocationNormalized) {
 
 	if (getCurrentUser()) {
 		try {
 			const response = await PublicAPI.getShare(to.params.token)
-			// if the user is logged in, we diretly route to the internal vote page
+			// if the user is logged in, we diretly route to 
+			// the internal vote page
 			return {
 				name: 'vote',
 				params: {
@@ -49,33 +48,34 @@ async function validateToken(to: RouteLocationNormalized) {
 	try {
 		// first validate the existance of the public token
 		await PublicAPI.getShare(to.params.token)
-
-		// then look for an existing private token from the user's client stored cookie
-		// matching the public token
-		const privateToken = getCookieValue(to.params.token)
-		if (privateToken && privateToken !== to.params.token) {
-			// participant has already access to the poll and a private token
-			// extend expiry time for 30 days after successful access
-			const cookieExpiration = (30 * 24 * 60 * 1000)
-			setCookie(to.params.token, privateToken, cookieExpiration)
-
-			// reroute to the vote page with the private token
-			return {
-				name: 'publicVote',
-				params: {
-					token: privateToken
-				}
-			}
-		}
-
-		// if no private token is found, load the poll
-		const pollStore = usePollStore()
-		await pollStore.load()
-
 	} catch (error) {
 		// in case of an error, reroute to the login page
 		window.location.replace(generateUrl('login'))
 	}
+
+	// then look for an existing personal token from 
+	// the user's client stored cookie
+	// matching the public token
+	const personalToken = getCookieValue(<string>to.params.token)
+
+	if (personalToken && personalToken !== to.params.token) {
+		// participant has already access to the poll and a private token
+		// extend expiry time for 30 days after successful access
+		const cookieExpiration = (30 * 24 * 60 * 1000)
+		setCookie(<string>to.params.token, personalToken, cookieExpiration)
+
+		// reroute to the public vote page using the personal token
+		return {
+			name: 'publicVote',
+			params: {
+				token: personalToken
+			}
+		}
+	}
+
+	// if no private token is found, load the poll
+	const pollStore = usePollStore()
+	await pollStore.load()
 }
 
 const routes: RouteRecordRaw[] = [
@@ -89,6 +89,7 @@ const routes: RouteRecordRaw[] = [
 		name: 'list',
 		meta: {
 			publicPage: false,
+			votePage: false,
 		}
 	},
 	{
@@ -100,6 +101,7 @@ const routes: RouteRecordRaw[] = [
 		name: 'administration',
 		meta: {
 			publicPage: false,
+			votePage: false,
 		}
 	},
 	{
@@ -112,6 +114,7 @@ const routes: RouteRecordRaw[] = [
 		name: 'combo',
 		meta: {
 			publicPage: false,
+			votePage: false,
 		}
 	},
 	{
@@ -123,6 +126,7 @@ const routes: RouteRecordRaw[] = [
 		name: 'notfound',
 		meta: {
 			publicPage: false,
+			votePage: false,
 		}
 	},
 	{
@@ -136,6 +140,7 @@ const routes: RouteRecordRaw[] = [
 		name: 'vote',
 		meta: {
 			publicPage: false,
+			votePage: true,
 		}
 	},
 	{
@@ -149,6 +154,7 @@ const routes: RouteRecordRaw[] = [
 		name: 'publicVote',
 		meta: {
 			publicPage: true,
+			votePage: true,
 		}
 	},
 	{
@@ -162,6 +168,7 @@ const routes: RouteRecordRaw[] = [
 		name: 'root',
 		meta: {
 			publicPage: false,
+			votePage: false,
 		}
 
 	},
@@ -187,19 +194,25 @@ const router = createRouter({
 
 router.beforeEach(async (to: RouteLocationNormalized) => {
 	const sessionStore = useSessionStore()
+	const shareStore = useShareStore()
+	const pollStore = usePollStore()
 	sessionStore.setRouter(to)
 	try {
-		loadContext(to)
+		await loadContext(to)
 	} catch (error) {
 		Logger.error('Could not load context')
 		return false
 	}
 
 	try {
-		if (to.name === 'vote') {
-			const pollStore = usePollStore()
+		if (to.meta.publicPage) {
+			await shareStore.load()
+		}
+
+		if (to.meta.votePage) {
 			await pollStore.load()
 		}
+	
 	} catch (error) {
 		Logger.warn('Could not load poll', error)
 		return {

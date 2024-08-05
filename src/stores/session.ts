@@ -153,7 +153,7 @@ export const useSessionStore = defineStore('session', {
 			let response = null
 			try {
 				if (this.route.name === 'publicVote') {
-					response = await PublicAPI.getSession(this.router.params.token)
+					response = await PublicAPI.getSession(this.route.params.token)
 				} else {
 					response = await SessionAPI.getSession()
 				}

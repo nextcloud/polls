@@ -14,7 +14,6 @@
 
 	const optionsStore = useOptionsStore()
 
-
 	const props = defineProps({
 		option: {
 			type: Object as PropType<Option>,
@@ -35,9 +34,6 @@
 
 	const dateBaseOptionString = computed(() => moment.unix(props.option.timestamp).format('LLLL'))
 
-	/**
-	 *
-	 */
 	function createSequence() {
 		optionsStore.sequence({
 			option: props.option,

@@ -37,6 +37,7 @@
 			class="comment-add__input"
 			:placeholder="t('polls', 'New comment …')"
 			submit
+			@submit="writeComment()"
 			@change="writeComment()" />
 	</div>
 </template>

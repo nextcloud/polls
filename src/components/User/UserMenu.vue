@@ -32,17 +32,23 @@
 	const route = useRoute()
 	const router = useRouter()
 
-	const hasCookie = !!findCookieByValue(route.params.token)
-	const personalLink = window.location.origin
+	const hasCookie = !!findCookieByValue(<string>route.params.token)
+
+	const personalLink = route.meta.publicPage ? window.location.origin
 		+ router.resolve({
 			name: 'publicVote',
 			params: { token: route.params.token },
-		}).href
+		}).href : ''
 
 	function logout() {
-		const reRouteTo = deleteCookieByValue(route.params.token)
+		const reRouteTo = deleteCookieByValue(<string>route.params.token)
 		if (reRouteTo) {
-			router.push({ name: 'publicVote', params: { token: reRouteTo } })
+			router.push({
+				name: 'publicVote',
+				params: {
+					token: reRouteTo,
+				},
+			})
 		}
 	}
 
@@ -104,7 +110,7 @@
 		<template #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
-		<NcActionButton v-if="$route.name === 'publicVote'"
+		<NcActionButton v-if="route.name === 'publicVote'"
 			:name="t('polls', 'Copy your personal link to clipboard')"
 			:aria-label="t('polls', 'Copy your personal link to clipboard')"
 			@click="copyLink()">
@@ -112,10 +118,10 @@
 				<ClippyIcon />
 			</template>
 		</NcActionButton>
-		<NcActionSeparator v-if="$route.name === 'publicVote'" />
-		<ActionInputEmailAddress v-if="$route.name === 'publicVote'" />
-		<ActionInputDisplayName v-if="$route.name === 'publicVote' && pollStore.permissions.vote" />
-		<NcActionButton v-if="$route.name === 'publicVote'"
+		<NcActionSeparator v-if="route.name === 'publicVote'" />
+		<ActionInputEmailAddress v-if="route.name === 'publicVote'" />
+		<ActionInputDisplayName v-if="route.name === 'publicVote' && pollStore.permissions.vote" />
+		<NcActionButton v-if="route.name === 'publicVote'"
 			:name="t('polls', 'Get your personal link per mail')"
 			:aria-label="t('polls', 'Get your personal link per mail')"
 			:disabled="!shareStore.user.emailAddress"
@@ -130,7 +136,7 @@
 			@change="toggleSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
 		</NcActionCheckbox>
-		<NcActionButton v-if="$route.name === 'publicVote' && shareStore.user.emailAddress"
+		<NcActionButton v-if="route.name === 'publicVote' && shareStore.user.emailAddress"
 			:name="t('polls', 'Remove Email Address')"
 			:aria-label="t('polls', 'Remove Email Address')"
 			@click="deleteEmailAddress">
@@ -154,7 +160,7 @@
 				<ResetVotesIcon />
 			</template>
 		</NcActionButton>
-		<NcActionButton v-if="$route.name === 'publicVote' && hasCookie"
+		<NcActionButton v-if="route.name === 'publicVote' && hasCookie"
 			:name="t('polls', 'Logout as {name} (delete cookie)', { name: sessionStore.currentUser.displayName })"
 			:aria-label="t('polls', 'Logout as {name} (delete cookie)', { name: sessionStore.currentUser.displayName })"
 			@click="logout()">
