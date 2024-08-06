@@ -32,6 +32,7 @@ OC.L10N.register(
     "Preferences" : "การกำหนดลักษณะ",
     "Details" : "รายละเอียด",
     "Configuration" : "การกำหนดค่า",
+    "Options" : "ตัวเลือก",
     "Sharing" : "การแชร์",
     "Comments" : "ความคิดเห็น",
     "Activity" : "กิจกรรม",
