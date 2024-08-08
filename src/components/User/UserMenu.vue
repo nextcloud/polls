@@ -86,10 +86,10 @@
 
 	async function copyLink() {
 		const personalLink = window.location.origin
-		+ router.resolve({
-			name: 'publicVote',
-			params: { token: sessionStore.publicToken },
-		}).href
+			+ router.resolve({
+				name: 'publicVote',
+				params: { token: sessionStore.publicToken },
+			}).href
 
 		try {
 			await navigator.clipboard.writeText(personalLink)
