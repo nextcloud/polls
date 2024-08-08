@@ -6,7 +6,7 @@
 export { Activity, Activities } from '../stores/activity.ts'
 export { UpdateType, Group, AppSettings } from '../stores/appSettings.ts'
 export { Subscription } from '../stores/subscription.ts'
-export { Combo, Participant } from '../stores/combo.ts'
+export { Combo } from '../stores/combo.ts'
 export { Comment, Comments, CommentsGrouped } from '../stores/comments.ts'
 export { Poll, PollType, AccessType, ShowResults, AllowProposals, PollConfiguration, PollStatus, PollPermissions, CurrentUserStatus } from '../stores/poll.ts'
 export { SortType, FilterType, PollCategory, Meta, PollList } from '../stores/polls.ts'
@@ -23,6 +23,7 @@ export enum StatusResults {
 	Success = 'success',
 	Loading = 'loading',
 	Loaded = 'loaded',
+	Unchanged = 'unchanged',
 }
 
 export enum SignalingType {
@@ -95,3 +96,11 @@ export type User = {
 	timeZone: string
 	categories: string[]
 }
+
+export type Participant = {
+	userId: string
+	displayName: string
+	pollId: number
+	user: User
+}
+

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, defineEmits, defineModel, defineProps, PropType } from 'vue'
+	import { computed, PropType } from 'vue'
 	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 	export type CheckboxOption = {

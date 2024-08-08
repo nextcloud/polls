@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 	import { useRoute } from 'vue-router'
-	import { defineEmits, ref } from 'vue'
+	import { ref } from 'vue'
 	import { NcButton, NcModal } from '@nextcloud/vue'
 	import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 	import { PollsAPI } from '../../../Api/index.js'

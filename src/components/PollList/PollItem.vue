@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 	import { RouterLink } from 'vue-router'
-	import { computed, defineProps, defineEmits, withDefaults } from 'vue'
+	import { computed } from 'vue'
 	import moment from '@nextcloud/moment'
 	import { BadgeDiv } from '../Base/index.js'
 	import { t } from '@nextcloud/l10n'

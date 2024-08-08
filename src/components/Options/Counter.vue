@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, PropType } from 'vue'
+	import { PropType } from 'vue'
 	import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
 	import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
 	import { Option } from '../../Types/index.ts'

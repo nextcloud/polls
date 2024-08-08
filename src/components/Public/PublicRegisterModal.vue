@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { ref, computed, onMounted, watch } from 'vue'
+	import { ref, computed, onMounted } from 'vue'
 	import { useRoute, useRouter } from 'vue-router'
 	import { debounce } from 'lodash'
 	import { showError } from '@nextcloud/dialogs'
@@ -15,11 +15,14 @@
 	import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
 	import { t } from '@nextcloud/l10n'
 	import { useShareStore } from '../../stores/share.ts'
+	import { SignalingType, UserType } from '../../Types'
 	import { useSessionStore } from '../../stores/session.ts'
 	import { usePollStore } from '../../stores/poll.ts'
 
 	const route = useRoute()
 	const router = useRouter()
+
+	const emit = defineEmits(['close'])
 
 	const shareStore = useShareStore()
 	const sessionStore = useSessionStore()
@@ -27,19 +30,20 @@
 
 	const COOKIE_LIFETIME = 30
 	const checkStatus = ref({
-		email: 'empty',
-		userName: 'empty',
+		email: SignalingType.Empty,
+		userName: SignalingType.Empty,
 	})
 
 	const sendRegistration = ref(false)
 	const userName = ref('')
 	const emailAddress = ref('')
-	const redirecting = ref(false)
 	const saveCookie = ref(true)
 
-	const registrationIsValid = computed(() => checkStatus.value.userName === 'valid' && (checkStatus.value.email === 'valid' || (emailAddress.value.length === 0 && shareStore.publicPollEmail !== 'mandatory')))
-	const disableSubmit = computed(() => !registrationIsValid.value || checkStatus.value.userName === 'checking' || sendRegistration.value)
-	const emailGeneratedStatus = computed(() => checkStatus.value.email === 'empty' ? shareStore.publicPollEmail : checkStatus.value.email)
+	const registrationIsValid = computed(() => checkStatus.value.userName === SignalingType.Valid && (checkStatus.value.email === SignalingType.Valid || (emailAddress.value.length === 0 && shareStore.publicPollEmail !== 'mandatory')))
+	const disableSubmit = computed(() => !registrationIsValid.value || checkStatus.value.userName === SignalingType.Checking || sendRegistration.value)
+	const emailGeneratedStatus = computed(() => checkStatus.value.email === SignalingType.Empty ? shareStore.publicPollEmail : checkStatus.value.email)
+	const offerCookies = computed(() => shareStore.user.type === UserType.Public)
+	const status = computed(() => registrationIsValid.value)
 
 	const privacyRich = computed(() => {
 		const subject = t('polls', 'By clicking the "OK" button you accept our {privacyPolicy}.')
@@ -97,21 +101,20 @@
 		}
 	})
 
-	/**
-	 *
-	 * @param {string} token - token of the poll
-	 */
-	function routeToPersonalShare(token) {
+	function routeToPersonalShare(token: string) {
 		if (route.params.token === token) {
 			// if share was not a public share, but a personal share
-			// (i.error. email shares allow to change personal data by fist entering of the poll),
+			// (i.e. email shares allow to change personal data by fist entering of the poll),
 			// just load the poll
 			pollStore.load()
 			closeModal()
 		} else {
 			// in case of a public share, redirect to the generated share
-			redirecting.value = true
-			router.replace({ name: 'publicVote', params: { token } })
+			router.push({
+				name: 'publicVote',
+				params: { token },
+				replace: true,
+			})
 			closeModal()
 		}
 	}
@@ -120,16 +123,16 @@
 	 *
 	 * @param {string} value - value to be stored in the cookie
 	 */
-	function updateCookie(value) {
+	function updateCookie(value: string) {
 		const cookieExpiration = (COOKIE_LIFETIME * 24 * 60 * 1000)
-		setCookie(route.params.token, value, cookieExpiration)
+		setCookie(<string>route.params.token, value, cookieExpiration)
 	}
 
 	/**
 	 *
 	 */
 	function closeModal() {
-		this.$emit('close')
+		emit('close')
 	}
 
 	/**
@@ -139,64 +142,54 @@
 		window.location.assign(`${window.location.protocol}//${window.location.host}${loginLink.value}`)
 	}
 
-	/**
-	 *
-	 */
-	function validatePublicUsername() {
-		debounce(async function() {
-			if (userName.value.length < 1) {
-				checkStatus.value.userName = 'empty'
+	const validatePublicUsername = debounce(async function () {
+		if (userName.value.length < 1) {
+			checkStatus.value.userName = SignalingType.Empty
+			return
+		}
+
+		checkStatus.value.userName = SignalingType.Checking
+		try {
+			await ValidatorAPI.validateName(route.params.token, userName.value)
+			checkStatus.value.userName = SignalingType.Valid
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			if (error?.code === 'ERR_BAD_REQUEST') {
+				checkStatus.value.userName = SignalingType.InValid
 				return
 			}
+			throw error
+		}
+	}, 500)
 
-			checkStatus.value.userName = 'checking'
-			try {
-				await ValidatorAPI.validateName(route.params.token, userName.value)
-				checkStatus.value.userName = 'valid'
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				if (error?.code === 'ERR_BAD_REQUEST') {
-					checkStatus.value.userName = 'invalid'
-					return
-				}
-				throw error
-			}
-		}, 500)
-	}
+	const validateEmailAddress = debounce(async function() {
+		if (emailAddress.value.length < 1) {
+			checkStatus.value.email = SignalingType.Empty
+			return
+		}
 
-	/**
-	 *
-	 */
-	function validateEmailAddress() {
-		debounce(async function() {
-			if (emailAddress.value.length < 1) {
-				checkStatus.value.email = 'empty'
+		checkStatus.value.email = SignalingType.Checking
+		try {
+			await ValidatorAPI.validateEmailAddress(emailAddress.value)
+			checkStatus.value.email = SignalingType.Valid
+		} catch (error) {
+			if (error?.code === 'ERR_CANCELED') return
+			if (error?.code === 'ERR_BAD_REQUEST') {
+				checkStatus.value.email = SignalingType.InValid
 				return
 			}
-
-			checkStatus.value.email = 'checking'
-			try {
-				await ValidatorAPI.validateEmailAddress(emailAddress.value)
-				checkStatus.value.email = 'valid'
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				if (error?.code === 'ERR_BAD_REQUEST') {
-					checkStatus.value.email = 'invalid'
-					return
-				}
-				throw error
-			}
-		}, 500)
-	}
+			throw error
+		}
+	}, 500)
 
 	/**
 	 *
 	 */
 	async function submitRegistration() {
-		if (!registrationIsValid.value || sendRegistration) {
+		if (!registrationIsValid.value || sendRegistration.value) {
 			return
 		}
-
+		
 		sendRegistration.value = true
 
 		try {
@@ -207,10 +200,10 @@
 			)
 
 			if (saveCookie.value && route.name === 'publicVote') {
-				updateCookie(response.data.shareStore.token)
+				updateCookie(response.data.share.token)
 			}
 
-			routeToPersonalShare(response.data.shareStore.token)
+			routeToPersonalShare(response.data.share.token)
 
 			if (shareStore.user.emailAddress && !shareStore.invitationSent) {
 				showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress }))
@@ -220,17 +213,9 @@
 			showError(t('polls', 'Error registering to poll', { error }))
 			throw error
 		} finally {
-			this.sendRegistration = false
+			sendRegistration.value = false
 		}
 	}
-
-	watch(userName, () => {
-		validatePublicUsername()
-	})
-
-	watch(emailAddress, () => {
-		validateEmailAddress()
-	})
 </script>
 
 <template>
@@ -244,7 +229,8 @@
 					:placeholder="t('polls', 'Enter your name or a nickname')"
 					:helper-text="userNameHint"
 					focus
-					@change="submitRegistration" />
+					@input="validatePublicUsername()"
+					@submit="submitRegistration()" />
 
 				<InputDiv v-if="shareStore.publicPollEmail !== 'disabled'"
 					v-model="emailAddress"
@@ -254,9 +240,10 @@
 					:helper-text="emailAddressHint"
 					type="email"
 					inputmode="email"
-					@change="submitRegistration" />
+					@input="validateEmailAddress()"
+					@submit="submitRegistration()" />
 
-				<NcCheckboxRadioSwitch v-if="shareStore.user.type === 'public'" v-model="saveCookie">
+				<NcCheckboxRadioSwitch v-if="offerCookies" v-model="saveCookie">
 					{{ t('polls', 'Remember me for 30 days') }}
 				</NcCheckboxRadioSwitch>
 
@@ -287,6 +274,7 @@
 						</NcButton>
 					</div>
 				</div>
+				<div> {{ status }}</div>
 			</div>
 
 			<div v-if="sessionStore.appSettings.showLogin" class="registration__login">

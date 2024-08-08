@@ -48,7 +48,6 @@ export const useVotesStore = defineStore('votes', {
 
 	getters: {
 		hasVotes: (state) => state.list.length > 0,
-	
 	},
 
 	actions: {

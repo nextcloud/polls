@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, defineProps, PropType } from 'vue'
+	import { computed, PropType } from 'vue'
 	import { ActionDelete } from '../Actions/index.js'
 	import UserItem from '../User/UserItem.vue'
 	import { t } from '@nextcloud/l10n'

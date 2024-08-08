@@ -41,7 +41,6 @@
 			inputmode="url"
 			:label="t('polls', 'Legal terms link:')"
 			:placeholder="placeholder.imprint"
-			@option:selected="appSettingsStore.write()"
 			@change="appSettingsStore.write()" />
 	</div>
 </template>

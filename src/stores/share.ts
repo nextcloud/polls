@@ -70,7 +70,7 @@ export const useShareStore = defineStore('share', {
 	}),
 
 	actions: {
-		async load() {
+		async load(): Promise<void> {
 			const sessionStore = useSessionStore()
 			if (sessionStore.route.name !== 'publicVote') {
 				this.$reset()
@@ -88,7 +88,7 @@ export const useShareStore = defineStore('share', {
 			}
 		},
 	
-		async updateEmailAddress(payload) {
+		async updateEmailAddress(payload: { emailAddress: string }): Promise<void> {
 			const pollStore = usePollStore()
 			const sessionStore = useSessionStore()
 
@@ -108,7 +108,7 @@ export const useShareStore = defineStore('share', {
 			}
 		},
 	
-		async updateDisplayName(payload) {
+		async updateDisplayName(payload: { displayName: string }): Promise<void> {
 			const pollStore = usePollStore()
 			const commentsStore = useCommentsStore()
 			const votesStore = useVotesStore()
@@ -134,7 +134,7 @@ export const useShareStore = defineStore('share', {
 			}
 		},
 	
-		async deleteEmailAddress() {
+		async deleteEmailAddress(): Promise<void>{
 			const pollStore = usePollStore()
 			const subscriptionStore = useSubscriptionStore()
 			const sessionStore = useSessionStore()

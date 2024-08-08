@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, defineEmits, PropType } from 'vue'
+	import { PropType } from 'vue'
 	import { NcActionButton, NcAppNavigationItem } from '@nextcloud/vue'
 	import { t } from '@nextcloud/l10n'
 

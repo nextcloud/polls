@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineEmits, ref } from 'vue'
+	import { ref } from 'vue'
 	import { CardDiv } from '../../Base/index.js'
 	import ActionSendConfirmed from '../../Actions/modules/ActionSendConfirmed.vue'
 	import { t } from '@nextcloud/l10n'

@@ -10,12 +10,14 @@
 	const observer = ref(null)
 
 	const observerTarget = ref<Element>(null)
+	const emit = defineEmits(['visible'])
 
 	onMounted(() => {
 		const observer = new IntersectionObserver((entries) => {
 			entries.forEach((entry) => {
 				if (entry.isIntersecting) {
 					inViewport.value = true
+					emit('visible')
 				} else {
 					inViewport.value = false
 				}

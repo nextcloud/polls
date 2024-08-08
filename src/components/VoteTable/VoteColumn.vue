@@ -4,11 +4,10 @@
 -->
 
 <script setup lang="ts">
-	import { computed, defineProps, PropType } from 'vue'
+	import { computed, PropType } from 'vue'
 	import { NcButton } from '@nextcloud/vue'
 	import Counter from '../Options/Counter.vue'
 	import OptionItem from '../Options/OptionItem.vue'
-	import { FlexSpacer } from '../Base/index.js'
 	import VoteItem from './VoteItem.vue'
 	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
@@ -17,7 +16,7 @@
 	import { t } from '@nextcloud/l10n'
 	import { getCurrentUser } from '@nextcloud/auth'
 	import { usePollStore, PollType } from '../../stores/poll.ts'
-	import { usePreferencesStore, ViewMode } from '../../stores/preferences.ts'
+	import { usePreferencesStore } from '../../stores/preferences.ts'
 	import { useOptionsStore, Option } from '../../stores/options.ts'
 	import { BoxType } from '../../Types/index.ts'
 
@@ -29,13 +28,6 @@
 		option: {
 			type: Object as PropType<Option>,
 			default: undefined,
-		},
-		viewMode: {
-			type: String as PropType<ViewMode>,
-			default: ViewMode.TableView,
-			validator(value: ViewMode) {
-				return [ViewMode.ListView, ViewMode.TableView].includes(value)
-			},
 		},
 	})
 
@@ -63,15 +55,17 @@
 
 <template>
 	<div :class="componentClass">
-		<OptionItem :option="option" :poll-type="pollStore.type" :display="pollStore.type === PollType.Date ? BoxType.Date : BoxType.Text" />
-
-		<Counter v-if="pollStore.permissions.seeResults"
-			:show-maybe="pollStore.configuration.allowMaybe"
-			:option="option" />
-
-		<CalendarPeek v-if="showCalendarPeek"
-			:focus-trap="false"
-			:option="option" />
+		<div class="column-header">
+			<OptionItem :option="option" :poll-type="pollStore.type" :display="pollStore.type === PollType.Date ? BoxType.Date : BoxType.Text" />
+	
+			<Counter v-if="pollStore.permissions.seeResults"
+				:show-maybe="pollStore.configuration.allowMaybe"
+				:option="option" />
+	
+			<CalendarPeek v-if="showCalendarPeek"
+				:focus-trap="false"
+				:option="option" />
+		</div>
 
 		<VoteItem v-for="(participant) in pollStore.safeParticipants"
 			:key="participant.userId"
@@ -83,7 +77,7 @@
 			:avatar-size="24"
 			class="owner" />
 
-		<FlexSpacer v-if="pollStore.type === PollType.Date && viewMode === ViewMode.ListView" />
+		<!-- <FlexSpacer v-if="pollStore.type === PollType.Date && viewMode === ViewMode.ListView" /> -->
 
 		<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="action confirm">
 			<NcButton :title="confirmButtonCaption"
@@ -100,6 +94,7 @@
 </template>
 
 <style lang="scss">
+
 .vote-style-beta-510 .vote-column {
 	border-radius: var(--border-radius-large);
 

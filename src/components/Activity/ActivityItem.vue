@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, defineProps } from 'vue'
+	import { computed } from 'vue'
 	import moment from '@nextcloud/moment'
 	import { NcUserBubble, NcRichText } from '@nextcloud/vue'
 	import { GuestBubble, SimpleLink } from '../../helpers/index.ts'

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, defineEmits, computed } from 'vue'
+	import { computed } from 'vue'
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
 	import CloseIcon from 'vue-material-design-icons/Close.vue'
 	import { MaybeIcon } from '../AppIcons/index.js'

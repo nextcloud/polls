@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, computed, PropType } from 'vue'
+	import { computed, PropType } from 'vue'
 	import moment from '@nextcloud/moment'
 	import linkifyStr from 'linkify-string'
 	import DragIcon from 'vue-material-design-icons/DragHorizontalVariant.vue'
