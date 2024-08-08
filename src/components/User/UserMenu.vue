@@ -4,44 +4,53 @@
 -->
 
 <script setup lang="ts">
-	import { useRouter, useRoute } from 'vue-router'
+	import { ref } from 'vue'
+	import { useRouter } from 'vue-router'
+	import { debounce } from 'lodash'
+
 	import { showSuccess, showError } from '@nextcloud/dialogs'
-	import { NcActions, NcActionButton, NcActionCheckbox, NcActionSeparator } from '@nextcloud/vue'
+	import { NcActions, NcActionButton, NcActionCheckbox, NcActionInput, NcActionSeparator } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+
+	import { PollsAPI, ValidatorAPI } from '../../Api/index.js'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useShareStore } from '../../stores/share.ts'
+	import { useSubscriptionStore } from '../../stores/subscription.ts'
+	import { useVotesStore } from '../../stores/votes.ts'
+
+	import { StatusResults } from '../../Types/index.ts'
+
+	import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
+	import { useSessionStore } from '../../stores/session.ts'
+
 	import SettingsIcon from 'vue-material-design-icons/Cog.vue'
 	import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
 	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 	import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
 	import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
+	import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 	import LogoutIcon from 'vue-material-design-icons/Logout.vue'
-	import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
-	import { PollsAPI } from '../../Api/index.js'
-	import { t } from '@nextcloud/l10n'
-	import { useSessionStore } from '../../stores/session.ts'
-	import { usePollStore } from '../../stores/poll.ts'
-	import { useShareStore } from '../../stores/share.ts'
-	import { useSubscriptionStore } from '../../stores/subscription.ts'
-	import { useVotesStore } from '../../stores/votes.ts'
-	import ActionInputDisplayName from './ActionInputDisplayName.vue'
-	import ActionInputEmailAddress from './ActionInputEmailAddress.vue'
+	import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
+
+
+	type InputProps = {
+		success: boolean
+		error: boolean
+		showTrailingButton: boolean
+		labelOutside: boolean
+		label: string
+	}
 
 	const pollStore = usePollStore()
 	const sessionStore = useSessionStore()
 	const shareStore = useShareStore()
 	const subscriptionStore = useSubscriptionStore()
 	const votesStore = useVotesStore()
-	const route = useRoute()
 	const router = useRouter()
-
-	const hasCookie = !!findCookieByValue(<string>route.params.token)
-
-	const personalLink = route.meta.publicPage ? window.location.origin
-		+ router.resolve({
-			name: 'publicVote',
-			params: { token: route.params.token },
-		}).href : ''
+	const hasCookie = !!findCookieByValue(sessionStore.publicToken)
 
 	function logout() {
-		const reRouteTo = deleteCookieByValue(<string>route.params.token)
+		const reRouteTo = deleteCookieByValue(sessionStore.publicToken)
 		if (reRouteTo) {
 			router.push({
 				name: 'publicVote',
@@ -76,6 +85,12 @@
 	}
 
 	async function copyLink() {
+		const personalLink = window.location.origin
+		+ router.resolve({
+			name: 'publicVote',
+			params: { token: sessionStore.publicToken },
+		}).href
+
 		try {
 			await navigator.clipboard.writeText(personalLink)
 			showSuccess(t('polls', 'Link copied to clipboard'))
@@ -86,7 +101,7 @@
 
 	async function getAddresses() {
 		try {
-			const response = await PollsAPI.getParticipantsEmailAddresses(route.params.id)
+			const response = await PollsAPI.getParticipantsEmailAddresses(sessionStore.route.params.id)
 			await navigator.clipboard.writeText(response.data.map((item) => item.combined))
 			showSuccess(t('polls', 'Link copied to clipboard'))
 		} catch (error) {
@@ -103,6 +118,90 @@
 			showError(t('polls', 'Error while resetting votes'))
 		}
 	}
+
+	const displayNameInputProps = ref<InputProps>({
+		success: false,
+		error: false,
+		showTrailingButton: true,
+		labelOutside: false,
+		label: t('polls', 'Change name'),
+	})
+
+	const validateDisplayName = debounce(async function () {
+		if (shareStore.displayName.length < 1) {
+			setDisplayNameStatus(StatusResults.Error)
+			return
+		}
+
+		if (shareStore.displayName === sessionStore.currentUser.displayName) {
+			setDisplayNameStatus(StatusResults.Unchanged)
+			return
+		}
+
+		try {
+			await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
+			setDisplayNameStatus(StatusResults.Success)
+		} catch {
+			setDisplayNameStatus(StatusResults.Error)
+		}
+	}, 500)
+
+	function setDisplayNameStatus(status: StatusResults) {
+		displayNameInputProps.value.success = status === StatusResults.Success
+		displayNameInputProps.value.error = status === StatusResults.Error
+		displayNameInputProps.value.showTrailingButton = status === StatusResults.Success
+	}
+
+	async function submitDisplayName() {
+		try {
+			await shareStore.updateDisplayName({ displayName: shareStore.displayName })
+			showSuccess(t('polls', 'Name changed.'))
+			setDisplayNameStatus(StatusResults.Unchanged)
+		} catch {
+			showError(t('polls', 'Error changing name.'))
+			setDisplayNameStatus(StatusResults.Error)
+		}
+	}
+
+	const eMailInputProps = ref<InputProps>({
+		success: false,
+		error: false,
+		showTrailingButton: true,
+		labelOutside: false,
+		label: t('polls', 'Edit Email Address'),
+	})
+
+	const validateEMail = debounce(async function () {
+		if (shareStore.emailAddress === sessionStore.currentUser.emailAddress) {
+			setEMailStatus(StatusResults.Unchanged)
+			return
+		}
+
+		try {
+			await ValidatorAPI.validateEmailAddress(shareStore.emailAddress)
+			setEMailStatus(StatusResults.Success)
+		} catch {
+			setEMailStatus(StatusResults.Error)
+		}
+	}, 500)
+
+	function setEMailStatus(status: StatusResults) {
+		eMailInputProps.value.success = status === StatusResults.Success
+		eMailInputProps.value.error = status === StatusResults.Error
+		eMailInputProps.value.showTrailingButton = status === StatusResults.Success
+	}
+
+	async function submitEmail() {
+		try {
+			await shareStore.updateEmailAddress({ emailAddress: shareStore.emailAddress })
+			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: shareStore.emailAddress }))
+			setEMailStatus(StatusResults.Unchanged)
+		} catch {
+			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: shareStore.emailAddress }))
+			setEMailStatus(StatusResults.Error)
+		}
+	}
+
 </script>
 
 <template>
@@ -110,7 +209,8 @@
 		<template #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
-		<NcActionButton v-if="route.name === 'publicVote'"
+
+		<NcActionButton v-if="sessionStore.route.name === 'publicVote'"
 			:name="t('polls', 'Copy your personal link to clipboard')"
 			:aria-label="t('polls', 'Copy your personal link to clipboard')"
 			@click="copyLink()">
@@ -118,10 +218,32 @@
 				<ClippyIcon />
 			</template>
 		</NcActionButton>
-		<NcActionSeparator v-if="route.name === 'publicVote'" />
-		<ActionInputEmailAddress v-if="route.name === 'publicVote'" />
-		<ActionInputDisplayName v-if="route.name === 'publicVote' && pollStore.permissions.vote" />
-		<NcActionButton v-if="route.name === 'publicVote'"
+
+		<NcActionSeparator v-if="sessionStore.route.name === 'publicVote'" />
+
+		<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
+			v-bind="displayNameInputProps"
+			v-model="shareStore.displayName"
+			@update:value-value="validateDisplayName"
+			@submit="submitDisplayName">
+			<template #icon>
+				<EditAccountIcon />
+			</template>
+			{{ displayNameInputProps.label }}
+		</NcActionInput>
+
+		<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
+			v-bind="eMailInputProps"
+			v-model="shareStore.emailAddress"
+			@update:model-value="validateEMail"
+			@submit="submitEmail">
+			<template #icon>
+				<EditEmailIcon />
+			</template>
+			{{ eMailInputProps.label }}
+		</NcActionInput>
+
+		<NcActionButton v-if="sessionStore.route.name === 'publicVote'"
 			:name="t('polls', 'Get your personal link per mail')"
 			:aria-label="t('polls', 'Get your personal link per mail')"
 			:disabled="!shareStore.user.emailAddress"
@@ -130,13 +252,15 @@
 				<SendLinkPerEmailIcon />
 			</template>
 		</NcActionButton>
+
 		<NcActionCheckbox :checked="subscriptionStore.subscribed"
 			:disabled="!pollStore.permissions.subscribe"
 			title="check"
 			@change="toggleSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
 		</NcActionCheckbox>
-		<NcActionButton v-if="route.name === 'publicVote' && shareStore.user.emailAddress"
+
+		<NcActionButton v-if="sessionStore.route.name === 'publicVote' && shareStore.user.emailAddress"
 			:name="t('polls', 'Remove Email Address')"
 			:aria-label="t('polls', 'Remove Email Address')"
 			@click="deleteEmailAddress">
@@ -144,6 +268,7 @@
 				<DeleteIcon />
 			</template>
 		</NcActionButton>
+
 		<NcActionButton v-if="pollStore.permissions.edit"
 			:name="t('polls', 'Copy list of email addresses to clipboard')"
 			:aria-label="t('polls', 'Copy list of email addresses to clipboard')"
@@ -152,6 +277,7 @@
 				<ClippyIcon />
 			</template>
 		</NcActionButton>
+
 		<NcActionButton v-if="pollStore.permissions.vote"
 			:name="t('polls', 'Reset your votes')"
 			:aria-label="t('polls', 'Reset your votes')"
@@ -160,7 +286,8 @@
 				<ResetVotesIcon />
 			</template>
 		</NcActionButton>
-		<NcActionButton v-if="route.name === 'publicVote' && hasCookie"
+
+		<NcActionButton v-if="sessionStore.route.name === 'publicVote' && hasCookie"
 			:name="t('polls', 'Logout as {name} (delete cookie)', { name: sessionStore.currentUser.displayName })"
 			:aria-label="t('polls', 'Logout as {name} (delete cookie)', { name: sessionStore.currentUser.displayName })"
 			@click="logout()">

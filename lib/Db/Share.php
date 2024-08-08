@@ -146,6 +146,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 			'invitationSent' => boolval($this->getInvitationSent()),
 			'reminderSent' => boolval($this->getReminderSent()),
 			'locked' => boolval($this->getDeleted() ? 0 : $this->getLocked()),
+			'displayName' => $this->getDisplayName(),
 			'label' => $this->getLabel(),
 			'URL' => $this->getURL(),
 			'publicPollEmail' => $this->getPublicPollEmail(),

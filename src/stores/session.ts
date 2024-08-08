@@ -41,6 +41,7 @@ export type Session = {
 	share: Share | null
 }
 
+const mobileBreakpoint = 480
 export const useSessionStore = defineStore('session', {
 	state: (): Session => ({
 		token: '',
@@ -123,14 +124,22 @@ export const useSessionStore = defineStore('session', {
 		},
 		share: null,
 	}),
+
 	getters: {
+		publicToken(state): string {
+			if (state.route.params.token) {
+				return state.route.params.token
+			}
+			return ''
+		},
+
 		viewTextPoll(state): ViewMode {
 			const preferencesStore = usePreferencesStore()
 			
 			if (state.sessionSettings.manualViewTextPoll) {
 				return state.sessionSettings.manualViewTextPoll
 			}
-			if (window.innerWidth > 480) {
+			if (window.innerWidth > mobileBreakpoint) {
 				return preferencesStore.user.defaultViewTextPoll
 			}
 			return ViewMode.ListView
@@ -141,7 +150,7 @@ export const useSessionStore = defineStore('session', {
 			if (state.sessionSettings.manualViewDatePoll) {
 				return state.sessionSettings.manualViewDatePoll
 			}
-			if (window.innerWidth > 480) {
+			if (window.innerWidth > mobileBreakpoint) {
 				return preferencesStore.user.defaultViewDatePoll
 			}
 			return ViewMode.ListView

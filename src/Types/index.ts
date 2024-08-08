@@ -23,6 +23,7 @@ export enum StatusResults {
 	Success = 'success',
 	Loading = 'loading',
 	Loaded = 'loaded',
+	Unchanged = 'unchanged',
 }
 
 export enum SignalingType {
