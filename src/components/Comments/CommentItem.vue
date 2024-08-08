@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, defineProps, PropType } from 'vue'
+	import { computed, PropType } from 'vue'
 	import moment from '@nextcloud/moment'
 	import linkifyStr from 'linkify-string'
 	import { showError } from '@nextcloud/dialogs'

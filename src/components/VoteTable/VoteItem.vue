@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 
-	import { defineProps, computed, withDefaults } from 'vue'
+	import { computed } from 'vue'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
 
 	import { useSessionStore } from '../../stores/session.ts'

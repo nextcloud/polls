@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, PropType } from 'vue'
+	import { PropType } from 'vue'
 	import VoteColumn from './VoteColumn.vue'
 	import UserItem from '../User/UserItem.vue'
 	import { useComboStore } from '../../stores/combo.ts'

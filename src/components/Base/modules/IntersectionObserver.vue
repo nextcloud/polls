@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineEmits, onBeforeUnmount, onMounted, ref } from 'vue'
+	import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 	const inViewport = ref(false)
 	const observer = ref(null)

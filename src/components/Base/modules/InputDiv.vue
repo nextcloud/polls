@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, onMounted, defineModel, PropType } from 'vue'
+	import { computed, onMounted, PropType } from 'vue'
 	import PlusIcon from 'vue-material-design-icons/Plus.vue'
 	import MinusIcon from 'vue-material-design-icons/Minus.vue'
 	import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'

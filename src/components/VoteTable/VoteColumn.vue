@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, defineProps, PropType } from 'vue'
+	import { computed, PropType } from 'vue'
 	import { NcButton } from '@nextcloud/vue'
 	import Counter from '../Options/Counter.vue'
 	import OptionItem from '../Options/OptionItem.vue'

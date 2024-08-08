@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, defineEmits, computed, ref, PropType } from 'vue'
+	import { computed, ref, PropType } from 'vue'
 	import moment from '@nextcloud/moment'
 	import { NcButton, NcSelect } from '@nextcloud/vue'
 	import { InputDiv } from '../Base/index.js'

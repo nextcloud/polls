@@ -6,7 +6,7 @@
 <script setup lang="ts">
 	import VoteIndicator from '../VoteTable/VoteIndicator.vue'
 	import { useComboStore } from '../../stores/combo.ts'
-	import { computed, defineProps, PropType } from 'vue'
+	import { computed, PropType } from 'vue'
 	import { Option, Poll, Answer, User } from '../../Types/index.ts'
 
 	const comboStore = useComboStore()
