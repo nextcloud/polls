@@ -20,8 +20,8 @@
     "stylelint:fix": "stylelint src --fix",
     "version": "node update-app-version.mjs && git add ./appinfo/info.xml",
     "build": "vite --mode production build",
-    "dev": "vite --mode development build",
-    "watch": "vite --mode development build --watch"
+    "dev": "set NODE_ENV=production && vite --mode development build",
+    "watch": "set NODE_ENV=production && vite --mode development build --watch"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
