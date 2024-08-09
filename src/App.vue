@@ -32,7 +32,10 @@
 	])
 
 	const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
-	const useSidebar = computed(() => pollStore.permissions.edit || pollStore.permissions.edit || sessionStore.route.name === 'combo')
+	const useSidebar = computed(() => pollStore.permissions.edit
+		|| pollStore.permissions.comment
+		|| sessionStore.route.name === 'combo'
+	)
 
 	/**
 	 * Turn off transitions
