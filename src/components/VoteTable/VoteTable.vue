@@ -52,7 +52,7 @@
 			<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="confirm" />
 		</div>
 
-		<TransitionGroup is="div"
+		<TransitionGroup tag="div"
 			name="list"
 			class="vote-table__votes">
 			<VoteColumn v-for="(item) in optionsStore.rankedOptions"

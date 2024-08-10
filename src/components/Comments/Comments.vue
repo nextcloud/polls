@@ -17,7 +17,7 @@
 </script>
 
 <template>
-	<TransitionGroup is="ul"
+	<TransitionGroup tag="ul"
 		name="fade"
 		:class="['comments' , { 'alternativestyle': preferencesStore.user.useCommentsAlternativeStyling }]"
 		:style="cssVar">

@@ -52,7 +52,7 @@
 		<SharePublicAdd v-if="sessionStore.appPermissions.publicShares" />
 
 		<div v-if="sharesStore.active.length" class="shares-list shared">
-			<TransitionGroup is="div"
+			<TransitionGroup tag="div"
 				name="list"
 				:css="false">
 				<ShareItem v-for="(share) in sharesStore.active"

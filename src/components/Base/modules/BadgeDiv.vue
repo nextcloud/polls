@@ -4,7 +4,6 @@
 -->
 
 <script setup lang="ts">
-
 	defineProps({
 		tag: {
 			type: String,

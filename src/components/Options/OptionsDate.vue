@@ -44,8 +44,8 @@
 
 <template>
 	<div :style="cssVar">
-		<TransitionGroup is="ul"
-			v-if="optionsStore.list.length"
+		<TransitionGroup v-if="optionsStore.list.length"
+			tag="ul"
 			name="list">
 			<OptionItem v-for="(option) in optionsStore.list"
 				:key="option.id"
