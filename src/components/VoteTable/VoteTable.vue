@@ -300,10 +300,6 @@
 		.option-item {
 			flex-direction: row;
 			padding: 8px 4px;
-			&.date-box {
-				flex: 0;
-				align-items: baseline;
-			}
 		}
 
 		.vote-item.currentuser {

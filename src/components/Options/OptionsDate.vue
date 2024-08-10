@@ -28,7 +28,7 @@
 	const optionsStore = useOptionsStore()
 
 	const cloneModal = ref(false)
-	const optionToClone = ref({})
+	const optionToClone = ref<Option>(null)
 	const pollType = ref(PollType.Date)
 
 	const cssVar = {
@@ -50,7 +50,6 @@
 			<OptionItem v-for="(option) in optionsStore.list"
 				:key="option.id"
 				:option="option"
-				:show-confirmed="true"
 				:poll-type="pollType"
 				:display="BoxType.Date"
 				tag="li">
