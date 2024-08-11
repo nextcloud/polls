@@ -11,7 +11,6 @@
 	import { usePollStore } from '../../stores/poll.ts'
 	import { useSessionStore } from '../../stores/session.ts'
 	import { useOptionsStore, Option } from '../../stores/options.ts'
-	import { UserType } from '../../Types/index.ts'
 
 	const pollStore = usePollStore()
 	const sessionStore = useSessionStore()
@@ -28,8 +27,7 @@
 		},
 	})
 
-	const showDelete = computed(() => !pollStore.permissions.edit && sessionStore.currentUser.userId === props.option.owner.userId)
-	const showOwner = computed(() => props.option.owner.type !== UserType.None && props.option.owner.userId !== pollStore.owner.userId)
+	const showDelete = computed(() => !pollStore.permissions.edit && sessionStore.currentUser.userId === props.option?.owner.userId)
 
 </script>
 
@@ -42,7 +40,7 @@
 			@restore="optionsStore.restore({ option: props.option })"
 			@delete="optionsStore.delete({ option: props.option })" />
 
-		<UserItem v-else-if="showOwner"
+		<UserItem v-else-if="props.option.owner"
 			:user="option.owner"
 			:icon-size="avatarSize"
 			hide-names

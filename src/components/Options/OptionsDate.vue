@@ -55,7 +55,7 @@
 				tag="li">
 				<template #icon>
 					<OptionItemOwner v-if="pollStore.permissions.addOptions"
-						:avatar-size="16"
+						:avatar-size="24"
 						:option="option"
 						class="owner" />
 				</template>
