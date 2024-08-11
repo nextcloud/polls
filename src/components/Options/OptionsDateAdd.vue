@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, defineProps, ref, watch } from 'vue'
+	import { computed, ref, watch } from 'vue'
 	import { showError, showSuccess } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 	import moment from '@nextcloud/moment'

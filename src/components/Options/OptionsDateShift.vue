@@ -9,7 +9,7 @@
 	import { NcButton, NcSelect } from '@nextcloud/vue'
 
 	import { InputDiv } from '../Base/index.js'
-	import { dateUnits } from '../../constants/dateUnits.ts'
+	import { dateUnits, DateUnitValue } from '../../constants/dateUnits.ts'
 	import { useOptionsStore, Shift } from '../../stores/options.ts'
 
 	import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
@@ -18,7 +18,7 @@
 
 	const shift = ref<Shift>({
 		step: 1,
-		unit: { name: t('polls', 'Week'), value: 'week' },
+		unit: { name: t('polls', 'Week'), value: DateUnitValue.Week },
 	})
 
 	function shiftDates(shift: Shift) {

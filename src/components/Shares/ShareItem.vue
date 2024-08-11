@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, defineEmits, ref, computed, onMounted, PropType } from 'vue'
+	import { ref, computed, onMounted, PropType } from 'vue'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 	import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'

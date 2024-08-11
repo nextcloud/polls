@@ -8,20 +8,22 @@
 		transition: all 0.5s ease;
 	}
 
-	.list-enter,
+	.list-enter-from,
 	.list-leave-to {
 		opacity: 0;
 	}
 
 	.list-move {
-		transition: transform 0.5s;
+		transition: transform 0.5s ease;
 	}
+}
 
-	.fade-leave-active .fade-enter-active{
-		transition: opacity 0.5s;
-	}
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 0.5s ease;
+}
 
-	.fade-enter, .fade-leave-to {
-		opacity: 0;
-	}
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
 }

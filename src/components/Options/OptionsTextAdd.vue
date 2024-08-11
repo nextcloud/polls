@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, ref } from 'vue'
+	import { ref } from 'vue'
 	import { showError, showSuccess } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 
@@ -44,7 +44,7 @@
 	<InputDiv v-model="newPollText"
 		:placeholder="props.placeholder"
 		submit
-		@change="addOption()" />
+		@submit="addOption()" />
 </template>
 
 <style lang="scss">

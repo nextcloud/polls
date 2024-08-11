@@ -8,7 +8,7 @@
  * @param {string} cookieValue Cookie value
  * @param {number} cookieExpiration expiration from now in seconds
  */
-const setCookie = (cookieName, cookieValue = '', cookieExpiration = 360) => {
+const setCookie = (cookieName: string, cookieValue: string = '', cookieExpiration: number = 360) => {
 	const expirationTime = (new Date())
 	expirationTime.setTime(expirationTime.getTime() + cookieExpiration)
 	document.cookie = `${cookieName}=${cookieValue};expires=${expirationTime.toUTCString()};path=/`
@@ -18,18 +18,18 @@ const setCookie = (cookieName, cookieValue = '', cookieExpiration = 360) => {
  * @param {string} cookieName Cookie name to read
  * @return {string} Cookie string ('name=value')
  */
-const findCookie = (cookieName) => document.cookie.split(';').find((cookie) => cookie.split('=')[0] === cookieName)
+const findCookie = (cookieName: string): string => document.cookie.split(';').find((cookie) => cookie.split('=')[0] === cookieName)
 
 /**
  * @param {string} searchValue Cookie value to search for
  * @return {string} Cookie string ('name=value')
  */
-const findCookieByValue = (searchValue) => document.cookie.split(';').find((cookie) => cookie.split('=')[1] === searchValue)
+const findCookieByValue = (searchValue: string): string => document.cookie.split(';').find((cookie) => cookie.split('=')[1] === searchValue)
 
 /**
  * @param {string} cookieName Cookie name to delete
  */
-const deleteCookie = (cookieName) => {
+const deleteCookie = (cookieName: string): void => {
 	setCookie(cookieName, 'deleted', -100)
 }
 
@@ -39,7 +39,7 @@ const deleteCookie = (cookieName) => {
  * @param {string} cookieName Cookie name to read
  * @return {string} Value of the found cookie
  */
-const getCookieValue = (cookieName) => {
+const getCookieValue = (cookieName: string): string => {
 	const cookie = findCookie(cookieName)
 	if (cookie) {
 		return cookie.split('=')[1]
@@ -50,7 +50,7 @@ const getCookieValue = (cookieName) => {
 /**
  * @param {string} searchValue Cookie value to search for
  */
-const deleteCookieByValue = (searchValue) => {
+const deleteCookieByValue = (searchValue: string): string | void => {
 	const [cookieName, cookieValue] = findCookieByValue(searchValue).split('=')
 
 	if (cookieValue === searchValue) {

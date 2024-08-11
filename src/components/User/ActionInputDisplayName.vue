@@ -13,28 +13,20 @@
 	import { useSessionStore } from '../../stores/session.ts'
 	import { useShareStore } from '../../stores/share.ts'
 	import { ref } from 'vue'
+	import { StatusResults } from '../../Types/index.ts'
+
+	type InputProps = {
+		success: boolean
+		error: boolean
+		showTrailingButton: boolean
+		labelOutside: boolean
+		label: string
+	}
 
 	const sessionStore = useSessionStore()
 	const shareStore = useShareStore()
 
-	const setError = (inputProps) => {
-		inputProps.success = false
-		inputProps.error = true
-		inputProps.showTrailingButton = false
-	}
-
-	const setSuccess = (inputProps) => {
-		inputProps.success = true
-		inputProps.error = false
-		inputProps.showTrailingButton = true
-	}
-	const setUnchanged = (inputProps) => {
-		inputProps.success = false
-		inputProps.error = false
-		inputProps.showTrailingButton = false
-	}
-
-	const inputProps = ref({
+	const inputProps = ref<InputProps>({
 		success: false,
 		error: false,
 		showTrailingButton: true,
@@ -43,42 +35,46 @@
 	})
 
 
-	function validate() {
-		debounce(async function () {
-			if (shareStore.displayName.length < 1) {
-				setError(inputProps.value)
-				return
-			}
-
-			if (shareStore.displayName === sessionStore.currentUser.displayName) {
-				setUnchanged(inputProps.value)
-				return
-			}
-
-			try {
-				await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
-				setSuccess(inputProps.value)
-			} catch {
-				setError(inputProps.value)
-			}
-		})
+	function setStatus(status: StatusResults) {
+		inputProps.value.success = status === StatusResults.Success
+		inputProps.value.error = status === StatusResults.Error
+		inputProps.value.showTrailingButton = status === StatusResults.Success
 	}
+
+	const validate = debounce(async function () {
+		if (shareStore.displayName.length < 1) {
+			setStatus(StatusResults.Unchanged)
+			return
+		}
+
+		if (shareStore.displayName === sessionStore.currentUser.displayName) {
+			setStatus(StatusResults.Error)
+			return
+		}
+
+		try {
+			await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
+			setStatus(StatusResults.Success)
+		} catch {
+			setStatus(StatusResults.Error)
+		}
+	}, 500)
 
 	async function submit() {
 		try {
 			await shareStore.updateDisplayName({ displayName: shareStore.displayName })
 			showSuccess(t('polls', 'Name changed.'))
-			setUnchanged(inputProps.value)
+			setStatus(StatusResults.Unchanged)
 		} catch {
 			showError(t('polls', 'Error changing name.'))
-			setError(inputProps.value)
+			setStatus(StatusResults.Error)
 		}
 	}
 
 </script>
 
 <template>
-	<NcActionInput v-if="$route.name === 'publicVote'"
+	<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
 		v-bind="inputProps"
 		v-model="shareStore.displayName"
 		@update:value-value="validate"

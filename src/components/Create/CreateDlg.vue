@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { ref, computed, defineEmits } from 'vue'
+	import { ref, computed } from 'vue'
 	import { useRouter } from 'vue-router'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
 	import { NcButton } from '@nextcloud/vue'

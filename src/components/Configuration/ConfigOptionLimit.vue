@@ -44,6 +44,7 @@
 			inputmode="numeric"
 			:num-min="1"
 			use-num-modifiers
+			@submit="pollStore.write()"
 			@change="pollStore.write()" />
 
 		<NcCheckboxRadioSwitch v-if="pollStore.configuration.maxVotesPerOption"

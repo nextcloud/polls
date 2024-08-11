@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, onMounted, defineModel, PropType } from 'vue'
+	import { computed, onMounted, PropType } from 'vue'
 	import PlusIcon from 'vue-material-design-icons/Plus.vue'
 	import MinusIcon from 'vue-material-design-icons/Minus.vue'
 	import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
@@ -150,7 +150,7 @@
 		
 		if (model.value !== nextValue) {
 			model.value = nextValue
-			emit('change')
+			emit('submit')
 		}
 	}
 
@@ -163,7 +163,7 @@
 		
 		if (model.value !== nextValue) {
 			model.value = nextValue
-			emit('change')
+			emit('submit')
 		}
 	}
 
@@ -188,14 +188,14 @@
 				:inputmode="inputmode"
 				:placeholder="placeholder"
 				:class="[{ 'has-modifier': useNumModifiers, 'has-submit': submit }, computedSignalingClass]"
-				@input="$emit('input')"
-				@change="$emit('change')"
-				@keyup.enter="$emit('change')">
+				@input="emit('input')"
+				@change="emit('change')"
+				@keyup.enter="emit('submit')">
 
 			<Spinner v-if="checking" class="signaling-icon spinner" />
 			<AlertIcon v-else-if="error" class="signaling-icon error" />
 			<CheckIcon v-else-if="success" class="signaling-icon success" />
-			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="$emit('change')" />
+			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="emit('change')" />
 			<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="subtract()" />
 			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
 		</div>

@@ -28,7 +28,7 @@
 	const optionsStore = useOptionsStore()
 
 	const cloneModal = ref(false)
-	const optionToClone = ref({})
+	const optionToClone = ref<Option>(null)
 	const pollType = ref(PollType.Date)
 
 	const cssVar = {
@@ -44,13 +44,12 @@
 
 <template>
 	<div :style="cssVar">
-		<TransitionGroup is="ul"
-			v-if="optionsStore.list.length"
+		<TransitionGroup v-if="optionsStore.list.length"
+			tag="ul"
 			name="list">
-			<OptionItem v-for="(option) in optionsStore.list"
+			<OptionItem v-for="(option) in optionsStore.sortedOptions"
 				:key="option.id"
 				:option="option"
-				:show-confirmed="true"
 				:poll-type="pollType"
 				:display="BoxType.Date"
 				tag="li">

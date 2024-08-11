@@ -4,8 +4,6 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps } from 'vue'
-
 	defineProps({
 		tag: {
 			type: String,

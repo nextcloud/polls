@@ -4,7 +4,6 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps } from 'vue'
 	import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 
 	defineProps({

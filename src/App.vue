@@ -26,13 +26,16 @@
 	const loading = ref(false)
 
 	const appClass = computed(() => [
-		transitionClass, {
+		transitionClass.value, {
 			edit: pollStore.permissions.edit,
 		},
 	])
 
 	const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
-	const useSidebar = computed(() => pollStore.permissions.edit || pollStore.permissions.edit || sessionStore.route.name === 'combo')
+	const useSidebar = computed(() => pollStore.permissions.edit
+		|| pollStore.permissions.comment
+		|| sessionStore.route.name === 'combo'
+	)
 
 	/**
 	 * Turn off transitions

@@ -119,7 +119,7 @@
 		</HeaderBar>
 
 		<div class="area__main">
-			<TransitionGroup is="div" name="list" class="poll-list__list">
+			<TransitionGroup tag="div" name="list" class="poll-list__list">
 				<PollItem key="0"
 					:header="true"
 					:sort="sort"

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, defineProps, defineOptions, type PropType } from 'vue'
+	import { computed, type PropType } from 'vue'
 	import { useRoute } from 'vue-router'
 	import { getCurrentUser } from '@nextcloud/auth'
 	import { NcAvatar } from '@nextcloud/vue'

@@ -4,16 +4,15 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, defineEmits, computed, ref, PropType } from 'vue'
+	import { computed, ref, PropType } from 'vue'
 	import moment from '@nextcloud/moment'
 	import { NcButton, NcSelect } from '@nextcloud/vue'
 	import { InputDiv } from '../Base/index.js'
 	import { t } from '@nextcloud/l10n'
 	import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
-	import { dateUnits } from '../../constants/dateUnits.ts'
+	import { dateUnits, DateUnitValue } from '../../constants/dateUnits.ts'
 
 	const optionsStore = useOptionsStore()
-
 
 	const props = defineProps({
 		option: {
@@ -27,7 +26,7 @@
 	const sequence = ref<Sequence>({
 		unit: {
 			name: t('polls', 'Week'),
-			value: 'week',
+			value: DateUnitValue.Week,
 		},
 		step: 1,
 		amount: 1,
@@ -35,9 +34,6 @@
 
 	const dateBaseOptionString = computed(() => moment.unix(props.option.timestamp).format('LLLL'))
 
-	/**
-	 *
-	 */
 	function createSequence() {
 		optionsStore.sequence({
 			option: props.option,

@@ -25,7 +25,7 @@
 		<template #icon>
 			<LockedIcon />
 		</template>
-		<TransitionGroup is="div"
+		<TransitionGroup tag="div"
 			name="list"
 			:css="false"
 			class="shares-list">

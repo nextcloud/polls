@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 	import moment from '@nextcloud/moment'
-	import { computed, defineProps, PropType } from 'vue'
+	import { computed, PropType } from 'vue'
 	import { Option } from '../../Types/index.ts'
 
 	const props = defineProps(

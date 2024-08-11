@@ -30,7 +30,7 @@
 	const qrText = ref('')
 	const configBoxProps = {
 		sharesList: {
-			name: t('polls', 'Locked shares (read only access)'),
+			name: t('polls', 'Shares'),
 		},
 	}
 
@@ -52,7 +52,7 @@
 		<SharePublicAdd v-if="sessionStore.appPermissions.publicShares" />
 
 		<div v-if="sharesStore.active.length" class="shares-list shared">
-			<TransitionGroup is="div"
+			<TransitionGroup tag="div"
 				name="list"
 				:css="false">
 				<ShareItem v-for="(share) in sharesStore.active"

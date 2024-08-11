@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { defineProps, defineEmits, ref, computed } from 'vue'
+	import { ref, computed } from 'vue'
 	import { NcButton } from '@nextcloud/vue'
 	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'

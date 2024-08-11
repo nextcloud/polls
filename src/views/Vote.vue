@@ -89,9 +89,9 @@
 			</div>
 
 			<div class="area__main" :class="pollStore.viewMode">
-				<VoteTable v-show="optionsStore.rankedOptions.length" />
+				<VoteTable v-show="optionsStore.list.length" />
 
-				<NcEmptyContent v-if="!optionsStore.rankedOptions.length"
+				<NcEmptyContent v-if="!optionsStore.list.length"
 					v-bind="emptyContentProps">
 					<template #icon>
 						<TextPollIcon v-if="pollStore.type === PollType.Text" />
