@@ -125,7 +125,7 @@
 	 */
 	function updateCookie(value: string) {
 		const cookieExpiration = (COOKIE_LIFETIME * 24 * 60 * 1000)
-		setCookie(<string>route.params.token, value, cookieExpiration)
+		setCookie(route.params.token, value, cookieExpiration)
 	}
 
 	/**
