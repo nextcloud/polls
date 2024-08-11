@@ -32,14 +32,14 @@
 </script>
 
 <template>
-	<div class="info-section">
-		<CardUnpublishedPoll v-if="showUnpublishedPollCard" />
-		<CardAddProposals v-if="showAddProposalsCard" />
-		<CardLimitedVotes v-if="showLimitCard" />
-		<CardClosedPoll v-if="showClosedCard" />
-		<CardSendConfirmations v-if="showSendConfirmationsCard" />
-		<CardLocked v-if="pollStore.currentUserStatus.isLocked" />
-		<CardRegister v-if="showRegisterCard" />
-	</div>
+	<TransitionGroup class="info-section">
+		<CardUnpublishedPoll v-if="showUnpublishedPollCard" :key="0" />
+		<CardAddProposals v-if="showAddProposalsCard" :key="1" />
+		<CardLimitedVotes v-if="showLimitCard" :key="2" />
+		<CardClosedPoll v-if="showClosedCard" :key="3" />
+		<CardSendConfirmations v-if="showSendConfirmationsCard" :key="4" />
+		<CardLocked v-if="pollStore.currentUserStatus.isLocked" :key="5" />
+		<CardRegister v-if="showRegisterCard" :key="6" />
+	</TransitionGroup>
 </template>
 

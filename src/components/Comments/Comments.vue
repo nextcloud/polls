@@ -18,7 +18,7 @@
 
 <template>
 	<TransitionGroup tag="ul"
-		name="fade"
+		name="list"
 		:class="['comments' , { 'alternativestyle': preferencesStore.user.useCommentsAlternativeStyling }]"
 		:style="cssVar">
 		<CommentItem v-for="(comment) in commentsStore.groupedComments"

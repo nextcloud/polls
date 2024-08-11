@@ -12,7 +12,7 @@
 </script>
 
 <template>
-	<TransitionGroup name="fade"
+	<TransitionGroup name="list"
 		class="activities"
 		tag="ul">
 		<ActivityItem v-for="(item) in activityStore.list"

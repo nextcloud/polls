@@ -26,7 +26,7 @@
 	const loading = ref(false)
 
 	const appClass = computed(() => [
-		transitionClass, {
+		transitionClass.value, {
 			edit: pollStore.permissions.edit,
 		},
 	])
