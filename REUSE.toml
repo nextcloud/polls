@@ -12,7 +12,7 @@ SPDX-FileCopyrightText = "none"
 SPDX-License-Identifier = "CC0-1.0"
 
 [[annotations]]
-path = ["l10n/**.js", "l10n/**.json", "js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "emptyTemplates/**", "jsconfig.json", "img/app.svg", "img/polls.svg", "img/polls-dark.svg", "src/js/assets/icons/maybe-vote.svg", "src/js/assets/icons/no-vote.svg", "src/js/assets/icons/spinner.svg", "src/js/assets/icons/yes-vote.svg"]
+path = ["l10n/**.js", "l10n/**.json", "js/**.js.map", "js/**.js", "js/**.mjs", "js/**.mjs.map", "js/templates/**.handlebars", "emptyTemplates/**", "jsconfig.json", "img/app.svg", "img/polls.svg", "img/polls-dark.svg", "src/assets/icons/maybe-vote.svg", "src/assets/icons/no-vote.svg", "src/assets/icons/spinner.svg", "src/assets/icons/yes-vote.svg"]
 precedence = "aggregate"
 SPDX-FileCopyrightText = "2016 Nextcloud contributors"
 SPDX-License-Identifier = "AGPL-3.0-or-later"
