@@ -44,8 +44,7 @@
 	<InputDiv v-model="newPollText"
 		:placeholder="props.placeholder"
 		submit
-		@submit="addOption()"
-		@change="addOption()" />
+		@submit="addOption()" />
 </template>
 
 <style lang="scss">
