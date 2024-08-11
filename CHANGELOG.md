@@ -5,7 +5,42 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-## [7.1.0] - tbd
+# Changelog
+All notable changes to this project will be documented in this file.
+##
+## [8.0.0] - tbd
+### Changes
+ - Migration to Vue 3 and Pinia
+
+## [7.2.0] - 2024-08-01
+### Changes
+ - Add Nextcloud 30
+
+## [7.1.4] - 2024-07-15
+### Fix
+ - Fix autoreminder again
+ - Fix acticities display of circles
+ - remove colons from exported file names
+
+## [7.1.3] - 2024-06-30
+### Fix
+ - Fix autoreminder
+
+## [7.1.2] - 2024-06-24
+### Fix
+ - Fix owner detection (prevented deleting comments by poll owners)
+ - Fix exporting of polls
+ - Fix poll loading on some MySQL configurations
+ - Fix context menu in polls list
+
+## [7.1.1] - 2024-06-10
+### Fix
+ - Fix opening and closing of sidebar after changed component
+ - try avoiding update error by removing class registering
+## Change
+ - Support Nextcloud 27
+
+## [7.1.0] - 2024-06-09
 ###  !!! changed API structure, please refer to the documentation
 ### Fix
  - Fixed counting of orphaned votes
