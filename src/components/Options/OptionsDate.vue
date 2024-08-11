@@ -47,7 +47,7 @@
 		<TransitionGroup v-if="optionsStore.list.length"
 			tag="ul"
 			name="list">
-			<OptionItem v-for="(option) in optionsStore.list"
+			<OptionItem v-for="(option) in optionsStore.sortedOptions"
 				:key="option.id"
 				:option="option"
 				:poll-type="pollType"

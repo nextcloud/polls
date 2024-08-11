@@ -55,7 +55,7 @@
 		<TransitionGroup tag="div"
 			name="list"
 			class="vote-table__votes">
-			<VoteColumn v-for="(item) in optionsStore.rankedOptions"
+			<VoteColumn v-for="(item) in optionsStore.orderedOptions"
 				:key="item.id"
 				:option="item"
 				:view-mode="pollStore.viewMode" />

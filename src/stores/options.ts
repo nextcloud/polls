@@ -65,19 +65,28 @@ export const useOptionsStore = defineStore('options', {
 	}),
 
 	getters: {
-		count(state) {
+		count(state): number {
 			return state.list.length
 		},
 
-		rankedOptions(state) {
-			return state.ranked ? orderBy(state.list, ['votes.yes', 'votes.maybe'], ['desc', 'desc']) : state.list
+		rankedOptions(state): Option[] {
+			return orderBy(state.list, ['votes.yes', 'votes.maybe'], ['desc', 'desc'])
 		},
 
-		proposalsExist(state) {
+		sortedOptions(state): Option[] {
+			const pollStore = usePollStore()
+			return pollStore.type === PollType.Date ? orderBy(state.list, ['timestamp'], ['asc']) : state.list
+		},
+
+		orderedOptions(state): Option[] {
+			return state.ranked ? this.rankedOptions : this.sortedOptions
+		},
+		
+		proposalsExist(state): boolean {
 			return !!state.list.filter((option) => option.owner.userId).length
 		},
 
-		confirmed(state) {
+		confirmed(state): Option[] {
 			return state.list.filter((option) => option.confirmed > 0)
 		},
 	
@@ -191,7 +200,7 @@ export const useOptionsStore = defineStore('options', {
 						},
 					)
 				}
-				this.$patch({ option: response.data.option })
+				this.list.push(response.data.option)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error adding option', { error, payload })
