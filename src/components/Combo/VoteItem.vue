@@ -27,8 +27,9 @@
 	})
 
 	const answer = computed(() => comboStore.getVote({
-		option: props.option,
-		user: props.user,
+		userId: props.user.userId,
+		optionText: props.option.text,
+		pollId: props.poll.id,
 	}).answer)
 
 	const iconAnswer = computed(() => {

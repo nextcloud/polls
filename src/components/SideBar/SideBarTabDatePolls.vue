@@ -18,7 +18,7 @@
 		<div v-for="(poll) in pollsStore.datePolls"
 			:key="poll.id"
 			:class="['poll-item', { listed: comboStore.pollIsListed(poll.id) }]"
-			@click="comboStore.pollIsListed(poll.id)">
+			@click="comboStore.togglePollItem(poll.id)">
 			<UserItem :user="poll.owner" condensed />
 			<div class="poll-title-box">
 				{{ poll.configuration.title }}
