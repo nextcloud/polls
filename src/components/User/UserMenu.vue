@@ -61,8 +61,7 @@
 		}
 	}
 
-	async function toggleSubscription() {
-		subscriptionStore.subscribed = !subscriptionStore.subscribed
+	async function writeSubscription() {
 		subscriptionStore.write()
 	}
 
@@ -253,10 +252,10 @@
 			</template>
 		</NcActionButton>
 
-		<NcActionCheckbox :checked="subscriptionStore.subscribed"
+		<NcActionCheckbox :model-value="subscriptionStore.subscribed"
 			:disabled="!pollStore.permissions.subscribe"
 			title="check"
-			@change="toggleSubscription">
+			@change="writeSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
 		</NcActionCheckbox>
 
