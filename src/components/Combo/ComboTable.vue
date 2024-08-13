@@ -18,8 +18,6 @@
 			default: ViewMode.TableView,
 		},
 	})
-
-
 </script>
 
 <template>
