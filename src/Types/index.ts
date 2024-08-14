@@ -5,7 +5,6 @@
 
 export { Activity, Activities } from '../stores/activity.ts'
 export { UpdateType, Group, AppSettings } from '../stores/appSettings.ts'
-export { Subscription } from '../stores/subscription.ts'
 export { Combo } from '../stores/combo.ts'
 export { Comment, Comments, CommentsGrouped } from '../stores/comments.ts'
 export { Poll, PollType, AccessType, ShowResults, AllowProposals, PollConfiguration, PollStatus, PollPermissions, CurrentUserStatus } from '../stores/poll.ts'
