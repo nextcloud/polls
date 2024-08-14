@@ -76,6 +76,7 @@ export default {
 			return (this.$route.name === 'publicVote'
 				&& ['public', 'email', 'contact'].includes(this.userRole)
 				&& !this.isPollClosed
+				&& !this.permissions.vote
 				&& !this.isLocked
 				&& !!this.pollId
 			)
