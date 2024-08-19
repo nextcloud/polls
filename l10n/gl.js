@@ -606,7 +606,7 @@ OC.L10N.register(
     "Show all" : "Amosar todo",
     "Combine polls" : "Combinar enquisas",
     "Preferences" : "Preferencias",
-    "Error cloning poll." : "Produciuse un erro ao clonar a  enquisa.",
+    "Error cloning poll." : "Produciuse un erro ao clonar a enquisa.",
     "404 - poll not found" : "404 – non se atopou a enquisa",
     "Enter a poll or start a new one." : "Introduza unha enquisa ou comece unha nova.",
     "Click here to load more" : "Prema aquí para cargar máis",
