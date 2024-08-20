@@ -402,7 +402,7 @@ OC.L10N.register(
     "Owner" : "Propietario",
     "Created" : "Creado",
     "Closing date" : "Pechar data",
-    "No description provided" : "Non foi fornecida unha descrición.",
+    "No description provided" : "Non foi fornecida nigunha descrición.",
     "Guest participants" : "Participantes convidados",
     "Enter your name or a nickname" : "Introduza o seu nome ou un alcume",
     "Remember me for 30 days" : "Lémbrame durante 30 días",
