@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Circle" : "Sirkel",
     "Group" : "Gruppe",
+    "Contact" : "Kontakt",
     "User" : "Bruker",
     "Delete" : "Slett",
     "Unknown error" : "Ukjend feil",
