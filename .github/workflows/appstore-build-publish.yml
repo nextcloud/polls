@@ -146,7 +146,7 @@ jobs:
           # Extracting release
           cd ${{ env.APP_NAME }}/build/artifacts
           tar -xvf ${{ env.APP_NAME }}.tar.gz
-          cd ../../../
+          cd ../../../../
           # Setting up keys
           echo '${{ secrets.APP_PRIVATE_KEY }}' > ${{ env.APP_NAME }}.key
           wget --quiet "https://github.com/nextcloud/app-certificate-requests/raw/master/${{ env.APP_NAME }}/${{ env.APP_NAME }}.crt"
