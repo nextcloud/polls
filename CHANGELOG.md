@@ -3,8 +3,11 @@
   - SPDX-License-Identifier: CC0-1.0
 -->
 # Changelog
-All notable changes to this project will be documented in this file.
 ##
+## [7.2.1] - 2024-08-22
+### Fix
+ -  Fix deleted user when email share registers
+
 ## [7.2.0] - 2024-08-01
 ### Changes
  - Add Nextcloud 30
