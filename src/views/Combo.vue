@@ -19,15 +19,6 @@
 	const title = t('polls', 'Combined polls')
 	const description = t('polls', 'Combine multiple date polls in a single view')
 
-	// watch: {
-	// 	'comboStore.pollCombo'() {
-	// 		this.settings.setPollCombo({ pollCombo: this.comboStore.pollCombo })
-	// 	},
-	// 	'settings.user.pollCombo'() {
-	// 		this.comboStore.verifyPollsFromSettings()
-	// 	},
-	// },
-
 	onMounted(() => {
 		comboStore.verifyPollsFromSettings()
 	})

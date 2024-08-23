@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use JsonSerializable;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
+use OCA\Polls\Model\UserBase;
 use OCP\IL10N;
 
 /**
@@ -117,7 +118,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'locked' => $this->getIsLocked(),
 			'hash' => $this->getPollOptionHash(),
 			'votes' => $this->getVotes(),
-			'owner' => $this->getUser(),
+			'owner' => $this->getOwnerUser(),
 		];
 	}
 
@@ -130,6 +131,15 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'currentUser' => $this->getUserVoteAnswer(),
 		];
 	}
+
+	public function getOwnerUser(): UserBase | null {
+		if ($this->getOwner() === '') {
+			return null;
+		}
+		return parent::getUser();
+	}
+
+
 	/**
 	 * cumulative Set option entities cumulative and validated
 	 * if timestamp is given, the pollOptionText will be synced according to the timestamp and duration

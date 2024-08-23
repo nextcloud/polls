@@ -18,8 +18,6 @@
 			default: ViewMode.TableView,
 		},
 	})
-
-
 </script>
 
 <template>
@@ -30,7 +28,7 @@
 				:key="poll.id"
 				:title="poll.configuration.title"
 				class="poll-group">
-				<div v-for="(participant) in poll.status.countParticipants"
+				<div v-for="(participant) in comboStore.participantsInPoll(poll.id)"
 					:key="`${participant.userId}_${participant.pollId}`"
 					class="participant">
 					<UserItem v-bind="participant" condensed />

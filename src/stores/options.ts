@@ -50,7 +50,7 @@ export type Option = {
 	locked: boolean
 	hash: string
 	votes: OptionVotes
-	owner: User
+	owner: User | null
 }
 
 export type Options = {
@@ -83,7 +83,7 @@ export const useOptionsStore = defineStore('options', {
 		},
 		
 		proposalsExist(state): boolean {
-			return !!state.list.filter((option) => option.owner.userId).length
+			return !!state.list.filter((option) => option.owner).length
 		},
 
 		confirmed(state): Option[] {

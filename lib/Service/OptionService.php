@@ -43,6 +43,7 @@ class OptionService {
 		private OptionMapper $optionMapper,
 		private PollMapper $pollMapper,
 		private UserSession $userSession,
+		private Poll $poll,
 	) {
 		$this->options = [];
 	}
@@ -55,16 +56,12 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function list(int $pollId): array {
-		$poll = $this->pollMapper->find($pollId);
-		$poll->request(Poll::PERMISSION_POLL_VIEW);
+		$this->getPoll($pollId, Poll::PERMISSION_POLL_VIEW);
 
 		try {
-			$this->options = $this->optionMapper->findByPoll($pollId, !$poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW));
+			$this->options = $this->optionMapper->findByPoll($pollId, !$this->poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW));
+			$this->filterBookedUp();
 
-			if ($poll->getHideBookedUp() && !$poll->getIsAllowed(Poll::PERMISSION_POLL_EDIT)) {
-				// hide booked up options, except the user has edit permission
-				$this->filterBookedUp();
-			}
 		} catch (DoesNotExistException $e) {
 			$this->options = [];
 		}
@@ -82,8 +79,7 @@ class OptionService {
 	 * @return Option
 	 */
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
-		$poll = $this->pollMapper->find($pollId);
-		$poll->request(Poll::PERMISSION_OPTIONS_ADD);
+		$this->getPoll($pollId, Poll::PERMISSION_OPTIONS_ADD);
 
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
@@ -91,7 +87,7 @@ class OptionService {
 
 		$this->option->setOption($timestamp, $duration, $pollOptionText, $order);
 
-		if (!$poll->getIsPollOwner()) {
+		if (!$this->poll->getIsPollOwner()) {
 			$this->option->setOwner($this->acl->getCurrentUserId());
 		}
 
@@ -128,7 +124,7 @@ class OptionService {
 	 * @return Option[]
 	 */
 	public function addBulk(int $pollId, string $pollOptionText = ''): array {
-		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_OPTIONS_ADD);
+		$this->getPoll($pollId, Poll::PERMISSION_OPTIONS_ADD);
 
 		$newOptions = array_unique(explode(PHP_EOL, $pollOptionText));
 		foreach ($newOptions as $option) {
@@ -150,7 +146,7 @@ class OptionService {
 	 */
 	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->pollMapper->find($this->option->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
 
 		$this->option->setOption($timestamp, $duration, $pollOptionText);
 
@@ -186,7 +182,7 @@ class OptionService {
 	 */
 	public function confirm(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->pollMapper->find($this->option->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
 
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
 		$this->option = $this->optionMapper->update($this->option);
@@ -209,10 +205,9 @@ class OptionService {
 	 */
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$this->option = $this->optionMapper->find($optionId);
-		$poll = $this->pollMapper->find($this->option->getPollId());
-		$poll->request(Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
 
-		if ($poll->getType() !== Poll::TYPE_DATE) {
+		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Sequences are only available in date polls');
 		}
 
@@ -237,7 +232,7 @@ class OptionService {
 
 		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($this->option));
 
-		return $this->optionMapper->findByPoll($poll->getId());
+		return $this->optionMapper->findByPoll($this->poll->getId());
 	}
 
 	/**
@@ -248,11 +243,10 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
-		$poll = $this->pollMapper->find($pollId);
-		$poll->request(Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
 		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
 
-		if ($poll->getType() !== Poll::TYPE_DATE) {
+		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');
 		}
 
@@ -302,10 +296,9 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function reorder(int $pollId, array $options): array {
-		$poll = $this->pollMapper->find($pollId);
-		$poll->request(Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($pollId, Poll::PERMISSION_POLL_EDIT);
 
-		if ($poll->getType() === Poll::TYPE_DATE) {
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Not allowed in date polls');
 		}
 
@@ -332,34 +325,33 @@ class OptionService {
 	 */
 	public function setOrder(int $optionId, int $newOrder): array {
 		$this->option = $this->optionMapper->find($optionId);
-		$poll = $this->pollMapper->find($this->option->getPollId());
-		$poll->request(Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
 
-		if ($poll->getType() === Poll::TYPE_DATE) {
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Not allowed in date polls');
 		}
 
 		if ($newOrder < 1) {
 			$newOrder = 1;
-		} elseif ($newOrder > $this->getHighestOrder($poll->getId())) {
-			$newOrder = $this->getHighestOrder($poll->getId());
+		} elseif ($newOrder > $this->getHighestOrder($this->poll->getId())) {
+			$newOrder = $this->getHighestOrder($this->poll->getId());
 		}
 
-		foreach ($this->optionMapper->findByPoll($poll->getId()) as $option) {
+		foreach ($this->optionMapper->findByPoll($this->poll->getId()) as $option) {
 			$option->setOrder($this->moveModifier($this->option->getOrder(), $newOrder, $option->getOrder()));
 			$this->optionMapper->update($option);
 		}
 
-		$this->eventDispatcher->dispatchTyped(new PollOptionReorderedEvent($poll));
+		$this->eventDispatcher->dispatchTyped(new PollOptionReorderedEvent($this->poll));
 
-		return $this->optionMapper->findByPoll($poll->getId());
+		return $this->optionMapper->findByPoll($this->poll->getId());
 	}
 
 	/**
 	 * moveModifier - evaluate new order depending on the old and
 	 * the new position of a moved array item
 	 *
-	 * @return int - The modified new new position of the current item
+	 * @return int - The modified new position of the current item
 	 */
 	private function moveModifier(int $moveFrom, int $moveTo, int $currentPosition): int {
 		$moveModifier = 0;
@@ -376,11 +368,25 @@ class OptionService {
 	}
 
 	/**
+	 * Load the poll and check permissions
+	 *
+	 * @return void
+	 */
+	private function getPoll(int $pollId, string $permission = Poll::PERMISSION_POLL_VIEW): void {
+		$this->poll = $this->pollMapper->find($pollId);
+		$this->poll->request($permission);
+	}
+
+	/**
 	 * Remove booked up options, because they are not votable
 	 *
 	 * @return void
 	 */
 	private function filterBookedUp() {
+		if (!$this->poll->getHideBookedUp() || $this->poll->getIsAllowed(Poll::PERMISSION_POLL_EDIT)) {
+			return;
+		}
+
 		$this->options = array_filter($this->options, function ($option) {
 			return (!$option->getIsLockedByOptionLimit());
 		});

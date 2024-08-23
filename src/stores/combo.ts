@@ -5,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { VotesAPI, OptionsAPI, PollsAPI } from '../Api/index.js'
-import { User, Participant } from '../Types/index.ts'
+import { Participant } from '../Types/index.ts'
 import { Logger, uniqueOptions, uniqueParticipants } from '../helpers/index.ts'
 import { Option } from './options.ts'
 import { Poll } from './poll.ts'
@@ -40,16 +40,16 @@ export const useComboStore = defineStore('combo', {
 		optionBelongsToPoll: (state) => (payload: { text: string; pollId: number }) => !!state.options.find((option) => option.text === payload.text && option.pollId === payload.pollId),
 		uniqueOptions: (state) => sortBy(uniqueOptions(state.options), 'timestamp'),
 	
-		getVote: (state) => (payload: { user: User; option: Option }) => {
+		getVote: (state) => (payload: { userId: string; optionText: string, pollId: number }) => {
 			const found = state.votes.find((vote: Vote) => (
-				vote.user.userId === payload.user.userId
-				&& vote.optionText === payload.option.text
-				&& vote.pollId === payload.option.pollId))
+				vote.user.userId === payload.userId
+				&& vote.optionText === payload.optionText
+				&& vote.pollId === payload.pollId))
 			if (found === undefined) {
 				return {
 					answer: '',
-					optionText: payload.option.text,
-					userId: payload.user.userId,
+					optionText: payload.optionText,
+					userId: payload.userId,
 				}
 			}
 			return found
@@ -136,7 +136,7 @@ export const useComboStore = defineStore('combo', {
 			try {
 				const response = await VotesAPI.getVotes(payload.pollId)
 				this.votes.push(...response.data.votes)
-				this.participants = uniqueParticipants(response.data.votes)
+				this.participants = uniqueParticipants(this.votes)
 			
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
