@@ -59,7 +59,7 @@ class ReminderMail extends MailBase {
 	private function addBodyText(): void {
 		$dtDeadline = new DateTime('now', $this->recipient->getTimeZone());
 		$dtDeadline->setTimestamp($this->deadline);
-		$deadlineText = (string) $this->l10n->l('datetime', $dtDeadline, ['width' => 'long']);
+		$deadlineText = (string)$this->l10n->l('datetime', $dtDeadline, ['width' => 'long']);
 
 		if ($this->getReminderReason() === self::REASON_OPTION) {
 			$this->emailTemplate->addBodyText(str_replace(

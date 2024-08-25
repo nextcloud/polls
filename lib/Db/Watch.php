@@ -27,11 +27,11 @@ use OCP\AppFramework\Db\Entity;
  */
 class Watch extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_watch';
-	public const OBJECT_POLLS = "polls";
-	public const OBJECT_VOTES = "votes";
-	public const OBJECT_OPTIONS = "options";
-	public const OBJECT_COMMENTS = "comments";
-	public const OBJECT_SHARES = "shares";
+	public const OBJECT_POLLS = 'polls';
+	public const OBJECT_VOTES = 'votes';
+	public const OBJECT_OPTIONS = 'options';
+	public const OBJECT_COMMENTS = 'comments';
+	public const OBJECT_SHARES = 'shares';
 
 	// schema columns
 	public $id = null;

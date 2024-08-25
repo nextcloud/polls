@@ -269,7 +269,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 
 		// If duration is zero, the option represents a moment with day and time
 		if ($this->getDuration() === 0) {
-			return (string) $l10n->l('datetime', $mutableFrom);
+			return (string)$l10n->l('datetime', $mutableFrom);
 		}
 
 		$dateTimeFrom = $l10n->l('datetime', $mutableFrom);
@@ -283,7 +283,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$dateTimeTo = $l10n->l('date', $mutableTo->sub($dayLongSecond));
 			// if start and end day are identiacal, just return the start day
 			if ($dateTimeFrom === $dateTimeTo) {
-				return (string) $dateTimeFrom;
+				return (string)$dateTimeFrom;
 			}
 		}
 
@@ -291,7 +291,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$dateTimeTo = $l10n->l('time', $mutableTo);
 		}
 
-		return (string) $dateTimeFrom . ' - ' . (string) $dateTimeTo;
+		return (string)$dateTimeFrom . ' - ' . (string)$dateTimeTo;
 	}
 
 	/**

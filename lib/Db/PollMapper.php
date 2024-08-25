@@ -24,7 +24,7 @@ use OCP\Search\ISearchQuery;
  */
 class PollMapper extends QBMapper {
 	public const TABLE = Poll::TABLE;
-	public const CONCAT_SEPARATOR = ",";
+	public const CONCAT_SEPARATOR = ',';
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
@@ -203,7 +203,7 @@ class PollMapper extends QBMapper {
 	 */
 	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
 		$joinAlias = 'user_shares';
-		$emptyString = $qb->expr()->literal("");
+		$emptyString = $qb->expr()->literal('');
 
 		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'))
 			->addGroupBy($joinAlias . '.type');

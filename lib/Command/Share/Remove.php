@@ -80,7 +80,7 @@ class Remove extends Base {
 	}
 
 	/**
-	 * @param Poll     $poll
+	 * @param Poll $poll
 	 * @param string[] $userIds
 	 * @psalm-suppress UnusedMethod
 	 */
@@ -93,7 +93,7 @@ class Remove extends Base {
 	}
 
 	/**
-	 * @param Poll     $poll
+	 * @param Poll $poll
 	 * @param string[] $groupIds
 	 * @psalm-suppress UnusedMethod
 	 */
@@ -106,7 +106,7 @@ class Remove extends Base {
 	}
 
 	/**
-	 * @param Poll     $poll
+	 * @param Poll $poll
 	 * @param string[] $emails
 	 * @psalm-suppress UnusedMethod
 	 */

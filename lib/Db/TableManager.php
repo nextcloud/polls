@@ -293,8 +293,8 @@ class TableManager {
 		if ($this->schema->hasTable($this->dbPrefix . $table)) {
 			// identify duplicates
 			$selection = $qb->selectDistinct('t1.id')
-			->from($table, 't1')
-			->innerJoin('t1', $table, 't2', $qb->expr()->lt('t1.id', 't2.id'));
+				->from($table, 't1')
+				->innerJoin('t1', $table, 't2', $qb->expr()->lt('t1.id', 't2.id'));
 
 			$i = 0;
 

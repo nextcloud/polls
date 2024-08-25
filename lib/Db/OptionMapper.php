@@ -151,7 +151,7 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * Build the enhanced query with joined tables
 	 * @param bool $hideResults Whether poll results are defined as beeing hidden
-	 *             injects the poll permission allowdSeeResults into the query
+	 *                          injects the poll permission allowdSeeResults into the query
 	 */
 	protected function buildQuery(bool $hideResults = false): IQueryBuilder {
 		$currentUserId = $this->userSession->getCurrentUserId();

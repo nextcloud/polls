@@ -39,7 +39,7 @@ use OCP\Security\ISecureRandom;
 use Psr\Log\LoggerInterface;
 
 class ShareService {
-	/** @var Share[] **/
+	/** @var Share[] * */
 	private array $shares;
 
 	/**
@@ -147,7 +147,7 @@ class ShareService {
 	/**
 	 * Get share by token for accessing the poll
 	 *
-	 * @param string $token             Token of share to get
+	 * @param string $token Token of share to get
 	 */
 	public function get(string $token): Share {
 		return $this->share = $this->shareMapper->findByToken($token);

@@ -136,7 +136,7 @@ class UserMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		->from($this->getTableName())
+			->from($this->getTableName())
 			->where($qb->expr()->eq('token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
 
 		return $this->findEntity($qb);
@@ -152,14 +152,14 @@ class UserMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		->from($this->getTableName())
+			->from($this->getTableName())
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq('user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)));
 
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
-			throw new ShareNotFoundException("Share not found by userId and pollId");
+			throw new ShareNotFoundException('Share not found by userId and pollId');
 		}
 	}
 
