@@ -62,6 +62,7 @@ OC.L10N.register(
     "Login" : "Логін",
     "Preview" : "Перегляд",
     "Copy link to clipboard" : "Копіювати посилання",
+    "Show QR code" : "Показати код QR",
     "Delete share" : "Вилучити спільний ресурс",
     "Restore share" : "Відновити спільні дані",
     "Share label" : "Мітка спільного ресурсу",
