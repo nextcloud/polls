@@ -51,7 +51,7 @@ abstract class EntityWithUser extends Entity {
 		}
 
 		// Anonymize if poll's anonymize setting is true
-		if ((bool) $this->anonymized) {
+		if ((bool)$this->anonymized) {
 			return self::ANON_FULL;
 		}
 

@@ -113,7 +113,7 @@ class ShareMapper extends QBMapper {
 		try {
 			return $this->findEntity($qb);
 		} catch (Exception $e) {
-			throw new ShareNotFoundException("Share not found by userId and pollId");
+			throw new ShareNotFoundException('Share not found by userId and pollId');
 		}
 	}
 

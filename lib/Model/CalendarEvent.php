@@ -70,7 +70,7 @@ class CalendarEvent implements \JsonSerializable {
 
 	// Getters for common event description
 	public function getId(): string {
-		return (string) $this->iCal['id'];
+		return (string)$this->iCal['id'];
 	}
 
 	public function getUID(): string {
@@ -180,7 +180,7 @@ class CalendarEvent implements \JsonSerializable {
 			return;
 		}
 		
-		preg_match_all("/([^;= ]+)=([^;= ]+)/", $this->event['RRULE'][0], $r);
+		preg_match_all('/([^;= ]+)=([^;= ]+)/', $this->event['RRULE'][0], $r);
 		$this->rRule = array_combine($r[1], $r[2]);
 		
 		$this->rRule['DTSTART'] = $this->getBaseStart();

@@ -180,7 +180,7 @@ abstract class MailBase {
 	protected function getParsedMarkDown(string $source) : string {
 		$config = [
 			'renderer' => [
-				'soft_break' => "<br />",
+				'soft_break' => '<br />',
 			],
 			'html_input' => 'strip',
 			'allow_unsafe_links' => false,
