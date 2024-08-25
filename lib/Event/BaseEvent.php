@@ -64,7 +64,7 @@ abstract class BaseEvent extends Event {
 
 	public function getLogId(): string {
 		if ($this->log && boolval($this->eventId)) {
-			return (string) $this->eventId;
+			return (string)$this->eventId;
 		}
 		return '';
 	}

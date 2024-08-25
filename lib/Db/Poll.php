@@ -329,7 +329,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function setAutoReminder(bool|int $value): void {
-		$this->setMiscSettingsByKey('autoReminder', (bool) $value);
+		$this->setMiscSettingsByKey('autoReminder', (bool)$value);
 	}
 
 	public function getAutoReminder(): bool {
@@ -552,7 +552,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	/**
 	 * getIsPersonallyInvited - Is the poll shared via user share with the current user?
 	 * Checking via user role
-	 * @return bool  Returns true, if the current poll contains a user role which matches a share type
+	 * @return bool Returns true, if the current poll contains a user role which matches a share type
 	 */
 	private function getIsPersonallyInvited(): bool {
 		return in_array($this->getUserRole(), [
@@ -686,7 +686,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Compare $userId with current user's id
 	 */
 	public function matchUser(string $userId): bool {
-		return (bool) $this->userSession->getUser()->getId() && $this->userSession->getUser()->getId() === $userId;
+		return (bool)$this->userSession->getUser()->getId() && $this->userSession->getUser()->getId() === $userId;
 	}
 
 	/**
@@ -721,7 +721,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		// return the poll setting for comments
-		return (bool) $this->getAllowComment();
+		return (bool)$this->getAllowComment();
 	}
 
 	/**
