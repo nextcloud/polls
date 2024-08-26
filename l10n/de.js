@@ -552,7 +552,7 @@ OC.L10N.register(
     "Remove Email Address" : "E-Mail-Adresse entfernen",
     "Copy list of email addresses to clipboard" : "Liste der E-Mail-Adressen in die Zwischenablage kopieren",
     "Reset your votes" : "Setze deine Stimmabgaben zurück",
-    "Logout as {name} (delete cookie)" : "Abmelden als {Name} (Cookie löschen)",
+    "Logout as {name} (delete cookie)" : "Abmelden als {name} (Cookie löschen)",
     "Email address deleted." : "E-Mail-Adresse gelöscht.",
     "Error deleting email address {emailAddress}" : "Fehler beim Löschen der E-Mail-Adresse {emailAddress}",
     "Email address {emailAddress} saved." : "E-Mail-Adresse {emailAddress} wurde gespeichert.",
