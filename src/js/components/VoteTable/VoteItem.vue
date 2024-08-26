@@ -35,6 +35,12 @@ export default {
 		},
 	},
 
+	data() {
+		return {
+			isLoading: false,
+		}
+	},
+
 	computed: {
 		...mapState({
 			currentUser: (state) => state.acl.currentUser,
@@ -51,6 +57,7 @@ export default {
 				&& this.isValidUser
 				&& !this.isPollClosed
 				&& !this.option.locked
+				&& !this.isLoading
 		},
 
 		isActive() {
@@ -94,6 +101,7 @@ export default {
 
 	methods: {
 		async setVote() {
+			this.isLoading = true
 			try {
 				await this.$store.dispatch('votes/set', {
 					option: this.option,
@@ -104,6 +112,8 @@ export default {
 			} catch (e) {
 				showError(t('polls', 'Error saving vote'))
 
+			} finally {
+				this.isLoading = false
 			}
 		},
 	},
