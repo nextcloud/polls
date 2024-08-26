@@ -132,7 +132,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
-	public function getOwnerUser(): UserBase | null {
+	public function getOwnerUser(): UserBase|null {
 		if ($this->getOwner() === '') {
 			return null;
 		}
