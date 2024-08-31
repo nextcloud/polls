@@ -48,6 +48,10 @@ class OptionService {
 		$this->options = [];
 	}
 
+	public function get(int $optionId): Option {
+		return $this->optionMapper->find($optionId);
+	}
+	
 	/**
 	 * Get all options of given poll
 	 *

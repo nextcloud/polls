@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\VoteService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
@@ -21,7 +23,9 @@ class VoteController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private VoteService $voteService
+		private VoteService $voteService,
+		private PollService $pollService,
+		private OptionService $optionService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -44,7 +48,13 @@ class VoteController extends BaseController {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	public function set(int $optionId, string $setTo): JSONResponse {
-		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $setTo)]);
+		$option = $this->optionService->get($optionId);
+		return $this->response(fn () => [
+			'vote' => $this->voteService->set($optionId, $setTo),
+			'poll' => $this->pollService->get($option->getPollId()),
+			'options' => $this->optionService->list($option->getPollId()),
+		
+		]);
 	}
 
 	/**
