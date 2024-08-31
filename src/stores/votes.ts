@@ -129,8 +129,8 @@ export const useVotesStore = defineStore('votes', {
 					response = await VotesAPI.setVote(payload.option.id, payload.setTo)
 				}
 				this.setItem({ option: payload.option, vote: response.data.vote })
-				optionsStore.load()
-				pollStore.load()
+				optionsStore.list = response.data.options
+				pollStore.$patch(response.data.poll)
 				return response
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
