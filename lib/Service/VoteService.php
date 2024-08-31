@@ -72,15 +72,20 @@ class VoteService {
 		$option = $this->optionMapper->find($optionId);
 		$poll = $this->pollMapper->find($option->getPollId());
 		$poll->request(Poll::PERMISSION_VOTE_EDIT);
-		
-		if ($setTo === Vote::VOTE_YES) {
-			$this->checkLimits($option);
-		}
-		//  delete no votes, if poll setting is set to useNo === 0
-		$deleteVoteInsteadOfNoVote = in_array(trim($setTo), [Vote::VOTE_NO, '']) && !boolval($poll->getUseNo());
 
 		try {
 			$this->vote = $this->voteMapper->findSingleVote($poll->getId(), $option->getPollOptionText(), $this->acl->getCurrentUserId());
+
+			if ($setTo === $this->vote->getVoteAnswer()) {
+				return $this->vote;
+			}
+
+			if ($setTo === Vote::VOTE_YES) {
+				$this->checkLimits($option);
+			}
+
+			//  delete no votes, if poll setting is set to useNo === 0
+			$deleteVoteInsteadOfNoVote = in_array(trim($setTo), [Vote::VOTE_NO, '']) && !boolval($poll->getUseNo());
 
 			if ($deleteVoteInsteadOfNoVote) {
 				$this->vote->setVoteAnswer('');
