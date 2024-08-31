@@ -53,7 +53,7 @@ class VoteController extends BaseController {
 			'vote' => $this->voteService->set($optionId, $setTo),
 			'poll' => $this->pollService->get($option->getPollId()),
 			'options' => $this->optionService->list($option->getPollId()),
-			]);
+		]);
 	}
 
 	/**
