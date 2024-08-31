@@ -206,7 +206,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 		if ($this->getType() === self::TYPE_PUBLIC) {
 			return '';
 		}
-		return (string) $this->displayName;
+		return (string)$this->displayName;
 	}
 
 	public function getTimeZoneName(): string {

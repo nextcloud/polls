@@ -30,7 +30,7 @@ class PreferencesService {
 	public function load(): void {
 		try {
 			$this->preferences = $this->preferencesMapper->find($this->userSession->getCurrentUserId());
-		} catch	(Exception $e) {
+		} catch (Exception $e) {
 			$this->preferences = new Preferences;
 		}
 	}
