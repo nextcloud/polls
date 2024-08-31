@@ -137,6 +137,7 @@ export const useVotesStore = defineStore('votes', {
 				if (error.response.status === 409) {
 					this.load()
 					optionsStore.load()
+					pollStore.load()
 				} else {
 					Logger.error('Error setting vote', { error, payload })
 					throw error
