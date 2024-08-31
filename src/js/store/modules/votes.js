@@ -109,6 +109,7 @@ const actions = {
 			if (error.response.status === 409) {
 				context.dispatch('list')
 				context.dispatch('options/list', null, { root: true })
+				context.dispatch('poll/get', null, { root: true })
 			} else {
 				Logger.error('Error setting vote', { error, payload })
 				throw error
