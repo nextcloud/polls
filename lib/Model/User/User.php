@@ -43,7 +43,7 @@ class User extends UserBase {
 		$this->config = Container::queryClass(IConfig::class);
 		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
 		$this->displayName = $this->user->getDisplayName();
-		$this->emailAddress = (string) $this->user->getEmailAddress();
+		$this->emailAddress = (string)$this->user->getEmailAddress();
 		$this->languageCode = $this->config->getUserValue($this->id, 'core', 'lang');
 		$this->localeCode = $this->config->getUserValue($this->id, 'core', 'locale');
 		$this->timeZoneName = $this->config->getUserValue($this->id, 'core', 'timezone');

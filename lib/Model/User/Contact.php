@@ -111,7 +111,7 @@ class Contact extends UserBase {
 			array_unshift($description, $this->getEmailAddress());
 		}
 
-		return count($description) ? implode(", ", $description) : $this->l10n->t('Contact');
+		return count($description) ? implode(', ', $description) : $this->l10n->t('Contact');
 	}
 
 

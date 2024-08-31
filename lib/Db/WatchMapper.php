@@ -37,15 +37,15 @@ class WatchMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where($qb->expr()->gt('updated', $qb->createNamedParameter($offset)))
-		   ->andWhere(
-		   	$qb->expr()->neq('session_id', $qb->createNamedParameter($this->userSession->getClientIdHashed()))
-		   )
-		   ->andWhere($qb->expr()->orX(
-		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId)),
-		   	$qb->expr()->eq('table', $qb->createNamedParameter(AppConstants::APP_ID))
-		   ));
+			->from($this->getTableName())
+			->where($qb->expr()->gt('updated', $qb->createNamedParameter($offset)))
+			->andWhere(
+				$qb->expr()->neq('session_id', $qb->createNamedParameter($this->userSession->getClientIdHashed()))
+			)
+			->andWhere($qb->expr()->orX(
+				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId)),
+				$qb->expr()->eq('table', $qb->createNamedParameter(AppConstants::APP_ID))
+			));
 
 		return $this->findEntities($qb);
 	}
@@ -58,16 +58,16 @@ class WatchMapper extends QBMapper {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')
-		   ->from($this->getTableName())
-		   ->where(
-		   	$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId))
-		   )
-		   ->andWhere(
-		   	$qb->expr()->eq('table', $qb->createNamedParameter($table))
-		   )
-		   ->andWhere(
-		   	$qb->expr()->eq('session_id', $qb->createNamedParameter($this->userSession->getClientIdHashed()))
-		   );
+			->from($this->getTableName())
+			->where(
+				$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId))
+			)
+			->andWhere(
+				$qb->expr()->eq('table', $qb->createNamedParameter($table))
+			)
+			->andWhere(
+				$qb->expr()->eq('session_id', $qb->createNamedParameter($this->userSession->getClientIdHashed()))
+			);
 
 		return $this->findEntity($qb);
 	}

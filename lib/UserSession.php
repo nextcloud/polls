@@ -59,7 +59,7 @@ class UserSession {
 		if (!$this->currentUser) {
 
 			if ($this->getIsLoggedIn()) {
-				$this->currentUser = $this->userMapper->getUserFromUserBase((string) $this->userSession->getUser()?->getUID());
+				$this->currentUser = $this->userMapper->getUserFromUserBase((string)$this->userSession->getUser()?->getUID());
 			} elseif ($this->session->get(self::SESSION_KEY_CRON_JOB)) {
 				$this->currentUser = new Cron();
 			} else {
@@ -75,7 +75,7 @@ class UserSession {
 			$this->session->set(self::SESSION_KEY_USER_ID, $this->getUser()->getId());
 		}
 
-		return (string) $this->session->get(self::SESSION_KEY_USER_ID);
+		return (string)$this->session->get(self::SESSION_KEY_USER_ID);
 	}
 
 	public function getIsLoggedIn(): bool {
@@ -111,7 +111,7 @@ class UserSession {
 	 * @return string
 	 */
 	public function getShareToken(): string {
-		return (string) $this->session->get(self::SESSION_KEY_SHARE_TOKEN);
+		return (string)$this->session->get(self::SESSION_KEY_SHARE_TOKEN);
 	}
 
 	/**
@@ -122,7 +122,7 @@ class UserSession {
 	 * @return bool
 	 */
 	public function hasShare(): bool {
-		return (bool) $this->getShareToken();
+		return (bool)$this->getShareToken();
 	}
 
 	/**
@@ -155,11 +155,11 @@ class UserSession {
 			$this->session->set(self::SESSION_KEY_SHARE_TYPE, $this->getShare()->getType());
 		}
 
-		return (string) $this->session->get(self::SESSION_KEY_SHARE_TYPE);
+		return (string)$this->session->get(self::SESSION_KEY_SHARE_TYPE);
 	}
 
 	public function getClientId(): string {
-		return (string) $this->session->get(self::CLIENT_ID);
+		return (string)$this->session->get(self::CLIENT_ID);
 	}
 
 	public function getClientIdHashed(): string {
