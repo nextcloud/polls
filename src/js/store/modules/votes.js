@@ -101,8 +101,10 @@ const actions = {
 				response = await VotesAPI.setVote(payload.option.id, payload.setTo)
 			}
 			context.commit('setItem', { option: payload.option, pollId: context.rootState.poll.id, vote: response.data.vote })
-			context.dispatch('options/list', null, { root: true })
-			context.dispatch('poll/get', null, { root: true })
+			context.commit('options/set', { options: response.data.options }, { root: true })
+			context.commit('poll/set', { poll: response.data.poll }, { root: true })
+			// context.dispatch('options/list', null, { root: true })
+			// context.dispatch('poll/get', null, { root: true })
 			return response
 		} catch (error) {
 			if (error?.code === 'ERR_CANCELED') return
