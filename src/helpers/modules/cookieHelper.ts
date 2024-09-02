@@ -55,7 +55,7 @@ const deleteCookieByValue = (searchValue: string): string | void => {
 
 	if (cookieValue === searchValue) {
 		deleteCookie(cookieName)
-		return cookieName
+		return cookieName.trim()
 	}
 }
 
