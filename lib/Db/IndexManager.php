@@ -122,11 +122,11 @@ class IndexManager {
 	 *
 	 * @return string[] logged messages
 	 */
-	public function removeAllForeignKeyConstraints(): array {
+	public function removeIncorrectForeignKeyConstraints(): array {
 		$messages = [];
 
 		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
-			$messages = array_merge($messages, $this->removeForeignKeysFromTable($tableName));
+			$messages = array_merge($messages, $this->removeIncorrectForeignKeysFromTable($tableName));
 		}
 
 		return $messages;
@@ -169,11 +169,11 @@ class IndexManager {
 	 *
 	 * @return string[] logged messages
 	 */
-	public function removeAllUniqueIndices(): array {
+	public function removeChangedUniqueIndices(): array {
 		$messages = [];
 
-		foreach (array_keys(TableSchema::UNIQUE_INDICES) as $tableName) {
-			$messages = array_merge($messages, $this->removeUniqueIndicesFromTable($tableName));
+		foreach (TableSchema::UNIQUE_INDICES as $tableName => $values) {
+			$messages = array_merge($messages, $this->removeChangedUniqueIndicesFromTable($tableName, $values));
 		}
 
 		return $messages;
@@ -185,7 +185,7 @@ class IndexManager {
 	 * @param string $tableName name of table to remove fk from
 	 * @return string[] logged messages
 	 */
-	public function removeForeignKeysFromTable(string $tableName): array {
+	public function removeIncorrectForeignKeysFromTable(string $tableName): array {
 		$messages = [];
 		$tableName = $this->dbPrefix . $tableName;
 
@@ -194,6 +194,10 @@ class IndexManager {
 			$table = $this->schema->getTable($tableName);
 
 			foreach ($table->getForeignKeys() as $foreignKey) {
+				if ($foreignKey->getForeignTableName() === $this->dbPrefix . TableSchema::FK_PARENT_TABLE) {
+					$messages[] = 'Kept unchanged ' . $foreignKey->getName() . ' from ' . $tableName;
+					continue;
+				}
 				$table->removeForeignKey($foreignKey->getName());
 				$messages[] = 'Removed ' . $foreignKey->getName() . ' from ' . $tableName;
 			}
@@ -208,7 +212,7 @@ class IndexManager {
 	 * @param string $tableName table name of table to remove unique incices from
 	 * @return string[] logged messages
 	 */
-	public function removeUniqueIndicesFromTable(string $tableName): array {
+	public function removeChangedUniqueIndicesFromTable(string $tableName, array $values): array {
 		$messages = [];
 		$tableName = $this->dbPrefix . $tableName;
 
@@ -218,6 +222,14 @@ class IndexManager {
 
 			foreach ($table->getIndexes() as $index) {
 				if (strpos($index->getName(), 'UNIQ_') === 0) {
+					if (
+						($index->getName() === $values['name']) &&
+						($index->isUnique() === $values['unique']) &&
+						($index->getColumns() === $values['columns'])
+					) {
+						$messages[] = 'Kept unchanged ' . $index->getName() . ' from ' . $tableName;
+						continue;
+					}
 					$table->dropIndex($index->getName());
 					$messages[] = 'Removed ' . $index->getName() . ' from ' . $tableName;
 				}

@@ -43,12 +43,12 @@ class RemoveIndices implements IRepairStep {
 		$this->schema = $this->connection->createSchema();
 		$this->indexManager->setSchema($this->schema);
 
-		$messages = $this->indexManager->removeAllForeignKeyConstraints();
+		$messages = $this->indexManager->removeIncorrectForeignKeyConstraints();
 		foreach ($messages as $message) {
 			$output->info($message);
 		}
 
-		$messages = $this->indexManager->removeAllUniqueIndices();
+		$messages = $this->indexManager->removeChangedUniqueIndices();
 		foreach ($messages as $message) {
 			$output->info($message);
 		}
