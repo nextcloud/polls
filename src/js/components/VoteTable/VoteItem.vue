@@ -103,7 +103,6 @@ export default {
 				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
 			} catch (e) {
 				showError(t('polls', 'Error saving vote'))
-
 			}
 		},
 	},
