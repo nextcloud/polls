@@ -73,7 +73,7 @@ class IndexManager {
 	/**
 	 * add an on delete fk contraint
 	 *
-	 * @param string $parentTableName name of reffered table
+	 * @param string $parentTableName name of referred table
 	 * @param string $childTableName name of referring table
 	 * @return string log message
 	 */
