@@ -4,6 +4,12 @@
 -->
 # Changelog
 ##
+## [7.2.2] - 2024-09-06
+### Fix
+ -  fix watcher in situations it may fail on pollId 0
+ -  fix failing routes on tokens with trailing spaces
+ -  Removed index removal from the pre-migration repair steps
+
 ## [7.2.1] - 2024-08-22
 ### Fix
  -  Fix deleted user when email share registers

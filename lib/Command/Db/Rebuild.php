@@ -23,6 +23,12 @@ class Rebuild extends Command {
 	protected array $operationHints = [
 		'All polls tables will get checked against the current schema.',
 		'NO data migration will be executed, so make sure you have a backup of your database.',
+		'',
+		'*****************************',
+		'**    Please understand    **',
+		'*****************************',
+		'The process will also recreate all indices and foreign key constraints.',
+		'This can lead to a database performance impact on the app after the recreation is done.',
 	];
 
 	public function __construct(
