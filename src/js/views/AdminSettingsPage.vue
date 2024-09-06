@@ -43,7 +43,7 @@
 		</NcSettingsSection>
 
 		<NcSettingsSection :name="t('polls', 'Job control')"
-			:description="t('polls', 'Manually start backgropund jobs, independent from the cron schedule.')">
+			:description="t('polls', 'Manually start background jobs, independent from the cron schedule.')">
 			<AdminJobs />
 		</NcSettingsSection>
 	</FlexSettings>
