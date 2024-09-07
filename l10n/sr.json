@@ -580,7 +580,6 @@
     "Email options" : "Опције за и-мејл",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Додавање линкова на правне услове, ако постоје, и додавање необавезног одрицања од одговорности у и-мејлове.",
     "Job control" : "Контрола посла",
-    "Manually start backgropund jobs, independent from the cron schedule." : "Ручно покренути позадински послови који не зависе од cron распореда.",
     "Administrative poll management" : "Административно управљање гласањем",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "Управљајте гласањима осталих налога. Можете да преузмете власништво над гласањима или да их обришете.",
     "Take over" : "Преузми",

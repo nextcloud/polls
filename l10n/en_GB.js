@@ -582,7 +582,6 @@ OC.L10N.register(
     "Email options" : "Email options",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Add links to legal terms, if they exist and add an optional disclaimer to emails.",
     "Job control" : "Job control",
-    "Manually start backgropund jobs, independent from the cron schedule." : "Manually start backgropund jobs, independent from the cron schedule.",
     "Administrative poll management" : "Administrative poll management",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "Manage polls of other accounts. You can take over the ownership or delete polls.",
     "Take over" : "Take over",

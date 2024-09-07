@@ -582,7 +582,6 @@ OC.L10N.register(
     "Email options" : "E-posta seçenekleri",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Yasal hükümler ve varsa isteğe bağlı olarak e-postalar içine ek sorumluluk reddi metni bağlantıları ekleyin.",
     "Job control" : "Görev denetimi",
-    "Manually start backgropund jobs, independent from the cron schedule." : "Zamanlanmış görevinlerin zamanlamasından bağımsız olarak arka plan görevlerini el ile başlatın.",
     "Administrative poll management" : "Yönetimsel anket yönetimi",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "Diğer hesapların anketlerini yönetin. Anketleri silebilir ya da sahipliğini devralabilirsiniz.",
     "Take over" : "Devral",

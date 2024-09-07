@@ -582,7 +582,6 @@ OC.L10N.register(
     "Email options" : "خيارات الإيميل",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "إضافة روابط للمصطلحات القانونية، إن وجدت والإضافة الاختيارية لإخلاء المسؤولية إلى رسائل البريد الإلكتروني.",
     "Job control" : "التحكم في المهام",
-    "Manually start backgropund jobs, independent from the cron schedule." : "مهام بدأت العمل في الخلفية مستقلة عن جدول cron.",
     "Administrative poll management" : "إدارة الاستبيان الإداري",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "إدارة استبيانات لحسابات أخرى. يمكنك استلام ملكية الاستبيانات أو حذفها.",
     "Take over" : "تولى",

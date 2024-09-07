@@ -582,7 +582,6 @@ OC.L10N.register(
     "Email options" : "Alternativer for e-post",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Legg til koblinger til juridiske termer, hvis de finnes, og legg til en valgfri ansvarsfraskrivelse i e-poster.",
     "Job control" : "Jobbkontroll",
-    "Manually start backgropund jobs, independent from the cron schedule." : "Start bakgrunnsjobber manuelt, uavhengig av cron-tidsplanen.",
     "Administrative poll management" : "Administrativ avstemningsadministrasjon",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "Administrer avstemninger fra andre kontoer. Du kan ta over eierskapet eller slette avstemninger.",
     "Take over" : "Ta over",
