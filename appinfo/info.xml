@@ -58,7 +58,6 @@
   <repair-steps>
     <pre-migration>
       <step>OCA\Polls\Migration\RepairSteps\RemoveObsoleteMigrations</step>
-      <step>OCA\Polls\Migration\RepairSteps\RemoveIndices</step>
     </pre-migration>
     <post-migration>
       <step>OCA\Polls\Migration\RepairSteps\DropOrphanedTables</step>
