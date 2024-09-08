@@ -3,8 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-# Note: This is the Vue 3 port of polls. This branch will be the next mail branch
-
 # Polls - an app, similar to doodle or dudle, for Nextcloud written in PHP and JS/Vue.
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
 ![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)
