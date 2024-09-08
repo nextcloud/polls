@@ -2,6 +2,9 @@
   - SPDX-FileCopyrightText: 2016 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+
+# Note: This is the Vue 3 port of polls. This branch will be the next mail branch
+
 # Polls - an app, similar to doodle or dudle, for Nextcloud written in PHP and JS/Vue.
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
 ![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)
@@ -12,7 +15,6 @@
 [![REUSE status](https://api.reuse.software/badge/github.com/nextcloud/polls)](https://api.reuse.software/info/github.com/nextcloud/polls)
 
 # Free meeting schedule tool
-
 - :next_track_button: Easy poll creation
 - :hammer_and_wrench: Highly customizable
     - :envelope: Make your poll confidential by hiding the results until you want them to be discovered
