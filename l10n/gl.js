@@ -582,6 +582,7 @@ OC.L10N.register(
     "Email options" : "Opcións de correo",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Engada ligazóns aos termos legais, se existen e engada unha exención de responsabilidade opcional nos correos.",
     "Job control" : "Control do traballo",
+    "Manually start background jobs, independent from the cron schedule." : "Iniciar manualmente os traballos en segundo plano, independentemente da programación de cron.",
     "Administrative poll management" : "Xestión administrativa de enquisas",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "Xestionar enquisas doutras contas. Pode facerse cargo da propiedade ou eliminar enquisas.",
     "Take over" : "Tomar o control",
