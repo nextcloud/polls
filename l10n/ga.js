@@ -582,6 +582,7 @@ OC.L10N.register(
     "Email options" : "Roghanna ríomhphoist",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Cuir naisc le téarmaí dlíthiúla, má tá siad ann agus cuir séanadh roghnach le ríomhphoist.",
     "Job control" : "Rialú poist",
+    "Manually start background jobs, independent from the cron schedule." : "Cuir tús le poist chúlra de láimh, neamhspleách ar an sceideal cron.",
     "Administrative poll management" : "Bainistíocht vótaíochta riaracháin",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "Bainistigh pobalbhreith cuntas eile. Is féidir leat seilbh a ghlacadh ar láimh nó pobalbhreith a scriosadh.",
     "Take over" : "A ghlacadh ar láimh",

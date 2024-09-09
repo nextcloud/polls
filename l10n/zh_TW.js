@@ -582,6 +582,7 @@ OC.L10N.register(
     "Email options" : "電子郵件選項",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "新增指向法律條款的連結（若存在）並新增選擇性的免責聲明至電子郵件。",
     "Job control" : "任務控制",
+    "Manually start background jobs, independent from the cron schedule." : "手動啟動背景作業，獨立於 cron 排程。",
     "Administrative poll management" : "行政投票管理",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "管理其他參與者的投票。您可以接管所有權或刪除投票。",
     "Take over" : "接管",

@@ -580,6 +580,7 @@
     "Email options" : "E-Mail-Optionen",
     "Add links to legal terms, if they exist and add an optional disclaimer to emails." : "Falls Links zu Nutzungsbedingungen vorhanden sind, diese hinzufügen und zu E-Mails einen optionalen Haftungsausschluss hinzufügen.",
     "Job control" : "Job-Kontrolle",
+    "Manually start background jobs, independent from the cron schedule." : "Hintergrundjobs manuell starten, unabhängig vom Cron-Zeitplan.",
     "Administrative poll management" : "Administrative Umfrageverwaltung",
     "Manage polls of other accounts. You can take over the ownership or delete polls." : "Umfragen anderer Konten verwalten. Sie können den Besitz übernehmen oder Umfragen löschen.",
     "Take over" : "Übernehmen",
