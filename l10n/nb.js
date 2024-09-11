@@ -254,7 +254,6 @@ OC.L10N.register(
     "_%n vote is allowed per option._::_%n votes are allowed per option._" : ["%n stemme er tillatt per alternativ.","%n stemmer er tillatt per alternativ."],
     "_%n vote is allowed per participant._::_%n votes are allowed per participant._" : ["%n stemme er tillatt per deltaker.","%n stemmer er tillatt per deltaker."],
     "_You have %n vote left._::_You have %n votes left._" : ["Du har %n gjenværende stemme.","Du har %n gjenværende stemmer"],
-    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n foreldreløs stemme av et sannsynligvis slettet alternativ blokkerer muligens stemmegrensen din.","%n foreldreløse stemmer av sannsynligvis slettede alternativer blokkerer muligens stemmegrensen din."],
     "This share is locked and allows only read access. Registering is not possible." : "Denne delingen er låst og tillater bare lesetilgang. Registrering er ikke mulig.",
     "Voting is locked and you have just read access to this poll." : "Stemmegivningen er låst og du har bare lesetilgang til denne avstemningen.",
     "To participate, register with your email address and a name." : "For å delta, registrer deg med din e-postadresse og et navn.",

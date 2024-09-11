@@ -254,7 +254,6 @@ OC.L10N.register(
     "_%n vote is allowed per option._::_%n votes are allowed per option._" : ["每個選項允許 %n 票。"],
     "_%n vote is allowed per participant._::_%n votes are allowed per participant._" : ["每個參與者允許 %n 票。"],
     "_You have %n vote left._::_You have %n votes left._" : ["您還剩下 %n 票。"],
-    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n 個可能已刪除選項的孤立投票可能會阻止您的投票限制。"],
     "This share is locked and allows only read access. Registering is not possible." : "此分享已被上鎖並且僅允許唯讀存取。無法註冊。",
     "Voting is locked and you have just read access to this poll." : "投票已被上鎖，此民意調查您只有讀取權限。",
     "To participate, register with your email address and a name." : "要參與，使用您的電郵地址與名稱註冊。",

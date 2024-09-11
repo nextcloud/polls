@@ -254,7 +254,6 @@ OC.L10N.register(
     "_%n vote is allowed per option._::_%n votes are allowed per option._" : ["%n Stimme ist pro Option erlaubt.","%n Stimmen sind pro Option erlaubt."],
     "_%n vote is allowed per participant._::_%n votes are allowed per participant._" : ["%n Stimme ist pro Teilnehmer erlaubt.","%n Stimmen sind pro Teilnehmer erlaubt."],
     "_You have %n vote left._::_You have %n votes left._" : ["Sie haben noch %n Stimme übrig.","Sie haben noch %n Stimmen übrig."],
-    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n verwaiste Stimme einer wahrscheinlich gelöschten Option blockiert möglicherweise Ihr Abstimmungslimit.","%n verwaiste Stimmen von wahrscheinlich gelöschten Optionen blockieren möglicherweise Ihr Abstimmungslimit."],
     "This share is locked and allows only read access. Registering is not possible." : "Diese Freigabe ist gesperrt und erlaubt nur den Lesezugriff. Eine Registrierung ist nicht möglich.",
     "Voting is locked and you have just read access to this poll." : "Die Abstimmung ist gesperrt und Sie haben lediglich Lesezugriff auf diese Umfrage.",
     "To participate, register with your email address and a name." : "Um teilzunehmen, registrieren Sie sich mit Ihrer E-Mail-Adresse und einem Namen.",

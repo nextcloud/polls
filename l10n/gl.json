@@ -252,7 +252,6 @@
     "_%n vote is allowed per option._::_%n votes are allowed per option._" : ["Permítese %n voto por opción.","Permítense %n votos por opción."],
     "_%n vote is allowed per participant._::_%n votes are allowed per participant._" : ["Permítese %n voto por participante.","Permítense %n votos por participante."],
     "_You have %n vote left._::_You have %n votes left._" : ["Aínda dispón de %n voto","Aínda dispón de %n votos"],
-    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n voto orfo dunha opción probabelmente eliminada posibelmente estea a bloquear o seu límite de votos.","%n votos orfos de opcións probabelmente eliminadas posibelmente estean a bloquear o seu límite de votos."],
     "This share is locked and allows only read access. Registering is not possible." : "Este recurso compartido está bloqueado e só permite o acceso de lectura. Non é posíbel rexistrarse.",
     "Voting is locked and you have just read access to this poll." : "A súa votación está bloqueada e só ten acceso de lectura a esta enquisa.",
     "To participate, register with your email address and a name." : "Para participar, rexístrese co seu enderezo de correo-e e un nome.",

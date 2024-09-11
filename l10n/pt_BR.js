@@ -254,7 +254,6 @@ OC.L10N.register(
     "_%n vote is allowed per option._::_%n votes are allowed per option._" : ["%n votos são permitidos por opção.","%n votos são permitidos por opção.","%n votos são permitidos por opção."],
     "_%n vote is allowed per participant._::_%n votes are allowed per participant._" : ["%n votos são permitidos por participante.","%n votos são permitidos por participante.","%n votos são permitidos por participante."],
     "_You have %n vote left._::_You have %n votes left._" : ["Você tem %n votos restantes.","Você tem %n votos restantes.","Você tem %n votos restantes."],
-    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n votos órfãos de opções provavelmente excluídas estão possivelmente bloqueando seu limite de votos.","%n votos órfãos de opções provavelmente excluídas estão possivelmente bloqueando seu limite de votos.","%n votos órfãos de opções provavelmente excluídas estão possivelmente bloqueando seu limite de votos."],
     "This share is locked and allows only read access. Registering is not possible." : "Este compartilhamento está bloqueado e permite apenas acesso de leitura. O registro não é possível.",
     "Voting is locked and you have just read access to this poll." : "A votação está bloqueada e você acabou de ler o acesso a esta enquete.",
     "To participate, register with your email address and a name." : "Para participar, registre-se com seu endereço de e-mail e um nome.",

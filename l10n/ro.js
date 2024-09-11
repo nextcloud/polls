@@ -35,6 +35,7 @@ OC.L10N.register(
     "Created" : "A fost creat",
     "Login" : "Autentificare",
     "Preview" : "Previzualizare",
+    "Show QR code" : "Afișează codul QR",
     "Restore share" : "Restabilește partajarea",
     "Shares" : "Partajări",
     "Description" : "Descriere",
