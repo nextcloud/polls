@@ -4,6 +4,10 @@
 -->
 # Changelog
 ##
+## [7.2.3] - 2024-09-12
+### Fix
+ -  fix size of creation box in navigation
+
 ## [7.2.2] - 2024-09-06
 ### Fix
  -  fix watcher in situations it may fail on pollId 0
