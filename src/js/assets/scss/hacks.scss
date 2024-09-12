@@ -5,8 +5,17 @@
 // some hacks, do alter the display of third parity components
 
 // raltive position to be able to get sticky toolbar
-.app-content {
-	position: relative !important;
+// Eliminated in Polls 7.2.3
+// .app-content {
+// 	position: relative !important;
+// }
+
+// prevents scrolling of the navigation default slot
+// Added in POlls 7.2.3
+// https://github.com/nextcloud/polls/issues/3704
+// https://github.com/nextcloud-libraries/nextcloud-vue/issues/6079
+.app-navigation__body {
+	flex: 1 0 auto;
 }
 
 // fill full input with background color
@@ -14,9 +23,10 @@
 	background-clip: initial !important;
 }
 
-.app-sidebar {
-	top: 0 !important;
-}
+// Eliminated in Polls 7.2.3
+// .app-sidebar {
+// 	top: 0 !important;
+// }
 
 .action-item.action-item--single.app-navigation-toggle.undefined.has-tooltip {
 	top: 4px;
@@ -32,9 +42,10 @@
 }
 
 // force scrolling of sidebar-tabs content
-.app-sidebar-tabs {
-	overflow-y: hidden;
-}
+// Eliminated in Polls 7.2.3
+// .app-sidebar-tabs {
+// 	overflow-y: hidden;
+// }
 
 .user-item > .checkbox-radio-switch-switch,
 .user-item.add-public > .icon-add {
@@ -42,11 +53,12 @@
 }
 
 // fix v-popover sizing
-.poll-header-buttons {
-	.trigger {
-		display: inline !important;
-	}
-}
+// Eliminated in Polls 7.2.3
+// .poll-header-buttons {
+// 	.trigger {
+// 		display: inline !important;
+// 	}
+// }
 
 .modal-wrapper .modal-container {
 	overflow: scroll !important;
