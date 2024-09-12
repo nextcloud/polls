@@ -50,11 +50,11 @@ jobs:
     - name: Extract release notes
       if: success()
       id: extract-release-notes
-      uses: ffurrer2/extract-release-notes@v1
+      uses: ffurrer2/extract-release-notes@v2
 
     - name: Draft Release
       if: success()
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with: 
         body: "# Changelog ${{ steps.appinfo.outputs.app-version }} \n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: false
