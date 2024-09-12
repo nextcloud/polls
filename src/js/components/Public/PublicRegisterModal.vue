@@ -20,7 +20,7 @@
 					v-model="emailAddress"
 					class="section__email"
 					:signaling-class="checkStatus.email"
-					:placeholder="t('polls', share.publicPollEmail === 'mandatory' ? 'Email address (mandatory)' : 'Email address (optional)')"
+					:placeholder="share.publicPollEmail === 'mandatory' ? t('polls', 'Email address (mandatory)') : t('polls', 'Email address (optional)')"
 					:helper-text="emailAddressHint"
 					type="email"
 					inputmode="email"
