@@ -404,6 +404,8 @@ OC.L10N.register(
     "No description provided" : "No description provided",
     "Guest participants" : "Guest participants",
     "Enter your name or a nickname" : "Enter your name or a nickname",
+    "Email address (mandatory)" : "Email address (mandatory)",
+    "Email address (optional)" : "Email address (optional)",
     "Remember me for 30 days" : "Remember me for 30 days",
     "Registered accounts" : "Registered accounts",
     "Login" : "Login",

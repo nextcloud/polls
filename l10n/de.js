@@ -404,6 +404,8 @@ OC.L10N.register(
     "No description provided" : "Keine Beschreibung eingegeben",
     "Guest participants" : "Gastteilnehmer",
     "Enter your name or a nickname" : "Gib deinen Namen oder einen Spitznamen ein",
+    "Email address (mandatory)" : "E-Mail-Adresse (Pflichtfeld)",
+    "Email address (optional)" : "E-Mail-Adresse (Optional)",
     "Remember me for 30 days" : "30 Tage lang an mich erinnern",
     "Registered accounts" : "Registrierte Konten",
     "Login" : "Anmeldung",
