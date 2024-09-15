@@ -402,6 +402,8 @@
     "No description provided" : "Açıklama yazılmamış.",
     "Guest participants" : "Konuk katılımcılar",
     "Enter your name or a nickname" : "Adınızı ya da bir takma ad yazın",
+    "Email address (mandatory)" : "E-posta adresi (zorunlu)",
+    "Email address (optional)" : "E-posta adresi (isteğe bağlı)",
     "Remember me for 30 days" : "Beni 30 gün boyunca hatırla",
     "Registered accounts" : "Kayıtlı hesaplar",
     "Login" : "Oturum aç",

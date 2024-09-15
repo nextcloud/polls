@@ -404,6 +404,8 @@ OC.L10N.register(
     "No description provided" : "Níor tugadh tuairisc",
     "Guest participants" : "Rannpháirtithe aoi",
     "Enter your name or a nickname" : "Cuir isteach d'ainm nó leasainm",
+    "Email address (mandatory)" : "Seoladh ríomhphoist (éigeantach)",
+    "Email address (optional)" : "Seoladh ríomhphoist (roghnach)",
     "Remember me for 30 days" : "Cuimhnigh orm ar feadh 30 lá",
     "Registered accounts" : "Cuntais chláraithe",
     "Login" : "Logáil isteach",

@@ -402,6 +402,8 @@
     "No description provided" : "未提供描述",
     "Guest participants" : "訪客參與者",
     "Enter your name or a nickname" : "輸入您的名字或暱稱",
+    "Email address (mandatory)" : "電郵地址（必填）",
+    "Email address (optional)" : "電郵地址（選填）",
     "Remember me for 30 days" : "記住我30天",
     "Registered accounts" : "已註冊帳戶",
     "Login" : "登入",
