@@ -402,6 +402,8 @@
     "No description provided" : "لم يتم تقديم وصف",
     "Guest participants" : "مشاركون ضيوف",
     "Enter your name or a nickname" : "أدخِل اسمك أو اسم الشُّهرة",
+    "Email address (mandatory)" : "عنوان البريد الالكتروني (مطلوب)",
+    "Email address (optional)" : "عنوان البريد الالكتروني (اختياري)",
     "Remember me for 30 days" : "تذكَّرْني لمدة 30 يومًا",
     "Registered accounts" : "مشاركون مسجلون",
     "Login" : "الدخول",
