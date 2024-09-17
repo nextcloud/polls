@@ -75,6 +75,7 @@ OC.L10N.register(
     "Public link" : "Публічне посилання",
     "Edit Email Address" : "Редагувати ел. адресу",
     "Change name" : "Змінити ім'я",
+    "Logout as {name} (delete cookie)" : "Вийти з акаунту {name} (видалити cookie)",
     "Email options" : "Параметри електронної пошти",
     "Yes" : "Так",
     "Administration" : "Адміністрування",
