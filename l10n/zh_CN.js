@@ -363,6 +363,8 @@ OC.L10N.register(
     "Error saving vote" : "保存投票出错",
     "Delete votes" : "删除投票",
     "Poll settings" : "投票设置",
+    "Change poll settings globally (for all accounts)" : "全局更改投票设置（针对所有帐户）",
+    "Change share settings globally (for all accounts)" : "全局更改共享设置（针对所有帐户）",
     "Other settings" : "其他设置",
     "If you are experiencing connection problems, change how auto updates are retrieved." : "如果您遇到连接问题，请更改获取自动更新的方式。",
     "Email options" : "电子邮件选项",
