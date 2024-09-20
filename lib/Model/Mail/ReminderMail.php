@@ -86,7 +86,7 @@ class ReminderMail extends MailBase {
 		));
 	}
 
-	private function getReminderReason() : ?string {
+	private function getReminderReason() : string|null {
 		if ($this->poll->getExpire()) {
 			return self::REASON_EXPIRATION;
 		} elseif ($this->poll->getType() === Poll::TYPE_DATE) {

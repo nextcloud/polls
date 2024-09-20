@@ -37,7 +37,7 @@ class ActivityProvider implements IProvider {
 	) {
 	}
 
-	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {
+	public function parse($language, IEvent $event, IEvent|null $previousEvent = null) {
 		if ($event->getApp() !== AppConstants::APP_ID) {
 			throw new \InvalidArgumentException();
 		}

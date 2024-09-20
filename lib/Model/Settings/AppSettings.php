@@ -279,7 +279,7 @@ class AppSettings implements JsonSerializable {
 		};
 	}
 
-	private function boolToString(?bool $value): string {
+	private function boolToString(bool|null $value): string {
 		if ($value) {
 			return 'yes';
 		}

@@ -29,11 +29,11 @@ class WatchController extends BaseController {
 	/**
 	 * Watch poll for updates
 	 * @param int $pollId poll id of poll to wqatch
-	 * @param ?int $offset only watch changes after this timestamp
+	 * @param int|null $offset only watch changes after this timestamp
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function watchPoll(int $pollId, ?int $offset): JSONResponse {
+	public function watchPoll(int $pollId, int|null $offset): JSONResponse {
 		return $this->responseLong(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
 	}
 }

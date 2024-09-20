@@ -121,11 +121,11 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Watch poll for updates
-	 * @param ?int $offset only watch changes after this timestamp
+	 * @param int|null $offset only watch changes after this timestamp
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
-	public function watchPoll(?int $offset): JSONResponse {
+	public function watchPoll(int|null $offset): JSONResponse {
 		return $this->responseLong(fn () => [
 			'updates' => $this->watchService->watchUpdates($this->userSession->getShare()->getPollId(), $offset)
 		]);

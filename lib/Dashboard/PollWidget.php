@@ -39,7 +39,7 @@ class PollWidget implements IWidget {
 		return 'icon-polls-dark';
 	}
 
-	public function getUrl(): ?string {
+	public function getUrl(): string|null {
 		return $this->urlGenerator->linkToRouteAbsolute(AppConstants::APP_ID . '.page.index');
 	}
 

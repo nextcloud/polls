@@ -91,7 +91,7 @@ class UserMapper extends QBMapper {
 		return $users;
 	}
 
-	public function getUserFromUserBase(string $userId, ?int $pollId = null): User {
+	public function getUserFromUserBase(string $userId, int|null $pollId = null): User {
 		$user = $this->userManager->get($userId);
 		if ($user instanceof IUser) {
 			try {

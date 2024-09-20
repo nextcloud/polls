@@ -17,8 +17,8 @@ use OCA\Polls\UserSession;
 use OCP\EventDispatcher\Event;
 
 abstract class BaseEvent extends Event {
-	protected ?string $activityObjectType = null;
-	protected ?string $eventId = null;
+	protected string|null $activityObjectType = null;
+	protected string|null $eventId = null;
 	protected array $activitySubjectParams = [];
 	protected bool $log = true;
 	protected Poll $poll;
@@ -73,7 +73,7 @@ abstract class BaseEvent extends Event {
 		return [];
 	}
 
-	public function getActivityObjectType(): ?string {
+	public function getActivityObjectType(): string|null {
 		return $this->activityObjectType;
 	}
 
@@ -84,7 +84,7 @@ abstract class BaseEvent extends Event {
 		return $this->eventObject->getId();
 	}
 
-	public function getActivityType(): ?string {
+	public function getActivityType(): string|null {
 		return $this->eventId;
 	}
 

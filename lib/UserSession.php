@@ -31,8 +31,8 @@ class UserSession {
 	public const CLIENT_TZ = 'ncPollsClientTimeZone';
 
 	public const TABLE = Share::TABLE;
-	protected ?UserBase $currentUser = null;
-	// protected ?Share $share = null;
+	protected UserBase|null $currentUser = null;
+	// protected Share|null $share = null;
 
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod

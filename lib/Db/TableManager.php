@@ -259,7 +259,7 @@ class TableManager {
 	 *
 	 * @psalm-return list<string>
 	 */
-	public function deleteAllDuplicates(?IOutput $output = null): array {
+	public function deleteAllDuplicates(IOutput|null $output = null): array {
 		$messages = [];
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $index) {
 			$count = $this->deleteDuplicates($tableName, $index['columns']);
@@ -346,7 +346,7 @@ class TableManager {
 		}
 	}
 
-	public function resetLastInteraction(?int $timestamp = null): array {
+	public function resetLastInteraction(int|null $timestamp = null): array {
 		$messages = [];
 		$timestamp = $timestamp ?? time();
 		$query = $this->connection->getQueryBuilder();
