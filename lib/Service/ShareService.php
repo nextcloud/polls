@@ -290,7 +290,6 @@ class ShareService {
 	 * @param string|null $emailAddress
 	 * @param string|null $timeZone
 	 * @param string|null $language
-	 * @return Share
 	 */
 	private function convertPersonalPublicShareToExternalShare(
 		string|null $userId = null,
@@ -298,7 +297,7 @@ class ShareService {
 		string|null $emailAddress = null,
 		string|null $timeZone = null,
 		string|null $language = null,
-	): Share {
+	): void {
 
 		// paranoia double check
 		if (!in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
@@ -323,7 +322,6 @@ class ShareService {
 		// remove personal information from user id
 		$this->share->setUserId($this->generatePublicUserId());
 		$this->share = $this->shareMapper->update($this->share);
-		return $this->share;
 	}
 
 	/**
@@ -366,7 +364,7 @@ class ShareService {
 		} elseif (in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
 			// Convert email and contact shares to external share, if user registers
 			// this should be avoided by the actual use cases, but keep code in case of later changes
-			$this->convertPersonalPublicShareToExternalShare($userId, $displayName, $emailAddress, $timeZone, $language, $resetInvitation);
+			$this->convertPersonalPublicShareToExternalShare($userId, $displayName, $emailAddress, $timeZone, $language);
 
 		} else {
 			throw new ForbiddenException('Share does not allow registering for poll');
