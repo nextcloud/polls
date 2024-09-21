@@ -301,7 +301,7 @@ class ShareService {
 
 		// paranoia double check
 		if (!in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
-			return $this->share;
+			return;
 		}
 
 		$this->share->setUserId($userId ?? $this->generatePublicUserId());
@@ -348,7 +348,6 @@ class ShareService {
 
 		$language = $this->systemService->getGenericLanguage();
 		$userId = $this->generatePublicUserId();
-		$resetInvitation = false;
 
 		if ($this->share->getType() === Share::TYPE_PUBLIC) {
 			// Create new external share for user, who entered the poll via public link,
