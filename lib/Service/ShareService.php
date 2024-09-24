@@ -333,13 +333,13 @@ class ShareService {
 
 	/**
 	 * Rename userId as a follow up on renaming share's userId
-	 * This methods covers the situation, where a userId of a share 
-	 * is changed, but there are already existing votes or options 
+	 * This methods covers the situation, where a userId of a share
+	 * is changed, but there are already existing votes or options
 	 * belonging to the renamed user
-	 * 
-	 * This situation could occur, if a user already registered before the update to 7.2.4 and 
+	 *
+	 * This situation could occur, if a user already registered before the update to 7.2.4 and
 	 * already voted, commented or suggested an option and reenters the poll with an email or contact share
-	 * 
+	 *
 	 * added in Polls 7.2.4 (can be removed later)
 	 */
 	private function convertDependingObjects(string $userId, string $replacementId, int $pollId) {
