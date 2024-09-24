@@ -39,7 +39,6 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Security\ISecureRandom;
-use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 
 class ShareService {
@@ -339,7 +338,7 @@ class ShareService {
 	 * belonging to the renamed user
 	 * 
 	 * This situation could occur, if a user already registered before the update to 7.2.4 and 
-	 * already voted, commented or suggested an option and reenters the pol lwith an email or contact share
+	 * already voted, commented or suggested an option and reenters the poll with an email or contact share
 	 * 
 	 * added in Polls 7.2.4 (can be removed later)
 	 */
