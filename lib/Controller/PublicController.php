@@ -238,8 +238,11 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	#[ShareTokenRequired]
 	public function setVote(int $optionId, string $setTo): JSONResponse {
+		$option = $this->optionService->get($optionId);
 		return $this->response(fn () => [
-			'vote' => $this->voteService->set($optionId, $setTo)
+			'vote' => $this->voteService->set($optionId, $setTo),
+			'poll' => $this->pollService->get($option->getPollId()),
+			'options' => $this->optionService->list($option->getPollId()),
 		]);
 	}
 
