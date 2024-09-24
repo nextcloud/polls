@@ -17,7 +17,7 @@
 			</template>
 		</NcActionButton>
 		<NcActionSeparator v-if="$route.name === 'publicVote'" />
-		<NcActionInput v-if="$route.name === 'publicVote'"
+		<NcActionInput v-if="share.type === 'external'"
 			v-bind="userEmail.inputProps"
 			:value.sync="userEmail.inputValue"
 			:label-outside="false"
@@ -29,7 +29,7 @@
 			</template>
 			{{ t('polls', 'Edit Email Address') }}
 		</NcActionInput>
-		<NcActionInput v-if="$route.name === 'publicVote' && permissions.vote"
+		<NcActionInput v-if="share.type === 'external' && permissions.vote"
 			v-bind="userName.inputProps"
 			:value.sync="userName.inputValue"
 			:label-outside="false"
@@ -57,7 +57,7 @@
 			@change="toggleSubscription">
 			{{ t('polls', 'Subscribe to notifications') }}
 		</NcActionCheckbox>
-		<NcActionButton v-if="$route.name === 'publicVote' && emailAddress"
+		<NcActionButton v-if="share.type === 'external' && emailAddress"
 			:name="t('polls', 'Remove Email Address')"
 			:aria-label="t('polls', 'Remove Email Address')"
 			:disabled="!emailAddress"
