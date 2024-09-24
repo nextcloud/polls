@@ -53,12 +53,17 @@ class CommentMapper extends QBMapperWithUser {
 	/**
 	 * @return void
 	 */
-	public function renameUserId(string $userId, string $replacementName): void {
+	public function renameUserId(string $userId, string $replacementId, int|null $pollId = null): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName(), self::TABLE)
-			->set('user_id', $query->createNamedParameter($replacementName))
-			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)))
-			->executeStatement();
+			->set('user_id', $query->createNamedParameter($replacementId))
+			->where($query->expr()->eq('user_id', $query->createNamedParameter($userId)));
+
+		if ($pollId !== null) {
+			$query->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		}
+	
+		$query->executeStatement();
 	}
 
 	public function purgeDeletedComments(int $offset): void {
