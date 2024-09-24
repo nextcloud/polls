@@ -8,11 +8,14 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Service;
 
+use OCA\Polls\Db\CommentMapper;
+use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\ShareChangedDisplayNameEvent;
 use OCA\Polls\Event\ShareChangedEmailEvent;
 use OCA\Polls\Event\ShareChangedLabelEvent;
@@ -64,6 +67,9 @@ class ShareService {
 		private PollMapper $pollMapper,
 		private UserMapper $userMapper,
 		private UserSession $userSession,
+		private VoteMapper $voteMapper,
+		private OptionMapper $optionMapper,
+		private CommentMapper $commentMapper,
 	) {
 		$this->shares = [];
 	}
@@ -304,6 +310,7 @@ class ShareService {
 			return;
 		}
 
+		$initialUserId = $this->share->getUserId();
 		$this->share->setUserId($userId ?? $this->generatePublicUserId());
 		$this->share->setDisplayName($displayName ?? $this->share->getDisplayName());
 		$this->share->setTimeZoneName($timeZone ?? $this->share->getTimeZoneName());
@@ -322,6 +329,24 @@ class ShareService {
 		// remove personal information from user id
 		$this->share->setUserId($this->generatePublicUserId());
 		$this->share = $this->shareMapper->update($this->share);
+		$this->convertDependingObjects($initialUserId, $this->share->getUserId(), $this->share->getPollId());
+	}
+
+	/**
+	 * Rename userId as a follow up on renaming share's userId
+	 * This methods covers the situation, where a userId of a share 
+	 * is changed, but there are already existing votes or options 
+	 * belonging to the renamed user
+	 * 
+	 * This situation could occur, if a user already registered before the update to 7.2.4 and 
+	 * already voted, commented or suggested an option and reenters the pol lwith an email or contact share
+	 * 
+	 * added in Polls 7.2.4 (can be removed later)
+	 */
+	private function convertDependingObjects(string $userId, string $replacementId, int $pollId) {
+		$this->voteMapper->renameUserId($userId, $replacementId, $pollId);
+		$this->optionMapper->renameUserId($userId, $replacementId, $pollId);
+		$this->commentMapper->renameUserId($userId, $replacementId, $pollId);
 	}
 
 	/**
