@@ -128,12 +128,17 @@ class OptionMapper extends QBMapperWithUser {
 		return $this->findEntities($qb);
 	}
 
-	public function renameUserId(string $userId, string $replacementName): void {
+	public function renameUserId(string $userId, string $replacementName, int|null $pollId = null): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName())
 			->set('owner', $query->createNamedParameter($replacementName))
-			->where($query->expr()->eq('owner', $query->createNamedParameter($userId)))
-			->executeStatement();
+			->where($query->expr()->eq('owner', $query->createNamedParameter($userId)));
+
+		if ($pollId !== null) {
+			$query->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		}
+
+		$query->executeStatement();
 	}
 
 	public function purgeDeletedOptions(int $offset): void {
