@@ -36,9 +36,15 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Security\ISecureRandom;
+use phpDocumentor\Reflection\Types\This;
 use Psr\Log\LoggerInterface;
 
 class ShareService {
+	private const SHARES_TO_CONVERT_ON_ACCESS = [
+		Share::TYPE_EMAIL,
+		Share::TYPE_CONTACT,
+	];
+
 	/** @var Share[] * */
 	private array $shares;
 
@@ -107,7 +113,7 @@ class ShareService {
 	 * If user is not authorized for this poll, create a personal share
 	 * for this user and return the created share instead of the public share
 	 */
-	private function convertPublicToPersonalShare(): void {
+	private function convertPublicShareToPersonalShare(): void {
 		try {
 			$this->share = $this->createNewShare(
 				$this->share->getPollId(),
@@ -128,6 +134,7 @@ class ShareService {
 	 * @param string $token Token of share to get
 	 */
 	public function request(string $token): Share {
+
 		$this->share = $this->shareMapper->findByToken($token);
 
 		$this->validateShareType();
@@ -139,8 +146,14 @@ class ShareService {
 
 		// Exception: logged in user, accesses the poll via public share link
 		if ($this->share->getType() === Share::TYPE_PUBLIC && $this->userSession->getIsLoggedIn()) {
-			$this->convertPublicToPersonalShare();
+			$this->convertPublicShareToPersonalShare();
 		}
+
+		// Exception for convertable (email and contact) shares
+		if (in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
+			$this->convertPersonalPublicShareToExternalShare();
+		}
+
 		return $this->share;
 	}
 
@@ -271,8 +284,54 @@ class ShareService {
 	}
 
 	/**
+	 * Convert convertable public shares to external share and generates a unique user id
+	 * @param string|null $userId
+	 * @param string|null $displayName
+	 * @param string|null $emailAddress
+	 * @param string|null $timeZone
+	 * @param string|null $language
+	 */
+	private function convertPersonalPublicShareToExternalShare(
+		string|null $userId = null,
+		string|null $displayName = null,
+		string|null $emailAddress = null,
+		string|null $timeZone = null,
+		string|null $language = null,
+	): void {
+
+		// paranoia double check
+		if (!in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
+			return;
+		}
+
+		$this->share->setUserId($userId ?? $this->generatePublicUserId());
+		$this->share->setDisplayName($displayName ?? $this->share->getDisplayName());
+		$this->share->setTimeZoneName($timeZone ?? $this->share->getTimeZoneName());
+		$this->share->setLanguage($language ?? $this->share->getLanguage());
+		
+		if ($emailAddress && $emailAddress !== $this->share->getEmailAddress()) {
+			// reset invitation sent, if email address is changed
+			$this->share->setInvitationSent(0);
+		}
+
+		$this->share->setEmailAddress($emailAddress ?? $this->share->getEmailAddress());
+
+		// convert to type external
+		$this->share->setType(Share::TYPE_EXTERNAL);
+
+		// remove personal information from user id
+		$this->share->setUserId($this->generatePublicUserId());
+		$this->share = $this->shareMapper->update($this->share);
+	}
+
+	/**
 	 * Create a personal share from a public share
 	 * or update an email share with the displayName
+	 * @param string $publicShareToken
+	 * @param string $displayName
+	 * @param string $emailAddress
+	 * @param string $timeZone
+	 * @return Share
 	 */
 	public function register(
 		string $publicShareToken,
@@ -300,23 +359,12 @@ class ShareService {
 				$timeZone
 			);
 			$this->eventDispatcher->dispatchTyped(new ShareRegistrationEvent($this->share));
-		} elseif (
-			$this->share->getType() === Share::TYPE_EMAIL
-			|| $this->share->getType() === Share::TYPE_CONTACT
-		) {
-			// Convert email and contact shares to external share, if user registers
-			$this->share->setType(Share::TYPE_EXTERNAL);
-			$this->share->setUserId($userId);
-			$this->share->setDisplayName($displayName);
-			$this->share->setTimeZoneName($timeZone);
-			$this->share->setLanguage($language);
 
-			// prepare for resending invitation to new email address
-			if ($emailAddress !== $this->share->getEmailAddress()) {
-				$this->share->setInvitationSent(0);
-			}
-			$this->share->setEmailAddress($emailAddress);
-			$this->shareMapper->update($this->share);
+		} elseif (in_array($this->share->getType(), Share::CONVERATABLE_PUBLIC_SHARES, true)) {
+			// Convert email and contact shares to external share, if user registers
+			// this should be avoided by the actual use cases, but keep code in case of later changes
+			$this->convertPersonalPublicShareToExternalShare($userId, $displayName, $emailAddress, $timeZone, $language);
+
 		} else {
 			throw new ForbiddenException('Share does not allow registering for poll');
 		}

@@ -69,12 +69,16 @@ class Share extends EntityWithUser implements JsonSerializable {
 	public const TYPE_CONTACTGROUP = 'contactGroup';
 
 
+	public const CONVERATABLE_PUBLIC_SHARES = [
+		self::TYPE_EMAIL,
+		self::TYPE_CONTACT,
+	];
+
 	// Share types, that are allowed for public access (without login)
 	public const SHARE_PUBLIC_ACCESS_ALLOWED = [
 		self::TYPE_PUBLIC,
-		self::TYPE_CONTACT,
-		self::TYPE_EMAIL,
 		self::TYPE_EXTERNAL,
+		...self::CONVERATABLE_PUBLIC_SHARES,
 	];
 
 	// Share types, that are allowed for authenticated access (with login)
