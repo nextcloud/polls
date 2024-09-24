@@ -4,6 +4,12 @@
 -->
 # Changelog
 ##
+## [7.2.3] - 2024-09-25
+### Fix
+ - fix vote limit checks for public users
+ - fix access to public polls email and contact shares
+ - fix placeholder translations of email input of the register dialog
+
 ## [7.2.3] - 2024-09-12
 ### Fix
  -  fix size of creation box in navigation
