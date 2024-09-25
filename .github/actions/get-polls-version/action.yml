@@ -21,7 +21,7 @@ runs:
   steps:
     - name: Get app version from appinfo/info.xml
       id: appinfo
-      uses: mavrosxristoforos/get-xml-info@1.1.1
+      uses: mavrosxristoforos/get-xml-info@1.1.1.0
       with:
         xml-file: 'appinfo/info.xml'
         xpath: '//info//version'
