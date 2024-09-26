@@ -209,7 +209,7 @@
 			<SettingsIcon :size="20" decorative />
 		</template>
 
-		<NcActionButton v-if="sessionStore.route.name === 'publicVote'"
+		<NcActionButton v-if="sessionStore.share.type === 'external'"
 			:name="t('polls', 'Copy your personal link to clipboard')"
 			:aria-label="t('polls', 'Copy your personal link to clipboard')"
 			@click="copyLink()">
@@ -218,9 +218,9 @@
 			</template>
 		</NcActionButton>
 
-		<NcActionSeparator v-if="sessionStore.route.name === 'publicVote'" />
+		<NcActionSeparator v-if="sessionStore.share.type === 'external'" />
 
-		<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
+		<NcActionInput v-if="sessionStore.share.type === 'external'"
 			v-bind="displayNameInputProps"
 			v-model="shareStore.displayName"
 			@update:value-value="validateDisplayName"
@@ -231,7 +231,7 @@
 			{{ displayNameInputProps.label }}
 		</NcActionInput>
 
-		<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
+		<NcActionInput v-if="sessionStore.share.type === 'external'"
 			v-bind="eMailInputProps"
 			v-model="shareStore.emailAddress"
 			@update:model-value="validateEMail"
@@ -242,7 +242,7 @@
 			{{ eMailInputProps.label }}
 		</NcActionInput>
 
-		<NcActionButton v-if="sessionStore.route.name === 'publicVote'"
+		<NcActionButton v-if="sessionStore.share.type === 'external'"
 			:name="t('polls', 'Get your personal link per mail')"
 			:aria-label="t('polls', 'Get your personal link per mail')"
 			:disabled="!shareStore.user.emailAddress"
@@ -259,7 +259,7 @@
 			{{ t('polls', 'Subscribe to notifications') }}
 		</NcActionCheckbox>
 
-		<NcActionButton v-if="sessionStore.route.name === 'publicVote' && shareStore.user.emailAddress"
+		<NcActionButton v-if="sessionStore.share.type === 'external' && shareStore.user.emailAddress"
 			:name="t('polls', 'Remove Email Address')"
 			:aria-label="t('polls', 'Remove Email Address')"
 			@click="deleteEmailAddress">
@@ -286,7 +286,7 @@
 			</template>
 		</NcActionButton>
 
-		<NcActionButton v-if="sessionStore.route.name === 'publicVote' && hasCookie"
+		<NcActionButton v-if="sessionStore.share.type === 'external' && hasCookie"
 			:name="t('polls', 'Logout as {name} (delete cookie)', { name: sessionStore.currentUser.displayName })"
 			:aria-label="t('polls', 'Logout as {name} (delete cookie)', { name: sessionStore.currentUser.displayName })"
 			@click="logout()">
