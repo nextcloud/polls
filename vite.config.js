@@ -11,6 +11,13 @@ const customConfig = {
 			'@': resolve('src/js'),
 		}
 	},
+	css: {
+		preprocessorOptions: {
+			scss: {
+				api: 'modern-compiler'
+			},
+		},
+	},
 }
 export default createAppConfig({
 	main: resolve(join('src', 'main.ts')),
