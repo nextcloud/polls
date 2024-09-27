@@ -12,6 +12,7 @@
 	import { Logger } from '../../../helpers/index.ts'
 	import { t, n } from '@nextcloud/l10n'
 	import { StatusResults } from '../../../Types/index.ts'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const route = useRoute()
 	const showModal = ref(false)
@@ -50,7 +51,7 @@
 
 <template>
 	<div class="action send-confirmations">
-		<NcButton type="primary"
+		<NcButton :type="ButtonType.Primary"
 			:aria-label="sendButtonCaption"
 			:disabled="disableButton"
 			@click="clickAction()">

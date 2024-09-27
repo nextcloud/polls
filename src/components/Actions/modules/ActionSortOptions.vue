@@ -12,6 +12,7 @@
 	import { t } from '@nextcloud/l10n'
 	import { useOptionsStore } from '../../../stores/options.ts'
 	import { usePollStore, PollType } from '../../../stores/poll.ts'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollStore = usePollStore()
 	const optionsStore = useOptionsStore()
@@ -31,7 +32,7 @@
 
 <template>
 	<div class="action sort-options">
-		<NcButton type="tertiary"
+		<NcButton :type="ButtonType.Tertiary"
 			:title="caption"
 			:aria-label="caption"
 			@click="optionsStore.ranked = !optionsStore.ranked">

@@ -8,6 +8,7 @@
 	import { emit } from '@nextcloud/event-bus'
 	import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 	import { t } from '@nextcloud/l10n'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js';
 
 	const caption = t('polls', 'Toggle Sidebar')
 	function clickAction() {
@@ -19,7 +20,7 @@
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
+		<NcButton :type="ButtonType.Tertiary"
 			:title="caption"
 			:aria-label="caption"
 			@click="clickAction()">

@@ -11,6 +11,7 @@
 	import { t } from '@nextcloud/l10n'
 	import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
 	import { dateUnits, DateUnitValue } from '../../constants/dateUnits.ts'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const optionsStore = useOptionsStore()
 
@@ -77,7 +78,7 @@
 				</template>
 			</NcButton>
 
-			<NcButton type="primary" @click="createSequence()">
+			<NcButton :type="ButtonType.Primary" @click="createSequence()">
 				<template #default>
 					{{ t('polls', 'OK') }}
 				</template>

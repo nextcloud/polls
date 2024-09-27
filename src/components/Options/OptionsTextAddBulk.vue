@@ -12,6 +12,7 @@
 	import { useOptionsStore } from '../../stores/options.ts'
 
 	import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const optionsStore = useOptionsStore()
 
@@ -70,7 +71,7 @@
 						</template>
 					</NcButton>
 
-					<NcButton type="primary" @click="addOptionsList()">
+					<NcButton :type="ButtonType.Primary" @click="addOptionsList()">
 						<template #default>
 							{{ t('polls', 'OK') }}
 						</template>
