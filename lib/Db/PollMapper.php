@@ -295,7 +295,7 @@ class PollMapper extends QBMapper {
 	/**
 	 * Subquery for votes count
 	 */
-	protected function subQueryVotesCount(string $fromAlias, IParameter $currentUserId, ?IParameter $answerFilter = null): IQueryBuilder {
+	protected function subQueryVotesCount(string $fromAlias, IParameter $currentUserId, IParameter|null $answerFilter = null): IQueryBuilder {
 		$subAlias = 'user_vote_sub';
 
 		$subQuery = $this->db->getQueryBuilder();

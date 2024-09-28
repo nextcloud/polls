@@ -514,7 +514,7 @@ class ShareService {
 	 * @param Share $share
 	 * @param SentResult $sentResult to collect results
 	 */
-	public function sendInvitation(Share $share, ?SentResult &$sentResult = null): SentResult|null {
+	public function sendInvitation(Share $share, SentResult|null &$sentResult = null): SentResult|null {
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
 		} elseif ($share->getType() === Share::TYPE_GROUP) {

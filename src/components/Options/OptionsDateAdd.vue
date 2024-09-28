@@ -15,6 +15,7 @@
 	import { FlexSpacer } from '../Base/index.js'
 	import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const optionsStore = useOptionsStore()
 	const props = defineProps({
@@ -239,7 +240,7 @@
 		@change="changedDate"
 		@pick="pickedDate">
 		<template #input>
-			<NcButton type="primary" :aria-label="buttonAriaLabel">
+			<NcButton :type="ButtonType.Primary" :aria-label="buttonAriaLabel">
 				<template #icon>
 					<AddDateIcon />
 				</template>

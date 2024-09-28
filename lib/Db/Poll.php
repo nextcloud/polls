@@ -128,8 +128,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public $id = null;
 	protected string $type = '';
 	protected string $title = '';
-	protected ?string $description = '';
-	protected ?string $owner = '';
+	protected string|null $description = '';
+	protected string|null $owner = '';
 	protected int $created = 0;
 	protected int $expire = 0;
 	protected int $deleted = 0;
@@ -146,15 +146,15 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $hideBookedUp = 0;
 	protected int $useNo = 0;
 	protected int $lastInteraction = 0;
-	protected ?string $miscSettings = '';
+	protected string|null $miscSettings = '';
 
 	// joined columns
-	protected ?int $isCurrentUserLocked = 0;
+	protected int|null $isCurrentUserLocked = 0;
 	protected int $maxDate = 0;
 	protected int $minDate = 0;
 	protected string $userRole = self::ROLE_NONE;
 	protected string $shareToken = '';
-	protected ?string $groupShares = '';
+	protected string|null $groupShares = '';
 	protected int $countOptions = 0;
 	
 	// subqueried columns

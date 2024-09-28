@@ -18,6 +18,7 @@
 	import { t } from '@nextcloud/l10n'
 	import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
 	import { SortType, Poll, StatusResults } from '../Types/index.ts'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollsAdminStore = usePollsAdminStore()
 
@@ -186,7 +187,7 @@
 						</template>
 					</NcButton>
 
-					<NcButton type="primary" @click="takeOverPoll()">
+					<NcButton :type="ButtonType.Primary" @click="takeOverPoll()">
 						<template #default>
 							{{ t('polls', 'Yes') }}
 						</template>
@@ -209,7 +210,7 @@
 						</template>
 					</NcButton>
 
-					<NcButton type="primary" @click="deletePoll()">
+					<NcButton :type="ButtonType.Primary" @click="deletePoll()">
 						<template #default>
 							{{ t('polls', 'Yes') }}
 						</template>

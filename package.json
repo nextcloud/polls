@@ -20,8 +20,9 @@
     "stylelint:fix": "stylelint src --fix",
     "version": "node update-app-version.mjs && git add ./appinfo/info.xml",
     "build": "vite --mode production build",
-    "dev": "set NODE_ENV=production && vite --mode development build",
-    "watch": "set NODE_ENV=production && vite --mode development build --watch"
+    "dev": "NODE_ENV=development vite --mode development build",
+    "dev:win": "set NODE_ENV=development && vite --mode development build",
+    "watch": "NODE_ENV=development vite --mode development build --watch"
   },
   "browserslist": [
     "extends @nextcloud/browserslist-config"
@@ -52,7 +53,7 @@
     "vue": "^3.4.30",
     "vue-material-design-icons": "^5.3.0",
     "vue-router": "^4.4.0",
-    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.2/xlsx-0.20.2.tgz"
+    "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {
     "@nextcloud/browserslist-config": "^3.0.1",

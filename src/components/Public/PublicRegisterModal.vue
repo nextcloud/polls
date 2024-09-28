@@ -18,6 +18,7 @@
 	import { SignalingType, UserType } from '../../Types'
 	import { useSessionStore } from '../../stores/session.ts'
 	import { usePollStore } from '../../stores/poll.ts'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const route = useRoute()
 	const router = useRouter()
@@ -125,7 +126,7 @@
 	 */
 	function updateCookie(value: string) {
 		const cookieExpiration = (COOKIE_LIFETIME * 24 * 60 * 1000)
-		setCookie(route.params.token, value, cookieExpiration)
+		setCookie(route.params.token.toString(), value, cookieExpiration)
 	}
 
 	/**
@@ -267,7 +268,7 @@
 							</template>
 						</NcButton>
 
-						<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
+						<NcButton :type="ButtonType.Primary" :disabled="disableSubmit" @click="submitRegistration()">
 							<template #default>
 								{{ t('polls', 'OK') }}
 							</template>

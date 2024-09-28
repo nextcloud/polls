@@ -47,9 +47,9 @@ class Log extends Entity implements JsonSerializable {
 	// schema columns
 	public $id = null;
 	protected int $pollId = 0;
-	protected ?string $userId = '';
-	protected ?string $displayName = '';
-	protected ?string $messageId = '';
+	protected string|null $userId = '';
+	protected string|null $displayName = '';
+	protected string|null $messageId = '';
 	protected int $created = 0;
 	protected int $processed = 0;
 

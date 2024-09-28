@@ -7,6 +7,7 @@
 	import { NcButton } from '@nextcloud/vue'
 	import { emit } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js';
 
 	const caption = t('polls', 'Add some!')
 
@@ -18,7 +19,7 @@
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton type="primary"
+		<NcButton :type="ButtonType.Primary"
 			:aria-label="caption"
 			@click="clickAction()">
 			{{ caption }}

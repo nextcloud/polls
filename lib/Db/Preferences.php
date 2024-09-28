@@ -43,7 +43,7 @@ class Preferences extends Entity implements JsonSerializable {
 	public $id = 0;
 	protected string $userId = '';
 	protected int $timestamp = 0;
-	protected ?string $preferences = '';
+	protected string|null $preferences = '';
 
 	public function __construct() {
 		$this->addType('timestamp', 'int');

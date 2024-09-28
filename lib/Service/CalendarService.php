@@ -144,7 +144,7 @@ class CalendarService {
 		return $events;
 	}
 
-	private function getCalendarFromEvent(array $event): ?ICalendar {
+	private function getCalendarFromEvent(array $event): ICalendar|null {
 		foreach ($this->calendars as $calendar) {
 			if ($calendar->getKey() === $event['calendar-key']) {
 				return $calendar;

@@ -70,7 +70,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $deleted = 0;
 
 	// joined columns
-	protected ?string $userVoteAnswer = '';
+	protected string|null $userVoteAnswer = '';
 	protected int $optionLimit = 0;
 	protected int $voteLimit = 0;
 	protected int $userCountYesVotes = 0;

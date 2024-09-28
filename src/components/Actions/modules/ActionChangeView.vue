@@ -12,6 +12,7 @@
 	import { t } from '@nextcloud/l10n'
 	import { usePollStore, PollType, } from '../../../stores/poll.ts'
 	import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
+	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollStore = usePollStore()
 	const preferencesStore = usePreferencesStore()
@@ -45,7 +46,7 @@
 
 <template>
 	<div class="action change-view">
-		<NcButton type="tertiary"
+		<NcButton :type="ButtonType.Tertiary"
 			:title="caption"
 			:aria-label="caption"
 			@click="clickAction()">
