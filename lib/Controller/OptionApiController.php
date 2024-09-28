@@ -22,7 +22,7 @@ class OptionApiController extends BaseApiController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private OptionService $optionService
+		private OptionService $optionService,
 	) {
 		parent::__construct($appName, $request);
 	}

@@ -31,7 +31,7 @@ class CalendarEvent implements \JsonSerializable {
 		protected ICalendar $calendar,
 		protected ?DateTimeImmutable $filterFrom = null,
 		protected ?DateTimeImmutable $filterTo = null,
-		protected ?DateTimeZone $timezone = null
+		protected ?DateTimeZone $timezone = null,
 	) {
 		$this->event = $this->iCal['objects'][0];
 		$this->hasRRule = isset($this->event['RRULE']);

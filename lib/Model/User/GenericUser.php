@@ -23,7 +23,7 @@ class GenericUser extends UserBase {
 		string $emailAddress = '',
 		string $languageCode = '',
 		string $localeCode = '',
-		string $timeZoneName = ''
+		string $timeZoneName = '',
 	) {
 		parent::__construct($id, $type, $displayName, $emailAddress, $languageCode, $localeCode, $timeZoneName);
 

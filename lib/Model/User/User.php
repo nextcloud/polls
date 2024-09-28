@@ -27,7 +27,7 @@ class User extends UserBase {
 
 	public function __construct(
 		string $id,
-		string $type = self::TYPE
+		string $type = self::TYPE,
 	) {
 		parent::__construct($id, $type);
 		$this->icon = self::ICON;

@@ -32,7 +32,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
 	public function __construct(
 	) {
 		parent::__construct();
-		$this->question = new ConfirmationQuestion('Continue (y/n)? ['. ($this->defaultContinueAnswer ? 'y' : 'n') . '] ', $this->defaultContinueAnswer);
+		$this->question = new ConfirmationQuestion('Continue (y/n)? [' . ($this->defaultContinueAnswer ? 'y' : 'n') . '] ', $this->defaultContinueAnswer);
 	}
 
 	protected function configure(): void {

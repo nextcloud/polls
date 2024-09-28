@@ -18,7 +18,9 @@ class ActivitySettings implements ISetting {
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
-	public function __construct(protected IL10N $l10n) {
+	public function __construct(
+		protected IL10N $l10n,
+	) {
 	}
 
 	public function getIdentifier() : string {

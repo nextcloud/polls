@@ -53,7 +53,7 @@ class CommentMapper extends QBMapperWithUser {
 	/**
 	 * @return void
 	 */
-	public function renameUserId(string $userId, string $replacementId, int|null $pollId = null): void {
+	public function renameUserId(string $userId, string $replacementId, ?int $pollId = null): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName(), self::TABLE)
 			->set('user_id', $query->createNamedParameter($replacementId))

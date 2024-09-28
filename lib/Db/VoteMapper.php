@@ -115,7 +115,7 @@ class VoteMapper extends QBMapperWithUser {
 		$qb->executeStatement();
 	}
 
-	public function renameUserId(string $userId, string $replacementId, int|null $pollId = null): void {
+	public function renameUserId(string $userId, string $replacementId, ?int $pollId = null): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName())
 			->set('user_id', $query->createNamedParameter($replacementId))

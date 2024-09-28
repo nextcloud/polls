@@ -21,7 +21,7 @@ class WatchController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private WatchService $watchService
+		private WatchService $watchService,
 	) {
 		parent::__construct($appName, $request);
 	}

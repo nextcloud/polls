@@ -43,7 +43,6 @@ class UserSession {
 		protected UserMapper $userMapper,
 		protected ShareMapper $shareMapper,
 		protected Share $share,
-
 	) {
 	}
 

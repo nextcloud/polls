@@ -50,7 +50,7 @@ class PublicController extends BasePublicController {
 		private SubscriptionService $subscriptionService,
 		private SystemService $systemService,
 		private VoteService $voteService,
-		private WatchService $watchService
+		private WatchService $watchService,
 	) {
 		parent::__construct($appName, $request);
 	}

@@ -257,7 +257,7 @@ class IndexManager {
 	 *
 	 * @return null|string
 	 */
-	public function removeNamedIndexFromTable(string $tableName, string $indexName): string|null {
+	public function removeNamedIndexFromTable(string $tableName, string $indexName): ?string {
 		$tableName = $this->dbPrefix . $tableName;
 		$message = null;
 		try {

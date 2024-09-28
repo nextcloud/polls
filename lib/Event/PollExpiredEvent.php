@@ -13,7 +13,7 @@ class PollExpiredEvent extends PollEvent {
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function __construct(
-		protected Poll $poll
+		protected Poll $poll,
 	) {
 		parent::__construct($poll);
 		$this->eventId = self::EXPIRE;

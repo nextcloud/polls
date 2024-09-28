@@ -20,7 +20,7 @@ class CommentController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private CommentService $commentService
+		private CommentService $commentService,
 	) {
 		parent::__construct($appName, $request);
 	}

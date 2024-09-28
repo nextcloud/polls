@@ -25,7 +25,7 @@ use Symfony\Component\Console\Question\ConfirmationQuestion;
 class TransferOwnership extends Command {
 	public function __construct(
 		private IUserManager $userManager,
-		private PollService $pollService
+		private PollService $pollService,
 	) {
 		parent::__construct();
 	}

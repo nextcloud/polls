@@ -21,7 +21,7 @@ class Group extends UserBase {
 	private IGroup $group;
 
 	public function __construct(
-		string $id
+		string $id,
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;

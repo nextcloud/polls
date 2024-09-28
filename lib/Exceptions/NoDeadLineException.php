@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class NoDeadLineException extends Exception {
 	public function __construct(
-		string $e = 'No deadline calculated'
+		string $e = 'No deadline calculated',
 	) {
 		parent::__construct($e, Http::STATUS_OK);
 	}

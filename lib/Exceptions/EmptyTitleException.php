@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class EmptyTitleException extends Exception {
 	public function __construct(
-		string $e = 'Poll title must not be empty'
+		string $e = 'Poll title must not be empty',
 	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}

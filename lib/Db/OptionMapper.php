@@ -128,7 +128,7 @@ class OptionMapper extends QBMapperWithUser {
 		return $this->findEntities($qb);
 	}
 
-	public function renameUserId(string $userId, string $replacementName, int|null $pollId = null): void {
+	public function renameUserId(string $userId, string $replacementName, ?int $pollId = null): void {
 		$query = $this->db->getQueryBuilder();
 		$query->update($this->getTableName())
 			->set('owner', $query->createNamedParameter($replacementName))

@@ -22,7 +22,7 @@ class NotificationMail extends MailBase {
 	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Notification';
 
 	public function __construct(
-		protected Subscription $subscription
+		protected Subscription $subscription,
 	) {
 		parent::__construct($subscription->getUserId(), $subscription->getPollId());
 	}

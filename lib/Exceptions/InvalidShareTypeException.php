@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class InvalidShareTypeException extends Exception {
 	public function __construct(
-		string $e = 'Invalid share type'
+		string $e = 'Invalid share type',
 	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}

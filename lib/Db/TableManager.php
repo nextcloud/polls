@@ -101,7 +101,7 @@ class TableManager {
 			->setParameter('appid', AppConstants::APP_ID)
 			->executeStatement();
 
-		$this->logger->info('Removed all app config records from '. $this->dbPrefix . 'appconfig');
+		$this->logger->info('Removed all app config records from ' . $this->dbPrefix . 'appconfig');
 		$messages[] = 'Removed all app config records from ' . $this->dbPrefix . 'appconfig';
 		$messages[] = 'Done.';
 		$messages[] = '';
@@ -273,7 +273,7 @@ class TableManager {
 			$count = $this->deleteDuplicates($tableName, $index['columns']);
 
 			if ($count) {
-				$messages[] = 'Removed '. $count. ' duplicate records from ' . $this->dbPrefix . $tableName;
+				$messages[] = 'Removed ' . $count . ' duplicate records from ' . $this->dbPrefix . $tableName;
 				$this->logger->info(end($messages));
 			}
 

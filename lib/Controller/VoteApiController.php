@@ -25,7 +25,7 @@ class VoteApiController extends BaseApiController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private VoteService $voteService
+		private VoteService $voteService,
 	) {
 		parent::__construct($appName, $request);
 	}
