@@ -11,7 +11,7 @@ use OCA\Polls\Notification\Notifier;
 
 class PollTakeoverEvent extends PollOwnerChangeEvent {
 	public function __construct(
-		protected Poll $poll
+		protected Poll $poll,
 	) {
 		parent::__construct($poll);
 	}

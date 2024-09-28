@@ -68,7 +68,7 @@ class VoteService {
 	/**
 	 * Set vote
 	 */
-	public function set(int $optionId, string $setTo): Vote|null {
+	public function set(int $optionId, string $setTo): ?Vote {
 		$option = $this->optionMapper->find($optionId);
 		$poll = $this->pollMapper->find($option->getPollId());
 		$poll->request(Poll::PERMISSION_VOTE_EDIT);

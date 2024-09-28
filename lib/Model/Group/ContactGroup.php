@@ -19,7 +19,7 @@ class ContactGroup extends UserBase {
 	public const ICON = 'icon-group';
 
 	public function __construct(
-		string $id
+		string $id,
 	) {
 		parent::__construct($id, self::TYPE);
 		$this->icon = self::ICON;

@@ -10,7 +10,7 @@ use OCA\Polls\Db\Poll;
 
 class PollCreatedEvent extends PollEvent {
 	public function __construct(
-		protected Poll $poll
+		protected Poll $poll,
 	) {
 		parent::__construct($poll);
 		$this->eventId = self::ADD;

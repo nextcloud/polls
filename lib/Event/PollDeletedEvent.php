@@ -12,7 +12,7 @@ use OCA\Polls\Notification\Notifier;
 
 class PollDeletedEvent extends PollEvent {
 	public function __construct(
-		protected Poll $poll
+		protected Poll $poll,
 	) {
 		parent::__construct($poll);
 		$this->eventId = self::DELETE;

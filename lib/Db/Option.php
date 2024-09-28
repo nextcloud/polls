@@ -70,7 +70,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $deleted = 0;
 
 	// joined columns
-	protected string|null $userVoteAnswer = '';
+	protected ?string $userVoteAnswer = '';
 	protected int $optionLimit = 0;
 	protected int $voteLimit = 0;
 	protected int $userCountYesVotes = 0;
@@ -132,7 +132,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		];
 	}
 
-	public function getOwnerUser(): UserBase|null {
+	public function getOwnerUser(): ?UserBase {
 		if ($this->getOwner() === '') {
 			return null;
 		}

@@ -23,7 +23,7 @@ trait TShareCommand {
 		private ShareMapper $shareMapper,
 		private ShareService $shareService,
 		private IUserManager $userManager,
-		private IGroupManager $groupManager
+		private IGroupManager $groupManager,
 	) {
 		parent::__construct();
 	}

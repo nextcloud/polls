@@ -21,7 +21,7 @@ class SystemController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private SystemService $systemService
+		private SystemService $systemService,
 	) {
 		parent::__construct($appName, $request);
 	}

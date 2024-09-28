@@ -174,7 +174,7 @@ class MailService {
 		}
 	}
 
-	public function sendInvitation(Share $share, SentResult|null &$sentResult = null): SentResult|null {
+	public function sendInvitation(Share $share, ?SentResult &$sentResult = null): ?SentResult {
 		foreach ($this->userMapper->getUserFromShare($share)->getMembers() as $recipient) {
 			$invitation = new InvitationMail($recipient->getId(), $share);
 

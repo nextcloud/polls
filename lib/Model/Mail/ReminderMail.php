@@ -29,7 +29,7 @@ class ReminderMail extends MailBase {
 
 	public function __construct(
 		protected string $recipientId,
-		protected int $pollId
+		protected int $pollId,
 	) {
 		parent::__construct($recipientId, $pollId);
 		$this->deadline = $this->poll->getDeadline();
@@ -86,7 +86,7 @@ class ReminderMail extends MailBase {
 		));
 	}
 
-	private function getReminderReason() : string|null {
+	private function getReminderReason() : ?string {
 		if ($this->poll->getExpire()) {
 			return self::REASON_EXPIRATION;
 		} elseif ($this->poll->getType() === Poll::TYPE_DATE) {

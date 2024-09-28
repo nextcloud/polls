@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class InvalidClassException extends Exception {
 	public function __construct(
-		string $e = 'Invalid class value'
+		string $e = 'Invalid class value',
 	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}

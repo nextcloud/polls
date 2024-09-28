@@ -31,7 +31,7 @@ class UserSession {
 	public const CLIENT_TZ = 'ncPollsClientTimeZone';
 
 	public const TABLE = Share::TABLE;
-	protected UserBase|null $currentUser = null;
+	protected ?UserBase $currentUser = null;
 	// protected Share|null $share = null;
 
 	/**
@@ -43,7 +43,6 @@ class UserSession {
 		protected UserMapper $userMapper,
 		protected ShareMapper $shareMapper,
 		protected Share $share,
-
 	) {
 	}
 

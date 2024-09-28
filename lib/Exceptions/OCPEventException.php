@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class OCPEventException extends Exception {
 	public function __construct(
-		string $e = 'OCP namespace event'
+		string $e = 'OCP namespace event',
 	) {
 		parent::__construct($e, Http::STATUS_OK);
 	}

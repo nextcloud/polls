@@ -50,7 +50,7 @@ class PublicController extends BasePublicController {
 		private SubscriptionService $subscriptionService,
 		private SystemService $systemService,
 		private VoteService $voteService,
-		private WatchService $watchService
+		private WatchService $watchService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -125,7 +125,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
-	public function watchPoll(int|null $offset): JSONResponse {
+	public function watchPoll(?int $offset): JSONResponse {
 		return $this->responseLong(fn () => [
 			'updates' => $this->watchService->watchUpdates($this->userSession->getShare()->getPollId(), $offset)
 		]);

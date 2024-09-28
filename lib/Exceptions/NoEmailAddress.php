@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class NoEmailAddress extends Exception {
 	public function __construct(
-		string $e = 'No email address found'
+		string $e = 'No email address found',
 	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}

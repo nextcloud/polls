@@ -23,15 +23,15 @@ class CalendarEvent implements \JsonSerializable {
 	protected array $occurrences = [];
 	protected bool $hasRRule;
 	protected array $rRule;
-	protected int|null $matchOccurrence = null;
+	protected ?int $matchOccurrence = null;
 	protected array $event;
 
 	public function __construct(
 		protected array $iCal,
 		protected ICalendar $calendar,
-		protected DateTimeImmutable|null $filterFrom = null,
-		protected DateTimeImmutable|null $filterTo = null,
-		protected DateTimeZone|null $timezone = null
+		protected ?DateTimeImmutable $filterFrom = null,
+		protected ?DateTimeImmutable $filterTo = null,
+		protected ?DateTimeZone $timezone = null,
 	) {
 		$this->event = $this->iCal['objects'][0];
 		$this->hasRRule = isset($this->event['RRULE']);
@@ -42,7 +42,7 @@ class CalendarEvent implements \JsonSerializable {
 	}
 
 	// Getters for calendar information
-	public function getCalendarName(): string|null {
+	public function getCalendarName(): ?string {
 		return $this->calendar->getDisplayName();
 	}
 
@@ -64,7 +64,7 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	public function getDisplayColor(): string|null {
+	public function getDisplayColor(): ?string {
 		return $this->calendar->getDisplayColor();
 	}
 

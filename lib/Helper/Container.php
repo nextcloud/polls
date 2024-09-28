@@ -35,7 +35,7 @@ abstract class Container {
 		return Server::get(ShareMapper::class)->findByPollAndUser($pollId, $userId);
 	}
 
-	public static function getL10N(string|null $lang = null): IL10N {
+	public static function getL10N(?string $lang = null): IL10N {
 		return Server::get(IFactory::class)->get(AppConstants::APP_ID, $lang);
 	}
 	public static function isAppEnabled(string $app): bool {

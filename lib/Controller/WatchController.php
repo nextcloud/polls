@@ -21,7 +21,7 @@ class WatchController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private WatchService $watchService
+		private WatchService $watchService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -33,7 +33,7 @@ class WatchController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function watchPoll(int $pollId, int|null $offset): JSONResponse {
+	public function watchPoll(int $pollId, ?int $offset): JSONResponse {
 		return $this->responseLong(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
 	}
 }

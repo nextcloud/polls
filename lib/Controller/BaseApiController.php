@@ -26,7 +26,7 @@ class BaseApiController extends ApiController {
 		IRequest $request,
 		string $corsMethods = 'PUT, POST, GET, DELETE',
 		string $corsAllowedHeaders = 'Authorization, Content-Type, Accept',
-		int $corsMaxAge = 1728000
+		int $corsMaxAge = 1728000,
 	) {
 		parent::__construct($appName, $request, $corsMethods, $corsAllowedHeaders, $corsMaxAge);
 	}

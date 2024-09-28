@@ -101,7 +101,7 @@ class TableManager {
 			->setParameter('appid', AppConstants::APP_ID)
 			->executeStatement();
 
-		$this->logger->info('Removed all app config records from '. $this->dbPrefix . 'appconfig');
+		$this->logger->info('Removed all app config records from ' . $this->dbPrefix . 'appconfig');
 		$messages[] = 'Removed all app config records from ' . $this->dbPrefix . 'appconfig';
 		$messages[] = 'Done.';
 		$messages[] = '';
@@ -259,13 +259,13 @@ class TableManager {
 	 *
 	 * @psalm-return list<string>
 	 */
-	public function deleteAllDuplicates(IOutput|null $output = null): array {
+	public function deleteAllDuplicates(?IOutput $output = null): array {
 		$messages = [];
 		foreach (TableSchema::UNIQUE_INDICES as $tableName => $index) {
 			$count = $this->deleteDuplicates($tableName, $index['columns']);
 
 			if ($count) {
-				$messages[] = 'Removed '. $count. ' duplicate records from ' . $this->dbPrefix . $tableName;
+				$messages[] = 'Removed ' . $count . ' duplicate records from ' . $this->dbPrefix . $tableName;
 				$this->logger->info(end($messages));
 			}
 
@@ -346,7 +346,7 @@ class TableManager {
 		}
 	}
 
-	public function resetLastInteraction(int|null $timestamp = null): array {
+	public function resetLastInteraction(?int $timestamp = null): array {
 		$messages = [];
 		$timestamp = $timestamp ?? time();
 		$query = $this->connection->getQueryBuilder();

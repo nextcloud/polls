@@ -21,7 +21,7 @@ class SettingsController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private SettingsService $settingsService
+		private SettingsService $settingsService,
 	) {
 		parent::__construct($appName, $request);
 	}

@@ -20,7 +20,7 @@ class SubscriptionController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private SubscriptionService $subscriptionService
+		private SubscriptionService $subscriptionService,
 	) {
 		parent::__construct($appName, $request);
 	}

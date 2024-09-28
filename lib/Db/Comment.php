@@ -34,7 +34,7 @@ class Comment extends EntityWithUser implements JsonSerializable {
 	public $id = null;
 	protected int $pollId = 0;
 	protected string $userId = '';
-	protected string|null $comment = null;
+	protected ?string $comment = null;
 	protected int $timestamp = 0;
 	protected int $deleted = 0;
 

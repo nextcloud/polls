@@ -49,7 +49,6 @@ class AppSettings implements JsonSerializable {
 	public function __construct(
 		private IConfig $config,
 		private UserSession $userSession,
-
 	) {
 	}
 
@@ -279,7 +278,7 @@ class AppSettings implements JsonSerializable {
 		};
 	}
 
-	private function boolToString(bool|null $value): string {
+	private function boolToString(?bool $value): string {
 		if ($value) {
 			return 'yes';
 		}

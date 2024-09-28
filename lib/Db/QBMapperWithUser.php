@@ -25,7 +25,7 @@ abstract class QBMapperWithUser extends QBMapper {
 	public function __construct(
 		IDBConnection $db,
 		string $tableName,
-		string|null $entityClass = null
+		?string $entityClass = null,
 	) {
 		parent::__construct($db, $tableName, $entityClass);
 	}

@@ -18,7 +18,7 @@ use OCP\IURLGenerator;
 class PollChanges implements IFilter {
 	public function __construct(
 		protected IL10N $l10n,
-		protected IURLGenerator $urlGenerator
+		protected IURLGenerator $urlGenerator,
 	) {
 	}
 

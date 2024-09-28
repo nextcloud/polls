@@ -10,7 +10,7 @@ use OCA\Polls\Db\Option;
 
 class OptionDeletedEvent extends OptionEvent {
 	public function __construct(
-		protected Option $option
+		protected Option $option,
 	) {
 		parent::__construct($option);
 		$this->eventId = $option->getDeleted() ? self::DELETE : self::RESTORE;

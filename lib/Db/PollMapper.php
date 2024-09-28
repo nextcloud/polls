@@ -212,7 +212,7 @@ class PollMapper extends QBMapper {
 		$qb->selectAlias($joinAlias . '.locked', 'is_current_user_locked')
 			->addGroupBy($joinAlias . '.locked');
 
-		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.token, '. $emptyString . ') AS share_token'))
+		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.token, ' . $emptyString . ') AS share_token'))
 			->addGroupBy($joinAlias . '.token');
 
 		$qb->leftJoin(
@@ -235,19 +235,19 @@ class PollMapper extends QBMapper {
 		$joinAlias = 'group_shares';
 
 		if ($this->db->getDatabasePlatform() instanceof PostgreSQLPlatform) {
-			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
+			$qb->addSelect($qb->createFunction('string_agg(distinct ' . $joinAlias . '.user_id, \'' . self::CONCAT_SEPARATOR . '\') AS group_shares'));
 
 		} elseif ($this->db->getDatabasePlatform() instanceof OraclePlatform) {
-			$qb->addSelect($qb->createFunction('listagg(distinct ' . $joinAlias . '.user_id, \''. self::CONCAT_SEPARATOR . '\') WITHIN GROUP (ORDER BY ' . $joinAlias . '.user_id) AS group_shares'));
+			$qb->addSelect($qb->createFunction('listagg(distinct ' . $joinAlias . '.user_id, \'' . self::CONCAT_SEPARATOR . '\') WITHIN GROUP (ORDER BY ' . $joinAlias . '.user_id) AS group_shares'));
 
 		} elseif ($this->db->getDatabasePlatform() instanceof SqlitePlatform) {
-			$qb->addSelect($qb->createFunction('group_concat(replace(distinct ' . $joinAlias . '.user_id ,\'\',\'\'), \''. self::CONCAT_SEPARATOR . '\') AS group_shares'));
+			$qb->addSelect($qb->createFunction('group_concat(replace(distinct ' . $joinAlias . '.user_id ,\'\',\'\'), \'' . self::CONCAT_SEPARATOR . '\') AS group_shares'));
 
 		} elseif ($this->db->getDatabasePlatform() instanceof MySQLPlatform) {
-			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "' . self::CONCAT_SEPARATOR . '") AS group_shares'));
 
 		} else {
-			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "'. self::CONCAT_SEPARATOR . '") AS group_shares'));
+			$qb->addSelect($qb->createFunction('group_concat(distinct ' . $joinAlias . '.user_id SEPARATOR "' . self::CONCAT_SEPARATOR . '") AS group_shares'));
 		}
 
 		$qb->leftJoin(
@@ -275,7 +275,7 @@ class PollMapper extends QBMapper {
 		$zero = $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT);
 		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
 
-		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), '. $zero  . ') AS max_date'))
+		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), ' . $zero . ') AS max_date'))
 			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'));
 		$qb->selectAlias($qb->func()->count($joinAlias . '.id'), 'count_options');
 
@@ -295,7 +295,7 @@ class PollMapper extends QBMapper {
 	/**
 	 * Subquery for votes count
 	 */
-	protected function subQueryVotesCount(string $fromAlias, IParameter $currentUserId, IParameter|null $answerFilter = null): IQueryBuilder {
+	protected function subQueryVotesCount(string $fromAlias, IParameter $currentUserId, ?IParameter $answerFilter = null): IQueryBuilder {
 		$subAlias = 'user_vote_sub';
 
 		$subQuery = $this->db->getQueryBuilder();

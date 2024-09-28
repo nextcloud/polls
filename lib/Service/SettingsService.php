@@ -15,7 +15,9 @@ class SettingsService {
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
-	public function __construct(private AppSettings $appSettings) {
+	public function __construct(
+		private AppSettings $appSettings,
+	) {
 	}
 
 	/**

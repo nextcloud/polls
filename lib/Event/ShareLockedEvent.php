@@ -10,7 +10,7 @@ use OCA\Polls\Db\Share;
 
 class ShareLockedEvent extends ShareEvent {
 	public function __construct(
-		protected Share $share
+		protected Share $share,
 	) {
 		parent::__construct($share);
 		$this->eventId = $share->getLocked() ? self::UNLOCKED : self::LOCKED;

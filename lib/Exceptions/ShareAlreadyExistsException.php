@@ -14,11 +14,11 @@ use OCP\AppFramework\Http;
 class ShareAlreadyExistsException extends Exception {
 	public function __construct(
 		string $e = 'Share already exists',
-		private Share|null $existingShare = null,
+		private ?Share $existingShare = null,
 	) {
 		parent::__construct($e, Http::STATUS_OK);
 	}
-	public function getShare(): Share|null {
+	public function getShare(): ?Share {
 		return $this->existingShare;
 	}
 }

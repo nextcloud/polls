@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class NoUpdatesException extends Exception {
 	public function __construct(
-		string $e = 'No updates'
+		string $e = 'No updates',
 	) {
 		parent::__construct($e, Http::STATUS_NOT_MODIFIED);
 	}

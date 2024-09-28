@@ -26,7 +26,7 @@ class LogService {
 	/**
 	 * Log poll activity
 	 */
-	public function setLog(int $pollId, string $messageId, string|null $userId = null): void {
+	public function setLog(int $pollId, string $messageId, ?string $userId = null): void {
 		$this->log = new Log();
 		$this->log->setPollId($pollId);
 		$this->log->setCreated(time());

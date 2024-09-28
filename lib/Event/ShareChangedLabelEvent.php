@@ -10,7 +10,7 @@ use OCA\Polls\Db\Share;
 
 class ShareChangedLabelEvent extends ShareEvent {
 	public function __construct(
-		protected Share $share
+		protected Share $share,
 	) {
 		parent::__construct($share);
 		$this->eventId = self::CHANGE_LABEL;

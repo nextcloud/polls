@@ -108,7 +108,7 @@ class PollService {
 	 * Update poll configuration
 	 * @return Poll
 	 */
-	public function takeover(int $pollId, UserBase|null $targetUser = null): Poll {
+	public function takeover(int $pollId, ?UserBase $targetUser = null): Poll {
 		if (!$targetUser) {
 			$targetUser = $this->userSession->getUser();
 		}

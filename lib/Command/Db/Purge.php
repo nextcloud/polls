@@ -29,7 +29,7 @@ class Purge extends Command {
 
 	public function __construct(
 		private IDBConnection $connection,
-		private TableManager $tableManager
+		private TableManager $tableManager,
 	) {
 		parent::__construct();
 	}
