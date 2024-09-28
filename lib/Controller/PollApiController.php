@@ -28,7 +28,7 @@ class PollApiController extends BaseApiController {
 		string $appName,
 		IRequest $request,
 		private Acl $acl,
-		private PollService $pollService
+		private PollService $pollService,
 	) {
 		parent::__construct($appName, $request);
 	}

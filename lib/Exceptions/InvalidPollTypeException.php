@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class InvalidPollTypeException extends Exception {
 	public function __construct(
-		string $e = 'Invalid pollType value'
+		string $e = 'Invalid pollType value',
 	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}

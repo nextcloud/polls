@@ -21,7 +21,7 @@ class ConfirmationMail extends MailBase {
 
 	public function __construct(
 		string $recipientId,
-		int $pollId
+		int $pollId,
 	) {
 		parent::__construct($recipientId, $pollId);
 		$this->confirmedOptions = $this->optionMapper->findConfirmed($pollId);

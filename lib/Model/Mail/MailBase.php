@@ -46,7 +46,7 @@ abstract class MailBase {
 	public function __construct(
 		protected string $recipientId,
 		protected int $pollId,
-		protected string $url = ''
+		protected string $url = '',
 	) {
 		$this->setup();
 	}
@@ -157,14 +157,14 @@ abstract class MailBase {
 		$legal = '';
 
 		if ($this->appSettings->getUseImprintUrl()) {
-			$legal = '<a href="' . $this->appSettings->getUseImprintUrl() . '">' .  $this->l10n->t('Legal Notice') . '</a>';
+			$legal = '<a href="' . $this->appSettings->getUseImprintUrl() . '">' . $this->l10n->t('Legal Notice') . '</a>';
 		}
 		if ($this->appSettings->getUsePrivacyUrl()) {
 			if ($this->appSettings->getUseImprintUrl()) {
 				$legal = $legal . ' | ';
 			}
 
-			$legal = $legal . '<a href="' . $this->appSettings->getUsePrivacyUrl() . '">' .  $this->l10n->t('Privacy Policy') . '</a>';
+			$legal = $legal . '<a href="' . $this->appSettings->getUsePrivacyUrl() . '">' . $this->l10n->t('Privacy Policy') . '</a>';
 		}
 		return $legal;
 	}

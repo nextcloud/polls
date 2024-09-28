@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class InvalidShowResultsException extends Exception {
 	public function __construct(
-		string $e = 'Invalid showResults value'
+		string $e = 'Invalid showResults value',
 	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}

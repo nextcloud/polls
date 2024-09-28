@@ -17,7 +17,10 @@ use OCP\Settings\IIconSection;
  * @psalm-suppress UnusedClass
  */
 class AdminSection implements IIconSection {
-	public function __construct(private IL10N $l10n, private IURLGenerator $urlGenerator) {
+	public function __construct(
+		private IL10N $l10n,
+		private IURLGenerator $urlGenerator,
+	) {
 	}
 
 	public function getID(): string {

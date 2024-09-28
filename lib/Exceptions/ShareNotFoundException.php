@@ -10,7 +10,7 @@ namespace OCA\Polls\Exceptions;
 
 class ShareNotFoundException extends NotFoundException {
 	public function __construct(
-		string $e = 'Share not found'
+		string $e = 'Share not found',
 	) {
 		parent::__construct($e);
 	}

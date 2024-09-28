@@ -10,7 +10,7 @@ use OCA\Polls\Db\Share;
 
 class ShareChangedRegistrationConstraintEvent extends ShareEvent {
 	public function __construct(
-		protected Share $share
+		protected Share $share,
 	) {
 		parent::__construct($share);
 		$this->eventId = self::CHANGE_REG_CONSTR;

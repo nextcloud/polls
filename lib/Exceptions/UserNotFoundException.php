@@ -10,7 +10,7 @@ namespace OCA\Polls\Exceptions;
 
 class UserNotFoundException extends NotFoundException {
 	public function __construct(
-		string $e = 'User not found'
+		string $e = 'User not found',
 	) {
 		parent::__construct($e);
 	}

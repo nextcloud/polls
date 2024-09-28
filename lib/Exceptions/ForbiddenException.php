@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class ForbiddenException extends Exception {
 	public function __construct(
-		string $e = 'Forbidden'
+		string $e = 'Forbidden',
 	) {
 		parent::__construct($e, Http::STATUS_FORBIDDEN);
 	}

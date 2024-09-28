@@ -297,11 +297,11 @@ class ShareService {
 	 * @param string|null $language
 	 */
 	private function convertPersonalPublicShareToExternalShare(
-		string|null $userId = null,
-		string|null $displayName = null,
-		string|null $emailAddress = null,
-		string|null $timeZone = null,
-		string|null $language = null,
+		?string $userId = null,
+		?string $displayName = null,
+		?string $emailAddress = null,
+		?string $timeZone = null,
+		?string $language = null,
 	): void {
 
 		// paranoia double check
@@ -361,7 +361,7 @@ class ShareService {
 		string $publicShareToken,
 		string $displayName,
 		string $emailAddress = '',
-		string $timeZone = ''
+		string $timeZone = '',
 	): Share {
 		$this->share = $this->get($publicShareToken);
 		$displayName = $this->systemService->validatePublicUsername($displayName, share: $this->share);
@@ -454,7 +454,7 @@ class ShareService {
 		return $share;
 	}
 
-	public function sendAllInvitations(int $pollId): SentResult|null {
+	public function sendAllInvitations(int $pollId): ?SentResult {
 		$sentResult = new SentResult();
 
 		// first resolve group shares
@@ -514,7 +514,7 @@ class ShareService {
 	 * @param Share $share
 	 * @param SentResult $sentResult to collect results
 	 */
-	public function sendInvitation(Share $share, ?SentResult &$sentResult = null): SentResult|null {
+	public function sendInvitation(Share $share, ?SentResult &$sentResult = null): ?SentResult {
 		if (in_array($share->getType(), [Share::TYPE_USER, Share::TYPE_ADMIN], true)) {
 			$this->notificationService->sendInvitation($share->getPollId(), $share->getUserId());
 		} elseif ($share->getType() === Share::TYPE_GROUP) {
@@ -557,7 +557,7 @@ class ShareService {
 		string $type,
 		string $userId = '',
 		string $displayName = '',
-		string $emailAddress = ''
+		string $emailAddress = '',
 	): Share {
 		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
 
@@ -634,7 +634,7 @@ class ShareService {
 		int $pollId,
 		UserBase $userGroup,
 		bool $preventInvitation = false,
-		string $timeZone = ''
+		string $timeZone = '',
 	): Share {
 		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
 

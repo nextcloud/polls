@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class InvalidUsernameException extends Exception {
 	public function __construct(
-		string $e = 'Username not allowed'
+		string $e = 'Username not allowed',
 	) {
 		parent::__construct($e, Http::STATUS_FORBIDDEN);
 	}

@@ -10,7 +10,7 @@ use OCA\Polls\Db\Comment;
 
 class CommentDeleteEvent extends CommentEvent {
 	public function __construct(
-		protected Comment $comment
+		protected Comment $comment,
 	) {
 		parent::__construct($comment);
 		$this->log = false;

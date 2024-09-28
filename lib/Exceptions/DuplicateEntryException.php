@@ -12,7 +12,7 @@ use OCP\AppFramework\Http;
 
 class DuplicateEntryException extends Exception {
 	public function __construct(
-		string $e = 'Duplicate Entry'
+		string $e = 'Duplicate Entry',
 	) {
 		parent::__construct($e, Http::STATUS_CONFLICT);
 	}

@@ -24,7 +24,7 @@ class ShareApiController extends BaseApiController {
 		string $appName,
 		IRequest $request,
 		private MailService $mailService,
-		private ShareService $shareService
+		private ShareService $shareService,
 	) {
 		parent::__construct($appName, $request);
 	}

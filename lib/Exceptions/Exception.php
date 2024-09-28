@@ -13,7 +13,7 @@ use OCP\AppFramework\Http;
 class Exception extends \Exception {
 	public function __construct(
 		string $e = 'Unexpected error',
-		protected int $status = Http::STATUS_INTERNAL_SERVER_ERROR
+		protected int $status = Http::STATUS_INTERNAL_SERVER_ERROR,
 	) {
 		parent::__construct($e);
 	}

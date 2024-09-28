@@ -29,7 +29,7 @@ class ReminderMail extends MailBase {
 
 	public function __construct(
 		protected string $recipientId,
-		protected int $pollId
+		protected int $pollId,
 	) {
 		parent::__construct($recipientId, $pollId);
 		$this->deadline = $this->poll->getDeadline();

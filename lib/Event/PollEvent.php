@@ -20,7 +20,7 @@ abstract class PollEvent extends BaseEvent {
 	public const OPTION_REORDER = 'poll_option_reorder';
 
 	public function __construct(
-		protected Poll $poll
+		protected Poll $poll,
 	) {
 		parent::__construct($poll);
 		$this->activityObjectType = 'poll';

@@ -19,7 +19,7 @@ class Email extends UserBase {
 		string $id,
 		string $displayName = '',
 		string $emailAddress = '',
-		string $languageCode = ''
+		string $languageCode = '',
 	) {
 		parent::__construct($id, self::TYPE, languageCode: $languageCode);
 		$this->icon = self::ICON;

@@ -15,7 +15,7 @@ abstract class VoteEvent extends BaseEvent {
 	public const SET = 'vote_set';
 
 	public function __construct(
-		protected Vote $vote
+		protected Vote $vote,
 	) {
 		parent::__construct($vote);
 		$this->activityObjectType = 'poll';
