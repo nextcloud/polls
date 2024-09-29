@@ -16,6 +16,7 @@
   <category>social</category>
   <category>organization</category>
   <website>https://github.com/nextcloud/polls</website>
+  <discussion>https://help.nextcloud.com/tag/polls-app</discussion>
   <bugs>https://github.com/nextcloud/polls/issues</bugs>
   <repository type="git">https://github.com/nextcloud/polls.git</repository>
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/overview.png</screenshot>
