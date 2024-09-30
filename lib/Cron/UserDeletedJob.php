@@ -53,8 +53,8 @@ class UserDeletedJob extends QueuedJob {
 	protected function run($argument) {
 		$this->session->set(AppConstants::SESSION_KEY_CRON_JOB, true);
 		$userId = $argument['userId'];
-		$this->logger->info('Deleting polls for deleted user id {user}', [
-			'user' => $userId
+		$this->logger->info('Deleting polls for deleted user', [
+			'userId' => $userId
 		]);
 
 		$replacementName = 'deleted_' . $this->secureRandom->generate(
