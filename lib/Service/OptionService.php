@@ -230,7 +230,10 @@ class OptionService {
 			try {
 				$this->optionMapper->insert($clonedOption);
 			} catch (Exception $e) {
-				$this->logger->warning('Skip sequence no. ' . $i . 'of option ' . $this->option->getId() . '. Option possibly already exists.');
+				$this->logger->warning('Skip sequence no. {sequence} of option {optionId}. Option possibly already exists.', [
+					'sequence' => $i,
+					'optionId' => $this->option->getId(),
+				]);
 			}
 		}
 

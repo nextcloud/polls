@@ -161,9 +161,15 @@ class MailService {
 				$notification = new NotificationMail($subscription);
 				$notification->send();
 			} catch (InvalidEmailAddress $e) {
-				$this->logger->warning('Invalid or no email address for notification: ' . json_encode($subscription), ['exception' => $e]);
+				$this->logger->warning('Invalid or no email address for notification', [
+					'recipient' => json_encode($subscription),
+					'exception' => $e,
+				]);
 			} catch (\Exception $e) {
-				$this->logger->error('Error sending notification to ' . json_encode($subscription), ['exception' => $e]);
+				$this->logger->error('Error sending notification', [
+					'recipient' => json_encode($subscription),
+					'exception' => $e,
+				]);
 				continue;
 			}
 		}
@@ -183,16 +189,22 @@ class MailService {
 				if ($sentResult) {
 					$sentResult->AddSentMail($recipient);
 				}
+
 			} catch (InvalidEmailAddress $e) {
 				if ($sentResult) {
 					$sentResult->AddAbortedMail($recipient, SentResult::INVALID_EMAIL_ADDRESS);
 				}
-				$this->logger->warning('Invalid or no email address for invitation: ' . json_encode($recipient));
+				$this->logger->warning('Invalid or no email address for invitation', ['recipient' => json_encode($recipient)]);
+
 			} catch (\Exception $e) {
 				if ($sentResult) {
 					$sentResult->AddAbortedMail($recipient);
 				}
-				$this->logger->error('Error sending Invitation to ' . json_encode($recipient));
+
+				$this->logger->error('Error sending invitation', [
+					'recipient' => json_encode($recipient),
+					'exception' => $e,
+				]);
 			}
 		}
 
@@ -228,10 +240,16 @@ class MailService {
 				$this->sendConfirmationMail($participant, $pollId);
 				$sentResult->AddSentMail($participant);
 			} catch (InvalidEmailAddress $e) {
-				$this->logger->warning('Invalid or no email address for confirmation: ' . json_encode($participant));
+				$this->logger->warning('Invalid or no email address for confirmation', [
+					'recipient' => json_encode($participant),
+					'exception' => $e,
+				]);
 				$sentResult->AddAbortedMail($participant, SentResult::INVALID_EMAIL_ADDRESS);
 			} catch (\Exception $e) {
-				$this->logger->error('Error sending confirmation to ' . json_encode($participant));
+				$this->logger->error('Error sending confirmation', [
+					'recipient' => json_encode($participant),
+					'exception' => $e,
+				]);
 				$sentResult->AddAbortedMail($participant);
 			}
 		}
@@ -266,11 +284,20 @@ class MailService {
 
 			try {
 				$reminder->send();
-				$this->logger->info('Reminder for poll id ' . $poll->getId() . ' sent to ' . json_encode($recipient));
+				$this->logger->info('Reminder sent', [
+					'recipient' => json_encode($recipient),
+					'pollId' => $poll->getId(),
+				]);
 			} catch (InvalidEmailAddress $e) {
-				$this->logger->warning('Invalid or missing email address for sending out reminder for poll id ' . $poll->getid() . ' to share id ' . $share->getId());
+				$this->logger->warning('Invalid or missing email address for sending out reminder', [
+					'pollId' => $poll->getid(),
+					'shareId' => $share->getId()
+				]);
 			} catch (\Exception $e) {
-				$this->logger->error('Error sending reminder to ' . json_encode($share));
+				$this->logger->error('Error sending reminder', [
+					'share' => json_encode($share),
+					'exception' => $e
+				]);
 			}
 		}
 	}

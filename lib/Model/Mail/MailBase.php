@@ -90,7 +90,7 @@ abstract class MailBase {
 			$message->useTemplate($this->getEmailTemplate());
 			$this->mailer->send($message);
 		} catch (\Exception $e) {
-			$this->logger->error('Error sending Mail to ' . json_encode($this->recipient));
+			$this->logger->error('Error sending Mail to {recipient}', ['recipient' => json_encode($this->recipient)]);
 			$this->logger->alert($e->getMessage());
 			throw $e;
 		}
