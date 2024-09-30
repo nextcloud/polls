@@ -342,7 +342,7 @@ class ShareService {
 	 *
 	 * added in Polls 7.2.4 (can be removed later)
 	 */
-	private function convertDependingObjects(string $userId, string $replacementId, int $pollId) {
+	private function convertDependingObjects(string $userId, string $replacementId, int $pollId): void {
 		$this->voteMapper->renameUserId($userId, $replacementId, $pollId);
 		$this->optionMapper->renameUserId($userId, $replacementId, $pollId);
 		$this->commentMapper->renameUserId($userId, $replacementId, $pollId);
@@ -399,7 +399,7 @@ class ShareService {
 				$this->mailService->sendInvitation($this->share);
 			}
 		} catch (\Exception $e) {
-			$this->logger->error('Error sending Mail to ' . $this->share->getEmailAddress());
+			$this->logger->error('Error sending Mail', ['emailAddress' => $this->share->getEmailAddress()]);
 		}
 
 		return $this->share;

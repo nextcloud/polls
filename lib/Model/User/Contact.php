@@ -84,7 +84,7 @@ class Contact extends UserBase {
 		// workaround fur multiple found UIDs
 		// Don't throw an error, log the error and take the first entry
 		if (count($contacts) > 1) {
-			$this->logger->warning('Multiple contacts found for id ' . $this->id);
+			$this->logger->warning('Multiple contacts found for {id} ', ['id' => $this->id]);
 		}
 
 		$this->contact = $contacts[0];

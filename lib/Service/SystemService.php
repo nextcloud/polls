@@ -86,22 +86,23 @@ class SystemService {
 			IShare::TYPE_GROUP,
 			IShare::TYPE_EMAIL
 		];
+		$maxResults = 200;
 		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
 			// Add circles to the search, if app is enabled
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
-		[$result, $more] = $this->userSearch->search($query, $types, false, 200, 0);
+		[$result, $more] = $this->userSearch->search($query, $types, false, $maxResults, 0);
 
 		if ($more) {
-			$this->logger->info('Only first 200 matches will be returned.');
+			$this->logger->info('Only first {maxResults} matches will be returned.', ['maxResults' => $maxResults]);
 		}
 
 		foreach (($result['users'] ?? []) as $item) {
 			if (isset($item['value']['shareWith'])) {
 				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
 			} else {
-				$this->handleFailedSearchResult($query, $item);
+				$this->handleFailedSearchResult($query, $item, 'users');
 			}
 		}
 
@@ -109,7 +110,7 @@ class SystemService {
 			if (isset($item['value']['shareWith'])) {
 				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
 			} else {
-				$this->handleFailedSearchResult($query, $item);
+				$this->handleFailedSearchResult($query, $item, 'exact users');
 			}
 		}
 
@@ -117,7 +118,7 @@ class SystemService {
 			if (isset($item['value']['shareWith'])) {
 				$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
 			} else {
-				$this->handleFailedSearchResult($query, $item);
+				$this->handleFailedSearchResult($query, $item, 'groups');
 			}
 		}
 
@@ -125,7 +126,7 @@ class SystemService {
 			if (isset($item['value']['shareWith'])) {
 				$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
 			} else {
-				$this->handleFailedSearchResult($query, $item);
+				$this->handleFailedSearchResult($query, $item, 'exact groups');
 			}
 		}
 
@@ -153,10 +154,11 @@ class SystemService {
 		return $items;
 	}
 
-	private function handleFailedSearchResult(string $query, mixed $item): void {
-		$this->logger->debug('Unrecognized result for query: \"{query}\". Result: {result]', [
+	private function handleFailedSearchResult(string $query, mixed $item, string $type = 'unspecified'): void {
+		$this->logger->debug('Unrecognized search result', [
 			'query' => $query,
 			'result' => json_encode($item),
+			'type' => $type,
 		]);
 	}
 
