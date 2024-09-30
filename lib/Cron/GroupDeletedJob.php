@@ -36,7 +36,7 @@ class GroupDeletedJob extends QueuedJob {
 	protected function run($argument) {
 		$this->session->set(AppConstants::SESSION_KEY_CRON_JOB, true);
 		$group = $argument['group'];
-		$this->logger->info('Removing group shares for deleted group {group}', [
+		$this->logger->info('Removing group shares for deleted group', [
 			'group' => $group
 		]);
 

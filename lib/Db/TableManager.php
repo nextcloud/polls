@@ -61,11 +61,14 @@ class TableManager {
 	 */
 	public function purgeTables(): array {
 		$messages = [];
+
 		// drop all child tables
+		$droppedTables = [];
+
 		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
 			if ($this->connection->tableExists($tableName)) {
 				$this->connection->dropTable($tableName);
-				$this->logger->info('Dropped ' . $this->dbPrefix . $tableName);
+				$droppedTables[] = $this->dbPrefix . $tableName;
 				$messages[] = 'Dropped ' . $this->dbPrefix . $tableName;
 			}
 		}
@@ -73,7 +76,7 @@ class TableManager {
 		foreach (TableSchema::FK_OTHER_TABLES as $tableName) {
 			if ($this->connection->tableExists($tableName)) {
 				$this->connection->dropTable($tableName);
-				$this->logger->info('Dropped ' . $this->dbPrefix . $tableName);
+				$droppedTables[] = $this->dbPrefix . $tableName;
 				$messages[] = 'Dropped ' . $this->dbPrefix . $tableName;
 			}
 		}
@@ -81,8 +84,11 @@ class TableManager {
 		// drop parent table
 		if ($this->connection->tableExists(TableSchema::FK_PARENT_TABLE)) {
 			$this->connection->dropTable(TableSchema::FK_PARENT_TABLE);
-			$this->logger->info('Dropped ' . $this->dbPrefix . TableSchema::FK_PARENT_TABLE);
+			$droppedTables[] = $this->dbPrefix . TableSchema::FK_PARENT_TABLE;
 			$messages[] = 'Dropped ' . $this->dbPrefix . TableSchema::FK_PARENT_TABLE;
+		}
+		if (!$droppedTables) {
+			$this->logger->info('Dropped tables', $droppedTables);
 		}
 
 		// delete all migration records
@@ -92,7 +98,7 @@ class TableManager {
 			->setParameter('appName', AppConstants::APP_ID)
 			->executeStatement();
 
-		$this->logger->info('Removed all migration records from ' . $this->dbPrefix . 'migrations');
+		$this->logger->info('Removed all migration records from {dbPrefix}migrations', ['dbPrefix' => $this->dbPrefix]);
 		$messages[] = 'Removed all migration records from ' . $this->dbPrefix . 'migrations';
 		
 		// delete all app configs
@@ -101,7 +107,7 @@ class TableManager {
 			->setParameter('appid', AppConstants::APP_ID)
 			->executeStatement();
 
-		$this->logger->info('Removed all app config records from ' . $this->dbPrefix . 'appconfig');
+		$this->logger->info('Removed all app config records from {dbPrefix}appconfig', ['dbPrefix' => $this->dbPrefix]);
 		$messages[] = 'Removed all app config records from ' . $this->dbPrefix . 'appconfig';
 		$messages[] = 'Done.';
 		$messages[] = '';
