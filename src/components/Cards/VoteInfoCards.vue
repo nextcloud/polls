@@ -32,7 +32,7 @@
 </script>
 
 <template>
-	<TransitionGroup class="info-section">
+	<TransitionGroup>
 		<CardUnpublishedPoll v-if="showUnpublishedPollCard" :key="0" />
 		<CardAddProposals v-if="showAddProposalsCard" :key="1" />
 		<CardLimitedVotes v-if="showLimitCard" :key="2" />

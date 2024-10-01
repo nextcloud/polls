@@ -69,7 +69,7 @@
 			default: '',
 		},
 		type: {
-			type: Object as PropType<UserType | VirtualUserItemType>,
+			type: String as PropType<UserType | VirtualUserItemType>,
 			default: UserType.None,
 			validator(value: UserType | VirtualUserItemType) {
 				return [
