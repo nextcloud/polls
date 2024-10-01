@@ -24,7 +24,7 @@
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
   <dependencies>
     <php min-version="8.0"/>
-    <nextcloud min-version="28" max-version="30"/>
+    <nextcloud min-version="29" max-version="31"/>
   </dependencies>
   <activity>
     <providers>

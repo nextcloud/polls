@@ -18,7 +18,7 @@
 		"optimize-autoloader": true,
 		"autoloader-suffix": "Polls",
 		"platform": {
-			"php": "8.0"
+			"php": "8.1"
 		},
 		"allow-plugins": {
 			"bamarni/composer-bin-plugin": true
@@ -39,8 +39,8 @@
 		"doctrine/dbal": "3.8.6",
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
-		"nextcloud/coding-standard": "^1.0",
-		"nextcloud/ocp": "dev-stable28"
+		"nextcloud/coding-standard": "1.3.1",
+		"nextcloud/ocp": "dev-stable29"
 	},
 	"scripts": {
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
