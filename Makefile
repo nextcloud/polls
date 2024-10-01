@@ -89,21 +89,8 @@ endif
 package: clean
 	mkdir -p $(build_source_dir)
 	mkdir -p $(appstore_build_dir)
-	rsync -zarh \
-	$(project_dir)/appinfo \
-	$(project_dir)/img \
-	$(project_dir)/js \
-	$(project_dir)/l10n \
-	$(project_dir)/lib \
-	$(project_dir)/templates \
-	$(project_dir)/vendor \
-	$(project_dir)/COPYING \
-	$(project_dir)/README.md \
-	$(project_dir)/CHANGELOG.md \
-		--exclude="vendor/bin" \
-	$(build_source_dir)/$(app_name)
-	tar -czf $(appstore_package_name).tar.gz \
-	   --directory="$(build_source_dir)" $(app_name)
+	rsync -zarh $(project_dir)/ --files-from="$(project_dir)/sync_list.txt" --exclude="vendor/bin" $(build_source_dir)/$(app_name)
+	tar -czf $(appstore_package_name).tar.gz --directory="$(build_source_dir)" $(app_name)
 	@if [ -f $(nc_cert_dir)/$(app_name).key ]; then \
 		echo "Signing package..."; \
 		openssl dgst -sha512 -sign $(nc_cert_dir)/$(app_name).key $(appstore_build_dir)/$(app_name).tar.gz | openssl base64; \
