@@ -1,0 +1,10 @@
+/appinfo
+/img
+/js
+/l10n
+/lib
+/templates
+/vendor
+/COPYING
+/README.md
+/CHANGELOG.md
