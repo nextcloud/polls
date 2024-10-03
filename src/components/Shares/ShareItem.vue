@@ -12,8 +12,7 @@
 	import { Logger } from '../../helpers/index.ts'
 	import UserItem from '../User/UserItem.vue'
 
-	import { useSharesStore } from '../../stores/shares.ts'
-	import { Share, UserType } from '../../Types/index.ts'
+	import { useSharesStore, Share, ShareType } from '../../stores/shares.ts'
 
 	import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 	import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
@@ -51,10 +50,10 @@
 		},
 	})
 
-	const isActivePublicShare = computed(() => !props.share.deleted && props.share.user.type === UserType.Public)
-	const activateResendInvitation = computed(() => !props.share.deleted && (props.share.user.emailAddress || props.share.user.type === UserType.Group))
-	const activateResolveGroup = computed(() => !props.share.deleted && [UserType.ContactGroup, UserType.Circle].includes(props.share.user.type))
-	const activateSwitchAdmin = computed(() => !props.share.deleted && (props.share.user.type === UserType.User || props.share.user.type === UserType.Admin))
+	const isActivePublicShare = computed(() => !props.share.deleted && props.share.type === ShareType.Public)
+	const activateResendInvitation = computed(() => !props.share.deleted && (props.share.user.emailAddress || props.share.type === ShareType.Group))
+	const activateResolveGroup = computed(() => !props.share.deleted && [ShareType.ContactGroup, ShareType.Circle].includes(props.share.type))
+	const activateSwitchAdmin = computed(() => !props.share.deleted && (props.share.type === ShareType.User || props.share.type === ShareType.Admin))
 	const activateCopyLink = computed(() => !props.share.deleted)
 	const activateShowQr = computed(() => !props.share.deleted && !!props.share.URL)
 	const userItemProps = computed(() => ({
@@ -146,7 +145,7 @@
 				<div v-if="share.voted">
 					<VotedIcon class="vote-status voted" :name="t('polls', 'Has voted')" />
 				</div>
-				<div v-else-if="[UserType.Public, UserType.Group].includes(share.user.type)">
+				<div v-else-if="[ShareType.Public, ShareType.Group].includes(share.type)">
 					<div class="vote-status empty" />
 				</div>
 				<div v-else>
@@ -184,11 +183,11 @@
 				</NcActionButton>
 
 				<NcActionButton v-if="activateSwitchAdmin"
-					:name="share.user.type === UserType.User ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
-					:aria-label="share.user.type === UserType.User ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
+					:name="share.type === ShareType.User ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
+					:aria-label="share.type === ShareType.User ? t('polls', 'Grant poll admin access') : t('polls', 'Withdraw poll admin access')"
 					@click="sharesStore.switchAdmin({ share: share })">
 					<template #icon>
-						<GrantAdminIcon v-if="share.user.type === UserType.User" />
+						<GrantAdminIcon v-if="share.type === ShareType.User" />
 						<WithdrawAdminIcon v-else />
 					</template>
 				</NcActionButton>

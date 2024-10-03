@@ -40,18 +40,18 @@
 	}
 
 	const validate = debounce(async function () {
-		if (sessionStore.share.displayName.length < 1) {
+		if (sessionStore.share.user.displayName.length < 1) {
 			setStatus(StatusResults.Unchanged)
 			return
 		}
 
-		if (sessionStore.share.displayName === sessionStore.currentUser.displayName) {
+		if (sessionStore.share.user.displayName === sessionStore.currentUser.displayName) {
 			setStatus(StatusResults.Error)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateName(sessionStore.route.params.token, sessionStore.share.displayName)
+			await ValidatorAPI.validateName(sessionStore.route.params.token, sessionStore.share.user.displayName)
 			setStatus(StatusResults.Success)
 		} catch {
 			setStatus(StatusResults.Error)
@@ -60,7 +60,7 @@
 
 	async function submit() {
 		try {
-			await sessionStore.updateDisplayName({ displayName: sessionStore.share.displayName })
+			await sessionStore.updateDisplayName({ displayName: sessionStore.share.user.displayName })
 			showSuccess(t('polls', 'Name changed.'))
 			setStatus(StatusResults.Unchanged)
 		} catch {
@@ -74,7 +74,7 @@
 <template>
 	<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
 		v-bind="inputProps"
-		v-model="sessionStore.share.displayName"
+		v-model="sessionStore.share.user.displayName"
 		@update:value-value="validate"
 		@submit="submit">
 		<template #icon>

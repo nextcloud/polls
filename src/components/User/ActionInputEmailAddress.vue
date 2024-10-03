@@ -40,13 +40,13 @@
 
 
 	const validate = debounce(async function () {
-		if (sessionStore.share.emailAddress === sessionStore.currentUser.emailAddress) {
+		if (sessionStore.share.user.emailAddress === sessionStore.currentUser.emailAddress) {
 			setStatus(StatusResults.Unchanged)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateEmailAddress(sessionStore.share.emailAddress)
+			await ValidatorAPI.validateEmailAddress(sessionStore.share.user.emailAddress)
 			setStatus(StatusResults.Success)
 		} catch {
 			setStatus(StatusResults.Error)
@@ -55,11 +55,11 @@
 
 	async function submit() {
 		try {
-			await sessionStore.updateEmailAddress({ emailAddress: sessionStore.share.emailAddress })
-			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: sessionStore.share.emailAddress }))
+			await sessionStore.updateEmailAddress({ emailAddress: sessionStore.share.user.emailAddress })
+			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: sessionStore.share.user.emailAddress }))
 			setStatus(StatusResults.Unchanged)
 		} catch {
-			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: sessionStore.share.emailAddress }))
+			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: sessionStore.share.user.emailAddress }))
 			setStatus(StatusResults.Error)
 		}
 	}
@@ -68,7 +68,7 @@
 <template>
 	<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
 		v-bind="inputProps"
-		v-model="sessionStore.share.emailAddress"
+		v-model="sessionStore.share.user.emailAddress"
 		@update:model-value="validate"
 		@submit="submit">
 		<template #icon>

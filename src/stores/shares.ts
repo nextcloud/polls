@@ -7,7 +7,20 @@ import { defineStore } from 'pinia'
 import { SharesAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.ts'
 import { useSessionStore } from './session.ts'
-import { User, UserType } from '../Types/index.ts'
+import { User } from '../Types/index.ts'
+
+export enum ShareType {
+	Email = 'email',
+	External = 'external',
+	Contact = 'contact',
+	User = 'user',
+	Group = 'group',
+	Admin = 'admin',
+	Public = 'public',
+	Circle = 'circle',
+	ContactGroup = 'contactGroup',
+	None = '',
+}
 
 export type Share = {
 	displayName: string
@@ -16,7 +29,7 @@ export type Share = {
 	locked: boolean
 	pollId: number | null
 	token: string
-	type: UserType
+	type: ShareType
 	emailAddress: string
 	userId: string
 	publicPollEmail: string
@@ -40,22 +53,22 @@ export const useSharesStore = defineStore('shares', {
 	getters: {
 		active: (state) => {
 			// share types, which will be active, after the user gets his invitation
-			const invitationTypes = [UserType.Email, UserType.External, UserType.Contact]
+			const invitationTypes = [ShareType.Email, ShareType.External, ShareType.Contact]
 
 			// sharetype which are active without sending an invitation
-			const directShareTypes = [UserType.User, UserType.Group, UserType.Admin, UserType.Public]
+			const directShareTypes = [ShareType.User, ShareType.Group, ShareType.Admin, ShareType.Public]
 			return state.list.filter((share) => (!share.locked
-				&& (directShareTypes.includes(share.user.type)
-					|| (invitationTypes.includes(share.user.type) && (share.user.type === UserType.External || share.invitationSent || share.voted))
+				&& (directShareTypes.includes(share.type)
+					|| (invitationTypes.includes(share.type) && (share.type === ShareType.External || share.invitationSent || share.voted))
 				)
 			))
 		},
 	
 		locked: (state) => state.list.filter((share) => (!!share.locked)),
 		unsentInvitations: (state) => state.list.filter((share) =>
-			(share.user.emailAddress || share.user.type === UserType.Group || share.user.type === UserType.ContactGroup || share.user.type === UserType.Circle)
+			(share.user.emailAddress || share.type === ShareType.Group || share.type === ShareType.ContactGroup || share.type === ShareType.Circle)
 			&& !share.invitationSent && !share.locked && !share.voted),
-		public: (state) => state.list.filter((share) => share.user.type === UserType.Public),
+		public: (state) => state.list.filter((share) => share.type === ShareType.Public),
 		hasShares: (state) => state.list.length > 0,
 		hasLocked() {
 			return this.locked.length > 0
@@ -94,7 +107,7 @@ export const useSharesStore = defineStore('shares', {
 		},
 	
 		async switchAdmin(payload: { share: Share }): Promise<void>{
-			const setTo = payload.share.user.type === UserType.User ? UserType.Admin : UserType.User
+			const setTo = payload.share.type === ShareType.User ? ShareType.Admin : ShareType.User
 	
 			try {
 				const response = await SharesAPI.switchAdmin(payload.share.token, setTo)

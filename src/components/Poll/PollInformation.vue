@@ -173,11 +173,11 @@
 			</template>
 			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', pollStore.configuration.maxVotesPerOption) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="$route.name === 'publicVote' && sessionStore.share.user.emailAddress">
+		<BadgeDiv v-if="$route.name === 'publicVote' && sessionStore.currentUser.emailAddress">
 			<template #icon>
 				<EmailIcon />
 			</template>
-			{{ sessionStore.share.user.emailAddress }}
+			{{ sessionStore.currentUser.emailAddress }}
 		</BadgeDiv>
 		<BadgeDiv v-if="subscriptionStore.subscribed">
 			<template #icon>

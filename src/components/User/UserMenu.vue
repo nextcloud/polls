@@ -31,7 +31,6 @@
 	import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 	import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 
-
 	type InputProps = {
 		success: boolean
 		error: boolean
@@ -125,18 +124,18 @@
 	})
 
 	const validateDisplayName = debounce(async function () {
-		if (sessionStore.share.displayName.length < 1) {
+		if (sessionStore.share.user.displayName.length < 1) {
 			setDisplayNameStatus(StatusResults.Error)
 			return
 		}
 
-		if (sessionStore.share.displayName === sessionStore.currentUser.displayName) {
+		if (sessionStore.share.user.displayName === sessionStore.currentUser.displayName) {
 			setDisplayNameStatus(StatusResults.Unchanged)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateName(sessionStore.route.params.token, sessionStore.share.displayName)
+			await ValidatorAPI.validateName(sessionStore.route.params.token, sessionStore.share.user.displayName)
 			setDisplayNameStatus(StatusResults.Success)
 		} catch {
 			setDisplayNameStatus(StatusResults.Error)
@@ -151,7 +150,7 @@
 
 	async function submitDisplayName() {
 		try {
-			await sessionStore.updateDisplayName({ displayName: sessionStore.share.displayName })
+			await sessionStore.updateDisplayName({ displayName: sessionStore.share.user.displayName })
 			showSuccess(t('polls', 'Name changed.'))
 			setDisplayNameStatus(StatusResults.Unchanged)
 		} catch {
@@ -169,13 +168,13 @@
 	})
 
 	const validateEMail = debounce(async function () {
-		if (sessionStore.share.emailAddress === sessionStore.currentUser.emailAddress) {
+		if (sessionStore.share.user.emailAddress === sessionStore.currentUser.emailAddress) {
 			setEMailStatus(StatusResults.Unchanged)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateEmailAddress(sessionStore.share.emailAddress)
+			await ValidatorAPI.validateEmailAddress(sessionStore.share.user.emailAddress)
 			setEMailStatus(StatusResults.Success)
 		} catch {
 			setEMailStatus(StatusResults.Error)
@@ -190,11 +189,11 @@
 
 	async function submitEmail() {
 		try {
-			await sessionStore.updateEmailAddress({ emailAddress: sessionStore.share.emailAddress })
-			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: sessionStore.share.emailAddress }))
+			await sessionStore.updateEmailAddress({ emailAddress: sessionStore.share.user.emailAddress })
+			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: sessionStore.share.user.emailAddress }))
 			setEMailStatus(StatusResults.Unchanged)
 		} catch {
-			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: sessionStore.share.emailAddress }))
+			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: sessionStore.share.user.emailAddress }))
 			setEMailStatus(StatusResults.Error)
 		}
 	}
@@ -220,7 +219,7 @@
 
 		<NcActionInput v-if="sessionStore.share?.type === 'external'"
 			v-bind="displayNameInputProps"
-			v-model="sessionStore.share.displayName"
+			v-model="sessionStore.share.user.displayName"
 			@update:value-value="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
@@ -231,7 +230,7 @@
 
 		<NcActionInput v-if="sessionStore.share?.type === 'external'"
 			v-bind="eMailInputProps"
-			v-model="sessionStore.share.emailAddress"
+			v-model="sessionStore.share.user.emailAddress"
 			@update:model-value="validateEMail"
 			@submit="submitEmail">
 			<template #icon>
