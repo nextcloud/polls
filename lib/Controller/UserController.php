@@ -67,6 +67,7 @@ class UserController extends BaseController {
 			'currentUser' => $this->acl->getCurrentUser(),
 			'appPermissions' => $this->acl->getPermissionsArray(),
 			'appSettings' => $this->acl->getAppSettings(),
+			'share' => null,
 		]);
 	}
 

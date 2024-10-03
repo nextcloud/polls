@@ -6,10 +6,27 @@
 import { defineStore } from 'pinia'
 import { SharesAPI } from '../Api/index.js'
 import { Logger } from '../helpers/index.ts'
-import { Share } from './share.ts'
 import { useSessionStore } from './session.ts'
-import { UserType } from '../Types/index.ts'
+import { User, UserType } from '../Types/index.ts'
 
+export type Share = {
+	displayName: string
+	id: string | null
+	invitationSent: boolean
+	locked: boolean
+	pollId: number | null
+	token: string
+	type: UserType
+	emailAddress: string
+	userId: string
+	publicPollEmail: string
+	user: User
+	reminderSent: boolean
+	label: string
+	URL: string
+	voted: boolean
+	deleted: boolean
+}
 
 export type Shares = {
 	list: Share[]

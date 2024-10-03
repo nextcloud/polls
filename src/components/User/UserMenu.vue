@@ -14,14 +14,13 @@
 
 	import { PollsAPI, ValidatorAPI } from '../../Api/index.js'
 	import { usePollStore } from '../../stores/poll.ts'
-	import { useShareStore } from '../../stores/share.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
 	import { useVotesStore } from '../../stores/votes.ts'
 
 	import { StatusResults } from '../../Types/index.ts'
 
 	import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
-	import { useSessionStore } from '../../stores/session.ts'
 
 	import SettingsIcon from 'vue-material-design-icons/Cog.vue'
 	import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
@@ -43,7 +42,6 @@
 
 	const pollStore = usePollStore()
 	const sessionStore = useSessionStore()
-	const shareStore = useShareStore()
 	const subscriptionStore = useSubscriptionStore()
 	const votesStore = useVotesStore()
 	const router = useRouter()
@@ -67,19 +65,19 @@
 
 	async function deleteEmailAddress() {
 		try {
-			await shareStore.deleteEmailAddress()
+			await sessionStore.deleteEmailAddress()
 			showSuccess(t('polls', 'Email address deleted.'))
 		} catch {
-			showError(t('polls', 'Error deleting email address {emailAddress}', { emailAddress: shareStore.user.emailAddress }))
+			showError(t('polls', 'Error deleting email address {emailAddress}', { emailAddress: sessionStore.share.user.emailAddress }))
 		}
 	}
 
 	async function resendInvitation() {
 		try {
-			const response = await shareStore.resendInvitation()
-			showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.shareStore.user.emailAddress }))
+			const response = await sessionStore.resendInvitation()
+			showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.user.emailAddress }))
 		} catch {
-			showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: shareStore.user.emailAddress }))
+			showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: sessionStore.share.user.emailAddress }))
 		}
 	}
 
@@ -127,18 +125,18 @@
 	})
 
 	const validateDisplayName = debounce(async function () {
-		if (shareStore.displayName.length < 1) {
+		if (sessionStore.share.displayName.length < 1) {
 			setDisplayNameStatus(StatusResults.Error)
 			return
 		}
 
-		if (shareStore.displayName === sessionStore.currentUser.displayName) {
+		if (sessionStore.share.displayName === sessionStore.currentUser.displayName) {
 			setDisplayNameStatus(StatusResults.Unchanged)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
+			await ValidatorAPI.validateName(sessionStore.route.params.token, sessionStore.share.displayName)
 			setDisplayNameStatus(StatusResults.Success)
 		} catch {
 			setDisplayNameStatus(StatusResults.Error)
@@ -153,7 +151,7 @@
 
 	async function submitDisplayName() {
 		try {
-			await shareStore.updateDisplayName({ displayName: shareStore.displayName })
+			await sessionStore.updateDisplayName({ displayName: sessionStore.share.displayName })
 			showSuccess(t('polls', 'Name changed.'))
 			setDisplayNameStatus(StatusResults.Unchanged)
 		} catch {
@@ -171,13 +169,13 @@
 	})
 
 	const validateEMail = debounce(async function () {
-		if (shareStore.emailAddress === sessionStore.currentUser.emailAddress) {
+		if (sessionStore.share.emailAddress === sessionStore.currentUser.emailAddress) {
 			setEMailStatus(StatusResults.Unchanged)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateEmailAddress(shareStore.emailAddress)
+			await ValidatorAPI.validateEmailAddress(sessionStore.share.emailAddress)
 			setEMailStatus(StatusResults.Success)
 		} catch {
 			setEMailStatus(StatusResults.Error)
@@ -192,11 +190,11 @@
 
 	async function submitEmail() {
 		try {
-			await shareStore.updateEmailAddress({ emailAddress: shareStore.emailAddress })
-			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: shareStore.emailAddress }))
+			await sessionStore.updateEmailAddress({ emailAddress: sessionStore.share.emailAddress })
+			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: sessionStore.share.emailAddress }))
 			setEMailStatus(StatusResults.Unchanged)
 		} catch {
-			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: shareStore.emailAddress }))
+			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: sessionStore.share.emailAddress }))
 			setEMailStatus(StatusResults.Error)
 		}
 	}
@@ -222,7 +220,7 @@
 
 		<NcActionInput v-if="sessionStore.share?.type === 'external'"
 			v-bind="displayNameInputProps"
-			v-model="shareStore.displayName"
+			v-model="sessionStore.share.displayName"
 			@update:value-value="validateDisplayName"
 			@submit="submitDisplayName">
 			<template #icon>
@@ -233,7 +231,7 @@
 
 		<NcActionInput v-if="sessionStore.share?.type === 'external'"
 			v-bind="eMailInputProps"
-			v-model="shareStore.emailAddress"
+			v-model="sessionStore.share.emailAddress"
 			@update:model-value="validateEMail"
 			@submit="submitEmail">
 			<template #icon>
@@ -245,7 +243,7 @@
 		<NcActionButton v-if="sessionStore.share?.type === 'external'"
 			:name="t('polls', 'Get your personal link per mail')"
 			:aria-label="t('polls', 'Get your personal link per mail')"
-			:disabled="!shareStore.user.emailAddress"
+			:disabled="!sessionStore.share.user.emailAddress"
 			@click="resendInvitation()">
 			<template #icon>
 				<SendLinkPerEmailIcon />
@@ -259,7 +257,7 @@
 			{{ t('polls', 'Subscribe to notifications') }}
 		</NcActionCheckbox>
 
-		<NcActionButton v-if="sessionStore.share?.type === 'external' && shareStore.user.emailAddress"
+		<NcActionButton v-if="sessionStore.share?.type === 'external' && sessionStore.share.user.emailAddress"
 			:name="t('polls', 'Remove Email Address')"
 			:aria-label="t('polls', 'Remove Email Address')"
 			@click="deleteEmailAddress">

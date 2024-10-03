@@ -10,7 +10,7 @@
 	import { NcUserBubble } from '@nextcloud/vue'
 
 	import { BadgeDiv } from '../Base/index.js'
-	import { useShareStore } from '../../stores/share.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 	import { usePollStore, AccessType } from '../../stores/poll.ts'
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
 	import { useOptionsStore } from '../../stores/options.ts'
@@ -36,7 +36,7 @@
 	import { MaybeIcon } from '../AppIcons/index.js'
 
 	const pollStore = usePollStore()
-	const shareStore = useShareStore()
+	const sessionStore = useSessionStore()
 	const subscriptionStore = useSubscriptionStore()
 	const optionsStore = useOptionsStore()
 	const votesStore = useVotesStore()
@@ -173,11 +173,11 @@
 			</template>
 			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', pollStore.configuration.maxVotesPerOption) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="$route.name === 'publicVote' && shareStore.user.emailAddress">
+		<BadgeDiv v-if="$route.name === 'publicVote' && sessionStore.share.user.emailAddress">
 			<template #icon>
 				<EmailIcon />
 			</template>
-			{{ shareStore.user.emailAddress }}
+			{{ sessionStore.share.user.emailAddress }}
 		</BadgeDiv>
 		<BadgeDiv v-if="subscriptionStore.subscribed">
 			<template #icon>

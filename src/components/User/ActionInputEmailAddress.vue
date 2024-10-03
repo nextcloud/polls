@@ -11,7 +11,6 @@
 	import { ValidatorAPI } from '../../Api/index.js'
 	import { t } from '@nextcloud/l10n'
 	import { useSessionStore } from '../../stores/session.ts'
-	import { useShareStore } from '../../stores/share.ts'
 	import { ref } from 'vue'
 	import { StatusResults } from '../../Types/index.ts'
 
@@ -24,7 +23,6 @@
 	}
 
 	const sessionStore = useSessionStore()
-	const shareStore = useShareStore()
 
 	const inputProps = ref<InputProps>({
 		success: false,
@@ -42,13 +40,13 @@
 
 
 	const validate = debounce(async function () {
-		if (shareStore.emailAddress === sessionStore.currentUser.emailAddress) {
+		if (sessionStore.share.emailAddress === sessionStore.currentUser.emailAddress) {
 			setStatus(StatusResults.Unchanged)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateEmailAddress(shareStore.emailAddress)
+			await ValidatorAPI.validateEmailAddress(sessionStore.share.emailAddress)
 			setStatus(StatusResults.Success)
 		} catch {
 			setStatus(StatusResults.Error)
@@ -57,11 +55,11 @@
 
 	async function submit() {
 		try {
-			await shareStore.updateEmailAddress({ emailAddress: shareStore.emailAddress })
-			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: shareStore.emailAddress }))
+			await sessionStore.updateEmailAddress({ emailAddress: sessionStore.share.emailAddress })
+			showSuccess(t('polls', 'Email address {emailAddress} saved.', { emailAddress: sessionStore.share.emailAddress }))
 			setStatus(StatusResults.Unchanged)
 		} catch {
-			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: shareStore.emailAddress }))
+			showError(t('polls', 'Error saving email address {emailAddress}', { emailAddress: sessionStore.share.emailAddress }))
 			setStatus(StatusResults.Error)
 		}
 	}
@@ -70,7 +68,7 @@
 <template>
 	<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
 		v-bind="inputProps"
-		v-model="shareStore.emailAddress"
+		v-model="sessionStore.share.emailAddress"
 		@update:model-value="validate"
 		@submit="submit">
 		<template #icon>

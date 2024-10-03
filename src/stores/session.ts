@@ -6,12 +6,18 @@
 import { defineStore } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
 import { PublicAPI, SessionAPI } from '../Api/index.js'
-import { User, AppPermissions, UserType } from '../Types/index.ts'
+import { User, AppPermissions } from '../Types/index.ts'
 import { AppSettings, UpdateType } from './appSettings.ts'
 import { usePreferencesStore, ViewMode, SessionSettings } from './preferences.ts'
 import { FilterType } from './polls.ts'
-import { Share } from './share.ts'
+import { Share } from './shares.ts'
 import { RouteLocationNormalized } from 'vue-router'
+import { Logger } from '../helpers/index.ts'
+import { usePollStore } from './poll.ts'
+import { useOptionsStore } from './options.ts'
+import { useVotesStore } from './votes.ts'
+import { useCommentsStore } from './comments.ts'
+import { useSubscriptionStore } from './subscription.ts'
 
 export type Route = {
 	currentRoute: string
@@ -30,10 +36,10 @@ export type UserStatus = {
 }
 
 export type Session = {
-	token: string
+	token: string | null
 	appPermissions: AppPermissions
 	appSettings: AppSettings
-	currentUser: User
+	currentUser: User |null
 	sessionSettings: SessionSettings
 	viewModes: ViewMode[]
 	route: Route
@@ -44,24 +50,6 @@ export type Session = {
 const mobileBreakpoint = 480
 export const useSessionStore = defineStore('session', {
 	state: (): Session => ({
-		token: '',
-		currentUser: {
-			userId: '',
-			displayName: '',
-			emailAddress: '',
-			subName: '',
-			subtitle: '',
-			isNoUser: true,
-			desc: '',
-			type: UserType.User,
-			id: '',
-			user: '',
-			organisation: '', 
-			languageCode: '',
-			localeCode: '',
-			timeZone: '',
-			categories: []
-		},
 		appPermissions: {
 			allAccess: false,
 			publicShares: false,
@@ -122,6 +110,8 @@ export const useSessionStore = defineStore('session', {
 			isLoggedin: !!getCurrentUser(),
 			isAdmin: !!getCurrentUser()?.isAdmin,
 		},
+		token: null,
+		currentUser: null,
 		share: null,
 	}),
 
@@ -192,6 +182,103 @@ export const useSessionStore = defineStore('session', {
 			this.route.name = payload.name
 			this.route.path = payload.path
 			this.route.params = payload.params
+		},
+
+		// Share store
+		async loadShare(): Promise<void> {
+			if (this.route.name !== 'publicVote') {
+				this.share = null
+				return
+			}
+
+			try {
+				const response = await PublicAPI.getShare(this.route.params.token)
+				this.share = response.data.share
+				return response.data
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error retrieving share', { error })
+				throw error
+			}
+		},
+
+		async updateEmailAddress(payload: { emailAddress: string }): Promise<void> {
+			const pollStore = usePollStore()
+
+			if (this.route.name !== 'publicVote') {
+				return
+			}
+
+			try {
+				const response = await PublicAPI.setEmailAddress(this.route.params.token, payload.emailAddress)
+				this.share = response.data.share
+				pollStore.load()
+
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error writing email address', { error, payload })
+				throw error
+			}
+		},
+
+		async updateDisplayName(payload: { displayName: string }): Promise<void> {
+			const pollStore = usePollStore()
+			const commentsStore = useCommentsStore()
+			const votesStore = useVotesStore()
+			const optionsStore = useOptionsStore()
+
+			if (this.route.name !== 'publicVote') {
+				return
+			}
+
+			try {
+				const response = await PublicAPI.setDisplayName(this.route.params.token, payload.displayName)
+				this.share = response.data.share
+				pollStore.load()
+				commentsStore.load()
+				votesStore.load()
+				optionsStore.load()
+
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error changing name', { error, payload })
+				throw error
+			}
+		},
+
+		async deleteEmailAddress(): Promise<void>{
+			const pollStore = usePollStore()
+			const subscriptionStore = useSubscriptionStore()
+
+			if (this.route.name !== 'publicVote') {
+				return
+			}
+
+			try {
+				const response = await PublicAPI.deleteEmailAddress(this.route.params.token)
+				this.share = response.data.share
+				subscriptionStore.$state.subscribed = false
+				subscriptionStore.write()
+				pollStore.load()
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error writing email address', { error })
+				throw error
+			}
+		},
+
+		async resendInvitation() {
+			if (this.route.name !== 'publicVote') {
+				return
+			}
+
+			try {
+				return await PublicAPI.resendInvitation(this.route.params.token)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error sending invitation', { error, token: this.route.params.token })
+				throw error
+			}
 		},
 	},
 })

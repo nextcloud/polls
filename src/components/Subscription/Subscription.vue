@@ -8,13 +8,13 @@
 	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 	import { t } from '@nextcloud/l10n'
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
-	import { useShareStore } from '../../stores/share.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 
-	const shareStore = useShareStore()
+	const sessionStore = useSessionStore()
 	const subscriptionStore = useSubscriptionStore()
 
-	const label = computed(() => shareStore.user.emailAddress
-		? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: shareStore.user.emailAddress })
+	const label = computed(() => sessionStore.share.user.emailAddress
+		? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: sessionStore.share.user.emailAddress })
 		: t('polls', 'Receive notification email on activity')
 	)
 

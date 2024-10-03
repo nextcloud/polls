@@ -11,7 +11,6 @@
 	import { ValidatorAPI } from '../../Api/index.js'
 	import { t } from '@nextcloud/l10n'
 	import { useSessionStore } from '../../stores/session.ts'
-	import { useShareStore } from '../../stores/share.ts'
 	import { ref } from 'vue'
 	import { StatusResults } from '../../Types/index.ts'
 
@@ -24,7 +23,6 @@
 	}
 
 	const sessionStore = useSessionStore()
-	const shareStore = useShareStore()
 
 	const inputProps = ref<InputProps>({
 		success: false,
@@ -42,18 +40,18 @@
 	}
 
 	const validate = debounce(async function () {
-		if (shareStore.displayName.length < 1) {
+		if (sessionStore.share.displayName.length < 1) {
 			setStatus(StatusResults.Unchanged)
 			return
 		}
 
-		if (shareStore.displayName === sessionStore.currentUser.displayName) {
+		if (sessionStore.share.displayName === sessionStore.currentUser.displayName) {
 			setStatus(StatusResults.Error)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
+			await ValidatorAPI.validateName(sessionStore.route.params.token, sessionStore.share.displayName)
 			setStatus(StatusResults.Success)
 		} catch {
 			setStatus(StatusResults.Error)
@@ -62,7 +60,7 @@
 
 	async function submit() {
 		try {
-			await shareStore.updateDisplayName({ displayName: shareStore.displayName })
+			await sessionStore.updateDisplayName({ displayName: sessionStore.share.displayName })
 			showSuccess(t('polls', 'Name changed.'))
 			setStatus(StatusResults.Unchanged)
 		} catch {
@@ -76,7 +74,7 @@
 <template>
 	<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
 		v-bind="inputProps"
-		v-model="shareStore.displayName"
+		v-model="sessionStore.share.displayName"
 		@update:value-value="validate"
 		@submit="submit">
 		<template #icon>
