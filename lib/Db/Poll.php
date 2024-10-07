@@ -70,9 +70,9 @@ use OCP\IURLGenerator;
  * @method int getCountOptions()
  *
  * Magic functions for subqueried columns
- * @method int getCurrentUserCountOrphanedVotes()
- * @method int getCurrentUserCountVotes()
- * @method int getCurrentUserCountVotesYes()
+ * @method int getCurrentUserOrphanedVotes()
+ * @method int getCurrentUserVotes()
+ * @method int getCurrentUserVotesYes()
  */
 
 class Poll extends EntityWithUser implements JsonSerializable {
@@ -157,9 +157,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $countOptions = 0;
 	
 	// subqueried columns
-	protected int $currentUserCountOrphanedVotes = 0;
-	protected int $currentUserCountVotes = 0;
-	protected int $currentUserCountVotesYes = 0;
+	protected int $currentUserOrphanedVotes = 0;
+	protected int $currentUserVotes = 0;
+	protected int $currentUserVotesYes = 0;
 
 	public function __construct() {
 		$this->addType('created', 'integer');
@@ -183,9 +183,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('countOptions', 'integer');
 
 		// subqueried columns
-		$this->addType('currentUserCountVotes', 'integer');
-		$this->addType('currentUserCountVotesYes', 'integer');
-		$this->addType('currentUserCountOrphanedVotes', 'integer');
+		$this->addType('currentUserVotes', 'integer');
+		$this->addType('currentUserVotesYes', 'integer');
+		$this->addType('currentUserOrphanedVotes', 'integer');
 
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userSession = Container::queryClass(UserSession::class);
@@ -251,9 +251,9 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'isNoUser' => !$this->userSession->getIsLoggedIn(),
 			'isOwner' => $this->getIsPollOwner(),
 			'userId' => $this->getUserId(),
-			'orphanedVotes' => $this->getCurrentUserCountOrphanedVotes(),
-			'yesVotes' => $this->getCurrentUserCountVotesYes(),
-			'countVotes' => $this->getCurrentUserCountVotes(),
+			'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
+			'yesVotes' => $this->getCurrentUserVotesYes(),
+			'countVotes' => $this->getCurrentUserVotes(),
 			'shareToken' => $this->getShareToken(),
 			'groupInvitations' => $this->getGroupShares(),
 		];
@@ -528,7 +528,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * @return bool Returns true, if the current user is already a particitipant of the current poll.
 	 */
 	private function getIsParticipant(): bool {
-		return $this->getCurrentUserCountVotes() > 0;
+		return $this->getCurrentUserVotes() > 0;
 	}
 
 	/**
