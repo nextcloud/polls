@@ -5,11 +5,13 @@
 
 <script setup lang="ts">
 	import { computed } from 'vue'
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import { t } from '@nextcloud/l10n'
+
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+
 	import UserItem from '../User/UserItem.vue'
-	import { usePollStore, AccessType } from '../../stores/poll.ts'
 	import { VirtualUserItemType } from '../../Types/index.ts'
+	import { usePollStore, AccessType } from '../../stores/poll.ts'
 
 
 	const pollStore = usePollStore()

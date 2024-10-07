@@ -5,12 +5,10 @@
 
 <script setup lang="ts">
 	import { PropType } from 'vue'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-	import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
 	import { t } from '@nextcloud/l10n'
 
-	import { useSessionStore } from '../../stores/session.ts'
-	import { Poll, PollType } from '../../Types/index.ts'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
 
 	import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 	import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
@@ -18,6 +16,9 @@
 	import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+
+	import { useSessionStore } from '../../stores/session.ts'
+	import { Poll, PollType } from '../../Types/index.ts'
 
 	const sessionStore = useSessionStore()
 

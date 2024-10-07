@@ -7,16 +7,12 @@
 	import { ref, computed, onMounted, PropType } from 'vue'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
+
 	import NcActionCaption from '@nextcloud/vue/dist/Components/NcActionCaption.js'
 	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
 	import NcActionRadio from '@nextcloud/vue/dist/Components/NcActionRadio.js'
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-
-	import { Logger } from '../../helpers/index.ts'
-	import UserItem from '../User/UserItem.vue'
-
-	import { useSharesStore, Share, ShareType } from '../../stores/shares.ts'
 
 	import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 	import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
@@ -31,6 +27,11 @@
 	import UnlockIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+
+	import { Logger } from '../../helpers/index.ts'
+	import UserItem from '../User/UserItem.vue'
+
+	import { useSharesStore, Share, ShareType } from '../../stores/shares.ts'
 
 	const sharesStore = useSharesStore()
 	const props = defineProps( {

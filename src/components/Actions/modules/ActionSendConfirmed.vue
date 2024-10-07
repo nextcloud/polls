@@ -6,12 +6,15 @@
 <script setup lang="ts">
 	import { useRoute } from 'vue-router'
 	import { ref } from 'vue'
+	import { t, n } from '@nextcloud/l10n'
+
 	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
 	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+
 	import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
+
 	import { PollsAPI } from '../../../Api/index.js'
 	import { Logger } from '../../../helpers/index.ts'
-	import { t, n } from '@nextcloud/l10n'
 	import { StatusResults } from '../../../Types/index.ts'
 
 	const route = useRoute()

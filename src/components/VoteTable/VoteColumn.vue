@@ -5,20 +5,23 @@
 
 <script setup lang="ts">
 	import { computed, PropType } from 'vue'
+	import { t } from '@nextcloud/l10n'
+	import { getCurrentUser } from '@nextcloud/auth'
+	
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	
+	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+
 	import Counter from '../Options/Counter.vue'
 	import OptionItem from '../Options/OptionItem.vue'
 	import VoteItem from './VoteItem.vue'
-	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
-	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 	import CalendarPeek from '../Calendar/CalendarPeek.vue'
 	import OptionItemOwner from '../Options/OptionItemOwner.vue'
-	import { t } from '@nextcloud/l10n'
-	import { getCurrentUser } from '@nextcloud/auth'
 	import { usePollStore, PollType } from '../../stores/poll.ts'
 	import { usePreferencesStore } from '../../stores/preferences.ts'
 	import { useOptionsStore, Option } from '../../stores/options.ts'
 	import { BoxType } from '../../Types/index.ts'
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollStore = usePollStore()
 	const preferencesStore = usePreferencesStore()

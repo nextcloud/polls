@@ -7,10 +7,12 @@
 	import { ref } from 'vue'
 	import { debounce } from 'lodash'
 	import { showError } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+
 	import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
+
 	import { AppSettingsAPI } from '../../Api/index.js'
 	import { Logger } from '../../helpers/index.ts'
-	import { t } from '@nextcloud/l10n'
 	import { useSharesStore } from '../../stores/shares.ts'
 
 	const sharesStore = useSharesStore()

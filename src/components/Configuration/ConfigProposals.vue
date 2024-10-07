@@ -6,9 +6,11 @@
 <script setup lang="ts">
 	import { computed } from 'vue'
 	import moment from '@nextcloud/moment'
+	import { t } from '@nextcloud/l10n'
+
 	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import NcDateTimePicker from '@nextcloud/vue/dist/Components/NcDateTimePicker.js'
-	import { t } from '@nextcloud/l10n'
+
 	import { usePollStore, AllowProposals } from '../../stores/poll.ts'
 
 	const pollStore = usePollStore()

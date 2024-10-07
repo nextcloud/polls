@@ -7,14 +7,16 @@
 	import { ref } from 'vue'
 	import { showError, showSuccess } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
+
 	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
+	import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
+
 	import { useOptionsStore } from '../../stores/options.ts'
 
-	import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 
 	const optionsStore = useOptionsStore()
 

@@ -4,15 +4,17 @@
 -->
 
 <script setup lang="ts">
+	import { ref } from 'vue'
 	import { debounce } from 'lodash'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+
 	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
 	import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
+
 	import { ValidatorAPI } from '../../Api/index.js'
-	import { t } from '@nextcloud/l10n'
-	import { useSessionStore } from '../../stores/session.ts'
-	import { ref } from 'vue'
 	import { StatusResults } from '../../Types/index.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 
 	type InputProps = {
 		success: boolean

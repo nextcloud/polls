@@ -4,8 +4,10 @@
 -->
 
 <script setup lang="ts">
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import { t } from '@nextcloud/l10n'
+
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+
 	import { useVotesStore } from '../../../stores/votes.ts'
 
 	const votesStore = useVotesStore()

@@ -5,20 +5,12 @@
 
 <script setup lang="ts">
 	import { ref } from 'vue'
+	import { t } from '@nextcloud/l10n'
+
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
-	import { t } from '@nextcloud/l10n'
-
-	import OptionCloneDate from './OptionCloneDate.vue'
-	import OptionItem from './OptionItem.vue'
-	import OptionItemOwner from './OptionItemOwner.vue'
-
-	import { usePollStore, PollType } from '../../stores/poll.ts'
-	import { useOptionsStore, Option } from '../../stores/options.ts'
-
-	import { BoxType } from '../../Types/index.ts'
 
 	import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
@@ -26,6 +18,13 @@
 	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+
+	import OptionCloneDate from './OptionCloneDate.vue'
+	import OptionItem from './OptionItem.vue'
+	import OptionItemOwner from './OptionItemOwner.vue'
+	import { usePollStore, PollType } from '../../stores/poll.ts'
+	import { useOptionsStore, Option } from '../../stores/options.ts'
+	import { BoxType } from '../../Types/index.ts'
 
 	const pollStore = usePollStore()
 	const optionsStore = useOptionsStore()

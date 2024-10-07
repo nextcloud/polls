@@ -4,11 +4,13 @@
 -->
 <script setup>
 	import { ref, onMounted, onUnmounted } from 'vue'
+	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import { t } from '@nextcloud/l10n'
+
 	import NcAppSettingsDialog from '@nextcloud/vue/dist/Components/NcAppSettingsDialog.js'
 	import NcAppSettingsSection from '@nextcloud/vue/dist/Components/NcAppSettingsSection.js'
-	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+
 	import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
-	import { t } from '@nextcloud/l10n'
 	import { usePreferencesStore } from '../../stores/preferences.ts'
 
 	const preferencesStore = usePreferencesStore()

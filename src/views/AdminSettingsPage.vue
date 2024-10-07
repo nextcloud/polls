@@ -5,17 +5,19 @@
 
 <script setup>
 	import { onMounted } from 'vue'
+	import { t } from '@nextcloud/l10n'
+
+	import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
+
+	import { FlexSettings } from '../components/Base/index.js'
 	import {
 		AdminActivities, AdminArchivePolls, AdminCombo, AdminEmail, AdminJobs, AdminLegal, 
 		AdminPerformance, AdminPollCreation, AdminPollDownload, AdminPollsInNavigation,
 		AdminShareOpenPoll, AdminSharePublicCreate, AdminSharePublicShowLogin,
 		AdminShowMailAddresses
 	} from '../components/Settings/AdminSettings/index.js'
-	import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
-	import { FlexSettings } from '../components/Base/index.js'
-	import '../assets/scss/markdown.scss'
-	import { t } from '@nextcloud/l10n'
 	import { useAppSettingsStore } from '../stores/appSettings.ts'
+	import '../assets/scss/markdown.scss'
 
 	const appSettingsStore = useAppSettingsStore()
 

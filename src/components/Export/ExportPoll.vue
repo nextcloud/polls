@@ -7,24 +7,25 @@
 	import { ref, computed } from 'vue'
 	import { useRoute } from 'vue-router'
 	import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
-	import { saveAs } from 'file-saver'
 	import DOMPurify from 'dompurify'
+	import { saveAs } from 'file-saver'
 	import { t } from '@nextcloud/l10n'
+	import { showError } from '@nextcloud/dialogs'
+	
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-	import { showError } from '@nextcloud/dialogs'
-
-	import { usePollStore, PollType } from '../../stores/poll.ts'
-	import { useVotesStore } from '../../stores/votes.ts'
-	import { useOptionsStore } from '../../stores/options.ts'
-
-	import { PollsAPI } from '../../Api/index.js'
 
 	import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 	import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 	import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 	import XmlIcon from 'vue-material-design-icons/Xml.vue'
 	import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
+
+	import { PollsAPI } from '../../Api/index.js'
+	import { usePollStore, PollType } from '../../stores/poll.ts'
+	import { useVotesStore } from '../../stores/votes.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
+
 
 	const route = useRoute()
 	const pollStore = usePollStore()

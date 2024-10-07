@@ -4,6 +4,8 @@
 -->
 
 <script setup lang="ts">
+	import { t } from '@nextcloud/l10n'
+
 	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import NcPopover from '@nextcloud/vue/dist/Components/NcPopover.js'
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
@@ -11,7 +13,7 @@
 
 	import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 	import AutoReminderInformation from './AutoReminderInformation.vue'
-	import { t } from '@nextcloud/l10n'
+
 	import { usePollStore } from '../../stores/poll.ts'
 
 	const pollStore = usePollStore()

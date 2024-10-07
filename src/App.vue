@@ -5,20 +5,24 @@
 
 <script setup lang="ts">
 	import { ref, computed, onMounted, onUnmounted } from 'vue'
-	import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
+	import { debounce } from 'lodash'
 	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+
+	import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
+
+	import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
+	import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
+
+	import { useSessionStore } from './stores/session.ts'
+	import { usePollStore } from './stores/poll.ts'
+	import { showSuccess } from '@nextcloud/dialogs'
+
 	import '@nextcloud/dialogs/style.css'
 	import './assets/scss/colors.scss'
 	import './assets/scss/hacks.scss'
 	import './assets/scss/print.scss'
 	import './assets/scss/transitions.scss'
 	import './assets/scss/markdown.scss'
-	import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
-	import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
-	import { useSessionStore } from './stores/session.ts'
-	import { usePollStore } from './stores/poll.ts'
-	import { showSuccess } from '@nextcloud/dialogs'
-	import { debounce } from 'lodash'
 
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()

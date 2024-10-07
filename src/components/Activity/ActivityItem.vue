@@ -6,8 +6,10 @@
 <script setup lang="ts">
 	import { computed } from 'vue'
 	import moment from '@nextcloud/moment'
+
 	import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 	import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
+
 	import { GuestBubble, SimpleLink } from '../../helpers/index.ts'
 
 	const props = defineProps({

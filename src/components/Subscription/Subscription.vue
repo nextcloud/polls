@@ -5,8 +5,10 @@
 
 <script setup lang="ts">
 	import { computed } from 'vue'
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import { t } from '@nextcloud/l10n'
+
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
 	import { useSessionStore } from '../../stores/session.ts'
 

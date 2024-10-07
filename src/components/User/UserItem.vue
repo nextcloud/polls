@@ -7,6 +7,8 @@
 	import { computed, type PropType } from 'vue'
 	import { useRoute } from 'vue-router'
 	import { getCurrentUser } from '@nextcloud/auth'
+	import { t } from '@nextcloud/l10n'
+
 	import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
 	import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
 	import LinkIcon from 'vue-material-design-icons/LinkVariant.vue'
@@ -18,7 +20,7 @@
 	import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
 	import DeletedUserIcon from 'vue-material-design-icons/AccountOff.vue'
 	import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
-	import { t } from '@nextcloud/l10n'
+
 	import { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
 
 	const route = useRoute()

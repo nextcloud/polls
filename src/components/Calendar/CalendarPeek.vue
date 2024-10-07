@@ -6,14 +6,17 @@
 <script setup lang="ts">
 
 	import { computed, onMounted, ref, PropType } from 'vue'
+	import { t } from '@nextcloud/l10n'
 	import orderBy from 'lodash/orderBy'
-	import NcPopover from '@nextcloud/vue/dist/Components/NcPopover.js'
 	import moment from '@nextcloud/moment'
+
+	import NcPopover from '@nextcloud/vue/dist/Components/NcPopover.js'
+
+	import { usePollStore } from '../../stores/poll.ts'
+
 	import CalendarInfo from './CalendarInfo.vue'
 	import { CalendarAPI } from '../../Api/index.js'
 	import { Logger } from '../../helpers/index.ts'
-	import { t } from '@nextcloud/l10n'
-	import { usePollStore } from '../../stores/poll.ts'
 	import { Option } from '../../Types/index.ts'
 
 	const pollStore = usePollStore()

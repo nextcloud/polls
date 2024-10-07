@@ -5,19 +5,15 @@
 
 <script setup>
 	import { ref, computed, onMounted } from 'vue'
+	import { getCurrentUser } from '@nextcloud/auth'
+	import { showError } from '@nextcloud/dialogs'
+	import { emit } from '@nextcloud/event-bus'
+	import { t } from '@nextcloud/l10n'
+
 	import NcAppNavigation from '@nextcloud/vue/dist/Components/NcAppNavigation.js'
 	import NcAppNavigationNew from '@nextcloud/vue/dist/Components/NcAppNavigationNew.js'
 	import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
 	import NcCounterBubble from '@nextcloud/vue/dist/Components/NcCounterBubble.js'
-	import { getCurrentUser } from '@nextcloud/auth'
-	import { showError } from '@nextcloud/dialogs'
-	import { emit } from '@nextcloud/event-bus'
-	import CreateDlg from '../components/Create/CreateDlg.vue'
-	import { t } from '@nextcloud/l10n'
-	import { FilterType, usePollsStore } from '../stores/polls.ts'
-	import { useSessionStore } from '../stores/session.ts'
-	import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
-	import { Logger } from '../helpers/index.ts'
 
 	// Icons
 	import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
@@ -33,6 +29,12 @@
 	import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 	import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 	import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
+
+	import { Logger } from '../helpers/index.ts'
+	import CreateDlg from '../components/Create/CreateDlg.vue'
+	import { FilterType, usePollsStore } from '../stores/polls.ts'
+	import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
+	import { useSessionStore } from '../stores/session.ts'
 
 	const iconSize = 20
 	const icons = [

@@ -5,12 +5,22 @@
 
 <script setup lang="ts">
 	import { showError } from '@nextcloud/dialogs'
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import { t } from '@nextcloud/l10n'
-
-	import { PollType, ShowResults, usePollStore } from '../../stores/poll.ts'
-	import { useVotesStore } from '../../stores/votes.ts'
-
+	
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	
+	import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+	import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+	import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
+	import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
+	import LockedIcon from 'vue-material-design-icons/Lock.vue'
+	import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
+	import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
+	import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
+	import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
+	import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+	import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+	
 	import { ConfigBox, CardDiv } from '../Base/index.js'
 	import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
 	import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
@@ -24,21 +34,12 @@
 	import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
 	import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 
-	import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
-	import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
-	import DescriptionIcon from 'vue-material-design-icons/TextBox.vue'
-	import PollConfigIcon from 'vue-material-design-icons/Wrench.vue'
-	import LockedIcon from 'vue-material-design-icons/Lock.vue'
-	import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
-	import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
-	import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
-	import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
-	import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
-	import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
-
+	import { usePollStore, PollType, ShowResults } from '../../stores/poll.ts'
+	import { useVotesStore } from '../../stores/votes.ts'
+	
 	const pollStore = usePollStore()
 	const votesStore = useVotesStore()
-
+	
 	/**
 	 *
 	 */

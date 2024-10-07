@@ -8,15 +8,16 @@
 	import { showError, showSuccess } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 	import moment from '@nextcloud/moment'
+
 	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import NcDateTimePicker from '@nextcloud/vue/dist/Components/NcDateTimePicker.js'
 	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
-	import { useOptionsStore } from '../../stores/options.ts'
-
-	import { FlexSpacer } from '../Base/index.js'
 	import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
+	
+	import { FlexSpacer } from '../Base/index.js'
+	import { useOptionsStore } from '../../stores/options.ts'
 
 	const optionsStore = useOptionsStore()
 	const props = defineProps({

@@ -5,14 +5,16 @@
 
 <script setup lang="ts">
 	import { showSuccess, showError } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+	
 	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
-	import { ConfigBox } from '../Base/index.js'
 	import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 	import ShareItem from './ShareItem.vue'
 	import BulkMailIcon from 'vue-material-design-icons/EmailMultipleOutline.vue'
+
+	import { ConfigBox } from '../Base/index.js'
 	import { Logger } from '../../helpers/index.ts'
-	import { t } from '@nextcloud/l10n'
 	import { usePollStore } from '../../stores/poll.ts'
 	import { useSharesStore } from '../../stores/shares.ts'
 

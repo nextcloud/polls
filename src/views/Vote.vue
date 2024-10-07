@@ -5,30 +5,29 @@
 
 <script setup lang="ts">
 	import { ref, computed, onMounted, onUnmounted } from 'vue'
-	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
-	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
+	
+	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 
-	import { usePollStore, PollType } from '../stores/poll.ts'
-	import { useOptionsStore } from '../stores/options.ts'
-	import { usePreferencesStore } from '../stores/preferences.ts'
-
+	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	
 	import { useHandleScroll } from '../composables/handleScroll.ts'
-
-	import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
-	import { HeaderBar } from '../components/Base/index.js'
-	import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
 	import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
 	import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 	import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
 	import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 	import VoteTable from '../components/VoteTable/VoteTable.vue'
 	import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
+	import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
+	import { HeaderBar } from '../components/Base/index.js'
+	import { CardAnonymousPollHint, CardHiddenParticipants } from '../components/Cards/index.js'
 
-	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-
+	import { usePollStore, PollType } from '../stores/poll.ts'
+	import { useOptionsStore } from '../stores/options.ts'
+	import { usePreferencesStore } from '../stores/preferences.ts'
 	
 	const pollStore = usePollStore()
 	const optionsStore = useOptionsStore()

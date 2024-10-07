@@ -4,12 +4,14 @@
 -->
 
 <script setup lang="ts">
+	import { emit } from '@nextcloud/event-bus'
+	import { t } from '@nextcloud/l10n'
+
 	import NcAppSidebar from '@nextcloud/vue/dist/Components/NcAppSidebar.js'
 	import NcAppSidebarTab from '@nextcloud/vue/dist/Components/NcAppSidebarTab.js'
-	import { emit } from '@nextcloud/event-bus'
+
 	import { PollsAppIcon } from '../components/AppIcons/index.js'
 	import { SideBarTabDatePolls } from '../components/SideBar/index.js'
-	import { t } from '@nextcloud/l10n'
 
 	function closeSideBar() {
 		emit('polls:sidebar:toggle', { open: false })

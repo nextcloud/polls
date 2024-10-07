@@ -7,14 +7,23 @@
 	import { ref } from 'vue'
 	import { useRouter } from 'vue-router'
 	import { debounce } from 'lodash'
-
 	import { showSuccess, showError } from '@nextcloud/dialogs'
+	import { t } from '@nextcloud/l10n'
+
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 	import NcActionCheckbox from '@nextcloud/vue/dist/Components/NcActionCheckbox.js'
 	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
 	import NcActionSeparator from '@nextcloud/vue/dist/Components/NcActionSeparator.js'
-	import { t } from '@nextcloud/l10n'
+
+	import SettingsIcon from 'vue-material-design-icons/Cog.vue'
+	import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
+	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+	import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
+	import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
+	import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
+	import LogoutIcon from 'vue-material-design-icons/Logout.vue'
+	import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 
 	import { PollsAPI, ValidatorAPI } from '../../Api/index.js'
 	import { usePollStore } from '../../stores/poll.ts'
@@ -25,15 +34,6 @@
 	import { StatusResults } from '../../Types/index.ts'
 
 	import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
-
-	import SettingsIcon from 'vue-material-design-icons/Cog.vue'
-	import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'
-	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-	import ClippyIcon from 'vue-material-design-icons/ClipboardArrowLeftOutline.vue'
-	import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
-	import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
-	import LogoutIcon from 'vue-material-design-icons/Logout.vue'
-	import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 
 	type InputProps = {
 		success: boolean
