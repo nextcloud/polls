@@ -18,7 +18,7 @@
 	<div class="action toggle-sidebar">
 		<NcButton :type="ButtonType.Primary"
 			:aria-label="caption"
-			@click="pollStore.switchSafeTable()">
+			@click="pollStore.revealParticipants = true">
 			{{ caption }}
 		</NcButton>
 	</div>
