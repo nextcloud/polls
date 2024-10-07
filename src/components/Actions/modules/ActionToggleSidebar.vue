@@ -4,11 +4,10 @@
 -->
 
 <script setup lang="ts">
-	import { NcButton } from '@nextcloud/vue'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import { emit } from '@nextcloud/event-bus'
 	import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 	import { t } from '@nextcloud/l10n'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js';
 
 	const caption = t('polls', 'Toggle Sidebar')
 	function clickAction() {

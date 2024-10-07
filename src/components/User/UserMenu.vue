@@ -9,7 +9,11 @@
 	import { debounce } from 'lodash'
 
 	import { showSuccess, showError } from '@nextcloud/dialogs'
-	import { NcActions, NcActionButton, NcActionCheckbox, NcActionInput, NcActionSeparator } from '@nextcloud/vue'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcActionCheckbox from '@nextcloud/vue/dist/Components/NcActionCheckbox.js'
+	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
+	import NcActionSeparator from '@nextcloud/vue/dist/Components/NcActionSeparator.js'
 	import { t } from '@nextcloud/l10n'
 
 	import { PollsAPI, ValidatorAPI } from '../../Api/index.js'

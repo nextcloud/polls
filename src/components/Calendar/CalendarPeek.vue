@@ -7,7 +7,7 @@
 
 	import { computed, onMounted, ref, PropType } from 'vue'
 	import orderBy from 'lodash/orderBy'
-	import { NcPopover } from '@nextcloud/vue'
+	import NcPopover from '@nextcloud/vue/dist/Components/NcPopover.js'
 	import moment from '@nextcloud/moment'
 	import CalendarInfo from './CalendarInfo.vue'
 	import { CalendarAPI } from '../../Api/index.js'

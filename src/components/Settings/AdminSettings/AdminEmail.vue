@@ -5,7 +5,7 @@
 
 <script setup>
 	import { computed, ref } from 'vue'
-	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import { marked } from 'marked'
 	import { gfmHeadingId } from 'marked-gfm-heading-id'
 	import DOMPurify from 'dompurify'

@@ -5,7 +5,6 @@
 
 <script setup lang="ts">
 	import { computed, PropType } from 'vue'
-	import { NcButton } from '@nextcloud/vue'
 	import Counter from '../Options/Counter.vue'
 	import OptionItem from '../Options/OptionItem.vue'
 	import VoteItem from './VoteItem.vue'
@@ -19,7 +18,7 @@
 	import { usePreferencesStore } from '../../stores/preferences.ts'
 	import { useOptionsStore, Option } from '../../stores/options.ts'
 	import { BoxType } from '../../Types/index.ts'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollStore = usePollStore()
 	const preferencesStore = usePreferencesStore()

@@ -5,7 +5,8 @@
 
 <script setup lang="ts">
 	import { showSuccess, showError } from '@nextcloud/dialogs'
-	import { NcButton } from '@nextcloud/vue'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+
 	import { ConfigBox } from '../Base/index.js'
 	import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 	import ShareItem from './ShareItem.vue'
@@ -43,7 +44,7 @@
 		<template #actions>
 			<NcButton :title="t('polls', 'Resolve and send all invitations')"
 				:aria-label="t('polls', 'Resolve and send all invitations')"
-				type="tertiary"
+				:type="ButtonType.Tertiary"
 				@click="sendAllInvitations()">
 				<template #icon>
 					<BulkMailIcon />

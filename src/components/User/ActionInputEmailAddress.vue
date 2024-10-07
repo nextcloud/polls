@@ -6,7 +6,7 @@
 <script setup lang="ts">
 	import { debounce } from 'lodash'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
-	import { NcActionInput } from '@nextcloud/vue'
+	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
 	import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 	import { ValidatorAPI } from '../../Api/index.js'
 	import { t } from '@nextcloud/l10n'

@@ -5,7 +5,10 @@
 
 <script setup>
 	import { ref, computed, onMounted } from 'vue'
-	import { NcAppNavigation, NcAppNavigationNew, NcAppNavigationItem, NcCounterBubble } from '@nextcloud/vue'
+	import NcAppNavigation from '@nextcloud/vue/dist/Components/NcAppNavigation.js'
+	import NcAppNavigationNew from '@nextcloud/vue/dist/Components/NcAppNavigationNew.js'
+	import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
+	import NcCounterBubble from '@nextcloud/vue/dist/Components/NcCounterBubble.js'
 	import { getCurrentUser } from '@nextcloud/auth'
 	import { showError } from '@nextcloud/dialogs'
 	import { emit } from '@nextcloud/event-bus'

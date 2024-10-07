@@ -6,7 +6,7 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
-	import { NcModal } from '@nextcloud/vue'
+	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
 
 	import { usePollStore } from '../../stores/poll.ts'
 	import { useSharesStore } from '../../stores/shares.ts'

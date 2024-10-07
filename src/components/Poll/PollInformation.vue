@@ -7,7 +7,7 @@
 	import { computed } from 'vue'
 	import moment from '@nextcloud/moment'
 	import { t, n } from '@nextcloud/l10n'
-	import { NcUserBubble } from '@nextcloud/vue'
+	import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 
 	import { BadgeDiv } from '../Base/index.js'
 	import { useSessionStore } from '../../stores/session.ts'

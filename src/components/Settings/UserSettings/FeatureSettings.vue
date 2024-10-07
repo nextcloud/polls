@@ -6,7 +6,7 @@
 <script setup>
 	import { computed } from 'vue'
 	import { InputDiv } from '../../Base/index.js'
-	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import { t } from '@nextcloud/l10n'
 	import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
 

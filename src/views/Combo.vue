@@ -5,7 +5,8 @@
 
 <script setup lang="ts">
 	import { ref, onMounted } from 'vue'
-	import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 	import ComboTable from '../components/Combo/ComboTable.vue'
 	import { ActionToggleSidebar } from '../components/Actions/index.js'
 	import { HeaderBar } from '../components/Base/index.js'

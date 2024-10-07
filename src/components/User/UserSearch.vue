@@ -7,7 +7,7 @@
 	import { ref } from 'vue'
 	import { debounce } from 'lodash'
 	import { showError } from '@nextcloud/dialogs'
-	import { NcSelect } from '@nextcloud/vue'
+	import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
 	import { AppSettingsAPI } from '../../Api/index.js'
 	import { Logger } from '../../helpers/index.ts'
 	import { t } from '@nextcloud/l10n'

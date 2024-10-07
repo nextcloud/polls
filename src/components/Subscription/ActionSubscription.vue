@@ -5,7 +5,8 @@
 
 <script setup lang="ts">
 	import { computed } from 'vue'
-	import { NcActions, NcActionCheckbox } from '@nextcloud/vue'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionCheckbox from '@nextcloud/vue/dist/Components/NcActionCheckbox.js'
 	import { t } from '@nextcloud/l10n'
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
 	import { useSessionStore } from '../../stores/session.ts'

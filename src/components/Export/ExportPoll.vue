@@ -10,7 +10,8 @@
 	import { saveAs } from 'file-saver'
 	import DOMPurify from 'dompurify'
 	import { t } from '@nextcloud/l10n'
-	import { NcActions, NcActionButton } from '@nextcloud/vue'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 	import { showError } from '@nextcloud/dialogs'
 
 	import { usePollStore, PollType } from '../../stores/poll.ts'

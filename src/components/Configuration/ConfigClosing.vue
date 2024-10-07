@@ -6,7 +6,9 @@
 <script setup lang="ts">
 	import { computed } from 'vue'
 	import moment from '@nextcloud/moment'
-	import { NcButton, NcDateTimePicker, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcDateTimePicker from '@nextcloud/vue/dist/Components/NcDateTimePicker.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 	import ClosePollIcon from 'vue-material-design-icons/Lock.vue'
 	import { t } from '@nextcloud/l10n'

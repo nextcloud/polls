@@ -5,7 +5,8 @@
 
 <script setup lang="ts">
 	import { PropType } from 'vue'
-	import { NcActionButton, NcAppNavigationItem } from '@nextcloud/vue'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
 	import { t } from '@nextcloud/l10n'
 
 	import { useSessionStore } from '../../stores/session.ts'

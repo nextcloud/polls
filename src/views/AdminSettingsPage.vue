@@ -11,8 +11,8 @@
 		AdminShareOpenPoll, AdminSharePublicCreate, AdminSharePublicShowLogin,
 		AdminShowMailAddresses
 	} from '../components/Settings/AdminSettings/index.js'
+	import NcSettingsSection from '@nextcloud/vue/dist/Components/NcSettingsSection.js'
 	import { FlexSettings } from '../components/Base/index.js'
-	import { NcSettingsSection } from '@nextcloud/vue'
 	import '../assets/scss/markdown.scss'
 	import { t } from '@nextcloud/l10n'
 	import { useAppSettingsStore } from '../stores/appSettings.ts'

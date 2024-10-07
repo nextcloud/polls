@@ -4,11 +4,10 @@
 -->
 
 <script setup>
-	import { NcButton } from '@nextcloud/vue'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import { AdminAPI } from '../../../Api/index.js'
 	import { Logger } from '../../../helpers/index.ts'
 	import { t } from '@nextcloud/l10n'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js';
 
 	const autoreminder = {
 		text: t('polls', 'Run autoreminder'),

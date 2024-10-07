@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 	import { showError } from '@nextcloud/dialogs'
-	import { NcButton } from '@nextcloud/vue'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import { t } from '@nextcloud/l10n'
 
 	import { PollType, ShowResults, usePollStore } from '../../stores/poll.ts'
@@ -131,7 +131,7 @@
 				</template>
 			</NcButton>
 
-			<NcButton v-if="pollStore.status.deleted" type="error" @click="deletePoll()">
+			<NcButton v-if="pollStore.status.deleted" :type="ButtonType.Error" @click="deletePoll()">
 				<template #icon>
 					<DeletePollIcon />
 				</template>

@@ -5,7 +5,8 @@
 
 <script setup lang="ts">
 	import { showError } from '@nextcloud/dialogs'
-	import { NcActions, NcActionButton } from '@nextcloud/vue'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 	import PlusIcon from 'vue-material-design-icons/Plus.vue'
 	import { t } from '@nextcloud/l10n'
 	import UserItem from '../User/UserItem.vue'

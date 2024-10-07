@@ -5,7 +5,8 @@
 
 <script setup lang="ts">
 	import { ref, onMounted, onUnmounted } from 'vue'
-	import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
+	import NcAppSidebar from '@nextcloud/vue/dist/Components/NcAppSidebar.js'
+	import NcAppSidebarTab from '@nextcloud/vue/dist/Components/NcAppSidebarTab.js'
 	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 	import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'

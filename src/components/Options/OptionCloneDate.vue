@@ -6,12 +6,12 @@
 <script setup lang="ts">
 	import { computed, ref, PropType } from 'vue'
 	import moment from '@nextcloud/moment'
-	import { NcButton, NcSelect } from '@nextcloud/vue'
+	import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import { InputDiv } from '../Base/index.js'
 	import { t } from '@nextcloud/l10n'
 	import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
 	import { dateUnits, DateUnitValue } from '../../constants/dateUnits.ts'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const optionsStore = useOptionsStore()
 

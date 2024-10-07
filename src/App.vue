@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 	import { ref, computed, onMounted, onUnmounted } from 'vue'
-	import { NcContent } from '@nextcloud/vue'
+	import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
 	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import '@nextcloud/dialogs/style.css'
 	import './assets/scss/colors.scss'

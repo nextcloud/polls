@@ -4,11 +4,13 @@
 -->
 
 <script setup lang="ts">
+	// '@nextcloud/vue/dist/Components/.js'
+	// /dist/Components/.js
 	import { ref } from 'vue'
-	import { NcModal, NcButton } from '@nextcloud/vue'
+	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
 	import { t } from '@nextcloud/l10n'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js';
 
 	const caption = t('polls', 'Register')
 	const showRegistration = ref(false)

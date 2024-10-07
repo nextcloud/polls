@@ -7,7 +7,11 @@
 	import { ref, computed, onMounted, PropType } from 'vue'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
-	import { NcActions, NcActionButton, NcActionCaption, NcActionInput, NcActionRadio } from '@nextcloud/vue'
+	import NcActionCaption from '@nextcloud/vue/dist/Components/NcActionCaption.js'
+	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
+	import NcActionRadio from '@nextcloud/vue/dist/Components/NcActionRadio.js'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 
 	import { Logger } from '../../helpers/index.ts'
 	import UserItem from '../User/UserItem.vue'

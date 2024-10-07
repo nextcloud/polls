@@ -9,7 +9,8 @@
 	import { usePollStore } from '../../stores/poll.ts'
 	import { useSessionStore } from '../../stores/session.ts'
 
-	import { NcButton, NcPopover } from '@nextcloud/vue'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcPopover from '@nextcloud/vue/dist/Components/NcPopover.js'
 	import { t } from '@nextcloud/l10n'
 
 	import { ActionToggleSidebar } from '../Actions/index.js'
@@ -39,7 +40,7 @@
 			<template #trigger>
 				<NcButton :title="caption"
 					:aria-label="caption"
-					type="tertiary">
+					:type="ButtonType.Tertiary">
 					<template #icon>
 						<PollInformationIcon />
 					</template>

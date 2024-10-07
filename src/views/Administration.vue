@@ -6,7 +6,13 @@
 <script setup lang="ts">
 	import { computed, onMounted, ref } from 'vue'
 	import { showError } from '@nextcloud/dialogs'
-	import { NcActions, NcActionButton, NcAppContent, NcButton, NcEmptyContent, NcLoadingIcon, NcModal } from '@nextcloud/vue'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+	import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
+	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import { sortBy } from 'lodash'
 	import { HeaderBar } from '../components/Base/index.js'
 	import { PollsAppIcon } from '../components/AppIcons/index.js'
@@ -18,7 +24,6 @@
 	import { t } from '@nextcloud/l10n'
 	import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
 	import { SortType, Poll, StatusResults } from '../Types/index.ts'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollsAdminStore = usePollsAdminStore()
 

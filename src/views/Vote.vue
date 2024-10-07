@@ -5,7 +5,8 @@
 
 <script setup lang="ts">
 	import { ref, computed, onMounted, onUnmounted } from 'vue'
-	import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 

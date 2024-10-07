@@ -5,7 +5,10 @@
 
 <script setup lang="ts">
 	import { ref } from 'vue'
-	import { NcActions, NcActionButton, NcEmptyContent, NcModal } from '@nextcloud/vue'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
 	import { t } from '@nextcloud/l10n'
 
 	import OptionCloneDate from './OptionCloneDate.vue'

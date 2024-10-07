@@ -5,7 +5,9 @@
 
 <script setup lang="ts">
 	import { t } from '@nextcloud/l10n'
-	import { NcActions, NcActionButton, NcEmptyContent } from '@nextcloud/vue'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 	import { Sortable } from "sortablejs-vue3"
 
 	import OptionItem from './OptionItem.vue'

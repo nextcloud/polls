@@ -7,7 +7,7 @@
 	import { computed, type PropType } from 'vue'
 	import { useRoute } from 'vue-router'
 	import { getCurrentUser } from '@nextcloud/auth'
-	import { NcAvatar } from '@nextcloud/vue'
+	import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
 	import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
 	import LinkIcon from 'vue-material-design-icons/LinkVariant.vue'
 	import ContactIcon from 'vue-material-design-icons/CardAccountDetails.vue'

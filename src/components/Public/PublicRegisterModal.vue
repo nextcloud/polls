@@ -9,7 +9,9 @@
 	import { debounce } from 'lodash'
 	import { showError } from '@nextcloud/dialogs'
 	import { generateUrl } from '@nextcloud/router'
-	import { NcButton, NcCheckboxRadioSwitch, NcRichText } from '@nextcloud/vue'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import { InputDiv } from '../Base/index.js'
 	import { SimpleLink, setCookie } from '../../helpers/index.ts'
 	import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
@@ -17,7 +19,6 @@
 	import { SignalingType, ShareType } from '../../Types'
 	import { useSessionStore } from '../../stores/session.ts'
 	import { usePollStore } from '../../stores/poll.ts'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const route = useRoute()
 	const router = useRouter()

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 	import { t } from '@nextcloud/l10n'
 	import { usePollStore } from '../../stores/poll.ts'
 

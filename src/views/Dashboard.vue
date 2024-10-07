@@ -8,7 +8,7 @@
 	import { showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 	import { generateUrl } from '@nextcloud/router'
-	import { NcDashboardWidget } from '@nextcloud/vue'
+	import NcDashboardWidget from '@nextcloud/vue/dist/Components/NcDashboardWidget.js'
 	import { usePollsStore } from '../stores/polls.ts'
 	import { PollType } from '../Types/index.ts'
 	import { Logger } from '../helpers/index.ts'

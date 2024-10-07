@@ -6,7 +6,7 @@
 <script setup lang="ts">
 	import { computed, onMounted, onUnmounted } from 'vue'
 	import Activities from '../Activity/Activities.vue'
-	import { NcEmptyContent } from '@nextcloud/vue'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 	import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 	import { t } from '@nextcloud/l10n'
 	import { useActivityStore } from '../../stores/activity.ts'

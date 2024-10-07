@@ -4,7 +4,8 @@
 -->
 
 <script setup>
-	import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 	import SearchIcon from 'vue-material-design-icons/Magnify.vue'
 	import { t } from '@nextcloud/l10n'
 
