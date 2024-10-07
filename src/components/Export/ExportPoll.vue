@@ -145,11 +145,11 @@
 
 				optionsStore.list.forEach((option) => {
 					if (style === 'symbols') {
-						votesLine.push(votesStore.getVote({ userId: participant.userId, option }).answerSymbol ?? '❌')
+						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answerSymbol ?? '❌')
 					} else if (style === 'raw') {
-						votesLine.push(votesStore.getVote({ userId: participant.userId, option }).answer)
+						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answer)
 					} else {
-						votesLine.push(votesStore.getVote({ userId: participant.userId, option }).answerTranslated ?? t('polls', 'No'))
+						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answerTranslated ?? t('polls', 'No'))
 					}
 				})
 

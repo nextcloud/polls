@@ -27,7 +27,7 @@
 	})
 
 	const answer = computed(() => comboStore.getVote({
-		userId: props.user.userId,
+		userId: props.user.id,
 		optionText: props.option.text,
 		pollId: props.poll.id,
 	}).answer)

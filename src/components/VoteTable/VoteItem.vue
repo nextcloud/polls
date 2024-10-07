@@ -11,14 +11,14 @@
 	import { useSessionStore } from '../../stores/session.ts'
 	import { usePollStore } from '../../stores/poll.ts'
 	import { useVotesStore } from '../../stores/votes.ts'
-	import { Option } from '../../Types/index.ts'
+	import { Option, User } from '../../Types/index.ts'
 
 	import { t } from '@nextcloud/l10n'
 	import VoteIndicator from './VoteIndicator.vue'
 
 	export interface Props {
 		option?: Option
-		userId: string
+		user: User
 	}
 
 	const pollStore = usePollStore()
@@ -27,7 +27,7 @@
 
 	const props = withDefaults(defineProps<Props>(), {
 		option: undefined,
-		userId: '',
+		user: undefined,
 	})
 
 	const isVotable = computed(() => isActive.value
@@ -37,11 +37,11 @@
 
 	const isActive = computed(() => isCurrentUser.value && pollStore.permissions.vote)
 
-	const isCurrentUser = computed(() => sessionStore.currentUser.userId === props.userId)
+	const isCurrentUser = computed(() => sessionStore.currentUser.id === props.user.id)
 
 	const answer = computed(() => votesStore.getVote({
 		option: props.option,
-		userId: props.userId,
+		userId: props.user.id,
 	}).answer)
 
 	const iconAnswer = computed(() => {
@@ -62,7 +62,7 @@
 
 	})
 
-	const isValidUser = computed(() => (props.userId !== '' && props.userId !== null))
+	const isValidUser = computed(() => (props.user.id !== '' && props.user.id !== null))
 
 	/**
 	 *
@@ -82,7 +82,7 @@
 </script>
 
 <template>
-	<div class="vote-item" :class="[answer, { active: isVotable }, {currentuser: isCurrentUser}]">
+	<div class="vote-item" :class="[answer, { active: isVotable }, {'current-user': isCurrentUser}]">
 		<VoteIndicator :answer="iconAnswer"
 			:active="isVotable"
 			@click="setVote()" />
@@ -129,7 +129,7 @@
 			background-color: var(--color-polls-background-maybe);
 		}
 
-		&.currentuser {
+		&.current-user {
 			background-color: transparent !important;
 			.locked & {
 				background-color: var(--color-polls-background-no) !important;
@@ -138,7 +138,7 @@
 	}
 
 	.locked {
-		.vote-item.currentuser {
+		.vote-item.current-user {
 			background-color: var(--color-polls-background-no) !important;
 		}
 	}

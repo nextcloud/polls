@@ -56,7 +56,7 @@ export const useVotesStore = defineStore('votes', {
 		},
 
 		getVote(payload: { userId: string; option: { text: string } }) {
-			const found = this.list.find((vote: Vote) => (vote.user.userId === payload.userId
+			const found = this.list.find((vote: Vote) => (vote.user.id === payload.userId
 					&& vote.optionText === payload.option.text))
 			if (found === undefined) {
 				return {
@@ -108,7 +108,7 @@ export const useVotesStore = defineStore('votes', {
 		setItem(payload: { option: Option; vote: Vote }) {
 			const index = this.list.findIndex((vote: Vote) =>
 				vote.pollId === payload.option.pollId
-				&& vote.user.userId === payload.vote.user.userId
+				&& vote.user.id === payload.vote.user.id
 				&& vote.optionText === payload.option.text)
 			if (index > -1) {
 				this.list[index] = Object.assign(this.list[index], payload.vote)
@@ -154,7 +154,7 @@ export const useVotesStore = defineStore('votes', {
 				} else {
 					response = await VotesAPI.removeUser(sessionStore.route.params.id)
 				}
-				this.list = this.list.filter((vote: Vote) => vote.user.userId !== response.data.deleted)
+				this.list = this.list.filter((vote: Vote) => vote.user.id !== response.data.deleted)
 
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -167,7 +167,7 @@ export const useVotesStore = defineStore('votes', {
 			const sessionStore = useSessionStore()
 			try {
 				await VotesAPI.removeUser(sessionStore.route.params.id, payload.userId)
-				this.list = this.list.filter((vote: Vote) => vote.user.userId !== payload.userId)
+				this.list = this.list.filter((vote: Vote) => vote.user.id !== payload.userId)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error deleting votes', { error, payload })

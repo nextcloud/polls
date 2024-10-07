@@ -84,7 +84,7 @@
 			<template #icon>
 				<OwnerIcon />
 			</template>
-			{{ t('polls', 'Poll owner:') }} <NcUserBubble v-if="pollStore.owner.userId" :user="pollStore.owner.userId" :display-name="pollStore.owner.displayName" />
+			{{ t('polls', 'Poll owner:') }} <NcUserBubble v-if="pollStore.owner.id" :user="pollStore.owner.id" :display-name="pollStore.owner.displayName" />
 		</BadgeDiv>
 		<BadgeDiv>
 			<template #icon>

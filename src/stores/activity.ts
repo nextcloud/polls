@@ -46,7 +46,7 @@ export const useActivityStore = defineStore('activity', {
 		},
 		
 		deleteActivities(payload: { userId: string }) {
-			this.list = this.list.filter((vote: Vote) => vote.user.userId !== payload.userId)
+			this.list = this.list.filter((vote: Vote) => vote.user.id !== payload.userId)
 		},
 		
 	},

@@ -42,7 +42,7 @@ export const useComboStore = defineStore('combo', {
 	
 		getVote: (state) => (payload: { userId: string; optionText: string, pollId: number }) => {
 			const found = state.votes.find((vote: Vote) => (
-				vote.user.userId === payload.userId
+				vote.user.id === payload.userId
 				&& vote.optionText === payload.optionText
 				&& vote.pollId === payload.pollId))
 			if (found === undefined) {

@@ -37,14 +37,14 @@
 			</div>
 
 			<div v-for="(participant) in pollStore.safeParticipants"
-				:key="participant.userId"
-				:class="['participant', {currentuser: (participant.userId === sessionStore.currentUser.userId) }]">
+				:key="participant.user.id"
+				:class="['participant', {'current-user': (participant.user.id === sessionStore.currentUser.id) }]">
 				<UserItem :user="participant" condensed />
 
 				<ActionDelete v-if="pollStore.permissions.edit"
 					class="user-actions"
 					:name="t('polls', 'Delete votes')"
-					@delete="removeUser(participant.userId)" />
+					@delete="removeUser(participant.user.id)" />
 			</div>
 
 			<div v-if="optionsStore.proposalsExist" class="owner" />
@@ -77,7 +77,7 @@
 		line-height: 1.5em;
 		padding: 6px;
 		border-radius: 12px;
-		&.currentuser {
+		&.current-user {
 			order:5;
 		}
 	}
@@ -218,7 +218,7 @@
 		}
 
 		.participant, .vote-item {
-			&.currentuser {
+			&.current-user {
 				margin-bottom: 30px;
 			}
 		}
@@ -253,7 +253,7 @@
 			border-top: none;
 		}
 
-		.participant:not(.currentuser), .vote-item:not(.currentuser) {
+		.participant:not(.current-user), .vote-item:not(.current-user) {
 			display: none;
 		}
 
@@ -302,7 +302,7 @@
 			padding: 8px 4px;
 		}
 
-		.vote-item.currentuser {
+		.vote-item.current-user {
 			border: none;
 		}
 

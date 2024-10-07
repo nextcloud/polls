@@ -168,19 +168,19 @@
 		if (props.label !== '') return props.label
 		if (typeComputed.value === UserType.Public) return publicShareLabel.value
 		if (typeComputed.value === VirtualUserItemType.Deleted) return t('polls', 'Deleted participant')
-		return props.user.displayName ?? props.user.userId
+		return props.user.displayName ?? props.user.id
 	})
 
 	const avatarUserId = computed(() => {
 		if (isGuestComputed.value) return props.user.displayName
-		return props.user.userId
+		return props.user.id
 	})
 
 	const publicShareDescription = computed(() => {
 		if (props.label === '') {
-			return t('polls', 'Token: {token}', { token: props.user.userId })
+			return t('polls', 'Token: {token}', { token: props.user.id })
 		}
-		return t('polls', 'Public link: {token}', { token: props.user.userId })
+		return t('polls', 'Public link: {token}', { token: props.user.id })
 	})
 
 	const publicShareLabel = computed(() => {

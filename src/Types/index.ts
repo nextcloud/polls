@@ -78,7 +78,6 @@ export type AppPermissions = {
 }
 
 export type User = {
-	userId: string
 	displayName: string
 	emailAddress: string
 	subName: string
@@ -87,7 +86,6 @@ export type User = {
 	desc: string
 	type: UserType
 	id: string
-	user: string
 	organisation: string
 	languageCode: string
 	localeCode: string

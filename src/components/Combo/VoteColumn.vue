@@ -12,7 +12,7 @@
 			:title="poll.configuration.title"
 			class="poll-group">
 			<VoteItem v-for="(participant) in comboStore.participantsInPoll(poll.id)"
-				:key="`${participant.userId}_${participant.pollId}`"
+				:key="`${participant.user.id}_${participant.pollId}`"
 				:poll="poll"
 				:user="participant.user"
 				:option="option" />
