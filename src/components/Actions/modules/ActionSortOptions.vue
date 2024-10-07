@@ -5,14 +5,16 @@
 
 <script setup lang="ts">
 	import { computed } from 'vue'
-	import { NcButton } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+
 	import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 	import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 	import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
-	import { t } from '@nextcloud/l10n'
+
 	import { useOptionsStore } from '../../../stores/options.ts'
 	import { usePollStore, PollType } from '../../../stores/poll.ts'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollStore = usePollStore()
 	const optionsStore = useOptionsStore()

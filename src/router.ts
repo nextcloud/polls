@@ -21,7 +21,6 @@ import Combo from './views/Combo.vue'
 import { usePollStore } from './stores/poll.ts'
 import { FilterType } from './stores/polls.ts'
 import { useSessionStore } from './stores/session.ts'
-import { useShareStore } from './stores/share.ts'
 
 async function validateToken(to: RouteLocationNormalized) {
 
@@ -194,7 +193,6 @@ const router = createRouter({
 
 router.beforeEach(async (to: RouteLocationNormalized) => {
 	const sessionStore = useSessionStore()
-	const shareStore = useShareStore()
 	const pollStore = usePollStore()
 	sessionStore.setRouter(to)
 	try {
@@ -206,7 +204,7 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
 
 	try {
 		if (to.meta.publicPage) {
-			await shareStore.load()
+			await sessionStore.loadShare()
 		}
 
 		if (to.meta.votePage) {

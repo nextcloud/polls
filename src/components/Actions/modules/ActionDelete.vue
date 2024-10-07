@@ -5,12 +5,14 @@
 
 <script setup lang="ts">
 	import { ref, computed } from 'vue'
-	import { NcButton } from '@nextcloud/vue'
+	import { t, n } from '@nextcloud/l10n'
+
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+
 	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 	import LockIcon from 'vue-material-design-icons/Lock.vue'
 	import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
-	import { t, n } from '@nextcloud/l10n'
 
 	const props = defineProps({
 		timeout: {
@@ -97,7 +99,7 @@
 <template>
 	<div class="">
 		<NcButton :name="computedTitle"
-			type="tertiary"
+			:type="ButtonType.Tertiary"
 			:aria-label="computedTitle">
 			<template #icon>
 				<RestoreIcon v-if="restore"

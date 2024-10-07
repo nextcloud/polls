@@ -29,7 +29,7 @@
 				:title="poll.configuration.title"
 				class="poll-group">
 				<div v-for="(participant) in comboStore.participantsInPoll(poll.id)"
-					:key="`${participant.userId}_${participant.pollId}`"
+					:key="`${participant.user.id}_${participant.pollId}`"
 					class="participant">
 					<UserItem v-bind="participant" condensed />
 				</div>

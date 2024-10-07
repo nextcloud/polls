@@ -5,20 +5,27 @@
 
 <script setup lang="ts">
 	import { computed, onMounted, watch } from 'vue'
+	import { useRouter, useRoute } from 'vue-router'
 	import { showError } from '@nextcloud/dialogs'
-	import { Logger } from '../helpers/index.ts'
-	import { NcActions, NcActionButton, NcAppContent, NcEmptyContent, NcLoadingIcon } from '@nextcloud/vue'
-	import { HeaderBar, IntersectionObserver } from '../components/Base/index.js'
+	import { t, n } from '@nextcloud/l10n'
+	
+	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+	import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+
 	import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 	import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 	import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 	import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+
+	import { Logger } from '../helpers/index.ts'
+	import { HeaderBar, IntersectionObserver } from '../components/Base/index.js'
 	import { PollsAppIcon } from '../components/AppIcons/index.js'
 	import PollItem from '../components/PollList/PollItem.vue'
-	import { t, n } from '@nextcloud/l10n'
 	import { usePollsStore } from '../stores/polls.ts'
 	import { useSessionStore } from '../stores/session.ts'
-	import { useRouter, useRoute } from 'vue-router'
 
 	const pollsStore = usePollsStore()
 	const sessionStore = useSessionStore()

@@ -5,16 +5,18 @@
 
 <script setup lang="ts">
 	import { computed, onMounted, onUnmounted } from 'vue'
-	import { NcEmptyContent } from '@nextcloud/vue'
 	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
-
-	import { usePollStore } from '../../stores/poll.ts'
-	import { useCommentsStore } from '../../stores/comments.ts'
+	
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
 
 	import CommentAdd from '../Comments/CommentAdd.vue'
 	import Comments from '../Comments/Comments.vue'
 	import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useCommentsStore } from '../../stores/comments.ts'
+
 
 	const pollStore = usePollStore()
 	const commentsStore = useCommentsStore()

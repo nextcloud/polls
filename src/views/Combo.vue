@@ -5,13 +5,16 @@
 
 <script setup lang="ts">
 	import { ref, onMounted } from 'vue'
-	import { NcAppContent, NcEmptyContent } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+
+	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+
 	import ComboTable from '../components/Combo/ComboTable.vue'
+	import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 	import { ActionToggleSidebar } from '../components/Actions/index.js'
 	import { HeaderBar } from '../components/Base/index.js'
 	import { PollsAppIcon } from '../components/AppIcons/index.js'
-	import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
-	import { t } from '@nextcloud/l10n'
 	import { useComboStore } from '../stores/combo.ts'
 
 	const comboStore = useComboStore()

@@ -7,14 +7,8 @@
 	import { computed } from 'vue'
 	import moment from '@nextcloud/moment'
 	import { t, n } from '@nextcloud/l10n'
-	import { NcUserBubble } from '@nextcloud/vue'
 
-	import { BadgeDiv } from '../Base/index.js'
-	import { useShareStore } from '../../stores/share.ts'
-	import { usePollStore, AccessType } from '../../stores/poll.ts'
-	import { useSubscriptionStore } from '../../stores/subscription.ts'
-	import { useOptionsStore } from '../../stores/options.ts'
-	import { useVotesStore, Answer } from '../../stores/votes.ts'
+	import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
 
 	import OwnerIcon from 'vue-material-design-icons/Crown.vue'
 	import SubscribedIcon from 'vue-material-design-icons/Bell.vue'
@@ -33,10 +27,18 @@
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
 	import CloseIcon from 'vue-material-design-icons/Close.vue'
 	import EmailIcon from 'vue-material-design-icons/Email.vue'
+
 	import { MaybeIcon } from '../AppIcons/index.js'
 
+	import { BadgeDiv } from '../Base/index.js'
+	import { useSessionStore } from '../../stores/session.ts'
+	import { usePollStore, AccessType } from '../../stores/poll.ts'
+	import { useSubscriptionStore } from '../../stores/subscription.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
+	import { useVotesStore, Answer } from '../../stores/votes.ts'
+
 	const pollStore = usePollStore()
-	const shareStore = useShareStore()
+	const sessionStore = useSessionStore()
 	const subscriptionStore = useSubscriptionStore()
 	const optionsStore = useOptionsStore()
 	const votesStore = useVotesStore()
@@ -84,7 +86,7 @@
 			<template #icon>
 				<OwnerIcon />
 			</template>
-			{{ t('polls', 'Poll owner:') }} <NcUserBubble v-if="pollStore.owner.userId" :user="pollStore.owner.userId" :display-name="pollStore.owner.displayName" />
+			{{ t('polls', 'Poll owner:') }} <NcUserBubble v-if="pollStore.owner.id" :user="pollStore.owner.id" :display-name="pollStore.owner.displayName" />
 		</BadgeDiv>
 		<BadgeDiv>
 			<template #icon>
@@ -173,11 +175,11 @@
 			</template>
 			{{ n('polls', 'Only %n vote per option.', 'Only %n votes per option.', pollStore.configuration.maxVotesPerOption) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="$route.name === 'publicVote' && shareStore.user.emailAddress">
+		<BadgeDiv v-if="$route.name === 'publicVote' && sessionStore.currentUser.emailAddress">
 			<template #icon>
 				<EmailIcon />
 			</template>
-			{{ shareStore.user.emailAddress }}
+			{{ sessionStore.currentUser.emailAddress }}
 		</BadgeDiv>
 		<BadgeDiv v-if="subscriptionStore.subscribed">
 			<template #icon>

@@ -4,16 +4,17 @@
 -->
 
 <script setup lang="ts">
+	import { ref } from 'vue'
 	import { debounce } from 'lodash'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
-	import { NcActionInput } from '@nextcloud/vue'
-	import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
-	import { ValidatorAPI } from '../../Api/index.js'
 	import { t } from '@nextcloud/l10n'
-	import { useSessionStore } from '../../stores/session.ts'
-	import { useShareStore } from '../../stores/share.ts'
-	import { ref } from 'vue'
+
+	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
+	import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
+
+	import { ValidatorAPI } from '../../Api/index.js'
 	import { StatusResults } from '../../Types/index.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 
 	type InputProps = {
 		success: boolean
@@ -24,7 +25,6 @@
 	}
 
 	const sessionStore = useSessionStore()
-	const shareStore = useShareStore()
 
 	const inputProps = ref<InputProps>({
 		success: false,
@@ -42,18 +42,18 @@
 	}
 
 	const validate = debounce(async function () {
-		if (shareStore.displayName.length < 1) {
+		if (sessionStore.share.user.displayName.length < 1) {
 			setStatus(StatusResults.Unchanged)
 			return
 		}
 
-		if (shareStore.displayName === sessionStore.currentUser.displayName) {
+		if (sessionStore.share.user.displayName === sessionStore.currentUser.displayName) {
 			setStatus(StatusResults.Error)
 			return
 		}
 
 		try {
-			await ValidatorAPI.validateName(sessionStore.route.params.token, shareStore.displayName)
+			await ValidatorAPI.validateName(sessionStore.route.params.token, sessionStore.share.user.displayName)
 			setStatus(StatusResults.Success)
 		} catch {
 			setStatus(StatusResults.Error)
@@ -62,7 +62,7 @@
 
 	async function submit() {
 		try {
-			await shareStore.updateDisplayName({ displayName: shareStore.displayName })
+			await sessionStore.updateDisplayName({ displayName: sessionStore.share.user.displayName })
 			showSuccess(t('polls', 'Name changed.'))
 			setStatus(StatusResults.Unchanged)
 		} catch {
@@ -76,7 +76,7 @@
 <template>
 	<NcActionInput v-if="sessionStore.route.name === 'publicVote'"
 		v-bind="inputProps"
-		v-model="shareStore.displayName"
+		v-model="sessionStore.share.user.displayName"
 		@update:value-value="validate"
 		@submit="submit">
 		<template #icon>

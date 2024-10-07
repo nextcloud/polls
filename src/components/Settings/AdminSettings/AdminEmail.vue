@@ -5,12 +5,14 @@
 
 <script setup>
 	import { computed, ref } from 'vue'
-	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 	import { marked } from 'marked'
 	import { gfmHeadingId } from 'marked-gfm-heading-id'
 	import DOMPurify from 'dompurify'
 	import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
 	import { t } from '@nextcloud/l10n'
+
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+
 	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 	const appSettingsStore = useAppSettingsStore()

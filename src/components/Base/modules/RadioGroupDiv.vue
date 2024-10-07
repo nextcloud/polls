@@ -5,7 +5,8 @@
 
 <script setup lang="ts">
 	import { computed, PropType } from 'vue'
-	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
 
 	export type CheckboxOption = {
 		value: string

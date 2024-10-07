@@ -7,7 +7,9 @@
 	import { computed, type PropType } from 'vue'
 	import { useRoute } from 'vue-router'
 	import { getCurrentUser } from '@nextcloud/auth'
-	import { NcAvatar } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+
+	import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
 	import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
 	import LinkIcon from 'vue-material-design-icons/LinkVariant.vue'
 	import ContactIcon from 'vue-material-design-icons/CardAccountDetails.vue'
@@ -18,7 +20,7 @@
 	import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
 	import DeletedUserIcon from 'vue-material-design-icons/AccountOff.vue'
 	import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
-	import { t } from '@nextcloud/l10n'
+
 	import { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
 
 	const route = useRoute()
@@ -168,19 +170,19 @@
 		if (props.label !== '') return props.label
 		if (typeComputed.value === UserType.Public) return publicShareLabel.value
 		if (typeComputed.value === VirtualUserItemType.Deleted) return t('polls', 'Deleted participant')
-		return props.user.displayName ?? props.user.userId
+		return props.user.displayName ?? props.user.id
 	})
 
 	const avatarUserId = computed(() => {
 		if (isGuestComputed.value) return props.user.displayName
-		return props.user.userId
+		return props.user.id
 	})
 
 	const publicShareDescription = computed(() => {
 		if (props.label === '') {
-			return t('polls', 'Token: {token}', { token: props.user.userId })
+			return t('polls', 'Token: {token}', { token: props.user.id })
 		}
-		return t('polls', 'Public link: {token}', { token: props.user.userId })
+		return t('polls', 'Public link: {token}', { token: props.user.id })
 	})
 
 	const publicShareLabel = computed(() => {

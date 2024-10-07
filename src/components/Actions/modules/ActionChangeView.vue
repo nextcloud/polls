@@ -5,14 +5,16 @@
 
 <script setup lang="ts">
 	import { computed } from 'vue'
-	import { NcButton } from '@nextcloud/vue'
 	import { emit } from '@nextcloud/event-bus'
+	import { t } from '@nextcloud/l10n'
+
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+
 	import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
 	import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
-	import { t } from '@nextcloud/l10n'
+
 	import { usePollStore, PollType, } from '../../../stores/poll.ts'
 	import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollStore = usePollStore()
 	const preferencesStore = usePreferencesStore()

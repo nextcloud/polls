@@ -27,7 +27,7 @@
 		},
 	})
 
-	const showDelete = computed(() => !pollStore.permissions.edit && sessionStore.currentUser.userId === props.option.owner?.userId)
+	const showDelete = computed(() => !pollStore.permissions.edit && sessionStore.currentUser.id === props.option.owner?.id)
 
 </script>
 

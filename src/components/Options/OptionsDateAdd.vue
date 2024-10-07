@@ -8,14 +8,16 @@
 	import { showError, showSuccess } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 	import moment from '@nextcloud/moment'
-	import { NcButton, NcCheckboxRadioSwitch, NcDateTimePicker } from '@nextcloud/vue'
 
-	import { useOptionsStore } from '../../stores/options.ts'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcDateTimePicker from '@nextcloud/vue/dist/Components/NcDateTimePicker.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
-	import { FlexSpacer } from '../Base/index.js'
 	import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	
+	import { FlexSpacer } from '../Base/index.js'
+	import { useOptionsStore } from '../../stores/options.ts'
 
 	const optionsStore = useOptionsStore()
 	const props = defineProps({
@@ -283,7 +285,7 @@
 					{{ dateOption.text }}
 				</div>
 				<FlexSpacer />
-				<NcButton v-if="dateOption.option.duration >= 0 && !added" type="primary" @click="addOption">
+				<NcButton v-if="dateOption.option.duration >= 0 && !added" :type="ButtonType.Primary" @click="addOption">
 					{{ t('polls', 'Add') }}
 				</NcButton>
 				<CheckIcon v-if="added"

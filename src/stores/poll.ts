@@ -145,7 +145,6 @@ export const usePollStore = defineStore('poll', {
 			maxVotesPerUser: 0,
 		},
 		owner: {
-			userId: '',
 			displayName: '',
 			emailAddress: '',
 			subName: '',
@@ -154,7 +153,6 @@ export const usePollStore = defineStore('poll', {
 			desc: '',
 			type: UserType.User,
 			id: '',
-			user: '',
 			organisation: '',
 			languageCode: '',
 			localeCode: '',
@@ -242,9 +240,9 @@ export const usePollStore = defineStore('poll', {
 			const participants = this.participantsVoted
 	
 			// add current user, if not among participants and voting is allowed
-			if (!participants.find((participant: User) => participant.userId === sessionStore.currentUser.userId) && sessionStore.currentUser.userId && state.permissions.vote) {
+			if (!participants.find((participant: User) => participant.id === sessionStore.currentUser.id) && sessionStore.currentUser.id && state.permissions.vote) {
 				participants.push({
-					userId: sessionStore.currentUser.userId,
+					id: sessionStore.currentUser.id,
 					displayName: sessionStore.currentUser.displayName,
 					isNoUser: sessionStore.currentUser.isNoUser,
 				})
@@ -257,7 +255,7 @@ export const usePollStore = defineStore('poll', {
 			const sessionStore = useSessionStore()
 			if (this.getSafeTable) {
 				return [{
-					userId: sessionStore.currentUser.userId,
+					id: sessionStore.currentUser.id,
 					displayName: sessionStore.currentUser.displayName,
 					isNoUser: sessionStore.currentUser.isNoUser,
 				}]

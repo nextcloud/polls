@@ -7,23 +7,25 @@
 	import { ref, computed } from 'vue'
 	import { useRoute } from 'vue-router'
 	import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
-	import { saveAs } from 'file-saver'
 	import DOMPurify from 'dompurify'
+	import { saveAs } from 'file-saver'
 	import { t } from '@nextcloud/l10n'
-	import { NcActions, NcActionButton } from '@nextcloud/vue'
 	import { showError } from '@nextcloud/dialogs'
-
-	import { usePollStore, PollType } from '../../stores/poll.ts'
-	import { useVotesStore } from '../../stores/votes.ts'
-	import { useOptionsStore } from '../../stores/options.ts'
-
-	import { PollsAPI } from '../../Api/index.js'
+	
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 
 	import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 	import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'
 	import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 	import XmlIcon from 'vue-material-design-icons/Xml.vue'
 	import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
+
+	import { PollsAPI } from '../../Api/index.js'
+	import { usePollStore, PollType } from '../../stores/poll.ts'
+	import { useVotesStore } from '../../stores/votes.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
+
 
 	const route = useRoute()
 	const pollStore = usePollStore()
@@ -145,11 +147,11 @@
 
 				optionsStore.list.forEach((option) => {
 					if (style === 'symbols') {
-						votesLine.push(votesStore.getVote({ userId: participant.userId, option }).answerSymbol ?? '❌')
+						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answerSymbol ?? '❌')
 					} else if (style === 'raw') {
-						votesLine.push(votesStore.getVote({ userId: participant.userId, option }).answer)
+						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answer)
 					} else {
-						votesLine.push(votesStore.getVote({ userId: participant.userId, option }).answerTranslated ?? t('polls', 'No'))
+						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answerTranslated ?? t('polls', 'No'))
 					}
 				})
 

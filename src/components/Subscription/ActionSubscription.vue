@@ -5,16 +5,19 @@
 
 <script setup lang="ts">
 	import { computed } from 'vue'
-	import { NcActions, NcActionCheckbox } from '@nextcloud/vue'
 	import { t } from '@nextcloud/l10n'
+
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionCheckbox from '@nextcloud/vue/dist/Components/NcActionCheckbox.js'
+
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
-	import { useShareStore } from '../../stores/share.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 
 	const subscriptionStore = useSubscriptionStore()
-	const shareStore = useShareStore()
+	const sessionStore = useSessionStore()
 
-	const label = computed(() => shareStore.user.emailAddress
-		? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: shareStore.user.emailAddress })
+	const label = computed(() => sessionStore.share.user.emailAddress
+		? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: sessionStore.share.user.emailAddress })
 		: t('polls', 'Receive notification email on activity'))
 
 </script>

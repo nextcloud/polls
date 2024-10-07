@@ -5,16 +5,19 @@
 
 <script setup lang="ts">
 	import { computed, PropType } from 'vue'
-	import { NcButton } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+	import { getCurrentUser } from '@nextcloud/auth'
+	
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	
+	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+
 	import Counter from '../Options/Counter.vue'
 	import OptionItem from '../Options/OptionItem.vue'
 	import VoteItem from './VoteItem.vue'
-	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
-	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 	import CalendarPeek from '../Calendar/CalendarPeek.vue'
 	import OptionItemOwner from '../Options/OptionItemOwner.vue'
-	import { t } from '@nextcloud/l10n'
-	import { getCurrentUser } from '@nextcloud/auth'
 	import { usePollStore, PollType } from '../../stores/poll.ts'
 	import { usePreferencesStore } from '../../stores/preferences.ts'
 	import { useOptionsStore, Option } from '../../stores/options.ts'
@@ -68,8 +71,8 @@
 		</div>
 
 		<VoteItem v-for="(participant) in pollStore.safeParticipants"
-			:key="participant.userId"
-			:user-id="participant.userId"
+			:key="participant.id"
+			:user="participant"
 			:option="option" />
 
 		<OptionItemOwner v-if="optionsStore.proposalsExist"
@@ -82,7 +85,7 @@
 		<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="action confirm">
 			<NcButton :title="confirmButtonCaption"
 				:aria-label="confirmButtonCaption"
-				type="tertiary"
+				:type=ButtonType.Tertiary
 				@click="optionsStore.confirm({option: props.option})">
 				<template #icon>
 					<UnconfirmIcon v-if="option.confirmed" :size="20" />

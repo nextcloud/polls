@@ -6,12 +6,10 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
-	import { NcModal } from '@nextcloud/vue'
 
-	import { usePollStore } from '../../stores/poll.ts'
-	import { useSharesStore } from '../../stores/shares.ts'
-	import { useSessionStore } from '../../stores/session.ts'
-	import { Share } from '../../Types/index.ts'
+	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
+
+	import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 
 	import { ConfigBox, QrModal } from '../Base/index.js'
 	import ShareItem from './ShareItem.vue'
@@ -19,8 +17,10 @@
 	import SharePublicAdd from './SharePublicAdd.vue'
 	import ShareItemAllUsers from './ShareItemAllUsers.vue'
 	import MarkUpDescription from '../Poll/MarkUpDescription.vue'
-
-	import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+	
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useSharesStore, Share } from '../../stores/shares.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 
 	const pollStore = usePollStore()
 	const sharesStore = useSharesStore()

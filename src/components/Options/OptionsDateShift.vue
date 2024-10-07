@@ -6,13 +6,15 @@
 <script setup lang="ts">
 	import { ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
-	import { NcButton, NcSelect } from '@nextcloud/vue'
+
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
+
+	import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 	import { InputDiv } from '../Base/index.js'
 	import { dateUnits, DateUnitValue } from '../../constants/dateUnits.ts'
 	import { useOptionsStore, Shift } from '../../stores/options.ts'
-
-	import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 	const optionsStore = useOptionsStore()
 
@@ -42,7 +44,7 @@
 				label="name" />
 			<NcButton class="submit"
 				:aria-label="t('polls', 'Submit')"
-				type="tertiary"
+				:type="ButtonType.Tertiary"
 				@click="shiftDates(shift)">
 				<template #icon>
 					<SubmitIcon />

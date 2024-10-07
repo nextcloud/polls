@@ -7,11 +7,15 @@
 	import { ref, computed } from 'vue'
 	import { useRouter } from 'vue-router'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
-	import { NcButton } from '@nextcloud/vue'
-	import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
+	import { t } from '@nextcloud/l10n'
+
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+
 	import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
-	import { t } from '@nextcloud/l10n'
+
+	import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
+
 	import { usePollStore, PollType } from '../../stores/poll.ts'
 
 	const pollStore = usePollStore()
@@ -74,7 +78,7 @@
 				</template>
 			</NcButton>
 			<NcButton :disabled="titleEmpty"
-				type="primary"
+				:type="ButtonType.Primary"
 				@click="confirm">
 				<template #default>
 					{{ t('polls', 'Apply') }}

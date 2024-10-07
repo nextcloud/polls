@@ -5,17 +5,19 @@
 
 <script setup>
 	import { onMounted } from 'vue'
+	import { generateUrl } from '@nextcloud/router'
 	import { showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
-	import { generateUrl } from '@nextcloud/router'
-	import { NcDashboardWidget } from '@nextcloud/vue'
-	import { usePollsStore } from '../stores/polls.ts'
-	import { PollType } from '../Types/index.ts'
-	import { Logger } from '../helpers/index.ts'
+
+	import NcDashboardWidget from '@nextcloud/vue/dist/Components/NcDashboardWidget.js'
 
 	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
+
 	import { PollsAppIcon } from '../components/AppIcons/index.js'
+	import { Logger } from '../helpers/index.ts'
+	import { usePollsStore } from '../stores/polls.ts'
+	import { PollType } from '../Types/index.ts'
 
 	const dashboardWidgetProperties = {
 		emptyContentMessage: t('polls', 'No polls found for this category'),

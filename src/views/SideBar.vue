@@ -5,15 +5,19 @@
 
 <script setup lang="ts">
 	import { ref, onMounted, onUnmounted } from 'vue'
-	import { NcAppSidebar, NcAppSidebarTab } from '@nextcloud/vue'
 	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+	import { t } from '@nextcloud/l10n'
+
+	import NcAppSidebar from '@nextcloud/vue/dist/Components/NcAppSidebar.js'
+	import NcAppSidebarTab from '@nextcloud/vue/dist/Components/NcAppSidebarTab.js'
+
 	import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 	import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
 	import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 	import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 	import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+
 	import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
-	import { t } from '@nextcloud/l10n'
 	import { usePollStore } from '../stores/poll.ts'
 	import { useSessionStore } from '../stores/session.ts'
 

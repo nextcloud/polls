@@ -24,9 +24,9 @@
 	import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
 
 	export interface Props {
-		header: boolean
+		header?: boolean
 		poll?: Poll
-		noLink: boolean
+		noLink?: boolean
 	}
 
 

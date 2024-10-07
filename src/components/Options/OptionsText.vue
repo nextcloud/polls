@@ -5,21 +5,23 @@
 
 <script setup lang="ts">
 	import { t } from '@nextcloud/l10n'
-	import { NcActions, NcActionButton, NcEmptyContent } from '@nextcloud/vue'
 	import { Sortable } from "sortablejs-vue3"
 
-	import OptionItem from './OptionItem.vue'
-	import OptionItemOwner from '../Options/OptionItemOwner.vue'
-	import OptionsTextAdd from './OptionsTextAdd.vue'
-
-	import { usePollStore } from '../../stores/poll.ts'
-	import { useOptionsStore } from '../../stores/options.ts'
+	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
+	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 
 	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+
+	import OptionItem from './OptionItem.vue'
+	import OptionItemOwner from '../Options/OptionItemOwner.vue'
+	import OptionsTextAdd from './OptionsTextAdd.vue'
+	import { usePollStore } from '../../stores/poll.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
 
 	const pollStore = usePollStore()
 	const optionsStore = useOptionsStore()

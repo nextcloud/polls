@@ -4,10 +4,10 @@
 -->
 
 <script setup lang="ts">
-	import { NcButton } from '@nextcloud/vue'
 	import { t } from '@nextcloud/l10n'
 	import { usePollStore } from '../../../stores/poll.ts'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js';
+
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const pollStore = usePollStore()
 	const caption = t('polls', 'Reveal them')
@@ -18,7 +18,7 @@
 	<div class="action toggle-sidebar">
 		<NcButton :type="ButtonType.Primary"
 			:aria-label="caption"
-			@click="pollStore.switchSafeTable()">
+			@click="pollStore.revealParticipants = true">
 			{{ caption }}
 		</NcButton>
 	</div>

@@ -15,7 +15,7 @@ const uniqueOptions = (options: Option[]) =>
 
 const uniqueParticipants = (votes: Vote[]): Participant[] => {
 	const participants: Participant[] = votes.map((vote) => ({
-		userId: vote.user.userId,
+		userId: vote.user.id,
 		displayName: vote.user.displayName,
 		isNoUser: vote.user.isNoUser,
 		user: vote.user,

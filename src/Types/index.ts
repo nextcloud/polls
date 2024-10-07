@@ -10,8 +10,7 @@ export { Comment, Comments, CommentsGrouped } from '../stores/comments.ts'
 export { Poll, PollType, AccessType, ShowResults, AllowProposals, PollConfiguration, PollStatus, PollPermissions, CurrentUserStatus } from '../stores/poll.ts'
 export { SortType, FilterType, PollCategory, Meta, PollList } from '../stores/polls.ts'
 export { Option, OptionVotes, Sequence, Shift, SimpleOption, Options } from '../stores/options.ts'
-export { Share } from '../stores/share.ts'
-export { Shares } from '../stores/shares.ts'
+export { Share, Shares, ShareType } from '../stores/shares.ts'
 export { Route, UserStatus, Session } from '../stores/session.ts'
 export { UserPreferences, SessionSettings, Calendar, Preferences, ViewMode } from '../stores/preferences.ts'
 export { Answer, AnswerSymbol, Vote, Votes } from '../stores/votes.ts'
@@ -79,7 +78,6 @@ export type AppPermissions = {
 }
 
 export type User = {
-	userId: string
 	displayName: string
 	emailAddress: string
 	subName: string
@@ -88,7 +86,6 @@ export type User = {
 	desc: string
 	type: UserType
 	id: string
-	user: string
 	organisation: string
 	languageCode: string
 	localeCode: string

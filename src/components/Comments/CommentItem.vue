@@ -32,7 +32,7 @@
 
 	const dateCommentedRelative = computed(() => moment.unix(props.comment.timestamp).fromNow())
 
-	const isCurrentUser = computed(() => sessionStore.currentUser.userId === props.comment.user.userId)
+	const isCurrentUser = computed(() => sessionStore.currentUser.id === props.comment.user.id)
 
 	function linkify(subComment: string) {
 		return linkifyStr(subComment)
@@ -57,7 +57,7 @@
 </script>
 
 <template>
-	<div :class="['comment-item', {currentuser: isCurrentUser}]">
+	<div :class="['comment-item', {'current-user': isCurrentUser}]">
 		<UserItem :user="comment.user" hide-names />
 		<div class="comment-item__content">
 			<span class="comment-item__user">{{ comment.user.displayName }}</span>
@@ -69,7 +69,7 @@
 				<span v-html="linkify(subComment.comment)" />
 				<!-- eslint-enable vue/no-v-html -->
 
-				<ActionDelete v-if="(comment.user.userId === sessionStore.currentUser.userId || pollStore.currentUserStatus.isOwner)"
+				<ActionDelete v-if="(comment.user.id === sessionStore.currentUser.id || pollStore.currentUserStatus.isOwner)"
 					:name="subComment.deleted ? t('polls', 'Restore comment') : t('polls', 'Delete comment')"
 					:restore="!!subComment.deleted"
 					:timeout="0"
@@ -146,7 +146,7 @@
 	.alternativestyle {
 		.comment-item {
 		flex-direction: row-reverse;
-			&.currentuser {
+			&.current-user {
 				flex-direction: row;
 			}
 		}

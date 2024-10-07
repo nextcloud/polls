@@ -9,23 +9,24 @@
 	import { debounce } from 'lodash'
 	import { showError } from '@nextcloud/dialogs'
 	import { generateUrl } from '@nextcloud/router'
-	import { NcButton, NcCheckboxRadioSwitch, NcRichText } from '@nextcloud/vue'
+	import { t } from '@nextcloud/l10n'
+
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+
 	import { InputDiv } from '../Base/index.js'
 	import { SimpleLink, setCookie } from '../../helpers/index.ts'
 	import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
-	import { t } from '@nextcloud/l10n'
-	import { useShareStore } from '../../stores/share.ts'
-	import { SignalingType, UserType } from '../../Types'
+	import { SignalingType, ShareType } from '../../Types'
 	import { useSessionStore } from '../../stores/session.ts'
 	import { usePollStore } from '../../stores/poll.ts'
-	import { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 
 	const route = useRoute()
 	const router = useRouter()
 
 	const emit = defineEmits(['close'])
 
-	const shareStore = useShareStore()
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()
 
@@ -40,10 +41,19 @@
 	const emailAddress = ref('')
 	const saveCookie = ref(true)
 
-	const registrationIsValid = computed(() => checkStatus.value.userName === SignalingType.Valid && (checkStatus.value.email === SignalingType.Valid || (emailAddress.value.length === 0 && shareStore.publicPollEmail !== 'mandatory')))
+	const registrationIsValid = computed(() => checkStatus.value.userName === SignalingType.Valid 
+		&& (checkStatus.value.email === SignalingType.Valid
+			|| (emailAddress.value.length === 0
+				&& sessionStore.share.publicPollEmail !== 'mandatory'
+			)
+		)
+	)
 	const disableSubmit = computed(() => !registrationIsValid.value || checkStatus.value.userName === SignalingType.Checking || sendRegistration.value)
-	const emailGeneratedStatus = computed(() => checkStatus.value.email === SignalingType.Empty ? shareStore.publicPollEmail : checkStatus.value.email)
-	const offerCookies = computed(() => shareStore.user.type === UserType.Public)
+	const emailGeneratedStatus = computed(() => checkStatus.value.email === SignalingType.Empty 
+		? sessionStore.share.publicPollEmail 
+		: checkStatus.value.email
+	)
+	const offerCookies = computed(() => sessionStore.share.type === ShareType.Public)
 	const status = computed(() => registrationIsValid.value)
 
 	const privacyRich = computed(() => {
@@ -71,9 +81,9 @@
 	})
 
 	const userNameHint = computed(() => {
-		if (checkStatus.value.userName === 'checking') return t('polls', 'Checking name …')
-		if (checkStatus.value.userName === 'empty') return t('polls', 'A name is required.')
-		if (checkStatus.value.userName === 'invalid') return t('polls', 'The name {username} is invalid or reserved.', { username: userName.value })
+		if (checkStatus.value.userName === SignalingType.Checking) return t('polls', 'Checking name …')
+		if (checkStatus.value.userName === SignalingType.Empty) return t('polls', 'A name is required.')
+		if (checkStatus.value.userName === SignalingType.InValid) return t('polls', 'The name {username} is invalid or reserved.', { username: userName.value })
 		return ''
 	})
 
@@ -82,7 +92,7 @@
 		if (emailGeneratedStatus.value === 'checking') return t('polls', 'Checking email address …')
 		if (emailGeneratedStatus.value === 'mandatory') return t('polls', 'An email address is required.')
 		if (emailGeneratedStatus.value === 'invalid') return t('polls', 'Invalid email address.')
-		if (shareStore.user.type === 'public') {
+		if (sessionStore.share.type === ShareType.Public) {
 			if (emailGeneratedStatus.value === 'valid') return t('polls', 'You will receive your personal link after clicking "OK".')
 			return t('polls', 'Enter your email address to get your personal access link.')
 		}
@@ -93,12 +103,12 @@
 		if (route.name === 'publicVote' && route.query.name) {
 			userName.value = route.query.name.toString()
 		} else {
-			userName.value = shareStore.user.displayName
+			userName.value = sessionStore.currentUser.displayName
 		}
 		if (route.name === 'publicVote' && route.query.email) {
 			emailAddress.value = route.query.email.toString()
 		} else {
-			emailAddress.value = shareStore.user.emailAddress
+			emailAddress.value = sessionStore.currentUser.emailAddress
 		}
 	})
 
@@ -206,7 +216,7 @@
 
 			routeToPersonalShare(response.data.share.token)
 
-			if (shareStore.user.emailAddress && !shareStore.invitationSent) {
+			if (sessionStore.currentUser.emailAddress && !sessionStore.share.invitationSent) {
 				showError(t('polls', 'Email could not be sent to {emailAddress}', { emailAddress: this.shareStore.user.emailAddress }))
 			}
 		} catch (error) {
@@ -233,11 +243,11 @@
 					@input="validatePublicUsername()"
 					@submit="submitRegistration()" />
 
-				<InputDiv v-if="shareStore.publicPollEmail !== 'disabled'"
+				<InputDiv v-if="sessionStore.share.publicPollEmail !== 'disabled'"
 					v-model="emailAddress"
 					class="section__email"
 					:signaling-class="checkStatus.email"
-					:placeholder="shareStore.publicPollEmail === 'mandatory' ? t('polls', 'Email address (mandatory)') : t('polls', 'Email address (optional)')"
+					:placeholder="sessionStore.share.publicPollEmail === 'mandatory' ? t('polls', 'Email address (mandatory)') : t('polls', 'Email address (optional)')"
 					:helper-text="emailAddressHint"
 					type="email"
 					inputmode="email"
