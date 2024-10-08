@@ -78,24 +78,22 @@ export type AppPermissions = {
 }
 
 export type User = {
-	displayName: string
-	emailAddress: string
-	subName: string
-	subtitle: string
-	isNoUser: boolean
-	desc: string
-	type: UserType
 	id: string
-	organisation: string
-	languageCode: string
-	localeCode: string
-	timeZone: string
-	categories: string[]
+	displayName: string
+	emailAddress: string | null
+	isNoUser: boolean
+	type: UserType
+	subName: string | null
+	subtitle: string | null
+	desc: string | null
+	organisation: string | null
+	languageCode: string | null
+	localeCode: string | null
+	timeZone: string | null
+	categories: string[] | null
 }
 
 export type Participant = {
-	userId: string
-	displayName: string
 	pollId: number
 	user: User
 }

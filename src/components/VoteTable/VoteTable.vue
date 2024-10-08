@@ -37,14 +37,14 @@
 			</div>
 
 			<div v-for="(participant) in pollStore.safeParticipants"
-				:key="participant.user.id"
-				:class="['participant', {'current-user': (participant.user.id === sessionStore.currentUser.id) }]">
+				:key="participant.id"
+				:class="['participant', {'current-user': (participant.id === sessionStore.currentUser.id) }]">
 				<UserItem :user="participant" condensed />
 
 				<ActionDelete v-if="pollStore.permissions.edit"
 					class="user-actions"
 					:name="t('polls', 'Delete votes')"
-					@delete="removeUser(participant.user.id)" />
+					@delete="removeUser(participant.id)" />
 			</div>
 
 			<div v-if="optionsStore.proposalsExist" class="owner" />

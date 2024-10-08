@@ -185,13 +185,6 @@ class UserBase implements JsonSerializable {
 		return $this->getDescription();
 	}
 
-	/**
-	 * @deprecated Not used anymore?
-	 */
-	private function getIcon(): string {
-		return $this->icon;
-	}
-
 	public function getEmailAddress(): string {
 		return $this->emailAddress;
 	}
@@ -321,12 +314,10 @@ class UserBase implements JsonSerializable {
 			'desc' => $this->getDescription(),
 			'type' => $this->getType(),
 			'id' => $this->getId(),
-			'user' => $this->getId(),
 			'organisation' => $this->getOrganisation(),
 			'languageCode' => $this->getLanguageCode(),
 			'localeCode' => $this->getLocaleCode(),
 			'timeZone' => $this->getTimeZoneName(),
-			'icon' => $this->getIcon(),
 			'categories' => $this->getCategories(),
 		];
 	}
@@ -337,18 +328,26 @@ class UserBase implements JsonSerializable {
 
 	/**
 	 * Simply user array returning safe attributes
-	 * @return (bool|string)[]
 	 *
-	 * @psalm-return array{id: string, userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
+	 * @return (bool|null|string)[]
+	 *
+	 * @psalm-return array{id: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, subName: null, subtitle: null, desc: null, user: null, organisation: null, languageCode: null, localeCode: null, timeZone: null, icon: null, categories: null}
 	 */
 	protected function getSimpleUserArray(): array {
 		return	[
 			'id' => $this->getSafeId(),
-			'userId' => $this->getSafeId(),
 			'displayName' => $this->getSafeDisplayName(),
 			'emailAddress' => $this->getSafeEmailAddress(),
 			'isNoUser' => $this->getIsNoUser(),
 			'type' => $this->getSafeType(),
+			'subName' => null,
+			'subtitle' => null,
+			'desc' => null,
+			'organisation' => null,
+			'languageCode' => null,
+			'localeCode' => null,
+			'timeZone' => null,
+			'categories' => null,
 		];
 	}
 
@@ -392,7 +391,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
-	public function getSafeEmailAddress(): string {
+	public function getSafeEmailAddress(): string | null {
 		// return real email address for cron jobs
 		if ($this->userSession->getUser()->getIsSystemUser()) {
 			return $this->getEmailAddress();
@@ -404,14 +403,14 @@ class UserBase implements JsonSerializable {
 		}
 
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
-			return '';
+			return null;
 		}
 
 		if ($this->appSettings->getAllowSeeMailAddresses()) {
 			return $this->getEmailAddress();
 		}
 
-		return '';
+		return null;
 	}
 
 	public function getOrganisation(): string {

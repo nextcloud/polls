@@ -13,7 +13,7 @@
 	import PlusIcon from 'vue-material-design-icons/Plus.vue'
 
 	import UserItem from '../User/UserItem.vue'
-	import { VirtualUserItemType } from '../../Types/index.ts'
+	import { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
 	import { useSharesStore } from '../../stores/shares.ts'
 
 	const sharesStore = useSharesStore()
@@ -23,13 +23,20 @@
 		type: VirtualUserItemType.AddPublicLink,
 	}
 
-	const user = {
-		user: {
-			type: 'public',
-			userId: '',
-			displayName: '',
-			emailAddress: '',
-		},
+	const user: User = {
+		id: '',
+		displayName: '',
+		emailAddress: '',
+		isNoUser: false,
+		type: UserType.None,
+		subName: null,
+		subtitle: null,
+		desc: null,
+		organisation: null,
+		languageCode: null,
+		localeCode: null,
+		timeZone: null,
+		categories: null,
 	}
 
 	async function addPublicShare() {
