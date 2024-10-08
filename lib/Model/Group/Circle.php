@@ -22,7 +22,6 @@ use OCA\Polls\Model\UserBase;
  */
 class Circle extends UserBase {
 	public const TYPE = 'circle';
-	public const ICON = 'icon-circles';
 
 	private CirclesCircle $circle;
 
@@ -30,7 +29,6 @@ class Circle extends UserBase {
 		string $id,
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->icon = self::ICON;
 		$this->description = $this->l10n->t('Circle');
 		$this->richObjectType = 'circle';
 

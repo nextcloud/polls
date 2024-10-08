@@ -55,7 +55,6 @@ class UserBase implements JsonSerializable {
 	protected string $description = '';
 	protected string $richObjectType = 'user';
 	protected string $organisation = '';
-	protected string $icon = '';
 	protected IDateTimeZone $timeZone;
 	protected IGroupManager $groupManager;
 	protected IL10N $l10n;
@@ -71,7 +70,6 @@ class UserBase implements JsonSerializable {
 		protected string $localeCode = '',
 		protected string $timeZoneName = '',
 	) {
-		$this->icon = 'icon-share';
 		$this->l10n = Container::getL10N();
 		$this->groupManager = Server::get(IGroupManager::class);
 		$this->timeZone = Server::get(IDateTimeZone::class);
@@ -331,7 +329,7 @@ class UserBase implements JsonSerializable {
 	 *
 	 * @return (bool|null|string)[]
 	 *
-	 * @psalm-return array{id: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, subName: null, subtitle: null, desc: null, user: null, organisation: null, languageCode: null, localeCode: null, timeZone: null, icon: null, categories: null}
+	 * @psalm-return array{id: string, displayName: string, emailAddress: string, isNoUser: bool, type: string, subName: null, subtitle: null, desc: null, user: null, organisation: null, languageCode: null, localeCode: null, timeZone: null, categories: null}
 	 */
 	protected function getSimpleUserArray(): array {
 		return	[
@@ -391,7 +389,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
-	public function getSafeEmailAddress(): ?string {
+	public function getSafeEmailAddress(): string | null {
 		// return real email address for cron jobs
 		if ($this->userSession->getUser()->getIsSystemUser()) {
 			return $this->getEmailAddress();

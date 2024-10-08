@@ -12,7 +12,6 @@ use OCA\Polls\Model\UserBase;
 
 class Ghost extends UserBase {
 	public const TYPE = 'deleted';
-	public const ICON = 'icon-ghost';
 
 	public function __construct(string $id) {
 		parent::__construct($id, self::TYPE);

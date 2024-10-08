@@ -13,8 +13,6 @@ use OCA\Polls\Model\UserBase;
 
 class GenericUser extends UserBase {
 	public const TYPE = 'external';
-	public const ICON_DEFAULT = 'icon-share';
-	public const ICON_PUBLIC = 'icon-public';
 
 	public function __construct(
 		string $id,
@@ -27,12 +25,10 @@ class GenericUser extends UserBase {
 	) {
 		parent::__construct($id, $type, $displayName, $emailAddress, $languageCode, $localeCode, $timeZoneName);
 
-		$this->icon = self::ICON_DEFAULT;
 		$this->description = $this->l10n->t('External participant');
 		$this->richObjectType = 'guest';
 
 		if ($type === UserBase::TYPE_PUBLIC) {
-			$this->icon = self::ICON_PUBLIC;
 			// $this->description = $this->l10n->t('Public link');
 			$this->description = '';
 		}
