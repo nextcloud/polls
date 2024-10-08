@@ -18,8 +18,6 @@ class User extends UserBase {
 	/** @var string */
 	public const TYPE = 'user';
 	/** @var string */
-	public const ICON = 'icon-user';
-	/** @var string */
 	public const PRINCIPAL_PREFIX = 'principals/users/';
 
 	private IConfig $config;
@@ -30,7 +28,6 @@ class User extends UserBase {
 		string $type = self::TYPE,
 	) {
 		parent::__construct($id, $type);
-		$this->icon = self::ICON;
 		$this->description = $this->l10n->t('User');
 		
 		$this->setUp();

@@ -16,7 +16,6 @@ use OCP\IGroupManager;
 
 class Group extends UserBase {
 	public const TYPE = 'group';
-	public const ICON = 'icon-group';
 
 	private IGroup $group;
 
@@ -24,7 +23,6 @@ class Group extends UserBase {
 		string $id,
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->icon = self::ICON;
 		$this->description = $this->l10n->t('Group');
 		$this->richObjectType = 'user-group';
 

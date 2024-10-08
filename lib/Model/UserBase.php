@@ -55,7 +55,6 @@ class UserBase implements JsonSerializable {
 	protected string $description = '';
 	protected string $richObjectType = 'user';
 	protected string $organisation = '';
-	protected string $icon = '';
 	protected IDateTimeZone $timeZone;
 	protected IGroupManager $groupManager;
 	protected IL10N $l10n;
@@ -71,7 +70,6 @@ class UserBase implements JsonSerializable {
 		protected string $localeCode = '',
 		protected string $timeZoneName = '',
 	) {
-		$this->icon = 'icon-share';
 		$this->l10n = Container::getL10N();
 		$this->groupManager = Server::get(IGroupManager::class);
 		$this->timeZone = Server::get(IDateTimeZone::class);
@@ -183,13 +181,6 @@ class UserBase implements JsonSerializable {
 
 	public function getSubName(): string {
 		return $this->getDescription();
-	}
-
-	/**
-	 * @deprecated Not used anymore?
-	 */
-	private function getIcon(): string {
-		return $this->icon;
 	}
 
 	public function getEmailAddress(): string {
@@ -307,8 +298,6 @@ class UserBase implements JsonSerializable {
 	 * without obfuscating/anonymizing
 	 *
 	 * @return (bool|string|string[])[]
-	 *
-	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, subName: string, subtitle: string, isNoUser: bool, desc: string, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, icon: string, categories: array<string>}
 	 */
 	public function getRichUserArray(): array {
 		return	[
@@ -321,12 +310,10 @@ class UserBase implements JsonSerializable {
 			'desc' => $this->getDescription(),
 			'type' => $this->getType(),
 			'id' => $this->getId(),
-			'user' => $this->getId(),
 			'organisation' => $this->getOrganisation(),
 			'languageCode' => $this->getLanguageCode(),
 			'localeCode' => $this->getLocaleCode(),
 			'timeZone' => $this->getTimeZoneName(),
-			'icon' => $this->getIcon(),
 			'categories' => $this->getCategories(),
 		];
 	}
@@ -337,18 +324,24 @@ class UserBase implements JsonSerializable {
 
 	/**
 	 * Simply user array returning safe attributes
-	 * @return (bool|string)[]
 	 *
-	 * @psalm-return array{id: string, userId: string, displayName: string, emailAddress: string, isNoUser: bool, type: string}
+	 * @return (bool|null|string)[]
 	 */
 	protected function getSimpleUserArray(): array {
 		return	[
 			'id' => $this->getSafeId(),
-			'userId' => $this->getSafeId(),
 			'displayName' => $this->getSafeDisplayName(),
 			'emailAddress' => $this->getSafeEmailAddress(),
 			'isNoUser' => $this->getIsNoUser(),
 			'type' => $this->getSafeType(),
+			'subName' => null,
+			'subtitle' => null,
+			'desc' => null,
+			'organisation' => null,
+			'languageCode' => null,
+			'localeCode' => null,
+			'timeZone' => null,
+			'categories' => null,
 		];
 	}
 
@@ -392,7 +385,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
-	public function getSafeEmailAddress(): string {
+	public function getSafeEmailAddress(): ?string {
 		// return real email address for cron jobs
 		if ($this->userSession->getUser()->getIsSystemUser()) {
 			return $this->getEmailAddress();
@@ -404,14 +397,14 @@ class UserBase implements JsonSerializable {
 		}
 
 		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
-			return '';
+			return null;
 		}
 
 		if ($this->appSettings->getAllowSeeMailAddresses()) {
 			return $this->getEmailAddress();
 		}
 
-		return '';
+		return null;
 	}
 
 	public function getOrganisation(): string {

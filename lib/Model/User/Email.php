@@ -13,7 +13,6 @@ use OCA\Polls\Model\UserBase;
 
 class Email extends UserBase {
 	public const TYPE = 'email';
-	public const ICON = 'icon-mail';
 
 	public function __construct(
 		string $id,
@@ -22,7 +21,6 @@ class Email extends UserBase {
 		string $languageCode = '',
 	) {
 		parent::__construct($id, self::TYPE, languageCode: $languageCode);
-		$this->icon = self::ICON;
 		$this->richObjectType = 'email';
 		$this->description = $emailAddress !== '' ? $emailAddress : $this->l10n->t('External Email');
 		$this->emailAddress = $emailAddress !== '' ? $emailAddress : $id;
