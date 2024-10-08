@@ -301,7 +301,7 @@ class UserBase implements JsonSerializable {
 	 *
 	 * @return (bool|string|string[])[]
 	 *
-	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, subName: string, subtitle: string, isNoUser: bool, desc: string, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, icon: string, categories: array<string>}
+	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, subName: string, subtitle: string, isNoUser: bool, desc: string, type: string, id: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, categories: array<string>}
 	 */
 	public function getRichUserArray(): array {
 		return	[
@@ -391,7 +391,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
-	public function getSafeEmailAddress(): string | null {
+	public function getSafeEmailAddress(): ?string {
 		// return real email address for cron jobs
 		if ($this->userSession->getUser()->getIsSystemUser()) {
 			return $this->getEmailAddress();
