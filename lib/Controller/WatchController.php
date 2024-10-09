@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\WatchService;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -33,6 +34,7 @@ class WatchController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/watch')]
 	public function watchPoll(int $pollId, ?int $offset): JSONResponse {
 		return $this->responseLong(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
 	}

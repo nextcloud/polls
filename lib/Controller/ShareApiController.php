@@ -11,6 +11,7 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
 use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -36,6 +37,7 @@ class ShareApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/api/v1/poll/{pollId}/shares')]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
 	}
@@ -46,6 +48,7 @@ class ShareApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/api/v1/share/{token}')]
 	public function get(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->get($token)]);
 	}
@@ -61,6 +64,7 @@ class ShareApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/api/v1/poll/{pollId}/share/{type}')]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)]);
 	}
@@ -72,6 +76,7 @@ class ShareApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/api/v1/share/{token}')]
 	public function delete(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token)]);
 	}
@@ -83,6 +88,7 @@ class ShareApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/share/{token}/restore')]
 	public function restore(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token, restore: true)]);
 	}
@@ -94,6 +100,7 @@ class ShareApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/share/{token}/lock')]
 	public function lock(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token)]);
 	}
@@ -105,6 +112,7 @@ class ShareApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/share/{token}/unlock')]
 	public function unlock(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token, unlock: true)]);
 	}
@@ -117,6 +125,7 @@ class ShareApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/api/v1/share/{token}/invite')]
 	public function sendInvitation(string $token): JSONResponse {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [

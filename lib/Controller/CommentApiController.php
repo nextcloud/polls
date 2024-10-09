@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\CommentService;
 use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -34,6 +35,7 @@ class CommentApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/api/v1/poll/{pollId}/comments')]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'comments' => $this->commentService->list($pollId)
@@ -48,6 +50,7 @@ class CommentApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/api/v1/poll/{pollId}/comment')]
 	public function add(int $pollId, string $comment): JSONResponse {
 		return $this->response(fn () => [
 			'comment' => $this->commentService->add($comment, $pollId)
@@ -61,6 +64,7 @@ class CommentApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/api/v1/comment/{commentId}')]
 	public function delete(int $commentId): JSONResponse {
 		return $this->response(fn () => [
 			'comment' => $this->commentService->delete($commentId)]);
@@ -73,6 +77,7 @@ class CommentApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/api/v1/comment/{commentId}/restore')]
 	public function restore(int $commentId): JSONResponse {
 		return $this->response(fn () => [
 			'comment' => $this->commentService->delete($commentId, true)

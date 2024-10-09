@@ -12,6 +12,7 @@ use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Service\SubscriptionService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -36,6 +37,7 @@ class SubscriptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/api/v1/poll/{pollId}/subscription')]
 	public function get(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse([
@@ -54,6 +56,7 @@ class SubscriptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/api/v1/poll/{pollId}/subscription')]
 	public function subscribe(int $pollId): JSONResponse {
 		try {
 			$this->subscriptionService->set(true, $pollId);
@@ -73,6 +76,7 @@ class SubscriptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/api/v1/poll/{pollId}/subscription')]
 	public function unsubscribe(int $pollId): JSONResponse {
 		try {
 			$this->subscriptionService->set(false, $pollId);

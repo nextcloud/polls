@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\OptionService;
 use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -34,6 +35,7 @@ class OptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/api/v1/polls/{pollId}/options')]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['options' => $this->optionService->list($pollId)]);
 	}
@@ -48,6 +50,7 @@ class OptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/api/v1/poll/{pollId}/option')]
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)]);
 	}
@@ -61,6 +64,7 @@ class OptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/api/v1/poll/{pollId}/options')]
 	public function addBulk(int $pollId, string $text = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['options' => $this->optionService->addBulk($pollId, $text)]);
 	}
@@ -75,6 +79,7 @@ class OptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/option/{optionId}')]
 	public function update(int $optionId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $text, $duration)]);
 	}
@@ -86,6 +91,7 @@ class OptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/api/v1/option/{optionId}')]
 	public function delete(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
@@ -97,6 +103,7 @@ class OptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/option/{optionId}/restore')]
 	public function restore(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)]);
 	}
@@ -108,6 +115,7 @@ class OptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/option/{optionId}/confirm')]
 	public function confirm(int $optionId): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
@@ -120,6 +128,7 @@ class OptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/option/{optionId}/order/{order}')]
 	public function setOrder(int $optionId, int $order): JSONResponse {
 		return $this->response(fn () => ['option' => $this->optionService->setOrder($optionId, $order)]);
 	}

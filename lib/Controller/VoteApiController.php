@@ -13,6 +13,7 @@ use OCA\Polls\Service\VoteService;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\CORS;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -37,6 +38,7 @@ class VoteApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/api/v1/poll/{pollId}/votes')]
 	public function list(int $pollId): JSONResponse {
 		try {
 			return new JSONResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
@@ -55,6 +57,7 @@ class VoteApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/option/{optionId}/vote/{answer}')]
 	public function set(int $optionId, string $answer): JSONResponse {
 		try {
 			return new JSONResponse(['vote' => $this->voteService->set($optionId, $answer)], Http::STATUS_OK);
@@ -73,6 +76,7 @@ class VoteApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/api/v1/poll/{pollId}/user/{userId}')]
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId)]);
 	}
@@ -85,6 +89,7 @@ class VoteApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/api/v1/poll/{pollId}/votes/orphaned')]
 	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
 	}

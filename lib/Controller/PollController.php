@@ -17,6 +17,7 @@ use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\VoteService;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -45,6 +46,7 @@ class PollController extends BaseController {
 	 * Get list of polls
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/polls')]
 	public function list(): JSONResponse {
 		return $this->response(function () {
 			$appSettings = Server::get(AppSettings::class);
@@ -63,6 +65,7 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/poll')]
 	public function get(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->get($pollId),
@@ -75,6 +78,7 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}')]
 	public function getFull(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->get($pollId),
@@ -93,6 +97,7 @@ class PollController extends BaseController {
 	 * @param string $type Poll type ('datePoll', 'textPoll')
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/poll/add')]
 	public function add(string $type, string $title): JSONResponse {
 		return $this->responseCreate(fn () => $this->pollService->add($type, $title));
 	}
@@ -103,6 +108,7 @@ class PollController extends BaseController {
 	 * @param array $poll poll config
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}')]
 	public function update(int $pollId, array $poll): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->update($pollId, $poll),
@@ -115,6 +121,7 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/confirmation')]
 	public function sendConfirmation(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'confirmations' => $this->mailService->sendConfirmations($pollId),
@@ -122,10 +129,11 @@ class PollController extends BaseController {
 	}
 
 	/**
-	 * Switch deleted status (move to deleted polls)
+	 * Switch archived status (move to archive polls)
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/toggleArchive')]
 	public function toggleArchive(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
 	}
@@ -135,7 +143,7 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
-
+	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}')]
 	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
 	}
@@ -145,6 +153,7 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/close')]
 	public function close(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->close($pollId),
@@ -157,6 +166,7 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/reopen')]
 	public function reopen(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->reopen($pollId),
@@ -169,6 +179,7 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/clone')]
 	public function clone(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->clonePoll($pollId));
 	}
@@ -184,6 +195,7 @@ class PollController extends BaseController {
 	 * @param string $sourceUser User to transfer polls from
 	 * @param string $targetUser User to transfer polls to
 	 */
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/transfer/{sourceUser}/{targetUser}')]
 	public function transferPolls(string $sourceUser, string $targetUser): JSONResponse {
 		return $this->response(fn () => $this->pollService->transferPolls($sourceUser, $targetUser));
 	}
@@ -193,6 +205,7 @@ class PollController extends BaseController {
 	 * @param int $pollId Poll id
 	 */
 	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/addresses')]
 	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->getParticipantsEmailAddresses($pollId));
 	}
