@@ -21,6 +21,7 @@ use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
+use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
@@ -31,6 +32,7 @@ abstract class MailBase {
 	/** @var string */
 	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Mail';
 
+	protected IAppConfig $appConfig;
 	protected AppSettings $appSettings;
 	protected IEmailTemplate $emailTemplate;
 	protected IL10N $l10n;
@@ -55,6 +57,7 @@ abstract class MailBase {
 	 * setUp
 	 */
 	private function setUp(): void {
+		$this->appConfig = Container::queryClass(IAppConfig::class);
 		$this->appSettings = Container::queryClass(AppSettings::class);
 		$this->logger = Container::queryClass(LoggerInterface::class);
 		$this->mailer = Container::queryClass(IMailer::class);
@@ -115,12 +118,12 @@ abstract class MailBase {
 
 		// add footer
 		$footerText = $this->getFooter();
-		if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL)) {
+		if ($this->appConfig->getValueString(AppConstants::APP_ID, AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL)) {
 			$footerText = $footerText . '<br>' . $this->getLegalLinks();
 		}
 
-		if ($this->appSettings->getStringSetting(AppSettings::SETTING_DISCLAIMER)) {
-			$footerText = $footerText . '<br>' . $this->getParsedMarkDown($this->appSettings->getStringSetting(AppSettings::SETTING_DISCLAIMER));
+		if ($this->appConfig->getValueString(AppConstants::APP_ID, AppSettings::SETTING_DISCLAIMER)) {
+			$footerText = $footerText . '<br>' . $this->getParsedMarkDown($this->appConfig->getValueString(AppConstants::APP_ID, AppSettings::SETTING_DISCLAIMER));
 		}
 
 		$this->emailTemplate->addFooter($footerText);

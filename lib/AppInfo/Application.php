@@ -62,7 +62,7 @@ use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
 use OCP\Group\Events\GroupDeletedEvent;
-use OCP\IConfig;
+use OCP\IAppConfig;
 use OCP\IDBConnection;
 use OCP\IUserManager;
 use OCP\User\Events\UserDeletedEvent;
@@ -143,7 +143,7 @@ class Application extends App implements IBootstrap {
 
 		$context->registerService(AppSettings::class, function (ContainerInterface $c): AppSettings {
 			return new AppSettings(
-				$c->get(IConfig::class),
+				$c->get(IAppConfig::class),
 				$c->get(UserSession::class),
 			);
 		});
