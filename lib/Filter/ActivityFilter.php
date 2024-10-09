@@ -16,6 +16,9 @@ use OCA\Polls\Event\ShareEvent;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ActivityFilter implements \OCP\Activity\IFilter {
 	private $l10n;
 	private $urlGenerator;

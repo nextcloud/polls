@@ -314,13 +314,13 @@ class ShareService {
 		$this->share->setDisplayName($displayName ?? $this->share->getDisplayName());
 		$this->share->setTimeZoneName($timeZone ?? $this->share->getTimeZoneName());
 		$this->share->setLanguage($language ?? $this->share->getLanguage());
-		
-		if ($emailAddress && $emailAddress !== $this->share->getEmailAddress()) {
+
+		if ($emailAddress !== null && $emailAddress !== '' && $emailAddress !== $this->share->getEmailAddress()) {
 			// reset invitation sent, if email address is changed
 			$this->share->setInvitationSent(0);
 		}
-
 		$this->share->setEmailAddress($emailAddress ?? $this->share->getEmailAddress());
+
 
 		// convert to type external
 		$this->share->setType(Share::TYPE_EXTERNAL);

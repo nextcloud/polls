@@ -18,7 +18,7 @@ use OCA\Polls\Model\User\User;
 use OCA\Polls\Model\UserBase;
 
 /**
- * @psam-supress
+ * @psalm-suppress UnusedClass
  */
 class Circle extends UserBase {
 	public const TYPE = 'circle';

@@ -74,10 +74,6 @@ class AppSettings implements JsonSerializable {
 		return $this->stringToArray($this->appConfig->getValueString(AppConstants::APP_ID, $key));
 	}
 
-	public function getStringSetting(string $key, string $default = ''): string {
-		return $this->appConfig->getValueString(AppConstants::APP_ID, $key, $default);
-	}
-
 	public function getIntegerSetting(string $key, int $default = 0): int {
 		if ($this->checkSettingType($key, IAppConfig::VALUE_INT)) {
 			return $this->appConfig->getValueInt(AppConstants::APP_ID, $key, $default);
