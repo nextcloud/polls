@@ -1,33 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-  - SPDX-FileCopyrightText: 2021 Nextcloud contributors
-  - SPDX-License-Identifier: AGPL-3.0-or-later
--->
-<files psalm-version="5.23.0@005e3184fb6de4350a873b9b8c4dc3cede9db762">
-  <file src="lib/Filter/ActivityFilter.php">
-    <UnusedClass>
-      <code><![CDATA[ActivityFilter]]></code>
-    </UnusedClass>
-  </file>
+<files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
   <file src="lib/Model/Group/Circle.php">
     <UndefinedClass>
       <code><![CDATA[$this->circle]]></code>
       <code><![CDATA[CirclesCircle]]></code>
     </UndefinedClass>
   </file>
-  <file src="lib/Model/UserBase.php">
-    <UnusedVariable>
-      <code><![CDATA[$more]]></code>
-    </UnusedVariable>
-  </file>
   <file src="lib/Service/MailService.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[parseEmailStrings]]></code>
     </PossiblyUnusedMethod>
-  </file>
-  <file src="lib/Settings/ActivityVote.php">
-    <UnusedClass>
-      <code><![CDATA[ActivityVote]]></code>
-    </UnusedClass>
   </file>
 </files>

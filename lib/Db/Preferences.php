@@ -19,7 +19,6 @@ use OCP\AppFramework\Db\Entity;
  * @method void setUserId(string $value)
  * @method string getTimestamp()
  * @method void setTimestamp(int $value)
- * @method string getPreferences()
  * @method void setPreferences(string $value)
  */
 class Preferences extends Entity implements JsonSerializable {
@@ -52,8 +51,12 @@ class Preferences extends Entity implements JsonSerializable {
 		$this->setPreferences(json_encode(self::DEFAULT));
 	}
 
+	public function getPreferences(): string {
+		return $this->preferences ?? '';
+	}
+
 	public function getPreferences_decoded(): mixed {
-		return json_decode($this->getPreferences() ?? '');
+		return json_decode($this->getPreferences());
 	}
 
 	public function getCheckCalendarsHoursBefore(): int {

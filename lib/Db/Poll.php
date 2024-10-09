@@ -355,7 +355,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getGroupShares(): array {
-		if (!empty($this->groupShares)) {
+		if ($this->groupShares !== null && $this->groupShares !== '') {
 			// explode with separator and remove empty elements
 			return array_filter(explode(PollMapper::CONCAT_SEPARATOR, PollMapper::CONCAT_SEPARATOR . $this->groupShares));
 		}

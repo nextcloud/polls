@@ -8,6 +8,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Settings;
 
+/**
+ * @psalm-suppress UnusedClass
+ */
 class ActivityVote extends ActivitySettings {
 	public function getIdentifier() : string {
 		return 'vote_set';

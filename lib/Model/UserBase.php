@@ -242,7 +242,7 @@ class UserBase implements JsonSerializable {
 			$types[] = IShare::TYPE_CIRCLE;
 		}
 
-		[$result, $more] = Container::queryClass(ISearch::class)->search($query, $types, false, 200, 0);
+		[$result] = Container::queryClass(ISearch::class)->search($query, $types, false, 200, 0);
 
 		foreach (($result['users'] ?? []) as $item) {
 			$items[] = new User($item['value']['shareWith']);

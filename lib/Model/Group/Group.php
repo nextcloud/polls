@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Model\Group;
 
+use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\User;
 use OCA\Polls\Model\UserBase;
@@ -30,7 +31,12 @@ class Group extends UserBase {
 	}
 
 	private function setUp(): void {
-		$this->group = $this->groupManager->get($this->id);
+		$foundGroup = $this->groupManager->get($this->id);
+		if ($foundGroup === null) {
+			throw new NotFoundException('Group not found');
+		}
+
+		$this->group = $foundGroup;
 		$this->displayName = $this->group->getDisplayName();
 	}
 
