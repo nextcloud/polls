@@ -35,7 +35,7 @@
 	
 	// FIXME: Fix this, since it is not 'vote-main' that is scrolled
 	const voteMainId = 'vote-main'
-	const { scrolled } = useHandleScroll(voteMainId)
+	const scrolled = useHandleScroll(voteMainId)
 
 	const isLoading = ref(false)
 
@@ -68,7 +68,7 @@
 </script>
 
 <template>
-	<NcAppContent :class="[{ closed: pollStore.isClosed, scrolled: (scrolled > 0), 'vote-style-beta-510': preferencesStore.user.useAlternativeStyling }, pollStore.type]">
+	<NcAppContent :class="[{ closed: pollStore.isClosed, scrolled: !!scrolled, 'vote-style-beta-510': preferencesStore.user.useAlternativeStyling }, pollStore.type]">
 		<HeaderBar class="area__header">
 			<template #title>
 				{{ pollStore.configuration.title }} scrolled: {{ scrolled }}
