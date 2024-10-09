@@ -11,8 +11,10 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\VoteService;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -35,7 +37,8 @@ class VoteController extends BaseController {
 	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
-	#[NoCSRFRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/votes')]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['votes' => $this->voteService->list($pollId)]);
 	}
@@ -47,6 +50,9 @@ class VoteController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/vote')]
+	// #[FrontpageRoute(verb: 'PUT', url: '/vote/{optionId}/set/{setTo}')]
 	public function set(int $optionId, string $setTo): JSONResponse {
 		$option = $this->optionService->get($optionId);
 		return $this->response(fn () => [
@@ -63,6 +69,9 @@ class VoteController extends BaseController {
 	 * @param string $userId User to remove
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}/user/{userId}', postfix: 'named')]
+	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}/user', postfix: 'self')]
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId)]);
 	}
@@ -73,6 +82,8 @@ class VoteController extends BaseController {
 	 * @param string $userId User to delete orphan votes from
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}/votes/orphaned')]
 	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
 	}

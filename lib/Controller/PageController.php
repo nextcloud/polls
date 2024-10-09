@@ -11,8 +11,10 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Service\NotificationService;
 use OCP\AppFramework\Controller;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
 use OCP\EventDispatcher\IEventDispatcher;
@@ -33,10 +35,15 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * reder index page
+	 * render index page
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/', postfix: 'index')]
+	#[FrontpageRoute(verb: 'GET', url: '/combo', postfix: 'combo')]
+	#[FrontpageRoute(verb: 'GET', url: '/not-found', postfix: 'notFound')]
+	#[FrontpageRoute(verb: 'GET', url: '/list/{category}', postfix: 'list')]
 	public function index(): TemplateResponse {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());
@@ -44,11 +51,13 @@ class PageController extends Controller {
 	}
 
 	/**
-	 * reder vote page
+	 * render vote page
 	 * @param $id poll id
 	 */
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/vote/{id}')]
 	public function vote(int $id): TemplateResponse {
 		$this->notificationService->removeNotification($id);
 		Util::addScript(AppConstants::APP_ID, 'polls-main');

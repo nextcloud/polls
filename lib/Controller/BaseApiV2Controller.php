@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 /**
- * SPDX-FileCopyrightText: 2017 Nextcloud contributors
+ * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
@@ -11,16 +11,19 @@ namespace OCA\Polls\Controller;
 use Closure;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
-use OCP\AppFramework\ApiController;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
+use OCP\AppFramework\OCS\OCSBadRequestException;
+use OCP\AppFramework\OCS\OCSNotFoundException;
+use OCP\AppFramework\OCSController;
 use OCP\IRequest;
 
 /**
  * @psalm-api
  */
-class BaseApiController extends ApiController {
+class BaseApiV2Controller extends OCSController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -36,11 +39,13 @@ class BaseApiController extends ApiController {
 	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
-	protected function response(Closure $callback): JSONResponse {
+	protected function response(Closure $callback): DataResponse {
 		try {
-			return new JSONResponse($callback(), Http::STATUS_OK);
+			return new DataResponse($callback(), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			throw new OCSNotFoundException($e->getMessage());
 		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+			throw new OCSBadRequestException($e->getMessage());
 		}
 	}
 
@@ -49,11 +54,13 @@ class BaseApiController extends ApiController {
 	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
-	protected function responseLong(Closure $callback): JSONResponse {
+	protected function responseLong(Closure $callback): DataResponse {
 		try {
-			return new JSONResponse($callback(), Http::STATUS_OK);
+			return new DataResponse($callback(), Http::STATUS_OK);
+		} catch (DoesNotExistException $e) {
+			throw new OCSNotFoundException($e->getMessage());
 		} catch (NoUpdatesException $e) {
-			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
+			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
 		}
 	}
 
@@ -62,11 +69,11 @@ class BaseApiController extends ApiController {
 	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
-	protected function responseCreate(Closure $callback): JSONResponse {
+	protected function responseCreate(Closure $callback): DataResponse {
 		try {
-			return new JSONResponse($callback(), Http::STATUS_CREATED);
+			return new DataResponse($callback(), Http::STATUS_CREATED);
 		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+			throw new OCSBadRequestException($e->getMessage());
 		}
 	}
 }

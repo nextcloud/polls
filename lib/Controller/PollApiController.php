@@ -8,27 +8,26 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\AppConstants;
-use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\ResponseDefinitions as ResponseDefinitions;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\VoteService;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 /**
  * @psalm-api
- */
-class PollApiController extends BaseApiController {
+ * @psalm-import-type PollsPoll from ResponseDefinitions
+ *  */
+class PollApiController extends BaseApiV2Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -49,33 +48,11 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function list(): JSONResponse {
-		try {
-			return new JSONResponse([AppConstants::APP_ID => $this->pollService->list()], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse([], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/polls', requirements: ['apiVersion' => '(v2)'])]
+	public function list(): DataResponse {
+		return $this->response(fn () => ['polls' => $this->pollService->list()]);
 	}
 	
-	/**
-	 * get poll
-	 * @param $pollId Poll id
-	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	public function get(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse(['poll' => $this->pollService->get($pollId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
 	/**
 	 * get complete poll
 	 * @param int $pollId Poll id
@@ -83,7 +60,8 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function getFull(int $pollId): JSONResponse {
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	public function get(int $pollId): DataResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->get($pollId),
 			'options' => $this->optionService->list($pollId),
@@ -94,25 +72,7 @@ class PollApiController extends BaseApiController {
 			'acl' => $this->acl,
 		]);
 	}
-
-
-	/**
-	 * get acl for poll
-	 * @param $pollId Poll id
-	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	public function getAcl(): JSONResponse {
-		try {
-			return new JSONResponse(['acl' => $this->acl], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
+	
 	/**
 	 * Add poll
 	 * @param string $title Poll title
@@ -121,12 +81,9 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function add(string $type, string $title): JSONResponse {
-		try {
-			return new JSONResponse(['poll' => $this->pollService->add($type, $title)], Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll', requirements: ['apiVersion' => '(v2)'])]
+	public function add(string $type, string $title): DataResponse {
+		return $this->responseCreate(fn () => ['poll' => $this->pollService->add($type, $title)]);
 	}
 
 	/**
@@ -137,17 +94,9 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function update(int $pollId, array $pollConfiguration): JSONResponse {
-		try {
-			return new JSONResponse([
-				'poll' => $this->pollService->update($pollId, $pollConfiguration),
-				'acl' => $this->acl,
-			], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	public function update(int $pollId, array $pollConfiguration): DataResponse {
+		return $this->response(fn () => ['poll' => $this->pollService->update($pollId, $pollConfiguration)]);
 	}
 
 	/**
@@ -157,14 +106,9 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function toggleArchive(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse(['poll' => $this->pollService->toggleArchive($pollId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}/archive/toggle', requirements: ['apiVersion' => '(v2)'])]
+	public function toggleArchive(int $pollId): DataResponse {
+		return $this->response(fn () => ['poll' => $this->pollService->toggleArchive($pollId)]);
 	}
 
 	/**
@@ -174,14 +118,9 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function close(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse(['poll' => $this->pollService->close($pollId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}/close', requirements: ['apiVersion' => '(v2)'])]
+	public function close(int $pollId): DataResponse {
+		return $this->response(fn () => ['poll' => $this->pollService->close($pollId)]);
 	}
 
 	/**
@@ -191,14 +130,9 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function reopen(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse(['poll' => $this->pollService->reopen($pollId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}/reopen', requirements: ['apiVersion' => '(v2)'])]
+	public function reopen(int $pollId): DataResponse {
+		return $this->response(fn () => ['poll' => $this->pollService->reopen($pollId)]);
 	}
 
 	/**
@@ -208,14 +142,9 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function delete(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse(['poll' => $this->pollService->delete($pollId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	public function delete(int $pollId): DataResponse {
+		return $this->response(fn () => ['poll' => $this->pollService->delete($pollId)]);
 	}
 
 	/**
@@ -225,44 +154,33 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function clone(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse(['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll/{pollId}/clone', requirements: ['apiVersion' => '(v2)'])]
+	public function clone(int $pollId): DataResponse {
+		return $this->responseCreate(fn () => ['poll' => $this->pollService->clone($pollId)]);
 	}
 
 	/**
 	 * Transfer all polls from one user to another (change owner of poll)
 	 * @param string $sourceUser User to transfer polls from
-	 * @param string $destinationUser User to transfer polls to
+	 * @param string $targetUser User to transfer polls to
 	 */
 	#[CORS]
 	#[NoCSRFRequired]
-	public function transferPolls(string $sourceUser, string $destinationUser): JSONResponse {
-		try {
-			return new JSONResponse(['transferred' => $this->pollService->transferPolls($sourceUser, $destinationUser)], Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/transfer/{sourceUser}/{targetUser}', requirements: ['apiVersion' => '(v2)'])]
+	public function transferPolls(string $sourceUser, string $targetUser): DataResponse {
+		return $this->response(fn () => ['transferred' => $this->pollService->transferPolls($sourceUser, $targetUser)]);
 	}
 
 	/**
 	 * Transfer singe poll to another user (change owner of poll)
 	 * @param int $pollId Poll to transfer
-	 * @param string $destinationUser User to transfer the poll to
+	 * @param string $targetUser User to transfer the poll to
 	 */
 	#[CORS]
 	#[NoCSRFRequired]
-	public function transferPoll(int $pollId, string $destinationUser): JSONResponse {
-		try {
-			return new JSONResponse(['transferred' => $this->pollService->transferPoll($pollId, $destinationUser)], Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}/transfer/{targetUser}', requirements: ['apiVersion' => '(v2)'])]
+	public function transferPoll(int $pollId, string $targetUser): DataResponse {
+		return $this->response(fn () => ['transferred' => $this->pollService->transferPoll($pollId, $targetUser)]);
 	}
 
 	/**
@@ -272,14 +190,9 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse($this->pollService->getParticipantsEmailAddresses($pollId), Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/addresses', requirements: ['apiVersion' => '(v2)'])]
+	public function getParticipantsEmailAddresses(int $pollId): DataResponse {
+		return $this->response(fn () => ['addresses' => $this->pollService->getParticipantsEmailAddresses($pollId)]);
 	}
 
 	/**
@@ -288,7 +201,8 @@ class PollApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function enum(): JSONResponse {
-		return new JSONResponse($this->pollService->getValidEnum(), Http::STATUS_OK);
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/enum', requirements: ['apiVersion' => '(v2)'])]
+	public function enum(): DataResponse {
+		return $this->response(fn () => ['enum' => $this->pollService->getValidEnum()]);
 	}
 }

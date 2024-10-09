@@ -10,16 +10,17 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Service\PreferencesService;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 /**
  * @psalm-api
  */
-class UserApiController extends BaseApiController {
+class UserApiController extends BaseApiV2Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -30,45 +31,24 @@ class UserApiController extends BaseApiController {
 	}
 
 	/**
-	 * Get user preferences
+	 * Write user preferences
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function getPreferences(): JSONResponse {
-		return $this->response(fn () => $this->preferencesService->get());
-	}
-	
-	/**
-	 * Get user preferences
-	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	public function writePreferences(array $preferences): JSONResponse {
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/preferences', requirements: ['apiVersion' => '(v2)'])]
+	public function writePreferences(array $preferences): DataResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
-	
 	/**
-	 * get acl for poll
-	 * @param $pollId Poll id
-	 * @deprecated 8.0.0 Use getSession instead
+	 * get user session
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function getAcl(): JSONResponse {
-		return $this->response(fn () => ['acl' => $this->acl]);
-	}
-	/**
-	 * get acl for poll
-	 * @param $pollId Poll id
-	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	public function getSession(): JSONResponse {
-		return new JSONResponse([
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/session', requirements: ['apiVersion' => '(v2)'])]
+	public function getSession(): DataResponse {
+		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
 			'currentUser' => $this->acl->getCurrentUser(),
 			'appPermissions' => $this->acl->getPermissionsArray(),

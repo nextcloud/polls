@@ -80,6 +80,14 @@ class CommentService {
 	}
 
 	/**
+	 * Restore comment
+	 * @param int $commentId id of Comment to restore
+	 */
+	public function restore(int $commentId): Comment {
+		return $this->delete($commentId, true);
+	}
+
+	/**
 	 * Delete or restore comment
 	 * @param int $commentId id of Comment to delete or restore
 	 * @param bool $restore Set true, if comment is to be restored

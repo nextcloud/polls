@@ -13,7 +13,9 @@ use OCA\Polls\Cron\AutoReminderCron;
 use OCA\Polls\Cron\JanitorCron;
 use OCA\Polls\Cron\NotificationCron;
 use OCA\Polls\Service\PollService;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Collaboration\Resources\LoadAdditionalScriptsEvent;
@@ -43,6 +45,8 @@ class AdminController extends BaseController {
 	 * Load admin page
 	 */
 	#[NoCSRFRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/administration')]
 	public function index(): TemplateResponse {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());
@@ -52,6 +56,7 @@ class AdminController extends BaseController {
 	/**
 	 * Get list of polls for administrative purposes
 	 */
+	#[FrontpageRoute(verb: 'GET', url: '/administration/polls')]
 	public function list(): JSONResponse {
 		return $this->response(fn () => $this->pollService->listForAdmin());
 	}
@@ -60,14 +65,41 @@ class AdminController extends BaseController {
 	 * Takeover ownership of a poll
 	 * @param int $pollId PollId to take over
 	 */
+	#[FrontpageRoute(verb: 'PUT', url: '/administration/poll/{pollId}/takeover')]
 	public function takeover(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->takeover($pollId));
 	}
 
 	/**
-	 * Switch deleted status (move to deleted polls)
-	 * @param int $pollId poll id
+	 * Run auto reminder job
 	 */
+	#[FrontpageRoute(verb: 'GET', url: '/administration/autoReminder/run')]
+	public function runAutoReminderJob(): JSONResponse {
+		return $this->response(fn () => $this->autoReminderCron->manuallyRun());
+	}
+
+	/**
+	 * Run janitor job
+	 */
+	#[FrontpageRoute(verb: 'GET', url: '/administration/janitor/run')]
+	public function runJanitorJob(): JSONResponse {
+		return $this->response(fn () => $this->janitorCron->manuallyRun());
+	}
+
+	/**
+	 * Run notification job
+	 */
+	#[FrontpageRoute(verb: 'GET', url: '/administration/notification/run')]
+	public function runNotificationJob(): JSONResponse {
+		return $this->response(fn () => $this->notificationCron->manuallyRun());
+	}
+
+	/**
+	 * Switch archived status (move to archived polls)
+	 * @param int $pollId poll id
+	 * @deprecated 8.0.0 Not used anymore (use PUT /poll/{pollId}/toggleArchive)
+	 */
+	#[FrontpageRoute(verb: 'PUT', url: '/administration/poll/{pollId}/toggleArchive')]
 	public function toggleArchive(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
 	}
@@ -75,18 +107,10 @@ class AdminController extends BaseController {
 	/**
 	 * Delete poll
 	 * @param int $pollId poll id
+	 * @deprecated 8.0.0 Not used anymore (use DELETE /poll/{pollId})
 	 */
+	#[FrontpageRoute(verb: 'DELETE', url: '/administration/poll/{pollId}')]
 	public function delete(int $pollId): JSONResponse {
 		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
-	}
-
-	public function runAutoReminderJob(): JSONResponse {
-		return $this->response(fn () => $this->autoReminderCron->manuallyRun());
-	}
-	public function runJanitorJob(): JSONResponse {
-		return $this->response(fn () => $this->janitorCron->manuallyRun());
-	}
-	public function runNotificationJob(): JSONResponse {
-		return $this->response(fn () => $this->notificationCron->manuallyRun());
 	}
 }

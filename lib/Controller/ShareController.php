@@ -10,7 +10,9 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Service\ShareService;
+use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -31,6 +33,8 @@ class ShareController extends BaseController {
 	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/shares')]
 	public function list(int $pollId): JSONResponse {
 		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
 	}
@@ -44,6 +48,8 @@ class ShareController extends BaseController {
 	 * @param string $emailAddress Email address of user
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/share')]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)]);
 	}
@@ -54,6 +60,8 @@ class ShareController extends BaseController {
 	 * @param string $value new value
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'POST', url: '/share/{token}/publicpollemail/{value}')]
 	public function setPublicPollEmail(string $token, string $value): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->setPublicPollEmail($token, $value)]);
 	}
@@ -61,9 +69,11 @@ class ShareController extends BaseController {
 	/**
 	 * Change Label of a public share
 	 * @param string $token Share token
-	 * @param string $label new label of oublic poll
+	 * @param string $label new label of public poll
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/setlabel')]
 	public function setLabel(string $token, string $label = ''): JSONResponse {
 		return $this->response(fn () => [
 			'share' => $this->shareService->setLabel($label, $token)
@@ -75,6 +85,8 @@ class ShareController extends BaseController {
 	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/user')]
 	public function adminToUser(string $token): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_USER)]);
 	}
@@ -84,21 +96,10 @@ class ShareController extends BaseController {
 	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/admin')]
 	public function userToAdmin(string $token): JSONResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)]);
-	}
-
-	/**
-	 * Set email address
-	 * @param string $token Share token
-	 * @param string $emailAddress Email address
-	 */
-	#[NoAdminRequired]
-	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
-		return $this->response(fn () => [
-			'share' => $this->shareService->setEmailAddress($this->shareService->get($token),
-				$emailAddress)
-		]);
 	}
 
 	/**
@@ -106,6 +107,8 @@ class ShareController extends BaseController {
 	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'DELETE', url: '/share/{token}')]
 	public function delete(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token)]);
 	}
@@ -115,6 +118,8 @@ class ShareController extends BaseController {
 	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/restore')]
 	public function restore(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token, restore: true)]);
 	}
@@ -124,6 +129,8 @@ class ShareController extends BaseController {
 	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/lock')]
 	public function lock(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token)]);
 	}
@@ -133,6 +140,8 @@ class ShareController extends BaseController {
 	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/unlock')]
 	public function unlock(string $token): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token, unlock: true)]);
 	}
@@ -143,6 +152,8 @@ class ShareController extends BaseController {
 	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'POST', url: '/share/{token}/invite')]
 	public function sendInvitation(string $token): JSONResponse {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
@@ -157,6 +168,8 @@ class ShareController extends BaseController {
 	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/inviteAll')]
 	public function sendAllInvitations(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $pollId,
@@ -169,9 +182,29 @@ class ShareController extends BaseController {
 	 * @param string $token Share token
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/share/{token}/resolve')]
 	public function resolveGroup(string $token): JSONResponse {
 		return $this->response(fn () => [
 			'shares' => $this->shareService->resolveGroupByToken($token)
+		]);
+	}
+
+	/**
+	 * Set email address
+	 * @param string $token Share token
+	 * @param string $emailAddress Email address
+	 * @deprecated 8.0.0 Use PUT /s/{token}/email/{emailAddress}
+	 */
+	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/email')]
+	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
+		return $this->response(fn () => [
+			'share' => $this->shareService->setEmailAddress(
+				$this->shareService->get($token),
+				$emailAddress
+			)
 		]);
 	}
 }

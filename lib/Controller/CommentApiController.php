@@ -9,16 +9,17 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\CommentService;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 /**
  * @psalm-api
  */
-class CommentApiController extends BaseApiController {
+class CommentApiController extends BaseApiV2Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -34,10 +35,9 @@ class CommentApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function list(int $pollId): JSONResponse {
-		return $this->response(fn () => [
-			'comments' => $this->commentService->list($pollId)
-		]);
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/comments', requirements: ['apiVersion' => '(v2)'])]
+	public function list(int $pollId): DataResponse {
+		return $this->response(fn () => ['comments' => $this->commentService->list($pollId)]);
 	}
 
 	/**
@@ -48,10 +48,9 @@ class CommentApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function add(int $pollId, string $comment): JSONResponse {
-		return $this->response(fn () => [
-			'comment' => $this->commentService->add($comment, $pollId)
-		]);
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll/{pollId}/comment', requirements: ['apiVersion' => '(v2)'])]
+	public function add(int $pollId, string $comment): DataResponse {
+		return $this->response(fn () => ['comment' => $this->commentService->add($comment, $pollId)]);
 	}
 
 	/**
@@ -61,9 +60,9 @@ class CommentApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function delete(int $commentId): JSONResponse {
-		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($commentId)]);
+	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/comment/{commentId}', requirements: ['apiVersion' => '(v2)'])]
+	public function delete(int $commentId): DataResponse {
+		return $this->response(fn () => ['comment' => $this->commentService->delete($commentId)]);
 	}
 
 	/**
@@ -73,9 +72,8 @@ class CommentApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function restore(int $commentId): JSONResponse {
-		return $this->response(fn () => [
-			'comment' => $this->commentService->delete($commentId, true)
-		]);
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/comment/{commentId}/restore', requirements: ['apiVersion' => '(v2)'])]
+	public function restore(int $commentId): DataResponse {
+		return $this->response(fn () => ['comment' => $this->commentService->restore($commentId)]);
 	}
 }

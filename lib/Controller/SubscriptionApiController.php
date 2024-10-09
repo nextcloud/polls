@@ -8,19 +8,18 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Service\SubscriptionService;
-use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 /**
  * @psalm-api
  */
-class SubscriptionApiController extends BaseApiController {
+class SubscriptionApiController extends BaseApiV2Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -36,15 +35,12 @@ class SubscriptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function get(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse([
-				'pollId' => $pollId,
-				'subscribed' => $this->subscriptionService->get($pollId),
-			], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	public function get(int $pollId): DataResponse {
+		return $this->response(fn () => [
+			'pollId' => $pollId,
+			'subscribed' => $this->subscriptionService->get($pollId),
+		]);
 	}
 
 	/**
@@ -54,16 +50,12 @@ class SubscriptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function subscribe(int $pollId): JSONResponse {
-		try {
-			$this->subscriptionService->set(true, $pollId);
-			return new JSONResponse([
-				'pollId' => $pollId,
-				'subscribed' => $this->subscriptionService->get($pollId),
-			], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	public function subscribe(int $pollId): DataResponse {
+		return $this->response(fn () => [
+			'pollId' => $pollId,
+			'subscribed' => $this->subscriptionService->set(true, $pollId),
+		]);
 	}
 
 	/**
@@ -73,15 +65,11 @@ class SubscriptionApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	public function unsubscribe(int $pollId): JSONResponse {
-		try {
-			$this->subscriptionService->set(false, $pollId);
-			return new JSONResponse([
-				'pollId' => $pollId,
-				'subscribed' => $this->subscriptionService->get($pollId),
-			], Http::STATUS_OK);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	public function unsubscribe(int $pollId): DataResponse {
+		return $this->response(fn () => [
+			'pollId' => $pollId,
+			'subscribed' => $this->subscriptionService->set(false, $pollId),
+		]);
 	}
 }
