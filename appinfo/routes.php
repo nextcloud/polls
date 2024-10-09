@@ -7,6 +7,13 @@
 return [
 	'routes' => [
 		// REST-API calls
-		['name' => 'base_api#preflighted_cors', 'url' => '/api/v1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
+		['name' => 'baseApiV1#preflighted_cors', 'url' => '/api/v1.0/{path}', 'verb' => 'OPTIONS', 'requirements' => ['path' => '.+']],
 	],
+	// 'ocs' => [
+	// 	// CORS Preflight
+	// 	['name' => 'api#preflightedCors', 'url' => $apiBase . '{path}', 'verb' => 'OPTIONS', 'requirements' => [
+	// 		'path' => '.+',
+	// 		'apiVersion' => 'v2'
+	// 	]],
+	// ],
 ];

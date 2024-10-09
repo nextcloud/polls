@@ -8,21 +8,18 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Service\VoteService;
-use OCP\AppFramework\Db\DoesNotExistException;
-use OCP\AppFramework\Http;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
-use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 /**
  * @psalm-api
  */
-class VoteApiController extends BaseApiController {
+class VoteApiController extends BaseApiV2Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -38,15 +35,9 @@ class VoteApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[FrontpageRoute(verb: 'GET', url: '/api/v1/poll/{pollId}/votes')]
-	public function list(int $pollId): JSONResponse {
-		try {
-			return new JSONResponse(['votes' => $this->voteService->list($pollId)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'No votes'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/votes', requirements: ['apiVersion' => '(v2)'])]
+	public function list(int $pollId): DataResponse {
+		return $this->response(fn () => ['votes' => $this->voteService->list($pollId)]);
 	}
 
 	/**
@@ -57,15 +48,9 @@ class VoteApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[FrontpageRoute(verb: 'PUT', url: '/api/v1/option/{optionId}/vote/{answer}')]
-	public function set(int $optionId, string $answer): JSONResponse {
-		try {
-			return new JSONResponse(['vote' => $this->voteService->set($optionId, $answer)], Http::STATUS_OK);
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['error' => 'Option or poll not found'], Http::STATUS_NOT_FOUND);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/option/{optionId}/vote/{answer}', requirements: ['apiVersion' => '(v2)'])]
+	public function set(int $optionId, string $answer): DataResponse {
+		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $answer)]);
 	}
 
 	/**
@@ -76,8 +61,8 @@ class VoteApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[FrontpageRoute(verb: 'DELETE', url: '/api/v1/poll/{pollId}/user/{userId}')]
-	public function delete(int $pollId, string $userId = ''): JSONResponse {
+	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/poll/{pollId}/user/{userId}', requirements: ['apiVersion' => '(v2)'])]
+	public function delete(int $pollId, string $userId = ''): DataResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId)]);
 	}
 
@@ -89,8 +74,8 @@ class VoteApiController extends BaseApiController {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[FrontpageRoute(verb: 'DELETE', url: '/api/v1/poll/{pollId}/votes/orphaned')]
-	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
+	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/poll/{pollId}/votes/orphaned', requirements: ['apiVersion' => '(v2)'])]
+	public function deleteOrphaned(int $pollId, string $userId = ''): DataResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
 	}
 }

@@ -10,18 +10,17 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Service\PreferencesService;
+use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
-use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
-use OCP\AppFramework\Http\JSONResponse;
+use OCP\AppFramework\Http\DataResponse;
 use OCP\IRequest;
 
 /**
  * @psalm-api
  */
-class UserApiController extends BaseApiController
-{
+class UserApiController extends BaseApiV2Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -37,10 +36,9 @@ class UserApiController extends BaseApiController
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[FrontpageRoute(verb: 'POST', url: '/api/v1/preferences')]
-	public function writePreferences(array $preferences): JSONResponse
-	{
-		return $this->response(fn() => $this->preferencesService->write($preferences));
+	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/preferences', requirements: ['apiVersion' => '(v2)'])]
+	public function writePreferences(array $preferences): DataResponse {
+		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
 	/**
 	 * get user session
@@ -48,39 +46,13 @@ class UserApiController extends BaseApiController
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[FrontpageRoute(verb: 'GET', url: '/api/v1/session')]
-	public function getSession(): JSONResponse
-	{
-		return new JSONResponse([
+	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/session', requirements: ['apiVersion' => '(v2)'])]
+	public function getSession(): DataResponse {
+		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
 			'currentUser' => $this->acl->getCurrentUser(),
 			'appPermissions' => $this->acl->getPermissionsArray(),
 			'appSettings' => $this->acl->getAppSettings(),
 		]);
-	}
-
-	/**
-	 * Get user preferences
-	 * @deprecated 8.0.0 Use getSession instead
-	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	public function getPreferences(): JSONResponse
-	{
-		return $this->response(fn() => $this->preferencesService->get());
-	}
-
-	/**
-	 * get acl
-	 * @deprecated 8.0.0 Use getSession instead
-	 */
-	#[CORS]
-	#[NoAdminRequired]
-	#[NoCSRFRequired]
-	#[FrontpageRoute(verb: 'GET', url: '/api/v1/acl')]
-	public function getAcl(): JSONResponse
-	{
-		return $this->response(fn() => ['acl' => $this->acl]);
 	}
 }
