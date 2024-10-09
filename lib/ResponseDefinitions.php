@@ -22,7 +22,7 @@ namespace OCA\Polls;
  *  view: boolean,
  *  vote: boolean,
  * }
- * 
+ *
  * @psalm-type PollsCurrentUserStatus = array {
  * 	userRole: string,
  *  isLocked: boolean,
@@ -37,7 +37,7 @@ namespace OCA\Polls;
  *  shareToken: string,
  *  groupInvitations: string[],
  * }
- * 
+ *
  * @psalm-type PollsPollsStatus = array {
  * 	lastInteraction: int,
  *  created: int,
@@ -47,7 +47,7 @@ namespace OCA\Polls;
  *  countOptions: int,
  *  countParticipants: int,
  * }
- * 
+ *
  * @psalm-type PollsUser = array {
  * 	id: string,
  *  displayName: string,
@@ -63,7 +63,7 @@ namespace OCA\Polls;
  *  timeZone?: string,
  *  categories?: string[],
  * }
- * 
+ *
  * @psalm-type PollsPollConfiguration = array {
  * 	title: string,
  *  description: string,
@@ -81,7 +81,7 @@ namespace OCA\Polls;
  *  maxVotesPerOption: int,
  *  maxVotesPerUser: int,
  * }
- * 
+ *
  * @psalm-type PollsPoll = array {
  *   id: int,
  *   type: string,
