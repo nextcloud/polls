@@ -13,6 +13,7 @@ use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\PreferencesService;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -34,6 +35,7 @@ class UserController extends BaseController {
 	 * Read all preferences
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/preferences')]
 	public function getPreferences(): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->get());
@@ -44,6 +46,7 @@ class UserController extends BaseController {
 	 * @param array $preferences
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/preferences')]
 	public function writePreferences(array $preferences): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
@@ -53,6 +56,7 @@ class UserController extends BaseController {
 	 * get session information
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/session')]
 	public function getSession(): JSONResponse {
 		return $this->response(fn () => [
@@ -68,6 +72,7 @@ class UserController extends BaseController {
 	 * Read all calendars
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/calendars')]
 	public function getCalendars(): JSONResponse {
 		return $this->response(fn () => [
@@ -80,6 +85,7 @@ class UserController extends BaseController {
 	 * @deprecated 8.0.0 Use getSession instead
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/acl')]
 	public function getAcl(): JSONResponse {
 		return $this->response(fn () => [

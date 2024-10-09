@@ -23,6 +23,7 @@ use OCA\Polls\Service\WatchService;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
@@ -62,6 +63,7 @@ class PublicController extends BasePublicController {
 	#[PublicPage]
 	#[NoCSRFRequired]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}')]
 	public function votePage() {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
@@ -79,6 +81,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/poll')]
 	public function getPoll(): JSONResponse {
 		return $this->response(function () {
@@ -100,6 +103,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/acl')]
 	public function getAcl(): JSONResponse {
 		return $this->response(fn () => [
@@ -112,6 +116,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/session')]
 	public function getSession(): JSONResponse {
 		return $this->response(fn () => [
@@ -130,6 +135,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/watch')]
 	public function watchPoll(?int $offset): JSONResponse {
 		return $this->responseLong(fn () => [
@@ -143,6 +149,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/share')]
 	public function getShare(string $token): JSONResponse {
 		return $this->response(fn () => [
@@ -155,6 +162,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/votes')]
 	public function getVotes(): JSONResponse {
 		return $this->response(fn () => [
@@ -167,6 +175,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/user')]
 	public function deleteUser(): JSONResponse {
 		return $this->response(fn () => [
@@ -179,6 +188,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/votes/orphaned')]
 	public function deleteOrphanedVotes(): JSONResponse {
 		return $this->response(fn () => [
@@ -191,6 +201,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/options')]
 	public function getOptions(): JSONResponse {
 		return $this->response(fn () => [
@@ -206,6 +217,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/option')]
 	public function addOption(int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => [
@@ -224,6 +236,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/option/{optionId}')]
 	public function deleteOption(int $optionId): JSONResponse {
 		return $this->response(fn () => [
@@ -237,6 +250,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/option/{optionId}/restore')]
 	public function restoreOption(int $optionId): JSONResponse {
 		return $this->response(fn () => [
@@ -251,6 +265,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/vote')]
 	public function setVote(int $optionId, string $setTo): JSONResponse {
 		$option = $this->optionService->get($optionId);
@@ -266,6 +281,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/comments')]
 	public function getComments(): JSONResponse {
 		return $this->response(fn () => [
@@ -279,6 +295,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/comment')]
 	public function addComment(string $message): JSONResponse {
 		return $this->response(fn () => [
@@ -292,6 +309,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/comment/{commentId}')]
 	public function deleteComment(int $commentId): JSONResponse {
 		return $this->response(fn () => [
@@ -305,6 +323,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/comment/{commentId}/restore')]
 	public function restoreComment(int $commentId): JSONResponse {
 		return $this->response(fn () => [
@@ -317,6 +336,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/subscription')]
 	public function getSubscription(): JSONResponse {
 		return $this->response(fn () => [
@@ -329,6 +349,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/subscribe')]
 	public function subscribe(): JSONResponse {
 		return $this->response(fn () => [
@@ -341,6 +362,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/unsubscribe')]
 	public function unsubscribe(): JSONResponse {
 		return $this->response(fn () => [
@@ -356,6 +378,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/check/username')]
 	public function validatePublicDisplayName(string $displayName, string $token): JSONResponse {
 		return $this->response(fn () => [
@@ -369,6 +392,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/check/emailaddress/{emailAddress}')]
 	public function validateEmailAddress(string $emailAddress): JSONResponse {
 		return $this->response(fn () => [
@@ -383,6 +407,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/name/{displayName}')]
 	public function setDisplayName(string $token, string $displayName): JSONResponse {
 		return $this->response(fn () => [
@@ -398,6 +423,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/email/{emailAddress}')]
 	public function setEmailAddress(string $token, string $emailAddress = ''): JSONResponse {
 		return $this->response(fn () => [
@@ -411,6 +437,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/email')]
 	public function deleteEmailAddress(string $token): JSONResponse {
 		return $this->response(fn () => [
@@ -428,6 +455,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/register')]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
 		return $this->responseCreate(fn () => [
@@ -442,6 +470,7 @@ class PublicController extends BasePublicController {
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/resend')]
 	public function resendInvitation(string $token): JSONResponse {
 		$share = $this->shareService->get($token);

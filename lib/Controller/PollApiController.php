@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\ResponseDefinitions as ResponseDefinitions;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
@@ -24,7 +25,8 @@ use OCP\IRequest;
 
 /**
  * @psalm-api
- */
+ * @psalm-import-type PollsPoll from ResponseDefinitions
+ *  */
 class PollApiController extends BaseApiV2Controller {
 	public function __construct(
 		string $appName,

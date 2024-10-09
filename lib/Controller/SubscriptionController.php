@@ -11,6 +11,7 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\Service\SubscriptionService;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
@@ -31,6 +32,7 @@ class SubscriptionController extends BaseController {
 	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/subscription')]
 	public function get(int $pollId): JSONResponse {
 		return $this->response(fn () => [
@@ -43,6 +45,7 @@ class SubscriptionController extends BaseController {
 	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/subscribe')]
 	public function subscribe(int $pollId): JSONResponse {
 		return $this->response(fn () => [
@@ -55,6 +58,7 @@ class SubscriptionController extends BaseController {
 	 * @param int $pollId poll id
 	 */
 	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/unsubscribe')]
 	public function unsubscribe(int $pollId): JSONResponse {
 		return $this->response(fn () => [

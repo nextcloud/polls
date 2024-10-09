@@ -11,6 +11,7 @@ namespace OCA\Polls\Controller;
 use OCA\Polls\Service\SettingsService;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
+use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
@@ -32,6 +33,7 @@ class SettingsController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	#[PublicPage]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/settings/app')]
 	public function getAppSettings(): JSONResponse {
 		return $this->response(fn () => ['appSettings' => $this->settingsService->getAppSettings()]);
@@ -41,6 +43,7 @@ class SettingsController extends BaseController {
 	 * Write app settings
 	 * @param array $appSettings Settings as array
 	 */
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/settings/app')]
 	public function writeAppSettings(array $appSettings): JSONResponse {
 		$this->settingsService->writeAppSettings($appSettings);
