@@ -188,13 +188,17 @@ class PollMapper extends QBMapper {
 		$paramUser = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
 		$paramAnswerYes = $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR);
 
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_votes');
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_count_votes_yes');
+		// migrated to joinVotesCount
+		// $qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_votes');
+		// $qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_count_votes_yes');
+		$this->joinVotesCount($qb, self::TABLE, $paramUser, $paramAnswerYes);
+
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_count_orphaned_votes');
 
 		$this->joinOptionsForMaxDate($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$this->joinGroupShares($qb, self::TABLE);
+		\OC::$server->getLogger()->error(json_encode($qb->getSQL()));
 		return $qb;
 	}
 
@@ -290,6 +294,30 @@ class PollMapper extends QBMapper {
 	}
 
 
+	/**
+	 * Subquery for votes count
+	 */
+	protected function joinVotesCount(IQueryBuilder &$qb, string $fromAlias, IParameter $currentUserId, ?IParameter $answerFilter = null): IQueryBuilder {
+		$joinAlias = 'user_vote_sub';
+
+		$qb->selectAlias($qb->func()->count($joinAlias . '.vote_answer'), 'current_user_count_votes');
+
+		$qb->selectAlias($qb->func()->sum(
+			$qb->createFunction('CASE WHEN '. $joinAlias . '.vote_answer = \'yes\' THEN 1 ELSE 0 END')
+		), 'current_user_count_votes_yes');
+
+		$qb->leftJoin(
+			$fromAlias,
+			Vote::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
+				$qb->expr()->eq($joinAlias . '.user_id', $currentUserId),
+			)
+		);
+
+		return $qb;
+	}
 
 	/**
 	 * Subquery for votes count
