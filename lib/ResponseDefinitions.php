@@ -93,6 +93,7 @@ namespace OCA\Polls;
  *   permissions: PollsPollPermissions,
  *   revealPartitians: boolean,
  * }
+ * @psalm-suppress UnusedClass
  */
 class ResponseDefinitions {
 }
