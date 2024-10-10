@@ -13,7 +13,7 @@
 	import PlusIcon from 'vue-material-design-icons/Plus.vue'
 
 	import UserItem from '../User/UserItem.vue'
-	import { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
+	import { VirtualUserItemType } from '../../Types/index.ts'
 	import { useSharesStore } from '../../stores/shares.ts'
 
 	const sharesStore = useSharesStore()
@@ -21,22 +21,6 @@
 	const userItemProps = {
 		label: t('polls', 'Add a new public link'),
 		type: VirtualUserItemType.AddPublicLink,
-	}
-
-	const user: User = {
-		id: '',
-		displayName: '',
-		emailAddress: '',
-		isNoUser: false,
-		type: UserType.None,
-		subName: null,
-		subtitle: null,
-		desc: null,
-		organisation: null,
-		languageCode: null,
-		localeCode: null,
-		timeZone: null,
-		categories: null,
 	}
 
 	async function addPublicShare() {

@@ -14,7 +14,7 @@
 	import { AppSettingsAPI } from '../../Api/index.js'
 	import { Logger } from '../../helpers/index.ts'
 	import { useSharesStore } from '../../stores/shares.ts'
-import { User } from '../../Types/index.ts'
+	import { User } from '../../Types/index.ts'
 
 	const sharesStore = useSharesStore()
 	const users = ref([])

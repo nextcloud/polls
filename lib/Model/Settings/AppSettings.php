@@ -12,7 +12,6 @@ use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\UserSession;
-// use OCP\AppFramework\Services\IAppConfig;
 use OCP\IAppConfig;
 
 class AppSettings implements JsonSerializable {
