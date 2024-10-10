@@ -12,7 +12,6 @@ use JsonSerializable;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\UserSession;
-// use OCP\AppFramework\Services\IAppConfig;
 use OCP\IAppConfig;
 
 class AppSettings implements JsonSerializable {
@@ -239,7 +238,6 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_IMPRINT_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_IMPRINT_URL),
 			self::SETTING_PRIVACY_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_PRIVACY_URL),
 			self::SETTING_UPDATE_TYPE => $this->getUpdateType(),
-			'storedKeys' => $this->appConfig->getKeys(AppConstants::APP_ID),
 			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
 			'useImprintUrl' => $this->getUseImprintUrl(),
 			'defaultPrivacyUrl' => $this->appConfig->getValueString('theming', 'privacyUrl'),
