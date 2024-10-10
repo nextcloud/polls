@@ -239,7 +239,6 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_IMPRINT_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_IMPRINT_URL),
 			self::SETTING_PRIVACY_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_PRIVACY_URL),
 			self::SETTING_UPDATE_TYPE => $this->getUpdateType(),
-			'storedKeys' => $this->appConfig->getKeys(AppConstants::APP_ID),
 			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
 			'useImprintUrl' => $this->getUseImprintUrl(),
 			'defaultPrivacyUrl' => $this->appConfig->getValueString('theming', 'privacyUrl'),

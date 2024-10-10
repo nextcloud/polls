@@ -150,7 +150,7 @@
 		
 		if (model.value !== nextValue) {
 			model.value = nextValue
-			emit('submit')
+			emit('change')
 		}
 	}
 
@@ -163,7 +163,7 @@
 		
 		if (model.value !== nextValue) {
 			model.value = nextValue
-			emit('submit')
+			emit('change')
 		}
 	}
 
@@ -172,7 +172,6 @@
 	})
 
 </script>
-
 
 <template>
 	<div :class="['input-div', { numeric: useNumModifiers }]">
@@ -195,7 +194,7 @@
 			<Spinner v-if="checking" class="signaling-icon spinner" />
 			<AlertIcon v-else-if="error" class="signaling-icon error" />
 			<CheckIcon v-else-if="success" class="signaling-icon success" />
-			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="emit('change')" />
+			<ArrowRightIcon v-else-if="showSubmit" class="signaling-icon submit" @click="emit('submit')" />
 			<MinusIcon v-if="useNumModifiers" class="modifier subtract" @click="subtract()" />
 			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
 		</div>

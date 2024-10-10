@@ -14,6 +14,7 @@
 	import { AppSettingsAPI } from '../../Api/index.js'
 	import { Logger } from '../../helpers/index.ts'
 	import { useSharesStore } from '../../stores/shares.ts'
+import { User } from '../../Types/index.ts'
 
 	const sharesStore = useSharesStore()
 	const users = ref([])
@@ -39,14 +40,10 @@
 		}
 	}, 250)
 
-	async function clickAdd(payload) {
+	async function clickAdd(user: User) {
+		Logger.debug('Adding share clicAdd', user)	
 		try {
-			await sharesStore.add({
-				user: {
-					...payload,
-				},
-			},
-			)
+			await sharesStore.add(user)
 		} catch {
 			showError(t('polls', 'Error while adding share'))
 		}

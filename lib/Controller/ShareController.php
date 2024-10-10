@@ -55,6 +55,21 @@ class ShareController extends BaseController {
 	}
 
 	/**
+	 * Add share
+	 * @param int $pollId poll id
+	 * @param string $type Share type
+	 * @param string $userId User id
+	 * @param string $displayName Displayname of user
+	 * @param string $emailAddress Email address of user
+	 */
+	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/publicshare')]
+	public function addPublicShare(int $pollId): JSONResponse {
+		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, Share::TYPE_PUBLIC)]);
+	}
+
+	/**
 	 * Change the contraints for email addresses in public polls
 	 * @param string $token Share token
 	 * @param string $value new value
