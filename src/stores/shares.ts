@@ -90,11 +90,25 @@ export const useSharesStore = defineStore('shares', {
 	
 		async add(user: User ): Promise<void> {
 			const sessionStore = useSessionStore()
+
 			try {
-				await SharesAPI.addShare(sessionStore.route.params.id, user)
+				await SharesAPI.addUserShare(sessionStore.route.params.id, user)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error writing share', { error, payload: user })
+				throw error
+			} finally {
+				this.load()
+			}
+		},
+	
+		async addPublicShare(): Promise<void> {
+			const sessionStore = useSessionStore()
+			try {
+				await SharesAPI.addPublicShare(sessionStore.route.params.id)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error writing share', { error})
 				throw error
 			} finally {
 				this.load()

@@ -53,7 +53,7 @@ class SettingsService {
 		$this->appConfig->setValueArray(AppConstants::APP_ID, AppSettings::SETTING_POLL_CREATION_GROUPS, array_column($settingsArray[AppSettings::SETTING_POLL_CREATION_GROUPS], 'id'));
 		$this->appConfig->setValueArray(AppConstants::APP_ID, AppSettings::SETTING_POLL_DOWNLOAD_GROUPS, array_column($settingsArray[AppSettings::SETTING_POLL_DOWNLOAD_GROUPS], 'id'));
 		
-		$this->appConfig->setValueInt(AppConstants::APP_ID, AppSettings::SETTING_AUTO_ARCHIVE_OFFSET, $settingsArray[AppSettings::SETTING_AUTO_ARCHIVE_OFFSET]);
+		$this->appConfig->setValueInt(AppConstants::APP_ID, AppSettings::SETTING_AUTO_ARCHIVE_OFFSET, intval($settingsArray[AppSettings::SETTING_AUTO_ARCHIVE_OFFSET]));
 
 		$this->appConfig->setValueString(AppConstants::APP_ID, AppSettings::SETTING_UPDATE_TYPE, $settingsArray[AppSettings::SETTING_UPDATE_TYPE]);
 		$this->appConfig->setValueString(AppConstants::APP_ID, AppSettings::SETTING_PRIVACY_URL, $settingsArray[AppSettings::SETTING_PRIVACY_URL]);

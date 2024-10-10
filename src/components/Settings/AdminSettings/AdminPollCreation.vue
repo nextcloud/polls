@@ -30,7 +30,7 @@
 				:multiple="true"
 				:loading="isLoading"
 				:placeholder="t('polls', 'Leave empty to disable globally')"
-				@option:selected="appSettingsStore.write()"
+				@update:model-value="appSettingsStore.write()"
 				@search="appSettingsStore.loadGroups" />
 		</div>
 	</div>

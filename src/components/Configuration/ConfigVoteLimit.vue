@@ -57,7 +57,6 @@
 			:num-min="1"
 			:num-max="optionsStore.list.length"
 			num-wrap
-			@submit="pollStore.write()"
 			@change="pollStore.write()"/>
 	</div>
 </template>

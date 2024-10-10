@@ -14,12 +14,20 @@ const shares = {
 		})
 	},
 
-	addShare(pollId, user) {
+	addUserShare(pollId, user) {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/share`,
-			data: { ...user },
-			cancelToken: cancelTokenHandlerObject[this.addShare.name].handleRequestCancellation().token,
+			data: user,
+			cancelToken: cancelTokenHandlerObject[this.addUserShare.name].handleRequestCancellation().token,
+		})
+	},
+
+	addPublicShare(pollId) {
+		return httpInstance.request({
+			method: 'POST',
+			url: `poll/${pollId}/publicshare`,
+			cancelToken: cancelTokenHandlerObject[this.addPublicShare.name].handleRequestCancellation().token,
 		})
 	},
 

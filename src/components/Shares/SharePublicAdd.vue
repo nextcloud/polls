@@ -41,7 +41,7 @@
 
 	async function addPublicShare() {
 		try {
-			await sharesStore.add(user)
+			await sharesStore.addPublicShare()
 		} catch {
 			showError(t('polls', 'Error adding public link'))
 		}
