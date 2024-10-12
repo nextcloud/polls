@@ -74,7 +74,7 @@
   <navigations>
     <navigation>
       <name>Polls</name>
-      <route>polls.page.index</route>
+      <route>polls.page.indexindex</route>
       <icon>app.svg</icon>
       <order>77</order>
     </navigation>
