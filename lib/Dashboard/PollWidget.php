@@ -40,7 +40,7 @@ class PollWidget implements IWidget {
 	}
 
 	public function getUrl(): ?string {
-		return $this->urlGenerator->linkToRouteAbsolute(AppConstants::APP_ID . '.page.index');
+		return $this->urlGenerator->linkToRouteAbsolute(AppConstants::APP_ID . '.page.indexindex');
 	}
 
 	public function load(): void {
