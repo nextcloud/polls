@@ -341,7 +341,7 @@ OC.L10N.register(
     "Unconfirm option" : "خيار Unconfirm",
     "Confirm option" : "تأكيد الخيار",
     "No vote options" : "لا توجد خيارات تصويت",
-    "Select range" : "اختر مدي",
+    "Select range" : "تحديد نطاق",
     "Change date" : "تاريخ التغيير",
     "Change time" : "تغيير الوقت",
     "Remove time" : "إزالة الوقت",

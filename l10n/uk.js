@@ -111,7 +111,7 @@ OC.L10N.register(
     "Login" : "Логін",
     "You can also log in and participate with your regular account." : "Ви також можете увійти і проголосувати із застосуванням свого звичайного акаунту.",
     "Otherwise participate as a guest participant." : "В іншому випадку візьміть участь в опитуванні як гість.",
-    "A name is required." : "Потрібно вказати ім'я.",
+    "A name is required." : "Потрібно зазначити ім'я.",
     "An email address is required." : "Необхідно вказати адресу електронної пошти.",
     "You will receive your personal link after clicking \"OK\"." : "Ви отримаєте своє особисте посилання, коли натиснете \"ОК\".",
     "Enter your email address to get your personal access link." : "Введіть свою електронну адресу, щоб отримати особисте посилання для доступу.",
