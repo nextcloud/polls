@@ -420,6 +420,8 @@
     "Error saving vote" : "Błąd podczas zapisywania głosu",
     "Delete votes" : "Usuń głosy",
     "Poll settings" : "Ustawienia Sondy",
+    "Change poll settings globally (for all accounts)" : "Zmień ustawienia ankiety globalnie (dla wszystkich kont)",
+    "Change share settings globally (for all accounts)" : "Zmień ustawienia udostępniania globalnie (dla wszystkich kont)",
     "Other settings" : "Ustawienia pozostałe",
     "If you are experiencing connection problems, change how auto updates are retrieved." : "Jeśli masz problemy z połączeniem, zmień sposób pobierania aktualizacji automatycznych.",
     "Email options" : "Opcje e-mail",
