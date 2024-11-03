@@ -12,8 +12,8 @@ inputs:
     description: 'App to checkout (default: polls)'
   php-version:
     required: false
-    default: '8.0'
-    description: 'PHP version (default: 8.0)'
+    default: '8.2'
+    description: 'PHP version (default: 8.2)'
   php-tools:
     description: 'Additional php tools'
     required: false

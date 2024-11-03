@@ -33,7 +33,7 @@ class Subscription extends Entity implements JsonSerializable {
 
 
 	public function __construct() {
-		$this->addType('pollId', 'int');
+		$this->addType('pollId', 'integer');
 	}
 
 	/**

@@ -42,9 +42,9 @@ class Comment extends EntityWithUser implements JsonSerializable {
 	protected int $parent = 0;
 
 	public function __construct() {
-		$this->addType('pollId', 'int');
-		$this->addType('timestamp', 'int');
-		$this->addType('deleted', 'int');
+		$this->addType('pollId', 'integer');
+		$this->addType('timestamp', 'integer');
+		$this->addType('deleted', 'integer');
 	}
 
 	/**
