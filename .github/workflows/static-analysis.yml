@@ -15,7 +15,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        ocp-version: ['stable27', 'master']
+        ocp-version: ['stable28', 'master']
         php-versions: ['8.1', '8.2', '8.3']
 
     name: Psalm
@@ -30,10 +30,10 @@ jobs:
           php-tools: composer
 
       - name: Install Nextcloud API
-        run: composer require --dev nextcloud/ocp:dev-${{ matrix.ocp-version }}
+        run: composer require --dev -W nextcloud/ocp:dev-${{ matrix.ocp-version }}
 
       - name: Install symfony/console
-        run: composer require symfony/console
+        run: composer require -W symfony/console
 
       - name: Run coding standards check
         run: composer run psalm

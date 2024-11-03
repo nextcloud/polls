@@ -41,8 +41,8 @@ class Watch extends Entity implements JsonSerializable {
 	protected string $sessionId = '';
 
 	public function __construct() {
-		$this->addType('pollId', 'int');
-		$this->addType('updated', 'int');
+		$this->addType('pollId', 'integer');
+		$this->addType('updated', 'integer');
 	}
 
 	/**

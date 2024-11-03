@@ -26,7 +26,7 @@ jobs:
       fail-fast: false
       matrix:
         php-versions: ['8.1']
-        server-versions: ['stable27']
+        server-versions: ['stable28']
 
     name: SQLite
 

@@ -52,10 +52,10 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	protected ?int $optionId = null;
 
 	public function __construct() {
-		$this->addType('id', 'int');
-		$this->addType('pollId', 'int');
-		$this->addType('voteOptionId', 'int');
-		$this->addType('deleted', 'int');
+		$this->addType('id', 'integer');
+		$this->addType('pollId', 'integer');
+		$this->addType('voteOptionId', 'integer');
+		$this->addType('deleted', 'integer');
 	}
 
 	/**

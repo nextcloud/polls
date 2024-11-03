@@ -126,11 +126,11 @@ class Share extends EntityWithUser implements JsonSerializable {
 	protected int $voted = 0;
 
 	public function __construct() {
-		$this->addType('pollId', 'int');
-		$this->addType('invitationSent', 'int');
-		$this->addType('locked', 'int');
-		$this->addType('reminderSent', 'int');
-		$this->addType('deleted', 'int');
+		$this->addType('pollId', 'integer');
+		$this->addType('invitationSent', 'integer');
+		$this->addType('locked', 'integer');
+		$this->addType('reminderSent', 'integer');
+		$this->addType('deleted', 'integer');
 		$this->urlGenerator = Server::get(IURLGenerator::class);
 	}
 
