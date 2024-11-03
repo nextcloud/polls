@@ -164,25 +164,25 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $participantsCount = 0;
 
 	public function __construct() {
-		$this->addType('created', 'int');
-		$this->addType('expire', 'int');
-		$this->addType('deleted', 'int');
-		$this->addType('anonymous', 'int');
-		$this->addType('allowComment', 'int');
-		$this->addType('allowMaybe', 'int');
-		$this->addType('proposalsExpire', 'int');
-		$this->addType('voteLimit', 'int');
-		$this->addType('optionLimit', 'int');
-		$this->addType('adminAccess', 'int');
-		$this->addType('hideBookedUp', 'int');
-		$this->addType('useNo', 'int');
-		$this->addType('lastInteraction', 'int');
+		$this->addType('created', 'integer');
+		$this->addType('expire', 'integer');
+		$this->addType('deleted', 'integer');
+		$this->addType('anonymous', 'integer');
+		$this->addType('allowComment', 'integer');
+		$this->addType('allowMaybe', 'integer');
+		$this->addType('proposalsExpire', 'integer');
+		$this->addType('voteLimit', 'integer');
+		$this->addType('optionLimit', 'integer');
+		$this->addType('adminAccess', 'integer');
+		$this->addType('hideBookedUp', 'integer');
+		$this->addType('useNo', 'integer');
+		$this->addType('lastInteraction', 'integer');
 		
 		// joined columns
-		$this->addType('isCurrentUserLocked', 'int');
-		$this->addType('maxDate', 'int');
-		$this->addType('minDate', 'int');
-		$this->addType('countOptions', 'int');
+		$this->addType('isCurrentUserLocked', 'integer');
+		$this->addType('maxDate', 'integer');
+		$this->addType('minDate', 'integer');
+		$this->addType('countOptions', 'integer');
 
 		// subqueried columns
 		$this->addType('currentUserVotes', 'int');

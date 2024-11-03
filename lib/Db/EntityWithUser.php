@@ -37,8 +37,8 @@ abstract class EntityWithUser extends Entity {
 
 	public function __construct() {
 		// joined Attributes
-		$this->addType('anonymized', 'int');
-		$this->addType('poll_expire', 'int');
+		$this->addType('anonymized', 'integer');
+		$this->addType('poll_expire', 'integer');
 	}
 	/**
 	 * Anonymized the user completely (ANON_FULL) or just strips out personal information

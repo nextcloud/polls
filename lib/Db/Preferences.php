@@ -45,7 +45,7 @@ class Preferences extends Entity implements JsonSerializable {
 	protected ?string $preferences = '';
 
 	public function __construct() {
-		$this->addType('timestamp', 'int');
+		$this->addType('timestamp', 'integer');
 
 		// initialize with default values
 		$this->setPreferences(json_encode(self::DEFAULT));
