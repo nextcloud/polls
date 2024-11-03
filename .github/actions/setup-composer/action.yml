@@ -57,11 +57,11 @@ runs:
     - name: Install dev packages
       if: steps.cache-composer.outputs.cache-hit != 'true' && inputs.mode == 'dev'
       working-directory: ${{ inputs.working-directory }}
-      run: composer i -W -o
+      run: composer i -o
       shell: bash
 
     - name: Install production packages
       if: steps.cache-composer.outputs.cache-hit != 'true' && inputs.mode == 'production'
       working-directory: ${{ inputs.working-directory }}
-      run: composer i -W --no-dev -o
+      run: composer i --no-dev -o
       shell: bash
