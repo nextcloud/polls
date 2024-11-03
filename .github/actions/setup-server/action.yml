@@ -85,7 +85,7 @@ runs:
     - name: Set up components
       working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
       shell: bash
-      run: composer i
+      run:  -W
 
     - name: Remove Nextcloud API and Doctrine
       working-directory: ${{ inputs.server-path }}/apps/${{ inputs.app-name }}
