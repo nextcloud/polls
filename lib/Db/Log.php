@@ -54,9 +54,9 @@ class Log extends Entity implements JsonSerializable {
 	protected int $processed = 0;
 
 	public function __construct() {
-		$this->addType('pollId', 'int');
-		$this->addType('created', 'int');
-		$this->addType('processed', 'int');
+		$this->addType('pollId', 'integer');
+		$this->addType('created', 'integer');
+		$this->addType('processed', 'integer');
 	}
 
 	/**

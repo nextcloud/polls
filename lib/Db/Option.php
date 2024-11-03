@@ -80,23 +80,23 @@ class Option extends EntityWithUser implements JsonSerializable {
 	protected int $showResults = 0;
 
 	public function __construct() {
-		$this->addType('released', 'int');
-		$this->addType('pollId', 'int');
-		$this->addType('timestamp', 'int');
-		$this->addType('order', 'int');
-		$this->addType('confirmed', 'int');
-		$this->addType('duration', 'int');
-		$this->addType('deleted', 'int');
+		$this->addType('released', 'integer');
+		$this->addType('pollId', 'integer');
+		$this->addType('timestamp', 'integer');
+		$this->addType('order', 'integer');
+		$this->addType('confirmed', 'integer');
+		$this->addType('duration', 'integer');
+		$this->addType('deleted', 'integer');
 
 		// joined Attributes
-		$this->addType('optionLimit', 'int');
-		$this->addType('voteLimit', 'int');
-		$this->addType('userCountYesVotes', 'int');
-		$this->addType('countOptionVotes', 'int');
-		$this->addType('votesYes', 'int');
-		$this->addType('votesNo', 'int');
-		$this->addType('votesMaybe', 'int');
-		$this->addType('showResults', 'int');
+		$this->addType('optionLimit', 'integer');
+		$this->addType('voteLimit', 'integer');
+		$this->addType('userCountYesVotes', 'integer');
+		$this->addType('countOptionVotes', 'integer');
+		$this->addType('votesYes', 'integer');
+		$this->addType('votesNo', 'integer');
+		$this->addType('votesMaybe', 'integer');
+		$this->addType('showResults', 'integer');
 	}
 
 	/**
