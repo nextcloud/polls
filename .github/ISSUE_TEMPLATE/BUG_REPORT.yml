@@ -153,11 +153,11 @@ body:
       description: |
         Which Nextcloud Server version are you running.
       options:
-        - "Nextcloud 25"
-        - "Nextcloud 26"
         - "Nextcloud 27"
         - "Nextcloud 28"
         - "Nextcloud 29"
+        - "Nextcloud 30"
+        - "Nextcloud 31"
         - "Other/Don't know"
     validations:
       required: true
@@ -186,7 +186,7 @@ body:
     attributes:
       label: Other PHP version
       description: Add your _other_ PHP versoin
-      placeholder: i.e. PHP 7.4
+      placeholder: i.e. PHP 8.3
 
   - type: dropdown
     id: server-database
