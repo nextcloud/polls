@@ -40,7 +40,7 @@ OC.L10N.register(
     "Public link" : "Publiskā saite",
     "Other settings" : "Citi iestatījumi",
     "Yes" : "Jā",
-    "Administration" : "Administrēšana",
+    "Administration" : "Pārvaldīšana",
     "Details" : "Detaļas",
     "Configuration" : "Konfigurācija",
     "Sharing" : "Koplietošana",
