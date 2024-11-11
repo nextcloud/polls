@@ -498,7 +498,7 @@ OC.L10N.register(
     "Lock share" : "قَفل المشاركة",
     "Delete share" : "حذف المشاركة",
     "Restore share" : "استعادة مشاركة",
-    "Share label" : "علامة المشاركة",
+    "Share label" : "علامة رابط المشاركة",
     "Share of {displayName} unlocked" : "مشاركة {displayName} تمّ فكُّ قَفلِها",
     "Share of {displayName} locked" : "مشاركة {displayName} تمّ قَفلُها",
     "Error while changing lock status of share {displayName}" : "حدث خطأ أثناء تغيير قفل حالة المشاركة {displayName}",
