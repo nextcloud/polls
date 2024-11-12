@@ -15,10 +15,11 @@
 
 	import { SignalingType } from '../../../Types/index.ts'
 
-	const model = defineModel({
+	const model = defineModel<string | number>({
 		required: true,
-		type: String,
+		type: [ String, Number ],
 	})
+	const numericModelValue = computed(() => typeof model.value === "number" ? model.value : parseInt(model.value))
 
 	const vInputFocus = {
 		mounted: (el) => {
@@ -106,7 +107,7 @@
 			return false
 		}
 		return true
-	}	
+	}
 
 	/**
 	 * Check if value is within numMin and numMax
@@ -118,7 +119,7 @@
 			if (
 				props.numWrap && isNumMinSet.value
 				&& assertBoundaries()
-				&& parseInt(model.value) === props.numMax
+				&& numericModelValue.value === props.numMax
 			) {
 				value = props.numMin
 			} else {
@@ -131,7 +132,7 @@
 				props.numWrap &&
 				isNumMaxSet.value
 				&& assertBoundaries()
-				&& parseInt(model.value) === props.numMin
+				&& numericModelValue.value === props.numMin
 			) {
 				value = props.numMax
 			} else {
@@ -146,8 +147,9 @@
 	 *  Add modifierStepValue to value
 	 */
 	function add() {
-		const nextValue = numCheckBoundaries(parseInt(model.value) + props.modifierStepValue)
-		
+
+		const nextValue = numCheckBoundaries(numericModelValue.value + props.modifierStepValue)
+
 		if (model.value !== nextValue) {
 			model.value = nextValue
 			emit('change')
@@ -159,8 +161,8 @@
 	 * emits 'change' event if model.value has changed
 	 */
 	function subtract() {
-		const nextValue = numCheckBoundaries(parseInt(model.value) - props.modifierStepValue)
-		
+		const nextValue = numCheckBoundaries(numericModelValue.value - props.modifierStepValue)
+
 		if (model.value !== nextValue) {
 			model.value = nextValue
 			emit('change')
@@ -210,7 +212,6 @@
 
 	.input-div {
 		position: relative;
-		flex: 1;
 
 		label {
 			display: block;
@@ -260,8 +261,8 @@
 		}
 
 		&.numeric .input-wrapper {
-			min-width: 110px;
-			max-width: 150px;
+			min-width: 9rem;
+			max-width: 10rem;
 			input {
 				text-align: center;
 			}

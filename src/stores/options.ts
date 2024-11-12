@@ -12,16 +12,12 @@ import orderBy from 'lodash/orderBy'
 import { usePollStore, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { Answer } from './votes.ts'
+import { TimeUnits } from '../constants/dateUnits.ts'
 
 export type Sequence = {
 	unit: { name?: string, value: string }
-	step: number
+	value: number
 	amount: number
-}
-
-export type Shift = {
-	step: number
-	unit: { name?: string, value: string }	
 }
 
 export type OptionVotes = {
@@ -49,6 +45,7 @@ export type Option = {
 	duration: number
 	locked: boolean
 	hash: string
+	isOwner: boolean
 	votes: OptionVotes
 	owner: User | null
 }
@@ -81,7 +78,7 @@ export const useOptionsStore = defineStore('options', {
 		orderedOptions(state): Option[] {
 			return state.ranked ? this.rankedOptions : this.sortedOptions
 		},
-		
+
 		proposalsExist(state): boolean {
 			return !!state.list.filter((option) => option.owner).length
 		},
@@ -89,10 +86,14 @@ export const useOptionsStore = defineStore('options', {
 		confirmed(state): Option[] {
 			return state.list.filter((option) => option.confirmed > 0)
 		},
-	
+
 	},
 
 	actions: {
+		find(timestamp: number, duration: number): Option | undefined {
+			return this.list.find((option) => option.timestamp === timestamp && option.duration === duration)
+		},
+
 		explodeDates(option: Option) {
 			const from = moment.unix(option.timestamp)
 			const to = moment.unix(option.timestamp + Math.max(0, option.duration))
@@ -101,7 +102,7 @@ export const useOptionsStore = defineStore('options', {
 			// then we have a day long event (one or multiple days)
 			// In this case we want to suppress the display of any time information
 			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
-	
+
 			const dayModifier = dayLongEvent ? 1 : 0
 			// modified to date, in case of day long events, a second gets substracted
 			// to set the begin of the to day to the end of the previous date
@@ -138,14 +139,14 @@ export const useOptionsStore = defineStore('options', {
 				raw: `${from.format('llll')} - ${toModified.format('llll')}`,
 				iso: `${moment(from).toISOString()} - ${moment(to).toISOString()}`,
 			}
-	
+
 		},
 
 		async load() {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
-	
+
 				if (sessionStore.route.name === 'publicVote') {
 					response = await PublicAPI.getOptions(sessionStore.route.params.token)
 				} else if (sessionStore.route.params.id) {
@@ -162,12 +163,12 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-	
+
 		updateOption(payload: { option: Option }) {
 			const index = this.list.findIndex((option) =>
 				parseInt(option.id) === payload.option.id,
 			)
-	
+
 			if (index < 0) {
 				this.list.push(payload.option)
 			} else {
@@ -175,7 +176,7 @@ export const useOptionsStore = defineStore('options', {
 			}
 			this.list.sort((a, b) => (a.order < b.order) ? -1 : (a.order > b.order) ? 1 : 0)
 		},
-	
+
 		async add(payload: SimpleOption) {
 			const sessionStore = useSessionStore()
 			try {
@@ -208,7 +209,7 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-	
+
 		async update(payload: { option: Option }) {
 			try {
 				const response = await OptionsAPI.updateOption(payload.option)
@@ -219,7 +220,7 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-	
+
 		async delete(payload: { option: Option }) {
 			const sessionStore = useSessionStore()
 			try {
@@ -236,7 +237,7 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-	
+
 		async restore(payload: { option: Option }) {
 			const sessionStore = useSessionStore()
 			try {
@@ -253,7 +254,7 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-	
+
 		async addBulk(payload: { text: string }) {
 			const sessionStore = useSessionStore()
 			try {
@@ -266,17 +267,17 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-	
+
 		confirmOption(payload: { option: Option }) {
 			const index = this.list.findIndex((option: Option) => option.id === payload.option.id)
-	
+
 			this.list[index].confirmed = !this.list[index].confirmed
 		},
-	
+
 		async confirm(payload: { option: Option }) {
 			const index = this.list.findIndex((option: Option) => option.id === payload.option.id)
 			this.list[index].confirmed = !this.list[index].confirmed
-	
+
 			try {
 				const response = await OptionsAPI.confirmOption(payload.option.id)
 				this.updateOption({ option: response.data.option })
@@ -287,10 +288,10 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-	
+
 		async changeOrder(oldIndex: number, newIndex: number) {
 			const sessionStore = useSessionStore()
-			
+
 			this.list.splice(newIndex, 0, this.list.splice(oldIndex, 1)[0]);
 
 			try {
@@ -302,12 +303,12 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-		
+
 		async sequence(payload: { option: Option; sequence: Sequence }) {
 			try {
 				const response = await OptionsAPI.addOptionsSequence(
 					payload.option.id,
-					payload.sequence.step,
+					payload.sequence.value,
 					payload.sequence.unit.value,
 					payload.sequence.amount,
 				)
@@ -319,13 +320,13 @@ export const useOptionsStore = defineStore('options', {
 				throw error
 			}
 		},
-	
-		async shift(payload: { shift: Shift }) {
+
+		async shift(payload: { shift: TimeUnits }) {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await OptionsAPI.shiftOptions(
 					sessionStore.route.params.id,
-					payload.shift.step,
+					payload.shift.value,
 					payload.shift.unit.value,
 				)
 				this.$patch({ options: response.data.options })

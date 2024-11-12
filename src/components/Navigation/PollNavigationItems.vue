@@ -32,7 +32,9 @@
 </script>
 
 <template>
-	<NcAppNavigationItem :name="props.poll.configuration.title" :to="{name: 'vote', params: {id: props.poll.id}}" :class="{ closed: props.poll.status.expired }">
+	<NcAppNavigationItem :name="props.poll.configuration.title" 
+		:to="{name: 'vote', params: {id: props.poll.id}}" 
+		:class="{ closed: props.poll.status.expired }">
 		<template #icon>
 			<TextPollIcon v-if="props.poll.type === PollType.Text" />
 			<DatePollIcon v-else />

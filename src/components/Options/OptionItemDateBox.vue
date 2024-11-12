@@ -94,7 +94,7 @@
 	</div>
 
 	<div v-else :title="dateLocalFormatUTC" class="option-item__option--datebox">
-		<div class="event-date">
+		<div :class="['event-date', {aligned: props.display === BoxType.AlignedText}]">
 			<div class="event-from">
 				<div class="month">
 					{{ eventOption.from.month }}

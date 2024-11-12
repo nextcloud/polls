@@ -310,7 +310,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getUserRole(): string {
-		if ($this->userSession->getCurrentUserId() === $this->getOwner()) {
+		if ($this->getIsOwner()) {
 			return self::ROLE_OWNER;
 		}
 		if ($this->getIsCurrentUserLocked() && $this->userRole === self::ROLE_ADMIN) {

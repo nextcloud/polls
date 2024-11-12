@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { ref } from 'vue'
+	import { PropType, ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
@@ -37,6 +37,13 @@
 		'var(--content-deleted)': `" (${t('polls', 'deleted')})"`
 	}
 
+	const props = defineProps({
+		display: {
+			type: String as PropType<BoxType>,
+			default: BoxType.Date,
+		},
+	})
+
 	function cloneOptionModal(option: Option) {
 		optionToClone.value = option
 		cloneModal.value = true
@@ -53,7 +60,7 @@
 				:key="option.id"
 				:option="option"
 				:poll-type="pollType"
-				:display="BoxType.Date"
+				:display="props.display"
 				tag="li">
 				<template #icon>
 					<OptionItemOwner v-if="pollStore.permissions.addOptions"
@@ -61,7 +68,7 @@
 						:option="option"
 						class="owner" />
 				</template>
-				<template v-if="pollStore.permissions.edit" #actions>
+				<template v-if="pollStore.permissions.edit || option.isOwner" #actions>
 					<NcActions v-if="!pollStore.isClosed" class="action">
 						<NcActionButton v-if="!option.deleted" :name="t('polls', 'Delete option')" @click="optionsStore.delete({ option })">
 							<template #icon>

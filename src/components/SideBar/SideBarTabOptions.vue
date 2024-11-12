@@ -22,6 +22,7 @@
 	import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 	import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
 	import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
+	import ActionAddDateOption from '../Actions/modules/ActionAddDateOption.vue'
 
 	const optionsStore = useOptionsStore()
 	const pollStore = usePollStore()
@@ -46,6 +47,12 @@
 
 	const optionAddDatesProps = {
 		caption: t('polls', 'Add a date'),
+		showCaption: true,
+		primary: true,
+	}
+
+	const optionAddDatesModalProps = {
+		caption: t('polls', 'Add'),
 		showCaption: true,
 		primary: true,
 	}
@@ -87,6 +94,7 @@
 
 			<template #actions>
 				<OptionsDateAdd v-if="!pollStore.isClosed" v-bind="optionAddDatesProps" />
+				<ActionAddDateOption v-if="!pollStore.isClosed" v-bind="optionAddDatesModalProps" />
 			</template>
 		</ConfigBox>
 

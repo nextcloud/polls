@@ -9,7 +9,7 @@ export { Combo } from '../stores/combo.ts'
 export { Comment, Comments, CommentsGrouped } from '../stores/comments.ts'
 export { Poll, PollType, AccessType, ShowResults, AllowProposals, PollConfiguration, PollStatus, PollPermissions, CurrentUserStatus } from '../stores/poll.ts'
 export { SortType, FilterType, PollCategory, Meta, PollList } from '../stores/polls.ts'
-export { Option, OptionVotes, Sequence, Shift, SimpleOption, Options } from '../stores/options.ts'
+export { Option, OptionVotes, Sequence, SimpleOption, Options } from '../stores/options.ts'
 export { Share, Shares, ShareType } from '../stores/shares.ts'
 export { Route, UserStatus, Session } from '../stores/session.ts'
 export { UserPreferences, SessionSettings, Calendar, Preferences, ViewMode } from '../stores/preferences.ts'
@@ -22,6 +22,7 @@ export enum StatusResults {
 	Loading = 'loading',
 	Loaded = 'loaded',
 	Unchanged = 'unchanged',
+	None = '',
 }
 
 export enum SignalingType {
@@ -57,6 +58,7 @@ export enum VirtualUserItemType {
 export enum BoxType {
 	Text = 'textBox',
 	Date = 'dateBox',
+	AlignedText = 'alignedTextBox',
 }
 
 // export type AppSettings = {
