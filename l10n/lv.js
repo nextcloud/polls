@@ -28,6 +28,7 @@ OC.L10N.register(
     "never" : "nekad",
     "Owner" : "Īpašnieks",
     "Created" : "Izveidots",
+    "No description provided" : "Apraksts nav sniegts",
     "Login" : "Autorizēties",
     "Preview" : "Priekšskatīt",
     "Privacy policy link:" : "Privātuma politikas saite:",
