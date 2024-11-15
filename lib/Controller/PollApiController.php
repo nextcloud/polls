@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\ResponseDefinitions as ResponseDefinitions;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
@@ -31,7 +30,6 @@ class PollApiController extends BaseApiV2Controller {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private Acl $acl,
 		private CommentService $commentService,
 		private PollService $pollService,
 		private OptionService $optionService,
@@ -52,7 +50,7 @@ class PollApiController extends BaseApiV2Controller {
 	public function list(): DataResponse {
 		return $this->response(fn () => ['polls' => $this->pollService->list()]);
 	}
-	
+
 	/**
 	 * get complete poll
 	 * @param int $pollId Poll id
@@ -69,10 +67,9 @@ class PollApiController extends BaseApiV2Controller {
 			'comments' => $this->commentService->list($pollId),
 			'shares' => $this->shareService->list($pollId),
 			'subscribed' => $this->subscriptionService->get($pollId),
-			'acl' => $this->acl,
 		]);
 	}
-	
+
 	/**
 	 * Add poll
 	 * @param string $title Poll title

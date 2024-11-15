@@ -193,7 +193,7 @@ class PollMapper extends QBMapper {
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_orphaned_votes');
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryParticipantsCount(self::TABLE)->getSQL() . ')'), 'participants_count');
 
-		$this->joinOptionsForMaxDate($qb, self::TABLE);
+		$this->joinOptions($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$this->joinGroupShares($qb, self::TABLE);
 		return $qb;
@@ -269,15 +269,16 @@ class PollMapper extends QBMapper {
 	 * the max value is null
 	 * and adds the number of available options
 	 */
-	protected function joinOptionsForMaxDate(IQueryBuilder &$qb, string $fromAlias): void {
+	protected function joinOptions(IQueryBuilder &$qb, string $fromAlias): void {
 		$joinAlias = 'options';
 
 		$zero = $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT);
 		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
 
 		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), ' . $zero . ') AS max_date'))
-			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'));
-		$qb->selectAlias($qb->func()->count($joinAlias . '.id'), 'count_options');
+			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'))
+			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.owner != \'\' THEN 1 END)) AS proposals_count'));
+		$qb->selectAlias($qb->func()->count($joinAlias . '.id'), 'optionsCount');
 
 		$qb->leftJoin(
 			$fromAlias,

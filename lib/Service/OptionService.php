@@ -21,7 +21,6 @@ use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
-use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
@@ -36,7 +35,6 @@ class OptionService {
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function __construct(
-		private Acl $acl,
 		private IEventDispatcher $eventDispatcher,
 		private LoggerInterface $logger,
 		private Option $option,
@@ -51,7 +49,7 @@ class OptionService {
 	public function get(int $optionId): Option {
 		return $this->optionMapper->find($optionId);
 	}
-	
+
 	/**
 	 * Get all options of given poll
 	 *
@@ -83,7 +81,7 @@ class OptionService {
 	 * @return Option
 	 */
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
-		$this->getPoll($pollId, Poll::PERMISSION_OPTIONS_ADD);
+		$this->getPoll($pollId, Poll::PERMISSION_OPTION_ADD);
 
 		$this->option = new Option();
 		$this->option->setPollId($pollId);
@@ -92,13 +90,13 @@ class OptionService {
 		$this->option->setOption($timestamp, $duration, $pollOptionText, $order);
 
 		if (!$this->poll->getIsPollOwner()) {
-			$this->option->setOwner($this->acl->getCurrentUserId());
+			$this->option->setOwner($this->userSession->getCurrentUserId());
 		}
 
 		try {
 			$this->option = $this->optionMapper->insert($this->option);
 		} catch (Exception $e) {
-			
+
 			// TODO: Change exception catch to actual exception
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
 			// UniqueConstraintViolationException
@@ -128,7 +126,7 @@ class OptionService {
 	 * @return Option[]
 	 */
 	public function addBulk(int $pollId, string $pollOptionText = ''): array {
-		$this->getPoll($pollId, Poll::PERMISSION_OPTIONS_ADD);
+		$this->getPoll($pollId, Poll::PERMISSION_OPTION_ADD);
 
 		$newOptions = array_unique(explode(PHP_EOL, $pollOptionText));
 		foreach ($newOptions as $option) {
@@ -186,7 +184,7 @@ class OptionService {
 	 */
 	public function confirm(int $optionId): Option {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_OPTION_CONFIRM);
 
 		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
 		$this->option = $this->optionMapper->update($this->option);
@@ -209,7 +207,7 @@ class OptionService {
 	 */
 	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
 		$this->option = $this->optionMapper->find($optionId);
-		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_OPTION_ADD);
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Sequences are only available in date polls');
@@ -250,7 +248,7 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
-		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
+		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_OPTIONS_SHIFT);
 		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
@@ -278,7 +276,7 @@ class OptionService {
 	 */
 	public function clone(int $fromPollId, int $toPollId): void {
 		$this->pollMapper->find($fromPollId)->request(Poll::PERMISSION_POLL_VIEW);
-		$this->pollMapper->find($toPollId)->request(Poll::PERMISSION_POLL_EDIT);
+		$this->pollMapper->find($toPollId)->request(Poll::PERMISSION_OPTION_ADD);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
 			$option = new Option();

@@ -13,7 +13,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Subscription;
 use OCA\Polls\Db\SubscriptionMapper;
 use OCA\Polls\Exceptions\ForbiddenException;
-use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 
@@ -24,7 +24,7 @@ class SubscriptionService {
 	public function __construct(
 		private SubscriptionMapper $subscriptionMapper,
 		private PollMapper $pollMapper,
-		private Acl $acl,
+		private UserSession $userSession,
 	) {
 	}
 
@@ -32,7 +32,7 @@ class SubscriptionService {
 		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_VIEW);
 
 		try {
-			$this->subscriptionMapper->findByPollAndUser($pollId, $this->acl->getCurrentUserId());
+			$this->subscriptionMapper->findByPollAndUser($pollId, $this->userSession->getCurrentUserId());
 			// Subscription exists
 			return true;
 		} catch (DoesNotExistException $e) {
@@ -46,7 +46,7 @@ class SubscriptionService {
 		if (!$setToSubscribed) {
 			// user wants to unsubscribe, allow unsubscribe neverteheless the permissions are set
 			try {
-				$subscription = $this->subscriptionMapper->findByPollAndUser($pollId, $this->acl->getCurrentUserId());
+				$subscription = $this->subscriptionMapper->findByPollAndUser($pollId, $this->userSession->getCurrentUserId());
 				$this->subscriptionMapper->delete($subscription);
 			} catch (DoesNotExistException $e) {
 				// Not found, assume already unsubscribed
@@ -55,7 +55,7 @@ class SubscriptionService {
 		} else {
 			try {
 				$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_SUBSCRIBE);
-				$this->add($pollId, $this->acl->getCurrentUserId());
+				$this->add($pollId, $this->userSession->getCurrentUserId());
 			} catch (ForbiddenException $e) {
 				return false;
 			} catch (Exception $e) {

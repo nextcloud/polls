@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
@@ -30,7 +29,6 @@ class PollController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private Acl $acl,
 		private MailService $mailService,
 		private OptionService $optionService,
 		private PollService $pollService,
@@ -69,7 +67,6 @@ class PollController extends BaseController {
 	public function get(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->get($pollId),
-			'acl' => $this->acl,
 		]);
 	}
 
@@ -87,7 +84,6 @@ class PollController extends BaseController {
 			'comments' => $this->commentService->list($pollId),
 			'shares' => $this->shareService->list($pollId),
 			'subscribed' => $this->subscriptionService->get($pollId),
-			'acl' => $this->acl,
 		]);
 	}
 
@@ -112,7 +108,6 @@ class PollController extends BaseController {
 	public function update(int $pollId, array $poll): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->update($pollId, $poll),
-			'acl' => $this->acl,
 		]);
 	}
 
@@ -157,7 +152,6 @@ class PollController extends BaseController {
 	public function close(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->close($pollId),
-			'acl' => $this->acl,
 		]);
 	}
 
@@ -170,7 +164,6 @@ class PollController extends BaseController {
 	public function reopen(int $pollId): JSONResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->reopen($pollId),
-			'acl' => $this->acl,
 		]);
 	}
 

@@ -31,8 +31,8 @@ use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
-use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Model\SentResult;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -61,7 +61,7 @@ class ShareService {
 		private SystemService $systemService,
 		private Share $share,
 		private MailService $mailService,
-		private Acl $acl,
+		private AppSettings $appSettings,
 		private NotificationService $notificationService,
 		private PollMapper $pollMapper,
 		private UserMapper $userMapper,
@@ -242,7 +242,7 @@ class ShareService {
 		} else {
 			throw new InvalidShareTypeException('Displayname can only be set for external shares.');
 		}
-		
+
 		$this->share = $this->shareMapper->update($this->share);
 		$this->eventDispatcher->dispatchTyped($dispatchEvent);
 
@@ -269,7 +269,7 @@ class ShareService {
 		} else {
 			throw new InvalidShareTypeException('Label can only be set for public shares.');
 		}
-		
+
 		$this->share = $this->shareMapper->update($this->share);
 		$this->eventDispatcher->dispatchTyped($dispatchEvent);
 
@@ -559,11 +559,12 @@ class ShareService {
 		string $displayName = '',
 		string $emailAddress = '',
 	): Share {
-		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
+		$poll = $this->pollMapper->find($pollId);
+		$poll->request(Poll::PERMISSION_POLL_EDIT);
 
 
 		if ($type === UserBase::TYPE_PUBLIC) {
-			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
+			$this->appSettings->getPublicSharesAllowed();
 		}
 
 		$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));
@@ -588,7 +589,7 @@ class ShareService {
 	 * or is accessibale for use by the current user
 	 */
 	private function validateShareType(): void {
-		
+
 		$valid = match ($this->share->getType()) {
 			Share::TYPE_PUBLIC,	Share::TYPE_EMAIL, Share::TYPE_EXTERNAL => true,
 			Share::TYPE_USER => $this->share->getUserId() === $this->userSession->getCurrentUserId(),
@@ -662,7 +663,7 @@ class ShareService {
 			$this->share->setLanguage($userGroup->getLanguageCode());
 			$this->share->setTimeZoneName($timeZone);
 		}
-		
+
 		try {
 			$this->share = $this->shareMapper->insert($this->share);
 			// return new created share

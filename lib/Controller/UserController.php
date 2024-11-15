@@ -8,9 +8,10 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Model\Acl;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\PreferencesService;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
@@ -26,7 +27,8 @@ class UserController extends BaseController {
 		IRequest $request,
 		private PreferencesService $preferencesService,
 		private CalendarService $calendarService,
-		private Acl $acl,
+		private UserSession $userSession,
+		private AppSettings $appSettings,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -51,7 +53,7 @@ class UserController extends BaseController {
 	public function writePreferences(array $preferences): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
-	
+
 	/**
 	 * get session information
 	 */
@@ -61,13 +63,13 @@ class UserController extends BaseController {
 	public function getSession(): JSONResponse {
 		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
-			'currentUser' => $this->acl->getCurrentUser(),
-			'appPermissions' => $this->acl->getPermissionsArray(),
-			'appSettings' => $this->acl->getAppSettings(),
+			'currentUser' => $this->userSession->getUser(),
+			'appPermissions' => $this->appSettings->getPermissionsArray(),
+			'appSettings' => $this->appSettings->getAppSettings(),
 			'share' => null,
 		]);
 	}
-	
+
 	/**
 	 * Read all calendars
 	 */
@@ -77,19 +79,6 @@ class UserController extends BaseController {
 	public function getCalendars(): JSONResponse {
 		return $this->response(fn () => [
 			'calendars' => $this->calendarService->getCalendars(),
-		]);
-	}
-	
-	/**
-	 * get acl for user
-	 * @deprecated 8.0.0 Use getSession instead
-	 */
-	#[NoAdminRequired]
-	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'GET', url: '/acl')]
-	public function getAcl(): JSONResponse {
-		return $this->response(fn () => [
-			'acl' => $this->acl,
 		]);
 	}
 }

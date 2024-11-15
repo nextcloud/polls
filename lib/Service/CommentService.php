@@ -15,7 +15,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Event\CommentAddEvent;
 use OCA\Polls\Event\CommentDeleteEvent;
 use OCA\Polls\Exceptions\Exception;
-use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\UserSession;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class CommentService {
@@ -26,7 +26,7 @@ class CommentService {
 		private CommentMapper $commentMapper,
 		private Comment $comment,
 		private IEventDispatcher $eventDispatcher,
-		protected Acl $acl,
+		private UserSession $userSession,
 		private PollMapper $pollMapper,
 	) {
 	}
@@ -69,7 +69,7 @@ class CommentService {
 
 		$this->comment = new Comment();
 		$this->comment->setPollId($pollId);
-		$this->comment->setUserId($this->acl->getCurrentUserId());
+		$this->comment->setUserId($this->userSession->getCurrentUserId());
 		$this->comment->setComment($message);
 		$this->comment->setTimestamp(time());
 		$this->comment = $this->commentMapper->insert($this->comment);
@@ -95,10 +95,10 @@ class CommentService {
 	public function delete(int $commentId, bool $restore = false): Comment {
 		$this->comment = $this->commentMapper->find($commentId);
 
-		if (!$this->acl->matchUser($this->comment->getUserId())) {
+		if (!$this->comment->getIsOwner()) {
 			$this->pollMapper->find($this->comment->getPollId())->request(Poll::PERMISSION_COMMENT_DELETE);
 		}
-	
+
 		$this->comment->setDeleted($restore ? 0 : time());
 		$this->commentMapper->update($this->comment);
 		$this->eventDispatcher->dispatchTyped(new CommentDeleteEvent($this->comment));
