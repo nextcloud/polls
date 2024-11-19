@@ -308,14 +308,14 @@ class UserBase implements JsonSerializable {
 	 *
 	 * @return (bool|string|string[])[]
 	 *
-	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, subName: string, subtitle: string, isNoUser: bool, desc: string, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, icon: string, categories: array<string>}
+	 * @psalm-return array{userId: string, displayName: string, emailAddress: string, subname: string, subtitle: string, isNoUser: bool, desc: string, type: string, id: string, user: string, organisation: string, languageCode: string, localeCode: string, timeZone: string, icon: string, categories: array<string>}
 	 */
 	public function getRichUserArray(): array {
 		return	[
 			'userId' => $this->getId(),
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getEmailAddress(),
-			'subName' => $this->getSubName(),
+			'subname' => $this->getSubName(),
 			'subtitle' => $this->getDescription(),
 			'isNoUser' => $this->getIsNoUser(),
 			'desc' => $this->getDescription(),
