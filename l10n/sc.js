@@ -153,6 +153,7 @@ OC.L10N.register(
     "Copy link to clipboard" : "Còpia su ligòngiu in punta de billete",
     "Email address is optional" : "S'indiritzu de posta eletrònica est optzionale",
     "Email address is mandatory" : "S'indiritzu de posta eletrònica est obligatòriu",
+    "Delete share" : "Cantzella sa cumpartzidura",
     "Restore share" : "Riprìstina cumpartzidura",
     "Share label" : "Cumpartzi eticheta",
     "Resolving of {name} is not possible. The circles app is not enabled." : "No faghet a risòlvere {name}. S'aplicatzione de giros no est ativa.",
