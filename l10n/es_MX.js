@@ -20,6 +20,8 @@ OC.L10N.register(
     "Cancel" : "Cancelar",
     "Apply" : "Aplicar",
     "Participants" : "Participantes",
+    "From" : "De",
+    "To" : "Para",
     "Email address" : "Dirección de correo electrónico",
     "No" : "No",
     "Delete poll" : "Borrar encuesta",
