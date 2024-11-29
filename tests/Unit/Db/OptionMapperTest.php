@@ -6,7 +6,7 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Db;
+namespace OCA\Polls\Tests\Unit\Db;
 
 use OCA\Polls\Tests\Unit\UnitTestCase;
 
@@ -24,11 +24,11 @@ class OptionMapperTest extends UnitTestCase {
 	private OptionMapper $optionMapper;
 	private PollMapper $pollMapper;
 	private VoteMapper $voteMapper;
-	/** @var Poll[] $polls */ 
+	/** @var Poll[] $polls */
 	private array $polls = [];
-	/** @var Option[] $options */ 
+	/** @var Option[] $options */
 	private array $options = [];
-	/** @var Vote[] $votes */ 
+	/** @var Vote[] $votes */
 	private array $votes = [];
 
 	/**
@@ -52,13 +52,13 @@ class OptionMapperTest extends UnitTestCase {
 
 			for ($count = 0; $count < 2; $count++) {
 
-				/** @var Option $option */ 
+				/** @var Option $option */
 				$option = $this->fm->instance('OCA\Polls\Db\Option');
 				$option->setPollId($poll->getId());
 				$option->syncOption();
 				array_push($this->options, $this->optionMapper->insert($option));
 
-				/** @var Vote $vote */ 
+				/** @var Vote $vote */
 				$vote = $this->fm->instance('OCA\Polls\Db\Vote');
 				$vote->setPollId($option->getPollId());
 				$vote->setUserId('TestUser');

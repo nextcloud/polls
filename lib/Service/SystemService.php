@@ -80,6 +80,7 @@ class SystemService {
 	 * get a list of user objects from the backend matching the query string
 	 */
 	public function search(string $query = ''): array {
+		$startSearchTimer = microtime(true);
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
@@ -91,8 +92,9 @@ class SystemService {
 			// Add circles to the search, if app is enabled
 			$types[] = IShare::TYPE_CIRCLE;
 		}
-
+		$startCollaborationSearchTimer = microtime(true);
 		[$result, $more] = $this->userSearch->search($query, $types, false, $maxResults, 0);
+		$this->logger->debug('Search took {time}s', ['time' => microtime(true) - $startCollaborationSearchTimer]);
 
 		if ($more) {
 			$this->logger->info('Only first {maxResults} matches will be returned.', ['maxResults' => $maxResults]);
@@ -150,7 +152,7 @@ class SystemService {
 				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
 			}
 		}
-
+		$this->logger->debug('Search took {time}s overall', ['time' => microtime(true) - $startSearchTimer]);
 		return $items;
 	}
 
