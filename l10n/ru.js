@@ -59,6 +59,7 @@ OC.L10N.register(
     "{actor} has deleted a comment from poll {pollTitle}" : "{actor} удалил(а) комментарий из опроса {pollTitle}",
     "You have deleted a comment" : "Вы удалили комментарий",
     "{actor} has deleted a comment" : "{actor} удалил комментарий",
+    "You have restored a comment" : "Вы восстановили комментарий",
     "You have added an option to poll {pollTitle}" : "Вы добавили вариант ответа к опросу {pollTitle}",
     "{actor} has added an option to poll {pollTitle}" : "{actor} добавил(а) вариант ответа к опросу {pollTitle}",
     "You have added an option" : "Вы добавили опцию",
