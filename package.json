@@ -46,7 +46,7 @@
     "marked-gfm-heading-id": "^4.1.1",
     "qrcode": "^1.5.4",
     "v-click-outside": "^3.2.0",
-    "vue": "^2.7.15",
+    "vue": "^3.5.13",
     "vue-material-design-icons": "^5.3.1",
     "vue-router": "^3.6.5",
     "vuedraggable": "^2.24.3",
