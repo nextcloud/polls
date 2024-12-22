@@ -41,6 +41,7 @@ OC.L10N.register(
     "Access" : "Adgang",
     "Owner" : "Ejer",
     "Created" : "Oprettet",
+    "No description provided" : "Ingen beskrivelse leveret",
     "Login" : "Login",
     "Preview" : "Forhåndsvisning",
     "Restore share" : "Gendan deling",
