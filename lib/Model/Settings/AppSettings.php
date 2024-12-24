@@ -55,8 +55,7 @@ class AppSettings implements JsonSerializable {
 	/**
 	 * Get all permissions as array
 	 */
-	public function getPermissionsArray(): array
-	{
+	public function getPermissionsArray(): array {
 		return [
 			'allAccess' => $this->getAllAccessAllowed(),
 			'publicShares' => $this->getPublicSharesAllowed(),
@@ -67,8 +66,7 @@ class AppSettings implements JsonSerializable {
 		];
 	}
 
-	public function getAppSettings(): array
-	{
+	public function getAppSettings(): array {
 		$appSettingsArray = [
 			'usePrivacyUrl' => '',
 			'useImprintUrl' => '',
@@ -88,8 +86,7 @@ class AppSettings implements JsonSerializable {
 	/**
 	 * Get public app settings
 	 */
-	private function getPublicAppSettings(): array
-	{
+	private function getPublicAppSettings(): array {
 		return [
 			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
 			'useImprintUrl' => $this->getUseImprintUrl(),
@@ -100,8 +97,7 @@ class AppSettings implements JsonSerializable {
 	/**
 	 * Get internal app settings
 	 */
-	private function getInternalAppSettings(): array
-	{
+	private function getInternalAppSettings(): array {
 		return [
 			'useActivity' => $this->getUseActivity(),
 			'navigationPollsInList' => $this->getLoadPollsInNavigation(),
