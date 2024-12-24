@@ -58,7 +58,7 @@
 		}
 	})
 
-	const dateLocalFormatUTC = computed(() => 
+	const dateLocalFormatUTC = computed(() =>
 		props.option.duration
 			? `${eventOption.value.from.utc} - ${eventOption.value.to.utc} UTC`
 			: `${eventOption.value.from.utc} UTC`
@@ -94,7 +94,7 @@
 	</div>
 
 	<div v-else :title="dateLocalFormatUTC" class="option-item__option--datebox">
-		<div class="event-date">
+		<div :class="['event-date', {aligned: props.display === BoxType.AlignedText}]">
 			<div class="event-from">
 				<div class="month">
 					{{ eventOption.from.month }}
@@ -138,7 +138,7 @@
 		text-align: center;
 		hyphens: auto;
 		white-space: nowrap !important;
-		
+
 		.devider {
 			align-self: center;
 			color: var(--color-text-maxcontrast);

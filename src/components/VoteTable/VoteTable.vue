@@ -32,6 +32,7 @@
 <template>
 	<div class="vote-table" :class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
 		<div class="vote-table__users sticky-left">
+			<div class="option-menu" />
 			<div class="column-header">
 				<VoteMenu />
 			</div>
@@ -47,17 +48,18 @@
 					@delete="removeUser(participant.id)" />
 			</div>
 
-			<div v-if="optionsStore.proposalsExist" class="owner" />
+			<!-- <div v-if="pollStore.status.countProposals > 0" class="owner" />
 
-			<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="confirm" />
+			<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="confirm" /> -->
 		</div>
 
 		<TransitionGroup tag="div"
 			name="list"
 			class="vote-table__votes">
-			<VoteColumn v-for="(item) in optionsStore.orderedOptions"
-				:key="item.id"
-				:option="item"
+			<VoteColumn v-for="(option) in optionsStore.orderedOptions"
+				:key="option.id"
+				:option="option"
+				:class="{ 'option-owner': option.isOwner }"
 				:view-mode="pollStore.viewMode" />
 		</TransitionGroup>
 	</div>

@@ -8,8 +8,9 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\PreferencesService;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -25,7 +26,8 @@ class UserApiController extends BaseApiV2Controller {
 		string $appName,
 		IRequest $request,
 		private PreferencesService $preferencesService,
-		private Acl $acl,
+		private UserSession $userSession,
+		private AppSettings $appSettings,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -50,9 +52,9 @@ class UserApiController extends BaseApiV2Controller {
 	public function getSession(): DataResponse {
 		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
-			'currentUser' => $this->acl->getCurrentUser(),
-			'appPermissions' => $this->acl->getPermissionsArray(),
-			'appSettings' => $this->acl->getAppSettings(),
+			'currentUser' => $this->userSession->getUser(),
+			'appPermissions' => $this->appSettings->getPermissionsArray(),
+			'appSettings' => $this->appSettings->getAppSettings(),
 		]);
 	}
 }

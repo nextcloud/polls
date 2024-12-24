@@ -16,17 +16,24 @@
 	<div>
 		<b> {{ t('polls', 'The style settings are still experimental!') }}</b>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch v-model="preferencesStore.user.useCommentsAlternativeStyling" 
+			<NcCheckboxRadioSwitch v-model="preferencesStore.user.useCommentsAlternativeStyling"
 				type="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Use alternative styling for the comments sidebar') }}
 			</NcCheckboxRadioSwitch>
 		</div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch v-model="preferencesStore.user.useAlternativeStyling" 
+			<NcCheckboxRadioSwitch v-model="preferencesStore.user.useAlternativeStyling"
 				type="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Use alternative vote page styling') }}
+			</NcCheckboxRadioSwitch>
+		</div>
+		<div class="user_settings">
+			<NcCheckboxRadioSwitch v-model="preferencesStore.user.useNewAddOption"
+				type="switch"
+				@update:model-value="preferencesStore.write()">
+				{{ t('polls', 'Use alternative option add dialog') }}
 			</NcCheckboxRadioSwitch>
 		</div>
 	</div>

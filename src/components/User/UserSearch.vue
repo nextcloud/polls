@@ -41,7 +41,7 @@
 	}, 250)
 
 	async function clickAdd(user: User) {
-		Logger.debug('Adding share clicAdd', user)	
+		Logger.debug('Adding share clicAdd', user)
 		try {
 			await sharesStore.add(user)
 		} catch {
@@ -60,6 +60,7 @@
 		:tag-width="80"
 		:limit="30"
 		:loading="isLoading"
+		:filterable="false"
 		:searchable="true"
 		:placeholder="placeholder"
 		:close-on-select="false"

@@ -13,17 +13,20 @@
 	import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 	import { InputDiv } from '../Base/index.js'
-	import { dateUnits, DateUnitValue } from '../../constants/dateUnits.ts'
-	import { useOptionsStore, Shift } from '../../stores/options.ts'
+	import { dateUnits, DateUnitValue, TimeUnits } from '../../constants/dateUnits.ts'
+	import { useOptionsStore } from '../../stores/options.ts'
+	import { usePollStore } from '../../stores/poll.ts'
+
+	const pollStore = usePollStore()
 
 	const optionsStore = useOptionsStore()
 
-	const shift = ref<Shift>({
-		step: 1,
+	const shift = ref<TimeUnits>({
+		value: 1,
 		unit: { name: t('polls', 'Week'), value: DateUnitValue.Week },
 	})
 
-	function shiftDates(shift: Shift) {
+	function shiftDates(shift: TimeUnits) {
 		optionsStore.shift({ shift })
 	}
 
@@ -31,11 +34,11 @@
 
 <template>
 	<div>
-		<div v-if="optionsStore.proposalsExist">
+		<div v-if="pollStore.status.countProposals > 0">
 			{{ t('polls', 'Shifting dates is disabled to prevent shifting of proposals of other participants.') }}
 		</div>
 		<div v-else class="select-unit">
-			<InputDiv v-model="shift.step" :label="t('polls', 'Step width')" use-num-modifiers />
+			<InputDiv v-model="shift.value" :label="t('polls', 'Step width')" use-num-modifiers />
 			<NcSelect v-model="shift.unit"
 				:input-label="t('polls', 'Step unit')"
 				:clearable="false"

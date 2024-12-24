@@ -14,12 +14,30 @@ export enum DateUnitValue {
 	Year = 'year',
 }
 
-export type DateUnit = {
+export enum DateTypeValue {
+	Date = 'date',
+	DateTime = 'dateTime',
+	DateRange = 'dateRange',
+	DateTimeRange = 'dateTimeRange',
+}
+
+
+export type DateUnitSelect = {
 	name: string
 	value: DateUnitValue
 }
 
-export const dateUnits: DateUnit[] = [
+export type TimeUnits = {
+	value: number
+	unit: DateUnitSelect
+}
+
+export type DateOptionTypeSelect = {
+	name: string
+	value: DateTypeValue
+}
+
+export const dateUnits: DateUnitSelect[] = [
 	{ name: t('polls', 'Minute'), value: DateUnitValue.Minute },
 	{ name: t('polls', 'Hour'), value: DateUnitValue.Hour },
 	{ name: t('polls', 'Day'), value: DateUnitValue.Day },

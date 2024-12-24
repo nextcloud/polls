@@ -117,6 +117,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'duration' => $this->getDuration(),
 			'locked' => $this->getIsLocked(),
 			'hash' => $this->getPollOptionHash(),
+			'isOwner' => $this->getIsOwner(),
 			'votes' => $this->getVotes(),
 			'owner' => $this->getOwnerUser(),
 		];
@@ -151,7 +152,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @return void
 	 */
 	public function setOption(int $timestamp = 0, int $duration = 0, string $pollOptionText = '', int $order = 0): void {
-		
+
 		if ($timestamp) {
 			$this->setTimestamp($timestamp);
 			$this->setDuration($duration);
@@ -190,7 +191,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		// timestamp gets precedence over pollOptionText
 		if ($this->getTimestamp()) {
 			$this->setOrder($this->getTimestamp());
-	
+
 			if ($this->duration) {
 				$this->setPollOptionText(date('c', $this->getTimestamp()) . ' - ' . date('c', $this->getTimestamp() + $this->getDuration()));
 			} else {
@@ -201,7 +202,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		// update hash
 		$this->updateHash();
 	}
-	
+
 	private function updateHash(): void {
 		$this->setPollOptionHash(hash('md5', $this->getPollId() . $this->getPollOptionText() . $this->getTimestamp()));
 	}
@@ -229,7 +230,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		}
 		return htmlspecialchars_decode($this->pollOptionText);
 	}
-	
+
 	public function getPollOptionTextStart(): string {
 		if ($this->getTimestamp()) {
 			return date('c', $this->getTimestamp());

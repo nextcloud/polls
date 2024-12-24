@@ -48,8 +48,8 @@
 			v-html="linkifyStr(props.option.text)" />
 		<!-- eslint-enable vue/no-v-html -->
 
-		<OptionItemDateBox v-if="props.pollType === PollType.Date" 
-			:display="props.display" 
+		<OptionItemDateBox v-if="props.pollType === PollType.Date"
+			:display="props.display"
 			:option="props.option" />
 
 		<slot name="actions" />
@@ -62,6 +62,7 @@
 		align-items: center;
 		flex: 1;
 		position: relative;
+		padding: 8px 0;
 
 		&.deleted {
 			opacity: 0.6;

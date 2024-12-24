@@ -40,13 +40,14 @@ abstract class EntityWithUser extends Entity {
 		$this->addType('anonymized', 'integer');
 		$this->addType('poll_expire', 'integer');
 	}
+
 	/**
 	 * Anonymized the user completely (ANON_FULL) or just strips out personal information
 	 */
 	public function getAnonymizeLevel(): string {
 		$currentUserId = Container::queryClass(UserSession::class)->getCurrentUserId();
 		// Don't censor for poll owner or it is the current user's entity
-		if ($this->getPollOwnerId() === $currentUserId || $this->getUserId() === $currentUserId) {
+		if ($this->getPollOwnerId() === $currentUserId || $this->getIsOwner()) {
 			return self::ANON_NONE;
 		}
 
@@ -63,8 +64,12 @@ abstract class EntityWithUser extends Entity {
 		) {
 			return self::ANON_FULL;
 		}
-		
+
 		return self::ANON_PRIVACY;
+	}
+
+	public function getIsOwner(): bool {
+		return Container::queryClass(UserSession::class)->getCurrentUserId() === $this->getUserId();
 	}
 
 	public function getUser(): UserBase {

@@ -31,7 +31,7 @@
 			name: t('polls', 'Week'),
 			value: DateUnitValue.Week,
 		},
-		step: 1,
+		value: 1,
 		amount: 1,
 	})
 
@@ -60,7 +60,7 @@
 			label="name" />
 
 		<div class="sideways">
-			<InputDiv v-model="sequence.step"
+			<InputDiv v-model="sequence.value"
 				:label="t('polls', 'Step width')"
 				type="number"
 				inputmode="numeric"

@@ -11,7 +11,7 @@ namespace OCA\Polls\Attributes;
 use Attribute;
 
 /**
- * Attribute for permission check against Acl
+ * Attribute for permission check against existing share
  */
 #[Attribute]
 class ShareTokenRequired {

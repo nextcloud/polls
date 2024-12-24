@@ -29,7 +29,6 @@ use OCA\Polls\Exceptions\InvalidShowResultsException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\UserNotFoundException;
-use OCA\Polls\Model\Acl as Acl;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
@@ -43,7 +42,6 @@ class PollService {
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
 	public function __construct(
-		private Acl $acl,
 		private AppSettings $appSettings,
 		private IEventDispatcher $eventDispatcher,
 		private Poll $poll,
@@ -55,7 +53,7 @@ class PollService {
 	}
 
 	/**
-	 * Get list of polls including acl and Threshold for "relevant polls"
+	 * Get list of polls including Threshold for "relevant polls"
 	 */
 	public function list(): array {
 		$pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
@@ -238,12 +236,12 @@ class PollService {
 			}
 
 			if ($pollConfiguration['access'] === (Poll::ACCESS_OPEN)) {
-				$this->acl->request(Acl::PERMISSION_ALL_ACCESS);
+				$this->appSettings->getAllAccessAllowed();
 			}
 		}
 
 		// Set the expiry time to the actual servertime to avoid an
-		// expiry misinterpration when using acl
+		// expiry misinterpration when using permission checks
 		if (isset($pollConfiguration['expire']) && $pollConfiguration['expire'] < 0) {
 			$pollConfiguration['expire'] = time();
 		}
@@ -345,7 +343,7 @@ class PollService {
 	public function clone(int $pollId): Poll {
 		$origin = $this->pollMapper->find($pollId);
 		$origin->request(Poll::PERMISSION_POLL_VIEW);
-		$this->acl->request(Acl::PERMISSION_POLL_CREATE);
+		$this->appSettings->getPollCreationAllowed();
 
 		$this->poll = new Poll();
 		$this->poll->setCreated(time());

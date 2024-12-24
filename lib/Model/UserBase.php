@@ -159,7 +159,7 @@ class UserBase implements JsonSerializable {
 
 		return $this->localeCode;
 	}
-	
+
 	public function getTimeZone(): DateTimeZone {
 		if ($this->timeZoneName) {
 			return new DateTimeZone($this->timeZoneName);
@@ -304,7 +304,7 @@ class UserBase implements JsonSerializable {
 			'userId' => $this->getId(),
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getEmailAddress(),
-			'subName' => $this->getSubName(),
+			'subname' => $this->getSubName(),
 			'subtitle' => $this->getDescription(),
 			'isNoUser' => $this->getIsNoUser(),
 			'desc' => $this->getDescription(),
@@ -334,7 +334,7 @@ class UserBase implements JsonSerializable {
 			'emailAddress' => $this->getSafeEmailAddress(),
 			'isNoUser' => $this->getIsNoUser(),
 			'type' => $this->getSafeType(),
-			'subName' => null,
+			'subname' => null,
 			'subtitle' => null,
 			'desc' => null,
 			'organisation' => null,

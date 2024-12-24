@@ -76,12 +76,16 @@ export type PollStatus = {
 	relevantThreshold: number
 	countOptions: number
 	countParticipants: number
+	countProposals: number
 }
 
 export type PollPermissions = {
 	addOptions: boolean
+	shiftOptions: boolean
+	reorderOptions: boolean
 	archive: boolean
 	comment: boolean
+	confirmOptions: boolean
 	delete: boolean
 	edit: boolean
 	seeResults: boolean
@@ -167,6 +171,7 @@ export const usePollStore = defineStore('poll', {
 			relevantThreshold: 0,
 			countOptions: 0,
 			countParticipants: 0,
+			countProposals: 0,
 		},
 		currentUserStatus: {
 			userRole: UserType.None,
@@ -184,8 +189,11 @@ export const usePollStore = defineStore('poll', {
 		},
 		permissions: {
 			addOptions: false,
+			shiftOptions: false,
+			reorderOptions: false,
 			archive: false,
 			comment: false,
+			confirmOptions: false,
 			delete: false,
 			edit: false,
 			seeResults: false,
@@ -203,50 +211,50 @@ export const usePollStore = defineStore('poll', {
 			if (state.type === PollType.Text) {
 				return preferencesStore.viewTextPoll
 			}
-	
+
 			if (state.type === PollType.Date) {
 				return preferencesStore.viewDatePoll
 			}
 			return ViewMode.TableView
 		},
-	
+
 		getNextViewMode() {
 			const preferencesStore = usePreferencesStore()
 			if (preferencesStore.viewModes.indexOf(this.viewMode) < 0) {
 				return preferencesStore.viewModes[1]
 			}
 			return preferencesStore.viewModes[(preferencesStore.viewModes.indexOf(this.viewMode) + 1) % preferencesStore.viewModes.length]
-	
+
 		},
-	
+
 		typeName(state) {
 			if (state.type === PollType.Text) {
 				return t('polls', 'Text poll')
 			}
 			return t('polls', 'Date poll')
 		},
-	
+
 		answerSequence(state) {
 			const noString = state.configuration.useNo ? Answer.No : Answer.None
 			if (state.configuration.allowMaybe) {
 				return [noString, Answer.Yes, Answer.Maybe]
 			}
 			return [noString, Answer.Yes]
-	
+
 		},
-	
+
 		participants(state): User[] {
 			const sessionStore = useSessionStore()
 			const participants = this.participantsVoted
-	
+
 			// add current user, if not among participants and voting is allowed
 			if (!participants.find((participant: User) => participant.id === sessionStore.currentUser.id) && sessionStore.currentUser.id && state.permissions.vote) {
 				participants.push(sessionStore.currentUser)
 			}
-	
+
 			return participants
 		},
-	
+
 		safeParticipants() {
 			const sessionStore = useSessionStore()
 			if (this.getSafeTable) {
@@ -254,7 +262,7 @@ export const usePollStore = defineStore('poll', {
 			}
 			return this.participants
 		},
-	
+
 		participantsVoted(): User[] {
 			const votesStore = useVotesStore()
 
@@ -262,12 +270,12 @@ export const usePollStore = defineStore('poll', {
 				vote.user
 			)))
 		},
-	
+
 		getProposalsOptions: () => [
 			{ value: AllowProposals.Disallow, label: t('polls', 'Disallow proposals') },
 			{ value: AllowProposals.Allow, label: t('polls', 'Allow proposals') },
 		],
-	
+
 		displayResults(state) {
 			return state.configuration.showResults === ShowResults.Always || (state.configuration.showResults === ShowResults.Closed && !this.closed)
 		},
@@ -278,6 +286,14 @@ export const usePollStore = defineStore('poll', {
 
 		isProposalAllowed(state) {
 			return state.configuration.allowProposals === AllowProposals.Allow || state.configuration.allowProposals === AllowProposals.Review
+		},
+
+		isConfirmationAllowed(state) {
+			return state.permissions.confirmOptions || !this.isClosed
+		},
+
+		isOptionCloneAllowed(state) {
+			return !this.isClosed && state.permissions.edit
 		},
 
 		isProposalExpired(state) {
@@ -297,7 +313,7 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isClosed(state) {
-			return (state.configuration.expire > 0 && moment.unix(state.configuration.expire).diff() < 1000)
+			return (state.status.expired || state.configuration.expire > 0 && moment.unix(state.configuration.expire).diff() < 1000)
 		},
 
 		getSafeTable(state) {
@@ -331,7 +347,7 @@ export const usePollStore = defineStore('poll', {
 			return DOMPurify.sanitize(marked.parse(this.configuration.description).toString())
 		},
 	},
-	
+
 	actions: {
 		reset() {
 			this.$reset()
@@ -379,21 +395,20 @@ export const usePollStore = defineStore('poll', {
 					this.reset()
 					return
 				}
-				
+
 				this.$patch(response.data.poll)
 				votesStore.list = response.data.votes
 				optionsStore.list = response.data.options
 				sharesStore.list = response.data.shares
 				commentsStore.list = response.data.comments
 				subscriptionStore.subscribed = response.data.subscribed
-				sessionStore.$patch(response.data.acl)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error loading poll', { error: error.response })
 				throw error
 			}
 		},
-	
+
 		async add(payload: { type: PollType; title: string }) {
 			const pollsStore = usePollsStore()
 
@@ -408,7 +423,7 @@ export const usePollStore = defineStore('poll', {
 				pollsStore.load()
 			}
 		},
-	
+
 		write: debounce(async function() {
 			const pollsStore = usePollsStore()
 			if (this.configuration.title === '') {
@@ -420,7 +435,7 @@ export const usePollStore = defineStore('poll', {
 				const response = await PollsAPI.writePoll(this.id, this.configuration)
 				this.$patch(response.data.poll)
 				emit('polls:poll:updated', { store: 'poll', message: t('polls', 'Poll updated') })
-				
+
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error updating poll:', { error, poll: this.$state })
@@ -447,7 +462,7 @@ export const usePollStore = defineStore('poll', {
 				pollsStore.load()
 			}
 		},
-	
+
 		async reopen() {
 			const pollsStore = usePollsStore()
 
@@ -463,7 +478,7 @@ export const usePollStore = defineStore('poll', {
 				pollsStore.load()
 			}
 		},
-	
+
 		async toggleArchive(payload: { pollId: number }) {
 			const pollsStore = usePollsStore()
 
@@ -477,7 +492,7 @@ export const usePollStore = defineStore('poll', {
 				pollsStore.load()
 			}
 		},
-	
+
 		async delete(payload: { pollId: number }) {
 			const pollsStore = usePollsStore()
 
@@ -491,7 +506,7 @@ export const usePollStore = defineStore('poll', {
 				pollsStore.load()
 			}
 		},
-	
+
 		async clone(payload: { pollId: number }) {
 			const pollsStore = usePollsStore()
 			try {

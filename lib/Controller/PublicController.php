@@ -10,7 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ShareTokenRequired;
-use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
@@ -32,18 +32,17 @@ use OCP\IRequest;
 use OCP\Util;
 
 /**
- * Always use parent's classe response* methods to make sure, the token gets set correctly.
+ * Always use parent's class response* methods to make sure, the token gets set correctly.
  * Requesting the token inside the controller is not possible, because the token is submitted
  * as a paramter and not known while contruction time
- * i.e. ACL requests are not valid before calling the response* method
  * @psalm-api
  */
 class PublicController extends BasePublicController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private Acl $acl,
 		private UserSession $userSession,
+		private AppSettings $appSettings,
 		private CommentService $commentService,
 		private MailService $mailService,
 		private OptionService $optionService,
@@ -92,23 +91,8 @@ class PublicController extends BasePublicController {
 				'comments' => $this->commentService->list($this->userSession->getShare()->getPollId()),
 				'shares' => $this->shareService->list($this->userSession->getShare()->getPollId()),
 				'subscribed' => $this->subscriptionService->get($this->userSession->getShare()->getPollId()),
-				'acl' => $this->acl,
 			];
 		});
-	}
-
-	/**
-	 * get acl for user
-	 * @deprecated 8.0.0 Use getSession instead
-	 */
-	#[PublicPage]
-	#[ShareTokenRequired]
-	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/acl')]
-	public function getAcl(): JSONResponse {
-		return $this->response(fn () => [
-			'acl' => $this->acl
-		]);
 	}
 
 	/**
@@ -122,8 +106,8 @@ class PublicController extends BasePublicController {
 		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
 			'currentUser' => $this->userSession->getUser(),
-			'appPermissions' => $this->acl->getPermissionsArray(),
-			'appSettings' => $this->acl->getAppSettings(),
+			'appPermissions' => $this->appSettings->getPermissionsArray(),
+			'appSettings' => $this->appSettings->getAppSettings(),
 			'share' => $this->userSession->getShare(),
 		]);
 	}

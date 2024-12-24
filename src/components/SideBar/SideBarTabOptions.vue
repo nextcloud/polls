@@ -10,6 +10,7 @@
 
 	import { useOptionsStore } from '../../stores/options.ts'
 	import { PollType, usePollStore } from '../../stores/poll.ts'
+	import { usePreferencesStore } from '../../stores/preferences.ts'
 
 	import { ConfigBox } from '../Base/index.js'
 	import OptionsDate from '../Options/OptionsDate.vue'
@@ -22,9 +23,11 @@
 	import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 	import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
 	import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
+	import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
 
 	const optionsStore = useOptionsStore()
 	const pollStore = usePollStore()
+	const preferencesStore = usePreferencesStore()
 
 	const configBoxProps = {
 		delegatedAdminHint: {
@@ -44,7 +47,7 @@
 		},
 	}
 
-	const optionAddDatesProps = {
+	const OptionsAddModalDatesProps = {
 		caption: t('polls', 'Add a date'),
 		showCaption: true,
 		primary: true,
@@ -85,8 +88,9 @@
 
 			<OptionsDate />
 
-			<template #actions>
-				<OptionsDateAdd v-if="!pollStore.isClosed" v-bind="optionAddDatesProps" />
+			<template v-if="!pollStore.isClosed" #actions>
+				<ActionAddOption v-if="preferencesStore.user.useNewAddOption" :caption="t('polls', 'Add a date')" />
+				<OptionsDateAdd v-else v-bind="OptionsAddModalDatesProps" />
 			</template>
 		</ConfigBox>
 
@@ -119,7 +123,6 @@
 
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
-		padding: 8px 0;
 
 		&:active,
 		&:hover {
@@ -129,6 +132,7 @@
 	}
 	.option-item__option--text {
 		-webkit-line-clamp: 2;
+		line-clamp: 2;
 		-webkit-box-orient: vertical;
 		display: -webkit-inline-box;
 		overflow: clip;
@@ -139,6 +143,7 @@
 		&:hover,
 		&:active {
 			-webkit-line-clamp: initial;
+			line-clamp: initial;
 			max-height: 12em;
 		}
 	}

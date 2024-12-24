@@ -40,7 +40,7 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_PRIVACY_URL = 'privacyUrl';
 	public const SETTING_IMPRINT_URL = 'imprintUrl';
 	public const SETTING_DISCLAIMER = 'disclaimer';
-	
+
 	public const SETTING_UPDATE_TYPE_LONG_POLLING = 'longPolling';
 	public const SETTING_UPDATE_TYPE_NO_POLLING = 'noPolling';
 	public const SETTING_UPDATE_TYPE_PERIODIC_POLLING = 'periodicPolling';
@@ -52,6 +52,57 @@ class AppSettings implements JsonSerializable {
 	) {
 	}
 
+	/**
+	 * Get all permissions as array
+	 */
+	public function getPermissionsArray(): array {
+		return [
+			'allAccess' => $this->getAllAccessAllowed(),
+			'publicShares' => $this->getPublicSharesAllowed(),
+			'pollCreation' => $this->getPollCreationAllowed(),
+			'seeMailAddresses' => $this->getAllowSeeMailAddresses(),
+			'pollDownload' => $this->getPollDownloadAllowed(),
+			'comboView' => $this->getComboAllowed(),
+		];
+	}
+
+	public function getAppSettings(): array {
+		$appSettingsArray = [
+			'usePrivacyUrl' => '',
+			'useImprintUrl' => '',
+			'useLogin' => true,
+			'useActivity' => false,
+			'navigationPollsInList' => false,
+			'updateType' => $this->getUpdateType(),
+		];
+
+		if ($this->userSession->getIsLoggedIn()) {
+			return array_merge($appSettingsArray, $this->getInternalAppSettings());
+		}
+
+		return array_merge($appSettingsArray, $this->getPublicAppSettings());
+	}
+
+	/**
+	 * Get public app settings
+	 */
+	private function getPublicAppSettings(): array {
+		return [
+			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
+			'useImprintUrl' => $this->getUseImprintUrl(),
+			'useLogin' => $this->getShowLogin(),
+		];
+	}
+
+	/**
+	 * Get internal app settings
+	 */
+	private function getInternalAppSettings(): array {
+		return [
+			'useActivity' => $this->getUseActivity(),
+			'navigationPollsInList' => $this->getLoadPollsInNavigation(),
+		];
+	}
 
 	private function checkSettingType(string $key, int $type): bool {
 		return $this->appConfig->getValueType(AppConstants::APP_ID, $key) === $type;
@@ -157,7 +208,7 @@ class AppSettings implements JsonSerializable {
 		}
 		return $this->appConfig->getValueString('theming', 'imprintUrl');
 	}
-	
+
 	public function getAutoarchiveOffset(): int {
 		return $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET, self::SETTING_AUTO_ARCHIVE_OFFSET_DEFAULT);
 	}
@@ -176,7 +227,7 @@ class AppSettings implements JsonSerializable {
 	public function getLoadPollsInNavigation(): bool {
 		return $this->getBooleanSetting(self::SETTING_LOAD_POLLS_IN_NAVIGATION);
 	}
-	
+
 	/**
 	 * @return array
 	 *
