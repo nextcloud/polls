@@ -4,6 +4,10 @@
 -->
 # Changelog
 ##
+## [7.2.6] - 2024-12-24
+### Fix
+ - fix date picker poositioning by updating to nextcloud/vue-components@8.22.0
+
 ## [7.2.5] - 2024-11-23
 ### Fix
  - avoid error message due to new core check of column name length
