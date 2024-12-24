@@ -270,6 +270,7 @@
 		display: flex;
 		flex-wrap: wrap-reverse;
 	}
+
 	.select-duration {
 		display: flex;
 		column-gap: 1rem;
