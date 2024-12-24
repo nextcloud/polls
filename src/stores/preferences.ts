@@ -13,8 +13,6 @@ export enum ViewMode {
 }
 
 export type UserPreferences = {
-	useCommentsAlternativeStyling: boolean
-	useAlternativeStyling: boolean
 	calendarPeek: boolean
 	checkCalendars: [],
 	checkCalendarsHoursBefore: number,
@@ -24,6 +22,9 @@ export type UserPreferences = {
 	performanceThreshold: number,
 	pollCombo: number[],
 	relevantOffset: number,
+	useNewAddOption: boolean
+	useCommentsAlternativeStyling: boolean
+	useAlternativeStyling: boolean
 }
 
 export type SessionSettings = {
@@ -49,8 +50,6 @@ export type Preferences = {
 export const usePreferencesStore = defineStore('preferences', {
 	state: (): Preferences => ({
 		user: {
-			useCommentsAlternativeStyling: false,
-			useAlternativeStyling: false,
 			calendarPeek: false,
 			checkCalendars: [],
 			checkCalendarsHoursBefore: 0,
@@ -60,6 +59,9 @@ export const usePreferencesStore = defineStore('preferences', {
 			performanceThreshold: 1000,
 			pollCombo: [],
 			relevantOffset: 30,
+			useNewAddOption: false,
+			useCommentsAlternativeStyling: false,
+			useAlternativeStyling: false,
 		},
 		session: {
 			manualViewDatePoll: '',
@@ -88,7 +90,7 @@ export const usePreferencesStore = defineStore('preferences', {
 				return state.user.defaultViewDatePoll
 			}
 			return ViewMode.TableView
-	
+
 		},
 	},
 
@@ -101,12 +103,12 @@ export const usePreferencesStore = defineStore('preferences', {
 		setCalendars(payload) {
 			this.availableCalendars = payload.calendars
 		},
-	
+
 		addCheckCalendar(calendar: Calendar ) {
 			this.user.checkCalendars.push(calendar.key)
 			this.write()
 		},
-	
+
 		removeCheckCalendar(calendar: Calendar) {
 			const index = this.user.checkCalendars.indexOf(calendar.key);
 			if (index !== -1) {
@@ -114,7 +116,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			}
 			this.write()
 		},
-	
+
 		setViewDatePoll(viewMode: ViewMode) {
 			this.session.manualViewDatePoll = viewMode
 		},
@@ -122,7 +124,7 @@ export const usePreferencesStore = defineStore('preferences', {
 		setViewTextPoll(viewMode: ViewMode) {
 			this.session.manualViewTextPoll = viewMode
 		},
-	
+
 		async load(): Promise<void> {
 			try {
 				const response = await UserSettingsAPI.getUserSettings()
@@ -149,7 +151,7 @@ export const usePreferencesStore = defineStore('preferences', {
 				throw error
 			}
 		},
-	
+
 		async getCalendars() {
 			try {
 				const response = await CalendarAPI.getCalendars()

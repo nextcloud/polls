@@ -716,7 +716,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Is current user allowed to confirm options
 	 */
 	private function getAllowConfirmOption(): bool {
-		return $this->getAllowEditPoll() && !$this->getExpired();
+		return $this->getAllowEditPoll() && $this->getExpired();
 	}
 
 	/**

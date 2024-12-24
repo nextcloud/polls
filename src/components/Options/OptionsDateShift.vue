@@ -15,6 +15,9 @@
 	import { InputDiv } from '../Base/index.js'
 	import { dateUnits, DateUnitValue, TimeUnits } from '../../constants/dateUnits.ts'
 	import { useOptionsStore } from '../../stores/options.ts'
+	import { usePollStore } from '../../stores/poll.ts'
+
+	const pollStore = usePollStore()
 
 	const optionsStore = useOptionsStore()
 
@@ -31,7 +34,7 @@
 
 <template>
 	<div>
-		<div v-if="optionsStore.proposalsExist">
+		<div v-if="pollStore.status.countProposals > 0">
 			{{ t('polls', 'Shifting dates is disabled to prevent shifting of proposals of other participants.') }}
 		</div>
 		<div v-else class="select-unit">

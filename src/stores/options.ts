@@ -79,10 +79,6 @@ export const useOptionsStore = defineStore('options', {
 			return state.ranked ? this.rankedOptions : this.sortedOptions
 		},
 
-		proposalsExist(state): boolean {
-			return !!state.list.filter((option) => option.owner).length
-		},
-
 		confirmed(state): Option[] {
 			return state.list.filter((option) => option.confirmed > 0)
 		},

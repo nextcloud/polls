@@ -8,9 +8,11 @@
 	import OptionProposals from '../../Options/OptionProposals.vue'
 	import { t } from '@nextcloud/l10n'
 	import { usePollStore, PollType } from '../../../stores/poll.ts'
-	import ActionAddDateOption from '../../Actions/modules/ActionAddDateOption.vue'
+	import ActionAddOption from '../../Actions/modules/ActionAddOption.vue'
+	import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 	const pollStore = usePollStore()
+	const preferencesStore = usePreferencesStore()
 	const cardType = 'info'
 
 	const optionAddDatesModalProps = {
@@ -18,7 +20,6 @@
 		showCaption: true,
 		primary: true,
 	}
-
 </script>
 
 <template>
@@ -29,9 +30,9 @@
 				{ timeRelative: pollStore.proposalsExpireRelative }) }}
 		</p>
 		<OptionProposals v-if="pollStore.type === PollType.Text" />
-		<template #button>
-			<ActionAddDateOption v-if="!pollStore.isClosed" v-bind="optionAddDatesModalProps" />
-			<OptionProposals v-if="pollStore.type === PollType.Date" />
+		<template v-if="pollStore.type === PollType.Date" #button>
+			<ActionAddOption v-if="preferencesStore.user.useNewAddOption" v-bind="optionAddDatesModalProps" />
+			<OptionProposals v-else />
 		</template>
 	</CardDiv>
 </template>

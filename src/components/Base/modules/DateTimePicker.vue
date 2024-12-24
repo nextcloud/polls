@@ -43,6 +43,7 @@
 		type: 'datetime',
 		showTimePanel: false,
 		appendToBody: true,
+		editable: true,
 		format: moment.localeData().longDateFormat('L'),
 		placeholder: moment.localeData().longDateFormat('L'),
 		lang: {
@@ -52,8 +53,8 @@
 
 	const timePickerOptions = computed(() => ({
 		type: 'time',
-		editable: false,
-		minuteStep: 5,
+		editable: true,
+		minuteStep: 15,
 		appendToBody: true,
 		showSecond: false,
 		format: moment.localeData().longDateFormat('LT'),

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import { computed, ref } from 'vue'
+	import { computed, ref, watch } from 'vue'
 	import { showError, showSuccess } from '@nextcloud/dialogs'
 	import { t, n } from '@nextcloud/l10n'
 
@@ -20,33 +20,39 @@
 	import { useOptionsStore } from '../../stores/options'
 	import { StatusResults } from '../../Types'
 
+	const timeStepMinutes = 15
 	const successColor = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
 	const useRange = ref(false)
-	const allDay = ref(false)
+	const allDay = ref(true)
 	const optionsStore = useOptionsStore()
 	const result = ref(StatusResults.None)
+	// set initial time mark to the next full quater of the hour
+	const dateFrom = ref(new Date(new Date().setMinutes(Math.ceil((46/60)*(60/timeStepMinutes))*timeStepMinutes, 0, 0)))
 
-	const dateFrom = ref(new Date(new Date().setSeconds(0,0)))
 	const storedDurationSec = ref(60 * 60) // 1 hour
 	const dateTo = ref(new Date(dateFrom.value.getTime() + (1000 * storedDurationSec.value))) // 7 days later (in ms)
+
 	const humanReadableDuration = computed(() => {
-		let duration = durationComputedSec.value
-		const years = Math.floor(duration / 31536000)
-		duration = duration - years * 31536000
-		const months = Math.floor(duration / 2592000)
-		duration = duration - months * 2592000
-		const days = Math.floor(duration / 86400)
-		duration = duration - days * 86400
-		const hours = Math.floor(duration / 3600)
-		duration = duration - hours * 3600
-		const minutes = Math.floor((duration % 3600) / 60)
-		const yearsStr = years > 0 ? `${years} ${n('polls', 'Jahr', 'Jahre', years)} ` : ''
-		const monthsStr = months > 0 ? `${months} ${n('polls', 'Monat', 'Monate', months)} ` : ''
-		const daysStr = days > 0 ? `${days} ${n('polls', 'Tag', 'Tage', days)} ` : ''
-		const hoursStr = hours > 0 ? `${hours} ${n('polls', 'Stunde', 'Stunden', hours)} ` : ''
-		const minutesStr = minutes > 0 ? `${minutes} ${n('polls', 'Minute', 'Minuten', minutes)} ` : ''
-		return `${yearsStr}${monthsStr}${daysStr}${hoursStr}${minutesStr}`
+		// use duration information for blocked Option error message to avoid more areas
+		if (blockedOption.value) {
+			return t('polls', 'Option already exists')
+		}
+
+		if (durationComputedSec.value === 0) {
+			return t('polls', 'No duration')
+		}
+		const result = convertSeconds(durationComputedSec.value)
+
+		let durationString = ''
+
+		if (result.years > 0) durationString += `${result.years} ${n('polls', 'year', 'years', result.years)}, `
+		if (result.months > 0) durationString += `${result.months} ${n('polls', 'month', 'months', result.months)}, `
+		if (result.days > 0) durationString += `${result.days} ${n('polls', 'day', 'days', result.days)}, `
+		if (result.hours > 0) durationString += `${result.hours} ${n('polls', 'hour', 'hours', result.hours)}, `
+		if (result.minutes > 0) durationString += `${result.minutes} ${n('polls', 'minute', 'minutes', result.minutes)}, `
+		return durationString.replace(/, $/, '');
 	})
+
 	const finalFrom = computed(() => {
 		const date = new Date(dateFrom.value)
 
@@ -64,7 +70,12 @@
 	})
 
 	const finalTo = computed(() => {
-		const date = new Date(dateTo.value)
+		let date = new Date(dateTo.value)
+
+		// if only a moment is requested, set the due dateTime to dateFrom
+		if (!useRange.value) {
+			date = new Date(dateFrom.value)
+		}
 
 		if (allDay.value) {
 			// set time to 23:59:59.999 (end of the day) in case of a day only option
@@ -91,26 +102,61 @@
 		return durationComputedSec.value
 	})
 
-	const addable = computed(() => {
-		const option = optionsStore.find(finalFrom.value.unix, finalDurationSec.value)
-		if (option || result.value === StatusResults.Loading) {
-			return false
+	const addable = computed(() => (!blockedOption.value && result.value !== StatusResults.Loading))
+
+	const blockedOption = computed(() => {
+		if (optionsStore.find(finalFrom.value.unix, finalDurationSec.value)) {
+			return result.value !== StatusResults.Success
 		}
-		return true
+		return false
 	})
 
-	const statusHint = computed(() => {
-		if (!addable.value) {
-			return t('polls', 'Option already exists')
-		}
-		if (result.value === StatusResults.Success) {
-			return t('polls', 'Option added')
-		}
-		if (result.value === StatusResults.Error) {
-			return t('polls', 'Error adding option')
-		}
-		return ''
+	watch(() => finalFrom.value, () => {
+		dateTo.value = new Date(dateFrom.value.getTime() + storedDurationSec.value * 1000)
+		onAnyChange()
 	})
+
+	watch(() => finalTo.value, () => {
+		if (dateTo.value.getTime() < dateFrom.value.getTime()) {
+			dateTo.value = new Date(dateFrom.value.getTime() + (1000 * 60 * 60)) // 1 hour
+		}
+		storedDurationSec.value = durationComputedSec.value
+		onAnyChange()
+	})
+
+	watch(() => allDay.value, onAnyChange)
+	watch(() => useRange.value, onAnyChange)
+
+	function convertSeconds(seconds) {
+		const years = Math.floor(seconds / (365 * 24 * 60 * 60));
+		seconds %= (365 * 24 * 60 * 60);
+		const months = Math.floor(seconds / (30 * 24 * 60 * 60));
+		seconds %= (30 * 24 * 60 * 60);
+		const days = Math.floor(seconds / (24 * 60 * 60));
+		seconds %= (24 * 60 * 60);
+		const hours = Math.floor(seconds / (60 * 60));
+		seconds %= (60 * 60);
+		const minutes = Math.floor(seconds / 60);
+		seconds %= 60;
+
+		return {
+			years,
+			months,
+			days,
+			hours,
+			minutes,
+			seconds
+		};
+	}
+
+	function onAnyChange() {
+		if (addable.value) {
+			result.value = StatusResults.None
+			return
+		}
+
+		result.value = StatusResults.Error
+	}
 
 	async function addOption() {
 		result.value = StatusResults.Loading
@@ -135,32 +181,11 @@
 		}
 	}
 
-	function onAnyChange() {
-		if (addable.value) {
-			result.value = StatusResults.None
-			return
-		}
-
-		result.value = StatusResults.Error
-	}
-
-	function onChangeFrom() {
-		dateTo.value = new Date(dateFrom.value.getTime() + storedDurationSec.value * 1000)
-		onAnyChange()
-	}
-
-	function onChangeTo() {
-		if (dateTo.value.getTime() < dateFrom.value.getTime()) {
-			dateTo.value = new Date(dateFrom.value.getTime() + (1000 * 60 * 60)) // 1 hour
-		}
-		storedDurationSec.value = durationComputedSec.value
-		onAnyChange()
-	}
 </script>
 
 <template>
 	<div class="header-container">
-		<h2>{{ t('polls', 'Select date option') }}</h2>
+		<h2>{{ t('polls', 'Add option') }}</h2>
 	</div>
 
 	<div class="add-container">
@@ -168,8 +193,7 @@
 			<div class="from">
 				<DateTimePicker v-model="dateFrom"
 					:use-time="!allDay"
-					focus
-					@change="onChangeFrom">
+					focus>
 					<template #icon>
 						<CalendarStartIcon />
 					</template>
@@ -178,8 +202,7 @@
 
 			<div v-if="useRange" class="to">
 				<DateTimePicker v-model="dateTo"
-					:use-time="!allDay"
-					@change="onChangeTo">
+					:use-time="!allDay">
 					<template #icon>
 						<CalendarEndIcon />
 					</template>
@@ -189,13 +212,11 @@
 
 		<div class="switch-container">
 			<NcCheckboxRadioSwitch v-model="allDay"
-				type="switch"
-				@change="onAnyChange">
+				type="switch">
 				{{ t('polls', 'All day') }}
 			</NcCheckboxRadioSwitch>
 			<NcCheckboxRadioSwitch v-model="useRange"
-				type="switch"
-				@change="onAnyChange">
+				type="switch">
 				{{ t('polls', 'Time range') }}
 			</NcCheckboxRadioSwitch>
 		</div>
@@ -203,7 +224,6 @@
 
 	<div class="preview-container">
 		<h2>{{ t('polls', 'Preview') }}</h2>
-		<div class="hint">{{ statusHint }}</div>
 		<div class="preview">
 
 			<div class="preview-container">
@@ -222,10 +242,11 @@
 						:date="dateTo"
 						:hide-time="allDay" />
 				</div>
-				<div class="duration-info">
+				<div :class="['duration-info', { error: blockedOption }]">
 					{{ humanReadableDuration }}
 				</div>
 			</div>
+
 			<CheckIcon v-if="result === StatusResults.Success"
 				class="date-added"
 				:title="t('polls', 'Added')"
@@ -286,6 +307,10 @@
 			font-size: 0.8em;
 			color: var(--color-text-maxcontrast);
 			font-weight: 600;
+			text-align: center;
+			&.error {
+				color: var(--color-error-text);
+			}
 		}
 
 		.preview-container {
@@ -301,6 +326,7 @@
 			flex: 1 auto;
 			justify-content: center;
 			column-gap: 0.6rem;
+			min-height: 5.5rem;
 		}
 
 		.preview___devider {
@@ -320,7 +346,7 @@
 		display: flex;
 		flex-direction: column;
 		min-height: 5.4rem;
-		flex: 0 350px;
+		flex: 1 18rem;
 		.to, .from {
 			display: flex;
 			align-items: center;

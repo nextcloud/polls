@@ -58,7 +58,7 @@
 		}
 	})
 
-	const dateLocalFormatUTC = computed(() => 
+	const dateLocalFormatUTC = computed(() =>
 		props.option.duration
 			? `${eventOption.value.from.utc} - ${eventOption.value.to.utc} UTC`
 			: `${eventOption.value.from.utc} UTC`
@@ -138,7 +138,7 @@
 		text-align: center;
 		hyphens: auto;
 		white-space: nowrap !important;
-		
+
 		.devider {
 			align-self: center;
 			color: var(--color-text-maxcontrast);
