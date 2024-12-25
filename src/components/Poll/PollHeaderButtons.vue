@@ -7,12 +7,12 @@
 	import { computed, onBeforeUnmount } from 'vue'
 	import { useRoute } from 'vue-router'
 	import { t } from '@nextcloud/l10n'
-	
+
 	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
 	import NcPopover from '@nextcloud/vue/dist/Components/NcPopover.js'
 
 	import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
-	
+
 	import { ActionToggleSidebar } from '../Actions/index.js'
 	import PollInformation from '../Poll/PollInformation.vue'
 	import UserMenu from '../User/UserMenu.vue'
