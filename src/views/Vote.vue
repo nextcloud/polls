@@ -34,9 +34,7 @@
 	const pollStore = usePollStore()
 	const optionsStore = useOptionsStore()
 	const preferencesStore = usePreferencesStore()
-
-	// FIXME: Fix this, since it is not 'vote-main' that is scrolled
-	const voteMainId = 'vote-main'
+	const voteMainId = 'watched-scroll-area'
 	const scrolled = useHandleScroll(voteMainId)
 
 	const isLoading = ref(false)
@@ -70,10 +68,10 @@
 </script>
 
 <template>
-	<NcAppContent :class="[{ closed: pollStore.isClosed, scrolled: !!scrolled, 'vote-style-beta-510': preferencesStore.user.useAlternativeStyling }, pollStore.type]">
+	<NcAppContent :class="[{ closed: pollStore.isClosed, scrolled: scrolled, 'vote-style-beta-510': preferencesStore.user.useAlternativeStyling }, pollStore.type, voteMainId]">
 		<HeaderBar class="area__header">
 			<template #title>
-				{{ pollStore.configuration.title }} scrolled: {{ scrolled }}
+				{{ pollStore.configuration.title }}
 			</template>
 
 			<template #right>
@@ -83,7 +81,7 @@
 			<PollInfoLine />
 		</HeaderBar>
 
-		<div :id="voteMainId" class="vote_main">
+		<div class="vote_main">
 			<VoteInfoCards />
 
 			<div v-if="pollStore.configuration.description" class="area__description">
