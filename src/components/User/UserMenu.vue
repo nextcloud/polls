@@ -4,10 +4,11 @@
 -->
 
 <script setup lang="ts">
-	import { ref } from 'vue'
+	import { computed, ref } from 'vue'
 	import { useRouter } from 'vue-router'
 	import { debounce } from 'lodash'
 	import { showSuccess, showError } from '@nextcloud/dialogs'
+	import { emit } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
@@ -24,14 +25,21 @@
 	import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 	import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 	import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
+	import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
+	import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
+	import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+	import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
+	import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
 	import { PollsAPI, ValidatorAPI } from '../../Api/index.js'
+	import { useOptionsStore } from '../../stores/options.ts'
 	import { usePollStore } from '../../stores/poll.ts'
+	import { usePreferencesStore } from '../../stores/preferences.ts'
 	import { useSessionStore } from '../../stores/session.ts'
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
 	import { useVotesStore } from '../../stores/votes.ts'
 
-	import { StatusResults } from '../../Types/index.ts'
+	import { StatusResults, ViewMode, PollType } from '../../Types/index.ts'
 
 	import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 
@@ -43,9 +51,11 @@
 		label: string
 	}
 
+	const optionsStore = useOptionsStore()
 	const pollStore = usePollStore()
 	const sessionStore = useSessionStore()
 	const subscriptionStore = useSubscriptionStore()
+	const preferencesStore = usePreferencesStore()
 	const votesStore = useVotesStore()
 	const router = useRouter()
 	const hasCookie = !!findCookieByValue(sessionStore.publicToken)
@@ -81,6 +91,18 @@
 			showSuccess(t('polls', 'Invitation resent to {emailAddress}', { emailAddress: response.data.share.user.emailAddress }))
 		} catch {
 			showError(t('polls', 'Mail could not be resent to {emailAddress}', { emailAddress: sessionStore.share.user.emailAddress }))
+		}
+	}
+
+	/**
+	 *
+	 */
+	function changeView(): void {
+		emit('polls:transitions:off', 500)
+		if (pollStore.type === PollType.Date) {
+			preferencesStore.setViewDatePoll(pollStore.viewMode === ViewMode.TableView ? ViewMode.ListView : ViewMode.TableView)
+		} else if (pollStore.type === PollType.Text) {
+			preferencesStore.setViewTextPoll(pollStore.viewMode === ViewMode.TableView ? ViewMode.ListView : ViewMode.TableView)
 		}
 	}
 
@@ -125,6 +147,25 @@
 		showTrailingButton: true,
 		labelOutside: false,
 		label: t('polls', 'Change name'),
+	})
+
+	const sortCaption = computed(() => {
+		if (optionsStore.ranked && pollStore.type === PollType.Date) {
+			return t('polls', 'Switch to date order')
+		}
+
+		if (optionsStore.ranked && pollStore.type === PollType.Text) {
+			return t('polls', 'Switch to original order')
+		}
+
+		return t('polls', 'Switch to ranked order')
+	})
+
+	const viewModeCaption = computed(() => {
+		if (pollStore.viewMode === ViewMode.TableView) {
+			return t('polls', 'Switch to list view')
+		}
+		return t('polls', 'Switch to table view')
 	})
 
 	const validateDisplayName = debounce(async function () {
@@ -209,6 +250,24 @@
 		<template #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
+		<NcActionButton :name="viewModeCaption"
+			:aria-label="viewModeCaption"
+			@click="changeView()">
+			<template #icon>
+				<ListViewIcon v-if="pollStore.viewMode === ViewMode.TableView" />
+				<TableViewIcon v-else />
+			</template>
+		</NcActionButton>
+
+		<NcActionButton :name="sortCaption"
+			:aria-label="sortCaption"
+			@click="optionsStore.ranked = !optionsStore.ranked">
+			<template #icon>
+				<SortByDateOptionIcon v-if="optionsStore.ranked && pollStore.type === PollType.Date" />
+				<SortByOriginalOrderIcon v-else-if="optionsStore.ranked && pollStore.type === PollType.Text" />
+				<SortByRankIcon v-else />
+			</template>
+		</NcActionButton>
 
 		<NcActionButton v-if="sessionStore.share?.type === 'external'"
 			:name="t('polls', 'Copy your personal link to clipboard')"

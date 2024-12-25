@@ -10,7 +10,6 @@
 	import { ActionDelete } from '../Actions/index.js'
 
 	import VoteColumn from './VoteColumn.vue'
-	import VoteMenu from './VoteMenu.vue'
 	import UserItem from '../User/UserItem.vue'
 	import { usePollStore } from '../../stores/poll.ts'
 	import { useSessionStore } from '../../stores/session.ts'
@@ -33,9 +32,7 @@
 	<div class="vote-table" :class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
 		<div class="vote-table__users sticky-left">
 			<div class="option-menu" />
-			<div class="column-header">
-				<VoteMenu />
-			</div>
+			<div class="column-header" />
 
 			<div v-for="(participant) in pollStore.safeParticipants"
 				:key="participant.id"
