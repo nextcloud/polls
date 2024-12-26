@@ -192,13 +192,13 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		/*
-		* polls list, filtered by category 
+		* polls list, filtered by category
 		*/
 		pollsByCategory: (state: PollList) => (filterId: FilterType) => {
 			const useCategory = state.categories.find((category) => category.id === filterId)
 			return state.list.filter((poll) => useCategory.filterCondition(poll))
 		},
-		
+
 		pollsCount(state: PollList): Array<{ id: string, count: number }> {
 			const count = []
 			for (const category of state.categories) {
@@ -212,7 +212,7 @@ export const usePollsStore = defineStore('polls', {
 		pollsFilteredSorted(state: PollList): Poll[] {
 			return orderBy(
 				this.pollsByCategory(this.currentCategory.id),
-				[state.sort.by],
+				[sortColumnsMapping[state.sort.by]],
 				[state.sort.reverse ? 'desc' : 'asc'],
 			)
 		},
@@ -280,7 +280,7 @@ export const usePollsStore = defineStore('polls', {
 				this.list = response.data.list
 				this.meta.status = StatusResults.Loaded
 			} catch (e) {
-				if (e?.code === 'ERR_CANCELED')	return
+				if (e?.code === 'ERR_CANCELED') return
 				this.meta.status = StatusResults.Error
 				Logger.error('Error loading polls', { error: e.response })
 				throw e
@@ -288,7 +288,7 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		async setSort(payload: { sortBy: SortType }): Promise<void> {
-			if (this.sort.by === sortColumnsMapping[payload.sortBy]) {
+			if (this.sort.by === payload.sortBy) {
 				this.sort.reverse = !this.sort.reverse
 			} else {
 				this.sort.reverse = true
