@@ -67,13 +67,21 @@
 	/**
 	 *
 	 */
-	function setVote() {
+	async function setVote() {
 		if (isVotable.value) {
-			votesStore.set({
-				option: props.option,
-				setTo: nextAnswer.value,
-			})
-			showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
+			try {
+				await votesStore.set({
+					option: props.option,
+					setTo: nextAnswer.value,
+				})
+				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
+			} catch (error) {
+				if (error.response.status === 409 && error.response.data.message === 'Vote limit exceeded') {
+					showError(t('polls', 'Vote already booked out'))
+				} else {
+					showError(t('polls', 'Error saving vote'))
+				}
+			}
 		} else {
 			showError(t('polls', 'Error saving vote'))
 		}

@@ -81,7 +81,7 @@ export const useVotesStore = defineStore('votes', {
 					this.$reset()
 					return
 				}
-	
+
 				const votes: Vote[] = []
 				response.data.votes.forEach((vote: Vote) => {
 					if (vote.answer === Answer.Yes) {
@@ -104,7 +104,7 @@ export const useVotesStore = defineStore('votes', {
 				throw error
 			}
 		},
-	
+
 		setItem(payload: { option: Option; vote: Vote }) {
 			const index = this.list.findIndex((vote: Vote) =>
 				vote.pollId === payload.option.pollId
@@ -116,7 +116,7 @@ export const useVotesStore = defineStore('votes', {
 			}
 			this.list.push(payload.vote)
 		},
-	
+
 		async set(payload: { option: Option; setTo: Answer }) {
 			const sessionStore = useSessionStore()
 			const optionsStore = useOptionsStore()
@@ -135,17 +135,17 @@ export const useVotesStore = defineStore('votes', {
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				if (error.response.status === 409) {
-					this.load()
-					optionsStore.load()
 					pollStore.load()
+					throw error
 				} else {
-					Logger.error('Error setting vote', { error, payload })
+					Logger.error('Error setting vote aa', { error, payload })
 					throw error
 				}
 			}
 		},
-	
+
 		async resetVotes() {
+			Logger.debug('Resetting votes')
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
@@ -162,7 +162,7 @@ export const useVotesStore = defineStore('votes', {
 				throw error
 			}
 		},
-	
+
 		async deleteUser(payload) {
 			const sessionStore = useSessionStore()
 			try {
@@ -178,7 +178,6 @@ export const useVotesStore = defineStore('votes', {
 		async removeOrphanedVotes() {
 			const sessionStore = useSessionStore()
 			const pollStore = usePollStore()
-			const optionsStore = useOptionsStore()
 			try {
 				if (sessionStore.route.name === 'publicVote') {
 					await PublicAPI.removeOrphanedVotes(sessionStore.route.params.token)
@@ -186,13 +185,12 @@ export const useVotesStore = defineStore('votes', {
 					await VotesAPI.removeOrphanedVotes(sessionStore.route.params.id)
 				}
 				pollStore.load()
-				optionsStore.load()
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error deleting orphaned votes', { error })
 				throw error
 			}
 		},
-	
+
 	},
 })

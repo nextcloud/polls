@@ -55,11 +55,11 @@ class VoteController extends BaseController {
 	// #[FrontpageRoute(verb: 'PUT', url: '/vote/{optionId}/set/{setTo}')]
 	public function set(int $optionId, string $setTo): JSONResponse {
 		$option = $this->optionService->get($optionId);
+
 		return $this->response(fn () => [
 			'vote' => $this->voteService->set($optionId, $setTo),
 			'poll' => $this->pollService->get($option->getPollId()),
 			'options' => $this->optionService->list($option->getPollId()),
-		
 		]);
 	}
 
@@ -73,7 +73,12 @@ class VoteController extends BaseController {
 	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}/user/{userId}', postfix: 'named')]
 	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}/user', postfix: 'self')]
 	public function delete(int $pollId, string $userId = ''): JSONResponse {
-		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId)]);
+		return $this->response(fn () => [
+			'deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId),
+			'poll' => $this->pollService->get($pollId),
+			'options' => $this->optionService->list($pollId),
+			'votes' => $this->voteService->list($pollId)
+		]);
 	}
 
 	/**
@@ -85,6 +90,11 @@ class VoteController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}/votes/orphaned')]
 	public function deleteOrphaned(int $pollId, string $userId = ''): JSONResponse {
-		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
+		return $this->response(fn () => [
+			'deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true),
+			'poll' => $this->pollService->get($pollId),
+			'options' => $this->optionService->list($pollId),
+			'votes' => $this->voteService->list($pollId)
+		]);
 	}
 }
