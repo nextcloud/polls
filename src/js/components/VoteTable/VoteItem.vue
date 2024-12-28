@@ -102,6 +102,10 @@ export default {
 				})
 				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
 			} catch (e) {
+				if (e.response.status === 409 && e.response.data.message === 'Vote limit exceeded') {
+					showError(t('polls', 'Vote already booked out'))
+					return
+				}
 				showError(t('polls', 'Error saving vote'))
 			}
 		},

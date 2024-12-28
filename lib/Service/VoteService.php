@@ -15,12 +15,14 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\VoteSetEvent;
+use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\VoteLimitExceededException;
 use OCA\Polls\Model\Acl as Acl;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 
-class VoteService {
+class VoteService
+{
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
@@ -31,18 +33,18 @@ class VoteService {
 		private PollMapper $pollMapper,
 		private Vote $vote,
 		private VoteMapper $voteMapper,
-	) {
-	}
+	) {}
 
 	/**
 	 * Read all votes of a poll based on the poll id and return list as array
 	 *
 	 * @return Vote[]
 	 */
-	public function list(int $pollId): array {
+	public function list(int $pollId): array
+	{
 		$poll = $this->pollMapper->find($pollId);
 		$poll->request(Poll::PERMISSION_POLL_VIEW);
-		
+
 		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW)) {
 			// Just return the participants votes, no further anoymizing or obfuscating is nessecary
 			return $this->voteMapper->findByPollAndUser($pollId, ($this->acl->getCurrentUserId()));
@@ -53,7 +55,8 @@ class VoteService {
 		return $votes;
 	}
 
-	private function checkLimits(Option $option): void {
+	private function checkLimits(Option $option): void
+	{
 		// check, if the optionlimit is reached or exceeded, if one is set
 		if ($option->getIsLockedByOptionLimit()) {
 			throw new VoteLimitExceededException;
@@ -65,13 +68,32 @@ class VoteService {
 		return;
 	}
 
+	private function checkVoteLimit(Option $option): void
+	{
+		// check, if the optionlimit is reached or exceeded, if one is set
+		if ($option->getIsLockedByOptionLimit()) {
+			throw new VoteLimitExceededException();
+		}
+
+		if ($option->getIsLockedByVotesLimit()) {
+			throw new VoteLimitExceededException;
+		}
+		return;
+	}
+
 	/**
 	 * Set vote
 	 */
-	public function set(int $optionId, string $setTo): ?Vote {
+	public function set(int $optionId, string $setTo): ?Vote
+	{
 		$option = $this->optionMapper->find($optionId);
 		$poll = $this->pollMapper->find($option->getPollId());
 		$poll->request(Poll::PERMISSION_VOTE_EDIT);
+
+		if ($option->getIsLocked()) {
+			$this->checkVoteLimit($option);
+			throw new NotFoundException();
+		}
 
 		try {
 			$this->vote = $this->voteMapper->findSingleVote($poll->getId(), $option->getPollOptionText(), $this->acl->getCurrentUserId());
@@ -117,7 +139,8 @@ class VoteService {
 	 * @param string $userId user id of the user, the votes get deleted from
 	 * @param bool $deleteOnlyOrphaned - false deletes all votes of the specified user, true only the orphaned votes aka votes without an option
 	 */
-	public function deleteUserFromPoll(int $pollId, string $userId = '', bool $deleteOnlyOrphaned = false): string {
+	public function deleteUserFromPoll(int $pollId, string $userId = '', bool $deleteOnlyOrphaned = false): string
+	{
 		if ($userId === '') {
 			// if no user set, use current user
 			$userId = $this->acl->getCurrentUserId();
@@ -141,7 +164,8 @@ class VoteService {
 	 * @param string $userId user id of the user, the votes get deleted from. No user affects the current user
 	 * @param bool $deleteOnlyOrphaned - false deletes all votes of the specified user, true only the orphaned votes aka votes without an option
 	 */
-	private function delete(int $pollId, string $userId, bool $deleteOnlyOrphaned = false): string {
+	private function delete(int $pollId, string $userId, bool $deleteOnlyOrphaned = false): string
+	{
 		if ($deleteOnlyOrphaned) {
 			$votes = $this->voteMapper->findOrphanedByPollandUser($pollId, $userId);
 			foreach ($votes as $vote) {
