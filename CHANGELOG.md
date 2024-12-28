@@ -4,6 +4,10 @@
 -->
 # Changelog
 ##
+## [7.2.7] - 2024-12-28
+### Fix
+ - fix limit check
+
 ## [7.2.6] - 2024-12-24
 ### Fix
  - fix date picker poositioning by updating to nextcloud/vue-components@8.22.0
