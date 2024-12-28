@@ -15,6 +15,7 @@ use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Vote;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Event\VoteSetEvent;
+use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\VoteLimitExceededException;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -65,6 +66,18 @@ class VoteService {
 		return;
 	}
 
+	private function checkVoteLimit(Option $option): void {
+		// check, if the optionlimit is reached or exceeded, if one is set
+		if ($option->getIsLockedByOptionLimit()) {
+			throw new VoteLimitExceededException();
+		}
+
+		if ($option->getIsLockedByVotesLimit()) {
+			throw new VoteLimitExceededException;
+		}
+		return;
+	}
+
 	/**
 	 * Set vote
 	 */
@@ -72,6 +85,11 @@ class VoteService {
 		$option = $this->optionMapper->find($optionId);
 		$poll = $this->pollMapper->find($option->getPollId());
 		$poll->request(Poll::PERMISSION_VOTE_EDIT);
+
+		if ($option->getIsLocked()) {
+			$this->checkVoteLimit($option);
+			throw new NotFoundException();
+		}
 
 		try {
 			$this->vote = $this->voteMapper->findSingleVote($poll->getId(), $option->getPollOptionText(), $this->userSession->getCurrentUserId());
