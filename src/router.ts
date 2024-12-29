@@ -27,12 +27,12 @@ async function validateToken(to: RouteLocationNormalized) {
 	if (getCurrentUser()) {
 		try {
 			const response = await PublicAPI.getShare(to.params.token)
-			// if the user is logged in, we diretly route to 
+			// if the user is logged in, we diretly route to
 			// the internal vote page
 			return {
 				name: 'vote',
 				params: {
-					id: response.data.share.pollId 
+					id: response.data.share.pollId
 				}
 			}
 		} catch (error) {
@@ -42,7 +42,7 @@ async function validateToken(to: RouteLocationNormalized) {
 			}
 		}
 	}
-	
+
 	// continue for external users
 	try {
 		// first validate the existance of the public token
@@ -52,7 +52,7 @@ async function validateToken(to: RouteLocationNormalized) {
 		window.location.replace(generateUrl('login'))
 	}
 
-	// then look for an existing personal token from 
+	// then look for an existing personal token from
 	// the user's client stored cookie
 	// matching the public token
 	const personalToken = getCookieValue(<string>to.params.token)
@@ -210,7 +210,7 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
 		if (to.meta.votePage) {
 			await pollStore.load()
 		}
-	
+
 	} catch (error) {
 		Logger.warn('Could not load poll', error)
 		return {

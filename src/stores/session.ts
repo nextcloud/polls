@@ -30,7 +30,7 @@ export type Route = {
 	}
 }
 
-export type UserStatus = { 
+export type UserStatus = {
 	isLoggedin: boolean
 	isAdmin: boolean
 }
@@ -125,7 +125,7 @@ export const useSessionStore = defineStore('session', {
 
 		viewTextPoll(state): ViewMode {
 			const preferencesStore = usePreferencesStore()
-			
+
 			if (state.sessionSettings.manualViewTextPoll) {
 				return state.sessionSettings.manualViewTextPoll
 			}
@@ -149,6 +149,7 @@ export const useSessionStore = defineStore('session', {
 
 	actions: {
 		async load() {
+			Logger.debug('Loading session')
 			let response = null
 			try {
 				if (this.route.name === 'publicVote') {
@@ -159,7 +160,7 @@ export const useSessionStore = defineStore('session', {
 				this.$patch(response.data)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-	
+
 				this.$reset()
 				if (this.route.name === null) {
 					this.$reset()
@@ -167,6 +168,7 @@ export const useSessionStore = defineStore('session', {
 					throw error
 				}
 			}
+			Logger.debug('Session loaded')
 		},
 
 		setViewDatePoll(viewMode: ViewMode) {
