@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "鍵入以添加單個分享",
     "Error while adding share" : "新增分享時發生錯誤",
     "Vote saved" : "投票已存儲",
+    "Vote already booked out" : "投票已經預訂滿了",
     "Error saving vote" : "存儲投票時發生錯誤",
     "Delete votes" : "刪除投票",
     "Participant {userId} has been removed" : "參與者 {userId} 已被移除",

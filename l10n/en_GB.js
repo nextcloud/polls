@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "Type to add an individual share",
     "Error while adding share" : "Error while adding share",
     "Vote saved" : "Vote saved",
+    "Vote already booked out" : "Vote already booked out",
     "Error saving vote" : "Error saving vote",
     "Delete votes" : "Delete votes",
     "Participant {userId} has been removed" : "Participant {userId} has been removed",

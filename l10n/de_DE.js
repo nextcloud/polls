@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "Tippen, um eine einzelne Freigabe hinzuzufügen",
     "Error while adding share" : "Fehler beim Hinzufügen der Freigabe",
     "Vote saved" : "Ihre Stimmabgabe wurde gespeichert",
+    "Vote already booked out" : "Abstimmung bereits ausgebucht",
     "Error saving vote" : "Fehler beim Speichern der Stimmabgabe",
     "Delete votes" : "Stimmen löschen",
     "Participant {userId} has been removed" : "Teilnehmer {userId} wurde entfernt",

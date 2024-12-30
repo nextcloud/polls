@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "Pište zde, pokud chcete sdílet individuálně",
     "Error while adding share" : "Chyba při přidávání sdílení",
     "Vote saved" : "Hlas uložen",
+    "Vote already booked out" : "Hlas už použit",
     "Error saving vote" : "Chyba při ukládání hlasu",
     "Delete votes" : "Smazat hlasy",
     "Participant {userId} has been removed" : "Účastník {userId} byl odstraněn",

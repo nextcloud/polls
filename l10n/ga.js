@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "Clóscríobh chun sciar aonair a chur leis",
     "Error while adding share" : "Earráid agus sciar á cur leis",
     "Vote saved" : "Sábháladh an vóta",
+    "Vote already booked out" : "Vóta curtha in áirithe cheana féin",
     "Error saving vote" : "Earráid agus an vóta á shábháil",
     "Delete votes" : "Scrios na vótaí",
     "Participant {userId} has been removed" : "Baineadh rannpháirtí {userId}",

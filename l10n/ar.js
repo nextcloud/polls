@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "اكتب لإضافة مشاركة فردية",
     "Error while adding share" : "خطأ أثناء إضافة المشاركة",
     "Vote saved" : "تم حفظ التصويت",
+    "Vote already booked out" : "تمّ حجز التصويت سلفاً",
     "Error saving vote" : "خطأ في حفظ التصويت",
     "Delete votes" : "حذف الأصوات",
     "Participant {userId} has been removed" : "المشارك {userId} تمّ حذفه",
