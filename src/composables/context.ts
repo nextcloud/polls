@@ -6,16 +6,18 @@
 import { RouteLocationNormalized } from 'vue-router'
 import { useSessionStore } from '../stores/session.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
+import { Logger } from '../helpers/index.ts'
 
-const loadContext = (to: RouteLocationNormalized) => {
+async function loadContext(to: RouteLocationNormalized) {
 	const preferencesStore = usePreferencesStore()
 	const sessionStore = useSessionStore()
-	sessionStore.setRouter(to)
-	sessionStore.load().then(() => {
-		if (sessionStore.userStatus.isLoggedin) {
-			preferencesStore.load()
-		}
-	})
+	await sessionStore.setRouter(to)
+	await sessionStore.load()
+	if (sessionStore.userStatus.isLoggedin) {
+		await preferencesStore.load()
+	}
+
+	Logger.debug('Context loaded')
 }
 
 export { loadContext }
