@@ -11,7 +11,7 @@
 	import { saveAs } from 'file-saver'
 	import { t } from '@nextcloud/l10n'
 	import { showError } from '@nextcloud/dialogs'
-	
+
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 
@@ -147,11 +147,11 @@
 
 				optionsStore.list.forEach((option) => {
 					if (style === 'symbols') {
-						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answerSymbol ?? '❌')
+						votesLine.push(votesStore.getVote({ user: participant, option }).answerSymbol ?? '❌')
 					} else if (style === 'raw') {
-						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answer)
+						votesLine.push(votesStore.getVote({ user: participant, option }).answer)
 					} else {
-						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answerTranslated ?? t('polls', 'No'))
+						votesLine.push(votesStore.getVote({ user: participant, option }).answerTranslated ?? t('polls', 'No'))
 					}
 				})
 

@@ -162,8 +162,12 @@ class PublicController extends BasePublicController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/user')]
 	public function deleteUser(): JSONResponse {
+		$pollId = $this->userSession->getShare()->getPollId();
+		$this->voteService->deleteUserFromPoll($pollId);
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->deleteUserFromPoll($this->userSession->getShare()->getPollId())
+			'poll' => $this->pollService->get($pollId),
+			'options' => $this->optionService->list($pollId),
+			'votes' => $this->voteService->list($pollId)
 		]);
 	}
 
@@ -175,8 +179,12 @@ class PublicController extends BasePublicController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'DELETE', url: '/s/{token}/votes/orphaned')]
 	public function deleteOrphanedVotes(): JSONResponse {
+		$pollId = $this->userSession->getShare()->getPollId();
+		$this->voteService->deleteUserFromPoll($pollId, deleteOnlyOrphaned: true);
 		return $this->response(fn () => [
-			'deleted' => $this->voteService->deleteUserFromPoll($this->userSession->getShare()->getPollId(), deleteOnlyOrphaned: true)
+			'poll' => $this->pollService->get($pollId),
+			'options' => $this->optionService->list($pollId),
+			'votes' => $this->voteService->list($pollId)
 		]);
 	}
 
@@ -253,10 +261,12 @@ class PublicController extends BasePublicController {
 	#[FrontpageRoute(verb: 'PUT', url: '/s/{token}/vote')]
 	public function setVote(int $optionId, string $setTo): JSONResponse {
 		$option = $this->optionService->get($optionId);
+		$vote = $this->voteService->set($optionId, $setTo);
 		return $this->response(fn () => [
-			'vote' => $this->voteService->set($optionId, $setTo),
+			'vote' => $vote,
 			'poll' => $this->pollService->get($option->getPollId()),
 			'options' => $this->optionService->list($option->getPollId()),
+			'votes' => $this->voteService->list($option->getPollId())
 		]);
 	}
 

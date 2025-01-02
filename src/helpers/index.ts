@@ -8,3 +8,4 @@ export { uniqueArrayOfObjects, uniqueOptions, uniqueParticipants } from './modul
 export { groupComments } from './modules/comments.ts'
 export { SimpleLink } from './modules/SimpleLink.ts'
 export { GuestBubble } from './modules/GuestBubble.ts'
+export { StoreHelper } from './modules/StoreHelper.ts'

@@ -9,6 +9,11 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
+use OCA\Polls\AppConstants;
+use OCA\Polls\Helper\Container;
+use OCA\Polls\UserSession;
+use OCP\IL10N;
+use OCP\L10N\IFactory;
 
 /**
  * @psalm-suppress UnusedProperty
@@ -38,6 +43,10 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	public const VOTE_NO = 'no';
 	public const VOTE_EVENTUALLY = 'maybe';
 
+	protected IL10N $l10n;
+	protected UserSession $userSession;
+	protected IFactory $transFactory;
+
 	// schema columns
 	public $id = null;
 	protected int $pollId = 0;
@@ -51,13 +60,51 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	// joined columns
 	protected ?int $optionId = null;
 
-	public function __construct() {
+	public function __construct(
+	) {
+		$this->userSession = Container::queryClass(UserSession::class);
+		$this->transFactory = Container::queryClass(IFactory::class);
+		$this->userSession->getUser()->getLocaleCode();
+
+		$languageCode = $this->userSession->getUser()->getLanguageCode() !== '' ? $this->userSession->getUser()->getLanguageCode() : $this->transFactory->findGenericLanguage();
+
+		$this->l10n = $this->transFactory->get(
+			AppConstants::APP_ID,
+			$languageCode,
+			$this->userSession->getUser()->getLocaleCode()
+		);
+
 		$this->addType('id', 'integer');
 		$this->addType('pollId', 'integer');
 		$this->addType('voteOptionId', 'integer');
 		$this->addType('deleted', 'integer');
 	}
 
+	private function getAnswerSymbol(): string {
+		switch ($this->getVoteAnswer()) {
+			case self::VOTE_YES:
+				return '✔';
+			case self::VOTE_NO:
+				return '❌';
+			case self::VOTE_EVENTUALLY:
+				return '❔';
+			default:
+				return '';
+		}
+	}
+
+	private function getAnswerTranslated(): string {
+		switch ($this->getVoteAnswer()) {
+			case self::VOTE_YES:
+				return $this->l10n->t('Yes');
+			case self::VOTE_NO:
+				return $this->l10n->t('No');
+			case self::VOTE_EVENTUALLY:
+				return $this->l10n->t('Maybe');
+			default:
+				return '';
+		}
+	}
 	/**
 	 * @return array
 	 *
@@ -72,6 +119,8 @@ class Vote extends EntityWithUser implements JsonSerializable {
 			'deleted' => $this->getDeleted(),
 			'optionId' => $this->getOptionId(),
 			'user' => $this->getUser(),
+			'answerSymbol' => $this->getAnswerSymbol(),
+			'answerTranslated' => $this->getAnswerTranslated(),
 		];
 	}
 }
