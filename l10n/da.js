@@ -37,6 +37,7 @@ OC.L10N.register(
     "Submit" : "Tilføj",
     "Add option" : "Tilføj valg",
     "Close" : "Luk",
+    "Archived" : "Arkiveret",
     "never" : "aldrig",
     "Access" : "Adgang",
     "Owner" : "Ejer",
