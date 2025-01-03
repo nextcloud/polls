@@ -6,9 +6,8 @@
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api/index.js'
 import { User } from '../Types/index.ts'
-import { Logger } from '../helpers/index.ts'
-import { t } from '@nextcloud/l10n'
-import { Option, useOptionsStore } from './options.ts'
+import { Logger, StoreHelper } from '../helpers/index.ts'
+import { Option } from './options.ts'
 import { usePollStore } from './poll.ts'
 import { useSessionStore } from './session.ts'
 
@@ -31,7 +30,6 @@ export type Vote = {
 	optionText: string
 	answer: Answer
 	answerSymbol: AnswerSymbol
-	answerTranslated: string
 	deleted: number
 	optionId: number
 	user: User
@@ -55,14 +53,19 @@ export const useVotesStore = defineStore('votes', {
 			return this.list.filter((vote) => vote.answer === answer).length
 		},
 
-		getVote(payload: { userId: string; option: { text: string } }) {
-			const found = this.list.find((vote: Vote) => (vote.user.id === payload.userId
+		getVote(payload: { user: User; option: Option }): Vote {
+			const found = this.list.find((vote: Vote) => (vote.user.id === payload.user.id
 					&& vote.optionText === payload.option.text))
 			if (found === undefined) {
 				return {
-					answer: '',
+					answer: Answer.None,
 					optionText: payload.option.text,
-					userId: payload.userId,
+					user: payload.user,
+					answerSymbol: AnswerSymbol.None,
+					deleted: 0,
+					id: 0,
+					optionId: payload.option.id,
+					pollId: payload.option.pollId,
 				}
 			}
 			return found
@@ -82,22 +85,7 @@ export const useVotesStore = defineStore('votes', {
 					return
 				}
 
-				const votes: Vote[] = []
-				response.data.votes.forEach((vote: Vote) => {
-					if (vote.answer === Answer.Yes) {
-						vote.answerTranslated = t('polls', 'Yes')
-						vote.answerSymbol = AnswerSymbol.Yes
-					} else if (vote.answer === Answer.Maybe) {
-						vote.answerTranslated = t('polls', 'Maybe')
-						vote.answerSymbol = AnswerSymbol.Maybe
-					} else {
-						vote.answerTranslated = t('polls', 'No')
-						vote.answerSymbol = AnswerSymbol.No
-					}
-					votes.push(vote)
-				})
-
-				this.list = votes
+				this.list = response.data.votes
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				this.$reset()
@@ -119,7 +107,6 @@ export const useVotesStore = defineStore('votes', {
 
 		async set(payload: { option: Option; setTo: Answer }) {
 			const sessionStore = useSessionStore()
-			const optionsStore = useOptionsStore()
 			const pollStore = usePollStore()
 			try {
 				let response = null
@@ -128,9 +115,10 @@ export const useVotesStore = defineStore('votes', {
 				} else {
 					response = await VotesAPI.setVote(payload.option.id, payload.setTo)
 				}
+
 				this.setItem({ option: payload.option, vote: response.data.vote })
-				optionsStore.list = response.data.options
-				pollStore.$patch(response.data.poll)
+				StoreHelper.updateStores(response.data)
+
 				return response
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -154,7 +142,7 @@ export const useVotesStore = defineStore('votes', {
 				} else {
 					response = await VotesAPI.removeUser(sessionStore.route.params.id)
 				}
-				this.list = this.list.filter((vote: Vote) => vote.user.id !== response.data.deleted)
+				StoreHelper.updateStores(response.data)
 
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -166,8 +154,8 @@ export const useVotesStore = defineStore('votes', {
 		async deleteUser(payload) {
 			const sessionStore = useSessionStore()
 			try {
-				await VotesAPI.removeUser(sessionStore.route.params.id, payload.userId)
-				this.list = this.list.filter((vote: Vote) => vote.user.id !== payload.userId)
+				const response = await VotesAPI.removeUser(sessionStore.route.params.id, payload.userId)
+				StoreHelper.updateStores(response.data)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error deleting votes', { error, payload })

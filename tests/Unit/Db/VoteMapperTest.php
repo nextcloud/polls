@@ -115,9 +115,10 @@ class VoteMapperTest extends UnitTestCase {
 	/**
 	 * testDeleteByPollAndUser
 	 */
-	public function testDeleteByPollAndUserId() {
+	public function testDeleteByPollAndUserId(): void {
 		foreach ($this->polls as $poll) {
-			$this->assertNull($this->voteMapper->deleteByPollAndUserId($poll->getId(), 'voter'));
+			$this->expectNotToPerformAssertions();
+			$this->voteMapper->deleteByPollAndUserId($poll->getId(), 'voter');
 		}
 	}
 

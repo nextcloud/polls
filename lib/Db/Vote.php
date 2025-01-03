@@ -51,11 +51,25 @@ class Vote extends EntityWithUser implements JsonSerializable {
 	// joined columns
 	protected ?int $optionId = null;
 
-	public function __construct() {
+	public function __construct(
+	) {
 		$this->addType('id', 'integer');
 		$this->addType('pollId', 'integer');
 		$this->addType('voteOptionId', 'integer');
 		$this->addType('deleted', 'integer');
+	}
+
+	private function getAnswerSymbol(): string {
+		switch ($this->getVoteAnswer()) {
+			case self::VOTE_YES:
+				return '✔';
+			case self::VOTE_NO:
+				return '❌';
+			case self::VOTE_EVENTUALLY:
+				return '❔';
+			default:
+				return '';
+		}
 	}
 
 	/**
@@ -72,6 +86,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 			'deleted' => $this->getDeleted(),
 			'optionId' => $this->getOptionId(),
 			'user' => $this->getUser(),
+			'answerSymbol' => $this->getAnswerSymbol(),
 		];
 	}
 }

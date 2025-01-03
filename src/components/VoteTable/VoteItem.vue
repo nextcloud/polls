@@ -41,7 +41,7 @@
 
 	const answer = computed(() => votesStore.getVote({
 		option: props.option,
-		userId: props.user.id,
+		user: props.user,
 	}).answer)
 
 	const iconAnswer = computed(() => {

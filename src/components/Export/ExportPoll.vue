@@ -11,7 +11,7 @@
 	import { saveAs } from 'file-saver'
 	import { t } from '@nextcloud/l10n'
 	import { showError } from '@nextcloud/dialogs'
-	
+
 	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
 	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
 
@@ -23,9 +23,21 @@
 
 	import { PollsAPI } from '../../Api/index.js'
 	import { usePollStore, PollType } from '../../stores/poll.ts'
-	import { useVotesStore } from '../../stores/votes.ts'
+	import { Answer, AnswerSymbol, useVotesStore } from '../../stores/votes.ts'
 	import { useOptionsStore } from '../../stores/options.ts'
 
+	enum ArrayStyle {
+		Symbols = 'symbols',
+		Raw = 'raw',
+		Generic = 'generic',
+	}
+
+	enum ExportFormat {
+		Html = 'html',
+		Xlsx = 'xlsx',
+		Ods = 'ods',
+		Csv = 'csv',
+	}
 
 	const route = useRoute()
 	const pollStore = usePollStore()
@@ -50,11 +62,21 @@
 		return buf
 	}
 
+	function getAnswerTranslated(answer: Answer) {
+		switch (answer) {
+			case Answer.Yes:
+				return t('polls', 'Yes')
+			case Answer.Maybe:
+				return t('polls', 'Maybe')
+			default:
+				return t('polls', 'No')
+		}
+	}
 	/**
 	 *
-	 * @param exportType - export type
+	 * @param exportFormat - export type
 	 */
-	async function exportFile(exportType) {
+	async function exportFile(exportFormat: ExportFormat) {
 		const participantsHeader = [t('polls', 'Participants')]
 		const fromHeader = [t('polls', 'From')]
 		const toHeader = [t('polls', 'To')]
@@ -62,7 +84,7 @@
 		workBook.value.SheetNames.push(sheetName.value)
 		sheetData.value = []
 
-		if (['html', 'xlsx', 'ods'].includes(exportType)) {
+		if ([ExportFormat.Html, ExportFormat.Xlsx, ExportFormat.Ods].includes(exportFormat)) {
 			sheetData.value.push(
 				[DOMPurify.sanitize(pollStore.configuration.title)],
 				[DOMPurify.sanitize(pollStore.configuration.description)],
@@ -82,7 +104,7 @@
 		}
 
 		if (pollStore.type === PollType.Text) {
-			if (['html'].includes(exportType)) {
+			if ([ExportFormat.Html].includes(exportFormat)) {
 				sheetData.value.push([
 					...participantsHeader,
 					...optionsStore.list.map((item) => DOMPurify.sanitize(item.text)),
@@ -94,13 +116,13 @@
 				])
 			}
 
-		} else if (['csv'].includes(exportType)) {
+		} else if ([ExportFormat.Csv].includes(exportFormat)) {
 			sheetData.value.push([
 				...participantsHeader,
 				...optionsStore.list.map((option) => optionsStore.explodeDates(option).iso),
 			])
 
-		} else if (['html'].includes(exportType)) {
+		} else if ([ExportFormat.Html].includes(exportFormat)) {
 			sheetData.value.push([
 				...participantsHeader,
 				...optionsStore.list.map((option) => optionsStore.explodeDates(option).raw),
@@ -117,16 +139,16 @@
 			])
 		}
 
-		if (['html', 'ods', 'xlsx'].includes(exportType)) {
-			addVotesArray('symbols')
-		} else if (['csv'].includes(exportType)) {
-			addVotesArray('raw')
+		if ([ExportFormat.Html, ExportFormat.Ods, ExportFormat.Xlsx].includes(exportFormat)) {
+			addVotesArray(ArrayStyle.Symbols)
+		} else if ([ExportFormat.Csv].includes(exportFormat)) {
+			addVotesArray(ArrayStyle.Raw)
 		} else {
-			addVotesArray('generic')
+			addVotesArray(ArrayStyle.Generic)
 		}
 		try {
-			const workBookOutput = xlsxWrite(workBook.value, { bookType: exportType, type: 'binary' })
-			saveAs(new Blob([s2ab(workBookOutput)], { type: 'application/octet-stream' }), `pollStore.${exportType}`)
+			const workBookOutput = xlsxWrite(workBook.value, { bookType: exportFormat, type: 'binary' })
+			saveAs(new Blob([s2ab(workBookOutput)], { type: 'application/octet-stream' }), `pollStore.${exportFormat}`)
 		} catch (error) {
 			console.error(error)
 			showError(t('polls', 'Error exporting file.'))
@@ -137,7 +159,7 @@
 	 *
 	 * @param style - style
 	 */
-	function addVotesArray(style: 'symbols' | 'raw' | 'generic') {
+	function addVotesArray(style: ArrayStyle) {
 		pollStore.participants.forEach((participant) => {
 			const votesLine = [participant.displayName]
 			try {
@@ -146,18 +168,18 @@
 				}
 
 				optionsStore.list.forEach((option) => {
-					if (style === 'symbols') {
-						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answerSymbol ?? '❌')
-					} else if (style === 'raw') {
-						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answer)
+					if (style === ArrayStyle.Symbols) {
+						votesLine.push(votesStore.getVote({ user: participant, option }).answerSymbol ?? AnswerSymbol.No)
+					} else if (style === ArrayStyle.Raw) {
+						votesLine.push(votesStore.getVote({ user: participant, option }).answer)
 					} else {
-						votesLine.push(votesStore.getVote({ userId: participant.id, option }).answerTranslated ?? t('polls', 'No'))
+						votesLine.push(getAnswerTranslated(votesStore.getVote({ user: participant, option }).answer))
 					}
 				})
 
 				sheetData.value.push(votesLine)
 			} catch (error) {
-			// just skip this participant
+				// just skip this participant
 			}
 		})
 
@@ -174,7 +196,7 @@
 		<NcActionButton close-after-click
 			:name="t('polls', 'Download Excel spreadsheet')"
 			:aria-label="t('polls', 'Download Excel spreadsheet')"
-			@click="exportFile('xlsx')">
+			@click="exportFile(ExportFormat.Xlsx)">
 			<template #icon>
 				<ExcelIcon />
 			</template>
@@ -183,7 +205,7 @@
 		<NcActionButton close-after-click
 			:name="t('polls', 'Download Open Document spreadsheet')"
 			:aria-label="t('polls', 'Download Open Document spreadsheet')"
-			@click="exportFile('ods')">
+			@click="exportFile(ExportFormat.Ods)">
 			<template #icon>
 				<FileTableIcon />
 			</template>
@@ -192,7 +214,7 @@
 		<NcActionButton close-after-click
 			:name="t('polls', 'Download CSV file')"
 			::aria-label="t('polls', 'Download CSV file')"
-			@click="exportFile('csv')">
+			@click="exportFile(ExportFormat.Csv)">
 			<template #icon>
 				<CsvIcon />
 			</template>
@@ -201,7 +223,7 @@
 		<NcActionButton close-after-click
 			:name="t('polls', 'Download HTML file')"
 			:aria-label="t('polls', 'Download HTML file')"
-			@click="exportFile('html')">
+			@click="exportFile(ExportFormat.Html)">
 			<template #icon>
 				<XmlIcon />
 			</template>
