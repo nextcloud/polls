@@ -30,7 +30,6 @@ export type Vote = {
 	optionText: string
 	answer: Answer
 	answerSymbol: AnswerSymbol
-	answerTranslated: string
 	deleted: number
 	optionId: number
 	user: User
@@ -63,7 +62,6 @@ export const useVotesStore = defineStore('votes', {
 					optionText: payload.option.text,
 					user: payload.user,
 					answerSymbol: AnswerSymbol.None,
-					answerTranslated: '',
 					deleted: 0,
 					id: 0,
 					optionId: payload.option.id,
