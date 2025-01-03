@@ -25,6 +25,7 @@ export type UserPreferences = {
 	useNewAddOption: boolean
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
+	useCardsArrangement: boolean
 }
 
 export type SessionSettings = {
@@ -62,6 +63,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			useNewAddOption: false,
 			useCommentsAlternativeStyling: false,
 			useAlternativeStyling: false,
+			useCardsArrangement: false,
 		},
 		session: {
 			manualViewDatePoll: '',
