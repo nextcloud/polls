@@ -82,11 +82,23 @@
 		</HeaderBar>
 
 		<div class="vote_main">
-			<VoteInfoCards />
+			<VoteInfoCards v-if="!preferencesStore.user.useCardsArrangement"/>
 
-			<div v-if="pollStore.configuration.description" class="area__description">
+			<div v-if="pollStore.configuration.description && !preferencesStore.user.useCardsArrangement" class="area__description">
 				<MarkUpDescription />
 			</div>
+
+			<div v-if="preferencesStore.user.useCardsArrangement" class="top_area">
+				<div v-if="pollStore.configuration.description" class="description_container">
+					<div class="area__description">
+						<MarkUpDescription />
+					</div>
+				</div>
+				<div class="cards_container">
+					<VoteInfoCards />
+				</div>
+			</div>
+
 
 			<div class="area__main" :class="pollStore.viewMode">
 				<VoteTable v-show="optionsStore.list.length" />
@@ -135,6 +147,14 @@
 .area__main {
 	display: flex;
 	flex-direction: column;
+}
+
+.top_area {
+	display: flex;
+	flex-wrap: wrap-reverse;
+	.description_container, .cards_container {
+		flex: 1 50rem;
+	}
 }
 
 .app-content .area__header {

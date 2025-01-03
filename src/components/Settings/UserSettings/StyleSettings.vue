@@ -36,5 +36,12 @@
 				{{ t('polls', 'Use alternative option add dialog') }}
 			</NcCheckboxRadioSwitch>
 		</div>
+		<div class="user_settings">
+			<NcCheckboxRadioSwitch v-model="preferencesStore.user.useCardsArrangement"
+				type="switch"
+				@update:model-value="preferencesStore.write()">
+				{{ t('polls', 'Arrange description and card hints side by side') }}
+			</NcCheckboxRadioSwitch>
+		</div>
 	</div>
 </template>

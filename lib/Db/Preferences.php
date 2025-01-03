@@ -27,6 +27,7 @@ class Preferences extends Entity implements JsonSerializable {
 	public const DEFAULT = [
 		'useCommentsAlternativeStyling' => false,
 		'useAlternativeStyling' => false,
+		'useCardsArrangement' => false,
 		'calendarPeek' => false,
 		'checkCalendars' => [],
 		'checkCalendarsHoursBefore' => 0,
@@ -70,7 +71,7 @@ class Preferences extends Entity implements JsonSerializable {
 		}
 		return 0;
 	}
-	
+
 	public function getCheckCalendarsHoursAfter(): int {
 		if (isset($this->getPreferences_decoded()->checkCalendarsHoursAfter)) {
 			return intval($this->getPreferences_decoded()->checkCalendarsHoursAfter);
