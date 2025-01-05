@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "Digitare per aggiungere una singola condivisione",
     "Error while adding share" : "Errore durante l'aggiunta della condivisione",
     "Vote saved" : "Voto salvato",
+    "Vote already booked out" : "Voto già prenotato",
     "Error saving vote" : "Errore durante il salvataggio del voto",
     "Delete votes" : "Elimina voti",
     "Participant {userId} has been removed" : "Il partecipante {userId} è stato rimosso",
