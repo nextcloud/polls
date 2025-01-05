@@ -212,6 +212,7 @@
 
 	.input-div {
 		position: relative;
+		margin-bottom: var(--default-grid-baseline);
 
 		label {
 			display: block;
@@ -245,7 +246,7 @@
 			position: relative;
 			display: flex;
 			& > input {
-				height: 44px !important;
+				// height: 44px !important;
 				flex: 1;
 			}
 		}
