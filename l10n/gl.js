@@ -228,7 +228,7 @@ OC.L10N.register(
     "Delete orphaned" : "Eliminar orfo",
     "Add some!" : "Engadir algún!",
     "Edit access" : "Editar o acceso",
-    "Register" : "Rexistrar",
+    "Register" : "Rexistrarse",
     "Result of sent confirmation mails" : "Resultado dos correos de confirmación enviados",
     "No valid email address" : "Non hai ningún enderezo de correo válido",
     "Unknown error" : "Produciuse un erro descoñecido",
