@@ -38,21 +38,23 @@
 			{{ t('polls', 'Shifting dates is disabled to prevent shifting of proposals of other participants.') }}
 		</div>
 		<div v-else class="select-unit">
-			<InputDiv v-model="shift.value" :label="t('polls', 'Step width')" use-num-modifiers />
-			<NcSelect v-model="shift.unit"
-				:input-label="t('polls', 'Step unit')"
-				:clearable="false"
-				:filterable="false"
-				:options="dateUnits"
-				label="name" />
-			<NcButton class="submit"
-				:aria-label="t('polls', 'Submit')"
-				:type="ButtonType.Tertiary"
-				@click="shiftDates(shift)">
-				<template #icon>
-					<SubmitIcon />
-				</template>
-			</NcButton>
+			<InputDiv v-model="shift.value" class="shift-step" :label="t('polls', 'Step width')" use-num-modifiers />
+			<div class="unit-select">
+				<NcSelect v-model="shift.unit"
+					:input-label="t('polls', 'Step unit')"
+					:clearable="false"
+					:filterable="false"
+					:options="dateUnits"
+					label="name" />
+				<NcButton class="submit"
+					:aria-label="t('polls', 'Submit')"
+					:type="ButtonType.Tertiary"
+					@click="shiftDates(shift)">
+					<template #icon>
+						<SubmitIcon />
+					</template>
+				</NcButton>
+			</div>
 		</div>
 	</div>
 </template>
@@ -62,16 +64,22 @@
 	display: flex;
 	flex-wrap: wrap;
 	align-items: end;
-	.v-select {
-		margin: 0 8px;
-		width: unset !important;
-		min-width: 75px;
-		flex: 1;
-	}
+	column-gap: 8px;
 
-	.button-vue.button-vue--vue-tertiary {
-		padding: 0;
-		min-width: 0;
+	.unit-select {
+		flex: 1;
+		display: flex;
+		align-items: end;
+		.v-select {
+			flex: 1 185px;
+			margin: 0 8px;
+			width: unset !important;
+			margin-bottom: var(--default-grid-baseline);
+		}
+		.button-vue {
+			margin-bottom: var(--default-grid-baseline);
+			flex: 0 auto;
+		}
 	}
 
 	.button-vue__text,
