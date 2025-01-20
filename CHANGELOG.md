@@ -4,6 +4,11 @@
 -->
 # Changelog
 ##
+## [7.2.10] - 2024-01-21
+### Same as 7.2.8 but only for PHP 8.0
+### Fix
+ - fix limit check
+
 ## [7.2.9] - 2024-01-03
 ### Fix
  - minimum php version (8.1)
