@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "Escriba para engadir unha compartición individual",
     "Error while adding share" : "Produciuse un erro ao engadir a compartición",
     "Vote saved" : "Voto gardado",
+    "Vote already booked out" : "O voto xa está reservado",
     "Error saving vote" : "Produciuse un erro ao gardar o voto",
     "Delete votes" : "Eliminar os votos",
     "Participant {userId} has been removed" : "O participante {userId} foi retirado",
