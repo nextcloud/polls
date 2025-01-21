@@ -23,7 +23,7 @@
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
   <dependencies>
-    <php min-version="8.0" max-version="8.0" />
+    <php min-version="8.0" max-version="8.0"/>
     <nextcloud min-version="27" max-version="29"/>
   </dependencies>
   <activity>
