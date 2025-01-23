@@ -568,6 +568,7 @@ OC.L10N.register(
     "Type to add an individual share" : "Куцајте да додате појединачно дељење",
     "Error while adding share" : "Грешка приликом додавања дељења",
     "Vote saved" : "Глас је сачуван",
+    "Vote already booked out" : "Гласање је већ закључено",
     "Error saving vote" : "Грешка приликом чувања гласа",
     "Delete votes" : "Обриши гласове",
     "Participant {userId} has been removed" : "Уклоњен је учесник {userId}",
