@@ -208,9 +208,8 @@
 </template>
 
 <style lang="scss" scoped>
-	$input-height: 44px;
-
 	.input-div {
+		--input-height: 44px;
 		position: relative;
 		margin-bottom: var(--default-grid-baseline);
 
@@ -226,11 +225,11 @@
 			&.error,
 			&.success,
 			&.checking {
-				padding-right: $input-height;
+				padding-right: var(--input-height);
 			}
 
 			&.has-modifier {
-				padding: 0 $input-height;
+				padding: 0 var(--input-height);
 			}
 
 			&.error {
@@ -272,14 +271,14 @@
 		.signaling-icon {
 			position: absolute;
 			right: 0;
-			width: $input-height;
-			height: $input-height;
+			width: var(--input-height);
+			height: var(--input-height);
 		}
 
 		.modifier {
 			position: absolute;
 			height: 100%;
-			width: $input-height;
+			width: var(--input-height);
 			border-color: var(--color-border-dark);
 			cursor: pointer;
 
