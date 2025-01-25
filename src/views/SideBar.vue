@@ -8,8 +8,8 @@
 	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 
-	import NcAppSidebar from '@nextcloud/vue/dist/Components/NcAppSidebar.js'
-	import NcAppSidebarTab from '@nextcloud/vue/dist/Components/NcAppSidebarTab.js'
+	import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
+	import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 
 	import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 	import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'

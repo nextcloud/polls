@@ -8,12 +8,12 @@
 	import { useRouter, useRoute } from 'vue-router'
 	import { showError } from '@nextcloud/dialogs'
 	import { t, n } from '@nextcloud/l10n'
-	
-	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
-	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-	import NcLoadingIcon from '@nextcloud/vue/dist/Components/NcLoadingIcon.js'
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+
+	import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+	import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 	import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 	import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'

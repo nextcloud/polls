@@ -11,11 +11,11 @@
 	import { emit } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-	import NcActionCheckbox from '@nextcloud/vue/dist/Components/NcActionCheckbox.js'
-	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
-	import NcActionSeparator from '@nextcloud/vue/dist/Components/NcActionSeparator.js'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+	import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
+	import NcActionInput from '@nextcloud/vue/components/NcActionInput'
+	import NcActionSeparator from '@nextcloud/vue/components/NcActionSeparator'
 
 	import SettingsIcon from 'vue-material-design-icons/Cog.vue'
 	import SendLinkPerEmailIcon from 'vue-material-design-icons/LinkVariant.vue'

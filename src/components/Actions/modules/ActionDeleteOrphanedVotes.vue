@@ -6,7 +6,7 @@
 <script setup lang="ts">
 	import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	import { useVotesStore } from '../../../stores/votes.ts'
 

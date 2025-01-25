@@ -7,9 +7,9 @@
 	import { t } from '@nextcloud/l10n'
 	import { Sortable } from "sortablejs-vue3"
 
-	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'

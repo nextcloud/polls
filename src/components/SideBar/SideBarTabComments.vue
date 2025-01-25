@@ -7,8 +7,8 @@
 	import { computed, onMounted, onUnmounted } from 'vue'
 	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
-	
-	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+
+	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
 	import CommentAdd from '../Comments/CommentAdd.vue'
 	import Comments from '../Comments/Comments.vue'

@@ -9,7 +9,7 @@
 	import { showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 
-	import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
+	import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 	import { AppSettingsAPI } from '../../Api/index.js'
 	import { Logger } from '../../helpers/index.ts'

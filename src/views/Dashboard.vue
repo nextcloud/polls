@@ -9,7 +9,7 @@
 	import { showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 
-	import NcDashboardWidget from '@nextcloud/vue/dist/Components/NcDashboardWidget.js'
+	import NcDashboardWidget from '@nextcloud/vue/components/NcDashboardWidget'
 
 	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'

@@ -10,10 +10,10 @@
 	import { emit } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 
-	import NcAppNavigation from '@nextcloud/vue/dist/Components/NcAppNavigation.js'
-	import NcAppNavigationNew from '@nextcloud/vue/dist/Components/NcAppNavigationNew.js'
-	import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
-	import NcCounterBubble from '@nextcloud/vue/dist/Components/NcCounterBubble.js'
+	import NcAppNavigation from '@nextcloud/vue/components/NcAppNavigation'
+	import NcAppNavigationNew from '@nextcloud/vue/components/NcAppNavigationNew'
+	import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
+	import NcCounterBubble from '@nextcloud/vue/components/NcCounterBubble'
 
 	// Icons
 	import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'

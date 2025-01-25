@@ -7,7 +7,7 @@
 	import { computed } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 	import { InputDiv } from '../../Base/index.js'
 	import { usePreferencesStore } from '../../../stores/preferences.ts'
@@ -32,7 +32,7 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch v-model="preferencesStore.user.calendarPeek" 
+			<NcCheckboxRadioSwitch v-model="preferencesStore.user.calendarPeek"
 				type="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Use calendar lookup for conflicting calendar events') }}
@@ -72,7 +72,7 @@
 				:num-min="0"
 				:num-max="24"
 				num-wrap
-				use-num-modifiers 
+				use-num-modifiers
 				@change="preferencesStore.write()" />
 		</div>
 	</div>

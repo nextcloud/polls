@@ -7,8 +7,8 @@
 	import { ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
-	import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+	import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 	import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 

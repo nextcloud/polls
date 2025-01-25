@@ -7,8 +7,8 @@
 	import { ref, onMounted } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
-	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+	import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
 	import ComboTable from '../components/Combo/ComboTable.vue'
 	import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'

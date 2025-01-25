@@ -7,8 +7,8 @@
 	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 
-	import NcAppSettingsDialog from '@nextcloud/vue/dist/Components/NcAppSettingsDialog.js'
-	import NcAppSettingsSection from '@nextcloud/vue/dist/Components/NcAppSettingsSection.js'
+	import NcAppSettingsDialog from '@nextcloud/vue/components/NcAppSettingsDialog'
+	import NcAppSettingsSection from '@nextcloud/vue/components/NcAppSettingsSection'
 
 	import { CalendarSettings, FeatureSettings, StyleSettings, PerformanceSettings } from './UserSettings/index.js'
 	import { usePreferencesStore } from '../../stores/preferences.ts'

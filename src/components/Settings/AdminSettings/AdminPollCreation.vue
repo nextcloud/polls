@@ -5,9 +5,9 @@
 
 <script setup>
 	import { t } from '@nextcloud/l10n'
-	
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-	import NcSelect from '@nextcloud/vue/dist/Components/NcSelect.js'
+
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+	import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
@@ -16,7 +16,7 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.allowPollCreation" 
+		<NcCheckboxRadioSwitch v-model="appSettingsStore.allowPollCreation"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
 			{{ t('polls', 'Enable the poll creation globally') }}

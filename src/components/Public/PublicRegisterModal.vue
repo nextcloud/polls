@@ -11,9 +11,9 @@
 	import { generateUrl } from '@nextcloud/router'
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-	import NcRichText from '@nextcloud/vue/dist/Components/NcRichText.js'
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+	import NcRichText from '@nextcloud/vue/components/NcRichText'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	import { InputDiv } from '../Base/index.js'
 	import { SimpleLink, setCookie } from '../../helpers/index.ts'
@@ -41,7 +41,7 @@
 	const emailAddress = ref('')
 	const saveCookie = ref(true)
 
-	const registrationIsValid = computed(() => checkStatus.value.userName === SignalingType.Valid 
+	const registrationIsValid = computed(() => checkStatus.value.userName === SignalingType.Valid
 		&& (checkStatus.value.email === SignalingType.Valid
 			|| (emailAddress.value.length === 0
 				&& sessionStore.share.publicPollEmail !== 'mandatory'
@@ -49,8 +49,8 @@
 		)
 	)
 	const disableSubmit = computed(() => !registrationIsValid.value || checkStatus.value.userName === SignalingType.Checking || sendRegistration.value)
-	const emailGeneratedStatus = computed(() => checkStatus.value.email === SignalingType.Empty 
-		? sessionStore.share.publicPollEmail 
+	const emailGeneratedStatus = computed(() => checkStatus.value.email === SignalingType.Empty
+		? sessionStore.share.publicPollEmail
 		: checkStatus.value.email
 	)
 	const offerCookies = computed(() => sessionStore.share.type === ShareType.Public)
@@ -200,7 +200,7 @@
 		if (!registrationIsValid.value || sendRegistration.value) {
 			return
 		}
-		
+
 		sendRegistration.value = true
 
 		try {

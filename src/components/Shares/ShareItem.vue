@@ -8,11 +8,11 @@
 	import { showSuccess, showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 
-	import NcActionCaption from '@nextcloud/vue/dist/Components/NcActionCaption.js'
-	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
-	import NcActionRadio from '@nextcloud/vue/dist/Components/NcActionRadio.js'
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcActionCaption from '@nextcloud/vue/components/NcActionCaption'
+	import NcActionInput from '@nextcloud/vue/components/NcActionInput'
+	import NcActionRadio from '@nextcloud/vue/components/NcActionRadio'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 	import VotedIcon from 'vue-material-design-icons/CheckboxMarked.vue'
 	import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'

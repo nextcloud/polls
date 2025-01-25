@@ -7,8 +7,8 @@
 	import { PropType } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-	import NcAppNavigationItem from '@nextcloud/vue/dist/Components/NcAppNavigationItem.js'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+	import NcAppNavigationItem from '@nextcloud/vue/components/NcAppNavigationItem'
 
 	import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 	import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
@@ -32,8 +32,8 @@
 </script>
 
 <template>
-	<NcAppNavigationItem :name="props.poll.configuration.title" 
-		:to="{name: 'vote', params: {id: props.poll.id}}" 
+	<NcAppNavigationItem :name="props.poll.configuration.title"
+		:to="{name: 'vote', params: {id: props.poll.id}}"
 		:class="{ closed: props.poll.status.expired }">
 		<template #icon>
 			<TextPollIcon v-if="props.poll.type === PollType.Text" />

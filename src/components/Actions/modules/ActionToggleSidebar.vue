@@ -7,8 +7,8 @@
 	import { emit } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
-	
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+
 	import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 
 	const caption = t('polls', 'Toggle Sidebar')

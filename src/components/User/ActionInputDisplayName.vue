@@ -9,7 +9,7 @@
 	import { showSuccess, showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 
-	import NcActionInput from '@nextcloud/vue/dist/Components/NcActionInput.js'
+	import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 	import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 
 	import { ValidatorAPI } from '../../Api/index.js'

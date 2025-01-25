@@ -7,8 +7,8 @@
 	import { emit } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 
-	import NcAppSidebar from '@nextcloud/vue/dist/Components/NcAppSidebar.js'
-	import NcAppSidebarTab from '@nextcloud/vue/dist/Components/NcAppSidebarTab.js'
+	import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
+	import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 
 	import { PollsAppIcon } from '../components/AppIcons/index.js'
 	import { SideBarTabDatePolls } from '../components/SideBar/index.js'

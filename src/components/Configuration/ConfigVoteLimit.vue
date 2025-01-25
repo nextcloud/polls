@@ -7,7 +7,7 @@
 	import { computed } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 	import { InputDiv } from '../Base/index.js'
 
@@ -42,7 +42,7 @@
 
 <template>
 	<div>
-		<NcCheckboxRadioSwitch v-model="useLimit" 
+		<NcCheckboxRadioSwitch v-model="useLimit"
 			type="switch"
 			@update:model-value="validateLimit()">
 			{{ t('polls', 'Limit "Yes" votes per participant') }}

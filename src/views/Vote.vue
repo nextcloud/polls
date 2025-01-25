@@ -8,8 +8,8 @@
 	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 	import { t } from '@nextcloud/l10n'
 
-	import NcAppContent from '@nextcloud/vue/dist/Components/NcAppContent.js'
-	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+	import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
 	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 	import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'

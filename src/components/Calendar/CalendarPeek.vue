@@ -10,7 +10,7 @@
 	import orderBy from 'lodash/orderBy'
 	import moment from '@nextcloud/moment'
 
-	import NcPopover from '@nextcloud/vue/dist/Components/NcPopover.js'
+	import NcPopover from '@nextcloud/vue/components/NcPopover'
 
 	import { usePollStore } from '../../stores/poll.ts'
 

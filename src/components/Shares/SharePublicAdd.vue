@@ -7,8 +7,8 @@
 	import { showError } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 	import PlusIcon from 'vue-material-design-icons/Plus.vue'
 
@@ -40,7 +40,7 @@
 			<div class="vote-status" />
 		</template>
 		<NcActions>
-			<NcActionButton :name="t('polls', 'Add a new public link')" 
+			<NcActionButton :name="t('polls', 'Add a new public link')"
 				:aria-label="t('polls', 'Add a new public link')"
 				@click="addPublicShare()">
 				<template #icon>

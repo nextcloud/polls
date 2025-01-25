@@ -8,8 +8,8 @@
 	import { ref } from 'vue'
 	import { t, n } from '@nextcloud/l10n'
 
-	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcModal from '@nextcloud/vue/components/NcModal'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 

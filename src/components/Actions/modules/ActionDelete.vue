@@ -7,7 +7,7 @@
 	import { ref, computed } from 'vue'
 	import { t, n } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'

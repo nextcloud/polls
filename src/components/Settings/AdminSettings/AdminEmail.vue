@@ -11,7 +11,7 @@
 	import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
@@ -31,7 +31,7 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.legalTermsInEmail" 
+		<NcCheckboxRadioSwitch v-model="appSettingsStore.legalTermsInEmail"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
 
@@ -43,7 +43,7 @@
 				<span>{{ t('polls', 'Additional email disclaimer') }}</span>
 				<LanguageMarkdownIcon />
 			</div>
-			<NcCheckboxRadioSwitch v-model="preview" 
+			<NcCheckboxRadioSwitch v-model="preview"
 				type="switch"
 				@change="appSettingsStore.write()">
 				{{ t('polls', 'Preview') }}

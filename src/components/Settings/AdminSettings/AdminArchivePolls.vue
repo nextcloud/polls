@@ -6,9 +6,9 @@
 <script setup>
 	import { InputDiv } from '../../Base/index.js'
 	import { t } from '@nextcloud/l10n'
-	
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-	
+
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+
 	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 	const appSettingsStore = useAppSettingsStore()
@@ -26,7 +26,7 @@
 			type="number"
 			inputmode="numeric"
 			use-num-modifiers
-			:label="t('polls', 'Days after which polls should be archived after closing')" 
+			:label="t('polls', 'Days after which polls should be archived after closing')"
 			@change="appSettingsStore.write()"/>
 	</div>
 </template>
