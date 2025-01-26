@@ -166,9 +166,7 @@
 					<Component :is="getIconComponent(pollCategory.id)" :size="iconSize" />
 				</template>
 				<template #counter>
-					<NcCounterBubble>
-						{{ pollsStore.pollsCount[pollCategory.id] }}
-					</NcCounterBubble>
+					<NcCounterBubble :count="pollsStore.pollsCount[pollCategory.id]" />
 				</template>
 				<ul v-if="sessionStore.appSettings.navigationPollsInList">
 					<PollNavigationItems v-for="(poll) in pollsStore.navigationList(pollCategory.id)"
