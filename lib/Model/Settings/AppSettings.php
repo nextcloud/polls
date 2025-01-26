@@ -105,7 +105,11 @@ class AppSettings implements JsonSerializable {
 	}
 
 	private function checkSettingType(string $key, int $type): bool {
-		return $this->appConfig->getValueType(AppConstants::APP_ID, $key) === $type;
+		try {
+			return $this->appConfig->getValueType(AppConstants::APP_ID, $key) === $type;
+		} catch (\Throwable $th) {
+			return false;
+		}
 	}
 
 	// Getters
