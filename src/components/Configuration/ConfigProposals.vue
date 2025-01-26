@@ -8,8 +8,8 @@
 	import moment from '@nextcloud/moment'
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-	import NcDateTimePicker from '@nextcloud/vue/dist/Components/NcDateTimePicker.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+	import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
 
 	import { usePollStore, AllowProposals } from '../../stores/poll.ts'
 
@@ -41,7 +41,7 @@
 			}
 			pollStore.write()
 		},
-	})	
+	})
 
 	const firstDOW = moment.localeData()._week.dow === 0 ? 7 : moment.localeData()._week.dow
 

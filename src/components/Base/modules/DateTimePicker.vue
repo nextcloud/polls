@@ -7,7 +7,7 @@
 	import { computed } from 'vue';
 	import { t } from '@nextcloud/l10n'
 	import moment from '@nextcloud/moment'
-	import NcDateTimePicker from '@nextcloud/vue/dist/Components/NcDateTimePicker.js'
+	import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
 
 	const model = defineModel({
 		required: true,

@@ -8,7 +8,7 @@
 	import { InputDiv } from '../../Base/index.js'
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 	import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
 
@@ -36,7 +36,7 @@
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch v-model="defaultViewTextPoll" 
+			<NcCheckboxRadioSwitch v-model="defaultViewTextPoll"
 				type ="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Text polls default to list view') }}
@@ -47,7 +47,7 @@
 		</div>
 
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch v-model="defaultViewDatePoll" 
+			<NcCheckboxRadioSwitch v-model="defaultViewDatePoll"
 				type="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Date polls default to list view') }}
@@ -62,7 +62,7 @@
 				type="number"
 				inputmode="numeric"
 				use-num-modifiers
-				:label="t('polls', 'Enter the amount of days, polls without activity stay in the relevant list:')" 
+				:label="t('polls', 'Enter the amount of days, polls without activity stay in the relevant list:')"
 				@change="preferencesStore.write()" />
 		</div>
 	</div>

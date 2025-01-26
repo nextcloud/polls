@@ -7,7 +7,7 @@
 	import { computed } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
 	import { useSessionStore } from '../../stores/session.ts'
@@ -24,7 +24,7 @@
 
 <template>
 	<div class="subscription">
-		<NcCheckboxRadioSwitch v-model="subscriptionStore.subscribed" 
+		<NcCheckboxRadioSwitch v-model="subscriptionStore.subscribed"
 			type="switch"
 			@change="subscriptionStore.write()">
 			{{ label }}

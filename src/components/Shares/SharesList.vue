@@ -7,7 +7,7 @@
 	import { ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
+	import NcModal from '@nextcloud/vue/components/NcModal'
 
 	import ShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 
@@ -17,7 +17,7 @@
 	import SharePublicAdd from './SharePublicAdd.vue'
 	import ShareItemAllUsers from './ShareItemAllUsers.vue'
 	import MarkUpDescription from '../Poll/MarkUpDescription.vue'
-	
+
 	import { usePollStore } from '../../stores/poll.ts'
 	import { useSharesStore, Share } from '../../stores/shares.ts'
 	import { useSessionStore } from '../../stores/session.ts'

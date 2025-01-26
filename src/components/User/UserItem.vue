@@ -9,7 +9,7 @@
 	import { getCurrentUser } from '@nextcloud/auth'
 	import { t } from '@nextcloud/l10n'
 
-	import NcAvatar from '@nextcloud/vue/dist/Components/NcAvatar.js'
+	import NcAvatar from '@nextcloud/vue/components/NcAvatar'
 	import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
 	import LinkIcon from 'vue-material-design-icons/LinkVariant.vue'
 	import ContactIcon from 'vue-material-design-icons/CardAccountDetails.vue'

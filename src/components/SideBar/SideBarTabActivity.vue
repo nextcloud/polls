@@ -8,7 +8,7 @@
 	import { t } from '@nextcloud/l10n'
 	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
-	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
+	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
 	import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 

@@ -8,8 +8,8 @@
 	import { showError, showSuccess } from '@nextcloud/dialogs'
 	import { t, n } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
 	import CalendarStartIcon from 'vue-material-design-icons/CalendarStart.vue'

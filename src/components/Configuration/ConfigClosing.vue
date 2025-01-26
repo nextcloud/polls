@@ -8,9 +8,9 @@
 	import moment from '@nextcloud/moment'
 	import { t } from '@nextcloud/l10n'
 
-	import NcButton from '@nextcloud/vue/dist/Components/NcButton.js'
-	import NcDateTimePicker from '@nextcloud/vue/dist/Components/NcDateTimePicker.js'
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcButton from '@nextcloud/vue/components/NcButton'
+	import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 	import OpenPollIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 	import ClosePollIcon from 'vue-material-design-icons/Lock.vue'

@@ -7,7 +7,7 @@
 	import { computed } from 'vue'
 	import { t } from '@nextcloud/l10n'
 	import { emit } from '@nextcloud/event-bus'
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 	import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 
 	const buttonAriaLabel = computed(() => props.caption ?? t('polls', 'Add option'))

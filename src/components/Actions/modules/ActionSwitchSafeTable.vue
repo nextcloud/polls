@@ -7,7 +7,7 @@
 	import { t } from '@nextcloud/l10n'
 	import { usePollStore } from '../../../stores/poll.ts'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	const pollStore = usePollStore()
 	const caption = t('polls', 'Reveal them')

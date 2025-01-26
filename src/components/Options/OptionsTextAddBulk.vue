@@ -8,10 +8,10 @@
 	import { showError, showSuccess } from '@nextcloud/dialogs'
 	import { t } from '@nextcloud/l10n'
 
-	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcModal from '@nextcloud/vue/components/NcModal'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 
@@ -50,7 +50,7 @@
 <template>
 	<div>
 		<NcActions>
-			<NcActionButton :name="props.caption" 
+			<NcActionButton :name="props.caption"
 				:aria-label="props.caption"
 				@click="showModal = true">
 				<template #icon>

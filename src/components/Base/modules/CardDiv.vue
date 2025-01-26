@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-	import NcNoteCard from '@nextcloud/vue/dist/Components/NcNoteCard.js'
+	import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 </script>
 
 <template>

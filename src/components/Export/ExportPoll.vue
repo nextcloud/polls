@@ -12,8 +12,8 @@
 	import { t } from '@nextcloud/l10n'
 	import { showError } from '@nextcloud/dialogs'
 
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 	import ExcelIcon from 'vue-material-design-icons/MicrosoftExcel.vue'
 	import FileTableIcon from 'vue-material-design-icons/FileTableOutline.vue'

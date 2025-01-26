@@ -7,7 +7,7 @@
 	import { computed } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 	import UserItem from '../User/UserItem.vue'
 	import { VirtualUserItemType } from '../../Types/index.ts'

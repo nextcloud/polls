@@ -8,7 +8,7 @@
 	import moment from '@nextcloud/moment'
 	import { t, n } from '@nextcloud/l10n'
 
-	import NcUserBubble from '@nextcloud/vue/dist/Components/NcUserBubble.js'
+	import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
 	import OwnerIcon from 'vue-material-design-icons/Crown.vue'
 	import SubscribedIcon from 'vue-material-design-icons/Bell.vue'

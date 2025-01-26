@@ -7,8 +7,8 @@
 	import { computed } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionCheckbox from '@nextcloud/vue/dist/Components/NcActionCheckbox.js'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionCheckbox from '@nextcloud/vue/components/NcActionCheckbox'
 
 	import { useSubscriptionStore } from '../../stores/subscription.ts'
 	import { useSessionStore } from '../../stores/session.ts'

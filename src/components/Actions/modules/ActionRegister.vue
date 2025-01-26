@@ -7,8 +7,8 @@
 	import { ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
-	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+	import NcModal from '@nextcloud/vue/components/NcModal'
 
 	import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
 

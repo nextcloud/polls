@@ -9,13 +9,13 @@
 	import { t } from '@nextcloud/l10n'
 	import moment from '@nextcloud/moment'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-	import NcDateTimePicker from '@nextcloud/vue/dist/Components/NcDateTimePicker.js'
-	import NcButton, { ButtonType } from '@nextcloud/vue/dist/Components/NcButton.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+	import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
-	
+
 	import { FlexSpacer } from '../Base/index.js'
 	import { useOptionsStore } from '../../stores/options.ts'
 

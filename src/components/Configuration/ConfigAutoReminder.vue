@@ -6,10 +6,10 @@
 <script setup lang="ts">
 	import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/dist/Components/NcCheckboxRadioSwitch.js'
-	import NcPopover from '@nextcloud/vue/dist/Components/NcPopover.js'
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
+	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+	import NcPopover from '@nextcloud/vue/components/NcPopover'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
 	import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 	import AutoReminderInformation from './AutoReminderInformation.vue'
@@ -21,7 +21,7 @@
 
 <template>
 	<div class="auto-reminder-switch">
-		<NcCheckboxRadioSwitch v-model="pollStore.configuration.autoReminder" 
+		<NcCheckboxRadioSwitch v-model="pollStore.configuration.autoReminder"
 			type="switch"
 			@update:model-value="pollStore.write()">
 			{{ t('polls', 'Use Autoreminder') }}

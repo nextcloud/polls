@@ -7,9 +7,9 @@
 	import { computed, PropType, ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcActions from '@nextcloud/vue/dist/Components/NcActions.js'
-	import NcActionButton from '@nextcloud/vue/dist/Components/NcActionButton.js'
-	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
+	import NcActions from '@nextcloud/vue/components/NcActions'
+	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+	import NcModal from '@nextcloud/vue/components/NcModal'
 
 	import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
 	import DeleteIcon from 'vue-material-design-icons/Delete.vue'

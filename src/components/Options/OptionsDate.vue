@@ -7,8 +7,8 @@
 	import { PropType, ref } from 'vue'
 	import { t } from '@nextcloud/l10n'
 
-	import NcEmptyContent from '@nextcloud/vue/dist/Components/NcEmptyContent.js'
-	import NcModal from '@nextcloud/vue/dist/Components/NcModal.js'
+	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+	import NcModal from '@nextcloud/vue/components/NcModal'
 
 	import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 

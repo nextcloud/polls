@@ -8,7 +8,7 @@
 	import { debounce } from 'lodash'
 	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
-	import NcContent from '@nextcloud/vue/dist/Components/NcContent.js'
+	import NcContent from '@nextcloud/vue/components/NcContent'
 
 	import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 	import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
@@ -108,7 +108,7 @@
 	// 		this.sessionStore.setRouter(this.$route)
 	// 		this.sessionStore.load()
 	// 	}
-		
+
 	// 	if (this.sessionStore.userStatus.isLoggedin) {
 	// 		this.preferencesStore.load()
 	// 	}
