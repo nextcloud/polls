@@ -54,7 +54,6 @@
 		: checkStatus.value.email
 	)
 	const offerCookies = computed(() => sessionStore.share.type === ShareType.Public)
-	const status = computed(() => registrationIsValid.value)
 
 	const privacyRich = computed(() => {
 		const subject = t('polls', 'By clicking the "OK" button you accept our {privacyPolicy}.')
