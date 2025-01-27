@@ -61,15 +61,6 @@ export enum BoxType {
 	AlignedText = 'alignedTextBox',
 }
 
-// export type AppSettings = {
-// 	usePrivacyUrl: string,
-// 	useImprintUrl: string,
-// 	useLogin: boolean
-// 	useActivity: boolean
-// 	navigationPollsInList: boolean
-// 	updateType: UpdateType,
-// }
-
 export type AppPermissions = {
 	allAccess: boolean
 	publicShares: boolean

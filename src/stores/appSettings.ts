@@ -44,8 +44,8 @@ export type AppSettings = {
 	useActivity: boolean
 	useCollaboration: boolean
 	navigationPollsInList: boolean
-	usePrivacyUrl: string
-	useImprintUrl: string
+	finalPrivacyUrl: string
+	finalImprintUrl: string
 	comboGroups: string[]
 	publicSharesGroups: string[]
 	pollCreationGroups: string[]
@@ -79,8 +79,8 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		useActivity: false,
 		useCollaboration: true,
 		navigationPollsInList: true,
-		usePrivacyUrl: '',
-		useImprintUrl: '',
+		finalPrivacyUrl: '',
+		finalImprintUrl: '',
 		comboGroups: [],
 		publicSharesGroups: [],
 		pollCreationGroups: [],
@@ -101,7 +101,7 @@ export const useAppSettingsStore = defineStore('appSettings', {
 				Logger.error('Error getting appSettings', { error })
 			}
 		},
-	
+
 		async write() {
 			try {
 				const response = await AppSettingsAPI.writeAppSettings(this.$state)

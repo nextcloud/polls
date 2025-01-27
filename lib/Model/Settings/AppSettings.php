@@ -13,6 +13,7 @@ use OCA\Polls\AppConstants;
 use OCA\Polls\Model\Group\Group;
 use OCA\Polls\UserSession;
 use OCP\IAppConfig;
+use Psr\Log\LoggerInterface;
 
 class AppSettings implements JsonSerializable {
 	public const SETTING_ALLOW_PUBLIC_SHARES = 'allowPublicShares';
@@ -20,7 +21,6 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_ALLOW_ALL_ACCESS = 'allowAllAccess';
 	public const SETTING_ALLOW_POLL_CREATION = 'allowPollCreation';
 	public const SETTING_ALLOW_POLL_DOWNLOAD = 'allowPollDownload';
-	public const SETTING_AUTO_ARCHIVE = 'autoArchive';
 	public const SETTING_LEGAL_TERMS_IN_EMAIL = 'legalTermsInEmail';
 	public const SETTING_SHOW_LOGIN = 'showLogin';
 	public const SETTING_USE_ACTIVITY = 'useActivity';
@@ -34,8 +34,10 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_LOAD_POLLS_IN_NAVIGATION = 'navigationPollsInList';
 
 	public const SETTING_SHOW_MAIL_ADDRESSES = 'showMailAddresses';
-	public const SETTING_AUTO_ARCHIVE_OFFSET = 'autoArchiveOffset';
-	public const SETTING_AUTO_ARCHIVE_OFFSET_DEFAULT = 30;
+	public const SETTING_AUTO_ARCHIVE = 'autoArchive';
+	public const SETTING_AUTO_ARCHIVE_DEFAULT = false;
+	public const SETTING_AUTO_ARCHIVE_OFFSET_DAYS = 'autoArchiveOffset';
+	public const SETTING_AUTO_ARCHIVE_OFFSET_DAYS_DEFAULT = 30;
 	public const SETTING_UPDATE_TYPE = 'updateType';
 	public const SETTING_PRIVACY_URL = 'privacyUrl';
 	public const SETTING_IMPRINT_URL = 'imprintUrl';
@@ -49,6 +51,7 @@ class AppSettings implements JsonSerializable {
 	public function __construct(
 		private IAppConfig $appConfig,
 		private UserSession $userSession,
+		protected LoggerInterface $logger,
 	) {
 	}
 
@@ -68,8 +71,8 @@ class AppSettings implements JsonSerializable {
 
 	public function getAppSettings(): array {
 		$appSettingsArray = [
-			'usePrivacyUrl' => '',
-			'useImprintUrl' => '',
+			'finalPrivacyUrl' => '',
+			'finalImprintUrl' => '',
 			'useLogin' => true,
 			'useActivity' => false,
 			'navigationPollsInList' => false,
@@ -88,8 +91,8 @@ class AppSettings implements JsonSerializable {
 	 */
 	private function getPublicAppSettings(): array {
 		return [
-			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
-			'useImprintUrl' => $this->getUseImprintUrl(),
+			'finalPrivacyUrl' => $this->getFinalPrivacyUrl(),
+			'finalImprintUrl' => $this->getFinalImprintUrl(),
 			'useLogin' => $this->getShowLogin(),
 		];
 	}
@@ -104,35 +107,101 @@ class AppSettings implements JsonSerializable {
 		];
 	}
 
-	private function checkSettingType(string $key, int $type): bool {
+	private function checkSettingType(string $key, int $expectedType, string $app = AppConstants::APP_ID): bool {
 		try {
-			return $this->appConfig->getValueType(AppConstants::APP_ID, $key) === $type;
-		} catch (\Throwable $th) {
-			return false;
+			$actualType = $this->appConfig->getValueType($app, $key);
+			if ($actualType === $expectedType || $actualType === IAppConfig::VALUE_MIXED) {
+				return true;
+			}
+
+			$this->logger->warning('Setting type does not match', [
+				'app' => $app,
+				'key' => $key,
+				'expectedType' => $expectedType,
+				'actualType' => $actualType,
+			]);
+
+		} catch (\Exception $e) {
+			$this->logger->warning('Could not get setting type', [
+				'app' => $app,
+				'key' => $key,
+				'expectedType' => $expectedType,
+				'actualType' => null,
+				'exception' => $e->getMessage()
+			]);
 		}
+		return false;
 	}
 
 	// Getters
 	// generic Setters
-	public function getBooleanSetting(string $key, bool $default = true): bool {
-		if ($this->checkSettingType($key, IAppConfig::VALUE_BOOL)) {
-			return $this->appConfig->getValueBool(AppConstants::APP_ID, $key);
+
+	/**
+	 * Get the value of a boolean setting
+	 */
+	private function getBooleanSetting(string $key, bool $default = true, string $app = AppConstants::APP_ID): bool {
+		if (!$this->checkSettingType($key, IAppConfig::VALUE_BOOL, $app)) {
+			return $default;
 		}
-		return $this->stringToBool($this->appConfig->getValueString(AppConstants::APP_ID, $key), $default);
+		return $this->appConfig->getValueBool($app, $key, $default);
 	}
 
-	public function getGroupSetting(string $key): array {
-		if ($this->checkSettingType($key, IAppConfig::VALUE_ARRAY)) {
-			return $this->appConfig->getValueArray(AppConstants::APP_ID, $key, []);
-		}
-		return $this->stringToArray($this->appConfig->getValueString(AppConstants::APP_ID, $key));
+	/**
+	 * Set a boolean setting
+	 */
+	public function setBooleanSetting(string $key, bool $value): void {
+		$this->appConfig->setValueBool(AppConstants::APP_ID, $key, $value);
 	}
 
-	public function getIntegerSetting(string $key, int $default = 0): int {
-		if ($this->checkSettingType($key, IAppConfig::VALUE_INT)) {
-			return $this->appConfig->getValueInt(AppConstants::APP_ID, $key, $default);
+	/**
+	 * Get the value of an group (array) setting
+	 */
+	private function getGroupSetting(string $key, array $default = [], string $app = AppConstants::APP_ID): array {
+		if (!$this->checkSettingType($key, IAppConfig::VALUE_ARRAY, $app)) {
+			return $default;
 		}
-		return $this->stringToInteger($this->appConfig->getValueString(AppConstants::APP_ID, $key), $default);
+		return $this->appConfig->getValueArray($app, $key, $default);
+	}
+
+	/**
+	 * Set an array setting
+	 */
+	public function setGroupSetting(string $key, array $value): void {
+		$this->appConfig->setValueArray(AppConstants::APP_ID, $key, $value);
+	}
+
+	/**
+	 * Get the value of an integer setting
+	 */
+	private function getIntegerSetting(string $key, int $default = 0, string $app = AppConstants::APP_ID): int {
+		if (!$this->checkSettingType($key, IAppConfig::VALUE_INT, $app)) {
+			return $default;
+		}
+		return $this->appConfig->getValueInt($app, $key, $default);
+	}
+
+	/**
+	 * Set a integer setting
+	 */
+	public function setIntegerSetting(string $key, int $value): void {
+		$this->appConfig->setValueInt(AppConstants::APP_ID, $key, $value);
+	}
+
+	/**
+	 * Get the value of a string setting
+	 */
+	private function getStringSetting(string $key, string $default = '', string $app = AppConstants::APP_ID): string {
+		if (!$this->checkSettingType($key, IAppConfig::VALUE_STRING, $app)) {
+			return $default;
+		}
+		return $this->appConfig->getValueString($app, $key, $default);
+	}
+
+	/**
+	 * Set a string setting
+	 */
+	public function setStringSetting(string $key, string $value): void {
+		$this->appConfig->setValueString(AppConstants::APP_ID, $key, $value);
 	}
 
 	// Checks
@@ -197,37 +266,90 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
-	public function getUsePrivacyUrl(): string {
-		$ownSetting = $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_PRIVACY_URL);
-		if ($ownSetting === '') {
-			return $ownSetting;
+	/**
+	 * Get privacy url
+	 * Returns the final privacy url to use
+	 * Use URL from the app settings if set, otherwise use the default from the theming app
+	 */
+	public function getFinalPrivacyUrl(): string {
+		$privacyUrl = $this->getStringSetting(self::SETTING_PRIVACY_URL);
+		if ($privacyUrl) {
+			return $privacyUrl;
 		}
-		return $this->appConfig->getValueString('theming', 'privacyUrl');
+
+		return $this->getStringSetting(key: 'privacyUrl', app: 'theming');
 	}
 
-	public function getUseImprintUrl(): string {
-		$ownSetting = $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_IMPRINT_URL);
-		if ($ownSetting === '') {
-			return $ownSetting;
+	/**
+	 * Get imprint url
+	 * Returns the imprint url from the app settings if set,
+	 * otherwise the default from theming
+	 */
+	public function getFinalImprintUrl(): string {
+		$imprintUrl = $this->getStringSetting(self::SETTING_IMPRINT_URL);
+		if ($imprintUrl) {
+			return $imprintUrl;
 		}
-		return $this->appConfig->getValueString('theming', 'imprintUrl');
+
+		return $this->getStringSetting(key: 'imprintUrl', app: 'theming');
 	}
 
-	public function getAutoarchiveOffset(): int {
-		return $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET, self::SETTING_AUTO_ARCHIVE_OFFSET_DEFAULT);
+	/**
+	 * Get wether link to the imprint and privacy terms should be used in email footers
+	 */
+	public function getUseLegalTermsInEmail(): bool {
+		return $this->getBooleanSetting(self::SETTING_LEGAL_TERMS_IN_EMAIL);
 	}
 
+	/**
+	 * Get the disclaimer text
+	 */
+	public function getDisclaimer(): string {
+		return $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_DISCLAIMER);
+	}
+
+	/**
+	 * Get the auto archive offset in days
+	 */
+	public function getAutoarchiveOffsetDays(): int {
+		return $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET_DAYS, self::SETTING_AUTO_ARCHIVE_OFFSET_DAYS_DEFAULT);
+	}
+
+	/**
+	 * Get the auto archive setting enabled or disabled
+	 */
+	public function getAutoarchiveEnabled(): bool {
+		return $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE, self::SETTING_AUTO_ARCHIVE_DEFAULT);
+	}
+
+	/**
+	 * Get the update type for frontend polling of new data
+	 * returning one of the following:
+	 * - longPolling
+	 * - noPolling
+	 * - periodicPolling
+	 */
 	public function getUpdateType(): string {
 		return $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_UPDATE_TYPE, self::SETTING_UPDATE_TYPE_DEFAULT);
 	}
 
+	/**
+	 * Get wether to show login button in the public register dialog
+	 */
 	public function getShowLogin(): bool {
 		return $this->getBooleanSetting(self::SETTING_SHOW_LOGIN);
 	}
 
+	/**
+	 * Get wether to use Activity app or not
+	 */
 	public function getUseActivity(): bool {
 		return $this->getBooleanSetting(self::SETTING_USE_ACTIVITY);
 	}
+
+	/**
+	 * Get wether to show polls in the navigation
+	 */
 	public function getLoadPollsInNavigation(): bool {
 		return $this->getBooleanSetting(self::SETTING_LOAD_POLLS_IN_NAVIGATION);
 	}
@@ -288,13 +410,13 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS => $showMailAddressesGroups,
 			self::SETTING_COMBO_GROUPS => $comboGroups,
 			self::SETTING_AUTO_ARCHIVE => $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE),
-			self::SETTING_AUTO_ARCHIVE_OFFSET => $this->getAutoarchiveOffset(),
+			self::SETTING_AUTO_ARCHIVE_OFFSET_DAYS => $this->getAutoarchiveOffsetDays(),
 			self::SETTING_DISCLAIMER => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_DISCLAIMER),
 			self::SETTING_IMPRINT_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_IMPRINT_URL),
 			self::SETTING_PRIVACY_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_PRIVACY_URL),
 			self::SETTING_UPDATE_TYPE => $this->getUpdateType(),
-			'usePrivacyUrl' => $this->getUsePrivacyUrl(),
-			'useImprintUrl' => $this->getUseImprintUrl(),
+			'finalPrivacyUrl' => $this->getFinalPrivacyUrl(),
+			'finalImprintUrl' => $this->getFinalImprintUrl(),
 			'defaultPrivacyUrl' => $this->appConfig->getValueString('theming', 'privacyUrl'),
 			'defaultImprintUrl' => $this->appConfig->getValueString('theming', 'imprintUrl'),
 		];
@@ -307,27 +429,5 @@ class AppSettings implements JsonSerializable {
 			}
 		}
 		return false;
-	}
-
-	private function stringToInteger(string $value, int $default): int {
-		if ($value !== '') {
-			return intval($value);
-		}
-		return $default;
-	}
-
-	private function stringToArray(string $value): array {
-		if ($value) {
-			return json_decode($value);
-		}
-		return [];
-	}
-
-	private function stringToBool(string $value, bool $default): bool {
-		return match ($value) {
-			'yes' => true,
-			'no' => false,
-			default => $default,
-		};
 	}
 }
