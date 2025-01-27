@@ -57,11 +57,8 @@ abstract class BaseListener implements IEventListener {
 			$this->checkClass();
 			$this->updateLastInteraction();
 			$this->addLog();
+			$this->addActivity();
 
-			// If addLog throws UniqueConstraintViolationException, avoid spamming activities
-			if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_USE_ACTIVITY)) {
-				$this->addActivity();
-			}
 		} catch (InvalidClassException $e) {
 			return;
 		} catch (OCPEventException $e) {
@@ -155,6 +152,7 @@ abstract class BaseListener implements IEventListener {
 	 */
 	protected function addActivity() : void {
 		if (($this->event instanceof BaseEvent)
+		  && $this->appSettings->getUseActivity()
 		  && boolval($this->event->getActivityType())
 		  && boolval($this->event->getActivityObjectType())) {
 			$this->activityService->addActivity($this->event);

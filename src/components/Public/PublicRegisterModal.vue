@@ -54,7 +54,6 @@
 		: checkStatus.value.email
 	)
 	const offerCookies = computed(() => sessionStore.share.type === ShareType.Public)
-	const status = computed(() => registrationIsValid.value)
 
 	const privacyRich = computed(() => {
 		const subject = t('polls', 'By clicking the "OK" button you accept our {privacyPolicy}.')
@@ -62,7 +61,7 @@
 			privacyPolicy: {
 				component: SimpleLink,
 				props: {
-					href: sessionStore.appSettings.usePrivacyUrl,
+					href: sessionStore.appSettings.finalPrivacyUrl,
 					name: t('polls', 'privacy policy'),
 					target: '_blank',
 				},
@@ -258,15 +257,15 @@
 					{{ t('polls', 'Remember me for 30 days') }}
 				</NcCheckboxRadioSwitch>
 
-				<div v-if="sessionStore.appSettings.usePrivacyUrl" class="section__optin">
+				<div v-if="sessionStore.appSettings.finalPrivacyUrl" class="section__optin">
 					<NcRichText :text="privacyRich.subject" :arguments="privacyRich.parameters" />
 				</div>
 
 				<div class="modal__buttons">
 					<div class="left">
 						<div class="legal_links">
-							<SimpleLink v-if="sessionStore.appSettings.useImprintUrl"
-								:href="sessionStore.appSettings.useImprintUrl"
+							<SimpleLink v-if="sessionStore.appSettings.finalImprintUrl"
+								:href="sessionStore.appSettings.finalImprintUrl"
 								target="_blank"
 								:name="t('polls', 'Legal Notice')" />
 						</div>
@@ -285,7 +284,6 @@
 						</NcButton>
 					</div>
 				</div>
-				<div> {{ status }}</div>
 			</div>
 
 			<div v-if="sessionStore.appSettings.showLogin" class="registration__login">

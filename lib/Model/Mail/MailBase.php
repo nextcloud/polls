@@ -21,7 +21,6 @@ use OCA\Polls\Exceptions\InvalidEmailAddress;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
-use OCP\IAppConfig;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
 use OCP\Mail\IEMailTemplate;
@@ -32,7 +31,6 @@ abstract class MailBase {
 	/** @var string */
 	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Mail';
 
-	protected IAppConfig $appConfig;
 	protected AppSettings $appSettings;
 	protected IEmailTemplate $emailTemplate;
 	protected IL10N $l10n;
@@ -57,7 +55,6 @@ abstract class MailBase {
 	 * setUp
 	 */
 	private function setUp(): void {
-		$this->appConfig = Container::queryClass(IAppConfig::class);
 		$this->appSettings = Container::queryClass(AppSettings::class);
 		$this->logger = Container::queryClass(LoggerInterface::class);
 		$this->mailer = Container::queryClass(IMailer::class);
@@ -118,12 +115,12 @@ abstract class MailBase {
 
 		// add footer
 		$footerText = $this->getFooter();
-		if ($this->appConfig->getValueString(AppConstants::APP_ID, AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL)) {
+		if ($this->appSettings->getUseLegalTermsInEmail()) {
 			$footerText = $footerText . '<br>' . $this->getLegalLinks();
 		}
 
-		if ($this->appConfig->getValueString(AppConstants::APP_ID, AppSettings::SETTING_DISCLAIMER)) {
-			$footerText = $footerText . '<br>' . $this->getParsedMarkDown($this->appConfig->getValueString(AppConstants::APP_ID, AppSettings::SETTING_DISCLAIMER));
+		if ($this->appSettings->getDisclaimer()) {
+			$footerText = $footerText . '<br>' . $this->getParsedMarkDown($this->appSettings->getDisclaimer());
 		}
 
 		$this->emailTemplate->addFooter($footerText);
@@ -159,15 +156,15 @@ abstract class MailBase {
 	protected function getLegalLinks(): string {
 		$legal = '';
 
-		if ($this->appSettings->getUseImprintUrl()) {
-			$legal = '<a href="' . $this->appSettings->getUseImprintUrl() . '">' . $this->l10n->t('Legal Notice') . '</a>';
+		if ($this->appSettings->getFinalImprintUrl()) {
+			$legal = '<a href="' . $this->appSettings->getFinalImprintUrl() . '">' . $this->l10n->t('Legal Notice') . '</a>';
 		}
-		if ($this->appSettings->getUsePrivacyUrl()) {
-			if ($this->appSettings->getUseImprintUrl()) {
+		if ($this->appSettings->getFinalPrivacyUrl()) {
+			if ($this->appSettings->getFinalImprintUrl()) {
 				$legal = $legal . ' | ';
 			}
 
-			$legal = $legal . '<a href="' . $this->appSettings->getUsePrivacyUrl() . '">' . $this->l10n->t('Privacy Policy') . '</a>';
+			$legal = $legal . '<a href="' . $this->appSettings->getFinalPrivacyUrl() . '">' . $this->l10n->t('Privacy Policy') . '</a>';
 		}
 		return $legal;
 	}
