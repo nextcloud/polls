@@ -285,7 +285,6 @@
 						</NcButton>
 					</div>
 				</div>
-				<div> {{ status }}</div>
 			</div>
 
 			<div v-if="sessionStore.appSettings.showLogin" class="registration__login">
