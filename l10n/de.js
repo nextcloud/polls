@@ -409,7 +409,7 @@ OC.L10N.register(
     "Remember me for 30 days" : "30 Tage lang an mich erinnern",
     "Registered accounts" : "Registrierte Konten",
     "Login" : "Anmeldung",
-    "You can also log in and participate with your regular account." : "Sie können sich mit Ihrem Standardkonto anmelden und teilnehmen.",
+    "You can also log in and participate with your regular account." : "Du kannst dich mit deinem Standardkonto anmelden und teilnehmen.",
     "Otherwise participate as a guest participant." : "Ansonsten nimm als Gast teil.",
     "By clicking the \"OK\" button you accept our {privacyPolicy}." : "Durch Klicken auf den \"OK\"-Button akzeptierst du unsere {privacyPolicy}. ",
     "privacy policy" : "Datenschutzerklärung",
