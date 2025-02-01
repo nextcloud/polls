@@ -415,7 +415,7 @@
     "A name is required." : "Ein Name ist erforderlich.",
     "The name {username} is invalid or reserved." : "Der Name {username} is ungültig oder reserviert.",
     "An email address is required." : "Eine E-Mail Adresse ist erforderlich",
-    "You will receive your personal link after clicking \"OK\"." : "Nach einem Klick auf „OK“ erhalten Sie Ihren persönlichen Link.",
+    "You will receive your personal link after clicking \"OK\"." : "Nach einem Klick auf \"OK\" erhalten Sie Ihren persönlichen Link.",
     "Enter your email address to get your personal access link." : "Geben Sie Ihre E-Mail-Adresse ein, um Ihren persönlichen Zugangslink zu erhalten.",
     "Email could not be sent to {emailAddress}" : "E-Mail konnte nicht an {emailAddress} versendet werden",
     "Error registering to poll" : "Fehler bei der Registrierung für die Umfrage",
