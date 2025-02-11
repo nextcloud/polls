@@ -52,7 +52,7 @@ OC.L10N.register(
     "Options" : "Opções",
     "Sharing" : "Partilha",
     "Comments" : "Comentários",
-    "Activity" : "Actividade",
+    "Activity" : "Atividade",
     "Hour" : "Hora",
     "Day" : "Dia",
     "Month" : "Mês",
