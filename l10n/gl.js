@@ -434,7 +434,7 @@ OC.L10N.register(
     "Only use them, if it is absolutely neccessary (i.error. your cron does not work properly) or for testing." : "Emprégueos só, se é absolutamente necesario (p. ex., se o cron non funciona correctamente) ou para facer probas.",
     "Starting the jobs does not mean, that the rules for these actions are overridden." : "Comezar os traballos non significa que se anulen as regras destas accións.",
     "Each job can only be run once. If you want to rerun them, you have to refresh the page." : "Cada traballo só se pode executar unha vez. Se quere volver executalos, ten que actualizar a páxina.",
-    "If you want to see the result, please check the logs." : "Se quere ver o resultado, consulte os rexistros.",
+    "If you want to see the result, please check the logs." : "Se quere ver o resultado, consulte os ficheiros de rexistro.",
     "Run autoreminder" : "Executar o servizo de lembrete automático",
     "Run janitor" : "Executar o servizo de conserxería",
     "Run notification" : "Executar o servizo de notificación",
