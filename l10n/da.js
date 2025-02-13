@@ -47,7 +47,7 @@ OC.L10N.register(
     "Login" : "Login",
     "You will receive your personal link after clicking \"OK\"." : "Du modtager dit personlige link efter at have klikket på \"OK\".",
     "Preview" : "Forhåndsvisning",
-    "Use calendar lookup for conflicting calendar events" : "Brug kalenderopslag til modstridende kalenderbegivenheder",
+    "Use calendar lookup for conflicting calendar events" : "Brug kalenderopslag til konfliktende kalenderbegivenheder",
     "Select the calendars to use for lookup." : "Vælg de kalendere, der skal bruges til opslag.",
     "Show QR code" : "Vis QR-kode",
     "Delete share" : "Slet deling",
