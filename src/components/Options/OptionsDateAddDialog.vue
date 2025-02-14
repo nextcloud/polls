@@ -17,14 +17,16 @@
 
 	import DateTimePicker from '../Base/modules/DateTimePicker.vue'
 	import DateBox from '../Base/modules/DateBox.vue'
+	import { useSessionStore } from '../../stores/session'
 	import { useOptionsStore } from '../../stores/options'
 	import { StatusResults } from '../../Types'
 
+	const sessionStore = useSessionStore()
+	const optionsStore = useOptionsStore()
 	const timeStepMinutes = 15
 	const successColor = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
 	const useRange = ref(false)
 	const allDay = ref(true)
-	const optionsStore = useOptionsStore()
 	const result = ref(StatusResults.None)
 	// set initial time mark to the next full quater of the hour
 	const dateFrom = ref(new Date(new Date().setMinutes(Math.ceil((46/60)*(60/timeStepMinutes))*timeStepMinutes, 0, 0)))
@@ -45,12 +47,18 @@
 
 		let durationString = ''
 
-		if (result.years > 0) durationString += `${result.years} ${n('polls', 'year', 'years', result.years)}, `
-		if (result.months > 0) durationString += `${result.months} ${n('polls', 'month', 'months', result.months)}, `
-		if (result.days > 0) durationString += `${result.days} ${n('polls', 'day', 'days', result.days)}, `
-		if (result.hours > 0) durationString += `${result.hours} ${n('polls', 'hour', 'hours', result.hours)}, `
-		if (result.minutes > 0) durationString += `${result.minutes} ${n('polls', 'minute', 'minutes', result.minutes)}, `
-		return durationString.replace(/, $/, '');
+		try {
+			durationString = new Intl.DurationFormat(sessionStore.currentUser.languageCode, { style: "long" }).format(result)
+		} catch (error) {
+			console.debug("Intl.DurationFormat not supported, falling back to custom implementation")
+			if (result.years > 0) durationString += `${result.years} ${n('polls', 'year', 'years', result.years)}, `
+			if (result.months > 0) durationString += `${result.months} ${n('polls', 'month', 'months', result.months)}, `
+			if (result.days > 0) durationString += `${result.days} ${n('polls', 'day', 'days', result.days)}, `
+			if (result.hours > 0) durationString += `${result.hours} ${n('polls', 'hour', 'hours', result.hours)}, `
+			if (result.minutes > 0) durationString += `${result.minutes} ${n('polls', 'minute', 'minutes', result.minutes)}, `
+			durationString = durationString.replace(/, $/, '');
+		}
+		return durationString
 	})
 
 	const finalFrom = computed(() => {
