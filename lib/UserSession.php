@@ -70,6 +70,10 @@ class UserSession {
 	}
 
 	public function getCurrentUserId(): string {
+		if (defined('OC_CONSOLE')) {
+			return 'CONSOLE';
+		}
+
 		if (!$this->session->get(self::SESSION_KEY_USER_ID)) {
 			$this->session->set(self::SESSION_KEY_USER_ID, $this->getUser()->getId());
 		}
