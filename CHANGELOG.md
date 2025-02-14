@@ -5,7 +5,7 @@
 # Changelog
 ##
 
-## [7.3.0] - 2024-02-14
+## [7.3.1] - 2024-02-14
 ### Fix
  - fix poll transfer via occ
  - support Nextcloud 31
