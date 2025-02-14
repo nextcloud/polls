@@ -61,6 +61,7 @@ OC.L10N.register(
     "Public link: {token}" : "Offentligt link: {token}",
     "Public link" : "Offentligt link",
     "Change name" : "Ændre navn",
+    "Other settings" : "Andre indstillinger",
     "Email options" : "E-mail muligheder",
     "Yes" : "Ja",
     "Administration" : "Administration",
