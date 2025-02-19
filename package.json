@@ -45,7 +45,7 @@
     "lodash": "^4.17.21",
     "marked": "^15.0.4",
     "marked-gfm-heading-id": "^4.1.0",
-    "pinia": "^2.1.7",
+    "pinia": "^3.0.1",
     "qrcode": "^1.5.3",
     "sortablejs": "^1.15.2",
     "sortablejs-vue3": "^1.2.11",
