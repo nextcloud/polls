@@ -51,7 +51,7 @@
 <template>
 	<div :class="componentClass">
 		<div class="option-menu">
-			<OptionMenu :option="option" force-name />
+			<OptionMenu :option="option" />
 		</div>
 		<div class="column-header">
 			<OptionItem :option="option"
