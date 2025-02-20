@@ -11,7 +11,6 @@
 		:user-select="true"
 		:filterable="false"
 		:tag-width="80"
-		:limit="30"
 		:loading="isLoading"
 		:searchable="true"
 		:placeholder="placeholder"
