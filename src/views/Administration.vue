@@ -81,7 +81,7 @@
 
 	async function deletePoll() {
 		try {
-			await pollsAdminStore.delete({ pollId: currentPoll.value.pollId })
+			await pollsAdminStore.delete({ pollId: currentPoll.value.id })
 			deleteModal.value = false
 		} catch {
 			showError(t('polls', 'Error deleting poll.'))
@@ -91,7 +91,7 @@
 
 	async function takeOverPoll() {
 		try {
-			await pollsAdminStore.takeOver({ pollId: currentPoll.value.pollId })
+			await pollsAdminStore.takeOver({ pollId: currentPoll.value.id })
 			takeOverModal.value = false
 		} catch {
 			showError(t('polls', 'Error overtaking poll.'))
