@@ -62,7 +62,7 @@
     "@nextcloud/vite-config": "^1.5.2",
     "eslint-config-prettier": "^10.0.1",
     "eslint-plugin-prettier": "^5.2.3",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.2",
     "vite": "^6.1.1",
     "xml2js": "^0.6.2"
   },
