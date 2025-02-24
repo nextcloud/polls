@@ -35,7 +35,7 @@ OC.L10N.register(
     "Show QR code" : "Parādīt kvadrātkodu",
     "Restore share" : "Atjaunot koplietojumu",
     "Shares" : "Koplietots",
-    "No activity" : "Nav nekādas aktivitātes",
+    "No activity" : "Nav darbību",
     "Description" : "Apraksts",
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "Public link" : "Publiskā saite",
