@@ -139,7 +139,7 @@ export default {
 	.vote-column {
 		order: 2;
 		display: flex;
-		flex: 1 0 11em;
+		flex: 1 0 auto;
 		flex-direction: column;
 		align-items: stretch;
 		max-width: 19em;
