@@ -10,7 +10,7 @@ OC.L10N.register(
     "User" : "Bruger",
     "Switch to list view" : "Skift til listevisning",
     "Delete" : "Slet",
-    "Register" : "Registér",
+    "Register" : "Register",
     "Unknown error" : "Ukendt fejl",
     "Conflict" : "Konflikt",
     "New comment …" : "Ny kommentar…",
@@ -21,7 +21,7 @@ OC.L10N.register(
     "Never show results" : "Vis aldrig resultater",
     "Title" : "Titel",
     "Poll type" : "Afstemningstype",
-    "Cancel" : "Annullér",
+    "Cancel" : "Annuller",
     "Apply" : "Anvend",
     "Participants" : "Deltagere",
     "From" : "Fra",
@@ -77,6 +77,6 @@ OC.L10N.register(
     "Month" : "Måned",
     "Year" : "År",
     "Title must not be empty!" : "Overskriften må ikke være tom!",
-    "Archive" : "Arkivér"
+    "Archive" : "Arkiver"
 },
 "nplurals=2; plural=(n != 1);");
