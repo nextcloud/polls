@@ -5,6 +5,10 @@
 # Changelog
 ##
 
+## [7.3.2] - 2024-02-25
+### Change
+ - remove limit of usersearch (was limited to 30 results)
+
 ## [7.3.1] - 2024-02-14
 ### Fix
  - fix poll transfer via occ
