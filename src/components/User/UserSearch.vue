@@ -58,7 +58,6 @@
 		:multiple="false"
 		:user-select="true"
 		:tag-width="80"
-		:limit="30"
 		:loading="isLoading"
 		:filterable="false"
 		:searchable="true"
