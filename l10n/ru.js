@@ -311,6 +311,7 @@ OC.L10N.register(
     "Add terms links also to the email footer" : "Добавлять в письмо ссылки на правила и условия",
     "Additional email disclaimer" : "Дополнительный отказ от ответственности по эл. почте",
     "Preview" : "Предпросмотр",
+    "Autoreminder failed" : "Автонапоминание не удалось",
     "Enable periodic requests of poll updates from the client" : "Разрешить периодические запросы обновлений опроса от клиента",
     "Use calendar lookup for conflicting calendar events" : "Просматривать события в календаре",
     "Select the calendars to use for lookup." : "Выберите календарь, используемый для просмотра.",
