@@ -248,7 +248,7 @@
     "No further action is possible." : "Başka bir işlem yapılamaz.",
     "Due to possible performance issues {countHiddenParticipants} voters are hidden." : "Yaşanabilecek başarım sorunlarını engellemek için {countHiddenParticipants} oy veren gizlendi.",
     "You can reveal them, but you may expect an unwanted long loading time." : "Gizlenen oy verenleri görüntüleyebilirsiniz ancak yükleme süresi istenmeyecek kadar uzun olabilir.",
-    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["Büyük olasılıkla silinmiş seçeneklerdeki %n sahipsiz oy, sayı sınırınızı aşıyor.","Büyük olasılıkla silinmiş seçeneklerdeki %n sahipsiz oy, sayı sınırınızı aşıyor."],
+    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["Büyük olasılıkla silinmiş bir seçenekteki %n sahipsiz oy, oy sınırınızı aşıyor.","Büyük olasılıkla silinmiş seçeneklerdeki %n sahipsiz oy, oy sınırınızı aşıyor."],
     "Limited votes." : "Sınırlı oy.",
     "_%n vote is allowed per option._::_%n votes are allowed per option._" : ["Her seçenek için %n oy verilebilir.","Her seçenek için %n oy verilebilir."],
     "_%n vote is allowed per participant._::_%n votes are allowed per participant._" : ["Her katılımcı %n oy verebilir.","Her katılımcı %n oy verebilir."],
