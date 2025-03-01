@@ -6,6 +6,8 @@ OC.L10N.register(
     "Privacy Policy" : "Privātuma politika",
     "Contact" : "Kontakts",
     "User" : "Lietotājs",
+    "You have reopened the poll \"{pollTitle}\" " : "Tu atkārtoti atvēri aptauju \"{pollTitle}\"",
+    "You have reopened this poll" : "Tu atkārtoti atvēri šo aptauju",
     "Delete" : "Dzēst",
     "Unknown error" : "Nezināma kļūda",
     "Conflict" : "Konflikts",
