@@ -23,6 +23,9 @@ use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\User;
 use OCP\Collaboration\Collaborators\ISearch;
+use OCP\IConfig;
+use OCP\IGroupManager;
+use OCP\IUserSession;
 use OCP\L10N\IFactory;
 use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
@@ -39,6 +42,9 @@ class SystemService {
 		private ShareMapper $shareMapper,
 		private VoteMapper $voteMapper,
 		private UserMapper $userMapper,
+		private IGroupManager $groupManager,
+		private IConfig $config,
+		private IUserSession $userSession,
 	) {
 	}
 
@@ -80,6 +86,10 @@ class SystemService {
 	 * get a list of user objects from the backend matching the query string
 	 */
 	public function search(string $query = ''): array {
+		if (!$this->isUserAllowedToShare()) {
+			return [];
+		}
+
 		$startSearchTimer = microtime(true);
 		$items = [];
 		$types = [
@@ -242,5 +252,23 @@ class SystemService {
 		}
 		// return $userName, if username is allowed
 		return $userName;
+	}
+
+	private function isUserAllowedToShare(): bool {
+		$excludedGroups = $this->config->getAppValue('core', 'shareapi_exclude_groups_list', '');
+		if ($excludedGroups === '') {
+			return true;
+		}
+		$excludedGroups = json_decode($excludedGroups, true);
+
+		$user = $this->userSession->getUser();
+		if ($user) {
+			if ($excludedGroups) {
+				$userGroups = $this->groupManager->getUserGroupIds($user);
+				return !(bool)array_intersect($excludedGroups, $userGroups);
+			}
+		}
+
+		return true;
 	}
 }
