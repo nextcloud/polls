@@ -250,6 +250,7 @@ OC.L10N.register(
     "No further action is possible." : "Není možná žádná další akce.",
     "Due to possible performance issues {countHiddenParticipants} voters are hidden." : "Kvůli možným problémům s výkonem je skryto {countHiddenParticipants} hlasujících.",
     "You can reveal them, but you may expect an unwanted long loading time." : "Je možné si je nechat zobrazit, ale očekávejte neúměrně dlouhou dobu načítání.",
+    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n osiřelý hlas pravděpodobně smazané možnosti možná blokuje váš limit počtu voleb.","%n osiřelé hlasy pravděpodobně smazané možnosti možná blokuje váš limit počtu voleb.","%n osiřelých hlasů pravděpodobně smazané možnosti možná blokuje váš limit počtu voleb.","%n osiřelé hlasy pravděpodobně smazané možnosti možná blokuje váš limit počtu voleb."],
     "Limited votes." : "Omezené hlasy.",
     "_%n vote is allowed per option._::_%n votes are allowed per option._" : ["Pro každou volbu lze dát jen %n hlas.","Pro každou volbu lze dát jen %n hlasy.","Pro každou volbu lze dát jen %n hlasů.","Pro každou volbu lze dát jen %n hlasy."],
     "_%n vote is allowed per participant._::_%n votes are allowed per participant._" : ["Každý účastník může dát jen %n hlas.","Každý účastník může dát jen %n hlasy.","Každý účastník může dát jen %n hlasů.","Každý účastník může dát jen %n hlasy."],
