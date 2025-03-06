@@ -142,7 +142,7 @@ class AppSettings implements JsonSerializable {
 		}
 
 		// first check group exception mode
-		$groupExceptionMode = $this->getShareGroupExceptionMode();
+		$groupExceptionMode = $this->getCoreLimitSharingBasedOnGroupsMode();
 
 		if ($groupExceptionMode === 'off') {
 			// no group exceptions are set, allow share creation
@@ -153,7 +153,7 @@ class AppSettings implements JsonSerializable {
 			// just kept for the moment as reminder
 			//
 			// Additionally check, if user is in excluded groups 'Exclude groups from creating link shares'
-			$excludedGroups = $this->getShareExcludedGroups();
+			$excludedGroups = $this->getCoreExternalShareCreationGroups();
 			if ($excludedGroups) {
 				// if user is in exception group, allow share creation
 				return !$this->userSession->getUser()->getIsInGroupArray($excludedGroups);
@@ -161,7 +161,7 @@ class AppSettings implements JsonSerializable {
 		}
 
 		// get group exceptions
-		$exceptionGroups = $this->getShareExceptionGroups();
+		$exceptionGroups = $this->getCoreLimitSharingBasedOnGroupsGroups();
 
 		if ($groupExceptionMode === 'allowGroup') {
 			// exception mode is 'Limit sharing to some groups'
@@ -180,7 +180,7 @@ class AppSettings implements JsonSerializable {
 	 * Get share exception groups
 	 * @return array
 	 */
-	public function getShareExceptionGroups(): array {
+	private function getCoreExternalShareCreationGroups(): array {
 		$exceptionGroups = $this->config->getAppValue('core', 'shareapi_exclude_groups_list', '');
 		return json_decode($exceptionGroups, true) ?? [];
 	}
@@ -189,7 +189,7 @@ class AppSettings implements JsonSerializable {
 	 * Get share excluded groups
 	 * @return array
 	 */
-	public function getShareExcludedGroups(): array {
+	private function getCoreLimitSharingBasedOnGroupsGroups(): array {
 		$excludedGroups = $this->config->getAppValue('core', 'shareapi_allow_links_exclude_groups', '');
 		return json_decode($excludedGroups, true) ?? [];
 	}
@@ -203,7 +203,7 @@ class AppSettings implements JsonSerializable {
 	 * 'allow' => 'allowGroup' (Limit sharing to some groups)
 	 * default => 'off' (Allow sharing for everyone) or setting absent
 	 */
-	public function getShareGroupExceptionMode(): string {
+	private function getCoreLimitSharingBasedOnGroupsMode(): string {
 		$excludedMode = $this->config->getAppValue('core', 'shareapi_exclude_groups', '');
 		return match ($excludedMode) {
 			'yes' => 'denyGroup',
