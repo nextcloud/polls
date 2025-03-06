@@ -562,6 +562,7 @@ class ShareService {
 		$poll = $this->pollMapper->find($pollId);
 		$poll->request(Poll::PERMISSION_POLL_EDIT);
 
+		$this->acl->request(Acl::PERMISSION_SHARE_CREATE);
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->appSettings->getPublicSharesAllowed();
