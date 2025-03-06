@@ -40,7 +40,7 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_PRIVACY_URL = 'privacyUrl';
 	public const SETTING_IMPRINT_URL = 'imprintUrl';
 	public const SETTING_DISCLAIMER = 'disclaimer';
-
+	
 	public const SETTING_UPDATE_TYPE_LONG_POLLING = 'longPolling';
 	public const SETTING_UPDATE_TYPE_NO_POLLING = 'noPolling';
 	public const SETTING_UPDATE_TYPE_PERIODIC_POLLING = 'periodicPolling';
@@ -132,65 +132,6 @@ class AppSettings implements JsonSerializable {
 		return false;
 	}
 
-	/**
-	 * Permission to create shares is controlled by core settings
-	 */
-	public function getShareCreateAllowed(): bool {
-		if (!$this->userSession->getIsLoggedIn()) {
-			// only logged in users can create shares
-			return false;
-		}
-
-		// first check group exception mode
-		$groupExceptionMode = $this->getShareGroupExceptionMode();
-
-		if ($groupExceptionMode === 'off') {
-			// no group exceptions
-			return true;
-		}
-
-		// get group exceptions
-		$excludedGroups = $this->getShareExceptionGroups();
-
-		if ($groupExceptionMode === 'allowGroup') {
-			// exception mode is 'limit sharing to some groups'
-			// if user is in exception group, allow share creation
-			return $this->userSession->getUser()->getIsInGroupArray($excludedGroups);
-		}
-
-		// exception mode is 'Exclude some Groups from sharing'
-		// if user is in exception group, deny share creation
-		return $this->userSession->getUser()->getIsInGroupArray($excludedGroups);
-
-	}
-
-	/**
-	 * Get share exception groups
-	 * @return array
-	 */
-	public function getShareExceptionGroups(): array {
-		$excludedGroups = $this->config->getAppValue('core', 'shareapi_exclude_groups_list', '');
-		return json_decode($excludedGroups, true) ?? [];
-	}
-
-	/**
-	 * Get share group exception mode
-	 * @return string
-	 * @psalm-return 'denyGroup'|'allowGroup'|'off'
-	 * Take value from the core setting 'shareapi_exclude_Mode' and translate
-	 * 'yes' => 'denyGroup' ('Exclude some groups from sharing')
-	 * 'allow' => 'allowGroup' (Limit sharing to some groups)
-	 * default => 'off' (Allow sharing for everyone) or setting absent
-	 */
-	public function getShareGroupExceptionMode(): string {
-		$excludedMode = $this->config->getAppValue('core', 'shareapi_exclude_Mode', '');
-		return match ($excludedMode) {
-			'yes' => 'denyGroup',
-			'allow' => 'allowGroup',
-			default => 'off',
-		};
-	}
-
 	public function getUsePrivacyUrl(): string {
 		if ($this->config->getAppValue(AppConstants::APP_ID, self::SETTING_PRIVACY_URL)) {
 			return $this->config->getAppValue(AppConstants::APP_ID, self::SETTING_PRIVACY_URL);
@@ -204,7 +145,7 @@ class AppSettings implements JsonSerializable {
 		}
 		return $this->config->getAppValue('theming', 'imprintUrl');
 	}
-
+	
 	public function getAutoarchiveOffset(): int {
 		return $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET, self::SETTING_AUTO_ARCHIVE_OFFSET_DEFAULT);
 	}
@@ -223,7 +164,7 @@ class AppSettings implements JsonSerializable {
 	public function getLoadPollsInNavigation(): bool {
 		return $this->getBooleanSetting(self::SETTING_LOAD_POLLS_IN_NAVIGATION);
 	}
-
+	
 	// Setters
 	// generic setters
 	public function setBooleanSetting(string $key, bool $value): void {

@@ -161,7 +161,7 @@ class UserBase implements JsonSerializable {
 
 		return $this->localeCode;
 	}
-
+	
 	public function getTimeZone(): DateTimeZone {
 		if ($this->timeZoneName) {
 			return new DateTimeZone($this->timeZoneName);
@@ -432,19 +432,6 @@ class UserBase implements JsonSerializable {
 
 	public function getIsInGroup(string $groupName): bool {
 		return $this->groupManager->isInGroup($this->getId(), $groupName);
-	}
-
-	public function getIsInGroupArray(array $groupNames): bool {
-		if (!($this instanceof User)) {
-			return false;
-		}
-
-		foreach ($groupNames as $groupName) {
-			if ($this->getIsInGroup($groupName)) {
-				return true;
-			}
-		}
-		return false;
 	}
 
 	/**

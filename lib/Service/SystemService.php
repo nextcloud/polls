@@ -19,7 +19,6 @@ use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
-use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\User;
@@ -40,7 +39,6 @@ class SystemService {
 		private ShareMapper $shareMapper,
 		private VoteMapper $voteMapper,
 		private UserMapper $userMapper,
-		private AppSettings $appSettings,
 	) {
 	}
 
@@ -82,10 +80,6 @@ class SystemService {
 	 * get a list of user objects from the backend matching the query string
 	 */
 	public function search(string $query = ''): array {
-		if (!$this->appSettings->getShareCreateAllowed()) {
-			return [];
-		}
-
 		$startSearchTimer = microtime(true);
 		$items = [];
 		$types = [
