@@ -19,12 +19,13 @@ use OCA\Polls\UserSession;
  * @package OCA\Polls\Model\Acl
  */
 class Acl implements JsonSerializable {
-	public const PERMISSION_OVERRIDE = 'override_permission';
 	public const PERMISSION_ALL_ACCESS = 'allAccess';
+	public const PERMISSION_OVERRIDE = 'override_permission';
 	public const PERMISSION_PUBLIC_SHARES = 'publicShares';
 	public const PERMISSION_POLL_CREATE = 'pollCreate';
 	public const PERMISSION_POLL_MAILADDRESSES_VIEW = 'seeMailAddresses';
 	public const PERMISSION_POLL_DOWNLOAD = 'pollDownload';
+	public const PERMISSION_SHARE_CREATE = 'shareCreate';
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
@@ -39,7 +40,7 @@ class Acl implements JsonSerializable {
 	 */
 	public function jsonSerialize(): array {
 		return	[
-			'currentUser' => $this->userSession->getUser(),
+			'currentUser' => $this->getCurrentUser(),
 			'appPermissions' => $this->getPermissionsArray(),
 			'appSettings' => $this->getAppSettings(),
 		];
@@ -56,6 +57,7 @@ class Acl implements JsonSerializable {
 			self::PERMISSION_POLL_CREATE => $this->appSettings->getPollCreationAllowed(),
 			self::PERMISSION_POLL_MAILADDRESSES_VIEW => $this->appSettings->getAllowSeeMailAddresses(),
 			self::PERMISSION_POLL_DOWNLOAD => $this->appSettings->getPollDownloadAllowed(),
+			self::PERMISSION_SHARE_CREATE => $this->appSettings->getShareCreateAllowed(),
 			default => false,
 		};
 	}
@@ -66,10 +68,11 @@ class Acl implements JsonSerializable {
 	private function getPermissionsArray(): array {
 		return [
 			'allAccess' => $this->getIsAllowed(self::PERMISSION_ALL_ACCESS),
-			'publicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
-			'pollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
 			'seeMailAddresses' => $this->getIsAllowed(self::PERMISSION_POLL_MAILADDRESSES_VIEW),
+			'shareCreate' => $this->getIsAllowed(self::PERMISSION_SHARE_CREATE),
+			'pollCreation' => $this->getIsAllowed(self::PERMISSION_POLL_CREATE),
 			'pollDownload' => $this->getIsAllowed(self::PERMISSION_POLL_DOWNLOAD),
+			'publicShares' => $this->getIsAllowed(self::PERMISSION_PUBLIC_SHARES),
 		];
 	}
 
