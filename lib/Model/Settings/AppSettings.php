@@ -145,23 +145,35 @@ class AppSettings implements JsonSerializable {
 		$groupExceptionMode = $this->getShareGroupExceptionMode();
 
 		if ($groupExceptionMode === 'off') {
-			// no group exceptions
+			// no group exceptions are set, allow share creation
 			return true;
+
+			// TODO: get clarification for the usage of the excluded groups
+			// The following code is not reachable by intention, because it is based on a misunderstanding.
+			// just kept for the moment as reminder
+			//
+			// Additionally check, if user is in excluded groups 'Exclude groups from creating link shares'
+			$excludedGroups = $this->getShareExcludedGroups();
+			if ($excludedGroups) {
+				// if user is in exception group, allow share creation
+				return !$this->userSession->getUser()->getIsInGroupArray($excludedGroups);
+			}
 		}
 
 		// get group exceptions
-		$excludedGroups = $this->getShareExceptionGroups();
+		$exceptionGroups = $this->getShareExceptionGroups();
 
 		if ($groupExceptionMode === 'allowGroup') {
-			// exception mode is 'limit sharing to some groups'
+			// exception mode is 'Limit sharing to some groups'
 			// if user is in exception group, allow share creation
-			return $this->userSession->getUser()->getIsInGroupArray($excludedGroups);
+			return $this->userSession->getUser()->getIsInGroupArray($exceptionGroups);
+		} elseif ($groupExceptionMode === 'denyGroup') {
+			// exception mode is 'Exclude some Groups from sharing'
+			// if user is in exception group, deny share creation
+			return !$this->userSession->getUser()->getIsInGroupArray($exceptionGroups);
 		}
 
-		// exception mode is 'Exclude some Groups from sharing'
-		// if user is in exception group, deny share creation
-		return $this->userSession->getUser()->getIsInGroupArray($excludedGroups);
-
+		return true;
 	}
 
 	/**
@@ -169,7 +181,16 @@ class AppSettings implements JsonSerializable {
 	 * @return array
 	 */
 	public function getShareExceptionGroups(): array {
-		$excludedGroups = $this->config->getAppValue('core', 'shareapi_exclude_groups_list', '');
+		$exceptionGroups = $this->config->getAppValue('core', 'shareapi_exclude_groups_list', '');
+		return json_decode($exceptionGroups, true) ?? [];
+	}
+
+	/**
+	 * Get share excluded groups
+	 * @return array
+	 */
+	public function getShareExcludedGroups(): array {
+		$excludedGroups = $this->config->getAppValue('core', 'shareapi_allow_links_exclude_groups', '');
 		return json_decode($excludedGroups, true) ?? [];
 	}
 
@@ -177,13 +198,13 @@ class AppSettings implements JsonSerializable {
 	 * Get share group exception mode
 	 * @return string
 	 * @psalm-return 'denyGroup'|'allowGroup'|'off'
-	 * Take value from the core setting 'shareapi_exclude_Mode' and translate
+	 * Take value from the core setting 'shareapi_exclude_groups' and translate
 	 * 'yes' => 'denyGroup' ('Exclude some groups from sharing')
 	 * 'allow' => 'allowGroup' (Limit sharing to some groups)
 	 * default => 'off' (Allow sharing for everyone) or setting absent
 	 */
 	public function getShareGroupExceptionMode(): string {
-		$excludedMode = $this->config->getAppValue('core', 'shareapi_exclude_Mode', '');
+		$excludedMode = $this->config->getAppValue('core', 'shareapi_exclude_groups', '');
 		return match ($excludedMode) {
 			'yes' => 'denyGroup',
 			'allow' => 'allowGroup',
