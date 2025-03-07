@@ -32,7 +32,11 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\SentResult;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -482,7 +486,6 @@ class ShareService {
 	public function resolveGroupByToken(string $token): array {
 		$share = $this->get($token);
 		return $this->resolveGroup($share);
-
 	}
 
 	/**
@@ -499,6 +502,10 @@ class ShareService {
 			try {
 				$newShare = $this->add($share->getPollId(), $member->getType(), $member->getId());
 				$shares[] = $newShare;
+			} catch (ForbiddenException $e) {
+				// skip, if user is not allowed to add share, usually because of forbitten share type
+				// skip share creation silenly
+				continue;
 			} catch (ShareAlreadyExistsException $e) {
 				continue;
 			}
@@ -565,6 +572,19 @@ class ShareService {
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
+			$this->acl->request(Acl::PERMISSION_SHARE_CREATE_EXTERNAL);
+		}
+
+		// validate user type for external types and check, if user is allowed to create this type of share
+		if (match ($type) {
+			Ghost::TYPE => true,
+			Contact::TYPE => true,
+			ContactGroup::TYPE => true,
+			Email::TYPE => true,
+			UserBase::TYPE_EXTERNAL => true,
+			default => false,
+		}) {
+			$this->acl->request(Acl::PERMISSION_SHARE_CREATE_EXTERNAL);
 		}
 
 		$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));

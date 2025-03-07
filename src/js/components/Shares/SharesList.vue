@@ -11,7 +11,7 @@
 
 		<UserSearch v-if="appPermissions.shareCreate" class="add-share" />
 		<ShareItemAllUsers v-if="appPermissions.allAccess" />
-		<SharePublicAdd v-if="appPermissions.publicShares && appPermissions.shareCreate" />
+		<SharePublicAdd v-if="appPermissions.publicShares && appPermissions.shareCreate && appPermissions.shareCreateExternal" />
 
 		<div v-if="activeShares.length" class="shares-list shared">
 			<TransitionGroup is="div"
