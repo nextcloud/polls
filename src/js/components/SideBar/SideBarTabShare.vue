@@ -5,13 +5,14 @@
 
 <template>
 	<div class="sidebar-share">
-		<SharesListUnsent class="shares unsent" />
+		<SharesListUnsent v-if="appPermissions.shareCreate" class="shares unsent" />
 		<SharesList class="shares effective" />
-		<SharesListLocked class="shares" />
+		<SharesListLocked v-if="appPermissions.shareCreate" class="shares" />
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import SharesList from '../Shares/SharesList.vue'
 import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 import SharesListLocked from '../Shares/SharesListLocked.vue'
@@ -23,6 +24,11 @@ export default {
 		SharesList,
 		SharesListUnsent,
 		SharesListLocked,
+		},
+	computed: {
+		...mapState({
+			appPermissions: (state) => state.acl.appPermissions,
+		}),
 	},
 }
 </script>

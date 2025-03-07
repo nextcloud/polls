@@ -32,7 +32,11 @@ use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Model\Acl as Acl;
+use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\SentResult;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -242,7 +246,7 @@ class ShareService {
 		} else {
 			throw new InvalidShareTypeException('Displayname can only be set for external shares.');
 		}
-		
+
 		$this->share = $this->shareMapper->update($this->share);
 		$this->eventDispatcher->dispatchTyped($dispatchEvent);
 
@@ -269,7 +273,7 @@ class ShareService {
 		} else {
 			throw new InvalidShareTypeException('Label can only be set for public shares.');
 		}
-		
+
 		$this->share = $this->shareMapper->update($this->share);
 		$this->eventDispatcher->dispatchTyped($dispatchEvent);
 
@@ -314,7 +318,7 @@ class ShareService {
 		$this->share->setDisplayName($displayName ?? $this->share->getDisplayName());
 		$this->share->setTimeZoneName($timeZone ?? $this->share->getTimeZoneName());
 		$this->share->setLanguage($language ?? $this->share->getLanguage());
-		
+
 		if ($emailAddress && $emailAddress !== $this->share->getEmailAddress()) {
 			// reset invitation sent, if email address is changed
 			$this->share->setInvitationSent(0);
@@ -482,7 +486,6 @@ class ShareService {
 	public function resolveGroupByToken(string $token): array {
 		$share = $this->get($token);
 		return $this->resolveGroup($share);
-
 	}
 
 	/**
@@ -499,6 +502,10 @@ class ShareService {
 			try {
 				$newShare = $this->add($share->getPollId(), $member->getType(), $member->getId());
 				$shares[] = $newShare;
+			} catch (ForbiddenException $e) {
+				// skip, if user is not allowed to add share, usually because of forbitten share type
+				// skip share creation silenly
+				continue;
 			} catch (ShareAlreadyExistsException $e) {
 				continue;
 			}
@@ -561,9 +568,23 @@ class ShareService {
 	): Share {
 		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
 
+		$this->acl->request(Acl::PERMISSION_SHARE_CREATE);
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->acl->request(Acl::PERMISSION_PUBLIC_SHARES);
+			$this->acl->request(Acl::PERMISSION_SHARE_CREATE_EXTERNAL);
+		}
+
+		// validate user type for external types and check, if user is allowed to create this type of share
+		if (match ($type) {
+			Ghost::TYPE => true,
+			Contact::TYPE => true,
+			ContactGroup::TYPE => true,
+			Email::TYPE => true,
+			UserBase::TYPE_EXTERNAL => true,
+			default => false,
+		}) {
+			$this->acl->request(Acl::PERMISSION_SHARE_CREATE_EXTERNAL);
 		}
 
 		$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));
@@ -588,7 +609,7 @@ class ShareService {
 	 * or is accessibale for use by the current user
 	 */
 	private function validateShareType(): void {
-		
+
 		$valid = match ($this->share->getType()) {
 			Share::TYPE_PUBLIC,	Share::TYPE_EMAIL, Share::TYPE_EXTERNAL => true,
 			Share::TYPE_USER => $this->share->getUserId() === $this->userSession->getCurrentUserId(),
@@ -662,7 +683,7 @@ class ShareService {
 			$this->share->setLanguage($userGroup->getLanguageCode());
 			$this->share->setTimeZoneName($timeZone);
 		}
-		
+
 		try {
 			$this->share = $this->shareMapper->insert($this->share);
 			// return new created share

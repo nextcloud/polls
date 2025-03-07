@@ -16,6 +16,7 @@ use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\TooShortException;
+use OCA\Polls\Model\Acl;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
@@ -29,6 +30,7 @@ use Psr\Log\LoggerInterface;
 
 class SystemService {
 	private const REGEX_INVALID_USERNAME_CHARACTERS = '/[\x{2000}-\x{206F}]/u';
+	private const MAX_SEARCH_RESULTS = 200;
 	/**
 	 * @psalm-suppress PossiblyUnusedMethod
 	 */
@@ -39,6 +41,7 @@ class SystemService {
 		private ShareMapper $shareMapper,
 		private VoteMapper $voteMapper,
 		private UserMapper $userMapper,
+		private Acl $acl,
 	) {
 	}
 
@@ -63,6 +66,7 @@ class SystemService {
 		$list = [];
 		if ($query !== '') {
 			try {
+				$this->acl->request(Acl::PERMISSION_SHARE_CREATE_EXTERNAL);
 				// try to identify an email address
 				$result = MailService::extractEmailAddressAndName($query);
 				$list[] = new Email($result['emailAddress'], $result['displayName'], $result['emailAddress']);
@@ -80,24 +84,35 @@ class SystemService {
 	 * get a list of user objects from the backend matching the query string
 	 */
 	public function search(string $query = ''): array {
+		if (!$this->acl->getIsAllowed(Acl::PERMISSION_SHARE_CREATE)) {
+			return [];
+		}
+
 		$startSearchTimer = microtime(true);
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
 			IShare::TYPE_GROUP,
-			IShare::TYPE_EMAIL
 		];
-		$maxResults = 200;
+
+		// Add email shares if external shares are allowed
+		if ($this->acl->getIsAllowed(Acl::PERMISSION_SHARE_CREATE_EXTERNAL)) {
+			$types[] = IShare::TYPE_EMAIL;
+		}
+
 		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
 			// Add circles to the search, if app is enabled
 			$types[] = IShare::TYPE_CIRCLE;
 		}
+
 		$startCollaborationSearchTimer = microtime(true);
-		[$result, $more] = $this->userSearch->search($query, $types, false, $maxResults, 0);
+
+		[$result, $more] = $this->userSearch->search($query, $types, false, self::MAX_SEARCH_RESULTS, 0);
+
 		$this->logger->debug('Search took {time}s', ['time' => microtime(true) - $startCollaborationSearchTimer]);
 
 		if ($more) {
-			$this->logger->info('Only first {maxResults} matches will be returned.', ['maxResults' => $maxResults]);
+			$this->logger->info('Only first {maxResults} matches will be returned.', ['maxResults' => self::MAX_SEARCH_RESULTS]);
 		}
 
 		foreach (($result['users'] ?? []) as $item) {
@@ -132,7 +147,8 @@ class SystemService {
 			}
 		}
 
-		if (Contact::isEnabled()) {
+		// Search contacts if external shares are allowed
+		if (Contact::isEnabled() && $this->acl->getIsAllowed(Acl::PERMISSION_SHARE_CREATE_EXTERNAL)) {
 			foreach (Contact::search($query) as $contact) {
 				$items[] = $contact->getRichUserArray();
 			}
