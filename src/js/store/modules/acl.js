@@ -20,7 +20,7 @@ const defaultAcl = () => ({
 		type: 'user',
 		id: '',
 		user: '',
-		organisation: '', 
+		organisation: '',
 		languageCode: '',
 		localeCode: '',
 		timeZone: '',
@@ -33,6 +33,8 @@ const defaultAcl = () => ({
 		pollCreation: false,
 		seeMailAddresses: false,
 		pollDownload: false,
+		shareCreate: true,
+		shareCreateExternal: true,
 	},
 	appSettings: {
 		usePrivacyUrl: '',
@@ -73,7 +75,7 @@ const actions = {
 
 			context.commit('reset')
 			if (context.rootState.route.name === null) {
-				// TODO: for some reason unauthorized users first get the root route resulting in a 401 
+				// TODO: for some reason unauthorized users first get the root route resulting in a 401
 				// and after that the publicVote route is called as next route
 				// therefore we just debug the error and reset the acl
 

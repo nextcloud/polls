@@ -9,9 +9,9 @@
 			<ShareIcon />
 		</template>
 
-		<UserSearch class="add-share" />
+		<UserSearch v-if="appPermissions.shareCreate" class="add-share" />
 		<ShareItemAllUsers v-if="appPermissions.allAccess" />
-		<SharePublicAdd v-if="appPermissions.publicShares" />
+		<SharePublicAdd v-if="appPermissions.publicShares && appPermissions.shareCreate" />
 
 		<div v-if="activeShares.length" class="shares-list shared">
 			<TransitionGroup is="div"
