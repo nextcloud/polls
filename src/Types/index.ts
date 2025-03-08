@@ -62,6 +62,8 @@ export enum BoxType {
 }
 
 export type AppPermissions = {
+	addShares: boolean
+	addSharesExternal: boolean
 	allAccess: boolean
 	publicShares: boolean
 	pollCreation: boolean

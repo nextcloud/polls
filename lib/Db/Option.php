@@ -221,9 +221,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return date('c', $this->getTimestamp());
 	}
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function getPollOptionTextEnd(): string {
 		if ($this->getTimestamp()) {
 			return date('c', $this->getTimestamp() + $this->getDuration());

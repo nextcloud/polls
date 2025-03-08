@@ -40,9 +40,7 @@ class MailService {
 	// Regex for extracting only email address
 	//  private const REGEX_PARSE_MAIL = '/^([^<>@\s]+@[^\s<>]+\.[a-zA-Z]{2,})$/';
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private LoggerInterface $logger,
 		private LogMapper $logMapper,
@@ -216,7 +214,7 @@ class MailService {
 
 	public function sendAutoReminder(): void {
 		$polls = $this->pollMapper->findAutoReminderPolls();
-		
+
 		foreach ($polls as $poll) {
 			try {
 				$this->processSharesForAutoReminder($poll);

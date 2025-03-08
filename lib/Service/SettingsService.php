@@ -12,9 +12,7 @@ use OCA\Polls\Model\Settings\AppSettings;
 
 class SettingsService {
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private AppSettings $appSettings,
 	) {

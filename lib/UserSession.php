@@ -34,9 +34,7 @@ class UserSession {
 	protected ?UserBase $currentUser = null;
 	// protected Share|null $share = null;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		protected ISession $session,
 		protected IUserSession $userSession,

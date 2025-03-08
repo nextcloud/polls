@@ -18,9 +18,7 @@ use OCP\IDBConnection;
 class SubscriptionMapper extends QBMapper {
 	public const TABLE = Subscription::TABLE;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, Subscription::TABLE, Subscription::class);
 	}

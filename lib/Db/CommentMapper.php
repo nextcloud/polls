@@ -17,9 +17,7 @@ use OCP\IDBConnection;
 class CommentMapper extends QBMapperWithUser {
 	public const TABLE = Comment::TABLE;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, self::TABLE, Comment::class);
 	}
@@ -62,7 +60,7 @@ class CommentMapper extends QBMapperWithUser {
 		if ($pollId !== null) {
 			$query->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		}
-	
+
 		$query->executeStatement();
 	}
 
@@ -89,7 +87,7 @@ class CommentMapper extends QBMapperWithUser {
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
-		
+
 		$this->joinAnon($qb, self::TABLE);
 		return $qb;
 	}

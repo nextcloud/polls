@@ -25,9 +25,7 @@ class CalendarService {
 	/** @var ICalendar[] */
 	private array $calendars;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private CalendarManager $calendarManager,
 		private OptionMapper $optionMapper,
@@ -129,7 +127,7 @@ class CalendarService {
 				$this->logger->warning('Skipping invalid calendar entry', ['calendarEvent' => json_encode($event)]);
 				continue;
 			}
-			
+
 			$calendarEvent = new CalendarEvent($event, $calendar, $timerange['from'], $timerange['to'], $timezone);
 
 			if ($calendarEvent->getOccurrences()) {

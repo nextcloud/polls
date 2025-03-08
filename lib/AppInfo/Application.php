@@ -54,6 +54,7 @@ use OCA\Polls\Listener\UserDeletedListener;
 use OCA\Polls\Listener\VoteListener;
 use OCA\Polls\Middleware\RequestAttributesMiddleware;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\Model\Settings\SystemSettings;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\SearchProvider;
 use OCA\Polls\UserSession;
@@ -145,6 +146,7 @@ class Application extends App implements IBootstrap {
 			return new AppSettings(
 				$c->get(IAppConfig::class),
 				$c->get(UserSession::class),
+				$c->get(SystemSettings::class),
 				$c->get(LoggerInterface::class),
 			);
 		});

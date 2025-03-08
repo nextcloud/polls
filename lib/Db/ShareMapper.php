@@ -21,9 +21,7 @@ use OCP\IDBConnection;
 class ShareMapper extends QBMapper {
 	public const TABLE = Share::TABLE;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		IDBConnection $db,
 	) {

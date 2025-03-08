@@ -8,12 +8,14 @@
 	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
 	import { useSharesStore } from '../../stores/shares.ts'
+	import { useSessionStore } from '../../stores/session.ts'
 
 	import SharesList from '../Shares/SharesList.vue'
 	import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 	import SharesListLocked from '../Shares/SharesListLocked.vue'
 
 	const sharesStore = useSharesStore()
+	const sessionStore = useSessionStore()
 
 	onMounted(() => {
 		subscribe('polls:change:shares', () => sharesStore.load())
@@ -26,9 +28,9 @@
 
 <template>
 	<div class="sidebar-share">
-		<SharesListUnsent class="shares unsent" />
+		<SharesListUnsent v-if="sessionStore.appPermissions.addShares" class="shares unsent" />
 		<SharesList class="shares effective" />
-		<SharesListLocked class="shares" />
+		<SharesListLocked v-if="sessionStore.appPermissions.addShares" class="shares" />
 	</div>
 </template>
 

@@ -31,8 +31,12 @@ use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Exceptions\ShareAlreadyExistsException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
+use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\Model\User\Contact;
+use OCA\Polls\Model\User\Email;
+use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
@@ -50,9 +54,7 @@ class ShareService {
 	/** @var Share[] * */
 	private array $shares;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private LoggerInterface $logger,
 		private IEventDispatcher $eventDispatcher,
@@ -499,6 +501,10 @@ class ShareService {
 			try {
 				$newShare = $this->add($share->getPollId(), $member->getType(), $member->getId());
 				$shares[] = $newShare;
+			} catch (ForbiddenException $e) {
+				// skip, if user is not allowed to add share, usually because of forbidden share type
+				// skip share creation silenly
+				continue;
 			} catch (ShareAlreadyExistsException $e) {
 				continue;
 			}
@@ -561,10 +567,23 @@ class ShareService {
 	): Share {
 		$poll = $this->pollMapper->find($pollId);
 		$poll->request(Poll::PERMISSION_POLL_EDIT);
-
+		$poll->request(Poll::PERMISSION_SHARE_ADD);
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			$this->appSettings->getPublicSharesAllowed();
+			$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
+		}
+
+		// validate user type for external types and check, if user is allowed to create this type of share
+		if (match ($type) {
+			Ghost::TYPE => true,
+			Contact::TYPE => true,
+			ContactGroup::TYPE => true,
+			Email::TYPE => true,
+			UserBase::TYPE_EXTERNAL => true,
+			default => false,
+		}) {
+			$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
 		}
 
 		$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));

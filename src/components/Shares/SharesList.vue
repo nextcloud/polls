@@ -47,9 +47,9 @@
 			<ShareIcon />
 		</template>
 
-		<UserSearch class="add-share" />
+		<UserSearch v-if="sessionStore.appPermissions.addShares" class="add-share" />
 		<ShareItemAllUsers v-if="sessionStore.appPermissions.allAccess" />
-		<SharePublicAdd v-if="sessionStore.appPermissions.publicShares" />
+		<SharePublicAdd v-if="sessionStore.appPermissions.publicShares && sessionStore.appPermissions.addShares && sessionStore.appPermissions.addSharesExternal" />
 
 		<div v-if="sharesStore.active.length" class="shares-list shared">
 			<TransitionGroup tag="div"

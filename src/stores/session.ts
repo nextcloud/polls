@@ -51,6 +51,8 @@ const mobileBreakpoint = 480
 export const useSessionStore = defineStore('session', {
 	state: (): Session => ({
 		appPermissions: {
+			addShares: false,
+			addSharesExternal: false,
 			allAccess: false,
 			publicShares: false,
 			pollCreation: false,

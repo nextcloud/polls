@@ -22,9 +22,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class VoteService {
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private IEventDispatcher $eventDispatcher,
 		private OptionMapper $optionMapper,

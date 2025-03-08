@@ -31,9 +31,7 @@ class OptionService {
 	/** @var Option[] */
 	private array $options;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private IEventDispatcher $eventDispatcher,
 		private LoggerInterface $logger,

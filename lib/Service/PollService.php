@@ -38,9 +38,7 @@ use OCP\Search\ISearchQuery;
 
 class PollService {
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private AppSettings $appSettings,
 		private IEventDispatcher $eventDispatcher,

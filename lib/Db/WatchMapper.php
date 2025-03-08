@@ -19,9 +19,7 @@ use OCP\IDBConnection;
 class WatchMapper extends QBMapper {
 	public const TABLE = Watch::TABLE;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		IDBConnection $db,
 		protected UserSession $userSession,

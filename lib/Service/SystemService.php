@@ -14,11 +14,13 @@ use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\VoteMapper;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidUsernameException;
 use OCA\Polls\Exceptions\TooShortException;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;
 use OCA\Polls\Model\Group\Group;
+use OCA\Polls\Model\Settings\SystemSettings;
 use OCA\Polls\Model\User\Contact;
 use OCA\Polls\Model\User\Email;
 use OCA\Polls\Model\User\User;
@@ -29,9 +31,9 @@ use Psr\Log\LoggerInterface;
 
 class SystemService {
 	private const REGEX_INVALID_USERNAME_CHARACTERS = '/[\x{2000}-\x{206F}]/u';
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	private const MAX_SEARCH_RESULTS = 200;
+
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private IFactory $transFactory,
 		private ISearch $userSearch,
@@ -39,6 +41,7 @@ class SystemService {
 		private ShareMapper $shareMapper,
 		private VoteMapper $voteMapper,
 		private UserMapper $userMapper,
+		private SystemSettings $systemSettings,
 	) {
 	}
 
@@ -63,6 +66,9 @@ class SystemService {
 		$list = [];
 		if ($query !== '') {
 			try {
+				if (!$this->systemSettings->getExternalShareCreationAllowed()) {
+					throw new ForbiddenException();
+				}
 				// try to identify an email address
 				$result = MailService::extractEmailAddressAndName($query);
 				$list[] = new Email($result['emailAddress'], $result['displayName'], $result['emailAddress']);
@@ -80,24 +86,32 @@ class SystemService {
 	 * get a list of user objects from the backend matching the query string
 	 */
 	public function search(string $query = ''): array {
+		if (!$this->systemSettings->getShareCreateAllowed()) {
+			return [];
+		}
+
 		$startSearchTimer = microtime(true);
 		$items = [];
 		$types = [
 			IShare::TYPE_USER,
 			IShare::TYPE_GROUP,
-			IShare::TYPE_EMAIL
 		];
-		$maxResults = 200;
+
+		if ($this->systemSettings->getExternalShareCreationAllowed()) {
+			$types[] = IShare::TYPE_EMAIL;
+		}
+
 		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
 			// Add circles to the search, if app is enabled
 			$types[] = IShare::TYPE_CIRCLE;
 		}
+
 		$startCollaborationSearchTimer = microtime(true);
-		[$result, $more] = $this->userSearch->search($query, $types, false, $maxResults, 0);
+		[$result, $more] = $this->userSearch->search($query, $types, false, self::MAX_SEARCH_RESULTS, 0);
 		$this->logger->debug('Search took {time}s', ['time' => microtime(true) - $startCollaborationSearchTimer]);
 
 		if ($more) {
-			$this->logger->info('Only first {maxResults} matches will be returned.', ['maxResults' => $maxResults]);
+			$this->logger->info('Only first {maxResults} matches will be returned.', ['maxResults' => self::MAX_SEARCH_RESULTS]);
 		}
 
 		foreach (($result['users'] ?? []) as $item) {
@@ -132,7 +146,7 @@ class SystemService {
 			}
 		}
 
-		if (Contact::isEnabled()) {
+		if (Contact::isEnabled() && $this->systemSettings->getExternalShareCreationAllowed()) {
 			foreach (Contact::search($query) as $contact) {
 				$items[] = $contact->getRichUserArray();
 			}
