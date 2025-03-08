@@ -34,9 +34,7 @@ class ActivityService {
 	private const FIRST_PERSON_FILTERED = 'firstFiltered';
 	private const THIRD_PERSON_FILTERED = 'thirdFiltered';
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private ActivityManager $activityManager,
 		private IL10N $l10n,

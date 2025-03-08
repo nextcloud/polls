@@ -31,9 +31,7 @@ class Email extends UserBase {
 		return $this->displayName ? $this->displayName : $this->id;
 	}
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function jsonSerialize(): array {
 		if ($this->userSession->getIsLoggedIn()) {
 			return $this->getRichUserArray();

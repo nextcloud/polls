@@ -18,9 +18,7 @@ use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
 
 class SubscriptionService {
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private SubscriptionMapper $subscriptionMapper,
 		private PollMapper $pollMapper,

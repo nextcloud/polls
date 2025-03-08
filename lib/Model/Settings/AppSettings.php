@@ -51,6 +51,7 @@ class AppSettings implements JsonSerializable {
 	public function __construct(
 		private IAppConfig $appConfig,
 		private UserSession $userSession,
+		private SystemSettings $systemSettings,
 		protected LoggerInterface $logger,
 	) {
 	}
@@ -66,6 +67,8 @@ class AppSettings implements JsonSerializable {
 			'seeMailAddresses' => $this->getAllowSeeMailAddresses(),
 			'pollDownload' => $this->getPollDownloadAllowed(),
 			'comboView' => $this->getComboAllowed(),
+			'addShares' => $this->systemSettings->getShareCreateAllowed(),
+			'addSharesExternal' => $this->systemSettings->getShareCreateAllowed(),
 		];
 	}
 

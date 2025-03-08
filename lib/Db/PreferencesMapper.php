@@ -18,9 +18,7 @@ use OCP\IDBConnection;
 class PreferencesMapper extends QBMapper {
 	public const TABLE = Preferences::TABLE;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, Preferences::TABLE, Preferences::class);
 	}

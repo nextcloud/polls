@@ -26,9 +26,7 @@ class Notifier implements INotifier {
 	private const SUBJECT_PARSED = 'parsedSubject';
 	private const SUBJECT_RICH = 'richSubject';
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		protected IFactory $l10nFactory,
 		protected IURLGenerator $urlGenerator,

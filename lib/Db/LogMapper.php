@@ -18,9 +18,7 @@ use OCP\IDBConnection;
 class LogMapper extends QBMapper {
 	public const TABLE = Log::TABLE;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(IDBConnection $db) {
 		parent::__construct($db, Log::TABLE, Log::class);
 	}

@@ -15,9 +15,7 @@ use OCA\Polls\UserSession;
 use OCP\Notification\IManager;
 
 class NotificationService {
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		protected IManager $notificationManager,
 		protected UserSession $userSession,

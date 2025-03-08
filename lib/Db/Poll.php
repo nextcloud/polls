@@ -13,6 +13,7 @@ use OCA\Polls\AppConstants;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\NoDeadLineException;
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Settings\SystemSettings;
 use OCA\Polls\UserSession;
 use OCP\IURLGenerator;
 use phpDocumentor\Reflection\Types\This;
@@ -125,10 +126,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const PERMISSION_OPTIONS_REORDER = 'reorderOptions';
 	public const PERMISSION_OPTIONS_SHIFT = 'shiftOptions';
 	public const PERMISSION_VOTE_EDIT = 'vote';
-
+	public const PERMISSION_SHARE_ADD = 'shareCreate';
+	public const PERMISSION_SHARE_ADD_EXTERNAL = 'shareCreateExternal';
 
 	private IURLGenerator $urlGenerator;
 	protected UserSession $userSession;
+	protected SystemSettings $systemSettings;
 
 	// schema columns
 	public $id = null;
@@ -199,6 +202,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 		$this->userSession = Container::queryClass(UserSession::class);
+		$this->systemSettings = Container::queryClass(SystemSettings::class);
+
 	}
 
 	/**
@@ -272,6 +277,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function getPermissionsArray(): array {
 		return [
 			'addOptions' => $this->getIsAllowed(self::PERMISSION_OPTION_ADD),
+			'addShares' => $this->getIsAllowed(self::PERMISSION_SHARE_ADD),
+			'addSharesExternal' => $this->getIsAllowed(self::PERMISSION_SHARE_ADD_EXTERNAL),
 			'archive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
 			'comment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
 			'confirmOptions' => $this->getIsAllowed(self::PERMISSION_OPTION_CONFIRM),
@@ -521,6 +528,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			self::PERMISSION_POLL_RESULTS_VIEW => $this->getAllowShowResults(),
 			self::PERMISSION_POLL_USERNAMES_VIEW => $this->getAllowEditPoll() || !$this->getAnonymous(),
 			self::PERMISSION_VOTE_EDIT => $this->getAllowVote(),
+			self::PERMISSION_SHARE_ADD => $this->systemSettings->getShareCreateAllowed(),
+			self::PERMISSION_SHARE_ADD_EXTERNAL => $this->systemSettings->getExternalShareCreationAllowed(),
 			default => false,
 		};
 	}

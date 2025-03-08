@@ -15,19 +15,17 @@ use OCA\Polls\Migration\TableSchema;
 use OCP\IConfig;
 
 class IndexManager {
-	
+
 	private string $dbPrefix;
-	
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private IConfig $config,
 		private Schema $schema,
 	) {
 		$this->setUp();
 	}
-	
+
 	private function setUp(): void {
 		$this->dbPrefix = $this->config->getSystemValue('dbtableprefix', 'oc_');
 	}
@@ -62,11 +60,11 @@ class IndexManager {
 	 */
 	public function createForeignKeyConstraints(): array {
 		$messages = [];
-		
+
 		foreach (TableSchema::FK_CHILD_TABLES as $childTable) {
 			$messages[] = $this->createForeignKeyConstraint(TableSchema::FK_PARENT_TABLE, $childTable);
 		}
-		
+
 		return $messages;
 	}
 

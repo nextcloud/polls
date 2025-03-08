@@ -110,7 +110,7 @@ class CalendarEvent implements \JsonSerializable {
 	public function getBaseStart(): DateTimeImmutable {
 		return $this->event['DTSTART'][0];
 	}
-	
+
 	/**
 	 * Get the event end from the base event
 	 * If not set return the start of the base event
@@ -118,7 +118,7 @@ class CalendarEvent implements \JsonSerializable {
 	public function getBaseEnd(): DateTimeImmutable {
 		return $this->event['DTEND'][0] ?? $this->event['DTSTART'][0];
 	}
-	
+
 	/**
 	 * Get the event start for the matched occurence
 	 */
@@ -128,21 +128,21 @@ class CalendarEvent implements \JsonSerializable {
 		}
 		return $this->getBaseStart();
 	}
-	
+
 	/**
 	 * Calculate the end of the matched occurence by adding the diff of the base start/end
 	 */
 	public function getEnd(): DateTimeImmutable {
 		return $this->getStart()->add($this->getDiff());
 	}
-	
+
 	/**
 	 * Calculate the event duration as DateInterval
 	 */
 	public function getDiff(): DateInterval {
 		return $this->getBaseStart()->diff($this->getBaseEnd());
 	}
-	
+
 	/**
 	 * Calculate the event duration in seconds
 	 */
@@ -155,7 +155,7 @@ class CalendarEvent implements \JsonSerializable {
 		// Currently the status is taken from the base event.
 		return $this->event['STATUS'][0] ?? '';
 	}
-	
+
 	// Getters and functions for recurrence handling
 	public function getHasRRule(): bool {
 		return $this->hasRRule;
@@ -179,12 +179,12 @@ class CalendarEvent implements \JsonSerializable {
 		if (!$this->getHasRRule()) {
 			return;
 		}
-		
+
 		preg_match_all('/([^;= ]+)=([^;= ]+)/', $this->event['RRULE'][0], $r);
 		$this->rRule = array_combine($r[1], $r[2]);
-		
+
 		$this->rRule['DTSTART'] = $this->getBaseStart();
-		
+
 		// force limiting occurrences to the filter boundary, if set
 		if ($this->filterTo) {
 			$this->rRule['UNTIL'] = $this->filterTo;
@@ -205,7 +205,7 @@ class CalendarEvent implements \JsonSerializable {
 				// skip occurrences before filter span
 				continue;
 			}
-			
+
 			if ($this->filterTo && $occurrence->getTimestamp() > $this->filterTo->getTimestamp()) {
 				// skip occurrences after filter span
 				return;
@@ -219,9 +219,7 @@ class CalendarEvent implements \JsonSerializable {
 		}
 	}
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function jsonSerialize(): array {
 		return	[
 			'id' => $this->getId(),

@@ -16,9 +16,7 @@ use OCA\Polls\UserSession;
 
 class PreferencesService {
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private PreferencesMapper $preferencesMapper,
 		private Preferences $preferences,
@@ -38,7 +36,7 @@ class PreferencesService {
 	public function get(): Preferences {
 		return $this->preferences;
 	}
-	
+
 	/**
 	 * Write references
 	 */
@@ -51,12 +49,12 @@ class PreferencesService {
 		$this->preferences->setPreferences(json_encode($preferences));
 		$this->preferences->setTimestamp(time());
 		$this->preferences->setUserId($this->userSession->getCurrentUserId());
-		
+
 		if ($this->preferences->getId() > 0) {
 			return $this->preferencesMapper->update($this->preferences);
 		} else {
 			return $this->preferencesMapper->insert($this->preferences);
-			
+
 		}
 	}
 

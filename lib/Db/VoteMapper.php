@@ -20,9 +20,7 @@ use Psr\Log\LoggerInterface;
 class VoteMapper extends QBMapperWithUser {
 	public const TABLE = Vote::TABLE;
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		IDBConnection $db,
 		private LoggerInterface $logger,
@@ -35,7 +33,7 @@ class VoteMapper extends QBMapperWithUser {
 		$entity = parent::update($entity);
 		return $this->find($entity->getId());
 	}
-	
+
 	public function insert(Entity $entity): Vote {
 		$entity->setVoteOptionHash(hash('md5', $entity->getPollId() . $entity->getUserId() . $entity->getVoteOptionText()));
 		$entity = parent::insert($entity);
@@ -53,8 +51,8 @@ class VoteMapper extends QBMapperWithUser {
 		$qb->select('*')->from($this->getTableName());
 		return $this->findEntities($qb);
 	}
-	
-	
+
+
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
 	 * @return Vote[]
@@ -124,7 +122,7 @@ class VoteMapper extends QBMapperWithUser {
 		if ($pollId !== null) {
 			$query->andWhere($query->expr()->eq('poll_id', $query->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		}
-	
+
 		$query->executeStatement();
 	}
 
@@ -171,13 +169,13 @@ class VoteMapper extends QBMapperWithUser {
 
 	protected function buildQuery(bool $findOrphaned = false): IQueryBuilder {
 		$qb = $this->db->getQueryBuilder();
-		
+
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
 		$optionAlias = $this->joinOption($qb, self::TABLE);
-		
+
 		if ($findOrphaned) {
 			$qb->where($qb->expr()->isNull($optionAlias . '.id'));
 		} else {
@@ -185,7 +183,7 @@ class VoteMapper extends QBMapperWithUser {
 		}
 		$this->joinAnon($qb, self::TABLE);
 
-		
+
 		return $qb;
 	}
 
@@ -195,7 +193,7 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	protected function joinOption(IQueryBuilder &$qb, string $fromAlias): string {
 		$joinAlias = 'options';
-		
+
 		$qb->selectAlias($joinAlias . '.id', 'option_id')
 			->addGroupBy($joinAlias . '.id');
 

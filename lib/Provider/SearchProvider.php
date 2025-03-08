@@ -22,9 +22,7 @@ use OCP\Search\ISearchQuery;
 use OCP\Search\SearchResult;
 
 class SearchProvider implements IProvider {
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private IL10N $l10n,
 		// private IURLGenerator $urlGenerator,

@@ -26,9 +26,7 @@ class PollMapper extends QBMapper {
 	public const TABLE = Poll::TABLE;
 	public const CONCAT_SEPARATOR = ',';
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		IDBConnection $db,
 		private UserSession $userSession,

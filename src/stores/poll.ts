@@ -81,6 +81,8 @@ export type PollStatus = {
 
 export type PollPermissions = {
 	addOptions: boolean
+	addShares: boolean
+	addSharesExternal: boolean
 	shiftOptions: boolean
 	reorderOptions: boolean
 	archive: boolean
@@ -189,6 +191,8 @@ export const usePollStore = defineStore('poll', {
 		},
 		permissions: {
 			addOptions: false,
+			addShares: false,
+			addSharesExternal: false,
 			shiftOptions: false,
 			reorderOptions: false,
 			archive: false,

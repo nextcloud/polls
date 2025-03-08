@@ -19,9 +19,7 @@ use OCA\Polls\UserSession;
 use OCP\EventDispatcher\IEventDispatcher;
 
 class CommentService {
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private CommentMapper $commentMapper,
 		private Comment $comment,

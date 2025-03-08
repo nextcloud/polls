@@ -283,9 +283,7 @@ class UserBase implements JsonSerializable {
 		return [$this];
 	}
 
-	/**
-	 * @psalm-suppress PossiblyUnusedMethod
-	 */
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function jsonSerialize(): array {
 		if ($this->getIsCurrentUser()) {
 			return $this->getRichUserArray();
@@ -426,6 +424,20 @@ class UserBase implements JsonSerializable {
 	public function getIsInGroup(string $groupName): bool {
 		return $this->groupManager->isInGroup($this->getId(), $groupName);
 	}
+
+	public function getIsInGroupArray(array $groupNames): bool {
+		if (!($this instanceof User)) {
+			return false;
+		}
+
+		foreach ($groupNames as $groupName) {
+			if ($this->getIsInGroup($groupName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 
 	/**
 	 * returns the safe id to avoid leaking the real user type
