@@ -13,7 +13,7 @@
 	import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 	import { InputDiv } from '../Base/index.js'
-	import { dateUnits, DateUnitValue, TimeUnits } from '../../constants/dateUnits.ts'
+	import { dateUnits, DateUnitKeys, TimeUnitsType } from '../../constants/dateUnits.ts'
 	import { useOptionsStore } from '../../stores/options.ts'
 	import { usePollStore } from '../../stores/poll.ts'
 
@@ -21,12 +21,12 @@
 
 	const optionsStore = useOptionsStore()
 
-	const shift = ref<TimeUnits>({
+	const shift = ref<TimeUnitsType>({
 		value: 1,
-		unit: { name: t('polls', 'Week'), value: DateUnitValue.Week },
+		unit: { name: t('polls', 'Week'), key: DateUnitKeys.Week },
 	})
 
-	function shiftDates(shift: TimeUnits) {
+	function shiftDates(shift: TimeUnitsType) {
 		optionsStore.shift({ shift })
 	}
 

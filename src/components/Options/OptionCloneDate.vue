@@ -13,7 +13,7 @@
 
 	import { InputDiv } from '../Base/index.js'
 	import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
-	import { dateUnits, DateUnitValue } from '../../constants/dateUnits.ts'
+	import { dateUnits, DateUnitKeys } from '../../constants/dateUnits.ts'
 
 	const optionsStore = useOptionsStore()
 
@@ -29,10 +29,10 @@
 	const sequence = ref<Sequence>({
 		unit: {
 			name: t('polls', 'Week'),
-			value: DateUnitValue.Week,
+			key: DateUnitKeys.Week,
 		},
-		value: 1,
-		amount: 1,
+		stepWidth: 1,
+		repetitions: 1,
 	})
 
 	const dateBaseOptionString = computed(() => moment.unix(props.option.timestamp).format('LLLL'))
@@ -60,13 +60,13 @@
 			label="name" />
 
 		<div class="sideways">
-			<InputDiv v-model="sequence.value"
+			<InputDiv v-model="sequence.stepWidth"
 				:label="t('polls', 'Step width')"
 				type="number"
 				inputmode="numeric"
 				use-num-modifiers />
 
-			<InputDiv v-model="sequence.amount"
+			<InputDiv v-model="sequence.repetitions"
 				:label="t('polls', 'Amount')"
 				type="number"
 				inputmode="numeric"

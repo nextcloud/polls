@@ -6,175 +6,126 @@
 <script setup lang="ts">
 	import { computed, ref, watch } from 'vue'
 	import { showError, showSuccess } from '@nextcloud/dialogs'
-	import { t, n } from '@nextcloud/l10n'
+	import { n, t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
-
+	import NcSelect from '@nextcloud/vue/components/NcSelect'
+	import { DateTime, Duration } from 'luxon';
 	import CheckIcon from 'vue-material-design-icons/Check.vue'
-	import CalendarStartIcon from 'vue-material-design-icons/CalendarStart.vue'
-	import CalendarEndIcon from 'vue-material-design-icons/CalendarEnd.vue'
 
+	import { InputDiv } from '../Base/index.js'
 	import DateTimePicker from '../Base/modules/DateTimePicker.vue'
 	import DateBox from '../Base/modules/DateBox.vue'
 	import { useSessionStore } from '../../stores/session'
-	import { useOptionsStore } from '../../stores/options'
+	import { useOptionsStore, Sequence } from '../../stores/options'
 	import { StatusResults } from '../../Types'
+	import { dateOnlyUnits, dateUnits, DateUnitKeys, DurationType } from '../../constants/dateUnits.ts'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 	const sessionStore = useSessionStore()
 	const optionsStore = useOptionsStore()
+
 	const timeStepMinutes = 15
 	const successColor = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
-	const useRange = ref(false)
-	const allDay = ref(true)
 	const result = ref(StatusResults.None)
+
+	// *** refs for the inputs
+	// allDay is a boolean to toggle between all day and time based options
+	const allDay = ref(true)
+
 	// set initial time mark to the next full quater of the hour
-	const dateFrom = ref(new Date(new Date().setMinutes(Math.ceil((46/60)*(60/timeStepMinutes))*timeStepMinutes, 0, 0)))
+	const fromInput = ref(new Date(new Date().setMinutes(Math.ceil((new Date().getMinutes() / 60) * (60 / timeStepMinutes)) * timeStepMinutes, 0, 0)))
 
-	const storedDurationSec = ref(60 * 60) // 1 hour
-	const dateTo = ref(new Date(dateFrom.value.getTime() + (1000 * storedDurationSec.value))) // 7 days later (in ms)
-
-	const humanReadableDuration = computed(() => {
-		// use duration information for blocked Option error message to avoid more areas
-		if (blockedOption.value) {
-			return t('polls', 'Option already exists')
-		}
-
-		if (durationComputedSec.value === 0) {
-			return t('polls', 'No duration')
-		}
-		const result = convertSeconds(durationComputedSec.value)
-
-		let durationString = ''
-
-		try {
-			durationString = new Intl.DurationFormat(sessionStore.currentUser.languageCode, { style: "long" }).format(result)
-		} catch (error) {
-			console.debug("Intl.DurationFormat not supported, falling back to custom implementation")
-			if (result.years > 0) durationString += `${result.years} ${n('polls', 'year', 'years', result.years)}, `
-			if (result.months > 0) durationString += `${result.months} ${n('polls', 'month', 'months', result.months)}, `
-			if (result.days > 0) durationString += `${result.days} ${n('polls', 'day', 'days', result.days)}, `
-			if (result.hours > 0) durationString += `${result.hours} ${n('polls', 'hour', 'hours', result.hours)}, `
-			if (result.minutes > 0) durationString += `${result.minutes} ${n('polls', 'minute', 'minutes', result.minutes)}, `
-			durationString = durationString.replace(/, $/, '');
-		}
-		return durationString
+	// set initial duration to one Day
+	const durationInput = ref<DurationType>({
+		unit: dateUnits.find(unit => unit.key === DateUnitKeys.Day),
+		amount: 0,
 	})
 
-	const finalFrom = computed(() => {
-		const date = new Date(dateFrom.value)
+	// set initial sequence to one week but disabled
+	const sequenceInput = ref<Sequence>({
+		unit: dateUnits.find(unit => unit.key === DateUnitKeys.Week),
+		stepWidth: 1,
+		repetitions: 0,
+	})
 
+	// computed from as DateTime from Luxon
+	const from = computed(() => {
+		const dateFrom = DateTime.fromJSDate(fromInput.value).setLocale(sessionStore.currentUser.languageCode)
+		// if the option is an all day option, the time is set to 00:00
 		if (allDay.value) {
-			// set time to 00:00:00.0 (Start of the day) in case of a day only option
-			date.setHours(0, 0, 0, 0)
-		} else {
-			date.setSeconds(0, 0)
+			return dateFrom.startOf(DateUnitKeys.Day).setLocale(sessionStore.currentUser.languageCode)
 		}
-		return {
-			dateTime: date,
-			ts: date.getTime(),
-			unix: Math.floor(date.getTime() / 1000)
-		}
+		return dateFrom
 	})
 
-	const finalTo = computed(() => {
-		let date = new Date(dateTo.value)
+	// computed duration as Duration from Luxon
+	// Set duration to 1 Day if allDay is true and duration is 0
+	const duration = computed(() => durationInput.value.amount < 1 && allDay.value
+		? Duration.fromObject({ [DateUnitKeys.Day]: 1 })
+		: Duration.fromObject({ [durationInput.value.unit.key]: durationInput.value.amount }))
 
-		// if only a moment is requested, set the due dateTime to dateFrom
-		if (!useRange.value) {
-			date = new Date(dateFrom.value)
-		}
+	// computed sequence as Duration from Luxon
+	// Set sequence to 0 if repetitions are 0
+	const sequence = computed(() => sequenceInput.value.repetitions > 0
+		? Duration.fromObject({ [sequenceInput.value.unit.key]: sequenceInput.value.stepWidth * sequenceInput.value.repetitions })
+		: Duration.fromObject({ millisecond: 0 }))
 
-		if (allDay.value) {
-			// set time to 23:59:59.999 (end of the day) in case of a day only option
-			date.setHours(23, 59, 59, 999)
-		} else {
-			date.setSeconds(0, 0)
-		}
-		// return unix timestamp in seconds rounded up for full seconds
-		return {
-			dateTime: date,
-			ts: date.getTime(),
-			unix: Math.ceil(date.getTime() / 1000)
-		}
-	})
+	// True, if from and to dates are the same day
+	const sameDay = computed(() => from.value.hasSame(to.value, DateUnitKeys.Day))
 
-	const sameDaySpan = computed(() => dateFrom.value.getDate() === dateTo.value.getDate() && dateFrom.value.getMonth() === dateTo.value.getMonth() && dateFrom.value.getFullYear() === dateTo.value.getFullYear())
-	const durationComputedSec = computed(() => finalTo.value.unix - finalFrom.value.unix)
+	// *** computed properties only used for display
+	// computed to as DateTime from Luxon
+	// remove one day to simulate the end of the prior day and not the start of the calculated day in case of allDay
+	const to = computed(() => from.value.plus(duration.value).minus({ [DateUnitKeys.Day]: allDay.value ? 1 : 0 }))
 
-	const finalDurationSec = computed(() => {
-		if (!useRange.value) {
-			return allDay.value ? (24 * 60 * 60) : 0 // 1 day
-		}
+	// computed last from dateTime repetition
+	const lastFromDisplay = computed(() => from.value.plus(sequence.value))
 
-		return durationComputedSec.value
-	})
+	// computed last to dateTime repetition
+	const lastToDisplay = computed(() => to.value.plus(sequence.value))
 
+	// computed if the option is blocked by existing option
+	const blockedOption = computed(() => optionsStore.find(from.value.toSeconds(), duration.value.as('seconds')) ? result.value !== StatusResults.Success :false)
+
+	// computed if the option is addable
 	const addable = computed(() => (!blockedOption.value && result.value !== StatusResults.Loading))
+	const optionInfo = computed(() => blockedOption.value ? t('polls', 'Option already exists') : '')
 
-	const blockedOption = computed(() => {
-		if (optionsStore.find(finalFrom.value.unix, finalDurationSec.value)) {
-			return result.value !== StatusResults.Success
-		}
-		return false
+	watch(() => allDay.value, () => {
+		resetduratonUnits()
 	})
 
-	watch(() => finalFrom.value, () => {
-		dateTo.value = new Date(dateFrom.value.getTime() + storedDurationSec.value * 1000)
+	watch(() => fromInput.value, () => {
 		onAnyChange()
 	})
 
-	watch(() => finalTo.value, () => {
-		if (dateTo.value.getTime() < dateFrom.value.getTime()) {
-			dateTo.value = new Date(dateFrom.value.getTime() + (1000 * 60 * 60)) // 1 hour
+	function resetduratonUnits() {
+		if (allDay.value) {
+			// change date units, when switching from time based to all day, since minutes and hours are not valid anymore
+			if (durationInput.value.unit.key === DateUnitKeys.Minute || durationInput.value.unit.key === DateUnitKeys.Hour) {
+				durationInput.value.unit = dateUnits.find(unit => unit.key === DateUnitKeys.Day)
+			}
 		}
-		storedDurationSec.value = durationComputedSec.value
-		onAnyChange()
-	})
-
-	watch(() => allDay.value, onAnyChange)
-	watch(() => useRange.value, onAnyChange)
-
-	function convertSeconds(seconds) {
-		const years = Math.floor(seconds / (365 * 24 * 60 * 60));
-		seconds %= (365 * 24 * 60 * 60);
-		const months = Math.floor(seconds / (30 * 24 * 60 * 60));
-		seconds %= (30 * 24 * 60 * 60);
-		const days = Math.floor(seconds / (24 * 60 * 60));
-		seconds %= (24 * 60 * 60);
-		const hours = Math.floor(seconds / (60 * 60));
-		seconds %= (60 * 60);
-		const minutes = Math.floor(seconds / 60);
-		seconds %= 60;
-
-		return {
-			years,
-			months,
-			days,
-			hours,
-			minutes,
-			seconds
-		};
 	}
 
 	function onAnyChange() {
-		if (addable.value) {
-			result.value = StatusResults.None
-			return
-		}
-
-		result.value = StatusResults.Error
+		result.value = addable.value ? StatusResults.None : StatusResults.Error
 	}
 
 	async function addOption() {
 		result.value = StatusResults.Loading
 
 		try {
-			await optionsStore.add({
+			const newOption = await optionsStore.add({
 				text: '',
-				timestamp: finalFrom.value.unix,
-				duration: finalDurationSec.value,
+				timestamp: from.value.toSeconds(),
+				duration: duration.value.as('seconds'),
 			})
+
+			if (sequenceInput.value.repetitions > 0) {
+				await optionsStore.sequence({option: newOption, sequence: sequenceInput.value})
+			}
 			result.value = StatusResults.Success
 			showSuccess(t('polls', 'Option added'))
 		} catch (error) {
@@ -188,70 +139,115 @@
 			result.value = StatusResults.Error
 		}
 	}
-
 </script>
 
 <template>
 	<div class="header-container">
-		<h2>{{ t('polls', 'Add option') }}</h2>
+		<h2>{{ t('polls', 'Add times') }}</h2>
+		<NcCheckboxRadioSwitch v-model="allDay">
+			{{ t('polls', 'All day') }}
+		</NcCheckboxRadioSwitch>
 	</div>
 
 	<div class="add-container">
 		<div class="select-container">
-			<div class="from">
-				<DateTimePicker v-model="dateFrom"
-					:use-time="!allDay"
-					focus>
-					<template #icon>
-						<CalendarStartIcon />
-					</template>
-				</DateTimePicker>
+			<div class="selection from">
+				<DateTimePicker v-model="fromInput"
+					:use-time="!allDay" />
 			</div>
 
-			<div v-if="useRange" class="to">
-				<DateTimePicker v-model="dateTo"
-					:use-time="!allDay">
-					<template #icon>
-						<CalendarEndIcon />
-					</template>
-				</DateTimePicker>
+			<div class="selection duration">
+				<div>
+					<InputDiv v-model="durationInput.amount"
+						:label="t('polls', 'Duaration')"
+						type="number"
+						inputmode="numeric"
+						:num-min="0"
+						use-num-modifiers />
+					<NcSelect v-model="durationInput.unit"
+						class="time-unit"
+						:input-label="t('polls', 'Duration time unit')"
+						:clearable="false"
+						:filterable="false"
+						:options="allDay ? dateOnlyUnits : dateUnits"
+						label="name" />
+				</div>
+			</div>
+
+			<div class="selection repetition">
+				<div class="set-repetition">
+					<InputDiv v-model="sequenceInput.repetitions"
+						:label="t('polls', 'Repetitions')"
+						type="number"
+						inputmode="numeric"
+						:num-min="0"
+						use-num-modifiers />
+
+					<NcSelect v-if="sequenceInput.repetitions > 0"
+						v-model="sequenceInput.unit"
+						class="time-unit"
+						:input-label="t('polls', 'Step unit')"
+						:clearable="false"
+						:filterable="false"
+						:options="dateUnits"
+						label="name" />
+
+					<InputDiv v-if="sequenceInput.repetitions > 0"
+						v-model="sequenceInput.stepWidth"
+						:label="t('polls', 'Step width')"
+						type="number"
+						inputmode="numeric"
+						use-num-modifiers />
+				</div>
 			</div>
 		</div>
 
-		<div class="switch-container">
-			<NcCheckboxRadioSwitch v-model="allDay"
-				type="switch">
-				{{ t('polls', 'All day') }}
-			</NcCheckboxRadioSwitch>
-			<NcCheckboxRadioSwitch v-model="useRange"
-				type="switch">
-				{{ t('polls', 'Time range') }}
-			</NcCheckboxRadioSwitch>
-		</div>
 	</div>
+
 
 	<div class="preview-container">
 		<h2>{{ t('polls', 'Preview') }}</h2>
 		<div class="preview">
 
 			<div class="preview-container">
-				<div class="preview___entry">
-					<DateBox class="from"
-						:date="dateFrom"
-						:duration-sec="sameDaySpan ? durationComputedSec : 0"
-						:hide-time="allDay" />
+				<div class="preview-group">
+					<div class="preview___entry">
+						<DateBox class="from"
+							:date="from.toJSDate()"
+							:duration-sec="sameDay ? duration.as('seconds') : 0"
+							:hide-time="allDay" />
 
-					<div v-if="useRange && !sameDaySpan" class="preview___devider">
-						<span>{{ ' - ' }} </span>
+						<div v-if="durationInput.amount > 0 && !sameDay" class="preview___devider">
+							<span>{{ ' - ' }} </span>
+						</div>
+
+						<DateBox v-if="!sameDay" class="to"
+							:date="to.toJSDate()"
+							:duration-sec="sameDay ? duration.as('seconds') : 0"
+							:hide-time="allDay" />
+					</div>
+					<div v-if="sequenceInput.repetitions > 0" class="preview___repetitions">
+						<span>{{ n('polls', '%n repetition until', '%n repetitions until', sequenceInput.repetitions) }}</span>
+						<div class="preview___entry">
+							<DateBox class="from"
+								:date="lastFromDisplay.toJSDate()"
+								:duration-sec="sameDay ? duration.as('seconds') : 0"
+								:hide-time="allDay" />
+
+							<div v-if="durationInput.amount > 0 && !sameDay" class="preview___devider">
+								<span>{{ ' - ' }} </span>
+							</div>
+
+							<DateBox v-if="!sameDay" class="to"
+								:date="lastToDisplay.toJSDate()"
+								:duration-sec="sameDay ? duration.as('seconds') : 0"
+								:hide-time="allDay" />
+						</div>
 					</div>
 
-					<DateBox v-if="useRange && !sameDaySpan"
-						class="to"
-						:date="dateTo"
-						:hide-time="allDay" />
 				</div>
 				<div :class="['duration-info', { error: blockedOption }]">
-					{{ humanReadableDuration }}
+					{{ optionInfo }}
 				</div>
 			</div>
 
@@ -262,11 +258,13 @@
 				:size="26" />
 
 			<NcButton v-else
+				class="date-add-button"
 				:type="ButtonType.Primary"
 				:disabled="!addable"
 				@click="addOption">{{ t('polls', 'Add') }}</NcButton>
 		</div>
 	</div>
+
 </template>
 
 <style lang="scss">
@@ -279,9 +277,41 @@
 		flex-wrap: wrap-reverse;
 	}
 
+	.header-container {
+		display: flex;
+		justify-content: space-between;
+		column-gap: 1rem;
+
+	}
+
+	.select-container {
+		display: flex;
+		flex-direction: column;
+		min-height: 5.4rem;
+		flex: 1 18rem;
+		.to, .from {
+			display: flex;
+			align-items: center;
+		}
+		.selection {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: start;
+
+			> div {
+				flex: 1;
+				column-gap: 1rem;
+				display: flex;
+				flex-wrap: wrap;
+				.v-select.select.time-unit {
+					min-width: 11rem;
+				}
+			}
+		}
+	}
+
 	.select-duration {
 		display: flex;
-		column-gap: 1rem;
 		align-items: center;
 	}
 
@@ -311,6 +341,7 @@
 	.preview {
 		display: flex;
 		align-items: center;
+		flex-wrap: wrap;
 
 		.duration-info {
 			font-size: 0.8em;
@@ -320,6 +351,13 @@
 			&.error {
 				color: var(--color-error-text);
 			}
+		}
+
+		.preview-group {
+			display: flex;
+			flex: 1 auto;
+			row-gap: 0.6rem;
+			column-gap: 2rem;
 		}
 
 		.preview-container {
@@ -337,6 +375,17 @@
 			column-gap: 0.6rem;
 			min-height: 5.5rem;
 		}
+		.preview___repetitions {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			font-weight: bold;
+			font-size: 0.8em;
+			opacity: 0.6;
+			background-color: var(--color-background-darker);
+			padding: 1rem 1rem 0 1rem;
+			border-radius: var(--border-radius-container-large);
+		}
 
 		.preview___devider {
 			flex: 0 auto;
@@ -345,21 +394,9 @@
 		}
 
 		button {
-			flex: 0 auto;
-			min-height: 40px;
+			flex: 1 0 4.5rem;
 		}
 
-	}
-
-	.select-container {
-		display: flex;
-		flex-direction: column;
-		min-height: 5.4rem;
-		flex: 1 18rem;
-		.to, .from {
-			display: flex;
-			align-items: center;
-		}
 	}
 
 	.switch-container {

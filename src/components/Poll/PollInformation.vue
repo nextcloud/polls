@@ -167,7 +167,7 @@
 			<template #icon>
 				<CheckIcon />
 			</template>
-			{{ n('polls', '{usedVotes} of %n vote left.', '{usedVotes} of %n votes left.', pollStore.configuration.maxVotesPerUser, { maximalVotes: pollStore.configuration.maxVotesPerUser, usedVotes: countUsedVotes }) }}
+			{{ n('polls', '{usedVotes} of %n vote left.', '{usedVotes} of %n votes left.', pollStore.configuration.maxVotesPerUser, { usedVotes: countUsedVotes }) }}
 		</BadgeDiv>
 		<BadgeDiv v-if="pollStore.configuration.maxVotesPerOption">
 			<template #icon>

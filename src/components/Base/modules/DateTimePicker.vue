@@ -8,16 +8,23 @@
 	import { t } from '@nextcloud/l10n'
 	import moment from '@nextcloud/moment'
 	import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
+	import { NcCheckboxRadioSwitch } from '@nextcloud/vue';
 
 	const model = defineModel({
 		required: true,
 		type: Object,
 	})
 
-	const emit = defineEmits(['delete', 'change'])
+	const timeSelected = defineModel('timeSelected', {
+		type: Boolean,
+	})
 
 	const props = defineProps({
 		useTime: {
+			type: Boolean,
+			default: false,
+		},
+		selectTime: {
 			type: Boolean,
 			default: false,
 		},
@@ -75,17 +82,19 @@
 				<NcDateTimePicker v-model="model"
 					v-bind="datePickerOptions"
 					class="date-picker"
-					:aria-label="t('polls', 'Enter a date')"
-					@change="emit('change')">
-				</NcDateTimePicker>
+					:aria-label="t('polls', 'Enter a date')" />
+				<div class="time-picker">
+					<NcCheckboxRadioSwitch v-if="props.selectTime"
+						v-model="timeSelected"
+						:aria-label="t('polls', 'Select a time')" />
 
-				<NcDateTimePicker v-if="props.useTime"
-					v-model="model"
-					v-bind="timePickerOptions"
-					class="time-picker"
-					:aria-label="t('polls', 'Enter a time')"
-					@change="emit('change')">
-				</NcDateTimePicker>
+					<NcDateTimePicker v-if="props.useTime || props.selectTime"
+						v-model="model"
+						:disabled="props.selectTime && !timeSelected"
+						v-bind="timePickerOptions"
+						:aria-label="t('polls', 'Enter a time')" />
+				</div>
+
 			</div>
 		</div>
 
@@ -106,21 +115,27 @@
 
 	.picker-wrapper {
 		display: flex;
-		column-gap: 8px;
+		.checkbox-radio-switch-checkbox {
+			flex: 0 0 auto;
+		}
 	}
 
 	.picker-input {
 		display: flex;
-		// flex-wrap: wrap;
-		column-gap: 4px;
+		flex-wrap: wrap;
+		column-gap: 0.25rem;
 	}
 
-	.mx-datepicker {
-		&.date-picker {
-			max-width: 9rem;
-		}
-		&.time-picker {
-			max-width: 6rem;
-		}
+	.time-picker {
+		display: flex;
+		align-items: center;
 	}
+	// .mx-datepicker {
+	// 	&.date-picker {
+	// 		max-width: 9rem;
+	// 	}
+	// 	&.time-picker {
+	// 		max-width: 6.5rem;
+	// 	}
+	// }
 </style>

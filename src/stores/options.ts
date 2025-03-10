@@ -12,12 +12,12 @@ import orderBy from 'lodash/orderBy'
 import { usePollStore, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { Answer } from './votes.ts'
-import { TimeUnits } from '../constants/dateUnits.ts'
+import { DateUnitType, TimeUnitsType } from '../constants/dateUnits.ts'
 
 export type Sequence = {
-	unit: { name?: string, value: string }
-	value: number
-	amount: number
+	unit: DateUnitType,
+	stepWidth: number
+	repetitions: number
 }
 
 export type OptionVotes = {
@@ -198,6 +198,7 @@ export const useOptionsStore = defineStore('options', {
 					)
 				}
 				this.list.push(response.data.option)
+				return response.data.option
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error adding option', { error, payload })
@@ -255,7 +256,7 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await OptionsAPI.addOptions(sessionStore.route.params.id, payload.text)
-				this.$patch({ options: response.data.options })
+				this.list = response.data.options
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error adding option', { error, payload })
@@ -292,7 +293,7 @@ export const useOptionsStore = defineStore('options', {
 
 			try {
 				const response = await OptionsAPI.reorderOptions(sessionStore.route.params.id, this.list.map(({ id, text }) => ({ id, text })))
-				this.$patch({ options: response.data.options })
+				this.list = response.data.options
 			} catch (error) {
 				Logger.error('Error reordering option', { error, options: this.list, oldIndex, newIndex})
 				this.load()
@@ -304,11 +305,11 @@ export const useOptionsStore = defineStore('options', {
 			try {
 				const response = await OptionsAPI.addOptionsSequence(
 					payload.option.id,
-					payload.sequence.value,
-					payload.sequence.unit.value,
-					payload.sequence.amount,
+					payload.sequence.stepWidth,
+					payload.sequence.unit.key,
+					payload.sequence.repetitions,
 				)
-				this.$patch({ options: response.data.options })
+				this.list = response.data.options
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error creating sequence', { error, payload })
@@ -317,15 +318,15 @@ export const useOptionsStore = defineStore('options', {
 			}
 		},
 
-		async shift(payload: { shift: TimeUnits }) {
+		async shift(payload: { shift: TimeUnitsType }) {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await OptionsAPI.shiftOptions(
 					sessionStore.route.params.id,
 					payload.shift.value,
-					payload.shift.unit.value,
+					payload.shift.unit.key,
 				)
-				this.$patch({ options: response.data.options })
+				this.list = response.data.options
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error shifting dates', { error, payload })
