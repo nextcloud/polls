@@ -38,7 +38,7 @@ abstract class BaseEvent extends Event {
 		// Default
 		$this->activitySubjectParams['pollTitle'] = [
 			'type' => 'highlight',
-			'id' => $this->eventObject->getPollId(),
+			'id' => (string) $this->eventObject->getPollId(),
 			'name' => $this->poll->getTitle(),
 			'link' => $this->poll->getVoteUrl(),
 		];
