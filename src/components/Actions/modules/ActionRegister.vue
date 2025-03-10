@@ -26,6 +26,7 @@
 			{{ caption }}
 		</NcButton>
 		<NcModal v-model:show="showRegistration"
+			:name="caption"
 			:size="registerModalSize"
 			:can-close="true"
 			@close="showRegistration = false">

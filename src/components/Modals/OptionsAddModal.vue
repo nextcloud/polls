@@ -19,6 +19,7 @@
 
 	const pollStore = usePollStore()
 	const showModal = ref(false)
+	const caption = t('polls', 'Add date option')
 
 	onMounted(() => {
 		subscribe('polls:options:add-date', () => {
@@ -35,7 +36,7 @@
 </script>
 
 <template>
-	<NcModal v-model:show="showModal" size="large">
+	<NcModal v-model:show="showModal" :name="caption" size="large">
 		<div class="screen-container">
 			<div v-if="!pollStore.isClosed" class="edit-container">
 				<OptionsDateAddDialog />

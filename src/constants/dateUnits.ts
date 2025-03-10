@@ -5,43 +5,85 @@
 
 import { t } from '@nextcloud/l10n'
 
-export enum DateUnitValue {
+export enum DateUnitKeys {
 	Minute = 'minute',
 	Hour = 'hour',
-	Day = 'day',
+	Day = 'days',
 	Week = 'week',
 	Month = 'month',
 	Year = 'year',
 }
 
-export enum DateTypeValue {
+export enum DateTypeKeys {
 	Date = 'date',
 	DateTime = 'dateTime',
 	DateRange = 'dateRange',
 	DateTimeRange = 'dateTimeRange',
 }
 
-
-export type DateUnitSelect = {
+export type DateUnitType = {
 	name: string
-	value: DateUnitValue
+	key: DateUnitKeys
 }
 
-export type TimeUnits = {
+export type TimeUnitsType = {
+	unit: DateUnitType
 	value: number
-	unit: DateUnitSelect
 }
 
 export type DateOptionTypeSelect = {
 	name: string
-	value: DateTypeValue
+	key: DateTypeKeys
 }
 
-export const dateUnits: DateUnitSelect[] = [
-	{ name: t('polls', 'Minute'), value: DateUnitValue.Minute },
-	{ name: t('polls', 'Hour'), value: DateUnitValue.Hour },
-	{ name: t('polls', 'Day'), value: DateUnitValue.Day },
-	{ name: t('polls', 'Week'), value: DateUnitValue.Week },
-	{ name: t('polls', 'Month'), value: DateUnitValue.Month },
-	{ name: t('polls', 'Year'), value: DateUnitValue.Year },
+export type DurationType = {
+	unit: DateUnitType
+	amount: number
+}
+
+export const dateUnits: DateUnitType[] = [
+	{
+		name: t('polls', 'Minute'),
+		key: DateUnitKeys.Minute,
+	},
+	{
+		name: t('polls', 'Hour'),
+		key: DateUnitKeys.Hour,
+	},
+	{
+		name: t('polls', 'Day'),
+		key: DateUnitKeys.Day,
+	},
+	{
+		name: t('polls', 'Week'),
+		key: DateUnitKeys.Week,
+	},
+	{
+		name: t('polls', 'Month'),
+		key: DateUnitKeys.Month,
+	},
+	{
+		name: t('polls', 'Year'),
+		key: DateUnitKeys.Year,
+	},
 ]
+
+export const dateOnlyUnits: DateUnitType[] = [
+	{
+		name: t('polls', 'Day'),
+		key: DateUnitKeys.Day,
+	},
+	{
+		name: t('polls', 'Week'),
+		key: DateUnitKeys.Week,
+	},
+	{
+		name: t('polls', 'Month'),
+		key: DateUnitKeys.Month,
+	},
+	{
+		name: t('polls', 'Year'),
+		key: DateUnitKeys.Year,
+	},
+]
+
