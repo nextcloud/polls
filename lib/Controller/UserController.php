@@ -17,6 +17,9 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
+use Psr\Log\LoggerInterface;
+
+use function OCP\Log\logger;
 
 /**
  * @psalm-api
@@ -29,6 +32,8 @@ class UserController extends BaseController {
 		private CalendarService $calendarService,
 		private UserSession $userSession,
 		private AppSettings $appSettings,
+		private LoggerInterface $logger,
+
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -40,6 +45,7 @@ class UserController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/preferences')]
 	public function getPreferences(): JSONResponse {
+		$this->logger->error('getPreferences');
 		return $this->response(fn () => $this->preferencesService->get());
 	}
 
@@ -66,6 +72,7 @@ class UserController extends BaseController {
 			'currentUser' => $this->userSession->getUser(),
 			'appPermissions' => $this->appSettings->getPermissionsArray(),
 			'appSettings' => $this->appSettings->getAppSettings(),
+			'preferences' => $this->preferencesService->get(),
 			'share' => null,
 		]);
 	}
