@@ -223,7 +223,7 @@ class UserBase implements JsonSerializable {
 	public function getRichObjectString() : array {
 		return [
 			'type' => $this->richObjectType,
-			'id' => $this->getId(),
+			'id' => (string) $this->getId(),
 			'name' => $this->getDisplayName(),
 		];
 	}
