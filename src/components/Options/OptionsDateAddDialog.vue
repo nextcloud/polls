@@ -276,13 +276,23 @@
 		display: flex;
 		flex-wrap: wrap-reverse;
 	}
+
 	.header-container {
 		display: flex;
 		justify-content: space-between;
 		column-gap: 1rem;
 
 	}
+
 	.select-container {
+		display: flex;
+		flex-direction: column;
+		min-height: 5.4rem;
+		flex: 1 18rem;
+		.to, .from {
+			display: flex;
+			align-items: center;
+		}
 		.selection {
 			display: flex;
 			flex-wrap: wrap;
@@ -387,17 +397,6 @@
 			flex: 1 0 4.5rem;
 		}
 
-	}
-
-	.select-container {
-		display: flex;
-		flex-direction: column;
-		min-height: 5.4rem;
-		flex: 1 18rem;
-		.to, .from {
-			display: flex;
-			align-items: center;
-		}
 	}
 
 	.switch-container {
