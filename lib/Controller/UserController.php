@@ -66,6 +66,7 @@ class UserController extends BaseController {
 			'currentUser' => $this->userSession->getUser(),
 			'appPermissions' => $this->appSettings->getPermissionsArray(),
 			'appSettings' => $this->appSettings->getAppSettings(),
+			'preferences' => $this->preferencesService->get(),
 			'share' => null,
 		]);
 	}
