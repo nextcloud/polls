@@ -252,7 +252,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	public function getRichObjectString(): array {
 		return [
 			'type' => 'highlight',
-			'id' => (string) $this->getId(),
+			'id' => (string)$this->getId(),
 			'name' => $this->getType(),
 		];
 	}

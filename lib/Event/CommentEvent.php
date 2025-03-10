@@ -24,7 +24,7 @@ abstract class CommentEvent extends BaseEvent {
 		$this->activityObjectType = 'poll';
 		$this->activitySubjectParams['comment'] = [
 			'type' => 'highlight',
-			'id' => (string) $comment->getId(),
+			'id' => (string)$comment->getId(),
 			'name' => $comment->getComment(),
 		];
 	}
