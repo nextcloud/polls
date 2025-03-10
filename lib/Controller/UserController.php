@@ -40,7 +40,6 @@ class UserController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/preferences')]
 	public function getPreferences(): JSONResponse {
-		$this->logger->error('getPreferences');
 		return $this->response(fn () => $this->preferencesService->get());
 	}
 
