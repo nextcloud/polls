@@ -14,7 +14,6 @@ use OCA\Polls\Db\PreferencesMapper;
 use OCA\Polls\Exceptions\NotAuthorizedException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\UserSession;
-use Psr\Log\LoggerInterface;
 
 class PreferencesService {
 
@@ -23,8 +22,6 @@ class PreferencesService {
 		private PreferencesMapper $preferencesMapper,
 		private Preferences $preferences,
 		private UserSession $userSession,
-		private LoggerInterface $logger,
-
 	) {
 		$this->load();
 	}
@@ -33,7 +30,6 @@ class PreferencesService {
 		try {
 			$this->preferences = $this->preferencesMapper->find($this->userSession->getCurrentUserId());
 			if (!$this->preferences->getPreferences()) {
-				$this->logger->error('No preferences found');
 				throw new NotFoundException('No preferences found');
 			}
 		} catch (Exception $e) {

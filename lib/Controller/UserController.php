@@ -17,9 +17,6 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use Psr\Log\LoggerInterface;
-
-use function OCP\Log\logger;
 
 /**
  * @psalm-api
@@ -32,8 +29,6 @@ class UserController extends BaseController {
 		private CalendarService $calendarService,
 		private UserSession $userSession,
 		private AppSettings $appSettings,
-		private LoggerInterface $logger,
-
 	) {
 		parent::__construct($appName, $request);
 	}
