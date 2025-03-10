@@ -2,6 +2,8 @@
   - SPDX-FileCopyrightText: 2016 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
+# Note: This is the vue3 branch (v8.x), which still is in alpha state and replaced the [master branch](https://github.com/nextcloud/polls/tree/master) (v7.x) as main branch
+## For the current release branch (v7.x) please switch to the [master branch](https://github.com/nextcloud/polls/tree/master)
 
 # Polls - an app, similar to doodle or dudle, for Nextcloud written in PHP and JS/Vue.
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
