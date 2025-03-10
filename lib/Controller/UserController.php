@@ -25,10 +25,10 @@ class UserController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
-		private AppSettings $appSettings,
-		private CalendarService $calendarService,
 		private PreferencesService $preferencesService,
+		private CalendarService $calendarService,
 		private UserSession $userSession,
+		private AppSettings $appSettings,
 	) {
 		parent::__construct($appName, $request);
 	}
