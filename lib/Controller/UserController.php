@@ -34,6 +34,16 @@ class UserController extends BaseController {
 	}
 
 	/**
+	 * Read all preferences
+	 */
+	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/preferences')]
+	public function getPreferences(): JSONResponse {
+		return $this->response(fn () => $this->preferencesService->get());
+	}
+
+	/**
 	 * Write preferences
 	 * @param array $preferences
 	 */
@@ -42,16 +52,6 @@ class UserController extends BaseController {
 	#[FrontpageRoute(verb: 'POST', url: '/preferences')]
 	public function writePreferences(array $preferences): JSONResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
-	}
-
-	/**
-	 * Read all preferences
-	 */
-	#[NoAdminRequired]
-	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'GET', url: '/preferences')]
-	public function getPreferences(): JSONResponse {
-		return $this->response(fn() => $this->preferencesService->get());
 	}
 
 	/**
