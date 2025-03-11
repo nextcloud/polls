@@ -24,7 +24,7 @@ abstract class OptionEvent extends BaseEvent {
 		$this->activityObjectType = 'poll';
 		$this->activitySubjectParams['optionTitle'] = [
 			'type' => 'highlight',
-			'id' => $this->option->getId(),
+			'id' => (string)$this->option->getId(),
 			'name' => $this->option->getPollOptionText(),
 		];
 	}
