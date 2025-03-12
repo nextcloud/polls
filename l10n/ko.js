@@ -147,6 +147,7 @@ OC.L10N.register(
     "Add time" : "시간 추가",
     "Added" : "추가된",
     "Pick a day." : "날짜를 정하다.",
+    "All day" : "하루 종일",
     "Preview" : "미리 보기",
     "_year_::_years_" : ["년"],
     "_month_::_months_" : ["개월"],

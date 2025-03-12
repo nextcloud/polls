@@ -24,6 +24,7 @@ OC.L10N.register(
     "Delete poll" : "Borrar encuesta",
     "Week" : "Semana",
     "OK" : "OK",
+    "All day" : "Todo el día",
     "Preview" : "Previsualizar",
     "Submit" : "Enviar",
     "Close" : "Cerrar",
