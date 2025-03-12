@@ -17,7 +17,7 @@
 
 	const activityStore = useActivityStore()
 	const emptyContentProps = {
-		name: t('polls', 'No comments'),
+		name: t('polls', 'No activity yet'),
 	}
 
 	const showEmptyContent = computed(() => activityStore.list.length === 0)
