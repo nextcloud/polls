@@ -139,6 +139,7 @@ OC.L10N.register(
     "Add time" : "Pridėti laiką",
     "Added" : "Pridėta",
     "Pick a day." : "Pasirinkite dieną.",
+    "All day" : "Visą dieną",
     "Preview" : "Peržiūra",
     "_year_::_years_" : ["metai","metai","metų","metai"],
     "_month_::_months_" : ["mėnesis","mėnesiai","mėnesių","mėnesis"],
