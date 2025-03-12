@@ -31,6 +31,7 @@
 
 		Object.keys(parameters).forEach(function(key) {
 			const { type } = parameters[key]
+
 			switch (type) {
 				case 'highlight':
 					parameters[key] = parameters[key].link
@@ -61,6 +62,8 @@
 						},
 					}
 					break
+				case 'addressbook-contact':
+				case 'email':
 				case 'guest':
 					parameters[key] = {
 						component: GuestBubble,

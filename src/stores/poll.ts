@@ -18,6 +18,7 @@ import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
 import { PublicAPI, PollsAPI } from '../Api/index.js'
 import { User, UserType } from '../Types/index.ts'
 
+import { useActivityStore } from './activity.ts'
 import { usePreferencesStore, ViewMode } from './preferences.ts'
 import { useVotesStore, Answer } from './votes.ts'
 import { useOptionsStore } from './options.ts'
@@ -388,6 +389,7 @@ export const usePollStore = defineStore('poll', {
 			const sharesStore = useSharesStore()
 			const commentsStore = useCommentsStore()
 			const subscriptionStore = useSubscriptionStore()
+			const activityStore = useActivityStore()
 			try {
 				let response = null
 
@@ -395,6 +397,9 @@ export const usePollStore = defineStore('poll', {
 					response = await PublicAPI.getPoll(sessionStore.route.params.token)
 				} else if (sessionStore.route.name === 'vote') {
 					response = await PollsAPI.getFullPoll(sessionStore.route.params.id)
+					if (sessionStore.appSettings.useActivity) {
+						await activityStore.load()
+					}
 				} else {
 					this.reset()
 					return
