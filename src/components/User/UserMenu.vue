@@ -261,7 +261,7 @@
 			</NcActionButton>
 		</NcActionButtonGroup>
 
-		<NcActionButtonGroup name="Order of options">
+		<NcActionButtonGroup name="Options order">
 			<NcActionButton v-model="optionsStore.ranked"
 				:value="RankedType.notRanked"
 				type="radio"
