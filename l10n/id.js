@@ -33,6 +33,7 @@ OC.L10N.register(
     "Login" : "Masuk",
     "deleted" : "terhapus",
     "Shares" : "Dibagikan",
+    "No activity yet" : "Belum ada aktivitas",
     "Description" : "Deskrisi",
     "Public link" : "Tautan publik",
     "Administration" : "Administrasi",

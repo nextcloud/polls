@@ -673,15 +673,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "جميع الاستبيانات المغلقة التي تمّ تعطيل التصويت فيها.",
     "Archive" : "الأرشيف",
     "My archived polls" : "استبياناتي المؤرشفة",
-    "Your archived polls are only accessible to you." : "استبياناتك المؤرشفة متاحةٌ لك فقط.",
-    "Date order" : "ترتيب التاريخ",
-    "Original order" : "الترتيب الأصلي",
-    "Ranked order" : "الترتيب المصنف",
-    "valid email address." : "عنوان بريد الكتروني صالح.",
-    "Optional email address" : "عنوان بريد إلكتروني اختياري",
-    "No activity" : "لا يوجد نشاط",
-    "Manually start background jobs, independent from the cron schedule." : "إبدأ مهام الخلفية يدويّاً بمعزلٍ عن جدول المهام cron.",
-    "Error loading poll" : "حدث خطأ أثناء تحميل الاستبيان",
-    "\"{pollTitle}\" successfully saved" : "تمّ حفظ \"{pollTitle}\" بنجاح"
+    "Your archived polls are only accessible to you." : "استبياناتك المؤرشفة متاحةٌ لك فقط."
 },
 "nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;");

@@ -324,6 +324,7 @@ OC.L10N.register(
     "Error adding public link" : "添加公开链接出错",
     "Shares" : "共享",
     "Unsent invitations" : "取消发送邀请",
+    "No activity yet" : "暂无动态",
     "No comments" : "无评论",
     "Be the first." : "成为第一个",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "更改选项时请小心，因为它可能会以一种不希望的方式影响现有的投票。",
@@ -415,14 +416,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "所有禁止投票的已关闭民意测验",
     "Archive" : "存档",
     "My archived polls" : "我的已存档投票",
-    "Your archived polls are only accessible to you." : "你的已存档投票只有你能访问。",
-    "Date order" : "日期顺序",
-    "Original order" : "初始顺序",
-    "Ranked order" : "排名顺序",
-    "valid email address." : "有效的电子邮件地址",
-    "Optional email address" : "可选的电子邮件地址",
-    "No activity" : "无活动",
-    "Error loading poll" : "加载投票时出错",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" 被成功保存"
+    "Your archived polls are only accessible to you." : "你的已存档投票只有你能访问。"
 },
 "nplurals=1; plural=0;");

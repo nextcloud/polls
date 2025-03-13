@@ -197,6 +197,7 @@ OC.L10N.register(
     "Delete share" : "Delete share",
     "Restore share" : "Restore share",
     "Shares" : "Shares",
+    "No activity yet" : "აქტივობა ჯერ არ არის",
     "Description" : "Description",
     "Change name" : "Change name",
     "Public link" : "Public link",

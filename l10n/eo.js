@@ -53,6 +53,7 @@ OC.L10N.register(
     "Delete share" : "Forigi kunhavigon",
     "Restore share" : "Restaŭri kunhavon",
     "Shares" : "Kunhavoj",
+    "No activity yet" : "Ankoraŭ neniu aktivaĵo",
     "Description" : "Priskribo",
     "Poll configurations" : "Enketa agordo",
     "Shift all date options" : "Movi ĉiujn datajn opciojn",

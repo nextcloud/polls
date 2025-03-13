@@ -405,6 +405,7 @@ OC.L10N.register(
     "Error adding public link" : "Errorea esteka publikoa gehitzean",
     "Shares" : "Partekatzeak",
     "Unsent invitations" : "Bidali gabeko gonbidapenak",
+    "No activity yet" : "Jarduerarik ez oraindik",
     "No comments" : "Iruzkinik ez",
     "Be the first." : "Izan zaitez lehenengoa",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Mesedez aldatu aukerak kontu handiz, eman diren botoei ustekabeko moduan eragin diezaieketelako. ",
@@ -524,14 +525,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Itxitako galdeketa guztiak, bozkatu ezin direnak.",
     "Archive" : "Artxibatu",
     "My archived polls" : "Nire artxibatutako galdeketak",
-    "Your archived polls are only accessible to you." : "Artxibatutako galdeketak zuretzat bakarrik dira eskuragarriak.",
-    "Date order" : "Dataren ordena",
-    "Original order" : "Jatorrizko ordena",
-    "Ranked order" : "Ordena sailkatua",
-    "valid email address." : "baliozko e-posta helbidea.",
-    "Optional email address" : "Helbide elektronikoa aukeran",
-    "No activity" : "Ez dago jarduerarik",
-    "Error loading poll" : "Errorea galdeketa kargatzean",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" ondo gorde da"
+    "Your archived polls are only accessible to you." : "Artxibatutako galdeketak zuretzat bakarrik dira eskuragarriak."
 },
 "nplurals=2; plural=(n != 1);");

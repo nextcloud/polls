@@ -32,6 +32,7 @@ OC.L10N.register(
     "Login" : "Hyrje",
     "deleted" : "të fshira",
     "Shares" : "Shpërndarje",
+    "No activity yet" : "Akoma asnjë aktivitet",
     "Description" : "Përshkrim",
     "Preferences" : "Preferencat",
     "Comments" : "Komentet",

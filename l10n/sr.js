@@ -538,6 +538,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "Закључана дељења (приступ само за читање)",
     "Unsent invitations" : "Непослате позивнице",
     "Resolve and send all invitations" : "Разреши и пошаљи све позивнице",
+    "No activity yet" : "Још нема активности",
     "No comments" : "Нема коментара",
     "Be the first." : "Будите први.",
     "Error {action} poll." : "Грешка приликом {action} гласања.",
@@ -683,15 +684,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Сва затворена гласања у којима је искључено гласање.",
     "Archive" : "Архива",
     "My archived polls" : "Моја архивирана гласања",
-    "Your archived polls are only accessible to you." : "Ваша архивирана гласања су доступна само вама.",
-    "Date order" : "Редослед датума",
-    "Original order" : "Оригинални редослед",
-    "Ranked order" : "Рангирани редослед",
-    "valid email address." : "исправна и-мејл адреса.",
-    "Optional email address" : "Опциона адреса е-поште",
-    "No activity" : "Нема активности",
-    "Manually start background jobs, independent from the cron schedule." : "Ручно покрени позадинске послове, независно од cron распореда.",
-    "Error loading poll" : "Грешка при учитавању гласања",
-    "\"{pollTitle}\" successfully saved" : "„{pollTitle}” је успешно сачувано"
+    "Your archived polls are only accessible to you." : "Ваша архивирана гласања су доступна само вама."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");

@@ -359,6 +359,7 @@ OC.L10N.register(
     "Error adding public link" : "Σφάλμα κατά την προσθήκη δημόσιου συνδέσμου",
     "Shares" : "Κοινόχρηστα",
     "Unsent invitations" : "Μη απεσταλμένες προσκλήσεις",
+    "No activity yet" : "Καμία δραστηριότητα ακόμα",
     "No comments" : "Χωρίς σχόλια",
     "Be the first." : "Γίνετε ο πρώτος.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Να είστε προσεκτικοί όταν αλλάζετε επιλογές, γιατί μπορεί να επηρεάσει τις υπάρχουσες ψήφους με ανεπιθύμητο τρόπο.",
@@ -465,14 +466,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Όλες οι κλειστές δημοσκοπήσεις, όπου η ψηφοφορία είναι απενεργοποιημένη.",
     "Archive" : "Αρχειοθετημένες",
     "My archived polls" : "Οι αρχειοθετημένες δημοσκοπήσεις μου",
-    "Your archived polls are only accessible to you." : "Οι αρχειοθετημένες δημοσκοπήσεις σας είναι προσβάσιμες μόνο σε εσάς.",
-    "Date order" : "Ταξινόμηση κατά ημερομηνία",
-    "Original order" : "Αρχική ταξινόμηση",
-    "Ranked order" : "Διαβαθμισμένη ταξινόμηση",
-    "valid email address." : "έγκυρη διεύθυνση email.",
-    "Optional email address" : "Προαιρετική διεύθυνση email",
-    "No activity" : "Καμία δραστηριότητα",
-    "Error loading poll" : "Σφάλμα φόρτωσης δημοσκόπησης",
-    "\"{pollTitle}\" successfully saved" : "Η \"{pollTitle}\" αποθηκεύτηκε με επιτυχία"
+    "Your archived polls are only accessible to you." : "Οι αρχειοθετημένες δημοσκοπήσεις σας είναι προσβάσιμες μόνο σε εσάς."
 },
 "nplurals=2; plural=(n != 1);");

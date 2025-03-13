@@ -264,6 +264,7 @@ OC.L10N.register(
     "Restore share" : "共有を復元する",
     "Shares" : "共有",
     "Unsent invitations" : "未送信の招待",
+    "No activity yet" : "まだアクティビティはありません",
     "No comments" : "コメントなし",
     "As an admin you may edit this poll" : "管理者として、この投票を編集することができます",
     "Description" : "説明",
@@ -312,12 +313,6 @@ OC.L10N.register(
     "All polls" : "全ての投票",
     "All polls, where you have access to." : "あなたがアクセスできる全投票",
     "Archive" : "アーカイブ",
-    "My archived polls" : "アーカイブされた投票",
-    "Date order" : "日付順",
-    "Original order" : "オリジナル順",
-    "Ranked order" : "順位順",
-    "valid email address." : "有効なメールアドレス。",
-    "Optional email address" : "オプションメールアドレス",
-    "Error loading poll" : "投票の読み込みエラー"
+    "My archived polls" : "アーカイブされた投票"
 },
 "nplurals=1; plural=0;");

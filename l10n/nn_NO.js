@@ -25,6 +25,7 @@ OC.L10N.register(
     "Login" : "Login",
     "Styles" : "Stilar",
     "Shares" : "Delingar",
+    "No activity yet" : "Ingen aktivitetar enno",
     "Description" : "Skildring",
     "Other settings" : "Andre innstillingar",
     "Administration" : "Administrasjon",

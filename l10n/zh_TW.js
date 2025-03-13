@@ -538,6 +538,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "已鎖定的分享（唯讀存取權）",
     "Unsent invitations" : "取消傳送邀請",
     "Resolve and send all invitations" : "解決並傳送給所有的參與者",
+    "No activity yet" : "尚未有活動狀態",
     "No comments" : "無留言",
     "Be the first." : "成為第一個。",
     "Error {action} poll." : "錯誤 {action} 投票。",
@@ -683,15 +684,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。",
     "Archive" : "封存",
     "My archived polls" : "我的已封存投票",
-    "Your archived polls are only accessible to you." : "您封存的投票僅有您能存取。",
-    "Date order" : "日期順序",
-    "Original order" : "原始順序",
-    "Ranked order" : "排名順序",
-    "valid email address." : "有效的電子郵件地址。",
-    "Optional email address" : "可選的電子郵件地址",
-    "No activity" : "無活動",
-    "Manually start background jobs, independent from the cron schedule." : "手動啟動背景作業，獨立於 cron 排程。",
-    "Error loading poll" : "載入投票時發生錯誤",
-    "\"{pollTitle}\" successfully saved" : "「{pollTitle}」成功儲存"
+    "Your archived polls are only accessible to you." : "您封存的投票僅有您能存取。"
 },
 "nplurals=1; plural=0;");

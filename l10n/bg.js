@@ -488,14 +488,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Всички затворени анкети, където гласуването е забранено.",
     "Archive" : "Архив",
     "My archived polls" : "Моите архивирани анкети",
-    "Your archived polls are only accessible to you." : "Вашите архивирани анкети са достъпни само за вас.",
-    "Date order" : "Подредба по дата",
-    "Original order" : "Оригинална подредба",
-    "Ranked order" : "Подредба по класиране",
-    "valid email address." : "валиден имейл адрес",
-    "Optional email address" : "Имейл адрес по избор",
-    "No activity" : "Няма активност",
-    "Error loading poll" : "Грешка при зареждане на анкета",
-    "\"{pollTitle}\" successfully saved" : "„{pollTitle}“ е запазено успешно "
+    "Your archived polls are only accessible to you." : "Вашите архивирани анкети са достъпни само за вас."
 },
 "nplurals=2; plural=(n != 1);");

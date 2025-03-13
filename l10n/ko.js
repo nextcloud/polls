@@ -217,6 +217,7 @@ OC.L10N.register(
     "This is an openly accessible poll" : "이는 공개적으로 접근 가능한 투표입니다.",
     "Shares" : "공유",
     "Unsent invitations" : "미발송된 초대",
+    "No activity yet" : "아직 활동 없음",
     "Description" : "설명",
     "Poll configurations" : "투표 구성",
     "Poll closing status" : "투표 마감 상태",
@@ -275,9 +276,6 @@ OC.L10N.register(
     "Openly accessible polls" : "공개적으로 접근할 수 있는 투표",
     "All polls" : "모든 투표",
     "Closed polls" : "마감된 투표",
-    "Archive" : "보관",
-    "valid email address." : "유효한 이메일 주소",
-    "Error loading poll" : "투표 로딩 오류",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\"이 성공적으로 저장됨"
+    "Archive" : "보관"
 },
 "nplurals=1; plural=0;");

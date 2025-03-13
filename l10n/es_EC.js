@@ -383,6 +383,7 @@ OC.L10N.register(
     "Error adding public link" : "Error al agregar el enlace público",
     "Shares" : "Elementos compartidos",
     "Unsent invitations" : "Invitaciones no enviadas",
+    "No activity yet" : "Aún no tiene actividad",
     "No comments" : "No hay comentarios",
     "Be the first." : "Sé el primero.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Por favor, ten cuidado al cambiar las opciones, ya que puede afectar los votos existentes de manera no deseada.",
@@ -492,14 +493,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Todas las encuestas cerradas, donde la votación está desactivada.",
     "Archive" : "Archivar",
     "My archived polls" : "Mis encuestas archivadas",
-    "Your archived polls are only accessible to you." : "Tus encuestas archivadas solo son accesibles para ti.",
-    "Date order" : "Orden de fechas",
-    "Original order" : "Orden original",
-    "Ranked order" : "Orden clasificado",
-    "valid email address." : "dirección de correo electrónico válida.",
-    "Optional email address" : "Dirección de correo electrónico opcional",
-    "No activity" : "Sin actividad",
-    "Error loading poll" : "Error al cargar la encuesta",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" guardado correctamente"
+    "Your archived polls are only accessible to you." : "Tus encuestas archivadas solo son accesibles para ti."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

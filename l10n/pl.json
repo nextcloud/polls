@@ -378,6 +378,7 @@
     "Error adding public link" : "Błąd podczas dodawania linku publicznego",
     "Shares" : "Udostępnione",
     "Unsent invitations" : "Niewysłane zaproszenia",
+    "No activity yet" : "Brak aktywności",
     "No comments" : "Bez komentarzy",
     "Be the first." : "Bądź pierwszy.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Zachowaj ostrożność przy zmianie opcji, ponieważ może to wpłynąć w niepożądany sposób na istniejące głosy.",
@@ -491,14 +492,6 @@
     "All closed polls, where voting is disabled." : "Wszystkie sondy zamknięte, w których głosowanie jest wyłączone.",
     "Archive" : "Archiwum",
     "My archived polls" : "Moje zarchiwizowane sondy",
-    "Your archived polls are only accessible to you." : "Twoje zarchiwizowane sondy są dostępne tylko dla Ciebie.",
-    "Date order" : "Kolejność według daty",
-    "Original order" : "Kolejność pierwotna",
-    "Ranked order" : "Kolejność według rankingu",
-    "valid email address." : "poprawny adres e-mail.",
-    "Optional email address" : "Opcjonalny adres e-mail",
-    "No activity" : "Brak aktywności",
-    "Error loading poll" : "Błąd wczytywania sondy",
-    "\"{pollTitle}\" successfully saved" : "Pomyślnie zapisano \"{pollTitle}\""
+    "Your archived polls are only accessible to you." : "Twoje zarchiwizowane sondy są dostępne tylko dla Ciebie."
 },"pluralForm" :"nplurals=4; plural=(n==1 ? 0 : (n%10>=2 && n%10<=4) && (n%100<12 || n%100>14) ? 1 : n!=1 && (n%10>=0 && n%10<=1) || (n%10>=5 && n%10<=9) || (n%100>=12 && n%100<=14) ? 2 : 3);"
 }

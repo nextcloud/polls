@@ -521,6 +521,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "Comparticións bloqueadas (acceso de só lectura)",
     "Unsent invitations" : "Convites non enviados",
     "Resolve and send all invitations" : "Decidir e enviar todos os convites",
+    "No activity yet" : "Aínda non houbo actividade",
     "No comments" : "Sen comentarios",
     "Be the first." : "Sexa o primeiro.",
     "Error {action} poll." : "Produciuse un erro ao {action} a enquisa.",
@@ -660,15 +661,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Todas as enquisas pechadas, nas que a votación está desactivada.",
     "Archive" : "Arquivar",
     "My archived polls" : "As miñas enquisas arquivadas",
-    "Your archived polls are only accessible to you." : "Só Vde. pode acceder ás súas enquisas arquivadas.",
-    "Date order" : "Orde da data",
-    "Original order" : "Orde orixinal",
-    "Ranked order" : "Orde de clasificación",
-    "valid email address." : "enderezo válido de correo.",
-    "Optional email address" : "Enderezo de correo-e opcional",
-    "No activity" : "Sen actividade",
-    "Manually start background jobs, independent from the cron schedule." : "Iniciar manualmente os traballos en segundo plano, independentemente da programación de cron.",
-    "Error loading poll" : "Produciuse un erro ao cargar a enquisa",
-    "\"{pollTitle}\" successfully saved" : "«{pollTitle}» foi gardada satisfactoriamente"
+    "Your archived polls are only accessible to you." : "Só Vde. pode acceder ás súas enquisas arquivadas."
 },
 "nplurals=2; plural=(n != 1);");

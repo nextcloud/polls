@@ -62,6 +62,7 @@ OC.L10N.register(
     "Delete share" : "Slet deling",
     "Restore share" : "Gendan deling",
     "Shares" : "Delinger",
+    "No activity yet" : "Endnu ingen aktiviteter",
     "Description" : "Beskrivelse",
     "Receive notification email on activity" : "Modtag notifikationsemail om aktivitet",
     "Change name" : "Ændre navn",

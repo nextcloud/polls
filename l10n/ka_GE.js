@@ -36,6 +36,7 @@ OC.L10N.register(
     "Login" : "ავტორიზაცია",
     "deleted" : "გაუქმებულია",
     "Shares" : "გაზიარებები",
+    "No activity yet" : "აქტოვობა ჯერ არაა",
     "Description" : "აღწერილობა",
     "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
     "Administration" : "ადმინისტრაცია",

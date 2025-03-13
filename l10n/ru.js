@@ -356,6 +356,7 @@ OC.L10N.register(
     "Error adding public link" : "Не удалось создать общедоступную ссылку",
     "Shares" : "Приглашения",
     "Unsent invitations" : "Неотправленные приглашения",
+    "No activity yet" : "Событий ещё нет",
     "No comments" : "Нет ни одного комментария",
     "Be the first." : "Создайте первый комментарий.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Изменение параметров может неожиданным образом изменить повлиять на уже полученные результаты.",
@@ -460,14 +461,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Все завершённые опросы, где голосование отключено.",
     "Archive" : "Архив",
     "My archived polls" : "Мой архив опросов",
-    "Your archived polls are only accessible to you." : "Архив опросов доступен только вам.",
-    "Date order" : "Дата заказа",
-    "Original order" : "Оригинальный заказ",
-    "Ranked order" : "Ранжирование по порядку",
-    "valid email address." : "действительный почтовый адрес.",
-    "Optional email address" : "Дополнительный адрес эл. почты",
-    "No activity" : "Событий нет",
-    "Error loading poll" : "Не удалось загрузить опрос",
-    "\"{pollTitle}\" successfully saved" : "Параметры «{pollTitle}» сохранены"
+    "Your archived polls are only accessible to you." : "Архив опросов доступен только вам."
 },
 "nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);");

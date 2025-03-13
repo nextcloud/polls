@@ -86,6 +86,7 @@ OC.L10N.register(
     "Restore share" : "Endurheimta sameign",
     "Shares" : "Sameignir",
     "Unsent invitations" : "Ósend boð",
+    "No activity yet" : "Engar athafnir ennþá",
     "No comments" : "Engar athugasemdir",
     "Be the first." : "Vertu fyrst/ur.",
     "As an admin you may edit this poll" : "Sem stjórnandi geturðu breytt þessari könnun",
@@ -136,13 +137,6 @@ OC.L10N.register(
     "All polls, where you have access to." : "Allar kannanir sem þú hefur aðgang að.",
     "Closed polls" : "Lokaðar kannanir",
     "All closed polls, where voting is disabled." : "Allar lokaðar kannanir, þar sem atkvæðagreiðsla er ekki virk.",
-    "Archive" : "Safn",
-    "Date order" : "Röðun eftir dagsetningu",
-    "Original order" : "Upprunaleg röðun",
-    "valid email address." : "Gilt tölvupóstfang",
-    "Optional email address" : "Valfrjálst tölvupóstfang",
-    "No activity" : "Engin virkni",
-    "Error loading poll" : "Villa við að hlaða inn könnun",
-    "\"{pollTitle}\" successfully saved" : "Tókst að vista \"{pollTitle}\""
+    "Archive" : "Safn"
 },
 "nplurals=2; plural=(n % 10 != 1 || n % 100 == 11);");

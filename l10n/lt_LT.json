@@ -198,6 +198,7 @@
     "Error adding public link" : "Klaida pridedant viešąją nuorodą",
     "Shares" : "Viešiniai",
     "Unsent invitations" : "Neišsiųsti pakvietimai",
+    "No activity yet" : "Kol kas jokių veiksmų",
     "No comments" : "Nėra komentarų",
     "Be the first." : "Būkite pirmieji.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Būkite atsargūs keisdami variantus, nes tai gali nepageidaujamai paveikti esamus balsus.",
@@ -286,13 +287,6 @@
     "All closed polls, where voting is disabled." : "Visos baigtos apklausos, kuriose balsavimas yra išjungtas.",
     "Archive" : "Archyvas",
     "My archived polls" : "Mano archyvuotos apklausos",
-    "Your archived polls are only accessible to you." : "Jūsų archyvuotos apklausos yra pasiekiamos tik jums.",
-    "Date order" : "Datų tvarka",
-    "Original order" : "Pradinė tvarka",
-    "Ranked order" : "Išrikiuota tvarka",
-    "valid email address." : "tinkamas el. pašto adresas.",
-    "Optional email address" : "Nebūtinas el. pašto adresas",
-    "Error loading poll" : "Klaida įkeliant apklausą",
-    "\"{pollTitle}\" successfully saved" : "„{pollTitle}“ sėkmingai įrašyta"
+    "Your archived polls are only accessible to you." : "Jūsų archyvuotos apklausos yra pasiekiamos tik jums."
 },"pluralForm" :"nplurals=4; plural=(n % 10 == 1 && (n % 100 > 19 || n % 100 < 11) ? 0 : (n % 10 >= 2 && n % 10 <=9) && (n % 100 > 19 || n % 100 < 11) ? 1 : n % 1 != 0 ? 2: 3);"
 }

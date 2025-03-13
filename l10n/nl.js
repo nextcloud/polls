@@ -258,6 +258,7 @@ OC.L10N.register(
     "Add time" : "Tijd toevoegen",
     "Added" : "Toegevoegd",
     "Pick a day." : "Kies een dag",
+    "All day" : "Alle dagen",
     "Preview" : "Voorbeeld",
     "_year_::_years_" : ["jaar","jaren"],
     "_month_::_months_" : ["maand","maanden"],
@@ -337,6 +338,7 @@ OC.L10N.register(
     "Error adding public link" : "Fout bij toevoegen publieke link",
     "Shares" : "Shares",
     "Unsent invitations" : "Niet verzonden uitnodigingen",
+    "No activity yet" : "Nog geen activiteiten",
     "No comments" : "Geen reacties",
     "Be the first." : "Wees de eerste.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Wees voorzichtig bij het wijzigen van opties, omdat dit de al uitgebrachte stemmen kan beïnvloeden.",
@@ -432,14 +434,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Alle gesloten peilingen waarbij stemmen is uitgeschakeld.",
     "Archive" : "Archiveren",
     "My archived polls" : "Mijn gearchiveerde peilingen",
-    "Your archived polls are only accessible to you." : "Je gearchiveerde peilingen zijn alleen voor jou toegankelijk.",
-    "Date order" : "Datum volgorde",
-    "Original order" : "Originele volgorde",
-    "Ranked order" : "Gerangschikte volgorde",
-    "valid email address." : "geldig e-mailadres.",
-    "Optional email address" : "Optioneel e-mailadres",
-    "No activity" : "Geen activiteit",
-    "Error loading poll" : "Fout bij laden peiling",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" succesvol opgeslagen"
+    "Your archived polls are only accessible to you." : "Je gearchiveerde peilingen zijn alleen voor jou toegankelijk."
 },
 "nplurals=2; plural=(n != 1);");

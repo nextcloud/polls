@@ -25,6 +25,7 @@ OC.L10N.register(
     "Owner" : "เจ้าของ",
     "Login" : "เข้าสู่ระบบ",
     "Shares" : "การแชร์",
+    "No activity yet" : "ยังไม่มีกิจกรรม",
     "Description" : "รายละเอียด",
     "Change name" : "เปลี่ยนชื่อ",
     "Public link" : "ลิงก์สาธารณะ",

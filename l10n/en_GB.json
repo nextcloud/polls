@@ -536,6 +536,7 @@
     "Locked shares (read only access)" : "Locked shares (read only access)",
     "Unsent invitations" : "Unsent invitations",
     "Resolve and send all invitations" : "Resolve and send all invitations",
+    "No activity yet" : "No activity yet",
     "No comments" : "No comments",
     "Be the first." : "Be the first.",
     "Error {action} poll." : "Error {action} poll.",
@@ -681,15 +682,6 @@
     "All closed polls, where voting is disabled." : "All closed polls, where voting is disabled.",
     "Archive" : "Archive",
     "My archived polls" : "My archived polls",
-    "Your archived polls are only accessible to you." : "Your archived polls are only accessible to you.",
-    "Date order" : "Date order",
-    "Original order" : "Original order",
-    "Ranked order" : "Ranked order",
-    "valid email address." : "valid email address.",
-    "Optional email address" : "Optional email address",
-    "No activity" : "No activity",
-    "Manually start background jobs, independent from the cron schedule." : "Manually start background jobs, independent from the cron schedule.",
-    "Error loading poll" : "Error loading poll",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" successfully saved"
+    "Your archived polls are only accessible to you." : "Your archived polls are only accessible to you."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

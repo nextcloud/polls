@@ -298,6 +298,7 @@ OC.L10N.register(
     "Error adding public link" : "Prišlo je do napake med dodajanjem javne povezave",
     "Shares" : "Souporaba",
     "Unsent invitations" : "Neposlana vabila",
+    "No activity yet" : "Ni še zabeležene dejavnosti",
     "No comments" : "Ni še vpisanih opomb.",
     "Be the first." : "Bodite prvi.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Anketa je že dejavna, zato previdno pri spreminjanju možnosti! Spreminjanje lahko na neželen način vpliva na že zbrane podatke.",
@@ -409,14 +410,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Zaprte ankete, pri katerih so odzivi onemogočeni.",
     "Archive" : "Arhiv",
     "My archived polls" : "Arhivirane ankete",
-    "Your archived polls are only accessible to you." : "Vaše arhivirane ankete so dostopne le vam.",
-    "Date order" : "Datumska razvrstitev",
-    "Original order" : "Izvorna razvrstitev",
-    "Ranked order" : "Rangirana razvrstitev",
-    "valid email address." : "Veljaven elektronski naslov.",
-    "Optional email address" : "Izbirno elektronski naslov",
-    "No activity" : "Ni dejavnosti",
-    "Error loading poll" : "Napaka nalaganja ankete",
-    "\"{pollTitle}\" successfully saved" : "Anketa »{pollTitle}« je uspešno shranjena."
+    "Your archived polls are only accessible to you." : "Vaše arhivirane ankete so dostopne le vam."
 },
 "nplurals=4; plural=(n%100==1 ? 0 : n%100==2 ? 1 : n%100==3 || n%100==4 ? 2 : 3);");

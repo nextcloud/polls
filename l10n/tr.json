@@ -536,6 +536,7 @@
     "Locked shares (read only access)" : "Kilitli paylaşımlar (salt okunur erişim)",
     "Unsent invitations" : "Gönderilmemiş davetler",
     "Resolve and send all invitations" : "Çözümle ve tüm davetleri gönder",
+    "No activity yet" : "Henüz bir işlem yok",
     "No comments" : "Henüz bir yorum yok",
     "Be the first." : "İlk yorumu siz yapın.",
     "Error {action} poll." : "Anket üzerinde {action} işlemi yapılırken sorun çıktı.",
@@ -681,15 +682,6 @@
     "All closed polls, where voting is disabled." : "Oy vermenin kullanımdan kaldırıldığı tüm sona ermemiş anketler. ",
     "Archive" : "Arşiv",
     "My archived polls" : "Arşivlenmiş anketlerim",
-    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz.",
-    "Date order" : "Tarih sıralaması",
-    "Original order" : "Özgün sıralama",
-    "Ranked order" : "Değerlendirme sıralaması",
-    "valid email address." : "E-posta adresi geçerli.",
-    "Optional email address" : "İsteğe bağlı e-posta adresi",
-    "No activity" : "Henüz bir işlem yapılmamış",
-    "Manually start background jobs, independent from the cron schedule." : "Arka plan görevlerini, zamanlanmış görevlerin zamanlamasından bağımsız olarak el ile başlatın.",
-    "Error loading poll" : "Anket yüklenirken sorun çıktı",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" kaydedildi"
+    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

@@ -381,6 +381,7 @@
     "Error adding public link" : "Error adding public link",
     "Shares" : "اشتراک گذاری ها",
     "Unsent invitations" : "Unsent invitations",
+    "No activity yet" : "هنوز فعّالیت ندارد",
     "No comments" : "No comments",
     "Be the first." : "Be the first.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Please be careful when changing options, because it can affect existing votes in an unwanted manner.",
@@ -491,14 +492,6 @@
     "All closed polls, where voting is disabled." : "All closed polls, where voting is disabled.",
     "Archive" : "بایگانی",
     "My archived polls" : "My archived polls",
-    "Your archived polls are only accessible to you." : "Your archived polls are only accessible to you.",
-    "Date order" : "Date order",
-    "Original order" : "Original order",
-    "Ranked order" : "Ranked order",
-    "valid email address." : "valid email address.",
-    "Optional email address" : "Optional email address",
-    "No activity" : "No activity",
-    "Error loading poll" : "Error loading poll",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" successfully saved"
+    "Your archived polls are only accessible to you." : "Your archived polls are only accessible to you."
 },"pluralForm" :"nplurals=2; plural=(n > 1);"
 }

@@ -462,6 +462,7 @@
     "Error adding public link" : "Chyba pri pridávaná verejného odkazu",
     "Shares" : "Sprístupnené položky",
     "Unsent invitations" : "Neodoslané pozvania",
+    "No activity yet" : "Zatiaľ žiadne aktivity.",
     "No comments" : "Žiadne komentáre",
     "Be the first." : "Buďte prvý.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Pri zmene možností buďte opatrní, pretože to môže nežiadúcim spôsobom ovplyvniť existujúce hlasovania.",
@@ -582,14 +583,6 @@
     "All closed polls, where voting is disabled." : "Všetky uzavreté ankety, kde je hlasovanie vypnuté.",
     "Archive" : "Archív",
     "My archived polls" : "Moje archivované ankety",
-    "Your archived polls are only accessible to you." : "Vaše archivované ankety sú prístupné iba vám.",
-    "Date order" : "Poradie podľa dátumu",
-    "Original order" : "Pôvodné poradie",
-    "Ranked order" : "Poradie podľa hodnotenia",
-    "valid email address." : "platná emailová adresa.",
-    "Optional email address" : "Voliteľná e-mailová adresa",
-    "No activity" : "Žiadne aktivity",
-    "Error loading poll" : "Pri načítavaní ankety sa vyskytla chyba",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" úspešne uložené"
+    "Your archived polls are only accessible to you." : "Vaše archivované ankety sú prístupné iba vám."
 },"pluralForm" :"nplurals=4; plural=(n % 1 == 0 && n == 1 ? 0 : n % 1 == 0 && n >= 2 && n <= 4 ? 1 : n % 1 != 0 ? 2: 3);"
 }

@@ -268,10 +268,6 @@ OC.L10N.register(
     "Private polls" : "Encuestes privaes",
     "All polls" : "Toles encuestes",
     "Closed polls" : "Encuestes zarraes",
-    "Archive" : "Archivar",
-    "Original order" : "Orde orixinal",
-    "No activity" : "Nun hai actividá",
-    "Error loading poll" : "Hebo un error al cargar la encuesta",
-    "\"{pollTitle}\" successfully saved" : "«{pollTitle}» guardóse correutamente"
+    "Archive" : "Archivar"
 },
 "nplurals=2; plural=(n != 1);");

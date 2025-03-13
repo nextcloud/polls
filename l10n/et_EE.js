@@ -107,6 +107,7 @@ OC.L10N.register(
     "This poll is private" : "See küsitlus on privaatne.",
     "This is an openly accessible poll" : "See küsitlus on avalikult juurdepääsetav.",
     "Shares" : "Jagamisi",
+    "No activity yet" : "Tegevusi veel pole",
     "No comments" : "Kommentaare pole",
     "Be the first." : "Ole esimene.",
     "Description" : "Kirjeldus",

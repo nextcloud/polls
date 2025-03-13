@@ -353,6 +353,7 @@ OC.L10N.register(
     "Add time" : "Legg til tidspunkt",
     "Added" : "Lagt til",
     "Pick a day." : "Velg en dag.",
+    "All day" : "Hele dagen",
     "Preview" : "Forhåndsvis",
     "_year_::_years_" : ["år","år"],
     "_month_::_months_" : ["måned","måneder"],
@@ -518,6 +519,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "Låste delte ressurser (kun lesetilgang)",
     "Unsent invitations" : "Usendte invitasjoner",
     "Resolve and send all invitations" : "Oppklar og send alle invitasjoner",
+    "No activity yet" : "Ingen aktivitet enda",
     "No comments" : "Ingen kommentarer",
     "Be the first." : "Vær den første.",
     "Error {action} poll." : "Feil {action} avstemning.",
@@ -656,14 +658,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Alle lukkede avstemninger, der stemmegivning er deaktivert.",
     "Archive" : "Arkiv",
     "My archived polls" : "Mine arkiverte avstemninger",
-    "Your archived polls are only accessible to you." : "Dine arkiverte avstemninger er bare tilgjengelige for deg.",
-    "Date order" : "Dato rekkefølge",
-    "Original order" : "Opprinnelig rekkefølge",
-    "Ranked order" : "Rangert rekkefølge",
-    "valid email address." : "gyldig e-postadresse",
-    "Optional email address" : "Valgfri e-postadresse",
-    "No activity" : "Ingen aktivitet",
-    "Error loading poll" : "Feil ved lasting av avstemning",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" lagret"
+    "Your archived polls are only accessible to you." : "Dine arkiverte avstemninger er bare tilgjengelige for deg."
 },
 "nplurals=2; plural=(n != 1);");

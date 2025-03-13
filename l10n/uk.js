@@ -136,6 +136,7 @@ OC.L10N.register(
     "This poll is private" : "Це приватне опитування.",
     "This is an openly accessible poll" : "Це опитування знаходиться у відкритому доступі.",
     "Shares" : "Спільний доступ",
+    "No activity yet" : "Поки що відсутні події",
     "No comments" : "Нема коментарів",
     "Be the first." : "Будьте першим.",
     "As an admin you may edit this poll" : "Адміністратор може редагувати це опитування",
@@ -200,12 +201,6 @@ OC.L10N.register(
     "All polls" : "Всі опитування",
     "Closed polls" : "Закриті опитування",
     "All closed polls, where voting is disabled." : "Всі закриті опитування, в яких голосування вимкнено.",
-    "Archive" : "Архів",
-    "Date order" : "Відсортувати за датою",
-    "Ranked order" : "Відсортувати за рангом",
-    "valid email address." : "Дійсна електронна адреса.",
-    "Optional email address" : "Електронна адреса (необов'язково)",
-    "Error loading poll" : "Помилка під час завантаження опитування",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" було збережено"
+    "Archive" : "Архів"
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

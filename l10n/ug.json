@@ -499,6 +499,7 @@
     "Locked shares (read only access)" : "قۇلۇپلانغان پايلار (پەقەت زىيارەتنىلا ئوقۇڭ)",
     "Unsent invitations" : "تەكلىپ قىلىنمىغان تەكلىپلەر",
     "Resolve and send all invitations" : "بارلىق تەكلىپلەرنى ھەل قىلىڭ ۋە ئەۋەتىڭ",
+    "No activity yet" : "تېخى پائالىيەت يوق",
     "No comments" : "ھېچقانداق باھا يوق",
     "Be the first." : "بىرىنچى بولۇڭ.",
     "Error {action} poll." : "خاتالىق {action} راي سىناش.",
@@ -635,15 +636,6 @@
     "All closed polls, where voting is disabled." : "بېلەت تاشلاش چەكلەنگەن بارلىق يېپىق راي سىناشلار.",
     "Archive" : "ئارخىپ",
     "My archived polls" : "مېنىڭ ئارخىپ راي سىناشلىرىم",
-    "Your archived polls are only accessible to you." : "ئارخىپ راي سىناشلىرىڭىزنى پەقەت زىيارەت قىلالايسىز.",
-    "Date order" : "چېسلا تەرتىپى",
-    "Original order" : "ئەسلى تەرتىپ",
-    "Ranked order" : "رەت تەرتىپى",
-    "valid email address." : "ئىناۋەتلىك ئېلېكترونلۇق خەت ئادرېسى.",
-    "Optional email address" : "ئىختىيارىي ئېلېكترونلۇق خەت ئادرېسى",
-    "No activity" : "پائالىيەت يوق",
-    "Manually start background jobs, independent from the cron schedule." : "ئارقا كۆرۈنۈش خىزمىتىنى قولدا باشلاڭ.",
-    "Error loading poll" : "راي سىناشتا خاتالىق كۆرۈلدى",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" مۇۋەپپەقىيەتلىك ساقلاندى"
+    "Your archived polls are only accessible to you." : "ئارخىپ راي سىناشلىرىڭىزنى پەقەت زىيارەت قىلالايسىز."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

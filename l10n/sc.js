@@ -167,6 +167,7 @@ OC.L10N.register(
     "Add a new public link" : "Agiunghe unu ligòngiu pùblicu nou",
     "Shares" : "Cumpartziduras ",
     "Unsent invitations" : "Annulla s'imbiu de is invitos",
+    "No activity yet" : "Ancora peruna atividade ",
     "No comments" : "Perunu cummentu",
     "Be the first." : "Proa a èssere su primu.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Atentzione a cambiare is sèberos, ca podet cambiare is votos esistentes chene ddu bòlere.",
@@ -251,13 +252,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Totu is sondàgios serrados, in ue is votos sunt disativados.",
     "Archive" : "Cartella",
     "My archived polls" : "Is sondàgios mios archiviados",
-    "Your archived polls are only accessible to you." : "Is sondàgios tuos archiviados sunt atzessìbiles isceti a tie.",
-    "Date order" : "Òrdina pro data",
-    "Original order" : "Òrdine originale",
-    "Ranked order" : "Òrdine classificadu",
-    "valid email address." : "indiritzu de posta eletrònica bàlidu.",
-    "Optional email address" : "indiritzu de posta eletrònica a sèberu",
-    "Error loading poll" : "Errore carrighende su sondàgiu",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" sarvadu in manera curreta"
+    "Your archived polls are only accessible to you." : "Is sondàgios tuos archiviados sunt atzessìbiles isceti a tie."
 },
 "nplurals=2; plural=(n != 1);");

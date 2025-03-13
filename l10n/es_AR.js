@@ -32,6 +32,7 @@ OC.L10N.register(
     "deleted" : "Borrado",
     "Link copied to clipboard" : "Enlace copiado al portapapeles",
     "Shares" : "Shares",
+    "No activity yet" : "Aún no hay actividades",
     "Description" : "Descripción",
     "Change name" : "Cambiar nombre",
     "Preferences" : "Preferencias",

@@ -45,6 +45,7 @@ OC.L10N.register(
     "Show QR code" : "Afișează codul QR",
     "Restore share" : "Restabilește partajarea",
     "Shares" : "Partajări",
+    "No activity yet" : "Momentan fără activitate",
     "Description" : "Descriere",
     "Change name" : "Schimbă numele",
     "Public link" : "Link public",

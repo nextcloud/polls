@@ -538,6 +538,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "Gesperrte Freigaben (Nur Lesezugriff)",
     "Unsent invitations" : "Nicht gesendete Einladungen",
     "Resolve and send all invitations" : "Auflösen und alle Einladungen versenden",
+    "No activity yet" : "Bislang keine Aktivität",
     "No comments" : "Keine Kommentare",
     "Be the first." : "Seien Sie der Erste.",
     "Error {action} poll." : "Fehler {action} Umfrage.",
@@ -683,15 +684,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Alle geschlossenen Umfragen, bei denen die Abstimmung deaktiviert ist.",
     "Archive" : "Archiv",
     "My archived polls" : "Meine archivierten Umfragen",
-    "Your archived polls are only accessible to you." : "Ihre archivierten Umfragen sind nur für Sie zugänglich. ",
-    "Date order" : "Reihenfolge nach Datum",
-    "Original order" : "Original Reihenfolge",
-    "Ranked order" : "Rangliste",
-    "valid email address." : "Gültige E-Mail-Adresse.",
-    "Optional email address" : "Optionale E-Mail-Adresse",
-    "No activity" : "Keine Aktivität",
-    "Manually start background jobs, independent from the cron schedule." : "Hintergrundjobs manuell starten, unabhängig vom Cron-Zeitplan.",
-    "Error loading poll" : "Fehler beim Laden der Umfrage",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" erfolgreich gespeichert"
+    "Your archived polls are only accessible to you." : "Ihre archivierten Umfragen sind nur für Sie zugänglich. "
 },
 "nplurals=2; plural=(n != 1);");

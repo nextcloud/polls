@@ -35,6 +35,7 @@ OC.L10N.register(
     "Login" : "Iniciar sesión",
     "deleted" : "Borrado",
     "Shares" : "Elementos compartidos",
+    "No activity yet" : "Aún no tiene actividad",
     "Description" : "Descripción",
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Public link" : "Liga pública",

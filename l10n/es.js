@@ -518,6 +518,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "Recursos compartidos bloqueados (acceso de sólo lectura)",
     "Unsent invitations" : "Invitaciones no enviadas",
     "Resolve and send all invitations" : "Resolver y enviar todas las invitaciones",
+    "No activity yet" : "Aun no hay actividad",
     "No comments" : "Sin comentarios",
     "Be the first." : "Sé el primero.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Por favor ten cuidado al cambiar las opciones, porque pueden afectar a los votos existentes de una forma no deseable.",
@@ -654,14 +655,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Todas la encuestas cerradas, en las cuales el voto está desactivado.",
     "Archive" : "Archivar",
     "My archived polls" : "Mis encuestas archivadas",
-    "Your archived polls are only accessible to you." : "Solo Ud. puede acceder a sus encuestas archivadas.",
-    "Date order" : "Ordenado por fechas",
-    "Original order" : "Orden original",
-    "Ranked order" : "Orden clasificado",
-    "valid email address." : "dirección de correo electrónico válida.",
-    "Optional email address" : "Dirección de correo opcional",
-    "No activity" : "Sin actividad",
-    "Error loading poll" : "Error al cargar la encuesta",
-    "\"{pollTitle}\" successfully saved" : "«{pollTitle}» guardada con éxito"
+    "Your archived polls are only accessible to you." : "Solo Ud. puede acceder a sus encuestas archivadas."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

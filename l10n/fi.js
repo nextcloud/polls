@@ -232,6 +232,7 @@ OC.L10N.register(
     "Error adding public link" : "Virhe julkista linkkiä lisättäessä",
     "Shares" : "Jaot",
     "Unsent invitations" : "Lähettämättömät kutsut",
+    "No activity yet" : "Ei vielä tapahtumia",
     "No comments" : "Ei kommentteja",
     "Be the first." : "Ole ensimmäinen.",
     "As an admin you may edit this poll" : "Ylläpitäjänä voit muokata tätä kyselyä",
@@ -322,14 +323,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Kaikki suljetut äänestykset, joissa äänestäminen on poissä käytöstä",
     "Archive" : "Arkisto",
     "My archived polls" : "Omat arkistoidut kyselyt",
-    "Your archived polls are only accessible to you." : "Arkistoidut kyselysi ovat vain sinun käytettävissä.",
-    "Date order" : "Aikajärjestys",
-    "Original order" : "Alkuperäinen järjestys",
-    "Ranked order" : "Tulosjärjestys",
-    "valid email address." : "kelvollinen sähköpostiosoite.",
-    "Optional email address" : "Valinnainen sähköpostiosoite",
-    "No activity" : "Ei toimia",
-    "Error loading poll" : "Virhe ladatessa kyselyä",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" tallennettu onnistuneesti"
+    "Your archived polls are only accessible to you." : "Arkistoidut kyselysi ovat vain sinun käytettävissä."
 },
 "nplurals=2; plural=(n != 1);");

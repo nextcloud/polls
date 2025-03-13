@@ -422,6 +422,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "Zárolt megosztások (csak olvasás)",
     "Unsent invitations" : "Küldésre váró meghívók",
     "Resolve and send all invitations" : "Megoldás és minden meghívó küldése",
+    "No activity yet" : "Még nincsenek tevékenységek",
     "No comments" : "Nincsenek hozzászólások",
     "Be the first." : "Legyen az első.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Legyen óvatos a lehetőségek megváltoztatásakor, mert az nem kívánt módon befolyásolhatja a meglévő szavazatokat.",
@@ -542,14 +543,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Az összes lezárt szavazás, ahol a szavazás le van tiltva.",
     "Archive" : "Archívum",
     "My archived polls" : "Archivált saját szavazások",
-    "Your archived polls are only accessible to you." : "Az archivált szavazásaihoz csak Ön fér hozzá.",
-    "Date order" : "Dátumsorrend",
-    "Original order" : "Eredeti sorrend",
-    "Ranked order" : "Népszerűségi sorrend",
-    "valid email address." : "érvényes e-mail-cím.",
-    "Optional email address" : "Nem kötelező e-mail-cím",
-    "No activity" : "Nincsenek tevékenységek",
-    "Error loading poll" : "Hiba a szavazás betöltése során",
-    "\"{pollTitle}\" successfully saved" : "„{pollTitle}” sikeresen mentve"
+    "Your archived polls are only accessible to you." : "Az archivált szavazásaihoz csak Ön fér hozzá."
 },
 "nplurals=2; plural=(n != 1);");

@@ -521,6 +521,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "Partages verrouillés (accès en lecture seule)",
     "Unsent invitations" : "Invitations non envoyées",
     "Resolve and send all invitations" : "Résoudre et envoyer toutes les invitations",
+    "No activity yet" : "Pas encore d’activité",
     "No comments" : "Aucun commentaire",
     "Be the first." : "Soyez le premier.",
     "Error {action} poll." : "Erreur au moment d'effectuer {action} sur le sondage",
@@ -659,15 +660,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Tous les sondages terminés (où il n'est plus possible de voter).",
     "Archive" : "Archives",
     "My archived polls" : "Mes sondages archivés",
-    "Your archived polls are only accessible to you." : "Vous seul pouvez consulter les sondages que vous avez archivés.",
-    "Date order" : "Ordre de date",
-    "Original order" : "Ordre original",
-    "Ranked order" : "Ordre classé",
-    "valid email address." : "adresse e-mail valide",
-    "Optional email address" : "Adresse e-mail (optionnel)",
-    "No activity" : "Aucune activité",
-    "Manually start background jobs, independent from the cron schedule." : "Démarrez manuellement les tâches en arrière-plan, indépendamment de la planification cron.",
-    "Error loading poll" : "Erreur lors du chargement du sondage",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" enregistré avec succès"
+    "Your archived polls are only accessible to you." : "Vous seul pouvez consulter les sondages que vous avez archivés."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

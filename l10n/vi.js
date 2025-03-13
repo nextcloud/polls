@@ -42,6 +42,7 @@ OC.L10N.register(
     "deleted" : "đã xóa",
     "Delete share" : "Xóa chia sẻ",
     "Shares" : "Chia sẻ",
+    "No activity yet" : "Chưa có hoạt động nào",
     "Description" : "Mô tả",
     "Change name" : "Đổi tên",
     "Switch to list view" : "Chuyển sang chế độ xem danh sách",

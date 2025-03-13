@@ -384,6 +384,7 @@ OC.L10N.register(
     "Error adding public link" : "Det gick inte att lägga till publik länk",
     "Shares" : "Delat",
     "Unsent invitations" : "Ej skickade inbjudningar",
+    "No activity yet" : "Ingen aktivitet än",
     "No comments" : "Inga kommentarer",
     "Be the first." : "Var den första.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Var försiktig när du ändrar alternativ, eftersom det kan påverka befintliga röster på ett oönskat sätt.",
@@ -494,14 +495,6 @@ OC.L10N.register(
     "All closed polls, where voting is disabled." : "Alla stängda omröstningar, där röstning är inaktiverad.",
     "Archive" : "Arkivera",
     "My archived polls" : "Mina arkiverade omröstningar",
-    "Your archived polls are only accessible to you." : "Dina arkiverade omröstningar är endast tillgängliga för dig.",
-    "Date order" : "Datumordning",
-    "Original order" : "Originalordning",
-    "Ranked order" : "Rangordning",
-    "valid email address." : "giltig e-postadress.",
-    "Optional email address" : "Frivillig e-postadress",
-    "No activity" : "Ingen aktivitet",
-    "Error loading poll" : "Det gick inte att läsa in omröstningen",
-    "\"{pollTitle}\" successfully saved" : "\"{pollTitle}\" sparades framgångsrikt"
+    "Your archived polls are only accessible to you." : "Dina arkiverade omröstningar är endast tillgängliga för dig."
 },
 "nplurals=2; plural=(n != 1);");

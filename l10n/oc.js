@@ -44,6 +44,7 @@ OC.L10N.register(
     "Performance settings" : "Paramètres de performança",
     "deleted" : "suprimit",
     "Shares" : "Partatges",
+    "No activity yet" : "Cap d’activitat pel moment",
     "No comments" : "Cap de comentari",
     "Be the first." : "Siatz lo primièr.",
     "Description" : "Descripcion",

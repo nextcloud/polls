@@ -40,6 +40,7 @@ OC.L10N.register(
     "Show QR code" : "Parādīt kvadrātkodu",
     "Restore share" : "Atjaunot koplietojumu",
     "Shares" : "Koplietots",
+    "No activity yet" : "Vēl nav darbības",
     "Description" : "Apraksts",
     "Receive notification email on activity" : "Saņemiet paziņojuma e-pastu par darbību",
     "Public link" : "Publiskā saite",
@@ -54,7 +55,6 @@ OC.L10N.register(
     "Day" : "Diena",
     "Month" : "Mēnesis",
     "Year" : "Gads",
-    "Archive" : "Arhīvi",
-    "No activity" : "Nav darbību"
+    "Archive" : "Arhīvi"
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

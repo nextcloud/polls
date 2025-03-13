@@ -197,6 +197,7 @@
     "Restore share" : "Vrati dijeljenje",
     "Shares" : "Dijeljenja",
     "Unsent invitations" : "Neposlane pozivnice",
+    "No activity yet" : "Trenutno nema aktivnosti",
     "No comments" : "Nema komentara",
     "Be the first." : "Ostavite prvi komentar.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Obratite posebnu pažnju pri promjeni mogućnosti jer to može na neželjen način utjecati na postojeće glasove.",
@@ -281,13 +282,6 @@
     "All closed polls, where voting is disabled." : "Sve zatvorene ankete gdje je onemogućeno glasanje.",
     "Archive" : "Arhiva",
     "My archived polls" : "Moje arhivirane ankete",
-    "Your archived polls are only accessible to you." : "Vašim arhiviranim anketama možete samo vi pristupiti.",
-    "Date order" : "Redoslijed po datumu",
-    "Original order" : "Izvorni redoslijed",
-    "Ranked order" : "Redoslijed po rangu",
-    "valid email address." : "važeća adresa e-pošte.",
-    "Optional email address" : "Neobvezna adresa e-pošte",
-    "Error loading poll" : "Pogreška pri učitavanju ankete",
-    "\"{pollTitle}\" successfully saved" : "Uspješno spremljena anketa „{pollTitle}“"
+    "Your archived polls are only accessible to you." : "Vašim arhiviranim anketama možete samo vi pristupiti."
 },"pluralForm" :"nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;"
 }

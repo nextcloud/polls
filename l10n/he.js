@@ -77,6 +77,7 @@ OC.L10N.register(
     "Copy link to clipboard" : "העתקת קישור ללוח הגזירים",
     "Restore share" : "שחזור שיתוף",
     "Shares" : "שיתופים",
+    "No activity yet" : "אין פעילות עדיין",
     "As an admin you may edit this poll" : "כמנהל יש לך אפשרות לערוך את הסקר הזה",
     "Description" : "תיאור",
     "Poll configurations" : "הגדרות סקר",
@@ -112,7 +113,6 @@ OC.L10N.register(
     "All polls, where you placed a vote." : "כל הסקרים בהם הצבעת.",
     "All polls" : "כל הסקרים",
     "All polls, where you have access to." : "כל הסקרים אליהם יש לך גישה.",
-    "Archive" : "לארכיון",
-    "Error loading poll" : "שגיאה בטעינת הסקר"
+    "Archive" : "לארכיון"
 },
 "nplurals=3; plural=(n == 1 && n % 1 == 0) ? 0 : (n == 2 && n % 1 == 0) ? 1: 2;");
