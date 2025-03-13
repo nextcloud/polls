@@ -243,19 +243,20 @@
 		</template>
 		<NcActionButtonGroup name="View mode">
 			<NcActionButton v-model="viewMode"
-				:value="ViewMode.ListView"
-				type="radio"
-				:aria-label="t('polls', 'Switch to list view')">
-				<template #icon>
-					<ListViewIcon />
-				</template>
-			</NcActionButton>
-			<NcActionButton v-model="viewMode"
 				:value="ViewMode.TableView"
 				type="radio"
 				:aria-label="t('polls', 'Switch to table view')">
 				<template #icon>
 					<TableViewIcon />
+				</template>
+			</NcActionButton>
+
+			<NcActionButton v-model="viewMode"
+				:value="ViewMode.ListView"
+				type="radio"
+				:aria-label="t('polls', 'Switch to list view')">
+				<template #icon>
+					<ListViewIcon />
 				</template>
 			</NcActionButton>
 		</NcActionButtonGroup>
@@ -272,6 +273,7 @@
 					<SortByOriginalOrderIcon v-else />
 				</template>
 			</NcActionButton>
+
 			<NcActionButton v-model="optionsStore.ranked"
 				:value="RankedType.ranked"
 				type="radio"
@@ -281,6 +283,8 @@
 				</template>
 			</NcActionButton>
 		</NcActionButtonGroup>
+
+		<NcActionSeparator />
 
 		<NcActionButton v-if="sessionStore.share?.type === 'external'"
 			:name="t('polls', 'Copy your personal link to clipboard')"

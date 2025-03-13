@@ -4,7 +4,8 @@
  */
 
 import { defineStore } from 'pinia'
-import { debounce } from 'lodash'
+import debounce from 'lodash/debounce'
+import orderBy from 'lodash/orderBy'
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
@@ -49,6 +50,12 @@ export enum AllowProposals {
 	Allow = 'allow',
 	Disallow = 'disallow',
 	Review = 'review',
+}
+
+export enum SortParticipants {
+	Alphabetical = 'alphabetical',
+	VoteCount = 'voteCount',
+	Unordered = 'unordered',
 }
 
 export type PollConfiguration = {
@@ -123,6 +130,7 @@ export type Poll = {
 	currentUserStatus: CurrentUserStatus
 	permissions: PollPermissions
 	revealParticipants: boolean
+	sortParticipants: SortParticipants
 }
 
 const markedPrefix = {
@@ -208,6 +216,7 @@ export const usePollStore = defineStore('poll', {
 			vote: false,
 		},
 		revealParticipants: false,
+		sortParticipants: SortParticipants.Alphabetical,
 	}),
 
 	getters: {
@@ -256,8 +265,7 @@ export const usePollStore = defineStore('poll', {
 			if (!participants.find((participant: User) => participant.id === sessionStore.currentUser.id) && sessionStore.currentUser.id && state.permissions.vote) {
 				participants.push(sessionStore.currentUser)
 			}
-
-			return participants
+			return this.sortParticipants === SortParticipants.Alphabetical ? orderBy(participants, ['displayName'], ['asc']) : participants
 		},
 
 		safeParticipants() {
