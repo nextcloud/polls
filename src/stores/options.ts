@@ -14,6 +14,11 @@ import { useSessionStore } from './session.ts'
 import { Answer } from './votes.ts'
 import { DateUnitType, TimeUnitsType } from '../constants/dateUnits.ts'
 
+export enum RankedType {
+	ranked = 'yes',
+	notRanked = 'no',
+}
+
 export type Sequence = {
 	unit: DateUnitType,
 	stepWidth: number
@@ -52,13 +57,13 @@ export type Option = {
 
 export type Options = {
 	list: Option[]
-	ranked: boolean
+	ranked: RankedType
 }
 
 export const useOptionsStore = defineStore('options', {
 	state: (): Options => ({
 		list: [],
-		ranked: false,
+		ranked: RankedType.notRanked,
 	}),
 
 	getters: {
@@ -76,7 +81,7 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		orderedOptions(state): Option[] {
-			return state.ranked ? this.rankedOptions : this.sortedOptions
+			return state.ranked === 'yes' ? this.rankedOptions : this.sortedOptions
 		},
 
 		confirmed(state): Option[] {
