@@ -27,14 +27,6 @@
 	const pollsStore = usePollsStore()
 
 	/**
-	 *
-	 * @param {object} poll - The poll object
-	 */
-	function pollLink(poll) {
-		generateUrl(`/apps/polls/vote/${poll.id}`)
-	}
-
-	/**
 	 * Load the polls
 	 */
 	function loadPolls() {
@@ -62,7 +54,7 @@
 			</template>
 
 			<template #default="{ item }">
-				<a :href="pollLink(item)">
+				<a :href="generateUrl(`/apps/polls/vote/${item.id}`)">
 					<div class="poll-item__item">
 						<div class="item__icon-spacer">
 							<TextPollIcon v-if="item.type === PollType.Text" />
