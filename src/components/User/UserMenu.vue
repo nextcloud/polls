@@ -32,7 +32,7 @@
 	import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
 	import { PollsAPI, ValidatorAPI } from '../../Api/index.js'
-	import { useOptionsStore } from '../../stores/options.ts'
+	import { RankedType, useOptionsStore } from '../../stores/options.ts'
 	import { usePollStore } from '../../stores/poll.ts'
 	import { usePreferencesStore } from '../../stores/preferences.ts'
 	import { useSessionStore } from '../../stores/session.ts'
@@ -42,6 +42,7 @@
 	import { StatusResults, ViewMode, PollType } from '../../Types/index.ts'
 
 	import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
+	import { NcActionButtonGroup } from '@nextcloud/vue'
 
 	type InputProps = {
 		success: boolean
@@ -59,6 +60,14 @@
 	const votesStore = useVotesStore()
 	const router = useRouter()
 	const hasCookie = !!findCookieByValue(sessionStore.publicToken)
+	const viewMode = computed({
+		get() {
+			return pollStore.viewMode
+		},
+		set() {
+			changeView()
+		}
+	})
 
 	function logout() {
 		const reRouteTo = deleteCookieByValue(sessionStore.publicToken)
@@ -106,6 +115,7 @@
 		}
 	}
 
+
 	async function copyLink() {
 		const personalLink = window.location.origin
 			+ router.resolve({
@@ -147,25 +157,6 @@
 		showTrailingButton: true,
 		labelOutside: false,
 		label: t('polls', 'Change name'),
-	})
-
-	const sortCaption = computed(() => {
-		if (optionsStore.ranked && pollStore.type === PollType.Date) {
-			return t('polls', 'Switch to date order')
-		}
-
-		if (optionsStore.ranked && pollStore.type === PollType.Text) {
-			return t('polls', 'Switch to original order')
-		}
-
-		return t('polls', 'Switch to ranked order')
-	})
-
-	const viewModeCaption = computed(() => {
-		if (pollStore.viewMode === ViewMode.TableView) {
-			return t('polls', 'Switch to list view')
-		}
-		return t('polls', 'Switch to table view')
 	})
 
 	const validateDisplayName = debounce(async function () {
@@ -250,24 +241,50 @@
 		<template #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
-		<NcActionButton :name="viewModeCaption"
-			:aria-label="viewModeCaption"
-			@click="changeView()">
-			<template #icon>
-				<ListViewIcon v-if="pollStore.viewMode === ViewMode.TableView" />
-				<TableViewIcon v-else />
-			</template>
-		</NcActionButton>
+		<NcActionButtonGroup name="View mode">
+			<NcActionButton v-model="viewMode"
+				:value="ViewMode.TableView"
+				type="radio"
+				:aria-label="t('polls', 'Switch to table view')">
+				<template #icon>
+					<TableViewIcon />
+				</template>
+			</NcActionButton>
 
-		<NcActionButton :name="sortCaption"
-			:aria-label="sortCaption"
-			@click="optionsStore.ranked = !optionsStore.ranked">
-			<template #icon>
-				<SortByDateOptionIcon v-if="optionsStore.ranked && pollStore.type === PollType.Date" />
-				<SortByOriginalOrderIcon v-else-if="optionsStore.ranked && pollStore.type === PollType.Text" />
-				<SortByRankIcon v-else />
-			</template>
-		</NcActionButton>
+			<NcActionButton v-model="viewMode"
+				:value="ViewMode.ListView"
+				type="radio"
+				:aria-label="t('polls', 'Switch to list view')">
+				<template #icon>
+					<ListViewIcon />
+				</template>
+			</NcActionButton>
+		</NcActionButtonGroup>
+
+		<NcActionButtonGroup name="Options order">
+			<NcActionButton v-model="optionsStore.ranked"
+				:value="RankedType.notRanked"
+				type="radio"
+				:aria-label="pollStore.type === PollType.Date
+					? t('polls', 'Switch to date order')
+					: t('polls', 'Switch to original order')">
+				<template #icon>
+					<SortByDateOptionIcon v-if="pollStore.type === PollType.Date" />
+					<SortByOriginalOrderIcon v-else />
+				</template>
+			</NcActionButton>
+
+			<NcActionButton v-model="optionsStore.ranked"
+				:value="RankedType.ranked"
+				type="radio"
+				:aria-label="t('polls', 'Switch to ranked order')">
+				<template #icon>
+					<SortByRankIcon />
+				</template>
+			</NcActionButton>
+		</NcActionButtonGroup>
+
+		<NcActionSeparator />
 
 		<NcActionButton v-if="sessionStore.share?.type === 'external'"
 			:name="t('polls', 'Copy your personal link to clipboard')"
