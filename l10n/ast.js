@@ -213,6 +213,7 @@ OC.L10N.register(
     "Add a new public link" : "Amestar un enllaz públicu nuevu",
     "Error adding public link" : "Hebo un error mentanto s'amestaba l'enllaz públicu",
     "Shares" : "Comparticiones",
+    "No activity yet" : " Entá nun hai actividá",
     "No comments" : "Nun hai nengún comentariu",
     "Be the first." : "Sé'l primeru",
     "Description" : "Descripción",

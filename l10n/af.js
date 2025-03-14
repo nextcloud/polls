@@ -29,6 +29,7 @@ OC.L10N.register(
     "Owner" : "Eienaar",
     "Created" : "Geskep",
     "Login" : "Teken aan",
+    "No activity yet" : "Nog geen aktiwiteit",
     "Description" : "Beskrywing",
     "Public link" : "Openbare skakel",
     "Comments" : "Kommentare",

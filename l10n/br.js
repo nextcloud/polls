@@ -25,6 +25,7 @@ OC.L10N.register(
     "Login" : "Anv arveriad",
     "deleted" : "lemet",
     "Shares" : "Rannañ",
+    "No activity yet" : "Tamm obererezh ebet",
     "Description" : "Diskrivadur",
     "Change name" : "Cheñch env",
     "Public link" : "Liamm publik",

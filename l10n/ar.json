@@ -532,6 +532,7 @@
     "Locked shares (read only access)" : "مشاركات مُقفَلة (للقراءة فقط)",
     "Unsent invitations" : "دعوات لم يتم إرسالها",
     "Resolve and send all invitations" : "حلِّل و أرسل كل الدعوات",
+    "No activity yet" : "لا توجد أنشطة حتى الآن",
     "No comments" : "لا يوجد تعليقات",
     "Be the first." : "كن الأول.",
     "Error {action} poll." : "خطأ في {action} الاستبيان.",

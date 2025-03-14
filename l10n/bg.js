@@ -379,6 +379,7 @@ OC.L10N.register(
     "Error adding public link" : "Грешка при добавяне на публична връзка",
     "Shares" : "Споделени",
     "Unsent invitations" : "Неизпратени покани",
+    "No activity yet" : "Все още няма активност",
     "No comments" : "Няма коментари ",
     "Be the first." : "Бъдете пръв.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Моля, бъдете внимателни, когато променяте опциите, защото това може да повлияе на съществуващите гласувания по нежелан начин.",
