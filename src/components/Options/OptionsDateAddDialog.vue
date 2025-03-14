@@ -159,7 +159,7 @@
 			<div class="selection duration">
 				<div>
 					<InputDiv v-model="durationInput.amount"
-						:label="t('polls', 'Duaration')"
+						:label="t('polls', 'Duration')"
 						type="number"
 						inputmode="numeric"
 						:num-min="0"
