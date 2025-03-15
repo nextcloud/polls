@@ -421,7 +421,7 @@ OC.L10N.register(
     "privacy policy" : "Datenschutzerklärung",
     "Checking name …" : "Prüfe den Namen …",
     "A name is required." : "Ein Name ist erforderlich.",
-    "The name {username} is invalid or reserved." : "Der Name {username} is ungültig oder reserviert.",
+    "The name {username} is invalid or reserved." : "Der Name {username} ist ungültig oder reserviert.",
     "Checking email address …" : "Prüfe E-Mail-Adresse…",
     "An email address is required." : "Eine E-Mail Adresse ist erforderlich",
     "Invalid email address." : "Ungültige E-Mail-Adresse.",
