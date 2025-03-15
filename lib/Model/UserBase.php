@@ -299,6 +299,7 @@ class UserBase implements JsonSerializable {
 	 */
 	public function getRichUserArray(): array {
 		return	[
+			'id' => $this->getId(),
 			'userId' => $this->getId(),
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getEmailAddress(),
@@ -307,7 +308,6 @@ class UserBase implements JsonSerializable {
 			'isNoUser' => $this->getIsNoUser(),
 			'desc' => $this->getDescription(),
 			'type' => $this->getType(),
-			'id' => $this->getId(),
 			'organisation' => $this->getOrganisation(),
 			'languageCode' => $this->getLanguageCode(),
 			'localeCode' => $this->getLocaleCode(),
@@ -328,18 +328,19 @@ class UserBase implements JsonSerializable {
 	protected function getSimpleUserArray(): array {
 		return	[
 			'id' => $this->getSafeId(),
+			'userId' => $this->getSafeId(),
 			'displayName' => $this->getSafeDisplayName(),
 			'emailAddress' => $this->getSafeEmailAddress(),
+			'subname' => '',
+			'subtitle' => '',
 			'isNoUser' => $this->getIsNoUser(),
+			'desc' => '',
 			'type' => $this->getSafeType(),
-			'subname' => null,
-			'subtitle' => null,
-			'desc' => null,
-			'organisation' => null,
-			'languageCode' => null,
-			'localeCode' => null,
-			'timeZone' => null,
-			'categories' => null,
+			'organisation' => '',
+			'languageCode' => '',
+			'localeCode' => '',
+			'timeZone' => '',
+			'categories' => '',
 		];
 	}
 
