@@ -6,7 +6,8 @@ on:
   pull_request:
   push:
     branches:
-      - master
+      - main
+      - master*
       - next
       - stable*
 
