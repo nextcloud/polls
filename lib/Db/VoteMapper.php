@@ -154,6 +154,8 @@ class VoteMapper extends QBMapperWithUser {
 	protected function find(int $id): Vote {
 		$qb = $this->buildQuery();
 		$qb->andWhere($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->groupBy(self::TABLE . '.id');
+
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
