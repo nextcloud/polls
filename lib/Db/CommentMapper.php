@@ -30,8 +30,6 @@ class CommentMapper extends QBMapperWithUser {
 	public function find(int $id): Comment {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		$qb->groupBy(self::TABLE . '.id');
-
 		return $this->findEntity($qb);
 	}
 
@@ -47,8 +45,6 @@ class CommentMapper extends QBMapperWithUser {
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
-		$qb->groupBy(self::TABLE . '.id');
-
 		return $this->findEntities($qb);
 	}
 
