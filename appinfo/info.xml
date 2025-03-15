@@ -69,8 +69,8 @@
 
   <settings>
     <admin>OCA\Polls\Settings\AdminSettings</admin>
-    <personal>OCA\Polls\Settings\PersonalSettings</personal>
     <admin-section>OCA\Polls\Settings\AdminSection</admin-section>
+    <personal>OCA\Polls\Settings\PersonalSettings</personal>
     <personal-section>OCA\Polls\Settings\PersonalSection</personal-section>
   </settings>
 
