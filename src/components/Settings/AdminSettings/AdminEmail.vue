@@ -1,5 +1,5 @@
 <!--
-  - SPDX-FileCopyrightText: 2018 Nextcloud contributors
+  - SPDX-FileCopyrightText: 2022 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
