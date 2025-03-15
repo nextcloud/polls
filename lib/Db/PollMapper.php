@@ -60,7 +60,7 @@ class PollMapper extends QBMapper {
 	public function find(int $id): Poll {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
-		$qb->groupBy(self::TABLE . '.type');
+		$qb->groupBy(self::TABLE . '.type', self::TABLE . '.id');
 
 		return $this->findEntity($qb);
 	}
