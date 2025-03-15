@@ -3,20 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 module.exports = {
-	extends: [
-		'@nextcloud/eslint-config/vue3',
-		'prettier',
-	],
-	plugins: [
-		'promise',
-	],
+	extends: ['@nextcloud/eslint-config/vue3', 'prettier'],
+	plugins: ['promise'],
 	rules: {
 		'arrow-body-style': 'error',
-		"jsdoc/require-jsdoc": ["error" | "warn", {
-			"publicOnly": {
-				"ancestorsOnly": true,
+		'jsdoc/require-jsdoc': [
+			'error' | 'warn',
+			{
+				publicOnly: {
+					ancestorsOnly: true,
+				},
 			},
-		}],
+		],
 		'no-array-constructor': 'error',
 		'no-continue': 'error',
 		'no-else-return': ['error', { allowElseIf: false }],
@@ -24,15 +22,18 @@ module.exports = {
 		'no-negated-condition': 'error',
 		'no-plusplus': ['error', { allowForLoopAfterthoughts: true }],
 		'prefer-template': 'error',
-		'vue/script-indent': ['error', 'tab', {
-			baseIndent: 1,
-			switchCase: 1,
-		}],
+		'vue/first-attribute-linebreak': [
+			'error',
+			{ multiline: 'below', singleline: 'ignore' },
+		],
 		'vue/no-v-model-argument': 'off',
-		'vue/no-unused-properties': ['error', {
-			groups: ['props', 'data', 'computed', 'methods'],
-			deepData: true,
-			ignorePublicMembers: true,
-		}],
+		'vue/no-unused-properties': [
+			'error',
+			{
+				groups: ['props', 'data', 'computed', 'methods'],
+				deepData: true,
+				ignorePublicMembers: true,
+			},
+		],
 	},
 }
