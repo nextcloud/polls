@@ -26,6 +26,7 @@ OC.L10N.register(
     "Week" : "Tuần",
     "OK" : "OK",
     "All day" : "Cả ngày",
+    "Duration" : "Khoảng thời gian",
     "Preview" : "Xem trước",
     "_year_::_years_" : ["năm"],
     "_month_::_months_" : ["tháng"],

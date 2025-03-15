@@ -23,6 +23,7 @@ OC.L10N.register(
     "Week" : "Javë",
     "OK" : "OK",
     "All day" : "Gjithë ditën",
+    "Duration" : "Kohëzgjatja",
     "Preview" : "Parapamje ",
     "Submit" : "Dërgo",
     "Close" : "Mbylleni",

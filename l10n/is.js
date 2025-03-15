@@ -57,6 +57,7 @@ OC.L10N.register(
     "Confirm option" : "Staðfesta valkost",
     "No vote options" : "Engir valkostir í kosningu",
     "All day" : "Heilsdagsviðburður",
+    "Duration" : "Tímalengd",
     "Preview" : "Forskoðun",
     "_year_::_years_" : ["ár","ár"],
     "_month_::_months_" : ["mánuður","mánuðir"],

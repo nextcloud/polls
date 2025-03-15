@@ -28,6 +28,7 @@ OC.L10N.register(
     "Week" : "Săptămâna",
     "OK" : "OK",
     "All day" : "Toată ziua",
+    "Duration" : "Durată",
     "Preview" : "Previzualizare",
     "_year_::_years_" : ["an","ani","ani"],
     "_month_::_months_" : ["lună","luni","luni"],

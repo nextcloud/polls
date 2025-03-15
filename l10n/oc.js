@@ -28,6 +28,7 @@ OC.L10N.register(
     "Week" : "Aquesta setmana",
     "OK" : "D'acòrdi",
     "All day" : "Tota la jornada",
+    "Duration" : "Durada",
     "Preview" : "Apercebut",
     "_year_::_years_" : ["annada","annadas"],
     "_month_::_months_" : ["mes","mese"],

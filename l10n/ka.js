@@ -179,6 +179,7 @@ OC.L10N.register(
     "Week" : "Week",
     "OK" : "OK",
     "All day" : "All day",
+    "Duration" : "Duration",
     "Preview" : "Preview",
     "_year_::_years_" : ["year","years"],
     "_month_::_months_" : ["month","months"],

@@ -29,6 +29,7 @@ OC.L10N.register(
     "Week" : "Semana",
     "OK" : "OK",
     "All day" : "Todo o dia",
+    "Duration" : "Duração",
     "Preview" : "Pré-visualizar",
     "_year_::_years_" : ["ano","anos","anos"],
     "_month_::_months_" : ["mês","meses","meses"],

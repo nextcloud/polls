@@ -27,6 +27,7 @@ OC.L10N.register(
     "Week" : "Nedēļa",
     "OK" : "Labi",
     "All day" : "Visas dienas",
+    "Duration" : "Ilgums",
     "Preview" : "Priekšskatīt",
     "Submit" : "Iesniegt",
     "Close" : "Aizvērt",
