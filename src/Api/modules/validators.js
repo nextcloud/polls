@@ -9,7 +9,10 @@ const validators = {
 		return httpInstance.request({
 			method: 'GET',
 			url: `check/emailaddress/${emailAddress}`,
-			cancelToken: cancelTokenHandlerObject[this.validateEmailAddress.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.validateEmailAddress.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -17,14 +20,17 @@ const validators = {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'check/username',
-			cancelToken: cancelTokenHandlerObject[this.validateName.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.validateName.name
+				].handleRequestCancellation().token,
 			data: {
 				displayName: name,
 				token: pollToken,
 			},
 			headers: {
 				'Nc-Polls-Share-Token': pollToken,
-			}
+			},
 		})
 	},
 }

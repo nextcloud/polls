@@ -4,27 +4,25 @@
 -->
 
 <script setup lang="ts">
-	import { emit } from '@nextcloud/event-bus'
-	import { t } from '@nextcloud/l10n'
+import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 
-	import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
-	import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
+import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
+import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 
-	import { PollsAppIcon } from '../components/AppIcons/index.js'
-	import { SideBarTabDatePolls } from '../components/SideBar/index.js'
+import { PollsAppIcon } from '../components/AppIcons/index.js'
+import { SideBarTabDatePolls } from '../components/SideBar/index.js'
 
-	function closeSideBar() {
-		emit('polls:sidebar:toggle', { open: false })
-	}
-
+function closeSideBar() {
+	emit('polls:sidebar:toggle', { open: false })
+}
 </script>
 
 <template>
-	<NcAppSidebar :name="t('polls', 'Select polls to combine')"
+	<NcAppSidebar
+		:name="t('polls', 'Select polls to combine')"
 		@close="closeSideBar()">
-		<NcAppSidebarTab :id="'polls'"
-			:order="1"
-			:name="t('polls', 'Polls')">
+		<NcAppSidebarTab :id="'polls'" :order="1" :name="t('polls', 'Polls')">
 			<template #icon>
 				<PollsAppIcon />
 			</template>

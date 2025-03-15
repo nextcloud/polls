@@ -21,9 +21,13 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 		try {
 			let response = null
 			if (sessionStore.route.name === 'publicVote') {
-				response = await PublicAPI.getSubscription(sessionStore.route.params.token)
+				response = await PublicAPI.getSubscription(
+					sessionStore.route.params.token,
+				)
 			} else if (sessionStore.route.name === 'vote') {
-				response = await PollsAPI.getSubscription(sessionStore.route.params.id)
+				response = await PollsAPI.getSubscription(
+					sessionStore.route.params.id,
+				)
 			} else {
 				subscribed.value = false
 				return
@@ -40,9 +44,15 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 		try {
 			let response = null
 			if (sessionStore.route.name === 'publicVote') {
-				response = await PublicAPI.setSubscription(sessionStore.route.params.token, !subscribed.value)
+				response = await PublicAPI.setSubscription(
+					sessionStore.route.params.token,
+					!subscribed.value,
+				)
 			} else if (sessionStore.route.name === 'vote') {
-				response = await PollsAPI.setSubscription(sessionStore.route.params.id, !subscribed.value)
+				response = await PollsAPI.setSubscription(
+					sessionStore.route.params.id,
+					!subscribed.value,
+				)
 			} else {
 				subscribed.value = false
 				return
@@ -50,7 +60,7 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 			subscribed.value = response.data.subscribed
 		} catch (error) {
 			if (error?.code === 'ERR_CANCELED') return
-			Logger.error('Error on changing subscription' , error)
+			Logger.error('Error on changing subscription', error)
 			throw error
 		}
 	}

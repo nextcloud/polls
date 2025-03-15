@@ -4,68 +4,77 @@
 -->
 
 <script setup lang="ts">
-	import { ref } from 'vue'
-	import { showError, showSuccess } from '@nextcloud/dialogs'
-	import { t } from '@nextcloud/l10n'
+import { ref } from 'vue'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 
-	import { InputDiv } from '../Base/index.js'
-	import { useOptionsStore } from '../../stores/options.ts'
+import { InputDiv } from '../Base/index.js'
+import { useOptionsStore } from '../../stores/options.ts'
 
-	const optionsStore = useOptionsStore()
+const optionsStore = useOptionsStore()
 
-	const props = defineProps({
-		placeholder: {
-			type: String,
-			default: t('polls', 'Add option'),
-		},
-	})
+const props = defineProps({
+	placeholder: {
+		type: String,
+		default: t('polls', 'Add option'),
+	},
+})
 
-	const newPollText = ref('')
+const newPollText = ref('')
 
-	async function addOption() {
-		if (newPollText.value) {
-			try {
-				await optionsStore.add({ text: newPollText.value })
-				showSuccess(t('polls', '{optionText} added', { optionText: newPollText.value }))
-				newPollText.value = ''
-			} catch (error) {
-				if (error.response.status === 409) {
-					showError(t('polls', '{optionText} already exists', { optionText: newPollText.value }))
-				} else {
-					showError(t('polls', 'Error adding {optionText}', { optionText: newPollText.value }))
-				}
+async function addOption() {
+	if (newPollText.value) {
+		try {
+			await optionsStore.add({ text: newPollText.value })
+			showSuccess(
+				t('polls', '{optionText} added', { optionText: newPollText.value }),
+			)
+			newPollText.value = ''
+		} catch (error) {
+			if (error.response.status === 409) {
+				showError(
+					t('polls', '{optionText} already exists', {
+						optionText: newPollText.value,
+					}),
+				)
+			} else {
+				showError(
+					t('polls', 'Error adding {optionText}', {
+						optionText: newPollText.value,
+					}),
+				)
 			}
 		}
 	}
-
+}
 </script>
 
 <template>
-	<InputDiv v-model="newPollText"
+	<InputDiv
+		v-model="newPollText"
 		:placeholder="props.placeholder"
 		submit
 		@submit="addOption()" />
 </template>
 
 <style lang="scss">
-	.optionAdd {
-		display: flex;
-	}
+.optionAdd {
+	display: flex;
+}
 
-	.newOption {
-		margin-left: 40px;
-		flex: 1;
-		&:empty:before {
-			color: grey;
-		}
+.newOption {
+	margin-left: 40px;
+	flex: 1;
+	&:empty:before {
+		color: grey;
 	}
+}
 
-	.submit-option {
-		width: 30px;
-		background-color: transparent;
-		border: none;
-		opacity: 0.3;
-		cursor: pointer;
-	}
-
+.submit-option {
+	width: 30px;
+	background-color: transparent;
+	border: none;
+	opacity: 0.3;
+	cursor: pointer;
+}
 </style>

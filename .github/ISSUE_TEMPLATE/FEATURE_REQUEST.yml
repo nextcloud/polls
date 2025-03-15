@@ -1,6 +1,6 @@
-name: "Feature request: Nextcloud Polls"
-description: "Suggest your idea for the improvement of Polls"
-labels: ["enhancement"]
+name: 'Feature request: Nextcloud Polls'
+description: 'Suggest your idea for the improvement of Polls'
+labels: ['enhancement']
 
 body:
   - type: markdown
@@ -11,7 +11,7 @@ body:
   - type: checkboxes
     id: before-posting
     attributes:
-      label: "⚠️ This issue respects the following points: ⚠️"
+      label: '⚠️ This issue respects the following points: ⚠️'
       description: All conditions are **required**. Your issue can be closed if these are checked incorrectly.
       options:
         - label: I agree to follow Nextcloud's [Code of Conduct](https://nextcloud.com/contribute/code-of-conduct/).
@@ -35,6 +35,6 @@ body:
   - type: textarea
     id: additional-context
     attributes:
-      label: Additional context 
+      label: Additional context
       description: |
         Add a screenshot or a mockup for your UI suggestion or add more context to understand the reason, why you think this is a valuable request.

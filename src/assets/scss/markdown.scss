@@ -4,26 +4,27 @@
  */
 // Resets some NC classes and markdown specific styles
 .polls-markdown {
-    * {
-        margin: revert;
-        padding: revert;
-        font-size: revert;
-        text-decoration: revert;
-        list-style: revert;
-        opacity: revert;
-        min-height: revert;
-    }
+	* {
+		margin: revert;
+		padding: revert;
+		font-size: revert;
+		text-decoration: revert;
+		list-style: revert;
+		opacity: revert;
+		min-height: revert;
+	}
 
-    table {
-        border-spacing: 2px;
-    }
+	table {
+		border-spacing: 2px;
+	}
 
-    thead {
-        background-color: var(--color-background-darker);
-        color: var(--color-main-text);
-    }
+	thead {
+		background-color: var(--color-background-darker);
+		color: var(--color-main-text);
+	}
 
-    td, th {
-        padding: 1px 4px;
-    }
+	td,
+	th {
+		padding: 1px 4px;
+	}
 }

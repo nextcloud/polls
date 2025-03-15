@@ -4,51 +4,61 @@
 -->
 
 <script setup lang="ts">
-	import { ref, computed } from 'vue'
-	import { useRouter } from 'vue-router'
-	import { showSuccess, showError } from '@nextcloud/dialogs'
-	import { t } from '@nextcloud/l10n'
+import { ref, computed } from 'vue'
+import { useRouter } from 'vue-router'
+import { showSuccess, showError } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
-	import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
-	import CheckIcon from 'vue-material-design-icons/Check.vue'
+import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 
-	import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
+import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.js'
 
-	import { usePollStore, PollType } from '../../stores/poll.ts'
+import { usePollStore, PollType } from '../../stores/poll.ts'
 
-	const pollStore = usePollStore()
-	const router = useRouter()
+const pollStore = usePollStore()
+const router = useRouter()
 
-	const title = ref('')
-	const pollType = ref(PollType.Date)
-	const pollTypeOptions = [
-		{ value: PollType.Date, label: t('polls', 'Date poll') },
-		{ value: PollType.Text, label: t('polls', 'Text poll') },
-	]
+const title = ref('')
+const pollType = ref(PollType.Date)
+const pollTypeOptions = [
+	{ value: PollType.Date, label: t('polls', 'Date poll') },
+	{ value: PollType.Text, label: t('polls', 'Text poll') },
+]
 
-	const titleEmpty = computed(() => (title.value === ''))
+const titleEmpty = computed(() => title.value === '')
 
-	const emit = defineEmits(['closeCreate'])
+const emit = defineEmits(['closeCreate'])
 
-	const cancel = () => {
-		title.value = ''
-		pollType.value = PollType.Date
-		emit('closeCreate')
+const cancel = () => {
+	title.value = ''
+	pollType.value = PollType.Date
+	emit('closeCreate')
+}
+
+const confirm = async () => {
+	try {
+		const response = await pollStore.add({
+			title: title.value,
+			type: pollType.value,
+		})
+		cancel()
+		showSuccess(
+			t('polls', 'Poll "{pollTitle}" added', {
+				pollTitle: response.data.configuration.title,
+			}),
+		)
+		router.push({ name: 'vote', params: { id: response.data.id } })
+	} catch {
+		showError(
+			t('polls', 'Error while creating Poll "{pollTitle}"', {
+				pollTitle: title.value,
+			}),
+		)
 	}
-
-	const confirm = async () => {
-		try {
-			const response = await pollStore.add({ title: title.value, type: pollType.value })
-			cancel()
-			showSuccess(t('polls', 'Poll "{pollTitle}" added', { pollTitle: response.data.configuration.title }))
-			router.push({ name: 'vote', params: { id: response.data.id } })
-		} catch {
-			showError(t('polls', 'Error while creating Poll "{pollTitle}"', { pollTitle: title.value }))
-		}
-	}
-
+}
 </script>
 
 <template>
@@ -57,7 +67,8 @@
 			<template #icon>
 				<SpeakerIcon />
 			</template>
-			<InputDiv v-model="title"
+			<InputDiv
+				v-model="title"
 				focus
 				type="text"
 				:placeholder="t('polls', 'Enter Title')"
@@ -77,7 +88,8 @@
 					{{ t('polls', 'Cancel') }}
 				</template>
 			</NcButton>
-			<NcButton :disabled="titleEmpty"
+			<NcButton
+				:disabled="titleEmpty"
 				:type="ButtonType.Primary"
 				@click="confirm">
 				<template #default>

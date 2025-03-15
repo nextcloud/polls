@@ -4,74 +4,83 @@
 -->
 
 <script setup lang="ts">
-	import { computed, PropType, ref } from 'vue'
-	import { t } from '@nextcloud/l10n'
+import { computed, PropType, ref } from 'vue'
+import { t } from '@nextcloud/l10n'
 
-	import NcActions from '@nextcloud/vue/components/NcActions'
-	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-	import NcModal from '@nextcloud/vue/components/NcModal'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcModal from '@nextcloud/vue/components/NcModal'
 
-	import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
-	import DeleteIcon from 'vue-material-design-icons/Delete.vue'
-	import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
-	import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
-	import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import CloneDateIcon from 'vue-material-design-icons/CalendarMultiple.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
+import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
+import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
 
-	import OptionCloneDate from './OptionCloneDate.vue'
-	import { usePollStore } from '../../stores/poll.ts'
-	import { useOptionsStore, Option } from '../../stores/options.ts'
+import OptionCloneDate from './OptionCloneDate.vue'
+import { usePollStore } from '../../stores/poll.ts'
+import { useOptionsStore, Option } from '../../stores/options.ts'
 
-	const pollStore = usePollStore()
-	const optionsStore = useOptionsStore()
+const pollStore = usePollStore()
+const optionsStore = useOptionsStore()
 
-	const cloneModal = ref(false)
+const cloneModal = ref(false)
 
-	const props = defineProps({
-		option: {
-			type: Object as PropType<Option>,
-			default: null,
-		},
-	})
+const props = defineProps({
+	option: {
+		type: Object as PropType<Option>,
+		default: null,
+	},
+})
 
-	const deleteOrRestoreStaticText = computed(() => props.option.deleted
+const deleteOrRestoreStaticText = computed(() =>
+	props.option.deleted
 		? t('polls', 'Restore option')
-		: t('polls', 'Delete option'))
+		: t('polls', 'Delete option'),
+)
 
-	const deleteAllowed = computed(() => (props.option.isOwner || pollStore.permissions.edit) && !pollStore.isClosed)
-	const confirmAllowed = computed(() => !props.option.deleted && pollStore.isClosed && pollStore.permissions.edit)
-	const cloneAllowed = computed(() => !props.option.deleted && !pollStore.isClosed && pollStore.permissions.edit)
+const deleteAllowed = computed(
+	() =>
+		(props.option.isOwner || pollStore.permissions.edit) && !pollStore.isClosed,
+)
+const confirmAllowed = computed(
+	() => !props.option.deleted && pollStore.isClosed && pollStore.permissions.edit,
+)
+const cloneAllowed = computed(
+	() => !props.option.deleted && !pollStore.isClosed && pollStore.permissions.edit,
+)
 
+function cloneOptionModal() {
+	cloneModal.value = true
+}
 
-	function cloneOptionModal() {
-		cloneModal.value = true
+function deleteRestoreOption() {
+	if (props.option.deleted) {
+		optionsStore.restore({ option: props.option })
+		return
 	}
+	optionsStore.delete({ option: props.option })
+}
 
-	function deleteRestoreOption() {
-		if (props.option.deleted) {
-			optionsStore.restore({ option: props.option })
-			return
-		}
-		optionsStore.delete({ option: props.option })
-	}
-
-	function confirmOption() {
-		optionsStore.confirm({ option: props.option })
-	}
-
+function confirmOption() {
+	optionsStore.confirm({ option: props.option })
+}
 </script>
 
 <template>
 	<NcActions class="option-menu">
-		<NcActionButton v-if="deleteAllowed"
+		<NcActionButton
+			v-if="deleteAllowed"
 			:name="deleteOrRestoreStaticText"
 			@click="deleteRestoreOption()">
 			<template #icon>
-				<DeleteIcon v-if="!props.option.deleted"/>
+				<DeleteIcon v-if="!props.option.deleted" />
 				<RestoreIcon v-else />
 			</template>
 		</NcActionButton>
 
-		<NcActionButton v-if="cloneAllowed"
+		<NcActionButton
+			v-if="cloneAllowed"
 			:name="t('polls', 'Clone option')"
 			@click="cloneOptionModal()">
 			<template #icon>
@@ -79,19 +88,30 @@
 			</template>
 		</NcActionButton>
 
-		<NcActionButton v-if="confirmAllowed"
-			:name="props.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option')"
+		<NcActionButton
+			v-if="confirmAllowed"
+			:name="
+				props.option.confirmed
+					? t('polls', 'Unconfirm option')
+					: t('polls', 'Confirm option')
+			"
 			@click="confirmOption()">
 			<template #icon>
 				<UnconfirmIcon v-if="props.option.confirmed" />
 				<ConfirmIcon v-else />
 			</template>
-			{{ props.option.confirmed ? t('polls', 'Unconfirm option') : t('polls', 'Confirm option') }}
+			{{
+				props.option.confirmed
+					? t('polls', 'Unconfirm option')
+					: t('polls', 'Confirm option')
+			}}
 		</NcActionButton>
 	</NcActions>
 
 	<NcModal v-if="cloneModal" size="small" :can-close="false">
-		<OptionCloneDate :option="props.option" class="modal__content" @close="cloneModal = false" />
+		<OptionCloneDate
+			:option="props.option"
+			class="modal__content"
+			@close="cloneModal = false" />
 	</NcModal>
 </template>
-

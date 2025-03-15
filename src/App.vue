@@ -4,117 +4,118 @@
 -->
 
 <script setup lang="ts">
-	import { ref, computed, onMounted, onUnmounted } from 'vue'
-	import { debounce } from 'lodash'
-	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { debounce } from 'lodash'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
-	import NcContent from '@nextcloud/vue/components/NcContent'
+import NcContent from '@nextcloud/vue/components/NcContent'
 
-	import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
-	import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
+import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
+import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 
-	import { useSessionStore } from './stores/session.ts'
-	import { usePollStore } from './stores/poll.ts'
-	import { showSuccess } from '@nextcloud/dialogs'
+import { useSessionStore } from './stores/session.ts'
+import { usePollStore } from './stores/poll.ts'
+import { showSuccess } from '@nextcloud/dialogs'
 
-	import '@nextcloud/dialogs/style.css'
-	import './assets/scss/colors.scss'
-	import './assets/scss/hacks.scss'
-	import './assets/scss/print.scss'
-	import './assets/scss/transitions.scss'
-	import './assets/scss/markdown.scss'
+import '@nextcloud/dialogs/style.css'
+import './assets/scss/colors.scss'
+import './assets/scss/hacks.scss'
+import './assets/scss/print.scss'
+import './assets/scss/transitions.scss'
+import './assets/scss/markdown.scss'
 
-	const sessionStore = useSessionStore()
-	const pollStore = usePollStore()
-	const transitionClass = ref('transitions-active')
-	const loading = ref(false)
+const sessionStore = useSessionStore()
+const pollStore = usePollStore()
+const transitionClass = ref('transitions-active')
+const loading = ref(false)
 
-	const appClass = computed(() => [
-		transitionClass.value, {
-			edit: pollStore.permissions.edit,
-		},
-	])
+const appClass = computed(() => [
+	transitionClass.value,
+	{
+		edit: pollStore.permissions.edit,
+	},
+])
 
-	const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
-	const useSidebar = computed(() => pollStore.permissions.edit
-		|| pollStore.permissions.comment
-		|| sessionStore.route.name === 'combo'
-	)
+const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
+const useSidebar = computed(
+	() =>
+		pollStore.permissions.edit ||
+		pollStore.permissions.comment ||
+		sessionStore.route.name === 'combo',
+)
 
-	/**
-	 * Turn off transitions
-	 */
-	function transitionsOn() {
-		transitionClass.value = 'transitions-active'
+/**
+ * Turn off transitions
+ */
+function transitionsOn() {
+	transitionClass.value = 'transitions-active'
+}
+
+/**
+ * Turn on transitions
+ * @param {number} delay - optional delay
+ */
+function transitionsOff(delay: number) {
+	transitionClass.value = ''
+	if (delay) {
+		setTimeout(() => {
+			transitionClass.value = 'transitions-active'
+		}, delay)
 	}
+}
 
-	/**
-	 * Turn on transitions
-	 * @param {number} delay - optional delay
-	 */
-	function transitionsOff(delay: number) {
-		transitionClass.value = ''
-		if (delay) {
-			setTimeout(() => {
-				transitionClass.value = 'transitions-active'
-			}, delay)
+function notify(payload: { store: string; message: string }) {
+	debounce(async function () {
+		if (payload.store === 'poll') {
+			showSuccess(payload.message)
 		}
-	}
+	}, 1500)
+}
 
-	function notify(payload: { store: string, message: string }) {
-		debounce(async function () {
-			if (payload.store === 'poll') {
-				showSuccess(payload.message)
-			}
-		}, 1500)
-	}
-
-	onMounted(() => {
-		subscribe('polls:transitions:off', (delay) => {
-			transitionsOff(delay)
-		})
-
-		subscribe('polls:transitions:on', () => {
-			transitionsOn()
-		})
-
-		subscribe('polls:poll:update', (payload) => {
-			notify(payload)
-		})
+onMounted(() => {
+	subscribe('polls:transitions:off', (delay) => {
+		transitionsOff(delay)
 	})
 
-	onUnmounted(() => {
-		unsubscribe('polls:transitions:on', () => {
-			transitionsOn()
-		})
-		unsubscribe('polls:transitions:off', () => {
-			transitionsOff(0)
-		})
-		unsubscribe('polls:poll:updated', () => {
-			notify(null)
-		})
+	subscribe('polls:transitions:on', () => {
+		transitionsOn()
 	})
 
-	// watch: {
-	// 	$route(to, from) {
-	// 		Logger.debug('Route changed', { from, to })
-	// 		this.loadContext()
-	// 		this.watchPolls()
-	// 	},
-	// },
+	subscribe('polls:poll:update', (payload) => {
+		notify(payload)
+	})
+})
 
-	// loadContext() {
-	// 	if (this.$route.name !== null) {
-	// 		this.sessionStore.setRouter(this.$route)
-	// 		this.sessionStore.load()
-	// 	}
+onUnmounted(() => {
+	unsubscribe('polls:transitions:on', () => {
+		transitionsOn()
+	})
+	unsubscribe('polls:transitions:off', () => {
+		transitionsOff(0)
+	})
+	unsubscribe('polls:poll:updated', () => {
+		notify(null)
+	})
+})
 
-	// 	if (this.sessionStore.userStatus.isLoggedin) {
-	// 		this.preferencesStore.load()
-	// 	}
-	// },
+// watch: {
+// 	$route(to, from) {
+// 		Logger.debug('Route changed', { from, to })
+// 		this.loadContext()
+// 		this.watchPolls()
+// 	},
+// },
 
+// loadContext() {
+// 	if (this.$route.name !== null) {
+// 		this.sessionStore.setRouter(this.$route)
+// 		this.sessionStore.load()
+// 	}
 
+// 	if (this.sessionStore.userStatus.isLoggedin) {
+// 		this.preferencesStore.load()
+// 	}
+// },
 </script>
 
 <template>

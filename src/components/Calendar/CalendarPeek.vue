@@ -4,75 +4,78 @@
 -->
 
 <script setup lang="ts">
+import { computed, onMounted, ref, PropType } from 'vue'
+import { t } from '@nextcloud/l10n'
+import orderBy from 'lodash/orderBy'
+import moment from '@nextcloud/moment'
 
-	import { computed, onMounted, ref, PropType } from 'vue'
-	import { t } from '@nextcloud/l10n'
-	import orderBy from 'lodash/orderBy'
-	import moment from '@nextcloud/moment'
+import NcPopover from '@nextcloud/vue/components/NcPopover'
 
-	import NcPopover from '@nextcloud/vue/components/NcPopover'
+import { usePollStore } from '../../stores/poll.ts'
 
-	import { usePollStore } from '../../stores/poll.ts'
+import CalendarInfo from './CalendarInfo.vue'
+import { CalendarAPI } from '../../Api/index.js'
+import { Logger } from '../../helpers/index.ts'
+import { Option } from '../../Types/index.ts'
 
-	import CalendarInfo from './CalendarInfo.vue'
-	import { CalendarAPI } from '../../Api/index.js'
-	import { Logger } from '../../helpers/index.ts'
-	import { Option } from '../../Types/index.ts'
+const pollStore = usePollStore()
 
-	const pollStore = usePollStore()
+const props = defineProps({
+	option: {
+		type: Object as PropType<Option>,
+		default: undefined,
+	},
+})
 
-	const props = defineProps({
-		option: {
-			type: Object as PropType<Option>,
-			default: undefined,
-		},
-	})
+const events = ref([])
 
-	const events = ref([])
+const detectAllDay = computed(() => {
+	const from = moment.unix(props.option.timestamp)
+	const to = moment.unix(
+		props.option.timestamp + Math.max(0, props.option.duration),
+	)
+	const dayLongEvent =
+		from.unix() === moment(from).startOf('day').unix() &&
+		to.unix() === moment(to).startOf('day').unix() &&
+		from.unix() !== to.unix()
+	return {
+		allDay: dayLongEvent,
+		type: dayLongEvent ? 'date' : 'dateTime',
+	}
+})
 
-	const detectAllDay = computed(() => {
-		const from = moment.unix(props.option.timestamp)
-		const to = moment.unix(props.option.timestamp + Math.max(0, props.option.duration))
-		const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
-		return {
-			allDay: dayLongEvent,
-			type: dayLongEvent ? 'date' : 'dateTime',
-		}
-	})
+const sortedEvents = computed(() => {
+	const sortedEvents = [...events.value]
+	sortedEvents.push(currentOption.value)
+	return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
+})
 
-	const sortedEvents = computed(() => {
-		const sortedEvents = [...events.value]
-		sortedEvents.push(currentOption.value)
-		return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
-	})
+const currentOption = computed(() => ({
+	id: props.option.id,
+	UID: props.option.id,
+	calendarUri: '',
+	calendarKey: 0,
+	calendarName: 'Polls',
+	displayColor: 'transparent',
+	allDay: detectAllDay.value.allDay,
+	description: pollStore.configuration.description,
+	start: props.option.timestamp,
+	location: '',
+	end: props.option.timestamp + props.option.duration,
+	status: 'self',
+	summary: pollStore.configuration.title,
+	type: detectAllDay.value.type,
+}))
 
-	const currentOption = computed(() => ({
-		id: props.option.id,
-		UID: props.option.id,
-		calendarUri: '',
-		calendarKey: 0,
-		calendarName: 'Polls',
-		displayColor: 'transparent',
-		allDay: detectAllDay.value.allDay,
-		description: pollStore.configuration.description,
-		start: props.option.timestamp,
-		location: '',
-		end: props.option.timestamp + props.option.duration,
-		status: 'self',
-		summary: pollStore.configuration.title,
-		type: detectAllDay.value.type,
-	}))
-
-	onMounted(async () => {
-		try {
-			const response = await CalendarAPI.getEvents(props.option.id)
-			events.value = response.data.events
-		} catch (error) {
-			if (error?.code === 'ERR_CANCELED') return
-			Logger.error('Error fetching events', { error })
-		}
-	})
-
+onMounted(async () => {
+	try {
+		const response = await CalendarAPI.getEvents(props.option.id)
+		events.value = response.data.events
+	} catch (error) {
+		if (error?.code === 'ERR_CANCELED') return
+		Logger.error('Error fetching events', { error })
+	}
+})
 </script>
 
 <template>
@@ -86,7 +89,8 @@
 			</div>
 		</template>
 		<div class="calendar-peek__grid">
-			<CalendarInfo v-for="eventItem in sortedEvents"
+			<CalendarInfo
+				v-for="eventItem in sortedEvents"
 				:key="eventItem.UID"
 				:calendar-event="eventItem"
 				:option="option" />
@@ -95,7 +99,6 @@
 </template>
 
 <style lang="scss">
-
 .calendar-peek {
 	flex-direction: column;
 }
@@ -117,5 +120,4 @@
 	background-color: var(--color-main-background);
 	border-radius: var(--border-radius);
 }
-
 </style>

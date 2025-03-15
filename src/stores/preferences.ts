@@ -14,14 +14,14 @@ export enum ViewMode {
 
 export type UserPreferences = {
 	calendarPeek: boolean
-	checkCalendars: [],
-	checkCalendarsHoursBefore: number,
-	checkCalendarsHoursAfter: number,
+	checkCalendars: []
+	checkCalendarsHoursBefore: number
+	checkCalendarsHoursAfter: number
 	defaultViewTextPoll: ViewMode
 	defaultViewDatePoll: ViewMode
-	performanceThreshold: number,
-	pollCombo: number[],
-	relevantOffset: number,
+	performanceThreshold: number
+	pollCombo: number[]
+	relevantOffset: number
 	useNewAddOption: boolean
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
@@ -43,9 +43,9 @@ export type Calendar = {
 
 export type Preferences = {
 	user: UserPreferences
-	session: SessionSettings,
-	availableCalendars: Calendar[],
-	viewModes: ViewMode[],
+	session: SessionSettings
+	availableCalendars: Calendar[]
+	viewModes: ViewMode[]
 }
 
 export const usePreferencesStore = defineStore('preferences', {
@@ -92,12 +92,14 @@ export const usePreferencesStore = defineStore('preferences', {
 				return state.user.defaultViewDatePoll
 			}
 			return ViewMode.TableView
-
 		},
 	},
 
 	actions: {
-		writePreference(payload: { key: string, value: boolean|number|string|Array<string> }) {
+		writePreference(payload: {
+			key: string
+			value: boolean | number | string | Array<string>
+		}) {
 			this.$patch(payload)
 			this.write()
 		},
@@ -106,15 +108,15 @@ export const usePreferencesStore = defineStore('preferences', {
 			this.availableCalendars = payload.calendars
 		},
 
-		addCheckCalendar(calendar: Calendar ) {
+		addCheckCalendar(calendar: Calendar) {
 			this.user.checkCalendars.push(calendar.key)
 			this.write()
 		},
 
 		removeCheckCalendar(calendar: Calendar) {
-			const index = this.user.checkCalendars.indexOf(calendar.key);
+			const index = this.user.checkCalendars.indexOf(calendar.key)
 			if (index !== -1) {
-				this.user.checkCalendars.splice(index, 1);
+				this.user.checkCalendars.splice(index, 1)
 			}
 			this.write()
 		},
@@ -149,7 +151,10 @@ export const usePreferencesStore = defineStore('preferences', {
 				this.$patch({ user: response.data.preferences })
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error writing preferences', { error, preferences: this.user })
+				Logger.error('Error writing preferences', {
+					error,
+					preferences: this.user,
+				})
 				throw error
 			}
 		},

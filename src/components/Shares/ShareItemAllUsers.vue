@@ -4,34 +4,36 @@
 -->
 
 <script setup lang="ts">
-	import { computed } from 'vue'
-	import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-	import UserItem from '../User/UserItem.vue'
-	import { VirtualUserItemType } from '../../Types/index.ts'
-	import { usePollStore, AccessType } from '../../stores/poll.ts'
+import UserItem from '../User/UserItem.vue'
+import { VirtualUserItemType } from '../../Types/index.ts'
+import { usePollStore, AccessType } from '../../stores/poll.ts'
 
+const pollStore = usePollStore()
 
-	const pollStore = usePollStore()
+const userItemProps = computed(() => ({
+	label: t('polls', 'Internal access'),
+	type: VirtualUserItemType.InternalAccess,
+	disabled: pollStore.configuration.access === AccessType.Private,
+	description:
+		pollStore.configuration.access === AccessType.Private
+			? t('polls', 'This poll is private')
+			: t('polls', 'This is an openly accessible poll'),
+}))
 
-	const userItemProps = computed(() => ({
-		label: t('polls', 'Internal access'),
-		type: VirtualUserItemType.InternalAccess,
-		disabled: pollStore.configuration.access === AccessType.Private,
-		description: pollStore.configuration.access === AccessType.Private ? t('polls', 'This poll is private') : t('polls', 'This is an openly accessible poll'),
-	}))
-
-	const pollAccess = computed({
-		get() {
-			return pollStore.configuration.access === AccessType.Open
-		},
-		set(value) {
-			pollStore.configuration.access = value ? AccessType.Open : AccessType.Private
-			pollStore.write()
-		},
-	})
+const pollAccess = computed({
+	get() {
+		return pollStore.configuration.access === AccessType.Open
+	},
+	set(value) {
+		pollStore.configuration.access = value ? AccessType.Open : AccessType.Private
+		pollStore.write()
+	},
+})
 </script>
 
 <template>

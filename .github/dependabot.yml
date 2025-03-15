@@ -2,27 +2,27 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 version: 2
 updates:
-- package-ecosystem: npm
-  directory: "/"
-  schedule:
-    interval: daily
-    time: "03:00"
-    timezone: Europe/Paris
-  open-pull-requests-limit: 10
-  ignore:
-  - dependency-name: linkify-urls
-    versions:
-    - ">= 3.0.a"
-    - "< 3.1"
-  - dependency-name: linkify-urls
-    versions:
-    - ">= 3.1.a"
-    - "< 3.2"
-- package-ecosystem: composer
-  directory: "/"
-  schedule:
-    interval: weekly
-    day: saturday
-    time: "03:00"
-    timezone: Europe/Paris
-  open-pull-requests-limit: 10
+  - package-ecosystem: npm
+    directory: '/'
+    schedule:
+      interval: daily
+      time: '03:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: linkify-urls
+        versions:
+          - '>= 3.0.a'
+          - '< 3.1'
+      - dependency-name: linkify-urls
+        versions:
+          - '>= 3.1.a'
+          - '< 3.2'
+  - package-ecosystem: composer
+    directory: '/'
+    schedule:
+      interval: weekly
+      day: saturday
+      time: '03:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 10

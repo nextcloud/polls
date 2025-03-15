@@ -4,241 +4,282 @@
 -->
 
 <script setup lang="ts">
-	import { computed, ref, watch } from 'vue'
-	import { showError, showSuccess } from '@nextcloud/dialogs'
-	import { t } from '@nextcloud/l10n'
-	import moment from '@nextcloud/moment'
+import { computed, ref, watch } from 'vue'
+import { showError, showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
+import moment from '@nextcloud/moment'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-	import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
-	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
+import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
-	import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
-	import CheckIcon from 'vue-material-design-icons/Check.vue'
+import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
+import CheckIcon from 'vue-material-design-icons/Check.vue'
 
-	import { FlexSpacer } from '../Base/index.js'
-	import { useOptionsStore } from '../../stores/options.ts'
+import { FlexSpacer } from '../Base/index.js'
+import { useOptionsStore } from '../../stores/options.ts'
 
-	const optionsStore = useOptionsStore()
-	const props = defineProps({
-		caption: {
-			type: String,
-			default: undefined,
+const optionsStore = useOptionsStore()
+const props = defineProps({
+	caption: {
+		type: String,
+		default: undefined,
+	},
+})
+
+const pickerSelection = ref(null)
+const changed = ref(false)
+const pickerOpen = ref(false)
+const useRange = ref(false)
+const useTime = ref(false)
+const showTimePanel = ref(false)
+const lastPickedDate = ref(moment(null))
+const added = ref(false)
+const successColor = getComputedStyle(document.documentElement).getPropertyValue(
+	'--color-success',
+)
+
+const tempFormat = computed(() => {
+	if (useTime.value) {
+		return moment.localeData().longDateFormat('L LT')
+	}
+	return moment.localeData().longDateFormat('L')
+})
+
+const firstDOW = computed(() => {
+	// vue2-datepicker needs 7 for sunday
+	if (moment.localeData()._week.dow === 0) {
+		return 7
+	}
+	return moment.localeData()._week.dow
+})
+
+const pickerOptions = computed(() => ({
+	appendToBody: true,
+	editable: false,
+	minuteStep: 5,
+	type: useTime.value ? 'datetime' : 'date',
+	range: useRange.value,
+	key: useRange.value ? 'range-on' : 'range-off',
+	showSecond: false,
+	showTimePanel: showTimePanel.value,
+	valueType: 'timestamp',
+	format: tempFormat.value,
+	placeholder: t('polls', 'Click to add an option'),
+	lang: {
+		formatLocale: {
+			firstDayOfWeek: firstDOW.value,
+			months: moment.months(),
+			monthsShort: moment.monthsShort(),
+			weekdays: moment.weekdays(),
+			weekdaysMin: moment.weekdaysMin(),
 		},
-	})
+	},
+}))
 
-	const pickerSelection = ref(null)
-	const changed = ref(false)
-	const pickerOpen = ref(false)
-	const useRange = ref(false)
-	const useTime = ref(false)
-	const showTimePanel = ref(false)
-	const lastPickedDate = ref(moment(null))
-	const added = ref(false)
-	const successColor = getComputedStyle(document.documentElement).getPropertyValue('--color-success')
+const dateOption = computed(() => {
+	let from = moment()
+	let to = moment()
+	let text = ''
 
-	const tempFormat = computed(() => {
+	if (Array.isArray(pickerSelection.value)) {
+		from = moment(pickerSelection.value[0])
+		to = moment(pickerSelection.value[1])
+
+		// if a sigle day is selected while useRange is true and the paicker did not return a
+		// valid selection, use the single selected day
+		if (useRange.value && lastPickedDate.value) {
+			from = moment(lastPickedDate.value)
+				.hour(from.hour())
+				.minute(from.minute())
+			to = moment(lastPickedDate.value).hour(to.hour()).minute(to.minute())
+		}
+	} else {
+		from = moment(pickerSelection.value).startOf(
+			useTime.value ? 'minute' : 'day',
+		)
+		to = moment(pickerSelection.value).startOf(useTime.value ? 'minute' : 'day')
+	}
+
+	if (useRange.value) {
 		if (useTime.value) {
-			return moment.localeData().longDateFormat('L LT')
-		}
-		return moment.localeData().longDateFormat('L')
-	})
-
-	const firstDOW = computed(() => {
-		// vue2-datepicker needs 7 for sunday
-		if (moment.localeData()._week.dow === 0) {
-			return 7
-		}
-		return moment.localeData()._week.dow
-	})
-
-	const pickerOptions = computed(() => ({
-		appendToBody: true,
-		editable: false,
-		minuteStep: 5,
-		type: useTime.value ? 'datetime' : 'date',
-		range: useRange.value,
-		key: useRange.value ? 'range-on' : 'range-off',
-		showSecond: false,
-		showTimePanel: showTimePanel.value,
-		valueType: 'timestamp',
-		format: tempFormat.value,
-		placeholder: t('polls', 'Click to add an option'),
-		lang: {
-			formatLocale: {
-				firstDayOfWeek: firstDOW.value,
-				months: moment.months(),
-				monthsShort: moment.monthsShort(),
-				weekdays: moment.weekdays(),
-				weekdaysMin: moment.weekdaysMin(),
-			},
-		},
-	}))
-
-	const dateOption = computed(() => {
-		let from = moment()
-		let to = moment()
-		let text = ''
-
-		if (Array.isArray(pickerSelection.value)) {
-			from = moment(pickerSelection.value[0])
-			to = moment(pickerSelection.value[1])
-
-			// if a sigle day is selected while useRange is true and the paicker did not return a
-			// valid selection, use the single selected day
-			if (useRange.value && lastPickedDate.value) {
-				from = moment(lastPickedDate.value).hour(from.hour()).minute(from.minute())
-				to = moment(lastPickedDate.value).hour(to.hour()).minute(to.minute())
-			}
-		} else {
-			from = moment(pickerSelection.value).startOf(useTime.value ? 'minute' : 'day')
-			to = moment(pickerSelection.value).startOf(useTime.value ? 'minute' : 'day')
-		}
-
-		if (useRange.value) {
-			if (useTime.value) {
-				if (moment(from).startOf('day').valueOf() === moment(to).startOf('day').valueOf()) {
-					text = `${from.format('ll LT')} - ${to.format('LT')}`
-				} else {
-					text = `${from.format('ll LT')} - ${to.format('ll LT')}`
-				}
+			if (
+				moment(from).startOf('day').valueOf() ===
+				moment(to).startOf('day').valueOf()
+			) {
+				text = `${from.format('ll LT')} - ${to.format('LT')}`
 			} else {
-				from = from.startOf('day')
-				to = to.startOf('day')
-				if (moment(from).startOf('day').valueOf() === moment(to).startOf('day').valueOf()) {
-					text = from.format('ll')
-				} else {
-					text = `${from.format('ll')} - ${to.format('ll')}`
-				}
+				text = `${from.format('ll LT')} - ${to.format('ll LT')}`
 			}
-		} else if (useTime.value) {
-			text = from.format('ll LT')
 		} else {
-			text = from.startOf('day').format('ll')
+			from = from.startOf('day')
+			to = to.startOf('day')
+			if (
+				moment(from).startOf('day').valueOf() ===
+				moment(to).startOf('day').valueOf()
+			) {
+				text = from.format('ll')
+			} else {
+				text = `${from.format('ll')} - ${to.format('ll')}`
+			}
 		}
+	} else if (useTime.value) {
+		text = from.format('ll LT')
+	} else {
+		text = from.startOf('day').format('ll')
+	}
 
-		return {
-			isValid: from._isValid && to._isValid,
-			from,
-			to,
-			text,
-			option: {
-				timestamp: from.unix(),
-				duration: moment(to).add(useTime.value ? 0 : 1, 'day').unix() - from.unix(),
-				text: '',
-			},
-		}
-	})
+	return {
+		isValid: from._isValid && to._isValid,
+		from,
+		to,
+		text,
+		option: {
+			timestamp: from.unix(),
+			duration:
+				moment(to)
+					.add(useTime.value ? 0 : 1, 'day')
+					.unix() - from.unix(),
+			text: '',
+		},
+	}
+})
 
-	const buttonAriaLabel = computed(() => props.caption ?? t('polls', 'Add date'))
+const buttonAriaLabel = computed(() => props.caption ?? t('polls', 'Add date'))
 
-	watch(() => useRange.value, () => {
+watch(
+	() => useRange.value,
+	() => {
 		if (useRange.value && !Array.isArray(pickerSelection.value)) {
 			pickerSelection.value = [pickerSelection.value, pickerSelection.value]
 		} else if (!useRange.value && Array.isArray(pickerSelection.value)) {
 			pickerSelection.value = pickerSelection.value[0]
 		}
-	})
+	},
+)
 
-	/**
-	 *
-	 */
-	function changedDate() {
-		added.value = false
-		changed.value = true
+/**
+ *
+ */
+function changedDate() {
+	added.value = false
+	changed.value = true
+}
+
+/**
+ * The date picker does not update the values, if useRange is true and
+ * a single day is selected without a second click. Therfore we store
+ * the picked day to define the correct date selection inside the
+ * computed dateOptions property
+ *
+ * @param value - the picked date
+ */
+function pickedDate(value) {
+	// we rely on the behavior, that the changed event is fired before the picked event
+	// if the picker already returned a valid selection before, ignore picked date
+	added.value = false
+	if (changed.value) {
+		// reset changed status
+		changed.value = false
+		// reset the last picked date
+		lastPickedDate.value = null
+	} else {
+		// otherwise store the selection of the picked date
+		lastPickedDate.value = moment(value)
 	}
+	// keep picker open
+	pickerOpen.value = true
+}
 
-	/**
-	 * The date picker does not update the values, if useRange is true and
-	 * a single day is selected without a second click. Therfore we store
-	 * the picked day to define the correct date selection inside the
-	 * computed dateOptions property
-	 *
-	 * @param value - the picked date
-	 */
-	function pickedDate(value) {
-		// we rely on the behavior, that the changed event is fired before the picked event
-		// if the picker already returned a valid selection before, ignore picked date
-		added.value = false
-		if (changed.value) {
-			// reset changed status
-			changed.value = false
-			// reset the last picked date
-			lastPickedDate.value = null
+/**
+ *
+ */
+function addTime() {
+	added.value = false
+	if (useRange.value) {
+		// make sure, the pickerSelection is set to the last displayed status
+		pickerSelection.value = [
+			dateOption.value.from.valueOf(),
+			dateOption.value.to.valueOf(),
+		]
+	}
+	useTime.value = true
+	showTimePanel.value = true
+}
+
+/**
+ *
+ */
+function removeTime() {
+	added.value = false
+	if (useRange.value) {
+		// make sure, the pickerSelection is set to the last displayed status
+		pickerSelection.value = [
+			dateOption.value.from.valueOf(),
+			dateOption.value.to.valueOf(),
+		]
+	}
+	useTime.value = false
+	showTimePanel.value = false
+}
+
+/**
+ *
+ */
+function toggleTimePanel() {
+	if (showTimePanel.value) {
+		changed.value = false
+	} else if (useRange.value) {
+		// make sure, the pickerSelection is set to the last displayed status
+		pickerSelection.value = [
+			dateOption.value.from.valueOf(),
+			dateOption.value.to.valueOf(),
+		]
+	}
+	showTimePanel.value = !showTimePanel.value
+}
+
+/**
+ *
+ */
+async function addOption() {
+	if (useRange.value) {
+		// make sure, the pickerSelection is set to the last displayed status
+		pickerSelection.value = [
+			dateOption.value.from.valueOf(),
+			dateOption.value.to.valueOf(),
+		]
+	}
+	try {
+		await optionsStore.add(dateOption.value.option)
+		added.value = true
+		showSuccess(
+			t('polls', '{optionText} added', { optionText: dateOption.value.text }),
+		)
+	} catch (error) {
+		if (error.response.status === 409) {
+			showError(
+				t('polls', '{optionText} already exists', {
+					optionText: dateOption.value.text,
+				}),
+			)
 		} else {
-			// otherwise store the selection of the picked date
-			lastPickedDate.value = moment(value)
-		}
-		// keep picker open
-		pickerOpen.value = true
-	}
-
-	/**
-	 *
-	 */
-	function addTime() {
-		added.value = false
-		if (useRange.value) {
-			// make sure, the pickerSelection is set to the last displayed status
-			pickerSelection.value = [dateOption.value.from.valueOf(), dateOption.value.to.valueOf()]
-		}
-		useTime.value = true
-		showTimePanel.value = true
-	}
-
-	/**
-	 *
-	 */
-	function removeTime() {
-		added.value = false
-		if (useRange.value) {
-			// make sure, the pickerSelection is set to the last displayed status
-			pickerSelection.value = [dateOption.value.from.valueOf(), dateOption.value.to.valueOf()]
-		}
-		useTime.value = false
-		showTimePanel.value = false
-	}
-
-	/**
-	 *
-	 */
-	function toggleTimePanel() {
-		if (showTimePanel.value) {
-			changed.value = false
-		} else if (useRange.value) {
-			// make sure, the pickerSelection is set to the last displayed status
-			pickerSelection.value = [dateOption.value.from.valueOf(), dateOption.value.to.valueOf()]
-		}
-		showTimePanel.value = !showTimePanel.value
-	}
-
-	/**
-	 *
-	 */
-	async function addOption() {
-		if (useRange.value) {
-			// make sure, the pickerSelection is set to the last displayed status
-			pickerSelection.value = [dateOption.value.from.valueOf(), dateOption.value.to.valueOf()]
-		}
-		try {
-			await optionsStore.add(dateOption.value.option)
-			added.value = true
-			showSuccess(t('polls', '{optionText} added', { optionText: dateOption.value.text }))
-		} catch (error) {
-			if (error.response.status === 409) {
-				showError(t('polls', '{optionText} already exists', { optionText: dateOption.value.text }))
-			} else {
-				showError(t('polls', 'Error adding {optionText}', { optionText: dateOption.value.text }))
-			}
+			showError(
+				t('polls', 'Error adding {optionText}', {
+					optionText: dateOption.value.text,
+				}),
+			)
 		}
 	}
+}
 </script>
 
 <template>
-	<NcDateTimePicker v-model="pickerSelection"
+	<NcDateTimePicker
+		v-model="pickerSelection"
 		v-bind="pickerOptions"
 		v-model:open="pickerOpen"
-		style="width: inherit;"
+		style="width: inherit"
 		@change="changedDate"
 		@pick="pickedDate">
 		<template #input>
@@ -257,21 +298,21 @@
 				{{ t('polls', 'Select range') }}
 			</NcCheckboxRadioSwitch>
 			<div class="picker-buttons">
-				<NcButton v-if="useTime"
-					@click="toggleTimePanel">
+				<NcButton v-if="useTime" @click="toggleTimePanel">
 					<template #default>
-						{{ showTimePanel ? t('polls', 'Change date') : t('polls', 'Change time') }}
+						{{
+							showTimePanel
+								? t('polls', 'Change date')
+								: t('polls', 'Change time')
+						}}
 					</template>
 				</NcButton>
-				<NcButton v-if="useTime"
-					@click="removeTime">
+				<NcButton v-if="useTime" @click="removeTime">
 					<template #default>
 						{{ t('polls', 'Remove time') }}
 					</template>
 				</NcButton>
-				<NcButton v-else
-					:disabled="!dateOption.isValid"
-					@click="addTime">
+				<NcButton v-else :disabled="!dateOption.isValid" @click="addTime">
 					<template #default>
 						{{ t('polls', 'Add time') }}
 					</template>
@@ -285,10 +326,14 @@
 					{{ dateOption.text }}
 				</div>
 				<FlexSpacer />
-				<NcButton v-if="dateOption.option.duration >= 0 && !added" :type="ButtonType.Primary" @click="addOption">
+				<NcButton
+					v-if="dateOption.option.duration >= 0 && !added"
+					:type="ButtonType.Primary"
+					@click="addOption">
 					{{ t('polls', 'Add') }}
 				</NcButton>
-				<CheckIcon v-if="added"
+				<CheckIcon
+					v-if="added"
 					class="date-added"
 					:title="t('polls', 'Added')"
 					:fill-color="successColor"
@@ -315,7 +360,6 @@
 </style>
 
 <style lang="scss">
-
 .picker-buttons {
 	display: flex;
 	justify-content: flex-end;
@@ -336,5 +380,4 @@
 	justify-content: flex-end;
 	margin: 8px;
 }
-
 </style>

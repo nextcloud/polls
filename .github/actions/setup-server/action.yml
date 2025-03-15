@@ -52,7 +52,7 @@ inputs:
     desrcription: 'Password of the admin user (Default: password)'
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Checkout server ${{ inputs.server-version }}
       uses: actions/checkout@v4

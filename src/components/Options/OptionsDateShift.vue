@@ -4,49 +4,59 @@
 -->
 
 <script setup lang="ts">
-	import { ref } from 'vue'
-	import { t } from '@nextcloud/l10n'
+import { ref } from 'vue'
+import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
-	import NcSelect from '@nextcloud/vue/components/NcSelect'
+import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
 
-	import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
+import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
-	import { InputDiv } from '../Base/index.js'
-	import { dateUnits, DateUnitKeys, TimeUnitsType } from '../../constants/dateUnits.ts'
-	import { useOptionsStore } from '../../stores/options.ts'
-	import { usePollStore } from '../../stores/poll.ts'
+import { InputDiv } from '../Base/index.js'
+import { dateUnits, DateUnitKeys, TimeUnitsType } from '../../constants/dateUnits.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
-	const pollStore = usePollStore()
+const pollStore = usePollStore()
 
-	const optionsStore = useOptionsStore()
+const optionsStore = useOptionsStore()
 
-	const shift = ref<TimeUnitsType>({
-		value: 1,
-		unit: { name: t('polls', 'Week'), key: DateUnitKeys.Week },
-	})
+const shift = ref<TimeUnitsType>({
+	value: 1,
+	unit: { name: t('polls', 'Week'), key: DateUnitKeys.Week },
+})
 
-	function shiftDates(shift: TimeUnitsType) {
-		optionsStore.shift({ shift })
-	}
-
+function shiftDates(shift: TimeUnitsType) {
+	optionsStore.shift({ shift })
+}
 </script>
 
 <template>
 	<div>
 		<div v-if="pollStore.status.countProposals > 0">
-			{{ t('polls', 'Shifting dates is disabled to prevent shifting of proposals of other participants.') }}
+			{{
+				t(
+					'polls',
+					'Shifting dates is disabled to prevent shifting of proposals of other participants.',
+				)
+			}}
 		</div>
 		<div v-else class="select-unit">
-			<InputDiv v-model="shift.value" class="shift-step" :label="t('polls', 'Step width')" use-num-modifiers />
+			<InputDiv
+				v-model="shift.value"
+				class="shift-step"
+				:label="t('polls', 'Step width')"
+				use-num-modifiers />
 			<div class="unit-select">
-				<NcSelect v-model="shift.unit"
+				<NcSelect
+					v-model="shift.unit"
 					:input-label="t('polls', 'Step unit')"
 					:clearable="false"
 					:filterable="false"
 					:options="dateUnits"
 					label="name" />
-				<NcButton class="submit"
+				<NcButton
+					class="submit"
 					:aria-label="t('polls', 'Submit')"
 					:type="ButtonType.Tertiary"
 					@click="shiftDates(shift)">

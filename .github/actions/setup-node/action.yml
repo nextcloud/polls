@@ -8,12 +8,12 @@ inputs:
     description: 'Node version to use'
 
 outputs:
-  cache-hit: 
+  cache-hit:
     description: 'Return cache hit'
     value: ${{ steps.cache-modules.outputs.cache-hit }}
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Use or setup caching npm modules
       uses: actions/cache@v4

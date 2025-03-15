@@ -4,28 +4,29 @@
 -->
 
 <script setup lang="ts">
-	import { ref } from 'vue'
-	import { t } from '@nextcloud/l10n'
+import { ref } from 'vue'
+import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
-	import NcModal from '@nextcloud/vue/components/NcModal'
+import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcModal from '@nextcloud/vue/components/NcModal'
 
-	import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
+import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
 
-	const caption = t('polls', 'Register')
-	const showRegistration = ref(false)
-	const registerModalSize = 'large'
-
+const caption = t('polls', 'Register')
+const showRegistration = ref(false)
+const registerModalSize = 'large'
 </script>
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton :type="ButtonType.Primary"
+		<NcButton
+			:type="ButtonType.Primary"
 			:aria-label="caption"
 			@click="showRegistration = true">
 			{{ caption }}
 		</NcButton>
-		<NcModal v-model:show="showRegistration"
+		<NcModal
+			v-model:show="showRegistration"
 			:name="caption"
 			:size="registerModalSize"
 			:can-close="true"

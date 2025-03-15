@@ -4,37 +4,36 @@
 -->
 
 <script setup>
-	import { computed, ref } from 'vue'
-	import { marked } from 'marked'
-	import { gfmHeadingId } from 'marked-gfm-heading-id'
-	import DOMPurify from 'dompurify'
-	import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
-	import { t } from '@nextcloud/l10n'
+import { computed, ref } from 'vue'
+import { marked } from 'marked'
+import { gfmHeadingId } from 'marked-gfm-heading-id'
+import DOMPurify from 'dompurify'
+import LanguageMarkdownIcon from 'vue-material-design-icons/LanguageMarkdown.vue'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-	const appSettingsStore = useAppSettingsStore()
+const appSettingsStore = useAppSettingsStore()
 
-	const markedPrefix = {
-		prefix: 'disclaimer-',
-	}
+const markedPrefix = {
+	prefix: 'disclaimer-',
+}
 
-	const preview = ref(false)
-	const markedDisclaimer = computed(() => {
-		marked.use(gfmHeadingId(markedPrefix))
-		return DOMPurify.sanitize(marked.parse(appSettingsStore.disclaimer))
-	})
-
+const preview = ref(false)
+const markedDisclaimer = computed(() => {
+	marked.use(gfmHeadingId(markedPrefix))
+	return DOMPurify.sanitize(marked.parse(appSettingsStore.disclaimer))
+})
 </script>
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.legalTermsInEmail"
+		<NcCheckboxRadioSwitch
+			v-model="appSettingsStore.legalTermsInEmail"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
-
 			{{ t('polls', 'Add terms links also to the email footer') }}
 		</NcCheckboxRadioSwitch>
 
@@ -43,31 +42,35 @@
 				<span>{{ t('polls', 'Additional email disclaimer') }}</span>
 				<LanguageMarkdownIcon />
 			</div>
-			<NcCheckboxRadioSwitch v-model="preview"
+			<NcCheckboxRadioSwitch
+				v-model="preview"
 				type="switch"
 				@change="appSettingsStore.write()">
 				{{ t('polls', 'Preview') }}
 			</NcCheckboxRadioSwitch>
 		</div>
-		<textarea v-show="!preview" v-model="appSettingsStore.disclaimer" @change="appSettingsStore.write()" />
+		<textarea
+			v-show="!preview"
+			v-model="appSettingsStore.disclaimer"
+			@change="appSettingsStore.write()" />
 		<!-- eslint-disable-next-line vue/no-v-html -->
 		<div v-show="preview" class="polls-markdown" v-html="markedDisclaimer" />
 	</div>
 </template>
 
 <style lang="scss">
-	.disclaimer_group {
+.disclaimer_group {
+	display: flex;
+	align-items: center;
+
+	.grow_title {
 		display: flex;
-		align-items: center;
+		flex-grow: 1;
+		margin-right: 12px;
 
-		.grow_title {
-			display: flex;
-			flex-grow: 1;
-			margin-right: 12px;
-
-			.material-design-icon {
-				margin-left: 4px;
-			}
+		.material-design-icon {
+			margin-left: 4px;
 		}
 	}
+}
 </style>

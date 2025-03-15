@@ -2,7 +2,12 @@
  * SPDX-FileCopyrightText: 2019 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { RouteLocationNormalized, RouteRecordRaw, createWebHistory, createRouter } from 'vue-router'
+import {
+	RouteLocationNormalized,
+	RouteRecordRaw,
+	createWebHistory,
+	createRouter,
+} from 'vue-router'
 
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
@@ -23,7 +28,6 @@ import { FilterType } from './stores/polls.ts'
 import { useSessionStore } from './stores/session.ts'
 
 async function validateToken(to: RouteLocationNormalized) {
-
 	if (getCurrentUser()) {
 		try {
 			const response = await PublicAPI.getShare(to.params.token)
@@ -32,13 +36,13 @@ async function validateToken(to: RouteLocationNormalized) {
 			return {
 				name: 'vote',
 				params: {
-					id: response.data.share.pollId
-				}
+					id: response.data.share.pollId,
+				},
 			}
 		} catch (error) {
 			// in case of an error, reroute to the not found page
 			return {
-				name: 'notfound'
+				name: 'notfound',
 			}
 		}
 	}
@@ -60,15 +64,15 @@ async function validateToken(to: RouteLocationNormalized) {
 	if (personalToken && personalToken !== to.params.token) {
 		// participant has already access to the poll and a private token
 		// extend expiry time for 30 days after successful access
-		const cookieExpiration = (30 * 24 * 60 * 1000)
+		const cookieExpiration = 30 * 24 * 60 * 1000
 		setCookie(<string>to.params.token, personalToken, cookieExpiration)
 
 		// reroute to the public vote page using the personal token
 		return {
 			name: 'publicVote',
 			params: {
-				token: personalToken
-			}
+				token: personalToken,
+			},
 		}
 	}
 
@@ -89,7 +93,7 @@ const routes: RouteRecordRaw[] = [
 		meta: {
 			publicPage: false,
 			votePage: false,
-		}
+		},
 	},
 	{
 		path: '/administration',
@@ -101,7 +105,7 @@ const routes: RouteRecordRaw[] = [
 		meta: {
 			publicPage: false,
 			votePage: false,
-		}
+		},
 	},
 	{
 		path: '/combo',
@@ -114,7 +118,7 @@ const routes: RouteRecordRaw[] = [
 		meta: {
 			publicPage: false,
 			votePage: false,
-		}
+		},
 	},
 	{
 		path: '/not-found',
@@ -126,7 +130,7 @@ const routes: RouteRecordRaw[] = [
 		meta: {
 			publicPage: false,
 			votePage: false,
-		}
+		},
 	},
 	{
 		path: '/vote/:id',
@@ -140,7 +144,7 @@ const routes: RouteRecordRaw[] = [
 		meta: {
 			publicPage: false,
 			votePage: true,
-		}
+		},
 	},
 	{
 		path: '/s/:token',
@@ -154,7 +158,7 @@ const routes: RouteRecordRaw[] = [
 		meta: {
 			publicPage: true,
 			votePage: true,
-		}
+		},
 	},
 	{
 		path: '/',
@@ -168,8 +172,7 @@ const routes: RouteRecordRaw[] = [
 		meta: {
 			publicPage: false,
 			votePage: false,
-		}
-
+		},
 	},
 	{
 		path: '/list',
@@ -181,7 +184,7 @@ const routes: RouteRecordRaw[] = [
 		},
 		meta: {
 			publicPage: false,
-		}
+		},
 	},
 ]
 
@@ -210,7 +213,6 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
 		if (to.meta.votePage) {
 			await pollStore.load()
 		}
-
 	} catch (error) {
 		Logger.warn('Could not load poll', error)
 		return {

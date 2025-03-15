@@ -4,24 +4,23 @@
 -->
 
 <script setup lang="ts">
-	import { emit } from '@nextcloud/event-bus'
-	import { t } from '@nextcloud/l10n'
+import { emit } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
-	import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 
-	const caption = t('polls', 'Toggle Sidebar')
-	function clickAction() {
-		emit('polls:sidebar:toggle', null)
-	}
-
+const caption = t('polls', 'Toggle Sidebar')
+function clickAction() {
+	emit('polls:sidebar:toggle', null)
+}
 </script>
-
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton :type="ButtonType.Tertiary"
+		<NcButton
+			:type="ButtonType.Tertiary"
 			:title="caption"
 			:aria-label="caption"
 			@click="clickAction()">

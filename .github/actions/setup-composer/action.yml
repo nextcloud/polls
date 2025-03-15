@@ -26,12 +26,12 @@ inputs:
     default: ''
 
 outputs:
-  cache-hit: 
+  cache-hit:
     description: 'Return cache hit'
     value: ${{ steps.cache-composer.outputs.cache-hit }}
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Use or setup caching composer packages (${{ inputs.mode }})
       uses: actions/cache@v4

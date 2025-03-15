@@ -4,21 +4,18 @@
 -->
 
 <script setup lang="ts">
+import ActivityItem from './ActivityItem.vue'
+import { useActivityStore } from '../../stores/activity.ts'
 
-	import ActivityItem from './ActivityItem.vue'
-	import { useActivityStore } from '../../stores/activity.ts';
-
-	const activityStore = useActivityStore()
+const activityStore = useActivityStore()
 </script>
 
 <template>
-	<TransitionGroup name="list"
-		class="activities"
-		tag="ul">
-		<ActivityItem v-for="(item) in activityStore.list"
+	<TransitionGroup name="list" class="activities" tag="ul">
+		<ActivityItem
+			v-for="item in activityStore.list"
 			:key="item.activity_id"
 			:activity="item"
 			tag="li" />
 	</TransitionGroup>
 </template>
-

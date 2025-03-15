@@ -4,18 +4,19 @@
 -->
 
 <script setup lang="ts">
-	import { usePollsStore } from '../../stores/polls.ts'
-	import { useComboStore } from '../../stores/combo.ts'
+import { usePollsStore } from '../../stores/polls.ts'
+import { useComboStore } from '../../stores/combo.ts'
 
-	import UserItem from '../User/UserItem.vue'
+import UserItem from '../User/UserItem.vue'
 
-	const pollsStore = usePollsStore()
-	const comboStore = useComboStore()
+const pollsStore = usePollsStore()
+const comboStore = useComboStore()
 </script>
 
 <template>
 	<div class="side-bar-tab-polls">
-		<div v-for="(poll) in pollsStore.datePolls"
+		<div
+			v-for="poll in pollsStore.datePolls"
 			:key="poll.id"
 			:class="['poll-item', { listed: comboStore.pollIsListed(poll.id) }]"
 			@click="comboStore.togglePollItem(poll.id)">

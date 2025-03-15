@@ -1,6 +1,6 @@
-name: "Bug report: Nextcloud Polls"
-description: "Submit a report and help us improve Polls"
-labels: ["bug"]
+name: 'Bug report: Nextcloud Polls'
+description: 'Submit a report and help us improve Polls'
+labels: ['bug']
 
 body:
   - type: markdown
@@ -11,7 +11,7 @@ body:
   - type: checkboxes
     id: before-posting
     attributes:
-      label: "⚠️ This issue respects the following points: ⚠️"
+      label: '⚠️ This issue respects the following points: ⚠️'
       description: All conditions are **required**. Your issue can be closed if these are checked incorrectly.
       options:
         - label: This is a **bug**, not a question or a configuration/webserver/proxy issue.
@@ -71,9 +71,9 @@ body:
       description: |
         How did you install the Polls version, you are referring to, especially when experiencing update errors
       options:
-        - "Installed/updated from the appstore (Apps section of your site)"
-        - "Installed/updated using occ"
-        - "Installed/updated via extracting downloaded package to the apps folder"
+        - 'Installed/updated from the appstore (Apps section of your site)'
+        - 'Installed/updated using occ'
+        - 'Installed/updated via extracting downloaded package to the apps folder'
     validations:
       required: true
   - type: dropdown
@@ -83,10 +83,10 @@ body:
       description: |
         Was it an update or a first time installation
       options:
-        - "First time installation"
-        - "Updated from a minor version within same major version (i.e. 4.0.0 to 4.1.1)"
-        - "Updated from previous major version (i.e. 3.x.x to 4.x.x)"
-        - "Updated from a much older version (more than one major version)"
+        - 'First time installation'
+        - 'Updated from a minor version within same major version (i.e. 4.0.0 to 4.1.1)'
+        - 'Updated from previous major version (i.e. 3.x.x to 4.x.x)'
+        - 'Updated from a much older version (more than one major version)'
     validations:
       required: true
   - type: input
@@ -111,11 +111,11 @@ body:
       description: |
         Select **all** browsers you used, where the bug appeared.
       options:
-      - label: "Firefox"
-      - label: "Chrome"
-      - label: "Chromium/Chromium based (i.e. Edge)"
-      - label: "Safari"
-      - label: "Other/Don't know"
+        - label: 'Firefox'
+        - label: 'Chrome'
+        - label: 'Chromium/Chromium based (i.e. Edge)'
+        - label: 'Safari'
+        - label: "Other/Don't know"
   - type: input
     id: client-browser-other
     attributes:
@@ -151,11 +151,11 @@ body:
       description: |
         Which Nextcloud Server version are you running.
       options:
-        - "Nextcloud 27"
-        - "Nextcloud 28"
-        - "Nextcloud 29"
-        - "Nextcloud 30"
-        - "Nextcloud 31"
+        - 'Nextcloud 27'
+        - 'Nextcloud 28'
+        - 'Nextcloud 29'
+        - 'Nextcloud 30'
+        - 'Nextcloud 31'
         - "Other/Don't know"
     validations:
       required: true
@@ -172,10 +172,10 @@ body:
       description: |
         Select PHP engine version serving Nextcloud Server.
       options:
-        - "PHP 8.0"
-        - "PHP 8.1"
-        - "PHP 8.2"
-        - "PHP 8.3"
+        - 'PHP 8.0'
+        - 'PHP 8.1'
+        - 'PHP 8.2'
+        - 'PHP 8.3'
         - "Other/Don't know"
     validations:
       required: true
@@ -193,11 +193,11 @@ body:
       description: |
         Select Database engine serving Nextcloud Server.
       options:
-        - "MySQL"
-        - "MariaDB"
-        - "PostgreSQL"
-        - "SQlite"
-        - "Oracle"
+        - 'MySQL'
+        - 'MariaDB'
+        - 'PostgreSQL'
+        - 'SQlite'
+        - 'Oracle'
         - "Other/Don't know"
     validations:
       required: true
@@ -216,10 +216,10 @@ body:
         Select **all** user-backends Enabled on your Nextcloud Server.
         _Describe in the "Additional info" section if you chose "Other"._
       options:
-      - label: "Default user-backend _(database)_"
-      - label: "LDAP/ Active Directory"
-      - label: "SSO - SAML"
-      - label: "Other/Don't know"
+        - label: 'Default user-backend _(database)_'
+        - label: 'LDAP/ Active Directory'
+        - label: 'SSO - SAML'
+        - label: "Other/Don't know"
 
   - type: textarea
     id: server-nextcloud-log

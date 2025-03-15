@@ -10,8 +10,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
  * @param scrollElementId the id of the element that should be checked for scrolling
  * @param offset the offset in px that should be scrolled before returning the scroll value
  */
-export function useHandleScroll(scrollElementId: string, offset:number = 20) {
-
+export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 	const scrolled = ref(0)
 	const scrollElement = ref<HTMLElement>(null)
 

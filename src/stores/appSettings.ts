@@ -12,14 +12,13 @@ export enum UpdateType {
 	NoPolling = 'noPolling',
 	Periodic = 'periodicPolling',
 	LongPolling = 'longPolling',
-
 }
 export type Group = {
-	id: string,
-	userId: string,
-	displayName: string,
-	emailAddress: string,
-	isNoUser: boolean,
+	id: string
+	userId: string
+	displayName: string
+	emailAddress: string
+	isNoUser: boolean
 	type: string
 }
 
@@ -108,7 +107,10 @@ export const useAppSettingsStore = defineStore('appSettings', {
 				this.$patch(response.data.appSettings)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error writing appSettings', { error, appSettings: this.$state })
+				Logger.error('Error writing appSettings', {
+					error,
+					appSettings: this.$state,
+				})
 				throw error
 			}
 		},
@@ -128,4 +130,3 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		}, 500),
 	},
 })
-

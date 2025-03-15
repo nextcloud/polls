@@ -4,27 +4,30 @@
 -->
 
 <script setup lang="ts">
-	import { computed } from 'vue'
-	import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-	import { useSubscriptionStore } from '../../stores/subscription.ts'
-	import { useSessionStore } from '../../stores/session.ts'
+import { useSubscriptionStore } from '../../stores/subscription.ts'
+import { useSessionStore } from '../../stores/session.ts'
 
-	const sessionStore = useSessionStore()
-	const subscriptionStore = useSubscriptionStore()
+const sessionStore = useSessionStore()
+const subscriptionStore = useSubscriptionStore()
 
-	const label = computed(() => sessionStore.share.user.emailAddress
-		? t('polls', 'Receive notification email on activity to {emailAddress}', { emailAddress: sessionStore.share.user.emailAddress })
-		: t('polls', 'Receive notification email on activity')
-	)
-
+const label = computed(() =>
+	sessionStore.share.user.emailAddress
+		? t('polls', 'Receive notification email on activity to {emailAddress}', {
+				emailAddress: sessionStore.share.user.emailAddress,
+			})
+		: t('polls', 'Receive notification email on activity'),
+)
 </script>
 
 <template>
 	<div class="subscription">
-		<NcCheckboxRadioSwitch v-model="subscriptionStore.subscribed"
+		<NcCheckboxRadioSwitch
+			v-model="subscriptionStore.subscribed"
 			type="switch"
 			@change="subscriptionStore.write()">
 			{{ label }}
@@ -33,7 +36,7 @@
 </template>
 
 <style lang="css">
-	.subscription {
-		padding: 8px;
-	}
+.subscription {
+	padding: 8px;
+}
 </style>

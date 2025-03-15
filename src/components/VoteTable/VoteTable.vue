@@ -4,42 +4,51 @@
 -->
 
 <script setup lang="ts">
-	import { showSuccess } from '@nextcloud/dialogs'
-	import { t } from '@nextcloud/l10n'
+import { showSuccess } from '@nextcloud/dialogs'
+import { t } from '@nextcloud/l10n'
 
-	import { ActionDelete } from '../Actions/index.js'
+import { ActionDelete } from '../Actions/index.js'
 
-	import VoteColumn from './VoteColumn.vue'
-	import UserItem from '../User/UserItem.vue'
-	import { usePollStore } from '../../stores/poll.ts'
-	import { useSessionStore } from '../../stores/session.ts'
-	import { useOptionsStore } from '../../stores/options.ts'
-	import { useVotesStore } from '../../stores/votes.ts'
+import VoteColumn from './VoteColumn.vue'
+import UserItem from '../User/UserItem.vue'
+import { usePollStore } from '../../stores/poll.ts'
+import { useSessionStore } from '../../stores/session.ts'
+import { useOptionsStore } from '../../stores/options.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
-	const pollStore = usePollStore()
-	const sessionStore = useSessionStore()
-	const optionsStore = useOptionsStore()
-	const votesStore = useVotesStore()
+const pollStore = usePollStore()
+const sessionStore = useSessionStore()
+const optionsStore = useOptionsStore()
+const votesStore = useVotesStore()
 
-	async function removeUser(userId: string) {
-		await votesStore.deleteUser({ userId })
-		showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
-	}
-
+async function removeUser(userId: string) {
+	await votesStore.deleteUser({ userId })
+	showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
+}
 </script>
 
 <template>
-	<div class="vote-table" :class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
+	<div
+		class="vote-table"
+		:class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
 		<div class="vote-table__users sticky-left">
 			<div class="option-menu" />
 			<div class="column-header" />
 
-			<div v-for="(participant) in pollStore.safeParticipants"
+			<div
+				v-for="participant in pollStore.safeParticipants"
 				:key="participant.id"
-				:class="['participant', {'current-user': (participant.id === sessionStore.currentUser.id) }]">
+				:class="[
+					'participant',
+					{
+						'current-user':
+							participant.id === sessionStore.currentUser.id,
+					},
+				]">
 				<UserItem :user="participant" condensed />
 
-				<ActionDelete v-if="pollStore.permissions.edit"
+				<ActionDelete
+					v-if="pollStore.permissions.edit"
 					class="user-actions"
 					:name="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.id)" />
@@ -50,10 +59,9 @@
 			<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="confirm" /> -->
 		</div>
 
-		<TransitionGroup tag="div"
-			name="list"
-			class="vote-table__votes">
-			<VoteColumn v-for="(option) in optionsStore.orderedOptions"
+		<TransitionGroup tag="div" name="list" class="vote-table__votes">
+			<VoteColumn
+				v-for="option in optionsStore.orderedOptions"
 				:key="option.id"
 				:option="option"
 				:class="{ 'option-owner': option.isOwner }"
@@ -63,13 +71,13 @@
 </template>
 
 <style lang="scss">
-
 .vote-table {
 	display: flex;
 	flex: 1;
 	overflow-x: scroll;
 
-	.participant, .vote-item {
+	.participant,
+	.vote-item {
 		flex: 0 0 auto;
 		height: 4.5em;
 		order: 10;
@@ -77,7 +85,7 @@
 		padding: 6px;
 		border-radius: 12px;
 		&.current-user {
-			order:5;
+			order: 5;
 		}
 	}
 
@@ -127,7 +135,7 @@
 		max-width: 19em;
 		margin-bottom: 4px;
 
-		&>div {
+		& > div {
 			display: flex;
 			justify-content: center;
 			align-items: center;
@@ -136,7 +144,6 @@
 			flex: 1;
 			order: 1;
 		}
-
 	}
 
 	&.closed .vote-column {
@@ -154,16 +161,16 @@
 	}
 
 	.confirmation {
-		order:3;
+		order: 3;
 		padding: 4px;
 	}
 
 	.counter {
-		order:3;
+		order: 3;
 	}
 
 	.calendar-peek {
-		order:2;
+		order: 2;
 	}
 
 	.confirm {
@@ -198,7 +205,8 @@
 			}
 		}
 
-		.vote-table__users::after, .vote-column::after {
+		.vote-table__users::after,
+		.vote-column::after {
 			content: '';
 			height: 8px;
 			order: 99;
@@ -216,7 +224,8 @@
 			padding: 0 0.6em;
 		}
 
-		.participant, .vote-item {
+		.participant,
+		.vote-item {
 			&.current-user {
 				margin-bottom: 30px;
 			}
@@ -252,7 +261,8 @@
 			border-top: none;
 		}
 
-		.participant:not(.current-user), .vote-item:not(.current-user) {
+		.participant:not(.current-user),
+		.vote-item:not(.current-user) {
 			display: none;
 		}
 
@@ -286,7 +296,8 @@
 			margin: 0;
 			flex-direction: revert;
 
-			.confirm, .owner {
+			.confirm,
+			.owner {
 				display: none;
 			}
 		}
@@ -319,7 +330,7 @@
 
 		.calendar-peek {
 			order: 0;
-			padding-left:4px;
+			padding-left: 4px;
 		}
 
 		.calendar-peek__conflict.icon {
@@ -336,5 +347,4 @@
 		}
 	}
 }
-
 </style>

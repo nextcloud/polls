@@ -4,28 +4,31 @@
 -->
 
 <script setup>
-	import { t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-	import NcSelect from '@nextcloud/vue/components/NcSelect'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
 
-	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-	const appSettingsStore = useAppSettingsStore()
-
+const appSettingsStore = useAppSettingsStore()
 </script>
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.allowAllAccess"
+		<NcCheckboxRadioSwitch
+			v-model="appSettingsStore.allowAllAccess"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
-			{{ t('polls', 'Enable the creation of openly accessible polls globally') }}
+			{{
+				t('polls', 'Enable the creation of openly accessible polls globally')
+			}}
 		</NcCheckboxRadioSwitch>
 
 		<div v-if="!appSettingsStore.allowAllAccess" class="settings_details">
-			<NcSelect v-model="appSettingsStore.allAccessGroups"
-				:input-label="t('polls','Enable only for the following groups')"
+			<NcSelect
+				v-model="appSettingsStore.allAccessGroups"
+				:input-label="t('polls', 'Enable only for the following groups')"
 				label="displayName"
 				:options="appSettingsStore.groups"
 				:user-select="true"

@@ -8,8 +8,12 @@
  * @param {string} cookieValue Cookie value
  * @param {number} cookieExpiration expiration from now in seconds
  */
-const setCookie = (cookieName: string, cookieValue: string = '', cookieExpiration: number = 360) => {
-	const expirationTime = (new Date())
+const setCookie = (
+	cookieName: string,
+	cookieValue: string = '',
+	cookieExpiration: number = 360,
+) => {
+	const expirationTime = new Date()
 	expirationTime.setTime(expirationTime.getTime() + cookieExpiration)
 	document.cookie = `${cookieName}=${cookieValue};expires=${expirationTime.toUTCString()};path=/`
 }
@@ -18,13 +22,15 @@ const setCookie = (cookieName: string, cookieValue: string = '', cookieExpiratio
  * @param {string} cookieName Cookie name to read
  * @return {string} Cookie string ('name=value')
  */
-const findCookie = (cookieName: string): string => document.cookie.split(';').find((cookie) => cookie.split('=')[0] === cookieName)
+const findCookie = (cookieName: string): string =>
+	document.cookie.split(';').find((cookie) => cookie.split('=')[0] === cookieName)
 
 /**
  * @param {string} searchValue Cookie value to search for
  * @return {string} Cookie string ('name=value')
  */
-const findCookieByValue = (searchValue: string): string => document.cookie.split(';').find((cookie) => cookie.split('=')[1] === searchValue)
+const findCookieByValue = (searchValue: string): string =>
+	document.cookie.split(';').find((cookie) => cookie.split('=')[1] === searchValue)
 
 /**
  * @param {string} cookieName Cookie name to delete
@@ -59,4 +65,11 @@ const deleteCookieByValue = (searchValue: string): string | void => {
 	}
 }
 
-export { getCookieValue, findCookie, setCookie, deleteCookie, deleteCookieByValue, findCookieByValue }
+export {
+	getCookieValue,
+	findCookie,
+	setCookie,
+	deleteCookie,
+	deleteCookieByValue,
+	findCookieByValue,
+}

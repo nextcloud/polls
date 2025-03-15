@@ -10,7 +10,10 @@ const polls = {
 			method: 'GET',
 			url: 'polls',
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getPolls.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getPolls.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -19,7 +22,10 @@ const polls = {
 			method: 'GET',
 			url: 'administration/polls',
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getPollsForAdmin.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getPollsForAdmin.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -28,7 +34,10 @@ const polls = {
 			method: 'GET',
 			url: `poll/${pollId}/poll`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getPoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getPoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -37,7 +46,10 @@ const polls = {
 			method: 'GET',
 			url: `poll/${pollId}`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getPoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getPoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -46,7 +58,10 @@ const polls = {
 			method: 'GET',
 			url: `poll/${pollId}/watch`,
 			params: { offset: lastUpdated },
-			cancelToken: cancelTokenHandlerObject[this.watchPoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.watchPoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -54,7 +69,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `administration/poll/${pollId}/takeover`,
-			cancelToken: cancelTokenHandlerObject[this.takeOver.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.takeOver.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -66,7 +84,10 @@ const polls = {
 				type,
 				title,
 			},
-			cancelToken: cancelTokenHandlerObject[this.addPoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.addPoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -75,7 +96,10 @@ const polls = {
 			method: 'PUT',
 			url: `poll/${pollId}`,
 			data: { poll },
-			cancelToken: cancelTokenHandlerObject[this.writePoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.writePoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -83,7 +107,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `poll/${pollId}`,
-			cancelToken: cancelTokenHandlerObject[this.deletePoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.deletePoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -91,7 +118,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/close`,
-			cancelToken: cancelTokenHandlerObject[this.closePoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.closePoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -99,7 +129,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/reopen`,
-			cancelToken: cancelTokenHandlerObject[this.reopenPoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.reopenPoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -107,7 +140,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/toggleArchive`,
-			cancelToken: cancelTokenHandlerObject[this.toggleArchive.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.toggleArchive.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -115,7 +151,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/clone`,
-			cancelToken: cancelTokenHandlerObject[this.clonePoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.clonePoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -123,7 +162,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/confirmation`,
-			cancelToken: cancelTokenHandlerObject[this.sendConfirmation.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.sendConfirmation.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -131,7 +173,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/addresses`,
-			cancelToken: cancelTokenHandlerObject[this.getParticipantsEmailAddresses.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getParticipantsEmailAddresses.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -139,7 +184,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/subscription`,
-			cancelToken: cancelTokenHandlerObject[this.getSubscription.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getSubscription.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -147,7 +195,10 @@ const polls = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}${subscription ? '/subscribe' : '/unsubscribe'}`,
-			cancelToken: cancelTokenHandlerObject[this.setSubscription.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.setSubscription.name
+				].handleRequestCancellation().token,
 		})
 	},
 }
