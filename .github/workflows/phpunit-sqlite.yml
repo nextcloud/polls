@@ -12,9 +12,7 @@ on:
   pull_request:
   push:
     branches:
-      - master
-      - next
-      - stable*
+      - main
 
 permissions:
   contents: read
