@@ -158,6 +158,7 @@ OC.L10N.register(
     "Change date" : "Camudar la data",
     "Change time" : "Camudar la hora",
     "All day" : "Tol día",
+    "Duration" : "Duración",
     "Preview" : "Previsualizar",
     "_year_::_years_" : ["añu","años"],
     "_month_::_months_" : ["mes","meses"],

@@ -157,6 +157,7 @@ OC.L10N.register(
     "Added" : "Lisätty",
     "Pick a day." : "Valitse päivä.",
     "All day" : "Koko päivä",
+    "Duration" : "Kesto",
     "Preview" : "Esikatselu",
     "_year_::_years_" : ["vuosi","vuotta"],
     "_month_::_months_" : ["kuukausi","kuukautta"],

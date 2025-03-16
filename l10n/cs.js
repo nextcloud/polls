@@ -363,6 +363,7 @@ OC.L10N.register(
     "Error adding Option" : "Chyba při přidávání volby",
     "Add times" : "Přidat časy",
     "All day" : "Celý den",
+    "Duration" : "Trvání",
     "Duration time unit" : "Jednotka času doby trvání",
     "Repetitions" : "Opakování",
     "Preview" : "Náhled",

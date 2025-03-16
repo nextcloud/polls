@@ -285,6 +285,7 @@ OC.L10N.register(
     "Added" : "Gehituta",
     "Pick a day." : "Aukeratu egun bat.",
     "All day" : "Egun osoa",
+    "Duration" : "Iraupena",
     "Preview" : "Aurrebista",
     "_year_::_years_" : ["urte","urte"],
     "_month_::_months_" : ["hilabete","hilabete"],

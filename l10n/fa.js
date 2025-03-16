@@ -269,6 +269,7 @@ OC.L10N.register(
     "Added" : "Added",
     "Pick a day." : "Pick a day.",
     "All day" : "تمام روز",
+    "Duration" : "مدت زمان",
     "Preview" : "پیش‌نمایش",
     "_year_::_years_" : ["سال","سال ها"],
     "_month_::_months_" : ["ماه","ماه ها"],

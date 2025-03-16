@@ -363,6 +363,7 @@ OC.L10N.register(
     "Error adding Option" : "Error adding Option",
     "Add times" : "Add times",
     "All day" : "All day",
+    "Duration" : "Duration",
     "Duration time unit" : "Duration time unit",
     "Repetitions" : "Repetitions",
     "Preview" : "Preview",

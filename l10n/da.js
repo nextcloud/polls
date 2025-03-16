@@ -36,6 +36,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Delete option" : "Slet valg",
     "All day" : "Hele dagen",
+    "Duration" : "Varighed",
     "Preview" : "Forhåndsvisning",
     "_year_::_years_" : ["år","år"],
     "_month_::_months_" : ["måned","måneder"],

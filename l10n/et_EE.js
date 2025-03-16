@@ -68,6 +68,7 @@ OC.L10N.register(
     "Remove time" : "Eemalda aeg",
     "Add time" : "Lisa aeg",
     "All day" : "Kogu päev",
+    "Duration" : "Kestus",
     "Preview" : "Eelvaade",
     "_month_::_months_" : ["kuu","kuud"],
     "_day_::_days_" : ["päev","päeva"],

@@ -18,6 +18,7 @@ OC.L10N.register(
     "Week" : "Wythnos",
     "OK" : "Iawn",
     "All day" : "Drwy'r dydd",
+    "Duration" : "Hyd",
     "Preview" : "Rhagolwg",
     "_year_::_years_" : ["blwyddyn","blwyddyn","flwyddyn","blwyddyn"],
     "_month_::_months_" : ["mis","mis","mis","mis"],

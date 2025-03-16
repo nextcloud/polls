@@ -269,6 +269,7 @@ OC.L10N.register(
     "Added" : "Agregado",
     "Pick a day." : "Elige un día.",
     "All day" : "Todo el día",
+    "Duration" : "Duración",
     "Preview" : "Previsualizar",
     "_year_::_years_" : ["año","años","años"],
     "_month_::_months_" : ["mes","meses","meses"],
