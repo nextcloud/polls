@@ -538,7 +538,7 @@ OC.L10N.register(
     "Locked shares (read only access)" : "Gesperrte Freigaben (Nur Lesezugriff)",
     "Unsent invitations" : "Nicht gesendete Einladungen",
     "Resolve and send all invitations" : "Auflösen und alle Einladungen versenden",
-    "No activity yet" : "Benötigt keine Übersetzung. Hier wird nur die formelle Übersetzung verwendet (de_DE).",
+    "No activity yet" : "Bislang keine Aktivitäten",
     "No comments" : "Keine Kommentare",
     "Be the first." : "Sei der Erste.",
     "Error {action} poll." : "Fehler {action} Umfrage.",
