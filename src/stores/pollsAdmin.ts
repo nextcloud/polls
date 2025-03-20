@@ -9,7 +9,7 @@ import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
 import { Logger } from '../helpers/index.ts'
 import { PollsAPI } from '../Api/index.js'
-import { SortType, sortColumnsMapping, PollList, FilterType } from './polls.ts'
+import { SortType, sortColumnsMapping, PollList, FilterType, usePollsStore } from './polls.ts'
 import { Poll } from './poll.ts'
 import { StatusResults } from '../Types/index.ts'
 
@@ -50,7 +50,7 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 	},
 
 	actions: {
-		async load(): Promise<void> {
+		async load(loadUserPolls = false): Promise<void> {
 			this.meta.status = StatusResults.Loading
 			if (!getCurrentUser().isAdmin) {
 				return
@@ -59,6 +59,10 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 			try {
 				const response = await PollsAPI.getPollsForAdmin()
 				this.list = response.data
+				if(loadUserPolls) {
+					const pollsStore = usePollsStore()
+					await pollsStore.load()
+				}
 				this.meta.status = StatusResults.Loaded
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -112,7 +116,7 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 				Logger.error('Error archiving/restoring poll', { error, payload })
 				throw error
 			} finally {
-				this.load()
+				this.load(true)
 			}
 		},
 
