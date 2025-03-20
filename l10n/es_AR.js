@@ -35,6 +35,7 @@ OC.L10N.register(
     "No activity yet" : "Aún no hay actividades",
     "Description" : "Descripción",
     "Change name" : "Cambiar nombre",
+    "Administration" : "Administración",
     "Preferences" : "Preferencias",
     "Comments" : "Comentarios",
     "Details" : "Detalles",

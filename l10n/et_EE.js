@@ -135,6 +135,7 @@ OC.L10N.register(
     "Delete votes" : "Kustuta sissekanded",
     "Poll settings" : "Küsitluse sätted",
     "Other settings" : "Muud sätted",
+    "Email options" : "E-posti valikud",
     "Loading polls…" : "Küsitluste laadimine…",
     "Administration" : "Haldus",
     "{username} will get notified." : "{username}saab teavituse.",
