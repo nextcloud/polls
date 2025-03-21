@@ -13,7 +13,6 @@ use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\Entity;
 use OCP\Server;
-use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-suppress UnusedProperty
