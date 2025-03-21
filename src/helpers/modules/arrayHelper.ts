@@ -3,15 +3,18 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Comment, Option, Vote, Participant } from "../../Types"
+import { Comment, Option, Vote, Participant } from '../../Types'
 
 const uniqueArrayOfObjects = (array: unknown[]) =>
-	[...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) => JSON.parse(string))
+	[...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) =>
+		JSON.parse(string),
+	)
 
 const uniqueOptions = (options: Option[]) =>
-	options.filter((option, index, array) =>
-		array.findIndex((compare) =>
-			(compare.text === option.text)) === index)
+	options.filter(
+		(option, index, array) =>
+			array.findIndex((compare) => compare.text === option.text) === index,
+	)
 
 const uniqueParticipants = (votes: Vote[]): Participant[] => {
 	const participants: Participant[] = votes.map((vote) => ({

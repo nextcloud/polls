@@ -4,48 +4,52 @@
 -->
 
 <script setup lang="ts">
-	import { computed, PropType } from 'vue'
-	import { getCurrentUser } from '@nextcloud/auth'
+import { computed, PropType } from 'vue'
+import { getCurrentUser } from '@nextcloud/auth'
 
-	import Counter from '../Options/Counter.vue'
-	import OptionItem from '../Options/OptionItem.vue'
-	import VoteItem from './VoteItem.vue'
-	import CalendarPeek from '../Calendar/CalendarPeek.vue'
-	import { usePollStore, PollType } from '../../stores/poll.ts'
-	import { usePreferencesStore } from '../../stores/preferences.ts'
-	import { Option } from '../../stores/options.ts'
+import Counter from '../Options/Counter.vue'
+import OptionItem from '../Options/OptionItem.vue'
+import VoteItem from './VoteItem.vue'
+import CalendarPeek from '../Calendar/CalendarPeek.vue'
+import { usePollStore, PollType } from '../../stores/poll.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { Option } from '../../stores/options.ts'
 
-	import { BoxType } from '../../Types/index.ts'
-	import OptionMenu from '../Options/OptionMenu.vue'
+import { BoxType } from '../../Types/index.ts'
+import OptionMenu from '../Options/OptionMenu.vue'
 
-	const pollStore = usePollStore()
-	const preferencesStore = usePreferencesStore()
+const pollStore = usePollStore()
+const preferencesStore = usePreferencesStore()
 
-	const props = defineProps({
-		option: {
-			type: Object as PropType<Option>,
-			default: undefined,
-		},
-	})
+const props = defineProps({
+	option: {
+		type: Object as PropType<Option>,
+		default: undefined,
+	},
+})
 
-	const componentClass = computed(() => {
-		const classList = ['vote-column']
-		if (props.option.locked) {
-			classList.push('locked')
-		}
+const componentClass = computed(() => {
+	const classList = ['vote-column']
+	if (props.option.locked) {
+		classList.push('locked')
+	}
 
-		if (props.option.confirmed && pollStore.isClosed) {
-			classList.push('confirmed')
-		}
-		if (props.option.votes.currentUser) {
-			classList.push(props.option.votes.currentUser)
-		}
+	if (props.option.confirmed && pollStore.isClosed) {
+		classList.push('confirmed')
+	}
+	if (props.option.votes.currentUser) {
+		classList.push(props.option.votes.currentUser)
+	}
 
-		return classList
-	})
+	return classList
+})
 
-	const showCalendarPeek = computed(() => pollStore.type === PollType.Date && getCurrentUser() && preferencesStore.user.calendarPeek)
-
+const showCalendarPeek = computed(
+	() =>
+		pollStore.type === PollType.Date &&
+		getCurrentUser() &&
+		preferencesStore.user.calendarPeek,
+)
 </script>
 
 <template>
@@ -54,20 +58,26 @@
 			<OptionMenu :option="option" />
 		</div>
 		<div class="column-header">
-			<OptionItem :option="option"
+			<OptionItem
+				:option="option"
 				:poll-type="pollStore.type"
-				:display="pollStore.type === PollType.Date ? BoxType.Date : BoxType.Text" />
+				:display="
+					pollStore.type === PollType.Date ? BoxType.Date : BoxType.Text
+				" />
 
-			<Counter v-if="pollStore.permissions.seeResults"
+			<Counter
+				v-if="pollStore.permissions.seeResults"
 				:show-maybe="pollStore.configuration.allowMaybe"
 				:option="option" />
 
-			<CalendarPeek v-if="showCalendarPeek"
+			<CalendarPeek
+				v-if="showCalendarPeek"
 				:focus-trap="false"
 				:option="option" />
 		</div>
 
-		<VoteItem v-for="(participant) in pollStore.safeParticipants"
+		<VoteItem
+			v-for="participant in pollStore.safeParticipants"
 			:key="participant.id"
 			:user="participant"
 			:option="option" />
@@ -75,7 +85,6 @@
 </template>
 
 <style lang="scss">
-
 .option-menu {
 	align-self: center;
 	flex: 0 0 34px;
@@ -92,5 +101,4 @@
 		background-color: var(--color-polls-background-no);
 	}
 }
-
 </style>

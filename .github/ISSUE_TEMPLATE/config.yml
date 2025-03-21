@@ -1,5 +1,5 @@
 blank_issues_enabled: false
 contact_links:
-    - name: ❓ Polls Community Support and Help
-      url: https://help.nextcloud.com/c/apps/polls/94
-      about: Configuration or usage questions regarding Polls
+  - name: ❓ Polls Community Support and Help
+    url: https://help.nextcloud.com/c/apps/polls/94
+    about: Configuration or usage questions regarding Polls

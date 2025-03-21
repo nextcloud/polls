@@ -1,23 +1,23 @@
 # SPDX-FileCopyrightText: 2022 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Read polls version from info.xml
-inputs: 
+inputs:
   skip-check:
     description: Do not check tag against version
     required: false
-    type:  boolean
+    type: boolean
     default: false
 
 outputs:
-  app-version: 
+  app-version:
     description: 'Version string from app'
     value: ${{ steps.appinfo.outputs.info }}
-  tag-version: 
+  tag-version:
     description: 'Version string from tag'
     value: ${{ steps.gettag.outputs.VERSION }}
 
 runs:
-  using: "composite"
+  using: 'composite'
   steps:
     - name: Get app version from appinfo/info.xml
       id: appinfo

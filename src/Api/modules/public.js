@@ -10,7 +10,10 @@ const publicPoll = {
 			method: 'GET',
 			url: `/s/${shareToken}/poll`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getPoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getPoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -19,7 +22,10 @@ const publicPoll = {
 			method: 'GET',
 			url: `/s/${shareToken}/session`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getSession.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getSession.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -28,7 +34,10 @@ const publicPoll = {
 			method: 'GET',
 			url: `s/${shareToken}/watch`,
 			params: { offset: lastUpdated },
-			cancelToken: cancelTokenHandlerObject[this.watchPoll.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.watchPoll.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -37,7 +46,10 @@ const publicPoll = {
 			method: 'GET',
 			url: `/s/${shareToken}/options`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getOptions.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getOptions.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -46,7 +58,10 @@ const publicPoll = {
 			method: 'POST',
 			url: `/s/${shareToken}/option`,
 			data: { ...option },
-			cancelToken: cancelTokenHandlerObject[this.addOption.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.addOption.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -55,7 +70,10 @@ const publicPoll = {
 			method: 'DELETE',
 			url: `s/${shareToken}/option/${optionId}`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.deleteOption.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.deleteOption.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -65,7 +83,10 @@ const publicPoll = {
 			url: `s/${shareToken}/option/${optionId}/restore`,
 			params: { time: +new Date() },
 
-			cancelToken: cancelTokenHandlerObject[this.restoreOption.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.restoreOption.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -74,7 +95,10 @@ const publicPoll = {
 			method: 'GET',
 			url: `/s/${shareToken}/votes`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getVotes.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getVotes.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -83,7 +107,10 @@ const publicPoll = {
 			method: 'PUT',
 			url: `s/${shareToken}/vote`,
 			data: { optionId, setTo },
-			cancelToken: cancelTokenHandlerObject[this.setVote.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.setVote.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -91,7 +118,10 @@ const publicPoll = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/user`,
-			cancelToken: cancelTokenHandlerObject[this.removeVotes.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.removeVotes.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -99,7 +129,10 @@ const publicPoll = {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/votes/orphaned`,
-			cancelToken: cancelTokenHandlerObject[this.removeOrphanedVotes.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.removeOrphanedVotes.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -108,7 +141,10 @@ const publicPoll = {
 			method: 'GET',
 			url: `/s/${shareToken}/comments`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getComments.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getComments.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -118,7 +154,10 @@ const publicPoll = {
 			url: `s/${shareToken}/comment`,
 			data: { message },
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.addComment.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.addComment.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -128,7 +167,10 @@ const publicPoll = {
 			url: `s/${shareToken}/comment/${commentId}`,
 			params: { time: +new Date() },
 
-			cancelToken: cancelTokenHandlerObject[this.deleteComment.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.deleteComment.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -138,7 +180,10 @@ const publicPoll = {
 			url: `s/${shareToken}/comment/${commentId}/restore`,
 			params: { time: +new Date() },
 
-			cancelToken: cancelTokenHandlerObject[this.restoreComment.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.restoreComment.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -147,7 +192,10 @@ const publicPoll = {
 			method: 'GET',
 			url: `s/${shareToken}/share`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getShare.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getShare.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -156,7 +204,10 @@ const publicPoll = {
 			method: 'PUT',
 			url: `s/${shareToken}/email/${emailAddress}`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.setEmailAddress.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.setEmailAddress.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -165,7 +216,10 @@ const publicPoll = {
 			method: 'DELETE',
 			url: `s/${shareToken}/email`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.deleteEmailAddress.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.deleteEmailAddress.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -174,7 +228,10 @@ const publicPoll = {
 			method: 'PUT',
 			url: `s/${shareToken}/name/${displayName}`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.setDisplayName.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.setDisplayName.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -183,7 +240,10 @@ const publicPoll = {
 			method: 'POST',
 			url: `s/${shareToken}/resend`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.resendInvitation.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.resendInvitation.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -191,7 +251,10 @@ const publicPoll = {
 		return httpInstance.request({
 			method: 'GET',
 			url: `s/${shareToken}/subscription`,
-			cancelToken: cancelTokenHandlerObject[this.getSubscription.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getSubscription.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -199,7 +262,10 @@ const publicPoll = {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}${subscription ? '/subscribe' : '/unsubscribe'}`,
-			cancelToken: cancelTokenHandlerObject[this.setSubscription.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.setSubscription.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -213,7 +279,10 @@ const publicPoll = {
 				timeZone,
 			},
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.register.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.register.name
+				].handleRequestCancellation().token,
 		})
 	},
 }

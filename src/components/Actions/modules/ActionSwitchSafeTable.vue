@@ -4,19 +4,19 @@
 -->
 
 <script setup lang="ts">
-	import { t } from '@nextcloud/l10n'
-	import { usePollStore } from '../../../stores/poll.ts'
+import { t } from '@nextcloud/l10n'
+import { usePollStore } from '../../../stores/poll.ts'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
-	const pollStore = usePollStore()
-	const caption = t('polls', 'Reveal them')
-
+const pollStore = usePollStore()
+const caption = t('polls', 'Reveal them')
 </script>
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton :type="ButtonType.Primary"
+		<NcButton
+			:type="ButtonType.Primary"
 			:aria-label="caption"
 			@click="pollStore.revealParticipants = true">
 			{{ caption }}

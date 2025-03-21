@@ -10,7 +10,5 @@ import AdminSettingsPage from './views/AdminSettingsPage.vue'
 
 // Vue.config.devtools = import.meta.env.MODE !== 'production'
 
-const Polls = createApp(AdminSettingsPage)
-	.use(pinia)
+const Polls = createApp(AdminSettingsPage).use(pinia)
 Polls.mount('#content_polls')
-

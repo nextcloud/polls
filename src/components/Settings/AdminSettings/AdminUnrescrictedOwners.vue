@@ -4,28 +4,29 @@
 -->
 
 <script setup>
-	import { t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-	import NcSelect from '@nextcloud/vue/components/NcSelect'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
 
-	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
-	import CardDiv from '../../Base/modules/CardDiv.vue'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+import CardDiv from '../../Base/modules/CardDiv.vue'
 
-	const appSettingsStore = useAppSettingsStore()
-
+const appSettingsStore = useAppSettingsStore()
 </script>
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.unrestrictedOwner"
+		<NcCheckboxRadioSwitch
+			v-model="appSettingsStore.unrestrictedOwner"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
 			{{ t('polls', 'Enable unrestricted Owners globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!appSettingsStore.unrestrictedOwner" class="settings_details">
-			<NcSelect v-model="appSettingsStore.unrestrictedOwnerGroups"
-				:input-label="t('polls','Enable only for the following groups')"
+			<NcSelect
+				v-model="appSettingsStore.unrestrictedOwnerGroups"
+				:input-label="t('polls', 'Enable only for the following groups')"
 				label="displayName"
 				:options="appSettingsStore.groups"
 				:user-select="true"
@@ -40,8 +41,22 @@
 				{{ t('polls', 'Effects on restricted owners:') }}
 			</p>
 			<ul>
-				<li>{{ t('polls', 'Anonymizing a poll of a restricted owner means that this poll is anonymous for everyone, including the owner.') }}</li>
-				<li>{{ t('polls', 'Deletion and changing votes of participants is not possible') }}</li>
+				<li>
+					{{
+						t(
+							'polls',
+							'Anonymizing a poll of a restricted owner means that this poll is anonymous for everyone, including the owner.',
+						)
+					}}
+				</li>
+				<li>
+					{{
+						t(
+							'polls',
+							'Deletion and changing votes of participants is not possible',
+						)
+					}}
+				</li>
 			</ul>
 		</CardDiv>
 	</div>

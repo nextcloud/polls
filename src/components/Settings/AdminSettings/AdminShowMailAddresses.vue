@@ -4,27 +4,30 @@
 -->
 
 <script setup>
-	import { t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-	import NcSelect from '@nextcloud/vue/components/NcSelect'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcSelect from '@nextcloud/vue/components/NcSelect'
 
-	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-	const appSettingsStore = useAppSettingsStore()
-
+const appSettingsStore = useAppSettingsStore()
 </script>
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.showMailAddresses"
+		<NcCheckboxRadioSwitch
+			v-model="appSettingsStore.showMailAddresses"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
 			{{ t('polls', 'Show email addresses of internal accounts') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!appSettingsStore.showMailAddresses" class="settings_details">
-			<NcSelect v-model="appSettingsStore.showMailAddressesGroups"
-				:input-label="t('polls','Show only to members of the following groups')"
+			<NcSelect
+				v-model="appSettingsStore.showMailAddressesGroups"
+				:input-label="
+					t('polls', 'Show only to members of the following groups')
+				"
 				label="displayName"
 				:options="appSettingsStore.groups"
 				:user-select="true"

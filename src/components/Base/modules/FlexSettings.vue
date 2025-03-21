@@ -23,9 +23,9 @@
 }
 
 .settings-description {
-	margin-top: -.2em;
+	margin-top: -0.2em;
 	margin-bottom: 1em;
-	opacity: .7;
+	opacity: 0.7;
 }
 
 .user_settings {
@@ -42,5 +42,4 @@
 	padding-bottom: 16px;
 	margin-left: 36px;
 }
-
 </style>

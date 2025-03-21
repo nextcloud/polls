@@ -36,4 +36,4 @@ changelog:
         - performance
     - title: Other Changes
       labels:
-        - "*"
+        - '*'

@@ -54,8 +54,11 @@ export const useVotesStore = defineStore('votes', {
 		},
 
 		getVote(payload: { user: User; option: Option }): Vote {
-			const found = this.list.find((vote: Vote) => (vote.user.id === payload.user.id
-					&& vote.optionText === payload.option.text))
+			const found = this.list.find(
+				(vote: Vote) =>
+					vote.user.id === payload.user.id &&
+					vote.optionText === payload.option.text,
+			)
 			if (found === undefined) {
 				return {
 					answer: Answer.None,
@@ -76,9 +79,13 @@ export const useVotesStore = defineStore('votes', {
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.getVotes(sessionStore.route.params.token)
+					response = await PublicAPI.getVotes(
+						sessionStore.route.params.token,
+					)
 				} else if (sessionStore.route.name === 'vote') {
-					Logger.debug('Loading votes for poll', { pollId: sessionStore.route.params.id })
+					Logger.debug('Loading votes for poll', {
+						pollId: sessionStore.route.params.id,
+					})
 					response = await VotesAPI.getVotes(sessionStore.route.params.id)
 				} else {
 					this.$reset()
@@ -94,10 +101,12 @@ export const useVotesStore = defineStore('votes', {
 		},
 
 		setItem(payload: { option: Option; vote: Vote }) {
-			const index = this.list.findIndex((vote: Vote) =>
-				vote.pollId === payload.option.pollId
-				&& vote.user.id === payload.vote.user.id
-				&& vote.optionText === payload.option.text)
+			const index = this.list.findIndex(
+				(vote: Vote) =>
+					vote.pollId === payload.option.pollId &&
+					vote.user.id === payload.vote.user.id &&
+					vote.optionText === payload.option.text,
+			)
 			if (index > -1) {
 				this.list[index] = Object.assign(this.list[index], payload.vote)
 				return
@@ -111,9 +120,16 @@ export const useVotesStore = defineStore('votes', {
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.setVote(sessionStore.route.params.token, payload.option.id, payload.setTo)
+					response = await PublicAPI.setVote(
+						sessionStore.route.params.token,
+						payload.option.id,
+						payload.setTo,
+					)
 				} else {
-					response = await VotesAPI.setVote(payload.option.id, payload.setTo)
+					response = await VotesAPI.setVote(
+						payload.option.id,
+						payload.setTo,
+					)
 				}
 
 				this.setItem({ option: payload.option, vote: response.data.vote })
@@ -138,12 +154,15 @@ export const useVotesStore = defineStore('votes', {
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.removeVotes(sessionStore.route.params.token)
+					response = await PublicAPI.removeVotes(
+						sessionStore.route.params.token,
+					)
 				} else {
-					response = await VotesAPI.removeUser(sessionStore.route.params.id)
+					response = await VotesAPI.removeUser(
+						sessionStore.route.params.id,
+					)
 				}
 				StoreHelper.updateStores(response.data)
-
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error deleting votes', { error })
@@ -154,7 +173,10 @@ export const useVotesStore = defineStore('votes', {
 		async deleteUser(payload) {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await VotesAPI.removeUser(sessionStore.route.params.id, payload.userId)
+				const response = await VotesAPI.removeUser(
+					sessionStore.route.params.id,
+					payload.userId,
+				)
 				StoreHelper.updateStores(response.data)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -168,7 +190,9 @@ export const useVotesStore = defineStore('votes', {
 			const pollStore = usePollStore()
 			try {
 				if (sessionStore.route.name === 'publicVote') {
-					await PublicAPI.removeOrphanedVotes(sessionStore.route.params.token)
+					await PublicAPI.removeOrphanedVotes(
+						sessionStore.route.params.token,
+					)
 				} else {
 					await VotesAPI.removeOrphanedVotes(sessionStore.route.params.id)
 				}
@@ -179,6 +203,5 @@ export const useVotesStore = defineStore('votes', {
 				throw error
 			}
 		},
-
 	},
 })

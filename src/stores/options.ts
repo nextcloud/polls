@@ -20,7 +20,7 @@ export enum RankedType {
 }
 
 export type Sequence = {
-	unit: DateUnitType,
+	unit: DateUnitType
 	stepWidth: number
 	repetitions: number
 }
@@ -72,12 +72,18 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		rankedOptions(state): Option[] {
-			return orderBy(state.list, ['votes.yes', 'votes.maybe'], ['desc', 'desc'])
+			return orderBy(
+				state.list,
+				['votes.yes', 'votes.maybe'],
+				['desc', 'desc'],
+			)
 		},
 
 		sortedOptions(state): Option[] {
 			const pollStore = usePollStore()
-			return pollStore.type === PollType.Date ? orderBy(state.list, ['timestamp'], ['asc']) : state.list
+			return pollStore.type === PollType.Date
+				? orderBy(state.list, ['timestamp'], ['asc'])
+				: state.list
 		},
 
 		orderedOptions(state): Option[] {
@@ -87,12 +93,14 @@ export const useOptionsStore = defineStore('options', {
 		confirmed(state): Option[] {
 			return state.list.filter((option) => option.confirmed > 0)
 		},
-
 	},
 
 	actions: {
 		find(timestamp: number, duration: number): Option | undefined {
-			return this.list.find((option) => option.timestamp === timestamp && option.duration === duration)
+			return this.list.find(
+				(option) =>
+					option.timestamp === timestamp && option.duration === duration,
+			)
 		},
 
 		explodeDates(option: Option) {
@@ -102,7 +110,10 @@ export const useOptionsStore = defineStore('options', {
 			// is the duration divisable through 24 hours without rest
 			// then we have a day long event (one or multiple days)
 			// In this case we want to suppress the display of any time information
-			const dayLongEvent = from.unix() === moment(from).startOf('day').unix() && to.unix() === moment(to).startOf('day').unix() && from.unix() !== to.unix()
+			const dayLongEvent =
+				from.unix() === moment(from).startOf('day').unix() &&
+				to.unix() === moment(to).startOf('day').unix() &&
+				from.unix() !== to.unix()
 
 			const dayModifier = dayLongEvent ? 1 : 0
 			// modified to date, in case of day long events, a second gets substracted
@@ -116,7 +127,9 @@ export const useOptionsStore = defineStore('options', {
 
 			return {
 				from: {
-					month: from.format(moment().year() === from.year() ? 'MMM' : 'MMM [ \']YY'),
+					month: from.format(
+						moment().year() === from.year() ? 'MMM' : "MMM [ ']YY",
+					),
 					day: from.format('D'),
 					dow: from.format('ddd'),
 					time: from.format('LT'),
@@ -126,7 +139,9 @@ export const useOptionsStore = defineStore('options', {
 					utc: moment(from).utc().format('llll'),
 				},
 				to: {
-					month: toModified.format(moment().year() === toModified.year() ? 'MMM' : 'MMM [ \']YY'),
+					month: toModified.format(
+						moment().year() === toModified.year() ? 'MMM' : "MMM [ ']YY",
+					),
 					day: toModified.format('D'),
 					dow: toModified.format('ddd'),
 					time: to.format('LT'),
@@ -140,7 +155,6 @@ export const useOptionsStore = defineStore('options', {
 				raw: `${from.format('llll')} - ${toModified.format('llll')}`,
 				iso: `${moment(from).toISOString()} - ${moment(to).toISOString()}`,
 			}
-
 		},
 
 		async load() {
@@ -149,9 +163,13 @@ export const useOptionsStore = defineStore('options', {
 				let response = null
 
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.getOptions(sessionStore.route.params.token)
+					response = await PublicAPI.getOptions(
+						sessionStore.route.params.token,
+					)
 				} else if (sessionStore.route.params.id) {
-					response = await OptionsAPI.getOptions(sessionStore.route.params.id)
+					response = await OptionsAPI.getOptions(
+						sessionStore.route.params.id,
+					)
 				} else {
 					this.$reset()
 					return
@@ -160,14 +178,17 @@ export const useOptionsStore = defineStore('options', {
 				this.list = response.data.options
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error loding options', { error, pollId: sessionStore.route.params.id })
+				Logger.error('Error loding options', {
+					error,
+					pollId: sessionStore.route.params.id,
+				})
 				throw error
 			}
 		},
 
 		updateOption(payload: { option: Option }) {
-			const index = this.list.findIndex((option) =>
-				parseInt(option.id) === payload.option.id,
+			const index = this.list.findIndex(
+				(option) => parseInt(option.id) === payload.option.id,
 			)
 
 			if (index < 0) {
@@ -175,7 +196,9 @@ export const useOptionsStore = defineStore('options', {
 			} else {
 				this.list.splice(index, 1, payload.option)
 			}
-			this.list.sort((a, b) => (a.order < b.order) ? -1 : (a.order > b.order) ? 1 : 0)
+			this.list.sort((a, b) =>
+				a.order < b.order ? -1 : a.order > b.order ? 1 : 0,
+			)
 		},
 
 		async add(payload: SimpleOption) {
@@ -193,14 +216,12 @@ export const useOptionsStore = defineStore('options', {
 						},
 					)
 				} else {
-					response = await OptionsAPI.addOption(
-						{
-							pollId: sessionStore.route.params.id,
-							timestamp: payload.timestamp,
-							text: payload.text,
-							duration: payload.duration,
-						},
-					)
+					response = await OptionsAPI.addOption({
+						pollId: sessionStore.route.params.id,
+						timestamp: payload.timestamp,
+						text: payload.text,
+						duration: payload.duration,
+					})
 				}
 				this.list.push(response.data.option)
 				return response.data.option
@@ -228,7 +249,10 @@ export const useOptionsStore = defineStore('options', {
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.deleteOption(sessionStore.route.params.token, payload.option.id)
+					response = await PublicAPI.deleteOption(
+						sessionStore.route.params.token,
+						payload.option.id,
+					)
 				} else {
 					response = await OptionsAPI.deleteOption(payload.option.id)
 				}
@@ -245,7 +269,10 @@ export const useOptionsStore = defineStore('options', {
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.restoreOption(sessionStore.route.params.token, payload.option.id)
+					response = await PublicAPI.restoreOption(
+						sessionStore.route.params.token,
+						payload.option.id,
+					)
 				} else {
 					response = await OptionsAPI.restoreOption(payload.option.id)
 				}
@@ -260,7 +287,10 @@ export const useOptionsStore = defineStore('options', {
 		async addBulk(payload: { text: string }) {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await OptionsAPI.addOptions(sessionStore.route.params.id, payload.text)
+				const response = await OptionsAPI.addOptions(
+					sessionStore.route.params.id,
+					payload.text,
+				)
 				this.list = response.data.options
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -271,13 +301,17 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		confirmOption(payload: { option: Option }) {
-			const index = this.list.findIndex((option: Option) => option.id === payload.option.id)
+			const index = this.list.findIndex(
+				(option: Option) => option.id === payload.option.id,
+			)
 
 			this.list[index].confirmed = !this.list[index].confirmed
 		},
 
 		async confirm(payload: { option: Option }) {
-			const index = this.list.findIndex((option: Option) => option.id === payload.option.id)
+			const index = this.list.findIndex(
+				(option: Option) => option.id === payload.option.id,
+			)
 			this.list[index].confirmed = !this.list[index].confirmed
 
 			try {
@@ -294,13 +328,21 @@ export const useOptionsStore = defineStore('options', {
 		async changeOrder(oldIndex: number, newIndex: number) {
 			const sessionStore = useSessionStore()
 
-			this.list.splice(newIndex, 0, this.list.splice(oldIndex, 1)[0]);
+			this.list.splice(newIndex, 0, this.list.splice(oldIndex, 1)[0])
 
 			try {
-				const response = await OptionsAPI.reorderOptions(sessionStore.route.params.id, this.list.map(({ id, text }) => ({ id, text })))
+				const response = await OptionsAPI.reorderOptions(
+					sessionStore.route.params.id,
+					this.list.map(({ id, text }) => ({ id, text })),
+				)
 				this.list = response.data.options
 			} catch (error) {
-				Logger.error('Error reordering option', { error, options: this.list, oldIndex, newIndex})
+				Logger.error('Error reordering option', {
+					error,
+					options: this.list,
+					oldIndex,
+					newIndex,
+				})
 				this.load()
 				throw error
 			}

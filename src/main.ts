@@ -15,8 +15,8 @@ import ClickOutside from 'v-click-outside'
 const Polls = createApp(App)
 	.use(pinia)
 	.use(router)
-	.use(ClickOutside)	
+	.use(ClickOutside)
 	.directive('focus', {
-		mounted: (el) => el.focus()
+		mounted: (el) => el.focus(),
 	})
 Polls.mount('#content_polls')

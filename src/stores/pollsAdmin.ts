@@ -31,7 +31,10 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 				id: FilterType.Admin,
 				title: t('polls', 'Relevant'),
 				titleExt: t('polls', 'Relevant polls'),
-				description: t('polls', 'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to.'),
+				description: t(
+					'polls',
+					'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to.',
+				),
 				pinned: false,
 				createDependent: false,
 				filterCondition: () => null,
@@ -77,12 +80,11 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 			this.sort.by = payload.sortBy
 		},
 
-
 		async takeOver(payload: { pollId: number }): Promise<void> {
 			if (!getCurrentUser().isAdmin) {
 				return
 			}
-	
+
 			try {
 				await PollsAPI.takeOver(payload.pollId)
 				this.load()
@@ -115,6 +117,5 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 				this.load()
 			}
 		},
-
 	},
 })

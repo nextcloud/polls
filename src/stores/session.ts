@@ -39,7 +39,7 @@ export type Session = {
 	token: string | null
 	appPermissions: AppPermissions
 	appSettings: AppSettings
-	currentUser: User |null
+	currentUser: User | null
 	sessionSettings: SessionSettings
 	viewModes: ViewMode[]
 	route: Route
@@ -100,8 +100,8 @@ export const useSessionStore = defineStore('session', {
 			unrestrictedOwnerGroups: [],
 			groups: [],
 			status: {
-				loadingGroups: false
-			}
+				loadingGroups: false,
+			},
 		},
 		route: {
 			currentRoute: '',
@@ -111,7 +111,7 @@ export const useSessionStore = defineStore('session', {
 				id: 0,
 				token: '',
 				type: FilterType.Relevant,
-			}
+			},
 		},
 		userStatus: {
 			isLoggedin: !!getCurrentUser(),
@@ -219,10 +219,12 @@ export const useSessionStore = defineStore('session', {
 			}
 
 			try {
-				const response = await PublicAPI.setEmailAddress(this.route.params.token, payload.emailAddress)
+				const response = await PublicAPI.setEmailAddress(
+					this.route.params.token,
+					payload.emailAddress,
+				)
 				this.share = response.data.share
 				pollStore.load()
-
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error writing email address', { error, payload })
@@ -241,13 +243,15 @@ export const useSessionStore = defineStore('session', {
 			}
 
 			try {
-				const response = await PublicAPI.setDisplayName(this.route.params.token, payload.displayName)
+				const response = await PublicAPI.setDisplayName(
+					this.route.params.token,
+					payload.displayName,
+				)
 				this.share = response.data.share
 				pollStore.load()
 				commentsStore.load()
 				votesStore.load()
 				optionsStore.load()
-
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error changing name', { error, payload })
@@ -255,7 +259,7 @@ export const useSessionStore = defineStore('session', {
 			}
 		},
 
-		async deleteEmailAddress(): Promise<void>{
+		async deleteEmailAddress(): Promise<void> {
 			const pollStore = usePollStore()
 			const subscriptionStore = useSubscriptionStore()
 
@@ -264,7 +268,9 @@ export const useSessionStore = defineStore('session', {
 			}
 
 			try {
-				const response = await PublicAPI.deleteEmailAddress(this.route.params.token)
+				const response = await PublicAPI.deleteEmailAddress(
+					this.route.params.token,
+				)
 				this.share = response.data.share
 				subscriptionStore.$state.subscribed = false
 				subscriptionStore.write()
@@ -285,7 +291,10 @@ export const useSessionStore = defineStore('session', {
 				return await PublicAPI.resendInvitation(this.route.params.token)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error sending invitation', { error, token: this.route.params.token })
+				Logger.error('Error sending invitation', {
+					error,
+					token: this.route.params.token,
+				})
 				throw error
 			}
 		},

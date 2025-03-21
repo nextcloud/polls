@@ -4,8 +4,8 @@
 -->
 
 <script setup lang="ts">
-	import { usePollStore } from '../../stores/poll.ts'
-	const pollStore = usePollStore()
+import { usePollStore } from '../../stores/poll.ts'
+const pollStore = usePollStore()
 </script>
 
 <template>
@@ -34,7 +34,8 @@
 		color: var(--color-main-text);
 	}
 
-	td, th {
+	td,
+	th {
 		padding: 1px 4px;
 	}
 }

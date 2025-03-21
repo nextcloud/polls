@@ -4,13 +4,12 @@
 -->
 
 <script setup lang="ts">
-
-	const props = defineProps({
-		tag: {
-			type: String,
-			default: 'div',
-		},
-	})
+const props = defineProps({
+	tag: {
+		type: String,
+		default: 'div',
+	},
+})
 </script>
 
 <template>
@@ -20,7 +19,7 @@
 </template>
 
 <style lang="scss">
-	.spacer {
-		flex: 1;
-	}
+.spacer {
+	flex: 1;
+}
 </style>

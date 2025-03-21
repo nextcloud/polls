@@ -4,24 +4,25 @@
 -->
 
 <script setup lang="ts">
-	import { ref } from 'vue'
+import { ref } from 'vue'
 
-	const clamped = ref(true)
+const clamped = ref(true)
 
-	/**
-	 * Toggles the clamped state
-	 */
-	function toggleClamp() {
-		clamped.value = !clamped.value
-	}
-
+/**
+ * Toggles the clamped state
+ */
+function toggleClamp() {
+	clamped.value = !clamped.value
+}
 </script>
 
 <template>
 	<div class="header_bar">
 		<div class="header_bar_top">
 			<div class="bar_top_left">
-				<div :class="['header_title', { 'clamped': clamped }]" @click="toggleClamp()">
+				<div
+					:class="['header_title', { clamped: clamped }]"
+					@click="toggleClamp()">
 					<slot name="title" />
 				</div>
 				<div class="bar_top_left_sub">
@@ -37,8 +38,6 @@
 		</div>
 	</div>
 </template>
-
-
 
 <style lang="scss">
 .page--scrolled .header_bar_bottom {
@@ -83,7 +82,7 @@
 		}
 	}
 
-	[class*="bar_"] {
+	[class*='bar_'] {
 		flex: 0;
 	}
 }

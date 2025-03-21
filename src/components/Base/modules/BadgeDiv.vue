@@ -4,12 +4,12 @@
 -->
 
 <script setup lang="ts">
-	defineProps({
-		tag: {
-			type: String,
-			default: 'span',
-		},
-	})
+defineProps({
+	tag: {
+		type: String,
+		default: 'span',
+	},
+})
 </script>
 
 <template>
@@ -22,39 +22,37 @@
 </template>
 
 <style lang="scss">
+.badge {
+	display: flex;
+	align-items: center;
+	gap: 5px;
+	border-radius: var(--border-radius);
+	padding: 5px;
+	text-align: center;
+	line-height: 1.1em;
+	font-size: 0.9em;
+	overflow: hidden;
 
-	.badge {
-		display: flex;
-		align-items: center;
-		gap: 5px;
-		border-radius: var(--border-radius);
-		padding: 5px;
-		text-align: center;
-		line-height: 1.1em;
-		font-size: 0.9em;
+	span {
 		overflow: hidden;
-
-		span {
-			overflow: hidden;
-			text-overflow: ellipsis;
-			white-space: nowrap;
-		}
-
-		h2 & {
-			font-size: 0.6em;
-		}
-
-		&.error {
-			border-color: var(--color-error);
-			background-color: var(--color-error);
-			color: var(--color-primary-element-text) !important;
-		}
-
-		&.success {
-			border-color: var(--color-success);
-			background-color: var(--color-success);
-			color: var(--color-primary-element-text) !important;
-		}
+		text-overflow: ellipsis;
+		white-space: nowrap;
 	}
 
+	h2 & {
+		font-size: 0.6em;
+	}
+
+	&.error {
+		border-color: var(--color-error);
+		background-color: var(--color-error);
+		color: var(--color-primary-element-text) !important;
+	}
+
+	&.success {
+		border-color: var(--color-success);
+		background-color: var(--color-success);
+		color: var(--color-primary-element-text) !important;
+	}
+}
 </style>

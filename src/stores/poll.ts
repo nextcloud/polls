@@ -29,7 +29,6 @@ import { useSubscriptionStore } from './subscription.ts'
 import { useSharesStore } from './shares.ts'
 import { useCommentsStore } from './comments.ts'
 
-
 export enum PollType {
 	Text = 'textPoll',
 	Date = 'datePoll',
@@ -249,8 +248,10 @@ export const usePollStore = defineStore('poll', {
 			if (preferencesStore.viewModes.indexOf(this.viewMode) < 0) {
 				return preferencesStore.viewModes[1]
 			}
-			return preferencesStore.viewModes[(preferencesStore.viewModes.indexOf(this.viewMode) + 1) % preferencesStore.viewModes.length]
-
+			return preferencesStore.viewModes[
+				(preferencesStore.viewModes.indexOf(this.viewMode) + 1) %
+					preferencesStore.viewModes.length
+			]
 		},
 
 		typeName(state) {
@@ -266,7 +267,6 @@ export const usePollStore = defineStore('poll', {
 				return [noString, Answer.Yes, Answer.Maybe]
 			}
 			return [noString, Answer.Yes]
-
 		},
 
 		participants(state): User[] {
@@ -274,10 +274,19 @@ export const usePollStore = defineStore('poll', {
 			const participants = this.participantsVoted
 
 			// add current user, if not among participants and voting is allowed
-			if (!participants.find((participant: User) => participant.id === sessionStore.currentUser.id) && sessionStore.currentUser.id && state.permissions.vote) {
+			if (
+				!participants.find(
+					(participant: User) =>
+						participant.id === sessionStore.currentUser.id,
+				) &&
+				sessionStore.currentUser.id &&
+				state.permissions.vote
+			) {
 				participants.push(sessionStore.currentUser)
 			}
-			return this.sortParticipants === SortParticipants.Alphabetical ? orderBy(participants, ['displayName'], ['asc']) : participants
+			return this.sortParticipants === SortParticipants.Alphabetical
+				? orderBy(participants, ['displayName'], ['asc'])
+				: participants
 		},
 
 		safeParticipants() {
@@ -291,18 +300,23 @@ export const usePollStore = defineStore('poll', {
 		participantsVoted(): User[] {
 			const votesStore = useVotesStore()
 
-			return uniqueArrayOfObjects(votesStore.list.map((vote) => (
-				vote.user
-			)))
+			return uniqueArrayOfObjects(votesStore.list.map((vote) => vote.user))
 		},
 
 		getProposalsOptions: () => [
-			{ value: AllowProposals.Disallow, label: t('polls', 'Disallow proposals') },
+			{
+				value: AllowProposals.Disallow,
+				label: t('polls', 'Disallow proposals'),
+			},
 			{ value: AllowProposals.Allow, label: t('polls', 'Allow proposals') },
 		],
 
 		displayResults(state) {
-			return state.configuration.showResults === ShowResults.Always || (state.configuration.showResults === ShowResults.Closed && !this.closed)
+			return (
+				state.configuration.showResults === ShowResults.Always ||
+				(state.configuration.showResults === ShowResults.Closed &&
+					!this.closed)
+			)
 		},
 
 		isProposalOpen() {
@@ -310,7 +324,10 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isProposalAllowed(state) {
-			return state.configuration.allowProposals === AllowProposals.Allow || state.configuration.allowProposals === AllowProposals.Review
+			return (
+				state.configuration.allowProposals === AllowProposals.Allow ||
+				state.configuration.allowProposals === AllowProposals.Review
+			)
 		},
 
 		isConfirmationAllowed(state) {
@@ -322,7 +339,11 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isProposalExpired(state) {
-			return this.isProposalAllowed && state.configuration.proposalsExpire && moment.unix(state.configuration.proposalsExpire).diff() < 0
+			return (
+				this.isProposalAllowed &&
+				state.configuration.proposalsExpire &&
+				moment.unix(state.configuration.proposalsExpire).diff() < 0
+			)
 		},
 
 		isProposalExpirySet(state) {
@@ -338,12 +359,19 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isClosed(state) {
-			return (state.status.isExpired || state.configuration.expire > 0 && moment.unix(state.configuration.expire).diff() < 1000)
+			return (
+				state.status.isExpired ||
+				(state.configuration.expire > 0 &&
+					moment.unix(state.configuration.expire).diff() < 1000)
+			)
 		},
 
 		getSafeTable(state) {
 			const preferencesStore = usePreferencesStore()
-			return !state.revealParticipants && this.countCells > preferencesStore.user.performanceThreshold
+			return (
+				!state.revealParticipants &&
+				this.countCells > preferencesStore.user.performanceThreshold
+			)
 		},
 
 		countParticipants() {
@@ -369,7 +397,9 @@ export const usePollStore = defineStore('poll', {
 
 		descriptionMarkUp() {
 			marked.use(gfmHeadingId(markedPrefix))
-			return DOMPurify.sanitize(marked.parse(this.configuration.description).toString())
+			return DOMPurify.sanitize(
+				marked.parse(this.configuration.description).toString(),
+			)
 		},
 	},
 
@@ -414,9 +444,13 @@ export const usePollStore = defineStore('poll', {
 				let response = null
 
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.getPoll(sessionStore.route.params.token)
+					response = await PublicAPI.getPoll(
+						sessionStore.route.params.token,
+					)
 				} else if (sessionStore.route.name === 'vote') {
-					response = await PollsAPI.getFullPoll(sessionStore.route.params.id)
+					response = await PollsAPI.getFullPoll(
+						sessionStore.route.params.id,
+					)
 					if (sessionStore.appSettings.useActivity) {
 						await activityStore.load()
 					}
@@ -457,7 +491,10 @@ export const usePollStore = defineStore('poll', {
 				await PollsAPI.lockAnonymous(this.id)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error locking poll to anonymous:', { error, state: this.$state })
+				Logger.error('Error locking poll to anonymous:', {
+					error,
+					state: this.$state,
+				})
 				throw error
 			} finally {
 				// reload the poll
@@ -465,7 +502,7 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		write: debounce(async function() {
+		write: debounce(async function () {
 			const pollsStore = usePollsStore()
 
 			if (this.configuration.title === '') {
@@ -474,10 +511,15 @@ export const usePollStore = defineStore('poll', {
 			}
 
 			try {
-				const response = await PollsAPI.writePoll(this.id, this.configuration)
+				const response = await PollsAPI.writePoll(
+					this.id,
+					this.configuration,
+				)
 				this.$patch(response.data.poll)
-				emit('polls:poll:updated', { store: 'poll', message: t('polls', 'Poll updated') })
-
+				emit('polls:poll:updated', {
+					store: 'poll',
+					message: t('polls', 'Poll updated'),
+				})
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error updating poll:', { error, poll: this.$state })

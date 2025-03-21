@@ -4,28 +4,27 @@
 -->
 
 <script setup lang="ts">
-	import { ref, onMounted } from 'vue'
-	import { t } from '@nextcloud/l10n'
+import { ref, onMounted } from 'vue'
+import { t } from '@nextcloud/l10n'
 
-	import NcAppContent from '@nextcloud/vue/components/NcAppContent'
-	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
-	import ComboTable from '../components/Combo/ComboTable.vue'
-	import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
-	import { ActionToggleSidebar } from '../components/Actions/index.js'
-	import { HeaderBar } from '../components/Base/index.js'
-	import { PollsAppIcon } from '../components/AppIcons/index.js'
-	import { useComboStore } from '../stores/combo.ts'
+import ComboTable from '../components/Combo/ComboTable.vue'
+import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
+import { ActionToggleSidebar } from '../components/Actions/index.js'
+import { HeaderBar } from '../components/Base/index.js'
+import { PollsAppIcon } from '../components/AppIcons/index.js'
+import { useComboStore } from '../stores/combo.ts'
 
-	const comboStore = useComboStore()
-	const isLoading = ref(false)
-	const title = t('polls', 'Combined polls')
-	const description = t('polls', 'Combine multiple date polls in a single view')
+const comboStore = useComboStore()
+const isLoading = ref(false)
+const title = t('polls', 'Combined polls')
+const description = t('polls', 'Combine multiple date polls in a single view')
 
-	onMounted(() => {
-		comboStore.verifyPollsFromSettings()
-	})
-
+onMounted(() => {
+	comboStore.verifyPollsFromSettings()
+})
 </script>
 
 <template>
@@ -45,9 +44,15 @@
 		<div class="area__main">
 			<ComboTable v-show="comboStore.polls.length" />
 
-			<NcEmptyContent v-if="!comboStore.polls.length"
+			<NcEmptyContent
+				v-if="!comboStore.polls.length"
 				:name="t('polls', 'No polls selected')"
-				:description="t('polls', 'Select polls by clicking on them in the right sidebar!')">
+				:description="
+					t(
+						'polls',
+						'Select polls by clicking on them in the right sidebar!',
+					)
+				">
 				<template #icon>
 					<PollsAppIcon />
 				</template>

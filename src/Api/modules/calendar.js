@@ -10,7 +10,10 @@ const calendar = {
 			method: 'GET',
 			url: 'calendars',
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getCalendars.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getCalendars.name
+				].handleRequestCancellation().token,
 		})
 	},
 	getEvents(optionId) {
@@ -21,7 +24,10 @@ const calendar = {
 				tz: Intl.DateTimeFormat().resolvedOptions().timeZone,
 				time: +new Date(),
 			},
-			cancelToken: cancelTokenHandlerObject[this.getEvents.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getEvents.name
+				].handleRequestCancellation().token,
 		})
 	},
 }

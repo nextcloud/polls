@@ -53,42 +53,69 @@ export const useSharesStore = defineStore('shares', {
 	getters: {
 		active: (state) => {
 			// share types, which will be active, after the user gets his invitation
-			const invitationTypes = [ShareType.Email, ShareType.External, ShareType.Contact]
+			const invitationTypes = [
+				ShareType.Email,
+				ShareType.External,
+				ShareType.Contact,
+			]
 
 			// sharetype which are active without sending an invitation
-			const directShareTypes = [ShareType.User, ShareType.Group, ShareType.Admin, ShareType.Public]
-			return state.list.filter((share) => (!share.locked
-				&& (directShareTypes.includes(share.type)
-					|| (invitationTypes.includes(share.type) && (share.type === ShareType.External || share.invitationSent || share.voted))
-				)
-			))
+			const directShareTypes = [
+				ShareType.User,
+				ShareType.Group,
+				ShareType.Admin,
+				ShareType.Public,
+			]
+			return state.list.filter(
+				(share) =>
+					!share.locked &&
+					(directShareTypes.includes(share.type) ||
+						(invitationTypes.includes(share.type) &&
+							(share.type === ShareType.External ||
+								share.invitationSent ||
+								share.voted))),
+			)
 		},
-	
-		locked: (state) => state.list.filter((share) => (!!share.locked)),
-		unsentInvitations: (state) => state.list.filter((share) =>
-			(share.user.emailAddress || share.type === ShareType.Group || share.type === ShareType.ContactGroup || share.type === ShareType.Circle)
-			&& !share.invitationSent && !share.locked && !share.voted),
-		public: (state) => state.list.filter((share) => share.type === ShareType.Public),
+
+		locked: (state) => state.list.filter((share) => !!share.locked),
+		unsentInvitations: (state) =>
+			state.list.filter(
+				(share) =>
+					(share.user.emailAddress ||
+						share.type === ShareType.Group ||
+						share.type === ShareType.ContactGroup ||
+						share.type === ShareType.Circle) &&
+					!share.invitationSent &&
+					!share.locked &&
+					!share.voted,
+			),
+		public: (state) =>
+			state.list.filter((share) => share.type === ShareType.Public),
 		hasShares: (state) => state.list.length > 0,
 		hasLocked() {
 			return this.locked.length > 0
-		}
+		},
 	},
-	
+
 	actions: {
-		async load(): Promise<void>{
+		async load(): Promise<void> {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await SharesAPI.getShares(sessionStore.route.params.id)
+				const response = await SharesAPI.getShares(
+					sessionStore.route.params.id,
+				)
 				this.list = response.data.shares
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error loading shares', { error, pollId: sessionStore.route.params.id })
+				Logger.error('Error loading shares', {
+					error,
+					pollId: sessionStore.route.params.id,
+				})
 				throw error
 			}
 		},
-	
-		async add(user: User ): Promise<void> {
+
+		async add(user: User): Promise<void> {
 			const sessionStore = useSessionStore()
 
 			try {
@@ -101,30 +128,38 @@ export const useSharesStore = defineStore('shares', {
 				this.load()
 			}
 		},
-	
+
 		async addPublicShare(): Promise<void> {
 			const sessionStore = useSessionStore()
 			try {
 				await SharesAPI.addPublicShare(sessionStore.route.params.id)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error writing share', { error})
+				Logger.error('Error writing share', { error })
 				throw error
 			} finally {
 				this.load()
 			}
 		},
-	
+
 		update(payload: { share: Share }): void {
-			const foundIndex = this.list.findIndex((share: Share) => share.id === payload.share.id)
+			const foundIndex = this.list.findIndex(
+				(share: Share) => share.id === payload.share.id,
+			)
 			Object.assign(this.list[foundIndex], payload.share)
 		},
-	
-		async switchAdmin(payload: { share: Share }): Promise<void>{
-			const setTo = payload.share.type === ShareType.User ? ShareType.Admin : ShareType.User
-	
+
+		async switchAdmin(payload: { share: Share }): Promise<void> {
+			const setTo =
+				payload.share.type === ShareType.User
+					? ShareType.Admin
+					: ShareType.User
+
 			try {
-				const response = await SharesAPI.switchAdmin(payload.share.token, setTo)
+				const response = await SharesAPI.switchAdmin(
+					payload.share.token,
+					setTo,
+				)
 				this.update(response.data)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
@@ -133,22 +168,34 @@ export const useSharesStore = defineStore('shares', {
 				throw error
 			}
 		},
-	
-		async setPublicPollEmail(payload: { share: Share; value: string }): Promise<void> {
+
+		async setPublicPollEmail(payload: {
+			share: Share
+			value: string
+		}): Promise<void> {
 			try {
-				const response = await SharesAPI.setEmailAddressConstraint(payload.share.token, payload.value)
+				const response = await SharesAPI.setEmailAddressConstraint(
+					payload.share.token,
+					payload.value,
+				)
 				this.update(response.data)
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error changing email register setting', { error, payload })
+				Logger.error('Error changing email register setting', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
 		},
-	
+
 		async writeLabel(payload: { token: string; label: string }): Promise<void> {
 			try {
-				const response = await SharesAPI.writeLabel(payload.token, payload.label)
+				const response = await SharesAPI.writeLabel(
+					payload.token,
+					payload.label,
+				)
 				this.update(response.data)
 				return response.data
 			} catch (error) {
@@ -158,7 +205,7 @@ export const useSharesStore = defineStore('shares', {
 				throw error
 			}
 		},
-	
+
 		async inviteAll(payload: { pollId: number }) {
 			try {
 				const response = await SharesAPI.inviteAll(payload.pollId)
@@ -170,7 +217,6 @@ export const useSharesStore = defineStore('shares', {
 			} finally {
 				this.load()
 			}
-	
 		},
 		async sendInvitation(payload: { share: Share }) {
 			try {
@@ -184,7 +230,7 @@ export const useSharesStore = defineStore('shares', {
 				this.load()
 			}
 		},
-	
+
 		async resolveGroup(payload: { share: Share }): Promise<void> {
 			try {
 				await SharesAPI.resolveShare(payload.share.token)
@@ -195,7 +241,7 @@ export const useSharesStore = defineStore('shares', {
 				throw error
 			}
 		},
-	
+
 		async lock(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.lockShare(payload.share.token)
@@ -207,7 +253,7 @@ export const useSharesStore = defineStore('shares', {
 				throw error
 			}
 		},
-	
+
 		async unlock(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.unlockShare(payload.share.token)
@@ -219,7 +265,7 @@ export const useSharesStore = defineStore('shares', {
 				throw error
 			}
 		},
-	
+
 		async delete(payload: { share: Share }): Promise<void> {
 			try {
 				const response = await SharesAPI.deleteShare(payload.share.token)

@@ -4,25 +4,30 @@
 -->
 
 <script setup lang="ts">
-	import { computed } from 'vue'
-	import { CardDiv } from '../../Base/index.js'
-	import ActionRegister from '../../Actions/modules/ActionRegister.vue'
-	import { t } from '@nextcloud/l10n'
-	import { useSessionStore } from '../../../stores/session.ts'
+import { computed } from 'vue'
+import { CardDiv } from '../../Base/index.js'
+import ActionRegister from '../../Actions/modules/ActionRegister.vue'
+import { t } from '@nextcloud/l10n'
+import { useSessionStore } from '../../../stores/session.ts'
 
-	const sessionStore = useSessionStore()
-	const cardType = 'info'
+const sessionStore = useSessionStore()
+const cardType = 'info'
 
-	const registrationInvitationText = computed(() => {
-		if (sessionStore.share.publicPollEmail === 'mandatory') {
-			return t('polls', 'To participate, register with your email address and a name.')
-		}
-		if (sessionStore.share.publicPollEmail === 'optional') {
-			return t('polls', 'To participate, register a name and optionally with your email address.')
-		}
-		return t('polls', 'To participate, register with a name.')
-	})
-
+const registrationInvitationText = computed(() => {
+	if (sessionStore.share.publicPollEmail === 'mandatory') {
+		return t(
+			'polls',
+			'To participate, register with your email address and a name.',
+		)
+	}
+	if (sessionStore.share.publicPollEmail === 'optional') {
+		return t(
+			'polls',
+			'To participate, register a name and optionally with your email address.',
+		)
+	}
+	return t('polls', 'To participate, register with a name.')
+})
 </script>
 
 <template>

@@ -10,21 +10,30 @@ const adminJobs = {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'administration/autoreminder/run',
-			cancelToken: cancelTokenHandlerObject[this.runAutoReminder.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.runAutoReminder.name
+				].handleRequestCancellation().token,
 		})
 	},
 	runJanitor() {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'administration/janitor/run',
-			cancelToken: cancelTokenHandlerObject[this.runJanitor.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.runJanitor.name
+				].handleRequestCancellation().token,
 		})
 	},
 	runNotification() {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'administration/notification/run',
-			cancelToken: cancelTokenHandlerObject[this.runNotification.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.runNotification.name
+				].handleRequestCancellation().token,
 		})
 	},
 }

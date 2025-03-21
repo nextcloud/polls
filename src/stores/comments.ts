@@ -35,16 +35,20 @@ export const useCommentsStore = defineStore('comments', {
 	getters: {
 		count: (state) => state.list.length,
 		groupedComments: (state) => groupComments(state.list),
-	},	
+	},
 	actions: {
 		async load() {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.getComments(sessionStore.route.params.token)
+					response = await PublicAPI.getComments(
+						sessionStore.route.params.token,
+					)
 				} else if (sessionStore.route.name === 'vote') {
-					response = await CommentsAPI.getComments(sessionStore.route.params.id)
+					response = await CommentsAPI.getComments(
+						sessionStore.route.params.id,
+					)
 				} else {
 					this.$reset()
 					return
@@ -55,14 +59,20 @@ export const useCommentsStore = defineStore('comments', {
 				this.$reset()
 			}
 		},
-	
+
 		async add(payload: { message: string }) {
 			const sessionStore = useSessionStore()
 			try {
 				if (sessionStore.route.name === 'publicVote') {
-					await PublicAPI.addComment(sessionStore.route.params.token, payload.message)
+					await PublicAPI.addComment(
+						sessionStore.route.params.token,
+						payload.message,
+					)
 				} else if (sessionStore.route.name === 'vote') {
-					await CommentsAPI.addComment(sessionStore.route.params.id, payload.message)
+					await CommentsAPI.addComment(
+						sessionStore.route.params.id,
+						payload.message,
+					)
 				} else {
 					this.$reset()
 					return
@@ -74,45 +84,51 @@ export const useCommentsStore = defineStore('comments', {
 				throw error
 			}
 		},
-		
+
 		setItem(payload: { comment: Comment }) {
-			const index = this.list.findIndex((comment) =>
-				parseInt(comment.id) === payload.comment.id,
+			const index = this.list.findIndex(
+				(comment) => parseInt(comment.id) === payload.comment.id,
 			)
-	
+
 			if (index < 0) {
 				this.list.push(payload.comment)
 			} else {
 				this.list[index] = Object.assign(this.list[index], payload.comment)
 			}
 		},
-	
+
 		async delete(payload: { comment: Comment }) {
 			const sessionStore = useSessionStore()
-			
+
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.deleteComment(sessionStore.route.params.token, payload.comment.id)
+					response = await PublicAPI.deleteComment(
+						sessionStore.route.params.token,
+						payload.comment.id,
+					)
 				} else {
 					response = await CommentsAPI.deleteComment(payload.comment.id)
 				}
 
 				this.setItem({ comment: response.data.comment })
-
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error deleting comment', { error, payload })
 				throw error
 			}
 		},
-	
+
 		async restore(payload) {
 			const sessionStore = useSessionStore()
 			try {
 				let response = null
 				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.restoreComment(sessionStore.route.params.token, payload.comment.id, { comment: payload.comment })
+					response = await PublicAPI.restoreComment(
+						sessionStore.route.params.token,
+						payload.comment.id,
+						{ comment: payload.comment },
+					)
 				} else {
 					response = await CommentsAPI.restoreComment(payload.comment.id)
 				}
@@ -124,6 +140,5 @@ export const useCommentsStore = defineStore('comments', {
 				throw error
 			}
 		},
-	
 	},
 })

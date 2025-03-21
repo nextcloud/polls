@@ -4,31 +4,35 @@
 -->
 
 <script setup lang="ts">
-	import { PropType } from 'vue'
-	import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
-	import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
-	import { Option } from '../../Types/index.ts'
+import { PropType } from 'vue'
+import YesCounterIcon from 'vue-material-design-icons/AccountCheck.vue'
+import MaybeCounterIcon from 'vue-material-design-icons/AccountCheckOutline.vue'
+import { Option } from '../../Types/index.ts'
 
-	const props = defineProps({
-		option: {
-			type: Object as PropType<Option>,
-			default: undefined,
-		},
-		showMaybe: {
-			type: Boolean,
-			default: false,
-		},
-	})
+const props = defineProps({
+	option: {
+		type: Object as PropType<Option>,
+		default: undefined,
+	},
+	showMaybe: {
+		type: Boolean,
+		default: false,
+	},
+})
 </script>
 
 <template>
 	<div class="counter">
 		<div class="yes">
-			<YesCounterIcon fill-color="var(--color-polls-foreground-yes)" :size="20" />
+			<YesCounterIcon
+				fill-color="var(--color-polls-foreground-yes)"
+				:size="20" />
 			<span>{{ props.option.votes.yes }}</span>
 		</div>
 		<div v-if="showMaybe" class="maybe">
-			<MaybeCounterIcon fill-color="var(--color-polls-foreground-maybe)" :size="20" />
+			<MaybeCounterIcon
+				fill-color="var(--color-polls-foreground-maybe)"
+				:size="20" />
 			<span>{{ props.option.votes.maybe }}</span>
 		</div>
 	</div>
@@ -61,5 +65,4 @@
 		color: var(--color-polls-foreground-maybe);
 	}
 }
-
 </style>

@@ -4,16 +4,22 @@
 -->
 
 <script setup lang="ts">
-	import { computed } from 'vue'
-	import { CardDiv } from '../../Base/index.js'
-	import { t } from '@nextcloud/l10n'
-	import { useSessionStore } from '../../../stores/session.ts'
+import { computed } from 'vue'
+import { CardDiv } from '../../Base/index.js'
+import { t } from '@nextcloud/l10n'
+import { useSessionStore } from '../../../stores/session.ts'
 
-	const sessionStore = useSessionStore()
-	const cardType = 'warning'
+const sessionStore = useSessionStore()
+const cardType = 'warning'
 
-	const cardText = computed(() => sessionStore.route.name === 'publicVote' ? t('polls', 'This share is locked and allows only read access. Registering is not possible.') : t('polls', 'Voting is locked and you have just read access to this poll.'))
-
+const cardText = computed(() =>
+	sessionStore.route.name === 'publicVote'
+		? t(
+				'polls',
+				'This share is locked and allows only read access. Registering is not possible.',
+			)
+		: t('polls', 'Voting is locked and you have just read access to this poll.'),
+)
 </script>
 
 <template>

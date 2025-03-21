@@ -1,16 +1,11 @@
 {
 	"compilerOptions": {
-		"lib":[
-			"ES2022",
-			"dom"
-		],
+		"lib": ["ES2022", "dom"],
 		"allowImportingTsExtensions": true,
 		"noEmit": true,
 		"module": "esnext",
 		"target": "es6",
 		"moduleResolution": "Bundler",
-		"types" :["node", "vite/client"]
+		"types": ["node", "vite/client"]
 	}
-
 }
-  

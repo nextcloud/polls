@@ -16,10 +16,10 @@ import { usePollsStore } from './polls.ts'
 
 export type Combo = {
 	id: number
-	options: Option[],
-	polls: Poll[],
-	participants: Participant[],
-	votes: Vote[],
+	options: Option[]
+	polls: Poll[]
+	participants: Participant[]
+	votes: Vote[]
 }
 
 export const useComboStore = defineStore('combo', {
@@ -32,28 +32,44 @@ export const useComboStore = defineStore('combo', {
 	}),
 
 	getters: {
-		poll: (state) => (pollId: number) => state.polls.find((poll: Poll) => poll.id === pollId),
-		votesInPoll: (state) => (pollId: number) => state.votes.filter((vote: Vote) => vote.pollId === pollId),
-		participantsInPoll: (state) => (pollId: number) => state.participants.filter((participant: Participant) => participant.pollId === pollId),
-		pollIsListed: (state) => (pollId: number) => !!state.polls.find((poll: Poll) => poll.id === pollId),
+		poll: (state) => (pollId: number) =>
+			state.polls.find((poll: Poll) => poll.id === pollId),
+		votesInPoll: (state) => (pollId: number) =>
+			state.votes.filter((vote: Vote) => vote.pollId === pollId),
+		participantsInPoll: (state) => (pollId: number) =>
+			state.participants.filter(
+				(participant: Participant) => participant.pollId === pollId,
+			),
+		pollIsListed: (state) => (pollId: number) =>
+			!!state.polls.find((poll: Poll) => poll.id === pollId),
 		pollCombo: (state) => state.polls.map((poll: Poll) => poll.id),
-		optionBelongsToPoll: (state) => (payload: { text: string; pollId: number }) => !!state.options.find((option) => option.text === payload.text && option.pollId === payload.pollId),
+		optionBelongsToPoll:
+			(state) => (payload: { text: string; pollId: number }) =>
+				!!state.options.find(
+					(option) =>
+						option.text === payload.text &&
+						option.pollId === payload.pollId,
+				),
 		uniqueOptions: (state) => sortBy(uniqueOptions(state.options), 'timestamp'),
 
-		getVote: (state) => (payload: { userId: string; optionText: string, pollId: number }) => {
-			const found = state.votes.find((vote: Vote) => (
-				vote.user.id === payload.userId
-				&& vote.optionText === payload.optionText
-				&& vote.pollId === payload.pollId))
-			if (found === undefined) {
-				return {
-					answer: '',
-					optionText: payload.optionText,
-					userId: payload.userId,
+		getVote:
+			(state) =>
+			(payload: { userId: string; optionText: string; pollId: number }) => {
+				const found = state.votes.find(
+					(vote: Vote) =>
+						vote.user.id === payload.userId &&
+						vote.optionText === payload.optionText &&
+						vote.pollId === payload.pollId,
+				)
+				if (found === undefined) {
+					return {
+						answer: '',
+						optionText: payload.optionText,
+						userId: payload.userId,
+					}
 				}
-			}
-			return found
-		},
+				return found
+			},
 	},
 
 	actions: {
@@ -74,21 +90,27 @@ export const useComboStore = defineStore('combo', {
 		},
 
 		removePoll(payload: { pollId: number }) {
-			this.polls = this.polls.filter((poll: Poll) => poll.id !== payload.pollId)
+			this.polls = this.polls.filter(
+				(poll: Poll) => poll.id !== payload.pollId,
+			)
 		},
 
 		removeVotes(payload: { pollId: number }) {
-			this.votes = this.votes.filter((vote: Vote) => vote.pollId !== payload.pollId)
+			this.votes = this.votes.filter(
+				(vote: Vote) => vote.pollId !== payload.pollId,
+			)
 			this.participants = uniqueParticipants(this.votes)
 		},
 
 		removeOptions(payload: { pollId: number }) {
-			this.options = this.options.filter((option: Option) => option.pollId !== payload.pollId)
+			this.options = this.options.filter(
+				(option: Option) => option.pollId !== payload.pollId,
+			)
 		},
 
 		async verifyPollsFromSettings() {
 			const preferencesStore = usePreferencesStore()
-			preferencesStore.user.pollCombo.forEach(pollId => {
+			preferencesStore.user.pollCombo.forEach((pollId) => {
 				if (!this.pollCombo.includes(pollId)) {
 					this.add(pollId)
 				}
@@ -98,7 +120,11 @@ export const useComboStore = defineStore('combo', {
 		async cleanUp() {
 			const pollsStore = usePollsStore()
 			this.polls.forEach((comboPoll: Poll) => {
-				if (pollsStore.list.findIndex((poll) => poll.id === comboPoll.id && !poll.status.isDeleted) < 0) {
+				if (
+					pollsStore.list.findIndex(
+						(poll) => poll.id === comboPoll.id && !poll.status.isDeleted,
+					) < 0
+				) {
 					this.removePoll({ pollId: comboPoll.id })
 				}
 			})
@@ -137,7 +163,6 @@ export const useComboStore = defineStore('combo', {
 				const response = await VotesAPI.getVotes(payload.pollId)
 				this.votes.push(...response.data.votes)
 				this.participants = uniqueParticipants(this.votes)
-
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error loading options for combo', { error })

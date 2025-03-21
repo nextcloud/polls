@@ -1,6 +1,6 @@
-name: "Announcement"
-description: "Used for announcements"
-labels: ["announcement"]
+name: 'Announcement'
+description: 'Used for announcements'
+labels: ['announcement']
 
 body:
   - type: textarea
