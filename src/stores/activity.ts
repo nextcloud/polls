@@ -37,17 +37,20 @@ export const useActivityStore = defineStore('activity', {
 		async load() {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await ActivityAPI.getActivities(sessionStore.route.params.id)
+				const response = await ActivityAPI.getActivities(
+					sessionStore.route.params.id,
+				)
 				this.list = response.data.ocs.data
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				this.$reset()
 			}
 		},
-		
+
 		deleteActivities(payload: { userId: string }) {
-			this.list = this.list.filter((vote: Vote) => vote.user.id !== payload.userId)
+			this.list = this.list.filter(
+				(vote: Vote) => vote.user.id !== payload.userId,
+			)
 		},
-		
 	},
 })

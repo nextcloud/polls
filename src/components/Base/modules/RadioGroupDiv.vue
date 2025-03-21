@@ -4,42 +4,46 @@
 -->
 
 <script setup lang="ts">
-	import { computed, PropType } from 'vue'
+import { computed, PropType } from 'vue'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-	export type CheckboxOption = {
-		value: string
-		label: string
-	}
+export type CheckboxOption = {
+	value: string
+	label: string
+}
 
-	const RandId = () => Math.random().toString(36).replace(/[^a-z]+/g, '').slice(2, 12)
+const RandId = () =>
+	Math.random()
+		.toString(36)
+		.replace(/[^a-z]+/g, '')
+		.slice(2, 12)
 
-	const props = defineProps({
-		id: {
-			type: String,
-			default: null,
-		},
-		options: {
-			type: Array as PropType<CheckboxOption[]>,
-			required: true,
-		},
-	})
-
-	const model = defineModel({
+const props = defineProps({
+	id: {
 		type: String,
 		default: null,
-	})
+	},
+	options: {
+		type: Array as PropType<CheckboxOption[]>,
+		required: true,
+	},
+})
 
-	const emit = defineEmits(['update'])
+const model = defineModel({
+	type: String,
+	default: null,
+})
 
-	const elementId = computed(() => props.id ?? `rg-${RandId()}`)
+const emit = defineEmits(['update'])
 
+const elementId = computed(() => props.id ?? `rg-${RandId()}`)
 </script>
 
 <template>
 	<div class="radio-group-div">
-		<NcCheckboxRadioSwitch v-for="(option, index) in options"
+		<NcCheckboxRadioSwitch
+			v-for="(option, index) in options"
 			:key="option.value"
 			v-model="model"
 			:value="option.value"

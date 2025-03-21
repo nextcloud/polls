@@ -7,12 +7,40 @@ export { Activity, Activities } from '../stores/activity.ts'
 export { UpdateType, Group, AppSettings } from '../stores/appSettings.ts'
 export { Combo } from '../stores/combo.ts'
 export { Comment, Comments, CommentsGrouped } from '../stores/comments.ts'
-export { Poll, PollType, AccessType, ShowResults, AllowProposals, PollConfiguration, PollStatus, PollPermissions, CurrentUserStatus } from '../stores/poll.ts'
-export { SortType, FilterType, PollCategory, Meta, PollList } from '../stores/polls.ts'
-export { Option, OptionVotes, Sequence, SimpleOption, Options } from '../stores/options.ts'
+export {
+	Poll,
+	PollType,
+	AccessType,
+	ShowResults,
+	AllowProposals,
+	PollConfiguration,
+	PollStatus,
+	PollPermissions,
+	CurrentUserStatus,
+} from '../stores/poll.ts'
+export {
+	SortType,
+	FilterType,
+	PollCategory,
+	Meta,
+	PollList,
+} from '../stores/polls.ts'
+export {
+	Option,
+	OptionVotes,
+	Sequence,
+	SimpleOption,
+	Options,
+} from '../stores/options.ts'
 export { Share, Shares, ShareType } from '../stores/shares.ts'
 export { Route, UserStatus, Session } from '../stores/session.ts'
-export { UserPreferences, SessionSettings, Calendar, Preferences, ViewMode } from '../stores/preferences.ts'
+export {
+	UserPreferences,
+	SessionSettings,
+	Calendar,
+	Preferences,
+	ViewMode,
+} from '../stores/preferences.ts'
 export { Answer, AnswerSymbol, Vote, Votes } from '../stores/votes.ts'
 
 export enum StatusResults {
@@ -95,4 +123,3 @@ export type Participant = {
 	pollId: number
 	user: User
 }
-

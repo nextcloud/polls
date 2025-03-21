@@ -10,7 +10,5 @@ import UserSettingsPage from './views/UserSettingsPage.vue'
 
 // Vue.config.devtools = import.meta.env.MODE !== 'production'
 
-const Polls = createApp(UserSettingsPage)
-	.use(pinia)
+const Polls = createApp(UserSettingsPage).use(pinia)
 Polls.mount('#content_polls')
-

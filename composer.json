@@ -39,15 +39,15 @@
 		"doctrine/dbal": "3.8.6",
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
-		"nextcloud/coding-standard": "^1.0",
 		"nextcloud/ocp": "dev-stable29"
 	},
 	"scripts": {
+		"lint": "find . -name \\*.php -not -path './vendor*/*' -print0 | xargs -0 -n1 php -l",
 		"cs:check": "php-cs-fixer fix --dry-run --diff",
 		"cs:fix": "php-cs-fixer fix",
 		"psalm": "psalm --no-diff",
-		"phpunit:unit": "phpunit -c tests/phpunit.xml",
-		"phpunit:integration": "phpunit -c tests/phpunit.xml",
+		"test:unit": "phpunit -c tests/phpunit.xml",
+		"test:integration": "phpunit -c tests/phpunit.xml",
 		"psalm:fix": "psalm --alter --php-version=8.0 --issues=MissingReturnType,InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
 		"psalm:info": "psalm --no-diff --show-info=true",
 		"psalm:baseline": "psalm --set-baseline=psalm-baseline.xml",

@@ -3,45 +3,38 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script setup lang="ts">
-
-	const props = defineProps(
-		{ 
-			title: { 
-				type: String, 
-				default: 'Admin Access',
-			}, 
-			fillColor: { 
-				type: String, 
-				default: 'currentColor',
-			}, 
-			size: { 
-				type: Number, 
-				default: 24, 
-			}, 
-		} 
-	)
+const props = defineProps({
+	title: {
+		type: String,
+		default: 'Admin Access',
+	},
+	fillColor: {
+		type: String,
+		default: 'currentColor',
+	},
+	size: {
+		type: Number,
+		default: 24,
+	},
+})
 </script>
 
 <template>
-	<span :aria-hidden="!props.title"
+	<span
+		:aria-hidden="!props.title"
 		:aria-label="props.title"
 		class="material-design-icon spinner"
 		role="img">
-		<svg viewBox="0 0 100 100"
-			:width="props.size"
-			:height="props.size">
-			<circle cx="50"
-				cy="50"
-				r="45"
-				:stroke="props.fillColor" />
+		<svg viewBox="0 0 100 100" :width="props.size" :height="props.size">
+			<circle cx="50" cy="50" r="45" :stroke="props.fillColor" />
 		</svg>
 	</span>
 </template>
 
 <style lang="scss" scoped>
 svg {
-  animation: 2s linear infinite svg-animation;
-  max-width: 100px;
+	animation: 2s linear infinite svg-animation;
+	max-width: 100px;
 }
 
 @keyframes svg-animation {
@@ -50,7 +43,7 @@ svg {
 	}
 
 	100% {
-		transform: rotateZ(360deg)
+		transform: rotateZ(360deg);
 	}
 }
 

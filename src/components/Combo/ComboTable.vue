@@ -4,31 +4,33 @@
 -->
 
 <script setup lang="ts">
-	import { PropType } from 'vue'
-	import VoteColumn from './VoteColumn.vue'
-	import UserItem from '../User/UserItem.vue'
-	import { useComboStore } from '../../stores/combo.ts'
-	import { ViewMode } from '../../Types/index.ts'
+import { PropType } from 'vue'
+import VoteColumn from './VoteColumn.vue'
+import UserItem from '../User/UserItem.vue'
+import { useComboStore } from '../../stores/combo.ts'
+import { ViewMode } from '../../Types/index.ts'
 
-	const comboStore = useComboStore()
+const comboStore = useComboStore()
 
-	const props = defineProps({
-		viewMode: {
-			type: String as PropType<ViewMode>,
-			default: ViewMode.TableView,
-		},
-	})
+const props = defineProps({
+	viewMode: {
+		type: String as PropType<ViewMode>,
+		default: ViewMode.TableView,
+	},
+})
 </script>
 
 <template>
 	<div :class="['combo-table', props.viewMode]">
 		<div class="user-column">
 			<div class="spacer" />
-			<div v-for="(poll) in comboStore.polls"
+			<div
+				v-for="poll in comboStore.polls"
 				:key="poll.id"
 				:title="poll.configuration.title"
 				class="poll-group">
-				<div v-for="(participant) in comboStore.participantsInPoll(poll.id)"
+				<div
+					v-for="participant in comboStore.participantsInPoll(poll.id)"
 					:key="`${participant.user.id}_${participant.pollId}`"
 					class="participant">
 					<UserItem v-bind="participant" condensed />
@@ -36,10 +38,9 @@
 			</div>
 		</div>
 
-		<TransitionGroup name="list"
-			tag="div"
-			class="vote-grid">
-			<VoteColumn v-for="(option) in comboStore.uniqueOptions"
+		<TransitionGroup name="list" tag="div" class="vote-grid">
+			<VoteColumn
+				v-for="option in comboStore.uniqueOptions"
 				:key="option.id"
 				:option="option" />
 		</TransitionGroup>
@@ -64,7 +65,8 @@
 		flex-direction: column;
 	}
 
-	.participant, .vote-item {
+	.participant,
+	.vote-item {
 		flex: 0 0 auto;
 		height: 4.5em;
 		line-height: 1.5em;
@@ -89,7 +91,8 @@
 		overflow-x: scroll;
 	}
 
-	.user-column::after, .vote-column::after {
+	.user-column::after,
+	.vote-column::after {
 		content: '';
 		height: 8px;
 	}

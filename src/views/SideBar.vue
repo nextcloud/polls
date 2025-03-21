@@ -4,63 +4,70 @@
 -->
 
 <script setup lang="ts">
-	import { ref, onMounted, onUnmounted } from 'vue'
-	import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-	import { t } from '@nextcloud/l10n'
+import { ref, onMounted, onUnmounted } from 'vue'
+import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 
-	import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
-	import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
+import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
+import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 
-	import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
-	import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
-	import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
-	import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
-	import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
+import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
+import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
+import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
+import SidebarCommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+import SidebarActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
-	import { SideBarTabConfiguration, SideBarTabComments, SideBarTabOptions, SideBarTabShare, SideBarTabActivity } from '../components/SideBar/index.js'
-	import { usePollStore } from '../stores/poll.ts'
-	import { useSessionStore } from '../stores/session.ts'
+import {
+	SideBarTabConfiguration,
+	SideBarTabComments,
+	SideBarTabOptions,
+	SideBarTabShare,
+	SideBarTabActivity,
+} from '../components/SideBar/index.js'
+import { usePollStore } from '../stores/poll.ts'
+import { useSessionStore } from '../stores/session.ts'
 
-	const pollStore = usePollStore()
-	const sessionStore = useSessionStore()
+const pollStore = usePollStore()
+const sessionStore = useSessionStore()
 
-	const showSidebar = ref((window.innerWidth > 920))
-	const activeTab = ref(t('polls', 'Comments').toLowerCase())
+const showSidebar = ref(window.innerWidth > 920)
+const activeTab = ref(t('polls', 'Comments').toLowerCase())
 
-	onMounted(() => {
-		subscribe('polls:sidebar:toggle', (payload) => {
-			showSidebar.value = payload?.open ?? !showSidebar.value
-			activeTab.value = payload?.activeTab ?? activeTab.value
-		})
-		subscribe('polls:sidebar:changeTab', (payload) => {
-			activeTab.value = payload?.activeTab ?? activeTab.value
-		})
+onMounted(() => {
+	subscribe('polls:sidebar:toggle', (payload) => {
+		showSidebar.value = payload?.open ?? !showSidebar.value
+		activeTab.value = payload?.activeTab ?? activeTab.value
 	})
-
-	onUnmounted(() => {
-		unsubscribe('polls:sidebar:changeTab', () => {
-			activeTab.value = 'comments'
-		})
-		unsubscribe('polls:sidebar:toggle', () => {
-			showSidebar.value = false
-		})
+	subscribe('polls:sidebar:changeTab', (payload) => {
+		activeTab.value = payload?.activeTab ?? activeTab.value
 	})
+})
 
-	/**
-	 *
-	 */
-	function closeSideBar() {
-		emit('polls:sidebar:toggle', { open: false })
-	}
+onUnmounted(() => {
+	unsubscribe('polls:sidebar:changeTab', () => {
+		activeTab.value = 'comments'
+	})
+	unsubscribe('polls:sidebar:toggle', () => {
+		showSidebar.value = false
+	})
+})
+
+/**
+ *
+ */
+function closeSideBar() {
+	emit('polls:sidebar:toggle', { open: false })
+}
 </script>
 
-
 <template>
-	<NcAppSidebar v-show="showSidebar"
+	<NcAppSidebar
+		v-show="showSidebar"
 		v-model="activeTab"
 		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
-		<NcAppSidebarTab v-if="pollStore.permissions.edit"
+		<NcAppSidebarTab
+			v-if="pollStore.permissions.edit"
 			id="configuration"
 			:order="1"
 			:name="t('polls', 'Configuration')">
@@ -70,7 +77,8 @@
 			<SideBarTabConfiguration />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="pollStore.permissions.edit"
+		<NcAppSidebarTab
+			v-if="pollStore.permissions.edit"
 			id="options"
 			:order="2"
 			:name="t('polls', 'Options')">
@@ -80,7 +88,8 @@
 			<SideBarTabOptions />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="pollStore.permissions.edit"
+		<NcAppSidebarTab
+			v-if="pollStore.permissions.edit"
 			id="sharing"
 			:order="3"
 			:name="t('polls', 'Sharing')">
@@ -90,7 +99,8 @@
 			<SideBarTabShare />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="pollStore.permissions.comment"
+		<NcAppSidebarTab
+			v-if="pollStore.permissions.comment"
 			id="comments"
 			:order="5"
 			:name="t('polls', 'Comments')">
@@ -100,7 +110,8 @@
 			<SideBarTabComments />
 		</NcAppSidebarTab>
 
-		<NcAppSidebarTab v-if="pollStore.permissions.edit && sessionStore.appSettings.useActivity"
+		<NcAppSidebarTab
+			v-if="pollStore.permissions.edit && sessionStore.appSettings.useActivity"
 			id="activity"
 			:order="6"
 			:name="t('polls', 'Activity')">

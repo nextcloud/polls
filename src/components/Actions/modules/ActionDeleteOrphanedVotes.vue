@@ -4,24 +4,23 @@
 -->
 
 <script setup lang="ts">
-	import { t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
-	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
-	import { useVotesStore } from '../../../stores/votes.ts'
+import { useVotesStore } from '../../../stores/votes.ts'
 
-	const votesStore = useVotesStore()
-	const caption = t('polls', 'Delete orphaned')
-
+const votesStore = useVotesStore()
+const caption = t('polls', 'Delete orphaned')
 </script>
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton :type="ButtonType.Primary"
+		<NcButton
+			:type="ButtonType.Primary"
 			:aria-label="caption"
 			@click="votesStore.removeOrphanedVotes()">
 			{{ caption }}
 		</NcButton>
 	</div>
 </template>
-

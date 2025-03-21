@@ -4,58 +4,80 @@
 -->
 
 <script setup>
-	import { onMounted } from 'vue'
-	import { t } from '@nextcloud/l10n'
+import { onMounted } from 'vue'
+import { t } from '@nextcloud/l10n'
 
-	import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
+import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
-	import { FlexSettings } from '../components/Base/index.js'
-	import {
-		AdminActivities, AdminArchivePolls, AdminCombo, AdminEmail, AdminJobs, AdminLegal,
-		AdminPerformance, AdminPollCreation, AdminPollDownload, AdminPollsInNavigation,
-		AdminShareOpenPoll, AdminSharePublicCreate, AdminSharePublicShowLogin,
-		AdminShowMailAddresses, AdminUnrescrictedOwners
-	} from '../components/Settings/AdminSettings/index.js'
-	import { useAppSettingsStore } from '../stores/appSettings.ts'
-	import '../assets/scss/markdown.scss'
+import { FlexSettings } from '../components/Base/index.js'
+import {
+	AdminActivities,
+	AdminArchivePolls,
+	AdminCombo,
+	AdminEmail,
+	AdminJobs,
+	AdminLegal,
+	AdminPerformance,
+	AdminPollCreation,
+	AdminPollDownload,
+	AdminPollsInNavigation,
+	AdminShareOpenPoll,
+	AdminSharePublicCreate,
+	AdminSharePublicShowLogin,
+	AdminShowMailAddresses,
+	AdminUnrescrictedOwners,
+} from '../components/Settings/AdminSettings/index.js'
+import { useAppSettingsStore } from '../stores/appSettings.ts'
+import '../assets/scss/markdown.scss'
 
-	const appSettingsStore = useAppSettingsStore()
+const appSettingsStore = useAppSettingsStore()
 
-	const sections = {
-		pollSettings: {
-			name: t('polls', 'Poll settings'),
-			description: t('polls', 'Change poll settings globally (for all accounts)')
-		},
-		shareSettings: {
-			name: t('polls', 'Share settings'),
-			description: t('polls', 'Change share settings globally (for all accounts)')
-		},
-		otherSettings: {
-			name: t('polls', 'Other settings'),
-			description: t('polls', 'Enable or disable individual features.')
-		},
-		performanceSettings: {
-			name: t('polls', 'Performance settings'),
-			description: t('polls', 'If you are experiencing connection problems, change how auto updates are retrieved.')
-		},
-		publicSettings: {
-			name: t('polls', 'Public poll registration dialog options'),
-			description: t('polls', 'These options regard the appearence of the registration dialog of public polls.')
-		},
-		emailSettings: {
-			name: t('polls', 'Email options'),
-			description: t('polls', 'Add links to legal terms, if they exist and add an optional disclaimer to emails.')
-		},
-		jobSettings: {
-			name: t('polls', 'Job control'),
-			description: t('polls', 'Manually start backgropund jobs, independent from the cron schedule.')
-		}
-	}
+const sections = {
+	pollSettings: {
+		name: t('polls', 'Poll settings'),
+		description: t('polls', 'Change poll settings globally (for all accounts)'),
+	},
+	shareSettings: {
+		name: t('polls', 'Share settings'),
+		description: t('polls', 'Change share settings globally (for all accounts)'),
+	},
+	otherSettings: {
+		name: t('polls', 'Other settings'),
+		description: t('polls', 'Enable or disable individual features.'),
+	},
+	performanceSettings: {
+		name: t('polls', 'Performance settings'),
+		description: t(
+			'polls',
+			'If you are experiencing connection problems, change how auto updates are retrieved.',
+		),
+	},
+	publicSettings: {
+		name: t('polls', 'Public poll registration dialog options'),
+		description: t(
+			'polls',
+			'These options regard the appearence of the registration dialog of public polls.',
+		),
+	},
+	emailSettings: {
+		name: t('polls', 'Email options'),
+		description: t(
+			'polls',
+			'Add links to legal terms, if they exist and add an optional disclaimer to emails.',
+		),
+	},
+	jobSettings: {
+		name: t('polls', 'Job control'),
+		description: t(
+			'polls',
+			'Manually start backgropund jobs, independent from the cron schedule.',
+		),
+	},
+}
 
-
-	onMounted(() => {
-		appSettingsStore.load()
-	})
+onMounted(() => {
+	appSettingsStore.load()
+})
 </script>
 
 <template>

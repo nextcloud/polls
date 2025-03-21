@@ -4,38 +4,36 @@
 -->
 
 <script setup lang="ts">
-	import { computed, onMounted, onUnmounted } from 'vue'
-	import { subscribe, unsubscribe } from '@nextcloud/event-bus'
-	import { t } from '@nextcloud/l10n'
+import { computed, onMounted, onUnmounted } from 'vue'
+import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { t } from '@nextcloud/l10n'
 
-	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
-	import CommentAdd from '../Comments/CommentAdd.vue'
-	import Comments from '../Comments/Comments.vue'
-	import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
+import CommentAdd from '../Comments/CommentAdd.vue'
+import Comments from '../Comments/Comments.vue'
+import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 
-	import { usePollStore } from '../../stores/poll.ts'
-	import { useCommentsStore } from '../../stores/comments.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { useCommentsStore } from '../../stores/comments.ts'
 
+const pollStore = usePollStore()
+const commentsStore = useCommentsStore()
 
-	const pollStore = usePollStore()
-	const commentsStore = useCommentsStore()
+const emptyContentProps = {
+	name: t('polls', 'No comments'),
+	description: t('polls', 'Be the first.'),
+}
 
-	const emptyContentProps = {
-		name: t('polls', 'No comments'),
-		description: t('polls', 'Be the first.'),
-	}
+const showEmptyContent = computed(() => commentsStore.list.length === 0)
 
-	const showEmptyContent = computed(() => commentsStore.list.length === 0)
+onMounted(() => {
+	subscribe('polls:comments:update', () => commentsStore.load())
+})
 
-	onMounted(() => {
-		subscribe('polls:comments:update', () => commentsStore.load())
-	})
-
-	onUnmounted(() => {
-		unsubscribe('polls:comments:update', () => commentsStore.load())
-	})
-
+onUnmounted(() => {
+	unsubscribe('polls:comments:update', () => commentsStore.load())
+})
 </script>
 
 <template>

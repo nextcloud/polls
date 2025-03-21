@@ -4,17 +4,17 @@
 -->
 
 <script setup>
-	import { t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
-	import NcAppContent from '@nextcloud/vue/components/NcAppContent'
-	import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
+import NcAppContent from '@nextcloud/vue/components/NcAppContent'
+import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 
-	import SearchIcon from 'vue-material-design-icons/Magnify.vue'
+import SearchIcon from 'vue-material-design-icons/Magnify.vue'
 
-	const emptyContentProps = {
-		name: t('polls', '404 - poll not found'),
-		description: t('polls', 'Enter a poll or start a new one.'),
-	}
+const emptyContentProps = {
+	name: t('polls', '404 - poll not found'),
+	description: t('polls', 'Enter a poll or start a new one.'),
+}
 </script>
 
 <template>

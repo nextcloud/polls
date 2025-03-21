@@ -6,56 +6,39 @@
   <description>A polls app, similar to Doodle/Dudle with the possibility to restrict access (members, certain groups/users, hidden and public).</description>
   <version>8.0.0-alpha13</version>
   <licence>agpl</licence>
+
   <author>Vinzenz Rosenkranz</author>
   <author>René Gieling</author>
   <author>Kai Schröer</author>
+
   <documentation>
     <admin>https://github.com/nextcloud/polls/blob/master/README.md</admin>
   </documentation>
+
   <category>tools</category>
   <category>social</category>
   <category>organization</category>
+
   <website>https://github.com/nextcloud/polls</website>
   <discussion>https://help.nextcloud.com/tag/polls-app</discussion>
   <bugs>https://github.com/nextcloud/polls/issues</bugs>
   <repository type="git">https://github.com/nextcloud/polls.git</repository>
+
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/overview.png</screenshot>
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/vote.png</screenshot>
   <screenshot>https://raw.githubusercontent.com/nextcloud/polls/master/screenshots/edit-poll.png</screenshot>
+
   <dependencies>
     <php min-version="8.1"/>
-    <nextcloud min-version="29" max-version="31"/>
+    <nextcloud min-version="30" max-version="31"/>
   </dependencies>
-  <activity>
-    <providers>
-      <provider>OCA\Polls\Provider\ActivityProvider</provider>
-    </providers>
-    <filters>
-      <filter>OCA\Polls\Filter\ActivityFilter</filter>
-    </filters>
-  </activity>
+
   <background-jobs>
     <job>OCA\Polls\Cron\NotificationCron</job>
     <job>OCA\Polls\Cron\JanitorCron</job>
     <job>OCA\Polls\Cron\AutoReminderCron</job>
   </background-jobs>
-  <commands>
-    <command>OCA\Polls\Command\Share\Add</command>
-    <command>OCA\Polls\Command\Share\Remove</command>
-    <command>OCA\Polls\Command\Db\Purge</command>
-    <command>OCA\Polls\Command\Db\RemoveIndices</command>
-    <command>OCA\Polls\Command\Db\Rebuild</command>
-    <command>OCA\Polls\Command\Db\CreateIndices</command>
-    <command>OCA\Polls\Command\Db\CleanMigrations</command>
-    <command>OCA\Polls\Command\Db\ResetWatch</command>
-    <command>OCA\Polls\Command\Poll\TransferOwnership</command>
-  </commands>
-  <settings>
-    <admin-section>OCA\Polls\Settings\AdminSection</admin-section>
-    <personal-section>OCA\Polls\Settings\PersonalSection</personal-section>
-    <admin>OCA\Polls\Settings\AdminSettings</admin>
-    <personal>OCA\Polls\Settings\PersonalSettings</personal>
-  </settings>
+
   <repair-steps>
     <pre-migration>
       <step>OCA\Polls\Migration\RepairSteps\RemoveObsoleteMigrations</step>
@@ -71,6 +54,35 @@
       <step>OCA\Polls\Migration\RepairSteps\Install</step>
     </install>
   </repair-steps>
+
+  <commands>
+    <command>OCA\Polls\Command\Share\Add</command>
+    <command>OCA\Polls\Command\Share\Remove</command>
+    <command>OCA\Polls\Command\Db\Purge</command>
+    <command>OCA\Polls\Command\Db\RemoveIndices</command>
+    <command>OCA\Polls\Command\Db\Rebuild</command>
+    <command>OCA\Polls\Command\Db\CreateIndices</command>
+    <command>OCA\Polls\Command\Db\CleanMigrations</command>
+    <command>OCA\Polls\Command\Db\ResetWatch</command>
+    <command>OCA\Polls\Command\Poll\TransferOwnership</command>
+  </commands>
+
+  <settings>
+    <admin>OCA\Polls\Settings\AdminSettings</admin>
+    <admin-section>OCA\Polls\Settings\AdminSection</admin-section>
+    <personal>OCA\Polls\Settings\PersonalSettings</personal>
+    <personal-section>OCA\Polls\Settings\PersonalSection</personal-section>
+  </settings>
+
+  <activity>
+    <filters>
+      <filter>OCA\Polls\Filter\ActivityFilter</filter>
+    </filters>
+    <providers>
+      <provider>OCA\Polls\Provider\ActivityProvider</provider>
+    </providers>
+  </activity>
+
   <navigations>
     <navigation>
       <name>Polls</name>
@@ -79,4 +91,5 @@
       <order>77</order>
     </navigation>
   </navigations>
+
 </info>

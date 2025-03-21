@@ -22,11 +22,16 @@ const SimpleLink = {
 	},
 
 	setup(props: { href: string; target: string; name: string }) {
-		return () => h('a', {
-			href: props.href,
-			target: props.target,
-		}, props.name)
-	}
+		return () =>
+			h(
+				'a',
+				{
+					href: props.href,
+					target: props.target,
+				},
+				props.name,
+			)
+	},
 }
 
 export { SimpleLink }

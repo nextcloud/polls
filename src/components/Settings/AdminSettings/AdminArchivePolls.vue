@@ -4,30 +4,34 @@
 -->
 
 <script setup>
-	import { InputDiv } from '../../Base/index.js'
-	import { t } from '@nextcloud/l10n'
+import { InputDiv } from '../../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
-	const appSettingsStore = useAppSettingsStore()
+const appSettingsStore = useAppSettingsStore()
 </script>
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.autoArchive" type="switch"
-		@update:model-value="appSettingsStore.write()">
+		<NcCheckboxRadioSwitch
+			v-model="appSettingsStore.autoArchive"
+			type="switch"
+			@update:model-value="appSettingsStore.write()">
 			{{ t('polls', 'Enable the automatic poll archiving') }}
 		</NcCheckboxRadioSwitch>
-		<InputDiv v-if="appSettingsStore.autoArchive"
+		<InputDiv
+			v-if="appSettingsStore.autoArchive"
 			v-model="appSettingsStore.autoArchiveOffset"
 			class="settings_details"
 			type="number"
 			inputmode="numeric"
 			use-num-modifiers
-			:label="t('polls', 'Days after which polls should be archived after closing')"
-			@change="appSettingsStore.write()"/>
+			:label="
+				t('polls', 'Days after which polls should be archived after closing')
+			"
+			@change="appSettingsStore.write()" />
 	</div>
 </template>
-

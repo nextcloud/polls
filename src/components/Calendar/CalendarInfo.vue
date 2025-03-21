@@ -4,97 +4,96 @@
 -->
 
 <script setup lang="ts">
-	import moment from '@nextcloud/moment'
-	import { computed, PropType } from 'vue'
-	import { Option } from '../../Types/index.ts'
+import moment from '@nextcloud/moment'
+import { computed, PropType } from 'vue'
+import { Option } from '../../Types/index.ts'
 
-	const props = defineProps(
-		{
-			calendarEvent: {
-				type: Object,
-				default: undefined,
-			},
+const props = defineProps({
+	calendarEvent: {
+		type: Object,
+		default: undefined,
+	},
 
-			option: {
-				type: Object as PropType<Option>,
-				default: undefined,
-			},
-		}
-	)
+	option: {
+		type: Object as PropType<Option>,
+		default: undefined,
+	},
+})
 
-	const calendarStyle = computed(() => ({
-		backgroundColor: props.calendarEvent.displayColor,
-		color: fontColor.value,
-	}))
+const calendarStyle = computed(() => ({
+	backgroundColor: props.calendarEvent.displayColor,
+	color: fontColor.value,
+}))
 
-	const fontColor = computed(() => {
-		if (props.calendarEvent.displayColor === 'transparent') {
-			return 'var(--color-main-text)'
-		}
+const fontColor = computed(() => {
+	if (props.calendarEvent.displayColor === 'transparent') {
+		return 'var(--color-main-text)'
+	}
 
-		const hex = props.calendarEvent.displayColor.replace(/#/, '')
-		const r = parseInt(hex.slice(0, 2), 16)
-		const g = parseInt(hex.slice(2, 4), 16)
-		const b = parseInt(hex.slice(4, 6), 16)
+	const hex = props.calendarEvent.displayColor.replace(/#/, '')
+	const r = parseInt(hex.slice(0, 2), 16)
+	const g = parseInt(hex.slice(2, 4), 16)
+	const b = parseInt(hex.slice(4, 6), 16)
 
-		const l = [
-			0.299 * r,
-			0.587 * g,
-			0.114 * b,
-		].reduce((a, b) => a + b) / 255
+	const l = [0.299 * r, 0.587 * g, 0.114 * b].reduce((a, b) => a + b) / 255
 
-		return l > 0.5 ? '#222' : '#ddd'
-	})
+	return l > 0.5 ? '#222' : '#ddd'
+})
 
-	const dayStart = computed(() => moment.unix(props.calendarEvent.start).format('ddd'))
+const dayStart = computed(() => moment.unix(props.calendarEvent.start).format('ddd'))
 
-	const dayEnd = computed(() => moment.unix(props.calendarEvent.end - 1).format('ddd'))
+const dayEnd = computed(() => moment.unix(props.calendarEvent.end - 1).format('ddd'))
 
-	const dayDisplay = computed(() => {
-		if (dayEnd.value === dayStart.value) {
-			return dayStart.value
-		}
+const dayDisplay = computed(() => {
+	if (dayEnd.value === dayStart.value) {
+		return dayStart.value
+	}
 
-		return `${dayStart.value} - ${dayEnd.value}`
-	})
+	return `${dayStart.value} - ${dayEnd.value}`
+})
 
-	const timeStart = computed(() => moment.unix(props.calendarEvent.start).format('LT'))
+const timeStart = computed(() => moment.unix(props.calendarEvent.start).format('LT'))
 
-	const timeEnd = computed(() => moment.unix(props.calendarEvent.end).format('LT'))
+const timeEnd = computed(() => moment.unix(props.calendarEvent.end).format('LT'))
 
-	const timeDisplay = computed(() => {
-		if (timeEnd.value === timeStart.value) {
-			return timeStart.value
-		}
-		return `${timeStart.value} - ${timeEnd.value}`
-	})
+const timeDisplay = computed(() => {
+	if (timeEnd.value === timeStart.value) {
+		return timeStart.value
+	}
+	return `${timeStart.value} - ${timeEnd.value}`
+})
 
-	const showJustDays = computed(() => dayStart.value !== dayEnd.value || props.calendarEvent.allDay)
+const showJustDays = computed(
+	() => dayStart.value !== dayEnd.value || props.calendarEvent.allDay,
+)
 
-	const statusClass = computed(() => props.calendarEvent.status.toLowerCase())
+const statusClass = computed(() => props.calendarEvent.status.toLowerCase())
 
-	const conflictLevel = computed(() => {
-		if (props.calendarEvent.calendarKey === 0) {
-			return 'conflict-ignore'
-		}
+const conflictLevel = computed(() => {
+	if (props.calendarEvent.calendarKey === 0) {
+		return 'conflict-ignore'
+	}
 
-		// No conflict, if calendarEvent starts after end of option
-		if (props.calendarEvent.start >= props.option.timestamp + props.option.duration) {
-			return 'conflict-no'
-		}
+	// No conflict, if calendarEvent starts after end of option
+	if (
+		props.calendarEvent.start >=
+		props.option.timestamp + props.option.duration
+	) {
+		return 'conflict-no'
+	}
 
-		// No conflict, if calendarEvent ends before option
-		if (props.calendarEvent.end <= props.option.timestamp) {
-			return 'conflict-no'
-		}
+	// No conflict, if calendarEvent ends before option
+	if (props.calendarEvent.end <= props.option.timestamp) {
+		return 'conflict-no'
+	}
 
-		return 'conflict-yes'
-	})
-
+	return 'conflict-yes'
+})
 </script>
 
 <template>
-	<div class="calendar-info"
+	<div
+		class="calendar-info"
 		:class="[conflictLevel, statusClass]"
 		:style="calendarStyle">
 		<div class="calendar-info__time">
@@ -107,7 +106,6 @@
 </template>
 
 <style lang="scss">
-
 .calendar-info {
 	display: flex;
 	align-items: center;

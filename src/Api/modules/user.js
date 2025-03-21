@@ -10,7 +10,10 @@ const userSettings = {
 			method: 'GET',
 			url: 'preferences',
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getUserSettings.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getUserSettings.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -19,7 +22,10 @@ const userSettings = {
 			method: 'GET',
 			url: 'session',
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getSession.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getSession.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -28,7 +34,10 @@ const userSettings = {
 			method: 'POST',
 			url: 'preferences',
 			data: { preferences },
-			cancelToken: cancelTokenHandlerObject[this.writeUserSettings.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.writeUserSettings.name
+				].handleRequestCancellation().token,
 		})
 	},
 }

@@ -33,7 +33,6 @@ const writeFileAsync = (path, data, encoding) => fs.writeFile(path, data, encodi
  */
 const updateXml = async () => {
 	try {
-
 		// Read the current version from package.json
 		const packageJsonContent = await readFileAsync('./package.json', 'utf-8')
 		const { version: newVersion } = JSON.parse(packageJsonContent)

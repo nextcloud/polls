@@ -4,24 +4,25 @@
 -->
 
 <script setup lang="ts">
-	import { t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-	import NcPopover from '@nextcloud/vue/components/NcPopover'
-	import NcActions from '@nextcloud/vue/components/NcActions'
-	import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcPopover from '@nextcloud/vue/components/NcPopover'
+import NcActions from '@nextcloud/vue/components/NcActions'
+import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
-	import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
-	import AutoReminderInformation from './AutoReminderInformation.vue'
+import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
+import AutoReminderInformation from './AutoReminderInformation.vue'
 
-	import { usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
-	const pollStore = usePollStore()
+const pollStore = usePollStore()
 </script>
 
 <template>
 	<div class="auto-reminder-switch">
-		<NcCheckboxRadioSwitch v-model="pollStore.configuration.autoReminder"
+		<NcCheckboxRadioSwitch
+			v-model="pollStore.configuration.autoReminder"
 			type="switch"
 			@update:model-value="pollStore.write()">
 			{{ t('polls', 'Use Autoreminder') }}
@@ -29,7 +30,9 @@
 		<NcPopover :focus-trap="false">
 			<template #trigger>
 				<NcActions>
-					<NcActionButton :name="t('polls', 'Autoreminder informations')" :aria-label="t('polls', 'Autoreminder informations')">
+					<NcActionButton
+						:name="t('polls', 'Autoreminder informations')"
+						:aria-label="t('polls', 'Autoreminder informations')">
 						<template #icon>
 							<InformationIcon />
 						</template>
@@ -42,10 +45,10 @@
 </template>
 
 <style lang="scss">
-	.auto-reminder-switch {
-		display: flex;
-		.information-icon {
-			margin-left: 12px;
-		}
+.auto-reminder-switch {
+	display: flex;
+	.information-icon {
+		margin-left: 12px;
 	}
+}
 </style>

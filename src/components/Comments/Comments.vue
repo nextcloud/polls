@@ -4,24 +4,32 @@
 -->
 
 <script setup lang="ts">
-	import CommentItem from './CommentItem.vue'
-	import { t } from '@nextcloud/l10n'
-	import { usePreferencesStore } from '../../stores/preferences.ts'
-	import { useCommentsStore } from '../../stores/comments.ts'
+import CommentItem from './CommentItem.vue'
+import { t } from '@nextcloud/l10n'
+import { usePreferencesStore } from '../../stores/preferences.ts'
+import { useCommentsStore } from '../../stores/comments.ts'
 
-	const commentsStore = useCommentsStore()
-	const preferencesStore = usePreferencesStore()
-	const cssVar = {
-		'--content-deleted': `" (${t('polls', 'deleted')})"`,
-	}
+const commentsStore = useCommentsStore()
+const preferencesStore = usePreferencesStore()
+const cssVar = {
+	'--content-deleted': `" (${t('polls', 'deleted')})"`,
+}
 </script>
 
 <template>
-	<TransitionGroup tag="ul"
+	<TransitionGroup
+		tag="ul"
 		name="list"
-		:class="['comments' , { 'alternativestyle': preferencesStore.user.useCommentsAlternativeStyling }]"
+		:class="[
+			'comments',
+			{
+				alternativestyle:
+					preferencesStore.user.useCommentsAlternativeStyling,
+			},
+		]"
 		:style="cssVar">
-		<CommentItem v-for="(comment) in commentsStore.groupedComments"
+		<CommentItem
+			v-for="comment in commentsStore.groupedComments"
 			:key="comment.id"
 			:comment="comment"
 			tag="li" />

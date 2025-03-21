@@ -10,7 +10,10 @@ const session = {
 			method: 'GET',
 			url: '/session',
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getSession.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getSession.name
+				].handleRequestCancellation().token,
 		})
 	},
 }

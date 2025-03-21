@@ -4,65 +4,87 @@
 -->
 
 <script setup>
-	import { computed } from 'vue'
-	import { InputDiv } from '../../Base/index.js'
-	import { t } from '@nextcloud/l10n'
+import { computed } from 'vue'
+import { InputDiv } from '../../Base/index.js'
+import { t } from '@nextcloud/l10n'
 
-	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
+import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-	import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
+import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
 
-	const preferencesStore = usePreferencesStore()
+const preferencesStore = usePreferencesStore()
 
-	const defaultViewTextPoll = computed({
-		get() {
-			return preferencesStore.user.defaultViewTextPoll === ViewMode.ListView
-		},
-		set(value) {
-			preferencesStore.user.defaultViewTextPoll = value ? ViewMode.ListView : ViewMode.TableView
-		},
-	})
+const defaultViewTextPoll = computed({
+	get() {
+		return preferencesStore.user.defaultViewTextPoll === ViewMode.ListView
+	},
+	set(value) {
+		preferencesStore.user.defaultViewTextPoll = value
+			? ViewMode.ListView
+			: ViewMode.TableView
+	},
+})
 
-	const defaultViewDatePoll = computed({
-		get() {
-			return preferencesStore.user.defaultViewDatePoll === ViewMode.ListView
-		},
-		set(value) {
-			preferencesStore.user.defaultViewDatePoll = value ? ViewMode.ListView : ViewMode.TableView
-		},
-	})
+const defaultViewDatePoll = computed({
+	get() {
+		return preferencesStore.user.defaultViewDatePoll === ViewMode.ListView
+	},
+	set(value) {
+		preferencesStore.user.defaultViewDatePoll = value
+			? ViewMode.ListView
+			: ViewMode.TableView
+	},
+})
 </script>
 
 <template>
 	<div>
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch v-model="defaultViewTextPoll"
-				type ="switch"
+			<NcCheckboxRadioSwitch
+				v-model="defaultViewTextPoll"
+				type="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Text polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
-				{{ t('polls', 'Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view.') }}
+				{{
+					t(
+						'polls',
+						'Check this, if you prefer to display text poll in a vertical aligned list rather than in the grid view. The initial default is list view.',
+					)
+				}}
 			</div>
 		</div>
 
 		<div class="user_settings">
-			<NcCheckboxRadioSwitch v-model="defaultViewDatePoll"
+			<NcCheckboxRadioSwitch
+				v-model="defaultViewDatePoll"
 				type="switch"
 				@update:model-value="preferencesStore.write()">
 				{{ t('polls', 'Date polls default to list view') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
-				{{ t('polls', 'Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view.') }}
+				{{
+					t(
+						'polls',
+						'Check this, if you prefer to display date poll in a vertical view rather than in the grid view. The initial default is grid view.',
+					)
+				}}
 			</div>
 		</div>
 
 		<div class="user_settings">
-			<InputDiv v-model="preferencesStore.user.relevantOffset"
+			<InputDiv
+				v-model="preferencesStore.user.relevantOffset"
 				type="number"
 				inputmode="numeric"
 				use-num-modifiers
-				:label="t('polls', 'Enter the amount of days, polls without activity stay in the relevant list:')"
+				:label="
+					t(
+						'polls',
+						'Enter the amount of days, polls without activity stay in the relevant list:',
+					)
+				"
 				@change="preferencesStore.write()" />
 		</div>
 	</div>

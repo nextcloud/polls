@@ -14,10 +14,8 @@ import './assets/scss/polls-icon.scss'
 
 document.addEventListener('DOMContentLoaded', () => {
 	OCA.Dashboard.register('polls', (el) => {
-		const PollsDashboard = createApp(Dashboard)
-		.use(pinia)
-		.mount(el)
+		const PollsDashboard = createApp(Dashboard).use(pinia).mount(el)
 
-	return PollsDashboard
+		return PollsDashboard
 	})
 })

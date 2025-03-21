@@ -10,7 +10,10 @@ const comments = {
 			method: 'GET',
 			url: `poll/${pollId}/comments`,
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.getComments.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getComments.name
+				].handleRequestCancellation().token,
 		})
 	},
 	addComment(pollId, message) {
@@ -19,7 +22,10 @@ const comments = {
 			url: `poll/${pollId}/comment`,
 			data: { message },
 			params: { time: +new Date() },
-			cancelToken: cancelTokenHandlerObject[this.addComment.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.addComment.name
+				].handleRequestCancellation().token,
 		})
 	},
 
@@ -29,7 +35,10 @@ const comments = {
 			url: `comment/${commentId}`,
 			params: { time: +new Date() },
 
-			cancelToken: cancelTokenHandlerObject[this.deleteComment.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.deleteComment.name
+				].handleRequestCancellation().token,
 		})
 	},
 	restoreComment(commentId) {
@@ -38,7 +47,10 @@ const comments = {
 			url: `comment/${commentId}/restore`,
 			params: { time: +new Date() },
 
-			cancelToken: cancelTokenHandlerObject[this.restoreComment.name].handleRequestCancellation().token,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.restoreComment.name
+				].handleRequestCancellation().token,
 		})
 	},
 }

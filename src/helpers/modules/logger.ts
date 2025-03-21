@@ -5,9 +5,6 @@
 
 import { getLoggerBuilder } from '@nextcloud/logger'
 
-const Logger = getLoggerBuilder()
-	.setApp('polls')
-	.detectUser()
-	.build()
+const Logger = getLoggerBuilder().setApp('polls').detectUser().build()
 
 export { Logger }

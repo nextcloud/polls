@@ -12,7 +12,8 @@ const axiosConfig = {
 	headers: {
 		Accept: 'application/json',
 		'Nc-Polls-Client-Id': clientSessionId,
-		'Nc-Polls-Client-Time-Zone': Intl.DateTimeFormat().resolvedOptions().timeZone,
+		'Nc-Polls-Client-Time-Zone':
+			Intl.DateTimeFormat().resolvedOptions().timeZone,
 	},
 }
 
@@ -35,20 +36,22 @@ const ocsInstance = axios.create(axiosOcsConfig)
  */
 const createCancelTokenHandler = (apiObject) => {
 	const cancelTokenHandler = {}
-	Object.getOwnPropertyNames(apiObject)
-		.forEach((propertyName) => {
-			const cancelTokenRequestHandler = {
-				cancelToken: undefined,
-			}
+	Object.getOwnPropertyNames(apiObject).forEach((propertyName) => {
+		const cancelTokenRequestHandler = {
+			cancelToken: undefined,
+		}
 
-			cancelTokenHandler[propertyName] = {
-				handleRequestCancellation: () => {
-					cancelTokenRequestHandler.cancelToken && cancelTokenRequestHandler.cancelToken.cancel(`${propertyName} canceled`)
-					cancelTokenRequestHandler.cancelToken = CancelToken.source()
-					return cancelTokenRequestHandler.cancelToken
-				},
-			}
-		})
+		cancelTokenHandler[propertyName] = {
+			handleRequestCancellation: () => {
+				cancelTokenRequestHandler.cancelToken &&
+					cancelTokenRequestHandler.cancelToken.cancel(
+						`${propertyName} canceled`,
+					)
+				cancelTokenRequestHandler.cancelToken = CancelToken.source()
+				return cancelTokenRequestHandler.cancelToken
+			},
+		}
+	})
 
 	return cancelTokenHandler
 }
