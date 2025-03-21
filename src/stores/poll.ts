@@ -452,9 +452,22 @@ export const usePollStore = defineStore('poll', {
 				pollsStore.load()
 			}
 		},
+		async LockAnonymous() {
+			try {
+				await PollsAPI.lockAnonymous(this.id)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error locking poll to anonymous:', { error, state: this.$state })
+				throw error
+			} finally {
+				// reload the poll
+				this.load()
+			}
+		},
 
 		write: debounce(async function() {
 			const pollsStore = usePollsStore()
+
 			if (this.configuration.title === '') {
 				showError(t('polls', 'Title must not be empty!'))
 				return
@@ -469,9 +482,9 @@ export const usePollStore = defineStore('poll', {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error updating poll:', { error, poll: this.$state })
 				showError(t('polls', 'Error writing poll'))
-				this.load()
 				throw error
 			} finally {
+				this.load()
 				pollsStore.load()
 			}
 		}, 500),

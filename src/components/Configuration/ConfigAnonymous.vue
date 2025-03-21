@@ -10,7 +10,7 @@
 
 	import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 	import { NcDialog } from '@nextcloud/vue'
-	import { ButtonType } from '@nextcloud/vue/components/NcButton'
+	import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 	const dialog = {
 		message: t('polls', 'Once enabled the anonymous setting can not be reverted anymore.'),
@@ -32,9 +32,12 @@
 	}
 	const showDialog = ref(false)
 
-	function confirmationDialog() {
-		if (!pollStore.permissions.deanonymize &&
-			pollStore.configuration.anonymous) {
+	const showLockAnonymous = computed(() => pollStore.permissions.deanonymize
+		&& pollStore.status.isAnonymous
+		&& !pollStore.status.isRealAnonymous)
+
+	function spawnConfirmationDialog(lockAnonymous = false) {
+		if ((!pollStore.permissions.deanonymize && pollStore.configuration.anonymous) || lockAnonymous) {
 			showDialog.value = true
 			return
 		}
@@ -42,12 +45,18 @@
 	}
 
 	function confirmAnonymous() {
+		if (pollStore.permissions.deanonymize) {
+			pollStore.LockAnonymous()
+		}
+
 		pollStore.write()
 		return true
 	}
 
 	function cancelAnonymous() {
-		pollStore.configuration.anonymous = false
+		if (!pollStore.permissions.deanonymize) {
+			pollStore.configuration.anonymous = false
+		}
 		return true
 	}
 
@@ -59,9 +68,13 @@
 	<NcCheckboxRadioSwitch v-model="pollStore.configuration.anonymous"
 		type="switch"
 		:disabled="disabledState"
-		@update:model-value="confirmationDialog()">
+		@update:model-value="spawnConfirmationDialog()">
 		{{ t('polls', 'Anonymous poll') }}
 	</NcCheckboxRadioSwitch>
+
+	<NcButton v-if="showLockAnonymous" class="indented" @click="spawnConfirmationDialog(true)">
+		{{ t('polls', 'Anonymize poll irrevocably') }}
+	</NcButton>
 
 	<NcDialog v-model:open="showDialog" v-bind="dialog" />
 

@@ -272,6 +272,29 @@ class PollService {
 	}
 
 	/**
+	 * Manually lock anonymization
+	 * @return Poll
+	 */
+	public function lockAnonymous(int $pollId): Poll {
+		$this->poll = $this->pollMapper->find($pollId);
+
+		// Only possible, if poll is already anonymized
+		if ($this->poll->getAnonymous() < 1) {
+			throw new ForbiddenException('Anonymization is not allowed');
+		}
+
+		// Only possible, if user is allowed to deanonymize
+		$this->poll->request(Poll::PERMISSION_DEANONYMIZE);
+
+		$this->poll->setAnonymous(-1);
+		$this->poll = $this->pollMapper->update($this->poll);
+
+		$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($this->poll));
+
+		return $this->poll;
+	}
+
+	/**
 	 * Update timestamp for last interaction with polls
 	 */
 	public function setLastInteraction(int $pollId): void {

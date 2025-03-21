@@ -112,6 +112,18 @@ class PollController extends BaseController {
 	}
 
 	/**
+	 * Lock Anonymous
+	 * @param int $pollId Poll id
+	 */
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/lockAnonymous')]
+	public function lockAnonymous(int $pollId): JSONResponse {
+		return $this->response(fn () => [
+			'poll' => $this->pollService->lockAnonymous($pollId),
+		]);
+	}
+
+	/**
 	 * Send confirmation mails
 	 * @param int $pollId Poll id
 	 */
