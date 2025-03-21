@@ -23,7 +23,7 @@ class Anon extends UserBase {
 	}
 
 	public function getSimpleType(): string {
-		return 'guest';
+		return UserBase::TYPE_GUEST;
 	}
 
 	public function getLanguageCode(): string {

@@ -10,6 +10,7 @@
 	import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+	import CardDiv from '../../Base/modules/CardDiv.vue'
 
 	const appSettingsStore = useAppSettingsStore()
 
@@ -34,5 +35,14 @@
 				@update:model-value="appSettingsStore.write()"
 				@search="appSettingsStore.loadGroups" />
 		</div>
+		<CardDiv type="info">
+			<p>
+				{{ t('polls', 'Effects on restricted owners:') }}
+			</p>
+			<ul>
+				<li>{{ t('polls', 'Anonymizing a poll of a restricted owner means that this poll is anonymous for everyone, including the owner.') }}</li>
+				<li>{{ t('polls', 'Deletion and changing votes of participants is not possible') }}</li>
+			</ul>
+		</CardDiv>
 	</div>
 </template>

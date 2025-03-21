@@ -52,7 +52,7 @@ class UserApiController extends BaseApiV2Controller {
 	public function getSession(): DataResponse {
 		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
-			'currentUser' => $this->userSession->getUser(),
+			'currentUser' => $this->userSession->getCurrentUser(),
 			'appPermissions' => $this->appSettings->getPermissionsArray(),
 			'appSettings' => $this->appSettings->getAppSettings(),
 		]);

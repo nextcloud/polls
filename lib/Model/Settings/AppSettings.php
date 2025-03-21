@@ -36,8 +36,8 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_SHOW_MAIL_ADDRESSES = 'showMailAddresses';
 	public const SETTING_SHOW_MAIL_ADDRESSES_GROUPS = 'showMailAddressesGroups';
 
-	public const SETTING_UNRESTRICTED_OWNER = 'unrestrictedOwner';
-	public const SETTING_UNRESTRICTED_OWNER_GROUPS = 'unrestrictedOwnerGroups';
+	public const SETTING_UNRESTRICTED_POLL_OWNER = 'unrestrictedOwner';
+	public const SETTING_UNRESTRICTED_POLL_OWNER_GROUPS = 'unrestrictedOwnerGroups';
 
 	public const SETTING_LEGAL_TERMS_IN_EMAIL = 'legalTermsInEmail';
 	public const SETTING_DISCLAIMER = 'disclaimer';
@@ -74,14 +74,16 @@ class AppSettings implements JsonSerializable {
 	public function getPermissionsArray(): array {
 		return [
 			'allAccess' => $this->getAllAccessAllowed(),
-			'publicShares' => $this->getPublicSharesAllowed(),
-			'pollCreation' => $this->getPollCreationAllowed(),
-			'seeMailAddresses' => $this->getAllowSeeMailAddresses(),
-			'pollDownload' => $this->getPollDownloadAllowed(),
-			'comboView' => $this->getComboAllowed(),
-			'unrestrictedOwner' => $this->getUnrestrictedOwner(),
 			'addShares' => $this->systemSettings->getShareCreateAllowed(),
 			'addSharesExternal' => $this->systemSettings->getShareCreateAllowed(),
+			'changeForeignVotes' => $this->getIsUnrestrictedPollOwner(),
+			'comboView' => $this->getComboAllowed(),
+			'deanonymizePoll' => $this->getIsUnrestrictedPollOwner(),
+			'pollCreation' => $this->getPollCreationAllowed(),
+			'pollDownload' => $this->getPollDownloadAllowed(),
+			'publicShares' => $this->getPublicSharesAllowed(),
+			'seeMailAddresses' => $this->getAllowSeeMailAddresses(),
+			'unrestrictedOwner' => $this->getIsUnrestrictedPollOwner(),
 		];
 	}
 
@@ -155,7 +157,7 @@ class AppSettings implements JsonSerializable {
 	/**
 	 * Get the value of a boolean setting
 	 */
-	private function getBooleanSetting(string $key, string $groupKey = self::NO_GROUPCHECK, bool $default = true, string $app = AppConstants::APP_ID): bool {
+	public function getBooleanSetting(string $key, string $groupKey = self::NO_GROUPCHECK, bool $default = true, string $app = AppConstants::APP_ID): bool {
 		// key missing or invalid, return default
 		if (!$this->checkSettingType($key, IAppConfig::VALUE_BOOL, $app)) {
 			return $default;
@@ -180,7 +182,7 @@ class AppSettings implements JsonSerializable {
 	/**
 	 * Get the value of an group (array) setting
 	 */
-	private function getGroupSetting(string $key, array $default = [], string $app = AppConstants::APP_ID): array {
+	public function getGroupSetting(string $key, array $default = [], string $app = AppConstants::APP_ID): array {
 		if (!$this->checkSettingType($key, IAppConfig::VALUE_ARRAY, $app)) {
 			return $default;
 		}
@@ -239,8 +241,8 @@ class AppSettings implements JsonSerializable {
 	/**
 	 * Poll creation permission is controlled by app settings
 	 */
-	public function getUnrestrictedOwner(): bool {
-		return $this->getBooleanSetting(self::SETTING_UNRESTRICTED_OWNER, self::SETTING_UNRESTRICTED_OWNER_GROUPS);
+	public function getIsUnrestrictedPollOwner(): bool {
+		return $this->getBooleanSetting(self::SETTING_UNRESTRICTED_POLL_OWNER, self::SETTING_UNRESTRICTED_POLL_OWNER_GROUPS);
 	}
 
 	/**
@@ -254,7 +256,7 @@ class AppSettings implements JsonSerializable {
 	 * Permission to download emailaddresses is controlled by app settings
 	 */
 	public function getPollDownloadAllowed(): bool {
-		return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD,self::SETTING_ALLOW_POLL_DOWNLOAD_GROUPS);
+		return $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD, self::SETTING_ALLOW_POLL_DOWNLOAD_GROUPS);
 	}
 
 	/**
@@ -367,8 +369,8 @@ class AppSettings implements JsonSerializable {
 	}
 
 	/**
-	 * Get the group objects for the given group ids
-	 * @param array $groupIds
+	 * Get the group objects for the given settingsGroup
+	 * @param string $settingsGroup
 	 * @return Group[]
 	 * @psalm-return array<Group>
 	 */
@@ -406,8 +408,8 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_ALLOW_POLL_DOWNLOAD => $this->getBooleanSetting(self::SETTING_ALLOW_POLL_DOWNLOAD),
 			self::SETTING_ALLOW_POLL_DOWNLOAD_GROUPS => $this->getGroupObjects(self::SETTING_ALLOW_POLL_DOWNLOAD_GROUPS),
 
-			self::SETTING_UNRESTRICTED_OWNER => $this->getBooleanSetting(self::SETTING_UNRESTRICTED_OWNER),
-			self::SETTING_UNRESTRICTED_OWNER_GROUPS => $this->getGroupObjects(self::SETTING_UNRESTRICTED_OWNER_GROUPS),
+			self::SETTING_UNRESTRICTED_POLL_OWNER => $this->getBooleanSetting(self::SETTING_UNRESTRICTED_POLL_OWNER),
+			self::SETTING_UNRESTRICTED_POLL_OWNER_GROUPS => $this->getGroupObjects(self::SETTING_UNRESTRICTED_POLL_OWNER_GROUPS),
 
 			self::SETTING_SHOW_MAIL_ADDRESSES => $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES),
 			self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS => $this->getGroupObjects(self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS),
@@ -434,7 +436,7 @@ class AppSettings implements JsonSerializable {
 
 	private function isMember(array $groups): bool {
 		foreach ($groups as $GID) {
-			if ($this->userSession->getUser()->getIsInGroup($GID)) {
+			if ($this->userSession->getCurrentUser()->getIsInGroup($GID)) {
 				return true;
 			}
 		}

@@ -257,7 +257,7 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		datePolls(state: PollList): Poll[] {
-			return state.list.filter((poll) => (poll.type === PollType.Date && !poll.status.deleted))
+			return state.list.filter((poll) => (poll.type === PollType.Date && !poll.status.isDeleted))
 		},
 
 		pollsLoading(state): boolean {

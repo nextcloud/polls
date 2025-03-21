@@ -105,7 +105,7 @@ class PublicController extends BasePublicController {
 	public function getSession(): JSONResponse {
 		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
-			'currentUser' => $this->userSession->getUser(),
+			'currentUser' => $this->userSession->getCurrentUser(),
 			'appPermissions' => $this->appSettings->getPermissionsArray(),
 			'appSettings' => $this->appSettings->getAppSettings(),
 			'share' => $this->userSession->getShare(),

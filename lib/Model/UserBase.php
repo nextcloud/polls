@@ -29,6 +29,7 @@ use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\Server;
 use OCP\Share\IShare;
+use Psr\Log\LoggerInterface;
 
 class UserBase implements JsonSerializable {
 	/** @var string */
@@ -38,7 +39,7 @@ class UserBase implements JsonSerializable {
 	/** @var string */
 	public const TYPE_EXTERNAL = 'external';
 	public const TYPE_EMPTY = 'empty';
-	public const TYPE_ANON = 'anonymous';
+	public const TYPE_GUEST = 'guest';
 	public const TYPE_CIRCLE = Circle::TYPE;
 	public const TYPE_CONTACT = Contact::TYPE;
 	public const TYPE_CONTACTGROUP = ContactGroup::TYPE;
@@ -51,15 +52,15 @@ class UserBase implements JsonSerializable {
 
 	/** @var string[] */
 	protected array $categories = [];
-	protected string $anonymizeLevel = EntityWithUser::ANON_PRIVACY;
 	protected string $description = '';
-	protected string $richObjectType = 'user';
+	protected string $richObjectType = self::TYPE_USER;
 	protected string $organisation = '';
 	protected IDateTimeZone $timeZone;
 	protected IGroupManager $groupManager;
 	protected IL10N $l10n;
 	protected UserSession $userSession;
 	protected AppSettings $appSettings;
+	protected LoggerInterface $logger;
 
 	public function __construct(
 		protected string $id,
@@ -75,6 +76,7 @@ class UserBase implements JsonSerializable {
 		$this->timeZone = Server::get(IDateTimeZone::class);
 		$this->userSession = Server::get(UserSession::class);
 		$this->appSettings = Server::get(AppSettings::class);
+		$this->logger = Server::get(LoggerInterface::class);
 	}
 
 	public function getId(): string {
@@ -83,10 +85,6 @@ class UserBase implements JsonSerializable {
 
 	public function getShareUserId(): string {
 		return $this->getId();
-	}
-
-	public function setAnonymizeLevel(string $anonymizeLevel = EntityWithUser::ANON_PRIVACY): void {
-		$this->anonymizeLevel = $anonymizeLevel;
 	}
 
 	/**
@@ -101,7 +99,7 @@ class UserBase implements JsonSerializable {
 	 */
 	public function getHashedUserId(): string {
 		// TODO: add a session salt
-		return hash('md5', $this->getId());
+		return hash('md5', $this->id);
 	}
 
 	/**
@@ -116,6 +114,7 @@ class UserBase implements JsonSerializable {
 	 * 		Group::TYPE (NC Group),
 	 * 		Circle::TYPE (Share),
 	 * 		ContactGroup::TYPE (Share)
+	 * 		Anon::TYPE (Anonymized User)
 	 *
 	 * @return string
 	 **/
@@ -134,6 +133,7 @@ class UserBase implements JsonSerializable {
 	 * 		Group::TYPE (NC Group),
 	 * 		Circle::TYPE (Share),
 	 * 		ContactGroup::TYPE (Share)
+	 * 		Anon::TYPE (Anonymized User)
 	 *
 	 * @return string
 	 **/
@@ -141,11 +141,14 @@ class UserBase implements JsonSerializable {
 		return $this->type;
 	}
 
+	public function getIsGuest(): bool {
+		return !in_array($this->type, [User::TYPE, Admin::TYPE]);
+	}
 	/**
 	 * used for telling internal from guest users
 	 */
 	public function getSimpleType(): string {
-		return in_array($this->type, [User::TYPE, Admin::TYPE]) ? 'user' : 'guest';
+		return in_array($this->type, [User::TYPE, Admin::TYPE]) ? self::TYPE_USER : self::TYPE_GUEST;
 	}
 
 	public function getLanguageCode(): string {
@@ -200,7 +203,8 @@ class UserBase implements JsonSerializable {
 	 */
 	public function hasName(string $checkName): bool {
 		return in_array(strtolower($checkName), [
-			strtolower($this->getDisplayName()), strtolower($this->getId()),
+			strtolower($this->getDisplayName()),
+			strtolower($this->getId()),
 		]);
 	}
 
@@ -214,10 +218,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	public function getIsNoUser(): bool {
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL && $this->getIsCurrentUser()) {
-			return true;
-		}
-		return $this->getSimpleType() !== 'user';
+		return $this->getSimpleType() !== self::TYPE_USER;
 	}
 
 	public function getRichObjectString() : array {
@@ -299,20 +300,23 @@ class UserBase implements JsonSerializable {
 	 */
 	public function getRichUserArray(): array {
 		return	[
-			'id' => $this->getId(),
-			'userId' => $this->getId(),
+			'array' => 'richArray',
+			'categories' => $this->getCategories(),
+			'desc' => $this->getDescription(),
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getEmailAddress(),
-			'subname' => $this->getSubName(),
-			'subtitle' => $this->getDescription(),
+			'id' => $this->getId(),
+			'isGuest' => $this->getIsGuest(),
 			'isNoUser' => $this->getIsNoUser(),
-			'desc' => $this->getDescription(),
-			'type' => $this->getType(),
-			'organisation' => $this->getOrganisation(),
+			'isUnrestrictedOwner' => $this->getIsUnrestrictedPollOwner(),
 			'languageCode' => $this->getLanguageCode(),
 			'localeCode' => $this->getLocaleCode(),
+			'organisation' => $this->getOrganisation(),
+			'subname' => $this->getSubName(),
+			'subtitle' => $this->getDescription(),
 			'timeZone' => $this->getTimeZoneName(),
-			'categories' => $this->getCategories(),
+			'type' => $this->getType(),
+			'userId' => $this->getId(),
 		];
 	}
 
@@ -327,20 +331,23 @@ class UserBase implements JsonSerializable {
 	 */
 	protected function getSimpleUserArray(): array {
 		return	[
-			'id' => $this->getSafeId(),
-			'userId' => $this->getSafeId(),
+			'array' => 'simpleArray',
+			'categories' => '',
+			'desc' => '',
 			'displayName' => $this->getSafeDisplayName(),
 			'emailAddress' => $this->getSafeEmailAddress(),
-			'subname' => '',
-			'subtitle' => '',
+			'id' => $this->getSafeId(),
 			'isNoUser' => $this->getIsNoUser(),
-			'desc' => '',
-			'type' => $this->getSafeType(),
-			'organisation' => '',
+			'isGuest' => $this->getIsGuest(),
+			'isUnrestrictedOwner' => false,
 			'languageCode' => '',
 			'localeCode' => '',
+			'organisation' => '',
+			'subname' => '',
+			'subtitle' => '',
 			'timeZone' => '',
-			'categories' => '',
+			'type' => $this->getSafeType(),
+			'userId' => $this->getSafeId(),
 		];
 	}
 
@@ -348,62 +355,41 @@ class UserBase implements JsonSerializable {
 	 * returns the safe id to avoid leaking the userId
 	 */
 	public function getSafeId(): string {
-		// return real userId for cron jobs
-		if ($this->userSession->getUser()->getIsSystemUser()) {
-			return $this->getId();
-		}
-
 		// always return real userId for the current user
 		if ($this->getIsCurrentUser()) {
 			return $this->getId();
 		}
 
-		// return hashed userId, if fully anonimized
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
+		// hash the userId, if user is not logged in
+		if (!$this->userSession->getIsLoggedIn()) {
 			return $this->getHashedUserId();
 		}
 
-		// internal users may see the real userId
-		if ($this->userSession->getIsLoggedIn()) {
-			return $this->getId();
-		}
-
 		// otherwise return the obfuscated userId
-		return $this->getHashedUserId();
+		return $this->getId();
 	}
 
 	/**
 	 * anonymize the displayname in case of anonymous settings
 	 */
 	public function getSafeDisplayName(): string {
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
-			return 'Anon';
-		}
-
 		return $this->displayName;
 	}
 
 	// Function for obfuscating mail adresses; Default return the email address
-	public function getSafeEmailAddress(): ?string {
-		// return real email address for cron jobs
-		if ($this->userSession->getUser()->getIsSystemUser()) {
-			return $this->getEmailAddress();
-		}
-
-		// always return real email address for the current user
+	public function getSafeEmailAddress(): string {
+		// always return real email address if this user object is the current user
 		if ($this->getIsCurrentUser()) {
 			return $this->getEmailAddress();
 		}
 
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
-			return null;
+		// hide email address, if user is denied to see email addresses (App setting)
+		// hide email address, if user is not logged in
+		if (!$this->appSettings->getAllowSeeMailAddresses() || !$this->userSession->getIsLoggedIn()) {
+			return '';
 		}
 
-		if ($this->appSettings->getAllowSeeMailAddresses()) {
-			return $this->getEmailAddress();
-		}
-
-		return null;
+		return $this->getEmailAddress();
 	}
 
 	public function getOrganisation(): string {
@@ -414,49 +400,54 @@ class UserBase implements JsonSerializable {
 		return $this->getId() === $this->userSession->getCurrentUserId();
 	}
 
+	/**
+	 * returns true, if the user is an unrestricted owner
+	 * Only valid for User
+	 */
+	public function getIsUnrestrictedPollOwner(): bool {
+		return false;
+	}
+
+	/**
+	 * returns true, if the user is an admin
+	 * Only valid for User, false for other user types
+	 */
 	public function getIsAdmin(): bool {
-		return $this->groupManager->isAdmin($this->getId());
+		return false;
 	}
 
 	public function getIsSystemUser(): bool {
 		return $this->groupManager->isAdmin($this->getId());
 	}
 
+	/**
+	 * returns true, if the user is member of the requested group
+	 * Only valid for User, false for other user types
+	 */
 	public function getIsInGroup(string $groupName): bool {
-		return $this->groupManager->isInGroup($this->getId(), $groupName);
-	}
-
-	public function getIsInGroupArray(array $groupNames): bool {
-		if (!($this instanceof User)) {
-			return false;
-		}
-
-		foreach ($groupNames as $groupName) {
-			if ($this->getIsInGroup($groupName)) {
-				return true;
-			}
-		}
 		return false;
 	}
 
+	/**
+	 * returns true, if the user is member of one of the requested groups
+	 * Only valid for User, false for other user types
+	 */
+	public function getIsInGroupArray(array $groupNames): bool {
+		return false;
+	}
 
 	/**
 	 * returns the safe id to avoid leaking the real user type
 	 */
 	public function getSafeType(): string {
-		// return real type for cron jobs
-		if ($this->userSession->getUser()->getIsSystemUser()) {
-			return $this->getType();
-		}
-
 		// always return real type for the current user
 		if ($this->getIsCurrentUser()) {
 			return $this->getType();
 		}
 
-		// return hashed userId, if fully anonimized
-		if ($this->anonymizeLevel === EntityWithUser::ANON_FULL) {
-			return self::TYPE_ANON;
+		// return simple type, if user is not logged in
+		if (!$this->userSession->getIsLoggedIn()) {
+			return $this->getSimpleType();
 		}
 
 		return $this->getType();

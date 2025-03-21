@@ -36,10 +36,10 @@
 		if (answer.value === Answer.No) {
 			// TODO: check isActive
 			// return (closed && props.option.confirmed) || isActive ? 'no' : ''
-			return (props.poll.status.expired && props.option.confirmed) ? Answer.No : Answer.None
+			return (props.poll.status.isExpired && props.option.confirmed) ? Answer.No : Answer.None
 		}
 		if (answer.value === '') {
-			return (props.poll.status.expired && props.option.confirmed) ? Answer.No : Answer.None
+			return (props.poll.status.isExpired && props.option.confirmed) ? Answer.No : Answer.None
 		}
 		return answer.value
 	})

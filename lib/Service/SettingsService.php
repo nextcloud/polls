@@ -40,7 +40,7 @@ class SettingsService {
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_USE_ACTIVITY, $settingsArray[AppSettings::SETTING_USE_ACTIVITY]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL, $settingsArray[AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_LOAD_POLLS_IN_NAVIGATION, $settingsArray[AppSettings::SETTING_LOAD_POLLS_IN_NAVIGATION]);
-		$this->appSettings->setBooleanSetting(AppSettings::SETTING_UNRESTRICTED_OWNER, $settingsArray[AppSettings::SETTING_UNRESTRICTED_OWNER]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_UNRESTRICTED_POLL_OWNER, $settingsArray[AppSettings::SETTING_UNRESTRICTED_POLL_OWNER]);
 
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_SHOW_MAIL_ADDRESSES_GROUPS, array_column($settingsArray[AppSettings::SETTING_SHOW_MAIL_ADDRESSES_GROUPS], 'id'));
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_ALLOW_ALL_ACCESS_GROUPS, array_column($settingsArray[AppSettings::SETTING_ALLOW_ALL_ACCESS_GROUPS], 'id'));
@@ -48,7 +48,7 @@ class SettingsService {
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_ALLOW_COMBO_GROUPS, array_column($settingsArray[AppSettings::SETTING_ALLOW_COMBO_GROUPS], 'id'));
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_ALLOW_POLL_CREATION_GROUPS, array_column($settingsArray[AppSettings::SETTING_ALLOW_POLL_CREATION_GROUPS], 'id'));
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_ALLOW_POLL_DOWNLOAD_GROUPS, array_column($settingsArray[AppSettings::SETTING_ALLOW_POLL_DOWNLOAD_GROUPS], 'id'));
-		$this->appSettings->setGroupSetting(AppSettings::SETTING_UNRESTRICTED_OWNER_GROUPS, array_column($settingsArray[AppSettings::SETTING_UNRESTRICTED_OWNER_GROUPS], 'id'));
+		$this->appSettings->setGroupSetting(AppSettings::SETTING_UNRESTRICTED_POLL_OWNER_GROUPS, array_column($settingsArray[AppSettings::SETTING_UNRESTRICTED_POLL_OWNER_GROUPS], 'id'));
 
 		$this->appSettings->setIntegerSetting(AppSettings::SETTING_AUTO_ARCHIVE_OFFSET_DAYS, intval($settingsArray[AppSettings::SETTING_AUTO_ARCHIVE_OFFSET_DAYS]));
 

@@ -140,7 +140,7 @@ class VoteService {
 		}
 
 		// Set default right to delete all votes of the user
-		$checkRight = Poll::PERMISSION_POLL_EDIT;
+		$checkRight = Poll::PERMISSION_VOTE_FOREIGN_CHANGE;
 		if ($userId === $this->userSession->getCurrentUserId()) {
 			// allow current user to remove his votes
 			$checkRight = Poll::PERMISSION_VOTE_EDIT;

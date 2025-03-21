@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCA\Polls\UserSession;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
@@ -18,7 +19,10 @@ class CommentMapper extends QBMapperWithUser {
 	public const TABLE = Comment::TABLE;
 
 	/** @psalm-suppress PossiblyUnusedMethod */
-	public function __construct(IDBConnection $db) {
+	public function __construct(
+		IDBConnection $db,
+		private UserSession $userSession,
+	) {
 		parent::__construct($db, self::TABLE, Comment::class);
 	}
 
@@ -82,6 +86,7 @@ class CommentMapper extends QBMapperWithUser {
 	 * Build the enhanced query with joined tables
 	 */
 	protected function buildQuery(): IQueryBuilder {
+		$currentUserId = $this->userSession->getCurrentUserId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
@@ -89,6 +94,7 @@ class CommentMapper extends QBMapperWithUser {
 			->groupBy(self::TABLE . '.id');
 
 		$this->joinAnon($qb, self::TABLE);
+		$this->joinShareRole($qb, self::TABLE, $currentUserId);
 		return $qb;
 	}
 }

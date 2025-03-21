@@ -26,7 +26,7 @@ class GenericUser extends UserBase {
 		parent::__construct($id, $type, $displayName, $emailAddress, $languageCode, $localeCode, $timeZoneName);
 
 		$this->description = $this->l10n->t('External participant');
-		$this->richObjectType = 'guest';
+		$this->richObjectType = UserBase::TYPE_GUEST;
 
 		if ($type === UserBase::TYPE_PUBLIC) {
 			// $this->description = $this->l10n->t('Public link');

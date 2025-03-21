@@ -93,7 +93,7 @@ class CommentService {
 	public function delete(int $commentId, bool $restore = false): Comment {
 		$this->comment = $this->commentMapper->find($commentId);
 
-		if (!$this->comment->getIsOwner()) {
+		if (!$this->comment->getCurrentUserIsEntityUser()) {
 			$this->pollMapper->find($this->comment->getPollId())->request(Poll::PERMISSION_COMMENT_DELETE);
 		}
 

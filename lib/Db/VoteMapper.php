@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Entity;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -24,6 +25,7 @@ class VoteMapper extends QBMapperWithUser {
 	public function __construct(
 		IDBConnection $db,
 		private LoggerInterface $logger,
+		private UserSession $userSession,
 	) {
 		parent::__construct($db, self::TABLE, Vote::class);
 	}
@@ -168,6 +170,7 @@ class VoteMapper extends QBMapperWithUser {
 	}
 
 	protected function buildQuery(bool $findOrphaned = false): IQueryBuilder {
+		$currentUserId = $this->userSession->getCurrentUserId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
@@ -182,6 +185,7 @@ class VoteMapper extends QBMapperWithUser {
 			$qb->where($qb->expr()->isNotNull($optionAlias . '.id'));
 		}
 		$this->joinAnon($qb, self::TABLE);
+		$this->joinShareRole($qb, self::TABLE, $currentUserId);
 
 
 		return $qb;

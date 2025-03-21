@@ -173,6 +173,7 @@ class OptionMapper extends QBMapperWithUser {
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
 		$this->joinAnon($qb, self::TABLE);
+		$this->joinShareRole($qb, self::TABLE, $currentUserId);
 
 
 		return $qb;

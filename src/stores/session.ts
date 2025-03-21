@@ -54,11 +54,14 @@ export const useSessionStore = defineStore('session', {
 			addShares: false,
 			addSharesExternal: false,
 			allAccess: false,
-			publicShares: false,
-			pollCreation: false,
-			seeMailAddresses: false,
-			pollDownload: false,
+			changeForeignVotes: false,
 			comboView: false,
+			deanonymizePoll: false,
+			pollCreation: false,
+			pollDownload: false,
+			publicShares: false,
+			seeMailAddresses: false,
+			unrestrictedOwner: false,
 		},
 		viewModes: Object.values(ViewMode),
 		sessionSettings: {
@@ -93,6 +96,8 @@ export const useSessionStore = defineStore('session', {
 			pollCreationGroups: [],
 			pollDownloadGroups: [],
 			showMailAddressesGroups: [],
+			unrestrictedOwner: false,
+			unrestrictedOwnerGroups: [],
 			groups: [],
 			status: {
 				loadingGroups: false

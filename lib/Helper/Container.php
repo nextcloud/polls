@@ -19,6 +19,12 @@ use OCP\L10N\IFactory;
 use OCP\Server;
 
 abstract class Container {
+	/**
+	 * @param string $class
+	 * @return mixed
+	 * @deprecated Use Server::get instead
+	 * @psalm-suppress DeprecatedMethod
+	 */
 	public static function queryClass(string $class): mixed {
 		return Server::get($class);
 	}

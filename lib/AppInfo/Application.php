@@ -161,6 +161,7 @@ class Application extends App implements IBootstrap {
 		$context->registerService(CommentMapper::class, function (ContainerInterface $c): CommentMapper {
 			return new CommentMapper(
 				$c->get(IDBConnection::class),
+				$c->get(UserSession::class),
 			);
 		});
 
@@ -168,6 +169,7 @@ class Application extends App implements IBootstrap {
 			return new VoteMapper(
 				$c->get(IDBConnection::class),
 				$c->get(LoggerInterface::class),
+				$c->get(UserSession::class),
 			);
 		});
 

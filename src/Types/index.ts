@@ -65,11 +65,14 @@ export type AppPermissions = {
 	addShares: boolean
 	addSharesExternal: boolean
 	allAccess: boolean
-	publicShares: boolean
-	pollCreation: boolean
-	seeMailAddresses: boolean
-	pollDownload: boolean
+	changeForeignVotes: boolean
 	comboView: boolean
+	deanonymizePoll: boolean
+	pollCreation: boolean
+	pollDownload: boolean
+	publicShares: boolean
+	seeMailAddresses: boolean
+	unrestrictedOwner: boolean
 }
 
 export type User = {
