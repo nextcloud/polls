@@ -10,7 +10,6 @@ namespace OCA\Polls\Model;
 
 use DateTimeZone;
 use JsonSerializable;
-use OCA\Polls\Db\EntityWithUser;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Group\Circle;
 use OCA\Polls\Model\Group\ContactGroup;

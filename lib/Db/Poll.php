@@ -407,7 +407,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return [];
 	}
 
-	private function getAccess() {
+	private function getAccess(): string {
 		if ($this->access === self::ACCESS_PUBLIC) {
 			return self::ACCESS_OPEN;
 		}

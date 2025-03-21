@@ -13,6 +13,7 @@ use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\Entity;
 use OCP\Server;
+use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-suppress UnusedProperty
@@ -45,12 +46,11 @@ abstract class EntityWithUser extends Entity {
 	 * @return bool
 	 */
 	public function getCurrentUserIsEntityUser(): bool {
-		/** @var UserSession */
 		$userSession = Server::get(UserSession::class);
 		return $userSession->getCurrentUserId() === $this->getUserId();
 	}
 
-	private function getEntityAnonymization() {
+	private function getEntityAnonymization(): bool {
 		if ($this->getCurrentUserIsEntityUser()) {
 			// if the current user is the owner of the entity, don't anonymize the entity
 			return false;
@@ -79,9 +79,10 @@ abstract class EntityWithUser extends Entity {
 		// the poll is not anonymized
 		if ($this->getPollShowResults() === Poll::SHOW_RESULTS_NEVER
 			|| ($this->getPollShowResults() === Poll::SHOW_RESULTS_CLOSED
-				&& !$this->getExpired())) {
-			// if results inside the poll are not shown, anonymize the entity
-			return true;
+				&& !$this->getPollExpire() > time())) {
+
+			// Do not anonymize the poll owner
+			return !($this instanceof Poll);
 		}
 
 		// in all other cases, don't anonymize the entity
