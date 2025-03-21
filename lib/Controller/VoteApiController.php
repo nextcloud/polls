@@ -35,7 +35,7 @@ class VoteApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/votes', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/votes', requirements: ['apiVersion' => '(v2)'])]
 	public function list(int $pollId): DataResponse {
 		return $this->response(fn () => ['votes' => $this->voteService->list($pollId)]);
 	}
@@ -48,7 +48,7 @@ class VoteApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/option/{optionId}/vote/{answer}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/vote/{answer}', requirements: ['apiVersion' => '(v2)'])]
 	public function set(int $optionId, string $answer): DataResponse {
 		return $this->response(fn () => ['vote' => $this->voteService->set($optionId, $answer)]);
 	}
@@ -61,7 +61,7 @@ class VoteApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/poll/{pollId}/user/{userId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/poll/{pollId}/user/{userId}', requirements: ['apiVersion' => '(v2)'])]
 	public function delete(int $pollId, string $userId = ''): DataResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId)]);
 	}
@@ -74,7 +74,7 @@ class VoteApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/poll/{pollId}/votes/orphaned', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/poll/{pollId}/votes/orphaned', requirements: ['apiVersion' => '(v2)'])]
 	public function deleteOrphaned(int $pollId, string $userId = ''): DataResponse {
 		return $this->response(fn () => ['deleted' => $this->voteService->deleteUserFromPoll($pollId, $userId, deleteOnlyOrphaned: true)]);
 	}

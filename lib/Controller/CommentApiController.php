@@ -35,7 +35,7 @@ class CommentApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/comments', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/comments', requirements: ['apiVersion' => '(v2)'])]
 	public function list(int $pollId): DataResponse {
 		return $this->response(fn () => ['comments' => $this->commentService->list($pollId)]);
 	}
@@ -48,7 +48,7 @@ class CommentApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll/{pollId}/comment', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/comment', requirements: ['apiVersion' => '(v2)'])]
 	public function add(int $pollId, string $comment): DataResponse {
 		return $this->response(fn () => ['comment' => $this->commentService->add($comment, $pollId)]);
 	}
@@ -60,7 +60,7 @@ class CommentApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/comment/{commentId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/comment/{commentId}', requirements: ['apiVersion' => '(v2)'])]
 	public function delete(int $commentId): DataResponse {
 		return $this->response(fn () => ['comment' => $this->commentService->delete($commentId)]);
 	}
@@ -72,7 +72,7 @@ class CommentApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/comment/{commentId}/restore', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/comment/{commentId}/restore', requirements: ['apiVersion' => '(v2)'])]
 	public function restore(int $commentId): DataResponse {
 		return $this->response(fn () => ['comment' => $this->commentService->restore($commentId)]);
 	}

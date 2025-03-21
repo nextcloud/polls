@@ -35,7 +35,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/options', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/options', requirements: ['apiVersion' => '(v2)'])]
 	public function list(int $pollId): DataResponse {
 		return $this->response(fn () => ['options' => $this->optionService->list($pollId)]);
 	}
@@ -50,7 +50,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll/{pollId}/option', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/option', requirements: ['apiVersion' => '(v2)'])]
 	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)]);
 	}
@@ -64,7 +64,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll/{pollId}/options', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/options', requirements: ['apiVersion' => '(v2)'])]
 	public function addBulk(int $pollId, string $text = ''): DataResponse {
 		return $this->responseCreate(fn () => ['options' => $this->optionService->addBulk($pollId, $text)]);
 	}
@@ -79,7 +79,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/option/{optionId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}', requirements: ['apiVersion' => '(v2)'])]
 	public function update(int $optionId, int $timestamp = 0, string $text = '', int $duration = 0): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->update($optionId, $timestamp, $text, $duration)]);
 	}
@@ -91,7 +91,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/option/{optionId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/option/{optionId}', requirements: ['apiVersion' => '(v2)'])]
 	public function delete(int $optionId): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->delete($optionId)]);
 	}
@@ -103,7 +103,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/option/{optionId}/restore', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/restore', requirements: ['apiVersion' => '(v2)'])]
 	public function restore(int $optionId): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->delete($optionId, true)]);
 	}
@@ -115,7 +115,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/option/{optionId}/confirm', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/confirm', requirements: ['apiVersion' => '(v2)'])]
 	public function confirm(int $optionId): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->confirm($optionId)]);
 	}
@@ -128,7 +128,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/option/{optionId}/order/{order}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/option/{optionId}/order/{order}', requirements: ['apiVersion' => '(v2)'])]
 	public function setOrder(int $optionId, int $order): DataResponse {
 		return $this->response(fn () => ['option' => $this->optionService->setOrder($optionId, $order)]);
 	}
