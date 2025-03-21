@@ -23,7 +23,7 @@ use OCP\IRequest;
 
 /**
  * @psalm-api
- * @psalm-import-type PollsPoll from ResponseDefinitions
+ * @psalm-import-type PollsPoll from \OCA\Polls\ResponseDefinitions
  *  */
 class PollApiController extends BaseApiV2Controller {
 	public function __construct(
