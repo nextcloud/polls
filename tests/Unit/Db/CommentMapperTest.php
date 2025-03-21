@@ -13,14 +13,16 @@ use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\UserSession;
 use OCP\Server;
 
 class CommentMapperTest extends UnitTestCase {
 	private CommentMapper $commentMapper;
 	private PollMapper $pollMapper;
-	/** @var Poll[] $polls */ 
+	public UserSession $userSession;
+	/** @var Poll[] $polls */
 	private array $polls = [];
-	/** @var Comment[] $comments */ 
+	/** @var Comment[] $comments */
 	private array $comments = [];
 
 	/**
@@ -30,6 +32,7 @@ class CommentMapperTest extends UnitTestCase {
 		parent::setUp();
 		$this->commentMapper = Server::get(CommentMapper::class);
 		$this->pollMapper = Server::get(PollMapper::class);
+		$this->userSession = Server::get(UserSession::class);
 
 		$this->polls = [
 			$this->fm->instance('OCA\Polls\Db\Poll')
