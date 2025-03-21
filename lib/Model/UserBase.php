@@ -28,7 +28,6 @@ use OCP\IGroupManager;
 use OCP\IL10N;
 use OCP\Server;
 use OCP\Share\IShare;
-use Psr\Log\LoggerInterface;
 
 class UserBase implements JsonSerializable {
 	/** @var string */
@@ -59,7 +58,6 @@ class UserBase implements JsonSerializable {
 	protected IL10N $l10n;
 	protected UserSession $userSession;
 	protected AppSettings $appSettings;
-	protected LoggerInterface $logger;
 
 	public function __construct(
 		protected string $id,
@@ -75,7 +73,6 @@ class UserBase implements JsonSerializable {
 		$this->timeZone = Server::get(IDateTimeZone::class);
 		$this->userSession = Server::get(UserSession::class);
 		$this->appSettings = Server::get(AppSettings::class);
-		$this->logger = Server::get(LoggerInterface::class);
 	}
 
 	public function getId(): string {
@@ -415,6 +412,8 @@ class UserBase implements JsonSerializable {
 		return false;
 	}
 
+	// TODO: reactivate this function later
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function getIsSystemUser(): bool {
 		return $this->groupManager->isAdmin($this->getId());
 	}
