@@ -39,7 +39,7 @@ export const useComboStore = defineStore('combo', {
 		pollCombo: (state) => state.polls.map((poll: Poll) => poll.id),
 		optionBelongsToPoll: (state) => (payload: { text: string; pollId: number }) => !!state.options.find((option) => option.text === payload.text && option.pollId === payload.pollId),
 		uniqueOptions: (state) => sortBy(uniqueOptions(state.options), 'timestamp'),
-	
+
 		getVote: (state) => (payload: { userId: string; optionText: string, pollId: number }) => {
 			const found = state.votes.find((vote: Vote) => (
 				vote.user.id === payload.userId
@@ -64,7 +64,7 @@ export const useComboStore = defineStore('combo', {
 				this.addOptions({ pollId }),
 			])
 		},
-	
+
 		async remove(pollId: number) {
 			return Promise.all([
 				this.removePoll({ pollId }),
@@ -72,20 +72,20 @@ export const useComboStore = defineStore('combo', {
 				this.removeOptions({ pollId }),
 			])
 		},
-	
+
 		removePoll(payload: { pollId: number }) {
 			this.polls = this.polls.filter((poll: Poll) => poll.id !== payload.pollId)
 		},
-	
+
 		removeVotes(payload: { pollId: number }) {
 			this.votes = this.votes.filter((vote: Vote) => vote.pollId !== payload.pollId)
 			this.participants = uniqueParticipants(this.votes)
 		},
-	
+
 		removeOptions(payload: { pollId: number }) {
 			this.options = this.options.filter((option: Option) => option.pollId !== payload.pollId)
 		},
-	
+
 		async verifyPollsFromSettings() {
 			const preferencesStore = usePreferencesStore()
 			preferencesStore.user.pollCombo.forEach(pollId => {
@@ -94,16 +94,16 @@ export const useComboStore = defineStore('combo', {
 				}
 			})
 		},
-	
+
 		async cleanUp() {
 			const pollsStore = usePollsStore()
 			this.polls.forEach((comboPoll: Poll) => {
-				if (pollsStore.list.findIndex((poll) => poll.id === comboPoll.id && !poll.status.deleted) < 0) {
+				if (pollsStore.list.findIndex((poll) => poll.id === comboPoll.id && !poll.status.isDeleted) < 0) {
 					this.removePoll({ pollId: comboPoll.id })
 				}
 			})
 		},
-	
+
 		async togglePollItem(pollId: number) {
 			if (this.pollIsListed(pollId)) {
 				this.remove(pollId)
@@ -111,7 +111,7 @@ export const useComboStore = defineStore('combo', {
 				this.add(pollId)
 			}
 		},
-	
+
 		async addPoll(payload: { pollId: number }): Promise<void> {
 			try {
 				const response = await PollsAPI.getPoll(payload.pollId)
@@ -121,7 +121,7 @@ export const useComboStore = defineStore('combo', {
 				Logger.error('Error loading poll for combo', { error })
 			}
 		},
-	
+
 		async addOptions(payload: { pollId: number }): Promise<void> {
 			try {
 				const response = await OptionsAPI.getOptions(payload.pollId)
@@ -131,13 +131,13 @@ export const useComboStore = defineStore('combo', {
 				Logger.error('Error loading options for combo', { error })
 			}
 		},
-	
+
 		async addVotes(payload: { pollId: number }): Promise<void> {
 			try {
 				const response = await VotesAPI.getVotes(payload.pollId)
 				this.votes.push(...response.data.votes)
 				this.participants = uniqueParticipants(this.votes)
-			
+
 			} catch (error) {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error loading options for combo', { error })

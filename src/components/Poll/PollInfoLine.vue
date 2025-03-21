@@ -26,7 +26,7 @@
 	const subTexts = computed(() => {
 		const subTexts = []
 
-		if (pollStore.status.deleted) {
+		if (pollStore.status.isDeleted) {
 			subTexts.push({
 				id: 'deleted',
 				text: t('polls', 'Archived'),

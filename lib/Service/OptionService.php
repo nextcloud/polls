@@ -164,7 +164,7 @@ class OptionService {
 	public function delete(int $optionId, bool $restore = false): Option {
 		$this->option = $this->optionMapper->find($optionId);
 
-		if (!$this->option->getIsOwner()) {
+		if (!$this->option->getCurrentUserIsEntityUser()) {
 			$this->pollMapper->find($this->option->getPollId())->request(Poll::PERMISSION_OPTION_DELETE);
 		}
 

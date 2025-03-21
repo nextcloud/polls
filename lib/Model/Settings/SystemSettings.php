@@ -42,11 +42,11 @@ class SystemSettings {
 		if ($groupExceptionMode === 'allowGroup') {
 			// exception mode is 'Limit sharing to some groups'
 			// if user is in exception group, allow share creation
-			return $this->userSession->getUser()->getIsInGroupArray($exceptionGroups);
+			return $this->userSession->getCurrentUser()->getIsInGroupArray($exceptionGroups);
 		} elseif ($groupExceptionMode === 'denyGroup') {
 			// exception mode is 'Exclude some Groups from sharing'
 			// if user is in exception group, deny share creation
-			return !$this->userSession->getUser()->getIsInGroupArray($exceptionGroups);
+			return !$this->userSession->getCurrentUser()->getIsInGroupArray($exceptionGroups);
 		}
 
 		return true;
@@ -94,7 +94,7 @@ class SystemSettings {
 		$excludedGroups = $this->getCoreExternalShareCreationGroups();
 		if ($excludedGroups) {
 			// if user is in exception group, disallow external share creation
-			return !$this->userSession->getUser()->getIsInGroupArray($excludedGroups);
+			return !$this->userSession->getCurrentUser()->getIsInGroupArray($excludedGroups);
 		}
 		return true;
 	}

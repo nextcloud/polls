@@ -6,12 +6,19 @@
 <script setup lang="ts">
 	import { CardDiv } from '../../Base/index.js'
 	import { t } from '@nextcloud/l10n'
+	import { usePollStore } from '../../../stores/poll.ts'
+
 	const cardType = 'warning'
+	const pollStore = usePollStore()
 </script>
 
 <template>
-	<CardDiv :type="cardType">
-		{{ t('polls', 'Although participant\'s names are hidden, this is not a real anonymous poll because they are not hidden from the owner.') }}
-		{{ t('polls', 'Additionally the owner can remove the anonymous flag at any time, which will reveal the participant\'s names.') }}
+	<CardDiv v-if="pollStore.status.isRealAnonymous" type="info">
+		{{ t('polls', 'This poll is an anonymous poll for everyone, including the owner. Deanonymizing is disabled for this poll.') }}
+		{{ t('polls', 'But be aware, that your name is not stored in an encrypted or obfuscated way.') }}
+	</CardDiv>
+	<CardDiv v-else :type="cardType">
+		{{ t('polls', 'This poll is an anonymous poll for everyone, except for the owner and delegated poll admins.') }}
+		{{ t('polls', 'Anonymization of this poll can be removed at any time by the owner and delegated poll admins.') }}
 	</CardDiv>
 </template>

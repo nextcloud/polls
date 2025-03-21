@@ -52,7 +52,7 @@ class UserSession {
 	 * - the stored session share token
 	 *
 	 */
-	public function getUser(): UserBase {
+	public function getCurrentUser(): UserBase {
 		if (!$this->currentUser) {
 
 			if ($this->getIsLoggedIn()) {
@@ -73,7 +73,7 @@ class UserSession {
 		}
 
 		if (!$this->session->get(self::SESSION_KEY_USER_ID)) {
-			$this->session->set(self::SESSION_KEY_USER_ID, $this->getUser()->getId());
+			$this->session->set(self::SESSION_KEY_USER_ID, $this->getCurrentUser()->getId());
 		}
 
 		return (string)$this->session->get(self::SESSION_KEY_USER_ID);
@@ -166,7 +166,6 @@ class UserSession {
 	public function getClientIdHashed(): string {
 		return hash('md5', $this->getClientId());
 	}
-
 
 	public function setClientId(string $clientId): void {
 		$this->session->set(self::CLIENT_ID, $clientId);

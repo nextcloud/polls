@@ -42,10 +42,10 @@
 
 	const emit = defineEmits(['sortList'])
 
-	const closeToClosing = computed(() => !props.poll.status.expired && props.poll.configuration.expire && moment.unix(props.poll.configuration.expire).diff() < 86400000)
+	const closeToClosing = computed(() => !props.poll.status.isExpired && props.poll.configuration.expire && moment.unix(props.poll.configuration.expire).diff() < 86400000)
 
 	const accessType = computed(() => {
-		if (props.poll.status.deleted) {
+		if (props.poll.status.isDeleted) {
 			return t('polls', 'Archived')
 		}
 
@@ -71,7 +71,7 @@
 	})
 
 	const expiryClass = computed(() => {
-		if (props.poll.status.expired) {
+		if (props.poll.status.isExpired) {
 			return StatusResults.Error
 		}
 
@@ -79,7 +79,7 @@
 			return StatusResults.Warning
 		}
 
-		if (props.poll.configuration.expire && !props.poll.status.expired) {
+		if (props.poll.configuration.expire && !props.poll.status.isExpired) {
 			return StatusResults.Success
 		}
 
@@ -132,7 +132,7 @@
 		<TextPollIcon v-if="props.poll.type === PollType.Text" class="item__type" :title="pollTypeName" />
 		<DatePollIcon v-else class="item__type" :title="pollTypeName" />
 
-		<div v-if="props.noLink" class="item__title" :class="{ closed: props.poll.status.expired }">
+		<div v-if="props.noLink" class="item__title" :class="{ closed: props.poll.status.isExpired }">
 			<div class="title">
 				{{ props.poll.configuration.title }}
 			</div>
@@ -145,7 +145,7 @@
 		<RouterLink v-else
 			class="item__title"
 			:to="{ name: 'vote', params: { id: props.poll.id }}"
-			:class="{ closed: props.poll.status.expired, active: (props.poll.id === pollStore.id) }">
+			:class="{ closed: props.poll.status.isExpired, active: (props.poll.id === pollStore.id) }">
 			<div class="title">
 				{{ props.poll.configuration.title }}
 			</div>
@@ -157,7 +157,7 @@
 
 		<slot name="actions" />
 
-		<ArchivedPollIcon v-if="props.poll.status.deleted" :title="accessType" class="item__access" />
+		<ArchivedPollIcon v-if="props.poll.status.isDeleted" :title="accessType" class="item__access" />
 		<OpenPollIcon v-else-if="props.poll.configuration.access === AccessType.Open" :title="accessType" class="item__access" />
 		<PrivatePollIcon v-else :title="accessType" class="item__access" />
 

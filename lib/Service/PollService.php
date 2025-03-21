@@ -35,6 +35,7 @@ use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Search\ISearchQuery;
+use Psr\Log\LoggerInterface;
 
 class PollService {
 
@@ -47,6 +48,7 @@ class PollService {
 		private UserMapper $userMapper,
 		private UserSession $userSession,
 		private VoteMapper $voteMapper,
+		private LoggerInterface $logger,
 	) {
 	}
 
@@ -90,7 +92,7 @@ class PollService {
 	 */
 	public function listForAdmin(): array {
 		$pollList = [];
-		if ($this->userSession->getUser()->getIsAdmin()) {
+		if ($this->userSession->getCurrentUser()->getIsAdmin()) {
 			try {
 				$pollList = $this->pollMapper->findForAdmin($this->userSession->getCurrentUserId());
 			} catch (DoesNotExistException $e) {
@@ -106,7 +108,7 @@ class PollService {
 	 */
 	public function takeover(int $pollId, ?UserBase $targetUser = null): Poll {
 		if (!$targetUser) {
-			$targetUser = $this->userSession->getUser();
+			$targetUser = $this->userSession->getCurrentUser();
 		}
 
 		$this->poll = $this->pollMapper->find($pollId);
@@ -189,22 +191,30 @@ class PollService {
 			throw new EmptyTitleException('Title must not be empty');
 		}
 
+		$timestamp = time();
 		$this->poll = new Poll();
 		$this->poll->setType($type);
-		$this->poll->setCreated(time());
-		$this->poll->setOwner($this->userSession->getCurrentUserId());
 		$this->poll->setTitle($title);
+		$this->poll->setCreated($timestamp);
+		$this->poll->setLastInteraction($timestamp);
+		$this->poll->setOwner($this->userSession->getCurrentUserId());
+
+		// create new poll before resetting all values to
+		// ensure that the poll has all required values and an id
+		// latter checks mai fail if the poll has no id
+		$this->poll = $this->pollMapper->insert($this->poll);
+
 		$this->poll->setDescription('');
 		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
 		$this->poll->setExpire(0);
-		$this->poll->setAnonymous(0);
+		$this->poll->setAnonymousSafe(0);
 		$this->poll->setAllowMaybe(0);
 		$this->poll->setVoteLimit(0);
 		$this->poll->setShowResults(Poll::SHOW_RESULTS_ALWAYS);
 		$this->poll->setDeleted(0);
 		$this->poll->setAdminAccess(0);
-		$this->poll->setLastInteraction(time());
-		$this->poll = $this->pollMapper->insert($this->poll);
+
+		$this->pollMapper->update($this->poll);
 
 		$this->eventDispatcher->dispatchTyped(new PollCreatedEvent($this->poll));
 
@@ -228,6 +238,13 @@ class PollService {
 			throw new EmptyTitleException('Title must not be empty');
 		}
 
+		if (isset($pollConfiguration['anonymous'])
+			&& $pollConfiguration['anonymous'] === 0
+			&& $this->poll->getAnonymous() < 0
+		) {
+			throw new ForbiddenException('Deanonimization is not allowed');
+		}
+
 		if (isset($pollConfiguration['access']) && !in_array($pollConfiguration['access'], $this->getValidAccess())) {
 			if (!in_array($pollConfiguration['access'], $this->getValidAccess())) {
 				throw new InvalidAccessException('Invalid value for prop access ' . $pollConfiguration['access']);
@@ -245,7 +262,33 @@ class PollService {
 		}
 
 		$this->poll->deserializeArray($pollConfiguration);
-		$this->pollMapper->update($this->poll);
+		$tempValue = $this->poll->getAnonymous();
+
+		$this->poll = $this->pollMapper->update($this->poll);
+		$this->logger->error('set anonymous setting', ['pollId' => $this->poll->getId(), 'before update' => $tempValue, 'after update' => $this->poll->getAnonymous()]);
+		$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($this->poll));
+
+		return $this->poll;
+	}
+
+	/**
+	 * Manually lock anonymization
+	 * @return Poll
+	 */
+	public function lockAnonymous(int $pollId): Poll {
+		$this->poll = $this->pollMapper->find($pollId);
+
+		// Only possible, if poll is already anonymized
+		if ($this->poll->getAnonymous() < 1) {
+			throw new ForbiddenException('Anonymization is not allowed');
+		}
+
+		// Only possible, if user is allowed to deanonymize
+		$this->poll->request(Poll::PERMISSION_DEANONYMIZE);
+
+		$this->poll->setAnonymous(-1);
+		$this->poll = $this->pollMapper->update($this->poll);
+
 		$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($this->poll));
 
 		return $this->poll;
@@ -353,7 +396,8 @@ class PollService {
 		$this->poll->setType($origin->getType());
 		$this->poll->setDescription($origin->getDescription());
 		$this->poll->setExpire($origin->getExpire());
-		$this->poll->setAnonymous($origin->getAnonymous());
+		// deanonymize cloned polls by default, to avoid locked anonymous polls
+		$this->poll->setAnonymous(0);
 		$this->poll->setAllowMaybe($origin->getAllowMaybe());
 		$this->poll->setVoteLimit($origin->getVoteLimit());
 		$this->poll->setShowResults($origin->getShowResults());

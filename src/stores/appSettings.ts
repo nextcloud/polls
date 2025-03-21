@@ -40,6 +40,7 @@ export type AppSettings = {
 	privacyUrl: string
 	showMailAddresses: boolean
 	showLogin: boolean
+	unrestrictedOwner: boolean
 	updateType: UpdateType
 	useActivity: boolean
 	useCollaboration: boolean
@@ -51,6 +52,7 @@ export type AppSettings = {
 	pollCreationGroups: string[]
 	pollDownloadGroups: string[]
 	showMailAddressesGroups: string[]
+	unrestrictedOwnerGroups: string[]
 	groups: Group[]
 	status: {
 		loadingGroups: boolean
@@ -75,6 +77,7 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		privacyUrl: '',
 		showMailAddresses: false,
 		showLogin: true,
+		unrestrictedOwner: false,
 		updateType: UpdateType.NoPolling,
 		useActivity: false,
 		useCollaboration: true,
@@ -86,6 +89,7 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		pollCreationGroups: [],
 		pollDownloadGroups: [],
 		showMailAddressesGroups: [],
+		unrestrictedOwnerGroups: [],
 		groups: [],
 		status: {
 			loadingGroups: false,

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Model\User;
 
 use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
 use OCP\IConfig;
 use OCP\IUser;
@@ -29,7 +30,7 @@ class User extends UserBase {
 	) {
 		parent::__construct($id, $type);
 		$this->description = $this->l10n->t('User');
-		
+
 		$this->setUp();
 	}
 
@@ -39,6 +40,7 @@ class User extends UserBase {
 	private function setUp(): void {
 		$this->config = Container::queryClass(IConfig::class);
 		$this->user = Container::queryClass(IUserManager::class)->get($this->id);
+		// $this->appSettings = Container::queryClass(AppSettings::class);
 		$this->displayName = $this->user->getDisplayName();
 		$this->emailAddress = (string)$this->user->getEmailAddress();
 		$this->languageCode = $this->config->getUserValue($this->id, 'core', 'lang');
@@ -60,6 +62,42 @@ class User extends UserBase {
 	public function getPrincipalUri(): string {
 		return self::PRINCIPAL_PREFIX . $this->getId();
 	}
+
+	public function getIsUnrestrictedPollOwner(): bool {
+		// Unrestricted owner setting enabled globally?
+		if ($this->appSettings->getBooleanSetting(AppSettings::SETTING_UNRESTRICTED_POLL_OWNER)) {
+			return true;
+		}
+
+		// Unrestricted owner setting enabled for groups this user is member of?
+		$groups = $this->appSettings->getGroupSetting(AppSettings::SETTING_UNRESTRICTED_POLL_OWNER_GROUPS);
+		if ($this->getIsInGroupArray($groups)) {
+			return true;
+		}
+		return false;
+	}
+
+	public function getIsAdmin(): bool {
+		return $this->groupManager->isAdmin($this->getId());
+	}
+
+	public function getIsInGroup(string $groupName): bool {
+		return $this->groupManager->isInGroup($this->getId(), $groupName);
+	}
+
+	public function getIsInGroupArray(array $groupNames): bool {
+		if (!($this instanceof User)) {
+			return false;
+		}
+
+		foreach ($groupNames as $groupName) {
+			if ($this->getIsInGroup($groupName)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
 	/**
 	 * @return User[]
 	 *

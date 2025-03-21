@@ -48,9 +48,9 @@ class UserMapper extends QBMapper {
 	/**
 	 * Get poll participant
 	 *
-	 * Returns a UserBase child from share determined by userId and pollId
+	 * Returns a UserBase child from share determined by userId and pollId or from userbase by userId
 	 *
-	 * @param string $userId Get internal user. If pollId is given, the user who participates in the particulair poll will be returned
+	 * @param string $userId
 	 * @param int $pollId Can only be used together with $userId and will return the internal user or the share user
 	 * @return UserBase
 	 **/
@@ -70,8 +70,9 @@ class UserMapper extends QBMapper {
 			return $this->getUserFromShare($share);
 		} catch (ShareNotFoundException $e) {
 			// User seems to be probaly deleted, use fake share
-			return new Ghost($userId);
 		}
+
+		return new Ghost($userId);
 	}
 
 	/**

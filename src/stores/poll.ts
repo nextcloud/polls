@@ -59,28 +59,31 @@ export enum SortParticipants {
 }
 
 export type PollConfiguration = {
-	title: string
-	description: string
 	access: AccessType
 	allowComment: boolean
 	allowMaybe: boolean
 	allowProposals: AllowProposals
 	anonymous: boolean
 	autoReminder: boolean
+	description: string
 	expire: number
 	hideBookedUp: boolean
-	proposalsExpire: number
-	showResults: ShowResults
-	useNo: boolean
 	maxVotesPerOption: number
 	maxVotesPerUser: number
+	proposalsExpire: number
+	showResults: ShowResults
+	title: string
+	useNo: boolean
 }
 
 export type PollStatus = {
+	anonymizeLevel: string
 	lastInteraction: number
 	created: number
-	deleted: boolean
-	expired: boolean
+	isAnonymous: boolean
+	isDeleted: boolean
+	isExpired: boolean
+	isRealAnonymous: boolean
 	relevantThreshold: number
 	countOptions: number
 	countParticipants: number
@@ -91,33 +94,36 @@ export type PollPermissions = {
 	addOptions: boolean
 	addShares: boolean
 	addSharesExternal: boolean
-	shiftOptions: boolean
-	reorderOptions: boolean
 	archive: boolean
+	changeForeignVotes: boolean
+	clone: boolean
 	comment: boolean
 	confirmOptions: boolean
+	deanonymize: boolean
 	delete: boolean
 	edit: boolean
+	reorderOptions: boolean
 	seeResults: boolean
 	seeUsernames: boolean
+	shiftOptions: boolean
 	subscribe: boolean
 	view: boolean
 	vote: boolean
 }
 
 export type CurrentUserStatus = {
-	userRole: UserType
-	isLocked: boolean
+	countVotes: number
+	groupInvitations: string[]
 	isInvolved: boolean
+	isLocked: boolean
 	isLoggedIn: boolean
 	isNoUser: boolean
 	isOwner: boolean
-	userId: string
 	orphanedVotes: number
-	yesVotes: number
-	countVotes: number
 	shareToken: string
-	groupInvitations: string[]
+	userId: string
+	userRole: UserType
+	yesVotes: number
 }
 
 export type Poll = {
@@ -175,40 +181,46 @@ export const usePollStore = defineStore('poll', {
 			categories: null,
 		},
 		status: {
+			anonymizeLevel: 'ANON_NONE',
 			lastInteraction: 0,
 			created: 0,
-			deleted: false,
-			expired: false,
+			isAnonymous: false,
+			isDeleted: false,
+			isExpired: false,
+			isRealAnonymous: false,
 			relevantThreshold: 0,
 			countOptions: 0,
 			countParticipants: 0,
 			countProposals: 0,
 		},
 		currentUserStatus: {
-			userRole: UserType.None,
-			isLocked: false,
+			countVotes: 0,
+			groupInvitations: [],
 			isInvolved: false,
+			isLocked: false,
 			isLoggedIn: false,
 			isNoUser: true,
 			isOwner: false,
-			userId: '',
 			orphanedVotes: 0,
-			yesVotes: 0,
-			countVotes: 0,
 			shareToken: '',
-			groupInvitations: [],
+			userId: '',
+			userRole: UserType.None,
+			yesVotes: 0,
 		},
 		permissions: {
 			addOptions: false,
 			addShares: false,
 			addSharesExternal: false,
-			shiftOptions: false,
-			reorderOptions: false,
 			archive: false,
+			changeForeignVotes: false,
+			clone: false,
 			comment: false,
 			confirmOptions: false,
+			deanonymize: false,
 			delete: false,
 			edit: false,
+			reorderOptions: false,
+			shiftOptions: false,
 			seeResults: false,
 			seeUsernames: false,
 			subscribe: false,
@@ -326,7 +338,7 @@ export const usePollStore = defineStore('poll', {
 		},
 
 		isClosed(state) {
-			return (state.status.expired || state.configuration.expire > 0 && moment.unix(state.configuration.expire).diff() < 1000)
+			return (state.status.isExpired || state.configuration.expire > 0 && moment.unix(state.configuration.expire).diff() < 1000)
 		},
 
 		getSafeTable(state) {
@@ -440,9 +452,22 @@ export const usePollStore = defineStore('poll', {
 				pollsStore.load()
 			}
 		},
+		async LockAnonymous() {
+			try {
+				await PollsAPI.lockAnonymous(this.id)
+			} catch (error) {
+				if (error?.code === 'ERR_CANCELED') return
+				Logger.error('Error locking poll to anonymous:', { error, state: this.$state })
+				throw error
+			} finally {
+				// reload the poll
+				this.load()
+			}
+		},
 
 		write: debounce(async function() {
 			const pollsStore = usePollsStore()
+
 			if (this.configuration.title === '') {
 				showError(t('polls', 'Title must not be empty!'))
 				return
@@ -457,9 +482,9 @@ export const usePollStore = defineStore('poll', {
 				if (error?.code === 'ERR_CANCELED') return
 				Logger.error('Error updating poll:', { error, poll: this.$state })
 				showError(t('polls', 'Error writing poll'))
-				this.load()
 				throw error
 			} finally {
+				this.load()
 				pollsStore.load()
 			}
 		}, 500),

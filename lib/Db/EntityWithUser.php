@@ -8,10 +8,11 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use OCA\Polls\Helper\Container;
+use OCA\Polls\Model\User\Anon;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\Entity;
+use OCP\Server;
 
 /**
  * @psalm-suppress UnusedProperty
@@ -23,6 +24,7 @@ use OCP\AppFramework\Db\Entity;
  * @method string getPollOwnerId()
  * @method string getPollShowResults()
  * @method int getPollExpire()
+ * @method string getShareType()
  */
 
 abstract class EntityWithUser extends Entity {
@@ -30,10 +32,7 @@ abstract class EntityWithUser extends Entity {
 	protected string $pollOwnerId = '';
 	protected string $pollShowResults = '';
 	protected int $pollExpire = 0;
-
-	public const ANON_FULL = 'anonymous';
-	public const ANON_PRIVACY = 'privacy';
-	public const ANON_NONE = 'ful_view';
+	protected ?string $shareType = '';
 
 	public function __construct() {
 		// joined Attributes
@@ -42,41 +41,66 @@ abstract class EntityWithUser extends Entity {
 	}
 
 	/**
-	 * Anonymized the user completely (ANON_FULL) or just strips out personal information
+	 * Is the current user the owner of the entity
+	 * @return bool
 	 */
-	public function getAnonymizeLevel(): string {
-		$currentUserId = Container::queryClass(UserSession::class)->getCurrentUserId();
-		// Don't censor for poll owner or it is the current user's entity
-		if ($this->getPollOwnerId() === $currentUserId || $this->getIsOwner()) {
-			return self::ANON_NONE;
+	public function getCurrentUserIsEntityUser(): bool {
+		$userSession = Server::get(UserSession::class);
+		return $userSession->getCurrentUserId() === $this->getUserId();
+	}
+
+	private function getEntityAnonymization(): bool {
+		if ($this->getCurrentUserIsEntityUser()) {
+			// if the current user is the owner of the entity, don't anonymize the entity
+			return false;
 		}
 
-		// Anonymize if poll's anonymize setting is true
-		if ((bool)$this->anonymized) {
-			return self::ANON_FULL;
+		if ($this->getAnonymized() < 0) {
+			// the poll is anonymized and locked, anonymize the entity
+			return true;
 		}
 
-		// Anonymize if votes are hidden
+		if ($this->getAnonymized() > 0) {
+			// the poll is anonymized and unlocked
+			$userSession = Server::get(UserSession::class);
+			if ($this->getPollOwnerId() === $userSession->getCurrentUserId()) {
+				// if the current user is the poll owner, don't anonymize the entity
+				return false;
+			}
+			if ($this->getShareType() === Share::TYPE_ADMIN) {
+				// if the current user is a delegated admin, don't anonymize the entity
+				return false;
+			}
+			// if the current user is not the poll owner, anonymize the entity
+			return true;
+		}
+
+		// the poll is not anonymized
 		if ($this->getPollShowResults() === Poll::SHOW_RESULTS_NEVER
-			|| ($this->getPollShowResults() === Poll::SHOW_RESULTS_CLOSED && (
-				!$this->getPollExpire() || $this->getPollExpire() > time()
-			))
-		) {
-			return self::ANON_FULL;
+			|| ($this->getPollShowResults() === Poll::SHOW_RESULTS_CLOSED
+				&& !$this->getPollExpire() > time())) {
+
+			// Do not anonymize the poll owner
+			return !($this instanceof Poll);
 		}
 
-		return self::ANON_PRIVACY;
+		// in all other cases, don't anonymize the entity
+		return false;
 	}
 
-	public function getIsOwner(): bool {
-		return Container::queryClass(UserSession::class)->getCurrentUserId() === $this->getUserId();
-	}
 
+	/**
+	 * @return UserBase Gets owner of the entity
+	 */
 	public function getUser(): UserBase {
-		/** @var UserMapper */
-		$userMapper = (Container::queryClass(UserMapper::class));
+		if ($this->getEntityAnonymization()) {
+			$user = new Anon($this->getUserId());
+			return $user;
+		}
+
+		$userMapper = (Server::get(UserMapper::class));
+
 		$user = $userMapper->getParticipant($this->getUserId(), $this->getPollId());
-		$user->setAnonymizeLevel($this->getAnonymizeLevel());
 		return $user;
 	}
 }

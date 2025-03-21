@@ -107,7 +107,7 @@
 			</template>
 			{{ t('polls', 'Closing: {dateRelative}', {dateRelative: dateExpiryRelative}) }}
 		</BadgeDiv>
-		<BadgeDiv v-if="pollStore.configuration.anonymous">
+		<BadgeDiv v-if="pollStore.status.isAnonymous">
 			<template #icon>
 				<AnoymousIcon />
 			</template>

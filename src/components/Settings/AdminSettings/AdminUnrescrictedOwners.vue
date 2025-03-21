@@ -1,5 +1,5 @@
 <!--
-  - SPDX-FileCopyrightText: 2022 Nextcloud contributors
+  - SPDX-FileCopyrightText: 2025 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
@@ -10,6 +10,7 @@
 	import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 	import { useAppSettingsStore } from '../../../stores/appSettings.ts'
+	import CardDiv from '../../Base/modules/CardDiv.vue'
 
 	const appSettingsStore = useAppSettingsStore()
 
@@ -17,22 +18,31 @@
 
 <template>
 	<div class="user_settings">
-		<NcCheckboxRadioSwitch v-model="appSettingsStore.allowPollDownload"
+		<NcCheckboxRadioSwitch v-model="appSettingsStore.unrestrictedOwner"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
-			{{ t('polls', 'Enable the spreadsheet download of polls globally') }}
+			{{ t('polls', 'Enable unrestricted Owners globally') }}
 		</NcCheckboxRadioSwitch>
-		<div v-if="!appSettingsStore.allowPollDownload" class="settings_details">
-			<NcSelect v-model="appSettingsStore.pollDownloadGroups"
+		<div v-if="!appSettingsStore.unrestrictedOwner" class="settings_details">
+			<NcSelect v-model="appSettingsStore.unrestrictedOwnerGroups"
 				:input-label="t('polls','Enable only for the following groups')"
 				label="displayName"
 				:options="appSettingsStore.groups"
 				:user-select="true"
 				:multiple="true"
-				:loading="isLoading"
+				:loading="appSettingsStore.status.loadingGroups"
 				:placeholder="t('polls', 'Leave empty to disable globally')"
 				@update:model-value="appSettingsStore.write()"
 				@search="appSettingsStore.loadGroups" />
 		</div>
+		<CardDiv type="info">
+			<p>
+				{{ t('polls', 'Effects on restricted owners:') }}
+			</p>
+			<ul>
+				<li>{{ t('polls', 'Anonymizing a poll of a restricted owner means that this poll is anonymous for everyone, including the owner.') }}</li>
+				<li>{{ t('polls', 'Deletion and changing votes of participants is not possible') }}</li>
+			</ul>
+		</CardDiv>
 	</div>
 </template>

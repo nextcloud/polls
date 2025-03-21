@@ -124,7 +124,7 @@ class ShareService {
 		try {
 			$this->share = $this->createNewShare(
 				$this->share->getPollId(),
-				$this->userSession->getUser(),
+				$this->userSession->getCurrentUser(),
 				preventInvitation: true
 			);
 		} catch (ShareAlreadyExistsException $e) {
@@ -614,7 +614,7 @@ class ShareService {
 			Share::TYPE_USER => $this->share->getUserId() === $this->userSession->getCurrentUserId(),
 			Share::TYPE_ADMIN => $this->share->getUserId() === $this->userSession->getCurrentUserId(),
 			// Note: $this->share->getUserId() is actually the group name in case of Share::TYPE_GROUP
-			Share::TYPE_GROUP => $this->userSession->getUser()->getIsInGroup($this->share->getUserId()),
+			Share::TYPE_GROUP => $this->userSession->getCurrentUser()->getIsInGroup($this->share->getUserId()),
 			default => throw new ForbiddenException('Invalid share type ' . $this->share->getType()),
 		};
 		if (!$valid) {

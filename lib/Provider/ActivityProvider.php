@@ -12,6 +12,7 @@ use InvalidArgumentException;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
+use OCA\Polls\Model\UserBase;
 use OCA\Polls\Service\ActivityService;
 use OCP\Activity\IEvent;
 use OCP\Activity\IEventMerger;
@@ -41,7 +42,7 @@ class ActivityProvider implements IProvider {
 		if ($event->getApp() !== AppConstants::APP_ID) {
 			throw new \InvalidArgumentException();
 		}
-		
+
 		$this->l10n = $this->transFactory->get($event->getApp(), $language);
 		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'polls-dark.svg')));
 		$subject = $this->activityService->getActivityMessage($event, $language, $this->activityManager->isFormattingFilteredObject());
@@ -54,7 +55,7 @@ class ActivityProvider implements IProvider {
 
 	protected function setSubjects(IEvent $event, string $subject): void {
 		$parameters = $event->getSubjectParameters();
-		
+
 		try {
 			$actor = $this->userMapper->getParticipant($event->getAuthor(), $event->getObjectId());
 			$parameters['actor'] = [
@@ -64,7 +65,7 @@ class ActivityProvider implements IProvider {
 			];
 		} catch (\Exception $e) {
 			$parameters['actor'] = [
-				'type' => 'guest',
+				'type' => UserBase::TYPE_GUEST,
 				'id' => $event->getAuthor(),
 				'name' => 'An unknown participant',
 			];

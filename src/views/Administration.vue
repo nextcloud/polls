@@ -151,12 +151,12 @@
 									</template>
 								</NcActionButton>
 
-								<NcActionButton :name="poll.status.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
-									:aria-label="poll.status.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+								<NcActionButton :name="poll.status.isDeleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
+									:aria-label="poll.status.isDeleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll')"
 									close-after-click
 									@click="toggleArchive(poll.id)">
 									<template #icon>
-										<RestorePollIcon v-if="poll.status.deleted" />
+										<RestorePollIcon v-if="poll.status.isDeleted" />
 										<ArchivePollIcon v-else />
 									</template>
 								</NcActionButton>

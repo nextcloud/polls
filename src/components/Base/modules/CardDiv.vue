@@ -25,6 +25,7 @@
 		flex: 1 0 180px;
 		ul {
 			list-style: initial;
+			margin-left: 2rem;
 		}
 	}
 

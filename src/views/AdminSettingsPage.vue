@@ -14,7 +14,7 @@
 		AdminActivities, AdminArchivePolls, AdminCombo, AdminEmail, AdminJobs, AdminLegal,
 		AdminPerformance, AdminPollCreation, AdminPollDownload, AdminPollsInNavigation,
 		AdminShareOpenPoll, AdminSharePublicCreate, AdminSharePublicShowLogin,
-		AdminShowMailAddresses
+		AdminShowMailAddresses, AdminUnrescrictedOwners
 	} from '../components/Settings/AdminSettings/index.js'
 	import { useAppSettingsStore } from '../stores/appSettings.ts'
 	import '../assets/scss/markdown.scss'
@@ -63,6 +63,7 @@
 		<NcSettingsSection v-bind="sections.pollSettings">
 			<AdminPollCreation />
 			<AdminPollDownload />
+			<AdminUnrescrictedOwners />
 		</NcSettingsSection>
 
 		<NcSettingsSection v-bind="sections.shareSettings">

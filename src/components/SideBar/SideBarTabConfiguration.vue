@@ -47,7 +47,7 @@
 		try {
 			pollStore.toggleArchive({ pollId: pollStore.id })
 		} catch {
-			showError(t('polls', 'Error {action} poll.', { action: pollStore.status.deleted ? 'restoring' : 'archiving' }))
+			showError(t('polls', 'Error {action} poll.', { action: pollStore.status.isDeleted ? 'restoring' : 'archiving' }))
 		}
 	}
 
@@ -55,7 +55,7 @@
 	 *
 	 */
 	function deletePoll() {
-		if (!pollStore.status.deleted) return
+		if (!pollStore.status.isDeleted) return
 		try {
 			pollStore.delete({ pollId: pollStore.id })
 		} catch {
@@ -124,15 +124,15 @@
 		<div class="delete-area">
 			<NcButton @click="toggleArchive()">
 				<template #icon>
-					<RestorePollIcon v-if="pollStore.status.deleted" />
+					<RestorePollIcon v-if="pollStore.status.isDeleted" />
 					<ArchivePollIcon v-else />
 				</template>
 				<template #default>
-					{{ pollStore.status.deleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
+					{{ pollStore.status.isDeleted ? t('polls', 'Restore poll') : t('polls', 'Archive poll') }}
 				</template>
 			</NcButton>
 
-			<NcButton v-if="pollStore.status.deleted" :type="ButtonType.Error" @click="deletePoll()">
+			<NcButton v-if="pollStore.status.isDeleted" :type="ButtonType.Error" @click="deletePoll()">
 				<template #icon>
 					<DeletePollIcon />
 				</template>

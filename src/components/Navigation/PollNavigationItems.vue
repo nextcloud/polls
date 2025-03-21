@@ -34,7 +34,7 @@
 <template>
 	<NcAppNavigationItem :name="props.poll.configuration.title"
 		:to="{name: 'vote', params: {id: props.poll.id}}"
-		:class="{ closed: props.poll.status.expired }">
+		:class="{ closed: props.poll.status.isExpired }">
 		<template #icon>
 			<TextPollIcon v-if="props.poll.type === PollType.Text" />
 			<DatePollIcon v-else />
@@ -49,7 +49,7 @@
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="props.poll.permissions.edit && !props.poll.status.deleted"
+			<NcActionButton v-if="props.poll.permissions.edit && !props.poll.status.isDeleted"
 				:name="t('polls', 'Archive poll')"
 				:aria-label="t('polls', 'Archive poll')"
 				@click="emit('toggleArchive')">
@@ -58,7 +58,7 @@
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="props.poll.permissions.edit && props.poll.status.deleted"
+			<NcActionButton v-if="props.poll.permissions.edit && props.poll.status.isDeleted"
 				:name="t('polls', 'Restore poll')"
 				:aria-label="t('polls', 'Restore poll')"
 				@click="emit('toggleArchive')">
@@ -67,7 +67,7 @@
 				</template>
 			</NcActionButton>
 
-			<NcActionButton v-if="props.poll.permissions.edit && props.poll.status.deleted"
+			<NcActionButton v-if="props.poll.permissions.edit && props.poll.status.isDeleted"
 				class="danger"
 				:name="t('polls', 'Delete poll')"
 				:aria-label="t('polls', 'Delete poll')"

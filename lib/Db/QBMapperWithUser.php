@@ -54,5 +54,29 @@ abstract class QBMapperWithUser extends QBMapper {
 			$qb->expr()->eq($joinAlias . '.id', $fromAlias . '.poll_id'),
 		);
 
+
+	}
+	/**
+	 * Joins share type for evaluating current user's role in a poll
+	 */
+	protected function joinShareRole(IQueryBuilder &$qb, string $fromAlias, string $userId): void {
+		$joinAlias = 'shareRole';
+
+		$qb->selectAlias($joinAlias . '.type', 'share_type')
+			->addGroupBy(
+				$joinAlias . '.type',
+			);
+
+		$qb->leftJoin(
+			$fromAlias,
+			Share::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
+			)
+		);
+
+
 	}
 }

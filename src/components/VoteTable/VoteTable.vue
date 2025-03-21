@@ -39,15 +39,11 @@
 				:class="['participant', {'current-user': (participant.id === sessionStore.currentUser.id) }]">
 				<UserItem :user="participant" condensed />
 
-				<ActionDelete v-if="pollStore.permissions.edit"
+				<ActionDelete v-if="pollStore.permissions.edit && pollStore.permissions.changeForeignVotes"
 					class="user-actions"
 					:name="t('polls', 'Delete votes')"
 					@delete="removeUser(participant.id)" />
 			</div>
-
-			<!-- <div v-if="pollStore.status.countProposals > 0" class="owner" />
-
-			<div v-if="pollStore.permissions.edit && pollStore.isClosed" class="confirm" /> -->
 		</div>
 
 		<TransitionGroup tag="div"

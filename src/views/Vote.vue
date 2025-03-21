@@ -118,7 +118,7 @@
 
 			<div class="area__footer">
 				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants" />
-				<CardAnonymousPollHint v-if="pollStore.configuration.anonymous" />
+				<CardAnonymousPollHint v-if="pollStore.status.isAnonymous" />
 			</div>
 		</div>
 

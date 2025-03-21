@@ -49,7 +49,7 @@ class CalendarService {
 	 * getCalendars -
 	 */
 	private function getCalendarsForPrincipal(): void {
-		$principalUri = $this->userSession->getUser()->getPrincipalUri();
+		$principalUri = $this->userSession->getCurrentUser()->getPrincipalUri();
 
 		if (!empty($principalUri)) {
 			$this->calendars = $this->calendarManager->getCalendarsForPrincipal($principalUri);
@@ -87,11 +87,11 @@ class CalendarService {
 	}
 
 	private function searchEventsByTimeRange(DateTimeImmutable $from, DateTimeImmutable $to): array {
-		if ($this->userSession->getUser()->getPrincipalUri() === '') {
+		if ($this->userSession->getCurrentUser()->getPrincipalUri() === '') {
 			return [];
 		}
 
-		$query = $this->calendarManager->newQuery($this->userSession->getUser()->getPrincipalUri());
+		$query = $this->calendarManager->newQuery($this->userSession->getCurrentUser()->getPrincipalUri());
 		$query->setTimerangeStart($from);
 		$query->setTimerangeEnd($to);
 

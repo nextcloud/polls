@@ -79,6 +79,14 @@ const polls = {
 		})
 	},
 
+	lockAnonymous(pollId) {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `poll/${pollId}/lockAnonymous`,
+			cancelToken: cancelTokenHandlerObject[this.lockAnonymous.name].handleRequestCancellation().token,
+		})
+	},
+
 	deletePoll(pollId) {
 		return httpInstance.request({
 			method: 'DELETE',

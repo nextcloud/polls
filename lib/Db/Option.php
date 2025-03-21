@@ -117,7 +117,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 			'duration' => $this->getDuration(),
 			'locked' => $this->getIsLocked(),
 			'hash' => $this->getPollOptionHash(),
-			'isOwner' => $this->getIsOwner(),
+			'isOwner' => $this->getCurrentUserIsEntityUser(),
 			'votes' => $this->getVotes(),
 			'owner' => $this->getOwnerUser(),
 		];
