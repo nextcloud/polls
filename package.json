@@ -12,12 +12,14 @@
     "url": "git+https://github.com/nextcloud/polls.git"
   },
   "license": "AGPL-3.0",
+  "type": "module",
   "main": "src/main.js",
   "scripts": {
     "build": "vite --mode production build",
     "dev": "NODE_ENV=development vite --mode development build",
     "dev:win": "set NODE_ENV=development && vite --mode development build",
     "format": "prettier --check .",
+    "format:fix": "prettier --write .",
     "lint": "eslint --ext .js,.vue src",
     "lint:fix": "eslint --ext .js,.vue src --fix",
     "stylelint": "stylelint src/**/*{.scss,.vue,.css}",
@@ -75,7 +77,6 @@
     "node": "^20.0.0",
     "npm": "^10.0.0"
   },
-  "type": "module",
   "authors": [
     {
       "name": "Vinzenz Rosenkranz",

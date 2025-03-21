@@ -5,6 +5,9 @@
 **/.svn
 **/.hg
 
+# Github workflows
+.github/workflows/
+
 # 3rdparty dependencies
 **/node_modules
 **/vendor
@@ -13,12 +16,20 @@
 # Compiled JS output
 js/
 
+# Handled by transifex
+l10n/
+
+# OpenAPI
+openapi.json
+
 # PHP
 appinfo/
 lib/
 tests/
 templates/
 **/*.php
+composer.json
+composer.lock
 
 # individual files
 screenshots/
