@@ -35,7 +35,7 @@ class SubscriptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
 	public function get(int $pollId): DataResponse {
 		return $this->response(fn () => [
 			'pollId' => $pollId,
@@ -50,7 +50,7 @@ class SubscriptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
 	public function subscribe(int $pollId): DataResponse {
 		return $this->response(fn () => [
 			'pollId' => $pollId,
@@ -65,7 +65,7 @@ class SubscriptionApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/poll/{pollId}/subscription', requirements: ['apiVersion' => '(v2)'])]
 	public function unsubscribe(int $pollId): DataResponse {
 		return $this->response(fn () => [
 			'pollId' => $pollId,

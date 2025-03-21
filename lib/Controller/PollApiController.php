@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
-use OCA\Polls\ResponseDefinitions as ResponseDefinitions;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
@@ -46,7 +45,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/polls', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/polls', requirements: ['apiVersion' => '(v2)'])]
 	public function list(): DataResponse {
 		return $this->response(fn () => ['polls' => $this->pollService->list()]);
 	}
@@ -58,7 +57,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
 	public function get(int $pollId): DataResponse {
 		return $this->response(fn () => [
 			'poll' => $this->pollService->get($pollId),
@@ -78,7 +77,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll', requirements: ['apiVersion' => '(v2)'])]
 	public function add(string $type, string $title): DataResponse {
 		return $this->responseCreate(fn () => ['poll' => $this->pollService->add($type, $title)]);
 	}
@@ -91,7 +90,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
 	public function update(int $pollId, array $pollConfiguration): DataResponse {
 		return $this->response(fn () => ['poll' => $this->pollService->update($pollId, $pollConfiguration)]);
 	}
@@ -103,7 +102,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}/archive/toggle', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/archive/toggle', requirements: ['apiVersion' => '(v2)'])]
 	public function toggleArchive(int $pollId): DataResponse {
 		return $this->response(fn () => ['poll' => $this->pollService->toggleArchive($pollId)]);
 	}
@@ -115,7 +114,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}/close', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/close', requirements: ['apiVersion' => '(v2)'])]
 	public function close(int $pollId): DataResponse {
 		return $this->response(fn () => ['poll' => $this->pollService->close($pollId)]);
 	}
@@ -127,7 +126,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}/reopen', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/reopen', requirements: ['apiVersion' => '(v2)'])]
 	public function reopen(int $pollId): DataResponse {
 		return $this->response(fn () => ['poll' => $this->pollService->reopen($pollId)]);
 	}
@@ -139,7 +138,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/{apiVersion}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
 	public function delete(int $pollId): DataResponse {
 		return $this->response(fn () => ['poll' => $this->pollService->delete($pollId)]);
 	}
@@ -151,7 +150,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/poll/{pollId}/clone', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/clone', requirements: ['apiVersion' => '(v2)'])]
 	public function clone(int $pollId): DataResponse {
 		return $this->responseCreate(fn () => ['poll' => $this->pollService->clone($pollId)]);
 	}
@@ -163,19 +162,19 @@ class PollApiController extends BaseApiV2Controller {
 	 */
 	#[CORS]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/transfer/{sourceUser}/{targetUser}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/transfer/{sourceUser}/{targetUser}', requirements: ['apiVersion' => '(v2)'])]
 	public function transferPolls(string $sourceUser, string $targetUser): DataResponse {
 		return $this->response(fn () => ['transferred' => $this->pollService->transferPolls($sourceUser, $targetUser)]);
 	}
 
 	/**
-	 * Transfer singe poll to another user (change owner of poll)
+	 * Transfer single poll to another user (change owner of poll)
 	 * @param int $pollId Poll to transfer
 	 * @param string $targetUser User to transfer the poll to
 	 */
 	#[CORS]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{apiVersion}/poll/{pollId}/transfer/{targetUser}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/transfer/{targetUser}', requirements: ['apiVersion' => '(v2)'])]
 	public function transferPoll(int $pollId, string $targetUser): DataResponse {
 		return $this->response(fn () => ['transferred' => $this->pollService->transferPoll($pollId, $targetUser)]);
 	}
@@ -187,7 +186,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/{pollId}/addresses', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/addresses', requirements: ['apiVersion' => '(v2)'])]
 	public function getParticipantsEmailAddresses(int $pollId): DataResponse {
 		return $this->response(fn () => ['addresses' => $this->pollService->getParticipantsEmailAddresses($pollId)]);
 	}
@@ -198,7 +197,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/poll/enum', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/enum', requirements: ['apiVersion' => '(v2)'])]
 	public function enum(): DataResponse {
 		return $this->response(fn () => ['enum' => $this->pollService->getValidEnum()]);
 	}

@@ -37,7 +37,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{appVersion}/poll/{pollId}/shares', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/poll/{pollId}/shares', requirements: ['apiVersion' => '(v2)'])]
 	public function list(int $pollId): DataResponse {
 		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
 	}
@@ -48,7 +48,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{appVersion}/share/{token}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/share/{token}', requirements: ['apiVersion' => '(v2)'])]
 	public function get(string $token): DataResponse {
 		return $this->response(fn () => ['share' => $this->shareService->get($token)]);
 	}
@@ -64,7 +64,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{appVersion}/poll/{pollId}/share/{type}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/share/{type}', requirements: ['apiVersion' => '(v2)'])]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): DataResponse {
 		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)]);
 	}
@@ -76,7 +76,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'DELETE', url: '/api/{appVersion}/share/{token}', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/share/{token}', requirements: ['apiVersion' => '(v2)'])]
 	public function delete(string $token): DataResponse {
 		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token)]);
 	}
@@ -88,7 +88,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{appVersion}/share/{token}/restore', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/share/{token}/restore', requirements: ['apiVersion' => '(v2)'])]
 	public function restore(string $token): DataResponse {
 		return $this->response(fn () => ['share' => $this->shareService->deleteByToken($token, restore: true)]);
 	}
@@ -100,7 +100,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{appVersion}/share/{token}/lock', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/share/{token}/lock', requirements: ['apiVersion' => '(v2)'])]
 	public function lock(string $token): DataResponse {
 		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token)]);
 	}
@@ -112,7 +112,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/{appVersion}/share/{token}/unlock', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/share/{token}/unlock', requirements: ['apiVersion' => '(v2)'])]
 	public function unlock(string $token): DataResponse {
 		return $this->response(fn () => ['share' => $this->shareService->lockByToken($token, unlock: true)]);
 	}
@@ -125,7 +125,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{appVersion}/share/{token}/invite', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/share/{token}/invite', requirements: ['apiVersion' => '(v2)'])]
 	public function sendInvitation(string $token): DataResponse {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [

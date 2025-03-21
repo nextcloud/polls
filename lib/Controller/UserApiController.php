@@ -38,7 +38,7 @@ class UserApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'POST', url: '/api/{apiVersion}/preferences', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/preferences', requirements: ['apiVersion' => '(v2)'])]
 	public function writePreferences(array $preferences): DataResponse {
 		return $this->response(fn () => $this->preferencesService->write($preferences));
 	}
@@ -48,7 +48,7 @@ class UserApiController extends BaseApiV2Controller {
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'GET', url: '/api/{apiVersion}/session', requirements: ['apiVersion' => '(v2)'])]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/session', requirements: ['apiVersion' => '(v2)'])]
 	public function getSession(): DataResponse {
 		return $this->response(fn () => [
 			'token' => $this->request->getParam('token'),
