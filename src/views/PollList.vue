@@ -174,74 +174,71 @@ async function clonePoll(pollId: number) {
 		</HeaderBar>
 
 		<div class="area__main">
-			<TransitionGroup tag="div" name="list" class="poll-list__list">
-				<PollItem key="0" header @sort-list="pollsStore.setSort($event)" />
+			<TransitionGroup v-if="!emptyPollListnoPolls" tag="div" name="list" class="poll-list__list">
 
-				<template v-if="!emptyPollListnoPolls">
-					<PollItem
-						v-for="poll in pollsStore.chunkedList"
-						:key="poll.id"
-						:poll="poll"
-						@goto-poll="gotoPoll(poll.id)">
-						<template #actions>
-							<NcActions force-menu>
-								<NcActionButton
-									v-if="sessionStore.appPermissions.pollCreation"
-									:name="t('polls', 'Clone poll')"
-									:aria-label="t('polls', 'Clone poll')"
-									close-after-click
-									@click="clonePoll(poll.id)">
-									<template #icon>
-										<ClonePollIcon />
-									</template>
-								</NcActionButton>
+				<PollItem
+					v-for="poll in pollsStore.chunkedList"
+					:key="poll.id"
+					:poll="poll"
+					@goto-poll="gotoPoll(poll.id)">
+					<template #actions>
+						<NcActions force-menu>
+							<NcActionButton
+								v-if="sessionStore.appPermissions.pollCreation"
+								:name="t('polls', 'Clone poll')"
+								:aria-label="t('polls', 'Clone poll')"
+								close-after-click
+								@click="clonePoll(poll.id)">
+								<template #icon>
+									<ClonePollIcon />
+								</template>
+							</NcActionButton>
 
-								<NcActionButton
-									v-if="
-										poll.permissions.edit &&
-										!poll.status.isDeleted
-									"
-									:name="t('polls', 'Archive poll')"
-									:aria-label="t('polls', 'Archive poll')"
-									close-after-click
-									@click="toggleArchive(poll.id)">
-									<template #icon>
-										<ArchivePollIcon />
-									</template>
-								</NcActionButton>
+							<NcActionButton
+								v-if="
+									poll.permissions.edit &&
+									!poll.status.isDeleted
+								"
+								:name="t('polls', 'Archive poll')"
+								:aria-label="t('polls', 'Archive poll')"
+								close-after-click
+								@click="toggleArchive(poll.id)">
+								<template #icon>
+									<ArchivePollIcon />
+								</template>
+							</NcActionButton>
 
-								<NcActionButton
-									v-if="
-										poll.permissions.edit &&
-										poll.status.isDeleted
-									"
-									:name="t('polls', 'Restore poll')"
-									:aria-label="t('polls', 'Restore poll')"
-									close-after-click
-									@click="toggleArchive(poll.id)">
-									<template #icon>
-										<RestorePollIcon />
-									</template>
-								</NcActionButton>
+							<NcActionButton
+								v-if="
+									poll.permissions.edit &&
+									poll.status.isDeleted
+								"
+								:name="t('polls', 'Restore poll')"
+								:aria-label="t('polls', 'Restore poll')"
+								close-after-click
+								@click="toggleArchive(poll.id)">
+								<template #icon>
+									<RestorePollIcon />
+								</template>
+							</NcActionButton>
 
-								<NcActionButton
-									v-if="
-										poll.permissions.edit &&
-										poll.status.isDeleted
-									"
-									class="danger"
-									:name="t('polls', 'Delete poll')"
-									:aria-label="t('polls', 'Delete poll')"
-									close-after-click
-									@click="deletePoll(poll.id)">
-									<template #icon>
-										<DeletePollIcon />
-									</template>
-								</NcActionButton>
-							</NcActions>
-						</template>
-					</PollItem>
-				</template>
+							<NcActionButton
+								v-if="
+									poll.permissions.edit &&
+									poll.status.isDeleted
+								"
+								class="danger"
+								:name="t('polls', 'Delete poll')"
+								:aria-label="t('polls', 'Delete poll')"
+								close-after-click
+								@click="deletePoll(poll.id)">
+								<template #icon>
+									<DeletePollIcon />
+								</template>
+							</NcActionButton>
+						</NcActions>
+					</template>
+				</PollItem>
 			</TransitionGroup>
 
 			<IntersectionObserver

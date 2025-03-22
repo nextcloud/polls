@@ -325,15 +325,6 @@ export const usePollsStore = defineStore('polls', {
 			}
 		},
 
-		async setSort(payload: { sortBy: SortType }): Promise<void> {
-			if (this.sort.by === payload.sortBy) {
-				this.sort.reverse = !this.sort.reverse
-			} else {
-				this.sort.reverse = true
-			}
-			this.sort.by = payload.sortBy
-		},
-
 		addChunk(): void {
 			this.meta.loadedChunks = this.meta.loadedChunks + 1
 		},
