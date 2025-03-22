@@ -170,7 +170,6 @@
     "Private poll" : "개인 옵션",
     "Openly accessible poll" : "공개적으로 접근할 수 있는 투표",
     "Poll owner:" : "투표 소유자:",
-    "_%n Participant_::_%n Participants_" : ["%n 참가자들"],
     "_%n option_::_%n options_" : ["%n 옵션들"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n \"예\" 투표"],
     "_%n No vote_::_%n \"No\" votes_" : ["%n \"아니오\" 투표"],

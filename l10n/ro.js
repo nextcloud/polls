@@ -13,7 +13,6 @@ OC.L10N.register(
     "Enter a date" : "Introdu data",
     "Conflict" : "Conflict",
     "Add" : "Adaugă",
-    "_You have %n vote left._::_You have %n votes left._" : ["Ai %n vot rămas.","Mai ai %n voturi rămase.","Mai ai %n voturi rămase."],
     "New comment …" : "Comentariu nou...",
     "Delete comment" : "Șterge comentariu",
     "Title" : "Titlu",

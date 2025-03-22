@@ -39,7 +39,6 @@ OC.L10N.register(
     "Close" : "Tampar",
     "never" : "pas jamai",
     "Private poll" : "Sondatge privat",
-    "_%n Participant_::_%n Participants_" : ["%n participant","%n participants"],
     "Owner" : "Owner",
     "Login" : "Login",
     "Performance settings" : "Paramètres de performança",

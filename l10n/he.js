@@ -65,7 +65,6 @@ OC.L10N.register(
     "Submit" : "שליחה",
     "Close" : "סגירה",
     "never" : "מעולם לא",
-    "_%n Participant_::_%n Participants_" : ["משתתף אחד","%n משתתפים","%n משתתפים"],
     "Access" : "גישה",
     "Owner" : "בעלות",
     "Created" : "יצירה",

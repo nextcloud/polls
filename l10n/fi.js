@@ -181,7 +181,6 @@ OC.L10N.register(
     "Closing: {dateRelative}" : "Sulkeutuu: {dateRelative}",
     "Time zone: {timezoneString}" : "Aikavyöhyke: {timezoneString}",
     "You subscribed to this poll" : "Tilasit tämän kyselyn",
-    "_%n Participant_::_%n Participants_" : ["%n osallistuja","%n osallistujaa"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n \"Kyllä\"-ääni","%n \"Kyllä\"-ääntä"],
     "_%n No vote_::_%n \"No\" votes_" : ["%n \"Ei\"-ääni","%n \"Ei\"-ääntä"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Ehkä\"-ääni","%n \"Ehkä\"-ääntä"],

@@ -47,7 +47,6 @@ OC.L10N.register(
     "Results are hidden until closing poll" : "Резултатите не видливи до затворање на анкетата",
     "Results are visible since closing poll" : "Резултатите се видливи до затворање на анкетата",
     "Private poll" : "Приватна анкета",
-    "_%n Participant_::_%n Participants_" : ["%n Учесник","%n Учесници"],
     "Access" : "Пристап",
     "Owner" : "Сопственик",
     "Created" : "Креирано",

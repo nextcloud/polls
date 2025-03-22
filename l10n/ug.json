@@ -236,8 +236,6 @@
     "Add" : "قوش",
     "You are asked to propose more options. " : "سىزدىن تېخىمۇ كۆپ تاللاشلارنى ئوتتۇرىغا قويۇشىڭىز تەلەپ قىلىنىدۇ. ",
     "The proposal period ends {timeRelative}." : "تەكلىپ مۇددىتى {timeRelative} ئاخىرلىشىدۇ.",
-    "Although participant's names are hidden, this is not a real anonymous poll because they are not hidden from the owner." : "گەرچە قاتناشقۇچىلارنىڭ ئىسمى يوشۇرۇن بولسىمۇ ، ئەمما بۇ ھەقىقىي نامسىز راي سىناش ئەمەس ، چۈنكى ئۇلار ئىگىسىدىن يوشۇرۇلمىغان.",
-    "Additionally the owner can remove the anonymous flag at any time, which will reveal the participant's names." : "بۇنىڭدىن باشقا ، ئىگىسى نامسىز بايراقنى خالىغان ۋاقىتتا ئۆچۈرۈۋېتەلەيدۇ ، بۇ قاتناشقۇچىنىڭ ئىسمىنى ئاشكارىلايدۇ.",
     "This poll is closed." : "بۇ راي سىناش ئاخىرلاشقان.",
     "No further action is possible." : "بۇنىڭدىن كېيىن ھېچقانداق ھەرىكەت قىلىش مۇمكىن ئەمەس.",
     "Due to possible performance issues {countHiddenParticipants} voters are hidden." : "ئىقتىدار مەسىلىسى سەۋەبىدىن {countHiddenParticipants} سايلىغۇچىلار يوشۇرۇنغان.",
