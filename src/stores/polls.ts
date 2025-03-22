@@ -112,7 +112,7 @@ export const usePollsStore = defineStore('polls', {
 				titleExt: t('polls', 'Relevant polls'),
 				description: t(
 					'polls',
-					'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to.',
+					'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown.',
 				),
 				pinned: false,
 				createDependent: false,
