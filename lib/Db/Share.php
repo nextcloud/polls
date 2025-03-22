@@ -10,8 +10,8 @@ namespace OCA\Polls\Db;
 
 use JsonSerializable;
 use OCA\Polls\AppConstants;
+use OCA\Polls\Helper\Container;
 use OCP\IURLGenerator;
-use OCP\Server;
 
 /**
  * @psalm-suppress UnusedProperty
@@ -131,7 +131,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 		$this->addType('locked', 'integer');
 		$this->addType('reminderSent', 'integer');
 		$this->addType('deleted', 'integer');
-		$this->urlGenerator = Server::get(IURLGenerator::class);
+		$this->urlGenerator = Container::queryClass(IURLGenerator::class);
 	}
 
 	/**

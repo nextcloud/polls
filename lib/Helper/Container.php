@@ -17,16 +17,19 @@ use OCP\App\IAppManager;
 use OCP\IL10N;
 use OCP\L10N\IFactory;
 use OCP\Server;
+use Psr\Log\LoggerInterface;
 
 abstract class Container {
 	/**
 	 * @param string $class
 	 * @return mixed
-	 * @deprecated Use Server::get instead
-	 * @psalm-suppress DeprecatedMethod
 	 */
 	public static function queryClass(string $class): mixed {
 		return Server::get($class);
+	}
+
+	public static function logger(): Poll {
+		return Server::get(LoggerInterface::class);
 	}
 
 	public static function getPoll(int $pollId, bool $getDeleted = false): Poll {

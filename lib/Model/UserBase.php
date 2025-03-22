@@ -26,7 +26,6 @@ use OCP\Collaboration\Collaborators\ISearch;
 use OCP\IDateTimeZone;
 use OCP\IGroupManager;
 use OCP\IL10N;
-use OCP\Server;
 use OCP\Share\IShare;
 
 class UserBase implements JsonSerializable {
@@ -69,10 +68,10 @@ class UserBase implements JsonSerializable {
 		protected string $timeZoneName = '',
 	) {
 		$this->l10n = Container::getL10N();
-		$this->groupManager = Server::get(IGroupManager::class);
-		$this->timeZone = Server::get(IDateTimeZone::class);
-		$this->userSession = Server::get(UserSession::class);
-		$this->appSettings = Server::get(AppSettings::class);
+		$this->groupManager = Container::queryClass(IGroupManager::class);
+		$this->timeZone = Container::queryClass(IDateTimeZone::class);
+		$this->userSession = Container::queryClass(UserSession::class);
+		$this->appSettings = Container::queryClass(AppSettings::class);
 	}
 
 	public function getId(): string {

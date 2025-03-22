@@ -8,11 +8,11 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\Anon;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\Entity;
-use OCP\Server;
 
 /**
  * @psalm-suppress UnusedProperty
@@ -45,7 +45,7 @@ abstract class EntityWithUser extends Entity {
 	 * @return bool
 	 */
 	public function getCurrentUserIsEntityUser(): bool {
-		$userSession = Server::get(UserSession::class);
+		$userSession = Container::queryClass(UserSession::class);
 		return $userSession->getCurrentUserId() === $this->getUserId();
 	}
 
@@ -62,7 +62,7 @@ abstract class EntityWithUser extends Entity {
 
 		if ($this->getAnonymized() > 0) {
 			// the poll is anonymized and unlocked
-			$userSession = Server::get(UserSession::class);
+			$userSession = Container::queryClass(UserSession::class);
 			if ($this->getPollOwnerId() === $userSession->getCurrentUserId()) {
 				// if the current user is the poll owner, don't anonymize the entity
 				return false;
@@ -98,7 +98,7 @@ abstract class EntityWithUser extends Entity {
 			return $user;
 		}
 
-		$userMapper = (Server::get(UserMapper::class));
+		$userMapper = (Container::queryClass(UserMapper::class));
 
 		$user = $userMapper->getParticipant($this->getUserId(), $this->getPollId());
 		return $user;

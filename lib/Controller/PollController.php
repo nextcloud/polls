@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
@@ -20,7 +21,6 @@ use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
-use OCP\Server;
 
 /**
  * @psalm-api
@@ -47,7 +47,7 @@ class PollController extends BaseController {
 	#[FrontpageRoute(verb: 'GET', url: '/polls')]
 	public function list(): JSONResponse {
 		return $this->response(function () {
-			$appSettings = Server::get(AppSettings::class);
+			$appSettings = Container::queryClass(AppSettings::class);
 			return [
 				'list' => $this->pollService->list(),
 				'permissions' => [
