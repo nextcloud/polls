@@ -17,7 +17,7 @@ import { StatusResults } from '../../Types/index.ts'
 // Icons
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
+import CreationIcon from 'vue-material-design-icons/ClockPlusOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
 import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'

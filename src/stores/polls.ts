@@ -21,6 +21,7 @@ export enum SortType {
 	Access = 'access',
 	Owner = 'owner',
 	Expire = 'expire',
+	Interaction = 'interaction',
 }
 
 export enum FilterType {
@@ -33,6 +34,11 @@ export enum FilterType {
 	Closed = 'closed',
 	Archived = 'archived',
 	Admin = 'admin',
+}
+
+export enum SortDirection {
+	Asc = 'asc',
+	Desc = 'desc',
 }
 
 export type PollCategory = {
@@ -68,6 +74,16 @@ export const sortColumnsMapping: { [key in SortType]: string } = {
 	access: 'configuration.access',
 	owner: 'owner.displayName',
 	expire: 'configuration.expire',
+	interaction: 'status.lastInteraction',
+}
+
+export const sortTitlesMapping: { [key in SortType]: string } = {
+	created: t('polls', 'Created'),
+	title: t('polls', 'Title'),
+	access: t('polls', 'Access'),
+	owner: t('polls', 'Owner'),
+	expire: t('polls', 'Expire'),
+	interaction: t('polls', 'Last interaction'),
 }
 
 export const usePollsStore = defineStore('polls', {

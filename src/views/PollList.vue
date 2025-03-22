@@ -26,6 +26,7 @@ import { PollsAppIcon } from '../components/AppIcons/index.js'
 import PollItem from '../components/PollList/PollItem.vue'
 import { usePollsStore } from '../stores/polls.ts'
 import { useSessionStore } from '../stores/session.ts'
+import PollListSort from '../components/PollList/PollListSort.vue'
 
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
@@ -166,6 +167,10 @@ async function clonePoll(pollId: number) {
 				{{ title }}
 			</template>
 			{{ description }}
+			<template #right>
+				<PollListSort />
+			</template>
+
 		</HeaderBar>
 
 		<div class="area__main">
