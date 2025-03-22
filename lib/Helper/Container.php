@@ -28,7 +28,8 @@ abstract class Container {
 		return Server::get($class);
 	}
 
-	public static function logger(): Poll {
+	/** @psalm-suppress PossiblyUnusedMethod */
+	public static function logger(): LoggerInterface {
 		return Server::get(LoggerInterface::class);
 	}
 
