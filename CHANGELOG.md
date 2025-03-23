@@ -5,7 +5,10 @@
 # Changelog
 ##
 
-## [7.4.0] - 2024-03-07
+
+### New
+ - Apply rules for creating shares as set in the system settings
+## [7.4.1] - 2024-03-07
 ### New
  - Apply rules for creating shares as set in the system settings
 
