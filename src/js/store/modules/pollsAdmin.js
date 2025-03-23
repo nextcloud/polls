@@ -46,6 +46,7 @@ const actions = {
 		try {
 			await PollsAPI.takeOver(payload.pollId)
 			context.dispatch('list')
+			context.dispatch('polls/list', null, { root: true })
 		} catch (error) {
 			if (error?.code === 'ERR_CANCELED') return
 			throw error
