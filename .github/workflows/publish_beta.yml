@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Publish pre-release
 
-on: 
+on:
   push:
     tags:
       - v*-beta*
@@ -59,7 +59,7 @@ jobs:
       with:
         body: "# Changelog for the upcomming release (preview)\n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: true
-        draft: false
+        draft: true
         generate_release_notes: true
         files: |
           build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
