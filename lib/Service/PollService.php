@@ -35,7 +35,6 @@ use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Search\ISearchQuery;
-use Psr\Log\LoggerInterface;
 
 class PollService {
 
@@ -48,7 +47,6 @@ class PollService {
 		private UserMapper $userMapper,
 		private UserSession $userSession,
 		private VoteMapper $voteMapper,
-		private LoggerInterface $logger,
 	) {
 	}
 
@@ -57,11 +55,13 @@ class PollService {
 	 */
 	public function list(): array {
 		$pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
-		// return $pollList;
+		if ($this->userSession->getCurrentUser()->getIsAdmin()) {
+			return $pollList;
+		}
+
 		return array_values(array_filter($pollList, function (Poll $poll): bool {
 			return $poll->getIsAllowed(Poll::PERMISSION_POLL_VIEW);
 		}));
-
 	}
 
 	/**
@@ -262,10 +262,8 @@ class PollService {
 		}
 
 		$this->poll->deserializeArray($pollConfiguration);
-		$tempValue = $this->poll->getAnonymous();
-
 		$this->poll = $this->pollMapper->update($this->poll);
-		$this->logger->error('set anonymous setting', ['pollId' => $this->poll->getId(), 'before update' => $tempValue, 'after update' => $this->poll->getAnonymous()]);
+
 		$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($this->poll));
 
 		return $this->poll;

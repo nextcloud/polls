@@ -12,23 +12,16 @@ import { t, n } from '@nextcloud/l10n'
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
-import NcActions from '@nextcloud/vue/components/NcActions'
-import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-
-import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
-import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
-import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
-import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 
 import { Logger } from '../helpers/index.ts'
 import { HeaderBar, IntersectionObserver } from '../components/Base/index.js'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 import PollItem from '../components/PollList/PollItem.vue'
 import { usePollsStore } from '../stores/polls.ts'
-import { useSessionStore } from '../stores/session.ts'
+import PollListSort from '../components/PollList/PollListSort.vue'
+import PollItemActions from '../components/PollList/PollItemActions.vue'
 
 const pollsStore = usePollsStore()
-const sessionStore = useSessionStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -121,42 +114,6 @@ async function loadMore() {
 		showError(t('polls', 'Error loading more polls'))
 	}
 }
-
-/**
- *
- * @param pollId - The poll id to clone
- */
-async function toggleArchive(pollId: number) {
-	try {
-		await pollsStore.toggleArchive({ pollId })
-	} catch {
-		showError(t('polls', 'Error archiving/restoring poll.'))
-	}
-}
-
-/**
- *
- * @param pollId - The poll id to delete
- */
-async function deletePoll(pollId: number) {
-	try {
-		await pollsStore.delete({ pollId })
-	} catch {
-		showError(t('polls', 'Error deleting poll.'))
-	}
-}
-
-/**
- *
- * @param pollId - The poll id to clone
- */
-async function clonePoll(pollId: number) {
-	try {
-		await pollsStore.clone({ pollId })
-	} catch {
-		showError(t('polls', 'Error cloning poll.'))
-	}
-}
 </script>
 
 <template>
@@ -166,77 +123,26 @@ async function clonePoll(pollId: number) {
 				{{ title }}
 			</template>
 			{{ description }}
+			<template #right>
+				<PollListSort />
+			</template>
 		</HeaderBar>
 
 		<div class="area__main">
-			<TransitionGroup tag="div" name="list" class="poll-list__list">
-				<PollItem key="0" header @sort-list="pollsStore.setSort($event)" />
-
-				<template v-if="!emptyPollListnoPolls">
-					<PollItem
-						v-for="poll in pollsStore.chunkedList"
-						:key="poll.id"
-						:poll="poll"
-						@goto-poll="gotoPoll(poll.id)">
-						<template #actions>
-							<NcActions force-menu>
-								<NcActionButton
-									v-if="sessionStore.appPermissions.pollCreation"
-									:name="t('polls', 'Clone poll')"
-									:aria-label="t('polls', 'Clone poll')"
-									close-after-click
-									@click="clonePoll(poll.id)">
-									<template #icon>
-										<ClonePollIcon />
-									</template>
-								</NcActionButton>
-
-								<NcActionButton
-									v-if="
-										poll.permissions.edit &&
-										!poll.status.isDeleted
-									"
-									:name="t('polls', 'Archive poll')"
-									:aria-label="t('polls', 'Archive poll')"
-									close-after-click
-									@click="toggleArchive(poll.id)">
-									<template #icon>
-										<ArchivePollIcon />
-									</template>
-								</NcActionButton>
-
-								<NcActionButton
-									v-if="
-										poll.permissions.edit &&
-										poll.status.isDeleted
-									"
-									:name="t('polls', 'Restore poll')"
-									:aria-label="t('polls', 'Restore poll')"
-									close-after-click
-									@click="toggleArchive(poll.id)">
-									<template #icon>
-										<RestorePollIcon />
-									</template>
-								</NcActionButton>
-
-								<NcActionButton
-									v-if="
-										poll.permissions.edit &&
-										poll.status.isDeleted
-									"
-									class="danger"
-									:name="t('polls', 'Delete poll')"
-									:aria-label="t('polls', 'Delete poll')"
-									close-after-click
-									@click="deletePoll(poll.id)">
-									<template #icon>
-										<DeletePollIcon />
-									</template>
-								</NcActionButton>
-							</NcActions>
-						</template>
-					</PollItem>
-				</template>
+			<TransitionGroup
+				v-if="!emptyPollListnoPolls"
+				tag="div"
+				name="list"
+				class="poll-list__list">
+				<PollItem
+					v-for="poll in pollsStore.chunkedList"
+					:key="poll.id"
+					:poll="poll"
+					@goto-poll="gotoPoll(poll.id)">
+					<template #actions>
+						<PollItemActions :poll="poll" />
+					</template>
+				</PollItem>
 			</TransitionGroup>
 
 			<IntersectionObserver
