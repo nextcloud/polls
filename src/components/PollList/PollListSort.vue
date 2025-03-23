@@ -98,7 +98,7 @@ function setSort(sort: { by?: SortType; reverse?: boolean }) {
 		<NcActionButton
 			:name="sortTitlesMapping[SortType.Owner]"
 			:aria-label="t('polls', 'Sort by owner name')"
-			@click="setSort({ by: SortType.Expire })">
+			@click="setSort({ by: SortType.Owner })">
 			<template #icon>
 				<AccountCircleOutlineIcon />
 			</template>
