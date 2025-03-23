@@ -110,7 +110,6 @@ OC.L10N.register(
     "Year" : "שנה",
     "Title must not be empty!" : "הכותרת לא יכולה להישאר ריקה!",
     "My polls" : "הסקרים שלי",
-    "All polls, where you placed a vote." : "כל הסקרים בהם הצבעת.",
     "All polls" : "כל הסקרים",
     "All polls, where you have access to." : "כל הסקרים אליהם יש לך גישה.",
     "Archive" : "לארכיון"

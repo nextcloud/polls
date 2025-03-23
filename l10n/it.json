@@ -633,21 +633,18 @@
     "Title must not be empty!" : "Il titolo non può essere vuoto!",
     "Error writing poll" : "Errore durante la scrittura del sondaggio",
     "Relevant" : "Importante",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Sondaggi pertinenti che sono rilevanti per te, perché sei un partecipante o il proprietario o sei stato invitato.",
     "My polls" : "I miei sondaggi",
-    "Your polls (in which you are the owner)." : "I tuoi sondaggi (di cui sei il proprietario).",
     "Private polls" : "Sondaggi privati",
     "All private polls, to which you have access." : "Tutti i sondaggi privati, a cui hai accesso.",
     "Participated" : "Partecipato",
-    "All polls, where you placed a vote." : "Tutti i sondaggi, in cui hai votato.",
     "Openly accessible polls" : "Sondaggi apertamente accessibili",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Un elenco completo di tutti i sondaggi pubblicamente accessibili su questo sito, indipendentemente da chi ne sia il proprietario.",
     "All polls" : "Tutti i sondaggi",
     "All polls, where you have access to." : "Tutti i sondaggi a cui hai accesso.",
     "Closed polls" : "Sondaggi chiusi",
     "All closed polls, where voting is disabled." : "Tutti i sondaggi chiusi, dove il voto è disabilitato.",
     "Archive" : "Archivio",
     "My archived polls" : "I miei sondaggi archiviati",
-    "Your archived polls are only accessible to you." : "I tuoi sondaggi archiviati sono accessibili solo a te."
+    "Your archived polls are only accessible to you." : "I tuoi sondaggi archiviati sono accessibili solo a te.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Sondaggi pertinenti che sono rilevanti per te, perché sei un partecipante o il proprietario o sei stato invitato."
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

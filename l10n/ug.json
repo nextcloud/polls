@@ -620,21 +620,18 @@
     "Title must not be empty!" : "تېما بوش قالماسلىقى كېرەك!",
     "Error writing poll" : "راي سىناشتا خاتالىق",
     "Relevant" : "مۇناسىۋەتلىك",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "مۇناسىۋەتلىك ياكى سىز ئۈچۈن مۇناسىۋەتلىك راي سىناشلار ، چۈنكى سىز قاتناشقۇچى ياكى ئىگىسى ياكى سىز تەكلىپ قىلىنغان.",
     "My polls" : "راي سىناش",
-    "Your polls (in which you are the owner)." : "راي سىناشلىرىڭىز (بۇنىڭ ئىگىسى).",
     "Private polls" : "شەخسىي راي سىناش",
     "All private polls, to which you have access." : "سىز زىيارەت قىلالايدىغان بارلىق شەخسىي راي سىناشلار.",
     "Participated" : "قاتناشتى",
-    "All polls, where you placed a vote." : "بېلەت تاشلىغان بارلىق راي سىناشلار.",
     "Openly accessible polls" : "راي سىناشقا ئوچۇق",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "كىمنىڭ ئىگىسى بولۇشىدىن قەتئىينەزەر ، بۇ تور بېكەتتىكى بارلىق ئوچۇق راي سىناشلار بىلەن تولۇق تىزىملىك.",
     "All polls" : "بارلىق راي سىناش",
     "All polls, where you have access to." : "سىز زىيارەت قىلالايدىغان بارلىق راي سىناشلار.",
     "Closed polls" : "بېلەت تاشلاش",
     "All closed polls, where voting is disabled." : "بېلەت تاشلاش چەكلەنگەن بارلىق يېپىق راي سىناشلار.",
     "Archive" : "ئارخىپ",
     "My archived polls" : "مېنىڭ ئارخىپ راي سىناشلىرىم",
-    "Your archived polls are only accessible to you." : "ئارخىپ راي سىناشلىرىڭىزنى پەقەت زىيارەت قىلالايسىز."
+    "Your archived polls are only accessible to you." : "ئارخىپ راي سىناشلىرىڭىزنى پەقەت زىيارەت قىلالايسىز.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "مۇناسىۋەتلىك ياكى سىز ئۈچۈن مۇناسىۋەتلىك راي سىناشلار ، چۈنكى سىز قاتناشقۇچى ياكى ئىگىسى ياكى سىز تەكلىپ قىلىنغان."
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

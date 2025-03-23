@@ -636,21 +636,18 @@ OC.L10N.register(
     "Title must not be empty!" : "Le titre ne doit pas être vide !",
     "Error writing poll" : "Erreur d'écriture du sondage",
     "Relevant" : "Me concernant",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Tous les sondages qui sont pertinents ou pour vous, parce que vous êtes soit un participant, soit le propriétaire, soit y avez été invité.",
     "My polls" : "Mes sondages",
-    "Your polls (in which you are the owner)." : "Vos sondages (dont vous êtes propriétaire)",
     "Private polls" : "Sondages privés",
     "All private polls, to which you have access." : "Tous les sondages privés auxquels vous avez accès.",
     "Participated" : "Auxquels j'ai participé",
-    "All polls, where you placed a vote." : "Tous les sondages auxquels vous avez participé.",
     "Openly accessible polls" : "Sondages publics",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Une liste complète de tous les sondages publics sur ce site, peu importe le propriétaire",
     "All polls" : "Tous les sondages",
     "All polls, where you have access to." : "Tous les sondages auxquels vous avez accès.",
     "Closed polls" : "Sondages terminés",
     "All closed polls, where voting is disabled." : "Tous les sondages terminés (où il n'est plus possible de voter).",
     "Archive" : "Archives",
     "My archived polls" : "Mes sondages archivés",
-    "Your archived polls are only accessible to you." : "Vous seul pouvez consulter les sondages que vous avez archivés."
+    "Your archived polls are only accessible to you." : "Vous seul pouvez consulter les sondages que vous avez archivés.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Tous les sondages qui sont pertinents ou pour vous, parce que vous êtes soit un participant, soit le propriétaire, soit y avez été invité."
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

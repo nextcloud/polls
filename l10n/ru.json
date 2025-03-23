@@ -441,21 +441,18 @@
     "Title must not be empty!" : "Заголовок не может быть пустым.",
     "Error writing poll" : "Не удалось записать опрос",
     "Relevant" : "Актуальные",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Соответствующие опросы, которые актуальны или для вас, потому что вы являетесь участником или владельцем, или вас пригласили.",
     "My polls" : "Мои опросы",
-    "Your polls (in which you are the owner)." : "Ваши опросы (где вы владелец)",
     "Private polls" : "Частные опросы",
     "All private polls, to which you have access." : "Все частные опросы, к которым у вас есть доступ.",
     "Participated" : "Вы приняли участие",
-    "All polls, where you placed a vote." : "Все опросы, где вы проголосовали.",
     "Openly accessible polls" : "Открытые доступные опросы",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Полный список всех открытых опросов на этом сайте, независимо от того, кто является владельцем.",
     "All polls" : "Все опросы",
     "All polls, where you have access to." : "Все опросы, где у вас есть доступ.",
     "Closed polls" : "Закрытые опросы",
     "All closed polls, where voting is disabled." : "Все завершённые опросы, где голосование отключено.",
     "Archive" : "Архив",
     "My archived polls" : "Мой архив опросов",
-    "Your archived polls are only accessible to you." : "Архив опросов доступен только вам."
+    "Your archived polls are only accessible to you." : "Архив опросов доступен только вам.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Соответствующие опросы, которые актуальны или для вас, потому что вы являетесь участником или владельцем, или вас пригласили."
 },"pluralForm" :"nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || (n%100>=11 && n%100<=14)? 2 : 3);"
 }

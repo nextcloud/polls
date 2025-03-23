@@ -632,21 +632,18 @@ OC.L10N.register(
     "Title must not be empty!" : "El títol no pot estar buit!",
     "Error writing poll" : "Error d’escriptura de l'enquesta",
     "Relevant" : "Important",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Enquestes rellevants que són rellevants o per a tu, perquè ets un participant o el propietari o hi estàs convidat.",
     "My polls" : "Les meves enquestes",
-    "Your polls (in which you are the owner)." : "Les teves enquestes (de les quals ets el propietari).",
     "Private polls" : "Enquestes privades",
     "All private polls, to which you have access." : "Totes les enquestes privades, a les quals tens accés.",
     "Participated" : "Va participar",
-    "All polls, where you placed a vote." : "Totes les enquestes, on vostè va posar un vot.",
     "Openly accessible polls" : "Enquestes d'accés obert",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Una llista completa amb totes les enquestes d'accés obert d'aquest lloc, independentment de qui sigui el propietari.",
     "All polls" : "Totes les enquestes",
     "All polls, where you have access to." : "Totes les enquestes, on teniu accés.",
     "Closed polls" : "Enquestes tancades",
     "All closed polls, where voting is disabled." : "Totes les enquestes tancades, on la votació està desactivada.",
     "Archive" : "Arxiu",
     "My archived polls" : "Les meves enquestes arxivades",
-    "Your archived polls are only accessible to you." : "Només podeu accedir a les vostres enquestes arxivades."
+    "Your archived polls are only accessible to you." : "Només podeu accedir a les vostres enquestes arxivades.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Enquestes rellevants que són rellevants o per a tu, perquè ets un participant o el propietari o hi estàs convidat."
 },
 "nplurals=2; plural=(n != 1);");

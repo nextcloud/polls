@@ -183,17 +183,15 @@ OC.L10N.register(
     "Year" : "рік",
     "Title must not be empty!" : "Потрібно зазначити заголовок!",
     "Relevant" : "Відповідне",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Опитування, релевантні для вас, оскільки ви є учасником, власником опитування або вас запрошено взяти в ньому участь.",
     "My polls" : "Мої опитування",
-    "Your polls (in which you are the owner)." : "Ваші опитування (опитування, де ви є власником)",
     "Private polls" : "Приватні опитування",
     "All private polls, to which you have access." : "Всі приватні опитування, до яких ви маєте доступ.",
     "Participated" : "Взяли участь",
-    "All polls, where you placed a vote." : "Всі опитування, в яких ви приголосували.",
     "Openly accessible polls" : "Опитування у відкритому доступі",
     "All polls" : "Всі опитування",
     "Closed polls" : "Закриті опитування",
     "All closed polls, where voting is disabled." : "Всі закриті опитування, в яких голосування вимкнено.",
-    "Archive" : "Архів"
+    "Archive" : "Архів",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Опитування, релевантні для вас, оскільки ви є учасником, власником опитування або вас запрошено взяти в ньому участь."
 },
 "nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % 100 >=11 && n % 100 <=14 )) ? 2: 3);");

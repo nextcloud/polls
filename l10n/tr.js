@@ -658,21 +658,18 @@ OC.L10N.register(
     "Poll updated" : "Anket güncellendi",
     "Error writing poll" : "Anket yazılırken sorun çıktı",
     "Relevant" : "İlişkili",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Katılımcısı, sahibi ya da davetlisi olduğunuz, sizinle ilgili olan ya da sizin olan anketler.",
     "My polls" : "Anketlerim",
-    "Your polls (in which you are the owner)." : "Anketleriniz (sahibi olduklarınız).",
     "Private polls" : "Kapalı anketler",
     "All private polls, to which you have access." : "Erişiminiz olan tüm kapalı anketler.",
     "Participated" : "Katıldı",
-    "All polls, where you placed a vote." : "Oy verdiğiniz tüm anketler.",
     "Openly accessible polls" : "Herkese açık anketler",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Sahibinin kim olduğundan bağımsız olarak, sitedeki herkese açık tüm anketlerin listesi.",
     "All polls" : "Tüm anketler",
     "All polls, where you have access to." : "Erişiminiz olan tüm anketler.",
     "Closed polls" : "Sona ermiş anketler",
     "All closed polls, where voting is disabled." : "Oy vermenin kullanımdan kaldırıldığı tüm sona ermemiş anketler. ",
     "Archive" : "Arşiv",
     "My archived polls" : "Arşivlenmiş anketlerim",
-    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz."
+    "Your archived polls are only accessible to you." : "Arşivlenmiş anketlerinize yalnızca siz erişebilirsiniz.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Katılımcısı, sahibi ya da davetlisi olduğunuz, sizinle ilgili olan ya da sizin olan anketler."
 },
 "nplurals=2; plural=(n > 1);");

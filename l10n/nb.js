@@ -634,21 +634,18 @@ OC.L10N.register(
     "Title must not be empty!" : "Tittelen må ikke være tom!",
     "Error writing poll" : "Feil ved skriving av avstemning",
     "Relevant" : "Relevant",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Relevante avstemninger som er aktuelle eller for deg, fordi du er deltaker eller eier eller du er invitert til.",
     "My polls" : "Mine avstemninger",
-    "Your polls (in which you are the owner)." : "Avstemningene dine (der du er eieren).",
     "Private polls" : "Private avstemninger",
     "All private polls, to which you have access." : "Alle private avstemninger, som du har tilgang til.",
     "Participated" : "Deltatt",
-    "All polls, where you placed a vote." : "Alle avstemninger, hvor du har lagt inn en stemme.",
     "Openly accessible polls" : "Åpent tilgjengelige avstemninger",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "En komplett liste med alle åpent tilgjengelige avstemninger på dette nettstedet, uavhengig av hvem som er eier.",
     "All polls" : "Alle avstemninger",
     "All polls, where you have access to." : "Alle avstemninger, hvor du har tilgang til.",
     "Closed polls" : "Stengte avstemninger",
     "All closed polls, where voting is disabled." : "Alle lukkede avstemninger, der stemmegivning er deaktivert.",
     "Archive" : "Arkiv",
     "My archived polls" : "Mine arkiverte avstemninger",
-    "Your archived polls are only accessible to you." : "Dine arkiverte avstemninger er bare tilgjengelige for deg."
+    "Your archived polls are only accessible to you." : "Dine arkiverte avstemninger er bare tilgjengelige for deg.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Relevante avstemninger som er aktuelle eller for deg, fordi du er deltaker eller eier eller du er invitert til."
 },
 "nplurals=2; plural=(n != 1);");

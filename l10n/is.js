@@ -133,7 +133,6 @@ OC.L10N.register(
     "Error writing poll" : "Villa við að skrifa könnun",
     "Relevant" : "Tengt",
     "My polls" : "Mínar kannanir",
-    "All polls, where you placed a vote." : "Allar kannanir þar sem þú greiddir atkvæði.",
     "All polls" : "Allar kannanir",
     "All polls, where you have access to." : "Allar kannanir sem þú hefur aðgang að.",
     "Closed polls" : "Lokaðar kannanir",
