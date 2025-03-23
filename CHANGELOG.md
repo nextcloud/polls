@@ -5,12 +5,70 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 ##
-# Changelog
-All notable changes to this project will be documented in this file.
-##
+
 ## [8.0.0] - tbd
 ### Changes
  - Migration to Vue 3 and Pinia
+### New
+ - New dialog for creation of datetime options in date polls
+ - Locked anonymous mode
+ - Restricted poll owners
+ - Redesign of poll lists
+
+## [7.4.1] - 2024-03-07
+### New
+ - Apply rules for creating shares as set in the system settings
+
+## [7.3.2] - 2024-02-25
+### Change
+ - remove limit of usersearch (was limited to 30 results)
+
+## [7.3.1] - 2024-02-14
+### Fix
+ - fix poll transfer via occ
+ - support Nextcloud 31
+
+## [7.2.10] - 2024-01-21
+### Same as 7.2.8 but only for PHP 8.0
+### Fix
+ - fix limit check
+
+## [7.2.9] - 2024-01-03
+### Fix
+ - minimum php version (8.1)
+
+## [7.2.8] - 2024-12-28
+### Fix
+ - fix limit check
+
+## [7.2.6] - 2024-12-24
+### Fix
+ - fix date picker poositioning by updating to nextcloud/vue-components@8.22.0
+
+## [7.2.5] - 2024-11-23
+### Fix
+ - avoid error message due to new core check of column name length
+ - fix user search did not display subnames
+
+## [7.2.4] - 2024-09-26
+### Fix
+ - fix vote limit checks for public users
+ - fix access to public polls email and contact shares
+ - fix placeholder translations of email input of the register dialog
+
+## [7.2.3] - 2024-09-12
+### Fix
+ -  fix size of creation box in navigation
+
+## [7.2.2] - 2024-09-06
+### Fix
+ -  fix watcher in situations it may fail on pollId 0
+ -  fix failing routes on tokens with trailing spaces
+ -  Removed index removal from the pre-migration repair steps
+
+## [7.2.1] - 2024-08-22
+### Fix
+ -  Fix deleted user when email share registers
 
 ## [7.2.0] - 2024-08-01
 ### Changes
@@ -46,7 +104,7 @@ All notable changes to this project will be documented in this file.
  - Fixed counting of orphaned votes
  - Disable registration button while registration is pending
  - Disable "resolve group share" while resolving
- - Fix showing booked up options in polls with hidden results 
+ - Fix showing booked up options in polls with hidden results
 ### Changes
  - Mainly performance improvements
  - Changed API structure for polls, please refer to the documentation
@@ -117,8 +175,8 @@ All notable changes to this project will be documented in this file.
 
 ## [6.1.0] - 2024-02-16
 
-#### This minor version contains a huge change in the internal user and Access management. 
-This is a step further to a public poll creation. The next major version will be a long time necessary technical migration to the current Vue 3 framework. 
+#### This minor version contains a huge change in the internal user and Access management.
+This is a step further to a public poll creation. The next major version will be a long time necessary technical migration to the current Vue 3 framework.
 
 So this 6.x branch will get only bug fixes and compatibility updates. Any other featues are scheduled after the migration.
 
@@ -139,7 +197,7 @@ So this 6.x branch will get only bug fixes and compatibility updates. Any other 
  - Fixed some minor activity issues
  - Fixed autoreminder could not be set
  - Fixed migration error which could cause data loss (when comming from 3.x)
- 
+
 ## [6.0.1] - 2023-12-10
 ### Fixes
  - Some minor fixes regarding user apperances
@@ -247,13 +305,13 @@ So this 6.x branch will get only bug fixes and compatibility updates. Any other 
 ## [5.0.1] - 2023-04-13
 ### Fix
  - Polls cannot be edited when user has no mail address
- 
+
 ## [5.0.0] - 2023-04-07
 ### New
  - Added qr code for public shares
 ### Changes
  - PHP 8.0 as minimum requirement
- - Shorten public tokens to 8 characters (lower and upper characters and digits) 
+ - Shorten public tokens to 8 characters (lower and upper characters and digits)
 
 ## [4.1.8] - 2023-03-03
 ### Fix
@@ -340,7 +398,7 @@ So this 6.x branch will get only bug fixes and compatibility updates. Any other 
  - Use display name for avatar of the current public user instead of user id
  - Fix export, if owner did not vote in the poll
  - Fix adding option, when not admin (bulk operation)
- 
+
 ## [3.7.0] - 2022-06-24
 ### New
 - User setting for conflict check (hours before and after an option to search for conflicts)
@@ -425,7 +483,7 @@ So this 6.x branch will get only bug fixes and compatibility updates. Any other 
 - #2377 - Changed transitions on vote vlicks and add hover state
 ## [3.6.0-beta2] - 2022-04-13
 ### New
-- #2373 - Add icon symbol for locked vote options 
+- #2373 - Add icon symbol for locked vote options
 - #2351 - Store username in a public poll to cookie
 
 ### Fixed
@@ -845,10 +903,10 @@ See also https://github.com/nextcloud/polls/milestone/34?closed=1
 ## [1.7.2 - beta3] - 2021-01-17
  - [enhancement] #1338 - Support dark mode and dark theme
  - [fix] #1346 - user search broken
- - [fix] #1344 - prevent commenting, when entering public poll without registration  
+ - [fix] #1344 - prevent commenting, when entering public poll without registration
 
 ## [1.7.1 - beta2] - 2021-01-12
- - [fix] #1325 - There are no spaces in the column name  
+ - [fix] #1325 - There are no spaces in the column name
  - [fix] #1326 - Invalid string text in the email
  - [enhancement] #739 - Limit number of participants per option
  - [enhancement] #738 - Limit number of votes per participant (also #647, #624)
