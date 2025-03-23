@@ -18,7 +18,6 @@ import Vote from './views/Vote.vue'
 import SideBar from './views/SideBar.vue'
 
 import List from './views/PollList.vue'
-import Administration from './views/Administration.vue'
 import NotFound from './views/NotFound.vue'
 import SideBarCombo from './views/SideBarCombo.vue'
 import Navigation from './views/Navigation.vue'
@@ -90,18 +89,6 @@ const routes: RouteRecordRaw[] = [
 		},
 		props: true,
 		name: 'list',
-		meta: {
-			publicPage: false,
-			votePage: false,
-		},
-	},
-	{
-		path: '/administration',
-		components: {
-			default: Administration,
-			navigation: Navigation,
-		},
-		name: 'administration',
 		meta: {
 			publicPage: false,
 			votePage: false,

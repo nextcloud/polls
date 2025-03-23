@@ -4,8 +4,7 @@
 -->
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
-import { getCurrentUser } from '@nextcloud/auth'
+import { ref, onMounted } from 'vue'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
@@ -33,7 +32,6 @@ import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 import { Logger } from '../helpers/index.ts'
 import CreateDlg from '../components/Create/CreateDlg.vue'
 import { FilterType, usePollsStore } from '../stores/polls.ts'
-import { usePollsAdminStore } from '../stores/pollsAdmin.ts'
 import { useSessionStore } from '../stores/session.ts'
 
 const iconSize = 20
@@ -50,7 +48,6 @@ const icons = [
 ]
 
 const createDlgToggle = ref(false)
-const showAdminSection = computed(() => getCurrentUser().isAdmin)
 
 /**
  *
@@ -84,10 +81,6 @@ function loadPolls() {
 	try {
 		Logger.debug('Loading polls in navigation')
 		pollsStore.load()
-
-		if (getCurrentUser().isAdmin) {
-			pollsAdminStore.load()
-		}
 	} catch {
 		showError(t('polls', 'Error loading poll list'))
 	}
@@ -138,7 +131,6 @@ function showSettings() {
 
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
-const pollsAdminStore = usePollsAdminStore()
 
 onMounted(() => {
 	loadPolls()
@@ -212,14 +204,6 @@ onMounted(() => {
 					:to="{ name: 'combo' }">
 					<template #icon>
 						<ComboIcon :size="iconSize" />
-					</template>
-				</NcAppNavigationItem>
-				<NcAppNavigationItem
-					v-if="showAdminSection"
-					:name="t('polls', 'Administration')"
-					:to="{ name: 'administration' }">
-					<template #icon>
-						<AdministrationIcon :size="iconSize" />
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem

@@ -272,7 +272,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'isOwner' => $this->getIsPollOwner(),
 			'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
 			'shareToken' => $this->getShareToken(),
-			'userId' => $this->getUserId(),
+			'userId' => $this->userSession->getCurrentUserId(),
 			'userRole' => $this->getUserRole(),
 			'yesVotes' => $this->getCurrentUserVotesYes(),
 		];
