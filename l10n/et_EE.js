@@ -162,7 +162,6 @@ OC.L10N.register(
     "My polls" : "Minu küsitlused",
     "Private polls" : "Privaatsed küsitlused",
     "Participated" : "Osaletud küsitlused",
-    "All polls, where you placed a vote." : "Kõik küsitlused, kus oled hääletanud",
     "Openly accessible polls" : "Avalikult juurdepääsetavad küsitlused",
     "All polls" : "Kõik küsitlused",
     "All polls, where you have access to." : "Kõik küsitlused, millele sul on ligipääs.",

@@ -307,7 +307,6 @@ OC.L10N.register(
     "Error writing poll" : "投票を作成中にエラー",
     "Relevant" : "関連",
     "My polls" : "自分の投票",
-    "All polls, where you placed a vote." : "あなたが投票した全投票",
     "All polls" : "全ての投票",
     "All polls, where you have access to." : "あなたがアクセスできる全投票",
     "Archive" : "アーカイブ",

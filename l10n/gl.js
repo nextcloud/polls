@@ -636,21 +636,18 @@ OC.L10N.register(
     "Title must not be empty!" : "O título non debe estar baleiro!",
     "Error writing poll" : "Produciuse un erro ao escribir a enquisa.",
     "Relevant" : "Relevante",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "As enquisas que son relevantes ou importantes para vostede, porque vostede é un participante ou propietario ou foi convidado a elas.",
     "My polls" : "As miñas enquisas",
-    "Your polls (in which you are the owner)." : "As súas enquisas (das que vostede é o propietario).",
     "Private polls" : "Enquisas privadas",
     "All private polls, to which you have access." : "Todas as enquisas privadas, ás que vostede ten acceso.",
     "Participated" : "Participou",
-    "All polls, where you placed a vote." : "Todas as enquisas nas que Vde. votou.",
     "Openly accessible polls" : "Enquisas de libre acceso",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Unha lista completa con todas as enquisas de libre acceso deste sitio, independentemente de quen sexa o propietario.",
     "All polls" : "Todas as enquisas",
     "All polls, where you have access to." : "Todas as enquisas, ás que Vde. ten acceso.",
     "Closed polls" : "Enquisas pechadas",
     "All closed polls, where voting is disabled." : "Todas as enquisas pechadas, nas que a votación está desactivada.",
     "Archive" : "Arquivar",
     "My archived polls" : "As miñas enquisas arquivadas",
-    "Your archived polls are only accessible to you." : "Só Vde. pode acceder ás súas enquisas arquivadas."
+    "Your archived polls are only accessible to you." : "Só Vde. pode acceder ás súas enquisas arquivadas.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "As enquisas que son relevantes ou importantes para vostede, porque vostede é un participante ou propietario ou foi convidado a elas."
 },
 "nplurals=2; plural=(n != 1);");

@@ -658,21 +658,18 @@ OC.L10N.register(
     "Poll updated" : "Nuashonraíodh an vótaíocht",
     "Error writing poll" : "Earráid agus vótaíocht á scríobh",
     "Relevant" : "Ábhartha",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Pobalbhreith ábhartha atá ábhartha nó duitse, toisc gur rannpháirtí tú nó gur úinéir nó go dtugtar cuireadh duit.",
     "My polls" : "Mo pobalbhreith",
-    "Your polls (in which you are the owner)." : "Do vótaíochtaí (ar tusa an t-úinéir).",
     "Private polls" : "Pobalbhreith phríobháideach",
     "All private polls, to which you have access." : "Gach pobalbhreith phríobháideach, a bhfuil rochtain agat air.",
     "Participated" : "Ghlac páirt",
-    "All polls, where you placed a vote." : "Gach pobalbhreith, áit ar chuir tú vóta.",
     "Openly accessible polls" : "Pobalbhreith atá inrochtana go hoscailte",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Liosta iomlán le gach pobalbhreith ar an láithreán seo atá inrochtana go hoscailte, is cuma cé hé an t-úinéir.",
     "All polls" : "Gach pobalbhreith",
     "All polls, where you have access to." : "Gach pobalbhreith, áit a bhfuil rochtain agat.",
     "Closed polls" : "Pobalbhreith dúnta",
     "All closed polls, where voting is disabled." : "Gach pobalbhreith dúnta, áit a bhfuil an vótáil díchumasaithe.",
     "Archive" : "Cartlann",
     "My archived polls" : "Mo pobalbhreith cartlainne",
-    "Your archived polls are only accessible to you." : "Níl rochtain agat ar do vótaíochtaí cartlainne ach amháin."
+    "Your archived polls are only accessible to you." : "Níl rochtain agat ar do vótaíochtaí cartlainne ach amháin.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Pobalbhreith ábhartha atá ábhartha nó duitse, toisc gur rannpháirtí tú nó gur úinéir nó go dtugtar cuireadh duit."
 },
 "nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);");

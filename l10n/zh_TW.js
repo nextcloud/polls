@@ -658,21 +658,18 @@ OC.L10N.register(
     "Poll updated" : "投票已更新",
     "Error writing poll" : "寫入投票時發生錯誤",
     "Relevant" : "相關",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "與您相關或您的投票，因為您是參與者或所有者，或者您被邀請參加。",
     "My polls" : "我的投票",
-    "Your polls (in which you are the owner)." : "您的投票（您是所有者）。",
     "Private polls" : "私人投票",
     "All private polls, to which you have access." : "您可以存取的所有私人投票。",
     "Participated" : "已參與",
-    "All polls, where you placed a vote." : "您已投票的所有投票。",
     "Openly accessible polls" : "開放可存取的投票",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "此網站上的所有開放可存取的投票的完整列表，無論誰是所有者。",
     "All polls" : "所有投票",
     "All polls, where you have access to." : "您可以存取的所有投票。",
     "Closed polls" : "已關閉的投票",
     "All closed polls, where voting is disabled." : "所有已關閉的投票，停用投票。",
     "Archive" : "封存",
     "My archived polls" : "我的已封存投票",
-    "Your archived polls are only accessible to you." : "您封存的投票僅有您能存取。"
+    "Your archived polls are only accessible to you." : "您封存的投票僅有您能存取。",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "與您相關或您的投票，因為您是參與者或所有者，或者您被邀請參加。"
 },
 "nplurals=1; plural=0;");

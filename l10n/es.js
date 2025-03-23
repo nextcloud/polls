@@ -631,21 +631,18 @@ OC.L10N.register(
     "Title must not be empty!" : "¡El título no puede estar vacío!",
     "Error writing poll" : "Error al escribir la encuesta",
     "Relevant" : "Relevante",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Todas las encuestas que son relevantes para Ud., ya sea porque ha participado, Ud. es el propietario o bien ha sido invitado.",
     "My polls" : "Mis encuestas",
-    "Your polls (in which you are the owner)." : "Sus encuestas (de las que Ud. es el propietario).",
     "Private polls" : "Encuestas privadas",
     "All private polls, to which you have access." : "Todas las encuestas privadas a las que tienes acceso.",
     "Participated" : "Participado",
-    "All polls, where you placed a vote." : "Todas las encuestas en las que ha votado.",
     "Openly accessible polls" : "Encuestas de libre acceso",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Una lista completa con todas las encuestas de libre acceso en este sitio, independientemente de quién sea el propietario.",
     "All polls" : "Todas las encuestas",
     "All polls, where you have access to." : "Todas las encuestas a las que tiene acceso.",
     "Closed polls" : "Encuestas cerradas",
     "All closed polls, where voting is disabled." : "Todas la encuestas cerradas, en las cuales el voto está desactivado.",
     "Archive" : "Archivar",
     "My archived polls" : "Mis encuestas archivadas",
-    "Your archived polls are only accessible to you." : "Solo Ud. puede acceder a sus encuestas archivadas."
+    "Your archived polls are only accessible to you." : "Solo Ud. puede acceder a sus encuestas archivadas.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Todas las encuestas que son relevantes para Ud., ya sea porque ha participado, Ud. es el propietario o bien ha sido invitado."
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

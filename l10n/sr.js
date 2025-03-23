@@ -658,21 +658,18 @@ OC.L10N.register(
     "Poll updated" : "Гласање је ажурирано",
     "Error writing poll" : "Грешка приликом уписивања гласања",
     "Relevant" : "Релевантно",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Сва гласања која се тичу вас или су вам битна, јер сте учесник или власник или се на њих позвани.",
     "My polls" : "Моја гласања",
-    "Your polls (in which you are the owner)." : "Ваша гласања (чији сте ви власник).",
     "Private polls" : "Приватна гласања",
     "All private polls, to which you have access." : "Сва приватна гласања којима имате приступ.",
     "Participated" : "Учествовао/ла",
-    "All polls, where you placed a vote." : "Сва гласања, где сте дали глас.",
     "Openly accessible polls" : "Гласања отворена за све",
-    "A complete list with all openly accessible polls on this site, regardless who is the owner." : "Комплетна листа свих гласања отворених за све на овом сајту, без обзира на то ко је власник.",
     "All polls" : "Сва гласања",
     "All polls, where you have access to." : "Сва гласање, којима имате приступ.",
     "Closed polls" : "Затворена гласања",
     "All closed polls, where voting is disabled." : "Сва затворена гласања у којима је искључено гласање.",
     "Archive" : "Архива",
     "My archived polls" : "Моја архивирана гласања",
-    "Your archived polls are only accessible to you." : "Ваша архивирана гласања су доступна само вама."
+    "Your archived polls are only accessible to you." : "Ваша архивирана гласања су доступна само вама.",
+    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to." : "Сва гласања која се тичу вас или су вам битна, јер сте учесник или власник или се на њих позвани."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);");
