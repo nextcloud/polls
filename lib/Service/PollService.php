@@ -48,7 +48,6 @@ class PollService {
 		private UserMapper $userMapper,
 		private UserSession $userSession,
 		private VoteMapper $voteMapper,
-		private LoggerInterface $logger,
 	) {
 	}
 
