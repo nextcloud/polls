@@ -35,7 +35,6 @@ use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Search\ISearchQuery;
-use Psr\Log\LoggerInterface;
 
 class PollService {
 
