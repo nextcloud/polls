@@ -46,6 +46,7 @@ const icons = [
 	{ id: FilterType.All, iconComponent: AllPollsIcon },
 	{ id: FilterType.Closed, iconComponent: ClosedPollsIcon },
 	{ id: FilterType.Archived, iconComponent: ArchivedPollsIcon },
+	{ id: FilterType.Admin, iconComponent: AdministrationIcon },
 ]
 
 const createDlgToggle = ref(false)
@@ -158,7 +159,7 @@ onMounted(() => {
 
 		<template #list>
 			<NcAppNavigationItem
-				v-for="pollCategory in pollsStore.categories"
+				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
 				:name="pollCategory.title"
 				:allow-collapse="sessionStore.appSettings.navigationPollsInList"

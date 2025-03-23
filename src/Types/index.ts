@@ -107,6 +107,7 @@ export type User = {
 	id: string
 	displayName: string
 	emailAddress: string | null
+	isAdmin: boolean
 	isNoUser: boolean
 	type: UserType
 	subName: string | null

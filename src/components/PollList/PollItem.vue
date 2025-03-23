@@ -9,6 +9,7 @@ import { computed } from 'vue'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 import { usePollStore, AccessType, Poll, PollType } from '../../stores/poll'
+import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
 import { StatusResults } from '../../Types/index.ts'
 
 // Icons
@@ -18,7 +19,8 @@ import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
 import PrivatePollIcon from 'vue-material-design-icons/Key.vue'
 import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
-import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
+import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
+import LockPollIcon from 'vue-material-design-icons/Security.vue'
 
 export interface Props {
 	poll?: Poll
@@ -28,7 +30,6 @@ export interface Props {
 const pollStore = usePollStore()
 
 const props = withDefaults(defineProps<Props>(), {
-	header: false,
 	poll: undefined,
 	noLink: false,
 })
@@ -78,75 +79,75 @@ const timeCreatedRelative = computed(() =>
 <template>
 	<div class="poll-item">
 		<TextPollIcon
-			v-if="props.poll.type === PollType.Text"
+			v-if="poll.type === PollType.Text"
 			class="item__type"
 			:title="pollTypeName" />
 		<DatePollIcon v-else class="item__type" :title="pollTypeName" />
 
 		<div
-			v-if="props.noLink"
+			v-if="noLink || !poll.permissions.view"
 			class="item__title"
-			:class="{ closed: props.poll.status.isExpired }">
+			:class="{ closed: poll.status.isExpired }">
 			<div class="title">
-				{{ props.poll.configuration.title }}
+				{{ poll.configuration.title }}
 			</div>
 
-			<div class="description">
-				{{
-					props.poll.configuration.description
-						? props.poll.configuration.description
-						: t('polls', 'No description provided')
-				}}
+			<div class="description_line">
+				<LockPollIcon :size="16" />
+				<div class="description">
+					{{
+						t('polls', 'No access to this poll of {ownerName}.', {
+							ownerName: poll.owner.displayName,
+						})
+					}}
+				</div>
 			</div>
 		</div>
 
 		<RouterLink
 			v-else
 			class="item__title"
-			:title="props.poll.configuration.description"
-			:to="{ name: 'vote', params: { id: props.poll.id } }"
+			:title="poll.configuration.description"
+			:to="{ name: 'vote', params: { id: poll.id } }"
 			:class="{
-				closed: props.poll.status.isExpired,
-				active: props.poll.id === pollStore.id,
+				closed: poll.status.isExpired,
+				active: poll.id === pollStore.id,
 			}">
 			<div class="title_line">
 				<span class="title">
-					{{ props.poll.configuration.title }}
+					{{ poll.configuration.title }}
 				</span>
-				<BadgeSmallDiv v-if="props.poll.configuration.expire" :class="expiryClass">
+				<BadgeSmallDiv v-if="poll.configuration.expire" :class="expiryClass">
 					<template #icon>
-						<ExpirationIcon :size="16"/>
+						<ClosedPollsIcon v-if="poll.status.isExpired" :size="16" />
+						<ExpirationIcon v-else :size="16" />
 					</template>
 					{{ timeExpirationRelative }}
 				</BadgeSmallDiv>
 			</div>
 
 			<div class="description_line">
-				<!-- <BadgeSmallDiv class="item_access">
-					<template #icon>
-						<ArchivedPollIcon v-if="props.poll.status.isDeleted" :size="16"/>
-						<OpenPollIcon v-else-if="props.poll.configuration.access === AccessType.Open" :size="16"/>
-						<PrivatePollIcon v-else :size="16"/>
-					</template>
-					<span v-if="props.poll.status.isDeleted">
-						{{ t('polls', 'Archived  poll') }}
-					</span>
-					<span v-else>
-						{{ props.poll.configuration.access === AccessType.Open ? t('polls', 'Openly accessible poll') : t('polls', 'Private poll')}}
-					</span>
-				</BadgeSmallDiv> -->
-
-				<ArchivedPollIcon v-if="props.poll.status.isDeleted" :title="t('polls', 'Archived  poll')" :size="16"/>
-				<OpenPollIcon v-else-if="props.poll.configuration.access === AccessType.Open" :title="t('polls', 'Openly accessible poll')" :size="16"/>
-				<PrivatePollIcon v-else :title="t('polls', 'Private poll')" :size="16"/>
+				<ArchivedPollIcon
+					v-if="poll.status.isDeleted"
+					:title="t('polls', 'Archived  poll')"
+					:size="16" />
+				<OpenPollIcon
+					v-else-if="poll.configuration.access === AccessType.Open"
+					:title="t('polls', 'Openly accessible poll')"
+					:size="16" />
+				<PrivatePollIcon
+					v-else
+					:title="t('polls', 'Private poll')"
+					:size="16" />
 
 				<span class="description">
-					{{ t('polls', 'from {ownerName}, started {relativeTime}', {
-						ownerName: props.poll.owner.displayName,
-						'relativeTime': timeCreatedRelative,
-					}) }}
+					{{
+						t('polls', 'Started {relativeTime} from {ownerName}', {
+							ownerName: poll.owner.displayName,
+							relativeTime: timeCreatedRelative,
+						})
+					}}
 				</span>
-
 			</div>
 		</RouterLink>
 
@@ -183,7 +184,8 @@ const timeCreatedRelative = computed(() =>
 	.description_line {
 		display: flex;
 		gap: 8px;
-		.title, .description {
+		.title,
+		.description {
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;

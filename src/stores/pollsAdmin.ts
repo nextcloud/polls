@@ -36,7 +36,7 @@ export const usePollsAdminStore = defineStore('pollsAdmin', {
 					'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to.',
 				),
 				pinned: false,
-				createDependent: false,
+				showInNavigation: () => true,
 				filterCondition: () => null,
 			},
 		],
