@@ -168,6 +168,7 @@ export const usePollStore = defineStore('poll', {
 			id: '',
 			displayName: '',
 			emailAddress: '',
+			isAdmin: false,
 			isNoUser: false,
 			type: UserType.None,
 			subName: null,
