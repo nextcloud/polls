@@ -13,8 +13,9 @@
     "Add" : "Agregar",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",
-    "Title" : "Título",
     "Cancel" : "Cancelar",
+    "Ok" : "Ok",
+    "Title" : "Título",
     "Apply" : "Aplicar",
     "Yes" : "Sí",
     "No" : "No",
@@ -27,9 +28,6 @@
     "Submit" : "Enviar",
     "Close" : "Cerrar",
     "never" : "nunca",
-    "Access" : "Acceso",
-    "Owner" : "Propietario",
-    "Created" : "Creado",
     "Login" : "Iniciar sesión",
     "deleted" : "Borrado",
     "Shares" : "Elementos compartidos",
@@ -37,7 +35,6 @@
     "Description" : "Descripción",
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Public link" : "Liga pública",
-    "Administration" : "Administración",
     "Comments" : "Comentarios",
     "Details" : "Detalles",
     "Configuration" : "Configuración",
@@ -46,6 +43,10 @@
     "Hour" : "Hora",
     "Day" : "Día",
     "Month" : "Mes",
-    "Archive" : "Archivar"
+    "Created" : "Creado",
+    "Access" : "Acceso",
+    "Owner" : "Propietario",
+    "Archive" : "Archivar",
+    "Administration" : "Administración"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

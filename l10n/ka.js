@@ -170,6 +170,7 @@ OC.L10N.register(
     "Add" : "Add",
     "Delete comment" : "Delete comment",
     "Cancel" : "Cancel",
+    "Ok" : "Ok",
     "Yes" : "Yes",
     "No" : "No",
     "Participants" : "Participants",
@@ -190,8 +191,6 @@ OC.L10N.register(
     "Close" : "Close",
     "never" : "never",
     "Private poll" : "Private poll",
-    "Owner" : "Owner",
-    "Created" : "Created",
     "Login" : "Login",
     "Share label" : "Share label",
     "deleted" : "deleted",
@@ -204,7 +203,6 @@ OC.L10N.register(
     "Public link" : "Public link",
     "Switch to list view" : "Switch to list view",
     "Email options" : "Email options",
-    "Administration" : "Administration",
     "Preferences" : "Preferences",
     "Comments" : "Comments",
     "Details" : "Details",
@@ -214,6 +212,9 @@ OC.L10N.register(
     "Day" : "Day",
     "Month" : "Month",
     "Year" : "Year",
-    "Archive" : "Archive"
+    "Created" : "Created",
+    "Owner" : "Owner",
+    "Archive" : "Archive",
+    "Administration" : "Administration"
 },
 "nplurals=2; plural=(n!=1);");

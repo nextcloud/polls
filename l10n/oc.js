@@ -17,8 +17,8 @@ OC.L10N.register(
     "Add" : "Apondre",
     "New comment …" : "Nòu comentari…",
     "Delete comment" : "Suprimir comentari",
-    "Title" : "Títol",
     "Cancel" : "Anullar",
+    "Title" : "Títol",
     "Apply" : "Aplicar",
     "Yes" : "Yes",
     "No" : "No",
@@ -39,7 +39,6 @@ OC.L10N.register(
     "Close" : "Tampar",
     "never" : "pas jamai",
     "Private poll" : "Sondatge privat",
-    "Owner" : "Owner",
     "Login" : "Login",
     "Performance settings" : "Paramètres de performança",
     "deleted" : "suprimit",
@@ -51,7 +50,6 @@ OC.L10N.register(
     "Public link" : "Ligam public",
     "Other settings" : "Autres paramètres",
     "Email options" : "Opcions d’email",
-    "Administration" : "Administracion",
     "Show all" : "O veire tot",
     "Comments" : "Comentaris",
     "Details" : "Detalhs",
@@ -64,7 +62,9 @@ OC.L10N.register(
     "Day" : "Jorn",
     "Month" : "Mes",
     "Year" : "Annada",
+    "Owner" : "Owner",
     "My polls" : "Mos sondatges",
-    "Archive" : "Archiu"
+    "Archive" : "Archiu",
+    "Administration" : "Administracion"
 },
 "nplurals=2; plural=(n > 1);");

@@ -10,8 +10,9 @@ OC.L10N.register(
     "Add" : "เพิ่ม",
     "New comment …" : "ความคิดเห็นใหม่ ...",
     "Delete comment" : "ลบความคิดเห็น",
-    "Title" : "ชื่อเรื่อง",
     "Cancel" : "ยกเลิก",
+    "Ok" : "ตกลง",
+    "Title" : "ชื่อเรื่อง",
     "Apply" : "นำไปใช้",
     "Yes" : "ใช่",
     "No" : "ไม่ใช่",
@@ -22,7 +23,6 @@ OC.L10N.register(
     "Submit" : "ส่ง",
     "Close" : "ปิด",
     "never" : "ไม่ต้องเลย",
-    "Owner" : "เจ้าของ",
     "Login" : "เข้าสู่ระบบ",
     "Shares" : "การแชร์",
     "No activity yet" : "ยังไม่มีกิจกรรม",
@@ -40,6 +40,7 @@ OC.L10N.register(
     "Day" : "วัน",
     "Month" : "เดือน",
     "Year" : "ปี",
+    "Owner" : "เจ้าของ",
     "Archive" : "เก็บถาวร"
 },
 "nplurals=1; plural=0;");

@@ -19,9 +19,10 @@
     "Delete comment" : "Избриши коментар",
     "The automatic reminder is sent to all shares via email:" : "Автоматски потсетник е испратен на сите споделувања по е-пошта:",
     "No reminder is sent:" : "Нема испратено потсетник:",
+    "Cancel" : "Откажи",
+    "Ok" : "Во ред",
     "Hide results until poll is closed" : "Сокриј ги резултатите до затворање на анкетата",
     "Title" : "Наслов",
-    "Cancel" : "Откажи",
     "Apply" : "Примени",
     "Yes" : "Да",
     "No" : "Не",
@@ -45,9 +46,6 @@
     "Results are hidden until closing poll" : "Резултатите не видливи до затворање на анкетата",
     "Results are visible since closing poll" : "Резултатите се видливи до затворање на анкетата",
     "Private poll" : "Приватна анкета",
-    "Access" : "Пристап",
-    "Owner" : "Сопственик",
-    "Created" : "Креирано",
     "Login" : "Најава",
     "Share label" : "Ознака на споделувањето",
     "deleted" : "избришана",
@@ -61,7 +59,6 @@
     "Public link" : "Јавен линк",
     "Switch to list view" : "Прикажи поглед во листа",
     "Email options" : "Е-пошта параметри",
-    "Administration" : "Администрација",
     "Show all" : "Прикажи ги сите",
     "Preferences" : "Перформанси",
     "Comments" : "Коментари",
@@ -73,6 +70,10 @@
     "Day" : "Ден",
     "Month" : "Месец",
     "Year" : "Година",
-    "Archive" : "Архива"
+    "Created" : "Креирано",
+    "Access" : "Пристап",
+    "Owner" : "Сопственик",
+    "Archive" : "Архива",
+    "Administration" : "Администрација"
 },"pluralForm" :"nplurals=2; plural=(n % 10 == 1 && n % 100 != 11) ? 0 : 1;"
 }

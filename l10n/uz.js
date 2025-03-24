@@ -7,8 +7,8 @@ OC.L10N.register(
     "Add" : "Add",
     "New comment …" : "New comment …",
     "Delete comment" : "Delete comment",
-    "Title" : "Sarlavha",
     "Cancel" : "Cancel",
+    "Title" : "Sarlavha",
     "Yes" : "Yes",
     "No" : "No",
     "From" : "Dan",
@@ -24,7 +24,6 @@ OC.L10N.register(
     "_day_::_days_" : ["kun"],
     "Close" : "Close",
     "never" : "never",
-    "Owner" : "Owner",
     "Login" : "Login",
     "No activity yet" : "Afsuski, faollik mavjud emas",
     "Description" : "Tavsif",
@@ -35,6 +34,7 @@ OC.L10N.register(
     "Activity" : "Faollik",
     "Day" : "Kun",
     "Month" : "Oy",
-    "Year" : "Yil"
+    "Year" : "Yil",
+    "Owner" : "Owner"
 },
 "nplurals=1; plural=0;");

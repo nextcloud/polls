@@ -11,8 +11,9 @@
     "Add" : "Adicionar",
     "New comment …" : "Novo comentário…",
     "Delete comment" : "Eliminar comentário",
-    "Title" : "Título ",
     "Cancel" : "Cancelar",
+    "Ok" : "CONFIRMAR",
+    "Title" : "Título ",
     "Apply" : "Aplicar",
     "Yes" : "Sim",
     "No" : "Não",
@@ -37,9 +38,6 @@
     "Submit" : "Submeter",
     "Close" : "Fechar",
     "never" : "nunca",
-    "Access" : "Acesso",
-    "Owner" : "Proprietário",
-    "Created" : "Criado",
     "Login" : "Iniciar sessão",
     "Enable the spreadsheet download of polls globally" : "Pernitir a transferência de folha de cálculo de eleições globalmente",
     "deleted" : "eliminado",
@@ -50,7 +48,6 @@
     "Change name" : "Alterar nome",
     "Public link" : "Hiperligação Pública",
     "Email options" : "Opções de e-mail",
-    "Administration" : "Administração",
     "Show all" : "Mostrar tudo",
     "Preferences" : "Preferências",
     "Comments" : "Comentários",
@@ -63,6 +60,10 @@
     "Day" : "Dia",
     "Month" : "Mês",
     "Year" : "Year",
-    "Archive" : "Arquivar"
+    "Created" : "Criado",
+    "Access" : "Acesso",
+    "Owner" : "Proprietário",
+    "Archive" : "Arquivar",
+    "Administration" : "Administração"
 },"pluralForm" :"nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

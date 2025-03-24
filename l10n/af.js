@@ -12,8 +12,8 @@ OC.L10N.register(
     "Add" : "Voeg by",
     "New comment …" : "Nuwe kommentaar…",
     "Delete comment" : "Skrap kommentaar",
-    "Title" : "Titel",
     "Cancel" : "Kanselleer",
+    "Title" : "Titel",
     "Yes" : "Ja",
     "No" : "Nee",
     "From" : "Van",
@@ -26,8 +26,6 @@ OC.L10N.register(
     "Submit" : "Dien in",
     "Close" : "Sluit",
     "never" : "nooit",
-    "Owner" : "Eienaar",
-    "Created" : "Geskep",
     "Login" : "Teken aan",
     "No activity yet" : "Nog geen aktiwiteit",
     "Description" : "Beskrywing",
@@ -38,6 +36,8 @@ OC.L10N.register(
     "Hour" : "Uur",
     "Day" : "Dag",
     "Month" : "Maand",
+    "Created" : "Geskep",
+    "Owner" : "Eienaar",
     "Archive" : "Argief"
 },
 "nplurals=2; plural=(n != 1);");

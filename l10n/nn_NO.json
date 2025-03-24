@@ -8,8 +8,9 @@
     "Add" : "Legg til",
     "New comment …" : "Ny kommentar...",
     "Delete comment" : "Slett kommentar",
-    "Title" : "Tittel",
     "Cancel" : "Avbryt",
+    "Ok" : "Greitt",
+    "Title" : "Tittel",
     "Apply" : "Anvend",
     "Yes" : "Ja",
     "No" : "Nei",
@@ -18,15 +19,12 @@
     "OK" : "OK",
     "Close" : "Lukk",
     "never" : "aldri",
-    "Owner" : "Owner",
-    "Created" : "Lagd",
     "Login" : "Login",
     "Styles" : "Stilar",
     "Shares" : "Delingar",
     "No activity yet" : "Ingen aktivitetar enno",
     "Description" : "Skildring",
     "Other settings" : "Andre innstillingar",
-    "Administration" : "Administrasjon",
     "Comments" : "Kommentarar",
     "Details" : "Detaljar",
     "Configuration" : "Innstillingar",
@@ -35,6 +33,9 @@
     "Minute" : "Minutt",
     "Day" : "Dag",
     "Month" : "Månad",
-    "Year" : "År"
+    "Year" : "År",
+    "Created" : "Lagd",
+    "Owner" : "Owner",
+    "Administration" : "Administrasjon"
 },"pluralForm" :"nplurals=2; plural=(n != 1);"
 }

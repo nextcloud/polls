@@ -8,8 +8,8 @@ OC.L10N.register(
     "Conflict" : "Stourm",
     "Add" : "Ouzhpennañ",
     "Delete comment" : "Lemel an displegadenn",
-    "Title" : "Titl",
     "Cancel" : "Arrest",
+    "Title" : "Titl",
     "Apply" : "Lakaat",
     "Yes" : "Ya",
     "No" : "Nan",
@@ -20,8 +20,6 @@ OC.L10N.register(
     "Submit" : "Kinnig",
     "Close" : "Seriñ",
     "never" : "james",
-    "Owner" : "Perc'henner",
-    "Created" : "Krouet",
     "Login" : "Anv arveriad",
     "deleted" : "lemet",
     "Shares" : "Rannañ",
@@ -29,7 +27,6 @@ OC.L10N.register(
     "Description" : "Diskrivadur",
     "Change name" : "Cheñch env",
     "Public link" : "Liamm publik",
-    "Administration" : "Merouriez",
     "Preferences" : "Dibaboù",
     "Comments" : "Displegadennoù",
     "Details" : "Munudoù",
@@ -37,6 +34,9 @@ OC.L10N.register(
     "Sharing" : "Rannan",
     "Activity" : "Obererezh",
     "Day" : "Deiz",
-    "Month" : "Miz"
+    "Month" : "Miz",
+    "Created" : "Krouet",
+    "Owner" : "Perc'henner",
+    "Administration" : "Merouriez"
 },
 "nplurals=5; plural=((n%10 == 1) && (n%100 != 11) && (n%100 !=71) && (n%100 !=91) ? 0 :(n%10 == 2) && (n%100 != 12) && (n%100 !=72) && (n%100 !=92) ? 1 :(n%10 ==3 || n%10==4 || n%10==9) && (n%100 < 10 || n% 100 > 19) && (n%100 < 70 || n%100 > 79) && (n%100 < 90 || n%100 > 99) ? 2 :(n != 0 && n % 1000000 == 0) ? 3 : 4);");

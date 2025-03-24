@@ -13,8 +13,8 @@ OC.L10N.register(
     "Add" : "Añadir",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",
-    "Title" : "Título",
     "Cancel" : "Cancelar",
+    "Title" : "Título",
     "Apply" : "Aplicar",
     "Yes" : "Si",
     "No" : "No",
@@ -26,8 +26,6 @@ OC.L10N.register(
     "Submit" : "Enviar",
     "Close" : "Cerrar",
     "never" : "nunca",
-    "Owner" : "Dueño",
-    "Created" : "Creado",
     "Login" : "Inicio de sesión",
     "deleted" : "Borrado",
     "Link copied to clipboard" : "Enlace copiado al portapapeles",
@@ -36,7 +34,6 @@ OC.L10N.register(
     "Description" : "Descripción",
     "Change name" : "Cambiar nombre",
     "Email options" : "Opciones de correo electrónico",
-    "Administration" : "Administración",
     "Preferences" : "Preferencias",
     "Comments" : "Comentarios",
     "Details" : "Detalles",
@@ -48,6 +45,9 @@ OC.L10N.register(
     "Day" : "Día",
     "Month" : "Mes",
     "Year" : "Año",
-    "Archive" : "Archivar"
+    "Created" : "Creado",
+    "Owner" : "Dueño",
+    "Archive" : "Archivar",
+    "Administration" : "Administración"
 },
 "nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

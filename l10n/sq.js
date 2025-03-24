@@ -14,8 +14,9 @@ OC.L10N.register(
     "Add" : "Shto",
     "New comment …" : "Koment i ri ...",
     "Delete comment" : "Fshi komentin",
-    "Title" : "Titulli",
     "Cancel" : "Anullo",
+    "Ok" : "Në rregull",
+    "Title" : "Titulli",
     "Apply" : "Apliko",
     "Yes" : "Yes",
     "No" : "Jo",
@@ -28,8 +29,6 @@ OC.L10N.register(
     "Submit" : "Dërgo",
     "Close" : "Mbylleni",
     "never" : "asnjëherë",
-    "Owner" : "Zotëruesi",
-    "Created" : "U krijua",
     "Login" : "Hyrje",
     "deleted" : "të fshira",
     "Shares" : "Shpërndarje",
@@ -44,6 +43,8 @@ OC.L10N.register(
     "Hour" : "Orë",
     "Day" : "Ditë",
     "Month" : "Muaj",
+    "Created" : "U krijua",
+    "Owner" : "Zotëruesi",
     "Archive" : "Arkiva"
 },
 "nplurals=2; plural=(n != 1);");

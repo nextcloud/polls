@@ -9,8 +9,9 @@
     "Add" : "Masukkan",
     "New comment …" : "Komentar baru ...",
     "Delete comment" : "Hapus komentar",
-    "Title" : "Judul",
     "Cancel" : "Membatalkan",
+    "Ok" : "Oke",
+    "Title" : "Judul",
     "Apply" : "Terapkan",
     "Yes" : "Ya",
     "No" : "Tidak",
@@ -26,15 +27,12 @@
     "_minute_::_minutes_" : ["menit"],
     "Close" : "Tutup",
     "never" : "tidak pernah.",
-    "Owner" : "Owner",
-    "Created" : "Dibuat",
     "Login" : "Masuk",
     "deleted" : "terhapus",
     "Shares" : "Dibagikan",
     "No activity yet" : "Belum ada aktivitas",
     "Description" : "Deskrisi",
     "Public link" : "Tautan publik",
-    "Administration" : "Administrasi",
     "Preferences" : "Preferensi",
     "Comments" : "Komentar",
     "Details" : "Detil",
@@ -46,6 +44,9 @@
     "Day" : "Hari",
     "Month" : "Bulan",
     "Year" : "Tahun",
-    "Archive" : "Arsip"
+    "Created" : "Dibuat",
+    "Owner" : "Owner",
+    "Archive" : "Arsip",
+    "Administration" : "Administrasi"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

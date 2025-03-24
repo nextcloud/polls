@@ -10,8 +10,8 @@ OC.L10N.register(
     "Register" : "Cofrestru",
     "Unknown error" : "Gwall anhysbys",
     "Add" : "Ychwanegu",
-    "Title" : "Teitl",
     "Cancel" : "Diddymu",
+    "Title" : "Teitl",
     "Yes" : "Iawn",
     "No" : "No",
     "Email address" : "Cyfeiriad e-bost",
@@ -27,7 +27,6 @@ OC.L10N.register(
     "_minute_::_minutes_" : ["munud","munud","munud","munud"],
     "Close" : "Cau",
     "never" : "byth",
-    "Owner" : "Owner",
     "Login" : "Login",
     "No activity yet" : "Dim gweithred eto",
     "Description" : "Disgrifiad",
@@ -36,6 +35,7 @@ OC.L10N.register(
     "Day" : "Diwrnod",
     "Month" : "Mis",
     "Year" : "Blwyddyn",
+    "Owner" : "Owner",
     "Archive" : "Archif"
 },
 "nplurals=4; plural=(n==1) ? 0 : (n==2) ? 1 : (n != 8 && n != 11) ? 2 : 3;");

@@ -14,8 +14,8 @@
     "Add" : "Agregar",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",
-    "Title" : "Título",
     "Cancel" : "Cancelar",
+    "Title" : "Título",
     "Apply" : "Aplicar",
     "Yes" : "Sí",
     "Maybe" : "Tal vez",
@@ -38,9 +38,7 @@
     "Submit" : "Enviar",
     "Close" : "Cerrar",
     "never" : "nunca",
-    "Access" : "Acceso",
-    "Owner" : "Propietario",
-    "Created" : "Creado",
+    "Sort by title" : "Ordenar por título",
     "Login" : "Iniciar sesión",
     "Share label" : "Etiqueta del recurso compartido",
     "deleted" : "Borrado",
@@ -56,7 +54,6 @@
     "Public link" : "Liga pública",
     "Switch to list view" : "Cambiar a vista de lista",
     "Email options" : "Opciones de correo electrónico",
-    "Administration" : "Administración",
     "Show all" : "Mostrar todo",
     "Preferences" : "Preferencias",
     "Comments" : "Comentarios",
@@ -69,6 +66,10 @@
     "Day" : "Día",
     "Month" : "Mes",
     "Year" : "Año",
-    "Archive" : "Archivar"
+    "Created" : "Creado",
+    "Access" : "Acceso",
+    "Owner" : "Propietario",
+    "Archive" : "Archivar",
+    "Administration" : "Administración"
 },"pluralForm" :"nplurals=3; plural=n == 1 ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;"
 }

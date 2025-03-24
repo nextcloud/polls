@@ -12,8 +12,9 @@
     "Add" : "Thêm",
     "New comment …" : "Bình luận mới ...",
     "Delete comment" : " Xóa bình luận",
-    "Title" : "Tên",
     "Cancel" : "Hủy bỏ",
+    "Ok" : "Đồng ý",
+    "Title" : "Tên",
     "Apply" : "Áp dụng",
     "Yes" : "Đồng ý",
     "No" : "Không",
@@ -34,8 +35,8 @@
     "Submit" : "Gửi đi",
     "Close" : "Đóng",
     "never" : "không thay đổi",
-    "Owner" : "Chủ",
-    "Created" : "Đã tạo",
+    "Descending" : "Giảm dần",
+    "Ascending" : "Tăng dần",
     "Login" : "Đăng nhập",
     "Share label" : "Chia sẻ nhãn",
     "deleted" : "đã xóa",
@@ -46,7 +47,6 @@
     "Change name" : "Đổi tên",
     "Switch to list view" : "Chuyển sang chế độ xem danh sách",
     "Email options" : "Tùy chọn email",
-    "Administration" : "Quản trị viên",
     "Preferences" : "Cài đặt",
     "Comments" : "Các bình luận",
     "Details" : "Thông tin",
@@ -56,6 +56,9 @@
     "Day" : "Ngày",
     "Month" : "Tháng",
     "Year" : "Năm",
-    "Archive" : "Lưu trữ"
+    "Created" : "Đã tạo",
+    "Owner" : "Chủ",
+    "Archive" : "Lưu trữ",
+    "Administration" : "Quản trị viên"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

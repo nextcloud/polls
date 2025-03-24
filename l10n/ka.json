@@ -168,6 +168,7 @@
     "Add" : "Add",
     "Delete comment" : "Delete comment",
     "Cancel" : "Cancel",
+    "Ok" : "Ok",
     "Yes" : "Yes",
     "No" : "No",
     "Participants" : "Participants",
@@ -188,8 +189,6 @@
     "Close" : "Close",
     "never" : "never",
     "Private poll" : "Private poll",
-    "Owner" : "Owner",
-    "Created" : "Created",
     "Login" : "Login",
     "Share label" : "Share label",
     "deleted" : "deleted",
@@ -202,7 +201,6 @@
     "Public link" : "Public link",
     "Switch to list view" : "Switch to list view",
     "Email options" : "Email options",
-    "Administration" : "Administration",
     "Preferences" : "Preferences",
     "Comments" : "Comments",
     "Details" : "Details",
@@ -212,6 +210,9 @@
     "Day" : "Day",
     "Month" : "Month",
     "Year" : "Year",
-    "Archive" : "Archive"
+    "Created" : "Created",
+    "Owner" : "Owner",
+    "Archive" : "Archive",
+    "Administration" : "Administration"
 },"pluralForm" :"nplurals=2; plural=(n!=1);"
 }
