@@ -11,6 +11,7 @@ OC.L10N.register(
     "Unknown error" : "Gwall anhysbys",
     "Add" : "Ychwanegu",
     "Cancel" : "Diddymu",
+    "Ok" : "Iawn",
     "Title" : "Teitl",
     "Yes" : "Iawn",
     "No" : "No",
