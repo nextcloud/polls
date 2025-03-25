@@ -33,6 +33,13 @@ import { Logger } from '../helpers/index.ts'
 import CreateDlg from '../components/Create/CreateDlg.vue'
 import { FilterType, usePollsStore } from '../stores/polls.ts'
 import { useSessionStore } from '../stores/session.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
+import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
+import { ButtonMode } from '../Types/index.ts'
+
+const pollsStore = usePollsStore()
+const sessionStore = useSessionStore()
+const preferencesStore = usePreferencesStore()
 
 const iconSize = 20
 const icons = [
@@ -129,9 +136,6 @@ function showSettings() {
 	emit('polls:settings:show')
 }
 
-const pollsStore = usePollsStore()
-const sessionStore = useSessionStore()
-
 onMounted(() => {
 	loadPolls()
 })
@@ -139,15 +143,20 @@ onMounted(() => {
 
 <template>
 	<NcAppNavigation>
+		<ActionAddPoll
+			v-if="preferencesStore.useActionAddPollInNavigation"
+			:button-mode="ButtonMode.Navigation" />
+
 		<NcAppNavigationNew
-			v-if="sessionStore.appPermissions.pollCreation"
+			v-if="preferencesStore.useNcAppNavigationNew"
 			button-class="icon-add"
 			:text="t('polls', 'New poll')"
 			@click="toggleCreateDlg" />
 		<CreateDlg
 			v-show="createDlgToggle"
 			ref="createDlg"
-			@close-create="closeCreate()" />
+			@add="closeCreate()"
+			@cancel="closeCreate()" />
 
 		<template #list>
 			<NcAppNavigationItem
@@ -219,6 +228,17 @@ onMounted(() => {
 </template>
 
 <style lang="scss">
+// TODO: hack for the navigation list
+.app-polls {
+	.app-navigation__body {
+		overflow: revert;
+	}
+
+	.app-navigation-footer {
+		margin-left: 10 px;
+	}
+}
+
 .closed {
 	.app-navigation-entry-icon,
 	.app-navigation-entry__title {
@@ -231,9 +251,5 @@ onMounted(() => {
 	* {
 		color: unset !important;
 	}
-}
-
-.app-navigation-footer {
-	flex: 0 0 auto;
 }
 </style>

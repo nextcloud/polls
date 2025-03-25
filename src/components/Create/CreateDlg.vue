@@ -22,34 +22,42 @@ const pollStore = usePollStore()
 const router = useRouter()
 
 const title = ref('')
+const adding = ref(false)
 const pollType = ref(PollType.Date)
+
 const pollTypeOptions = [
 	{ value: PollType.Date, label: t('polls', 'Date poll') },
 	{ value: PollType.Text, label: t('polls', 'Text poll') },
 ]
 
 const titleEmpty = computed(() => title.value === '')
+const disableConfirm = computed(() => titleEmpty.value || adding.value)
 
-const emit = defineEmits(['closeCreate'])
+const emit = defineEmits(['cancel', 'add'])
 
-const cancel = () => {
+function resetInput() {
 	title.value = ''
 	pollType.value = PollType.Date
-	emit('closeCreate')
 }
 
-const confirm = async () => {
+async function add() {
 	try {
+		adding.value = true
 		const response = await pollStore.add({
 			title: title.value,
 			type: pollType.value,
 		})
-		cancel()
+
+		resetInput()
+
 		showSuccess(
 			t('polls', 'Poll "{pollTitle}" added', {
 				pollTitle: response.data.configuration.title,
 			}),
 		)
+
+		emit('add')
+
 		router.push({ name: 'vote', params: { id: response.data.id } })
 	} catch {
 		showError(
@@ -57,6 +65,8 @@ const confirm = async () => {
 				pollTitle: title.value,
 			}),
 		)
+	} finally {
+		adding.value = false
 	}
 }
 </script>
@@ -72,7 +82,7 @@ const confirm = async () => {
 				focus
 				type="text"
 				:placeholder="t('polls', 'Enter Title')"
-				@submit="confirm" />
+				@submit="add()" />
 		</ConfigBox>
 
 		<ConfigBox :name="t('polls', 'Poll type')">
@@ -83,17 +93,17 @@ const confirm = async () => {
 		</ConfigBox>
 
 		<div class="create-buttons">
-			<NcButton @click="cancel">
+			<NcButton @click="emit('cancel')">
 				<template #default>
 					{{ t('polls', 'Cancel') }}
 				</template>
 			</NcButton>
 			<NcButton
-				:disabled="titleEmpty"
+				:disabled="disableConfirm"
 				:type="ButtonType.Primary"
-				@click="confirm">
+				@click="add()">
 				<template #default>
-					{{ t('polls', 'Apply') }}
+					{{ t('polls', 'Add') }}
 				</template>
 			</NcButton>
 		</div>
@@ -108,6 +118,7 @@ const confirm = async () => {
 
 .create-buttons {
 	display: flex;
-	justify-content: space-between;
+	justify-content: flex-end;
+	gap: 8px;
 }
 </style>

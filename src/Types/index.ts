@@ -43,6 +43,12 @@ export {
 } from '../stores/preferences.ts'
 export { Answer, AnswerSymbol, Vote, Votes } from '../stores/votes.ts'
 
+export enum ButtonMode {
+	Navigation = 'navigation',
+	ActionMenu = 'actionMenu',
+	Native = 'native',
+}
+
 export enum StatusResults {
 	Error = 'error',
 	Warning = 'warning',

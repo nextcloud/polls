@@ -59,6 +59,14 @@ function toggleClamp() {
 			justify-content: center;
 		}
 
+		.bar_top_right {
+			display: flex;
+			flex: 1;
+			justify-content: flex-end;
+			gap: 8px;
+			flex-wrap: wrap;
+		}
+
 		.header_title {
 			font-weight: bold;
 			font-size: 1em;
