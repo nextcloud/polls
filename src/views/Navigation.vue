@@ -235,7 +235,7 @@ onMounted(() => {
 	}
 
 	.app-navigation-footer {
-		margin-left: 10 px;
+		margin-left: 10px;
 	}
 }
 
