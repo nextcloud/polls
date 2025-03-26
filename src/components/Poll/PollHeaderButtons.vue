@@ -13,7 +13,7 @@ import NcPopover from '@nextcloud/vue/components/NcPopover'
 
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
 
-import { ActionToggleSidebar } from '../Actions/index.js'
+import { ActionToggleSidebar } from '../Actions/index.ts'
 import PollInformation from '../Poll/PollInformation.vue'
 import UserMenu from '../User/UserMenu.vue'
 import ExportPoll from '../Export/ExportPoll.vue'

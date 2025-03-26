@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
-import { InputDiv } from '../Base/index.js'
+import { InputDiv } from '../Base/index.ts'
 import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
 import { dateUnits, DateUnitKeys } from '../../constants/dateUnits.ts'
 

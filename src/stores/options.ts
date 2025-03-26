@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, OptionsAPI } from '../Api/index.js'
+import { PublicAPI, OptionsAPI } from '../Api/index.ts'
 import { User } from '../Types/index.ts'
 import { Logger } from '../helpers/index.ts'
 import moment from '@nextcloud/moment'

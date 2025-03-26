@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { SharesAPI } from '../Api/index.js'
+import { SharesAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { useSessionStore } from './session.ts'
 import { User } from '../Types/index.ts'

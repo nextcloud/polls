@@ -15,7 +15,7 @@ import {
 	FeatureSettings,
 	StyleSettings,
 	PerformanceSettings,
-} from './UserSettings/index.js'
+} from './UserSettings/index.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 
 const preferencesStore = usePreferencesStore()

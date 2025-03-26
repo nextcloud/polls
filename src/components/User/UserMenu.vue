@@ -31,7 +31,7 @@ import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBullete
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
-import { PollsAPI, ValidatorAPI } from '../../Api/index.js'
+import { PollsAPI, ValidatorAPI } from '../../Api/index.ts'
 import { RankedType, useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'

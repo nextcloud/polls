@@ -28,9 +28,9 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
 import EmailIcon from 'vue-material-design-icons/Email.vue'
 
-import { MaybeIcon } from '../AppIcons/index.js'
+import { MaybeIcon } from '../AppIcons/index.ts'
 
-import { BadgeDiv } from '../Base/index.js'
+import { BadgeDiv } from '../Base/index.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore, AccessType } from '../../stores/poll.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'

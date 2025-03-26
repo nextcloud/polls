@@ -9,13 +9,13 @@ import { t } from '@nextcloud/l10n'
 
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
-import { FlexSettings } from '../components/Base/index.js'
+import { FlexSettings } from '../components/Base/index.ts'
 import {
 	CalendarSettings,
 	FeatureSettings,
 	StyleSettings,
 	PerformanceSettings,
-} from '../components/Settings/UserSettings/index.js'
+} from '../components/Settings/UserSettings/index.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 
 const preferencesStore = usePreferencesStore()

@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { InvalidJSON } from '../Exceptions/Exceptions.js'
-import { PollsAPI, PublicAPI } from '../Api/index.js'
+import { PollsAPI, PublicAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { mapStores } from 'pinia'
 import { useSessionStore } from '../stores/session.ts'

@@ -15,9 +15,9 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import NcRichText from '@nextcloud/vue/components/NcRichText'
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
-import { InputDiv } from '../Base/index.js'
+import { InputDiv } from '../Base/index.ts'
 import { SimpleLink, setCookie } from '../../helpers/index.ts'
-import { ValidatorAPI, PublicAPI } from '../../Api/index.js'
+import { ValidatorAPI, PublicAPI } from '../../Api/index.ts'
 import { SignalingType, ShareType } from '../../Types'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'

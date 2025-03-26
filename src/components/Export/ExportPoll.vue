@@ -21,7 +21,7 @@ import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 
-import { PollsAPI } from '../../Api/index.js'
+import { PollsAPI } from '../../Api/index.ts'
 import { usePollStore, PollType } from '../../stores/poll.ts'
 import { Answer, AnswerSymbol, useVotesStore } from '../../stores/votes.ts'
 import { useOptionsStore } from '../../stores/options.ts'

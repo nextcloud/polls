@@ -13,7 +13,7 @@ import {
 	CardRegister,
 	CardSendConfirmations,
 	CardUnpublishedPoll,
-} from './index.js'
+} from './index.ts'
 import { usePollStore, AccessType } from '../../stores/poll.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { useSharesStore } from '../../stores/shares.ts'

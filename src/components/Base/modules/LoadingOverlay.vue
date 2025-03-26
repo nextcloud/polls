@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { Spinner } from '../../AppIcons/index.js'
+import { Spinner } from '../../AppIcons/index.ts'
 </script>
 
 <template>

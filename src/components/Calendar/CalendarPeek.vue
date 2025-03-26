@@ -14,7 +14,7 @@ import NcPopover from '@nextcloud/vue/components/NcPopover'
 import { usePollStore } from '../../stores/poll.ts'
 
 import CalendarInfo from './CalendarInfo.vue'
-import { CalendarAPI } from '../../Api/index.js'
+import { CalendarAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
 import { Option } from '../../Types/index.ts'
 

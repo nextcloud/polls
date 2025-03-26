@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { CalendarAPI, UserSettingsAPI } from '../Api/index.js'
+import { CalendarAPI, UserSettingsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 
 export enum ViewMode {

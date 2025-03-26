@@ -16,7 +16,7 @@ import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
-import { FlexSpacer } from '../Base/index.js'
+import { FlexSpacer } from '../Base/index.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 
 const optionsStore = useOptionsStore()

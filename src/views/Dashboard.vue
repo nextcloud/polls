@@ -14,7 +14,7 @@ import NcDashboardWidget from '@nextcloud/vue/components/NcDashboardWidget'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
-import { PollsAppIcon } from '../components/AppIcons/index.js'
+import { PollsAppIcon } from '../components/AppIcons/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { usePollsStore } from '../stores/polls.ts'
 import { PollType } from '../Types/index.ts'

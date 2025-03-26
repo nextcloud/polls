@@ -4,7 +4,7 @@
 -->
 
 <script setup>
-import { InputDiv } from '../../Base/index.js'
+import { InputDiv } from '../../Base/index.ts'
 import { t } from '@nextcloud/l10n'
 import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 import { computed } from 'vue'

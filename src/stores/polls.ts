@@ -9,7 +9,7 @@ import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 
 import { Logger } from '../helpers/index.ts'
-import { PollsAPI } from '../Api/index.js'
+import { PollsAPI } from '../Api/index.ts'
 
 import { AccessType, Poll, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'

@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 
-import { AppSettingsAPI } from '../../Api/index.js'
+import { AppSettingsAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
 import { useSharesStore } from '../../stores/shares.ts'
 import { User } from '../../Types/index.ts'
