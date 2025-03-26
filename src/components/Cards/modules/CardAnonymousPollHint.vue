@@ -23,7 +23,7 @@ const pollStore = usePollStore()
 		{{
 			t(
 				'polls',
-				'But be aware, that your name is not stored in an encrypted or obfuscated way.',
+				'But be aware that your name is not stored in an encrypted or obfuscated way.',
 			)
 		}}
 	</CardDiv>
@@ -31,13 +31,13 @@ const pollStore = usePollStore()
 		{{
 			t(
 				'polls',
-				'This poll is an anonymous poll for everyone, except for the owner and delegated poll admins.',
+				'This poll is an anonymous poll for everyone, except for the owner and delegated poll administration.',
 			)
 		}}
 		{{
 			t(
 				'polls',
-				'Anonymization of this poll can be removed at any time by the owner and delegated poll admins.',
+				'Anonymization of this poll can be removed at any time by the owner and delegated poll administration.',
 			)
 		}}
 	</CardDiv>
