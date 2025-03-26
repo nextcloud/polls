@@ -53,7 +53,7 @@ const appSettingsStore = useAppSettingsStore()
 					{{
 						t(
 							'polls',
-							'Deletion and changing votes of participants is not possible',
+							'Deleting and changing votes of participants is not possible',
 						)
 					}}
 				</li>
