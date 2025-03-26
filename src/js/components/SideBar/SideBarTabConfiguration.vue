@@ -5,7 +5,7 @@
 
 <template>
 	<div>
-		<CardDiv v-if="hasVotes" type="warning">
+		<CardDiv v-if="hasVotes || hasVotesStandard" type="warning">
 			{{ t('polls', 'Please be careful when changing options, because it can affect existing votes in an unwanted manner.') }}
 		</CardDiv>
 
@@ -32,12 +32,22 @@
 				<PollConfigIcon />
 			</template>
 			<ConfigAllowComment @change="writePoll" />
-			<ConfigAllowMayBe @change="writePoll" />
+			<template v-if="pollType!=='textRankPoll'">
+		   	<ConfigAllowMayBe @change="writePoll" />
 			<ConfigUseNo @change="writePoll" />
+			</template>
+			
 			<ConfigAnonymous @change="writePoll" />
 
 			<ConfigVoteLimit @change="writePoll" />
 			<ConfigOptionLimit @change="writePoll" />
+		</ConfigBox>
+
+		<ConfigBox v-if="pollType === 'textRankPoll' && !hasVotes" :name="t('polls', 'Rank Options')">
+			<template #icon>
+				<PollConfigIcon />
+			</template>
+		<ConfigRankOptions :choosenRank.sync="pollConfiguration.choosenRank" />
 		</ConfigBox>
 
 		<ConfigBox :name="t('polls', 'Poll closing status')">
@@ -49,7 +59,6 @@
 			<ConfigAutoReminder v-if="pollType === 'datePoll' || hasExpiration"
 				@change="writePoll" />
 		</ConfigBox>
-
 		<ConfigBox :name="t('polls', 'Result display')">
 			<template #icon>
 				<ShowResultsIcon v-if="showResults === 'always'" />
@@ -83,7 +92,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
+import { mapGetters, mapState, mapActions } from 'vuex'
 import { showError } from '@nextcloud/dialogs'
 import { NcButton } from '@nextcloud/vue'
 import { ConfigBox, CardDiv } from '../Base/index.js'
@@ -98,6 +107,7 @@ import ConfigShowResults from '../Configuration/ConfigShowResults.vue'
 import ConfigTitle from '../Configuration/ConfigTitle.vue'
 import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
+import ConfigRankOptions from '../Configuration/ConfigRankOptions.vue'
 
 import { writePoll } from '../../mixins/writePoll.js'
 
@@ -113,8 +123,12 @@ import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 
+
+import { t } from '@nextcloud/l10n';
+
 export default {
 	name: 'SideBarTabConfiguration',
+	
 
 	components: {
 		ArchivePollIcon,
@@ -140,6 +154,7 @@ export default {
 		ConfigTitle,
 		ConfigUseNo,
 		ConfigVoteLimit,
+		ConfigRankOptions,
 		NcButton,
 		CardDiv,
 	},
@@ -147,6 +162,7 @@ export default {
 	mixins: [writePoll],
 
 	computed: {
+
 		...mapState({
 			pollId: (state) => state.poll.id,
 			pollType: (state) => state.poll.type,
@@ -154,15 +170,26 @@ export default {
 			hasExpiration: (state) => state.poll.configuration.expire,
 			showResults: (state) => state.poll.configuration.showResults,
 			isOwner: (state) => state.poll.currentUserStatus.isOwner,
+			pollConfiguration: (state) => state.poll.configuration,
 		}),
 
 		...mapGetters({
 			isPollClosed: 'poll/isClosed',
+			hasVotesStandard: 'votesStandard/hasVotes',
 			hasVotes: 'votes/hasVotes',
 		}),
+    		
+		choosenRank() {
+        		return this.pollConfiguration.choosenRank;
+    		},
 	},
 
 	methods: {
+		...mapActions({
+		      	 toggleArchive: 'poll/toggleArchive',
+     			 deletePoll: 'poll/delete',
+    		}),
+
 		async toggleArchive() {
 			try {
 				await this.$store.dispatch('poll/toggleArchive', { pollId: this.pollId })
@@ -181,8 +208,8 @@ export default {
 				showError(t('polls', 'Error deleting poll.'))
 			}
 		},
-	},
-}
+   	},
+};
 </script>
 
 <style lang="scss">

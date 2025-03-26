@@ -11,7 +11,8 @@
 			@click="clickAction()">
 			<template #icon>
 				<SortByDateOptionIcon v-if="isRanked && pollType === 'datePoll'" />
-				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textPoll'" />
+				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textIndPoll'" />
+				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textRankPoll'" />
 				<SortByRankIcon v-else />
 			</template>
 		</NcButton>
@@ -46,7 +47,10 @@ export default {
 				return t('polls', 'Date order')
 			}
 
-			if (this.isRanked && this.pollType === 'textPoll') {
+			if (this.isRanked && this.pollType === 'textIndPoll') {
+				return t('polls', 'Original order')
+			}
+			if (this.isRanked && this.pollType === 'textRankPoll') {
 				return t('polls', 'Original order')
 			}
 

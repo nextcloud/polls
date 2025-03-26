@@ -11,6 +11,7 @@
 			:show-maybe="permissions.allowMaybe"
 			:option="option" />
 
+
 		<CalendarPeek v-if="showCalendarPeek"
 			:focus-trap="false"
 			:option="option" />

@@ -7,7 +7,10 @@
 	<div class="vote-item" :class="[answer, { active: isVotable }, {currentuser: isCurrentUser}]">
 		<VoteIndicator :answer="iconAnswer"
 			:active="isVotable"
-			@click="setVote()" />
+		        :disabled="!isVotable" 
+			@click="setVote()" 
+			@select-change="handleRankSelected" 
+			/>
 	</div>
 </template>
 
@@ -35,10 +38,14 @@ export default {
 		},
 	},
 
+
 	computed: {
 		...mapState({
 			currentUser: (state) => state.acl.currentUser,
 			allowVote: (state) => state.poll.permissions.vote,
+			pollType: (state) => {
+      				return state.poll.type;
+			}
 		}),
 
 		...mapGetters({
@@ -54,11 +61,11 @@ export default {
 		},
 
 		isActive() {
-			return this.isCurrentUser && this.allowVote
+			return this.isCurrentUser && this.allowVote;
 		},
 
-		isCurrentUser() {
-			return this.currentUser.userId === this.userId
+		isCurrentUser(){
+			return this.currentUser.userId === this.userId;
 		},
 
 		answer() {
@@ -93,13 +100,29 @@ export default {
 	},
 
 	methods: {
-		async setVote() {
+
+		async handleRankSelected(rank) {
+			await this.setVote(rank);
+  		},
+
+		async setVote(rank) {
 			try {
+				if (this.pollType ==='textRankPoll')  {
+				const setTo = String(rank);
+
+				await this.$store.dispatch('votes/set', {
+					option: this.option,
+					userId: this.userId,
+					setTo: setTo,
+				});
+				}
+				else 
 				await this.$store.dispatch('votes/set', {
 					option: this.option,
 					userId: this.userId,
 					setTo: this.nextAnswer,
-				})
+				});
+					
 				showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
 			} catch (e) {
 				if (e.response.status === 409 && e.response.data.message === 'Vote limit exceeded') {

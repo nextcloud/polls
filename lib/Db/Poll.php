@@ -41,7 +41,9 @@ use OCP\IURLGenerator;
  * @method int getAllowComment()
  * @method void setAllowComment(int $value)
  * @method int getAllowMaybe()
+ * @method array getChoosenRank()
  * @method void setAllowMaybe(int $value)
+ * @method void setChoosenRank(array $value)
  * @method string getAllowProposals()
  * @method void setAllowProposals(string $value)
  * @method int getProposalsExpire()
@@ -78,7 +80,8 @@ use OCP\IURLGenerator;
 class Poll extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_polls';
 	public const TYPE_DATE = 'datePoll';
-	public const TYPE_TEXT = 'textPoll';
+	public const TYPE_IND_TEXT = 'textIndPoll';
+	public const TYPE_RANK_TEXT = 'textRankPoll';
 	public const ACCESS_HIDDEN = 'hidden';
 	public const ACCESS_PUBLIC = 'public';
 	public const ACCESS_PRIVATE = 'private';
@@ -135,6 +138,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected string $access = '';
 	protected int $anonymous = 0;
 	protected int $allowMaybe = 0;
+	protected $choosenRank = [];
 	protected string $allowProposals = '';
 	protected int $proposalsExpire = 0;
 	protected int $voteLimit = 0;
@@ -168,6 +172,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('anonymous', 'integer');
 		$this->addType('allowComment', 'integer');
 		$this->addType('allowMaybe', 'integer');
+		$this->addType('choosenRank', 'array');
 		$this->addType('proposalsExpire', 'integer');
 		$this->addType('voteLimit', 'integer');
 		$this->addType('optionLimit', 'integer');
@@ -229,6 +234,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'access' => $this->getAccess(),
 			'allowComment' => boolval($this->getAllowComment()),
 			'allowMaybe' => boolval($this->getAllowMaybe()),
+			'choosenRank' =>$this->getChoosenRank(),
 			'allowProposals' => $this->getAllowProposals(),
 			'anonymous' => boolval($this->getAnonymous()),
 			'autoReminder' => $this->getAutoReminder(),
@@ -283,6 +289,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setAccess($pollConfiguration['access'] ?? $this->getAccess());
 		$this->setAllowComment($pollConfiguration['allowComment'] ?? $this->getAllowComment());
 		$this->setAllowMaybe($pollConfiguration['allowMaybe'] ?? $this->getAllowMaybe());
+		 $choosenRank = $pollConfiguration['choosenRank'] ?? $this->getChoosenRank();
+	        if (is_string($choosenRank)) {
+        		$choosenRank = json_decode($choosenRank, true);
+    			}
+    		$this->setChoosenRank($choosenRank);
 		$this->setAllowProposals($pollConfiguration['allowProposals'] ?? $this->getAllowProposals());
 		$this->setAnonymous($pollConfiguration['anonymous'] ?? $this->getAnonymous());
 		$this->setAutoReminder($pollConfiguration['autoReminder'] ?? $this->getAutoReminder());

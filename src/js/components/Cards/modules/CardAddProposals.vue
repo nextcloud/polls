@@ -10,7 +10,8 @@
 			{{ t('polls', 'The proposal period ends {timeRelative}.',
 				{ timeRelative: proposalsExpireRelative }) }}
 		</p>
-		<OptionProposals v-if="pollType === 'textPoll'" />
+		<OptionProposals v-if="pollType === 'textIndPoll'" />
+		<OptionProposals v-else-if="pollType === 'textRankPoll'" />
 		<template #button>
 			<OptionProposals v-if="pollType === 'datePoll'" />
 		</template>

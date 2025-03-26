@@ -107,7 +107,7 @@ export default {
 
 	data() {
 		return {
-			pollType: 'textPoll',
+			pollType: this.pollType,
 			drag: false,
 		}
 	},

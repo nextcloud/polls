@@ -131,7 +131,7 @@ export default {
 				}
 			}
 
-			if (this.pollType === 'textPoll') {
+			if (this.pollType === 'textIndPoll') {
 				if (['html'].includes(exportType)) {
 					this.sheetData.push([
 						...participantsHeader,
@@ -143,7 +143,18 @@ export default {
 						...this.options.list.map((item) => item.text),
 					])
 				}
-
+			} else if (this.pollType === 'textRankPoll') {
+				if (['html'].includes(exportType)) {
+					this.sheetData.push([
+						...participantsHeader,
+						...this.options.list.map((item) => DOMPurify.sanitize(item.text)),
+					])
+				} else {
+					this.sheetData.push([
+						...participantsHeader,
+						...this.options.list.map((item) => item.text),
+					])
+				}
 			} else if (['csv'].includes(exportType)) {
 				this.sheetData.push([
 					...participantsHeader,
