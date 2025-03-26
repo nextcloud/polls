@@ -21,6 +21,7 @@ vendor-bin/**/vendor/
 Thumbs.db
 yarn-error.log
 *.cmd
+*.env
 *.iml
 *.ntvs*
 *.njsproj
