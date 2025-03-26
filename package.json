@@ -67,7 +67,7 @@
     "@nextcloud/vite-config": "^2.3.2",
     "@vue/tsconfig": "^0.7.0",
     "eslint-config-prettier": "^10.0.1",
-    "eslint-plugin-prettier": "^5.2.4",
+    "eslint-plugin-prettier": "^5.2.5",
     "prettier": "^3.2.5",
     "vite": "^6.2.3",
     "vite-plugin-node-polyfills": "^0.23.0",
