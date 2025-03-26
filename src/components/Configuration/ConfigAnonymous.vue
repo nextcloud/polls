@@ -16,7 +16,7 @@ const showAnonDialog = ref(false)
 const anonDialog = {
 	message: t(
 		'polls',
-		'Once enabled the anonymous setting can not be reverted anymore.',
+		'Once enabled, the anonymous setting cannot be reverted anymore.',
 	),
 	name: t('polls', 'Anonymize poll irrevocably'),
 
