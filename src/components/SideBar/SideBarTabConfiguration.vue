@@ -63,7 +63,7 @@ function deletePoll() {
 	try {
 		pollStore.delete({ pollId: pollStore.id })
 	} catch {
-		showError(t('polls', 'Error deleting pollStore.'))
+		showError(t('polls', 'Error deleting poll.'))
 	}
 }
 </script>
