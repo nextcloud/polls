@@ -178,7 +178,6 @@ OC.L10N.register(
     "Email address" : "Email address",
     "Week" : "Week",
     "OK" : "OK",
-    "All day" : "All day",
     "Preview" : "Preview",
     "_year_::_years_" : ["year","years"],
     "_month_::_months_" : ["month","months"],

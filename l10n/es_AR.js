@@ -21,7 +21,6 @@ OC.L10N.register(
     "Participants" : "Participantes",
     "Week" : "Semana",
     "OK" : "OK",
-    "All day" : "Todo el día",
     "Preview" : "Vista previa",
     "Submit" : "Enviar",
     "Close" : "Cerrar",
