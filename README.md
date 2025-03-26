@@ -5,7 +5,7 @@
 # Note: This is the vue3 branch (v8.x), which still is in alpha state and replaced the [master branch](https://github.com/nextcloud/polls/tree/master-7) (v7.x) as main branch
 ## For the current release branch (v7.x) please switch to the [master branch](https://github.com/nextcloud/polls/tree/master-7)
 
-# Polls - an app, similar to doodle or dudle, for Nextcloud written in PHP and JS/Vue.
+# Polls - an app, similar to doodle or DuD-Poll, for Nextcloud written in PHP and JS/Vue.
 ![psalm](https://github.com/nextcloud/polls/actions/workflows/static-analysis.yml/badge.svg)
 ![tests](https://github.com/nextcloud/polls/actions/workflows/phpunit.yml/badge.svg)
 ![puild](https://github.com/nextcloud/polls/actions/workflows/nodejs.yml/badge.svg)
