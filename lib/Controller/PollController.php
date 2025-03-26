@@ -66,7 +66,7 @@ class PollController extends BaseController {
 	/**
 	 * Add poll
 	 * @param string $title Poll title
-	 * @param string $type Poll type ('datePoll', 'textIndPoll','textRankPoll')
+	 * @param string $type Poll type ('datePoll', 'textPoll','textRankPoll')
 	 */
 	#[NoAdminRequired]
 	public function add(string $type, string $title): JSONResponse {

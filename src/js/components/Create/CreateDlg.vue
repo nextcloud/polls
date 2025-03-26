@@ -66,7 +66,7 @@ export default {
 			title: '',
 			pollTypeOptions: [
 				{ value: 'datePoll', label: t('polls', 'Date poll') },
-				{ value: 'textIndPoll', label: t('polls', 'Text poll') },
+				{ value: 'textPoll', label: t('polls', 'Text poll') },
 				{ value: 'textRankPoll', label: t('polls', 'Text Rank poll') },
 			],
 		}

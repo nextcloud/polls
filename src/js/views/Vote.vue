@@ -30,7 +30,7 @@
 				<NcEmptyContent v-if="!options.length"
 					v-bind="emptyContentProps">
 					<template #icon>
-						<TextIndPollIcon v-if="pollType === 'textIndPoll'" />
+						<TextPollIcon v-if="pollType === 'textPoll'" />
 						<TextRankPollIcon v-else-if="pollType === 'textRankPoll'" />
 						<DatePollIcon v-else />
 					</template>
@@ -59,7 +59,7 @@ import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
 import { HeaderBar } from '../components/Base/index.js'
 import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
-import TextIndPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import TextRankPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import VoteTable from '../components/VoteTable/VoteTable.vue'
@@ -76,7 +76,7 @@ export default {
 		PollHeaderButtons,
 		PollInfoLine,
 		DatePollIcon,
-		TextIndPollIcon,
+		TextPollIcon,
 		TextRankPollIcon,
 		ActionOpenOptionsSidebar,
 		CardAnonymousPollHint,

@@ -47,7 +47,7 @@
 			<template #icon>
 				<PollConfigIcon />
 			</template>
-		<ConfigRankOptions :choosenRank.sync="pollConfiguration.choosenRank" />
+		<ConfigRankOptions :chosenRank.sync="pollConfiguration.chosenRank" />
 		</ConfigBox>
 
 		<ConfigBox :name="t('polls', 'Poll closing status')">
@@ -178,10 +178,6 @@ export default {
 			hasVotesStandard: 'votesStandard/hasVotes',
 			hasVotes: 'votes/hasVotes',
 		}),
-    		
-		choosenRank() {
-        		return this.pollConfiguration.choosenRank;
-    		},
 	},
 
 	methods: {

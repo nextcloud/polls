@@ -131,7 +131,7 @@ export default {
 				}
 			}
 
-			if (this.pollType === 'textIndPoll') {
+			if (this.pollType === 'textPoll') {
 				if (['html'].includes(exportType)) {
 					this.sheetData.push([
 						...participantsHeader,

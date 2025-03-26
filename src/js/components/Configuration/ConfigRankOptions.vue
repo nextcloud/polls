@@ -1,13 +1,13 @@
 <template>
   <div class="option-container">
-    <!-- Menu déroulant pour sélectionner une option -->
+    <!-- Menu to choose the rank for this poll -->
     <select v-model="selectedOption">
-      <option v-for="(option, index) in internalChoosenRank" :key="index" :value="option">
+      <option v-for="(option, index) in internalChosenRank" :key="index" :value="option">
         {{ option }}
       </option>
     </select>
 
-    <!-- Champ de texte pour ajouter une nouvelle option -->
+    <!-- text field to add a new value to the rank -->
     <NcTextField
       v-model="newOption"
       :placeholder="t('polls', 'Enter a new option')"
@@ -15,7 +15,7 @@
       class="nc-text-field"
     />
 
-    <!-- Bouton pour ajouter une nouvelle option -->
+    <!-- and the boutton to add it -->
     <NcButton @click="addOption">
       <template #icon>
         <PlusIcon />
@@ -23,7 +23,7 @@
       {{ t('polls', 'Add Option') }}
     </NcButton>
 
-    <!-- Bouton pour supprimer l'option sélectionnée -->
+    <!-- Delete selected rank from the select -->
     <NcButton @click="removeOption" :disabled="!selectedOption">
       <template #icon>
         <CloseIcon />
@@ -39,11 +39,11 @@ import { t } from '@nextcloud/l10n';
 import { NcButton, NcTextField } from '@nextcloud/vue';
 import PlusIcon from 'vue-material-design-icons/Plus.vue';
 import CloseIcon from 'vue-material-design-icons/Close.vue';
-import { writePoll } from '../../mixins/writePoll.js'; // Importez le mixin
+import { writePoll } from '../../mixins/writePoll.js'; // Import the mixin
 
 export default {
   name: 'ConfigRankOptions',
-  mixins: [writePoll], // Ajoutez le mixin ici
+  mixins: [writePoll], // Add mixins here
 
   components: {
     NcButton,
@@ -53,8 +53,8 @@ export default {
   },
 
   props: {
-    choosenRank: {
-      type: String, // ou Array selon votre implémentation
+    chosenRank: {
+      type: Array, 
       required: true,
     },
   },
@@ -63,29 +63,29 @@ export default {
     return {
       selectedOption: null,
       newOption: '',
-      internalChoosenRank: [], // Stocke la valeur parsée de choosenRank
+      internalChosenRank: [], 
     };
   },
 
   computed: {
-    // Getter pour choosenRank
-    parsedChoosenRank() {
+    // Getter for chosenRank
+    parsedChosenRank() {
       try {
-        const parsed = JSON.parse(this.choosenRank); // Transforme en tableau
+        const parsed = JSON.parse(this.chosenRank); // Transform in array
         return parsed;
       } catch (error) {
-        console.error("Failed to parse choosenRank:", error);
-        return []; // Retourne un tableau vide en cas d'erreur
+        console.error("Failed to parse chosenRank:", error);
+        return []; // Return blank array in case of error
       }
     },
   },
 
   watch: {
-    // Synchronise internalChoosenRank avec parsedChoosenRank
-    parsedChoosenRank: {
+    // Synchronize internalChosenRank with parsedChosenRank
+    parsedChosenRank: {
       immediate: true,
       handler(newValue) {
-        this.internalChoosenRank = newValue;
+        this.internalChosenRank = newValue;
       },
     },
   },
@@ -93,49 +93,50 @@ export default {
   methods: {
     async addOption() {
       const trimmedOption = this.newOption.trim();
-      if (trimmedOption && !this.internalChoosenRank.includes(trimmedOption)) {
-        const updatedChoosenRank = [...this.internalChoosenRank, trimmedOption];
-        this.internalChoosenRank = updatedChoosenRank.sort(); // Met à jour localement
+      if (trimmedOption && !this.internalChosenRank.includes(trimmedOption)) {
+        const updatedChosenRank = [...this.internalChosenRank, trimmedOption];
+        this.internalChosenRank = updatedChosenRank.sort(); // Update locally
         this.newOption = '';
-        await this.updateChoosenRank(updatedChoosenRank); // Met à jour dans le store et appelle writePoll()
+        await this.updateChosenRank(updatedChosenRank); // Update the store and save poll
       }
     },
 
     async removeOption() {
       if (this.selectedOption) {
-        const updatedChoosenRank = this.internalChoosenRank.filter(option => option !== this.selectedOption);
-        this.internalChoosenRank = updatedChoosenRank.sort(); // Met à jour localement
-        if (updatedChoosenRank.length > 0) {
-          this.selectedOption = updatedChoosenRank[0];
+        const updatedChosenRank = this.internalChosenRank.filter(option => option !== this.selectedOption);
+        this.internalChosenRank = updatedChosenRank.sort(); // Update locally
+        if (updatedChosenRank.length > 0) {
+          this.selectedOption = updatedChosenRank[0];
         } else {
           this.selectedOption = null;
         }
-        await this.updateChoosenRank(updatedChoosenRank); // Met à jour dans le store et appelle writePoll()
+        await this.updateChosenRank(updatedChosenRank); // Update the store
       }
     },
 
-    async updateChoosenRank(updatedChoosenRank) {
+    async updateChosenRank(updatedChosenRank) {
       try {
-        // Met à jour choosenRank dans le store
-        await this.$store.dispatch('poll/updateChoosenRank', JSON.stringify(updatedChoosenRank));
-        // Appelle writePoll() du mixin pour enregistrer les modifications
+        // Update chosenRank into the store
+        await this.$store.dispatch('poll/updateChosenRank', JSON.stringify(updatedChosenRank));
+        // call writePoll() for save pool
         await this.writePoll();
       } catch (error) {
-        console.error("Failed to update choosenRank:", error);
-        showError(t('polls', 'Failed to update options')); // Affiche un message d'erreur
+        console.error("Failed to update chosenRank:", error);
+	showError(t('polls', 'Failed to update options')); 
       }
     },
   },
 
   mounted() {
-    if (this.parsedChoosenRank.length > 0) {
-      this.selectedOption = this.parsedChoosenRank[0]; // Sélectionne la première option par défaut
+    if (this.parsedChosenRank.length > 0) {
+      this.selectedOption = this.parsedChosenRank[0]; // Sélect first choice by default
     }
   },
 };
 </script>
 
 <style scoped>
+
 select {
 	width: 130px; 
 	padding: 2px;
@@ -152,20 +153,22 @@ select:focus {
 }
 
 button {
+	margin-bottom: 8px;
 	margin-right: 8px;
-	margin-bottom: 8px;margin-right: 8px;
 }
+
 .option-container {
     display: flex;
     align-items: center;
     gap: 8px;
     margin-bottom: 8px;
-}		/* Style pour le champ de texte */
+}
+
 .nc-text-field {
 	flex-grow: 1;
 	margin-right: 8px;
 	margin-bottom: 8px;
-	width: 100px; /* Ajustez la largeur selon vos besoins */
+	width: 100px; 
 
 }
 </style>

@@ -10,7 +10,7 @@
     			</span>
 			<select v-else v-model="selectedRank" class="vote-ranking"  @change="handleRankSelected">
 				<option disabled value=""></option>
-				<option v-for="rank in resolvedChoosenRank" :key="rank" :value="rank">
+				<option v-for="rank in resolvedChosenRank" :key="rank" :value="rank">
 					{{ rank }}
 				</option>
 			</select>
@@ -61,23 +61,18 @@ export default {
 			colorCodeMaybe: getComputedStyle(document.documentElement).getPropertyValue('--color-warning'),
 		}
 	},
-	watch: {
-  	answer(newValue) {
-   	 this.selectedRank = newValue; // Mettre à jour selectedRank lorsque answer change
-  		},
-	},
 	computed: {
 		...mapState({
 			pollType: (state) => state.poll.type,
 		}),
 
 		...mapGetters({
-			validRanks: 'poll/getChoosenRank',
+			validRanks: 'poll/getChosenRank',
 		}),
 
 
-		resolvedChoosenRank() {
-         	   return this.validRanks || ['0', '1', '2', '3']; // Remplacez par votre valeur par défaut
+		resolvedChosenRank() {
+         	   return this.validRanks || [];
         	},
 
 		foregroundColor() {
@@ -89,6 +84,11 @@ export default {
 			}
 			return this.colorCodeNo
 		},
+	},
+	watch: {
+  	answer(newValue) {
+   	 this.selectedRank = newValue; // Mettre à jour selectedRank lorsque answer change
+  		},
 	},
 	methods: {
 		handleRankSelected(event) {

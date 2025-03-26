@@ -18,7 +18,7 @@
 				<a :href="pollLink(item)">
 					<div class="poll-item__item">
 						<div class="item__icon-spacer">
-							<TextIndPollIcon v-if="item.type === 'textIndPoll'" />
+							<TextPollIcon v-if="item.type === 'textPoll'" />
 							<TextRankPollIcon v-else-if="item.type === 'textRankPoll'" />
 							<DatePollIcon v-else />
 						</div>
@@ -42,7 +42,7 @@
 <script>
 import { NcDashboardWidget } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
-import TextIndPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
+import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import TextRankPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
@@ -55,7 +55,7 @@ export default {
 		NcDashboardWidget,
 		DatePollIcon,
 		PollsAppIcon,
-		TextIndPollIcon,
+		TextPollIcon,
 		TextRankPollIcon,
 	},
 

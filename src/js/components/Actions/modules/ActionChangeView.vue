@@ -37,7 +37,7 @@ export default {
 		...mapState({
 			pollType: (state) => state.poll.type,
 			manualViewDatePoll: (state) => state.settings.manualViewDatePoll,
-			manualViewTextIndPoll: (state) => state.settings.manualViewTextIndPoll,
+			manualViewTextPoll: (state) => state.settings.manualViewTextPoll,
 			manualViewTextRankPoll: (state) => state.settings.manualViewTextRankPoll,
 		}),
 
@@ -59,8 +59,8 @@ export default {
 		changeView() {
 			if (this.pollType === 'datePoll') {
 				this.$store.commit('settings/setViewDatePoll', this.manualViewDatePoll ? '' : this.getNextViewMode)
-			} else if (this.pollType === 'textIndPoll') {
-				this.$store.commit('settings/setViewTextIndPoll', this.manualViewTextIndPoll ? '' : this.getNextViewMode)
+			} else if (this.pollType === 'textPoll') {
+				this.$store.commit('settings/setViewTextPoll', this.manualViewTextPoll ? '' : this.getNextViewMode)
 			} else if (this.pollType === 'textRankPoll') {
 				this.$store.commit('settings/setViewTextRankPoll', this.manualViewTextRankPoll ? '' : this.getNextViewMode)
 			}

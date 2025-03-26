@@ -43,9 +43,7 @@ export default {
 		...mapState({
 			currentUser: (state) => state.acl.currentUser,
 			allowVote: (state) => state.poll.permissions.vote,
-			pollType: (state) => {
-      				return state.poll.type;
-			}
+			pollType: (state) => { return state.poll.type; },
 		}),
 
 		...mapGetters({
@@ -107,14 +105,14 @@ export default {
 
 		async setVote(rank) {
 			try {
-				if (this.pollType ==='textRankPoll')  {
-				const setTo = String(rank);
+				if (this.pollType ==='textRankPoll') {
+					const setTo = String(rank);
 
-				await this.$store.dispatch('votes/set', {
-					option: this.option,
-					userId: this.userId,
-					setTo: setTo,
-				});
+					await this.$store.dispatch('votes/set', {
+						option: this.option,
+						userId: this.userId,
+						setTo: setTo,
+						});
 				}
 				else 
 				await this.$store.dispatch('votes/set', {

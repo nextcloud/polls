@@ -89,9 +89,9 @@ export default {
 		},
 		pollType: {
 			type: String,
-			default: 'textIndPoll',
+			default: 'textPoll',
 			validator(value) {
-				return ['textIndPoll','testRankPoll', 'datePoll'].includes(value)
+				return ['textPoll','testRankPoll', 'datePoll'].includes(value)
 			},
 		},
 	},

@@ -12,7 +12,7 @@
 				class="add-date-proposal"
 				show-caption
 				primary />
-			<OptionsTextAdd v-if="pollType === 'textIndPoll'" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
+			<OptionsTextAdd v-if="pollType === 'textPoll'" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
 			<OptionsTextAdd v-if="pollType === 'textRankPoll'" :placeholder="t('polls', 'Propose an option')" class="add-text-proposal" />
 		</div>
 	</div>

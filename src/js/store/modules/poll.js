@@ -17,7 +17,7 @@ const defaultPoll = () => ({
 		access: 'private',
 		allowComment: false,
 		allowMaybe: false,
-		choosenRank: [],
+		chosenRank: [],
 		allowProposals: 'disallow',
 		anonymous: false,
 		autoReminder: false,
@@ -75,8 +75,8 @@ const namespaced = true
 const state = defaultPoll()
 
 const mutations = {
- 	SET_CHOOSEN_RANK(state, choosenRank) {
-    			state.configuration.choosenRank = JSON.stringify(choosenRank);
+ 	SET_CHOOSEN_RANK(state, chosenRank) {
+    			state.configuration.chosenRank = JSON.stringify(chosenRank);
   	},
 
 	set(state, payload) {
@@ -104,13 +104,11 @@ const mutations = {
 }
 
 const getters = {
-	getChoosenRank: (state) => {
-        	return JSON.parse(state.configuration.choosenRank) || DEFAULT_CHOOSEN_RANK;
-    	},
+	getChosenRank: (state) => { return JSON.parse(state.configuration.chosenRank) || []; },
 
 	viewMode: (state, getters, rootState, rootGetters) => {
-		if (state.type === 'textIndPoll') {
-			return rootGetters['settings/viewTextIndPoll']
+		if (state.type === 'textPoll') {
+			return rootGetters['settings/viewTextPoll']
 		}
 		if (state.type === 'textRankPollRank') {
 			return rootGetters['settings/viewTextRankPoll']
@@ -130,7 +128,7 @@ const getters = {
 	},
 
 	typeName: (state) => {
-		if (state.type === 'textIndPoll') {
+		if (state.type === 'textPoll') {
 			return t('polls', 'Text poll')
 		}
 		if (state.type === 'textRankPoll') {
@@ -199,8 +197,8 @@ const getters = {
 }
 
 const actions = {
-  	updateChoosenRank({ commit }, choosenRank) {
-    		commit('SET_CHOOSEN_RANK', choosenRank);
+  	updateChosenRank({ commit }, chosenRank) {
+    		commit('SET_CHOOSEN_RANK', chosenRank);
   	},
 
 	reset(context) {
