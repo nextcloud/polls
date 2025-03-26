@@ -43,11 +43,11 @@
 			<ConfigOptionLimit @change="writePoll" />
 		</ConfigBox>
 
-		<ConfigBox v-if="pollType === 'textRankPoll' && !hasVotes" :name="t('polls', 'Rank Options')">
+		<ConfigBox v-if="pollType === 'textRankPoll'" :name="t('polls', 'Rank Options')">
 			<template #icon>
 				<PollConfigIcon />
 			</template>
-		<ConfigRankOptions :chosenRank.sync="pollConfiguration.chosenRank" />
+		<ConfigRankOptions :chosen-rank.sync="pollConfiguration.chosenRank" />
 		</ConfigBox>
 
 		<ConfigBox :name="t('polls', 'Poll closing status')">

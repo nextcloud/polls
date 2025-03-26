@@ -60,7 +60,6 @@ import { HeaderBar } from '../components/Base/index.js'
 import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import TextRankPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import VoteTable from '../components/VoteTable/VoteTable.vue'
 import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
@@ -77,7 +76,6 @@ export default {
 		PollInfoLine,
 		DatePollIcon,
 		TextPollIcon,
-		TextRankPollIcon,
 		ActionOpenOptionsSidebar,
 		CardAnonymousPollHint,
 		CardHiddenParticipants,

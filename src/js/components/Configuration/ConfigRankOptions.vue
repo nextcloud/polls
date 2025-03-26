@@ -8,8 +8,7 @@
     </select>
 
     <!-- text field to add a new value to the rank -->
-    <NcTextField
-      v-model="newOption"
+    <NcTextField v-model="newOption"
       :placeholder="t('polls', 'Enter a new option')"
       :label="t('polls', 'New option')"
       class="nc-text-field"
@@ -24,7 +23,7 @@
     </NcButton>
 
     <!-- Delete selected rank from the select -->
-    <NcButton @click="removeOption" :disabled="!selectedOption">
+    <NcButton :disabled="!selectedOption" @click="removeOption">
       <template #icon>
         <CloseIcon />
       </template>
@@ -34,16 +33,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex';
 import { t } from '@nextcloud/l10n';
 import { NcButton, NcTextField } from '@nextcloud/vue';
 import PlusIcon from 'vue-material-design-icons/Plus.vue';
 import CloseIcon from 'vue-material-design-icons/Close.vue';
 import { writePoll } from '../../mixins/writePoll.js'; // Import the mixin
+import { showError } from '@nextcloud/dialogs'
+import { mapGetters } from 'vuex'
 
 export default {
-  name: 'ConfigRankOptions',
-  mixins: [writePoll], // Add mixins here
+  name: 'ConfigRankOptions', // Add mixins here
 
   components: {
     NcButton,
@@ -51,6 +50,7 @@ export default {
     PlusIcon,
     CloseIcon,
   },
+  mixins: [writePoll],
 
   props: {
     chosenRank: {
@@ -63,11 +63,14 @@ export default {
     return {
       selectedOption: null,
       newOption: '',
-      internalChosenRank: [], 
     };
   },
 
   computed: {
+       ...mapGetters({
+	internalChosenRank: 'poll/getChosenRank',
+	}),
+
     // Getter for chosenRank
     parsedChosenRank() {
       try {
@@ -79,7 +82,6 @@ export default {
       }
     },
   },
-
   watch: {
     // Synchronize internalChosenRank with parsedChosenRank
     parsedChosenRank: {
@@ -88,6 +90,12 @@ export default {
         this.internalChosenRank = newValue;
       },
     },
+  },
+
+  mounted() {
+    if (this.parsedChosenRank.length > 0) {
+      this.selectedOption = this.parsedChosenRank[0]; // Sélect first choice by default
+    }
   },
 
   methods: {
@@ -125,12 +133,6 @@ export default {
 	showError(t('polls', 'Failed to update options')); 
       }
     },
-  },
-
-  mounted() {
-    if (this.parsedChosenRank.length > 0) {
-      this.selectedOption = this.parsedChosenRank[0]; // Sélect first choice by default
-    }
   },
 };
 </script>

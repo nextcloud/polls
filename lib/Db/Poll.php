@@ -18,63 +18,63 @@ use OCP\IURLGenerator;
 
 /**
  * @psalm-api
- * @method int getId()
- * @method void setId(int $value)
- * @method string getType()
- * @method void setType(string $value)
- * @method string getTitle()
- * @method void setTitle(string $value)
- * @method string getDescription()
- * @method void setDescription(string $value)
- * @method string getOwner()
- * @method void setOwner(string $value)
- * @method int getCreated()
- * @method void setCreated(int $value)
- * @method int getExpire()
- * @method void setExpire(int $value)
- * @method int getDeleted()
- * @method void setDeleted(int $value)
- * @method string getAccess()
- * @method void setAccess(string $value)
- * @method int getAnonymous()
- * @method void setAnonymous(int $value)
- * @method int getAllowComment()
- * @method void setAllowComment(int $value)
- * @method int getAllowMaybe()
- * @method string getChosenRank()
- * @method void setAllowMaybe(int $value)
- * @method void setChosenRank(string $value)
- * @method string getAllowProposals()
- * @method void setAllowProposals(string $value)
- * @method int getProposalsExpire()
- * @method void setProposalsExpire(int $value)
- * @method int getVoteLimit()
- * @method void setVoteLimit(int $value)
- * @method int getOptionLimit()
- * @method void setOptionLimit(int $value)
- * @method string getShowResults()
- * @method void setShowResults(string $value)
- * @method int getAdminAccess()
- * @method void setAdminAccess(int $value)
- * @method int getHideBookedUp()
- * @method void setHideBookedUp(int $value)
- * @method int getUseNo()
- * @method void setUseNo(int $value)
- * @method int getLastInteraction()
- * @method void setLastInteraction(int $value)
- * @method string getMiscSettings()
- * @method void setMiscSettings(string $value)
+ * @method    int getId()
+ * @method    void setId(int $value)
+ * @method    string getType()
+ * @method    void setType(string $value)
+ * @method    string getTitle()
+ * @method    void setTitle(string $value)
+ * @method    string getDescription()
+ * @method    void setDescription(string $value)
+ * @method    string getOwner()
+ * @method    void setOwner(string $value)
+ * @method    int getCreated()
+ * @method    void setCreated(int $value)
+ * @method    int getExpire()
+ * @method    void setExpire(int $value)
+ * @method    int getDeleted()
+ * @method    void setDeleted(int $value)
+ * @method    string getAccess()
+ * @method    void setAccess(string $value)
+ * @method    int getAnonymous()
+ * @method    void setAnonymous(int $value)
+ * @method    int getAllowComment()
+ * @method    void setAllowComment(int $value)
+ * @method    int getAllowMaybe()
+ * @method    string getChosenRank()
+ * @method    void setAllowMaybe(int $value)
+ * @method    void setChosenRank(string $value)
+ * @method    string getAllowProposals()
+ * @method    void setAllowProposals(string $value)
+ * @method    int getProposalsExpire()
+ * @method    void setProposalsExpire(int $value)
+ * @method    int getVoteLimit()
+ * @method    void setVoteLimit(int $value)
+ * @method    int getOptionLimit()
+ * @method    void setOptionLimit(int $value)
+ * @method    string getShowResults()
+ * @method    void setShowResults(string $value)
+ * @method    int getAdminAccess()
+ * @method    void setAdminAccess(int $value)
+ * @method    int getHideBookedUp()
+ * @method    void setHideBookedUp(int $value)
+ * @method    int getUseNo()
+ * @method    void setUseNo(int $value)
+ * @method    int getLastInteraction()
+ * @method    void setLastInteraction(int $value)
+ * @method    string getMiscSettings()
+ * @method    void setMiscSettings(string $value)
  *
  * Magic functions for joined columns
- * @method int getMinDate()
- * @method int getMaxDate()
- * @method int getShareToken()
- * @method int getCountOptions()
+ * @method    int getMinDate()
+ * @method    int getMaxDate()
+ * @method    int getShareToken()
+ * @method    int getCountOptions()
  *
  * Magic functions for subqueried columns
- * @method int getCurrentUserOrphanedVotes()
- * @method int getCurrentUserVotes()
- * @method int getCurrentUserVotesYes()
+ * @method    int getCurrentUserOrphanedVotes()
+ * @method    int getCurrentUserVotes()
+ * @method    int getCurrentUserVotesYes()
  */
 
 class Poll extends EntityWithUser implements JsonSerializable
@@ -206,83 +206,83 @@ class Poll extends EntityWithUser implements JsonSerializable
     public function jsonSerialize(): array
     {
         return [
-            'id' => $this->getId(),
-            'type' => $this->getType(),
-            // editable settings
-            'configuration' => $this->getConfigurationArray(),
-            // read only properties
-            'descriptionSafe' => $this->getDescriptionSafe(),
-            // read only properties
-            'owner' => $this->getUser(),
-            'status' => $this->getStatusArray(),
-            'currentUserStatus' => $this->getCurrentUserStatus(),
-            'permissions' => $this->getPermissionsArray(),
+        'id' => $this->getId(),
+        'type' => $this->getType(),
+        // editable settings
+        'configuration' => $this->getConfigurationArray(),
+        // read only properties
+        'descriptionSafe' => $this->getDescriptionSafe(),
+        // read only properties
+        'owner' => $this->getUser(),
+        'status' => $this->getStatusArray(),
+        'currentUserStatus' => $this->getCurrentUserStatus(),
+        'permissions' => $this->getPermissionsArray(),
         ];
     }
 
     public function getStatusArray(): array
     {
         return [
-            'lastInteraction' => $this->getLastInteraction(),
-            'created' => $this->getCreated(),
-            'deleted' => boolval($this->getDeleted()),
-            'expired' => $this->getExpired(),
-            'relevantThreshold' => $this->getRelevantThreshold(),
-            'countOptions' => $this->getCountOptions(),
+        'lastInteraction' => $this->getLastInteraction(),
+        'created' => $this->getCreated(),
+        'deleted' => boolval($this->getDeleted()),
+        'expired' => $this->getExpired(),
+        'relevantThreshold' => $this->getRelevantThreshold(),
+        'countOptions' => $this->getCountOptions(),
         ];
     }
     public function getConfigurationArray(): array
     {
         return [
-            'title' => $this->getTitle(),
-            'description' => $this->getDescription(),
-            'access' => $this->getAccess(),
-            'allowComment' => boolval($this->getAllowComment()),
-            'allowMaybe' => boolval($this->getAllowMaybe()),
-            'chosenRank' => $this->getChosenRank(),
-            'allowProposals' => $this->getAllowProposals(),
-            'anonymous' => boolval($this->getAnonymous()),
-            'autoReminder' => $this->getAutoReminder(),
-            'expire' => $this->getExpire(),
-            'hideBookedUp' => boolval($this->getHideBookedUp()),
-            'proposalsExpire' => $this->getProposalsExpire(),
-            'showResults' => $this->getShowResults(),
-            'useNo' => boolval($this->getUseNo()),
-            'maxVotesPerOption' => $this->getOptionLimit(),
-            'maxVotesPerUser' => $this->getVoteLimit(),
+        'title' => $this->getTitle(),
+        'description' => $this->getDescription(),
+        'access' => $this->getAccess(),
+        'allowComment' => boolval($this->getAllowComment()),
+        'allowMaybe' => boolval($this->getAllowMaybe()),
+        'chosenRank' => $this->getChosenRank(),
+        'allowProposals' => $this->getAllowProposals(),
+        'anonymous' => boolval($this->getAnonymous()),
+        'autoReminder' => $this->getAutoReminder(),
+        'expire' => $this->getExpire(),
+        'hideBookedUp' => boolval($this->getHideBookedUp()),
+        'proposalsExpire' => $this->getProposalsExpire(),
+        'showResults' => $this->getShowResults(),
+        'useNo' => boolval($this->getUseNo()),
+        'maxVotesPerOption' => $this->getOptionLimit(),
+        'maxVotesPerUser' => $this->getVoteLimit(),
         ];
     }
 
     public function getCurrentUserStatus(): array
     {
         return [
-            'userRole' => $this->getUserRole(),
-            'isLocked' => boolval($this->getIsCurrentUserLocked()),
-            'isInvolved' => $this->getIsInvolved(),
-            'isLoggedIn' => $this->userSession->getIsLoggedIn(),
-            'isNoUser' => !$this->userSession->getIsLoggedIn(),
-            'isOwner' => $this->getIsPollOwner(),
-            'userId' => $this->getUserId(),
-            'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
-            'yesVotes' => $this->getCurrentUserVotesYes(),
-            'countVotes' => $this->getCurrentUserVotes(),
-            'shareToken' => $this->getShareToken(),
-            'groupInvitations' => $this->getGroupShares(),
+        'userRole' => $this->getUserRole(),
+        'isLocked' => boolval($this->getIsCurrentUserLocked()),
+        'isInvolved' => $this->getIsInvolved(),
+        'isLoggedIn' => $this->userSession->getIsLoggedIn(),
+        'isNoUser' => !$this->userSession->getIsLoggedIn(),
+        'isOwner' => $this->getIsPollOwner(),
+        'userId' => $this->getUserId(),
+        'orphanedVotes' => $this->getCurrentUserOrphanedVotes(),
+        'yesVotes' => $this->getCurrentUserVotesYes(),
+        'countVotes' => $this->getCurrentUserVotes(),
+        'shareToken' => $this->getShareToken(),
+        'groupInvitations' => $this->getGroupShares(),
         ];
     }
     public function getPermissionsArray(): array
     {
         return [
-            'addOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
-            'archive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
-            'comment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
-            'delete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
-            'edit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
-            'seeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
-            'seeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
-            'subscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
-            'view' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
-            'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
+        'addOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_ADD),
+        'archive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
+        'comment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
+        'delete' => $this->getIsAllowed(self::PERMISSION_POLL_DELETE),
+        'edit' => $this->getIsAllowed(self::PERMISSION_POLL_EDIT),
+        'seeResults' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW),
+        'seeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
+        'subscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
+        'view' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
+        'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
         ];
     }
 
@@ -321,8 +321,8 @@ class Poll extends EntityWithUser implements JsonSerializable
         $expiry = $this->getExpire();
 
         return (
-            $expiry > 0
-            && $expiry < $compareTime
+        $expiry > 0
+        && $expiry < $compareTime
         );
     }
 
@@ -402,8 +402,8 @@ class Poll extends EntityWithUser implements JsonSerializable
     public function getProposalsExpired(): bool
     {
         return (
-            $this->getProposalsExpire() > 0
-            && $this->getProposalsExpire() < time()
+        $this->getProposalsExpire() > 0
+        && $this->getProposalsExpire() < time()
         );
     }
 
@@ -446,16 +446,14 @@ class Poll extends EntityWithUser implements JsonSerializable
 
         $deadline = $this->getDeadline();
 
-        if (
-            $deadline - $this->getCreated() > self::FIVE_DAYS
+        if ($deadline - $this->getCreated() > self::FIVE_DAYS
             && $deadline - $time < self::TWO_DAYS
             && $deadline > $time
         ) {
             return self::TWO_DAYS;
         }
 
-        if (
-            $deadline - $this->getCreated() > self::TWO_DAYS
+        if ($deadline - $this->getCreated() > self::TWO_DAYS
             && $deadline - $time < self::ONE_AND_HALF_DAY
             && $deadline > $time
         ) {
@@ -505,13 +503,12 @@ class Poll extends EntityWithUser implements JsonSerializable
     }
 
     /**
-     *
      * Check Permissions
-     *
      */
 
     /**
      * Request a permission level and get exception if denied
+     *
      * @throws ForbiddenException Thrown if access is denied
      */
     public function request(string $permission): void
@@ -548,15 +545,16 @@ class Poll extends EntityWithUser implements JsonSerializable
 
     /**
      * getIsInvolved - Is current user involved in current poll?
+     *
      * @return bool Returns true, if the current user is involved in the poll via share, as a participant or as the poll owner.
      */
     private function getIsInvolved(): bool
     {
         return (
-            $this->getIsPollOwner()
-            || $this->getIsParticipant()
-            || $this->getIsPersonallyInvited())
-            || $this->getIsInvitedViaGroupShare();
+        $this->getIsPollOwner()
+        || $this->getIsParticipant()
+        || $this->getIsPersonallyInvited())
+        || $this->getIsInvitedViaGroupShare();
     }
 
     /**
@@ -569,6 +567,7 @@ class Poll extends EntityWithUser implements JsonSerializable
 
     /**
      * getIsParticipant - Is user a participant?
+     *
      * @return bool Returns true, if the current user is already a particitipant of the current poll.
      */
     private function getIsParticipant(): bool
@@ -579,6 +578,7 @@ class Poll extends EntityWithUser implements JsonSerializable
     /**
      * getIsInvitedViaGroupShare - Is the poll shared via group share?
      * where the current user is member of. This only affects logged in users.
+     *
      * @return bool Returns true, if the current poll contains a group share with a group,
      */
     private function getIsInvitedViaGroupShare(): bool
@@ -592,24 +592,29 @@ class Poll extends EntityWithUser implements JsonSerializable
 
     private function getGroupSharesForUser(): array
     {
-        return array_filter($this->getGroupShares(), function ($groupName) {
-            return ($this->userSession->getUser()->getIsInGroup($groupName));
-        });
+        return array_filter(
+            $this->getGroupShares(), function ($groupName) {
+                return ($this->userSession->getUser()->getIsInGroup($groupName));
+            }
+        );
     }
     /**
      * getIsPersonallyInvited - Is the poll shared via user share with the current user?
      * Checking via user role
+     *
      * @return bool Returns true, if the current poll contains a user role which matches a share type
      */
     private function getIsPersonallyInvited(): bool
     {
-        return in_array($this->getUserRole(), [
+        return in_array(
+            $this->getUserRole(), [
             Poll::ROLE_ADMIN,
             Poll::ROLE_USER,
             Poll::ROLE_EXTERNAL,
             Poll::ROLE_EMAIL,
             Poll::ROLE_CONTACT,
-        ]);
+            ]
+        );
     }
 
     /**
@@ -623,7 +628,7 @@ class Poll extends EntityWithUser implements JsonSerializable
     private function getIsDelegatedAdmin(): bool
     {
         return $this->getUserRole() === Poll::ROLE_ADMIN
-            && !$this->getIsCurrentUserLocked();
+        && !$this->getIsCurrentUserLocked();
     }
 
     /**

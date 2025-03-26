@@ -7,7 +7,7 @@
 	<NcAppNavigationItem :name="poll.configuration.title" :to="{name: 'vote', params: {id: poll.id}}" :class="{ closed: isPollClosed }">
 		<template #icon>
 			<TextPollIcon v-if="poll.type === 'textPoll'" />
-			<TextRankPollIcon v-else-if="poll.type === 'textRankPoll'" />
+			<TextPollIcon v-else-if="poll.type === 'textRankPoll'" />
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>
@@ -60,7 +60,6 @@ import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import TextRankPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
 export default {
@@ -74,7 +73,6 @@ export default {
 		ArchivePollIcon,
 		RestorePollIcon,
 		TextPollIcon,
-		TextRankPollIcon,
 		DatePollIcon,
 	},
 

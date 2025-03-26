@@ -19,7 +19,7 @@
 					<div class="poll-item__item">
 						<div class="item__icon-spacer">
 							<TextPollIcon v-if="item.type === 'textPoll'" />
-							<TextRankPollIcon v-else-if="item.type === 'textRankPoll'" />
+							<TextPollIcon v-else-if="item.type === 'textRankPoll'" />
 							<DatePollIcon v-else />
 						</div>
 
@@ -43,7 +43,6 @@
 import { NcDashboardWidget } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import TextRankPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.js'
 import { mapGetters, mapState, mapActions } from 'vuex'
@@ -56,7 +55,6 @@ export default {
 		DatePollIcon,
 		PollsAppIcon,
 		TextPollIcon,
-		TextRankPollIcon,
 	},
 
 	computed: {

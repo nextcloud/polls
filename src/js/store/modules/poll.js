@@ -7,6 +7,8 @@ import moment from '@nextcloud/moment'
 import { uniqueArrayOfObjects, Logger } from '../../helpers/index.js'
 import { PollsAPI, PublicAPI } from '../../Api/index.js'
 
+const DEFAULT_CHOSEN_RANK = ['1', '2', '3'] ;
+
 const defaultPoll = () => ({
 	id: 0,
 	type: 'datePoll',
@@ -17,7 +19,7 @@ const defaultPoll = () => ({
 		access: 'private',
 		allowComment: false,
 		allowMaybe: false,
-		chosenRank: [],
+		chosenRank: JSON.stringify(DEFAULT_CHOSEN_RANK),
 		allowProposals: 'disallow',
 		anonymous: false,
 		autoReminder: false,
@@ -104,7 +106,14 @@ const mutations = {
 }
 
 const getters = {
-	getChosenRank: (state) => { return JSON.parse(state.configuration.chosenRank) || []; },
+	getChosenRank: (state) => {
+		try {
+		     const parsed = JSON.parse(state.configuration.chosenRank);
+		   return Array.isArray(parsed) ? parsed : DEFAULT_CHOSEN_RANK;
+    		} catch {
+      		return DEFAULT_CHOSEN_RANK;
+    		}
+	},
 
 	viewMode: (state, getters, rootState, rootGetters) => {
 		if (state.type === 'textPoll') {

@@ -43,7 +43,7 @@ export default {
 		...mapState({
 			currentUser: (state) => state.acl.currentUser,
 			allowVote: (state) => state.poll.permissions.vote,
-			pollType: (state) => { return state.poll.type; },
+			pollType: (state) => state.poll.type,
 		}),
 
 		...mapGetters({
@@ -111,7 +111,7 @@ export default {
 					await this.$store.dispatch('votes/set', {
 						option: this.option,
 						userId: this.userId,
-						setTo: setTo,
+						setTo,
 						});
 				}
 				else 

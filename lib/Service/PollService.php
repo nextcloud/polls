@@ -60,9 +60,13 @@ class PollService
     {
         $pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
         // return $pollList;
-        return array_values(array_filter($pollList, function (Poll $poll): bool {
-            return $poll->getIsAllowed(Poll::PERMISSION_POLL_VIEW);
-        }));
+        return array_values(
+            array_filter(
+                $pollList, function (Poll $poll): bool {
+                    return $poll->getIsAllowed(Poll::PERMISSION_POLL_VIEW);
+                }
+            )
+        );
 
     }
 
@@ -91,6 +95,7 @@ class PollService
 
     /**
      * Get list of polls
+     *
      * @return Poll[]
      */
     public function listForAdmin(): array
@@ -108,6 +113,7 @@ class PollService
 
     /**
      * Update poll configuration
+     *
      * @return Poll
      */
     public function takeover(int $pollId, ?UserBase $targetUser = null): Poll
@@ -127,7 +133,7 @@ class PollService
     }
 
     /**
-     * @return Poll[]
+     * @return       Poll[]
      * @psalm-return array<Poll>
      */
     public function transferPolls(string $sourceUser, string $targetUser): array
@@ -170,6 +176,7 @@ class PollService
     }
     /**
      * get poll configuration
+     *
      * @return Poll
      */
     public function get(int $pollId)
@@ -222,6 +229,7 @@ class PollService
 
     /**
      * Update poll configuration
+     *
      * @return Poll
      */
     public function update(int $pollId, array $pollConfiguration): Poll
@@ -274,6 +282,7 @@ class PollService
 
     /**
      * Move to archive or restore
+     *
      * @return Poll
      */
     public function toggleArchive(int $pollId): Poll
@@ -295,6 +304,7 @@ class PollService
 
     /**
      * Delete poll
+     *
      * @return Poll
      */
     public function delete(int $pollId): Poll
@@ -311,6 +321,7 @@ class PollService
 
     /**
      * Close poll
+     *
      * @return Poll
      */
     public function close(int $pollId): Poll
@@ -321,6 +332,7 @@ class PollService
 
     /**
      * Reopen poll
+     *
      * @return Poll
      */
     public function reopen(int $pollId): Poll
@@ -331,6 +343,7 @@ class PollService
 
     /**
      * Close poll
+     *
      * @return Poll
      */
     private function toggleClose(int $pollId, int $expiry): Poll
@@ -352,6 +365,7 @@ class PollService
 
     /**
      * Clone poll
+     *
      * @return Poll
      */
     public function clone(int $pollId): Poll
@@ -384,7 +398,6 @@ class PollService
 
     /**
      * Collect email addresses from particitipants
-     *
      */
     public function getParticipantsEmailAddresses(int $pollId): array
     {
@@ -396,9 +409,9 @@ class PollService
         foreach ($votes as $vote) {
             $user = $vote->getUser();
             $list[] = [
-                'displayName' => $user->getDisplayName(),
-                'emailAddress' => $user->getEmailAddress(),
-                'combined' => $user->getEmailAndDisplayName(),
+            'displayName' => $user->getDisplayName(),
+            'emailAddress' => $user->getEmailAddress(),
+            'combined' => $user->getEmailAndDisplayName(),
             ];
         }
         return $list;
@@ -414,9 +427,9 @@ class PollService
     public function getValidEnum(): array
     {
         return [
-            'pollType' => $this->getValidPollType(),
-            'access' => $this->getValidAccess(),
-            'showResults' => $this->getValidShowResults()
+        'pollType' => $this->getValidPollType(),
+        'access' => $this->getValidAccess(),
+        'showResults' => $this->getValidShowResults()
         ];
     }
 

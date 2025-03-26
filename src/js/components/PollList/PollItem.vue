@@ -43,7 +43,7 @@
 
 	<div v-else class="poll-item content">
 		<TextPollIcon v-if="pollType === 'textPoll'" class="item__type" :title="pollTypeName" />
-		<TextRankPollIcon v-else-if="pollType === 'textRankPoll'" class="item__type" :title="pollTypeName" />
+		<TextPollIcon v-else-if="pollType === 'textRankPoll'" class="item__type" :title="pollTypeName" />
 		<DatePollIcon v-else class="item__type" :title="pollTypeName" />
 
 		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
@@ -101,7 +101,6 @@ import { mapState } from 'vuex'
 import moment from '@nextcloud/moment'
 import { BadgeDiv } from '../Base/index.js'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import TextRankPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import CreationIcon from 'vue-material-design-icons/ClockOutline.vue'
 import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
@@ -113,7 +112,6 @@ export default {
 	name: 'PollItem',
 	components: {
 		BadgeDiv,
-		TextRankPollIcon,
 		TextPollIcon,
 		DatePollIcon,
 		CreationIcon,
@@ -180,7 +178,7 @@ export default {
 			if (this.pollType === 'textPoll') {
 				return t('polls', 'Text poll')
 			}
-			else if (this.pollType === 'textRankPoll') {
+			if (this.pollType === 'textRankPoll') {
 				return t('polls', 'Text poll ranking')
 			}
 			return t('polls', 'Date poll')
