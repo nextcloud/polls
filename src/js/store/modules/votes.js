@@ -35,17 +35,6 @@ const mutations = {
 			state.list[index] = Object.assign(state.list[index], payload.vote)
 			return
 		}
-		const vote = {... payload.vote}
-		if (vote.answer === 'yes') {
-			vote.answerTranslated = t('polls', 'Yes')
-			vote.answerSymbol = '✔'
-		} else if (vote.answer === 'maybe') {
-			vote.answerTranslated = t('polls', 'Maybe')
-			vote.answerSymbol = '❔'
-		} else {
-			vote.answerTranslated = t('polls', 'No')
-			vote.answerSymbol = '❌'
-		}
 		state.list.push(payload.vote)
 	},
 }
