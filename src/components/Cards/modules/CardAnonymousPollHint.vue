@@ -37,7 +37,7 @@ const pollStore = usePollStore()
 		{{
 			t(
 				'polls',
-				'The anonymity of this poll can be removed at any time by the owner and delegated poll administration.',
+				'Anonymization of this poll can be removed at any time by the owner and delegated poll administration.',
 			)
 		}}
 	</CardDiv>
