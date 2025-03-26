@@ -125,7 +125,7 @@ export const usePollsStore = defineStore('polls', {
 				titleExt: t('polls', 'My polls'),
 				description: t(
 					'polls',
-					'This are all polls, where you are the owner.',
+					'These are all the polls for which you are the owner.',
 				),
 				pinned: false,
 				showInNavigation: () => {
