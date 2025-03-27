@@ -227,7 +227,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	public function setLanguage(string $value): void {
 		$this->setMiscSettingsByKey('language', $value);
 	}
-
+	
 	// Fallback for now; use language as locale
 	public function getLocale(): string {
 		return $this->getLanguage();
@@ -252,7 +252,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 	public function getRichObjectString(): array {
 		return [
 			'type' => 'highlight',
-			'id' => (string)$this->getId(),
+			'id' => $this->getId(),
 			'name' => $this->getType(),
 		];
 	}

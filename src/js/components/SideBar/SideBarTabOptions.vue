@@ -46,6 +46,17 @@
 				<OptionsTextAddBulk v-if="!isPollClosed" />
 			</template>
 		</ConfigBox>
+		<ConfigBox v-if="pollType === 'textRankPoll'" :name="t('polls', 'Available Options')">
+			<template #icon>
+				<TextOptionsIcon />
+			</template>
+
+			<OptionsText />
+
+			<template #actions>
+				<OptionsTextAddBulk v-if="!isPollClosed" />
+			</template>
+		</ConfigBox>
 	</div>
 </template>
 

@@ -91,7 +91,7 @@ export default {
 			type: String,
 			default: 'textPoll',
 			validator(value) {
-				return ['textPoll', 'datePoll'].includes(value)
+				return ['textPoll','testRankPoll', 'datePoll'].includes(value)
 			},
 		},
 	},

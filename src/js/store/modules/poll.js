@@ -7,6 +7,8 @@ import moment from '@nextcloud/moment'
 import { uniqueArrayOfObjects, Logger } from '../../helpers/index.js'
 import { PollsAPI, PublicAPI } from '../../Api/index.js'
 
+const DEFAULT_CHOSEN_RANK = ['1', '2', '3'] ;
+
 const defaultPoll = () => ({
 	id: 0,
 	type: 'datePoll',
@@ -17,6 +19,7 @@ const defaultPoll = () => ({
 		access: 'private',
 		allowComment: false,
 		allowMaybe: false,
+		chosenRank: JSON.stringify(DEFAULT_CHOSEN_RANK),
 		allowProposals: 'disallow',
 		anonymous: false,
 		autoReminder: false,
@@ -74,6 +77,10 @@ const namespaced = true
 const state = defaultPoll()
 
 const mutations = {
+ 	SET_CHOOSEN_RANK(state, chosenRank) {
+    			state.configuration.chosenRank = JSON.stringify(chosenRank);
+  	},
+
 	set(state, payload) {
 		Object.assign(state, payload.poll)
 	},
@@ -99,11 +106,22 @@ const mutations = {
 }
 
 const getters = {
+	getChosenRank: (state) => {
+		try {
+		     const parsed = JSON.parse(state.configuration.chosenRank);
+		   return Array.isArray(parsed) ? parsed : DEFAULT_CHOSEN_RANK;
+    		} catch {
+      		return DEFAULT_CHOSEN_RANK;
+    		}
+	},
+
 	viewMode: (state, getters, rootState, rootGetters) => {
 		if (state.type === 'textPoll') {
 			return rootGetters['settings/viewTextPoll']
 		}
-
+		if (state.type === 'textRankPollRank') {
+			return rootGetters['settings/viewTextRankPoll']
+		}
 		if (state.type === 'datePoll') {
 			return rootGetters['settings/viewDatePoll']
 		}
@@ -121,6 +139,9 @@ const getters = {
 	typeName: (state) => {
 		if (state.type === 'textPoll') {
 			return t('polls', 'Text poll')
+		}
+		if (state.type === 'textRankPoll') {
+			return t('polls', 'Text Rank poll')
 		}
 		return t('polls', 'Date poll')
 	},
@@ -185,6 +206,9 @@ const getters = {
 }
 
 const actions = {
+  	updateChosenRank({ commit }, chosenRank) {
+    		commit('SET_CHOOSEN_RANK', chosenRank);
+  	},
 
 	reset(context) {
 		context.commit('reset')

@@ -12,6 +12,7 @@
 			<template #icon>
 				<SortByDateOptionIcon v-if="isRanked && pollType === 'datePoll'" />
 				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textPoll'" />
+				<SortByOriginalOrderIcon v-else-if="isRanked && pollType === 'textRankPoll'" />
 				<SortByRankIcon v-else />
 			</template>
 		</NcButton>
@@ -47,6 +48,9 @@ export default {
 			}
 
 			if (this.isRanked && this.pollType === 'textPoll') {
+				return t('polls', 'Original order')
+			}
+			if (this.isRanked && this.pollType === 'textRankPoll') {
 				return t('polls', 'Original order')
 			}
 

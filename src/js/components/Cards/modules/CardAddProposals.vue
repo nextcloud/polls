@@ -11,6 +11,7 @@
 				{ timeRelative: proposalsExpireRelative }) }}
 		</p>
 		<OptionProposals v-if="pollType === 'textPoll'" />
+		<OptionProposals v-else-if="pollType === 'textRankPoll'" />
 		<template #button>
 			<OptionProposals v-if="pollType === 'datePoll'" />
 		</template>

@@ -43,6 +43,7 @@
 
 	<div v-else class="poll-item content">
 		<TextPollIcon v-if="pollType === 'textPoll'" class="item__type" :title="pollTypeName" />
+		<TextPollIcon v-else-if="pollType === 'textRankPoll'" class="item__type" :title="pollTypeName" />
 		<DatePollIcon v-else class="item__type" :title="pollTypeName" />
 
 		<div v-if="noLink" class="item__title" :class="{ closed: closed }">
@@ -176,6 +177,9 @@ export default {
 		pollTypeName() {
 			if (this.pollType === 'textPoll') {
 				return t('polls', 'Text poll')
+			}
+			if (this.pollType === 'textRankPoll') {
+				return t('polls', 'Text poll ranking')
 			}
 			return t('polls', 'Date poll')
 		},

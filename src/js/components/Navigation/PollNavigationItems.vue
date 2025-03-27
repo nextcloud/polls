@@ -7,6 +7,7 @@
 	<NcAppNavigationItem :name="poll.configuration.title" :to="{name: 'vote', params: {id: poll.id}}" :class="{ closed: isPollClosed }">
 		<template #icon>
 			<TextPollIcon v-if="poll.type === 'textPoll'" />
+			<TextPollIcon v-else-if="poll.type === 'textRankPoll'" />
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>

@@ -31,6 +31,7 @@
 					v-bind="emptyContentProps">
 					<template #icon>
 						<TextPollIcon v-if="pollType === 'textPoll'" />
+						<TextRankPollIcon v-else-if="pollType === 'textRankPoll'" />
 						<DatePollIcon v-else />
 					</template>
 					<template #action>
