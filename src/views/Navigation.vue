@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted } from 'vue'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
@@ -30,12 +30,15 @@ import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 import { Logger } from '../helpers/index.ts'
-import CreateDlg from '../components/Create/CreateDlg.vue'
+import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
 import { FilterType, usePollsStore } from '../stores/polls.ts'
 import { useSessionStore } from '../stores/session.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { ButtonMode } from '../Types/index.ts'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
@@ -56,34 +59,10 @@ const icons = [
 
 const createDlgToggle = ref(false)
 
-/**
- *
- * @param {string} iconId id of the icon
- */
-function getIconComponent(iconId) {
+function getIconComponent(iconId: FilterType) {
 	return icons.find((icon) => icon.id === iconId).iconComponent
 }
 
-/**
- *
- */
-function toggleCreateDlg() {
-	createDlgToggle.value = !createDlgToggle.value
-	// if (createDlgToggle.value) {
-	// 	this.$refs.createDlg.setFocus()
-	// }
-}
-
-/**
- *
- */
-function closeCreate() {
-	createDlgToggle.value = false
-}
-
-/**
- *
- */
 function loadPolls() {
 	try {
 		Logger.debug('Loading polls in navigation')
@@ -93,11 +72,7 @@ function loadPolls() {
 	}
 }
 
-/**
- * Archive or restore a poll
- * @param {number} pollId poll id to archive/unarchive
- */
-function toggleArchive(pollId) {
+function toggleArchive(pollId: number) {
 	try {
 		pollsStore.toggleArchive({ pollId })
 	} catch {
@@ -109,7 +84,7 @@ function toggleArchive(pollId) {
  * Delete a poll
  * @param {number} pollId poll id to delete
  */
-function deletePoll(pollId) {
+function deletePoll(pollId: number) {
 	try {
 		pollsStore.delete({ pollId })
 	} catch {
@@ -121,7 +96,7 @@ function deletePoll(pollId) {
  *
  * @param {number} pollId poll id to clone
  */
-function clonePoll(pollId) {
+function clonePoll(pollId: number) {
 	try {
 		pollsStore.clone({ pollId })
 	} catch {
@@ -133,7 +108,12 @@ function clonePoll(pollId) {
  * Show the settings dialog
  */
 function showSettings() {
-	emit('polls:settings:show')
+	emit('polls:settings:show', null)
+}
+
+async function pollAdded(payLoad: { id: number; title: string }) {
+	createDlgToggle.value = false
+	router.push({ name: 'vote', params: { id: payLoad.id } })
 }
 
 onMounted(() => {
@@ -151,12 +131,11 @@ onMounted(() => {
 			v-if="preferencesStore.useNcAppNavigationNew"
 			button-class="icon-add"
 			:text="t('polls', 'New poll')"
-			@click="toggleCreateDlg" />
-		<CreateDlg
+			@click="createDlgToggle = !createDlgToggle" />
+		<PollCreateDlg
 			v-show="createDlgToggle"
-			ref="createDlg"
-			@add="closeCreate()"
-			@cancel="closeCreate()" />
+			@added="pollAdded"
+			@close="createDlgToggle = false" />
 
 		<template #list>
 			<NcAppNavigationItem
@@ -191,7 +170,7 @@ onMounted(() => {
 						:name="t('polls', 'No polls found for this category')" />
 					<NcAppNavigationItem
 						v-if="
-							pollsStore.pollsByCategory(pollCategory.id) >
+							pollsStore.pollsByCategory(pollCategory.id).length >
 							pollsStore.meta.maxPollsInNavigation
 						"
 						class="force-not-active"

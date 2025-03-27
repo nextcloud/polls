@@ -326,10 +326,6 @@ export const usePollsStore = defineStore('polls', {
 			).slice(0, 7)
 		},
 
-		count(): number {
-			return this.filteredRaw.length
-		},
-
 		loaded(state: PollList): number {
 			return state.meta.loadedChunks * state.meta.chunksize
 		},

@@ -334,9 +334,9 @@ async function submitEmail() {
 			</NcActionButton>
 		</NcActionButtonGroup>
 
-		<NcActionSeparator v-if="sessionStore.appPermissions.pollCreation"/>
+		<NcActionSeparator v-if="sessionStore.appPermissions.pollCreation" />
 
-		<ActionAddPoll :button-mode="ButtonMode.ActionMenu"/>
+		<ActionAddPoll :button-mode="ButtonMode.ActionMenu" />
 
 		<NcActionSeparator />
 

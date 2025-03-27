@@ -21,6 +21,7 @@ import { ValidatorAPI, PublicAPI } from '../../Api/index.ts'
 import { SignalingType, ShareType } from '../../Types'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
+import { PublicPollEmailConditions } from '../../stores/shares.ts'
 
 const route = useRoute()
 const router = useRouter()
@@ -46,7 +47,8 @@ const registrationIsValid = computed(
 		checkStatus.value.userName === SignalingType.Valid &&
 		(checkStatus.value.email === SignalingType.Valid ||
 			(emailAddress.value.length === 0 &&
-				sessionStore.share.publicPollEmail !== 'mandatory')),
+				sessionStore.share.publicPollEmail !==
+					PublicPollEmailConditions.Mandatory)),
 )
 const disableSubmit = computed(
 	() =>
@@ -276,12 +278,16 @@ async function submitRegistration() {
 					@submit="submitRegistration()" />
 
 				<InputDiv
-					v-if="sessionStore.share.publicPollEmail !== 'disabled'"
+					v-if="
+						sessionStore.share.publicPollEmail !==
+						PublicPollEmailConditions.Disabled
+					"
 					v-model="emailAddress"
 					class="section__email"
 					:signaling-class="checkStatus.email"
 					:placeholder="
-						sessionStore.share.publicPollEmail === 'mandatory'
+						sessionStore.share.publicPollEmail ===
+						PublicPollEmailConditions.Mandatory
 							? t('polls', 'Email address (mandatory)')
 							: t('polls', 'Email address (optional)')
 					"

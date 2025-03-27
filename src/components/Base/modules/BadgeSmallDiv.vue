@@ -29,7 +29,6 @@ defineProps({
 	gap: 5px;
 	border: 2px solid;
 	border-radius: var(--border-radius-pill) !important;
-	padding: 5px;
 	text-align: center;
 	font-size: 0.9em;
 	overflow: hidden;

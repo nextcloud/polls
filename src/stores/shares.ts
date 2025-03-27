@@ -22,6 +22,11 @@ export enum ShareType {
 	None = '',
 }
 
+export enum PublicPollEmailConditions {
+	Mandatory = 'mandatory',
+	Optional = 'optional',
+	Disabled = 'disabled',
+}
 export type Share = {
 	displayName: string
 	id: string | null
@@ -32,7 +37,7 @@ export type Share = {
 	type: ShareType
 	emailAddress: string
 	userId: string
-	publicPollEmail: string
+	publicPollEmail: PublicPollEmailConditions
 	user: User
 	reminderSent: boolean
 	label: string
@@ -171,7 +176,7 @@ export const useSharesStore = defineStore('shares', {
 
 		async setPublicPollEmail(payload: {
 			share: Share
-			value: string
+			value: PublicPollEmailConditions
 		}): Promise<void> {
 			try {
 				const response = await SharesAPI.setEmailAddressConstraint(
