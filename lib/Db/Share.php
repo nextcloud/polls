@@ -37,8 +37,7 @@ use OCP\IURLGenerator;
  * @method void setDisplayName(string $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
- * @method int getVoted()
- * @method void setVoted(int $value)
+ * @method int getAnonymizedVotes()
  * @method int getDeleted()
  * @method void setDeleted(int $value)
  * @method string getLabel()
@@ -124,6 +123,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 
 	// joined columns
 	protected int $voted = 0;
+	protected int $anonymizedVotes = 0;
 
 	public function __construct() {
 		$this->addType('pollId', 'integer');
@@ -155,6 +155,10 @@ class Share extends EntityWithUser implements JsonSerializable {
 			'deleted' => boolval($this->getDeleted()),
 			'user' => $this->getUser()->getRichUserArray(),
 		];
+	}
+
+	private function getVoted(): int {
+		return $this->getAnonymizedVotes() ? 0 : $this->voted;
 	}
 
 	/**

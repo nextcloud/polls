@@ -46,6 +46,7 @@ class ShareMapper extends QBMapper {
 		}
 
 		$this->joinUserVoteCount($qb, self::TABLE);
+		$this->joinAnon($qb, self::TABLE);
 
 		return $this->findEntities($qb);
 	}
@@ -107,6 +108,7 @@ class ShareMapper extends QBMapper {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
 		$this->joinUserVoteCount($qb, self::TABLE);
+		$this->joinAnon($qb, self::TABLE);
 
 		try {
 			return $this->findEntity($qb);
@@ -131,6 +133,7 @@ class ShareMapper extends QBMapper {
 		}
 
 		$this->joinUserVoteCount($qb, self::TABLE);
+		$this->joinAnon($qb, self::TABLE);
 
 		try {
 			return $this->findEntity($qb);
@@ -183,4 +186,22 @@ class ShareMapper extends QBMapper {
 		);
 	}
 
+	/**
+	 * Joins anonymous setting of poll
+	 */
+	protected function joinAnon(IQueryBuilder &$qb, string $fromAlias): void {
+		$joinAlias = 'anon';
+
+		$qb->selectAlias($joinAlias . '.anonymous', 'anonymizedVotes')
+			->addGroupBy(
+				$joinAlias . '.anonymous',
+			);
+
+		$qb->leftJoin(
+			$fromAlias,
+			Poll::TABLE,
+			$joinAlias,
+			$qb->expr()->eq($joinAlias . '.id', $fromAlias . '.poll_id'),
+		);
+	}
 }
