@@ -24,6 +24,8 @@ OC.L10N.register(
     "Yes" : "Jā",
     "No" : "Nē",
     "Participants" : "Dalībnieki",
+    "From" : "No",
+    "To" : "Līdz",
     "Email address" : "E-pasta adrese",
     "Week" : "Nedēļa",
     "OK" : "Labi",

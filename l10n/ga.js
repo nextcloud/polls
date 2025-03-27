@@ -534,7 +534,6 @@ OC.L10N.register(
     "No comments" : "Aon tuairimí",
     "Be the first." : "Bí ar an gcéad.",
     "Error {action} poll." : "Vótaíocht earráide {action}.",
-    "Error deleting pollStore." : "Earráid agus vótaíocht á scriosadh.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Bí cúramach le do thoil agus roghanna á n-athrú agat, mar is féidir leis cur isteach ar vótaí atá ann cheana féin ar bhealach nach dteastaíonn.",
     "As an admin you may edit this poll" : "Mar riarthóir is féidir leat an pobalbhreith seo a chur in eagar",
     "Description" : "Cur síos",
