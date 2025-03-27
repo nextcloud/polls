@@ -58,7 +58,6 @@ async function addPoll() {
 			title: response.data.configuration.title,
 		})
 		resetPoll()
-
 	} catch {
 		showError(
 			t('polls', 'Error while creating Poll "{pollTitle}"', {
@@ -75,7 +74,6 @@ function resetPoll() {
 	pollId.value = null
 	pollTitle.value = ''
 }
-
 </script>
 
 <template>

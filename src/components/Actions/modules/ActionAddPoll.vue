@@ -39,7 +39,6 @@ defineProps({
 
 const newPoll = ref({ id: 0, title: '' })
 
-
 const showModal = ref(false)
 
 function addedPoll(payLoad: { id: number; title: string }) {
@@ -95,9 +94,7 @@ function addAnotherPoll() {
 			<PlusIcon size="20" decorative />
 		</template>
 		<template #modal-content>
-			<PollCreateDlg
-				@added="addedPoll"
-				@close="showModal = false" />
+			<PollCreateDlg @added="addedPoll" @close="showModal = false" />
 		</template>
 	</ButtonModal>
 	<NcDialog
