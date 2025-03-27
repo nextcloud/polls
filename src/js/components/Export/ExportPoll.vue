@@ -184,6 +184,15 @@ export default {
 			}
 		},
 
+		getTranslatedAnswer(answer) {
+			if (answer === 'yes') {
+				return t('polls', 'Yes')
+			}
+			if (answer === 'maybe') {
+				return t('polls', 'Maybe')
+			}
+			return t('polls', 'No')
+		},
 		addVotesArray(style) {
 			this.participants.forEach((participant) => {
 				const votesLine = [participant.displayName]
@@ -198,7 +207,7 @@ export default {
 						} else if (style === 'raw') {
 							votesLine.push(this.getVote({ userId: participant.userId, option }).answer)
 						} else {
-							votesLine.push(this.getVote({ userId: participant.userId, option }).answerTranslated ?? t('polls', 'No'))
+							votesLine.push(this.getTranslatedAnswer(this.getVote({ userId: participant.userId, option }).answer))
 						}
 					})
 

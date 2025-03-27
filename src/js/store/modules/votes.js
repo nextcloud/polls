@@ -70,20 +70,7 @@ const actions = {
 				return
 			}
 
-			const votes = []
-			response.data.votes.forEach((vote) => {
-				if (vote.answer === 'yes') {
-					vote.answerTranslated = t('polls', 'Yes')
-					vote.answerSymbol = '✔'
-				} else if (vote.answer === 'maybe') {
-					vote.answerTranslated = t('polls', 'Maybe')
-					vote.answerSymbol = '❔'
-				} else {
-					vote.answerTranslated = t('polls', 'No')
-					vote.answerSymbol = '❌'
-				}
-				votes.push(vote)
-			})
+			const votes = response.data.votes
 			context.commit('set', votes)
 		} catch (error) {
 			if (error?.code === 'ERR_CANCELED') return
