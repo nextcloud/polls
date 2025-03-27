@@ -7,7 +7,7 @@
 import { computed } from 'vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import CloseIcon from 'vue-material-design-icons/Close.vue'
-import { MaybeIcon } from '../AppIcons/index.js'
+import { MaybeIcon } from '../AppIcons/index.ts'
 import { Answer } from '../../Types/index.ts'
 
 const props = defineProps({

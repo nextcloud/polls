@@ -13,7 +13,7 @@ import NcSelect from '@nextcloud/vue/components/NcSelect'
 import { DateTime, Duration } from 'luxon'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
-import { InputDiv } from '../Base/index.js'
+import { InputDiv } from '../Base/index.ts'
 import DateTimePicker from '../Base/modules/DateTimePicker.vue'
 import DateBox from '../Base/modules/DateBox.vue'
 import { useSessionStore } from '../../stores/session'

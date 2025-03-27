@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { RadioGroupDiv } from '../../Base/index.js'
+import { RadioGroupDiv } from '../../Base/index.ts'
 import { t } from '@nextcloud/l10n'
 import { useAppSettingsStore, UpdateType } from '../../../stores/appSettings.ts'
 

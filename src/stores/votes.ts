@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, VotesAPI } from '../Api/index.js'
+import { PublicAPI, VotesAPI } from '../Api/index.ts'
 import { User } from '../Types/index.ts'
 import { Logger, StoreHelper } from '../helpers/index.ts'
 import { Option } from './options.ts'

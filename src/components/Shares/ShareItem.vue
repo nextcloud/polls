@@ -31,7 +31,12 @@ import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import { Logger } from '../../helpers/index.ts'
 import UserItem from '../User/UserItem.vue'
 
-import { useSharesStore, Share, ShareType } from '../../stores/shares.ts'
+import {
+	useSharesStore,
+	Share,
+	ShareType,
+	PublicPollEmailConditions,
+} from '../../stores/shares.ts'
 
 const sharesStore = useSharesStore()
 const props = defineProps({
@@ -318,10 +323,13 @@ function copyLink() {
 				<NcActionRadio
 					v-if="isActivePublicShare"
 					name="publicPollEmail"
-					value="optional"
-					:model-value="share.publicPollEmail === 'optional'"
+					:value="PublicPollEmailConditions.Optional"
+					:model-value="share.publicPollEmail"
 					@update:model-value="
-						sharesStore.setPublicPollEmail({ share, value: 'optional' })
+						sharesStore.setPublicPollEmail({
+							share,
+							value: PublicPollEmailConditions.Optional,
+						})
 					">
 					{{ t('polls', 'Email address is optional') }}
 				</NcActionRadio>
@@ -329,10 +337,13 @@ function copyLink() {
 				<NcActionRadio
 					v-if="isActivePublicShare"
 					name="publicPollEmail"
-					value="mandatory"
-					:model-value="share.publicPollEmail === 'mandatory'"
+					:value="PublicPollEmailConditions.Mandatory"
+					:model-value="share.publicPollEmail"
 					@update:model-value="
-						sharesStore.setPublicPollEmail({ share, value: 'mandatory' })
+						sharesStore.setPublicPollEmail({
+							share,
+							value: PublicPollEmailConditions.Mandatory,
+						})
 					">
 					{{ t('polls', 'Email address is mandatory') }}
 				</NcActionRadio>
@@ -340,10 +351,13 @@ function copyLink() {
 				<NcActionRadio
 					v-if="isActivePublicShare"
 					name="publicPollEmail"
-					value="disabled"
-					:model-value="share.publicPollEmail === 'disabled'"
+					:value="PublicPollEmailConditions.Disabled"
+					:model-value="share.publicPollEmail"
 					@update:model-value="
-						sharesStore.setPublicPollEmail({ share, value: 'disabled' })
+						sharesStore.setPublicPollEmail({
+							share,
+							value: PublicPollEmailConditions.Disabled,
+						})
 					">
 					{{ t('polls', 'Do not ask for an email address') }}
 				</NcActionRadio>

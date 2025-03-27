@@ -31,7 +31,7 @@ import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBullete
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
-import { PollsAPI, ValidatorAPI } from '../../Api/index.js'
+import { PollsAPI, ValidatorAPI } from '../../Api/index.ts'
 import { RankedType, useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
@@ -39,10 +39,11 @@ import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import { StatusResults, ViewMode, PollType } from '../../Types/index.ts'
+import { StatusResults, ViewMode, PollType, ButtonMode } from '../../Types/index.ts'
 
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 import { NcActionButtonGroup } from '@nextcloud/vue'
+import ActionAddPoll from '../Actions/modules/ActionAddPoll.vue'
 
 type InputProps = {
 	success: boolean
@@ -332,6 +333,10 @@ async function submitEmail() {
 				</template>
 			</NcActionButton>
 		</NcActionButtonGroup>
+
+		<NcActionSeparator v-if="sessionStore.appPermissions.pollCreation" />
+
+		<ActionAddPoll :button-mode="ButtonMode.ActionMenu" />
 
 		<NcActionSeparator />
 

@@ -10,8 +10,8 @@ import { t } from '@nextcloud/l10n'
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 
-import { PollsAppIcon } from '../components/AppIcons/index.js'
-import { SideBarTabDatePolls } from '../components/SideBar/index.js'
+import { PollsAppIcon } from '../components/AppIcons/index.ts'
+import { SideBarTabDatePolls } from '../components/SideBar/index.ts'
 
 function closeSideBar() {
 	emit('polls:sidebar:toggle', { open: false })

@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import { showError } from '@nextcloud/dialogs'
-import { InputDiv } from '../Base/index.js'
+import { InputDiv } from '../Base/index.ts'
 import { t } from '@nextcloud/l10n'
 import UserItem from '../User/UserItem.vue'
 import { useSessionStore } from '../../stores/session.ts'

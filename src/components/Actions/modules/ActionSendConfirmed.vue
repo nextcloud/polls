@@ -13,7 +13,7 @@ import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 
-import { PollsAPI } from '../../../Api/index.js'
+import { PollsAPI } from '../../../Api/index.ts'
 import { Logger } from '../../../helpers/index.ts'
 import { StatusResults } from '../../../Types/index.ts'
 

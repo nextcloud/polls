@@ -15,6 +15,35 @@ const preferencesStore = usePreferencesStore()
 <template>
 	<div>
 		<b> {{ t('polls', 'The style settings are still experimental!') }}</b>
+
+		<div class="user_settings">
+			<NcCheckboxRadioSwitch
+				v-model="preferencesStore.user.useNewPollDialogInNavigation"
+				type="switch"
+				@update:model-value="preferencesStore.write()">
+				{{
+					t(
+						'polls',
+						"Use modal 'Add poll ' dialog instead of embedded dialog in Navigation bar",
+					)
+				}}
+			</NcCheckboxRadioSwitch>
+		</div>
+
+		<div class="user_settings">
+			<NcCheckboxRadioSwitch
+				v-model="preferencesStore.user.useNewPollInPollist"
+				type="switch"
+				@update:model-value="preferencesStore.write()">
+				{{
+					t(
+						'polls',
+						"Use 'Add poll ' as button in poll list instead of inside the navigation",
+					)
+				}}
+			</NcCheckboxRadioSwitch>
+		</div>
+
 		<div class="user_settings">
 			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.useCommentsAlternativeStyling"

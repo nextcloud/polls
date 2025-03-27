@@ -12,7 +12,7 @@ import { useOptionsStore } from '../../stores/options.ts'
 import { PollType, usePollStore } from '../../stores/poll.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 
-import { ConfigBox } from '../Base/index.js'
+import { ConfigBox } from '../Base/index.ts'
 import OptionsDate from '../Options/OptionsDate.vue'
 import OptionsDateShift from '../Options/OptionsDateShift.vue'
 import OptionsText from '../Options/OptionsText.vue'

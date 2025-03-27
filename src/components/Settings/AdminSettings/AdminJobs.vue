@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
-import { AdminAPI } from '../../../Api/index.js'
+import { AdminAPI } from '../../../Api/index.ts'
 
 const autoreminder = {
 	text: t('polls', 'Run autoreminder'),

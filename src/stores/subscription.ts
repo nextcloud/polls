@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { PublicAPI, PollsAPI } from '../Api/index.js'
+import { PublicAPI, PollsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { useSessionStore } from './session.ts'
 import { ref } from 'vue'

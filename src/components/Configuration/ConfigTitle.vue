@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { InputDiv } from '../Base/index.js'
+import { InputDiv } from '../Base/index.ts'
 import { usePollStore } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()

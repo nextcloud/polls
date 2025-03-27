@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { CalendarAPI, UserSettingsAPI } from '../Api/index.js'
+import { CalendarAPI, UserSettingsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 
 export enum ViewMode {
@@ -23,6 +23,8 @@ export type UserPreferences = {
 	pollCombo: number[]
 	relevantOffset: number
 	useNewAddOption: boolean
+	useNewPollDialogInNavigation: boolean
+	useNewPollInPollist: boolean
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
 	useCardsArrangement: boolean
@@ -61,6 +63,8 @@ export const usePreferencesStore = defineStore('preferences', {
 			pollCombo: [],
 			relevantOffset: 30,
 			useNewAddOption: false,
+			useNewPollDialogInNavigation: false,
+			useNewPollInPollist: false,
 			useCommentsAlternativeStyling: false,
 			useAlternativeStyling: false,
 			useCardsArrangement: false,
@@ -92,6 +96,20 @@ export const usePreferencesStore = defineStore('preferences', {
 				return state.user.defaultViewDatePoll
 			}
 			return ViewMode.TableView
+		},
+
+		useNcAppNavigationNew(state): boolean {
+			return (
+				!state.user.useNewPollDialogInNavigation &&
+				!state.user.useNewPollInPollist
+			)
+		},
+
+		useActionAddPollInNavigation(state): boolean {
+			return (
+				state.user.useNewPollDialogInNavigation &&
+				!state.user.useNewPollInPollist
+			)
 		},
 	},
 

@@ -5,22 +5,23 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { CardDiv } from '../../Base/index.js'
+import { CardDiv } from '../../Base/index.ts'
 import ActionRegister from '../../Actions/modules/ActionRegister.vue'
 import { t } from '@nextcloud/l10n'
 import { useSessionStore } from '../../../stores/session.ts'
+import { PublicPollEmailConditions } from '../../../stores/shares.ts'
 
 const sessionStore = useSessionStore()
 const cardType = 'info'
 
 const registrationInvitationText = computed(() => {
-	if (sessionStore.share.publicPollEmail === 'mandatory') {
+	if (sessionStore.share.publicPollEmail === PublicPollEmailConditions.Mandatory) {
 		return t(
 			'polls',
 			'To participate, register with your email address and a name.',
 		)
 	}
-	if (sessionStore.share.publicPollEmail === 'optional') {
+	if (sessionStore.share.publicPollEmail === PublicPollEmailConditions.Optional) {
 		return t(
 			'polls',
 			'To participate, register a name and optionally with your email address.',

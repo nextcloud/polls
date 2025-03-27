@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { AppSettingsAPI } from '../Api/index.js'
+import { AppSettingsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { debounce } from 'lodash'
 

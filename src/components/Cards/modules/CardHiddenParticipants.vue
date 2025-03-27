@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { CardDiv } from '../../Base/index.js'
+import { CardDiv } from '../../Base/index.ts'
 import ActionSwitchSafeTable from '../../Actions/modules/ActionSwitchSafeTable.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore } from '../../../stores/poll.ts'

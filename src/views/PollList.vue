@@ -14,14 +14,17 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 
 import { Logger } from '../helpers/index.ts'
-import { HeaderBar, IntersectionObserver } from '../components/Base/index.js'
-import { PollsAppIcon } from '../components/AppIcons/index.js'
+import { HeaderBar, IntersectionObserver } from '../components/Base/index.ts'
+import { PollsAppIcon } from '../components/AppIcons/index.ts'
 import PollItem from '../components/PollList/PollItem.vue'
 import { usePollsStore } from '../stores/polls.ts'
 import PollListSort from '../components/PollList/PollListSort.vue'
 import PollItemActions from '../components/PollList/PollItemActions.vue'
+import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
+import { usePreferencesStore } from '../stores/preferences.ts'
 
 const pollsStore = usePollsStore()
+const preferencesStore = usePreferencesStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -124,6 +127,7 @@ async function loadMore() {
 			</template>
 			{{ description }}
 			<template #right>
+				<ActionAddPoll v-if="preferencesStore.user.useNewPollInPollist" />
 				<PollListSort />
 			</template>
 		</HeaderBar>

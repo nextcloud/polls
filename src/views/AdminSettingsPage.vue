@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcSettingsSection from '@nextcloud/vue/components/NcSettingsSection'
 
-import { FlexSettings } from '../components/Base/index.js'
+import { FlexSettings } from '../components/Base/index.ts'
 import {
 	AdminActivities,
 	AdminArchivePolls,
@@ -26,7 +26,7 @@ import {
 	AdminSharePublicShowLogin,
 	AdminShowMailAddresses,
 	AdminUnrescrictedOwners,
-} from '../components/Settings/AdminSettings/index.js'
+} from '../components/Settings/AdminSettings/index.ts'
 import { useAppSettingsStore } from '../stores/appSettings.ts'
 import '../assets/scss/markdown.scss'
 

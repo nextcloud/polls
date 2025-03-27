@@ -4,9 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
-import { useRouter } from 'vue-router'
-import { showSuccess, showError } from '@nextcloud/dialogs'
+import { computed, ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
@@ -16,58 +14,65 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.ts'
 
-import { usePollStore, PollType } from '../../stores/poll.ts'
+import { PollType, usePollStore } from '../../stores/poll.ts'
+import { showError, showSuccess } from '@nextcloud/dialogs'
 
 const pollStore = usePollStore()
-const router = useRouter()
 
-const title = ref('')
-const adding = ref(false)
+const emit = defineEmits<{
+	(e: 'close'): void
+	(e: 'added', poll: { id: number; title: string }): void
+}>()
+
+const pollTitle = ref('')
 const pollType = ref(PollType.Date)
+const pollId = ref(null as number | null)
+const adding = ref(false)
 
 const pollTypeOptions = [
 	{ value: PollType.Date, label: t('polls', 'Date poll') },
 	{ value: PollType.Text, label: t('polls', 'Text poll') },
 ]
 
-const titleEmpty = computed(() => title.value === '')
-const disableConfirm = computed(() => titleEmpty.value || adding.value)
+const titleIsEmpty = computed(() => pollTitle.value === '')
+const disableAddButton = computed(() => titleIsEmpty.value || adding.value)
 
-const emit = defineEmits(['cancel', 'add'])
-
-function resetInput() {
-	title.value = ''
-	pollType.value = PollType.Date
-}
-
-async function add() {
+async function addPoll() {
 	try {
+		// block the modal to prevent double submission
 		adding.value = true
+		// add the poll
 		const response = await pollStore.add({
-			title: title.value,
+			title: pollTitle.value,
 			type: pollType.value,
 		})
-
-		resetInput()
+		pollId.value = response.data.id
 
 		showSuccess(
-			t('polls', 'Poll "{pollTitle}" added', {
+			t('polls', '"{pollTitle}" has been added', {
 				pollTitle: response.data.configuration.title,
 			}),
 		)
-
-		emit('add')
-
-		router.push({ name: 'vote', params: { id: response.data.id } })
+		emit('added', {
+			id: response.data.id,
+			title: response.data.configuration.title,
+		})
+		resetPoll()
 	} catch {
 		showError(
 			t('polls', 'Error while creating Poll "{pollTitle}"', {
-				pollTitle: title.value,
+				pollTitle: pollTitle.value,
 			}),
 		)
 	} finally {
+		// unblock the modal
 		adding.value = false
 	}
+}
+
+function resetPoll() {
+	pollId.value = null
+	pollTitle.value = ''
 }
 </script>
 
@@ -78,11 +83,12 @@ async function add() {
 				<SpeakerIcon />
 			</template>
 			<InputDiv
-				v-model="title"
+				v-model="pollTitle"
 				focus
 				type="text"
 				:placeholder="t('polls', 'Enter Title')"
-				@submit="add()" />
+				:helper-text="t('polls', 'Choose a meaningful title for your poll')"
+				@submit="addPoll" />
 		</ConfigBox>
 
 		<ConfigBox :name="t('polls', 'Poll type')">
@@ -93,15 +99,15 @@ async function add() {
 		</ConfigBox>
 
 		<div class="create-buttons">
-			<NcButton @click="emit('cancel')">
+			<NcButton @click="emit('close')">
 				<template #default>
-					{{ t('polls', 'Cancel') }}
+					{{ t('polls', 'Close') }}
 				</template>
 			</NcButton>
 			<NcButton
-				:disabled="disableConfirm"
+				:disabled="disableAddButton"
 				:type="ButtonType.Primary"
-				@click="add()">
+				@click="addPoll">
 				<template #default>
 					{{ t('polls', 'Add') }}
 				</template>

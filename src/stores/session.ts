@@ -5,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
-import { PublicAPI, SessionAPI } from '../Api/index.js'
+import { PublicAPI, SessionAPI } from '../Api/index.ts'
 import { User, AppPermissions } from '../Types/index.ts'
 import { AppSettings, UpdateType } from './appSettings.ts'
 import { usePreferencesStore, ViewMode, SessionSettings } from './preferences.ts'

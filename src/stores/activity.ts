@@ -4,7 +4,7 @@
  */
 
 import { defineStore } from 'pinia'
-import { ActivityAPI } from '../Api/index.js'
+import { ActivityAPI } from '../Api/index.ts'
 import { Vote } from './votes.ts'
 import { useSessionStore } from './session.ts'
 

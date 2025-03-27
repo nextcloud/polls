@@ -16,7 +16,7 @@ import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 
 import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
-import { PublicAPI, PollsAPI } from '../Api/index.js'
+import { PublicAPI, PollsAPI } from '../Api/index.ts'
 import { User, UserType } from '../Types/index.ts'
 
 import { useActivityStore } from './activity.ts'

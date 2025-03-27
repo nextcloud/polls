@@ -12,7 +12,7 @@ import { t } from '@nextcloud/l10n'
 import NcActionInput from '@nextcloud/vue/components/NcActionInput'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
 
-import { ValidatorAPI } from '../../Api/index.js'
+import { ValidatorAPI } from '../../Api/index.ts'
 import { StatusResults } from '../../Types/index.ts'
 import { useSessionStore } from '../../stores/session.ts'
 

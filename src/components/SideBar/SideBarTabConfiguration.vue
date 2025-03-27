@@ -21,7 +21,7 @@ import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 
-import { ConfigBox, CardDiv } from '../Base/index.js'
+import { ConfigBox, CardDiv } from '../Base/index.ts'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
 import ConfigAllowMayBe from '../Configuration/ConfigAllowMayBe.vue'
 import ConfigAnonymous from '../Configuration/ConfigAnonymous.vue'

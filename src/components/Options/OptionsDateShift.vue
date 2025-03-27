@@ -12,7 +12,7 @@ import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
-import { InputDiv } from '../Base/index.js'
+import { InputDiv } from '../Base/index.ts'
 import { dateUnits, DateUnitKeys, TimeUnitsType } from '../../constants/dateUnits.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'

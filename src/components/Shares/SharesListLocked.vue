@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ConfigBox } from '../Base/index.js'
+import { ConfigBox } from '../Base/index.ts'
 import LockedIcon from 'vue-material-design-icons/Lock.vue'
 import ShareItem from './ShareItem.vue'
 import { t } from '@nextcloud/l10n'

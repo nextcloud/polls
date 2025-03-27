@@ -23,12 +23,12 @@ import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 import VoteTable from '../components/VoteTable/VoteTable.vue'
 import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
 import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
-import { ActionOpenOptionsSidebar } from '../components/Actions/index.js'
-import { HeaderBar } from '../components/Base/index.js'
+import { ActionOpenOptionsSidebar } from '../components/Actions/index.ts'
+import { HeaderBar } from '../components/Base/index.ts'
 import {
 	CardAnonymousPollHint,
 	CardHiddenParticipants,
-} from '../components/Cards/index.js'
+} from '../components/Cards/index.ts'
 
 import { usePollStore, PollType } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'

@@ -7,7 +7,7 @@
 import { showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import { ActionDelete } from '../Actions/index.js'
+import { ActionDelete } from '../Actions/index.ts'
 
 import VoteColumn from './VoteColumn.vue'
 import UserItem from '../User/UserItem.vue'

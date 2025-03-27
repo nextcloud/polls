@@ -12,7 +12,7 @@ import {
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, Logger, setCookie } from './helpers/index.ts'
-import { PublicAPI } from './Api/index.js'
+import { PublicAPI } from './Api/index.ts'
 import { loadContext } from './composables/context.ts'
 import Vote from './views/Vote.vue'
 import SideBar from './views/SideBar.vue'
