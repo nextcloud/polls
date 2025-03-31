@@ -227,7 +227,7 @@ class PollService {
 			throw new EmptyTitleException('Title must not be empty');
 		}
 
-		if (isset($pollConfiguration['access']) && !in_array($pollConfiguration['access'], $this->getValidAccess())) {
+		if (isset($pollConfiguration['access'])) {
 			if (!in_array($pollConfiguration['access'], $this->getValidAccess())) {
 				throw new InvalidAccessException('Invalid value for prop access ' . $pollConfiguration['access']);
 			}
