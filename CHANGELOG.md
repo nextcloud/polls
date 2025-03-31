@@ -5,9 +5,12 @@
 # Changelog
 ##
 
+## [7.4.2] - 2024-03-31
+### Fix
+ - Poll export did not update recent votes of the current user
+ - User could change a poll to an openly accessible polls, without having the permission to
+ - Poll list was not updating after overtaking a poll
 
-### New
- - Apply rules for creating shares as set in the system settings
 ## [7.4.1] - 2024-03-07
 ### New
  - Apply rules for creating shares as set in the system settings
