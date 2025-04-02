@@ -6,7 +6,7 @@
 <template>
 	<div>
 		<NcActions>
-			<NcActionButton :name="caption" 
+			<NcActionButton :name="caption"
 				:aria-label="caption"
 				@click="showModal = true">
 				<template #icon>
@@ -15,7 +15,7 @@
 			</NcActionButton>
 		</NcActions>
 
-		<NcModal v-if="showModal" size="small" :can-close="false">
+		<NcModal v-if="showModal" size="small" no-close>
 			<div class="option-clone-date modal__content">
 				<h2>{{ t('polls', 'Create multiple options at once') }}</h2>
 				<p>{{ t('polls', 'Each line creates a new option. Duplicates will get skipped without warning.') }}</p>
@@ -31,7 +31,7 @@
 						</template>
 					</NcButton>
 
-					<NcButton type="primary" @click="addOptionsList()">
+					<NcButton variant="primary" @click="addOptionsList()">
 						<template #default>
 							{{ t('polls', 'OK') }}
 						</template>

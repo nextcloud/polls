@@ -12,7 +12,6 @@
 		</NcButton>
 		<NcModal :show.sync="showRegistration"
 			:size="registerModalSize"
-			:can-close="true"
 			@close="closeRegisterModal()">
 			<PublicRegisterModal @close="closeRegisterModal()" />
 		</NcModal>
