@@ -30,7 +30,7 @@
 		<div v-if="permissions.edit && isPollClosed" class="action confirm">
 			<NcButton :title="confirmButtonCaption"
 				:aria-label="confirmButtonCaption"
-				type="tertiary"
+				variant="tertiary"
 				@click="confirmOption(option)">
 				<template #icon>
 					<UnconfirmIcon v-if="option.confirmed" :size="20" />

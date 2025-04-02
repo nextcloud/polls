@@ -36,7 +36,7 @@
 				</template>
 			</NcButton>
 
-			<NcButton type="primary" @click="createSequence()">
+			<NcButton variant="primary" @click="createSequence()">
 				<template #default>
 					{{ t('polls', 'OK') }}
 				</template>

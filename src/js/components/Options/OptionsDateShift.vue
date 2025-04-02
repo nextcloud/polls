@@ -18,7 +18,7 @@
 				label="name" />
 			<NcButton class="submit"
 				:aria-label="t('polls', 'Submit')"
-				type="tertiary"
+				variant="tertiary"
 				@click="shiftDates(shift)">
 				<template #icon>
 					<SubmitIcon />

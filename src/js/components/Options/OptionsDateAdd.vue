@@ -11,7 +11,7 @@
 		@change="changedDate"
 		@pick="pickedDate">
 		<template #input>
-			<NcButton type="primary" :aria-label="buttonAriaLabel">
+			<NcButton variant="primary" :aria-label="buttonAriaLabel">
 				<template #icon>
 					<AddDateIcon />
 				</template>
@@ -54,7 +54,7 @@
 					{{ dateOption.text }}
 				</div>
 				<FlexSpacer />
-				<NcButton v-if="dateOption.option.duration >= 0 && !added" type="primary" @click="addOption">
+				<NcButton v-if="dateOption.option.duration >= 0 && !added" variant="primary" @click="addOption">
 					{{ t('polls', 'Add') }}
 				</NcButton>
 				<CheckIcon v-if="added"

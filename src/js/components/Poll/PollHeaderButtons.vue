@@ -10,7 +10,7 @@
 			<template #trigger>
 				<NcButton :title="caption"
 					:aria-label="caption"
-					type="tertiary">
+					variant="tertiary">
 					<template #icon>
 						<PollInformationIcon />
 					</template>
