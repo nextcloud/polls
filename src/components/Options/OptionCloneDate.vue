@@ -13,24 +13,25 @@ import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 import { InputDiv } from '../Base/index.ts'
 import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
-import { dateUnits, DateUnitKeys } from '../../constants/dateUnits.ts'
+import {
+	dateTimeUnits,
+	dateTimeUnitsKeyed,
+	DateUnitKeys,
+} from '../../constants/dateUnits.ts'
 
 const optionsStore = useOptionsStore()
 
 const props = defineProps({
 	option: {
 		type: Object as PropType<Option>,
-		default: undefined,
+		required: true,
 	},
 })
 
 const emit = defineEmits(['close'])
 
 const sequence = ref<Sequence>({
-	unit: {
-		name: t('polls', 'Week'),
-		key: DateUnitKeys.Week,
-	},
+	unit: dateTimeUnitsKeyed[DateUnitKeys.Week],
 	stepWidth: 1,
 	repetitions: 1,
 })
@@ -39,6 +40,9 @@ const dateBaseOptionString = computed(() =>
 	moment.unix(props.option.timestamp).format('LLLL'),
 )
 
+/**
+ *
+ */
 function createSequence() {
 	optionsStore.sequence({
 		option: props.option,
@@ -66,7 +70,7 @@ function createSequence() {
 			:input-label="t('polls', 'Step unit')"
 			:clearable="false"
 			:filterable="false"
-			:options="dateUnits"
+			:options="dateTimeUnits"
 			label="name" />
 
 		<div class="sideways">

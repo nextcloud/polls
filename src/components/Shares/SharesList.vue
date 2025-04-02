@@ -34,6 +34,10 @@ const configBoxProps = {
 	},
 }
 
+/**
+ *
+ * @param share
+ */
 function openQrModal(share: Share) {
 	qrText.value = share.URL
 	qrModal.value = true

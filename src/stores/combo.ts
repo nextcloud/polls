@@ -13,6 +13,7 @@ import { Vote } from './votes.ts'
 import { sortBy } from 'lodash'
 import { usePreferencesStore } from './preferences.ts'
 import { usePollsStore } from './polls.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 export type Combo = {
 	id: number
@@ -143,7 +144,9 @@ export const useComboStore = defineStore('combo', {
 				const response = await PollsAPI.getPoll(payload.pollId)
 				this.polls.push(response.data.poll)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error loading poll for combo', { error })
 			}
 		},
@@ -153,7 +156,9 @@ export const useComboStore = defineStore('combo', {
 				const response = await OptionsAPI.getOptions(payload.pollId)
 				this.options.push(...response.data.options)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error loading options for combo', { error })
 			}
 		},
@@ -164,7 +169,9 @@ export const useComboStore = defineStore('combo', {
 				this.votes.push(...response.data.votes)
 				this.participants = uniqueParticipants(this.votes)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error loading options for combo', { error })
 			}
 		},

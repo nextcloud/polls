@@ -13,14 +13,14 @@ const StoreHelper = {
 		const votesStore = useVotesStore()
 		const optionsStore = useOptionsStore()
 
-		if (Object.prototype.hasOwnProperty.call(data, 'polls')) {
-			pollStore.$patch(data.poll)
+		if (Object.hasOwn(data, 'polls')) {
+			pollStore.$patch(data.poll as Poll)
 		}
-		if (Object.prototype.hasOwnProperty.call(data, 'votes')) {
-			votesStore.list = data.votes
+		if (Object.hasOwn(data, 'votes')) {
+			votesStore.list = data.votes as Vote[]
 		}
-		if (Object.prototype.hasOwnProperty.call(data, 'options')) {
-			optionsStore.list = data.options
+		if (Object.hasOwn(data, 'options')) {
+			optionsStore.list = data.options as Option[]
 		}
 	},
 }

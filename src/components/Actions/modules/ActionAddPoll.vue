@@ -37,10 +37,19 @@ defineProps({
 	},
 })
 
-const newPoll = ref({ id: 0, title: '' })
+const newPoll = ref({
+	id: 0,
+	title: '',
+})
 
 const showModal = ref(false)
 
+/**
+ *
+ * @param payLoad
+ * @param payLoad.id
+ * @param payLoad.title
+ */
 function addedPoll(payLoad: { id: number; title: string }) {
 	newPoll.value = payLoad
 
@@ -68,12 +77,18 @@ const confirmationDialogProps = {
 			label: t('polls', 'Open poll now'),
 			type: ButtonType.Primary,
 			callback: () => {
-				router.push({ name: 'vote', params: { id: newPoll.value.id } })
+				router.push({
+					name: 'vote',
+					params: { id: newPoll.value.id },
+				})
 			},
 		},
 	],
 }
 
+/**
+ *
+ */
 function addAnotherPoll() {
 	showModal.value = true
 	showConfirmationDialog.value = false

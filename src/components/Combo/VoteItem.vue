@@ -14,7 +14,7 @@ const comboStore = useComboStore()
 const props = defineProps({
 	option: {
 		type: Object as PropType<Option>,
-		default: undefined,
+		required: true,
 	},
 	user: {
 		type: Object as PropType<User>,

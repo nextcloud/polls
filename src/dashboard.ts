@@ -13,6 +13,7 @@ import './assets/scss/polls-icon.scss'
 /** global: OCA */
 
 document.addEventListener('DOMContentLoaded', () => {
+	// @ts-expect-error: Name not found error
 	OCA.Dashboard.register('polls', (el) => {
 		const PollsDashboard = createApp(Dashboard).use(pinia).mount(el)
 

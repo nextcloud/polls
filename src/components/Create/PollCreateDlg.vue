@@ -21,7 +21,13 @@ const pollStore = usePollStore()
 
 const emit = defineEmits<{
 	(e: 'close'): void
-	(e: 'added', poll: { id: number; title: string }): void
+	(
+		e: 'added',
+		poll: {
+			id: number
+			title: string
+		},
+	): void
 }>()
 
 const pollTitle = ref('')
@@ -30,34 +36,46 @@ const pollId = ref(null as number | null)
 const adding = ref(false)
 
 const pollTypeOptions = [
-	{ value: PollType.Date, label: t('polls', 'Date poll') },
-	{ value: PollType.Text, label: t('polls', 'Text poll') },
+	{
+		value: PollType.Date,
+		label: t('polls', 'Date poll'),
+	},
+	{
+		value: PollType.Text,
+		label: t('polls', 'Text poll'),
+	},
 ]
 
 const titleIsEmpty = computed(() => pollTitle.value === '')
 const disableAddButton = computed(() => titleIsEmpty.value || adding.value)
 
+/**
+ *
+ */
 async function addPoll() {
 	try {
 		// block the modal to prevent double submission
 		adding.value = true
 		// add the poll
-		const response = await pollStore.add({
+		const poll = await pollStore.add({
 			title: pollTitle.value,
 			type: pollType.value,
 		})
-		pollId.value = response.data.id
 
-		showSuccess(
-			t('polls', '"{pollTitle}" has been added', {
-				pollTitle: response.data.configuration.title,
-			}),
-		)
-		emit('added', {
-			id: response.data.id,
-			title: response.data.configuration.title,
-		})
-		resetPoll()
+		if (poll) {
+			pollId.value = poll.id
+
+			showSuccess(
+				t('polls', '"{pollTitle}" has been added', {
+					pollTitle: poll.configuration.title,
+				}),
+			)
+			emit('added', {
+				id: poll.id,
+				title: poll.configuration.title,
+			})
+			resetPoll()
+		}
 	} catch {
 		showError(
 			t('polls', 'Error while creating Poll "{pollTitle}"', {
@@ -70,6 +88,9 @@ async function addPoll() {
 	}
 }
 
+/**
+ *
+ */
 function resetPoll() {
 	pollId.value = null
 	pollTitle.value = ''

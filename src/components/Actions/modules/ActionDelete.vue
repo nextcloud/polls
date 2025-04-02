@@ -37,8 +37,8 @@ const props = defineProps({
 	},
 })
 
-const deleteInterval = ref(null)
-const deleteTimeout = ref(null)
+const deleteInterval = ref<null | NodeJS.Timeout>(null)
+const deleteTimeout = ref<null | NodeJS.Timeout>(null)
 const countdown = ref(4)
 
 const countdownTitle = computed(() =>
@@ -60,7 +60,7 @@ const emit = defineEmits(['delete', 'restore'])
 /**
  *
  */
-function deleteItem() {
+function deleteItem(): void {
 	// delete immediately
 	if (props.timeout === 0) {
 		emit('delete')
@@ -68,12 +68,14 @@ function deleteItem() {
 	}
 
 	countdown.value = props.timeout
+
 	deleteInterval.value = setInterval(() => {
 		countdown.value -= 1
 		if (countdown.value < 0) {
 			countdown.value = 0
 		}
 	}, 1000)
+
 	deleteTimeout.value = setTimeout(() => {
 		emit('delete')
 		deleteTimeout.value = null
@@ -85,9 +87,9 @@ function deleteItem() {
 /**
  *
  */
-function cancelDelete() {
-	clearTimeout(deleteTimeout.value)
-	clearInterval(deleteInterval.value)
+function cancelDelete(): void {
+	clearTimeout(deleteTimeout.value as NodeJS.Timeout)
+	clearInterval(deleteInterval.value as NodeJS.Timeout)
 	deleteTimeout.value = null
 	deleteInterval.value = null
 	countdown.value = props.timeout
@@ -96,9 +98,9 @@ function cancelDelete() {
 /**
  *
  */
-function restoreItem() {
-	clearTimeout(deleteTimeout.value)
-	clearInterval(deleteInterval.value)
+function restoreItem(): void {
+	clearTimeout(deleteTimeout.value as NodeJS.Timeout)
+	clearInterval(deleteInterval.value as NodeJS.Timeout)
 	deleteTimeout.value = null
 	deleteInterval.value = null
 	emit('restore')

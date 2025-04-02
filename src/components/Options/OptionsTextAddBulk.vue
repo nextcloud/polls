@@ -33,6 +33,9 @@ const props = defineProps({
 	},
 })
 
+/**
+ *
+ */
 async function addOptionsList() {
 	if (newPollTexts.value) {
 		try {

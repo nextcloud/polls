@@ -2,10 +2,12 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import { AxiosResponse } from '@nextcloud/axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { Comment } from '../../stores/comments.js'
 
 const comments = {
-	getComments(pollId) {
+	getComments(pollId: number): Promise<AxiosResponse<{ comments: Comment[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/comments`,
@@ -16,7 +18,10 @@ const comments = {
 				].handleRequestCancellation().token,
 		})
 	},
-	addComment(pollId, message) {
+	addComment(
+		pollId: number,
+		message: string,
+	): Promise<AxiosResponse<{ comment: Comment }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/comment`,
@@ -29,7 +34,7 @@ const comments = {
 		})
 	},
 
-	deleteComment(commentId) {
+	deleteComment(commentId: number): Promise<AxiosResponse<{ comment: Comment }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `comment/${commentId}`,
@@ -41,7 +46,7 @@ const comments = {
 				].handleRequestCancellation().token,
 		})
 	},
-	restoreComment(commentId) {
+	restoreComment(commentId: number): Promise<AxiosResponse<{ comment: Comment }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `comment/${commentId}/restore`,

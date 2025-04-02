@@ -21,6 +21,9 @@ const useLimit = computed({
 	},
 })
 
+/**
+ *
+ */
 function validateLimit() {
 	if (!useLimit.value) {
 		pollStore.configuration.maxVotesPerOption = 0

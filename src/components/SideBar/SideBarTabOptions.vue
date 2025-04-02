@@ -24,6 +24,7 @@ import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.
 import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
+import { Event } from '../../Types/index.ts'
 
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
@@ -54,11 +55,11 @@ const OptionsAddModalDatesProps = {
 }
 
 onMounted(() => {
-	subscribe('polls:options:update', () => optionsStore.load())
+	subscribe(Event.UpdateOptions, () => optionsStore.load())
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:options:update', () => optionsStore.load())
+	unsubscribe(Event.UpdateOptions, () => optionsStore.load())
 })
 </script>
 

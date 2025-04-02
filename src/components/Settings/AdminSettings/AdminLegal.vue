@@ -19,7 +19,10 @@ const placeholder = computed(() => {
 	if (appSettingsStore.defaultImprintUrl) {
 		imprint = appSettingsStore.defaultImprintUrl
 	}
-	return { privacy, imprint }
+	return {
+		privacy,
+		imprint,
+	}
 })
 </script>
 

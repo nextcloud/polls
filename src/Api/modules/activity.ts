@@ -5,7 +5,7 @@
 import { ocsInstance, createCancelTokenHandler } from './HttpApi.js'
 
 const activity = {
-	getActivities(pollId) {
+	getActivities(pollId: number) {
 		const response = ocsInstance.request({
 			method: 'GET',
 			url: 'activity/api/v2/activity/polls',

@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { computed } from 'vue'
+import { computed, PropType } from 'vue'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 import { usePollStore, AccessType, Poll, PollType } from '../../stores/poll'
@@ -29,9 +29,15 @@ export interface Props {
 
 const pollStore = usePollStore()
 
-const props = withDefaults(defineProps<Props>(), {
-	poll: undefined,
-	noLink: false,
+const props = defineProps({
+	poll: {
+		type: Object as PropType<Poll>,
+		required: true,
+	},
+	noLink: {
+		type: Boolean,
+		default: false,
+	},
 })
 
 const closeToClosing = computed(
@@ -108,7 +114,10 @@ const timeCreatedRelative = computed(() =>
 			v-else
 			class="item__title"
 			:title="poll.configuration.description"
-			:to="{ name: 'vote', params: { id: poll.id } }"
+			:to="{
+				name: 'vote',
+				params: { id: poll.id },
+			}"
 			:class="{
 				closed: poll.status.isExpired,
 				active: poll.id === pollStore.id,

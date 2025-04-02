@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\CommentService;
@@ -152,7 +153,7 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}')]
 	public function delete(int $pollId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
+		return $this->responseDeleteTolerant(fn () => ['poll' => $this->pollService->delete($pollId)]);
 	}
 
 	/**
@@ -186,13 +187,13 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/clone')]
 	public function clone(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->clonePoll($pollId));
+		return $this->response(fn () => ['poll' => $this->clonePoll($pollId)]);
 	}
 
-	private function clonePoll(int $pollId): JSONResponse {
+	private function clonePoll(int $pollId): Poll {
 		$poll = $this->pollService->clone($pollId);
 		$this->optionService->clone($pollId, $poll->getId());
-		return $this->get($pollId);
+		return $this->pollService->get($pollId);
 	}
 
 	/**

@@ -7,9 +7,9 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 
 const inViewport = ref(false)
-const observer = ref(null)
+const observer = ref<null | IntersectionObserver>(null)
 
-const observerTarget = ref<Element>(null)
+const observerTarget = ref<null | Element>(null)
 const emit = defineEmits(['visible'])
 
 onMounted(() => {
@@ -24,7 +24,7 @@ onMounted(() => {
 		})
 	})
 
-	observer.observe(observerTarget.value)
+	observer.observe(observerTarget.value as Element)
 })
 
 onBeforeUnmount(() => {

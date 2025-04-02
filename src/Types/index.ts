@@ -18,6 +18,7 @@ export {
 	PollPermissions,
 	CurrentUserStatus,
 } from '../stores/poll.ts'
+
 export {
 	SortType,
 	FilterType,
@@ -25,6 +26,7 @@ export {
 	Meta,
 	PollList,
 } from '../stores/polls.ts'
+
 export {
 	Option,
 	OptionVotes,
@@ -32,8 +34,10 @@ export {
 	SimpleOption,
 	Options,
 } from '../stores/options.ts'
+
 export { Share, Shares, ShareType } from '../stores/shares.ts'
 export { Route, UserStatus, Session } from '../stores/session.ts'
+
 export {
 	UserPreferences,
 	SessionSettings,
@@ -41,7 +45,23 @@ export {
 	Preferences,
 	ViewMode,
 } from '../stores/preferences.ts'
+
 export { Answer, AnswerSymbol, Vote, Votes } from '../stores/votes.ts'
+
+export enum Event {
+	TransitionsOff = 'polls:transitions:off',
+	TransitionsOn = 'polls:transitions:on',
+	UpdatePoll = 'polls:poll:update',
+	LoadPoll = 'polls:poll:load',
+	SidebarChangeTab = 'polls:sidebar:changeTab',
+	SidebarToggle = 'polls:sidebar:toggle',
+	ChangeShares = 'polls:change:shares',
+	UpdateOptions = 'polls:options:update',
+	AddDate = 'polls:options:add-date',
+	UpdateComments = 'polls:comments:update',
+	UpdateActivity = 'polls:activity:update',
+	ShowSettings = 'polls:settings:show',
+}
 
 export enum ButtonMode {
 	Navigation = 'navigation',
@@ -95,6 +115,12 @@ export enum BoxType {
 	AlignedText = 'alignedTextBox',
 }
 
+export type ApiEmailAdressList = {
+	displayName: string
+	emailAddress: string
+	combined: string
+}
+
 export type AppPermissions = {
 	addShares: boolean
 	addSharesExternal: boolean
@@ -112,7 +138,7 @@ export type AppPermissions = {
 export type User = {
 	id: string
 	displayName: string
-	emailAddress: string | null
+	emailAddress: string
 	isAdmin: boolean
 	isNoUser: boolean
 	type: UserType
@@ -120,7 +146,7 @@ export type User = {
 	subtitle: string | null
 	desc: string | null
 	organisation: string | null
-	languageCode: string | null
+	languageCode: string
 	localeCode: string | null
 	timeZone: string | null
 	categories: string[] | null
@@ -129,4 +155,11 @@ export type User = {
 export type Participant = {
 	pollId: number
 	user: User
+}
+
+/**
+ *
+ */
+export function createDefault<T>(): T {
+	return {} as T
 }

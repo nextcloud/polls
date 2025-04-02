@@ -33,6 +33,7 @@ import {
 import { usePollStore, PollType } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
+import { Event } from '../Types/index.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -67,13 +68,13 @@ const windowTitle = computed(
 )
 
 onMounted(() => {
-	subscribe('polls:poll:load', () => pollStore.load())
-	emit('polls:transitions:off', 500)
+	subscribe(Event.LoadPoll, () => pollStore.load())
+	emit(Event.TransitionsOff, 500)
 })
 
 onUnmounted(() => {
 	pollStore.reset()
-	unsubscribe('polls:poll:load', () => pollStore.load())
+	unsubscribe(Event.TransitionsOff, () => {})
 })
 </script>
 

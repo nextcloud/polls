@@ -13,7 +13,7 @@ const activityStore = useActivityStore()
 <template>
 	<TransitionGroup name="list" class="activities" tag="ul">
 		<ActivityItem
-			v-for="item in activityStore.list"
+			v-for="item in activityStore.getActivitiesForPoll"
 			:key="item.activity_id"
 			:activity="item"
 			tag="li" />

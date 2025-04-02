@@ -23,6 +23,7 @@ import './assets/scss/hacks.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
+import { Event } from './Types/index.ts'
 
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
@@ -53,7 +54,8 @@ function transitionsOn() {
 
 /**
  * Turn on transitions
- * @param {number} delay - optional delay
+ *
+ * @param delay - optional delay
  */
 function transitionsOff(delay: number) {
 	transitionClass.value = ''
@@ -64,6 +66,12 @@ function transitionsOff(delay: number) {
 	}
 }
 
+/**
+ *
+ * @param payload
+ * @param payload.store
+ * @param payload.message
+ */
 function notify(payload: { store: string; message: string }) {
 	debounce(async function () {
 		if (payload.store === 'poll') {
@@ -73,49 +81,26 @@ function notify(payload: { store: string; message: string }) {
 }
 
 onMounted(() => {
-	subscribe('polls:transitions:off', (delay) => {
+	subscribe(Event.TransitionsOff, (delay) => {
 		transitionsOff(delay)
 	})
 
-	subscribe('polls:transitions:on', () => {
+	subscribe(Event.TransitionsOn, () => {
 		transitionsOn()
 	})
 
-	subscribe('polls:poll:update', (payload) => {
+	subscribe(Event.UpdatePoll, (payload) => {
 		notify(payload)
 	})
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:transitions:on', () => {
+	unsubscribe(Event.TransitionsOn, () => {
 		transitionsOn()
 	})
-	unsubscribe('polls:transitions:off', () => {
-		transitionsOff(0)
-	})
-	unsubscribe('polls:poll:updated', () => {
-		notify(null)
-	})
+	unsubscribe(Event.TransitionsOff, () => {})
+	unsubscribe(Event.UpdatePoll, () => {})
 })
-
-// watch: {
-// 	$route(to, from) {
-// 		Logger.debug('Route changed', { from, to })
-// 		this.loadContext()
-// 		this.watchPolls()
-// 	},
-// },
-
-// loadContext() {
-// 	if (this.$route.name !== null) {
-// 		this.sessionStore.setRouter(this.$route)
-// 		this.sessionStore.load()
-// 	}
-
-// 	if (this.sessionStore.userStatus.isLoggedin) {
-// 		this.preferencesStore.load()
-// 	}
-// },
 </script>
 
 <template>
@@ -134,6 +119,14 @@ onUnmounted(() => {
 	flex-direction: column;
 	padding: 0px 8px;
 	row-gap: 8px;
+
+	.clamped {
+		-webkit-line-clamp: 2;
+		line-clamp: 2;
+		-webkit-box-orient: vertical;
+		text-wrap: wrap;
+		display: -webkit-box;
+	}
 }
 
 // global areas settings

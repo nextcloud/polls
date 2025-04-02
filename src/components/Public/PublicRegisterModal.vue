@@ -22,6 +22,7 @@ import { SignalingType, ShareType } from '../../Types'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { PublicPollEmailConditions } from '../../stores/shares.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 const route = useRoute()
 const router = useRouter()
@@ -78,7 +79,10 @@ const privacyRich = computed(() => {
 			},
 		},
 	}
-	return { subject, parameters }
+	return {
+		subject,
+		parameters,
+	}
 })
 
 const loginLink = computed(() => {
@@ -91,30 +95,37 @@ const loginLink = computed(() => {
 })
 
 const userNameHint = computed(() => {
-	if (checkStatus.value.userName === SignalingType.Checking)
+	if (checkStatus.value.userName === SignalingType.Checking) {
 		return t('polls', 'Checking name …')
-	if (checkStatus.value.userName === SignalingType.Empty)
+	}
+	if (checkStatus.value.userName === SignalingType.Empty) {
 		return t('polls', 'A name is required.')
-	if (checkStatus.value.userName === SignalingType.InValid)
+	}
+	if (checkStatus.value.userName === SignalingType.InValid) {
 		return t('polls', 'The name {username} is invalid or reserved.', {
 			username: userName.value,
 		})
+	}
 	return ''
 })
 
 const emailAddressHint = computed(() => {
-	if (emailGeneratedStatus.value === 'checking')
+	if (emailGeneratedStatus.value === 'checking') {
 		return t('polls', 'Checking email address …')
-	if (emailGeneratedStatus.value === 'mandatory')
+	}
+	if (emailGeneratedStatus.value === 'mandatory') {
 		return t('polls', 'An email address is required.')
-	if (emailGeneratedStatus.value === 'invalid')
+	}
+	if (emailGeneratedStatus.value === 'invalid') {
 		return t('polls', 'Invalid email address.')
+	}
 	if (sessionStore.share.type === ShareType.Public) {
-		if (emailGeneratedStatus.value === 'valid')
+		if (emailGeneratedStatus.value === 'valid') {
 			return t(
 				'polls',
 				'You will receive your personal link after clicking "OK".',
 			)
+		}
 		return t(
 			'polls',
 			'Enter your email address to get your personal access link.',
@@ -136,7 +147,11 @@ onMounted(() => {
 	}
 })
 
-function routeToPersonalShare(token: string) {
+/**
+ *
+ * @param token
+ */
+function routeToPersonalShare(token: string): void {
 	if (route.params.token === token) {
 		// if share was not a public share, but a personal share
 		// (i.e. email shares allow to change personal data by fist entering of the poll),
@@ -156,9 +171,9 @@ function routeToPersonalShare(token: string) {
 
 /**
  *
- * @param {string} value - value to be stored in the cookie
+ * @param value - value to be stored in the cookie
  */
-function updateCookie(value: string) {
+function updateCookie(value: string): void {
 	const cookieExpiration = COOKIE_LIFETIME * 24 * 60 * 1000
 	setCookie(route.params.token.toString(), value, cookieExpiration)
 }
@@ -166,20 +181,20 @@ function updateCookie(value: string) {
 /**
  *
  */
-function closeModal() {
+function closeModal(): void {
 	emit('close')
 }
 
 /**
  *
  */
-function login() {
+function login(): void {
 	window.location.assign(
 		`${window.location.protocol}//${window.location.host}${loginLink.value}`,
 	)
 }
 
-const validatePublicUsername = debounce(async function () {
+const validatePublicUsername = debounce(async function (): Promise<void> {
 	if (userName.value.length < 1) {
 		checkStatus.value.userName = SignalingType.Empty
 		return
@@ -190,8 +205,10 @@ const validatePublicUsername = debounce(async function () {
 		await ValidatorAPI.validateName(route.params.token, userName.value)
 		checkStatus.value.userName = SignalingType.Valid
 	} catch (error) {
-		if (error?.code === 'ERR_CANCELED') return
-		if (error?.code === 'ERR_BAD_REQUEST') {
+		if ((error as AxiosError).code === 'ERR_CANCELED') {
+			return
+		}
+		if ((error as AxiosError).code === 'ERR_BAD_REQUEST') {
 			checkStatus.value.userName = SignalingType.InValid
 			return
 		}
@@ -199,7 +216,7 @@ const validatePublicUsername = debounce(async function () {
 	}
 }, 500)
 
-const validateEmailAddress = debounce(async function () {
+const validateEmailAddress = debounce(async function (): Promise<void> {
 	if (emailAddress.value.length < 1) {
 		checkStatus.value.email = SignalingType.Empty
 		return
@@ -210,8 +227,10 @@ const validateEmailAddress = debounce(async function () {
 		await ValidatorAPI.validateEmailAddress(emailAddress.value)
 		checkStatus.value.email = SignalingType.Valid
 	} catch (error) {
-		if (error?.code === 'ERR_CANCELED') return
-		if (error?.code === 'ERR_BAD_REQUEST') {
+		if ((error as AxiosError).code === 'ERR_CANCELED') {
+			return
+		}
+		if ((error as AxiosError).code === 'ERR_BAD_REQUEST') {
 			checkStatus.value.email = SignalingType.InValid
 			return
 		}
@@ -222,7 +241,7 @@ const validateEmailAddress = debounce(async function () {
 /**
  *
  */
-async function submitRegistration() {
+async function submitRegistration(): Promise<void> {
 	if (!registrationIsValid.value || sendRegistration.value) {
 		return
 	}
@@ -231,7 +250,7 @@ async function submitRegistration() {
 
 	try {
 		const response = await PublicAPI.register(
-			route.params.token,
+			route.params.token as string,
 			userName.value,
 			emailAddress.value,
 		)
@@ -248,12 +267,14 @@ async function submitRegistration() {
 		) {
 			showError(
 				t('polls', 'Email could not be sent to {emailAddress}', {
-					emailAddress: this.shareStore.user.emailAddress,
+					emailAddress: sessionStore.currentUser.emailAddress,
 				}),
 			)
 		}
 	} catch (error) {
-		if (error?.code === 'ERR_CANCELED') return
+		if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+			return
+		}
 		showError(t('polls', 'Error registering to poll', { error }))
 		throw error
 	} finally {

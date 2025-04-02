@@ -14,9 +14,10 @@ import { Option, User } from '../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
 import VoteIndicator from './VoteIndicator.vue'
+import { AxiosError } from '@nextcloud/axios'
 
 export interface Props {
-	option?: Option
+	option: Option
 	user: User
 }
 
@@ -85,10 +86,7 @@ async function setVote() {
 			})
 			showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })
 		} catch (error) {
-			if (
-				error.response.status === 409 &&
-				error.response.data.message === 'Vote limit exceeded'
-			) {
+			if ((error as AxiosError).status === 409) {
 				showError(t('polls', 'Vote already booked out'))
 			} else {
 				showError(t('polls', 'Error saving vote'))

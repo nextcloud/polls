@@ -2,10 +2,18 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import { AxiosResponse } from '@nextcloud/axios'
+import { Share, ShareType, User } from '../../Types/index.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { PublicPollEmailConditions } from '../../stores/shares.js'
+
+export type SentResults = {
+	sentMails: { emailAddress: string; displayName: string }[]
+	abortedMails: { emailAddress: string; displayName: string }[]
+}
 
 const shares = {
-	getShares(pollId) {
+	getShares(pollId: number): Promise<AxiosResponse<{ shares: Share[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/shares`,
@@ -17,7 +25,10 @@ const shares = {
 		})
 	},
 
-	addUserShare(pollId, user) {
+	addUserShare(
+		pollId: number,
+		user: User,
+	): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/share`,
@@ -29,7 +40,7 @@ const shares = {
 		})
 	},
 
-	addPublicShare(pollId) {
+	addPublicShare(pollId: number): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/publicshare`,
@@ -40,7 +51,10 @@ const shares = {
 		})
 	},
 
-	writeLabel(shareToken, label) {
+	writeLabel(
+		shareToken: string,
+		label: string,
+	): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/setlabel`,
@@ -54,7 +68,10 @@ const shares = {
 		})
 	},
 
-	switchAdmin(shareToken, setTo) {
+	switchAdmin(
+		shareToken: string,
+		setTo: ShareType,
+	): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/${setTo}`,
@@ -65,7 +82,10 @@ const shares = {
 		})
 	},
 
-	setEmailAddressConstraint(shareToken, setTo) {
+	setEmailAddressConstraint(
+		shareToken: string,
+		setTo: PublicPollEmailConditions,
+	): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/publicpollemail/${setTo}`,
@@ -76,7 +96,12 @@ const shares = {
 		})
 	},
 
-	sendInvitation(shareToken) {
+	sendInvitation(shareToken: string): Promise<
+		AxiosResponse<{
+			share: Share
+			sentResult: null | SentResults
+		}>
+	> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `share/${shareToken}/invite`,
@@ -87,7 +112,7 @@ const shares = {
 		})
 	},
 
-	resolveShare(shareToken) {
+	resolveShare(shareToken: string): Promise<AxiosResponse> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `share/${shareToken}/resolve`,
@@ -99,7 +124,7 @@ const shares = {
 		})
 	},
 
-	deleteShare(shareToken) {
+	deleteShare(shareToken: string): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `share/${shareToken}`,
@@ -110,7 +135,7 @@ const shares = {
 		})
 	},
 
-	restoreShare(shareToken) {
+	restoreShare(shareToken: string): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/restore`,
@@ -121,7 +146,7 @@ const shares = {
 		})
 	},
 
-	lockShare(shareToken) {
+	lockShare(shareToken: string): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/lock`,
@@ -132,7 +157,7 @@ const shares = {
 		})
 	},
 
-	unlockShare(shareToken) {
+	unlockShare(shareToken: string): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `share/${shareToken}/unlock`,
@@ -143,7 +168,9 @@ const shares = {
 		})
 	},
 
-	inviteAll(pollId) {
+	inviteAll(
+		pollId: number,
+	): Promise<AxiosResponse<{ poll: number; sentResult: null | SentResults }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/inviteAll`,

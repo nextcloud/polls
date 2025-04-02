@@ -21,8 +21,12 @@ const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 
+/**
+ *
+ * @param userId
+ */
 async function removeUser(userId: string) {
-	await votesStore.deleteUser({ userId })
+	await votesStore.resetUserVotes({ userId })
 	showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
 }
 </script>

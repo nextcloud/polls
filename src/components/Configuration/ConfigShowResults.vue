@@ -11,12 +11,18 @@ import { usePollStore, ShowResults } from '../../stores/poll.ts'
 const pollStore = usePollStore()
 
 const pollShowResultsOptions = [
-	{ value: ShowResults.Always, label: t('polls', 'Always show results') },
+	{
+		value: ShowResults.Always,
+		label: t('polls', 'Always show results'),
+	},
 	{
 		value: ShowResults.Closed,
 		label: t('polls', 'Hide results until poll is closed'),
 	},
-	{ value: ShowResults.Never, label: t('polls', 'Never show results') },
+	{
+		value: ShowResults.Never,
+		label: t('polls', 'Never show results'),
+	},
 ]
 </script>
 

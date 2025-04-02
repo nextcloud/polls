@@ -8,6 +8,7 @@ import { SharesAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { useSessionStore } from './session.ts'
 import { User } from '../Types/index.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 export enum ShareType {
 	Email = 'email',
@@ -29,7 +30,7 @@ export enum PublicPollEmailConditions {
 }
 export type Share = {
 	displayName: string
-	id: string | null
+	id: string
 	invitationSent: boolean
 	locked: boolean
 	pollId: number | null
@@ -107,14 +108,16 @@ export const useSharesStore = defineStore('shares', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await SharesAPI.getShares(
-					sessionStore.route.params.id,
+					sessionStore.currentPollId,
 				)
 				this.list = response.data.shares
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error loading shares', {
 					error,
-					pollId: sessionStore.route.params.id,
+					pollId: sessionStore.currentPollId,
 				})
 				throw error
 			}
@@ -124,10 +127,15 @@ export const useSharesStore = defineStore('shares', {
 			const sessionStore = useSessionStore()
 
 			try {
-				await SharesAPI.addUserShare(sessionStore.route.params.id, user)
+				await SharesAPI.addUserShare(sessionStore.currentPollId, user)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error writing share', { error, payload: user })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error writing share', {
+					error,
+					payload: user,
+				})
 				throw error
 			} finally {
 				this.load()
@@ -137,9 +145,11 @@ export const useSharesStore = defineStore('shares', {
 		async addPublicShare(): Promise<void> {
 			const sessionStore = useSessionStore()
 			try {
-				await SharesAPI.addPublicShare(sessionStore.route.params.id)
+				await SharesAPI.addPublicShare(sessionStore.currentPollId)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error writing share', { error })
 				throw error
 			} finally {
@@ -167,8 +177,13 @@ export const useSharesStore = defineStore('shares', {
 				)
 				this.update(response.data)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error(`Error switching type to ${setTo}`, { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error(`Error switching type to ${setTo}`, {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
@@ -185,7 +200,9 @@ export const useSharesStore = defineStore('shares', {
 				)
 				this.update(response.data)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error changing email register setting', {
 					error,
 					payload,
@@ -202,38 +219,28 @@ export const useSharesStore = defineStore('shares', {
 					payload.label,
 				)
 				this.update(response.data)
-				return response.data
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error writing share label', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error writing share label', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
 		},
 
 		async inviteAll(payload: { pollId: number }) {
-			try {
-				const response = await SharesAPI.inviteAll(payload.pollId)
-				return response
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error sending invitation', { error, payload })
-				throw error
-			} finally {
-				this.load()
-			}
+			const response = await SharesAPI.inviteAll(payload.pollId)
+			this.load()
+			return response
 		},
 		async sendInvitation(payload: { share: Share }) {
-			try {
-				const response = await SharesAPI.sendInvitation(payload.share.token)
-				return response
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error sending invitation', { error, payload })
-				throw error
-			} finally {
-				this.load()
-			}
+			const response = await SharesAPI.sendInvitation(payload.share.token)
+			this.load()
+			return response
 		},
 
 		async resolveGroup(payload: { share: Share }): Promise<void> {
@@ -241,8 +248,13 @@ export const useSharesStore = defineStore('shares', {
 				await SharesAPI.resolveShare(payload.share.token)
 				this.load()
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error exploding group', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error exploding group', {
+					error,
+					payload,
+				})
 				throw error
 			}
 		},
@@ -252,8 +264,13 @@ export const useSharesStore = defineStore('shares', {
 				const response = await SharesAPI.lockShare(payload.share.token)
 				this.update(response.data)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error locking share', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error locking share', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
@@ -264,8 +281,13 @@ export const useSharesStore = defineStore('shares', {
 				const response = await SharesAPI.unlockShare(payload.share.token)
 				this.update(response.data)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error unlocking share', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error unlocking share', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
@@ -276,8 +298,13 @@ export const useSharesStore = defineStore('shares', {
 				const response = await SharesAPI.deleteShare(payload.share.token)
 				this.update(response.data)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error deleting share', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error deleting share', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
@@ -287,8 +314,13 @@ export const useSharesStore = defineStore('shares', {
 				const response = await SharesAPI.restoreShare(payload.share.token)
 				this.update(response.data)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error restoring share', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error restoring share', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}

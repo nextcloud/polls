@@ -164,31 +164,53 @@ const useIconSlot = computed(() =>
 	].includes(typeComputed.value),
 )
 
-const typeComputed = computed(() => props.user.type ?? props.type)
+const typeComputed = computed<UserType | VirtualUserItemType>(
+	() => props.user.type ?? props.type,
+)
 const descriptionComputed = computed(() => {
-	if (props.condensed) return ''
-	if (props.deletedState) return t('polls', '(deleted)')
-	if (props.lockedState) return t('polls', '(locked)')
-	if (props.description !== '') return props.description
-	if (typeComputed.value === UserType.Public) return publicShareDescription
-	if (typeComputed.value === VirtualUserItemType.Deleted)
+	if (props.condensed) {
+		return ''
+	}
+	if (props.deletedState) {
+		return t('polls', '(deleted)')
+	}
+	if (props.lockedState) {
+		return t('polls', '(locked)')
+	}
+	if (props.description !== '') {
+		return props.description
+	}
+	if (typeComputed.value === UserType.Public) {
+		return publicShareDescription
+	}
+	if (typeComputed.value === VirtualUserItemType.Deleted) {
 		return t('polls', 'The participant got removed from this poll')
-	if (typeComputed.value === UserType.Admin)
+	}
+	if (typeComputed.value === UserType.Admin) {
 		return t('polls', 'Is granted admin rights for this poll')
-	if (typeComputed.value === VirtualUserItemType.Anonymous)
+	}
+	if (typeComputed.value === VirtualUserItemType.Anonymous) {
 		return t('polls', 'Anonymized participant')
+	}
 	return emailAddressComputed
 })
 const labelComputed = computed(() => {
-	if (props.label !== '') return props.label
-	if (typeComputed.value === UserType.Public) return publicShareLabel.value
-	if (typeComputed.value === VirtualUserItemType.Deleted)
+	if (props.label !== '') {
+		return props.label
+	}
+	if (typeComputed.value === UserType.Public) {
+		return publicShareLabel.value
+	}
+	if (typeComputed.value === VirtualUserItemType.Deleted) {
 		return t('polls', 'Deleted participant')
+	}
 	return props.user.displayName ?? props.user.id
 })
 
 const avatarUserId = computed(() => {
-	if (isGuestComputed.value) return props.user.displayName
+	if (isGuestComputed.value) {
+		return props.user.displayName
+	}
 	return props.user.id
 })
 
@@ -244,7 +266,10 @@ function showMenu() {
 		:class="[
 			'user-item',
 			typeComputed,
-			{ disabled, condensed: props.condensed },
+			{
+				disabled,
+				condensed: props.condensed,
+			},
 		]">
 		<div class="avatar-wrapper">
 			<NcAvatar
@@ -280,19 +305,19 @@ function showMenu() {
 			</NcAvatar>
 
 			<AdminIcon
-				v-if="typeComputed === UserType.Admin && showTypeIcon"
+				v-if="showTypeIcon && typeComputed === UserType.Admin"
 				:size="props.typeIconSize"
 				class="type-icon" />
 			<ContactIcon
-				v-if="typeComputed === UserType.Contact && showTypeIcon"
+				v-if="showTypeIcon && typeComputed === UserType.Contact"
 				:size="props.typeIconSize"
 				class="type-icon" />
 			<EmailIcon
-				v-if="typeComputed === UserType.Email && showTypeIcon"
+				v-if="showTypeIcon && typeComputed === UserType.Email"
 				:size="props.typeIconSize"
 				class="type-icon" />
 			<ShareIcon
-				v-if="typeComputed === UserType.Email && showTypeIcon"
+				v-if="showTypeIcon && typeComputed === UserType.Email"
 				:size="props.typeIconSize"
 				class="type-icon" />
 		</div>

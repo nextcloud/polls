@@ -10,6 +10,7 @@ import { t } from '@nextcloud/l10n'
 
 import { InputDiv } from '../Base/index.ts'
 import { useOptionsStore } from '../../stores/options.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 const optionsStore = useOptionsStore()
 
@@ -22,7 +23,10 @@ const props = defineProps({
 
 const newPollText = ref('')
 
-async function addOption() {
+/**
+ *
+ */
+async function addOption(): Promise<void> {
 	if (newPollText.value) {
 		try {
 			await optionsStore.add({ text: newPollText.value })
@@ -31,7 +35,7 @@ async function addOption() {
 			)
 			newPollText.value = ''
 		} catch (error) {
-			if (error.response.status === 409) {
+			if ((error as AxiosError).response?.status === 409) {
 				showError(
 					t('polls', '{optionText} already exists', {
 						optionText: newPollText.value,

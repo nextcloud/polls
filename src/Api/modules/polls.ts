@@ -2,10 +2,31 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import { Poll, PollConfiguration, PollType } from '../../stores/poll.js'
+import { AxiosResponse } from '@nextcloud/axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { Option } from '../../stores/options.js'
+import { Vote } from '../../stores/votes.js'
+import { Share } from '../../stores/shares.js'
+import { ApiEmailAdressList, Comment } from '../../Types/index.js'
+
+export type Confirmations = {
+	sentMails: { emailAddress: string; displayName: string }[]
+	abortedMails: { emailAddress: string; displayName: string; reason: string }[]
+	countSentMails: number
+	countAbortedMails: number
+}
+
+export type WatcherResponse = {
+	id: number
+	pollId: number
+	table: string
+	updated: number
+	sessionId: string
+}
 
 const polls = {
-	getPolls() {
+	getPolls(): Promise<AxiosResponse<{ list: Poll[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'polls',
@@ -17,19 +38,7 @@ const polls = {
 		})
 	},
 
-	getPollsForAdmin() {
-		return httpInstance.request({
-			method: 'GET',
-			url: 'administration/polls',
-			params: { time: +new Date() },
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.getPollsForAdmin.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	getPoll(pollId) {
+	getPoll(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/poll`,
@@ -41,7 +50,16 @@ const polls = {
 		})
 	},
 
-	getFullPoll(pollId) {
+	getFullPoll(pollId: number): Promise<
+		AxiosResponse<{
+			poll: Poll
+			options: Option[]
+			votes: Vote[]
+			comments: Comment[]
+			shares: Share[]
+			subscribed: boolean
+		}>
+	> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}`,
@@ -53,7 +71,10 @@ const polls = {
 		})
 	},
 
-	watchPoll(pollId = 0, lastUpdated) {
+	watchPoll(
+		pollId = 0,
+		lastUpdated: number,
+	): Promise<AxiosResponse<{ updates: WatcherResponse[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/watch`,
@@ -65,7 +86,7 @@ const polls = {
 		})
 	},
 
-	takeOver(pollId) {
+	takeOver(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `administration/poll/${pollId}/takeover`,
@@ -76,7 +97,7 @@ const polls = {
 		})
 	},
 
-	addPoll(type, title) {
+	addPoll(type: PollType, title: string): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'poll/add',
@@ -91,7 +112,10 @@ const polls = {
 		})
 	},
 
-	writePoll(pollId, poll) {
+	writePoll(
+		pollId: number,
+		poll: PollConfiguration,
+	): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}`,
@@ -103,7 +127,7 @@ const polls = {
 		})
 	},
 
-	lockAnonymous(pollId) {
+	lockAnonymous(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/lockAnonymous`,
@@ -114,7 +138,7 @@ const polls = {
 		})
 	},
 
-	deletePoll(pollId) {
+	deletePoll(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `poll/${pollId}`,
@@ -125,7 +149,7 @@ const polls = {
 		})
 	},
 
-	closePoll(pollId) {
+	closePoll(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/close`,
@@ -136,7 +160,7 @@ const polls = {
 		})
 	},
 
-	reopenPoll(pollId) {
+	reopenPoll(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/reopen`,
@@ -147,7 +171,7 @@ const polls = {
 		})
 	},
 
-	toggleArchive(pollId) {
+	toggleArchive(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}/toggleArchive`,
@@ -158,7 +182,7 @@ const polls = {
 		})
 	},
 
-	clonePoll(pollId) {
+	clonePoll(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/clone`,
@@ -169,7 +193,9 @@ const polls = {
 		})
 	},
 
-	sendConfirmation(pollId) {
+	sendConfirmation(
+		pollId: number,
+	): Promise<AxiosResponse<{ confirmations: Confirmations }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/confirmation`,
@@ -180,7 +206,9 @@ const polls = {
 		})
 	},
 
-	getParticipantsEmailAddresses(pollId) {
+	getParticipantsEmailAddresses(
+		pollId: string | number | string[],
+	): Promise<AxiosResponse<ApiEmailAdressList[]>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/addresses`,
@@ -191,7 +219,9 @@ const polls = {
 		})
 	},
 
-	getSubscription(pollId) {
+	getSubscription(
+		pollId: number,
+	): Promise<AxiosResponse<{ subscribed: boolean }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/subscription`,
@@ -202,7 +232,10 @@ const polls = {
 		})
 	},
 
-	setSubscription(pollId, subscription) {
+	setSubscription(
+		pollId: number,
+		subscription: boolean,
+	): Promise<AxiosResponse<{ subscribed: boolean }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `poll/${pollId}${subscription ? '/subscribe' : '/unsubscribe'}`,

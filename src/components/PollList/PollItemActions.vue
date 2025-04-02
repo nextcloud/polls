@@ -29,7 +29,7 @@ const sessionStore = useSessionStore()
 const props = defineProps({
 	poll: {
 		type: Object as PropType<Poll>,
-		default: undefined,
+		required: true,
 	},
 })
 
@@ -73,6 +73,9 @@ const takeOverDialog = {
 	],
 }
 
+/**
+ *
+ */
 async function toggleArchive() {
 	try {
 		await pollsStore.toggleArchive({ pollId: props.poll.id })
@@ -81,6 +84,9 @@ async function toggleArchive() {
 	}
 }
 
+/**
+ *
+ */
 async function deletePoll() {
 	try {
 		await pollsStore.delete({ pollId: props.poll.id })
@@ -89,6 +95,9 @@ async function deletePoll() {
 	}
 }
 
+/**
+ *
+ */
 async function clonePoll() {
 	try {
 		await pollsStore.clone({ pollId: props.poll.id })
@@ -97,6 +106,9 @@ async function clonePoll() {
 	}
 }
 
+/**
+ *
+ */
 async function takeOverPoll(): Promise<void> {
 	if (!sessionStore.currentUser.isAdmin) {
 		return

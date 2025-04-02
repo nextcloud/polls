@@ -10,6 +10,7 @@ import { t } from '@nextcloud/l10n'
 
 import NcAppSidebar from '@nextcloud/vue/components/NcAppSidebar'
 import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
+import { Event } from '../Types/index.ts'
 
 import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
 import SidebarOptionsIcon from 'vue-material-design-icons/FormatListChecks.vue'
@@ -34,20 +35,20 @@ const showSidebar = ref(window.innerWidth > 920)
 const activeTab = ref(t('polls', 'Comments').toLowerCase())
 
 onMounted(() => {
-	subscribe('polls:sidebar:toggle', (payload) => {
+	subscribe(Event.SidebarToggle, (payload) => {
 		showSidebar.value = payload?.open ?? !showSidebar.value
 		activeTab.value = payload?.activeTab ?? activeTab.value
 	})
-	subscribe('polls:sidebar:changeTab', (payload) => {
+	subscribe(Event.SidebarChangeTab, (payload) => {
 		activeTab.value = payload?.activeTab ?? activeTab.value
 	})
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:sidebar:changeTab', () => {
+	unsubscribe(Event.SidebarToggle, () => {
 		activeTab.value = 'comments'
 	})
-	unsubscribe('polls:sidebar:toggle', () => {
+	unsubscribe(Event.SidebarChangeTab, () => {
 		showSidebar.value = false
 	})
 })
@@ -56,7 +57,7 @@ onUnmounted(() => {
  *
  */
 function closeSideBar() {
-	emit('polls:sidebar:toggle', { open: false })
+	emit(Event.SidebarToggle, { open: false })
 }
 </script>
 

@@ -24,7 +24,7 @@ const preferencesStore = usePreferencesStore()
 const props = defineProps({
 	option: {
 		type: Object as PropType<Option>,
-		default: undefined,
+		required: true,
 	},
 })
 

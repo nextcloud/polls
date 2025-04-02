@@ -13,16 +13,17 @@ import { useSessionStore } from '../../stores/session.ts'
 import SharesList from '../Shares/SharesList.vue'
 import SharesListUnsent from '../Shares/SharesListUnsent.vue'
 import SharesListLocked from '../Shares/SharesListLocked.vue'
+import { Event } from '../../Types/index.ts'
 
 const sharesStore = useSharesStore()
 const sessionStore = useSessionStore()
 
 onMounted(() => {
-	subscribe('polls:change:shares', () => sharesStore.load())
+	subscribe(Event.ChangeShares, () => sharesStore.load())
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:change:shares', () => sharesStore.load())
+	unsubscribe(Event.ChangeShares, () => sharesStore.load())
 })
 </script>
 

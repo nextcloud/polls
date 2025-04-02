@@ -12,7 +12,12 @@ import orderBy from 'lodash/orderBy'
 import { usePollStore, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { Answer } from './votes.ts'
-import { DateUnitType, TimeUnitsType } from '../constants/dateUnits.ts'
+import {
+	DateTimeDetails,
+	DateTimeUnitType,
+	TimeUnitsType,
+} from '../constants/dateUnits.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 export enum RankedType {
 	ranked = 'yes',
@@ -20,7 +25,7 @@ export enum RankedType {
 }
 
 export type Sequence = {
-	unit: DateUnitType
+	unit: DateTimeUnitType
 	stepWidth: number
 	repetitions: number
 }
@@ -52,7 +57,7 @@ export type Option = {
 	hash: string
 	isOwner: boolean
 	votes: OptionVotes
-	owner: User | null
+	owner: User | undefined
 }
 
 export type Options = {
@@ -103,7 +108,13 @@ export const useOptionsStore = defineStore('options', {
 			)
 		},
 
-		explodeDates(option: Option) {
+		explodeDates(option: Option): {
+			from: DateTimeDetails
+			to: DateTimeDetails
+			raw: string
+			iso: string
+			dayLong: boolean
+		} {
 			const from = moment.unix(option.timestamp)
 			const to = moment.unix(option.timestamp + Math.max(0, option.duration))
 			// does the event start at 00:00 local time and
@@ -119,11 +130,6 @@ export const useOptionsStore = defineStore('options', {
 			// modified to date, in case of day long events, a second gets substracted
 			// to set the begin of the to day to the end of the previous date
 			const toModified = moment(to).subtract(dayModifier, 'days')
-			const pollStore = usePollStore()
-
-			if (pollStore.type !== PollType.Date) {
-				return {}
-			}
 
 			return {
 				from: {
@@ -160,27 +166,31 @@ export const useOptionsStore = defineStore('options', {
 		async load() {
 			const sessionStore = useSessionStore()
 			try {
-				let response = null
+				const response = await (() => {
+					if (sessionStore.route.name === 'publicVote') {
+						return PublicAPI.getOptions(
+							sessionStore.route.params.token as string,
+						)
+					}
+					if (sessionStore.currentPollId) {
+						return OptionsAPI.getOptions(sessionStore.currentPollId)
+					}
+					return null
+				})()
 
-				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.getOptions(
-						sessionStore.route.params.token,
-					)
-				} else if (sessionStore.route.params.id) {
-					response = await OptionsAPI.getOptions(
-						sessionStore.route.params.id,
-					)
-				} else {
+				if (!response) {
 					this.$reset()
 					return
 				}
 
 				this.list = response.data.options
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error loding options', {
 					error,
-					pollId: sessionStore.route.params.id,
+					pollId: sessionStore.currentPollId,
 				})
 				throw error
 			}
@@ -188,7 +198,7 @@ export const useOptionsStore = defineStore('options', {
 
 		updateOption(payload: { option: Option }) {
 			const index = this.list.findIndex(
-				(option) => parseInt(option.id) === payload.option.id,
+				(option) => option.id === payload.option.id,
 			)
 
 			if (index < 0) {
@@ -201,35 +211,33 @@ export const useOptionsStore = defineStore('options', {
 			)
 		},
 
-		async add(payload: SimpleOption) {
+		async add(simpleOption: SimpleOption) {
 			const sessionStore = useSessionStore()
 			try {
-				let response = null
-				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.addOption(
-						sessionStore.route.params.token,
-						{
-							pollId: sessionStore.route.params.id,
-							timestamp: payload.timestamp,
-							text: payload.text,
-							duration: payload.duration,
-						},
+				const response = await (() => {
+					if (sessionStore.route.name === 'publicVote') {
+						return PublicAPI.addOption(
+							sessionStore.route.params.token,
+							simpleOption,
+						)
+					}
+					return OptionsAPI.addOption(
+						sessionStore.currentPollId,
+						simpleOption,
 					)
-				} else {
-					response = await OptionsAPI.addOption({
-						pollId: sessionStore.route.params.id,
-						timestamp: payload.timestamp,
-						text: payload.text,
-						duration: payload.duration,
-					})
-				}
+				})()
+
 				this.list.push(response.data.option)
 				return response.data.option
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error adding option', { error, payload })
-				this.load()
-				throw error
+				if ((error as AxiosError)?.code !== 'ERR_CANCELED') {
+					Logger.error('Error adding option', {
+						error,
+						simpleOption,
+					})
+					this.load()
+					throw error
+				}
 			}
 		},
 
@@ -238,7 +246,10 @@ export const useOptionsStore = defineStore('options', {
 				const response = await OptionsAPI.updateOption(payload.option)
 				this.updateOption({ option: response.data.option })
 			} catch (error) {
-				Logger.error('Error updating option', { error, payload })
+				Logger.error('Error updating option', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
@@ -247,19 +258,25 @@ export const useOptionsStore = defineStore('options', {
 		async delete(payload: { option: Option }) {
 			const sessionStore = useSessionStore()
 			try {
-				let response = null
-				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.deleteOption(
-						sessionStore.route.params.token,
-						payload.option.id,
-					)
-				} else {
-					response = await OptionsAPI.deleteOption(payload.option.id)
-				}
+				const response = await (() => {
+					if (sessionStore.route.name === 'publicVote') {
+						return PublicAPI.deleteOption(
+							sessionStore.route.params.token,
+							payload.option.id,
+						)
+					}
+					return OptionsAPI.deleteOption(payload.option.id)
+				})()
+
 				this.updateOption({ option: response.data.option })
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error deleting option', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error deleting option', {
+					error,
+					payload,
+				})
 				throw error
 			}
 		},
@@ -267,19 +284,25 @@ export const useOptionsStore = defineStore('options', {
 		async restore(payload: { option: Option }) {
 			const sessionStore = useSessionStore()
 			try {
-				let response = null
-				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.restoreOption(
-						sessionStore.route.params.token,
-						payload.option.id,
-					)
-				} else {
-					response = await OptionsAPI.restoreOption(payload.option.id)
-				}
+				const response = await (() => {
+					if (sessionStore.route.name === 'publicVote') {
+						return PublicAPI.restoreOption(
+							sessionStore.route.params.token,
+							payload.option.id,
+						)
+					}
+					return OptionsAPI.restoreOption(payload.option.id)
+				})()
+
 				this.updateOption({ option: response.data.option })
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error restoring option', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error restoring option', {
+					error,
+					payload,
+				})
 				throw error
 			}
 		},
@@ -288,38 +311,40 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await OptionsAPI.addOptions(
-					sessionStore.route.params.id,
+					sessionStore.currentPollId,
 					payload.text,
 				)
 				this.list = response.data.options
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error adding option', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error adding option', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
-		},
-
-		confirmOption(payload: { option: Option }) {
-			const index = this.list.findIndex(
-				(option: Option) => option.id === payload.option.id,
-			)
-
-			this.list[index].confirmed = !this.list[index].confirmed
 		},
 
 		async confirm(payload: { option: Option }) {
 			const index = this.list.findIndex(
 				(option: Option) => option.id === payload.option.id,
 			)
-			this.list[index].confirmed = !this.list[index].confirmed
+			this.list[index].confirmed = Math.abs(this.list[index].confirmed - 1)
 
 			try {
 				const response = await OptionsAPI.confirmOption(payload.option.id)
 				this.updateOption({ option: response.data.option })
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error confirming option', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error confirming option', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
@@ -332,8 +357,11 @@ export const useOptionsStore = defineStore('options', {
 
 			try {
 				const response = await OptionsAPI.reorderOptions(
-					sessionStore.route.params.id,
-					this.list.map(({ id, text }) => ({ id, text })),
+					sessionStore.currentPollId,
+					this.list.map(({ id, text }) => ({
+						id,
+						text,
+					})),
 				)
 				this.list = response.data.options
 			} catch (error) {
@@ -353,13 +381,18 @@ export const useOptionsStore = defineStore('options', {
 				const response = await OptionsAPI.addOptionsSequence(
 					payload.option.id,
 					payload.sequence.stepWidth,
-					payload.sequence.unit.key,
+					payload.sequence.unit.id,
 					payload.sequence.repetitions,
 				)
 				this.list = response.data.options
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error creating sequence', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error creating sequence', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}
@@ -369,14 +402,19 @@ export const useOptionsStore = defineStore('options', {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await OptionsAPI.shiftOptions(
-					sessionStore.route.params.id,
+					sessionStore.currentPollId,
 					payload.shift.value,
-					payload.shift.unit.key,
+					payload.shift.unit.id,
 				)
 				this.list = response.data.options
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error shifting dates', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error shifting dates', {
+					error,
+					payload,
+				})
 				this.load()
 				throw error
 			}

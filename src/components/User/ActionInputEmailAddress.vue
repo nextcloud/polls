@@ -34,6 +34,10 @@ const inputProps = ref<InputProps>({
 	label: t('polls', 'Edit Email Address'),
 })
 
+/**
+ *
+ * @param status
+ */
 function setStatus(status: StatusResults) {
 	inputProps.value.success = status === StatusResults.Success
 	inputProps.value.error = status === StatusResults.Error
@@ -57,6 +61,9 @@ const validate = debounce(async function () {
 	}
 }, 500)
 
+/**
+ *
+ */
 async function submit() {
 	try {
 		await sessionStore.updateEmailAddress({

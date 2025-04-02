@@ -26,7 +26,7 @@ const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
 const props = defineProps({
 	poll: {
 		type: Object as PropType<Poll>,
-		default: undefined,
+		required: true,
 	},
 })
 </script>
@@ -34,7 +34,10 @@ const props = defineProps({
 <template>
 	<NcAppNavigationItem
 		:name="props.poll.configuration.title"
-		:to="{ name: 'vote', params: { id: props.poll.id } }"
+		:to="{
+			name: 'vote',
+			params: { id: props.poll.id },
+		}"
 		:class="{ closed: props.poll.status.isExpired }">
 		<template #icon>
 			<TextPollIcon v-if="props.poll.type === PollType.Text" />

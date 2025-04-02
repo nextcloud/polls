@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2021 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { InvalidJSON } from '../Exceptions/Exceptions.js'
+import { InvalidJSON } from '../Exceptions/Exceptions.ts'
 import { PollsAPI, PublicAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { mapStores } from 'pinia'

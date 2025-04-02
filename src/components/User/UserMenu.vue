@@ -39,11 +39,18 @@ import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import { StatusResults, ViewMode, PollType, ButtonMode } from '../../Types/index.ts'
+import {
+	StatusResults,
+	ViewMode,
+	PollType,
+	ButtonMode,
+	Event,
+} from '../../Types/index.ts'
 
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 import { NcActionButtonGroup } from '@nextcloud/vue'
 import ActionAddPoll from '../Actions/modules/ActionAddPoll.vue'
+import { AxiosError } from '@nextcloud/axios'
 
 type InputProps = {
 	success: boolean
@@ -70,6 +77,9 @@ const viewMode = computed({
 	},
 })
 
+/**
+ *
+ */
 function logout() {
 	const reRouteTo = deleteCookieByValue(sessionStore.publicToken)
 	if (reRouteTo) {
@@ -82,10 +92,16 @@ function logout() {
 	}
 }
 
+/**
+ *
+ */
 async function writeSubscription() {
 	subscriptionStore.write()
 }
 
+/**
+ *
+ */
 async function deleteEmailAddress() {
 	try {
 		await sessionStore.deleteEmailAddress()
@@ -99,14 +115,19 @@ async function deleteEmailAddress() {
 	}
 }
 
+/**
+ *
+ */
 async function resendInvitation() {
 	try {
 		const response = await sessionStore.resendInvitation()
-		showSuccess(
-			t('polls', 'Invitation resent to {emailAddress}', {
-				emailAddress: response.data.share.user.emailAddress,
-			}),
-		)
+		if (response) {
+			showSuccess(
+				t('polls', 'Invitation resent to {emailAddress}', {
+					emailAddress: response.data.share.user.emailAddress,
+				}),
+			)
+		}
 	} catch {
 		showError(
 			t('polls', 'Mail could not be resent to {emailAddress}', {
@@ -120,7 +141,7 @@ async function resendInvitation() {
  *
  */
 function changeView(): void {
-	emit('polls:transitions:off', 500)
+	emit(Event.TransitionsOff, 500)
 	if (pollStore.type === PollType.Date) {
 		preferencesStore.setViewDatePoll(
 			pollStore.viewMode === ViewMode.TableView
@@ -136,6 +157,9 @@ function changeView(): void {
 	}
 }
 
+/**
+ *
+ */
 async function copyLink() {
 	const personalLink =
 		window.location.origin +
@@ -152,21 +176,29 @@ async function copyLink() {
 	}
 }
 
+/**
+ *
+ */
 async function getAddresses() {
 	try {
 		const response = await PollsAPI.getParticipantsEmailAddresses(
 			sessionStore.route.params.id,
 		)
 		await navigator.clipboard.writeText(
-			response.data.map((item) => item.combined),
+			response.data.map((item) => item.combined).join(', '),
 		)
 		showSuccess(t('polls', 'Link copied to clipboard'))
 	} catch (error) {
-		if (error?.code === 'ERR_CANCELED') return
+		if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+			return
+		}
 		showError(t('polls', 'Error while copying link to clipboard'))
 	}
 }
 
+/**
+ *
+ */
 async function resetVotes() {
 	try {
 		await votesStore.resetVotes()
@@ -208,12 +240,19 @@ const validateDisplayName = debounce(async function () {
 	}
 }, 500)
 
+/**
+ *
+ * @param status
+ */
 function setDisplayNameStatus(status: StatusResults) {
 	displayNameInputProps.value.success = status === StatusResults.Success
 	displayNameInputProps.value.error = status === StatusResults.Error
 	displayNameInputProps.value.showTrailingButton = status === StatusResults.Success
 }
 
+/**
+ *
+ */
 async function submitDisplayName() {
 	try {
 		await sessionStore.updateDisplayName({
@@ -252,12 +291,19 @@ const validateEMail = debounce(async function () {
 	}
 }, 500)
 
+/**
+ *
+ * @param status
+ */
 function setEMailStatus(status: StatusResults) {
 	eMailInputProps.value.success = status === StatusResults.Success
 	eMailInputProps.value.error = status === StatusResults.Error
 	eMailInputProps.value.showTrailingButton = status === StatusResults.Success
 }
 
+/**
+ *
+ */
 async function submitEmail() {
 	try {
 		await sessionStore.updateEmailAddress({

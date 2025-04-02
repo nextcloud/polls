@@ -14,20 +14,23 @@ import ActivityIcon from 'vue-material-design-icons/LightningBolt.vue'
 
 import Activities from '../Activity/Activities.vue'
 import { useActivityStore } from '../../stores/activity.ts'
+import { Event } from '../../Types/index.ts'
 
 const activityStore = useActivityStore()
 const emptyContentProps = {
 	name: t('polls', 'No activity yet'),
 }
 
-const showEmptyContent = computed(() => activityStore.list.length === 0)
+const showEmptyContent = computed(
+	() => activityStore.getActivitiesForPoll.length === 0,
+)
 
 onMounted(() => {
-	subscribe('polls:activity:update', () => activityStore.load())
+	subscribe(Event.UpdateActivity, () => activityStore.load())
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:activity:update', () => activityStore.load())
+	unsubscribe(Event.UpdateActivity, () => activityStore.load())
 })
 </script>
 

@@ -16,6 +16,7 @@ import CommentsIcon from 'vue-material-design-icons/CommentProcessing.vue'
 
 import { usePollStore } from '../../stores/poll.ts'
 import { useCommentsStore } from '../../stores/comments.ts'
+import { Event } from '../../Types/index.ts'
 
 const pollStore = usePollStore()
 const commentsStore = useCommentsStore()
@@ -28,11 +29,11 @@ const emptyContentProps = {
 const showEmptyContent = computed(() => commentsStore.list.length === 0)
 
 onMounted(() => {
-	subscribe('polls:comments:update', () => commentsStore.load())
+	subscribe(Event.UpdateComments, () => commentsStore.load())
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:comments:update', () => commentsStore.load())
+	unsubscribe(Event.UpdateComments, () => commentsStore.load())
 })
 </script>
 

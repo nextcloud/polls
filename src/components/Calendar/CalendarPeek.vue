@@ -17,17 +17,35 @@ import CalendarInfo from './CalendarInfo.vue'
 import { CalendarAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
 import { Option } from '../../Types/index.ts'
+import { AxiosError } from '@nextcloud/axios'
+
+export type CalendarEvent = {
+	id: number
+	UID: number
+	calendarUri: string
+	calendarKey: number
+	calendarName: string
+	displayColor: string
+	allDay: boolean
+	description: string
+	start: number
+	location: string
+	end: number
+	status: string
+	summary: string
+	type: string
+}
 
 const pollStore = usePollStore()
 
 const props = defineProps({
 	option: {
 		type: Object as PropType<Option>,
-		default: undefined,
+		required: true,
 	},
 })
 
-const events = ref([])
+const events = ref<CalendarEvent[]>([])
 
 const detectAllDay = computed(() => {
 	const from = moment.unix(props.option.timestamp)
@@ -46,33 +64,37 @@ const detectAllDay = computed(() => {
 
 const sortedEvents = computed(() => {
 	const sortedEvents = [...events.value]
-	sortedEvents.push(currentOption.value)
+	sortedEvents.push(currentEvent.value)
 	return orderBy(sortedEvents, ['start', 'end'], ['asc', 'asc'])
 })
 
-const currentOption = computed(() => ({
-	id: props.option.id,
-	UID: props.option.id,
-	calendarUri: '',
-	calendarKey: 0,
-	calendarName: 'Polls',
-	displayColor: 'transparent',
-	allDay: detectAllDay.value.allDay,
-	description: pollStore.configuration.description,
-	start: props.option.timestamp,
-	location: '',
-	end: props.option.timestamp + props.option.duration,
-	status: 'self',
-	summary: pollStore.configuration.title,
-	type: detectAllDay.value.type,
-}))
+const currentEvent = computed(
+	(): CalendarEvent => ({
+		id: props.option.id,
+		UID: props.option.id,
+		calendarUri: '',
+		calendarKey: 0,
+		calendarName: 'Polls',
+		displayColor: 'transparent',
+		allDay: detectAllDay.value.allDay,
+		description: pollStore.configuration.description,
+		start: props.option.timestamp,
+		location: '',
+		end: props.option.timestamp + props.option.duration,
+		status: 'self',
+		summary: pollStore.configuration.title,
+		type: detectAllDay.value.type,
+	}),
+)
 
 onMounted(async () => {
 	try {
 		const response = await CalendarAPI.getEvents(props.option.id)
 		events.value = response.data.events
 	} catch (error) {
-		if (error?.code === 'ERR_CANCELED') return
+		if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+			return
+		}
 		Logger.error('Error fetching events', { error })
 	}
 })

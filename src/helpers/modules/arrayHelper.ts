@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { Comment, Option, Vote, Participant } from '../../Types'
+import { Option, Vote, Participant } from '../../Types'
 
 const uniqueArrayOfObjects = (array: unknown[]) =>
 	[...new Set(array.map((obj) => JSON.stringify(obj)))].map((string) =>
@@ -25,67 +25,41 @@ const uniqueParticipants = (votes: Vote[]): Participant[] => {
 	return uniqueArrayOfObjects(participants)
 }
 
-const transformComments = (inputArray: Comment[]): Comment[] => {
-	const idToElement = inputArray.reduce((acc, item) => {
-		acc[item.id] = item
-		return acc
-	}, {})
+/**
+ * Creates a Record object from an array of objects
+ *
+ * @param arr - An array of objects that should contain the specified key property.
+ * @param key - An optional string that specifies which property to use as the key (default is 'id').
+ * @return A Record where the keys are the values of the specified property, and the values are the objects themselves.
+ */
+function createRecordFromArray<T extends object>(
+	arr: T[],
+	key: keyof T = 'id' as keyof T,
+): Record<string | number, T> {
+	// Use reduce to iterate over the array and build the Record object
+	return arr.reduce(
+		(acc, item) => {
+			// Ensure the key exists in the current item (type safety)
+			const keyValue = item[key]
 
-	const resultArray = inputArray
-		.filter((item) => item.parent === 0)
-		.sort((a, b) => b.timestamp - a.timestamp)
-		.map((parentItem) => {
-			const comments = getComments(parentItem.id)
-
-			const sortedComments = comments.sort((a, b) => {
-				const elementA = idToElement[a.id]
-				const elementB = idToElement[b.id]
-
-				// Verify elementA and elementB are defined
-				if (elementA && elementB) {
-					// compare timestamps
-					if (elementA.timestamp !== elementB.timestamp) {
-						return elementB.timestamp - elementA.timestamp
-					}
-
-					// sort by id, if timestamps are identical
-					return elementB.id - elementA.id
-				}
-
-				// otherwise sort by id
-				return b.id - a.id
-			})
-
-			return {
-				...parentItem,
-				comments: sortedComments,
-			}
-		})
-
-	function getComments(parentId: number): Comment[] {
-		const comments = []
-		const stack = [parentId]
-
-		while (stack.length > 0) {
-			const currentId = stack.pop()
-			const currentElement = idToElement[currentId]
-			comments.push({
-				id: currentElement.id,
-				comment: currentElement.comment,
-				deleted: currentElement.deleted,
-			})
-
-			const childIds = inputArray
-				.filter((item) => item.parent === currentId)
-				.map((item) => item.id)
-
-			stack.push(...childIds)
-		}
-
-		return comments
-	}
-
-	return resultArray
+			// Explicitly cast the key value to 'string | number'
+			acc[keyValue as string | number] = item
+			return acc
+		},
+		{} as Record<string | number, T>,
+	)
 }
 
-export { uniqueArrayOfObjects, uniqueOptions, uniqueParticipants, transformComments }
+// function createRecordFromArray<T extends { id: string | number }>(arr: T[]): Record<string | number, T> {
+//   return arr.reduce((acc, item) => {
+//     acc[item.id] = item;
+//     return acc;
+//   }, {} as Record<string | number, T>);
+// }
+
+export {
+	uniqueArrayOfObjects,
+	uniqueOptions,
+	uniqueParticipants,
+	createRecordFromArray,
+}

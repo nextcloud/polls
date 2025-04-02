@@ -11,12 +11,12 @@ import { Option } from '../../Types/index.ts'
 const props = defineProps({
 	calendarEvent: {
 		type: Object,
-		default: undefined,
+		required: true,
 	},
 
 	option: {
 		type: Object as PropType<Option>,
-		default: undefined,
+		required: true,
 	},
 })
 

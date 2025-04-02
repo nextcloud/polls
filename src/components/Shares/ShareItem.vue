@@ -37,12 +37,13 @@ import {
 	ShareType,
 	PublicPollEmailConditions,
 } from '../../stores/shares.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 const sharesStore = useSharesStore()
 const props = defineProps({
 	share: {
 		type: Object as PropType<Share>,
-		default: undefined,
+		required: true,
 	},
 })
 
@@ -95,6 +96,10 @@ onMounted(() => {
 	label.value.inputValue = props.share.label
 })
 
+/**
+ *
+ * @param share
+ */
 async function switchLocked(share: Share) {
 	try {
 		if (share.locked) {
@@ -118,10 +123,16 @@ async function switchLocked(share: Share) {
 				displayName: share.user.displayName,
 			}),
 		)
-		Logger.error('Error locking or unlocking share', { share, error })
+		Logger.error('Error locking or unlocking share', {
+			share,
+			error,
+		})
 	}
 }
 
+/**
+ *
+ */
 async function submitLabel() {
 	sharesStore.writeLabel({
 		token: props.share.token,
@@ -129,6 +140,10 @@ async function submitLabel() {
 	})
 }
 
+/**
+ *
+ * @param share
+ */
 async function resolveGroup(share: Share) {
 	if (resolving.value) {
 		return
@@ -140,8 +155,9 @@ async function resolveGroup(share: Share) {
 		await sharesStore.resolveGroup({ share })
 	} catch (error) {
 		if (
-			error.response.status === 409 &&
-			error.response.data === 'Circles is not enabled for this user'
+			(error as AxiosError).response?.status === 409 &&
+			(error as AxiosError).response?.data ===
+				'Circles is not enabled for this user'
 		) {
 			showError(
 				t(
@@ -151,8 +167,8 @@ async function resolveGroup(share: Share) {
 				),
 			)
 		} else if (
-			error.response.status === 409 &&
-			error.response.data === 'Contacts is not enabled'
+			(error as AxiosError).response?.status === 409 &&
+			(error as AxiosError).response?.data === 'Contacts is not enabled'
 		) {
 			showError(
 				t(
@@ -173,35 +189,46 @@ async function resolveGroup(share: Share) {
 	}
 }
 
+/**
+ *
+ */
 async function sendInvitation() {
-	const response = await sharesStore.sendInvitation({ share: props.share })
-	if (response.data?.sentResult?.sentMails) {
-		response.data.sentResult.sentMails.forEach((item) => {
-			showSuccess(
-				t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
-					emailAddress: item.emailAddress,
-					displayName: item.displayName,
-				}),
-			)
-		})
-	}
-	if (response.data?.sentResult?.abortedMails) {
-		response.data.sentResult.abortedMails.forEach((item) => {
-			Logger.error('Mail could not be sent!', { recipient: item })
-			showError(
-				t(
-					'polls',
-					'Error sending invitation to {displayName} ({emailAddress})',
-					{
+	try {
+		const response = await sharesStore.sendInvitation({ share: props.share })
+		if (response.data?.sentResult?.sentMails) {
+			response.data.sentResult.sentMails.forEach((item) => {
+				showSuccess(
+					t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
 						emailAddress: item.emailAddress,
 						displayName: item.displayName,
-					},
-				),
-			)
-		})
+					}),
+				)
+			})
+		}
+		if (response.data?.sentResult?.abortedMails) {
+			response.data.sentResult.abortedMails.forEach((item) => {
+				Logger.error('Mail could not be sent!', { recipient: item })
+				showError(
+					t(
+						'polls',
+						'Error sending invitation to {displayName} ({emailAddress})',
+						{
+							emailAddress: item.emailAddress,
+							displayName: item.displayName,
+						},
+					),
+				)
+			})
+		}
+	} catch (error) {
+		showError(t('polls', 'Error sending invitation'))
+		Logger.error('Error sending invitation', { error })
 	}
 }
 
+/**
+ *
+ */
 function copyLink() {
 	try {
 		navigator.clipboard.writeText(props.share.URL)
