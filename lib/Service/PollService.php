@@ -245,7 +245,7 @@ class PollService {
 			throw new ForbiddenException('Deanonimization is not allowed');
 		}
 
-		if (isset($pollConfiguration['access']) && !in_array($pollConfiguration['access'], $this->getValidAccess())) {
+		if (isset($pollConfiguration['access'])) {
 			if (!in_array($pollConfiguration['access'], $this->getValidAccess())) {
 				throw new InvalidAccessException('Invalid value for prop access ' . $pollConfiguration['access']);
 			}
