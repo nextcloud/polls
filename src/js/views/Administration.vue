@@ -80,7 +80,7 @@
 						</template>
 					</NcButton>
 
-					<NcButton type="primary" @click="takeOverPoll()">
+					<NcButton variant="primary" @click="takeOverPoll()">
 						<template #default>
 							{{ t('polls', 'Yes') }}
 						</template>
@@ -103,7 +103,7 @@
 						</template>
 					</NcButton>
 
-					<NcButton type="primary" @click="deletePoll()">
+					<NcButton variant="primary" @click="deletePoll()">
 						<template #default>
 							{{ t('polls', 'Yes') }}
 						</template>

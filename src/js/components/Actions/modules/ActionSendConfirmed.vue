@@ -5,7 +5,7 @@
 
 <template>
 	<div class="action send-confirmations">
-		<NcButton type="primary"
+		<NcButton variant="primary"
 			:aria-label="sendButtonCaption"
 			:disabled="disableButton"
 			@click="clickAction()">

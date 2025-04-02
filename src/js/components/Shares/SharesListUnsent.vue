@@ -11,7 +11,7 @@
 		<template #actions>
 			<NcButton :title="t('polls', 'Resolve and send all invitations')"
 				:aria-label="t('polls', 'Resolve and send all invitations')"
-				type="tertiary"
+				variant="tertiary"
 				@click="sendAllInvitations()">
 				<template #icon>
 					<BulkMailIcon />
