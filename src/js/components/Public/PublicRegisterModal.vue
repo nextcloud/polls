@@ -50,7 +50,7 @@
 							</template>
 						</NcButton>
 
-						<NcButton type="primary" :disabled="disableSubmit" @click="submitRegistration()">
+						<NcButton variant="primary" :disabled="disableSubmit" @click="submitRegistration()">
 							<template #default>
 								{{ t('polls', 'OK') }}
 							</template>

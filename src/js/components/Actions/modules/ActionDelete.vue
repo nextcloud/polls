@@ -6,7 +6,7 @@
 <template>
 	<div class="">
 		<NcButton :name="computedTitle"
-			type="tertiary"
+			variant="tertiary"
 			:aria-label="computedTitle">
 			<template #icon>
 				<RestoreIcon v-if="restore"

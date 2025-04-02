@@ -5,7 +5,7 @@
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton type="tertiary"
+		<NcButton variant="tertiary"
 			:title="caption"
 			:aria-label="caption"
 			@click="clickAction()">

@@ -30,7 +30,7 @@
 				</template>
 			</NcButton>
 			<NcButton :disabled="titleEmpty"
-				type="primary"
+				variant="primary"
 				@click="confirm">
 				<template #default>
 					{{ t('polls', 'Apply') }}

@@ -181,8 +181,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-	$input-height: 44px;
-
 	.input-div {
 		position: relative;
 		flex: 1;
@@ -199,11 +197,11 @@ export default {
 			&.error,
 			&.success,
 			&.checking {
-				padding-right: $input-height;
+				padding-right: 44px;
 			}
 
 			&.has-modifier {
-				padding: 0 $input-height;
+				padding: 0 44px;
 			}
 
 			&.error {
@@ -245,14 +243,14 @@ export default {
 		.signaling-icon {
 			position: absolute;
 			right: 0;
-			width: $input-height;
-			height: $input-height;
+			width: 44px;
+			height: 44px;
 		}
 
 		.modifier {
 			position: absolute;
 			height: 100%;
-			width: $input-height;
+			width: 44px;
 			border-color: var(--color-border-dark);
 			cursor: pointer;
 

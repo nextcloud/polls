@@ -60,7 +60,7 @@
 			</template>
 		</NcEmptyContent>
 
-		<NcModal v-if="cloneModal" size="small" :can-close="false">
+		<NcModal v-if="cloneModal" size="small" no-close>
 			<OptionCloneDate :option="optionToClone" class="modal__content" @close="closeModal()" />
 		</NcModal>
 	</div>

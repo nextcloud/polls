@@ -17,21 +17,21 @@
 			</p>
 		</div>
 		<div class="job_buttons_section">
-			<NcButton type="primary"
+			<NcButton variant="primary"
 				:aria-label="autoreminder.text"
 				:disabled="autoreminder.disabled"
 				@click="runAutoReminderJob()">
 				{{ autoreminder.text }}
 			</NcButton>
 
-			<NcButton type="primary"
+			<NcButton variant="primary"
 				:aria-label="janitor.text"
 				:disabled="janitor.disabled"
 				@click="runJanitorJob()">
 				{{ janitor.text }}
 			</NcButton>
 
-			<NcButton type="primary"
+			<NcButton variant="primary"
 				:aria-label="notification.text"
 				:disabled="notification.disabled"
 				@click="runNotificationJob()">
@@ -122,4 +122,3 @@ export default {
 	}
 }
 </style>
- 

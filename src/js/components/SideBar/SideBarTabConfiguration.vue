@@ -70,7 +70,7 @@
 				</template>
 			</NcButton>
 
-			<NcButton v-if="isPollArchived" type="error" @click="deletePoll()">
+			<NcButton v-if="isPollArchived" variant="error" @click="deletePoll()">
 				<template #icon>
 					<DeletePollIcon />
 				</template>

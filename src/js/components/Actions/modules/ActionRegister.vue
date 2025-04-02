@@ -5,14 +5,13 @@
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton type="primary"
+		<NcButton variant="primary"
 			:aria-label="caption"
 			@click="clickAction()">
 			{{ caption }}
 		</NcButton>
 		<NcModal :show.sync="showRegistration"
 			:size="registerModalSize"
-			:can-close="true"
 			@close="closeRegisterModal()">
 			<PublicRegisterModal @close="closeRegisterModal()" />
 		</NcModal>

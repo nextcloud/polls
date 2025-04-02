@@ -5,7 +5,7 @@
 
 <template>
 	<div class="action change-view">
-		<NcButton type="tertiary"
+		<NcButton variant="tertiary"
 			:title="caption"
 			:aria-label="caption"
 			@click="clickAction()">
