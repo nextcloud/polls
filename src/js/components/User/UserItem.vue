@@ -41,7 +41,6 @@
 </template>
 
 <script>
-import { getCurrentUser } from '@nextcloud/auth'
 import { NcAvatar } from '@nextcloud/vue'
 import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
 import LinkIcon from 'vue-material-design-icons/LinkVariant.vue'
@@ -169,7 +168,7 @@ export default {
 			type: Number,
 			default: 16,
 		},
-		hideUserStatus: {
+		hideStatus: {
 			type: Boolean,
 			default: false,
 		},
@@ -191,7 +190,7 @@ export default {
 				isGuest: this.isGuestComputed,
 				menuPosition: this.menuPosition,
 				size: this.iconSize,
-				showUserStatus: this.showUserStatus,
+				hideStatus: this.hideStatus,
 				user: this.avatarUserId,
 				displayName: this.displayName,
 				isNoUser: this.user.isNoUser,
@@ -263,10 +262,6 @@ export default {
 			}
 
 			return ''
-		},
-
-		showUserStatus() {
-			return !this.hideUserStatus && Boolean(getCurrentUser())
 		},
 	},
 }
