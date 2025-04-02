@@ -32,13 +32,21 @@ const dateCommentedRelative = computed(() =>
 )
 
 const isCurrentUser = computed(
-	() => sessionStore.currentUser.id === props.comment.user.id,
+	() => sessionStore.currentUser?.id === props.comment.user.id,
 )
 
+/**
+ *
+ * @param subComment
+ */
 function linkify(subComment: string) {
 	return linkifyStr(subComment)
 }
 
+/**
+ *
+ * @param comment
+ */
 async function deleteComment(comment: Comment) {
 	try {
 		await commentsStore.delete({ comment })
@@ -47,6 +55,10 @@ async function deleteComment(comment: Comment) {
 	}
 }
 
+/**
+ *
+ * @param comment
+ */
 async function restoreComment(comment: Comment) {
 	try {
 		await commentsStore.restore({ comment })
@@ -75,7 +87,7 @@ async function restoreComment(comment: Comment) {
 
 				<ActionDelete
 					v-if="
-						comment.user.id === sessionStore.currentUser.id ||
+						comment.user.id === sessionStore.currentUser?.id ||
 						pollStore.currentUserStatus.isOwner
 					"
 					:name="

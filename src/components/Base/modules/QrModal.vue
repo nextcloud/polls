@@ -7,6 +7,7 @@
 import QRCode from 'qrcode'
 import { Logger } from '../../../helpers/index.ts'
 import { onMounted, ref } from 'vue'
+import { AxiosError } from '@nextcloud/axios'
 
 const props = defineProps({
 	name: {
@@ -35,7 +36,8 @@ const qrUri = ref<string>('')
 async function generateQr() {
 	try {
 		qrUri.value = await QRCode.toDataURL(props.encodeText)
-	} catch (error) {
+	} catch (e) {
+		const error = e as AxiosError
 		Logger.error('Error on generating QR code', { error: error.message })
 	}
 }

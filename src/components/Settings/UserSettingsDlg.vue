@@ -2,7 +2,7 @@
   - SPDX-FileCopyrightText: 2018 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
-<script setup>
+<script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
@@ -17,6 +17,7 @@ import {
 	PerformanceSettings,
 } from './UserSettings/index.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
+import { Event } from '../../Types/index.ts'
 
 const preferencesStore = usePreferencesStore()
 const show = ref(false)
@@ -24,20 +25,20 @@ const show = ref(false)
 /**
  *
  */
-function loadPreferences() {
+function loadPreferences(): void {
 	preferencesStore.load()
 	preferencesStore.getCalendars()
 }
 
 onMounted(() => {
-	subscribe('polls:settings:show', () => {
+	subscribe(Event.ShowSettings, () => {
 		show.value = true
 		loadPreferences()
 	})
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:settings:show')
+	unsubscribe(Event.ShowSettings, () => {})
 })
 </script>
 

@@ -7,15 +7,19 @@ import { onMounted, onUnmounted, ref } from 'vue'
 
 /**
  * returns a boolean value if the user has scrolled downwards more than 20px
+ *
  * @param scrollElementId the id of the element that should be checked for scrolling
  * @param offset the offset in px that should be scrolled before returning the scroll value
  */
 export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 	const scrolled = ref(0)
-	const scrollElement = ref<HTMLElement>(null)
+	const scrollElement = ref<null | HTMLElement>(null)
 
+	/**
+	 *
+	 */
 	function handleScroll() {
-		if (scrollElement.value.scrollTop > offset) {
+		if (scrollElement.value !== null && scrollElement.value.scrollTop > offset) {
 			scrolled.value = scrollElement.value.scrollTop
 		} else {
 			scrolled.value = 0
@@ -27,6 +31,7 @@ export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 		// Fallback for class based elements
 		if (scrollElement.value === null) {
 			const scrollElements = document.getElementsByClassName(scrollElementId)
+			// asssume the first one is the desired one
 			scrollElement.value = scrollElements[0] as HTMLElement
 		}
 
@@ -36,7 +41,8 @@ export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 	})
 
 	onUnmounted(() => {
-		scrollElement.value.removeEventListener('scroll', handleScroll)
+		if (scrollElement.value !== null)
+			scrollElement.value.removeEventListener('scroll', handleScroll)
 	})
 	return scrolled
 }

@@ -15,13 +15,15 @@ const sessionStore = useSessionStore()
 const cardType = 'info'
 
 const registrationInvitationText = computed(() => {
-	if (sessionStore.share.publicPollEmail === PublicPollEmailConditions.Mandatory) {
+	if (
+		sessionStore.share?.publicPollEmail === PublicPollEmailConditions.Mandatory
+	) {
 		return t(
 			'polls',
 			'To participate, register with your email address and a name.',
 		)
 	}
-	if (sessionStore.share.publicPollEmail === PublicPollEmailConditions.Optional) {
+	if (sessionStore.share?.publicPollEmail === PublicPollEmailConditions.Optional) {
 		return t(
 			'polls',
 			'To participate, register a name and optionally with your email address.',

@@ -26,8 +26,14 @@ const adding = ref(false)
 const pollType = ref(PollType.Date)
 
 const pollTypeOptions = [
-	{ value: PollType.Date, label: t('polls', 'Date poll') },
-	{ value: PollType.Text, label: t('polls', 'Text poll') },
+	{
+		value: PollType.Date,
+		label: t('polls', 'Date poll'),
+	},
+	{
+		value: PollType.Text,
+		label: t('polls', 'Text poll'),
+	},
 ]
 
 const titleEmpty = computed(() => title.value === '')
@@ -35,30 +41,40 @@ const disableConfirm = computed(() => titleEmpty.value || adding.value)
 
 const emit = defineEmits(['cancel', 'add'])
 
+/**
+ *
+ */
 function resetInput() {
 	title.value = ''
 	pollType.value = PollType.Date
 }
 
+/**
+ *
+ */
 async function add() {
 	try {
 		adding.value = true
-		const response = await pollStore.add({
+		const poll = await pollStore.add({
 			title: title.value,
 			type: pollType.value,
 		})
 
 		resetInput()
+		if (poll) {
+			showSuccess(
+				t('polls', 'Poll "{pollTitle}" added', {
+					pollTitle: poll.configuration.title,
+				}),
+			)
 
-		showSuccess(
-			t('polls', 'Poll "{pollTitle}" added', {
-				pollTitle: response.data.configuration.title,
-			}),
-		)
+			emit('add')
 
-		emit('add')
-
-		router.push({ name: 'vote', params: { id: response.data.id } })
+			router.push({
+				name: 'vote',
+				params: { id: poll.id },
+			})
+		}
 	} catch {
 		showError(
 			t('polls', 'Error while creating Poll "{pollTitle}"', {

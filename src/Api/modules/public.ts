@@ -2,10 +2,28 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import { AxiosResponse } from '@nextcloud/axios'
+import { Option, SimpleOption } from '../../stores/options.js'
+import { Session } from '../../stores/session.js'
+import { Answer, Vote } from '../../stores/votes.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { Comment } from '../../stores/comments.js'
+import { Poll } from '../../stores/poll.js'
+import { Share } from '../../stores/shares.js'
+import { SentResults } from './shares.js'
+import { WatcherResponse } from './polls.js'
 
 const publicPoll = {
-	getPoll(shareToken) {
+	getPoll(shareToken: string): Promise<
+		AxiosResponse<{
+			poll: Poll
+			options: Option[]
+			votes: Vote[]
+			comments: Comment[]
+			shares: Share[]
+			subscribed: boolean
+		}>
+	> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/poll`,
@@ -17,7 +35,7 @@ const publicPoll = {
 		})
 	},
 
-	getSession(shareToken) {
+	getSession(shareToken: string): Promise<AxiosResponse<Session>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/session`,
@@ -29,7 +47,10 @@ const publicPoll = {
 		})
 	},
 
-	watchPoll(shareToken, lastUpdated) {
+	watchPoll(
+		shareToken: string,
+		lastUpdated: number,
+	): Promise<AxiosResponse<{ updates: WatcherResponse[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `s/${shareToken}/watch`,
@@ -41,7 +62,7 @@ const publicPoll = {
 		})
 	},
 
-	getOptions(shareToken) {
+	getOptions(shareToken: string): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/options`,
@@ -53,7 +74,10 @@ const publicPoll = {
 		})
 	},
 
-	addOption(shareToken, option) {
+	addOption(
+		shareToken: string,
+		option: SimpleOption,
+	): Promise<AxiosResponse<{ option: Option }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `/s/${shareToken}/option`,
@@ -65,7 +89,10 @@ const publicPoll = {
 		})
 	},
 
-	deleteOption(shareToken, optionId) {
+	deleteOption(
+		shareToken: string,
+		optionId: number,
+	): Promise<AxiosResponse<{ option: Option }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/option/${optionId}`,
@@ -77,7 +104,10 @@ const publicPoll = {
 		})
 	},
 
-	restoreOption(shareToken, optionId) {
+	restoreOption(
+		shareToken: string,
+		optionId: number,
+	): Promise<AxiosResponse<{ option: Option }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/option/${optionId}/restore`,
@@ -90,7 +120,7 @@ const publicPoll = {
 		})
 	},
 
-	getVotes(shareToken) {
+	getVotes(shareToken: string): Promise<AxiosResponse<{ votes: Vote[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/votes`,
@@ -102,11 +132,20 @@ const publicPoll = {
 		})
 	},
 
-	setVote(shareToken, optionId, setTo) {
+	setVote(
+		shareToken: string,
+		optionId: number,
+		setTo: Answer,
+	): Promise<
+		AxiosResponse<{ vote: Vote; poll: Poll; options: Option[]; votes: Vote[] }>
+	> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/vote`,
-			data: { optionId, setTo },
+			data: {
+				optionId,
+				setTo,
+			},
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.setVote.name
@@ -114,18 +153,22 @@ const publicPoll = {
 		})
 	},
 
-	removeVotes(shareToken) {
+	resetVotes(
+		shareToken: string,
+	): Promise<AxiosResponse<{ poll: Poll; options: Option[]; votes: Vote[] }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/user`,
 			cancelToken:
 				cancelTokenHandlerObject[
-					this.removeVotes.name
+					this.resetVotes.name
 				].handleRequestCancellation().token,
 		})
 	},
 
-	removeOrphanedVotes(shareToken) {
+	removeOrphanedVotes(
+		shareToken: string,
+	): Promise<AxiosResponse<{ poll: Poll; options: Option[]; votes: Vote[] }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/votes/orphaned`,
@@ -136,7 +179,9 @@ const publicPoll = {
 		})
 	},
 
-	getComments(shareToken) {
+	getComments(
+		shareToken: string,
+	): Promise<AxiosResponse<{ comments: Comment[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `/s/${shareToken}/comments`,
@@ -148,7 +193,10 @@ const publicPoll = {
 		})
 	},
 
-	addComment(shareToken, message) {
+	addComment(
+		shareToken: string,
+		message: string,
+	): Promise<AxiosResponse<{ comment: Comment }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `s/${shareToken}/comment`,
@@ -161,7 +209,10 @@ const publicPoll = {
 		})
 	},
 
-	deleteComment(shareToken, commentId) {
+	deleteComment(
+		shareToken: string,
+		commentId: number,
+	): Promise<AxiosResponse<{ comment: Comment }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/comment/${commentId}`,
@@ -174,7 +225,10 @@ const publicPoll = {
 		})
 	},
 
-	restoreComment(shareToken, commentId) {
+	restoreComment(
+		shareToken: string,
+		commentId: number,
+	): Promise<AxiosResponse<{ comment: Comment }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/comment/${commentId}/restore`,
@@ -187,7 +241,7 @@ const publicPoll = {
 		})
 	},
 
-	getShare(shareToken) {
+	getShare(shareToken: string): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `s/${shareToken}/share`,
@@ -199,7 +253,10 @@ const publicPoll = {
 		})
 	},
 
-	setEmailAddress(shareToken, emailAddress) {
+	setEmailAddress(
+		shareToken: string,
+		emailAddress: string,
+	): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/email/${emailAddress}`,
@@ -211,7 +268,9 @@ const publicPoll = {
 		})
 	},
 
-	deleteEmailAddress(shareToken) {
+	deleteEmailAddress(
+		shareToken: string,
+	): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `s/${shareToken}/email`,
@@ -223,7 +282,10 @@ const publicPoll = {
 		})
 	},
 
-	setDisplayName(shareToken, displayName) {
+	setDisplayName(
+		shareToken: string,
+		displayName: string,
+	): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}/name/${displayName}`,
@@ -235,7 +297,9 @@ const publicPoll = {
 		})
 	},
 
-	resendInvitation(shareToken) {
+	resendInvitation(
+		shareToken: string,
+	): Promise<AxiosResponse<{ share: Share; sentResult: SentResults }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `s/${shareToken}/resend`,
@@ -247,7 +311,9 @@ const publicPoll = {
 		})
 	},
 
-	getSubscription(shareToken) {
+	getSubscription(
+		shareToken: string,
+	): Promise<AxiosResponse<{ subscribed: boolean }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `s/${shareToken}/subscription`,
@@ -258,7 +324,10 @@ const publicPoll = {
 		})
 	},
 
-	setSubscription(shareToken, subscription) {
+	setSubscription(
+		shareToken: string,
+		subscription: boolean,
+	): Promise<AxiosResponse<{ subscribed: boolean }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `s/${shareToken}${subscription ? '/subscribe' : '/unsubscribe'}`,
@@ -269,7 +338,12 @@ const publicPoll = {
 		})
 	},
 
-	register(shareToken, displayName, emailAddress, timeZone) {
+	register(
+		shareToken: string,
+		displayName: string,
+		emailAddress: string,
+		timeZone: undefined = undefined,
+	): Promise<AxiosResponse<{ share: Share }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `s/${shareToken}/register`,

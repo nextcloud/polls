@@ -13,7 +13,12 @@ import NcSelect from '@nextcloud/vue/components/NcSelect'
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 import { InputDiv } from '../Base/index.ts'
-import { dateUnits, DateUnitKeys, TimeUnitsType } from '../../constants/dateUnits.ts'
+import {
+	dateTimeUnits,
+	dateTimeUnitsKeyed,
+	DateUnitKeys,
+	TimeUnitsType,
+} from '../../constants/dateUnits.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'
 
@@ -23,9 +28,13 @@ const optionsStore = useOptionsStore()
 
 const shift = ref<TimeUnitsType>({
 	value: 1,
-	unit: { name: t('polls', 'Week'), key: DateUnitKeys.Week },
+	unit: dateTimeUnitsKeyed[DateUnitKeys.Week],
 })
 
+/**
+ *
+ * @param shift
+ */
 function shiftDates(shift: TimeUnitsType) {
 	optionsStore.shift({ shift })
 }
@@ -53,7 +62,7 @@ function shiftDates(shift: TimeUnitsType) {
 					:input-label="t('polls', 'Step unit')"
 					:clearable="false"
 					:filterable="false"
-					:options="dateUnits"
+					:options="dateTimeUnits"
 					label="name" />
 				<NcButton
 					class="submit"

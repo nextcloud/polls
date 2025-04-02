@@ -4,8 +4,8 @@
  */
 
 import { defineStore } from 'pinia'
-import debounce from 'lodash/debounce'
 import orderBy from 'lodash/orderBy'
+// eslint-disable-next-line import/no-named-as-default
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
 import { gfmHeadingId } from 'marked-gfm-heading-id'
@@ -17,9 +17,8 @@ import { emit } from '@nextcloud/event-bus'
 
 import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
 import { PublicAPI, PollsAPI } from '../Api/index.ts'
-import { User, UserType } from '../Types/index.ts'
+import { createDefault, Event, User, UserType } from '../Types/index.ts'
 
-import { useActivityStore } from './activity.ts'
 import { usePreferencesStore, ViewMode } from './preferences.ts'
 import { useVotesStore, Answer } from './votes.ts'
 import { useOptionsStore } from './options.ts'
@@ -28,6 +27,7 @@ import { useSessionStore } from './session.ts'
 import { useSubscriptionStore } from './subscription.ts'
 import { useSharesStore } from './shares.ts'
 import { useCommentsStore } from './comments.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 export enum PollType {
 	Text = 'textPoll',
@@ -164,22 +164,7 @@ export const usePollStore = defineStore('poll', {
 			maxVotesPerOption: 0,
 			maxVotesPerUser: 0,
 		},
-		owner: {
-			id: '',
-			displayName: '',
-			emailAddress: '',
-			isAdmin: false,
-			isNoUser: false,
-			type: UserType.None,
-			subName: null,
-			subtitle: null,
-			desc: null,
-			organisation: null,
-			languageCode: null,
-			localeCode: null,
-			timeZone: null,
-			categories: null,
-		},
+		owner: createDefault<User>(),
 		status: {
 			anonymizeLevel: 'ANON_NONE',
 			lastInteraction: 0,
@@ -232,7 +217,7 @@ export const usePollStore = defineStore('poll', {
 	}),
 
 	getters: {
-		viewMode(state) {
+		viewMode(state): ViewMode {
 			const preferencesStore = usePreferencesStore()
 			if (state.type === PollType.Text) {
 				return preferencesStore.viewTextPoll
@@ -244,25 +229,7 @@ export const usePollStore = defineStore('poll', {
 			return ViewMode.TableView
 		},
 
-		getNextViewMode() {
-			const preferencesStore = usePreferencesStore()
-			if (preferencesStore.viewModes.indexOf(this.viewMode) < 0) {
-				return preferencesStore.viewModes[1]
-			}
-			return preferencesStore.viewModes[
-				(preferencesStore.viewModes.indexOf(this.viewMode) + 1) %
-					preferencesStore.viewModes.length
-			]
-		},
-
-		typeName(state) {
-			if (state.type === PollType.Text) {
-				return t('polls', 'Text poll')
-			}
-			return t('polls', 'Date poll')
-		},
-
-		answerSequence(state) {
+		answerSequence(state): Answer[] {
 			const noString = state.configuration.useNo ? Answer.No : Answer.None
 			if (state.configuration.allowMaybe) {
 				return [noString, Answer.Yes, Answer.Maybe]
@@ -278,9 +245,9 @@ export const usePollStore = defineStore('poll', {
 			if (
 				!participants.find(
 					(participant: User) =>
-						participant.id === sessionStore.currentUser.id,
+						participant.id === sessionStore.currentUser?.id,
 				) &&
-				sessionStore.currentUser.id &&
+				sessionStore.currentUser?.id &&
 				state.permissions.vote
 			) {
 				participants.push(sessionStore.currentUser)
@@ -290,7 +257,7 @@ export const usePollStore = defineStore('poll', {
 				: participants
 		},
 
-		safeParticipants() {
+		safeParticipants(): User[] {
 			const sessionStore = useSessionStore()
 			if (this.getSafeTable) {
 				return [sessionStore.currentUser]
@@ -304,62 +271,70 @@ export const usePollStore = defineStore('poll', {
 			return uniqueArrayOfObjects(votesStore.list.map((vote) => vote.user))
 		},
 
-		getProposalsOptions: () => [
-			{
-				value: AllowProposals.Disallow,
-				label: t('polls', 'Disallow proposals'),
-			},
-			{ value: AllowProposals.Allow, label: t('polls', 'Allow proposals') },
-		],
+		getProposalsOptions(): {
+			value: AllowProposals
+			label: string
+		}[] {
+			return [
+				{
+					value: AllowProposals.Disallow,
+					label: t('polls', 'Disallow proposals'),
+				},
+				{
+					value: AllowProposals.Allow,
+					label: t('polls', 'Allow proposals'),
+				},
+			]
+		},
 
-		displayResults(state) {
+		displayResults(state): boolean {
 			return (
 				state.configuration.showResults === ShowResults.Always ||
 				(state.configuration.showResults === ShowResults.Closed &&
-					!this.closed)
+					!this.status.isExpired)
 			)
 		},
 
-		isProposalOpen() {
+		isProposalOpen(): boolean {
 			return this.isProposalAllowed && !this.isProposalExpired
 		},
 
-		isProposalAllowed(state) {
+		isProposalAllowed(state): boolean {
 			return (
 				state.configuration.allowProposals === AllowProposals.Allow ||
 				state.configuration.allowProposals === AllowProposals.Review
 			)
 		},
 
-		isConfirmationAllowed(state) {
+		isConfirmationAllowed(state): boolean {
 			return state.permissions.confirmOptions || !this.isClosed
 		},
 
-		isOptionCloneAllowed(state) {
+		isOptionCloneAllowed(state): boolean {
 			return !this.isClosed && state.permissions.edit
 		},
 
-		isProposalExpired(state) {
+		isProposalExpired(state): boolean {
 			return (
 				this.isProposalAllowed &&
-				state.configuration.proposalsExpire &&
+				state.configuration.proposalsExpire > 0 &&
 				moment.unix(state.configuration.proposalsExpire).diff() < 0
 			)
 		},
 
-		isProposalExpirySet(state) {
-			return this.isProposalAllowed && state.configuration.proposalsExpire
+		isProposalExpirySet(state): boolean {
+			return this.isProposalAllowed && state.configuration.proposalsExpire > 0
 		},
 
-		proposalsExpireRelative(state) {
+		proposalsExpireRelative(state): string {
 			return moment.unix(state.configuration.proposalsExpire).fromNow()
 		},
 
-		proposalsExpire_d(state) {
+		proposalsExpire_d(state): Date {
 			return moment.unix(state.configuration.proposalsExpire)._d
 		},
 
-		isClosed(state) {
+		isClosed(state): boolean {
 			return (
 				state.status.isExpired ||
 				(state.configuration.expire > 0 &&
@@ -367,7 +342,7 @@ export const usePollStore = defineStore('poll', {
 			)
 		},
 
-		getSafeTable(state) {
+		getSafeTable(state): boolean {
 			const preferencesStore = usePreferencesStore()
 			return (
 				!state.revealParticipants &&
@@ -375,28 +350,28 @@ export const usePollStore = defineStore('poll', {
 			)
 		},
 
-		countParticipants() {
+		countParticipants(): number {
 			return this.participants.length
 		},
 
-		countHiddenParticipants() {
+		countHiddenParticipants(): number {
 			return this.participants.length - this.safeParticipants.length
 		},
 
-		countSafeParticipants() {
+		countSafeParticipants(): number {
 			return this.safeParticipants.length
 		},
 
-		countParticipantsVoted() {
+		countParticipantsVoted(): number {
 			return this.participantsVoted.length
 		},
 
-		countCells() {
+		countCells(): number {
 			const optionsStore = useOptionsStore()
 			return this.countParticipants * optionsStore.count
 		},
 
-		descriptionMarkUp() {
+		descriptionMarkUp(): string {
 			marked.use(gfmHeadingId(markedPrefix))
 			return DOMPurify.sanitize(
 				marked.parse(this.configuration.description).toString(),
@@ -405,21 +380,21 @@ export const usePollStore = defineStore('poll', {
 	},
 
 	actions: {
-		reset() {
+		reset(): void {
 			this.$reset()
 		},
 
-		setProposalExpiration(payload: { expire: number }) {
-			this.configuration.proposalExpire = moment(payload.expire).unix()
-			this.update()
+		setProposalExpiration(payload: { expire: number }): void {
+			this.configuration.proposalsExpire = moment(payload.expire).unix()
+			this.write()
 		},
 
-		setExpiration(payload: { expire: number }) {
-			this.configuration.proposalExpire = moment(payload.expire).unix()
-			this.update()
+		setExpiration(payload: { expire: number }): void {
+			this.configuration.proposalsExpire = moment(payload.expire).unix()
+			this.write()
 		},
 
-		async resetPoll() {
+		async resetPoll(): Promise<void> {
 			const votesStore = useVotesStore()
 			const optionsStore = useOptionsStore()
 			const sharesStore = useSharesStore()
@@ -433,30 +408,26 @@ export const usePollStore = defineStore('poll', {
 			subscriptionStore.$reset()
 		},
 
-		async load() {
+		async load(): Promise<void> {
 			const votesStore = useVotesStore()
 			const sessionStore = useSessionStore()
 			const optionsStore = useOptionsStore()
 			const sharesStore = useSharesStore()
 			const commentsStore = useCommentsStore()
 			const subscriptionStore = useSubscriptionStore()
-			const activityStore = useActivityStore()
 			try {
-				let response = null
-
-				if (sessionStore.route.name === 'publicVote') {
-					response = await PublicAPI.getPoll(
-						sessionStore.route.params.token,
-					)
-				} else if (sessionStore.route.name === 'vote') {
-					response = await PollsAPI.getFullPoll(
-						sessionStore.route.params.id,
-					)
-					if (sessionStore.appSettings.useActivity) {
-						await activityStore.load()
+				const response = await (() => {
+					if (sessionStore.route.name === 'publicVote') {
+						return PublicAPI.getPoll(sessionStore.route.params.token)
 					}
-				} else {
-					this.reset()
+					if (sessionStore.route.name === 'vote') {
+						return PollsAPI.getFullPoll(sessionStore.currentPollId)
+					}
+					return null
+				})()
+
+				if (!response) {
+					this.$reset()
 					return
 				}
 
@@ -467,31 +438,41 @@ export const usePollStore = defineStore('poll', {
 				commentsStore.list = response.data.comments
 				subscriptionStore.subscribed = response.data.subscribed
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error loading poll', { error: error.response })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error loading poll', { error })
 				throw error
 			}
 		},
 
-		async add(payload: { type: PollType; title: string }) {
+		async add(payload: { type: PollType; title: string }): Promise<Poll | void> {
 			const pollsStore = usePollsStore()
 
 			try {
 				const response = await PollsAPI.addPoll(payload.type, payload.title)
-				return response
+				return response.data.poll
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error adding poll:', { error, state: this.$state })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error adding poll:', {
+					error,
+					state: this.$state,
+				})
 				throw error
 			} finally {
 				pollsStore.load()
 			}
 		},
-		async LockAnonymous() {
+
+		async LockAnonymous(): Promise<void> {
 			try {
 				await PollsAPI.lockAnonymous(this.id)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error locking poll to anonymous:', {
 					error,
 					state: this.$state,
@@ -503,44 +484,57 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		write: debounce(async function () {
+		write(): void {
 			const pollsStore = usePollsStore()
 
-			if (this.configuration.title === '') {
-				showError(t('polls', 'Title must not be empty!'))
-				return
-			}
+			const debouncedLoad = this.$debounce(async () => {
+				if (this.configuration.title === '') {
+					showError(t('polls', 'Title must not be empty!'))
+					return
+				}
 
-			try {
-				const response = await PollsAPI.writePoll(
-					this.id,
-					this.configuration,
-				)
-				this.$patch(response.data.poll)
-				emit('polls:poll:updated', {
-					store: 'poll',
-					message: t('polls', 'Poll updated'),
-				})
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error updating poll:', { error, poll: this.$state })
-				showError(t('polls', 'Error writing poll'))
-				throw error
-			} finally {
-				this.load()
-				pollsStore.load()
-			}
-		}, 500),
+				try {
+					const response = await PollsAPI.writePoll(
+						this.id,
+						this.configuration,
+					)
+					this.$patch(response.data.poll)
+					emit(Event.UpdatePoll, {
+						store: 'poll',
+						message: t('polls', 'Poll updated'),
+					})
+				} catch (error) {
+					if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+						return
+					}
+					Logger.error('Error updating poll:', {
+						error,
+						poll: this.$state,
+					})
+					showError(t('polls', 'Error writing poll'))
+					throw error
+				} finally {
+					this.load()
+					pollsStore.load()
+				}
+			}, 500)
+			debouncedLoad()
+		},
 
-		async close() {
+		async close(): Promise<void> {
 			const pollsStore = usePollsStore()
 
 			try {
 				const response = await PollsAPI.closePoll(this.id)
 				this.$patch(response.data.poll)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error closing poll', { error, pollId: this.id })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error closing poll', {
+					error,
+					pollId: this.id,
+				})
 				this.load()
 				throw error
 			} finally {
@@ -548,15 +542,20 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		async reopen() {
+		async reopen(): Promise<void> {
 			const pollsStore = usePollsStore()
 
 			try {
 				const response = await PollsAPI.reopenPoll(this.id)
 				this.$patch(response.data.poll)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error reopening poll', { error, pollId: this.id })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error reopening poll', {
+					error,
+					pollId: this.id,
+				})
 				this.load()
 				throw error
 			} finally {
@@ -564,42 +563,38 @@ export const usePollStore = defineStore('poll', {
 			}
 		},
 
-		async toggleArchive(payload: { pollId: number }) {
+		async toggleArchive(payload: { pollId: number }): Promise<void> {
 			const pollsStore = usePollsStore()
 
 			try {
 				await PollsAPI.toggleArchive(payload.pollId)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error archiving/restoring', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error archiving/restoring', {
+					error,
+					payload,
+				})
 				throw error
 			} finally {
 				pollsStore.load()
 			}
 		},
 
-		async delete(payload: { pollId: number }) {
+		async delete(payload: { pollId: number }): Promise<void> {
 			const pollsStore = usePollsStore()
 
 			try {
 				await PollsAPI.deletePoll(payload.pollId)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error deleting poll', { error, payload })
-				throw error
-			} finally {
-				pollsStore.load()
-			}
-		},
-
-		async clone(payload: { pollId: number }) {
-			const pollsStore = usePollsStore()
-			try {
-				const response = await PollsAPI.clonePoll(payload.pollId)
-				return response
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error cloning poll', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error deleting poll', {
+					error,
+					payload,
+				})
 				throw error
 			} finally {
 				pollsStore.load()

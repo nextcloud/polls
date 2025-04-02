@@ -15,9 +15,10 @@ import { AppSettingsAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
 import { useSharesStore } from '../../stores/shares.ts'
 import { User } from '../../Types/index.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 const sharesStore = useSharesStore()
-const users = ref([])
+const users = ref<User[]>([])
 const isLoading = ref(false)
 const placeholder = t('polls', 'Type to add an individual share')
 
@@ -34,12 +35,18 @@ const loadUsersAsync = debounce(async function (query: string) {
 		users.value = response.data.siteusers
 		isLoading.value = false
 	} catch (error) {
-		if (error?.code === 'ERR_CANCELED') return
-		Logger.error(error.response)
+		if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+			return
+		}
+		Logger.error('Error loading users', { error })
 		isLoading.value = false
 	}
 }, 250)
 
+/**
+ *
+ * @param user
+ */
 async function clickAdd(user: User) {
 	Logger.debug('Adding share clicAdd', user)
 	try {

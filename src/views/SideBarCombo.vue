@@ -12,9 +12,13 @@ import NcAppSidebarTab from '@nextcloud/vue/components/NcAppSidebarTab'
 
 import { PollsAppIcon } from '../components/AppIcons/index.ts'
 import { SideBarTabDatePolls } from '../components/SideBar/index.ts'
+import { Event } from '../Types/index.ts'
 
+/**
+ *
+ */
 function closeSideBar() {
-	emit('polls:sidebar:toggle', { open: false })
+	emit(Event.SidebarToggle, { open: false })
 }
 </script>
 

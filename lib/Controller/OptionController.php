@@ -48,7 +48,7 @@ class OptionController extends BaseController {
 	 * @param int $duration duration of option
 	 */
 	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'POST', url: '/option')]
+	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/option')]
 	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
 		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $text, $duration)]);
 	}

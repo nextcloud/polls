@@ -2,10 +2,14 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import { AxiosResponse } from '@nextcloud/axios'
+import { Answer, Vote } from '../../stores/votes.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { Option } from '../../stores/options.js'
+import { Poll } from '../../stores/poll.js'
 
 const votes = {
-	getVotes(pollId) {
+	getVotes(pollId: number): Promise<AxiosResponse<{ votes: Vote[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/votes`,
@@ -17,11 +21,19 @@ const votes = {
 		})
 	},
 
-	setVote(optionId, setTo) {
+	setVote(
+		optionId: number,
+		setTo: Answer,
+	): Promise<
+		AxiosResponse<{ vote: Vote; poll: Poll; options: Option[]; votes: Vote[] }>
+	> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: 'vote',
-			data: { optionId, setTo },
+			data: {
+				optionId,
+				setTo,
+			},
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.setVote.name
@@ -29,18 +41,23 @@ const votes = {
 		})
 	},
 
-	removeUser(pollId, userId = null) {
+	resetVotes(
+		pollId: number,
+		userId: string | null = null,
+	): Promise<AxiosResponse<{ poll: Poll; options: Option[]; votes: Vote[] }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: userId ? `poll/${pollId}/user/${userId}` : `poll/${pollId}/user`,
 			cancelToken:
 				cancelTokenHandlerObject[
-					this.removeUser.name
+					this.resetVotes.name
 				].handleRequestCancellation().token,
 		})
 	},
 
-	removeOrphanedVotes(pollId) {
+	removeOrphanedVotes(
+		pollId: number,
+	): Promise<AxiosResponse<{ poll: Poll; options: Option[]; votes: Vote[] }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `poll/${pollId}/votes/orphaned`,

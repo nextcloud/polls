@@ -35,7 +35,7 @@ import { FilterType, usePollsStore } from '../stores/polls.ts'
 import { useSessionStore } from '../stores/session.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
-import { ButtonMode } from '../Types/index.ts'
+import { ButtonMode, Event } from '../Types/index.ts'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
@@ -45,24 +45,58 @@ const sessionStore = useSessionStore()
 const preferencesStore = usePreferencesStore()
 
 const iconSize = 20
-const icons = [
-	{ id: FilterType.Relevant, iconComponent: RelevantIcon },
-	{ id: FilterType.My, iconComponent: MyPollsIcon },
-	{ id: FilterType.Private, iconComponent: PrivatePollsIcon },
-	{ id: FilterType.Participated, iconComponent: ParticipatedIcon },
-	{ id: FilterType.Open, iconComponent: OpenPollIcon },
-	{ id: FilterType.All, iconComponent: AllPollsIcon },
-	{ id: FilterType.Closed, iconComponent: ClosedPollsIcon },
-	{ id: FilterType.Archived, iconComponent: ArchivedPollsIcon },
-	{ id: FilterType.Admin, iconComponent: AdministrationIcon },
-]
+const icons = {
+	[FilterType.Relevant]: {
+		id: FilterType.Relevant,
+		iconComponent: RelevantIcon,
+	},
+	[FilterType.My]: {
+		id: FilterType.My,
+		iconComponent: MyPollsIcon,
+	},
+	[FilterType.Private]: {
+		id: FilterType.Private,
+		iconComponent: PrivatePollsIcon,
+	},
+	[FilterType.Participated]: {
+		id: FilterType.Participated,
+		iconComponent: ParticipatedIcon,
+	},
+	[FilterType.Open]: {
+		id: FilterType.Open,
+		iconComponent: OpenPollIcon,
+	},
+	[FilterType.All]: {
+		id: FilterType.All,
+		iconComponent: AllPollsIcon,
+	},
+	[FilterType.Closed]: {
+		id: FilterType.Closed,
+		iconComponent: ClosedPollsIcon,
+	},
+	[FilterType.Archived]: {
+		id: FilterType.Archived,
+		iconComponent: ArchivedPollsIcon,
+	},
+	[FilterType.Admin]: {
+		id: FilterType.Admin,
+		iconComponent: AdministrationIcon,
+	},
+}
 
 const createDlgToggle = ref(false)
 
+/**
+ *
+ * @param iconId
+ */
 function getIconComponent(iconId: FilterType) {
-	return icons.find((icon) => icon.id === iconId).iconComponent
+	return icons[iconId].iconComponent
 }
 
+/**
+ *
+ */
 function loadPolls() {
 	try {
 		Logger.debug('Loading polls in navigation')
@@ -72,6 +106,10 @@ function loadPolls() {
 	}
 }
 
+/**
+ *
+ * @param pollId
+ */
 function toggleArchive(pollId: number) {
 	try {
 		pollsStore.toggleArchive({ pollId })
@@ -82,7 +120,8 @@ function toggleArchive(pollId: number) {
 
 /**
  * Delete a poll
- * @param {number} pollId poll id to delete
+ *
+ * @param pollId poll id to delete
  */
 function deletePoll(pollId: number) {
 	try {
@@ -94,7 +133,7 @@ function deletePoll(pollId: number) {
 
 /**
  *
- * @param {number} pollId poll id to clone
+ * @param pollId poll id to clone
  */
 function clonePoll(pollId: number) {
 	try {
@@ -108,12 +147,21 @@ function clonePoll(pollId: number) {
  * Show the settings dialog
  */
 function showSettings() {
-	emit('polls:settings:show', null)
+	emit(Event.ShowSettings, null)
 }
 
+/**
+ *
+ * @param payLoad
+ * @param payLoad.id
+ * @param payLoad.title
+ */
 async function pollAdded(payLoad: { id: number; title: string }) {
 	createDlgToggle.value = false
-	router.push({ name: 'vote', params: { id: payLoad.id } })
+	router.push({
+		name: 'vote',
+		params: { id: payLoad.id },
+	})
 }
 
 onMounted(() => {
@@ -144,7 +192,10 @@ onMounted(() => {
 				:name="pollCategory.title"
 				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
 				:pinned="pollCategory.pinned"
-				:to="{ name: 'list', params: { type: pollCategory.id } }"
+				:to="{
+					name: 'list',
+					params: { type: pollCategory.id },
+				}"
 				:open="false">
 				<template #icon>
 					<Component
@@ -170,11 +221,14 @@ onMounted(() => {
 						:name="t('polls', 'No polls found for this category')" />
 					<NcAppNavigationItem
 						v-if="
-							pollsStore.pollsByCategory(pollCategory.id).length >
+							pollsStore.navigationList(pollCategory.id).length >
 							pollsStore.meta.maxPollsInNavigation
 						"
 						class="force-not-active"
-						:to="{ name: 'list', params: { type: pollCategory.id } }"
+						:to="{
+							name: 'list',
+							params: { type: pollCategory.id },
+						}"
 						:name="t('polls', 'Show all')">
 						<template #icon>
 							<GoToIcon :size="iconSize" />

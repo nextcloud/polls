@@ -54,14 +54,16 @@ class VoteController extends BaseController {
 	#[FrontpageRoute(verb: 'PUT', url: '/vote')]
 	// #[FrontpageRoute(verb: 'PUT', url: '/vote/{optionId}/set/{setTo}')]
 	public function set(int $optionId, string $setTo): JSONResponse {
-		$option = $this->optionService->get($optionId);
-		$vote = $this->voteService->set($optionId, $setTo);
-		return $this->response(fn () => [
-			'vote' => $vote,
-			'poll' => $this->pollService->get($option->getPollId()),
-			'options' => $this->optionService->list($option->getPollId()),
-			'votes' => $this->voteService->list($option->getPollId())
-		]);
+		return $this->response(function () use ($optionId, $setTo) {
+			$option = $this->optionService->get($optionId);
+			$vote = $this->voteService->set($optionId, $setTo);
+			return [
+				'vote' => $vote,
+				'poll' => $this->pollService->get($option->getPollId()),
+				'options' => $this->optionService->list($option->getPollId()),
+				'votes' => $this->voteService->list($option->getPollId())
+			];
+		});
 	}
 
 	/**

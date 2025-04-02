@@ -29,7 +29,7 @@ import { useSessionStore } from './stores/session.ts'
 async function validateToken(to: RouteLocationNormalized) {
 	if (getCurrentUser()) {
 		try {
-			const response = await PublicAPI.getShare(to.params.token)
+			const response = await PublicAPI.getShare(to.params.token as string)
 			// if the user is logged in, we diretly route to
 			// the internal vote page
 			return {
@@ -49,7 +49,7 @@ async function validateToken(to: RouteLocationNormalized) {
 	// continue for external users
 	try {
 		// first validate the existance of the public token
-		await PublicAPI.getShare(to.params.token)
+		await PublicAPI.getShare(to.params.token as string)
 	} catch (error) {
 		// in case of an error, reroute to the login page
 		window.location.replace(generateUrl('login'))
@@ -58,7 +58,7 @@ async function validateToken(to: RouteLocationNormalized) {
 	// then look for an existing personal token from
 	// the user's client stored cookie
 	// matching the public token
-	const personalToken = getCookieValue(<string>to.params.token)
+	const personalToken = getCookieValue(to.params.token as string)
 
 	if (personalToken && personalToken !== to.params.token) {
 		// participant has already access to the poll and a private token
@@ -184,7 +184,6 @@ const router = createRouter({
 router.beforeEach(async (to: RouteLocationNormalized) => {
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()
-	sessionStore.setRouter(to)
 	try {
 		await loadContext(to)
 	} catch (error) {
@@ -201,7 +200,7 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
 			await pollStore.load()
 		}
 	} catch (error) {
-		Logger.warn('Could not load poll', error)
+		Logger.warn('Could not load poll', { error })
 		return {
 			name: 'notfound',
 		}

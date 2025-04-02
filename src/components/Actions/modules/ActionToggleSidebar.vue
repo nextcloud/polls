@@ -10,10 +10,14 @@ import { t } from '@nextcloud/l10n'
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
+import { Event } from '../../../Types'
 
 const caption = t('polls', 'Toggle Sidebar')
+/**
+ *
+ */
 function clickAction() {
-	emit('polls:sidebar:toggle', null)
+	emit(Event.SidebarToggle, null)
 }
 </script>
 

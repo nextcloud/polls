@@ -21,11 +21,13 @@ import { useOptionsStore, Sequence } from '../../stores/options'
 import { StatusResults } from '../../Types'
 import {
 	dateOnlyUnits,
-	dateUnits,
+	dateTimeUnits,
 	DateUnitKeys,
 	DurationType,
+	dateTimeUnitsKeyed,
 } from '../../constants/dateUnits.ts'
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { AxiosError } from '@nextcloud/axios'
 
 const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
@@ -54,13 +56,13 @@ const fromInput = ref(
 
 // set initial duration to one Day
 const durationInput = ref<DurationType>({
-	unit: dateUnits.find((unit) => unit.key === DateUnitKeys.Day),
+	unit: dateTimeUnitsKeyed[DateUnitKeys.Day],
 	amount: 0,
 })
 
 // set initial sequence to one week but disabled
 const sequenceInput = ref<Sequence>({
-	unit: dateUnits.find((unit) => unit.key === DateUnitKeys.Week),
+	unit: dateTimeUnitsKeyed[DateUnitKeys.Week],
 	stepWidth: 1,
 	repetitions: 0,
 })
@@ -73,7 +75,7 @@ const from = computed(() => {
 	// if the option is an all day option, the time is set to 00:00
 	if (allDay.value) {
 		return dateFrom
-			.startOf(DateUnitKeys.Day)
+			.startOf(dateTimeUnitsKeyed[DateUnitKeys.Day].luxonUnit)
 			.setLocale(sessionStore.currentUser.languageCode)
 	}
 	return dateFrom
@@ -85,7 +87,7 @@ const duration = computed(() =>
 	durationInput.value.amount < 1 && allDay.value
 		? Duration.fromObject({ [DateUnitKeys.Day]: 1 })
 		: Duration.fromObject({
-				[durationInput.value.unit.key]: durationInput.value.amount,
+				[durationInput.value.unit.id]: durationInput.value.amount,
 			}),
 )
 
@@ -94,14 +96,16 @@ const duration = computed(() =>
 const sequence = computed(() =>
 	sequenceInput.value.repetitions > 0
 		? Duration.fromObject({
-				[sequenceInput.value.unit.key]:
+				[sequenceInput.value.unit.id]:
 					sequenceInput.value.stepWidth * sequenceInput.value.repetitions,
 			})
 		: Duration.fromObject({ millisecond: 0 }),
 )
 
 // True, if from and to dates are the same day
-const sameDay = computed(() => from.value.hasSame(to.value, DateUnitKeys.Day))
+const sameDay = computed(() =>
+	from.value.hasSame(to.value, dateTimeUnitsKeyed[DateUnitKeys.Day].luxonUnit),
+)
 
 // *** computed properties only used for display
 // computed to as DateTime from Luxon
@@ -147,25 +151,32 @@ watch(
 	},
 )
 
-function resetduratonUnits() {
+/**
+ *
+ */
+function resetduratonUnits(): void {
 	if (allDay.value) {
 		// change date units, when switching from time based to all day, since minutes and hours are not valid anymore
 		if (
-			durationInput.value.unit.key === DateUnitKeys.Minute ||
-			durationInput.value.unit.key === DateUnitKeys.Hour
+			durationInput.value.unit.id === DateUnitKeys.Minute ||
+			durationInput.value.unit.id === DateUnitKeys.Hour
 		) {
-			durationInput.value.unit = dateUnits.find(
-				(unit) => unit.key === DateUnitKeys.Day,
-			)
+			durationInput.value.unit = dateTimeUnitsKeyed[DateUnitKeys.Day]
 		}
 	}
 }
 
-function onAnyChange() {
+/**
+ *
+ */
+function onAnyChange(): void {
 	result.value = addable.value ? StatusResults.None : StatusResults.Error
 }
 
-async function addOption() {
+/**
+ *
+ */
+async function addOption(): Promise<void> {
 	result.value = StatusResults.Loading
 
 	try {
@@ -174,17 +185,18 @@ async function addOption() {
 			timestamp: from.value.toSeconds(),
 			duration: duration.value.as('seconds'),
 		})
-
-		if (sequenceInput.value.repetitions > 0) {
-			await optionsStore.sequence({
-				option: newOption,
-				sequence: sequenceInput.value,
-			})
+		if (newOption) {
+			if (sequenceInput.value.repetitions > 0 && newOption) {
+				await optionsStore.sequence({
+					option: newOption,
+					sequence: sequenceInput.value,
+				})
+			}
+			result.value = StatusResults.Success
+			showSuccess(t('polls', 'Option added'))
 		}
-		result.value = StatusResults.Success
-		showSuccess(t('polls', 'Option added'))
 	} catch (error) {
-		if (error.response.status === 409) {
+		if ((error as AxiosError).response?.status === 409) {
 			showError(t('polls', 'Option already exists'))
 			result.value = StatusResults.Warning
 			return
@@ -225,7 +237,7 @@ async function addOption() {
 						:input-label="t('polls', 'Duration time unit')"
 						:clearable="false"
 						:filterable="false"
-						:options="allDay ? dateOnlyUnits : dateUnits"
+						:options="allDay ? dateOnlyUnits : dateTimeUnits"
 						label="name" />
 				</div>
 			</div>
@@ -247,7 +259,7 @@ async function addOption() {
 						:input-label="t('polls', 'Step unit')"
 						:clearable="false"
 						:filterable="false"
-						:options="dateUnits"
+						:options="dateTimeUnits"
 						label="name" />
 
 					<InputDiv
@@ -337,9 +349,9 @@ async function addOption() {
 				class="date-add-button"
 				:type="ButtonType.Primary"
 				:disabled="!addable"
-				@click="addOption"
-				>{{ t('polls', 'Add') }}</NcButton
-			>
+				@click="addOption">
+				{{ t('polls', 'Add') }}
+			</NcButton>
 		</div>
 	</div>
 </template>

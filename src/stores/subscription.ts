@@ -8,6 +8,7 @@ import { PublicAPI, PollsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { useSessionStore } from './session.ts'
 import { ref } from 'vue'
+import { AxiosError } from '@nextcloud/axios'
 
 export type Subscription = {
 	subscribed: boolean
@@ -16,53 +17,76 @@ export type Subscription = {
 export const useSubscriptionStore = defineStore('subscription', () => {
 	const subscribed = ref(false)
 
+	/**
+	 *
+	 */
 	async function load() {
 		const sessionStore = useSessionStore()
 		try {
-			let response = null
-			if (sessionStore.route.name === 'publicVote') {
-				response = await PublicAPI.getSubscription(
-					sessionStore.route.params.token,
-				)
-			} else if (sessionStore.route.name === 'vote') {
-				response = await PollsAPI.getSubscription(
-					sessionStore.route.params.id,
-				)
-			} else {
-				subscribed.value = false
+			const response = await (() => {
+				if (sessionStore.route.name === 'publicVote') {
+					return PublicAPI.getSubscription(sessionStore.route.params.token)
+				}
+				if (sessionStore.route.name === 'vote') {
+					return PollsAPI.getSubscription(sessionStore.currentPollId)
+				}
+
+				return null
+			})()
+
+			if (response) {
+				subscribed.value = response.data.subscribed
 				return
 			}
-			subscribed.value = response.data.subscribed
+
+			subscribed.value = false
 		} catch (error) {
-			if (error?.code === 'ERR_CANCELED') return
+			if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+				return
+			}
 			subscribed.value = false
 			throw error
 		}
 	}
+	/**
+	 *
+	 */
 	async function write() {
 		const sessionStore = useSessionStore()
 		try {
-			let response = null
-			if (sessionStore.route.name === 'publicVote') {
-				response = await PublicAPI.setSubscription(
-					sessionStore.route.params.token,
-					!subscribed.value,
-				)
-			} else if (sessionStore.route.name === 'vote') {
-				response = await PollsAPI.setSubscription(
-					sessionStore.route.params.id,
-					!subscribed.value,
-				)
-			} else {
-				subscribed.value = false
+			const response = await (() => {
+				if (sessionStore.route.name === 'publicVote') {
+					return PublicAPI.setSubscription(
+						sessionStore.route.params.token,
+						!subscribed.value,
+					)
+				}
+				if (sessionStore.route.name === 'vote') {
+					return PollsAPI.setSubscription(
+						sessionStore.currentPollId,
+						!subscribed.value,
+					)
+				}
+
+				return null
+			})()
+
+			if (response) {
+				subscribed.value = response.data.subscribed
 				return
 			}
-			subscribed.value = response.data.subscribed
-		} catch (error) {
-			if (error?.code === 'ERR_CANCELED') return
-			Logger.error('Error on changing subscription', error)
+			subscribed.value = false
+		} catch (error: unknown) {
+			if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+				return
+			}
+			Logger.error('Error on changing subscription', { error })
 			throw error
 		}
 	}
-	return { subscribed, load, write }
+	return {
+		subscribed,
+		load,
+		write,
+	}
 })

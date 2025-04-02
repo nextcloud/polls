@@ -3,7 +3,7 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-<script setup>
+<script setup lang="ts">
 import { onMounted } from 'vue'
 import { generateUrl } from '@nextcloud/router'
 import { showError } from '@nextcloud/dialogs'
@@ -29,7 +29,7 @@ const pollsStore = usePollsStore()
 /**
  * Load the polls
  */
-function loadPolls() {
+function loadPolls(): void {
 	Logger.debug('Loading polls in dashboard widget')
 	pollsStore
 		.load()

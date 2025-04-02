@@ -6,14 +6,22 @@ declare module '@nextcloud/event-bus' {
 	interface NextcloudEvents {
 		'polls:transitions:off': number
 		'polls:transitions:on': null
-		'polls:poll:update': { store: string; message: string }
+		'polls:poll:update': {
+			store: string
+			message: string
+		}
 		'polls:poll:load': null
 		'polls:sidebar:changeTab': { activeTab: string }
-		'polls:sidebar:toggle': { open?: boolean; activeTab?: string }
+		'polls:sidebar:toggle': null | {
+			open?: boolean
+			activeTab?: string
+		}
 		'polls:change:shares': null
 		'polls:options:update': null
+		'polls:options:add-date': null
 		'polls:comments:update': null
 		'polls:activity:update': null
+		'polls:settings:show': null
 	}
 }
 

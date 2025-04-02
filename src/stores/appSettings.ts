@@ -6,7 +6,7 @@
 import { defineStore } from 'pinia'
 import { AppSettingsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
-import { debounce } from 'lodash'
+import { AxiosError } from '@nextcloud/axios'
 
 export enum UpdateType {
 	NoPolling = 'noPolling',
@@ -96,7 +96,7 @@ export const useAppSettingsStore = defineStore('appSettings', {
 	}),
 
 	actions: {
-		async load() {
+		async load(): Promise<void> {
 			try {
 				const response = await AppSettingsAPI.getAppSettings()
 				this.$patch(response.data.appSettings)
@@ -105,12 +105,14 @@ export const useAppSettingsStore = defineStore('appSettings', {
 			}
 		},
 
-		async write() {
+		async write(): Promise<void> {
 			try {
 				const response = await AppSettingsAPI.writeAppSettings(this.$state)
 				this.$patch(response.data.appSettings)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error writing appSettings', {
 					error,
 					appSettings: this.$state,
@@ -119,18 +121,24 @@ export const useAppSettingsStore = defineStore('appSettings', {
 			}
 		},
 
-		loadGroups: debounce(async function (query: string) {
-			this.status.loadingGroups = true
+		loadGroups(query: string): void {
+			const debouncedLoad = this.$debounce(async () => {
+				this.status.loadingGroups = true
 
-			try {
-				const response = await AppSettingsAPI.getGroups(query)
-				this.groups = response.data.groups
-				this.status.loadingGroups = false
-			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error getting groups', { error: error.response })
-				this.status.loadingGroups = false
-			}
-		}, 500),
+				try {
+					const response = await AppSettingsAPI.getGroups(query)
+					this.groups = response.data.groups
+					this.status.loadingGroups = false
+				} catch (error) {
+					if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+						return
+					}
+					Logger.error('Error getting groups', { error })
+					this.status.loadingGroups = false
+				}
+			}, 500)
+
+			debouncedLoad()
+		},
 	},
 })

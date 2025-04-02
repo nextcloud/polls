@@ -5,8 +5,8 @@
 
 import { defineStore } from 'pinia'
 import { ActivityAPI } from '../Api/index.ts'
-import { Vote } from './votes.ts'
 import { useSessionStore } from './session.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 export type Activity = {
 	activity_id: number
@@ -34,22 +34,30 @@ export const useActivityStore = defineStore('activity', {
 	}),
 
 	actions: {
-		async load() {
+		async load(): Promise<void> {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await ActivityAPI.getActivities(
-					sessionStore.route.params.id,
+					sessionStore.currentPollId,
 				)
 				this.list = response.data.ocs.data
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				this.$reset()
 			}
 		},
+	},
 
-		deleteActivities(payload: { userId: string }) {
-			this.list = this.list.filter(
-				(vote: Vote) => vote.user.id !== payload.userId,
+	getters: {
+		getActivitiesForPoll(state): Activity[] {
+			const sessionStore = useSessionStore()
+			// TODO: Learn: Why is activity.object_id === sessionStore.currentPollId always false?
+			return state.list.filter(
+				(activity: Activity) =>
+					activity.object_type === 'poll' &&
+					activity.object_id - sessionStore.currentPollId === 0,
 			)
 		},
 	},

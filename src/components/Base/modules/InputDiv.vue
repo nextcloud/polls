@@ -24,8 +24,10 @@ const numericModelValue = computed(() =>
 )
 
 const vInputFocus = {
-	mounted: (el) => {
-		if (props.focus) el.focus()
+	mounted: (el: { focus: () => void }) => {
+		if (props.focus) {
+			el.focus()
+		}
 	},
 }
 
@@ -87,8 +89,12 @@ const props = defineProps({
 const emit = defineEmits(['input', 'change', 'submit'])
 
 const computedSignalingClass = computed(() => {
-	if (props.signalingClass === SignalingType.Valid) return SignalingType.Success
-	if (props.signalingClass === SignalingType.InValid) return SignalingType.Error
+	if (props.signalingClass === SignalingType.Valid) {
+		return SignalingType.Success
+	}
+	if (props.signalingClass === SignalingType.InValid) {
+		return SignalingType.Error
+	}
 	return props.signalingClass
 })
 
@@ -136,10 +142,11 @@ function assertBoundaries() {
 
 /**
  * Check if value is within numMin and numMax
- * @param {number} value Value to be checked
- * @return {number} value kept within defined boundaries
+ *
+ * @param value Value to be checked
+ * @return value kept within defined boundaries
  */
-function numCheckBoundaries(value) {
+function numCheckBoundaries(value: number) {
 	if (isNumMaxSet.value && value > props.numMax) {
 		if (
 			props.numWrap &&
@@ -218,7 +225,10 @@ onMounted(() => {
 				:inputmode="inputmode"
 				:placeholder="placeholder"
 				:class="[
-					{ 'has-modifier': useNumModifiers, 'has-submit': submit },
+					{
+						'has-modifier': useNumModifiers,
+						'has-submit': submit,
+					},
 					computedSignalingClass,
 				]"
 				@input="emit('input')"

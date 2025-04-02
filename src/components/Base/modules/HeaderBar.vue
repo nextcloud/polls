@@ -20,9 +20,7 @@ function toggleClamp() {
 	<div class="header_bar">
 		<div class="header_bar_top">
 			<div class="bar_top_left">
-				<div
-					:class="['header_title', { clamped: clamped }]"
-					@click="toggleClamp()">
+				<div :class="['header_title', { clamped }]" @click="toggleClamp()">
 					<slot name="title" />
 				</div>
 				<div class="bar_top_left_sub">
@@ -74,12 +72,8 @@ function toggleClamp() {
 			overflow: clip;
 			text-overflow: ellipsis;
 			display: -webkit-box;
-			&.clamped {
-				-webkit-line-clamp: 2;
-				line-clamp: 2;
-				-webkit-box-orient: vertical;
-			}
 		}
+
 		.sub {
 			display: flex;
 			flex-wrap: wrap;

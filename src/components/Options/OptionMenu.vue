@@ -50,10 +50,16 @@ const cloneAllowed = computed(
 	() => !props.option.deleted && !pollStore.isClosed && pollStore.permissions.edit,
 )
 
+/**
+ *
+ */
 function cloneOptionModal() {
 	cloneModal.value = true
 }
 
+/**
+ *
+ */
 function deleteRestoreOption() {
 	if (props.option.deleted) {
 		optionsStore.restore({ option: props.option })
@@ -62,6 +68,9 @@ function deleteRestoreOption() {
 	optionsStore.delete({ option: props.option })
 }
 
+/**
+ *
+ */
 function confirmOption() {
 	optionsStore.confirm({ option: props.option })
 }

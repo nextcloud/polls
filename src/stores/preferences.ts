@@ -6,6 +6,7 @@
 import { defineStore } from 'pinia'
 import { CalendarAPI, UserSettingsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 export enum ViewMode {
 	TableView = 'table-view',
@@ -14,7 +15,7 @@ export enum ViewMode {
 
 export type UserPreferences = {
 	calendarPeek: boolean
-	checkCalendars: []
+	checkCalendars: string[]
 	checkCalendarsHoursBefore: number
 	checkCalendarsHoursAfter: number
 	defaultViewTextPoll: ViewMode
@@ -47,7 +48,6 @@ export type Preferences = {
 	user: UserPreferences
 	session: SessionSettings
 	availableCalendars: Calendar[]
-	viewModes: ViewMode[]
 }
 
 export const usePreferencesStore = defineStore('preferences', {
@@ -74,7 +74,6 @@ export const usePreferencesStore = defineStore('preferences', {
 			manualViewTextPoll: '',
 		},
 		availableCalendars: [],
-		viewModes: Object.values(ViewMode),
 	}),
 
 	getters: {
@@ -114,15 +113,7 @@ export const usePreferencesStore = defineStore('preferences', {
 	},
 
 	actions: {
-		writePreference(payload: {
-			key: string
-			value: boolean | number | string | Array<string>
-		}) {
-			this.$patch(payload)
-			this.write()
-		},
-
-		setCalendars(payload) {
+		setCalendars(payload: { calendars: Calendar[] }) {
 			this.availableCalendars = payload.calendars
 		},
 
@@ -152,15 +143,12 @@ export const usePreferencesStore = defineStore('preferences', {
 				const response = await UserSettingsAPI.getUserSettings()
 				this.$patch({ user: response.data.preferences })
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				this.$reset()
 				throw error
 			}
-		},
-
-		async setPollCombo(payload: { pollCombo: Array<string> }): Promise<void> {
-			this.user.pollCombo = payload.pollCombo
-			this.write()
 		},
 
 		async write(): Promise<void> {
@@ -168,7 +156,9 @@ export const usePreferencesStore = defineStore('preferences', {
 				const response = await UserSettingsAPI.writeUserSettings(this.user)
 				this.$patch({ user: response.data.preferences })
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				Logger.error('Error writing preferences', {
 					error,
 					preferences: this.user,
@@ -184,7 +174,9 @@ export const usePreferencesStore = defineStore('preferences', {
 				this.setCalendars({ calendars: response.data.calendars })
 				return response
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				throw error
 			}
 		},

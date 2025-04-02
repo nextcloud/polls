@@ -12,7 +12,7 @@ import { Option } from '../../Types/index.ts'
 const props = defineProps({
 	option: {
 		type: Object as PropType<Option>,
-		default: undefined,
+		required: true,
 	},
 	showMaybe: {
 		type: Boolean,

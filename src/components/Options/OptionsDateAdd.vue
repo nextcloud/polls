@@ -18,6 +18,19 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { FlexSpacer } from '../Base/index.ts'
 import { useOptionsStore } from '../../stores/options.ts'
+import { AxiosError } from '@nextcloud/axios'
+
+type DateOption = {
+	isValid: boolean
+	from: moment.Moment
+	to: moment.Moment
+	text: string
+	option: {
+		timestamp: number
+		duration: number
+		text: string
+	}
+}
 
 const optionsStore = useOptionsStore()
 const props = defineProps({
@@ -27,7 +40,7 @@ const props = defineProps({
 	},
 })
 
-const pickerSelection = ref(null)
+const pickerSelection = ref<[moment.Moment, moment.Moment]>([moment(), moment()])
 const changed = ref(false)
 const pickerOpen = ref(false)
 const useRange = ref(false)
@@ -46,7 +59,7 @@ const tempFormat = computed(() => {
 	return moment.localeData().longDateFormat('L')
 })
 
-const firstDOW = computed(() => {
+const firstDOW = computed<number>(() => {
 	// vue2-datepicker needs 7 for sunday
 	if (moment.localeData()._week.dow === 0) {
 		return 7
@@ -77,7 +90,7 @@ const pickerOptions = computed(() => ({
 	},
 }))
 
-const dateOption = computed(() => {
+const dateOption = computed<DateOption>(() => {
 	let from = moment()
 	let to = moment()
 	let text = ''
@@ -174,7 +187,7 @@ function changedDate() {
  *
  * @param value - the picked date
  */
-function pickedDate(value) {
+function pickedDate(value: Date) {
 	// we rely on the behavior, that the changed event is fired before the picked event
 	// if the picker already returned a valid selection before, ignore picked date
 	added.value = false
@@ -257,7 +270,7 @@ async function addOption() {
 			t('polls', '{optionText} added', { optionText: dateOption.value.text }),
 		)
 	} catch (error) {
-		if (error.response.status === 409) {
+		if ((error as AxiosError).response?.status === 409) {
 			showError(
 				t('polls', '{optionText} already exists', {
 					optionText: dateOption.value.text,

@@ -14,6 +14,7 @@ import { PollsAPI } from '../Api/index.ts'
 import { AccessType, Poll, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { StatusResults } from '../Types/index.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 export enum SortType {
 	Created = 'created',
@@ -22,6 +23,11 @@ export enum SortType {
 	Owner = 'owner',
 	Expire = 'expire',
 	Interaction = 'interaction',
+}
+
+export enum SortDirection {
+	Asc = 'asc',
+	Desc = 'desc',
 }
 
 export enum FilterType {
@@ -36,11 +42,6 @@ export enum FilterType {
 	Admin = 'admin',
 }
 
-export enum SortDirection {
-	Asc = 'asc',
-	Desc = 'desc',
-}
-
 export type PollCategory = {
 	id: FilterType
 	title: string
@@ -50,6 +51,8 @@ export type PollCategory = {
 	showInNavigation(): boolean
 	filterCondition(poll: Poll): boolean
 }
+
+export type PollCategorieList = Record<FilterType, PollCategory>
 
 export type Meta = {
 	chunksize: number
@@ -65,7 +68,7 @@ export type PollList = {
 		by: SortType
 		reverse: boolean
 	}
-	categories: PollCategory[]
+	categories: PollCategorieList
 }
 
 export const sortColumnsMapping: { [key in SortType]: string } = {
@@ -86,6 +89,127 @@ export const sortTitlesMapping: { [key in SortType]: string } = {
 	interaction: t('polls', 'Last interaction'),
 }
 
+export const pollCategories: PollCategorieList = {
+	[FilterType.Relevant]: {
+		id: FilterType.Relevant,
+		title: t('polls', 'Relevant'),
+		titleExt: t('polls', 'Relevant polls'),
+		description: t(
+			'polls',
+			'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown.',
+		),
+		pinned: false,
+		showInNavigation: () => true,
+		filterCondition: (poll: Poll) =>
+			!poll.status.isDeleted &&
+			DateTime.fromSeconds(poll.status.relevantThreshold).diffNow('days')
+				.days > -100 &&
+			(poll.currentUserStatus.isInvolved ||
+				(poll.permissions.view &&
+					poll.configuration.access !== AccessType.Open)),
+	},
+	[FilterType.My]: {
+		id: FilterType.My,
+		title: t('polls', 'My polls'),
+		titleExt: t('polls', 'My polls'),
+		description: t('polls', 'These are all polls where you are the owner.'),
+		pinned: false,
+		showInNavigation: () => {
+			const sessionStore = useSessionStore()
+			return sessionStore.appPermissions.pollCreation
+		},
+		filterCondition: (poll: Poll) =>
+			!poll.status.isDeleted && poll.currentUserStatus.isOwner,
+	},
+	[FilterType.Private]: {
+		id: FilterType.Private,
+		title: t('polls', 'Private polls'),
+		titleExt: t('polls', 'Private polls'),
+		description: t('polls', 'All private polls, to which you have access.'),
+		pinned: false,
+		showInNavigation: () => {
+			const sessionStore = useSessionStore()
+			return sessionStore.appPermissions.pollCreation
+		},
+		filterCondition: (poll: Poll) =>
+			!poll.status.isDeleted &&
+			poll.permissions.view &&
+			poll.configuration.access === AccessType.Private,
+	},
+	[FilterType.Participated]: {
+		id: FilterType.Participated,
+		title: t('polls', 'Participated'),
+		titleExt: t('polls', 'Participated'),
+		description: t('polls', 'All polls in which you participated.'),
+		pinned: false,
+		showInNavigation: () => true,
+		filterCondition: (poll: Poll) =>
+			!poll.status.isDeleted && poll.currentUserStatus.countVotes > 0,
+	},
+	[FilterType.Open]: {
+		id: FilterType.Open,
+		title: t('polls', 'Openly accessible polls'),
+		titleExt: t('polls', 'Openly accessible polls'),
+		description: t(
+			'polls',
+			'A complete list with all openly accessible polls on this site.',
+		),
+		pinned: false,
+		showInNavigation: () => {
+			const sessionStore = useSessionStore()
+			return sessionStore.appPermissions.pollCreation
+		},
+		filterCondition: (poll: Poll) =>
+			!poll.status.isDeleted && poll.configuration.access === AccessType.Open,
+	},
+	[FilterType.All]: {
+		id: FilterType.All,
+		title: t('polls', 'All polls'),
+		titleExt: t('polls', 'All polls'),
+		description: t('polls', 'All polls, where you have access to.'),
+		pinned: false,
+		showInNavigation: () => true,
+		filterCondition: (poll: Poll) => !poll.status.isDeleted,
+	},
+	[FilterType.Closed]: {
+		id: FilterType.Closed,
+		title: t('polls', 'Closed polls'),
+		titleExt: t('polls', 'Closed polls'),
+		description: t('polls', 'All closed polls, where voting is disabled.'),
+		pinned: false,
+		showInNavigation: () => true,
+		filterCondition: (poll: Poll) =>
+			!poll.status.isDeleted && poll.status.isExpired,
+	},
+	[FilterType.Archived]: {
+		id: FilterType.Archived,
+		title: t('polls', 'Archive'),
+		titleExt: t('polls', 'My archived polls'),
+		description: t('polls', 'Your archived polls are only accessible to you.'),
+		pinned: true,
+		showInNavigation: () => {
+			const sessionStore = useSessionStore()
+			return sessionStore.appPermissions.pollCreation
+		},
+		filterCondition: (poll: Poll) => poll.status.isDeleted,
+	},
+	[FilterType.Admin]: {
+		id: FilterType.Admin,
+		title: t('polls', 'Administration'),
+		titleExt: t('polls', 'Administrative access.'),
+		description: t(
+			'polls',
+			'You can delete, archive and take over polls in this list, but access is still not possible.',
+		),
+		pinned: true,
+		showInNavigation: () => {
+			const sessionStore = useSessionStore()
+			return !!sessionStore.currentUser?.isAdmin
+		},
+		filterCondition: (poll: Poll) => !poll.permissions.view,
+	},
+}
+
 export const usePollsStore = defineStore('polls', {
 	state: (): PollList => ({
 		list: [],
@@ -99,195 +223,52 @@ export const usePollsStore = defineStore('polls', {
 			by: SortType.Created,
 			reverse: true,
 		},
-		categories: [
-			{
-				id: FilterType.Relevant,
-				title: t('polls', 'Relevant'),
-				titleExt: t('polls', 'Relevant polls'),
-				description: t(
-					'polls',
-					'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown.',
-				),
-				pinned: false,
-				showInNavigation: () => true,
-				filterCondition: (poll: Poll) =>
-					!poll.status.isDeleted &&
-					DateTime.fromSeconds(poll.status.relevantThreshold).diffNow(
-						'days',
-					).days > -100 &&
-					(poll.currentUserStatus.isInvolved ||
-						(poll.permissions.view &&
-							poll.configuration.access !== AccessType.Open)),
-			},
-			{
-				id: FilterType.My,
-				title: t('polls', 'My polls'),
-				titleExt: t('polls', 'My polls'),
-				description: t(
-					'polls',
-					'These are all polls where you are the owner.',
-				),
-				pinned: false,
-				showInNavigation: () => {
-					const sessionStore = useSessionStore()
-					return sessionStore.appPermissions.pollCreation
-				},
-				filterCondition: (poll: Poll) =>
-					!poll.status.isDeleted && poll.currentUserStatus.isOwner,
-			},
-			{
-				id: FilterType.Private,
-				title: t('polls', 'Private polls'),
-				titleExt: t('polls', 'Private polls'),
-				description: t(
-					'polls',
-					'All private polls, to which you have access.',
-				),
-				pinned: false,
-				showInNavigation: () => {
-					const sessionStore = useSessionStore()
-					return sessionStore.appPermissions.pollCreation
-				},
-				filterCondition: (poll: Poll) =>
-					!poll.status.isDeleted &&
-					poll.permissions.view &&
-					poll.configuration.access === AccessType.Private,
-			},
-			{
-				id: FilterType.Participated,
-				title: t('polls', 'Participated'),
-				titleExt: t('polls', 'Participated'),
-				description: t('polls', 'All polls in which you participated.'),
-				pinned: false,
-				showInNavigation: () => true,
-				filterCondition: (poll: Poll) =>
-					!poll.status.isDeleted && poll.currentUserStatus.countVotes > 0,
-			},
-			{
-				id: FilterType.Open,
-				title: t('polls', 'Openly accessible polls'),
-				titleExt: t('polls', 'Openly accessible polls'),
-				description: t(
-					'polls',
-					'A complete list with all openly accessible polls on this site.',
-				),
-				pinned: false,
-				showInNavigation: () => {
-					const sessionStore = useSessionStore()
-					return sessionStore.appPermissions.pollCreation
-				},
-				filterCondition: (poll: Poll) =>
-					!poll.status.isDeleted &&
-					poll.configuration.access === AccessType.Open,
-			},
-			{
-				id: FilterType.All,
-				title: t('polls', 'All polls'),
-				titleExt: t('polls', 'All polls'),
-				description: t('polls', 'All polls, where you have access to.'),
-				pinned: false,
-				showInNavigation: () => true,
-				filterCondition: (poll: Poll) => !poll.status.isDeleted,
-			},
-			{
-				id: FilterType.Closed,
-				title: t('polls', 'Closed polls'),
-				titleExt: t('polls', 'Closed polls'),
-				description: t(
-					'polls',
-					'All closed polls, where voting is disabled.',
-				),
-				pinned: false,
-				showInNavigation: () => true,
-				filterCondition: (poll: Poll) =>
-					!poll.status.isDeleted && poll.status.isExpired,
-			},
-			{
-				id: FilterType.Archived,
-				title: t('polls', 'Archive'),
-				titleExt: t('polls', 'My archived polls'),
-				description: t(
-					'polls',
-					'Your archived polls are only accessible to you.',
-				),
-				pinned: true,
-				showInNavigation: () => {
-					const sessionStore = useSessionStore()
-					return sessionStore.appPermissions.pollCreation
-				},
-				filterCondition: (poll: Poll) => poll.status.isDeleted,
-			},
-			{
-				id: FilterType.Admin,
-				title: t('polls', 'Administration'),
-				titleExt: t('polls', 'Administrative access.'),
-				description: t(
-					'polls',
-					'You can delete, archive and take over polls in this list, but access is still not possible.',
-				),
-				pinned: true,
-				showInNavigation: () => {
-					const sessionStore = useSessionStore()
-					return sessionStore.currentUser.isAdmin
-				},
-				filterCondition: (poll: Poll) => !poll.permissions.view,
-			},
-		],
+		categories: pollCategories,
 	}),
 
 	getters: {
 		navigationCategories(state: PollList): PollCategory[] {
-			return state.categories.filter((category: PollCategory) =>
+			return Object.values(state.categories).filter((category) =>
 				category.showInNavigation(),
 			)
 		},
 
-		currentCategory(state: PollList): PollCategory | null {
+		/*
+		 * Sliced filtered and sorted polls for navigation
+		 */
+		navigationList:
+			(state: PollList) =>
+			(filterId: FilterType): Poll[] =>
+				orderBy(
+					state.list.filter((poll: Poll) =>
+						state.categories[filterId].filterCondition(poll),
+					) ?? [],
+					[SortType.Created],
+					[SortDirection.Desc],
+				).slice(0, state.meta.maxPollsInNavigation),
+
+		currentCategory(state: PollList): PollCategory {
 			const sessionStore = useSessionStore()
 
 			if (
 				sessionStore.route.name === 'list' &&
 				sessionStore.route.params.type
 			) {
-				return state.categories.find(
-					(category: PollCategory) =>
-						category.id === sessionStore.route.params.type,
-				)
+				return state.categories[sessionStore.route.params.type as FilterType]
 			}
-			return state.categories.find(
-				(category: PollCategory) => category.id === FilterType.Relevant,
-			)
+			return state.categories[FilterType.Relevant]
 		},
 
-		/*
-		 * polls list, filtered by category
-		 */
-		pollsByCategory: (state: PollList) => (filterId: FilterType) => {
-			const useCategory = state.categories.find(
-				(category: PollCategory) => category.id === filterId,
-			)
-			return state.list.filter((poll: Poll) =>
-				useCategory.filterCondition(poll),
-			)
-		},
-
-		pollsCount(state: PollList): Array<{ id: string; count: number }> {
-			const count = []
-			for (const category of state.categories) {
-				count[category.id] = state.list.filter((poll: Poll) =>
-					category.filterCondition(poll),
-				).length
-			}
-			return count
-		},
 		/*
 		 * polls list, filtered by current category and sorted
 		 */
 		pollsFilteredSorted(state: PollList): Poll[] {
 			return orderBy(
-				this.pollsByCategory(this.currentCategory.id),
+				state.list.filter((poll: Poll) =>
+					this.currentCategory?.filterCondition(poll),
+				) ?? [],
 				[sortColumnsMapping[state.sort.by]],
-				[state.sort.reverse ? 'desc' : 'asc'],
+				[state.sort.reverse ? SortDirection.Desc : SortDirection.Asc],
 			)
 		},
 
@@ -298,31 +279,31 @@ export const usePollsStore = defineStore('polls', {
 			return this.pollsFilteredSorted.slice(0, this.loaded)
 		},
 
-		/*
-		 * Sliced filtered and sorted polls for navigation
-		 */
-		navigationList: (state: PollList) => (filterId: FilterType) => {
-			const useCategory = state.categories.find(
-				(category: PollCategory) => category.id === filterId,
-			)
-			return orderBy(
-				state.list.filter((poll: Poll) => useCategory.filterCondition(poll)),
-				[SortType.Created],
-				['desc'],
-			).slice(0, state.meta.maxPollsInNavigation)
+		pollsCount(state: PollList): { [key: string]: number } {
+			const count: Record<FilterType, number> = {} as Record<
+				FilterType,
+				number
+			>
+
+			for (const [key, category] of Object.entries(state.categories)) {
+				count[key as FilterType] = state.list.filter((poll: Poll) =>
+					category.filterCondition(poll),
+				).length
+			}
+
+			return count
 		},
 
 		/*
 		 * Sliced filtered and sorted polls for dashboard
 		 */
 		dashboardList(state: PollList): Poll[] {
-			const useCategory = state.categories.find(
-				(category: PollCategory) => category.id === FilterType.Relevant,
-			)
 			return orderBy(
-				state.list.filter((poll: Poll) => useCategory.filterCondition(poll)),
+				state.list.filter((poll: Poll) =>
+					state.categories[FilterType.Relevant].filterCondition(poll),
+				),
 				[SortType.Created],
-				['desc'],
+				[SortDirection.Desc],
 			).slice(0, 7)
 		},
 
@@ -341,11 +322,9 @@ export const usePollsStore = defineStore('polls', {
 			return state.meta.status === StatusResults.Loading
 		},
 
-		countByCategory: (state: PollList) => (filterId: string) =>
+		countByCategory: (state: PollList) => (filterId: FilterType) =>
 			state.list.filter((poll: Poll) =>
-				state.categories
-					.find((category: PollCategory) => category.id === filterId)
-					.filterCondition(poll),
+				state.categories[filterId].filterCondition(poll),
 			).length,
 	},
 
@@ -356,11 +335,13 @@ export const usePollsStore = defineStore('polls', {
 				const response = await PollsAPI.getPolls()
 				this.list = response.data.list
 				this.meta.status = StatusResults.Loaded
-			} catch (e) {
-				if (e?.code === 'ERR_CANCELED') return
+			} catch (error) {
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
 				this.meta.status = StatusResults.Error
-				Logger.error('Error loading polls', { error: e.response })
-				throw e
+				Logger.error('Error loading polls', { error })
+				throw error
 			}
 		},
 
@@ -372,13 +353,17 @@ export const usePollsStore = defineStore('polls', {
 			this.meta.loadedChunks = 1
 		},
 
-		async clone(payload: { pollId: number }) {
+		async clone(payload: { pollId: number }): Promise<void> {
 			try {
-				const response = await PollsAPI.clonePoll(payload.pollId)
-				return response
+				await PollsAPI.clonePoll(payload.pollId)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error cloning poll', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error cloning poll', {
+					error,
+					payload,
+				})
 				throw error
 			} finally {
 				this.load()
@@ -389,8 +374,13 @@ export const usePollsStore = defineStore('polls', {
 			try {
 				await PollsAPI.deletePoll(payload.pollId)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error deleting poll', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error deleting poll', {
+					error,
+					payload,
+				})
 				throw error
 			} finally {
 				this.load()
@@ -401,8 +391,13 @@ export const usePollsStore = defineStore('polls', {
 			try {
 				await PollsAPI.toggleArchive(payload.pollId)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error archiving/restoring poll', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error archiving/restoring poll', {
+					error,
+					payload,
+				})
 				throw error
 			} finally {
 				this.load()
@@ -412,8 +407,13 @@ export const usePollsStore = defineStore('polls', {
 			try {
 				await PollsAPI.takeOver(payload.pollId)
 			} catch (error) {
-				if (error?.code === 'ERR_CANCELED') return
-				Logger.error('Error archiving/restoring poll', { error, payload })
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error archiving/restoring poll', {
+					error,
+					payload,
+				})
 				throw error
 			} finally {
 				this.load()

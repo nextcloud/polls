@@ -67,7 +67,9 @@ class AdminController extends BaseController {
 	 */
 	#[FrontpageRoute(verb: 'PUT', url: '/administration/poll/{pollId}/takeover')]
 	public function takeover(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->pollService->takeover($pollId));
+		return $this->response(fn () => [
+			'poll' => $this->pollService->takeover($pollId)
+		]);
 	}
 
 	/**

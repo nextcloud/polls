@@ -6,7 +6,9 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRoute } from 'vue-router'
-import { utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
+
+// eslint-disable-next-line import/named
+import { Sheet, WorkBook, utils as xlsxUtils, write as xlsxWrite } from 'xlsx'
 import DOMPurify from 'dompurify'
 import { saveAs } from 'file-saver'
 import { t } from '@nextcloud/l10n'
@@ -21,10 +23,11 @@ import CsvIcon from 'vue-material-design-icons/FileDelimited.vue'
 import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 
-import { PollsAPI } from '../../Api/index.ts'
+import { ApiEmailAdressList, PollsAPI } from '../../Api/index.ts'
 import { usePollStore, PollType } from '../../stores/poll.ts'
 import { Answer, AnswerSymbol, useVotesStore } from '../../stores/votes.ts'
 import { useOptionsStore } from '../../stores/options.ts'
+import { AxiosError } from '@nextcloud/axios'
 
 enum ArrayStyle {
 	Symbols = 'symbols',
@@ -46,24 +49,26 @@ const optionsStore = useOptionsStore()
 
 const regex = /[:\\/?*[\]]/g
 
-const workBook = ref(null)
-const sheetData = ref([])
-const emailAddresses = ref([])
+const workBook = ref<null | WorkBook>(null)
+const sheetData = ref<Sheet>([])
+const emailAddresses = ref<ApiEmailAdressList[]>([])
 const sheetName = computed(() =>
 	pollStore.configuration.title.replaceAll(regex, '').slice(0, 31),
 )
 
-/**
- *
- * @param s - string
- */
-function s2ab(s) {
+function s2ab(s: string) {
 	const buf = new ArrayBuffer(s.length) // convert s to arrayBuffer
 	const view = new Uint8Array(buf) // create uint8array as viewer
-	for (let i = 0; i < s.length; i++) view[i] = s.charCodeAt(i) & 0xff // convert to octet
+	for (let i = 0; i < s.length; i++) {
+		view[i] = s.charCodeAt(i) & 0xff
+	} // convert to octet
 	return buf
 }
 
+/**
+ *
+ * @param answer
+ */
 function getAnswerTranslated(answer: Answer) {
 	switch (answer) {
 		case Answer.Yes:
@@ -107,7 +112,9 @@ async function exportFile(exportFormat: ExportFormat) {
 			)
 			emailAddresses.value = response.data
 		} catch (error) {
-			if (error.name === 'CanceledError') return
+			if ((error as AxiosError).name === 'CanceledError') {
+				return
+			}
 		}
 	}
 
@@ -183,6 +190,10 @@ async function exportFile(exportFormat: ExportFormat) {
  * @param style - style
  */
 function addVotesArray(style: ArrayStyle) {
+	if (!workBook.value) {
+		return
+	}
+
 	pollStore.participants.forEach((participant) => {
 		const votesLine = [participant.displayName]
 		try {
@@ -190,24 +201,32 @@ function addVotesArray(style: ArrayStyle) {
 				votesLine.push(
 					emailAddresses.value.find(
 						(item) => item.displayName === participant.displayName,
-					).emailAddress,
+					)?.emailAddress ?? '',
 				)
 			}
 
 			optionsStore.list.forEach((option) => {
 				if (style === ArrayStyle.Symbols) {
 					votesLine.push(
-						votesStore.getVote({ user: participant, option })
-							.answerSymbol ?? AnswerSymbol.No,
+						votesStore.getVote({
+							user: participant,
+							option,
+						}).answerSymbol ?? AnswerSymbol.No,
 					)
 				} else if (style === ArrayStyle.Raw) {
 					votesLine.push(
-						votesStore.getVote({ user: participant, option }).answer,
+						votesStore.getVote({
+							user: participant,
+							option,
+						}).answer,
 					)
 				} else {
 					votesLine.push(
 						getAnswerTranslated(
-							votesStore.getVote({ user: participant, option }).answer,
+							votesStore.getVote({
+								user: participant,
+								option,
+							}).answer,
 						),
 					)
 				}
@@ -219,7 +238,7 @@ function addVotesArray(style: ArrayStyle) {
 		}
 	})
 
-	const workSheet = xlsxUtils.aoa_to_sheet(sheetData.value)
+	const workSheet = xlsxUtils.aoa_to_sheet(sheetData.value as unknown[][])
 	workBook.value.Sheets[sheetName.value] = workSheet
 }
 </script>

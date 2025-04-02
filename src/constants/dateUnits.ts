@@ -4,11 +4,26 @@
  */
 
 import { t } from '@nextcloud/l10n'
+import { createRecordFromArray } from '../helpers/modules/arrayHelper'
 
 export enum DateUnitKeys {
 	Minute = 'minute',
 	Hour = 'hour',
 	Day = 'days',
+	Week = 'week',
+	Month = 'month',
+	Year = 'year',
+}
+
+export enum TimeUnitKeys {
+	Minute = 'minute',
+	Hour = 'hour',
+}
+
+export enum DateTimeUnitKeys {
+	Minute = 'minute',
+	Hour = 'hour',
+	Day = 'day',
 	Week = 'week',
 	Month = 'month',
 	Year = 'year',
@@ -21,68 +36,95 @@ export enum DateTypeKeys {
 	DateTimeRange = 'dateTimeRange',
 }
 
-export type DateUnitType = {
+export type DateTimeUnitType = {
+	id: DateUnitKeys
 	name: string
-	key: DateUnitKeys
+	luxonUnit: 'year' | 'month' | 'week' | 'day' | 'hour' | 'minute'
 }
 
 export type TimeUnitsType = {
-	unit: DateUnitType
+	unit: DateTimeUnitType
 	value: number
 }
 
 export type DateOptionTypeSelect = {
+	id: DateTypeKeys
 	name: string
-	key: DateTypeKeys
 }
 
 export type DurationType = {
-	unit: DateUnitType
+	unit: DateTimeUnitType
 	amount: number
 }
 
-export const dateUnits: DateUnitType[] = [
+export type DateTimeDetails = {
+	month: string
+	day: string
+	dow: string
+	time: string
+	date: string
+	dateTime: string
+	iso: string
+	utc: string
+	sameDay?: boolean
+}
+
+export const dateTimeUnits: DateTimeUnitType[] = [
 	{
+		id: DateUnitKeys.Minute,
 		name: t('polls', 'Minute'),
-		key: DateUnitKeys.Minute,
+		luxonUnit: 'minute',
 	},
 	{
+		id: DateUnitKeys.Hour,
 		name: t('polls', 'Hour'),
-		key: DateUnitKeys.Hour,
+		luxonUnit: 'hour',
 	},
 	{
+		id: DateUnitKeys.Day,
 		name: t('polls', 'Day'),
-		key: DateUnitKeys.Day,
+		luxonUnit: 'day',
 	},
 	{
+		id: DateUnitKeys.Week,
 		name: t('polls', 'Week'),
-		key: DateUnitKeys.Week,
+		luxonUnit: 'week',
 	},
 	{
+		id: DateUnitKeys.Month,
 		name: t('polls', 'Month'),
-		key: DateUnitKeys.Month,
+		luxonUnit: 'month',
 	},
 	{
+		id: DateUnitKeys.Year,
 		name: t('polls', 'Year'),
-		key: DateUnitKeys.Year,
+		luxonUnit: 'year',
 	},
 ]
 
-export const dateOnlyUnits: DateUnitType[] = [
+// Create a record from the dateUnits array
+export const dateTimeUnitsKeyed: Record<DateUnitKeys, DateTimeUnitType> =
+	createRecordFromArray(dateTimeUnits)
+
+export const dateOnlyUnits: DateTimeUnitType[] = [
 	{
 		name: t('polls', 'Day'),
-		key: DateUnitKeys.Day,
+		id: DateUnitKeys.Day,
+		luxonUnit: 'day',
 	},
 	{
 		name: t('polls', 'Week'),
-		key: DateUnitKeys.Week,
+		id: DateUnitKeys.Week,
+		luxonUnit: 'week',
 	},
 	{
 		name: t('polls', 'Month'),
-		key: DateUnitKeys.Month,
+		id: DateUnitKeys.Month,
+		luxonUnit: 'month',
 	},
 	{
 		name: t('polls', 'Year'),
-		key: DateUnitKeys.Year,
+		id: DateUnitKeys.Year,
+		luxonUnit: 'year',
 	},
 ]

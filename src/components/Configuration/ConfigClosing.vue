@@ -60,6 +60,9 @@ const useExpire = computed({
 	},
 })
 
+/**
+ *
+ */
 function clickToggleClosed() {
 	if (pollStore.isClosed) {
 		pollStore.reopen()

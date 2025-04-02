@@ -2,10 +2,13 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import { AxiosResponse } from '@nextcloud/axios'
+import { AppSettings, Group } from '../../stores/appSettings.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { User } from '../../Types/index.js'
 
 const appSettings = {
-	getAppSettings() {
+	getAppSettings(): Promise<AxiosResponse<{ appSettings: AppSettings }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'settings/app',
@@ -17,7 +20,9 @@ const appSettings = {
 		})
 	},
 
-	writeAppSettings(appSettings) {
+	writeAppSettings(
+		appSettings: AppSettings,
+	): Promise<AxiosResponse<{ appSettings: AppSettings }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'settings/app',
@@ -29,7 +34,7 @@ const appSettings = {
 		})
 	},
 
-	getGroups(query) {
+	getGroups(query: string): Promise<AxiosResponse<{ groups: Group[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `groups${query.trim() ? `/${query.trim()}` : ''}`,
@@ -40,7 +45,7 @@ const appSettings = {
 		})
 	},
 
-	getUsers(query) {
+	getUsers(query: string): Promise<AxiosResponse<{ siteusers: User[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `search/users${query.trim() ? `/${query.trim()}` : ''}`,

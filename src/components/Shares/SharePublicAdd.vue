@@ -23,6 +23,9 @@ const userItemProps = {
 	type: VirtualUserItemType.AddPublicLink,
 }
 
+/**
+ *
+ */
 async function addPublicShare() {
 	try {
 		await sharesStore.addPublicShare()

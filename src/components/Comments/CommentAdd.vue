@@ -16,6 +16,9 @@ const commentsStore = useCommentsStore()
 const sessionStore = useSessionStore()
 const comment = ref('')
 
+/**
+ *
+ */
 async function writeComment() {
 	if (comment.value) {
 		try {

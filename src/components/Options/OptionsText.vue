@@ -37,7 +37,13 @@ const cssVar = {
 	'--content-deleted': `" (${t('polls', 'deleted')})"`,
 }
 
-function onSort(event) {
+/**
+ *
+ * @param event
+ * @param event.oldIndex
+ * @param event.newIndex
+ */
+function onSort(event: { oldIndex: number; newIndex: number }) {
 	optionsStore.changeOrder(event.oldIndex, event.newIndex)
 }
 </script>

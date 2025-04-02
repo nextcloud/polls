@@ -44,6 +44,10 @@ const showLockAnonymous = computed(
 		!pollStore.status.isRealAnonymous,
 )
 
+/**
+ *
+ * @param forceDialog
+ */
 function spawnConfirmationDialog(forceDialog: boolean = false) {
 	if (forceDialog) {
 		showAnonDialog.value = true
@@ -52,6 +56,9 @@ function spawnConfirmationDialog(forceDialog: boolean = false) {
 	pollStore.write()
 }
 
+/**
+ *
+ */
 function lockAnonymous() {
 	pollStore.LockAnonymous()
 	pollStore.write()

@@ -16,21 +16,20 @@ import OptionsDateAddDialog from '../Options/OptionsDateAddDialog.vue'
 import OptionsDate from '../Options/OptionsDate.vue'
 
 import { usePollStore } from '../../stores/poll'
+import { Event } from '../../Types'
 
 const pollStore = usePollStore()
 const showModal = ref(false)
 const caption = t('polls', 'Add date option')
 
 onMounted(() => {
-	subscribe('polls:options:add-date', () => {
+	subscribe(Event.AddDate, () => {
 		showModal.value = true
 	})
 })
 
 onUnmounted(() => {
-	unsubscribe('polls:options:add-date', () => {
-		showModal.value = false
-	})
+	unsubscribe(Event.AddDate, () => {})
 })
 </script>
 

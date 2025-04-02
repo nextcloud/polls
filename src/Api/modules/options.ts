@@ -2,10 +2,13 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
+import { Option, SimpleOption } from '../../stores/options.js'
+import { DateUnitKeys } from '../../constants/dateUnits.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
+import { AxiosResponse } from '@nextcloud/axios'
 
 const options = {
-	getOptions(pollId) {
+	getOptions(pollId: number): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `poll/${pollId}/options`,
@@ -17,10 +20,13 @@ const options = {
 		})
 	},
 
-	addOption(option) {
+	addOption(
+		pollId: number,
+		option: SimpleOption,
+	): Promise<AxiosResponse<{ option: Option }>> {
 		return httpInstance.request({
 			method: 'POST',
-			url: 'option',
+			url: `poll/${pollId}/option`,
 			data: { ...option },
 			cancelToken:
 				cancelTokenHandlerObject[
@@ -29,7 +35,7 @@ const options = {
 		})
 	},
 
-	updateOption(option) {
+	updateOption(option: Option): Promise<AxiosResponse<{ option: Option }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${option.id}`,
@@ -42,7 +48,7 @@ const options = {
 		})
 	},
 
-	deleteOption(optionId) {
+	deleteOption(optionId: number): Promise<AxiosResponse<{ option: Option }>> {
 		return httpInstance.request({
 			method: 'DELETE',
 			url: `option/${optionId}`,
@@ -54,7 +60,7 @@ const options = {
 		})
 	},
 
-	restoreOption(optionId) {
+	restoreOption(optionId: number): Promise<AxiosResponse<{ option: Option }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${optionId}/restore`,
@@ -67,7 +73,10 @@ const options = {
 		})
 	},
 
-	addOptions(pollId, optionsBatch) {
+	addOptions(
+		pollId: number,
+		optionsBatch: string,
+	): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'option/bulk',
@@ -82,7 +91,7 @@ const options = {
 		})
 	},
 
-	confirmOption(optionId) {
+	confirmOption(optionId: number): Promise<AxiosResponse<{ option: Option }>> {
 		return httpInstance.request({
 			method: 'PUT',
 			url: `option/${optionId}/confirm`,
@@ -93,7 +102,13 @@ const options = {
 		})
 	},
 
-	reorderOptions(pollId, options) {
+	reorderOptions(
+		pollId: number,
+		options: {
+			id: number
+			text: string
+		}[],
+	): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/options/reorder`,
@@ -105,7 +120,12 @@ const options = {
 		})
 	},
 
-	addOptionsSequence(optionId, step, unit, amount) {
+	addOptionsSequence(
+		optionId: number,
+		step: number,
+		unit: DateUnitKeys,
+		amount: number,
+	): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `option/${optionId}/sequence`,
@@ -121,7 +141,11 @@ const options = {
 		})
 	},
 
-	shiftOptions(pollId, step, unit) {
+	shiftOptions(
+		pollId: number,
+		step: number,
+		unit: DateUnitKeys,
+	): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/shift`,

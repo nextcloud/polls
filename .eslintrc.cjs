@@ -15,6 +15,7 @@ module.exports = {
 				},
 			},
 		],
+		'jsdoc/require-param-description': 'off',
 		'no-array-constructor': 'error',
 		'no-continue': 'error',
 		'no-else-return': ['error', { allowElseIf: false }],

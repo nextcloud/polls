@@ -17,7 +17,7 @@ import { Logger } from '../helpers/index.ts'
 import { HeaderBar, IntersectionObserver } from '../components/Base/index.ts'
 import { PollsAppIcon } from '../components/AppIcons/index.ts'
 import PollItem from '../components/PollList/PollItem.vue'
-import { usePollsStore } from '../stores/polls.ts'
+import { FilterType, usePollsStore } from '../stores/polls.ts'
 import PollListSort from '../components/PollList/PollListSort.vue'
 import PollItemActions from '../components/PollList/PollItemActions.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
@@ -29,18 +29,19 @@ const router = useRouter()
 const route = useRoute()
 
 const title = computed(
-	() =>
-		pollsStore.categories.find((category) => category.id === route.params.type)
-			?.titleExt,
+	() => pollsStore.categories[route.params.type as FilterType].titleExt,
 )
+
 const showMore = computed(
 	() =>
 		pollsStore.chunkedList.length < pollsStore.pollsFilteredSorted.length &&
 		pollsStore.meta.status !== 'loading',
 )
+
 const countLoadedPolls = computed(() =>
 	Math.min(pollsStore.chunkedList.length, pollsStore.pollsFilteredSorted.length),
 )
+
 const infoLoaded = computed(() =>
 	n(
 		'polls',
@@ -54,9 +55,7 @@ const infoLoaded = computed(() =>
 	),
 )
 const description = computed(
-	() =>
-		pollsStore.categories.find((category) => category.id === route.params.type)
-			?.description,
+	() => pollsStore.categories[route.params.type as FilterType].description,
 )
 const emptyPollListnoPolls = computed(
 	() => pollsStore.pollsFilteredSorted.length < 1,
@@ -104,7 +103,10 @@ function refreshView() {
  * @param pollId - The poll id to clone
  */
 function gotoPoll(pollId: number) {
-	router.push({ name: 'vote', params: { id: pollId } })
+	router.push({
+		name: 'vote',
+		params: { id: pollId },
+	})
 }
 
 /**

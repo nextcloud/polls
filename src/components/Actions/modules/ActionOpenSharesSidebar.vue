@@ -8,11 +8,18 @@ import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import { Event } from '../../../Types'
 
 const caption = t('polls', 'Edit access')
 
+/**
+ *
+ */
 function clickAction() {
-	emit('polls:sidebar:toggle', { open: true, activeTab: 'sharing' })
+	emit(Event.SidebarToggle, {
+		open: true,
+		activeTab: 'sharing',
+	})
 }
 </script>
 

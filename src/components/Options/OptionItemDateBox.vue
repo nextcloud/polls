@@ -7,6 +7,7 @@
 import { computed, PropType } from 'vue'
 import moment from '@nextcloud/moment'
 import { Option, BoxType } from '../../Types/index.ts'
+import { DateTimeDetails } from '../../constants/dateUnits.ts'
 
 const props = defineProps({
 	option: {
@@ -19,52 +20,56 @@ const props = defineProps({
 	},
 })
 
-const eventOption = computed(() => {
-	const from = moment.unix(props.option.timestamp)
-	const to = moment.unix(
-		props.option.timestamp + Math.max(0, props.option.duration),
-	)
-	// does the event start at 00:00 local time and
-	// is the duration divisable through 24 hours without rest
-	// then we have a day long event (one or multiple days)
-	// In this case we want to suppress the display of any time information
-	const dayLongEvent =
-		from.unix() === moment(from).startOf('day').unix() &&
-		to.unix() === moment(to).startOf('day').unix() &&
-		from.unix() !== to.unix()
+const eventOption = computed(
+	(): { from: DateTimeDetails; to: DateTimeDetails; dayLong: boolean } => {
+		const from = moment.unix(props.option.timestamp)
+		const to = moment.unix(
+			props.option.timestamp + Math.max(0, props.option.duration),
+		)
+		// does the event start at 00:00 local time and
+		// is the duration divisable through 24 hours without rest
+		// then we have a day long event (one or multiple days)
+		// In this case we want to suppress the display of any time information
+		const dayLongEvent =
+			from.unix() === moment(from).startOf('day').unix() &&
+			to.unix() === moment(to).startOf('day').unix() &&
+			from.unix() !== to.unix()
 
-	const dayModifier = dayLongEvent ? 1 : 0
-	// modified to date, in case of day long events, a second gets substracted
-	// to set the begin of the to day to the end of the previous date
-	const toModified = moment(to).subtract(dayModifier, 'days')
+		const dayModifier = dayLongEvent ? 1 : 0
+		// modified to date, in case of day long events, a second gets substracted
+		// to set the begin of the to day to the end of the previous date
+		const toModified = moment(to).subtract(dayModifier, 'days')
 
-	return {
-		from: {
-			month: from.format(
-				moment().year() === from.year() ? 'MMM' : "MMM [ ']YY",
-			),
-			day: from.format('D'),
-			dow: from.format('ddd'),
-			time: from.format('LT'),
-			date: from.format('ll'),
-			dateTime: from.format('llll'),
-			utc: moment(from).utc().format('llll'),
-		},
-		to: {
-			month: toModified.format(
-				moment().year() === toModified.year() ? 'MMM' : "MMM [ ']YY",
-			),
-			day: toModified.format('D'),
-			dow: toModified.format('ddd'),
-			time: to.format('LT'),
-			date: toModified.format('ll'),
-			dateTime: to.format('llll'),
-			utc: moment(to).utc().format('llll'),
-			sameDay: from.format('L') === toModified.format('L'),
-		},
-		dayLong: dayLongEvent,
-	}
-})
+		return {
+			from: {
+				month: from.format(
+					moment().year() === from.year() ? 'MMM' : "MMM [ ']YY",
+				),
+				day: from.format('D'),
+				dow: from.format('ddd'),
+				time: from.format('LT'),
+				date: from.format('ll'),
+				dateTime: from.format('llll'),
+				iso: moment(from).toISOString(),
+				utc: moment(from).utc().format('llll'),
+			},
+			to: {
+				month: toModified.format(
+					moment().year() === toModified.year() ? 'MMM' : "MMM [ ']YY",
+				),
+				day: toModified.format('D'),
+				dow: toModified.format('ddd'),
+				time: to.format('LT'),
+				date: toModified.format('ll'),
+				dateTime: to.format('llll'),
+				utc: moment(to).utc().format('llll'),
+				iso: moment(to).toISOString(),
+				sameDay: from.format('L') === toModified.format('L'),
+			},
+			dayLong: dayLongEvent,
+		}
+	},
+)
 
 const dateLocalFormatUTC = computed(() =>
 	props.option.duration

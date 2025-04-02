@@ -9,6 +9,7 @@ import { t } from '@nextcloud/l10n'
 import { emit } from '@nextcloud/event-bus'
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
+import { Event } from '../../../Types'
 
 const buttonAriaLabel = computed(() => props.caption ?? t('polls', 'Add option'))
 
@@ -19,8 +20,11 @@ const props = defineProps({
 	},
 })
 
+/**
+ *
+ */
 async function clickAction() {
-	emit('polls:options:add-date', null)
+	emit(Event.AddDate, null)
 }
 </script>
 

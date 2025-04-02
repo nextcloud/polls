@@ -59,7 +59,9 @@ function toggleArchive() {
  *
  */
 function deletePoll() {
-	if (!pollStore.status.isDeleted) return
+	if (!pollStore.status.isDeleted) {
+		return
+	}
 	try {
 		pollStore.delete({ pollId: pollStore.id })
 	} catch {

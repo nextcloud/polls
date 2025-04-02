@@ -19,7 +19,7 @@ const optionsStore = useOptionsStore()
 const props = defineProps({
 	option: {
 		type: Object as PropType<Option>,
-		default: undefined,
+		required: true,
 	},
 	avatarSize: {
 		type: Number,
@@ -56,7 +56,7 @@ const showDelete = computed(
 			hide-user-status
 			:tooltip-message="
 				t('polls', '{displayName}\'s proposal', {
-					displayName: option.owner.displayName,
+					displayName: option.owner?.displayName ?? '',
 				})
 			" />
 	</div>
