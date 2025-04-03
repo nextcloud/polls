@@ -36,7 +36,7 @@ const placeholder = computed(() => {
 			{{
 				t(
 					'polls',
-					'Use the default terms for public polls and enable the default footer.',
+					'Use the default terms for public polls and enable the default footer',
 				)
 			}}
 		</NcCheckboxRadioSwitch>
