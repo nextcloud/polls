@@ -368,6 +368,7 @@ export const useSessionStore = defineStore('session', {
 			this.route.path = payload.path
 			this.route.params.id = payload.params.id as unknown as number
 			this.route.params.token = payload.params.token as string
+			this.route.params.type = payload.params.type as FilterType
 		},
 
 		// Share store
