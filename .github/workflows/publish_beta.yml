@@ -64,14 +64,3 @@ jobs:
         files: |
           build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
           build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip
-
-    - name: Create release notification issue
-      if: success()
-      uses: JasonEtco/create-an-issue@v2
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASENOTES: ${{ steps.extract-release-notes.outputs.release_notes }}
-        VERSION: ${{ steps.appinfo.outputs.app-version }}
-        TAG: ${{ steps.appinfo.outputs.tag-version }}
-      with:
-        filename: .github/BETA_NOTIFICATION.md
