@@ -43,6 +43,7 @@ export type AppSettings = {
 	updateType: UpdateType
 	useActivity: boolean
 	useCollaboration: boolean
+	useSiteLegalTerms: boolean
 	navigationPollsInList: boolean
 	finalPrivacyUrl: string
 	finalImprintUrl: string
@@ -80,6 +81,7 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		updateType: UpdateType.NoPolling,
 		useActivity: false,
 		useCollaboration: true,
+		useSiteLegalTerms: true,
 		navigationPollsInList: true,
 		finalPrivacyUrl: '',
 		finalImprintUrl: '',
