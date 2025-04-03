@@ -39,6 +39,7 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_UNRESTRICTED_POLL_OWNER = 'unrestrictedOwner';
 	public const SETTING_UNRESTRICTED_POLL_OWNER_GROUPS = 'unrestrictedOwnerGroups';
 
+	public const SETTING_USE_SITE_LEGAL = 'useSiteLegalTerms';
 	public const SETTING_LEGAL_TERMS_IN_EMAIL = 'legalTermsInEmail';
 	public const SETTING_DISCLAIMER = 'disclaimer';
 	public const SETTING_PRIVACY_URL = 'privacyUrl';
@@ -92,6 +93,7 @@ class AppSettings implements JsonSerializable {
 			'finalPrivacyUrl' => '',
 			'finalImprintUrl' => '',
 			'useLogin' => true,
+			'useSiteLegalTerms' => true,
 			'useActivity' => false,
 			'navigationPollsInList' => false,
 			'updateType' => $this->getUpdateType(),
@@ -287,7 +289,7 @@ class AppSettings implements JsonSerializable {
 	 */
 	public function getFinalPrivacyUrl(): string {
 		$privacyUrl = $this->getStringSetting(self::SETTING_PRIVACY_URL);
-		if ($privacyUrl) {
+		if ($privacyUrl && !$this->getBooleanSetting(self::SETTING_USE_SITE_LEGAL)) {
 			return $privacyUrl;
 		}
 
@@ -301,7 +303,7 @@ class AppSettings implements JsonSerializable {
 	 */
 	public function getFinalImprintUrl(): string {
 		$imprintUrl = $this->getStringSetting(self::SETTING_IMPRINT_URL);
-		if ($imprintUrl) {
+		if ($imprintUrl && !$this->getBooleanSetting(self::SETTING_USE_SITE_LEGAL)) {
 			return $imprintUrl;
 		}
 
@@ -417,6 +419,7 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_AUTO_ARCHIVE => $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE),
 			self::SETTING_AUTO_ARCHIVE_OFFSET_DAYS => $this->getAutoarchiveOffsetDays(),
 
+			self::SETTING_USE_SITE_LEGAL => $this->getBooleanSetting(self::SETTING_USE_SITE_LEGAL),
 			self::SETTING_LEGAL_TERMS_IN_EMAIL => $this->getBooleanSetting(self::SETTING_LEGAL_TERMS_IN_EMAIL),
 			self::SETTING_DISCLAIMER => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_DISCLAIMER),
 			self::SETTING_IMPRINT_URL => $this->appConfig->getValueString(AppConstants::APP_ID, self::SETTING_IMPRINT_URL),
