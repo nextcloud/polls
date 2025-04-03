@@ -240,6 +240,7 @@ onMounted(() => {
 			<input
 				v-model="model"
 				v-input-focus
+				:disabled="disabled"
 				:type="type"
 				:inputmode="inputmode"
 				:placeholder="placeholder"

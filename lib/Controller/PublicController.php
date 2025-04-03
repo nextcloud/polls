@@ -30,6 +30,7 @@ use OCP\AppFramework\Http\Attribute\PublicPage;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\AppFramework\Http\Template\PublicTemplateResponse;
 use OCP\AppFramework\Http\TemplateResponse;
+use OCP\IAppConfig;
 use OCP\IRequest;
 use OCP\Util;
 
@@ -43,6 +44,7 @@ class PublicController extends BasePublicController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
+		private IAppConfig $appConfig,
 		private UserSession $userSession,
 		private AppSettings $appSettings,
 		private CommentService $commentService,
@@ -72,7 +74,7 @@ class PublicController extends BasePublicController {
 			return new TemplateResponse(AppConstants::APP_ID, 'main');
 		} else {
 			$template = new PublicTemplateResponse(AppConstants::APP_ID, 'main');
-			$template->setFooterVisible(false);
+			$template->setFooterVisible($this->appConfig->getValueBool('polls', AppSettings::SETTING_USE_SITE_LEGAL, true));
 			return $template;
 		}
 	}
