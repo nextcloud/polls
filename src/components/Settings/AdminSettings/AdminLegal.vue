@@ -40,10 +40,9 @@ const placeholder = computed(() => {
 				)
 			}}
 		</NcCheckboxRadioSwitch>
-
 	</div>
 	<div v-if="!appSettingsStore.useSiteLegalTerms" class="user_settings">
-		<p class="settings-description" >
+		<p class="settings-description">
 			{{
 				t(
 					'polls',
