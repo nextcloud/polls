@@ -147,17 +147,21 @@ async function setVote() {
 		}
 
 		&.current-user {
-			background-color: transparent !important;
+			background-color: transparent;
 			.locked & {
-				background-color: var(--color-polls-background-no) !important;
+				background-color: var(--color-polls-background-no);
 			}
 		}
 	}
 
 	.locked {
 		.vote-item.current-user {
-			background-color: var(--color-polls-background-no) !important;
+			background-color: var(--color-polls-background-no);
 		}
 	}
+}
+
+.list-view .locked .vote-item.current-user {
+	background-color: revert;
 }
 </style>
