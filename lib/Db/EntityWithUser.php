@@ -60,17 +60,18 @@ abstract class EntityWithUser extends Entity {
 			return true;
 		}
 
+		$userSession = Container::queryClass(UserSession::class);
+		if ($this->getPollOwnerId() === $userSession->getCurrentUserId()) {
+			// if the current user is the poll owner, don't anonymize the entity
+			return false;
+		}
+
+		if ($this->getShareType() === Share::TYPE_ADMIN) {
+			// if the current user is a delegated admin, don't anonymize the entity
+			return false;
+		}
+
 		if ($this->getAnonymized() > 0) {
-			// the poll is anonymized and unlocked
-			$userSession = Container::queryClass(UserSession::class);
-			if ($this->getPollOwnerId() === $userSession->getCurrentUserId()) {
-				// if the current user is the poll owner, don't anonymize the entity
-				return false;
-			}
-			if ($this->getShareType() === Share::TYPE_ADMIN) {
-				// if the current user is a delegated admin, don't anonymize the entity
-				return false;
-			}
 			// if the current user is not the poll owner, anonymize the entity
 			return true;
 		}
