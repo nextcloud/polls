@@ -18,7 +18,7 @@ tests/.phpunit.result.cache
 npm-debug.log
 vendor
 vendor-bin/**/vendor/
-vendor_bin/**/*.lock
+vendor-bin/**/*.lock
 Thumbs.db
 yarn-error.log
 *.cmd
