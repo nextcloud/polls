@@ -38,10 +38,6 @@ defineProps({
 		type: Boolean,
 		default: false,
 	},
-	noClose: {
-		type: Boolean,
-		default: false,
-	},
 })
 </script>
 
