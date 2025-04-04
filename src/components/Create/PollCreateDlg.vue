@@ -7,7 +7,7 @@
 import { computed, ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -127,7 +127,7 @@ function resetPoll() {
 			</NcButton>
 			<NcButton
 				:disabled="disableAddButton"
-				:type="ButtonType.Primary"
+				:variant="ButtonVariant.Primary"
 				@click="addPoll">
 				<template #default>
 					{{ t('polls', 'Add') }}

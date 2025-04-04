@@ -7,7 +7,7 @@
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import EmailAlertIcon from 'vue-material-design-icons/EmailAlert.vue'
 import ShareItem from './ShareItem.vue'
@@ -65,7 +65,7 @@ async function sendAllInvitations() {
 			<NcButton
 				:title="t('polls', 'Resolve and send all invitations')"
 				:aria-label="t('polls', 'Resolve and send all invitations')"
-				:type="ButtonType.Tertiary"
+				:variant="ButtonVariant.Tertiary"
 				@click="sendAllInvitations()">
 				<template #icon>
 					<BulkMailIcon />

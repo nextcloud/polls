@@ -7,7 +7,7 @@
 import { PropType } from 'vue'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import NcModal from '@nextcloud/vue/components/NcModal'
 
 import { NcActionButton, NcAppNavigationNew } from '@nextcloud/vue'
@@ -30,9 +30,9 @@ defineProps({
 		type: String as PropType<ButtonMode>,
 		default: ButtonMode.Native,
 	},
-	buttonType: {
-		type: String as PropType<ButtonType>,
-		default: ButtonType.Primary,
+	ButtonVariant: {
+		type: String as PropType<ButtonVariant>,
+		default: ButtonVariant.Primary,
 	},
 	noClose: {
 		type: Boolean,
@@ -57,7 +57,7 @@ defineProps({
 			@click="showModal = true" />
 		<NcButton
 			v-else-if="buttonMode === ButtonMode.Native"
-			:type="buttonType"
+			:variant="ButtonVariant"
 			:aria-label="buttonCaption"
 			@click="showModal = true">
 			<template #icon>

@@ -7,7 +7,7 @@
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
@@ -161,7 +161,7 @@ function deletePoll() {
 
 			<NcButton
 				v-if="pollStore.status.isDeleted"
-				:type="ButtonType.Error"
+				:variant="ButtonVariant.Error"
 				@click="deletePoll()">
 				<template #icon>
 					<DeletePollIcon />
