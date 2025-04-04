@@ -338,7 +338,7 @@ async function addOption(): Promise<void> {
 			</div>
 
 			<CheckIcon
-				v-if="result === StatusResults.Success"
+				v-if="result === StatusResults.Success && blockedOption"
 				class="date-added"
 				:title="t('polls', 'Added')"
 				:fill-color="successColor"

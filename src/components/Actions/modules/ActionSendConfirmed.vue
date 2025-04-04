@@ -77,6 +77,7 @@ async function clickAction() {
 
 		<NcModal
 			v-model:show="showModal"
+			no-close
 			:name="t('polls', 'Result of sent confirmation mails')"
 			size="small">
 			<div class="modal-confirmation-result">
