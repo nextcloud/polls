@@ -523,6 +523,7 @@
     "Error resolving {name}." : "Earráid agus {name} á réiteach.",
     "Invitation sent to {displayName} ({emailAddress})" : "Cuireadh chuig {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Earráid agus cuireadh á sheoladh chuig {displayName} ({emailAddress})",
+    "Error sending invitation" : "Earráid agus cuireadh á sheoladh",
     "Link copied to clipboard" : "Cóipeáladh an nasc chuig an ngearrthaisce",
     "Error while copying link to clipboard" : "Earráid agus an nasc chuig an ngearrthaisce á chóipeáil",
     "Has voted" : "Tá vótáil",

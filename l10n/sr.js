@@ -525,6 +525,7 @@ OC.L10N.register(
     "Error resolving {name}." : "Грешка приликом разрешавања {name}",
     "Invitation sent to {displayName} ({emailAddress})" : "Позивница је постата кориснику {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Грешка приликом слања позивнице кориснику {displayName} ({emailAddress})",
+    "Error sending invitation" : "Грешка приликом слања позивнице",
     "Link copied to clipboard" : "Веза копирана у оставу",
     "Error while copying link to clipboard" : "Грешка приликом копирања везе у оставу",
     "Has voted" : "Гласао је",

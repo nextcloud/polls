@@ -523,6 +523,7 @@
     "Error resolving {name}." : "Fehler beim Auflösen von {name}.",
     "Invitation sent to {displayName} ({emailAddress})" : "Die Einladung wurde an {displayName} ({emailAddress}) gesendet",
     "Error sending invitation to {displayName} ({emailAddress})" : "Es ist ein Fehler beim Senden der Einladung an {displayName} ({emailAddress}) aufgetreten",
+    "Error sending invitation" : "Fehler beim Senden der Einladung",
     "Link copied to clipboard" : "Link in die Zwischenablage kopiert",
     "Error while copying link to clipboard" : "Fehler beim Kopieren des Links in die Zwischenablage",
     "Has voted" : "Hat teilgenommen",

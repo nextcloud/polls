@@ -525,6 +525,7 @@ OC.L10N.register(
     "Error resolving {name}." : "Chyba při překládání {name}.",
     "Invitation sent to {displayName} ({emailAddress})" : "Pozvánka odeslána na {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Chyba při odesílání pozvánky pro {displayName} ({emailAddress})",
+    "Error sending invitation" : "Chyba při odesílání pozvánky",
     "Link copied to clipboard" : "Odkaz zkopírován do schánky",
     "Error while copying link to clipboard" : "Chyba při kopírování odkazu do schránky",
     "Has voted" : "Hlasoval/a",
