@@ -117,7 +117,7 @@ function confirmOption() {
 		</NcActionButton>
 	</NcActions>
 
-	<NcModal v-if="cloneModal" size="small" :can-close="false">
+	<NcModal v-if="cloneModal" size="small" no-close>
 		<OptionCloneDate
 			:option="props.option"
 			class="modal__content"

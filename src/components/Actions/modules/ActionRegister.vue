@@ -29,7 +29,7 @@ const registerModalSize = 'large'
 			v-model:show="showRegistration"
 			:name="caption"
 			:size="registerModalSize"
-			:can-close="true"
+			close-on-click-outside
 			@close="showRegistration = false">
 			<PublicRegisterModal @close="showRegistration = false" />
 		</NcModal>

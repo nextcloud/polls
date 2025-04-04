@@ -34,6 +34,10 @@ defineProps({
 		type: String as PropType<ButtonType>,
 		default: ButtonType.Primary,
 	},
+	noClose: {
+		type: Boolean,
+		default: false,
+	},
 })
 </script>
 
@@ -68,7 +72,7 @@ defineProps({
 			v-model:show="showModal"
 			:name="buttonCaption"
 			:size="modalSize"
-			:can-close="true"
+			:no-close="noClose"
 			@close="showModal = false">
 			<h2>{{ buttonCaption }}</h2>
 			<slot name="modal-content" />
