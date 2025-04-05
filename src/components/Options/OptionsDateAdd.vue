@@ -11,7 +11,7 @@ import moment from '@nextcloud/moment'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -296,7 +296,7 @@ async function addOption() {
 		@change="changedDate"
 		@pick="pickedDate">
 		<template #input>
-			<NcButton :type="ButtonType.Primary" :aria-label="buttonAriaLabel">
+			<NcButton :variant="ButtonVariant.Primary" :aria-label="buttonAriaLabel">
 				<template #icon>
 					<AddDateIcon />
 				</template>
@@ -341,7 +341,7 @@ async function addOption() {
 				<FlexSpacer />
 				<NcButton
 					v-if="dateOption.option.duration >= 0 && !added"
-					:type="ButtonType.Primary"
+					:variant="ButtonVariant.Primary"
 					@click="addOption">
 					{{ t('polls', 'Add') }}
 				</NcButton>

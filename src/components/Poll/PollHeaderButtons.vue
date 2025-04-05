@@ -8,7 +8,7 @@ import { computed, onBeforeUnmount } from 'vue'
 import { useRoute } from 'vue-router'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import NcPopover from '@nextcloud/vue/components/NcPopover'
 
 import PollInformationIcon from 'vue-material-design-icons/InformationOutline.vue'
@@ -45,7 +45,7 @@ onBeforeUnmount(() => {
 				<NcButton
 					:title="caption"
 					:aria-label="caption"
-					:type="ButtonType.Tertiary">
+					:variant="ButtonVariant.Tertiary">
 					<template #icon>
 						<PollInformationIcon />
 					</template>

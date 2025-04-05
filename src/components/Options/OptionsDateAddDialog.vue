@@ -8,7 +8,7 @@ import { computed, ref, watch } from 'vue'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { n, t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 import { DateTime, Duration } from 'luxon'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -338,7 +338,7 @@ async function addOption(): Promise<void> {
 			</div>
 
 			<CheckIcon
-				v-if="result === StatusResults.Success"
+				v-if="result === StatusResults.Success && blockedOption"
 				class="date-added"
 				:title="t('polls', 'Added')"
 				:fill-color="successColor"
@@ -347,7 +347,7 @@ async function addOption(): Promise<void> {
 			<NcButton
 				v-else
 				class="date-add-button"
-				:type="ButtonType.Primary"
+				:variant="ButtonVariant.Primary"
 				:disabled="!addable"
 				@click="addOption">
 				{{ t('polls', 'Add') }}

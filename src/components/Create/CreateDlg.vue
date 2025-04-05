@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -116,7 +116,7 @@ async function add() {
 			</NcButton>
 			<NcButton
 				:disabled="disableConfirm"
-				:type="ButtonType.Primary"
+				:variant="ButtonVariant.Primary"
 				@click="add()">
 				<template #default>
 					{{ t('polls', 'Add') }}

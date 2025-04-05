@@ -7,7 +7,7 @@
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 import { Event } from '../../../Types'
@@ -24,7 +24,7 @@ function clickAction() {
 <template>
 	<div class="action toggle-sidebar">
 		<NcButton
-			:type="ButtonType.Tertiary"
+			:variant="ButtonVariant.Tertiary"
 			:title="caption"
 			:aria-label="caption"
 			@click="clickAction()">

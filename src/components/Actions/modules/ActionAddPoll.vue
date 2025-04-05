@@ -10,7 +10,7 @@ import { useRouter } from 'vue-router'
 import { useSessionStore } from '../../../stores/session'
 
 import { t } from '@nextcloud/l10n'
-import { ButtonType } from '@nextcloud/vue/components/NcButton'
+import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import ButtonModal from '../../Base/modules/ButtonModal.vue'
 import { ButtonMode } from '../../../Types'
@@ -75,7 +75,7 @@ const confirmationDialogProps = {
 		},
 		{
 			label: t('polls', 'Open poll now'),
-			type: ButtonType.Primary,
+			type: ButtonVariant.Primary,
 			callback: () => {
 				router.push({
 					name: 'vote',
@@ -104,7 +104,7 @@ function addAnotherPoll() {
 		"
 		:modal-size="modalSize"
 		:button-mode="buttonMode"
-		:button-type="ButtonType.Primary">
+		:button-type="ButtonVariant.Primary">
 		<template #icon>
 			<PlusIcon size="20" decorative />
 		</template>

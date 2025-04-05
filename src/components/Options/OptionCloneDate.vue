@@ -9,7 +9,7 @@ import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import { InputDiv } from '../Base/index.ts'
 import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
@@ -96,7 +96,7 @@ function createSequence() {
 				</template>
 			</NcButton>
 
-			<NcButton :type="ButtonType.Primary" @click="createSequence()">
+			<NcButton :variant="ButtonVariant.Primary" @click="createSequence()">
 				<template #default>
 					{{ t('polls', 'OK') }}
 				</template>
