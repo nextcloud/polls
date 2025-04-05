@@ -525,6 +525,7 @@ OC.L10N.register(
     "Error resolving {name}." : "分拆 {name} 時發生錯誤。",
     "Invitation sent to {displayName} ({emailAddress})" : "邀請已傳送到 {displayName}（{emailAddress}）",
     "Error sending invitation to {displayName} ({emailAddress})" : "向  {displayName}（{emailAddress}）傳送邀請時發生錯誤",
+    "Error sending invitation" : "傳送邀請時發生錯誤",
     "Link copied to clipboard" : "已複製連結至剪貼板",
     "Error while copying link to clipboard" : "複製連結至剪貼板時發生錯誤 ",
     "Has voted" : "已投票",
