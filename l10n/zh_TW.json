@@ -523,6 +523,7 @@
     "Error resolving {name}." : "解析 {name} 時發生錯誤。",
     "Invitation sent to {displayName} ({emailAddress})" : "邀請已傳送至 {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "向 {displayName} ({emailAddress}) 傳送邀請時發生錯誤",
+    "Error sending invitation" : "傳送邀請時發生錯誤",
     "Link copied to clipboard" : "已複製連結至剪貼簿",
     "Error while copying link to clipboard" : "複製連結至剪貼簿時發生錯誤 ",
     "Has voted" : "已投票",
