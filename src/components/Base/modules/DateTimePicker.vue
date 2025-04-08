@@ -107,7 +107,7 @@ function nextDay() {
 					:type="ButtonType.TertiaryNoBackground"
 					@click="previousDay">
 					<template #icon>
-						<ChevronLeftIcon/>
+						<ChevronLeftIcon />
 					</template>
 				</NcButton>
 				<NcDateTimePicker
@@ -121,7 +121,7 @@ function nextDay() {
 					:type="ButtonType.TertiaryNoBackground"
 					@click="nextDay">
 					<template #icon>
-						<ChevronRightIcon/>
+						<ChevronRightIcon />
 					</template>
 				</NcButton>
 				<div class="time-picker">

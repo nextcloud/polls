@@ -26,11 +26,13 @@ const options = {
 		option: SimpleOption,
 		sequence: Sequence | null,
 		voteYes: boolean = false,
-	): Promise<AxiosResponse<{
-		added: Option[],
-		options: Option[],
-		votes: Vote[],
-	}>> {
+	): Promise<
+		AxiosResponse<{
+			added: Option[]
+			options: Option[]
+			votes: Vote[]
+		}>
+	> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/option`,
@@ -84,12 +86,14 @@ const options = {
 	addOptions(
 		pollId: number,
 		optionsBatch: string,
-	): Promise<AxiosResponse<{
-		option: Option,
-		repetitions: Option[],
-		options: Option[],
-		votes: Vote[],
-	}>> {
+	): Promise<
+		AxiosResponse<{
+			option: Option
+			repetitions: Option[]
+			options: Option[]
+			votes: Vote[]
+		}>
+	> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'option/bulk',
@@ -141,7 +145,7 @@ const options = {
 			method: 'POST',
 			url: `option/${optionId}/sequence`,
 			data: {
-				sequence
+				sequence,
 			},
 			cancelToken:
 				cancelTokenHandlerObject[

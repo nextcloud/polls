@@ -235,13 +235,12 @@ export const useOptionsStore = defineStore('options', {
 					)
 				})()
 
-				this.list = (response.data.options)
+				this.list = response.data.options
 
 				if (response.data.votes) {
 					const votesStore = useVotesStore()
 					votesStore.list = response.data.votes
 				}
-
 			} catch (error) {
 				if ((error as AxiosError)?.code !== 'ERR_CANCELED') {
 					Logger.error('Error adding option', {

@@ -233,7 +233,7 @@ onMounted(() => {
 				:type="ButtonType.TertiaryNoBackground"
 				@click="subtract">
 				<template #icon>
-					<ChevronLeftIcon/>
+					<ChevronLeftIcon />
 				</template>
 			</NcButton>
 
@@ -267,7 +267,7 @@ onMounted(() => {
 				:type="ButtonType.TertiaryNoBackground"
 				@click="add">
 				<template #icon>
-					<ChevronRightIcon/>
+					<ChevronRightIcon />
 				</template>
 			</NcButton>
 			<MinusIcon

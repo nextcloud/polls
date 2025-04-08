@@ -79,12 +79,14 @@ const publicPoll = {
 		option: SimpleOption,
 		sequence: Sequence | null,
 		voteYes: boolean = false,
-	): Promise<AxiosResponse<{
-		option: Option,
-		repetitions: Option[],
-		options: Option[],
-		votes: Vote[],
-	}>> {
+	): Promise<
+		AxiosResponse<{
+			option: Option
+			repetitions: Option[]
+			options: Option[]
+			votes: Vote[]
+		}>
+	> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `/s/${shareToken}/option`,
