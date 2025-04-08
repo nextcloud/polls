@@ -35,16 +35,27 @@ class UserBase implements JsonSerializable {
 	public const TYPE_PUBLIC = 'public';
 	/** @var string */
 	public const TYPE_EXTERNAL = 'external';
+	/** @var string */
 	public const TYPE_EMPTY = 'empty';
+	/** @var string */
 	public const TYPE_GUEST = 'guest';
+	/** @var string */
 	public const TYPE_CIRCLE = Circle::TYPE;
+	/** @var string */
 	public const TYPE_CONTACT = Contact::TYPE;
+	/** @var string */
 	public const TYPE_CONTACTGROUP = ContactGroup::TYPE;
+	/** @var string */
 	public const TYPE_EMAIL = Email::TYPE;
+	/** @var string */
 	public const TYPE_GHOST = Ghost::TYPE;
+	/** @var string */
 	public const TYPE_GROUP = Group::TYPE;
+	/** @var string */
 	public const TYPE_USER = User::TYPE;
+	/** @var string */
 	public const TYPE_ADMIN = Admin::TYPE;
+	/** @var string */
 	public const TYPE_CRON = Cron::TYPE;
 
 	/** @var string[] */

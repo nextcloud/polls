@@ -29,8 +29,9 @@ class UserSession {
 	public const CLIENT_ID = 'ncPollsClientId';
 	/** @var string */
 	public const CLIENT_TZ = 'ncPollsClientTimeZone';
-
+	/** @var string */
 	public const TABLE = Share::TABLE;
+
 	protected ?UserBase $currentUser = null;
 	// protected Share|null $share = null;
 
@@ -171,6 +172,10 @@ class UserSession {
 		$this->session->set(self::CLIENT_ID, $clientId);
 	}
 
+	/**
+	 *
+	 * @return non-empty-string
+	 */
 	public function getClientTimeZone(): string {
 		return $this->session->get(self::CLIENT_TZ) ?? date_default_timezone_get();
 	}

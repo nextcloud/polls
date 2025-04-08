@@ -359,7 +359,7 @@ async function addOption() {
 	</NcDateTimePicker>
 </template>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .mx-input-wrapper .material-design-icon__svg {
 	width: initial;
 	height: initial;

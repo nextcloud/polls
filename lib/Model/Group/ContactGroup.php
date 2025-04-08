@@ -15,6 +15,7 @@ use OCA\Polls\Model\UserBase;
 use OCP\Contacts\IManager as IContactsManager;
 
 class ContactGroup extends UserBase {
+	/** @var string */
 	public const TYPE = 'contactGroup';
 
 	public function __construct(

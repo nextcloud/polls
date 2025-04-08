@@ -79,8 +79,12 @@ class VoteService {
 	/**
 	 * Set vote
 	 */
-	public function set(int $optionId, string $setTo): ?Vote {
-		$option = $this->optionMapper->find($optionId);
+	public function set(Option|int $optionOrOptionIdoptionId, string $setTo): ?Vote {
+		if ($optionOrOptionIdoptionId instanceof Option) {
+			$option = $optionOrOptionIdoptionId;
+		} else {
+			$option = $this->optionMapper->find($optionOrOptionIdoptionId);
+		}
 		$poll = $this->pollMapper->find($option->getPollId());
 		$poll->request(Poll::PERMISSION_VOTE_EDIT);
 

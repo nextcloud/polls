@@ -2,10 +2,11 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { Option, SimpleOption } from '../../stores/options.js'
+import { Option, Sequence, SimpleOption } from '../../stores/options.js'
 import { DateUnitKeys } from '../../constants/dateUnits.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 import { AxiosResponse } from '@nextcloud/axios'
+import { Vote } from '../../stores/votes.js'
 
 const options = {
 	getOptions(pollId: number): Promise<AxiosResponse<{ options: Option[] }>> {
@@ -23,11 +24,18 @@ const options = {
 	addOption(
 		pollId: number,
 		option: SimpleOption,
-	): Promise<AxiosResponse<{ option: Option }>> {
+		sequence: Sequence | null,
+		voteYes: boolean = false,
+	): Promise<AxiosResponse<{
+		added: Option[],
+		options: Option[],
+		votes: Vote[],
+	}>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `poll/${pollId}/option`,
-			data: { ...option },
+			// data: { ...option },
+			data: { option, sequence, voteYes },
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.addOption.name
@@ -76,7 +84,12 @@ const options = {
 	addOptions(
 		pollId: number,
 		optionsBatch: string,
-	): Promise<AxiosResponse<{ options: Option[] }>> {
+	): Promise<AxiosResponse<{
+		option: Option,
+		repetitions: Option[],
+		options: Option[],
+		votes: Vote[],
+	}>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: 'option/bulk',
@@ -122,17 +135,13 @@ const options = {
 
 	addOptionsSequence(
 		optionId: number,
-		step: number,
-		unit: DateUnitKeys,
-		amount: number,
+		sequence: Sequence,
 	): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `option/${optionId}/sequence`,
 			data: {
-				step,
-				unit,
-				amount,
+				sequence
 			},
 			cancelToken:
 				cancelTokenHandlerObject[

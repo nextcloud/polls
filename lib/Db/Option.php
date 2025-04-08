@@ -14,6 +14,7 @@ use DateTimeImmutable;
 use DateTimeZone;
 use JsonSerializable;
 use OCA\Polls\Exceptions\InsufficientAttributesException;
+use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Model\UserBase;
 use OCP\IL10N;
 
@@ -140,6 +141,14 @@ class Option extends EntityWithUser implements JsonSerializable {
 		return parent::getUser();
 	}
 
+	public function setFromSimpleOption(SimpleOption $option): void {
+		$this->setOption(
+			$option->getTimestamp(),
+			$option->getDuration(),
+			$option->getText(),
+			$option->getOrder(),
+		);
+	}
 
 	/**
 	 * cumulative Set option entities cumulative and validated
@@ -151,7 +160,12 @@ class Option extends EntityWithUser implements JsonSerializable {
 	 * @param int $order Set order of this option inside the poll, defaults to 0, ignored if timestap is set
 	 * @return void
 	 */
-	public function setOption(int $timestamp = 0, int $duration = 0, string $pollOptionText = '', int $order = 0): void {
+	public function setOption(
+		int $timestamp = 0,
+		int $duration = 0,
+		string $pollOptionText = '',
+		int $order = 0,
+	): void {
 
 		if ($timestamp) {
 			$this->setTimestamp($timestamp);

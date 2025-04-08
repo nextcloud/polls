@@ -21,6 +21,7 @@ use OCA\Polls\Model\UserBase;
  * @psalm-suppress UnusedClass
  */
 class Circle extends UserBase {
+	/** @var string */
 	public const TYPE = 'circle';
 
 	private CirclesCircle $circle;
