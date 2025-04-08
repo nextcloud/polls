@@ -12,7 +12,6 @@ import { generateUrl } from '@nextcloud/router'
 import { t } from '@nextcloud/l10n'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import NcRichText from '@nextcloud/vue/components/NcRichText'
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 
 import { InputDiv } from '../Base/index.ts'
@@ -63,27 +62,6 @@ const emailGeneratedStatus = computed(() =>
 		: checkStatus.value.email,
 )
 const offerCookies = computed(() => sessionStore.share.type === ShareType.Public)
-
-const privacyRich = computed(() => {
-	const subject = t(
-		'polls',
-		'By clicking the "OK" button you accept our {privacyPolicy}.',
-	)
-	const parameters = {
-		privacyPolicy: {
-			component: SimpleLink,
-			props: {
-				href: sessionStore.appSettings.finalPrivacyUrl,
-				name: t('polls', 'privacy policy'),
-				target: '_blank',
-			},
-		},
-	}
-	return {
-		subject,
-		parameters,
-	}
-})
 
 const loginLink = computed(() => {
 	const redirectUrl = router.resolve({
@@ -322,14 +300,6 @@ async function submitRegistration(): Promise<void> {
 					{{ t('polls', 'Remember me for 30 days') }}
 				</NcCheckboxRadioSwitch>
 
-				<div
-					v-if="sessionStore.appSettings.finalPrivacyUrl"
-					class="section__optin">
-					<NcRichText
-						:text="privacyRich.subject"
-						:arguments="privacyRich.parameters" />
-				</div>
-
 				<div class="modal__buttons">
 					<div class="left">
 						<div class="legal_links">
@@ -338,6 +308,11 @@ async function submitRegistration(): Promise<void> {
 								:href="sessionStore.appSettings.finalImprintUrl"
 								target="_blank"
 								:name="t('polls', 'Legal Notice')" />
+							<SimpleLink
+								v-if="sessionStore.appSettings.finalPrivacyUrl"
+								:href="sessionStore.appSettings.finalPrivacyUrl"
+								target="_blank"
+								:name="t('polls', 'Privacy policy')" />
 						</div>
 					</div>
 					<div class="right">
@@ -446,7 +421,7 @@ async function submitRegistration(): Promise<void> {
 		}
 
 		&:after {
-			content: '|';
+			content: '·';
 			padding: 0 4px;
 		}
 

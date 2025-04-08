@@ -38,6 +38,7 @@ class SettingsService {
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_AUTO_ARCHIVE, $settingsArray[AppSettings::SETTING_AUTO_ARCHIVE]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_SHOW_LOGIN, $settingsArray[AppSettings::SETTING_SHOW_LOGIN]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_USE_ACTIVITY, $settingsArray[AppSettings::SETTING_USE_ACTIVITY]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_USE_SITE_LEGAL, $settingsArray[AppSettings::SETTING_USE_SITE_LEGAL]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL, $settingsArray[AppSettings::SETTING_LEGAL_TERMS_IN_EMAIL]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_LOAD_POLLS_IN_NAVIGATION, $settingsArray[AppSettings::SETTING_LOAD_POLLS_IN_NAVIGATION]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_UNRESTRICTED_POLL_OWNER, $settingsArray[AppSettings::SETTING_UNRESTRICTED_POLL_OWNER]);
