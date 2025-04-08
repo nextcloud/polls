@@ -42,6 +42,9 @@ const result = ref(StatusResults.None)
 // allDay is a boolean to toggle between all day and time based options
 const allDay = ref(true)
 
+// Vote yes for new options
+const voteYes = ref(true)
+
 // set initial time mark to the next full quater of the hour
 const fromInput = ref(
 	new Date(
@@ -122,19 +125,25 @@ const lastFromDisplay = computed(() => from.value.plus(sequence.value))
 // computed last to dateTime repetition
 const lastToDisplay = computed(() => to.value.plus(sequence.value))
 
-// computed if the option is blocked by existing option
-const blockedOption = computed(() =>
-	optionsStore.find(from.value.toSeconds(), duration.value.as('seconds'))
-		? result.value !== StatusResults.Success
-		: false,
-)
+// computed if the option is blocked by an existing option
+const blockedOption = computed(() => {
+	const option = sameOption.value
+	return (
+		option && !option.deleted
+	)
+})
+
+const sameOption = computed(() => {
+	const option = optionsStore.find(from.value.toSeconds(), duration.value.as('seconds'))
+	return option
+})
 
 // computed if the option is addable
 const addable = computed(
 	() => !blockedOption.value && result.value !== StatusResults.Loading,
 )
 const optionInfo = computed(() =>
-	blockedOption.value ? t('polls', 'Option already exists') : '',
+	blockedOption.value && result.value !== StatusResults.Success ? t('polls', 'Option already exists') : '',
 )
 
 watch(
@@ -151,9 +160,6 @@ watch(
 	},
 )
 
-/**
- *
- */
 function resetduratonUnits(): void {
 	if (allDay.value) {
 		// change date units, when switching from time based to all day, since minutes and hours are not valid anymore
@@ -166,35 +172,27 @@ function resetduratonUnits(): void {
 	}
 }
 
-/**
- *
- */
 function onAnyChange(): void {
 	result.value = addable.value ? StatusResults.None : StatusResults.Error
 }
 
-/**
- *
- */
 async function addOption(): Promise<void> {
 	result.value = StatusResults.Loading
 
 	try {
-		const newOption = await optionsStore.add({
-			text: '',
-			timestamp: from.value.toSeconds(),
-			duration: duration.value.as('seconds'),
-		})
-		if (newOption) {
-			if (sequenceInput.value.repetitions > 0 && newOption) {
-				await optionsStore.sequence({
-					option: newOption,
-					sequence: sequenceInput.value,
-				})
-			}
-			result.value = StatusResults.Success
-			showSuccess(t('polls', 'Option added'))
-		}
+		await optionsStore.add(
+			{
+				text: '',
+				timestamp: from.value.toSeconds(),
+				duration: duration.value.as('seconds'),
+			},
+			sequenceInput.value,
+			voteYes.value,
+		)
+
+		result.value = StatusResults.Success
+		showSuccess(t('polls', 'Option added'))
+
 	} catch (error) {
 		if ((error as AxiosError).response?.status === 409) {
 			showError(t('polls', 'Option already exists'))
@@ -219,7 +217,10 @@ async function addOption(): Promise<void> {
 	<div class="add-container">
 		<div class="select-container">
 			<div class="selection from">
-				<DateTimePicker v-model="fromInput" :use-time="!allDay" />
+				<DateTimePicker
+					v-model="fromInput"
+					use-day-buttons
+					:use-time="!allDay" />
 			</div>
 
 			<div class="selection duration">
@@ -270,6 +271,11 @@ async function addOption(): Promise<void> {
 						inputmode="numeric"
 						use-num-modifiers />
 				</div>
+			</div>
+			<div>
+				<NcCheckboxRadioSwitch v-model="voteYes">
+					{{ t('polls', 'Automatically vote "yes" for new option.') }}
+				</NcCheckboxRadioSwitch>
 			</div>
 		</div>
 	</div>
@@ -338,7 +344,7 @@ async function addOption(): Promise<void> {
 			</div>
 
 			<CheckIcon
-				v-if="result === StatusResults.Success"
+				v-if="result === StatusResults.Success && blockedOption"
 				class="date-added"
 				:title="t('polls', 'Added')"
 				:fill-color="successColor"
@@ -382,11 +388,13 @@ async function addOption(): Promise<void> {
 		display: flex;
 		align-items: center;
 	}
+
 	.selection {
 		display: flex;
 		flex-wrap: wrap;
 		align-items: start;
-
+		padding: 0 1rem;
+		margin: 0.2rem 0;
 		> div {
 			flex: 1;
 			column-gap: 1rem;
@@ -395,6 +403,12 @@ async function addOption(): Promise<void> {
 			.v-select.select.time-unit {
 				min-width: 11rem;
 			}
+		}
+
+		&.repetition {
+			border-radius: var(--border-radius-container-large);
+			background-color: rgb(from var(--color-background-darker) r g b /0.6);
+			padding: 1rem 1rem;
 		}
 	}
 }
@@ -431,6 +445,9 @@ async function addOption(): Promise<void> {
 	display: flex;
 	align-items: center;
 	flex-wrap: wrap;
+	> * {
+		flex: 1 auto;
+	}
 
 	.duration-info {
 		font-size: 0.8em;
@@ -450,7 +467,7 @@ async function addOption(): Promise<void> {
 	}
 
 	.preview-container {
-		flex: 1 auto;
+		// flex: 1 auto;
 		align-items: center;
 		display: flex;
 		flex-direction: column;

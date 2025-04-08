@@ -16,6 +16,7 @@ use OCP\IGroup;
 use OCP\IGroupManager;
 
 class Group extends UserBase {
+	/** @var string */
 	public const TYPE = 'group';
 
 	private IGroup $group;

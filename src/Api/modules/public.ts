@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { AxiosResponse } from '@nextcloud/axios'
-import { Option, SimpleOption } from '../../stores/options.js'
+import { Option, Sequence, SimpleOption } from '../../stores/options.js'
 import { Session } from '../../stores/session.js'
 import { Answer, Vote } from '../../stores/votes.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
@@ -77,11 +77,18 @@ const publicPoll = {
 	addOption(
 		shareToken: string,
 		option: SimpleOption,
-	): Promise<AxiosResponse<{ option: Option }>> {
+		sequence: Sequence | null,
+		voteYes: boolean = false,
+	): Promise<AxiosResponse<{
+		option: Option,
+		repetitions: Option[],
+		options: Option[],
+		votes: Vote[],
+	}>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `/s/${shareToken}/option`,
-			data: { ...option },
+			data: { option, sequence, voteYes },
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.addOption.name

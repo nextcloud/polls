@@ -10,7 +10,9 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ShareTokenRequired;
+use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\Settings\AppSettings;
+use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
@@ -203,23 +205,30 @@ class PublicController extends BasePublicController {
 
 	/**
 	 * Add options
-	 * @param int $timestamp timestamp for datepoll
-	 * @param string $text Option text for text poll
-	 * @param int duration duration of option
+	 * @param array $option Options text for text poll
+	 * @param array $sequence Sequence of the option
+	 * @param bool $voteYes Vote yes
 	 */
 	#[PublicPage]
 	#[ShareTokenRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/option')]
-	public function addOption(int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
-		return $this->responseCreate(fn () => [
-			'option' => $this->optionService->add(
-				pollId: $this->userSession->getShare()->getPollId(),
-				timestamp: $timestamp,
-				pollOptionText: $text,
-				duration: $duration,
-			)
-		]);
+	public function addOption(
+		array $option,
+		bool $voteYes = false,
+		?array $sequence = null,
+	): JSONResponse {
+		$pollId = $this->userSession->getShare()->getPollId();
+		return $this->responseCreate(fn () => array_merge(
+			$this->optionService->addWithSequenceAndAutoVote(
+				$pollId,
+				SimpleOption::fromArray($option),
+				$voteYes,
+				Sequence::fromArray($sequence),
+			),
+			['options' => $this->optionService->list($pollId)],
+			['votes' => $this->voteService->list($pollId)],
+		));
 	}
 
 	/**

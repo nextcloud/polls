@@ -11,6 +11,7 @@ namespace OCA\Polls\Model\User;
 use OCA\Polls\Model\UserBase;
 
 class Cron extends UserBase {
+	/** @var string */
 	public const TYPE = 'cron';
 
 	public function __construct() {

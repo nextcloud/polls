@@ -11,6 +11,7 @@ namespace OCA\Polls\Model\User;
 use OCA\Polls\Model\UserBase;
 
 class Ghost extends UserBase {
+	/** @var string */
 	public const TYPE = 'deleted';
 
 	public function __construct(string $id) {

@@ -11,7 +11,7 @@ import moment from '@nextcloud/moment'
 import orderBy from 'lodash/orderBy'
 import { usePollStore, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
-import { Answer } from './votes.ts'
+import { Answer, useVotesStore } from './votes.ts'
 import {
 	DateTimeDetails,
 	DateTimeUnitType,
@@ -211,7 +211,11 @@ export const useOptionsStore = defineStore('options', {
 			)
 		},
 
-		async add(simpleOption: SimpleOption) {
+		async add(
+			simpleOption: SimpleOption,
+			sequence: Sequence | null = null,
+			voteYes: boolean = false,
+		) {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
@@ -219,16 +223,25 @@ export const useOptionsStore = defineStore('options', {
 						return PublicAPI.addOption(
 							sessionStore.route.params.token,
 							simpleOption,
+							sequence,
+							voteYes,
 						)
 					}
 					return OptionsAPI.addOption(
 						sessionStore.currentPollId,
 						simpleOption,
+						sequence,
+						voteYes,
 					)
 				})()
 
-				this.list.push(response.data.option)
-				return response.data.option
+				this.list = (response.data.options)
+
+				if (response.data.votes) {
+					const votesStore = useVotesStore()
+					votesStore.list = response.data.votes
+				}
+
 			} catch (error) {
 				if ((error as AxiosError)?.code !== 'ERR_CANCELED') {
 					Logger.error('Error adding option', {
@@ -380,9 +393,7 @@ export const useOptionsStore = defineStore('options', {
 			try {
 				const response = await OptionsAPI.addOptionsSequence(
 					payload.option.id,
-					payload.sequence.stepWidth,
-					payload.sequence.unit.id,
-					payload.sequence.repetitions,
+					payload.sequence,
 				)
 				this.list = response.data.options
 			} catch (error) {

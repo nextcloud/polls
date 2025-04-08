@@ -8,7 +8,10 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Model\Sequence;
+use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\VoteService;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -24,6 +27,7 @@ class OptionApiController extends BaseApiV2Controller {
 		string $appName,
 		IRequest $request,
 		private OptionService $optionService,
+		private VoteService $voteService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -43,16 +47,30 @@ class OptionApiController extends BaseApiV2Controller {
 	/**
 	 * Add a new option
 	 * @param int $pollId poll id
-	 * @param int $timestamp timestamp for datepoll
-	 * @param string $pollOptionText Option text for text poll
-	 * @param int duration duration of option
+	 * @param array $option Options text for text poll
+	 * @param array $sequence Sequence of the option
+	 * @param bool $voteYes Vote yes
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/option', requirements: ['apiVersion' => '(v2)'])]
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): DataResponse {
-		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $pollOptionText, $duration)]);
+	public function add(
+		int $pollId,
+		array $option,
+		bool $voteYes = false,
+		?array $sequence = null,
+	): DataResponse {
+		return $this->responseCreate(fn () => array_merge(
+			$this->optionService->addWithSequenceAndAutoVote(
+				$pollId,
+				SimpleOption::fromArray($option),
+				$voteYes,
+				Sequence::fromArray($sequence),
+			),
+			['options' => $this->optionService->list($pollId)],
+			['votes' => $this->voteService->list($pollId)],
+		));
 	}
 
 

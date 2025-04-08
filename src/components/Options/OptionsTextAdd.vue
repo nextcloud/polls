@@ -9,7 +9,7 @@ import { showError, showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
 import { InputDiv } from '../Base/index.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+import { SimpleOption, useOptionsStore } from '../../stores/options.ts'
 import { AxiosError } from '@nextcloud/axios'
 
 const optionsStore = useOptionsStore()
@@ -29,7 +29,7 @@ const newPollText = ref('')
 async function addOption(): Promise<void> {
 	if (newPollText.value) {
 		try {
-			await optionsStore.add({ text: newPollText.value })
+			await optionsStore.add({ text: newPollText.value } as SimpleOption)
 			showSuccess(
 				t('polls', '{optionText} added', { optionText: newPollText.value }),
 			)

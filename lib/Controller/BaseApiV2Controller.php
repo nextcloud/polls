@@ -41,7 +41,7 @@ class BaseApiV2Controller extends OCSController {
 	#[NoAdminRequired]
 	protected function response(Closure $callback): DataResponse {
 		try {
-			return new DataResponse($callback(), Http::STATUS_OK);
+			return new DataResponse($callback());
 		} catch (DoesNotExistException $e) {
 			throw new OCSNotFoundException($e->getMessage());
 		} catch (Exception $e) {
@@ -56,7 +56,7 @@ class BaseApiV2Controller extends OCSController {
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): DataResponse {
 		try {
-			return new DataResponse($callback(), Http::STATUS_OK);
+			return new DataResponse($callback());
 		} catch (DoesNotExistException $e) {
 			throw new OCSNotFoundException($e->getMessage());
 		} catch (NoUpdatesException $e) {
