@@ -15,6 +15,7 @@ use OCP\Contacts\IManager as IContactsManager;
 use Psr\Log\LoggerInterface;
 
 class Contact extends UserBase {
+	/** @var string */
 	public const TYPE = 'contact';
 
 	protected LoggerInterface $logger;

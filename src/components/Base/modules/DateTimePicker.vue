@@ -8,7 +8,11 @@ import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
-import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
+import { ButtonType } from '@nextcloud/vue/components/NcButton'
+
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 
 const model = defineModel({
 	required: true,
@@ -25,6 +29,10 @@ const props = defineProps({
 		default: false,
 	},
 	selectTime: {
+		type: Boolean,
+		default: false,
+	},
+	useDayButtons: {
 		type: Boolean,
 		default: false,
 	},
@@ -70,6 +78,20 @@ const timePickerOptions = computed(() => ({
 		formatLocale,
 	},
 }))
+
+function previousDay() {
+	if (model.value) {
+		const date = moment(model.value).subtract(1, 'day')
+		model.value = date.toDate()
+	}
+}
+
+function nextDay() {
+	if (model.value) {
+		const date = moment(model.value).add(1, 'day')
+		model.value = date.toDate()
+	}
+}
 </script>
 
 <template>
@@ -79,11 +101,29 @@ const timePickerOptions = computed(() => ({
 			<slot name="icon" />
 
 			<div class="picker-input">
+				<NcButton
+					v-if="props.useDayButtons"
+					:title="t('polls', 'Previous day')"
+					:type="ButtonType.TertiaryNoBackground"
+					@click="previousDay">
+					<template #icon>
+						<ChevronLeftIcon />
+					</template>
+				</NcButton>
 				<NcDateTimePicker
 					v-model="model"
 					v-bind="datePickerOptions"
 					class="date-picker"
 					:aria-label="t('polls', 'Enter a date')" />
+				<NcButton
+					v-if="props.useDayButtons"
+					:title="t('polls', 'Next day')"
+					:type="ButtonType.TertiaryNoBackground"
+					@click="nextDay">
+					<template #icon>
+						<ChevronRightIcon />
+					</template>
+				</NcButton>
 				<div class="time-picker">
 					<NcCheckboxRadioSwitch
 						v-if="props.selectTime"

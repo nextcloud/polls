@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Model\User;
 
 class Admin extends User {
+	/** @var string */
 	public const TYPE = 'admin';
 
 	public function __construct(string $id) {

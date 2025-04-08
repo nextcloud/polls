@@ -35,7 +35,7 @@ class BasePublicController extends Controller {
 	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
 		try {
-			return new JSONResponse($callback(), Http::STATUS_OK);
+			return new JSONResponse($callback());
 		} catch (Exception $e) {
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
@@ -48,7 +48,7 @@ class BasePublicController extends Controller {
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
 		try {
-			return new JSONResponse($callback(), Http::STATUS_OK);
+			return new JSONResponse($callback());
 		} catch (NoUpdatesException $e) {
 			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
 		}

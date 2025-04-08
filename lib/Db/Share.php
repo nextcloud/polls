@@ -44,6 +44,7 @@ use OCP\IURLGenerator;
  * @method void setLabel(string $value)
  */
 class Share extends EntityWithUser implements JsonSerializable {
+	/** @var string */
 	public const TABLE = 'polls_share';
 
 	public const EMAIL_OPTIONAL = 'optional';

@@ -10,10 +10,15 @@ import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 import AlertIcon from 'vue-material-design-icons/AlertCircleOutline.vue'
+import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
+import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import { Spinner } from '../../AppIcons/index.ts'
 import { Logger } from '../../../helpers/index.ts'
 
 import { SignalingType } from '../../../Types/index.ts'
+import { NcButton } from '@nextcloud/vue'
+import { ButtonType } from '@nextcloud/vue/components/NcButton'
+import { t } from '@nextcloud/l10n'
 
 const model = defineModel<string | number>({
 	required: true,
@@ -83,6 +88,10 @@ const props = defineProps({
 	label: {
 		type: String,
 		default: null,
+	},
+	useNumericVariant: {
+		type: Boolean,
+		default: false,
 	},
 	disabled: {
 		type: Boolean,
@@ -221,7 +230,17 @@ onMounted(() => {
 		</label>
 
 		<div class="input-wrapper">
-			<!-- <input ref="input" -->
+			<NcButton
+				v-if="useNumModifiers && !props.useNumericVariant"
+				class="date-add-button"
+				:title="t('polls', 'minus')"
+				:type="ButtonType.TertiaryNoBackground"
+				@click="subtract">
+				<template #icon>
+					<ChevronLeftIcon />
+				</template>
+			</NcButton>
+
 			<input
 				v-model="model"
 				v-input-focus
@@ -231,7 +250,7 @@ onMounted(() => {
 				:placeholder="placeholder"
 				:class="[
 					{
-						'has-modifier': useNumModifiers,
+						'has-modifier': useNumModifiers && props.useNumericVariant,
 						'has-submit': submit,
 					},
 					computedSignalingClass,
@@ -247,11 +266,23 @@ onMounted(() => {
 				v-else-if="showSubmit"
 				class="signaling-icon submit"
 				@click="emit('submit')" />
+			<NcButton
+				v-if="useNumModifiers && !props.useNumericVariant"
+				:title="t('polls', 'plus')"
+				:type="ButtonType.TertiaryNoBackground"
+				@click="add">
+				<template #icon>
+					<ChevronRightIcon />
+				</template>
+			</NcButton>
 			<MinusIcon
-				v-if="useNumModifiers"
+				v-if="useNumModifiers && props.useNumericVariant"
 				class="modifier subtract"
 				@click="subtract()" />
-			<PlusIcon v-if="useNumModifiers" class="modifier add" @click="add()" />
+			<PlusIcon
+				v-if="useNumModifiers && props.useNumericVariant"
+				class="modifier add"
+				@click="add()" />
 		</div>
 
 		<div v-if="helperText !== null" :class="['helper', computedSignalingClass]">
@@ -314,10 +345,11 @@ onMounted(() => {
 	}
 
 	&.numeric .input-wrapper {
-		min-width: 9rem;
-		max-width: 10rem;
+		// min-width: 9rem;
+		// max-width: 10rem;
 		input {
 			text-align: center;
+			max-width: 4rem;
 		}
 	}
 

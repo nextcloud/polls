@@ -13,6 +13,7 @@ use OCA\Polls\Db\Option;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
+use OCA\Polls\Db\Vote;
 use OCA\Polls\Event\OptionConfirmedEvent;
 use OCA\Polls\Event\OptionCreatedEvent;
 use OCA\Polls\Event\OptionDeletedEvent;
@@ -21,6 +22,8 @@ use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
 use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
+use OCA\Polls\Model\Sequence;
+use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\DB\Exception;
@@ -35,11 +38,11 @@ class OptionService {
 	public function __construct(
 		private IEventDispatcher $eventDispatcher,
 		private LoggerInterface $logger,
-		private Option $option,
 		private OptionMapper $optionMapper,
 		private PollMapper $pollMapper,
 		private UserSession $userSession,
 		private Poll $poll,
+		private VoteService $voteService,
 	) {
 		$this->options = [];
 	}
@@ -70,72 +73,109 @@ class OptionService {
 	}
 
 	/**
+	 * Intermediate step to avoid code duplication
+	 */
+	public function addWithSequenceAndAutoVote(
+		int $pollId,
+		SimpleOption $option,
+		bool $voteYes = false,
+		?Sequence $sequence = null,
+	): array {
+
+		$newOption = $this->add($pollId, $option, $voteYes);
+
+
+		if ($sequence) {
+			$repetitions = $this->sequence($newOption, $sequence, $voteYes);
+		} else {
+			$repetitions = [];
+		}
+
+		return [
+			'option' => $newOption,
+			'repetitions' => $repetitions,
+		];
+	}
+
+	/**
 	 * Add a new option to a poll
 	 *
 	 * @param int $pollId poll id of poll to add option to
-	 * @param int $timestamp timestamp in case of date poll
-	 * @param string $pollOptionText option text in case of text poll
-	 * @param int $duration duration of option in case of date poll
+	 * @param SimpleOption $simpleOption SimpleOption object
+	 * @param bool $voteYes Directly vote 'yes' for the new option
 	 * @return Option
 	 */
-	public function add(int $pollId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
+	public function add(int $pollId, SimpleOption $simpleOption, bool $voteYes = false): Option {
 		$this->getPoll($pollId, Poll::PERMISSION_OPTION_ADD);
 
-		$this->option = new Option();
-		$this->option->setPollId($pollId);
-		$order = $this->getHighestOrder($pollId) + 1;
+		if ($this->poll->getType() === Poll::TYPE_TEXT) {
+			$simpleOption->setOrder($this->getHighestOrder($pollId) + 1);
+		}
 
-		$this->option->setOption($timestamp, $duration, $pollOptionText, $order);
+		// Build the new option
+		$newOption = new Option();
+		$newOption->setPollId($pollId);
+		$newOption->setFromSimpleOption($simpleOption);
+		$newOption->syncOption();
+		$newOption->setDeleted(0);
 
 		if (!$this->poll->getIsPollOwner()) {
-			$this->option->setOwner($this->userSession->getCurrentUserId());
+			$newOption->setOwner($this->userSession->getCurrentUserId());
 		}
 
 		try {
-			$this->option = $this->optionMapper->insert($this->option);
+			// Insert the new option
+			$newOption = $this->optionMapper->insert($newOption);
 		} catch (Exception $e) {
-
 			// TODO: Change exception catch to actual exception
 			// Currently OC\DB\Exceptions\DbalException is thrown instead of
 			// UniqueConstraintViolationException
 			// since the exception is from private namespace, we check the type string
 			if (get_class($e) === 'OC\DB\Exceptions\DbalException' || $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 
-				$option = $this->optionMapper->findByPollAndText($pollId, $this->option->getPollOptionText(), true);
-				if ($option->getDeleted()) {
-					// Deleted option exist, restore deleted option
-					$option->setDeleted(0);
-					// return existing undeleted share
-					return $this->optionMapper->update($option);
-				}
-				// optionalready exists
-				throw new DuplicateEntryException('This option already exists');
+				// Option already exists, so we need to update the existing one
+				// and remove deleted setting
+				$option = $this->optionMapper->findByPollAndText($pollId, $newOption->getPollOptionText(), true);
+				$option->setDeleted(0);
+
+				$newOption = $this->optionMapper->update($option);
+
+			} else {
+				throw $e;
 			}
-			throw $e;
 		}
 
-		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($this->option));
 
-		return $this->option;
+		if ($voteYes) {
+			// Set the vote for the new option on request
+			$this->voteService->set($newOption, Vote::VOTE_YES);
+		}
+
+		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($newOption));
+
+		return $newOption;
 	}
 	/**
 	 * Add a new option
-	 *
+	 * @param int $pollId poll id of poll to add option to
+	 * @param string $bulkText Text for new options separated by new lines
 	 * @return Option[]
 	 */
-	public function addBulk(int $pollId, string $pollOptionText = ''): array {
+	public function addBulk(int $pollId, string $bulkText = ''): array {
 		$this->getPoll($pollId, Poll::PERMISSION_OPTION_ADD);
 
-		$newOptions = array_unique(explode(PHP_EOL, $pollOptionText));
-		foreach ($newOptions as $option) {
-			if ($option) {
+		$newOptionsTexts = array_unique(explode(PHP_EOL, $bulkText));
+
+		foreach ($newOptionsTexts as $pollOptionText) {
+			if ($pollOptionText) {
 				try {
-					$this->add($pollId, pollOptionText: $option);
+					$this->add($pollId, new SimpleOption($pollOptionText, 0));
 				} catch (DuplicateEntryException $e) {
 					continue;
 				}
 			}
 		}
+
 		return $this->list($pollId);
 	}
 
@@ -145,15 +185,15 @@ class OptionService {
 	 * @return Option
 	 */
 	public function update(int $optionId, int $timestamp = 0, string $pollOptionText = '', int $duration = 0): Option {
-		$this->option = $this->optionMapper->find($optionId);
-		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
+		$option = $this->optionMapper->find($optionId);
+		$this->getPoll($option->getPollId(), Poll::PERMISSION_POLL_EDIT);
 
-		$this->option->setOption($timestamp, $duration, $pollOptionText);
+		$option->setOption($timestamp, $duration, $pollOptionText);
 
-		$this->option = $this->optionMapper->update($this->option);
-		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
+		$option = $this->optionMapper->update($option);
+		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($option));
 
-		return $this->option;
+		return $option;
 	}
 
 	/**
@@ -162,17 +202,17 @@ class OptionService {
 	 * @param bool $restore Set true, if option is to be restored
 	 */
 	public function delete(int $optionId, bool $restore = false): Option {
-		$this->option = $this->optionMapper->find($optionId);
+		$option = $this->optionMapper->find($optionId);
 
-		if (!$this->option->getCurrentUserIsEntityUser()) {
-			$this->pollMapper->find($this->option->getPollId())->request(Poll::PERMISSION_OPTION_DELETE);
+		if (!$option->getCurrentUserIsEntityUser()) {
+			$this->pollMapper->find($option->getPollId())->request(Poll::PERMISSION_OPTION_DELETE);
 		}
 
-		$this->option->setDeleted($restore ? 0 : time());
-		$this->optionMapper->update($this->option);
-		$this->eventDispatcher->dispatchTyped(new OptionDeletedEvent($this->option));
+		$option->setDeleted($restore ? 0 : time());
+		$this->optionMapper->update($option);
+		$this->eventDispatcher->dispatchTyped(new OptionDeletedEvent($option));
 
-		return $this->option;
+		return $option;
 	}
 
 	/**
@@ -181,61 +221,68 @@ class OptionService {
 	 * @return Option
 	 */
 	public function confirm(int $optionId): Option {
-		$this->option = $this->optionMapper->find($optionId);
-		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_OPTION_CONFIRM);
+		$option = $this->optionMapper->find($optionId);
+		$this->getPoll($option->getPollId(), Poll::PERMISSION_OPTION_CONFIRM);
 
-		$this->option->setConfirmed($this->option->getConfirmed() ? 0 : time());
-		$this->option = $this->optionMapper->update($this->option);
+		$option->setConfirmed($option->getConfirmed() ? 0 : time());
+		$option = $this->optionMapper->update($option);
 
-		if ($this->option->getConfirmed()) {
-			$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($this->option));
+		if ($option->getConfirmed()) {
+			$this->eventDispatcher->dispatchTyped(new OptionConfirmedEvent($option));
 		} else {
-			$this->eventDispatcher->dispatchTyped(new OptionUnconfirmedEvent($this->option));
+			$this->eventDispatcher->dispatchTyped(new OptionUnconfirmedEvent($option));
 		}
 
-		return $this->option;
+		return $option;
 	}
 
 	/**
 	 * Make a sequence of date poll options
 	 *
+	 * @param int | Option $optionOrOptionId Option od optionId of the option to clone
+	 * @param Sequence $sequence Sequence object
+	 * @param bool $voteYes Directly vote 'yes' for the new options
 	 * @return Option[]
 	 *
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function sequence(int $optionId, int $step, string $unit, int $amount): array {
-		$this->option = $this->optionMapper->find($optionId);
-		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_OPTION_ADD);
+	public function sequence(int|Option $optionOrOptionId, Sequence $sequence, bool $voteYes = false): array {
+		if ($sequence->getRepetitions() < 1 || $sequence->getStepWidth() < 1) {
+			return [];
+		}
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Sequences are only available in date polls');
 		}
 
-		if ($step === 0) {
-			return $this->optionMapper->findByPoll($this->option->getPollId());
+		if ($optionOrOptionId instanceof Option) {
+			$baseOption = $optionOrOptionId;
+		} else {
+			$baseOption = $this->optionMapper->find($optionOrOptionId);
 		}
 
-		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
+		$this->getPoll($baseOption->getPollId(), Poll::PERMISSION_OPTION_ADD);
 
-		for ($i = 1; $i < ($amount + 1); $i++) {
-			$clonedOption = new Option();
-			$clonedOption->setPollId($this->option->getPollId());
-			$clonedOption->setOption($this->option->getTimestamp(), $this->option->getDuration());
-			$clonedOption->shiftOption($timezone, ($step * $i), $unit);
+		$sequence->setTimeZone(new DateTimeZone($this->userSession->getClientTimeZone()));
+		$sequence->setBaseTimeStamp($baseOption->getTimestamp());
 
-			try {
-				$this->optionMapper->insert($clonedOption);
-			} catch (Exception $e) {
-				$this->logger->warning('Skip sequence no. {sequence} of option {optionId}. Option possibly already exists.', [
-					'sequence' => $i,
-					'optionId' => $this->option->getId(),
-				]);
-			}
+		$insertedOptions = [];
+		// iterate over the amount of options to create
+		for ($i = 1; $i <= ($sequence->getRepetitions()); $i++) {
+			// build a new option
+			$clonedOption = new SimpleOption(
+				'',
+				$sequence->getOccurence($i),
+				$baseOption->getDuration(),
+			);
+
+			$insertedOptions[] = $this->add($baseOption->getPollId(), $clonedOption, $voteYes);
 		}
 
-		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($this->option));
+		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($baseOption));
 
-		return $this->optionMapper->findByPoll($this->poll->getId());
+		// return the list of new options
+		return $insertedOptions;
 	}
 
 	/**
@@ -246,22 +293,22 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
-		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_OPTIONS_SHIFT);
+		$this->getPoll($pollId, Poll::PERMISSION_OPTIONS_SHIFT);
 		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');
 		}
 
-		$this->options = $this->optionMapper->findByPoll($pollId);
+		$options = $this->optionMapper->findByPoll($pollId);
 
 		if ($step > 0) {
 			// start from last item if moving option into the future
 			// avoid UniqueConstraintViolationException
-			$this->options = array_reverse($this->options);
+			$options = array_reverse($options);
 		}
 
-		foreach ($this->options as $option) {
+		foreach ($options as $option) {
 			$option->shiftOption($timezone, $step, $unit);
 			$this->optionMapper->update($option);
 		}
@@ -307,14 +354,22 @@ class OptionService {
 
 		$i = 0;
 		foreach ($options as $option) {
-			$this->option = $this->optionMapper->find($option['id']);
-			if ($pollId === intval($this->option->getPollId())) {
-				$this->option->setOrder(++$i);
-				$this->optionMapper->update($this->option);
+			// we do not trust the delivered array, so we try to load the option from the db
+			$loadedOption = $this->optionMapper->find($option['id']);
+
+			// check, if the loaded option matches the pollId
+			if ($pollId === intval($loadedOption->getPollId())) {
+				$loadedOption->setOrder(++$i);
+				$this->optionMapper->update($loadedOption);
+				$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($loadedOption));
+			} else {
+				$this->logger->error('Option {optionId} does not belong to poll {pollId}', [
+					'optionId' => $loadedOption->getId(),
+					'pollId' => $pollId,
+				]);
+				throw new DoesNotExistException('Option does not belong to poll');
 			}
 		}
-
-		$this->eventDispatcher->dispatchTyped(new OptionUpdatedEvent($this->option));
 
 		return $this->optionMapper->findByPoll($pollId);
 	}
@@ -327,8 +382,8 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function setOrder(int $optionId, int $newOrder): array {
-		$this->option = $this->optionMapper->find($optionId);
-		$this->getPoll($this->option->getPollId(), Poll::PERMISSION_POLL_EDIT);
+		$option = $this->optionMapper->find($optionId);
+		$this->getPoll($option->getPollId(), Poll::PERMISSION_POLL_EDIT);
 
 		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Not allowed in date polls');
@@ -341,7 +396,7 @@ class OptionService {
 		}
 
 		foreach ($this->optionMapper->findByPoll($this->poll->getId()) as $option) {
-			$option->setOrder($this->moveModifier($this->option->getOrder(), $newOrder, $option->getOrder()));
+			$option->setOrder($this->moveModifier($option->getOrder(), $newOrder, $option->getOrder()));
 			$this->optionMapper->update($option);
 		}
 

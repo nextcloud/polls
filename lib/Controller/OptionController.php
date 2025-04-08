@@ -8,8 +8,11 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Model\Sequence;
+use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\VoteService;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -24,6 +27,7 @@ class OptionController extends BaseController {
 		IRequest $request,
 		private OptionService $optionService,
 		private CalendarService $calendarService,
+		private VoteService $voteService,
 	) {
 		parent::__construct($appName, $request);
 	}
@@ -43,14 +47,29 @@ class OptionController extends BaseController {
 	/**
 	 * Add a new option
 	 * @param int $pollId poll id
-	 * @param int $timestamp timestamp for datepoll
-	 * @param string $text Option text for text poll
-	 * @param int $duration duration of option
+	 * @param array $option Options text for text poll
+	 * @param array $sequence sequence of new options
+	 * @param bool $voteYes vote yes
+	 * @return JSONResponse
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/option')]
-	public function add(int $pollId, int $timestamp = 0, string $text = '', int $duration = 0): JSONResponse {
-		return $this->responseCreate(fn () => ['option' => $this->optionService->add($pollId, $timestamp, $text, $duration)]);
+	public function add(
+		int $pollId,
+		array $option,
+		bool $voteYes = false,
+		?array $sequence = null,
+	): JSONResponse {
+		return $this->responseCreate(fn () => array_merge(
+			$this->optionService->addWithSequenceAndAutoVote(
+				$pollId,
+				SimpleOption::fromArray($option),
+				$voteYes,
+				Sequence::fromArray($sequence),
+			),
+			['options' => $this->optionService->list($pollId)],
+			['votes' => $this->voteService->list($pollId)],
+		));
 	}
 
 	/**
@@ -121,14 +140,13 @@ class OptionController extends BaseController {
 	/**
 	 * clone options in date poll
 	 * @param int $optionId clone template
-	 * @param int $step step width
-	 * @param string $unit unit of step width
-	 * @param int $amount number of new options to create
+	 * @param array $sequence sequence of new options
+	 * @param bool $voteYes vote yes
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/option/{optionId}/sequence')]
-	public function sequence(int $optionId, int $step, string $unit, int $amount): JSONResponse {
-		return $this->response(fn () => ['options' => $this->optionService->sequence($optionId, $step, $unit, $amount)]);
+	public function sequence(int $optionId, array $sequence, bool $voteYes = false): JSONResponse {
+		return $this->response(fn () => ['options' => $this->optionService->sequence($optionId, Sequence::fromArray($sequence), $voteYes)]);
 	}
 
 	/**
