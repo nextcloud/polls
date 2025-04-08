@@ -128,13 +128,14 @@ const lastToDisplay = computed(() => to.value.plus(sequence.value))
 // computed if the option is blocked by an existing option
 const blockedOption = computed(() => {
 	const option = sameOption.value
-	return (
-		option && !option.deleted
-	)
+	return option && !option.deleted
 })
 
 const sameOption = computed(() => {
-	const option = optionsStore.find(from.value.toSeconds(), duration.value.as('seconds'))
+	const option = optionsStore.find(
+		from.value.toSeconds(),
+		duration.value.as('seconds'),
+	)
 	return option
 })
 
@@ -143,7 +144,9 @@ const addable = computed(
 	() => !blockedOption.value && result.value !== StatusResults.Loading,
 )
 const optionInfo = computed(() =>
-	blockedOption.value && result.value !== StatusResults.Success ? t('polls', 'Option already exists') : '',
+	blockedOption.value && result.value !== StatusResults.Success
+		? t('polls', 'Option already exists')
+		: '',
 )
 
 watch(
@@ -192,7 +195,6 @@ async function addOption(): Promise<void> {
 
 		result.value = StatusResults.Success
 		showSuccess(t('polls', 'Option added'))
-
 	} catch (error) {
 		if ((error as AxiosError).response?.status === 409) {
 			showError(t('polls', 'Option already exists'))
@@ -407,7 +409,7 @@ async function addOption(): Promise<void> {
 
 		&.repetition {
 			border-radius: var(--border-radius-container-large);
-			background-color: rgb(from var(--color-background-darker) r g b /0.6);
+			background-color: rgb(from var(--color-background-darker) r g b / 0.6);
 			padding: 1rem 1rem;
 		}
 	}
