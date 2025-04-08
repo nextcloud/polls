@@ -122,6 +122,7 @@ OC.L10N.register(
     "Styles" : "Stiilid",
     "Share label" : "Jaga silti",
     "deleted" : "kustutatud",
+    "Error sending invitation" : "Viga kutse saatmisel",
     "Link copied to clipboard" : "Link on lõikelauale kopeeritud",
     "Has voted" : "On hääletanud",
     "Has not voted" : "Ei ole hääletanud",

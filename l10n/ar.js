@@ -525,6 +525,7 @@ OC.L10N.register(
     "Error resolving {name}." : "خطأ في تحليل {name}.",
     "Invitation sent to {displayName} ({emailAddress})" : "تم إرسال دعوة إلى {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "خطأ في إرسال دعوة إلى {displayName} ({emailAddress})",
+    "Error sending invitation" : "خطأ في إرسال الدعوة",
     "Link copied to clipboard" : "تمّ نسخ الرابط إلى الحافظة",
     "Error while copying link to clipboard" : "خطأ أثناء نسخ الرابط إلى الحافظة",
     "Has voted" : "قام بالتصويت",

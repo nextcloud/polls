@@ -48,7 +48,7 @@
 		"psalm": "psalm --no-diff",
 		"test:unit": "phpunit -c tests/phpunit.xml",
 		"test:integration": "phpunit -c tests/phpunit.xml",
-		"psalm:fix": "psalm --alter --php-version=8.0 --issues=MissingReturnType,InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
+		"psalm:fix": "psalm --alter --php-version=8.1 --issues=MissingReturnType,InvalidReturnType,InvalidNullableReturnType,MismatchingDocblockParamType,MismatchingDocblockReturnType,MissingParamType,InvalidFalsableReturnType",
 		"psalm:info": "psalm --no-diff --show-info=true",
 		"psalm:baseline": "psalm --set-baseline=psalm-baseline.xml",
 		"psalm:baseline:update": "psalm --update-baseline",

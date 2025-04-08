@@ -8,6 +8,7 @@ import { InputDiv } from '../../Base/index.ts'
 import { t } from '@nextcloud/l10n'
 import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 import { computed } from 'vue'
+import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 
 const appSettingsStore = useAppSettingsStore()
 const placeholder = computed(() => {
@@ -28,11 +29,24 @@ const placeholder = computed(() => {
 
 <template>
 	<div class="user_settings">
+		<NcCheckboxRadioSwitch
+			v-model="appSettingsStore.useSiteLegalTerms"
+			type="switch"
+			@update:model-value="appSettingsStore.write()">
+			{{
+				t(
+					'polls',
+					'Use the default terms for public polls and enable the default footer',
+				)
+			}}
+		</NcCheckboxRadioSwitch>
+	</div>
+	<div v-if="!appSettingsStore.useSiteLegalTerms" class="user_settings">
 		<p class="settings-description">
 			{{
 				t(
 					'polls',
-					'If you use different legal terms and privacy policy for public polls, enter the links below. Leave empty to use your default terms.',
+					'If you want to use diferent terms for public polls, enter them below.',
 				)
 			}}
 		</p>

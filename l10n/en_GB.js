@@ -525,6 +525,7 @@ OC.L10N.register(
     "Error resolving {name}." : "Error resolving {name}.",
     "Invitation sent to {displayName} ({emailAddress})" : "Invitation sent to {displayName} ({emailAddress})",
     "Error sending invitation to {displayName} ({emailAddress})" : "Error sending invitation to {displayName} ({emailAddress})",
+    "Error sending invitation" : "Error sending invitation",
     "Link copied to clipboard" : "Link copied to clipboard",
     "Error while copying link to clipboard" : "Error while copying link to clipboard",
     "Has voted" : "Has voted",

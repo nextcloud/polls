@@ -93,6 +93,10 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+	disabled: {
+		type: Boolean,
+		default: false,
+	},
 })
 
 const emit = defineEmits(['input', 'change', 'submit'])
@@ -240,6 +244,7 @@ onMounted(() => {
 			<input
 				v-model="model"
 				v-input-focus
+				:disabled="disabled"
 				:type="type"
 				:inputmode="inputmode"
 				:placeholder="placeholder"
