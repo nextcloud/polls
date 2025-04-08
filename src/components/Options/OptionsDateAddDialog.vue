@@ -413,6 +413,15 @@ async function addOption(): Promise<void> {
 			padding: 1rem 1rem;
 		}
 	}
+	.mx-datepicker {
+		max-width: 11rem;
+	}
+
+	.mx-datepicker-main.mx-datepicker-popup {
+	// TODO: Hack to force the date picker to be on top of the modal
+		z-index: 20000;
+	}
+
 }
 
 .select-duration {
@@ -517,8 +526,4 @@ async function addOption(): Promise<void> {
 	}
 }
 
-.mx-datepicker-main.mx-datepicker-popup {
-	// TODO: Hack to force the date picker to be on top of the modal
-	z-index: 20000;
-}
 </style>
