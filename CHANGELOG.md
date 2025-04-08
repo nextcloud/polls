@@ -14,6 +14,8 @@ All notable changes to this project will be documented in this file.
  - Locked anonymous mode
  - Restricted poll owners
  - Redesign of poll lists
+ - Added option to automatically set all added optioons to yes
+ - changed controls of numeric inputs
 
 ## [7.4.1] - 2024-03-07
 ### New
