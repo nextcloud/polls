@@ -38,6 +38,7 @@ OC.L10N.register(
     "Preview" : "Antaŭvidi",
     "Submit" : "Sendi",
     "never" : "neniam",
+    "Privacy policy" : "Privateca regularo",
     "Login" : "Login",
     "deleted" : "forigita",
     "Link copied to clipboard" : "Ligilo kopiita al tondujo",

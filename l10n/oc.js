@@ -14,6 +14,8 @@ OC.L10N.register(
     "Delete" : "Suprimir",
     "Register" : "S'inscriure",
     "Unknown error" : "Error desconeguda",
+    "Previous day" : "Jorn passat",
+    "Next day" : "Jorn seguent",
     "Add" : "Apondre",
     "New comment …" : "Nòu comentari…",
     "Delete comment" : "Suprimir comentari",
