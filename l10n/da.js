@@ -12,6 +12,7 @@ OC.L10N.register(
     "Delete" : "Slet",
     "Register" : "Register",
     "Unknown error" : "Ukendt fejl",
+    "Previous day" : "Forrige dag",
     "Enter a date" : "Indtast en dato",
     "Conflict" : "Konflikt",
     "Add" : "Tilføj",

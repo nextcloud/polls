@@ -304,8 +304,6 @@ OC.L10N.register(
     "Error cloning poll." : "Грешка при клониране на анкета.",
     "Take over" : "Вземане на управление",
     "Sort by title" : "Сортиране по заглавие",
-    "By clicking the \"OK\" button you accept our {privacyPolicy}." : "С натискането на бутон „OK“ приемате нашата {privacyPolicy}.",
-    "privacy policy" : "политика за поверителност",
     "Checking name …" : "Името се проверява …",
     "A name is required." : "Нужно е име.",
     "The name {username} is invalid or reserved." : "Името {username} е невалидно или е запазено.",
