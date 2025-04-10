@@ -30,7 +30,7 @@ class Circle extends UserBase {
 		string $id,
 	) {
 		parent::__construct($id, self::TYPE);
-		$this->description = $this->l10n->t('Circle');
+		$this->description = $this->l10n->t('Team');
 		$this->richObjectType = 'circle';
 
 		if (self::isEnabled()) {
