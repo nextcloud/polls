@@ -14,7 +14,7 @@ import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
 import { PropType } from 'vue'
 
 defineOptions({
-  inheritAttrs: false
+	inheritAttrs: false,
 })
 
 const model = defineModel({
@@ -53,9 +53,7 @@ function nextDay() {
 				<ChevronLeftIcon />
 			</template>
 		</NcButton>
-		<NcDateTimePickerNative
-			v-model="model"
-			v-bind="$attrs" />
+		<NcDateTimePickerNative v-model="model" v-bind="$attrs" />
 		<NcButton
 			v-if="props.useDayButtons"
 			:title="t('polls', 'Next day')"
