@@ -4,7 +4,6 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
@@ -19,26 +18,10 @@ const model = defineModel({
 })
 
 const props = defineProps({
-	useTime: {
-		type: Boolean,
-		default: false,
-	},
 	useDayButtons: {
 		type: Boolean,
 		default: false,
 	},
-	label: {
-		type: String,
-		default: '',
-	},
-})
-
-const nativePickerType = computed(() => {
-	// date, datetime-local, month, time, week
-	if (props.useTime) {
-		return 'datetime-local'
-	}
-	return 'date'
 })
 
 function previousDay() {
@@ -69,8 +52,7 @@ function nextDay() {
 		</NcButton>
 		<NcDateTimePickerNative
 			v-model="model"
-			:label="label"
-			:type="nativePickerType" />
+			v-bind="$attrs" />
 		<NcButton
 			v-if="props.useDayButtons"
 			:title="t('polls', 'Next day')"
