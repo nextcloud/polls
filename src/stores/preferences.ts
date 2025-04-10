@@ -23,7 +23,6 @@ export type UserPreferences = {
 	performanceThreshold: number
 	pollCombo: number[]
 	relevantOffset: number
-	useNewAddOption: boolean
 	useNewPollDialogInNavigation: boolean
 	useNewPollInPollist: boolean
 	useCommentsAlternativeStyling: boolean
@@ -62,7 +61,6 @@ export const usePreferencesStore = defineStore('preferences', {
 			performanceThreshold: 1000,
 			pollCombo: [],
 			relevantOffset: 30,
-			useNewAddOption: false,
 			useNewPollDialogInNavigation: false,
 			useNewPollInPollist: false,
 			useCommentsAlternativeStyling: false,

@@ -138,10 +138,7 @@ onUnmounted(() => {
 					</template>
 					<template v-if="pollStore.permissions.addOptions" #action>
 						<ActionAddOption
-							v-if="
-								preferencesStore.user.useNewAddOption
-								&& pollStore.type === PollType.Date
-							"
+							v-if="pollStore.type === PollType.Date"
 							:caption="t('polls', 'Add options')" />
 						<ActionOpenOptionsSidebar v-else />
 					</template>
