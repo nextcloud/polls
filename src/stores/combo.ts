@@ -48,8 +48,8 @@ export const useComboStore = defineStore('combo', {
 			(state) => (payload: { text: string; pollId: number }) =>
 				!!state.options.find(
 					(option) =>
-						option.text === payload.text &&
-						option.pollId === payload.pollId,
+						option.text === payload.text
+						&& option.pollId === payload.pollId,
 				),
 		uniqueOptions: (state) => sortBy(uniqueOptions(state.options), 'timestamp'),
 
@@ -58,9 +58,9 @@ export const useComboStore = defineStore('combo', {
 			(payload: { userId: string; optionText: string; pollId: number }) => {
 				const found = state.votes.find(
 					(vote: Vote) =>
-						vote.user.id === payload.userId &&
-						vote.optionText === payload.optionText &&
-						vote.pollId === payload.pollId,
+						vote.user.id === payload.userId
+						&& vote.optionText === payload.optionText
+						&& vote.pollId === payload.pollId,
 				)
 				if (found === undefined) {
 					return {

@@ -74,12 +74,12 @@ export const useSharesStore = defineStore('shares', {
 			]
 			return state.list.filter(
 				(share) =>
-					!share.locked &&
-					(directShareTypes.includes(share.type) ||
-						(invitationTypes.includes(share.type) &&
-							(share.type === ShareType.External ||
-								share.invitationSent ||
-								share.voted))),
+					!share.locked
+					&& (directShareTypes.includes(share.type)
+						|| (invitationTypes.includes(share.type)
+							&& (share.type === ShareType.External
+								|| share.invitationSent
+								|| share.voted))),
 			)
 		},
 
@@ -87,13 +87,13 @@ export const useSharesStore = defineStore('shares', {
 		unsentInvitations: (state) =>
 			state.list.filter(
 				(share) =>
-					(share.user.emailAddress ||
-						share.type === ShareType.Group ||
-						share.type === ShareType.ContactGroup ||
-						share.type === ShareType.Circle) &&
-					!share.invitationSent &&
-					!share.locked &&
-					!share.voted,
+					(share.user.emailAddress
+						|| share.type === ShareType.Group
+						|| share.type === ShareType.ContactGroup
+						|| share.type === ShareType.Circle)
+					&& !share.invitationSent
+					&& !share.locked
+					&& !share.voted,
 			),
 		public: (state) =>
 			state.list.filter((share) => share.type === ShareType.Public),

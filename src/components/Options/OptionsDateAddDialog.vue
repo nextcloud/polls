@@ -49,8 +49,8 @@ const voteYes = ref(true)
 const fromInput = ref(
 	new Date(
 		new Date().setMinutes(
-			Math.ceil((new Date().getMinutes() / 60) * (60 / timeStepMinutes)) *
-				timeStepMinutes,
+			Math.ceil((new Date().getMinutes() / 60) * (60 / timeStepMinutes))
+				* timeStepMinutes,
 			0,
 			0,
 		),
@@ -167,8 +167,8 @@ function resetduratonUnits(): void {
 	if (allDay.value) {
 		// change date units, when switching from time based to all day, since minutes and hours are not valid anymore
 		if (
-			durationInput.value.unit.id === DateUnitKeys.Minute ||
-			durationInput.value.unit.id === DateUnitKeys.Hour
+			durationInput.value.unit.id === DateUnitKeys.Minute
+			|| durationInput.value.unit.id === DateUnitKeys.Hour
 		) {
 			durationInput.value.unit = dateTimeUnitsKeyed[DateUnitKeys.Day]
 		}

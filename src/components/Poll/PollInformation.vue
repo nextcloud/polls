@@ -92,8 +92,8 @@ const countAllMaybeVotes = computed(() =>
 )
 const countUsedVotes = computed(
 	() =>
-		pollStore.configuration.maxVotesPerUser -
-		pollStore.currentUserStatus.yesVotes,
+		pollStore.configuration.maxVotesPerUser
+		- pollStore.currentUserStatus.yesVotes,
 )
 </script>
 
@@ -149,8 +149,8 @@ const countUsedVotes = computed(
 					v-if="pollStore.configuration.showResults === 'never'" />
 				<ShowResultsOnClosedIcon
 					v-else-if="
-						pollStore.configuration.showResults === 'closed' &&
-						pollStore.isClosed
+						pollStore.configuration.showResults === 'closed'
+						&& pollStore.isClosed
 					" />
 				<ShowResultsIcon v-else />
 			</template>

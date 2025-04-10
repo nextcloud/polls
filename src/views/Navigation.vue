@@ -221,8 +221,8 @@ onMounted(() => {
 						:name="t('polls', 'No polls found for this category')" />
 					<NcAppNavigationItem
 						v-if="
-							pollsStore.navigationList(pollCategory.id).length >
-							pollsStore.meta.maxPollsInNavigation
+							pollsStore.navigationList(pollCategory.id).length
+							> pollsStore.meta.maxPollsInNavigation
 						"
 						class="force-not-active"
 						:to="{

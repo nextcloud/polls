@@ -56,8 +56,8 @@ export const useActivityStore = defineStore('activity', {
 			// TODO: Learn: Why is activity.object_id === sessionStore.currentPollId always false?
 			return state.list.filter(
 				(activity: Activity) =>
-					activity.object_type === 'poll' &&
-					activity.object_id - sessionStore.currentPollId === 0,
+					activity.object_type === 'poll'
+					&& activity.object_id - sessionStore.currentPollId === 0,
 			)
 		},
 	},

@@ -106,8 +106,8 @@ onUnmounted(() => {
 
 			<div
 				v-if="
-					pollStore.configuration.description &&
-					!preferencesStore.user.useCardsArrangement
+					pollStore.configuration.description
+					&& !preferencesStore.user.useCardsArrangement
 				"
 				class="area__description">
 				<MarkUpDescription />
@@ -139,8 +139,8 @@ onUnmounted(() => {
 					<template v-if="pollStore.permissions.addOptions" #action>
 						<ActionAddOption
 							v-if="
-								preferencesStore.user.useNewAddOption &&
-								pollStore.type === PollType.Date
+								preferencesStore.user.useNewAddOption
+								&& pollStore.type === PollType.Date
 							"
 							:caption="t('polls', 'Add options')" />
 						<ActionOpenOptionsSidebar v-else />
