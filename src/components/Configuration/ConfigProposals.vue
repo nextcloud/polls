@@ -44,7 +44,6 @@ const proposalExpiration = computed({
 		pollStore.write()
 	},
 })
-
 </script>
 
 <template>

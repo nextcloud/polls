@@ -418,10 +418,9 @@ async function addOption(): Promise<void> {
 	}
 
 	.mx-datepicker-main.mx-datepicker-popup {
-	// TODO: Hack to force the date picker to be on top of the modal
+		// TODO: Hack to force the date picker to be on top of the modal
 		z-index: 20000;
 	}
-
 }
 
 .select-duration {
@@ -525,5 +524,4 @@ async function addOption(): Promise<void> {
 		text-wrap: nowrap;
 	}
 }
-
 </style>
