@@ -25,6 +25,7 @@ OC.L10N.register(
     "Preview" : "Voorskou",
     "Submit" : "Dien in",
     "never" : "nooit",
+    "Privacy policy" : "Privaatheidsbeleid",
     "Login" : "Teken aan",
     "No activity yet" : "Nog geen aktiwiteit",
     "Description" : "Beskrywing",
