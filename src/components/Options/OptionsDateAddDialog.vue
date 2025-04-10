@@ -408,20 +408,15 @@ async function addOption(): Promise<void> {
 				min-width: 11rem;
 			}
 		}
+		.date-time-picker {
+			column-gap: inherit;
+		}
 
 		&.repetition {
 			border-radius: var(--border-radius-container-large);
 			background-color: rgb(from var(--color-background-darker) r g b / 0.6);
 			padding: 1rem 1rem;
 		}
-	}
-	.mx-datepicker {
-		max-width: 11rem;
-	}
-
-	.mx-datepicker-main.mx-datepicker-popup {
-		// TODO: Hack to force the date picker to be on top of the modal
-		z-index: 20000;
 	}
 }
 
