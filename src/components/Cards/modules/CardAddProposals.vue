@@ -38,6 +38,5 @@ const optionAddDatesModalProps = {
 		<template v-if="pollStore.type === PollType.Date" #button>
 			<ActionAddOption v-bind="optionAddDatesModalProps" />
 		</template>
-
 	</CardDiv>
 </template>
