@@ -162,8 +162,8 @@ function changeView(): void {
  */
 async function copyLink() {
 	const personalLink =
-		window.location.origin +
-		router.resolve({
+		window.location.origin
+		+ router.resolve({
 			name: 'publicVote',
 			params: { token: sessionStore.publicToken },
 		}).href
@@ -276,8 +276,8 @@ const eMailInputProps = ref<InputProps>({
 
 const validateEMail = debounce(async function () {
 	if (
-		sessionStore.share.user.emailAddress ===
-		sessionStore.currentUser.emailAddress
+		sessionStore.share.user.emailAddress
+		=== sessionStore.currentUser.emailAddress
 	) {
 		setEMailStatus(StatusResults.Unchanged)
 		return
@@ -443,8 +443,8 @@ async function submitEmail() {
 
 		<NcActionButton
 			v-if="
-				sessionStore.share?.type === 'external' &&
-				sessionStore.share.user.emailAddress
+				sessionStore.share?.type === 'external'
+				&& sessionStore.share.user.emailAddress
 			"
 			:name="t('polls', 'Remove Email Address')"
 			:aria-label="t('polls', 'Remove Email Address')"

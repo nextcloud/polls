@@ -76,8 +76,8 @@ const conflictLevel = computed(() => {
 
 	// No conflict, if calendarEvent starts after end of option
 	if (
-		props.calendarEvent.start >=
-		props.option.timestamp + props.option.duration
+		props.calendarEvent.start
+		>= props.option.timestamp + props.option.duration
 	) {
 		return 'conflict-no'
 	}

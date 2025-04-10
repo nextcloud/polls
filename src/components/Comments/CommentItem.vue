@@ -87,8 +87,8 @@ async function restoreComment(comment: Comment) {
 
 				<ActionDelete
 					v-if="
-						comment.user.id === sessionStore.currentUser?.id ||
-						pollStore.currentUserStatus.isOwner
+						comment.user.id === sessionStore.currentUser?.id
+						|| pollStore.currentUserStatus.isOwner
 					"
 					:name="
 						subComment.deleted

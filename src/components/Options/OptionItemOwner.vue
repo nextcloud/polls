@@ -29,8 +29,8 @@ const props = defineProps({
 
 const showDelete = computed(
 	() =>
-		!pollStore.permissions.edit &&
-		sessionStore.currentUser.id === props.option.owner?.id,
+		!pollStore.permissions.edit
+		&& sessionStore.currentUser.id === props.option.owner?.id,
 )
 </script>
 

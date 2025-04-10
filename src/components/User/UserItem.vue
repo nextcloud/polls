@@ -230,18 +230,18 @@ const publicShareLabel = computed(() => {
 
 const emailAddressComputed = computed(() => {
 	if (
-		props.resolveInfo &&
-		(typeComputed.value === UserType.ContactGroup ||
-			typeComputed.value === UserType.Circle)
+		props.resolveInfo
+		&& (typeComputed.value === UserType.ContactGroup
+			|| typeComputed.value === UserType.Circle)
 	) {
 		return t('polls', 'Resolve this group first!')
 	}
 
 	if (
-		props.showEmail &&
-		props.user.emailAddress !== props.user.displayName &&
-		(typeComputed.value === UserType.External ||
-			typeComputed.value === UserType.Email)
+		props.showEmail
+		&& props.user.emailAddress !== props.user.displayName
+		&& (typeComputed.value === UserType.External
+			|| typeComputed.value === UserType.Email)
 	) {
 		return props.user.emailAddress
 	}

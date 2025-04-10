@@ -46,9 +46,9 @@ const componentClass = computed(() => {
 
 const showCalendarPeek = computed(
 	() =>
-		pollStore.type === PollType.Date &&
-		getCurrentUser() &&
-		preferencesStore.user.calendarPeek,
+		pollStore.type === PollType.Date
+		&& getCurrentUser()
+		&& preferencesStore.user.calendarPeek,
 )
 </script>
 

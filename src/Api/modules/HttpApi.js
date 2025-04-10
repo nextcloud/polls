@@ -43,8 +43,8 @@ const createCancelTokenHandler = (apiObject) => {
 
 		cancelTokenHandler[propertyName] = {
 			handleRequestCancellation: () => {
-				cancelTokenRequestHandler.cancelToken &&
-					cancelTokenRequestHandler.cancelToken.cancel(
+				cancelTokenRequestHandler.cancelToken
+					&& cancelTokenRequestHandler.cancelToken.cancel(
 						`${propertyName} canceled`,
 					)
 				cancelTokenRequestHandler.cancelToken = CancelToken.source()

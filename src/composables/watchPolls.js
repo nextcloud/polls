@@ -29,9 +29,9 @@ export const watchPolls = {
 
 		watchDisabled() {
 			return (
-				this.sessionStore.appSettings.updateType === UpdateType.NoPolling ||
-				this.retryCounter === null ||
-				this.retryCounter >= MAX_TRIES
+				this.sessionStore.appSettings.updateType === UpdateType.NoPolling
+				|| this.retryCounter === null
+				|| this.retryCounter >= MAX_TRIES
 			)
 		},
 	},

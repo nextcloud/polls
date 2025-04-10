@@ -27,9 +27,9 @@ const message = computed(() => {
 	const subject = props.activity.subject_rich[0]
 	const parameters = JSON.parse(JSON.stringify(props.activity.subject_rich[1]))
 	if (
-		parameters.after &&
-		typeof parameters.after.id === 'string' &&
-		parameters.after.id.startsWith('dt:')
+		parameters.after
+		&& typeof parameters.after.id === 'string'
+		&& parameters.after.id.startsWith('dt:')
 	) {
 		const dateTime = parameters.after.id.slice(3)
 		parameters.after.name = moment(dateTime).format('L LTS')

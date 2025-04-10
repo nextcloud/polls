@@ -99,15 +99,15 @@ export const usePreferencesStore = defineStore('preferences', {
 
 		useNcAppNavigationNew(state): boolean {
 			return (
-				!state.user.useNewPollDialogInNavigation &&
-				!state.user.useNewPollInPollist
+				!state.user.useNewPollDialogInNavigation
+				&& !state.user.useNewPollInPollist
 			)
 		},
 
 		useActionAddPollInNavigation(state): boolean {
 			return (
-				state.user.useNewPollDialogInNavigation &&
-				!state.user.useNewPollInPollist
+				state.user.useNewPollDialogInNavigation
+				&& !state.user.useNewPollInPollist
 			)
 		},
 	},

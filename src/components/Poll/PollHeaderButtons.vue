@@ -27,9 +27,9 @@ const caption = t('polls', 'Poll informations')
 
 const showUserMenu = computed(
 	() =>
-		route.name !== 'publicVote' ||
-		pollStore.permissions.vote ||
-		pollStore.permissions.subscribe,
+		route.name !== 'publicVote'
+		|| pollStore.permissions.vote
+		|| pollStore.permissions.subscribe,
 )
 
 onBeforeUnmount(() => {

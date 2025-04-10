@@ -27,42 +27,42 @@ const sessionStore = useSessionStore()
 
 const showUnpublishedPollCard = computed(
 	() =>
-		pollStore.configuration.access === AccessType.Private &&
-		!sharesStore.hasShares &&
-		pollStore.permissions.edit &&
-		optionsStore.list.length,
+		pollStore.configuration.access === AccessType.Private
+		&& !sharesStore.hasShares
+		&& pollStore.permissions.edit
+		&& optionsStore.list.length,
 )
 const showAddProposalsCard = computed(
 	() =>
-		pollStore.permissions.addOptions &&
-		pollStore.isProposalOpen &&
-		!pollStore.isClosed,
+		pollStore.permissions.addOptions
+		&& pollStore.isProposalOpen
+		&& !pollStore.isClosed,
 )
 const showClosedCard = computed(
 	() => pollStore.isClosed && !showSendConfirmationsCard.value,
 )
 const showSendConfirmationsCard = computed(
 	() =>
-		pollStore.permissions.edit &&
-		pollStore.isClosed &&
-		optionsStore.confirmed.length > 0,
+		pollStore.permissions.edit
+		&& pollStore.isClosed
+		&& optionsStore.confirmed.length > 0,
 )
 const showLimitCard = computed(
 	() =>
-		pollStore.permissions.vote &&
-		!pollStore.isClosed &&
-		(pollStore.configuration.maxVotesPerOption ||
-			pollStore.configuration.maxVotesPerUser),
+		pollStore.permissions.vote
+		&& !pollStore.isClosed
+		&& (pollStore.configuration.maxVotesPerOption
+			|| pollStore.configuration.maxVotesPerUser),
 )
 const showRegisterCard = computed(
 	() =>
-		sessionStore.route.name === 'publicVote' &&
-		[UserType.Public, UserType.Email, UserType.Contact].includes(
+		sessionStore.route.name === 'publicVote'
+		&& [UserType.Public, UserType.Email, UserType.Contact].includes(
 			pollStore.currentUserStatus.userRole,
-		) &&
-		!pollStore.isClosed &&
-		!pollStore.currentUserStatus.isLocked &&
-		!!pollStore.id,
+		)
+		&& !pollStore.isClosed
+		&& !pollStore.currentUserStatus.isLocked
+		&& !!pollStore.id,
 )
 </script>
 

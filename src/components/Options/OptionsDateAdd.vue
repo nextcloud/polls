@@ -117,8 +117,8 @@ const dateOption = computed<DateOption>(() => {
 	if (useRange.value) {
 		if (useTime.value) {
 			if (
-				moment(from).startOf('day').valueOf() ===
-				moment(to).startOf('day').valueOf()
+				moment(from).startOf('day').valueOf()
+				=== moment(to).startOf('day').valueOf()
 			) {
 				text = `${from.format('ll LT')} - ${to.format('LT')}`
 			} else {
@@ -128,8 +128,8 @@ const dateOption = computed<DateOption>(() => {
 			from = from.startOf('day')
 			to = to.startOf('day')
 			if (
-				moment(from).startOf('day').valueOf() ===
-				moment(to).startOf('day').valueOf()
+				moment(from).startOf('day').valueOf()
+				=== moment(to).startOf('day').valueOf()
 			) {
 				text = from.format('ll')
 			} else {

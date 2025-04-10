@@ -34,8 +34,8 @@ const title = computed(
 
 const showMore = computed(
 	() =>
-		pollsStore.chunkedList.length < pollsStore.pollsFilteredSorted.length &&
-		pollsStore.meta.status !== 'loading',
+		pollsStore.chunkedList.length < pollsStore.pollsFilteredSorted.length
+		&& pollsStore.meta.status !== 'loading',
 )
 
 const countLoadedPolls = computed(() =>

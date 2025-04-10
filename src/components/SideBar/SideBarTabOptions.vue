@@ -77,9 +77,9 @@ onUnmounted(() => {
 
 		<ConfigBox
 			v-if="
-				pollStore.type === PollType.Date &&
-				optionsStore.list.length &&
-				!pollStore.isClosed
+				pollStore.type === PollType.Date
+				&& optionsStore.list.length
+				&& !pollStore.isClosed
 			"
 			v-bind="configBoxProps.shiftDate">
 			<template #icon>

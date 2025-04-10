@@ -39,9 +39,9 @@ const anonDialog = {
 
 const showLockAnonymous = computed(
 	() =>
-		pollStore.permissions.deanonymize &&
-		pollStore.status.isAnonymous &&
-		!pollStore.status.isRealAnonymous,
+		pollStore.permissions.deanonymize
+		&& pollStore.status.isAnonymous
+		&& !pollStore.status.isRealAnonymous,
 )
 
 /**
@@ -67,8 +67,8 @@ function lockAnonymous() {
 const pollStore = usePollStore()
 const disabledState = computed(
 	() =>
-		(pollStore.status.isAnonymous && !pollStore.permissions.deanonymize) ||
-		pollStore.status.isRealAnonymous,
+		(pollStore.status.isAnonymous && !pollStore.permissions.deanonymize)
+		|| pollStore.status.isRealAnonymous,
 )
 </script>
 

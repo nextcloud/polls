@@ -46,8 +46,8 @@ function setStatus(status: StatusResults) {
 
 const validate = debounce(async function () {
 	if (
-		sessionStore.share.user.emailAddress ===
-		sessionStore.currentUser.emailAddress
+		sessionStore.share.user.emailAddress
+		=== sessionStore.currentUser.emailAddress
 	) {
 		setStatus(StatusResults.Unchanged)
 		return
