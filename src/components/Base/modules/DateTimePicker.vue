@@ -5,16 +5,21 @@
 
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
-import moment from '@nextcloud/moment'
+import { DateTime } from 'luxon'
 import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
 import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
 
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
+import { PropType } from 'vue'
+
+defineOptions({
+  inheritAttrs: false
+})
 
 const model = defineModel({
 	required: true,
-	type: Object,
+	type: Object as PropType<Date>,
 })
 
 const props = defineProps({
@@ -26,15 +31,13 @@ const props = defineProps({
 
 function previousDay() {
 	if (model.value) {
-		const date = moment(model.value).subtract(1, 'day')
-		model.value = date.toDate()
+		model.value = DateTime.fromJSDate(model.value).minus({ days: 1 }).toJSDate()
 	}
 }
 
 function nextDay() {
 	if (model.value) {
-		const date = moment(model.value).add(1, 'day')
-		model.value = date.toDate()
+		model.value = DateTime.fromJSDate(model.value).plus({ days: 1 }).toJSDate()
 	}
 }
 </script>
@@ -69,7 +72,6 @@ function nextDay() {
 .date-time-picker {
 	display: flex;
 	flex-wrap: wrap;
-	column-gap: 0.25rem;
 	align-items: end;
 }
 </style>
