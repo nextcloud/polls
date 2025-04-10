@@ -120,8 +120,8 @@ function deletePoll() {
 			<ConfigClosing @change="pollStore.write" />
 			<ConfigAutoReminder
 				v-if="
-					pollStore.type === PollType.Date ||
-					pollStore.configuration.expire
+					pollStore.type === PollType.Date
+					|| pollStore.configuration.expire
 				"
 				@change="pollStore.write" />
 		</ConfigBox>

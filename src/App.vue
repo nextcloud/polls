@@ -40,9 +40,9 @@ const appClass = computed(() => [
 const useNavigation = computed(() => sessionStore.userStatus.isLoggedin)
 const useSidebar = computed(
 	() =>
-		pollStore.permissions.edit ||
-		pollStore.permissions.comment ||
-		sessionStore.route.name === 'combo',
+		pollStore.permissions.edit
+		|| pollStore.permissions.comment
+		|| sessionStore.route.name === 'combo',
 )
 
 /**

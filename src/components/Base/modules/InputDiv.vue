@@ -115,28 +115,28 @@ const isNumMinSet = computed(() => props.numMin !== null)
 const isNumMaxSet = computed(() => props.numMax !== null)
 const checking = computed(
 	() =>
-		!props.useNumModifiers &&
-		computedSignalingClass.value === SignalingType.Checking,
+		!props.useNumModifiers
+		&& computedSignalingClass.value === SignalingType.Checking,
 )
 const error = computed(
 	() =>
-		!checking.value &&
-		!props.useNumModifiers &&
-		computedSignalingClass.value === SignalingType.Error,
+		!checking.value
+		&& !props.useNumModifiers
+		&& computedSignalingClass.value === SignalingType.Error,
 )
 const success = computed(
 	() =>
-		!checking.value &&
-		!props.useNumModifiers &&
-		computedSignalingClass.value === SignalingType.Success &&
-		!props.submit,
+		!checking.value
+		&& !props.useNumModifiers
+		&& computedSignalingClass.value === SignalingType.Success
+		&& !props.submit,
 )
 const showSubmit = computed(
 	() =>
-		!checking.value &&
-		!props.useNumModifiers &&
-		props.submit &&
-		computedSignalingClass.value !== SignalingType.Error,
+		!checking.value
+		&& !props.useNumModifiers
+		&& props.submit
+		&& computedSignalingClass.value !== SignalingType.Error,
 )
 
 /**
@@ -162,10 +162,10 @@ function assertBoundaries() {
 function numCheckBoundaries(value: number) {
 	if (isNumMaxSet.value && value > props.numMax) {
 		if (
-			props.numWrap &&
-			isNumMinSet.value &&
-			assertBoundaries() &&
-			numericModelValue.value === props.numMax
+			props.numWrap
+			&& isNumMinSet.value
+			&& assertBoundaries()
+			&& numericModelValue.value === props.numMax
 		) {
 			value = props.numMin
 		} else {
@@ -175,10 +175,10 @@ function numCheckBoundaries(value: number) {
 
 	if (isNumMinSet.value && value < props.numMin) {
 		if (
-			props.numWrap &&
-			isNumMaxSet.value &&
-			assertBoundaries() &&
-			numericModelValue.value === props.numMin
+			props.numWrap
+			&& isNumMaxSet.value
+			&& assertBoundaries()
+			&& numericModelValue.value === props.numMin
 		) {
 			value = props.numMax
 		} else {

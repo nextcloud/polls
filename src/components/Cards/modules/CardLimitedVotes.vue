@@ -22,10 +22,10 @@ const orphanedVotesText = computed(() =>
 )
 
 const votesLeft = computed(() =>
-	pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes >
-	0
-		? pollStore.configuration.maxVotesPerUser -
-			pollStore.currentUserStatus.yesVotes
+	pollStore.configuration.maxVotesPerUser - pollStore.currentUserStatus.yesVotes
+	> 0
+		? pollStore.configuration.maxVotesPerUser
+			- pollStore.currentUserStatus.yesVotes
 		: 0,
 )
 
@@ -69,8 +69,8 @@ const cardType = computed(() =>
 			</li>
 			<div
 				v-if="
-					pollStore.currentUserStatus.orphanedVotes &&
-					pollStore.configuration.maxVotesPerUser
+					pollStore.currentUserStatus.orphanedVotes
+					&& pollStore.configuration.maxVotesPerUser
 				">
 				<b>{{ orphanedVotesText }}</b>
 			</div>
@@ -78,8 +78,8 @@ const cardType = computed(() =>
 
 		<template
 			v-if="
-				pollStore.currentUserStatus.orphanedVotes &&
-				pollStore.configuration.maxVotesPerUser
+				pollStore.currentUserStatus.orphanedVotes
+				&& pollStore.configuration.maxVotesPerUser
 			"
 			#button>
 			<ActionDeleteOrphanedVotes />

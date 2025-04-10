@@ -101,12 +101,12 @@ export const pollCategories: PollCategorieList = {
 		pinned: false,
 		showInNavigation: () => true,
 		filterCondition: (poll: Poll) =>
-			!poll.status.isDeleted &&
-			DateTime.fromSeconds(poll.status.relevantThreshold).diffNow('days')
-				.days > -100 &&
-			(poll.currentUserStatus.isInvolved ||
-				(poll.permissions.view &&
-					poll.configuration.access !== AccessType.Open)),
+			!poll.status.isDeleted
+			&& DateTime.fromSeconds(poll.status.relevantThreshold).diffNow('days')
+				.days > -100
+			&& (poll.currentUserStatus.isInvolved
+				|| (poll.permissions.view
+					&& poll.configuration.access !== AccessType.Open)),
 	},
 	[FilterType.My]: {
 		id: FilterType.My,
@@ -132,9 +132,9 @@ export const pollCategories: PollCategorieList = {
 			return sessionStore.appPermissions.pollCreation
 		},
 		filterCondition: (poll: Poll) =>
-			!poll.status.isDeleted &&
-			poll.permissions.view &&
-			poll.configuration.access === AccessType.Private,
+			!poll.status.isDeleted
+			&& poll.permissions.view
+			&& poll.configuration.access === AccessType.Private,
 	},
 	[FilterType.Participated]: {
 		id: FilterType.Participated,
@@ -251,8 +251,8 @@ export const usePollsStore = defineStore('polls', {
 			const sessionStore = useSessionStore()
 
 			if (
-				sessionStore.route.name === 'list' &&
-				sessionStore.route.params.type
+				sessionStore.route.name === 'list'
+				&& sessionStore.route.params.type
 			) {
 				return state.categories[sessionStore.route.params.type as FilterType]
 			}

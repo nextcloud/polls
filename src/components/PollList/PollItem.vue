@@ -42,9 +42,9 @@ const props = defineProps({
 
 const closeToClosing = computed(
 	() =>
-		!props.poll.status.isExpired &&
-		props.poll.configuration.expire &&
-		moment.unix(props.poll.configuration.expire).diff() < 86400000,
+		!props.poll.status.isExpired
+		&& props.poll.configuration.expire
+		&& moment.unix(props.poll.configuration.expire).diff() < 86400000,
 )
 
 const pollTypeName = computed(() => {

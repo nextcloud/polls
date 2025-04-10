@@ -53,8 +53,8 @@ async function removeUser(userId: string) {
 
 				<ActionDelete
 					v-if="
-						pollStore.permissions.edit &&
-						pollStore.permissions.changeForeignVotes
+						pollStore.permissions.edit
+						&& pollStore.permissions.changeForeignVotes
 					"
 					class="user-actions"
 					:name="t('polls', 'Delete votes')"

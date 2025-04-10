@@ -54,9 +54,9 @@ function openQrModal(share: Share) {
 		<ShareItemAllUsers v-if="sessionStore.appPermissions.allAccess" />
 		<SharePublicAdd
 			v-if="
-				sessionStore.appPermissions.publicShares &&
-				sessionStore.appPermissions.addShares &&
-				sessionStore.appPermissions.addSharesExternal
+				sessionStore.appPermissions.publicShares
+				&& sessionStore.appPermissions.addShares
+				&& sessionStore.appPermissions.addSharesExternal
 			" />
 
 		<div v-if="sharesStore.active.length" class="shares-list shared">
