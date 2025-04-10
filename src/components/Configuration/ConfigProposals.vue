@@ -9,7 +9,7 @@ import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
+import DateTimePicker from '../../components/Base/modules/DateTimePicker.vue'
 
 import { usePollStore, AllowProposals } from '../../stores/poll.ts'
 
@@ -45,26 +45,6 @@ const proposalExpiration = computed({
 	},
 })
 
-const firstDOW =
-	moment.localeData()._week.dow === 0 ? 7 : moment.localeData()._week.dow
-
-const expirationDatePicker = {
-	editable: true,
-	minuteStep: 5,
-	type: 'datetime',
-	format: moment.localeData().longDateFormat('L LT'),
-	placeholder: t('polls', 'Proposals possible until'),
-	confirm: true,
-	lang: {
-		formatLocale: {
-			firstDayOfWeek: firstDOW,
-			months: moment.months(),
-			monthsShort: moment.monthsShort(),
-			weekdays: moment.weekdays(),
-			weekdaysMin: moment.weekdaysMin(),
-		},
-	},
-}
 </script>
 
 <template>
@@ -80,9 +60,9 @@ const expirationDatePicker = {
 			{{ t('polls', 'Proposal closing date') }}
 		</NcCheckboxRadioSwitch>
 
-		<NcDateTimePicker
+		<DateTimePicker
 			v-show="proposalExpiration && pollStore.isProposalAllowed"
 			v-model="pollExpire"
-			v-bind="expirationDatePicker" />
+			use-time />
 	</div>
 </template>
