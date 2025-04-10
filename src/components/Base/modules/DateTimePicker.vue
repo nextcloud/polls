@@ -7,9 +7,8 @@
 import { computed } from 'vue'
 import { t } from '@nextcloud/l10n'
 import moment from '@nextcloud/moment'
-import NcDateTimePicker from '@nextcloud/vue/components/NcDateTimePicker'
-import { NcButton, NcCheckboxRadioSwitch } from '@nextcloud/vue'
-import { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
 
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
 import ChevronRightIcon from 'vue-material-design-icons/ChevronRight.vue'
@@ -19,16 +18,8 @@ const model = defineModel({
 	type: Object,
 })
 
-const timeSelected = defineModel('timeSelected', {
-	type: Boolean,
-})
-
 const props = defineProps({
 	useTime: {
-		type: Boolean,
-		default: false,
-	},
-	selectTime: {
 		type: Boolean,
 		default: false,
 	},
@@ -36,48 +27,19 @@ const props = defineProps({
 		type: Boolean,
 		default: false,
 	},
+	label: {
+		type: String,
+		default: '',
+	},
 })
 
-const firstDOW = computed(() => {
-	// vue2-datepicker needs 7 for sunday
-	if (moment.localeData()._week.dow === 0) {
-		return 7
+const nativePickerType = computed(() => {
+	// date, datetime-local, month, time, week
+	if (props.useTime) {
+		return 'datetime-local'
 	}
-	return moment.localeData()._week.dow
+	return 'date'
 })
-
-const formatLocale = computed(() => ({
-	firstDayOfWeek: firstDOW.value,
-	months: moment.months(),
-	monthsShort: moment.monthsShort(),
-	weekdays: moment.weekdays(),
-	weekdaysMin: moment.weekdaysMin(),
-}))
-
-const datePickerOptions = computed(() => ({
-	type: 'datetime',
-	showTimePanel: false,
-	appendToBody: true,
-	editable: true,
-	format: moment.localeData().longDateFormat('L'),
-	placeholder: moment.localeData().longDateFormat('L'),
-	lang: {
-		formatLocale,
-	},
-}))
-
-const timePickerOptions = computed(() => ({
-	type: 'time',
-	editable: true,
-	minuteStep: 15,
-	appendToBody: true,
-	showSecond: false,
-	format: moment.localeData().longDateFormat('LT'),
-	placeholder: moment.localeData().longDateFormat('LT'),
-	lang: {
-		formatLocale,
-	},
-}))
 
 function previousDay() {
 	if (model.value) {
@@ -96,88 +58,36 @@ function nextDay() {
 
 <template>
 	<div class="date-time-picker">
-		<slot name="label" />
-		<div class="picker-wrapper">
-			<slot name="icon" />
-
-			<div class="picker-input">
-				<NcButton
-					v-if="props.useDayButtons"
-					:title="t('polls', 'Previous day')"
-					:type="ButtonType.TertiaryNoBackground"
-					@click="previousDay">
-					<template #icon>
-						<ChevronLeftIcon />
-					</template>
-				</NcButton>
-				<NcDateTimePicker
-					v-model="model"
-					v-bind="datePickerOptions"
-					class="date-picker"
-					:aria-label="t('polls', 'Enter a date')" />
-				<NcButton
-					v-if="props.useDayButtons"
-					:title="t('polls', 'Next day')"
-					:type="ButtonType.TertiaryNoBackground"
-					@click="nextDay">
-					<template #icon>
-						<ChevronRightIcon />
-					</template>
-				</NcButton>
-				<div class="time-picker">
-					<NcCheckboxRadioSwitch
-						v-if="props.selectTime"
-						v-model="timeSelected"
-						:aria-label="t('polls', 'Select a time')" />
-
-					<NcDateTimePicker
-						v-if="props.useTime || props.selectTime"
-						v-model="model"
-						:disabled="props.selectTime && !timeSelected"
-						v-bind="timePickerOptions"
-						:aria-label="t('polls', 'Enter a time')" />
-				</div>
-			</div>
-		</div>
-
-		<slot name="helper" class="helper" />
+		<NcButton
+			v-if="props.useDayButtons"
+			:title="t('polls', 'Previous day')"
+			:type="ButtonType.TertiaryNoBackground"
+			@click="previousDay">
+			<template #icon>
+				<ChevronLeftIcon />
+			</template>
+		</NcButton>
+		<NcDateTimePickerNative
+			v-model="model"
+			:label="label"
+			:type="nativePickerType" />
+		<NcButton
+			v-if="props.useDayButtons"
+			:title="t('polls', 'Next day')"
+			:type="ButtonType.TertiaryNoBackground"
+			@click="nextDay">
+			<template #icon>
+				<ChevronRightIcon />
+			</template>
+		</NcButton>
 	</div>
 </template>
 
 <style lang="scss" scoped>
-.helper {
-	min-height: 1.5rem;
-	font-size: 0.8em;
-	opacity: 0.8;
-	&.error {
-		opacity: 1;
-		color: var(--color-error);
-	}
-}
-
-.picker-wrapper {
-	display: flex;
-	.checkbox-radio-switch-checkbox {
-		flex: 0 0 auto;
-	}
-}
-
-.picker-input {
+.date-time-picker {
 	display: flex;
 	flex-wrap: wrap;
 	column-gap: 0.25rem;
+	align-items: end;
 }
-
-.time-picker {
-	display: flex;
-	align-items: center;
-}
-// .mx-datepicker {
-// 	&.date-picker {
-// 		max-width: 9rem;
-// 	}
-// 	&.time-picker {
-// 		max-width: 6.5rem;
-// 	}
-// }
 </style>
