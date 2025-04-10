@@ -38,12 +38,12 @@ const props = defineProps({
 	<Component
 		:is="tag"
 		:class="[
-			'option-item', {
+			'option-item',
+			{
 				draggable: props.draggable,
 				deleted: props.option.deleted !== 0,
-			}
+			},
 		]">
-
 		<DragIcon v-if="props.draggable" />
 
 		<slot name="icon" />
