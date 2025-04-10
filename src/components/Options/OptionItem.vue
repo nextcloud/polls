@@ -37,12 +37,14 @@ const props = defineProps({
 <template>
 	<Component
 		:is="tag"
-		class="option-item"
-		:class="{
-			draggable: props.draggable,
-			deleted: props.option.deleted !== 0,
-		}">
-		<DragIcon v-if="props.draggable" :class="{ draggable: props.draggable }" />
+		:class="[
+			'option-item', {
+				draggable: props.draggable,
+				deleted: props.option.deleted !== 0,
+			}
+		]">
+
+		<DragIcon v-if="props.draggable" />
 
 		<slot name="icon" />
 
@@ -105,9 +107,14 @@ const props = defineProps({
 }
 
 .draggable {
-	cursor: grab;
+	* {
+		cursor: grab;
+	}
+
 	&:active {
-		cursor: grabbing;
+		* {
+			cursor: grabbing;
+		}
 		cursor: -moz-grabbing;
 		cursor: -webkit-grabbing;
 	}
