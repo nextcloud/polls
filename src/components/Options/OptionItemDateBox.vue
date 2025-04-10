@@ -31,9 +31,9 @@ const eventOption = computed(
 		// then we have a day long event (one or multiple days)
 		// In this case we want to suppress the display of any time information
 		const dayLongEvent =
-			from.unix() === moment(from).startOf('day').unix() &&
-			to.unix() === moment(to).startOf('day').unix() &&
-			from.unix() !== to.unix()
+			from.unix() === moment(from).startOf('day').unix()
+			&& to.unix() === moment(to).startOf('day').unix()
+			&& from.unix() !== to.unix()
 
 		const dayModifier = dayLongEvent ? 1 : 0
 		// modified to date, in case of day long events, a second gets substracted
@@ -123,9 +123,9 @@ const dateLocalFormat = computed(() => {
 					{{ eventOption.from.time }}
 					<span
 						v-if="
-							!eventOption.dayLong &&
-							option.duration &&
-							eventOption.to.sameDay
+							!eventOption.dayLong
+							&& option.duration
+							&& eventOption.to.sameDay
 						">
 						- {{ eventOption.to.time }}
 					</span>

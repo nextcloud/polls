@@ -150,9 +150,9 @@ export const useSessionStore = defineStore('session', {
 	getters: {
 		watchEnabled(): boolean {
 			return (
-				!this.watcher.blockWatch &&
-				this.appSettings.updateType !== UpdateType.NoPolling &&
-				this.watcher.retryCounter < MAX_TRIES
+				!this.watcher.blockWatch
+				&& this.appSettings.updateType !== UpdateType.NoPolling
+				&& this.watcher.retryCounter < MAX_TRIES
 			)
 		},
 

@@ -57,8 +57,8 @@ export const useVotesStore = defineStore('votes', {
 		getVote(payload: { user: User; option: Option }): Vote {
 			const found = this.list.find(
 				(vote: Vote) =>
-					vote.user.id === payload.user.id &&
-					vote.optionText === payload.option.text,
+					vote.user.id === payload.user.id
+					&& vote.optionText === payload.option.text,
 			)
 			if (found === undefined) {
 				return {
@@ -107,9 +107,9 @@ export const useVotesStore = defineStore('votes', {
 		setItem(payload: { option: Option; vote: Vote }) {
 			const index = this.list.findIndex(
 				(vote: Vote) =>
-					vote.pollId === payload.option.pollId &&
-					vote.user.id === payload.vote.user.id &&
-					vote.optionText === payload.option.text,
+					vote.pollId === payload.option.pollId
+					&& vote.user.id === payload.vote.user.id
+					&& vote.optionText === payload.option.text,
 			)
 			if (index > -1) {
 				this.list[index] = Object.assign(this.list[index], payload.vote)

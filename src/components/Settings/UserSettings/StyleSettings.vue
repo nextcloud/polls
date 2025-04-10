@@ -62,14 +62,6 @@ const preferencesStore = usePreferencesStore()
 		</div>
 		<div class="user_settings">
 			<NcCheckboxRadioSwitch
-				v-model="preferencesStore.user.useNewAddOption"
-				type="switch"
-				@update:model-value="preferencesStore.write()">
-				{{ t('polls', 'Use alternative option add dialog') }}
-			</NcCheckboxRadioSwitch>
-		</div>
-		<div class="user_settings">
-			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.useCardsArrangement"
 				type="switch"
 				@update:model-value="preferencesStore.write()">

@@ -246,9 +246,9 @@ export const usePollStore = defineStore('poll', {
 				!participants.find(
 					(participant: User) =>
 						participant.id === sessionStore.currentUser?.id,
-				) &&
-				sessionStore.currentUser?.id &&
-				state.permissions.vote
+				)
+				&& sessionStore.currentUser?.id
+				&& state.permissions.vote
 			) {
 				participants.push(sessionStore.currentUser)
 			}
@@ -289,9 +289,9 @@ export const usePollStore = defineStore('poll', {
 
 		displayResults(state): boolean {
 			return (
-				state.configuration.showResults === ShowResults.Always ||
-				(state.configuration.showResults === ShowResults.Closed &&
-					!this.status.isExpired)
+				state.configuration.showResults === ShowResults.Always
+				|| (state.configuration.showResults === ShowResults.Closed
+					&& !this.status.isExpired)
 			)
 		},
 
@@ -301,8 +301,8 @@ export const usePollStore = defineStore('poll', {
 
 		isProposalAllowed(state): boolean {
 			return (
-				state.configuration.allowProposals === AllowProposals.Allow ||
-				state.configuration.allowProposals === AllowProposals.Review
+				state.configuration.allowProposals === AllowProposals.Allow
+				|| state.configuration.allowProposals === AllowProposals.Review
 			)
 		},
 
@@ -316,9 +316,9 @@ export const usePollStore = defineStore('poll', {
 
 		isProposalExpired(state): boolean {
 			return (
-				this.isProposalAllowed &&
-				state.configuration.proposalsExpire > 0 &&
-				moment.unix(state.configuration.proposalsExpire).diff() < 0
+				this.isProposalAllowed
+				&& state.configuration.proposalsExpire > 0
+				&& moment.unix(state.configuration.proposalsExpire).diff() < 0
 			)
 		},
 
@@ -336,17 +336,17 @@ export const usePollStore = defineStore('poll', {
 
 		isClosed(state): boolean {
 			return (
-				state.status.isExpired ||
-				(state.configuration.expire > 0 &&
-					moment.unix(state.configuration.expire).diff() < 1000)
+				state.status.isExpired
+				|| (state.configuration.expire > 0
+					&& moment.unix(state.configuration.expire).diff() < 1000)
 			)
 		},
 
 		getSafeTable(state): boolean {
 			const preferencesStore = usePreferencesStore()
 			return (
-				!state.revealParticipants &&
-				this.countCells > preferencesStore.user.performanceThreshold
+				!state.revealParticipants
+				&& this.countCells > preferencesStore.user.performanceThreshold
 			)
 		},
 

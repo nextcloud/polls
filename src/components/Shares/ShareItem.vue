@@ -66,19 +66,19 @@ const isActivePublicShare = computed(
 )
 const activateResendInvitation = computed(
 	() =>
-		!props.share.deleted &&
-		(props.share.user.emailAddress || props.share.type === ShareType.Group),
+		!props.share.deleted
+		&& (props.share.user.emailAddress || props.share.type === ShareType.Group),
 )
 const activateResolveGroup = computed(
 	() =>
-		!props.share.deleted &&
-		[ShareType.ContactGroup, ShareType.Circle].includes(props.share.type),
+		!props.share.deleted
+		&& [ShareType.ContactGroup, ShareType.Circle].includes(props.share.type),
 )
 const activateSwitchAdmin = computed(
 	() =>
-		!props.share.deleted &&
-		(props.share.type === ShareType.User ||
-			props.share.type === ShareType.Admin),
+		!props.share.deleted
+		&& (props.share.type === ShareType.User
+			|| props.share.type === ShareType.Admin),
 )
 const activateCopyLink = computed(() => !props.share.deleted)
 const activateShowQr = computed(() => !props.share.deleted && !!props.share.URL)
@@ -155,9 +155,9 @@ async function resolveGroup(share: Share) {
 		await sharesStore.resolveGroup({ share })
 	} catch (error) {
 		if (
-			(error as AxiosError).response?.status === 409 &&
-			(error as AxiosError).response?.data ===
-				'Circles is not enabled for this user'
+			(error as AxiosError).response?.status === 409
+			&& (error as AxiosError).response?.data
+				=== 'Circles is not enabled for this user'
 		) {
 			showError(
 				t(
@@ -167,8 +167,8 @@ async function resolveGroup(share: Share) {
 				),
 			)
 		} else if (
-			(error as AxiosError).response?.status === 409 &&
-			(error as AxiosError).response?.data === 'Contacts is not enabled'
+			(error as AxiosError).response?.status === 409
+			&& (error as AxiosError).response?.data === 'Contacts is not enabled'
 		) {
 			showError(
 				t(

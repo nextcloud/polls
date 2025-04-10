@@ -23,9 +23,9 @@ const sharesStore = useSharesStore()
 
 const isNoAccessSet = computed(
 	() =>
-		pollStore.configuration.access === AccessType.Private &&
-		!sharesStore.hasShares &&
-		pollStore.permissions.edit,
+		pollStore.configuration.access === AccessType.Private
+		&& !sharesStore.hasShares
+		&& pollStore.permissions.edit,
 )
 
 const subTexts = computed(() => {
@@ -134,9 +134,9 @@ const dateCreatedRelative = computed(() =>
 
 const closeToClosing = computed(
 	() =>
-		!pollStore.isClosed &&
-		pollStore.configuration.expire &&
-		moment.unix(pollStore.configuration.expire).diff() < 86400000,
+		!pollStore.isClosed
+		&& pollStore.configuration.expire
+		&& moment.unix(pollStore.configuration.expire).diff() < 86400000,
 )
 
 const timeExpirationRelative = computed(() => {

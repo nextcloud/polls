@@ -32,10 +32,10 @@ const props = withDefaults(defineProps<Props>(), {
 
 const isVotable = computed(
 	() =>
-		isActive.value &&
-		isValidUser.value &&
-		!pollStore.isClosed &&
-		!props.option.locked,
+		isActive.value
+		&& isValidUser.value
+		&& !pollStore.isClosed
+		&& !props.option.locked,
 )
 
 const isActive = computed(() => isCurrentUser.value && pollStore.permissions.vote)
@@ -67,8 +67,8 @@ const nextAnswer = computed(() => {
 		return pollStore.answerSequence[1]
 	}
 	return pollStore.answerSequence[
-		(pollStore.answerSequence.indexOf(answer.value) + 1) %
-			pollStore.answerSequence.length
+		(pollStore.answerSequence.indexOf(answer.value) + 1)
+			% pollStore.answerSequence.length
 	]
 })
 

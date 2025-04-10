@@ -53,9 +53,9 @@ const detectAllDay = computed(() => {
 		props.option.timestamp + Math.max(0, props.option.duration),
 	)
 	const dayLongEvent =
-		from.unix() === moment(from).startOf('day').unix() &&
-		to.unix() === moment(to).startOf('day').unix() &&
-		from.unix() !== to.unix()
+		from.unix() === moment(from).startOf('day').unix()
+		&& to.unix() === moment(to).startOf('day').unix()
+		&& from.unix() !== to.unix()
 	return {
 		allDay: dayLongEvent,
 		type: dayLongEvent ? 'date' : 'dateTime',

@@ -44,17 +44,17 @@ const saveCookie = ref(true)
 
 const registrationIsValid = computed(
 	() =>
-		checkStatus.value.userName === SignalingType.Valid &&
-		(checkStatus.value.email === SignalingType.Valid ||
-			(emailAddress.value.length === 0 &&
-				sessionStore.share.publicPollEmail !==
-					PublicPollEmailConditions.Mandatory)),
+		checkStatus.value.userName === SignalingType.Valid
+		&& (checkStatus.value.email === SignalingType.Valid
+			|| (emailAddress.value.length === 0
+				&& sessionStore.share.publicPollEmail
+					!== PublicPollEmailConditions.Mandatory)),
 )
 const disableSubmit = computed(
 	() =>
-		!registrationIsValid.value ||
-		checkStatus.value.userName === SignalingType.Checking ||
-		sendRegistration.value,
+		!registrationIsValid.value
+		|| checkStatus.value.userName === SignalingType.Checking
+		|| sendRegistration.value,
 )
 const emailGeneratedStatus = computed(() =>
 	checkStatus.value.email === SignalingType.Empty
@@ -240,8 +240,8 @@ async function submitRegistration(): Promise<void> {
 		routeToPersonalShare(response.data.share.token)
 
 		if (
-			sessionStore.currentUser.emailAddress &&
-			!sessionStore.share.invitationSent
+			sessionStore.currentUser.emailAddress
+			&& !sessionStore.share.invitationSent
 		) {
 			showError(
 				t('polls', 'Email could not be sent to {emailAddress}', {
@@ -278,15 +278,15 @@ async function submitRegistration(): Promise<void> {
 
 				<InputDiv
 					v-if="
-						sessionStore.share.publicPollEmail !==
-						PublicPollEmailConditions.Disabled
+						sessionStore.share.publicPollEmail
+						!== PublicPollEmailConditions.Disabled
 					"
 					v-model="emailAddress"
 					class="section__email"
 					:signaling-class="checkStatus.email"
 					:placeholder="
-						sessionStore.share.publicPollEmail ===
-						PublicPollEmailConditions.Mandatory
+						sessionStore.share.publicPollEmail
+						=== PublicPollEmailConditions.Mandatory
 							? t('polls', 'Email address (mandatory)')
 							: t('polls', 'Email address (optional)')
 					"

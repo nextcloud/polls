@@ -10,7 +10,6 @@ import { t } from '@nextcloud/l10n'
 
 import { useOptionsStore } from '../../stores/options.ts'
 import { PollType, usePollStore } from '../../stores/poll.ts'
-import { usePreferencesStore } from '../../stores/preferences.ts'
 
 import { ConfigBox } from '../Base/index.ts'
 import OptionsDate from '../Options/OptionsDate.vue'
@@ -21,14 +20,12 @@ import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 import DateOptionsIcon from 'vue-material-design-icons/CalendarMonth.vue'
 import ShiftDateIcon from 'vue-material-design-icons/CalendarStart.vue'
 import TextOptionsIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import OptionsDateAdd from '../Options/OptionsDateAdd.vue'
 import OptionsTextAddBulk from '../Options/OptionsTextAddBulk.vue'
 import ActionAddOption from '../Actions/modules/ActionAddOption.vue'
 import { Event } from '../../Types/index.ts'
 
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
-const preferencesStore = usePreferencesStore()
 
 const configBoxProps = {
 	delegatedAdminHint: {
@@ -46,12 +43,6 @@ const configBoxProps = {
 	textOptions: {
 		name: t('polls', 'Available Options'),
 	},
-}
-
-const OptionsAddModalDatesProps = {
-	caption: t('polls', 'Add a date'),
-	showCaption: true,
-	primary: true,
 }
 
 onMounted(() => {
@@ -77,9 +68,9 @@ onUnmounted(() => {
 
 		<ConfigBox
 			v-if="
-				pollStore.type === PollType.Date &&
-				optionsStore.list.length &&
-				!pollStore.isClosed
+				pollStore.type === PollType.Date
+				&& optionsStore.list.length
+				&& !pollStore.isClosed
 			"
 			v-bind="configBoxProps.shiftDate">
 			<template #icon>
@@ -98,10 +89,7 @@ onUnmounted(() => {
 			<OptionsDate />
 
 			<template v-if="!pollStore.isClosed" #actions>
-				<ActionAddOption
-					v-if="preferencesStore.user.useNewAddOption"
-					:caption="t('polls', 'Add a date')" />
-				<OptionsDateAdd v-else v-bind="OptionsAddModalDatesProps" />
+				<ActionAddOption :caption="t('polls', 'Add a date')" />
 			</template>
 		</ConfigBox>
 

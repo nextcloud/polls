@@ -49,8 +49,8 @@ const voteYes = ref(true)
 const fromInput = ref(
 	new Date(
 		new Date().setMinutes(
-			Math.ceil((new Date().getMinutes() / 60) * (60 / timeStepMinutes)) *
-				timeStepMinutes,
+			Math.ceil((new Date().getMinutes() / 60) * (60 / timeStepMinutes))
+				* timeStepMinutes,
 			0,
 			0,
 		),
@@ -167,8 +167,8 @@ function resetduratonUnits(): void {
 	if (allDay.value) {
 		// change date units, when switching from time based to all day, since minutes and hours are not valid anymore
 		if (
-			durationInput.value.unit.id === DateUnitKeys.Minute ||
-			durationInput.value.unit.id === DateUnitKeys.Hour
+			durationInput.value.unit.id === DateUnitKeys.Minute
+			|| durationInput.value.unit.id === DateUnitKeys.Hour
 		) {
 			durationInput.value.unit = dateTimeUnitsKeyed[DateUnitKeys.Day]
 		}
@@ -222,7 +222,9 @@ async function addOption(): Promise<void> {
 				<DateTimePicker
 					v-model="fromInput"
 					use-day-buttons
-					:use-time="!allDay" />
+					hide-label
+					:label="t('polls', 'Add a new date/time')"
+					:type="allDay ? 'date' : 'datetime-local'" />
 			</div>
 
 			<div class="selection duration">
@@ -406,6 +408,9 @@ async function addOption(): Promise<void> {
 				min-width: 11rem;
 			}
 		}
+		.date-time-picker {
+			column-gap: inherit;
+		}
 
 		&.repetition {
 			border-radius: var(--border-radius-container-large);
@@ -413,15 +418,6 @@ async function addOption(): Promise<void> {
 			padding: 1rem 1rem;
 		}
 	}
-	.mx-datepicker {
-		max-width: 11rem;
-	}
-
-	.mx-datepicker-main.mx-datepicker-popup {
-	// TODO: Hack to force the date picker to be on top of the modal
-		z-index: 20000;
-	}
-
 }
 
 .select-duration {
@@ -525,5 +521,4 @@ async function addOption(): Promise<void> {
 		text-wrap: nowrap;
 	}
 }
-
 </style>
