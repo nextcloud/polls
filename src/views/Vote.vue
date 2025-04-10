@@ -197,10 +197,6 @@ onUnmounted(() => {
 	box-shadow: 6px 6px 6px var(--color-box-shadow);
 }
 
-.area__proposal .mx-input-wrapper > button {
-	width: initial;
-}
-
 .icon.icon-settings.active {
 	display: block;
 	width: 44px;
