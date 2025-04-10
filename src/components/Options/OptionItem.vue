@@ -109,12 +109,12 @@ const props = defineProps({
 .draggable {
 	* {
 		cursor: grab;
+		&:active {
+			cursor: grabbing;
+		}
 	}
 
 	&:active {
-		* {
-			cursor: grabbing;
-		}
 		cursor: -moz-grabbing;
 		cursor: -webkit-grabbing;
 	}
