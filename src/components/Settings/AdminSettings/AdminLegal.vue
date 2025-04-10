@@ -46,7 +46,7 @@ const placeholder = computed(() => {
 			{{
 				t(
 					'polls',
-					'If you want to use diferent terms for public polls, enter them below.',
+					'If you want to use different terms for public polls, enter them below.',
 				)
 			}}
 		</p>
