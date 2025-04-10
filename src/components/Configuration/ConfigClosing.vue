@@ -75,7 +75,6 @@ function clickToggleClosed() {
 		<DateTimePicker
 			v-show="useExpire && !pollStore.isClosed"
 			v-model="expire"
-			use-time
-			use-native-picker />
+			type="datetime-local" />
 	</div>
 </template>

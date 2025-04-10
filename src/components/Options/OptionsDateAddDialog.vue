@@ -222,7 +222,9 @@ async function addOption(): Promise<void> {
 				<DateTimePicker
 					v-model="fromInput"
 					use-day-buttons
-					:use-time="!allDay" />
+					hide-label
+					:label="t('polls', 'Add a new date/time')"
+					:type="allDay ? 'date' : 'datetime-local'" />
 			</div>
 
 			<div class="selection duration">

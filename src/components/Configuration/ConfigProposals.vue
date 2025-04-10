@@ -62,6 +62,6 @@ const proposalExpiration = computed({
 		<DateTimePicker
 			v-show="proposalExpiration && pollStore.isProposalAllowed"
 			v-model="pollExpire"
-			use-time />
+			type="datetime-local" />
 	</div>
 </template>
