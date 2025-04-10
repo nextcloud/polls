@@ -5,14 +5,12 @@
 
 <script setup lang="ts">
 import { CardDiv } from '../../Base/index.ts'
-import OptionProposals from '../../Options/OptionProposals.vue'
 import { t } from '@nextcloud/l10n'
 import { usePollStore, PollType } from '../../../stores/poll.ts'
 import ActionAddOption from '../../Actions/modules/ActionAddOption.vue'
-import { usePreferencesStore } from '../../../stores/preferences.ts'
+import OptionsTextAdd from '../../Options/OptionsTextAdd.vue'
 
 const pollStore = usePollStore()
-const preferencesStore = usePreferencesStore()
 const cardType = 'info'
 
 const optionAddDatesModalProps = {
@@ -32,12 +30,14 @@ const optionAddDatesModalProps = {
 				})
 			}}
 		</p>
-		<OptionProposals v-if="pollStore.type === PollType.Text" />
+
+		<OptionsTextAdd
+			v-if="pollStore.type === PollType.Text"
+			:placeholder="t('polls', 'Propose an option')" />
+
 		<template v-if="pollStore.type === PollType.Date" #button>
-			<ActionAddOption
-				v-if="preferencesStore.user.useNewAddOption"
-				v-bind="optionAddDatesModalProps" />
-			<OptionProposals v-else />
+			<ActionAddOption v-bind="optionAddDatesModalProps" />
 		</template>
+
 	</CardDiv>
 </template>
