@@ -20,11 +20,6 @@
 	position: relative !important;
 }
 
-// fill full input with background color
-.mx-input {
-	background-clip: initial !important;
-}
-
 .app-sidebar {
 	top: 0 !important;
 }
@@ -32,14 +27,6 @@
 .action-item.action-item--single.app-navigation-toggle.undefined.has-tooltip {
 	top: 4px;
 	margin-right: -50px;
-}
-
-.mx-input-wrapper .button-vue--vue-primary .material-design-icon__svg {
-	fill: var(--color-primary-element-text);
-}
-
-.mx-datepicker-main .checkbox-radio-switch--checked svg {
-	fill: var(--color-primary-element);
 }
 
 // force scrolling of sidebar-tabs content
