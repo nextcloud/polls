@@ -2,7 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Опитування",
-    "Circle" : "Коло",
+    "Team" : "Команда",
     "Contact group" : "Групи",
     "Group" : "Група",
     "This email is sent to you to inform you about the result of a poll you participated in. At least your name or your email address was recorded in this poll. If you want to be removed from this poll, contact the site administrator or the poll initiator, where the mail is sent from." : "Вам надіслано цей лист, щоб поінформувати вас про результати опитування, в якому ви взяли участть. Щонайменше дані про ваше ім'я або адресу електронної пошти було збережено у цьому опитуванні. Якщо ви бажаєте, аби ци дані було видалено, зверніться до адміністратора опитування або його ініціатора, від імені якого надійшов лист.",
@@ -28,7 +28,6 @@ OC.L10N.register(
     "No valid email address" : "Відсутня дійсна адреса електронної пошти",
     "Unknown error" : "Невідома помилка",
     "Previous day" : "Вчора",
-    "Enter a date" : "Зазначте дату",
     "Next day" : "Завтра",
     "Conflict" : "Конфлікт",
     "Add" : "Додати",

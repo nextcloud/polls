@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Poll changes" : "שינויים בסקר",
     "Polls" : "סקרים",
-    "Circle" : "מעגל",
     "Group" : "קבוצה",
     "Poll invitation \"%s\"" : "הזמנה לסקר „%s”",
     "{owner} invited you to take part in the poll \"{title}\"" : "הוזמנת על ידי {owner} להשתתף בסקר „{title}”",
@@ -23,7 +22,6 @@ OC.L10N.register(
     "Register" : "רישום",
     "Unknown error" : "שגיאה בלתי ידועה",
     "Previous day" : "יום לאחור",
-    "Enter a date" : "נא למלא תאריך",
     "Next day" : "היום הבא",
     "Conflict" : "התנגשות",
     "Add" : "הוספה",

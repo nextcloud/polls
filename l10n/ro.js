@@ -2,7 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Voturi",
-    "Circle" : "Cerc",
+    "Team" : "Echipă",
     "Group" : "Grup",
     "%s has left a comment." : "%s a lăsat un comentariu.",
     "Contact" : "Contact",
@@ -11,7 +11,6 @@ OC.L10N.register(
     "Register" : "Înregistrează-te",
     "Unknown error" : "Eroare necunoscută",
     "Previous day" : "Ziua anterioară",
-    "Enter a date" : "Introdu data",
     "Next day" : "Ziua următoare",
     "Conflict" : "Conflict",
     "Add" : "Adaugă",

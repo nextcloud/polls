@@ -1,6 +1,5 @@
 { "translations": {
     "Polls" : "Enketilo",
-    "Circle" : "Rondo",
     "Group" : "Grupo",
     "Go to poll" : "Iri al enketo",
     "Legal Notice" : "Atentigo pri kopirajto",
@@ -11,7 +10,6 @@
     "Delete" : "Forigi",
     "Register" : "Registriĝi",
     "Unknown error" : "Nekonata eraro",
-    "Enter a date" : "Entajpu daton",
     "Conflict" : "Konflikto",
     "Add" : "Aldoni",
     "New comment …" : "Nova komento...",

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Circle" : "Loks",
     "Group" : "Grupa",
     "Privacy Policy" : "Privātuma politika",
     "Contact" : "Kontakts",
@@ -11,7 +10,6 @@ OC.L10N.register(
     "Delete" : "Dzēst",
     "Unknown error" : "Nezināma kļūda",
     "Previous day" : "Iepriekšējā diena",
-    "Enter a date" : "Ievadiet datumu",
     "Next day" : "Nākamā diena",
     "Conflict" : "Konflikts",
     "Add" : "Pievienot",

@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Enketilo",
-    "Circle" : "Rondo",
     "Group" : "Grupo",
     "Go to poll" : "Iri al enketo",
     "Legal Notice" : "Atentigo pri kopirajto",
@@ -13,7 +12,6 @@ OC.L10N.register(
     "Delete" : "Forigi",
     "Register" : "Registriĝi",
     "Unknown error" : "Nekonata eraro",
-    "Enter a date" : "Entajpu daton",
     "Conflict" : "Konflikto",
     "Add" : "Aldoni",
     "New comment …" : "Nova komento...",
