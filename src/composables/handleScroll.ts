@@ -16,7 +16,8 @@ export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 	const scrollElement = ref<null | HTMLElement>(null)
 
 	/**
-	 *
+	 * return the scrollTop value of the element, if scrollTop is greater than offset
+	 * otherwise return 0
 	 */
 	function handleScroll() {
 		if (scrollElement.value !== null && scrollElement.value.scrollTop > offset) {
