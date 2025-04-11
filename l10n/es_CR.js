@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Encuestas",
-    "Circle" : "Círculo",
     "Group" : "Grupo",
     "Legal Notice" : "Aviso legal",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",

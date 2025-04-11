@@ -1,5 +1,4 @@
 { "translations": {
-    "Circle" : "Loks",
     "Group" : "Grupa",
     "Privacy Policy" : "Privātuma politika",
     "Contact" : "Kontakts",
@@ -9,7 +8,6 @@
     "Delete" : "Dzēst",
     "Unknown error" : "Nezināma kļūda",
     "Previous day" : "Iepriekšējā diena",
-    "Enter a date" : "Ievadiet datumu",
     "Next day" : "Nākamā diena",
     "Conflict" : "Konflikts",
     "Add" : "Pievienot",

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Circle" : "Тойрог",
     "Group" : "Бүлэг",
     "User" : "Хэрэглэгч",
     "Delete" : "Устгах",

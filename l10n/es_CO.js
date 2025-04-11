@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Encuestas",
-    "Circle" : "Círculo",
     "Group" : "Grupo",
     "Poll invitation \"%s\"" : "\"%s\"  invitación de encuesta",
     "{owner} invited you to take part in the poll \"{title}\"" : "{owner} te ha invitado a participar en la encuesta: \"{title}\"",

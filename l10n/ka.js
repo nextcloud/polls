@@ -3,7 +3,6 @@ OC.L10N.register(
     {
     "Poll changes" : "Poll changes",
     "Polls" : "Polls",
-    "Circle" : "Circle",
     "Contact group" : "Contact group",
     "Group" : "Group",
     "Poll \"%s\" - Confirmation" : "Poll \"%s\" - Confirmation",
@@ -166,7 +165,6 @@ OC.L10N.register(
     "Register" : "Register",
     "Unknown error" : "Unknown error",
     "Previous day" : "Previous day",
-    "Enter a date" : "Enter a date",
     "Next day" : "Next day",
     "Conflict" : "Conflict",
     "Add" : "Add",

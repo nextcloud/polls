@@ -2,7 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Kannanir",
-    "Circle" : "Hringur",
+    "Team" : "Teymi",
     "Contact group" : "Tengiliðahópur",
     "Group" : "Hópur",
     "Poll invitation \"%s\"" : "Boð um þátttöku í könnuninni \"%s\"",
@@ -21,7 +21,6 @@ OC.L10N.register(
     "Unknown error" : "Óþekkt villa",
     "Toggle Sidebar" : "Víxla hliðarspjaldi af/á",
     "Previous day" : "Fyrri dagur",
-    "Enter a date" : "Settu inn dagsetningu",
     "Next day" : "Næsta dag",
     "Conflict" : "Stangast á",
     "Add" : "Bæta við",

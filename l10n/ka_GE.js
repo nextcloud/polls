@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "გამოკითხვები",
-    "Circle" : "წრე",
     "Group" : "ჯგუფი",
     "Legal Notice" : "იურიდიული ცნობა",
     "Polls App - New Activity" : "Polls აპლიკაცია - ახალი აქტივობა",

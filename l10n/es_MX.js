@@ -2,7 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Encuestas",
-    "Circle" : "Círculo",
+    "Team" : "Equipo",
     "Group" : "Grupo",
     "Legal Notice" : "Aviso legal",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
@@ -12,7 +12,6 @@ OC.L10N.register(
     "Register" : "Registrar",
     "Unknown error" : "Se presentó un error desconocido",
     "Previous day" : "Día anterior",
-    "Enter a date" : "Ingrese una fecha",
     "Next day" : "Próximo día",
     "Conflict" : "Conflicto",
     "Add" : "Agregar",

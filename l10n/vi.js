@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Circle" : "Vòng kết nối",
     "Group" : "N",
     "Legal Notice" : "Thông cáo pháp lý",
     "Contact" : "Liên hệ",
@@ -10,7 +9,6 @@ OC.L10N.register(
     "Register" : "Đăng ký",
     "Unknown error" : "Lỗi không xác định",
     "Previous day" : "Ngày trước",
-    "Enter a date" : "Nhập ngày",
     "Next day" : "Ngày hôm sau",
     "Conflict" : "Xung đột",
     "Add" : "Thêm",

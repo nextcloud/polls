@@ -8,7 +8,6 @@ OC.L10N.register(
     "Delete" : "Skrap",
     "Register" : "Registreer",
     "Unknown error" : "Onbekende fout",
-    "Enter a date" : "Voer ’n datum in",
     "Add" : "Voeg by",
     "New comment …" : "Nuwe kommentaar…",
     "Delete comment" : "Skrap kommentaar",

@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Circle" : "Sirkel",
     "Group" : "Gruppe",
     "Contact" : "Kontakt",
     "User" : "Bruker",
