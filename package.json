@@ -70,7 +70,7 @@
     "@types/luxon": "^3.6.2",
     "@types/qrcode": "^1.5.5",
     "@vue/tsconfig": "^0.7.0",
-    "eslint-config-prettier": "^10.0.1",
+    "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
     "prettier": "^3.2.5",
     "vite": "^6.2.6",
