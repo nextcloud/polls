@@ -13,6 +13,8 @@ import { onMounted, onUnmounted, ref } from 'vue'
  */
 export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 	const scrolled = ref(0)
+	const scrolledTop = ref(false)
+	const scrolledBottom = ref(false)
 	const scrollElement = ref<null | HTMLElement>(null)
 
 	/**
@@ -21,10 +23,24 @@ export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 	 */
 	function handleScroll() {
 		if (scrollElement.value !== null && scrollElement.value.scrollTop > offset) {
+			const scrollHeight = scrollElement.value.scrollHeight
+			const clientHeight = scrollElement.value.clientHeight
+
 			scrolled.value = scrollElement.value.scrollTop
+
+			if (scrollHeight - scrolled.value === clientHeight) {
+				scrolledBottom.value = true
+				scrolledTop.value = false
+			} else {
+				scrolledBottom.value = false
+				scrolledTop.value = true
+			}
 		} else {
+			scrolledBottom.value = false
+			scrolledTop.value = false
 			scrolled.value = 0
 		}
+
 	}
 
 	onMounted(() => {
@@ -45,5 +61,5 @@ export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 		if (scrollElement.value !== null)
 			scrollElement.value.removeEventListener('scroll', handleScroll)
 	})
-	return scrolled
+	return { scrolled, scrolledTop, scrolledBottom }
 }
