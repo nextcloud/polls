@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Poll changes" : "تغييرات في الاستبيان",
     "Polls" : "الاستبيانات",
+    "Team" : "الفريق",
     "Contact group" : "الاتصال بالمجموعة",
     "Group" : "الفريق",
     "Poll \"%s\" - Confirmation" : "استبيان \"%s\" - تأكيد",
