@@ -57,7 +57,6 @@ const computedTitle = computed(() =>
 
 const emit = defineEmits(['delete', 'restore'])
 
-
 function deleteItem(): void {
 	// delete immediately
 	if (props.timeout === 0) {
