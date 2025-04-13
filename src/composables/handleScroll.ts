@@ -40,7 +40,6 @@ export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 			scrolledTop.value = false
 			scrolled.value = 0
 		}
-
 	}
 
 	onMounted(() => {

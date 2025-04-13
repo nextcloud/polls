@@ -224,7 +224,11 @@ onMounted(() => {
 </script>
 
 <template>
-	<div :class="['input-div', { numeric: useNumModifiers || inputmode === 'numeric' }]">
+	<div
+		:class="[
+			'input-div',
+			{ numeric: useNumModifiers || inputmode === 'numeric' },
+		]">
 		<label v-if="label">
 			{{ label }}
 		</label>

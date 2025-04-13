@@ -21,7 +21,6 @@ export function useResizeObserver(elementId: string, elWidthOffset: number = 0) 
 		if (element.value) {
 			elWidth.value = element.value.clientWidth
 			isBelowWidthOffset.value = elWidth.value < elWidthOffset
-
 		} else {
 			elWidth.value = 0
 		}

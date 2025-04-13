@@ -220,9 +220,7 @@ async function addOption(): Promise<void> {
 		</NcCheckboxRadioSwitch>
 	</div>
 
-	<div
-		id="add-date-options-container"
-		class="add-container">
+	<div id="add-date-options-container" class="add-container">
 		<div class="select-container">
 			<div class="selection from">
 				<DateTimePicker
