@@ -75,7 +75,7 @@ const confirmationDialogProps = {
 		},
 		{
 			label: t('polls', 'Open poll now'),
-			type: ButtonVariant.Primary,
+			variant: ButtonVariant.Primary,
 			callback: () => {
 				router.push({
 					name: 'vote',
@@ -104,7 +104,7 @@ function addAnotherPoll() {
 		"
 		:modal-size="modalSize"
 		:button-mode="buttonMode"
-		:button-type="ButtonVariant.Primary">
+		:button-variant="ButtonVariant.Primary">
 		<template #icon>
 			<PlusIcon size="20" decorative />
 		</template>

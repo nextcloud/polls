@@ -30,7 +30,7 @@ defineProps({
 		type: String as PropType<ButtonMode>,
 		default: ButtonMode.Native,
 	},
-	ButtonVariant: {
+	buttonVariant: {
 		type: String as PropType<ButtonVariant>,
 		default: ButtonVariant.Primary,
 	},
@@ -57,7 +57,7 @@ defineProps({
 			@click="showModal = true" />
 		<NcButton
 			v-else-if="buttonMode === ButtonMode.Native"
-			:variant="ButtonVariant"
+			:variant="buttonVariant"
 			:aria-label="buttonCaption"
 			@click="showModal = true">
 			<template #icon>
