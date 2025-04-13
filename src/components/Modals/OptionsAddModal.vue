@@ -56,32 +56,25 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
+.modal-container__content {
+	padding: 3rem 1.6rem 1rem;
+}
+
 .screen-container {
 	display: flex;
 	flex-wrap: wrap;
 	column-gap: 1rem;
 	overflow: hidden;
-	padding-top: 3rem;
-	padding-bottom: 1rem;
 
 	h2 {
 		display: inline-block;
 	}
 
-	& > div {
-		// border-top: 1px solid;
-		// border-right: 1px solid;
-		// margin-top: -2px;
-		// margin-right: -2px;
-		padding: 0 1rem;
-	}
-
 	.edit-container {
 		flex: 2 1 22rem;
-		// max-width: 42rem;
 		> div {
 			background-color: var(--container-background-light);
-			padding: 0 1rem;
+			padding: 0 0.5rem;
 		}
 		> div:first-child {
 			border-radius: var(--border-radius-container-large)
@@ -91,21 +84,11 @@ onUnmounted(() => {
 			border-radius: 0 0 var(--border-radius-container-large)
 				var(--border-radius-container-large);
 		}
-		.header-container {
-			padding-top: 0;
-		}
-		// .preview-container {
-		// 	padding-top: 24px;
-		// }
 	}
 
 	.info-container {
 		flex: 1 0 10rem;
 		min-width: fit-content;
-		// max-width: 18rem;
-		.menu-wrapper {
-			flex: 0 44px;
-		}
 	}
 }
 </style>

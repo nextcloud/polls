@@ -224,7 +224,11 @@ onMounted(() => {
 </script>
 
 <template>
-	<div :class="['input-div', { numeric: useNumModifiers }]">
+	<div
+		:class="[
+			'input-div',
+			{ numeric: useNumModifiers || inputmode === 'numeric' },
+		]">
 		<label v-if="label">
 			{{ label }}
 		</label>
@@ -296,6 +300,7 @@ onMounted(() => {
 	--input-height: 44px;
 	position: relative;
 	margin-bottom: var(--default-grid-baseline);
+	display: block !important;
 
 	label {
 		display: block;
