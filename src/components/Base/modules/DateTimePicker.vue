@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { t } from '@nextcloud/l10n'
 import { DateTime } from 'luxon'
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import NcDateTimePickerNative from '@nextcloud/vue/components/NcDateTimePickerNative'
 
 import ChevronLeftIcon from 'vue-material-design-icons/ChevronLeft.vue'
