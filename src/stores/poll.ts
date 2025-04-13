@@ -34,6 +34,10 @@ export enum PollType {
 	Date = 'datePoll',
 }
 
+export enum VoteVariant {
+	Simple = 'simple',
+}
+
 export enum AccessType {
 	Private = 'private',
 	Open = 'open',
@@ -128,6 +132,7 @@ export type CurrentUserStatus = {
 export type Poll = {
 	id: number
 	type: PollType
+	voteVariant: VoteVariant
 	descriptionSafe: string
 	configuration: PollConfiguration
 	owner: User
@@ -146,6 +151,7 @@ export const usePollStore = defineStore('poll', {
 	state: (): Poll => ({
 		id: 0,
 		type: PollType.Date,
+		voteVariant: VoteVariant.Simple,
 		descriptionSafe: '',
 		configuration: {
 			title: '',
