@@ -127,7 +127,7 @@ const props = defineProps({
 		type: Number,
 		default: 16,
 	},
-	hideUserStatus: {
+	hideStatus: {
 		type: Boolean,
 		default: false,
 	},
@@ -249,7 +249,7 @@ const emailAddressComputed = computed(() => {
 	return ''
 })
 const showUserStatusComputed = computed(
-	() => !props.hideUserStatus && Boolean(getCurrentUser()),
+	() => props.hideStatus && Boolean(getCurrentUser()),
 )
 
 /**

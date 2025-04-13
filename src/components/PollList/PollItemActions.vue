@@ -20,7 +20,7 @@ import { usePollsStore } from '../../stores/polls.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { Poll } from '../../stores/poll.ts'
 import { computed, PropType, ref } from 'vue'
-import { ButtonType } from '@nextcloud/vue/components/NcButton'
+import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { NcDialog } from '@nextcloud/vue'
 
 const pollsStore = usePollsStore()
@@ -44,7 +44,7 @@ const deleteDialog = {
 		{ label: t('polls', 'Cancel') },
 		{
 			label: t('polls', 'OK'),
-			type: ButtonType.Primary,
+			type: ButtonVariant.Primary,
 			callback: () => {
 				deletePoll()
 			},
@@ -65,7 +65,7 @@ const takeOverDialog = {
 		{ label: t('polls', 'Cancel') },
 		{
 			label: t('polls', 'Ok'),
-			type: ButtonType.Primary,
+			type: ButtonVariant.Primary,
 			callback: () => {
 				takeOverPoll()
 			},
