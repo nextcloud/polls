@@ -5,3 +5,5 @@
 
 declare module 'vue-material-design-icons/*'
 declare module 'v-click-outside'
+// TODO: remove this when the package is fixed
+declare module '@nextcloud/dialogs'
