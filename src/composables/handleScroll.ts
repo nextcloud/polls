@@ -12,10 +12,10 @@ import { onMounted, onUnmounted, ref } from 'vue'
  * @param offset the offset in px that should be scrolled before returning the scroll value
  */
 export function useHandleScroll(scrollElementId: string, offset: number = 20) {
+	const scrollElement = ref<null | HTMLElement>(null)
 	const scrolled = ref(0)
 	const scrolledTop = ref(false)
 	const scrolledBottom = ref(false)
-	const scrollElement = ref<null | HTMLElement>(null)
 
 	/**
 	 * return the scrollTop value of the element, if scrollTop is greater than offset

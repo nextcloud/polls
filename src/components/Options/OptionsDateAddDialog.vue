@@ -29,6 +29,10 @@ import {
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { AxiosError } from '@nextcloud/axios'
 
+import { useResizeObserver } from '../../composables/elementWidth.ts'
+
+const { isBelowWidthOffset } = useResizeObserver('add-date-options-container', 355)
+
 const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
 
@@ -216,49 +220,55 @@ async function addOption(): Promise<void> {
 		</NcCheckboxRadioSwitch>
 	</div>
 
-	<div class="add-container">
+	<div
+		id="add-date-options-container"
+		class="add-container">
 		<div class="select-container">
 			<div class="selection from">
 				<DateTimePicker
 					v-model="fromInput"
-					use-day-buttons
+					:use-day-buttons="!isBelowWidthOffset"
 					hide-label
 					:label="t('polls', 'Add a new date/time')"
 					:type="allDay ? 'date' : 'datetime-local'" />
 			</div>
 
 			<div class="selection duration">
-				<div>
-					<InputDiv
-						v-model="durationInput.amount"
-						:label="t('polls', 'Duration')"
-						type="number"
-						inputmode="numeric"
-						:num-min="0"
-						use-num-modifiers />
-					<NcSelect
-						v-model="durationInput.unit"
-						class="time-unit"
-						:input-label="t('polls', 'Duration time unit')"
-						:clearable="false"
-						:filterable="false"
-						:options="allDay ? dateOnlyUnits : dateTimeUnits"
-						label="name" />
-				</div>
+				<InputDiv
+					v-model="durationInput.amount"
+					:label="t('polls', 'Duration')"
+					type="number"
+					inputmode="numeric"
+					:num-min="0"
+					:use-num-modifiers="!isBelowWidthOffset" />
+				<NcSelect
+					v-model="durationInput.unit"
+					class="time-unit"
+					:input-label="t('polls', 'Duration time unit')"
+					:clearable="false"
+					:filterable="false"
+					:options="allDay ? dateOnlyUnits : dateTimeUnits"
+					label="name" />
 			</div>
 
 			<div class="selection repetition">
-				<div class="set-repetition">
+				<InputDiv
+					v-model="sequenceInput.repetitions"
+					:label="t('polls', 'Repetitions')"
+					type="number"
+					inputmode="numeric"
+					:num-min="0"
+					:use-num-modifiers="!isBelowWidthOffset" />
+
+				<div v-if="sequenceInput.repetitions > 0" class="set-repetition">
 					<InputDiv
-						v-model="sequenceInput.repetitions"
-						:label="t('polls', 'Repetitions')"
+						v-model="sequenceInput.stepWidth"
+						:label="t('polls', 'Step width')"
 						type="number"
 						inputmode="numeric"
-						:num-min="0"
-						use-num-modifiers />
+						:use-num-modifiers="!isBelowWidthOffset" />
 
 					<NcSelect
-						v-if="sequenceInput.repetitions > 0"
 						v-model="sequenceInput.unit"
 						class="time-unit"
 						:input-label="t('polls', 'Step unit')"
@@ -266,14 +276,6 @@ async function addOption(): Promise<void> {
 						:filterable="false"
 						:options="dateTimeUnits"
 						label="name" />
-
-					<InputDiv
-						v-if="sequenceInput.repetitions > 0"
-						v-model="sequenceInput.stepWidth"
-						:label="t('polls', 'Step width')"
-						type="number"
-						inputmode="numeric"
-						use-num-modifiers />
 				</div>
 			</div>
 			<div>
@@ -367,10 +369,6 @@ async function addOption(): Promise<void> {
 </template>
 
 <style lang="scss">
-.modal-container__content {
-	padding: 0 24px;
-}
-
 .add-container {
 	display: flex;
 	flex-wrap: wrap-reverse;
@@ -396,26 +394,25 @@ async function addOption(): Promise<void> {
 	.selection {
 		display: flex;
 		flex-wrap: wrap;
+		column-gap: 1rem;
 		align-items: start;
 		padding: 0 1rem;
 		margin: 0.2rem 0;
-		> div {
-			flex: 1;
-			column-gap: 1rem;
-			display: flex;
-			flex-wrap: wrap;
-			.v-select.select.time-unit {
-				min-width: 11rem;
-			}
-		}
-		.date-time-picker {
-			column-gap: inherit;
+
+		.v-select.select.time-unit {
+			min-width: 11rem;
 		}
 
 		&.repetition {
 			border-radius: var(--border-radius-container-large);
 			background-color: rgb(from var(--color-background-darker) r g b / 0.6);
 			padding: 1rem 1rem;
+		}
+
+		.set-repetition {
+			display: flex;
+			column-gap: 1rem;
+			flex-wrap: wrap;
 		}
 	}
 }
