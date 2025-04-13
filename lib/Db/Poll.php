@@ -62,6 +62,8 @@ use OCP\IURLGenerator;
  * @method void setLastInteraction(int $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
+ * @method string getVotingVariant()
+ * @method void setVotingVariant(string $value)
  *
  * Magic functions for joined columns
  * @method int getMinDate()
@@ -81,6 +83,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_polls';
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
+	public const VARIANT_SIMPLE = 'simple';
 	public const ACCESS_HIDDEN = 'hidden';
 	public const ACCESS_PUBLIC = 'public';
 	public const ACCESS_PRIVATE = 'private';
@@ -157,6 +160,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $useNo = 0;
 	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
+	protected string $votingVariant = '';
 
 	// joined columns
 	protected ?int $isCurrentUserLocked = 0;
@@ -216,6 +220,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return [
 			'id' => $this->getId(),
 			'type' => $this->getType(),
+			'votingVariant' => $this->getVotingVariant(),
 			// editable settings
 			'configuration' => $this->getConfigurationArray(),
 			// read only properties

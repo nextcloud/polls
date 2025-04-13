@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\PollService;
@@ -78,8 +79,8 @@ class PollApiController extends BaseApiV2Controller {
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll', requirements: ['apiVersion' => '(v2)'])]
-	public function add(string $type, string $title): DataResponse {
-		return $this->responseCreate(fn () => ['poll' => $this->pollService->add($type, $title)]);
+	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): DataResponse {
+		return $this->responseCreate(fn () => ['poll' => $this->pollService->add($type, $title, $votingVariant)]);
 	}
 
 	/**
