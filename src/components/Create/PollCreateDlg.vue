@@ -14,7 +14,7 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.ts'
 
-import { PollType, usePollStore } from '../../stores/poll.ts'
+import { PollType, pollTypes, usePollStore } from '../../stores/poll.ts'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 
 const pollStore = usePollStore()
@@ -35,23 +35,14 @@ const pollType = ref(PollType.Date)
 const pollId = ref(null as number | null)
 const adding = ref(false)
 
-const pollTypeOptions = [
-	{
-		value: PollType.Date,
-		label: t('polls', 'Date poll'),
-	},
-	{
-		value: PollType.Text,
-		label: t('polls', 'Text poll'),
-	},
-]
+const pollTypeOptions = Object.entries(pollTypes).map(([key, value]) => ({
+	value: key,
+	label: value.name,
+}))
 
 const titleIsEmpty = computed(() => pollTitle.value === '')
 const disableAddButton = computed(() => titleIsEmpty.value || adding.value)
 
-/**
- *
- */
 async function addPoll() {
 	try {
 		// block the modal to prevent double submission
@@ -88,9 +79,6 @@ async function addPoll() {
 	}
 }
 
-/**
- *
- */
 function resetPoll() {
 	pollId.value = null
 	pollTitle.value = ''

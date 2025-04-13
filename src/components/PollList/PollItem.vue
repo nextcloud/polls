@@ -8,7 +8,7 @@ import { RouterLink } from 'vue-router'
 import { computed, PropType } from 'vue'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
-import { usePollStore, AccessType, Poll, PollType } from '../../stores/poll'
+import { usePollStore, AccessType, Poll, PollType, pollTypes } from '../../stores/poll'
 import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
 import { StatusResults } from '../../Types/index.ts'
 
@@ -47,13 +47,6 @@ const closeToClosing = computed(
 		&& moment.unix(props.poll.configuration.expire).diff() < 86400000,
 )
 
-const pollTypeName = computed(() => {
-	if (props.poll.type === PollType.Text) {
-		return t('polls', 'Text poll')
-	}
-	return t('polls', 'Date poll')
-})
-
 const timeExpirationRelative = computed(() => {
 	if (props.poll.configuration.expire) {
 		return moment.unix(props.poll.configuration.expire).fromNow()
@@ -87,8 +80,8 @@ const timeCreatedRelative = computed(() =>
 		<TextPollIcon
 			v-if="poll.type === PollType.Text"
 			class="item__type"
-			:title="pollTypeName" />
-		<DatePollIcon v-else class="item__type" :title="pollTypeName" />
+			:title="pollTypes[props.poll.type].name" />
+		<DatePollIcon v-else class="item__type" :title="pollTypes[props.poll.type].name" />
 
 		<div
 			v-if="noLink || !poll.permissions.view"

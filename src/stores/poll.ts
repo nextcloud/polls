@@ -34,6 +34,19 @@ export enum PollType {
 	Date = 'datePoll',
 }
 
+type PollTypesType = {
+	name: string
+}
+
+export const pollTypes: Record<PollType, PollTypesType> = {
+	[PollType.Text]: {
+		name: t('polls', 'Text poll'),
+	},
+	[PollType.Date]: {
+		name: t('polls', 'Date poll'),
+	},
+}
+
 export enum VoteVariant {
 	Simple = 'simple',
 }
