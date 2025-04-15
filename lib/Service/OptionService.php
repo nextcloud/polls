@@ -251,10 +251,6 @@ class OptionService {
 			return [];
 		}
 
-		if ($this->poll->getType() !== Poll::TYPE_DATE) {
-			throw new InvalidPollTypeException('Sequences are only available in date polls');
-		}
-
 		if ($optionOrOptionId instanceof Option) {
 			$baseOption = $optionOrOptionId;
 		} else {
@@ -262,6 +258,10 @@ class OptionService {
 		}
 
 		$this->getPoll($baseOption->getPollId(), Poll::PERMISSION_OPTION_ADD);
+
+		if ($this->poll->getType() !== Poll::TYPE_DATE) {
+			throw new InvalidPollTypeException('Sequences are only available in date polls');
+		}
 
 		$sequence->setTimeZone(new DateTimeZone($this->userSession->getClientTimeZone()));
 		$sequence->setBaseTimeStamp($baseOption->getTimestamp());
