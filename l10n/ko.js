@@ -6,6 +6,8 @@ OC.L10N.register(
     "Team" : "팀",
     "Contact group" : "연락처 그룹",
     "Group" : "그룹",
+    "Poll \"%s\" - Confirmation" : "투표 \"%s\" - 확인",
+    "{owner} wants to inform you about the final result of the poll \"{title}\"" : "{owner} 이 투표 \"{title}\" 의 최종 결과에 대하여 알리고자합니다.",
     "_Confirmed option:_::_Confirmed options:_" : ["확인된 옵션:"],
     "Do not share this link with other people, because it is connected to your votes." : "이 링크는 당신의 투표와 연결되어 있으므로 다른 사람과 공유하지 마시오.",
     "Poll invitation \"%s\"" : "투표 초대 \"%s\"",

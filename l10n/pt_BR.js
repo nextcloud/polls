@@ -228,7 +228,7 @@ OC.L10N.register(
     "Add another poll" : "Adicionar outra enquete",
     "Open poll now" : "Abrir enquete agora",
     "New poll" : "Nova enquete",
-    "Delete" : "Deletar",
+    "Delete" : "Excluir",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Excluir em {countdown} segundo","Excluindo em {countdown} segundos","Excluindo em {countdown} segundos"],
     "Delete orphaned" : "Excluir órfão",
     "Add some!" : "Adicione alguma!",
