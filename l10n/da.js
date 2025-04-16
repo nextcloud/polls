@@ -43,7 +43,7 @@ OC.L10N.register(
     "Archived" : "Arkiveret",
     "never" : "aldrig",
     "Private poll" : "Privat afstemning",
-    "Sort by title" : "Sorter efter titel",
+    "Sort by title" : "Sortér efter titel",
     "You will receive your personal link after clicking \"OK\"." : "Du modtager dit personlige link efter at have klikket på \"OK\".",
     "Privacy policy" : "Fortrolighedspolitik",
     "Login" : "Login",
