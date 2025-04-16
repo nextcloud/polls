@@ -48,6 +48,13 @@ export {
 
 export { Answer, AnswerSymbol, Vote, Votes } from '../stores/votes.ts'
 
+export {
+	DateTimeUnit,
+	DateTimeUnitType,
+	TimeUnitsType,
+	DurationType,
+} from '../constants/dateUnits.ts'
+
 export enum Event {
 	TransitionsOff = 'polls:transitions:off',
 	TransitionsOn = 'polls:transitions:on',

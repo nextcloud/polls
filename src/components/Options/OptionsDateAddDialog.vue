@@ -19,13 +19,8 @@ import DateBox from '../Base/modules/DateBox.vue'
 import { useSessionStore } from '../../stores/session'
 import { useOptionsStore, Sequence } from '../../stores/options'
 import { StatusResults } from '../../Types'
-import {
-	dateOnlyUnits,
-	dateTimeUnits,
-	DateUnitKeys,
-	DurationType,
-	dateTimeUnitsKeyed,
-} from '../../constants/dateUnits.ts'
+import { DurationType, dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
+
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { AxiosError } from '@nextcloud/axios'
 
@@ -41,6 +36,20 @@ const successColor = getComputedStyle(document.documentElement).getPropertyValue
 	'--color-success',
 )
 const result = ref(StatusResults.None)
+
+const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) => ({
+	id: key,
+	value: value.id,
+	name: value.name,
+	timeOption: value.timeOption,
+}))
+
+const dateTimeOptionsFiltered = computed(() => {
+	if (allDay.value) {
+		return dateTimeOptions.filter((unit) => !unit.timeOption)
+	}
+	return dateTimeOptions
+})
 
 // *** refs for the inputs
 // allDay is a boolean to toggle between all day and time based options
@@ -63,13 +72,13 @@ const fromInput = ref(
 
 // set initial duration to one Day
 const durationInput = ref<DurationType>({
-	unit: dateTimeUnitsKeyed[DateUnitKeys.Day],
+	unit: dateTimeUnitsKeyed.day,
 	amount: 0,
 })
 
 // set initial sequence to one week but disabled
 const sequenceInput = ref<Sequence>({
-	unit: dateTimeUnitsKeyed[DateUnitKeys.Week],
+	unit: dateTimeUnitsKeyed.week,
 	stepWidth: 1,
 	repetitions: 0,
 })
@@ -82,7 +91,7 @@ const from = computed(() => {
 	// if the option is an all day option, the time is set to 00:00
 	if (allDay.value) {
 		return dateFrom
-			.startOf(dateTimeUnitsKeyed[DateUnitKeys.Day].luxonUnit)
+			.startOf('day')
 			.setLocale(sessionStore.currentUser.languageCode)
 	}
 	return dateFrom
@@ -92,7 +101,7 @@ const from = computed(() => {
 // Set duration to 1 Day if allDay is true and duration is 0
 const duration = computed(() =>
 	durationInput.value.amount < 1 && allDay.value
-		? Duration.fromObject({ [DateUnitKeys.Day]: 1 })
+		? Duration.fromObject({ day: 1 })
 		: Duration.fromObject({
 				[durationInput.value.unit.id]: durationInput.value.amount,
 			}),
@@ -110,17 +119,13 @@ const sequence = computed(() =>
 )
 
 // True, if from and to dates are the same day
-const sameDay = computed(() =>
-	from.value.hasSame(to.value, dateTimeUnitsKeyed[DateUnitKeys.Day].luxonUnit),
-)
+const sameDay = computed(() => from.value.hasSame(to.value, 'day'))
 
 // *** computed properties only used for display
 // computed to as DateTime from Luxon
 // remove one day to simulate the end of the prior day and not the start of the calculated day in case of allDay
 const to = computed(() =>
-	from.value
-		.plus(duration.value)
-		.minus({ [DateUnitKeys.Day]: allDay.value ? 1 : 0 }),
+	from.value.plus(duration.value).minus({ day: allDay.value ? 1 : 0 }),
 )
 
 // computed last from dateTime repetition
@@ -171,10 +176,10 @@ function resetduratonUnits(): void {
 	if (allDay.value) {
 		// change date units, when switching from time based to all day, since minutes and hours are not valid anymore
 		if (
-			durationInput.value.unit.id === DateUnitKeys.Minute
-			|| durationInput.value.unit.id === DateUnitKeys.Hour
+			durationInput.value.unit.id === 'minute'
+			|| durationInput.value.unit.id === 'hour'
 		) {
-			durationInput.value.unit = dateTimeUnitsKeyed[DateUnitKeys.Day]
+			durationInput.value.unit = dateTimeUnitsKeyed.day
 		}
 	}
 }
@@ -245,7 +250,7 @@ async function addOption(): Promise<void> {
 					:input-label="t('polls', 'Duration time unit')"
 					:clearable="false"
 					:filterable="false"
-					:options="allDay ? dateOnlyUnits : dateTimeUnits"
+					:options="dateTimeOptionsFiltered"
 					label="name" />
 			</div>
 
@@ -272,7 +277,7 @@ async function addOption(): Promise<void> {
 						:input-label="t('polls', 'Step unit')"
 						:clearable="false"
 						:filterable="false"
-						:options="dateTimeUnits"
+						:options="dateTimeOptions"
 						label="name" />
 				</div>
 			</div>
