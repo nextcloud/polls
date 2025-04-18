@@ -104,6 +104,7 @@ export const useSessionStore = defineStore('session', {
 			updateType: UpdateType.NoPolling,
 			useActivity: false,
 			useCollaboration: true,
+			useSiteLegalTerms: true,
 			navigationPollsInList: true,
 			finalPrivacyUrl: '',
 			finalImprintUrl: '',
