@@ -309,7 +309,6 @@ onMounted(() => {
 
 	input {
 		margin: 0;
-
 		&.has-submit,
 		&.error,
 		&.success,
@@ -355,6 +354,7 @@ onMounted(() => {
 		input {
 			text-align: center;
 			max-width: 4rem;
+			padding: 0;
 		}
 	}
 
