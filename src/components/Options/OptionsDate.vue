@@ -34,8 +34,6 @@ const cssVar = {
 				v-for="option in optionsStore.sortedOptions"
 				:key="option.id"
 				:option="option"
-				:poll-type="pollType"
-				:display="BoxType.Date"
 				tag="li">
 				<template #actions>
 					<div class="menu-wrapper">

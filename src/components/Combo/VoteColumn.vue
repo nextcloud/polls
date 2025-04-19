@@ -6,11 +6,8 @@
 //TODO: Check correct usage of participants in template (v-for)
 <template>
 	<div class="vote-column">
-		<OptionItem
-			:option="props.option"
-			:poll-type="PollType.Date"
-			:display="BoxType.Date" />
-		<div
+		<OptionItem :option="props.option" />
+		 <div
 			v-for="poll in comboStore.polls"
 			:key="poll.id"
 			:title="poll.configuration.title"

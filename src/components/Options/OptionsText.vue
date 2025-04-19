@@ -59,10 +59,7 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 			@sort="onSort">
 			<template #item="{ element: option }">
 				<div :key="option.id" class="draggable">
-					<OptionItem
-						:option="option"
-						:poll-type="pollStore.type"
-						:draggable="true">
+					<OptionItem :option="option" :draggable="true">
 						<template #icon>
 							<OptionItemOwner
 								v-if="pollStore.permissions.addOptions"

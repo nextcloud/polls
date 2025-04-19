@@ -15,7 +15,6 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { InputDiv } from '../Base/index.ts'
 import DateTimePicker from '../Base/modules/DateTimePicker.vue'
-import DateBox from '../Base/modules/DateBox.vue'
 import { useSessionStore } from '../../stores/session'
 import { useOptionsStore, Sequence } from '../../stores/options'
 import { StatusResults } from '../../Types'
@@ -25,6 +24,7 @@ import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { AxiosError } from '@nextcloud/axios'
 
 import { useResizeObserver } from '../../composables/elementWidth.ts'
+import DateBox from '../Base/modules/DateBox.vue'
 
 const { isBelowWidthOffset } = useResizeObserver('add-date-options-container', 355)
 
@@ -118,21 +118,8 @@ const sequence = computed(() =>
 		: Duration.fromObject({ millisecond: 0 }),
 )
 
-// True, if from and to dates are the same day
-const sameDay = computed(() => from.value.hasSame(to.value, 'day'))
-
-// *** computed properties only used for display
-// computed to as DateTime from Luxon
-// remove one day to simulate the end of the prior day and not the start of the calculated day in case of allDay
-const to = computed(() =>
-	from.value.plus(duration.value).minus({ day: allDay.value ? 1 : 0 }),
-)
-
 // computed last from dateTime repetition
-const lastFromDisplay = computed(() => from.value.plus(sequence.value))
-
-// computed last to dateTime repetition
-const lastToDisplay = computed(() => to.value.plus(sequence.value))
+const lastFrom = computed(() => from.value.plus(sequence.value))
 
 // computed if the option is blocked by an existing option
 const blockedOption = computed(() => {
@@ -297,22 +284,8 @@ async function addOption(): Promise<void> {
 					<div class="preview___entry">
 						<DateBox
 							class="from"
-							:date="from.toJSDate()"
-							:duration-sec="sameDay ? duration.as('seconds') : 0"
-							:hide-time="allDay" />
-
-						<div
-							v-if="durationInput.amount > 0 && !sameDay"
-							class="preview___devider">
-							<span>{{ ' - ' }} </span>
-						</div>
-
-						<DateBox
-							v-if="!sameDay"
-							class="to"
-							:date="to.toJSDate()"
-							:duration-sec="sameDay ? duration.as('seconds') : 0"
-							:hide-time="allDay" />
+							:luxon-date="from"
+							:luxon-duration="duration"/>
 					</div>
 					<div
 						v-if="sequenceInput.repetitions > 0"
@@ -328,22 +301,8 @@ async function addOption(): Promise<void> {
 						<div class="preview___entry">
 							<DateBox
 								class="from"
-								:date="lastFromDisplay.toJSDate()"
-								:duration-sec="sameDay ? duration.as('seconds') : 0"
-								:hide-time="allDay" />
-
-							<div
-								v-if="durationInput.amount > 0 && !sameDay"
-								class="preview___devider">
-								<span>{{ ' - ' }} </span>
-							</div>
-
-							<DateBox
-								v-if="!sameDay"
-								class="to"
-								:date="lastToDisplay.toJSDate()"
-								:duration-sec="sameDay ? duration.as('seconds') : 0"
-								:hide-time="allDay" />
+								:luxon-date="lastFrom"
+								:luxon-duration="duration" />
 						</div>
 					</div>
 				</div>

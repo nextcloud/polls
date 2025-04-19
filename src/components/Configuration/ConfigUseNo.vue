@@ -19,7 +19,6 @@ const deleteNo = computed({
 		pollStore.configuration.useNo = !value
 	},
 })
-
 </script>
 
 <template>

@@ -15,7 +15,6 @@ import { usePollStore, PollType } from '../../stores/poll.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 import { Option } from '../../stores/options.ts'
 
-import { BoxType } from '../../Types/index.ts'
 import OptionMenu from '../Options/OptionMenu.vue'
 
 const pollStore = usePollStore()
@@ -58,12 +57,7 @@ const showCalendarPeek = computed(
 			<OptionMenu :option="option" />
 		</div>
 		<div class="column-header">
-			<OptionItem
-				:option="option"
-				:poll-type="pollStore.type"
-				:display="
-					pollStore.type === PollType.Date ? BoxType.Date : BoxType.Text
-				" />
+			<OptionItem :option="option" />
 
 			<Counter
 				v-if="pollStore.permissions.seeResults"

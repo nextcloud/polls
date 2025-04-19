@@ -29,6 +29,7 @@ import { Answer, AnswerSymbol, useVotesStore } from '../../stores/votes.ts'
 import { Option, useOptionsStore } from '../../stores/options.ts'
 import { AxiosError } from '@nextcloud/axios'
 import { DateTime, Interval } from 'luxon'
+import { useSessionStore } from '../../stores/session.ts'
 
 enum ArrayStyle {
 	Symbols = 'symbols',
@@ -47,6 +48,7 @@ const route = useRoute()
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
 const optionsStore = useOptionsStore()
+const sessionStore = useSessionStore()
 
 const regex = /[:\\/?*[\]]/g
 
@@ -201,7 +203,7 @@ function getIntervalRaw(option: Option): string {
 	return Interval.fromDateTimes(
 		DateTime.fromSeconds(option.timestamp),
 		DateTime.fromSeconds(option.timestamp).plus({ seconds: option.duration }),
-	).toFormat('EEE, FF', { separator: ' - ' })
+	).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
 }
 
 /**
@@ -209,7 +211,9 @@ function getIntervalRaw(option: Option): string {
  * @param option - option
  */
 function getFromFormatted(option: Option): string {
-	return DateTime.fromSeconds(option.timestamp).toFormat('EEE, FF')
+	return DateTime.fromSeconds(option.timestamp)
+		.setLocale(sessionStore.currentUser.languageCode)
+		.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
 }
 
 /**
@@ -218,8 +222,9 @@ function getFromFormatted(option: Option): string {
  */
 function getToFormatted(option: Option): string {
 	return DateTime.fromSeconds(option.timestamp)
+		.setLocale(sessionStore.currentUser.languageCode)
 		.plus({ seconds: option.duration })
-		.toFormat('EEE, FF')
+		.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
 }
 /**
  *

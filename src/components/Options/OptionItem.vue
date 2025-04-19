@@ -6,9 +6,12 @@
 <script setup lang="ts">
 import { PropType } from 'vue'
 import linkifyStr from 'linkify-string'
-import DragIcon from 'vue-material-design-icons/DragHorizontalVariant.vue'
-import { Option, PollType, BoxType } from '../../Types/index.ts'
-import OptionItemDateBox from './OptionItemDateBox.vue'
+import DragIcon from 'vue-material-design-icons/DotsVertical.vue'
+import { Option, PollType } from '../../Types/index.ts'
+import DateBox from '../Base/modules/DateBox.vue'
+import { usePollStore } from '../../stores/poll.ts'
+
+const pollStore = usePollStore()
 
 const props = defineProps({
 	draggable: {
@@ -22,14 +25,6 @@ const props = defineProps({
 	tag: {
 		type: String,
 		default: 'div',
-	},
-	display: {
-		type: String as PropType<BoxType>,
-		default: BoxType.Text,
-	},
-	pollType: {
-		type: String as PropType<PollType>,
-		default: PollType.Text,
 	},
 })
 </script>
@@ -50,26 +45,21 @@ const props = defineProps({
 
 		<!-- eslint-disable vue/no-v-html -->
 		<div
-			v-if="props.pollType === PollType.Text"
+			v-if="pollStore.type === PollType.Text"
 			:title="option.text"
 			class="option-item__option--text"
 			v-html="linkifyStr(props.option.text)" />
 		<!-- eslint-enable vue/no-v-html -->
 
-		<OptionItemDateBox
-			v-if="props.pollType === PollType.Date"
-			:display="props.display"
-			:option="props.option" />
+		<DateBox v-else :option="props.option" />
 
 		<slot name="actions" />
+
 	</Component>
 </template>
 
 <style lang="scss">
 .option-item {
-	display: flex;
-	align-items: center;
-	flex: 1;
 	position: relative;
 	padding: 8px 0;
 

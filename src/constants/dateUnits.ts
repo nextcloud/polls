@@ -23,6 +23,8 @@ export type DurationType = {
 	amount: number
 }
 
+export type DateFormats = 'dateTime' | 'dateShort'
+
 export const dateTimeUnitsKeyed: Record<DateTimeUnit, DateTimeUnitType> = {
 	minute: {
 		id: 'minute',
