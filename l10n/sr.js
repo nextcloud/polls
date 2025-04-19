@@ -369,7 +369,7 @@ OC.L10N.register(
     "Submit" : "Пошаљи",
     "{optionText} added" : "Додата је {optionText}",
     "{optionText} already exists" : "{optionText} већ постоји",
-    "Error adding {optionText}" : "Грешка приликиом додавања {optionText}",
+    "Error adding {optionText}" : "Грешка приликом додавања {optionText}",
     "Add options list (one option per line)" : "Додајте листу опција (једна по линији)",
     "Paste option list" : "Налепи листу опција",
     "Options added" : "Опције су додате",
