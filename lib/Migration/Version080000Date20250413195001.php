@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Migration;
 
 use Doctrine\DBAL\Types\Type;
-use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\TableManager;
 use OCP\DB\ISchemaWrapper;
 use OCP\IDBConnection;
