@@ -59,6 +59,14 @@ const props = defineProps({
 </template>
 
 <style lang="scss">
+// TODO: This is just a quick fix optimize later
+.modal-container .option-item {
+	display: flex;
+}
+.side-bar-tab-options .option-item {
+	display: flex;
+}
+
 .option-item {
 	position: relative;
 	padding: 8px 0;
