@@ -35,7 +35,9 @@ async function removeUser(userId: string) {
 	<div
 		class="vote-table"
 		:class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
-		<div class="vote-table__users sticky-left">
+		<div
+			v-if="pollStore.viewMode === 'table-view'"
+			class="vote-table__users sticky-left">
 			<div class="option-menu" />
 			<div class="column-header" />
 
@@ -81,10 +83,8 @@ async function removeUser(userId: string) {
 
 	.participant,
 	.vote-item {
-		flex: 0 0 auto;
 		height: 4.5em;
 		order: 10;
-		line-height: 1.5em;
 		padding: 6px;
 		border-radius: 12px;
 		&.current-user {
@@ -140,8 +140,6 @@ async function removeUser(userId: string) {
 
 		& > div {
 			display: flex;
-			justify-content: center;
-			align-items: center;
 		}
 		.option-item {
 			flex: 1;
@@ -285,7 +283,6 @@ async function removeUser(userId: string) {
 		.owner {
 			order: 0;
 			flex: 0;
-			// justify-content: flex-end;
 		}
 
 		.counter {

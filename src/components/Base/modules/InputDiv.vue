@@ -309,7 +309,6 @@ onMounted(() => {
 
 	input {
 		margin: 0;
-
 		&.has-submit,
 		&.error,
 		&.success,
@@ -334,7 +333,6 @@ onMounted(() => {
 		position: relative;
 		display: flex;
 		& > input {
-			// height: 44px !important;
 			flex: 1;
 		}
 	}
@@ -350,11 +348,10 @@ onMounted(() => {
 	}
 
 	&.numeric .input-wrapper {
-		// min-width: 9rem;
-		// max-width: 10rem;
 		input {
 			text-align: center;
 			max-width: 4rem;
+			padding: 0;
 		}
 	}
 

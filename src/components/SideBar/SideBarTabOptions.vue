@@ -111,17 +111,6 @@ onUnmounted(() => {
 
 <style lang="scss">
 .side-bar-tab-options {
-	.owner {
-		display: flex;
-		position: relative;
-		left: -16px;
-		width: 0;
-	}
-
-	.draggable:hover .owner {
-		display: none;
-	}
-
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
 

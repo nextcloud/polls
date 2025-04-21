@@ -37,8 +37,6 @@ const answer = computed(
 
 const iconAnswer = computed(() => {
 	if (answer.value === Answer.No) {
-		// TODO: check isActive
-		// return (closed && props.option.confirmed) || isActive ? 'no' : ''
 		return props.poll.status.isExpired && props.option.confirmed
 			? Answer.No
 			: Answer.None

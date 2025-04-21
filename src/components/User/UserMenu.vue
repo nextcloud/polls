@@ -25,8 +25,8 @@ import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
-import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
-import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
+import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue'
+import TableViewIcon from 'vue-material-design-icons/Table.vue'
 import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'

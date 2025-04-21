@@ -26,8 +26,10 @@ import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 import { ApiEmailAdressList, PollsAPI } from '../../Api/index.ts'
 import { usePollStore, PollType } from '../../stores/poll.ts'
 import { Answer, AnswerSymbol, useVotesStore } from '../../stores/votes.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+import { Option, useOptionsStore } from '../../stores/options.ts'
 import { AxiosError } from '@nextcloud/axios'
+import { DateTime, Interval } from 'luxon'
+import { useSessionStore } from '../../stores/session.ts'
 
 enum ArrayStyle {
 	Symbols = 'symbols',
@@ -46,6 +48,7 @@ const route = useRoute()
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
 const optionsStore = useOptionsStore()
+const sessionStore = useSessionStore()
 
 const regex = /[:\\/?*[\]]/g
 
@@ -133,29 +136,21 @@ async function exportFile(exportFormat: ExportFormat) {
 	} else if ([ExportFormat.Csv].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
-			...optionsStore.list.map(
-				(option) => optionsStore.explodeDates(option).iso,
-			),
+			...optionsStore.list.map((option) => getIntervalIso(option)),
 		])
 	} else if ([ExportFormat.Html].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
-			...optionsStore.list.map(
-				(option) => optionsStore.explodeDates(option).raw,
-			),
+			...optionsStore.list.map((option) => getIntervalRaw(option)),
 		])
 	} else {
 		sheetData.value.push([
 			...fromHeader,
-			...optionsStore.list.map(
-				(option) => optionsStore.explodeDates(option).from.dateTime,
-			),
+			...optionsStore.list.map((option) => getFromFormatted(option)),
 		])
 		sheetData.value.push([
 			...toHeader,
-			...optionsStore.list.map(
-				(option) => optionsStore.explodeDates(option).to.dateTime,
-			),
+			...optionsStore.list.map((option) => getToFormatted(option)),
 		])
 	}
 
@@ -185,6 +180,52 @@ async function exportFile(exportFormat: ExportFormat) {
 	}
 }
 
+/**
+ * Get the interval in ISO format (slightly modified)
+ * @param option - option
+ */
+function getIntervalIso(option: Option): string {
+	return Interval.fromDateTimes(
+		DateTime.fromSeconds(option.timestamp).toUTC(),
+		DateTime.fromSeconds(option.timestamp)
+			.plus({ seconds: option.duration })
+			.toUTC(),
+	)
+		.toISO()
+		.replace('/', ' - ')
+}
+
+/**
+ * Get the interval in local format
+ * @param option - option
+ */
+function getIntervalRaw(option: Option): string {
+	return Interval.fromDateTimes(
+		DateTime.fromSeconds(option.timestamp),
+		DateTime.fromSeconds(option.timestamp).plus({ seconds: option.duration }),
+	).toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
+}
+
+/**
+ * Get the start date in local format
+ * @param option - option
+ */
+function getFromFormatted(option: Option): string {
+	return DateTime.fromSeconds(option.timestamp)
+		.setLocale(sessionStore.currentUser.languageCode)
+		.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
+}
+
+/**
+ * Get the end date in local format
+ * @param option - option
+ */
+function getToFormatted(option: Option): string {
+	return DateTime.fromSeconds(option.timestamp)
+		.setLocale(sessionStore.currentUser.languageCode)
+		.plus({ seconds: option.duration })
+		.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
+}
 /**
  *
  * @param style - style

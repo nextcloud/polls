@@ -44,7 +44,7 @@ const deleteDialog = {
 		{ label: t('polls', 'Cancel') },
 		{
 			label: t('polls', 'OK'),
-			type: ButtonVariant.Primary,
+			variant: ButtonVariant.Primary,
 			callback: () => {
 				deletePoll()
 			},
@@ -65,7 +65,7 @@ const takeOverDialog = {
 		{ label: t('polls', 'Cancel') },
 		{
 			label: t('polls', 'Ok'),
-			type: ButtonVariant.Primary,
+			variant: ButtonVariant.Primary,
 			callback: () => {
 				takeOverPoll()
 			},

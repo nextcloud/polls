@@ -35,7 +35,7 @@ const showDelete = computed(
 </script>
 
 <template>
-	<div class="option-item-owner">
+	<div class="option-item-owner blabla">
 		<ActionDelete
 			v-if="showDelete"
 			:name="

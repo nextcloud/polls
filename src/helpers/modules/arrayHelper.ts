@@ -50,13 +50,6 @@ function createRecordFromArray<T extends object>(
 	)
 }
 
-// function createRecordFromArray<T extends { id: string | number }>(arr: T[]): Record<string | number, T> {
-//   return arr.reduce((acc, item) => {
-//     acc[item.id] = item;
-//     return acc;
-//   }, {} as Record<string | number, T>);
-// }
-
 export {
 	uniqueArrayOfObjects,
 	uniqueOptions,
