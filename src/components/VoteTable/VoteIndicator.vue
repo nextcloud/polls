@@ -69,9 +69,6 @@ function onClick() {
 
 <style lang="scss">
 .vote-indicator {
-	// display: flex;
-	// justify-content: center;
-	// align-content: end;
 	color: var(--color-polls-foreground-no);
 	min-width: 30px;
 	min-height: 30px;

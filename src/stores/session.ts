@@ -44,7 +44,7 @@ type Watcher = {
 	watching: boolean
 	lastUpdated: number
 	endPoint: string
-	sleepTimeout: number
+	sleepTimeoutSeconds: number
 	retryCounter: number
 	blockWatch: boolean
 }
@@ -139,7 +139,7 @@ export const useSessionStore = defineStore('session', {
 			watching: true,
 			lastUpdated: Math.round(Date.now() / 1000),
 			endPoint: '',
-			sleepTimeout: SLEEP_TIMEOUT_DEFAULT, // seconds
+			sleepTimeoutSeconds: SLEEP_TIMEOUT_DEFAULT,
 			retryCounter: 0,
 			blockWatch: false,
 		},
@@ -272,10 +272,10 @@ export const useSessionStore = defineStore('session', {
 				? `Connection error, Attempt:  ${this.watcher.retryCounter}/${MAX_TRIES})`
 				: this.appSettings.updateType
 			Logger.debug(
-				`Sleep for ${this.watcher.sleepTimeout} seconds (reason: ${reason})`,
+				`Sleep for ${this.watcher.sleepTimeoutSeconds} seconds (reason: ${reason})`,
 			)
 			return new Promise((resolve) =>
-				setTimeout(resolve, this.watcher.sleepTimeout * 1000),
+				setTimeout(resolve, this.watcher.sleepTimeoutSeconds * 1000),
 			)
 		},
 
@@ -300,10 +300,10 @@ export const useSessionStore = defineStore('session', {
 
 			if (error.response?.status === 503) {
 				// Server possibly in maintenance mode
-				this.watcher.sleepTimeout =
+				this.watcher.sleepTimeoutSeconds =
 					error.response?.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
 				Logger.debug(
-					`Service not avaiable - retry ${this.appSettings.updateType} after ${this.watcher.sleepTimeout} seconds`,
+					`Service not avaiable - retry ${this.appSettings.updateType} after ${this.watcher.sleepTimeoutSeconds} seconds`,
 				)
 				return
 			}

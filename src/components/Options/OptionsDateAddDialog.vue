@@ -433,7 +433,6 @@ async function addOption(): Promise<void> {
 	}
 
 	.preview-container {
-		// flex: 1 auto;
 		align-items: center;
 		display: flex;
 		flex-direction: column;

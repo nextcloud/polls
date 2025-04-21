@@ -105,10 +105,8 @@ const props = defineProps({
 }
 
 .option-item__option--text {
-	// grid-area: option;
 	overflow: hidden;
 	text-overflow: ellipsis;
-	// TODO: Quick fix
 	align-self: center;
 
 	a {

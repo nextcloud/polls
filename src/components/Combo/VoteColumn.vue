@@ -3,7 +3,6 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
-//TODO: Check correct usage of participants in template (v-for)
 <template>
 	<div class="vote-column">
 		<OptionItem :option="props.option" />
@@ -27,7 +26,7 @@ import { PropType } from 'vue'
 import VoteItem from './VoteItem.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import { useComboStore } from '../../stores/combo.ts'
-import { Option, PollType, BoxType } from '../../Types/index.ts'
+import { Option } from '../../Types/index.ts'
 
 const comboStore = useComboStore()
 
