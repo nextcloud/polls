@@ -30,7 +30,10 @@ const appSettingsStore = useAppSettingsStore()
 			inputmode="numeric"
 			use-num-modifiers
 			:label="
-				t('polls', 'Days after which archived polls should be finally deleted')
+				t(
+					'polls',
+					'Days after which archived polls should be finally deleted',
+				)
 			"
 			@change="appSettingsStore.write()" />
 	</div>
