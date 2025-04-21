@@ -73,7 +73,7 @@
     "eslint-config-prettier": "^10.1.2",
     "eslint-plugin-prettier": "^5.2.6",
     "prettier": "^3.2.5",
-    "vite": "^6.3.1",
+    "vite": "^6.3.2",
     "vite-plugin-node-polyfills": "^0.23.0",
     "xml2js": "^0.6.2"
   },
