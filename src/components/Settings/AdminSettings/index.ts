@@ -5,6 +5,7 @@
 export { default as AdminActivities } from './AdminActivities.vue'
 export { default as AdminArchivePolls } from './AdminArchivePolls.vue'
 export { default as AdminCombo } from './AdminCombo.vue'
+export { default as AdminDeletePolls } from './AdminDeletePolls.vue'
 export { default as AdminEmail } from './AdminEmail.vue'
 export { default as AdminJobs } from './AdminJobs.vue'
 export { default as AdminLegal } from './AdminLegal.vue'

@@ -61,13 +61,23 @@ class JanitorCron extends TimedJob {
 		$this->commentMapper->purgeDeletedComments(time() - 4320);
 		$this->optionMapper->purgeDeletedOptions(time() - 4320);
 		$this->shareMapper->purgeDeletedShares(time() - 4320);
-		$autoArchiveOffest = $this->appSettings->getAutoarchiveOffsetDays();
+		$autoArchiveOffset = $this->appSettings->getAutoArchiveOffsetDays();
+		$autoDeleteOffset = $this->appSettings->getAutoDeleteOffsetDays();
+
 		// archive polls after defined days after closing date
-		if ($this->appSettings->getAutoarchiveEnabled() && $autoArchiveOffest > 0) {
+		if ($this->appSettings->getAutoArchiveEnabled() && $autoArchiveOffset > 0) {
 			$this->pollMapper->archiveExpiredPolls(
-				time() - ($autoArchiveOffest * 86400)
+				time() - ($autoArchiveOffset * 86400)
 			);
 		}
+
+		// delete polls after defined days after archiving date
+		if ($this->appSettings->getAutoDeleteEnabled() && $autoDeleteOffset > 0) {
+			$this->pollMapper->deleteArchivedPolls(
+				time() - ($autoDeleteOffset * 86400)
+			);
+		}
+
 		$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
 	}
 

@@ -150,6 +150,17 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
+	 * Delete polls per deletion timestamp
+	 */
+	public function deleteArchivedPolls(int $offset): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete($this->getTableName())
+			->where($qb->expr()->lt('deleted', $qb->createNamedParameter($offset)))
+			->andWhere($qb->expr()->gt('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		$qb->executeStatement();
+	}
+
+	/**
 	 * Archive polls per timestamp
 	 */
 	public function setLastInteraction(int $pollId): void {

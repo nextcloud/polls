@@ -54,6 +54,10 @@ class AppSettings implements JsonSerializable {
 	public const SETTING_AUTO_ARCHIVE_OFFSET_DAYS = 'autoArchiveOffset';
 	public const SETTING_AUTO_ARCHIVE_OFFSET_DAYS_DEFAULT = 30;
 
+	public const SETTING_AUTO_DELETE = 'autoDelete';
+	public const SETTING_AUTO_DELETE_DEFAULT = false;
+	public const SETTING_AUTO_DELETE_OFFSET_DAYS = 'autoDeleteOffset';
+	public const SETTING_AUTO_DELETE_OFFSET_DAYS_DEFAULT = 30;
 
 	public const SETTING_UPDATE_TYPE = 'updateType';
 	public const SETTING_UPDATE_TYPE_LONG_POLLING = 'longPolling';
@@ -327,15 +331,29 @@ class AppSettings implements JsonSerializable {
 	/**
 	 * Get the auto archive offset in days
 	 */
-	public function getAutoarchiveOffsetDays(): int {
+	public function getAutoArchiveOffsetDays(): int {
 		return $this->getIntegerSetting(self::SETTING_AUTO_ARCHIVE_OFFSET_DAYS, self::SETTING_AUTO_ARCHIVE_OFFSET_DAYS_DEFAULT);
+	}
+
+	/**
+	 * Get the auto delete offset in days
+	 */
+	public function getAutoDeleteOffsetDays(): int {
+		return $this->getIntegerSetting(self::SETTING_AUTO_DELETE_OFFSET_DAYS, self::SETTING_AUTO_DELETE_OFFSET_DAYS_DEFAULT);
 	}
 
 	/**
 	 * Get the auto archive setting enabled or disabled
 	 */
-	public function getAutoarchiveEnabled(): bool {
+	public function getAutoArchiveEnabled(): bool {
 		return $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE, default: self::SETTING_AUTO_ARCHIVE_DEFAULT);
+	}
+
+	/**
+	 * Get the auto delete setting enabled or disabled
+	 */
+	public function getAutoDeleteEnabled(): bool {
+		return $this->getBooleanSetting(self::SETTING_AUTO_DELETE, default: self::SETTING_AUTO_DELETE_DEFAULT);
 	}
 
 	/**
@@ -416,8 +434,11 @@ class AppSettings implements JsonSerializable {
 			self::SETTING_SHOW_MAIL_ADDRESSES => $this->getBooleanSetting(self::SETTING_SHOW_MAIL_ADDRESSES),
 			self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS => $this->getGroupObjects(self::SETTING_SHOW_MAIL_ADDRESSES_GROUPS),
 
-			self::SETTING_AUTO_ARCHIVE => $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE),
-			self::SETTING_AUTO_ARCHIVE_OFFSET_DAYS => $this->getAutoarchiveOffsetDays(),
+			self::SETTING_AUTO_ARCHIVE => $this->getBooleanSetting(self::SETTING_AUTO_ARCHIVE, default: self::SETTING_AUTO_ARCHIVE_DEFAULT),
+			self::SETTING_AUTO_ARCHIVE_OFFSET_DAYS => $this->getAutoArchiveOffsetDays(),
+
+			self::SETTING_AUTO_DELETE => $this->getBooleanSetting(self::SETTING_AUTO_DELETE, default: self::SETTING_AUTO_DELETE_DEFAULT),
+			self::SETTING_AUTO_DELETE_OFFSET_DAYS => $this->getAutoDeleteOffsetDays(),
 
 			self::SETTING_USE_SITE_LEGAL => $this->getBooleanSetting(self::SETTING_USE_SITE_LEGAL),
 			self::SETTING_LEGAL_TERMS_IN_EMAIL => $this->getBooleanSetting(self::SETTING_LEGAL_TERMS_IN_EMAIL),

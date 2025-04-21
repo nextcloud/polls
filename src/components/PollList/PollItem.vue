@@ -139,7 +139,7 @@ const timeCreatedRelative = computed(() =>
 
 			<div class="description_line">
 				<ArchivedPollIcon
-					v-if="poll.status.isDeleted"
+					v-if="poll.status.isArchived"
 					:title="t('polls', 'Archived  poll')"
 					:size="16" />
 				<OpenPollIcon

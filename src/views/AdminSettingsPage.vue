@@ -14,6 +14,7 @@ import {
 	AdminActivities,
 	AdminArchivePolls,
 	AdminCombo,
+	AdminDeletePolls,
 	AdminEmail,
 	AdminJobs,
 	AdminLegal,
@@ -96,6 +97,7 @@ onMounted(() => {
 		<NcSettingsSection v-bind="sections.otherSettings">
 			<AdminActivities />
 			<AdminArchivePolls />
+			<AdminDeletePolls />
 			<AdminCombo />
 			<AdminShowMailAddresses />
 		</NcSettingsSection>

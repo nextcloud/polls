@@ -55,7 +55,7 @@ const props = defineProps({
 			</NcActionButton>
 
 			<NcActionButton
-				v-if="props.poll.permissions.edit && !props.poll.status.isDeleted"
+				v-if="props.poll.permissions.edit && !props.poll.status.isArchived"
 				:name="t('polls', 'Archive poll')"
 				:aria-label="t('polls', 'Archive poll')"
 				@click="emit('toggleArchive')">
@@ -65,7 +65,7 @@ const props = defineProps({
 			</NcActionButton>
 
 			<NcActionButton
-				v-if="props.poll.permissions.edit && props.poll.status.isDeleted"
+				v-if="props.poll.permissions.edit && props.poll.status.isArchived"
 				:name="t('polls', 'Restore poll')"
 				:aria-label="t('polls', 'Restore poll')"
 				@click="emit('toggleArchive')">
@@ -75,7 +75,7 @@ const props = defineProps({
 			</NcActionButton>
 
 			<NcActionButton
-				v-if="props.poll.permissions.edit && props.poll.status.isDeleted"
+				v-if="props.poll.permissions.edit && props.poll.status.isArchived"
 				class="danger"
 				:name="t('polls', 'Delete poll')"
 				:aria-label="t('polls', 'Delete poll')"
