@@ -79,6 +79,18 @@ const expiryClass = computed(() => {
 const timeCreatedRelative = computed(() =>
 	moment.unix(props.poll.status.created).fromNow(),
 )
+
+const descriptionLine = computed(() => {
+	if (props.poll.status.isArchived) {
+		return t('polls', 'Archived {relativeTIme}', {
+			relativeTIme: moment.unix(props.poll.status.archivedDate).fromNow(),
+		})
+	}
+	return t('polls', 'Started {relativeTime} from {ownerName}', {
+		ownerName: props.poll.owner.displayName,
+		relativeTime: timeCreatedRelative.value,
+	})
+})
 </script>
 
 <template>
@@ -152,12 +164,7 @@ const timeCreatedRelative = computed(() =>
 					:size="16" />
 
 				<span class="description">
-					{{
-						t('polls', 'Started {relativeTime} from {ownerName}', {
-							ownerName: poll.owner.displayName,
-							relativeTime: timeCreatedRelative,
-						})
-					}}
+					{{ descriptionLine }}
 				</span>
 			</div>
 		</RouterLink>

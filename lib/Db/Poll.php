@@ -242,6 +242,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'isRealAnonymous' => $this->getAnonymous() < 0,
 			'relevantThreshold' => $this->getRelevantThreshold(),
 			'deletionDate' => $this->getDeletionDate(),
+			'archivedDate' => $this->getDeleted(),
 			'countOptions' => $this->getOptionsCount(),
 			'countParticipants' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getParticipantsCount() : 0,
 			'countProposals' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getProposalsCount() : 0,
