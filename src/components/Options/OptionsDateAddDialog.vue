@@ -285,7 +285,7 @@ async function addOption(): Promise<void> {
 						<DateBox
 							class="from"
 							:luxon-date="from"
-							:luxon-duration="duration"/>
+							:luxon-duration="duration" />
 					</div>
 					<div
 						v-if="sequenceInput.repetitions > 0"

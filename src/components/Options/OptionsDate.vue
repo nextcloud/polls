@@ -4,7 +4,6 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -12,46 +11,41 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
 import OptionItem from './OptionItem.vue'
-import { usePollStore, PollType } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore } from '../../stores/options.ts'
-import { BoxType } from '../../Types/index.ts'
 import OptionMenu from './OptionMenu.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 
-const pollType = ref(PollType.Date)
-
 const cssVar = {
-	'var(--content-deleted)': `" (${t('polls', 'deleted')})"`,
+	'--content-deleted': `" (${t('polls', 'deleted')})"`,
 }
 </script>
 
 <template>
-	<div :style="cssVar">
-		<TransitionGroup v-if="optionsStore.list.length" tag="ul" name="list">
+	<div v-if="optionsStore.list.length" :style="cssVar" class="options-list date">
+		<TransitionGroup name="list">
 			<OptionItem
 				v-for="option in optionsStore.sortedOptions"
 				:key="option.id"
 				:option="option"
-				tag="li">
+				show-owner>
 				<template #actions>
-					<div class="menu-wrapper">
-						<OptionMenu
-							v-if="pollStore.permissions.edit || option.isOwner"
-							:option="option" />
-					</div>
+					<OptionMenu
+						v-if="pollStore.permissions.edit || option.isOwner"
+						:option="option" />
 				</template>
 			</OptionItem>
 		</TransitionGroup>
-
-		<NcEmptyContent
-			v-else
-			:name="t('polls', 'No vote options')"
-			:description="t('polls', 'Add some!')">
-			<template #icon>
-				<DatePollIcon />
-			</template>
-		</NcEmptyContent>
 	</div>
+
+	<NcEmptyContent
+		v-else
+		:name="t('polls', 'No vote options')"
+		:description="t('polls', 'Add some!')">
+		<template #icon>
+			<DatePollIcon />
+		</template>
+	</NcEmptyContent>
 </template>

@@ -10,6 +10,7 @@ import DragIcon from 'vue-material-design-icons/DotsVertical.vue'
 import { Option, PollType } from '../../Types/index.ts'
 import DateBox from '../Base/modules/DateBox.vue'
 import { usePollStore } from '../../stores/poll.ts'
+import OptionItemOwner from './OptionItemOwner.vue'
 
 const pollStore = usePollStore()
 
@@ -22,77 +23,93 @@ const props = defineProps({
 		type: Object as PropType<Option>,
 		required: true,
 	},
-	tag: {
-		type: String,
-		default: 'div',
+	showOwner: {
+		type: Boolean,
+		default: false,
 	},
 })
 </script>
 
 <template>
-	<Component
-		:is="tag"
+	<div
 		:class="[
 			'option-item',
-			{
-				draggable: props.draggable,
-				deleted: props.option.deleted !== 0,
-			},
+			{ draggable, deleted: option.deleted !== 0 },
 		]">
-		<DragIcon v-if="props.draggable" />
+		<DragIcon v-if="props.draggable" class="grid-area-drag-icon" />
 
-		<slot name="icon" />
+		<OptionItemOwner
+			v-if="pollStore.permissions.addOptions && showOwner"
+			:avatar-size="24"
+			:option="option"
+			class="grid-area-owner" />
 
 		<!-- eslint-disable vue/no-v-html -->
 		<div
 			v-if="pollStore.type === PollType.Text"
 			:title="option.text"
 			class="option-item__option--text"
-			v-html="linkifyStr(props.option.text)" />
+			v-html="linkifyStr(option.text)" />
 		<!-- eslint-enable vue/no-v-html -->
 
-		<DateBox v-else :option="props.option" />
+		<DateBox v-else class="option-item__option--date" :option="option" />
 
 		<slot name="actions" />
-
-	</Component>
+	</div>
 </template>
 
 <style lang="scss">
-// TODO: This is just a quick fix optimize later
-.modal-container .option-item {
-	display: flex;
-}
-.side-bar-tab-options .option-item {
-	display: flex;
-}
-
 .option-item {
+	display: grid;
+	grid-template-columns: auto 1fr auto auto;
+	grid-template-areas: 'drag option owner actions';
 	position: relative;
 	padding: 8px 0;
+}
 
-	&.deleted {
-		opacity: 0.6;
-	}
+.grid-area-drag-icon {
+	grid-area: drag;
 }
 
 [class*='option-item__option'] {
-	flex: 1;
-	opacity: 1;
-	white-space: normal;
+	grid-area: option;
+}
+
+.grid-area-owner {
+	grid-area: owner;
+}
+
+.grid-area-actions, .option-menu {
+	grid-area: actions;
 }
 
 .deleted {
-	[class*='option-item__option']::after {
+	[class*='option-item__option'] {
+		opacity: 0.6;
+	}
+
+	[class*='option-item__option']::before {
 		content: var(--content-deleted);
 		font-weight: bold;
 		color: var(--color-error-text);
+		margin-right: 0.2rem;
 	}
 }
 
+.option-item__option--date {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	height: 100%;
+}
+
 .option-item__option--text {
+	// grid-area: option;
 	overflow: hidden;
 	text-overflow: ellipsis;
+	// TODO: Quick fix
+	align-self: center;
 
 	a {
 		font-weight: bold;

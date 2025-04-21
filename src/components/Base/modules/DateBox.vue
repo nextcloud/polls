@@ -133,7 +133,7 @@ const interval = computed(() =>
 <style lang="scss" scoped>
 .datebox {
 	display: grid;
-	grid-template: auto/auto 1rem auto;
+	grid-template: 1rem 2rem 1rem/auto 1.5rem auto;
 	row-gap: 0.33rem;
 	max-width: 11rem;
 	margin: auto;

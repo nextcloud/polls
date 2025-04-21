@@ -7,7 +7,7 @@
 <template>
 	<div class="vote-column">
 		<OptionItem :option="props.option" />
-		 <div
+		<div
 			v-for="poll in comboStore.polls"
 			:key="poll.id"
 			:title="poll.configuration.title"
