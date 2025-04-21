@@ -15,7 +15,6 @@ const cssVar = {
 	'--content-deleted': `"(${t('polls', 'deleted')})"`,
 }
 const alternativestyle = preferencesStore.user.useCommentsAlternativeStyling
-
 </script>
 
 <template>

@@ -31,11 +31,7 @@ const props = defineProps({
 </script>
 
 <template>
-	<div
-		:class="[
-			'option-item',
-			{ draggable, deleted: option.deleted !== 0 },
-		]">
+	<div :class="['option-item', { draggable, deleted: option.deleted !== 0 }]">
 		<DragIcon v-if="props.draggable" class="grid-area-drag-icon" />
 
 		<OptionItemOwner
@@ -79,7 +75,8 @@ const props = defineProps({
 	grid-area: owner;
 }
 
-.grid-area-actions, .option-menu {
+.grid-area-actions,
+.option-menu {
 	grid-area: actions;
 }
 
