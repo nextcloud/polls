@@ -32,14 +32,14 @@ const dragOptions = {
 	group: 'description',
 	disabled: false,
 	ghostClass: 'ghost',
-	onUpdate: (e: { oldIndex: number, newIndex: number }) => {
-		onSort({oldIndex: e.oldIndex, newIndex: e.newIndex})
+	onUpdate: (e: { oldIndex: number; newIndex: number }) => {
+		onSort({ oldIndex: e.oldIndex, newIndex: e.newIndex })
 		// nextTick required here as moveArrayElement is executed in a microtask
 		// so we need to wait until the next tick until that is finished.
 		nextTick(() => {
 			/* do nothing, wait for nextTick() */
 		})
-	}
+	},
 }
 
 useSortable(element, optionsStore.list, dragOptions)
