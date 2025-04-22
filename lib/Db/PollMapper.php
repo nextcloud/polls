@@ -139,25 +139,25 @@ class PollMapper extends QBMapper {
 	/**
 	 * Archive polls per timestamp
 	 */
-	public function archiveExpiredPolls(int $offset): void {
+	public function archiveExpiredPolls(int $offset): int {
 		$archiveDate = time();
 		$qb = $this->db->getQueryBuilder();
 		$qb->update($this->getTableName())
 			->set('deleted', $qb->createNamedParameter($archiveDate))
 			->where($qb->expr()->lt('expire', $qb->createNamedParameter($offset)))
 			->andWhere($qb->expr()->gt('expire', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
-		$qb->executeStatement();
+		return $qb->executeStatement();
 	}
 
 	/**
 	 * Delete polls per deletion timestamp
 	 */
-	public function deleteArchivedPolls(int $offset): void {
+	public function deleteArchivedPolls(int $offset): int {
 		$qb = $this->db->getQueryBuilder();
 		$qb->delete($this->getTableName())
 			->where($qb->expr()->lt('deleted', $qb->createNamedParameter($offset)))
 			->andWhere($qb->expr()->gt('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
-		$qb->executeStatement();
+		return $qb->executeStatement();
 	}
 
 	/**
