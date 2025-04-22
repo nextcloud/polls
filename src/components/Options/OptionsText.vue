@@ -4,8 +4,9 @@
 -->
 
 <script setup lang="ts">
+import { nextTick, useTemplateRef } from 'vue'
 import { t } from '@nextcloud/l10n'
-import { Sortable } from 'sortablejs-vue3'
+import { useSortable } from '@vueuse/integrations/useSortable'
 
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -24,13 +25,24 @@ import { useOptionsStore } from '../../stores/options.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
+const element = useTemplateRef<HTMLElement>('list')
 
 const dragOptions = {
 	animation: 200,
 	group: 'description',
 	disabled: false,
 	ghostClass: 'ghost',
+	onUpdate: (e: { oldIndex: number; newIndex: number }) => {
+		onSort({ oldIndex: e.oldIndex, newIndex: e.newIndex })
+		// nextTick required here as moveArrayElement is executed in a microtask
+		// so we need to wait until the next tick until that is finished.
+		nextTick(() => {
+			/* do nothing, wait for nextTick() */
+		})
+	},
 }
+
+useSortable(element, optionsStore.list, dragOptions)
 
 const cssVar = {
 	'--content-deleted': `" (${t('polls', 'deleted')})"`,
@@ -48,16 +60,9 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 </script>
 
 <template>
-	<OptionsTextAdd v-if="!pollStore.isClosed" />
-	<Sortable
-		v-if="optionsStore.list.length"
-		:list="optionsStore.list"
-		item-key="id"
-		class="options-list text"
-		:style="cssVar"
-		:options="dragOptions"
-		@sort="onSort">
-		<template #item="{ element: option }">
+	<OptionsTextAdd v-if="!pollStore.isClosed" :style="cssVar" />
+	<div v-if="optionsStore.list.length" ref="list" class="">
+		<div v-for="option in optionsStore.list" :key="option.id" class="">
 			<OptionItem
 				:key="option.id"
 				class="draggable"
@@ -106,8 +111,8 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 					</NcActions>
 				</template>
 			</OptionItem>
-		</template>
-	</Sortable>
+		</div>
+	</div>
 
 	<NcEmptyContent
 		v-else
