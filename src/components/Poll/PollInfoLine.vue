@@ -31,7 +31,7 @@ const isNoAccessSet = computed(
 const subTexts = computed(() => {
 	const subTexts = []
 
-	if (pollStore.status.isDeleted) {
+	if (pollStore.status.isArchived) {
 		subTexts.push({
 			id: 'deleted',
 			text: t('polls', 'Archived'),

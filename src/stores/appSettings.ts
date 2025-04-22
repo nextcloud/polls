@@ -30,7 +30,9 @@ export type AppSettings = {
 	allowPollCreation: boolean
 	allowPollDownload: boolean
 	autoArchive: boolean
+	autoDelete: boolean
 	autoArchiveOffset: number
+	autoDeleteOffset: number
 	defaultPrivacyUrl: string
 	defaultImprintUrl: string
 	disclaimer: string
@@ -68,7 +70,9 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		allowPollCreation: true,
 		allowPollDownload: true,
 		autoArchive: false,
+		autoDelete: false,
 		autoArchiveOffset: 30,
+		autoDeleteOffset: 30,
 		defaultPrivacyUrl: '',
 		defaultImprintUrl: '',
 		disclaimer: '',

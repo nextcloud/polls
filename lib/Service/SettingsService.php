@@ -36,6 +36,7 @@ class SettingsService {
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_POLL_CREATION, $settingsArray[AppSettings::SETTING_ALLOW_POLL_CREATION]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_ALLOW_POLL_DOWNLOAD, $settingsArray[AppSettings::SETTING_ALLOW_POLL_DOWNLOAD]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_AUTO_ARCHIVE, $settingsArray[AppSettings::SETTING_AUTO_ARCHIVE]);
+		$this->appSettings->setBooleanSetting(AppSettings::SETTING_AUTO_DELETE, $settingsArray[AppSettings::SETTING_AUTO_DELETE]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_SHOW_LOGIN, $settingsArray[AppSettings::SETTING_SHOW_LOGIN]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_USE_ACTIVITY, $settingsArray[AppSettings::SETTING_USE_ACTIVITY]);
 		$this->appSettings->setBooleanSetting(AppSettings::SETTING_USE_SITE_LEGAL, $settingsArray[AppSettings::SETTING_USE_SITE_LEGAL]);
@@ -52,6 +53,7 @@ class SettingsService {
 		$this->appSettings->setGroupSetting(AppSettings::SETTING_UNRESTRICTED_POLL_OWNER_GROUPS, array_column($settingsArray[AppSettings::SETTING_UNRESTRICTED_POLL_OWNER_GROUPS], 'id'));
 
 		$this->appSettings->setIntegerSetting(AppSettings::SETTING_AUTO_ARCHIVE_OFFSET_DAYS, intval($settingsArray[AppSettings::SETTING_AUTO_ARCHIVE_OFFSET_DAYS]));
+		$this->appSettings->setIntegerSetting(AppSettings::SETTING_AUTO_DELETE_OFFSET_DAYS, intval($settingsArray[AppSettings::SETTING_AUTO_DELETE_OFFSET_DAYS]));
 
 		$this->appSettings->setStringSetting(AppSettings::SETTING_UPDATE_TYPE, $settingsArray[AppSettings::SETTING_UPDATE_TYPE]);
 		$this->appSettings->setStringSetting(AppSettings::SETTING_PRIVACY_URL, $settingsArray[AppSettings::SETTING_PRIVACY_URL]);

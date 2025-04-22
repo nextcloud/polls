@@ -97,10 +97,12 @@ export type PollStatus = {
 	lastInteraction: number
 	created: number
 	isAnonymous: boolean
-	isDeleted: boolean
+	isArchived: boolean
 	isExpired: boolean
 	isRealAnonymous: boolean
 	relevantThreshold: number
+	deletionDate: number
+	archivedDate: number
 	countOptions: number
 	countParticipants: number
 	countProposals: number
@@ -189,10 +191,12 @@ export const usePollStore = defineStore('poll', {
 			lastInteraction: 0,
 			created: 0,
 			isAnonymous: false,
-			isDeleted: false,
+			isArchived: false,
 			isExpired: false,
 			isRealAnonymous: false,
 			relevantThreshold: 0,
+			deletionDate: 0,
+			archivedDate: 0,
 			countOptions: 0,
 			countParticipants: 0,
 			countProposals: 0,

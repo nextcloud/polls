@@ -237,10 +237,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'lastInteraction' => $this->getLastInteraction(),
 			'created' => $this->getCreated(),
 			'isAnonymous' => boolval($this->getAnonymous()),
-			'isDeleted' => boolval($this->getDeleted()),
+			'isArchived' => boolval($this->getDeleted()),
 			'isExpired' => $this->getExpired(),
 			'isRealAnonymous' => $this->getAnonymous() < 0,
 			'relevantThreshold' => $this->getRelevantThreshold(),
+			'deletionDate' => $this->getDeletionDate(),
+			'archivedDate' => $this->getDeleted(),
 			'countOptions' => $this->getOptionsCount(),
 			'countParticipants' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getParticipantsCount() : 0,
 			'countProposals' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getProposalsCount() : 0,
@@ -487,6 +489,13 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			$this->getExpire(),
 			$this->getMaxDate(),
 		);
+	}
+
+	private function getDeletionDate(): int {
+		if ($this->getDeleted() > 0 && $this->appSettings->getAutoDeleteEnabled()) {
+			return $this->getDeleted() + ($this->appSettings->getAutoDeleteOffsetDays() * 60 * 60 * 24);
+		}
+		return 0;
 	}
 
 	private function getIsCurrentUserLocked(): bool {

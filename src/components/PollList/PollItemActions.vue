@@ -136,7 +136,7 @@ async function takeOverPoll(): Promise<void> {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="(adminAccess || poll.permissions.edit) && !poll.status.isDeleted"
+			v-if="(adminAccess || poll.permissions.edit) && !poll.status.isArchived"
 			:name="t('polls', 'Archive poll')"
 			:aria-label="t('polls', 'Archive poll')"
 			close-after-click
@@ -147,7 +147,7 @@ async function takeOverPoll(): Promise<void> {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="(adminAccess || poll.permissions.edit) && poll.status.isDeleted"
+			v-if="(adminAccess || poll.permissions.edit) && poll.status.isArchived"
 			:name="t('polls', 'Restore poll')"
 			:aria-label="t('polls', 'Restore poll')"
 			close-after-click
@@ -169,7 +169,7 @@ async function takeOverPoll(): Promise<void> {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="adminAccess || (poll.permissions.edit && poll.status.isDeleted)"
+			v-if="adminAccess || (poll.permissions.edit && poll.status.isArchived)"
 			class="danger"
 			:name="t('polls', 'Delete poll')"
 			:aria-label="t('polls', 'Delete poll')"
