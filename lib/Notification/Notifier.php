@@ -23,6 +23,7 @@ class Notifier implements INotifier {
 	public const NOTIFY_POLL_ARCHIVED_BY_OTHER = 'softDeletePollByOther';
 	public const NOTIFY_POLL_TAKEOVER = 'takeOverPoll';
 	public const NOTIFY_INVITATION = 'invitation';
+
 	private const SUBJECT_PARSED = 'parsedSubject';
 	private const SUBJECT_RICH = 'richSubject';
 
@@ -80,7 +81,16 @@ class Notifier implements INotifier {
 		);
 
 		try {
-			$poll = $this->pollMapper->get(intval($notification->getObjectId()));
+			if ($notification->getObjectType() !== 'poll') {
+				$pollId = $parameters['pollTitle']['id'] ?? null;
+			} else {
+				$pollId = $notification->getObjectId();
+			}
+
+			if ($pollId === null) {
+				throw new \InvalidArgumentException();
+			}
+			$poll = $this->pollMapper->get(intval($pollId));
 			$actor = $this->getActor($parameters['actor'] ?? $poll->getOwner());
 			$pollTitle = $poll->getTitle();
 			$notification->setLink($poll->getVoteUrl());

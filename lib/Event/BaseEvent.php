@@ -18,7 +18,7 @@ use OCA\Polls\UserSession;
 use OCP\EventDispatcher\Event;
 
 abstract class BaseEvent extends Event {
-	protected ?string $activityObjectType = null;
+	protected ?string $activityObjectType = 'poll';
 	protected ?string $eventId = null;
 	protected array $activitySubjectParams = [];
 	protected bool $log = true;
@@ -36,7 +36,7 @@ abstract class BaseEvent extends Event {
 		$this->userSession = Container::queryClass(UserSession::class);
 
 		// Default
-		$this->activitySubjectParams['pollTitle'] = [
+		$this->activitySubjectParams = [
 			'type' => 'highlight',
 			'id' => (string)$this->eventObject->getPollId(),
 			'name' => $this->poll->getTitle(),
