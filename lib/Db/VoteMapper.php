@@ -175,7 +175,8 @@ class VoteMapper extends QBMapperWithUser {
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
-			->groupBy(self::TABLE . '.id');
+			->groupBy(self::TABLE . '.id')
+			->groupBy(self::TABLE . '.poll_id');
 
 		$optionAlias = $this->joinOption($qb, self::TABLE);
 
