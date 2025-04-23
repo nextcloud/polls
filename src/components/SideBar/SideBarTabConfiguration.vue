@@ -36,6 +36,10 @@ import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 
 import { usePollStore, PollType, ShowResults } from '../../stores/poll.ts'
 import { useVotesStore } from '../../stores/votes.ts'
+import DeletePollDialog from '../PollList/DeletePollDialog.vue'
+import { ref } from 'vue'
+import { router } from '../../router.ts'
+import { FilterType } from '../../stores/polls.ts'
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
@@ -55,19 +59,16 @@ function toggleArchive() {
 	}
 }
 
-/**
- *
- */
-function deletePoll() {
-	if (!pollStore.status.isArchived) {
-		return
-	}
-	try {
-		pollStore.delete({ pollId: pollStore.id })
-	} catch {
-		showError(t('polls', 'Error deleting poll.'))
-	}
+function routeAway() {
+	router.push({
+		name: 'list',
+		params: {
+			type: FilterType.Relevant,
+		},
+	})
 }
+const showDeleteDialog = ref(false)
+
 </script>
 
 <template>
@@ -160,9 +161,8 @@ function deletePoll() {
 			</NcButton>
 
 			<NcButton
-				v-if="pollStore.status.isArchived"
 				:variant="ButtonVariant.Error"
-				@click="deletePoll()">
+				@click="showDeleteDialog = true">
 				<template #icon>
 					<DeletePollIcon />
 				</template>
@@ -172,6 +172,12 @@ function deletePoll() {
 			</NcButton>
 		</div>
 	</div>
+
+	<DeletePollDialog
+		v-model="showDeleteDialog"
+		:poll="pollStore"
+		@deleted="routeAway"
+		@close="showDeleteDialog = false" />
 </template>
 
 <style lang="scss">
