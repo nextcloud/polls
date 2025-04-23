@@ -22,6 +22,7 @@ All notable changes to this project will be documented in this file.
  - Opt-in for an option, while adding it
  - Auto delete archived polls after configurable days
  - Configuration for using the Nextcloud default footer in public polls
+ - Delete polls without the need to archive them first
 
 ## [7.4.1] - 2024-03-07
 ### New

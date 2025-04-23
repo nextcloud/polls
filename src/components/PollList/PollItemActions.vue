@@ -22,6 +22,7 @@ import { Poll } from '../../stores/poll.ts'
 import { computed, PropType, ref } from 'vue'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { NcDialog } from '@nextcloud/vue'
+import DeletePollDialog from './DeletePollDialog.vue'
 
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
@@ -38,19 +39,6 @@ const adminAccess = computed(
 )
 
 const showDeleteDialog = ref(false)
-const deleteDialog = {
-	name: t('polls', 'Delete poll'),
-	buttons: [
-		{ label: t('polls', 'Cancel') },
-		{
-			label: t('polls', 'OK'),
-			variant: ButtonVariant.Primary,
-			callback: () => {
-				deletePoll()
-			},
-		},
-	],
-}
 
 const showTakeOverDialog = ref(false)
 const takeOverDialog = {
@@ -73,9 +61,6 @@ const takeOverDialog = {
 	],
 }
 
-/**
- *
- */
 async function toggleArchive() {
 	try {
 		await pollsStore.toggleArchive({ pollId: props.poll.id })
@@ -84,20 +69,6 @@ async function toggleArchive() {
 	}
 }
 
-/**
- *
- */
-async function deletePoll() {
-	try {
-		await pollsStore.delete({ pollId: props.poll.id })
-	} catch {
-		showError(t('polls', 'Error deleting poll.'))
-	}
-}
-
-/**
- *
- */
 async function clonePoll() {
 	try {
 		await pollsStore.clone({ pollId: props.poll.id })
@@ -106,9 +77,6 @@ async function clonePoll() {
 	}
 }
 
-/**
- *
- */
 async function takeOverPoll(): Promise<void> {
 	if (!sessionStore.currentUser.isAdmin) {
 		return
@@ -169,7 +137,7 @@ async function takeOverPoll(): Promise<void> {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="adminAccess || (poll.permissions.edit && poll.status.isArchived)"
+			v-if="adminAccess || poll.permissions.edit"
 			class="danger"
 			:name="t('polls', 'Delete poll')"
 			:aria-label="t('polls', 'Delete poll')"
@@ -183,18 +151,8 @@ async function takeOverPoll(): Promise<void> {
 
 	<NcDialog v-model:open="showTakeOverDialog" v-bind="takeOverDialog" />
 
-	<NcDialog v-model:open="showDeleteDialog" v-bind="deleteDialog">
-		<span v-if="adminAccess">
-			{{
-				t(
-					'polls',
-					'This will finally delete the poll and {username} will get notified.',
-					{ username: props.poll.owner.displayName },
-				)
-			}}
-		</span>
-		<span v-else>
-			{{ t('polls', 'This will finally delete the poll.') }}
-		</span>
-	</NcDialog>
+	<DeletePollDialog
+		v-model="showDeleteDialog"
+		:poll="props.poll"
+		@close="showDeleteDialog = false" />
 </template>
