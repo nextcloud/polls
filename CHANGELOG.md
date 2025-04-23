@@ -17,7 +17,7 @@ All notable changes to this project will be documented in this file.
  - Locked anonymous mode
  - Restricted poll owners
  - Redesign of poll lists
- - Added option to automatically set all added optioons to yes
+ - Added option to automatically set all added options to yes
  - Changed controls of numeric inputs
  - Opt-in for an option, while adding it
  - Auto delete archived polls after configurable days
