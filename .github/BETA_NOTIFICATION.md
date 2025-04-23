@@ -2,7 +2,7 @@
 title: Polls {{ env.VERSION }} released ({{ date | date('YYYY-MM-DD') }})
 labels: Announcement
 ---
-# Changelog for the upcomming release (preview)
+# Changelog for the upcoming release (preview)
 {{ env.RELEASENOTES }}
 
 # Downloads
