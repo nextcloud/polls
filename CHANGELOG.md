@@ -16,6 +16,7 @@ All notable changes to this project will be documented in this file.
  - Redesign of poll lists
  - Added option to automatically set all added optioons to yes
  - changed controls of numeric inputs
+ - Auto delete archived polls after configurable days
 
 ## [7.4.1] - 2024-03-07
 ### New
