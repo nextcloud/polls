@@ -9,14 +9,19 @@ All notable changes to this project will be documented in this file.
 ## [8.0.0] - tbd
 ### Changes
  - Migration to Vue 3 and Pinia
+ - Change Circles to Teams
+ - Change sortable component
+ - Preparation for voting variants
 ### New
  - New dialog for creation of datetime options in date polls
  - Locked anonymous mode
  - Restricted poll owners
  - Redesign of poll lists
  - Added option to automatically set all added optioons to yes
- - changed controls of numeric inputs
+ - Changed controls of numeric inputs
+ - Opt-in for an option, while adding it
  - Auto delete archived polls after configurable days
+ - Configuration for using the Nextcloud default footer in public polls
 
 ## [7.4.1] - 2024-03-07
 ### New
