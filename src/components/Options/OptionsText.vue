@@ -60,12 +60,11 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 </script>
 
 <template>
-	<OptionsTextAdd v-if="!pollStore.isClosed" :style="cssVar" />
-	<div v-if="optionsStore.list.length" ref="list" class="">
-		<div v-for="option in optionsStore.list" :key="option.id" class="">
+	<OptionsTextAdd v-if="!pollStore.isClosed" />
+	<div v-if="optionsStore.list.length" ref="list" :style="cssVar">
+		<div v-for="option in optionsStore.list" :key="option.id" class="sortable">
 			<OptionItem
 				:key="option.id"
-				class="draggable"
 				:option="option"
 				:draggable="true"
 				show-owner>
