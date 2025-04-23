@@ -36,20 +36,20 @@ const model = defineModel({
 
 function deletePoll() {
 	try {
-        pollStore.delete({ pollId: props.poll.id })
-        emit('deleted')
+		pollStore.delete({ pollId: props.poll.id })
+		emit('deleted')
 	} catch {
 		showError(t('polls', 'Error deleting poll.'))
 	}
 }
 
-const dialogText = adminAccess.value ?
-	t(
-		'polls',
-		'This will finally delete the poll and {username} will get notified.',
-		{ username: props.poll.owner.displayName },
-	) :
-	t('polls', 'This will finally delete the poll.')
+const dialogText = adminAccess.value
+	? t(
+			'polls',
+			'This will finally delete the poll and {username} will get notified.',
+			{ username: props.poll.owner.displayName },
+		)
+	: t('polls', 'This will finally delete the poll.')
 
 const deleteDialog = {
 	name: t('polls', 'Delete poll'),
@@ -59,17 +59,16 @@ const deleteDialog = {
 			label: t('polls', 'OK'),
 			variant: ButtonVariant.Primary,
 			callback: () => {
-                deletePoll()
+				deletePoll()
 			},
 		},
 	],
 }
-
 </script>
 
 <template>
 	<NcDialog v-model:open="model" v-bind="deleteDialog">
-		<span >
+		<span>
 			{{ dialogText }}
 		</span>
 	</NcDialog>

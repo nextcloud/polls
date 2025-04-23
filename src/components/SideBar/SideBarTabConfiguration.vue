@@ -68,7 +68,6 @@ function routeAway() {
 	})
 }
 const showDeleteDialog = ref(false)
-
 </script>
 
 <template>
