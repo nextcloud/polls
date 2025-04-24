@@ -16,13 +16,16 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import ConfirmIcon from 'vue-material-design-icons/CheckboxBlankOutline.vue'
 import UnconfirmIcon from 'vue-material-design-icons/CheckboxMarkedOutline.vue'
+import OptionSortIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
 
 import OptionCloneDate from './OptionCloneDate.vue'
 import { usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore, Option } from '../../stores/options.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
+const votesStore = useVotesStore()
 
 const cloneModal = ref(false)
 
@@ -30,6 +33,10 @@ const props = defineProps({
 	option: {
 		type: Object as PropType<Option>,
 		default: null,
+	},
+	useSort: {
+		type: Boolean,
+		default: false,
 	},
 })
 
@@ -114,6 +121,15 @@ function confirmOption() {
 					? t('polls', 'Unconfirm option')
 					: t('polls', 'Confirm option')
 			}}
+		</NcActionButton>
+
+		<NcActionButton
+			v-if="useSort && pollStore.permissions.edit"
+			:name="t('polls', 'Sort')"
+			@click="votesStore.setSort({optionId: option.id})">
+			<template #icon>
+				<OptionSortIcon />
+			</template>
 		</NcActionButton>
 	</NcActions>
 

@@ -4,7 +4,6 @@
  */
 
 import { defineStore } from 'pinia'
-import orderBy from 'lodash/orderBy'
 // eslint-disable-next-line import/no-named-as-default
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
@@ -260,26 +259,6 @@ export const usePollStore = defineStore('poll', {
 			return [noString, Answer.Yes]
 		},
 
-		participants(state): User[] {
-			const sessionStore = useSessionStore()
-			const participants = this.participantsVoted
-
-			// add current user, if not among participants and voting is allowed
-			if (
-				!participants.find(
-					(participant: User) =>
-						participant.id === sessionStore.currentUser?.id,
-				)
-				&& sessionStore.currentUser?.id
-				&& state.permissions.vote
-			) {
-				participants.push(sessionStore.currentUser)
-			}
-			return this.sortParticipants === SortParticipants.Alphabetical
-				? orderBy(participants, ['displayName'], ['asc'])
-				: participants
-		},
-
 		safeParticipants(): User[] {
 			const sessionStore = useSessionStore()
 			if (this.getSafeTable) {
@@ -288,10 +267,10 @@ export const usePollStore = defineStore('poll', {
 			return this.participants
 		},
 
-		participantsVoted(): User[] {
+		participants(): User[] {
 			const votesStore = useVotesStore()
 
-			return uniqueArrayOfObjects(votesStore.list.map((vote) => vote.user))
+			return uniqueArrayOfObjects(votesStore.sortedVotes.map((vote) => vote.user))
 		},
 
 		getProposalsOptions(): {
@@ -373,6 +352,7 @@ export const usePollStore = defineStore('poll', {
 			)
 		},
 
+		// count the number of participants (including current user, if has not voted yet)
 		countParticipants(): number {
 			return this.participants.length
 		},
@@ -381,12 +361,9 @@ export const usePollStore = defineStore('poll', {
 			return this.participants.length - this.safeParticipants.length
 		},
 
+		// count the number of safe participants (including current user, if has not voted yet)
 		countSafeParticipants(): number {
 			return this.safeParticipants.length
-		},
-
-		countParticipantsVoted(): number {
-			return this.participantsVoted.length
 		},
 
 		countCells(): number {

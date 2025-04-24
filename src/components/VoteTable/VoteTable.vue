@@ -15,7 +15,9 @@ import { usePollStore } from '../../stores/poll.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
-
+import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import { NcButton } from '@nextcloud/vue'
+import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
@@ -38,7 +40,19 @@ async function removeUser(userId: string) {
 		<div
 			v-if="pollStore.viewMode === 'table-view'"
 			class="vote-table__users sticky-left">
-			<div class="option-menu" />
+			<div class="option-menu">
+				<NcButton
+					v-if="votesStore.sortByOption > 0"
+					class="sort-indicator"
+					:title="t('polls', 'Click to sort by name')"
+					:button-variant="ButtonVariant.TertiaryNoBackground"
+					@click="() => votesStore.sortByOption = 0">
+					<template #icon>
+						<SortNameIcon />
+					</template>
+				</NcButton>
+			</div>
+
 			<div class="column-header" />
 
 			<div
@@ -87,9 +101,9 @@ async function removeUser(userId: string) {
 		order: 10;
 		padding: 6px;
 		border-radius: 12px;
-		&.current-user {
-			order: 5;
-		}
+		// &.current-user {
+		// 	order: 5;
+		// }
 	}
 
 	.participant {

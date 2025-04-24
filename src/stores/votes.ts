@@ -24,7 +24,12 @@ export enum AnswerSymbol {
 	No = '❌',
 	None = '',
 }
-
+const answerSortOrder: { [key in Answer]: number } = {
+  [Answer.Yes]: 1,
+  [Answer.Maybe]: 2,
+  [Answer.No]: 3,
+  [Answer.None]: 4,
+};
 export type Vote = {
 	id: number
 	pollId: number
@@ -38,14 +43,80 @@ export type Vote = {
 
 export type Votes = {
 	list: Vote[]
+	sortByOption: number,
 }
 
 export const useVotesStore = defineStore('votes', {
 	state: (): Votes => ({
 		list: [],
+		sortByOption: 0,
 	}),
 
 	getters: {
+		sortedVotes(state): Vote[] {
+			const sessionStore = useSessionStore()
+			const pollStore = usePollStore()
+
+			// add a fake vote for the current user, if not among participants and voting is allowed
+			if (
+				!state.list.find(
+					(vote: Vote) =>
+						vote.user.id === sessionStore.currentUser?.id,
+				)
+				&& sessionStore.currentUser?.id
+				&& pollStore.permissions.vote
+			) {
+				state.list.unshift({
+					answer: Answer.None,
+					optionText: '',
+					user: sessionStore.currentUser,
+					answerSymbol: AnswerSymbol.None,
+					deleted: 0,
+					id: 0,
+					optionId: state.sortByOption,
+					pollId: pollStore.id,
+				})
+			}
+
+			if (state.sortByOption === 0) {
+				return state.list.sort((a, b) => {
+					// sort votes of the current user to the top
+					if (a.user.id === sessionStore.currentUser.id && b.user.id !== sessionStore.currentUser.id) {
+						return -1
+					}
+					if (b.user.id === sessionStore.currentUser.id && a.user.id !== sessionStore.currentUser.id) {
+						return 1
+					}
+					// sort other votes by display name
+					if (a.user.displayName < b.user.displayName) {
+						return -1
+					}
+					if (a.user.displayName > b.user.displayName) {
+						return 1
+					}
+					return 0
+				})
+			}
+
+			if (state.sortByOption > 0) {
+				return state.list.sort((a, b) => {
+					// first sort by optionId (the closer the searched optionId, the further in front)
+					if (a.optionId === state.sortByOption && b.optionId !== state.sortByOption) {
+						return -1
+					}
+					if (b.optionId === state.sortByOption && a.optionId !== state.sortByOption) {
+						return 1
+					}
+
+					// then sort by answers with wanted order
+					return answerSortOrder[a.answer] - answerSortOrder[b.answer]
+				})
+			}
+
+			// fallback: no sort
+			return state.list
+		},
+
 		hasVotes: (state) => state.list.length > 0,
 	},
 
@@ -156,6 +227,10 @@ export const useVotesStore = defineStore('votes', {
 					throw error
 				}
 			}
+		},
+
+		async setSort(payload: { optionId: number }) {
+			this.sortByOption = payload.optionId
 		},
 
 		async resetVotes() {
