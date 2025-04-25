@@ -447,6 +447,8 @@ OC.L10N.register(
     "Enable the usage of the combo view globally" : "Zapnout používání kombo zobrazení globálně",
     "Enable only for the following groups" : "Povolit pouze vybraným skupinám",
     "Leave empty to disable globally" : "Nevyplňujte pokud má být přístupné všem",
+    "Enable the automatic deletion of archived polls" : "Zapnout automatické mazání archivovaných anket",
+    "Days after which archived polls should be finally deleted" : "Dnů po jejichž uplynutí mají být archivované ankety konečně smazány",
     "Add terms links also to the email footer" : "Přidat odkazy na podmínky používání do zápatí e-mailu",
     "Additional email disclaimer" : "Další e-mailové zřeknutí se odpovědnosti",
     "Run autoreminder" : "Spustit automatické připomenutí",
