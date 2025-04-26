@@ -119,7 +119,6 @@ const props = defineProps({
 		font-weight: bold;
 		text-decoration: underline;
 	}
-
 }
 
 .option-item__handle {

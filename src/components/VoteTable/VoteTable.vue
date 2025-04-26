@@ -282,7 +282,6 @@ const showCalendarPeek = computed(
 	}
 
 	&.table-view {
-
 		.current-user {
 			margin-bottom: 30px;
 		}
