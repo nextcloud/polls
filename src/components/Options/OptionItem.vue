@@ -105,11 +105,21 @@ const props = defineProps({
 	overflow: hidden;
 	text-overflow: ellipsis;
 	align-self: center;
+	text-wrap: balance;
+	hyphens: auto;
+
+	.table-view .option-item & {
+		text-align: center;
+		/* Notice: https://caniuse.com/css-text-wrap-balance */
+		padding: 0 0.6em;
+		margin: auto;
+	}
 
 	a {
 		font-weight: bold;
 		text-decoration: underline;
 	}
+
 }
 
 .option-item__handle {

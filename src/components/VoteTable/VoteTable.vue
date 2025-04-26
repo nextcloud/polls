@@ -177,93 +177,10 @@ const showCalendarPeek = computed(
 
 <style lang="scss">
 .vote-table {
-	&.table-view {
-		display: grid;
-		grid-template-columns: 7.5rem auto;
-		grid-template-areas: 'info options' 'users votes';
-
-		.grid-info {
-			grid-area: info;
-			position: sticky;
-			left: 0;
-			top: 0;
-			z-index: 5;
-			background-color: var(--color-main-background);
-		}
-
-		.grid-users {
-			grid-area: users;
-			position: sticky;
-			left: 0;
-			z-index: 4;
-			background-color: var(--color-main-background);
-		}
-
-		.grid-options {
-			grid-area: options;
-			position: sticky;
-			top: 0;
-			z-index: 2;
-			background-color: var(--color-main-background);
-			// TODO Quickfix: the grid area seems to be less wide, that it should be
-			// give the sticky divs inside grid-options
-			& > div {
-				background-color: var(--color-main-background);
-			}
-		}
-
-		.current-user {
-			margin-bottom: 30px;
-		}
-
-		.vote-table__options {
-			display: flex;
-		}
-
-		.vote-table__votes > div,
-		.vote-table__options > div {
-			flex: 1 0 11rem;
-			border-left: 1px solid var(--color-border-dark);
-		}
-
-		.option-menu-grid {
-			display: grid;
-			grid-template-columns: repeat(3, 1fr);
-			grid-template-areas: 'left middle right';
-			align-content: center;
-			align-self: stretch;
-			flex: 0 0 34px;
-
-			.option-menu {
-				grid-area: middle;
-				justify-self: center;
-			}
-
-			.sort-indicator {
-				grid-area: right;
-				justify-self: end;
-			}
-		}
-		.option-item .option-item__option--text {
-			text-align: center;
-			/* Notice: https://caniuse.com/css-text-wrap-balance */
-			text-wrap: balance;
-			hyphens: auto;
-			padding: 0 0.6em;
-			margin: auto;
-		}
-	}
-	.grid-votes {
-		grid-area: votes;
-	}
-
-	.grid-options {
-		grid-area: options;
-	}
-}
-
-.vote-table {
 	overflow-x: scroll;
+	display: grid;
+	grid-template-columns: 7.5rem auto;
+	grid-template-areas: 'info options' 'users votes';
 
 	.participant,
 	.vote-item {
@@ -306,14 +223,97 @@ const showCalendarPeek = computed(
 		order: 2;
 	}
 
-	&.list-view {
-		flex: 1;
+	.option-menu-grid {
 		display: grid;
-		grid-template-columns: 5rem auto;
-		grid-template-areas: 'votes options';
+		grid-template-columns: repeat(3, 1fr);
+		grid-template-areas: 'left middle right';
+		align-content: center;
+		align-self: stretch;
+		flex: 0 0 34px;
+
+		.option-menu {
+			grid-area: middle;
+			justify-self: center;
+		}
+
+		.sort-indicator {
+			grid-area: right;
+			justify-self: end;
+		}
+	}
+
+	.grid-info {
+		grid-area: info;
+		position: sticky;
+		left: 0;
+		top: 0;
+		z-index: 5;
+		background-color: var(--color-main-background);
+	}
+
+	.grid-users {
+		grid-area: users;
+		position: sticky;
+		left: 0;
+		z-index: 4;
+		background-color: var(--color-main-background);
+	}
+
+	.grid-votes,
+	.grid-options {
+		display: flex;
+	}
+
+	.grid-votes {
+		grid-area: votes;
+	}
+
+	.grid-options {
+		grid-area: options;
+		position: sticky;
+		top: 0;
+		z-index: 2;
+		background-color: var(--color-main-background);
+		// TODO Quickfix: the grid area seems to be less wide, that it should be
+		// give the sticky divs inside grid-options
+		& > div {
+			background-color: var(--color-main-background);
+		}
+	}
+
+	&.table-view {
+
+		.current-user {
+			margin-bottom: 30px;
+		}
 
 		.grid-votes,
 		.grid-options {
+			> div {
+				flex: 1 0 11rem;
+				border-left: 1px solid var(--color-border-dark);
+			}
+		}
+
+		.option-item .option-item__option--text {
+			text-align: center;
+			/* Notice: https://caniuse.com/css-text-wrap-balance */
+			text-wrap: balance;
+			hyphens: auto;
+			padding: 0 0.6em;
+			margin: auto;
+		}
+	}
+
+	&.list-view {
+		flex: 1;
+		grid-template-columns: auto 5rem;
+		grid-template-areas: 'options votes';
+
+		.grid-votes,
+		.grid-options {
+			align-items: stretch;
+			flex-direction: column;
 			> div {
 				flex: 1;
 				display: grid;
@@ -335,10 +335,6 @@ const showCalendarPeek = computed(
 
 		.vote-item:not(.current-user) {
 			display: none;
-		}
-		.vote-table__votes {
-			align-items: stretch;
-			flex-direction: column;
 		}
 
 		@media only screen and (max-width: 340px) {
