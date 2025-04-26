@@ -318,7 +318,7 @@ const showCalendarPeek = computed(
 				display: grid;
 				align-items: center;
 				justify-content: stretch;
-				min-height: 6.4rem;
+				min-height: 6.5rem;
 			}
 		}
 
