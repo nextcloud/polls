@@ -127,7 +127,7 @@ function confirmOption() {
 			v-if="useSort && pollStore.permissions.edit"
 			close-after-click
 			:name="t('polls', 'Sort')"
-			@click="votesStore.setSort({optionId: option.id})">
+			@click="votesStore.setSort({ optionId: option.id })">
 			<template #icon>
 				<OptionSortIcon />
 			</template>

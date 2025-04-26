@@ -31,7 +31,7 @@ import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import { StatusResults, } from '../../Types/index.ts'
+import { StatusResults } from '../../Types/index.ts'
 
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 

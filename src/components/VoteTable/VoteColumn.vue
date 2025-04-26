@@ -54,10 +54,10 @@ const showCalendarPeek = computed(
 <template>
 	<div :class="componentClass">
 		<div class="option-menu">
-			<OptionMenu :option="option" use-sort/>
+			<OptionMenu :option="option" use-sort />
 		</div>
 		<div class="column-header">
-			<OptionItem :option="option"/>
+			<OptionItem :option="option" />
 
 			<Counter
 				v-if="pollStore.permissions.seeResults"

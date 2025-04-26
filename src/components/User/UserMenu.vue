@@ -39,12 +39,7 @@ import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import {
-	StatusResults,
-	ViewMode,
-	PollType,
-	Event,
-} from '../../Types/index.ts'
+import { StatusResults, ViewMode, PollType, Event } from '../../Types/index.ts'
 
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 import { NcActionButtonGroup } from '@nextcloud/vue'
@@ -467,7 +462,10 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="pollStore.permissions.vote && pollStore.viewMode === ViewMode.ListView"
+			v-if="
+				pollStore.permissions.vote
+				&& pollStore.viewMode === ViewMode.ListView
+			"
 			:name="t('polls', 'Reset your votes')"
 			:aria-label="t('polls', 'Reset your votes')"
 			@click="resetVotes()">

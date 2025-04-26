@@ -270,7 +270,9 @@ export const usePollStore = defineStore('poll', {
 		participants(): User[] {
 			const votesStore = useVotesStore()
 
-			return uniqueArrayOfObjects(votesStore.sortedVotes.map((vote) => vote.user))
+			return uniqueArrayOfObjects(
+				votesStore.sortedVotes.map((vote) => vote.user),
+			)
 		},
 
 		getProposalsOptions(): {

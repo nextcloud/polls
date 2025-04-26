@@ -28,7 +28,6 @@ import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import VoteItem from './VoteItem.vue'
 import VoteMenu from './VoteMenu.vue'
 
-
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
@@ -56,14 +55,13 @@ const showCalendarPeek = computed(
 	<div
 		class="vote-table"
 		:class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
-
 		<div v-if="pollStore.viewMode === ViewMode.TableView" class="grid-info">
 			<NcButton
 				v-if="votesStore.sortByOption > 0"
 				class="sort-indicator"
 				:title="t('polls', 'Click to sort by name')"
 				:button-variant="ButtonVariant.TertiaryNoBackground"
-				@click="() => votesStore.sortByOption = 0">
+				@click="() => (votesStore.sortByOption = 0)">
 				<template #icon>
 					<SortNameIcon />
 				</template>
@@ -71,7 +69,8 @@ const showCalendarPeek = computed(
 		</div>
 
 		<TransitionGroup
-			v-if="pollStore.viewMode === 'table-view'" tag="div"
+			v-if="pollStore.viewMode === 'table-view'"
+			tag="div"
 			name="list"
 			class="vote-table__users grid-users">
 			<div
@@ -85,17 +84,28 @@ const showCalendarPeek = computed(
 					},
 				]">
 				<UserItem :user="participant" condensed>
-					<template v-if="pollStore.permissions.edit || participant.id === sessionStore.currentUser.id" #menu>
+					<template
+						v-if="
+							pollStore.permissions.edit
+							|| participant.id === sessionStore.currentUser.id
+						"
+						#menu>
 						<NcActions
-							v-if="participant.id !== sessionStore.currentUser.id && pollStore.permissions.changeForeignVotes"
+							v-if="
+								participant.id !== sessionStore.currentUser.id
+								&& pollStore.permissions.changeForeignVotes
+							"
 							class="user-menu"
 							placement="right"
 							:variant="ButtonVariant.TertiaryNoBackground"
 							force-menu>
-
 							<NcActionText :name="participant.displayName" />
 							<NcActionButton
-								:name="t('polls', 'Remove votes of {displayName}', { displayName: participant.displayName })"
+								:name="
+									t('polls', 'Remove votes of {displayName}', {
+										displayName: participant.displayName,
+									})
+								"
 								@click="removeUser(participant.id)">
 								<template #icon>
 									<DeleteIcon />
@@ -110,26 +120,32 @@ const showCalendarPeek = computed(
 							force-menu
 							no-menu-icon>
 						</VoteMenu>
-
 					</template>
 				</UserItem>
 			</div>
 		</TransitionGroup>
 
-		<TransitionGroup tag="div" name="list" class="vote-table__options grid-options">
-			<div
-				v-for="option in optionsStore.orderedOptions"
-				:key="option.id" >
+		<TransitionGroup
+			tag="div"
+			name="list"
+			class="vote-table__options grid-options">
+			<div v-for="option in optionsStore.orderedOptions" :key="option.id">
 				<div class="option-menu-grid">
-					<OptionMenu v-if="pollStore.viewMode === ViewMode.TableView" :option="option" use-sort/>
+					<OptionMenu
+						v-if="pollStore.viewMode === ViewMode.TableView"
+						:option="option"
+						use-sort />
 					<SortOptionIcon
-						v-if="votesStore.sortByOption === option.id && pollStore.viewMode === ViewMode.TableView"
+						v-if="
+							votesStore.sortByOption === option.id
+							&& pollStore.viewMode === ViewMode.TableView
+						"
 						class="sort-indicator"
 						:title="t('polls', 'Click to remove sorting')"
-						@click="() => votesStore.sortByOption = 0" />
+						@click="() => (votesStore.sortByOption = 0)" />
 				</div>
 				<div class="column-header">
-					<OptionItem :option="option"/>
+					<OptionItem :option="option" />
 					<Counter
 						v-if="pollStore.permissions.seeResults"
 						:show-maybe="pollStore.configuration.allowMaybe"
@@ -144,25 +160,27 @@ const showCalendarPeek = computed(
 		</TransitionGroup>
 
 		<TransitionGroup tag="div" name="list" class="vote-table__votes grid-votes">
-			<TransitionGroup v-for="option in optionsStore.orderedOptions" :key="option.id" tag="div" name="list">
+			<TransitionGroup
+				v-for="option in optionsStore.orderedOptions"
+				:key="option.id"
+				tag="div"
+				name="list">
 				<VoteItem
 					v-for="participant in pollStore.safeParticipants"
 					:key="participant.id"
 					:user="participant"
 					:option="option" />
-
 			</TransitionGroup>
 		</TransitionGroup>
 	</div>
 </template>
 
 <style lang="scss">
-
 .vote-table {
-	&.table-view  {
+	&.table-view {
 		display: grid;
 		grid-template-columns: 7.5rem auto;
-		grid-template-areas: "info options" "users votes";
+		grid-template-areas: 'info options' 'users votes';
 
 		.grid-info {
 			grid-area: info;
@@ -210,7 +228,7 @@ const showCalendarPeek = computed(
 
 		.option-menu-grid {
 			display: grid;
-			grid-template-columns: repeat(3, 1fr) ;
+			grid-template-columns: repeat(3, 1fr);
 			grid-template-areas: 'left middle right';
 			align-content: center;
 			align-self: stretch;
@@ -292,9 +310,10 @@ const showCalendarPeek = computed(
 		flex: 1;
 		display: grid;
 		grid-template-columns: 5rem auto;
-		grid-template-areas: "votes options";
+		grid-template-areas: 'votes options';
 
-		.grid-votes, .grid-options {
+		.grid-votes,
+		.grid-options {
 			> div {
 				flex: 1;
 				display: grid;

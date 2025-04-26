@@ -373,7 +373,6 @@ function showMenu() {
 	&:hover {
 		opacity: 1;
 	}
-
 }
 .user-item__avatar .material-design-icon {
 	background-color: var(--color-primary-element);

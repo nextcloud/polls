@@ -25,11 +25,11 @@ export enum AnswerSymbol {
 	None = '',
 }
 const answerSortOrder: { [key in Answer]: number } = {
-  [Answer.Yes]: 1,
-  [Answer.Maybe]: 2,
-  [Answer.No]: 3,
-  [Answer.None]: 4,
-};
+	[Answer.Yes]: 1,
+	[Answer.Maybe]: 2,
+	[Answer.No]: 3,
+	[Answer.None]: 4,
+}
 export type Vote = {
 	id: number
 	pollId: number
@@ -43,7 +43,7 @@ export type Vote = {
 
 export type Votes = {
 	list: Vote[]
-	sortByOption: number,
+	sortByOption: number
 }
 
 export const useVotesStore = defineStore('votes', {
@@ -60,8 +60,7 @@ export const useVotesStore = defineStore('votes', {
 			// add a fake vote for the current user, if not among participants and voting is allowed
 			if (
 				!state.list.find(
-					(vote: Vote) =>
-						vote.user.id === sessionStore.currentUser?.id,
+					(vote: Vote) => vote.user.id === sessionStore.currentUser?.id,
 				)
 				&& sessionStore.currentUser?.id
 				&& pollStore.permissions.vote
@@ -81,10 +80,16 @@ export const useVotesStore = defineStore('votes', {
 			if (state.sortByOption === 0) {
 				return state.list.sort((a, b) => {
 					// sort votes of the current user to the top
-					if (a.user.id === sessionStore.currentUser.id && b.user.id !== sessionStore.currentUser.id) {
+					if (
+						a.user.id === sessionStore.currentUser.id
+						&& b.user.id !== sessionStore.currentUser.id
+					) {
 						return -1
 					}
-					if (b.user.id === sessionStore.currentUser.id && a.user.id !== sessionStore.currentUser.id) {
+					if (
+						b.user.id === sessionStore.currentUser.id
+						&& a.user.id !== sessionStore.currentUser.id
+					) {
 						return 1
 					}
 					// sort other votes by display name
@@ -101,10 +106,16 @@ export const useVotesStore = defineStore('votes', {
 			if (state.sortByOption > 0) {
 				return state.list.sort((a, b) => {
 					// first sort by optionId (the closer the searched optionId, the further in front)
-					if (a.optionId === state.sortByOption && b.optionId !== state.sortByOption) {
+					if (
+						a.optionId === state.sortByOption
+						&& b.optionId !== state.sortByOption
+					) {
 						return -1
 					}
-					if (b.optionId === state.sortByOption && a.optionId !== state.sortByOption) {
+					if (
+						b.optionId === state.sortByOption
+						&& a.optionId !== state.sortByOption
+					) {
 						return 1
 					}
 

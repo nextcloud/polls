@@ -158,7 +158,8 @@ const countUsedVotes = computed(
 		</BadgeDiv>
 		<BadgeDiv
 			v-if="
-				pollStore.status.countParticipants && pollStore.permissions.seeResults
+				pollStore.status.countParticipants
+				&& pollStore.permissions.seeResults
 			">
 			<template #icon>
 				<ParticipantsIcon />

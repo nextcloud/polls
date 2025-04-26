@@ -126,22 +126,22 @@ onUnmounted(() => {
 				</div>
 			</div>
 
-				<VoteTable v-show="optionsStore.list.length" />
+			<VoteTable v-show="optionsStore.list.length" />
 
-				<NcEmptyContent
-					v-if="!optionsStore.list.length"
-					v-bind="emptyContentProps">
-					<template #icon>
-						<TextPollIcon v-if="pollStore.type === PollType.Text" />
-						<DatePollIcon v-else />
-					</template>
-					<template v-if="pollStore.permissions.addOptions" #action>
-						<ActionAddOption
-							v-if="pollStore.type === PollType.Date"
-							:caption="t('polls', 'Add options')" />
-						<ActionOpenOptionsSidebar v-else />
-					</template>
-				</NcEmptyContent>
+			<NcEmptyContent
+				v-if="!optionsStore.list.length"
+				v-bind="emptyContentProps">
+				<template #icon>
+					<TextPollIcon v-if="pollStore.type === PollType.Text" />
+					<DatePollIcon v-else />
+				</template>
+				<template v-if="pollStore.permissions.addOptions" #action>
+					<ActionAddOption
+						v-if="pollStore.type === PollType.Date"
+						:caption="t('polls', 'Add options')" />
+					<ActionOpenOptionsSidebar v-else />
+				</template>
+			</NcEmptyContent>
 
 			<div class="area__footer">
 				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants" />
