@@ -125,6 +125,7 @@ function confirmOption() {
 
 		<NcActionButton
 			v-if="useSort && pollStore.permissions.edit"
+			close-after-click
 			:name="t('polls', 'Sort')"
 			@click="votesStore.setSort({optionId: option.id})">
 			<template #icon>

@@ -41,7 +41,7 @@ const props = defineProps({
 <style lang="scss">
 .vote-column {
 	display: flex;
-	flex: 1 0 85px;
+	flex: 1 0 11rem;
 	flex-direction: column;
 	align-items: stretch;
 	max-width: 280px;

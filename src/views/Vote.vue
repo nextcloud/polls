@@ -126,7 +126,6 @@ onUnmounted(() => {
 				</div>
 			</div>
 
-			<div class="area__main" :class="pollStore.viewMode">
 				<VoteTable v-show="optionsStore.list.length" />
 
 				<NcEmptyContent
@@ -143,7 +142,6 @@ onUnmounted(() => {
 						<ActionOpenOptionsSidebar v-else />
 					</template>
 				</NcEmptyContent>
-			</div>
 
 			<div class="area__footer">
 				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants" />
@@ -170,11 +168,6 @@ onUnmounted(() => {
 	.poll-title {
 		flex: 1 270px;
 	}
-}
-
-.area__main {
-	display: flex;
-	flex-direction: column;
 }
 
 .top_area {

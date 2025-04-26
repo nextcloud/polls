@@ -111,6 +111,7 @@ async function setVote() {
 	display: flex;
 	background-color: var(--color-polls-background-no);
 	transition: all 0.4s ease-in-out;
+	background-clip: content-box;
 
 	&.yes {
 		background-color: var(--color-polls-background-yes);

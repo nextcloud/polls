@@ -7,21 +7,33 @@
 import { showSuccess } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import { ActionDelete } from '../Actions/index.ts'
-
-import VoteColumn from './VoteColumn.vue'
 import UserItem from '../User/UserItem.vue'
-import { usePollStore } from '../../stores/poll.ts'
+import { PollType, usePollStore } from '../../stores/poll.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import { NcButton } from '@nextcloud/vue'
+import { NcActionButton, NcActions, NcActionText, NcButton } from '@nextcloud/vue'
 import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
+import { computed } from 'vue'
+import { getCurrentUser } from '@nextcloud/auth'
+import Counter from '../Options/Counter.vue'
+import CalendarPeek from '../Calendar/CalendarPeek.vue'
+import OptionItem from '../Options/OptionItem.vue'
+import OptionMenu from '../Options/OptionMenu.vue'
+import { usePreferencesStore, ViewMode } from '../../stores/preferences.ts'
+
+import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
+import DeleteIcon from 'vue-material-design-icons/Delete.vue'
+import VoteItem from './VoteItem.vue'
+import VoteMenu from './VoteMenu.vue'
+
+
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
+const preferencesStore = usePreferencesStore()
 
 /**
  *
@@ -31,30 +43,37 @@ async function removeUser(userId: string) {
 	await votesStore.resetUserVotes({ userId })
 	showSuccess(t('polls', 'Participant {userId} has been removed', { userId }))
 }
+
+const showCalendarPeek = computed(
+	() =>
+		pollStore.type === PollType.Date
+		&& getCurrentUser()
+		&& preferencesStore.user.calendarPeek,
+)
 </script>
 
 <template>
 	<div
 		class="vote-table"
 		:class="[pollStore.viewMode, { closed: pollStore.isClosed }]">
-		<div
-			v-if="pollStore.viewMode === 'table-view'"
-			class="vote-table__users sticky-left">
-			<div class="option-menu">
-				<NcButton
-					v-if="votesStore.sortByOption > 0"
-					class="sort-indicator"
-					:title="t('polls', 'Click to sort by name')"
-					:button-variant="ButtonVariant.TertiaryNoBackground"
-					@click="() => votesStore.sortByOption = 0">
-					<template #icon>
-						<SortNameIcon />
-					</template>
-				</NcButton>
-			</div>
 
-			<div class="column-header" />
+		<div v-if="pollStore.viewMode === ViewMode.TableView" class="grid-info">
+			<NcButton
+				v-if="votesStore.sortByOption > 0"
+				class="sort-indicator"
+				:title="t('polls', 'Click to sort by name')"
+				:button-variant="ButtonVariant.TertiaryNoBackground"
+				@click="() => votesStore.sortByOption = 0">
+				<template #icon>
+					<SortNameIcon />
+				</template>
+			</NcButton>
+		</div>
 
+		<TransitionGroup
+			v-if="pollStore.viewMode === 'table-view'" tag="div"
+			name="list"
+			class="vote-table__users grid-users">
 			<div
 				v-for="participant in pollStore.safeParticipants"
 				:key="participant.id"
@@ -65,34 +84,167 @@ async function removeUser(userId: string) {
 							participant.id === sessionStore.currentUser.id,
 					},
 				]">
-				<UserItem :user="participant" condensed />
+				<UserItem :user="participant" condensed>
+					<template v-if="pollStore.permissions.edit || participant.id === sessionStore.currentUser.id" #menu>
+						<NcActions
+							v-if="participant.id !== sessionStore.currentUser.id && pollStore.permissions.changeForeignVotes"
+							class="user-menu"
+							placement="right"
+							:variant="ButtonVariant.TertiaryNoBackground"
+							force-menu>
 
-				<ActionDelete
-					v-if="
-						pollStore.permissions.edit
-						&& pollStore.permissions.changeForeignVotes
-					"
-					class="user-actions"
-					:name="t('polls', 'Delete votes')"
-					@delete="removeUser(participant.id)" />
+							<NcActionText :name="participant.displayName" />
+							<NcActionButton
+								:name="t('polls', 'Remove votes of {displayName}', { displayName: participant.displayName })"
+								@click="removeUser(participant.id)">
+								<template #icon>
+									<DeleteIcon />
+								</template>
+							</NcActionButton>
+						</NcActions>
+						<VoteMenu
+							v-if="participant.id === sessionStore.currentUser.id"
+							class="user-menu"
+							placement="right"
+							:variant="ButtonVariant.TertiaryNoBackground"
+							force-menu
+							no-menu-icon>
+						</VoteMenu>
+
+					</template>
+				</UserItem>
 			</div>
-		</div>
+		</TransitionGroup>
 
-		<TransitionGroup tag="div" name="list" class="vote-table__votes">
-			<VoteColumn
+		<TransitionGroup tag="div" name="list" class="vote-table__options grid-options">
+			<div
 				v-for="option in optionsStore.orderedOptions"
-				:key="option.id"
-				:option="option"
-				:class="{ 'option-owner': option.isOwner }"
-				:view-mode="pollStore.viewMode" />
+				:key="option.id" >
+				<div class="option-menu-grid">
+					<OptionMenu v-if="pollStore.viewMode === ViewMode.TableView" :option="option" use-sort/>
+					<SortOptionIcon
+						v-if="votesStore.sortByOption === option.id && pollStore.viewMode === ViewMode.TableView"
+						class="sort-indicator"
+						:title="t('polls', 'Click to remove sorting')"
+						@click="() => votesStore.sortByOption = 0" />
+				</div>
+				<div class="column-header">
+					<OptionItem :option="option"/>
+					<Counter
+						v-if="pollStore.permissions.seeResults"
+						:show-maybe="pollStore.configuration.allowMaybe"
+						:option="option" />
+
+					<CalendarPeek
+						v-if="showCalendarPeek"
+						:focus-trap="false"
+						:option="option" />
+				</div>
+			</div>
+		</TransitionGroup>
+
+		<TransitionGroup tag="div" name="list" class="vote-table__votes grid-votes">
+			<TransitionGroup v-for="option in optionsStore.orderedOptions" :key="option.id" tag="div" name="list">
+				<VoteItem
+					v-for="participant in pollStore.safeParticipants"
+					:key="participant.id"
+					:user="participant"
+					:option="option" />
+
+			</TransitionGroup>
 		</TransitionGroup>
 	</div>
 </template>
 
 <style lang="scss">
+
 .vote-table {
-	display: flex;
-	flex: 1;
+	&.table-view  {
+		display: grid;
+		grid-template-columns: 7.5rem auto;
+		grid-template-areas: "info options" "users votes";
+
+		.grid-info {
+			grid-area: info;
+			position: sticky;
+			left: 0;
+			top: 0;
+			z-index: 5;
+			background-color: var(--color-main-background);
+		}
+
+		.grid-users {
+			grid-area: users;
+			position: sticky;
+			left: 0;
+			z-index: 4;
+			background-color: var(--color-main-background);
+		}
+
+		.grid-options {
+			grid-area: options;
+			position: sticky;
+			top: 0;
+			z-index: 2;
+			background-color: var(--color-main-background);
+			// TODO Quickfix: the grid area seems to be less wide, that it should be
+			// give the sticky divs inside grid-options
+			& > div {
+				background-color: var(--color-main-background);
+			}
+		}
+
+		.current-user {
+			margin-bottom: 30px;
+		}
+
+		.vote-table__options {
+			display: flex;
+		}
+
+		.vote-table__votes > div,
+		.vote-table__options > div {
+			flex: 1 0 11rem;
+			border-left: 1px solid var(--color-border-dark);
+		}
+
+		.option-menu-grid {
+			display: grid;
+			grid-template-columns: repeat(3, 1fr) ;
+			grid-template-areas: 'left middle right';
+			align-content: center;
+			align-self: stretch;
+			flex: 0 0 34px;
+
+			.option-menu {
+				grid-area: middle;
+				justify-self: center;
+			}
+
+			.sort-indicator {
+				grid-area: right;
+				justify-self: end;
+			}
+		}
+		.option-item .option-item__option--text {
+			text-align: center;
+			/* Notice: https://caniuse.com/css-text-wrap-balance */
+			text-wrap: balance;
+			hyphens: auto;
+			padding: 0 0.6em;
+			margin: auto;
+		}
+	}
+	.grid-votes {
+		grid-area: votes;
+	}
+
+	.grid-options {
+		grid-area: options;
+	}
+}
+
+.vote-table {
 	overflow-x: scroll;
 
 	.participant,
@@ -101,15 +253,13 @@ async function removeUser(userId: string) {
 		order: 10;
 		padding: 6px;
 		border-radius: 12px;
-		// &.current-user {
-		// 	order: 5;
-		// }
 	}
 
 	.participant {
 		display: flex;
 		align-self: stretch;
 		justify-content: center;
+		max-width: 7rem;
 
 		.user-actions {
 			visibility: hidden;
@@ -128,236 +278,54 @@ async function removeUser(userId: string) {
 		flex-direction: column;
 		padding-bottom: 4px;
 		align-items: flex-start;
-
-		&.sticky-left {
-			position: sticky;
-			left: 0;
-			z-index: 2;
-			background-color: var(--color-main-background);
-		}
 	}
 
 	.vote-table__votes {
 		display: flex;
-		flex: 1;
-		overflow-x: scroll;
 	}
 
 	.vote-column {
 		order: 2;
-		display: flex;
-		flex: 1 0 11em;
-		flex-direction: column;
-		align-items: stretch;
-		max-width: 19em;
-		margin-bottom: 4px;
-
-		& > div {
-			display: flex;
-		}
-		.option-item {
-			flex: 1;
-			order: 1;
-		}
-	}
-
-	&.closed .vote-column {
-		&.confirmed {
-			order: 1;
-			border-radius: 10px;
-			border: 1px solid var(--color-polls-foreground-yes);
-			background-color: var(--color-polls-background-yes);
-			margin: 4px 4px;
-		}
-	}
-
-	.vote-item {
-		background-clip: content-box;
-	}
-
-	.confirmation {
-		order: 3;
-		padding: 4px;
-	}
-
-	.counter {
-		order: 3;
-	}
-
-	.calendar-peek {
-		order: 2;
-	}
-
-	.confirm {
-		height: 45px;
-		order: 20;
-	}
-
-	.owner {
-		display: flex;
-		flex: 0 auto;
-		height: 1.6em;
-		line-height: 1.6em;
-		min-width: 24px;
-		order: 19;
-	}
-
-	.spacer {
-		flex: 1;
-		order: 0;
-	}
-
-	&.table-view {
-		.column-header {
-			flex: 1;
-			flex-direction: column;
-			&.sticky-top {
-				position: sticky;
-				top: 78px;
-				background-color: var(--color-main-background);
-				padding-bottom: 4px;
-				z-index: 1;
-			}
-		}
-
-		.vote-table__users::after,
-		.vote-column::after {
-			content: '';
-			height: 8px;
-			order: 99;
-		}
-
-		.participant {
-			max-width: 245px;
-		}
-
-		.option-item .option-item__option--text {
-			text-align: center;
-			/* Notice: https://caniuse.com/css-text-wrap-balance */
-			text-wrap: balance;
-			hyphens: auto;
-			padding: 0 0.6em;
-		}
-
-		.participant,
-		.vote-item {
-			&.current-user {
-				margin-bottom: 30px;
-			}
-		}
 	}
 
 	&.list-view {
-		flex-direction: column;
+		flex: 1;
+		display: grid;
+		grid-template-columns: 5rem auto;
+		grid-template-areas: "votes options";
 
-		.vote-column {
-			flex-direction: row-reverse;
-			flex: 1 5.5em;
-			align-items: center;
-			max-width: initial;
-			position: relative;
-			border-top: solid 1px var(--color-border);
-			border-left: none;
-			padding: 0;
-
-			.column-header {
-				flex-direction: row-reverse;
-				order: 1;
+		.grid-votes, .grid-options {
+			> div {
 				flex: 1;
-				justify-content: space-between;
-			}
-
-			&.locked {
-				background-color: var(--color-polls-background-no);
-			}
-		}
-
-		.participant {
-			border-top: none;
-		}
-
-		.participant:not(.current-user),
-		.vote-item:not(.current-user) {
-			display: none;
-		}
-
-		&.closed {
-			.vote-column {
-				padding: 2px 8px;
-				&.confirmed {
-					margin: 4px 0;
-				}
+				display: grid;
+				align-items: center;
+				justify-content: stretch;
+				min-height: 6.4rem;
 			}
 		}
 
-		.confirm {
-			display: none;
-		}
-
-		.owner {
-			order: 0;
-			flex: 0;
+		.column-header {
+			display: grid;
+			grid-template-columns: auto 4rem;
 		}
 
 		.counter {
-			order: 0;
-			flex: 0;
 			flex-direction: column;
-			padding-left: 12px;
+			justify-content: space-evenly;
 		}
 
-		.vote-table__users {
-			margin: 0;
-			flex-direction: revert;
-
-			.confirm,
-			.owner {
-				display: none;
-			}
+		.vote-item:not(.current-user) {
+			display: none;
 		}
-
 		.vote-table__votes {
 			align-items: stretch;
 			flex-direction: column;
-		}
-
-		.option-item {
-			flex-direction: row;
-			padding: 8px 4px;
-		}
-
-		.vote-item.current-user {
-			border: none;
-		}
-
-		@media only screen and (max-width: 370px) {
-			.owner {
-				display: none;
-			}
 		}
 
 		@media only screen and (max-width: 340px) {
 			.calendar-peek {
 				display: none;
 			}
-		}
-
-		.calendar-peek {
-			order: 0;
-			padding-left: 4px;
-		}
-
-		.calendar-peek__conflict.icon {
-			width: 24px;
-			height: 24px;
-		}
-
-		.calendar-peek__caption {
-			display: none;
-		}
-
-		.option-item__option--datebox {
-			min-width: 120px;
 		}
 	}
 }
