@@ -14,7 +14,7 @@ import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 
-import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
+import { Logger } from '../helpers/index.ts'
 import { PublicAPI, PollsAPI } from '../Api/index.ts'
 import { createDefault, Event, User, UserType } from '../Types/index.ts'
 
@@ -261,18 +261,11 @@ export const usePollStore = defineStore('poll', {
 
 		safeParticipants(): User[] {
 			const sessionStore = useSessionStore()
+			const votesStore = useVotesStore()
 			if (this.getSafeTable) {
 				return [sessionStore.currentUser]
 			}
-			return this.participants
-		},
-
-		participants(): User[] {
-			const votesStore = useVotesStore()
-
-			return uniqueArrayOfObjects(
-				votesStore.sortedVotes.map((vote) => vote.user),
-			)
+			return votesStore.sortedParticipants
 		},
 
 		getProposalsOptions(): {
@@ -356,11 +349,13 @@ export const usePollStore = defineStore('poll', {
 
 		// count the number of participants (including current user, if has not voted yet)
 		countParticipants(): number {
-			return this.participants.length
+			const votesStore = useVotesStore()
+			return votesStore.sortedParticipants.length
 		},
 
 		countHiddenParticipants(): number {
-			return this.participants.length - this.safeParticipants.length
+			const votesStore = useVotesStore()
+			return votesStore.sortedParticipants.length - this.safeParticipants.length
 		},
 
 		// count the number of safe participants (including current user, if has not voted yet)
