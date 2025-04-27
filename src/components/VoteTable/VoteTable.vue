@@ -130,10 +130,10 @@ const showCalendarPeek = computed(
 			name="list"
 			class="vote-table__options grid-options">
 			<div v-for="option in optionsStore.orderedOptions" :key="option.id">
-				<div v-if="pollStore.viewMode === ViewMode.TableView" class="option-menu-grid">
-					<OptionMenu
-						:option="option"
-						use-sort />
+				<div
+					v-if="pollStore.viewMode === ViewMode.TableView"
+					class="option-menu-grid">
+					<OptionMenu :option="option" use-sort />
 					<SortOptionIcon
 						v-if="votesStore.sortByOption === option.id"
 						class="sort-indicator"
@@ -209,10 +209,6 @@ const showCalendarPeek = computed(
 		flex-direction: column;
 		padding-bottom: 4px;
 		align-items: flex-start;
-	}
-
-	.vote-table__votes {
-		display: flex;
 	}
 
 	.vote-column {

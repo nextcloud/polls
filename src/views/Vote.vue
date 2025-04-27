@@ -177,7 +177,6 @@ onUnmounted(() => {
 	}
 }
 
-
 .icon.icon-settings.active {
 	display: block;
 	width: 44px;

@@ -101,7 +101,7 @@ onMounted(async () => {
 </script>
 
 <template>
-	<NcPopover v-if="events.length" :focus-trap="false" class="calendar-peek">
+	<NcPopover v-if="events.length" v-bind="$attrs" class="calendar-peek">
 		<template #trigger>
 			<div>
 				<div class="calendar-peek__conflict icon icon-calendar" />
