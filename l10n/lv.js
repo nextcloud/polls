@@ -1,6 +1,7 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Aptaujas",
     "Group" : "Grupa",
     "Privacy Policy" : "Privātuma politika",
     "Contact" : "Kontakts",
@@ -58,6 +59,7 @@ OC.L10N.register(
     "Year" : "Gads",
     "Created" : "Izveidots",
     "Owner" : "Īpašnieks",
+    "All polls" : "Visas aptaujas",
     "Archive" : "Arhīvi",
     "Administration" : "Pārvaldīšana"
 },

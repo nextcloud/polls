@@ -1,4 +1,5 @@
 { "translations": {
+    "Polls" : "Aptaujas",
     "Group" : "Grupa",
     "Privacy Policy" : "Privātuma politika",
     "Contact" : "Kontakts",
@@ -56,6 +57,7 @@
     "Year" : "Gads",
     "Created" : "Izveidots",
     "Owner" : "Īpašnieks",
+    "All polls" : "Visas aptaujas",
     "Archive" : "Arhīvi",
     "Administration" : "Pārvaldīšana"
 },"pluralForm" :"nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);"
