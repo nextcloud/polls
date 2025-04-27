@@ -82,7 +82,7 @@ export const useOptionsStore = defineStore('options', {
 		sortedOptions(state): Option[] {
 			const pollStore = usePollStore()
 			return pollStore.type === PollType.Date
-				? orderBy(state.list, ['timestamp'], ['asc'])
+				? orderBy(state.list, ['timestamp', 'duration'], ['asc', 'asc'])
 				: state.list
 		},
 
