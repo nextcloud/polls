@@ -130,16 +130,12 @@ const showCalendarPeek = computed(
 			name="list"
 			class="vote-table__options grid-options">
 			<div v-for="option in optionsStore.orderedOptions" :key="option.id">
-				<div class="option-menu-grid">
+				<div v-if="pollStore.viewMode === ViewMode.TableView" class="option-menu-grid">
 					<OptionMenu
-						v-if="pollStore.viewMode === ViewMode.TableView"
 						:option="option"
 						use-sort />
 					<SortOptionIcon
-						v-if="
-							votesStore.sortByOption === option.id
-							&& pollStore.viewMode === ViewMode.TableView
-						"
+						v-if="votesStore.sortByOption === option.id"
 						class="sort-indicator"
 						:title="t('polls', 'Click to remove sorting')"
 						@click="() => (votesStore.sortByOption = 0)" />
@@ -184,7 +180,7 @@ const showCalendarPeek = computed(
 
 	.participant,
 	.vote-item {
-		height: 4.5em;
+		flex: 1;
 		order: 10;
 		padding: 6px;
 		border-radius: 12px;
@@ -289,6 +285,8 @@ const showCalendarPeek = computed(
 		.grid-votes,
 		.grid-options {
 			> div {
+				display: flex;
+				flex-direction: column;
 				flex: 1 0 11rem;
 				border-left: 1px solid var(--color-border-dark);
 			}
@@ -311,14 +309,10 @@ const showCalendarPeek = computed(
 
 		.grid-votes,
 		.grid-options {
-			align-items: stretch;
 			flex-direction: column;
 			> div {
 				flex: 1;
 				display: grid;
-				align-items: center;
-				justify-content: stretch;
-				min-height: 6.5rem;
 			}
 		}
 

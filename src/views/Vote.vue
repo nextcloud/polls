@@ -89,7 +89,7 @@ onUnmounted(() => {
 			pollStore.type,
 			voteMainId,
 		]">
-		<HeaderBar class="area__header">
+		<HeaderBar>
 			<template #title>
 				{{ pollStore.configuration.title }}
 			</template>
@@ -155,10 +155,8 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.vote_main {
-	display: flex;
-	flex-direction: column;
-	row-gap: 8px;
+.vote_main > * {
+	margin-top: 0.5rem;
 }
 
 .vote_head {
@@ -179,13 +177,6 @@ onUnmounted(() => {
 	}
 }
 
-.app-content .area__header {
-	transition: all var(--animation-slow) linear;
-}
-
-.app-content.scrolled .area__header {
-	box-shadow: 6px 6px 6px var(--color-box-shadow);
-}
 
 .icon.icon-settings.active {
 	display: block;

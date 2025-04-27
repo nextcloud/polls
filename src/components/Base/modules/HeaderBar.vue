@@ -41,8 +41,22 @@ function toggleClamp() {
 .page--scrolled .header_bar_bottom {
 	display: none;
 }
+.scrolled .header_bar {
+	box-shadow: 6px 6px 6px var(--color-box-shadow);
+}
 
 .header_bar {
+	position: sticky;
+	top: 0;
+	margin-left: -8px;
+	margin-right: -8px;
+	padding-right: 8px;
+	padding-left: 56px;
+	background-color: var(--color-main-background);
+	border-bottom: 1px solid var(--color-border);
+	z-index: 9;
+	transition: all var(--animation-slow) linear;
+
 	.header_bar_top {
 		display: flex;
 		flex-wrap: wrap-reverse;

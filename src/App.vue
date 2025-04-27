@@ -129,29 +129,6 @@ onUnmounted(() => {
 	}
 }
 
-// global areas settings
-[class*=' area__'],
-[class^='area__'] {
-	padding: 4px 0px;
-	background-color: var(--color-main-background);
-	border-radius: var(--border-radius);
-	min-width: 270px;
-}
-
-// special settings for header area
-[class*=' area__header'],
-[class^='area__header'] {
-	position: sticky;
-	top: 0;
-	background-color: var(--color-main-background);
-	border-bottom: 1px solid var(--color-border);
-	z-index: 9;
-	margin-left: -8px;
-	margin-right: -8px;
-	padding-right: 8px;
-	padding-left: 56px;
-}
-
 // global modal settings
 .modal__content {
 	padding: 14px;
