@@ -62,7 +62,9 @@ const showCalendarPeek = computed(
 			</NcButton>
 		</div>
 
-		<div v-if="pollStore.viewMode === ViewMode.TableView" class="option-spacer" />
+		<div
+			v-if="pollStore.viewMode === ViewMode.TableView"
+			class="option-spacer" />
 		<div v-if="pollStore.permissions.seeResults" class="counter-spacer" />
 
 		<template
@@ -171,7 +173,6 @@ const showCalendarPeek = computed(
 	}
 
 	&.table-view {
-
 		.grid-info {
 			grid-row: 1;
 			grid-column: 1;
