@@ -55,7 +55,7 @@
     "v-click-outside": "^3.2.0",
     "vue": "^3.4.30",
     "vue-material-design-icons": "^5.3.0",
-    "vue-router": "^4.4.0",
+    "vue-router": "^4.5.1",
     "xlsx": "https://cdn.sheetjs.com/xlsx-0.20.3/xlsx-0.20.3.tgz"
   },
   "devDependencies": {

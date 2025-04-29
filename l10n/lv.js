@@ -1,12 +1,16 @@
 OC.L10N.register(
     "polls",
     {
+    "Polls" : "Aptaujas",
     "Group" : "Grupa",
     "Privacy Policy" : "Privātuma politika",
+    "Polls App - New Activity" : "Aptauju lietotne - jauna darbība",
     "Contact" : "Kontakts",
     "User" : "Lietotājs",
     "You have reopened the poll \"{pollTitle}\" " : "Tu atkārtoti atvēri aptauju \"{pollTitle}\"",
     "You have reopened this poll" : "Tu atkārtoti atvēri šo aptauju",
+    "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Aptauju lietotne, līdzīga Doodle/DUD-Poll, ar iespēju ierobežot piekļuvi.",
+    "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aptauju lietotne, līdzīga Doodle/DUD-Poll, ar iespēju ierobežot piekļuvi (dalībnieki, noteikti lietotāji / to kopas, slēptas un publiskas).",
     "Delete" : "Izdzēst",
     "Unknown error" : "Nezināma kļūda",
     "Previous day" : "Iepriekšējā diena",
@@ -58,6 +62,7 @@ OC.L10N.register(
     "Year" : "Gads",
     "Created" : "Izveidots",
     "Owner" : "Īpašnieks",
+    "All polls" : "Visas aptaujas",
     "Archive" : "Arhīvi",
     "Administration" : "Pārvaldīšana"
 },

@@ -2,6 +2,7 @@ OC.L10N.register(
     "polls",
     {
     "Contact" : "Aloqa",
+    "Add option" : "Variant qo'shish",
     "Delete" : "Delete",
     "Register" : "Roʻyxatdan oʻtish",
     "Unknown error" : "Unknown error",
@@ -19,6 +20,7 @@ OC.L10N.register(
     "To" : "Gacha",
     "Email address" : "E-pochta manzili",
     "OK" : "OK",
+    "Delete option" : "O'chirish opsiyasi",
     "All day" : "Butun kun",
     "Duration" : "Davomiyligi",
     "Preview" : "Ko‘rib chiqish",
@@ -26,6 +28,7 @@ OC.L10N.register(
     "Login" : "Login",
     "No activity yet" : "Afsuski, faollik mavjud emas",
     "Description" : "Tavsif",
+    "Preferences" : "Afzalliklar",
     "Comments" : "Comments",
     "Details" : "Details",
     "Options" : "Variantlar",
