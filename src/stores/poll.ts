@@ -262,7 +262,7 @@ export const usePollStore = defineStore('poll', {
 		safeParticipants(): User[] {
 			const sessionStore = useSessionStore()
 			const votesStore = useVotesStore()
-			if (this.getSafeTable) {
+			if (this.getSafeTable || this.viewMode === ViewMode.ListView) {
 				return [sessionStore.currentUser]
 			}
 			return votesStore.sortedParticipants
@@ -355,7 +355,9 @@ export const usePollStore = defineStore('poll', {
 
 		countHiddenParticipants(): number {
 			const votesStore = useVotesStore()
-			return votesStore.sortedParticipants.length - this.safeParticipants.length
+			return (
+				votesStore.sortedParticipants.length - this.safeParticipants.length
+			)
 		},
 
 		// count the number of safe participants (including current user, if has not voted yet)

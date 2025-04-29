@@ -108,10 +108,12 @@ async function setVote() {
 
 <style lang="scss" scoped>
 .vote-item {
+	flex: 1;
 	display: flex;
 	background-color: var(--color-polls-background-no);
 	transition: all 0.4s ease-in-out;
 	background-clip: content-box;
+	border-radius: 12px;
 
 	&.yes {
 		background-color: var(--color-polls-background-yes);

@@ -112,16 +112,22 @@ export const useVotesStore = defineStore('votes', {
 			) {
 				participants.sort((aUser, bUser) => {
 					// find the votes for the selected option and the users to compare
-					const aAnswer = answerSortOrder[state.list.find(
-						(vote) =>
-							vote.user.id === aUser.id
-							&& vote.optionId === state.sortByOption,
-					)?.answer ?? Answer.None]
-					const bAnswer = answerSortOrder[state.list.find(
-						(vote) =>
-							vote.user.id === bUser.id
-							&& vote.optionId === state.sortByOption,
-					)?.answer ?? Answer.None]
+					const aAnswer =
+						answerSortOrder[
+							state.list.find(
+								(vote) =>
+									vote.user.id === aUser.id
+									&& vote.optionId === state.sortByOption,
+							)?.answer ?? Answer.None
+						]
+					const bAnswer =
+						answerSortOrder[
+							state.list.find(
+								(vote) =>
+									vote.user.id === bUser.id
+									&& vote.optionId === state.sortByOption,
+							)?.answer ?? Answer.None
+						]
 
 					if (aAnswer < bAnswer) {
 						return -1
