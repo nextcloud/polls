@@ -827,7 +827,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Checks, if poll owner is allowed to change votes
 	 **/
 	private function getAllowChangeForeignVotes(): bool {
-		return $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
+		return $this->getAnonymous() > -1 && $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
 	}
 
 	/**
@@ -835,7 +835,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 **/
 	private function getAllowDeanonymize(): bool {
 		// Current user is allowed to edit the poll and the owner of the poll is unrestricted
-		return $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
+		return $this->getAnonymous() > -1 && $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
 	}
 
 	/**

@@ -4,11 +4,10 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref } from 'vue'
+import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { debounce } from 'lodash'
 import { showSuccess, showError } from '@nextcloud/dialogs'
-import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -25,25 +24,16 @@ import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
-import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue'
-import TableViewIcon from 'vue-material-design-icons/Table.vue'
-import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
-import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
-import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
-import { PollsAPI, ValidatorAPI } from '../../Api/index.ts'
-import { RankedType, useOptionsStore } from '../../stores/options.ts'
+import { ValidatorAPI } from '../../Api/index.ts'
 import { usePollStore } from '../../stores/poll.ts'
-import { usePreferencesStore } from '../../stores/preferences.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import { StatusResults, ViewMode, PollType, Event } from '../../Types/index.ts'
+import { StatusResults } from '../../Types/index.ts'
 
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
-import { NcActionButtonGroup } from '@nextcloud/vue'
-import { AxiosError } from '@nextcloud/axios'
 
 const props = defineProps({
 	noMenuIcon: {
@@ -60,22 +50,12 @@ type InputProps = {
 	label: string
 }
 
-const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const subscriptionStore = useSubscriptionStore()
-const preferencesStore = usePreferencesStore()
 const votesStore = useVotesStore()
 const router = useRouter()
 const hasCookie = !!findCookieByValue(sessionStore.publicToken)
-const viewMode = computed({
-	get() {
-		return pollStore.viewMode
-	},
-	set() {
-		changeView()
-	},
-})
 
 /**
  *
@@ -140,26 +120,6 @@ async function resendInvitation() {
 /**
  *
  */
-function changeView(): void {
-	emit(Event.TransitionsOff, 500)
-	if (pollStore.type === PollType.Date) {
-		preferencesStore.setViewDatePoll(
-			pollStore.viewMode === ViewMode.TableView
-				? ViewMode.ListView
-				: ViewMode.TableView,
-		)
-	} else if (pollStore.type === PollType.Text) {
-		preferencesStore.setViewTextPoll(
-			pollStore.viewMode === ViewMode.TableView
-				? ViewMode.ListView
-				: ViewMode.TableView,
-		)
-	}
-}
-
-/**
- *
- */
 async function copyLink() {
 	const personalLink =
 		window.location.origin
@@ -172,26 +132,6 @@ async function copyLink() {
 		await navigator.clipboard.writeText(personalLink)
 		showSuccess(t('polls', 'Link copied to clipboard'))
 	} catch {
-		showError(t('polls', 'Error while copying link to clipboard'))
-	}
-}
-
-/**
- *
- */
-async function getAddresses() {
-	try {
-		const response = await PollsAPI.getParticipantsEmailAddresses(
-			sessionStore.route.params.id,
-		)
-		await navigator.clipboard.writeText(
-			response.data.map((item) => item.combined).join(', '),
-		)
-		showSuccess(t('polls', 'Link copied to clipboard'))
-	} catch (error) {
-		if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-			return
-		}
 		showError(t('polls', 'Error while copying link to clipboard'))
 	}
 }
@@ -331,56 +271,6 @@ async function submitEmail() {
 		<template v-if="!props.noMenuIcon" #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
-		<NcActionButtonGroup name="View mode">
-			<NcActionButton
-				v-model="viewMode"
-				:value="ViewMode.TableView"
-				type="radio"
-				:aria-label="t('polls', 'Switch to table view')">
-				<template #icon>
-					<TableViewIcon />
-				</template>
-			</NcActionButton>
-
-			<NcActionButton
-				v-model="viewMode"
-				:value="ViewMode.ListView"
-				type="radio"
-				:aria-label="t('polls', 'Switch to list view')">
-				<template #icon>
-					<ListViewIcon />
-				</template>
-			</NcActionButton>
-		</NcActionButtonGroup>
-
-		<NcActionButtonGroup name="Options order">
-			<NcActionButton
-				v-model="optionsStore.ranked"
-				:value="RankedType.notRanked"
-				type="radio"
-				:aria-label="
-					pollStore.type === PollType.Date
-						? t('polls', 'Switch to date order')
-						: t('polls', 'Switch to original order')
-				">
-				<template #icon>
-					<SortByDateOptionIcon v-if="pollStore.type === PollType.Date" />
-					<SortByOriginalOrderIcon v-else />
-				</template>
-			</NcActionButton>
-
-			<NcActionButton
-				v-model="optionsStore.ranked"
-				:value="RankedType.ranked"
-				type="radio"
-				:aria-label="t('polls', 'Switch to ranked order')">
-				<template #icon>
-					<SortByRankIcon />
-				</template>
-			</NcActionButton>
-		</NcActionButtonGroup>
-
-		<NcActionSeparator />
 
 		<NcActionButton
 			v-if="sessionStore.share?.type === 'external'"
@@ -430,7 +320,6 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionCheckbox
-			v-if="pollStore.viewMode === ViewMode.ListView"
 			:model-value="subscriptionStore.subscribed"
 			:disabled="!pollStore.permissions.subscribe"
 			title="check"
@@ -452,20 +341,7 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="pollStore.permissions.edit"
-			:name="t('polls', 'Copy list of email addresses to clipboard')"
-			:aria-label="t('polls', 'Copy list of email addresses to clipboard')"
-			@click="getAddresses()">
-			<template #icon>
-				<ClippyIcon />
-			</template>
-		</NcActionButton>
-
-		<NcActionButton
-			v-if="
-				pollStore.permissions.vote
-				&& pollStore.viewMode === ViewMode.ListView
-			"
+			v-if="pollStore.permissions.vote"
 			:name="t('polls', 'Reset your votes')"
 			:aria-label="t('polls', 'Reset your votes')"
 			@click="resetVotes()">

@@ -235,7 +235,7 @@ function addVotesArray(style: ArrayStyle) {
 		return
 	}
 
-	pollStore.participants.forEach((participant) => {
+	votesStore.participants.forEach((participant) => {
 		const votesLine = [participant.displayName]
 		try {
 			if (pollStore.permissions.edit) {

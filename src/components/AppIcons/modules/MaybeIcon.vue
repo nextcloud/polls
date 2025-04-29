@@ -11,7 +11,7 @@ const props = defineProps({
 	},
 	fillColor: {
 		type: String,
-		default: '#ffc107',
+		default: 'var(--color-warning)',
 	},
 	size: {
 		type: Number,
@@ -28,6 +28,7 @@ const props = defineProps({
 		role="img">
 		<svg
 			:fill="props.fillColor"
+			:stroke="props.fillColor"
 			class="material-design-icon__svg"
 			:width="props.size"
 			:height="props.size"
@@ -42,7 +43,6 @@ const props = defineProps({
 					font-family: sans-serif;
 					letter-spacing: 0px;
 					word-spacing: 0px;
-					fill: #ffc10f;
 					fill-opacity: 0.94117647;
 					stroke: none;
 					stroke-width: 0.6844213;
@@ -53,7 +53,6 @@ const props = defineProps({
 					id="path853"
 					style="
 						font-size: 9.81086349px;
-						fill: #ffc10f;
 						fill-opacity: 0.94117647;
 						stroke-width: 0.6844213;
 					"
@@ -65,7 +64,6 @@ const props = defineProps({
 				style="
 					fill: none;
 					fill-opacity: 1;
-					stroke: #ffc10f;
 					stroke-width: 1.40162849;
 					stroke-opacity: 0.94117647;
 				" />
@@ -79,7 +77,6 @@ const props = defineProps({
 					font-family: sans-serif;
 					letter-spacing: 0px;
 					word-spacing: 0px;
-					fill: #ffc10f;
 					fill-opacity: 0.94117647;
 					stroke: none;
 					stroke-width: 0.6844213;
@@ -90,7 +87,6 @@ const props = defineProps({
 					id="path856"
 					style="
 						font-size: 9.81086349px;
-						fill: #ffc10f;
 						fill-opacity: 0.94117647;
 						stroke-width: 0.6844213;
 					"

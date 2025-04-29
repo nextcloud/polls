@@ -89,7 +89,7 @@ onUnmounted(() => {
 			pollStore.type,
 			voteMainId,
 		]">
-		<HeaderBar class="area__header">
+		<HeaderBar>
 			<template #title>
 				{{ pollStore.configuration.title }}
 			</template>
@@ -126,24 +126,22 @@ onUnmounted(() => {
 				</div>
 			</div>
 
-			<div class="area__main" :class="pollStore.viewMode">
-				<VoteTable v-show="optionsStore.list.length" />
+			<VoteTable v-show="optionsStore.list.length" />
 
-				<NcEmptyContent
-					v-if="!optionsStore.list.length"
-					v-bind="emptyContentProps">
-					<template #icon>
-						<TextPollIcon v-if="pollStore.type === PollType.Text" />
-						<DatePollIcon v-else />
-					</template>
-					<template v-if="pollStore.permissions.addOptions" #action>
-						<ActionAddOption
-							v-if="pollStore.type === PollType.Date"
-							:caption="t('polls', 'Add options')" />
-						<ActionOpenOptionsSidebar v-else />
-					</template>
-				</NcEmptyContent>
-			</div>
+			<NcEmptyContent
+				v-if="!optionsStore.list.length"
+				v-bind="emptyContentProps">
+				<template #icon>
+					<TextPollIcon v-if="pollStore.type === PollType.Text" />
+					<DatePollIcon v-else />
+				</template>
+				<template v-if="pollStore.permissions.addOptions" #action>
+					<ActionAddOption
+						v-if="pollStore.type === PollType.Date"
+						:caption="t('polls', 'Add options')" />
+					<ActionOpenOptionsSidebar v-else />
+				</template>
+			</NcEmptyContent>
 
 			<div class="area__footer">
 				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants" />
@@ -157,10 +155,8 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.vote_main {
-	display: flex;
-	flex-direction: column;
-	row-gap: 8px;
+.vote_main > * {
+	margin-top: 0.5rem;
 }
 
 .vote_head {
@@ -172,11 +168,6 @@ onUnmounted(() => {
 	}
 }
 
-.area__main {
-	display: flex;
-	flex-direction: column;
-}
-
 .top_area {
 	display: flex;
 	flex-wrap: wrap-reverse;
@@ -184,14 +175,6 @@ onUnmounted(() => {
 	.cards_container {
 		flex: 1 50rem;
 	}
-}
-
-.app-content .area__header {
-	transition: all var(--animation-slow) linear;
-}
-
-.app-content.scrolled .area__header {
-	box-shadow: 6px 6px 6px var(--color-box-shadow);
 }
 
 .icon.icon-settings.active {
