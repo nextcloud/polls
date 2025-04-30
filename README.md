@@ -85,19 +85,19 @@ git clone https://github.com/nextcloud/polls.git
 
 ### First time install
 Nextcloud executes
-* unexecuteted `migration classes` (not listed in the `*_migrations` table) and the 
+* unexecuted `migration classes` (not listed in the `*_migrations` table) and the 
 * `install` repair step.
 
 ### After a version update (changed version attribute in appinfo/info.xml)
 Nextcloud executes 
 * `pre-migration` repair steps, 
-* unexecuteted `migration classes` (not listed in the `*_migrations` table) and the 
+* unexecuted `migration classes` (not listed in the `*_migrations` table) and the 
 * `post-migration` repair steps
 
 ### Enabling already installed but disabled app without version change
 Nextcloud executes 
 * `pre-migration` repair steps, 
-* unexecuteted `migration classes` (not listed in the `*_migrations` table) and the
+* unexecuted `migration classes` (not listed in the `*_migrations` table) and the
 * `post-migration` repair steps and the 
 * `install` repair step
 
