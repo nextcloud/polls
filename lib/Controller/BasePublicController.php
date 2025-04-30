@@ -34,11 +34,7 @@ class BasePublicController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback());
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->handleResponse($callback, Http::STATUS_OK, Exception::class);
 	}
 
 	/**
@@ -47,11 +43,7 @@ class BasePublicController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback());
-		} catch (NoUpdatesException $e) {
-			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
-		}
+		return $this->handleResponse($callback, Http::STATUS_OK, NoUpdatesException::class, Http::STATUS_NOT_MODIFIED);
 	}
 	/**
 	 * responseCreate
@@ -59,10 +51,30 @@ class BasePublicController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback(), Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->handleResponse($callback, Http::STATUS_CREATED, Exception::class);
 	}
+
+	private function handleResponse(
+    		Closure $callback,
+    		int $successStatus,
+    		string $exceptionClass,
+    		int $fallbackStatus = null
+    	): JSONResponse {
+    		try {
+    			return new JSONResponse($callback(), $successStatus);
+    		} catch (\Throwable $e) {
+    			if (is_a($e, $exceptionClass, true)) {
+    				if ($fallbackStatus !== null && $e instanceof NoUpdatesException) {
+    					return new JSONResponse([], $fallbackStatus);
+    				}
+    				if ($e instanceof Exception) {
+    					return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+    				}
+    			}
+    			return new JSONResponse(['message' => 'Unexpected error'], Http::STATUS_INTERNAL_SERVER_ERROR);
+    		}
+    	}
 }
+
+
+
