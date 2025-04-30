@@ -4,7 +4,6 @@
  */
 
 import { defineStore } from 'pinia'
-import orderBy from 'lodash/orderBy'
 // eslint-disable-next-line import/no-named-as-default
 import DOMPurify from 'dompurify'
 import { marked } from 'marked'
@@ -15,7 +14,7 @@ import moment from '@nextcloud/moment'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 
-import { Logger, uniqueArrayOfObjects } from '../helpers/index.ts'
+import { Logger } from '../helpers/index.ts'
 import { PublicAPI, PollsAPI } from '../Api/index.ts'
 import { createDefault, Event, User, UserType } from '../Types/index.ts'
 
@@ -32,6 +31,23 @@ import { AxiosError } from '@nextcloud/axios'
 export enum PollType {
 	Text = 'textPoll',
 	Date = 'datePoll',
+}
+
+type PollTypesType = {
+	name: string
+}
+
+export const pollTypes: Record<PollType, PollTypesType> = {
+	[PollType.Text]: {
+		name: t('polls', 'Text poll'),
+	},
+	[PollType.Date]: {
+		name: t('polls', 'Date poll'),
+	},
+}
+
+export enum VoteVariant {
+	Simple = 'simple',
 }
 
 export enum AccessType {
@@ -80,10 +96,12 @@ export type PollStatus = {
 	lastInteraction: number
 	created: number
 	isAnonymous: boolean
-	isDeleted: boolean
+	isArchived: boolean
 	isExpired: boolean
 	isRealAnonymous: boolean
 	relevantThreshold: number
+	deletionDate: number
+	archivedDate: number
 	countOptions: number
 	countParticipants: number
 	countProposals: number
@@ -128,6 +146,7 @@ export type CurrentUserStatus = {
 export type Poll = {
 	id: number
 	type: PollType
+	voteVariant: VoteVariant
 	descriptionSafe: string
 	configuration: PollConfiguration
 	owner: User
@@ -146,6 +165,7 @@ export const usePollStore = defineStore('poll', {
 	state: (): Poll => ({
 		id: 0,
 		type: PollType.Date,
+		voteVariant: VoteVariant.Simple,
 		descriptionSafe: '',
 		configuration: {
 			title: '',
@@ -170,10 +190,12 @@ export const usePollStore = defineStore('poll', {
 			lastInteraction: 0,
 			created: 0,
 			isAnonymous: false,
-			isDeleted: false,
+			isArchived: false,
 			isExpired: false,
 			isRealAnonymous: false,
 			relevantThreshold: 0,
+			deletionDate: 0,
+			archivedDate: 0,
 			countOptions: 0,
 			countParticipants: 0,
 			countProposals: 0,
@@ -237,38 +259,13 @@ export const usePollStore = defineStore('poll', {
 			return [noString, Answer.Yes]
 		},
 
-		participants(state): User[] {
-			const sessionStore = useSessionStore()
-			const participants = this.participantsVoted
-
-			// add current user, if not among participants and voting is allowed
-			if (
-				!participants.find(
-					(participant: User) =>
-						participant.id === sessionStore.currentUser?.id,
-				)
-				&& sessionStore.currentUser?.id
-				&& state.permissions.vote
-			) {
-				participants.push(sessionStore.currentUser)
-			}
-			return this.sortParticipants === SortParticipants.Alphabetical
-				? orderBy(participants, ['displayName'], ['asc'])
-				: participants
-		},
-
 		safeParticipants(): User[] {
 			const sessionStore = useSessionStore()
-			if (this.getSafeTable) {
+			const votesStore = useVotesStore()
+			if (this.getSafeTable || this.viewMode === ViewMode.ListView) {
 				return [sessionStore.currentUser]
 			}
-			return this.participants
-		},
-
-		participantsVoted(): User[] {
-			const votesStore = useVotesStore()
-
-			return uniqueArrayOfObjects(votesStore.list.map((vote) => vote.user))
+			return votesStore.sortedParticipants
 		},
 
 		getProposalsOptions(): {
@@ -350,20 +347,22 @@ export const usePollStore = defineStore('poll', {
 			)
 		},
 
+		// count the number of participants (including current user, if has not voted yet)
 		countParticipants(): number {
-			return this.participants.length
+			const votesStore = useVotesStore()
+			return votesStore.sortedParticipants.length
 		},
 
 		countHiddenParticipants(): number {
-			return this.participants.length - this.safeParticipants.length
+			const votesStore = useVotesStore()
+			return (
+				votesStore.sortedParticipants.length - this.safeParticipants.length
+			)
 		},
 
+		// count the number of safe participants (including current user, if has not voted yet)
 		countSafeParticipants(): number {
 			return this.safeParticipants.length
-		},
-
-		countParticipantsVoted(): number {
-			return this.participantsVoted.length
 		},
 
 		countCells(): number {

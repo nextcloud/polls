@@ -35,7 +35,7 @@ const showDelete = computed(
 </script>
 
 <template>
-	<div class="option-item-owner">
+	<div class="option-item-owner blabla">
 		<ActionDelete
 			v-if="showDelete"
 			:name="
@@ -53,7 +53,7 @@ const showDelete = computed(
 			:user="option.owner"
 			:icon-size="avatarSize"
 			hide-names
-			hide-user-status
+			hide-status
 			:tooltip-message="
 				t('polls', '{displayName}\'s proposal', {
 					displayName: option.owner?.displayName ?? '',

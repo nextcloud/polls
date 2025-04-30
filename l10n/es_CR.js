@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Encuestas",
-    "Circle" : "Círculo",
     "Group" : "Grupo",
     "Legal Notice" : "Aviso legal",
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
@@ -11,7 +10,6 @@ OC.L10N.register(
     "Delete" : "Borrar",
     "Register" : "Registrar",
     "Unknown error" : "Error desconocido",
-    "Conflict" : "Conflicto",
     "Add" : "Agregar",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",
@@ -24,6 +22,7 @@ OC.L10N.register(
     "Participants" : "Participantes",
     "Delete poll" : "Borrar encuesta",
     "OK" : "OK",
+    "Sort" : "Ordenar",
     "All day" : "Todo el día",
     "Preview" : "Previsualizar",
     "Submit" : "Enviar",

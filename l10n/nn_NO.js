@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Circle" : "Sirkel",
     "Group" : "Gruppe",
     "Contact" : "Kontakt",
     "User" : "Bruker",
@@ -18,6 +17,7 @@ OC.L10N.register(
     "No" : "Nei",
     "Participants" : "Deltakarar",
     "OK" : "OK",
+    "Sort" : "Sorter",
     "never" : "aldri",
     "Login" : "Login",
     "Styles" : "Stilar",

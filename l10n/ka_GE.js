@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "გამოკითხვები",
-    "Circle" : "წრე",
     "Group" : "ჯგუფი",
     "Legal Notice" : "იურიდიული ცნობა",
     "Polls App - New Activity" : "Polls აპლიკაცია - ახალი აქტივობა",
@@ -11,7 +10,6 @@ OC.L10N.register(
     "Delete" : "წაშლა",
     "Register" : "რეგისტრაცია",
     "Unknown error" : "უცნობი შეცდომა",
-    "Conflict" : "კონფლიქტი",
     "Add" : "დამატება",
     "New comment …" : "ახალი კომენტარი ...",
     "Delete comment" : "კომენტარის გაუქმება",
@@ -25,6 +23,7 @@ OC.L10N.register(
     "Participants" : "მონაწილეები",
     "Delete poll" : "გამოკითხვის გაუქმება",
     "OK" : "კარგი",
+    "Sort" : "განლაგება",
     "All day" : "მთელი დღე",
     "Preview" : "წინასწარი ჩვენება",
     "Submit" : "გაგზავნა",

@@ -177,7 +177,7 @@ class PollService {
 	/**
 	 * Add poll
 	 */
-	public function add(string $type, string $title): Poll {
+	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): Poll {
 		if (!$this->appSettings->getPollCreationAllowed()) {
 			throw new ForbiddenException('Poll creation is disabled');
 		}
@@ -194,6 +194,7 @@ class PollService {
 		$timestamp = time();
 		$this->poll = new Poll();
 		$this->poll->setType($type);
+		$this->poll->setVotingVariant($votingVariant);
 		$this->poll->setTitle($title);
 		$this->poll->setCreated($timestamp);
 		$this->poll->setLastInteraction($timestamp);
@@ -392,6 +393,7 @@ class PollService {
 		$this->poll->setAccess(Poll::ACCESS_PRIVATE);
 
 		$this->poll->setType($origin->getType());
+		$this->poll->setVotingVariant($origin->getVotingVariant());
 		$this->poll->setDescription($origin->getDescription());
 		$this->poll->setExpire($origin->getExpire());
 		// deanonymize cloned polls by default, to avoid locked anonymous polls

@@ -127,7 +127,7 @@ const props = defineProps({
 		type: Number,
 		default: 16,
 	},
-	hideUserStatus: {
+	hideStatus: {
 		type: Boolean,
 		default: false,
 	},
@@ -249,7 +249,7 @@ const emailAddressComputed = computed(() => {
 	return ''
 })
 const showUserStatusComputed = computed(
-	() => !props.hideUserStatus && Boolean(getCurrentUser()),
+	() => props.hideStatus && Boolean(getCurrentUser()),
 )
 
 /**
@@ -303,6 +303,10 @@ function showMenu() {
 						:size="props.mdIconSize" />
 				</template>
 			</NcAvatar>
+
+			<div v-if="$slots.menu" class="hover-menu">
+				<slot name="menu" />
+			</div>
 
 			<AdminIcon
 				v-if="showTypeIcon && typeComputed === UserType.Admin"
@@ -361,6 +365,15 @@ function showMenu() {
 	}
 }
 
+.hover-menu {
+	position: absolute;
+	top: 0;
+	left: 0;
+	opacity: 0;
+	&:hover {
+		opacity: 1;
+	}
+}
 .user-item__avatar .material-design-icon {
 	background-color: var(--color-primary-element);
 	border-radius: 50%;

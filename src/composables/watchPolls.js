@@ -19,7 +19,7 @@ export const watchPolls = {
 			watching: true,
 			lastUpdated: Math.round(Date.now() / 1000),
 			endPoint: '',
-			sleepTimeout: SLEEP_TIMEOUT_DEFAULT, // seconds
+			sleepTimeoutSeconds: SLEEP_TIMEOUT_DEFAULT,
 			retryCounter: 0,
 		}
 	},

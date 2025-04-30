@@ -19,8 +19,9 @@ npm-debug.log
 vendor
 vendor-bin/**/vendor/
 vendor-bin/**/*.lock
-Thumbs.db
+update-workflows.sh
 yarn-error.log
+Thumbs.db
 *.cmd
 *.env
 *.iml

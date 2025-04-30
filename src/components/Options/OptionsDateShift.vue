@@ -7,18 +7,13 @@
 import { ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 
 import { InputDiv } from '../Base/index.ts'
-import {
-	dateTimeUnits,
-	dateTimeUnitsKeyed,
-	DateUnitKeys,
-	TimeUnitsType,
-} from '../../constants/dateUnits.ts'
+import { dateTimeUnitsKeyed, TimeUnitsType } from '../../constants/dateUnits.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'
 
@@ -28,8 +23,13 @@ const optionsStore = useOptionsStore()
 
 const shift = ref<TimeUnitsType>({
 	value: 1,
-	unit: dateTimeUnitsKeyed[DateUnitKeys.Week],
+	unit: dateTimeUnitsKeyed.week,
 })
+
+const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) => ({
+	id: key,
+	name: value.name,
+}))
 
 /**
  *
@@ -62,12 +62,12 @@ function shiftDates(shift: TimeUnitsType) {
 					:input-label="t('polls', 'Step unit')"
 					:clearable="false"
 					:filterable="false"
-					:options="dateTimeUnits"
+					:options="dateTimeOptions"
 					label="name" />
 				<NcButton
 					class="submit"
 					:aria-label="t('polls', 'Submit')"
-					:type="ButtonType.Tertiary"
+					:variant="ButtonVariant.Tertiary"
 					@click="shiftDates(shift)">
 					<template #icon>
 						<SubmitIcon />

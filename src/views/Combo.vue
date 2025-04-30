@@ -29,7 +29,7 @@ onMounted(() => {
 
 <template>
 	<NcAppContent>
-		<HeaderBar class="area__header">
+		<HeaderBar>
 			<template #title>
 				{{ title }}
 			</template>

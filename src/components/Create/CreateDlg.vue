@@ -9,14 +9,14 @@ import { useRouter } from 'vue-router'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.ts'
 
-import { usePollStore, PollType } from '../../stores/poll.ts'
+import { usePollStore, PollType, pollTypes } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 const router = useRouter()
@@ -25,16 +25,10 @@ const title = ref('')
 const adding = ref(false)
 const pollType = ref(PollType.Date)
 
-const pollTypeOptions = [
-	{
-		value: PollType.Date,
-		label: t('polls', 'Date poll'),
-	},
-	{
-		value: PollType.Text,
-		label: t('polls', 'Text poll'),
-	},
-]
+const pollTypeOptions = Object.entries(pollTypes).map(([key, value]) => ({
+	value: key,
+	label: value.name,
+}))
 
 const titleEmpty = computed(() => title.value === '')
 const disableConfirm = computed(() => titleEmpty.value || adding.value)
@@ -116,7 +110,7 @@ async function add() {
 			</NcButton>
 			<NcButton
 				:disabled="disableConfirm"
-				:type="ButtonType.Primary"
+				:variant="ButtonVariant.Primary"
 				@click="add()">
 				<template #default>
 					{{ t('polls', 'Add') }}

@@ -1,5 +1,4 @@
 { "translations": {
-    "Circle" : "Círculo",
     "Group" : "Grupo",
     "Legal Notice" : "Notícia de legalidade",
     "Contact" : "Contacto",
@@ -9,7 +8,6 @@
     "Unknown error" : "Erro desconhecido",
     "Previous day" : "Dia anterior",
     "Next day" : "Dia seguinte",
-    "Conflict" : "Conflito",
     "Add" : "Adicionar",
     "New comment …" : "Novo comentário…",
     "Delete comment" : "Eliminar comentário",
@@ -28,6 +26,7 @@
     "Download CSV file" : "Transferir ficheiro CSV",
     "Download HTML file" : "ransferir ficheiro HTML",
     "OK" : "OK",
+    "Sort" : "Ordenar",
     "All day" : "Todo o dia",
     "Duration" : "Duração",
     "Preview" : "Pré-visualizar",

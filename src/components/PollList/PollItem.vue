@@ -8,7 +8,13 @@ import { RouterLink } from 'vue-router'
 import { computed, PropType } from 'vue'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
-import { usePollStore, AccessType, Poll, PollType } from '../../stores/poll'
+import {
+	usePollStore,
+	AccessType,
+	Poll,
+	PollType,
+	pollTypes,
+} from '../../stores/poll'
 import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
 import { StatusResults } from '../../Types/index.ts'
 
@@ -47,13 +53,6 @@ const closeToClosing = computed(
 		&& moment.unix(props.poll.configuration.expire).diff() < 86400000,
 )
 
-const pollTypeName = computed(() => {
-	if (props.poll.type === PollType.Text) {
-		return t('polls', 'Text poll')
-	}
-	return t('polls', 'Date poll')
-})
-
 const timeExpirationRelative = computed(() => {
 	if (props.poll.configuration.expire) {
 		return moment.unix(props.poll.configuration.expire).fromNow()
@@ -80,6 +79,18 @@ const expiryClass = computed(() => {
 const timeCreatedRelative = computed(() =>
 	moment.unix(props.poll.status.created).fromNow(),
 )
+
+const descriptionLine = computed(() => {
+	if (props.poll.status.isArchived) {
+		return t('polls', 'Archived {relativeTIme}', {
+			relativeTIme: moment.unix(props.poll.status.archivedDate).fromNow(),
+		})
+	}
+	return t('polls', 'Started {relativeTime} from {ownerName}', {
+		ownerName: props.poll.owner.displayName,
+		relativeTime: timeCreatedRelative.value,
+	})
+})
 </script>
 
 <template>
@@ -87,8 +98,11 @@ const timeCreatedRelative = computed(() =>
 		<TextPollIcon
 			v-if="poll.type === PollType.Text"
 			class="item__type"
-			:title="pollTypeName" />
-		<DatePollIcon v-else class="item__type" :title="pollTypeName" />
+			:title="pollTypes[props.poll.type].name" />
+		<DatePollIcon
+			v-else
+			class="item__type"
+			:title="pollTypes[props.poll.type].name" />
 
 		<div
 			v-if="noLink || !poll.permissions.view"
@@ -137,7 +151,7 @@ const timeCreatedRelative = computed(() =>
 
 			<div class="description_line">
 				<ArchivedPollIcon
-					v-if="poll.status.isDeleted"
+					v-if="poll.status.isArchived"
 					:title="t('polls', 'Archived  poll')"
 					:size="16" />
 				<OpenPollIcon
@@ -150,12 +164,7 @@ const timeCreatedRelative = computed(() =>
 					:size="16" />
 
 				<span class="description">
-					{{
-						t('polls', 'Started {relativeTime} from {ownerName}', {
-							ownerName: poll.owner.displayName,
-							relativeTime: timeCreatedRelative,
-						})
-					}}
+					{{ descriptionLine }}
 				</span>
 			</div>
 		</RouterLink>

@@ -2,7 +2,6 @@ OC.L10N.register(
     "polls",
     {
     "Polls" : "Sondazhe",
-    "Circle" : "Rreth",
     "Group" : "Grup",
     "Legal Notice" : "Shënim i ligjshëm",
     "Contact" : "Kontakt",
@@ -10,7 +9,6 @@ OC.L10N.register(
     "Delete" : "Fshij",
     "Register" : "Regjistrohu",
     "Unknown error" : "Gabim i panjohur",
-    "Conflict" : "Përplasje",
     "Add" : "Shto",
     "New comment …" : "Koment i ri ...",
     "Delete comment" : "Fshi komentin",
@@ -22,6 +20,7 @@ OC.L10N.register(
     "No" : "Jo",
     "Delete poll" : "Fshij sondazhin",
     "OK" : "OK",
+    "Sort" : "Renditni",
     "All day" : "Gjithë ditën",
     "Duration" : "Kohëzgjatja",
     "Preview" : "Parapamje ",

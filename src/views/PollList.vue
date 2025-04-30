@@ -123,7 +123,7 @@ async function loadMore() {
 
 <template>
 	<NcAppContent class="poll-list">
-		<HeaderBar class="area__header">
+		<HeaderBar>
 			<template #title>
 				{{ title }}
 			</template>

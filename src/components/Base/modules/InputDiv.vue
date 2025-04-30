@@ -17,7 +17,7 @@ import { Logger } from '../../../helpers/index.ts'
 
 import { SignalingType } from '../../../Types/index.ts'
 import { NcButton } from '@nextcloud/vue'
-import { ButtonType } from '@nextcloud/vue/components/NcButton'
+import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { t } from '@nextcloud/l10n'
 
 const model = defineModel<string | number>({
@@ -224,7 +224,11 @@ onMounted(() => {
 </script>
 
 <template>
-	<div :class="['input-div', { numeric: useNumModifiers }]">
+	<div
+		:class="[
+			'input-div',
+			{ numeric: useNumModifiers || inputmode === 'numeric' },
+		]">
 		<label v-if="label">
 			{{ label }}
 		</label>
@@ -234,7 +238,7 @@ onMounted(() => {
 				v-if="useNumModifiers && !props.useNumericVariant"
 				class="date-add-button"
 				:title="t('polls', 'minus')"
-				:type="ButtonType.TertiaryNoBackground"
+				:variant="ButtonVariant.TertiaryNoBackground"
 				@click="subtract">
 				<template #icon>
 					<ChevronLeftIcon />
@@ -269,7 +273,7 @@ onMounted(() => {
 			<NcButton
 				v-if="useNumModifiers && !props.useNumericVariant"
 				:title="t('polls', 'plus')"
-				:type="ButtonType.TertiaryNoBackground"
+				:variant="ButtonVariant.TertiaryNoBackground"
 				@click="add">
 				<template #icon>
 					<ChevronRightIcon />
@@ -296,6 +300,7 @@ onMounted(() => {
 	--input-height: 44px;
 	position: relative;
 	margin-bottom: var(--default-grid-baseline);
+	display: block !important;
 
 	label {
 		display: block;
@@ -304,7 +309,6 @@ onMounted(() => {
 
 	input {
 		margin: 0;
-
 		&.has-submit,
 		&.error,
 		&.success,
@@ -329,7 +333,6 @@ onMounted(() => {
 		position: relative;
 		display: flex;
 		& > input {
-			// height: 44px !important;
 			flex: 1;
 		}
 	}
@@ -345,11 +348,10 @@ onMounted(() => {
 	}
 
 	&.numeric .input-wrapper {
-		// min-width: 9rem;
-		// max-width: 10rem;
 		input {
 			text-align: center;
 			max-width: 4rem;
+			padding: 0;
 		}
 	}
 

@@ -8,26 +8,25 @@ import { computed, ref, watch } from 'vue'
 import { showError, showSuccess } from '@nextcloud/dialogs'
 import { n, t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 import { DateTime, Duration } from 'luxon'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { InputDiv } from '../Base/index.ts'
 import DateTimePicker from '../Base/modules/DateTimePicker.vue'
-import DateBox from '../Base/modules/DateBox.vue'
 import { useSessionStore } from '../../stores/session'
 import { useOptionsStore, Sequence } from '../../stores/options'
 import { StatusResults } from '../../Types'
-import {
-	dateOnlyUnits,
-	dateTimeUnits,
-	DateUnitKeys,
-	DurationType,
-	dateTimeUnitsKeyed,
-} from '../../constants/dateUnits.ts'
+import { DurationType, dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
+
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
 import { AxiosError } from '@nextcloud/axios'
+
+import { useResizeObserver } from '../../composables/elementWidth.ts'
+import DateBox from '../Base/modules/DateBox.vue'
+
+const { isBelowWidthOffset } = useResizeObserver('add-date-options-container', 355)
 
 const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
@@ -37,6 +36,20 @@ const successColor = getComputedStyle(document.documentElement).getPropertyValue
 	'--color-success',
 )
 const result = ref(StatusResults.None)
+
+const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) => ({
+	id: key,
+	value: value.id,
+	name: value.name,
+	timeOption: value.timeOption,
+}))
+
+const dateTimeOptionsFiltered = computed(() => {
+	if (allDay.value) {
+		return dateTimeOptions.filter((unit) => !unit.timeOption)
+	}
+	return dateTimeOptions
+})
 
 // *** refs for the inputs
 // allDay is a boolean to toggle between all day and time based options
@@ -59,13 +72,13 @@ const fromInput = ref(
 
 // set initial duration to one Day
 const durationInput = ref<DurationType>({
-	unit: dateTimeUnitsKeyed[DateUnitKeys.Day],
+	unit: dateTimeUnitsKeyed.day,
 	amount: 0,
 })
 
 // set initial sequence to one week but disabled
 const sequenceInput = ref<Sequence>({
-	unit: dateTimeUnitsKeyed[DateUnitKeys.Week],
+	unit: dateTimeUnitsKeyed.week,
 	stepWidth: 1,
 	repetitions: 0,
 })
@@ -78,7 +91,7 @@ const from = computed(() => {
 	// if the option is an all day option, the time is set to 00:00
 	if (allDay.value) {
 		return dateFrom
-			.startOf(dateTimeUnitsKeyed[DateUnitKeys.Day].luxonUnit)
+			.startOf('day')
 			.setLocale(sessionStore.currentUser.languageCode)
 	}
 	return dateFrom
@@ -88,7 +101,7 @@ const from = computed(() => {
 // Set duration to 1 Day if allDay is true and duration is 0
 const duration = computed(() =>
 	durationInput.value.amount < 1 && allDay.value
-		? Duration.fromObject({ [DateUnitKeys.Day]: 1 })
+		? Duration.fromObject({ day: 1 })
 		: Duration.fromObject({
 				[durationInput.value.unit.id]: durationInput.value.amount,
 			}),
@@ -105,25 +118,8 @@ const sequence = computed(() =>
 		: Duration.fromObject({ millisecond: 0 }),
 )
 
-// True, if from and to dates are the same day
-const sameDay = computed(() =>
-	from.value.hasSame(to.value, dateTimeUnitsKeyed[DateUnitKeys.Day].luxonUnit),
-)
-
-// *** computed properties only used for display
-// computed to as DateTime from Luxon
-// remove one day to simulate the end of the prior day and not the start of the calculated day in case of allDay
-const to = computed(() =>
-	from.value
-		.plus(duration.value)
-		.minus({ [DateUnitKeys.Day]: allDay.value ? 1 : 0 }),
-)
-
 // computed last from dateTime repetition
-const lastFromDisplay = computed(() => from.value.plus(sequence.value))
-
-// computed last to dateTime repetition
-const lastToDisplay = computed(() => to.value.plus(sequence.value))
+const lastFrom = computed(() => from.value.plus(sequence.value))
 
 // computed if the option is blocked by an existing option
 const blockedOption = computed(() => {
@@ -167,10 +163,10 @@ function resetduratonUnits(): void {
 	if (allDay.value) {
 		// change date units, when switching from time based to all day, since minutes and hours are not valid anymore
 		if (
-			durationInput.value.unit.id === DateUnitKeys.Minute
-			|| durationInput.value.unit.id === DateUnitKeys.Hour
+			durationInput.value.unit.id === 'minute'
+			|| durationInput.value.unit.id === 'hour'
 		) {
-			durationInput.value.unit = dateTimeUnitsKeyed[DateUnitKeys.Day]
+			durationInput.value.unit = dateTimeUnitsKeyed.day
 		}
 	}
 }
@@ -216,64 +212,60 @@ async function addOption(): Promise<void> {
 		</NcCheckboxRadioSwitch>
 	</div>
 
-	<div class="add-container">
+	<div id="add-date-options-container" class="add-container">
 		<div class="select-container">
 			<div class="selection from">
 				<DateTimePicker
 					v-model="fromInput"
-					use-day-buttons
+					:use-day-buttons="!isBelowWidthOffset"
 					hide-label
 					:label="t('polls', 'Add a new date/time')"
 					:type="allDay ? 'date' : 'datetime-local'" />
 			</div>
 
 			<div class="selection duration">
-				<div>
-					<InputDiv
-						v-model="durationInput.amount"
-						:label="t('polls', 'Duration')"
-						type="number"
-						inputmode="numeric"
-						:num-min="0"
-						use-num-modifiers />
-					<NcSelect
-						v-model="durationInput.unit"
-						class="time-unit"
-						:input-label="t('polls', 'Duration time unit')"
-						:clearable="false"
-						:filterable="false"
-						:options="allDay ? dateOnlyUnits : dateTimeUnits"
-						label="name" />
-				</div>
+				<InputDiv
+					v-model="durationInput.amount"
+					:label="t('polls', 'Duration')"
+					type="number"
+					inputmode="numeric"
+					:num-min="0"
+					:use-num-modifiers="!isBelowWidthOffset" />
+				<NcSelect
+					v-model="durationInput.unit"
+					class="time-unit"
+					:input-label="t('polls', 'Duration time unit')"
+					:clearable="false"
+					:filterable="false"
+					:options="dateTimeOptionsFiltered"
+					label="name" />
 			</div>
 
 			<div class="selection repetition">
-				<div class="set-repetition">
+				<InputDiv
+					v-model="sequenceInput.repetitions"
+					:label="t('polls', 'Repetitions')"
+					type="number"
+					inputmode="numeric"
+					:num-min="0"
+					:use-num-modifiers="!isBelowWidthOffset" />
+
+				<div v-if="sequenceInput.repetitions > 0" class="set-repetition">
 					<InputDiv
-						v-model="sequenceInput.repetitions"
-						:label="t('polls', 'Repetitions')"
+						v-model="sequenceInput.stepWidth"
+						:label="t('polls', 'Step width')"
 						type="number"
 						inputmode="numeric"
-						:num-min="0"
-						use-num-modifiers />
+						:use-num-modifiers="!isBelowWidthOffset" />
 
 					<NcSelect
-						v-if="sequenceInput.repetitions > 0"
 						v-model="sequenceInput.unit"
 						class="time-unit"
 						:input-label="t('polls', 'Step unit')"
 						:clearable="false"
 						:filterable="false"
-						:options="dateTimeUnits"
+						:options="dateTimeOptions"
 						label="name" />
-
-					<InputDiv
-						v-if="sequenceInput.repetitions > 0"
-						v-model="sequenceInput.stepWidth"
-						:label="t('polls', 'Step width')"
-						type="number"
-						inputmode="numeric"
-						use-num-modifiers />
 				</div>
 			</div>
 			<div>
@@ -292,22 +284,8 @@ async function addOption(): Promise<void> {
 					<div class="preview___entry">
 						<DateBox
 							class="from"
-							:date="from.toJSDate()"
-							:duration-sec="sameDay ? duration.as('seconds') : 0"
-							:hide-time="allDay" />
-
-						<div
-							v-if="durationInput.amount > 0 && !sameDay"
-							class="preview___devider">
-							<span>{{ ' - ' }} </span>
-						</div>
-
-						<DateBox
-							v-if="!sameDay"
-							class="to"
-							:date="to.toJSDate()"
-							:duration-sec="sameDay ? duration.as('seconds') : 0"
-							:hide-time="allDay" />
+							:luxon-date="from"
+							:luxon-duration="duration" />
 					</div>
 					<div
 						v-if="sequenceInput.repetitions > 0"
@@ -323,22 +301,8 @@ async function addOption(): Promise<void> {
 						<div class="preview___entry">
 							<DateBox
 								class="from"
-								:date="lastFromDisplay.toJSDate()"
-								:duration-sec="sameDay ? duration.as('seconds') : 0"
-								:hide-time="allDay" />
-
-							<div
-								v-if="durationInput.amount > 0 && !sameDay"
-								class="preview___devider">
-								<span>{{ ' - ' }} </span>
-							</div>
-
-							<DateBox
-								v-if="!sameDay"
-								class="to"
-								:date="lastToDisplay.toJSDate()"
-								:duration-sec="sameDay ? duration.as('seconds') : 0"
-								:hide-time="allDay" />
+								:luxon-date="lastFrom"
+								:luxon-duration="duration" />
 						</div>
 					</div>
 				</div>
@@ -357,7 +321,7 @@ async function addOption(): Promise<void> {
 			<NcButton
 				v-else
 				class="date-add-button"
-				:type="ButtonType.Primary"
+				:variant="ButtonVariant.Primary"
 				:disabled="!addable"
 				@click="addOption">
 				{{ t('polls', 'Add') }}
@@ -367,10 +331,6 @@ async function addOption(): Promise<void> {
 </template>
 
 <style lang="scss">
-.modal-container__content {
-	padding: 0 24px;
-}
-
 .add-container {
 	display: flex;
 	flex-wrap: wrap-reverse;
@@ -396,26 +356,25 @@ async function addOption(): Promise<void> {
 	.selection {
 		display: flex;
 		flex-wrap: wrap;
+		column-gap: 1rem;
 		align-items: start;
 		padding: 0 1rem;
 		margin: 0.2rem 0;
-		> div {
-			flex: 1;
-			column-gap: 1rem;
-			display: flex;
-			flex-wrap: wrap;
-			.v-select.select.time-unit {
-				min-width: 11rem;
-			}
-		}
-		.date-time-picker {
-			column-gap: inherit;
+
+		.v-select.select.time-unit {
+			min-width: 11rem;
 		}
 
 		&.repetition {
 			border-radius: var(--border-radius-container-large);
 			background-color: rgb(from var(--color-background-darker) r g b / 0.6);
 			padding: 1rem 1rem;
+		}
+
+		.set-repetition {
+			display: flex;
+			column-gap: 1rem;
+			flex-wrap: wrap;
 		}
 	}
 }
@@ -474,7 +433,6 @@ async function addOption(): Promise<void> {
 	}
 
 	.preview-container {
-		// flex: 1 auto;
 		align-items: center;
 		display: flex;
 		flex-direction: column;

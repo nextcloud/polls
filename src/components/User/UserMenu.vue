@@ -25,8 +25,8 @@ import ResetVotesIcon from 'vue-material-design-icons/Undo.vue'
 import EditAccountIcon from 'vue-material-design-icons/AccountEdit.vue'
 import LogoutIcon from 'vue-material-design-icons/Logout.vue'
 import EditEmailIcon from 'vue-material-design-icons/EmailEditOutline.vue'
-import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue' // view-sequential-outline
-import TableViewIcon from 'vue-material-design-icons/Table.vue' // view-comfy-outline
+import ListViewIcon from 'vue-material-design-icons/ViewListOutline.vue'
+import TableViewIcon from 'vue-material-design-icons/Table.vue'
 import SortByOriginalOrderIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
@@ -39,18 +39,18 @@ import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import {
-	StatusResults,
-	ViewMode,
-	PollType,
-	ButtonMode,
-	Event,
-} from '../../Types/index.ts'
+import { StatusResults, ViewMode, PollType, Event } from '../../Types/index.ts'
 
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 import { NcActionButtonGroup } from '@nextcloud/vue'
-import ActionAddPoll from '../Actions/modules/ActionAddPoll.vue'
 import { AxiosError } from '@nextcloud/axios'
+
+const props = defineProps({
+	noMenuIcon: {
+		type: Boolean,
+		default: false,
+	},
+})
 
 type InputProps = {
 	success: boolean
@@ -327,8 +327,8 @@ async function submitEmail() {
 </script>
 
 <template>
-	<NcActions primary>
-		<template #icon>
+	<NcActions v-bind="$attrs">
+		<template v-if="!props.noMenuIcon" #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
 		<NcActionButtonGroup name="View mode">
@@ -380,10 +380,6 @@ async function submitEmail() {
 			</NcActionButton>
 		</NcActionButtonGroup>
 
-		<NcActionSeparator v-if="sessionStore.appPermissions.pollCreation" />
-
-		<ActionAddPoll :button-mode="ButtonMode.ActionMenu" />
-
 		<NcActionSeparator />
 
 		<NcActionButton
@@ -434,6 +430,7 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionCheckbox
+			v-if="pollStore.viewMode === ViewMode.ListView"
 			:model-value="subscriptionStore.subscribed"
 			:disabled="!pollStore.permissions.subscribe"
 			title="check"
@@ -465,7 +462,10 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="pollStore.permissions.vote"
+			v-if="
+				pollStore.permissions.vote
+				&& pollStore.viewMode === ViewMode.ListView
+			"
 			:name="t('polls', 'Reset your votes')"
 			:aria-label="t('polls', 'Reset your votes')"
 			@click="resetVotes()">

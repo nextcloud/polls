@@ -95,8 +95,8 @@ class PollController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/add')]
-	public function add(string $type, string $title): JSONResponse {
-		return $this->responseCreate(fn () => $this->pollService->add($type, $title));
+	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): JSONResponse {
+		return $this->responseCreate(fn () => $this->pollService->add($type, $title, $votingVariant));
 	}
 
 	/**

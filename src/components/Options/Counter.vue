@@ -29,7 +29,7 @@ const props = defineProps({
 				:size="20" />
 			<span>{{ props.option.votes.yes }}</span>
 		</div>
-		<div v-if="showMaybe" class="maybe">
+		<div v-show="showMaybe" class="maybe">
 			<MaybeCounterIcon
 				fill-color="var(--color-polls-foreground-maybe)"
 				:size="20" />
@@ -42,9 +42,9 @@ const props = defineProps({
 .counter {
 	display: flex;
 	align-items: center;
-	justify-content: space-around;
-	gap: 4px 16px;
-	padding: 0 12px;
+	justify-content: center;
+	gap: 0.25rem 1rem;
+	padding: 0 0.75rem;
 	font-size: 1.1em;
 
 	div {

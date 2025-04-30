@@ -10,7 +10,7 @@ import { usePollStore } from '../../stores/poll.ts'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import { NcDialog } from '@nextcloud/vue'
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 const showAnonDialog = ref(false)
 const anonDialog = {
@@ -29,7 +29,7 @@ const anonDialog = {
 		},
 		{
 			label: t('polls', 'Ok'),
-			type: ButtonType.Primary,
+			variant: ButtonVariant.Primary,
 			callback: () => {
 				lockAnonymous()
 			},

@@ -12,16 +12,32 @@ import { onMounted, onUnmounted, ref } from 'vue'
  * @param offset the offset in px that should be scrolled before returning the scroll value
  */
 export function useHandleScroll(scrollElementId: string, offset: number = 20) {
-	const scrolled = ref(0)
 	const scrollElement = ref<null | HTMLElement>(null)
+	const scrolled = ref(0)
+	const scrolledTop = ref(false)
+	const scrolledBottom = ref(false)
 
 	/**
-	 *
+	 * return the scrollTop value of the element, if scrollTop is greater than offset
+	 * otherwise return 0
 	 */
 	function handleScroll() {
 		if (scrollElement.value !== null && scrollElement.value.scrollTop > offset) {
+			const scrollHeight = scrollElement.value.scrollHeight
+			const clientHeight = scrollElement.value.clientHeight
+
 			scrolled.value = scrollElement.value.scrollTop
+
+			if (scrollHeight - scrolled.value === clientHeight) {
+				scrolledBottom.value = true
+				scrolledTop.value = false
+			} else {
+				scrolledBottom.value = false
+				scrolledTop.value = true
+			}
 		} else {
+			scrolledBottom.value = false
+			scrolledTop.value = false
 			scrolled.value = 0
 		}
 	}
@@ -44,5 +60,5 @@ export function useHandleScroll(scrollElementId: string, offset: number = 20) {
 		if (scrollElement.value !== null)
 			scrollElement.value.removeEventListener('scroll', handleScroll)
 	})
-	return scrolled
+	return { scrolled, scrolledTop, scrolledBottom }
 }

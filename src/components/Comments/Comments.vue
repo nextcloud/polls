@@ -12,21 +12,16 @@ import { useCommentsStore } from '../../stores/comments.ts'
 const commentsStore = useCommentsStore()
 const preferencesStore = usePreferencesStore()
 const cssVar = {
-	'--content-deleted': `" (${t('polls', 'deleted')})"`,
+	'--content-deleted': `"(${t('polls', 'deleted')})"`,
 }
+const alternativestyle = preferencesStore.user.useCommentsAlternativeStyling
 </script>
 
 <template>
 	<TransitionGroup
 		tag="ul"
 		name="list"
-		:class="[
-			'comments',
-			{
-				alternativestyle:
-					preferencesStore.user.useCommentsAlternativeStyling,
-			},
-		]"
+		:class="['comments', { alternativestyle }]"
 		:style="cssVar">
 		<CommentItem
 			v-for="comment in commentsStore.groupedComments"

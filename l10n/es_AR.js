@@ -1,7 +1,6 @@
 OC.L10N.register(
     "polls",
     {
-    "Circle" : "Círculo",
     "Group" : "Grupo",
     "Legal Notice" : "Aviso legal",
     "Contact" : "Contacto",
@@ -11,7 +10,6 @@ OC.L10N.register(
     "Unknown error" : "Error desconocido",
     "Previous day" : "Día previo",
     "Next day" : "Proximo día",
-    "Conflict" : "Conflicto",
     "Add" : "Añadir",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",
@@ -22,6 +20,7 @@ OC.L10N.register(
     "No" : "No",
     "Participants" : "Participantes",
     "OK" : "OK",
+    "Sort" : "Ordenar",
     "All day" : "Todo el día",
     "Preview" : "Vista previa",
     "Submit" : "Enviar",

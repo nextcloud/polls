@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 import { Option, Sequence, SimpleOption } from '../../stores/options.js'
-import { DateUnitKeys } from '../../constants/dateUnits.js'
+import { DateTimeUnit } from '../../constants/dateUnits.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
 import { AxiosResponse } from '@nextcloud/axios'
 import { Vote } from '../../stores/votes.js'
@@ -157,7 +157,7 @@ const options = {
 	shiftOptions(
 		pollId: number,
 		step: number,
-		unit: DateUnitKeys,
+		unit: DateTimeUnit,
 	): Promise<AxiosResponse<{ options: Option[] }>> {
 		return httpInstance.request({
 			method: 'POST',

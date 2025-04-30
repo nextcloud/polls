@@ -101,7 +101,7 @@ export const pollCategories: PollCategorieList = {
 		pinned: false,
 		showInNavigation: () => true,
 		filterCondition: (poll: Poll) =>
-			!poll.status.isDeleted
+			!poll.status.isArchived
 			&& DateTime.fromSeconds(poll.status.relevantThreshold).diffNow('days')
 				.days > -100
 			&& (poll.currentUserStatus.isInvolved
@@ -119,7 +119,7 @@ export const pollCategories: PollCategorieList = {
 			return sessionStore.appPermissions.pollCreation
 		},
 		filterCondition: (poll: Poll) =>
-			!poll.status.isDeleted && poll.currentUserStatus.isOwner,
+			!poll.status.isArchived && poll.currentUserStatus.isOwner,
 	},
 	[FilterType.Private]: {
 		id: FilterType.Private,
@@ -132,7 +132,7 @@ export const pollCategories: PollCategorieList = {
 			return sessionStore.appPermissions.pollCreation
 		},
 		filterCondition: (poll: Poll) =>
-			!poll.status.isDeleted
+			!poll.status.isArchived
 			&& poll.permissions.view
 			&& poll.configuration.access === AccessType.Private,
 	},
@@ -144,7 +144,7 @@ export const pollCategories: PollCategorieList = {
 		pinned: false,
 		showInNavigation: () => true,
 		filterCondition: (poll: Poll) =>
-			!poll.status.isDeleted && poll.currentUserStatus.countVotes > 0,
+			!poll.status.isArchived && poll.currentUserStatus.countVotes > 0,
 	},
 	[FilterType.Open]: {
 		id: FilterType.Open,
@@ -160,7 +160,7 @@ export const pollCategories: PollCategorieList = {
 			return sessionStore.appPermissions.pollCreation
 		},
 		filterCondition: (poll: Poll) =>
-			!poll.status.isDeleted && poll.configuration.access === AccessType.Open,
+			!poll.status.isArchived && poll.configuration.access === AccessType.Open,
 	},
 	[FilterType.All]: {
 		id: FilterType.All,
@@ -169,7 +169,7 @@ export const pollCategories: PollCategorieList = {
 		description: t('polls', 'All polls, where you have access to.'),
 		pinned: false,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) => !poll.status.isDeleted,
+		filterCondition: (poll: Poll) => !poll.status.isArchived,
 	},
 	[FilterType.Closed]: {
 		id: FilterType.Closed,
@@ -179,7 +179,7 @@ export const pollCategories: PollCategorieList = {
 		pinned: false,
 		showInNavigation: () => true,
 		filterCondition: (poll: Poll) =>
-			!poll.status.isDeleted && poll.status.isExpired,
+			!poll.status.isArchived && poll.status.isExpired,
 	},
 	[FilterType.Archived]: {
 		id: FilterType.Archived,
@@ -191,7 +191,7 @@ export const pollCategories: PollCategorieList = {
 			const sessionStore = useSessionStore()
 			return sessionStore.appPermissions.pollCreation
 		},
-		filterCondition: (poll: Poll) => poll.status.isDeleted,
+		filterCondition: (poll: Poll) => poll.status.isArchived,
 	},
 	[FilterType.Admin]: {
 		id: FilterType.Admin,
@@ -314,7 +314,7 @@ export const usePollsStore = defineStore('polls', {
 		datePolls(state: PollList): Poll[] {
 			return state.list.filter(
 				(poll: Poll) =>
-					poll.type === PollType.Date && !poll.status.isDeleted,
+					poll.type === PollType.Date && !poll.status.isArchived,
 			)
 		},
 

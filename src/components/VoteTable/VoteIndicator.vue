@@ -22,7 +22,7 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['click'])
-const iconSize = 31
+const iconSize = 26
 const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-error',
 )
@@ -69,16 +69,14 @@ function onClick() {
 
 <style lang="scss">
 .vote-indicator {
-	display: flex;
-	justify-content: center;
-	align-content: end;
 	color: var(--color-polls-foreground-no);
-	width: 30px;
-	height: 30px;
+	min-width: 30px;
+	min-height: 30px;
 
 	&,
 	* {
 		transition: all 0.4s ease-in-out;
+		margin: auto;
 		.active & {
 			cursor: pointer;
 		}

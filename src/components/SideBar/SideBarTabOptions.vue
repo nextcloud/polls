@@ -111,17 +111,6 @@ onUnmounted(() => {
 
 <style lang="scss">
 .side-bar-tab-options {
-	.owner {
-		display: flex;
-		position: relative;
-		left: -16px;
-		width: 0;
-	}
-
-	.draggable:hover .owner {
-		display: none;
-	}
-
 	.option-item {
 		border-bottom: 1px solid var(--color-border);
 
@@ -130,22 +119,28 @@ onUnmounted(() => {
 			transition: var(--background-dark) 0.3s ease;
 			background-color: var(--color-background-dark);
 		}
+		.option-item__option--text {
+			-webkit-line-clamp: 2;
+			line-clamp: 2;
+			max-height: 4em;
+			-webkit-box-orient: vertical;
+			display: -webkit-inline-box;
+			overflow: clip;
+			text-overflow: ellipsis;
+			transition: all 0.3s ease-in-out;
+		}
 	}
-	.option-item__option--text {
-		-webkit-line-clamp: 2;
-		line-clamp: 2;
-		-webkit-box-orient: vertical;
-		display: -webkit-inline-box;
-		overflow: clip;
-		text-overflow: ellipsis;
-		transition: all 0.3s ease-in-out;
-		max-height: 4em;
 
-		&:hover,
-		&:active {
-			-webkit-line-clamp: initial;
-			line-clamp: initial;
-			max-height: 12em;
+	.sortable:not(.sortable-chosen) {
+		.option-item {
+			.option-item__option--text {
+				&:hover,
+				&:active {
+					-webkit-line-clamp: initial;
+					line-clamp: initial;
+					max-height: 12em;
+				}
+			}
 		}
 	}
 }

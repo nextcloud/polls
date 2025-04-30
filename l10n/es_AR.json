@@ -1,5 +1,4 @@
 { "translations": {
-    "Circle" : "Círculo",
     "Group" : "Grupo",
     "Legal Notice" : "Aviso legal",
     "Contact" : "Contacto",
@@ -9,7 +8,6 @@
     "Unknown error" : "Error desconocido",
     "Previous day" : "Día previo",
     "Next day" : "Proximo día",
-    "Conflict" : "Conflicto",
     "Add" : "Añadir",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",
@@ -20,6 +18,7 @@
     "No" : "No",
     "Participants" : "Participantes",
     "OK" : "OK",
+    "Sort" : "Ordenar",
     "All day" : "Todo el día",
     "Preview" : "Vista previa",
     "Submit" : "Enviar",

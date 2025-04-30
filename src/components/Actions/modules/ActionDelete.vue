@@ -7,7 +7,7 @@
 import { ref, computed } from 'vue'
 import { t, n } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
@@ -57,9 +57,6 @@ const computedTitle = computed(() =>
 
 const emit = defineEmits(['delete', 'restore'])
 
-/**
- *
- */
 function deleteItem(): void {
 	// delete immediately
 	if (props.timeout === 0) {
@@ -84,9 +81,6 @@ function deleteItem(): void {
 	}, props.timeout * 1000)
 }
 
-/**
- *
- */
 function cancelDelete(): void {
 	clearTimeout(deleteTimeout.value as NodeJS.Timeout)
 	clearInterval(deleteInterval.value as NodeJS.Timeout)
@@ -95,9 +89,6 @@ function cancelDelete(): void {
 	countdown.value = props.timeout
 }
 
-/**
- *
- */
 function restoreItem(): void {
 	clearTimeout(deleteTimeout.value as NodeJS.Timeout)
 	clearInterval(deleteInterval.value as NodeJS.Timeout)
@@ -111,7 +102,7 @@ function restoreItem(): void {
 	<div class="">
 		<NcButton
 			:name="computedTitle"
-			:type="ButtonType.Tertiary"
+			:variant="ButtonVariant.Tertiary"
 			:aria-label="computedTitle">
 			<template #icon>
 				<RestoreIcon

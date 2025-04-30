@@ -62,6 +62,8 @@ use OCP\IURLGenerator;
  * @method void setLastInteraction(int $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
+ * @method string getVotingVariant()
+ * @method void setVotingVariant(string $value)
  *
  * Magic functions for joined columns
  * @method int getMinDate()
@@ -81,6 +83,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_polls';
 	public const TYPE_DATE = 'datePoll';
 	public const TYPE_TEXT = 'textPoll';
+	public const VARIANT_SIMPLE = 'simple';
 	public const ACCESS_HIDDEN = 'hidden';
 	public const ACCESS_PUBLIC = 'public';
 	public const ACCESS_PRIVATE = 'private';
@@ -157,6 +160,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $useNo = 0;
 	protected int $lastInteraction = 0;
 	protected ?string $miscSettings = '';
+	protected string $votingVariant = '';
 
 	// joined columns
 	protected ?int $isCurrentUserLocked = 0;
@@ -216,6 +220,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return [
 			'id' => $this->getId(),
 			'type' => $this->getType(),
+			'votingVariant' => $this->getVotingVariant(),
 			// editable settings
 			'configuration' => $this->getConfigurationArray(),
 			// read only properties
@@ -232,10 +237,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'lastInteraction' => $this->getLastInteraction(),
 			'created' => $this->getCreated(),
 			'isAnonymous' => boolval($this->getAnonymous()),
-			'isDeleted' => boolval($this->getDeleted()),
+			'isArchived' => boolval($this->getDeleted()),
 			'isExpired' => $this->getExpired(),
 			'isRealAnonymous' => $this->getAnonymous() < 0,
 			'relevantThreshold' => $this->getRelevantThreshold(),
+			'deletionDate' => $this->getDeletionDate(),
+			'archivedDate' => $this->getDeleted(),
 			'countOptions' => $this->getOptionsCount(),
 			'countParticipants' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getParticipantsCount() : 0,
 			'countProposals' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getProposalsCount() : 0,
@@ -482,6 +489,13 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			$this->getExpire(),
 			$this->getMaxDate(),
 		);
+	}
+
+	private function getDeletionDate(): int {
+		if ($this->getDeleted() > 0 && $this->appSettings->getAutoDeleteEnabled()) {
+			return $this->getDeleted() + ($this->appSettings->getAutoDeleteOffsetDays() * 60 * 60 * 24);
+		}
+		return 0;
 	}
 
 	private function getIsCurrentUserLocked(): bool {
@@ -813,7 +827,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 * Checks, if poll owner is allowed to change votes
 	 **/
 	private function getAllowChangeForeignVotes(): bool {
-		return $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
+		return $this->getAnonymous() > -1 && $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
 	}
 
 	/**
@@ -821,7 +835,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 **/
 	private function getAllowDeanonymize(): bool {
 		// Current user is allowed to edit the poll and the owner of the poll is unrestricted
-		return $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
+		return $this->getAnonymous() > -1 && $this->getAllowEditPoll() && $this->getUser()->getIsUnrestrictedPollOwner();
 	}
 
 	/**

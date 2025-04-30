@@ -20,6 +20,7 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCP\AppFramework\Utility\ITimeFactory;
 use OCP\BackgroundJob\TimedJob;
 use OCP\ISession;
+use Psr\Log\LoggerInterface;
 
 /**
  * @psalm-api
@@ -36,6 +37,7 @@ class JanitorCron extends TimedJob {
 		private OptionMapper $optionMapper,
 		private ShareMapper $shareMapper,
 		private ISession $session,
+		private LoggerInterface $logger,
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day
@@ -61,13 +63,36 @@ class JanitorCron extends TimedJob {
 		$this->commentMapper->purgeDeletedComments(time() - 4320);
 		$this->optionMapper->purgeDeletedOptions(time() - 4320);
 		$this->shareMapper->purgeDeletedShares(time() - 4320);
-		$autoArchiveOffest = $this->appSettings->getAutoarchiveOffsetDays();
+
+		$autoArchiveOffset = $this->appSettings->getAutoArchiveOffsetDays();
+
 		// archive polls after defined days after closing date
-		if ($this->appSettings->getAutoarchiveEnabled() && $autoArchiveOffest > 0) {
-			$this->pollMapper->archiveExpiredPolls(
-				time() - ($autoArchiveOffest * 86400)
+		if ($this->appSettings->getAutoArchiveEnabled() && $autoArchiveOffset > 0) {
+			$affectedRows = $this->pollMapper->archiveExpiredPolls(
+				time() - ($autoArchiveOffset * 86400)
 			);
+			if ($affectedRows > 0) {
+				$this->logger->info(
+					'JanitorCron: Archived {count} poll(s).',
+					['count' => $affectedRows]
+				);
+			}
 		}
+
+		$autoDeleteOffset = $this->appSettings->getAutoDeleteOffsetDays();
+		// delete polls after defined days after archiving date
+		if ($this->appSettings->getAutoDeleteEnabled() && $autoDeleteOffset > 0) {
+			$affectedRows = $this->pollMapper->deleteArchivedPolls(
+				time() - ($autoDeleteOffset * 86400)
+			);
+			if ($affectedRows > 0) {
+				$this->logger->info(
+					'JanitorCron: Deleted {count} archived poll(s).',
+					['count' => $affectedRows]
+				);
+			}
+		}
+
 		$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
 	}
 

@@ -28,6 +28,7 @@ OC.L10N.register(
     "From" : "De",
     "Email address" : "Adreça mail",
     "OK" : "D'acòrdi",
+    "Sort" : "Triar",
     "All day" : "Tota la jornada",
     "Duration" : "Durada",
     "Preview" : "Apercebut",

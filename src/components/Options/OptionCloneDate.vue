@@ -9,15 +9,11 @@ import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 
 import NcSelect from '@nextcloud/vue/components/NcSelect'
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import { InputDiv } from '../Base/index.ts'
 import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
-import {
-	dateTimeUnits,
-	dateTimeUnitsKeyed,
-	DateUnitKeys,
-} from '../../constants/dateUnits.ts'
+import { dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
 
 const optionsStore = useOptionsStore()
 
@@ -28,10 +24,15 @@ const props = defineProps({
 	},
 })
 
+const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) => ({
+	id: key,
+	name: value.name,
+}))
+
 const emit = defineEmits(['close'])
 
 const sequence = ref<Sequence>({
-	unit: dateTimeUnitsKeyed[DateUnitKeys.Week],
+	unit: dateTimeUnitsKeyed.week,
 	stepWidth: 1,
 	repetitions: 1,
 })
@@ -70,7 +71,7 @@ function createSequence() {
 			:input-label="t('polls', 'Step unit')"
 			:clearable="false"
 			:filterable="false"
-			:options="dateTimeUnits"
+			:options="dateTimeOptions"
 			label="name" />
 
 		<div class="sideways">
@@ -96,7 +97,7 @@ function createSequence() {
 				</template>
 			</NcButton>
 
-			<NcButton :type="ButtonType.Primary" @click="createSequence()">
+			<NcButton :variant="ButtonVariant.Primary" @click="createSequence()">
 				<template #default>
 					{{ t('polls', 'OK') }}
 				</template>

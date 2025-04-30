@@ -7,7 +7,7 @@
 import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonType } from '@nextcloud/vue/components/NcButton'
+import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
@@ -36,6 +36,10 @@ import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 
 import { usePollStore, PollType, ShowResults } from '../../stores/poll.ts'
 import { useVotesStore } from '../../stores/votes.ts'
+import DeletePollDialog from '../PollList/DeletePollDialog.vue'
+import { ref } from 'vue'
+import { router } from '../../router.ts'
+import { FilterType } from '../../stores/polls.ts'
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
@@ -49,25 +53,21 @@ function toggleArchive() {
 	} catch {
 		showError(
 			t('polls', 'Error {action} poll.', {
-				action: pollStore.status.isDeleted ? 'restoring' : 'archiving',
+				action: pollStore.status.isArchived ? 'restoring' : 'archiving',
 			}),
 		)
 	}
 }
 
-/**
- *
- */
-function deletePoll() {
-	if (!pollStore.status.isDeleted) {
-		return
-	}
-	try {
-		pollStore.delete({ pollId: pollStore.id })
-	} catch {
-		showError(t('polls', 'Error deleting poll.'))
-	}
+function routeAway() {
+	router.push({
+		name: 'list',
+		params: {
+			type: FilterType.Relevant,
+		},
+	})
 }
+const showDeleteDialog = ref(false)
 </script>
 
 <template>
@@ -147,12 +147,12 @@ function deletePoll() {
 		<div class="delete-area">
 			<NcButton @click="toggleArchive()">
 				<template #icon>
-					<RestorePollIcon v-if="pollStore.status.isDeleted" />
+					<RestorePollIcon v-if="pollStore.status.isArchived" />
 					<ArchivePollIcon v-else />
 				</template>
 				<template #default>
 					{{
-						pollStore.status.isDeleted
+						pollStore.status.isArchived
 							? t('polls', 'Restore poll')
 							: t('polls', 'Archive poll')
 					}}
@@ -160,9 +160,8 @@ function deletePoll() {
 			</NcButton>
 
 			<NcButton
-				v-if="pollStore.status.isDeleted"
-				:type="ButtonType.Error"
-				@click="deletePoll()">
+				:variant="ButtonVariant.Error"
+				@click="showDeleteDialog = true">
 				<template #icon>
 					<DeletePollIcon />
 				</template>
@@ -172,6 +171,12 @@ function deletePoll() {
 			</NcButton>
 		</div>
 	</div>
+
+	<DeletePollDialog
+		v-model="showDeleteDialog"
+		:poll="pollStore"
+		@deleted="routeAway"
+		@close="showDeleteDialog = false" />
 </template>
 
 <style lang="scss">
