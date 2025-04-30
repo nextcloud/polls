@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error" : "Fazi dizanv",
     "Previous day" : "Deizioù kent",
     "Next day" : "Deiz war-lerc'h",
-    "Conflict" : "Stourm",
     "Add" : "Ouzhpennañ",
     "Delete comment" : "Lemel an displegadenn",
     "Cancel" : "Nullañ",

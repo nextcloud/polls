@@ -7,7 +7,6 @@ OC.L10N.register(
     "Unknown error" : "үл мэдэгдэх алдаа",
     "Previous day" : "Өмнөх өдөр",
     "Next day" : "Маргааш",
-    "Conflict" : "Давхцал",
     "Add" : "нэмэх",
     "New comment …" : "Шинэ сэтгэгдэл...",
     "Delete comment" : "Сэтгэгдэл устгах",

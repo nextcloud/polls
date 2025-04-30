@@ -14,7 +14,6 @@ OC.L10N.register(
     "Unknown error" : "Ukendt fejl",
     "Previous day" : "Forrige dag",
     "Next day" : "Næste dag",
-    "Conflict" : "Konflikt",
     "Add" : "Tilføj",
     "New comment …" : "Ny kommentar…",
     "Delete comment" : "Slet kommentar",

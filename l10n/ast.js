@@ -225,7 +225,6 @@ OC.L10N.register(
     "Switch to list view" : "Cambiar a la vista de llista",
     "Vote saved" : "Guardóse'l votu",
     "Error saving vote" : "Hebo un error al guardar el votu",
-    "Delete votes" : "Desaniciar los votos",
     "Other settings" : "Otra configuración",
     "Combined polls" : "Encuestes mecíes",
     "No polls selected" : "Nun se seleicionó nenguna encuesta",

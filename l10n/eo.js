@@ -12,7 +12,6 @@ OC.L10N.register(
     "Delete" : "Forigi",
     "Register" : "Registriĝi",
     "Unknown error" : "Nekonata eraro",
-    "Conflict" : "Konflikto",
     "Add" : "Aldoni",
     "New comment …" : "Nova komento...",
     "Delete comment" : "Forigi komenton",
