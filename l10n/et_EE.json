@@ -94,6 +94,7 @@
     "Archived" : "Arhiveeritud",
     "A private poll from {name}" : "Privaatne küsitlus kasutajalt {name}",
     "never" : "mitte kunagi",
+    "Private poll" : "Privaatne küsitlus",
     "This will finally delete the poll and {username} will get notified." : "Sellega saab küsitlus lõplikult kustutatud ja {username} saab asjakohase teate.",
     "This will finally delete the poll." : "Sellega saab küsitlus lõplikult kustutatud.",
     "Archived {relativeTIme}" : "Arhiveeritud {relativeTIme}",

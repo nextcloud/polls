@@ -35,6 +35,7 @@ OC.L10N.register(
     "Delete poll" : "Slet afstemning",
     "OK" : "OK",
     "Delete option" : "Slet valg",
+    "Sort" : "Sortér",
     "All day" : "Hele dagen",
     "Duration" : "Varighed",
     "Preview" : "Forhåndsvisning",
