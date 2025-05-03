@@ -83,19 +83,16 @@ function toggleClamp() {
 			font-weight: bold;
 			font-size: 1em;
 			line-height: 1.5em;
-			overflow: clip;
-			text-overflow: ellipsis;
-			display: -webkit-box;
 		}
 
 		.sub {
 			display: flex;
 			flex-wrap: wrap;
 		}
-		.header_bar_bottom {
-			display: flex;
-			margin-bottom: 16px;
-		}
+	}
+
+	.header_bar_bottom {
+		margin-bottom: 1rem;
 	}
 
 	[class*='bar_'] {

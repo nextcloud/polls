@@ -34,6 +34,7 @@ import { usePollStore, PollType } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
+import Collapsible from '../components/Base/modules/Collapsible.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -67,6 +68,16 @@ const windowTitle = computed(
 	() => `${t('polls', 'Polls')} - ${pollStore.configuration.title}`,
 )
 
+const isShortDescription = computed(() => {
+	if (!pollStore.configuration.description) {
+		return false
+	}
+	// If less than 20 words and less than 5 lines, then it's short
+	return (
+		pollStore.configuration.description.split(' ').length < 20
+		&& pollStore.configuration.description.split(/\r\n|\r|\n/).length < 5
+	)
+})
 onMounted(() => {
 	subscribe(Event.LoadPoll, () => pollStore.load())
 	emit(Event.TransitionsOff, 500)
@@ -102,29 +113,15 @@ onUnmounted(() => {
 		</HeaderBar>
 
 		<div class="vote_main">
-			<VoteInfoCards v-if="!preferencesStore.user.useCardsArrangement" />
-
-			<div
-				v-if="
-					pollStore.configuration.description
-					&& !preferencesStore.user.useCardsArrangement
-				"
-				class="area__description">
+			<Collapsible
+				v-if="pollStore.configuration.description"
+				:show-more-caption="pollStore.configuration.description"
+				:no-collapse="isShortDescription"
+				:initial-collapsed="!!pollStore.currentUserStatus.countVotes">
 				<MarkUpDescription />
-			</div>
+			</Collapsible>
 
-			<div v-if="preferencesStore.user.useCardsArrangement" class="top_area">
-				<div
-					v-if="pollStore.configuration.description"
-					class="description_container">
-					<div class="area__description">
-						<MarkUpDescription />
-					</div>
-				</div>
-				<div class="cards_container">
-					<VoteInfoCards />
-				</div>
-			</div>
+			<VoteInfoCards />
 
 			<VoteTable v-show="optionsStore.list.length" />
 
