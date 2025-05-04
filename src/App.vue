@@ -121,11 +121,14 @@ onUnmounted(() => {
 	row-gap: 8px;
 
 	.clamped {
+		display: -webkit-box !important;
 		-webkit-line-clamp: 2;
 		line-clamp: 2;
 		-webkit-box-orient: vertical;
 		text-wrap: wrap;
-		display: -webkit-box;
+		overflow: clip !important;
+		text-overflow: ellipsis !important;
+		padding: 0 !important;
 	}
 }
 

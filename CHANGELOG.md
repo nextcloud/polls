@@ -14,15 +14,15 @@ All notable changes to this project will be documented in this file.
  - Preparation for voting variants
 ### New
  - New dialog for creation of datetime options in date polls
+ - Added option to automatically set all added options to yes
  - Locked anonymous mode
  - Restricted poll owners
  - Redesign of poll lists
- - Added option to automatically set all added options to yes
  - Changed controls of numeric inputs
- - Opt-in for an option, while adding it
  - Auto delete archived polls after configurable days
  - Configuration for using the Nextcloud default footer in public polls
  - Delete polls without the need to archive them first
+ - Collapsible poll description
 
 ## [7.4.1] - 2024-03-07
 ### New

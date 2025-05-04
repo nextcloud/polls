@@ -10,18 +10,24 @@ const pollStore = usePollStore()
 
 <template>
 	<!-- eslint-disable-next-line vue/no-v-html -->
-	<div class="markup-description" v-html="pollStore.descriptionMarkUp" />
+	<div
+		ref="desc"
+		class="markup-description"
+		v-html="pollStore.descriptionMarkUp" />
 </template>
 
 <style lang="scss">
-.markup-description * {
-	margin: revert;
-	padding: revert;
-	font-size: revert;
-	text-decoration: revert;
-	list-style: revert;
-	opacity: revert;
-	min-height: revert;
+.markup-description {
+	padding: 0.5rem;
+	margin: 0.25rem;
+	overflow: auto;
+
+	* {
+		margin: revert;
+		font-size: revert;
+		text-decoration: revert;
+		list-style: inside;
+	}
 }
 
 .markup-description {

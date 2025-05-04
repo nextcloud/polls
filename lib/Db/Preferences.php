@@ -27,7 +27,6 @@ class Preferences extends Entity implements JsonSerializable {
 	public const DEFAULT = [
 		'useCommentsAlternativeStyling' => false,
 		'useAlternativeStyling' => false,
-		'useCardsArrangement' => false,
 		'calendarPeek' => false,
 		'checkCalendars' => [],
 		'checkCalendarsHoursBefore' => 0,

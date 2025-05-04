@@ -15,3 +15,4 @@ export { default as IntersectionObserver } from './modules/IntersectionObserver.
 export { default as LoadingOverlay } from './modules/LoadingOverlay.vue'
 export { default as QrModal } from './modules/QrModal.vue'
 export { default as RadioGroupDiv } from './modules/RadioGroupDiv.vue'
+export { default as Collapsible } from './modules/Collapsible.vue'
