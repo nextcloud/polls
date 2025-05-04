@@ -35,11 +35,7 @@ class BaseController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback());
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->handleResponse($callback, Http::STATUS_OK, Exception::class);
 	}
 
 	/**
@@ -48,11 +44,7 @@ class BaseController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback());
-		} catch (NoUpdatesException $e) {
-			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
-		}
+		return $this->handleResponse($callback, Http::STATUS_OK, NoUpdatesException::class, Http::STATUS_NOT_MODIFIED);
 	}
 
 	/**
@@ -61,11 +53,7 @@ class BaseController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback(), Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->handleResponse($callback, Http::STATUS_CREATED, Exception::class);
 	}
 
 	/**
@@ -74,12 +62,42 @@ class BaseController extends Controller {
 	 */
 	#[NoAdminRequired]
 	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
+		return $this->handleResponse(
+			$callback,
+			Http::STATUS_OK,
+			DoesNotExistException::class,
+			Http::STATUS_OK,
+			'Not found, assume already deleted',
+			Exception::class
+		);
+	}
+
+	private function handleResponse(
+		Closure $callback,
+		int $successStatus,
+		string $primaryException,
+		int $fallbackStatus = null,
+		string $fallbackMessage = null,
+		string $secondaryException = null
+	): JSONResponse {
 		try {
-			return new JSONResponse($callback());
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['message' => 'Not found, assume already deleted']);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse($callback(), $successStatus);
+		} catch (\Throwable $e) {
+			if (is_a($e, $primaryException, true)) {
+				if ($fallbackStatus !== null) {
+					return new JSONResponse(['message' => $fallbackMessage ?? ''], $fallbackStatus);
+				}
+				if ($e instanceof Exception) {
+					return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+				}
+			}
+
+			if ($secondaryException !== null && is_a($e, $secondaryException, true) && $e instanceof Exception) {
+				return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+			}
+
+			throw $e;
 		}
 	}
 }
+

@@ -12,6 +12,7 @@ use Closure;
 use OCA\Polls\Exceptions\Exception;
 use OCA\Polls\Exceptions\NoUpdatesException;
 use OCP\AppFramework\ApiController;
+use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -37,11 +38,7 @@ class BaseApiV1Controller extends ApiController {
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback());
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
+		return $this->handleResponse($callback, Http::STATUS_OK);
 	}
 
 	/**
@@ -50,11 +47,7 @@ class BaseApiV1Controller extends ApiController {
 	 */
 	#[NoAdminRequired]
 	protected function responseLong(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback());
-		} catch (NoUpdatesException $e) {
-			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
-		}
+		return $this->handleResponse($callback, Http::STATUS_OK, true);
 	}
 
 	/**
@@ -63,10 +56,27 @@ class BaseApiV1Controller extends ApiController {
 	 */
 	#[NoAdminRequired]
 	protected function responseCreate(Closure $callback): JSONResponse {
+		return $this->handleResponse($callback, Http::STATUS_CREATED);
+	}
+
+	private function handleResponse(
+		Closure $callback,
+		int $successStatus = Http::STATUS_OK,
+		bool $checkNoUpdates = false
+	): JSONResponse {
 		try {
-			return new JSONResponse($callback(), Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+			return new JSONResponse($callback(), $successStatus);
+		} catch (\Throwable $e) {
+			if ($checkNoUpdates && $e instanceof NoUpdatesException) {
+				return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
+			}
+			if ($e instanceof DoesNotExistException) {
+				return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_NOT_FOUND);
+			}
+			if ($e instanceof Exception) {
+				return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_INTERNAL_SERVER_ERROR);
+			}
+			return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_INTERNAL_SERVER_ERROR);
 		}
 	}
 }
