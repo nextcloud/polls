@@ -293,6 +293,7 @@ OC.L10N.register(
     "Error cloning poll." : "Fel vid kloning av omröstning.",
     "Take over" : "Ta över",
     "Sort by title" : "Sortera efter titel",
+    "Direction" : "Riktning",
     "Descending" : "Fallande",
     "Ascending" : "Stigande",
     "Checking name …" : "Kontrollerar namn...",

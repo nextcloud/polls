@@ -70,6 +70,9 @@ OC.L10N.register(
     "Owner" : "Īpašnieks",
     "All polls" : "Visas aptaujas",
     "Archive" : "Arhīvi",
-    "Administration" : "Pārvaldīšana"
+    "My archived polls" : "Manas arhivētās aptaujas",
+    "Your archived polls are only accessible to you." : "Tavas arhivētās aptaujas ir pieejamas tikai Tev.",
+    "Administration" : "Pārvaldīšana",
+    "You can delete, archive and take over polls in this list, but access is still not possible." : "Šī saraksta aptaujas var izdzēst, arhivēt un pārņemt, bet piekļūšana joprojām nav iespējama."
 },
 "nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n != 0 ? 1 : 2);");

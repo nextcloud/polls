@@ -347,6 +347,7 @@ OC.L10N.register(
     "Clone option" : "خيار الاستنساخ",
     "Unconfirm option" : "خيار Unconfirm",
     "Confirm option" : "تأكيد الخيار",
+    "Sort" : "ترتيب",
     "No vote options" : "لا توجد خيارات تصويت",
     "Option already exists" : "الخيار موجود سلفاً",
     "Option added" : "تمّت إضافة الخيار",

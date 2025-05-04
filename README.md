@@ -87,26 +87,26 @@ git clone https://github.com/nextcloud/polls.git
 
 ### First time install
 Nextcloud executes
-* unexecuteted `migration classes` (not listed in the `*_migrations` table) and the 
+* unexecuted `migration classes` (not listed in the `*_migrations` table) and the
 * `install` repair step.
 
 ### After a version update (changed version attribute in appinfo/info.xml)
-Nextcloud executes 
-* `pre-migration` repair steps, 
-* unexecuteted `migration classes` (not listed in the `*_migrations` table) and the 
+Nextcloud executes
+* `pre-migration` repair steps,
+* unexecuted `migration classes` (not listed in the `*_migrations` table) and the
 * `post-migration` repair steps
 
 ### Enabling already installed but disabled app without version change
-Nextcloud executes 
-* `pre-migration` repair steps, 
-* unexecuteted `migration classes` (not listed in the `*_migrations` table) and the
-* `post-migration` repair steps and the 
+Nextcloud executes
+* `pre-migration` repair steps,
+* unexecuted `migration classes` (not listed in the `*_migrations` table) and the
+* `post-migration` repair steps and the
 * `install` repair step
 
 ❗ As a compromise at the moment we allow the index creation to be ran twice when enabling the app via app store or `occ`, to ensure all indexes are created properly for every install/update/enabling path.
 
 ## Removing Polls from instance
-Call `occ polls:db:purge` to remove Polls completely. 
+Call `occ polls:db:purge` to remove Polls completely.
 * removes all Polls related tables
 * removes all Polls related migration records
 * removes all Polls related app config records (this also disables Polls)
