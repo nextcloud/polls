@@ -83,6 +83,7 @@
     "You subscribed to this poll" : "Ви слідкуєте за цим опитуванням.",
     "_%n option_::_%n options_" : ["%n варіант","%n варіантів","%n варіантів ","%n варіантів"],
     "Sort by title" : "Впорядкувати за назвою",
+    "Direction" : "Напрям",
     "Descending" : "За спаданням",
     "Ascending" : "За зростанням",
     "A name is required." : "Потрібно зазначити ім'я.",
