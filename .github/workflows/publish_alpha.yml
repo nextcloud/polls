@@ -37,13 +37,13 @@ jobs:
 
     - name: rename packages to polls-${{ steps.appinfo.outputs.app-version }}
       if: success()
-      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
+      run: mv build/artifacts/polls.tar.gz build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
 
     - name: create zip archive from sources
       if: success()
       run: |
         pushd build/source
-        zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip *
+        zip -r ../artifacts/polls-${{ steps.appinfo.outputs.app-version }}.zip *
         popd
 
     - name: Extract release notes
@@ -60,5 +60,5 @@ jobs:
         draft: true
         generate_release_notes: true
         files: |
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip
+          build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
+          build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.zip

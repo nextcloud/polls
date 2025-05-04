@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 name: Draft Release
 
-on: 
+on:
   push:
     tags:
       - v*
@@ -38,13 +38,13 @@ jobs:
 
     - name: rename packages to polls-${{ steps.appinfo.outputs.app-version }}
       if: success()
-      run: mv build/artifacts/appstore/polls.tar.gz build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
+      run: mv build/artifacts/polls.tar.gz build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
 
     - name: create zip archive from sources
       if: success()
       run: |
         pushd build/source
-        zip -r ../artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip *
+        zip -r ../artifacts/polls-${{ steps.appinfo.outputs.app-version }}.zip *
         popd
 
     - name: Extract release notes
@@ -55,14 +55,14 @@ jobs:
     - name: Draft Release
       if: success()
       uses: softprops/action-gh-release@v1
-      with: 
+      with:
         body: "# Changelog ${{ steps.appinfo.outputs.app-version }} \n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: false
         draft: false
         generate_release_notes: true
         files: |
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
-          build/artifacts/appstore/polls-${{ steps.appinfo.outputs.app-version }}.zip
+          build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
+          build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.zip
 
     - name: Create release notification issue
       if: success()
