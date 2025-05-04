@@ -26,22 +26,21 @@ const props = defineProps({
 	},
 })
 
-const showMore = ref(!props.initialCollapsed)
+const showMore = ref(!props.initialCollapsed || props.noCollapse)
 </script>
 
 <template>
 	<div class="collapsible">
 		<div
+			id="collapsible_container"
+			:class="['collapsible_container', { open: showMore || noCollapse }]">
+			<slot />
+		</div>
+		<div
 			v-show="!noCollapse"
 			:class="['collapsible-toggle', { open: showMore }]"
 			@click="showMore = !showMore">
 			{{ showMore ? props.closeCaption : props.showMoreCaption }}
-		</div>
-		<div
-			v-show="showMore || noCollapse"
-			id="collapsible_container"
-			:class="['collapsible_container', { open: showMore }]">
-			<slot />
 		</div>
 	</div>
 </template>
@@ -59,17 +58,20 @@ const showMore = ref(!props.initialCollapsed)
 		overflow: hidden;
 		text-overflow: ellipsis;
 		max-width: 100%;
+		background-color: var(--color-background-plain);
+		color: var(--color-primary-element-text);
+		border-radius: var(--border-radius-element);
 
 		&::before {
 			content: '\25B8';
 			margin: 0 0.3em;
 			display: inline-block;
-			transform: rotate(0deg);
+			transform: rotate(90deg);
 			transition: transform 0.3s ease-in-out;
 		}
 		&.open {
 			&::before {
-				transform: rotate(90deg);
+				transform: rotate(-90deg);
 			}
 		}
 	}
@@ -77,7 +79,7 @@ const showMore = ref(!props.initialCollapsed)
 	.collapsible_container {
 		transition: max-height 0.3s ease-in-out;
 		overflow: auto;
-		// max-height: 0;
+		max-height: 0;
 
 		background:
 		    /* Shadow covers */
