@@ -132,6 +132,8 @@ OC.L10N.register(
     "Register" : "登録",
     "Unknown error" : "不明なエラー",
     "Toggle Sidebar" : "サイドバーを切り替え",
+    "Show more" : "表示を増やす",
+    "Collapse" : "折りたたむ",
     "Previous day" : "前日",
     "Next day" : "翌日",
     "Add" : "追加",

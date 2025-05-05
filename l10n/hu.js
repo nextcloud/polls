@@ -199,6 +199,8 @@ OC.L10N.register(
     "Unknown error" : "Ismeretlen hiba",
     "Reveal them" : "Felfedés",
     "Toggle Sidebar" : "Oldalsáv be/ki",
+    "Show more" : "Több megjelenítése",
+    "Collapse" : "Összecsukás",
     "Previous day" : "Előző nap",
     "Next day" : "Következő nap",
     "Add" : "Hozzáadás",

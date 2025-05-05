@@ -177,6 +177,8 @@ OC.L10N.register(
     "Send information about confirmed options by email" : "Skicka information om bekräftade alternativ med mejl",
     "Unknown error" : "Okänt fel",
     "Toggle Sidebar" : "Växla sidofält",
+    "Show more" : "Visa mer",
+    "Collapse" : "Dölj",
     "Previous day" : "Föregående dag",
     "Next day" : "Nästa dag",
     "Add" : "Lägg till",

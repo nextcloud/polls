@@ -11,6 +11,8 @@ OC.L10N.register(
     "Delete" : "Eliminar",
     "Register" : "Registrar",
     "Unknown error" : "Se presentó un error desconocido",
+    "Show more" : "Mostrar más",
+    "Collapse" : "Colapsar",
     "Previous day" : "Día anterior",
     "Next day" : "Próximo día",
     "Add" : "Agregar",

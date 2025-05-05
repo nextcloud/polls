@@ -234,6 +234,8 @@ OC.L10N.register(
     "Unknown error" : "Produciuse un erro descoñecido",
     "Reveal them" : "Descubrilos",
     "Toggle Sidebar" : "Cambiar a barra lateral",
+    "Show more" : "Amosar máis",
+    "Collapse" : "Contraer",
     "Previous day" : "Día anterior",
     "Next day" : "Día seguinte",
     "Add" : "Engadir",

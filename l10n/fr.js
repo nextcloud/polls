@@ -234,6 +234,8 @@ OC.L10N.register(
     "Unknown error" : "Erreur inconnue",
     "Reveal them" : "Révélez-les",
     "Toggle Sidebar" : "Afficher/Masquer le panneau latéral",
+    "Show more" : "Show more",
+    "Collapse" : "Replier",
     "Previous day" : "Jour précédent",
     "Next day" : "Jour suivant",
     "Add" : "Ajouter",

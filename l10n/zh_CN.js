@@ -163,6 +163,8 @@ OC.L10N.register(
     "Register" : "注册",
     "Unknown error" : "未知错误",
     "Toggle Sidebar" : "切换侧边栏",
+    "Show more" : "显示更多",
+    "Collapse" : "折叠",
     "Previous day" : "前一天",
     "Next day" : "后一天",
     "Add" : "添加",

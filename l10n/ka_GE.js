@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete" : "წაშლა",
     "Register" : "რეგისტრაცია",
     "Unknown error" : "უცნობი შეცდომა",
+    "Collapse" : "აკეცვა",
     "Add" : "დამატება",
     "New comment …" : "ახალი კომენტარი ...",
     "Delete comment" : "კომენტარის გაუქმება",

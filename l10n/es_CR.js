@@ -10,6 +10,7 @@ OC.L10N.register(
     "Delete" : "Borrar",
     "Register" : "Registrar",
     "Unknown error" : "Error desconocido",
+    "Collapse" : "Colapsar",
     "Add" : "Agregar",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",

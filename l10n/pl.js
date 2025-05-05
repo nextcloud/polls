@@ -177,6 +177,8 @@ OC.L10N.register(
     "Send information about confirmed options by email" : "Wyślij informacje o potwierdzonych opcjach przez e-mail",
     "Unknown error" : "Nieznany błąd",
     "Toggle Sidebar" : "Przełącz pasek boczny",
+    "Show more" : "Pokaż więcej",
+    "Collapse" : "Zwiń",
     "Previous day" : "Poprzedni dzień",
     "Next day" : "Następny dzień",
     "Add" : "Dodaj",

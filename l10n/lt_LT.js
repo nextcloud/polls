@@ -67,6 +67,8 @@ OC.L10N.register(
     "Register" : "Registruotis",
     "Unknown error" : "Nežinoma klaida",
     "Toggle Sidebar" : "Perjungti šoninę juostą",
+    "Show more" : "Rodyti daugiau",
+    "Collapse" : "Suskleisti",
     "Previous day" : "Ankstesnė diena",
     "Next day" : "Kita diena",
     "Add" : "Pridėti",

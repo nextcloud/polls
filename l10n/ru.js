@@ -174,6 +174,8 @@ OC.L10N.register(
     "Send information about confirmed options by email" : "Отправлять информацию о подтвержденных опциях по электронной почте",
     "Unknown error" : "Неизвестная ошибка",
     "Toggle Sidebar" : "Скрыть или показать боковую панель",
+    "Show more" : "Показывать больше",
+    "Collapse" : "Свернуть",
     "Previous day" : "Предыдущий день",
     "Next day" : "Следующий день",
     "Add" : "Добавить",

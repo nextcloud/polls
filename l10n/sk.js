@@ -233,6 +233,8 @@ OC.L10N.register(
     "Unknown error" : "Neznáma chyba",
     "Reveal them" : "Ohaliť ich",
     "Toggle Sidebar" : "Prepnúť bočný panel",
+    "Show more" : "Zobraziť viac",
+    "Collapse" : "Zvinúť",
     "Previous day" : "Predchádzajúci deň",
     "Next day" : "Nasledujúci deň",
     "Add" : "Pridať",

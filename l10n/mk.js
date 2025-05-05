@@ -14,6 +14,8 @@ OC.L10N.register(
     "Register" : "Регистрирај се",
     "Unknown error" : "Непозната грешка",
     "Toggle Sidebar" : "Отвори странична лента",
+    "Show more" : "Прикажи повеќе",
+    "Collapse" : "Собери",
     "Previous day" : "Предходен ден",
     "Next day" : "Следен ден",
     "Add" : "Додади",

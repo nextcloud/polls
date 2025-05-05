@@ -99,6 +99,8 @@ OC.L10N.register(
     "Register" : "Vpis računa",
     "Unknown error" : "Neznana napaka",
     "Toggle Sidebar" : "Preklopi bočno okno",
+    "Show more" : "Pokaži več",
+    "Collapse" : "Skrči",
     "Previous day" : "Predhodni dan",
     "Next day" : "Naslednji dan",
     "Add" : "Dodaj",

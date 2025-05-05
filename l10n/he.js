@@ -21,6 +21,8 @@ OC.L10N.register(
     "Delete" : "מחיקה",
     "Register" : "רישום",
     "Unknown error" : "שגיאה בלתי ידועה",
+    "Show more" : "להציג יותר",
+    "Collapse" : "קיווץ",
     "Previous day" : "יום לאחור",
     "Next day" : "היום הבא",
     "Add" : "הוספה",

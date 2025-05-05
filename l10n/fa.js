@@ -177,6 +177,8 @@ OC.L10N.register(
     "Send information about confirmed options by email" : "Send information about confirmed options by email",
     "Unknown error" : "خطای ناشناخته",
     "Toggle Sidebar" : "Toggle Sidebar",
+    "Show more" : "Show more",
+    "Collapse" : "فروکش  کردن",
     "Previous day" : "روز قبل",
     "Next day" : "روز بعد",
     "Add" : "افزودن",

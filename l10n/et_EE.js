@@ -23,6 +23,8 @@ OC.L10N.register(
     "Register" : "Registreeru",
     "Unknown error" : "Tundmatu viga",
     "Click" : "Klõpsi",
+    "Show more" : "Näita rohkem",
+    "Collapse" : "Sulge",
     "Previous day" : "Eelmine päev",
     "Next day" : "Järgmine päev",
     "minus" : "miinus",

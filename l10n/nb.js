@@ -234,6 +234,8 @@ OC.L10N.register(
     "Unknown error" : "Ukjent feil",
     "Reveal them" : "Avslør dem",
     "Toggle Sidebar" : "Veksle sidefelt",
+    "Show more" : "Vis mer",
+    "Collapse" : "Skjul",
     "Previous day" : "Forrige dag",
     "Next day" : "Neste dag",
     "Add" : "Legg til",

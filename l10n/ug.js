@@ -232,6 +232,8 @@ OC.L10N.register(
     "Unknown error" : "يوچۇن خاتالىق",
     "Reveal them" : "ئۇلارنى ئاشكارىلىغىن",
     "Toggle Sidebar" : "يان كۆزنەكنى ئالماشتۇرۇڭ",
+    "Show more" : "تېخىمۇ كۆپ كۆرسەت",
+    "Collapse" : "يىمىرىلىش",
     "Previous day" : "ئالدىنقى كۈن",
     "Next day" : "ئەتىسى",
     "Add" : "قوش",

@@ -93,6 +93,8 @@ OC.L10N.register(
     "Register" : "Rekisteröidy",
     "Unknown error" : "Tuntematon virhe",
     "Toggle Sidebar" : "Avaa tai sulje sivupalkki",
+    "Show more" : "Näytä enemmän",
+    "Collapse" : "Kutista näkymää",
     "Previous day" : "Edellinen päivä",
     "Next day" : "Seuraava päivä",
     "Add" : "Lisää",

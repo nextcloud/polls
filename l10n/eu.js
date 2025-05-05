@@ -184,6 +184,8 @@ OC.L10N.register(
     "Unknown error" : "Errore ezezaguna",
     "Reveal them" : "Erakutsi",
     "Toggle Sidebar" : "Txandakatu alboko barra",
+    "Show more" : "Erakutsi gehiago",
+    "Collapse" : "Tolestu",
     "Previous day" : "Aurreko eguna",
     "Next day" : "Hurrengo eguna",
     "Add" : "Gehitu",

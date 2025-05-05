@@ -97,6 +97,8 @@ OC.L10N.register(
     "Add some!" : "더 추가하세요!",
     "Register" : "등록",
     "Unknown error" : "알 수 없는 오류",
+    "Show more" : "더 보기",
+    "Collapse" : "접기",
     "Previous day" : "이전날",
     "Next day" : "다음날",
     "Add" : "추가",

@@ -164,6 +164,8 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Register" : "Register",
     "Unknown error" : "Unknown error",
+    "Show more" : "Show more",
+    "Collapse" : "Collapse",
     "Previous day" : "Previous day",
     "Next day" : "Next day",
     "Add" : "Add",
