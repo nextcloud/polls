@@ -76,7 +76,7 @@ class BaseApiV1Controller extends ApiController {
 			if ($e instanceof Exception) {
 				return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_INTERNAL_SERVER_ERROR);
 			}
-			return new JSONResponse(['message' => $e->getMessage()], Http::STATUS_INTERNAL_SERVER_ERROR);
+			throw $e;
 		}
 	}
 }

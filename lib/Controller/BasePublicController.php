@@ -55,25 +55,27 @@ class BasePublicController extends Controller {
 	}
 
 	private function handleResponse(
-    		Closure $callback,
-    		int $successStatus,
-    		string $exceptionClass,
-    		int $fallbackStatus = null
-    	): JSONResponse {
-    		try {
-    			return new JSONResponse($callback(), $successStatus);
-    		} catch (\Throwable $e) {
-    			if (is_a($e, $exceptionClass, true)) {
-    				if ($fallbackStatus !== null && $e instanceof NoUpdatesException) {
-    					return new JSONResponse([], $fallbackStatus);
-    				}
-    				if ($e instanceof Exception) {
-    					return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-    				}
-    			}
-    			return new JSONResponse(['message' => 'Unexpected error'], Http::STATUS_INTERNAL_SERVER_ERROR);
-    		}
-    	}
+		Closure $callback,
+		int $successStatus,
+		string $exceptionClass,
+		int $fallbackStatus = null
+	): JSONResponse {
+		try {
+			return new JSONResponse($callback(), $successStatus);
+		} catch (\Exception $e) {
+			if (is_a($e, $exceptionClass, true)) {
+				if ($fallbackStatus !== null && $e instanceof NoUpdatesException) {
+					return new JSONResponse([], $fallbackStatus);
+				}
+				if ($e instanceof Exception) {
+					return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+				}
+			}
+
+			throw $e;
+		}
+	}
+
 }
 
 

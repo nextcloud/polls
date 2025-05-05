@@ -23,14 +23,16 @@ use OCP\IRequest;
 /**
  * @psalm-api
  */
-class BaseApiV2Controller extends OCSController {
+class BaseApiV2Controller extends OCSController
+{
 	public function __construct(
-		string $appName,
+		string   $appName,
 		IRequest $request,
-		string $corsMethods = 'PUT, POST, GET, DELETE',
-		string $corsAllowedHeaders = 'Authorization, Content-Type, Accept',
-		int $corsMaxAge = 1728000,
-	) {
+		string   $corsMethods = 'PUT, POST, GET, DELETE',
+		string   $corsAllowedHeaders = 'Authorization, Content-Type, Accept',
+		int      $corsMaxAge = 1728000,
+	)
+	{
 		parent::__construct($appName, $request, $corsMethods, $corsAllowedHeaders, $corsMaxAge);
 	}
 
@@ -39,7 +41,8 @@ class BaseApiV2Controller extends OCSController {
 	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
-	protected function response(Closure $callback): DataResponse {
+	protected function response(Closure $callback): DataResponse
+	{
 		return $this->handleResponse($callback, Http::STATUS_OK);
 	}
 
@@ -48,8 +51,9 @@ class BaseApiV2Controller extends OCSController {
 	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
-	protected function responseLong(Closure $callback): DataResponse {
-		return $this->handleResponse($callback, Http::STATUS_OK, true);
+	protected function responseLong(Closure $callback): DataResponse
+	{
+		return $this->handleResponse($callback, Http::STATUS_OK);
 	}
 
 	/**
@@ -57,28 +61,24 @@ class BaseApiV2Controller extends OCSController {
 	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
-	protected function responseCreate(Closure $callback): DataResponse {
+	protected function responseCreate(Closure $callback): DataResponse
+	{
 		return $this->handleResponse($callback, Http::STATUS_CREATED);
 	}
 
 	private function handleResponse(
 		Closure $callback,
-		int $successStatus = Http::STATUS_OK,
-		bool $checkNoUpdates = false
-	): DataResponse {
+		int     $successStatus = Http::STATUS_OK
+	): DataResponse
+	{
 		try {
 			return new DataResponse($callback(), $successStatus);
-		} catch (\Throwable $e) {
-			if ($checkNoUpdates && $e instanceof NoUpdatesException) {
-				return new DataResponse([], Http::STATUS_NOT_MODIFIED);
-			}
-			if ($e instanceof DoesNotExistException) {
-				throw new OCSNotFoundException($e->getMessage());
-			}
-			if ($e instanceof Exception) {
-				throw new OCSBadRequestException($e->getMessage());
-			}
-			throw $e;
+		} catch (NoUpdatesException $e) {
+			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
+		} catch (DoesNotExistException $e) {
+			throw new OCSNotFoundException($e->getMessage());
+		} catch (Exception $e) {
+			throw new OCSBadRequestException($e->getMessage());
 		}
 	}
 }

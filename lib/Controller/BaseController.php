@@ -82,7 +82,7 @@ class BaseController extends Controller {
 	): JSONResponse {
 		try {
 			return new JSONResponse($callback(), $successStatus);
-		} catch (\Throwable $e) {
+		} catch (\Exception $e) {
 			if (is_a($e, $primaryException, true)) {
 				if ($fallbackStatus !== null) {
 					return new JSONResponse(['message' => $fallbackMessage ?? ''], $fallbackStatus);
@@ -92,12 +92,17 @@ class BaseController extends Controller {
 				}
 			}
 
-			if ($secondaryException !== null && is_a($e, $secondaryException, true) && $e instanceof Exception) {
+			if (
+				$secondaryException !== null &&
+				is_a($e, $secondaryException, true) &&
+				$e instanceof Exception
+			) {
 				return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 			}
 
 			throw $e;
 		}
 	}
+
 }
 
