@@ -176,6 +176,8 @@ OC.L10N.register(
     "Send information about confirmed options by email" : "Изпращане на информация за потвърдените опции по имейл",
     "Unknown error" : "Неизвестна грешка",
     "Toggle Sidebar" : "Превключване на страничната лента",
+    "Show more" : "Покажи повече",
+    "Collapse" : "Сгъване",
     "Previous day" : "Вчера",
     "Next day" : "Утре",
     "Add" : "Добавяне",

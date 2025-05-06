@@ -242,6 +242,8 @@ OC.L10N.register(
     "Reveal them" : "أظْهِرْهُم",
     "Toggle Sidebar" : "تبديل الشريط الجانبي",
     "Click" : "أنقُر",
+    "Show more" : "عرض المزيد",
+    "Collapse" : "طوي",
     "Previous day" : "أمس",
     "Next day" : "غداً",
     "Add" : "إضافة",

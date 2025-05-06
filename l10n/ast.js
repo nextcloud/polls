@@ -105,6 +105,8 @@ OC.L10N.register(
     "Register" : "Rexistrase",
     "Unknown error" : "Fallu desconocíu",
     "Toggle Sidebar" : "Alternar la barra llateral",
+    "Show more" : "Amosar más",
+    "Collapse" : "Contrayer",
     "Previous day" : "Día anterior",
     "Next day" : "Día siguiente",
     "Add" : "Amestar",

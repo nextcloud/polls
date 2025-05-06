@@ -243,6 +243,7 @@ OC.L10N.register(
     "Toggle Sidebar" : "Seitenleiste umschalten",
     "Click" : "Klicken",
     "Show more" : "Mehr anzeigen",
+    "Collapse" : "Zuklappen",
     "Previous day" : "Vorheriger Tag",
     "Next day" : "Nächster Tag",
     "minus" : "Minus",
