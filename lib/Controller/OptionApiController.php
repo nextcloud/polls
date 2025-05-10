@@ -12,6 +12,7 @@ use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\VoteService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -61,7 +62,7 @@ class OptionApiController extends BaseApiV2Controller {
 		bool $voteYes = false,
 		?array $sequence = null,
 	): DataResponse {
-		return $this->responseCreate(fn () => array_merge(
+		return $this->response(fn () => array_merge(
 			$this->optionService->addWithSequenceAndAutoVote(
 				$pollId,
 				SimpleOption::fromArray($option),
@@ -70,7 +71,7 @@ class OptionApiController extends BaseApiV2Controller {
 			),
 			['options' => $this->optionService->list($pollId)],
 			['votes' => $this->voteService->list($pollId)],
-		));
+		), Http::STATUS_CREATED);
 	}
 
 
@@ -84,7 +85,7 @@ class OptionApiController extends BaseApiV2Controller {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/options', requirements: ['apiVersion' => '(v2)'])]
 	public function addBulk(int $pollId, string $text = ''): DataResponse {
-		return $this->responseCreate(fn () => ['options' => $this->optionService->addBulk($pollId, $text)]);
+		return $this->response(fn () => ['options' => $this->optionService->addBulk($pollId, $text)], Http::STATUS_CREATED);
 	}
 
 	/**

@@ -38,6 +38,6 @@ class WatchController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/watch')]
 	public function watchPoll(int $pollId, ?int $offset): JSONResponse {
-		return $this->responseLong(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
+		return $this->response(fn () => ['updates' => $this->watchService->watchUpdates($pollId, $offset)]);
 	}
 }

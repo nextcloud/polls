@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -66,7 +67,7 @@ class ShareApiController extends BaseApiV2Controller {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/share/{type}', requirements: ['apiVersion' => '(v2)'])]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): DataResponse {
-		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)]);
+		return $this->response(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)], Http::STATUS_CREATED);
 	}
 
 	/**

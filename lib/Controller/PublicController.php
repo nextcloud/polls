@@ -23,6 +23,7 @@ use OCA\Polls\Service\SystemService;
 use OCA\Polls\Service\VoteService;
 use OCA\Polls\Service\WatchService;
 use OCA\Polls\UserSession;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoCSRFRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
@@ -40,7 +41,7 @@ use OCP\Util;
  * as a paramter and not known while contruction time
  * @psalm-api
  */
-class PublicController extends BasePublicController {
+class PublicController extends BaseController {
 	public function __construct(
 		string $appName,
 		IRequest $request,
@@ -126,7 +127,7 @@ class PublicController extends BasePublicController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/watch')]
 	public function watchPoll(?int $offset): JSONResponse {
-		return $this->responseLong(fn () => [
+		return $this->response(fn () => [
 			'updates' => $this->watchService->watchUpdates($this->userSession->getShare()->getPollId(), $offset)
 		]);
 	}
@@ -221,7 +222,7 @@ class PublicController extends BasePublicController {
 		?array $sequence = null,
 	): JSONResponse {
 		$pollId = $this->userSession->getShare()->getPollId();
-		return $this->responseCreate(fn () => array_merge(
+		return $this->response(fn () => array_merge(
 			$this->optionService->addWithSequenceAndAutoVote(
 				$pollId,
 				SimpleOption::fromArray($option),
@@ -230,7 +231,7 @@ class PublicController extends BasePublicController {
 			),
 			['options' => $this->optionService->list($pollId)],
 			['votes' => $this->voteService->list($pollId)],
-		));
+		), Http::STATUS_CREATED);
 	}
 
 	/**
@@ -463,9 +464,9 @@ class PublicController extends BasePublicController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/s/{token}/register')]
 	public function register(string $token, string $displayName, string $emailAddress = '', string $timeZone = ''): JSONResponse {
-		return $this->responseCreate(fn () => [
+		return $this->response(fn () => [
 			'share' => $this->shareService->register($token, $displayName, $emailAddress, $timeZone),
-		]);
+		], Http::STATUS_CREATED);
 	}
 
 	/**

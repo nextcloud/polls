@@ -18,6 +18,7 @@ use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\VoteService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -96,7 +97,10 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/add')]
 	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): JSONResponse {
-		return $this->responseCreate(fn () => $this->pollService->add($type, $title, $votingVariant));
+		return $this->response(
+			fn () => $this->pollService->add($type, $title, $votingVariant),
+			Http::STATUS_CREATED
+		);
 	}
 
 	/**
@@ -153,7 +157,7 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}')]
 	public function delete(int $pollId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => ['poll' => $this->pollService->delete($pollId)]);
+		return $this->response(fn () => ['poll' => $this->pollService->delete($pollId)]);
 	}
 
 	/**
