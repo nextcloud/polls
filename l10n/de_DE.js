@@ -223,7 +223,7 @@ OC.L10N.register(
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Eine Umfrage-App ähnlich wie Doodle/DuD-Poll, mit der Möglichkeit Zugriffe zu beschränken (Mitglieder, bestimmte Gruppen, versteckt und öffentlich).",
     "Add option" : "Option hinzufügen",
     "Add poll" : "Umfrage hinzufügen",
-    "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" wurde erfolgreich erstellt",
+    "\"{pollTitle}\" has been successfully created." : "\"{pollTitle}\" wurde erstellt",
     "Poll created" : "Umfrage erstellt",
     "Add another poll" : "Weitere Umfrage hinzufügen",
     "Open poll now" : "Umfrage jetzt öffnen",
