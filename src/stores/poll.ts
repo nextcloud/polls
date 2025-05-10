@@ -113,6 +113,7 @@ export type PollPermissions = {
 	addSharesExternal: boolean
 	archive: boolean
 	changeForeignVotes: boolean
+	changeOwner: boolean
 	clone: boolean
 	comment: boolean
 	confirmOptions: boolean
@@ -124,6 +125,7 @@ export type PollPermissions = {
 	seeUsernames: boolean
 	shiftOptions: boolean
 	subscribe: boolean
+	takeOver: boolean
 	view: boolean
 	vote: boolean
 }
@@ -220,6 +222,7 @@ export const usePollStore = defineStore('poll', {
 			addSharesExternal: false,
 			archive: false,
 			changeForeignVotes: false,
+			changeOwner: false,
 			clone: false,
 			comment: false,
 			confirmOptions: false,
@@ -231,6 +234,7 @@ export const usePollStore = defineStore('poll', {
 			seeResults: false,
 			seeUsernames: false,
 			subscribe: false,
+			takeOver: false,
 			view: false,
 			vote: false,
 		},
