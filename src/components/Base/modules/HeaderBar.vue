@@ -75,6 +75,7 @@ function toggleClamp() {
 			display: flex;
 			flex: 1;
 			justify-content: flex-end;
+			align-content: center;
 			gap: 8px;
 			flex-wrap: wrap;
 		}
