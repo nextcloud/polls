@@ -78,6 +78,7 @@ const selectProps = {
 	searchable: true,
 	placeholder: props.placeholder,
 	closeOnSelect: props.closeOnSelect,
+	dropdownShouldOpen:() => users.value.length > 0,
 	label: 'displayName',
 }
 </script>
@@ -106,5 +107,9 @@ const selectProps = {
 	max-width: 100% !important;
 	margin-top: 4px !important;
 	margin-bottom: 4px !important;
+}
+// TODO: temp hack, remove this when the bug is fixed
+.vs--single.vs--searching:not(.vs--open):not(.vs--loading) .vs__search {
+	opacity: 1 !important;
 }
 </style>
