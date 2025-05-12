@@ -35,9 +35,12 @@ class SystemController extends BaseController {
 	#[NoAdminRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/search/users/{query}')]
-	public function userSearch(string $query = ''): JSONResponse {
-		return new JSONResponse(['siteusers' => $this->systemService->getSiteUsersAndGroups(
-			$query)], Http::STATUS_OK);
+	public function userSearch(string $query, string $types): JSONResponse {
+		$types = explode(',', $types);
+		return new JSONResponse([
+			'siteusers' => $this->systemService->getSiteUsersAndGroups($query, $types),
+			'types' => $types
+		], Http::STATUS_OK);
 	}
 	/**
 	 * Get a combined list of all NC groups

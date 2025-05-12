@@ -135,6 +135,7 @@ class PollService {
 		$pollsToTransfer = $this->pollMapper->listByOwner($sourceUser);
 
 		foreach ($pollsToTransfer as &$poll) {
+			$poll->request(Poll::PERMISSION_POLL_CHANGE_OWNER);
 			$poll = $this->executeTransfer($poll, $targetUser);
 		}
 		return $pollsToTransfer;
@@ -144,13 +145,16 @@ class PollService {
 	 * @return Poll
 	 */
 	public function transferPoll(int $pollId, string $targetUser): Poll {
+		$poll = $this->pollMapper->find($pollId);
+		$poll->request(Poll::PERMISSION_POLL_CHANGE_OWNER);
+
 		try {
 			$this->userMapper->getUserFromUserBase($targetUser);
 		} catch (UserNotFoundException $e) {
 			throw new InvalidUsernameException('The user id "' . $targetUser . '" for the target user is not valid.');
 		}
 
-		return $this->executeTransfer($this->pollMapper->find($pollId), $targetUser);
+		return $this->executeTransfer($poll, $targetUser);
 	}
 
 	private function executeTransfer(Poll $poll, string $targetUser): Poll {

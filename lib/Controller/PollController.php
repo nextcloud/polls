@@ -207,6 +207,16 @@ class PollController extends BaseController {
 	}
 
 	/**
+	 * Transfer ownership of one poll
+	 * @param int $pollId poll to transfer ownership
+	 * @param string $targetUser User to transfer polls to
+	 */
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/changeowner/{targetUser}')]
+	public function changeOwner(int $pollId, string $targetUser): JSONResponse {
+		return $this->response(fn () => $this->pollService->transferPoll($pollId, $targetUser));
+	}
+
+	/**
 	 * Collect email addresses from particitipants
 	 * @param int $pollId Poll id
 	 */

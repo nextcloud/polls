@@ -97,6 +97,20 @@ const polls = {
 		})
 	},
 
+	changeOwner(
+		pollId: number,
+		userId: string,
+	): Promise<AxiosResponse<{ poll: Poll }>> {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `poll/${pollId}/changeowner/${userId}`,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.changeOwner.name
+				].handleRequestCancellation().token,
+		})
+	},
+
 	addPoll(type: PollType, title: string): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'POST',

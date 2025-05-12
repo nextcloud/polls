@@ -7,13 +7,14 @@
 import { t } from '@nextcloud/l10n'
 
 import { useSessionStore } from '../../stores/session.ts'
-import { Poll, usePollStore } from '../../stores/poll.ts'
+import { Poll } from '../../stores/poll.ts'
 import { computed, PropType } from 'vue'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { NcDialog } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
+import { usePollsStore } from '../../stores/polls.ts'
 
-const pollStore = usePollStore()
+const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
 
 const emit = defineEmits(['deleted'])
@@ -34,9 +35,9 @@ const model = defineModel({
 	type: Boolean,
 })
 
-function deletePoll() {
+function dialogOK() {
 	try {
-		pollStore.delete({ pollId: props.poll.id })
+		pollsStore.delete({ pollId: props.poll.id })
 		emit('deleted')
 	} catch {
 		showError(t('polls', 'Error deleting poll.'))
@@ -51,15 +52,17 @@ const dialogText = adminAccess.value
 		)
 	: t('polls', 'This will finally delete the poll.')
 
-const deleteDialog = {
+const dialogProps = {
 	name: t('polls', 'Delete poll'),
+	noClose: true,
+	closeOnClickOutside: true,
 	buttons: [
 		{ label: t('polls', 'Cancel') },
 		{
 			label: t('polls', 'OK'),
 			variant: ButtonVariant.Primary,
 			callback: () => {
-				deletePoll()
+				dialogOK()
 			},
 		},
 	],
@@ -67,7 +70,7 @@ const deleteDialog = {
 </script>
 
 <template>
-	<NcDialog v-model:open="model" v-bind="deleteDialog">
+	<NcDialog v-model:open="model" v-bind="dialogProps">
 		<span>
 			{{ dialogText }}
 		</span>

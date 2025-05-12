@@ -4,23 +4,44 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { PropType, ref } from 'vue'
 import { debounce } from 'lodash'
-import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 import { AppSettingsAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
-import { useSharesStore } from '../../stores/shares.ts'
-import { User } from '../../Types/index.ts'
+import { ISearchType, User } from '../../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-const sharesStore = useSharesStore()
+
 const users = ref<User[]>([])
 const isLoading = ref(false)
-const placeholder = t('polls', 'Type to add an individual share')
+const model = defineModel({
+	required: true,
+	type: Object as PropType<User | null>,
+})
+const emit = defineEmits(['userSelected'])
+
+const props = defineProps({
+	placeholder: {
+		type: String,
+		default: t('polls', 'Type to start searching ...'),
+	},
+	ariaLabel: {
+		type: String,
+		default: t('polls', 'Select users'),
+	},
+	searchTypes: {
+		type: Array as PropType<ISearchType[]>,
+		default: () => [ISearchType.All],
+	},
+	closeOnSelect: {
+		type: Boolean,
+		default: false,
+	},
+})
 
 const loadUsersAsync = debounce(async function (query: string) {
 	if (!query) {
@@ -31,7 +52,7 @@ const loadUsersAsync = debounce(async function (query: string) {
 	isLoading.value = true
 
 	try {
-		const response = await AppSettingsAPI.getUsers(query)
+		const response = await AppSettingsAPI.getUsers(query, props.searchTypes)
 		users.value = response.data.siteusers
 		isLoading.value = false
 	} catch (error) {
@@ -43,35 +64,31 @@ const loadUsersAsync = debounce(async function (query: string) {
 	}
 }, 250)
 
-/**
- *
- * @param user
- */
-async function clickAdd(user: User) {
-	Logger.debug('Adding share clicAdd', user)
-	try {
-		await sharesStore.add(user)
-	} catch {
-		showError(t('polls', 'Error while adding share'))
-	}
+async function optionSelected(user: User) {
+	emit('userSelected', user)
+}
+
+const selectProps = {
+	ariaLabelCombobox: props.ariaLabel,
+	multiple: false,
+	userSelect: true,
+	tagWidth: 80,
+	loading: isLoading.value,
+	filterable: false,
+	searchable: true,
+	placeholder: props.placeholder,
+	closeOnSelect: props.closeOnSelect,
+	label: 'displayName',
 }
 </script>
 
 <template>
 	<NcSelect
 		id="ajax"
-		:aria-label-combobox="t('polls', 'Add shares')"
+		v-model="model"
+		v-bind="selectProps"
 		:options="users"
-		:multiple="false"
-		:user-select="true"
-		:tag-width="80"
-		:loading="isLoading"
-		:filterable="false"
-		:searchable="true"
-		:placeholder="placeholder"
-		:close-on-select="false"
-		label="displayName"
-		@option:selected="clickAdd"
+		@option:selected="optionSelected"
 		@search="loadUsersAsync">
 		<template #selection="{ values, isOpen }">
 			<span

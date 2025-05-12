@@ -4,10 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
-
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
@@ -18,8 +15,6 @@ import UnlockedIcon from 'vue-material-design-icons/LockOpenVariant.vue'
 import ShowResultsIcon from 'vue-material-design-icons/Monitor.vue'
 import HideResultsUntilClosedIcon from 'vue-material-design-icons/MonitorLock.vue'
 import ShowResultsNeverIcon from 'vue-material-design-icons/MonitorOff.vue'
-import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
-import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 
 import { ConfigBox, CardDiv } from '../Base/index.ts'
 import ConfigAllowComment from '../Configuration/ConfigAllowComment.vue'
@@ -36,38 +31,11 @@ import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 
 import { usePollStore, PollType, ShowResults } from '../../stores/poll.ts'
 import { useVotesStore } from '../../stores/votes.ts'
-import DeletePollDialog from '../PollList/DeletePollDialog.vue'
-import { ref } from 'vue'
-import { router } from '../../router.ts'
-import { FilterType } from '../../stores/polls.ts'
+import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
 
-/**
- *
- */
-function toggleArchive() {
-	try {
-		pollStore.toggleArchive({ pollId: pollStore.id })
-	} catch {
-		showError(
-			t('polls', 'Error {action} poll.', {
-				action: pollStore.status.isArchived ? 'restoring' : 'archiving',
-			}),
-		)
-	}
-}
-
-function routeAway() {
-	router.push({
-		name: 'list',
-		params: {
-			type: FilterType.Relevant,
-		},
-	})
-}
-const showDeleteDialog = ref(false)
 </script>
 
 <template>
@@ -144,45 +112,13 @@ const showDeleteDialog = ref(false)
 			<ConfigShowResults @change="pollStore.write" />
 		</ConfigBox>
 
-		<div class="delete-area">
-			<NcButton @click="toggleArchive()">
-				<template #icon>
-					<RestorePollIcon v-if="pollStore.status.isArchived" />
-					<ArchivePollIcon v-else />
-				</template>
-				<template #default>
-					{{
-						pollStore.status.isArchived
-							? t('polls', 'Restore poll')
-							: t('polls', 'Archive poll')
-					}}
-				</template>
-			</NcButton>
-
-			<NcButton
-				:variant="ButtonVariant.Error"
-				@click="showDeleteDialog = true">
-				<template #icon>
-					<DeletePollIcon />
-				</template>
-				<template #default>
-					{{ t('polls', 'Delete poll') }}
-				</template>
-			</NcButton>
-		</div>
+		<ConfigBox :name="t('polls', 'Deletion and Owner')">
+			<template #icon>
+				<DeletePollIcon />
+			</template>
+			<ConfigDangerArea />
+		</ConfigBox>
 	</div>
 
-	<DeletePollDialog
-		v-model="showDeleteDialog"
-		:poll="pollStore"
-		@deleted="routeAway"
-		@close="showDeleteDialog = false" />
 </template>
 
-<style lang="scss">
-.delete-area {
-	display: flex;
-	gap: 8px;
-	justify-content: space-between;
-}
-</style>

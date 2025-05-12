@@ -584,24 +584,5 @@ export const usePollStore = defineStore('poll', {
 				pollsStore.load()
 			}
 		},
-
-		async delete(payload: { pollId: number }): Promise<void> {
-			const pollsStore = usePollsStore()
-
-			try {
-				await PollsAPI.deletePoll(payload.pollId)
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
-				}
-				Logger.error('Error deleting poll', {
-					error,
-					payload,
-				})
-				throw error
-			} finally {
-				pollsStore.load()
-			}
-		},
 	},
 })
