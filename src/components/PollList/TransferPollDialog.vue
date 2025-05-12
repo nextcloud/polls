@@ -18,6 +18,8 @@ import { usePollsStore } from '../../stores/polls.ts'
 const pollsStore = usePollsStore()
 const pollStore = usePollStore()
 
+const emit = defineEmits(['accessDenied'])
+
 const props = defineProps({
 	poll: {
 		type: Object as PropType<Poll>,
@@ -46,7 +48,14 @@ async function dialogOK() {
 	} catch {
 		showError(t('polls', 'Error transfering poll.'))
 	} finally {
-		pollStore.load()
+		try {
+			// reload the poll to refresh the configuration
+			await pollStore.load()
+		} catch (error) {
+			// if error occurs, we need to emit the accessDenied event
+			// since we assume the user has no access to the poll anymore
+			emit('accessDenied')
+		}
 	}
 }
 

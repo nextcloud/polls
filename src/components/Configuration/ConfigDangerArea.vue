@@ -93,7 +93,7 @@ function routeAway() {
 	<TransferPollDialog
 		v-model="showTransferDialog"
 		:poll="pollStore"
-		@deleted="routeAway"
+		@access-denied="routeAway"
 		@close="showTransferDialog = false" />
 </template>
 
