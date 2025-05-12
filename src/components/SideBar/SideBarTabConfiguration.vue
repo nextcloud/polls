@@ -35,7 +35,6 @@ import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
-
 </script>
 
 <template>
@@ -119,6 +118,4 @@ const votesStore = useVotesStore()
 			<ConfigDangerArea />
 		</ConfigBox>
 	</div>
-
 </template>
-

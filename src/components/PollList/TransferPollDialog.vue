@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 import { Poll, usePollStore } from '../../stores/poll.ts'
 import { computed, PropType, ref } from 'vue'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
-import { NcDialog} from '@nextcloud/vue'
+import { NcDialog } from '@nextcloud/vue'
 import UserSearch from '../User/UserSearch.vue'
 import { ISearchType, User } from '../../Types/index.ts'
 import { showSuccess, showError } from '@nextcloud/dialogs'
@@ -69,12 +69,12 @@ const dialogText = computed(() => {
 		}
 
 		return t(
-				'polls',
-				'Transfering a poll to {user} may result in loss of access to this poll.',
-				{
-					user: newUser.value.displayName,
-				},
-			)
+			'polls',
+			'Transfering a poll to {user} may result in loss of access to this poll.',
+			{
+				user: newUser.value.displayName,
+			},
+		)
 	}
 	if (!newUser.value) {
 		return t(
@@ -109,26 +109,21 @@ const dialogProps = computed(() => ({
 				dialogOK()
 			},
 		},
-	]
-	}))
+	],
+}))
 </script>
 
 <template>
-	<NcDialog
-		v-model:open="model"
-		v-bind="dialogProps">
-
+	<NcDialog v-model:open="model" v-bind="dialogProps">
 		<UserSearch
 			v-model="newUser"
 			:search-types="[ISearchType.User]"
 			input-label="select me"
 			user-select
 			close-on-select
-			@user-selected="(user: User) => newUser = user"
-			/>
+			@user-selected="(user: User) => (newUser = user)" />
 		<span>
 			{{ dialogText }}
 		</span>
 	</NcDialog>
 </template>
-

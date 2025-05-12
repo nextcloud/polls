@@ -47,7 +47,6 @@ function routeAway() {
 		},
 	})
 }
-
 </script>
 
 <template>
@@ -66,9 +65,7 @@ function routeAway() {
 			</template>
 		</NcButton>
 
-		<NcButton
-			:variant="ButtonVariant.Error"
-			@click="showDeleteDialog = true">
+		<NcButton :variant="ButtonVariant.Error" @click="showDeleteDialog = true">
 			<template #icon>
 				<DeletePollIcon />
 			</template>

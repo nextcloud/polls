@@ -45,7 +45,10 @@ const appSettings = {
 		})
 	},
 
-	getUsers(query: string, types: ISearchType[]): Promise<AxiosResponse<{ siteusers: User[] }>> {
+	getUsers(
+		query: string,
+		types: ISearchType[],
+	): Promise<AxiosResponse<{ siteusers: User[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `search/users${query.trim() ? `/${query.trim()}` : ''}`,

@@ -15,7 +15,6 @@ import { Logger } from '../../helpers/index.ts'
 import { ISearchType, User } from '../../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-
 const users = ref<User[]>([])
 const isLoading = ref(false)
 const model = defineModel({
@@ -78,7 +77,7 @@ const selectProps = {
 	searchable: true,
 	placeholder: props.placeholder,
 	closeOnSelect: props.closeOnSelect,
-	dropdownShouldOpen:() => users.value.length > 0,
+	dropdownShouldOpen: () => users.value.length > 0,
 	label: 'displayName',
 }
 </script>

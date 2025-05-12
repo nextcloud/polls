@@ -52,7 +52,6 @@ async function addShare(user: User) {
 		showError(t('polls', 'Error while adding share'))
 	}
 }
-
 </script>
 
 <template>
@@ -66,8 +65,7 @@ async function addShare(user: User) {
 			class="add-share"
 			:aria-label="t('polls', 'Add shares')"
 			:placeholder="t('polls', 'Type to add an individual share')"
-			@user-selected="(user: User) => addShare(user)"
-			/>
+			@user-selected="(user: User) => addShare(user)" />
 		<ShareItemAllUsers v-if="sessionStore.appPermissions.allAccess" />
 		<SharePublicAdd
 			v-if="
