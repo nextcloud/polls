@@ -552,7 +552,6 @@ OC.L10N.register(
     "No activity yet" : "Bislang keine Aktivitäten",
     "No comments" : "Keine Kommentare",
     "Be the first." : "Sei der Erste.",
-    "Error {action} poll." : "Fehler {action} Umfrage.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Sei bitte vorsichtig beim Ändern von Optionen, da dies bestehende Abstimmungen in unerwünschter Weise beeinflussen kann.",
     "As an admin you may edit this poll" : "Als Administrator kannst du diese Umfrage bearbeiten",
     "Description" : "Beschreibung",
