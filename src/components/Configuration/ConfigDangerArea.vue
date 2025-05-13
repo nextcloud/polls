@@ -13,12 +13,12 @@ import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { FilterType } from '../../stores/polls.ts'
 import { usePollStore } from '../../stores/poll.ts'
 
-import DeletePollDialog from '../PollList/DeletePollDialog.vue'
+import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
 import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
-import TransferPollDialog from '../PollList/TransferPollDialog.vue'
+import TransferPollDialog from '../Modals/TransferPollDialog.vue'
 
 const pollStore = usePollStore()
 const showDeleteDialog = ref(false)
