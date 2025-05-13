@@ -22,6 +22,7 @@ class Notifier implements INotifier {
 	public const NOTIFY_POLL_DELETED_BY_OTHER = 'deletePollByOther';
 	public const NOTIFY_POLL_ARCHIVED_BY_OTHER = 'softDeletePollByOther';
 	public const NOTIFY_POLL_TAKEOVER = 'takeOverPoll';
+	public const NOTIFY_POLL_CHANGED_OWNER = 'PollChangedOwner';
 	public const NOTIFY_INVITATION = 'invitation';
 	private const SUBJECT_PARSED = 'parsedSubject';
 	private const SUBJECT_RICH = 'richSubject';
@@ -82,7 +83,7 @@ class Notifier implements INotifier {
 		try {
 			$poll = $this->pollMapper->get(intval($notification->getObjectId()));
 			$actor = $this->getActor($parameters['actor'] ?? $poll->getOwner());
-			$pollTitle = $poll->getTitle();
+			$pollTitle = $parameters['pollTitle'] ?? $poll->getTitle();
 			$notification->setLink($poll->getVoteUrl());
 		} catch (DoesNotExistException $e) {
 			$this->notificationService->removeNotification(intval($notification->getObjectId()));
@@ -97,6 +98,10 @@ class Notifier implements INotifier {
 			self::NOTIFY_POLL_TAKEOVER => [
 				self::SUBJECT_PARSED => $l->t('%s took over your poll', $actor['actor']['name']),
 				self::SUBJECT_RICH => $l->t('{actor} took over your poll "%s" and is the new owner.', $pollTitle),
+			],
+			self::NOTIFY_POLL_CHANGED_OWNER => [
+				self::SUBJECT_PARSED => $l->t('%s is the new owner of your poll. ', $parameters['newOwner']),
+				self::SUBJECT_RICH => $l->t('{actor} transfered your poll "%2$s" to the new owner %1$s. You are no more the owner.', $parameters['newOwner'], $pollTitle),
 			],
 			self::NOTIFY_POLL_DELETED_BY_OTHER => [
 				self::SUBJECT_PARSED => $l->t('%s deleted your poll', $actor['actor']['name']),

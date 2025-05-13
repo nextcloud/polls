@@ -198,23 +198,23 @@ class PollController extends BaseController {
 
 	/**
 	 * Transfer polls between users
-	 * @param string $sourceUser User to transfer polls from
-	 * @param string $targetUser User to transfer polls to
+	 * @param string $sourceUserId User id to transfer polls from
+	 * @param string $targetUserId User id to transfer polls to
 	 */
-	#[FrontpageRoute(verb: 'PUT', url: '/poll/transfer/{sourceUser}/{targetUser}')]
-	public function transferPolls(string $sourceUser, string $targetUser): JSONResponse {
-		return $this->response(fn () => $this->pollService->transferPolls($sourceUser, $targetUser));
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/transfer/{sourceUserId}/{targetUserId}')]
+	public function transferPolls(string $sourceUserId, string $targetUserId): JSONResponse {
+		return $this->response(fn () => $this->pollService->transferPolls($sourceUserId, $targetUserId));
 	}
 
 	/**
 	 * Transfer ownership of one poll
 	 * @param int $pollId poll to transfer ownership
-	 * @param string $targetUser User to transfer polls to
+	 * @param string $targetUserId User to transfer polls to
 	 */
 	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/changeowner/{targetUser}')]
-	public function changeOwner(int $pollId, string $targetUser): JSONResponse {
-		return $this->response(fn () => $this->pollService->transferPoll($pollId, $targetUser));
+	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/changeowner/{targetUserId}')]
+	public function changeOwner(int $pollId, string $targetUserId): JSONResponse {
+		return $this->response(fn () => $this->pollService->transferPoll($pollId, $targetUserId));
 	}
 
 	/**

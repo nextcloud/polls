@@ -158,26 +158,26 @@ class PollApiController extends BaseApiV2Controller {
 
 	/**
 	 * Transfer all polls from one user to another (change owner of poll)
-	 * @param string $sourceUser User to transfer polls from
-	 * @param string $targetUser User to transfer polls to
+	 * @param string $sourceUserId User id to transfer polls from
+	 * @param string $targetUserId User id to transfer polls to
 	 */
 	#[CORS]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/transfer/{sourceUser}/{targetUser}', requirements: ['apiVersion' => '(v2)'])]
-	public function transferPolls(string $sourceUser, string $targetUser): DataResponse {
-		return $this->response(fn () => ['transferred' => $this->pollService->transferPolls($sourceUser, $targetUser)]);
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/transfer/{sourceUserId}/{targetUserId}', requirements: ['apiVersion' => '(v2)'])]
+	public function transferPolls(string $sourceUserId, string $targetUserId): DataResponse {
+		return $this->response(fn () => ['transferred' => $this->pollService->transferPolls($sourceUserId, $targetUserId)]);
 	}
 
 	/**
 	 * Transfer single poll to another user (change owner of poll)
 	 * @param int $pollId Poll to transfer
-	 * @param string $targetUser User to transfer the poll to
+	 * @param string $targetUserId User id to transfer the poll to
 	 */
 	#[CORS]
 	#[NoCSRFRequired]
-	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/transfer/{targetUser}', requirements: ['apiVersion' => '(v2)'])]
-	public function transferPoll(int $pollId, string $targetUser): DataResponse {
-		return $this->response(fn () => ['transferred' => $this->pollService->transferPoll($pollId, $targetUser)]);
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/poll/{pollId}/transfer/{targetUserId}', requirements: ['apiVersion' => '(v2)'])]
+	public function transferPoll(int $pollId, string $targetUserId): DataResponse {
+		return $this->response(fn () => ['transferred' => $this->pollService->transferPoll($pollId, $targetUserId)]);
 	}
 
 	/**

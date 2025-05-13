@@ -682,8 +682,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	 **/
 	private function getAllowChangeOwner(): bool {
 		return $this->getAllowEditPoll()
-		|| $this->getAllowTakeOver();
-
+		|| $this->userSession->getCurrentUser()->getIsAdmin();
 	}
 
 	/**
