@@ -552,6 +552,8 @@ OC.L10N.register(
     "No activity yet" : "尚未有活動狀態",
     "No comments" : "無留言",
     "Be the first." : "成為第一個。",
+    "Error restoring poll." : "還原投票時發生錯誤。",
+    "Error archiving poll." : "封存投票時發生錯誤。",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "變更選項時請小心，因為其可能以您不想要的方式影響既有的投票。",
     "As an admin you may edit this poll" : "作為管理員，您可以編輯此投票",
     "Description" : "描述",

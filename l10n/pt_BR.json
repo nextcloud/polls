@@ -550,6 +550,8 @@
     "No activity yet" : "Ainda sem atividades",
     "No comments" : "Nenhum comentário",
     "Be the first." : "Seja o primeiro.",
+    "Error restoring poll." : "Erro ao restaurar enquete.",
+    "Error archiving poll." : "Erro ao arquivar enquete.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Tome cuidado ao alterar as opções, pois isso pode afetar os votos existentes de forma indesejada.",
     "As an admin you may edit this poll" : "Como administrador você pode editar esta enquete",
     "Description" : "Descrição",
