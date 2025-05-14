@@ -552,7 +552,6 @@ OC.L10N.register(
     "No activity yet" : "Још нема активности",
     "No comments" : "Нема коментара",
     "Be the first." : "Будите први.",
-    "Error {action} poll." : "Грешка приликом {action} гласања.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Молимо вас да будете опрезни када мењате опције, јер то може да на нежљени начин утиче на постојеће гласове.",
     "As an admin you may edit this poll" : "Као администратор можете да мењате ово гласање",
     "Description" : "Опис",

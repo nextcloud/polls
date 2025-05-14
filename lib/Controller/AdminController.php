@@ -95,24 +95,4 @@ class AdminController extends BaseController {
 	public function runNotificationJob(): JSONResponse {
 		return $this->response(fn () => $this->notificationCron->manuallyRun());
 	}
-
-	/**
-	 * Switch archived status (move to archived polls)
-	 * @param int $pollId poll id
-	 * @deprecated 8.0.0 Not used anymore (use PUT /poll/{pollId}/toggleArchive)
-	 */
-	#[FrontpageRoute(verb: 'PUT', url: '/administration/poll/{pollId}/toggleArchive')]
-	public function toggleArchive(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
-	}
-
-	/**
-	 * Delete poll
-	 * @param int $pollId poll id
-	 * @deprecated 8.0.0 Not used anymore (use DELETE /poll/{pollId})
-	 */
-	#[FrontpageRoute(verb: 'DELETE', url: '/administration/poll/{pollId}')]
-	public function delete(int $pollId): JSONResponse {
-		return $this->responseDeleteTolerant(fn () => $this->pollService->delete($pollId));
-	}
 }

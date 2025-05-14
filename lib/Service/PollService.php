@@ -20,6 +20,7 @@ use OCA\Polls\Event\PollOwnerChangeEvent;
 use OCA\Polls\Event\PollReopenEvent;
 use OCA\Polls\Event\PollRestoredEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
+use OCA\Polls\Exceptions\AlreadyDeletedException;
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidAccessException;
@@ -329,13 +330,16 @@ class PollService {
 	 * @return Poll
 	 */
 	public function delete(int $pollId): Poll {
-		$this->poll = $this->pollMapper->find($pollId);
-		$this->poll->request(Poll::PERMISSION_POLL_DELETE);
+		try {
+			$this->poll = $this->pollMapper->find($pollId);
+		} catch (DoesNotExistException $e) {
+			throw new AlreadyDeletedException('Poll not found, assume already deleted');
+		}
 
+		$this->poll->request(Poll::PERMISSION_POLL_DELETE);
 		$this->eventDispatcher->dispatchTyped(new PollDeletedEvent($this->poll));
 
 		$this->pollMapper->delete($this->poll);
-
 		return $this->poll;
 	}
 

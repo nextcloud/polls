@@ -551,7 +551,6 @@ OC.L10N.register(
     "No activity yet" : "Henüz bir işlem yok",
     "No comments" : "Henüz bir yorum yok",
     "Be the first." : "İlk yorumu siz yapın.",
-    "Error {action} poll." : "Anket üzerinde {action} işlemi yapılırken sorun çıktı.",
     "Please be careful when changing options, because it can affect existing votes in an unwanted manner." : "Var olan oyları istenmeyecek şekilde etkileyebileceğinden, lütfen ayarları değiştirirken dikkatli olun.",
     "As an admin you may edit this poll" : "Yönetici olduğunuzdan bu anketi düzenleyebilirsiniz",
     "Description" : "Açıklama",

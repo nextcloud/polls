@@ -15,6 +15,7 @@ use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
 use OCA\Polls\Service\VoteService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\ApiRoute;
 use OCP\AppFramework\Http\Attribute\CORS;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -80,7 +81,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll', requirements: ['apiVersion' => '(v2)'])]
 	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): DataResponse {
-		return $this->responseCreate(fn () => ['poll' => $this->pollService->add($type, $title, $votingVariant)]);
+		return $this->response(fn () => ['poll' => $this->pollService->add($type, $title, $votingVariant)], Http::STATUS_CREATED);
 	}
 
 	/**
@@ -153,7 +154,7 @@ class PollApiController extends BaseApiV2Controller {
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'POST', url: '/api/v1.0/poll/{pollId}/clone', requirements: ['apiVersion' => '(v2)'])]
 	public function clone(int $pollId): DataResponse {
-		return $this->responseCreate(fn () => ['poll' => $this->pollService->clone($pollId)]);
+		return $this->response(fn () => ['poll' => $this->pollService->clone($pollId)], Http::STATUS_CREATED);
 	}
 
 	/**

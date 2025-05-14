@@ -13,6 +13,7 @@ use OCA\Polls\Model\SimpleOption;
 use OCA\Polls\Service\CalendarService;
 use OCA\Polls\Service\OptionService;
 use OCA\Polls\Service\VoteService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -60,7 +61,7 @@ class OptionController extends BaseController {
 		bool $voteYes = false,
 		?array $sequence = null,
 	): JSONResponse {
-		return $this->responseCreate(fn () => array_merge(
+		return $this->response(fn () => array_merge(
 			$this->optionService->addWithSequenceAndAutoVote(
 				$pollId,
 				SimpleOption::fromArray($option),
@@ -69,7 +70,8 @@ class OptionController extends BaseController {
 			),
 			['options' => $this->optionService->list($pollId)],
 			['votes' => $this->voteService->list($pollId)],
-		));
+		),
+			Http::STATUS_CREATED);
 	}
 
 	/**
@@ -80,7 +82,7 @@ class OptionController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/option/bulk')]
 	public function addBulk(int $pollId, string $text = ''): JSONResponse {
-		return $this->responseCreate(fn () => ['options' => $this->optionService->addBulk($pollId, $text)]);
+		return $this->response(fn () => ['options' => $this->optionService->addBulk($pollId, $text)], Http::STATUS_CREATED);
 	}
 
 	/**

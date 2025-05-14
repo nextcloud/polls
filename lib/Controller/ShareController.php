@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Service\ShareService;
+use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\Attribute\OpenAPI;
@@ -51,7 +52,10 @@ class ShareController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/share')]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): JSONResponse {
-		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)]);
+		return $this->response(
+			fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)],
+			Http::STATUS_CREATED,
+		);
 	}
 
 	/**
@@ -62,7 +66,10 @@ class ShareController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/publicshare')]
 	public function addPublicShare(int $pollId): JSONResponse {
-		return $this->responseCreate(fn () => ['share' => $this->shareService->add($pollId, Share::TYPE_PUBLIC)]);
+		return $this->response(
+			fn () => ['share' => $this->shareService->add($pollId, Share::TYPE_PUBLIC)],
+			Http::STATUS_CREATED,
+		);
 	}
 
 	/**
@@ -99,7 +106,9 @@ class ShareController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/user')]
 	public function adminToUser(string $token): JSONResponse {
-		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_USER)]);
+		return $this->response(
+			fn () => ['share' => $this->shareService->setType($token, Share::TYPE_USER)],
+			Http::STATUS_CREATED, );
 	}
 
 	/**
@@ -110,7 +119,10 @@ class ShareController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/admin')]
 	public function userToAdmin(string $token): JSONResponse {
-		return $this->responseCreate(fn () => ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)]);
+		return $this->response(
+			fn () => ['share' => $this->shareService->setType($token, Share::TYPE_ADMIN)],
+			Http::STATUS_CREATED,
+		);
 	}
 
 	/**
