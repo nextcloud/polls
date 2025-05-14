@@ -92,7 +92,7 @@ class Notifier implements INotifier {
 			],
 			self::NOTIFY_POLL_CHANGED_OWNER => [
 				self::SUBJECT_PARSED => $l->t('%s is the new owner of your poll. ', $parameters['newOwner']),
-				self::SUBJECT_RICH => $l->t('{actor} transfered your poll "%s" to the new owner {newOwner}. You are no more the owner.', $pollTitle),
+				self::SUBJECT_RICH => $l->t('{actor} transfered your poll "%s" to {newOwner}. You are no more the owner.', $pollTitle),
 			],
 			self::NOTIFY_POLL_DELETED_BY_OTHER => [
 				self::SUBJECT_PARSED => $l->t('%s deleted your poll', $actor->getDisplayName()),
