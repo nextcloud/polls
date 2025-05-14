@@ -10,7 +10,6 @@ namespace OCA\Polls\Controller;
 
 use Closure;
 use OCA\Polls\Exceptions\Exception;
-use OCA\Polls\Exceptions\NoUpdatesException;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
@@ -39,40 +38,19 @@ class BaseApiV2Controller extends OCSController {
 	 * @param Closure $callback Callback function
 	 */
 	#[NoAdminRequired]
-	protected function response(Closure $callback): DataResponse {
+	protected function response(Closure $callback, int $successStatus = Http::STATUS_OK): DataResponse {
 		try {
-			return new DataResponse($callback());
+			return new DataResponse($callback(), $successStatus);
+
 		} catch (DoesNotExistException $e) {
 			throw new OCSNotFoundException($e->getMessage());
-		} catch (Exception $e) {
-			throw new OCSBadRequestException($e->getMessage());
-		}
-	}
 
-	/**
-	 * response
-	 * @param Closure $callback Callback function
-	 */
-	#[NoAdminRequired]
-	protected function responseLong(Closure $callback): DataResponse {
-		try {
-			return new DataResponse($callback());
-		} catch (DoesNotExistException $e) {
-			throw new OCSNotFoundException($e->getMessage());
-		} catch (NoUpdatesException $e) {
-			return new DataResponse([], Http::STATUS_NOT_MODIFIED);
-		}
-	}
-
-	/**
-	 * responseCreate
-	 * @param Closure $callback Callback function
-	 */
-	#[NoAdminRequired]
-	protected function responseCreate(Closure $callback): DataResponse {
-		try {
-			return new DataResponse($callback(), Http::STATUS_CREATED);
 		} catch (Exception $e) {
+
+			if ($e->getStatus() === Http::STATUS_NOT_MODIFIED) {
+				return new DataResponse(statusCode: $e->getStatus());
+			}
+
 			throw new OCSBadRequestException($e->getMessage());
 		}
 	}

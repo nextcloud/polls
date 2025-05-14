@@ -10,9 +10,7 @@ namespace OCA\Polls\Controller;
 
 use Closure;
 use OCA\Polls\Exceptions\Exception;
-use OCA\Polls\Exceptions\NoUpdatesException;
 use OCP\AppFramework\Controller;
-use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -32,54 +30,23 @@ class BaseController extends Controller {
 	/**
 	 * response
 	 * @param Closure $callback Callback function
+	 * @param int $successStatus HTTP status code for success
 	 */
 	#[NoAdminRequired]
-	protected function response(Closure $callback): JSONResponse {
+	protected function response(
+		Closure $callback,
+		int $successStatus = Http::STATUS_OK,
+	): JSONResponse {
 		try {
-			return new JSONResponse($callback());
+			return new JSONResponse($callback(), $successStatus);
 		} catch (Exception $e) {
+
+			if ($e->getStatus() === Http::STATUS_NOT_MODIFIED) {
+				return new JSONResponse(statusCode: $e->getStatus());
+			}
+
 			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
 		}
 	}
 
-	/**
-	 * response
-	 * @param Closure $callback Callback function
-	 */
-	#[NoAdminRequired]
-	protected function responseLong(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback());
-		} catch (NoUpdatesException $e) {
-			return new JSONResponse([], Http::STATUS_NOT_MODIFIED);
-		}
-	}
-
-	/**
-	 * responseCreate
-	 * @param Closure $callback Callback function
-	 */
-	#[NoAdminRequired]
-	protected function responseCreate(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback(), Http::STATUS_CREATED);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
-
-	/**
-	 * responseDeleteTolerant
-	 * @param Closure $callback Callback function
-	 */
-	#[NoAdminRequired]
-	protected function responseDeleteTolerant(Closure $callback): JSONResponse {
-		try {
-			return new JSONResponse($callback());
-		} catch (DoesNotExistException $e) {
-			return new JSONResponse(['message' => 'Not found, assume already deleted']);
-		} catch (Exception $e) {
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
-		}
-	}
 }
