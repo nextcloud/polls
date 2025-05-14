@@ -81,6 +81,7 @@ class Notifier implements INotifier {
 		$pollTitle = $parameters['pollTitle'] ?? $poll->getTitle();
 		$notification->setLink($poll->getVoteUrl());
 
+		// TODO: tidy subjects and parameters
 		$subjects = match ($notification->getSubject()) {
 			self::NOTIFY_INVITATION => [
 				self::SUBJECT_PARSED => $l->t('%s invited you to a poll', $actor->getDisplayName()),
