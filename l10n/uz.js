@@ -29,6 +29,7 @@ OC.L10N.register(
     "Login" : "Login",
     "No activity yet" : "Afsuski, faollik mavjud emas",
     "Description" : "Tavsif",
+    "Other settings" : "Boshqa sozlamalar",
     "Preferences" : "Afzalliklar",
     "Comments" : "Comments",
     "Details" : "Details",
