@@ -18,6 +18,7 @@ use OCP\IRequest;
 
 /**
  * @psalm-api
+ * @psalm-import-type HttpStatusCode from \OCA\Polls\Types
  */
 class BaseController extends Controller {
 	public function __construct(
@@ -30,7 +31,7 @@ class BaseController extends Controller {
 	/**
 	 * response
 	 * @param Closure $callback Callback function
-	 * @param int $successStatus HTTP status code for success
+	 * @psalm-param HttpStatusCode $successStatus HTTP status code for success
 	 */
 	#[NoAdminRequired]
 	protected function response(
@@ -42,10 +43,12 @@ class BaseController extends Controller {
 		} catch (Exception $e) {
 
 			if ($e->getStatus() === Http::STATUS_NOT_MODIFIED) {
-				return new JSONResponse(statusCode: $e->getStatus());
+				return new JSONResponse(statusCode: Http::STATUS_NOT_MODIFIED);
 			}
 
-			return new JSONResponse(['message' => $e->getMessage()], $e->getStatus());
+			/** @var HttpStatusCode $status */
+			$status = $e->getStatus();
+			return new JSONResponse(['message' => $e->getMessage()], $status);
 		}
 	}
 

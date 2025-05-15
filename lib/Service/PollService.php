@@ -135,9 +135,9 @@ class PollService {
 	/**
 	 * Transfer ownership of a poll
 	 * @param int|Poll $poll poll or pollId of poll to transfer ownership
-	 * @param null|string|UserBase $targetUser User to transfer polls to. If null the current user will be used
+	 * @param string|UserBase $targetUser User to transfer polls to. If null the current user will be used
 	 */
-	public function transferPoll(int|Poll $poll, null|string|UserBase $targetUser): Poll {
+	public function transferPoll(int|Poll $poll, string|UserBase $targetUser): Poll {
 		if (!($poll instanceof Poll)) {
 			$poll = $this->pollMapper->find($poll);
 		}
@@ -145,10 +145,12 @@ class PollService {
 		$poll->request(Poll::PERMISSION_POLL_CHANGE_OWNER);
 
 		if (!($targetUser instanceof UserBase)) {
+			$userId = $targetUser;
 			try {
-				$targetUser = $this->userMapper->getUserFromUserBase($targetUser);
+				$targetUser = $this->userMapper->getUserFromUserBase($userId);
 			} catch (UserNotFoundException $e) {
-				throw new InvalidUsernameException('The user id "' . $targetUser . '" for the target user is not valid.');
+				// to keep psalm quiet
+				throw new InvalidUsernameException('The user id "' . $userId . '" for the target user is not valid.');
 			}
 		}
 

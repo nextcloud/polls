@@ -70,6 +70,7 @@ class SystemService {
 	/**
 	 * Get a combined list of users, groups, circles, contact groups and contacts
 	 *
+	 * @param list<int> $types list of types to search for
 	 * @return (Circle|Email|Group|User|Contact|ContactGroup|mixed)[]
 	 *
 	 * @psalm-return array<array-key, Circle|Email|Group|User|Contact|ContactGroup|mixed>
