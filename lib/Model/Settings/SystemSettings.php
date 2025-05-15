@@ -39,22 +39,20 @@ class SystemSettings {
 		// get group exceptions
 		$exceptionGroups = $this->getCoreLimitSharingGroups();
 
-		if ($groupExceptionMode === 'allowGroup') {
-			// exception mode is 'Limit sharing to some groups'
-			// if user is in exception group, allow share creation
-			return $this->userSession->getCurrentUser()->getIsInGroupArray($exceptionGroups);
-		} elseif ($groupExceptionMode === 'denyGroup') {
+		if ($groupExceptionMode === 'denyGroup') {
 			// exception mode is 'Exclude some Groups from sharing'
 			// if user is in exception group, deny share creation
 			return !$this->userSession->getCurrentUser()->getIsInGroupArray($exceptionGroups);
 		}
 
-		return true;
+		// exception mode is 'Limit sharing to some groups'
+		// if user is in exception group, allow share creation
+		return $this->userSession->getCurrentUser()->getIsInGroupArray($exceptionGroups);
 	}
 
 	/**
 	 * Get share group exception mode
-	 * @return string
+	 * @return 'open'|'closed'|'archived'
 	 * @psalm-return 'denyGroup'|'allowGroup'|'off'
 	 * Take value from the core setting 'shareapi_exclude_groups' and translate
 	 * 'yes' => 'denyGroup' ('Exclude some groups from sharing') existing groups are handeled as deny groups

@@ -100,8 +100,7 @@ class MailService {
 		preg_match(self::REGEX_PARSE_MAIL_AND_NAME, $eMailString, $matches);
 
 		// Check if the found element is a valid email address
-		$emailAddress = !empty($matches[1]) ? trim($matches[1]) : null;
-
+		$emailAddress = (isset($matches[1]) && trim($matches[1]) !== '') ? trim($matches[1]) : null;
 		if ($emailAddress !== null && filter_var($emailAddress, FILTER_VALIDATE_EMAIL)) {
 			// Extract the name based on the input string
 			$displayName = trim(str_replace(['<', '>'], '', str_replace($emailAddress, '', $eMailString)));

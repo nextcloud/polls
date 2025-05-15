@@ -5,7 +5,6 @@ declare(strict_types=1);
  * SPDX-FileCopyrightText: 2024 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-
 namespace OCA\Polls\Controller;
 
 use Closure;
@@ -21,6 +20,7 @@ use OCP\IRequest;
 
 /**
  * @psalm-api
+ * @psalm-import-type HttpStatusCode from \OCA\Polls\Types
  */
 class BaseApiV2Controller extends OCSController {
 	public function __construct(
@@ -36,6 +36,7 @@ class BaseApiV2Controller extends OCSController {
 	/**
 	 * response
 	 * @param Closure $callback Callback function
+	 * @psalm-param HttpStatusCode $successStatus HTTP status code for success
 	 */
 	#[NoAdminRequired]
 	protected function response(Closure $callback, int $successStatus = Http::STATUS_OK): DataResponse {
@@ -48,7 +49,7 @@ class BaseApiV2Controller extends OCSController {
 		} catch (Exception $e) {
 
 			if ($e->getStatus() === Http::STATUS_NOT_MODIFIED) {
-				return new DataResponse(statusCode: $e->getStatus());
+				return new DataResponse(statusCode: Http::STATUS_NOT_MODIFIED);
 			}
 
 			throw new OCSBadRequestException($e->getMessage());

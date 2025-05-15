@@ -1,16 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <files psalm-version="5.26.1@d747f6500b38ac4f7dfc5edbcae6e4b637d7add0">
-  <file src="lib/Exceptions/DuplicateEntryException.php">
-    <UnusedClass>
-      <code><![CDATA[DuplicateEntryException]]></code>
-    </UnusedClass>
-  </file>
-  <file src="lib/Model/Group/Circle.php">
-    <UndefinedClass>
-      <code><![CDATA[$this->circle]]></code>
-      <code><![CDATA[CirclesCircle]]></code>
-    </UndefinedClass>
-  </file>
   <file src="lib/Service/MailService.php">
     <PossiblyUnusedMethod>
       <code><![CDATA[parseEmailStrings]]></code>

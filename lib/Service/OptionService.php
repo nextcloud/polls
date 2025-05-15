@@ -168,11 +168,7 @@ class OptionService {
 
 		foreach ($newOptionsTexts as $pollOptionText) {
 			if ($pollOptionText) {
-				try {
-					$this->add($pollId, new SimpleOption($pollOptionText, 0));
-				} catch (DuplicateEntryException $e) {
-					continue;
-				}
+				$this->add($pollId, new SimpleOption($pollOptionText, 0));
 			}
 		}
 

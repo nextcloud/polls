@@ -36,7 +36,8 @@ class SystemController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/search/users/{query}')]
 	public function userSearch(string $query, string $types): JSONResponse {
-		$types = explode(',', $types);
+		$types = array_map('intval', explode(',', $types));
+		// $types = explode(',', $types);
 		return new JSONResponse([
 			'siteusers' => $this->systemService->getSiteUsersAndGroups($query, $types),
 			'types' => $types

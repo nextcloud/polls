@@ -13,6 +13,7 @@
     cacheDirectory=".psalm.cache"
     findUnusedBaselineEntry="true"
     findUnusedCode="true"
+    phpVersion="8.1"
 >
     <projectFiles>
         <directory name="lib" />
@@ -23,6 +24,9 @@
     <extraFiles>
         <directory name="vendor" />
     </extraFiles>
+    <stubs>
+        <file name="stubs/circles-stubs.php"/>
+    </stubs>
 	<issueHandlers>
         <LessSpecificReturnStatement errorLevel="error"/>
         <LessSpecificReturnType errorLevel="error"/>
