@@ -20,7 +20,6 @@ use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
-use OCA\Polls\Exceptions\DuplicateEntryException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;

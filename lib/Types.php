@@ -1,5 +1,10 @@
 <?php
 
+declare(strict_types=1);
+/**
+ * SPDX-FileCopyrightText: 2025 Nextcloud contributors
+ * SPDX-License-Identifier: AGPL-3.0-or-later
+ */
 namespace OCA\Polls;
 
 /**
@@ -10,4 +15,5 @@ namespace OCA\Polls;
  *     500|501|502|503|504|505|506|507|508|509|510|511
  * @psalm-api
  */
-interface Types {}
+interface Types {
+}

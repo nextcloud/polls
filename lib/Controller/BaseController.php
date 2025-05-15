@@ -16,7 +16,6 @@ use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
 use OCP\IRequest;
 
-
 /**
  * @psalm-api
  * @psalm-import-type HttpStatusCode from \OCA\Polls\Types
