@@ -110,7 +110,7 @@ class PollService {
 		try {
 			$targetUser = $this->userMapper->getUserFromUserBase($targetUserId);
 		} catch (UserNotFoundException $e) {
-			throw new InvalidUsernameException('The user id "' . $targetUser . '" for the target user is not valid.');
+			throw new InvalidUsernameException('The user id "' . $targetUserId . '" for the target user is not valid.');
 		}
 
 		$pollsToTransfer = $this->pollMapper->listByOwner($sourceUserId);
@@ -137,7 +137,7 @@ class PollService {
 	 * @param int|Poll $poll poll or pollId of poll to transfer ownership
 	 * @param null|string|UserBase $targetUser User to transfer polls to. If null the current user will be used
 	 */
-	public function transferPoll(int|Poll $poll, string|UserBase $targetUser): Poll {
+	public function transferPoll(int|Poll $poll, null|string|UserBase $targetUser): Poll {
 		if (!($poll instanceof Poll)) {
 			$poll = $this->pollMapper->find($poll);
 		}
