@@ -112,6 +112,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public const PERMISSION_OVERRIDE = 'override_permission';
 	public const PERMISSION_POLL_VIEW = 'view';
 	public const PERMISSION_POLL_EDIT = 'edit';
+	public const PERMISSION_POLL_CHANGE_OWNER = 'changeOwner';
 	public const PERMISSION_POLL_DELETE = 'delete';
 	public const PERMISSION_POLL_ARCHIVE = 'archive';
 	public const PERMISSION_POLL_RESULTS_VIEW = 'seeResults';
@@ -291,6 +292,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'addSharesExternal' => $this->getIsAllowed(self::PERMISSION_SHARE_ADD_EXTERNAL),
 			'archive' => $this->getIsAllowed(self::PERMISSION_POLL_ARCHIVE),
 			'changeForeignVotes' => $this->getIsAllowed(self::PERMISSION_VOTE_FOREIGN_CHANGE),
+			'changeOwner' => $this->getIsAllowed(self::PERMISSION_POLL_CHANGE_OWNER),
 			'clone' => $this->getIsAllowed(self::PERMISSION_OPTION_CLONE),
 			'comment' => $this->getIsAllowed(self::PERMISSION_COMMENT_ADD),
 			'confirmOptions' => $this->getIsAllowed(self::PERMISSION_OPTION_CONFIRM),
@@ -302,6 +304,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'seeUsernames' => $this->getIsAllowed(self::PERMISSION_POLL_USERNAMES_VIEW),
 			'shiftOptions' => $this->getIsAllowed(self::PERMISSION_OPTIONS_SHIFT),
 			'subscribe' => $this->getIsAllowed(self::PERMISSION_POLL_SUBSCRIBE),
+			'takeOver' => $this->getIsAllowed(self::PERMISSION_POLL_TAKEOVER),
 			'view' => $this->getIsAllowed(self::PERMISSION_POLL_VIEW),
 			'vote' => $this->getIsAllowed(self::PERMISSION_VOTE_EDIT),
 		];
@@ -560,7 +563,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			self::PERMISSION_POLL_EDIT => $this->getAllowEditPoll(),
 			self::PERMISSION_POLL_DELETE => $this->getAllowDeletePoll(),
 			self::PERMISSION_POLL_ARCHIVE => $this->getAllowEditPoll(),
-			self::PERMISSION_POLL_TAKEOVER => $this->getAllowEditPoll(),
+			self::PERMISSION_POLL_TAKEOVER => $this->getAllowTakeOver(),
+			self::PERMISSION_POLL_CHANGE_OWNER => $this->getAllowChangeOwner(),
 			self::PERMISSION_POLL_SUBSCRIBE => $this->getAllowSubscribeToPoll(),
 			self::PERMISSION_POLL_RESULTS_VIEW => $this->getAllowShowResults(),
 			self::PERMISSION_POLL_USERNAMES_VIEW => $this->getAllowEditPoll() || !$this->getAnonymous(),
@@ -667,6 +671,18 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 		// deny edit rights in all other cases
 		return false;
+	}
+
+	private function getAllowTakeOver(): bool {
+		return $this->userSession->getCurrentUser()->getIsAdmin();
+	}
+
+	/**
+	 * Checks, if user is allowed to edit the poll configuration
+	 **/
+	private function getAllowChangeOwner(): bool {
+		return $this->getAllowEditPoll()
+		|| $this->userSession->getCurrentUser()->getIsAdmin();
 	}
 
 	/**

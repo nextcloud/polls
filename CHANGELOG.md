@@ -23,6 +23,7 @@ All notable changes to this project will be documented in this file.
  - Configuration for using the Nextcloud default footer in public polls
  - Delete polls without the need to archive them first
  - Collapsible poll description
+ - Transfer polls to another owner by the current poll owner or the administration
 
 ## [7.4.1] - 2024-03-07
 ### New

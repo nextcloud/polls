@@ -345,6 +345,23 @@ export const usePollsStore = defineStore('polls', {
 			}
 		},
 
+		async changeOwner(payload: { pollId: number; userId: string }) {
+			try {
+				await PollsAPI.changeOwner(payload.pollId, payload.userId)
+			} catch (error) {
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error changing poll owner', {
+					error,
+					payload,
+				})
+				throw error
+			} finally {
+				this.load()
+			}
+		},
+
 		addChunk(): void {
 			this.meta.loadedChunks = this.meta.loadedChunks + 1
 		},
@@ -370,7 +387,7 @@ export const usePollsStore = defineStore('polls', {
 			}
 		},
 
-		async delete(payload: { pollId: number }) {
+		async delete(payload: { pollId: number }): Promise<void> {
 			try {
 				await PollsAPI.deletePoll(payload.pollId)
 			} catch (error) {

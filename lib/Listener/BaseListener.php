@@ -13,7 +13,6 @@ use OCA\Polls\Event\PollArchivedEvent;
 use OCA\Polls\Event\PollDeletedEvent;
 use OCA\Polls\Event\PollExpiredEvent;
 use OCA\Polls\Event\PollOwnerChangeEvent;
-use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Exceptions\InvalidClassException;
 use OCA\Polls\Exceptions\OCPEventException;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -94,8 +93,7 @@ abstract class BaseListener implements IEventListener {
 
 	protected function updateLastInteraction(): void {
 		// Update last interaction, exept event is one of the of excluded events
-		if ($this->event instanceof PollTakeoverEvent
-			|| $this->event instanceof PollOwnerChangeEvent
+		if ($this->event instanceof PollOwnerChangeEvent
 			|| $this->event instanceof PollExpiredEvent
 			|| $this->event instanceof PollDeletedEvent
 			|| $this->event instanceof PollArchivedEvent

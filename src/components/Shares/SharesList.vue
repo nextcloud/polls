@@ -21,6 +21,8 @@ import MarkUpDescription from '../Poll/MarkUpDescription.vue'
 import { usePollStore } from '../../stores/poll.ts'
 import { useSharesStore, Share } from '../../stores/shares.ts'
 import { useSessionStore } from '../../stores/session.ts'
+import { showError } from '@nextcloud/dialogs'
+import { User } from '../../Types/index.ts'
 
 const pollStore = usePollStore()
 const sharesStore = useSharesStore()
@@ -42,6 +44,14 @@ function openQrModal(share: Share) {
 	qrText.value = share.URL
 	qrModal.value = true
 }
+
+async function addShare(user: User) {
+	try {
+		await sharesStore.add(user)
+	} catch {
+		showError(t('polls', 'Error while adding share'))
+	}
+}
 </script>
 
 <template>
@@ -50,7 +60,12 @@ function openQrModal(share: Share) {
 			<ShareIcon />
 		</template>
 
-		<UserSearch v-if="sessionStore.appPermissions.addShares" class="add-share" />
+		<UserSearch
+			v-if="sessionStore.appPermissions.addShares"
+			class="add-share"
+			:aria-label="t('polls', 'Add shares')"
+			:placeholder="t('polls', 'Type to add an individual share')"
+			@user-selected="(user: User) => addShare(user)" />
 		<ShareItemAllUsers v-if="sessionStore.appPermissions.allAccess" />
 		<SharePublicAdd
 			v-if="

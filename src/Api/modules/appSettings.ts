@@ -5,7 +5,7 @@
 import { AxiosResponse } from '@nextcloud/axios'
 import { AppSettings, Group } from '../../stores/appSettings.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { User } from '../../Types/index.js'
+import { ISearchType, User } from '../../Types/index.js'
 
 const appSettings = {
 	getAppSettings(): Promise<AxiosResponse<{ appSettings: AppSettings }>> {
@@ -45,10 +45,14 @@ const appSettings = {
 		})
 	},
 
-	getUsers(query: string): Promise<AxiosResponse<{ siteusers: User[] }>> {
+	getUsers(
+		query: string,
+		types: ISearchType[],
+	): Promise<AxiosResponse<{ siteusers: User[] }>> {
 		return httpInstance.request({
 			method: 'GET',
 			url: `search/users${query.trim() ? `/${query.trim()}` : ''}`,
+			params: { types: types.toString() },
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.getUsers.name

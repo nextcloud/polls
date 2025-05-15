@@ -19,7 +19,6 @@ use OCA\Polls\Event\PollDeletedEvent;
 use OCA\Polls\Event\PollOwnerChangeEvent;
 use OCA\Polls\Event\PollReopenEvent;
 use OCA\Polls\Event\PollRestoredEvent;
-use OCA\Polls\Event\PollTakeoverEvent;
 use OCA\Polls\Event\PollUpdatedEvent;
 use OCA\Polls\Exceptions\AlreadyDeletedException;
 use OCA\Polls\Exceptions\EmptyTitleException;
@@ -104,63 +103,65 @@ class PollService {
 	}
 
 	/**
-	 * Update poll configuration
-	 * @return Poll
-	 */
-	public function takeover(int $pollId, ?UserBase $targetUser = null): Poll {
-		if (!$targetUser) {
-			$targetUser = $this->userSession->getCurrentUser();
-		}
-
-		$this->poll = $this->pollMapper->find($pollId);
-
-		$this->eventDispatcher->dispatchTyped(new PollTakeOverEvent($this->poll));
-
-		$this->poll->setOwner($targetUser->getId());
-		$this->pollMapper->update($this->poll);
-
-		return $this->poll;
-	}
-
-	/**
 	 * @return Poll[]
 	 * @psalm-return array<Poll>
 	 */
-	public function transferPolls(string $sourceUser, string $targetUser): array {
+	public function transferPolls(string $sourceUserId, string $targetUserId): array {
 		try {
-			$this->userMapper->getUserFromUserBase($targetUser);
+			$targetUser = $this->userMapper->getUserFromUserBase($targetUserId);
 		} catch (UserNotFoundException $e) {
-			throw new InvalidUsernameException('The user id "' . $targetUser . '" for the target user is not valid.');
+			throw new InvalidUsernameException('The user id "' . $targetUserId . '" for the target user is not valid.');
 		}
 
-		$pollsToTransfer = $this->pollMapper->listByOwner($sourceUser);
+		$pollsToTransfer = $this->pollMapper->listByOwner($sourceUserId);
 
 		foreach ($pollsToTransfer as &$poll) {
-			$poll = $this->executeTransfer($poll, $targetUser);
+			$poll = $this->transferPoll($poll, $targetUser);
 		}
 		return $pollsToTransfer;
 	}
 
 	/**
+	 * Update poll configuration
 	 * @return Poll
 	 */
-	public function transferPoll(int $pollId, string $targetUser): Poll {
-		try {
-			$this->userMapper->getUserFromUserBase($targetUser);
-		} catch (UserNotFoundException $e) {
-			throw new InvalidUsernameException('The user id "' . $targetUser . '" for the target user is not valid.');
+	public function takeover(int $pollId, ?UserBase $targetUser = null): Poll {
+		if ($targetUser === null) {
+			$targetUser = $this->userSession->getCurrentUser();
+		}
+		return $this->transferPoll($pollId, $targetUser);
+	}
+
+	/**
+	 * Transfer ownership of a poll
+	 * @param int|Poll $poll poll or pollId of poll to transfer ownership
+	 * @param null|string|UserBase $targetUser User to transfer polls to. If null the current user will be used
+	 */
+	public function transferPoll(int|Poll $poll, null|string|UserBase $targetUser): Poll {
+		if (!($poll instanceof Poll)) {
+			$poll = $this->pollMapper->find($poll);
 		}
 
-		return $this->executeTransfer($this->pollMapper->find($pollId), $targetUser);
-	}
+		$poll->request(Poll::PERMISSION_POLL_CHANGE_OWNER);
 
-	private function executeTransfer(Poll $poll, string $targetUser): Poll {
-		$poll->setOwner($targetUser);
-		$this->pollMapper->update($poll);
-		$this->eventDispatcher->dispatchTyped(new PollOwnerChangeEvent($poll));
+		if (!($targetUser instanceof UserBase)) {
+			try {
+				$targetUser = $this->userMapper->getUserFromUserBase($targetUser);
+			} catch (UserNotFoundException $e) {
+				throw new InvalidUsernameException('The user id "' . $targetUser . '" for the target user is not valid.');
+			}
+		}
+
+		$oldOwner = $poll->getOwner();
+
+		$poll->setOwner($targetUser->getId());
+		$poll = $this->pollMapper->update($poll);
+
+		$this->eventDispatcher->dispatchTyped(new PollOwnerChangeEvent($poll, $oldOwner, $poll->getOwner()));
+
 		return $poll;
-
 	}
+
 	/**
 	 * get poll configuration
 	 * @return Poll

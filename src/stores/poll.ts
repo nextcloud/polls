@@ -113,6 +113,7 @@ export type PollPermissions = {
 	addSharesExternal: boolean
 	archive: boolean
 	changeForeignVotes: boolean
+	changeOwner: boolean
 	clone: boolean
 	comment: boolean
 	confirmOptions: boolean
@@ -124,6 +125,7 @@ export type PollPermissions = {
 	seeUsernames: boolean
 	shiftOptions: boolean
 	subscribe: boolean
+	takeOver: boolean
 	view: boolean
 	vote: boolean
 }
@@ -220,6 +222,7 @@ export const usePollStore = defineStore('poll', {
 			addSharesExternal: false,
 			archive: false,
 			changeForeignVotes: false,
+			changeOwner: false,
 			clone: false,
 			comment: false,
 			confirmOptions: false,
@@ -231,6 +234,7 @@ export const usePollStore = defineStore('poll', {
 			seeResults: false,
 			seeUsernames: false,
 			subscribe: false,
+			takeOver: false,
 			view: false,
 			vote: false,
 		},
@@ -572,25 +576,6 @@ export const usePollStore = defineStore('poll', {
 					return
 				}
 				Logger.error('Error archiving/restoring', {
-					error,
-					payload,
-				})
-				throw error
-			} finally {
-				pollsStore.load()
-			}
-		},
-
-		async delete(payload: { pollId: number }): Promise<void> {
-			const pollsStore = usePollsStore()
-
-			try {
-				await PollsAPI.deletePoll(payload.pollId)
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
-				}
-				Logger.error('Error deleting poll', {
 					error,
 					payload,
 				})

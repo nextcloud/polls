@@ -122,6 +122,16 @@ export enum BoxType {
 	AlignedText = 'alignedTextBox',
 }
 
+export enum ISearchType {
+	User = 0,
+	Group = 1,
+	UserGroup = 2,
+	Email = 4,
+	Circle = 7,
+	Contact = 51,
+	All = 99,
+}
+
 export type ApiEmailAdressList = {
 	displayName: string
 	emailAddress: string

@@ -30,6 +30,18 @@ use OCP\Share\IShare;
 use Psr\Log\LoggerInterface;
 
 class SystemService {
+	public const TYPE_CONTACT = 51;
+	public const TYPE_ALL = 99;
+	public const VALID_SEARCH_TYPES = [
+		IShare::TYPE_USER,
+		IShare::TYPE_GROUP,
+		IShare::TYPE_USERGROUP,
+		IShare::TYPE_CIRCLE,
+		IShare::TYPE_EMAIL,
+		SystemService::TYPE_CONTACT,
+		SystemService::TYPE_ALL,
+	];
+
 	private const REGEX_INVALID_USERNAME_CHARACTERS = '/[\x{2000}-\x{206F}]/u';
 	private const MAX_SEARCH_RESULTS = 200;
 
@@ -62,91 +74,147 @@ class SystemService {
 	 *
 	 * @psalm-return array<array-key, Circle|Email|Group|User|Contact|ContactGroup|mixed>
 	 */
-	public function getSiteUsersAndGroups(string $query = ''): array {
+	public function getSiteUsersAndGroups(string $query, array $types): array {
 		$list = [];
-		if ($query !== '') {
-			try {
-				if (!$this->systemSettings->getExternalShareCreationAllowed()) {
-					throw new ForbiddenException();
-				}
-				// try to identify an email address
-				$result = MailService::extractEmailAddressAndName($query);
-				$list[] = new Email($result['emailAddress'], $result['displayName'], $result['emailAddress']);
-			} catch (Exception $e) {
-				// catch silent
+
+		try {
+			if (!$this->systemSettings->getExternalShareCreationAllowed()) {
+				throw new ForbiddenException();
 			}
-			// search more matches in circles, users, groups and contacts
-			$list = array_merge($list, $this->search($query));
+			// try to identify an email address
+			$result = MailService::extractEmailAddressAndName($query);
+			$list[] = new Email($result['emailAddress'], $result['displayName'], $result['emailAddress']);
+		} catch (Exception $e) {
+			// catch silent
 		}
+		// search more matches in circles, users, groups and contacts
+		$list = array_merge($list, $this->search($query, $types));
 
 		return $list;
 	}
 
 	/**
 	 * get a list of user objects from the backend matching the query string
+	 * @param string $query search string
+	 * @param array $types list of types to search for
+	 * @psalm-param list<integer> $types
 	 */
-	public function search(string $query = ''): array {
-		if (!$this->systemSettings->getShareCreateAllowed()) {
+	private function search(string $query, array $types): array {
+		// if no query or no types are given, return empty array
+		// if sharing is not allowed, return empty array
+		if (!$query
+			|| !$types
+			|| !$this->systemSettings->getShareCreateAllowed()) {
+			return [];
+		}
+
+		$IShareTypes = [];
+		$searchContacts = false;
+		$searchAll = false;
+
+		foreach ($types as $type) {
+			if (!in_array($type, self::VALID_SEARCH_TYPES)) {
+				$this->logger->error('Invalid search type {type}', ['type' => $type]);
+				continue;
+			}
+			switch (intval($type)) {
+				case IShare::TYPE_USER:
+					$IShareTypes[] = IShare::TYPE_USER;
+					break;
+				case IShare::TYPE_GROUP:
+					$IShareTypes[] = IShare::TYPE_GROUP;
+					break;
+				case IShare::TYPE_EMAIL:
+					$IShareTypes[] = IShare::TYPE_EMAIL;
+					break;
+				case IShare::TYPE_CIRCLE:
+					$this->logger->error('Search for circles found');
+					$IShareTypes[] = IShare::TYPE_CIRCLE;
+					break;
+				case self::TYPE_CONTACT:
+					$searchContacts = true;
+					break;
+				case self::TYPE_ALL:
+					$searchAll = true;
+					break;
+			}
+		}
+
+		if ($searchAll) {
+			$IShareTypes = [
+				IShare::TYPE_USER,
+				IShare::TYPE_GROUP,
+				IShare::TYPE_EMAIL,
+				IShare::TYPE_CIRCLE,
+			];
+			$searchContacts = true;
+		}
+
+		// test again, if no valid search types are found
+		if (count($IShareTypes) < 1 && !$searchContacts) {
 			return [];
 		}
 
 		$startSearchTimer = microtime(true);
+
 		$items = [];
-		$types = [
-			IShare::TYPE_USER,
-			IShare::TYPE_GROUP,
-		];
 
-		if ($this->systemSettings->getExternalShareCreationAllowed()) {
-			$types[] = IShare::TYPE_EMAIL;
-		}
+		if (count($IShareTypes) > 0) {
 
-		if (Circle::isEnabled() && class_exists('\OCA\Circles\ShareByCircleProvider')) {
-			// Add circles to the search, if app is enabled
-			$types[] = IShare::TYPE_CIRCLE;
-		}
+			$startCollaborationSearchTimer = microtime(true);
+			[$result, $more] = $this->userSearch->search($query, $IShareTypes, false, self::MAX_SEARCH_RESULTS, 0);
 
-		$startCollaborationSearchTimer = microtime(true);
-		[$result, $more] = $this->userSearch->search($query, $types, false, self::MAX_SEARCH_RESULTS, 0);
-		$this->logger->debug('Search took {time}s', ['time' => microtime(true) - $startCollaborationSearchTimer]);
+			$this->logger->debug('Search took {time}s', ['time' => microtime(true) - $startCollaborationSearchTimer]);
 
-		if ($more) {
-			$this->logger->info('Only first {maxResults} matches will be returned.', ['maxResults' => self::MAX_SEARCH_RESULTS]);
-		}
+			if ($more) {
+				$this->logger->info('Only first {maxResults} matches will be returned.', ['maxResults' => self::MAX_SEARCH_RESULTS]);
+			}
 
-		foreach (($result['users'] ?? []) as $item) {
-			if (isset($item['value']['shareWith'])) {
-				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
-			} else {
-				$this->handleFailedSearchResult($query, $item, 'users');
+			foreach (($result['users'] ?? []) as $item) {
+				if (isset($item['value']['shareWith'])) {
+					$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
+				} else {
+					$this->handleFailedSearchResult($query, $item, 'users');
+				}
+			}
+
+			foreach (($result['exact']['users'] ?? []) as $item) {
+				if (isset($item['value']['shareWith'])) {
+					$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
+				} else {
+					$this->handleFailedSearchResult($query, $item, 'exact users');
+				}
+			}
+
+			foreach (($result['groups'] ?? []) as $item) {
+				if (isset($item['value']['shareWith'])) {
+					$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
+				} else {
+					$this->handleFailedSearchResult($query, $item, 'groups');
+				}
+			}
+
+			foreach (($result['exact']['groups'] ?? []) as $item) {
+				if (isset($item['value']['shareWith'])) {
+					$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
+				} else {
+					$this->handleFailedSearchResult($query, $item, 'exact groups');
+				}
+			}
+
+			foreach (($result['circles'] ?? []) as $item) {
+				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
+			}
+
+			foreach (($result['exact']['circles'] ?? []) as $item) {
+				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
 			}
 		}
 
-		foreach (($result['exact']['users'] ?? []) as $item) {
-			if (isset($item['value']['shareWith'])) {
-				$items[] = $this->userMapper->getUserFromUserBase($item['value']['shareWith'])->getRichUserArray();
-			} else {
-				$this->handleFailedSearchResult($query, $item, 'exact users');
-			}
-		}
+		if (Contact::isEnabled()
+			&& $searchContacts
+			&& $this->systemSettings->getExternalShareCreationAllowed()) {
 
-		foreach (($result['groups'] ?? []) as $item) {
-			if (isset($item['value']['shareWith'])) {
-				$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
-			} else {
-				$this->handleFailedSearchResult($query, $item, 'groups');
-			}
-		}
-
-		foreach (($result['exact']['groups'] ?? []) as $item) {
-			if (isset($item['value']['shareWith'])) {
-				$items[] = (new Group($item['value']['shareWith']))->getRichUserArray();
-			} else {
-				$this->handleFailedSearchResult($query, $item, 'exact groups');
-			}
-		}
-
-		if (Contact::isEnabled() && $this->systemSettings->getExternalShareCreationAllowed()) {
 			foreach (Contact::search($query) as $contact) {
 				$items[] = $contact->getRichUserArray();
 			}
@@ -157,16 +225,8 @@ class SystemService {
 			// $items = array_merge($items, ContactGroup::search($query));
 		}
 
-		if (Circle::isEnabled()) {
-			foreach (($result['circles'] ?? []) as $item) {
-				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
-			}
-
-			foreach (($result['exact']['circles'] ?? []) as $item) {
-				$items[] = $this->userMapper->getUserObject(Circle::TYPE, $item['value']['shareWith'])->getRichUserArray();
-			}
-		}
 		$this->logger->debug('Search took {time}s overall', ['time' => microtime(true) - $startSearchTimer]);
+
 		return $items;
 	}
 

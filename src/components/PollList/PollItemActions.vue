@@ -10,19 +10,21 @@ import { t } from '@nextcloud/l10n'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 
-import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
-import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
-import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
-import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
-import PlusIcon from 'vue-material-design-icons/Plus.vue'
-
 import { usePollsStore } from '../../stores/polls.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { Poll } from '../../stores/poll.ts'
 import { computed, PropType, ref } from 'vue'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { NcDialog } from '@nextcloud/vue'
-import DeletePollDialog from './DeletePollDialog.vue'
+import DeletePollDialog from '../Modals/DeletePollDialog.vue'
+import TransferPollDialog from '../Modals/TransferPollDialog.vue'
+
+import ArchivePollIcon from 'vue-material-design-icons/Archive.vue'
+import ClonePollIcon from 'vue-material-design-icons/ContentCopy.vue'
+import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
+import PlusIcon from 'vue-material-design-icons/Plus.vue'
+import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
+import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
 
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
@@ -39,6 +41,7 @@ const adminAccess = computed(
 )
 
 const showDeleteDialog = ref(false)
+const showTransferDialog = ref(false)
 
 const showTakeOverDialog = ref(false)
 const takeOverDialog = {
@@ -147,9 +150,25 @@ async function takeOverPoll(): Promise<void> {
 				<DeletePollIcon />
 			</template>
 		</NcActionButton>
+		<NcActionButton
+			v-if="adminAccess || poll.permissions.edit"
+			class="danger"
+			:name="t('polls', 'Transfer poll ownership')"
+			:aria-label="t('polls', 'Transfer poll ownership')"
+			close-after-click
+			@click="showTransferDialog = true">
+			<template #icon>
+				<TransferPollIcon />
+			</template>
+		</NcActionButton>
 	</NcActions>
 
 	<NcDialog v-model:open="showTakeOverDialog" v-bind="takeOverDialog" />
+
+	<TransferPollDialog
+		v-model="showTransferDialog"
+		:poll="props.poll"
+		@close="showTransferDialog = false" />
 
 	<DeletePollDialog
 		v-model="showDeleteDialog"
