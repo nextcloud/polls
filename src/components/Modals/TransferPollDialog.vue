@@ -119,7 +119,7 @@ const dialogProps = computed(() => ({
 			v-model="newUser"
 			:search-types="[ISearchType.User]"
 			:input-label="
-				t('polls', ' Select the user to transfer the ownership to')
+				t('polls', 'Select the user to transfer the ownership to')
 			"
 			user-select
 			close-on-select
