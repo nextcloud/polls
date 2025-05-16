@@ -14,7 +14,7 @@ const pollStore = usePollStore()
 		ref="desc"
 		class="markup-description"
 		v-html="pollStore.descriptionMarkUp" />
-		<!-- eslint-enable vue/no-v-html -->
+	<!-- eslint-enable vue/no-v-html -->
 </template>
 
 <style lang="scss">
