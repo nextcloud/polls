@@ -9,7 +9,7 @@ import { useRouter } from 'vue-router'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import SpeakerIcon from 'vue-material-design-icons/Bullhorn.vue'
 import CheckIcon from 'vue-material-design-icons/Check.vue'
@@ -108,10 +108,7 @@ async function add() {
 					{{ t('polls', 'Cancel') }}
 				</template>
 			</NcButton>
-			<NcButton
-				:disabled="disableConfirm"
-				:variant="ButtonVariant.Primary"
-				@click="add()">
+			<NcButton :disabled="disableConfirm" :variant="'primary'" @click="add()">
 				<template #default>
 					{{ t('polls', 'Add') }}
 				</template>

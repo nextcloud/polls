@@ -29,7 +29,7 @@ const anonDialog = {
 		},
 		{
 			label: t('polls', 'Ok'),
-			variant: ButtonVariant.Primary,
+			variant: 'primary' as ButtonVariant,
 			callback: () => {
 				lockAnonymous()
 			},

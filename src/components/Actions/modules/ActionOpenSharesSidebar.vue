@@ -7,7 +7,7 @@
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import { Event } from '../../../Types'
 
 const caption = t('polls', 'Edit access')
@@ -25,10 +25,7 @@ function clickAction() {
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton
-			:variant="ButtonVariant.Primary"
-			:aria-label="caption"
-			@click="clickAction()">
+		<NcButton :variant="'primary'" :aria-label="caption" @click="clickAction()">
 			{{ caption }}
 		</NcButton>
 	</div>

@@ -11,7 +11,7 @@ import { t } from '@nextcloud/l10n'
 import NcModal from '@nextcloud/vue/components/NcModal'
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 
@@ -90,9 +90,7 @@ async function addOptionsList() {
 						</template>
 					</NcButton>
 
-					<NcButton
-						:variant="ButtonVariant.Primary"
-						@click="addOptionsList()">
+					<NcButton :variant="'primary'" @click="addOptionsList()">
 						<template #default>
 							{{ t('polls', 'OK') }}
 						</template>

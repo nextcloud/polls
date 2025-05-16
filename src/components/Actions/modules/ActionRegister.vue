@@ -7,7 +7,7 @@
 import { ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcModal from '@nextcloud/vue/components/NcModal'
 
 import PublicRegisterModal from '../../Public/PublicRegisterModal.vue'
@@ -20,7 +20,7 @@ const registerModalSize = 'large'
 <template>
 	<div class="action toggle-sidebar">
 		<NcButton
-			:variant="ButtonVariant.Primary"
+			:variant="'primary'"
 			:aria-label="caption"
 			@click="showRegistration = true">
 			{{ caption }}

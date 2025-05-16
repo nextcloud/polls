@@ -9,11 +9,12 @@ const pollStore = usePollStore()
 </script>
 
 <template>
-	<!-- eslint-disable-next-line vue/no-v-html -->
+	<!-- eslint-disable vue/no-v-html -->
 	<div
 		ref="desc"
 		class="markup-description"
 		v-html="pollStore.descriptionMarkUp" />
+	<!-- eslint-enable vue/no-v-html -->
 </template>
 
 <style lang="scss">

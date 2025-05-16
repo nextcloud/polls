@@ -8,7 +8,7 @@ import { ref } from 'vue'
 import { router } from '../../router.ts'
 import { t } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import { FilterType } from '../../stores/polls.ts'
 import { usePollStore } from '../../stores/poll.ts'
@@ -65,7 +65,7 @@ function routeAway() {
 			</template>
 		</NcButton>
 
-		<NcButton :variant="ButtonVariant.Error" @click="showDeleteDialog = true">
+		<NcButton :variant="'error'" @click="showDeleteDialog = true">
 			<template #icon>
 				<DeletePollIcon />
 			</template>

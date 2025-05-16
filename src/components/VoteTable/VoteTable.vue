@@ -9,7 +9,7 @@ import { t } from '@nextcloud/l10n'
 import { PollType, usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+
 import { NcButton } from '@nextcloud/vue'
 import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
 import { computed } from 'vue'
@@ -54,7 +54,7 @@ const showCalendarPeek = computed(
 				v-show="votesStore.sortByOption > 0"
 				class="sort-indicator"
 				:title="t('polls', 'Click to sort by name')"
-				:button-variant="ButtonVariant.TertiaryNoBackground"
+				:button-variant="'tertiary-no-background'"
 				@click="() => (votesStore.sortByOption = 0)">
 				<template #icon>
 					<SortNameIcon />

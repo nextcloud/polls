@@ -30,8 +30,8 @@ export type AppSettings = {
 	allowPollCreation: boolean
 	allowPollDownload: boolean
 	autoArchive: boolean
-	autoDelete: boolean
 	autoArchiveOffset: number
+	autoDelete: boolean
 	autoDeleteOffset: number
 	defaultPrivacyUrl: string
 	defaultImprintUrl: string

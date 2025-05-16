@@ -14,7 +14,7 @@ import { usePollsStore } from '../../stores/polls.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { Poll } from '../../stores/poll.ts'
 import { computed, PropType, ref } from 'vue'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+
 import { NcDialog } from '@nextcloud/vue'
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
@@ -25,6 +25,7 @@ import DeletePollIcon from 'vue-material-design-icons/Delete.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
+import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
@@ -56,7 +57,7 @@ const takeOverDialog = {
 		{ label: t('polls', 'Cancel') },
 		{
 			label: t('polls', 'Ok'),
-			variant: ButtonVariant.Primary,
+			variant: 'primary' as ButtonVariant,
 			callback: () => {
 				takeOverPoll()
 			},

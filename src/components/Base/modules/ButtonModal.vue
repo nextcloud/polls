@@ -32,7 +32,7 @@ defineProps({
 	},
 	buttonVariant: {
 		type: String as PropType<ButtonVariant>,
-		default: ButtonVariant.Primary,
+		default: 'primary',
 	},
 	noClose: {
 		type: Boolean,

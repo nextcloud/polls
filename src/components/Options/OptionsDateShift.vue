@@ -7,7 +7,7 @@
 import { ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 import NcSelect from '@nextcloud/vue/components/NcSelect'
 
 import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
@@ -67,7 +67,7 @@ function shiftDates(shift: TimeUnitsType) {
 				<NcButton
 					class="submit"
 					:aria-label="t('polls', 'Submit')"
-					:variant="ButtonVariant.Tertiary"
+					:variant="'tertiary'"
 					@click="shiftDates(shift)">
 					<template #icon>
 						<SubmitIcon />

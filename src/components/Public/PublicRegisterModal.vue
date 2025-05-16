@@ -12,7 +12,7 @@ import { generateUrl } from '@nextcloud/router'
 import { t } from '@nextcloud/l10n'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import { InputDiv } from '../Base/index.ts'
 import { SimpleLink, setCookie } from '../../helpers/index.ts'
@@ -323,7 +323,7 @@ async function submitRegistration(): Promise<void> {
 						</NcButton>
 
 						<NcButton
-							:variant="ButtonVariant.Primary"
+							:variant="'primary'"
 							:disabled="disableSubmit"
 							@click="submitRegistration()">
 							<template #default>
