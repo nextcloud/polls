@@ -93,6 +93,8 @@ export const useSessionStore = defineStore('session', {
 			allowPollDownload: true,
 			autoArchive: false,
 			autoArchiveOffset: 30,
+			autoDelete: false,
+			autoDeleteOffset: 30,
 			defaultPrivacyUrl: '',
 			defaultImprintUrl: '',
 			disclaimer: '',
