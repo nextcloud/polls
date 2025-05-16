@@ -25,10 +25,7 @@ function clickAction() {
 
 <template>
 	<div class="action toggle-sidebar">
-		<NcButton
-			:variant="'primary'"
-			:aria-label="caption"
-			@click="clickAction()">
+		<NcButton :variant="'primary'" :aria-label="caption" @click="clickAction()">
 			{{ caption }}
 		</NcButton>
 	</div>

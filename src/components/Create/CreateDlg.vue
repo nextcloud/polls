@@ -108,10 +108,7 @@ async function add() {
 					{{ t('polls', 'Cancel') }}
 				</template>
 			</NcButton>
-			<NcButton
-				:disabled="disableConfirm"
-				:variant="'primary'"
-				@click="add()">
+			<NcButton :disabled="disableConfirm" :variant="'primary'" @click="add()">
 				<template #default>
 					{{ t('polls', 'Add') }}
 				</template>

@@ -90,9 +90,7 @@ async function addOptionsList() {
 						</template>
 					</NcButton>
 
-					<NcButton
-						:variant="'primary'"
-						@click="addOptionsList()">
+					<NcButton :variant="'primary'" @click="addOptionsList()">
 						<template #default>
 							{{ t('polls', 'OK') }}
 						</template>

@@ -11,7 +11,6 @@ import { useSessionStore } from '../../../stores/session'
 
 import { t } from '@nextcloud/l10n'
 
-
 import ButtonModal from '../../Base/modules/ButtonModal.vue'
 import { ButtonMode } from '../../../Types'
 import PollCreateDlg from '../../Create/PollCreateDlg.vue'
