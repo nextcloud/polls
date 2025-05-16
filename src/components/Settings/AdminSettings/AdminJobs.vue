@@ -7,7 +7,7 @@
 import { Logger } from '../../../helpers/index.ts'
 import { t } from '@nextcloud/l10n'
 
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import { AdminAPI } from '../../../Api/index.ts'
 
@@ -113,7 +113,7 @@ async function runNotificationJob() {
 		</div>
 		<div class="job_buttons_section">
 			<NcButton
-				:variant="ButtonVariant.Primary"
+				:variant="'primary'"
 				:aria-label="autoreminder.text"
 				:disabled="autoreminder.disabled"
 				@click="runAutoReminderJob()">
@@ -121,7 +121,7 @@ async function runNotificationJob() {
 			</NcButton>
 
 			<NcButton
-				:variant="ButtonVariant.Primary"
+				:variant="'primary'"
 				:aria-label="janitor.text"
 				:disabled="janitor.disabled"
 				@click="runJanitorJob()">
@@ -129,7 +129,7 @@ async function runNotificationJob() {
 			</NcButton>
 
 			<NcButton
-				:variant="ButtonVariant.Primary"
+				:variant="'primary'"
 				:aria-label="notification.text"
 				:disabled="notification.disabled"
 				@click="runNotificationJob()">

@@ -9,9 +9,10 @@ import { t } from '@nextcloud/l10n'
 import { useSessionStore } from '../../stores/session.ts'
 import { Poll } from '../../stores/poll.ts'
 import { computed, PropType } from 'vue'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+
 import { NcDialog } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
+import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { usePollsStore } from '../../stores/polls.ts'
 
 const pollsStore = usePollsStore()
@@ -60,7 +61,7 @@ const dialogProps = {
 		{ label: t('polls', 'Cancel') },
 		{
 			label: t('polls', 'OK'),
-			variant: ButtonVariant.Primary,
+			variant: 'primary' as ButtonVariant,
 			callback: () => {
 				dialogOK()
 			},

@@ -9,7 +9,7 @@ import { ref } from 'vue'
 import { t, n } from '@nextcloud/l10n'
 
 import NcModal from '@nextcloud/vue/components/NcModal'
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-comfy-outline
 
@@ -65,7 +65,7 @@ async function clickAction() {
 <template>
 	<div class="action send-confirmations">
 		<NcButton
-			:variant="ButtonVariant.Primary"
+			:variant="'primary'"
 			:aria-label="sendButtonCaption"
 			:disabled="disableButton"
 			@click="clickAction()">

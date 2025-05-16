@@ -7,7 +7,7 @@
 import { ref, computed } from 'vue'
 import { t, n } from '@nextcloud/l10n'
 
-import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import NcButton from '@nextcloud/vue/components/NcButton'
 
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
 import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
@@ -102,7 +102,7 @@ function restoreItem(): void {
 	<div class="">
 		<NcButton
 			:name="computedTitle"
-			:variant="ButtonVariant.Tertiary"
+			:variant="'tertiary'"
 			:aria-label="computedTitle">
 			<template #icon>
 				<RestoreIcon

@@ -17,7 +17,7 @@ import { Logger } from '../../../helpers/index.ts'
 
 import { SignalingType } from '../../../Types/index.ts'
 import { NcButton } from '@nextcloud/vue'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+
 import { t } from '@nextcloud/l10n'
 
 const model = defineModel<string | number>({
@@ -238,7 +238,7 @@ onMounted(() => {
 				v-if="useNumModifiers && !props.useNumericVariant"
 				class="date-add-button"
 				:title="t('polls', 'minus')"
-				:variant="ButtonVariant.TertiaryNoBackground"
+				:variant="'tertiary-no-background'"
 				@click="subtract">
 				<template #icon>
 					<ChevronLeftIcon />
@@ -273,7 +273,7 @@ onMounted(() => {
 			<NcButton
 				v-if="useNumModifiers && !props.useNumericVariant"
 				:title="t('polls', 'plus')"
-				:variant="ButtonVariant.TertiaryNoBackground"
+				:variant="'tertiary-no-background'"
 				@click="add">
 				<template #icon>
 					<ChevronRightIcon />

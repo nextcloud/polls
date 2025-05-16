@@ -11,7 +11,7 @@ import UserItem from '../User/UserItem.vue'
 import { usePollStore } from '../../stores/poll.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { useVotesStore } from '../../stores/votes.ts'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+
 import { NcActionButton, NcActions, NcActionText } from '@nextcloud/vue'
 import { PropType } from 'vue'
 import { ViewMode } from '../../stores/preferences.ts'
@@ -63,7 +63,7 @@ async function removeUser(userId: string) {
 				"
 				class="user-menu"
 				placement="right"
-				:variant="ButtonVariant.TertiaryNoBackground"
+				:variant="'tertiary-no-background'"
 				force-menu>
 				<NcActionText :name="user.displayName" />
 				<NcActionButton
@@ -82,7 +82,7 @@ async function removeUser(userId: string) {
 				v-if="user.id === sessionStore.currentUser.id"
 				class="user-menu"
 				placement="right"
-				:variant="ButtonVariant.TertiaryNoBackground"
+				:variant="'tertiary-no-background'"
 				force-menu
 				no-menu-icon>
 			</VoteMenu>

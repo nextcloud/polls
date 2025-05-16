@@ -8,12 +8,13 @@ import { t } from '@nextcloud/l10n'
 
 import { Poll, usePollStore } from '../../stores/poll.ts'
 import { computed, PropType, ref } from 'vue'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+
 import { NcDialog } from '@nextcloud/vue'
 import UserSearch from '../User/UserSearch.vue'
 import { ISearchType, User } from '../../Types/index.ts'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { usePollsStore } from '../../stores/polls.ts'
+import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 const pollsStore = usePollsStore()
 const pollStore = usePollStore()
@@ -103,7 +104,7 @@ const dialogProps = computed(() => ({
 		{ label: t('polls', 'Cancel') },
 		{
 			label: t('polls', 'OK'),
-			variant: ButtonVariant.Primary,
+			variant: 'primary' as ButtonVariant,
 			disabled: !newUser.value,
 			callback: () => {
 				dialogOK()
