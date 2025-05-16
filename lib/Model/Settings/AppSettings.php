@@ -138,7 +138,7 @@ class AppSettings implements JsonSerializable {
 				return true;
 			}
 
-			$this->logger->warning('Setting type does not match', [
+			$this->logger->debug('Setting type does not match', [
 				'app' => $app,
 				'key' => $key,
 				'expectedType' => $expectedType,
@@ -146,7 +146,7 @@ class AppSettings implements JsonSerializable {
 			]);
 
 		} catch (\Exception $e) {
-			$this->logger->warning('Could not get setting type', [
+			$this->logger->debug('Could not get setting type', [
 				'app' => $app,
 				'key' => $key,
 				'expectedType' => $expectedType,
