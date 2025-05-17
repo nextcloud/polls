@@ -304,6 +304,7 @@ OC.L10N.register(
     "Reopen poll" : "Znovuotevřít anketu",
     "Close poll" : "Uzavřít anketu",
     "Poll closing date" : "Datum uzavření ankety",
+    "Error {action} poll." : "Chyba {action} ankety.",
     "Restore poll" : "Obnovit anketu",
     "Archive poll" : "Archivovat anketu",
     "Delete poll" : "Smazat anketu",

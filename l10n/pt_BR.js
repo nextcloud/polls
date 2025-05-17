@@ -52,6 +52,7 @@ OC.L10N.register(
     "{actor} has invited you to the poll \"%s\"." : "{actor} convidou você para a enquete \"%s\".",
     "%s took over your poll" : "%s assumiu sua enquete",
     "{actor} took over your poll \"%s\" and is the new owner." : "{actor} assumiu sua enquete \"%s\" e é o novo proprietário.",
+    "%s is the new owner of your poll. " : "%s é o novo proprietário de sua enquete.",
     "%s deleted your poll" : "%s excluiu sua enquete",
     "{actor} deleted your poll \"%s\"." : "{actor} excluiu sua enquete \"%s\".",
     "%s archived your poll" : "%s arquivou sua enquete",

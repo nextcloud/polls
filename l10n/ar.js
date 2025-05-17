@@ -301,6 +301,7 @@ OC.L10N.register(
     "Reopen poll" : "إعادة فتح الاستبيان",
     "Close poll" : "إغلاق التصويت",
     "Poll closing date" : "تاريخ إغلاق التصويت",
+    "Error {action} poll." : "خطأ في {action} الاستبيان.",
     "Restore poll" : "استعادة الاستبيان",
     "Archive poll" : "أرشفة الاستبيان",
     "Delete poll" : "حذف الاستبيان",

@@ -286,6 +286,7 @@ OC.L10N.register(
     "Reopen poll" : "Torna a obrir l'enquesta",
     "Close poll" : "Tanca l'enquesta",
     "Poll closing date" : "Data de tancament de l'enquesta",
+    "Error {action} poll." : "Error {action} enquesta.",
     "Restore poll" : "Restaura l'enquesta",
     "Archive poll" : "Arxiva enquesta",
     "Delete poll" : "Suprimir enquesta",
