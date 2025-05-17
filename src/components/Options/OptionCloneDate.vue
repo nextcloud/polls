@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, ref, PropType } from 'vue'
+import { computed, ref } from 'vue'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 
@@ -15,14 +15,9 @@ import { InputDiv } from '../Base/index.ts'
 import { useOptionsStore, Option, Sequence } from '../../stores/options.ts'
 import { dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
 
-const optionsStore = useOptionsStore()
+const { option } = defineProps<{ option: Option }>()
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-})
+const optionsStore = useOptionsStore()
 
 const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) => ({
 	id: key,
@@ -38,7 +33,7 @@ const sequence = ref<Sequence>({
 })
 
 const dateBaseOptionString = computed(() =>
-	moment.unix(props.option.timestamp).format('LLLL'),
+	moment.unix(option.timestamp).format('LLLL'),
 )
 
 /**
@@ -46,7 +41,7 @@ const dateBaseOptionString = computed(() =>
  */
 function createSequence() {
 	optionsStore.sequence({
-		option: props.option,
+		option,
 		sequence: sequence.value,
 	})
 	emit('close')

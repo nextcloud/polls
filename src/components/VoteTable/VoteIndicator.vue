@@ -10,19 +10,17 @@ import CloseIcon from 'vue-material-design-icons/Close.vue'
 import { MaybeIcon } from '../AppIcons/index.ts'
 import { Answer } from '../../Types/index.ts'
 
-const props = defineProps({
-	answer: {
-		type: String,
-		default: '',
-	},
-	active: {
-		type: Boolean,
-		default: false,
-	},
-})
+const ICON_SIZE = 26
+
+interface Props {
+	answer: Answer
+	active?: boolean
+}
+
+const { answer, active = false } = defineProps<Props>()
 
 const emit = defineEmits(['click'])
-const iconSize = 26
+
 const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-error',
 )
@@ -34,20 +32,17 @@ const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyVal
 )
 
 const foregroundColor = computed(() => {
-	if (props.answer === Answer.Yes) {
+	if (answer === Answer.Yes) {
 		return colorCodeYes
 	}
-	if (props.answer === Answer.Maybe) {
+	if (answer === Answer.Maybe) {
 		return colorCodeMaybe
 	}
 	return colorCodeNo
 })
 
-/**
- *
- */
 function onClick() {
-	if (props.active) {
+	if (active) {
 		emit('click')
 	}
 }
@@ -55,15 +50,15 @@ function onClick() {
 
 <template>
 	<div :class="['vote-indicator', active]" @click="onClick()">
-		<MaybeIcon v-if="answer === Answer.Maybe" :size="iconSize" />
+		<MaybeIcon v-if="answer === Answer.Maybe" :size="ICON_SIZE" />
 		<CheckIcon
 			v-if="answer === Answer.Yes"
 			:fill-color="foregroundColor"
-			:size="iconSize" />
+			:size="ICON_SIZE" />
 		<CloseIcon
 			v-if="answer === Answer.No"
 			:fill-color="foregroundColor"
-			:size="iconSize" />
+			:size="ICON_SIZE" />
 	</div>
 </template>
 

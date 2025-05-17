@@ -5,7 +5,7 @@
 
 <template>
 	<div class="vote-column">
-		<OptionItem :option="props.option" />
+		<OptionItem :option="option" />
 		<div
 			v-for="poll in comboStore.polls"
 			:key="poll.id"
@@ -22,20 +22,14 @@
 </template>
 
 <script setup lang="ts">
-import { PropType } from 'vue'
 import VoteItem from './VoteItem.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import { useComboStore } from '../../stores/combo.ts'
 import { Option } from '../../Types/index.ts'
 
-const comboStore = useComboStore()
+const { option } = defineProps<{ option: Option }>()
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-})
+const comboStore = useComboStore()
 </script>
 
 <style lang="scss">

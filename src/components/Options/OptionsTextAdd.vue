@@ -14,12 +14,9 @@ import { AxiosError } from '@nextcloud/axios'
 
 const optionsStore = useOptionsStore()
 
-const props = defineProps({
-	placeholder: {
-		type: String,
-		default: t('polls', 'Add option'),
-	},
-})
+const { placeholder = t('polls', 'Add option') } = defineProps<{
+	placeholder?: string
+}>()
 
 const newPollText = ref('')
 
@@ -56,7 +53,7 @@ async function addOption(): Promise<void> {
 <template>
 	<InputDiv
 		v-model="newPollText"
-		:placeholder="props.placeholder"
+		:placeholder="placeholder"
 		submit
 		@submit="addOption()" />
 </template>

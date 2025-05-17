@@ -14,28 +14,21 @@ import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 import LockIcon from 'vue-material-design-icons/Lock.vue'
 import UndoIcon from 'vue-material-design-icons/ArrowULeftTop.vue'
 
-const props = defineProps({
-	timeout: {
-		type: Number,
-		default: 4,
-	},
-	name: {
-		type: String,
-		default: t('polls', 'Delete'),
-	},
-	iconSize: {
-		type: Number,
-		default: 20,
-	},
-	restore: {
-		type: Boolean,
-		default: false,
-	},
-	lock: {
-		type: Boolean,
-		default: false,
-	},
-})
+interface Props {
+	timeout?: number
+	name?: string
+	iconSize?: number
+	restore?: boolean
+	lock?: boolean
+}
+
+const {
+	timeout = 4,
+	name = t('polls', 'Delete'),
+	iconSize = 20,
+	restore = false,
+	lock = false,
+} = defineProps<Props>()
 
 const deleteInterval = ref<null | NodeJS.Timeout>(null)
 const deleteTimeout = ref<null | NodeJS.Timeout>(null)
@@ -52,19 +45,19 @@ const countdownTitle = computed(() =>
 )
 
 const computedTitle = computed(() =>
-	deleteTimeout.value ? countdownTitle.value : props.name,
+	deleteTimeout.value ? countdownTitle.value : name,
 )
 
 const emit = defineEmits(['delete', 'restore'])
 
 function deleteItem(): void {
 	// delete immediately
-	if (props.timeout === 0) {
+	if (timeout === 0) {
 		emit('delete')
 		return
 	}
 
-	countdown.value = props.timeout
+	countdown.value = timeout
 
 	deleteInterval.value = setInterval(() => {
 		countdown.value -= 1
@@ -77,8 +70,8 @@ function deleteItem(): void {
 		emit('delete')
 		deleteTimeout.value = null
 		deleteInterval.value = null
-		countdown.value = props.timeout
-	}, props.timeout * 1000)
+		countdown.value = timeout
+	}, timeout * 1000)
 }
 
 function cancelDelete(): void {
@@ -86,7 +79,7 @@ function cancelDelete(): void {
 	clearInterval(deleteInterval.value as NodeJS.Timeout)
 	deleteTimeout.value = null
 	deleteInterval.value = null
-	countdown.value = props.timeout
+	countdown.value = timeout
 }
 
 function restoreItem(): void {

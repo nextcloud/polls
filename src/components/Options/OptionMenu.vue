@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 
 import NcActions from '@nextcloud/vue/components/NcActions'
@@ -23,38 +23,31 @@ import { usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore, Option } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
+interface Props {
+	option: Option
+	useSort?: boolean
+}
+
+const { option, useSort = false } = defineProps<Props>()
+
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 
 const cloneModal = ref(false)
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		default: null,
-	},
-	useSort: {
-		type: Boolean,
-		default: false,
-	},
-})
-
 const deleteOrRestoreStaticText = computed(() =>
-	props.option.deleted
-		? t('polls', 'Restore option')
-		: t('polls', 'Delete option'),
+	option.deleted ? t('polls', 'Restore option') : t('polls', 'Delete option'),
 )
 
 const deleteAllowed = computed(
-	() =>
-		(props.option.isOwner || pollStore.permissions.edit) && !pollStore.isClosed,
+	() => (option.isOwner || pollStore.permissions.edit) && !pollStore.isClosed,
 )
 const confirmAllowed = computed(
-	() => !props.option.deleted && pollStore.isClosed && pollStore.permissions.edit,
+	() => !option.deleted && pollStore.isClosed && pollStore.permissions.edit,
 )
 const cloneAllowed = computed(
-	() => !props.option.deleted && !pollStore.isClosed && pollStore.permissions.edit,
+	() => !option.deleted && !pollStore.isClosed && pollStore.permissions.edit,
 )
 
 /**
@@ -68,18 +61,18 @@ function cloneOptionModal() {
  *
  */
 function deleteRestoreOption() {
-	if (props.option.deleted) {
-		optionsStore.restore({ option: props.option })
+	if (option.deleted) {
+		optionsStore.restore({ option })
 		return
 	}
-	optionsStore.delete({ option: props.option })
+	optionsStore.delete({ option })
 }
 
 /**
  *
  */
 function confirmOption() {
-	optionsStore.confirm({ option: props.option })
+	optionsStore.confirm({ option })
 }
 </script>
 
@@ -90,7 +83,7 @@ function confirmOption() {
 			:name="deleteOrRestoreStaticText"
 			@click="deleteRestoreOption()">
 			<template #icon>
-				<DeleteIcon v-if="!props.option.deleted" />
+				<DeleteIcon v-if="!option.deleted" />
 				<RestoreIcon v-else />
 			</template>
 		</NcActionButton>
@@ -107,17 +100,17 @@ function confirmOption() {
 		<NcActionButton
 			v-if="confirmAllowed"
 			:name="
-				props.option.confirmed
+				option.confirmed
 					? t('polls', 'Unconfirm option')
 					: t('polls', 'Confirm option')
 			"
 			@click="confirmOption()">
 			<template #icon>
-				<UnconfirmIcon v-if="props.option.confirmed" />
+				<UnconfirmIcon v-if="option.confirmed" />
 				<ConfirmIcon v-else />
 			</template>
 			{{
-				props.option.confirmed
+				option.confirmed
 					? t('polls', 'Unconfirm option')
 					: t('polls', 'Confirm option')
 			}}
@@ -136,7 +129,7 @@ function confirmOption() {
 
 	<NcModal v-if="cloneModal" size="small" no-close>
 		<OptionCloneDate
-			:option="props.option"
+			:option="option"
 			class="modal__content"
 			@close="cloneModal = false" />
 	</NcModal>

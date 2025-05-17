@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, PropType } from 'vue'
+import { computed, onMounted } from 'vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import ArrowRightIcon from 'vue-material-design-icons/ArrowRight.vue'
@@ -20,122 +20,89 @@ import { NcButton } from '@nextcloud/vue'
 
 import { t } from '@nextcloud/l10n'
 
-const model = defineModel<string | number>({
-	required: true,
-	type: [String, Number],
-})
-const numericModelValue = computed(() =>
-	typeof model.value === 'number' ? model.value : parseInt(model.value),
-)
+interface Props {
+	signalingClass?: SignalingType
+	placeholder?: string
+	type?: 'text' | 'email' | 'number' | 'url'
+	inputmode?: 'text' | 'none' | 'numeric' | 'email' | 'url'
+	useNumModifiers?: boolean
+	modifierStepValue?: number
+	numMax?: number
+	numMin?: number
+	numWrap?: boolean
+	focus?: boolean
+	submit?: boolean
+	helperText?: string
+	label?: string
+	useNumericVariant?: boolean
+	disabled?: boolean
+}
+const model = defineModel<string | number>({ required: true })
 
 const vInputFocus = {
 	mounted: (el: { focus: () => void }) => {
-		if (props.focus) {
+		if (focus) {
 			el.focus()
 		}
 	},
 }
 
-const props = defineProps({
-	signalingClass: {
-		type: String as PropType<SignalingType>,
-		default: SignalingType.None,
-	},
-	placeholder: {
-		type: String,
-		default: '',
-	},
-	type: {
-		type: String as PropType<'text' | 'email' | 'number' | 'url'>,
-		default: 'text',
-	},
-	inputmode: {
-		type: String as PropType<'text' | 'none' | 'numeric' | 'email' | 'url'>,
-		default: null,
-	},
-	useNumModifiers: {
-		type: Boolean,
-		default: false,
-	},
-	modifierStepValue: {
-		type: Number,
-		default: 1,
-	},
-	numMax: {
-		type: Number,
-		default: null,
-	},
-	numMin: {
-		type: Number,
-		default: null,
-	},
-	numWrap: {
-		type: Boolean,
-		default: false,
-	},
-	focus: {
-		type: Boolean,
-		default: false,
-	},
-	submit: {
-		type: Boolean,
-		default: false,
-	},
-	helperText: {
-		type: String,
-		default: null,
-	},
-	label: {
-		type: String,
-		default: null,
-	},
-	useNumericVariant: {
-		type: Boolean,
-		default: false,
-	},
-	disabled: {
-		type: Boolean,
-		default: false,
-	},
-})
+const {
+	signalingClass = SignalingType.None,
+	placeholder = '',
+	type = 'text',
+	inputmode,
+	useNumModifiers = false,
+	modifierStepValue = 1,
+	numMax,
+	numMin,
+	numWrap = false,
+	focus = false,
+	submit = false,
+	helperText = null,
+	label = null,
+	useNumericVariant = false,
+	disabled = false,
+} = defineProps<Props>()
 
 const emit = defineEmits(['input', 'change', 'submit'])
 
+const numericModelValue = computed(() =>
+	typeof model.value === 'number' ? model.value : parseInt(model.value),
+)
+
 const computedSignalingClass = computed(() => {
-	if (props.signalingClass === SignalingType.Valid) {
+	if (signalingClass === SignalingType.Valid) {
 		return SignalingType.Success
 	}
-	if (props.signalingClass === SignalingType.InValid) {
+	if (signalingClass === SignalingType.InValid) {
 		return SignalingType.Error
 	}
-	return props.signalingClass
+	return signalingClass
 })
 
-const isNumMinSet = computed(() => props.numMin !== null)
-const isNumMaxSet = computed(() => props.numMax !== null)
 const checking = computed(
 	() =>
-		!props.useNumModifiers
-		&& computedSignalingClass.value === SignalingType.Checking,
+		!useNumModifiers && computedSignalingClass.value === SignalingType.Checking,
 )
 const error = computed(
 	() =>
 		!checking.value
-		&& !props.useNumModifiers
+		&& !useNumModifiers
 		&& computedSignalingClass.value === SignalingType.Error,
 )
 const success = computed(
 	() =>
 		!checking.value
-		&& !props.useNumModifiers
+		&& !useNumModifiers
 		&& computedSignalingClass.value === SignalingType.Success
-		&& !props.submit,
+		&& !submit,
 )
 const showSubmit = computed(
 	() =>
 		!checking.value
-		&& !props.useNumModifiers
-		&& props.submit
+		&& !useNumModifiers
+		&& submit
 		&& computedSignalingClass.value !== SignalingType.Error,
 )
 
@@ -144,7 +111,7 @@ const showSubmit = computed(
  * Returns false in case of failed validation and just logs a warning
  */
 function assertBoundaries() {
-	if (isNumMinSet.value && isNumMaxSet.value && props.numMin >= props.numMax) {
+	if (numMin && numMax && numMin >= numMax) {
 		Logger.warn(
 			'numMin is greater or equal than numMax. Validation will be skipped.',
 		)
@@ -160,29 +127,29 @@ function assertBoundaries() {
  * @return value kept within defined boundaries
  */
 function numCheckBoundaries(value: number) {
-	if (isNumMaxSet.value && value > props.numMax) {
+	if (numMax && value > numMax) {
 		if (
-			props.numWrap
-			&& isNumMinSet.value
+			numWrap
+			&& numMin
 			&& assertBoundaries()
-			&& numericModelValue.value === props.numMax
+			&& numericModelValue.value === numMax
 		) {
-			value = props.numMin
+			value = numMin
 		} else {
-			value = props.numMax
+			value = numMax
 		}
 	}
 
-	if (isNumMinSet.value && value < props.numMin) {
+	if (numMin && value < numMin) {
 		if (
-			props.numWrap
-			&& isNumMaxSet.value
+			numWrap
+			&& numMax
 			&& assertBoundaries()
-			&& numericModelValue.value === props.numMin
+			&& numericModelValue.value === numMin
 		) {
-			value = props.numMax
+			value = numMax
 		} else {
-			value = props.numMin
+			value = numMin
 		}
 	}
 
@@ -193,9 +160,7 @@ function numCheckBoundaries(value: number) {
  *  Add modifierStepValue to value
  */
 function add() {
-	const nextValue = numCheckBoundaries(
-		numericModelValue.value + props.modifierStepValue,
-	)
+	const nextValue = numCheckBoundaries(numericModelValue.value + modifierStepValue)
 
 	if (model.value !== nextValue) {
 		model.value = nextValue
@@ -208,9 +173,7 @@ function add() {
  * emits 'change' event if model.value has changed
  */
 function subtract() {
-	const nextValue = numCheckBoundaries(
-		numericModelValue.value - props.modifierStepValue,
-	)
+	const nextValue = numCheckBoundaries(numericModelValue.value - modifierStepValue)
 
 	if (model.value !== nextValue) {
 		model.value = nextValue
@@ -235,7 +198,7 @@ onMounted(() => {
 
 		<div class="input-wrapper">
 			<NcButton
-				v-if="useNumModifiers && !props.useNumericVariant"
+				v-if="useNumModifiers && !useNumericVariant"
 				class="date-add-button"
 				:title="t('polls', 'minus')"
 				:variant="'tertiary-no-background'"
@@ -254,7 +217,7 @@ onMounted(() => {
 				:placeholder="placeholder"
 				:class="[
 					{
-						'has-modifier': useNumModifiers && props.useNumericVariant,
+						'has-modifier': useNumModifiers && useNumericVariant,
 						'has-submit': submit,
 					},
 					computedSignalingClass,
@@ -271,7 +234,7 @@ onMounted(() => {
 				class="signaling-icon submit"
 				@click="emit('submit')" />
 			<NcButton
-				v-if="useNumModifiers && !props.useNumericVariant"
+				v-if="useNumModifiers && !useNumericVariant"
 				:title="t('polls', 'plus')"
 				:variant="'tertiary-no-background'"
 				@click="add">
@@ -280,11 +243,11 @@ onMounted(() => {
 				</template>
 			</NcButton>
 			<MinusIcon
-				v-if="useNumModifiers && props.useNumericVariant"
+				v-if="useNumModifiers && useNumericVariant"
 				class="modifier subtract"
 				@click="subtract()" />
 			<PlusIcon
-				v-if="useNumModifiers && props.useNumericVariant"
+				v-if="useNumModifiers && useNumericVariant"
 				class="modifier add"
 				@click="add()" />
 		</div>

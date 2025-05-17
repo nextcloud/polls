@@ -4,7 +4,6 @@
 -->
 
 <script setup lang="ts">
-import { PropType } from 'vue'
 import { t } from '@nextcloud/l10n'
 
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
@@ -20,27 +19,19 @@ import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { useSessionStore } from '../../stores/session.ts'
 import { Poll, PollType } from '../../Types/index.ts'
 
-const sessionStore = useSessionStore()
-
 const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
-const props = defineProps({
-	poll: {
-		type: Object as PropType<Poll>,
-		required: true,
-	},
-})
+const { poll } = defineProps<{ poll: Poll }>()
+
+const sessionStore = useSessionStore()
 </script>
 
 <template>
 	<NcAppNavigationItem
-		:name="props.poll.configuration.title"
-		:to="{
-			name: 'vote',
-			params: { id: props.poll.id },
-		}"
-		:class="{ closed: props.poll.status.isExpired }">
+		:name="poll.configuration.title"
+		:to="{ name: 'vote', params: { id: poll.id } }"
+		:class="{ closed: poll.status.isExpired }">
 		<template #icon>
-			<TextPollIcon v-if="props.poll.type === PollType.Text" />
+			<TextPollIcon v-if="poll.type === PollType.Text" />
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>
@@ -55,7 +46,7 @@ const props = defineProps({
 			</NcActionButton>
 
 			<NcActionButton
-				v-if="props.poll.permissions.edit && !props.poll.status.isArchived"
+				v-if="poll.permissions.edit && !poll.status.isArchived"
 				:name="t('polls', 'Archive poll')"
 				:aria-label="t('polls', 'Archive poll')"
 				@click="emit('toggleArchive')">
@@ -65,7 +56,7 @@ const props = defineProps({
 			</NcActionButton>
 
 			<NcActionButton
-				v-if="props.poll.permissions.edit && props.poll.status.isArchived"
+				v-if="poll.permissions.edit && poll.status.isArchived"
 				:name="t('polls', 'Restore poll')"
 				:aria-label="t('polls', 'Restore poll')"
 				@click="emit('toggleArchive')">
@@ -75,7 +66,7 @@ const props = defineProps({
 			</NcActionButton>
 
 			<NcActionButton
-				v-if="props.poll.permissions.edit && props.poll.status.isArchived"
+				v-if="poll.permissions.edit && poll.status.isArchived"
 				class="danger"
 				:name="t('polls', 'Delete poll')"
 				:aria-label="t('polls', 'Delete poll')"

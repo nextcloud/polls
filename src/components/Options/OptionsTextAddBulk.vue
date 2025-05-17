@@ -17,21 +17,20 @@ import PasteIcon from 'vue-material-design-icons/ClipboardTextMultiple.vue'
 
 import { useOptionsStore } from '../../stores/options.ts'
 
+interface Props {
+	placeholder?: string
+	caption?: string
+}
+
 const optionsStore = useOptionsStore()
 
 const newPollTexts = ref('')
 const showModal = ref(false)
 
-const props = defineProps({
-	placeholder: {
-		type: String,
-		default: t('polls', 'Add options list (one option per line)'),
-	},
-	caption: {
-		type: String,
-		default: t('polls', 'Paste option list'),
-	},
-})
+const {
+	placeholder = t('polls', 'Add options list (one option per line)'),
+	caption = t('polls', 'Paste option list'),
+} = defineProps<Props>()
 
 /**
  *
@@ -57,8 +56,8 @@ async function addOptionsList() {
 	<div>
 		<NcActions>
 			<NcActionButton
-				:name="props.caption"
-				:aria-label="props.caption"
+				:name="caption"
+				:aria-label="caption"
 				@click="showModal = true">
 				<template #icon>
 					<PasteIcon />
@@ -81,7 +80,7 @@ async function addOptionsList() {
 				<textarea
 					v-model="newPollTexts"
 					class="add-options-list"
-					:placeholder="props.placeholder" />
+					:placeholder="placeholder" />
 
 				<div class="modal__buttons">
 					<NcButton @click="showModal = false">

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { PropType, ref } from 'vue'
+import { ref } from 'vue'
 import { debounce } from 'lodash'
 import { t } from '@nextcloud/l10n'
 
@@ -15,32 +15,26 @@ import { Logger } from '../../helpers/index.ts'
 import { ISearchType, User } from '../../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-const users = ref<User[]>([])
-const isLoading = ref(false)
-const model = defineModel({
-	required: true,
-	type: Object as PropType<User | null>,
-})
+interface Props {
+	placeholder?: string
+	ariaLabel?: string
+	searchTypes?: ISearchType[]
+	closeOnSelect?: boolean
+}
+
 const emit = defineEmits(['userSelected'])
 
-const props = defineProps({
-	placeholder: {
-		type: String,
-		default: t('polls', 'Type to start searching ...'),
-	},
-	ariaLabel: {
-		type: String,
-		default: t('polls', 'Select users'),
-	},
-	searchTypes: {
-		type: Array as PropType<ISearchType[]>,
-		default: () => [ISearchType.All],
-	},
-	closeOnSelect: {
-		type: Boolean,
-		default: false,
-	},
-})
+const modelValue = defineModel<User | null>({ required: true })
+
+const {
+	placeholder = t('polls', 'Type to start searching ...'),
+	ariaLabel = t('polls', 'Select users'),
+	searchTypes = [ISearchType.All],
+	closeOnSelect = false,
+} = defineProps<Props>()
+
+const users = ref<User[]>([])
+const isLoading = ref(false)
 
 const loadUsersAsync = debounce(async function (query: string) {
 	if (!query) {
@@ -51,7 +45,7 @@ const loadUsersAsync = debounce(async function (query: string) {
 	isLoading.value = true
 
 	try {
-		const response = await AppSettingsAPI.getUsers(query, props.searchTypes)
+		const response = await AppSettingsAPI.getUsers(query, searchTypes)
 		users.value = response.data.siteusers
 		isLoading.value = false
 	} catch (error) {
@@ -68,15 +62,15 @@ async function optionSelected(user: User) {
 }
 
 const selectProps = {
-	ariaLabelCombobox: props.ariaLabel,
+	ariaLabelCombobox: ariaLabel,
 	multiple: false,
 	userSelect: true,
 	tagWidth: 80,
 	loading: isLoading.value,
 	filterable: false,
 	searchable: true,
-	placeholder: props.placeholder,
-	closeOnSelect: props.closeOnSelect,
+	placeholder,
+	closeOnSelect,
 	dropdownShouldOpen: () => users.value.length > 0,
 	label: 'displayName',
 }
@@ -85,7 +79,7 @@ const selectProps = {
 <template>
 	<NcSelect
 		id="ajax"
-		v-model="model"
+		v-model="modelValue"
 		v-bind="selectProps"
 		:options="users"
 		@option:selected="optionSelected"

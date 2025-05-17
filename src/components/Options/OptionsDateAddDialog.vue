@@ -37,20 +37,6 @@ const successColor = getComputedStyle(document.documentElement).getPropertyValue
 )
 const result = ref(StatusResults.None)
 
-const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) => ({
-	id: key,
-	value: value.id,
-	name: value.name,
-	timeOption: value.timeOption,
-}))
-
-const dateTimeOptionsFiltered = computed(() => {
-	if (allDay.value) {
-		return dateTimeOptions.filter((unit) => !unit.timeOption)
-	}
-	return dateTimeOptions
-})
-
 // *** refs for the inputs
 // allDay is a boolean to toggle between all day and time based options
 const allDay = ref(true)
@@ -81,6 +67,20 @@ const sequenceInput = ref<Sequence>({
 	unit: dateTimeUnitsKeyed.week,
 	stepWidth: 1,
 	repetitions: 0,
+})
+
+const dateTimeOptions = Object.entries(dateTimeUnitsKeyed).map(([key, value]) => ({
+	id: key,
+	value: value.id,
+	name: value.name,
+	timeOption: value.timeOption,
+}))
+
+const dateTimeOptionsFiltered = computed(() => {
+	if (allDay.value) {
+		return dateTimeOptions.filter((unit) => !unit.timeOption)
+	}
+	return dateTimeOptions
 })
 
 // computed from as DateTime from Luxon
@@ -284,8 +284,8 @@ async function addOption(): Promise<void> {
 					<div class="preview___entry">
 						<DateBox
 							class="from"
-							:luxon-date="from"
-							:luxon-duration="duration" />
+							:date-time="from"
+							:duration="duration" />
 					</div>
 					<div
 						v-if="sequenceInput.repetitions > 0"
@@ -301,8 +301,8 @@ async function addOption(): Promise<void> {
 						<div class="preview___entry">
 							<DateBox
 								class="from"
-								:luxon-date="lastFrom"
-								:luxon-duration="duration" />
+								:date-time="lastFrom"
+								:duration="duration" />
 						</div>
 					</div>
 				</div>

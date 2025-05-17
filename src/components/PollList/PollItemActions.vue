@@ -13,7 +13,7 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import { usePollsStore } from '../../stores/polls.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { Poll } from '../../stores/poll.ts'
-import { computed, PropType, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { NcDialog } from '@nextcloud/vue'
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
@@ -27,18 +27,13 @@ import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
+const { poll } = defineProps<{ poll: Poll }>()
+
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
 
-const props = defineProps({
-	poll: {
-		type: Object as PropType<Poll>,
-		required: true,
-	},
-})
-
 const adminAccess = computed(
-	() => !props.poll.permissions.view && sessionStore.currentUser.isAdmin,
+	() => !poll.permissions.view && sessionStore.currentUser.isAdmin,
 )
 
 const showDeleteDialog = ref(false)
@@ -50,7 +45,7 @@ const takeOverDialog = {
 	message: t(
 		'polls',
 		'You will become the new owner and {username} will get notified.',
-		{ username: props.poll.owner.displayName },
+		{ username: poll.owner.displayName },
 	),
 
 	buttons: [
@@ -67,7 +62,7 @@ const takeOverDialog = {
 
 async function toggleArchive() {
 	try {
-		await pollsStore.toggleArchive({ pollId: props.poll.id })
+		await pollsStore.toggleArchive({ pollId: poll.id })
 	} catch {
 		showError(t('polls', 'Error archiving/restoring poll.'))
 	}
@@ -75,7 +70,7 @@ async function toggleArchive() {
 
 async function clonePoll() {
 	try {
-		await pollsStore.clone({ pollId: props.poll.id })
+		await pollsStore.clone({ pollId: poll.id })
 	} catch {
 		showError(t('polls', 'Error cloning poll.'))
 	}
@@ -87,7 +82,7 @@ async function takeOverPoll(): Promise<void> {
 	}
 
 	try {
-		await pollsStore.takeOver({ pollId: props.poll.id })
+		await pollsStore.takeOver({ pollId: poll.id })
 	} catch {
 		showError(t('polls', 'Error taking over poll.'))
 	}
@@ -168,11 +163,11 @@ async function takeOverPoll(): Promise<void> {
 
 	<TransferPollDialog
 		v-model="showTransferDialog"
-		:poll="props.poll"
+		:poll="poll"
 		@close="showTransferDialog = false" />
 
 	<DeletePollDialog
 		v-model="showDeleteDialog"
-		:poll="props.poll"
+		:poll="poll"
 		@close="showDeleteDialog = false" />
 </template>

@@ -13,7 +13,6 @@ import { useSessionStore } from '../../stores/session.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
 import { NcActionButton, NcActions, NcActionText } from '@nextcloud/vue'
-import { PropType } from 'vue'
 import { ViewMode } from '../../stores/preferences.ts'
 
 import DeleteIcon from 'vue-material-design-icons/Delete.vue'
@@ -24,12 +23,8 @@ const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const votesStore = useVotesStore()
 
-const props = defineProps({
-	user: {
-		type: Object as PropType<User>,
-		required: true,
-	},
-})
+const { user } = defineProps<{ user: User }>()
+
 /**
  *
  * @param userId
@@ -43,7 +38,7 @@ async function removeUser(userId: string) {
 <template>
 	<UserItem
 		v-if="pollStore.viewMode === ViewMode.TableView"
-		:user="props.user"
+		:user="user"
 		condensed
 		:class="[
 			'participant',

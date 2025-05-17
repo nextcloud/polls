@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 import {
@@ -28,48 +28,39 @@ import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import LockPollIcon from 'vue-material-design-icons/Security.vue'
 
-export interface Props {
-	poll?: Poll
+interface Props {
+	poll: Poll
 	noLink?: boolean
 }
 
-const pollStore = usePollStore()
+const { poll, noLink = false } = defineProps<Props>()
 
-const props = defineProps({
-	poll: {
-		type: Object as PropType<Poll>,
-		required: true,
-	},
-	noLink: {
-		type: Boolean,
-		default: false,
-	},
-})
+const pollStore = usePollStore()
 
 const closeToClosing = computed(
 	() =>
-		!props.poll.status.isExpired
-		&& props.poll.configuration.expire
-		&& moment.unix(props.poll.configuration.expire).diff() < 86400000,
+		!poll.status.isExpired
+		&& poll.configuration.expire
+		&& moment.unix(poll.configuration.expire).diff() < 86400000,
 )
 
 const timeExpirationRelative = computed(() => {
-	if (props.poll.configuration.expire) {
-		return moment.unix(props.poll.configuration.expire).fromNow()
+	if (poll.configuration.expire) {
+		return moment.unix(poll.configuration.expire).fromNow()
 	}
 	return t('polls', 'never')
 })
 
 const expiryClass = computed(() => {
-	if (props.poll.status.isExpired) {
+	if (poll.status.isExpired) {
 		return StatusResults.Error
 	}
 
-	if (props.poll.configuration.expire && closeToClosing.value) {
+	if (poll.configuration.expire && closeToClosing.value) {
 		return StatusResults.Warning
 	}
 
-	if (props.poll.configuration.expire && !props.poll.status.isExpired) {
+	if (poll.configuration.expire && !poll.status.isExpired) {
 		return StatusResults.Success
 	}
 
@@ -77,17 +68,17 @@ const expiryClass = computed(() => {
 })
 
 const timeCreatedRelative = computed(() =>
-	moment.unix(props.poll.status.created).fromNow(),
+	moment.unix(poll.status.created).fromNow(),
 )
 
 const descriptionLine = computed(() => {
-	if (props.poll.status.isArchived) {
+	if (poll.status.isArchived) {
 		return t('polls', 'Archived {relativeTIme}', {
-			relativeTIme: moment.unix(props.poll.status.archivedDate).fromNow(),
+			relativeTIme: moment.unix(poll.status.archivedDate).fromNow(),
 		})
 	}
 	return t('polls', 'Started {relativeTime} from {ownerName}', {
-		ownerName: props.poll.owner.displayName,
+		ownerName: poll.owner.displayName,
 		relativeTime: timeCreatedRelative.value,
 	})
 })
@@ -98,11 +89,8 @@ const descriptionLine = computed(() => {
 		<TextPollIcon
 			v-if="poll.type === PollType.Text"
 			class="item__type"
-			:title="pollTypes[props.poll.type].name" />
-		<DatePollIcon
-			v-else
-			class="item__type"
-			:title="pollTypes[props.poll.type].name" />
+			:title="pollTypes[poll.type].name" />
+		<DatePollIcon v-else class="item__type" :title="pollTypes[poll.type].name" />
 
 		<div
 			v-if="noLink || !poll.permissions.view"

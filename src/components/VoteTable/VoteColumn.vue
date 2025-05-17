@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 
 import Counter from '../Options/Counter.vue'
@@ -14,30 +14,24 @@ import CalendarPeek from '../Calendar/CalendarPeek.vue'
 import { usePollStore, PollType } from '../../stores/poll.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 import { Option } from '../../stores/options.ts'
-
 import OptionMenu from '../Options/OptionMenu.vue'
+
+const { option } = defineProps<{ option: Option }>()
 
 const pollStore = usePollStore()
 const preferencesStore = usePreferencesStore()
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-})
-
 const componentClass = computed(() => {
 	const classList = ['vote-column']
-	if (props.option.locked) {
+	if (option.locked) {
 		classList.push('locked')
 	}
 
-	if (props.option.confirmed && pollStore.isClosed) {
+	if (option.confirmed && pollStore.isClosed) {
 		classList.push('confirmed')
 	}
-	if (props.option.votes.currentUser) {
-		classList.push(props.option.votes.currentUser)
+	if (option.votes.currentUser) {
+		classList.push(option.votes.currentUser)
 	}
 
 	return classList

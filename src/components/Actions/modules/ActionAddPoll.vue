@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, PropType, ref } from 'vue'
+import { computed, ref } from 'vue'
 import { useRouter } from 'vue-router'
 
 import { useSessionStore } from '../../../stores/session'
@@ -19,23 +19,20 @@ import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import { NcDialog } from '@nextcloud/vue'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
+interface Props {
+	caption?: string
+	modalSize?: string
+	buttonMode?: ButtonMode
+}
+
+const {
+	caption = t('polls', 'Add poll'),
+	modalSize = 'normal',
+	buttonMode = ButtonMode.Native,
+} = defineProps<Props>()
+
 const router = useRouter()
 const sessionStore = useSessionStore()
-
-defineProps({
-	caption: {
-		type: String,
-		default: t('polls', 'Add poll'),
-	},
-	modalSize: {
-		type: String,
-		default: 'normal',
-	},
-	buttonMode: {
-		type: String as PropType<ButtonMode>,
-		default: ButtonMode.Native,
-	},
-})
 
 const newPoll = ref({
 	id: 0,

@@ -9,24 +9,19 @@ import { Logger } from '../../../helpers/index.ts'
 import { onMounted, ref } from 'vue'
 import { AxiosError } from '@nextcloud/axios'
 
-const props = defineProps({
-	name: {
-		type: String,
-		default: '',
-	},
-	subTitle: {
-		type: String,
-		default: '',
-	},
-	description: {
-		type: String,
-		default: '',
-	},
-	encodeText: {
-		type: String,
-		default: '',
-	},
-})
+interface Props {
+	name?: string
+	subTitle?: string
+	description?: string
+	encodeText: string
+}
+
+const {
+	name = '',
+	subTitle = '',
+	description = '',
+	encodeText,
+} = defineProps<Props>()
 
 const qrUri = ref<string>('')
 
@@ -35,7 +30,7 @@ const qrUri = ref<string>('')
  */
 async function generateQr() {
 	try {
-		qrUri.value = await QRCode.toDataURL(props.encodeText)
+		qrUri.value = await QRCode.toDataURL(encodeText)
 	} catch (e) {
 		const error = e as AxiosError
 		Logger.error('Error on generating QR code', { error: error.message })

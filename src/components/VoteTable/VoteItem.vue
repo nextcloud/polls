@@ -9,55 +9,49 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
-import { useVotesStore } from '../../stores/votes.ts'
+import { Answer, useVotesStore } from '../../stores/votes.ts'
 import { Option, User } from '../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
 import VoteIndicator from './VoteIndicator.vue'
 import { AxiosError } from '@nextcloud/axios'
 
-export interface Props {
+interface Props {
 	option: Option
 	user: User
 }
+
+const { option, user } = defineProps<Props>()
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const votesStore = useVotesStore()
 
-const props = withDefaults(defineProps<Props>(), {
-	option: undefined,
-	user: undefined,
-})
-
 const isVotable = computed(
 	() =>
-		isActive.value
-		&& isValidUser.value
-		&& !pollStore.isClosed
-		&& !props.option.locked,
+		isActive.value && isValidUser.value && !pollStore.isClosed && !option.locked,
 )
 
 const isActive = computed(() => isCurrentUser.value && pollStore.permissions.vote)
 
-const isCurrentUser = computed(() => sessionStore.currentUser.id === props.user.id)
+const isCurrentUser = computed(() => sessionStore.currentUser.id === user.id)
 
 const answer = computed(
 	() =>
 		votesStore.getVote({
-			option: props.option,
-			user: props.user,
+			option,
+			user,
 		}).answer,
 )
 
 const iconAnswer = computed(() => {
-	if (answer.value === 'no') {
-		return (pollStore.isClosed && props.option.confirmed) || isActive.value
-			? 'no'
-			: ''
+	if (answer.value === Answer.No) {
+		return (pollStore.isClosed && option.confirmed) || isActive.value
+			? Answer.No
+			: Answer.None
 	}
-	if (answer.value === '') {
-		return pollStore.isClosed && props.option.confirmed ? 'no' : ''
+	if (answer.value === Answer.None) {
+		return pollStore.isClosed && option.confirmed ? Answer.No : Answer.None
 	}
 	return answer.value
 })
@@ -72,7 +66,7 @@ const nextAnswer = computed(() => {
 	]
 })
 
-const isValidUser = computed(() => props.user.id !== '' && props.user.id !== null)
+const isValidUser = computed(() => user.id !== '' && user.id !== null)
 
 /**
  *
@@ -81,7 +75,7 @@ async function setVote() {
 	if (isVotable.value) {
 		try {
 			await votesStore.set({
-				option: props.option,
+				option,
 				setTo: nextAnswer.value,
 			})
 			showSuccess(t('polls', 'Vote saved'), { timeout: 2000 })

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, ref, PropType } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { t } from '@nextcloud/l10n'
 import orderBy from 'lodash/orderBy'
 import moment from '@nextcloud/moment'
@@ -37,22 +37,15 @@ export type CalendarEvent = {
 	type: string
 }
 
-const pollStore = usePollStore()
-
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-})
+const { option } = defineProps<{ option: Option }>()
 
 const events = ref<CalendarEvent[]>([])
 
+const pollStore = usePollStore()
+
 const detectAllDay = computed(() => {
-	const from = moment.unix(props.option.timestamp)
-	const to = moment.unix(
-		props.option.timestamp + Math.max(0, props.option.duration),
-	)
+	const from = moment.unix(option.timestamp)
+	const to = moment.unix(option.timestamp + Math.max(0, option.duration))
 	const dayLongEvent =
 		from.unix() === moment(from).startOf('day').unix()
 		&& to.unix() === moment(to).startOf('day').unix()
@@ -71,17 +64,17 @@ const sortedEvents = computed(() => {
 
 const currentEvent = computed(
 	(): CalendarEvent => ({
-		id: props.option.id,
-		UID: props.option.id,
+		id: option.id,
+		UID: option.id,
 		calendarUri: '',
 		calendarKey: 0,
 		calendarName: 'Polls',
 		displayColor: 'transparent',
 		allDay: detectAllDay.value.allDay,
 		description: pollStore.configuration.description,
-		start: props.option.timestamp,
+		start: option.timestamp,
 		location: '',
-		end: props.option.timestamp + props.option.duration,
+		end: option.timestamp + option.duration,
 		status: 'self',
 		summary: pollStore.configuration.title,
 		type: detectAllDay.value.type,
@@ -90,7 +83,7 @@ const currentEvent = computed(
 
 onMounted(async () => {
 	try {
-		const response = await CalendarAPI.getEvents(props.option.id)
+		const response = await CalendarAPI.getEvents(option.id)
 		events.value = response.data.events
 	} catch (error) {
 		if ((error as AxiosError)?.code === 'ERR_CANCELED') {

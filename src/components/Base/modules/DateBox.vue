@@ -4,58 +4,37 @@
 -->
 
 <script setup lang="ts">
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
 import { DateTime, Duration, Interval } from 'luxon'
-import { Option } from '../../../Types/index.ts'
 import { useSessionStore } from '../../../stores/session.ts'
 
+interface Props {
+	dateTime: DateTime
+	duration?: Duration
+}
+const { dateTime: luxonDate, duration: luxonDuration = Duration.fromMillis(0) } =
+	defineProps<Props>()
+
+const from = computed(() =>
+	luxonDate.setLocale(sessionStore.currentUser.languageCode),
+)
+
 const sessionStore = useSessionStore()
-const props = defineProps({
-	luxonDate: {
-		type: Object as PropType<DateTime>,
-		default: null,
-	},
-	luxonDuration: {
-		type: Object as PropType<Duration>,
-		default: null,
-	},
-	option: {
-		type: Object as PropType<Option>,
-		default: null,
-	},
-})
-
-const from = computed(() => {
-	if (props.option) {
-		return DateTime.fromSeconds(props.option.timestamp).setLocale(
-			sessionStore.currentUser.languageCode,
-		)
-	}
-	return props.luxonDate.setLocale(sessionStore.currentUser.languageCode)
-})
-
-const duration = computed(() => {
-	if (props.option) {
-		return Duration.fromMillis(props.option.duration * 1000)
-	}
-	return props.luxonDuration
-})
-
 // the dates span one or more entire days
 // do not display the time in this case
 const allDay = computed(
 	() =>
 		from.value.startOf('day').toSeconds() === from.value.toSeconds()
-		&& duration.value.as('seconds') % 86400 === 0,
+		&& luxonDuration.as('seconds') % 86400 === 0,
 )
 
 // 'to' is 'from' plus the duration
-// subtract a day if allDay is true and duration is greater than 0 to match the
+// subtract a day if allDay is true and luxonDuration is greater than 0 to match the
 // end of the day after the duration instead of the beginning of the next day
 const to = computed(() =>
 	from.value
-		.plus(duration.value)
-		.minus({ day: allDay.value && duration.value.as('seconds') > 0 ? 1 : 0 }),
+		.plus(luxonDuration)
+		.minus({ day: allDay.value && luxonDuration.as('seconds') > 0 ? 1 : 0 }),
 )
 
 // to and from dates have the same month (and year)
@@ -73,7 +52,7 @@ const isSameDay = computed(
 
 // Shortcut: 'to' and 'from' are identical
 // suppress the 'to' time if they are the same
-const isSameTime = computed(() => duration.value.as('seconds') === 0)
+const isSameTime = computed(() => luxonDuration.as('seconds') === 0)
 
 const interval = computed(() =>
 	Interval.fromDateTimes(from.value.toUTC(), to.value.toUTC()),

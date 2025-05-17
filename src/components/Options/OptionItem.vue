@@ -4,35 +4,28 @@
 -->
 
 <script setup lang="ts">
-import { PropType } from 'vue'
 import linkifyStr from 'linkify-string'
 import DragIcon from 'vue-material-design-icons/DotsVertical.vue'
 import { Option, PollType } from '../../Types/index.ts'
 import DateBox from '../Base/modules/DateBox.vue'
 import { usePollStore } from '../../stores/poll.ts'
 import OptionItemOwner from './OptionItemOwner.vue'
+import { DateTime, Duration } from 'luxon'
+
+interface Props {
+	option: Option
+	draggable?: boolean
+	showOwner?: boolean
+}
+
+const { option, draggable = false, showOwner = false } = defineProps<Props>()
 
 const pollStore = usePollStore()
-
-const props = defineProps({
-	draggable: {
-		type: Boolean,
-		default: false,
-	},
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-	showOwner: {
-		type: Boolean,
-		default: false,
-	},
-})
 </script>
 
 <template>
 	<div :class="['option-item', { draggable, deleted: option.deleted !== 0 }]">
-		<DragIcon v-if="props.draggable" class="grid-area-drag-icon" />
+		<DragIcon v-if="draggable" class="grid-area-drag-icon" />
 
 		<OptionItemOwner
 			v-if="pollStore.permissions.addOptions && showOwner"
@@ -48,7 +41,11 @@ const props = defineProps({
 			v-html="linkifyStr(option.text)" />
 		<!-- eslint-enable vue/no-v-html -->
 
-		<DateBox v-else class="option-item__option--date" :option="option" />
+		<DateBox
+			v-else
+			class="option-item__option--date"
+			:date-time="DateTime.fromSeconds(option.timestamp)"
+			:duration="Duration.fromMillis(option.duration * 1000)" />
 
 		<slot name="actions" />
 	</div>
