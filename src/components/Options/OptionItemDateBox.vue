@@ -8,29 +8,26 @@ import { DateTime, Duration } from 'luxon'
 import { useSessionStore } from '../../stores/session.ts'
 import DateBox from '../Base/modules/DateBox.vue'
 
+interface Props {
+	timeStamp: number
+	durationSeconds?: number
+}
+
 const sessionStore = useSessionStore()
 
-const props = defineProps({
-	timeStamp: {
-		type: Number,
-		default: 0,
-	},
-	durationSeconds: {
-		type: Number,
-		default: 0,
-	},
-})
+const { timeStamp, durationSeconds = 0 } = defineProps<Props>()
+
 // computed from as DateTime from Luxon
-const from = DateTime.fromSeconds(props.timeStamp).setLocale(
+const from = DateTime.fromSeconds(timeStamp).setLocale(
 	sessionStore.currentUser.languageCode,
 )
 
-const duration = Duration.fromMillis(props.durationSeconds * 1000)
+const duration = Duration.fromMillis(durationSeconds * 1000)
 </script>
 
 <template>
 	<div class="option-item__option--datebox">
-		<DateBox :luxon-date="from" :duration="duration" />
+		<DateBox :date-time="from" :duration="duration" />
 	</div>
 </template>
 

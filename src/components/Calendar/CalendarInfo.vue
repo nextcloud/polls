@@ -5,32 +5,28 @@
 
 <script setup lang="ts">
 import moment from '@nextcloud/moment'
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
 import { Option } from '../../Types/index.ts'
+import { CalendarEvent } from '../../components/Calendar/CalendarPeek.vue'
 
-const props = defineProps({
-	calendarEvent: {
-		type: Object,
-		required: true,
-	},
+interface Props {
+	calendarEvent: CalendarEvent
+	option: Option
+}
 
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-})
+const { calendarEvent, option } = defineProps<Props>()
 
 const calendarStyle = computed(() => ({
-	backgroundColor: props.calendarEvent.displayColor,
+	backgroundColor: calendarEvent.displayColor,
 	color: fontColor.value,
 }))
 
 const fontColor = computed(() => {
-	if (props.calendarEvent.displayColor === 'transparent') {
+	if (calendarEvent.displayColor === 'transparent') {
 		return 'var(--color-main-text)'
 	}
 
-	const hex = props.calendarEvent.displayColor.replace(/#/, '')
+	const hex = calendarEvent.displayColor.replace(/#/, '')
 	const r = parseInt(hex.slice(0, 2), 16)
 	const g = parseInt(hex.slice(2, 4), 16)
 	const b = parseInt(hex.slice(4, 6), 16)
@@ -40,9 +36,9 @@ const fontColor = computed(() => {
 	return l > 0.5 ? '#222' : '#ddd'
 })
 
-const dayStart = computed(() => moment.unix(props.calendarEvent.start).format('ddd'))
+const dayStart = computed(() => moment.unix(calendarEvent.start).format('ddd'))
 
-const dayEnd = computed(() => moment.unix(props.calendarEvent.end - 1).format('ddd'))
+const dayEnd = computed(() => moment.unix(calendarEvent.end - 1).format('ddd'))
 
 const dayDisplay = computed(() => {
 	if (dayEnd.value === dayStart.value) {
@@ -52,9 +48,9 @@ const dayDisplay = computed(() => {
 	return `${dayStart.value} - ${dayEnd.value}`
 })
 
-const timeStart = computed(() => moment.unix(props.calendarEvent.start).format('LT'))
+const timeStart = computed(() => moment.unix(calendarEvent.start).format('LT'))
 
-const timeEnd = computed(() => moment.unix(props.calendarEvent.end).format('LT'))
+const timeEnd = computed(() => moment.unix(calendarEvent.end).format('LT'))
 
 const timeDisplay = computed(() => {
 	if (timeEnd.value === timeStart.value) {
@@ -64,26 +60,23 @@ const timeDisplay = computed(() => {
 })
 
 const showJustDays = computed(
-	() => dayStart.value !== dayEnd.value || props.calendarEvent.allDay,
+	() => dayStart.value !== dayEnd.value || calendarEvent.allDay,
 )
 
-const statusClass = computed(() => props.calendarEvent.status.toLowerCase())
+const statusClass = computed(() => calendarEvent.status.toLowerCase())
 
 const conflictLevel = computed(() => {
-	if (props.calendarEvent.calendarKey === 0) {
+	if (calendarEvent.calendarKey === 0) {
 		return 'conflict-ignore'
 	}
 
 	// No conflict, if calendarEvent starts after end of option
-	if (
-		props.calendarEvent.start
-		>= props.option.timestamp + props.option.duration
-	) {
+	if (calendarEvent.start >= option.timestamp + option.duration) {
 		return 'conflict-no'
 	}
 
 	// No conflict, if calendarEvent ends before option
-	if (props.calendarEvent.end <= props.option.timestamp) {
+	if (calendarEvent.end <= option.timestamp) {
 		return 'conflict-no'
 	}
 

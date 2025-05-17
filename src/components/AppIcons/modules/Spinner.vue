@@ -3,30 +3,24 @@
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 <script setup lang="ts">
-const props = defineProps({
-	title: {
-		type: String,
-		default: 'Admin Access',
-	},
-	fillColor: {
-		type: String,
-		default: 'currentColor',
-	},
-	size: {
-		type: Number,
-		default: 24,
-	},
-})
+import { t } from '@nextcloud/l10n'
+import { IconProps } from './types'
+
+const {
+	title = t('polls', 'Loading'),
+	fillColor = 'currentColor',
+	size = 24,
+} = defineProps<IconProps>()
 </script>
 
 <template>
 	<span
-		:aria-hidden="!props.title"
-		:aria-label="props.title"
+		:aria-hidden="!title"
+		:aria-label="title"
 		class="material-design-icon spinner"
 		role="img">
-		<svg viewBox="0 0 100 100" :width="props.size" :height="props.size">
-			<circle cx="50" cy="50" r="45" :stroke="props.fillColor" />
+		<svg viewBox="0 0 100 100" :width="size" :height="size">
+			<circle cx="50" cy="50" r="45" :stroke="fillColor" />
 		</svg>
 	</span>
 </template>

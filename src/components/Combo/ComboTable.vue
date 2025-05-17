@@ -4,24 +4,18 @@
 -->
 
 <script setup lang="ts">
-import { PropType } from 'vue'
 import VoteColumn from './VoteColumn.vue'
 import UserItem from '../User/UserItem.vue'
 import { useComboStore } from '../../stores/combo.ts'
 import { ViewMode } from '../../Types/index.ts'
 
-const comboStore = useComboStore()
+const { viewMode } = defineProps<{ viewMode: ViewMode }>()
 
-const props = defineProps({
-	viewMode: {
-		type: String as PropType<ViewMode>,
-		default: ViewMode.TableView,
-	},
-})
+const comboStore = useComboStore()
 </script>
 
 <template>
-	<div :class="['combo-table', props.viewMode]">
+	<div :class="['combo-table', viewMode]">
 		<div class="user-column">
 			<div class="spacer" />
 			<div

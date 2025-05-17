@@ -4,12 +4,7 @@
 -->
 
 <script setup lang="ts">
-defineProps({
-	tag: {
-		type: String,
-		default: 'span',
-	},
-})
+const { tag = 'span' } = defineProps<{ tag?: string }>()
 </script>
 
 <template>

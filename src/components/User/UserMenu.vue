@@ -45,13 +45,6 @@ import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 import { NcActionButtonGroup } from '@nextcloud/vue'
 import { AxiosError } from '@nextcloud/axios'
 
-const props = defineProps({
-	noMenuIcon: {
-		type: Boolean,
-		default: false,
-	},
-})
-
 type InputProps = {
 	success: boolean
 	error: boolean
@@ -59,6 +52,8 @@ type InputProps = {
 	labelOutside: boolean
 	label: string
 }
+
+const { noMenuIcon = false } = defineProps<{ noMenuIcon?: boolean }>()
 
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
@@ -328,7 +323,7 @@ async function submitEmail() {
 
 <template>
 	<NcActions v-bind="$attrs">
-		<template v-if="!props.noMenuIcon" #icon>
+		<template v-if="!noMenuIcon" #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
 		<NcActionButtonGroup name="View mode">

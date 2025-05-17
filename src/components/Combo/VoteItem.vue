@@ -6,45 +6,34 @@
 <script setup lang="ts">
 import VoteIndicator from '../VoteTable/VoteIndicator.vue'
 import { useComboStore } from '../../stores/combo.ts'
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
 import { Option, Poll, Answer, User } from '../../Types/index.ts'
 
-const comboStore = useComboStore()
+interface Props {
+	option: Option
+	user: User
+	poll: Poll
+}
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-	user: {
-		type: Object as PropType<User>,
-		default: null,
-	},
-	poll: {
-		type: Object as PropType<Poll>,
-		default: null,
-	},
-})
+const { option, user, poll } = defineProps<Props>()
+
+const comboStore = useComboStore()
 
 const answer = computed(
 	() =>
 		comboStore.getVote({
-			userId: props.user.id,
-			optionText: props.option.text,
-			pollId: props.poll.id,
-		}).answer,
+			userId: user.id,
+			optionText: option.text,
+			pollId: poll.id,
+		}).answer as Answer,
 )
 
 const iconAnswer = computed(() => {
 	if (answer.value === Answer.No) {
-		return props.poll.status.isExpired && props.option.confirmed
-			? Answer.No
-			: Answer.None
+		return poll.status.isExpired && option.confirmed ? Answer.No : Answer.None
 	}
-	if (answer.value === '') {
-		return props.poll.status.isExpired && props.option.confirmed
-			? Answer.No
-			: Answer.None
+	if (answer.value === Answer.None) {
+		return poll.status.isExpired && option.confirmed ? Answer.No : Answer.None
 	}
 	return answer.value
 })
@@ -52,8 +41,8 @@ const iconAnswer = computed(() => {
 const foreignOption = computed(
 	() =>
 		!comboStore.optionBelongsToPoll({
-			text: props.option.text,
-			pollId: props.poll.id,
+			text: option.text,
+			pollId: poll.id,
 		}),
 )
 </script>

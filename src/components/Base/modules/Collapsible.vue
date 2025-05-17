@@ -7,26 +7,20 @@
 import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
 
-const props = defineProps({
-	initialCollapsed: {
-		type: Boolean,
-		default: false,
-	},
-	showMoreCaption: {
-		type: String,
-		default: t('polls', 'Show more'),
-	},
-	closeCaption: {
-		type: String,
-		default: t('polls', 'Collapse'),
-	},
-	noCollapse: {
-		type: Boolean,
-		default: false,
-	},
-})
+interface Props {
+	initialCollapsed?: boolean
+	noCollapse?: boolean
+	showMoreCaption?: string
+	closeCaption?: string
+}
+const {
+	initialCollapsed = false,
+	noCollapse = false,
+	showMoreCaption = t('polls', 'Show more'),
+	closeCaption = t('polls', 'Collapse'),
+} = defineProps<Props>()
 
-const showMore = ref(!props.initialCollapsed || props.noCollapse)
+const showMore = ref(!initialCollapsed || noCollapse)
 </script>
 
 <template>
@@ -40,7 +34,7 @@ const showMore = ref(!props.initialCollapsed || props.noCollapse)
 			v-show="!noCollapse"
 			:class="['collapsible-toggle', { open: showMore }]"
 			@click="showMore = !showMore">
-			{{ showMore ? props.closeCaption : props.showMoreCaption }}
+			{{ showMore ? closeCaption : showMoreCaption }}
 		</div>
 	</div>
 </template>

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
 import moment from '@nextcloud/moment'
 import linkifyStr from 'linkify-string'
 import { showError } from '@nextcloud/dialogs'
@@ -20,19 +20,14 @@ const sessionStore = useSessionStore()
 const pollStore = usePollStore()
 const commentsStore = useCommentsStore()
 
-const props = defineProps({
-	comment: {
-		type: Object as PropType<CommentsGrouped>,
-		default: null,
-	},
-})
+const { comment } = defineProps<{ comment: CommentsGrouped }>()
 
 const dateCommentedRelative = computed(() =>
-	moment.unix(props.comment.timestamp).fromNow(),
+	moment.unix(comment.timestamp).fromNow(),
 )
 
 const isCurrentUser = computed(
-	() => sessionStore.currentUser?.id === props.comment.user.id,
+	() => sessionStore.currentUser?.id === comment.user.id,
 )
 
 /**

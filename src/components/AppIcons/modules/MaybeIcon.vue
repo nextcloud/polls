@@ -4,34 +4,28 @@
 -->
 
 <script setup lang="ts">
-const props = defineProps({
-	title: {
-		type: String,
-		default: 'Maybe',
-	},
-	fillColor: {
-		type: String,
-		default: 'var(--color-warning)',
-	},
-	size: {
-		type: Number,
-		default: 24,
-	},
-})
+import { t } from '@nextcloud/l10n'
+import { IconProps } from './types'
+
+const {
+	title = t('polls', 'Maybe'),
+	fillColor = 'var(--color-warning)',
+	size = 24,
+} = defineProps<IconProps>()
 </script>
 
 <template>
 	<span
-		:aria-hidden="!props.title"
-		:aria-label="props.title"
+		:aria-hidden="!title"
+		:aria-label="title"
 		class="material-design-icon polls-maybe-icon"
 		role="img">
 		<svg
-			:fill="props.fillColor"
-			:stroke="props.fillColor"
+			:fill="fillColor"
+			:stroke="fillColor"
 			class="material-design-icon__svg"
-			:width="props.size"
-			:height="props.size"
+			:width="size"
+			:height="size"
 			viewBox="0 0 16 16">
 			<g
 				id="open-brace"

@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted, PropType } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
@@ -30,6 +30,7 @@ import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 
 import { Logger } from '../../helpers/index.ts'
 import UserItem from '../User/UserItem.vue'
+import { AxiosError } from '@nextcloud/axios'
 
 import {
 	useSharesStore,
@@ -37,17 +38,12 @@ import {
 	ShareType,
 	PublicPollEmailConditions,
 } from '../../stores/shares.ts'
-import { AxiosError } from '@nextcloud/axios'
-
-const sharesStore = useSharesStore()
-const props = defineProps({
-	share: {
-		type: Object as PropType<Share>,
-		required: true,
-	},
-})
 
 const emit = defineEmits(['showQrCode'])
+
+const { share } = defineProps<{ share: Share }>()
+
+const sharesStore = useSharesStore()
 
 const resolving = ref(false)
 const label = ref({
@@ -62,38 +58,37 @@ const label = ref({
 })
 
 const isActivePublicShare = computed(
-	() => !props.share.deleted && props.share.type === ShareType.Public,
+	() => !share.deleted && share.type === ShareType.Public,
 )
 const activateResendInvitation = computed(
 	() =>
-		!props.share.deleted
-		&& (props.share.user.emailAddress || props.share.type === ShareType.Group),
+		!share.deleted
+		&& (share.user.emailAddress || share.type === ShareType.Group),
 )
 const activateResolveGroup = computed(
 	() =>
-		!props.share.deleted
-		&& [ShareType.ContactGroup, ShareType.Circle].includes(props.share.type),
+		!share.deleted
+		&& [ShareType.ContactGroup, ShareType.Circle].includes(share.type),
 )
 const activateSwitchAdmin = computed(
 	() =>
-		!props.share.deleted
-		&& (props.share.type === ShareType.User
-			|| props.share.type === ShareType.Admin),
+		!share.deleted
+		&& (share.type === ShareType.User || share.type === ShareType.Admin),
 )
-const activateCopyLink = computed(() => !props.share.deleted)
-const activateShowQr = computed(() => !props.share.deleted && !!props.share.URL)
+const activateCopyLink = computed(() => !share.deleted)
+const activateShowQr = computed(() => !share.deleted && !!share.URL)
 const userItemProps = computed(() => ({
-	user: props.share.user,
-	label: props.share.label,
+	user: share.user,
+	label: share.label,
 	showEmail: true,
 	resolveInfo: true,
-	forcedDescription: props.share.deleted ? `(${t('polls', 'deleted')})` : null,
+	forcedDescription: share.deleted ? `(${t('polls', 'deleted')})` : null,
 	showTypeIcon: true,
 	icon: true,
 }))
 
 onMounted(() => {
-	label.value.inputValue = props.share.label
+	label.value.inputValue = share.label
 })
 
 /**
@@ -135,7 +130,7 @@ async function switchLocked(share: Share) {
  */
 async function submitLabel() {
 	sharesStore.writeLabel({
-		token: props.share.token,
+		token: share.token,
 		label: label.value.inputValue,
 	})
 }
@@ -194,7 +189,7 @@ async function resolveGroup(share: Share) {
  */
 async function sendInvitation() {
 	try {
-		const response = await sharesStore.sendInvitation({ share: props.share })
+		const response = await sharesStore.sendInvitation({ share })
 		if (response.data?.sentResult?.sentMails) {
 			response.data.sentResult.sentMails.forEach((item) => {
 				showSuccess(
@@ -231,7 +226,7 @@ async function sendInvitation() {
  */
 function copyLink() {
 	try {
-		navigator.clipboard.writeText(props.share.URL)
+		navigator.clipboard.writeText(share.URL)
 		showSuccess(t('polls', 'Link copied to clipboard'))
 	} catch {
 		showError(t('polls', 'Error while copying link to clipboard'))

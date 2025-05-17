@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, type PropType } from 'vue'
+import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { getCurrentUser } from '@nextcloud/auth'
 import { t } from '@nextcloud/l10n'
@@ -23,132 +23,79 @@ import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
 
 import { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
 
-const route = useRoute()
-
 defineOptions({
 	inheritAttrs: true,
 })
 
-const props = defineProps({
-	disabled: {
-		type: Boolean,
-		default: false,
-	},
-	deletedState: {
-		type: Boolean,
-		default: false,
-	},
-	lockedState: {
-		type: Boolean,
-		default: false,
-	},
-	hideNames: {
-		type: Boolean,
-		default: false,
-	},
-	showEmail: {
-		type: Boolean,
-		default: false,
-	},
-	disableMenu: {
-		type: Boolean,
-		default: true,
-	},
-	disableTooltip: {
-		type: Boolean,
-		default: false,
-	},
-	resolveInfo: {
-		type: Boolean,
-		default: false,
-	},
-	description: {
-		type: String,
-		default: '',
-	},
-	label: {
-		type: String,
-		default: '',
-	},
-	type: {
-		type: String as PropType<UserType | VirtualUserItemType>,
-		default: UserType.None,
-		validator(value: UserType | VirtualUserItemType) {
-			return [
-				UserType.Public,
-				UserType.User,
-				UserType.Admin,
-				UserType.Group,
-				UserType.Contact,
-				UserType.ContactGroup,
-				UserType.Circle,
-				UserType.External,
-				UserType.Email,
-				UserType.None,
-				VirtualUserItemType.InternalAccess,
-				VirtualUserItemType.Deleted,
-				VirtualUserItemType.AddPublicLink,
-			].includes(value)
-		},
-	},
-	user: {
-		type: Object as PropType<User>,
-		default() {
-			return {
-				userId: '',
-				displayName: '',
-				emailAddress: '',
-				isNoUser: true,
-				type: UserType.None,
-				subName: null,
-				subtitle: null,
-				desc: null,
-				organisation: null,
-				languageCode: null,
-				localeCode: null,
-				timeZone: null,
-				categories: null,
-			}
-		},
-	},
-	showTypeIcon: {
-		type: Boolean,
-		default: false,
-	},
-	iconSize: {
-		type: Number,
-		default: 32,
-	},
-	mdIconSize: {
-		type: Number,
-		default: 20,
-	},
-	typeIconSize: {
-		type: Number,
-		default: 16,
-	},
-	hideStatus: {
-		type: Boolean,
-		default: false,
-	},
-	condensed: {
-		type: Boolean,
-		default: false,
-	},
-})
+interface Props {
+	disabled?: boolean
+	deletedState?: boolean
+	lockedState?: boolean
+	hideNames?: boolean
+	showEmail?: boolean
+	disableMenu?: boolean
+	disableTooltip?: boolean
+	resolveInfo?: boolean
+	description?: string
+	label?: string
+	type?: UserType | VirtualUserItemType
+	user?: User
+	showTypeIcon?: boolean
+	iconSize?: number
+	mdIconSize?: number
+	typeIconSize?: number
+	hideStatus?: boolean
+	condensed?: boolean
+}
 
-const isGuestComputed = computed(
-	() => route.name === 'publicVote' || props.user.isNoUser,
-)
+const {
+	disabled = false,
+	deletedState = false,
+	lockedState = false,
+	hideNames = false,
+	showEmail = false,
+	disableMenu = true,
+	disableTooltip = false,
+	resolveInfo = false,
+	description,
+	label = '',
+	type = UserType.None,
+	user = {
+		id: '',
+		displayName: '',
+		emailAddress: '',
+		isNoUser: true,
+		isAdmin: false,
+		type: UserType.None,
+		subName: null,
+		subtitle: null,
+		desc: null,
+		organisation: null,
+		languageCode: '',
+		localeCode: null,
+		timeZone: null,
+		categories: null,
+	},
+	showTypeIcon = false,
+	iconSize = 32,
+	mdIconSize = 20,
+	typeIconSize = 16,
+	hideStatus = false,
+	condensed = false,
+} = defineProps<Props>()
+
+const route = useRoute()
+
+const isGuestComputed = computed(() => route.name === 'publicVote' || user.isNoUser)
 const avatarProps = computed(() => ({
 	user: avatarUserId.value,
 	showUserStatus: showUserStatusComputed.value,
 	isGuest: isGuestComputed.value,
 	displayName: labelComputed.value,
-	size: props.iconSize,
-	disableTooltip: props.disableTooltip,
-	disableMenu: props.disableMenu,
-	isNoUser: props.user.isNoUser,
+	size: iconSize,
+	disableTooltip,
+	disableMenu,
+	isNoUser: user.isNoUser,
 }))
 
 const useIconSlot = computed(() =>
@@ -165,20 +112,20 @@ const useIconSlot = computed(() =>
 )
 
 const typeComputed = computed<UserType | VirtualUserItemType>(
-	() => props.user.type ?? props.type,
+	() => user.type ?? type,
 )
 const descriptionComputed = computed(() => {
-	if (props.condensed) {
+	if (condensed) {
 		return ''
 	}
-	if (props.deletedState) {
+	if (deletedState) {
 		return t('polls', '(deleted)')
 	}
-	if (props.lockedState) {
+	if (lockedState) {
 		return t('polls', '(locked)')
 	}
-	if (props.description !== '') {
-		return props.description
+	if (description !== '') {
+		return description
 	}
 	if (typeComputed.value === UserType.Public) {
 		return publicShareDescription
@@ -195,8 +142,8 @@ const descriptionComputed = computed(() => {
 	return emailAddressComputed
 })
 const labelComputed = computed(() => {
-	if (props.label !== '') {
-		return props.label
+	if (label !== '') {
+		return label
 	}
 	if (typeComputed.value === UserType.Public) {
 		return publicShareLabel.value
@@ -204,33 +151,33 @@ const labelComputed = computed(() => {
 	if (typeComputed.value === VirtualUserItemType.Deleted) {
 		return t('polls', 'Deleted participant')
 	}
-	return props.user.displayName ?? props.user.id
+	return user.displayName ?? user.id
 })
 
 const avatarUserId = computed(() => {
 	if (isGuestComputed.value) {
-		return props.user.displayName
+		return user.displayName
 	}
-	return props.user.id
+	return user.id
 })
 
 const publicShareDescription = computed(() => {
-	if (props.label === '') {
-		return t('polls', 'Token: {token}', { token: props.user.id })
+	if (label === '') {
+		return t('polls', 'Token: {token}', { token: user.id })
 	}
-	return t('polls', 'Public link: {token}', { token: props.user.id })
+	return t('polls', 'Public link: {token}', { token: user.id })
 })
 
 const publicShareLabel = computed(() => {
-	if (props.label === '') {
+	if (label === '') {
 		return t('polls', 'Public link')
 	}
-	return props.label
+	return label
 })
 
 const emailAddressComputed = computed(() => {
 	if (
-		props.resolveInfo
+		resolveInfo
 		&& (typeComputed.value === UserType.ContactGroup
 			|| typeComputed.value === UserType.Circle)
 	) {
@@ -238,18 +185,18 @@ const emailAddressComputed = computed(() => {
 	}
 
 	if (
-		props.showEmail
-		&& props.user.emailAddress !== props.user.displayName
+		showEmail
+		&& user.emailAddress !== user.displayName
 		&& (typeComputed.value === UserType.External
 			|| typeComputed.value === UserType.Email)
 	) {
-		return props.user.emailAddress
+		return user.emailAddress
 	}
 
 	return ''
 })
 const showUserStatusComputed = computed(
-	() => props.hideStatus && Boolean(getCurrentUser()),
+	() => hideStatus && Boolean(getCurrentUser()),
 )
 
 /**
@@ -268,7 +215,7 @@ function showMenu() {
 			typeComputed,
 			{
 				disabled,
-				condensed: props.condensed,
+				condensed: condensed,
 			},
 		]">
 		<div class="avatar-wrapper">
@@ -279,28 +226,28 @@ function showMenu() {
 				<template v-if="useIconSlot" #icon>
 					<LinkIcon
 						v-if="typeComputed === UserType.Public"
-						:size="props.mdIconSize" />
+						:size="mdIconSize" />
 					<LinkIcon
 						v-if="typeComputed === VirtualUserItemType.AddPublicLink"
-						:size="props.mdIconSize" />
+						:size="mdIconSize" />
 					<AnoymousIcon
 						v-if="typeComputed === VirtualUserItemType.Anonymous"
-						:size="props.mdIconSize" />
+						:size="mdIconSize" />
 					<LinkIcon
 						v-if="typeComputed === VirtualUserItemType.InternalAccess"
-						:size="props.mdIconSize" />
+						:size="mdIconSize" />
 					<ContactGroupIcon
 						v-if="typeComputed === UserType.ContactGroup"
-						:size="props.mdIconSize" />
+						:size="mdIconSize" />
 					<GroupIcon
 						v-if="typeComputed === UserType.Group"
-						:size="props.mdIconSize" />
+						:size="mdIconSize" />
 					<CircleIcon
 						v-if="typeComputed === UserType.Circle"
-						:size="props.mdIconSize" />
+						:size="mdIconSize" />
 					<DeletedUserIcon
 						v-if="typeComputed === VirtualUserItemType.Deleted"
-						:size="props.mdIconSize" />
+						:size="mdIconSize" />
 				</template>
 			</NcAvatar>
 
@@ -310,25 +257,25 @@ function showMenu() {
 
 			<AdminIcon
 				v-if="showTypeIcon && typeComputed === UserType.Admin"
-				:size="props.typeIconSize"
+				:size="typeIconSize"
 				class="type-icon" />
 			<ContactIcon
 				v-if="showTypeIcon && typeComputed === UserType.Contact"
-				:size="props.typeIconSize"
+				:size="typeIconSize"
 				class="type-icon" />
 			<EmailIcon
 				v-if="showTypeIcon && typeComputed === UserType.Email"
-				:size="props.typeIconSize"
+				:size="typeIconSize"
 				class="type-icon" />
 			<ShareIcon
 				v-if="showTypeIcon && typeComputed === UserType.Email"
-				:size="props.typeIconSize"
+				:size="typeIconSize"
 				class="type-icon" />
 		</div>
 
 		<slot name="status" />
 
-		<div v-if="!props.hideNames" class="user-item__name">
+		<div v-if="!hideNames" class="user-item__name">
 			<div class="name">
 				{{ labelComputed }}
 			</div>

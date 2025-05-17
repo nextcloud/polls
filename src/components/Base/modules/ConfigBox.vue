@@ -6,20 +6,13 @@
 <script setup lang="ts">
 import InformationIcon from 'vue-material-design-icons/InformationVariant.vue'
 
-defineProps({
-	name: {
-		type: String,
-		default: '',
-	},
-	info: {
-		type: String,
-		default: '',
-	},
-	indented: {
-		type: Boolean,
-		default: false,
-	},
-})
+interface Props {
+	name: string
+	info?: string
+	indented?: boolean
+}
+
+const { name, info = '', indented = false } = defineProps<Props>()
 </script>
 
 <template>

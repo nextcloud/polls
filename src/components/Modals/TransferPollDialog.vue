@@ -7,7 +7,7 @@
 import { t } from '@nextcloud/l10n'
 
 import { Poll, usePollStore } from '../../stores/poll.ts'
-import { computed, PropType, ref } from 'vue'
+import { computed, ref } from 'vue'
 
 import { NcDialog } from '@nextcloud/vue'
 import UserSearch from '../User/UserSearch.vue'
@@ -16,29 +16,18 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 import { usePollsStore } from '../../stores/polls.ts'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
+const emit = defineEmits(['accessDenied'])
+const { poll } = defineProps<{ poll: Poll }>()
+const model = defineModel<boolean>({ required: true })
+
 const pollsStore = usePollsStore()
 const pollStore = usePollStore()
-
-const emit = defineEmits(['accessDenied'])
-
-const props = defineProps({
-	poll: {
-		type: Object as PropType<Poll>,
-		required: true,
-	},
-})
-
-const model = defineModel({
-	required: true,
-	type: Boolean,
-})
-
 const newUser = ref<User | null>(null)
 
 async function dialogOK() {
 	try {
 		await pollsStore.changeOwner({
-			pollId: props.poll.id,
+			pollId: poll.id,
 			userId: newUser.value ? newUser.value.id : '',
 		})
 		showSuccess(
@@ -61,7 +50,7 @@ async function dialogOK() {
 }
 
 const dialogText = computed(() => {
-	if (props.poll.currentUserStatus.isOwner) {
+	if (poll.currentUserStatus.isOwner) {
 		if (!newUser.value) {
 			return t(
 				'polls',
@@ -82,7 +71,7 @@ const dialogText = computed(() => {
 			'polls',
 			'You are not the owner of this poll. {owner} will get informed about this action.',
 			{
-				owner: props.poll.owner.displayName,
+				owner: poll.owner.displayName,
 			},
 		)
 	}
@@ -90,7 +79,7 @@ const dialogText = computed(() => {
 		'polls',
 		'You are not the owner of this poll. {owner} will get informed about the transfer to {newUser}.',
 		{
-			owner: props.poll.owner.displayName,
+			owner: poll.owner.displayName,
 			newUser: newUser.value.displayName,
 		},
 	)

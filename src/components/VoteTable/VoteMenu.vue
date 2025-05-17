@@ -30,17 +30,12 @@ import { usePollStore } from '../../stores/poll.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
-
 import { StatusResults } from '../../Types/index.ts'
-
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 
-const props = defineProps({
-	noMenuIcon: {
-		type: Boolean,
-		default: false,
-	},
-})
+interface Props {
+	noMenuIcon: boolean
+}
 
 type InputProps = {
 	success: boolean
@@ -49,6 +44,8 @@ type InputProps = {
 	labelOutside: boolean
 	label: string
 }
+
+const { noMenuIcon } = defineProps<Props>()
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
@@ -268,7 +265,7 @@ async function submitEmail() {
 
 <template>
 	<NcActions v-bind="$attrs">
-		<template v-if="!props.noMenuIcon" #icon>
+		<template v-if="!noMenuIcon" #icon>
 			<SettingsIcon :size="20" decorative />
 		</template>
 

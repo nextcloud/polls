@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
 import { ActionDelete } from '../Actions/index.ts'
 import UserItem from '../User/UserItem.vue'
 import { t } from '@nextcloud/l10n'
@@ -12,25 +12,21 @@ import { usePollStore } from '../../stores/poll.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { useOptionsStore, Option } from '../../stores/options.ts'
 
+interface Props {
+	option: Option
+	avatarSize?: number
+}
+
+const { option, avatarSize = 32 } = defineProps<Props>()
+
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
 
-const props = defineProps({
-	option: {
-		type: Object as PropType<Option>,
-		required: true,
-	},
-	avatarSize: {
-		type: Number,
-		default: 32,
-	},
-})
-
 const showDelete = computed(
 	() =>
 		!pollStore.permissions.edit
-		&& sessionStore.currentUser.id === props.option.owner?.id,
+		&& sessionStore.currentUser.id === option.owner?.id,
 )
 </script>
 
@@ -45,11 +41,11 @@ const showDelete = computed(
 			"
 			:restore="!!option.deleted"
 			:timeout="0"
-			@restore="optionsStore.restore({ option: props.option })"
-			@delete="optionsStore.delete({ option: props.option })" />
+			@restore="optionsStore.restore({ option: option })"
+			@delete="optionsStore.delete({ option: option })" />
 
 		<UserItem
-			v-else-if="props.option.owner"
+			v-else-if="option.owner"
 			:user="option.owner"
 			:icon-size="avatarSize"
 			hide-names

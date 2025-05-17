@@ -4,16 +4,11 @@
 -->
 
 <script setup lang="ts">
-const props = defineProps({
-	tag: {
-		type: String,
-		default: 'div',
-	},
-})
+const { tag = 'div' } = defineProps<{ tag?: string }>()
 </script>
 
 <template>
-	<Component :is="props.tag" class="spacer">
+	<Component :is="tag" class="spacer">
 		<slot />
 	</Component>
 </template>

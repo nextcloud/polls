@@ -4,7 +4,6 @@
 -->
 
 <script setup lang="ts">
-import { PropType } from 'vue'
 import { t } from '@nextcloud/l10n'
 
 import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
@@ -13,32 +12,22 @@ import NcModal from '@nextcloud/vue/components/NcModal'
 import { NcActionButton, NcAppNavigationNew } from '@nextcloud/vue'
 import { ButtonMode } from '../../../Types'
 
-const showModal = defineModel('showModal', {
-	type: Boolean,
-})
+interface Props {
+	buttonVariant?: ButtonVariant
+	buttonMode?: ButtonMode
+	buttonCaption?: string
+	modalSize?: string
+	noClose?: boolean
+}
+const showModal = defineModel('showModal', { type: Boolean })
 
-defineProps({
-	buttonCaption: {
-		type: String,
-		default: t('polls', 'Click'),
-	},
-	modalSize: {
-		type: String,
-		default: 'normal',
-	},
-	buttonMode: {
-		type: String as PropType<ButtonMode>,
-		default: ButtonMode.Native,
-	},
-	buttonVariant: {
-		type: String as PropType<ButtonVariant>,
-		default: 'primary',
-	},
-	noClose: {
-		type: Boolean,
-		default: false,
-	},
-})
+const {
+	buttonVariant = 'primary',
+	buttonMode = ButtonMode.Native,
+	buttonCaption = t('polls', 'Click'),
+	modalSize = 'normal',
+	noClose = false,
+} = defineProps<Props>()
 </script>
 
 <template>

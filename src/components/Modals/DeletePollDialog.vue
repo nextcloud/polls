@@ -8,37 +8,27 @@ import { t } from '@nextcloud/l10n'
 
 import { useSessionStore } from '../../stores/session.ts'
 import { Poll } from '../../stores/poll.ts'
-import { computed, PropType } from 'vue'
+import { computed } from 'vue'
 
 import { NcDialog } from '@nextcloud/vue'
 import { showError } from '@nextcloud/dialogs'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 import { usePollsStore } from '../../stores/polls.ts'
 
+const model = defineModel<boolean>({ required: true })
+const { poll } = defineProps<{ poll: Poll }>()
+const emit = defineEmits(['deleted'])
+
 const pollsStore = usePollsStore()
 const sessionStore = useSessionStore()
 
-const emit = defineEmits(['deleted'])
-
-const props = defineProps({
-	poll: {
-		type: Object as PropType<Poll>,
-		required: true,
-	},
-})
-
 const adminAccess = computed(
-	() => !props.poll.permissions.view && sessionStore.currentUser.isAdmin,
+	() => !poll.permissions.view && sessionStore.currentUser.isAdmin,
 )
-
-const model = defineModel({
-	required: true,
-	type: Boolean,
-})
 
 function dialogOK() {
 	try {
-		pollsStore.delete({ pollId: props.poll.id })
+		pollsStore.delete({ pollId: poll.id })
 		emit('deleted')
 	} catch {
 		showError(t('polls', 'Error deleting poll.'))
@@ -49,7 +39,7 @@ const dialogText = adminAccess.value
 	? t(
 			'polls',
 			'This will finally delete the poll and {username} will get notified.',
-			{ username: props.poll.owner.displayName },
+			{ username: poll.owner.displayName },
 		)
 	: t('polls', 'This will finally delete the poll.')
 
