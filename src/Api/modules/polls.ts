@@ -17,14 +17,6 @@ export type Confirmations = {
 	countAbortedMails: number
 }
 
-export type WatcherResponse = {
-	id: number
-	pollId: number
-	table: string
-	updated: number
-	sessionId: string
-}
-
 const polls = {
 	getPolls(): Promise<AxiosResponse<{ list: Poll[] }>> {
 		return httpInstance.request({
@@ -67,21 +59,6 @@ const polls = {
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.getPoll.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	watchPoll(
-		pollId = 0,
-		lastUpdated: number,
-	): Promise<AxiosResponse<{ updates: WatcherResponse[] }>> {
-		return httpInstance.request({
-			method: 'GET',
-			url: `poll/${pollId}/watch`,
-			params: { offset: lastUpdated },
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.watchPoll.name
 				].handleRequestCancellation().token,
 		})
 	},

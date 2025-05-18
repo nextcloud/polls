@@ -5,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { getCurrentUser } from '@nextcloud/auth'
-import { PollsAPI, PublicAPI, SessionAPI } from '../Api/index.ts'
+import { PublicAPI, SessionAPI } from '../Api/index.ts'
 import { createDefault, User, AppPermissions } from '../Types/index.ts'
 import { AppSettings, UpdateType } from './appSettings.ts'
 import { usePreferencesStore, ViewMode, SessionSettings } from './preferences.ts'
@@ -19,7 +19,6 @@ import { useVotesStore } from './votes.ts'
 import { useCommentsStore } from './comments.ts'
 import { useSubscriptionStore } from './subscription.ts'
 import { AxiosError } from '@nextcloud/axios'
-import { InvalidJSON } from '../Exceptions/Exceptions.ts'
 
 interface RouteParams {
 	id: number
@@ -47,6 +46,7 @@ type Watcher = {
 	sleepTimeoutSeconds: number
 	retryCounter: number
 	blockWatch: boolean
+	id: string
 }
 
 export type Session = {
@@ -61,7 +61,7 @@ export type Session = {
 	watcher: Watcher
 }
 
-const mobileBreakpoint = 480
+const MOBILE_BREAKPOINT = 480
 const SLEEP_TIMEOUT_DEFAULT = 30
 const MAX_TRIES = 5
 
@@ -144,6 +144,7 @@ export const useSessionStore = defineStore('session', {
 			sleepTimeoutSeconds: SLEEP_TIMEOUT_DEFAULT,
 			retryCounter: 0,
 			blockWatch: false,
+			id: Math.random().toString(36).substring(2)
 		},
 		token: null,
 		currentUser: createDefault<User>(),
@@ -179,7 +180,7 @@ export const useSessionStore = defineStore('session', {
 			if (state.sessionSettings.manualViewTextPoll) {
 				return state.sessionSettings.manualViewTextPoll
 			}
-			if (window.innerWidth > mobileBreakpoint) {
+			if (window.innerWidth > MOBILE_BREAKPOINT) {
 				return preferencesStore.user.defaultViewTextPoll
 			}
 			return ViewMode.ListView
@@ -190,7 +191,7 @@ export const useSessionStore = defineStore('session', {
 			if (state.sessionSettings.manualViewDatePoll) {
 				return state.sessionSettings.manualViewDatePoll
 			}
-			if (window.innerWidth > mobileBreakpoint) {
+			if (window.innerWidth > MOBILE_BREAKPOINT) {
 				return preferencesStore.user.defaultViewDatePoll
 			}
 			return ViewMode.ListView
@@ -198,129 +199,8 @@ export const useSessionStore = defineStore('session', {
 	},
 
 	actions: {
-		async watchPolls(): Promise<void> {
-			this.watcher.retryCounter = 0
-
-			while (this.watchEnabled) {
-				try {
-					const response = await this.fetchUpdates()
-
-					if (
-						response.headers['content-type'].includes('application/json')
-					) {
-						this.watcher.retryCounter = 0
-						response.data.updates.forEach((item) => {
-							this.watcher.lastUpdated = Math.max(
-								item.updated,
-								this.watcher.lastUpdated,
-							)
-						})
-					} else {
-						throw new InvalidJSON(
-							`No JSON response recieved, got "${response.headers['content-type']}"`,
-						)
-					}
-				} catch (error) {
-					await this.handleConnectionException(error)
-				}
-
-				if (!this.watchEnabled) {
-					return
-				}
-
-				// sleep if request was invalid or polling is set to "periodicPolling"
-				if (this.watcher.retryCounter) {
-					await this.sleep()
-					Logger.debug(
-						`Continue ${this.appSettings.updateType} after sleep`,
-					)
-				}
-
-				// avoid requests when app is in background and pause
-				while (document.hidden || !navigator.onLine) {
-					if (navigator.onLine) {
-						Logger.debug(
-							`App in background, pause ${this.appSettings.updateType}`,
-						)
-					} else {
-						Logger.debug(
-							`Browser is offline, pause ${this.appSettings.updateType}`,
-						)
-					}
-					await new Promise((resolve) => setTimeout(resolve, 5000))
-					Logger.debug('Resume')
-				}
-
-				if (this.watcher.retryCounter) {
-					Logger.debug(
-						`Cancel watch after ${this.watcher.retryCounter} failed requests`,
-					)
-				}
-			}
-		},
-
-		async fetchUpdates() {
-			if (this.route.name === 'publicVote') {
-				return PublicAPI.watchPoll(
-					this.route.params.token,
-					this.watcher.lastUpdated,
-				)
-			}
-			return PollsAPI.watchPoll(this.route.params.id, this.watcher.lastUpdated)
-		},
-
-		sleep(): Promise<void> {
-			const reason = this.watcher.retryCounter
-				? `Connection error, Attempt:  ${this.watcher.retryCounter}/${MAX_TRIES})`
-				: this.appSettings.updateType
-			Logger.debug(
-				`Sleep for ${this.watcher.sleepTimeoutSeconds} seconds (reason: ${reason})`,
-			)
-			return new Promise((resolve) =>
-				setTimeout(resolve, this.watcher.sleepTimeoutSeconds * 1000),
-			)
-		},
-
-		async handleConnectionException(e: unknown) {
-			const error = e as AxiosError
-			if (error.response?.status === 304) {
-				// this is a wanted response, no updates where found.
-				// resume to normal operation
-				Logger.debug(`No updates - continue ${this.appSettings.updateType}`)
-				this.watcher.retryCounter = 0
-				return
-			}
-			if (error?.code === 'ERR_NETWORK') {
-				Logger.debug(
-					`Possibly offline - continue ${this.appSettings.updateType}`,
-				)
-				return
-			}
-			// Errors, which allow a retry. Increase counter and resume to normal operation
-
-			this.watcher.retryCounter += 1
-
-			if (error.response?.status === 503) {
-				// Server possibly in maintenance mode
-				this.watcher.sleepTimeoutSeconds =
-					error.response?.headers['retry-after'] ?? SLEEP_TIMEOUT_DEFAULT
-				Logger.debug(
-					`Service not avaiable - retry ${this.appSettings.updateType} after ${this.watcher.sleepTimeoutSeconds} seconds`,
-				)
-				return
-			}
-
-			// Watch has to be canceled
-			if (error?.code === 'ERR_CANCELED' || error?.code === 'ECONNABORTED') {
-				Logger.debug('Watch canceled')
-			} else {
-				Logger.debug(
-					`No response - ${this.appSettings.updateType} aborted - failed request ${this.watcher.retryCounter}/${MAX_TRIES}`,
-					{ error },
-				)
-			}
-
-			this.watcher.blockWatch = true
+		generateWatcherId() {
+			this.watcher.id = Math.random().toString(36).substring(2)
 		},
 		async load(to: null | RouteLocationNormalized) {
 			Logger.debug('Loading session')

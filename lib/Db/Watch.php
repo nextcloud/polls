@@ -22,7 +22,7 @@ use OCP\AppFramework\Db\Entity;
  * @method void setTable(string $value)
  * @method int getUpdated()
  * @method void setUpdated(int $value)
- * @method int getSessionId()
+ * @method string getSessionId()
  * @method void setSessionId(string $value)
  */
 class Watch extends Entity implements JsonSerializable {
