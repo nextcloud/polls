@@ -11,7 +11,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import AddDateIcon from 'vue-material-design-icons/CalendarPlus.vue'
 import { Event } from '../../../Types'
 
-const caption = defineProps<{ caption?: string }>()
+const { caption } = defineProps<{ caption?: string }>()
 const buttonAriaLabel = computed(() => caption ?? t('polls', 'Add option'))
 
 async function clickAction() {
