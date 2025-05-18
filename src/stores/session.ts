@@ -39,13 +39,6 @@ export type UserStatus = {
 }
 
 type Watcher = {
-	restart: boolean
-	watching: boolean
-	lastUpdated: number
-	endPoint: string
-	sleepTimeoutSeconds: number
-	retryCounter: number
-	blockWatch: boolean
 	id: string
 }
 
@@ -62,8 +55,6 @@ export type Session = {
 }
 
 const MOBILE_BREAKPOINT = 480
-const SLEEP_TIMEOUT_DEFAULT = 30
-const MAX_TRIES = 5
 
 export const useSessionStore = defineStore('session', {
 	state: (): Session => ({
@@ -137,14 +128,7 @@ export const useSessionStore = defineStore('session', {
 			isAdmin: !!getCurrentUser()?.isAdmin,
 		},
 		watcher: {
-			restart: false,
-			watching: true,
-			lastUpdated: Math.round(Date.now() / 1000),
-			endPoint: '',
-			sleepTimeoutSeconds: SLEEP_TIMEOUT_DEFAULT,
-			retryCounter: 0,
-			blockWatch: false,
-			id: Math.random().toString(36).substring(2)
+			id: ''
 		},
 		token: null,
 		currentUser: createDefault<User>(),
@@ -152,14 +136,6 @@ export const useSessionStore = defineStore('session', {
 	}),
 
 	getters: {
-		watchEnabled(): boolean {
-			return (
-				!this.watcher.blockWatch
-				&& this.appSettings.updateType !== UpdateType.NoPolling
-				&& this.watcher.retryCounter < MAX_TRIES
-			)
-		},
-
 		publicToken(state): string {
 			if (state.route.params.token) {
 				return state.route.params.token as string
@@ -204,6 +180,7 @@ export const useSessionStore = defineStore('session', {
 		},
 		async load(to: null | RouteLocationNormalized) {
 			Logger.debug('Loading session')
+			this.generateWatcherId()
 
 			if (to !== null) {
 				Logger.debug('Set requested route', { to })
@@ -220,7 +197,6 @@ export const useSessionStore = defineStore('session', {
 				})()
 
 				this.$patch(response.data)
-				this.watcher.blockWatch = false
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -230,7 +206,6 @@ export const useSessionStore = defineStore('session', {
 				if (this.route.name === null) {
 					this.$reset()
 				} else {
-					this.watcher.blockWatch = true
 					throw error
 				}
 			}
