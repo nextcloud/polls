@@ -9,6 +9,7 @@ OC.L10N.register(
     "Delete" : "Borrar",
     "Register" : "Registrar",
     "Unknown error" : "Error desconocido",
+    "Loading" : "Cargando",
     "Collapse" : "Colapsar",
     "Add" : "Agregar",
     "New comment …" : "Comentario nuevo ...",

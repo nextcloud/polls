@@ -13,6 +13,7 @@ OC.L10N.register(
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aptauju lietotne, līdzīga Doodle/DUD-Poll, ar iespēju ierobežot piekļuvi (dalībnieki, noteikti lietotāji / to kopas, slēptas un publiskas).",
     "Delete" : "Izdzēst",
     "Unknown error" : "Nezināma kļūda",
+    "Loading" : "Ielādē",
     "Show more" : "Parādīt vairāk",
     "Collapse" : "Sakļaut",
     "Previous day" : "Iepriekšējā diena",

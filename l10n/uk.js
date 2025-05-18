@@ -27,6 +27,7 @@ OC.L10N.register(
     "Send information about confirmed options by email" : "Надіслати інформацію щодо підтверджених варіантів електронною поштою",
     "No valid email address" : "Відсутня дійсна адреса електронної пошти",
     "Unknown error" : "Невідома помилка",
+    "Loading" : "Завантаження",
     "Show more" : "Показати більше",
     "Collapse" : "Згорнути",
     "Previous day" : "Вчора",

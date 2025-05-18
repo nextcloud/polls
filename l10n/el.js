@@ -167,6 +167,7 @@ OC.L10N.register(
     "Register" : "Εγγραφή",
     "Unknown error" : "Άγνωστο σφάλμα",
     "Toggle Sidebar" : "Εναλλαγή Πλευρικής στήλης",
+    "Loading" : "Γίνεται φόρτωση",
     "Show more" : "Εμφάνιση περισσότερων",
     "Collapse" : "Σύμπτυξη",
     "Previous day" : "Προηγούμενη ημέρα",

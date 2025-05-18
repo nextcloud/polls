@@ -7,6 +7,7 @@ OC.L10N.register(
     "Delete" : "Hapus",
     "Register" : "Daftar",
     "Unknown error" : "Kesalahan tidak diketahui",
+    "Loading" : "Memuat",
     "Collapse" : "Tutup",
     "Previous day" : "Hari sebelum",
     "Next day" : "Hari setelah",

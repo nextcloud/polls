@@ -12,6 +12,7 @@ OC.L10N.register(
     "Delete" : "Forigi",
     "Register" : "Registriĝi",
     "Unknown error" : "Nekonata eraro",
+    "Loading" : "Ŝargado",
     "Show more" : "Montri pli",
     "Collapse" : "Maletendi",
     "Add" : "Aldoni",

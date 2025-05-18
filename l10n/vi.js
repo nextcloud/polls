@@ -8,6 +8,7 @@ OC.L10N.register(
     "Delete" : "Xóa",
     "Register" : "Đăng ký",
     "Unknown error" : "Lỗi không xác định",
+    "Loading" : "Đang tải",
     "Collapse" : "Thu gọn",
     "Previous day" : "Ngày trước",
     "Next day" : "Ngày hôm sau",

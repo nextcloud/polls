@@ -168,6 +168,7 @@ OC.L10N.register(
     "Register" : "Aanmelden",
     "Unknown error" : "Onbekende fout",
     "Toggle Sidebar" : "Omschakelen Zijbalk",
+    "Loading" : "Laden",
     "Show more" : "Toon meer",
     "Collapse" : "Inklappen",
     "Previous day" : "Vorige dag",

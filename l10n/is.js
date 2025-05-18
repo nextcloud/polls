@@ -20,6 +20,7 @@ OC.L10N.register(
     "Register" : "Nýskráning",
     "Unknown error" : "Óþekkt villa",
     "Toggle Sidebar" : "Víxla hliðarspjaldi af/á",
+    "Loading" : "Hleð inn",
     "Show more" : "Birta meira",
     "Collapse" : "Fella saman",
     "Previous day" : "Fyrri dagur",

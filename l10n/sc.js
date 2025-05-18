@@ -32,6 +32,7 @@ OC.L10N.register(
     "Register" : "Registra",
     "Unknown error" : "Errore disconnotu",
     "Toggle Sidebar" : "Mustra/Cua s'istanca laterale",
+    "Loading" : "Carrighende",
     "Show more" : "Mustra de prus",
     "Collapse" : "Cuntrae",
     "Previous day" : "Die in antis",

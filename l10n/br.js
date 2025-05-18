@@ -5,6 +5,7 @@ OC.L10N.register(
     "User" : "Implijer",
     "Delete" : "Dilemel",
     "Unknown error" : "Fazi dizanv",
+    "Loading" : "Kargañ",
     "Previous day" : "Deizioù kent",
     "Next day" : "Deiz war-lerc'h",
     "Add" : "Ouzhpennañ",

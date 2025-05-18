@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "ลบ",
     "Register" : "ลงทะเบียน",
     "Unknown error" : "ข้อผิดพลาดที่ไม่รู้จัก",
+    "Loading" : "กำลังโหลด",
     "Collapse" : "ย่อ",
     "Add" : "เพิ่ม",
     "New comment …" : "ความคิดเห็นใหม่ ...",

@@ -48,6 +48,7 @@ OC.L10N.register(
     "Register" : "Registriraj se",
     "Unknown error" : "Nepoznata pogreška",
     "Toggle Sidebar" : "Uključi/isključi bočnu traku",
+    "Loading" : "Učitavanje",
     "Show more" : "Prikaži više",
     "Collapse" : "Sakrij",
     "Previous day" : "Prethodni dan",

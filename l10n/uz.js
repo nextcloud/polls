@@ -6,6 +6,7 @@ OC.L10N.register(
     "Delete" : "Delete",
     "Register" : "Roʻyxatdan oʻtish",
     "Unknown error" : "Unknown error",
+    "Loading" : "Yuklanmoqda",
     "Previous day" : "Oldingi kun",
     "Next day" : "Keyingi kun",
     "Add" : "Add",
