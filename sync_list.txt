@@ -1,4 +1,5 @@
 /appinfo
+/assets
 /img
 /js
 /l10n

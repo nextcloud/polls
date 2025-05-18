@@ -123,6 +123,7 @@ class PublicController extends BaseController {
 	 * @param int|null $offset only watch changes after this timestamp
 	 */
 	#[PublicPage]
+	#[NoCSRFRequired]
 	#[ShareTokenRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/s/{token}/watch')]

@@ -11,7 +11,6 @@ import { Comment } from '../../stores/comments.js'
 import { Poll } from '../../stores/poll.js'
 import { Share } from '../../stores/shares.js'
 import { SentResults } from './shares.js'
-import { WatcherResponse } from './polls.js'
 
 const publicPoll = {
 	getPoll(shareToken: string): Promise<
@@ -43,21 +42,6 @@ const publicPoll = {
 			cancelToken:
 				cancelTokenHandlerObject[
 					this.getSession.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	watchPoll(
-		shareToken: string,
-		lastUpdated: number,
-	): Promise<AxiosResponse<{ updates: WatcherResponse[] }>> {
-		return httpInstance.request({
-			method: 'GET',
-			url: `s/${shareToken}/watch`,
-			params: { offset: lastUpdated },
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.watchPoll.name
 				].handleRequestCancellation().token,
 		})
 	},

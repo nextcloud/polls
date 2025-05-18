@@ -13,6 +13,8 @@ import NcContent from '@nextcloud/vue/components/NcContent'
 import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
 import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 
+import { usePollWatcher } from './composables/usePollWatcher'
+
 import { useSessionStore } from './stores/session.ts'
 import { usePollStore } from './stores/poll.ts'
 import { showSuccess } from '@nextcloud/dialogs'
@@ -25,8 +27,11 @@ import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
 import { Event } from './Types/index.ts'
 
+usePollWatcher()
+
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
+
 const transitionClass = ref('transitions-active')
 const loading = ref(false)
 

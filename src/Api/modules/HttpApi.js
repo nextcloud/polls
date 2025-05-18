@@ -4,14 +4,13 @@
  */
 import axios from '@nextcloud/axios'
 import { generateUrl, generateOcsUrl } from '@nextcloud/router'
-
-const clientSessionId = Math.random().toString(36).substring(2)
+import { useSessionStore } from '../../stores/session.ts'
+// const clientSessionId = Math.random().toString(36).substring(2)
 
 const axiosConfig = {
 	baseURL: generateUrl('apps/polls/'),
 	headers: {
 		Accept: 'application/json',
-		'Nc-Polls-Client-Id': clientSessionId,
 		'Nc-Polls-Client-Time-Zone':
 			Intl.DateTimeFormat().resolvedOptions().timeZone,
 	},
@@ -28,6 +27,18 @@ const CancelToken = axios.CancelToken
 const httpInstance = axios.create(axiosConfig)
 const ocsInstance = axios.create(axiosOcsConfig)
 
+httpInstance.interceptors.request.use((config) => {
+	try {
+		const sessionStore = useSessionStore()
+		config.headers = {
+			...config.headers,
+			'Nc-Polls-Client-Id': sessionStore.watcher.id,
+		}
+	} catch {
+		// ignore
+	}
+	return config
+})
 /**
  * Description
  *

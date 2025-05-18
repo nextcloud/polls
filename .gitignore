@@ -8,6 +8,7 @@
 .project/
 .idea/
 .vscode/
+assets/
 build/
 css/*.map
 js/*

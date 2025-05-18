@@ -17,7 +17,6 @@ async function loadContext(to: RouteLocationNormalized) {
 	if (sessionStore.userStatus.isLoggedin) {
 		await preferencesStore.load()
 	}
-
 	Logger.debug('Context loaded')
 }
 
