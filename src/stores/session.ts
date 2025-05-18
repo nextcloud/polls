@@ -128,7 +128,7 @@ export const useSessionStore = defineStore('session', {
 			isAdmin: !!getCurrentUser()?.isAdmin,
 		},
 		watcher: {
-			id: ''
+			id: '',
 		},
 		token: null,
 		currentUser: createDefault<User>(),

@@ -16,7 +16,6 @@ const axiosConfig = {
 	},
 }
 
-
 const axiosOcsConfig = {
 	baseURL: generateOcsUrl('apps/'),
 	headers: {

@@ -35,7 +35,14 @@ export const usePollWatcher = (interval = 30000) => {
 		}
 
 		worker = new PollWatcherWorker()
-		worker.postMessage({ pollId, updateType, interval, baseUrl, token: sessionStore.token, watcherId: sessionStore.watcher.id })
+		worker.postMessage({
+			pollId,
+			updateType,
+			interval,
+			baseUrl,
+			token: sessionStore.token,
+			watcherId: sessionStore.watcher.id,
+		})
 
 		worker.onmessage = (e) => {
 			const { type, message, updates } = e.data
@@ -75,7 +82,10 @@ export const usePollWatcher = (interval = 30000) => {
 		}
 	}
 
-	const getTasksFromUpdates = (updates: WatcherResponse[], currentPollId: number): string[] => {
+	const getTasksFromUpdates = (
+		updates: WatcherResponse[],
+		currentPollId: number,
+	): string[] => {
 		const tasks = new Set<string>()
 
 		for (const update of updates) {
