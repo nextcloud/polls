@@ -429,7 +429,7 @@ OC.L10N.register(
     "Error taking over poll." : "Fehler beim Übernehmen der Umfrage.",
     "Take over" : "Übernehmen",
     "Transfer poll ownership" : "Umfrage-Besitzrechte übertragen",
-    "Sort by title" : "Sortiere nach Titel",
+    "Sort by title" : "Nach Titel sortieren",
     "Sort by last interaction" : "Nach letzter Interaktion sortieren",
     "Sort by creation date" : "Nach Erstellungsdatum sortieren",
     "Sort by expiration date" : "Nach Ablaufdatum sortieren",

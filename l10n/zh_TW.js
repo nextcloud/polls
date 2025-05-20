@@ -354,6 +354,7 @@ OC.L10N.register(
     "Transfering a poll to {user} may result in loss of access to this poll." : "將投票轉移給 {user} 可能會導致無法存取此投票。",
     "You are not the owner of this poll. {owner} will get informed about this action." : "您不是此投票的擁有者。{owner} 會收到關於此動作的通知。",
     "You are not the owner of this poll. {owner} will get informed about the transfer to {newUser}." : "您不是此投票的擁有者。{owner} 會收到關於轉移給 {newUser} 的通知。",
+    "Select the user to transfer the ownership to" : "選取要轉移所有權的目標使用者",
     "Clone poll" : "再製投票",
     "Clone to option sequence" : "再製到選項序列",
     "Create a sequence of date options starting with {dateOption}." : "建立一個以 {dateOption} 開始的日期選項序列。",
