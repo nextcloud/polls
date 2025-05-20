@@ -116,7 +116,10 @@ onUnmounted(() => {
 			<Collapsible
 				v-if="pollStore.configuration.description"
 				:show-more-caption="t('polls', 'Show full description')"
-				:no-collapse="isShortDescription || !pollStore.configuration.collapseDescription"
+				:no-collapse="
+					isShortDescription
+					|| !pollStore.configuration.collapseDescription
+				"
 				:initial-collapsed="!!pollStore.currentUserStatus.countVotes">
 				<MarkDownDescription />
 			</Collapsible>
@@ -141,7 +144,11 @@ onUnmounted(() => {
 			</NcEmptyContent>
 
 			<div class="area__footer">
-				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants && pollStore.viewMode !== ViewMode.ListView" />
+				<CardHiddenParticipants
+					v-if="
+						pollStore.countHiddenParticipants
+						&& pollStore.viewMode !== ViewMode.ListView
+					" />
 				<CardAnonymousPollHint v-if="pollStore.status.isAnonymous" />
 			</div>
 		</div>

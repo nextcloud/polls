@@ -44,7 +44,7 @@ const votesStore = useVotesStore()
 		</CardDiv>
 
 		<CardDiv v-if="votesStore.hasVotes" type="warning">
-			{{ t( 'polls', 'Changes may affect existing votes.') }}
+			{{ t('polls', 'Changes may affect existing votes.') }}
 		</CardDiv>
 
 		<ConfigBox :name="t('polls', 'Title')">

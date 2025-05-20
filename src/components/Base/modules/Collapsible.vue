@@ -10,10 +10,7 @@ interface Props {
 	initialCollapsed?: boolean
 	noCollapse?: boolean
 }
-const {
-	initialCollapsed = false,
-	noCollapse = false,
-} = defineProps<Props>()
+const { initialCollapsed = false, noCollapse = false } = defineProps<Props>()
 
 const showMore = ref(!initialCollapsed || noCollapse)
 </script>
@@ -23,8 +20,7 @@ const showMore = ref(!initialCollapsed || noCollapse)
 		<div
 			v-show="!noCollapse"
 			:class="['collapsible-toggle', { open: showMore }]"
-			@click="showMore = !showMore">
-		</div>
+			@click="showMore = !showMore"></div>
 		<div
 			id="collapsible_container"
 			:class="['collapsible_container', { open: showMore || noCollapse }]">
