@@ -15,7 +15,7 @@ import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
 import { useHandleScroll } from '../composables/handleScroll.ts'
-import MarkUpDescription from '../components/Poll/MarkUpDescription.vue'
+import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
 import PollHeaderButtons from '../components/Poll/PollHeaderButtons.vue'
@@ -32,7 +32,7 @@ import {
 
 import { usePollStore, PollType } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'
-import { usePreferencesStore } from '../stores/preferences.ts'
+import { usePreferencesStore, ViewMode } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
 
@@ -115,10 +115,13 @@ onUnmounted(() => {
 		<div class="vote_main">
 			<Collapsible
 				v-if="pollStore.configuration.description"
-				:show-more-caption="pollStore.configuration.description"
-				:no-collapse="isShortDescription"
+				:show-more-caption="t('polls', 'Show full description')"
+				:no-collapse="
+					isShortDescription
+					|| !pollStore.configuration.collapseDescription
+				"
 				:initial-collapsed="!!pollStore.currentUserStatus.countVotes">
-				<MarkUpDescription />
+				<MarkDownDescription />
 			</Collapsible>
 
 			<VoteInfoCards />
@@ -141,7 +144,11 @@ onUnmounted(() => {
 			</NcEmptyContent>
 
 			<div class="area__footer">
-				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants" />
+				<CardHiddenParticipants
+					v-if="
+						pollStore.countHiddenParticipants
+						&& pollStore.viewMode !== ViewMode.ListView
+					" />
 				<CardAnonymousPollHint v-if="pollStore.status.isAnonymous" />
 			</div>
 		</div>

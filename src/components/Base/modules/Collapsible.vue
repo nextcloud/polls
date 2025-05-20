@@ -4,21 +4,13 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n'
 import { ref } from 'vue'
 
 interface Props {
 	initialCollapsed?: boolean
 	noCollapse?: boolean
-	showMoreCaption?: string
-	closeCaption?: string
 }
-const {
-	initialCollapsed = false,
-	noCollapse = false,
-	showMoreCaption = t('polls', 'Show more'),
-	closeCaption = t('polls', 'Collapse'),
-} = defineProps<Props>()
+const { initialCollapsed = false, noCollapse = false } = defineProps<Props>()
 
 const showMore = ref(!initialCollapsed || noCollapse)
 </script>
@@ -26,22 +18,20 @@ const showMore = ref(!initialCollapsed || noCollapse)
 <template>
 	<div class="collapsible">
 		<div
+			v-show="!noCollapse"
+			:class="['collapsible-toggle', { open: showMore }]"
+			@click="showMore = !showMore"></div>
+		<div
 			id="collapsible_container"
 			:class="['collapsible_container', { open: showMore || noCollapse }]">
 			<slot />
-		</div>
-		<div
-			v-show="!noCollapse"
-			:class="['collapsible-toggle', { open: showMore }]"
-			@click="showMore = !showMore">
-			{{ showMore ? closeCaption : showMoreCaption }}
 		</div>
 	</div>
 </template>
 
 <style lang="scss">
 .collapsible {
-	overflow: hidden;
+	display: flex;
 
 	.collapsible-toggle {
 		cursor: pointer;
@@ -49,31 +39,28 @@ const showMore = ref(!initialCollapsed || noCollapse)
 		line-height: 2rem;
 		font-weight: bold;
 		white-space: nowrap;
-		overflow: hidden;
 		text-overflow: ellipsis;
 		max-width: 100%;
-		background-color: var(--color-background-plain);
-		color: var(--color-primary-element-text);
-		border-radius: var(--border-radius-element);
+		padding: 0.5rem 1rem;
 
 		&::before {
 			content: '\25B8';
+			font-size: 1.5rem;
 			margin: 0 0.3em;
 			display: inline-block;
-			transform: rotate(90deg);
 			transition: transform 0.3s ease-in-out;
 		}
 		&.open {
 			&::before {
-				transform: rotate(-90deg);
+				transform: rotate(90deg);
 			}
 		}
 	}
 
 	.collapsible_container {
 		transition: max-height 0.3s ease-in-out;
-		overflow: auto;
-		max-height: 0;
+		max-height: 6rem;
+		overflow: hidden;
 
 		background:
 		    /* Shadow covers */
@@ -137,6 +124,7 @@ const showMore = ref(!initialCollapsed || noCollapse)
 
 		&.open {
 			max-height: max(51vh, 6rem);
+			overflow: auto;
 		}
 	}
 }

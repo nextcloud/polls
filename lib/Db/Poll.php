@@ -257,6 +257,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'allowProposals' => $this->getAllowProposals(),
 			'anonymous' => boolval($this->getAnonymous()),
 			'autoReminder' => $this->getAutoReminder(),
+			'collapseDescription' => $this->getCollapseDescription(),
 			'description' => $this->getDescription(),
 			'expire' => $this->getExpire(),
 			'hideBookedUp' => boolval($this->getHideBookedUp()),
@@ -322,6 +323,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setAllowProposals($pollConfiguration['allowProposals'] ?? $this->getAllowProposals());
 		$this->setAnonymousSafe($pollConfiguration['anonymous'] ?? $this->getAnonymous());
 		$this->setAutoReminder($pollConfiguration['autoReminder'] ?? $this->getAutoReminder());
+		$this->setCollapseDescription($pollConfiguration['collapseDescription'] ?? $this->getCollapseDescription());
 		$this->setExpire($pollConfiguration['expire'] ?? $this->getExpire());
 		$this->setHideBookedUp($pollConfiguration['hideBookedUp'] ?? $this->getHideBookedUp());
 		$this->setProposalsExpire($pollConfiguration['proposalsExpire'] ?? $this->getProposalsExpire());
@@ -389,8 +391,16 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setMiscSettingsByKey('autoReminder', (bool)$value);
 	}
 
+	private function setCollapseDescription(bool|int $value): void {
+		$this->setMiscSettingsByKey('collapseDescription', (bool)$value);
+	}
+
 	private function getAutoReminder(): bool {
 		return $this->getMiscSettingsArray()['autoReminder'] ?? false;
+	}
+
+	private function getCollapseDescription(): bool {
+		return $this->getMiscSettingsArray()['collapseDescription'] ?? true;
 	}
 
 	// alias of getId()

@@ -154,7 +154,13 @@ class UserBase implements JsonSerializable {
 	 * used for telling internal from guest users
 	 */
 	public function getSimpleType(): string {
-		return in_array($this->type, [User::TYPE, Admin::TYPE]) ? self::TYPE_USER : self::TYPE_GUEST;
+		if (in_array($this->type, [User::TYPE, Admin::TYPE])) {
+			return self::TYPE_USER;
+		} elseif ($this->type === Ghost::TYPE) {
+			return self::TYPE_GHOST;
+		}
+
+		return self::TYPE_GUEST;
 	}
 
 	public function getLanguageCode(): string {

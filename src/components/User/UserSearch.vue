@@ -24,7 +24,7 @@ interface Props {
 
 const emit = defineEmits(['userSelected'])
 
-const modelValue = defineModel<User | null>({ required: true })
+const modelValue = defineModel<User | null>()
 
 const {
 	placeholder = t('polls', 'Type to start searching ...'),

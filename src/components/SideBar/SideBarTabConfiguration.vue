@@ -39,17 +39,12 @@ const votesStore = useVotesStore()
 
 <template>
 	<div>
-		<CardDiv v-if="votesStore.hasVotes" type="warning">
-			{{
-				t(
-					'polls',
-					'Please be careful when changing options, because it can affect existing votes in an unwanted manner.',
-				)
-			}}
+		<CardDiv v-if="!pollStore.currentUserStatus.isOwner" type="success">
+			{{ t('polls', 'Administrative rights are delegated to you.') }}
 		</CardDiv>
 
-		<CardDiv v-if="!pollStore.currentUserStatus.isOwner" type="success">
-			{{ t('polls', 'As an admin you may edit this poll') }}
+		<CardDiv v-if="votesStore.hasVotes" type="warning">
+			{{ t('polls', 'Changes may affect existing votes.') }}
 		</CardDiv>
 
 		<ConfigBox :name="t('polls', 'Title')">
