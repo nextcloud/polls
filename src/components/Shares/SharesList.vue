@@ -16,7 +16,7 @@ import ShareItem from './ShareItem.vue'
 import UserSearch from '../User/UserSearch.vue'
 import SharePublicAdd from './SharePublicAdd.vue'
 import ShareItemAllUsers from './ShareItemAllUsers.vue'
-import MarkUpDescription from '../Poll/MarkUpDescription.vue'
+import MarkDownDescription from '../Poll/MarkDownDescription.vue'
 
 import { usePollStore } from '../../stores/poll.ts'
 import { useSharesStore, Share } from '../../stores/shares.ts'
@@ -91,7 +91,7 @@ async function addShare(user: User) {
 				:encode-text="qrText"
 				class="modal__content">
 				<template #description>
-					<MarkUpDescription />
+					<MarkDownDescription />
 				</template>
 			</QrModal>
 		</NcModal>

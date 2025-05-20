@@ -12,15 +12,13 @@ const pollStore = usePollStore()
 	<!-- eslint-disable vue/no-v-html -->
 	<div
 		ref="desc"
-		class="markup-description"
-		v-html="pollStore.descriptionMarkUp" />
+		class="markdown-description"
+		v-html="pollStore.descriptionMarkDown" />
 	<!-- eslint-enable vue/no-v-html -->
 </template>
 
 <style lang="scss">
-.markup-description {
-	padding: 0.5rem;
-	margin: 0.25rem;
+.markdown-description {
 	overflow: auto;
 
 	* {
@@ -29,9 +27,7 @@ const pollStore = usePollStore()
 		text-decoration: revert;
 		list-style: inside;
 	}
-}
 
-.markup-description {
 	table {
 		border-spacing: 2px;
 	}

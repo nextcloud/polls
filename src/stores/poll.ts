@@ -80,6 +80,7 @@ export type PollConfiguration = {
 	allowProposals: AllowProposals
 	anonymous: boolean
 	autoReminder: boolean
+	collapseDescription: boolean
 	description: string
 	expire: number
 	hideBookedUp: boolean
@@ -178,6 +179,7 @@ export const usePollStore = defineStore('poll', {
 			allowProposals: AllowProposals.Disallow,
 			anonymous: false,
 			autoReminder: false,
+			collapseDescription: true,
 			expire: 0,
 			hideBookedUp: false,
 			proposalsExpire: 0,
@@ -374,7 +376,7 @@ export const usePollStore = defineStore('poll', {
 			return this.countParticipants * optionsStore.count
 		},
 
-		descriptionMarkUp(): string {
+		descriptionMarkDown(): string {
 			marked.use(gfmHeadingId(markedPrefix))
 			return DOMPurify.sanitize(
 				marked.parse(this.configuration.description).toString(),
