@@ -32,7 +32,7 @@ import {
 
 import { usePollStore, PollType } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'
-import { usePreferencesStore } from '../stores/preferences.ts'
+import { usePreferencesStore, ViewMode } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
 
@@ -141,7 +141,7 @@ onUnmounted(() => {
 			</NcEmptyContent>
 
 			<div class="area__footer">
-				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants" />
+				<CardHiddenParticipants v-if="pollStore.countHiddenParticipants && pollStore.viewMode !== ViewMode.ListView" />
 				<CardAnonymousPollHint v-if="pollStore.status.isAnonymous" />
 			</div>
 		</div>
