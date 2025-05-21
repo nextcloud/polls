@@ -167,6 +167,10 @@ class UserBase implements JsonSerializable {
 		return $this->languageCode;
 	}
 
+	public function getLanguageCodeFixed(): string {
+		return str_replace('_', '-' ,$this->languageCode);
+	}
+
 	public function getLocaleCode(): string {
 		if (!$this->localeCode) {
 			return $this->languageCode;
@@ -323,6 +327,7 @@ class UserBase implements JsonSerializable {
 			'isNoUser' => $this->getIsNoUser(),
 			'isUnrestrictedOwner' => $this->getIsUnrestrictedPollOwner(),
 			'languageCode' => $this->getLanguageCode(),
+			'languageCodeFixed' => $this->getLanguageCodeFixed(),
 			'localeCode' => $this->getLocaleCode(),
 			'organisation' => $this->getOrganisation(),
 			'subname' => $this->getSubName(),
