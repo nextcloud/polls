@@ -178,6 +178,14 @@ class PollService {
 		}
 	}
 
+	public function getPollOwnerFromDB(int $pollId): UserBase {
+		try {
+			$poll = $this->pollMapper->find($pollId);
+			return $poll->getUser();
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Poll not found');
+		}
+	}
 	/**
 	 * Add poll
 	 */
