@@ -8,7 +8,6 @@ OC.L10N.register(
     "Register" : "Daftar",
     "Unknown error" : "Kesalahan tidak diketahui",
     "Loading" : "Memuat",
-    "Collapse" : "Tutup",
     "Previous day" : "Hari sebelum",
     "Next day" : "Hari setelah",
     "Add" : "Masukkan",

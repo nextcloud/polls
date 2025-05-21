@@ -13,8 +13,6 @@ OC.L10N.register(
     "Register" : "Registriĝi",
     "Unknown error" : "Nekonata eraro",
     "Loading" : "Ŝargado",
-    "Show more" : "Montri pli",
-    "Collapse" : "Maletendi",
     "Add" : "Aldoni",
     "New comment …" : "Nova komento...",
     "Delete comment" : "Forigi komenton",

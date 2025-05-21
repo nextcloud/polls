@@ -15,7 +15,6 @@ OC.L10N.register(
     "Register" : "S'inscriure",
     "Unknown error" : "Error desconeguda",
     "Loading" : "Cargament",
-    "Collapse" : "Replegar",
     "Previous day" : "Jorn passat",
     "Next day" : "Jorn seguent",
     "Add" : "Apondre",

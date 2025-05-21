@@ -13,8 +13,6 @@ OC.L10N.register(
     "Unknown error" : "Se presentó un error desconocido",
     "Maybe" : "Tal vez",
     "Loading" : "Cargando",
-    "Show more" : "Mostrar más",
-    "Collapse" : "Colapsar",
     "Previous day" : "Día anterior",
     "Next day" : "Próximo día",
     "Add" : "Agregar",

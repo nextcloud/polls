@@ -10,7 +10,6 @@ OC.L10N.register(
     "Delete" : "Șterge",
     "Register" : "Înregistrează-te",
     "Unknown error" : "Eroare necunoscută",
-    "Collapse" : "Restrânge",
     "Previous day" : "Ziua anterioară",
     "Next day" : "Ziua următoare",
     "Add" : "Adaugă",

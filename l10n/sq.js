@@ -9,7 +9,6 @@ OC.L10N.register(
     "Delete" : "Fshij",
     "Register" : "Regjistrohu",
     "Unknown error" : "Gabim i panjohur",
-    "Collapse" : "Tkurre",
     "Add" : "Shto",
     "New comment …" : "Koment i ri ...",
     "Delete comment" : "Fshi komentin",

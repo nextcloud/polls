@@ -106,8 +106,6 @@ OC.L10N.register(
     "Unknown error" : "Fallu desconocíu",
     "Toggle Sidebar" : "Alternar la barra llateral",
     "Loading" : "Cargando",
-    "Show more" : "Amosar más",
-    "Collapse" : "Contrayer",
     "Previous day" : "Día anterior",
     "Next day" : "Día siguiente",
     "Add" : "Amestar",

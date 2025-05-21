@@ -11,7 +11,6 @@ OC.L10N.register(
     "Register" : "რეგისტრაცია",
     "Unknown error" : "უცნობი შეცდომა",
     "Maybe" : "შესაძლოა",
-    "Collapse" : "აკეცვა",
     "Add" : "დამატება",
     "New comment …" : "ახალი კომენტარი ...",
     "Delete comment" : "კომენტარის გაუქმება",

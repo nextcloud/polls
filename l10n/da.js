@@ -13,7 +13,6 @@ OC.L10N.register(
     "Register" : "Register",
     "Unknown error" : "Ukendt fejl",
     "Loading" : "Indlæser",
-    "Collapse" : "Sammenfold",
     "Previous day" : "Forrige dag",
     "Next day" : "Næste dag",
     "Add" : "Tilføj",

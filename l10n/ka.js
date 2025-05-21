@@ -165,8 +165,6 @@ OC.L10N.register(
     "Register" : "Register",
     "Unknown error" : "Unknown error",
     "Loading" : "ითვირთება",
-    "Show more" : "Show more",
-    "Collapse" : "Collapse",
     "Previous day" : "Previous day",
     "Next day" : "Next day",
     "Add" : "Add",

@@ -9,7 +9,6 @@ OC.L10N.register(
     "Register" : "Registrar",
     "Unknown error" : "Error desconocido",
     "Loading" : "Cargando",
-    "Collapse" : "Colapsar",
     "Previous day" : "Día previo",
     "Next day" : "Proximo día",
     "Add" : "Añadir",

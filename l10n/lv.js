@@ -14,8 +14,6 @@ OC.L10N.register(
     "Delete" : "Izdzēst",
     "Unknown error" : "Nezināma kļūda",
     "Loading" : "Ielādē",
-    "Show more" : "Parādīt vairāk",
-    "Collapse" : "Sakļaut",
     "Previous day" : "Iepriekšējā diena",
     "Next day" : "Nākamā diena",
     "Add" : "Pievienot",
