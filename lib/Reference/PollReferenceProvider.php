@@ -21,6 +21,7 @@ use OCP\IURLGenerator;
 
 class PollReferenceProvider implements IReferenceProvider {
 
+	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		private PollService $pollService,
 		private IURLGenerator $urlGenerator,
@@ -118,7 +119,7 @@ class PollReferenceProvider implements IReferenceProvider {
 
 	public function getCachePrefix(string $referenceId): string {
 		$pollId = $this->extractPollId($referenceId);
-		if ($pollId !== null) {
+		if ($pollId !== 0) {
 			return (string)$pollId;
 		}
 
