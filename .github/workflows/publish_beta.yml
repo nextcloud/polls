@@ -57,7 +57,7 @@ jobs:
       if: success()
       uses: softprops/action-gh-release@v1
       with:
-        body: "# Changelog for the upcomming release (preview)\n ${{ steps.extract-release-notes.outputs.release_notes }} "
+        body: "# Changelog for the upcoming release (preview)\n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: true
         draft: true
         generate_release_notes: true
