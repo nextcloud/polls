@@ -164,6 +164,7 @@ export type User = {
 	desc: string | null
 	organisation: string | null
 	languageCode: string
+	languageCodeIntl: string
 	localeCode: string | null
 	timeZone: string | null
 	categories: string[] | null

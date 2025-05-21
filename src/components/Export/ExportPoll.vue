@@ -212,7 +212,7 @@ function getIntervalRaw(option: Option): string {
  */
 function getFromFormatted(option: Option): string {
 	return DateTime.fromSeconds(option.timestamp)
-		.setLocale(sessionStore.currentUser.languageCode)
+		.setLocale(sessionStore.currentUser.languageCodeIntl)
 		.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
 }
 
@@ -222,7 +222,7 @@ function getFromFormatted(option: Option): string {
  */
 function getToFormatted(option: Option): string {
 	return DateTime.fromSeconds(option.timestamp)
-		.setLocale(sessionStore.currentUser.languageCode)
+		.setLocale(sessionStore.currentUser.languageCodeIntl)
 		.plus({ seconds: option.duration })
 		.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
 }

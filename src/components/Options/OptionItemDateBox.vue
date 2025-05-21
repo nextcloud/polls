@@ -19,7 +19,7 @@ const { timeStamp, durationSeconds = 0 } = defineProps<Props>()
 
 // computed from as DateTime from Luxon
 const from = DateTime.fromSeconds(timeStamp).setLocale(
-	sessionStore.currentUser.languageCode,
+	sessionStore.currentUser.languageCodeIntl,
 )
 
 const duration = Duration.fromMillis(durationSeconds * 1000)

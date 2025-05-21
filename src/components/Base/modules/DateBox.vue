@@ -16,7 +16,7 @@ const { dateTime: luxonDate, duration: luxonDuration = Duration.fromMillis(0) } 
 	defineProps<Props>()
 
 const from = computed(() =>
-	luxonDate.setLocale(sessionStore.currentUser.languageCode),
+	luxonDate.setLocale(sessionStore.currentUser.languageCodeIntl),
 )
 
 const sessionStore = useSessionStore()
