@@ -86,13 +86,13 @@ const dateTimeOptionsFiltered = computed(() => {
 // computed from as DateTime from Luxon
 const from = computed(() => {
 	const dateFrom = DateTime.fromJSDate(fromInput.value).setLocale(
-		sessionStore.currentUser.languageCodeFixed,
+		sessionStore.currentUser.languageCodeIntl,
 	)
 	// if the option is an all day option, the time is set to 00:00
 	if (allDay.value) {
 		return dateFrom
 			.startOf('day')
-			.setLocale(sessionStore.currentUser.languageCodeFixed)
+			.setLocale(sessionStore.currentUser.languageCodeIntl)
 	}
 	return dateFrom
 })
