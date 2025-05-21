@@ -168,7 +168,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	public function getLanguageCodeFixed(): string {
-		return str_replace('_', '-' ,$this->languageCode);
+		return str_replace('_', '-', $this->languageCode);
 	}
 
 	public function getLocaleCode(): string {
