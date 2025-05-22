@@ -12,13 +12,13 @@ import './assets/scss/polls-icon.scss'
 registerWidget(
 	'polls_reference_widget',
 	async (el, { richObjectType, richObject, accessible }) => {
-    const PollsReference = createApp(
-		Reference, {
+		const PollsReference = createApp(Reference, {
 			richObjectType,
 			richObject,
-			accessible
+			accessible,
 		})
-		.use(pinia)
-		.mount(el)
-	return PollsReference
-})
+			.use(pinia)
+			.mount(el)
+		return PollsReference
+	},
+)

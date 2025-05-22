@@ -39,7 +39,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 		return ($this->extractPollId($referenceText) !== 0);
 	}
 
-	public function extractPollId($referenceText): int {
+	public function extractPollId(string $referenceText): int {
 		$matchingUrls = [
 			$this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_ID . '/vote'), // poll url base without index.php
 			$this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID . '/vote'), // poll url base with index.php

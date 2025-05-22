@@ -29,33 +29,32 @@ const {
 	richObject = null,
 	accessible = true,
 } = defineProps<Props>()
-
 </script>
 
 <template>
-    <div v-if="richObject" class="polls_widget">
+	<div v-if="richObject" class="polls_widget">
 		<div class="widget_header">
 			<PollsAppIcon :size="20" class="title-icon" />
-	        <span class="title">
-                {{ richObject.poll.title }}
-            </span>
-        </div>
-        <div class="description">
-            <span class="clamped">
-                {{ richObject.poll.description }}
-            </span>
-        </div>
+			<span class="title">
+				{{ richObject.poll.title }}
+			</span>
+		</div>
+		<div class="description">
+			<span class="clamped">
+				{{ richObject.poll.description }}
+			</span>
+		</div>
 		<div class="owner">
 			<NcUserBubble
 				:user="richObject.poll.ownerId"
 				:display-name="richObject.poll.ownerDisplayName" />
 		</div>
-    </div>
+	</div>
 </template>
 
 <style lang="scss" scoped>
 .polls_widget {
-	padding: 0.6rem
+	padding: 0.6rem;
 }
 .widget_header {
 	display: flex;
@@ -88,4 +87,3 @@ const {
 	padding: 0 !important;
 }
 </style>
-
