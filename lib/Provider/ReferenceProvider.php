@@ -61,6 +61,10 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
 			$pollId = $this->extractPollId($referenceText);
+			$expired = false;
+			$expiry = 0;
+			$participated = false;
+
 
 			if ($pollId) {
 				try {
@@ -70,6 +74,9 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 					$ownerId = $poll->getUser()->getId();
 					$ownerDisplayName = $poll->getUser()->getDisplayName();
 					$url = $poll->getVoteUrl();
+					$expired = $poll->getExpired();
+					$expiry = $poll->getExpire();
+					$participated = $poll->getCurrentUserVotes() ? true : false;
 
 				} catch (NotFoundException $e) {
 					$pollId = 0;
@@ -105,6 +112,9 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 						'ownerDisplayName' => $ownerDisplayName,
 						'ownerId' => $ownerId,
 						'url' => $url,
+						'expired' => $expired,
+						'expiry' => $expiry,
+						'participated' => $participated,
 					],
 				]);
 				return $reference;

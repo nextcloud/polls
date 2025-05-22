@@ -6,6 +6,11 @@
 <script setup lang="ts">
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import { PollsAppIcon } from '../components/AppIcons'
+import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
+import BadgeSmallDiv from '../components/Base/modules/BadgeSmallDiv.vue'
+import { t } from '@nextcloud/l10n'
+import { DateTime } from 'luxon'
+import { StatusResults } from '../Types'
 
 type RichObject = {
 	id: number
@@ -16,32 +21,71 @@ type RichObject = {
 		ownerDisplayName: string
 		ownerId: string
 		url: string
+		participated: boolean
+		expiry: number
+		expired: boolean
 	}
 }
 
 interface Props {
 	richObject?: RichObject
 }
-const { richObject = null } = defineProps<Props>()
+
+const { richObject } = defineProps<Props>()
+// const expiryClass2 = (() => {
+// 	if (!richObject?.poll?.expiry) {
+// 		return ''
+// 	}
+// 	if (DateTime.fromMillis(richObject.poll.expiry * 1000).diffNow('hours').hours < 36) {
+// 		return StatusResults.Warning
+// 	}
+// 	return StatusResults.Success
+// })
+const expiryClass = richObject?.poll?.expiry
+	? DateTime.fromMillis(richObject.poll.expiry * 1000).diffNow('hours').hours < 36
+		? StatusResults.Warning
+		: StatusResults.Success
+	: ''
 </script>
 
 <template>
 	<div v-if="richObject" class="polls_widget">
 		<div class="widget_header">
 			<PollsAppIcon :size="20" class="title-icon" />
-			<span class="title">
+			<a class="title" :href="richObject.poll.url" target="_blank">
 				{{ richObject.poll.title }}
-			</span>
+			</a>
+			<BadgeSmallDiv v-if="richObject.poll.participated" class="success">
+				{{ t('polls', 'participated') }}
+			</BadgeSmallDiv>
+			<BadgeSmallDiv v-else-if="richObject.poll.expired" class="error">
+				{{ t('polls', 'closed') }}
+			</BadgeSmallDiv>
+			<BadgeSmallDiv
+				v-else-if="richObject.poll.expiry > 0"
+				:class="expiryClass">
+				<template #icon>
+					<ExpirationIcon :size="16" />
+				</template>
+				{{ DateTime.fromMillis(richObject.poll.expiry * 1000).toRelative() }}
+			</BadgeSmallDiv>
 		</div>
 		<div class="description">
 			<span class="clamped">
 				{{ richObject.poll.description }}
 			</span>
 		</div>
-		<div class="owner">
+		<div class="widget_footer">
+			<span>{{ t('polls', 'By:') }}</span>
 			<NcUserBubble
 				:user="richObject.poll.ownerId"
 				:display-name="richObject.poll.ownerDisplayName" />
+			<span
+				v-if="richObject.poll.expiry > 0 && !richObject.poll.expired"
+				class="expiration">
+				{{ t('polls', 'Ends in') }}
+				{{ DateTime.fromMillis(richObject.poll.expiry * 1000).toRelative() }}
+			</span>
 		</div>
 	</div>
 </template>
@@ -50,10 +94,15 @@ const { richObject = null } = defineProps<Props>()
 .polls_widget {
 	padding: 0.6rem;
 }
-.widget_header {
+.widget_header,
+.widget_footer {
 	display: flex;
+	column-gap: 0.3rem;
 }
 
+.badge-small {
+	flex: 0;
+}
 .polls_app_icon {
 	flex: 0 0 1.4rem;
 }
@@ -61,6 +110,9 @@ const { richObject = null } = defineProps<Props>()
 	flex: 1;
 	font-weight: bold;
 	padding-left: 0.6rem;
+	text-wrap: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
 }
 .description {
 	margin-left: 1.4rem;

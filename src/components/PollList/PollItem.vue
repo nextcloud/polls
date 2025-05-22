@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { RouterLink } from 'vue-router'
 import { computed } from 'vue'
-import moment from '@nextcloud/moment'
+import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 import {
 	usePollStore,
@@ -41,12 +41,13 @@ const closeToClosing = computed(
 	() =>
 		!poll.status.isExpired
 		&& poll.configuration.expire
-		&& moment.unix(poll.configuration.expire).diff() < 86400000,
+		&& DateTime.fromMillis(poll.configuration.expire * 1000).diffNow('hours')
+			.hours < 36,
 )
 
 const timeExpirationRelative = computed(() => {
 	if (poll.configuration.expire) {
-		return moment.unix(poll.configuration.expire).fromNow()
+		return DateTime.fromMillis(poll.configuration.expire * 1000).toRelative()
 	}
 	return t('polls', 'never')
 })
@@ -67,14 +68,16 @@ const expiryClass = computed(() => {
 	return StatusResults.Success
 })
 
-const timeCreatedRelative = computed(() =>
-	moment.unix(poll.status.created).fromNow(),
+const timeCreatedRelative = computed(
+	() => DateTime.fromMillis(poll.status.created * 1000).toRelative() as string,
 )
 
 const descriptionLine = computed(() => {
 	if (poll.status.isArchived) {
-		return t('polls', 'Archived {relativeTIme}', {
-			relativeTIme: moment.unix(poll.status.archivedDate).fromNow(),
+		return t('polls', 'Archived {relativeTime}', {
+			relativeTime: DateTime.fromMillis(
+				poll.status.archivedDate * 1000,
+			).toRelative() as string,
 		})
 	}
 	return t('polls', 'Started {relativeTime} from {ownerName}', {
