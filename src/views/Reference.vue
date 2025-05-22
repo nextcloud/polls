@@ -22,9 +22,7 @@ type RichObject = {
 interface Props {
 	richObject?: RichObject
 }
-const {
-	richObject = null,
-} = defineProps<Props>()
+const { richObject = null } = defineProps<Props>()
 </script>
 
 <template>

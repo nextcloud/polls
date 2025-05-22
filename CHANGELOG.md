@@ -24,7 +24,7 @@ All notable changes to this project will be documented in this file.
  - Delete polls without the need to archive them first
  - Collapsible poll description
  - Transfer polls to another owner by the current poll owner or the administration
- - Added reference provider for link previews
+ - Added reference provider for link previews and smart picker
 
 ## [7.4.1] - 2024-03-07
 ### New
