@@ -20,14 +20,10 @@ type RichObject = {
 }
 
 interface Props {
-	richObjectType: string
 	richObject?: RichObject
-	accessible?: boolean
 }
 const {
-	richObjectType = 'poll',
 	richObject = null,
-	accessible = true,
 } = defineProps<Props>()
 </script>
 

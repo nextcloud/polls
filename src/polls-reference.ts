@@ -11,11 +11,9 @@ import './assets/scss/polls-icon.scss'
 
 registerWidget(
 	'polls_reference_widget',
-	async (el, { richObjectType, richObject, accessible }) => {
+	async (el, { richObject }) => {
 		const PollsReference = createApp(Reference, {
-			richObjectType,
 			richObject,
-			accessible,
 		})
 			.use(pinia)
 			.mount(el)
