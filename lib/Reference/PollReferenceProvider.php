@@ -99,7 +99,7 @@ class PollReferenceProvider implements IReferenceProvider {
 				$reference->setTitle($title);
 				$reference->setDescription($description ? $description : $this->l10n->t('No description available.'));
 				$reference->setImageUrl($imageUrl);
-				$reference->setRichObject(Application::APP_ID . '_poll_widget', [
+				$reference->setRichObject(Application::APP_ID . '_reference_widget', [
 					'id' => $pollId,
 					'poll' => [
 						'id' => $pollId,
