@@ -79,7 +79,7 @@ class ShareController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
-	#[FrontpageRoute(verb: 'POST', url: '/share/{token}/publicpollemail/{value}')]
+	#[FrontpageRoute(verb: 'PUT', url: '/share/{token}/publicpollemail/{value}')]
 	public function setPublicPollEmail(string $token, string $value): JSONResponse {
 		return $this->response(fn () => ['share' => $this->shareService->setPublicPollEmail($token, $value)]);
 	}
