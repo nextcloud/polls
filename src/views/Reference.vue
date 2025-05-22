@@ -4,7 +4,6 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 import { PollsAppIcon } from '../components/AppIcons'
 
@@ -51,7 +50,6 @@ const {
 				:user="richObject.poll.ownerId"
 				:display-name="richObject.poll.ownerDisplayName" />
 		</div>
-
     </div>
 </template>
 

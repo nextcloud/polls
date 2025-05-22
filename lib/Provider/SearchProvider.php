@@ -31,7 +31,7 @@ class SearchProvider implements IProvider {
 	}
 
 	public function getId(): string {
-		return 'poll';
+		return 'search-poll';
 	}
 
 	public function getName(): string {

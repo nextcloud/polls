@@ -57,7 +57,7 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\Settings\SystemSettings;
 use OCA\Polls\Notification\Notifier;
 use OCA\Polls\Provider\SearchProvider;
-use OCA\Polls\Reference\PollReferenceProvider;
+use OCA\Polls\Provider\ReferenceProvider;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
@@ -131,7 +131,8 @@ class Application extends App implements IBootstrap {
 
 		$context->registerSearchProvider(SearchProvider::class);
 		$context->registerDashboardWidget(PollWidget::class);
-		$context->registerReferenceProvider(PollReferenceProvider::class);
+		$context->registerReferenceProvider(ReferenceProvider::class);
+
 	}
 
 	/**
