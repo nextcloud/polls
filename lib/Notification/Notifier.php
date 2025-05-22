@@ -17,6 +17,7 @@ use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
 use OCP\Notification\INotification;
 use OCP\Notification\INotifier;
+use OCP\Notification\UnknownNotificationException;
 use Psr\Log\LoggerInterface;
 
 class Notifier implements INotifier {
@@ -56,7 +57,7 @@ class Notifier implements INotifier {
 	public function prepare(INotification $notification, string $languageCode): INotification {
 		$l = $this->l10nFactory->get(AppConstants::APP_ID, $languageCode);
 		if ($notification->getApp() !== AppConstants::APP_ID) {
-			throw new \InvalidArgumentException();
+			throw new UnknownNotificationException();
 		}
 		$parameters = $notification->getSubjectParameters();
 
@@ -104,7 +105,7 @@ class Notifier implements INotifier {
 				self::SUBJECT_RICH => $l->t('{actor} archived your poll "%s".', $pollTitle),
 			],
 			// Unknown subject => Unknown notification => throw
-			default => throw new \InvalidArgumentException(),
+			default => throw new UnknownNotificationException(),
 		};
 
 		switch ($notification->getSubject()) {
