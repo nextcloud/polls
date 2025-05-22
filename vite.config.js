@@ -25,6 +25,7 @@ export default createAppConfig(
 		userSettings: resolve(join('src', 'userSettings.ts')),
 		adminSettings: resolve(join('src', 'adminSettings.ts')),
 		dashboard: resolve(join('src', 'dashboard.ts')),
+		reference: resolve(join('src', 'polls-reference.ts')),
 	},
 	{
 		inlineCSS: { relativeCSSInjection: true },

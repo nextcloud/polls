@@ -48,6 +48,7 @@ use OCA\Polls\Listener\CommentListener;
 use OCA\Polls\Listener\GroupDeletedListener;
 use OCA\Polls\Listener\OptionListener;
 use OCA\Polls\Listener\PollListener;
+use OCA\Polls\Listener\PollsReferenceListener;
 use OCA\Polls\Listener\ShareListener;
 use OCA\Polls\Listener\UserDeletedListener;
 use OCA\Polls\Listener\VoteListener;
@@ -55,13 +56,14 @@ use OCA\Polls\Middleware\RequestAttributesMiddleware;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\Settings\SystemSettings;
 use OCA\Polls\Notification\Notifier;
+use OCA\Polls\Provider\ReferenceProvider;
 use OCA\Polls\Provider\SearchProvider;
-use OCA\Polls\Reference\PollReferenceProvider;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\App;
 use OCP\AppFramework\Bootstrap\IBootContext;
 use OCP\AppFramework\Bootstrap\IBootstrap;
 use OCP\AppFramework\Bootstrap\IRegistrationContext;
+use OCP\Collaboration\Reference\RenderReferenceEvent;
 use OCP\Group\Events\GroupDeletedEvent;
 use OCP\IAppConfig;
 use OCP\IDBConnection;
@@ -89,6 +91,7 @@ class Application extends App implements IBootstrap {
 		include_once __DIR__ . '/../../vendor/autoload.php';
 		$this->registerServices($context);
 
+		$context->registerEventListener(RenderReferenceEvent::class, PollsReferenceListener::class);
 		$context->registerMiddleWare(RequestAttributesMiddleware::class);
 		$context->registerNotifierService(Notifier::class);
 
@@ -128,7 +131,8 @@ class Application extends App implements IBootstrap {
 
 		$context->registerSearchProvider(SearchProvider::class);
 		$context->registerDashboardWidget(PollWidget::class);
-		$context->registerReferenceProvider(PollReferenceProvider::class);
+		$context->registerReferenceProvider(ReferenceProvider::class);
+
 	}
 
 	/**

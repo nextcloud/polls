@@ -6,20 +6,21 @@ declare(strict_types=1);
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-namespace OCA\Polls\Reference;
+namespace OCA\Polls\Provider;
 
 use Exception;
 use OCA\Polls\AppInfo\Application;
 use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\NotFoundException;
 use OCA\Polls\Service\PollService;
+use OCP\Collaboration\Reference\ADiscoverableReferenceProvider;
 use OCP\Collaboration\Reference\IReference;
-use OCP\Collaboration\Reference\IReferenceProvider;
+use OCP\Collaboration\Reference\ISearchableReferenceProvider;
 use OCP\Collaboration\Reference\Reference;
 use OCP\IL10N;
 use OCP\IURLGenerator;
 
-class PollReferenceProvider implements IReferenceProvider {
+class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearchableReferenceProvider {
 
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
@@ -38,7 +39,7 @@ class PollReferenceProvider implements IReferenceProvider {
 		return ($this->extractPollId($referenceText) !== 0);
 	}
 
-	private function extractPollId($referenceText): int {
+	public function extractPollId(string $referenceText): int {
 		$matchingUrls = [
 			$this->urlGenerator->getAbsoluteURL('/apps/' . Application::APP_ID . '/vote'), // poll url base without index.php
 			$this->urlGenerator->getAbsoluteURL('/index.php/apps/' . Application::APP_ID . '/vote'), // poll url base with index.php
@@ -60,6 +61,10 @@ class PollReferenceProvider implements IReferenceProvider {
 	public function resolveReference(string $referenceText): ?IReference {
 		if ($this->matchReference($referenceText)) {
 			$pollId = $this->extractPollId($referenceText);
+			$expired = false;
+			$expiry = 0;
+			$participated = false;
+
 
 			if ($pollId) {
 				try {
@@ -69,6 +74,9 @@ class PollReferenceProvider implements IReferenceProvider {
 					$ownerId = $poll->getUser()->getId();
 					$ownerDisplayName = $poll->getUser()->getDisplayName();
 					$url = $poll->getVoteUrl();
+					$expired = $poll->getExpired();
+					$expiry = $poll->getExpire();
+					$participated = $poll->getCurrentUserVotes() ? true : false;
 
 				} catch (NotFoundException $e) {
 					$pollId = 0;
@@ -91,15 +99,11 @@ class PollReferenceProvider implements IReferenceProvider {
 					return null;
 				}
 
-				$imageUrl = $this->urlGenerator->getAbsoluteURL(
-					$this->urlGenerator->imagePath(Application::APP_ID, 'polls.svg')
-				);
-
 				$reference = new Reference($referenceText);
 				$reference->setTitle($title);
 				$reference->setDescription($description ? $description : $this->l10n->t('No description available.'));
-				$reference->setImageUrl($imageUrl);
-				$reference->setRichObject(Application::APP_ID . '_poll_widget', [
+				$reference->setImageUrl($this->getIconUrl());
+				$reference->setRichObject(Application::APP_ID . '_reference_widget', [
 					'id' => $pollId,
 					'poll' => [
 						'id' => $pollId,
@@ -108,6 +112,9 @@ class PollReferenceProvider implements IReferenceProvider {
 						'ownerDisplayName' => $ownerDisplayName,
 						'ownerId' => $ownerId,
 						'url' => $url,
+						'expired' => $expired,
+						'expiry' => $expiry,
+						'participated' => $participated,
 					],
 				]);
 				return $reference;
@@ -128,5 +135,23 @@ class PollReferenceProvider implements IReferenceProvider {
 
 	public function getCacheKey(string $referenceId): ?string {
 		return $this->userId ?? '';
+	}
+	public function getId(): string {
+		return Application::APP_ID;
+	}
+	public function getTitle(): string {
+		return $this->l10n->t('Poll');
+	}
+
+	public function getIconUrl(): string {
+		return $this->urlGenerator->imagePath(Application::APP_ID, 'polls.svg');
+	}
+
+	public function getOrder(): int {
+		return 51;
+	}
+
+	public function getSupportedSearchProviderIds(): array {
+		return ['search-poll'];
 	}
 }
