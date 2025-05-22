@@ -46,6 +46,8 @@
     "{actor} deleted your poll \"%s\"." : "{actor} verwijderde je peiling \"%s\".",
     "%s archived your poll" : "%s archiveerde je peiling",
     "{actor} archived your poll \"%s\"." : "{actor} archiveerde je peiling \"%s\".",
+    "Poll" : "Peiling",
+    "Access denied" : "Toegang geweigerd",
     "You have commented on poll {pollTitle}" : "Je hebt gereageerd op peiling {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} heeft gereageerd op peiling {pollTitle}",
     "You have commented" : "Je hebt gereageerd",

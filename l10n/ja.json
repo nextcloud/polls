@@ -54,6 +54,8 @@
     "{actor} deleted your poll \"%s\"." : "{actor} があなた投票「%s」を削除しました",
     "%s archived your poll" : "%s があなたの投票をアーカイブしました",
     "{actor} archived your poll \"%s\"." : "{actor}はあなたの投票 \"%s\"をアーカイブしました",
+    "Poll" : "投票",
+    "Access denied" : "アクセス拒否",
     "You have commented on poll {pollTitle}" : "あなたは投票 {pollTitle} にコメントしました",
     "{actor} has commented on poll {pollTitle}" : "{actor} が投票 {pollTitle} にコメントしました",
     "You have commented" : "あなたがコメントしました",

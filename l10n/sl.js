@@ -55,6 +55,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} izbriše vašo anketo »%s«.",
     "%s archived your poll" : "%s arhivira anketo.",
     "{actor} archived your poll \"%s\"." : "{actor} arhivira vašo anketo »%s«.",
+    "Poll" : "Anketa",
+    "Access denied" : "Dostop je zavrnjen",
     "You have commented on poll {pollTitle}" : "Vpišete opombo za anketo {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} vpiše opombo za anketo {pollTitle}",
     "You have commented" : "Pošljete opombo",

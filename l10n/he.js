@@ -18,6 +18,7 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "הסקר שלך „%s” נמחק על ידי {actor}",
     "%s archived your poll" : "הסקר שלך הועבר לארכיון על ידי %s",
     "{actor} archived your poll \"%s\"." : "הסקר שלך „%s” הועבר לארכיון על ידי {actor}",
+    "Access denied" : "הגישה נדחתה",
     "Delete" : "מחיקה",
     "Register" : "רישום",
     "Unknown error" : "שגיאה בלתי ידועה",

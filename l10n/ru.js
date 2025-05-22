@@ -51,6 +51,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} удалил(а) ваш опрос \"%s\".",
     "%s archived your poll" : "%s заархивировал(а) ваш опрос",
     "{actor} archived your poll \"%s\"." : "{actor} заархивировал(а) ваш опрос \"%s\".",
+    "Poll" : "Опрос",
+    "Access denied" : "Доступ запрещён",
     "You have commented on poll {pollTitle}" : "Вы добавили комментарий к опросу {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} добавил(а) комментарий к опросу {pollTitle}",
     "You have commented" : "Вы прокомментировали",

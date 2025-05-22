@@ -56,6 +56,7 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor}-(e)k zure \"%s\" galdeketa ezabatu du.",
     "%s archived your poll" : "%s-(e)k zure galdeketa artxibatu du",
     "{actor} archived your poll \"%s\"." : "{actor}-ek zure \"%s\" galdeketa artxibatu du.",
+    "Access denied" : "Sarbidea ukatua",
     "You have commented on poll {pollTitle}" : "{pollTitle} galdeketa iruzkindu duzu",
     "{actor} has commented on poll {pollTitle}" : "{actor}-(e)k {pollTitle} galdeketa iruzkindu du",
     "You have commented" : "Iruzkindu duzu",

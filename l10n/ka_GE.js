@@ -7,6 +7,7 @@ OC.L10N.register(
     "Polls App - New Activity" : "Polls აპლიკაცია - ახალი აქტივობა",
     "Contact" : "კონტაქტი",
     "User" : "მომხმარებელი",
+    "Access denied" : "წვდომა არაა დაშვებული",
     "Delete" : "წაშლა",
     "Register" : "რეგისტრაცია",
     "Unknown error" : "უცნობი შეცდომა",

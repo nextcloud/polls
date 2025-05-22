@@ -7,6 +7,7 @@ OC.L10N.register(
     "%s has left a comment." : "%s a lăsat un comentariu.",
     "Contact" : "Contact",
     "User" : "Utilizator",
+    "Access denied" : "Acces interzis",
     "Delete" : "Șterge",
     "Register" : "Înregistrează-te",
     "Unknown error" : "Eroare necunoscută",

@@ -36,6 +36,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} ištrynė jūsų apklausą „%s“.",
     "%s archived your poll" : "%s užarchyvavo jūsų apklausą",
     "{actor} archived your poll \"%s\"." : "{actor} užarchyvavo jūsų apklausą „%s“.",
+    "Poll" : "Apklausa",
+    "Access denied" : "Prieiga negalima",
     "You have commented" : "Jūs pakomentavote",
     "{actor} has commented" : "{actor} pakomentavo",
     "You have deleted a comment" : "Jūs ištrynėte komentarą",

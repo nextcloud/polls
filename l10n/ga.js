@@ -58,6 +58,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "scrios {actor} do vótaíocht \"%s\".",
     "%s archived your poll" : "Chuir %s do vótaíocht i gcartlann",
     "{actor} archived your poll \"%s\"." : "Chuir {actor} do vótaíocht \"%s\" i gcartlann.",
+    "Poll" : "Vótaíocht",
+    "Access denied" : "Rochtain diúltaithe",
     "You have commented on poll {pollTitle}" : "Rinne tú nóta tráchta ar vótaíocht {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "Rinne {actor} nóta tráchta ar vótaíocht {pollTitle}",
     "You have commented" : "Tá trácht déanta agat",

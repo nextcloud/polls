@@ -11,6 +11,7 @@ OC.L10N.register(
     "External Email" : "Email extèrn",
     "User" : "User",
     "%s invited you to a poll" : "%s vos condivèt a un sondatge",
+    "Poll" : "Sondatge",
     "Delete" : "Suprimir",
     "Register" : "S'inscriure",
     "Unknown error" : "Error desconeguda",

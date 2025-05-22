@@ -42,6 +42,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} poisti kyselysi \"%s\".",
     "%s archived your poll" : "%s arkistoi kyselysi",
     "{actor} archived your poll \"%s\"." : "{actor} arkistoi kyselysi \"%s\".",
+    "Poll" : "Kysely",
+    "Access denied" : "Pääsy estetty",
     "You have commented on poll {pollTitle}" : "Olet kommentoinut kyselyä {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} on kommentoinut kyselyä {pollTitle}",
     "You have commented" : "Olet kommentoinut",

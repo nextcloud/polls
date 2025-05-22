@@ -8,6 +8,7 @@ OC.L10N.register(
     "Polls App - New Activity" : "Enketilo-aplikaĵo — Nova aktivaĵo",
     "Contact" : "Kontakto",
     "User" : "Uzanto",
+    "Access denied" : "Aliro malpermesata",
     "Add option" : "Aldoni opcion",
     "Delete" : "Forigi",
     "Register" : "Registriĝi",

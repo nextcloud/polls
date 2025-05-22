@@ -55,6 +55,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} your راي سىناشنى \"% s\" ئۆچۈردى.",
     "%s archived your poll" : "% s راي سىناشنى ئارخىپلاشتۇردى",
     "{actor} archived your poll \"%s\"." : "{actor} your راي سىناش \"% s\" نى ئارخىپلاشتۇردى.",
+    "Poll" : "راي سىناش",
+    "Access denied" : "زىيارەت رەت قىلىندى",
     "You have commented on poll {pollTitle}" : "راي سىناش {pollTitle} غا باھا بەردىڭىز",
     "{actor} has commented on poll {pollTitle}" : "{actor} راي سىناشقا باھا بەردى {pollTitle}",
     "You have commented" : "باھا بەردىڭىز",

@@ -53,6 +53,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} deleted your poll \"%s\".",
     "%s archived your poll" : "%s archived your poll",
     "{actor} archived your poll \"%s\"." : "{actor} archived your poll \"%s\".",
+    "Poll" : "Poll",
+    "Access denied" : "Access denied",
     "You have commented on poll {pollTitle}" : "You have commented on poll {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} has commented on poll {pollTitle}",
     "You have commented" : "You have commented",

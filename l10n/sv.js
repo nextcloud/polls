@@ -53,6 +53,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} har tagit bort din omröstning \"%s\".",
     "%s archived your poll" : "%s arkiverade din omröstning",
     "{actor} archived your poll \"%s\"." : "{actor} arkiverade din omröstning \"%s\".",
+    "Poll" : "Omröstning",
+    "Access denied" : "Åtkomst nekades",
     "You have commented on poll {pollTitle}" : "Du har kommenterat på omröstningen {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} har kommenterat på omröstningen {pollTitle}",
     "You have commented" : "Du har kommenterat",

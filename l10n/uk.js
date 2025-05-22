@@ -17,6 +17,7 @@ OC.L10N.register(
     "Contact" : "Контакт",
     "External Email" : "Зовнішня адреса електронної пошти",
     "User" : "Користувач",
+    "Access denied" : "Доступ заборонено",
     "You have changed your email address" : "Ви змінили свою електронну адресу",
     "{sharee} has changed the email address" : "{sharee} змінив(-ла) адресу електронної пошти",
     "Email address of {sharee} has been changed" : "Електронну адресу {sharee} було змінено",

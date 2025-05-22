@@ -48,6 +48,7 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} διέγραψε την δημοσκόπηση σας \"%s\"",
     "%s archived your poll" : "Ο %s αρχειοθέτησε την δημοσκόπηση σας",
     "{actor} archived your poll \"%s\"." : "{actor} αρχειοθέτησε την δημοσκόπηση σας \"%s\"",
+    "Access denied" : "Δεν επιτρέπεται η πρόσβαση",
     "You have commented on poll {pollTitle}" : "Σχολιάσατε στην δημοσκόπηση {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} έχει σχολιάσει στην δημοσκόπηση {pollTitle}",
     "You have commented" : "Έχετε σχολιάσει",

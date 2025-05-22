@@ -41,6 +41,7 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} je izbrisao vašu anketu „%s”.",
     "%s archived your poll" : "%s je arhivirao vašu anketu",
     "{actor} archived your poll \"%s\"." : "{actor} je arhivirao vašu anketu „%s“.",
+    "Access denied" : "Pristup odbijen",
     "Add option" : "Dodaj mogućnost",
     "Delete" : "Izbriši",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Brisanje za {countdown} sekundu","Brisanje za {countdown} sekunde","Brisanje za {countdown} sekundi"],

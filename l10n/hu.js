@@ -56,6 +56,7 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} törölte az Ön „%s” szavazását.",
     "%s archived your poll" : "%s archiválta az Ön szavazását",
     "{actor} archived your poll \"%s\"." : "{actor} archiválta az Ön „%s” szavazását.",
+    "Access denied" : "Hozzáférés megtagadva",
     "You have commented on poll {pollTitle}" : "Megjegyzést fűzött a(z) {pollTitle} szavazáshoz",
     "{actor} has commented on poll {pollTitle}" : "{actor} megjegyzést fűzött a(z) {pollTitle} szavazáshoz",
     "You have commented" : "Megjegyzést fűzött hozzá",

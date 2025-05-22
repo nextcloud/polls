@@ -50,6 +50,8 @@
     "{actor} deleted your poll \"%s\"." : "{actor} eliminó tu encuesta \"%s\".",
     "%s archived your poll" : "%s archivó tu encuesta",
     "{actor} archived your poll \"%s\"." : "{actor} archivó tu encuesta \"%s\".",
+    "Poll" : "Encuesta",
+    "Access denied" : "Acceso denegado",
     "You have commented on poll {pollTitle}" : "Has comentado en la encuesta {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} ha comentado en la encuesta {pollTitle}",
     "You have commented" : "Has comentado",

@@ -8,6 +8,7 @@ OC.L10N.register(
     "Polls App - New Activity" : "Aplicación de Encuestas - Nueva Actividad",
     "Contact" : "Contacto",
     "User" : "Usuario",
+    "Access denied" : "Acceso denegado",
     "Delete" : "Eliminar",
     "Register" : "Registrar",
     "Unknown error" : "Se presentó un error desconocido",

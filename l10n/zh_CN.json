@@ -43,6 +43,8 @@
     "{actor} deleted your poll \"%s\"." : "{actor} 删除了你的投票 \"%s\"",
     "%s archived your poll" : "%s 存档了你的投票",
     "{actor} archived your poll \"%s\"." : "{actor} 存档了你的投票 \"%s\"",
+    "Poll" : "投票",
+    "Access denied" : "访问被拒绝",
     "You have commented on poll {pollTitle}" : "你评论了 {pollTitle} 投票",
     "{actor} has commented on poll {pollTitle}" : "{actor} 评论了 {pollTitle} 投票",
     "You have commented" : "你评论了",

@@ -9,6 +9,8 @@ OC.L10N.register(
     "{owner} sends you this reminder to make sure, your votes are set." : "{owner} ви испрати потсетник за да се осигура дека сте гласале.",
     "Contact" : "Контакт",
     "User" : "Корисник",
+    "Poll" : "Анкета",
+    "Access denied" : "Забранет пристап",
     "Delete" : "Избриши",
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Бришење за 1 секунда","Бришење за {countdown} секунди"],
     "Register" : "Регистрирај се",

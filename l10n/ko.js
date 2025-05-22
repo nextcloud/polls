@@ -27,6 +27,8 @@ OC.L10N.register(
     "Contact" : "연락처",
     "External Email" : "외부 이메일",
     "User" : "사용자",
+    "Poll" : "투표",
+    "Access denied" : "접근이 거부됨",
     "{actor} has commented on poll {pollTitle}" : "{actor}이 당신의 투표 {pollTitle}에 댓글을 남겼습니다.",
     "You have commented" : "당신이 댓글을 남겼습니다.",
     "{actor} has commented" : "{actor}님이 댓글을 남겼습니다.",

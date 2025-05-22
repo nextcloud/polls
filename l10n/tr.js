@@ -56,6 +56,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor}, \"%s\" anketinizi sildi.",
     "%s archived your poll" : "%s anketinizi arşivledi",
     "{actor} archived your poll \"%s\"." : "{actor}, \"%s\" anketinizi arşivledi.",
+    "Poll" : "Anket",
+    "Access denied" : "Erişim reddedildi",
     "You have commented on poll {pollTitle}" : "{pollTitle} anketi hakkında yorum yaptınız",
     "{actor} has commented on poll {pollTitle}" : "{actor}, {pollTitle} anketi hakkında yorum yaptı",
     "You have commented" : "Yorum yaptınız",
