@@ -70,18 +70,18 @@ export default {
 <style lang="scss">
 
 .vote-indicator {
-	&, * {
-		transition: all 0.4s ease-in-out;
-		.active & {
-			cursor: pointer;
-		}
-	}
 	display: flex;
 	justify-content: center;
 	align-content: end;
 	color: var(--color-polls-foreground-no);
 	width: 30px;
 	height: 30px;
+	&, * {
+		transition: all 0.4s ease-in-out;
+		.active & {
+			cursor: pointer;
+		}
+	}
 
 	.active & {
 		border: 2px solid;
