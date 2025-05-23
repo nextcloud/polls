@@ -23,7 +23,7 @@ export default {
 <style lang="scss">
 .loading-overlay {
 	position: absolute;
-	left: 0;
+	inset-inline-start: 0;
 	top: 0;
 	width: 100vw;
 	height: 100vh;
@@ -33,7 +33,7 @@ export default {
 
 	.spinner {
 		position: fixed;
-		left: 50%;
+		inset-inline-start: 50%;
 		top: 50%;
 	}
 }

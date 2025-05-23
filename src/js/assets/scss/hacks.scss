@@ -30,7 +30,7 @@
 
 .action-item.action-item--single.app-navigation-toggle.undefined.has-tooltip {
 	top: 4px;
-	margin-right: -50px;
+	margin-inline-end: -50px;
 }
 
 .mx-input-wrapper .button-vue--vue-primary .material-design-icon__svg {
@@ -49,7 +49,7 @@
 
 .user-item > .checkbox-radio-switch-switch,
 .user-item.add-public > .icon-add {
-	margin-right: 20px !important;
+	margin-inline-end: 20px !important;
 }
 
 // fix v-popover sizing

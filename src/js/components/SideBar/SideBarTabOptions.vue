@@ -98,7 +98,7 @@ export default {
 	.owner {
 		display: flex;
 		position: relative;
-		left: -16px;
+		inset-inline-start: -16px;
 		width: 0;
 	}
 

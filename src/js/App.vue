@@ -248,10 +248,8 @@ export default {
 	background-color: var(--color-main-background);
 	border-bottom: 1px solid var(--color-border);
 	z-index: 9;
-	margin-left: -8px;
-	margin-right: -8px;
-	padding-right: 8px;
-	padding-left: 56px;
+	margin-inline: -8px;
+	padding-inline: 56px 8px;
 }
 
 // global modal settings
@@ -288,8 +286,7 @@ export default {
 	}
 
 	.button {
-		margin-left: 10px;
-		margin-right: 0;
+		margin-inline: 10px 0;
 	}
 }
 

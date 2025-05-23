@@ -94,8 +94,7 @@ export default {
 
 <style lang="scss">
 	.option-clone-date.modal__content {
-		padding-left: 28px;
-		padding-right: 28px;
+		padding-inline: 28px;
 	}
 
 	.add-options-list {

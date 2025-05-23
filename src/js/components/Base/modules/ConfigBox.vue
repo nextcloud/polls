@@ -88,11 +88,11 @@ export default {
 	.config-box__container {
 		display: flex;
 		flex-direction: column;
-		padding-left: 24px;
+		padding-inline-start: 24px;
 	}
 }
 
 .indented {
-	margin-left: 24px !important;
+	margin-inline-start: 24px !important;
 }
 </style>

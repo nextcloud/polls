@@ -276,7 +276,7 @@ export default {
 				content: '';
 				width: 8px;
 				height: 8px;
-				margin-left: 4px;
+				margin-inline-start: 4px;
 				background-image: var(--icon-triangle-n-dark);
 				background-repeat: no-repeat;
 				background-position: center;

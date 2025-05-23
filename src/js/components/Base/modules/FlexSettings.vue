@@ -47,7 +47,7 @@ export default {
 
 .settings_details {
 	padding-bottom: 16px;
-	margin-left: 36px;
+	margin-inline-start: 36px;
 }
 
 </style>
