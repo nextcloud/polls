@@ -422,6 +422,7 @@ OC.L10N.register(
     "404 - poll not found" : "404 - encuesta no encontrada",
     "Enter a poll or start a new one." : "Ingresa una encuesta o comienza una nueva.",
     "Add one or change category!" : "¡Agrega una o cambia de categoría!",
+    "participated" : "participó",
     "Comments" : "Comentarios",
     "Details" : "Detalles",
     "Configuration" : "Configuración",

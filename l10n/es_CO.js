@@ -44,6 +44,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
     "Public link" : "Liga pública",
     "No description provided" : "No se agregó ninguna descripción",
+    "participated" : "participó",
     "Comments" : "Comentarios",
     "Details" : "Detalles",
     "Configuration" : "Configuración",

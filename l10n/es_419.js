@@ -31,6 +31,7 @@ OC.L10N.register(
     "No activity yet" : "Aún no hay actividades",
     "Description" : "Descripción",
     "Receive notification email on activity" : "Recibir un correo de notificación en actividad ",
+    "participated" : "participó",
     "Comments" : "Comentarios",
     "Details" : "Detalles",
     "Configuration" : "Configuración",

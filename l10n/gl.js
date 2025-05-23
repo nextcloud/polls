@@ -580,6 +580,7 @@ OC.L10N.register(
     "Add one or change category!" : "Engadir unha ou cambiar a categoría!",
     "Error loading more polls" : "Produciuse un erro ao cargar máis enquisas",
     "Click here to load more" : "Prema aquí para cargar máis",
+    "participated" : "participou",
     "Comments" : "Comentarios",
     "Details" : "Detalles",
     "Configuration" : "Configuración",

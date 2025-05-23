@@ -425,6 +425,7 @@ OC.L10N.register(
     "404 - poll not found" : "404 - nie znaleziono sondy",
     "Enter a poll or start a new one." : "Wybierz sondę lub rozpocznij nową.",
     "Add one or change category!" : "Dodaj jedną lub zmień kategorię!",
+    "participated" : "głosujących",
     "Comments" : "Komentarze",
     "Details" : "Szczegóły",
     "Configuration" : "Konfiguracja",

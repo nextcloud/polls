@@ -50,6 +50,7 @@ OC.L10N.register(
     "Receive notification email on activity" : "Ricevi sciigojn retpoŝte okaze de aktivaĵo",
     "Change name" : "Ŝanĝi nomon",
     "Public link" : "Publika ligilo",
+    "participated" : "partoprenis",
     "Comments" : "Komentoj",
     "Details" : "Detaloj",
     "Configuration" : "Agordo",

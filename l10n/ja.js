@@ -276,6 +276,7 @@ OC.L10N.register(
     "Show all" : "全て表示",
     "Preferences" : "環境設定",
     "Enter a poll or start a new one." : "投票を入力するか新しい投票を開始してください。",
+    "participated" : "参加した",
     "Comments" : "コメント",
     "Details" : "詳細",
     "Configuration" : "設定",

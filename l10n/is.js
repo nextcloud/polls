@@ -109,6 +109,7 @@ OC.L10N.register(
     "404 - poll not found" : "404 - könnun fannst ekki",
     "Enter a poll or start a new one." : "Settu inn könnun eða byrjaðu nýja.",
     "Add one or change category!" : "Bæta við könnun eða skipta um flokk!",
+    "participated" : "tókst þátt",
     "Comments" : "Athugasemdir",
     "Details" : "Details",
     "Configuration" : "Uppsetning",

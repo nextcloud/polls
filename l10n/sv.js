@@ -427,6 +427,7 @@ OC.L10N.register(
     "404 - poll not found" : "404 - omröstning hittades inte",
     "Enter a poll or start a new one." : "Öppna en omröstning eller starta en ny.",
     "Add one or change category!" : "Lägg till en eller ändra kategori!",
+    "participated" : "deltog",
     "Comments" : "Kommentarer",
     "Details" : "Detaljer",
     "Configuration" : "Konfiguration",

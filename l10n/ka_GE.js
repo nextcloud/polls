@@ -35,6 +35,7 @@ OC.L10N.register(
     "No activity yet" : "აქტოვობა ჯერ არაა",
     "Description" : "აღწერილობა",
     "Receive notification email on activity" : "აქტივობისას ელ-წერილის მიღება",
+    "participated" : "მიიღო მონწილეობა",
     "Comments" : "კომენტარები",
     "Details" : "დეტალები",
     "Configuration" : "კონფიგურაცია",

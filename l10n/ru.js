@@ -399,6 +399,7 @@ OC.L10N.register(
     "404 - poll not found" : "404 — опрос не найден",
     "Enter a poll or start a new one." : "Пройдите опрос или создайте новый",
     "Add one or change category!" : "Добавьте или измените категорию",
+    "participated" : "Вы приняли участие",
     "Comments" : "Комментарии",
     "Details" : "Подробнее",
     "Configuration" : "Конфигурация",

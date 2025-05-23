@@ -25,6 +25,7 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} desanició la encuesta «%s».",
     "%s archived your poll" : "%s archivó la encuesta",
     "{actor} archived your poll \"%s\"." : "{actor} archivó la encuesta «%s».",
+    "Poll" : "Encuesta",
     "You have commented on poll {pollTitle}" : "Comentesti na encuesta «{pollTitle}»",
     "{actor} has commented on poll {pollTitle}" : "{actor} comentó na encuesta «{pollTitle}»",
     "You have commented" : "Comentesti",

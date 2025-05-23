@@ -472,6 +472,7 @@ OC.L10N.register(
     "Add one or change category!" : "Adjon hozzá vagy módosítson egy kategóriát!",
     "Error loading more polls" : "Hiba a további szavazások betöltése közben",
     "Click here to load more" : "Kattintson ide továbbiak betöltéséhez",
+    "participated" : "részt vett",
     "Comments" : "Hozzászólások",
     "Details" : "Részletek",
     "Configuration" : "Konfiguráció",

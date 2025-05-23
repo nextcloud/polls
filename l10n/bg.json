@@ -50,6 +50,8 @@
     "{actor} deleted your poll \"%s\"." : "{actor} изтри вашата анкета „%s“.",
     "%s archived your poll" : "%s архивира вашата анкета",
     "{actor} archived your poll \"%s\"." : "{actor} архивира вашата анкета „%s“.",
+    "Poll" : "Анкета",
+    "Access denied" : "Отказан достъп",
     "You have commented on poll {pollTitle}" : "Коментирали сте анкета {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} коментира анкета {pollTitle}",
     "You have commented" : "Вие коментирахте",

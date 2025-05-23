@@ -364,6 +364,7 @@ OC.L10N.register(
     "404 - poll not found" : "404 - 投票未找到",
     "Enter a poll or start a new one." : "输入投票或开始一个新的投票。",
     "Add one or change category!" : "添加一个或更改类别！",
+    "participated" : "参加了",
     "Comments" : "评论",
     "Details" : "详情",
     "Configuration" : "配置",

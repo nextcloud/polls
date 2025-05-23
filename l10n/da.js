@@ -8,6 +8,8 @@ OC.L10N.register(
     "Legal Notice" : "Juridisk notits",
     "Contact" : "takt",
     "User" : "Bruger",
+    "Poll" : "Afstemning",
+    "Access denied" : "Adgang nægtet",
     "Add option" : "Tilføj valg",
     "Delete" : "Slet",
     "Register" : "Register",

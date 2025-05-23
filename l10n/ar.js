@@ -56,6 +56,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "قام {actor} بحذف استبيانك\"%s\".",
     "%s archived your poll" : "قام %s بأرشفة استبيانك",
     "{actor} archived your poll \"%s\"." : "قام {actor} بأرشفة استبيانك \"%s\".",
+    "Poll" : "استبيان",
+    "Access denied" : "الوصول ممنوع",
     "You have commented on poll {pollTitle}" : "لقد قمتَ بالتعليق على استبيان {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "قام {actor} بالتعليق على استبيان {pollTitle}",
     "You have commented" : "لقد قمت بالتعليق",

@@ -455,6 +455,7 @@ OC.L10N.register(
     "Enter a poll or start a new one." : "Sartu galdeketa bat edo hasi berri bat.",
     "Loading polls…" : "Galdeketak kargatzen...",
     "Add one or change category!" : "Gehitu bat edo aldatu kategoria!",
+    "participated" : "parte-hartzailea",
     "Comments" : "Iruzkinak",
     "Details" : "Xehetasunak",
     "Configuration" : "Konfigurazioa",

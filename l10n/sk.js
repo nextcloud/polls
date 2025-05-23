@@ -511,6 +511,7 @@ OC.L10N.register(
     "404 - poll not found" : "404 - anketa nenájdená",
     "Enter a poll or start a new one." : "Zadajte anketu alebo začnite novú.",
     "Add one or change category!" : "Pridajte nejakú alebo zmeňte kategóriu!",
+    "participated" : "zúčastnený",
     "Comments" : "Komentáre",
     "Details" : "Podrobnosti",
     "Configuration" : "Nastavenia",

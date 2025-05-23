@@ -87,6 +87,7 @@ OC.L10N.register(
     "Show all" : "להציג הכול",
     "Preferences" : "העדפות",
     "Enter a poll or start a new one." : "כניסה לסקר או הקמת אחד חדש.",
+    "participated" : "השתתפת",
     "Comments" : "תגובות",
     "Details" : "פרטים",
     "Configuration" : "הגדרות",

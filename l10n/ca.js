@@ -56,6 +56,8 @@ OC.L10N.register(
     "{actor} deleted your poll \"%s\"." : "{actor} ha suprimit la vostra enquesta \"%s\".",
     "%s archived your poll" : "%sha arxivat la vostra enquesta",
     "{actor} archived your poll \"%s\"." : "{actor} ha arxivat la vostra enquesta \"%s\".",
+    "Poll" : "Enquesta",
+    "Access denied" : "Accés denegat",
     "You have commented on poll {pollTitle}" : "Heu comentat l'enquesta {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} ha comentat l'enquesta {pollTitle}",
     "You have commented" : "Heu  comentat",

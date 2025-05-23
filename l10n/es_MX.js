@@ -55,6 +55,7 @@ OC.L10N.register(
     "Email options" : "Opciones de correo electrónico",
     "Show all" : "Mostrar todo",
     "Preferences" : "Preferencias",
+    "participated" : "participó",
     "Comments" : "Comentarios",
     "Details" : "Detalles",
     "Configuration" : "Configuración",

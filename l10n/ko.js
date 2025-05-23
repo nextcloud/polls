@@ -238,6 +238,7 @@ OC.L10N.register(
     "Preferences" : "환경 설정",
     "404 - poll not found" : "404 - 투표를 찾을 수 없음",
     "Add one or change category!" : "하나를 추가 혹은 카테고리를 바꾸세요!",
+    "participated" : "참가자",
     "Comments" : "댓글",
     "Details" : "세부사항",
     "Configuration" : "설정",

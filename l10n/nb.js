@@ -578,6 +578,7 @@ OC.L10N.register(
     "Add one or change category!" : "Legg til en eller endre kategori!",
     "Error loading more polls" : "Feil ved lasting av flere avstemninger",
     "Click here to load more" : "Klikk her for å laste inn mer",
+    "participated" : "deltok",
     "Comments" : "Kommentarer",
     "Details" : "Detaljer",
     "Configuration" : "Oppsett",
