@@ -90,6 +90,13 @@ export default {
 		}
 	}
 
+	&, * {
+		transition: all 0.4s ease-in-out;
+		.active & {
+			cursor: pointer;
+		}
+	}
+
 	.active & {
 		border: 2px solid;
 		border-radius: var(--border-radius);
