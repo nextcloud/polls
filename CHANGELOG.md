@@ -5,6 +5,10 @@
 # Changelog
 ##
 
+## [7.4.3] - 2025-05-23
+### Fix
+ - Email constrains of public shares where not displayed properly
+
 ## [7.4.2] - 2024-03-31
 ### Fix
  - Poll export did not update recent votes of the current user

@@ -83,7 +83,7 @@ export default {
 		}
 		.bar_top_right {
 			padding-top: 3px;
-			padding-right: 44px;
+			padding-inline-end: 44px;
 		}
 	}
 

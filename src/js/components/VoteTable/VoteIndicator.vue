@@ -76,7 +76,6 @@ export default {
 	color: var(--color-polls-foreground-no);
 	width: 30px;
 	height: 30px;
-
 	&, * {
 		transition: all 0.4s ease-in-out;
 		.active & {

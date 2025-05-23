@@ -109,14 +109,14 @@ export default {
 	.activity-item__date {
 		opacity: 0.5;
 		font-size: 0.8em;
-		text-align: right;
+		text-align: end;
 		&::before {
 			content: ' ~ '
 		}
 	}
 
 	.activity-item__content {
-		margin-left: 8px;
+		margin-inline-start: 8px;
 		flex: 1 1;
 		padding-top: 2px;
 	}

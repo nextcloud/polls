@@ -80,28 +80,29 @@
 				<NcActionCaption v-if="isActivePublicShare" :name="t('polls', 'Options for the registration dialog')" />
 
 				<NcActionRadio v-if="isActivePublicShare"
+					:key="publicPollEmail"
+					v-model="publicPollEmail"
 					name="publicPollEmail"
-					value="optional"
-					:checked="share.publicPollEmail === 'optional'"
-					@change="setPublicPollEmail({ share, value: 'optional' })">
+					value="optional">
 					{{ t('polls', 'Email address is optional') }}
 				</NcActionRadio>
 
 				<NcActionRadio v-if="isActivePublicShare"
+					:key="publicPollEmail"
+					v-model="publicPollEmail"
 					name="publicPollEmail"
-					value="mandatory"
-					:checked="share.publicPollEmail === 'mandatory'"
-					@change="setPublicPollEmail({ share, value: 'mandatory' })">
+					value="mandatory">
 					{{ t('polls', 'Email address is mandatory') }}
 				</NcActionRadio>
 
 				<NcActionRadio v-if="isActivePublicShare"
+					:key="publicPollEmail"
+					v-model="publicPollEmail"
 					name="publicPollEmail"
-					value="disabled"
-					:checked="share.publicPollEmail === 'disabled'"
-					@change="setPublicPollEmail({ share, value: 'disabled' })">
+					value="disabled">
 					{{ t('polls', 'Do not ask for an email address') }}
 				</NcActionRadio>
+
 				<NcActionButton v-if="!share.deleted"
 					:name="share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share')"
 					:aria-label="share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share')"
@@ -200,6 +201,15 @@ export default {
 	},
 
 	computed: {
+		publicPollEmail: {
+			get() {
+				return this.share.publicPollEmail
+			},
+			set(value) {
+				this.$store.dispatch('shares/setPublicPollEmail', { share: this.share, value })
+			},
+		},
+
 		isActivePublicShare() {
 			return !this.share.deleted && this.share.user.type === 'public'
 		},
@@ -243,7 +253,6 @@ export default {
 			lockShare: 'shares/lock',
 			unlockShare: 'shares/unlock',
 			switchAdmin: 'shares/switchAdmin',
-			setPublicPollEmail: 'shares/setPublicPollEmail',
 			writeLabel: 'shares/writeLabel',
 		}),
 
@@ -321,7 +330,7 @@ export default {
 }
 
 .vote-status {
-	margin-left: 8px;
+	margin-inline-start: 8px;
 	width: 32px;
 
 	&.voted {

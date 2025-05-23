@@ -302,7 +302,7 @@ export default {
 	}
 
 	.option-item__handle {
-		margin-right: 8px;
+		margin-inline-end: 8px;
 	}
 
 	.draggable {
@@ -315,7 +315,7 @@ export default {
 
 		.material-design-icon.draggable {
 			width: 0;
-			padding-right: 0px;
+			padding-inline-end: 0px;
 			transition: all .3s ease-in-out;
 		}
 
@@ -323,7 +323,7 @@ export default {
 		&:hover {
 			.material-design-icon.draggable {
 				width: initial;
-				padding-right: 7px;
+				padding-inline-end: 7px;
 			}
 		}
 
@@ -332,6 +332,6 @@ export default {
 	.option-item__rank {
 		flex: 0 0;
 		justify-content: flex-end;
-		padding-right: 8px;
+		padding-inline-end: 8px;
 	}
 </style>

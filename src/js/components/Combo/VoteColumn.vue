@@ -56,7 +56,7 @@ export default {
 	flex-direction: column;
 	align-items: stretch;
 	max-width: 280px;
-	border-left: 1px solid var(--color-border-dark);
+	border-inline-start: 1px solid var(--color-border-dark);
 	margin-bottom: 4px;
 }
 </style>

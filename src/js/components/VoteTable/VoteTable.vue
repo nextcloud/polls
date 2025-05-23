@@ -242,7 +242,7 @@ export default {
 			max-width: initial;
 			position: relative;
 			border-top: solid 1px var(--color-border);
-			border-left: none;
+			border-inline-start: none;
 			padding: 0;
 
 			&.locked {
@@ -281,7 +281,7 @@ export default {
 			order: 0;
 			flex: 0;
 			flex-direction: column;
-			padding-left: 12px;
+			padding-inline-start: 12px;
 		}
 
 		.vote-table__users {
@@ -325,7 +325,7 @@ export default {
 
 		.calendar-peek {
 			order: 0;
-			padding-left:4px;
+			padding-inline-start:4px;
 		}
 
 		.calendar-peek__conflict.icon {

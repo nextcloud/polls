@@ -35,7 +35,7 @@
 	}
 
 	.area__header {
-		margin-left: 0 !important;
+		margin-inline-start: 0 !important;
 	}
 
 	.vote-table__votes,
@@ -54,7 +54,7 @@
 			background: none !important;
 			&::before {
 				content: '✔';
-				padding-right: 4px;
+				padding-inline-end: 4px;
 			}
 		}
 
@@ -62,7 +62,7 @@
 			background: none !important;
 			&::before {
 				content: '❔';
-				padding-right: 4px;
+				padding-inline-end: 4px;
 			}
 		}
 
@@ -70,7 +70,7 @@
 			background: none !important;
 			&::before {
 				content: '❌';
-				padding-right: 4px;
+				padding-inline-end: 4px;
 			}
 		}
 	}

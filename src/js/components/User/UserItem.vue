@@ -276,7 +276,7 @@ export default {
 		position: absolute;
 		background-size: 16px;
 		top: -6px;
-		left: -6px;
+		inset-inline-start: -6px;
 	}
 }
 
@@ -300,7 +300,7 @@ export default {
 .user-item__name {
 	flex: 1;
 	min-width: 50px;
-	padding-left: 8px;
+	padding-inline-start: 8px;
 	white-space: nowrap;
 	> div {
 		overflow: hidden;
