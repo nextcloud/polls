@@ -22,7 +22,6 @@ use OCP\IL10N;
 use OCP\IURLGenerator;
 use OCP\L10N\IFactory;
 
-
 /**
  * @psalm-suppress UnusedClass
  */
