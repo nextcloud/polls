@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Provider;
 
-use InvalidArgumentException;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\Service\ActivityService;
+use OCP\Activity\Exceptions\UnknownActivityException;
 use OCP\Activity\IEvent;
 use OCP\Activity\IEventMerger;
 use OCP\Activity\IManager as ActivityManager;
@@ -40,14 +40,14 @@ class ActivityProvider implements IProvider {
 
 	public function parse($language, IEvent $event, ?IEvent $previousEvent = null) {
 		if ($event->getApp() !== AppConstants::APP_ID) {
-			throw new \InvalidArgumentException();
+			throw new UnknownActivityException();
 		}
 
 		$this->l10n = $this->transFactory->get($event->getApp(), $language);
 		$event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath($event->getApp(), 'polls-dark.svg')));
 		$subject = $this->activityService->getActivityMessage($event, $language, $this->activityManager->isFormattingFilteredObject());
 		if (!$subject) {
-			throw new InvalidArgumentException();
+			throw new UnknownActivityException();
 		}
 		$this->setSubjects($event, $subject);
 		return $event;

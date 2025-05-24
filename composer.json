@@ -39,7 +39,7 @@
 		"doctrine/dbal": "3.8.6",
 		"league/factory-muffin": "^3.0",
 		"league/factory-muffin-faker": "^2.0",
-		"nextcloud/ocp": "dev-stable29"
+		"nextcloud/ocp": "dev-stable30"
 	},
 	"scripts": {
 		"lint": "find . -name \\*.php -not -path './vendor*/*' -print0 | xargs -0 -n1 php -l",
