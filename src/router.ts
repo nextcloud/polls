@@ -184,11 +184,22 @@ const router = createRouter({
 router.beforeEach(async (to: RouteLocationNormalized) => {
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()
+
+
 	try {
 		await loadContext(to)
 	} catch (error) {
 		Logger.error('Could not load context')
-		return false
+
+		if (!sessionStore.userStatus.isLoggedin) {
+			// if the user is not logged in, redirect to the login page
+			window.location.replace(generateUrl('login'))
+			return false
+		}
+
+		return {
+			name: 'notfound',
+		}
 	}
 
 	try {
