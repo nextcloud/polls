@@ -32,15 +32,7 @@ interface Props {
 }
 
 const { richObject } = defineProps<Props>()
-// const expiryClass2 = (() => {
-// 	if (!richObject?.poll?.expiry) {
-// 		return ''
-// 	}
-// 	if (DateTime.fromMillis(richObject.poll.expiry * 1000).diffNow('hours').hours < 36) {
-// 		return StatusResults.Warning
-// 	}
-// 	return StatusResults.Success
-// })
+
 const expiryClass = richObject?.poll?.expiry
 	? DateTime.fromMillis(richObject.poll.expiry * 1000).diffNow('hours').hours < 36
 		? StatusResults.Warning
@@ -80,12 +72,6 @@ const expiryClass = richObject?.poll?.expiry
 			<NcUserBubble
 				:user="richObject.poll.ownerId"
 				:display-name="richObject.poll.ownerDisplayName" />
-			<span
-				v-if="richObject.poll.expiry > 0 && !richObject.poll.expired"
-				class="expiration">
-				{{ t('polls', 'Ends in') }}
-				{{ DateTime.fromMillis(richObject.poll.expiry * 1000).toRelative() }}
-			</span>
 		</div>
 	</div>
 </template>
