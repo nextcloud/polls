@@ -98,7 +98,9 @@ class PollController extends BaseController {
 	#[FrontpageRoute(verb: 'POST', url: '/poll/add')]
 	public function add(string $type, string $title, string $votingVariant = Poll::VARIANT_SIMPLE): JSONResponse {
 		return $this->response(
-			fn () => $this->pollService->add($type, $title, $votingVariant),
+			fn () => [
+				'poll' => $this->pollService->add($type, $title, $votingVariant)
+			],
 			Http::STATUS_CREATED
 		);
 	}
@@ -147,7 +149,9 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'PUT', url: '/poll/{pollId}/toggleArchive')]
 	public function toggleArchive(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->pollService->toggleArchive($pollId));
+		return $this->response(fn () => [
+			'poll' => $this->pollService->toggleArchive($pollId)
+		]);
 	}
 
 	/**
@@ -157,7 +161,9 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'DELETE', url: '/poll/{pollId}')]
 	public function delete(int $pollId): JSONResponse {
-		return $this->response(fn () => ['poll' => $this->pollService->delete($pollId)]);
+		return $this->response(fn () => [
+			'poll' => $this->pollService->delete($pollId)
+		]);
 	}
 
 	/**
@@ -191,7 +197,9 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/clone')]
 	public function clone(int $pollId): JSONResponse {
-		return $this->response(fn () => ['poll' => $this->clonePoll($pollId)]);
+		return $this->response(fn () => [
+			'poll' => $this->clonePoll($pollId)
+		]);
 	}
 
 	private function clonePoll(int $pollId): Poll {
