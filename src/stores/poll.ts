@@ -572,7 +572,10 @@ export const usePollStore = defineStore('poll', {
 			const pollsStore = usePollsStore()
 
 			try {
-				await PollsAPI.toggleArchive(payload.pollId)
+				const response = await PollsAPI.toggleArchive(payload.pollId)
+				if (this.id === payload.pollId) {
+					this.$patch(response.data.poll)
+				}
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
