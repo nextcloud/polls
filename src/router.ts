@@ -185,7 +185,6 @@ router.beforeEach(async (to: RouteLocationNormalized) => {
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()
 
-
 	try {
 		await loadContext(to)
 	} catch (error) {
