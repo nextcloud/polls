@@ -73,6 +73,7 @@ OC.L10N.register(
     "No description provided" : "Ingen beskrivelse leveret",
     "Show all" : "Vis alle",
     "Preferences" : "Indstillinger",
+    "participated" : "deltog",
     "Comments" : "Kommentarer",
     "Details" : "Detaljer",
     "Configuration" : "sætning",

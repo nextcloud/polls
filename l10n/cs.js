@@ -665,7 +665,6 @@ OC.L10N.register(
     "participated" : "zúčastnil/a se",
     "closed" : "zavřeno",
     "By:" : "Vytvořil/a:",
-    "Ends in" : "Končí v",
     "Comments" : "Komentáře",
     "Details" : "Podrobnosti",
     "Configuration" : "Nastavení",

@@ -665,7 +665,6 @@ OC.L10N.register(
     "participated" : "participated",
     "closed" : "closed",
     "By:" : "By:",
-    "Ends in" : "Ends in",
     "Comments" : "Comments",
     "Details" : "Details",
     "Configuration" : "Configuration",

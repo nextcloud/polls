@@ -491,7 +491,6 @@ OC.L10N.register(
     "participated" : "osales",
     "closed" : "suletud",
     "By:" : "Looja:",
-    "Ends in" : "Lõpeb",
     "Comments" : "Kommentaarid",
     "Details" : "Üksikasjad",
     "Configuration" : "Seadistamine",
