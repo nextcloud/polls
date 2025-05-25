@@ -8,6 +8,8 @@ import { RouterLink } from 'vue-router'
 import { computed } from 'vue'
 import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
+import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
+
 import {
 	usePollStore,
 	AccessType,
@@ -15,6 +17,7 @@ import {
 	PollType,
 	pollTypes,
 } from '../../stores/poll'
+import { usePreferencesStore } from '../../stores/preferences.ts'
 import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
 import { StatusResults } from '../../Types/index.ts'
 
@@ -27,6 +30,8 @@ import OpenPollIcon from 'vue-material-design-icons/Earth.vue'
 import ArchivedPollIcon from 'vue-material-design-icons/Archive.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import LockPollIcon from 'vue-material-design-icons/Security.vue'
+import ParticipantsIcon from 'vue-material-design-icons/AccountMultipleCheck.vue'
+import ParticipatedIcon from 'vue-material-design-icons/AccountCheck.vue'
 
 interface Props {
 	poll: Poll
@@ -36,7 +41,7 @@ interface Props {
 const { poll, noLink = false } = defineProps<Props>()
 
 const pollStore = usePollStore()
-
+const preferencesStore = usePreferencesStore()
 const closeToClosing = computed(
 	() =>
 		!poll.status.isExpired
@@ -73,6 +78,13 @@ const timeCreatedRelative = computed(
 )
 
 const descriptionLine = computed(() => {
+	if (preferencesStore.user.verbosePollsList) {
+		if (poll.configuration.description) {
+			return poll.configuration.description
+		}
+		return t('polls', 'No description provided')
+	}
+
 	if (poll.status.isArchived) {
 		return t('polls', 'Archived {relativeTime}', {
 			relativeTime: DateTime.fromMillis(
@@ -80,6 +92,7 @@ const descriptionLine = computed(() => {
 			).toRelative() as string,
 		})
 	}
+
 	return t('polls', 'Started {relativeTime} from {ownerName}', {
 		ownerName: poll.owner.displayName,
 		relativeTime: timeCreatedRelative.value,
@@ -131,26 +144,28 @@ const descriptionLine = computed(() => {
 				<span class="title">
 					{{ poll.configuration.title }}
 				</span>
-				<BadgeSmallDiv v-if="poll.configuration.expire" :class="expiryClass">
-					<template #icon>
-						<ClosedPollsIcon v-if="poll.status.isExpired" :size="16" />
-						<ExpirationIcon v-else :size="16" />
-					</template>
-					{{ timeExpirationRelative }}
-				</BadgeSmallDiv>
 			</div>
 
 			<div class="description_line">
 				<ArchivedPollIcon
-					v-if="poll.status.isArchived"
+					v-if="
+						!preferencesStore.user.verbosePollsList
+						&& poll.status.isArchived
+					"
 					:title="t('polls', 'Archived  poll')"
 					:size="16" />
 				<OpenPollIcon
-					v-else-if="poll.configuration.access === AccessType.Open"
+					v-else-if="
+						!preferencesStore.user.verbosePollsList
+						&& poll.configuration.access === AccessType.Open
+					"
 					:title="t('polls', 'Openly accessible poll')"
 					:size="16" />
 				<PrivatePollIcon
-					v-else
+					v-else-if="
+						!preferencesStore.user.verbosePollsList
+						&& poll.configuration.access === AccessType.Private
+					"
 					:title="t('polls', 'Private poll')"
 					:size="16" />
 
@@ -160,6 +175,92 @@ const descriptionLine = computed(() => {
 			</div>
 		</RouterLink>
 
+		<div class="badges">
+			<BadgeSmallDiv
+				v-if="preferencesStore.user.verbosePollsList"
+				:title="
+					t('polls', '{count} participants', {
+						count: poll.status.countParticipants,
+					})
+				">
+				<template #icon> <ParticipantsIcon :size="16" /> </template>
+				{{ poll.status.countParticipants }}
+			</BadgeSmallDiv>
+
+			<BadgeSmallDiv
+				v-if="
+					preferencesStore.user.verbosePollsList
+					&& !poll.status.isArchived
+					&& poll.configuration.access === AccessType.Private
+				"
+				:title="
+					t('polls', 'Private poll, only invited participants have access')
+				">
+				<template #icon>
+					<PrivatePollIcon :size="16" />
+				</template>
+			</BadgeSmallDiv>
+			<BadgeSmallDiv
+				v-if="
+					preferencesStore.user.verbosePollsList
+					&& !poll.status.isArchived
+					&& poll.configuration.access === AccessType.Open
+				"
+				:title="
+					t('polls', 'Open poll, accessible to all users of this instance')
+				">
+				<template #icon>
+					<OpenPollIcon :size="16" />
+				</template>
+			</BadgeSmallDiv>
+			<BadgeSmallDiv
+				v-if="
+					preferencesStore.user.verbosePollsList && poll.status.isArchived
+				"
+				:title="t('polls', 'Archived poll')">
+				<template #icon>
+					<ArchivedPollIcon :size="16" />
+				</template>
+				{{ t('polls', 'Archived poll') }}
+			</BadgeSmallDiv>
+
+			<BadgeSmallDiv
+				v-if="
+					preferencesStore.user.verbosePollsList
+					&& poll.currentUserStatus.countVotes
+				"
+				:title="t('polls', 'You participated')">
+				<template #icon>
+					<ParticipatedIcon
+						:size="16"
+						style="color: var(--color-success-text)" />
+				</template>
+			</BadgeSmallDiv>
+
+			<BadgeSmallDiv
+				v-if="poll.configuration.expire"
+				:class="expiryClass"
+				:title="t('polls', 'Expiration')">
+				>
+				<template #icon>
+					<ClosedPollsIcon v-if="poll.status.isExpired" :size="16" />
+					<ExpirationIcon v-else :size="16" />
+				</template>
+				{{ timeExpirationRelative }}
+			</BadgeSmallDiv>
+
+			<NcUserBubble
+				v-if="preferencesStore.user.verbosePollsList"
+				:user="poll.owner.id"
+				:display-name="poll.owner.displayName"
+				:show-user-status="false"
+				:title="
+					t('polls', 'Poll owner: {ownerName}', {
+						ownerName: poll.owner.displayName,
+					})
+				" />
+		</div>
+
 		<slot name="actions" />
 	</div>
 </template>
@@ -167,9 +268,9 @@ const descriptionLine = computed(() => {
 <style lang="scss">
 .poll-item {
 	display: flex;
-	column-gap: 4px;
+	column-gap: 0.3rem;
 	align-items: center;
-	padding: 4px 0;
+	padding: 0.3rem 0;
 	border-bottom: 1px solid var(--color-border-dark);
 
 	&.active {
@@ -181,18 +282,18 @@ const descriptionLine = computed(() => {
 	}
 
 	.item__type {
-		flex: 0 0 44px;
+		flex: 0 0 3rem;
 	}
 
 	.item__title {
-		flex: 1 0 170px;
+		flex: 4 0 11.3rem;
 		overflow: hidden;
 	}
 
 	.title_line,
 	.description_line {
 		display: flex;
-		gap: 8px;
+		gap: 0.5rem;
 		.title,
 		.description {
 			overflow: hidden;
@@ -211,10 +312,16 @@ const descriptionLine = computed(() => {
 	.description_line {
 		opacity: 0.5;
 	}
-
+	.badges {
+		display: flex;
+		flex: 1 0 10rem;
+		gap: 0.25rem;
+		flex-wrap: wrap;
+		justify-content: flex-end;
+	}
 	.action-item {
 		display: flex;
-		flex: 0 0 40px;
+		flex: 0 0 2.7rem;
 		justify-content: center;
 	}
 }
