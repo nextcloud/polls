@@ -1,6 +1,7 @@
 name: 'Feature request: Nextcloud Polls'
 description: 'Suggest your idea for the improvement of Polls'
 labels: ['enhancement']
+type: 'enhancement'
 
 body:
   - type: markdown
@@ -21,7 +22,7 @@ body:
     attributes:
       label: Describe the goal you'd like to achieve
       description: |
-        Describe what (goal) you want to achieve and why (value). Please explain your goal and why this is valuable and 
+        Describe what (goal) you want to achieve and why (value). Please explain your goal and why this is valuable and
         **do not** describe the solution you suggest. Try to use the [user story](https://en.wikipedia.org/wiki/User_story) pattern
       value: As a **[poll participant/poll owner/...]**, I want to **[be able to .../ don't want to ...]**, because **[it helps to ... /avoids ...]**.
     validations:
