@@ -53,8 +53,6 @@ type InputProps = {
 	label: string
 }
 
-const { noMenuIcon = false } = defineProps<{ noMenuIcon?: boolean }>()
-
 const optionsStore = useOptionsStore()
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
@@ -322,9 +320,9 @@ async function submitEmail() {
 </script>
 
 <template>
-	<NcActions v-bind="$attrs">
-		<template v-if="!noMenuIcon" #icon>
-			<SettingsIcon :size="20" decorative />
+	<NcActions variant="primary">
+		<template #icon>
+			<SettingsIcon :size="20" />
 		</template>
 		<NcActionButtonGroup name="View mode">
 			<NcActionButton
