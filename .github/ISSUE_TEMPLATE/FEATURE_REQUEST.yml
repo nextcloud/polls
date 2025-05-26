@@ -1,6 +1,6 @@
 name: 'Feature request: Nextcloud Polls'
 description: 'Suggest your idea for the improvement of Polls'
-labels: ['enhancement']
+labels: ['new']
 type: 'enhancement'
 
 body:

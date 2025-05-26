@@ -1,6 +1,7 @@
 name: 'Announcement'
 description: 'Used for announcements'
 labels: ['announcement']
+type: 'overview'
 
 body:
   - type: textarea
