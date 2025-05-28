@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
-use Exception;
 use OCA\Polls\Exceptions\InvalidShareTypeException;
 use OCA\Polls\Exceptions\ShareNotFoundException;
 use OCA\Polls\Exceptions\UserNotFoundException;
@@ -93,12 +92,12 @@ class UserMapper extends QBMapper {
 	/**
 	 * Get a user from the userbase
 	 *
-	 * Returns a UserBase child build from the userId and
+	 * Returns a User child build from the userId and
 	 * if pollId is given, it will check if the user has admin rights for the poll
 	 *
 	 * @param string $userId
 	 * @param int|null $pollId
-	 * @return UserBase
+	 * @return User
 	 * @throws UserNotFoundException
 	 */
 	public function getUserFromUserBase(string $userId, ?int $pollId = null): User {
