@@ -29,6 +29,7 @@ const { tag = 'span' } = defineProps<{ tag?: string }>()
 	overflow: hidden;
 	padding: 0px 8px !important;
 	margin: 0 !important;
+	min-height: 1.4rem;
 
 	span {
 		overflow: hidden;
