@@ -249,7 +249,7 @@ onMounted(() => {
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
-					:name="t('polls', 'Preferences')"
+					:name="t('polls', 'Polls Settings')"
 					@click="showSettings()">
 					<template #icon>
 						<SettingsIcon :size="iconSize" />
