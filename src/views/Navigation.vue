@@ -190,6 +190,7 @@ onMounted(() => {
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
 				:name="pollCategory.title"
+				:title="pollCategory.titleExt"
 				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
 				:pinned="pollCategory.pinned"
 				:to="{
@@ -249,7 +250,7 @@ onMounted(() => {
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
-					:name="t('polls', 'Polls Settings')"
+					:name="t('polls', 'Polls settings')"
 					@click="showSettings()">
 					<template #icon>
 						<SettingsIcon :size="iconSize" />
