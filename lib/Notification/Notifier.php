@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Notification;
 
 use OCA\Polls\AppConstants;
+use OCA\Polls\Db\Poll;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Service\NotificationService;
@@ -48,6 +49,56 @@ class Notifier implements INotifier {
 	}
 
 	/**
+	 * Returns the subject parameters
+	 * Since 8.0.0 we changed the structure of the parameters
+	 *
+	 * @return string[]
+	 */
+	private function extractParameters(INotification $notification): array {
+		$parameters = $notification->getSubjectParameters();
+
+		// old array - deprecated since v8.0.0
+		if (isset($parameters['pollTitle']) && is_array($parameters['pollTitle'])) {
+			return $parameters['pollTitle'];
+		}
+
+		// new array - since v8.0.0
+		if (isset($parameters['poll']) && is_array($parameters['poll'])) {
+			return $parameters['poll'];
+		}
+
+		throw new UnknownNotificationException('Invalid parameters for Poll notification');
+	}
+
+	/**
+	 * Extracts the poll from the notification
+	 *
+	 * @throws DoesNotExistException
+	 */
+	private function extractPoll(INotification $notification): Poll {
+		if ($notification->getObjectType() !== 'poll') {
+			$pollId = $this->extractParameters($notification)['id'] ?? null;
+		} else {
+			// probably an 'activity_notification' notification
+			$pollId = $notification->getObjectId();
+		}
+		return $this->pollMapper->get(intval($pollId));
+	}
+
+	private function extractActorId(INotification $notification): ?string {
+		// actor is set in the subject parameters
+		$parameters = $this->extractParameters($notification);
+		if (isset($parameters['actor']) && is_string($parameters['actor'])) {
+			return $parameters['actor'];
+		}
+		// fallback to owner, if no actor is set
+		if (isset($parameters['owner']) && is_string($parameters['owner'])) {
+			return $parameters['owner'];
+		}
+		return null;
+	}
+
+	/**
 	 * Human readable name describing the notifier
 	 */
 	public function getName(): string {
@@ -55,11 +106,13 @@ class Notifier implements INotifier {
 	}
 
 	public function prepare(INotification $notification, string $languageCode): INotification {
-		$l = $this->l10nFactory->get(AppConstants::APP_ID, $languageCode);
 		if ($notification->getApp() !== AppConstants::APP_ID) {
+			// not for polls, don't bother me
 			throw new UnknownNotificationException();
 		}
-		$parameters = $notification->getSubjectParameters();
+
+		$l = $this->l10nFactory->get(AppConstants::APP_ID, $languageCode);
+
 
 		$notification->setIcon(
 			$this->urlGenerator->getAbsoluteURL(
@@ -67,19 +120,23 @@ class Notifier implements INotifier {
 			)
 		);
 
+		$parameters = $this->extractParameters($notification);
+
 		try {
-			$poll = $this->pollMapper->get(intval($notification->getObjectId()));
+			$poll = $this->extractPoll($notification);
 		} catch (DoesNotExistException $e) {
 			$this->logger->info('Notification silently removed, poll not found', [
 				'notification' => $notification->getObjectId(),
 				'error' => $e->getMessage(),
 			]);
-			$this->notificationService->removeNotification(intval($notification->getObjectId()));
+			$this->notificationService->removeNotification($notification);
 			return $notification;
 		}
 
-		$actor = $this->userMapper->getUserFromUserBase($parameters['actor'] ?? $poll->getOwner());
-		$pollTitle = $parameters['pollTitle'] ?? $poll->getTitle();
+		$actorId = $this->extractActorId($notification) ?? $poll->getOwner();
+		$actor = $this->userMapper->getUserFromUserBase($actorId);
+
+		$pollTitle = $poll->getTitle();
 		$notification->setLink($poll->getVoteUrl());
 
 		// TODO: tidy subjects and parameters

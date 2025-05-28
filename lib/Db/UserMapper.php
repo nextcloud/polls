@@ -90,15 +90,28 @@ class UserMapper extends QBMapper {
 		return $users;
 	}
 
+	/**
+	 * Get a user from the userbase
+	 *
+	 * Returns a UserBase child build from the userId and
+	 * if pollId is given, it will check if the user has admin rights for the poll
+	 *
+	 * @param string $userId
+	 * @param int|null $pollId
+	 * @return UserBase
+	 * @throws UserNotFoundException
+	 */
 	public function getUserFromUserBase(string $userId, ?int $pollId = null): User {
 		$user = $this->userManager->get($userId);
+
 		if ($user instanceof IUser) {
 			try {
 				// check if we find a share, where the user got admin rights for the particular poll
 				if ($pollId !== null && $this->getShareByPollAndUser($userId, $pollId)->getType() === Share::TYPE_ADMIN) {
 					return new Admin($userId);
 				}
-			} catch (Exception $e) {
+			} catch (ShareNotFoundException $e) {
+				// No share found, user has no admin delegation granted by share
 				// silent catch
 			}
 			return new User($userId);

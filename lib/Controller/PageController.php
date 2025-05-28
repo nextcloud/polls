@@ -59,7 +59,7 @@ class PageController extends Controller {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/vote/{id}')]
 	public function vote(int $id): TemplateResponse {
-		$this->notificationService->removeNotification($id);
+		$this->notificationService->removeNotificationsForPoll($id);
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		return new TemplateResponse(AppConstants::APP_ID, 'main');
 	}
