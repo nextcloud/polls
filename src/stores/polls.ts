@@ -96,7 +96,7 @@ export const pollCategories: PollCategorieList = {
 		titleExt: t('polls', 'Relevant polls'),
 		description: t(
 			'polls',
-			'Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown.',
+			'Relevant polls which are relevant or to you, because you are a participant or the owner or you are invited to. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown.',
 		),
 		pinned: false,
 		showInNavigation: () => true,
@@ -196,7 +196,7 @@ export const pollCategories: PollCategorieList = {
 	[FilterType.Admin]: {
 		id: FilterType.Admin,
 		title: t('polls', 'Administration'),
-		titleExt: t('polls', 'Administrative access.'),
+		titleExt: t('polls', 'Administrative access'),
 		description: t(
 			'polls',
 			'You can delete, archive and take over polls in this list, but access is still not possible.',

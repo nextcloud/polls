@@ -17,8 +17,8 @@ import NcCounterBubble from '@nextcloud/vue/components/NcCounterBubble'
 // Icons
 import PollNavigationItems from '../components/Navigation/PollNavigationItems.vue'
 import ComboIcon from 'vue-material-design-icons/VectorCombine.vue'
-import AdministrationIcon from 'vue-material-design-icons/Cog.vue'
-import SettingsIcon from 'vue-material-design-icons/AccountCog.vue'
+import AdministrationIcon from 'vue-material-design-icons/ShieldCrown.vue'
+import SettingsIcon from 'vue-material-design-icons/Cog.vue'
 import RelevantIcon from 'vue-material-design-icons/ExclamationThick.vue'
 import MyPollsIcon from 'vue-material-design-icons/Crown.vue'
 import PrivatePollsIcon from 'vue-material-design-icons/Key.vue'
@@ -190,6 +190,7 @@ onMounted(() => {
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
 				:name="pollCategory.title"
+				:title="pollCategory.titleExt"
 				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
 				:pinned="pollCategory.pinned"
 				:to="{
@@ -249,7 +250,7 @@ onMounted(() => {
 					</template>
 				</NcAppNavigationItem>
 				<NcAppNavigationItem
-					:name="t('polls', 'Preferences')"
+					:name="t('polls', 'Polls settings')"
 					@click="showSettings()">
 					<template #icon>
 						<SettingsIcon :size="iconSize" />
