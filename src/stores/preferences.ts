@@ -27,6 +27,7 @@ export type UserPreferences = {
 	useNewPollInPollist: boolean
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
+	verbosePollsList: boolean
 }
 
 export type SessionSettings = {
@@ -64,6 +65,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			useNewPollInPollist: false,
 			useCommentsAlternativeStyling: false,
 			useAlternativeStyling: false,
+			verbosePollsList: false,
 		},
 		session: {
 			manualViewDatePoll: '',
