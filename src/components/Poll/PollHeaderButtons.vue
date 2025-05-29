@@ -40,7 +40,7 @@ onBeforeUnmount(() => {
 <template>
 	<div class="poll-header-buttons">
 		<UserMenu v-if="showUserMenu" />
-		<NcPopover close-on-click-outside>
+		<NcPopover close-on-click-outside no-focus-trap>
 			<template #trigger>
 				<NcButton
 					:title="caption"
