@@ -8,6 +8,8 @@ import { RadioGroupDiv } from '../Base/index.ts'
 import { t } from '@nextcloud/l10n'
 import { usePollStore, ShowResults } from '../../stores/poll.ts'
 
+const emit = defineEmits(['change'])
+
 const pollStore = usePollStore()
 
 const pollShowResultsOptions = [
@@ -31,6 +33,6 @@ const pollShowResultsOptions = [
 		<RadioGroupDiv
 			v-model="pollStore.configuration.showResults"
 			:options="pollShowResultsOptions"
-			@update="pollStore.write()" />
+			@update="emit('change')" />
 	</div>
 </template>

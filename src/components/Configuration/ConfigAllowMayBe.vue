@@ -9,6 +9,8 @@ import { usePollStore } from '../../stores/poll.ts'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
+const emit = defineEmits(['change'])
+
 const pollStore = usePollStore()
 const label = t('polls', 'Allow "Maybe" vote')
 </script>
@@ -17,7 +19,7 @@ const label = t('polls', 'Allow "Maybe" vote')
 	<NcCheckboxRadioSwitch
 		v-model="pollStore.configuration.allowMaybe"
 		type="switch"
-		@update:model-value="pollStore.write()">
+		@update:model-value="emit('change')">
 		{{ label }}
 	</NcCheckboxRadioSwitch>
 </template>

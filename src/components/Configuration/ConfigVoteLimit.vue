@@ -14,6 +14,8 @@ import { InputDiv } from '../Base/index.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 
+const emit = defineEmits(['change'])
+
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 
@@ -36,7 +38,7 @@ function validateLimit() {
 		pollStore.configuration.maxVotesPerUser = optionsStore.list.length
 	}
 
-	pollStore.write()
+	emit('change')
 }
 </script>
 
@@ -59,6 +61,6 @@ function validateLimit() {
 			:num-min="1"
 			:num-max="optionsStore.list.length"
 			num-wrap
-			@change="pollStore.write()" />
+			@change="emit('change')" />
 	</div>
 </template>
