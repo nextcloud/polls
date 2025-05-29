@@ -218,7 +218,6 @@
     "You have done something indescribable with this poll" : "لقد قمتَ بعمل رائع في هذا الاستبيان",
     "{actor} has done something indescribable with this poll" : "قام {actor} بعمل رائع في هذا الاستبيان",
     "Events happening inside of a <strong>poll</strong>" : "الأحداث التي تجري داخل <strong>استبيان </strong>",
-    "Someone voted inside a <strong>poll</strong>" : "قام شخصٌ ما بالتصويت داخل <strong>استبيان</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "تطبيق الاستبيان؛ مماثل لاستبيان Doodle/DuD مع إمكانية تقييد الوصول.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "تطبيق الاستبيان؛ مماثل لاستبيان Doodle/DuD مع إمكانية تقييد الوصول بحسب (الأعضاء، أشخاص ومجموعات معينة، مخفي وعمومي).",
     "Add option" : "إضافة خيار",
@@ -401,6 +400,7 @@
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n أصوات بـ \"نعم\"","%n صوت \"نعم\"","%n أصوات \"نعم\"","%n أصوات \"نعم\"","%n أصوات \"نعم\"","%n أصوات \"نعم\""],
     "_%n No vote_::_%n \"No\" votes_" : ["%n أصوات بـ \"لا\"","%n صوت بـ \"لا\"","%n أصوات بـ \"لا\"","%n أصوات بـ \"لا\"","%n أصوات بـ \"لا\"","%n أصوات بـ \"لا\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n أصوات \"ربما\"","%n صوت \"ربما\"","%n أصوات \"ربما\"","%n أصوات \"ربما\"","%n أصوات \"ربما\"","%n أصوات \"ربما\""],
+    "No description provided" : "لم يتم تقديم وصف",
     "Started {relativeTime} from {ownerName}" : "بَدَأ {relativeTime} لصاحبه {ownerName}",
     "No access to this poll of {ownerName}." : "لايمكن الوصول لهذا الاستبيان لصاحبه {ownerName}.",
     "Archived poll" : "إستبيان مؤرشف",
@@ -614,10 +614,9 @@
     "No polls found for this category" : "لم يمكن العثور على استبيانات من هذه الفئة",
     "Relevant polls" : "الاستبيانات ذات الصلة",
     "Error loading poll list" : "حدث خطأ أثناء تحميل قائمة الاستبيانات",
-    "No description provided" : "لم يتم تقديم وصف",
     "Show all" : "عرض الكل",
     "Combine polls" : "تجميع استبيانات",
-    "Preferences" : "التفضيلات",
+    "Polls settings" : "إعدادات الاستبيان",
     "404 - poll not found" : "404 - الاستبيان غير موجود",
     "Enter a poll or start a new one." : "الدخول لاستبيان أو بدء استبيان جديد.",
     "_{loadedPolls} of {countPolls} poll loaded._::_{loadedPolls} of {countPolls} polls loaded._" : ["{loadedPolls} من {countPolls} استبيان تمّ تحميلها.","{loadedPolls} من {countPolls} استبيان تمّ تحميلها.","{loadedPolls} من {countPolls} استبيان تمّ تحميلها.","{loadedPolls} من {countPolls} استبيان تمّ تحميلها.","{loadedPolls} من {countPolls} استبيانات تمّ تحميلها.","{loadedPolls} من {countPolls} استبيان تمّ تحميلها."],
@@ -661,7 +660,6 @@
     "Expire" : "نهاية الصلاحية",
     "Last interaction" : "آخر تفاعل",
     "Relevant" : "ذات الصلة",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown." : "الاستبيانات ذات الصلة بك، سواءً كنت أنت صاحبها أو مُساهِماً فيها أو مَدعُوّاً إليها. لن يتم عرض سوى الاستبيانات التي لم يتجاوز عمرها 100 يوم مقارنةً بتاريخ الإنشاء أو آخر تفاعل أو تاريخ انتهاء الصلاحية أو أحدث خيار (لتاريخ الاستبيان).",
     "My polls" : "إستبياناتي",
     "These are all polls where you are the owner." : "هذه هي الاستبيانات التي أنت صاحبها",
     "Private polls" : "إستبيانات خاصة",
@@ -678,7 +676,6 @@
     "My archived polls" : "استبياناتي المؤرشفة",
     "Your archived polls are only accessible to you." : "استبياناتك المؤرشفة متاحةٌ لك فقط.",
     "Administration" : "الإدارة",
-    "Administrative access." : "وصول إداري.",
     "You can delete, archive and take over polls in this list, but access is still not possible." : "بإمكانك حذف الاستطلاعات الموجودة في هذه القائمة وأرشفتها والتحكم فيها، ولكن لا يزال الوصول إليها غير ممكن."
 },"pluralForm" :"nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 && n%100<=10 ? 3 : n%100>=11 && n%100<=99 ? 4 : 5;"
 }

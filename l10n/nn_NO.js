@@ -19,6 +19,7 @@ OC.L10N.register(
     "OK" : "OK",
     "Sort" : "Sorter",
     "never" : "aldri",
+    "Expiration" : "Utløp",
     "Login" : "Login",
     "Styles" : "Stilar",
     "Shares" : "Delingar",

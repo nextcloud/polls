@@ -31,6 +31,7 @@ OC.L10N.register(
     "Preview" : "Previsualizar",
     "Submit" : "Enviar",
     "never" : "nunca",
+    "Expiration" : "Expiración",
     "Login" : "Iniciar sesión",
     "deleted" : "Borrado",
     "Shares" : "Elementos compartidos",

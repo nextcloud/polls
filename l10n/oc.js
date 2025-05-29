@@ -37,6 +37,7 @@ OC.L10N.register(
     "Submit" : "Transmetre",
     "never" : "pas jamai",
     "Private poll" : "Sondatge privat",
+    "Expiration" : "Expiracion",
     "Login" : "Login",
     "Performance settings" : "Paramètres de performança",
     "deleted" : "suprimit",

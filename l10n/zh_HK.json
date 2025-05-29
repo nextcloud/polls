@@ -225,7 +225,6 @@
     "You have done something indescribable with this poll" : "你在這個民意調查中做了一些難以形容的事情",
     "{actor} has done something indescribable with this poll" : "{actor} 在這個民意調查中做了一些難以形容的事情",
     "Events happening inside of a <strong>poll</strong>" : "<strong>民意調查</strong>內發生的事件",
-    "Someone voted inside a <strong>poll</strong>" : "有人在<strong>民意調查</strong>中投票",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "類似於 Doodle/DuD-Poll 的投票應用程式，可限制存取權限。",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "類似於 Doodle/DuD-Poll 投票應用程式，可限制存取對象（成員、特定群組或用戶、隱藏與公開）。",
     "Add option" : "添加選項",
@@ -422,6 +421,7 @@
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n「贊成」票"],
     "_%n No vote_::_%n \"No\" votes_" : ["%n 「反對」票"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n 「也許」票"],
+    "No description provided" : "未提供描述",
     "Archived {relativeTime}" : "已封存 {relativeTime}",
     "Started {relativeTime} from {ownerName}" : "由 {ownerName} 於{relativeTime}開始的投票",
     "No access to this poll of {ownerName}." : "無法存取 {ownerName} 的這項投票。",
@@ -649,10 +649,9 @@
     "No polls found for this category" : "找不到此分類的投票",
     "Relevant polls" : "相關投票",
     "Error loading poll list" : "載入投票列表時發生錯誤",
-    "No description provided" : "未提供描述",
     "Show all" : "全部顯示",
     "Combine polls" : "聯合民意調查",
-    "Preferences" : "設定",
+    "Polls settings" : "投票設定",
     "404 - poll not found" : "404 - 找不到投票",
     "Enter a poll or start a new one." : "輸入投票或新增投票。",
     "_{loadedPolls} of {countPolls} poll loaded._::_{loadedPolls} of {countPolls} polls loaded._" : ["已載入 {countPolls} 個投票中的 {loadedPolls} 個。"],
@@ -700,7 +699,6 @@
     "Expire" : "到期",
     "Last interaction" : "最後互動",
     "Relevant" : "相關",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown." : "與你相關的投票，無論你是參與者、擁有者還是受邀者。只會顯示在創建、最後互動、過期或最新選項（對於日期投票）不超過 100 天的投票。",
     "My polls" : "我的投票",
     "These are all polls where you are the owner." : "這些都是你作為擁有者的投票。",
     "Private polls" : "私人投票",
@@ -717,7 +715,6 @@
     "My archived polls" : "我已封存的民意調查",
     "Your archived polls are only accessible to you." : "您封存的民意調查僅供您存取。",
     "Administration" : "管理",
-    "Administrative access." : "管理存取權。",
     "You can delete, archive and take over polls in this list, but access is still not possible." : "您可以刪除、封存或接管此清單中的投票，但仍然無法存取。"
 },"pluralForm" :"nplurals=1; plural=0;"
 }

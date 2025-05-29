@@ -28,7 +28,6 @@ OC.L10N.register(
     "Description" : "Diskrivadur",
     "Change name" : "Cheñch env",
     "Public link" : "Liamm publik",
-    "Preferences" : "Dibaboù",
     "Comments" : "Displegadennoù",
     "Details" : "Munudoù",
     "Configuration" : "Stumm",
