@@ -4,26 +4,47 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, useTemplateRef } from 'vue'
+import { onClickOutside } from '@vueuse/core'
 
 interface Props {
-	initialCollapsed?: boolean
 	noCollapse?: boolean
+	openOnClick?: boolean
 }
-const { initialCollapsed = false, noCollapse = false } = defineProps<Props>()
 
-const showMore = ref(!initialCollapsed || noCollapse)
+const { noCollapse = false, openOnClick = true } = defineProps<Props>()
+
+const open = defineModel<boolean>('open', { default: true })
+
+const collapsed = computed(() => {
+	if (noCollapse) {
+		return false
+	}
+	return !open.value
+})
+
+const collapsibleContainer = useTemplateRef<HTMLElement>('collapsible_container')
+const useToggle = computed(() => !noCollapse && !openOnClick)
+
+function toggleCollapsible(collapse: null | boolean = null) {
+	open.value = (collapse ?? !open.value) && !noCollapse
+}
+
+onClickOutside(collapsibleContainer, () => {
+	toggleCollapsible(false)
+})
 </script>
 
 <template>
-	<div class="collapsible">
+	<div :class="['collapsible', { collapsed }]">
 		<div
-			v-show="!noCollapse"
-			:class="['collapsible-toggle', { open: showMore }]"
-			@click="showMore = !showMore"></div>
+			v-if="useToggle"
+			class="collapsible-toggle"
+			@click="toggleCollapsible()"></div>
 		<div
-			id="collapsible_container"
-			:class="['collapsible_container', { open: showMore || noCollapse }]">
+			ref="collapsible_container"
+			class="collapsible_container"
+			@click="toggleCollapsible(true)">
 			<slot />
 		</div>
 	</div>
@@ -33,34 +54,11 @@ const showMore = ref(!initialCollapsed || noCollapse)
 .collapsible {
 	display: flex;
 
-	.collapsible-toggle {
-		cursor: pointer;
-		position: relative;
-		line-height: 2rem;
-		font-weight: bold;
-		white-space: nowrap;
-		text-overflow: ellipsis;
-		max-width: 100%;
-		padding: 0.5rem 1rem;
-
-		&::before {
-			content: '\25B8';
-			font-size: 1.5rem;
-			margin: 0 0.3em;
-			display: inline-block;
-			transition: transform 0.3s ease-in-out;
-		}
-		&.open {
-			&::before {
-				transform: rotate(90deg);
-			}
-		}
-	}
-
 	.collapsible_container {
-		transition: max-height 0.3s ease-in-out;
-		max-height: 6rem;
-		overflow: hidden;
+		// transition: max-height 0.3s ease-in-out;
+		transition: max-height 0.4s cubic-bezier(1, 0, 0, 1);
+		overflow: auto;
+		max-height: max(51vh, 12rem);
 
 		background:
 		    /* Shadow covers */
@@ -121,10 +119,41 @@ const showMore = ref(!initialCollapsed || noCollapse)
 
 		/* Opera doesn't support this in the shorthand */
 		background-attachment: local, local, scroll, scroll;
+	}
 
-		&.open {
-			max-height: max(51vh, 6rem);
-			overflow: auto;
+	.collapsible-toggle {
+		cursor: pointer;
+		position: relative;
+		line-height: 2rem;
+		font-weight: bold;
+		white-space: nowrap;
+		text-overflow: ellipsis;
+		max-width: 100%;
+		padding: 0.5rem 1rem;
+
+		&::before {
+			content: '\25B8';
+			font-size: 1.5rem;
+			margin: 0 0.3em;
+			display: inline-block;
+			transition: transform 0.3s ease-in-out;
+			transform: rotate(90deg);
+		}
+		.collapsed & {
+			&::before {
+				transform: rotate(0deg);
+			}
+		}
+	}
+
+	&.collapsed {
+		.collapsible-toggle {
+			&::before {
+				transform: rotate(0deg);
+			}
+		}
+		.collapsible_container {
+			max-height: 6rem;
 		}
 	}
 }
