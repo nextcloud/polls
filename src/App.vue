@@ -171,8 +171,7 @@ onUnmounted(() => {
 	}
 
 	.button {
-		margin-left: 10px;
-		margin-right: 0;
+		margin-inline: 10px 0;
 	}
 }
 

@@ -269,7 +269,7 @@ onMounted(() => {
 	}
 
 	.app-navigation-footer {
-		margin-left: 10px;
+		margin-inline-start: 10px;
 	}
 }
 

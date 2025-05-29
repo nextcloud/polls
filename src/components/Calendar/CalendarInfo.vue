@@ -107,18 +107,18 @@ const conflictLevel = computed(() => {
 	padding: 0 4px;
 
 	.summay {
-		margin-left: 4px;
+		margin-inline-start: 4px;
 	}
 
 	&.conflict-ignore {
-		border-left: 4px solid transparent;
+		border-inline-start: 4px solid transparent;
 		.summay {
 			font-weight: bold;
 		}
 	}
 
 	&.conflict-no {
-		border-left: 4px solid var(--color-success);
+		border-inline-start: 4px solid var(--color-success);
 	}
 
 	&.cancelled {
@@ -131,7 +131,7 @@ const conflictLevel = computed(() => {
 	}
 
 	&.conflict-yes {
-		border-left: 4px solid var(--color-error);
+		border-inline-start: 4px solid var(--color-error);
 	}
 }
 

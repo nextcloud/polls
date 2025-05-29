@@ -49,7 +49,7 @@ async function writeComment() {
 	margin-bottom: 24px;
 	display: flex;
 	.comment-add__input {
-		margin-left: 8px;
+		margin-inline-start: 8px;
 		flex: 1;
 		align-items: center;
 	}

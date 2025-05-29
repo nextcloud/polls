@@ -377,9 +377,9 @@ async function submitRegistration(): Promise<void> {
 		min-width: 140px;
 		padding: 24px;
 		border-top: 1px solid;
-		border-right: 1px solid;
+		border-inline-end: 1px solid;
 		margin-top: -2px;
-		margin-right: -2px;
+		margin-inline-end: -2px;
 		> button {
 			margin: 8px 0;
 		}

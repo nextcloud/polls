@@ -129,7 +129,7 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 }
 
 .newOption {
-	margin-left: 40px;
+	margin-inline-start: 40px;
 	flex: 1;
 	&:empty:before {
 		color: grey;

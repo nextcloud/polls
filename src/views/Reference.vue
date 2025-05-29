@@ -80,6 +80,7 @@ const expiryClass = richObject?.poll?.expiry
 .polls_widget {
 	padding: 0.6rem;
 }
+
 .widget_header,
 .widget_footer {
 	display: flex;
@@ -89,25 +90,30 @@ const expiryClass = richObject?.poll?.expiry
 .badge-small {
 	flex: 0;
 }
+
 .polls_app_icon {
 	flex: 0 0 1.4rem;
 }
+
 .title {
 	flex: 1;
 	font-weight: bold;
-	padding-left: 0.6rem;
+	padding-inline-start: 0.6rem;
 	text-wrap: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;
 }
+
 .description {
-	margin-left: 1.4rem;
+	margin-inline-start: 1.4rem;
 	padding: 0.6rem;
 }
+
 .owner {
-	margin-left: 1.4rem;
-	padding-left: 0.6rem;
+	margin-inline-start: 1.4rem;
+	padding-inline-start: 0.6rem;
 }
+
 .clamped {
 	display: -webkit-box !important;
 	-webkit-line-clamp: 4;
