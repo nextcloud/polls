@@ -7,7 +7,6 @@ import { pinia } from './stores/index.ts'
 import { router } from './router.ts'
 
 import App from './App.vue'
-import ClickOutside from 'v-click-outside'
 
 // TODO: FInd a way to use the devtools in the browser
 // Vue.config.devtools = import.meta.env.MODE !== 'production'
@@ -15,7 +14,6 @@ import ClickOutside from 'v-click-outside'
 const Polls = createApp(App)
 	.use(pinia)
 	.use(router)
-	.use(ClickOutside)
 	.directive('focus', {
 		mounted: (el) => el.focus(),
 	})
