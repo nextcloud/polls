@@ -201,7 +201,6 @@ OC.L10N.register(
     "Public link" : "Public link",
     "Switch to list view" : "Switch to list view",
     "Email options" : "Email options",
-    "Preferences" : "Preferences",
     "Comments" : "Comments",
     "Details" : "Details",
     "Configuration" : "Configuration",

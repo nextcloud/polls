@@ -36,6 +36,7 @@ OC.L10N.register(
     "Preview" : "Antaŭvidi",
     "Submit" : "Sendi",
     "never" : "neniam",
+    "Expiration" : "Eksvalidiĝo",
     "Privacy policy" : "Privateca regularo",
     "Login" : "Login",
     "deleted" : "forigita",

@@ -225,7 +225,6 @@
     "You have done something indescribable with this poll" : "Tá rud do-inscríofa déanta agat leis an bpobalbhreith seo",
     "{actor} has done something indescribable with this poll" : "Rinne {actor} rud éigin nach féidir a chur síos leis an bpobalbhreith seo",
     "Events happening inside of a <strong>poll</strong>" : "Imeachtaí ag tarlú taobh istigh de<strong>vóta</strong>",
-    "Someone voted inside a <strong>poll</strong>" : "Vótáil duine éigin taobh istigh de <strong>vóta</strong>",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access." : "Aip pobalbhreithe, cosúil le Doodle/DuD-Poll agus an fhéidearthacht ann rochtain a shrianadh.",
     "A polls app, similar to Doodle/DuD-Poll with the possibility to restrict access (members, certain groups/users, hidden and public)." : "Aip pobalbhreithe, cosúil le Doodle/DuD-Poll leis an bhféidearthacht rochtain a shrianadh (comhaltaí, grúpaí/úsáideoirí áirithe, i bhfolach agus poiblí).",
     "Add option" : "Cuir rogha leis",
@@ -422,6 +421,7 @@
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n vóta \"Tá\".","%n vótaí \"Tá\".","%n vótaí \"Tá\".","%n vótaí \"Tá\".","%n vótaí \"Tá\"."],
     "_%n No vote_::_%n \"No\" votes_" : ["%n vóta \"Níl\".","%n vótaí \"Níl\".","%n vótaí \"Níl\".","%n vótaí \"Níl\".","%n vótaí \"Níl\"."],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n vóta \"B'fhéidir\".","%n vótaí \"B'fhéidir\".","%n vótaí \"B'fhéidir\".","%n vótaí \"B'fhéidir\".","%n vótaí \"B'fhéidir\"."],
+    "No description provided" : "Níor tugadh tuairisc",
     "Archived {relativeTime}" : "Cartlannaithe {relativeTime}",
     "Started {relativeTime} from {ownerName}" : "Cuireadh tús le {relativeTime} ó {ownerName}",
     "No access to this poll of {ownerName}." : "Níl rochtain ar an vótaíocht seo de{ownerName}.",
@@ -649,10 +649,8 @@
     "No polls found for this category" : "Níor aimsíodh aon vótaíocht don chatagóir seo",
     "Relevant polls" : "Pobalbhreith ábhartha",
     "Error loading poll list" : "Earráid agus an liosta vótaíochta á lódáil",
-    "No description provided" : "Níor tugadh tuairisc",
     "Show all" : "Taispeáin gach rud",
     "Combine polls" : "Comhcheangail pobalbhreith",
-    "Preferences" : "Roghanna",
     "404 - poll not found" : "404 - níor aimsíodh vótaíocht",
     "Enter a poll or start a new one." : "Cuir isteach vótaíocht nó cuir tús le ceann nua.",
     "_{loadedPolls} of {countPolls} poll loaded._::_{loadedPolls} of {countPolls} polls loaded._" : ["Lódaíodh vótaíocht {loadedPolls} de {countPolls}.","Luchtaíodh {loadedPolls} de {countPolls} pobalbhreith.","Luchtaíodh {loadedPolls} de {countPolls} pobalbhreith.","Luchtaíodh {loadedPolls} de {countPolls} pobalbhreith.","Luchtaíodh {loadedPolls} de {countPolls} pobalbhreith."],
@@ -700,7 +698,6 @@
     "Expire" : "In éag",
     "Last interaction" : "Idirghníomhú seo caite",
     "Relevant" : "Ábhartha",
-    "Relevant polls which are relevant or for you, because you are a participant or the owner or you are invited to. Only polls not older than 100 days compared to creation, last interaction, expiration or latest option (for date polls) are shown." : "Pobalbhreith ábhartha atá ábhartha nó duitse, toisc gur rannpháirtí tú nó gur úinéir nó go dtugtar cuireadh duit. Ní thaispeántar ach pobalbhreith nach sine ná 100 lá i gcomparáid le cruthú, idirghníomhú deiridh, dul in éag nó rogha is déanaí (le haghaidh pobalbhreith dáta).",
     "My polls" : "Mo pobalbhreith",
     "These are all polls where you are the owner." : "Is pobalbhreith iad seo go léir ina bhfuil tú i d'úinéir.",
     "Private polls" : "Pobalbhreith phríobháideach",
@@ -717,7 +714,6 @@
     "My archived polls" : "Mo pobalbhreith cartlainne",
     "Your archived polls are only accessible to you." : "Níl rochtain agat ar do vótaíochtaí cartlainne ach amháin.",
     "Administration" : "Riarachán",
-    "Administrative access." : "Rochtain riaracháin.",
     "You can delete, archive and take over polls in this list, but access is still not possible." : "Is féidir leat pobalbhreitheanna sa liosta seo a scriosadh, a chur i gcartlann agus a ghlacadh ar láimh, ach níl rochtain fós indéanta."
 },"pluralForm" :"nplurals=5; plural=(n==1 ? 0 : n==2 ? 1 : n<7 ? 2 : n<11 ? 3 : 4);"
 }
