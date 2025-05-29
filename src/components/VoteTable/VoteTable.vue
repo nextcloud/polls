@@ -137,7 +137,7 @@ const showCalendarPeek = computed(
 		grid-column: 1;
 		padding: 6px;
 		position: sticky;
-		left: 0;
+		inset-inline-start: 0;
 		z-index: 3;
 		background-color: var(--color-main-background);
 
@@ -177,7 +177,7 @@ const showCalendarPeek = computed(
 			grid-row: 1;
 			grid-column: 1;
 			position: sticky;
-			left: 0;
+			inset-inline-start: 0;
 			z-index: 5;
 			background-color: var(--color-main-background);
 		}
@@ -186,7 +186,7 @@ const showCalendarPeek = computed(
 			grid-row: 2;
 			grid-column: 1;
 			position: sticky;
-			left: 0;
+			inset-inline-start: 0;
 			top: 0;
 			z-index: 5;
 			background-color: var(--color-main-background);
@@ -196,14 +196,14 @@ const showCalendarPeek = computed(
 			grid-row: 3;
 			grid-column: 1;
 			position: sticky;
-			left: 0;
+			inset-inline-start: 0;
 			z-index: 5;
 			background-color: var(--color-main-background);
 		}
 
 		.option-menu-grid {
 			grid-row: 1;
-			border-left: 1px solid var(--color-border);
+			border-inline-start: 1px solid var(--color-border);
 
 			.calendar-peek {
 				grid-area: left;
@@ -216,16 +216,16 @@ const showCalendarPeek = computed(
 			top: 0;
 			z-index: 2;
 			background-color: var(--color-main-background);
-			border-left: 1px solid var(--color-border);
+			border-inline-start: 1px solid var(--color-border);
 		}
 
 		.counter {
 			grid-row: 3;
-			border-left: 1px solid var(--color-border);
+			border-inline-start: 1px solid var(--color-border);
 		}
 
 		.vote-cell {
-			border-left: 1px solid var(--color-border);
+			border-inline-start: 1px solid var(--color-border);
 		}
 
 		.current-user {
@@ -241,7 +241,7 @@ const showCalendarPeek = computed(
 			display: flex;
 			flex-direction: column;
 			flex: 1 0 11rem;
-			border-left: 1px solid var(--color-border-dark);
+			border-inline-start: 1px solid var(--color-border-dark);
 		}
 
 		.option-item .option-item__option--text {

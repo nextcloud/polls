@@ -41,7 +41,6 @@ const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
 const voteMainId = 'watched-scroll-area'
 const scrolled = useHandleScroll(voteMainId)
-
 const isLoading = ref(false)
 
 const emptyContentProps = computed(() => {
@@ -70,7 +69,7 @@ const windowTitle = computed(
 
 const isShortDescription = computed(() => {
 	if (!pollStore.configuration.description) {
-		return false
+		return true
 	}
 	// If less than 20 words and less than 5 lines, then it's short
 	return (
@@ -78,6 +77,15 @@ const isShortDescription = computed(() => {
 		&& pollStore.configuration.description.split(/\r\n|\r|\n/).length < 5
 	)
 })
+
+const openDescription = ref(pollStore.currentUserStatus.countVotes === 0)
+
+const collapsibleProps = computed(() => ({
+	noCollapse:
+		!pollStore.configuration.collapseDescription || isShortDescription.value,
+	openOnClick: true,
+}))
+
 onMounted(() => {
 	subscribe(Event.LoadPoll, () => pollStore.load())
 	emit(Event.TransitionsOff, 500)
@@ -115,12 +123,8 @@ onUnmounted(() => {
 		<div class="vote_main">
 			<Collapsible
 				v-if="pollStore.configuration.description"
-				:show-more-caption="t('polls', 'Show full description')"
-				:no-collapse="
-					isShortDescription
-					|| !pollStore.configuration.collapseDescription
-				"
-				:initial-collapsed="!!pollStore.currentUserStatus.countVotes">
+				v-model:open="openDescription"
+				v-bind="collapsibleProps">
 				<MarkDownDescription />
 			</Collapsible>
 

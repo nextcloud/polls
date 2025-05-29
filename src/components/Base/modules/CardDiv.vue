@@ -25,13 +25,13 @@ import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 	flex: 1 0 180px;
 	ul {
 		list-style: initial;
-		margin-left: 2rem;
+		margin-inline-start: 2rem;
 	}
 }
 
 .right-card-side {
 	flex: 0;
-	padding-right: 8px;
+	padding-inline-end: 8px;
 }
 
 .notecard .card-content {

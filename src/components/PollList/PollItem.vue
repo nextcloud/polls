@@ -32,6 +32,7 @@ import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import LockPollIcon from 'vue-material-design-icons/Security.vue'
 import ParticipantsIcon from 'vue-material-design-icons/AccountMultipleCheck.vue'
 import ParticipatedIcon from 'vue-material-design-icons/AccountCheck.vue'
+import AdminIcon from 'vue-material-design-icons/ShieldCrown.vue'
 
 interface Props {
 	poll: Poll
@@ -227,6 +228,17 @@ const descriptionLine = computed(() => {
 			<BadgeSmallDiv
 				v-if="
 					preferencesStore.user.verbosePollsList
+					&& poll.currentUserStatus.userRole === 'admin'
+				"
+				:title="t('polls', 'You have delegated admin rights')">
+				<template #icon>
+					<AdminIcon :size="16" />
+				</template>
+			</BadgeSmallDiv>
+
+			<BadgeSmallDiv
+				v-if="
+					preferencesStore.user.verbosePollsList
 					&& poll.currentUserStatus.countVotes
 				"
 				:title="t('polls', 'You participated')">
@@ -235,18 +247,6 @@ const descriptionLine = computed(() => {
 						:size="16"
 						style="color: var(--color-success-text)" />
 				</template>
-			</BadgeSmallDiv>
-
-			<BadgeSmallDiv
-				v-if="poll.configuration.expire"
-				:class="expiryClass"
-				:title="t('polls', 'Expiration')">
-				>
-				<template #icon>
-					<ClosedPollsIcon v-if="poll.status.isExpired" :size="16" />
-					<ExpirationIcon v-else :size="16" />
-				</template>
-				{{ timeExpirationRelative }}
 			</BadgeSmallDiv>
 
 			<NcUserBubble
@@ -259,6 +259,18 @@ const descriptionLine = computed(() => {
 						ownerName: poll.owner.displayName,
 					})
 				" />
+
+			<BadgeSmallDiv
+				v-if="poll.configuration.expire"
+				:class="expiryClass"
+				:title="t('polls', 'Expiration')">
+				>
+				<template #icon>
+					<ClosedPollsIcon v-if="poll.status.isExpired" :size="16" />
+					<ExpirationIcon v-else :size="16" />
+				</template>
+				{{ timeExpirationRelative }}
+			</BadgeSmallDiv>
 		</div>
 
 		<slot name="actions" />
@@ -318,6 +330,12 @@ const descriptionLine = computed(() => {
 		gap: 0.25rem;
 		flex-wrap: wrap;
 		justify-content: flex-end;
+		align-items: center;
+
+		.user-bubble__wrapper {
+			line-height: normal;
+			min-height: 1.4rem;
+		}
 	}
 	.action-item {
 		display: flex;

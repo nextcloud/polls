@@ -10,7 +10,7 @@ const { tag = 'span' } = defineProps<{ tag?: string }>()
 <template>
 	<Component :is="tag" class="badge-small">
 		<slot name="icon" />
-		<span>
+		<span v-if="$slots.default">
 			<slot />
 		</span>
 	</Component>
@@ -29,6 +29,7 @@ const { tag = 'span' } = defineProps<{ tag?: string }>()
 	overflow: hidden;
 	padding: 0px 8px !important;
 	margin: 0 !important;
+	min-height: 1.4rem;
 
 	span {
 		overflow: hidden;

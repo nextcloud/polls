@@ -276,7 +276,7 @@ onMounted(() => {
 		&.error,
 		&.success,
 		&.checking {
-			padding-right: var(--input-height);
+			padding-inline-end: var(--input-height);
 		}
 
 		&.has-modifier {
@@ -320,7 +320,7 @@ onMounted(() => {
 
 	.signaling-icon {
 		position: absolute;
-		right: 0;
+		inset-inline-end: 0;
 		width: var(--input-height);
 		height: var(--input-height);
 	}
@@ -337,13 +337,13 @@ onMounted(() => {
 		}
 
 		&.add {
-			right: 0;
-			border-left: solid 2px var(--color-border-maxcontrast);
+			inset-inline-end: 0;
+			border-inline-start: solid 2px var(--color-border-maxcontrast);
 			border-radius: 0 var(--border-radius) var(--border-radius) 0;
 		}
 
 		&.subtract {
-			border-right: solid 2px var(--color-border-maxcontrast);
+			border-inline-end: solid 2px var(--color-border-maxcontrast);
 			border-radius: var(--border-radius) 0 0 var(--border-radius);
 		}
 	}

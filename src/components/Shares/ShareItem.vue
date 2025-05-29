@@ -431,7 +431,7 @@ function copyLink() {
 }
 
 .vote-status {
-	margin-left: 8px;
+	margin-inline-start: 8px;
 	width: 32px;
 
 	&.voted {

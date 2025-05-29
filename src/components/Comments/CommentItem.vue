@@ -114,14 +114,14 @@ async function restoreComment(comment: Comment) {
 .comment-item__date {
 	opacity: 0.5;
 	font-size: 0.8em;
-	text-align: right;
+	text-align: end;
 	&::before {
 		content: ' ~ ';
 	}
 }
 
 .comment-item__content {
-	margin-left: 8px;
+	margin-inline-start: 8px;
 	flex: 1 1;
 	padding-top: 2px;
 
@@ -174,17 +174,17 @@ async function restoreComment(comment: Comment) {
 		border-radius: var(--border-radius-large);
 		background-color: var(--color-primary-element-light);
 		box-shadow: 2px 2px 6px var(--color-box-shadow);
-		padding-left: 8px;
+		padding-inline-start: 8px;
 		padding-bottom: 10px;
 
 		.comment-item__sub-comment {
-			margin-right: 4px;
+			margin-inline-end: 4px;
 
 			&:hover {
 				background: var(--color-primary-element-hover);
 				color: var(--color-primary-element-light-hover);
-				margin-left: -4px;
-				padding-left: 4px;
+				margin-inline-start: -4px;
+				padding-inline-start: 4px;
 				border-radius: var(--border-radius-large);
 			}
 		}

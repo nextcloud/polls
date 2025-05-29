@@ -66,10 +66,10 @@ const markedDisclaimer = computed(() => {
 	.grow_title {
 		display: flex;
 		flex-grow: 1;
-		margin-right: 12px;
+		margin-inline-end: 12px;
 
 		.material-design-icon {
-			margin-left: 4px;
+			margin-inline-start: 4px;
 		}
 	}
 }

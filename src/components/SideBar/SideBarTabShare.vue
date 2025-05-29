@@ -69,7 +69,7 @@ onUnmounted(() => {
 	flex: 1;
 	min-width: 50px;
 	color: var(--color-text-maxcontrast);
-	padding-left: 8px;
+	padding-inline-start: 8px;
 	white-space: nowrap;
 	overflow: hidden;
 	text-overflow: ellipsis;

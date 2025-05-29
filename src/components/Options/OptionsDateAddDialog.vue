@@ -387,14 +387,14 @@ async function addOption(): Promise<void> {
 .lock-duration {
 	position: relative;
 	top: 1.3rem;
-	left: -0.8rem;
+	inset-inline-start: -0.8rem;
 }
 
 .time-lock {
 	border-style: solid;
 	width: 22px;
 	height: 0.5rem;
-	margin-left: 0.5rem;
+	margin-inline-start: 0.5rem;
 
 	&.upper {
 		border-width: 2px 2px 0 0;

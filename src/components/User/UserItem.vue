@@ -296,7 +296,7 @@ function showMenu() {
 		position: absolute;
 		background-size: 16px;
 		top: -6px;
-		left: -6px;
+		inset-inline-start: -6px;
 	}
 }
 
@@ -315,12 +315,13 @@ function showMenu() {
 .hover-menu {
 	position: absolute;
 	top: 0;
-	left: 0;
+	inset-inline-start: 0;
 	opacity: 0;
 	&:hover {
 		opacity: 1;
 	}
 }
+
 .user-item__avatar .material-design-icon {
 	background-color: var(--color-primary-element);
 	border-radius: 50%;
@@ -329,7 +330,7 @@ function showMenu() {
 .user-item__name {
 	flex: 1;
 	min-width: 50px;
-	padding-left: 8px;
+	padding-inline-start: 8px;
 	white-space: nowrap;
 	> div {
 		overflow: hidden;

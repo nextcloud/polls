@@ -86,7 +86,7 @@ const pollStore = usePollStore()
 		content: var(--content-deleted);
 		font-weight: bold;
 		color: var(--color-error-text);
-		margin-right: 0.2rem;
+		margin-inline-end: 0.2rem;
 	}
 }
 
@@ -119,7 +119,7 @@ const pollStore = usePollStore()
 }
 
 .option-item__handle {
-	margin-right: 0.5em;
+	margin-inline-end: 0.5em;
 }
 
 .draggable {
@@ -137,7 +137,7 @@ const pollStore = usePollStore()
 
 	.material-design-icon.draggable {
 		width: 0;
-		padding-right: 0;
+		padding-inline-end: 0;
 		transition: all 0.3s ease-in-out;
 	}
 
@@ -145,7 +145,7 @@ const pollStore = usePollStore()
 	&:hover {
 		.material-design-icon.draggable {
 			width: initial;
-			padding-right: 0.5px;
+			padding-inline-end: 0.5px;
 		}
 	}
 }
