@@ -679,7 +679,6 @@ OC.L10N.register(
     "All options are booked up." : "Cuirtear na roghanna go léir in áirithe.",
     "No vote options available" : "Níl roghanna vótála ar fáil",
     "Maybe the owner did not provide some until now." : "B'fhéidir nár chuir an t-úinéir roinnt ar fáil go dtí seo.",
-    "Show full description" : "Taispeáin cur síos iomlán",
     "Add options" : "Cuir roghanna leis",
     "Minute" : "Nóiméad",
     "Hour" : "Uair",

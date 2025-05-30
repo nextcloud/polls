@@ -404,6 +404,7 @@
     "Started {relativeTime} from {ownerName}" : "بَدَأ {relativeTime} لصاحبه {ownerName}",
     "No access to this poll of {ownerName}." : "لايمكن الوصول لهذا الاستبيان لصاحبه {ownerName}.",
     "Archived poll" : "إستبيان مؤرشف",
+    "Expiration" : "إنتهاء",
     "Take over poll?" : "هل ستستلم مسؤولية الاستبيان؟",
     "You will become the new owner and {username} will get notified." : "سوف تصبح أنت المالك الجديد؛ وسيتم إشعار {username} بذلك.",
     "Error archiving/restoring poll." : "خطأ في أرشفة / استعادة الاستبيان.",

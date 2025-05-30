@@ -21,6 +21,7 @@ OC.L10N.register(
     "Preview" : "Ragwell",
     "Submit" : "Kinnig",
     "never" : "james",
+    "Expiration" : "Termen",
     "Login" : "Anv arveriad",
     "deleted" : "dilamet",
     "Shares" : "Rannañ",

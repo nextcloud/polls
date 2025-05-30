@@ -680,7 +680,6 @@ OC.L10N.register(
     "All options are booked up." : "Tutte le opzioni sono prenotate.",
     "No vote options available" : "Non sono disponibili opzioni di voto",
     "Maybe the owner did not provide some until now." : "Forse il proprietario non le ha fornite ancora.",
-    "Show full description" : "Mostra la descrizione completa",
     "Add options" : "Aggiungi opzioni",
     "Minute" : "Minuto",
     "Hour" : "Ora",

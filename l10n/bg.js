@@ -291,6 +291,7 @@ OC.L10N.register(
     "_%n No vote_::_%n \"No\" votes_" : ["%n  гласа „Не“","%n гласа „Не“"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%nгласа „Може би“. ","%n  гласа „Може би“."],
     "No description provided" : "Не е предоставено описание",
+    "Expiration" : "Валидност",
     "Error archiving/restoring poll." : "Грешка при архивиране/възстановяване на анкетата.",
     "Error cloning poll." : "Грешка при клониране на анкета.",
     "Take over" : "Вземане на управление",

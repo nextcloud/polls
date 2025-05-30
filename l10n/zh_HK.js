@@ -680,7 +680,6 @@ OC.L10N.register(
     "All options are booked up." : "所有選項均已預訂完畢。",
     "No vote options available" : "無投票選項",
     "Maybe the owner did not provide some until now." : "也許擁有者到現在都沒有提供。",
-    "Show full description" : "顯示完整描述",
     "Add options" : "添加選項",
     "Minute" : "分鐘",
     "Hour" : "小時",

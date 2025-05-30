@@ -681,7 +681,6 @@ OC.L10N.register(
     "All options are booked up." : "Všechny možnosti jsou zarezervovány.",
     "No vote options available" : "Nejsou k dispozici žádné možnosti volby",
     "Maybe the owner did not provide some until now." : "Vlastník nejspíš doposud žádné neposkytl.",
-    "Show full description" : "Zobrazit úplný popis",
     "Add options" : "Přidat volby",
     "Minute" : "Minuta",
     "Hour" : "Hodina",

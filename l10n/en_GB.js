@@ -681,7 +681,6 @@ OC.L10N.register(
     "All options are booked up." : "All options are booked up.",
     "No vote options available" : "No vote options available",
     "Maybe the owner did not provide some until now." : "Maybe the owner did not provide some until now.",
-    "Show full description" : "Show full description",
     "Add options" : "Add options",
     "Minute" : "Minute",
     "Hour" : "Hour",

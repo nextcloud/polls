@@ -24,6 +24,7 @@ OC.L10N.register(
     "Preview" : "Voorskou",
     "Submit" : "Dien in",
     "never" : "nooit",
+    "Expiration" : "Verval",
     "Privacy policy" : "Privaatheidsbeleid",
     "Login" : "Teken aan",
     "No activity yet" : "Nog geen aktiwiteit",
