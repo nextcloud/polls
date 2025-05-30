@@ -13,7 +13,7 @@ import { usePollStore } from '../../stores/poll.ts'
 const emit = defineEmits(['change'])
 
 const pollStore = usePollStore()
-const label = t('polls', 'Use expicit "No" votes')
+const label = t('polls', 'Use explicit "No" votes')
 </script>
 
 <template>
