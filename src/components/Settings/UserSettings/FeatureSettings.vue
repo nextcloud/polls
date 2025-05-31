@@ -84,7 +84,7 @@ const defaultViewDatePoll = computed({
 				{{
 					t(
 						'polls',
-						'Check thisfor more poll information in the overview.',
+						'Check this for more poll information in the overview.',
 					)
 				}}
 			</div>
