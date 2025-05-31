@@ -16,6 +16,8 @@ import AutoReminderInformation from './AutoReminderInformation.vue'
 
 import { usePollStore } from '../../stores/poll.ts'
 
+const emit = defineEmits(['change'])
+
 const pollStore = usePollStore()
 </script>
 
@@ -24,7 +26,7 @@ const pollStore = usePollStore()
 		<NcCheckboxRadioSwitch
 			v-model="pollStore.configuration.autoReminder"
 			type="switch"
-			@update:model-value="pollStore.write()">
+			@update:model-value="emit('change')">
 			{{ t('polls', 'Use Autoreminder') }}
 		</NcCheckboxRadioSwitch>
 		<NcPopover :focus-trap="false">

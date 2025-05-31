@@ -19,7 +19,8 @@ interface Props {
 	modalSize?: string
 	noClose?: boolean
 }
-const showModal = defineModel('showModal', { type: Boolean })
+
+const showModal = defineModel<boolean>('showModal', { default: false })
 
 const {
 	buttonVariant = 'primary',

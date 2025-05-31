@@ -9,22 +9,18 @@ import { InputDiv } from '../Base/index.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { SignalingType } from '../../Types/index.ts'
 
+const emit = defineEmits(['change'])
+
 const pollStore = usePollStore()
 const checkTitle = computed(() =>
 	pollStore.configuration.title ? SignalingType.None : SignalingType.Error,
 )
-const pollTitle = computed({
-	get: () => pollStore.configuration.title,
-	set: (value) => {
-		pollStore.configuration.title = value
-	},
-})
 </script>
 
 <template>
 	<InputDiv
-		v-model="pollTitle"
+		v-model="pollStore.configuration.title"
 		:signaling-class="checkTitle"
 		type="text"
-		@change="pollStore.write()" />
+		@change="emit('change')" />
 </template>

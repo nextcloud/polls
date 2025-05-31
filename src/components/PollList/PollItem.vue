@@ -230,7 +230,7 @@ const descriptionLine = computed(() => {
 					preferencesStore.user.verbosePollsList
 					&& poll.currentUserStatus.userRole === 'admin'
 				"
-				:title="t('polls', 'You have delegated admin rights')">
+				:title="t('polls', 'You have got delegated admin rights')">
 				<template #icon>
 					<AdminIcon :size="16" />
 				</template>

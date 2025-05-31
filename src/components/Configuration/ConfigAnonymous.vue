@@ -12,6 +12,8 @@ import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwit
 import { NcDialog } from '@nextcloud/vue'
 import NcButton, { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
+const emit = defineEmits(['change'])
+
 const showAnonDialog = ref(false)
 const anonDialog = {
 	message: t(
@@ -53,7 +55,7 @@ function spawnConfirmationDialog(forceDialog: boolean = false) {
 		showAnonDialog.value = true
 		return
 	}
-	pollStore.write()
+	emit('change')
 }
 
 /**
@@ -61,7 +63,7 @@ function spawnConfirmationDialog(forceDialog: boolean = false) {
  */
 function lockAnonymous() {
 	pollStore.LockAnonymous()
-	pollStore.write()
+	emit('change')
 }
 
 const pollStore = usePollStore()

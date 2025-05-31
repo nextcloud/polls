@@ -13,6 +13,8 @@ import { InputDiv } from '../Base/index.ts'
 
 import { usePollStore } from '../../stores/poll.ts'
 
+const emit = defineEmits(['change'])
+
 const pollStore = usePollStore()
 const useLimit = computed({
 	get: () => !!pollStore.configuration.maxVotesPerOption,
@@ -31,7 +33,7 @@ function validateLimit() {
 		pollStore.configuration.maxVotesPerOption = 1
 	}
 
-	pollStore.write()
+	emit('change')
 }
 </script>
 
@@ -52,14 +54,14 @@ function validateLimit() {
 			inputmode="numeric"
 			:num-min="1"
 			use-num-modifiers
-			@change="pollStore.write()" />
+			@change="emit('change')" />
 
 		<NcCheckboxRadioSwitch
 			v-if="pollStore.configuration.maxVotesPerOption"
 			v-model="pollStore.configuration.hideBookedUp"
 			class="indented"
 			type="switch"
-			@change="pollStore.write()">
+			@change="emit('change')">
 			{{ t('polls', 'Hide not available Options') }}
 		</NcCheckboxRadioSwitch>
 	</div>

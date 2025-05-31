@@ -9,23 +9,18 @@ import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 import { usePollStore } from '../../stores/poll.ts'
-import { computed } from 'vue'
+
+const emit = defineEmits(['change'])
 
 const pollStore = usePollStore()
-const label = t('polls', 'Delete vote when switched to "No"')
-const deleteNo = computed({
-	get: () => !pollStore.configuration.useNo,
-	set(value: boolean) {
-		pollStore.configuration.useNo = !value
-	},
-})
+const label = t('polls', 'Use explicit "No" votes')
 </script>
 
 <template>
 	<NcCheckboxRadioSwitch
-		v-model="deleteNo"
+		v-model="pollStore.configuration.useNo"
 		type="switch"
-		@update:model-value="pollStore.write()">
+		@update:model-value="emit('change')">
 		{{ label }}
 	</NcCheckboxRadioSwitch>
 </template>

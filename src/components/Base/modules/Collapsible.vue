@@ -52,10 +52,7 @@ onClickOutside(collapsibleContainer, () => {
 
 <style lang="scss">
 .collapsible {
-	display: flex;
-
 	.collapsible_container {
-		// transition: max-height 0.3s ease-in-out;
 		transition: max-height 0.4s cubic-bezier(1, 0, 0, 1);
 		overflow: auto;
 		max-height: max(51vh, 12rem);
@@ -127,7 +124,6 @@ onClickOutside(collapsibleContainer, () => {
 		line-height: 2rem;
 		font-weight: bold;
 		white-space: nowrap;
-		text-overflow: ellipsis;
 		max-width: 100%;
 		padding: 0.5rem 1rem;
 

@@ -24,7 +24,7 @@ interface Props {
 
 const emit = defineEmits(['userSelected'])
 
-const modelValue = defineModel<User | null>()
+const model = defineModel<User | null>()
 
 const {
 	placeholder = t('polls', 'Type to start searching ...'),
@@ -79,7 +79,7 @@ const selectProps = {
 <template>
 	<NcSelect
 		id="ajax"
-		v-model="modelValue"
+		v-model="model"
 		v-bind="selectProps"
 		:options="users"
 		@option:selected="optionSelected"

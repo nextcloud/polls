@@ -83,7 +83,7 @@ const showCalendarPeek = computed(
 					:focus-trap="false"
 					:option="option" />
 
-				<OptionMenu :id="`menu-${option.id}`" :option="option" use-sort />
+				<OptionMenu :option="option" use-sort />
 
 				<SortOptionIcon
 					v-show="votesStore.sortByOption === option.id"
