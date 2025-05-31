@@ -430,6 +430,7 @@
     "{count} participants" : "{count} учесника",
     "Private poll, only invited participants have access" : "Приватно гласање, приступ имају само позвани учесници",
     "Open poll, accessible to all users of this instance" : "Отворено гласање, приступ имају сви корисници ове инстанце",
+    "You have delegated admin rights" : "Делегирали сте админ права",
     "You participated" : "Учествовали сте",
     "Poll owner: {ownerName}" : "Власник гласања: {ownerName}",
     "Expiration" : "Истиче",

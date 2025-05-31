@@ -432,6 +432,7 @@ OC.L10N.register(
     "{count} participants" : "{count} Teilnehmer",
     "Private poll, only invited participants have access" : "Private Umfrage, nur eingeladene Personen haben Zugriff",
     "Open poll, accessible to all users of this instance" : "Offene Umfrage, zugänglich für alle Benutzer dieser Instanz",
+    "You have delegated admin rights" : "Du hast Adminstrationsrechte delegiert",
     "You participated" : "Sie haben teilgenommen",
     "Poll owner: {ownerName}" : "Umfrage-Eigentümer: {ownerName}",
     "Expiration" : "Ablauf",

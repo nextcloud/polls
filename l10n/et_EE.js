@@ -317,6 +317,7 @@ OC.L10N.register(
     "{count} participants" : "{count} osalejat",
     "Private poll, only invited participants have access" : "Privaatne küsitlus, milles saavad osaleda vaid kutsutud kasutajad",
     "Open poll, accessible to all users of this instance" : "Avalik küsitlus, milles saavad osaleda kõik selle serveri kasutajad",
+    "You have delegated admin rights" : "Sa oled haldusõigused delegeerinud",
     "You participated" : "Sina osalesid",
     "Poll owner: {ownerName}" : "Küsitluse omanik: {ownerName}",
     "Expiration" : "Aegumine",
