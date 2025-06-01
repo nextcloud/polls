@@ -205,7 +205,6 @@ OC.L10N.register(
     "Always show results" : "总是显示结果",
     "Hide results until poll is closed" : "隐藏结果，直到投票关闭 ",
     "Never show results" : "不要显示结果",
-    "Delete vote when switched to \"No\"" : "切换至“反对”时删除投票",
     "Poll \"{pollTitle}\" added" : "投票 \"{pollTitle}\" 已添加",
     "Error while creating Poll \"{pollTitle}\"" : "创建投票 \"{pollTitle}\" 时出错",
     "Title" : "标题",

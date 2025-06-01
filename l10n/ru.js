@@ -219,7 +219,6 @@ OC.L10N.register(
     "Always show results" : "Всегда показывать",
     "Hide results until poll is closed" : "Скрывать результаты до завершения опроса",
     "Never show results" : "Никогда не показывать",
-    "Delete vote when switched to \"No\"" : "Удалить голос при переключении на \"Нет\"",
     "Poll \"{pollTitle}\" added" : "Добавлен опрос «{pollTitle}»",
     "Error while creating Poll \"{pollTitle}\"" : "Не удалось создать опрос «{pollTitle}»",
     "Title" : "Название",

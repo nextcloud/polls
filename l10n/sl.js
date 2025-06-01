@@ -142,7 +142,6 @@ OC.L10N.register(
     "Always show results" : "Vedno pokaži odzive",
     "Hide results until poll is closed" : "Skri odzive, dokler anketa ni zaprta",
     "Never show results" : "Nikoli ne pokaži odzivov",
-    "Delete vote when switched to \"No\"" : "Izbriši glasovanje ob preklopu na » Ne «",
     "Poll \"{pollTitle}\" added" : "Anketa »{pollTitle}« je uspešno dodana.",
     "Error while creating Poll \"{pollTitle}\"" : "Prišlo je do napake med ustvarjanjem ankete »{pollTitle}«",
     "Title" : "Naslov",

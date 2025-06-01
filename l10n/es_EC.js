@@ -219,7 +219,6 @@ OC.L10N.register(
     "Always show results" : "Mostrar siempre los resultados",
     "Hide results until poll is closed" : "Ocultar resultados hasta que se cierre la encuesta",
     "Never show results" : "Nunca mostrar resultados",
-    "Delete vote when switched to \"No\"" : "Eliminar voto cuando se cambie a \"No\"",
     "Poll \"{pollTitle}\" added" : "Encuesta \"{pollTitle}\" agregada",
     "Error while creating Poll \"{pollTitle}\"" : "Error al crear la Encuesta \"{pollTitle}\"",
     "Title" : "Título",

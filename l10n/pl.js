@@ -219,7 +219,6 @@ OC.L10N.register(
     "Always show results" : "Zawsze pokazuj wyniki",
     "Hide results until poll is closed" : "Ukryj wyniki do zakończenia sondy",
     "Never show results" : "Nigdy nie pokazuj wyników",
-    "Delete vote when switched to \"No\"" : "Usuń głos po przełączeniu na \"Nie\"",
     "Poll \"{pollTitle}\" added" : "Dodano sondę \"{pollTitle}\"",
     "Error while creating Poll \"{pollTitle}\"" : "Błąd podczas tworzenia sondy \"{pollTitle}\"",
     "Title" : "Tytuł",

@@ -220,7 +220,6 @@ OC.L10N.register(
     "Always show results" : "Always show results",
     "Hide results until poll is closed" : "Hide results until poll is closed",
     "Never show results" : "Never show results",
-    "Delete vote when switched to \"No\"" : "Delete vote when switched to \"No\"",
     "Poll \"{pollTitle}\" added" : "Poll \"{pollTitle}\" added",
     "Error while creating Poll \"{pollTitle}\"" : "Error while creating Poll \"{pollTitle}\"",
     "Title" : "عنوان",

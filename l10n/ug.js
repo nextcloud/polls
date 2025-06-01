@@ -296,7 +296,6 @@ OC.L10N.register(
     "Always show results" : "ھەمىشە نەتىجىنى كۆرسىتىڭ",
     "Hide results until poll is closed" : "راي سىناش ئاخىرلاشقۇچە نەتىجىنى يوشۇرۇڭ",
     "Never show results" : "ھەرگىزمۇ نەتىجىنى كۆرسەتمەڭ",
-    "Delete vote when switched to \"No\"" : "«ياق» غا ئالماشتۇرغاندا بېلەتنى ئۆچۈرۈڭ.",
     "Limit \"Yes\" votes per participant" : "ھەر بىر قاتناشقۇچىغا «ھەئە» بېلەتلىرىنى چەكلەڭ",
     "Poll \"{pollTitle}\" added" : "راي سىناش \"{pollTitle}\" قوشۇلدى",
     "Error while creating Poll \"{pollTitle}\"" : "راي سىناش \"{pollTitle}\" نى قۇرۇشتىكى خاتالىق",

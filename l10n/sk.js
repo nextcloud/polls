@@ -287,7 +287,6 @@ OC.L10N.register(
     "Always show results" : "Vždy zobrazovať výsledky",
     "Hide results until poll is closed" : "Skryť výsledky do doby ukončenia ankety",
     "Never show results" : "Nikdy neukázať výsledky",
-    "Delete vote when switched to \"No\"" : "Odstrániť hlas pri prepnutí na „Nie“",
     "Limit \"Yes\" votes per participant" : "Limitovať voľbu \"Áno\" na účastníka",
     "Poll \"{pollTitle}\" added" : "Anketa \"{pollTitle}\" pridaná",
     "Error while creating Poll \"{pollTitle}\"" : "Chyba pri vytváraní Ankety \"{pollTitle}\"",

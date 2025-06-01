@@ -234,7 +234,6 @@ OC.L10N.register(
     "Always show results" : "Erakutsi emaitzak beti",
     "Hide results until poll is closed" : "Ezkutatu emaitzak galdeketa itxi arte",
     "Never show results" : "Ez erakutsi emaitzak inoiz",
-    "Delete vote when switched to \"No\"" : "Ezabatu botoa \"ez\"-era aldatzean",
     "Limit \"Yes\" votes per participant" : "Parte-hartzaile bakoitzeko \"bai\" botoak mugatu",
     "Poll \"{pollTitle}\" added" : "\"{pollTitle}\" galdeketa gehitu da",
     "Error while creating Poll \"{pollTitle}\"" : "Errorea \"{pollTitle}\" galdeketa sortzerakoan",
