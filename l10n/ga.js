@@ -325,7 +325,6 @@ OC.L10N.register(
     "Always show results" : "Taispeáin torthaí i gcónaí",
     "Hide results until poll is closed" : "Folaigh na torthaí go dtí go ndúntar an vótaíocht",
     "Never show results" : "Ná taispeáin torthaí riamh",
-    "Delete vote when switched to \"No\"" : "Scrios an vóta nuair a aistrítear go \"Níl\"",
     "Limit \"Yes\" votes per participant" : "Teorainn a chur ar vótaí \"Tá\" in aghaidh an rannpháirtí",
     "Poll \"{pollTitle}\" added" : "Cuireadh vótaíocht \"{pollTitle}\" leis",
     "Error while creating Poll \"{pollTitle}\"" : "Earráid agus an vótaíocht \"{ pollTitle}\" á cruthú",

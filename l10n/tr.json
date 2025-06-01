@@ -313,7 +313,6 @@
     "Always show results" : "Sonuçlar her zaman görüntülensin",
     "Hide results until poll is closed" : "Sonuçlar anket sona erene kadar gizlensin",
     "Never show results" : "Sonuçlar asla görüntülenmesin",
-    "Delete vote when switched to \"No\"" : "Oy, \"Hayır\" olarak değiştirildiğinde silinsin",
     "Limit \"Yes\" votes per participant" : "Her katılımcı için \"Evet\" oyları sınırlansın",
     "Poll \"{pollTitle}\" added" : "\"{pollTitle}\" anketi eklendi",
     "Error while creating Poll \"{pollTitle}\"" : "\"{pollTitle}\" anketi eklenirken sorun çıktı",

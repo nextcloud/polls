@@ -245,7 +245,6 @@
     "Always show results" : "Eredmények megjelenítése mindig",
     "Hide results until poll is closed" : "Eredmények elrejtése a szavazás lezárásáig",
     "Never show results" : "Sose jelenítse meg az eredményeket",
-    "Delete vote when switched to \"No\"" : "Szavazat törlése „Nem” lehetőségre állításkor",
     "Poll \"{pollTitle}\" added" : "„{pollTitle}” szavazás hozzáadva",
     "Error while creating Poll \"{pollTitle}\"" : "Hiba a(z) „{pollTitle}” szavazás létrehozása során",
     "Title" : "Cím",

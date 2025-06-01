@@ -325,7 +325,6 @@ OC.L10N.register(
     "Always show results" : "Výsledky vždy zobrazovat",
     "Hide results until poll is closed" : "Výsledky do uzavření ankety skrýt",
     "Never show results" : "Nikdy nezobrazovat výsledky",
-    "Delete vote when switched to \"No\"" : "V případě přepnutí na „Ne“ hlas smazat",
     "Limit \"Yes\" votes per participant" : "Omezit počet hlasů „Ano“ na účastníka",
     "Poll \"{pollTitle}\" added" : "Anketa „{pollTitle}“ přidána",
     "Error while creating Poll \"{pollTitle}\"" : "Chyba při vytváření ankety „{pollTitle}“",

@@ -101,7 +101,6 @@ OC.L10N.register(
     "Always show results" : "Visada rodyti rezultatus",
     "Hide results until poll is closed" : "Slėpti rezultatus tol, kol apklausa bus baigta",
     "Never show results" : "Niekada nerodyti rezultatų",
-    "Delete vote when switched to \"No\"" : "Ištrinti balsą, kai atsakoma „Ne“",
     "Poll \"{pollTitle}\" added" : "Apklausa „{pollTitle}“ pridėta",
     "Error while creating Poll \"{pollTitle}\"" : "Klaida kuriant apklausą „{pollTitle}“",
     "Title" : "Pavadinimas",

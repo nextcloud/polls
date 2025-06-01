@@ -218,7 +218,6 @@
     "Always show results" : "Visa alltid resultat",
     "Hide results until poll is closed" : "Dölj resultat tills omröstningen är stängd",
     "Never show results" : "Visa aldrig resultat",
-    "Delete vote when switched to \"No\"" : "Radera röst när det växlas till \"Nej\"",
     "Poll \"{pollTitle}\" added" : "Omröstningen \"{pollTitle}\" har lagts till",
     "Error while creating Poll \"{pollTitle}\"" : "Det gick inte att skapa omröstningen \"{pollTitle}\"",
     "Title" : "Titel",

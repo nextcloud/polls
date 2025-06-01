@@ -162,7 +162,6 @@
     "Always show results" : "常に結果を表示",
     "Hide results until poll is closed" : "投票が終了するまで結果を非表示",
     "Never show results" : "結果を表示しない",
-    "Delete vote when switched to \"No\"" : "「いいえ」にした場合に投票を削除",
     "Poll \"{pollTitle}\" added" : "投票 \"{pollTitle}\" を追加しました",
     "Error while creating Poll \"{pollTitle}\"" : "投票「{pollTitle}」の作成中にエラーが発生しました",
     "Title" : "タイトル",

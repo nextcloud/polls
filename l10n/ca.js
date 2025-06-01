@@ -298,7 +298,6 @@ OC.L10N.register(
     "Always show results" : "Mostra sempre els resultats",
     "Hide results until poll is closed" : "Amaga els resultats fins que es tanqui l'enquesta",
     "Never show results" : "No mostrar mai resultats",
-    "Delete vote when switched to \"No\"" : "Suprimir el vot quan es canvia a \"No\"",
     "Limit \"Yes\" votes per participant" : "Limitar els vots \"Sí\" per participant",
     "Poll \"{pollTitle}\" added" : "S'ha afegit l'enquesta \"{pollTitle}\"",
     "Error while creating Poll \"{pollTitle}\"" : "S'ha produït un error en crear l'enquesta \"{pollTitle}\"",

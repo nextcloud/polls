@@ -86,7 +86,6 @@
     "Always show results" : "Uvijek prikaži rezultate",
     "Hide results until poll is closed" : "Sakrij rezultate do zatvaranja ankete",
     "Never show results" : "Nemoj prikazati rezultate",
-    "Delete vote when switched to \"No\"" : "Izbriši glas kad se prebaci na „Ne”",
     "Poll \"{pollTitle}\" added" : "Dodana je anketa „{pollTitle}“",
     "Error while creating Poll \"{pollTitle}\"" : "Pogreška pri stvaranju ankete „{pollTitle}“",
     "Title" : "Naslov",

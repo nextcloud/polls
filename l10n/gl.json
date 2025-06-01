@@ -297,7 +297,6 @@
     "Always show results" : "Amosar sempre os resultados",
     "Hide results until poll is closed" : "Agochar resultados ata que se peche a enquisa",
     "Never show results" : "Non amosar nunca os resultados",
-    "Delete vote when switched to \"No\"" : "Eliminar o voto cando se cambia a «Non»",
     "Limit \"Yes\" votes per participant" : "Límite de votos «Si» por participante",
     "Poll \"{pollTitle}\" added" : "Foi engadida a enquisa «{pollTitle}»",
     "Error while creating Poll \"{pollTitle}\"" : "Produciuse un erro ao crear a enquisa «{pollTitle}»",

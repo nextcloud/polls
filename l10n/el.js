@@ -208,7 +208,6 @@ OC.L10N.register(
     "Always show results" : "Πάντα εμφάνιση αποτελεσμάτων",
     "Hide results until poll is closed" : "Απόκρυψη αποτελεσμάτων έως ότου κλείσει η δημοσκόπηση",
     "Never show results" : "Ποτέ να μην εμφανίζονται αποτελέσματα",
-    "Delete vote when switched to \"No\"" : "Διαγραφή ψήφου όταν αλλάζει σε \"Όχι\"",
     "Poll \"{pollTitle}\" added" : "Προστέθηκε η δημοσκόπηση \"{pollTitle}\"",
     "Error while creating Poll \"{pollTitle}\"" : "Σφάλμα κατά τη δημιουργία δημοσκόπησης \"{pollTitle}\".",
     "Title" : "Τίτλος",

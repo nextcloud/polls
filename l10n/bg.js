@@ -219,7 +219,6 @@ OC.L10N.register(
     "Always show results" : "Винаги показвайте резултати",
     "Hide results until poll is closed" : "Скриване на резултатите до затваряне на анкетата",
     "Never show results" : "Никога не показвайте резултати",
-    "Delete vote when switched to \"No\"" : "Изтриване на глас, когато превключи на „Не“",
     "Poll \"{pollTitle}\" added" : "Добавена е анкета „{pollTitle}“.",
     "Error while creating Poll \"{pollTitle}\"" : "Грешка при създаването на анкета „{pollTitle}“",
     "Title" : "Име",

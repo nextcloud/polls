@@ -299,7 +299,6 @@ OC.L10N.register(
     "Always show results" : "Toujours afficher les résultats",
     "Hide results until poll is closed" : "Masquer les résultats tant que le sondage n'est pas terminé.",
     "Never show results" : "Ne jamais afficher les résultats",
-    "Delete vote when switched to \"No\"" : "Supprimer le vote lorsqu'il passe à \"Non\"",
     "Limit \"Yes\" votes per participant" : "Limiter les votes «​ Oui » par participant",
     "Poll \"{pollTitle}\" added" : "Sondage « {pollTitle} » ajouté",
     "Error while creating Poll \"{pollTitle}\"" : "Erreur à la création du sondage \"{pollTitle}\"",

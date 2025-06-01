@@ -299,7 +299,6 @@ OC.L10N.register(
     "Always show results" : "Alltid vis resultater",
     "Hide results until poll is closed" : "Skjul resultater frem til avstemningen er stengt",
     "Never show results" : "Aldri vis resultater",
-    "Delete vote when switched to \"No\"" : "Slett stemme ved bytte til \"Nei\"",
     "Limit \"Yes\" votes per participant" : "Begrens \"Ja\"-stemmer per deltaker",
     "Poll \"{pollTitle}\" added" : "Avstemning \"{pollTitle}\" lagt til",
     "Error while creating Poll \"{pollTitle}\"" : "Feil ved oppretting av avstemning \"{pollTitle}\"",

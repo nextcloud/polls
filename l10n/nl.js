@@ -210,7 +210,6 @@ OC.L10N.register(
     "Always show results" : "Toon steeds resultaten",
     "Hide results until poll is closed" : "Verberg resultaten totdat de peiling gesloten is",
     "Never show results" : "Toon nooit resultaten",
-    "Delete vote when switched to \"No\"" : "Verwijder stem wanneer \"Nee\" gestemd",
     "Poll \"{pollTitle}\" added" : "Peiling \"{pollTitle}\" toegevoegd",
     "Error while creating Poll \"{pollTitle}\"" : "Fout bij creëren peiling \"{pollTitle}\"",
     "Title" : "Titel",
