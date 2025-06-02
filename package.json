@@ -71,7 +71,7 @@
     "@types/qrcode": "^1.5.5",
     "@vue/tsconfig": "^0.7.0",
     "eslint-config-prettier": "^10.1.5",
-    "eslint-plugin-prettier": "^5.4.0",
+    "eslint-plugin-prettier": "^5.4.1",
     "prettier": "^3.2.5",
     "vite": "^6.3.5",
     "vite-plugin-node-polyfills": "^0.23.0",
