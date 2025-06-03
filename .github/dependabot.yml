@@ -19,8 +19,8 @@ updates:
       timezone: Europe/Paris
     open-pull-requests-limit: 10
 
-  - package-ecosystem: "github-actions"
-    directory: "/"
+  - package-ecosystem: 'github-actions'
+    directory: '/'
     schedule:
       interval: weekly
       day: friday
@@ -28,9 +28,9 @@ updates:
       timezone: Europe/Paris
     open-pull-requests-limit: 10
 
-# master-7
+  # master-7
   - package-ecosystem: npm
-    directory: "/"
+    directory: '/'
     target-branch: master-7
     schedule:
       interval: weekly
@@ -39,11 +39,11 @@ updates:
       timezone: Europe/Paris
     open-pull-requests-limit: 10
     ignore:
-      - dependency-name: "*"
-        update-types: ["version-update:semver-major"]
+      - dependency-name: '*'
+        update-types: ['version-update:semver-major']
 
   - package-ecosystem: github-actions
-    directory: "/"
+    directory: '/'
     target-branch: master-7
     schedule:
       interval: weekly
@@ -51,4 +51,3 @@ updates:
       time: '02:00'
       timezone: Europe/Paris
     open-pull-requests-limit: 10
-
