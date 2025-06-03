@@ -36,7 +36,8 @@ updates:
       day: monday
       time: '02:00'
       timezone: Europe/Paris
-    prefix: '[master-7] '
+    commit-message:
+      prefix: '[master-7] '
     open-pull-requests-limit: 10
     ignore:
       - dependency-name: '*'
@@ -50,5 +51,6 @@ updates:
       day: monday
       time: '02:00'
       timezone: Europe/Paris
-    prefix: '[master-7] '
+    commit-message:
+      prefix: '[master-7] '
     open-pull-requests-limit: 10
