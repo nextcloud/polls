@@ -129,7 +129,7 @@
     "You have reordered the options" : "Sina oled muutnud valikute järjestust",
     "{actor} has reordered the options" : "{actor} on muutnud valikute järjestust",
     "You have changed your email address" : "Sa muutsid oma e-posti aadressi",
-    "{sharee} has changed the email address" : "{sharee} on muutnud seda e-posti aadressi",
+    "{sharee} has changed the email address" : "{sharee} on muutnud oma e-posti aadressi",
     "Email address of {sharee} has been changed" : "{sharee} e-posti aadress on muutunud",
     "You have changed your name" : "Sa oled oma nime muutnud",
     "{sharee} has changed the name" : "{sharee} on muutnud seda nime",
