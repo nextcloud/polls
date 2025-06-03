@@ -48,6 +48,7 @@
     "dompurify": "^3.2.6",
     "file-saver": "^2.0.5",
     "linkify-string": "^4.3.1",
+    "linkify-urls": "^5.0.2",
     "lodash": "^4.17.21",
     "luxon": "^3.6.1",
     "marked": "^15.0.12",
