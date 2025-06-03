@@ -55,7 +55,7 @@ jobs:
 
     - name: Publish pre-release ${{ steps.appinfo.outputs.app-version }}
       if: success()
-      uses: softprops/action-gh-release@v1
+      uses: softprops/action-gh-release@v2
       with:
         body: "# Changelog for the upcoming release (preview)\n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: true
