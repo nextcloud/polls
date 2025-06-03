@@ -9,20 +9,46 @@ updates:
       time: '03:00'
       timezone: Europe/Paris
     open-pull-requests-limit: 10
-    ignore:
-      - dependency-name: linkify-urls
-        versions:
-          - '>= 3.0.a'
-          - '< 3.1'
-      - dependency-name: linkify-urls
-        versions:
-          - '>= 3.1.a'
-          - '< 3.2'
+
   - package-ecosystem: composer
     directory: '/'
+    target-branch: master-7
     schedule:
-      interval: weekly
-      day: saturday
+      interval: daily
       time: '03:00'
       timezone: Europe/Paris
     open-pull-requests-limit: 10
+
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: weekly
+      day: friday
+      time: '04:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 10
+
+# master-7
+  - package-ecosystem: npm
+    directory: "/"
+    target-branch: master-7
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 10
+    ignore:
+      - dependency-name: "*"
+        update-types: ["version-update:semver-major"]
+
+  - package-ecosystem: github-actions
+    directory: "/"
+    target-branch: master-7
+    schedule:
+      interval: weekly
+      day: monday
+      time: '02:00'
+      timezone: Europe/Paris
+    open-pull-requests-limit: 10
+
