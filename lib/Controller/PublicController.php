@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\AppConstants;
 use OCA\Polls\Attributes\ShareTokenRequired;
+use OCA\Polls\Model\SentResult;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\SimpleOption;
@@ -483,7 +484,7 @@ class PublicController extends BaseController {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
 			'share' => $share,
-			'sentResult' => $this->mailService->sendInvitation($share)
+			'sentResult' => $this->mailService->sendInvitation($share, new SentResult()),
 		]);
 	}
 }
