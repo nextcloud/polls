@@ -65,13 +65,16 @@ class CommentService {
 	/**
 	 * Add comment
 	 */
-	public function add(string $message, int $pollId): Comment {
-		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_COMMENT_ADD);
+	public function add(string $message, int $pollId, ?bool $confidential = false): Comment {
+		$poll = $this->pollMapper->find($pollId);
+		$poll->request(Poll::PERMISSION_COMMENT_ADD);
 
 		$this->comment = new Comment();
 		$this->comment->setPollId($pollId);
 		$this->comment->setUserId($this->userSession->getCurrentUserId());
 		$this->comment->setComment($message);
+		$this->comment->setConfidential($confidential ? Comment::CONFIDENTIAL_YES : Comment::CONFIDENTIAL_NO);
+		$this->comment->setRecipient($confidential ? $poll->getOwner() : null);
 		$this->comment->setTimestamp(time());
 		$this->comment = $this->commentMapper->insert($this->comment);
 

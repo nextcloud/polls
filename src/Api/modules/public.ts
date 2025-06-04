@@ -189,11 +189,12 @@ const publicPoll = {
 	addComment(
 		shareToken: string,
 		message: string,
+		confidential: boolean = false,
 	): Promise<AxiosResponse<{ comment: Comment }>> {
 		return httpInstance.request({
 			method: 'POST',
 			url: `s/${shareToken}/comment`,
-			data: { message },
+			data: { message, confidential },
 			params: { time: +new Date() },
 			cancelToken:
 				cancelTokenHandlerObject[

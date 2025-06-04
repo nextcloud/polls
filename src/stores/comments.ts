@@ -76,7 +76,7 @@ export const useCommentsStore = defineStore('comments', {
 			}
 		},
 
-		async add(payload: { message: string }) {
+		async add(payload: { message: string; confidential: boolean }) {
 			const sessionStore = useSessionStore()
 			try {
 				const response = await (() => {
@@ -84,12 +84,14 @@ export const useCommentsStore = defineStore('comments', {
 						return PublicAPI.addComment(
 							sessionStore.publicToken,
 							payload.message,
+							payload.confidential,
 						)
 					}
 					if (sessionStore.route.name === 'vote') {
 						return CommentsAPI.addComment(
 							sessionStore.currentPollId,
 							payload.message,
+							payload.confidential,
 						)
 					}
 					return null
