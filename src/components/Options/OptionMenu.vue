@@ -81,6 +81,7 @@ function confirmOption() {
 		<NcActionButton
 			v-if="deleteAllowed"
 			:name="deleteOrRestoreStaticText"
+			close-after-click
 			@click="deleteRestoreOption()">
 			<template #icon>
 				<DeleteIcon v-if="!option.deleted" />
@@ -91,6 +92,7 @@ function confirmOption() {
 		<NcActionButton
 			v-if="cloneAllowed"
 			:name="t('polls', 'Clone option')"
+			close-after-click
 			@click="cloneOptionModal()">
 			<template #icon>
 				<CloneDateIcon />
@@ -104,6 +106,7 @@ function confirmOption() {
 					? t('polls', 'Unconfirm option')
 					: t('polls', 'Confirm option')
 			"
+			close-after-click
 			@click="confirmOption()">
 			<template #icon>
 				<UnconfirmIcon v-if="option.confirmed" />
