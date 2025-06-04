@@ -8,6 +8,7 @@
 .project/
 .idea/
 .vscode/
+assets/
 build/
 css/*.map
 js/*
@@ -18,9 +19,12 @@ tests/.phpunit.result.cache
 npm-debug.log
 vendor
 vendor-bin/**/vendor/
-Thumbs.db
+vendor-bin/**/*.lock
+update-workflows.sh
 yarn-error.log
+Thumbs.db
 *.cmd
+*.env
 *.iml
 *.ntvs*
 *.njsproj
