@@ -54,6 +54,8 @@
     "%s archived your poll" : "%s arhivira anketo.",
     "{actor} archived your poll \"%s\"." : "{actor} arhivira vašo anketo »%s«.",
     "Poll" : "Anketa",
+    "404 - Poll not found" : "napaka 404 – ankete ni mogoče najti",
+    "This poll does not exist (anymore)." : "Anketa ne obstaja (več).",
     "Access denied" : "Dostop je zavrnjen",
     "You have commented on poll {pollTitle}" : "Vpišete opombo za anketo {pollTitle}",
     "{actor} has commented on poll {pollTitle}" : "{actor} vpiše opombo za anketo {pollTitle}",
