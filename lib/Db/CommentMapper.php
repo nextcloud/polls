@@ -44,11 +44,25 @@ class CommentMapper extends QBMapperWithUser {
 	 * @return Comment[]
 	 */
 	public function findByPoll(int $pollId, bool $getDeleted = false): array {
+		$currentUserId = $this->userSession->getCurrentUserId();
+
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere(
+			$qb->expr()->orX(
+				$qb->expr()->eq(self::TABLE . '.confidential', $qb->createNamedParameter(Comment::CONFIDENTIAL_NO, IQueryBuilder::PARAM_INT)),
+				$qb->expr()->eq(self::TABLE . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+				$qb->expr()->andX(
+					$qb->expr()->eq(self::TABLE . '.confidential', $qb->createNamedParameter(Comment::CONFIDENTIAL_YES, IQueryBuilder::PARAM_INT)),
+					$qb->expr()->eq(self::TABLE . '.recipient', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
+				)
+			)
+		);
+
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
 		}
+
 		return $this->findEntities($qb);
 	}
 
