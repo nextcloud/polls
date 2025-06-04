@@ -26,13 +26,6 @@ const confidentialText =
 				displayName: pollStore.owner.displayName,
 			})
 
-const forcedConfidentialHint =
-	pollStore.owner.id === sessionStore.currentUser.id
-		? t('polls', 'New comments are only visible to me')
-		: t('polls', 'New comments are only visible to {displayName}', {
-				displayName: pollStore.owner.displayName,
-			})
-
 /**
  *
  */
@@ -67,7 +60,7 @@ async function writeComment() {
 				{{ confidentialText }}
 			</NcCheckboxRadioSwitch>
 			<div v-else>
-				{{ forcedConfidentialHint }}
+				{{ confidentialText }}
 			</div>
 		</div>
 	</div>
