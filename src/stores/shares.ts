@@ -123,7 +123,10 @@ export const useSharesStore = defineStore('shares', {
 			const sessionStore = useSessionStore()
 
 			try {
-				const response = await SharesAPI.addUserShare(sessionStore.currentPollId, user)
+				const response = await SharesAPI.addUserShare(
+					sessionStore.currentPollId,
+					user,
+				)
 				this.list.push(response.data.share)
 			} catch (error) {
 				this.handleError(error, 'Error adding user share', {
@@ -136,7 +139,9 @@ export const useSharesStore = defineStore('shares', {
 		async addPublicShare(): Promise<void> {
 			const sessionStore = useSessionStore()
 			try {
-				const response = await SharesAPI.addPublicShare(sessionStore.currentPollId)
+				const response = await SharesAPI.addPublicShare(
+					sessionStore.currentPollId,
+				)
 				this.list.push(response.data.share)
 			} catch (error) {
 				this.handleError(error, 'Error adding public share', {
@@ -180,7 +185,11 @@ export const useSharesStore = defineStore('shares', {
 				)
 				this.update(response.data)
 			} catch (error) {
-				this.handleError(error, 'Error changing email register setting', payload)
+				this.handleError(
+					error,
+					'Error changing email register setting',
+					payload,
+				)
 			}
 		},
 
@@ -204,12 +213,11 @@ export const useSharesStore = defineStore('shares', {
 			} catch (error) {
 				this.handleError(error, 'Error inviting all users', payload)
 			}
-
 		},
 		async sendInvitation(payload: { share: Share }): Promise<{
 			share: Share
 			sentResult: null | SentResults
-		} | void>  {
+		} | void> {
 			try {
 				const response = await SharesAPI.sendInvitation(payload.share.token)
 				this.load()
@@ -233,7 +241,8 @@ export const useSharesStore = defineStore('shares', {
 				const response = await SharesAPI.lockShare(payload.share.token)
 				this.update(response.data)
 			} catch (error) {
-				this.handleError(error, 'Error locking share', payload)}
+				this.handleError(error, 'Error locking share', payload)
+			}
 		},
 
 		async unlock(payload: { share: Share }): Promise<void> {
@@ -271,6 +280,6 @@ export const useSharesStore = defineStore('shares', {
 
 			this.load()
 			throw error
-		}
+		},
 	},
 })

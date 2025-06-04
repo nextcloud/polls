@@ -12,10 +12,7 @@ import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 
 import UserItem from '../User/UserItem.vue'
 
-import {
-	Share,
-	ShareType,
-} from '../../stores/shares.ts'
+import { Share, ShareType } from '../../stores/shares.ts'
 import ShareMenu from './ShareMenu.vue'
 
 const emit = defineEmits(['showQrCode'])
@@ -46,7 +43,6 @@ const userItemProps = computed(() => ({
 onMounted(() => {
 	label.value.inputValue = share.label
 })
-
 </script>
 
 <template>
@@ -74,7 +70,7 @@ onMounted(() => {
 				</div>
 			</template>
 
-			<ShareMenu :share="share" @show-qr-code="emit('showQrCode')"/>
+			<ShareMenu :share="share" @show-qr-code="emit('showQrCode')" />
 		</UserItem>
 	</div>
 </template>
