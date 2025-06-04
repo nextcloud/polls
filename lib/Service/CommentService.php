@@ -49,7 +49,10 @@ class CommentService {
 		$predecessor = new Comment();
 
 		foreach ($comments as &$comment) {
-			if ($comment->getUserId() === $predecessor->getUserId() && $comment->getTimestamp() - $predecessor->getTimestamp() < $timeTolerance) {
+			if ($comment->getUserId() === $predecessor->getUserId()
+				&& $comment->getTimestamp() - $predecessor->getTimestamp() < $timeTolerance
+				&& $comment->getConfidential() === $predecessor->getConfidential()
+			) {
 				$comment->setParent($predecessor->getId());
 			} else {
 				$predecessor = $comment;

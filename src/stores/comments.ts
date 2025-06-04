@@ -18,7 +18,10 @@ export type Comment = {
 	pollId: number
 	timestamp: number
 	user: User
+	confidential: number
+	recipient: User | null
 }
+
 export type ShortComment = {
 	comment: string
 	deleted: number
