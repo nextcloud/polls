@@ -21,8 +21,15 @@ const comment = ref('')
 const confidantial = ref(false)
 const confidentialText =
 	pollStore.owner.id === sessionStore.currentUser.id
-		? t('polls', 'Only for me')
-		: t('polls', 'Only for {displayName}', {
+		? t('polls', 'Only visible to me')
+		: t('polls', 'Only visible to {displayName}', {
+				displayName: pollStore.owner.displayName,
+			})
+
+const forcedConfidentialHint =
+	pollStore.owner.id === sessionStore.currentUser.id
+		? t('polls', 'New comments are only visible to me')
+		: t('polls', 'New comments are only visible to {displayName}', {
 				displayName: pollStore.owner.displayName,
 			})
 
@@ -53,9 +60,15 @@ async function writeComment() {
 				:placeholder="t('polls', 'New comment …')"
 				submit
 				@submit="writeComment()" />
-			<NcCheckboxRadioSwitch v-model="confidantial" type="switch">
+			<NcCheckboxRadioSwitch
+				v-if="!pollStore.configuration.forceConfidentialComments"
+				v-model="confidantial"
+				type="switch">
 				{{ confidentialText }}
 			</NcCheckboxRadioSwitch>
+			<div v-else>
+				{{ forcedConfidentialHint }}
+			</div>
 		</div>
 	</div>
 </template>

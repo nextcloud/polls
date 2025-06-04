@@ -69,6 +69,10 @@ class CommentService {
 		$poll = $this->pollMapper->find($pollId);
 		$poll->request(Poll::PERMISSION_COMMENT_ADD);
 
+		if ($poll->getForceConfidentialComments()) {
+			$confidential = true;
+		}
+
 		$this->comment = new Comment();
 		$this->comment->setPollId($pollId);
 		$this->comment->setUserId($this->userSession->getCurrentUserId());
