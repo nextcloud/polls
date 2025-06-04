@@ -36,8 +36,8 @@ const confidentialRecipient = computed(() => {
 		return ''
 	}
 	if (comment.recipient && comment.recipient.id !== sessionStore.currentUser.id) {
-		return t('polls', 'Confidential with {userName}', {
-			userName: comment.recipient.displayName,
+		return t('polls', 'Confidential with {displayName}', {
+			displayName: comment.recipient.displayName,
 		})
 	}
 	return t('polls', 'Confidential')
