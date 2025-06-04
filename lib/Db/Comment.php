@@ -11,7 +11,6 @@ namespace OCA\Polls\Db;
 use Exception;
 use JsonSerializable;
 use OCA\Polls\Helper\Container;
-use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
 
 /**
@@ -60,12 +59,12 @@ class Comment extends EntityWithUser implements JsonSerializable {
 		$this->addType('confidential', 'integer');
 	}
 
-	public function getRecipientUser() : UserBase | null {
+	public function getRecipientUser() : ?UserBase {
 		if ($this->getRecipient() === '' || $this->getRecipient() === null) {
 			return null;
 		}
 
-		try  {
+		try {
 			/* @var UserMapper $userMapper */
 			$userMapper = (Container::queryClass(UserMapper::class));
 			$user = $userMapper->getParticipant($this->getRecipient(), $this->getPollId());
