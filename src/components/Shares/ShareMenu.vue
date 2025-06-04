@@ -65,8 +65,12 @@ type ButtonProps = {
 }
 
 const resendInvitation = computed<ButtonProps>(() => ({
-	activate: (!share.deleted && (!!share.user. emailAddress || share.type === ShareType.Group)),
-	name: share.invitationSent ? t('polls', 'Resend invitation mail') : t('polls', 'Send invitation mail'),
+	activate:
+		!share.deleted
+		&& (!!share.user.emailAddress || share.type === ShareType.Group),
+	name: share.invitationSent
+		? t('polls', 'Resend invitation mail')
+		: t('polls', 'Send invitation mail'),
 	action: async () => {
 		try {
 			const result = await sharesStore.sendInvitation({ share })
@@ -80,34 +84,37 @@ const resendInvitation = computed<ButtonProps>(() => ({
 }))
 
 function handleInvitationResults(sentResult: SentResults) {
-		if (sentResult?.sentMails) {
-			sentResult.sentMails.forEach((item) => {
-				showSuccess(
-					t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
+	if (sentResult?.sentMails) {
+		sentResult.sentMails.forEach((item) => {
+			showSuccess(
+				t('polls', 'Invitation sent to {displayName} ({emailAddress})', {
+					emailAddress: item.emailAddress,
+					displayName: item.displayName,
+				}),
+			)
+		})
+	}
+	if (sentResult?.abortedMails) {
+		sentResult.abortedMails.forEach((item) => {
+			showError(
+				t(
+					'polls',
+					'Error sending invitation to {displayName} ({emailAddress})',
+					{
 						emailAddress: item.emailAddress,
 						displayName: item.displayName,
-					}),
-				)
-			})
-		}
-		if (sentResult?.abortedMails) {
-			sentResult.abortedMails.forEach((item) => {
-				showError(
-					t(
-						'polls',
-						'Error sending invitation to {displayName} ({emailAddress})',
-						{
-							emailAddress: item.emailAddress,
-							displayName: item.displayName,
-						},
-					),
-				)
-			})
-		}
+					},
+				),
+			)
+		})
+	}
 }
 
 const resolveGroups = computed<ButtonProps>(() => ({
-	activate: !resolving.value && !share.deleted && [ShareType.ContactGroup, ShareType.Circle].includes(share.type),
+	activate:
+		!resolving.value
+		&& !share.deleted
+		&& [ShareType.ContactGroup, ShareType.Circle].includes(share.type),
 	name: t('polls', 'Resolve group into individual invitations'),
 	action: async () => {
 		if (resolving.value) return
@@ -149,10 +156,13 @@ function resolveGroupResolveError(message: string) {
 }
 
 const switchAdmin = computed<ButtonProps>(() => ({
-	activate: !share.deleted && (share.type === ShareType.User || share.type === ShareType.Admin),
-	name: share.type === ShareType.User
-		? t('polls', 'Grant poll admin access')
-		: t('polls', 'Withdraw poll admin access'),
+	activate:
+		!share.deleted
+		&& (share.type === ShareType.User || share.type === ShareType.Admin),
+	name:
+		share.type === ShareType.User
+			? t('polls', 'Grant poll admin access')
+			: t('polls', 'Withdraw poll admin access'),
 	action: () => {
 		sharesStore.switchAdmin({ share })
 	},
@@ -171,7 +181,6 @@ const copyLinkButton = computed<ButtonProps>(() => ({
 	},
 }))
 
-
 const showQrCodeButton = computed<ButtonProps>(() => ({
 	activate: !share.deleted && !!share.URL,
 	name: t('polls', 'Show QR code'),
@@ -182,9 +191,7 @@ const showQrCodeButton = computed<ButtonProps>(() => ({
 
 const lockShareButton = computed<ButtonProps>(() => ({
 	activate: !share.deleted,
-	name: share.locked
-		? t('polls', 'Unlock share')
-		: t('polls', 'Lock share'),
+	name: share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share'),
 	action: () => {
 		try {
 			if (share.locked) {
@@ -194,14 +201,17 @@ const lockShareButton = computed<ButtonProps>(() => ({
 			}
 		} catch (error) {
 			showError(
-				t('polls', 'Error while changing lock status of share {displayName}', {
-					displayName: share.user.displayName,
-				}),
+				t(
+					'polls',
+					'Error while changing lock status of share {displayName}',
+					{
+						displayName: share.user.displayName,
+					},
+				),
 			)
 		}
 	},
 }))
-
 
 const deleteShareButton = computed<ButtonProps>(() => ({
 	activate: true,
@@ -215,9 +225,13 @@ const deleteShareButton = computed<ButtonProps>(() => ({
 			}
 		} catch (error) {
 			showError(
-				t('polls', 'Error while changing deleted status of share {displayName}', {
-					displayName: share.user.displayName,
-				}),
+				t(
+					'polls',
+					'Error while changing deleted status of share {displayName}',
+					{
+						displayName: share.user.displayName,
+					},
+				),
 			)
 		}
 	},
@@ -226,7 +240,6 @@ const deleteShareButton = computed<ButtonProps>(() => ({
 onMounted(() => {
 	label.value.inputValue = share.label
 })
-
 
 /**
  *
@@ -237,7 +250,6 @@ async function submitLabel() {
 		label: label.value.inputValue,
 	})
 }
-
 </script>
 
 <template>
