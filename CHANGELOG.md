@@ -25,6 +25,7 @@ All notable changes to this project will be documented in this file.
  - Collapsible poll description
  - Transfer polls to another owner by the current poll owner or the administration
  - Added reference provider for link previews and smart picker
+ - Added confidential comments for comments only visible by the author and the current poll owner
 
 ## [7.4.1] - 2024-03-07
 ### New
