@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Controller;
 
+use OCA\Polls\Model\SentResult;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\ShareService;
 use OCP\AppFramework\Http;
@@ -131,7 +132,7 @@ class ShareApiController extends BaseApiV2Controller {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
 			'share' => $share,
-			'sentResult' => $this->mailService->sendInvitation($share),
+			'sentResult' => $this->mailService->sendInvitation($share, new SentResult()),
 		]);
 	}
 }
