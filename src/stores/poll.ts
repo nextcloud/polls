@@ -83,6 +83,7 @@ export type PollConfiguration = {
 	collapseDescription: boolean
 	description: string
 	expire: number
+	forceConfidentialComments: boolean
 	hideBookedUp: boolean
 	maxVotesPerOption: number
 	maxVotesPerUser: number
@@ -181,6 +182,7 @@ export const usePollStore = defineStore('poll', {
 			autoReminder: false,
 			collapseDescription: true,
 			expire: 0,
+			forceConfidentialComments: false,
 			hideBookedUp: false,
 			proposalsExpire: 0,
 			showResults: ShowResults.Always,

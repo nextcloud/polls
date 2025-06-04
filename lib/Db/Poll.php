@@ -260,6 +260,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'collapseDescription' => $this->getCollapseDescription(),
 			'description' => $this->getDescription(),
 			'expire' => $this->getExpire(),
+			'forceConfidentialComments' => $this->getForceConfidentialComments(),
 			'hideBookedUp' => boolval($this->getHideBookedUp()),
 			'maxVotesPerOption' => $this->getOptionLimit(),
 			'maxVotesPerUser' => $this->getVoteLimit(),
@@ -325,6 +326,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setAutoReminder($pollConfiguration['autoReminder'] ?? $this->getAutoReminder());
 		$this->setCollapseDescription($pollConfiguration['collapseDescription'] ?? $this->getCollapseDescription());
 		$this->setExpire($pollConfiguration['expire'] ?? $this->getExpire());
+		$this->setForceConfidentialComments($pollConfiguration['forceConfidentialComments'] ?? $this->getForceConfidentialComments());
 		$this->setHideBookedUp($pollConfiguration['hideBookedUp'] ?? $this->getHideBookedUp());
 		$this->setProposalsExpire($pollConfiguration['proposalsExpire'] ?? $this->getProposalsExpire());
 		$this->setShowResults($pollConfiguration['showResults'] ?? $this->getShowResults());
@@ -391,12 +393,20 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->setMiscSettingsByKey('autoReminder', (bool)$value);
 	}
 
-	private function setCollapseDescription(bool|int $value): void {
-		$this->setMiscSettingsByKey('collapseDescription', (bool)$value);
-	}
-
 	private function getAutoReminder(): bool {
 		return $this->getMiscSettingsArray()['autoReminder'] ?? false;
+	}
+
+	private function setForceConfidentialComments(bool|int $value): void {
+		$this->setMiscSettingsByKey('forceConfidentialComments', (bool)$value);
+	}
+
+	public function getForceConfidentialComments(): bool {
+		return $this->getMiscSettingsArray()['forceConfidentialComments'] ?? false;
+	}
+
+	private function setCollapseDescription(bool|int $value): void {
+		$this->setMiscSettingsByKey('collapseDescription', (bool)$value);
 	}
 
 	private function getCollapseDescription(): bool {
