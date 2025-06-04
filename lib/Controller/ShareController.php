@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Share;
+use OCA\Polls\Model\SentResult;
 use OCA\Polls\Service\ShareService;
 use OCP\AppFramework\Http\Attribute\NoAdminRequired;
 use OCP\AppFramework\Http\JSONResponse;
@@ -147,7 +148,7 @@ class ShareController extends BaseController {
 		$share = $this->shareService->get($token);
 		return $this->response(fn () => [
 			'share' => $share,
-			'sentResult' => $this->shareService->sendInvitation($share),
+			'sentResult' => $this->shareService->sendInvitation($share, new SentResult()),
 		]);
 	}
 
