@@ -30,6 +30,18 @@ const isCurrentUser = computed(
 	() => sessionStore.currentUser?.id === comment.user.id,
 )
 
+const isConfidential = computed(() => comment.confidential > 0)
+const confidentialRecipient = computed(() => {
+	if (!isConfidential.value) {
+		return ''
+	}
+	if (comment.recipient && comment.recipient.id !== sessionStore.currentUser.id) {
+		return t('polls', 'Confidential with {displayName}', {
+			displayName: comment.recipient.displayName,
+		})
+	}
+	return t('polls', 'Confidential')
+})
 /**
  *
  * @param subComment
@@ -69,6 +81,10 @@ async function restoreComment(comment: Comment) {
 		<div class="comment-item__content">
 			<span class="comment-item__user">{{ comment.user.displayName }}</span>
 			<span class="comment-item__date">{{ dateCommentedRelative }}</span>
+			<span v-if="isConfidential" class="comment-item__confidential">
+				{{ confidentialRecipient }}
+			</span>
+
 			<div
 				v-for="subComment in comment.comments"
 				:key="subComment.id"
@@ -117,6 +133,18 @@ async function restoreComment(comment: Comment) {
 	text-align: end;
 	&::before {
 		content: ' ~ ';
+	}
+}
+
+.comment-item__confidential {
+	opacity: 0.5;
+	font-size: 0.8em;
+	text-align: end;
+	&::before {
+		content: ' (';
+	}
+	&::after {
+		content: ') ';
 	}
 }
 

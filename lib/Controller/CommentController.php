@@ -45,9 +45,9 @@ class CommentController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/comment')]
-	public function add(int $pollId, string $message): JSONResponse {
+	public function add(int $pollId, string $message, bool $confidential): JSONResponse {
 		return $this->response(fn () => [
-			'comment' => $this->commentService->add($message, $pollId)
+			'comment' => $this->commentService->add($message, $pollId, $confidential)
 		]);
 	}
 

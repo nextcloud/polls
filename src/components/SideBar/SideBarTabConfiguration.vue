@@ -32,6 +32,7 @@ import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 import { usePollStore, PollType, ShowResults } from '../../stores/poll.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
+import ConfigForceConfidentialComments from '../Configuration/ConfigForceConfidentialComments.vue'
 
 const pollStore = usePollStore()
 const votesStore = useVotesStore()
@@ -66,6 +67,9 @@ const votesStore = useVotesStore()
 				<PollConfigIcon />
 			</template>
 			<ConfigAllowComment @change="pollStore.write" />
+			<ConfigForceConfidentialComments
+				v-if="pollStore.configuration.allowComment"
+				@change="pollStore.write" />
 			<ConfigAllowMayBe @change="pollStore.write" />
 			<ConfigUseNo @change="pollStore.write" />
 			<ConfigAnonymous @change="pollStore.write" />
