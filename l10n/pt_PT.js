@@ -14,6 +14,7 @@ OC.L10N.register(
     "Next day" : "Dia seguinte",
     "Add" : "Adicionar",
     "New comment …" : "Novo comentário…",
+    "Confidential" : "Confidencial",
     "Delete comment" : "Eliminar comentário",
     "Cancel" : "Cancelar",
     "Ok" : "CONFIRMAR",
