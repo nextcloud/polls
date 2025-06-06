@@ -175,7 +175,9 @@ onMounted(() => {
 	// Watch for manual height changes (e.g., via drag)
 })
 
-watch(height, () => { requestAnimationFrame(updateOverflowIndicators) })
+watch(height, () => {
+	requestAnimationFrame(updateOverflowIndicators)
+})
 
 onBeforeUnmount(() => {
 	observer?.disconnect()
@@ -245,7 +247,7 @@ onBeforeUnmount(() => {
 			z-index: 1;
 		}
 
-		// Fade oben
+		// Fade top
 		&::before {
 			top: 0;
 			background: linear-gradient(
@@ -257,7 +259,7 @@ onBeforeUnmount(() => {
 			transition: opacity 0.2s;
 		}
 
-		// Fade unten
+		// Fade bottom
 		&::after {
 			bottom: 0;
 			background: linear-gradient(
@@ -287,7 +289,6 @@ onBeforeUnmount(() => {
 	background: transparent;
 	z-index: 1;
 
-	// 1px durchgehende Linie zentriert in der Höhe
 	&::before {
 		content: '';
 		position: absolute;
@@ -299,7 +300,6 @@ onBeforeUnmount(() => {
 		transform: translateY(-0.5px);
 	}
 
-	// Griffsymbol exakt auf der Linie
 	&::after {
 		content: '• • •';
 		position: absolute;
