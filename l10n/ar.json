@@ -272,6 +272,7 @@
     "Invite users or allow internal access for all site users." : "قم بدعوة المستخدِمين أو قم بالسماح بالوصول الداخلي لجميع مستخدمي الموقع.",
     "Error while saving comment" : "خطأ أثناء حفظ التعليق",
     "New comment …" : "تعليق جديد ...",
+    "Confidential" : "حيثيات الدخول Credentials",
     "Error while deleting the comment" : "خطأ أثناء حذف التعليق",
     "Error while restoring the comment" : "حدث خطأ أثناء استعادة الملاحظة",
     "Restore comment" : "إستعادة ملاحظة",
