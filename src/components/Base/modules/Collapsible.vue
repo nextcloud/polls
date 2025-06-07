@@ -20,8 +20,8 @@ const {
 	maxHeightVh = 40,
 } = defineProps<CollapsibleProps>()
 
-// Reference to the inner content wrapper
 const slotWrapper = ref<HTMLElement | null>(null)
+const containerRef = ref<HTMLElement | null>(null)
 
 // Measured content height
 const contentHeight = ref(0)
@@ -29,18 +29,22 @@ const contentHeight = ref(0)
 // Current visible container height
 const height = ref(minHeight)
 
-// Max height: either content or 40vh
+// Max height is either the content height or capped by maxHeightVh
 const maxHeight = computed(() =>
 	Math.min(contentHeight.value, window.innerHeight * (maxHeightVh / 100)),
 )
 
+// Effective minimum height: either minHeight or capped by maxHeight
+const effectiveMinHeight = computed(() => Math.min(minHeight, maxHeight.value))
+
 // Watch for manual height changes (e.g., via drag or click)
 const isTransitioning = ref(false)
 
-// Effective minHeight (capped by maxHeight)
-const effectiveMinHeight = computed(() => Math.min(minHeight, maxHeight.value))
+// Overflow indicators
+const hasTopOverflow = ref(false)
+const hasBottomOverflow = ref(false)
 
-// Drag logic
+// drag state
 const drag = {
 	startY: 0,
 	startHeight: 0,
@@ -48,6 +52,7 @@ const drag = {
 	hasInitializedHeight: false,
 }
 
+// Helper to get clientY from mouse or touch events
 function getClientY(event: MouseEvent | TouchEvent): number {
 	return 'touches' in event ? (event.touches[0]?.clientY ?? 0) : event.clientY
 }
@@ -102,11 +107,6 @@ function stopResize() {
 		})
 	}
 }
-
-const containerRef = ref<HTMLElement | null>(null)
-
-const hasTopOverflow = ref(false)
-const hasBottomOverflow = ref(false)
 
 function updateOverflowIndicators() {
 	const el = containerRef.value
