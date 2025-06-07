@@ -47,7 +47,7 @@ const drag = {
 }
 
 function getClientY(event: MouseEvent | TouchEvent): number {
-	return 'touches' in event ? event.touches[0]?.clientY ?? 0 : event.clientY
+	return 'touches' in event ? (event.touches[0]?.clientY ?? 0) : event.clientY
 }
 
 // Start dragging the resize handle
@@ -74,7 +74,7 @@ function onMove(event: MouseEvent | TouchEvent) {
 	let newHeight = drag.startHeight + dy
 	newHeight = Math.max(
 		effectiveMinHeight.value,
-		Math.min(maxHeight.value, newHeight)
+		Math.min(maxHeight.value, newHeight),
 	)
 	height.value = newHeight
 }

@@ -78,12 +78,17 @@ const isShortDescription = computed(() => {
 	)
 })
 
-const collapsibleProps = computed(() => ({
-	noCollapse:
-		!pollStore.configuration.collapseDescription || isShortDescription.value,
-	openOnClick: true,
-	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min'
-} as const ))
+const collapsibleProps = computed(
+	() =>
+		({
+			noCollapse:
+				!pollStore.configuration.collapseDescription
+				|| isShortDescription.value,
+			openOnClick: true,
+			initialState:
+				pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
+		}) as const,
+)
 
 onMounted(() => {
 	subscribe(Event.LoadPoll, () => pollStore.load())
