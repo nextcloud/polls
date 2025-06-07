@@ -14,7 +14,11 @@ class Ghost extends UserBase {
 	/** @var string */
 	public const TYPE = 'deleted';
 
-	public function __construct(string $id) {
+	public function __construct(?string $id = null) {
+		// if Id is null, create a random value
+		if ($id === null) {
+			$id = bin2hex(random_bytes(16));
+		}
 		parent::__construct($id, self::TYPE);
 	}
 
