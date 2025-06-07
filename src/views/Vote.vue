@@ -84,7 +84,6 @@ const collapsibleProps = computed(
 			noCollapse:
 				!pollStore.configuration.collapseDescription
 				|| isShortDescription.value,
-			openOnClick: true,
 			initialState:
 				pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 		}) as const,
