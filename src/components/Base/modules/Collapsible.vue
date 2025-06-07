@@ -10,12 +10,14 @@ export interface CollapsibleProps {
 	initialState?: 'min' | 'max'
 	minHeight?: number
 	noCollapse: boolean
+	maxHeightVh?: number
 }
 
 const {
 	initialState = 'max',
 	minHeight = 100,
 	noCollapse = false,
+	maxHeightVh = 40,
 } = defineProps<CollapsibleProps>()
 
 // Reference to the inner content wrapper
@@ -29,7 +31,7 @@ const height = ref(minHeight)
 
 // Max height: either content or 40vh
 const maxHeight = computed(() =>
-	Math.min(contentHeight.value, window.innerHeight * 0.4),
+	Math.min(contentHeight.value, window.innerHeight * (maxHeightVh / 100)),
 )
 
 // Watch for manual height changes (e.g., via drag or click)
