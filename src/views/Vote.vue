@@ -35,6 +35,7 @@ import { useOptionsStore } from '../stores/options.ts'
 import { usePreferencesStore, ViewMode } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
+import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -78,12 +79,10 @@ const isShortDescription = computed(() => {
 	)
 })
 
-const openDescription = ref(pollStore.currentUserStatus.countVotes === 0)
-
-const collapsibleProps = computed(() => ({
+const collapsibleProps = computed<CollapsibleProps>(() => ({
 	noCollapse:
 		!pollStore.configuration.collapseDescription || isShortDescription.value,
-	openOnClick: true,
+	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 }))
 
 onMounted(() => {
@@ -123,7 +122,6 @@ onUnmounted(() => {
 		<div class="vote_main">
 			<Collapsible
 				v-if="pollStore.configuration.description"
-				v-model:open="openDescription"
 				v-bind="collapsibleProps">
 				<MarkDownDescription />
 			</Collapsible>

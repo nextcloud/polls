@@ -1,156 +1,322 @@
 <!--
-  - SPDX-FileCopyrightText: 2018 Nextcloud contributors
+  - SPDX-FileCopyrightText: 2025 Nextcloud contributors
   - SPDX-License-Identifier: AGPL-3.0-or-later
 -->
 
 <script setup lang="ts">
-import { computed, useTemplateRef } from 'vue'
-import { onClickOutside } from '@vueuse/core'
+import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-interface Props {
-	noCollapse?: boolean
-	openOnClick?: boolean
+export interface CollapsibleProps {
+	initialState?: 'min' | 'max'
+	minHeight?: number
+	noCollapse: boolean
+	maxHeightVh?: number
 }
 
-const { noCollapse = false, openOnClick = true } = defineProps<Props>()
+const {
+	initialState = 'max',
+	minHeight = 100,
+	noCollapse = false,
+	maxHeightVh = 40,
+} = defineProps<CollapsibleProps>()
 
-const open = defineModel<boolean>('open', { default: true })
+const slotWrapper = ref<HTMLElement | null>(null)
+const containerRef = ref<HTMLElement | null>(null)
 
-const collapsed = computed(() => {
-	if (noCollapse) {
-		return false
+// Measured content height
+const contentHeight = ref(0)
+
+// Current visible container height
+const height = ref(minHeight)
+
+// Max height is either the content height or capped by maxHeightVh
+const maxHeight = computed(() =>
+	Math.min(contentHeight.value, window.innerHeight * (maxHeightVh / 100)),
+)
+
+// Effective minimum height: either minHeight or capped by maxHeight
+const effectiveMinHeight = computed(() => Math.min(minHeight, maxHeight.value))
+
+// Watch for manual height changes (e.g., via drag or click)
+const isTransitioning = ref(false)
+
+// Overflow indicators
+const hasTopOverflow = ref(false)
+const hasBottomOverflow = ref(false)
+
+// drag state
+const drag = {
+	startY: 0,
+	startHeight: 0,
+	isDragging: false,
+	hasInitializedHeight: false,
+}
+
+// Helper to get clientY from mouse or touch events
+function getClientY(event: MouseEvent | TouchEvent): number {
+	return 'touches' in event ? (event.touches[0]?.clientY ?? 0) : event.clientY
+}
+
+// Start dragging the resize handle
+function startResize(event: MouseEvent | TouchEvent) {
+	if (noCollapse) return
+
+	drag.startY = getClientY(event)
+	drag.startHeight = height.value
+	drag.isDragging = false
+
+	document.addEventListener('mousemove', onMove)
+	document.addEventListener('touchmove', onMove)
+	document.addEventListener('mouseup', stopResize)
+	document.addEventListener('touchend', stopResize)
+}
+
+// Handle vertical dragging
+function onMove(event: MouseEvent | TouchEvent) {
+	const y = getClientY(event)
+	const dy = y - drag.startY
+
+	if (Math.abs(dy) > 3) drag.isDragging = true
+
+	let newHeight = drag.startHeight + dy
+	newHeight = Math.max(
+		effectiveMinHeight.value,
+		Math.min(maxHeight.value, newHeight),
+	)
+	height.value = newHeight
+}
+
+// Stop dragging – or toggle between min/max if it was just a click
+function stopResize() {
+	if (noCollapse) return
+
+	document.removeEventListener('mousemove', onMove)
+	document.removeEventListener('touchmove', onMove)
+	document.removeEventListener('mouseup', stopResize)
+	document.removeEventListener('touchend', stopResize)
+
+	if (drag.isDragging) {
+		drag.isDragging = false
+	} else {
+		requestAnimationFrame(() => {
+			drag.isDragging = false
+			height.value =
+				height.value > effectiveMinHeight.value + 10
+					? effectiveMinHeight.value
+					: maxHeight.value
+		})
 	}
-	return !open.value
+}
+
+function updateOverflowIndicators() {
+	const el = containerRef.value
+	if (!el) return
+
+	hasTopOverflow.value = el.scrollTop > 0
+	hasBottomOverflow.value = el.scrollTop + el.clientHeight < el.scrollHeight
+}
+
+let observer: ResizeObserver | null = null
+
+onMounted(() => {
+	updateOverflowIndicators()
+
+	containerRef.value?.addEventListener('scroll', updateOverflowIndicators)
+
+	if (slotWrapper.value) {
+		// Watch actual content size via ResizeObserver
+		observer = new ResizeObserver(() => {
+			if (!slotWrapper.value) return
+
+			// If collapse is disabled, always follow content size (with 50vh cap)
+			if (noCollapse) {
+				contentHeight.value = slotWrapper.value.scrollHeight
+				height.value = maxHeight.value
+				return
+			}
+
+			const scrollHeight = slotWrapper.value.scrollHeight
+			const previousMax = maxHeight.value
+			contentHeight.value = scrollHeight
+
+			const newMax = maxHeight.value
+			const wasAtMax = height.value === previousMax
+
+			// Expand height if previously at max and content grew
+			if (wasAtMax && newMax > previousMax) {
+				height.value = newMax
+			}
+
+			// Reduce height if content shrunk below current height
+			if (height.value > newMax) {
+				height.value = newMax
+			}
+
+			// Set initial height only once
+			if (!drag.hasInitializedHeight) {
+				const target =
+					initialState === 'min' ? effectiveMinHeight.value : newMax
+
+				drag.isDragging = true // disable transition
+				height.value = target
+				drag.hasInitializedHeight = true
+
+				requestAnimationFrame(() => {
+					drag.isDragging = false
+				})
+			}
+			updateOverflowIndicators()
+		})
+		observer.observe(slotWrapper.value)
+	}
 })
 
-const collapsibleContainer = useTemplateRef<HTMLElement>('collapsible_container')
-const useToggle = computed(() => !noCollapse && !openOnClick)
+// Watch for manual height changes (e.g., via drag)
+watch(height, () => {
+	requestAnimationFrame(updateOverflowIndicators)
+})
 
-function toggleCollapsible(collapse: null | boolean = null) {
-	open.value = (collapse ?? !open.value) && !noCollapse
-}
-
-onClickOutside(collapsibleContainer, () => {
-	toggleCollapsible(false)
+onBeforeUnmount(() => {
+	observer?.disconnect()
+	containerRef.value?.removeEventListener('scroll', updateOverflowIndicators)
 })
 </script>
 
 <template>
-	<div :class="['collapsible', { collapsed }]">
+	<div class="collapsible">
 		<div
-			v-if="useToggle"
-			class="collapsible-toggle"
-			@click="toggleCollapsible()"></div>
-		<div
-			ref="collapsible_container"
-			class="collapsible_container"
-			@click="toggleCollapsible(true)">
-			<slot />
+			:class="[
+				'collapsible_wrapper',
+				{
+					'has-top-shadow': hasTopOverflow,
+					'has-bottom-shadow': hasBottomOverflow,
+				},
+			]">
+			<div
+				ref="containerRef"
+				:class="[
+					'collapsible_container',
+					{ 'no-transition': drag.isDragging },
+				]"
+				:style="{ height: height + 'px' }">
+				<div ref="slotWrapper" class="collapsible_content">
+					<slot />
+				</div>
+			</div>
 		</div>
+		<div
+			v-show="!noCollapse && contentHeight >= minHeight"
+			class="resize-handle"
+			:style="{ top: isTransitioning ? undefined : height + 'px' }"
+			@touchstart.prevent="startResize"
+			@mousedown.prevent="startResize" />
 	</div>
 </template>
 
 <style lang="scss">
 .collapsible {
+	position: relative;
+	margin-bottom: 1.5rem;
+
 	.collapsible_container {
-		transition: max-height 0.4s cubic-bezier(1, 0, 0, 1);
-		overflow: auto;
-		max-height: max(51vh, 12rem);
-
-		background:
-		    /* Shadow covers */
-			linear-gradient(
-				var(--color-main-background) 30%,
-				rgba(from var(--color-main-text) r g b / 0)
-			),
-			linear-gradient(
-					rgba(from var(--color-main-text) r g b / 0),
-					var(--color-main-background) 70%
-				)
-				0 100%,
-			/* Shadows */
-				radial-gradient(
-					50% 0,
-					farthest-side,
-					rgba(from var(--color-main-text) r g b / 0.2),
-					rgba(from var(--color-main-background) r g b / 0.2)
-				),
-			radial-gradient(
-					50% 100%,
-					farthest-side,
-					rgba(from var(--color-main-text) r g b / 0.2),
-					rgba(from var(--color-main-background) r g b / 0.2)
-				)
-				0 100%;
-
-		background:
-    		/* Shadow covers */
-			linear-gradient(
-				var(--color-main-background) 30%,
-				rgba(from var(--color-main-text) r g b / 0)
-			),
-			linear-gradient(
-					rgba(from var(--color-main-text) r g b / 0),
-					var(--color-main-background) 70%
-				)
-				0 100%,
-			/* Shadows */
-				radial-gradient(
-					farthest-side at 50% 0,
-					rgba(from var(--color-main-text) r g b / 0.2),
-					rgba(from var(--color-main-background) r g b / 0.2)
-				),
-			radial-gradient(
-					farthest-side at 50% 100%,
-					rgba(from var(--color-main-text) r g b / 0.2),
-					rgba(from var(--color-main-background) r g b / 0.2)
-				)
-				0 100%;
-		background-repeat: no-repeat;
-		background-color: var(--color-main-background);
-		background-size:
-			100% 40px,
-			100% 40px,
-			100% 14px,
-			100% 14px;
-
-		/* Opera doesn't support this in the shorthand */
-		background-attachment: local, local, scroll, scroll;
-	}
-
-	.collapsible-toggle {
-		cursor: pointer;
 		position: relative;
-		line-height: 2rem;
-		font-weight: bold;
-		white-space: nowrap;
-		max-width: 100%;
-		padding: 0.5rem 1rem;
+		overflow: auto;
+		width: 100%;
+		transition: height 0.3s ease;
+		padding-right: 8px;
 
-		&::before {
-			content: '\25B8';
-			font-size: 1.5rem;
-			margin: 0 0.3em;
-			display: inline-block;
-			transition: transform 0.3s ease-in-out;
-			transform: rotate(90deg);
-		}
-		.collapsed & {
-			&::before {
-				transform: rotate(0deg);
-			}
+		&.no-transition {
+			transition: none !important;
 		}
 	}
 
-	&.collapsed {
-		.collapsible-toggle {
-			&::before {
-				transform: rotate(0deg);
-			}
+	.collapsible_wrapper {
+		position: relative;
+		overflow: hidden;
+
+		&::before,
+		&::after {
+			content: '';
+			position: absolute;
+			left: 0;
+			right: 8px;
+			height: 2.5rem;
+			pointer-events: none;
+			z-index: 1;
 		}
-		.collapsible_container {
-			max-height: 6rem;
+
+		// Fade top
+		&::before {
+			top: 0;
+			background: linear-gradient(
+				to bottom,
+				var(--color-main-background),
+				rgba(0, 0, 0, 0)
+			);
+			opacity: 0;
+			transition: opacity 0.2s;
 		}
+
+		// Fade bottom
+		&::after {
+			bottom: 0;
+			background: linear-gradient(
+				to top,
+				var(--color-main-background),
+				rgba(0, 0, 0, 0)
+			);
+			opacity: 0;
+			transition: opacity 0.2s;
+		}
+
+		&.has-top-shadow::before {
+			opacity: 1;
+		}
+		&.has-bottom-shadow::after {
+			opacity: 1;
+		}
+	}
+}
+
+.resize-handle {
+	position: absolute;
+	left: 0;
+	right: 0;
+	height: 12px;
+	cursor: ns-resize;
+	background: transparent;
+	z-index: 1;
+
+	&::before {
+		content: '';
+		position: absolute;
+		top: 50%;
+		left: 0;
+		right: 0;
+		height: 1px;
+		background: var(--color-border);
+		transform: translateY(-0.5px);
+	}
+
+	&::after {
+		content: '• • •';
+		position: absolute;
+		top: 50%;
+		left: 50%;
+		transform: translate(-50%, -50%);
+		padding: 0.15rem 0.5rem;
+		font-size: 1rem;
+		line-height: 1;
+		color: var(--color-main-text);
+		background: var(--color-border, rgba(0, 0, 0, 0.05));
+		border-radius: 0.5rem;
+		pointer-events: none;
+		user-select: none;
+	}
+
+	&:hover::after {
+		color: var(--color-loading-dark);
+		background: var(--color-background-darker, rgba(0, 0, 0, 0.1));
 	}
 }
 </style>
