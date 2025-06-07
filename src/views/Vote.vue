@@ -78,13 +78,12 @@ const isShortDescription = computed(() => {
 	)
 })
 
-const openDescription = ref(pollStore.currentUserStatus.countVotes === 0)
-
 const collapsibleProps = computed(() => ({
 	noCollapse:
 		!pollStore.configuration.collapseDescription || isShortDescription.value,
 	openOnClick: true,
-}))
+	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min'
+} as const ))
 
 onMounted(() => {
 	subscribe(Event.LoadPoll, () => pollStore.load())
@@ -123,7 +122,6 @@ onUnmounted(() => {
 		<div class="vote_main">
 			<Collapsible
 				v-if="pollStore.configuration.description"
-				v-model:open="openDescription"
 				v-bind="collapsibleProps">
 				<MarkDownDescription />
 			</Collapsible>

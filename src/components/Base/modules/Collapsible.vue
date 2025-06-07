@@ -46,28 +46,35 @@ const drag = {
 	hasInitializedHeight: false,
 }
 
-// Start dragging the resize handle
-function startResize(e: MouseEvent) {
-	if (noCollapse) return // Disable drag behavior if collapse is off
+function getClientY(event: MouseEvent | TouchEvent): number {
+	return 'touches' in event ? event.touches[0]?.clientY ?? 0 : event.clientY
+}
 
-	drag.startY = e.clientY
+// Start dragging the resize handle
+function startResize(event: MouseEvent | TouchEvent) {
+	if (noCollapse) return
+
+	drag.startY = getClientY(event)
 	drag.startHeight = height.value
 	drag.isDragging = false
 
-	document.addEventListener('mousemove', onMouseMove)
+	document.addEventListener('mousemove', onMove)
+	document.addEventListener('touchmove', onMove)
 	document.addEventListener('mouseup', stopResize)
+	document.addEventListener('touchend', stopResize)
 }
 
-// Handle vertical mouse movement during drag
-function onMouseMove(event: MouseEvent) {
-	const dy = event.clientY - drag.startY
+// Handle vertical dragging
+function onMove(event: MouseEvent | TouchEvent) {
+	const y = getClientY(event)
+	const dy = y - drag.startY
 
-	if (Math.abs(dy) > 3) drag.isDragging = true // Threshold to detect real drag
+	if (Math.abs(dy) > 3) drag.isDragging = true
 
 	let newHeight = drag.startHeight + dy
 	newHeight = Math.max(
 		effectiveMinHeight.value,
-		Math.min(maxHeight.value, newHeight),
+		Math.min(maxHeight.value, newHeight)
 	)
 	height.value = newHeight
 }
@@ -76,33 +83,21 @@ function onMouseMove(event: MouseEvent) {
 function stopResize() {
 	if (noCollapse) return
 
-	document.removeEventListener('mousemove', onMouseMove)
+	document.removeEventListener('mousemove', onMove)
+	document.removeEventListener('touchmove', onMove)
 	document.removeEventListener('mouseup', stopResize)
+	document.removeEventListener('touchend', stopResize)
 
 	if (drag.isDragging) {
 		drag.isDragging = false
 	} else {
-		const el = containerRef.value
-		if (!el) return
-
-		isTransitioning.value = true
-
-		// Determine target height (collapse or expand)
-		const newHeight =
-			height.value > effectiveMinHeight.value + 10
-				? effectiveMinHeight.value
-				: maxHeight.value
-
-		height.value = newHeight
-
-		// Wait for CSS transition to finish before resetting state
-		const onTransitionEnd = (event: TransitionEvent) => {
-			if (event.propertyName === 'height') {
-				isTransitioning.value = false
-				el.removeEventListener('transitionend', onTransitionEnd)
-			}
-		}
-		el.addEventListener('transitionend', onTransitionEnd)
+		requestAnimationFrame(() => {
+			drag.isDragging = false
+			height.value =
+				height.value > effectiveMinHeight.value + 10
+					? effectiveMinHeight.value
+					: maxHeight.value
+		})
 	}
 }
 
@@ -172,9 +167,9 @@ onMounted(() => {
 		})
 		observer.observe(slotWrapper.value)
 	}
-	// Watch for manual height changes (e.g., via drag)
 })
 
+// Watch for manual height changes (e.g., via drag)
 watch(height, () => {
 	requestAnimationFrame(updateOverflowIndicators)
 })
@@ -211,6 +206,7 @@ onBeforeUnmount(() => {
 			v-show="!noCollapse && contentHeight >= minHeight"
 			class="resize-handle"
 			:style="{ top: isTransitioning ? undefined : height + 'px' }"
+			@touchstart.prevent="startResize"
 			@mousedown.prevent="startResize" />
 	</div>
 </template>
