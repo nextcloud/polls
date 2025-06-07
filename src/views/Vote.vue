@@ -35,6 +35,7 @@ import { useOptionsStore } from '../stores/options.ts'
 import { usePreferencesStore, ViewMode } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
+import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -78,16 +79,11 @@ const isShortDescription = computed(() => {
 	)
 })
 
-const collapsibleProps = computed(
-	() =>
-		({
-			noCollapse:
-				!pollStore.configuration.collapseDescription
-				|| isShortDescription.value,
-			initialState:
-				pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
-		}) as const,
-)
+const collapsibleProps = computed<CollapsibleProps>(() => ({
+	noCollapse:
+		!pollStore.configuration.collapseDescription || isShortDescription.value,
+	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
+}))
 
 onMounted(() => {
 	subscribe(Event.LoadPoll, () => pollStore.load())

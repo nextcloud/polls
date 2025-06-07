@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 
-interface Props {
+export interface CollapsibleProps {
 	initialState?: 'min' | 'max'
 	minHeight?: number
 	noCollapse: boolean
@@ -16,7 +16,7 @@ const {
 	initialState = 'max',
 	minHeight = 100,
 	noCollapse = false,
-} = defineProps<Props>()
+} = defineProps<CollapsibleProps>()
 
 // Reference to the inner content wrapper
 const slotWrapper = ref<HTMLElement | null>(null)
