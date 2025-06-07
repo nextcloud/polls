@@ -238,7 +238,7 @@ onBeforeUnmount(() => {
 			position: absolute;
 			left: 0;
 			right: 8px;
-			height: 1.5rem;
+			height: 2.5rem;
 			pointer-events: none;
 			z-index: 1;
 		}
