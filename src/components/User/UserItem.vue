@@ -134,7 +134,7 @@ const descriptionComputed = computed(() => {
 		return t('polls', 'The participant got removed from this poll')
 	}
 	if (typeComputed.value === UserType.Admin) {
-		return t('polls', 'Is granted admin rights for this poll')
+		return t('polls', 'Administrative rights granted')
 	}
 	if (typeComputed.value === VirtualUserItemType.Anonymous) {
 		return t('polls', 'Anonymized participant')

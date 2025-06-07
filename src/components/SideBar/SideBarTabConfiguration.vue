@@ -41,7 +41,7 @@ const votesStore = useVotesStore()
 <template>
 	<div>
 		<CardDiv v-if="!pollStore.currentUserStatus.isOwner" type="success">
-			{{ t('polls', 'Administrative rights are delegated to you.') }}
+			{{ t('polls', 'You have been granted administrative rights.') }}
 		</CardDiv>
 
 		<CardDiv v-if="votesStore.hasVotes" type="warning">
