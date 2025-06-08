@@ -306,7 +306,6 @@ OC.L10N.register(
     "Error saving email address {emailAddress}" : "Shranjevanje elektronskega naslova {emailAddress} je spodletelo.",
     "(deleted)" : "(izbrisano)",
     "(locked)" : "(zaklenjeno)",
-    "Is granted admin rights for this poll" : "Dodeljena dovoljenja za skrbniško urejanje ankete",
     "Anonymized participant" : "Anonimni udeleženec",
     "Deleted participant" : "Izbrisan udeleženec",
     "Token: {token}" : "Žeton: {token}",

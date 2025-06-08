@@ -565,7 +565,6 @@ OC.L10N.register(
     "(deleted)" : "(محذوف)",
     "(locked)" : "(مٌقفل)",
     "The participant got removed from this poll" : "هذا المُشارِك تمّت إزالته من هذا الاستبيان",
-    "Is granted admin rights for this poll" : "مُنِحَ حق الإشراف على هذا الاستبيان",
     "Anonymized participant" : "مشارك مخفي الهوية",
     "Deleted participant" : "مشارك محذوف",
     "Token: {token}" : "رمز التحقق المميز: {token}",

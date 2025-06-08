@@ -381,7 +381,6 @@
     "Edit Email Address" : "Edytuj adres e-mail",
     "Email address {emailAddress} saved." : "Adres e-mail {emailAddress} został zapisany.",
     "Error saving email address {emailAddress}" : "Błąd podczas zapisywania adresu e-mail {emailAddress}",
-    "Is granted admin rights for this poll" : "Udziel uprawnienia administratora do tej sondy",
     "Token: {token}" : "Token: {token}",
     "Public link" : "Link publiczny",
     "Resolve this group first!" : "Najpierw rozwiąż tę grupę!",

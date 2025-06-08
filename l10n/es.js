@@ -565,7 +565,6 @@ OC.L10N.register(
     "(deleted)" : "(borrado)",
     "(locked)" : "(bloqueado)",
     "The participant got removed from this poll" : "El participante fue removido de esta encuesta",
-    "Is granted admin rights for this poll" : "Se le conceden permisos de administrador en esta encuesta",
     "Anonymized participant" : "Participante anonimizado",
     "Deleted participant" : "Participante eliminado",
     "Token: {token}" : "Token: {token}",

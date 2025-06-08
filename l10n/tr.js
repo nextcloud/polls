@@ -573,7 +573,6 @@ OC.L10N.register(
     "(deleted)" : "(silinmiş)",
     "(locked)" : "(kilitlenmiş)",
     "The participant got removed from this poll" : "Katılımcı bu anketten çıkarıldı",
-    "Is granted admin rights for this poll" : "Bu anket için yönetici izinleri verildi",
     "Anonymized participant" : "Anonimleştirilmiş katılımcı",
     "Deleted participant" : "Silinmiş katılımcı",
     "Token: {token}" : "Kod: {token}",

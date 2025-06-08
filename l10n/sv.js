@@ -388,7 +388,6 @@ OC.L10N.register(
     "Edit Email Address" : "Redigera e-postadress",
     "Email address {emailAddress} saved." : "E-postadressen {emailAddress} har sparats.",
     "Error saving email address {emailAddress}" : "Det gick inte att spara e-postadressen {emailAddress}",
-    "Is granted admin rights for this poll" : "Beviljas administratörsrättigheter för denna omröstning",
     "Token: {token}" : "Token: {token}",
     "Public link" : "Publik länk",
     "Resolve this group first!" : "Fixa här gruppen först!",

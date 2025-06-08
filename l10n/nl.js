@@ -340,7 +340,6 @@ OC.L10N.register(
     "Edit Email Address" : "Wijzig E-mailadres",
     "Email address {emailAddress} saved." : "E-mailadres {emailAddress} opgeslagen.",
     "Error saving email address {emailAddress}" : "Fout bij opslaan e-mailadres {emailAddress}",
-    "Is granted admin rights for this poll" : "Heeft beheerdersmachtigingen gekregen voor deze poll",
     "Token: {token}" : "Token: {token}",
     "Public link" : "Openbare Link",
     "Resolve this group first!" : "Los deze groep eerst op!",

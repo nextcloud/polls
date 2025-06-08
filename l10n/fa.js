@@ -386,7 +386,6 @@ OC.L10N.register(
     "Edit Email Address" : "Edit Email Address",
     "Email address {emailAddress} saved." : "Email address {emailAddress} saved.",
     "Error saving email address {emailAddress}" : "Error saving email address {emailAddress}",
-    "Is granted admin rights for this poll" : "Is granted admin rights for this poll",
     "Token: {token}" : "Token: {token}",
     "Public link" : "پیوند عمومی",
     "Resolve this group first!" : "Resolve this group first!",

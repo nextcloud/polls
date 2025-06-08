@@ -467,7 +467,6 @@ OC.L10N.register(
     "Error saving email address {emailAddress}" : "Chyba pri ukladaní e-mail adresy {emailAddress}",
     "(deleted)" : "(vymazané)",
     "(locked)" : "(uzamknuté)",
-    "Is granted admin rights for this poll" : "Má udelené práva správcu pre túto anketu",
     "Deleted participant" : "Zmazaný účastník",
     "Token: {token}" : "Token: {token}",
     "Public link" : "Verejný odkaz",

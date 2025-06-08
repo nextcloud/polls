@@ -358,7 +358,6 @@ OC.L10N.register(
     "Edit Email Address" : "Επεξεργασία Διεύθυνσης Email",
     "Email address {emailAddress} saved." : "Η διεύθυνση email {emailAddress} αποθηκεύτηκε.",
     "Error saving email address {emailAddress}" : "Σφάλμα κατά την αποθήκευση της διεύθυνσης email {emailAddress}",
-    "Is granted admin rights for this poll" : "Παραχωρούνται δικαιώματα διαχειριστή για αυτήν τη δημοσκόπηση",
     "Token: {token}" : "Token: {token}",
     "Public link" : "Δημόσιος σύνδεσμος",
     "Resolve this group first!" : "Επιλύστε πρώτα αυτήν την ομάδα!",

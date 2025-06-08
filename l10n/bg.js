@@ -379,7 +379,6 @@ OC.L10N.register(
     "Edit Email Address" : "Редактиране на имейл адрес",
     "Email address {emailAddress} saved." : "Имейл адресът {emailAddress} е запазен.",
     "Error saving email address {emailAddress}" : "Грешка при запазването на имейл адреса {emailAddress}",
-    "Is granted admin rights for this poll" : "Предоставени са администраторски права за тази анкета",
     "Token: {token}" : "Токен: {token}",
     "Public link" : "Публична връзка",
     "Resolve this group first!" : "Разреши първо тази група!",

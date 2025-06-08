@@ -426,7 +426,6 @@ OC.L10N.register(
     "Error saving email address {emailAddress}" : "Hiba történt az {emailAddress} cím mentésekor",
     "(deleted)" : "(törölt)",
     "(locked)" : "(zárolt)",
-    "Is granted admin rights for this poll" : "Adminisztrátori jogokat kapott ehhez a szavazáshoz",
     "Deleted participant" : "Törölt résztvevő",
     "Token: {token}" : "Token: {token}",
     "Public link: {token}" : "Nyilvános hivatkozás: {token}",

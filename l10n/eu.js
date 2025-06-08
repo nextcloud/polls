@@ -411,7 +411,6 @@ OC.L10N.register(
     "Error saving email address {emailAddress}" : "Errorea {emailAddress} helbide elektronikoa gordetzean",
     "(deleted)" : "(ezabatuta)",
     "(locked)" : "(blokeatuta)",
-    "Is granted admin rights for this poll" : "Administratzaile baimenak eman zaizkio galdeketa honentzat",
     "Anonymized participant" : "Parte-hartzaile anonimizatua",
     "Deleted participant" : "Ezabatutako parte-hartzailea",
     "Token: {token}" : "Tokena: {token}",

@@ -518,7 +518,6 @@
     "(deleted)" : "(slettet)",
     "(locked)" : "(låst)",
     "The participant got removed from this poll" : "Deltakeren ble fjernet fra denne avstemningen",
-    "Is granted admin rights for this poll" : "Er gitt administratorrettigheter for denne avstemningen",
     "Anonymized participant" : "Anonymisert deltaker",
     "Deleted participant" : "Slettet deltaker",
     "Token: {token}" : "Token: {token}",

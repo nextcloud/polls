@@ -326,7 +326,6 @@
     "Edit Email Address" : "编辑电子邮件地址",
     "Email address {emailAddress} saved." : "已保存邮件地  {emailAddress} ",
     "Error saving email address {emailAddress}" : "保存电子邮件地址 {emailAddress} 时出错",
-    "Is granted admin rights for this poll" : "被授予此投票的管理员权限",
     "Token: {token}" : "令牌：{token}",
     "Public link" : "公开链接",
     "Resolve this group first!" : "先解散此群组！",
