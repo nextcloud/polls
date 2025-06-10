@@ -138,10 +138,6 @@ class UserMapper extends QBMapper {
 	}
 
 	public function getUserFromShareToken(string $token): UserBase {
-		// TODO: This is just a dirty hack. Analyse userId while updating to get correct userId
-		if ($token === '') {
-			return new Ghost();
-		}
 		$share = $this->getShareByToken($token);
 
 		return $this->getUserFromShare($share);

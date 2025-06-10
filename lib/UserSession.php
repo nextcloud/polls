@@ -8,10 +8,12 @@ declare(strict_types=1);
 
 namespace OCA\Polls;
 
+use Exception;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Model\User\Cron;
+use OCA\Polls\Model\User\Ghost;
 use OCA\Polls\Model\UserBase;
 use OCP\ISession;
 use OCP\IUserSession;
@@ -56,12 +58,18 @@ class UserSession {
 	public function getCurrentUser(): UserBase {
 		if (!$this->currentUser) {
 
-			if ($this->getIsLoggedIn()) {
-				$this->currentUser = $this->userMapper->getUserFromUserBase((string)$this->userSession->getUser()?->getUID());
-			} elseif ($this->session->get(self::SESSION_KEY_CRON_JOB)) {
-				$this->currentUser = new Cron();
-			} else {
-				$this->currentUser = $this->userMapper->getUserFromShareToken($this->getShareToken());
+			try {
+				if ($this->getIsLoggedIn()) {
+					$this->currentUser = $this->userMapper->getUserFromUserBase((string)$this->userSession->getUser()?->getUID());
+				} elseif ($this->session->get(self::SESSION_KEY_CRON_JOB)) {
+					$this->currentUser = new Cron();
+				} else {
+					$this->currentUser = $this->userMapper->getUserFromShareToken($this->getShareToken());
+				}
+			} catch (Exception $e) {
+				// In case of system jobs, we do not get a valid user, so we return a Ghost user
+				// can happen while running cron jobs or during app updates
+				$this->currentUser = new Ghost();
 			}
 		}
 
