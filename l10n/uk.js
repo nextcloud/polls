@@ -73,6 +73,7 @@ OC.L10N.register(
     "Duration" : "Тривалість",
     "Preview" : "Перегляд",
     "Submit" : "Гаразд",
+    "Archived" : "Заархівовані",
     "A private poll from {name}" : "Приватне опитування від {name}",
     "An openly accessible poll from {name}" : "Опитування у відкритому доступі від {name}",
     "Closing {relativeExpirationTime}" : "Закривається {relativeExpirationTime}",

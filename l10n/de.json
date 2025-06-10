@@ -268,7 +268,7 @@
     "No further action is possible." : "Keine weitere Aktion möglich.",
     "Due to possible performance issues {countHiddenParticipants} voters are hidden." : "Aufgrund möglicher Leistungsprobleme werden {countHiddenParticipants} Abstimmende ausgeblendet.",
     "You can reveal them, but you may expect an unwanted long loading time." : "Du kannst diese zwar anzeigen, musst aber mit einer ungewollt langen Ladezeit rechnen.",
-    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n verwaiste Stimme einer wahrscheinlich gelöschten Option blockiert möglicherweise Dein Abstimmungslimit.","%n verwaiste Stimmen von wahrscheinlich gelöschten Optionen blockieren möglicherweise Dein Abstimmungslimit."],
+    "_%n orphaned vote of a probaly deleted option is possibly blocking your vote limit._::_%n orphaned votes of probaly deleted options are possibly blocking your vote limit._" : ["%n verwaiste Stimme einer wahrscheinlich gelöschten Option blockiert möglicherweise Dein Abstimmungslimit.","%n verwaiste Stimmen von wahrscheinlich gelöschten Optionen blockieren unter Umständen Dein Abstimmungslimit."],
     "Limited votes." : "Begrenzte Stimmen.",
     "This share is locked and allows only read access. Registering is not possible." : "Diese Freigabe ist gesperrt und erlaubt nur den Lesezugriff. Eine Registrierung ist nicht möglich.",
     "Voting is locked and you have just read access to this poll." : "Die Abstimmung ist gesperrt und Du hast lediglich Lesezugriff auf diese Umfrage.",
