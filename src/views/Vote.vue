@@ -161,8 +161,16 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.vote_main > * {
+.vote_main{
+	--cap-width: 49rem;
+	.markdown-description {
+		margin: auto;
+		max-width: var(--cap-width);
+	}
+
+	& > * {
 	margin-top: 0.5rem;
+	}
 }
 
 .vote_head {

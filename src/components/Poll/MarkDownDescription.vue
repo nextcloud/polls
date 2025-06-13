@@ -20,7 +20,6 @@ const pollStore = usePollStore()
 <style lang="scss">
 .markdown-description {
 	overflow: auto;
-	max-width: 49rem;
 
 	* {
 		margin: revert;
