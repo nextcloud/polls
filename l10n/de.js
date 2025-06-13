@@ -496,7 +496,7 @@ OC.L10N.register(
     "Janitor failed" : "Aufräumen fehlgeschlagen",
     "Notification started" : "Benachrichtigung gestartet",
     "Notification failed" : "Benachrichtigung fehlgeschlagen",
-    "Please understand, that the jobs were defined as asynchronous jobs by intention." : "Bitte habe Verständnis dafür, dass die Jobs absichtlich als asynchrone Jobs definiert wurden.",
+    "Please understand, that the jobs were defined as asynchronous jobs by intention." : "Bitte beachte, dass die Jobs absichtlich als asynchrone Jobs definiert wurden.",
     "Only use them, if it is absolutely neccessary (i.error. your cron does not work properly) or for testing." : "Verwende sie nur, wenn es unbedingt notwendig ist (z. B. Fehler, dein Cron funktioniert nicht richtig) oder zu Testzwecken.",
     "Starting the jobs does not mean, that the rules for these actions are overridden." : "Das Starten der Jobs bedeutet nicht, dass die Regeln für diese Aktionen außer Kraft gesetzt werden.",
     "Each job can only be run once. If you want to rerun them, you have to refresh the page." : "Jeder Job kann nur einmal ausgeführt werden. Wenn du ihn erneut ausführen möchtest, musst du die Seite aktualisieren.",
