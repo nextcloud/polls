@@ -9,14 +9,16 @@ import { CardDiv } from '../../Base/index.ts'
 import ActionDeleteOrphanedVotes from '../../Actions/modules/ActionDeleteOrphanedVotes.vue'
 import { t, n } from '@nextcloud/l10n'
 import { usePollStore } from '../../../stores/poll.ts'
+import { useOptionsStore } from '../../../stores/options.ts'
 
 const pollStore = usePollStore()
+const optionsStore = useOptionsStore()
 
 const orphanedVotesText = computed(() =>
 	n(
 		'polls',
-		'%n orphaned vote of a probaly deleted option is possibly blocking your vote limit.',
-		'%n orphaned votes of probaly deleted options are possibly blocking your vote limit.',
+		'%n orphaned vote reduces your vote quota.',
+		'%n orphaned votes reduces your vote quota.',
 		pollStore.currentUserStatus.orphanedVotes,
 	),
 )
@@ -29,52 +31,60 @@ const votesLeft = computed(() =>
 		: 0,
 )
 
+const optionsAvailableText = computed(() => {
+	if (optionsStore.countOptionsLeft === 0) {
+		return t('polls', 'No more voting options are available.')
+	}
+
+	return n(
+		'polls',
+		'%n voting option is available.',
+		'%n voting options are available.',
+		optionsStore.countOptionsLeft,
+	)
+
+})
+
+const votesLeftText = computed(() => {
+	if (!votesLeft.value) {
+		return t('polls', 'You have no votes left.')
+	}
+	return n(
+		'polls',
+		'You have %n vote left out of {maxVotes}.',
+		'You have %n votes left out of {maxVotes}.',
+		votesLeft.value,
+		{
+			maxVotes: pollStore.configuration.maxVotesPerUser,
+		},
+	)
+
+}
+)
+
 const cardType = computed(() =>
 	pollStore.configuration.maxVotesPerUser && votesLeft.value < 1
 		? 'error'
 		: 'info',
 )
+
 </script>
 
 <template>
 	<CardDiv :heading="t('polls', 'Limited votes.')" :type="cardType">
-		<ul>
-			<li v-if="pollStore.configuration.maxVotesPerOption">
-				{{
-					n(
-						'polls',
-						'%n vote is allowed per option.',
-						'%n votes are allowed per option.',
-						pollStore.configuration.maxVotesPerOption,
-					)
-				}}
-			</li>
-			<li v-if="pollStore.configuration.maxVotesPerUser">
-				{{
-					n(
-						'polls',
-						'%n vote is allowed per participant.',
-						'%n votes are allowed per participant.',
-						pollStore.configuration.maxVotesPerUser,
-					)
-				}}
-				{{
-					n(
-						'polls',
-						'You have %n vote left.',
-						'You have %n votes left.',
-						votesLeft,
-					)
-				}}
-			</li>
-			<div
-				v-if="
-					pollStore.currentUserStatus.orphanedVotes
-					&& pollStore.configuration.maxVotesPerUser
-				">
-				<b>{{ orphanedVotesText }}</b>
-			</div>
-		</ul>
+		<span v-if="pollStore.configuration.maxVotesPerOption">
+			{{ optionsAvailableText }}
+		</span>
+		<span v-if="pollStore.configuration.maxVotesPerUser">
+			{{ votesLeftText }}
+		</span>
+		<div
+			v-if="
+				pollStore.currentUserStatus.orphanedVotes
+				&& pollStore.configuration.maxVotesPerUser
+			">
+			<b>{{ orphanedVotesText }}</b>
+		</div>
 
 		<template
 			v-if="
@@ -86,3 +96,9 @@ const cardType = computed(() =>
 		</template>
 	</CardDiv>
 </template>
+
+<style lang="scss" scoped>
+span::after {
+	content: ' ';
+}
+</style>
