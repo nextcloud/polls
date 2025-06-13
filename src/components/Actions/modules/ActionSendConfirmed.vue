@@ -20,9 +20,9 @@ import { Confirmations } from '../../../Api/modules/polls.ts'
 
 const route = useRoute()
 const showModal = ref(false)
-const sendButtonCaption = ref(
-	t('polls', 'Send information about confirmed options by email'),
-)
+const sendButtonCaption = ref(t('polls', 'Send confirmation mails'))
+
+
 const confirmations = ref<Confirmations>({
 	sentMails: [],
 	abortedMails: [],
