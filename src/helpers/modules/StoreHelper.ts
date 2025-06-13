@@ -13,7 +13,7 @@ const StoreHelper = {
 		const votesStore = useVotesStore()
 		const optionsStore = useOptionsStore()
 
-		if (Object.hasOwn(data, 'polls')) {
+		if (Object.hasOwn(data, 'poll')) {
 			pollStore.$patch(data.poll as Poll)
 		}
 		if (Object.hasOwn(data, 'votes')) {
