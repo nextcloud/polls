@@ -61,7 +61,7 @@ function validateLimit() {
 			v-model="pollStore.configuration.hideBookedUp"
 			class="indented"
 			type="switch"
-			@change="emit('change')">
+			@update:model-value="emit('change')">
 			{{ t('polls', 'Hide not available Options') }}
 		</NcCheckboxRadioSwitch>
 	</div>
