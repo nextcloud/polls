@@ -67,13 +67,33 @@ const showRegisterCard = computed(
 </script>
 
 <template>
-	<TransitionGroup tag="div">
-		<CardUnpublishedPoll v-if="showUnpublishedPollCard" :key="0" />
-		<CardAddProposals v-if="showAddProposalsCard" :key="1" />
+	<TransitionGroup tag="div" class="vote-info-cards">
 		<CardLimitedVotes v-if="showLimitCard" :key="2" />
+		<CardUnpublishedPoll v-if="showUnpublishedPollCard" :key="0" />
 		<CardClosedPoll v-if="showClosedCard" :key="3" />
-		<CardSendConfirmations v-if="showSendConfirmationsCard" :key="4" />
 		<CardLocked v-if="pollStore.currentUserStatus.isLocked" :key="5" />
+		<CardAddProposals v-if="showAddProposalsCard" :key="1" />
+		<CardSendConfirmations v-if="showSendConfirmationsCard" :key="4" />
 		<CardRegister v-if="showRegisterCard" :key="6" />
 	</TransitionGroup>
 </template>
+
+<style lang="scss" scoped>
+.vote-info-cards {
+	margin: auto;
+	display: flex;
+	gap: 1rem;
+	flex-wrap: wrap;
+	justify-content: center;
+
+	& > * {
+		flex: 1;
+	}
+
+	// remove margin from notecard in favor of flexbox gap
+	.notecard {
+		margin: unset;
+		flex: 1 calc(var(--cap-width) / 2);
+	}
+}
+</style>
