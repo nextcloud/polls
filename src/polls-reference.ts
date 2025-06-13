@@ -16,4 +16,4 @@ registerWidget('polls_reference_widget', async (el, { richObject }) => {
 		.use(pinia)
 		.mount(el)
 	return PollsReference
-})
+}, el => el.classList.add('nc-polls-reference-widget'), {})
