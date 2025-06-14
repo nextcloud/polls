@@ -5,6 +5,11 @@
 # Changelog
 ##
 
+## [7.4.4] - 2025-06-14
+### Fix
+ - Bring back user feedback after sent invitations
+ - Fix possible broken update on invalid records
+
 ## [7.4.3] - 2025-05-23
 ### Fix
  - Email constrains of public shares where not displayed properly
