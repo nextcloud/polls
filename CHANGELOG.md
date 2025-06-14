@@ -27,6 +27,21 @@ All notable changes to this project will be documented in this file.
  - Added reference provider for link previews and smart picker
  - Added confidential comments for comments only visible by the author and the current poll owner
 
+## [7.4.4] - 2025-06-14
+### Fix
+ - Bring back user feedback after sent invitations
+ - Fix possible broken update on invalid records
+
+## [7.4.3] - 2025-05-23
+### Fix
+ - Email constrains of public shares where not displayed properly
+
+## [7.4.2] - 2024-03-31
+### Fix
+ - Poll export did not update recent votes of the current user
+ - User could change a poll to an openly accessible polls, without having the permission to
+ - Poll list was not updating after overtaking a poll
+
 ## [7.4.1] - 2024-03-07
 ### New
  - Apply rules for creating shares as set in the system settings
