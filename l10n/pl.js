@@ -297,6 +297,7 @@ OC.L10N.register(
     "Take over" : "Przejąć",
     "Sort by title" : "Sortuj po tytule",
     "Sort by creation date" : "Sortuj według daty utworzenia",
+    "Direction" : "Kierunek",
     "Descending" : "Malejąco",
     "Ascending" : "Rosnąco",
     "Checking name …" : "Sprawdzanie nazwy…",
