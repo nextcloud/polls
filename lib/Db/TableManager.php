@@ -11,6 +11,7 @@ namespace OCA\Polls\Db;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Migration\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -379,11 +380,16 @@ class TableManager {
 			$count = 0;
 			if ($table->hasColumn('poll_option_hash')) {
 				foreach ($this->optionMapper->getAll() as $option) {
-					$option->syncOption();
-					// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
+					try {
+						$option->syncOption();
+						// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
 
-					$this->optionMapper->update($option);
-					$count++;
+						$this->optionMapper->update($option);
+						$count++;
+					} catch (Exception $e) {
+						$messages[] = 'Skip hash update - Error updating option hash for optionId ' . $option->getId();
+						$this->logger->error('Error updating option hash for optionId {id}', ['id' => $option->getId(), 'message' => $e->getMessage()]);
+					}
 				}
 
 				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count,'db' => $this->dbPrefix . OptionMapper::TABLE]);
@@ -401,9 +407,14 @@ class TableManager {
 			$count = 0;
 			if ($table->hasColumn('vote_option_hash')) {
 				foreach ($this->voteMapper->getAll() as $vote) {
-					$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
-					$this->voteMapper->update($vote);
-					$count++;
+					try {
+						$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
+						$this->voteMapper->update($vote);
+						$count++;
+					} catch (Exception $e) {
+						$messages[] = 'Skip hash update - Error updating option hash for voteId ' . $vote->getId();
+						$this->logger->error('Error updating option hash for voteId {id}', ['id' => $vote->getId(), 'message' => $e->getMessage()]);
+					}
 				}
 
 				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count, 'db' => $this->dbPrefix . VoteMapper::TABLE]);

@@ -38,8 +38,8 @@
     <post-migration>
       <step>OCA\Polls\Migration\RepairSteps\DropOrphanedTables</step>
       <step>OCA\Polls\Migration\RepairSteps\DropOrphanedColumns</step>
-      <step>OCA\Polls\Migration\RepairSteps\UpdateHashes</step>
       <step>OCA\Polls\Migration\RepairSteps\DeleteInvalidRecords</step>
+      <step>OCA\Polls\Migration\RepairSteps\UpdateHashes</step>
       <step>OCA\Polls\Migration\RepairSteps\CreateIndices</step>
     </post-migration>
     <install>
