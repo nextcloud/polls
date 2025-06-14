@@ -380,11 +380,16 @@ class TableManager {
 			$count = 0;
 			if ($table->hasColumn('poll_option_hash')) {
 				foreach ($this->optionMapper->getAll() as $option) {
-					$option->syncOption();
-					// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
+					try {
+						$option->syncOption();
+						// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
 
-					$this->optionMapper->update($option);
-					$count++;
+						$this->optionMapper->update($option);
+						$count++;
+					} catch (Exception $e) {
+						$messages[] = 'Skip hash update - Error updating option hash for optionId ' . $option->getId();
+						$this->logger->error('Error updating option hash for optionId {id}', ['id' => $option->getId(), 'message' => $e->getMessage()]);
+					}
 				}
 
 				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count,'db' => $this->dbPrefix . OptionMapper::TABLE]);
