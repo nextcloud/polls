@@ -67,7 +67,7 @@ const expiryClass = richObject?.poll?.expiry
 				{{ richObject.poll.description }}
 			</span>
 		</div>
-		<div class="widget_footer">
+		<div v-if="richObject.poll.ownerId" class="widget_footer">
 			<span>{{ t('polls', 'By:') }}</span>
 			<NcUserBubble
 				:user="richObject.poll.ownerId"

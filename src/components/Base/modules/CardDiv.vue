@@ -34,11 +34,18 @@ import NcNoteCard from '@nextcloud/vue/components/NcNoteCard'
 	padding-inline-end: 8px;
 }
 
-.notecard .card-content {
-	display: flex;
-	flex-wrap: wrap;
-	align-items: center;
-	flex: 1;
-	column-gap: 8px;
+.notecard {
+	& > * {
+		display: flex;
+		flex-direction: column;
+	}
+
+	.card-content {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		flex: 1;
+		column-gap: 8px;
+	}
 }
 </style>

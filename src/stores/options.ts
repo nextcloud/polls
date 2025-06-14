@@ -71,6 +71,21 @@ export const useOptionsStore = defineStore('options', {
 			return state.list.length
 		},
 
+		countAvailable(state): number {
+			return state.list.filter((option) => !option.locked && !option.deleted)
+				.length
+		},
+
+		countVotedByCurrentUser(state): number {
+			return state.list.filter(
+				(option) => option.votes.currentUser === Answer.Yes,
+			).length
+		},
+
+		countOptionsLeft(): number {
+			return this.countAvailable - this.countVotedByCurrentUser
+		},
+
 		rankedOptions(state): Option[] {
 			return orderBy(
 				state.list,

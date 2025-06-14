@@ -17,4 +17,4 @@ const Polls = createApp(App)
 	.directive('focus', {
 		mounted: (el) => el.focus(),
 	})
-Polls.mount('#content_polls')
+Polls.mount('#content')
