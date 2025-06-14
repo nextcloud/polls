@@ -42,7 +42,6 @@ const optionsAvailableText = computed(() => {
 		'%n voting options are available.',
 		optionsStore.countOptionsLeft,
 	)
-
 })
 
 const votesLeftText = computed(() => {
@@ -58,16 +57,13 @@ const votesLeftText = computed(() => {
 			maxVotes: pollStore.configuration.maxVotesPerUser,
 		},
 	)
-
-}
-)
+})
 
 const cardType = computed(() =>
 	pollStore.configuration.maxVotesPerUser && votesLeft.value < 1
 		? 'error'
 		: 'info',
 )
-
 </script>
 
 <template>

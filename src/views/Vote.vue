@@ -161,7 +161,7 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.vote_main{
+.vote_main {
 	--cap-width: 49rem;
 	.markdown-description {
 		margin: auto;
@@ -169,7 +169,7 @@ onUnmounted(() => {
 	}
 
 	& > * {
-	margin-top: 0.5rem;
+		margin-top: 0.5rem;
 	}
 }
 

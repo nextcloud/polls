@@ -22,7 +22,6 @@ const route = useRoute()
 const showModal = ref(false)
 const sendButtonCaption = ref(t('polls', 'Send confirmation mails'))
 
-
 const confirmations = ref<Confirmations>({
 	sentMails: [],
 	abortedMails: [],

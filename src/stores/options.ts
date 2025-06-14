@@ -72,12 +72,14 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		countAvailable(state): number {
-			return state.list.filter((option) => !option.locked && !option.deleted).length
+			return state.list.filter((option) => !option.locked && !option.deleted)
+				.length
 		},
 
 		countVotedByCurrentUser(state): number {
 			return state.list.filter(
-				(option) => option.votes.currentUser === Answer.Yes ).length
+				(option) => option.votes.currentUser === Answer.Yes,
+			).length
 		},
 
 		countOptionsLeft(): number {
