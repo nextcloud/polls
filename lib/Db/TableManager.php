@@ -11,6 +11,7 @@ namespace OCA\Polls\Db;
 
 use Doctrine\DBAL\Schema\Schema;
 use Doctrine\DBAL\Types\Type;
+use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Migration\TableSchema;
 use OCP\DB\QueryBuilder\IQueryBuilder;
@@ -21,7 +22,7 @@ use PDO;
 use Psr\Log\LoggerInterface;
 
 class TableManager {
-	
+
 	private string $dbPrefix;
 
 	/**
@@ -72,7 +73,7 @@ class TableManager {
 				$messages[] = 'Dropped ' . $this->dbPrefix . $tableName;
 			}
 		}
-		
+
 		foreach (TableSchema::FK_OTHER_TABLES as $tableName) {
 			if ($this->connection->tableExists($tableName)) {
 				$this->connection->dropTable($tableName);
@@ -100,7 +101,7 @@ class TableManager {
 
 		$this->logger->info('Removed all migration records from {dbPrefix}migrations', ['dbPrefix' => $this->dbPrefix]);
 		$messages[] = 'Removed all migration records from ' . $this->dbPrefix . 'migrations';
-		
+
 		// delete all app configs
 		$query->delete('appconfig')
 			->where('appid = :appid')
@@ -137,7 +138,7 @@ class TableManager {
 	 */
 	public function createTable(string $tableName, array $columns): array {
 		$messages = [];
-		
+
 		$tableName = $this->dbPrefix . $tableName;
 
 		if ($this->schema->hasTable($tableName)) {
@@ -188,7 +189,7 @@ class TableManager {
 	 */
 	public function createTables(): array {
 		$messages = [];
-		
+
 		foreach (TableSchema::TABLES as $tableName => $columns) {
 			$messages = array_merge($messages, $this->createTable($tableName, $columns));
 		}
@@ -383,17 +384,23 @@ class TableManager {
 
 	public function migrateOptionsToHash(): array {
 		$messages = [];
-	
+
 		if ($this->schema->hasTable($this->dbPrefix . OptionMapper::TABLE)) {
 			$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
 			$count = 0;
 			if ($table->hasColumn('poll_option_hash')) {
 				foreach ($this->optionMapper->getAll() as $option) {
-					$option->syncOption();
-					// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
-					
-					$this->optionMapper->update($option);
-					$count++;
+					try {
+						$option->syncOption();
+						// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
+
+						$this->optionMapper->update($option);
+						$count++;
+					} catch (Exception $e) {
+						$messages[] = 'Skip hash update - Error updating option hash for optionId ' . $option->getId();
+						$this->logger->error('Error updating option hash for optionId {id}', ['id' => $option->getId(), 'message' => $e->getMessage()]);
+					}
+
 				}
 
 				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count,'db' => $this->dbPrefix . OptionMapper::TABLE]);
@@ -411,14 +418,19 @@ class TableManager {
 			$count = 0;
 			if ($table->hasColumn('vote_option_hash')) {
 				foreach ($this->voteMapper->getAll() as $vote) {
-					$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
-					$this->voteMapper->update($vote);
-					$count++;
+					try {
+						$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
+						$this->voteMapper->update($vote);
+						$count++;
+					} catch (Exception $e) {
+						$messages[] = 'Skip hash update - Error updating option hash for voteId ' . $vote->getId();
+						$this->logger->error('Error updating option hash for voteId {id}', ['id' => $vote->getId(), 'message' => $e->getMessage()]);
+					}
 				}
 
 				$this->logger->info('Updated {number} hashes in {db}', ['number' => $count, 'db' => $this->dbPrefix . VoteMapper::TABLE]);
 				$messages[] = 'Updated ' . $count . ' vote hashes';
-				
+
 			} else {
 				$this->logger->error('{db} is missing column \'poll_option_hash\' - aborted recalculating hashes', ['db' => $this->dbPrefix . VoteMapper::TABLE]);
 			}
