@@ -56,6 +56,7 @@ class PollController extends BaseController {
 					'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),
 					'comboAllowed' => $appSettings->getComboAllowed(),
 				],
+				'groups' => $this->pollService->groups(),
 			];
 		});
 	}
