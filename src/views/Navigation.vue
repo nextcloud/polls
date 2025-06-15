@@ -38,6 +38,7 @@ import { usePreferencesStore } from '../stores/preferences.ts'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { ButtonMode, Event } from '../Types/index.ts'
 import { useRouter } from 'vue-router'
+import { NcAppNavigationSpacer } from '@nextcloud/vue'
 
 const router = useRouter()
 
@@ -228,7 +229,7 @@ onMounted(() => {
 					</NcAppNavigationItem>
 				</ul>
 			</NcAppNavigationItem>
-
+			<NcAppNavigationSpacer v-if="pollsStore.groups.length"/>
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
