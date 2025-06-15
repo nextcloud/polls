@@ -26,8 +26,6 @@ use JsonSerializable;
  * @method void setTitle(string $value)
  * @method string getTitleExt()
  * @method void setTitleExt(string $value)
- * @method string getPolls()
- * @method void setPolls(string $value)
  */
 
 class PollGroup extends EntityWithUser implements JsonSerializable {
