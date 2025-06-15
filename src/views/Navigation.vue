@@ -28,6 +28,7 @@ import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
+import GroupIcon from 'vue-material-design-icons/AccountGroup.vue'
 
 import { Logger } from '../helpers/index.ts'
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
@@ -186,6 +187,48 @@ onMounted(() => {
 			@close="createDlgToggle = false" />
 
 		<template #list>
+			<NcAppNavigationItem
+				v-for="pollGroup in pollsStore.groups"
+				:key="pollGroup.id"
+				:name="pollGroup.title"
+				:title="pollGroup.titleExt"
+				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
+				:open="false">
+				<template #icon>
+					<GroupIcon :size="iconSize" />
+				</template>
+				<template #counter>
+					<NcCounterBubble :count="pollGroup.polls.length" />
+				</template>
+				<ul v-if="sessionStore.appSettings.navigationPollsInList">
+					<PollNavigationItems
+						v-for="poll in pollsStore.groupList(pollGroup.polls)"
+						:key="poll.id"
+						:poll="poll"
+						@toggle-archive="toggleArchive(poll.id)"
+						@clone-poll="clonePoll(poll.id)"
+						@delete-poll="deletePoll(poll.id)" />
+					<NcAppNavigationItem
+						v-if="pollsStore.groupList(pollGroup.polls).length === 0"
+						:name="t('polls', 'No polls found for this category')" />
+					<NcAppNavigationItem
+						v-if="
+							pollsStore.groupList(pollGroup.polls).length
+							> pollsStore.meta.maxPollsInNavigation
+						"
+						class="force-not-active"
+						:to="{
+							name: 'list',
+							params: { type: pollGroup.id },
+						}"
+						:name="t('polls', 'Show all')">
+						<template #icon>
+							<GoToIcon :size="iconSize" />
+						</template>
+					</NcAppNavigationItem>
+				</ul>
+			</NcAppNavigationItem>
+
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"

@@ -13,7 +13,7 @@ import { PollsAPI } from '../Api/index.ts'
 
 import { AccessType, Poll, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
-import { StatusResults } from '../Types/index.ts'
+import { StatusResults, User } from '../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 
 export enum SortType {
@@ -51,8 +51,18 @@ export type PollCategory = {
 	showInNavigation(): boolean
 	filterCondition(poll: Poll): boolean
 }
+export type PollGroup = {
+	id: number
+	created: number
+	deleted: number
+	description: string
+	owner: User
+	title: string
+	titleExt: string
+	polls: number[]
+}
 
-export type PollCategorieList = Record<FilterType, PollCategory>
+export type PollCategoryList = Record<FilterType, PollCategory>
 
 export type Meta = {
 	chunksize: number
@@ -63,12 +73,13 @@ export type Meta = {
 
 export type PollList = {
 	list: Poll[]
+	groups: PollGroup[]
 	meta: Meta
 	sort: {
 		by: SortType
 		reverse: boolean
 	}
-	categories: PollCategorieList
+	categories: PollCategoryList
 }
 
 export const sortColumnsMapping: { [key in SortType]: string } = {
@@ -89,7 +100,7 @@ export const sortTitlesMapping: { [key in SortType]: string } = {
 	interaction: t('polls', 'Last interaction'),
 }
 
-export const pollCategories: PollCategorieList = {
+export const pollCategories: PollCategoryList = {
 	[FilterType.Relevant]: {
 		id: FilterType.Relevant,
 		title: t('polls', 'Relevant'),
@@ -213,6 +224,7 @@ export const pollCategories: PollCategorieList = {
 export const usePollsStore = defineStore('polls', {
 	state: (): PollList => ({
 		list: [],
+		groups: [],
 		meta: {
 			chunksize: 20,
 			loadedChunks: 1,
@@ -243,6 +255,19 @@ export const usePollsStore = defineStore('polls', {
 					state.list.filter((poll: Poll) =>
 						state.categories[filterId].filterCondition(poll),
 					) ?? [],
+					[SortType.Created],
+					[SortDirection.Desc],
+				).slice(0, state.meta.maxPollsInNavigation),
+
+		/*
+		 * Sliced filtered and sorted polls for navigation
+		 */
+		groupList:
+			(state: PollList) =>
+			(filterList: number[]): Poll[] =>
+				orderBy(
+					state.list.filter((poll: Poll) => filterList.includes(poll.id))
+						?? [],
 					[SortType.Created],
 					[SortDirection.Desc],
 				).slice(0, state.meta.maxPollsInNavigation),
@@ -334,6 +359,7 @@ export const usePollsStore = defineStore('polls', {
 			try {
 				const response = await PollsAPI.getPolls()
 				this.list = response.data.list
+				this.groups = response.data.groups
 				this.meta.status = StatusResults.Loaded
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
@@ -420,6 +446,7 @@ export const usePollsStore = defineStore('polls', {
 				this.load()
 			}
 		},
+
 		async takeOver(payload: { pollId: number }) {
 			try {
 				await PollsAPI.takeOver(payload.pollId)

@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollGroupMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\UserMapper;
 use OCA\Polls\Db\VoteMapper;
@@ -47,6 +48,7 @@ class PollService {
 		private UserMapper $userMapper,
 		private UserSession $userSession,
 		private VoteMapper $voteMapper,
+		private PollGroupMapper $pollGroupMapper,
 	) {
 	}
 
@@ -62,6 +64,10 @@ class PollService {
 		return array_values(array_filter($pollList, function (Poll $poll): bool {
 			return $poll->getIsAllowed(Poll::PERMISSION_POLL_VIEW);
 		}));
+	}
+
+	public function groups(): array {
+		return $this->pollGroupMapper->list();
 	}
 
 	/**

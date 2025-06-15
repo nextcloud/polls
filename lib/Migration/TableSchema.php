@@ -13,6 +13,7 @@ use OCA\Polls\Db\Comment;
 use OCA\Polls\Db\Log;
 use OCA\Polls\Db\Option;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollGroup;
 use OCA\Polls\Db\Preferences;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\Subscription;
@@ -148,6 +149,16 @@ abstract class TableSchema {
 	 *
 	 */
 	public const TABLES = [
+		PollGroup::TABLE => [
+			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
+			'created' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'deleted' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'description' => ['type' => Types::TEXT, 'options' => ['notnull' => false, 'default' => null, 'length' => 65535]],
+			'owner' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null, 'length' => 256]],
+			'polls' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => null, 'length' => 256]],
+			'title' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 128]],
+			'title_ext' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 128]],
+		],
 		Poll::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => 'datePoll', 'length' => 64]],

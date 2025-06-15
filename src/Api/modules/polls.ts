@@ -9,6 +9,7 @@ import { Option } from '../../stores/options.js'
 import { Vote } from '../../stores/votes.js'
 import { Share } from '../../stores/shares.js'
 import { ApiEmailAdressList, Comment } from '../../Types/index.js'
+import { PollGroup } from '../../stores/polls.js'
 
 export type Confirmations = {
 	sentMails: { emailAddress: string; displayName: string }[]
@@ -18,7 +19,13 @@ export type Confirmations = {
 }
 
 const polls = {
-	getPolls(): Promise<AxiosResponse<{ list: Poll[] }>> {
+	getPolls(): Promise<
+		AxiosResponse<{
+			list: Poll[]
+			permissions: { pollCreationAllowed: boolean; comboAllowed: true }
+			groups: PollGroup[]
+		}>
+	> {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'polls',
