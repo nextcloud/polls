@@ -172,7 +172,6 @@ OC.L10N.register(
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Будет удалено через {countdown} секунду","Будет удалено через {countdown} секунды","Будет удалено через {countdown} секунд","Будет удалено через {countdown} секунды"],
     "Add some!" : "Добавьте варианты.",
     "Register" : "Регистрация",
-    "Send information about confirmed options by email" : "Отправлять информацию о подтвержденных опциях по электронной почте",
     "Unknown error" : "Неизвестная ошибка",
     "Toggle Sidebar" : "Скрыть или показать боковую панель",
     "Maybe" : "Возможно",

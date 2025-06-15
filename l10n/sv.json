@@ -173,7 +173,6 @@
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Raderar om {countdown} sekund","Raderar om {countdown} sekunder"],
     "Add some!" : "Lägg till några!",
     "Register" : "Registrera",
-    "Send information about confirmed options by email" : "Skicka information om bekräftade alternativ med mejl",
     "Unknown error" : "Okänt fel",
     "Toggle Sidebar" : "Växla sidofält",
     "Maybe" : "Kanske",

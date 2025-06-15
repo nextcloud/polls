@@ -179,7 +179,6 @@ OC.L10N.register(
     "Add some!" : "Gehitu baten bat!",
     "Edit access" : "Editatu sarbidea",
     "Register" : "Erregistratu",
-    "Send information about confirmed options by email" : "Bidali baieztatutako aukerei buruzko informazioa e-posta bidez",
     "See result" : "Ikusi emaitza",
     "Unknown error" : "Errore ezezaguna",
     "Reveal them" : "Erakutsi",

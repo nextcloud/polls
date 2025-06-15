@@ -228,7 +228,6 @@ OC.L10N.register(
     "Add some!" : "Afegeix-ne alguns!",
     "Edit access" : "Edició d’accés",
     "Register" : "Registra",
-    "Send information about confirmed options by email" : "Envieu informació quant a les opcions confirmades per correu electrònic",
     "See result" : "Veure resultat",
     "Result of sent confirmation mails" : "Resultat dels correus de confirmació enviats",
     "No valid email address" : "Adreça de correu electrònic no vàlida",

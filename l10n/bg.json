@@ -172,7 +172,6 @@
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Изтриване след {countdown} секунди","Изтриване след {countdown} секунди"],
     "Add some!" : "Добавете няколко!",
     "Register" : "Регистрация",
-    "Send information about confirmed options by email" : "Изпращане на информация за потвърдените опции по имейл",
     "Unknown error" : "Неизвестна грешка",
     "Toggle Sidebar" : "Превключване на страничната лента",
     "Maybe" : "Може би",

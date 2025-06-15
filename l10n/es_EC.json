@@ -172,7 +172,6 @@
     "_Deleting in {countdown} second_::_Deleting in {countdown} seconds_" : ["Eliminando en {countdown} segundo","Eliminando en {countdown} segundos","Eliminando en {countdown} segundos"],
     "Add some!" : "¡Agrega algunas!",
     "Register" : "Registrar",
-    "Send information about confirmed options by email" : "Enviar información sobre opciones confirmadas por correo electrónico",
     "Unknown error" : "Error desconocido",
     "Toggle Sidebar" : "Alternar barra lateral",
     "Maybe" : "Tal vez",

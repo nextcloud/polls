@@ -228,7 +228,6 @@ OC.L10N.register(
     "Add some!" : "Pridajte nejaké!",
     "Edit access" : "Upraviť prístup",
     "Register" : "Registrovať",
-    "Send information about confirmed options by email" : "Poslať informácie o potvrdených možnostiach e-mailom",
     "See result" : "Zobraziť výsledok",
     "No valid email address" : "Žiadna platná emailová adresa",
     "Unknown error" : "Neznáma chyba",

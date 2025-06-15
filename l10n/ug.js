@@ -226,7 +226,6 @@ OC.L10N.register(
     "Add some!" : "ئازراق قوشۇڭ!",
     "Edit access" : "زىيارەتنى تەھرىرلەڭ",
     "Register" : "تىزىملىتىڭ",
-    "Send information about confirmed options by email" : "جەزملەشتۈرۈلگەن تاللاشلار توغرىسىدىكى ئۇچۇرلارنى ئېلېكترونلۇق خەت ئارقىلىق ئەۋەتىڭ",
     "See result" : "نەتىجىگە قاراڭ",
     "Result of sent confirmation mails" : "ئەۋەتىلگەن جەزملەشتۈرۈش خەتلىرىنىڭ نەتىجىسى",
     "No valid email address" : "ئىناۋەتلىك ئېلېكترونلۇق خەت ئادرېسى يوق",

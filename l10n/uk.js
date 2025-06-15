@@ -25,7 +25,6 @@ OC.L10N.register(
     "New poll" : "Нове опитування",
     "Delete" : "Вилучити",
     "Register" : "Зареєструватися",
-    "Send information about confirmed options by email" : "Надіслати інформацію щодо підтверджених варіантів електронною поштою",
     "No valid email address" : "Відсутня дійсна адреса електронної пошти",
     "Unknown error" : "Невідома помилка",
     "Loading" : "Завантаження",
