@@ -28,7 +28,7 @@ import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
-import GroupIcon from 'vue-material-design-icons/AccountGroup.vue'
+import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
 import { Logger } from '../helpers/index.ts'
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
