@@ -99,13 +99,14 @@ onUnmounted(() => {
 <template>
 	<NcAppContent
 		:class="[
+			pollStore.type,
+			pollStore.viewMode,
+			voteMainId,
 			{
-				closed: pollStore.isClosed,
 				scrolled: scrolled,
 				'vote-style-beta-510': preferencesStore.user.useAlternativeStyling,
+				'fixed-table-header': preferencesStore.user.useFixedTableHeader,
 			},
-			pollStore.type,
-			voteMainId,
 		]">
 		<HeaderBar>
 			<template #title>
@@ -161,6 +162,16 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
+.table-view.fixed-table-header .vote_main {
+	flex: 1;
+	overflow: auto;
+
+	.vote-table {
+		max-height: 75vh;
+	}
+
+}
+
 .vote_main {
 	--cap-width: 49rem;
 	.markdown-description {

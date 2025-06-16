@@ -47,7 +47,6 @@ const showCalendarPeek = computed(
 		tag="div"
 		name="list"
 		class="vote-table"
-		:class="[pollStore.viewMode, { closed: pollStore.isClosed }]"
 		:style="tableStyle">
 		<div v-if="pollStore.viewMode === ViewMode.TableView" class="grid-info">
 			<NcButton
@@ -129,13 +128,13 @@ const showCalendarPeek = computed(
 	overflow: scroll;
 
 	.vote-cell {
-		padding: 6px;
+		padding: 0.4rem;
 		display: flex;
 	}
 
 	.participant {
 		grid-column: 1;
-		padding: 6px;
+		padding: 0.4rem;
 		position: sticky;
 		inset-inline-start: 0;
 		z-index: 3;
@@ -172,7 +171,7 @@ const showCalendarPeek = computed(
 		}
 	}
 
-	&.table-view {
+	.table-view & {
 		.grid-info {
 			grid-row: 1;
 			grid-column: 1;
@@ -204,6 +203,7 @@ const showCalendarPeek = computed(
 		.option-menu-grid {
 			grid-row: 1;
 			border-inline-start: 1px solid var(--color-border);
+			background-color: var(--color-main-background);
 
 			.calendar-peek {
 				grid-area: left;
@@ -229,7 +229,8 @@ const showCalendarPeek = computed(
 		}
 
 		.current-user {
-			margin: 1rem 0;
+			padding-top: 1.5rem;
+			padding-bottom: 1.5rem;
 		}
 
 		.option-element {
