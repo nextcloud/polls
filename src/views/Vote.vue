@@ -169,7 +169,6 @@ onUnmounted(() => {
 	.vote-table {
 		max-height: 75vh;
 	}
-
 }
 
 .vote_main {
