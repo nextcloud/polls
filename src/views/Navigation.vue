@@ -229,7 +229,7 @@ onMounted(() => {
 					</NcAppNavigationItem>
 				</ul>
 			</NcAppNavigationItem>
-			<NcAppNavigationSpacer v-if="pollsStore.groups.length"/>
+			<NcAppNavigationSpacer v-if="pollsStore.groups.length" />
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
