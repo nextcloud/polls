@@ -165,6 +165,7 @@ onUnmounted(() => {
 .table-view.fixed-table-header .vote_main {
 	flex: 1;
 	overflow: auto;
+	overscroll-behavior-inline: contain;
 
 	.vote-table {
 		max-height: 75vh;
