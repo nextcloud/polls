@@ -320,6 +320,7 @@ OC.L10N.register(
     "_%n No vote_::_%n \"No\" votes_" : ["%n „Nem” szavazat","%n „Nem” szavazat"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n „Talán” szavazat","%n „Talán” szavazat"],
     "No description provided" : "Nincs leírás megadva",
+    "Archived {relativeTime}" : "Archiválva: {relativeTime}",
     "Expiration" : "Lejárat",
     "Error archiving/restoring poll." : "Hiba a szavazás archiválása/helyreállítása során.",
     "Error cloning poll." : "Hiba a szavazás klónozása során.",

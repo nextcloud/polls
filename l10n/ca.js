@@ -377,6 +377,7 @@ OC.L10N.register(
     "Error cloning poll." : "Error clonant l’enquesta.",
     "Take over" : "Fer-se càrrec",
     "Sort by title" : "Ordenar per títol",
+    "Ascending" : "Ascendent",
     "Checking name …" : "S'està comprovant el nom …",
     "A name is required." : "Cal un nom.",
     "The name {username} is invalid or reserved." : "El nom {username} no és vàlid o reservat.",
