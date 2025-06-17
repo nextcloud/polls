@@ -687,7 +687,7 @@ OC.L10N.register(
     "Details" : "Detalhes",
     "Configuration" : "Configuração",
     "Options" : "Opções",
-    "Sharing" : "Compartilhando",
+    "Sharing" : "Compartilhamento",
     "Activity" : "Atividade",
     "Select polls to combine" : "Selecione as enquetes para unir",
     "Search for conflicting calendar entries" : "Pesquisar entradas de calendário conflitantes",
