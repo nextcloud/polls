@@ -278,6 +278,13 @@ export const usePollsStore = defineStore('polls', {
 					[SortDirection.Desc],
 				).slice(0, state.meta.maxPollsInNavigation),
 
+		pollsWithGroups(
+			state: PollList,
+		): Poll[] {
+			return state.list.filter((poll: Poll) =>
+				poll.pollGroups.length > 0
+			)
+		},
 		currentCategory(state: PollList): PollCategory {
 			const sessionStore = useSessionStore()
 
@@ -380,18 +387,18 @@ export const usePollsStore = defineStore('polls', {
 		async loadPollGroups(): Promise<void> {
 			const debouncedLoad = this.$debounce(async () => {
 				this.status.loadingGroups = true
-			try {
-				const response = await PollsAPI.getPollGroups()
-				this.groups = response.data.groups
-				this.meta.status = StatusResults.Loaded
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
+				try {
+					const response = await PollsAPI.getPollGroups()
+					this.groups = response.data.groups
+					this.meta.status = StatusResults.Loaded
+				} catch (error) {
+					if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+						return
+					}
+					this.meta.status = StatusResults.Error
+					Logger.error('Error loading poll groups', { error })
+					throw error
 				}
-				this.meta.status = StatusResults.Error
-				Logger.error('Error loading poll groups', { error })
-				throw error
-			}
 			}, 500)
 			debouncedLoad()
 		},

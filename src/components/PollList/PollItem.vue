@@ -201,6 +201,7 @@ const descriptionLine = computed(() => {
 					<PrivatePollIcon :size="16" />
 				</template>
 			</BadgeSmallDiv>
+
 			<BadgeSmallDiv
 				v-if="
 					preferencesStore.user.verbosePollsList
@@ -214,6 +215,7 @@ const descriptionLine = computed(() => {
 					<OpenPollIcon :size="16" />
 				</template>
 			</BadgeSmallDiv>
+
 			<BadgeSmallDiv
 				v-if="
 					preferencesStore.user.verbosePollsList && poll.status.isArchived
