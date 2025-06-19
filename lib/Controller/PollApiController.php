@@ -53,6 +53,43 @@ class PollApiController extends BaseApiV2Controller {
 	}
 
 	/**
+	 * Get list of pollgroups
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/pollgroups', requirements: ['apiVersion' => '(v2)'])]
+	public function listGroups(): DataResponse {
+		return $this->response(fn () => ['pollgroups' => $this->pollService->groups()]);
+	}
+
+	/**
+	 * Add poll to a group
+	 * @param int $pollGroupId Pollgroup id
+	 * @param int $pollId Poll id
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/pollgroup/{pollGroupId}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	public function addPollToPollGroup(int $pollId, int $pollGroupId): DataResponse {
+		return $this->response(fn () => ['pollgroup' => $this->pollService->addPollToPollGroup($pollId, $pollGroupId)]);
+	}
+
+	/**
+	 * Remove poll from a group
+	 * @param int $pollGroupId Pollgroup id
+	 * @param int $pollId Poll id
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/pollgroup/{pollGroupId}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	public function removePollFromPollGroup(int $pollId, int $pollGroupId): DataResponse {
+		return $this->response(fn () => ['pollgroup' => $this->pollService->removePollFromPollGroup($pollId, $pollGroupId)]);
+	}
+
+	/**
 	 * get complete poll
 	 * @param int $pollId Poll id
 	 */

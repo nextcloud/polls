@@ -62,6 +62,35 @@ class PollController extends BaseController {
 	}
 
 	/**
+	 * Get list of pollgroups
+	 */
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'GET', url: '/pollgroups')]
+	public function listPollGroups(): JSONResponse {
+		return $this->response(function () {
+			return [
+				'groups' => $this->pollService->groups(),
+			];
+		});
+	}
+
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/pollgroup/{pollGroupId}/poll/{pollId}')]
+	public function addPollToPollGroup(int $pollId, int $pollGroupId): JSONResponse {
+		return $this->response(fn () => [
+			'group' => $this->pollService->addPollToPollGroup($pollId, $pollGroupId),
+		]);
+	}
+
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'DELETE', url: '/pollgroup/{pollGroupId}/poll/{pollId}')]
+	public function removePollFromPollGroup(int $pollId, int $pollGroupId): JSONResponse {
+		return $this->response(fn () => [
+			'group' => $this->pollService->removePollFromPollGroup($pollId, $pollGroupId),
+		]);
+	}
+
+	/**
 	 * get poll
 	 * @param int $pollId Poll id
 	 */
