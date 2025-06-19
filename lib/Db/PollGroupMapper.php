@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\QBMapper;
+use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
@@ -16,6 +17,7 @@ use OCP\IDBConnection;
  */
 class PollGroupMapper extends QBMapper {
 	public const TABLE = PollGroup::TABLE;
+	public const CONCAT_SEPARATOR = ',';
 
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
@@ -24,12 +26,48 @@ class PollGroupMapper extends QBMapper {
 		parent::__construct($db, PollGroup::TABLE, PollGroup::class);
 	}
 
+	/**
+	 * List all PollGroups
+	 *
+	 * @return PollGroup[]
+	 */
 	public function list(): array {
-		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from($this->getTableName())
-			->orderBy('title', 'ASC');
+		$qb = $this->buildQuery();
+		$qb->orderBy('title', 'ASC');
 		return $this->findEntities($qb);
 	}
 
+	/**
+	 * Build the enhanced query with joined tables
+	 */
+	protected function buildQuery(): IQueryBuilder {
+		$qb = $this->db->getQueryBuilder();
+		$qb->select(self::TABLE . '.*')
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id');
+
+		// Join polls
+		$this->joinPolls($qb);
+
+		return $qb;
+	}
+
+	protected function joinPolls(IQueryBuilder $qb): void {
+		$joinPollsAlias = 'polls';
+		TableManager::getConcatenatedArray(
+			qb: $qb,
+			concatColumn: $joinPollsAlias . '.poll_id',
+			asColumn: 'polls',
+			dbProvider: $this->db->getDatabaseProvider(),
+		);
+
+		$qb->leftJoin(
+			self::TABLE,
+			PollGroup::RELATION_TABLE,
+			$joinPollsAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq(self::TABLE . '.id', $joinPollsAlias . '.group_id'),
+			)
+		);
+	}
 }

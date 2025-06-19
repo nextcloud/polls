@@ -30,6 +30,7 @@ use JsonSerializable;
 
 class PollGroup extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_groups';
+	public const RELATION_TABLE = 'polls_groups_polls';
 	public const CONCAT_SEPARATOR = ',';
 
 	// schema columns
@@ -40,7 +41,8 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	protected ?string $owner = '';
 	protected string $title = '';
 	protected string $titleExt = '';
-	protected string $polls = '';
+	// joined polls
+	protected ?string $polls = '';
 
 	public function __construct() {
 	}
@@ -51,15 +53,19 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	 * @psalm-return list<int>
 	 */
 	public function getPolls(): array {
-		if ($this->polls === '') {
+		if (!$this->polls) {
 			return [];
 		}
-		$polls = explode(self::CONCAT_SEPARATOR, $this->polls);
-		return array_map('intval', $polls);
+		return array_map('intval', explode(self::CONCAT_SEPARATOR, $this->polls));
 	}
 
 	public function setPolls(array $polls): void {
 		$this->polls = implode(self::CONCAT_SEPARATOR, $polls);
+	}
+
+	public function hasPoll(int $pollId): bool {
+		$polls = $this->getPolls();
+		return in_array($pollId, $polls, true);
 	}
 
 	public function addPoll(int $pollId): void {
