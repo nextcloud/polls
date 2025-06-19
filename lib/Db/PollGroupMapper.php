@@ -38,6 +38,20 @@ class PollGroupMapper extends QBMapper {
 	}
 
 	/**
+	 * Find a PollGroup by its ID
+	 *
+	 * @param int $id id off poll group
+	 * @return PollGroup
+	 */
+	public function find(int $id): PollGroup {
+		$qb = $this->buildQuery();
+
+		$qb->where($qb->expr()->eq('id', $qb->createNamedParameter($id)));
+
+		return $this->findEntity($qb);
+	}
+
+	/**
 	 * Build the enhanced query with joined tables
 	 */
 	protected function buildQuery(): IQueryBuilder {

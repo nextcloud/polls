@@ -37,6 +37,18 @@ const polls = {
 		})
 	},
 
+	getPollGroups(): Promise<AxiosResponse<{ groups: PollGroup[] }>> {
+		return httpInstance.request({
+			method: 'GET',
+			url: 'pollgroups',
+			params: { time: +new Date() },
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getPollGroups.name
+				].handleRequestCancellation().token,
+		})
+	},
+
 	getPoll(pollId: number): Promise<AxiosResponse<{ poll: Poll }>> {
 		return httpInstance.request({
 			method: 'GET',

@@ -79,6 +79,9 @@ export type PollList = {
 		by: SortType
 		reverse: boolean
 	}
+	status: {
+		loadingGroups: boolean
+	}
 	categories: PollCategoryList
 }
 
@@ -235,6 +238,9 @@ export const usePollsStore = defineStore('polls', {
 			by: SortType.Created,
 			reverse: true,
 		},
+		status: {
+			loadingGroups: false,
+		},
 		categories: pollCategories,
 	}),
 
@@ -369,6 +375,25 @@ export const usePollsStore = defineStore('polls', {
 				Logger.error('Error loading polls', { error })
 				throw error
 			}
+		},
+
+		async loadPollGroups(): Promise<void> {
+			const debouncedLoad = this.$debounce(async () => {
+				this.status.loadingGroups = true
+			try {
+				const response = await PollsAPI.getPollGroups()
+				this.groups = response.data.groups
+				this.meta.status = StatusResults.Loaded
+			} catch (error) {
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				this.meta.status = StatusResults.Error
+				Logger.error('Error loading poll groups', { error })
+				throw error
+			}
+			}, 500)
+			debouncedLoad()
 		},
 
 		async changeOwner(payload: { pollId: number; userId: string }) {
