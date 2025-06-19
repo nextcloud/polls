@@ -70,6 +70,36 @@ class PollService {
 		return $this->pollGroupMapper->list();
 	}
 
+	public function addPollToPollGroup(int $pollId, int $pollGroupId): Poll {
+		$poll = $this->pollMapper->find($pollId);
+		$poll->request(Poll::PERMISSION_POLL_EDIT);
+
+		$pollGroup = $this->pollGroupMapper->find($pollGroupId);
+
+		if (!$pollGroup->hasPoll($pollId)) {
+			$pollGroup->addPoll($pollId);
+			$this->pollGroupMapper->update($pollGroup);
+			$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($poll));
+		}
+
+		return $poll;
+	}
+
+	public function removePollFromPollGroup(int $pollId, int $pollGroupId): Poll {
+		$poll = $this->pollMapper->find($pollId);
+		$poll->request(Poll::PERMISSION_POLL_EDIT);
+
+		$pollGroup = $this->pollGroupMapper->find($pollGroupId);
+
+		if ($pollGroup->hasPoll($pollId)) {
+			$pollGroup->removePoll($pollId);
+			$this->pollGroupMapper->update($pollGroup);
+			$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($poll));
+		}
+
+		return $poll;
+	}
+
 	/**
 	 * Get list of polls
 	 */
