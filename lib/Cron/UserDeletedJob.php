@@ -59,9 +59,9 @@ class UserDeletedJob extends QueuedJob {
 
 		$replacementName = 'deleted_' . $this->secureRandom->generate(
 			8,
-			ISecureRandom::CHAR_DIGITS .
-			ISecureRandom::CHAR_LOWER .
-			ISecureRandom::CHAR_UPPER
+			ISecureRandom::CHAR_DIGITS
+			. ISecureRandom::CHAR_LOWER
+			. ISecureRandom::CHAR_UPPER
 		);
 
 		$this->pollMapper->deleteByUserId($userId);

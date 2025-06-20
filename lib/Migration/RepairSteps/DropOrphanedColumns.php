@@ -36,7 +36,7 @@ class DropOrphanedColumns implements IRepairStep {
 		$this->tableManager->setSchema($this->schema);
 		$messages = $this->tableManager->removeObsoleteColumns();
 		$this->connection->migrateToSchema($this->schema);
-		
+
 		foreach ($messages as $message) {
 			$output->info($message);
 		}

@@ -43,7 +43,7 @@ class CreateTables implements IRepairStep {
 		$messages = $this->tableManager->createTables();
 
 		$this->connection->migrateToSchema($this->schema);
-		
+
 		foreach ($messages as $message) {
 			$output->info($message);
 		}

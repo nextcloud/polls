@@ -39,7 +39,7 @@ class CleanMigrations extends Command {
 
 		$this->printComment('Remove migration entries from migration table');
 		$this->connection->migrateToSchema($this->schema);
-		
+
 		return 0;
 	}
 }

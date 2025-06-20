@@ -28,7 +28,7 @@ class Command extends \Symfony\Component\Console\Command\Command {
 	protected InputInterface $input;
 	protected OutputInterface $output;
 	protected ConfirmationQuestion $question;
-	
+
 	public function __construct(
 	) {
 		parent::__construct();
