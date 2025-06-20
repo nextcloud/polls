@@ -149,7 +149,10 @@ async function loadMore() {
 					@goto-poll="gotoPoll(poll.id)">
 					<template #actions>
 						<PollItemActions
-							v-if="poll.permissions.edit || sessionStore.appPermissions.pollCreation"
+							v-if="
+								poll.permissions.edit
+								|| sessionStore.appPermissions.pollCreation
+							"
 							:poll="poll" />
 					</template>
 				</PollItem>
