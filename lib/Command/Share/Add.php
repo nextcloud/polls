@@ -93,7 +93,7 @@ class Add extends Base {
 			}
 		}
 	}
-	
+
 	/**
 	 * @param Poll $poll
 	 * @param string[] $groupIds

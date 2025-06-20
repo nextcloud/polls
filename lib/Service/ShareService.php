@@ -538,9 +538,9 @@ class ShareService {
 		while ($publicUserId === '') {
 			$publicUserId = $prefix . $this->secureRandom->generate(
 				8,
-				ISecureRandom::CHAR_DIGITS .
-					ISecureRandom::CHAR_LOWER .
-					ISecureRandom::CHAR_UPPER
+				ISecureRandom::CHAR_DIGITS
+					. ISecureRandom::CHAR_LOWER
+					. ISecureRandom::CHAR_UPPER
 			);
 
 			try {
@@ -629,9 +629,9 @@ class ShareService {
 			$loopCounter++;
 			$token = $this->secureRandom->generate(
 				8,
-				ISecureRandom::CHAR_DIGITS .
-				ISecureRandom::CHAR_LOWER .
-				ISecureRandom::CHAR_UPPER
+				ISecureRandom::CHAR_DIGITS
+				. ISecureRandom::CHAR_LOWER
+				. ISecureRandom::CHAR_UPPER
 			);
 			try {
 				$this->shareMapper->findByToken($token, true);

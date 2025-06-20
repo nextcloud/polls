@@ -38,7 +38,7 @@ class DropOrphanedTables implements IRepairStep {
 		$messages = $this->tableManager->removeObsoleteTables();
 
 		$this->connection->migrateToSchema($this->schema);
-		
+
 		foreach ($messages as $message) {
 			$output->info($message);
 		}
