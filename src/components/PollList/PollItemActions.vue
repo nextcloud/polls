@@ -253,6 +253,7 @@ async function takeOverPoll(): Promise<void> {
 				:name="pollGroup.title"
 				@click="addPollToPollGroup(poll.id, pollGroup.id)" />
 			<NcActionInput
+				v-if="sessionStore.appPermissions.pollCreation"
 				v-model="newGroupTitle"
 				:name="t('polls', 'Create new group')"
 				:aria-label="t('polls', 'Create new group')"

@@ -22,9 +22,11 @@ import PollListSort from '../components/PollList/PollListSort.vue'
 import PollItemActions from '../components/PollList/PollItemActions.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { usePreferencesStore } from '../stores/preferences.ts'
+import { useSessionStore } from '../stores/session.ts'
 
 const pollsStore = usePollsStore()
 const preferencesStore = usePreferencesStore()
+const sessionStore = useSessionStore()
 const router = useRouter()
 const route = useRoute()
 
@@ -146,7 +148,9 @@ async function loadMore() {
 					:poll="poll"
 					@goto-poll="gotoPoll(poll.id)">
 					<template #actions>
-						<PollItemActions :poll="poll" />
+						<PollItemActions
+							v-if="poll.permissions.edit || sessionStore.appPermissions.pollCreation"
+							:poll="poll" />
 					</template>
 				</PollItem>
 			</TransitionGroup>

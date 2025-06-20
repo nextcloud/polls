@@ -82,6 +82,7 @@ class PollService {
 
 		if ($pollGroupId === null && $newPollGroupName) {
 			if (!$this->appSettings->getPollCreationAllowed()) {
+				// If poll creation is disabled, creating a poll group is also disabled
 				throw new ForbiddenException('Poll group creation is disabled');
 			}
 			// Create new poll group

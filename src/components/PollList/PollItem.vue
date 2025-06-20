@@ -275,7 +275,9 @@ const descriptionLine = computed(() => {
 			</BadgeSmallDiv>
 		</div>
 
-		<slot name="actions" />
+		<div class="actions">
+			<slot name="actions" />
+		</div>
 	</div>
 </template>
 
@@ -339,7 +341,7 @@ const descriptionLine = computed(() => {
 			min-height: 1.4rem;
 		}
 	}
-	.action-item {
+	.actions {
 		display: flex;
 		flex: 0 0 2.7rem;
 		justify-content: center;
