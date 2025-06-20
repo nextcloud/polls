@@ -8,6 +8,8 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use Exception;
+use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
@@ -22,6 +24,7 @@ class PollGroupMapper extends QBMapper {
 	/** @psalm-suppress PossiblyUnusedMethod */
 	public function __construct(
 		IDBConnection $db,
+		private UserSession $userSession,
 	) {
 		parent::__construct($db, PollGroup::TABLE, PollGroup::class);
 	}
@@ -46,9 +49,84 @@ class PollGroupMapper extends QBMapper {
 	public function find(int $id): PollGroup {
 		$qb = $this->buildQuery();
 
-		$qb->where($qb->expr()->eq('id', $qb->createNamedParameter($id)));
+		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id)));
 
 		return $this->findEntity($qb);
+	}
+
+	public function addPollToGroup(int $pollId, int $groupId): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->insert(PollGroup::RELATION_TABLE)
+			->setValue('poll_id', $qb->createNamedParameter($pollId))
+			->setValue('group_id', $qb->createNamedParameter($groupId));
+		$qb->executeStatement();
+	}
+
+	/**
+	 * Remove a Poll from a PollGroup
+	 *
+	 * @param int $pollId id of poll
+	 * @param int $groupId id of group
+	 * @throws Exception
+	 */
+	public function removePollFromGroup(int $pollId, int $groupId): void {
+		$qb = $this->db->getQueryBuilder();
+		$qb->delete(PollGroup::RELATION_TABLE)
+			->where(
+				$qb->expr()->andX(
+					$qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId)),
+					$qb->expr()->eq('group_id', $qb->createNamedParameter($groupId))
+				)
+			);
+		$qb->executeStatement();
+	}
+
+	public function addGroup(string $PollGroupName): PollGroup {
+		$pollGroup = new PollGroup();
+		$pollGroup->setTitle($PollGroupName);
+		$pollGroup->setTitleExt($PollGroupName);
+		$pollGroup->setDescription($PollGroupName);
+		$pollGroup->setCreated(time());
+		$pollGroup->setOwner($this->userSession->getCurrentUserId());
+		return $this->insert($pollGroup);
+
+	}
+
+	public function tidyPollGroups(): void {
+		$qb = $this->db->getQueryBuilder();
+
+		// This is, what we wanna do
+		//
+		// DELETE FROM oc_polls_groups
+		//   WHERE `id` not IN (
+		//     SELECT `group_id`
+		//     FROM oc_polls_groups_polls)
+		//
+		// should result in
+		//
+		// $qb->delete(PollGroup::TABLE)
+		// 	->where($qb->expr()->notIn(
+		// 		'id',
+		// 		$qb->selectDistinct('group_id')
+		// 			->from(PollGroup::RELATION_TABLE)
+		// 			->getSQL(),
+		// 		IQueryBuilder::PARAM_INT_ARRAY
+		// 	)
+		// );
+		//
+		// But we have to use a subquery, otherwise, we get 'InvalidArgumentException Only strings, Literals and Parameters are allowed'
+
+		$subquery = $this->db->getQueryBuilder();
+		$subquery->selectDistinct('group_id')->from(PollGroup::RELATION_TABLE);
+
+		$qb->delete(PollGroup::TABLE)
+			->where($qb->expr()->notIn(
+				'id',
+				$qb->createFunction($subquery->getSQL()),
+				IQueryBuilder::PARAM_INT_ARRAY
+			)
+			);
+		$qb->executeStatement();
 	}
 
 	/**
@@ -71,7 +149,7 @@ class PollGroupMapper extends QBMapper {
 		TableManager::getConcatenatedArray(
 			qb: $qb,
 			concatColumn: $joinPollsAlias . '.poll_id',
-			asColumn: 'polls',
+			asColumn: 'poll_ids',
 			dbProvider: $this->db->getDatabaseProvider(),
 		);
 

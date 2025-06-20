@@ -189,7 +189,7 @@ onMounted(() => {
 
 		<template #list>
 			<NcAppNavigationItem
-				v-for="pollGroup in pollsStore.groups"
+				v-for="pollGroup in pollsStore.pollGroupsSorted"
 				:key="pollGroup.id"
 				:name="pollGroup.title"
 				:title="pollGroup.titleExt"
@@ -199,22 +199,22 @@ onMounted(() => {
 					<GroupIcon :size="iconSize" />
 				</template>
 				<template #counter>
-					<NcCounterBubble :count="pollGroup.polls.length" />
+					<NcCounterBubble :count="pollGroup.pollIds.length" />
 				</template>
 				<ul v-if="sessionStore.appSettings.navigationPollsInList">
 					<PollNavigationItems
-						v-for="poll in pollsStore.groupList(pollGroup.polls)"
+						v-for="poll in pollsStore.groupList(pollGroup.pollIds)"
 						:key="poll.id"
 						:poll="poll"
 						@toggle-archive="toggleArchive(poll.id)"
 						@clone-poll="clonePoll(poll.id)"
 						@delete-poll="deletePoll(poll.id)" />
 					<NcAppNavigationItem
-						v-if="pollsStore.groupList(pollGroup.polls).length === 0"
+						v-if="pollsStore.groupList(pollGroup.pollIds).length === 0"
 						:name="t('polls', 'No polls found for this category')" />
 					<NcAppNavigationItem
 						v-if="
-							pollsStore.groupList(pollGroup.polls).length
+							pollsStore.groupList(pollGroup.pollIds).length
 							> pollsStore.meta.maxPollsInNavigation
 						"
 						class="force-not-active"
@@ -229,7 +229,7 @@ onMounted(() => {
 					</NcAppNavigationItem>
 				</ul>
 			</NcAppNavigationItem>
-			<NcAppNavigationSpacer v-if="pollsStore.groups.length" />
+			<NcAppNavigationSpacer v-if="pollsStore.pollGroups.length" />
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"

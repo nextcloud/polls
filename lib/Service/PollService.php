@@ -9,6 +9,7 @@ declare(strict_types=1);
 namespace OCA\Polls\Service;
 
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollGroup;
 use OCA\Polls\Db\PollGroupMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\UserMapper;
@@ -34,6 +35,7 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Model\UserBase;
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\DB\Exception;
 use OCP\EventDispatcher\IEventDispatcher;
 use OCP\Search\ISearchQuery;
 
@@ -55,7 +57,7 @@ class PollService {
 	/**
 	 * Get list of polls including Threshold for "relevant polls"
 	 */
-	public function list(): array {
+	public function listPolls(): array {
 		$pollList = $this->pollMapper->findForMe($this->userSession->getCurrentUserId());
 		if ($this->userSession->getCurrentUser()->getIsAdmin()) {
 			return $pollList;
@@ -66,38 +68,69 @@ class PollService {
 		}));
 	}
 
-	public function groups(): array {
+	public function listPollGroups(): array {
 		return $this->pollGroupMapper->list();
 	}
 
-	public function addPollToPollGroup(int $pollId, int $pollGroupId): Poll {
+	public function addPollToPollGroup(
+		int $pollId,
+		?int $pollGroupId = null,
+		?string $newPollGroupName = null,
+	): PollGroup {
 		$poll = $this->pollMapper->find($pollId);
 		$poll->request(Poll::PERMISSION_POLL_EDIT);
 
-		$pollGroup = $this->pollGroupMapper->find($pollGroupId);
+		if ($pollGroupId === null && $newPollGroupName) {
+			if (!$this->appSettings->getPollCreationAllowed()) {
+				throw new ForbiddenException('Poll group creation is disabled');
+			}
+			// Create new poll group
+			$pollGroup = $this->pollGroupMapper->addGroup($newPollGroupName);
+		} else {
+			$pollGroup = $this->pollGroupMapper->find($pollGroupId);
+		}
 
 		if (!$pollGroup->hasPoll($pollId)) {
-			$pollGroup->addPoll($pollId);
-			$this->pollGroupMapper->update($pollGroup);
+			try {
+				$this->pollGroupMapper->addPollToGroup($pollId, $pollGroup->getId());
+			} catch (Exception $e) {
+				if ($e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
+					// Poll is already member of this group
+				} else {
+					throw $e;
+				}
+			}
+
 			$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($poll));
 		}
 
-		return $poll;
+		return $this->pollGroupMapper->find($pollGroup->getId());
 	}
 
-	public function removePollFromPollGroup(int $pollId, int $pollGroupId): Poll {
+	public function removePollFromPollGroup(
+		int $pollId,
+		int $pollGroupId,
+	): ?PollGroup {
 		$poll = $this->pollMapper->find($pollId);
 		$poll->request(Poll::PERMISSION_POLL_EDIT);
 
 		$pollGroup = $this->pollGroupMapper->find($pollGroupId);
 
 		if ($pollGroup->hasPoll($pollId)) {
-			$pollGroup->removePoll($pollId);
-			$this->pollGroupMapper->update($pollGroup);
+			$this->pollGroupMapper->removePollFromGroup($pollId, $pollGroupId);
 			$this->eventDispatcher->dispatchTyped(new PollUpdatedEvent($poll));
+		} else {
+			throw new NotFoundException('Poll not found in group');
 		}
 
-		return $poll;
+		$this->pollGroupMapper->tidyPollGroups();
+		try {
+			$pollGroup = $this->pollGroupMapper->find($pollGroupId);
+		} catch (DoesNotExistException $e) {
+			// Poll group was deleted, return null
+			return null;
+		}
+		return $pollGroup;
 	}
 
 	/**

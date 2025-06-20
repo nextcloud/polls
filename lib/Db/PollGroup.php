@@ -42,7 +42,7 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	protected string $title = '';
 	protected string $titleExt = '';
 	// joined polls
-	protected ?string $polls = '';
+	protected ?string $pollIds = '';
 
 	public function __construct() {
 	}
@@ -52,36 +52,20 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	 *
 	 * @psalm-return list<int>
 	 */
-	public function getPolls(): array {
-		if (!$this->polls) {
+	public function getPollIds(): array {
+		if (!$this->pollIds) {
 			return [];
 		}
-		return array_map('intval', explode(self::CONCAT_SEPARATOR, $this->polls));
+		return array_map('intval', explode(self::CONCAT_SEPARATOR, $this->pollIds));
 	}
 
-	public function setPolls(array $polls): void {
-		$this->polls = implode(self::CONCAT_SEPARATOR, $polls);
+	public function setPollIds(array $pollIds): void {
+		$this->pollIds = implode(self::CONCAT_SEPARATOR, $pollIds);
 	}
 
 	public function hasPoll(int $pollId): bool {
-		$polls = $this->getPolls();
+		$polls = $this->getPollIds();
 		return in_array($pollId, $polls, true);
-	}
-
-	public function addPoll(int $pollId): void {
-		$polls = $this->getPolls();
-		if (!in_array($pollId, $polls, true)) {
-			$polls[] = $pollId;
-			$this->setPolls($polls);
-		}
-	}
-
-	public function removePoll(int $pollId): void {
-		$polls = $this->getPolls();
-		if (($key = array_search($pollId, $polls, true)) !== false) {
-			unset($polls[$key]);
-			$this->setPolls(array_values($polls));
-		}
 	}
 
 	// alias of getOwner()
@@ -108,7 +92,7 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 			'owner' => $this->getUser(),
 			'title' => $this->getTitle(),
 			'titleExt' => $this->getTitleExt(),
-			'polls' => $this->getPolls(),
+			'pollIds' => $this->getPollIds(),
 		];
 	}
 }
