@@ -172,6 +172,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected ?string $groupShares = '';
 	protected int $optionsCount = 0;
 	protected int $proposalsCount = 0;
+	protected ?string $pollGroups = '';
 
 	// subqueried columns
 	protected int $currentUserOrphanedVotes = 0;
@@ -230,6 +231,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'status' => $this->getStatusArray(),
 			'currentUserStatus' => $this->getCurrentUserStatus(),
 			'permissions' => $this->getPermissionsArray(),
+			'pollGroups' => $this->getPollGroups(),
 		];
 	}
 
@@ -435,6 +437,18 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		}
 
 		return [];
+	}
+
+	/**
+	 * @return int[]
+	 *
+	 * @psalm-return list<int>
+	 */
+	public function getPollGroups(): array {
+		if (!$this->pollGroups) {
+			return [];
+		}
+		return array_map('intval', explode(PollGroup::CONCAT_SEPARATOR, $this->pollGroups));
 	}
 
 	private function getAccess(): string {

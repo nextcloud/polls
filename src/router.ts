@@ -95,6 +95,19 @@ const routes: RouteRecordRaw[] = [
 		},
 	},
 	{
+		path: '/group/:slug',
+		components: {
+			default: List,
+			navigation: Navigation,
+		},
+		props: true,
+		name: 'group',
+		meta: {
+			publicPage: false,
+			votePage: false,
+		},
+	},
+	{
 		path: '/combo',
 		components: {
 			default: Combo,

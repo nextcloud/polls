@@ -24,6 +24,7 @@ interface RouteParams {
 	id: number
 	token: string
 	type: FilterType
+	slug: string
 }
 
 export type Route = {
@@ -121,6 +122,7 @@ export const useSessionStore = defineStore('session', {
 				id: 0,
 				token: '',
 				type: FilterType.Relevant,
+				slug: '',
 			},
 		},
 		userStatus: {
@@ -227,6 +229,7 @@ export const useSessionStore = defineStore('session', {
 			this.route.params.id = payload.params.id as unknown as number
 			this.route.params.token = payload.params.token as string
 			this.route.params.type = payload.params.type as FilterType
+			this.route.params.slug = payload.params.slug as string
 		},
 
 		// Share store

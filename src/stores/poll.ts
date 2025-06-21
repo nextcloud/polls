@@ -154,6 +154,7 @@ export type Poll = {
 	descriptionSafe: string
 	configuration: PollConfiguration
 	owner: User
+	pollGroups: number[]
 	status: PollStatus
 	currentUserStatus: CurrentUserStatus
 	permissions: PollPermissions
@@ -191,6 +192,7 @@ export const usePollStore = defineStore('poll', {
 			maxVotesPerUser: 0,
 		},
 		owner: createDefault<User>(),
+		pollGroups: [],
 		status: {
 			anonymizeLevel: 'ANON_NONE',
 			lastInteraction: 0,

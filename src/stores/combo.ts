@@ -122,7 +122,7 @@ export const useComboStore = defineStore('combo', {
 			const pollsStore = usePollsStore()
 			this.polls.forEach((comboPoll: Poll) => {
 				if (
-					pollsStore.list.findIndex(
+					pollsStore.polls.findIndex(
 						(poll) =>
 							poll.id === comboPoll.id && !poll.status.isArchived,
 					) < 0

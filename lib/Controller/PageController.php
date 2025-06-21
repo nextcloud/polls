@@ -44,6 +44,7 @@ class PageController extends Controller {
 	#[FrontpageRoute(verb: 'GET', url: '/combo', postfix: 'combo')]
 	#[FrontpageRoute(verb: 'GET', url: '/not-found', postfix: 'notFound')]
 	#[FrontpageRoute(verb: 'GET', url: '/list/{category}', postfix: 'list')]
+	#[FrontpageRoute(verb: 'GET', url: '/group/{slug}', postfix: 'group')]
 	public function index(): TemplateResponse {
 		Util::addScript(AppConstants::APP_ID, 'polls-main');
 		$this->eventDispatcher->dispatchTyped(new LoadAdditionalScriptsEvent());

@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Db;
 
+use Exception;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\User\Anon;
 use OCA\Polls\Model\UserBase;
@@ -101,7 +102,14 @@ abstract class EntityWithUser extends Entity {
 
 		$userMapper = (Container::queryClass(UserMapper::class));
 
-		$user = $userMapper->getParticipant($this->getUserId(), $this->getPollId());
+		try {
+			$pollId = $this->getPollId();
+			$user = $userMapper->getParticipant($this->getUserId(), $pollId);
+			// Get user from userbase
+		} catch (Exception $e) {
+			// If pollId is not set, we assume that the user is not a participant of a poll
+			$user = $userMapper->getUserFromUserBase($this->getUserId());
+		}
 		return $user;
 	}
 }

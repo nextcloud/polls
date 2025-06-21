@@ -28,6 +28,7 @@ import AllPollsIcon from 'vue-material-design-icons/Poll.vue'
 import ClosedPollsIcon from 'vue-material-design-icons/Lock.vue'
 import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
+import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
 import { Logger } from '../helpers/index.ts'
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
@@ -37,6 +38,7 @@ import { usePreferencesStore } from '../stores/preferences.ts'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { ButtonMode, Event } from '../Types/index.ts'
 import { useRouter } from 'vue-router'
+import { NcAppNavigationSpacer } from '@nextcloud/vue'
 
 const router = useRouter()
 
@@ -186,6 +188,52 @@ onMounted(() => {
 			@close="createDlgToggle = false" />
 
 		<template #list>
+			<NcAppNavigationItem
+				v-for="pollGroup in pollsStore.pollGroupsSorted"
+				:key="pollGroup.id"
+				:name="pollGroup.title"
+				:title="pollGroup.titleExt"
+				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
+				:to="{
+					name: 'group',
+					params: { slug: pollGroup.slug },
+				}"
+				:open="false">
+				<template #icon>
+					<GroupIcon :size="iconSize" />
+				</template>
+				<template #counter>
+					<NcCounterBubble :count="pollGroup.pollIds.length" />
+				</template>
+				<ul v-if="sessionStore.appSettings.navigationPollsInList">
+					<PollNavigationItems
+						v-for="poll in pollsStore.groupList(pollGroup.pollIds)"
+						:key="poll.id"
+						:poll="poll"
+						@toggle-archive="toggleArchive(poll.id)"
+						@clone-poll="clonePoll(poll.id)"
+						@delete-poll="deletePoll(poll.id)" />
+					<NcAppNavigationItem
+						v-if="pollsStore.groupList(pollGroup.pollIds).length === 0"
+						:name="t('polls', 'No polls found for this category')" />
+					<NcAppNavigationItem
+						v-if="
+							pollsStore.groupList(pollGroup.pollIds).length
+							> pollsStore.meta.maxPollsInNavigation
+						"
+						class="force-not-active"
+						:to="{
+							name: 'group',
+							params: { slug: pollGroup.slug },
+						}"
+						:name="t('polls', 'Show all')">
+						<template #icon>
+							<GoToIcon :size="iconSize" />
+						</template>
+					</NcAppNavigationItem>
+				</ul>
+			</NcAppNavigationItem>
+			<NcAppNavigationSpacer v-if="pollsStore.pollGroups.length" />
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"
