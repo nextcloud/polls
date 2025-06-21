@@ -47,6 +47,7 @@ const sessionStore = useSessionStore()
 const preferencesStore = usePreferencesStore()
 
 const iconSize = 20
+
 const icons = {
 	[FilterType.Relevant]: {
 		id: FilterType.Relevant,
