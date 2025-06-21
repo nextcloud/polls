@@ -23,7 +23,7 @@ use OCP\Migration\SimpleMigrationStep;
  *
  * @psalm-suppress UnusedClass
  */
-class Version080000Date20250413195001 extends SimpleMigrationStep {
+class Version080000Date20250622002601 extends SimpleMigrationStep {
 	private ISchemaWrapper $schema;
 
 	public function __construct(
