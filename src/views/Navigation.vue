@@ -194,6 +194,10 @@ onMounted(() => {
 				:name="pollGroup.title"
 				:title="pollGroup.titleExt"
 				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
+				:to="{
+					name: 'group',
+					params: { slug: pollGroup.slug },
+				}"
 				:open="false">
 				<template #icon>
 					<GroupIcon :size="iconSize" />
@@ -219,8 +223,8 @@ onMounted(() => {
 						"
 						class="force-not-active"
 						:to="{
-							name: 'list',
-							params: { type: pollGroup.id },
+							name: 'group',
+							params: { slug: pollGroup.slug },
 						}"
 						:name="t('polls', 'Show all')">
 						<template #icon>

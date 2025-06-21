@@ -30,9 +30,16 @@ const sessionStore = useSessionStore()
 const router = useRouter()
 const route = useRoute()
 
-const title = computed(
-	() => pollsStore.categories[route.params.type as FilterType].titleExt,
-)
+const title = computed(() => {
+	if (route.name === 'group') {
+		return (
+			pollsStore.currentGroup?.titleExt
+			|| pollsStore.currentGroup?.title
+			|| t('polls', 'Group without title')
+		)
+	}
+	return pollsStore.categories[route.params.type as FilterType].titleExt
+})
 
 const showMore = computed(
 	() =>
@@ -56,12 +63,22 @@ const infoLoaded = computed(() =>
 		},
 	),
 )
-const description = computed(
-	() => pollsStore.categories[route.params.type as FilterType].description,
-)
+
+const description = computed(() => {
+	if (route.name === 'group') {
+		return (
+			pollsStore.currentGroup?.description
+			|| t('polls', 'Group without description')
+		)
+	}
+
+	return pollsStore.categories[route.params.type as FilterType].description
+})
+
 const emptyPollListnoPolls = computed(
 	() => pollsStore.pollsFilteredSorted.length < 1,
 )
+
 const windowTitle = computed(() => `${t('polls', 'Polls')} - ${title.value}`)
 
 const emptyContent = computed(() => {
