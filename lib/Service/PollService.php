@@ -72,6 +72,27 @@ class PollService {
 		return $this->pollGroupMapper->list();
 	}
 
+	public function updatePollGroup(
+		int $pollGroupId,
+		string $title,
+		string $titleExt,
+		string $description,
+	): PollGroup {
+		try {
+			$pollGroup = $this->pollGroupMapper->find($pollGroupId);
+			if ($pollGroup->getOwner() !== $this->userSession->getCurrentUserId()) {
+				throw new ForbiddenException('You do not have permission to edit this poll group');
+			}
+			$pollGroup->setTitle($title);
+			$pollGroup->setTitleExt($titleExt);
+			$pollGroup->setDescription($description);
+
+			$pollGroup = $this->pollGroupMapper->update($pollGroup);
+			return $pollGroup;
+		} catch (DoesNotExistException $e) {
+			throw new NotFoundException('Poll group not found');
+		}
+	}
 	public function addPollToPollGroup(
 		int $pollId,
 		?int $pollGroupId = null,

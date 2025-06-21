@@ -314,6 +314,21 @@ class PollController extends BaseController {
 	}
 
 	/**
+	 * Update Pollgroup
+	 */
+	#[NoAdminRequired]
+	#[FrontpageRoute(verb: 'PUT', url: '/pollgroup/{pollGroupId}/update')]
+	public function updatePollGroup(
+		int $pollGroupId,
+		string $title,
+		string $titleExt,
+		string $description,
+	): JSONResponse {
+		return $this->response(fn () => [
+			'pollGroup' => $this->pollService->updatePollGroup($pollGroupId, $title, $titleExt, $description),
+		]);
+	}
+	/**
 	 * Remove poll from pollgroup
 	 * @param int $pollId Poll id
 	 * @param int $pollGroupId Poll group id
