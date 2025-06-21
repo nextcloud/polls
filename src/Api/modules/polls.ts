@@ -2,13 +2,14 @@
  * SPDX-FileCopyrightText: 2022 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { Poll, PollConfiguration, PollType } from '../../stores/poll.js'
+import { Poll, PollConfiguration, PollType } from '../../stores/poll.ts'
 import { AxiosResponse } from '@nextcloud/axios'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { Option } from '../../stores/options.js'
-import { Vote } from '../../stores/votes.js'
-import { Share } from '../../stores/shares.js'
-import { ApiEmailAdressList, Comment } from '../../Types/index.js'
+import { Option } from '../../stores/options.ts'
+import { Vote } from '../../stores/votes.ts'
+import { Share } from '../../stores/shares.ts'
+import { ApiEmailAdressList, Comment } from '../../Types/index.ts'
+import { PollGroup } from '../../stores/polls.ts'
 
 export type Confirmations = {
 	sentMails: { emailAddress: string; displayName: string }[]
@@ -18,7 +19,94 @@ export type Confirmations = {
 }
 
 const polls = {
-	getPolls(): Promise<AxiosResponse<{ list: Poll[] }>> {
+	getPollGroups(): Promise<AxiosResponse<{ pollGroups: PollGroup[] }>> {
+		return httpInstance.request({
+			method: 'GET',
+			url: 'pollgroups',
+			params: { time: +new Date() },
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.getPollGroups.name
+				].handleRequestCancellation().token,
+		})
+	},
+
+	createPollGroupForPoll(
+		newPollGroupName: string,
+		pollId: number,
+	): Promise<AxiosResponse<{ pollGroup: PollGroup; poll: Poll }>> {
+		return httpInstance.request({
+			method: 'POST',
+			url: `pollgroup/new/poll/${pollId}`,
+			data: {
+				newPollGroupName,
+			},
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.createPollGroupForPoll.name
+				].handleRequestCancellation().token,
+		})
+	},
+
+	addPollToGroup(
+		pollGroupId: number,
+		pollId: number,
+	): Promise<AxiosResponse<{ pollGroup: PollGroup; poll: Poll }>> {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `pollgroup/${pollGroupId}/poll/${pollId}`,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.addPollToGroup.name
+				].handleRequestCancellation().token,
+		})
+	},
+
+	removePollFromGroup(
+		pollGroupId: number,
+		pollId: number,
+	): Promise<AxiosResponse<{ pollGroup: PollGroup | null; poll: Poll }>> {
+		return httpInstance.request({
+			method: 'DELETE',
+			url: `pollgroup/${pollGroupId}/poll/${pollId}`,
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.removePollFromGroup.name
+				].handleRequestCancellation().token,
+		})
+	},
+
+	updatePollGroup(
+		pollGroupId: number,
+		title: string,
+		titleExt: string,
+		description: string,
+	): Promise<AxiosResponse<{ pollGroup: PollGroup }>> {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `pollgroup/${pollGroupId}/update`,
+			data: {
+				title,
+				titleExt,
+				description,
+			},
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.updatePollGroup.name
+				].handleRequestCancellation().token,
+		})
+	},
+
+	getPolls(): Promise<
+		AxiosResponse<{
+			polls: Poll[]
+			permissions: {
+				pollCreationAllowed: boolean
+				comboAllowed: true
+			}
+			pollGroups: PollGroup[]
+		}>
+	> {
 		return httpInstance.request({
 			method: 'GET',
 			url: 'polls',

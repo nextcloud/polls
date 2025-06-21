@@ -22,15 +22,31 @@ import PollListSort from '../components/PollList/PollListSort.vue'
 import PollItemActions from '../components/PollList/PollItemActions.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { usePreferencesStore } from '../stores/preferences.ts'
+import { useSessionStore } from '../stores/session.ts'
+import ActionEditGroup from '../components/Actions/modules/ActionEditGroup.vue'
 
 const pollsStore = usePollsStore()
 const preferencesStore = usePreferencesStore()
+const sessionStore = useSessionStore()
 const router = useRouter()
 const route = useRoute()
 
-const title = computed(
-	() => pollsStore.categories[route.params.type as FilterType].titleExt,
+const editable = computed(
+	() =>
+		route.name === 'group'
+		&& sessionStore.currentUser.id === pollsStore.currentGroup?.owner.id,
 )
+
+const title = computed(() => {
+	if (route.name === 'group') {
+		return (
+			pollsStore.currentGroup?.titleExt
+			|| pollsStore.currentGroup?.title
+			|| t('polls', 'Group without title')
+		)
+	}
+	return pollsStore.categories[route.params.type as FilterType].titleExt
+})
 
 const showMore = computed(
 	() =>
@@ -54,12 +70,22 @@ const infoLoaded = computed(() =>
 		},
 	),
 )
-const description = computed(
-	() => pollsStore.categories[route.params.type as FilterType].description,
-)
+
+const description = computed(() => {
+	if (route.name === 'group') {
+		return (
+			pollsStore.currentGroup?.description
+			|| t('polls', 'Group without description')
+		)
+	}
+
+	return pollsStore.categories[route.params.type as FilterType].description
+})
+
 const emptyPollListnoPolls = computed(
 	() => pollsStore.pollsFilteredSorted.length < 1,
 )
+
 const windowTitle = computed(() => `${t('polls', 'Polls')} - ${title.value}`)
 
 const emptyContent = computed(() => {
@@ -129,6 +155,7 @@ async function loadMore() {
 			</template>
 			{{ description }}
 			<template #right>
+				<ActionEditGroup v-if="editable" />
 				<ActionAddPoll v-if="preferencesStore.user.useNewPollInPollist" />
 				<PollListSort />
 			</template>
@@ -146,7 +173,12 @@ async function loadMore() {
 					:poll="poll"
 					@goto-poll="gotoPoll(poll.id)">
 					<template #actions>
-						<PollItemActions :poll="poll" />
+						<PollItemActions
+							v-if="
+								poll.permissions.edit
+								|| sessionStore.appPermissions.pollCreation
+							"
+							:poll="poll" />
 					</template>
 				</PollItem>
 			</TransitionGroup>

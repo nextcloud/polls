@@ -43,13 +43,83 @@ class PollApiController extends BaseApiV2Controller {
 
 	/**
 	 * Get list of polls
+	 *
+	 * psalm-return DataResponse<array{polls: PollsPoll[]}>
 	 */
 	#[CORS]
 	#[NoAdminRequired]
 	#[NoCSRFRequired]
 	#[ApiRoute(verb: 'GET', url: '/api/v1.0/polls', requirements: ['apiVersion' => '(v2)'])]
-	public function list(): DataResponse {
-		return $this->response(fn () => ['polls' => $this->pollService->list()]);
+	public function listPolls(): DataResponse {
+		return $this->response(fn () => ['polls' => $this->pollService->listPolls()]);
+	}
+
+	/**
+	 * Get list of pollgroups
+	 *
+	 * psalm-return DataResponse<array{ pollGroups: array<int, PollGroup> }>
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'GET', url: '/api/v1.0/pollgroups', requirements: ['apiVersion' => '(v2)'])]
+	public function listPollGroups(): DataResponse {
+		return $this->response(fn () => ['pollGroups' => $this->pollService->listPollGroups()]);
+	}
+
+	/**
+	 * Create a new pollgroup with its title and add a poll to it
+	 *
+	 * @param int $pollId Poll id to add to the new pollgroup
+	 * @param string $newPollGroupName Name of the new pollgroup
+	 *
+	 * psalm-return JSONResponse<array{pollGroup: PollGroup, poll: Poll}>
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'POST', url: '/api/v1.0/pollgroup/new/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	public function addPollToNewPollGroup(int $pollId, string $newPollGroupName = ''): DataResponse {
+		return $this->response(fn () => [
+			'pollGroup' => $this->pollService->addPollToPollGroup($pollId, newPollGroupName: $newPollGroupName),
+			'poll' => $this->pollService->get($pollId),
+		]);
+	}
+
+	/**
+	 * Add poll to a group
+	 * @param int $pollGroupId Pollgroup id
+	 * @param int $pollId Poll id
+	 *
+	 * psalm-return DataResponse<array{ pollGroup: PollGroup, poll: Poll }>
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'PUT', url: '/api/v1.0/pollgroup/{pollGroupId}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	public function addPollToPollGroup(int $pollId, int $pollGroupId): DataResponse {
+		return $this->response(fn () => [
+			'pollGroup' => $this->pollService->addPollToPollGroup($pollId, $pollGroupId),
+			'poll' => $this->pollService->get($pollId),
+		]);
+	}
+
+	/**
+	 * Remove poll from a group
+	 * @param int $pollGroupId Pollgroup id
+	 * @param int $pollId Poll id
+	 *
+	 * psalm-return DataResponse<array{ pollgroup: PollGroup | null, poll: Poll }>
+	 */
+	#[CORS]
+	#[NoAdminRequired]
+	#[NoCSRFRequired]
+	#[ApiRoute(verb: 'DELETE', url: '/api/v1.0/pollgroup/{pollGroupId}/poll/{pollId}', requirements: ['apiVersion' => '(v2)'])]
+	public function removePollFromPollGroup(int $pollId, int $pollGroupId): DataResponse {
+		return $this->response(fn () => [
+			'pollgroup' => $this->pollService->removePollFromPollGroup($pollId, $pollGroupId),
+			'poll' => $this->pollService->get($pollId),
+		]);
 	}
 
 	/**
