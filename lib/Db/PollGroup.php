@@ -68,6 +68,16 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 		return in_array($pollId, $polls, true);
 	}
 
+	public function getSlug(): string {
+		// sanitize the title to remove any unwanted characters
+		$slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $this->getTitle());
+		// in case the title is empty, use a default slug
+		if ($slug === '') {
+			$slug = 'group';
+		}
+		return strtolower(str_replace(' ', '-', $slug)) . '-' . $this->getId();
+	}
+
 	// alias of getOwner()
 	public function getUserId(): string {
 		return $this->getOwner();
@@ -93,6 +103,7 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 			'title' => $this->getTitle(),
 			'titleExt' => $this->getTitleExt(),
 			'pollIds' => $this->getPollIds(),
+			'slug' => $this->getSlug(),
 		];
 	}
 }

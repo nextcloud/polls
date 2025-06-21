@@ -60,6 +60,7 @@ export type PollGroup = {
 	title: string
 	titleExt: string
 	pollIds: number[]
+	slug: string
 }
 
 export type PollCategoryList = Record<FilterType, PollCategory>
@@ -285,6 +286,7 @@ export const usePollsStore = defineStore('polls', {
 		pollsWithGroups(state: PollList): Poll[] {
 			return state.polls.filter((poll: Poll) => poll.pollGroups.length > 0)
 		},
+
 		currentCategory(state: PollList): PollCategory {
 			const sessionStore = useSessionStore()
 
@@ -297,10 +299,32 @@ export const usePollsStore = defineStore('polls', {
 			return state.categories[FilterType.Relevant]
 		},
 
+		currentGroup(state: PollList): PollGroup | undefined {
+			const sessionStore = useSessionStore()
+			if (sessionStore.route.name === 'group') {
+				return state.pollGroups.find(
+					(group) => group.slug === sessionStore.route.params.slug,
+				)
+			}
+			return undefined
+		},
+
+		groupPolls(state: PollList): Poll[] {
+			if (!this.currentGroup) {
+				return []
+			}
+			return state.polls.filter((poll) => this.currentGroup?.pollIds.includes(poll.id))
+		},
+
 		/*
 		 * polls list, filtered by current category and sorted
 		 */
 		pollsFilteredSorted(state: PollList): Poll[] {
+			const sessionStore = useSessionStore()
+			if (sessionStore.route.name === 'group') {
+				return this.groupPolls
+			}
+
 			return orderBy(
 				state.polls.filter((poll: Poll) =>
 					this.currentCategory?.filterCondition(poll),
