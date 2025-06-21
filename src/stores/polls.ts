@@ -414,20 +414,15 @@ export const usePollsStore = defineStore('polls', {
 			return this.pollGroups.filter((group) => !group.pollIds.includes(pollId))
 		},
 
-		updateListElement(payload: {
-			poll: Poll | undefined
-			pollGroup: PollGroup | undefined
-		}) {
+		updatePollGroupElement(payload: { pollGroup: PollGroup; poll?: Poll }) {
+			this.pollGroups = this.pollGroups
+				.filter((g) => g.id !== payload.pollGroup.id)
+				.concat(payload.pollGroup)
+
 			if (payload.poll) {
 				this.polls = this.polls
 					.filter((p) => p.id !== payload.poll?.id)
 					.concat(payload.poll)
-			}
-
-			if (payload.pollGroup) {
-				this.pollGroups = this.pollGroups
-					.filter((g) => g.id !== payload.pollGroup?.id)
-					.concat(payload.pollGroup)
 			}
 		},
 
@@ -442,7 +437,7 @@ export const usePollsStore = defineStore('polls', {
 						payload.pollGroupId,
 						payload.pollId,
 					)
-					this.updateListElement({
+					this.updatePollGroupElement({
 						poll: response.data.poll,
 						pollGroup: response.data.pollGroup,
 					})
@@ -454,7 +449,7 @@ export const usePollsStore = defineStore('polls', {
 						payload.groupTitle,
 						payload.pollId,
 					)
-					this.updateListElement({
+					this.updatePollGroupElement({
 						poll: response.data.poll,
 						pollGroup: response.data.pollGroup,
 					})
@@ -488,7 +483,7 @@ export const usePollsStore = defineStore('polls', {
 				}
 
 				// update the collections
-				this.updateListElement({
+				this.updatePollGroupElement({
 					poll: response.data.poll,
 					pollGroup: response.data.pollGroup,
 				})
@@ -605,6 +600,38 @@ export const usePollsStore = defineStore('polls', {
 				return group.title
 			}
 			return t('polls', 'Invalid Group ID')
+		},
+
+		async updatePollGroup(payload: {
+			title: string
+			titleExt: string
+			description: string
+			slug: string
+		}) {
+			if (!this.currentGroup) {
+				throw new Error('No current poll group set')
+			}
+			try {
+				const response = await PollsAPI.updatePollGroup(
+					this.currentGroup.id,
+					payload.title,
+					payload.titleExt,
+					payload.description,
+				)
+				this.updatePollGroupElement({
+					pollGroup: response.data.pollGroup,
+				})
+				return response.data.pollGroup
+			} catch (error) {
+				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
+					return
+				}
+				Logger.error('Error updating poll group', {
+					error,
+					payload,
+				})
+				throw error
+			}
 		},
 	},
 })

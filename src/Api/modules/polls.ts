@@ -76,6 +76,27 @@ const polls = {
 		})
 	},
 
+	updatePollGroup(
+		pollGroupId: number,
+		title: string,
+		titleExt: string,
+		description: string,
+	): Promise<AxiosResponse<{ pollGroup: PollGroup }>> {
+		return httpInstance.request({
+			method: 'PUT',
+			url: `pollgroup/${pollGroupId}/update`,
+			data: {
+				title,
+				titleExt,
+				description,
+			},
+			cancelToken:
+				cancelTokenHandlerObject[
+					this.updatePollGroup.name
+				].handleRequestCancellation().token,
+		})
+	},
+
 	getPolls(): Promise<
 		AxiosResponse<{
 			polls: Poll[]

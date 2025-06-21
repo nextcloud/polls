@@ -23,12 +23,19 @@ import PollItemActions from '../components/PollList/PollItemActions.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import { useSessionStore } from '../stores/session.ts'
+import ActionEditGroup from '../components/Actions/modules/ActionEditGroup.vue'
 
 const pollsStore = usePollsStore()
 const preferencesStore = usePreferencesStore()
 const sessionStore = useSessionStore()
 const router = useRouter()
 const route = useRoute()
+
+const editable = computed(
+	() =>
+		route.name === 'group'
+		&& sessionStore.currentUser.id === pollsStore.currentGroup?.owner.id,
+)
 
 const title = computed(() => {
 	if (route.name === 'group') {
@@ -148,6 +155,7 @@ async function loadMore() {
 			</template>
 			{{ description }}
 			<template #right>
+				<ActionEditGroup v-if="editable" />
 				<ActionAddPoll v-if="preferencesStore.user.useNewPollInPollist" />
 				<PollListSort />
 			</template>
