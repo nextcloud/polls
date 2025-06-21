@@ -32,14 +32,19 @@ const route = useRoute()
 
 const title = computed(() => {
 	if (route.name === 'group') {
-		return pollsStore.currentGroup?.titleExt || pollsStore.currentGroup?.title
+		return (
+			pollsStore.currentGroup?.titleExt
+			|| pollsStore.currentGroup?.title
 			|| t('polls', 'Group without title')
+		)
 	}
 	return pollsStore.categories[route.params.type as FilterType].titleExt
 })
 
-const showMore = computed(() => pollsStore.chunkedList.length < pollsStore.pollsFilteredSorted.length
-	&& pollsStore.meta.status !== 'loading'
+const showMore = computed(
+	() =>
+		pollsStore.chunkedList.length < pollsStore.pollsFilteredSorted.length
+		&& pollsStore.meta.status !== 'loading',
 )
 
 const countLoadedPolls = computed(() =>
@@ -61,7 +66,10 @@ const infoLoaded = computed(() =>
 
 const description = computed(() => {
 	if (route.name === 'group') {
-		return pollsStore.currentGroup?.description || t('polls', 'Group without description')
+		return (
+			pollsStore.currentGroup?.description
+			|| t('polls', 'Group without description')
+		)
 	}
 
 	return pollsStore.categories[route.params.type as FilterType].description

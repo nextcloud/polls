@@ -313,7 +313,9 @@ export const usePollsStore = defineStore('polls', {
 			if (!this.currentGroup) {
 				return []
 			}
-			return state.polls.filter((poll) => this.currentGroup?.pollIds.includes(poll.id))
+			return state.polls.filter((poll) =>
+				this.currentGroup?.pollIds.includes(poll.id),
+			)
 		},
 
 		/*
