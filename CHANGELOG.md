@@ -6,7 +6,11 @@
 All notable changes to this project will be documented in this file.
 ##
 
-## [8.0.0] - tbd
+## [8.0.1] - 2025-06-22
+### Fix
+ - Fixed display of the list view mode
+
+## [8.0.0] - 2025-06-22
 ### Changes
  - Migration to Vue 3 and Pinia
  - Change Circles to Teams
