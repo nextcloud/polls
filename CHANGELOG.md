@@ -10,6 +10,7 @@ All notable changes to this project will be documented in this file.
 ### Fix
  - Fixed display of the list view mode
  - Use locale instead of language for date and time representation
+ - Fixed representation of time interval when adding a date option with a duration
 
 ## [8.0.0] - 2025-06-22
 ### Changes

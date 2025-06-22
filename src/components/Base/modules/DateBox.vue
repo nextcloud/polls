@@ -45,9 +45,7 @@ const isSameDay = computed(() => dateTime.day === to.value.day && isSameMonth.va
 // suppress the 'to' time if they are the same
 const isSameTime = computed(() => duration.as('seconds') === 0)
 
-const interval = computed(() =>
-	Interval.fromDateTimes(dateTime.toUTC(), to.value.toUTC()),
-)
+const interval = computed(() => Interval.fromDateTimes(dateTime, to.value))
 </script>
 
 <template>
