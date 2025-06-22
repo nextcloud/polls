@@ -7,7 +7,29 @@ All notable changes to this project will be documented in this file.
 ##
 
 ## [8.0.1] - 2025-06-22
-### Fix
+### Changes (8.0.0)
+ - Migration to Vue 3 and Pinia
+ - Change Circles to Teams
+ - Change sortable component
+ - Preparation for voting variants
+
+### New (8.0.0)
+ - New dialog for creation of datetime options in date polls
+ - Added option to automatically set all added options to yes
+ - Locked anonymous mode
+ - Restricted poll owners
+ - Redesign of poll lists
+ - Changed controls of numeric inputs
+ - Auto delete archived polls after configurable days
+ - Configuration for using the Nextcloud default footer in public polls
+ - Delete polls without the need to archive them first
+ - Collapsible poll description
+ - Transfer polls to another owner by the current poll owner or the administration
+ - Added reference provider for link previews and smart picker
+ - Added confidential comments for comments only visible by the author and the current poll owner
+ - Create and manage poll groups for better poll management
+
+### Fix (8.0.1)
  - Fixed display of the list view mode
  - Use locale instead of language for date and time representation
  - Fixed representation of time interval when adding a date option with a duration
