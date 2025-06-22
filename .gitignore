@@ -1,5 +1,9 @@
 # SPDX-FileCopyrightText: 2016 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
+/assets/
+/css/*.map
+/js/*
+/css/*
 .DS_Store
 .sass-cache/
 .php_cs.cache
@@ -8,11 +12,7 @@
 .project/
 .idea/
 .vscode/
-assets/
 build/
-css/*.map
-js/*
-css/*
 nbproject/
 node_modules/
 tests/.phpunit.result.cache

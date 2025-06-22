@@ -230,8 +230,8 @@ const showCalendarPeek = computed(
 		}
 
 		.current-user {
-			padding-top: 1.5rem;
-			padding-bottom: 1.5rem;
+			margin-top: 1.5rem;
+			margin-bottom: 1.5rem;
 		}
 
 		.option-element {
@@ -258,6 +258,7 @@ const showCalendarPeek = computed(
 
 	&.list-view {
 		grid-template-columns: auto 5rem 5rem;
+		max-width: var(--cap-width);
 
 		.grid-info,
 		.option-spacer,

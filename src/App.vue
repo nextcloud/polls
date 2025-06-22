@@ -20,7 +20,7 @@ import { usePollStore } from './stores/poll.ts'
 import { showSuccess } from '@nextcloud/dialogs'
 
 import '@nextcloud/dialogs/style.css'
-import './assets/scss/colors.scss'
+import './assets/scss/vars.scss'
 import './assets/scss/hacks.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
