@@ -43,7 +43,12 @@ const showCalendarPeek = computed(
 </script>
 
 <template>
-	<TransitionGroup tag="div" name="list" :class="pollStore.viewMode" class="vote-table" :style="tableStyle">
+	<TransitionGroup
+		tag="div"
+		name="list"
+		:class="pollStore.viewMode"
+		class="vote-table"
+		:style="tableStyle">
 		<div v-if="pollStore.viewMode === ViewMode.TableView" class="grid-info">
 			<NcButton
 				v-show="votesStore.sortByOption > 0"
