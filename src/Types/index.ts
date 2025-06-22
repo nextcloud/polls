@@ -166,6 +166,7 @@ export type User = {
 	languageCode: string
 	languageCodeIntl: string
 	localeCode: string | null
+	localeCodeIntl: string | null
 	timeZone: string | null
 	categories: string[] | null
 }

@@ -5,7 +5,6 @@
 
 <script setup lang="ts">
 import { DateTime, Duration } from 'luxon'
-import { useSessionStore } from '../../stores/session.ts'
 import DateBox from '../Base/modules/DateBox.vue'
 
 interface Props {
@@ -13,14 +12,10 @@ interface Props {
 	durationSeconds?: number
 }
 
-const sessionStore = useSessionStore()
-
 const { timeStamp, durationSeconds = 0 } = defineProps<Props>()
 
 // computed from as DateTime from Luxon
-const from = DateTime.fromSeconds(timeStamp).setLocale(
-	sessionStore.currentUser.languageCodeIntl,
-)
+const from = DateTime.fromSeconds(timeStamp)
 
 const duration = Duration.fromMillis(durationSeconds * 1000)
 </script>

@@ -6,7 +6,6 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { DateTime, Duration, Interval } from 'luxon'
-import { useSessionStore } from '../../../stores/session.ts'
 
 interface Props {
 	dateTime: DateTime
@@ -15,11 +14,9 @@ interface Props {
 const { dateTime: luxonDate, duration: luxonDuration = Duration.fromMillis(0) } =
 	defineProps<Props>()
 
-const from = computed(() =>
-	luxonDate.setLocale(sessionStore.currentUser.languageCodeIntl),
+const from = computed(() =>	luxonDate
 )
 
-const sessionStore = useSessionStore()
 // the dates span one or more entire days
 // do not display the time in this case
 const allDay = computed(
