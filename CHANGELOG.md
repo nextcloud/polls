@@ -6,7 +6,10 @@
 All notable changes to this project will be documented in this file.
 ##
 
-## [8.0.2] - 2025-06-22
+## [8.0.3] - 2025-06-22
+### Fix (8.0.3)
+ - Fixed malformatted activity stream messages
+
 ### Changes (8.0.0)
  - Migration to Vue 3 and Pinia
  - Change Circles to Teams
@@ -29,11 +32,12 @@ All notable changes to this project will be documented in this file.
  - Added confidential comments for comments only visible by the author and the current poll owner
  - Create and manage poll groups for better poll management
 
+## [8.0.1] - 2025-06-22
 ### Fix (8.0.1)
  - Fixed display of the list view mode
  - Use locale instead of language for date and time representation
  - Fixed representation of time interval when adding a date option with a duration
-## [8.0.1] - 2025-06-22
+
 ### Changes (8.0.0)
  - Migration to Vue 3 and Pinia
  - Change Circles to Teams
@@ -55,12 +59,6 @@ All notable changes to this project will be documented in this file.
  - Added reference provider for link previews and smart picker
  - Added confidential comments for comments only visible by the author and the current poll owner
  - Create and manage poll groups for better poll management
-
-### Fix (8.0.2)
- - Fixed display of the list view mode
- - Use locale instead of language for date and time representation
- - Fixed representation of time interval when adding a date option with a duration
- - Fixed malformatted activity stream messages
 
 ## [8.0.0] - 2025-06-22
 ### Changes
