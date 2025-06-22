@@ -230,8 +230,8 @@ const showCalendarPeek = computed(
 		}
 
 		.current-user {
-			padding-top: 1.5rem;
-			padding-bottom: 1.5rem;
+			margin-top: 1.5rem;
+			margin-bottom: 1.5rem;
 		}
 
 		.option-element {
