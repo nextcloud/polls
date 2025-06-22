@@ -15,7 +15,9 @@ async function loadContext(to: RouteLocationNormalized) {
 
 	await sessionStore.load(to)
 
-	Settings.defaultLocale = sessionStore.currentUser.localeCodeIntl || sessionStore.currentUser.languageCodeIntl
+	Settings.defaultLocale =
+		sessionStore.currentUser.localeCodeIntl
+		|| sessionStore.currentUser.languageCodeIntl
 
 	if (sessionStore.userStatus.isLoggedin) {
 		await preferencesStore.load()

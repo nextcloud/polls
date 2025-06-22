@@ -209,8 +209,9 @@ function getIntervalRaw(option: Option): string {
  * @param option - option
  */
 function getFromFormatted(option: Option): string {
-	return DateTime.fromSeconds(option.timestamp)
-		.toLocaleString(DateTime.DATETIME_MED_WITH_WEEKDAY)
+	return DateTime.fromSeconds(option.timestamp).toLocaleString(
+		DateTime.DATETIME_MED_WITH_WEEKDAY,
+	)
 }
 
 /**

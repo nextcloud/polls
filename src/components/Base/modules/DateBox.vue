@@ -7,7 +7,10 @@
 import { computed } from 'vue'
 import { DateTime, Duration, Interval } from 'luxon'
 
-interface Props { dateTime: DateTime, duration?: Duration }
+interface Props {
+	dateTime: DateTime
+	duration?: Duration
+}
 const { dateTime, duration = Duration.fromMillis(0) } = defineProps<Props>()
 
 // the dates span one or more entire days
@@ -36,9 +39,7 @@ const isSameMonth = computed(
 // to and from dates have the same day (in the same month and year)
 // suppress the 'to' day if they are the same
 // display the interval as timespan inside the same day
-const isSameDay = computed(
-	() => dateTime.day === to.value.day && isSameMonth.value,
-)
+const isSameDay = computed(() => dateTime.day === to.value.day && isSameMonth.value)
 
 // Shortcut: 'to' and 'from' are identical
 // suppress the 'to' time if they are the same
