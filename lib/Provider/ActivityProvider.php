@@ -53,8 +53,21 @@ class ActivityProvider implements IProvider {
 		return $event;
 	}
 
+	private function patchParameters(array $parameters) : array {
+		// add an ugly fix, because there are some activities that have misconfigured poll references
+		// the poll can exist as $parameters['poll'] or as $parameters['pollTitle']
+		// fix it to $parameters['pollTitle'] for consistency
+		// this to avoid massive translation changes in transifex
+
+		if (isset($parameters['poll']) && !isset($parameters['pollTitle'])) {
+			$parameters['pollTitle'] = $parameters['poll'];
+		}
+
+		return $parameters;
+	}
+
 	protected function setSubjects(IEvent $event, string $subject): void {
-		$parameters = $event->getSubjectParameters();
+		$parameters = $this->patchParameters($event->getSubjectParameters());
 
 		try {
 			$actor = $this->userMapper->getParticipant($event->getAuthor(), $event->getObjectId());
