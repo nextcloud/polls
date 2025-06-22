@@ -58,7 +58,7 @@ jobs:
       with:
         body: "# Changelog ${{ steps.appinfo.outputs.app-version }} \n ${{ steps.extract-release-notes.outputs.release_notes }} "
         prerelease: false
-        draft: false
+        draft: true
         generate_release_notes: true
         files: |
           build/artifacts/polls-${{ steps.appinfo.outputs.app-version }}.tar.gz
