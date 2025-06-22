@@ -15,7 +15,6 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { InputDiv } from '../Base/index.ts'
 import DateTimePicker from '../Base/modules/DateTimePicker.vue'
-import { useSessionStore } from '../../stores/session'
 import { useOptionsStore, Sequence } from '../../stores/options'
 import { StatusResults } from '../../Types'
 import { DurationType, dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
@@ -28,7 +27,6 @@ import DateBox from '../Base/modules/DateBox.vue'
 
 const { isBelowWidthOffset } = useResizeObserver('add-date-options-container', 355)
 
-const sessionStore = useSessionStore()
 const optionsStore = useOptionsStore()
 
 const timeStepMinutes = 15
@@ -85,14 +83,10 @@ const dateTimeOptionsFiltered = computed(() => {
 
 // computed from as DateTime from Luxon
 const from = computed(() => {
-	const dateFrom = DateTime.fromJSDate(fromInput.value).setLocale(
-		sessionStore.currentUser.languageCodeIntl,
-	)
+	const dateFrom = DateTime.fromJSDate(fromInput.value)
 	// if the option is an all day option, the time is set to 00:00
 	if (allDay.value) {
-		return dateFrom
-			.startOf('day')
-			.setLocale(sessionStore.currentUser.languageCodeIntl)
+		return dateFrom.startOf('day')
 	}
 	return dateFrom
 })

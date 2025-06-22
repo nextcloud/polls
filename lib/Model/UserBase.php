@@ -168,7 +168,7 @@ class UserBase implements JsonSerializable {
 	}
 
 	public function getLanguageCodeIntl(): string {
-		return str_replace('_', '-', $this->languageCode);
+		return str_replace('_', '-', $this->getLanguageCode());
 	}
 
 	public function getLocaleCode(): string {
@@ -177,6 +177,10 @@ class UserBase implements JsonSerializable {
 		}
 
 		return $this->localeCode;
+	}
+
+	public function getLocaleCodeIntl(): string {
+		return str_replace('_', '-', $this->getLocaleCode());
 	}
 
 	public function getTimeZone(): DateTimeZone {
@@ -329,6 +333,7 @@ class UserBase implements JsonSerializable {
 			'languageCode' => $this->getLanguageCode(),
 			'languageCodeIntl' => $this->getLanguageCodeIntl(),
 			'localeCode' => $this->getLocaleCode(),
+			'localeCodeIntl' => $this->getLocaleCodeIntl(),
 			'organisation' => $this->getOrganisation(),
 			'subname' => $this->getSubName(),
 			'subtitle' => $this->getDescription(),

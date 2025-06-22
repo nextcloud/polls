@@ -6,65 +6,54 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { DateTime, Duration, Interval } from 'luxon'
-import { useSessionStore } from '../../../stores/session.ts'
 
 interface Props {
 	dateTime: DateTime
 	duration?: Duration
 }
-const { dateTime: luxonDate, duration: luxonDuration = Duration.fromMillis(0) } =
-	defineProps<Props>()
+const { dateTime, duration = Duration.fromMillis(0) } = defineProps<Props>()
 
-const from = computed(() =>
-	luxonDate.setLocale(sessionStore.currentUser.languageCodeIntl),
-)
-
-const sessionStore = useSessionStore()
 // the dates span one or more entire days
 // do not display the time in this case
 const allDay = computed(
 	() =>
-		from.value.startOf('day').toSeconds() === from.value.toSeconds()
-		&& luxonDuration.as('seconds') % 86400 === 0,
+		dateTime.startOf('day').toSeconds() === dateTime.toSeconds()
+		&& duration.as('seconds') % 86400 === 0,
 )
 
 // 'to' is 'from' plus the duration
 // subtract a day if allDay is true and luxonDuration is greater than 0 to match the
 // end of the day after the duration instead of the beginning of the next day
 const to = computed(() =>
-	from.value
-		.plus(luxonDuration)
-		.minus({ day: allDay.value && luxonDuration.as('seconds') > 0 ? 1 : 0 }),
+	dateTime
+		.plus(duration)
+		.minus({ day: allDay.value && duration.as('seconds') > 0 ? 1 : 0 }),
 )
 
 // to and from dates have the same month (and year)
 // suppress the 'to' month if they are the same
 const isSameMonth = computed(
-	() => from.value.month === to.value.month && from.value.year === to.value.year,
+	() => dateTime.month === to.value.month && dateTime.year === to.value.year,
 )
 
 // to and from dates have the same day (in the same month and year)
 // suppress the 'to' day if they are the same
 // display the interval as timespan inside the same day
-const isSameDay = computed(
-	() => from.value.day === to.value.day && isSameMonth.value,
-)
+const isSameDay = computed(() => dateTime.day === to.value.day && isSameMonth.value)
 
 // Shortcut: 'to' and 'from' are identical
 // suppress the 'to' time if they are the same
-const isSameTime = computed(() => luxonDuration.as('seconds') === 0)
+const isSameTime = computed(() => duration.as('seconds') === 0)
 
-const interval = computed(() =>
-	Interval.fromDateTimes(from.value.toUTC(), to.value.toUTC()),
-)
+const interval = computed(() => Interval.fromDateTimes(dateTime, to.value))
 </script>
 
 <template>
 	<div :title="interval.toISO()" class="datebox">
 		<div class="month from" :class="{ span: isSameMonth }">
 			{{
-				from.toLocaleString(
-					DateTime.now().year === from.year
+				dateTime.toLocaleString(
+					DateTime.now().year === dateTime.year
 						? { month: 'short' }
 						: { month: 'short', year: '2-digit' },
 				)
@@ -74,7 +63,7 @@ const interval = computed(() =>
 		<div v-if="!isSameMonth" class="month to">
 			{{
 				to.toLocaleString(
-					DateTime.now().year === from.year
+					DateTime.now().year === dateTime.year
 						? { month: 'short' }
 						: { month: 'short', year: '2-digit' },
 				)
@@ -82,7 +71,7 @@ const interval = computed(() =>
 		</div>
 
 		<div class="day from" :class="{ span: isSameDay }">
-			{{ from.toLocaleString({ weekday: 'short', day: 'numeric' }) }}
+			{{ dateTime.toLocaleString({ weekday: 'short', day: 'numeric' }) }}
 		</div>
 
 		<span v-if="!isSameDay" class="day divider">–</span>
@@ -95,7 +84,7 @@ const interval = computed(() =>
 			{{
 				isSameDay && !isSameTime
 					? interval.toLocaleString(DateTime.TIME_SIMPLE)
-					: from.toLocaleString(DateTime.TIME_SIMPLE)
+					: dateTime.toLocaleString(DateTime.TIME_SIMPLE)
 			}}
 		</div>
 
