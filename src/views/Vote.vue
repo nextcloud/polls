@@ -173,7 +173,6 @@ onUnmounted(() => {
 }
 
 .vote_main {
-	--cap-width: 49rem;
 	.markdown-description {
 		margin: auto;
 		max-width: var(--cap-width);

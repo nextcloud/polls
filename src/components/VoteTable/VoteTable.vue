@@ -258,7 +258,7 @@ const showCalendarPeek = computed(
 
 	&.list-view {
 		grid-template-columns: auto 5rem 5rem;
-		max-width: 49rem;
+		max-width: var(--cap-width);
 
 		.grid-info,
 		.option-spacer,
