@@ -6,9 +6,11 @@
 All notable changes to this project will be documented in this file.
 ##
 
-## [8.0.3] - 2025-06-22
-### Fix (8.0.3)
+## [8.0.4] - 2025-06-22
+### Fix (8.0.4)
  - Fixed malformatted activity stream messages
+ - Fixed some design issues
+ - limited width of vote table in list view
 
 ### Changes (8.0.0)
  - Migration to Vue 3 and Pinia
