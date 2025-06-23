@@ -435,6 +435,7 @@ OC.L10N.register(
     "_%n No vote_::_%n \"No\" votes_" : ["%n voto \"Não\"","%n votos \"Não\"","%n votos \"Não\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n voto \"Talvez\"","%n votos \"Talvez\"","%n votos \"Talvez\""],
     "Description" : "Descrição",
+    "Enter a description" : "Digite uma descrição",
     "Update" : "Atualizar",
     "No description provided" : "Nenhuma descrição fornecida",
     "Archived {relativeTime}" : "Arquivada {relativeTime}",
@@ -456,6 +457,8 @@ OC.L10N.register(
     "Back" : "Voltar",
     "Take over" : "Assumir",
     "Transfer poll ownership" : "Transferir propriedade da enquete",
+    "Create new group" : "Criar novo grupo",
+    "New group name" : "Nome do novo grupo",
     "Sort by title" : "Ordenar por título",
     "Sort by last interaction" : "Ordenar por última interação",
     "Sort by creation date" : "Ordenar por data de criação",
@@ -677,7 +680,9 @@ OC.L10N.register(
     "Polls settings" : "Configurações de enquetes",
     "404 - poll not found" : "404 - enquete não encontrada",
     "Enter a poll or start a new one." : "Digite uma enquete ou inicie uma nova.",
+    "Group without title" : "Grupo sem título",
     "_{loadedPolls} of {countPolls} poll loaded._::_{loadedPolls} of {countPolls} polls loaded._" : ["{loadedPolls} de {countPolls} pesquisa carregada.","{loadedPolls} de {countPolls} pesquisas carregadas.","{loadedPolls} de {countPolls} pesquisas carregadas."],
+    "Group without description" : "Grupo sem descrição",
     "Loading polls…" : "Carregando enquetes…",
     "Add one or change category!" : "Adicione uma ou mude a categoria!",
     "Error loading more polls" : "Erro ao carregar mais enquetes",
@@ -739,6 +744,7 @@ OC.L10N.register(
     "Your archived polls are only accessible to you." : "Suas enquetes arquivadas estão acessíveis apenas para você.",
     "Administration" : "Administração",
     "Administrative access" : "Acesso administrativo",
-    "You can delete, archive and take over polls in this list, but access is still not possible." : "Você pode excluir, arquivar e assumir o controle de enquetes nesta lista, mas o acesso ainda não é possível."
+    "You can delete, archive and take over polls in this list, but access is still not possible." : "Você pode excluir, arquivar e assumir o controle de enquetes nesta lista, mas o acesso ainda não é possível.",
+    "Invalid Group ID" : "ID de Grupo Inválido"
 },
 "nplurals=3; plural=(n == 0 || n == 1) ? 0 : n != 0 && n % 1000000 == 0 ? 1 : 2;");

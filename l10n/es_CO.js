@@ -37,6 +37,7 @@ OC.L10N.register(
     "Submit" : "Enviar",
     "never" : "nunca",
     "Description" : "Descripción",
+    "Update" : "Actualizar",
     "No description provided" : "No se agregó ninguna descripción",
     "Expiration" : "Expiración",
     "Login" : "Iniciar sesión",

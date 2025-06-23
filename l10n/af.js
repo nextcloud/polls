@@ -25,6 +25,7 @@ OC.L10N.register(
     "Submit" : "Dien in",
     "never" : "nooit",
     "Description" : "Beskrywing",
+    "Update" : "Werk by",
     "Expiration" : "Verval",
     "Privacy policy" : "Privaatheidsbeleid",
     "Login" : "Teken aan",

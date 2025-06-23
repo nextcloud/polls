@@ -435,6 +435,7 @@ OC.L10N.register(
     "_%n No vote_::_%n \"No\" votes_" : ["%n No vote","%n \"No\" votes"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n \"Maybe\" vote","%n \"Maybe\" votes"],
     "Description" : "Description",
+    "Update" : "Update",
     "No description provided" : "No description provided",
     "Archived {relativeTime}" : "Archived {relativeTime}",
     "Started {relativeTime} from {ownerName}" : "Started {relativeTime} from {ownerName}",

@@ -27,6 +27,7 @@ OC.L10N.register(
     "Submit" : "Enviar",
     "never" : "nunca",
     "Description" : "Descripción",
+    "Update" : "Actualizar",
     "Expiration" : "Expiración",
     "Back" : "Volver",
     "Privacy policy" : "Políticas de privacidad",

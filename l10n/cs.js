@@ -435,6 +435,7 @@ OC.L10N.register(
     "_%n No vote_::_%n \"No\" votes_" : ["%n hlas Ne","%n hlasy „Ne“","%n hlasů „Ne“","%n hlasy „Ne“"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n hlas „Možná“","%n hlasy „Možná“","%n hlasů „Možná“","%n hlasy „Možná“"],
     "Description" : "Popis",
+    "Update" : "Aktualizovat",
     "No description provided" : "Nezadán žádný popis",
     "Archived {relativeTime}" : "Archivováno {relativeTime}",
     "Started {relativeTime} from {ownerName}" : "Zahájené {relativeTime} uživatelem {ownerName}",

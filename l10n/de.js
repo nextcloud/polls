@@ -435,6 +435,7 @@ OC.L10N.register(
     "_%n No vote_::_%n \"No\" votes_" : ["%n Nein-Stimme","%n Nein-Stimmen"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n Vielleicht-Stimme","%n Vielleicht-Stimmen"],
     "Description" : "Beschreibung",
+    "Update" : "Aktualisieren",
     "No description provided" : "Keine Beschreibung eingegeben",
     "Archived {relativeTime}" : "{relativeTime} archiviert",
     "Started {relativeTime} from {ownerName}" : "Gestartet {relativeTime} von {ownerName}",

@@ -30,6 +30,7 @@ OC.L10N.register(
     "Submit" : "Enviar",
     "never" : "nunca",
     "Description" : "Descripción",
+    "Update" : "Actualizar",
     "Expiration" : "Expiración",
     "Login" : "Iniciar sesión",
     "deleted" : "Borrado",

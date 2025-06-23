@@ -37,6 +37,7 @@ OC.L10N.register(
     "Submit" : "Sendi",
     "never" : "neniam",
     "Description" : "Priskribo",
+    "Update" : "Ĝisdatigi",
     "Expiration" : "Eksvalidiĝo",
     "Privacy policy" : "Privateca regularo",
     "Login" : "Login",

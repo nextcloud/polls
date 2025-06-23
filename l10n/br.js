@@ -22,6 +22,7 @@ OC.L10N.register(
     "Submit" : "Kinnig",
     "never" : "james",
     "Description" : "Diskrivadur",
+    "Update" : "Hizivaat",
     "Expiration" : "Termen",
     "Login" : "Anv arveriad",
     "deleted" : "dilamet",

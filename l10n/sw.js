@@ -30,6 +30,7 @@ OC.L10N.register(
     "Description" : "Maelezo",
     "Update" : "Sasisha",
     "Back" : "Rudi",
+    "Privacy policy" : "Sheria ya faragha",
     "Login" : "Ingia",
     "Show QR code" : "Onesha msimbo wa QR",
     "Public link" : "Kiungio cha umma",
