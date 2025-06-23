@@ -23,6 +23,8 @@ use OCP\IURLGenerator;
  * @method void setType(string $value)
  * @method int getPollId()
  * @method void setPollId(int $value)
+ * @method int getGroupId()
+ * @method void setGroupId(int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getEmailAddress()
@@ -105,11 +107,18 @@ class Share extends EntityWithUser implements JsonSerializable {
 		self::TYPE_CONTACTGROUP
 	];
 
+	public const GROUP_SHARES = [
+		self::TYPE_USER,
+		self::TYPE_GROUP,
+		self::TYPE_ADMIN,
+	];
+
 	protected IURLGenerator $urlGenerator;
 
 	// schema columns
 	public $id = null;
-	protected int $pollId = 0;
+	protected ?int $pollId = null;
+	protected ?int $groupId = null;
 	protected string $token = '';
 	protected string $type = '';
 	protected string $label = '';
@@ -146,6 +155,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 			'token' => $this->getToken(),
 			'type' => $this->getType(),
 			'pollId' => $this->getPollId(),
+			'groupId' => $this->getGroupId(),
 			'invitationSent' => boolval($this->getInvitationSent()),
 			'reminderSent' => boolval($this->getReminderSent()),
 			'locked' => boolval($this->getDeleted() ? 0 : $this->getLocked()),

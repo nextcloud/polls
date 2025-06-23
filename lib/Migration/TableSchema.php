@@ -226,7 +226,8 @@ abstract class TableSchema {
 		],
 		Share::TABLE => [
 			'id' => ['type' => Types::BIGINT, 'options' => ['autoincrement' => true, 'notnull' => true, 'length' => 20]],
-			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => true, 'default' => 0, 'length' => 20]],
+			'poll_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => false, 'default' => null, 'length' => 20]],
+			'group_id' => ['type' => Types::BIGINT, 'options' => ['notnull' => false, 'default' => null, 'length' => 20]],
 			'token' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'type' => ['type' => Types::STRING, 'options' => ['notnull' => true, 'default' => '', 'length' => 64]],
 			'label' => ['type' => Types::STRING, 'options' => ['notnull' => false, 'default' => '', 'length' => 256]],

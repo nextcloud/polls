@@ -35,6 +35,7 @@ export type Share = {
 	invitationSent: boolean
 	locked: boolean
 	pollId: number | null
+	groupId: number | null
 	token: string
 	type: ShareType
 	emailAddress: string
