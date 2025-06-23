@@ -61,8 +61,8 @@ class IndexManager {
 	public function createForeignKeyConstraints(): array {
 		$messages = [];
 
-		foreach(TableSchema::FK_INDICES as $parent => $child) {
-			foreach($child as $table => $childTable) {
+		foreach (TableSchema::FK_INDICES as $parent => $child) {
+			foreach ($child as $table => $childTable) {
 				$messages[] = $this->createForeignKeyConstraint($parent, $table, $childTable['constraintColumn']);
 			}
 		}
@@ -125,8 +125,8 @@ class IndexManager {
 	public function removeAllForeignKeyConstraints(): array {
 		$messages = [];
 
-		foreach(TableSchema::FK_INDICES as $child) {
-			foreach(array_keys($child) as $table) {
+		foreach (TableSchema::FK_INDICES as $child) {
+			foreach (array_keys($child) as $table) {
 				$messages = array_merge($messages, $this->removeForeignKeysFromTable($table));
 			}
 		}
@@ -142,8 +142,8 @@ class IndexManager {
 	public function removeAllGenericIndices(): array {
 		$messages = [];
 
-		foreach(TableSchema::FK_INDICES as $child) {
-			foreach(array_keys($child) as $table) {
+		foreach (TableSchema::FK_INDICES as $child) {
+			foreach (array_keys($child) as $table) {
 				$messages = array_merge($messages, $this->removeForeignKeysFromTable($table));
 				$messages = array_merge($messages, $this->removeGenericIndicesFromTable($table));
 			}

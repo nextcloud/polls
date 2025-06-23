@@ -256,17 +256,17 @@ class TableManager {
 		// the main polls table
 		// TODO: Move to command after polls5.x
 
-		foreach(TableSchema::FK_INDICES as $child) {
-			foreach(array_keys($child) as $tableName) {
-			$table = "$this->dbPrefix$tableName";
-			$query = "DELETE
+		foreach (TableSchema::FK_INDICES as $child) {
+			foreach (array_keys($child) as $tableName) {
+				$table = "$this->dbPrefix$tableName";
+				$query = "DELETE
                 FROM $table
                 WHERE NOT EXISTS (
                     SELECT NULL
                     FROM {$this->dbPrefix}polls_polls polls
                     WHERE polls.id = {$table}.poll_id
                 )";
-			$this->connection->executeStatement($query);
+				$this->connection->executeStatement($query);
 			}
 		}
 	}
