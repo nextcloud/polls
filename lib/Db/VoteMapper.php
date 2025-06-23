@@ -50,7 +50,8 @@ class VoteMapper extends QBMapperWithUser {
 	public function getAll(): array {
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->select('*')->from($this->getTableName());
+		$qb->select('*')->from($this->getTableName())
+			->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
 		return $this->findEntities($qb);
 	}
 
@@ -150,12 +151,21 @@ class VoteMapper extends QBMapperWithUser {
 		return $this->findEntities($qb);
 	}
 
+	public function deleteOrphaned(): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where($query->expr()->isNull('poll_id'));
+		$query->executeStatement();
+	}
+
 	/**
 	 * Build the enhanced query with joined tables
 	 */
 	protected function find(int $id): Vote {
 		$qb = $this->buildQuery();
-		$qb->andWhere($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
+
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
@@ -174,15 +184,16 @@ class VoteMapper extends QBMapperWithUser {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
+			->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'))
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
 		$optionAlias = $this->joinOption($qb, self::TABLE);
 
 		if ($findOrphaned) {
-			$qb->where($qb->expr()->isNull($optionAlias . '.id'));
+			$qb->andWhere($qb->expr()->isNull($optionAlias . '.id'));
 		} else {
-			$qb->where($qb->expr()->isNotNull($optionAlias . '.id'));
+			$qb->andWhere($qb->expr()->isNotNull($optionAlias . '.id'));
 		}
 		$this->joinAnon($qb, self::TABLE);
 		$this->joinShareRole($qb, self::TABLE, $currentUserId);

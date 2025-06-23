@@ -17,8 +17,8 @@ use OCA\Polls\Model\UserBase;
  * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
- * @method int getPollId()
- * @method void setPollId(int $value)
+ * @method ?int getPollId()
+ * @method void setPollId(?int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getComment()
@@ -41,7 +41,7 @@ class Comment extends EntityWithUser implements JsonSerializable {
 
 	// schema columns
 	public $id = null;
-	protected int $pollId = 0;
+	protected ?int $pollId = null;
 	protected string $userId = '';
 	protected ?string $comment = null;
 	protected int $timestamp = 0;

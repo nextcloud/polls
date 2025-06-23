@@ -32,7 +32,7 @@ class LogMapper extends QBMapper {
 
 		$qb->select('*')
 			->from($this->getTableName())
-			->where($qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			->where($qb->expr()->isNotNull('poll_id'));
 		return $this->findEntities($qb);
 	}
 
@@ -56,15 +56,22 @@ class LogMapper extends QBMapper {
 		$query->executeStatement();
 	}
 
+	public function deleteOrphaned(): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->isNull('poll_id')
+			);
+		$query->executeStatement();
+	}
+
 	/**
 	 * Delete processed entries
 	 */
 	public function deleteProcessedEntries(): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
-			->where(
-				$query->expr()->gt('processed', $query->createNamedParameter(0))
-			);
+			->where($query->expr()->isNull('poll_id'));
 		$query->executeStatement();
 	}
 }

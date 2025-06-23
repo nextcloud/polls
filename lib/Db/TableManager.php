@@ -64,7 +64,26 @@ class TableManager {
 		// drop all child tables
 		$droppedTables = [];
 
-		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
+		// First drop all tables that have foreign key constraints
+		foreach (TableSchema::FK_INDICES as $parent => $child) {
+			// drop all child tables referencing the parent table
+			foreach (array_keys($child) as $table) {
+				if ($this->connection->tableExists($table)) {
+					$this->connection->dropTable($table);
+					$droppedTables[] = $this->dbPrefix . $table;
+					$messages[] = 'Dropped ' . $this->dbPrefix . $table;
+				}
+			}
+			// drop the parent table
+			if ($this->connection->tableExists($parent)) {
+				$this->connection->dropTable($parent);
+				$droppedTables[] = $this->dbPrefix . $parent;
+				$messages[] = 'Dropped ' . $this->dbPrefix . $parent;
+			}
+		}
+
+		// Then if there are any tables left, drop them
+		foreach (array_keys(TableSchema::TABLES) as $tableName) {
 			if ($this->connection->tableExists($tableName)) {
 				$this->connection->dropTable($tableName);
 				$droppedTables[] = $this->dbPrefix . $tableName;
@@ -72,25 +91,13 @@ class TableManager {
 			}
 		}
 
-		foreach (TableSchema::FK_OTHER_TABLES as $tableName) {
-			if ($this->connection->tableExists($tableName)) {
-				$this->connection->dropTable($tableName);
-				$droppedTables[] = $this->dbPrefix . $tableName;
-				$messages[] = 'Dropped ' . $this->dbPrefix . $tableName;
-			}
-		}
-
-		// drop parent table
-		if ($this->connection->tableExists(TableSchema::FK_PARENT_TABLE)) {
-			$this->connection->dropTable(TableSchema::FK_PARENT_TABLE);
-			$droppedTables[] = $this->dbPrefix . TableSchema::FK_PARENT_TABLE;
-			$messages[] = 'Dropped ' . $this->dbPrefix . TableSchema::FK_PARENT_TABLE;
-		}
 		if (!$droppedTables) {
 			$this->logger->info('Dropped tables', $droppedTables);
 		}
 
 		// delete all migration records
+		// ATTENTION: This is more or less an illegal access
+		// to the migrations table which belong to the core
 		$query = $this->connection->getQueryBuilder();
 		$query->delete('migrations')
 			->where('app = :appName')
@@ -101,6 +108,8 @@ class TableManager {
 		$messages[] = 'Removed all migration records from ' . $this->dbPrefix . 'migrations';
 
 		// delete all app configs
+		// ATTENTION: This is more or less an illegal access
+		// to the migrations table which belong to the core
 		$query->delete('appconfig')
 			->where('appid = :appid')
 			->setParameter('appid', AppConstants::APP_ID)
@@ -246,16 +255,19 @@ class TableManager {
 		// check for orphaned entries in all tables referencing
 		// the main polls table
 		// TODO: Move to command after polls5.x
-		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
-			$child = "$this->dbPrefix$tableName";
+
+		foreach(TableSchema::FK_INDICES as $child) {
+			foreach(array_keys($child) as $tableName) {
+			$table = "$this->dbPrefix$tableName";
 			$query = "DELETE
-                FROM $child
+                FROM $table
                 WHERE NOT EXISTS (
                     SELECT NULL
                     FROM {$this->dbPrefix}polls_polls polls
-                    WHERE polls.id = {$child}.poll_id
+                    WHERE polls.id = {$table}.poll_id
                 )";
 			$this->connection->executeStatement($query);
+			}
 		}
 	}
 
@@ -358,7 +370,7 @@ class TableManager {
 
 		$query->update(Poll::TABLE)
 			->set('last_interaction', $query->createNamedParameter($timestamp))
-			->where($query->expr()->eq('last_interaction', $query->createNamedParameter(0)));
+			->where($query->expr()->eq('last_interaction', $query->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		$count = $query->executeStatement();
 
 		if ($count > 0) {

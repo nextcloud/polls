@@ -167,6 +167,14 @@ class ShareMapper extends QBMapper {
 		$query->executeStatement();
 	}
 
+	public function deleteOrphaned(): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where($query->expr()->isNull('poll_id'))
+			->andWhere($query->expr()->isNull('group_id'));
+		$query->executeStatement();
+	}
+
 	/**
 	 * Joins votes count of the share user in the given poll
 	 */

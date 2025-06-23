@@ -96,6 +96,15 @@ class CommentMapper extends QBMapperWithUser {
 
 	}
 
+	public function deleteOrphaned(): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->isNull('poll_id')
+			);
+		$query->executeStatement();
+	}
+
 	/**
 	 * Build the enhanced query with joined tables
 	 */

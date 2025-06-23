@@ -38,6 +38,7 @@ class OptionMapper extends QBMapperWithUser {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')->from($this->getTableName());
+		$qb->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
 		return $this->findEntities($qb);
 	}
 
@@ -81,6 +82,7 @@ class OptionMapper extends QBMapperWithUser {
 	public function find(int $id): Option {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
 
 		return $this->findEntity($qb);
 	}
@@ -149,6 +151,15 @@ class OptionMapper extends QBMapperWithUser {
 			)
 			->andWhere(
 				$query->expr()->lt('deleted', $query->expr()->literal($offset, IQueryBuilder::PARAM_INT))
+			);
+		$query->executeStatement();
+	}
+
+	public function deleteOrphaned(): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->isNull('poll_id')
 			);
 		$query->executeStatement();
 	}
