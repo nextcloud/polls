@@ -288,7 +288,7 @@ class PollMapper extends QBMapper {
 	protected function joinOptions(IQueryBuilder &$qb, string $fromAlias): void {
 		$joinAlias = 'options';
 
-		$zero = $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT);
+		$zero = $qb->expr()->literal(0, IQueryBuilder::PARAM_INT);
 		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
 
 		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), ' . $zero . ') AS max_date'))

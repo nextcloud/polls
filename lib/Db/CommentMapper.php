@@ -60,7 +60,7 @@ class CommentMapper extends QBMapperWithUser {
 		);
 
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		return $this->findEntities($qb);
@@ -86,7 +86,7 @@ class CommentMapper extends QBMapperWithUser {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->where(
-				$query->expr()->gt('deleted', $query->createNamedParameter(0))
+				$query->expr()->gt('deleted', $query->expr()->literal(0, IQueryBuilder::PARAM_INT))
 			)
 			->andWhere(
 				$query->expr()->lt('deleted', $query->createNamedParameter($offset))

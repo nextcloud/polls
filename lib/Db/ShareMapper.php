@@ -42,7 +42,7 @@ class ShareMapper extends QBMapper {
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		$this->joinUserVoteCount($qb, self::TABLE);
@@ -62,10 +62,10 @@ class ShareMapper extends QBMapper {
 		$qb->select('*')
 			->from($this->getTableName())
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('invitation_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			->andWhere($qb->expr()->eq('invitation_sent', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		return $this->findEntities($qb);
@@ -82,10 +82,10 @@ class ShareMapper extends QBMapper {
 		$qb->select('*')
 			->from($this->getTableName())
 			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->eq('reminder_sent', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			->andWhere($qb->expr()->eq('reminder_sent', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq('deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		return $this->findEntities($qb);
@@ -105,7 +105,7 @@ class ShareMapper extends QBMapper {
 			->andWhere($qb->expr()->isNotNull(self::TABLE . '.id'));
 
 		if (!$findDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 		$this->joinUserVoteCount($qb, self::TABLE);
 		$this->joinAnon($qb, self::TABLE);
@@ -129,7 +129,7 @@ class ShareMapper extends QBMapper {
 			->where($qb->expr()->eq(self::TABLE . '.token', $qb->createNamedParameter($token, IQueryBuilder::PARAM_STR)));
 
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		$this->joinUserVoteCount($qb, self::TABLE);
@@ -159,7 +159,7 @@ class ShareMapper extends QBMapper {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->where(
-				$query->expr()->gt('deleted', $query->createNamedParameter(0))
+				$query->expr()->gt('deleted', $query->expr()->literal(0, IQueryBuilder::PARAM_INT))
 			)
 			->andWhere(
 				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
