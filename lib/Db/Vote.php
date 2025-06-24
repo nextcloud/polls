@@ -14,7 +14,7 @@ use JsonSerializable;
  * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
- * @method ?int getPollId()
+ * @method int getPollId()
  * @method void setPollId(?int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)

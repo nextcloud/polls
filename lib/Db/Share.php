@@ -21,7 +21,7 @@ use OCP\IURLGenerator;
  * @method void setToken(string $value)
  * @method string getType()
  * @method void setType(string $value)
- * @method ?int getPollId()
+ * @method int getPollId()
  * @method void setPollId(?int $value)
  * @method ?int getGroupId()
  * @method void setGroupId(?int $value)

@@ -30,7 +30,7 @@ use OCP\IL10N;
  * @method void setOrder(int $value)
  * @method string getOwner()
  * @method void setOwner(string $value)
- * @method ?int getPollId()
+ * @method int getPollId()
  * @method void setPollId(?int $value)
  * @method string getPollOptionText()
  * @method void setPollOptionText(string $value)
