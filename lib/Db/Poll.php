@@ -71,6 +71,8 @@ use OCP\IURLGenerator;
  * @method int getShareToken()
  * @method int getOptionsCount()
  * @method int getProposalsCount()
+ * @method int getProposalsCount()
+ * @method int getPollGroups()
  *
  * Magic functions for subqueried columns
  * @method int getCurrentUserOrphanedVotes()
@@ -173,6 +175,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $optionsCount = 0;
 	protected int $proposalsCount = 0;
 	protected ?string $pollGroups = '';
+	protected ?string $pollGroupUserShares = '';
 
 	// subqueried columns
 	protected int $currentUserOrphanedVotes = 0;
@@ -287,6 +290,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'userId' => $this->userSession->getCurrentUserId(),
 			'userRole' => $this->getUserRole(),
 			'yesVotes' => $this->getCurrentUserVotesYes(),
+			'pollGroupUserShares' => $this->getPollGroupUserShares(),
 		];
 	}
 	public function getPermissionsArray(): array {
@@ -351,6 +355,20 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	public function getUserRole(): string {
 		if ($this->getCurrentUserIsEntityUser()) {
 			return self::ROLE_OWNER;
+		}
+
+		if ($this->getPollGroupUserShares()) {
+			foreach ($this->getPollGroupUserShares() as $shareType) {
+				if ($shareType === self::ROLE_ADMIN) {
+					return self::ROLE_ADMIN;
+					// if the user is invited via group share, return the role
+					// of the group share
+				}
+				return self::ROLE_USER;
+			}
+			// if the user is invited via group share, return the role
+			// of the group share
+			return $this->userRole;
 		}
 
 		if ($this->getIsCurrentUserLocked() && $this->userRole === self::ROLE_ADMIN) {
@@ -449,6 +467,18 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			return [];
 		}
 		return array_map('intval', explode(PollGroup::CONCAT_SEPARATOR, $this->pollGroups));
+	}
+
+	/**
+	 * @return int[]
+	 *
+	 * @psalm-return list<int>
+	 */
+	public function getPollGroupUserShares(): array {
+		if (!$this->pollGroupUserShares) {
+			return [];
+		}
+		return explode(PollGroup::CONCAT_SEPARATOR, $this->pollGroupUserShares);
 	}
 
 	private function getAccess(): string {
@@ -742,6 +772,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		if ($this->getIsInvolved()) {
 			return true;
 		}
+
 		$share = $this->userSession->getShare();
 		// return check result of an existing valid share for this user
 		return boolval($share->getId() && $share->getPollId() === $this->getId());
