@@ -275,6 +275,7 @@ OC.L10N.register(
     "Description" : "Beschrijving",
     "Update" : "Update",
     "No description provided" : "Geen beschrijving opgegeven",
+    "Archived {relativeTime}" : "{relativeTime} gearchiveerd",
     "Expiration" : "Vervaltermijn",
     "Error archiving/restoring poll." : "Fout bij archiveren/herstellen peiling.",
     "Error cloning poll." : "Fout bij klonen peiling.",
