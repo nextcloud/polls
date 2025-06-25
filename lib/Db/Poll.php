@@ -72,7 +72,6 @@ use OCP\IURLGenerator;
  * @method int getOptionsCount()
  * @method int getProposalsCount()
  * @method int getProposalsCount()
- * @method int getPollGroups()
  *
  * Magic functions for subqueried columns
  * @method int getCurrentUserOrphanedVotes()
@@ -357,18 +356,18 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			return self::ROLE_OWNER;
 		}
 
-		if ($this->getPollGroupUserShares()) {
+		$evaluatedRole = $this->userRole;
+
+		// If user is not a poll admin (set by normal poll share) and poll group shares exist,
+		// iterate over the share types and return the higher role
+		if ($this->getPollGroupUserShares() && !$evaluatedRole) {
+			// return the higher role of the group shares
 			foreach ($this->getPollGroupUserShares() as $shareType) {
 				if ($shareType === self::ROLE_ADMIN) {
-					return self::ROLE_ADMIN;
-					// if the user is invited via group share, return the role
-					// of the group share
+					$evaluatedRole = self::ROLE_ADMIN;
 				}
 				return self::ROLE_USER;
 			}
-			// if the user is invited via group share, return the role
-			// of the group share
-			return $this->userRole;
 		}
 
 		if ($this->getIsCurrentUserLocked() && $this->userRole === self::ROLE_ADMIN) {
@@ -379,7 +378,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			return Share::TYPE_PUBLIC;
 		}
 
-		return $this->userRole;
+		return $evaluatedRole;
 	}
 
 	public function getVoteUrl(): string {
@@ -458,6 +457,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
+	 * Return the poll groups this poll belongs to
 	 * @return int[]
 	 *
 	 * @psalm-return list<int>
@@ -470,9 +470,11 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	}
 
 	/**
-	 * @return int[]
+	 * Returns the sharetypes of the poll group this poll belongs to
 	 *
-	 * @psalm-return list<int>
+	 * @return string[]
+	 *
+	 * @psalm-return list<string>
 	 */
 	public function getPollGroupUserShares(): array {
 		if (!$this->pollGroupUserShares) {

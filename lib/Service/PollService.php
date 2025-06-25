@@ -25,6 +25,7 @@ use OCA\Polls\Event\PollUpdatedEvent;
 use OCA\Polls\Exceptions\AlreadyDeletedException;
 use OCA\Polls\Exceptions\EmptyTitleException;
 use OCA\Polls\Exceptions\ForbiddenException;
+use OCA\Polls\Exceptions\InsufficientAttributesException;
 use OCA\Polls\Exceptions\InvalidAccessException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Exceptions\InvalidShowResultsException;
@@ -101,15 +102,20 @@ class PollService {
 		$poll = $this->pollMapper->find($pollId);
 		$poll->request(Poll::PERMISSION_POLL_EDIT);
 
-		if ($pollGroupId === null && $newPollGroupName) {
+		if ($pollGroupId === null
+			&& $newPollGroupName !== null
+			&& $newPollGroupName !== ''
+		) {
 			if (!$this->appSettings->getPollCreationAllowed()) {
 				// If poll creation is disabled, creating a poll group is also disabled
 				throw new ForbiddenException('Poll group creation is disabled');
 			}
 			// Create new poll group
 			$pollGroup = $this->pollGroupMapper->addGroup($newPollGroupName);
-		} else {
+		} else if ($pollGroupId !== null) {
 			$pollGroup = $this->pollGroupMapper->find($pollGroupId);
+		} else{
+			throw new InsufficientAttributesException('An existing poll group id must be provided or a new poll group name must be given.');
 		}
 
 		if (!$pollGroup->hasPoll($pollId)) {

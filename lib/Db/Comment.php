@@ -31,8 +31,8 @@ use OCA\Polls\Model\UserBase;
  * @method void setParent(int $value)
  * @method int getConfidential()
  * @method void setConfidential(int $value)
- * @method string getRecipient()
- * @method void setRecipient(string $value)
+ * @method ?string getRecipient()
+ * @method void setRecipient(?string $value)
  */
 class Comment extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_comments';

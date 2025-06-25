@@ -15,8 +15,8 @@ use OCP\AppFramework\Db\Entity;
  * @psalm-suppress UnusedProperty
  * @method int getId()
  * @method void setId(int $value)
- * @method ?int getPollId()
- * @method void setPollId(?int $value)
+ * @method int getPollId()
+ * @method void setPollId(int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  */
@@ -25,7 +25,7 @@ class Subscription extends Entity implements JsonSerializable {
 
 	// schema columns
 	public $id = null;
-	protected ?int $pollId = null;
+	protected int $pollId;
 	protected string $userId = '';
 
 	/** @var Log[] $logEntries */
