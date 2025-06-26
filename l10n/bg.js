@@ -303,6 +303,7 @@ OC.L10N.register(
     "Error cloning poll." : "Грешка при клониране на анкета.",
     "Take over" : "Вземане на управление",
     "Sort by title" : "Сортиране по заглавие",
+    "Direction" : "Посока",
     "Descending" : "Низходящо",
     "Ascending" : "Възходящо",
     "Checking name …" : "Името се проверява …",
