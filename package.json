@@ -73,7 +73,7 @@
     "@vue/tsconfig": "^0.7.0",
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.5.0",
-    "prettier": "^3.6.0",
+    "prettier": "^3.6.1",
     "vite": "^6.3.5",
     "vite-plugin-node-polyfills": "^0.23.0",
     "xml2js": "^0.6.2"
