@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref } from 'vue'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
@@ -30,7 +30,6 @@ import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
-import { Logger } from '../helpers/index.ts'
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
 import { FilterType, usePollsStore } from '../stores/polls.ts'
 import { useSessionStore } from '../stores/session.ts'
@@ -99,18 +98,6 @@ function getIconComponent(iconId: FilterType) {
 
 /**
  *
- */
-function loadPolls() {
-	try {
-		Logger.debug('Loading polls in navigation')
-		pollsStore.load()
-	} catch {
-		showError(t('polls', 'Error loading poll list'))
-	}
-}
-
-/**
- *
  * @param pollId
  */
 function toggleArchive(pollId: number) {
@@ -166,10 +153,6 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 		params: { id: payLoad.id },
 	})
 }
-
-onMounted(() => {
-	loadPolls()
-})
 </script>
 
 <template>
@@ -194,7 +177,7 @@ onMounted(() => {
 				:key="pollGroup.id"
 				:name="pollGroup.title"
 				:title="pollGroup.titleExt"
-				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
+				allow-collapse
 				:to="{
 					name: 'group',
 					params: { slug: pollGroup.slug },
@@ -204,7 +187,8 @@ onMounted(() => {
 					<GroupIcon :size="iconSize" />
 				</template>
 				<template #counter>
-					<NcCounterBubble :count="pollGroup.pollIds.length" />
+					<NcCounterBubble
+						:count="pollsStore.countPollsinPollGroups[pollGroup.id]" />
 				</template>
 				<ul v-if="sessionStore.appSettings.navigationPollsInList">
 					<PollNavigationItems

@@ -48,7 +48,7 @@ function updatedGroup() {
 		:button-mode="buttonMode"
 		:button-variant="'secondary'">
 		<template #icon>
-			<EditIcon size="20" decorative />
+			<EditIcon :size="20" decorative />
 		</template>
 		<template #modal-content>
 			<PollGroupEditDlg @updated="updatedGroup" @close="showModal = false" />

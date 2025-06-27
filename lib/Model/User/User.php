@@ -48,6 +48,10 @@ class User extends UserBase {
 		$this->timeZoneName = $this->config->getUserValue($this->id, 'core', 'timezone');
 	}
 
+	public function getinternalUserId(): ?string {
+		return $this->getId();
+	}
+
 	public function isEnabled(): bool {
 		return $this->user->isEnabled();
 	}

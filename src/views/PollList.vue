@@ -24,6 +24,7 @@ import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import { useSessionStore } from '../stores/session.ts'
 import ActionEditGroup from '../components/Actions/modules/ActionEditGroup.vue'
+import ActionToggleSidebar from '../components/Actions/modules/ActionToggleSidebar.vue'
 
 const pollsStore = usePollsStore()
 const preferencesStore = usePreferencesStore()
@@ -34,15 +35,15 @@ const route = useRoute()
 const editable = computed(
 	() =>
 		route.name === 'group'
-		&& sessionStore.currentUser.id === pollsStore.currentGroup?.owner.id,
+		&& sessionStore.currentUser.id === pollsStore.currentPollGroup?.owner.id,
 )
 
 const title = computed(() => {
 	if (route.name === 'group') {
 		return (
-			pollsStore.currentGroup?.titleExt
-			|| pollsStore.currentGroup?.title
-			|| t('polls', 'Group without title')
+			pollsStore.currentPollGroup?.titleExt
+			|| pollsStore.currentPollGroup?.title
+			|| ''
 		)
 	}
 	return pollsStore.categories[route.params.type as FilterType].titleExt
@@ -73,10 +74,7 @@ const infoLoaded = computed(() =>
 
 const description = computed(() => {
 	if (route.name === 'group') {
-		return (
-			pollsStore.currentGroup?.description
-			|| t('polls', 'Group without description')
-		)
+		return pollsStore.currentPollGroup?.description || ''
 	}
 
 	return pollsStore.categories[route.params.type as FilterType].description
@@ -104,7 +102,7 @@ const emptyContent = computed(() => {
 
 onMounted(() => {
 	Logger.debug('Loading polls onMounted')
-	pollsStore.load()
+	// pollsStore.load()
 	refreshView()
 })
 
@@ -112,7 +110,7 @@ watch(
 	() => route.params.id,
 	() => {
 		Logger.debug('Loading polls on watch')
-		pollsStore.load()
+		// pollsStore.load()
 		refreshView()
 	},
 )
@@ -158,6 +156,11 @@ async function loadMore() {
 				<ActionEditGroup v-if="editable" />
 				<ActionAddPoll v-if="preferencesStore.user.useNewPollInPollist" />
 				<PollListSort />
+				<ActionToggleSidebar
+					v-if="
+						pollsStore.currentPollGroup?.owner.id
+						=== sessionStore.currentUser.id
+					" />
 			</template>
 		</HeaderBar>
 

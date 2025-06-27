@@ -61,6 +61,7 @@ export type PollGroup = {
 	titleExt: string
 	pollIds: number[]
 	slug: string
+	allowEdit: boolean
 }
 
 export type PollCategoryList = Record<FilterType, PollCategory>
@@ -280,11 +281,13 @@ export const usePollsStore = defineStore('polls', {
 				).slice(0, state.meta.maxPollsInNavigation),
 
 		pollGroupsSorted(state: PollList): PollGroup[] {
-			return orderBy(state.pollGroups, ['title', 'id'], [SortDirection.Desc])
-		},
-
-		pollsWithGroups(state: PollList): Poll[] {
-			return state.polls.filter((poll: Poll) => poll.pollGroups.length > 0)
+			return orderBy(
+				state.pollGroups.filter(
+					(group) => this.countPollsinPollGroups[group.id] > 0,
+				),
+				['title'],
+				['asc'],
+			)
 		},
 
 		currentCategory(state: PollList): PollCategory {
@@ -299,7 +302,7 @@ export const usePollsStore = defineStore('polls', {
 			return state.categories[FilterType.Relevant]
 		},
 
-		currentGroup(state: PollList): PollGroup | undefined {
+		currentPollGroup(state: PollList): PollGroup | undefined {
 			const sessionStore = useSessionStore()
 			if (sessionStore.route.name === 'group') {
 				return state.pollGroups.find(
@@ -309,12 +312,27 @@ export const usePollsStore = defineStore('polls', {
 			return undefined
 		},
 
+		/*
+		 * Count of polls in each poll group and return pollgroupid and count as list
+		 * with the pollgroupid as key and the count as value
+		 */
+
+		countPollsinPollGroups(state: PollList): Record<number, number> {
+			const counts: Record<number, number> = {}
+			state.pollGroups.forEach((group) => {
+				counts[group.id] = state.polls.filter((poll) =>
+					group.pollIds.includes(poll.id),
+				).length
+			})
+			return counts
+		},
+
 		groupPolls(state: PollList): Poll[] {
-			if (!this.currentGroup) {
+			if (!this.currentPollGroup) {
 				return []
 			}
 			return state.polls.filter((poll) =>
-				this.currentGroup?.pollIds.includes(poll.id),
+				this.currentPollGroup?.pollIds.includes(poll.id),
 			)
 		},
 
@@ -608,12 +626,12 @@ export const usePollsStore = defineStore('polls', {
 			description: string
 			slug: string
 		}) {
-			if (!this.currentGroup) {
+			if (!this.currentPollGroup) {
 				throw new Error('No current poll group set')
 			}
 			try {
 				const response = await PollsAPI.updatePollGroup(
-					this.currentGroup.id,
+					this.currentPollGroup.id,
 					payload.title,
 					payload.titleExt,
 					payload.description,

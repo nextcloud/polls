@@ -35,9 +35,9 @@ const emit = defineEmits<{
 
 const newGroupAttributes = ref({
 	slug: route.params.slug as string,
-	title: pollsStore.currentGroup?.title || '',
-	titleExt: pollsStore.currentGroup?.titleExt || '',
-	description: pollsStore.currentGroup?.description || '',
+	title: pollsStore.currentPollGroup?.title || '',
+	titleExt: pollsStore.currentPollGroup?.titleExt || '',
+	description: pollsStore.currentPollGroup?.description || '',
 })
 
 watch(route, (route) => {
@@ -46,7 +46,7 @@ watch(route, (route) => {
 
 const pollGroupTitle = computed({
 	get() {
-		return pollsStore.currentGroup?.title || ''
+		return pollsStore.currentPollGroup?.title || ''
 	},
 	set(newTitle: string) {
 		newGroupAttributes.value.title = newTitle
@@ -54,7 +54,7 @@ const pollGroupTitle = computed({
 })
 const pollGroupTitleExt = computed({
 	get() {
-		return pollsStore.currentGroup?.titleExt || ''
+		return pollsStore.currentPollGroup?.titleExt || ''
 	},
 	set(newTitleExt: string) {
 		newGroupAttributes.value.titleExt = newTitleExt
@@ -63,7 +63,7 @@ const pollGroupTitleExt = computed({
 
 const pollGroupTitleDescription = computed({
 	get() {
-		return pollsStore.currentGroup?.description || ''
+		return pollsStore.currentPollGroup?.description || ''
 	},
 	set(newDescription: string) {
 		newGroupAttributes.value.description = newDescription
@@ -73,7 +73,7 @@ const pollGroupTitleDescription = computed({
 const updating = ref(false)
 
 const titleUpdated = computed(
-	() => pollGroupTitle.value !== pollsStore.currentGroup?.title,
+	() => pollGroupTitle.value !== pollsStore.currentPollGroup?.title,
 )
 const titleIsEmpty = computed(() => pollGroupTitle.value === '')
 const disableEditButton = computed(() => titleIsEmpty.value || updating.value)
@@ -81,9 +81,9 @@ const disableEditButton = computed(() => titleIsEmpty.value || updating.value)
 function resetInputs(slug: string) {
 	newGroupAttributes.value = {
 		slug,
-		title: pollsStore.currentGroup?.title || '',
-		titleExt: pollsStore.currentGroup?.titleExt || '',
-		description: pollsStore.currentGroup?.description || '',
+		title: pollsStore.currentPollGroup?.title || '',
+		titleExt: pollsStore.currentPollGroup?.titleExt || '',
+		description: pollsStore.currentPollGroup?.description || '',
 	}
 }
 

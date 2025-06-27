@@ -16,7 +16,7 @@ use OCP\AppFramework\Db\Entity;
  * @method int getId()
  * @method void setId(int $value)
  * @method int getPollId()
- * @method void setPollId(int $value)
+ * @method void setPollId(?int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  */
@@ -24,8 +24,8 @@ class Subscription extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_notif';
 
 	// schema columns
-	public $id = null;
-	protected int $pollId;
+	public $id;
+	protected int $pollId = 0;
 	protected string $userId = '';
 
 	/** @var Log[] $logEntries */
@@ -33,6 +33,7 @@ class Subscription extends Entity implements JsonSerializable {
 
 
 	public function __construct() {
+		$this->addType('id', 'integer');
 		$this->addType('pollId', 'integer');
 	}
 

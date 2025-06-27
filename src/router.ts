@@ -23,8 +23,10 @@ import SideBarCombo from './views/SideBarCombo.vue'
 import Navigation from './views/Navigation.vue'
 import Combo from './views/Combo.vue'
 import { usePollStore } from './stores/poll.ts'
-import { FilterType } from './stores/polls.ts'
+import { FilterType, usePollsStore } from './stores/polls.ts'
 import { useSessionStore } from './stores/session.ts'
+import SideBarPollGroup from './views/SideBarPollGroup.vue'
+import { useSharesStore } from './stores/shares.ts'
 
 async function validateToken(to: RouteLocationNormalized) {
 	if (getCurrentUser()) {
@@ -90,8 +92,7 @@ const routes: RouteRecordRaw[] = [
 		props: true,
 		name: 'list',
 		meta: {
-			publicPage: false,
-			votePage: false,
+			listPage: true,
 		},
 	},
 	{
@@ -99,12 +100,13 @@ const routes: RouteRecordRaw[] = [
 		components: {
 			default: List,
 			navigation: Navigation,
+			sidebar: SideBarPollGroup,
 		},
 		props: true,
 		name: 'group',
 		meta: {
-			publicPage: false,
-			votePage: false,
+			groupPage: true,
+			listPage: true,
 		},
 	},
 	{
@@ -116,8 +118,7 @@ const routes: RouteRecordRaw[] = [
 		},
 		name: 'combo',
 		meta: {
-			publicPage: false,
-			votePage: false,
+			comboPage: true,
 		},
 	},
 	{
@@ -127,10 +128,6 @@ const routes: RouteRecordRaw[] = [
 			navigation: Navigation,
 		},
 		name: 'notfound',
-		meta: {
-			publicPage: false,
-			votePage: false,
-		},
 	},
 	{
 		path: '/vote/:id',
@@ -142,7 +139,6 @@ const routes: RouteRecordRaw[] = [
 		props: true,
 		name: 'vote',
 		meta: {
-			publicPage: false,
 			votePage: true,
 		},
 	},
@@ -169,10 +165,6 @@ const routes: RouteRecordRaw[] = [
 			},
 		},
 		name: 'root',
-		meta: {
-			publicPage: false,
-			votePage: false,
-		},
 	},
 	{
 		path: '/list',
@@ -181,9 +173,6 @@ const routes: RouteRecordRaw[] = [
 			params: {
 				type: FilterType.Relevant,
 			},
-		},
-		meta: {
-			publicPage: false,
 		},
 	},
 ]
@@ -194,40 +183,68 @@ const router = createRouter({
 	linkActiveClass: 'active',
 })
 
-router.beforeEach(async (to: RouteLocationNormalized) => {
-	const sessionStore = useSessionStore()
-	const pollStore = usePollStore()
+router.beforeEach(
+	async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+		const sessionStore = useSessionStore()
+		const pollStore = usePollStore()
+		const pollsStore = usePollsStore()
+		const sharesStore = useSharesStore()
 
-	try {
-		await loadContext(to)
-	} catch (error) {
-		Logger.error('Could not load context')
+		const cheapLoading =
+			sessionStore.watcher.mode !== 'noPolling'
+			&& sessionStore.watcher.status !== 'stopped'
+			&& to.name === from.name
 
-		if (!sessionStore.userStatus.isLoggedin) {
-			// if the user is not logged in, redirect to the login page
-			window.location.replace(generateUrl('login'))
-			return false
+		// first load app context -> session and preferences
+		// await loading until further execution to ensure,
+		// the context is loaded properly
+		try {
+			await loadContext(to, cheapLoading)
+		} catch (error) {
+			Logger.error('Could not load context')
+
+			if (!sessionStore.userStatus.isLoggedin) {
+				// if the user is not logged in, redirect to the login page
+				window.location.replace(generateUrl('login'))
+				return false
+			}
+
+			// if context can't be loaded, redirect to not found page
+			return {
+				name: 'notfound',
+			}
 		}
 
-		return {
-			name: 'notfound',
-		}
-	}
+		try {
+			// for public pages we need to load the share first
+			if (to.meta.publicPage) {
+				await sessionStore.loadShare()
+			}
 
-	try {
-		if (to.meta.publicPage) {
-			await sessionStore.loadShare()
-		}
+			// vote pages load the particular poll
+			// or reset the poll store if not a vote page
+			if (to.meta.votePage) {
+				pollStore.load()
+			} else {
+				pollStore.resetPoll()
+			}
 
-		if (to.meta.votePage) {
-			await pollStore.load()
+			// load polls at least for navigation
+			if (!to.meta.publicPage && !cheapLoading) {
+				await pollsStore.load()
+			}
+
+			// group pages need shares for the current poll group
+			if (to.meta.groupPage) {
+				sharesStore.load('pollGroup')
+			}
+		} catch (error) {
+			Logger.warn('Could not load poll', { error })
+			return {
+				name: 'notfound',
+			}
 		}
-	} catch (error) {
-		Logger.warn('Could not load poll', { error })
-		return {
-			name: 'notfound',
-		}
-	}
-})
+	},
+)
 
 export { router }

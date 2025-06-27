@@ -4,7 +4,7 @@
  */
 
 import { watch, onBeforeUnmount } from 'vue'
-import { useSessionStore } from '../stores/session'
+import { useSessionStore, Watcher } from '../stores/session'
 import { usePollStore } from '../stores/poll'
 import { generateUrl } from '@nextcloud/router'
 // eslint-disable-next-line import/default
@@ -45,7 +45,16 @@ export const usePollWatcher = (interval = 30000) => {
 		})
 
 		worker.onmessage = (e) => {
-			const { type, message, updates } = e.data
+			const { type, message, updates, status, mode } = e.data
+
+			sessionStore.watcher = <Watcher>{
+				...sessionStore.watcher,
+				mode,
+				status,
+				interval,
+				lastUpdated: Date.now(),
+				lastMessage: message ?? sessionStore.watcher.lastMessage,
+			}
 
 			switch (type) {
 				case 'info':
@@ -67,7 +76,9 @@ export const usePollWatcher = (interval = 30000) => {
 						handleWatcherUpdates(updates)
 					}
 					break
-
+				case 'status':
+					if (message) Logger.info(`[PollWatcher] ${message}`)
+					break
 				default:
 					Logger.warn('[PollWatcher] Unknown message type:', { type })
 			}
@@ -78,6 +89,12 @@ export const usePollWatcher = (interval = 30000) => {
 		if (worker) {
 			worker.terminate()
 			worker = null
+			sessionStore.watcher = <Watcher>{
+				...sessionStore.watcher,
+				status: 'stopped',
+				lastUpdated: Date.now(),
+				lastMessage: 'Watcher stopped.',
+			}
 			Logger.info('[PollWatcher] Worker stopped.')
 		}
 	}

@@ -10,6 +10,7 @@ namespace OCA\Polls\Controller;
 
 use OCA\Polls\Db\Share;
 use OCA\Polls\Model\SentResult;
+use OCA\Polls\Model\User\User;
 use OCA\Polls\Service\ShareService;
 use OCP\AppFramework\Http;
 use OCP\AppFramework\Http\Attribute\FrontpageRoute;
@@ -38,7 +39,18 @@ class ShareController extends BaseController {
 	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
 	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}/shares')]
 	public function list(int $pollId): JSONResponse {
-		return $this->response(fn () => ['shares' => $this->shareService->list($pollId)]);
+		return $this->response(fn () => ['shares' => $this->shareService->list($pollId, 'poll')]);
+	}
+
+	/**
+	 * List shares
+	 * @param int $pollGroupId poll id or group id
+	 */
+	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'GET', url: '/pollgroup/{pollGroupId}/shares')]
+	public function listForPollGroup(int $pollGroupId): JSONResponse {
+		return $this->response(fn () => ['shares' => $this->shareService->list($pollGroupId, 'pollGroup')]);
 	}
 
 	/**
@@ -54,7 +66,33 @@ class ShareController extends BaseController {
 	#[FrontpageRoute(verb: 'POST', url: '/poll/{pollId}/share')]
 	public function add(int $pollId, string $type, string $userId = '', string $displayName = '', string $emailAddress = ''): JSONResponse {
 		return $this->response(
-			fn () => ['share' => $this->shareService->add($pollId, $type, $userId, $displayName, $emailAddress)],
+			fn () => ['share' => $this->shareService->add(
+				pollOrPollGroupId: $pollId,
+				type: $type,
+				userId: $userId,
+				displayName: $displayName,
+				emailAddress: $emailAddress,
+				purpose: 'poll',
+			)],
+			Http::STATUS_CREATED,
+		);
+	}
+
+	/**
+	 * Add share for a poll group
+	 * @param int $pollGroupId poll group id
+	 * @param string $userId User id
+	 */
+	#[NoAdminRequired]
+	#[OpenAPI(OpenAPI::SCOPE_IGNORE)]
+	#[FrontpageRoute(verb: 'POST', url: '/pollgroup/{pollGroupId}/share')]
+	public function addForPollGroup(int $pollGroupId, string $userId = ''): JSONResponse {
+		return $this->response(
+			fn () => ['share' => $this->shareService->add(
+				pollOrPollGroupId: $pollGroupId,
+				type: User::TYPE,
+				userId: $userId,
+				purpose: 'pollGroup')],
 			Http::STATUS_CREATED,
 		);
 	}

@@ -50,6 +50,25 @@ class ShareMapper extends QBMapper {
 
 		return $this->findEntities($qb);
 	}
+	/**
+	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found
+	 * @return Share[]
+	 * @psalm-return array<array-key, Share>
+	 */
+	public function findByPollGroup(int $pollGroupId, bool $getDeleted = false): array {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->select(self::TABLE . '.*')
+			->from($this->getTableName(), self::TABLE)
+			->groupBy(self::TABLE . '.id')
+			->where($qb->expr()->eq(self::TABLE . '.group_id', $qb->createNamedParameter($pollGroupId, IQueryBuilder::PARAM_INT)));
+
+		if (!$getDeleted) {
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		}
+
+		return $this->findEntities($qb);
+	}
 
 	/**
 	 * @throws \OCP\AppFramework\Db\DoesNotExistException if not found

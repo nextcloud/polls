@@ -112,9 +112,9 @@ class PollService {
 			}
 			// Create new poll group
 			$pollGroup = $this->pollGroupMapper->addGroup($newPollGroupName);
-		} else if ($pollGroupId !== null) {
+		} elseif ($pollGroupId !== null) {
 			$pollGroup = $this->pollGroupMapper->find($pollGroupId);
-		} else{
+		} else {
 			throw new InsufficientAttributesException('An existing poll group id must be provided or a new poll group name must be given.');
 		}
 

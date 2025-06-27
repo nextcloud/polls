@@ -17,7 +17,9 @@ import { usePollWatcher } from './composables/usePollWatcher'
 
 import { useSessionStore } from './stores/session.ts'
 import { usePollStore } from './stores/poll.ts'
+import { usePollsStore } from './stores/polls.ts'
 import { showSuccess } from '@nextcloud/dialogs'
+import { Event } from './Types/index.ts'
 
 import '@nextcloud/dialogs/style.css'
 import './assets/scss/vars.scss'
@@ -25,12 +27,12 @@ import './assets/scss/hacks.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
-import { Event } from './Types/index.ts'
 
 usePollWatcher()
 
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
+const pollsStore = usePollsStore()
 
 const transitionClass = ref('transitions-active')
 const loading = ref(false)
@@ -47,7 +49,10 @@ const useSidebar = computed(
 	() =>
 		pollStore.permissions.edit
 		|| pollStore.permissions.comment
-		|| sessionStore.route.name === 'combo',
+		|| sessionStore.route.name === 'combo'
+		|| (sessionStore.route.name === 'group'
+			&& pollsStore.currentPollGroup?.owner.id
+				=== sessionStore.currentUser.id),
 )
 
 /**

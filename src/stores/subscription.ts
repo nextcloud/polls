@@ -17,6 +17,9 @@ export type Subscription = {
 export const useSubscriptionStore = defineStore('subscription', () => {
 	const subscribed = ref(false)
 
+	const reset = () => {
+		subscribed.value = false
+	}
 	/**
 	 *
 	 */
@@ -87,6 +90,7 @@ export const useSubscriptionStore = defineStore('subscription', () => {
 	return {
 		subscribed,
 		load,
+		reset,
 		write,
 	}
 })

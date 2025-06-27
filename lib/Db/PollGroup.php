@@ -9,6 +9,9 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use JsonSerializable;
+use OCA\Polls\Exceptions\ForbiddenException;
+use OCA\Polls\Helper\Container;
+use OCA\Polls\UserSession;
 
 /**
  * @psalm-api
@@ -32,6 +35,9 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	public const TABLE = 'polls_groups';
 	public const RELATION_TABLE = 'polls_groups_polls';
 	public const CONCAT_SEPARATOR = ',';
+	public const PERMISSION_POLL_GROUP_EDIT = 'poll_group_edit';
+
+	protected UserSession $userSession;
 
 	// schema columns
 	public $id = null;
@@ -45,6 +51,10 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	protected ?string $pollIds = '';
 
 	public function __construct() {
+		$this->addType('created', 'integer');
+		$this->addType('deleted', 'integer');
+
+		$this->userSession = Container::queryClass(UserSession::class);
 	}
 
 	/**
@@ -104,6 +114,32 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 			'titleExt' => $this->getTitleExt(),
 			'pollIds' => $this->getPollIds(),
 			'slug' => $this->getSlug(),
+			'allowEdit' => $this->getAllowEdit(),
 		];
 	}
+
+	private function getAllowEdit(): bool {
+		return $this->getUserId() === $this->userSession->getCurrentUser()->getId();
+	}
+
+	/**
+	 * Check particular rights and inform via boolean value, if the right is granted or denied
+	 */
+	public function getIsAllowed(string $permission): bool {
+		return match ($permission) {
+			self::PERMISSION_POLL_GROUP_EDIT => $this->getAllowEdit(),
+		};
+	}
+
+	/**
+	 * Request a permission level and get exception if denied
+	 * @throws ForbiddenException Thrown if access is denied
+	 */
+	public function request(string $permission): bool {
+		if (!$this->getIsAllowed($permission)) {
+			throw new ForbiddenException('denied permission ' . $permission);
+		}
+		return true;
+	}
+
 }
