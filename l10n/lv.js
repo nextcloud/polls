@@ -52,6 +52,7 @@ OC.L10N.register(
     "Enable the automatic deletion of archived polls" : "Iespējot arhivētu aptauju automātisku izdzēšanu",
     "Privacy policy link:" : "Privātuma politikas saite:",
     "deleted" : "izdzēsts",
+    "Copy link to clipboard" : "Ievietot saiti starpliktuvē",
     "Show QR code" : "Parādīt kvadrātkodu",
     "Restore share" : "Atjaunot koplietojumu",
     "Shares" : "Koplietots",
