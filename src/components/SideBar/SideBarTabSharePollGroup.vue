@@ -14,7 +14,10 @@ import { Event } from '../../Types/index.ts'
 import { t } from '@nextcloud/l10n'
 
 const sharesStore = useSharesStore()
-
+const infoText = t(
+	'polls',
+	'Shares for a poll group grant voting access to the polls contained in the poll group.',
+)
 onMounted(() => {
 	subscribe(Event.ChangeShares, () => sharesStore.load())
 })
@@ -25,16 +28,16 @@ onUnmounted(() => {
 </script>
 
 <template>
-	<div>
-		{{
-			t(
-				'polls',
-				'Shares for a poll group grant voting access to the polls contained in the poll group.',
-			)
-		}}
-	</div>
 	<div class="sidebar-share">
-		<SharesList class="shares effective" />
+		<div>
+			{{
+				t(
+					'polls',
+					'Shares for a poll group grant voting access to the polls contained in the poll group.',
+				)
+			}}
+		</div>
+		<SharesList class="shares effective" :info="infoText" />
 	</div>
 </template>
 

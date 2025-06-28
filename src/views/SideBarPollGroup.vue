@@ -15,6 +15,8 @@ import { Event } from '../Types/index.ts'
 import SidebarShareIcon from 'vue-material-design-icons/ShareVariant.vue'
 
 import { SideBarTabPollGroupShare } from '../components/SideBar/index.js'
+import SidebarConfigurationIcon from 'vue-material-design-icons/Wrench.vue'
+import SideBarTabConfigurationPollGroup from '../components/SideBar/SideBarTabConfigurationPollGroup.vue'
 
 const showSidebar = ref(window.innerWidth > 920)
 const activeTab = ref(t('polls', 'Shares').toLowerCase())
@@ -45,7 +47,16 @@ function closeSideBar() {
 		v-model="activeTab"
 		:name="t('polls', 'Details')"
 		@close="closeSideBar()">
-		<NcAppSidebarTab id="sharing" :order="3" :name="t('polls', 'Sharing')">
+		<NcAppSidebarTab
+			id="configuration"
+			:order="1"
+			:name="t('polls', 'Configuration')">
+			<template #icon>
+				<SidebarConfigurationIcon />
+			</template>
+			<SideBarTabConfigurationPollGroup />
+		</NcAppSidebarTab>
+		<NcAppSidebarTab id="sharing" :order="2" :name="t('polls', 'Sharing')">
 			<template #icon>
 				<SidebarShareIcon />
 			</template>

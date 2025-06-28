@@ -7,5 +7,5 @@ export { default as SideBarTabConfiguration } from './SideBarTabConfiguration.vu
 export { default as SideBarTabComments } from './SideBarTabComments.vue'
 export { default as SideBarTabDatePolls } from './SideBarTabDatePolls.vue'
 export { default as SideBarTabOptions } from './SideBarTabOptions.vue'
-export { default as SideBarTabPollGroupShare } from './SideBarTabPollGroupShare.vue'
+export { default as SideBarTabPollGroupShare } from './SideBarTabSharePollGroup.vue'
 export { default as SideBarTabShare } from './SideBarTabShare.vue'

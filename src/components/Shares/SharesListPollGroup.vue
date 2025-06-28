@@ -17,6 +17,9 @@ import { showError } from '@nextcloud/dialogs'
 import { ISearchType, User } from '../../Types/index.ts'
 
 const sharesStore = useSharesStore()
+const { info } = defineProps<{
+	info?: string
+}>()
 
 const configBoxProps = {
 	sharesList: {
@@ -34,7 +37,7 @@ async function addShare(user: User) {
 </script>
 
 <template>
-	<ConfigBox v-bind="configBoxProps.sharesList">
+	<ConfigBox v-bind="configBoxProps.sharesList" :info="info">
 		<template #icon>
 			<ShareIcon />
 		</template>

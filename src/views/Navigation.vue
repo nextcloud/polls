@@ -32,6 +32,7 @@ import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
 import { FilterType, usePollsStore } from '../stores/polls.ts'
+import { usePollGroupsStore } from '../stores/pollGroups.ts'
 import { useSessionStore } from '../stores/session.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
@@ -42,6 +43,7 @@ import { NcAppNavigationSpacer } from '@nextcloud/vue'
 const router = useRouter()
 
 const pollsStore = usePollsStore()
+const pollGroupsStore = usePollGroupsStore()
 const sessionStore = useSessionStore()
 const preferencesStore = usePreferencesStore()
 
@@ -173,7 +175,7 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 
 		<template #list>
 			<NcAppNavigationItem
-				v-for="pollGroup in pollsStore.pollGroupsSorted"
+				v-for="pollGroup in pollGroupsStore.pollGroupsSorted"
 				:key="pollGroup.id"
 				:name="pollGroup.title"
 				:title="pollGroup.titleExt"
@@ -188,7 +190,9 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 				</template>
 				<template #counter>
 					<NcCounterBubble
-						:count="pollsStore.countPollsinPollGroups[pollGroup.id]" />
+						:count="
+							pollGroupsStore.countPollsInPollGroups[pollGroup.id]
+						" />
 				</template>
 				<ul v-if="sessionStore.appSettings.navigationPollsInList">
 					<PollNavigationItems
@@ -218,7 +222,7 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 					</NcAppNavigationItem>
 				</ul>
 			</NcAppNavigationItem>
-			<NcAppNavigationSpacer v-if="pollsStore.pollGroups.length" />
+			<NcAppNavigationSpacer v-if="pollGroupsStore.pollGroups.length" />
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"

@@ -11,6 +11,7 @@ import { User } from '../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 import { SentResults } from '../Api/modules/shares.ts'
 import { usePollsStore } from './polls.ts'
+import { usePollGroupsStore } from './pollGroups.ts'
 
 export enum ShareType {
 	Email = 'email',
@@ -111,6 +112,7 @@ export const useSharesStore = defineStore('shares', {
 
 	actions: {
 		async load(purpose: SharePurpose = 'poll'): Promise<void> {
+			const pollGroupsStore = usePollGroupsStore()
 			let pollOrPollGroupId: number = 0
 
 			if (purpose === 'pollGroup') {
@@ -118,10 +120,10 @@ export const useSharesStore = defineStore('shares', {
 				// For group shares, we need to use the current poll group ID
 				const pollsStore = usePollsStore()
 
-				if (!pollsStore.currentPollGroup) {
+				if (!pollGroupsStore.currentPollGroup) {
 					throw new Error('Current group is not set')
 				}
-				pollOrPollGroupId = pollsStore.currentPollGroup.id
+				pollOrPollGroupId = pollGroupsStore.currentPollGroup.id
 			} else {
 				Logger.info('Loading poll shares')
 				// For regular poll shares, we use the current poll ID
@@ -143,17 +145,18 @@ export const useSharesStore = defineStore('shares', {
 		},
 
 		async add(user: User, purpose: SharePurpose = 'poll'): Promise<void> {
+			const pollGroupsStore = usePollGroupsStore()
 			let pollOrPollGroupId: number = 0
 
 			if (purpose === 'pollGroup') {
 				// For group shares, we need to use the current poll group ID
 				const pollsStore = usePollsStore()
 
-				if (!pollsStore.currentPollGroup) {
+				if (!pollGroupsStore.currentPollGroup) {
 					throw new Error('Current group is not set')
 				}
 
-				pollOrPollGroupId = pollsStore.currentPollGroup.id
+				pollOrPollGroupId = pollGroupsStore.currentPollGroup.id
 			} else {
 				// For regular poll shares, we use the current poll ID
 				const sessionStore = useSessionStore()

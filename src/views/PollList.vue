@@ -23,10 +23,11 @@ import PollItemActions from '../components/PollList/PollItemActions.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import { useSessionStore } from '../stores/session.ts'
-import ActionEditGroup from '../components/Actions/modules/ActionEditGroup.vue'
 import ActionToggleSidebar from '../components/Actions/modules/ActionToggleSidebar.vue'
+import { usePollGroupsStore } from '../stores/pollGroups.ts'
 
 const pollsStore = usePollsStore()
+const pollGroupsStore = usePollGroupsStore()
 const preferencesStore = usePreferencesStore()
 const sessionStore = useSessionStore()
 const router = useRouter()
@@ -35,14 +36,15 @@ const route = useRoute()
 const editable = computed(
 	() =>
 		route.name === 'group'
-		&& sessionStore.currentUser.id === pollsStore.currentPollGroup?.owner.id,
+		&& sessionStore.currentUser.id
+			=== pollGroupsStore.currentPollGroup?.owner.id,
 )
 
 const title = computed(() => {
 	if (route.name === 'group') {
 		return (
-			pollsStore.currentPollGroup?.titleExt
-			|| pollsStore.currentPollGroup?.title
+			pollGroupsStore.currentPollGroup?.titleExt
+			|| pollGroupsStore.currentPollGroup?.title
 			|| ''
 		)
 	}
@@ -74,7 +76,7 @@ const infoLoaded = computed(() =>
 
 const description = computed(() => {
 	if (route.name === 'group') {
-		return pollsStore.currentPollGroup?.description || ''
+		return pollGroupsStore.currentPollGroup?.description || ''
 	}
 
 	return pollsStore.categories[route.params.type as FilterType].description
@@ -153,12 +155,11 @@ async function loadMore() {
 			</template>
 			{{ description }}
 			<template #right>
-				<ActionEditGroup v-if="editable" />
 				<ActionAddPoll v-if="preferencesStore.user.useNewPollInPollist" />
 				<PollListSort />
 				<ActionToggleSidebar
 					v-if="
-						pollsStore.currentPollGroup?.owner.id
+						pollGroupsStore.currentPollGroup?.owner.id
 						=== sessionStore.currentUser.id
 					" />
 			</template>
