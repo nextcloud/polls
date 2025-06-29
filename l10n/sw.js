@@ -3,8 +3,10 @@ OC.L10N.register(
     {
     "Team" : "Timu",
     "Group" : "Kundi",
+    "User" : "Mtumiaji",
     "Add option" : "Ongeza mbadala",
     "Delete" : "Futa",
+    "Register" : "Sajiri",
     "Unknown error" : "Hitilafu isiyojulikana",
     "Previous day" : "Siku iliyopita",
     "Next day" : "Siku inayofuata",
