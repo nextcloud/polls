@@ -38,6 +38,7 @@ class OptionMapper extends QBMapperWithUser {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')->from($this->getTableName());
+		$qb->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
 		return $this->findEntities($qb);
 	}
 
@@ -52,7 +53,7 @@ class OptionMapper extends QBMapperWithUser {
 		$qb = $this->buildQuery($hideResults);
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		return $this->findEntities($qb);
@@ -68,7 +69,7 @@ class OptionMapper extends QBMapperWithUser {
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.poll_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR)));
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		return $this->findEntity($qb);
@@ -81,6 +82,7 @@ class OptionMapper extends QBMapperWithUser {
 	public function find(int $id): Option {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
 
 		return $this->findEntity($qb);
 	}
@@ -92,7 +94,7 @@ class OptionMapper extends QBMapperWithUser {
 	public function findConfirmed(int $pollId): array {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->gt(self::TABLE . '.confirmed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			->andWhere($qb->expr()->gt(self::TABLE . '.confirmed', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntities($qb);
 	}
@@ -145,10 +147,19 @@ class OptionMapper extends QBMapperWithUser {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->andWhere(
-				$query->expr()->gt('deleted', $query->createNamedParameter(0))
+				$query->expr()->gt('deleted', $query->expr()->literal(0, IQueryBuilder::PARAM_INT))
 			)
 			->andWhere(
-				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
+				$query->expr()->lt('deleted', $query->expr()->literal($offset, IQueryBuilder::PARAM_INT))
+			);
+		$query->executeStatement();
+	}
+
+	public function deleteOrphaned(): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where(
+				$query->expr()->isNull('poll_id')
 			);
 		$query->executeStatement();
 	}

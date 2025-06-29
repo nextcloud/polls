@@ -66,7 +66,9 @@ async function addShare(user: User) {
 			:aria-label="t('polls', 'Add shares')"
 			:placeholder="t('polls', 'Type to add an individual share')"
 			@user-selected="(user: User) => addShare(user)" />
+
 		<ShareItemAllUsers v-if="sessionStore.appPermissions.allAccess" />
+
 		<SharePublicAdd
 			v-if="
 				sessionStore.appPermissions.publicShares

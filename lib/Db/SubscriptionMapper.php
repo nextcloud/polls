@@ -67,4 +67,12 @@ class SubscriptionMapper extends QBMapper {
 			->setParameter('userId', $userId);
 		$query->executeStatement();
 	}
+
+	public function deleteOrphaned(): void {
+		$query = $this->db->getQueryBuilder();
+		$query->delete($this->getTableName())
+			->where($query->expr()->isNull('poll_id'));
+		$query->executeStatement();
+	}
+
 }

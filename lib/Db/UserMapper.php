@@ -53,7 +53,7 @@ class UserMapper extends QBMapper {
 	 * @param int $pollId Can only be used together with $userId and will return the internal user or the share user
 	 * @return UserBase
 	 **/
-	public function getParticipant(string $userId, int $pollId): UserBase {
+	public function getParticipant(string $userId, ?int $pollId): UserBase {
 		if ($userId === '') {
 			return new UserBase($userId, UserBase::TYPE_EMPTY);
 		}
@@ -78,7 +78,7 @@ class UserMapper extends QBMapper {
 	 * Get participans of a poll as array of user objects
 	 * @return UserBase[]
 	 */
-	public function getParticipants(int $pollId): array {
+	public function getParticipants(?int $pollId): array {
 		$users = [];
 		// get the distict list of usernames from the votes
 		$participants = $this->findParticipantsByPoll($pollId);

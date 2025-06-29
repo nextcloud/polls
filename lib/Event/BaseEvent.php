@@ -45,7 +45,7 @@ abstract class BaseEvent extends Event {
 	}
 
 	public function getPollId(): int {
-		return $this->eventObject->getPollId();
+		return $this->eventObject->getPollId() ?? 0;
 	}
 
 	public function getPollTitle(): string {
@@ -80,7 +80,7 @@ abstract class BaseEvent extends Event {
 
 	public function getActivityObjectId(): int {
 		if ($this->activityObjectType === 'poll') {
-			return $this->eventObject->getPollId();
+			return $this->eventObject->getPollId() ?? 0;
 		}
 		return $this->eventObject->getId();
 	}

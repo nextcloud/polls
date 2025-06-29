@@ -88,11 +88,11 @@ class Notifier implements INotifier {
 	private function extractActorId(INotification $notification): ?string {
 		// actor is set in the subject parameters
 		$parameters = $this->extractParameters($notification);
-		if (isset($parameters['actor']) && is_string($parameters['actor'])) {
+		if (isset($parameters['actor']) && $parameters['actor'] !== '') {
 			return $parameters['actor'];
 		}
 		// fallback to owner, if no actor is set
-		if (isset($parameters['owner']) && is_string($parameters['owner'])) {
+		if (isset($parameters['owner']) && $parameters['owner'] !== '') {
 			return $parameters['owner'];
 		}
 		return null;

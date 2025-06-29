@@ -53,19 +53,27 @@ namespace OCA\Polls;
  * }
  *
  * @psalm-type PollsUser = array {
- * 	id: string,
+ *  array: string,
+ *  categories?: string[],
+ *  desc?: string,
  *  displayName: string,
  *  emailAddress?: string,
+ * 	id: string,
+ *  user?: string,
+ *  isAdmin: boolean,
+ *  isGuest: boolean,
  *  isNoUser: boolean,
- *  type: string,
+ *  isUnrestrictedOwner: boolean,
+ *  languageCode?: string,
+ *  languageCodeIntl?: string,
+ *  localeCode?: string,
+ *  localeCodeIntl?: string,
+ *  organisation?: string,
  *  subName?: string,
  *  subtitle?: string,
- *  desc?: string,
- *  organisation?: string,
- *  languageCode?: string,
- *  localeCode?: string,
  *  timeZone?: string,
- *  categories?: string[],
+ *  type: string,
+ *  userId: string,
  * }
  *
  * @psalm-type PollsPollConfiguration = array {

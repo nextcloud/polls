@@ -5,7 +5,7 @@
 import { AxiosResponse } from '@nextcloud/axios'
 import { Share, ShareType, User } from '../../Types/index.js'
 import { httpInstance, createCancelTokenHandler } from './HttpApi.js'
-import { PublicPollEmailConditions } from '../../stores/shares.js'
+import { PublicPollEmailConditions, SharePurpose } from '../../stores/shares.js'
 
 export type SentResults = {
 	sentMails: { emailAddress: string; displayName: string }[]
@@ -13,10 +13,13 @@ export type SentResults = {
 }
 
 const shares = {
-	getShares(pollId: number): Promise<AxiosResponse<{ shares: Share[] }>> {
+	getShares(
+		pollOrPollGroupId: number,
+		purpose: SharePurpose = 'poll',
+	): Promise<AxiosResponse<{ shares: Share[] }>> {
 		return httpInstance.request({
 			method: 'GET',
-			url: `poll/${pollId}/shares`,
+			url: `${purpose.toLowerCase()}/${pollOrPollGroupId}/shares`,
 			params: { time: +new Date() },
 			cancelToken:
 				cancelTokenHandlerObject[
@@ -26,12 +29,14 @@ const shares = {
 	},
 
 	addUserShare(
-		pollId: number,
+		pollOrPollGroupId: number,
 		user: User,
+		purpose: SharePurpose = 'poll',
 	): Promise<AxiosResponse<{ share: Share }>> {
+		// make purpose lower case
 		return httpInstance.request({
 			method: 'POST',
-			url: `poll/${pollId}/share`,
+			url: `${purpose.toLowerCase()}/${pollOrPollGroupId}/share`,
 			data: user,
 			cancelToken:
 				cancelTokenHandlerObject[

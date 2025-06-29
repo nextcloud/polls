@@ -172,7 +172,7 @@ class MailService {
 		}
 
 		foreach ($this->logs as $logItem) {
-			$logItem->setProcessed(time());
+			$logItem->setPollId(null);
 			$this->logMapper->update($logItem);
 		}
 	}

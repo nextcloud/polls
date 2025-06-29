@@ -56,6 +56,7 @@ class PollMapper extends QBMapper {
 	public function find(int $id): Poll {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+
 		return $this->findEntity($qb);
 	}
 
@@ -198,10 +199,12 @@ class PollMapper extends QBMapper {
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_orphaned_votes');
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryParticipantsCount(self::TABLE)->getSQL() . ')'), 'participants_count');
 
+		$pollGroupsAlias = 'poll_groups';
 		$this->joinOptions($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$this->joinGroupShares($qb, self::TABLE);
-		$this->joinPollGroups($qb, self::TABLE);
+		$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
+		$this->joinUserSharesfromPollGroups($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
 		return $qb;
 	}
 
@@ -235,7 +238,7 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
-	 * Join group shares
+	 * Join group shares of this poll
 	 */
 	protected function joinGroupShares(IQueryBuilder &$qb, string $fromAlias): void {
 		$joinAlias = 'group_shares';
@@ -258,12 +261,13 @@ class PollMapper extends QBMapper {
 		);
 	}
 
-
-	protected function joinPollGroups(IQueryBuilder $qb, string $fromAlias): void {
-		$joinPollsGroupsAlias = 'groups';
+	/**
+	 * Joins poll groups, the poll belongs to
+	 */
+	protected function joinPollGroups(IQueryBuilder $qb, string $fromAlias, string $joinAlias): void {
 		TableManager::getConcatenatedArray(
 			qb: $qb,
-			concatColumn: $joinPollsGroupsAlias . '.group_id',
+			concatColumn: $joinAlias . '.group_id',
 			asColumn: 'poll_groups',
 			dbProvider: $this->db->getDatabaseProvider(),
 		);
@@ -271,9 +275,39 @@ class PollMapper extends QBMapper {
 		$qb->leftJoin(
 			$fromAlias,
 			PollGroup::RELATION_TABLE,
-			$joinPollsGroupsAlias,
+			$joinAlias,
 			$qb->expr()->andX(
-				$qb->expr()->eq(self::TABLE . '.id', $joinPollsGroupsAlias . '.poll_id'),
+				$qb->expr()->eq(self::TABLE . '.id', $joinAlias . '.poll_id'),
+			)
+		);
+	}
+
+	/**
+	 * Joins shares that are set for poll groups
+	 * Poll group shares are meant to inherit access
+	 * Higher access types will win. Currently poll groups are only availablke for
+	 * authenticated users.
+	 *
+	 * Supported share types are User and Admin
+	 * Groups, Teams will not work atm.
+	 */
+	protected function joinUserSharesfromPollGroups(IQueryBuilder $qb, string $fromAlias, string $currentUserId, string $pollGroupsAlias): void {
+		$joinAlias = 'poll_group_shares';
+		TableManager::getConcatenatedArray(
+			qb: $qb,
+			concatColumn: $joinAlias . '.type',
+			asColumn: 'poll_group_user_shares',
+			dbProvider: $this->db->getDatabaseProvider(),
+		);
+
+		$qb->leftJoin(
+			$fromAlias,
+			Share::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($joinAlias . '.group_id', $pollGroupsAlias . '.group_id'),
+				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
+				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
 			)
 		);
 	}
@@ -288,7 +322,7 @@ class PollMapper extends QBMapper {
 	protected function joinOptions(IQueryBuilder &$qb, string $fromAlias): void {
 		$joinAlias = 'options';
 
-		$zero = $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT);
+		$zero = $qb->expr()->literal(0, IQueryBuilder::PARAM_INT);
 		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
 
 		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), ' . $zero . ') AS max_date'))
@@ -306,8 +340,6 @@ class PollMapper extends QBMapper {
 			),
 		);
 	}
-
-
 
 	/**
 	 * Subquery for votes count

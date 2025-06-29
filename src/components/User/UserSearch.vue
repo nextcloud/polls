@@ -8,7 +8,7 @@ import { ref } from 'vue'
 import { debounce } from 'lodash'
 import { t } from '@nextcloud/l10n'
 
-import NcSelect from '@nextcloud/vue/components/NcSelect'
+import NcSelectUsers from '@nextcloud/vue/components/NcSelectUsers'
 
 import { AppSettingsAPI } from '../../Api/index.ts'
 import { Logger } from '../../helpers/index.ts'
@@ -24,7 +24,7 @@ interface Props {
 
 const emit = defineEmits(['userSelected'])
 
-const model = defineModel<User | null>()
+const model = defineModel<User | undefined>()
 
 const {
 	placeholder = t('polls', 'Type to start searching ...'),
@@ -77,7 +77,7 @@ const selectProps = {
 </script>
 
 <template>
-	<NcSelect
+	<NcSelectUsers
 		id="ajax"
 		v-model="model"
 		v-bind="selectProps"
@@ -91,7 +91,7 @@ const selectProps = {
 				{{ values.length }} users selected
 			</span>
 		</template>
-	</NcSelect>
+	</NcSelectUsers>
 </template>
 
 <style lang="scss">

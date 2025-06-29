@@ -89,6 +89,10 @@ class UserBase implements JsonSerializable {
 		return $this->id;
 	}
 
+	public function getinternalUserId(): ?string {
+		return null;
+	}
+
 	public function getShareUserId(): string {
 		return $this->getId();
 	}
@@ -316,7 +320,7 @@ class UserBase implements JsonSerializable {
 	 * Full user array for poll owners, delegated poll admins and the current user himself
 	 * without obfuscating/anonymizing
 	 *
-	 * @return (bool|string|string[])[]
+	 * @return (null|bool|string|string[])[]
 	 */
 	public function getRichUserArray(): array {
 		return	[
@@ -326,6 +330,7 @@ class UserBase implements JsonSerializable {
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getEmailAddress(),
 			'id' => $this->getId(),
+			'user' => $this->getinternalUserId(),
 			'isAdmin' => $this->getIsAdmin(),
 			'isGuest' => $this->getIsGuest(),
 			'isNoUser' => $this->getIsNoUser(),
@@ -350,7 +355,7 @@ class UserBase implements JsonSerializable {
 	/**
 	 * Simply user array returning safe attributes
 	 *
-	 * @return (bool|null|string)[]
+	 * @return (null|bool|null|string)[]
 	 */
 	protected function getSimpleUserArray(): array {
 		return	[
@@ -360,6 +365,7 @@ class UserBase implements JsonSerializable {
 			'displayName' => $this->getSafeDisplayName(),
 			'emailAddress' => $this->getSafeEmailAddress(),
 			'id' => $this->getSafeId(),
+			'user' => null,
 			'isAdmin' => false,
 			'isNoUser' => $this->getIsNoUser(),
 			'isGuest' => $this->getIsGuest(),

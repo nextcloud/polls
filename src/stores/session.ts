@@ -39,8 +39,13 @@ export type UserStatus = {
 	isAdmin: boolean
 }
 
-type Watcher = {
+export type Watcher = {
 	id: string
+	mode: UpdateType
+	status: 'running' | 'stopped' | 'error' | 'stopping' | 'idle'
+	interval?: number
+	lastUpdated?: number
+	lastMessage?: string
 }
 
 export type Session = {
@@ -131,6 +136,8 @@ export const useSessionStore = defineStore('session', {
 		},
 		watcher: {
 			id: '',
+			mode: UpdateType.NoPolling,
+			status: 'stopped',
 		},
 		token: null,
 		currentUser: createDefault<User>(),
@@ -180,7 +187,10 @@ export const useSessionStore = defineStore('session', {
 		generateWatcherId() {
 			this.watcher.id = Math.random().toString(36).substring(2)
 		},
-		async load(to: null | RouteLocationNormalized) {
+		async load(
+			to: null | RouteLocationNormalized,
+			cheapLoading: boolean = false,
+		) {
 			Logger.debug('Loading session')
 			this.generateWatcherId()
 
@@ -188,6 +198,11 @@ export const useSessionStore = defineStore('session', {
 				Logger.debug('Set requested route', { to })
 				await this.setRouter(to)
 				Logger.debug('Route set', { route: this.route })
+			}
+
+			if (cheapLoading) {
+				Logger.debug('Same route, skipping session load')
+				return
 			}
 
 			try {

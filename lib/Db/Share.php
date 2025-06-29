@@ -21,8 +21,10 @@ use OCP\IURLGenerator;
  * @method void setToken(string $value)
  * @method string getType()
  * @method void setType(string $value)
- * @method int getPollId()
- * @method void setPollId(int $value)
+ * @method ?int getPollId()
+ * @method void setPollId(?int $value)
+ * @method ?int getGroupId()
+ * @method void setGroupId(?int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method string getEmailAddress()
@@ -37,7 +39,7 @@ use OCP\IURLGenerator;
  * @method void setDisplayName(string $value)
  * @method string getMiscSettings()
  * @method void setMiscSettings(string $value)
- * @method int getAnonymizedVotes()
+ * @method ?int getAnonymizedVotes()
  * @method int getDeleted()
  * @method void setDeleted(int $value)
  * @method string getLabel()
@@ -105,11 +107,18 @@ class Share extends EntityWithUser implements JsonSerializable {
 		self::TYPE_CONTACTGROUP
 	];
 
+	public const GROUP_SHARES = [
+		self::TYPE_USER,
+		self::TYPE_GROUP,
+		self::TYPE_ADMIN,
+	];
+
 	protected IURLGenerator $urlGenerator;
 
 	// schema columns
 	public $id = null;
-	protected int $pollId = 0;
+	protected ?int $pollId = null;
+	protected ?int $groupId = null;
 	protected string $token = '';
 	protected string $type = '';
 	protected string $label = '';
@@ -124,7 +133,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 
 	// joined columns
 	protected int $voted = 0;
-	protected int $anonymizedVotes = 0;
+	protected ?int $anonymizedVotes = 0;
 
 	public function __construct() {
 		$this->addType('pollId', 'integer');
@@ -146,6 +155,7 @@ class Share extends EntityWithUser implements JsonSerializable {
 			'token' => $this->getToken(),
 			'type' => $this->getType(),
 			'pollId' => $this->getPollId(),
+			'groupId' => $this->getGroupId(),
 			'invitationSent' => boolval($this->getInvitationSent()),
 			'reminderSent' => boolval($this->getReminderSent()),
 			'locked' => boolval($this->getDeleted() ? 0 : $this->getLocked()),
@@ -237,6 +247,10 @@ class Share extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getURL(): string {
+		if (!$this->getPollId()) {
+			return '';
+		}
+
 		if (in_array($this->type, [self::TYPE_USER, self::TYPE_ADMIN, self::TYPE_GROUP], true)) {
 			return $this->urlGenerator->linkToRouteAbsolute(
 				AppConstants::APP_ID . '.page.vote',

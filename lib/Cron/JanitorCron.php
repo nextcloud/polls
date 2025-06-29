@@ -14,6 +14,8 @@ use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\SubscriptionMapper;
+use OCA\Polls\Db\VoteMapper;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -30,14 +32,16 @@ class JanitorCron extends TimedJob {
 
 	public function __construct(
 		protected ITimeFactory $time,
-		private LogMapper $logMapper,
-		private PollMapper $pollMapper,
-		private WatchMapper $watchMapper,
 		private CommentMapper $commentMapper,
-		private OptionMapper $optionMapper,
-		private ShareMapper $shareMapper,
 		private ISession $session,
 		private LoggerInterface $logger,
+		private LogMapper $logMapper,
+		private OptionMapper $optionMapper,
+		private PollMapper $pollMapper,
+		private ShareMapper $shareMapper,
+		private SubscriptionMapper $subscriptionMapper,
+		private VoteMapper $voteMapper,
+		private WatchMapper $watchMapper,
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day
@@ -63,6 +67,14 @@ class JanitorCron extends TimedJob {
 		$this->commentMapper->purgeDeletedComments(time() - 4320);
 		$this->optionMapper->purgeDeletedOptions(time() - 4320);
 		$this->shareMapper->purgeDeletedShares(time() - 4320);
+
+		// delete orphaned entries (poll_id = null)
+		$this->commentMapper->deleteOrphaned();
+		$this->logMapper->deleteOrphaned();
+		$this->optionMapper->deleteOrphaned();
+		$this->shareMapper->deleteOrphaned();
+		$this->subscriptionMapper->deleteOrphaned();
+		$this->voteMapper->deleteOrphaned();
 
 		$autoArchiveOffset = $this->appSettings->getAutoArchiveOffsetDays();
 

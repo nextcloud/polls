@@ -414,7 +414,7 @@ export const usePollStore = defineStore('poll', {
 			optionsStore.$reset()
 			sharesStore.$reset()
 			commentsStore.$reset()
-			subscriptionStore.$reset()
+			subscriptionStore.reset()
 		},
 
 		async load(): Promise<void> {
@@ -443,7 +443,7 @@ export const usePollStore = defineStore('poll', {
 				this.$patch(response.data.poll)
 				votesStore.list = response.data.votes
 				optionsStore.list = response.data.options
-				sharesStore.list = response.data.shares
+				sharesStore.shares = response.data.shares
 				commentsStore.list = response.data.comments
 				subscriptionStore.subscribed = response.data.subscribed
 			} catch (error) {
