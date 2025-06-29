@@ -176,7 +176,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	async function removePollFromGroup(payload: {
 		pollGroupId: number
 		pollId: number
-	}): Promise<void>{
+	}): Promise<void> {
 		const pollsStore = usePollsStore()
 
 		try {
@@ -197,7 +197,6 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 			}
 			// Otherwise, update the poll group in the store
 			addOrUpdatePollGroupInList({ pollGroup: response.data.pollGroup })
-
 		} catch (error) {
 			if ((error as AxiosError)?.code !== 'ERR_CANCELED') {
 				Logger.error('Error removing poll from group', {

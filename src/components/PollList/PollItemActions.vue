@@ -87,7 +87,10 @@ async function removePollFromGroup(pollId: number, pollGroupId: number) {
 		})
 		if (!pollGroupsStore.currentPollGroup) {
 			showInfo(
-				t('polls', 'The poll group was deleted by removing the last member.'),
+				t(
+					'polls',
+					'The poll group was deleted by removing the last member.',
+				),
 			)
 			if (route.name === 'group') {
 				router.push({ name: 'root' })

@@ -47,7 +47,7 @@ class PollGroupController extends BaseController {
 	 * Create a new pollgroup with its title and add a poll to it
 	 *
 	 * @param int $pollId Poll id to add to the new pollgroup
-	 * @param string $newPollGroupName Name of the new pollgroup
+	 * @param string $pollGroupName Name of the new pollgroup
 	 *
 	 * psalm-return JSONResponse<array{pollGroup: PollGroup, poll: Poll}>
 	 */
