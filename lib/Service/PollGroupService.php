@@ -42,7 +42,7 @@ class PollGroupService {
 		int $pollGroupId,
 		string $name,
 		string $titleExt,
-		string $description,
+		?string $description,
 	): PollGroup {
 		try {
 			$pollGroup = $this->pollGroupMapper->find($pollGroupId);
@@ -62,23 +62,31 @@ class PollGroupService {
 	public function addPollToPollGroup(
 		int $pollId,
 		?int $pollGroupId = null,
-		?string $newPollGroupName = null,
+		?string $pollGroupName = null,
 	): PollGroup {
 		$poll = $this->pollMapper->find($pollId);
 		$poll->request(Poll::PERMISSION_POLL_EDIT);
 
+		// Without poll group id, we create a new poll group
 		if ($pollGroupId === null
-			&& $newPollGroupName !== null
-			&& $newPollGroupName !== ''
+			&& $pollGroupName !== null
+			&& $pollGroupName !== ''
 		) {
 			if (!$this->appSettings->getPollCreationAllowed()) {
 				// If poll creation is disabled, creating a poll group is also disabled
 				throw new ForbiddenException('Poll group creation is disabled');
 			}
+
 			// Create new poll group
-			$pollGroup = $this->pollGroupMapper->addGroup($newPollGroupName);
+			$pollGroup = new PollGroup();
+			$pollGroup->setName($pollGroupName);
+			$pollGroup->setOwner($this->userSession->getCurrentUserId());
+			$pollGroup->setCreated(time());
+			$pollGroup = $this->pollGroupMapper->add($pollGroup);
+
 		} elseif ($pollGroupId !== null) {
 			$pollGroup = $this->pollGroupMapper->find($pollGroupId);
+
 		} else {
 			throw new InsufficientAttributesException('An existing poll group id must be provided or a new poll group name must be given.');
 		}

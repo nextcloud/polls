@@ -175,6 +175,7 @@ async function loadMore() {
 								poll.permissions.edit
 								|| sessionStore.appPermissions.pollCreation
 							"
+							:key="`actions-${poll.id}`"
 							:poll="poll" />
 					</template>
 				</PollItem>

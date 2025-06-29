@@ -158,13 +158,13 @@ const routes: RouteRecordRaw[] = [
 	},
 	{
 		path: '/',
+		name: 'root',
 		redirect: {
 			name: 'list',
 			params: {
 				type: FilterType.Relevant,
 			},
 		},
-		name: 'root',
 	},
 	{
 		path: '/list',

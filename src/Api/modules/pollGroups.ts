@@ -34,7 +34,7 @@ const pollGroups = {
 		} else if (pollGroupName) {
 			verb = 'POST'
 			url = `pollgroup/new/poll/${pollId}`
-			data = { newPollGroupName: pollGroupName }
+			data = { pollGroupName }
 		} else {
 			throw new Error(
 				'You must provide either a pollGroupId or a pollGroupName',

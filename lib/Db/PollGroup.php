@@ -21,10 +21,12 @@ use OCA\Polls\UserSession;
  * @method void setCreated(int $value)
  * @method int getDeleted()
  * @method void setDeleted(int $value)
- * @method string getDescription()
- * @method void setDescription(string $value)
+ * @method ?string getDescription()
+ * @method void setDescription(?string $value)
  * @method string getOwner()
  * @method void setOwner(string $value)
+ * @method string getTitle()
+ * @method void setTitle(string $value)
  * @method string getTitleExt()
  * @method void setTitleExt(string $value)
  */
@@ -68,11 +70,11 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	}
 
 	public function getName(): string {
-		return $this->title;
+		return $this->getTitle();
 	}
 
 	public function setName(string $name): void {
-		$this->title = $name;
+		$this->setTitle($name);
 	}
 
 	public function setPollIds(array $pollIds): void {
@@ -117,6 +119,7 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 			'description' => $this->getDescription(),
 			'owner' => $this->getUser(),
 			'name' => $this->getName(),
+			'title' => $this->getTitle(),
 			'titleExt' => $this->getTitleExt(),
 			'pollIds' => $this->getPollIds(),
 			'slug' => $this->getSlug(),

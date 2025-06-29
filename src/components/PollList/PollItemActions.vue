@@ -4,18 +4,22 @@
 -->
 
 <script setup lang="ts">
-import { showError } from '@nextcloud/dialogs'
+import { computed, ref } from 'vue'
+import { router } from '../../router.ts'
+
+import { NcActionInput, NcDialog } from '@nextcloud/vue'
+import { showError, showInfo } from '@nextcloud/dialogs'
 import { t } from '@nextcloud/l10n'
 
 import NcActions from '@nextcloud/vue/components/NcActions'
 import NcActionButton from '@nextcloud/vue/components/NcActionButton'
+import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
 
 import { usePollsStore } from '../../stores/polls.ts'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { Poll } from '../../stores/poll.ts'
-import { computed, ref } from 'vue'
 
-import { NcActionInput, NcDialog } from '@nextcloud/vue'
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
 import TransferPollDialog from '../Modals/TransferPollDialog.vue'
 
@@ -27,11 +31,14 @@ import MinusIcon from 'vue-material-design-icons/Minus.vue'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 import RestorePollIcon from 'vue-material-design-icons/Recycle.vue'
 import TransferPollIcon from 'vue-material-design-icons/AccountSwitchOutline.vue'
-import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
+import { useRoute } from 'vue-router'
 
 const { poll } = defineProps<{ poll: Poll }>()
 
+const route = useRoute()
+
 const pollsStore = usePollsStore()
+const pollGroupsStore = usePollGroupsStore()
 const sessionStore = useSessionStore()
 
 const adminAccess = computed(
@@ -74,10 +81,18 @@ async function toggleSubMenu(
 async function removePollFromGroup(pollId: number, pollGroupId: number) {
 	subMenu.value = null
 	try {
-		pollsStore.removePollFromGroup({
+		await pollGroupsStore.removePollFromGroup({
 			pollId,
 			pollGroupId,
 		})
+		if (!pollGroupsStore.currentPollGroup) {
+			showInfo(
+				t('polls', 'The poll group was deleted by removing the last member.'),
+			)
+			if (route.name === 'group') {
+				router.push({ name: 'root' })
+			}
+		}
 	} catch {
 		showError(t('polls', 'Error removing poll from group.'))
 	}
@@ -85,7 +100,7 @@ async function removePollFromGroup(pollId: number, pollGroupId: number) {
 
 async function addPollToPollGroup(pollId: number, pollGroupId: number) {
 	subMenu.value = null
-	pollsStore.addPollToPollGroup({
+	pollGroupsStore.addPollToPollGroup({
 		pollId,
 		pollGroupId,
 	})
@@ -97,7 +112,7 @@ async function addPollToNewPollGroup(pollId: number) {
 	}
 
 	try {
-		await pollsStore.addPollToPollGroup({
+		await pollGroupsStore.addPollToPollGroup({
 			pollId,
 			groupTitle: newGroupTitle.value.trim(),
 		})
@@ -248,9 +263,9 @@ async function takeOverPoll(): Promise<void> {
 
 		<template v-if="subMenu === 'addToGroup'">
 			<NcActionButton
-				v-for="pollGroup in pollsStore.addablePollGroups(poll.id)"
-				:key="pollGroup.id"
-				:name="pollGroup.title"
+				v-for="pollGroup in pollGroupsStore.addablePollGroups(poll.id)"
+				:key="`add-${pollGroup.id}`"
+				:name="pollGroup.name"
 				@click="addPollToPollGroup(poll.id, pollGroup.id)" />
 			<NcActionInput
 				v-if="sessionStore.appPermissions.pollCreation"
@@ -263,10 +278,10 @@ async function takeOverPoll(): Promise<void> {
 
 		<template v-if="subMenu === 'removeFromGroup'">
 			<NcActionButton
-				v-for="pollGroup in poll.pollGroups"
-				:key="pollGroup"
-				:name="pollsStore.getPollGroupName(pollGroup)"
-				@click="removePollFromGroup(poll.id, pollGroup)" />
+				v-for="pollGroupId in poll.pollGroups"
+				:key="`remove-${pollGroupId}`"
+				:name="pollGroupsStore.getPollGroupName(pollGroupId)"
+				@click="removePollFromGroup(poll.id, pollGroupId)" />
 		</template>
 	</NcActions>
 

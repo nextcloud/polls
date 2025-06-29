@@ -53,9 +53,9 @@ class PollGroupController extends BaseController {
 	 */
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'POST', url: '/pollgroup/new/poll/{pollId}')]
-	public function add(int $pollId, string $newPollGroupName = ''): JSONResponse {
+	public function add(int $pollId, string $pollGroupName = ''): JSONResponse {
 		return $this->response(fn () => [
-			'pollGroup' => $this->pollGroupService->addPollToPollGroup($pollId, newPollGroupName: $newPollGroupName),
+			'pollGroup' => $this->pollGroupService->addPollToPollGroup($pollId, pollGroupName: $pollGroupName),
 			'poll' => $this->pollService->get($pollId),
 		]);
 	}
@@ -85,7 +85,7 @@ class PollGroupController extends BaseController {
 		int $pollGroupId,
 		string $name,
 		string $titleExt,
-		string $description,
+		?string $description,
 	): JSONResponse {
 		return $this->response(fn () => [
 			'pollGroup' => $this->pollGroupService->updatePollGroup($pollGroupId, $name, $titleExt, $description),

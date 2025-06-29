@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
 
-import { watch, onBeforeUnmount } from 'vue'
+import { watch, onBeforeUnmount, onMounted } from 'vue'
 import { useSessionStore, Watcher } from '../stores/session'
 import { usePollStore } from '../stores/poll'
 import { generateUrl } from '@nextcloud/router'

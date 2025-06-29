@@ -176,36 +176,38 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	async function removePollFromGroup(payload: {
 		pollGroupId: number
 		pollId: number
-	}) {
+	}): Promise<void>{
 		const pollsStore = usePollsStore()
+
 		try {
 			const response = await PollGroupsAPI.removePollFromGroup(
 				payload.pollGroupId,
 				payload.pollId,
 			)
 
+			// update poll in the polls store
+			pollsStore.addOrUpdatePollGroupInList({ poll: response.data.poll })
+
 			if (response.data.pollGroup === null) {
 				// If the poll group was removed (=== null), remove it from the store
 				pollGroups.value = pollGroups.value.filter(
 					(group) => group.id !== payload.pollGroupId,
 				)
-			} else {
-				// Otherwise, update the poll group in the store
-				addOrUpdatePollGroupInList({ pollGroup: response.data.pollGroup })
-			}
-			// update poll in the polls store
-			pollsStore.addOrUpdatePollGroupInList({ poll: response.data.poll })
-		} catch (error) {
-			if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 				return
 			}
-			Logger.error('Error removing poll from group', {
-				error,
-				payload,
-			})
-			throw error
+			// Otherwise, update the poll group in the store
+			addOrUpdatePollGroupInList({ pollGroup: response.data.pollGroup })
+
+		} catch (error) {
+			if ((error as AxiosError)?.code !== 'ERR_CANCELED') {
+				Logger.error('Error removing poll from group', {
+					error,
+					payload,
+				})
+				throw error
+			}
 		} finally {
-			pollsStore.load()
+			// pollsStore.load()
 		}
 	}
 
