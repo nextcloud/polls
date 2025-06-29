@@ -33,18 +33,11 @@ const sessionStore = useSessionStore()
 const router = useRouter()
 const route = useRoute()
 
-const editable = computed(
-	() =>
-		route.name === 'group'
-		&& sessionStore.currentUser.id
-			=== pollGroupsStore.currentPollGroup?.owner.id,
-)
-
 const title = computed(() => {
 	if (route.name === 'group') {
 		return (
 			pollGroupsStore.currentPollGroup?.titleExt
-			|| pollGroupsStore.currentPollGroup?.title
+			|| pollGroupsStore.currentPollGroup?.name
 			|| ''
 		)
 	}

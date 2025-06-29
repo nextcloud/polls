@@ -4,40 +4,47 @@
 -->
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { InputDiv } from '../Base/index.ts'
 import { t } from '@nextcloud/l10n'
 import { usePollGroupsStore } from '../../stores/pollGroups.ts'
+import { computed } from 'vue'
+import { SignalingType } from '../../Types/index.ts'
 
 const emit = defineEmits(['change'])
 
 const pollGroupsStore = usePollGroupsStore()
 
-const pollGroupTitleExt = computed({
+const pollGroupName = computed({
 	get() {
-		return pollGroupsStore.currentPollGroup?.titleExt || ''
+		return pollGroupsStore.currentPollGroup?.name || ''
 	},
 	set(value: string) {
 		pollGroupsStore.setCurrentPollGroup({
 			...pollGroupsStore.currentPollGroup,
-			titleExt: value,
+			name: value,
 		})
 	},
 })
+const checkName = computed(() =>
+	pollGroupsStore.currentPollGroup?.name
+		? SignalingType.None
+		: SignalingType.Error,
+)
+
 const inputProps = {
-	placeholder: t('polls', 'Enter extended title'),
+	placeholder: t('polls', 'Enter Title'),
 	helperText: t(
 		'polls',
-		'Optional choose a more meaningful title for the overview page',
+		'Choose a brief title for the navigation bar and the slug',
 	),
 }
 </script>
 
 <template>
 	<InputDiv
-		v-model="pollGroupTitleExt"
+		v-model="pollGroupName"
 		v-bind="inputProps"
-		class="input-textarea"
+		:signaling-class="checkName"
 		type="text"
 		@change="emit('change')" />
 </template>

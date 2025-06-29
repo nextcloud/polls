@@ -83,7 +83,7 @@ class PollGroupMapper extends QBMapper {
 
 	public function addGroup(string $PollGroupName): PollGroup {
 		$pollGroup = new PollGroup();
-		$pollGroup->setTitle($PollGroupName);
+		$pollGroup->setName($PollGroupName);
 		$pollGroup->setTitleExt($PollGroupName);
 		$pollGroup->setDescription($PollGroupName);
 		$pollGroup->setCreated(time());

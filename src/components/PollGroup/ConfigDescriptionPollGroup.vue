@@ -5,8 +5,6 @@
 
 <script setup lang="ts">
 import { computed } from 'vue'
-import { InputDiv } from '../Base/index.ts'
-import { SignalingType } from '../../Types/index.ts'
 import { t } from '@nextcloud/l10n'
 import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 
@@ -29,17 +27,14 @@ const pollGroupDescription = computed({
 		})
 	},
 })
-
-const checkTitle = computed(() =>
-	pollGroupDescription.value ? SignalingType.None : SignalingType.Error,
-)
 </script>
 
 <template>
 	<textarea
 		v-model="pollGroupDescription"
 		class="input-textarea"
-		:placeholder="inputProps.placeholder" />
+		:placeholder="inputProps.placeholder"
+		@change="emit('change')" />
 	<p class="helper">
 		{{ inputProps.helperText }}
 	</p>

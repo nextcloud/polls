@@ -9,8 +9,7 @@ import { Option } from '../../stores/options.ts'
 import { Vote } from '../../stores/votes.ts'
 import { Share } from '../../stores/shares.ts'
 import { ApiEmailAdressList, Comment } from '../../Types/index.ts'
-import { PollGroup } from '../../stores/polls.ts'
-import { method } from 'lodash'
+import { PollGroup } from '../../stores/pollGroups.types.ts'
 
 export type Confirmations = {
 	sentMails: { emailAddress: string; displayName: string }[]
@@ -20,85 +19,6 @@ export type Confirmations = {
 }
 
 const polls = {
-	getPollGroups(): Promise<AxiosResponse<{ pollGroups: PollGroup[] }>> {
-		return httpInstance.request({
-			method: 'GET',
-			url: 'pollgroups',
-			params: { time: +new Date() },
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.getPollGroups.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	addPollToGroup(
-		pollId: number,
-		pollGroupId?: number,
-		pollGroupName?: string,
-	): Promise<AxiosResponse<{ pollGroup: PollGroup; poll: Poll }>> {
-		let url = ''
-		let verb = 'PUT'
-		let data = {}
-
-		if (pollGroupId) {
-			url = `pollgroup/${pollGroupId}/poll/${pollId}`
-		} else if (pollGroupName) {
-			verb = 'POST'
-			url = `pollgroup/new/poll/${pollId}`
-			data = { newPollGroupName: pollGroupName }
-		} else {
-			throw new Error(
-				'You must provide either a pollGroupId or a pollGroupName',
-			)
-		}
-
-		return httpInstance.request({
-			method: verb,
-			url,
-			data,
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.addPollToGroup.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	removePollFromGroup(
-		pollGroupId: number,
-		pollId: number,
-	): Promise<AxiosResponse<{ pollGroup: PollGroup | null; poll: Poll }>> {
-		return httpInstance.request({
-			method: 'DELETE',
-			url: `pollgroup/${pollGroupId}/poll/${pollId}`,
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.removePollFromGroup.name
-				].handleRequestCancellation().token,
-		})
-	},
-
-	updatePollGroup(payload: {
-		id: number
-		title: string
-		titleExt: string
-		description: string
-	}): Promise<AxiosResponse<{ pollGroup: PollGroup }>> {
-		return httpInstance.request({
-			method: 'PUT',
-			url: `pollgroup/${payload.id}/update`,
-			data: {
-				title: payload.title,
-				titleExt: payload.titleExt,
-				description: payload.description,
-			},
-			cancelToken:
-				cancelTokenHandlerObject[
-					this.updatePollGroup.name
-				].handleRequestCancellation().token,
-		})
-	},
-
 	getPolls(): Promise<
 		AxiosResponse<{
 			polls: Poll[]

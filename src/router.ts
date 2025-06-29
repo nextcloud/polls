@@ -201,7 +201,7 @@ router.beforeEach(
 		try {
 			await loadContext(to, cheapLoading)
 		} catch (error) {
-			Logger.error('Could not load context')
+			Logger.error('Could not load context', { error })
 
 			if (!sessionStore.userStatus.isLoggedin) {
 				// if the user is not logged in, redirect to the login page

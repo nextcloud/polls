@@ -13,7 +13,7 @@ import { PollsAPI } from '../Api/index.ts'
 
 import { AccessType, Poll, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
-import { StatusResults, User } from '../Types/index.ts'
+import { StatusResults } from '../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 import { usePollGroupsStore } from './pollGroups.ts'
 
@@ -52,18 +52,18 @@ export type PollCategory = {
 	showInNavigation(): boolean
 	filterCondition(poll: Poll): boolean
 }
-export type PollGroup = {
-	id: number
-	created: number
-	deleted: number
-	description: string
-	owner: User
-	title: string
-	titleExt: string
-	pollIds: number[]
-	slug: string
-	allowEdit: boolean
-}
+// export type PollGroup = {
+// 	id: number
+// 	created: number
+// 	deleted: number
+// 	description: string
+// 	owner: User
+// 	title: string
+// 	titleExt: string
+// 	pollIds: number[]
+// 	slug: string
+// 	allowEdit: boolean
+// }
 
 export type PollCategoryList = Record<FilterType, PollCategory>
 

@@ -25,8 +25,6 @@ use OCA\Polls\UserSession;
  * @method void setDescription(string $value)
  * @method string getOwner()
  * @method void setOwner(string $value)
- * @method string getTitle()
- * @method void setTitle(string $value)
  * @method string getTitleExt()
  * @method void setTitleExt(string $value)
  */
@@ -69,6 +67,14 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 		return array_map('intval', explode(self::CONCAT_SEPARATOR, $this->pollIds));
 	}
 
+	public function getName(): string {
+		return $this->title;
+	}
+
+	public function setName(string $name): void {
+		$this->title = $name;
+	}
+
 	public function setPollIds(array $pollIds): void {
 		$this->pollIds = implode(self::CONCAT_SEPARATOR, $pollIds);
 	}
@@ -80,7 +86,7 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 
 	public function getSlug(): string {
 		// sanitize the title to remove any unwanted characters
-		$slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $this->getTitle());
+		$slug = preg_replace('/[^a-zA-Z0-9\s]/', '', $this->getName());
 		// in case the title is empty, use a default slug
 		if ($slug === '') {
 			$slug = 'group';
@@ -110,7 +116,7 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 			'deleted' => $this->getDeleted(),
 			'description' => $this->getDescription(),
 			'owner' => $this->getUser(),
-			'title' => $this->getTitle(),
+			'name' => $this->getName(),
 			'titleExt' => $this->getTitleExt(),
 			'pollIds' => $this->getPollIds(),
 			'slug' => $this->getSlug(),

@@ -10,16 +10,14 @@ import { useSessionStore } from './session'
 import { usePollsStore } from './polls'
 import { orderBy } from 'lodash'
 import type { PollGroup } from './pollGroups.types'
-import { PollsAPI } from '../Api'
+import { PollGroupsAPI } from '../Api'
 import { AxiosError } from 'axios'
 import { Logger } from '../helpers'
 import { t } from '@nextcloud/l10n'
 
 export const usePollGroupsStore = defineStore('pollGroups', () => {
 	const pollGroups = ref<PollGroup[]>([])
-	const status = ref({
-		loadingGroups: false,
-	})
+	const updating = ref(false)
 
 	/**
 	 * Currently selected pollsgroup or undefined if not in a pollsgroup route
@@ -90,12 +88,12 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	 * This function updates the current poll group in the store without saving it to the API
 	 * as a temporary state.
 	 * @param payload
-	 * @param payload.title
+	 * @param payload.name
 	 * @param payload.titleExt
 	 * @param payload.description
 	 */
 	function setCurrentPollGroup(payload: {
-		title?: string
+		name?: string
 		titleExt?: string
 		description?: string
 	}): void {
@@ -107,7 +105,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 			if (group.id === currentPollGroup.value?.id) {
 				return {
 					...group,
-					title: payload.title ?? group.title,
+					name: payload.name ?? group.name,
 					titleExt: payload.titleExt ?? group.titleExt,
 					description: payload.description ?? group.description,
 				}
@@ -116,18 +114,18 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 		})
 	}
 
-	async function writeCurrentPollGroup() {
+	async function writeCurrentPollGroup(): Promise<PollGroup | undefined> {
 		if (!currentPollGroup.value) {
 			throw new Error('No current poll group set')
 		}
 
 		try {
-			const response = await PollsAPI.updatePollGroup({
+			const response = await PollGroupsAPI.updatePollGroup({
 				...currentPollGroup.value,
 			})
-			addOrUpdatePollGroupInList({
-				pollGroup: response.data.pollGroup,
-			})
+
+			addOrUpdatePollGroupInList({ pollGroup: response.data.pollGroup })
+
 			return response.data.pollGroup
 		} catch (error) {
 			if ((error as AxiosError)?.code === 'ERR_CANCELED') {
@@ -155,7 +153,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 		const pollsStore = usePollsStore()
 
 		try {
-			const response = await PollsAPI.addPollToGroup(
+			const response = await PollGroupsAPI.addPollToGroup(
 				payload.pollId,
 				payload.pollGroupId,
 				payload.groupTitle,
@@ -181,7 +179,7 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	}) {
 		const pollsStore = usePollsStore()
 		try {
-			const response = await PollsAPI.removePollFromGroup(
+			const response = await PollGroupsAPI.removePollFromGroup(
 				payload.pollGroupId,
 				payload.pollId,
 			)
@@ -214,14 +212,14 @@ export const usePollGroupsStore = defineStore('pollGroups', () => {
 	function getPollGroupName(PollGroupId: number): string {
 		const group = pollGroups.value.find((group) => group.id === PollGroupId)
 		if (group) {
-			return group.title
+			return group.name
 		}
 		return t('polls', 'Invalid Group ID')
 	}
 
 	return {
 		pollGroups,
-		status,
+		updating,
 		pollGroupsSorted,
 		countPollsInPollGroups,
 		currentPollGroup,

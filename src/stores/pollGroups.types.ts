@@ -10,7 +10,7 @@ export type PollGroup = {
 	deleted: number
 	description: string
 	owner: User
-	title: string
+	name: string
 	titleExt: string
 	pollIds: number[]
 	slug: string

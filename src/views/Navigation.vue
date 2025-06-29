@@ -177,7 +177,7 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 			<NcAppNavigationItem
 				v-for="pollGroup in pollGroupsStore.pollGroupsSorted"
 				:key="pollGroup.id"
-				:name="pollGroup.title"
+				:name="pollGroup.name"
 				:title="pollGroup.titleExt"
 				allow-collapse
 				:to="{
