@@ -22,7 +22,7 @@ const optionAddDatesModalProps = {
 
 <template>
 	<CardDiv :type="cardType">
-		{{ t('polls', 'You are asked to propose more options. ') }}
+		{{ t('polls', 'You are asked to propose more options.') }}
 		<p v-if="pollStore.isProposalExpirySet && !pollStore.isProposalExpired">
 			{{
 				t('polls', 'The proposal period ends {timeRelative}.', {

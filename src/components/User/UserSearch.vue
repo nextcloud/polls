@@ -27,7 +27,7 @@ const emit = defineEmits(['userSelected'])
 const model = defineModel<User | null>()
 
 const {
-	placeholder = t('polls', 'Type to start searching ...'),
+	placeholder = t('polls', 'Type to start searching …'),
 	ariaLabel = t('polls', 'Select users'),
 	searchTypes = [ISearchType.All],
 	closeOnSelect = false,

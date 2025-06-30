@@ -150,7 +150,7 @@ class Notifier implements INotifier {
 				self::SUBJECT_RICH => $l->t('{actor} took over your poll "%s" and is the new owner.', $pollTitle),
 			],
 			self::NOTIFY_POLL_CHANGED_OWNER => [
-				self::SUBJECT_PARSED => $l->t('%s is the new owner of your poll. ', $parameters['newOwner']),
+				self::SUBJECT_PARSED => $l->t('%s is the new owner of your poll.', $parameters['newOwner']),
 				self::SUBJECT_RICH => $l->t('{actor} transfered your poll "%s" to {newOwner}. You are no more the owner.', $pollTitle),
 			],
 			self::NOTIFY_POLL_DELETED_BY_OTHER => [
@@ -170,7 +170,7 @@ class Notifier implements INotifier {
 				$newOwner = $this->userMapper->getUserFromUserBase($parameters['newOwner']);
 				// overwrite the subject with the new owner
 				$notification->setParsedSubject(
-					$l->t('%s is the new owner of your poll. ', $newOwner->getDisplayName())
+					$l->t('%s is the new owner of your poll.', $newOwner->getDisplayName())
 				);
 
 				$notification->setRichSubject(
