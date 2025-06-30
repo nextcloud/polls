@@ -179,13 +179,13 @@ class ActivityService {
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('This poll has been closed'),
 			],
 			PollEvent::CLOSE => [
-				self::FIRST_PERSON_FULL => $this->l10n->t('You have closed the poll "{pollTitle}" '),
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have closed the poll "{pollTitle}"'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has closed the poll "{pollTitle}"'),
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have closed this poll'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has closed this poll'),
 			],
 			PollEvent::REOPEN => [
-				self::FIRST_PERSON_FULL => $this->l10n->t('You have reopened the poll "{pollTitle}" '),
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have reopened the poll "{pollTitle}"'),
 				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has reopened the poll "{pollTitle}"'),
 				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have reopened this poll'),
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has reopened this poll'),
