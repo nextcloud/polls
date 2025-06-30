@@ -31,6 +31,7 @@ OC.L10N.register(
     "never" : "kamwe",
     "Description" : "Maelezo",
     "Update" : "Sasisha",
+    "Archived {relativeTime}" : "Imewekwa katika kumbukumbu {relativeTime}",
     "Back" : "Rudi",
     "Privacy policy" : "Sheria ya faragha",
     "Login" : "Ingia",
