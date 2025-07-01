@@ -188,7 +188,6 @@ OC.L10N.register(
     "Previous day" : "Aurreko eguna",
     "Next day" : "Hurrengo eguna",
     "Add" : "Gehitu",
-    "You are asked to propose more options. " : "Aukera gehiago proposatzeko eskatu zaizu.",
     "Propose an option" : "Proposatu aukera",
     "Limited votes." : "Bozketa mugatuak.",
     "To participate, register with your email address and a name." : "Erantzuteko, erregistratu posta helbidea erabiliz.",

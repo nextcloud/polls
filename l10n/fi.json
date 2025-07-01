@@ -276,7 +276,6 @@
     "Copy list of email addresses to clipboard" : "Kopio lista sähköpostiosoitteista leikepöydälle",
     "Reset your votes" : "Nollaa äänesi",
     "Logout as {name} (delete cookie)" : "Kirjaudu ulos tililtä {name} (poista eväste)",
-    "Type to start searching ..." : "Kirjoita etsiäksesi...",
     "Select users" : "Valitse käyttäjät",
     "Vote saved" : "Ääni tallennettu",
     "Error saving vote" : "Virhe ääntä tallentaessa",
