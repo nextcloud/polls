@@ -16,7 +16,7 @@ use OCP\AppFramework\Db\Entity;
  * @method int getId()
  * @method void setId(int $value)
  * @method int getPollId()
- * @method void setPollId(?int $value)
+ * @method void setPollId(int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  */

@@ -31,7 +31,7 @@ use OCP\IL10N;
  * @method string getOwner()
  * @method void setOwner(string $value)
  * @method int getPollId()
- * @method void setPollId(?int $value)
+ * @method void setPollId(int $value)
  * @method string getPollOptionText()
  * @method void setPollOptionText(string $value)
  * @method string getPollOptionHash()
@@ -59,7 +59,7 @@ class Option extends EntityWithUser implements JsonSerializable {
 
 	// schema columns
 	public $id = null;
-	protected ?int $pollId = null;
+	protected int $pollId = 0;
 	protected string $pollOptionText = '';
 	protected string $pollOptionHash = '';
 	protected int $timestamp = 0;

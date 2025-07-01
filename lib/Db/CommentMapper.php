@@ -82,7 +82,7 @@ class CommentMapper extends QBMapperWithUser {
 		$query->executeStatement();
 	}
 
-	public function purgeDeletedComments(int $offset): void {
+	public function purgeDeletedComments(int $offset): int {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->where(
@@ -92,17 +92,24 @@ class CommentMapper extends QBMapperWithUser {
 				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
 			);
 
-		$query->executeStatement();
+		return $query->executeStatement();
 
 	}
 
-	public function deleteOrphaned(): void {
+	public function deleteOrphaned(): int {
+		// collects all pollIds
+		$subqueryPolls = $this->db->getQueryBuilder();
+		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
+
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->where(
-				$query->expr()->isNull('poll_id')
+				$query->expr()->orX(
+					$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('poll_id')
+				)
 			);
-		$query->executeStatement();
+		return $query->executeStatement();
 	}
 
 	/**

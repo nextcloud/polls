@@ -49,6 +49,7 @@ onMounted(() => {
 	<div :class="{ deleted: share.deleted }">
 		<UserItem
 			v-bind="userItemProps"
+			:delegated-from-group="!share.pollId"
 			:deleted-state="share.deleted"
 			:locked-state="share.locked">
 			<template #status>

@@ -83,7 +83,7 @@ class IndexManager {
 		$parentTable = $this->schema->getTable($parentTableName);
 		$childTable = $this->schema->getTable($childTableName);
 
-		$childTable->addForeignKeyConstraint($parentTable, [$constraintColumn], ['id'], ['onDelete' => 'SET NULL']);
+		$childTable->addForeignKeyConstraint($parentTable, [$constraintColumn], ['id'], ['onDelete' => 'CASCADE']);
 		return 'Added ' . $parentTableName . '[' . $constraintColumn . '] <- ' . $childTableName . '[id]';
 	}
 

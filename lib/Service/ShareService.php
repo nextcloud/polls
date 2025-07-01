@@ -88,8 +88,9 @@ class ShareService {
 	public function list(int $pollOrPollGroupId, string $purpose = 'poll'): array {
 		try {
 			if ($purpose === 'poll') {
-				$this->pollMapper->find($pollOrPollGroupId)->request(Poll::PERMISSION_POLL_EDIT);
-				$this->shares = $this->shareMapper->findByPoll($pollOrPollGroupId);
+				$poll = $this->pollMapper->find($pollOrPollGroupId);
+				$poll->request(Poll::PERMISSION_POLL_EDIT);
+				$this->shares = $this->shareMapper->findByPoll($pollOrPollGroupId, $poll->getPollGroups());
 			} else {
 				$this->pollGroupMapper->find($pollOrPollGroupId);
 				$this->shares = $this->shareMapper->findByPollGroup($pollOrPollGroupId);

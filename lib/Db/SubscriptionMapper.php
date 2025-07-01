@@ -68,11 +68,20 @@ class SubscriptionMapper extends QBMapper {
 		$query->executeStatement();
 	}
 
-	public function deleteOrphaned(): void {
+	public function deleteOrphaned(): int {
+		// collects all pollIds
+		$subqueryPolls = $this->db->getQueryBuilder();
+		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
+
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
-			->where($query->expr()->isNull('poll_id'));
-		$query->executeStatement();
+			->where(
+				$query->expr()->orX(
+					$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('poll_id')
+				)
+			);
+		return $query->executeStatement();
 	}
 
 }

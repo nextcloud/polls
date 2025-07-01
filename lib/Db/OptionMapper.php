@@ -34,11 +34,15 @@ class OptionMapper extends QBMapperWithUser {
 	 * @return Option[]
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function getAll(): array {
+	public function getAll(bool $includeNull = false): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')->from($this->getTableName());
-		$qb->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
+
+		if (!$includeNull) {
+			$qb->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
+		}
+
 		return $this->findEntities($qb);
 	}
 
@@ -143,7 +147,7 @@ class OptionMapper extends QBMapperWithUser {
 		$query->executeStatement();
 	}
 
-	public function purgeDeletedOptions(int $offset): void {
+	public function purgeDeletedOptions(int $offset): int {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->andWhere(
@@ -152,16 +156,23 @@ class OptionMapper extends QBMapperWithUser {
 			->andWhere(
 				$query->expr()->lt('deleted', $query->expr()->literal($offset, IQueryBuilder::PARAM_INT))
 			);
-		$query->executeStatement();
+		return $query->executeStatement();
 	}
 
-	public function deleteOrphaned(): void {
+	public function deleteOrphaned(): int {
+		// collects all pollIds
+		$subqueryPolls = $this->db->getQueryBuilder();
+		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
+
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->where(
-				$query->expr()->isNull('poll_id')
+				$query->expr()->orX(
+					$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('poll_id')
+				)
 			);
-		$query->executeStatement();
+		return $query->executeStatement();
 	}
 
 	/**

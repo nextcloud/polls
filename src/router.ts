@@ -27,6 +27,8 @@ import { FilterType, usePollsStore } from './stores/polls.ts'
 import { useSessionStore } from './stores/session.ts'
 import SideBarPollGroup from './views/SideBarPollGroup.vue'
 import { useSharesStore } from './stores/shares.ts'
+import { AxiosError } from 'axios'
+import Forbidden from './views/Forbidden.vue'
 
 async function validateToken(to: RouteLocationNormalized) {
 	if (getCurrentUser()) {
@@ -50,7 +52,7 @@ async function validateToken(to: RouteLocationNormalized) {
 
 	// continue for external users
 	try {
-		// first validate the existance of the public token
+		// first validate the existence of the public token
 		await PublicAPI.getShare(to.params.token as string)
 	} catch (error) {
 		// in case of an error, reroute to the login page
@@ -128,6 +130,14 @@ const routes: RouteRecordRaw[] = [
 			navigation: Navigation,
 		},
 		name: 'notfound',
+	},
+	{
+		path: '/forbidden',
+		components: {
+			default: Forbidden,
+			navigation: Navigation,
+		},
+		name: 'forbidden',
 	},
 	{
 		path: '/vote/:id',
@@ -224,7 +234,7 @@ router.beforeEach(
 			// vote pages load the particular poll
 			// or reset the poll store if not a vote page
 			if (to.meta.votePage) {
-				pollStore.load()
+				await pollStore.load()
 			} else {
 				pollStore.resetPoll()
 			}
@@ -240,6 +250,13 @@ router.beforeEach(
 			}
 		} catch (error) {
 			Logger.warn('Could not load poll', { error })
+			if ((error as AxiosError).response?.status === 403) {
+				// User has no access
+				return {
+					name: 'forbidden',
+				}
+			}
+			// else let's pretend, the poll does not exist (what will be probably the case)
 			return {
 				name: 'notfound',
 			}

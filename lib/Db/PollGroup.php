@@ -27,8 +27,8 @@ use OCA\Polls\UserSession;
  * @method void setOwner(string $value)
  * @method string getTitle()
  * @method void setTitle(string $value)
- * @method string getTitleExt()
- * @method void setTitleExt(string $value)
+ * @method ?string getTitleExt()
+ * @method void setTitleExt(?string $value)
  */
 
 class PollGroup extends EntityWithUser implements JsonSerializable {
@@ -43,10 +43,10 @@ class PollGroup extends EntityWithUser implements JsonSerializable {
 	public $id = null;
 	protected int $created = 0;
 	protected int $deleted = 0;
-	protected ?string $description = '';
-	protected ?string $owner = '';
 	protected string $title = '';
-	protected string $titleExt = '';
+	protected string $owner = '';
+	protected ?string $description = '';
+	protected ?string $titleExt = '';
 	// joined polls
 	protected ?string $pollIds = '';
 

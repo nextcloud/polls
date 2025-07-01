@@ -246,29 +246,102 @@ class TableManager {
 	 * delete all orphaned entries by selecting all rows
 	 * those poll_ids are not present in the polls table
 	 *
-	 * we have to use a raw query, because NOT EXISTS is not
-	 * part of doctrine's expression builder
+	 * Because we allowed nullish poll_ids between version 8.0.0 and 8.1.0,
+	 * we also delete all entries with a nullish poll_id.
+	 *
+	 * This method is used to clean up orphaned entries in the database and
+	 * is used by the occ command `occ polls:db:rebuild and while updating
 	 */
-	public function removeOrphaned(): void {
-		// polls 1.4 -> introduced contraints
-		// Version0104Date20200205104800
-		// check for orphaned entries in all tables referencing
-		// the main polls table
-		// TODO: Move to command after polls5.x
+	public function removeOrphaned(): array {
 
-		foreach (TableSchema::FK_INDICES as $child) {
-			foreach (array_keys($child) as $tableName) {
-				$table = "$this->dbPrefix$tableName";
-				$query = "DELETE
-                FROM $table
-                WHERE NOT EXISTS (
-                    SELECT NULL
-                    FROM {$this->dbPrefix}polls_polls polls
-                    WHERE polls.id = {$table}.poll_id
-                )";
-				$this->connection->executeStatement($query);
+		// Tables which rely only on polls
+		$TABLES_POLL = [
+			Comment::TABLE,
+			Log::TABLE,
+			Subscription::TABLE,
+			Option::TABLE,
+			Vote::TABLE,
+			Watch::TABLE,
+		];
+
+		// Tables which rely on polls or groups
+		$TABLES_POLL_GROUP = [
+			Share::TABLE,
+		];
+
+		// collects all pollIds
+		$subqueryPolls = $this->connection->getQueryBuilder();
+		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
+
+		// collects all groupIds
+		$subqueryGroups = $this->connection->getQueryBuilder();
+		$subqueryGroups->selectDistinct('id')->from(PollGroup::TABLE);
+
+		// delete all orphaned entries without a corresponding poll (poll_id is NULL or not in the polls table)
+		foreach (TableSchema::FK_INDICES as $children) {
+			foreach (array_keys($children) as $tableName) {
+				$query = $this->connection->getQueryBuilder();
+				$query->delete($tableName)
+					->where(
+						$query->expr()->orX(
+							$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+							$query->expr()->isNull('poll_id')
+						)
+					);
+				$executed = $query->executeStatement();
+				if (isset($orphaned[$tableName])) {
+					$orphaned[$tableName] += $executed;
+				} else {
+					$orphaned[$tableName] = $executed;
+				}
+				// $orphaned[$tableName] = $query->executeStatement();
 			}
 		}
+
+		// delete all orphaned entries without a corresponding poll group and poll (group_id and poll_id are NULL or not in the polls or poll groups table)
+		foreach ($TABLES_POLL_GROUP as $tableName) {
+			$query = $this->connection->getQueryBuilder();
+			$query->delete($tableName)
+				->where(
+					$query->expr()->orX(
+						$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+						$query->expr()->isNull('poll_id')
+					)
+				);
+			$query->andWhere(
+				$query->expr()->orX(
+					$query->expr()->notIn('group_id', $query->createFunction($subqueryGroups->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('group_id')
+				)
+			);
+			$orphaned[$tableName] = $query->executeStatement();
+		}
+
+		// delete all orphaned entries from the poll-group-relation (group_id or poll_id are NULL or not in the polls or poll groups table)
+		$query = $this->connection->getQueryBuilder();
+		$query->delete(PollGroup::RELATION_TABLE)
+			->where(
+				$query->expr()->orX(
+					$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('poll_id')
+				)
+			);
+		$query->orWhere(
+			$query->expr()->orX(
+				$query->expr()->notIn('group_id', $query->createFunction($subqueryGroups->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+				$query->expr()->isNull('group_id')
+			)
+		);
+		$orphaned[PollGroup::RELATION_TABLE] = $query->executeStatement();
+
+
+		// finally delete all polls with id === null
+		$query = $this->connection->getQueryBuilder();
+		$query->delete(Poll::TABLE)
+			->where($query->expr()->isNull('id'));
+		$orphaned[Poll::TABLE] = $query->executeStatement();
+
+		return $orphaned;
 	}
 
 	/**
@@ -391,7 +464,7 @@ class TableManager {
 			$table = $this->schema->getTable($this->dbPrefix . OptionMapper::TABLE);
 			$count = 0;
 			if ($table->hasColumn('poll_option_hash')) {
-				foreach ($this->optionMapper->getAll() as $option) {
+				foreach ($this->optionMapper->getAll(includeNull: true) as $option) {
 					try {
 						$option->syncOption();
 						// $option->setPollOptionHash(hash('md5', $option->getPollId() . $option->getPollOptionText() . $option->getTimestamp()));
@@ -418,7 +491,7 @@ class TableManager {
 			$table = $this->schema->getTable($this->dbPrefix . VoteMapper::TABLE);
 			$count = 0;
 			if ($table->hasColumn('vote_option_hash')) {
-				foreach ($this->voteMapper->getAll() as $vote) {
+				foreach ($this->voteMapper->getAll(includeNull: true) as $vote) {
 					try {
 						$vote->setVoteOptionHash(hash('md5', $vote->getPollId() . $vote->getUserId() . $vote->getVoteOptionText()));
 						$this->voteMapper->update($vote);

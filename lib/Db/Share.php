@@ -121,14 +121,14 @@ class Share extends EntityWithUser implements JsonSerializable {
 	protected ?int $groupId = null;
 	protected string $token = '';
 	protected string $type = '';
-	protected string $label = '';
+	protected ?string $label = null;
 	protected string $userId = '';
 	protected ?string $displayName = null;
 	protected ?string $emailAddress = null;
 	protected int $invitationSent = 0;
 	protected int $reminderSent = 0;
 	protected int $locked = 0;
-	protected ?string $miscSettings = '';
+	protected ?string $miscSettings = null;
 	protected int $deleted = 0;
 
 	// joined columns

@@ -33,7 +33,7 @@ class ShareMapper extends QBMapper {
 	 * @return Share[]
 	 * @psalm-return array<array-key, Share>
 	 */
-	public function findByPoll(int $pollId, bool $getDeleted = false): array {
+	public function findByPoll(int $pollId, array $groupIds = [], bool $getDeleted = false): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
@@ -41,6 +41,11 @@ class ShareMapper extends QBMapper {
 			->groupBy(self::TABLE . '.id')
 			->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 
+		if (!empty($groupIds)) {
+			$qb->orWhere(
+				$qb->expr()->in(self::TABLE . '.group_id', $qb->createNamedParameter($groupIds, IQueryBuilder::PARAM_INT_ARRAY))
+			);
+		}
 		if (!$getDeleted) {
 			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
@@ -174,7 +179,7 @@ class ShareMapper extends QBMapper {
 		$query->executeStatement();
 	}
 
-	public function purgeDeletedShares(int $offset): void {
+	public function purgeDeletedShares(int $offset): int {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->where(
@@ -183,15 +188,35 @@ class ShareMapper extends QBMapper {
 			->andWhere(
 				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
 			);
-		$query->executeStatement();
+		return $query->executeStatement();
 	}
 
-	public function deleteOrphaned(): void {
+	public function deleteOrphaned(): int {
+
+		// collects all pollIds
+		$subqueryPolls = $this->db->getQueryBuilder();
+		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
+
+		// collects all groupIds
+		$subqueryGroups = $this->db->getQueryBuilder();
+		$subqueryGroups->selectDistinct('id')->from(PollGroup::TABLE);
+
+		// delete all shares without any related poll and group
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
-			->where($query->expr()->isNull('poll_id'))
-			->andWhere($query->expr()->isNull('group_id'));
-		$query->executeStatement();
+			->where(
+				$query->expr()->orX(
+					$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('poll_id')
+				)
+			)
+			->andWhere(
+				$query->expr()->orX(
+					$query->expr()->notIn('group_id', $query->createFunction($subqueryGroups->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('group_id')
+				)
+			);
+		return $query->executeStatement();
 	}
 
 	/**

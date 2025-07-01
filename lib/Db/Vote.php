@@ -15,7 +15,7 @@ use JsonSerializable;
  * @method int getId()
  * @method void setId(int $value)
  * @method int getPollId()
- * @method void setPollId(?int $value)
+ * @method void setPollId(int $value)
  * @method string getUserId()
  * @method void setUserId(string $value)
  * @method int getVoteOptionId()
@@ -40,7 +40,7 @@ class Vote extends EntityWithUser implements JsonSerializable {
 
 	// schema columns
 	public $id = null;
-	protected ?int $pollId = null;
+	protected int $pollId = 0;
 	protected string $userId = '';
 	protected int $voteOptionId = 0;
 	protected string $voteOptionText = '';

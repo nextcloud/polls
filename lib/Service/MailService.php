@@ -172,7 +172,6 @@ class MailService {
 		}
 
 		foreach ($this->logs as $logItem) {
-			$logItem->setPollId(null);
 			$this->logMapper->update($logItem);
 		}
 	}

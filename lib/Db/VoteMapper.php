@@ -47,11 +47,14 @@ class VoteMapper extends QBMapperWithUser {
 	 * @return Vote[]
 	 * @psalm-return array<array-key, Vote>
 	 */
-	public function getAll(): array {
+	public function getAll(bool $includeNull = false): array {
 		$qb = $this->db->getQueryBuilder();
 
-		$qb->select('*')->from($this->getTableName())
-			->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
+		$qb->select('*')->from($this->getTableName());
+
+		if (!$includeNull) {
+			$qb->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
+		}
 		return $this->findEntities($qb);
 	}
 
@@ -151,11 +154,20 @@ class VoteMapper extends QBMapperWithUser {
 		return $this->findEntities($qb);
 	}
 
-	public function deleteOrphaned(): void {
+	public function deleteOrphaned(): int {
+		// collects all pollIds
+		$subqueryPolls = $this->db->getQueryBuilder();
+		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
+
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
-			->where($query->expr()->isNull('poll_id'));
-		$query->executeStatement();
+			->where(
+				$query->expr()->orX(
+					$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('poll_id')
+				)
+			);
+		return $query->executeStatement();
 	}
 
 	/**
