@@ -328,6 +328,7 @@ OC.L10N.register(
     "Take over" : "Átvétel",
     "Sort by title" : "Rendezés cím szerint",
     "Sort by creation date" : "Rendezés létrehozás dátuma szerint.",
+    "Direction" : "Irány",
     "Descending" : "Csökkenő",
     "Ascending" : "Növekvő",
     "Checking name …" : "Név ellenőrzése…",
