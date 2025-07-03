@@ -133,7 +133,6 @@ export type PollPermissions = {
 }
 
 export type CurrentUserStatus = {
-	countVotes: number
 	groupInvitations: string[]
 	isInvolved: boolean
 	isLocked: boolean
@@ -144,7 +143,10 @@ export type CurrentUserStatus = {
 	shareToken: string
 	userId: string
 	userRole: UserType
+	countVotes: number
 	yesVotes: number
+	noVotes: number
+	maybeVotes: number
 }
 
 export type Poll = {
@@ -209,7 +211,6 @@ export const usePollStore = defineStore('poll', {
 			countProposals: 0,
 		},
 		currentUserStatus: {
-			countVotes: 0,
 			groupInvitations: [],
 			isInvolved: false,
 			isLocked: false,
@@ -220,7 +221,10 @@ export const usePollStore = defineStore('poll', {
 			shareToken: '',
 			userId: '',
 			userRole: UserType.None,
+			countVotes: 0,
 			yesVotes: 0,
+			noVotes: 0,
+			maybeVotes: 0,
 		},
 		permissions: {
 			addOptions: false,

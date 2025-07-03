@@ -72,11 +72,13 @@ use OCP\IURLGenerator;
  * @method int getOptionsCount()
  * @method int getProposalsCount()
  * @method int getProposalsCount()
+ * @method int getCurrentUserVotes()
+ * @method int getCurrentUserVotesYes()
+ * @method int getCurrentUserVotesNo()
+ * @method int getCurrentUserVotesMaybe()
  *
  * Magic functions for subqueried columns
  * @method int getCurrentUserOrphanedVotes()
- * @method int getCurrentUserVotes()
- * @method int getCurrentUserVotesYes()
  * @method int getParticipantsCount()
  */
 
@@ -175,11 +177,13 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $proposalsCount = 0;
 	protected ?string $pollGroups = '';
 	protected ?string $pollGroupUserShares = '';
+	protected int $currentUserVotes = 0;
+	protected int $currentUserVotesYes = 0;
+	protected int $currentUserVotesNo = 0;
+	protected int $currentUserVotesMaybe = 0;
 
 	// subqueried columns
 	protected int $currentUserOrphanedVotes = 0;
-	protected int $currentUserVotes = 0;
-	protected int $currentUserVotesYes = 0;
 	protected int $participantsCount = 0;
 
 	public function __construct() {
@@ -202,10 +206,12 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('maxDate', 'integer');
 		$this->addType('minDate', 'integer');
 		$this->addType('countOptions', 'integer');
-
-		// subqueried columns
 		$this->addType('currentUserVotes', 'integer');
 		$this->addType('currentUserVotesYes', 'integer');
+		$this->addType('currentUserVotesNo', 'integer');
+		$this->addType('currentUserVotesMaybe', 'integer');
+
+		// subqueried columns
 		$this->addType('currentUserOrphanedVotes', 'integer');
 		$this->addType('participantsCount', 'integer');
 
@@ -277,7 +283,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	public function getCurrentUserStatus(): array {
 		return [
-			'countVotes' => $this->getCurrentUserVotes(),
 			'groupInvitations' => $this->getGroupShares(),
 			'isInvolved' => $this->getIsInvolved(),
 			'isLocked' => boolval($this->getIsCurrentUserLocked()),
@@ -288,7 +293,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'shareToken' => $this->getShareToken(),
 			'userId' => $this->userSession->getCurrentUserId(),
 			'userRole' => $this->getUserRole(),
+			'countVotes' => $this->getCurrentUserVotes(),
 			'yesVotes' => $this->getCurrentUserVotesYes(),
+			'noVotes' => $this->getCurrentUserVotesNo(),
+			'maybeVotes' => $this->getCurrentUserVotesMaybe(),
 			'pollGroupUserShares' => $this->getPollGroupUserShares(),
 		];
 	}
