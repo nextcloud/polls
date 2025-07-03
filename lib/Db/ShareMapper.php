@@ -207,8 +207,8 @@ class ShareMapper extends QBMapper {
 			Vote::TABLE,
 			$joinAlias,
 			$qb->expr()->andX(
-				$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
-				$qb->expr()->eq($fromAlias . '.user_id', $joinAlias . '.user_id'),
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.user_id', $fromAlias . '.user_id'),
 			)
 		);
 	}

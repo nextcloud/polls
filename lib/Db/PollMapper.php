@@ -203,7 +203,7 @@ class PollMapper extends QBMapper {
 		$this->joinGroupShares($qb, self::TABLE);
 		$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
 		$this->joinUserSharesfromPollGroups($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
-		$this->joinVotesCount($qb, $currentUserId, self::TABLE);
+		$this->joinVotesCount($qb, self::TABLE, $currentUserId);
 		return $qb;
 	}
 
@@ -233,7 +233,7 @@ class PollMapper extends QBMapper {
 			Share::TABLE,
 			$joinAlias,
 			$qb->expr()->andX(
-				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
 				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR)),
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
@@ -262,7 +262,7 @@ class PollMapper extends QBMapper {
 			Share::TABLE,
 			$joinAlias,
 			$qb->expr()->andX(
-				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
 				$qb->expr()->eq($joinAlias . '.type', $qb->expr()->literal(Share::TYPE_GROUP)),
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
@@ -357,7 +357,7 @@ class PollMapper extends QBMapper {
 			Option::TABLE,
 			$joinAlias,
 			$qb->expr()->andX(
-				$qb->expr()->eq($fromAlias . '.id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
 				$qb->expr()->eq($joinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			),
 		);
@@ -392,8 +392,8 @@ class PollMapper extends QBMapper {
 	 */
 	protected function joinVotesCount(
 		IQueryBuilder &$qb,
-		string $currentUserId,
 		string $fromAlias,
+		string $currentUserId,
 		bool $hideResults = false,
 		string $joinAlias = 'votes',
 	): void {
