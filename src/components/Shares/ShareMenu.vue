@@ -35,12 +35,21 @@ import {
 	PublicPollEmailConditions,
 } from '../../stores/shares.ts'
 import { SentResults } from '../../Api/modules/shares.ts'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['showQrCode'])
 
 const { share } = defineProps<{ share: Share }>()
 
 const sharesStore = useSharesStore()
+const pollGroupsStore = usePollGroupsStore()
+const pollStore = usePollStore()
+
+const isDirectShare = computed(
+	() => share.groupId === pollGroupsStore.currentPollGroup?.id
+	|| share.pollId === pollStore.id
+)
 
 const resolving = ref(false)
 const label = ref({
@@ -217,7 +226,7 @@ const lockShareButton = computed<ButtonProps>(() => ({
 }))
 
 const deleteShareButton = computed<ButtonProps>(() => ({
-	activate: true,
+	activate: isDirectShare.value,
 	name: share.deleted ? t('polls', 'Restore share') : t('polls', 'Delete share'),
 	action: () => {
 		try {
