@@ -36,7 +36,7 @@ abstract class QBMapperWithUser extends QBMapper {
 	protected function joinAnon(
 		IQueryBuilder &$qb,
 		string $fromAlias,
-		string $joinAlias = 'anon'
+		string $joinAlias = 'anon',
 	): void {
 
 		$qb->selectAlias($joinAlias . '.anonymous', 'anonymized')
@@ -66,7 +66,7 @@ abstract class QBMapperWithUser extends QBMapper {
 		IQueryBuilder &$qb,
 		string $fromAlias,
 		string $userId,
-		string $joinAlias = 'shareRole'
+		string $joinAlias = 'shareRole',
 	): void {
 
 		$qb->selectAlias($joinAlias . '.type', 'share_type')

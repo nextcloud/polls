@@ -341,8 +341,8 @@ class PollMapper extends QBMapper {
 	protected function joinOptions(
 		IQueryBuilder &$qb,
 		string $fromAlias,
-		string $joinAlias = 'options'
-		): void {
+		string $joinAlias = 'options',
+	): void {
 
 		$zero = $qb->expr()->literal(0, IQueryBuilder::PARAM_INT);
 		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
@@ -370,8 +370,8 @@ class PollMapper extends QBMapper {
 		string $fromAlias,
 		IParameter $currentUserId,
 		?IParameter $answerFilter = null,
-		$subAlias = 'user_vote_sub'
-		): IQueryBuilder {
+		$subAlias = 'user_vote_sub',
+	): IQueryBuilder {
 
 		$subQuery = $this->db->getQueryBuilder();
 		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
@@ -454,7 +454,7 @@ class PollMapper extends QBMapper {
 	 */
 	protected function subQueryParticipantsCount(
 		string $fromAlias,
-		$subAlias = 'user_vote_sub'
+		$subAlias = 'user_vote_sub',
 	): IQueryBuilder {
 		$subQuery = $this->db->getQueryBuilder();
 		$subQuery->select($subQuery->createFunction('COUNT(DISTINCT ' . $subAlias . '.user_id)'))

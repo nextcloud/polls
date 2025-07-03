@@ -142,7 +142,7 @@ class PollGroupMapper extends QBMapper {
 
 	protected function joinPollIds(
 		IQueryBuilder $qb,
-		string $joinAlias = 'polls'
+		string $joinAlias = 'polls',
 	): void {
 		TableManager::getConcatenatedArray(
 			qb: $qb,
