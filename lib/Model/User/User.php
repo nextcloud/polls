@@ -48,7 +48,7 @@ class User extends UserBase {
 		$this->timeZoneName = $this->config->getUserValue($this->id, 'core', 'timezone');
 	}
 
-	public function getinternalUserId(): ?string {
+	public function getInternalUserId(): ?string {
 		return $this->getId();
 	}
 

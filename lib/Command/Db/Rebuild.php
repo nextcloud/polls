@@ -154,7 +154,7 @@ class Rebuild extends Command {
 	}
 
 	/**
-	 * remove on delete fk contraint from all tables referencing the main polls table
+	 * remove on delete fk constraints from all tables referencing the main polls table
 	 */
 	private function deleteForeignKeyConstraints(): void {
 		$this->printComment(' - Remove foreign key constraints');

@@ -172,6 +172,7 @@ class MailService {
 		}
 
 		foreach ($this->logs as $logItem) {
+			$logItem->setProcessed(time());
 			$this->logMapper->update($logItem);
 		}
 	}

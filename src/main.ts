@@ -2,7 +2,7 @@
  * SPDX-FileCopyrightText: 2018 Nextcloud contributors
  * SPDX-License-Identifier: AGPL-3.0-or-later
  */
-import { createApp, markRaw } from 'vue'
+import { createApp } from 'vue'
 import { pinia } from './stores/index.ts'
 import { router } from './router.ts'
 
@@ -17,9 +17,4 @@ const Polls = createApp(App)
 	.directive('focus', {
 		mounted: (el) => el.focus(),
 	})
-
-pinia.use(({ store }) => {
-	store.router = markRaw(router)
-})
-
 Polls.mount('#content')

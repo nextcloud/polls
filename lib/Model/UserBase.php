@@ -89,7 +89,7 @@ class UserBase implements JsonSerializable {
 		return $this->id;
 	}
 
-	public function getinternalUserId(): ?string {
+	public function getInternalUserId(): ?string {
 		return null;
 	}
 
@@ -330,7 +330,7 @@ class UserBase implements JsonSerializable {
 			'displayName' => $this->getDisplayName(),
 			'emailAddress' => $this->getEmailAddress(),
 			'id' => $this->getId(),
-			'user' => $this->getinternalUserId(),
+			'user' => $this->getInternalUserId(),
 			'isAdmin' => $this->getIsAdmin(),
 			'isGuest' => $this->getIsGuest(),
 			'isNoUser' => $this->getIsNoUser(),
