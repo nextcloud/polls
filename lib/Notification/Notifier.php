@@ -77,9 +77,9 @@ class Notifier implements INotifier {
 	 */
 	private function extractPoll(INotification $notification): Poll {
 		if ($notification->getObjectType() !== 'poll') {
+			// probably an 'activity_notification' notification
 			$pollId = $this->extractParameters($notification)['id'] ?? null;
 		} else {
-			// probably an 'activity_notification' notification
 			$pollId = $notification->getObjectId();
 		}
 		return $this->pollMapper->get(intval($pollId));
@@ -163,6 +163,11 @@ class Notifier implements INotifier {
 			],
 			// Unknown subject => Unknown notification => throw
 			default => throw new UnknownNotificationException(),
+			// for debugging purposes, uncomment to see the default subject
+			// default => [
+			// 	self::SUBJECT_PARSED => $l->t('ohoh ', $actor->getDisplayName()),
+			// 	self::SUBJECT_RICH => $l->t('{actor} unknown notification "%s".', $pollTitle),
+			// ],
 		};
 
 		switch ($notification->getSubject()) {

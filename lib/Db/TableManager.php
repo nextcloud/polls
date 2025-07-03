@@ -253,22 +253,6 @@ class TableManager {
 	 * is used by the occ command `occ polls:db:rebuild and while updating
 	 */
 	public function removeOrphaned(): array {
-
-		// Tables which rely only on polls
-		$TABLES_POLL = [
-			Comment::TABLE,
-			Log::TABLE,
-			Subscription::TABLE,
-			Option::TABLE,
-			Vote::TABLE,
-			Watch::TABLE,
-		];
-
-		// Tables which rely on polls or groups
-		$TABLES_POLL_GROUP = [
-			Share::TABLE,
-		];
-
 		// collects all pollIds
 		$subqueryPolls = $this->connection->getQueryBuilder();
 		$subqueryPolls->selectDistinct('id')->from(Poll::TABLE);
@@ -294,28 +278,25 @@ class TableManager {
 				} else {
 					$orphaned[$tableName] = $executed;
 				}
-				// $orphaned[$tableName] = $query->executeStatement();
 			}
 		}
 
-		// delete all orphaned entries without a corresponding poll group and poll (group_id and poll_id are NULL or not in the polls or poll groups table)
-		foreach ($TABLES_POLL_GROUP as $tableName) {
-			$query = $this->connection->getQueryBuilder();
-			$query->delete($tableName)
-				->where(
-					$query->expr()->orX(
-						$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
-						$query->expr()->isNull('poll_id')
-					)
-				);
-			$query->andWhere(
+		// delete all orphaned shares without corresponding poll group and poll (group_id and poll_id are NULL or not in the polls or poll groups table)
+		$query = $this->connection->getQueryBuilder();
+		$query->delete(Share::TABLE)
+			->where(
 				$query->expr()->orX(
-					$query->expr()->notIn('group_id', $query->createFunction($subqueryGroups->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
-					$query->expr()->isNull('group_id')
+					$query->expr()->notIn('poll_id', $query->createFunction($subqueryPolls->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+					$query->expr()->isNull('poll_id')
 				)
 			);
-			$orphaned[$tableName] = $query->executeStatement();
-		}
+		$query->andWhere(
+			$query->expr()->orX(
+				$query->expr()->notIn('group_id', $query->createFunction($subqueryGroups->getSQL()), IQueryBuilder::PARAM_INT_ARRAY),
+				$query->expr()->isNull('group_id')
+			)
+		);
+		$orphaned[Share::TABLE] = $query->executeStatement();
 
 		// delete all orphaned entries from the poll-group-relation (group_id or poll_id are NULL or not in the polls or poll groups table)
 		$query = $this->connection->getQueryBuilder();

@@ -144,8 +144,8 @@ class Rebuild extends Command {
 	private function cleanTables(): void {
 		$this->printComment(' - Remove orphaned records');
 		$orphaned = $this->tableManager->removeOrphaned();
-		foreach ($orphaned as $type => $count) {
-			$this->printInfo("    Removed $count orphaned records from $type");
+		foreach ($orphaned as $table => $count) {
+			$this->printInfo("    Removed $count orphaned records from $table");
 		}
 
 		$this->printComment(' - Remove duplicates');

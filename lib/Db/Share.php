@@ -42,8 +42,8 @@ use OCP\IURLGenerator;
  * @method ?int getAnonymizedVotes()
  * @method int getDeleted()
  * @method void setDeleted(int $value)
- * @method string getLabel()
- * @method void setLabel(string $value)
+ * @method ?string getLabel()
+ * @method void setLabel(?string $value)
  */
 class Share extends EntityWithUser implements JsonSerializable {
 	/** @var string */

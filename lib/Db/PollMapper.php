@@ -142,7 +142,8 @@ class PollMapper extends QBMapper {
 		$qb->update($this->getTableName())
 			->set('deleted', $qb->createNamedParameter($archiveDate))
 			->where($qb->expr()->lt('expire', $qb->createNamedParameter($offset)))
-			->andWhere($qb->expr()->gt('expire', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+			->andWhere($qb->expr()->gt('expire', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->eq('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		return $qb->executeStatement();
 	}
 
