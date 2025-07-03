@@ -115,8 +115,6 @@ class OptionService {
 		$newOption = new Option();
 		$newOption->setPollId($pollId);
 		$newOption->setFromSimpleOption($simpleOption);
-		$newOption->syncOption();
-		$newOption->setDeleted(0);
 
 		if (!$this->poll->getIsPollOwner()) {
 			$newOption->setOwner($this->userSession->getCurrentUserId());
@@ -242,7 +240,7 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function sequence(int|Option $optionOrOptionId, Sequence $sequence, bool $voteYes = false): array {
-		if ($sequence->getRepetitions() < 1 || $sequence->getStepWidth() < 1) {
+		if ($sequence->getRepetitions() < 1) {
 			return [];
 		}
 
@@ -261,23 +259,24 @@ class OptionService {
 		$sequence->setTimeZone(new DateTimeZone($this->userSession->getClientTimeZone()));
 		$sequence->setBaseTimeStamp($baseOption->getTimestamp());
 
-		$insertedOptions = [];
 		// iterate over the amount of options to create
 		for ($i = 1; $i <= ($sequence->getRepetitions()); $i++) {
 			// build a new option
-			$clonedOption = new SimpleOption(
-				'',
-				$sequence->getOccurence($i),
-				$baseOption->getDuration(),
+			$this->add(
+				$baseOption->getPollId(),
+				new SimpleOption(
+					'',
+					$sequence->getOccurence($i),
+					$baseOption->getDuration(),
+				),
+				$voteYes
 			);
-
-			$insertedOptions[] = $this->add($baseOption->getPollId(), $clonedOption, $voteYes);
 		}
 
 		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($baseOption));
 
-		// return the list of new options
-		return $insertedOptions;
+		// return list of all options of the poll
+		return $this->optionMapper->findByPoll($this->poll->getId());
 	}
 
 	/**
@@ -426,7 +425,9 @@ class OptionService {
 	 * @return void
 	 */
 	private function getPoll(int $pollId, string $permission = Poll::PERMISSION_POLL_VIEW): void {
-		$this->poll = $this->pollMapper->find($pollId);
+		if ($this->poll->getId() !== $pollId) {
+			$this->poll = $this->pollMapper->find($pollId);
+		}
 		$this->poll->request($permission);
 	}
 

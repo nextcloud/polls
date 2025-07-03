@@ -148,6 +148,8 @@ class Option extends EntityWithUser implements JsonSerializable {
 			$option->getText(),
 			$option->getOrder(),
 		);
+		$this->setDeleted(0);
+		$this->syncOption();
 	}
 
 	/**

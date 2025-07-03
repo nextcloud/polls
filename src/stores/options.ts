@@ -349,7 +349,7 @@ export const useOptionsStore = defineStore('options', {
 					payload.option.id,
 					payload.sequence,
 				)
-				this.list = { ...this.list, ...response.data.options }
+				this.list = response.data.options
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
