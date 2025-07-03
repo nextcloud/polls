@@ -196,7 +196,7 @@ class PollMapper extends QBMapper {
 		$paramAnswerYes = $qb->createNamedParameter(Vote::VOTE_YES, IQueryBuilder::PARAM_STR);
 
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_votes');
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, $paramAnswerYes)->getSQL() . ')'), 'current_user_votes_yes');
+		$qb->selectAlias($qb->createFunction('(' . $this->subQueryVotesCount(self::TABLE, $paramUser, answerFilter: $paramAnswerYes)->getSQL() . ')'), 'current_user_votes_yes');
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_orphaned_votes');
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryParticipantsCount(self::TABLE)->getSQL() . ')'), 'participants_count');
 
@@ -212,8 +212,13 @@ class PollMapper extends QBMapper {
 	/**
 	 * Joins shares to evaluate user role
 	 */
-	protected function joinUserRole(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
-		$joinAlias = 'user_shares';
+	protected function joinUserRole(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $currentUserId,
+		string $joinAlias = 'user_shares',
+	): void {
+
 		$emptyString = $qb->expr()->literal('');
 
 		$qb->addSelect($qb->createFunction('coalesce(' . $joinAlias . '.type, ' . $emptyString . ') AS user_role'))
@@ -241,8 +246,12 @@ class PollMapper extends QBMapper {
 	/**
 	 * Join group shares of this poll
 	 */
-	protected function joinGroupShares(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'group_shares';
+	protected function joinGroupShares(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'group_shares',
+	): void {
+
 		TableManager::getConcatenatedArray(
 			qb: $qb,
 			concatColumn: $joinAlias . '.user_id',
@@ -265,7 +274,12 @@ class PollMapper extends QBMapper {
 	/**
 	 * Joins poll groups, the poll belongs to
 	 */
-	protected function joinPollGroups(IQueryBuilder $qb, string $fromAlias, string $joinAlias): void {
+	protected function joinPollGroups(
+		IQueryBuilder $qb,
+		string $fromAlias,
+		string $joinAlias = 'poll_groups',
+	): void {
+
 		TableManager::getConcatenatedArray(
 			qb: $qb,
 			concatColumn: $joinAlias . '.group_id',
@@ -292,8 +306,14 @@ class PollMapper extends QBMapper {
 	 * Supported share types are User and Admin
 	 * Groups, Teams will not work atm.
 	 */
-	protected function joinUserSharesfromPollGroups(IQueryBuilder $qb, string $fromAlias, string $currentUserId, string $pollGroupsAlias): void {
-		$joinAlias = 'poll_group_shares';
+	protected function joinUserSharesfromPollGroups(
+		IQueryBuilder $qb,
+		string $fromAlias,
+		string $currentUserId,
+		string $pollGroupsAlias,
+		string $joinAlias = 'poll_group_shares',
+	): void {
+
 		TableManager::getConcatenatedArray(
 			qb: $qb,
 			concatColumn: $joinAlias . '.type',
@@ -320,8 +340,11 @@ class PollMapper extends QBMapper {
 	 * the max value is null
 	 * and adds the number of available options
 	 */
-	protected function joinOptions(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'options';
+	protected function joinOptions(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'options'
+		): void {
 
 		$zero = $qb->expr()->literal(0, IQueryBuilder::PARAM_INT);
 		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
@@ -345,8 +368,12 @@ class PollMapper extends QBMapper {
 	/**
 	 * Subquery for votes count
 	 */
-	protected function subQueryVotesCount(string $fromAlias, IParameter $currentUserId, ?IParameter $answerFilter = null): IQueryBuilder {
-		$subAlias = 'user_vote_sub';
+	protected function subQueryVotesCount(
+		string $fromAlias,
+		IParameter $currentUserId,
+		?IParameter $answerFilter = null,
+		$subAlias = 'user_vote_sub'
+		): IQueryBuilder {
 
 		$subQuery = $this->db->getQueryBuilder();
 		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
@@ -365,9 +392,12 @@ class PollMapper extends QBMapper {
 	/**
 	 * Subquery for count of orphaned votes
 	 */
-	protected function subQueryOrphanedVotesCount(string $fromAlias, IParameter $currentUserId): IQueryBuilder {
-		$subAlias = 'user_vote_sub';
-		$subJoinAlias = 'vote_options_join';
+	protected function subQueryOrphanedVotesCount(
+		string $fromAlias,
+		IParameter $currentUserId,
+		$subAlias = 'user_vote_sub',
+		$subJoinAlias = 'vote_options_join',
+	): IQueryBuilder {
 
 		// use subQueryVotesCount as base query
 		$subQuery = $this->subQueryVotesCount($fromAlias, $currentUserId);
@@ -392,9 +422,10 @@ class PollMapper extends QBMapper {
 	/**
 	 * Subquery for count of orphaned votes
 	 */
-	protected function subQueryParticipantsCount(string $fromAlias): IQueryBuilder {
-		$subAlias = 'user_vote_sub';
-
+	protected function subQueryParticipantsCount(
+		string $fromAlias,
+		$subAlias = 'user_vote_sub'
+	): IQueryBuilder {
 		$subQuery = $this->db->getQueryBuilder();
 		$subQuery->select($subQuery->createFunction('COUNT(DISTINCT ' . $subAlias . '.user_id)'))
 			->from(Vote::TABLE, $subAlias)

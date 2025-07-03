@@ -202,8 +202,11 @@ class VoteMapper extends QBMapperWithUser {
 	 * Joins options to restrict query to votes with actually undeleted options
 	 * Avoid orphaned votes
 	 */
-	protected function joinOption(IQueryBuilder &$qb, string $fromAlias): string {
-		$joinAlias = 'options';
+	protected function joinOption(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'options',
+	): string {
 
 		$qb->selectAlias($joinAlias . '.id', 'option_id')
 			->addGroupBy($joinAlias . '.id');

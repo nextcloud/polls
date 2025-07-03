@@ -194,8 +194,11 @@ class ShareMapper extends QBMapper {
 	/**
 	 * Joins votes count of the share user in the given poll
 	 */
-	protected function joinUserVoteCount(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'votes';
+	protected function joinUserVoteCount(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'votes',
+	): void {
 
 		$qb->addSelect($qb->func()->count($joinAlias . '.id', 'voted'));
 
@@ -213,8 +216,11 @@ class ShareMapper extends QBMapper {
 	/**
 	 * Joins anonymous setting of poll
 	 */
-	protected function joinAnon(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'anon';
+	protected function joinAnon(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'anon',
+	): void {
 
 		$qb->selectAlias($joinAlias . '.anonymous', 'anonymizedVotes')
 			->addGroupBy(

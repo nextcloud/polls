@@ -211,5 +211,4 @@ class UserMapper extends QBMapper {
 
 		return $this->findEntities($qb);
 	}
-
 }

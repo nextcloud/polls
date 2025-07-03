@@ -174,7 +174,7 @@ class OptionMapper extends QBMapperWithUser {
 			->orderBy('order', 'ASC');
 
 
-		$this->joinVotesCount($qb, self::TABLE, $hideResults);
+		$this->joinVotesCount($qb, self::TABLE, hideResults: $hideResults);
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
@@ -188,8 +188,13 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * Joins votes to count votes per option and answer
 	 */
-	protected function joinVotesCount(IQueryBuilder &$qb, string $fromAlias, bool $hideResults = false): void {
-		$joinAlias = 'votes';
+	protected function joinVotesCount(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		bool $hideResults = false,
+		string $joinAlias = 'votes',
+	): void {
+
 		$qb->leftJoin(
 			$fromAlias,
 			Vote::TABLE,
@@ -214,9 +219,11 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * Joins poll to fetch option_limit and vote_limit
 	 */
-	protected function joinPollForLimits(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'limits';
-
+	protected function joinPollForLimits(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'limits',
+	): void {
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->min($joinAlias . '.option_limit'), 'option_limit')
 			->selectAlias($qb->func()->min($joinAlias . '.vote_limit'), 'vote_limit');
@@ -232,8 +239,12 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * Joins votes to get the current user's answer to this option
 	 */
-	protected function joinCurrentUserVote(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
-		$joinAlias = 'user_vote';
+	protected function joinCurrentUserVote(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $currentUserId,
+		string $joinAlias = 'user_vote',
+	): void {
 
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->min($joinAlias . '.vote_answer'), 'user_vote_answer');
@@ -254,9 +265,12 @@ class OptionMapper extends QBMapperWithUser {
 	 * Joins votes to be able to check against polls_polls.vote_limit of the current user
 	 * in other words: returns all votes of current user and count them
 	 */
-	protected function joinCurrentUserVoteCount(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
-		$joinAlias = 'votes_user';
-
+	protected function joinCurrentUserVoteCount(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $currentUserId,
+		string $joinAlias = 'votes_user',
+	): void {
 		// Count yes votes of the user in this poll
 		$qb->addSelect($qb->createFunction('COUNT(DISTINCT(votes_user.id)) AS user_count_yes_votes'));
 
