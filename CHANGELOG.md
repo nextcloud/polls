@@ -7,8 +7,9 @@ All notable changes to this project will be documented in this file.
 ##
 
 ## [8.0.5] - tbd
-### Changes (8.0.5)
+### Changes (8.0.6)
  - terminate webworker in background tabs
+ - fix cloning of date options
 
 ### Changes (8.0.0)
  - Migration to Vue 3 and Pinia
