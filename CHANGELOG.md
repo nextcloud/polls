@@ -6,7 +6,7 @@
 All notable changes to this project will be documented in this file.
 ##
 
-## [8.0.5] - tbd
+## [8.0.6] - 2025-07-03
 ### Changes (8.0.6)
  - terminate webworker in background tabs
  - fix cloning of date options
@@ -32,7 +32,6 @@ All notable changes to this project will be documented in this file.
  - Added reference provider for link previews and smart picker
  - Added confidential comments for comments only visible by the author and the current poll owner
  - Create and manage poll groups for better poll management
-
 
 ## [8.0.4] - 2025-06-22
 ### Fix (8.0.4)
