@@ -76,10 +76,10 @@ use OCP\IURLGenerator;
  * @method int getCurrentUserVotesYes()
  * @method int getCurrentUserVotesNo()
  * @method int getCurrentUserVotesMaybe()
+ * @method int getParticipantsCount()
  *
  * Magic functions for subqueried columns
  * @method int getCurrentUserOrphanedVotes()
- * @method int getParticipantsCount()
  */
 
 class Poll extends EntityWithUser implements JsonSerializable {
@@ -181,10 +181,10 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $currentUserVotesYes = 0;
 	protected int $currentUserVotesNo = 0;
 	protected int $currentUserVotesMaybe = 0;
+	protected int $participantsCount = 0;
 
 	// subqueried columns
 	protected int $currentUserOrphanedVotes = 0;
-	protected int $participantsCount = 0;
 
 	public function __construct() {
 		$this->addType('created', 'integer');

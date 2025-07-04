@@ -201,7 +201,7 @@ class OptionMapper extends QBMapperWithUser {
 			$joinAlias,
 			$qb->expr()->andX(
 				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
-				$qb->expr()->eq($joinAlias . '.vote_option_text', $fromAlias . '.poll_option_text' ),
+				$qb->expr()->eq($joinAlias . '.vote_option_text', $fromAlias . '.poll_option_text'),
 			)
 		)
 			// Count number of votes for this option

@@ -195,7 +195,6 @@ class PollMapper extends QBMapper {
 		$paramUser = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
 
 		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_orphaned_votes');
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryParticipantsCount(self::TABLE)->getSQL() . ')'), 'participants_count');
 
 		$pollGroupsAlias = 'poll_groups';
 		$this->joinOptions($qb, self::TABLE);
@@ -204,6 +203,7 @@ class PollMapper extends QBMapper {
 		$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
 		$this->joinUserSharesfromPollGroups($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
 		$this->joinVotesCount($qb, self::TABLE, $currentUserId);
+		$this->joinParticipantsCount($qb, self::TABLE);
 		return $qb;
 	}
 
@@ -420,6 +420,26 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
+	 * Join to count of participants in poll
+	 */
+	protected function joinParticipantsCount(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'participants',
+	): void {
+		$qb->leftJoin(
+			$fromAlias,
+			Vote::TABLE,
+			$joinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.id'),
+			)
+		)
+			->addSelect($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.user_id)) AS participants_count'));
+	}
+
+
+	/**
 	 * Subquery for count of orphaned votes
 	 */
 	protected function subQueryOrphanedVotesCount(
@@ -447,19 +467,6 @@ class PollMapper extends QBMapper {
 				$subQuery->expr()->eq($subJoinAlias . '.deleted', $subQuery->expr()->literal(0, IQueryBuilder::PARAM_INT)),
 			)
 		);
-		return $subQuery;
-	}
-	/**
-	 * Subquery for count of orphaned votes
-	 */
-	protected function subQueryParticipantsCount(
-		string $fromAlias,
-		$subAlias = 'user_vote_sub',
-	): IQueryBuilder {
-		$subQuery = $this->db->getQueryBuilder();
-		$subQuery->select($subQuery->createFunction('COUNT(DISTINCT ' . $subAlias . '.user_id)'))
-			->from(Vote::TABLE, $subAlias)
-			->where($subQuery->expr()->eq($subAlias . '.poll_id', $fromAlias . '.id'));
 		return $subQuery;
 	}
 }
