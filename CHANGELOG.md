@@ -6,6 +6,24 @@
 All notable changes to this project will be documented in this file.
 ##
 
+## [8.1.0] - tbd
+### New
+ - Added user shares to poll groups
+ - Added a forbidden route and page
+ - Added WatchController to OCS-API
+
+### Changes
+ - Optimized janitor cron
+ - Optimized rebuild command
+ - Optimized poll loading by migrating subqueries to join (#3692)
+ - Separated pollGroups from polls (Store, Service, Mapper, ...)
+ - Catch CronJob runs and report as error, but avoid crash at higher thread levels
+ - Changed poll loading triggers (mainly navigation affected)
+ - Added some status to the watchWorker
+
+### Fixes
+ - Fixed broken endpoint for manually calling autoReminderCron
+
 ## [8.0.6] - 2025-07-03
 ### Changes (8.0.6)
  - terminate webworker in background tabs
