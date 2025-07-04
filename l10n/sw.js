@@ -3,6 +3,7 @@ OC.L10N.register(
     {
     "Team" : "Timu",
     "Group" : "Kundi",
+    "Contact" : "Mawasiliano",
     "User" : "Mtumiaji",
     "Poll" : "Kura ya maoni",
     "Add option" : "Ongeza mbadala",
