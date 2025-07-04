@@ -67,4 +67,5 @@ class SubscriptionMapper extends QBMapper {
 			->setParameter('userId', $userId);
 		$query->executeStatement();
 	}
+
 }

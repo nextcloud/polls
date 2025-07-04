@@ -11,6 +11,8 @@ namespace OCA\Polls\Service;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Db\PollGroup;
+use OCA\Polls\Db\PollGroupMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\Share;
 use OCA\Polls\Db\ShareMapper;
@@ -71,6 +73,7 @@ class ShareService {
 		private VoteMapper $voteMapper,
 		private OptionMapper $optionMapper,
 		private CommentMapper $commentMapper,
+		private PollGroupMapper $pollGroupMapper,
 	) {
 		$this->shares = [];
 	}
@@ -82,10 +85,16 @@ class ShareService {
 	 *
 	 * @psalm-return array<array-key, Share>
 	 */
-	public function list(int $pollId): array {
+	public function list(int $pollOrPollGroupId, string $purpose = 'poll'): array {
 		try {
-			$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
-			$this->shares = $this->shareMapper->findByPoll($pollId);
+			if ($purpose === 'poll') {
+				$poll = $this->pollMapper->find($pollOrPollGroupId);
+				$poll->request(Poll::PERMISSION_POLL_EDIT);
+				$this->shares = $this->shareMapper->findByPoll($pollOrPollGroupId, $poll->getPollGroups());
+			} else {
+				$this->pollGroupMapper->find($pollOrPollGroupId);
+				$this->shares = $this->shareMapper->findByPollGroup($pollOrPollGroupId);
+			}
 		} catch (ForbiddenException $e) {
 			return [];
 		} catch (DoesNotExistException $e) {
@@ -423,11 +432,19 @@ class ShareService {
 	 * @param bool $restore Set true, if share is to be restored
 	 */
 	public function delete(Share $share, bool $restore = false): Share {
-		$this->pollMapper->find($share->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
+		if (!$share->getPollId() && $share->getGroupId()) {
+			$this->pollGroupMapper->find($share->getGroupId())->request(PollGroup::PERMISSION_POLL_GROUP_EDIT);
+		} else {
+			$this->pollMapper->find($share->getPollId())->request(Poll::PERMISSION_POLL_EDIT);
+		}
 
 		$share->setDeleted($restore ? 0 : time());
 		$this->shareMapper->update($share);
-		$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($share));
+
+		// skip event when deleting a poll group share
+		if ($share->getPollId()) {
+			$this->eventDispatcher->dispatchTyped(new ShareDeletedEvent($share));
+		}
 		return $share;
 	}
 
@@ -556,39 +573,58 @@ class ShareService {
 	/**
 	 * Add share
 	 *
+	 * @param int $pollOrPollGroupId Poll or PollGroup id
+	 * @param string $type Type of share, e.g. UserBase::TYPE_EXTERNAL, UserBase::TYPE_PUBLIC, Ghost::TYPE, Contact::TYPE, ContactGroup::TYPE, Email::TYPE
 	 * @return Share
 	 */
 	public function add(
-		int $pollId,
+		int $pollOrPollGroupId,
 		string $type,
 		string $userId = '',
 		string $displayName = '',
 		string $emailAddress = '',
+		string $purpose = 'poll',
 	): Share {
-		$poll = $this->pollMapper->find($pollId);
-		$poll->request(Poll::PERMISSION_POLL_EDIT);
-		$poll->request(Poll::PERMISSION_SHARE_ADD);
+		if ($purpose === 'poll') {
+			$poll = $this->pollMapper->find($pollOrPollGroupId);
+			$poll->request(Poll::PERMISSION_POLL_EDIT);
+			$poll->request(Poll::PERMISSION_SHARE_ADD);
 
-		if ($type === UserBase::TYPE_PUBLIC) {
-			$this->appSettings->getPublicSharesAllowed();
-			$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
+			if ($type === UserBase::TYPE_PUBLIC) {
+				$this->appSettings->getPublicSharesAllowed();
+				$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
+			}
+
+			// validate user type for external types and check, if user is allowed to create this type of share
+			if (match ($type) {
+				Ghost::TYPE => true,
+				Contact::TYPE => true,
+				ContactGroup::TYPE => true,
+				Email::TYPE => true,
+				UserBase::TYPE_EXTERNAL => true,
+				default => false,
+			}) {
+				$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
+			}
+			$shareUser = $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress);
+			$preventInvitation = false;
+		} else {
+			$shareUser = $this->userMapper->getUserFromUserBase($userId);
+			$preventInvitation = true;
 		}
 
-		// validate user type for external types and check, if user is allowed to create this type of share
-		if (match ($type) {
-			Ghost::TYPE => true,
-			Contact::TYPE => true,
-			ContactGroup::TYPE => true,
-			Email::TYPE => true,
-			UserBase::TYPE_EXTERNAL => true,
-			default => false,
-		}) {
-			$poll->request(Poll::PERMISSION_SHARE_ADD_EXTERNAL);
+		$share = $this->createNewShare(
+			pollOrPollGroupId: $pollOrPollGroupId,
+			userGroup: $shareUser,
+			preventInvitation: $preventInvitation,
+			timeZone: '',
+			purpose: $purpose
+		);
+
+		// TODO: extend event for pollGroups
+		if ($share->getPollId()) {
+			$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
 		}
-
-		$share = $this->createNewShare($pollId, $this->userMapper->getUserObject($type, $userId, $displayName, $emailAddress));
-		$this->eventDispatcher->dispatchTyped(new ShareCreateEvent($share));
-
 		return $share;
 	}
 
@@ -648,13 +684,22 @@ class ShareService {
 		return $token;
 	}
 	/**
-	 * crate a new share
+	 * create a new share
+	 * Note: For poll groups only normal user shares are supported
+	 * If pollId and pollGroupId are set, pollId is used to create a share for a poll and the poll group id is ignored.
+	 *
+	 * @param int $pollOrPollGroupId Poll or PollGroup id
+	 * @param UserBase $userGroup UserBase object of the user group to share with
+	 * @param bool $preventInvitation Set true, if no invitation should be sent
+	 * @param string $timeZone Timezone of the user, used for external users
+	 * @param string $purpose Purpose of the share, either 'poll' or 'pollGroup'
 	 */
 	private function createNewShare(
-		int $pollId,
+		int $pollOrPollGroupId,
 		UserBase $userGroup,
 		bool $preventInvitation = false,
 		string $timeZone = '',
+		string $purpose = 'poll',
 	): Share {
 		$preventInvitation = $userGroup->getType() === UserBase::TYPE_PUBLIC ?: $preventInvitation;
 
@@ -662,25 +707,36 @@ class ShareService {
 		$token = $this->generateToken();
 
 		$this->share = new Share();
+
+		if ($purpose === 'poll') {
+			$this->share->setPollId($pollOrPollGroupId);
+			$this->share->setGroupId(null);
+		} else {
+			$this->share->setPollId(null);
+			$this->share->setGroupId($pollOrPollGroupId);
+		}
+
 		$this->share->setToken($token);
-		$this->share->setPollId($pollId);
 		$this->share->setType($userGroup->getShareType());
 		$this->share->setDisplayName($userGroup->getDisplayName());
 		$this->share->setInvitationSent($preventInvitation ? time() : 0);
 		$this->share->setEmailAddress($userGroup->getEmailAddress());
 		$this->share->setUserId($userGroup->getShareUserId());
 
-		// normal continuation
-		// public share to create, set token as userId
-		if ($userGroup->getType() === UserBase::TYPE_PUBLIC) {
-			$this->share->setUserId($token);
-		}
+		// skip for poll groups
+		if ($purpose === 'poll') {
+			// normal continuation
+			// public share to create, set token as userId
+			if ($userGroup->getType() === UserBase::TYPE_PUBLIC) {
+				$this->share->setUserId($token);
+			}
 
-		// user is created from public share. Store locale information for
-		// usage in server side actions, i.e. scheduled emails
-		if ($userGroup->getType() === UserBase::TYPE_EXTERNAL) {
-			$this->share->setLanguage($userGroup->getLanguageCode());
-			$this->share->setTimeZoneName($timeZone);
+			// user is created from public share. Store locale information for
+			// usage in server side actions, i.e. scheduled emails
+			if ($userGroup->getType() === UserBase::TYPE_EXTERNAL) {
+				$this->share->setLanguage($userGroup->getLanguageCode());
+				$this->share->setTimeZoneName($timeZone);
+			}
 		}
 
 		try {
@@ -694,7 +750,7 @@ class ShareService {
 			// since the exception is from private namespace, we check the type string
 			if (get_class($e) === 'OC\DB\Exceptions\DbalException' && $e->getReason() === Exception::REASON_UNIQUE_CONSTRAINT_VIOLATION) {
 
-				$share = $this->shareMapper->findByPollAndUser($pollId, $this->share->getUserId(), true);
+				$share = $this->shareMapper->findByPollAndUser($pollOrPollGroupId, $this->share->getUserId(), true);
 				if ($share->getDeleted()) {
 					// Deleted share exist, restore deleted share and generate new token
 					$share->setDeleted(0);

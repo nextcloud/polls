@@ -36,6 +36,7 @@ class Rebuild extends Command {
 		private IndexManager $indexManager,
 		private IDBConnection $connection,
 		private Schema $schema,
+
 	) {
 		parent::__construct();
 	}
@@ -56,24 +57,24 @@ class Rebuild extends Command {
 		$this->removeObsoleteColumns();
 
 		$this->connection->migrateToSchema($this->schema);
-		
+
 		$this->printComment('Step 3. Create or update tables to current shema');
 		$this->createOrUpdateSchema();
-		
+
 		$this->connection->migrateToSchema($this->schema);
 
 		$this->printComment('Step 4. set hashes for votes and options');
 		$this->migrateOptionsToHash();
-		
+
 		$this->printComment('Step 5. Remove invalid records (orphaned and duplicates)');
 		$this->cleanTables();
-		
+
 		$this->printComment('Step 6. Recreate indices and foreign key constraints');
 		$this->addForeignKeyConstraints();
 		$this->addIndices();
 
 		$this->connection->migrateToSchema($this->schema);
-		
+
 		return 0;
 	}
 
@@ -142,7 +143,10 @@ class Rebuild extends Command {
 	 */
 	private function cleanTables(): void {
 		$this->printComment(' - Remove orphaned records');
-		$this->tableManager->removeOrphaned();
+		$orphaned = $this->tableManager->removeOrphaned();
+		foreach ($orphaned as $table => $count) {
+			$this->printInfo("    Removed $count orphaned records from $table");
+		}
 
 		$this->printComment(' - Remove duplicates');
 		$messages = $this->tableManager->deleteAllDuplicates();
@@ -150,7 +154,7 @@ class Rebuild extends Command {
 	}
 
 	/**
-	 * remove on delete fk contraint from all tables referencing the main polls table
+	 * remove on delete fk constraints from all tables referencing the main polls table
 	 */
 	private function deleteForeignKeyConstraints(): void {
 		$this->printComment(' - Remove foreign key constraints');

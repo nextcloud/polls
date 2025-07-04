@@ -8,12 +8,14 @@ declare(strict_types=1);
 
 namespace OCA\Polls\Cron;
 
+use Exception;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\CommentMapper;
 use OCA\Polls\Db\LogMapper;
 use OCA\Polls\Db\OptionMapper;
 use OCA\Polls\Db\PollMapper;
 use OCA\Polls\Db\ShareMapper;
+use OCA\Polls\Db\TableManager;
 use OCA\Polls\Db\WatchMapper;
 use OCA\Polls\Helper\Container;
 use OCA\Polls\Model\Settings\AppSettings;
@@ -30,14 +32,15 @@ class JanitorCron extends TimedJob {
 
 	public function __construct(
 		protected ITimeFactory $time,
-		private LogMapper $logMapper,
-		private PollMapper $pollMapper,
-		private WatchMapper $watchMapper,
 		private CommentMapper $commentMapper,
-		private OptionMapper $optionMapper,
-		private ShareMapper $shareMapper,
 		private ISession $session,
 		private LoggerInterface $logger,
+		private LogMapper $logMapper,
+		private OptionMapper $optionMapper,
+		private PollMapper $pollMapper,
+		private ShareMapper $shareMapper,
+		private WatchMapper $watchMapper,
+		private TableManager $tableManager,
 	) {
 		parent::__construct($time);
 		parent::setInterval(86400); // run once a day
@@ -50,53 +53,81 @@ class JanitorCron extends TimedJob {
 	 */
 	protected function run($argument) {
 		$this->session->set(AppConstants::SESSION_KEY_CRON_JOB, true);
-		// delete processed log entries
-		$this->logMapper->deleteProcessedEntries();
 
-		// delete entries older than 7 days
-		$this->logMapper->deleteOldEntries(time() - (86400 * 7));
+		try {
 
-		// delete entries older than 1 day
-		$this->watchMapper->deleteOldEntries(time() - 86400);
+			// delete processed log entries
+			$this->logMapper->deleteProcessedEntries();
 
-		// purge entries virtually deleted more than 12 hour ago
-		$this->commentMapper->purgeDeletedComments(time() - 4320);
-		$this->optionMapper->purgeDeletedOptions(time() - 4320);
-		$this->shareMapper->purgeDeletedShares(time() - 4320);
+			// delete entries older than 7 days
+			$this->logMapper->deleteOldEntries(time() - (86400 * 7));
 
-		$autoArchiveOffset = $this->appSettings->getAutoArchiveOffsetDays();
+			// delete entries older than 1 day
+			$this->watchMapper->deleteOldEntries(time() - 86400);
 
-		// archive polls after defined days after closing date
-		if ($this->appSettings->getAutoArchiveEnabled() && $autoArchiveOffset > 0) {
-			$affectedRows = $this->pollMapper->archiveExpiredPolls(
-				time() - ($autoArchiveOffset * 86400)
-			);
-			if ($affectedRows > 0) {
-				$this->logger->info(
-					'JanitorCron: Archived {count} poll(s).',
-					['count' => $affectedRows]
+			// purge entries virtually deleted more than 12 hour ago
+			$deleted['comments'] = $this->commentMapper->purgeDeletedComments(time() - 4320);
+			$deleted['options'] = $this->optionMapper->purgeDeletedOptions(time() - 4320);
+			$deleted['shares'] = $this->shareMapper->purgeDeletedShares(time() - 4320);
+
+			// delete polls after defined days after archiving date
+			$autoDeleteOffset = $this->appSettings->getAutoDeleteOffsetDays();
+			if ($this->appSettings->getAutoDeleteEnabled() && $autoDeleteOffset > 0) {
+				$deleted['archived poll'] = $this->pollMapper->deleteArchivedPolls(
+					time() - ($autoDeleteOffset * 86400)
 				);
 			}
-		}
 
-		$autoDeleteOffset = $this->appSettings->getAutoDeleteOffsetDays();
-		// delete polls after defined days after archiving date
-		if ($this->appSettings->getAutoDeleteEnabled() && $autoDeleteOffset > 0) {
-			$affectedRows = $this->pollMapper->deleteArchivedPolls(
-				time() - ($autoDeleteOffset * 86400)
-			);
-			if ($affectedRows > 0) {
-				$this->logger->info(
-					'JanitorCron: Deleted {count} archived poll(s).',
-					['count' => $affectedRows]
-				);
+			foreach ($deleted as $type => $count) {
+				if ($count > 0) {
+					$this->logger->info(
+						'JanitorCron: Purged {count} {type}(s).',
+						['count' => $count, 'type' => $type]
+					);
+				}
 			}
-		}
 
-		$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
+			// delete orphaned entries (poll_id = null)
+			$orphaned = $this->tableManager->removeOrphaned();
+			foreach ($orphaned as $type => $count) {
+				if ($count > 0) {
+					$this->logger->info(
+						'JanitorCron: Purged {count} orphaned record(s) from {type}.',
+						['count' => $count, 'type' => $type]
+					);
+				}
+			}
+
+
+			// archive polls after defined days after closing date
+			$autoArchiveOffset = $this->appSettings->getAutoArchiveOffsetDays();
+
+			if ($this->appSettings->getAutoArchiveEnabled() && $autoArchiveOffset > 0) {
+				$archived['poll'] = $this->pollMapper->archiveExpiredPolls(
+					time() - ($autoArchiveOffset * 86400)
+				);
+
+				foreach ($archived as $type => $count) {
+					if ($count > 0) {
+						$this->logger->info(
+							'JanitorCron: Archived {count} poll(s).',
+							['count' => $count, 'type' => $type]
+						);
+					}
+				}
+			}
+		} catch (Exception $e) {
+			$this->logger->error(
+				'JanitorCron: An error occurred while running the janitor cron: {message}',
+				['message' => $e->getMessage()]
+			);
+		} finally {
+			$this->session->remove(AppConstants::SESSION_KEY_CRON_JOB);
+		}
 	}
 
 	public function manuallyRun(): string {
+		$this->logger->info('JanitorCron manually run.');
 		$this->run(null);
 		return 'JanitorCron manually run.';
 	}

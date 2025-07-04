@@ -18,7 +18,7 @@ use OCP\AppFramework\Db\Entity;
 /**
  * @psalm-suppress UnusedProperty
  * @method string getUserId()
- * @method int getPollId()
+ * @method ?int getPollId()
  *
  * Joined Attributes
  * @method int getAnonymized()
@@ -104,6 +104,9 @@ abstract class EntityWithUser extends Entity {
 
 		try {
 			$pollId = $this->getPollId();
+			if ($pollId === null) {
+				return $userMapper->getUserFromUserBase($this->getUserId());
+			}
 			$user = $userMapper->getParticipant($this->getUserId(), $pollId);
 			// Get user from userbase
 		} catch (Exception $e) {

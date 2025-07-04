@@ -18,7 +18,7 @@ const orphanedVotesText = computed(() =>
 	n(
 		'polls',
 		'%n orphaned vote reduces your vote quota.',
-		'%n orphaned votes reduces your vote quota.',
+		'%n orphaned votes reduce your vote quota.',
 		pollStore.currentUserStatus.orphanedVotes,
 	),
 )

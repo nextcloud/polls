@@ -13,8 +13,9 @@ import { PollsAPI } from '../Api/index.ts'
 
 import { AccessType, Poll, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
-import { StatusResults, User } from '../Types/index.ts'
+import { StatusResults } from '../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
+import { usePollGroupsStore } from './pollGroups.ts'
 
 export enum SortType {
 	Created = 'created',
@@ -51,17 +52,18 @@ export type PollCategory = {
 	showInNavigation(): boolean
 	filterCondition(poll: Poll): boolean
 }
-export type PollGroup = {
-	id: number
-	created: number
-	deleted: number
-	description: string
-	owner: User
-	title: string
-	titleExt: string
-	pollIds: number[]
-	slug: string
-}
+// export type PollGroup = {
+// 	id: number
+// 	created: number
+// 	deleted: number
+// 	description: string
+// 	owner: User
+// 	title: string
+// 	titleExt: string
+// 	pollIds: number[]
+// 	slug: string
+// 	allowEdit: boolean
+// }
 
 export type PollCategoryList = Record<FilterType, PollCategory>
 
@@ -74,7 +76,7 @@ export type Meta = {
 
 export type PollList = {
 	polls: Poll[]
-	pollGroups: PollGroup[]
+	// pollGroups: PollGroup[]
 	meta: Meta
 	sort: {
 		by: SortType
@@ -228,7 +230,7 @@ export const pollCategories: PollCategoryList = {
 export const usePollsStore = defineStore('polls', {
 	state: (): PollList => ({
 		polls: [],
-		pollGroups: [],
+		// pollGroups: [],
 		meta: {
 			chunksize: 20,
 			loadedChunks: 1,
@@ -266,27 +268,6 @@ export const usePollsStore = defineStore('polls', {
 					[SortDirection.Desc],
 				).slice(0, state.meta.maxPollsInNavigation),
 
-		/*
-		 * Sliced filtered and sorted polls for navigation
-		 */
-		groupList:
-			(state: PollList) =>
-			(filterList: number[]): Poll[] =>
-				orderBy(
-					state.polls.filter((poll: Poll) => filterList.includes(poll.id))
-						?? [],
-					[SortType.Created],
-					[SortDirection.Desc],
-				).slice(0, state.meta.maxPollsInNavigation),
-
-		pollGroupsSorted(state: PollList): PollGroup[] {
-			return orderBy(state.pollGroups, ['title', 'id'], [SortDirection.Desc])
-		},
-
-		pollsWithGroups(state: PollList): Poll[] {
-			return state.polls.filter((poll: Poll) => poll.pollGroups.length > 0)
-		},
-
 		currentCategory(state: PollList): PollCategory {
 			const sessionStore = useSessionStore()
 
@@ -299,32 +280,16 @@ export const usePollsStore = defineStore('polls', {
 			return state.categories[FilterType.Relevant]
 		},
 
-		currentGroup(state: PollList): PollGroup | undefined {
-			const sessionStore = useSessionStore()
-			if (sessionStore.route.name === 'group') {
-				return state.pollGroups.find(
-					(group) => group.slug === sessionStore.route.params.slug,
-				)
-			}
-			return undefined
-		},
-
-		groupPolls(state: PollList): Poll[] {
-			if (!this.currentGroup) {
-				return []
-			}
-			return state.polls.filter((poll) =>
-				this.currentGroup?.pollIds.includes(poll.id),
-			)
-		},
-
 		/*
 		 * polls list, filtered by current category and sorted
 		 */
 		pollsFilteredSorted(state: PollList): Poll[] {
 			const sessionStore = useSessionStore()
+			const pollGroupsStore = usePollGroupsStore()
+
+			// if we are in a group route, return the polls of the current group
 			if (sessionStore.route.name === 'group') {
-				return this.groupPolls
+				return pollGroupsStore.pollsInCurrendPollGroup
 			}
 
 			return orderBy(
@@ -393,12 +358,25 @@ export const usePollsStore = defineStore('polls', {
 	},
 
 	actions: {
+		/**
+		 * Load all polls and poll groups from the API.
+		 * This will set the `polls` and `pollGroups` state properties.
+		 *
+		 * This will also set the `meta.status` to `Loading` while the request is in progress,
+		 * and to `Loaded` or `Error` when the request is finished.
+		 *
+		 * @throws {Error} If the request fails and is not canceled.
+		 * @return {Promise<void>}
+		 */
 		async load(): Promise<void> {
+			const pollGroupsStore = usePollGroupsStore()
+
 			this.meta.status = StatusResults.Loading
+
 			try {
 				const response = await PollsAPI.getPolls()
 				this.polls = response.data.polls
-				this.pollGroups = response.data.pollGroups
+				pollGroupsStore.pollGroups = response.data.pollGroups
 				this.meta.status = StatusResults.Loaded
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
@@ -410,95 +388,24 @@ export const usePollsStore = defineStore('polls', {
 			}
 		},
 
-		addablePollGroups(pollId: number): PollGroup[] {
-			return this.pollGroups.filter((group) => !group.pollIds.includes(pollId))
+		/**
+		 * Sliced filtered and sorted polls for navigation
+		 * @param filterList - List of poll IDs to filter by
+		 */
+		groupList(filterList: number[]): Poll[] {
+			const pollsStore = usePollsStore()
+			return orderBy(
+				pollsStore.polls.filter((poll: Poll) => filterList.includes(poll.id))
+					?? [],
+				[SortType.Created],
+				[SortDirection.Desc],
+			).slice(0, pollsStore.meta.maxPollsInNavigation)
 		},
 
-		updatePollGroupElement(payload: { pollGroup: PollGroup; poll?: Poll }) {
-			this.pollGroups = this.pollGroups
-				.filter((g) => g.id !== payload.pollGroup.id)
-				.concat(payload.pollGroup)
-
-			if (payload.poll) {
-				this.polls = this.polls
-					.filter((p) => p.id !== payload.poll?.id)
-					.concat(payload.poll)
-			}
-		},
-
-		async addPollToPollGroup(payload: {
-			pollId: number
-			pollGroupId?: number
-			groupTitle?: string
-		}) {
-			try {
-				if (payload.pollGroupId) {
-					const response = await PollsAPI.addPollToGroup(
-						payload.pollGroupId,
-						payload.pollId,
-					)
-					this.updatePollGroupElement({
-						poll: response.data.poll,
-						pollGroup: response.data.pollGroup,
-					})
-					return
-				}
-
-				if (payload.groupTitle) {
-					const response = await PollsAPI.createPollGroupForPoll(
-						payload.groupTitle,
-						payload.pollId,
-					)
-					this.updatePollGroupElement({
-						poll: response.data.poll,
-						pollGroup: response.data.pollGroup,
-					})
-				}
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
-				}
-				Logger.error('Error adding poll to group', {
-					error,
-					payload,
-				})
-				this.load()
-				throw error
-			}
-		},
-
-		async removePollFromGroup(payload: { pollGroupId: number; pollId: number }) {
-			try {
-				const response = await PollsAPI.removePollFromGroup(
-					payload.pollGroupId,
-					payload.pollId,
-				)
-
-				if (response.data.pollGroup === null) {
-					// If the poll group was removed (=== null), remove it from the store
-					this.pollGroups = this.pollGroups.filter(
-						(group) => group.id !== payload.pollGroupId,
-					)
-					return
-				}
-
-				// update the collections
-				this.updatePollGroupElement({
-					poll: response.data.poll,
-					pollGroup: response.data.pollGroup,
-				})
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
-				}
-				Logger.error('Error removing poll from group', {
-					error,
-					payload,
-				})
-				throw error
-			} finally {
-				this.load()
-			}
+		addOrUpdatePollGroupInList(payload: { poll: Poll }) {
+			this.polls = this.polls
+				.filter((p) => p.id !== payload.poll?.id)
+				.concat(payload.poll)
 		},
 
 		async changeOwner(payload: { pollId: number; userId: string }) {
@@ -591,46 +498,6 @@ export const usePollsStore = defineStore('polls', {
 				throw error
 			} finally {
 				this.load()
-			}
-		},
-
-		getPollGroupName(PollGroupId: number): string {
-			const group = this.pollGroups.find((group) => group.id === PollGroupId)
-			if (group) {
-				return group.title
-			}
-			return t('polls', 'Invalid Group ID')
-		},
-
-		async updatePollGroup(payload: {
-			title: string
-			titleExt: string
-			description: string
-			slug: string
-		}) {
-			if (!this.currentGroup) {
-				throw new Error('No current poll group set')
-			}
-			try {
-				const response = await PollsAPI.updatePollGroup(
-					this.currentGroup.id,
-					payload.title,
-					payload.titleExt,
-					payload.description,
-				)
-				this.updatePollGroupElement({
-					pollGroup: response.data.pollGroup,
-				})
-				return response.data.pollGroup
-			} catch (error) {
-				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
-					return
-				}
-				Logger.error('Error updating poll group', {
-					error,
-					payload,
-				})
-				throw error
 			}
 		},
 	},

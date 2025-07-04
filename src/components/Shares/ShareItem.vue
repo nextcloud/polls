@@ -49,6 +49,7 @@ onMounted(() => {
 	<div :class="{ deleted: share.deleted }">
 		<UserItem
 			v-bind="userItemProps"
+			:delegated-from-group="!share.pollId"
 			:deleted-state="share.deleted"
 			:locked-state="share.locked">
 			<template #status>
@@ -59,7 +60,8 @@ onMounted(() => {
 				</div>
 				<div
 					v-else-if="
-						[ShareType.Public, ShareType.Group].includes(share.type)
+						share.groupId
+						|| [ShareType.Public, ShareType.Group].includes(share.type)
 					">
 					<div class="vote-status empty" />
 				</div>

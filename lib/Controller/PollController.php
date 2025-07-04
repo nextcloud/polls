@@ -14,6 +14,7 @@ use OCA\Polls\Model\Settings\AppSettings;
 use OCA\Polls\Service\CommentService;
 use OCA\Polls\Service\MailService;
 use OCA\Polls\Service\OptionService;
+use OCA\Polls\Service\PollGroupService;
 use OCA\Polls\Service\PollService;
 use OCA\Polls\Service\ShareService;
 use OCA\Polls\Service\SubscriptionService;
@@ -34,6 +35,7 @@ class PollController extends BaseController {
 		private MailService $mailService,
 		private OptionService $optionService,
 		private PollService $pollService,
+		private PollGroupService $pollGroupService,
 		private VoteService $voteService,
 		private CommentService $commentService,
 		private SubscriptionService $subscriptionService,
@@ -64,7 +66,7 @@ class PollController extends BaseController {
 					'pollCreationAllowed' => $appSettings->getPollCreationAllowed(),
 					'comboAllowed' => $appSettings->getComboAllowed(),
 				],
-				'pollGroups' => $this->pollService->listPollGroups(),
+				'pollGroups' => $this->pollGroupService->listPollGroups(),
 			];
 		});
 	}
@@ -264,84 +266,4 @@ class PollController extends BaseController {
 	public function getParticipantsEmailAddresses(int $pollId): JSONResponse {
 		return $this->response(fn () => $this->pollService->getParticipantsEmailAddresses($pollId));
 	}
-
-	/**
-	 * Get list of pollgroups
-	 *
-	 * psalm-return JSONResponse<array{pollGroups: array<int, PollGroup>}>
-	 */
-	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'GET', url: '/pollgroups')]
-	public function listPollGroups(): JSONResponse {
-		return $this->response(function () {
-			return [
-				'pollGroups' => $this->pollService->listPollGroups(),
-			];
-		});
-	}
-
-	/**
-	 * Create a new pollgroup with its title and add a poll to it
-	 *
-	 * @param int $pollId Poll id to add to the new pollgroup
-	 * @param string $newPollGroupName Name of the new pollgroup
-	 *
-	 * psalm-return JSONResponse<array{pollGroup: PollGroup, poll: Poll}>
-	 */
-	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'POST', url: '/pollgroup/new/poll/{pollId}')]
-	public function addPollToNewPollGroup(int $pollId, string $newPollGroupName = ''): JSONResponse {
-		return $this->response(fn () => [
-			'pollGroup' => $this->pollService->addPollToPollGroup($pollId, newPollGroupName: $newPollGroupName),
-			'poll' => $this->pollService->get($pollId),
-		]);
-	}
-
-	/**
-	 * Add poll to pollgroup
-	 * @param int $pollId Poll id
-	 * @param int $pollGroupId Poll group id
-	 *
-	 * psalm-return JSONResponse<array{pollGroup: PollGroup, poll: Poll}>
-	 */
-	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'PUT', url: '/pollgroup/{pollGroupId}/poll/{pollId}')]
-	public function addPollToPollGroup(int $pollId, int $pollGroupId): JSONResponse {
-		return $this->response(fn () => [
-			'pollGroup' => $this->pollService->addPollToPollGroup($pollId, $pollGroupId),
-			'poll' => $this->pollService->get($pollId),
-		]);
-	}
-
-	/**
-	 * Update Pollgroup
-	 */
-	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'PUT', url: '/pollgroup/{pollGroupId}/update')]
-	public function updatePollGroup(
-		int $pollGroupId,
-		string $title,
-		string $titleExt,
-		string $description,
-	): JSONResponse {
-		return $this->response(fn () => [
-			'pollGroup' => $this->pollService->updatePollGroup($pollGroupId, $title, $titleExt, $description),
-		]);
-	}
-	/**
-	 * Remove poll from pollgroup
-	 * @param int $pollId Poll id
-	 * @param int $pollGroupId Poll group id
-	 *
-	 * psalm-return JSONResponse<array{pollGroup: PollGroup | null, poll: Poll}>
-	 */
-	#[NoAdminRequired]
-	#[FrontpageRoute(verb: 'DELETE', url: '/pollgroup/{pollGroupId}/poll/{pollId}')]
-	public function removePollFromPollGroup(int $pollId, int $pollGroupId): JSONResponse {
-		return $this->response(fn () => [
-			'pollGroup' => $this->pollService->removePollFromPollGroup($pollId, $pollGroupId),
-			'poll' => $this->pollService->get($pollId),
-		]);
-	}
-
 }
