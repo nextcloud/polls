@@ -10,7 +10,6 @@ namespace OCA\Polls\Db;
 
 use OCA\Polls\UserSession;
 use OCP\AppFramework\Db\QBMapper;
-use OCP\DB\QueryBuilder\IParameter;
 use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 use OCP\Search\ISearchQuery;
@@ -192,10 +191,6 @@ class PollMapper extends QBMapper {
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
-		$paramUser = $qb->createNamedParameter($currentUserId, IQueryBuilder::PARAM_STR);
-
-		$qb->selectAlias($qb->createFunction('(' . $this->subQueryOrphanedVotesCount(self::TABLE, $paramUser)->getSQL() . ')'), 'current_user_orphaned_votes');
-
 		$pollGroupsAlias = 'poll_groups';
 		$this->joinOptions($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
@@ -364,38 +359,14 @@ class PollMapper extends QBMapper {
 	}
 
 	/**
-	 * Subquery for votes count
-	 */
-	protected function subQueryVotesCount(
-		string $fromAlias,
-		IParameter $currentUserId,
-		?IParameter $answerFilter = null,
-		$subAlias = 'user_vote_sub',
-	): IQueryBuilder {
-
-		$subQuery = $this->db->getQueryBuilder();
-		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
-			->from(Vote::TABLE, $subAlias)
-			->where($subQuery->expr()->eq($subAlias . '.poll_id', $fromAlias . '.id'))
-			->andWhere($subQuery->expr()->eq($subAlias . '.user_id', $currentUserId));
-
-		// filter by answer
-		if ($answerFilter) {
-			$subQuery->andWhere($subQuery->expr()->eq($subAlias . '.vote_answer', $answerFilter));
-		}
-
-		return $subQuery;
-	}
-
-	/**
 	 * Joins votes to count votes per option and answer
 	 */
 	protected function joinVotesCount(
 		IQueryBuilder &$qb,
 		string $fromAlias,
 		string $currentUserId,
-		bool $hideResults = false,
 		string $joinAlias = 'votes',
+		string $subJoinAlias = 'vote_options_sub',
 	): void {
 
 		$qb->leftJoin(
@@ -414,9 +385,19 @@ class PollMapper extends QBMapper {
 			// Count number of no votes for this option
 			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'no\' THEN ' . $joinAlias . '.id END)) AS current_user_votes_no'))
 			// Count number of maybe votes for this option
-			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'maybe\' THEN ' . $joinAlias . '.id END)) AS current_user_votes_maybe'))
-			// inject if the votes should be hidden
-			->addSelect($qb->createFunction(intval(!$hideResults) . ' as show_results'));
+			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.vote_answer = \'maybe\' THEN ' . $joinAlias . '.id END)) AS current_user_votes_maybe'));
+
+		// Join to count orphaned votes of current user (votes without option)
+		$qb->leftJoin(
+			$joinAlias,
+			Option::TABLE,
+			$subJoinAlias,
+			$qb->expr()->andX(
+				$qb->expr()->eq($subJoinAlias . '.poll_id', $joinAlias . '.poll_id'),
+				$qb->expr()->eq($subJoinAlias . '.poll_option_text', $joinAlias . '.vote_option_text'),
+				$qb->expr()->eq($subJoinAlias . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)),
+			)
+		)->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $subJoinAlias . '.id is NULL THEN ' . $joinAlias . '.id END)) AS current_user_orphaned_votes'));
 	}
 
 	/**
@@ -436,37 +417,5 @@ class PollMapper extends QBMapper {
 			)
 		)
 			->addSelect($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.user_id)) AS participants_count'));
-	}
-
-
-	/**
-	 * Subquery for count of orphaned votes
-	 */
-	protected function subQueryOrphanedVotesCount(
-		string $fromAlias,
-		IParameter $currentUserId,
-		$subAlias = 'user_vote_sub',
-		$subJoinAlias = 'vote_options_join',
-	): IQueryBuilder {
-
-		// use subQueryVotesCount as base query
-		$subQuery = $this->subQueryVotesCount($fromAlias, $currentUserId);
-
-		// superseed select, group result by voteId and add an additional condition
-		$subQuery->select($subQuery->func()->count($subAlias . '.vote_answer'))
-			->andWhere($subQuery->expr()->isNull($subJoinAlias . '.id'));
-
-		// join options to restrict query to votes with actually undeleted options
-		$subQuery->leftJoin(
-			$subAlias,
-			Option::TABLE,
-			$subJoinAlias,
-			$subQuery->expr()->andX(
-				$subQuery->expr()->eq($subJoinAlias . '.poll_id', $subAlias . '.poll_id'),
-				$subQuery->expr()->eq($subJoinAlias . '.poll_option_text', $subAlias . '.vote_option_text'),
-				$subQuery->expr()->eq($subJoinAlias . '.deleted', $subQuery->expr()->literal(0, IQueryBuilder::PARAM_INT)),
-			)
-		);
-		return $subQuery;
 	}
 }

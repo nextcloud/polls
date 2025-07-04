@@ -182,8 +182,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected int $currentUserVotesNo = 0;
 	protected int $currentUserVotesMaybe = 0;
 	protected int $participantsCount = 0;
-
-	// subqueried columns
 	protected int $currentUserOrphanedVotes = 0;
 
 	public function __construct() {
@@ -210,8 +208,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('currentUserVotesYes', 'integer');
 		$this->addType('currentUserVotesNo', 'integer');
 		$this->addType('currentUserVotesMaybe', 'integer');
-
-		// subqueried columns
 		$this->addType('currentUserOrphanedVotes', 'integer');
 		$this->addType('participantsCount', 'integer');
 
