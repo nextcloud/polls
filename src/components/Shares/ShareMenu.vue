@@ -47,8 +47,9 @@ const pollGroupsStore = usePollGroupsStore()
 const pollStore = usePollStore()
 
 const isDirectShare = computed(
-	() => share.groupId === pollGroupsStore.currentPollGroup?.id
-	|| share.pollId === pollStore.id
+	() =>
+		share.groupId === pollGroupsStore.currentPollGroup?.id
+		|| share.pollId === pollStore.id,
 )
 
 const resolving = ref(false)

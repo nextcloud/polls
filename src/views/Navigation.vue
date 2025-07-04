@@ -160,11 +160,17 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 <template>
 	<NcAppNavigation>
 		<ActionAddPoll
-			v-if="preferencesStore.useActionAddPollInNavigation && sessionStore.appPermissions.pollCreation"
+			v-if="
+				preferencesStore.useActionAddPollInNavigation
+				&& sessionStore.appPermissions.pollCreation
+			"
 			:button-mode="ButtonMode.Navigation" />
 
 		<NcAppNavigationNew
-			v-else-if="preferencesStore.useNcAppNavigationNew && sessionStore.appPermissions.pollCreation"
+			v-else-if="
+				preferencesStore.useNcAppNavigationNew
+				&& sessionStore.appPermissions.pollCreation
+			"
 			button-class="icon-add"
 			:text="t('polls', 'New poll')"
 			@click="createDlgToggle = !createDlgToggle" />
