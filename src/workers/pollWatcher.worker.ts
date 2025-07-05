@@ -59,13 +59,6 @@ self.onmessage = async (props) => {
 	}
 
 	const run = async () => {
-		// self.postMessage({
-		// 	type: 'status',
-		// 	status: 'running',
-		// 	mode: updateType,
-		// 	interval,
-		// })
-
 		try {
 			let endPoint = `poll/${pollId}/watch`
 			if (token) {
@@ -79,7 +72,6 @@ self.onmessage = async (props) => {
 			consecutiveErrors = 0
 
 			if (response.status === 200 && response.data.updates?.length > 0) {
-
 				lastUpdated =
 					response.data.updates[response.data.updates.length - 1].updated
 
