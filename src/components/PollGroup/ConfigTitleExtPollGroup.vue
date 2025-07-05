@@ -28,7 +28,7 @@ const inputProps = {
 	placeholder: t('polls', 'Enter extended title'),
 	helperText: t(
 		'polls',
-		'Optional choose a more meaningful title for the overview page',
+		'Optionally choose a more meaningful title for the overview page',
 	),
 }
 </script>

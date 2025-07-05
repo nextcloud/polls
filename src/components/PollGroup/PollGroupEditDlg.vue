@@ -39,13 +39,13 @@ async function updatePollGroup() {
 				showInfo(
 					t(
 						'polls',
-						'Note: Based on the name change also the URL has changed',
+						'Note: Based on the name change, the URL has also changed',
 					),
 				)
 			}
 		}
 	} catch {
-		showError(t('polls', 'Error updating PollGroup'))
+		showError(t('polls', 'Error updating poll group'))
 	} finally {
 		pollGroupsStore.updating = false
 	}
