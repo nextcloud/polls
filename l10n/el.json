@@ -278,7 +278,6 @@
     "_%n No vote_::_%n \"No\" votes_" : ["%nψήφος \"Όχι\"","%n ψήφοι \"Όχι\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n ψήφος \"Ίσως\"","%n ψήφοι \"Ίσως\""],
     "Description" : "Περιγραφή",
-    "Update" : "Ενημέρωση",
     "No description provided" : "Δεν υπάρχει περιγραφή",
     "Expiration" : "Λήξη",
     "Error archiving/restoring poll." : "Σφάλμα αρχειοθέτησης/επαναφοράς δημοσκόπησης.",

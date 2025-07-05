@@ -399,7 +399,6 @@ OC.L10N.register(
     "_%n No vote_::_%n \"No\" votes_" : ["%n أصوات بـ \"لا\"","%n صوت بـ \"لا\"","%n أصوات بـ \"لا\"","%n أصوات بـ \"لا\"","%n أصوات بـ \"لا\"","%n أصوات بـ \"لا\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n أصوات \"ربما\"","%n صوت \"ربما\"","%n أصوات \"ربما\"","%n أصوات \"ربما\"","%n أصوات \"ربما\"","%n أصوات \"ربما\""],
     "Description" : "الوصف",
-    "Update" : "تحديث",
     "No description provided" : "لم يتم تقديم وصف",
     "Started {relativeTime} from {ownerName}" : "بَدَأ {relativeTime} لصاحبه {ownerName}",
     "No access to this poll of {ownerName}." : "لايمكن الوصول لهذا الاستبيان لصاحبه {ownerName}.",

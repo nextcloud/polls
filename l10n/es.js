@@ -399,7 +399,6 @@ OC.L10N.register(
     "_%n No vote_::_%n \"No\" votes_" : ["%n voto «No»","%n votos «No»","%n votos «No»"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n  voto \"Quizás\"","%n votos \"Quizás\"","%n votos \"Quizás\""],
     "Description" : "Descripción",
-    "Update" : "Actualizar",
     "No description provided" : "No se ha proporcionado descripción",
     "Started {relativeTime} from {ownerName}" : "Se inicio {relativeTime} desde {ownerName}",
     "No access to this poll of {ownerName}." : "No hay acceso a esta encuesta de {ownerName}.",

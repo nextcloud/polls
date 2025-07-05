@@ -49,7 +49,6 @@ OC.L10N.register(
     "never" : "aldrig",
     "Private poll" : "Privat afstemning",
     "Description" : "Beskrivelse",
-    "Update" : "Opdater",
     "No description provided" : "Ingen beskrivelse leveret",
     "Expiration" : "Udløb",
     "Back" : "Tilbage",

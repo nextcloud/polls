@@ -171,7 +171,6 @@
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n votu «Sí»","%n votos «Sí»"],
     "_%n No vote_::_%n \"No\" votes_" : ["%n votu «Non»","%n votos «Non»"],
     "Description" : "Descripción",
-    "Update" : "Anovar",
     "No description provided" : "Nun se fornió nenguna descripción",
     "Expiration" : "Caducidá",
     "Error archiving/restoring poll." : "Hebo un error al archivar/restaurar la encuesta.",
