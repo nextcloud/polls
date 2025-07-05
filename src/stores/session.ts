@@ -44,7 +44,7 @@ export type Watcher = {
 	mode: UpdateType
 	status: 'running' | 'stopped' | 'error' | 'stopping' | 'idle'
 	interval?: number
-	lastUpdated?: number
+	lastUpdate: number
 	lastMessage?: string
 }
 
@@ -138,6 +138,7 @@ export const useSessionStore = defineStore('session', {
 			id: '',
 			mode: UpdateType.NoPolling,
 			status: 'stopped',
+			lastUpdate: Math.floor(Date.now() / 1000),
 		},
 		token: null,
 		currentUser: createDefault<User>(),

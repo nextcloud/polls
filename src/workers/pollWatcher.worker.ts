@@ -7,7 +7,7 @@ import axios, { AxiosError, AxiosInstance } from 'axios'
 const MAX_ERRORS = 5
 const SLEEP_TIMEOUT_DEFAULT = 30000
 
-let lastUpdated = Math.floor(Date.now() / 1000)
+let lastUpdated = 0
 let http: AxiosInstance
 let consecutiveErrors = 0
 
@@ -21,7 +21,10 @@ self.onmessage = async (props) => {
 		baseUrl,
 		token,
 		watcherId,
+		lastUpdate = lastUpdated,
 	} = props.data
+
+	lastUpdated = lastUpdate
 
 	self.postMessage({
 		type: 'status',
@@ -76,8 +79,10 @@ self.onmessage = async (props) => {
 			consecutiveErrors = 0
 
 			if (response.status === 200 && response.data.updates?.length > 0) {
+
 				lastUpdated =
 					response.data.updates[response.data.updates.length - 1].updated
+
 				self.postMessage({
 					type: 'update',
 					status: 'running',
@@ -85,6 +90,7 @@ self.onmessage = async (props) => {
 					interval,
 					message: '[Worker] 200 got updates',
 					updates: response.data.updates,
+					lastUpdate: lastUpdated,
 				})
 			} else if (response.status === 304) {
 				self.postMessage({
@@ -93,6 +99,7 @@ self.onmessage = async (props) => {
 					mode: updateType,
 					interval,
 					message: '[Worker] 304 – no changes',
+					lastUpdate: lastUpdated,
 				})
 			} else {
 				self.postMessage({
@@ -101,6 +108,7 @@ self.onmessage = async (props) => {
 					mode: updateType,
 					interval,
 					message: '[Worker] 200 but no updates',
+					lastUpdate: lastUpdated,
 				})
 			}
 		} catch (error) {
@@ -113,6 +121,7 @@ self.onmessage = async (props) => {
 					mode: updateType,
 					interval,
 					message: '[Worker] Request aborted by intention',
+					lastUpdate: lastUpdated,
 				})
 				return
 			}

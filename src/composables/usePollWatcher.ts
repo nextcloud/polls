@@ -58,18 +58,19 @@ export const usePollWatcher = (interval = 30000) => {
 			baseUrl,
 			token: sessionStore.token,
 			watcherId: sessionStore.watcher.id,
+			lastUpdate: sessionStore.watcher.lastUpdate,
 		})
 
 		// Handle messages from worker
 		worker.onmessage = (e) => {
-			const { type, message, updates, status, mode } = e.data
+			const { type, message, updates, status, mode, lastUpdated } = e.data
 
 			sessionStore.watcher = <Watcher>{
 				...sessionStore.watcher,
 				mode,
 				status,
 				interval,
-				lastUpdated: Date.now(),
+				lastUpdate: lastUpdated ?? sessionStore.watcher.lastUpdate,
 				lastMessage: message ?? sessionStore.watcher.lastMessage,
 			}
 
@@ -109,8 +110,8 @@ export const usePollWatcher = (interval = 30000) => {
 			sessionStore.watcher = <Watcher>{
 				...sessionStore.watcher,
 				status: 'stopped',
-				lastUpdated: Date.now(),
 				lastMessage: 'Watcher stopped.',
+				lastUpdate: Math.floor(Date.now() / 1000),
 			}
 			Logger.info('[PollWatcher] Worker stopped.')
 		}
