@@ -123,7 +123,10 @@ export const useCommentsStore = defineStore('comments', {
 			if (index < 0) {
 				this.comments.push(payload.comment)
 			} else {
-				this.comments[index] = Object.assign(this.comments[index], payload.comment)
+				this.comments[index] = Object.assign(
+					this.comments[index],
+					payload.comment,
+				)
 			}
 		},
 
