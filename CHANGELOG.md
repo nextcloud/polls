@@ -11,6 +11,9 @@ All notable changes to this project will be documented in this file.
  - Added user shares to poll groups
  - Added a forbidden route and page
  - Added WatchController to OCS-API
+ - Sticky option headers in vote table
+ - added a variant of the sticky option headers to the user settings
+ - Lazy loading of participants on scroll, if too many vote cells are rendered
 
 ### Changes
  - Optimized janitor cron
@@ -20,6 +23,7 @@ All notable changes to this project will be documented in this file.
  - Catch CronJob runs and report as error, but avoid crash at higher thread levels
  - Changed poll loading triggers (mainly navigation affected)
  - Added some status to the watchWorker
+ - removed performance setting in favor of lazy loading participants
 
 ### Fixes
  - Fixed broken endpoint for manually calling autoReminderCron
