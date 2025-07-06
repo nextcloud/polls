@@ -29,7 +29,7 @@ export type ShortComment = {
 }
 
 export type Comments = {
-	list: Comment[]
+	comments: Comment[]
 }
 
 export interface CommentsGrouped extends Comment {
@@ -38,12 +38,12 @@ export interface CommentsGrouped extends Comment {
 
 export const useCommentsStore = defineStore('comments', {
 	state: (): Comments => ({
-		list: [],
+		comments: [],
 	}),
 
 	getters: {
-		count: (state) => state.list.length,
-		groupedComments: (state) => groupComments(state.list),
+		count: (state) => state.comments.length,
+		groupedComments: (state) => groupComments(state.comments),
 	},
 	actions: {
 		async load() {
@@ -67,7 +67,7 @@ export const useCommentsStore = defineStore('comments', {
 					return
 				}
 
-				this.list = response.data.comments
+				this.comments = response.data.comments
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -116,14 +116,17 @@ export const useCommentsStore = defineStore('comments', {
 		},
 
 		setItem(payload: { comment: Comment }) {
-			const index = this.list.findIndex(
+			const index = this.comments.findIndex(
 				(comment) => comment.id === payload.comment.id,
 			)
 
 			if (index < 0) {
-				this.list.push(payload.comment)
+				this.comments.push(payload.comment)
 			} else {
-				this.list[index] = Object.assign(this.list[index], payload.comment)
+				this.comments[index] = Object.assign(
+					this.comments[index],
+					payload.comment,
+				)
 			}
 		},
 

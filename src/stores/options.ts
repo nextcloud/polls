@@ -56,28 +56,25 @@ export type Option = {
 }
 
 export type Options = {
-	list: Option[]
+	options: Option[]
 	ranked: RankedType
 }
 
 export const useOptionsStore = defineStore('options', {
 	state: (): Options => ({
-		list: [],
+		options: [],
 		ranked: RankedType.notRanked,
 	}),
 
 	getters: {
-		count(state): number {
-			return state.list.length
-		},
-
 		countAvailable(state): number {
-			return state.list.filter((option) => !option.locked && !option.deleted)
-				.length
+			return state.options.filter(
+				(option) => !option.locked && !option.deleted,
+			).length
 		},
 
 		countVotedByCurrentUser(state): number {
-			return state.list.filter(
+			return state.options.filter(
 				(option) => option.votes.currentUser === Answer.Yes,
 			).length
 		},
@@ -88,7 +85,7 @@ export const useOptionsStore = defineStore('options', {
 
 		rankedOptions(state): Option[] {
 			return orderBy(
-				state.list,
+				state.options,
 				['votes.yes', 'votes.maybe'],
 				['desc', 'desc'],
 			)
@@ -97,8 +94,8 @@ export const useOptionsStore = defineStore('options', {
 		sortedOptions(state): Option[] {
 			const pollStore = usePollStore()
 			return pollStore.type === PollType.Date
-				? orderBy(state.list, ['timestamp', 'duration'], ['asc', 'asc'])
-				: state.list
+				? orderBy(state.options, ['timestamp', 'duration'], ['asc', 'asc'])
+				: state.options
 		},
 
 		orderedOptions(state): Option[] {
@@ -106,13 +103,13 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		confirmed(state): Option[] {
-			return state.list.filter((option) => option.confirmed > 0)
+			return state.options.filter((option) => option.confirmed > 0)
 		},
 	},
 
 	actions: {
 		find(timestamp: number, duration: number): Option | undefined {
-			return this.list.find(
+			return this.options.find(
 				(option) =>
 					option.timestamp === timestamp && option.duration === duration,
 			)
@@ -138,7 +135,7 @@ export const useOptionsStore = defineStore('options', {
 					return
 				}
 
-				this.list = response.data.options
+				this.options = response.data.options
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -152,16 +149,16 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		updateOption(payload: { option: Option }) {
-			const index = this.list.findIndex(
+			const index = this.options.findIndex(
 				(option) => option.id === payload.option.id,
 			)
 
 			if (index < 0) {
-				this.list.push(payload.option)
+				this.options.push(payload.option)
 			} else {
-				this.list.splice(index, 1, payload.option)
+				this.options.splice(index, 1, payload.option)
 			}
-			this.list.sort((a, b) =>
+			this.options.sort((a, b) =>
 				a.order < b.order ? -1 : a.order > b.order ? 1 : 0,
 			)
 		},
@@ -190,11 +187,11 @@ export const useOptionsStore = defineStore('options', {
 					)
 				})()
 
-				this.list = response.data.options
+				this.options = response.data.options
 
 				if (response.data.votes) {
 					const votesStore = useVotesStore()
-					votesStore.list = response.data.votes
+					votesStore.votes = response.data.votes
 				}
 			} catch (error) {
 				if ((error as AxiosError)?.code !== 'ERR_CANCELED') {
@@ -281,7 +278,7 @@ export const useOptionsStore = defineStore('options', {
 					sessionStore.currentPollId,
 					payload.text,
 				)
-				this.list = response.data.options
+				this.options = response.data.options
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -296,10 +293,12 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		async confirm(payload: { option: Option }) {
-			const index = this.list.findIndex(
+			const index = this.options.findIndex(
 				(option: Option) => option.id === payload.option.id,
 			)
-			this.list[index].confirmed = Math.abs(this.list[index].confirmed - 1)
+			this.options[index].confirmed = Math.abs(
+				this.options[index].confirmed - 1,
+			)
 
 			try {
 				const response = await OptionsAPI.confirmOption(payload.option.id)
@@ -320,21 +319,21 @@ export const useOptionsStore = defineStore('options', {
 		async changeOrder(oldIndex: number, newIndex: number) {
 			const sessionStore = useSessionStore()
 
-			this.list.splice(newIndex, 0, this.list.splice(oldIndex, 1)[0])
+			this.options.splice(newIndex, 0, this.options.splice(oldIndex, 1)[0])
 
 			try {
 				const response = await OptionsAPI.reorderOptions(
 					sessionStore.currentPollId,
-					this.list.map(({ id, text }) => ({
+					this.options.map(({ id, text }) => ({
 						id,
 						text,
 					})),
 				)
-				this.list = response.data.options
+				this.options = response.data.options
 			} catch (error) {
 				Logger.error('Error reordering option', {
 					error,
-					options: this.list,
+					options: this.options,
 					oldIndex,
 					newIndex,
 				})
@@ -349,7 +348,7 @@ export const useOptionsStore = defineStore('options', {
 					payload.option.id,
 					payload.sequence,
 				)
-				this.list = response.data.options
+				this.options = response.data.options
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -371,7 +370,7 @@ export const useOptionsStore = defineStore('options', {
 					payload.shift.value,
 					payload.shift.unit.id,
 				)
-				this.list = response.data.options
+				this.options = response.data.options
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return

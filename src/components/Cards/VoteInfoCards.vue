@@ -30,7 +30,7 @@ const showUnpublishedPollCard = computed(
 		pollStore.configuration.access === AccessType.Private
 		&& !sharesStore.hasShares
 		&& pollStore.permissions.edit
-		&& optionsStore.list.length,
+		&& optionsStore.options.length,
 )
 const showAddProposalsCard = computed(
 	() =>

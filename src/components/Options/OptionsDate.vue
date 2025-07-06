@@ -24,7 +24,10 @@ const cssVar = {
 </script>
 
 <template>
-	<div v-if="optionsStore.list.length" :style="cssVar" class="options-list date">
+	<div
+		v-if="optionsStore.options.length"
+		:style="cssVar"
+		class="options-list date">
 		<TransitionGroup name="list">
 			<OptionItem
 				v-for="option in optionsStore.sortedOptions"

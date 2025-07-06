@@ -132,6 +132,11 @@ export enum ISearchType {
 	All = 99,
 }
 
+export type Chunking = {
+	size: number
+	loaded: number
+}
+
 export type ApiEmailAdressList = {
 	displayName: string
 	emailAddress: string

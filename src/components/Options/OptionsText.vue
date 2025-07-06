@@ -42,7 +42,7 @@ const dragOptions = {
 	},
 }
 
-useSortable(element, optionsStore.list, dragOptions)
+useSortable(element, optionsStore.options, dragOptions)
 
 const cssVar = {
 	'--content-deleted': `" (${t('polls', 'deleted')})"`,
@@ -61,8 +61,11 @@ function onSort(event: { oldIndex: number; newIndex: number }) {
 
 <template>
 	<OptionsTextAdd v-if="!pollStore.isClosed" />
-	<div v-if="optionsStore.list.length" ref="list" :style="cssVar">
-		<div v-for="option in optionsStore.list" :key="option.id" class="sortable">
+	<div v-if="optionsStore.options.length" ref="list" :style="cssVar">
+		<div
+			v-for="option in optionsStore.options"
+			:key="option.id"
+			class="sortable">
 			<OptionItem
 				:key="option.id"
 				:option="option"

@@ -17,10 +17,10 @@ const StoreHelper = {
 			pollStore.$patch(data.poll as Poll)
 		}
 		if (Object.hasOwn(data, 'votes')) {
-			votesStore.list = data.votes as Vote[]
+			votesStore.votes = data.votes as Vote[]
 		}
 		if (Object.hasOwn(data, 'options')) {
-			optionsStore.list = data.options as Option[]
+			optionsStore.options = data.options as Option[]
 		}
 	},
 }

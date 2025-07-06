@@ -16,7 +16,7 @@ const cardType = 'warning'
 <template>
 	<CardDiv :type="cardType">
 		{{ t('polls', 'This poll is unpublished.') }}
-		<span v-if="votesStore.list.length"
+		<span v-if="votesStore.votes.length"
 			>{{ t('polls', 'Existing participants will still have access.') }}
 		</span>
 		{{ t('polls', 'Invite users or allow internal access for all site users.') }}
