@@ -14,6 +14,7 @@ All notable changes to this project will be documented in this file.
  - Sticky option headers in vote table
  - added a variant of the sticky option headers to the user settings
  - Lazy loading of participants on scroll, if too many vote cells are rendered
+ - Support Nextcloud 30
 
 ### Changes
  - Optimized janitor cron
