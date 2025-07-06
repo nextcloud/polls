@@ -52,18 +52,6 @@ export type PollCategory = {
 	showInNavigation(): boolean
 	filterCondition(poll: Poll): boolean
 }
-// export type PollGroup = {
-// 	id: number
-// 	created: number
-// 	deleted: number
-// 	description: string
-// 	owner: User
-// 	title: string
-// 	titleExt: string
-// 	pollIds: number[]
-// 	slug: string
-// 	allowEdit: boolean
-// }
 
 export type PollCategoryList = Record<FilterType, PollCategory>
 
@@ -230,7 +218,6 @@ export const pollCategories: PollCategoryList = {
 export const usePollsStore = defineStore('polls', {
 	state: (): PollList => ({
 		polls: [],
-		// pollGroups: [],
 		meta: {
 			chunksize: 20,
 			loadedChunks: 1,
