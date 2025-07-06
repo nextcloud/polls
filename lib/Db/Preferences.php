@@ -33,7 +33,6 @@ class Preferences extends Entity implements JsonSerializable {
 		'checkCalendarsHoursAfter' => 0,
 		'defaultViewTextPoll' => 'table-view',
 		'defaultViewDatePoll' => 'table-view',
-		'performanceThreshold' => 1000,
 		'pollCombo' => [],
 		'relevantOffset' => 30,
 	];

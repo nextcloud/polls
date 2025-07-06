@@ -123,32 +123,32 @@ async function exportFile(exportFormat: ExportFormat) {
 		if ([ExportFormat.Html].includes(exportFormat)) {
 			sheetData.value.push([
 				...participantsHeader,
-				...optionsStore.list.map((item) => DOMPurify.sanitize(item.text)),
+				...optionsStore.options.map((item) => DOMPurify.sanitize(item.text)),
 			])
 		} else {
 			sheetData.value.push([
 				...participantsHeader,
-				...optionsStore.list.map((item) => item.text),
+				...optionsStore.options.map((item) => item.text),
 			])
 		}
 	} else if ([ExportFormat.Csv].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
-			...optionsStore.list.map((option) => getIntervalIso(option)),
+			...optionsStore.options.map((option) => getIntervalIso(option)),
 		])
 	} else if ([ExportFormat.Html].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
-			...optionsStore.list.map((option) => getIntervalRaw(option)),
+			...optionsStore.options.map((option) => getIntervalRaw(option)),
 		])
 	} else {
 		sheetData.value.push([
 			...fromHeader,
-			...optionsStore.list.map((option) => getFromFormatted(option)),
+			...optionsStore.options.map((option) => getFromFormatted(option)),
 		])
 		sheetData.value.push([
 			...toHeader,
-			...optionsStore.list.map((option) => getToFormatted(option)),
+			...optionsStore.options.map((option) => getToFormatted(option)),
 		])
 	}
 
@@ -243,7 +243,7 @@ function addVotesArray(style: ArrayStyle) {
 				)
 			}
 
-			optionsStore.list.forEach((option) => {
+			optionsStore.options.forEach((option) => {
 				if (style === ArrayStyle.Symbols) {
 					votesLine.push(
 						votesStore.getVote({

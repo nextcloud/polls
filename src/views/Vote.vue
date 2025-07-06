@@ -25,14 +25,11 @@ import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
 import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
 import { ActionOpenOptionsSidebar } from '../components/Actions/index.ts'
 import { HeaderBar } from '../components/Base/index.ts'
-import {
-	CardAnonymousPollHint,
-	CardHiddenParticipants,
-} from '../components/Cards/index.ts'
+import { CardAnonymousPollHint } from '../components/Cards/index.ts'
 
 import { usePollStore, PollType } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'
-import { usePreferencesStore, ViewMode } from '../stores/preferences.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
@@ -129,10 +126,10 @@ onUnmounted(() => {
 
 			<VoteInfoCards />
 
-			<VoteTable v-show="optionsStore.list.length" />
+			<VoteTable v-show="optionsStore.options.length" />
 
 			<NcEmptyContent
-				v-if="!optionsStore.list.length"
+				v-if="!optionsStore.options.length"
 				v-bind="emptyContentProps">
 				<template #icon>
 					<TextPollIcon v-if="pollStore.type === PollType.Text" />
@@ -147,11 +144,6 @@ onUnmounted(() => {
 			</NcEmptyContent>
 
 			<div class="area__footer">
-				<CardHiddenParticipants
-					v-if="
-						pollStore.countHiddenParticipants
-						&& pollStore.viewMode !== ViewMode.ListView
-					" />
 				<CardAnonymousPollHint v-if="pollStore.status.isAnonymous" />
 			</div>
 		</div>

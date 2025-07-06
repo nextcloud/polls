@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 
 import { PollType, usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore } from '../../stores/options.ts'
@@ -23,6 +23,8 @@ import { usePreferencesStore, ViewMode } from '../../stores/preferences.ts'
 import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
 import VoteItem from './VoteItem.vue'
 import VoteParticipant from './VoteParticipant.vue'
+import IntersectionObserver from '../Base/modules/IntersectionObserver.vue'
+import { showError } from '@nextcloud/dialogs'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -31,7 +33,7 @@ const preferencesStore = usePreferencesStore()
 
 const tableStyle = computed(() => ({
 	'--participants-count': `${pollStore.safeParticipants.length}`,
-	'--options-count': `${optionsStore.list.length}`,
+	'--options-count': `${optionsStore.options.length}`,
 }))
 
 const showCalendarPeek = computed(
@@ -40,6 +42,17 @@ const showCalendarPeek = computed(
 		&& getCurrentUser()
 		&& preferencesStore.user.calendarPeek,
 )
+
+/**
+ *
+ */
+async function loadMore() {
+	try {
+		votesStore.addChunk()
+	} catch {
+		showError(t('polls', 'Error loading more participants'))
+	}
+}
 </script>
 
 <template>
@@ -112,10 +125,41 @@ const showCalendarPeek = computed(
 					:option="option" />
 			</div>
 		</template>
+		<div
+			v-if="votesStore.countHiddenParticipants > 0"
+			class="observer-container">
+			<IntersectionObserver
+				key="observer"
+				class="observer_section"
+				@visible="loadMore">
+				<div class="clickable_load_more" @click="loadMore">
+					{{
+						n(
+							'polls',
+							'%n participant is hidden. Click here to load more',
+							'%n participants are hidden. Click here to load more',
+							votesStore.countHiddenParticipants,
+						)
+					}}
+				</div>
+			</IntersectionObserver>
+		</div>
 	</TransitionGroup>
 </template>
 
 <style lang="scss">
+.observer-container {
+	grid-column: 2 / -1;
+	grid-row: 999;
+	display: flex;
+	justify-content: flex-start;
+}
+
+.observer_section {
+	position: sticky;
+	left: 70px;
+}
+
 .vote-table {
 	display: grid;
 	grid-template-columns: max-content repeat(

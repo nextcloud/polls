@@ -177,7 +177,7 @@ const countUsedVotes = computed(
 			<template #icon>
 				<OptionsIcon />
 			</template>
-			{{ n('polls', '%n option', '%n options', optionsStore.list.length) }}
+			{{ n('polls', '%n option', '%n options', optionsStore.options.length) }}
 		</BadgeDiv>
 		<BadgeDiv v-if="countAllYesVotes">
 			<template #icon>

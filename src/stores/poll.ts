@@ -16,7 +16,14 @@ import { emit } from '@nextcloud/event-bus'
 
 import { Logger } from '../helpers/index.ts'
 import { PublicAPI, PollsAPI } from '../Api/index.ts'
-import { createDefault, Event, User, UserType } from '../Types/index.ts'
+import {
+	Chunking,
+	createDefault,
+	Event,
+	StatusResults,
+	User,
+	UserType,
+} from '../Types/index.ts'
 
 import { usePreferencesStore, ViewMode } from './preferences.ts'
 import { useVotesStore, Answer } from './votes.ts'
@@ -71,6 +78,11 @@ export enum SortParticipants {
 	Alphabetical = 'alphabetical',
 	VoteCount = 'voteCount',
 	Unordered = 'unordered',
+}
+
+type Meta = {
+	chunking: Chunking
+	status: StatusResults
 }
 
 export type PollConfiguration = {
@@ -162,6 +174,7 @@ export type Poll = {
 	permissions: PollPermissions
 	revealParticipants: boolean
 	sortParticipants: SortParticipants
+	meta: Meta
 }
 
 const markedPrefix = {
@@ -250,6 +263,13 @@ export const usePollStore = defineStore('poll', {
 		},
 		revealParticipants: false,
 		sortParticipants: SortParticipants.Alphabetical,
+		meta: {
+			chunking: {
+				size: 0,
+				loaded: 0,
+			},
+			status: StatusResults.Loaded,
+		},
 	}),
 
 	getters: {
@@ -276,10 +296,10 @@ export const usePollStore = defineStore('poll', {
 		safeParticipants(): User[] {
 			const sessionStore = useSessionStore()
 			const votesStore = useVotesStore()
-			if (this.getSafeTable || this.viewMode === ViewMode.ListView) {
+			if (this.viewMode === ViewMode.ListView) {
 				return [sessionStore.currentUser]
 			}
-			return votesStore.sortedParticipants
+			return votesStore.getChunkedParticipants
 		},
 
 		getProposalsOptions(): {
@@ -353,37 +373,6 @@ export const usePollStore = defineStore('poll', {
 			)
 		},
 
-		getSafeTable(state): boolean {
-			const preferencesStore = usePreferencesStore()
-			return (
-				!state.revealParticipants
-				&& this.countCells > preferencesStore.user.performanceThreshold
-			)
-		},
-
-		// count the number of participants (including current user, if has not voted yet)
-		countParticipants(): number {
-			const votesStore = useVotesStore()
-			return votesStore.sortedParticipants.length
-		},
-
-		countHiddenParticipants(): number {
-			const votesStore = useVotesStore()
-			return (
-				votesStore.sortedParticipants.length - this.safeParticipants.length
-			)
-		},
-
-		// count the number of safe participants (including current user, if has not voted yet)
-		countSafeParticipants(): number {
-			return this.safeParticipants.length
-		},
-
-		countCells(): number {
-			const optionsStore = useOptionsStore()
-			return this.countParticipants * optionsStore.count
-		},
-
 		descriptionMarkDown(): string {
 			marked.use(gfmHeadingId(markedPrefix))
 			return DOMPurify.sanitize(
@@ -445,10 +434,10 @@ export const usePollStore = defineStore('poll', {
 				}
 
 				this.$patch(response.data.poll)
-				votesStore.list = response.data.votes
-				optionsStore.list = response.data.options
+				votesStore.votes = response.data.votes
+				optionsStore.options = response.data.options
 				sharesStore.shares = response.data.shares
-				commentsStore.list = response.data.comments
+				commentsStore.comments = response.data.comments
 				subscriptionStore.subscribed = response.data.subscribed
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {

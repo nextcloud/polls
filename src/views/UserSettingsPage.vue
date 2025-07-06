@@ -14,7 +14,6 @@ import {
 	CalendarSettings,
 	FeatureSettings,
 	StyleSettings,
-	PerformanceSettings,
 } from '../components/Settings/UserSettings/index.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 
@@ -28,13 +27,6 @@ const sections = {
 	personalSettings: {
 		name: t('polls', 'Personal preferences'),
 		description: t('polls', 'Set your personal preferences for the polls app'),
-	},
-	performanceSettings: {
-		name: t('polls', 'Performance settings'),
-		description: t(
-			'polls',
-			'Try to change these parameters to handle big polls',
-		),
 	},
 	styleSettings: {
 		name: t('polls', 'Experimental styles'),
@@ -53,12 +45,9 @@ onMounted(() => {
 		<NcSettingsSection v-bind="sections.calendarSettings">
 			<CalendarSettings />
 		</NcSettingsSection>
+
 		<NcSettingsSection v-bind="sections.personalSettings">
 			<FeatureSettings />
-		</NcSettingsSection>
-
-		<NcSettingsSection v-bind="sections.performanceSettings">
-			<PerformanceSettings />
 		</NcSettingsSection>
 
 		<NcSettingsSection v-bind="sections.styleSettings">

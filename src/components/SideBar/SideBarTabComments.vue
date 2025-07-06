@@ -26,7 +26,7 @@ const emptyContentProps = {
 	description: t('polls', 'Be the first.'),
 }
 
-const showEmptyContent = computed(() => commentsStore.list.length === 0)
+const showEmptyContent = computed(() => commentsStore.comments.length === 0)
 
 onMounted(() => {
 	subscribe(Event.UpdateComments, () => commentsStore.load())

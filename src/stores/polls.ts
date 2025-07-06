@@ -13,7 +13,7 @@ import { PollsAPI } from '../Api/index.ts'
 
 import { AccessType, Poll, PollType } from './poll.ts'
 import { useSessionStore } from './session.ts'
-import { StatusResults } from '../Types/index.ts'
+import { Chunking, StatusResults } from '../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 import { usePollGroupsStore } from './pollGroups.ts'
 
@@ -56,8 +56,7 @@ export type PollCategory = {
 export type PollCategoryList = Record<FilterType, PollCategory>
 
 export type Meta = {
-	chunksize: number
-	loadedChunks: number
+	chunks: Chunking
 	maxPollsInNavigation: number
 	status: StatusResults
 }
@@ -219,8 +218,10 @@ export const usePollsStore = defineStore('polls', {
 	state: (): PollList => ({
 		polls: [],
 		meta: {
-			chunksize: 20,
-			loadedChunks: 1,
+			chunks: {
+				size: 20,
+				loaded: 1,
+			},
 			maxPollsInNavigation: 6,
 			status: StatusResults.Loaded,
 		},
@@ -324,7 +325,7 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		loaded(state: PollList): number {
-			return state.meta.loadedChunks * state.meta.chunksize
+			return state.meta.chunks.loaded * state.meta.chunks.size
 		},
 
 		datePolls(state: PollList): Poll[] {
@@ -413,11 +414,11 @@ export const usePollsStore = defineStore('polls', {
 		},
 
 		addChunk(): void {
-			this.meta.loadedChunks = this.meta.loadedChunks + 1
+			this.meta.chunks.loaded = this.meta.chunks.loaded + 1
 		},
 
 		resetChunks(): void {
-			this.meta.loadedChunks = 1
+			this.meta.chunks.loaded = 1
 		},
 
 		async clone(payload: { pollId: number }): Promise<void> {

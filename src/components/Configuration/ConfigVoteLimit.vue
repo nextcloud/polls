@@ -34,8 +34,10 @@ function validateLimit() {
 		pollStore.configuration.maxVotesPerUser = 0
 	} else if (pollStore.configuration.maxVotesPerUser < 1) {
 		pollStore.configuration.maxVotesPerUser = 1
-	} else if (pollStore.configuration.maxVotesPerUser > optionsStore.list.length) {
-		pollStore.configuration.maxVotesPerUser = optionsStore.list.length
+	} else if (
+		pollStore.configuration.maxVotesPerUser > optionsStore.options.length
+	) {
+		pollStore.configuration.maxVotesPerUser = optionsStore.options.length
 	}
 
 	emit('change')
@@ -59,7 +61,7 @@ function validateLimit() {
 			inputmode="numeric"
 			use-num-modifiers
 			:num-min="1"
-			:num-max="optionsStore.list.length"
+			:num-max="optionsStore.options.length"
 			num-wrap
 			@change="emit('change')" />
 	</div>

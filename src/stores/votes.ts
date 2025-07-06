@@ -5,7 +5,7 @@
 
 import { defineStore } from 'pinia'
 import { PublicAPI, VotesAPI } from '../Api/index.ts'
-import { User } from '../Types/index.ts'
+import { Chunking, User } from '../Types/index.ts'
 import { Logger, StoreHelper } from '../helpers/index.ts'
 import { Option, useOptionsStore } from './options.ts'
 import { usePollStore, VoteVariant } from './poll.ts'
@@ -44,14 +44,23 @@ export type Vote = {
 }
 
 export type Votes = {
-	list: Vote[]
+	votes: Vote[]
 	sortByOption: number
+	meta: {
+		chunks: Chunking
+	}
 }
 
 export const useVotesStore = defineStore('votes', {
 	state: (): Votes => ({
-		list: [],
+		votes: [],
 		sortByOption: 0,
+		meta: {
+			chunks: {
+				size: 25,
+				loaded: 1,
+			},
+		},
 	}),
 
 	getters: {
@@ -64,7 +73,7 @@ export const useVotesStore = defineStore('votes', {
 		participants: (state): User[] =>
 			Array.from(
 				new Map(
-					state.list.map((vote) => [vote.user.id, vote.user]),
+					state.votes.map((vote) => [vote.user.id, vote.user]),
 				).values(),
 			).sort((aUser, bUser) => {
 				if (aUser.displayName < bUser.displayName) {
@@ -75,6 +84,39 @@ export const useVotesStore = defineStore('votes', {
 				}
 				return 0
 			}),
+
+		loadedParticipants(state: Votes): number {
+			return Math.min(
+				state.meta.chunks.loaded * state.meta.chunks.size,
+				this.participants.length,
+			)
+		},
+
+		countHiddenParticipants(): number {
+			return this.participants.length - this.getChunkedParticipants.length
+		},
+
+		/**
+		 * Returns a chunked list of participants, limited by the performance threshold
+		 * If the number of participants is greater than the performance threshold, only return the loaded chunks
+		 * @param state
+		 * @return
+		 */
+		getChunkedParticipants(state): User[] {
+			if (
+				this.participants.length > state.meta.chunks.size
+				&& this.participants.length
+					> state.meta.chunks.loaded * state.meta.chunks.size
+			) {
+				// if the number of cells is greater than the performance threshold, return an empty array
+				return this.sortedParticipants.slice(
+					0,
+					state.meta.chunks.loaded * state.meta.chunks.size,
+				)
+			}
+			// otherwise return all participants
+			return this.sortedParticipants
+		},
 
 		/**
 		 * Returns a sorted list of participants including the current user, even if not voted
@@ -114,7 +156,7 @@ export const useVotesStore = defineStore('votes', {
 					// find the votes for the selected option and the users to compare
 					const aAnswer =
 						answerSortOrder[
-							state.list.find(
+							state.votes.find(
 								(vote) =>
 									vote.user.id === aUser.id
 									&& vote.optionId === state.sortByOption,
@@ -122,7 +164,7 @@ export const useVotesStore = defineStore('votes', {
 						]
 					const bAnswer =
 						answerSortOrder[
-							state.list.find(
+							state.votes.find(
 								(vote) =>
 									vote.user.id === bUser.id
 									&& vote.optionId === state.sortByOption,
@@ -156,8 +198,8 @@ export const useVotesStore = defineStore('votes', {
 			const optionsStore = useOptionsStore()
 			const virtualVotes: Vote[] = []
 			this.sortedParticipants.forEach((user) => {
-				optionsStore.list.forEach((option) => {
-					const found = state.list.find(
+				optionsStore.options.forEach((option) => {
+					const found = state.votes.find(
 						(vote: Vote) =>
 							vote.optionId === option.id && vote.user.id === user.id,
 					)
@@ -180,12 +222,16 @@ export const useVotesStore = defineStore('votes', {
 			return virtualVotes
 		},
 
-		hasVotes: (state) => state.list.length > 0,
+		hasVotes: (state) => state.votes.length > 0,
 	},
 
 	actions: {
+		addChunk(): void {
+			this.meta.chunks.loaded = this.meta.chunks.loaded + 1
+		},
+
 		countAllVotesByAnswer(answer: Answer): number {
-			return this.list.filter((vote) => vote.answer === answer).length
+			return this.votes.filter((vote) => vote.answer === answer).length
 		},
 
 		getVote(payload: { user: User; option: Option }): Vote {
@@ -228,7 +274,7 @@ export const useVotesStore = defineStore('votes', {
 					return
 				}
 
-				this.list = response.data.votes
+				this.votes = response.data.votes
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -239,17 +285,17 @@ export const useVotesStore = defineStore('votes', {
 		},
 
 		setItem(payload: { option: Option; vote: Vote }) {
-			const index = this.list.findIndex(
+			const index = this.votes.findIndex(
 				(vote: Vote) =>
 					vote.pollId === payload.option.pollId
 					&& vote.user.id === payload.vote.user.id
 					&& vote.optionText === payload.option.text,
 			)
 			if (index > -1) {
-				this.list[index] = Object.assign(this.list[index], payload.vote)
+				this.votes[index] = Object.assign(this.votes[index], payload.vote)
 				return
 			}
-			this.list.push(payload.vote)
+			this.votes.push(payload.vote)
 		},
 
 		async set(payload: { option: Option; setTo: Answer }) {
