@@ -262,6 +262,7 @@ async function loadMore() {
 		.option-item {
 			grid-row: 2;
 			position: sticky;
+			opacity: 0.85;
 			top: 0;
 			z-index: 2;
 			background-color: var(--color-main-background);

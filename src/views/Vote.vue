@@ -154,13 +154,22 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
-.table-view.fixed-table-header .vote_main {
+.table-view .vote_main {
 	flex: 1;
 	overflow: auto;
 	overscroll-behavior-inline: contain;
 
 	.vote-table {
 		max-height: 75vh;
+		min-height: 16.6rem;
+	}
+}
+
+.table-view.fixed-table-header .vote_main {
+	display: flex;
+	flex-direction: column;
+	.vote-table {
+		min-height: 18rem;
 	}
 }
 
