@@ -62,7 +62,10 @@ async function loadMore() {
 		:class="pollStore.viewMode"
 		class="vote-table"
 		:style="tableStyle">
-		<div v-if="pollStore.viewMode === ViewMode.TableView" class="grid-info">
+		<div
+			v-if="pollStore.viewMode === ViewMode.TableView"
+			key="grid-info"
+			class="grid-info">
 			<NcButton
 				v-show="votesStore.sortByOption > 0"
 				class="sort-indicator"
@@ -77,6 +80,7 @@ async function loadMore() {
 
 		<div
 			v-if="pollStore.viewMode === ViewMode.TableView"
+			key="option-spacer"
 			class="option-spacer" />
 		<div v-if="pollStore.permissions.seeResults" class="counter-spacer" />
 
