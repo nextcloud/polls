@@ -41,6 +41,7 @@ OC.L10N.register(
     "Privacy policy" : "Sheria ya faragha",
     "Login" : "Ingia",
     "Show QR code" : "Onesha msimbo wa QR",
+    "No activity yet" : "Bado hakuna shughuli",
     "Public link" : "Kiungio cha umma",
     "Switch to list view" : "Switch to list view",
     "Comments" : "Maoni",

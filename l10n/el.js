@@ -279,6 +279,7 @@ OC.L10N.register(
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n ψήφος \"Ναι\"","%n ψήφοι \"Ναι\""],
     "_%n No vote_::_%n \"No\" votes_" : ["%nψήφος \"Όχι\"","%n ψήφοι \"Όχι\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n ψήφος \"Ίσως\"","%n ψήφοι \"Ίσως\""],
+    "Name" : "Όνομα",
     "Description" : "Περιγραφή",
     "No description provided" : "Δεν υπάρχει περιγραφή",
     "Expiration" : "Λήξη",

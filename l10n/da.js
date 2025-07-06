@@ -48,6 +48,7 @@ OC.L10N.register(
     "Archived" : "Arkiveret",
     "never" : "aldrig",
     "Private poll" : "Privat afstemning",
+    "Name" : "Navn",
     "Description" : "Beskrivelse",
     "No description provided" : "Ingen beskrivelse leveret",
     "Expiration" : "Udløb",

@@ -437,7 +437,6 @@ OC.L10N.register(
     "Enter a description" : "Bir açıklama yazın",
     "Choose a description for the overview page" : "Özet sayfası için bir açıklama seçin",
     "Choose a brief title for the navigation bar and the slug" : "Gezinme çubuğu ve kısaltma için kısa bir başlık seçin",
-    "Error updating PollGroup" : "Anket grubu güncellenirken sorun çıktı",
     "Name" : "Ad",
     "Extended title" : "Uzun başlık",
     "Description" : "Açıklama",

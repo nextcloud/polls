@@ -369,6 +369,7 @@ OC.L10N.register(
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n vot \"Sí\"","%n vots “Sí”"],
     "_%n No vote_::_%n \"No\" votes_" : ["%n vot No","%n vots \"No\""],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n vot \"Potser\"","%n vots “Potser”"],
+    "Name" : "Nom",
     "Description" : "Descripció",
     "No description provided" : "No s'ha proveït cap descripció",
     "Expiration" : "Caducitat",

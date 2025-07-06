@@ -396,6 +396,7 @@
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n voto \"Sí\"","%n  votos \"Sí\"","%n  votos \"Sí\""],
     "_%n No vote_::_%n \"No\" votes_" : ["%n voto «No»","%n votos «No»","%n votos «No»"],
     "_%n \"Maybe\" vote_::_%n \"Maybe\" votes_" : ["%n  voto \"Quizás\"","%n votos \"Quizás\"","%n votos \"Quizás\""],
+    "Name" : "Nombre",
     "Description" : "Descripción",
     "No description provided" : "No se ha proporcionado descripción",
     "Started {relativeTime} from {ownerName}" : "Se inicio {relativeTime} desde {ownerName}",

@@ -172,6 +172,7 @@ OC.L10N.register(
     "_%n option_::_%n options_" : ["%n opción","%n opciones"],
     "_%n \"Yes\" vote_::_%n \"Yes\" votes_" : ["%n votu «Sí»","%n votos «Sí»"],
     "_%n No vote_::_%n \"No\" votes_" : ["%n votu «Non»","%n votos «Non»"],
+    "Name" : "Nome",
     "Description" : "Descripción",
     "No description provided" : "Nun se fornió nenguna descripción",
     "Expiration" : "Caducidá",

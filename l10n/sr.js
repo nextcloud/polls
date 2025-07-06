@@ -433,7 +433,6 @@ OC.L10N.register(
     "Enter a description" : "Унесите опис",
     "Choose a description for the overview page" : "Изаберите опис за страницу прегледа",
     "Choose a brief title for the navigation bar and the slug" : "Изаберите кратак наслов за линију навигације и пужа",
-    "Error updating PollGroup" : "Грешка приликом ажурирања PollGroup",
     "Name" : "Име",
     "Extended title" : "Проширени наслов",
     "Description" : "Опис",

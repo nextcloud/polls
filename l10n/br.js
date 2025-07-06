@@ -22,6 +22,7 @@ OC.L10N.register(
     "Preview" : "Ragwell",
     "Submit" : "Kinnig",
     "never" : "james",
+    "Name" : "Anv",
     "Description" : "Diskrivadur",
     "Expiration" : "Termen",
     "Login" : "Anv arveriad",

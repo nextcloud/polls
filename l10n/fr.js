@@ -433,7 +433,6 @@ OC.L10N.register(
     "Enter a description" : "Saisissez une description",
     "Choose a description for the overview page" : "Choisissez un description pour la page récapitulative",
     "Choose a brief title for the navigation bar and the slug" : "Choisissez un titre bref pour la barre de navigation et l'URL",
-    "Error updating PollGroup" : "Erreur à la mise à jour du groupe de sondage",
     "Name" : "Nom",
     "Extended title" : "Titre étendu",
     "Description" : "Description",
