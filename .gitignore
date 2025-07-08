@@ -1,33 +1,55 @@
 # SPDX-FileCopyrightText: 2016 Nextcloud contributors
 # SPDX-License-Identifier: AGPL-3.0-or-later
-/assets/
+
+# build dirs
+/assets
 /css/*.map
-/js/*
-/css/*
+/js
+/css
+/build
+
+# Mac nonsense
 .DS_Store
+
+# Win nonsense
+Thumbs.db
+
+# local folders and files
+.local
+
+# caches
 .sass-cache/
 .php_cs.cache
 .php-cs-fixer.cache
 .psalm.cache
+tests/.phpunit.result.cache
+
+# logs
+npm-debug.log
+yarn-error.log
+
+# IDEs
 .project/
 .idea/
 .vscode/
-build/
 nbproject/
+*.iml
+*.ntvs*
+*.suo
+*.sln
+*.njsproj
+
+# modules
 node_modules/
-tests/.phpunit.result.cache
-npm-debug.log
+
+# Composer vendors
 vendor
 vendor-bin/**/vendor/
 vendor-bin/**/*.lock
-update-workflows.sh
-yarn-error.log
-Thumbs.db
+
+# local command files
+*.sh
 *.cmd
-*.env
-*.iml
-*.ntvs*
-*.njsproj
-*.sln
-*.suo
+
+# misc
 tests/Api
