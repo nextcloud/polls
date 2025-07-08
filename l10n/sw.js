@@ -55,6 +55,7 @@ OC.L10N.register(
     "Month" : "Mwezi",
     "Year" : "Mwaka",
     "Created" : "Imetengenezwa",
-    "Owner" : "Mmiliki"
+    "Owner" : "Mmiliki",
+    "Archive" : "Weka kumbukumbu"
 },
 "nplurals=2; plural=(n != 1);");

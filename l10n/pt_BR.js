@@ -659,6 +659,7 @@ OC.L10N.register(
     "Error saving vote" : "Erro ao salvar voto ",
     "Participant {userId} has been removed" : "O participante {userId} foi removido",
     "Remove votes of {displayName}" : "Remover votos de {displayName}",
+    "Error loading more participants" : "Erro ao carregar mais participantes",
     "Click to sort by name" : "Clique para ordenar por nome",
     "Click to remove sorting" : "Clique para remover a ordenação",
     "Poll settings" : "Configurações de enquete",

@@ -593,6 +593,7 @@
     "Error saving vote" : "Viga hääle salvestamisel",
     "Participant {userId} has been removed" : "Osaleja {userId}on eemaldatud.",
     "Remove votes of {displayName}" : "Eemalda „{displayName}“ antud hääled",
+    "Error loading more participants" : "Viga täiendavate osalejate laadimisel",
     "Click to sort by name" : "Nime alusel järjestamiseks klõpsi",
     "Click to remove sorting" : "Järjestuse eemaldamiseks klõpsi",
     "Poll settings" : "Küsitluse seadistused",
