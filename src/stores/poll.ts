@@ -410,20 +410,23 @@ export const usePollStore = defineStore('poll', {
 			subscriptionStore.reset()
 		},
 
-		async load(): Promise<void> {
+		async load(pollId: number | null = null): Promise<void> {
 			const votesStore = useVotesStore()
 			const sessionStore = useSessionStore()
 			const optionsStore = useOptionsStore()
 			const sharesStore = useSharesStore()
 			const commentsStore = useCommentsStore()
 			const subscriptionStore = useSubscriptionStore()
+
+			this.meta.status = StatusResults.Loading
+
 			try {
 				const response = await (() => {
 					if (sessionStore.route.name === 'publicVote') {
 						return PublicAPI.getPoll(sessionStore.route.params.token)
 					}
 					if (sessionStore.route.name === 'vote') {
-						return PollsAPI.getFullPoll(sessionStore.currentPollId)
+						return PollsAPI.getFullPoll(pollId ?? sessionStore.currentPollId)
 					}
 					return null
 				})()
@@ -439,10 +442,13 @@ export const usePollStore = defineStore('poll', {
 				sharesStore.shares = response.data.shares
 				commentsStore.comments = response.data.comments
 				subscriptionStore.subscribed = response.data.subscribed
+
+				this.meta.status = StatusResults.Loaded
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
 				}
+				this.meta.status = StatusResults.Error
 				Logger.error('Error loading poll', { error })
 				throw error
 			}

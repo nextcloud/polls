@@ -4,13 +4,12 @@
 -->
 
 <script setup lang="ts">
-import { onMounted, onUnmounted } from 'vue'
-import { subscribe, unsubscribe } from '@nextcloud/event-bus'
+import { onMounted } from 'vue'
+import { onBeforeRouteUpdate } from 'vue-router'
 
 import { useSharesStore } from '../../stores/shares.ts'
 
 import SharesList from '../Shares/SharesListPollGroup.vue'
-import { Event } from '../../Types/index.ts'
 import { t } from '@nextcloud/l10n'
 
 const sharesStore = useSharesStore()
@@ -18,13 +17,16 @@ const infoText = t(
 	'polls',
 	'Shares for a poll group grant voting access to the polls contained in the poll group.',
 )
+
+
 onMounted(() => {
-	subscribe(Event.ChangeShares, () => sharesStore.load())
+	sharesStore.load('pollGroup')
 })
 
-onUnmounted(() => {
-	unsubscribe(Event.ChangeShares, () => sharesStore.load())
+onBeforeRouteUpdate(async () => {
+	sharesStore.load('pollGroup')
 })
+
 </script>
 
 <template>

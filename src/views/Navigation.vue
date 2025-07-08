@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
@@ -155,6 +155,11 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 		params: { id: payLoad.id },
 	})
 }
+
+onMounted(() => {
+	pollsStore.load(false)
+})
+
 </script>
 
 <template>

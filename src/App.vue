@@ -11,7 +11,6 @@ import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import NcContent from '@nextcloud/vue/components/NcContent'
 
 import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
-import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 
 import { usePollWatcher } from './composables/usePollWatcher'
 
@@ -35,7 +34,6 @@ const pollStore = usePollStore()
 const pollGroupsStore = usePollGroupsStore()
 
 const transitionClass = ref('transitions-active')
-const loading = ref(false)
 
 const appClass = computed(() => [
 	transitionClass.value,
@@ -118,7 +116,6 @@ onUnmounted(() => {
 		<router-view v-if="useNavigation" name="navigation" />
 		<router-view />
 		<router-view v-if="useSidebar" name="sidebar" />
-		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
 </template>
