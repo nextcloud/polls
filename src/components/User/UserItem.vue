@@ -335,6 +335,7 @@ function showMenu() {
 .user-item__avatar .material-design-icon {
 	background-color: var(--color-primary-element);
 	border-radius: 50%;
+	color: var(--color-primary-element-text);
 }
 
 .user-item__name {
