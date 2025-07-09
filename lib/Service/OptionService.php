@@ -198,7 +198,7 @@ class OptionService {
 		$option = $this->optionMapper->find($optionId);
 
 		if (!$option->getCurrentUserIsEntityUser()) {
-			$this->pollMapper->find($option->getPollId())->request(Poll::PERMISSION_OPTION_DELETE);
+			$this->pollMapper->get($option->getPollId(), withRoles: true)->request(Poll::PERMISSION_OPTION_DELETE);
 		}
 
 		$option->setDeleted($restore ? 0 : time());
@@ -314,8 +314,8 @@ class OptionService {
 	 * Copy options from $fromPoll to $toPoll
 	 */
 	public function clone(int $fromPollId, int $toPollId): void {
-		$this->pollMapper->find($fromPollId)->request(Poll::PERMISSION_POLL_VIEW);
-		$this->pollMapper->find($toPollId)->request(Poll::PERMISSION_OPTION_ADD);
+		$this->pollMapper->get($fromPollId, withRoles: true)->request(Poll::PERMISSION_POLL_VIEW);
+		$this->pollMapper->get($toPollId, withRoles: true)->request(Poll::PERMISSION_OPTION_ADD);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
 			$option = new Option();
@@ -426,7 +426,7 @@ class OptionService {
 	 */
 	private function getPoll(int $pollId, string $permission = Poll::PERMISSION_POLL_VIEW): void {
 		if ($this->poll->getId() !== $pollId) {
-			$this->poll = $this->pollMapper->find($pollId);
+			$this->poll = $this->pollMapper->get($pollId, withRoles: true);
 		}
 		$this->poll->request($permission);
 	}

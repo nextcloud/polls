@@ -38,7 +38,7 @@ abstract class Container {
 	}
 
 	public static function queryPoll(int $pollId): Poll {
-		return Server::get(PollMapper::class)->find($pollId);
+		return Server::get(PollMapper::class)->get($pollId);
 	}
 
 	public static function findShare(int $pollId, string $userId): Share {

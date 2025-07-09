@@ -39,7 +39,7 @@ class VoteService {
 	 * @return Vote[]
 	 */
 	public function list(int $pollId): array {
-		$poll = $this->pollMapper->find($pollId);
+		$poll = $this->pollMapper->get($pollId, withRoles: true);
 		$poll->request(Poll::PERMISSION_POLL_VIEW);
 
 		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW)) {
@@ -50,6 +50,18 @@ class VoteService {
 		$votes = $this->voteMapper->findByPoll($pollId);
 
 		return $votes;
+	}
+
+	public function getParticipants(int $pollId): array {
+		$poll = $this->pollMapper->get($pollId, withRoles: true);
+		$poll->request(Poll::PERMISSION_POLL_VIEW);
+
+		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW)) {
+			// Just return the participants votes, no further anoymizing or obfuscating is nessecary
+			return $this->voteMapper->findByPollAndUser($pollId, ($this->userSession->getCurrentUserId()));
+		}
+
+		return $this->voteMapper->findParticipantsByPoll($pollId);
 	}
 
 	private function checkLimits(Option $option): void {
@@ -85,7 +97,7 @@ class VoteService {
 		} else {
 			$option = $this->optionMapper->find($optionOrOptionIdoptionId);
 		}
-		$poll = $this->pollMapper->find($option->getPollId());
+		$poll = $this->pollMapper->get($option->getPollId(), withRoles: true);
 		$poll->request(Poll::PERMISSION_VOTE_EDIT);
 
 		if ($option->getIsLocked()) {
@@ -150,7 +162,7 @@ class VoteService {
 			$checkRight = Poll::PERMISSION_VOTE_EDIT;
 		}
 
-		$this->pollMapper->find($pollId)->request($checkRight);
+		$this->pollMapper->get($pollId, withRoles: true)->request($checkRight);
 
 		return $this->delete($pollId, $userId, $deleteOnlyOrphaned);
 	}

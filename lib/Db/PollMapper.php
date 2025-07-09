@@ -35,13 +35,27 @@ class PollMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Poll
 	 */
-	public function get(int $id, bool $getDeleted = false): Poll {
+	public function get(int $id, bool $getDeleted = false, bool $withRoles = false): Poll {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->select(self::TABLE . '.*')
+			->from($this->getTableName(), self::TABLE)
+			->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+			->groupBy(self::TABLE . '.id');
+
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		}
+
+		if ($withRoles) {
+			$pollGroupsAlias = 'poll_groups';
+			$currentUserId = $this->userSession->getCurrentUserId();
+			// $this->joinOptions($qb, self::TABLE);
+			$this->joinUserRole($qb, self::TABLE, $currentUserId);
+			$this->joinGroupShares($qb, self::TABLE);
+			$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
+			$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
+			// $this->joinVotesCount($qb, self::TABLE, $currentUserId);
+			// $this->joinParticipantsCount($qb, self::TABLE);
 		}
 		return $this->findEntity($qb);
 	}
@@ -184,19 +198,19 @@ class PollMapper extends QBMapper {
 	 * Build the enhanced query with joined tables
 	 */
 	protected function buildQuery(): IQueryBuilder {
-		$currentUserId = $this->userSession->getCurrentUserId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
+		$currentUserId = $this->userSession->getCurrentUserId();
 		$pollGroupsAlias = 'poll_groups';
 		$this->joinOptions($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$this->joinGroupShares($qb, self::TABLE);
 		$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
-		$this->joinUserSharesfromPollGroups($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
+		$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
 		$this->joinVotesCount($qb, self::TABLE, $currentUserId);
 		$this->joinParticipantsCount($qb, self::TABLE);
 		return $qb;
@@ -299,7 +313,7 @@ class PollMapper extends QBMapper {
 	 * Supported share types are User and Admin
 	 * Groups, Teams will not work atm.
 	 */
-	protected function joinUserSharesfromPollGroups(
+	protected function joinPollGroupShares(
 		IQueryBuilder $qb,
 		string $fromAlias,
 		string $currentUserId,
