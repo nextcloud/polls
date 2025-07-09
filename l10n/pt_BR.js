@@ -439,7 +439,7 @@ OC.L10N.register(
     "Enter extended title" : "Digite o título estendido",
     "Optionally choose a more meaningful title for the overview page" : "Opcionalmente, escolha um título mais significativo para a página de visão geral",
     "Note: Based on the name change, the URL has also changed" : "Observação: Com base na mudança de nome, o URL também foi alterado",
-    "Error updating poll group" : "Erro ao atualizar grupo de enquete",
+    "Error updating poll group" : "Erro ao atualizar grupo de enquetes",
     "Name" : "Nome",
     "Extended title" : "Título estendido",
     "Description" : "Descrição",

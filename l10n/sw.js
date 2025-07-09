@@ -46,6 +46,7 @@ OC.L10N.register(
     "Switch to list view" : "Switch to list view",
     "Comments" : "Maoni",
     "Details" : "Maelezo ya kina",
+    "Configuration" : "Usanidi",
     "Options" : "Chaguzi",
     "Sharing" : "inashirikisha",
     "Activity" : "Shughuli",
