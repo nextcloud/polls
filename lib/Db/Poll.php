@@ -571,7 +571,7 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			$this->getCreated(),
 			$this->getLastInteraction(),
 			$this->getExpire(),
-			$this->getMaxDate() ?? 0,
+			$this->getMaxDate(),
 		);
 	}
 

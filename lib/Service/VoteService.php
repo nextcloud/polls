@@ -52,18 +52,6 @@ class VoteService {
 		return $votes;
 	}
 
-	public function getParticipants(int $pollId): array {
-		$poll = $this->pollMapper->get($pollId, withRoles: true);
-		$poll->request(Poll::PERMISSION_POLL_VIEW);
-
-		if (!$poll->getIsAllowed(Poll::PERMISSION_POLL_RESULTS_VIEW)) {
-			// Just return the participants votes, no further anoymizing or obfuscating is nessecary
-			return $this->voteMapper->findByPollAndUser($pollId, ($this->userSession->getCurrentUserId()));
-		}
-
-		return $this->voteMapper->findParticipantsByPoll($pollId);
-	}
-
 	private function checkLimits(Option $option): void {
 		// check, if the optionlimit is reached or exceeded, if one is set
 		if ($option->getIsLockedByOptionLimit()) {

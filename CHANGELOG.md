@@ -20,14 +20,17 @@ All notable changes to this project will be documented in this file.
  - Optimized janitor cron
  - Optimized rebuild command
  - Optimized poll loading by migrating subqueries to join (#3692)
+ - Accelerated loading performance of polls
  - Separated pollGroups from polls (Store, Service, Mapper, ...)
  - Catch CronJob runs and report as error, but avoid crash at higher thread levels
  - Changed poll loading triggers (mainly navigation affected)
  - Added some status to the watchWorker
- - removed performance setting in favor of lazy loading participants
+ - removed performance user setting in favor of lazy loading participants
+ - reduce noise by avoiding toasts for obvious changes
 
 ### Fixes
  - Fixed broken endpoint for manually calling autoReminderCron
+ - fix avatar foreground color
 
 ## [8.0.6] - 2025-07-03
 ### Changes (8.0.6)
