@@ -5,12 +5,15 @@
 
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, ref } from 'vue'
+import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 
 const inViewport = ref(false)
 const observer = ref<null | IntersectionObserver>(null)
 
 const observerTarget = ref<null | Element>(null)
 const emit = defineEmits(['visible'])
+
+const { loading } = defineProps<{ loading: boolean }>()
 
 onMounted(() => {
 	const observer = new IntersectionObserver((entries) => {
@@ -36,6 +39,7 @@ onBeforeUnmount(() => {
 
 <template>
 	<div ref="observerTarget">
-		<slot :in-viewport="inViewport" />
+		<NcLoadingIcon v-if="loading" :size="15" />
+		<slot v-else :in-viewport="inViewport" />
 	</div>
 </template>
