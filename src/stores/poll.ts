@@ -426,7 +426,9 @@ export const usePollStore = defineStore('poll', {
 						return PublicAPI.getPoll(sessionStore.route.params.token)
 					}
 					if (sessionStore.route.name === 'vote') {
-						return PollsAPI.getFullPoll(pollId ?? sessionStore.currentPollId)
+						return PollsAPI.getFullPoll(
+							pollId ?? sessionStore.currentPollId,
+						)
 					}
 					return null
 				})()

@@ -360,10 +360,14 @@ export const usePollsStore = defineStore('polls', {
 		async load(forced: boolean = true): Promise<void> {
 			const pollGroupsStore = usePollGroupsStore()
 
-			if (this.meta.status === StatusResults.Loading
-				|| (!forced
-				&& this.meta.status === StatusResults.Loaded)) {
-				Logger.debug('Polls already loaded or loading, skipping load', {status: this.meta.status, forced})
+			if (
+				this.meta.status === StatusResults.Loading
+				|| (!forced && this.meta.status === StatusResults.Loaded)
+			) {
+				Logger.debug('Polls already loaded or loading, skipping load', {
+					status: this.meta.status,
+					forced,
+				})
 				return
 			}
 

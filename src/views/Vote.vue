@@ -153,14 +153,12 @@ onUnmounted(() => {
 			<NcEmptyContent
 				v-if="!optionsStore.options.length"
 				v-bind="emptyContentProps">
-
 				<template #icon>
 					<TextPollIcon v-if="pollStore.type === PollType.Text" />
 					<DatePollIcon v-else />
 				</template>
 
-				<template
-					v-if="pollStore.permissions.addOptions" #action>
+				<template v-if="pollStore.permissions.addOptions" #action>
 					<ActionAddOption
 						v-if="pollStore.type === PollType.Date"
 						:caption="t('polls', 'Add options')" />

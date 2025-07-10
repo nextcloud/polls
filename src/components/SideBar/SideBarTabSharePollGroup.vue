@@ -18,7 +18,6 @@ const infoText = t(
 	'Shares for a poll group grant voting access to the polls contained in the poll group.',
 )
 
-
 onMounted(() => {
 	sharesStore.load('pollGroup')
 })
@@ -26,7 +25,6 @@ onMounted(() => {
 onBeforeRouteUpdate(async () => {
 	sharesStore.load('pollGroup')
 })
-
 </script>
 
 <template>

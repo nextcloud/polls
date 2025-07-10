@@ -47,7 +47,6 @@ async function validateToken(to: RouteLocationNormalized) {
 				},
 			}
 		}
-
 	} catch (error) {
 		if (getCurrentUser()) {
 			if ((error as AxiosError).response?.status === 403) {
@@ -228,43 +227,6 @@ router.beforeEach(
 				name: 'notfound',
 			}
 		}
-
-	// 	try {
-	// 		// for public pages we need to load the share first
-	// 		if (to.meta.publicPage) {
-	// 			await sessionStore.loadShare()
-	// 		}
-
-	// 		// vote pages load the particular poll
-	// 		// or reset the poll store if not a vote page
-	// 		if (to.meta.votePage) {
-	// 			// pollStore.load()
-	// 		} else {
-	// 			// pollStore.resetPoll()
-	// 		}
-
-	// 		// load polls at least for navigation
-	// 		if (!to.meta.publicPage && !cheapLoading) {
-	// 			await pollsStore.load()
-	// 		}
-
-	// 		// group pages need shares for the current poll group
-	// 		if (to.meta.groupPage) {
-	// 			sharesStore.load('pollGroup')
-	// 		}
-	// 	} catch (error) {
-	// 		Logger.warn('Could not load poll', { error })
-	// 		if ((error as AxiosError).response?.status === 403) {
-	// 			// User has no access
-	// 			return {
-	// 				name: 'forbidden',
-	// 			}
-	// 		}
-	// 		// else let's pretend, the poll does not exist (what will be probably the case)
-	// 		return {
-	// 			name: 'notfound',
-	// 		}
-	// 	}
 	},
 )
 

@@ -4,9 +4,9 @@
 -->
 
 <script setup lang="ts">
-import { t } from '@nextcloud/l10n';
+import { t } from '@nextcloud/l10n'
 import { Spinner } from '../../AppIcons/index.ts'
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref, watch } from 'vue'
 
 const description = ref(t('polls', 'Please wait…'))
 
@@ -23,7 +23,6 @@ const {
 }>()
 
 const sequentialDescriptionOutput = () => {
-
 	if (loadingTexts instanceof String) {
 		description.value = loadingTexts as string
 		return
@@ -55,19 +54,22 @@ const sequentialDescriptionOutput = () => {
 		}
 	}
 	showDescription()
-};
+}
 
-watch(() => show, (newValue) => {
-	if (newValue === true && loadingTexts.length > 0) {
-		sequentialDescriptionOutput();
-	}
-});
+watch(
+	() => show,
+	(newValue) => {
+		if (newValue === true && loadingTexts.length > 0) {
+			sequentialDescriptionOutput()
+		}
+	},
+)
 
 onMounted(() => {
 	if (show) {
-		sequentialDescriptionOutput();
+		sequentialDescriptionOutput()
 	}
-});
+})
 </script>
 
 <template>
@@ -82,7 +84,6 @@ onMounted(() => {
 					{{ description }}
 				</p>
 			</div>
-
 		</div>
 	</Teleport>
 </template>

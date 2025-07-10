@@ -159,7 +159,6 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 onMounted(() => {
 	pollsStore.load(false)
 })
-
 </script>
 
 <template>

@@ -93,9 +93,9 @@ const loadingOverlayProps = {
 }
 
 const emptyContentProps = computed(() => ({
-		name: t('polls', 'No polls found for this category'),
-		description: t('polls', 'Add one or change category!'),
-	}))
+	name: t('polls', 'No polls found for this category'),
+	description: t('polls', 'Add one or change category!'),
+}))
 
 /**
  *
@@ -134,7 +134,6 @@ onMounted(() => {
 onBeforeRouteUpdate(async () => {
 	refreshView()
 })
-
 </script>
 
 <template>
