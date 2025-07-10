@@ -47,7 +47,6 @@ namespace OCA\Polls;
  *  deleted: boolean,
  *  expired: boolean,
  *  relevantThreshold: int,
- *  countOptions: int,
  *  countParticipants: int,
  *  countProposals: int,
  * }

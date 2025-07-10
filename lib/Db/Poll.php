@@ -67,7 +67,6 @@ use OCP\IURLGenerator;
  *
  * Magic functions for joined columns
  * @method int getShareToken()
- * @method int getOptionsCount()
  * @method int getProposalsCount()
  * @method int getProposalsCount()
  * @method int getCurrentUserVotes()
@@ -171,7 +170,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 	protected string $userRole = self::ROLE_NONE;
 	protected string $shareToken = '';
 	protected ?string $groupShares = '';
-	protected int $optionsCount = 0;
 	protected int $proposalsCount = 0;
 	protected ?string $pollGroups = '';
 	protected ?string $pollGroupUserShares = '';
@@ -201,7 +199,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		$this->addType('isCurrentUserLocked', 'integer');
 		$this->addType('maxDate', 'integer');
 		$this->addType('minDate', 'integer');
-		$this->addType('countOptions', 'integer');
 		$this->addType('currentUserVotes', 'integer');
 		$this->addType('currentUserVotesYes', 'integer');
 		$this->addType('currentUserVotesNo', 'integer');
@@ -248,7 +245,6 @@ class Poll extends EntityWithUser implements JsonSerializable {
 			'relevantThreshold' => $this->getRelevantThreshold(),
 			'deletionDate' => $this->getDeletionDate(),
 			'archivedDate' => $this->getDeleted(),
-			'countOptions' => $this->getOptionsCount(),
 			'countParticipants' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getParticipantsCount() : 0,
 			'countProposals' => $this->getIsAllowed(self::PERMISSION_POLL_RESULTS_VIEW) ? $this->getProposalsCount() : 0,
 		];
