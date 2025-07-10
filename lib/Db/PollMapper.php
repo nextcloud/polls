@@ -352,13 +352,16 @@ class PollMapper extends QBMapper {
 		string $fromAlias,
 		string $joinAlias = 'options',
 	): void {
+		// add highest option date
+		$qb->addSelect($qb->createFunction('MAX(' . $joinAlias . '.timestamp) AS max_date'));
 
-		$zero = $qb->expr()->literal(0, IQueryBuilder::PARAM_INT);
-		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
+		// add lowest option date
+		$qb->addSelect($qb->createFunction('MIN(' . $joinAlias . '.timestamp) AS min_date'));
 
-		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), ' . $zero . ') AS max_date'))
-			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'))
-			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.owner != \'\' THEN 1 END)) AS proposals_count'));
+		// add number of options with an owner (results in number of proposals)
+		$qb->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.owner != \'\' THEN 1 END)) AS proposals_count'));
+
+		// count number of options by counting unique ids
 		$qb->selectAlias($qb->func()->count($joinAlias . '.id'), 'optionsCount');
 
 		$qb->leftJoin(
