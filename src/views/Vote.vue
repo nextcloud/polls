@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted } from 'vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
@@ -33,14 +33,26 @@ import { usePreferencesStore } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
 const voteMainId = 'watched-scroll-area'
 const scrolled = useHandleScroll(voteMainId)
-const isLoading = ref(false)
 
+const loadingOverlayProps = {
+	name: t('polls', 'Loading poll…'),
+	teleportTo: '#content-vue',
+	loadingTexts: [
+		t('polls', 'Fetching configuration…'),
+		t('polls', 'Collecting elements…'),
+		t('polls', 'Checking access…'),
+		t('polls', 'Almost ready…'),
+		t('polls', 'Do not go away…'),
+		t('polls', 'This seems to be a huge poll, please be patient…'),
+	],
+}
 const emptyContentProps = computed(() => {
 	if (pollStore.status.countOptions > 0) {
 		return {
@@ -82,14 +94,24 @@ const collapsibleProps = computed<CollapsibleProps>(() => ({
 	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 }))
 
+onBeforeRouteUpdate(async () => {
+	pollStore.load()
+	emit(Event.TransitionsOff, 500)
+})
+
+onBeforeRouteLeave(() => {
+	pollStore.resetPoll()
+})
+
 onMounted(() => {
+	pollStore.load()
 	subscribe(Event.LoadPoll, () => pollStore.load())
 	emit(Event.TransitionsOff, 500)
 })
 
 onUnmounted(() => {
 	pollStore.reset()
-	unsubscribe(Event.TransitionsOff, () => {})
+	unsubscribe(Event.LoadPoll, () => {})
 })
 </script>
 
@@ -135,6 +157,7 @@ onUnmounted(() => {
 					<TextPollIcon v-if="pollStore.type === PollType.Text" />
 					<DatePollIcon v-else />
 				</template>
+
 				<template v-if="pollStore.permissions.addOptions" #action>
 					<ActionAddOption
 						v-if="pollStore.type === PollType.Date"
@@ -148,7 +171,9 @@ onUnmounted(() => {
 			</div>
 		</div>
 
-		<LoadingOverlay v-if="isLoading" />
+		<LoadingOverlay
+			:show="pollStore.meta.status === 'loading'"
+			v-bind="loadingOverlayProps" />
 		<OptionsAddModal v-if="pollStore.permissions.addOptions" />
 	</NcAppContent>
 </template>

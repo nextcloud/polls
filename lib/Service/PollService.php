@@ -139,7 +139,7 @@ class PollService {
 	 */
 	public function transferPoll(int|Poll $poll, string|UserBase $targetUser): Poll {
 		if (!($poll instanceof Poll)) {
-			$poll = $this->pollMapper->find($poll);
+			$poll = $this->pollMapper->get($poll, withRoles: true);
 		}
 
 		$poll->request(Poll::PERMISSION_POLL_CHANGE_OWNER);
@@ -168,9 +168,13 @@ class PollService {
 	 * get poll configuration
 	 * @return Poll
 	 */
-	public function get(int $pollId) {
+	public function get(int $pollId, $lightweight = false) {
 		try {
-			$this->poll = $this->pollMapper->find($pollId);
+			if ($lightweight) {
+				$this->poll = $this->pollMapper->get($pollId, withRoles: true);
+			} else {
+				$this->poll = $this->pollMapper->find($pollId);
+			}
 			$this->poll->request(Poll::PERMISSION_POLL_VIEW);
 			return $this->poll;
 		} catch (DoesNotExistException $e) {
@@ -180,7 +184,7 @@ class PollService {
 
 	public function getPollOwnerFromDB(int $pollId): UserBase {
 		try {
-			$poll = $this->pollMapper->find($pollId);
+			$poll = $this->pollMapper->get($pollId, withRoles: true);
 			return $poll->getUser();
 		} catch (DoesNotExistException $e) {
 			throw new NotFoundException('Poll not found');
@@ -341,7 +345,7 @@ class PollService {
 	 */
 	public function delete(int $pollId): Poll {
 		try {
-			$this->poll = $this->pollMapper->find($pollId);
+			$this->poll = $this->pollMapper->get($pollId, withRoles: true);
 		} catch (DoesNotExistException $e) {
 			throw new AlreadyDeletedException('Poll not found, assume already deleted');
 		}
@@ -358,7 +362,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function close(int $pollId): Poll {
-		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
+		$this->pollMapper->get($pollId, withRoles: true)->request(Poll::PERMISSION_POLL_EDIT);
 		return $this->toggleClose($pollId, time() - 5);
 	}
 
@@ -367,7 +371,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function reopen(int $pollId): Poll {
-		$this->pollMapper->find($pollId)->request(Poll::PERMISSION_POLL_EDIT);
+		$this->pollMapper->get($pollId, withRoles: true)->request(Poll::PERMISSION_POLL_EDIT);
 		return $this->toggleClose($pollId, 0);
 	}
 
@@ -396,7 +400,7 @@ class PollService {
 	 * @return Poll
 	 */
 	public function clone(int $pollId): Poll {
-		$origin = $this->pollMapper->find($pollId);
+		$origin = $this->pollMapper->get($pollId, withRoles: true);
 		$origin->request(Poll::PERMISSION_POLL_VIEW);
 		$this->appSettings->getPollCreationAllowed();
 
@@ -428,7 +432,7 @@ class PollService {
 	 *
 	 */
 	public function getParticipantsEmailAddresses(int $pollId): array {
-		$this->poll = $this->pollMapper->find($pollId);
+		$this->poll = $this->pollMapper->get($pollId, withRoles: true);
 		$this->poll->request(Poll::PERMISSION_POLL_EDIT);
 
 		$votes = $this->voteMapper->findParticipantsByPoll($this->poll->getId());

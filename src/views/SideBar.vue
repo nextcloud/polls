@@ -53,9 +53,6 @@ onUnmounted(() => {
 	})
 })
 
-/**
- *
- */
 function closeSideBar() {
 	emit(Event.SidebarToggle, { open: false })
 }

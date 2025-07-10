@@ -12,7 +12,7 @@ import { useVotesStore } from '../../stores/votes.ts'
 
 import { NcButton } from '@nextcloud/vue'
 import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
-import { computed } from 'vue'
+import { computed, nextTick, ref } from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import Counter from '../Options/Counter.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
@@ -30,6 +30,7 @@ const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
+const chunksLoading = ref(false)
 
 const tableStyle = computed(() => ({
 	'--participants-count': `${pollStore.safeParticipants.length}`,
@@ -46,9 +47,15 @@ const showCalendarPeek = computed(
 /**
  *
  */
-async function loadMore() {
+function loadMore() {
 	try {
-		votesStore.addChunk()
+		chunksLoading.value = true
+		nextTick(() => {
+			votesStore.addChunk()
+		})
+		nextTick(() => {
+			chunksLoading.value = false
+		})
 	} catch {
 		showError(t('polls', 'Error loading more participants'))
 	}
@@ -103,7 +110,7 @@ async function loadMore() {
 				<OptionMenu :option="option" use-sort />
 
 				<SortOptionIcon
-					v-show="votesStore.sortByOption === option.id"
+					v-show="votesStore.sortByOption === option.id && !chunksLoading"
 					:id="`option-sort-${option.id}`"
 					class="sort-indicator"
 					:title="t('polls', 'Click to remove sorting')"
@@ -135,6 +142,7 @@ async function loadMore() {
 			<IntersectionObserver
 				key="observer"
 				class="observer_section"
+				:loading="chunksLoading"
 				@visible="loadMore">
 				<div class="clickable_load_more" @click="loadMore">
 					{{

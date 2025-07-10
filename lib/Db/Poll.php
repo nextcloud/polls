@@ -66,8 +66,6 @@ use OCP\IURLGenerator;
  * @method void setVotingVariant(string $value)
  *
  * Magic functions for joined columns
- * @method int getMinDate()
- * @method int getMaxDate()
  * @method int getShareToken()
  * @method int getOptionsCount()
  * @method int getProposalsCount()
@@ -168,8 +166,8 @@ class Poll extends EntityWithUser implements JsonSerializable {
 
 	// joined columns
 	protected ?int $isCurrentUserLocked = 0;
-	protected int $maxDate = 0;
-	protected int $minDate = 0;
+	protected ?int $maxDate = 0;
+	protected ?int $minDate = 0;
 	protected string $userRole = self::ROLE_NONE;
 	protected string $shareToken = '';
 	protected ?string $groupShares = '';
@@ -517,6 +515,19 @@ class Poll extends EntityWithUser implements JsonSerializable {
 		return htmlspecialchars($this->getDescription());
 	}
 
+	private function getMaxDate(): int {
+		if ($this->maxDate === null) {
+			return 0;
+		}
+		return $this->maxDate;
+	}
+
+	private function getMinDate(): int {
+		if ($this->minDate === null) {
+			return time();
+		}
+		return $this->minDate;
+	}
 
 	private function setMiscSettingsArray(array $value): void {
 		$this->setMiscSettings(json_encode($value));

@@ -35,13 +35,27 @@ class PollMapper extends QBMapper {
 	 * @throws \OCP\AppFramework\Db\MultipleObjectsReturnedException if more than one result
 	 * @return Poll
 	 */
-	public function get(int $id, bool $getDeleted = false): Poll {
+	public function get(int $id, bool $getDeleted = false, bool $withRoles = false): Poll {
 		$qb = $this->db->getQueryBuilder();
-		$qb->select('*')
-			->from($this->getTableName())
-			->where($qb->expr()->eq('id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->select(self::TABLE . '.*')
+			->from($this->getTableName(), self::TABLE)
+			->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+			->groupBy(self::TABLE . '.id');
+
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq('deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
+		}
+
+		if ($withRoles) {
+			$pollGroupsAlias = 'poll_groups';
+			$currentUserId = $this->userSession->getCurrentUserId();
+			// $this->joinOptions($qb, self::TABLE);
+			$this->joinUserRole($qb, self::TABLE, $currentUserId);
+			$this->joinGroupShares($qb, self::TABLE);
+			$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
+			$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
+			// $this->joinVotesCount($qb, self::TABLE, $currentUserId);
+			// $this->joinParticipantsCount($qb, self::TABLE);
 		}
 		return $this->findEntity($qb);
 	}
@@ -184,19 +198,19 @@ class PollMapper extends QBMapper {
 	 * Build the enhanced query with joined tables
 	 */
 	protected function buildQuery(): IQueryBuilder {
-		$currentUserId = $this->userSession->getCurrentUserId();
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
+		$currentUserId = $this->userSession->getCurrentUserId();
 		$pollGroupsAlias = 'poll_groups';
 		$this->joinOptions($qb, self::TABLE);
 		$this->joinUserRole($qb, self::TABLE, $currentUserId);
 		$this->joinGroupShares($qb, self::TABLE);
 		$this->joinPollGroups($qb, self::TABLE, $pollGroupsAlias);
-		$this->joinUserSharesfromPollGroups($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
+		$this->joinPollGroupShares($qb, $pollGroupsAlias, $currentUserId, $pollGroupsAlias);
 		$this->joinVotesCount($qb, self::TABLE, $currentUserId);
 		$this->joinParticipantsCount($qb, self::TABLE);
 		return $qb;
@@ -299,7 +313,7 @@ class PollMapper extends QBMapper {
 	 * Supported share types are User and Admin
 	 * Groups, Teams will not work atm.
 	 */
-	protected function joinUserSharesfromPollGroups(
+	protected function joinPollGroupShares(
 		IQueryBuilder $qb,
 		string $fromAlias,
 		string $currentUserId,
@@ -338,13 +352,16 @@ class PollMapper extends QBMapper {
 		string $fromAlias,
 		string $joinAlias = 'options',
 	): void {
+		// add highest option date
+		$qb->addSelect($qb->createFunction('MAX(' . $joinAlias . '.timestamp) AS max_date'));
 
-		$zero = $qb->expr()->literal(0, IQueryBuilder::PARAM_INT);
-		$saveMin = $qb->createNamedParameter(time(), IQueryBuilder::PARAM_INT);
+		// add lowest option date
+		$qb->addSelect($qb->createFunction('MIN(' . $joinAlias . '.timestamp) AS min_date'));
 
-		$qb->addSelect($qb->createFunction('coalesce(MAX(' . $joinAlias . '.timestamp), ' . $zero . ') AS max_date'))
-			->addSelect($qb->createFunction('coalesce(MIN(' . $joinAlias . '.timestamp), ' . $saveMin . ') AS min_date'))
-			->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.owner != \'\' THEN 1 END)) AS proposals_count'));
+		// add number of options with an owner (results in number of proposals)
+		$qb->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.owner != \'\' THEN 1 END)) AS proposals_count'));
+
+		// count number of options by counting unique ids
 		$qb->selectAlias($qb->func()->count($joinAlias . '.id'), 'optionsCount');
 
 		$qb->leftJoin(

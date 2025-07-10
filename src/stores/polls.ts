@@ -93,7 +93,7 @@ export const sortTitlesMapping: { [key in SortType]: string } = {
 	interaction: t('polls', 'Last interaction'),
 }
 
-export const pollCategories: PollCategoryList = {
+const pollCategories: PollCategoryList = {
 	[FilterType.Relevant]: {
 		id: FilterType.Relevant,
 		title: t('polls', 'Relevant'),
@@ -223,7 +223,7 @@ export const usePollsStore = defineStore('polls', {
 				loaded: 1,
 			},
 			maxPollsInNavigation: 6,
-			status: StatusResults.Loaded,
+			status: StatusResults.None,
 		},
 		sort: {
 			by: SortType.Created,
@@ -353,11 +353,23 @@ export const usePollsStore = defineStore('polls', {
 		 * This will also set the `meta.status` to `Loading` while the request is in progress,
 		 * and to `Loaded` or `Error` when the request is finished.
 		 *
+		 * @param {boolean} forced - If false, loading polls will only be done, when the status is not `Loaded`.
 		 * @throws {Error} If the request fails and is not canceled.
 		 * @return {Promise<void>}
 		 */
-		async load(): Promise<void> {
+		async load(forced: boolean = true): Promise<void> {
 			const pollGroupsStore = usePollGroupsStore()
+
+			if (
+				this.meta.status === StatusResults.Loading
+				|| (!forced && this.meta.status === StatusResults.Loaded)
+			) {
+				Logger.debug('Polls already loaded or loading, skipping load', {
+					status: this.meta.status,
+					forced,
+				})
+				return
+			}
 
 			this.meta.status = StatusResults.Loading
 

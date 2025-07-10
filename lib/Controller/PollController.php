@@ -102,14 +102,66 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}')]
 	public function getFull(int $pollId): JSONResponse {
-		return $this->response(fn () => [
-			'poll' => $this->pollService->get($pollId),
-			'options' => $this->optionService->list($pollId),
-			'votes' => $this->voteService->list($pollId),
-			'comments' => $this->commentService->list($pollId),
-			'shares' => $this->shareService->list($pollId),
-			'subscribed' => $this->subscriptionService->get($pollId),
-		]);
+		return $this->response(fn () => $this->getFullPoll($pollId), Http::STATUS_OK);
+
+		// return $this->response(fn () => [
+		// 	'poll' => $this->pollService->get($pollId),
+		// 	'options' => $this->optionService->list($pollId),
+		// 	'votes' => $this->voteService->list($pollId),
+		// 	'comments' => $this->commentService->list($pollId),
+		// 	'shares' => $this->shareService->list($pollId),
+		// 	'subscribed' => $this->subscriptionService->get($pollId),
+		// ]);
+	}
+
+	private function getFullPoll(int $pollId, bool $withTimings = false): array {
+		$timerMicro['start'] = microtime(true);
+
+		$poll = $this->pollService->get($pollId);
+		$timerMicro['poll'] = microtime(true);
+
+		$options = $this->optionService->list($pollId);
+		$timerMicro['options'] = microtime(true);
+
+		$votes = $this->voteService->list($pollId);
+		$timerMicro['votes'] = microtime(true);
+
+		$comments = $this->commentService->list($pollId);
+		$timerMicro['comments'] = microtime(true);
+
+		$shares = $this->shareService->list($pollId);
+		$timerMicro['shares'] = microtime(true);
+
+		$subscribed = $this->subscriptionService->get($pollId);
+		$timerMicro['subscribed'] = microtime(true);
+
+		$diffMicro['total'] = microtime(true) - $timerMicro['start'];
+		$diffMicro['poll'] = $timerMicro['poll'] - $timerMicro['start'];
+		$diffMicro['options'] = $timerMicro['options'] - $timerMicro['poll'];
+		$diffMicro['votes'] = $timerMicro['votes'] - $timerMicro['options'];
+		$diffMicro['comments'] = $timerMicro['comments'] - $timerMicro['votes'];
+		$diffMicro['shares'] = $timerMicro['shares'] - $timerMicro['comments'];
+		$diffMicro['subscribed'] = $timerMicro['subscribed'] - $timerMicro['shares'];
+
+		if ($withTimings) {
+			return [
+				'poll' => $poll,
+				'options' => $options,
+				'votes' => $votes,
+				'comments' => $comments,
+				'shares' => $shares,
+				'subscribed' => $subscribed,
+				'diffMicro' => $diffMicro,
+			];
+		}
+		return [
+			'poll' => $poll,
+			'options' => $options,
+			'votes' => $votes,
+			'comments' => $comments,
+			'shares' => $shares,
+			'subscribed' => $subscribed,
+		];
 	}
 
 	/**

@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed, ref, watch } from 'vue'
-import { showError, showSuccess } from '@nextcloud/dialogs'
+import { showError } from '@nextcloud/dialogs'
 import { n, t } from '@nextcloud/l10n'
 
 import NcButton from '@nextcloud/vue/components/NcButton'
@@ -184,7 +184,6 @@ async function addOption(): Promise<void> {
 		)
 
 		result.value = StatusResults.Success
-		showSuccess(t('polls', 'Option added'))
 	} catch (error) {
 		if ((error as AxiosError).response?.status === 409) {
 			showError(t('polls', 'Option already exists'))
