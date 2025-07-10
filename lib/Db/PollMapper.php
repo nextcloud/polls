@@ -355,14 +355,6 @@ class PollMapper extends QBMapper {
 		// add highest option date
 		$qb->addSelect($qb->createFunction('MAX(' . $joinAlias . '.timestamp) AS max_date'));
 
-		// add lowest option date
-		$qb->addSelect($qb->createFunction('MIN(' . $joinAlias . '.timestamp) AS min_date'));
-
-		// add number of options with an owner (results in number of proposals)
-		$qb->addSelect($qb->createFunction('COUNT(DISTINCT(CASE WHEN ' . $joinAlias . '.owner != \'\' THEN 1 END)) AS proposals_count'));
-
-		// count number of options by counting unique ids
-		// $qb->selectAlias($qb->createFunction('COUNT(DISTINCT(' . $joinAlias . '.id))'), 'optionsCount');
 
 		$qb->leftJoin(
 			$fromAlias,

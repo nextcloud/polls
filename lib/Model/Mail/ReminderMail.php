@@ -12,6 +12,7 @@ namespace OCA\Polls\Model\Mail;
 use DateTime;
 use OCA\Polls\AppConstants;
 use OCA\Polls\Db\Poll;
+use OCA\Polls\Exceptions\NoDeadLineException;
 
 class ReminderMail extends MailBase {
 	protected const TEMPLATE_CLASS = AppConstants::APP_ID . '.Reminder';
@@ -32,8 +33,45 @@ class ReminderMail extends MailBase {
 		protected int $pollId,
 	) {
 		parent::__construct($recipientId, $pollId);
-		$this->deadline = $this->poll->getDeadline();
-		$this->timeToDeadline = $this->poll->getTimeToDeadline();
+	}
+
+	public function getDeadline(): int {
+		// if expiration is set return expiration date
+		if ($this->poll->getExpire()) {
+			return $this->poll->getExpire();
+		}
+
+		if ($this->poll->getType() === Poll::TYPE_DATE) {
+			// use lowest date option as reminder deadline threshold
+			// if no options are set return is the current time
+			return $this->optionMapper->getMinDate($this->pollId) ?? time();
+		}
+		throw new NoDeadLineException();
+	}
+
+	protected function getTimeToDeadline(int $time = 0): int {
+		if ($time === 0) {
+			$time = time();
+		}
+
+		$deadline = $this->getDeadline();
+
+		if (
+			$deadline - $this->poll->getCreated() > self::FIVE_DAYS
+			&& $deadline - $time < self::TWO_DAYS
+			&& $deadline > $time
+		) {
+			return self::TWO_DAYS;
+		}
+
+		if (
+			$deadline - $this->poll->getCreated() > self::TWO_DAYS
+			&& $deadline - $time < self::ONE_AND_HALF_DAY
+			&& $deadline > $time
+		) {
+			return self::ONE_AND_HALF_DAY;
+		}
+		throw new NoDeadLineException();
 	}
 
 	protected function getSubject(): string {
@@ -58,13 +96,13 @@ class ReminderMail extends MailBase {
 
 	private function addBodyText(): void {
 		$dtDeadline = new DateTime('now', $this->recipient->getTimeZone());
-		$dtDeadline->setTimestamp($this->deadline);
+		$dtDeadline->setTimestamp($this->getDeadline());
 		$deadlineText = (string)$this->l10n->l('datetime', $dtDeadline, ['width' => 'long']);
 
 		if ($this->getReminderReason() === self::REASON_OPTION) {
 			$this->emailTemplate->addBodyText(str_replace(
 				['{leftPeriod}', '{dateTime}', '{timezone}'],
-				[($this->timeToDeadline / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
+				[($this->getTimeToDeadline() / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
 				$this->l10n->t('The first poll option is away less than {leftPeriod} hours ({dateTime}, {timezone}).')
 			));
 			return;
@@ -73,7 +111,7 @@ class ReminderMail extends MailBase {
 		if ($this->getReminderReason() === self::REASON_EXPIRATION) {
 			$this->emailTemplate->addBodyText(str_replace(
 				['{leftPeriod}', '{dateTime}', '{timezone}'],
-				[($this->timeToDeadline / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
+				[($this->getTimeToDeadline() / 3600), $deadlineText, $this->recipient->getTimeZone()->getName()],
 				$this->l10n->t('The poll is about to expire in less than {leftPeriod} hours ({dateTime}, {timezone}).')
 			));
 			return;

@@ -15,6 +15,7 @@ import { forEach } from 'lodash'
 import { usePollsStore } from '../stores/polls.ts'
 import { useOptionsStore } from '../stores/options.ts'
 import { useCommentsStore } from '../stores/comments.ts'
+import { useVotesStore } from '../stores/votes.ts'
 
 /**
  * poll watcher to keep polls collection and the current poll
@@ -27,7 +28,7 @@ export const usePollWatcher = (interval = 30000) => {
 	const sessionStore = useSessionStore()
 	const pollStore = usePollStore()
 	const pollsStore = usePollsStore()
-	const votesStore = usePollStore()
+	const votesStore = useVotesStore()
 	const optionsStore = useOptionsStore()
 	const commentsStore = useCommentsStore()
 
@@ -167,7 +168,7 @@ export const usePollWatcher = (interval = 30000) => {
 					optionsStore.load()
 					break
 				case 'options':
-					pollStore.load()
+					optionsStore.load()
 					break
 				case 'comments':
 					commentsStore.load()

@@ -62,6 +62,7 @@ class OptionMapper extends QBMapperWithUser {
 
 		return $this->findEntities($qb);
 	}
+
 	/**
 	 * @return Option
 	 * @param int $pollId
@@ -117,6 +118,25 @@ class OptionMapper extends QBMapperWithUser {
 		return $qb->executeQuery()->fetchAll()[0];
 	}
 
+	public function getMinDate(int $pollId): ?int {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->selectAlias($qb->func()->min('timestamp'), 'min_date')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+
+		return $qb->executeQuery()->fetchOne();
+	}
+
+	public function getMaxDate(int $pollId): ?int {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->selectAlias($qb->func()->max('timestamp'), 'max_date')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+
+		return $qb->executeQuery()->fetchOne();
+	}
 
 	/**
 	 * @return Option[]
