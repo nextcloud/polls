@@ -25,9 +25,6 @@ class ReminderMail extends MailBase {
 	public const TWO_DAYS = 172800;
 	public const ONE_AND_HALF_DAY = 129600;
 
-	protected int $deadline;
-	protected int $timeToDeadline;
-
 	public function __construct(
 		protected string $recipientId,
 		protected int $pollId,
@@ -44,7 +41,11 @@ class ReminderMail extends MailBase {
 		if ($this->poll->getType() === Poll::TYPE_DATE) {
 			// use lowest date option as reminder deadline threshold
 			// if no options are set return is the current time
-			return $this->optionMapper->getMinDate($this->pollId) ?? time();
+			$mindate = $this->optionMapper->getMinDate($this->pollId);
+			if ($mindate === false) {
+				return time();
+			}
+			return $mindate;
 		}
 		throw new NoDeadLineException();
 	}

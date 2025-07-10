@@ -20,6 +20,7 @@ use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
@@ -279,6 +280,16 @@ class OptionService {
 		return $this->optionMapper->findByPoll($this->poll->getId());
 	}
 
+	private function countProposals(array $options): int {
+		$count = 0;
+		foreach ($options as $option) {
+			if ($option->getOwner()) {
+				$count++;
+			}
+		}
+		return $count;
+	}
+
 	/**
 	 * Shift all date options
 	 *
@@ -287,14 +298,19 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
-		$this->getPoll($pollId, Poll::PERMISSION_OPTIONS_SHIFT);
-		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
+		$this->getPoll($pollId);
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');
 		}
 
 		$options = $this->optionMapper->findByPoll($pollId);
+
+		if ($this->countProposals($options) > 0) {
+			throw new ForbiddenException('dates is not allowed');
+		}
+
+		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
 
 		if ($step > 0) {
 			// start from last item if moving option into the future

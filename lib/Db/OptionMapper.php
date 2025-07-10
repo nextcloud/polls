@@ -118,7 +118,13 @@ class OptionMapper extends QBMapperWithUser {
 		return $qb->executeQuery()->fetchAll()[0];
 	}
 
-	public function getMinDate(int $pollId): ?int {
+	/**
+	 * Get the minimum date of all options in a poll
+	 *
+	 * @param int $pollId
+	 * @return int|false Returns the minimum timestamp or false if no options are found
+	 */
+	public function getMinDate(int $pollId): int | false {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->selectAlias($qb->func()->min('timestamp'), 'min_date')
@@ -128,7 +134,15 @@ class OptionMapper extends QBMapperWithUser {
 		return $qb->executeQuery()->fetchOne();
 	}
 
-	public function getMaxDate(int $pollId): ?int {
+
+	/**
+	 * Get the maximum date of all options in a poll
+	 *
+	 * @param int $pollId
+	 * @return int|false Returns the maximum timestamp or false if no options are found
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
+	public function getMaxDate(int $pollId): int | false {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->selectAlias($qb->func()->max('timestamp'), 'max_date')

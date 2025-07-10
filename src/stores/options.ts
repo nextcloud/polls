@@ -107,8 +107,8 @@ export const useOptionsStore = defineStore('options', {
 		},
 
 		countProposals(state): number {
-			 return state.options.filter((option: Option) => option.owner !== null).length;
-
+			return state.options.filter((option: Option) => option.owner !== null)
+				.length
 		},
 	},
 
