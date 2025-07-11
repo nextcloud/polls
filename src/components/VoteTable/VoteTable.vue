@@ -89,7 +89,9 @@ function loadMore() {
 			v-if="pollStore.viewMode === ViewMode.TableView"
 			key="option-spacer"
 			class="option-spacer sticky-left" />
-		<div v-if="pollStore.permissions.seeResults" class="counter-spacer sticky-left" />
+		<div
+			v-if="pollStore.permissions.seeResults"
+			class="counter-spacer sticky-left" />
 
 		<template
 			v-for="participant in pollStore.safeParticipants"
@@ -117,7 +119,10 @@ function loadMore() {
 					@click="() => (votesStore.sortByOption = 0)" />
 			</div>
 
-			<OptionItem :id="`option-${option.id}`" class="sticky-top" :option="option" />
+			<OptionItem
+				:id="`option-${option.id}`"
+				class="sticky-top"
+				:option="option" />
 			<Counter
 				v-if="pollStore.permissions.seeResults"
 				:id="`counter-${option.id}`"
@@ -137,9 +142,7 @@ function loadMore() {
 			</div>
 		</template>
 	</TransitionGroup>
-	<div
-		v-if="votesStore.countHiddenParticipants > 0"
-		class="observer-container">
+	<div v-if="votesStore.countHiddenParticipants > 0" class="observer-container">
 		<IntersectionObserver
 			key="observer"
 			class="observer_section sticky-left"

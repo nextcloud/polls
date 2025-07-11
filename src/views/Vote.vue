@@ -190,8 +190,8 @@ onUnmounted(() => {
 	// display: flex;
 	flex-direction: column;
 	// .vote-table {
-		// min-height: 18rem;
-		// flex: auto;
+	// min-height: 18rem;
+	// flex: auto;
 	// }
 }
 
