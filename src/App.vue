@@ -26,6 +26,7 @@ import './assets/scss/hacks.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
+import './assets/scss/globals.scss'
 
 usePollWatcher()
 
