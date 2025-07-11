@@ -105,6 +105,11 @@ export const useOptionsStore = defineStore('options', {
 		confirmed(state): Option[] {
 			return state.options.filter((option) => option.confirmed > 0)
 		},
+
+		countProposals(state): number {
+			return state.options.filter((option: Option) => option.owner !== null)
+				.length
+		},
 	},
 
 	actions: {

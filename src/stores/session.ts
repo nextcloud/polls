@@ -14,9 +14,6 @@ import { Share } from './shares.ts'
 import { RouteLocationNormalized, RouteRecordNameGeneric } from 'vue-router'
 import { Logger } from '../helpers/index.ts'
 import { usePollStore } from './poll.ts'
-import { useOptionsStore } from './options.ts'
-import { useVotesStore } from './votes.ts'
-import { useCommentsStore } from './comments.ts'
 import { useSubscriptionStore } from './subscription.ts'
 import { AxiosError } from '@nextcloud/axios'
 
@@ -295,9 +292,6 @@ export const useSessionStore = defineStore('session', {
 
 		async updateDisplayName(payload: { displayName: string }): Promise<void> {
 			const pollStore = usePollStore()
-			const commentsStore = useCommentsStore()
-			const votesStore = useVotesStore()
-			const optionsStore = useOptionsStore()
 
 			if (this.route.name !== 'publicVote') {
 				return
@@ -310,9 +304,6 @@ export const useSessionStore = defineStore('session', {
 				)
 				this.share = response.data.share
 				pollStore.load()
-				commentsStore.load()
-				votesStore.load()
-				optionsStore.load()
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return

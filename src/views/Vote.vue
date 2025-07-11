@@ -54,7 +54,7 @@ const loadingOverlayProps = {
 	],
 }
 const emptyContentProps = computed(() => {
-	if (pollStore.status.countOptions > 0) {
+	if (optionsStore.options.length > 0) {
 		return {
 			name: t(
 				'polls',

@@ -12,7 +12,6 @@ namespace OCA\Polls;
 /**
  * @psalm-type PollsPollPermissions = array {
  *  addOptions: boolean,
- *  shiftOptions: boolean,
  *  reorderOptions: boolean,
  *  archive: boolean,
  *  comment: boolean,
@@ -47,9 +46,7 @@ namespace OCA\Polls;
  *  deleted: boolean,
  *  expired: boolean,
  *  relevantThreshold: int,
- *  countOptions: int,
  *  countParticipants: int,
- *  countProposals: int,
  * }
  *
  * @psalm-type PollsUser = array {

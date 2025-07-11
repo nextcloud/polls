@@ -102,16 +102,7 @@ class PollController extends BaseController {
 	#[NoAdminRequired]
 	#[FrontpageRoute(verb: 'GET', url: '/poll/{pollId}')]
 	public function getFull(int $pollId): JSONResponse {
-		return $this->response(fn () => $this->getFullPoll($pollId), Http::STATUS_OK);
-
-		// return $this->response(fn () => [
-		// 	'poll' => $this->pollService->get($pollId),
-		// 	'options' => $this->optionService->list($pollId),
-		// 	'votes' => $this->voteService->list($pollId),
-		// 	'comments' => $this->commentService->list($pollId),
-		// 	'shares' => $this->shareService->list($pollId),
-		// 	'subscribed' => $this->subscriptionService->get($pollId),
-		// ]);
+		return $this->response(fn () => $this->getFullPoll($pollId, true), Http::STATUS_OK);
 	}
 
 	private function getFullPoll(int $pollId, bool $withTimings = false): array {

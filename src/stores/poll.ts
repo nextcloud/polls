@@ -116,9 +116,7 @@ export type PollStatus = {
 	relevantThreshold: number
 	deletionDate: number
 	archivedDate: number
-	countOptions: number
 	countParticipants: number
-	countProposals: number
 }
 
 export type PollPermissions = {
@@ -137,7 +135,6 @@ export type PollPermissions = {
 	reorderOptions: boolean
 	seeResults: boolean
 	seeUsernames: boolean
-	shiftOptions: boolean
 	subscribe: boolean
 	takeOver: boolean
 	view: boolean
@@ -219,9 +216,7 @@ export const usePollStore = defineStore('poll', {
 			relevantThreshold: 0,
 			deletionDate: 0,
 			archivedDate: 0,
-			countOptions: 0,
 			countParticipants: 0,
-			countProposals: 0,
 		},
 		currentUserStatus: {
 			groupInvitations: [],
@@ -253,7 +248,6 @@ export const usePollStore = defineStore('poll', {
 			delete: false,
 			edit: false,
 			reorderOptions: false,
-			shiftOptions: false,
 			seeResults: false,
 			seeUsernames: false,
 			subscribe: false,
