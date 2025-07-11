@@ -72,7 +72,7 @@ function loadMore() {
 		<div
 			v-if="pollStore.viewMode === ViewMode.TableView"
 			key="grid-info"
-			class="grid-info">
+			class="grid-info sticky-left">
 			<NcButton
 				v-show="votesStore.sortByOption > 0"
 				class="sort-indicator"
@@ -88,13 +88,13 @@ function loadMore() {
 		<div
 			v-if="pollStore.viewMode === ViewMode.TableView"
 			key="option-spacer"
-			class="option-spacer" />
-		<div v-if="pollStore.permissions.seeResults" class="counter-spacer" />
+			class="option-spacer sticky-left" />
+		<div v-if="pollStore.permissions.seeResults" class="counter-spacer sticky-left" />
 
 		<template
 			v-for="participant in pollStore.safeParticipants"
 			:key="participant.id">
-			<VoteParticipant :user="participant" />
+			<VoteParticipant class="sticky-left" :user="participant" />
 		</template>
 
 		<template v-for="option in optionsStore.orderedOptions" :key="option.id">
@@ -117,7 +117,7 @@ function loadMore() {
 					@click="() => (votesStore.sortByOption = 0)" />
 			</div>
 
-			<OptionItem :id="`option-${option.id}`" :option="option" />
+			<OptionItem :id="`option-${option.id}`" class="sticky-top" :option="option" />
 			<Counter
 				v-if="pollStore.permissions.seeResults"
 				:id="`counter-${option.id}`"
@@ -136,33 +136,33 @@ function loadMore() {
 					:option="option" />
 			</div>
 		</template>
-		<div
-			v-if="votesStore.countHiddenParticipants > 0"
-			class="observer-container">
-			<IntersectionObserver
-				key="observer"
-				class="observer_section"
-				:loading="chunksLoading"
-				@visible="loadMore">
-				<div class="clickable_load_more" @click="loadMore">
-					{{
-						n(
-							'polls',
-							'%n participant is hidden. Click here to load more',
-							'%n participants are hidden. Click here to load more',
-							votesStore.countHiddenParticipants,
-						)
-					}}
-				</div>
-			</IntersectionObserver>
-		</div>
 	</TransitionGroup>
+	<div
+		v-if="votesStore.countHiddenParticipants > 0"
+		class="observer-container">
+		<IntersectionObserver
+			key="observer"
+			class="observer_section sticky-left"
+			:loading="chunksLoading"
+			@visible="loadMore">
+			<div class="clickable_load_more" @click="loadMore">
+				{{
+					n(
+						'polls',
+						'%n participant is hidden. Click here to load more',
+						'%n participants are hidden. Click here to load more',
+						votesStore.countHiddenParticipants,
+					)
+				}}
+			</div>
+		</IntersectionObserver>
+	</div>
 </template>
 
 <style lang="scss">
 .observer-container {
-	grid-column: 2 / -1;
-	grid-row: 999;
+	// grid-column: 2 / -1;
+	// grid-row: 999;
 	display: flex;
 	justify-content: flex-start;
 }
@@ -192,9 +192,7 @@ function loadMore() {
 	.participant {
 		grid-column: 1;
 		padding: 0.4rem;
-		position: sticky;
 		inset-inline-start: 0;
-		z-index: 3;
 		background-color: var(--color-main-background);
 
 		.user-actions {
@@ -229,31 +227,27 @@ function loadMore() {
 	}
 
 	.table-view & {
+		overflow: visible;
+		min-width: min-content;
+		max-width: max-content;
 		.grid-info {
 			grid-row: 1;
 			grid-column: 1;
-			position: sticky;
 			inset-inline-start: 0;
-			z-index: 5;
 			background-color: var(--color-main-background);
 		}
 
 		.option-spacer {
 			grid-row: 2;
 			grid-column: 1;
-			position: sticky;
 			inset-inline-start: 0;
-			top: 0;
-			z-index: 5;
 			background-color: var(--color-main-background);
 		}
 
 		.counter-spacer {
 			grid-row: 3;
 			grid-column: 1;
-			position: sticky;
 			inset-inline-start: 0;
-			z-index: 5;
 			background-color: var(--color-main-background);
 		}
 
@@ -269,10 +263,7 @@ function loadMore() {
 
 		.option-item {
 			grid-row: 2;
-			position: sticky;
 			opacity: 0.85;
-			top: 0;
-			z-index: 2;
 			background-color: var(--color-main-background);
 			border-inline-start: 1px solid var(--color-border);
 		}

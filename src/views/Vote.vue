@@ -142,11 +142,12 @@ onUnmounted(() => {
 		<div class="vote_main">
 			<Collapsible
 				v-if="pollStore.configuration.description"
+				class="sticky-left"
 				v-bind="collapsibleProps">
 				<MarkDownDescription />
 			</Collapsible>
 
-			<VoteInfoCards />
+			<VoteInfoCards class="sticky-left" />
 
 			<VoteTable v-show="optionsStore.options.length" />
 
@@ -166,7 +167,7 @@ onUnmounted(() => {
 				</template>
 			</NcEmptyContent>
 
-			<div class="area__footer">
+			<div class="area__footer sticky-left">
 				<CardAnonymousPollHint v-if="pollStore.status.isAnonymous" />
 			</div>
 		</div>
@@ -183,19 +184,15 @@ onUnmounted(() => {
 	flex: 1;
 	overflow: auto;
 	overscroll-behavior-inline: contain;
-
-	.vote-table {
-		max-height: 75vh;
-		min-height: 16.6rem;
-	}
 }
 
 .table-view.fixed-table-header .vote_main {
-	display: flex;
+	// display: flex;
 	flex-direction: column;
-	.vote-table {
-		min-height: 18rem;
-	}
+	// .vote-table {
+		// min-height: 18rem;
+		// flex: auto;
+	// }
 }
 
 .vote_main {
