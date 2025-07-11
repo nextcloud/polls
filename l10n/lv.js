@@ -15,6 +15,7 @@ OC.L10N.register(
     "Loading" : "Ielādē",
     "Previous day" : "Iepriekšējā diena",
     "Next day" : "Nākamā diena",
+    "Loading …" : "Ielādē…",
     "Add" : "Pievienot",
     "New comment …" : "Jauna piebilde …",
     "Delete comment" : "Izdzēst piebildi",

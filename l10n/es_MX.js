@@ -16,6 +16,7 @@ OC.L10N.register(
     "Loading" : "Cargando",
     "Previous day" : "Día anterior",
     "Next day" : "Próximo día",
+    "Loading …" : "Cargando …",
     "Add" : "Agregar",
     "New comment …" : "Nuevo comentario ...",
     "Delete comment" : "Borrar comentario",

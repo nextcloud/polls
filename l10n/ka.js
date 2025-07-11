@@ -167,6 +167,7 @@ OC.L10N.register(
     "Loading" : "ითვირთება",
     "Previous day" : "Previous day",
     "Next day" : "Next day",
+    "Loading …" : "Loading …",
     "Add" : "Add",
     "Delete comment" : "Delete comment",
     "deleted" : "deleted",

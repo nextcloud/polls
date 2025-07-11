@@ -103,6 +103,8 @@ OC.L10N.register(
     "Loading" : "불러오는 중",
     "Previous day" : "이전날",
     "Next day" : "다음날",
+    "Please wait…" : "잠시 기다리십시오 …",
+    "Loading …" : "불러오는 중 ...",
     "Add" : "추가",
     "Propose an option" : "옵션 제안",
     "New comment …" : "새 댓글…",

@@ -12,6 +12,7 @@ OC.L10N.register(
     "Unknown error" : "Hitilafu isiyojulikana",
     "Previous day" : "Siku iliyopita",
     "Next day" : "Siku inayofuata",
+    "Loading …" : "Inapakia",
     "Add" : "Ongeza",
     "Delete comment" : "Futa oni",
     "Cancel" : "Cancel",

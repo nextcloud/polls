@@ -13,6 +13,7 @@ OC.L10N.register(
     "Unknown error" : "Eroare necunoscută",
     "Previous day" : "Ziua anterioară",
     "Next day" : "Ziua următoare",
+    "Please wait…" : "Vă rugăm așteptați...",
     "Add" : "Adaugă",
     "New comment …" : "Comentariu nou...",
     "Delete comment" : "Șterge comentariu",

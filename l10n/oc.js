@@ -18,6 +18,7 @@ OC.L10N.register(
     "Loading" : "Cargament",
     "Previous day" : "Jorn passat",
     "Next day" : "Jorn seguent",
+    "Loading …" : "Cargament…",
     "Add" : "Apondre",
     "New comment …" : "Nòu comentari…",
     "Delete comment" : "Suprimir comentari",
