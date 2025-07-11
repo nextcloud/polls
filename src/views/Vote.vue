@@ -124,7 +124,6 @@ onUnmounted(() => {
 			{
 				scrolled: scrolled,
 				'vote-style-beta-510': preferencesStore.user.useAlternativeStyling,
-				'fixed-table-header': preferencesStore.user.useFixedTableHeader,
 			},
 		]">
 		<HeaderBar>
@@ -184,15 +183,6 @@ onUnmounted(() => {
 	flex: 1;
 	overflow: auto;
 	overscroll-behavior-inline: contain;
-}
-
-.table-view.fixed-table-header .vote_main {
-	// display: flex;
-	flex-direction: column;
-	// .vote-table {
-	// min-height: 18rem;
-	// flex: auto;
-	// }
 }
 
 .vote_main {

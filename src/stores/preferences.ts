@@ -26,7 +26,6 @@ export type UserPreferences = {
 	useNewPollInPollist: boolean
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
-	useFixedTableHeader: boolean
 	verbosePollsList: boolean
 }
 
@@ -64,7 +63,6 @@ export const usePreferencesStore = defineStore('preferences', {
 			useNewPollInPollist: false,
 			useCommentsAlternativeStyling: false,
 			useAlternativeStyling: false,
-			useFixedTableHeader: false,
 			verbosePollsList: false,
 		},
 		session: {
