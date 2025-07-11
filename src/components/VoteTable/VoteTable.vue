@@ -142,7 +142,12 @@ function loadMore() {
 			</div>
 		</template>
 	</TransitionGroup>
-	<div v-if="votesStore.countHiddenParticipants > 0" class="observer-container">
+	<div
+		v-if="
+			votesStore.countHiddenParticipants > 0
+			&& pollStore.viewMode === ViewMode.TableView
+		"
+		class="observer-container">
 		<IntersectionObserver
 			key="observer"
 			class="observer_section sticky-left"
