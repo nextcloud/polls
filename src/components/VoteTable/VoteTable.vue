@@ -147,10 +147,10 @@ function loadMore() {
 			votesStore.countHiddenParticipants > 0
 			&& pollStore.viewMode === ViewMode.TableView
 		"
-		class="observer-container">
+		class="observer-container sticky-left">
 		<IntersectionObserver
 			key="observer"
-			class="observer_section sticky-left"
+			class="observer_section"
 			:loading="chunksLoading"
 			@visible="loadMore">
 			<div class="clickable_load_more" @click="loadMore">
@@ -169,10 +169,8 @@ function loadMore() {
 
 <style lang="scss">
 .observer-container {
-	// grid-column: 2 / -1;
-	// grid-row: 999;
 	display: flex;
-	justify-content: flex-start;
+	justify-content: center;
 }
 
 .observer_section {
