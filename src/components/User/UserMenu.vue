@@ -32,14 +32,14 @@ import SortByRankIcon from 'vue-material-design-icons/FormatListNumbered.vue'
 import SortByDateOptionIcon from 'vue-material-design-icons/SortClockAscendingOutline.vue'
 
 import { PollsAPI, ValidatorAPI } from '../../Api/index.ts'
-import { RankedType, useOptionsStore } from '../../stores/options.ts'
+import { useOptionsStore } from '../../stores/options.ts'
 import { usePollStore } from '../../stores/poll.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 import { useSessionStore } from '../../stores/session.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
-import { StatusResults, ViewMode, PollType, Event } from '../../Types/index.ts'
+import { StatusResults, Event } from '../../Types/index.ts'
 
 import { deleteCookieByValue, findCookieByValue } from '../../helpers/index.ts'
 import { NcActionButtonGroup } from '@nextcloud/vue'
@@ -135,17 +135,13 @@ async function resendInvitation() {
  */
 function changeView(): void {
 	emit(Event.TransitionsOff, 500)
-	if (pollStore.type === PollType.Date) {
+	if (pollStore.type === 'datePoll') {
 		preferencesStore.setViewDatePoll(
-			pollStore.viewMode === ViewMode.TableView
-				? ViewMode.ListView
-				: ViewMode.TableView,
+			pollStore.viewMode === 'table-view' ? 'list-view' : 'table-view',
 		)
-	} else if (pollStore.type === PollType.Text) {
+	} else if (pollStore.type === 'textPoll') {
 		preferencesStore.setViewTextPoll(
-			pollStore.viewMode === ViewMode.TableView
-				? ViewMode.ListView
-				: ViewMode.TableView,
+			pollStore.viewMode === 'table-view' ? 'list-view' : 'table-view',
 		)
 	}
 }
@@ -211,14 +207,14 @@ const displayNameInputProps = ref<InputProps>({
 
 const validateDisplayName = debounce(async function () {
 	if (sessionStore.share.user.displayName.length < 1) {
-		setDisplayNameStatus(StatusResults.Error)
+		setDisplayNameStatus('error')
 		return
 	}
 
 	if (
 		sessionStore.share.user.displayName === sessionStore.currentUser.displayName
 	) {
-		setDisplayNameStatus(StatusResults.Unchanged)
+		setDisplayNameStatus('unchanged')
 		return
 	}
 
@@ -227,9 +223,9 @@ const validateDisplayName = debounce(async function () {
 			sessionStore.route.params.token,
 			sessionStore.share.user.displayName,
 		)
-		setDisplayNameStatus(StatusResults.Success)
+		setDisplayNameStatus('success')
 	} catch {
-		setDisplayNameStatus(StatusResults.Error)
+		setDisplayNameStatus('error')
 	}
 }, 500)
 
@@ -238,9 +234,9 @@ const validateDisplayName = debounce(async function () {
  * @param status
  */
 function setDisplayNameStatus(status: StatusResults) {
-	displayNameInputProps.value.success = status === StatusResults.Success
-	displayNameInputProps.value.error = status === StatusResults.Error
-	displayNameInputProps.value.showTrailingButton = status === StatusResults.Success
+	displayNameInputProps.value.success = status === 'success'
+	displayNameInputProps.value.error = status === 'error'
+	displayNameInputProps.value.showTrailingButton = status === 'success'
 }
 
 /**
@@ -252,10 +248,10 @@ async function submitDisplayName() {
 			displayName: sessionStore.share.user.displayName,
 		})
 		showSuccess(t('polls', 'Name changed.'))
-		setDisplayNameStatus(StatusResults.Unchanged)
+		setDisplayNameStatus('unchanged')
 	} catch {
 		showError(t('polls', 'Error changing name.'))
-		setDisplayNameStatus(StatusResults.Error)
+		setDisplayNameStatus('error')
 	}
 }
 
@@ -272,15 +268,15 @@ const validateEMail = debounce(async function () {
 		sessionStore.share.user.emailAddress
 		=== sessionStore.currentUser.emailAddress
 	) {
-		setEMailStatus(StatusResults.Unchanged)
+		setEMailStatus('unchanged')
 		return
 	}
 
 	try {
 		await ValidatorAPI.validateEmailAddress(sessionStore.share.user.emailAddress)
-		setEMailStatus(StatusResults.Success)
+		setEMailStatus('success')
 	} catch {
-		setEMailStatus(StatusResults.Error)
+		setEMailStatus('error')
 	}
 }, 500)
 
@@ -289,9 +285,9 @@ const validateEMail = debounce(async function () {
  * @param status
  */
 function setEMailStatus(status: StatusResults) {
-	eMailInputProps.value.success = status === StatusResults.Success
-	eMailInputProps.value.error = status === StatusResults.Error
-	eMailInputProps.value.showTrailingButton = status === StatusResults.Success
+	eMailInputProps.value.success = status === 'success'
+	eMailInputProps.value.error = status === 'error'
+	eMailInputProps.value.showTrailingButton = status === 'success'
 }
 
 /**
@@ -307,14 +303,14 @@ async function submitEmail() {
 				emailAddress: sessionStore.share.user.emailAddress,
 			}),
 		)
-		setEMailStatus(StatusResults.Unchanged)
+		setEMailStatus('unchanged')
 	} catch {
 		showError(
 			t('polls', 'Error saving email address {emailAddress}', {
 				emailAddress: sessionStore.share.user.emailAddress,
 			}),
 		)
-		setEMailStatus(StatusResults.Error)
+		setEMailStatus('error')
 	}
 }
 </script>
@@ -327,7 +323,7 @@ async function submitEmail() {
 		<NcActionButtonGroup name="View mode">
 			<NcActionButton
 				v-model="viewMode"
-				:value="ViewMode.TableView"
+				:value="'table-view'"
 				type="radio"
 				:aria-label="t('polls', 'Switch to table view')">
 				<template #icon>
@@ -337,7 +333,7 @@ async function submitEmail() {
 
 			<NcActionButton
 				v-model="viewMode"
-				:value="ViewMode.ListView"
+				:value="'list-view'"
 				type="radio"
 				:aria-label="t('polls', 'Switch to list view')">
 				<template #icon>
@@ -349,22 +345,22 @@ async function submitEmail() {
 		<NcActionButtonGroup name="Options order">
 			<NcActionButton
 				v-model="optionsStore.ranked"
-				:value="RankedType.notRanked"
+				value="no"
 				type="radio"
 				:aria-label="
-					pollStore.type === PollType.Date
+					pollStore.type === 'datePoll'
 						? t('polls', 'Switch to date order')
 						: t('polls', 'Switch to original order')
 				">
 				<template #icon>
-					<SortByDateOptionIcon v-if="pollStore.type === PollType.Date" />
+					<SortByDateOptionIcon v-if="pollStore.type === 'datePoll'" />
 					<SortByOriginalOrderIcon v-else />
 				</template>
 			</NcActionButton>
 
 			<NcActionButton
 				v-model="optionsStore.ranked"
-				:value="RankedType.ranked"
+				value="yes"
 				type="radio"
 				:aria-label="t('polls', 'Switch to ranked order')">
 				<template #icon>
@@ -423,7 +419,7 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionCheckbox
-			v-if="pollStore.viewMode === ViewMode.ListView"
+			v-if="pollStore.viewMode === 'list-view'"
 			:model-value="subscriptionStore.subscribed"
 			:disabled="!pollStore.permissions.subscribe"
 			title="check"
@@ -455,10 +451,7 @@ async function submitEmail() {
 		</NcActionButton>
 
 		<NcActionButton
-			v-if="
-				pollStore.permissions.vote
-				&& pollStore.viewMode === ViewMode.ListView
-			"
+			v-if="pollStore.permissions.vote && pollStore.viewMode === 'list-view'"
 			:name="t('polls', 'Reset your votes')"
 			:aria-label="t('polls', 'Reset your votes')"
 			@click="resetVotes()">

@@ -17,7 +17,7 @@ import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 
 import { useSessionStore } from '../../stores/session.ts'
-import { Poll, PollType } from '../../Types/index.ts'
+import { Poll } from '../../Types/index.ts'
 
 const emit = defineEmits(['clonePoll', 'toggleArchive', 'deletePoll'])
 const { poll } = defineProps<{ poll: Poll }>()
@@ -31,7 +31,7 @@ const sessionStore = useSessionStore()
 		:to="{ name: 'vote', params: { id: poll.id } }"
 		:class="{ closed: poll.status.isExpired }">
 		<template #icon>
-			<TextPollIcon v-if="poll.type === PollType.Text" />
+			<TextPollIcon v-if="poll.type === 'textPoll'" />
 			<DatePollIcon v-else />
 		</template>
 		<template #actions>

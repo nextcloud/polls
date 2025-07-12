@@ -10,7 +10,6 @@ import ExpirationIcon from 'vue-material-design-icons/CalendarEnd.vue'
 import BadgeSmallDiv from '../components/Base/modules/BadgeSmallDiv.vue'
 import { t } from '@nextcloud/l10n'
 import { DateTime } from 'luxon'
-import { StatusResults } from '../Types'
 
 type RichObject = {
 	id: number
@@ -35,8 +34,8 @@ const { richObject } = defineProps<Props>()
 
 const expiryClass = richObject?.poll?.expiry
 	? DateTime.fromMillis(richObject.poll.expiry * 1000).diffNow('hours').hours < 36
-		? StatusResults.Warning
-		: StatusResults.Success
+		? 'warning'
+		: 'success'
 	: ''
 </script>
 

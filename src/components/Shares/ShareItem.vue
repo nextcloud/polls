@@ -12,7 +12,7 @@ import UnvotedIcon from 'vue-material-design-icons/MinusBox.vue'
 
 import UserItem from '../User/UserItem.vue'
 
-import { Share, ShareType } from '../../stores/shares.ts'
+import { Share } from '../../stores/shares.ts'
 import ShareMenu from './ShareMenu.vue'
 
 const emit = defineEmits(['showQrCode'])
@@ -60,8 +60,7 @@ onMounted(() => {
 				</div>
 				<div
 					v-else-if="
-						share.groupId
-						|| [ShareType.Public, ShareType.Group].includes(share.type)
+						share.groupId || ['public', 'group'].includes(share.type)
 					">
 					<div class="vote-status empty" />
 				</div>

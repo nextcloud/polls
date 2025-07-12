@@ -31,8 +31,8 @@ const emit = defineEmits<{
 }>()
 
 const pollTitle = ref('')
-const pollType = ref(PollType.Date)
-const pollId = ref(null as number | null)
+const pollType = ref<PollType>('datePoll')
+const pollId = ref<number | null>(null)
 const adding = ref(false)
 
 const pollTypeOptions = Object.entries(pollTypes).map(([key, value]) => ({
@@ -49,8 +49,8 @@ async function addPoll() {
 		adding.value = true
 		// add the poll
 		const poll = await pollStore.add({
-			title: pollTitle.value,
 			type: pollType.value,
+			title: pollTitle.value,
 		})
 
 		if (poll) {

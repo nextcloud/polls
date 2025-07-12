@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { CardDiv } from '../../Base/index.ts'
 import { t } from '@nextcloud/l10n'
-import { usePollStore, PollType } from '../../../stores/poll.ts'
+import { usePollStore } from '../../../stores/poll.ts'
 import ActionAddOption from '../../Actions/modules/ActionAddOption.vue'
 import OptionsTextAdd from '../../Options/OptionsTextAdd.vue'
 
@@ -32,10 +32,10 @@ const optionAddDatesModalProps = {
 		</p>
 
 		<OptionsTextAdd
-			v-if="pollStore.type === PollType.Text"
+			v-if="pollStore.type === 'textPoll'"
 			:placeholder="t('polls', 'Propose an option')" />
 
-		<template v-if="pollStore.type === PollType.Date" #button>
+		<template v-if="pollStore.type === 'datePoll'" #button>
 			<ActionAddOption v-bind="optionAddDatesModalProps" />
 		</template>
 	</CardDiv>

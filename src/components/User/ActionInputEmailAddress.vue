@@ -39,9 +39,9 @@ const inputProps = ref<InputProps>({
  * @param status
  */
 function setStatus(status: StatusResults) {
-	inputProps.value.success = status === StatusResults.Success
-	inputProps.value.error = status === StatusResults.Error
-	inputProps.value.showTrailingButton = status === StatusResults.Success
+	inputProps.value.success = status === 'success'
+	inputProps.value.error = status === 'error'
+	inputProps.value.showTrailingButton = status === 'success'
 }
 
 const validate = debounce(async function () {
@@ -49,15 +49,15 @@ const validate = debounce(async function () {
 		sessionStore.share.user.emailAddress
 		=== sessionStore.currentUser.emailAddress
 	) {
-		setStatus(StatusResults.Unchanged)
+		setStatus('unchanged')
 		return
 	}
 
 	try {
 		await ValidatorAPI.validateEmailAddress(sessionStore.share.user.emailAddress)
-		setStatus(StatusResults.Success)
+		setStatus('success')
 	} catch {
-		setStatus(StatusResults.Error)
+		setStatus('error')
 	}
 }, 500)
 
@@ -74,14 +74,14 @@ async function submit() {
 				emailAddress: sessionStore.share.user.emailAddress,
 			}),
 		)
-		setStatus(StatusResults.Unchanged)
+		setStatus('unchanged')
 	} catch {
 		showError(
 			t('polls', 'Error saving email address {emailAddress}', {
 				emailAddress: sessionStore.share.user.emailAddress,
 			}),
 		)
-		setStatus(StatusResults.Error)
+		setStatus('error')
 	}
 }
 </script>

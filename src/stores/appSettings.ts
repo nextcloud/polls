@@ -8,11 +8,7 @@ import { AppSettingsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-export enum UpdateType {
-	NoPolling = 'noPolling',
-	Periodic = 'periodicPolling',
-	LongPolling = 'longPolling',
-}
+export type UpdateType = 'noPolling' | 'periodicPolling' | 'longPolling'
 export type Group = {
 	id: string
 	userId: string
@@ -82,7 +78,7 @@ export const useAppSettingsStore = defineStore('appSettings', {
 		showMailAddresses: false,
 		showLogin: true,
 		unrestrictedOwner: false,
-		updateType: UpdateType.NoPolling,
+		updateType: 'noPolling',
 		useActivity: false,
 		useCollaboration: true,
 		useSiteLegalTerms: true,

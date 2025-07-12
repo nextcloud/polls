@@ -36,7 +36,7 @@ import { usePollGroupsStore } from '../stores/pollGroups.ts'
 import { useSessionStore } from '../stores/session.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
-import { ButtonMode, Event } from '../Types/index.ts'
+import { Event } from '../Types/index.ts'
 import { useRouter } from 'vue-router'
 import { NcAppNavigationSpacer } from '@nextcloud/vue'
 
@@ -50,40 +50,40 @@ const preferencesStore = usePreferencesStore()
 const iconSize = 20
 
 const icons = {
-	[FilterType.Relevant]: {
-		id: FilterType.Relevant,
+	relevant: {
+		id: 'relevant',
 		iconComponent: RelevantIcon,
 	},
-	[FilterType.My]: {
-		id: FilterType.My,
+	my: {
+		id: 'my',
 		iconComponent: MyPollsIcon,
 	},
-	[FilterType.Private]: {
-		id: FilterType.Private,
+	private: {
+		id: 'private',
 		iconComponent: PrivatePollsIcon,
 	},
-	[FilterType.Participated]: {
-		id: FilterType.Participated,
+	participated: {
+		id: 'participated',
 		iconComponent: ParticipatedIcon,
 	},
-	[FilterType.Open]: {
-		id: FilterType.Open,
+	open: {
+		id: 'open',
 		iconComponent: OpenPollIcon,
 	},
-	[FilterType.All]: {
-		id: FilterType.All,
+	all: {
+		id: 'all',
 		iconComponent: AllPollsIcon,
 	},
-	[FilterType.Closed]: {
-		id: FilterType.Closed,
+	closed: {
+		id: 'closed',
 		iconComponent: ClosedPollsIcon,
 	},
-	[FilterType.Archived]: {
-		id: FilterType.Archived,
+	archived: {
+		id: 'archived',
 		iconComponent: ArchivedPollsIcon,
 	},
-	[FilterType.Admin]: {
-		id: FilterType.Admin,
+	admin: {
+		id: 'admin',
 		iconComponent: AdministrationIcon,
 	},
 }
@@ -168,7 +168,7 @@ onMounted(() => {
 				preferencesStore.useActionAddPollInNavigation
 				&& sessionStore.appPermissions.pollCreation
 			"
-			:button-mode="ButtonMode.Navigation" />
+			:button-mode="'navigation'" />
 
 		<NcAppNavigationNew
 			v-else-if="

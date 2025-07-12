@@ -7,14 +7,11 @@
 import { computed } from 'vue'
 import { InputDiv } from '../Base/index.ts'
 import { usePollStore } from '../../stores/poll.ts'
-import { SignalingType } from '../../Types/index.ts'
 
 const emit = defineEmits(['change'])
 
 const pollStore = usePollStore()
-const checkTitle = computed(() =>
-	pollStore.configuration.title ? SignalingType.None : SignalingType.Error,
-)
+const checkTitle = computed(() => (pollStore.configuration.title ? '' : 'error'))
 </script>
 
 <template>

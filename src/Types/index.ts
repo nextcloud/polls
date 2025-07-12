@@ -70,67 +70,48 @@ export enum Event {
 	ShowSettings = 'polls:settings:show',
 }
 
-export enum ButtonMode {
-	Navigation = 'navigation',
-	ActionMenu = 'actionMenu',
-	Native = 'native',
-}
+export type ButtonMode = 'navigation' | 'actionMenu' | 'native'
+export type StatusResults =
+	| 'error'
+	| 'warning'
+	| 'success'
+	| 'loading'
+	| 'loaded'
+	| 'unchanged'
+	| ''
 
-export enum StatusResults {
-	Error = 'error',
-	Warning = 'warning',
-	Success = 'success',
-	Loading = 'loading',
-	Loaded = 'loaded',
-	Unchanged = 'unchanged',
-	None = '',
-}
+export type SignalingType =
+	| ''
+	| 'empty'
+	| 'error'
+	| 'valid'
+	| 'invalid'
+	| 'success'
+	| 'checking'
 
-export enum SignalingType {
-	None = '',
-	Empty = 'empty',
-	Error = 'error',
-	Valid = 'valid',
-	InValid = 'invalid',
-	Success = 'success',
-	Checking = 'checking',
-}
+export type UserType =
+	| 'email'
+	| 'external'
+	| 'contact'
+	| 'user'
+	| 'group'
+	| 'admin'
+	| 'public'
+	| 'circle'
+	| 'contactGroup'
+	| ''
 
-export enum UserType {
-	Email = 'email',
-	External = 'external',
-	Contact = 'contact',
-	User = 'user',
-	Group = 'group',
-	Admin = 'admin',
-	Public = 'public',
-	Circle = 'circle',
-	ContactGroup = 'contactGroup',
-	None = '',
-}
+export type VirtualUserItemType =
+	| 'addPublicLink'
+	| 'internalAccess'
+	| 'deleted'
+	| 'anonymous'
 
-export enum VirtualUserItemType {
-	AddPublicLink = 'addPublicLink',
-	InternalAccess = 'internalAccess',
-	Deleted = 'deleted',
-	Anonymous = 'anonymous',
-}
-
-export enum BoxType {
-	Text = 'textBox',
-	Date = 'dateBox',
-	AlignedText = 'alignedTextBox',
-}
-
-export enum ISearchType {
-	User = 0,
-	Group = 1,
-	UserGroup = 2,
-	Email = 4,
-	Circle = 7,
-	Contact = 51,
-	All = 99,
-}
+/**
+ * Type of search that can be used in the search bar.
+ * 0 = User, 1 = Group, 2 = UserGroup, 4 = Email, 7 = Circle, 51 = Contact, 99 = All
+ */
+export type ISearchType = 0 | 1 | 2 | 4 | 7 | 51 | 99
 
 export type Chunking = {
 	size: number

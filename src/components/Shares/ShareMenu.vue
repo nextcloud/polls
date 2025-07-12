@@ -28,12 +28,7 @@ import RestoreIcon from 'vue-material-design-icons/Recycle.vue'
 
 import { AxiosError } from '@nextcloud/axios'
 
-import {
-	useSharesStore,
-	Share,
-	ShareType,
-	PublicPollEmailConditions,
-} from '../../stores/shares.ts'
+import { useSharesStore, Share } from '../../stores/shares.ts'
 import { SentResults } from '../../Api/modules/shares.ts'
 import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 import { usePollStore } from '../../stores/poll.ts'
@@ -64,9 +59,7 @@ const label = ref({
 	},
 })
 
-const isActivePublicShare = computed(
-	() => !share.deleted && share.type === ShareType.Public,
-)
+const isActivePublicShare = computed(() => !share.deleted && share.type === 'public')
 
 type ButtonProps = {
 	activate: boolean
@@ -78,7 +71,7 @@ const resendInvitation = computed<ButtonProps>(() => ({
 	activate:
 		!share.groupId
 		&& !share.deleted
-		&& (!!share.user.emailAddress || share.type === ShareType.Group),
+		&& (!!share.user.emailAddress || share.type === 'group'),
 	name: share.invitationSent
 		? t('polls', 'Resend invitation mail')
 		: t('polls', 'Send invitation mail'),
@@ -126,7 +119,7 @@ const resolveGroups = computed<ButtonProps>(() => ({
 		!share.groupId
 		&& !resolving.value
 		&& !share.deleted
-		&& [ShareType.ContactGroup, ShareType.Circle].includes(share.type),
+		&& ['contactGroup', 'circle'].includes(share.type),
 	name: t('polls', 'Resolve group into individual invitations'),
 	action: async () => {
 		if (resolving.value) return
@@ -171,9 +164,9 @@ const switchAdmin = computed<ButtonProps>(() => ({
 	activate:
 		!share.groupId
 		&& !share.deleted
-		&& (share.type === ShareType.User || share.type === ShareType.Admin),
+		&& (share.type === 'user' || share.type === 'admin'),
 	name:
-		share.type === ShareType.User
+		share.type === 'user'
 			? t('polls', 'Grant poll admin access')
 			: t('polls', 'Withdraw poll admin access'),
 	action: () => {
@@ -307,7 +300,7 @@ async function submitLabel() {
 			:aria-label="switchAdmin.name"
 			@click="switchAdmin.action">
 			<template #icon>
-				<GrantAdminIcon v-if="share.type === ShareType.User" />
+				<GrantAdminIcon v-if="share.type === 'user'" />
 				<WithdrawAdminIcon v-else />
 			</template>
 		</NcActionButton>
@@ -341,12 +334,12 @@ async function submitLabel() {
 		<NcActionRadio
 			v-if="isActivePublicShare"
 			name="publicPollEmail"
-			:value="PublicPollEmailConditions.Optional"
+			:value="'optional'"
 			:model-value="share.publicPollEmail"
 			@update:model-value="
 				sharesStore.setPublicPollEmail({
 					share,
-					value: PublicPollEmailConditions.Optional,
+					value: 'optional',
 				})
 			">
 			{{ t('polls', 'Email address is optional') }}
@@ -355,12 +348,12 @@ async function submitLabel() {
 		<NcActionRadio
 			v-if="isActivePublicShare"
 			name="publicPollEmail"
-			:value="PublicPollEmailConditions.Mandatory"
+			:value="'mandatory'"
 			:model-value="share.publicPollEmail"
 			@update:model-value="
 				sharesStore.setPublicPollEmail({
 					share,
-					value: PublicPollEmailConditions.Mandatory,
+					value: 'mandatory',
 				})
 			">
 			{{ t('polls', 'Email address is mandatory') }}
@@ -369,12 +362,12 @@ async function submitLabel() {
 		<NcActionRadio
 			v-if="isActivePublicShare"
 			name="publicPollEmail"
-			:value="PublicPollEmailConditions.Disabled"
+			:value="'disabled'"
 			:model-value="share.publicPollEmail"
 			@update:model-value="
 				sharesStore.setPublicPollEmail({
 					share,
-					value: PublicPollEmailConditions.Disabled,
+					value: 'disabled',
 				})
 			">
 			{{ t('polls', 'Do not ask for an email address') }}

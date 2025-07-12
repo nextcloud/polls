@@ -48,7 +48,7 @@ const vInputFocus = {
 }
 
 const {
-	signalingClass = SignalingType.None,
+	signalingClass = '',
 	placeholder = '',
 	type = 'text',
 	inputmode,
@@ -72,30 +72,29 @@ const numericModelValue = computed(() =>
 )
 
 const computedSignalingClass = computed(() => {
-	if (signalingClass === SignalingType.Valid) {
-		return SignalingType.Success
+	if (signalingClass === 'valid') {
+		return 'success'
 	}
-	if (signalingClass === SignalingType.InValid) {
-		return SignalingType.Error
+	if (signalingClass === 'invalid') {
+		return 'error'
 	}
 	return signalingClass
 })
 
 const checking = computed(
-	() =>
-		!useNumModifiers && computedSignalingClass.value === SignalingType.Checking,
+	() => !useNumModifiers && computedSignalingClass.value === 'checking',
 )
 const error = computed(
 	() =>
 		!checking.value
 		&& !useNumModifiers
-		&& computedSignalingClass.value === SignalingType.Error,
+		&& computedSignalingClass.value === 'error',
 )
 const success = computed(
 	() =>
 		!checking.value
 		&& !useNumModifiers
-		&& computedSignalingClass.value === SignalingType.Success
+		&& computedSignalingClass.value === 'success'
 		&& !submit,
 )
 const showSubmit = computed(
@@ -103,7 +102,7 @@ const showSubmit = computed(
 		!checking.value
 		&& !useNumModifiers
 		&& submit
-		&& computedSignalingClass.value !== SignalingType.Error,
+		&& computedSignalingClass.value !== 'error',
 )
 
 /**

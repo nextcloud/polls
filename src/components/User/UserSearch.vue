@@ -29,7 +29,7 @@ const model = defineModel<User | undefined>()
 const {
 	placeholder = t('polls', 'Type to start searching …'),
 	ariaLabel = t('polls', 'Select users'),
-	searchTypes = [ISearchType.All],
+	searchTypes = [99],
 	closeOnSelect = false,
 } = defineProps<Props>()
 

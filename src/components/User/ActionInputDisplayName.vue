@@ -39,21 +39,21 @@ const inputProps = ref<InputProps>({
  * @param status
  */
 function setStatus(status: StatusResults) {
-	inputProps.value.success = status === StatusResults.Success
-	inputProps.value.error = status === StatusResults.Error
-	inputProps.value.showTrailingButton = status === StatusResults.Success
+	inputProps.value.success = status === 'success'
+	inputProps.value.error = status === 'error'
+	inputProps.value.showTrailingButton = status === 'success'
 }
 
 const validate = debounce(async function () {
 	if (sessionStore.share.user.displayName.length < 1) {
-		setStatus(StatusResults.Unchanged)
+		setStatus('unchanged')
 		return
 	}
 
 	if (
 		sessionStore.share.user.displayName === sessionStore.currentUser.displayName
 	) {
-		setStatus(StatusResults.Error)
+		setStatus('error')
 		return
 	}
 
@@ -62,9 +62,9 @@ const validate = debounce(async function () {
 			sessionStore.route.params.token,
 			sessionStore.share.user.displayName,
 		)
-		setStatus(StatusResults.Success)
+		setStatus('success')
 	} catch {
-		setStatus(StatusResults.Error)
+		setStatus('error')
 	}
 }, 500)
 
@@ -77,10 +77,10 @@ async function submit() {
 			displayName: sessionStore.share.user.displayName,
 		})
 		showSuccess(t('polls', 'Name changed.'))
-		setStatus(StatusResults.Unchanged)
+		setStatus('unchanged')
 	} catch {
 		showError(t('polls', 'Error changing name.'))
-		setStatus(StatusResults.Error)
+		setStatus('error')
 	}
 }
 </script>

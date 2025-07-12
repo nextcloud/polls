@@ -15,7 +15,6 @@ import EmailCheckIcon from 'vue-material-design-icons/EmailCheck.vue' // view-co
 
 import { PollsAPI } from '../../../Api/index.ts'
 import { Logger } from '../../../helpers/index.ts'
-import { StatusResults } from '../../../Types/index.ts'
 import { Confirmations } from '../../../Api/modules/polls.ts'
 
 const route = useRoute()
@@ -49,11 +48,11 @@ async function clickAction() {
 		confirmations.value = result.data.confirmations
 		showModal.value = true
 		sendButtonCaption.value = t('polls', 'See result')
-		sentStatus.value = StatusResults.Success
+		sentStatus.value = 'success'
 		emit('success')
 	} catch (error) {
 		Logger.error('Error on sending confirmation mails', { error })
-		sentStatus.value = StatusResults.Error
+		sentStatus.value = 'error'
 		emit('error')
 	} finally {
 		disableButton.value = false

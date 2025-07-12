@@ -8,28 +8,19 @@ import { PublicAPI, VotesAPI } from '../Api/index.ts'
 import { Chunking, User } from '../Types/index.ts'
 import { Logger, StoreHelper } from '../helpers/index.ts'
 import { Option, useOptionsStore } from './options.ts'
-import { usePollStore, VoteVariant } from './poll.ts'
+import { usePollStore } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-export enum Answer {
-	Yes = 'yes',
-	No = 'no',
-	Maybe = 'maybe',
-	None = '',
-}
-export enum AnswerSymbol {
-	Yes = '✔',
-	Maybe = '❔',
-	No = '❌',
-	None = '',
-}
+export type Answer = 'yes' | 'no' | 'maybe' | ''
+
+export type AnswerSymbol = '✔' | '❌' | '❔' | ''
 
 const answerSortOrder: { [key in Answer]: number } = {
-	[Answer.Yes]: 1,
-	[Answer.Maybe]: 2,
-	[Answer.No]: 3,
-	[Answer.None]: 3,
+	yes: 1,
+	maybe: 2,
+	no: 3,
+	'': 3,
 }
 
 export type Vote = {
@@ -148,10 +139,7 @@ export const useVotesStore = defineStore('votes', {
 
 			// sort participants by votes for the selected option if sortByOption is set
 			// TODO: Future usage: This is only valid for simple votes (not ranked)
-			if (
-				state.sortByOption > 0
-				&& pollStore.voteVariant === VoteVariant.Simple
-			) {
+			if (state.sortByOption > 0 && pollStore.voteVariant === 'simple') {
 				participants.sort((aUser, bUser) => {
 					// find the votes for the selected option and the users to compare
 					const aAnswer =
@@ -160,7 +148,7 @@ export const useVotesStore = defineStore('votes', {
 								(vote) =>
 									vote.user.id === aUser.id
 									&& vote.optionId === state.sortByOption,
-							)?.answer ?? Answer.None
+							)?.answer ?? ''
 						]
 					const bAnswer =
 						answerSortOrder[
@@ -168,7 +156,7 @@ export const useVotesStore = defineStore('votes', {
 								(vote) =>
 									vote.user.id === bUser.id
 									&& vote.optionId === state.sortByOption,
-							)?.answer ?? Answer.None
+							)?.answer ?? ''
 						]
 
 					if (aAnswer < bAnswer) {
@@ -207,10 +195,10 @@ export const useVotesStore = defineStore('votes', {
 						virtualVotes.push(found)
 					} else {
 						virtualVotes.push({
-							answer: Answer.None,
+							answer: '',
 							optionText: option.text,
 							user,
-							answerSymbol: AnswerSymbol.None,
+							answerSymbol: '',
 							deleted: 0,
 							id: 0,
 							optionId: option.id,
@@ -242,10 +230,10 @@ export const useVotesStore = defineStore('votes', {
 			)
 			if (found === undefined) {
 				return {
-					answer: Answer.None,
+					answer: '',
 					optionText: payload.option.text,
 					user: payload.user,
-					answerSymbol: AnswerSymbol.None,
+					answerSymbol: '',
 					deleted: 0,
 					id: 0,
 					optionId: payload.option.id,

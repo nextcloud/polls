@@ -6,23 +6,23 @@
 <script setup lang="ts">
 import { RadioGroupDiv } from '../../Base/index.ts'
 import { t } from '@nextcloud/l10n'
-import { useAppSettingsStore, UpdateType } from '../../../stores/appSettings.ts'
+import { useAppSettingsStore } from '../../../stores/appSettings.ts'
 
 const appSettingsStore = useAppSettingsStore()
 const updateTypeOptions = [
 	{
-		value: UpdateType.LongPolling,
+		value: 'longPolling',
 		label: t('polls', 'Enable "long polling" for instant updates'),
 	},
 	{
-		value: UpdateType.Periodic,
+		value: 'periodicPolling',
 		label: t(
 			'polls',
 			'Enable periodic requests of poll updates from the client',
 		),
 	},
 	{
-		value: UpdateType.NoPolling,
+		value: 'noPolling',
 		label: t(
 			'polls',
 			'Disable automatic updates (poll must be reloaded to get updates)',

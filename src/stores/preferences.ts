@@ -8,10 +8,7 @@ import { CalendarAPI, UserSettingsAPI } from '../Api/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-export enum ViewMode {
-	TableView = 'table-view',
-	ListView = 'list-view',
-}
+export type ViewMode = 'table-view' | 'list-view'
 
 export type UserPreferences = {
 	calendarPeek: boolean
@@ -55,8 +52,8 @@ export const usePreferencesStore = defineStore('preferences', {
 			checkCalendars: [],
 			checkCalendarsHoursBefore: 0,
 			checkCalendarsHoursAfter: 0,
-			defaultViewTextPoll: ViewMode.TableView,
-			defaultViewDatePoll: ViewMode.TableView,
+			defaultViewTextPoll: 'table-view',
+			defaultViewDatePoll: 'table-view',
 			pollCombo: [],
 			relevantOffset: 30,
 			useNewPollDialogInNavigation: false,
@@ -80,7 +77,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			if (window.innerWidth > 480) {
 				return state.user.defaultViewTextPoll
 			}
-			return ViewMode.ListView
+			return 'list-view'
 		},
 
 		viewDatePoll(state): ViewMode {
@@ -90,7 +87,7 @@ export const usePreferencesStore = defineStore('preferences', {
 			if (window.innerWidth > 480) {
 				return state.user.defaultViewDatePoll
 			}
-			return ViewMode.TableView
+			return 'table-view'
 		},
 
 		useNcAppNavigationNew(state): boolean {

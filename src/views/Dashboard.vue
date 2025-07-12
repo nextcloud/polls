@@ -17,7 +17,6 @@ import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import { PollsAppIcon } from '../components/AppIcons/index.ts'
 import { Logger } from '../helpers/index.ts'
 import { usePollsStore } from '../stores/polls.ts'
-import { PollType } from '../Types/index.ts'
 
 const dashboardWidgetProperties = {
 	emptyContentMessage: t('polls', 'No polls found for this category'),
@@ -58,7 +57,7 @@ onMounted(() => {
 				<a :href="generateUrl(`/apps/polls/vote/${item.id}`)">
 					<div class="poll-item__item">
 						<div class="item__icon-spacer">
-							<TextPollIcon v-if="item.type === PollType.Text" />
+							<TextPollIcon v-if="item.type === 'textPoll'" />
 							<DatePollIcon v-else />
 						</div>
 

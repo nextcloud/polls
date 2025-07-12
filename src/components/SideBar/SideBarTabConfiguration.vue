@@ -29,7 +29,7 @@ import ConfigTitle from '../Configuration/ConfigTitle.vue'
 import ConfigUseNo from '../Configuration/ConfigUseNo.vue'
 import ConfigVoteLimit from '../Configuration/ConfigVoteLimit.vue'
 
-import { usePollStore, PollType, ShowResults } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 import ConfigDangerArea from '../Configuration/ConfigDangerArea.vue'
 import ConfigForceConfidentialComments from '../Configuration/ConfigForceConfidentialComments.vue'
@@ -86,8 +86,7 @@ const votesStore = useVotesStore()
 			<ConfigClosing @change="pollStore.write" />
 			<ConfigAutoReminder
 				v-if="
-					pollStore.type === PollType.Date
-					|| pollStore.configuration.expire
+					pollStore.type === 'datePoll' || pollStore.configuration.expire
 				"
 				@change="pollStore.write" />
 		</ConfigBox>
@@ -95,17 +94,11 @@ const votesStore = useVotesStore()
 		<ConfigBox :name="t('polls', 'Result display')">
 			<template #icon>
 				<ShowResultsIcon
-					v-if="
-						pollStore.configuration.showResults === ShowResults.Always
-					" />
+					v-if="pollStore.configuration.showResults === 'always'" />
 				<HideResultsUntilClosedIcon
-					v-if="
-						pollStore.configuration.showResults === ShowResults.Closed
-					" />
+					v-if="pollStore.configuration.showResults === 'closed'" />
 				<ShowResultsNeverIcon
-					v-if="
-						pollStore.configuration.showResults === ShowResults.Never
-					" />
+					v-if="pollStore.configuration.showResults === 'never'" />
 			</template>
 			<ConfigShowResults @change="pollStore.write" />
 		</ConfigBox>

@@ -10,29 +10,29 @@ import { t } from '@nextcloud/l10n'
 
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
-import { usePreferencesStore, ViewMode } from '../../../stores/preferences.ts'
+import { usePreferencesStore } from '../../../stores/preferences.ts'
 
 const preferencesStore = usePreferencesStore()
 
 const defaultViewTextPoll = computed({
 	get() {
-		return preferencesStore.user.defaultViewTextPoll === ViewMode.ListView
+		return preferencesStore.user.defaultViewTextPoll === 'list-view'
 	},
 	set(value) {
 		preferencesStore.user.defaultViewTextPoll = value
-			? ViewMode.ListView
-			: ViewMode.TableView
+			? 'list-view'
+			: 'table-view'
 	},
 })
 
 const defaultViewDatePoll = computed({
 	get() {
-		return preferencesStore.user.defaultViewDatePoll === ViewMode.ListView
+		return preferencesStore.user.defaultViewDatePoll === 'list-view'
 	},
 	set(value) {
 		preferencesStore.user.defaultViewDatePoll = value
-			? ViewMode.ListView
-			: ViewMode.TableView
+			? 'list-view'
+			: 'table-view'
 	},
 })
 </script>

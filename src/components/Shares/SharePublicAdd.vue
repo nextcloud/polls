@@ -13,14 +13,17 @@ import NcActionButton from '@nextcloud/vue/components/NcActionButton'
 import PlusIcon from 'vue-material-design-icons/Plus.vue'
 
 import UserItem from '../User/UserItem.vue'
-import { VirtualUserItemType } from '../../Types/index.ts'
 import { useSharesStore } from '../../stores/shares.ts'
+import { VirtualUserItemType } from '../../Types/index.ts'
 
 const sharesStore = useSharesStore()
 
-const userItemProps = {
+const userItemProps: {
+	label: string
+	type: VirtualUserItemType
+} = {
 	label: t('polls', 'Add a new public link'),
-	type: VirtualUserItemType.AddPublicLink,
+	type: 'addPublicLink',
 }
 
 /**

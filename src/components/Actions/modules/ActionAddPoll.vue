@@ -28,7 +28,7 @@ interface Props {
 const {
 	caption = t('polls', 'Add poll'),
 	modalSize = 'normal',
-	buttonMode = ButtonMode.Native,
+	buttonMode = 'native',
 } = defineProps<Props>()
 
 const router = useRouter()
@@ -97,7 +97,7 @@ function addAnotherPoll() {
 		v-if="sessionStore.appPermissions.pollCreation"
 		v-model:show-modal="showModal"
 		:button-caption="
-			buttonMode === ButtonMode.Navigation ? t('polls', 'New poll') : caption
+			buttonMode === 'navigation' ? t('polls', 'New poll') : caption
 		"
 		:modal-size="modalSize"
 		:button-mode="buttonMode"

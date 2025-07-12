@@ -35,50 +35,26 @@ import { useSharesStore } from './shares.ts'
 import { useCommentsStore } from './comments.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-export enum PollType {
-	Text = 'textPoll',
-	Date = 'datePoll',
-}
+export type PollType = 'textPoll' | 'datePoll'
 
 type PollTypesType = {
 	name: string
 }
 
 export const pollTypes: Record<PollType, PollTypesType> = {
-	[PollType.Text]: {
+	textPoll: {
 		name: t('polls', 'Text poll'),
 	},
-	[PollType.Date]: {
+	datePoll: {
 		name: t('polls', 'Date poll'),
 	},
 }
 
-export enum VoteVariant {
-	Simple = 'simple',
-}
-
-export enum AccessType {
-	Private = 'private',
-	Open = 'open',
-}
-
-export enum ShowResults {
-	Always = 'always',
-	Closed = 'closed',
-	Never = 'never',
-}
-
-export enum AllowProposals {
-	Allow = 'allow',
-	Disallow = 'disallow',
-	Review = 'review',
-}
-
-export enum SortParticipants {
-	Alphabetical = 'alphabetical',
-	VoteCount = 'voteCount',
-	Unordered = 'unordered',
-}
+export type VoteVariant = 'simple'
+export type AccessType = 'private' | 'open'
+export type ShowResults = 'always' | 'closed' | 'never'
+export type AllowProposals = 'allow' | 'disallow' | 'review'
+export type SortParticipants = 'alphabetical' | 'voteCount' | 'unordered'
 
 type Meta = {
 	chunking: Chunking
@@ -181,16 +157,16 @@ const markedPrefix = {
 export const usePollStore = defineStore('poll', {
 	state: (): Poll => ({
 		id: 0,
-		type: PollType.Date,
-		voteVariant: VoteVariant.Simple,
+		type: 'datePoll',
+		voteVariant: 'simple',
 		descriptionSafe: '',
 		configuration: {
 			title: '',
 			description: '',
-			access: AccessType.Private,
+			access: 'private',
 			allowComment: false,
 			allowMaybe: false,
-			allowProposals: AllowProposals.Disallow,
+			allowProposals: 'disallow',
 			anonymous: false,
 			autoReminder: false,
 			collapseDescription: true,
@@ -198,7 +174,7 @@ export const usePollStore = defineStore('poll', {
 			forceConfidentialComments: false,
 			hideBookedUp: false,
 			proposalsExpire: 0,
-			showResults: ShowResults.Always,
+			showResults: 'always',
 			useNo: true,
 			maxVotesPerOption: 0,
 			maxVotesPerUser: 0,
@@ -228,7 +204,7 @@ export const usePollStore = defineStore('poll', {
 			orphanedVotes: 0,
 			shareToken: '',
 			userId: '',
-			userRole: UserType.None,
+			userRole: '',
 			countVotes: 0,
 			yesVotes: 0,
 			noVotes: 0,
@@ -256,41 +232,41 @@ export const usePollStore = defineStore('poll', {
 			vote: false,
 		},
 		revealParticipants: false,
-		sortParticipants: SortParticipants.Alphabetical,
+		sortParticipants: 'alphabetical',
 		meta: {
 			chunking: {
 				size: 0,
 				loaded: 0,
 			},
-			status: StatusResults.Loaded,
+			status: 'loaded',
 		},
 	}),
 
 	getters: {
 		viewMode(state): ViewMode {
 			const preferencesStore = usePreferencesStore()
-			if (state.type === PollType.Text) {
+			if (state.type === 'textPoll') {
 				return preferencesStore.viewTextPoll
 			}
 
-			if (state.type === PollType.Date) {
+			if (state.type === 'datePoll') {
 				return preferencesStore.viewDatePoll
 			}
-			return ViewMode.TableView
+			return 'table-view'
 		},
 
 		answerSequence(state): Answer[] {
-			const noString = state.configuration.useNo ? Answer.No : Answer.None
+			const noString = state.configuration.useNo ? 'no' : ''
 			if (state.configuration.allowMaybe) {
-				return [noString, Answer.Yes, Answer.Maybe]
+				return [noString, 'yes', 'maybe']
 			}
-			return [noString, Answer.Yes]
+			return [noString, 'yes']
 		},
 
 		safeParticipants(): User[] {
 			const sessionStore = useSessionStore()
 			const votesStore = useVotesStore()
-			if (this.viewMode === ViewMode.ListView) {
+			if (this.viewMode === 'list-view') {
 				return [sessionStore.currentUser]
 			}
 			return votesStore.getChunkedParticipants
@@ -302,11 +278,11 @@ export const usePollStore = defineStore('poll', {
 		}[] {
 			return [
 				{
-					value: AllowProposals.Disallow,
+					value: 'disallow',
 					label: t('polls', 'Disallow proposals'),
 				},
 				{
-					value: AllowProposals.Allow,
+					value: 'allow',
 					label: t('polls', 'Allow proposals'),
 				},
 			]
@@ -314,8 +290,8 @@ export const usePollStore = defineStore('poll', {
 
 		displayResults(state): boolean {
 			return (
-				state.configuration.showResults === ShowResults.Always
-				|| (state.configuration.showResults === ShowResults.Closed
+				state.configuration.showResults === 'always'
+				|| (state.configuration.showResults === 'closed'
 					&& !this.status.isExpired)
 			)
 		},
@@ -326,8 +302,8 @@ export const usePollStore = defineStore('poll', {
 
 		isProposalAllowed(state): boolean {
 			return (
-				state.configuration.allowProposals === AllowProposals.Allow
-				|| state.configuration.allowProposals === AllowProposals.Review
+				state.configuration.allowProposals === 'allow'
+				|| state.configuration.allowProposals === 'review'
 			)
 		},
 
@@ -412,7 +388,7 @@ export const usePollStore = defineStore('poll', {
 			const commentsStore = useCommentsStore()
 			const subscriptionStore = useSubscriptionStore()
 
-			this.meta.status = StatusResults.Loading
+			this.meta.status = 'loading'
 
 			try {
 				const response = await (() => {
@@ -439,12 +415,12 @@ export const usePollStore = defineStore('poll', {
 				commentsStore.comments = response.data.comments
 				subscriptionStore.subscribed = response.data.subscribed
 
-				this.meta.status = StatusResults.Loaded
+				this.meta.status = 'loaded'
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
 				}
-				this.meta.status = StatusResults.Error
+				this.meta.status = 'error'
 				Logger.error('Error loading poll', { error })
 				throw error
 			}

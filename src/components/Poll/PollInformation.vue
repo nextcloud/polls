@@ -32,10 +32,10 @@ import { MaybeIcon } from '../AppIcons/index.ts'
 
 import { BadgeDiv } from '../Base/index.ts'
 import { useSessionStore } from '../../stores/session.ts'
-import { usePollStore, AccessType } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 import { useSubscriptionStore } from '../../stores/subscription.ts'
 import { useOptionsStore } from '../../stores/options.ts'
-import { useVotesStore, Answer } from '../../stores/votes.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
@@ -74,7 +74,7 @@ const resultsCaption = computed(() => {
 })
 
 const accessCaption = computed(() =>
-	pollStore.configuration.access === AccessType.Private
+	pollStore.configuration.access === 'private'
 		? t('polls', 'Private poll')
 		: t('polls', 'Openly accessible poll'),
 )
@@ -85,11 +85,9 @@ const dateExpiryRelative = computed(() =>
 	moment.unix(pollStore.configuration.expire).fromNow(),
 )
 const currentTimeZone = Intl.DateTimeFormat().resolvedOptions().timeZone
-const countAllYesVotes = computed(() => votesStore.countAllVotesByAnswer(Answer.Yes))
-const countAllNoVotes = computed(() => votesStore.countAllVotesByAnswer(Answer.No))
-const countAllMaybeVotes = computed(() =>
-	votesStore.countAllVotesByAnswer(Answer.Maybe),
-)
+const countAllYesVotes = computed(() => votesStore.countAllVotesByAnswer('yes'))
+const countAllNoVotes = computed(() => votesStore.countAllVotesByAnswer('no'))
+const countAllMaybeVotes = computed(() => votesStore.countAllVotesByAnswer('maybe'))
 const countUsedVotes = computed(
 	() =>
 		pollStore.configuration.maxVotesPerUser
@@ -112,7 +110,7 @@ const countUsedVotes = computed(
 		<BadgeDiv>
 			<template #icon>
 				<PrivatePollIcon
-					v-if="pollStore.configuration.access === AccessType.Private" />
+					v-if="pollStore.configuration.access === 'private'" />
 				<OpenPollIcon v-else />
 			</template>
 			{{ accessCaption }}

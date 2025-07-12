@@ -14,7 +14,7 @@ import UserSearch from '../User/UserSearch.vue'
 
 import { useSharesStore } from '../../stores/shares.ts'
 import { showError } from '@nextcloud/dialogs'
-import { ISearchType, User } from '../../Types/index.ts'
+import { User } from '../../Types/index.ts'
 
 const sharesStore = useSharesStore()
 const { info } = defineProps<{
@@ -46,7 +46,7 @@ async function addShare(user: User) {
 			class="add-share"
 			:aria-label="t('polls', 'Add shares')"
 			:placeholder="t('polls', 'Type to add an individual share')"
-			:search-types="[ISearchType.User]"
+			:search-types="[0]"
 			@user-selected="(user: User) => addShare(user)" />
 
 		<div v-if="sharesStore.shares" class="shares-list shared">

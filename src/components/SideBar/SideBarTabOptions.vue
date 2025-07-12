@@ -9,7 +9,7 @@ import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
 import { useOptionsStore } from '../../stores/options.ts'
-import { PollType, usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 import { ConfigBox } from '../Base/index.ts'
 import OptionsDate from '../Options/OptionsDate.vue'
@@ -68,7 +68,7 @@ onUnmounted(() => {
 
 		<ConfigBox
 			v-if="
-				pollStore.type === PollType.Date
+				pollStore.type === 'datePoll'
 				&& optionsStore.options.length
 				&& !pollStore.isClosed
 			"
@@ -80,7 +80,7 @@ onUnmounted(() => {
 		</ConfigBox>
 
 		<ConfigBox
-			v-if="pollStore.type === PollType.Date"
+			v-if="pollStore.type === 'datePoll'"
 			v-bind="configBoxProps.dateOptions">
 			<template #icon>
 				<DateOptionsIcon />
@@ -94,7 +94,7 @@ onUnmounted(() => {
 		</ConfigBox>
 
 		<ConfigBox
-			v-if="pollStore.type === PollType.Text"
+			v-if="pollStore.type === 'textPoll'"
 			v-bind="configBoxProps.textOptions">
 			<template #icon>
 				<TextOptionsIcon />

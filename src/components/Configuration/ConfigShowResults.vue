@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { RadioGroupDiv } from '../Base/index.ts'
 import { t } from '@nextcloud/l10n'
-import { usePollStore, ShowResults } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['change'])
 
@@ -14,15 +14,15 @@ const pollStore = usePollStore()
 
 const pollShowResultsOptions = [
 	{
-		value: ShowResults.Always,
+		value: 'always',
 		label: t('polls', 'Always show results'),
 	},
 	{
-		value: ShowResults.Closed,
+		value: 'closed',
 		label: t('polls', 'Hide results until poll is closed'),
 	},
 	{
-		value: ShowResults.Never,
+		value: 'never',
 		label: t('polls', 'Never show results'),
 	},
 ]
