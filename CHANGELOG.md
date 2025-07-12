@@ -12,7 +12,6 @@ All notable changes to this project will be documented in this file.
  - Added a forbidden route and page
  - Added WatchController to OCS-API
  - Sticky option headers in vote table
- - added a variant of the sticky option headers to the user settings
  - Lazy loading of participants on scroll, if too many vote cells are rendered
  - Support Nextcloud 30
 

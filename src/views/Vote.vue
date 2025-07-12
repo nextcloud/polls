@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
@@ -14,7 +14,6 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
-import { useHandleScroll } from '../composables/handleScroll.ts'
 import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -34,12 +33,14 @@ import { Event } from '../Types/index.ts'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
 const voteMainId = 'watched-scroll-area'
-const scrolled = useHandleScroll(voteMainId)
+const topObserverVisible = ref(false)
+const voteHeaderDownPage = ref(false)
 
 const loadingOverlayProps = {
 	name: t('polls', 'Loading poll…'),
@@ -94,6 +95,10 @@ const collapsibleProps = computed<CollapsibleProps>(() => ({
 	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 }))
 
+const scrolled = computed(
+	() => !topObserverVisible.value && voteHeaderDownPage.value,
+)
+
 onBeforeRouteUpdate(async () => {
 	pollStore.load()
 	emit(Event.TransitionsOff, 500)
@@ -122,11 +127,11 @@ onUnmounted(() => {
 			pollStore.viewMode,
 			voteMainId,
 			{
-				scrolled: scrolled,
+				scrolled,
 				'vote-style-beta-510': preferencesStore.user.useAlternativeStyling,
 			},
 		]">
-		<HeaderBar>
+		<HeaderBar class="sticky-top" :class="{ 'sticky-bottom-shadow': scrolled }">
 			<template #title>
 				{{ pollStore.configuration.title }}
 			</template>
@@ -139,6 +144,7 @@ onUnmounted(() => {
 		</HeaderBar>
 
 		<div class="vote_main">
+			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
 			<Collapsible
 				v-if="pollStore.configuration.description"
 				class="sticky-left"
@@ -148,7 +154,9 @@ onUnmounted(() => {
 
 			<VoteInfoCards class="sticky-left" />
 
-			<VoteTable v-show="optionsStore.options.length" />
+			<VoteTable
+				v-show="optionsStore.options.length"
+				v-model:down-page="voteHeaderDownPage" />
 
 			<NcEmptyContent
 				v-if="!optionsStore.options.length"

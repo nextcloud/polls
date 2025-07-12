@@ -7,22 +7,25 @@
 import { onBeforeUnmount, onMounted, ref } from 'vue'
 import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 
-const inViewport = ref(false)
+// const model = ref(false)
+const model = defineModel<boolean>()
+
 const observer = ref<null | IntersectionObserver>(null)
 
 const observerTarget = ref<null | Element>(null)
-const emit = defineEmits(['visible'])
+const emit = defineEmits(['visible', 'invisible'])
 
-const { loading } = defineProps<{ loading: boolean }>()
+const { loading = false } = defineProps<{ loading?: boolean }>()
 
 onMounted(() => {
 	const observer = new IntersectionObserver((entries) => {
 		entries.forEach((entry) => {
 			if (entry.isIntersecting) {
-				inViewport.value = true
+				model.value = true
 				emit('visible')
 			} else {
-				inViewport.value = false
+				model.value = false
+				emit('invisible')
 			}
 		})
 	})
@@ -40,6 +43,6 @@ onBeforeUnmount(() => {
 <template>
 	<div ref="observerTarget">
 		<NcLoadingIcon v-if="loading" :size="15" />
-		<slot v-else :in-viewport="inViewport" />
+		<slot v-else :in-viewport="model" />
 	</div>
 </template>
