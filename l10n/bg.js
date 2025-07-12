@@ -180,6 +180,8 @@ OC.L10N.register(
     "Loading" : "Зареждане",
     "Previous day" : "Вчера",
     "Next day" : "Утре",
+    "Please wait…" : "Моля, изчакайте …",
+    "Loading …" : "Зареждане …",
     "Add" : "Добавяне",
     "Propose an option" : "Предложете опция",
     "This poll is unpublished." : "Тази анкета не е публикувана.",

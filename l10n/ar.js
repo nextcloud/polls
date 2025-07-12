@@ -244,6 +244,7 @@ OC.L10N.register(
     "Click" : "أنقُر",
     "Previous day" : "أمس",
     "Next day" : "غداً",
+    "Loading …" : "التحميل جارٍ ...",
     "Add" : "إضافة",
     "The proposal period ends {timeRelative}." : "صلاحية المقترح تنتهي في {timeRelative}.",
     "Propose an option" : "اقتراح خيار",

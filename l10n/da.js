@@ -17,6 +17,8 @@ OC.L10N.register(
     "Loading" : "Indlæser",
     "Previous day" : "Forrige dag",
     "Next day" : "Næste dag",
+    "Please wait…" : "Vent venligst...",
+    "Loading …" : "Indlæser ...",
     "Add" : "Tilføj",
     "New comment …" : "Ny kommentar…",
     "Confidential" : "Fortrolig",

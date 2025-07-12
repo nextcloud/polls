@@ -552,7 +552,6 @@ OC.L10N.register(
     "Enter the amount of days, polls without activity stay in the relevant list:" : "Cuir isteach an méid laethanta, fanann pobalbhreith gan ghníomhaíocht sa liosta ábhartha:",
     "The style settings are still experimental!" : "Tá na socruithe stíl fós turgnamhach!",
     "Use alternative styling for the comments sidebar" : "Úsáid stíleanna malartacha don bharra taoibh tuairimí",
-    "Use fixed table headers" : "Úsáid ceanntásca tábla seasta",
     "Use alternative vote page styling" : "Bain úsáid as stíliú leathanaigh vótaí malartacha",
     "Calendar check" : "Seiceáil féilire",
     "Personal preferences" : "Sainroghanna pearsanta",

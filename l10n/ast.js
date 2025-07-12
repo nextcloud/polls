@@ -107,6 +107,7 @@ OC.L10N.register(
     "Loading" : "Cargando",
     "Previous day" : "Día anterior",
     "Next day" : "Día siguiente",
+    "Loading …" : "Cargando…",
     "Add" : "Amestar",
     "Propose an option" : "Proponer una opción",
     "This poll is closed." : "Esta encuesta ta zarrada.",

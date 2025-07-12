@@ -236,6 +236,7 @@ OC.L10N.register(
     "Loading" : "S'està carregant",
     "Previous day" : "Dia anterior",
     "Next day" : "Dia següent",
+    "Loading …" : "S'està carregant…",
     "Add" : "Afegeix",
     "The proposal period ends {timeRelative}." : "El període de propostes acaba el {timeRelative}",
     "Propose an option" : "Proposa una opció",

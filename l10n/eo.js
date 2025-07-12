@@ -14,6 +14,7 @@ OC.L10N.register(
     "Register" : "Registriĝi",
     "Unknown error" : "Nekonata eraro",
     "Loading" : "Ŝargado",
+    "Loading …" : "Ŝargado...",
     "Add" : "Aldoni",
     "New comment …" : "Nova komento...",
     "Delete comment" : "Forigi komenton",

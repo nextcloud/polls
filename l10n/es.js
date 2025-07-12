@@ -257,6 +257,7 @@ OC.L10N.register(
     "Next day" : "Día siguiente",
     "minus" : "menos",
     "plus" : "mas",
+    "Loading …" : "Cargando …",
     "Possible calendar conflicts" : "Posibles conflictos de calendario",
     "Add" : "Añadir",
     "You are asked to propose more options." : "Se le pide que proponga más opciones.",
