@@ -20,6 +20,7 @@ use OCA\Polls\Event\OptionDeletedEvent;
 use OCA\Polls\Event\OptionUnconfirmedEvent;
 use OCA\Polls\Event\OptionUpdatedEvent;
 use OCA\Polls\Event\PollOptionReorderedEvent;
+use OCA\Polls\Exceptions\ForbiddenException;
 use OCA\Polls\Exceptions\InvalidPollTypeException;
 use OCA\Polls\Model\Sequence;
 use OCA\Polls\Model\SimpleOption;
@@ -115,8 +116,6 @@ class OptionService {
 		$newOption = new Option();
 		$newOption->setPollId($pollId);
 		$newOption->setFromSimpleOption($simpleOption);
-		$newOption->syncOption();
-		$newOption->setDeleted(0);
 
 		if (!$this->poll->getIsPollOwner()) {
 			$newOption->setOwner($this->userSession->getCurrentUserId());
@@ -200,7 +199,7 @@ class OptionService {
 		$option = $this->optionMapper->find($optionId);
 
 		if (!$option->getCurrentUserIsEntityUser()) {
-			$this->pollMapper->find($option->getPollId())->request(Poll::PERMISSION_OPTION_DELETE);
+			$this->pollMapper->get($option->getPollId(), withRoles: true)->request(Poll::PERMISSION_OPTION_DELETE);
 		}
 
 		$option->setDeleted($restore ? 0 : time());
@@ -242,7 +241,7 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function sequence(int|Option $optionOrOptionId, Sequence $sequence, bool $voteYes = false): array {
-		if ($sequence->getRepetitions() < 1 || $sequence->getStepWidth() < 1) {
+		if ($sequence->getRepetitions() < 1) {
 			return [];
 		}
 
@@ -261,23 +260,34 @@ class OptionService {
 		$sequence->setTimeZone(new DateTimeZone($this->userSession->getClientTimeZone()));
 		$sequence->setBaseTimeStamp($baseOption->getTimestamp());
 
-		$insertedOptions = [];
 		// iterate over the amount of options to create
 		for ($i = 1; $i <= ($sequence->getRepetitions()); $i++) {
 			// build a new option
-			$clonedOption = new SimpleOption(
-				'',
-				$sequence->getOccurence($i),
-				$baseOption->getDuration(),
+			$this->add(
+				$baseOption->getPollId(),
+				new SimpleOption(
+					'',
+					$sequence->getOccurence($i),
+					$baseOption->getDuration(),
+				),
+				$voteYes
 			);
-
-			$insertedOptions[] = $this->add($baseOption->getPollId(), $clonedOption, $voteYes);
 		}
 
 		$this->eventDispatcher->dispatchTyped(new OptionCreatedEvent($baseOption));
 
-		// return the list of new options
-		return $insertedOptions;
+		// return list of all options of the poll
+		return $this->optionMapper->findByPoll($this->poll->getId());
+	}
+
+	private function countProposals(array $options): int {
+		$count = 0;
+		foreach ($options as $option) {
+			if ($option->getOwner()) {
+				$count++;
+			}
+		}
+		return $count;
 	}
 
 	/**
@@ -288,14 +298,19 @@ class OptionService {
 	 * @psalm-return array<array-key, Option>
 	 */
 	public function shift(int $pollId, int $step, string $unit): array {
-		$this->getPoll($pollId, Poll::PERMISSION_OPTIONS_SHIFT);
-		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
+		$this->getPoll($pollId);
 
 		if ($this->poll->getType() !== Poll::TYPE_DATE) {
 			throw new InvalidPollTypeException('Shifting is only available in date polls');
 		}
 
 		$options = $this->optionMapper->findByPoll($pollId);
+
+		if ($this->countProposals($options) > 0) {
+			throw new ForbiddenException('dates is not allowed');
+		}
+
+		$timezone = new DateTimeZone($this->userSession->getClientTimeZone());
 
 		if ($step > 0) {
 			// start from last item if moving option into the future
@@ -315,8 +330,8 @@ class OptionService {
 	 * Copy options from $fromPoll to $toPoll
 	 */
 	public function clone(int $fromPollId, int $toPollId): void {
-		$this->pollMapper->find($fromPollId)->request(Poll::PERMISSION_POLL_VIEW);
-		$this->pollMapper->find($toPollId)->request(Poll::PERMISSION_OPTION_ADD);
+		$this->pollMapper->get($fromPollId, withRoles: true)->request(Poll::PERMISSION_POLL_VIEW);
+		$this->pollMapper->get($toPollId, withRoles: true)->request(Poll::PERMISSION_OPTION_ADD);
 
 		foreach ($this->optionMapper->findByPoll($fromPollId) as $origin) {
 			$option = new Option();
@@ -426,7 +441,9 @@ class OptionService {
 	 * @return void
 	 */
 	private function getPoll(int $pollId, string $permission = Poll::PERMISSION_POLL_VIEW): void {
-		$this->poll = $this->pollMapper->find($pollId);
+		if ($this->poll->getId() !== $pollId) {
+			$this->poll = $this->pollMapper->get($pollId, withRoles: true);
+		}
 		$this->poll->request($permission);
 	}
 

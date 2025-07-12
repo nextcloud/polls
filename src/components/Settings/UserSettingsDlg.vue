@@ -14,7 +14,6 @@ import {
 	CalendarSettings,
 	FeatureSettings,
 	StyleSettings,
-	PerformanceSettings,
 } from './UserSettings/index.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 import { Event } from '../../Types/index.ts'
@@ -52,12 +51,6 @@ onUnmounted(() => {
 			id="div-settings"
 			:name="t('polls', 'Personal preferences')">
 			<FeatureSettings />
-		</NcAppSettingsSection>
-
-		<NcAppSettingsSection
-			id="performance"
-			:name="t('polls', 'Performance settings')">
-			<PerformanceSettings />
 		</NcAppSettingsSection>
 
 		<NcAppSettingsSection id="styles" :name="t('polls', 'Styles')">

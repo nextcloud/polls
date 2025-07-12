@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
 import { showError } from '@nextcloud/dialogs'
 import { emit } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
@@ -30,9 +30,9 @@ import ArchivedPollsIcon from 'vue-material-design-icons/Archive.vue'
 import GoToIcon from 'vue-material-design-icons/ArrowRight.vue'
 import GroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
-import { Logger } from '../helpers/index.ts'
 import PollCreateDlg from '../components/Create/PollCreateDlg.vue'
 import { FilterType, usePollsStore } from '../stores/polls.ts'
+import { usePollGroupsStore } from '../stores/pollGroups.ts'
 import { useSessionStore } from '../stores/session.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
@@ -43,6 +43,7 @@ import { NcAppNavigationSpacer } from '@nextcloud/vue'
 const router = useRouter()
 
 const pollsStore = usePollsStore()
+const pollGroupsStore = usePollGroupsStore()
 const sessionStore = useSessionStore()
 const preferencesStore = usePreferencesStore()
 
@@ -95,18 +96,6 @@ const createDlgToggle = ref(false)
  */
 function getIconComponent(iconId: FilterType) {
 	return icons[iconId].iconComponent
-}
-
-/**
- *
- */
-function loadPolls() {
-	try {
-		Logger.debug('Loading polls in navigation')
-		pollsStore.load()
-	} catch {
-		showError(t('polls', 'Error loading poll list'))
-	}
 }
 
 /**
@@ -168,18 +157,24 @@ async function pollAdded(payLoad: { id: number; title: string }) {
 }
 
 onMounted(() => {
-	loadPolls()
+	pollsStore.load(false)
 })
 </script>
 
 <template>
 	<NcAppNavigation>
 		<ActionAddPoll
-			v-if="preferencesStore.useActionAddPollInNavigation"
+			v-if="
+				preferencesStore.useActionAddPollInNavigation
+				&& sessionStore.appPermissions.pollCreation
+			"
 			:button-mode="ButtonMode.Navigation" />
 
 		<NcAppNavigationNew
-			v-if="preferencesStore.useNcAppNavigationNew"
+			v-else-if="
+				preferencesStore.useNcAppNavigationNew
+				&& sessionStore.appPermissions.pollCreation
+			"
 			button-class="icon-add"
 			:text="t('polls', 'New poll')"
 			@click="createDlgToggle = !createDlgToggle" />
@@ -190,11 +185,11 @@ onMounted(() => {
 
 		<template #list>
 			<NcAppNavigationItem
-				v-for="pollGroup in pollsStore.pollGroupsSorted"
+				v-for="pollGroup in pollGroupsStore.pollGroupsSorted"
 				:key="pollGroup.id"
-				:name="pollGroup.title"
+				:name="pollGroup.name"
 				:title="pollGroup.titleExt"
-				:allow-collapse="sessionStore.appSettings.navigationPollsInList"
+				allow-collapse
 				:to="{
 					name: 'group',
 					params: { slug: pollGroup.slug },
@@ -204,7 +199,10 @@ onMounted(() => {
 					<GroupIcon :size="iconSize" />
 				</template>
 				<template #counter>
-					<NcCounterBubble :count="pollGroup.pollIds.length" />
+					<NcCounterBubble
+						:count="
+							pollGroupsStore.countPollsInPollGroups[pollGroup.id]
+						" />
 				</template>
 				<ul v-if="sessionStore.appSettings.navigationPollsInList">
 					<PollNavigationItems
@@ -234,7 +232,7 @@ onMounted(() => {
 					</NcAppNavigationItem>
 				</ul>
 			</NcAppNavigationItem>
-			<NcAppNavigationSpacer v-if="pollsStore.pollGroups.length" />
+			<NcAppNavigationSpacer v-if="pollGroupsStore.pollGroups.length" />
 			<NcAppNavigationItem
 				v-for="pollCategory in pollsStore.navigationCategories"
 				:key="pollCategory.id"

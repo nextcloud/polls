@@ -16,7 +16,14 @@ import { emit } from '@nextcloud/event-bus'
 
 import { Logger } from '../helpers/index.ts'
 import { PublicAPI, PollsAPI } from '../Api/index.ts'
-import { createDefault, Event, User, UserType } from '../Types/index.ts'
+import {
+	Chunking,
+	createDefault,
+	Event,
+	StatusResults,
+	User,
+	UserType,
+} from '../Types/index.ts'
 
 import { usePreferencesStore, ViewMode } from './preferences.ts'
 import { useVotesStore, Answer } from './votes.ts'
@@ -73,6 +80,11 @@ export enum SortParticipants {
 	Unordered = 'unordered',
 }
 
+type Meta = {
+	chunking: Chunking
+	status: StatusResults
+}
+
 export type PollConfiguration = {
 	access: AccessType
 	allowComment: boolean
@@ -104,9 +116,7 @@ export type PollStatus = {
 	relevantThreshold: number
 	deletionDate: number
 	archivedDate: number
-	countOptions: number
 	countParticipants: number
-	countProposals: number
 }
 
 export type PollPermissions = {
@@ -125,7 +135,6 @@ export type PollPermissions = {
 	reorderOptions: boolean
 	seeResults: boolean
 	seeUsernames: boolean
-	shiftOptions: boolean
 	subscribe: boolean
 	takeOver: boolean
 	view: boolean
@@ -133,7 +142,6 @@ export type PollPermissions = {
 }
 
 export type CurrentUserStatus = {
-	countVotes: number
 	groupInvitations: string[]
 	isInvolved: boolean
 	isLocked: boolean
@@ -144,7 +152,10 @@ export type CurrentUserStatus = {
 	shareToken: string
 	userId: string
 	userRole: UserType
+	countVotes: number
 	yesVotes: number
+	noVotes: number
+	maybeVotes: number
 }
 
 export type Poll = {
@@ -160,6 +171,7 @@ export type Poll = {
 	permissions: PollPermissions
 	revealParticipants: boolean
 	sortParticipants: SortParticipants
+	meta: Meta
 }
 
 const markedPrefix = {
@@ -204,12 +216,9 @@ export const usePollStore = defineStore('poll', {
 			relevantThreshold: 0,
 			deletionDate: 0,
 			archivedDate: 0,
-			countOptions: 0,
 			countParticipants: 0,
-			countProposals: 0,
 		},
 		currentUserStatus: {
-			countVotes: 0,
 			groupInvitations: [],
 			isInvolved: false,
 			isLocked: false,
@@ -220,7 +229,10 @@ export const usePollStore = defineStore('poll', {
 			shareToken: '',
 			userId: '',
 			userRole: UserType.None,
+			countVotes: 0,
 			yesVotes: 0,
+			noVotes: 0,
+			maybeVotes: 0,
 		},
 		permissions: {
 			addOptions: false,
@@ -236,7 +248,6 @@ export const usePollStore = defineStore('poll', {
 			delete: false,
 			edit: false,
 			reorderOptions: false,
-			shiftOptions: false,
 			seeResults: false,
 			seeUsernames: false,
 			subscribe: false,
@@ -246,6 +257,13 @@ export const usePollStore = defineStore('poll', {
 		},
 		revealParticipants: false,
 		sortParticipants: SortParticipants.Alphabetical,
+		meta: {
+			chunking: {
+				size: 0,
+				loaded: 0,
+			},
+			status: StatusResults.Loaded,
+		},
 	}),
 
 	getters: {
@@ -272,10 +290,10 @@ export const usePollStore = defineStore('poll', {
 		safeParticipants(): User[] {
 			const sessionStore = useSessionStore()
 			const votesStore = useVotesStore()
-			if (this.getSafeTable || this.viewMode === ViewMode.ListView) {
+			if (this.viewMode === ViewMode.ListView) {
 				return [sessionStore.currentUser]
 			}
-			return votesStore.sortedParticipants
+			return votesStore.getChunkedParticipants
 		},
 
 		getProposalsOptions(): {
@@ -349,37 +367,6 @@ export const usePollStore = defineStore('poll', {
 			)
 		},
 
-		getSafeTable(state): boolean {
-			const preferencesStore = usePreferencesStore()
-			return (
-				!state.revealParticipants
-				&& this.countCells > preferencesStore.user.performanceThreshold
-			)
-		},
-
-		// count the number of participants (including current user, if has not voted yet)
-		countParticipants(): number {
-			const votesStore = useVotesStore()
-			return votesStore.sortedParticipants.length
-		},
-
-		countHiddenParticipants(): number {
-			const votesStore = useVotesStore()
-			return (
-				votesStore.sortedParticipants.length - this.safeParticipants.length
-			)
-		},
-
-		// count the number of safe participants (including current user, if has not voted yet)
-		countSafeParticipants(): number {
-			return this.safeParticipants.length
-		},
-
-		countCells(): number {
-			const optionsStore = useOptionsStore()
-			return this.countParticipants * optionsStore.count
-		},
-
 		descriptionMarkDown(): string {
 			marked.use(gfmHeadingId(markedPrefix))
 			return DOMPurify.sanitize(
@@ -414,23 +401,28 @@ export const usePollStore = defineStore('poll', {
 			optionsStore.$reset()
 			sharesStore.$reset()
 			commentsStore.$reset()
-			subscriptionStore.$reset()
+			subscriptionStore.reset()
 		},
 
-		async load(): Promise<void> {
+		async load(pollId: number | null = null): Promise<void> {
 			const votesStore = useVotesStore()
 			const sessionStore = useSessionStore()
 			const optionsStore = useOptionsStore()
 			const sharesStore = useSharesStore()
 			const commentsStore = useCommentsStore()
 			const subscriptionStore = useSubscriptionStore()
+
+			this.meta.status = StatusResults.Loading
+
 			try {
 				const response = await (() => {
 					if (sessionStore.route.name === 'publicVote') {
 						return PublicAPI.getPoll(sessionStore.route.params.token)
 					}
 					if (sessionStore.route.name === 'vote') {
-						return PollsAPI.getFullPoll(sessionStore.currentPollId)
+						return PollsAPI.getFullPoll(
+							pollId ?? sessionStore.currentPollId,
+						)
 					}
 					return null
 				})()
@@ -441,15 +433,18 @@ export const usePollStore = defineStore('poll', {
 				}
 
 				this.$patch(response.data.poll)
-				votesStore.list = response.data.votes
-				optionsStore.list = response.data.options
-				sharesStore.list = response.data.shares
-				commentsStore.list = response.data.comments
+				votesStore.votes = response.data.votes
+				optionsStore.options = response.data.options
+				sharesStore.shares = response.data.shares
+				commentsStore.comments = response.data.comments
 				subscriptionStore.subscribed = response.data.subscribed
+
+				this.meta.status = StatusResults.Loaded
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
 				}
+				this.meta.status = StatusResults.Error
 				Logger.error('Error loading poll', { error })
 				throw error
 			}

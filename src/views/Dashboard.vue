@@ -31,12 +31,11 @@ const pollsStore = usePollsStore()
  */
 function loadPolls(): void {
 	Logger.debug('Loading polls in dashboard widget')
-	pollsStore
-		.load()
-		.then(() => null)
-		.catch(() => {
-			showError(t('polls', 'Error loading poll list'))
-		})
+	try {
+		pollsStore.load()
+	} catch (error) {
+		showError(t('polls', 'Error setting dashboard list'))
+	}
 }
 
 onMounted(() => {

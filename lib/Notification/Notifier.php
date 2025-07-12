@@ -77,9 +77,9 @@ class Notifier implements INotifier {
 	 */
 	private function extractPoll(INotification $notification): Poll {
 		if ($notification->getObjectType() !== 'poll') {
+			// probably an 'activity_notification' notification
 			$pollId = $this->extractParameters($notification)['id'] ?? null;
 		} else {
-			// probably an 'activity_notification' notification
 			$pollId = $notification->getObjectId();
 		}
 		return $this->pollMapper->get(intval($pollId));
@@ -88,11 +88,11 @@ class Notifier implements INotifier {
 	private function extractActorId(INotification $notification): ?string {
 		// actor is set in the subject parameters
 		$parameters = $this->extractParameters($notification);
-		if (isset($parameters['actor']) && is_string($parameters['actor'])) {
+		if (isset($parameters['actor']) && $parameters['actor'] !== '') {
 			return $parameters['actor'];
 		}
 		// fallback to owner, if no actor is set
-		if (isset($parameters['owner']) && is_string($parameters['owner'])) {
+		if (isset($parameters['owner']) && $parameters['owner'] !== '') {
 			return $parameters['owner'];
 		}
 		return null;
@@ -150,7 +150,7 @@ class Notifier implements INotifier {
 				self::SUBJECT_RICH => $l->t('{actor} took over your poll "%s" and is the new owner.', $pollTitle),
 			],
 			self::NOTIFY_POLL_CHANGED_OWNER => [
-				self::SUBJECT_PARSED => $l->t('%s is the new owner of your poll. ', $parameters['newOwner']),
+				self::SUBJECT_PARSED => $l->t('%s is the new owner of your poll.', $parameters['newOwner']),
 				self::SUBJECT_RICH => $l->t('{actor} transfered your poll "%s" to {newOwner}. You are no more the owner.', $pollTitle),
 			],
 			self::NOTIFY_POLL_DELETED_BY_OTHER => [
@@ -163,6 +163,11 @@ class Notifier implements INotifier {
 			],
 			// Unknown subject => Unknown notification => throw
 			default => throw new UnknownNotificationException(),
+			// for debugging purposes, uncomment to see the default subject
+			// default => [
+			// 	self::SUBJECT_PARSED => $l->t('ohoh ', $actor->getDisplayName()),
+			// 	self::SUBJECT_RICH => $l->t('{actor} unknown notification "%s".', $pollTitle),
+			// ],
 		};
 
 		switch ($notification->getSubject()) {
@@ -170,7 +175,7 @@ class Notifier implements INotifier {
 				$newOwner = $this->userMapper->getUserFromUserBase($parameters['newOwner']);
 				// overwrite the subject with the new owner
 				$notification->setParsedSubject(
-					$l->t('%s is the new owner of your poll. ', $newOwner->getDisplayName())
+					$l->t('%s is the new owner of your poll.', $newOwner->getDisplayName())
 				);
 
 				$notification->setRichSubject(

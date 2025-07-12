@@ -6,6 +6,58 @@
 All notable changes to this project will be documented in this file.
 ##
 
+## [8.1.0] - tbd
+### New
+ - Added user shares to poll groups
+ - Added a forbidden route and page
+ - Added WatchController to OCS-API
+ - Sticky option headers in vote table
+ - Lazy loading of participants on scroll, if too many vote cells are rendered
+ - Support Nextcloud 30
+
+### Changes
+ - Optimized janitor cron
+ - Optimized rebuild command
+ - Optimized poll loading by migrating subqueries to join (#3692)
+ - Accelerated loading performance of polls
+ - Separated pollGroups from polls (Store, Service, Mapper, ...)
+ - Catch CronJob runs and report as error, but avoid crash at higher thread levels
+ - Changed poll loading triggers (mainly navigation affected)
+ - Added some status to the watchWorker
+ - removed performance user setting in favor of lazy loading participants
+ - reduce noise by avoiding toasts for obvious changes
+
+### Fixes
+ - Fixed broken endpoint for manually calling autoReminderCron
+ - fix avatar foreground color
+
+## [8.0.6] - 2025-07-03
+### Changes (8.0.6)
+ - terminate webworker in background tabs
+ - fix cloning of date options
+
+### Changes (8.0.0)
+ - Migration to Vue 3 and Pinia
+ - Change Circles to Teams
+ - Change sortable component
+ - Preparation for voting variants
+
+### New (8.0.0)
+ - New dialog for creation of datetime options in date polls
+ - Added option to automatically set all added options to yes
+ - Locked anonymous mode
+ - Restricted poll owners
+ - Redesign of poll lists
+ - Changed controls of numeric inputs
+ - Auto delete archived polls after configurable days
+ - Configuration for using the Nextcloud default footer in public polls
+ - Delete polls without the need to archive them first
+ - Collapsible poll description
+ - Transfer polls to another owner by the current poll owner or the administration
+ - Added reference provider for link previews and smart picker
+ - Added confidential comments for comments only visible by the author and the current poll owner
+ - Create and manage poll groups for better poll management
+
 ## [8.0.4] - 2025-06-22
 ### Fix (8.0.4)
  - Fixed malformatted activity stream messages

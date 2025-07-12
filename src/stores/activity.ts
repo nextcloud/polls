@@ -25,12 +25,12 @@ export type Activity = {
 }
 
 export type Activities = {
-	list: Activity[]
+	activities: Activity[]
 }
 
 export const useActivityStore = defineStore('activity', {
 	state: (): Activities => ({
-		list: [],
+		activities: [],
 	}),
 
 	actions: {
@@ -40,7 +40,7 @@ export const useActivityStore = defineStore('activity', {
 				const response = await ActivityAPI.getActivities(
 					sessionStore.currentPollId,
 				)
-				this.list = response.data.ocs.data
+				this.activities = response.data.ocs.data
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return
@@ -54,7 +54,7 @@ export const useActivityStore = defineStore('activity', {
 		getActivitiesForPoll(state): Activity[] {
 			const sessionStore = useSessionStore()
 			// TODO: Learn: Why is activity.object_id === sessionStore.currentPollId always false?
-			return state.list.filter(
+			return state.activities.filter(
 				(activity: Activity) =>
 					activity.object_type === 'poll'
 					&& activity.object_id - sessionStore.currentPollId === 0,

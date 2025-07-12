@@ -64,7 +64,7 @@ class Add extends Base {
 		$emails = $input->getOption('email');
 
 		try {
-			$poll = $this->pollMapper->find($pollId);
+			$poll = $this->pollMapper->get($pollId);
 		} catch (DoesNotExistException $e) {
 			$output->writeln('<error>Poll not found.</error>');
 			return 1;

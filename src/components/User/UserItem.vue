@@ -20,6 +20,7 @@ import GroupIcon from 'vue-material-design-icons/AccountMultiple.vue'
 import CircleIcon from 'vue-material-design-icons/GoogleCirclesExtended.vue'
 import DeletedUserIcon from 'vue-material-design-icons/AccountOff.vue'
 import AnoymousIcon from 'vue-material-design-icons/Incognito.vue'
+import PollGroupIcon from 'vue-material-design-icons/CodeBraces.vue'
 
 import { User, UserType, VirtualUserItemType } from '../../Types/index.ts'
 
@@ -46,6 +47,7 @@ interface Props {
 	typeIconSize?: number
 	hideStatus?: boolean
 	condensed?: boolean
+	delegatedFromGroup?: boolean
 }
 
 const {
@@ -82,6 +84,7 @@ const {
 	typeIconSize = 16,
 	hideStatus = false,
 	condensed = false,
+	delegatedFromGroup = false,
 } = defineProps<Props>()
 
 const route = useRoute()
@@ -117,6 +120,9 @@ const typeComputed = computed<UserType | VirtualUserItemType>(
 const descriptionComputed = computed(() => {
 	if (condensed) {
 		return ''
+	}
+	if (delegatedFromGroup) {
+		return t('polls', 'Poll group access')
 	}
 	if (deletedState) {
 		return t('polls', '(deleted)')
@@ -260,15 +266,19 @@ function showMenu() {
 				:size="typeIconSize"
 				class="type-icon" />
 			<ContactIcon
-				v-if="showTypeIcon && typeComputed === UserType.Contact"
+				v-else-if="showTypeIcon && typeComputed === UserType.Contact"
 				:size="typeIconSize"
 				class="type-icon" />
 			<EmailIcon
-				v-if="showTypeIcon && typeComputed === UserType.Email"
+				v-else-if="showTypeIcon && typeComputed === UserType.Email"
 				:size="typeIconSize"
 				class="type-icon" />
 			<ShareIcon
-				v-if="showTypeIcon && typeComputed === UserType.Email"
+				v-else-if="showTypeIcon && typeComputed === UserType.External"
+				:size="typeIconSize"
+				class="type-icon" />
+			<PollGroupIcon
+				v-else-if="showTypeIcon && delegatedFromGroup"
 				:size="typeIconSize"
 				class="type-icon" />
 		</div>
@@ -325,6 +335,7 @@ function showMenu() {
 .user-item__avatar .material-design-icon {
 	background-color: var(--color-primary-element);
 	border-radius: 50%;
+	color: var(--color-primary-element-text);
 }
 
 .user-item__name {

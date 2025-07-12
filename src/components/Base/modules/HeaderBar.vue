@@ -42,19 +42,18 @@ function toggleClamp() {
 	display: none;
 }
 
-.scrolled .header_bar {
-	box-shadow: 6px 6px 6px var(--color-box-shadow);
-}
-
 .header_bar {
 	position: sticky;
 	top: 0;
 	margin-inline: -8px;
 	padding-inline: 56px 8px;
 	background-color: var(--color-main-background);
-	border-bottom: 1px solid var(--color-border);
 	z-index: 9;
 	transition: all var(--animation-slow) linear;
+
+	&::after {
+		border-top: 1px solid var(--color-border);
+	}
 
 	.header_bar_top {
 		display: flex;

@@ -47,10 +47,14 @@ class VoteMapper extends QBMapperWithUser {
 	 * @return Vote[]
 	 * @psalm-return array<array-key, Vote>
 	 */
-	public function getAll(): array {
+	public function getAll(bool $includeNull = false): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')->from($this->getTableName());
+
+		if (!$includeNull) {
+			$qb->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
+		}
 		return $this->findEntities($qb);
 	}
 
@@ -155,7 +159,9 @@ class VoteMapper extends QBMapperWithUser {
 	 */
 	protected function find(int $id): Vote {
 		$qb = $this->buildQuery();
-		$qb->andWhere($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)))
+			->andWhere($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
+
 		try {
 			return $this->findEntity($qb);
 		} catch (DoesNotExistException $e) {
@@ -174,15 +180,16 @@ class VoteMapper extends QBMapperWithUser {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select(self::TABLE . '.*')
+			->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'))
 			->from($this->getTableName(), self::TABLE)
 			->groupBy(self::TABLE . '.id');
 
 		$optionAlias = $this->joinOption($qb, self::TABLE);
 
 		if ($findOrphaned) {
-			$qb->where($qb->expr()->isNull($optionAlias . '.id'));
+			$qb->andWhere($qb->expr()->isNull($optionAlias . '.id'));
 		} else {
-			$qb->where($qb->expr()->isNotNull($optionAlias . '.id'));
+			$qb->andWhere($qb->expr()->isNotNull($optionAlias . '.id'));
 		}
 		$this->joinAnon($qb, self::TABLE);
 		$this->joinShareRole($qb, self::TABLE, $currentUserId);
@@ -195,8 +202,11 @@ class VoteMapper extends QBMapperWithUser {
 	 * Joins options to restrict query to votes with actually undeleted options
 	 * Avoid orphaned votes
 	 */
-	protected function joinOption(IQueryBuilder &$qb, string $fromAlias): string {
-		$joinAlias = 'options';
+	protected function joinOption(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'options',
+	): string {
 
 		$qb->selectAlias($joinAlias . '.id', 'option_id')
 			->addGroupBy($joinAlias . '.id');

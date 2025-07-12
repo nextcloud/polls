@@ -54,14 +54,6 @@ const preferencesStore = usePreferencesStore()
 		</div>
 		<div class="user_settings">
 			<NcCheckboxRadioSwitch
-				v-model="preferencesStore.user.useFixedTableHeader"
-				type="switch"
-				@update:model-value="preferencesStore.write()">
-				{{ t('polls', 'Use fixed table headers') }}
-			</NcCheckboxRadioSwitch>
-		</div>
-		<div class="user_settings">
-			<NcCheckboxRadioSwitch
 				v-model="preferencesStore.user.useAlternativeStyling"
 				type="switch"
 				@update:model-value="preferencesStore.write()">

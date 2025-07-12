@@ -75,7 +75,7 @@ class AdminController extends BaseController {
 	/**
 	 * Run auto reminder job
 	 */
-	#[FrontpageRoute(verb: 'GET', url: '/administration/autoReminder/run')]
+	#[FrontpageRoute(verb: 'GET', url: '/administration/autoreminder/run')]
 	public function runAutoReminderJob(): JSONResponse {
 		return $this->response(fn () => $this->autoReminderCron->manuallyRun());
 	}

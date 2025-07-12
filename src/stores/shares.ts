@@ -10,6 +10,7 @@ import { useSessionStore } from './session.ts'
 import { User } from '../Types/index.ts'
 import { AxiosError } from '@nextcloud/axios'
 import { SentResults } from '../Api/modules/shares.ts'
+import { usePollGroupsStore } from './pollGroups.ts'
 
 export enum ShareType {
 	Email = 'email',
@@ -29,12 +30,16 @@ export enum PublicPollEmailConditions {
 	Optional = 'optional',
 	Disabled = 'disabled',
 }
+
+export type SharePurpose = 'poll' | 'pollGroup'
+
 export type Share = {
 	displayName: string
 	id: string
 	invitationSent: boolean
 	locked: boolean
 	pollId: number | null
+	groupId: number | null
 	token: string
 	type: ShareType
 	emailAddress: string
@@ -49,12 +54,12 @@ export type Share = {
 }
 
 export type Shares = {
-	list: Share[]
+	shares: Share[]
 }
 
 export const useSharesStore = defineStore('shares', {
 	state: (): Shares => ({
-		list: [],
+		shares: [],
 	}),
 
 	getters: {
@@ -73,7 +78,7 @@ export const useSharesStore = defineStore('shares', {
 				ShareType.Admin,
 				ShareType.Public,
 			]
-			return state.list.filter(
+			return state.shares.filter(
 				(share) =>
 					!share.locked
 					&& (directShareTypes.includes(share.type)
@@ -84,9 +89,9 @@ export const useSharesStore = defineStore('shares', {
 			)
 		},
 
-		locked: (state) => state.list.filter((share) => !!share.locked),
+		locked: (state) => state.shares.filter((share) => !!share.locked),
 		unsentInvitations: (state) =>
-			state.list.filter(
+			state.shares.filter(
 				(share) =>
 					(share.user.emailAddress
 						|| share.type === ShareType.Group
@@ -97,40 +102,75 @@ export const useSharesStore = defineStore('shares', {
 					&& !share.voted,
 			),
 		public: (state) =>
-			state.list.filter((share) => share.type === ShareType.Public),
-		hasShares: (state) => state.list.length > 0,
+			state.shares.filter((share) => share.type === ShareType.Public),
+		hasShares: (state) => state.shares.length > 0,
 		hasLocked() {
 			return this.locked.length > 0
 		},
 	},
 
 	actions: {
-		async load(): Promise<void> {
-			const sessionStore = useSessionStore()
+		async load(purpose: SharePurpose = 'poll'): Promise<void> {
+			let pollOrPollGroupId: number = 0
+
+			if (purpose === 'pollGroup') {
+				const pollGroupsStore = usePollGroupsStore()
+				Logger.info('Loading group shares')
+				// For group shares, we need to use the current poll group ID
+
+				if (!pollGroupsStore.currentPollGroup) {
+					throw new Error('Current group is not set')
+				}
+				pollOrPollGroupId = pollGroupsStore.currentPollGroup.id
+			} else {
+				Logger.info('Loading poll shares')
+				// For regular poll shares, we use the current poll ID
+				const sessionStore = useSessionStore()
+				pollOrPollGroupId = sessionStore.currentPollId
+			}
+
 			try {
 				const response = await SharesAPI.getShares(
-					sessionStore.currentPollId,
+					pollOrPollGroupId,
+					purpose,
 				)
-				this.list = response.data.shares
+				this.shares = response.data.shares
 			} catch (error) {
 				this.handleError(error, 'Error loading shares', {
-					pollId: sessionStore.currentPollId,
+					pollId: pollOrPollGroupId,
 				})
 			}
 		},
 
-		async add(user: User): Promise<void> {
-			const sessionStore = useSessionStore()
+		async add(user: User, purpose: SharePurpose = 'poll'): Promise<void> {
+			let pollOrPollGroupId: number = 0
+
+			if (purpose === 'pollGroup') {
+				const pollGroupsStore = usePollGroupsStore()
+				// For group shares, we need to use the current poll group ID
+
+				if (!pollGroupsStore.currentPollGroup) {
+					throw new Error('Current group is not set')
+				}
+
+				pollOrPollGroupId = pollGroupsStore.currentPollGroup.id
+			} else {
+				// For regular poll shares, we use the current poll ID
+				const sessionStore = useSessionStore()
+				pollOrPollGroupId = sessionStore.currentPollId
+			}
 
 			try {
 				const response = await SharesAPI.addUserShare(
-					sessionStore.currentPollId,
+					pollOrPollGroupId,
 					user,
+					purpose,
 				)
-				this.list.push(response.data.share)
+				this.shares.push(response.data.share)
 			} catch (error) {
 				this.handleError(error, 'Error adding user share', {
-					pollId: sessionStore.currentPollId,
+					purpose,
+					id: pollOrPollGroupId,
 					payload: user,
 				})
 			}
@@ -142,7 +182,7 @@ export const useSharesStore = defineStore('shares', {
 				const response = await SharesAPI.addPublicShare(
 					sessionStore.currentPollId,
 				)
-				this.list.push(response.data.share)
+				this.shares.push(response.data.share)
 			} catch (error) {
 				this.handleError(error, 'Error adding public share', {
 					pollId: sessionStore.currentPollId,
@@ -151,10 +191,10 @@ export const useSharesStore = defineStore('shares', {
 		},
 
 		update(payload: { share: Share }): void {
-			const foundIndex = this.list.findIndex(
+			const foundIndex = this.shares.findIndex(
 				(share: Share) => share.id === payload.share.id,
 			)
-			Object.assign(this.list[foundIndex], payload.share)
+			Object.assign(this.shares[foundIndex], payload.share)
 		},
 
 		async switchAdmin(payload: { share: Share }): Promise<void> {

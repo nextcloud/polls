@@ -24,7 +24,7 @@ class Subscription extends Entity implements JsonSerializable {
 	public const TABLE = 'polls_notif';
 
 	// schema columns
-	public $id = null;
+	public $id;
 	protected int $pollId = 0;
 	protected string $userId = '';
 
@@ -33,6 +33,7 @@ class Subscription extends Entity implements JsonSerializable {
 
 
 	public function __construct() {
+		$this->addType('id', 'integer');
 		$this->addType('pollId', 'integer');
 	}
 

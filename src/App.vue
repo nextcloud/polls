@@ -11,13 +11,14 @@ import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 import NcContent from '@nextcloud/vue/components/NcContent'
 
 import UserSettingsDlg from './components/Settings/UserSettingsDlg.vue'
-import LoadingOverlay from './components/Base/modules/LoadingOverlay.vue'
 
 import { usePollWatcher } from './composables/usePollWatcher'
 
 import { useSessionStore } from './stores/session.ts'
 import { usePollStore } from './stores/poll.ts'
+import { usePollGroupsStore } from './stores/pollGroups.ts'
 import { showSuccess } from '@nextcloud/dialogs'
+import { Event } from './Types/index.ts'
 
 import '@nextcloud/dialogs/style.css'
 import './assets/scss/vars.scss'
@@ -25,15 +26,15 @@ import './assets/scss/hacks.scss'
 import './assets/scss/print.scss'
 import './assets/scss/transitions.scss'
 import './assets/scss/markdown.scss'
-import { Event } from './Types/index.ts'
+import './assets/scss/globals.scss'
 
 usePollWatcher()
 
 const sessionStore = useSessionStore()
 const pollStore = usePollStore()
+const pollGroupsStore = usePollGroupsStore()
 
 const transitionClass = ref('transitions-active')
-const loading = ref(false)
 
 const appClass = computed(() => [
 	transitionClass.value,
@@ -47,7 +48,10 @@ const useSidebar = computed(
 	() =>
 		pollStore.permissions.edit
 		|| pollStore.permissions.comment
-		|| sessionStore.route.name === 'combo',
+		|| sessionStore.route.name === 'combo'
+		|| (sessionStore.route.name === 'group'
+			&& pollGroupsStore.currentPollGroup?.owner.id
+				=== sessionStore.currentUser.id),
 )
 
 /**
@@ -113,7 +117,6 @@ onUnmounted(() => {
 		<router-view v-if="useNavigation" name="navigation" />
 		<router-view />
 		<router-view v-if="useSidebar" name="sidebar" />
-		<LoadingOverlay v-if="loading" />
 		<UserSettingsDlg />
 	</NcContent>
 </template>

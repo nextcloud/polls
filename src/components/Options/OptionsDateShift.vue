@@ -15,9 +15,6 @@ import SubmitIcon from 'vue-material-design-icons/ArrowRight.vue'
 import { InputDiv } from '../Base/index.ts'
 import { dateTimeUnitsKeyed, TimeUnitsType } from '../../constants/dateUnits.ts'
 import { useOptionsStore } from '../../stores/options.ts'
-import { usePollStore } from '../../stores/poll.ts'
-
-const pollStore = usePollStore()
 
 const optionsStore = useOptionsStore()
 
@@ -42,7 +39,7 @@ function shiftDates(shift: TimeUnitsType) {
 
 <template>
 	<div>
-		<div v-if="pollStore.status.countProposals > 0">
+		<div v-if="optionsStore.countProposals > 0">
 			{{
 				t(
 					'polls',

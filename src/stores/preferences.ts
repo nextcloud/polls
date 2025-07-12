@@ -20,14 +20,12 @@ export type UserPreferences = {
 	checkCalendarsHoursAfter: number
 	defaultViewTextPoll: ViewMode
 	defaultViewDatePoll: ViewMode
-	performanceThreshold: number
 	pollCombo: number[]
 	relevantOffset: number
 	useNewPollDialogInNavigation: boolean
 	useNewPollInPollist: boolean
 	useCommentsAlternativeStyling: boolean
 	useAlternativeStyling: boolean
-	useFixedTableHeader: boolean
 	verbosePollsList: boolean
 }
 
@@ -59,14 +57,12 @@ export const usePreferencesStore = defineStore('preferences', {
 			checkCalendarsHoursAfter: 0,
 			defaultViewTextPoll: ViewMode.TableView,
 			defaultViewDatePoll: ViewMode.TableView,
-			performanceThreshold: 1000,
 			pollCombo: [],
 			relevantOffset: 30,
 			useNewPollDialogInNavigation: false,
 			useNewPollInPollist: false,
 			useCommentsAlternativeStyling: false,
 			useAlternativeStyling: false,
-			useFixedTableHeader: false,
 			verbosePollsList: false,
 		},
 		session: {

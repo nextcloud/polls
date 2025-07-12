@@ -12,72 +12,82 @@ import {
 import { getCurrentUser } from '@nextcloud/auth'
 import { generateUrl } from '@nextcloud/router'
 import { getCookieValue, Logger, setCookie } from './helpers/index.ts'
-import { PublicAPI } from './Api/index.ts'
 import { loadContext } from './composables/context.ts'
-import Vote from './views/Vote.vue'
-import SideBar from './views/SideBar.vue'
+import { AxiosError } from 'axios'
 
+import Navigation from './views/Navigation.vue'
+
+import Combo from './views/Combo.vue'
+import Forbidden from './views/Forbidden.vue'
 import List from './views/PollList.vue'
 import NotFound from './views/NotFound.vue'
+import Vote from './views/Vote.vue'
+
+import SideBar from './views/SideBar.vue'
+import SideBarPollGroup from './views/SideBarPollGroup.vue'
 import SideBarCombo from './views/SideBarCombo.vue'
-import Navigation from './views/Navigation.vue'
-import Combo from './views/Combo.vue'
+
 import { usePollStore } from './stores/poll.ts'
 import { FilterType } from './stores/polls.ts'
 import { useSessionStore } from './stores/session.ts'
+import { ShareType } from './stores/shares.ts'
 
 async function validateToken(to: RouteLocationNormalized) {
-	if (getCurrentUser()) {
-		try {
-			const response = await PublicAPI.getShare(to.params.token as string)
-			// if the user is logged in, we diretly route to
-			// the internal vote page
+	const sessionStore = useSessionStore()
+
+	try {
+		await sessionStore.loadShare()
+
+		// if the user is logged in, reroute to the vote page
+		if (getCurrentUser()) {
 			return {
 				name: 'vote',
 				params: {
-					id: response.data.share.pollId,
+					id: sessionStore.share.pollId,
 				},
 			}
-		} catch (error) {
-			// in case of an error, reroute to the not found page
-			return {
-				name: 'notfound',
-			}
 		}
-	}
-
-	// continue for external users
-	try {
-		// first validate the existance of the public token
-		await PublicAPI.getShare(to.params.token as string)
 	} catch (error) {
-		// in case of an error, reroute to the login page
+		if (getCurrentUser()) {
+			if ((error as AxiosError).response?.status === 403) {
+				// User has no access
+				return { name: 'forbidden' }
+			}
+			// in case of other errors, reroute internal user to the not found page
+			return { name: 'notfound' }
+		}
+
+		// external users will get redirected to the login page
 		window.location.replace(generateUrl('login'))
 	}
 
-	// then look for an existing personal token from
-	// the user's client stored cookie
-	// matching the public token
-	const personalToken = getCookieValue(to.params.token as string)
+	// Continue for external users
+	//
+	if (sessionStore.share.type === ShareType.Public) {
+		// Check, if user has a personal token from the user's client stored cookie
+		// matching the public token
+		const personalToken = getCookieValue(to.params.token as string)
 
-	if (personalToken && personalToken !== to.params.token) {
-		// participant has already access to the poll and a private token
-		// extend expiry time for 30 days after successful access
-		const cookieExpiration = 30 * 24 * 60 * 1000
-		setCookie(<string>to.params.token, personalToken, cookieExpiration)
+		if (personalToken) {
+			// participant has already access to the poll and a private token
+			// extend expiry time for 30 days after successful access
+			const cookieExpiration = 30 * 24 * 60 * 1000
+			setCookie(to.params.token as string, personalToken, cookieExpiration)
 
-		// reroute to the public vote page using the personal token
-		return {
-			name: 'publicVote',
-			params: {
-				token: personalToken,
-			},
+			// reroute to the public vote page using the personal token
+			return {
+				name: 'publicVote',
+				params: {
+					token: personalToken,
+				},
+			}
 		}
 	}
 
-	// if no private token is found, load the poll
+	// finally load the poll
 	const pollStore = usePollStore()
-	await pollStore.load()
+
+	pollStore.load()
 }
 
 const routes: RouteRecordRaw[] = [
@@ -90,8 +100,7 @@ const routes: RouteRecordRaw[] = [
 		props: true,
 		name: 'list',
 		meta: {
-			publicPage: false,
-			votePage: false,
+			listPage: true,
 		},
 	},
 	{
@@ -99,12 +108,13 @@ const routes: RouteRecordRaw[] = [
 		components: {
 			default: List,
 			navigation: Navigation,
+			sidebar: SideBarPollGroup,
 		},
 		props: true,
 		name: 'group',
 		meta: {
-			publicPage: false,
-			votePage: false,
+			groupPage: true,
+			listPage: true,
 		},
 	},
 	{
@@ -116,8 +126,7 @@ const routes: RouteRecordRaw[] = [
 		},
 		name: 'combo',
 		meta: {
-			publicPage: false,
-			votePage: false,
+			comboPage: true,
 		},
 	},
 	{
@@ -127,10 +136,14 @@ const routes: RouteRecordRaw[] = [
 			navigation: Navigation,
 		},
 		name: 'notfound',
-		meta: {
-			publicPage: false,
-			votePage: false,
+	},
+	{
+		path: '/forbidden',
+		components: {
+			default: Forbidden,
+			navigation: Navigation,
 		},
+		name: 'forbidden',
 	},
 	{
 		path: '/vote/:id',
@@ -142,7 +155,6 @@ const routes: RouteRecordRaw[] = [
 		props: true,
 		name: 'vote',
 		meta: {
-			publicPage: false,
 			votePage: true,
 		},
 	},
@@ -162,16 +174,12 @@ const routes: RouteRecordRaw[] = [
 	},
 	{
 		path: '/',
+		name: 'root',
 		redirect: {
 			name: 'list',
 			params: {
 				type: FilterType.Relevant,
 			},
-		},
-		name: 'root',
-		meta: {
-			publicPage: false,
-			votePage: false,
 		},
 	},
 	{
@@ -182,9 +190,6 @@ const routes: RouteRecordRaw[] = [
 				type: FilterType.Relevant,
 			},
 		},
-		meta: {
-			publicPage: false,
-		},
 	},
 ]
 
@@ -194,40 +199,35 @@ const router = createRouter({
 	linkActiveClass: 'active',
 })
 
-router.beforeEach(async (to: RouteLocationNormalized) => {
-	const sessionStore = useSessionStore()
-	const pollStore = usePollStore()
+router.beforeEach(
+	async (to: RouteLocationNormalized, from: RouteLocationNormalized) => {
+		const sessionStore = useSessionStore()
 
-	try {
-		await loadContext(to)
-	} catch (error) {
-		Logger.error('Could not load context')
+		// if the previous and the requested routes have the same name and
+		// the watcher is active, we can do a cheap loading
+		const cheapLoading =
+			to.name === from.name
+			&& sessionStore.watcher.mode !== 'noPolling'
+			&& sessionStore.watcher.status !== 'stopped'
 
-		if (!sessionStore.userStatus.isLoggedin) {
-			// if the user is not logged in, redirect to the login page
-			window.location.replace(generateUrl('login'))
-			return false
-		}
+		// first load app context -> session and preferences
+		try {
+			await loadContext(to, cheapLoading)
+		} catch (error) {
+			Logger.error('Could not load context', { error })
 
-		return {
-			name: 'notfound',
-		}
-	}
+			if (!sessionStore.userStatus.isLoggedin) {
+				// if the user is not logged in, redirect to the login page
+				window.location.replace(generateUrl('login'))
+				return false
+			}
 
-	try {
-		if (to.meta.publicPage) {
-			await sessionStore.loadShare()
+			// if context can't be loaded, redirect to not found page
+			return {
+				name: 'notfound',
+			}
 		}
-
-		if (to.meta.votePage) {
-			await pollStore.load()
-		}
-	} catch (error) {
-		Logger.warn('Could not load poll', { error })
-		return {
-			name: 'notfound',
-		}
-	}
-})
+	},
+)
 
 export { router }

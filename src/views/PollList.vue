@@ -4,16 +4,14 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, watch } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { computed, onMounted } from 'vue'
+import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
 import { showError } from '@nextcloud/dialogs'
 import { t, n } from '@nextcloud/l10n'
 
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
-import NcLoadingIcon from '@nextcloud/vue/components/NcLoadingIcon'
 
-import { Logger } from '../helpers/index.ts'
 import { HeaderBar, IntersectionObserver } from '../components/Base/index.ts'
 import { PollsAppIcon } from '../components/AppIcons/index.ts'
 import PollItem from '../components/PollList/PollItem.vue'
@@ -23,26 +21,23 @@ import PollItemActions from '../components/PollList/PollItemActions.vue'
 import ActionAddPoll from '../components/Actions/modules/ActionAddPoll.vue'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import { useSessionStore } from '../stores/session.ts'
-import ActionEditGroup from '../components/Actions/modules/ActionEditGroup.vue'
+import ActionToggleSidebar from '../components/Actions/modules/ActionToggleSidebar.vue'
+import { usePollGroupsStore } from '../stores/pollGroups.ts'
+import LoadingOverlay from '../components/Base/modules/LoadingOverlay.vue'
 
 const pollsStore = usePollsStore()
+const pollGroupsStore = usePollGroupsStore()
 const preferencesStore = usePreferencesStore()
 const sessionStore = useSessionStore()
 const router = useRouter()
 const route = useRoute()
 
-const editable = computed(
-	() =>
-		route.name === 'group'
-		&& sessionStore.currentUser.id === pollsStore.currentGroup?.owner.id,
-)
-
 const title = computed(() => {
 	if (route.name === 'group') {
 		return (
-			pollsStore.currentGroup?.titleExt
-			|| pollsStore.currentGroup?.title
-			|| t('polls', 'Group without title')
+			pollGroupsStore.currentPollGroup?.titleExt
+			|| pollGroupsStore.currentPollGroup?.name
+			|| ''
 		)
 	}
 	return pollsStore.categories[route.params.type as FilterType].titleExt
@@ -73,10 +68,7 @@ const infoLoaded = computed(() =>
 
 const description = computed(() => {
 	if (route.name === 'group') {
-		return (
-			pollsStore.currentGroup?.description
-			|| t('polls', 'Group without description')
-		)
+		return pollGroupsStore.currentPollGroup?.description || ''
 	}
 
 	return pollsStore.categories[route.params.type as FilterType].description
@@ -88,34 +80,22 @@ const emptyPollListnoPolls = computed(
 
 const windowTitle = computed(() => `${t('polls', 'Polls')} - ${title.value}`)
 
-const emptyContent = computed(() => {
-	if (pollsStore.meta.status === 'loading') {
-		return {
-			name: t('polls', 'Loading polls…'),
-			description: '',
-		}
-	}
+const loadingOverlayProps = {
+	name: t('polls', 'Loading overview…'),
+	teleportTo: '#content-vue',
+	loadingTexts: [
+		t('polls', 'Fetching polls…'),
+		t('polls', 'Checking access…'),
+		t('polls', 'Almost ready…'),
+		t('polls', 'Do not go away…'),
+		t('polls', 'Please be patient…'),
+	],
+}
 
-	return {
-		name: t('polls', 'No polls found for this category'),
-		description: t('polls', 'Add one or change category!'),
-	}
-})
-
-onMounted(() => {
-	Logger.debug('Loading polls onMounted')
-	pollsStore.load()
-	refreshView()
-})
-
-watch(
-	() => route.params.id,
-	() => {
-		Logger.debug('Loading polls on watch')
-		pollsStore.load()
-		refreshView()
-	},
-)
+const emptyContentProps = computed(() => ({
+	name: t('polls', 'No polls found for this category'),
+	description: t('polls', 'Add one or change category!'),
+}))
 
 /**
  *
@@ -145,6 +125,15 @@ async function loadMore() {
 		showError(t('polls', 'Error loading more polls'))
 	}
 }
+
+onMounted(() => {
+	pollsStore.load(false)
+	refreshView()
+})
+
+onBeforeRouteUpdate(async () => {
+	refreshView()
+})
 </script>
 
 <template>
@@ -155,9 +144,13 @@ async function loadMore() {
 			</template>
 			{{ description }}
 			<template #right>
-				<ActionEditGroup v-if="editable" />
 				<ActionAddPoll v-if="preferencesStore.user.useNewPollInPollist" />
 				<PollListSort />
+				<ActionToggleSidebar
+					v-if="
+						pollGroupsStore.currentPollGroup?.owner.id
+						=== sessionStore.currentUser.id
+					" />
 			</template>
 		</HeaderBar>
 
@@ -178,6 +171,7 @@ async function loadMore() {
 								poll.permissions.edit
 								|| sessionStore.appPermissions.pollCreation
 							"
+							:key="`actions-${poll.id}`"
 							:poll="poll" />
 					</template>
 				</PollItem>
@@ -194,15 +188,15 @@ async function loadMore() {
 				</div>
 			</IntersectionObserver>
 
-			<NcEmptyContent v-if="emptyPollListnoPolls" v-bind="emptyContent">
+			<NcEmptyContent v-if="emptyPollListnoPolls" v-bind="emptyContentProps">
 				<template #icon>
-					<NcLoadingIcon
-						v-if="pollsStore.meta.status === 'loading'"
-						:size="64" />
-					<PollsAppIcon v-else />
+					<PollsAppIcon />
 				</template>
 			</NcEmptyContent>
 		</div>
+		<LoadingOverlay
+			:show="pollsStore.meta.status === 'loading'"
+			v-bind="loadingOverlayProps" />
 	</NcAppContent>
 </template>
 

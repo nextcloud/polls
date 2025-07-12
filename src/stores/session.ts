@@ -14,9 +14,6 @@ import { Share } from './shares.ts'
 import { RouteLocationNormalized, RouteRecordNameGeneric } from 'vue-router'
 import { Logger } from '../helpers/index.ts'
 import { usePollStore } from './poll.ts'
-import { useOptionsStore } from './options.ts'
-import { useVotesStore } from './votes.ts'
-import { useCommentsStore } from './comments.ts'
 import { useSubscriptionStore } from './subscription.ts'
 import { AxiosError } from '@nextcloud/axios'
 
@@ -39,8 +36,13 @@ export type UserStatus = {
 	isAdmin: boolean
 }
 
-type Watcher = {
+export type Watcher = {
 	id: string
+	mode: UpdateType
+	status: 'running' | 'stopped' | 'error' | 'stopping' | 'idle'
+	interval?: number
+	lastUpdate: number
+	lastMessage?: string
 }
 
 export type Session = {
@@ -131,6 +133,9 @@ export const useSessionStore = defineStore('session', {
 		},
 		watcher: {
 			id: '',
+			mode: UpdateType.NoPolling,
+			status: 'stopped',
+			lastUpdate: Math.floor(Date.now() / 1000),
 		},
 		token: null,
 		currentUser: createDefault<User>(),
@@ -180,7 +185,10 @@ export const useSessionStore = defineStore('session', {
 		generateWatcherId() {
 			this.watcher.id = Math.random().toString(36).substring(2)
 		},
-		async load(to: null | RouteLocationNormalized) {
+		async load(
+			to: null | RouteLocationNormalized,
+			cheapLoading: boolean = false,
+		) {
 			Logger.debug('Loading session')
 			this.generateWatcherId()
 
@@ -188,6 +196,11 @@ export const useSessionStore = defineStore('session', {
 				Logger.debug('Set requested route', { to })
 				await this.setRouter(to)
 				Logger.debug('Route set', { route: this.route })
+			}
+
+			if (cheapLoading) {
+				Logger.debug('Same route, skipping session load')
+				return
 			}
 
 			try {
@@ -279,9 +292,6 @@ export const useSessionStore = defineStore('session', {
 
 		async updateDisplayName(payload: { displayName: string }): Promise<void> {
 			const pollStore = usePollStore()
-			const commentsStore = useCommentsStore()
-			const votesStore = useVotesStore()
-			const optionsStore = useOptionsStore()
 
 			if (this.route.name !== 'publicVote') {
 				return
@@ -294,9 +304,6 @@ export const useSessionStore = defineStore('session', {
 				)
 				this.share = response.data.share
 				pollStore.load()
-				commentsStore.load()
-				votesStore.load()
-				optionsStore.load()
 			} catch (error) {
 				if ((error as AxiosError)?.code === 'ERR_CANCELED') {
 					return

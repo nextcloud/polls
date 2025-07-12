@@ -33,8 +33,11 @@ abstract class QBMapperWithUser extends QBMapper {
 	/**
 	 * Joins anonymous setting of poll
 	 */
-	protected function joinAnon(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'anon';
+	protected function joinAnon(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'anon',
+	): void {
 
 		$qb->selectAlias($joinAlias . '.anonymous', 'anonymized')
 			->selectAlias($joinAlias . '.owner', 'poll_owner_id')
@@ -59,8 +62,12 @@ abstract class QBMapperWithUser extends QBMapper {
 	/**
 	 * Joins share type for evaluating current user's role in a poll
 	 */
-	protected function joinShareRole(IQueryBuilder &$qb, string $fromAlias, string $userId): void {
-		$joinAlias = 'shareRole';
+	protected function joinShareRole(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $userId,
+		string $joinAlias = 'shareRole',
+	): void {
 
 		$qb->selectAlias($joinAlias . '.type', 'share_type')
 			->addGroupBy(
@@ -76,7 +83,5 @@ abstract class QBMapperWithUser extends QBMapper {
 				$qb->expr()->eq($joinAlias . '.user_id', $qb->createNamedParameter($userId, IQueryBuilder::PARAM_STR)),
 			)
 		);
-
-
 	}
 }

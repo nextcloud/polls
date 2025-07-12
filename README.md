@@ -56,17 +56,9 @@ You can download and install the latest release from the [Nextcloud app store](h
 - Community support: https://help.nextcloud.com/c/apps/polls/
 
 ## Screenshots
-#### Manage your polls and create new ones
-![Manage Polls](screenshots/overview.png)
-
-#### Many configuration options
-![Vote](screenshots/edit-poll.png)
-
-#### Share your poll with other people
-![Edit poll](screenshots/share.png)
-
-#### Vote on mobile
-![Share poll](screenshots/vote.png)
+Manage your polls and create new ones | Many configuration options | Share your poll with other people | Vote on mobile
+:-:|:-:|:-:|:-:
+![Manage Polls](screenshots/overview.png) | ![Vote](screenshots/edit-poll.png) | ![Edit poll](screenshots/share.png) | ![Share poll](screenshots/vote.png)
 
 ## For the 7.x release branch (v7.x) please switch to the [master-7 branch](https://github.com/nextcloud/polls/tree/master-7)
 ### Install from git

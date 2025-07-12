@@ -7,7 +7,7 @@ import axios, { AxiosError, AxiosInstance } from 'axios'
 const MAX_ERRORS = 5
 const SLEEP_TIMEOUT_DEFAULT = 30000
 
-let lastUpdated = Math.floor(Date.now() / 1000)
+let lastUpdated = 0
 let http: AxiosInstance
 let consecutiveErrors = 0
 
@@ -21,7 +21,18 @@ self.onmessage = async (props) => {
 		baseUrl,
 		token,
 		watcherId,
+		lastUpdate = lastUpdated,
 	} = props.data
+
+	lastUpdated = lastUpdate
+
+	self.postMessage({
+		type: 'status',
+		status: 'starting',
+		mode: updateType,
+		interval,
+		message: '[Worker] Recieved new parameters.',
+	})
 
 	if (!http) {
 		http = axios.create({
@@ -36,7 +47,13 @@ self.onmessage = async (props) => {
 	}
 
 	if (updateType === 'noPolling') {
-		self.postMessage({ type: 'info', message: '[Worker] noPolling: exiting.' })
+		self.postMessage({
+			type: 'info',
+			status: 'stopped',
+			mode: updateType,
+			interval,
+			message: '[Worker] noPolling: exiting.',
+		})
 		self.close()
 		return
 	}
@@ -57,20 +74,33 @@ self.onmessage = async (props) => {
 			if (response.status === 200 && response.data.updates?.length > 0) {
 				lastUpdated =
 					response.data.updates[response.data.updates.length - 1].updated
+
 				self.postMessage({
 					type: 'update',
+					status: 'running',
+					mode: updateType,
+					interval,
 					message: '[Worker] 200 got updates',
 					updates: response.data.updates,
+					lastUpdate: lastUpdated,
 				})
 			} else if (response.status === 304) {
 				self.postMessage({
 					type: 'info',
+					status: 'running',
+					mode: updateType,
+					interval,
 					message: '[Worker] 304 – no changes',
+					lastUpdate: lastUpdated,
 				})
 			} else {
 				self.postMessage({
 					type: 'info',
+					status: 'running',
+					mode: updateType,
+					interval,
 					message: '[Worker] 200 but no updates',
+					lastUpdate: lastUpdated,
 				})
 			}
 		} catch (error) {
@@ -78,8 +108,12 @@ self.onmessage = async (props) => {
 
 			if (err.code === 'ECONNABORTED' || err.code === 'ERR_CANCELED') {
 				self.postMessage({
-					type: 'debug',
+					type: 'status',
+					status: 'stopping',
+					mode: updateType,
+					interval,
 					message: '[Worker] Request aborted by intention',
+					lastUpdate: lastUpdated,
 				})
 				return
 			}
@@ -88,12 +122,18 @@ self.onmessage = async (props) => {
 
 			self.postMessage({
 				type: 'error',
+				status: 'error',
+				mode: updateType,
+				interval,
 				message: `[Worker] Request failed (${consecutiveErrors}/${MAX_ERRORS})`,
 			})
 
 			if (consecutiveErrors >= MAX_ERRORS) {
 				self.postMessage({
 					type: 'fatal',
+					status: 'error',
+					mode: updateType,
+					interval,
 					message: `[Worker] Stopping after ${MAX_ERRORS} consecutive errors`,
 				})
 				self.close()
@@ -107,16 +147,31 @@ self.onmessage = async (props) => {
 	if (updateType === 'periodicPolling') {
 		self.postMessage({
 			type: 'info',
+			status: 'starting',
+			mode: updateType,
+			interval,
 			message: '[Worker] Started periodic polling.',
 		})
 		while (true) {
 			await run()
+			self.postMessage({
+				type: 'status',
+				status: 'idle',
+				mode: updateType,
+				interval,
+			})
 			await sleep(interval)
 		}
 	}
 
 	if (updateType === 'longPolling') {
-		self.postMessage({ type: 'info', message: '[Worker] Started long polling.' })
+		self.postMessage({
+			type: 'info',
+			status: 'starting',
+			mode: updateType,
+			interval,
+			message: '[Worker] Started long polling.',
+		})
 		while (true) {
 			await run()
 		}

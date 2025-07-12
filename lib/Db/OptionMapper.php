@@ -34,10 +34,15 @@ class OptionMapper extends QBMapperWithUser {
 	 * @return Option[]
 	 * @psalm-return array<array-key, Option>
 	 */
-	public function getAll(): array {
+	public function getAll(bool $includeNull = false): array {
 		$qb = $this->db->getQueryBuilder();
 
 		$qb->select('*')->from($this->getTableName());
+
+		if (!$includeNull) {
+			$qb->where($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
+		}
+
 		return $this->findEntities($qb);
 	}
 
@@ -52,11 +57,12 @@ class OptionMapper extends QBMapperWithUser {
 		$qb = $this->buildQuery($hideResults);
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		return $this->findEntities($qb);
 	}
+
 	/**
 	 * @return Option
 	 * @param int $pollId
@@ -68,7 +74,7 @@ class OptionMapper extends QBMapperWithUser {
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
 			->andWhere($qb->expr()->eq(self::TABLE . '.poll_option_text', $qb->createNamedParameter($pollOptionText, IQueryBuilder::PARAM_STR)));
 		if (!$getDeleted) {
-			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			$qb->andWhere($qb->expr()->eq(self::TABLE . '.deleted', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 		}
 
 		return $this->findEntity($qb);
@@ -81,6 +87,7 @@ class OptionMapper extends QBMapperWithUser {
 	public function find(int $id): Option {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.id', $qb->createNamedParameter($id, IQueryBuilder::PARAM_INT)));
+		$qb->andWhere($qb->expr()->isNotNull(self::TABLE . '.poll_id'));
 
 		return $this->findEntity($qb);
 	}
@@ -92,7 +99,7 @@ class OptionMapper extends QBMapperWithUser {
 	public function findConfirmed(int $pollId): array {
 		$qb = $this->buildQuery();
 		$qb->where($qb->expr()->eq(self::TABLE . '.poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)))
-			->andWhere($qb->expr()->gt(self::TABLE . '.confirmed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			->andWhere($qb->expr()->gt(self::TABLE . '.confirmed', $qb->expr()->literal(0, IQueryBuilder::PARAM_INT)));
 
 		return $this->findEntities($qb);
 	}
@@ -111,6 +118,39 @@ class OptionMapper extends QBMapperWithUser {
 		return $qb->executeQuery()->fetchAll()[0];
 	}
 
+	/**
+	 * Get the minimum date of all options in a poll
+	 *
+	 * @param int $pollId
+	 * @return int|false Returns the minimum timestamp or false if no options are found
+	 */
+	public function getMinDate(int $pollId): int|false {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->selectAlias($qb->func()->min('timestamp'), 'min_date')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+
+		return $qb->executeQuery()->fetchOne();
+	}
+
+
+	/**
+	 * Get the maximum date of all options in a poll
+	 *
+	 * @param int $pollId
+	 * @return int|false Returns the maximum timestamp or false if no options are found
+	 * @psalm-suppress PossiblyUnusedMethod
+	 */
+	public function getMaxDate(int $pollId): int|false {
+		$qb = $this->db->getQueryBuilder();
+
+		$qb->selectAlias($qb->func()->max('timestamp'), 'max_date')
+			->from($this->getTableName())
+			->where($qb->expr()->eq('poll_id', $qb->createNamedParameter($pollId, IQueryBuilder::PARAM_INT)));
+
+		return $qb->executeQuery()->fetchOne();
+	}
 
 	/**
 	 * @return Option[]
@@ -141,16 +181,16 @@ class OptionMapper extends QBMapperWithUser {
 		$query->executeStatement();
 	}
 
-	public function purgeDeletedOptions(int $offset): void {
+	public function purgeDeletedOptions(int $offset): int {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
 			->andWhere(
-				$query->expr()->gt('deleted', $query->createNamedParameter(0))
+				$query->expr()->gt('deleted', $query->expr()->literal(0, IQueryBuilder::PARAM_INT))
 			)
 			->andWhere(
-				$query->expr()->lt('deleted', $query->createNamedParameter($offset))
+				$query->expr()->lt('deleted', $query->expr()->literal($offset, IQueryBuilder::PARAM_INT))
 			);
-		$query->executeStatement();
+		return $query->executeStatement();
 	}
 
 	/**
@@ -168,7 +208,7 @@ class OptionMapper extends QBMapperWithUser {
 			->orderBy('order', 'ASC');
 
 
-		$this->joinVotesCount($qb, self::TABLE, $hideResults);
+		$this->joinVotesCount($qb, self::TABLE, hideResults: $hideResults);
 		$this->joinPollForLimits($qb, self::TABLE);
 		$this->joinCurrentUserVote($qb, self::TABLE, $currentUserId);
 		$this->joinCurrentUserVoteCount($qb, self::TABLE, $currentUserId);
@@ -182,15 +222,20 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * Joins votes to count votes per option and answer
 	 */
-	protected function joinVotesCount(IQueryBuilder &$qb, string $fromAlias, bool $hideResults = false): void {
-		$joinAlias = 'votes';
+	protected function joinVotesCount(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		bool $hideResults = false,
+		string $joinAlias = 'votes',
+	): void {
+
 		$qb->leftJoin(
 			$fromAlias,
 			Vote::TABLE,
 			$joinAlias,
 			$qb->expr()->andX(
-				$qb->expr()->eq($fromAlias . '.poll_id', $joinAlias . '.poll_id'),
-				$qb->expr()->eq($fromAlias . '.poll_option_text', $joinAlias . '.vote_option_text'),
+				$qb->expr()->eq($joinAlias . '.poll_id', $fromAlias . '.poll_id'),
+				$qb->expr()->eq($joinAlias . '.vote_option_text', $fromAlias . '.poll_option_text'),
 			)
 		)
 			// Count number of votes for this option
@@ -208,9 +253,11 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * Joins poll to fetch option_limit and vote_limit
 	 */
-	protected function joinPollForLimits(IQueryBuilder &$qb, string $fromAlias): void {
-		$joinAlias = 'limits';
-
+	protected function joinPollForLimits(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $joinAlias = 'limits',
+	): void {
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->min($joinAlias . '.option_limit'), 'option_limit')
 			->selectAlias($qb->func()->min($joinAlias . '.vote_limit'), 'vote_limit');
@@ -226,8 +273,12 @@ class OptionMapper extends QBMapperWithUser {
 	/**
 	 * Joins votes to get the current user's answer to this option
 	 */
-	protected function joinCurrentUserVote(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
-		$joinAlias = 'user_vote';
+	protected function joinCurrentUserVote(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $currentUserId,
+		string $joinAlias = 'user_vote',
+	): void {
 
 		// force value into a MIN function to avoid grouping errors
 		$qb->selectAlias($qb->func()->min($joinAlias . '.vote_answer'), 'user_vote_answer');
@@ -248,9 +299,12 @@ class OptionMapper extends QBMapperWithUser {
 	 * Joins votes to be able to check against polls_polls.vote_limit of the current user
 	 * in other words: returns all votes of current user and count them
 	 */
-	protected function joinCurrentUserVoteCount(IQueryBuilder &$qb, string $fromAlias, string $currentUserId): void {
-		$joinAlias = 'votes_user';
-
+	protected function joinCurrentUserVoteCount(
+		IQueryBuilder &$qb,
+		string $fromAlias,
+		string $currentUserId,
+		string $joinAlias = 'votes_user',
+	): void {
 		// Count yes votes of the user in this poll
 		$qb->addSelect($qb->createFunction('COUNT(DISTINCT(votes_user.id)) AS user_count_yes_votes'));
 

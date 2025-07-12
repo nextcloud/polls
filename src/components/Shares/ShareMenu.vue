@@ -35,12 +35,22 @@ import {
 	PublicPollEmailConditions,
 } from '../../stores/shares.ts'
 import { SentResults } from '../../Api/modules/shares.ts'
+import { usePollGroupsStore } from '../../stores/pollGroups.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const emit = defineEmits(['showQrCode'])
 
 const { share } = defineProps<{ share: Share }>()
 
 const sharesStore = useSharesStore()
+const pollGroupsStore = usePollGroupsStore()
+const pollStore = usePollStore()
+
+const isDirectShare = computed(
+	() =>
+		share.groupId === pollGroupsStore.currentPollGroup?.id
+		|| share.pollId === pollStore.id,
+)
 
 const resolving = ref(false)
 const label = ref({
@@ -66,7 +76,8 @@ type ButtonProps = {
 
 const resendInvitation = computed<ButtonProps>(() => ({
 	activate:
-		!share.deleted
+		!share.groupId
+		&& !share.deleted
 		&& (!!share.user.emailAddress || share.type === ShareType.Group),
 	name: share.invitationSent
 		? t('polls', 'Resend invitation mail')
@@ -112,7 +123,8 @@ function handleInvitationResults(sentResult: SentResults) {
 
 const resolveGroups = computed<ButtonProps>(() => ({
 	activate:
-		!resolving.value
+		!share.groupId
+		&& !resolving.value
 		&& !share.deleted
 		&& [ShareType.ContactGroup, ShareType.Circle].includes(share.type),
 	name: t('polls', 'Resolve group into individual invitations'),
@@ -157,7 +169,8 @@ function resolveGroupResolveError(message: string) {
 
 const switchAdmin = computed<ButtonProps>(() => ({
 	activate:
-		!share.deleted
+		!share.groupId
+		&& !share.deleted
 		&& (share.type === ShareType.User || share.type === ShareType.Admin),
 	name:
 		share.type === ShareType.User
@@ -169,7 +182,7 @@ const switchAdmin = computed<ButtonProps>(() => ({
 }))
 
 const copyLinkButton = computed<ButtonProps>(() => ({
-	activate: !share.deleted && !!share.URL,
+	activate: !share.groupId && !share.deleted && !!share.URL,
 	name: t('polls', 'Copy link to clipboard'),
 	action: () => {
 		try {
@@ -182,7 +195,7 @@ const copyLinkButton = computed<ButtonProps>(() => ({
 }))
 
 const showQrCodeButton = computed<ButtonProps>(() => ({
-	activate: !share.deleted && !!share.URL,
+	activate: !share.groupId && !share.deleted && !!share.URL,
 	name: t('polls', 'Show QR code'),
 	action: () => {
 		emit('showQrCode')
@@ -190,7 +203,7 @@ const showQrCodeButton = computed<ButtonProps>(() => ({
 }))
 
 const lockShareButton = computed<ButtonProps>(() => ({
-	activate: !share.deleted,
+	activate: !share.groupId && !share.deleted,
 	name: share.locked ? t('polls', 'Unlock share') : t('polls', 'Lock share'),
 	action: () => {
 		try {
@@ -214,7 +227,7 @@ const lockShareButton = computed<ButtonProps>(() => ({
 }))
 
 const deleteShareButton = computed<ButtonProps>(() => ({
-	activate: true,
+	activate: isDirectShare.value,
 	name: share.deleted ? t('polls', 'Restore share') : t('polls', 'Delete share'),
 	action: () => {
 		try {

@@ -61,8 +61,10 @@ class IndexManager {
 	public function createForeignKeyConstraints(): array {
 		$messages = [];
 
-		foreach (TableSchema::FK_CHILD_TABLES as $childTable) {
-			$messages[] = $this->createForeignKeyConstraint(TableSchema::FK_PARENT_TABLE, $childTable);
+		foreach (TableSchema::FK_INDICES as $parent => $child) {
+			foreach ($child as $table => $childTable) {
+				$messages[] = $this->createForeignKeyConstraint($parent, $table, $childTable['constraintColumn']);
+			}
 		}
 
 		return $messages;
@@ -75,14 +77,14 @@ class IndexManager {
 	 * @param string $childTableName name of referring table
 	 * @return string log message
 	 */
-	public function createForeignKeyConstraint(string $parentTableName, string $childTableName): string {
+	public function createForeignKeyConstraint(string $parentTableName, string $childTableName, string $constraintColumn): string {
 		$parentTableName = $this->dbPrefix . $parentTableName;
 		$childTableName = $this->dbPrefix . $childTableName;
 		$parentTable = $this->schema->getTable($parentTableName);
 		$childTable = $this->schema->getTable($childTableName);
 
-		$childTable->addForeignKeyConstraint($parentTable, ['poll_id'], ['id'], ['onDelete' => 'CASCADE']);
-		return 'Added ' . $parentTableName . '[\'poll_id\'] <- ' . $childTableName . '[\'id\']';
+		$childTable->addForeignKeyConstraint($parentTable, [$constraintColumn], ['id'], ['onDelete' => 'CASCADE']);
+		return 'Added ' . $parentTableName . '[' . $constraintColumn . '] <- ' . $childTableName . '[id]';
 	}
 
 	/**
@@ -123,8 +125,10 @@ class IndexManager {
 	public function removeAllForeignKeyConstraints(): array {
 		$messages = [];
 
-		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
-			$messages = array_merge($messages, $this->removeForeignKeysFromTable($tableName));
+		foreach (TableSchema::FK_INDICES as $child) {
+			foreach (array_keys($child) as $table) {
+				$messages = array_merge($messages, $this->removeForeignKeysFromTable($table));
+			}
 		}
 
 		return $messages;
@@ -138,8 +142,11 @@ class IndexManager {
 	public function removeAllGenericIndices(): array {
 		$messages = [];
 
-		foreach (TableSchema::FK_CHILD_TABLES as $tableName) {
-			$messages = array_merge($messages, $this->removeGenericIndicesFromTable($tableName));
+		foreach (TableSchema::FK_INDICES as $child) {
+			foreach (array_keys($child) as $table) {
+				$messages = array_merge($messages, $this->removeForeignKeysFromTable($table));
+				$messages = array_merge($messages, $this->removeGenericIndicesFromTable($table));
+			}
 		}
 
 		return $messages;

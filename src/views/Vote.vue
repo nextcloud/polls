@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { computed, onMounted, onUnmounted, ref } from 'vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
 import { t } from '@nextcloud/l10n'
 
@@ -14,7 +14,6 @@ import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
 import DatePollIcon from 'vue-material-design-icons/CalendarBlank.vue'
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
 
-import { useHandleScroll } from '../composables/handleScroll.ts'
 import MarkDownDescription from '../components/Poll/MarkDownDescription.vue'
 import ActionAddOption from '../components/Actions/modules/ActionAddOption.vue'
 import PollInfoLine from '../components/Poll/PollInfoLine.vue'
@@ -25,27 +24,38 @@ import VoteInfoCards from '../components/Cards/VoteInfoCards.vue'
 import OptionsAddModal from '../components/Modals/OptionsAddModal.vue'
 import { ActionOpenOptionsSidebar } from '../components/Actions/index.ts'
 import { HeaderBar } from '../components/Base/index.ts'
-import {
-	CardAnonymousPollHint,
-	CardHiddenParticipants,
-} from '../components/Cards/index.ts'
+import { CardAnonymousPollHint } from '../components/Cards/index.ts'
 
 import { usePollStore, PollType } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'
-import { usePreferencesStore, ViewMode } from '../stores/preferences.ts'
+import { usePreferencesStore } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
 import Collapsible from '../components/Base/modules/Collapsible.vue'
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
+import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
+import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
 const voteMainId = 'watched-scroll-area'
-const scrolled = useHandleScroll(voteMainId)
-const isLoading = ref(false)
+const topObserverVisible = ref(false)
+const voteHeaderDownPage = ref(false)
 
+const loadingOverlayProps = {
+	name: t('polls', 'Loading poll…'),
+	teleportTo: '#content-vue',
+	loadingTexts: [
+		t('polls', 'Fetching configuration…'),
+		t('polls', 'Collecting elements…'),
+		t('polls', 'Checking access…'),
+		t('polls', 'Almost ready…'),
+		t('polls', 'Do not go away…'),
+		t('polls', 'This seems to be a huge poll, please be patient…'),
+	],
+}
 const emptyContentProps = computed(() => {
-	if (pollStore.status.countOptions > 0) {
+	if (optionsStore.options.length > 0) {
 		return {
 			name: t(
 				'polls',
@@ -85,14 +95,28 @@ const collapsibleProps = computed<CollapsibleProps>(() => ({
 	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 }))
 
+const scrolled = computed(
+	() => !topObserverVisible.value && voteHeaderDownPage.value,
+)
+
+onBeforeRouteUpdate(async () => {
+	pollStore.load()
+	emit(Event.TransitionsOff, 500)
+})
+
+onBeforeRouteLeave(() => {
+	pollStore.resetPoll()
+})
+
 onMounted(() => {
+	pollStore.load()
 	subscribe(Event.LoadPoll, () => pollStore.load())
 	emit(Event.TransitionsOff, 500)
 })
 
 onUnmounted(() => {
 	pollStore.reset()
-	unsubscribe(Event.TransitionsOff, () => {})
+	unsubscribe(Event.LoadPoll, () => {})
 })
 </script>
 
@@ -103,12 +127,11 @@ onUnmounted(() => {
 			pollStore.viewMode,
 			voteMainId,
 			{
-				scrolled: scrolled,
+				scrolled,
 				'vote-style-beta-510': preferencesStore.user.useAlternativeStyling,
-				'fixed-table-header': preferencesStore.user.useFixedTableHeader,
 			},
 		]">
-		<HeaderBar>
+		<HeaderBar class="sticky-top" :class="{ 'sticky-bottom-shadow': scrolled }">
 			<template #title>
 				{{ pollStore.configuration.title }}
 			</template>
@@ -121,23 +144,28 @@ onUnmounted(() => {
 		</HeaderBar>
 
 		<div class="vote_main">
+			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
 			<Collapsible
 				v-if="pollStore.configuration.description"
+				class="sticky-left"
 				v-bind="collapsibleProps">
 				<MarkDownDescription />
 			</Collapsible>
 
-			<VoteInfoCards />
+			<VoteInfoCards class="sticky-left" />
 
-			<VoteTable v-show="optionsStore.list.length" />
+			<VoteTable
+				v-show="optionsStore.options.length"
+				v-model:down-page="voteHeaderDownPage" />
 
 			<NcEmptyContent
-				v-if="!optionsStore.list.length"
+				v-if="!optionsStore.options.length"
 				v-bind="emptyContentProps">
 				<template #icon>
 					<TextPollIcon v-if="pollStore.type === PollType.Text" />
 					<DatePollIcon v-else />
 				</template>
+
 				<template v-if="pollStore.permissions.addOptions" #action>
 					<ActionAddOption
 						v-if="pollStore.type === PollType.Date"
@@ -146,30 +174,23 @@ onUnmounted(() => {
 				</template>
 			</NcEmptyContent>
 
-			<div class="area__footer">
-				<CardHiddenParticipants
-					v-if="
-						pollStore.countHiddenParticipants
-						&& pollStore.viewMode !== ViewMode.ListView
-					" />
+			<div class="area__footer sticky-left">
 				<CardAnonymousPollHint v-if="pollStore.status.isAnonymous" />
 			</div>
 		</div>
 
-		<LoadingOverlay v-if="isLoading" />
+		<LoadingOverlay
+			:show="pollStore.meta.status === 'loading'"
+			v-bind="loadingOverlayProps" />
 		<OptionsAddModal v-if="pollStore.permissions.addOptions" />
 	</NcAppContent>
 </template>
 
 <style lang="scss">
-.table-view.fixed-table-header .vote_main {
+.table-view .vote_main {
 	flex: 1;
 	overflow: auto;
 	overscroll-behavior-inline: contain;
-
-	.vote-table {
-		max-height: 75vh;
-	}
 }
 
 .vote_main {

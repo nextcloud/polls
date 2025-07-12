@@ -22,7 +22,7 @@ const model = defineModel<boolean>({ required: true })
 
 const pollsStore = usePollsStore()
 const pollStore = usePollStore()
-const newUser = ref<User | null>(null)
+const newUser = ref<User | undefined>(undefined)
 
 async function dialogOK() {
 	try {

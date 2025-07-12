@@ -5,7 +5,6 @@
 export { default as CardAddProposals } from './modules/CardAddProposals.vue'
 export { default as CardAnonymousPollHint } from './modules/CardAnonymousPollHint.vue'
 export { default as CardClosedPoll } from './modules/CardClosedPoll.vue'
-export { default as CardHiddenParticipants } from './modules/CardHiddenParticipants.vue'
 export { default as CardLimitedVotes } from './modules/CardLimitedVotes.vue'
 export { default as CardLocked } from './modules/CardLocked.vue'
 export { default as CardRegister } from './modules/CardRegister.vue'

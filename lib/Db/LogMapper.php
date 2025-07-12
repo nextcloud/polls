@@ -9,7 +9,6 @@ declare(strict_types=1);
 namespace OCA\Polls\Db;
 
 use OCP\AppFramework\Db\QBMapper;
-use OCP\DB\QueryBuilder\IQueryBuilder;
 use OCP\IDBConnection;
 
 /**
@@ -32,7 +31,7 @@ class LogMapper extends QBMapper {
 
 		$qb->select('*')
 			->from($this->getTableName())
-			->where($qb->expr()->eq('processed', $qb->createNamedParameter(0, IQueryBuilder::PARAM_INT)));
+			->where($qb->expr()->isNotNull('poll_id'));
 		return $this->findEntities($qb);
 	}
 
@@ -62,9 +61,7 @@ class LogMapper extends QBMapper {
 	public function deleteProcessedEntries(): void {
 		$query = $this->db->getQueryBuilder();
 		$query->delete($this->getTableName())
-			->where(
-				$query->expr()->gt('processed', $query->createNamedParameter(0))
-			);
+			->where($query->expr()->isNull('poll_id'));
 		$query->executeStatement();
 	}
 }

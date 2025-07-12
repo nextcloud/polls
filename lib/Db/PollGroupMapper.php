@@ -81,11 +81,7 @@ class PollGroupMapper extends QBMapper {
 		$qb->executeStatement();
 	}
 
-	public function addGroup(string $PollGroupName): PollGroup {
-		$pollGroup = new PollGroup();
-		$pollGroup->setTitle($PollGroupName);
-		$pollGroup->setTitleExt($PollGroupName);
-		$pollGroup->setDescription($PollGroupName);
+	public function add(PollGroup $pollGroup): PollGroup {
 		$pollGroup->setCreated(time());
 		$pollGroup->setOwner($this->userSession->getCurrentUserId());
 		return $this->insert($pollGroup);
@@ -139,16 +135,18 @@ class PollGroupMapper extends QBMapper {
 			->groupBy(self::TABLE . '.id');
 
 		// Join polls
-		$this->joinPolls($qb);
+		$this->joinPollIds($qb);
 
 		return $qb;
 	}
 
-	protected function joinPolls(IQueryBuilder $qb): void {
-		$joinPollsAlias = 'polls';
+	protected function joinPollIds(
+		IQueryBuilder $qb,
+		string $joinAlias = 'polls',
+	): void {
 		TableManager::getConcatenatedArray(
 			qb: $qb,
-			concatColumn: $joinPollsAlias . '.poll_id',
+			concatColumn: $joinAlias . '.poll_id',
 			asColumn: 'poll_ids',
 			dbProvider: $this->db->getDatabaseProvider(),
 		);
@@ -156,9 +154,9 @@ class PollGroupMapper extends QBMapper {
 		$qb->leftJoin(
 			self::TABLE,
 			PollGroup::RELATION_TABLE,
-			$joinPollsAlias,
+			$joinAlias,
 			$qb->expr()->andX(
-				$qb->expr()->eq(self::TABLE . '.id', $joinPollsAlias . '.group_id'),
+				$qb->expr()->eq(self::TABLE . '.id', $joinAlias . '.group_id'),
 			)
 		);
 	}

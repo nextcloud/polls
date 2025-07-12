@@ -30,7 +30,7 @@ class WatchController extends BaseController {
 
 	/**
 	 * Watch poll for updates
-	 * @param int $pollId poll id of poll to wqatch
+	 * @param int $pollId poll id of poll to watch
 	 * @param int|null $offset only watch changes after this timestamp
 	 */
 	#[NoAdminRequired]
