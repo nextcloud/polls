@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import linkifyStr from 'linkify-string'
 import DragIcon from 'vue-material-design-icons/DotsVertical.vue'
-import { Option, PollType } from '../../Types/index.ts'
+import { Option } from '../../Types/index.ts'
 import DateBox from '../Base/modules/DateBox.vue'
 import { usePollStore } from '../../stores/poll.ts'
 import OptionItemOwner from './OptionItemOwner.vue'
@@ -35,7 +35,7 @@ const pollStore = usePollStore()
 
 		<!-- eslint-disable vue/no-v-html -->
 		<div
-			v-if="pollStore.type === PollType.Text"
+			v-if="pollStore.type === 'textPoll'"
 			:title="option.text"
 			class="option-item__option--text"
 			v-html="linkifyStr(option.text)" />

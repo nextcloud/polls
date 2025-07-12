@@ -9,7 +9,7 @@ import { showSuccess, showError } from '@nextcloud/dialogs'
 
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
-import { Answer, useVotesStore } from '../../stores/votes.ts'
+import { useVotesStore } from '../../stores/votes.ts'
 import { Option, User } from '../../Types/index.ts'
 
 import { t } from '@nextcloud/l10n'
@@ -45,13 +45,11 @@ const answer = computed(
 )
 
 const iconAnswer = computed(() => {
-	if (answer.value === Answer.No) {
-		return (pollStore.isClosed && option.confirmed) || isActive.value
-			? Answer.No
-			: Answer.None
+	if (answer.value === 'no') {
+		return (pollStore.isClosed && option.confirmed) || isActive.value ? 'no' : ''
 	}
-	if (answer.value === Answer.None) {
-		return pollStore.isClosed && option.confirmed ? Answer.No : Answer.None
+	if (answer.value === '') {
+		return pollStore.isClosed && option.confirmed ? 'no' : ''
 	}
 	return answer.value
 })

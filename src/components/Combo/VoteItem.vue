@@ -29,11 +29,8 @@ const answer = computed(
 )
 
 const iconAnswer = computed(() => {
-	if (answer.value === Answer.No) {
-		return poll.status.isExpired && option.confirmed ? Answer.No : Answer.None
-	}
-	if (answer.value === Answer.None) {
-		return poll.status.isExpired && option.confirmed ? Answer.No : Answer.None
+	if (['no', ''].includes(answer.value)) {
+		return poll.status.isExpired && option.confirmed ? 'no' : ''
 	}
 	return answer.value
 })

@@ -30,10 +30,10 @@ const pollsStore = usePollsStore()
 
 const sortDirection = computed({
 	get() {
-		return pollsStore.sort.reverse ? SortDirection.Desc : SortDirection.Asc
+		return pollsStore.sort.reverse ? 'desc' : 'asc'
 	},
 	set(direction: SortDirection) {
-		direction === SortDirection.Asc
+		direction === 'asc'
 			? (pollsStore.sort.reverse = false)
 			: (pollsStore.sort.reverse = true)
 	},
@@ -66,45 +66,45 @@ function setSort(sort: { by?: SortType; reverse?: boolean }) {
 		</template>
 
 		<NcActionButton
-			:name="sortTitlesMapping[SortType.Title]"
+			:name="sortTitlesMapping['title']"
 			:aria-label="t('polls', 'Sort by title')"
-			@click="setSort({ by: SortType.Title })">
+			@click="setSort({ by: 'title' })">
 			<template #icon>
 				<AlphabeticalIcon />
 			</template>
 		</NcActionButton>
 
 		<NcActionButton
-			:name="sortTitlesMapping[SortType.Interaction]"
+			:name="sortTitlesMapping['interaction']"
 			:aria-label="t('polls', 'Sort by last interaction')"
-			@click="setSort({ by: SortType.Interaction })">
+			@click="setSort({ by: 'interaction' })">
 			<template #icon>
 				<GestureDoubleTapIcon />
 			</template>
 		</NcActionButton>
 
 		<NcActionButton
-			:name="sortTitlesMapping[SortType.Created]"
+			:name="sortTitlesMapping['created']"
 			:aria-label="t('polls', 'Sort by creation date')"
-			@click="setSort({ by: SortType.Created })">
+			@click="setSort({ by: 'created' })">
 			<template #icon>
 				<CreationIcon />
 			</template>
 		</NcActionButton>
 
 		<NcActionButton
-			:name="sortTitlesMapping[SortType.Expire]"
+			:name="sortTitlesMapping['expire']"
 			:aria-label="t('polls', 'Sort by expiration date')"
-			@click="setSort({ by: SortType.Expire })">
+			@click="setSort({ by: 'expire' })">
 			<template #icon>
 				<ExpirationIcon />
 			</template>
 		</NcActionButton>
 
 		<NcActionButton
-			:name="sortTitlesMapping[SortType.Owner]"
+			:name="sortTitlesMapping['owner']"
 			:aria-label="t('polls', 'Sort by owner name')"
-			@click="setSort({ by: SortType.Owner })">
+			@click="setSort({ by: 'owner' })">
 			<template #icon>
 				<AccountCircleOutlineIcon />
 			</template>
@@ -115,7 +115,7 @@ function setSort(sort: { by?: SortType; reverse?: boolean }) {
 		<NcActionButtonGroup :name="t('polls', 'Direction')">
 			<NcActionButton
 				v-model="sortDirection"
-				:value="SortDirection.Desc"
+				:value="'desc'"
 				type="radio"
 				:aria-label="t('polls', 'Descending')">
 				<template #icon>
@@ -125,7 +125,7 @@ function setSort(sort: { by?: SortType; reverse?: boolean }) {
 
 			<NcActionButton
 				v-model="sortDirection"
-				:value="SortDirection.Asc"
+				:value="'asc'"
 				type="radio"
 				:aria-label="t('polls', 'Ascending')">
 				<template #icon>

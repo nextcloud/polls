@@ -8,7 +8,7 @@ import { computed } from 'vue'
 import moment from '@nextcloud/moment'
 import { t } from '@nextcloud/l10n'
 
-import { usePollStore, AccessType } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 import { useSharesStore } from '../../stores/shares.ts'
 
 import unpublishedIcon from 'vue-material-design-icons/PublishOff.vue'
@@ -23,7 +23,7 @@ const sharesStore = useSharesStore()
 
 const isNoAccessSet = computed(
 	() =>
-		pollStore.configuration.access === AccessType.Private
+		pollStore.configuration.access === 'private'
 		&& !sharesStore.hasShares
 		&& pollStore.permissions.edit,
 )
@@ -51,7 +51,7 @@ const subTexts = computed(() => {
 		return subTexts
 	}
 
-	if (pollStore.configuration.access === AccessType.Private) {
+	if (pollStore.configuration.access === 'private') {
 		subTexts.push({
 			id: pollStore.configuration.access,
 			text: t('polls', 'A private poll from {name}', {

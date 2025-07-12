@@ -61,14 +61,14 @@ const {
 	resolveInfo = false,
 	description,
 	label = '',
-	type = UserType.None,
+	type = '',
 	user = {
 		id: '',
 		displayName: '',
 		emailAddress: '',
 		isNoUser: true,
 		isAdmin: false,
-		type: UserType.None,
+		type: '',
 		subName: null,
 		subtitle: null,
 		desc: null,
@@ -103,14 +103,14 @@ const avatarProps = computed(() => ({
 
 const useIconSlot = computed(() =>
 	[
-		VirtualUserItemType.InternalAccess,
-		VirtualUserItemType.AddPublicLink,
-		UserType.Public,
-		UserType.ContactGroup,
-		UserType.Group,
-		UserType.Circle,
-		VirtualUserItemType.Deleted,
-		VirtualUserItemType.Anonymous,
+		'internalAccess',
+		'addPublicLink',
+		'public',
+		'contactGroup',
+		'group',
+		'circle',
+		'deleted',
+		'anonymous',
 	].includes(typeComputed.value),
 )
 
@@ -133,16 +133,16 @@ const descriptionComputed = computed(() => {
 	if (description !== '') {
 		return description
 	}
-	if (typeComputed.value === UserType.Public) {
+	if (typeComputed.value === 'public') {
 		return publicShareDescription
 	}
-	if (typeComputed.value === VirtualUserItemType.Deleted) {
+	if (typeComputed.value === 'deleted') {
 		return t('polls', 'The participant got removed from this poll')
 	}
-	if (typeComputed.value === UserType.Admin) {
+	if (typeComputed.value === 'admin') {
 		return t('polls', 'Administrative rights granted')
 	}
-	if (typeComputed.value === VirtualUserItemType.Anonymous) {
+	if (typeComputed.value === 'anonymous') {
 		return t('polls', 'Anonymized participant')
 	}
 	return emailAddressComputed
@@ -151,10 +151,10 @@ const labelComputed = computed(() => {
 	if (label !== '') {
 		return label
 	}
-	if (typeComputed.value === UserType.Public) {
+	if (typeComputed.value === 'public') {
 		return publicShareLabel.value
 	}
-	if (typeComputed.value === VirtualUserItemType.Deleted) {
+	if (typeComputed.value === 'deleted') {
 		return t('polls', 'Deleted participant')
 	}
 	return user.displayName ?? user.id
@@ -184,8 +184,7 @@ const publicShareLabel = computed(() => {
 const emailAddressComputed = computed(() => {
 	if (
 		resolveInfo
-		&& (typeComputed.value === UserType.ContactGroup
-			|| typeComputed.value === UserType.Circle)
+		&& (typeComputed.value === 'contactGroup' || typeComputed.value === 'circle')
 	) {
 		return t('polls', 'Resolve this group first!')
 	}
@@ -193,8 +192,7 @@ const emailAddressComputed = computed(() => {
 	if (
 		showEmail
 		&& user.emailAddress !== user.displayName
-		&& (typeComputed.value === UserType.External
-			|| typeComputed.value === UserType.Email)
+		&& (typeComputed.value === 'external' || typeComputed.value === 'email')
 	) {
 		return user.emailAddress
 	}
@@ -230,29 +228,25 @@ function showMenu() {
 				class="user-item__avatar"
 				@click="showMenu()">
 				<template v-if="useIconSlot" #icon>
+					<LinkIcon v-if="typeComputed === 'public'" :size="mdIconSize" />
 					<LinkIcon
-						v-if="typeComputed === UserType.Public"
-						:size="mdIconSize" />
-					<LinkIcon
-						v-if="typeComputed === VirtualUserItemType.AddPublicLink"
+						v-if="typeComputed === 'addPublicLink'"
 						:size="mdIconSize" />
 					<AnoymousIcon
-						v-if="typeComputed === VirtualUserItemType.Anonymous"
+						v-if="typeComputed === 'anonymous'"
 						:size="mdIconSize" />
 					<LinkIcon
-						v-if="typeComputed === VirtualUserItemType.InternalAccess"
+						v-if="typeComputed === 'internalAccess'"
 						:size="mdIconSize" />
 					<ContactGroupIcon
-						v-if="typeComputed === UserType.ContactGroup"
+						v-if="typeComputed === 'contactGroup'"
 						:size="mdIconSize" />
-					<GroupIcon
-						v-if="typeComputed === UserType.Group"
-						:size="mdIconSize" />
+					<GroupIcon v-if="typeComputed === 'group'" :size="mdIconSize" />
 					<CircleIcon
-						v-if="typeComputed === UserType.Circle"
+						v-if="typeComputed === 'circle'"
 						:size="mdIconSize" />
 					<DeletedUserIcon
-						v-if="typeComputed === VirtualUserItemType.Deleted"
+						v-if="typeComputed === 'deleted'"
 						:size="mdIconSize" />
 				</template>
 			</NcAvatar>
@@ -262,19 +256,19 @@ function showMenu() {
 			</div>
 
 			<AdminIcon
-				v-if="showTypeIcon && typeComputed === UserType.Admin"
+				v-if="showTypeIcon && typeComputed === 'admin'"
 				:size="typeIconSize"
 				class="type-icon" />
 			<ContactIcon
-				v-else-if="showTypeIcon && typeComputed === UserType.Contact"
+				v-else-if="showTypeIcon && typeComputed === 'contact'"
 				:size="typeIconSize"
 				class="type-icon" />
 			<EmailIcon
-				v-else-if="showTypeIcon && typeComputed === UserType.Email"
+				v-else-if="showTypeIcon && typeComputed === 'email'"
 				:size="typeIconSize"
 				class="type-icon" />
 			<ShareIcon
-				v-else-if="showTypeIcon && typeComputed === UserType.External"
+				v-else-if="showTypeIcon && typeComputed === 'external'"
 				:size="typeIconSize"
 				class="type-icon" />
 			<PollGroupIcon

@@ -24,24 +24,14 @@ import XmlIcon from 'vue-material-design-icons/Xml.vue'
 import ExportIcon from 'vue-material-design-icons/FileDownloadOutline.vue'
 
 import { ApiEmailAdressList, PollsAPI } from '../../Api/index.ts'
-import { usePollStore, PollType } from '../../stores/poll.ts'
-import { Answer, AnswerSymbol, useVotesStore } from '../../stores/votes.ts'
+import { usePollStore } from '../../stores/poll.ts'
+import { Answer, useVotesStore } from '../../stores/votes.ts'
 import { Option, useOptionsStore } from '../../stores/options.ts'
 import { AxiosError } from '@nextcloud/axios'
 import { DateTime, Interval } from 'luxon'
 
-enum ArrayStyle {
-	Symbols = 'symbols',
-	Raw = 'raw',
-	Generic = 'generic',
-}
-
-enum ExportFormat {
-	Html = 'html',
-	Xlsx = 'xlsx',
-	Ods = 'ods',
-	Csv = 'csv',
-}
+type ArrayStyle = 'symbols' | 'raw' | 'generic'
+type ExportFormat = 'html' | 'xlsx' | 'ods' | 'csv'
 
 const route = useRoute()
 const pollStore = usePollStore()
@@ -72,9 +62,9 @@ function s2ab(s: string) {
  */
 function getAnswerTranslated(answer: Answer) {
 	switch (answer) {
-		case Answer.Yes:
+		case 'yes':
 			return t('polls', 'Yes')
-		case Answer.Maybe:
+		case 'maybe':
 			return t('polls', 'Maybe')
 		default:
 			return t('polls', 'No')
@@ -92,11 +82,7 @@ async function exportFile(exportFormat: ExportFormat) {
 	workBook.value.SheetNames.push(sheetName.value)
 	sheetData.value = []
 
-	if (
-		[ExportFormat.Html, ExportFormat.Xlsx, ExportFormat.Ods].includes(
-			exportFormat,
-		)
-	) {
+	if (['html', 'xlsx', 'ods'].includes(exportFormat)) {
 		sheetData.value.push(
 			[DOMPurify.sanitize(pollStore.configuration.title)],
 			[DOMPurify.sanitize(pollStore.configuration.description)],
@@ -119,8 +105,8 @@ async function exportFile(exportFormat: ExportFormat) {
 		}
 	}
 
-	if (pollStore.type === PollType.Text) {
-		if ([ExportFormat.Html].includes(exportFormat)) {
+	if (pollStore.type === 'textPoll') {
+		if (['html'].includes(exportFormat)) {
 			sheetData.value.push([
 				...participantsHeader,
 				...optionsStore.options.map((item) => DOMPurify.sanitize(item.text)),
@@ -131,12 +117,12 @@ async function exportFile(exportFormat: ExportFormat) {
 				...optionsStore.options.map((item) => item.text),
 			])
 		}
-	} else if ([ExportFormat.Csv].includes(exportFormat)) {
+	} else if (['csv'].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
 			...optionsStore.options.map((option) => getIntervalIso(option)),
 		])
-	} else if ([ExportFormat.Html].includes(exportFormat)) {
+	} else if (['html'].includes(exportFormat)) {
 		sheetData.value.push([
 			...participantsHeader,
 			...optionsStore.options.map((option) => getIntervalRaw(option)),
@@ -152,16 +138,12 @@ async function exportFile(exportFormat: ExportFormat) {
 		])
 	}
 
-	if (
-		[ExportFormat.Html, ExportFormat.Ods, ExportFormat.Xlsx].includes(
-			exportFormat,
-		)
-	) {
-		addVotesArray(ArrayStyle.Symbols)
-	} else if ([ExportFormat.Csv].includes(exportFormat)) {
-		addVotesArray(ArrayStyle.Raw)
+	if (['html', 'ods', 'xlsx'].includes(exportFormat)) {
+		addVotesArray('symbols')
+	} else if (['csv'].includes(exportFormat)) {
+		addVotesArray('raw')
 	} else {
-		addVotesArray(ArrayStyle.Generic)
+		addVotesArray('generic')
 	}
 	try {
 		const workBookOutput = xlsxWrite(workBook.value, {
@@ -244,14 +226,14 @@ function addVotesArray(style: ArrayStyle) {
 			}
 
 			optionsStore.options.forEach((option) => {
-				if (style === ArrayStyle.Symbols) {
+				if (style === 'symbols') {
 					votesLine.push(
 						votesStore.getVote({
 							user: participant,
 							option,
-						}).answerSymbol ?? AnswerSymbol.No,
+						}).answerSymbol ?? '❌',
 					)
-				} else if (style === ArrayStyle.Raw) {
+				} else if (style === 'raw') {
 					votesLine.push(
 						votesStore.getVote({
 							user: participant,
@@ -290,7 +272,7 @@ function addVotesArray(style: ArrayStyle) {
 			close-after-click
 			:name="t('polls', 'Download Excel spreadsheet')"
 			:aria-label="t('polls', 'Download Excel spreadsheet')"
-			@click="exportFile(ExportFormat.Xlsx)">
+			@click="exportFile('xlsx')">
 			<template #icon>
 				<ExcelIcon />
 			</template>
@@ -300,7 +282,7 @@ function addVotesArray(style: ArrayStyle) {
 			close-after-click
 			:name="t('polls', 'Download Open Document spreadsheet')"
 			:aria-label="t('polls', 'Download Open Document spreadsheet')"
-			@click="exportFile(ExportFormat.Ods)">
+			@click="exportFile('ods')">
 			<template #icon>
 				<FileTableIcon />
 			</template>
@@ -310,7 +292,7 @@ function addVotesArray(style: ArrayStyle) {
 			close-after-click
 			:name="t('polls', 'Download CSV file')"
 			::aria-label="t('polls', 'Download CSV file')"
-			@click="exportFile(ExportFormat.Csv)">
+			@click="exportFile('csv')">
 			<template #icon>
 				<CsvIcon />
 			</template>
@@ -320,7 +302,7 @@ function addVotesArray(style: ArrayStyle) {
 			close-after-click
 			:name="t('polls', 'Download HTML file')"
 			:aria-label="t('polls', 'Download HTML file')"
-			@click="exportFile(ExportFormat.Html)">
+			@click="exportFile('html')">
 			<template #icon>
 				<XmlIcon />
 			</template>

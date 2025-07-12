@@ -8,7 +8,6 @@ import { InputDiv } from '../Base/index.ts'
 import { t } from '@nextcloud/l10n'
 import { usePollGroupsStore } from '../../stores/pollGroups.ts'
 import { computed } from 'vue'
-import { SignalingType } from '../../Types/index.ts'
 
 const emit = defineEmits(['change'])
 
@@ -26,9 +25,7 @@ const pollGroupName = computed({
 	},
 })
 const checkName = computed(() =>
-	pollGroupsStore.currentPollGroup?.name
-		? SignalingType.None
-		: SignalingType.Error,
+	pollGroupsStore.currentPollGroup?.name ? '' : 'error',
 )
 
 const inputProps = {

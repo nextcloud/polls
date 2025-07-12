@@ -11,7 +11,7 @@ import { computed, ref } from 'vue'
 
 import { NcDialog } from '@nextcloud/vue'
 import UserSearch from '../User/UserSearch.vue'
-import { ISearchType, User } from '../../Types/index.ts'
+import { User } from '../../Types/index.ts'
 import { showSuccess, showError } from '@nextcloud/dialogs'
 import { usePollsStore } from '../../stores/polls.ts'
 import { ButtonVariant } from '@nextcloud/vue/components/NcButton'
@@ -107,7 +107,7 @@ const dialogProps = computed(() => ({
 	<NcDialog v-model:open="model" v-bind="dialogProps">
 		<UserSearch
 			v-model="newUser"
-			:search-types="[ISearchType.User]"
+			:search-types="[0]"
 			:input-label="t('polls', 'Select the user to transfer the ownership to')"
 			user-select
 			close-on-select

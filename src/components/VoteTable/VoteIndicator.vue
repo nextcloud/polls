@@ -32,10 +32,10 @@ const colorCodeMaybe = getComputedStyle(document.documentElement).getPropertyVal
 )
 
 const foregroundColor = computed(() => {
-	if (answer === Answer.Yes) {
+	if (answer === 'yes') {
 		return colorCodeYes
 	}
-	if (answer === Answer.Maybe) {
+	if (answer === 'maybe') {
 		return colorCodeMaybe
 	}
 	return colorCodeNo
@@ -50,13 +50,13 @@ function onClick() {
 
 <template>
 	<div :class="['vote-indicator', active]" @click="onClick()">
-		<MaybeIcon v-if="answer === Answer.Maybe" :size="ICON_SIZE" />
+		<MaybeIcon v-if="answer === 'maybe'" :size="ICON_SIZE" />
 		<CheckIcon
-			v-if="answer === Answer.Yes"
+			v-if="answer === 'yes'"
 			:fill-color="foregroundColor"
 			:size="ICON_SIZE" />
 		<CloseIcon
-			v-if="answer === Answer.No"
+			v-if="answer === 'no'"
 			:fill-color="foregroundColor"
 			:size="ICON_SIZE" />
 	</div>

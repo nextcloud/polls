@@ -6,7 +6,7 @@
 <script setup lang="ts">
 import { n, t } from '@nextcloud/l10n'
 
-import { PollType, usePollStore } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
@@ -18,7 +18,7 @@ import Counter from '../Options/Counter.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import OptionMenu from '../Options/OptionMenu.vue'
-import { usePreferencesStore, ViewMode } from '../../stores/preferences.ts'
+import { usePreferencesStore } from '../../stores/preferences.ts'
 
 import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
 import VoteItem from './VoteItem.vue'
@@ -44,7 +44,7 @@ const tableStyle = computed(() => ({
 
 const showCalendarPeek = computed(
 	() =>
-		pollStore.type === PollType.Date
+		pollStore.type === 'datePoll'
 		&& getCurrentUser()
 		&& preferencesStore.user.calendarPeek,
 )
@@ -82,7 +82,7 @@ function loadMore() {
 		class="vote-table"
 		:style="tableStyle">
 		<div
-			v-if="pollStore.viewMode === ViewMode.TableView"
+			v-if="pollStore.viewMode === 'table-view'"
 			key="grid-info"
 			class="grid-info sticky-left">
 			<NcButton
@@ -98,7 +98,7 @@ function loadMore() {
 		</div>
 
 		<div
-			v-if="pollStore.viewMode === ViewMode.TableView"
+			v-if="pollStore.viewMode === 'table-view'"
 			key="option-spacer"
 			class="option-spacer sticky-left sticky-top"
 			:class="{ 'sticky-bottom-shadow': !downPage }" />
@@ -113,9 +113,7 @@ function loadMore() {
 		</template>
 
 		<template v-for="option in optionsStore.orderedOptions" :key="option.id">
-			<div
-				v-if="pollStore.viewMode === ViewMode.TableView"
-				class="option-menu-grid">
+			<div v-if="pollStore.viewMode === 'table-view'" class="option-menu-grid">
 				<CalendarPeek
 					v-if="showCalendarPeek"
 					:id="`peek-${option.id}`"
@@ -159,7 +157,7 @@ function loadMore() {
 	<div
 		v-if="
 			votesStore.countHiddenParticipants > 0
-			&& pollStore.viewMode === ViewMode.TableView
+			&& pollStore.viewMode === 'table-view'
 		"
 		class="observer-container sticky-left">
 		<IntersectionObserver

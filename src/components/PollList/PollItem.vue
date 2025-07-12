@@ -10,16 +10,9 @@ import { DateTime } from 'luxon'
 import { t } from '@nextcloud/l10n'
 import NcUserBubble from '@nextcloud/vue/components/NcUserBubble'
 
-import {
-	usePollStore,
-	AccessType,
-	Poll,
-	PollType,
-	pollTypes,
-} from '../../stores/poll'
+import { usePollStore, Poll, pollTypes } from '../../stores/poll'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 import BadgeSmallDiv from '../Base/modules/BadgeSmallDiv.vue'
-import { StatusResults } from '../../Types/index.ts'
 
 // Icons
 import TextPollIcon from 'vue-material-design-icons/FormatListBulletedSquare.vue'
@@ -60,18 +53,18 @@ const timeExpirationRelative = computed(() => {
 
 const expiryClass = computed(() => {
 	if (poll.status.isExpired) {
-		return StatusResults.Error
+		return 'error'
 	}
 
 	if (poll.configuration.expire && closeToClosing.value) {
-		return StatusResults.Warning
+		return 'warning'
 	}
 
 	if (poll.configuration.expire && !poll.status.isExpired) {
-		return StatusResults.Success
+		return 'success'
 	}
 
-	return StatusResults.Success
+	return 'success'
 })
 
 const timeCreatedRelative = computed(
@@ -104,7 +97,7 @@ const descriptionLine = computed(() => {
 <template>
 	<div class="poll-item">
 		<TextPollIcon
-			v-if="poll.type === PollType.Text"
+			v-if="poll.type === 'textPoll'"
 			class="item__type"
 			:title="pollTypes[poll.type].name" />
 		<DatePollIcon v-else class="item__type" :title="pollTypes[poll.type].name" />
@@ -158,14 +151,14 @@ const descriptionLine = computed(() => {
 				<OpenPollIcon
 					v-else-if="
 						!preferencesStore.user.verbosePollsList
-						&& poll.configuration.access === AccessType.Open
+						&& poll.configuration.access === 'open'
 					"
 					:title="t('polls', 'Openly accessible poll')"
 					:size="16" />
 				<PrivatePollIcon
 					v-else-if="
 						!preferencesStore.user.verbosePollsList
-						&& poll.configuration.access === AccessType.Private
+						&& poll.configuration.access === 'private'
 					"
 					:title="t('polls', 'Private poll')"
 					:size="16" />
@@ -192,7 +185,7 @@ const descriptionLine = computed(() => {
 				v-if="
 					preferencesStore.user.verbosePollsList
 					&& !poll.status.isArchived
-					&& poll.configuration.access === AccessType.Private
+					&& poll.configuration.access === 'private'
 				"
 				:title="
 					t('polls', 'Private poll, only invited participants have access')
@@ -206,7 +199,7 @@ const descriptionLine = computed(() => {
 				v-if="
 					preferencesStore.user.verbosePollsList
 					&& !poll.status.isArchived
-					&& poll.configuration.access === AccessType.Open
+					&& poll.configuration.access === 'open'
 				"
 				:title="
 					t('polls', 'Open poll, accessible to all users of this instance')

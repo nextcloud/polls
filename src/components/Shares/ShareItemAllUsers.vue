@@ -10,27 +10,32 @@ import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 
 import UserItem from '../User/UserItem.vue'
+import { usePollStore } from '../../stores/poll.ts'
 import { VirtualUserItemType } from '../../Types/index.ts'
-import { usePollStore, AccessType } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 
-const userItemProps = computed(() => ({
+const userItemProps = computed<{
+	label: string
+	type: VirtualUserItemType
+	disabled?: boolean
+	description?: string
+}>(() => ({
 	label: t('polls', 'Internal access'),
-	type: VirtualUserItemType.InternalAccess,
-	disabled: pollStore.configuration.access === AccessType.Private,
+	type: 'internalAccess',
+	disabled: pollStore.configuration.access === 'private',
 	description:
-		pollStore.configuration.access === AccessType.Private
+		pollStore.configuration.access === 'private'
 			? t('polls', 'This poll is private')
 			: t('polls', 'This is an openly accessible poll'),
 }))
 
 const pollAccess = computed({
 	get() {
-		return pollStore.configuration.access === AccessType.Open
+		return pollStore.configuration.access === 'open'
 	},
 	set(value) {
-		pollStore.configuration.access = value ? AccessType.Open : AccessType.Private
+		pollStore.configuration.access = value ? 'open' : 'private'
 		pollStore.write()
 	},
 })

@@ -10,7 +10,6 @@ import { t } from '@nextcloud/l10n'
 import { showError } from '@nextcloud/dialogs'
 import NcButton from '@nextcloud/vue/components/NcButton'
 
-import { FilterType } from '../../stores/polls.ts'
 import { usePollStore } from '../../stores/poll.ts'
 
 import DeletePollDialog from '../Modals/DeletePollDialog.vue'
@@ -43,7 +42,7 @@ function routeAway() {
 	router.push({
 		name: 'list',
 		params: {
-			type: FilterType.Relevant,
+			type: 'relevant',
 		},
 	})
 }

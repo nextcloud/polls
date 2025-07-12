@@ -26,7 +26,7 @@ import { ActionOpenOptionsSidebar } from '../components/Actions/index.ts'
 import { HeaderBar } from '../components/Base/index.ts'
 import { CardAnonymousPollHint } from '../components/Cards/index.ts'
 
-import { usePollStore, PollType } from '../stores/poll.ts'
+import { usePollStore } from '../stores/poll.ts'
 import { useOptionsStore } from '../stores/options.ts'
 import { usePreferencesStore } from '../stores/preferences.ts'
 import { Event } from '../Types/index.ts'
@@ -162,13 +162,13 @@ onUnmounted(() => {
 				v-if="!optionsStore.options.length"
 				v-bind="emptyContentProps">
 				<template #icon>
-					<TextPollIcon v-if="pollStore.type === PollType.Text" />
+					<TextPollIcon v-if="pollStore.type === 'textPoll'" />
 					<DatePollIcon v-else />
 				</template>
 
 				<template v-if="pollStore.permissions.addOptions" #action>
 					<ActionAddOption
-						v-if="pollStore.type === PollType.Date"
+						v-if="pollStore.type === 'datePoll'"
 						:caption="t('polls', 'Add options')" />
 					<ActionOpenOptionsSidebar v-else />
 				</template>

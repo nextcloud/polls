@@ -97,7 +97,7 @@ export const useSessionStore = defineStore('session', {
 			privacyUrl: '',
 			showMailAddresses: false,
 			showLogin: true,
-			updateType: UpdateType.NoPolling,
+			updateType: 'noPolling',
 			useActivity: false,
 			useCollaboration: true,
 			useSiteLegalTerms: true,
@@ -123,7 +123,7 @@ export const useSessionStore = defineStore('session', {
 			params: {
 				id: 0,
 				token: '',
-				type: FilterType.Relevant,
+				type: 'relevant',
 				slug: '',
 			},
 		},
@@ -133,7 +133,7 @@ export const useSessionStore = defineStore('session', {
 		},
 		watcher: {
 			id: '',
-			mode: UpdateType.NoPolling,
+			mode: 'noPolling',
 			status: 'stopped',
 			lastUpdate: Math.floor(Date.now() / 1000),
 		},
@@ -166,7 +166,7 @@ export const useSessionStore = defineStore('session', {
 			if (window.innerWidth > MOBILE_BREAKPOINT) {
 				return preferencesStore.user.defaultViewTextPoll
 			}
-			return ViewMode.ListView
+			return 'list-view'
 		},
 
 		viewDatePoll(state): ViewMode {
@@ -177,7 +177,7 @@ export const useSessionStore = defineStore('session', {
 			if (window.innerWidth > MOBILE_BREAKPOINT) {
 				return preferencesStore.user.defaultViewDatePoll
 			}
-			return ViewMode.ListView
+			return 'list-view'
 		},
 	},
 

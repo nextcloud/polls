@@ -28,9 +28,7 @@ import SideBarPollGroup from './views/SideBarPollGroup.vue'
 import SideBarCombo from './views/SideBarCombo.vue'
 
 import { usePollStore } from './stores/poll.ts'
-import { FilterType } from './stores/polls.ts'
 import { useSessionStore } from './stores/session.ts'
-import { ShareType } from './stores/shares.ts'
 
 async function validateToken(to: RouteLocationNormalized) {
 	const sessionStore = useSessionStore()
@@ -63,7 +61,7 @@ async function validateToken(to: RouteLocationNormalized) {
 
 	// Continue for external users
 	//
-	if (sessionStore.share.type === ShareType.Public) {
+	if (sessionStore.share.type === 'public') {
 		// Check, if user has a personal token from the user's client stored cookie
 		// matching the public token
 		const personalToken = getCookieValue(to.params.token as string)
@@ -178,7 +176,7 @@ const routes: RouteRecordRaw[] = [
 		redirect: {
 			name: 'list',
 			params: {
-				type: FilterType.Relevant,
+				type: 'relevant',
 			},
 		},
 	},
@@ -187,7 +185,7 @@ const routes: RouteRecordRaw[] = [
 		redirect: {
 			name: 'list',
 			params: {
-				type: FilterType.Relevant,
+				type: 'relevant',
 			},
 		},
 	},

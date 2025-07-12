@@ -11,7 +11,7 @@ import Counter from '../Options/Counter.vue'
 import OptionItem from '../Options/OptionItem.vue'
 import VoteItem from './VoteItem.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
-import { usePollStore, PollType } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 import { Option } from '../../stores/options.ts'
 import OptionMenu from '../Options/OptionMenu.vue'
@@ -39,7 +39,7 @@ const componentClass = computed(() => {
 
 const showCalendarPeek = computed(
 	() =>
-		pollStore.type === PollType.Date
+		pollStore.type === 'datePoll'
 		&& getCurrentUser()
 		&& preferencesStore.user.calendarPeek,
 )

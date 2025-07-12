@@ -17,11 +17,10 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import { InputDiv } from '../Base/index.ts'
 import { SimpleLink, setCookie } from '../../helpers/index.ts'
 import { ValidatorAPI, PublicAPI } from '../../Api/index.ts'
-import { SignalingType, ShareType } from '../../Types'
 import { useSessionStore } from '../../stores/session.ts'
 import { usePollStore } from '../../stores/poll.ts'
-import { PublicPollEmailConditions } from '../../stores/shares.ts'
 import { AxiosError } from '@nextcloud/axios'
+import { SignalingType } from '../../Types/index.ts'
 
 const route = useRoute()
 const router = useRouter()
@@ -32,9 +31,12 @@ const sessionStore = useSessionStore()
 const pollStore = usePollStore()
 
 const COOKIE_LIFETIME = 30
-const checkStatus = ref({
-	email: SignalingType.Empty,
-	userName: SignalingType.Empty,
+const checkStatus = ref<{
+	email: SignalingType
+	userName: SignalingType
+}>({
+	email: 'empty',
+	userName: 'empty',
 })
 
 const sendRegistration = ref(false)
@@ -44,24 +46,23 @@ const saveCookie = ref(true)
 
 const registrationIsValid = computed(
 	() =>
-		checkStatus.value.userName === SignalingType.Valid
-		&& (checkStatus.value.email === SignalingType.Valid
+		checkStatus.value.userName === 'valid'
+		&& (checkStatus.value.email === 'valid'
 			|| (emailAddress.value.length === 0
-				&& sessionStore.share.publicPollEmail
-					!== PublicPollEmailConditions.Mandatory)),
+				&& sessionStore.share.publicPollEmail !== 'mandatory')),
 )
 const disableSubmit = computed(
 	() =>
 		!registrationIsValid.value
-		|| checkStatus.value.userName === SignalingType.Checking
+		|| checkStatus.value.userName === 'checking'
 		|| sendRegistration.value,
 )
 const emailGeneratedStatus = computed(() =>
-	checkStatus.value.email === SignalingType.Empty
+	checkStatus.value.email === 'empty'
 		? sessionStore.share.publicPollEmail
 		: checkStatus.value.email,
 )
-const offerCookies = computed(() => sessionStore.share.type === ShareType.Public)
+const offerCookies = computed(() => sessionStore.share.type === 'public')
 
 const loginLink = computed(() => {
 	const redirectUrl = router.resolve({
@@ -73,13 +74,13 @@ const loginLink = computed(() => {
 })
 
 const userNameHint = computed(() => {
-	if (checkStatus.value.userName === SignalingType.Checking) {
+	if (checkStatus.value.userName === 'checking') {
 		return t('polls', 'Checking name …')
 	}
-	if (checkStatus.value.userName === SignalingType.Empty) {
+	if (checkStatus.value.userName === 'empty') {
 		return t('polls', 'A name is required.')
 	}
-	if (checkStatus.value.userName === SignalingType.InValid) {
+	if (checkStatus.value.userName === 'invalid') {
 		return t('polls', 'The name {username} is invalid or reserved.', {
 			username: userName.value,
 		})
@@ -97,7 +98,7 @@ const emailAddressHint = computed(() => {
 	if (emailGeneratedStatus.value === 'invalid') {
 		return t('polls', 'Invalid email address.')
 	}
-	if (sessionStore.share.type === ShareType.Public) {
+	if (sessionStore.share.type === 'public') {
 		if (emailGeneratedStatus.value === 'valid') {
 			return t(
 				'polls',
@@ -174,20 +175,20 @@ function login(): void {
 
 const validatePublicUsername = debounce(async function (): Promise<void> {
 	if (userName.value.length < 1) {
-		checkStatus.value.userName = SignalingType.Empty
+		checkStatus.value.userName = 'empty'
 		return
 	}
 
-	checkStatus.value.userName = SignalingType.Checking
+	checkStatus.value.userName = 'checking'
 	try {
 		await ValidatorAPI.validateName(route.params.token, userName.value)
-		checkStatus.value.userName = SignalingType.Valid
+		checkStatus.value.userName = 'valid'
 	} catch (error) {
 		if ((error as AxiosError).code === 'ERR_CANCELED') {
 			return
 		}
 		if ((error as AxiosError).code === 'ERR_BAD_REQUEST') {
-			checkStatus.value.userName = SignalingType.InValid
+			checkStatus.value.userName = 'invalid'
 			return
 		}
 		throw error
@@ -196,20 +197,20 @@ const validatePublicUsername = debounce(async function (): Promise<void> {
 
 const validateEmailAddress = debounce(async function (): Promise<void> {
 	if (emailAddress.value.length < 1) {
-		checkStatus.value.email = SignalingType.Empty
+		checkStatus.value.email = 'empty'
 		return
 	}
 
-	checkStatus.value.email = SignalingType.Checking
+	checkStatus.value.email = 'checking'
 	try {
 		await ValidatorAPI.validateEmailAddress(emailAddress.value)
-		checkStatus.value.email = SignalingType.Valid
+		checkStatus.value.email = 'valid'
 	} catch (error) {
 		if ((error as AxiosError).code === 'ERR_CANCELED') {
 			return
 		}
 		if ((error as AxiosError).code === 'ERR_BAD_REQUEST') {
-			checkStatus.value.email = SignalingType.InValid
+			checkStatus.value.email = 'invalid'
 			return
 		}
 		throw error
@@ -277,16 +278,12 @@ async function submitRegistration(): Promise<void> {
 					@submit="submitRegistration()" />
 
 				<InputDiv
-					v-if="
-						sessionStore.share.publicPollEmail
-						!== PublicPollEmailConditions.Disabled
-					"
+					v-if="sessionStore.share.publicPollEmail !== 'disabled'"
 					v-model="emailAddress"
 					class="section__email"
 					:signaling-class="checkStatus.email"
 					:placeholder="
-						sessionStore.share.publicPollEmail
-						=== PublicPollEmailConditions.Mandatory
+						sessionStore.share.publicPollEmail === 'mandatory'
 							? t('polls', 'Email address (mandatory)')
 							: t('polls', 'Email address (optional)')
 					"

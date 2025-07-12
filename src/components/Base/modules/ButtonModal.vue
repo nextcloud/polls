@@ -24,7 +24,7 @@ const showModal = defineModel<boolean>('showModal', { default: false })
 
 const {
 	buttonVariant = 'primary',
-	buttonMode = ButtonMode.Native,
+	buttonMode = 'native',
 	buttonCaption = t('polls', 'Click'),
 	modalSize = 'normal',
 	noClose = false,
@@ -36,17 +36,17 @@ const {
 		<!-- The NcAppNavigationNew component is used to display a button in
 			the navigation bar (Edge case for ActionAddPoll). -->
 		<NcAppNavigationNew
-			v-if="buttonMode === ButtonMode.Navigation"
+			v-if="buttonMode === 'navigation'"
 			button-class="icon-add"
 			:text="buttonCaption"
 			@click="showModal = true" />
 		<NcActionButton
-			v-else-if="buttonMode === ButtonMode.ActionMenu"
+			v-else-if="buttonMode === 'actionMenu'"
 			button-class="icon-add"
 			:text="buttonCaption"
 			@click="showModal = true" />
 		<NcButton
-			v-else-if="buttonMode === ButtonMode.Native"
+			v-else-if="buttonMode === 'native'"
 			:variant="buttonVariant"
 			:aria-label="buttonCaption"
 			@click="showModal = true">

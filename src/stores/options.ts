@@ -8,16 +8,13 @@ import { PublicAPI, OptionsAPI } from '../Api/index.ts'
 import { User } from '../Types/index.ts'
 import { Logger } from '../helpers/index.ts'
 import orderBy from 'lodash/orderBy'
-import { usePollStore, PollType } from './poll.ts'
+import { usePollStore } from './poll.ts'
 import { useSessionStore } from './session.ts'
 import { Answer, useVotesStore } from './votes.ts'
 import { DateTimeUnitType, TimeUnitsType } from '../constants/dateUnits.ts'
 import { AxiosError } from '@nextcloud/axios'
 
-export enum RankedType {
-	ranked = 'yes',
-	notRanked = 'no',
-}
+export type RankedType = 'yes' | 'no'
 
 export type Sequence = {
 	unit: DateTimeUnitType
@@ -63,7 +60,7 @@ export type Options = {
 export const useOptionsStore = defineStore('options', {
 	state: (): Options => ({
 		options: [],
-		ranked: RankedType.notRanked,
+		ranked: 'no',
 	}),
 
 	getters: {
@@ -75,7 +72,7 @@ export const useOptionsStore = defineStore('options', {
 
 		countVotedByCurrentUser(state): number {
 			return state.options.filter(
-				(option) => option.votes.currentUser === Answer.Yes,
+				(option) => option.votes.currentUser === 'yes',
 			).length
 		},
 
@@ -93,7 +90,7 @@ export const useOptionsStore = defineStore('options', {
 
 		sortedOptions(state): Option[] {
 			const pollStore = usePollStore()
-			return pollStore.type === PollType.Date
+			return pollStore.type === 'datePoll'
 				? orderBy(state.options, ['timestamp', 'duration'], ['asc', 'asc'])
 				: state.options
 		},

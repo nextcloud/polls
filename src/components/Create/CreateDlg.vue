@@ -16,14 +16,14 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 
 import { ConfigBox, RadioGroupDiv, InputDiv } from '../Base/index.ts'
 
-import { usePollStore, PollType, pollTypes } from '../../stores/poll.ts'
+import { usePollStore, pollTypes, PollType } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 const router = useRouter()
 
 const title = ref('')
 const adding = ref(false)
-const pollType = ref(PollType.Date)
+const pollType = ref<PollType>('datePoll')
 
 const pollTypeOptions = Object.entries(pollTypes).map(([key, value]) => ({
 	value: key,
@@ -40,7 +40,7 @@ const emit = defineEmits(['cancel', 'add'])
  */
 function resetInput() {
 	title.value = ''
-	pollType.value = PollType.Date
+	pollType.value = 'datePoll'
 }
 
 /**
@@ -50,8 +50,8 @@ async function add() {
 	try {
 		adding.value = true
 		const poll = await pollStore.add({
-			title: title.value,
 			type: pollType.value,
+			title: title.value,
 		})
 
 		resetInput()

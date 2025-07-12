@@ -16,7 +16,6 @@ import CheckIcon from 'vue-material-design-icons/Check.vue'
 import { InputDiv } from '../Base/index.ts'
 import DateTimePicker from '../Base/modules/DateTimePicker.vue'
 import { useOptionsStore, Sequence } from '../../stores/options'
-import { StatusResults } from '../../Types'
 import { DurationType, dateTimeUnitsKeyed } from '../../constants/dateUnits.ts'
 
 import { NcCheckboxRadioSwitch } from '@nextcloud/vue'
@@ -33,7 +32,7 @@ const timeStepMinutes = 15
 const successColor = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-success',
 )
-const result = ref(StatusResults.None)
+const result = ref('')
 
 // *** refs for the inputs
 // allDay is a boolean to toggle between all day and time based options
@@ -130,11 +129,9 @@ const sameOption = computed(() => {
 })
 
 // computed if the option is addable
-const addable = computed(
-	() => !blockedOption.value && result.value !== StatusResults.Loading,
-)
+const addable = computed(() => !blockedOption.value && result.value !== 'loading')
 const optionInfo = computed(() =>
-	blockedOption.value && result.value !== StatusResults.Success
+	blockedOption.value && result.value !== 'success'
 		? t('polls', 'Option already exists')
 		: '',
 )
@@ -166,11 +163,11 @@ function resetduratonUnits(): void {
 }
 
 function onAnyChange(): void {
-	result.value = addable.value ? StatusResults.None : StatusResults.Error
+	result.value = addable.value ? '' : 'error'
 }
 
 async function addOption(): Promise<void> {
-	result.value = StatusResults.Loading
+	result.value = 'loading'
 
 	try {
 		await optionsStore.add(
@@ -183,16 +180,16 @@ async function addOption(): Promise<void> {
 			voteYes.value,
 		)
 
-		result.value = StatusResults.Success
+		result.value = 'success'
 	} catch (error) {
 		if ((error as AxiosError).response?.status === 409) {
 			showError(t('polls', 'Option already exists'))
-			result.value = StatusResults.Warning
+			result.value = 'warning'
 			return
 		}
 
 		showError(t('polls', 'Error adding Option'))
-		result.value = StatusResults.Error
+		result.value = 'error'
 	}
 }
 </script>
@@ -305,7 +302,7 @@ async function addOption(): Promise<void> {
 			</div>
 
 			<CheckIcon
-				v-if="result === StatusResults.Success && blockedOption"
+				v-if="result === 'success' && blockedOption"
 				class="date-added"
 				:title="t('polls', 'Added')"
 				:fill-color="successColor"

@@ -155,14 +155,14 @@ const displayNameInputProps = ref<InputProps>({
 
 const validateDisplayName = debounce(async function () {
 	if (sessionStore.share.user.displayName.length < 1) {
-		setDisplayNameStatus(StatusResults.Error)
+		setDisplayNameStatus('error')
 		return
 	}
 
 	if (
 		sessionStore.share.user.displayName === sessionStore.currentUser.displayName
 	) {
-		setDisplayNameStatus(StatusResults.Unchanged)
+		setDisplayNameStatus('unchanged')
 		return
 	}
 
@@ -171,9 +171,9 @@ const validateDisplayName = debounce(async function () {
 			sessionStore.route.params.token,
 			sessionStore.share.user.displayName,
 		)
-		setDisplayNameStatus(StatusResults.Success)
+		setDisplayNameStatus('success')
 	} catch {
-		setDisplayNameStatus(StatusResults.Error)
+		setDisplayNameStatus('error')
 	}
 }, 500)
 
@@ -182,9 +182,9 @@ const validateDisplayName = debounce(async function () {
  * @param status
  */
 function setDisplayNameStatus(status: StatusResults) {
-	displayNameInputProps.value.success = status === StatusResults.Success
-	displayNameInputProps.value.error = status === StatusResults.Error
-	displayNameInputProps.value.showTrailingButton = status === StatusResults.Success
+	displayNameInputProps.value.success = status === 'success'
+	displayNameInputProps.value.error = status === 'error'
+	displayNameInputProps.value.showTrailingButton = status === 'success'
 }
 
 /**
@@ -196,10 +196,10 @@ async function submitDisplayName() {
 			displayName: sessionStore.share.user.displayName,
 		})
 		showSuccess(t('polls', 'Name changed.'))
-		setDisplayNameStatus(StatusResults.Unchanged)
+		setDisplayNameStatus('unchanged')
 	} catch {
 		showError(t('polls', 'Error changing name.'))
-		setDisplayNameStatus(StatusResults.Error)
+		setDisplayNameStatus('error')
 	}
 }
 
@@ -216,15 +216,15 @@ const validateEMail = debounce(async function () {
 		sessionStore.share.user.emailAddress
 		=== sessionStore.currentUser.emailAddress
 	) {
-		setEMailStatus(StatusResults.Unchanged)
+		setEMailStatus('unchanged')
 		return
 	}
 
 	try {
 		await ValidatorAPI.validateEmailAddress(sessionStore.share.user.emailAddress)
-		setEMailStatus(StatusResults.Success)
+		setEMailStatus('success')
 	} catch {
-		setEMailStatus(StatusResults.Error)
+		setEMailStatus('error')
 	}
 }, 500)
 
@@ -233,9 +233,9 @@ const validateEMail = debounce(async function () {
  * @param status
  */
 function setEMailStatus(status: StatusResults) {
-	eMailInputProps.value.success = status === StatusResults.Success
-	eMailInputProps.value.error = status === StatusResults.Error
-	eMailInputProps.value.showTrailingButton = status === StatusResults.Success
+	eMailInputProps.value.success = status === 'success'
+	eMailInputProps.value.error = status === 'error'
+	eMailInputProps.value.showTrailingButton = status === 'success'
 }
 
 /**
@@ -251,14 +251,14 @@ async function submitEmail() {
 				emailAddress: sessionStore.share.user.emailAddress,
 			}),
 		)
-		setEMailStatus(StatusResults.Unchanged)
+		setEMailStatus('unchanged')
 	} catch {
 		showError(
 			t('polls', 'Error saving email address {emailAddress}', {
 				emailAddress: sessionStore.share.user.emailAddress,
 			}),
 		)
-		setEMailStatus(StatusResults.Error)
+		setEMailStatus('error')
 	}
 }
 </script>

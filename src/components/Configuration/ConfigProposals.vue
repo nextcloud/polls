@@ -11,16 +11,14 @@ import { t } from '@nextcloud/l10n'
 import NcCheckboxRadioSwitch from '@nextcloud/vue/components/NcCheckboxRadioSwitch'
 import DateTimePicker from '../../components/Base/modules/DateTimePicker.vue'
 
-import { usePollStore, AllowProposals } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 
 const pollStore = usePollStore()
 
 const allowProposals = computed({
-	get: () => pollStore.configuration.allowProposals === AllowProposals.Allow,
+	get: () => pollStore.configuration.allowProposals === 'allow',
 	set: (value) => {
-		pollStore.configuration.allowProposals = value
-			? AllowProposals.Allow
-			: AllowProposals.Disallow
+		pollStore.configuration.allowProposals = value ? 'allow' : 'disallow'
 		pollStore.write()
 	},
 })

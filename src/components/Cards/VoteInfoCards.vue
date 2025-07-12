@@ -14,11 +14,10 @@ import {
 	CardSendConfirmations,
 	CardUnpublishedPoll,
 } from './index.ts'
-import { usePollStore, AccessType } from '../../stores/poll.ts'
+import { usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore } from '../../stores/options.ts'
 import { useSharesStore } from '../../stores/shares.ts'
 import { useSessionStore } from '../../stores/session.ts'
-import { UserType } from '../../Types/index.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
@@ -27,7 +26,7 @@ const sessionStore = useSessionStore()
 
 const showUnpublishedPollCard = computed(
 	() =>
-		pollStore.configuration.access === AccessType.Private
+		pollStore.configuration.access === 'private'
 		&& !sharesStore.hasShares
 		&& pollStore.permissions.edit
 		&& optionsStore.options.length,
@@ -57,7 +56,7 @@ const showLimitCard = computed(
 const showRegisterCard = computed(
 	() =>
 		sessionStore.route.name === 'publicVote'
-		&& [UserType.Public, UserType.Email, UserType.Contact].includes(
+		&& ['public', 'email', 'contact'].includes(
 			pollStore.currentUserStatus.userRole,
 		)
 		&& !pollStore.isClosed
