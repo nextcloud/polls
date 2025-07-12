@@ -95,7 +95,9 @@ const collapsibleProps = computed<CollapsibleProps>(() => ({
 	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 }))
 
-const scrolled = computed(() => !topObserverVisible.value && voteHeaderDownPage.value)
+const scrolled = computed(
+	() => !topObserverVisible.value && voteHeaderDownPage.value,
+)
 
 onBeforeRouteUpdate(async () => {
 	pollStore.load()
@@ -129,10 +131,7 @@ onUnmounted(() => {
 				'vote-style-beta-510': preferencesStore.user.useAlternativeStyling,
 			},
 		]">
-		<HeaderBar
-			class="sticky-top"
-			:class="{'sticky-bottom-shadow': scrolled}">
-
+		<HeaderBar class="sticky-top" :class="{ 'sticky-bottom-shadow': scrolled }">
 			<template #title>
 				{{ pollStore.configuration.title }}
 			</template>
@@ -143,7 +142,6 @@ onUnmounted(() => {
 
 			<PollInfoLine />
 		</HeaderBar>
-
 
 		<div class="vote_main">
 			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
@@ -158,8 +156,7 @@ onUnmounted(() => {
 
 			<VoteTable
 				v-show="optionsStore.options.length"
-				v-model:down-page="voteHeaderDownPage"
-			/>
+				v-model:down-page="voteHeaderDownPage" />
 
 			<NcEmptyContent
 				v-if="!optionsStore.options.length"

@@ -65,17 +65,14 @@ function loadMore() {
 		showError(t('polls', 'Error loading more participants'))
 	}
 }
-
 </script>
-
-
 
 <template>
 	<IntersectionObserver
 		key="top-observer"
 		v-model="downPage"
 		@visible="emit('headerSticky')"
-		@invisible="emit('headerUnSticky')"/>
+		@invisible="emit('headerUnSticky')" />
 
 	<TransitionGroup
 		id="vote-table"
@@ -104,7 +101,7 @@ function loadMore() {
 			v-if="pollStore.viewMode === ViewMode.TableView"
 			key="option-spacer"
 			class="option-spacer sticky-left sticky-top"
-			:class="{'sticky-bottom-shadow': !downPage}" />
+			:class="{ 'sticky-bottom-shadow': !downPage }" />
 		<div
 			v-if="pollStore.permissions.seeResults"
 			class="counter-spacer sticky-left" />
@@ -138,7 +135,7 @@ function loadMore() {
 			<OptionItem
 				:id="`option-${option.id}`"
 				class="sticky-top"
-				:class="{'sticky-bottom-shadow': !downPage}"
+				:class="{ 'sticky-bottom-shadow': !downPage }"
 				:option="option" />
 			<Counter
 				v-if="pollStore.permissions.seeResults"
