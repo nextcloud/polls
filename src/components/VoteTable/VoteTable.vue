@@ -26,10 +26,15 @@ import VoteParticipant from './VoteParticipant.vue'
 import IntersectionObserver from '../Base/modules/IntersectionObserver.vue'
 import { showError } from '@nextcloud/dialogs'
 
+const emit = defineEmits(['headerSticky', 'headerUnSticky'])
+
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
+
+const downPage = defineModel<boolean>('downPage', { default: false })
+
 const chunksLoading = ref(false)
 
 const tableStyle = computed(() => ({
@@ -60,10 +65,20 @@ function loadMore() {
 		showError(t('polls', 'Error loading more participants'))
 	}
 }
+
 </script>
 
+
+
 <template>
+	<IntersectionObserver
+		key="top-observer"
+		v-model="downPage"
+		@visible="emit('headerSticky')"
+		@invisible="emit('headerUnSticky')"/>
+
 	<TransitionGroup
+		id="vote-table"
 		tag="div"
 		name="list"
 		:class="pollStore.viewMode"
@@ -88,7 +103,8 @@ function loadMore() {
 		<div
 			v-if="pollStore.viewMode === ViewMode.TableView"
 			key="option-spacer"
-			class="option-spacer sticky-left" />
+			class="option-spacer sticky-left sticky-top"
+			:class="{'sticky-bottom-shadow': !downPage}" />
 		<div
 			v-if="pollStore.permissions.seeResults"
 			class="counter-spacer sticky-left" />
@@ -122,6 +138,7 @@ function loadMore() {
 			<OptionItem
 				:id="`option-${option.id}`"
 				class="sticky-top"
+				:class="{'sticky-bottom-shadow': !downPage}"
 				:option="option" />
 			<Counter
 				v-if="pollStore.permissions.seeResults"
@@ -149,7 +166,7 @@ function loadMore() {
 		"
 		class="observer-container sticky-left">
 		<IntersectionObserver
-			key="observer"
+			key="bottom-observer"
 			class="observer_section"
 			:loading="chunksLoading"
 			@visible="loadMore">
@@ -269,7 +286,6 @@ function loadMore() {
 
 		.option-item {
 			grid-row: 2;
-			opacity: 0.85;
 			background-color: var(--color-main-background);
 			border-inline-start: 1px solid var(--color-border);
 		}
