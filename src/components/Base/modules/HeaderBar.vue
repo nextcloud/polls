@@ -51,6 +51,10 @@ function toggleClamp() {
 	z-index: 9;
 	transition: all var(--animation-slow) linear;
 
+	&::after {
+		border-top: 1px solid var(--color-border);
+	}
+
 	.header_bar_top {
 		display: flex;
 		flex-wrap: wrap-reverse;

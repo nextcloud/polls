@@ -28,7 +28,6 @@
 			rgba(var(--color-box-shadow-rgb), 0.3),
 			rgba(var(--color-box-shadow-rgb), 0)
 		);
-		border-top: 1px solid var(--color-border);
 		transition:
 			all var(--animation-slow) linear,
 			border 1ms;
