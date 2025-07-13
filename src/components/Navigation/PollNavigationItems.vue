@@ -28,7 +28,9 @@ const sessionStore = useSessionStore()
 <template>
 	<NcAppNavigationItem
 		:name="poll.configuration.title"
-		:to="poll.permissions.view ? { name: 'vote', params: { id: poll.id } } : null"
+		:to="
+			poll.permissions.view ? { name: 'vote', params: { id: poll.id } } : null
+		"
 		:class="{ closed: poll.status.isExpired }">
 		<template #icon>
 			<TextPollIcon v-if="poll.type === 'textPoll'" />
@@ -36,7 +38,9 @@ const sessionStore = useSessionStore()
 		</template>
 		<template #actions>
 			<NcActionButton
-				v-if="sessionStore.appPermissions.pollCreation  && poll.permissions.view"
+				v-if="
+					sessionStore.appPermissions.pollCreation && poll.permissions.view
+				"
 				:name="t('polls', 'Clone poll')"
 				:aria-label="t('polls', 'Clone poll')"
 				@click="emit('clonePoll')">
