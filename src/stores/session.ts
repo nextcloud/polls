@@ -9,13 +9,15 @@ import { PublicAPI, SessionAPI } from '../Api/index.ts'
 import { createDefault, User, AppPermissions } from '../Types/index.ts'
 import { AppSettings, UpdateType } from './appSettings.ts'
 import { usePreferencesStore, ViewMode, SessionSettings } from './preferences.ts'
-import { FilterType } from './polls.ts'
+import { FilterType, usePollsStore } from './polls.ts'
 import { Share } from './shares.ts'
 import { RouteLocationNormalized, RouteRecordNameGeneric } from 'vue-router'
 import { Logger } from '../helpers/index.ts'
 import { usePollStore } from './poll.ts'
 import { useSubscriptionStore } from './subscription.ts'
 import { AxiosError } from '@nextcloud/axios'
+import { t } from '@nextcloud/l10n'
+import { usePollGroupsStore } from './pollGroups.ts'
 
 interface RouteParams {
 	id: number
@@ -178,6 +180,36 @@ export const useSessionStore = defineStore('session', {
 				return preferencesStore.user.defaultViewDatePoll
 			}
 			return 'list-view'
+		},
+
+		windowTitle(state): string {
+			const pollStore = usePollStore()
+
+			const windowTitle = {
+				prefix: `${t('polls', 'Polls')}`,
+				name: 'Nextcloud',
+			}
+
+			if (state.route.name === 'list') {
+				const pollsStore = usePollsStore()
+				windowTitle.name =
+					pollsStore.categories[
+						this.route.params.type as FilterType
+					].titleExt
+			} else if (state.route.name === 'group') {
+				const pollGroupsStore = usePollGroupsStore()
+				windowTitle.name =
+					pollGroupsStore.currentPollGroup?.titleExt
+					|| pollGroupsStore.currentPollGroup?.name
+					|| ''
+			} else if (state.route.name === 'publicVote') {
+				windowTitle.name = pollStore.configuration.title
+			} else if (state.route.name === 'vote') {
+				windowTitle.name =
+					pollStore.configuration.title ?? t('polls', 'Enter Title')
+			}
+
+			return `${windowTitle.prefix} – ${windowTitle.name}`
 		},
 	},
 

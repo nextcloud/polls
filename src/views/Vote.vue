@@ -94,11 +94,6 @@ async function loadChunks() {
 	}
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const windowTitle = computed(
-	() => `${t('polls', 'Polls')} - ${pollStore.configuration.title}`,
-)
-
 const isShortDescription = computed(() => {
 	if (!pollStore.configuration.description) {
 		return true

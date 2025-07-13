@@ -23,7 +23,7 @@ import { useSessionStore } from '../../stores/session.ts'
 const route = useRoute()
 const pollStore = usePollStore()
 const sessionStore = useSessionStore()
-const caption = t('polls', 'Poll informations')
+const caption = t('polls', 'Poll information')
 
 const showUserMenu = computed(
 	() =>

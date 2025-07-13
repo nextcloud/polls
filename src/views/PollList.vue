@@ -5,7 +5,7 @@
 
 <script setup lang="ts">
 import { computed, onMounted } from 'vue'
-import { useRouter, useRoute, onBeforeRouteUpdate } from 'vue-router'
+import { useRouter, useRoute } from 'vue-router'
 import { showError } from '@nextcloud/dialogs'
 import { t, n } from '@nextcloud/l10n'
 
@@ -78,8 +78,6 @@ const emptyPollListnoPolls = computed(
 	() => pollsStore.pollsFilteredSorted.length < 1,
 )
 
-const windowTitle = computed(() => `${t('polls', 'Polls')} - ${title.value}`)
-
 const loadingOverlayProps = {
 	name: t('polls', 'Loading overview…'),
 	teleportTo: '#content-vue',
@@ -96,13 +94,6 @@ const emptyContentProps = computed(() => ({
 	name: t('polls', 'No polls found for this category'),
 	description: t('polls', 'Add one or change category!'),
 }))
-
-/**
- *
- */
-function refreshView() {
-	window.document.title = windowTitle.value
-}
 
 /**
  *
@@ -128,11 +119,6 @@ async function loadMore() {
 
 onMounted(() => {
 	pollsStore.load(false)
-	refreshView()
-})
-
-onBeforeRouteUpdate(async () => {
-	refreshView()
 })
 </script>
 
