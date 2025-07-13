@@ -29,6 +29,11 @@ use OCP\DB\Types;
  */
 
 abstract class TableSchema {
+	// deprecated since 8.1.0, but keeb these constants to prevent broken updates
+	// from a version prior to 8.1.0; Fix was implemented with v8.1.2
+	public const FK_PARENT_TABLE = Poll::TABLE;
+	public const FK_CHILD_TABLES = [];
+	public const FK_OTHER_TABLES = [];
 
 	/**
 	 * define all foreign key indices
