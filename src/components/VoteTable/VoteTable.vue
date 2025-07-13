@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { n, t } from '@nextcloud/l10n'
+import { t } from '@nextcloud/l10n'
 
 import { usePollStore } from '../../stores/poll.ts'
 import { useOptionsStore } from '../../stores/options.ts'
@@ -12,7 +12,7 @@ import { useVotesStore } from '../../stores/votes.ts'
 
 import { NcButton } from '@nextcloud/vue'
 import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
-import { computed, nextTick, ref } from 'vue'
+import { computed,ref } from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import Counter from '../Options/Counter.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
@@ -23,17 +23,13 @@ import { usePreferencesStore } from '../../stores/preferences.ts'
 import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
 import VoteItem from './VoteItem.vue'
 import VoteParticipant from './VoteParticipant.vue'
-import IntersectionObserver from '../Base/modules/IntersectionObserver.vue'
-import { showError } from '@nextcloud/dialogs'
-
-const emit = defineEmits(['headerSticky', 'headerUnSticky'])
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
 
-const downPage = defineModel<boolean>('downPage', { default: false })
+const { downPage = false} = defineProps<{downPage: boolean}>()
 
 const chunksLoading = ref(false)
 
@@ -49,31 +45,9 @@ const showCalendarPeek = computed(
 		&& preferencesStore.user.calendarPeek,
 )
 
-/**
- *
- */
-function loadMore() {
-	try {
-		chunksLoading.value = true
-		nextTick(() => {
-			votesStore.addChunk()
-		})
-		nextTick(() => {
-			chunksLoading.value = false
-		})
-	} catch {
-		showError(t('polls', 'Error loading more participants'))
-	}
-}
 </script>
 
 <template>
-	<IntersectionObserver
-		key="top-observer"
-		v-model="downPage"
-		@visible="emit('headerSticky')"
-		@invisible="emit('headerUnSticky')" />
-
 	<TransitionGroup
 		id="vote-table"
 		tag="div"
@@ -154,42 +128,9 @@ function loadMore() {
 			</div>
 		</template>
 	</TransitionGroup>
-	<div
-		v-if="
-			votesStore.countHiddenParticipants > 0
-			&& pollStore.viewMode === 'table-view'
-		"
-		class="observer-container sticky-left">
-		<IntersectionObserver
-			key="bottom-observer"
-			class="observer_section"
-			:loading="chunksLoading"
-			@visible="loadMore">
-			<div class="clickable_load_more" @click="loadMore">
-				{{
-					n(
-						'polls',
-						'%n participant is hidden. Click here to load more',
-						'%n participants are hidden. Click here to load more',
-						votesStore.countHiddenParticipants,
-					)
-				}}
-			</div>
-		</IntersectionObserver>
-	</div>
 </template>
 
 <style lang="scss">
-.observer-container {
-	display: flex;
-	justify-content: center;
-}
-
-.observer_section {
-	position: sticky;
-	left: 70px;
-}
-
 .vote-table {
 	display: grid;
 	grid-template-columns: max-content repeat(
