@@ -36,7 +36,7 @@ const sessionStore = useSessionStore()
 		</template>
 		<template #actions>
 			<NcActionButton
-				v-if="sessionStore.appPermissions.pollCreation"
+				v-if="sessionStore.appPermissions.pollCreation  && poll.permissions.view"
 				:name="t('polls', 'Clone poll')"
 				:aria-label="t('polls', 'Clone poll')"
 				@click="emit('clonePoll')">
