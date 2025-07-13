@@ -171,7 +171,7 @@ class TableManager {
 				$table->modifyColumn($columnName, $columnDefinition['options']);
 			} else {
 				$table->addColumn($columnName, $columnDefinition['type'], $columnDefinition['options']);
-				$messages[] = 'Added ' . $table->getName() . ', ' . $columnName . ' (' . $columnDefinition['type'] . ')';
+				$messages[] = "Added {$table->getName()}, {$columnName} ({$columnDefinition['type']})";
 			}
 		}
 

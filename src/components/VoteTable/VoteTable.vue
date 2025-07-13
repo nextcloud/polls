@@ -188,6 +188,7 @@ const showCalendarPeek = computed(
 		overflow: visible;
 		min-width: min-content;
 		max-width: max-content;
+		margin: auto;
 		.grid-info {
 			grid-row: 1;
 			grid-column: 1;
