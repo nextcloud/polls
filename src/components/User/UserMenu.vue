@@ -260,7 +260,7 @@ const eMailInputProps = ref<InputProps>({
 	error: false,
 	showTrailingButton: true,
 	labelOutside: false,
-	label: t('polls', 'Edit Email Address'),
+	label: t('polls', 'Edit email address'),
 })
 
 const validateEMail = debounce(async function () {
@@ -432,8 +432,8 @@ async function submitEmail() {
 				sessionStore.share?.type === 'external'
 				&& sessionStore.share.user.emailAddress
 			"
-			:name="t('polls', 'Remove Email Address')"
-			:aria-label="t('polls', 'Remove Email Address')"
+			:name="t('polls', 'Remove email address')"
+			:aria-label="t('polls', 'Remove email address')"
 			@click="deleteEmailAddress">
 			<template #icon>
 				<DeleteIcon />

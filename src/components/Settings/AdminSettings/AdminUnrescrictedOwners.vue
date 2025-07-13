@@ -21,7 +21,7 @@ const appSettingsStore = useAppSettingsStore()
 			v-model="appSettingsStore.unrestrictedOwner"
 			type="switch"
 			@update:model-value="appSettingsStore.write()">
-			{{ t('polls', 'Enable unrestricted Owners globally') }}
+			{{ t('polls', 'Enable unrestricted owners globally') }}
 		</NcCheckboxRadioSwitch>
 		<div v-if="!appSettingsStore.unrestrictedOwner" class="settings_details">
 			<NcSelect

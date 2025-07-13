@@ -91,7 +91,7 @@ async function add() {
 				v-model="title"
 				focus
 				type="text"
-				:placeholder="t('polls', 'Enter Title')"
+				:placeholder="t('polls', 'Enter title')"
 				@submit="add()" />
 		</ConfigBox>
 

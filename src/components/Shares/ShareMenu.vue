@@ -167,8 +167,8 @@ const switchAdmin = computed<ButtonProps>(() => ({
 		&& (share.type === 'user' || share.type === 'admin'),
 	name:
 		share.type === 'user'
-			? t('polls', 'Grant poll admin access')
-			: t('polls', 'Withdraw poll admin access'),
+			? t('polls', 'Grant administrative poll access')
+			: t('polls', 'Withdraw administrative poll access'),
 	action: () => {
 		sharesStore.switchAdmin({ share })
 	},

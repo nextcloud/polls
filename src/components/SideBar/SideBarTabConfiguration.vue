@@ -103,7 +103,7 @@ const votesStore = useVotesStore()
 			<ConfigShowResults @change="pollStore.write" />
 		</ConfigBox>
 
-		<ConfigBox :name="t('polls', 'Deletion and Owner')">
+		<ConfigBox :name="t('polls', 'Deletion and owner')">
 			<template #icon>
 				<DeletePollIcon />
 			</template>

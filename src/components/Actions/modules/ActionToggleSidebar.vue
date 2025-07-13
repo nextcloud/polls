@@ -12,7 +12,7 @@ import NcButton from '@nextcloud/vue/components/NcButton'
 import SidebarIcon from 'vue-material-design-icons/TextAccount.vue' // view-comfy-outline
 import { Event } from '../../../Types'
 
-const caption = t('polls', 'Toggle Sidebar')
+const caption = t('polls', 'Toggle sidebar')
 /**
  *
  */
