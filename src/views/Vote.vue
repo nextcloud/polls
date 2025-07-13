@@ -4,9 +4,9 @@
 -->
 
 <script setup lang="ts">
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { emit, subscribe, unsubscribe } from '@nextcloud/event-bus'
-import { t } from '@nextcloud/l10n'
+import { n, t } from '@nextcloud/l10n'
 
 import NcAppContent from '@nextcloud/vue/components/NcAppContent'
 import NcEmptyContent from '@nextcloud/vue/components/NcEmptyContent'
@@ -34,13 +34,17 @@ import Collapsible from '../components/Base/modules/Collapsible.vue'
 import type { CollapsibleProps } from '../components/Base/modules/Collapsible.vue'
 import { onBeforeRouteLeave, onBeforeRouteUpdate } from 'vue-router'
 import IntersectionObserver from '../components/Base/modules/IntersectionObserver.vue'
+import { useVotesStore } from '../stores/votes.ts'
+import { showError } from '@nextcloud/dialogs'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const preferencesStore = usePreferencesStore()
+const votesStore = useVotesStore()
 const voteMainId = 'watched-scroll-area'
 const topObserverVisible = ref(false)
-const voteHeaderDownPage = ref(false)
+const tableSticky = ref(false)
+const chunksLoading = ref(false)
 
 const loadingOverlayProps = {
 	name: t('polls', 'Loading poll…'),
@@ -73,6 +77,23 @@ const emptyContentProps = computed(() => {
 	}
 })
 
+async function loadChunks() {
+	if (chunksLoading.value) {
+		return
+	}
+
+	try {
+		chunksLoading.value = true
+		await nextTick()
+		await votesStore.addChunk()
+	} catch {
+		showError(t('polls', 'Error loading more participants'))
+	} finally {
+		await nextTick()
+		chunksLoading.value = false
+	}
+}
+
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const windowTitle = computed(
 	() => `${t('polls', 'Polls')} - ${pollStore.configuration.title}`,
@@ -95,10 +116,13 @@ const collapsibleProps = computed<CollapsibleProps>(() => ({
 	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 }))
 
-const scrolled = computed(
-	() => !topObserverVisible.value && voteHeaderDownPage.value,
-)
+const scrolled = computed(() => !topObserverVisible.value && tableSticky.value)
 
+const showBottomObserver = computed(
+	() =>
+		votesStore.countHiddenParticipants > 0
+		&& pollStore.viewMode === 'table-view',
+)
 onBeforeRouteUpdate(async () => {
 	pollStore.load()
 	emit(Event.TransitionsOff, 500)
@@ -145,6 +169,7 @@ onUnmounted(() => {
 
 		<div class="vote_main">
 			<IntersectionObserver id="top-observer" v-model="topObserverVisible" />
+
 			<Collapsible
 				v-if="pollStore.configuration.description"
 				class="sticky-left"
@@ -154,9 +179,29 @@ onUnmounted(() => {
 
 			<VoteInfoCards class="sticky-left" />
 
+			<IntersectionObserver id="table-observer" v-model="tableSticky" />
+
 			<VoteTable
 				v-show="optionsStore.options.length"
-				v-model:down-page="voteHeaderDownPage" />
+				:down-page="tableSticky" />
+
+			<IntersectionObserver
+				v-if="showBottomObserver"
+				id="bottom-observer"
+				class="sticky-left"
+				:loading="chunksLoading"
+				@visible="loadChunks">
+				<div class="clickable_load_more" @click="loadChunks">
+					{{
+						n(
+							'polls',
+							'%n participant is hidden. Click here to load more',
+							'%n participants are hidden. Click here to load more',
+							votesStore.countHiddenParticipants,
+						)
+					}}
+				</div>
+			</IntersectionObserver>
 
 			<NcEmptyContent
 				v-if="!optionsStore.options.length"
@@ -187,6 +232,13 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss">
+#bottom-observer {
+	display: flex;
+	justify-content: center;
+	position: sticky;
+	left: 70px;
+}
+
 .table-view .vote_main {
 	flex: 1;
 	overflow: auto;
