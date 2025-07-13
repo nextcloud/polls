@@ -43,13 +43,13 @@ function toggleClamp() {
 }
 
 .header_bar {
-	position: sticky;
-	top: 0;
 	margin-inline: -8px;
 	padding-inline: 56px 8px;
 	background-color: var(--color-main-background);
-	z-index: 9;
 	transition: all var(--animation-slow) linear;
+	&.sticky-top {
+		z-index: 9;
+	}
 
 	&::after {
 		border-top: 1px solid var(--color-border);
