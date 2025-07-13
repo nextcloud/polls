@@ -260,7 +260,7 @@ async function addOption(): Promise<void> {
 			</div>
 			<div>
 				<NcCheckboxRadioSwitch v-model="voteYes">
-					{{ t('polls', 'Automatically vote "yes" for new option.') }}
+					{{ t('polls', 'Automatically vote "Yes" for new option.') }}
 				</NcCheckboxRadioSwitch>
 			</div>
 		</div>

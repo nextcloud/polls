@@ -47,7 +47,7 @@ const proposalExpiration = computed({
 <template>
 	<div>
 		<NcCheckboxRadioSwitch v-model="allowProposals" type="switch">
-			{{ t('polls', 'Allow Proposals') }}
+			{{ t('polls', 'Allow proposals') }}
 		</NcCheckboxRadioSwitch>
 
 		<NcCheckboxRadioSwitch

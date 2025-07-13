@@ -29,7 +29,7 @@ const checkName = computed(() =>
 )
 
 const inputProps = {
-	placeholder: t('polls', 'Enter Title'),
+	placeholder: t('polls', 'Enter title'),
 	helperText: t(
 		'polls',
 		'Choose a brief title for the navigation bar and the slug',

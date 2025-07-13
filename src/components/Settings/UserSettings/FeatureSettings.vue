@@ -78,7 +78,7 @@ const defaultViewDatePoll = computed({
 				v-model="preferencesStore.user.verbosePollsList"
 				type="switch"
 				@update:model-value="preferencesStore.write()">
-				{{ t('polls', 'Verbose Poll list') }}
+				{{ t('polls', 'Verbose poll list') }}
 			</NcCheckboxRadioSwitch>
 			<div class="settings_details">
 				{{

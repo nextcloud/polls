@@ -33,8 +33,8 @@ const pollStore = usePollStore()
 			<template #trigger>
 				<NcActions>
 					<NcActionButton
-						:name="t('polls', 'Autoreminder informations')"
-						:aria-label="t('polls', 'Autoreminder informations')">
+						:name="t('polls', 'Autoreminder information')"
+						:aria-label="t('polls', 'Autoreminder information')">
 						<template #icon>
 							<InformationIcon />
 						</template>

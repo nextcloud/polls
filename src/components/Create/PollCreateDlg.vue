@@ -95,7 +95,7 @@ function resetPoll() {
 				v-model="pollTitle"
 				focus
 				type="text"
-				:placeholder="t('polls', 'Enter Title')"
+				:placeholder="t('polls', 'Enter title')"
 				:helper-text="t('polls', 'Choose a meaningful title for your poll')"
 				@submit="addPoll" />
 		</ConfigBox>

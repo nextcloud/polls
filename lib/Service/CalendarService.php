@@ -68,8 +68,8 @@ class CalendarService {
 	 */
 	private function getTimerange(int $optionId, DateTimeZone $timezone): array {
 		$option = $this->optionMapper->find($optionId);
-		$searchIntervalBefore = new DateInterval('PT' . $this->preferences->getCheckCalendarsHoursBefore() . 'H');
-		$searchIntervalAfter = new DateInterval('PT' . $this->preferences->getCheckCalendarsHoursAfter() . 'H');
+		$searchIntervalBefore = new DateInterval("PT{$this->preferences->getCheckCalendarsHoursBefore()}H");
+		$searchIntervalAfter = new DateInterval("PT{$this->preferences->getCheckCalendarsHoursAfter()}H");
 
 		$from = (new DateTime())
 			->setTimeZone($timezone)

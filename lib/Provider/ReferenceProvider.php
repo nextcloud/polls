@@ -69,7 +69,7 @@ class ReferenceProvider extends ADiscoverableReferenceProvider implements ISearc
 			if ($pollId) {
 				try {
 					$poll = $this->pollService->get($pollId);
-					$title = $this->l10n->t('Poll') . ': ' . $poll->getTitle();
+					$title = $this->l10n->t('Poll: %s', $poll->getTitle());
 					$description = $poll->getDescription();
 					$ownerId = $poll->getUser()->getId();
 					$ownerDisplayName = $poll->getUser()->getDisplayName();

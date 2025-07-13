@@ -206,7 +206,7 @@ export const useSessionStore = defineStore('session', {
 				windowTitle.name = pollStore.configuration.title
 			} else if (state.route.name === 'vote') {
 				windowTitle.name =
-					pollStore.configuration.title ?? t('polls', 'Enter Title')
+					pollStore.configuration.title ?? t('polls', 'Enter title')
 			}
 
 			return `${windowTitle.prefix} – ${windowTitle.name}`

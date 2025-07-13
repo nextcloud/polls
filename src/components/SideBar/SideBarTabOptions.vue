@@ -38,10 +38,10 @@ const configBoxProps = {
 		name: t('polls', 'Shift all date options'),
 	},
 	dateOptions: {
-		name: t('polls', 'Available Options'),
+		name: t('polls', 'Available options'),
 	},
 	textOptions: {
-		name: t('polls', 'Available Options'),
+		name: t('polls', 'Available options'),
 	},
 }
 

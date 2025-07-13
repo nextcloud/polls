@@ -651,10 +651,10 @@ class ShareService {
 			Share::TYPE_ADMIN => $this->share->getUserId() === $this->userSession->getCurrentUserId(),
 			// Note: $this->share->getUserId() is actually the group name in case of Share::TYPE_GROUP
 			Share::TYPE_GROUP => $this->userSession->getCurrentUser()->getIsInGroup($this->share->getUserId()),
-			default => throw new ForbiddenException('Invalid share type ' . $this->share->getType()),
+			default => throw new ForbiddenException("Invalid share type {$this->share->getType()}"),
 		};
 		if (!$valid) {
-			throw new ForbiddenException('User is not allowed to use this share for poll access (' . $this->share->getType() . ')');
+			throw new ForbiddenException("User is not allowed to use this share for poll access ({$this->share->getType()})");
 		}
 	}
 

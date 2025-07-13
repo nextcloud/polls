@@ -167,7 +167,8 @@ const pollCategories: PollCategoryList = {
 		description: t('polls', 'All polls, where you have access to.'),
 		pinned: false,
 		showInNavigation: () => true,
-		filterCondition: (poll: Poll) => !poll.status.isArchived,
+		filterCondition: (poll: Poll) =>
+			!poll.status.isArchived && poll.permissions.view,
 	},
 	closed: {
 		id: 'closed',
@@ -177,7 +178,9 @@ const pollCategories: PollCategoryList = {
 		pinned: false,
 		showInNavigation: () => true,
 		filterCondition: (poll: Poll) =>
-			!poll.status.isArchived && poll.status.isExpired,
+			!poll.status.isArchived
+			&& poll.status.isExpired
+			&& poll.permissions.view,
 	},
 	archived: {
 		id: 'archived',
@@ -189,7 +192,8 @@ const pollCategories: PollCategoryList = {
 			const sessionStore = useSessionStore()
 			return sessionStore.appPermissions.pollCreation
 		},
-		filterCondition: (poll: Poll) => poll.status.isArchived,
+		filterCondition: (poll: Poll) =>
+			poll.status.isArchived && poll.permissions.view,
 	},
 	admin: {
 		id: 'admin',
