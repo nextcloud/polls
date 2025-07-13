@@ -12,7 +12,7 @@ import { useVotesStore } from '../../stores/votes.ts'
 
 import { NcButton } from '@nextcloud/vue'
 import SortNameIcon from 'vue-material-design-icons/SortAlphabeticalDescending.vue'
-import { computed,ref } from 'vue'
+import { computed, ref } from 'vue'
 import { getCurrentUser } from '@nextcloud/auth'
 import Counter from '../Options/Counter.vue'
 import CalendarPeek from '../Calendar/CalendarPeek.vue'
@@ -29,7 +29,7 @@ const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
 
-const { downPage = false} = defineProps<{downPage: boolean}>()
+const { downPage = false } = defineProps<{ downPage: boolean }>()
 
 const chunksLoading = ref(false)
 
@@ -44,7 +44,6 @@ const showCalendarPeek = computed(
 		&& getCurrentUser()
 		&& preferencesStore.user.calendarPeek,
 )
-
 </script>
 
 <template>

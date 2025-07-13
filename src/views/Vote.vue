@@ -116,14 +116,13 @@ const collapsibleProps = computed<CollapsibleProps>(() => ({
 	initialState: pollStore.currentUserStatus.countVotes === 0 ? 'max' : 'min',
 }))
 
-const scrolled = computed(
-	() => !topObserverVisible.value && tableSticky.value,
-)
+const scrolled = computed(() => !topObserverVisible.value && tableSticky.value)
 
-const showBottomObserver = computed(() => (
+const showBottomObserver = computed(
+	() =>
 		votesStore.countHiddenParticipants > 0
-		&& pollStore.viewMode === 'table-view'
-	))
+		&& pollStore.viewMode === 'table-view',
+)
 onBeforeRouteUpdate(async () => {
 	pollStore.load()
 	emit(Event.TransitionsOff, 500)
@@ -182,7 +181,9 @@ onUnmounted(() => {
 
 			<IntersectionObserver id="table-observer" v-model="tableSticky" />
 
-			<VoteTable v-show="optionsStore.options.length" :down-page="tableSticky" />
+			<VoteTable
+				v-show="optionsStore.options.length"
+				:down-page="tableSticky" />
 
 			<IntersectionObserver
 				v-if="showBottomObserver"
