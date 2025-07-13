@@ -174,7 +174,10 @@ onUnmounted(() => {
 
 			<VoteInfoCards class="sticky-left" />
 
-			<IntersectionObserver v-if="pollStore.viewMode === 'table-view'" id="table-observer" v-model="tableSticky" />
+			<IntersectionObserver
+				v-if="pollStore.viewMode === 'table-view'"
+				id="table-observer"
+				v-model="tableSticky" />
 
 			<VoteTable
 				v-show="optionsStore.options.length"
