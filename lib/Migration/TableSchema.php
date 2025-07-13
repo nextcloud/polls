@@ -30,6 +30,10 @@ use OCP\DB\Types;
 
 abstract class TableSchema {
 
+	public const FK_PARENT_TABLE = Poll::TABLE;
+	public const FK_CHILD_TABLES = [];
+	public const FK_OTHER_TABLES = [];
+
 	/**
 	 * define all foreign key indices
 	 * Parentable => [Childable => ['constraintColumn' => 'columnName']]
