@@ -714,6 +714,7 @@
     "Loading poll…" : "Carregando enquete…",
     "Fetching configuration…" : "Buscando a configuração…",
     "Collecting elements…" : "Coletando elementos…",
+    "This seems to be a huge poll, please be patient…" : "Esta parece ser uma enquete enorme, por favor, seja paciente…",
     "We are sorry, but there are no more vote options available" : "Lamentamos, mas não há mais opções de voto disponíveis",
     "All options are booked up." : "Todas as opções estão reservadas.",
     "No vote options available" : "Nenhuma opção de voto disponível",
