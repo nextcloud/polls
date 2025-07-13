@@ -90,18 +90,19 @@ async function validateToken(to: RouteLocationNormalized) {
 
 const routes: RouteRecordRaw[] = [
 	{
+		name: 'list',
 		path: '/list/:type?',
 		components: {
 			default: List,
 			navigation: Navigation,
 		},
 		props: true,
-		name: 'list',
 		meta: {
 			listPage: true,
 		},
 	},
 	{
+		name: 'group',
 		path: '/group/:slug',
 		components: {
 			default: List,
@@ -109,41 +110,47 @@ const routes: RouteRecordRaw[] = [
 			sidebar: SideBarPollGroup,
 		},
 		props: true,
-		name: 'group',
 		meta: {
 			groupPage: true,
 			listPage: true,
 		},
 	},
 	{
+		name: 'combo',
 		path: '/combo',
 		components: {
 			default: Combo,
 			navigation: Navigation,
 			sidebar: SideBarCombo,
 		},
-		name: 'combo',
 		meta: {
 			comboPage: true,
 		},
 	},
 	{
+		name: 'notfound',
 		path: '/not-found',
 		components: {
 			default: NotFound,
 			navigation: Navigation,
 		},
-		name: 'notfound',
+		meta: {
+			errorPage: true,
+		},
 	},
 	{
+		name: 'forbidden',
 		path: '/forbidden',
 		components: {
 			default: Forbidden,
 			navigation: Navigation,
 		},
-		name: 'forbidden',
+		meta: {
+			errorPage: true,
+		},
 	},
 	{
+		name: 'vote',
 		path: '/vote/:id',
 		components: {
 			default: Vote,
@@ -151,12 +158,12 @@ const routes: RouteRecordRaw[] = [
 			sidebar: SideBar,
 		},
 		props: true,
-		name: 'vote',
 		meta: {
 			votePage: true,
 		},
 	},
 	{
+		name: 'publicVote',
 		path: '/s/:token',
 		components: {
 			default: Vote,
@@ -164,15 +171,14 @@ const routes: RouteRecordRaw[] = [
 		},
 		beforeEnter: validateToken,
 		props: true,
-		name: 'publicVote',
 		meta: {
 			publicPage: true,
 			votePage: true,
 		},
 	},
 	{
-		path: '/',
 		name: 'root',
+		path: '/',
 		redirect: {
 			name: 'list',
 			params: {

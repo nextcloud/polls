@@ -4,7 +4,7 @@
 -->
 
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed, onMounted, onUnmounted, watchEffect } from 'vue'
 import { debounce } from 'lodash'
 import { subscribe, unsubscribe } from '@nextcloud/event-bus'
 
@@ -88,6 +88,10 @@ function notify(payload: { store: string; message: string }) {
 		}
 	}, 1500)
 }
+
+watchEffect(() => {
+	document.title = sessionStore.windowTitle
+})
 
 onMounted(() => {
 	subscribe(Event.TransitionsOff, (delay) => {

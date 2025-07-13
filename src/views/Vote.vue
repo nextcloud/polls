@@ -41,7 +41,6 @@ const preferencesStore = usePreferencesStore()
 const voteMainId = 'watched-scroll-area'
 const topObserverVisible = ref(false)
 const voteHeaderDownPage = ref(false)
-
 const loadingOverlayProps = {
 	name: t('polls', 'Loading poll…'),
 	teleportTo: '#content-vue',
@@ -72,11 +71,6 @@ const emptyContentProps = computed(() => {
 			: t('polls', 'Maybe the owner did not provide some until now.'),
 	}
 })
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const windowTitle = computed(
-	() => `${t('polls', 'Polls')} - ${pollStore.configuration.title}`,
-)
 
 const isShortDescription = computed(() => {
 	if (!pollStore.configuration.description) {
