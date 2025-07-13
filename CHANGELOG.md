@@ -4,16 +4,15 @@
 -->
 # Changelog
 All notable changes to this project will be documented in this file.
-##
 
-## [8.1.0] - tbd
+## [8.1.0] - 2025-07-13
 ### New
+ - Support Nextcloud 30
  - Added user shares to poll groups
  - Added a forbidden route and page
  - Added WatchController to OCS-API
  - Sticky option headers in vote table
  - Lazy loading of participants on scroll, if too many vote cells are rendered
- - Support Nextcloud 30
 
 ### Changes
  - Optimized janitor cron
@@ -24,12 +23,13 @@ All notable changes to this project will be documented in this file.
  - Catch CronJob runs and report as error, but avoid crash at higher thread levels
  - Changed poll loading triggers (mainly navigation affected)
  - Added some status to the watchWorker
- - removed performance user setting in favor of lazy loading participants
- - reduce noise by avoiding toasts for obvious changes
+ - Removed performance user setting in favor of lazy loading participants
+ - Reduce noise by avoiding toasts for obvious changes
 
 ### Fixes
  - Fixed broken endpoint for manually calling autoReminderCron
- - fix avatar foreground color
+ - Fix avatar foreground color
+ - Fix window title
 
 ## [8.0.6] - 2025-07-03
 ### Changes (8.0.6)
