@@ -193,7 +193,9 @@ export const useSessionStore = defineStore('session', {
 			if (state.route.name === 'list') {
 				const pollsStore = usePollsStore()
 				windowTitle.name =
-					pollsStore.categories[this.route.params.type as FilterType].titleExt
+					pollsStore.categories[
+						this.route.params.type as FilterType
+					].titleExt
 			} else if (state.route.name === 'group') {
 				const pollGroupsStore = usePollGroupsStore()
 				windowTitle.name =
