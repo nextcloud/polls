@@ -28,6 +28,7 @@ body:
         ---
         # Bug description
         Please try to explain your bug as detailed as possible. This helps us to reproduce this error and get it fixed faster.
+
   - type: textarea
     id: bug-description
     attributes:
@@ -37,6 +38,7 @@ body:
         Don't just expect someone will guess what your specific problem is and provide full details.
     validations:
       required: true
+
   - type: textarea
     id: expected-behavior
     attributes:
@@ -46,6 +48,7 @@ body:
         Help us to understand how this bug could be solved.
     validations:
       required: true
+
   - type: textarea
     id: reproduce-bug
     attributes:
@@ -65,6 +68,15 @@ body:
       value: |
         ---
         # Add some information about your Polls installation
+
+  - type: input
+    id: polls-version
+    attributes:
+      label: Affected polls version
+      placeholder: Your installed polls version
+    validations:
+      required: true
+
   - type: dropdown
     id: install-method
     attributes:
@@ -77,6 +89,7 @@ body:
         - 'Installed/updated via extracting downloaded package to the apps folder'
     validations:
       required: true
+
   - type: dropdown
     id: install-type
     attributes:
@@ -85,16 +98,11 @@ body:
         Was it an update or a first time installation
       options:
         - 'First time installation'
-        - 'Updated from a minor version within same major version (i.e. 4.0.0 to 4.1.1)'
-        - 'Updated from previous major version (i.e. 3.x.x to 4.x.x)'
+        - 'Updated from a minor version within same major version (i.e. 8.0.0 to 8.1.2)'
+        - 'Updated from previous major version (i.e. 7.x.x to 8.x.x)'
         - 'Updated from a much older version (more than one major version)'
     validations:
       required: true
-  - type: input
-    id: polls-version
-    attributes:
-      label: Affected polls version
-      placeholder: Your installed polls version
 
   - type: markdown
     attributes:
@@ -104,6 +112,17 @@ body:
         This helps us to identify possible effects caused by the client environment.
 
         ⚠️ Please make sure browser extensions/plug-ins can be excluded as the bug source (especially script and ad blockers).
+
+  - type: checkboxes
+    id: client-browser
+    attributes:
+      label: Can you rule out that any extension you use is involved in the issue?
+      description: |
+        Especially make sure no script or ad blocker is involved.
+      options:
+        - label: 'I have checked all browser extension'
+    validations:
+      required: true
 
   - type: checkboxes
     id: client-browser
@@ -157,6 +176,7 @@ body:
         - 'Nextcloud 29'
         - 'Nextcloud 30'
         - 'Nextcloud 31'
+        - 'Nextcloud 32'
         - "Other/Don't know"
     validations:
       required: true
@@ -173,10 +193,11 @@ body:
       description: |
         Select PHP engine version serving Nextcloud Server.
       options:
-        - 'PHP 8.0'
         - 'PHP 8.1'
         - 'PHP 8.2'
         - 'PHP 8.3'
+        - 'PHP 8.4'
+        - 'PHP 8.5'
         - "Other/Don't know"
     validations:
       required: true
@@ -230,7 +251,7 @@ body:
         Provide Nextcloud logs lines, which can give information about the bug.
         Copy all relevant contents from `data/nextcloud.log` or copy the a RAW entries from `/settings/admin/logging` section:
       placeholder: This will be automatically formatted into code for better readability.
-      render: shell
+      render: json
 
   - type: textarea
     id: additional-environment-info
