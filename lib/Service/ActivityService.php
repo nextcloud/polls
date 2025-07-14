@@ -225,10 +225,10 @@ class ActivityService {
 				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has changed the share type'),
 			],
 			ShareEvent::CHANGE_REG_CONSTR => [
-				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed the registration constraints for share {sharee}'),
-				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has changed the registration constraints for share {sharee}'),
-				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have changed the registration constraints for share {sharee}'),
-				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has changed the registration constraints for share {sharee}'),
+				self::FIRST_PERSON_FULL => $this->l10n->t('You have changed the registration constraints for the public share labeled {sharee}'),
+				self::THIRD_PERSON_FULL => $this->l10n->t('{actor} has changed the registration constraints for the public share labeled {sharee}'),
+				self::FIRST_PERSON_FILTERED => $this->l10n->t('You have changed the registration constraints for the public share labeled {sharee}'),
+				self::THIRD_PERSON_FILTERED => $this->l10n->t('{actor} has changed the registration constraints for the public share labeled {sharee}'),
 			],
 			ShareEvent::REGISTRATION => [
 				self::FIRST_PERSON_FULL => $this->l10n->t('You have registered to poll {pollTitle}'),
