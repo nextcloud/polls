@@ -5,17 +5,6 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
-### Fixes
- - Fixed some typos
- - Removed inaccessible polls from polls overview
- - Removed link target from inaccessible polls in navigation
- - Removed clone action from inaccessible polls in navigation
- - Fixed visual bug when scrolling in list view
-
-### changes
- - Center poll table
-
 ## [8.1.0] - 2025-07-13
 ### New
  - Support Nextcloud 30

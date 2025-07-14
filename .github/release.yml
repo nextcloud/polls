@@ -31,7 +31,6 @@ changelog:
     - title: 🐛 Fixed bugs
       labels:
         - bug
-        - bugfix
     - title: ⚡ Performance related changes
       labels:
         - performance
