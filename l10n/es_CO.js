@@ -25,7 +25,6 @@ OC.L10N.register(
     "Ok" : "Ok",
     "Delete poll" : "Borrar encuesta",
     "Title" : "Título",
-    "Enter Title" : "Escriba el título",
     "Poll type" : "Tipo de encuesta",
     "Close" : "Cerrar",
     "Yes" : "Sí",

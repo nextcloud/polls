@@ -13,7 +13,6 @@ OC.L10N.register(
     "Delete" : "Forigi",
     "Register" : "Registriĝi",
     "Unknown error" : "Nekonata eraro",
-    "Loading" : "Ŝargado",
     "Loading …" : "Ŝargado...",
     "Add" : "Aldoni",
     "New comment …" : "Nova komento...",
