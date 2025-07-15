@@ -12,14 +12,7 @@ import { Answer } from '../../Types/index.ts'
 
 const ICON_SIZE = 26
 
-interface Props {
-	answer: Answer
-	active?: boolean
-}
-
-const { answer, active = false } = defineProps<Props>()
-
-const emit = defineEmits(['click'])
+const { answer } = defineProps<{ answer: Answer }>()
 
 const colorCodeNo = getComputedStyle(document.documentElement).getPropertyValue(
 	'--color-error',
@@ -40,17 +33,14 @@ const foregroundColor = computed(() => {
 	}
 	return colorCodeNo
 })
-
-function onClick() {
-	if (active) {
-		emit('click')
-	}
-}
 </script>
 
 <template>
-	<div :class="['vote-indicator', active]" @click="onClick()">
-		<MaybeIcon v-if="answer === 'maybe'" :size="ICON_SIZE" />
+	<div class="vote-indicator">
+		<MaybeIcon
+			v-if="answer === 'maybe'"
+			:fill-color="foregroundColor"
+			:size="ICON_SIZE" />
 		<CheckIcon
 			v-if="answer === 'yes'"
 			:fill-color="foregroundColor"
@@ -63,43 +53,48 @@ function onClick() {
 </template>
 
 <style lang="scss">
-.vote-indicator {
-	color: var(--color-polls-foreground-no);
-	min-width: 30px;
-	min-height: 30px;
+.active .vote-indicator {
+	border: 2px solid;
+	border-radius: var(--border-radius);
 
 	&,
 	* {
-		transition: all 0.4s ease-in-out;
-		margin: auto;
-		.active & {
-			cursor: pointer;
-		}
+		cursor: pointer;
+	}
+	.material-design-icon {
+		width: 26px;
+		height: 26px;
 	}
 
-	.active & {
-		border: 2px solid;
-		border-radius: var(--border-radius);
-		.material-design-icon {
-			width: 26px;
-			height: 26px;
-		}
-	}
-	.yes & {
-		color: var(--color-polls-foreground-yes);
-	}
-
-	.maybe & {
-		color: var(--color-polls-foreground-maybe);
-	}
-
-	.active:hover & {
+	&:hover {
 		width: 35px;
 		height: 35px;
 		.material-design-icon {
 			width: 31px;
 			height: 31px;
 		}
+	}
+}
+
+.vote-indicator {
+	color: var(--color-polls-foreground-no);
+	min-width: 30px;
+	min-height: 30px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+
+	&,
+	* {
+		transition: all 0.4s ease-in-out;
+	}
+
+	.yes & {
+		color: var(--color-polls-foreground-yes);
+	}
+
+	.maybe & {
+		color: var(--color-polls-foreground-maybe);
 	}
 }
 </style>

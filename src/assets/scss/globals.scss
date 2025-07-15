@@ -14,7 +14,7 @@
 	top: 0;
 	z-index: 4;
 	padding-bottom: 0px;
-	margin-bottom: var(--shadow-height);
+	padding-bottom: var(--shadow-height);
 
 	&::after {
 		content: '';

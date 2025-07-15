@@ -7,7 +7,7 @@
 import { t } from '@nextcloud/l10n'
 
 import { usePollStore } from '../../stores/poll.ts'
-import { useOptionsStore } from '../../stores/options.ts'
+import { Option, useOptionsStore } from '../../stores/options.ts'
 import { useVotesStore } from '../../stores/votes.ts'
 
 import { NcButton } from '@nextcloud/vue'
@@ -21,13 +21,17 @@ import OptionMenu from '../Options/OptionMenu.vue'
 import { usePreferencesStore } from '../../stores/preferences.ts'
 
 import SortOptionIcon from 'vue-material-design-icons/SortBoolAscendingVariant.vue'
-import VoteItem from './VoteItem.vue'
+import VoteButton from './VoteButton.vue'
 import VoteParticipant from './VoteParticipant.vue'
+import VoteItem from './VoteItem.vue'
+import { useSessionStore } from '../../stores/session.ts'
+import { User } from '../../Types/index.ts'
 
 const pollStore = usePollStore()
 const optionsStore = useOptionsStore()
 const votesStore = useVotesStore()
 const preferencesStore = usePreferencesStore()
+const sessionStore = useSessionStore()
 
 const { downPage = false } = defineProps<{ downPage: boolean }>()
 
@@ -44,6 +48,19 @@ const showCalendarPeek = computed(
 		&& getCurrentUser()
 		&& preferencesStore.user.calendarPeek,
 )
+
+function isCurrentUser(participant: User) {
+	return participant.id === sessionStore.currentUser.id
+}
+
+function isVotable(participant: User, option: Option) {
+	return (
+		participant.id === sessionStore.currentUser.id
+		&& pollStore.permissions.vote
+		&& !pollStore.status.isExpired
+		&& !option.locked
+	)
+}
 </script>
 
 <template>
@@ -118,9 +135,15 @@ const showCalendarPeek = computed(
 			<div
 				v-for="participant in pollStore.safeParticipants"
 				:key="participant.id"
-				class="vote-cell">
+				class="vote-cell"
+				:class="{ 'current-user': isCurrentUser(participant) }">
+				<VoteButton
+					v-if="isVotable(participant, option)"
+					:key="`vote-${participant.id}-${option.id}-vote`"
+					:user="participant"
+					:option="option" />
 				<VoteItem
-					:id="`vote-${participant.id}-${option.id}`"
+					v-else
 					:key="`vote-${participant.id}-${option.id}`"
 					:user="participant"
 					:option="option" />
@@ -145,11 +168,12 @@ const showCalendarPeek = computed(
 	.vote-cell {
 		padding: 0.4rem;
 		display: flex;
+		justify-content: center;
 	}
 
 	.participant {
 		grid-column: 1;
-		padding: 0.4rem;
+		padding: 0.8rem 0.1rem 0.1rem 0.1rem;
 		inset-inline-start: 0;
 		background-color: var(--color-main-background);
 
@@ -235,16 +259,11 @@ const showCalendarPeek = computed(
 			border-inline-start: 1px solid var(--color-border);
 		}
 
-		.current-user {
+		> .current-user {
 			margin-top: 1.5rem;
 			margin-bottom: 1.5rem;
 		}
 
-		.option-element {
-			grid-row: 1;
-		}
-
-		.option-element,
 		.vote-column {
 			display: flex;
 			flex-direction: column;
@@ -285,10 +304,6 @@ const showCalendarPeek = computed(
 
 		.vote-cell {
 			grid-column: 3;
-		}
-
-		.vote-item:not(.current-user) {
-			display: none;
 		}
 
 		@media only screen and (max-width: 340px) {
