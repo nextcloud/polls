@@ -172,8 +172,9 @@ class MailService {
 		}
 
 		foreach ($this->logs as $logItem) {
-			$logItem->setProcessed(time());
+			$logItem->setProcessed(microtime(true)*1000);
 			$this->logMapper->update($logItem);
+			usleep(5000);
 		}
 	}
 
