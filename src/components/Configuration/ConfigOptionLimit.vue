@@ -62,7 +62,7 @@ function validateLimit() {
 			class="indented"
 			type="switch"
 			@update:model-value="emit('change')">
-			{{ t('polls', 'Hide unavailable Options') }}
+			{{ t('polls', 'Hide unavailable options') }}
 		</NcCheckboxRadioSwitch>
 	</div>
 </template>
