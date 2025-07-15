@@ -5,13 +5,14 @@
 # Changelog
 All notable changes to this project will be documented in this file.
 
-## [Unreleased]
+## [8.1.4] - 2025-07-15
 ### Fixes
  - Fixed some typos
  - Removed inaccessible polls from polls overview
  - Removed link target from inaccessible polls in navigation
  - Removed clone action from inaccessible polls in navigation
  - Fixed visual bug when scrolling in list view
+ - Fixed exception on notifications which may cause resending notification mails
 
 ### changes
  - Center poll table
